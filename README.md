@@ -1,93 +1,797 @@
-# decaf
+# Run-3 All-Hadronic Stop Analysis
 
+This repository contains the Coffea-based workflow for the CMS Run-3 all-hadronic stop-pair search.
 
+It includes:
 
-## Getting started
+* object definitions and event selections
+* corrections and scale factors
+* nominal and shifted processor production
+* local Coffea execution
+* HTCondor submission
+* histogram reduction, merging, and scaling
+* lightweight workflow automation
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+The automation layer wraps the existing analysis scripts without changing the underlying physics implementation.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+---
 
-## Add your files
+## Repository Structure
 
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
-
+```text
+decaf/
+├── analysis/
+│   ├── processors/
+│   │   └── stop_processor_v4.py
+│   ├── metadata/
+│   │   └── KNU_2024_v4.json.gz
+│   ├── datasets/
+│   │   ├── datasets_2024.txt
+│   │   └── datasets_2024_onlymc.txt
+│   ├── data/
+│   │   ├── corrections.coffea
+│   │   ├── ids.coffea
+│   │   └── common.coffea
+│   ├── hists/
+│   ├── run.py
+│   ├── reduce.py
+│   ├── merge.py
+│   └── scale.py
+│
+├── automation/
+│   ├── __init__.py
+│   ├── cli.py
+│   ├── config.py
+│   ├── paths.py
+│   └── validation.py
+│
+├── condor/
+│   ├── run_condor_2024.sh
+│   ├── run_condor_2024.sub
+│   ├── run_condor_jesTotal.sub
+│   ├── run_condor_metUnclustered.sub
+│   ├── run_condor_jer.sub
+│   ├── analysis.tgz
+│   └── py38.tgz
+│
+├── condor_log/
+│
+├── configs/
+│   └── stop_2024.yaml
+│
+├── .gitignore
+├── README.md
+└── setup_condor.sh
 ```
-cd existing_repo
-git remote add origin https://gitlab.cern.ch/cms-analysis/nps/Run3Stop/decaf.git
-git branch -M master
-git push -uf origin master
+
+---
+
+## Working Directory
+
+The main EOS working copy is:
+
+```text
+/eos/user/t/taiwoo/run3_stop/decaf
 ```
 
-## Integrate with your tools
+Move to the repository before running the workflow:
 
-* [Set up project integrations](https://gitlab.cern.ch/cms-analysis/nps/Run3Stop/decaf/-/settings/integrations)
+```bash
+cd /eos/user/t/taiwoo/run3_stop/decaf
+```
 
-## Collaborate with your team
+---
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+## Software Environment
 
-## Test and Deploy
+The current analysis environment uses:
 
-Use the built-in continuous integration in GitLab.
+```text
+Python 3.8.20
+Coffea 0.7.22
+```
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
+The configured Python executable is:
 
-***
+```text
+/eos/user/t/taiwoo/miniconda3/envs/py38/bin/python
+```
 
-# Editing this README
+For interactive use:
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+```bash
+source /eos/user/t/taiwoo/miniconda3/etc/profile.d/conda.sh
+conda activate py38
+```
 
-## Suggestions for a good README
+The automation commands below use the Python executable configured in:
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+```text
+configs/stop_2024.yaml
+```
 
-## Name
-Choose a self-explaining name for your project.
+---
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+## Main Configuration
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+The 2024 workflow is configured in:
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+```text
+configs/stop_2024.yaml
+```
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+It defines:
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+* analysis year
+* metadata name
+* processor names
+* external shifts
+* dataset-list files
+* local output paths
+* Condor input files
+* Condor log directory
+* Python executable
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+The processor and correction modules remain the source of truth for the physics implementation.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+---
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+## Supported External Shifts
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+The current 2024 workflow supports:
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+```text
+nominal
+jesTotalUp
+jesTotalDown
+metUnclusteredUp
+metUnclusteredDown
+jerUp
+jerDown
+```
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+The nominal workflow runs both data and MC.
 
-## License
-For open source projects, say how it is licensed.
+The external shifted workflows use MC-only dataset lists.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+---
+
+# 1. Validate the Setup
+
+Run validation before processing or submitting jobs:
+
+```bash
+/eos/user/t/taiwoo/miniconda3/envs/py38/bin/python \
+  -m automation.cli validate \
+  --config configs/stop_2024.yaml
+```
+
+Validation checks include:
+
+* processor source
+* metadata JSON
+* correction pickle files
+* dataset-list files
+* local workflow scripts
+* processor output paths
+* histogram output paths
+* Condor tarballs
+* proxy
+* worker script
+* Condor log directory
+
+A successful validation prints `[OK]` messages.
+
+---
+
+# 2. Compile a Processor
+
+Compile the nominal processor:
+
+```bash
+/eos/user/t/taiwoo/miniconda3/envs/py38/bin/python \
+  -m automation.cli compile \
+  --config configs/stop_2024.yaml \
+  --shift nominal
+```
+
+Compile a shifted processor:
+
+```bash
+/eos/user/t/taiwoo/miniconda3/envs/py38/bin/python \
+  -m automation.cli compile \
+  --config configs/stop_2024.yaml \
+  --shift jerUp
+```
+
+Processor files are written under:
+
+```text
+analysis/data/
+```
+
+Examples:
+
+```text
+analysis/data/stop_2024_nominal.processor
+analysis/data/stop_2024_jerUp.processor
+analysis/data/stop_2024_jerDown.processor
+```
+
+The automation `run` and `submit` commands always recompile the selected processor before execution.
+
+---
+
+# 3. Local Small Test
+
+Always begin with a dry-run:
+
+```bash
+/eos/user/t/taiwoo/miniconda3/envs/py38/bin/python \
+  -m automation.cli run \
+  --config configs/stop_2024.yaml \
+  --shift nominal \
+  --dataset-prefix TTto2L2Nu_ \
+  --max-datasets 1 \
+  --max-files 1 \
+  --dry-run
+```
+
+This resolves:
+
+* one metadata key
+* at most one ROOT file for that key
+* the processor compile command
+* the local run command
+* the expected histogram directory
+
+Run the actual test by removing `--dry-run`:
+
+```bash
+/eos/user/t/taiwoo/miniconda3/envs/py38/bin/python \
+  -m automation.cli run \
+  --config configs/stop_2024.yaml \
+  --shift nominal \
+  --dataset-prefix TTto2L2Nu_ \
+  --max-datasets 1 \
+  --max-files 1
+```
+
+---
+
+## Dataset Selection Modes
+
+The automation CLI supports three mutually exclusive dataset-selection modes.
+
+### Legacy substring mode
+
+```bash
+--dataset TT
+```
+
+This selects every metadata key containing the text `TT`.
+
+It may also select samples such as:
+
+```text
+TTW
+TTZ
+TTTT
+```
+
+Use this mode carefully.
+
+### Exact metadata key
+
+```bash
+--dataset-key '<full metadata key>'
+```
+
+This selects exactly one metadata key.
+
+### Prefix mode
+
+```bash
+--dataset-prefix TTto2L2Nu_
+```
+
+This selects metadata keys beginning with the supplied prefix.
+
+For small tests, combine it with:
+
+```bash
+--max-datasets 1
+--max-files 1
+```
+
+The meaning of:
+
+```bash
+--max-files 1
+```
+
+is:
+
+```text
+at most one input file per resolved metadata key
+```
+
+It is not a global input-file limit.
+
+---
+
+# 4. Local Postprocessing
+
+Inspect the postprocessing commands first:
+
+```bash
+/eos/user/t/taiwoo/miniconda3/envs/py38/bin/python \
+  -m automation.cli postprocess \
+  --config configs/stop_2024.yaml \
+  --shift nominal \
+  --dry-run
+```
+
+The postprocessing sequence is:
+
+```text
+reduce.py
+→ merge.py
+→ scale.py
+```
+
+Run it:
+
+```bash
+/eos/user/t/taiwoo/miniconda3/envs/py38/bin/python \
+  -m automation.cli postprocess \
+  --config configs/stop_2024.yaml \
+  --shift nominal
+```
+
+The automation calls the three stages explicitly and does not use the legacy `postprocess.py`.
+
+---
+
+# 5. Prepare Condor Inputs
+
+The Condor workflow uses:
+
+```text
+condor/analysis.tgz
+condor/py38.tgz
+analysis/proxy/x509up_u147757
+```
+
+The setup helper is:
+
+```text
+setup_condor.sh
+```
+
+Run it from the repository root when the analysis tarball, Python environment tarball, or proxy must be refreshed:
+
+```bash
+bash setup_condor.sh
+```
+
+Before submission, verify:
+
+```bash
+ls -lh \
+  condor/analysis.tgz \
+  condor/py38.tgz \
+  analysis/proxy/x509up_u147757
+```
+
+---
+
+# 6. Condor Dry-Run
+
+Inspect a one-job submission before sending it:
+
+```bash
+/eos/user/t/taiwoo/miniconda3/envs/py38/bin/python \
+  -m automation.cli submit \
+  --config configs/stop_2024.yaml \
+  --shift jerUp \
+  --max-jobs 1 \
+  --dry-run
+```
+
+The dry-run prints:
+
+* selected dataset-list entries
+* total available job count
+* selected job count
+* processor compile command
+* generated submit description
+* `condor_submit` command
+* output remap path
+* shared Condor log path
+
+Dry-run does not:
+
+* compile the processor
+* submit Condor jobs
+* create generated submit files
+* create output files
+* create log files
+
+---
+
+# 7. Submit One Test Job
+
+Submit one real `jerUp` job:
+
+```bash
+/eos/user/t/taiwoo/miniconda3/envs/py38/bin/python \
+  -m automation.cli submit \
+  --config configs/stop_2024.yaml \
+  --shift jerUp \
+  --max-jobs 1
+```
+
+The automation performs:
+
+```text
+validation
+→ processor compilation
+→ generated submit creation
+→ condor_submit
+```
+
+Record the cluster ID printed by Condor.
+
+Check its status:
+
+```bash
+condor_q <CLUSTER_ID>
+```
+
+Inspect the cluster log:
+
+```bash
+tail -f \
+  /eos/user/t/taiwoo/run3_stop/decaf/condor_log/job.<CLUSTER_ID>.log
+```
+
+Remove the test cluster if necessary:
+
+```bash
+condor_rm <CLUSTER_ID>
+```
+
+---
+
+# 8. Condor Job Unit
+
+Each Condor job corresponds to:
+
+```text
+one shift × one dataset-list entry
+```
+
+A dataset-list entry is a metadata dataset-key token.
+
+It is not necessarily one ROOT file.
+
+The worker receives:
+
+```bash
+DATASET="$1"
+SHIFT="$2"
+PROCESSOR="stop_2024_${SHIFT}"
+```
+
+It then runs:
+
+```bash
+python run.py \
+  -p "stop_2024_${SHIFT}" \
+  -m KNU_2024_v4 \
+  -w 1 \
+  -d "${DATASET}"
+```
+
+The shift is therefore propagated through the processor name.
+
+Examples:
+
+```text
+stop_2024_nominal
+stop_2024_jesTotalUp
+stop_2024_jesTotalDown
+stop_2024_metUnclusteredUp
+stop_2024_metUnclusteredDown
+stop_2024_jerUp
+stop_2024_jerDown
+```
+
+---
+
+# 9. Condor Output
+
+Each worker creates:
+
+```text
+out.futures
+```
+
+Condor remaps it to:
+
+```text
+analysis/hists/stop_2024_<shift>/<dataset>.futures
+```
+
+Examples:
+
+```text
+analysis/hists/stop_2024_nominal/<dataset>.futures
+analysis/hists/stop_2024_jerUp/<dataset>.futures
+analysis/hists/stop_2024_jerDown/<dataset>.futures
+```
+
+---
+
+# 10. Condor Logs
+
+Condor logs are stored under the top-level directory:
+
+```text
+condor_log/
+```
+
+All jobs in one submitted cluster share one file:
+
+```text
+condor_log/job.<ClusterId>.log
+```
+
+The submit configuration uses:
+
+```condor
+initialdir = /eos/user/t/taiwoo/run3_stop/decaf/condor_log
+
+output = job.$(ClusterId).log
+error  = job.$(ClusterId).log
+log    = job.$(ClusterId).log
+```
+
+Therefore:
+
+* stdout
+* stderr
+* Condor event information
+* output from all ProcIds
+
+may be interleaved in the same cluster-level log file.
+
+This is intentional to avoid producing thousands of separate log files.
+
+---
+
+# 11. Full Condor Submission
+
+After validating one job, test a small group:
+
+```bash
+/eos/user/t/taiwoo/miniconda3/envs/py38/bin/python \
+  -m automation.cli submit \
+  --config configs/stop_2024.yaml \
+  --shift jerUp \
+  --max-jobs 10
+```
+
+After confirming all test jobs finish successfully, submit the full shift:
+
+```bash
+/eos/user/t/taiwoo/miniconda3/envs/py38/bin/python \
+  -m automation.cli submit \
+  --config configs/stop_2024.yaml \
+  --shift jerUp
+```
+
+Recommended sequence:
+
+```text
+1 job
+→ 10 jobs
+→ full shift
+```
+
+Repeat for:
+
+```text
+jerDown
+jesTotalUp
+jesTotalDown
+metUnclusteredUp
+metUnclusteredDown
+nominal
+```
+
+---
+
+# 12. Manual Condor Submit Files
+
+The top-level `condor/` directory contains manually maintained submit files:
+
+```text
+condor/run_condor_2024.sub
+condor/run_condor_jesTotal.sub
+condor/run_condor_metUnclustered.sub
+condor/run_condor_jer.sub
+```
+
+All shifts reuse the common worker:
+
+```text
+condor/run_condor_2024.sh
+```
+
+The JER submit file supports:
+
+```text
+jerUp
+jerDown
+```
+
+The automation CLI is preferred over direct manual submission because it provides:
+
+* validation
+* processor recompilation
+* dry-run
+* limited job submission
+* generated shift-specific submit files
+* explicit subprocess return-code handling
+
+---
+
+# 13. Git Ignore Policy
+
+Analysis outputs and large runtime files must not be committed.
+
+Recommended `.gitignore` entries:
+
+```gitignore
+# Coffea outputs
+*.futures
+*.reduced
+*.merged
+*.scaled
+*.processor
+
+# Large runtime files
+*.tgz
+*.tar
+*.tar.gz
+*.root
+
+# Condor logs and generated files
+condor_log/
+analysis/condor/generated/
+```
+
+Because the actual generated submit directory may be under the top-level `condor/`, also ignore it if used:
+
+```gitignore
+condor/generated/
+```
+
+Before committing:
+
+```bash
+git status
+git diff --cached --stat
+```
+
+Check for unwanted large or generated files:
+
+```bash
+git diff --cached --name-only \
+  | grep -E '\.(futures|merged|scaled|processor|tgz|root|log)$'
+```
+
+---
+
+# 14. Recommended Git Workflow
+
+Avoid using `git add .` without reviewing the result.
+
+Add only the intended source and configuration files:
+
+```bash
+git add \
+  automation/ \
+  configs/stop_2024.yaml \
+  analysis/run.py \
+  condor/*.sub \
+  condor/*.sh \
+  setup_condor.sh \
+  README.md \
+  .gitignore
+```
+
+Inspect the staged changes:
+
+```bash
+git status
+git diff --cached --stat
+git diff --cached
+```
+
+Commit:
+
+```bash
+git commit -m "Add local and Condor analysis automation"
+```
+
+Push:
+
+```bash
+git push
+```
+
+---
+
+# 15. Current Automation Scope
+
+Implemented:
+
+* configuration validation
+* processor compilation
+* local execution
+* local dry-run
+* safe metadata-key selection
+* limited local tests
+* postprocessing orchestration
+* Condor submission
+* Condor dry-run
+* limited Condor submission with `--max-jobs`
+
+Not yet fully automated:
+
+* Condor status summaries
+* expected-output completeness checks
+* missing-output detection
+* failed-job classification
+* failed-job resubmission
+* automatic postprocessing after production
+* plotting
+* ROOT template production
+* datacard generation
+* Combine execution
+
+---
+
+# 16. Recommended Production Workflow
+
+```text
+1. Validate the configuration
+2. Run one local file
+3. Test nominal and shifted processors locally
+4. Run one Condor job
+5. Run ten Condor jobs
+6. Submit a full shift
+7. Compare expected and produced outputs
+8. Resubmit missing or failed entries
+9. Run postprocessing
+10. Produce plots and templates
+```
+
+---
+
+# Physics Safety
+
+When modifying the analysis:
+
+* do not silently change event selections
+* do not silently change histogram names or binning
+* do not silently change correction tags or values
+* do not treat JES or JER as event weights
+* compare data and MC selection logic explicitly
+* validate nominal and shifted outputs
+* run small tests before full production
+
+The existing processor and correction modules remain the authoritative physics implementation.
