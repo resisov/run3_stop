@@ -737,6 +737,8 @@ class AnalysisProcessor(processor.ProcessorABC):
         get_jec_correction = self._corrections['get_jec_correction']
         get_jec_uncertainty = self._corrections['get_jec_uncertainty']
         get_fjec_correction = self._corrections['get_fjec_correction']
+        get_jer_sf = self._corrections['get_jer_sf']
+        get_fjer_sf = self._corrections['get_fjer_sf']
         get_ele_veto_id_sf = self._corrections['get_ele_veto_id_sf']
         get_ele_medium_id_sf = self._corrections['get_ele_medium_id_sf']
         get_ele_hlt_sf = self._corrections['get_ele_hlt_sf']
@@ -860,7 +862,6 @@ class AnalysisProcessor(processor.ProcessorABC):
             'phi': t.phi,
         }, with_name='PolarTwoVector', behavior=vector.behavior)
         t_medium = t[t.ismedium]
-        #print(t_medium.pt)
 
         ### Jets
         j = events.Jet # Events/Jet_*
@@ -881,6 +882,19 @@ class AnalysisProcessor(processor.ProcessorABC):
             elif self._shift_name == "jesTotalDown":
                 j['pt'] = j.pt * (1 - jec_unc)
                 j['mass'] = j.mass * (1 - jec_unc)
+
+        ### JER Scale smearing variation for systematics
+        if not isData:
+            jer_sf, jer_sf_up, jer_sf_down = get_jer_sf(self._year, j.pt, j.eta)
+            if self._shift_name == "jerUp":
+                j['pt'] = j.pt * jer_sf_up
+                j['mass'] = j.mass * jer_sf_up
+            elif self._shift_name == "jerDown":
+                j['pt'] = j.pt * jer_sf_down
+                j['mass'] = j.mass * jer_sf_down
+            else:
+                j['pt'] = j.pt * jer_sf
+                j['mass'] = j.mass * jer_sf
 
         ### Appling JetID
         j['isgood'] = isGoodJet(j, self._year)
@@ -924,8 +938,8 @@ class AnalysisProcessor(processor.ProcessorABC):
         ### FatJets
         fj = events.FatJet
         ### Appling JECs
-        fj_raw_pt = fj.pt * (1.0 - fj.rawFactor)
-        fj_raw_mass = fj.mass * (1.0 - fj.rawFactor)
+        fj_raw_pt = fj.pt #* (1.0 - fj.rawFactor)
+        fj_raw_mass = fj.mass #* (1.0 - fj.rawFactor)
         fjec_corr = get_fjec_correction(self._year, fj_raw_pt, fj.eta, fj.phi, rho_density, fj.area, run, isData)
 
         fj['pt'] = fj_raw_pt * fjec_corr

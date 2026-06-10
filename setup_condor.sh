@@ -1,7 +1,7 @@
 source /eos/user/t/taiwoo/miniconda3/etc/profile.d/conda.sh
 conda activate py38
 voms-proxy-init -voms cms -valid 72:00
-voms-proxy-init -voms cms -valid 72:00   -out /eos/user/t/taiwoo/decaf/analysis/proxy/x509up_u$(id -u)
+voms-proxy-init -voms cms -valid 72:00   -out /eos/user/t/taiwoo/run3_stop/decaf/analysis/proxy/x509up_u$(id -u)
 
 tar -czf analysis.tgz \
     --exclude='*.root' \

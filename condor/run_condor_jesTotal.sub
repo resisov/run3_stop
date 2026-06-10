@@ -9,23 +9,23 @@ transfer_executable = TRUE
 
 # inputs: tarballs + proxy
 transfer_input_files = \
-  /eos/user/t/taiwoo/decaf/condor/analysis.tgz, \
-  /eos/user/t/taiwoo/decaf/condor/py38.tgz, \
-  /eos/user/t/taiwoo/decaf/analysis/proxy/x509up_u147757
+  /eos/user/t/taiwoo/run3_stop/decaf/condor/analysis.tgz, \
+  /eos/user/t/taiwoo/run3_stop/decaf/condor/py38.tgz, \
+  /eos/user/t/taiwoo/run3_stop/decaf/analysis/proxy/x509up_u147757
 
 # run_condor.sh creates this file in scratch
 transfer_output_files = out.futures
 
 # send output directly to the final shift directory
-transfer_output_remaps = "out.futures=/eos/user/t/taiwoo/decaf/analysis/hists/stop_2024_$(shift)/$(dataset).futures"
+transfer_output_remaps = "out.futures=/eos/user/t/taiwoo/run3_stop/decaf/analysis/hists/stop_2024_$(shift)/$(dataset).futures"
 
 # only for condor logs; this directory must exist
-initialdir = /eos/user/t/taiwoo/decaf/analysis/hists/condor_logs
+initialdir = /eos/user/t/taiwoo/run3_stop/decaf/condor_log
 
 # condor logs
-output = job.$(ClusterId).$(ProcId).$(shift).out
-error  = job.$(ClusterId).$(ProcId).$(shift).err
-log    = condor.$(ClusterId).log
+output = job.$(ClusterId).log
+error  = job.$(ClusterId).log
+log    = job.$(ClusterId).log
 
 request_cpus   = 1
 request_memory = 6000
@@ -37,8 +37,8 @@ getenv = true
 
 # jesTotalUp
 shift = jesTotalUp
-queue dataset from /eos/user/t/taiwoo/decaf/analysis/datasets_2024_onlymc.txt
+queue dataset from /eos/user/t/taiwoo/run3_stop/decaf/analysis/datasets/datasets_2024_onlymc.txt
 
 # jesTotalDown
 shift = jesTotalDown
-queue dataset from /eos/user/t/taiwoo/decaf/analysis/datasets_2024_onlymc.txt
+queue dataset from /eos/user/t/taiwoo/run3_stop/decaf/analysis/datasets/datasets_2024_onlymc.txt

@@ -18,7 +18,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 def run(processor_instance, samplefiles):
-    fileslice = slice(None)
+    fileslice = slice(None) if options.max_files is None else slice(options.max_files)
     for dataset, info in samplefiles.items():
         filelist = {}
         if options.dataset:
@@ -51,6 +51,7 @@ if __name__ == '__main__':
     parser.add_option('-m', '--metadata', help='metadata', dest='metadata')
     parser.add_option('-d', '--dataset', help='dataset', dest='dataset')
     parser.add_option('-w', '--workers', help='Number of workers to use for multi-worker executors (e.g. futures or condor)', dest='workers', type=int, default=8)
+    parser.add_option('--max-files', help='Maximum number of files to process per selected dataset', dest='max_files', type=int, default=None)
     (options, args) = parser.parse_args()
     
     processor_instance=load('data/'+options.processor+'.processor')

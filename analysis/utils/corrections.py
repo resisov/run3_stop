@@ -107,10 +107,10 @@ def get_jec_correction(year, pt, eta, phi, rho, area, run, isData):
         ## DATA Correction
         if isData:
             jec_names = {
-                'L1FastJet' : "Summer24Prompt24_V2_DATA_L1FastJet_AK4PFPuppi",
-                'L2Relative' : "Summer24Prompt24_V2_DATA_L2Relative_AK4PFPuppi",
-                'L3Absolute' : "Summer24Prompt24_V2_DATA_L3Absolute_AK4PFPuppi",
-                'L2L3Residual' : "Summer24Prompt24_V2_DATA_L2L3Residual_AK4PFPuppi"
+                'L1FastJet' : "Summer24Prompt24_V3_DATA_L1FastJet_AK4PFPuppi",
+                'L2Relative' : "Summer24Prompt24_V3_DATA_L2Relative_AK4PFPuppi",
+                'L3Absolute' : "Summer24Prompt24_V3_DATA_L3Absolute_AK4PFPuppi",
+                'L2L3Residual' : "Summer24Prompt24_V3_DATA_L2L3Residual_AK4PFPuppi"
             }
             # L1FastJet Correction
             corr_L1 = evaluator[jec_names['L1FastJet']].evaluate(area, eta, pt, rho)
@@ -124,9 +124,9 @@ def get_jec_correction(year, pt, eta, phi, rho, area, run, isData):
         ## MC Correction
         else:
             jec_names = {
-                'L1FastJet' : "Summer24Prompt24_V2_MC_L1FastJet_AK4PFPuppi",
-                'L2Relative' : "Summer24Prompt24_V2_MC_L2Relative_AK4PFPuppi",
-                'L3Absolute' : "Summer24Prompt24_V2_MC_L3Absolute_AK4PFPuppi"
+                'L1FastJet' : "Summer24Prompt24_V3_MC_L1FastJet_AK4PFPuppi",
+                'L2Relative' : "Summer24Prompt24_V3_MC_L2Relative_AK4PFPuppi",
+                'L3Absolute' : "Summer24Prompt24_V3_MC_L3Absolute_AK4PFPuppi"
             }
             # L1FastJet Correction
             corr_L1 = evaluator[jec_names['L1FastJet']].evaluate(area, eta, pt, rho)
@@ -243,10 +243,10 @@ def get_fjec_correction(year, pt, eta, phi, rho, area, run, isData):
         ## DATA Correction
         if isData:
             jec_names = {
-                'L1FastJet' : "Summer24Prompt24_V2_DATA_L1FastJet_AK8PFPuppi",
-                'L2Relative' : "Summer24Prompt24_V2_DATA_L2Relative_AK8PFPuppi",
-                'L3Absolute' : "Summer24Prompt24_V2_DATA_L3Absolute_AK8PFPuppi",
-                'L2L3Residual' : "Summer24Prompt24_V2_DATA_L2L3Residual_AK8PFPuppi"
+                'L1FastJet' : "Summer24Prompt24_V3_DATA_L1FastJet_AK8PFPuppi",
+                'L2Relative' : "Summer24Prompt24_V3_DATA_L2Relative_AK8PFPuppi",
+                'L3Absolute' : "Summer24Prompt24_V3_DATA_L3Absolute_AK8PFPuppi",
+                'L2L3Residual' : "Summer24Prompt24_V3_DATA_L2L3Residual_AK8PFPuppi"
             }
             # L1FastJet Correction
             corr_L1 = evaluator[jec_names['L1FastJet']].evaluate(area, eta, pt, rho)
@@ -260,9 +260,9 @@ def get_fjec_correction(year, pt, eta, phi, rho, area, run, isData):
         ## MC Correction
         else:
             jec_names = {
-                'L1FastJet' : "Summer24Prompt24_V2_MC_L1FastJet_AK8PFPuppi",
-                'L2Relative' : "Summer24Prompt24_V2_MC_L2Relative_AK8PFPuppi",
-                'L3Absolute' : "Summer24Prompt24_V2_MC_L3Absolute_AK8PFPuppi"
+                'L1FastJet' : "Summer24Prompt24_V3_MC_L1FastJet_AK8PFPuppi",
+                'L2Relative' : "Summer24Prompt24_V3_MC_L2Relative_AK8PFPuppi",
+                'L3Absolute' : "Summer24Prompt24_V3_MC_L3Absolute_AK8PFPuppi"
             }
             # L1FastJet Correction
             corr_L1 = evaluator[jec_names['L1FastJet']].evaluate(area, eta, pt, rho)
@@ -307,6 +307,30 @@ def get_fjec_correction(year, pt, eta, phi, rho, area, run, isData):
             corr = corr_L1 * corr_L2 * corr_L3
 
     return ak.unflatten(corr, counts)
+
+
+### JER scale factor
+def get_jer_sf(year, pt, eta):
+    evaluator = correctionlib.CorrectionSet.from_file('data/JMESF/'+year+'/jet_jerc.json.gz')
+    counts = ak.num(pt)
+    flatpt, flateta = ak.flatten(pt), ak.flatten(eta)
+    sf_nominal = evaluator["Summer24Prompt24_JRV1_MC_ScaleFactor_AK4PFPuppi"].evaluate(flateta, flatpt)
+    sf_uncertainty = evaluator["Summer24Prompt24_JRV1_MC_SFUncertainty_AK4PFPuppi"].evaluate(flateta, flatpt)
+    sf_up = sf_nominal + sf_uncertainty
+    sf_down = sf_nominal - sf_uncertainty
+    return ak.unflatten(sf_nominal, counts), ak.unflatten(sf_up, counts), ak.unflatten(sf_down, counts)
+
+def get_fjer_sf(year, pt, eta):
+    evaluator = correctionlib.CorrectionSet.from_file('data/JMESF/'+year+'/fatJet_jerc.json.gz')
+    counts = ak.num(pt)
+    flatpt, flateta = ak.flatten(pt), ak.flatten(eta)
+    sf_nominal = evaluator["Summer24Prompt24_JRV1_MC_ScaleFactor_AK8PFPuppi"].evaluate(flateta, flatpt)
+    sf_uncertainty = evaluator["Summer24Prompt24_JRV1_MC_SFUncertainty_AK8PFPuppi"].evaluate(flateta, flatpt)
+    sf_up = sf_nominal + sf_uncertainty
+    sf_down = sf_nominal - sf_uncertainty
+    return ak.unflatten(sf_nominal, counts), ak.unflatten(sf_up, counts), ak.unflatten(sf_down, counts)
+
+
 
 ####
 # Muon ID scale factor
@@ -915,6 +939,8 @@ corrections = {
     'get_jec_correction':       get_jec_correction,
     'get_jec_uncertainty':      get_jec_uncertainty,
     'get_fjec_correction':      get_fjec_correction,
+    'get_jer_sf':              get_jer_sf,
+    'get_fjer_sf':             get_fjer_sf,
     'get_mu_highpt_id_sf':      get_mu_highpt_id_sf,
     'get_mu_loose_iso_sf':      get_mu_loose_iso_sf,
     'get_mu_hlt_sf':            get_mu_hlt_sf,

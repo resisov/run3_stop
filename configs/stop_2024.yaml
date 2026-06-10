@@ -1,0 +1,94 @@
+analysis:
+  name: stop
+  label: run3_allhadronic_stop
+  year: "2024"
+
+paths:
+  analysis_dir: analysis
+  metadata_dir: analysis/metadata
+  processor_dir: analysis/processors
+  data_dir: analysis/data
+  hist_dir: analysis/hists
+  dataset_dir: analysis/datasets
+  condor_dir: condor
+
+metadata:
+  name: KNU_2024_v4
+  file: KNU_2024_v4.json.gz
+
+processor:
+  source: processors/stop_processor_v4.py
+  class_name: AnalysisProcessor
+  output_prefix: stop_2024
+
+execution:
+  python: /eos/user/t/taiwoo/miniconda3/envs/py38/bin/python
+  workers: 8
+  tree_name: Events
+
+shifts:
+  nominal:
+    processor_name: stop_2024_nominal
+    compile_name: 2024_nominal
+    shift_arg: null
+    datasets_file: datasets_2024.txt
+    run_data: true
+
+  jesTotalUp:
+    processor_name: stop_2024_jesTotalUp
+    compile_name: 2024_jesTotalUp
+    shift_arg: jesTotalUp
+    datasets_file: datasets_2024_onlymc.txt
+    run_data: false
+
+  jesTotalDown:
+    processor_name: stop_2024_jesTotalDown
+    compile_name: 2024_jesTotalDown
+    shift_arg: jesTotalDown
+    datasets_file: datasets_2024_onlymc.txt
+    run_data: false
+
+  metUnclusteredUp:
+    processor_name: stop_2024_metUnclusteredUp
+    compile_name: 2024_metUnclusteredUp
+    shift_arg: metUnclusteredUp
+    datasets_file: datasets_2024_onlymc.txt
+    run_data: false
+
+  metUnclusteredDown:
+    processor_name: stop_2024_metUnclusteredDown
+    compile_name: 2024_metUnclusteredDown
+    shift_arg: metUnclusteredDown
+    datasets_file: datasets_2024_onlymc.txt
+    run_data: false
+
+  jerUp:
+    processor_name: stop_2024_jerUp
+    compile_name: 2024_jerUp
+    shift_arg: jerUp
+    datasets_file: datasets_2024_onlymc.txt
+    run_data: false
+
+  jerDown:
+    processor_name: stop_2024_jerDown
+    compile_name: 2024_jerDown
+    shift_arg: jerDown
+    datasets_file: datasets_2024_onlymc.txt
+    run_data: false
+
+condor:
+  executable: condor/run_condor_2024.sh
+  submit_template: condor/run_condor_2024.sub
+  setup_script: setup_condor.sh
+  submit_command: condor_submit
+  analysis_tarball: /eos/user/t/taiwoo/run3_stop/decaf/condor/analysis.tgz
+  python_tarball: /eos/user/t/taiwoo/run3_stop/decaf/condor/py38.tgz
+  proxy: /eos/user/t/taiwoo/run3_stop/decaf/analysis/proxy/x509up_u147757
+  initialdir: /eos/user/t/taiwoo/run3_stop/decaf/condor_log
+  shared_log: job.$(ClusterId).log
+
+artifacts:
+  processor_file: "{data_dir}/{processor_name}.processor"
+  futures_dir: "{hist_dir}/{processor_name}"
+  merged_file: "{hist_dir}/{processor_name}.merged"
+  scaled_file: "{hist_dir}/{processor_name}.scaled"
