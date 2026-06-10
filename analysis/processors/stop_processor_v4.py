@@ -688,12 +688,6 @@ class AnalysisProcessor(processor.ProcessorABC):
                 hist.axis.Regular(50, 0.0, 1.0, name='fj1WvsQCD', label='Leading Fat Jet WvsQCD'),
                 storage=hist.storage.Weight(),
             ),
-            'fj1QCD': hist.Hist(
-                hist.axis.StrCategory([], name='region', growth=True),
-                hist.axis.StrCategory([], name='systematic', growth=True),
-                hist.axis.Regular(50, 0.0, 1.0, name='fj1QCD', label='Leading Fat Jet QCD'),
-                storage=hist.storage.Weight(),
-            ),
         }
     
     def process(self, events):
@@ -872,8 +866,8 @@ class AnalysisProcessor(processor.ProcessorABC):
         j = events.Jet # Events/Jet_*
         ### Appling JECs
         rho_density = events.Rho.fixedGridRhoFastjetAll
-        j_raw_pt = j.pt * (1.0 - j.rawFactor)
-        j_raw_mass = j.mass * (1.0 - j.rawFactor)
+        j_raw_pt = j.pt #* (1.0 - j.rawFactor)
+        j_raw_mass = j.mass #* (1.0 - j.rawFactor)
         jec_corr = get_jec_correction(self._year, j_raw_pt, j.eta, j.phi, rho_density, j.area, run, isData)
         j['pt'] = j_raw_pt * jec_corr
         j['mass'] = j_raw_mass * jec_corr
@@ -932,7 +926,7 @@ class AnalysisProcessor(processor.ProcessorABC):
         ### Appling JECs
         fj_raw_pt = fj.pt * (1.0 - fj.rawFactor)
         fj_raw_mass = fj.mass * (1.0 - fj.rawFactor)
-        fjec_corr = get_fjec_correction(self._year, fj.pt, fj.eta, fj.phi, rho_density, fj.area, run, isData)
+        fjec_corr = get_fjec_correction(self._year, fj_raw_pt, fj.eta, fj.phi, rho_density, fj.area, run, isData)
 
         fj['pt'] = fj_raw_pt * fjec_corr
         fj['mass'] = fj_raw_mass * fjec_corr
@@ -1400,9 +1394,8 @@ class AnalysisProcessor(processor.ProcessorABC):
                     'fj1msd': ak.fill_none(ak.firsts(fj_good).msoftdrop, -99),
                     'fj1phi': ak.fill_none(ak.firsts(fj_good).phi, -99),
                     'fj1eta': ak.fill_none(ak.firsts(fj_good).eta, -99),
-                    'fj1TvsQCD': ak.fill_none(ak.firsts(fj_good).particleNetWithMass_TvsQCD, -99),
-                    'fj1WvsQCD': ak.fill_none(ak.firsts(fj_good).particleNetWithMass_WvsQCD, -99),
-                    'fj1QCD': ak.fill_none(ak.firsts(fj_good).particleNetWithMass_QCD, -99),
+                    'fj1TvsQCD': ak.fill_none(ak.firsts(fj_good).globalParT3_withMassTopvsQCD, -99),
+                    'fj1WvsQCD': ak.fill_none(ak.firsts(fj_good).globalParT3_withMassWvsQCD, -99),
                 }
                 if region in mll:
                     variables['mll'] = mll[region]

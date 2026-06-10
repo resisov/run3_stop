@@ -69,6 +69,7 @@ def get_jec_correction(year, pt, eta, phi, rho, area, run, isData):
             jec_names = {
                 'L1FastJet' : "Summer22_22Sep2023_RunCD_V3_DATA_L1FastJet_AK4PFPuppi",
                 'L2Relative' : "Summer22_22Sep2023_RunCD_V3_DATA_L2Relative_AK4PFPuppi",
+                'L3Absolute' : "Summer22_22Sep2023_RunCD_V3_DATA_L3Absolute_AK4PFPuppi",
                 'L2L3Residual' : "Summer22_22Sep2023_RunCD_V3_DATA_L2L3Residual_AK4PFPuppi"
             }
             # L1FastJet Correction
@@ -76,21 +77,25 @@ def get_jec_correction(year, pt, eta, phi, rho, area, run, isData):
             # L2Relative Correction
             corr_L2 = evaluator[jec_names['L2Relative']].evaluate(eta, phi, pt)
             # L3Absolute Correction
+            corr_L3 = evaluator[jec_names['L3Absolute']].evaluate(eta, pt)
             # L2L3Residual Correction
             corr_L2L3 = evaluator[jec_names['L2L3Residual']].evaluate(run, eta, pt)
-            corr = corr_L1 * corr_L2 * corr_L2L3
+            corr = corr_L1 * corr_L2 * corr_L3 * corr_L2L3
         ## MC Correction
         else:
             jec_names = {
                 'L1FastJet' : "Summer22_22Sep2023_V3_MC_L1FastJet_AK4PFPuppi",
                 'L2Relative' : "Summer22_22Sep2023_V3_MC_L2Relative_AK4PFPuppi",
+                'L3Absolute' : "Summer22_22Sep2023_V3_MC_L3Absolute_AK4PFPuppi"
             }
             # L1FastJet Correction
             corr_L1 = evaluator[jec_names['L1FastJet']].evaluate(area, eta, pt, rho)
             # L2Relative Correction
             corr_L2 = evaluator[jec_names['L2Relative']].evaluate(eta, phi, pt)
             # L3Absolute Correction
-            corr = corr_L1 * corr_L2
+            corr_L3 = evaluator[jec_names['L3Absolute']].evaluate(eta, pt)
+            # L3Absolute Correction
+            corr = corr_L1 * corr_L2 * corr_L3
 
     elif year == '2022post':
         pass
@@ -104,27 +109,33 @@ def get_jec_correction(year, pt, eta, phi, rho, area, run, isData):
             jec_names = {
                 'L1FastJet' : "Summer24Prompt24_V2_DATA_L1FastJet_AK4PFPuppi",
                 'L2Relative' : "Summer24Prompt24_V2_DATA_L2Relative_AK4PFPuppi",
+                'L3Absolute' : "Summer24Prompt24_V2_DATA_L3Absolute_AK4PFPuppi",
                 'L2L3Residual' : "Summer24Prompt24_V2_DATA_L2L3Residual_AK4PFPuppi"
             }
             # L1FastJet Correction
             corr_L1 = evaluator[jec_names['L1FastJet']].evaluate(area, eta, pt, rho)
             # L2Relative Correction
             corr_L2 = evaluator[jec_names['L2Relative']].evaluate(eta, phi, pt)
+            # L3Absolute Correction
+            corr_L3 = evaluator[jec_names['L3Absolute']].evaluate(eta, pt)
             # L2L3Residual Correction
             corr_L2L3 = evaluator[jec_names['L2L3Residual']].evaluate(run, eta, pt)
-            corr = corr_L1 * corr_L2 * corr_L2L3
+            corr = corr_L1 * corr_L2 * corr_L3 * corr_L2L3
         ## MC Correction
         else:
             jec_names = {
                 'L1FastJet' : "Summer24Prompt24_V2_MC_L1FastJet_AK4PFPuppi",
                 'L2Relative' : "Summer24Prompt24_V2_MC_L2Relative_AK4PFPuppi",
+                'L3Absolute' : "Summer24Prompt24_V2_MC_L3Absolute_AK4PFPuppi"
             }
             # L1FastJet Correction
             corr_L1 = evaluator[jec_names['L1FastJet']].evaluate(area, eta, pt, rho)
             # L2Relative Correction
             corr_L2 = evaluator[jec_names['L2Relative']].evaluate(eta, phi, pt)
+            # L3Absolute Correction
+            corr_L3 = evaluator[jec_names['L3Absolute']].evaluate(eta, pt)
 
-            corr = corr_L1 * corr_L2
+            corr = corr_L1 * corr_L2 * corr_L3
 
     elif year == '2025':
         ## DATA Correction
@@ -132,27 +143,33 @@ def get_jec_correction(year, pt, eta, phi, rho, area, run, isData):
             jec_names = {
                 'L1FastJet' : "Winter25Prompt25_V3_DATA_L1FastJet_AK4PFPuppi",
                 'L2Relative' : "Winter25Prompt25_V3_DATA_L2Relative_AK4PFPuppi",
+                'L3Absolute' : "Winter25Prompt25_V3_DATA_L3Absolute_AK4PFPuppi",
                 'L2L3Residual' : "Winter25Prompt25_V3_DATA_L2L3Residual_AK4PFPuppi"
             }
             # L1FastJet Correction
             corr_L1 = evaluator[jec_names['L1FastJet']].evaluate(area, eta, pt, rho)
             # L2Relative Correction
             corr_L2 = evaluator[jec_names['L2Relative']].evaluate(eta, phi, pt)
+            # L3Absolute Correction
+            corr_L3 = evaluator[jec_names['L3Absolute']].evaluate(eta, pt)
             # L2L3Residual Correction
             corr_L2L3 = evaluator[jec_names['L2L3Residual']].evaluate(run, eta, pt)
-            corr = corr_L1 * corr_L2 * corr_L2L3
+            corr = corr_L1 * corr_L2 * corr_L3 * corr_L2L3
         ## MC Correction
         else:
             jec_names = {
                 'L1FastJet' : "Winter25Prompt25_V3_MC_L1FastJet_AK4PFPuppi",
                 'L2Relative' : "Winter25Prompt25_V3_MC_L2Relative_AK4PFPuppi",
+                'L3Absolute' : "Winter25Prompt25_V3_MC_L3Absolute_AK4PFPuppi"
             }
             # L1FastJet Correction
             corr_L1 = evaluator[jec_names['L1FastJet']].evaluate(area, eta, pt, rho)
             # L2Relative Correction
             corr_L2 = evaluator[jec_names['L2Relative']].evaluate(eta, phi, pt)
+            # L3Absolute Correction
+            corr_L3 = evaluator[jec_names['L3Absolute']].evaluate(eta, pt)
 
-            corr = corr_L1 * corr_L2
+            corr = corr_L1 * corr_L2 * corr_L3
 
     return ak.unflatten(corr, counts)
 
@@ -188,27 +205,33 @@ def get_fjec_correction(year, pt, eta, phi, rho, area, run, isData):
             jec_names = {
                 'L1FastJet' : "Summer22_22Sep2023_RunCD_V3_DATA_L1FastJet_AK8PFPuppi",
                 'L2Relative' : "Summer22_22Sep2023_RunCD_V3_DATA_L2Relative_AK8PFPuppi",
+                'L3Absolute' : "Summer22_22Sep2023_RunCD_V3_DATA_L3Absolute_AK8PFPuppi",
                 'L2L3Residual' : "Summer22_22Sep2023_RunCD_V3_DATA_L2L3Residual_AK8PFPuppi"
             }
             # L1FastJet Correction
             corr_L1 = evaluator[jec_names['L1FastJet']].evaluate(area, eta, pt, rho)
             # L2Relative Correction
             corr_L2 = evaluator[jec_names['L2Relative']].evaluate(eta, pt)
+            # L3Absolute Correction
+            corr_L3 = evaluator[jec_names['L3Absolute']].evaluate(eta, pt)
             # L2L3Residual Correction
             corr_L2L3 = evaluator[jec_names['L2L3Residual']].evaluate(run, eta, pt)
-            corr = corr_L1 * corr_L2 * corr_L2L3
+            corr = corr_L1 * corr_L2 * corr_L3 * corr_L2L3
         ## MC Correction
         else:
             jec_names = {
                 'L1FastJet' : "Summer22_22Sep2023_V3_MC_L1FastJet_AK8PFPuppi",
                 'L2Relative' : "Summer22_22Sep2023_V3_MC_L2Relative_AK8PFPuppi",
+                'L3Absolute' : "Summer22_22Sep2023_V3_MC_L3Absolute_AK8PFPuppi"
             }
             # L1FastJet Correction
             corr_L1 = evaluator[jec_names['L1FastJet']].evaluate(area, eta, pt, rho)
             # L2Relative Correction
             corr_L2 = evaluator[jec_names['L2Relative']].evaluate(eta, pt)
+            # L3Absolute Correction
+            corr_L3 = evaluator[jec_names['L3Absolute']].evaluate(eta, pt)
 
-            corr = corr_L1 * corr_L2
+            corr = corr_L1 * corr_L2 * corr_L3
 
     elif year == '2022post':
         pass
@@ -222,27 +245,33 @@ def get_fjec_correction(year, pt, eta, phi, rho, area, run, isData):
             jec_names = {
                 'L1FastJet' : "Summer24Prompt24_V2_DATA_L1FastJet_AK8PFPuppi",
                 'L2Relative' : "Summer24Prompt24_V2_DATA_L2Relative_AK8PFPuppi",
+                'L3Absolute' : "Summer24Prompt24_V2_DATA_L3Absolute_AK8PFPuppi",
                 'L2L3Residual' : "Summer24Prompt24_V2_DATA_L2L3Residual_AK8PFPuppi"
             }
             # L1FastJet Correction
             corr_L1 = evaluator[jec_names['L1FastJet']].evaluate(area, eta, pt, rho)
             # L2Relative Correction
             corr_L2 = evaluator[jec_names['L2Relative']].evaluate(eta, phi, pt)
+            # L3Absolute Correction
+            corr_L3 = evaluator[jec_names['L3Absolute']].evaluate(eta, pt)
             # L2L3Residual Correction
             corr_L2L3 = evaluator[jec_names['L2L3Residual']].evaluate(run, eta, pt)
-            corr = corr_L1 * corr_L2 * corr_L2L3
+            corr = corr_L1 * corr_L2 * corr_L3 * corr_L2L3
         ## MC Correction
         else:
             jec_names = {
                 'L1FastJet' : "Summer24Prompt24_V2_MC_L1FastJet_AK8PFPuppi",
                 'L2Relative' : "Summer24Prompt24_V2_MC_L2Relative_AK8PFPuppi",
+                'L3Absolute' : "Summer24Prompt24_V2_MC_L3Absolute_AK8PFPuppi"
             }
             # L1FastJet Correction
             corr_L1 = evaluator[jec_names['L1FastJet']].evaluate(area, eta, pt, rho)
             # L2Relative Correction
             corr_L2 = evaluator[jec_names['L2Relative']].evaluate(eta, phi, pt)
+            # L3Absolute Correction
+            corr_L3 = evaluator[jec_names['L3Absolute']].evaluate(eta, pt)
 
-            corr = corr_L1 * corr_L2
+            corr = corr_L1 * corr_L2 * corr_L3
 
     elif year == '2025':
         ## DATA Correction
@@ -250,26 +279,32 @@ def get_fjec_correction(year, pt, eta, phi, rho, area, run, isData):
             jec_names = {
                 'L1FastJet' : "Winter25Prompt25_V3_DATA_L1FastJet_AK8PFPuppi",
                 'L2Relative' : "Winter25Prompt25_V3_DATA_L2Relative_AK8PFPuppi",
+                'L3Absolute' : "Winter25Prompt25_V3_DATA_L3Absolute_AK8PFPuppi",
                 'L2L3Residual' : "Winter25Prompt25_V3_DATA_L2L3Residual_AK8PFPuppi"
             }
             # L1FastJet Correction
             corr_L1 = evaluator[jec_names['L1FastJet']].evaluate(area, eta, pt, rho)
             # L2Relative Correction
             corr_L2 = evaluator[jec_names['L2Relative']].evaluate(eta, phi, pt)
+            # L3Absolute Correction
+            corr_L3 = evaluator[jec_names['L3Absolute']].evaluate(eta, pt)
             # L2L3Residual Correction
             corr_L2L3 = evaluator[jec_names['L2L3Residual']].evaluate(run, eta, pt)
-            corr = corr_L1 * corr_L2 * corr_L2L3
+            corr = corr_L1 * corr_L2 * corr_L3 * corr_L2L3
         ## MC Correction
         else:
             jec_names = {
                 'L1FastJet' : "Winter25Prompt25_V3_MC_L1FastJet_AK8PFPuppi",
                 'L2Relative' : "Winter25Prompt25_V3_MC_L2Relative_AK8PFPuppi",
+                'L3Absolute' : "Winter25Prompt25_V3_MC_L3Absolute_AK8PFPuppi"
             }
             # L1FastJet Correction
             corr_L1 = evaluator[jec_names['L1FastJet']].evaluate(area, eta, pt, rho)
             # L2Relative Correction
             corr_L2 = evaluator[jec_names['L2Relative']].evaluate(eta, phi, pt)
-            corr = corr_L1 * corr_L2 
+            # L3Absolute Correction
+            corr_L3 = evaluator[jec_names['L3Absolute']].evaluate(eta, pt)
+            corr = corr_L1 * corr_L2 * corr_L3
 
     return ak.unflatten(corr, counts)
 
