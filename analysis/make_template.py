@@ -3,6 +3,7 @@
 
 import os
 import copy
+import argparse
 import numpy as np
 import uproot
 import hist
@@ -18,6 +19,9 @@ INPUT_METUNCL_DOWN = "hists/stop_2024_metUnclusteredDown.scaled"
 
 INPUT_JES_UP = "hists/stop_2024_jesTotalUp.scaled"
 INPUT_JES_DOWN = "hists/stop_2024_jesTotalDown.scaled"
+
+INPUT_JER_UP = "hists/stop_2024_jerUp.scaled"
+INPUT_JER_DOWN = "hists/stop_2024_jerDown.scaled"
 
 OUTPUT = "templates_metpt.root"
 
@@ -79,6 +83,12 @@ EXTERNAL_SHAPE_SYSTS = {
         "up_syst": "jesTotalUp",
         "down_file": INPUT_JES_DOWN,
         "down_syst": "jesTotalDown",
+    },
+    "jer": {
+        "up_file": INPUT_JER_UP,
+        "up_syst": "jerUp",
+        "down_file": INPUT_JER_DOWN,
+        "down_syst": "jerDown",
     },
 }
 
@@ -355,12 +365,36 @@ def check_external_axis(container, variable, process, syst_name, label):
 # ============================================================
 # Main
 # ============================================================
-def main():
-    if not os.path.exists(INPUT_NOMINAL):
-        raise FileNotFoundError(f"Input file not found: {INPUT_NOMINAL}")
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--nominal-scaled", default=INPUT_NOMINAL)
+    parser.add_argument("--output-root", default=OUTPUT)
+    parser.add_argument("--met-unclustered-up", default=INPUT_METUNCL_UP)
+    parser.add_argument("--met-unclustered-down", default=INPUT_METUNCL_DOWN)
+    parser.add_argument("--jes-total-up", default=INPUT_JES_UP)
+    parser.add_argument("--jes-total-down", default=INPUT_JES_DOWN)
+    parser.add_argument("--jer-up", default=INPUT_JER_UP)
+    parser.add_argument("--jer-down", default=INPUT_JER_DOWN)
+    return parser.parse_args()
 
-    print(f"[INFO] Loading nominal: {INPUT_NOMINAL}")
-    myhist = load(INPUT_NOMINAL)
+
+def main():
+    args = parse_args()
+    input_nominal = args.nominal_scaled
+    output = args.output_root
+    external_shape_systs = copy.deepcopy(EXTERNAL_SHAPE_SYSTS)
+    external_shape_systs["metUnclustered"]["up_file"] = args.met_unclustered_up
+    external_shape_systs["metUnclustered"]["down_file"] = args.met_unclustered_down
+    external_shape_systs["jesTotal"]["up_file"] = args.jes_total_up
+    external_shape_systs["jesTotal"]["down_file"] = args.jes_total_down
+    external_shape_systs["jer"]["up_file"] = args.jer_up
+    external_shape_systs["jer"]["down_file"] = args.jer_down
+
+    if not os.path.exists(input_nominal):
+        raise FileNotFoundError(f"Input file not found: {input_nominal}")
+
+    print(f"[INFO] Loading nominal: {input_nominal}")
+    myhist = load(input_nominal)
 
     bkg = myhist["bkg"]
     data = myhist["data"]
@@ -373,7 +407,7 @@ def main():
 
     external_loaded = {}
 
-    for syst_name, cfg in EXTERNAL_SHAPE_SYSTS.items():
+    for syst_name, cfg in external_shape_systs.items():
         up_file = cfg["up_file"]
         down_file = cfg["down_file"]
 
@@ -428,7 +462,7 @@ def main():
 
     all_mc_processes = BKG_PROCESSES + SIG_PROCESSES
 
-    with uproot.recreate(OUTPUT) as fout:
+    with uproot.recreate(output) as fout:
         for region in REGIONS:
             print(f"\n[INFO] Writing region: {region}")
 
@@ -578,9 +612,9 @@ def main():
                         f"  integral={integral(h_down):.6f}"
                     )
 
-    print(f"\n[INFO] Done. Output written to: {OUTPUT}")
+    print(f"\n[INFO] Done. Output written to: {output}")
     print("\nExample datacard shapes line:")
-    print(f"shapes * * {OUTPUT} $CHANNEL/$PROCESS $CHANNEL/$PROCESS_$SYSTEMATIC")
+    print(f"shapes * * {output} $CHANNEL/$PROCESS $CHANNEL/$PROCESS_$SYSTEMATIC")
 
     print("\nDatacard shape nuisance examples:")
     print("pileup                  shape  ...")
@@ -594,6 +628,7 @@ def main():
     print("btagSF_light_uncorrelated shape ...")
     print("metUnclustered          shape  ...")
     print("jesTotal                shape  ...")
+    print("jer                     shape  ...")
 
 
 if __name__ == "__main__":

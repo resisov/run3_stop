@@ -783,20 +783,22 @@ class AnalysisProcessor(processor.ProcessorABC):
 
         ### Electrons
         e = events.Electron
-        e_sf_veto, e_sf_veto_up, e_sf_veto_down = get_ele_veto_id_sf(self._year, e.eta+e.deltaEtaSC, e.pt, e.phi)
-        e_sf_medium, e_sf_medium_up, e_sf_medium_down = get_ele_medium_id_sf(self._year, e.eta+e.deltaEtaSC, e.pt, e.phi)
-        e_sf_hlt, e_sf_hlt_up, e_sf_hlt_down = get_ele_hlt_sf(self._year, e.eta, e.pt, e.phi)
         e['isveto'] = isVetoElectron(e, self._year)
-        e['veto_id_sf'] = ak.where(e.isveto, e_sf_veto, ak.ones_like(e.pt))
-        e['veto_id_sf_up'] = ak.where(e.isveto, e_sf_veto_up, ak.ones_like(e.pt))
-        e['veto_id_sf_down'] = ak.where(e.isveto, e_sf_veto_down, ak.ones_like(e.pt))
         e['ismedium'] = isMediumElectron(e, self._year)
-        e['medium_id_sf'] = ak.where(e.ismedium, e_sf_medium, ak.ones_like(e.pt))
-        e['medium_id_sf_up'] = ak.where(e.ismedium, e_sf_medium_up, ak.ones_like(e.pt))
-        e['medium_id_sf_down'] = ak.where(e.ismedium, e_sf_medium_down, ak.ones_like(e.pt))
-        e['hlt_sf'] = ak.where(e.ismedium, e_sf_hlt, ak.ones_like(e.pt))
-        e['hlt_sf_up'] = ak.where(e.ismedium, e_sf_hlt_up, ak.ones_like(e.pt))
-        e['hlt_sf_down'] = ak.where(e.ismedium, e_sf_hlt_down, ak.ones_like(e.pt))
+        if not isData:
+            e_sf_veto, e_sf_veto_up, e_sf_veto_down = get_ele_veto_id_sf(self._year, e.eta+e.deltaEtaSC, e.pt, e.phi)
+            e_sf_medium, e_sf_medium_up, e_sf_medium_down = get_ele_medium_id_sf(self._year, e.eta+e.deltaEtaSC, e.pt, e.phi)
+            e_sf_hlt, e_sf_hlt_up, e_sf_hlt_down = get_ele_hlt_sf(self._year, e.eta, e.pt, e.phi)
+            e['veto_id_sf'] = ak.where(e.isveto, e_sf_veto, ak.ones_like(e.pt))
+            e['veto_id_sf_up'] = ak.where(e.isveto, e_sf_veto_up, ak.ones_like(e.pt))
+            e['veto_id_sf_down'] = ak.where(e.isveto, e_sf_veto_down, ak.ones_like(e.pt))
+            e['medium_id_sf'] = ak.where(e.ismedium, e_sf_medium, ak.ones_like(e.pt))
+            e['medium_id_sf_up'] = ak.where(e.ismedium, e_sf_medium_up, ak.ones_like(e.pt))
+            e['medium_id_sf_down'] = ak.where(e.ismedium, e_sf_medium_down, ak.ones_like(e.pt))
+            e['hlt_sf'] = ak.where(e.ismedium, e_sf_hlt, ak.ones_like(e.pt))
+            e['hlt_sf_up'] = ak.where(e.ismedium, e_sf_hlt_up, ak.ones_like(e.pt))
+            e['hlt_sf_down'] = ak.where(e.ismedium, e_sf_hlt_down, ak.ones_like(e.pt))
+
         e['T'] = ak.zip({
             'r': e.pt,
             'phi': e.phi,
@@ -812,20 +814,21 @@ class AnalysisProcessor(processor.ProcessorABC):
         
         ### Muons
         m = events.Muon
-        m_sf_loose, m_sf_loose_up, m_sf_loose_down = get_mu_loose_id_sf(self._year, m.eta, m.pt)
-        m_sf_medium, m_sf_medium_up, m_sf_medium_down = get_mu_medium_id_sf(self._year, m.eta, m.pt)
-        m_sf_hlt, m_sf_hlt_up, m_sf_hlt_down = get_mu_hlt_sf(self._year, m.eta, m.pt)
         m['isloose'] = isLooseMuon(m, self._year)
-        m['loose_id_sf'] = ak.where(m.isloose, m_sf_loose, ak.ones_like(m.pt))
-        m['loose_id_sf_up'] = ak.where(m.isloose, m_sf_loose_up, ak.ones_like(m.pt))
-        m['loose_id_sf_down'] = ak.where(m.isloose, m_sf_loose_down, ak.ones_like(m.pt))
         m['ismedium'] = isMediumMuon(m, self._year)
-        m['medium_id_sf'] = ak.where(m.ismedium, m_sf_medium, ak.ones_like(m.pt))
-        m['medium_id_sf_up'] = ak.where(m.ismedium, m_sf_medium_up, ak.ones_like(m.pt))
-        m['medium_id_sf_down'] = ak.where(m.ismedium, m_sf_medium_down, ak.ones_like(m.pt))
-        m['hlt_sf'] = ak.where(m.ismedium, m_sf_hlt, ak.ones_like(m.pt))
-        m['hlt_sf_up'] = ak.where(m.ismedium, m_sf_hlt_up, ak.ones_like(m.pt))
-        m['hlt_sf_down'] = ak.where(m.ismedium, m_sf_hlt_down, ak.ones_like(m.pt))
+        if not isData:
+            m_sf_loose, m_sf_loose_up, m_sf_loose_down = get_mu_loose_id_sf(self._year, m.eta, m.pt)
+            m_sf_medium, m_sf_medium_up, m_sf_medium_down = get_mu_medium_id_sf(self._year, m.eta, m.pt)
+            m_sf_hlt, m_sf_hlt_up, m_sf_hlt_down = get_mu_hlt_sf(self._year, m.eta, m.pt)
+            m['loose_id_sf'] = ak.where(m.isloose, m_sf_loose, ak.ones_like(m.pt))
+            m['loose_id_sf_up'] = ak.where(m.isloose, m_sf_loose_up, ak.ones_like(m.pt))
+            m['loose_id_sf_down'] = ak.where(m.isloose, m_sf_loose_down, ak.ones_like(m.pt))
+            m['medium_id_sf'] = ak.where(m.ismedium, m_sf_medium, ak.ones_like(m.pt))
+            m['medium_id_sf_up'] = ak.where(m.ismedium, m_sf_medium_up, ak.ones_like(m.pt))
+            m['medium_id_sf_down'] = ak.where(m.ismedium, m_sf_medium_down, ak.ones_like(m.pt))
+            m['hlt_sf'] = ak.where(m.ismedium, m_sf_hlt, ak.ones_like(m.pt))
+            m['hlt_sf_up'] = ak.where(m.ismedium, m_sf_hlt_up, ak.ones_like(m.pt))
+            m['hlt_sf_down'] = ak.where(m.ismedium, m_sf_hlt_down, ak.ones_like(m.pt))
         
         m['T'] = ak.zip({
             'r': m.pt,
@@ -842,10 +845,12 @@ class AnalysisProcessor(processor.ProcessorABC):
         ### Photons
         p = events.Photon
         p['ismedium'] = isMediumPhoton(p, self._year)
-        p_sf_id, p_sf_id_up, p_sf_id_down = get_photon_id_sf(self._year, "Medium", p.eta, p.pt, p.phi)
-        p['id_sf'] = ak.where(p.ismedium, p_sf_id, ak.ones_like(p.pt))
-        p['id_sf_up'] = ak.where(p.ismedium, p_sf_id_up, ak.ones_like(p.pt))
-        p['id_sf_down'] = ak.where(p.ismedium, p_sf_id_down, ak.ones_like(p.pt))
+
+        if not isData:
+            p_sf_id, p_sf_id_up, p_sf_id_down = get_photon_id_sf(self._year, "Medium", p.eta, p.pt, p.phi)
+            p['id_sf'] = ak.where(p.ismedium, p_sf_id, ak.ones_like(p.pt))
+            p['id_sf_up'] = ak.where(p.ismedium, p_sf_id_up, ak.ones_like(p.pt))
+            p['id_sf_down'] = ak.where(p.ismedium, p_sf_id_down, ak.ones_like(p.pt))
 
         p['T'] = ak.zip({
             'r': p.pt,
@@ -884,17 +889,18 @@ class AnalysisProcessor(processor.ProcessorABC):
                 j['mass'] = j.mass * (1 - jec_unc)
 
         ### JER Scale smearing variation for systematics
-        if not isData:
-            jer_sf, jer_sf_up, jer_sf_down = get_jer_sf(self._year, j.pt, j.eta)
-            if self._shift_name == "jerUp":
-                j['pt'] = j.pt * jer_sf_up
-                j['mass'] = j.mass * jer_sf_up
-            elif self._shift_name == "jerDown":
-                j['pt'] = j.pt * jer_sf_down
-                j['mass'] = j.mass * jer_sf_down
-            else:
-                j['pt'] = j.pt * jer_sf
-                j['mass'] = j.mass * jer_sf
+
+        #if not isData:
+        #    jer_sf, jer_sf_up, jer_sf_down = get_jer_sf(self._year, j.pt, j.eta)
+        #    if self._shift_name == "jerUp":
+        #        j['pt'] = j.pt * jer_sf_up
+        #        j['mass'] = j.mass * jer_sf_up
+        #    elif self._shift_name == "jerDown":
+        #        j['pt'] = j.pt * jer_sf_down
+        #        j['mass'] = j.mass * jer_sf_down
+        #    else:
+        #        j['pt'] = j.pt * jer_sf
+        #        j['mass'] = j.mass * jer_sf
 
         ### Appling JetID
         j['isgood'] = isGoodJet(j, self._year)

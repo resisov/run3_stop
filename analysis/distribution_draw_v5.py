@@ -73,6 +73,7 @@ PLOT_DIR = args.plot_dir if args.plot_dir is not None else f"plots_{YEAR}"
 NOMINAL_ONLY = args.nominal_only
 
 NOMINAL_FILE = args.input_scaled if args.input_scaled is not None else f"{HIST_DIR}/stop_{YEAR}_nominal.scaled"
+#NOMINAL_FILE = f"hists/Legacy_0514/stop_2024_nominal.scaled"
 
 METUNCL_UP_FILE = args.met_unclustered_up if args.met_unclustered_up is not None else f"{HIST_DIR}/stop_{YEAR}_metUnclusteredUp.scaled"
 METUNCL_DOWN_FILE = args.met_unclustered_down if args.met_unclustered_down is not None else f"{HIST_DIR}/stop_{YEAR}_metUnclusteredDown.scaled"
@@ -408,38 +409,48 @@ os.makedirs(PLOT_DIR, exist_ok=True)
 # ----------------------------------------------------------------------
 # Print yields for checking
 # ----------------------------------------------------------------------
-total_bkg_yield = 0.0
+for region in regions_to_plot:
+    print("\n" + "=" * 80)
+    print(f"Yield check for region: {region}")
+    print("=" * 80)
 
-for process in stacks:
-    if "nMuon" in bkg and process in bkg["nMuon"]:
-        h = get_hist_safe(
-            bkg,
-            "nMuon",
-            process,
-            "cat1_preselection",
-            "nominal",
-        )
-        if h is None:
-            continue
+    total_bkg_yield = 0.0
 
-        vals, _ = hist_values_variances_with_overflow(h)
-        yield_ = vals.sum()
-        total_bkg_yield += yield_
-        print(f"Yield for {process}: {yield_}")
+    for process in stacks:
+        if "nMuon" in bkg and process in bkg["nMuon"]:
+            h = get_hist_safe(
+                bkg,
+                "nMuon",
+                process,
+                region,
+                "nominal",
+            )
+            if h is None:
+                continue
 
-print(f"Total background yield: {total_bkg_yield}")
+            vals, _ = hist_values_variances_with_overflow(h)
+            yield_ = vals.sum()
+            total_bkg_yield += yield_
+            print(f"Yield for {process}: {yield_}")
 
-try:
-    h_data = data["nMuon"]["JetMET"][{
-        "region": "cat1_preselection",
-        "systematic": "nominal",
-    }]
-    vals_data_check = hist_values_with_overflow(h_data)
-    data_yield = vals_data_check.sum()
-    print(f"Data yield: {data_yield}")
-except Exception as e:
-    print(f"[WARNING] Could not print data yield check: {e}")
+    print(f"Total background yield: {total_bkg_yield}")
 
+    try:
+        data_process = get_data_process(region)
+        h_data = data["nMuon"][data_process][{
+            "region": region,
+            "systematic": "nominal",
+        }]
+        vals_data_check = hist_values_with_overflow(h_data)
+        data_yield = vals_data_check.sum()
+        print(f"Data process: {data_process}")
+        print(f"Data yield: {data_yield}")
+
+        if total_bkg_yield > 0:
+            print(f"Data/MC: {data_yield / total_bkg_yield}")
+
+    except Exception as e:
+        print(f"[WARNING] Could not print data yield for {region}: {e}")
 try:
     print("Systematics keys in bkg['metpt']['W (lnu)']:")
     print(bkg["metpt"]["W (lnu)"])
