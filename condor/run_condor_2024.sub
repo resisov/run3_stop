@@ -38,3 +38,4 @@ getenv = true
 # nominal
 shift = nominal
 queue dataset from /eos/user/t/taiwoo/run3_stop/decaf/analysis/datasets/datasets_2024.txt
+#queue dataset from /eos/user/t/taiwoo/run3_stop/decaf/condor/missing.txt
