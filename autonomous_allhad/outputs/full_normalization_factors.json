@@ -1,0 +1,21 @@
+{
+  "blockers": [
+    "full production feature table is not complete",
+    "metadata does not contain full dataset signed sumw/Runs denominators",
+    "correction weight products for full production are not available",
+    "systematic shifted event weights are not available"
+  ],
+  "exact_unblock_steps": [
+    "Run full production over the configured NanoAOD files or provide a production feature table with per-dataset signed sumw denominators.",
+    "Add/derive full dataset Runs sumw metadata for every MC and signal dataset.",
+    "Recompute full_normalization_factors.json and full_normalized_yields.json before final search-bin selection."
+  ],
+  "full_normalization_factors": {},
+  "full_normalized_region_yields": {},
+  "luminosity_fb": 109.82,
+  "metadata_sumw_keys_found": [],
+  "production_state": "blocked",
+  "scope": "full-production normalization",
+  "status": "blocked",
+  "subset_artifact_for_reference_only": "autonomous_allhad/outputs/normalized_feature_yields.json"
+}

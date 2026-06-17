@@ -1,0 +1,17 @@
+{
+  "blockers": [
+    "final search bins are not selected",
+    "full-production normalized nominal yields are unavailable",
+    "systematic yields/templates are unavailable",
+    "manual legacy validation boundary has not been supplied by the user"
+  ],
+  "datacards_produced": 0,
+  "exact_unblock_steps": [
+    "Complete run-production and full-production-normalization.",
+    "Select final search bins after physics review/manual validation.",
+    "Produce systematic_yields.json from shifted inputs.",
+    "Rerun ./autonomous_allhad/analysisctl make-datacards --config autonomous_allhad/configs/run3_2024.yaml."
+  ],
+  "output_dir": "autonomous_allhad/cards",
+  "status": "blocked"
+}

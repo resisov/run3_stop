@@ -11,8 +11,10 @@ def main(argv: list[str] | None = None) -> int:
     sub = parser.add_subparsers(dest="command", required=True)
     config_commands = (
         "all", "resume", "real-subset", "validate-real-subset", "validate-feature-subset",
+        "run-production", "full-production-normalization", "select-search-bins",
         "publish-github-pages", "monitor", "design-search-bins", "normalization-audit",
-        "normalize-feature-yields", "make-feature-yields", "make-datacards", "expected-limits",
+        "normalize-feature-yields", "make-feature-yields", "make-systematic-yields",
+        "make-datacards", "expected-limits",
     )
     for name in config_commands:
         p = sub.add_parser(name)
@@ -38,11 +40,23 @@ def main(argv: list[str] | None = None) -> int:
     elif args.command == "normalization-audit":
         payload = pipeline.normalization_audit()
         print(json.dumps(payload, indent=2, sort_keys=True))
+    elif args.command == "run-production":
+        payload = pipeline.run_production()
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    elif args.command == "full-production-normalization":
+        payload = pipeline.full_production_normalization()
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    elif args.command == "select-search-bins":
+        payload = pipeline.select_search_bins()
+        print(json.dumps(payload, indent=2, sort_keys=True))
     elif args.command == "normalize-feature-yields":
         payload = pipeline.normalize_feature_yields()
         print(json.dumps(payload, indent=2, sort_keys=True))
     elif args.command == "make-feature-yields":
         payload = pipeline.make_feature_yields()
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    elif args.command == "make-systematic-yields":
+        payload = pipeline.make_systematic_yields()
         print(json.dumps(payload, indent=2, sort_keys=True))
     elif args.command == "make-datacards":
         payload = pipeline.make_datacards_stage()

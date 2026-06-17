@@ -1,0 +1,17 @@
+{
+  "blockers": [
+    "full-production normalized yields are unavailable",
+    "all candidate bins fail at least one configured statistics threshold in the feature subset"
+  ],
+  "candidate_source": "autonomous_allhad/studies/search_bins/search_bin_candidates.json",
+  "exact_unblock_steps": [
+    "Produce full-production normalized nominal yields.",
+    "Retune candidate bin thresholds or enlarge the design sample until selected bins satisfy configured MC statistics thresholds.",
+    "Obtain manual legacy validation before adopting any physics binning."
+  ],
+  "scope": "final search-bin selection",
+  "selected_bins": [],
+  "selected_scheme": null,
+  "status": "blocked",
+  "top_tagging_policy": "no top-tag scores, working points, or pass/fail categories in primary categorization"
+}

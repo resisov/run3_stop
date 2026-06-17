@@ -1,3 +1,5 @@
-# Prototype Datacards
+# Datacard Status
 
-Datacard production is prepared but blocked for final physics use until manual legacy validation, systematic templates, and an accepted search-bin scheme are available. No final datacards are claimed.
+Status: `blocked`
+
+No Combine-compatible production datacards are produced by this run. Required before datacards: final selected search bins, full-production nominal yields, systematic yields/templates, and user-provided manual validation against the legacy processor.

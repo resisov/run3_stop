@@ -156,6 +156,12 @@ def render_report_pages(repo: Path, base: Path, docs: Path, monitor: dict[str, A
     cutflows = _load(base / "validation" / "real_cutflows.json", {})
     search = _load(base / "studies" / "search_bins" / "search_bin_candidates.json", {})
     pages_status = _load(outputs / "github_pages_status.json", {})
+    production = _load(workflow / "production_manifest.json", {})
+    full_norm = _load(outputs / "full_normalized_yields.json", {})
+    final_bins = _load(base / "studies" / "search_bins" / "final_search_bins.json", {})
+    systematics = _load(outputs / "systematic_yields.json", {})
+    datacards = _load(base / "cards" / "datacard_summary.json", {})
+    limits = _load(base / "limits" / "expected_limits_status.json", {})
 
     root_files = monitor.get("root_files_read", len(real_summary.get("files", [])))
     feature_rows = monitor.get("feature_rows", real_summary.get("processed_events"))
@@ -182,11 +188,13 @@ def render_report_pages(repo: Path, base: Path, docs: Path, monitor: dict[str, A
   <div class="kpi"><b>{_fmt(bad_files)}</b><span>bad/corrupt files</span></div>
   <div class="kpi"><b>feature-side</b><span>subset-normalized nominal yields</span></div>
   <div class="kpi"><b>exploratory</b><span>search bins provisional only</span></div>
-  <div class="kpi"><b>blocked</b><span>datacards prototype · expected limits blocked</span></div>
+  <div class="kpi"><b>{_e(production.get("status", "blocked"))}</b><span>full production</span></div>
+  <div class="kpi"><b>{_e(full_norm.get("status", "blocked"))}</b><span>full normalization</span></div>
+  <div class="kpi"><b>blocked</b><span>datacards · expected limits</span></div>
 </div>
 <div class="card"><h2>Run-3 All-Hadronic Stop Autonomous Analysis</h2><p>이 사이트는 pipeline monitor가 아니라 현재 all-hadronic stop autonomous analysis의 서술형 리포트다. 실제 ROOT subset에서 특징 테이블, trigger/object/cutflow audit, feature-side normalization, exploratory search-bin studies, GitHub Pages publication 상태를 묶어 보여준다.</p><p class="warning">Legacy stop_processor_v4.py validation is external/manual. No independent agreement with stop_processor_v4.py is claimed by autonomous_allhad.</p></div>
 <div class="cards">{links}</div>
-<div class="card"><h2>현재 상태 요약</h2>{_table(["항목","상태"], [["GitHub Pages", pages_status.get("deployment_status", monitor.get("github_pages_deployment_status", "not_confirmed"))], ["Normalization", norm.get("scope", "missing")], ["Search bins", search.get("selection_status", "missing")], ["Feature yields", feature_yields.get("status", "missing")], ["Datacards", "blocked/prototype"], ["Expected limits", "blocked; Combine unavailable or no final datacards"]])}</div>
+<div class="card"><h2>현재 상태 요약</h2>{_table(["항목","상태"], [["GitHub Pages", pages_status.get("deployment_status", monitor.get("github_pages_deployment_status", "not_confirmed"))], ["Normalization", norm.get("scope", "missing")], ["Search bins", search.get("selection_status", "missing")], ["Feature yields", feature_yields.get("status", "missing")], ["Full production", production.get("status", "missing")], ["Full normalization", full_norm.get("status", "missing")], ["Final search bins", final_bins.get("status", "missing")], ["Systematic yields", systematics.get("status", "missing")], ["Datacards", datacards.get("status", "missing")], ["Expected limits", limits.get("status", "missing")]])}</div>
 '''
 
     plan_body = '''
@@ -200,6 +208,7 @@ def render_report_pages(repo: Path, base: Path, docs: Path, monitor: dict[str, A
 <div class="grid"><div class="kpi"><b>{_fmt(root_files)}</b><span>representative ROOT files</span></div><div class="kpi"><b>{_fmt(feature_rows)}</b><span>feature rows</span></div><div class="kpi"><b>{_fmt(bad_files)}</b><span>bad/corrupt files</span></div><div class="kpi"><b>{_fmt(lumi)} fb⁻¹</b><span>luminosity used for feature-side normalization</span></div></div>
 <div class="card"><h2>샘플 커버리지</h2>{_table(["Process", "preselection", "SR", "LLCR", "QCDCR", "GCR"], _sample_rows(real_yields))}</div>
 <div class="card"><h2>메타데이터와 정규화</h2><p>Data weight = 1. MC weight = genWeight × available correction weights × xsec × lumi / processed feature-subset sumw. 현재 correction weights 일부는 unavailable이며 full dataset sumw가 없으므로 full-production normalization은 주장하지 않는다.</p>{_table(["Process", "status", "xs pb", "processed sumw", "factor"], _normalization_preview(factors))}</div>
+<div class="card"><h2>Full-production manifest</h2>{_table(["항목", "값"], [["status", production.get("status", "missing")], ["configured datasets", production.get("datasets_configured", "missing")], ["files in metadata", production.get("files_in_metadata", "missing")], ["planned jobs", production.get("jobs_planned", "missing")], ["allow_condor_submit", production.get("allow_condor_submit", "missing")]])}</div>
 <div class="callout"><b>주의:</b> feature-side subset normalization은 full-production normalization이 아니다. Larger design sample/full production 전까지 최종 물리 수율로 사용하지 않는다.</div>
 '''
 
@@ -217,7 +226,7 @@ def render_report_pages(repo: Path, base: Path, docs: Path, monitor: dict[str, A
 
     yields_body = f'''
 <div class="card"><h2>All-hadronic regions</h2>{_table(["Region", "feature-side yield"], _sum_regions(region_yields))}</div>
-<div class="card"><h2>Normalization audit</h2><ul><li>Previous/current feature yields are marked: <code>{_e(norm_audit.get('current_feature_yields_raw_or_normalized', 'unknown'))}</code>.</li><li>Normalized feature-side yields were produced: <code>{_e(norm.get('normalization_status', 'missing'))}</code>.</li><li>Scope: <code>{_e(norm.get('scope', 'missing'))}</code>.</li><li>Full-production normalization remains incomplete because full dataset sumw/correction weights/systematic shifts are missing.</li></ul><p>{_artifact_link('data/normalization_audit.json')} · {_artifact_link('data/normalized_feature_yields.json')} · {_artifact_link('data/normalization_factors.json')}</p></div>
+<div class="card"><h2>Normalization audit</h2><ul><li>Previous/current feature yields are marked: <code>{_e(norm_audit.get('current_feature_yields_raw_or_normalized', 'unknown'))}</code>.</li><li>Normalized feature-side yields were produced: <code>{_e(norm.get('normalization_status', 'missing'))}</code>.</li><li>Scope: <code>{_e(norm.get('scope', 'missing'))}</code>.</li><li>Full-production normalization status: <code>{_e(full_norm.get('status', 'missing'))}</code>.</li></ul><p>{_artifact_link('data/normalization_audit.json')} · {_artifact_link('data/normalized_feature_yields.json')} · {_artifact_link('data/normalization_factors.json')} · {_artifact_link('data/full_normalized_yields.json')}</p></div>
 <div class="callout"><b>주의:</b> These are not final physics yields. They are feature-side subset diagnostics and normalized nominal yields only.</div>
 <div class="card"><h2>Plot gallery</h2>{_plot_gallery(docs)}</div>
 '''
@@ -226,16 +235,16 @@ def render_report_pages(repo: Path, base: Path, docs: Path, monitor: dict[str, A
 <div class="card"><h2>Top-tagging-independent search-bin design</h2><p>Primary categorization excludes top-tag scores, working points, and pass/fail decisions. AK8 kinematics without tagger scores are allowed.</p>{_table(["Allowed variable family"], [[v] for v in search.get('allowed_variables', ['Njet','Nb','HT','MET','recoil pT','min delta phi','AK8 kinematics without top-tag scores','ISR-like variables'])])}</div>
 <div class="grid"><div class="kpi"><b>{len(search.get('schemes', []))}</b><span>schemes tested</span></div><div class="kpi"><b>{sum(len(s.get('bins', [])) for s in search.get('schemes', []))}</b><span>candidate bins</span></div><div class="kpi"><b>none</b><span>selected physics scheme</span></div><div class="kpi"><b>blocked</b><span>real Combine limits</span></div></div>
 <div class="card"><h2>Candidate scheme summary</h2>{_table(["Scheme", "Bins", "Sane bins", "Low-stat bins", "Proxy score"], _scheme_rows(search))}<p class="warning">{_e(search.get('selection_status', 'No selected scheme.'))}</p></div>
-<div class="card"><h2>Cards and limits boundary</h2><ul><li>Downstream feature yields are <code>{_e(feature_yields.get('status', 'missing'))}</code> only.</li><li>Datacards are blocked/prototype only until manual legacy validation, systematic yields, and accepted bins exist.</li><li>Expected limits are blocked because Combine is unavailable in PATH and no final datacards exist.</li><li>No real Combine limits are produced or claimed.</li></ul><p>{_artifact_link('data/search_bin_candidates.json')} · {_artifact_link('data/search_bin_summary.md', 'search_bin_summary.md')} · {_artifact_link('data/feature_yields.json')} · {_artifact_link('data/expected_limits_status.json')} · {_artifact_link('data/cards_README.md', 'cards README')}</p></div>
+<div class="card"><h2>Cards and limits boundary</h2><ul><li>Downstream feature yields are <code>{_e(feature_yields.get('status', 'missing'))}</code> only.</li><li>Final search-bin selection: <code>{_e(final_bins.get('status', 'missing'))}</code>.</li><li>Systematic yields: <code>{_e(systematics.get('status', 'missing'))}</code>.</li><li>Datacards: <code>{_e(datacards.get('status', 'missing'))}</code>.</li><li>Expected limits: <code>{_e(limits.get('status', 'missing'))}</code>. No real Combine limits are produced or claimed.</li></ul><p>{_artifact_link('data/search_bin_candidates.json')} · {_artifact_link('data/final_search_bins.json')} · {_artifact_link('data/feature_yields.json')} · {_artifact_link('data/systematic_yields.json')} · {_artifact_link('data/datacard_summary.json')} · {_artifact_link('data/expected_limits_status.json')}</p></div>
 '''
 
     completed_rows = [[g, "complete"] for g in ["validate-feature-subset", "normalization-audit", "normalize-feature-yields", "design-search-bins", "make-feature-yields", "make-plots", "publish-github-pages"]]
-    blocked_rows = [[g, "blocked/not started"] for g in ["systematic_yields", "make_datacards", "expected_limits", "condor_production"]]
+    blocked_rows = [[g, "blocked/not started"] for g in ["run_production", "full_production_normalization", "select_search_bins", "systematic_yields", "make_datacards", "expected_limits", "condor_production"]]
     results_body = f'''
 <div class="grid"><div class="kpi"><b>pushed</b><span>GitHub publication status</span></div><div class="kpi"><b>{_e(monitor.get('github_pages_site_status', 'ready'))}</b><span>local site artifact status</span></div><div class="kpi"><b>0</b><span>analysisctl all exit code from latest run</span></div><div class="kpi"><b>no limits</b><span>no exclusion/reach claim</span></div></div>
 <div class="card"><h2>GitHub Pages</h2>{_table(["Item", "Value"], [["Expected URL", monitor.get('github_pages_expected_url', 'https://resisov.github.io/run3_stop/')], ["Deployment status in artifact", monitor.get('github_pages_deployment_status', 'not_confirmed')], ["Last publication UTC", monitor.get('github_pages_last_publication_time_utc', 'missing')]])}</div>
 <div class="card"><h2>Completed gates</h2>{_table(["Gate", "Status"], completed_rows)}</div>
-<div class="card"><h2>Blocked gates</h2>{_table(["Gate", "Reason"], blocked_rows)}</div>
+<div class="card"><h2>Blocked gates</h2>{_table(["Gate", "Reason"], blocked_rows)}{_table(["Artifact", "Status"], [["run_production", production.get("status", "missing")], ["full_production_normalization", full_norm.get("status", "missing")], ["select_search_bins", final_bins.get("status", "missing")], ["systematic_yields", systematics.get("status", "missing")], ["make_datacards", datacards.get("status", "missing")], ["expected_limits", limits.get("status", "missing")]])}</div>
 <div class="card"><h2>Next steps</h2><ol><li>Confirm Pages deployment.</li><li>Improve search-bin diagnostics.</li><li>Build larger design sample.</li><li>Implement systematic yields.</li><li>Prepare real datacards.</li><li>Set up Combine.</li></ol></div>
 <div class="callout badbox"><b>No exclusion limits are claimed.</b> Proxy or approximate metrics are not expected limits.</div>
 '''

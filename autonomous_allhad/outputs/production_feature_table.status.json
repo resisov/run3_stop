@@ -1,0 +1,9 @@
+{
+  "reason": "Full production was not submitted. This stage only built the production manifest and blocker report.",
+  "required_before_table": [
+    "execution.allow_condor_submit is false in autonomous_allhad/configs/run3_2024.yaml",
+    "no explicit bounded local full-production fallback is configured"
+  ],
+  "status": "blocked",
+  "table_produced": false
+}

@@ -262,8 +262,12 @@ class Pipeline:
             self.run_real_subset()
         self.normalization_audit()
         self.normalize_feature_yields()
+        self.run_production()
+        self.full_production_normalization()
         self.design_search_bins()
+        self.select_search_bins()
         self.make_feature_yields()
+        self.make_systematic_yields()
         self.make_plots_stage()
         self.make_datacards_stage()
         self.expected_limits_stage()
@@ -435,6 +439,33 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
             if pat in name:
                 return group
         return "other"
+
+    def _configured_dataset_keys(self) -> list[str]:
+        path = self.ref("datasets")
+        if not path.exists():
+            return []
+        return [x.strip() for x in path.read_text().splitlines() if x.strip() and not x.lstrip().startswith("#")]
+
+    def _dataset_files(self, meta: Any) -> list[Any]:
+        if isinstance(meta, dict):
+            files = meta.get("files", [])
+        elif isinstance(meta, list):
+            files = meta
+        else:
+            files = []
+        if isinstance(files, dict):
+            return list(files.values())
+        return list(files) if isinstance(files, list) else []
+
+    def _metadata_sumw_keys(self, metadata: dict[str, Any]) -> list[str]:
+        keys: set[str] = set()
+        for meta in metadata.values():
+            if isinstance(meta, dict):
+                for key in meta:
+                    low = key.lower()
+                    if "sumw" in low or "sum_gen" in low or low in {"nevents", "n_events", "genweightsum"}:
+                        keys.add(key)
+        return sorted(keys)
 
     def file_integrity_checks(self) -> dict[str, Any]:
         metadata = self.load_metadata()
@@ -1003,6 +1034,186 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
         self._record_direct_stage("make_feature_yields", "complete", {"output": str(path.relative_to(self.repo)), "status": out["status"]})
         return {"output": str(path), "status": out["status"]}
 
+    def run_production(self) -> dict[str, Any]:
+        metadata = self.load_metadata()
+        configured = self._configured_dataset_keys()
+        keys = configured or sorted(metadata)
+        datasets = []
+        total_files = 0
+        missing_metadata = []
+        for name in keys:
+            meta = metadata.get(name, {}) if isinstance(metadata, dict) else {}
+            files = self._dataset_files(meta)
+            total_files += len(files)
+            if name not in metadata:
+                missing_metadata.append(name)
+            datasets.append({
+                "dataset": name,
+                "process": self.group(name),
+                "metadata_present": name in metadata,
+                "files": len(files),
+                "xs_pb": meta.get("xs") if isinstance(meta, dict) else None,
+            })
+        allow_condor = bool(self.config.get("execution", {}).get("allow_condor_submit", False))
+        condor = shutil.which("condor_submit")
+        local_limit = self.config.get("production", {}).get("local_max_files") if isinstance(self.config.get("production"), dict) else None
+        blockers = []
+        exact_unblock_steps = []
+        if not allow_condor:
+            blockers.append("execution.allow_condor_submit is false in autonomous_allhad/configs/run3_2024.yaml")
+            exact_unblock_steps.append("Set execution.allow_condor_submit: true only after confirming a valid CERN proxy and intended HTCondor production campaign, then rerun ./autonomous_allhad/analysisctl run-production --config autonomous_allhad/configs/run3_2024.yaml")
+        if not condor:
+            blockers.append("condor_submit is unavailable in PATH")
+            exact_unblock_steps.append("Enter an environment with HTCondor client tools available, then rerun run-production.")
+        if local_limit is None:
+            blockers.append("no explicit bounded local full-production fallback is configured")
+            exact_unblock_steps.append("Alternatively add an explicit production.local_max_files/local output policy and rerun; do not treat the 14-file validation subset as full production.")
+        if missing_metadata:
+            blockers.append(f"{len(missing_metadata)} configured datasets are missing metadata entries")
+            exact_unblock_steps.append("Refresh analysis/metadata/KNU_2024_v4.json.gz so every configured dataset has file and cross-section metadata.")
+        status = "blocked" if blockers else "ready_not_submitted"
+        message = "Full production was not submitted. This stage only built the production manifest and blocker report."
+        manifest = {
+            "status": status,
+            "message": message,
+            "datasets_configured": len(keys),
+            "datasets_with_metadata": sum(1 for d in datasets if d["metadata_present"]),
+            "files_in_metadata": total_files,
+            "jobs_planned": total_files,
+            "job_granularity": "one NanoAOD file per planned job",
+            "condor_available": bool(condor),
+            "condor_submit_path": condor,
+            "allow_condor_submit": allow_condor,
+            "local_fallback": {"configured": local_limit is not None, "local_max_files": local_limit},
+            "legacy_processor_status": "external/manual; stop_processor_v4.py is not invoked by autonomous_allhad",
+            "datasets": datasets,
+            "blockers": blockers,
+            "exact_unblock_steps": exact_unblock_steps,
+        }
+        write_json(self.workflow / "production_manifest.json", manifest)
+        write_json(self.workflow / "production_state.json", manifest)
+        write_json(self.workflow / "job_manifest.json", {"status": status, "jobs": [], "planned_jobs": total_files, "cluster_ids": [], "condor_enabled": allow_condor})
+        write_json(self.outputs / "production_feature_table.status.json", {"status": status, "table_produced": False, "reason": message, "required_before_table": blockers})
+        write_json(self.base / "benchmarks" / "production_benchmark.json", {"status": status, "datasets": len(keys), "files": total_files, "jobs_planned": total_files, "events_processed": 0, "blockers": blockers})
+        lines = ["# Full Production Status", "", f"Status: `{status}`", "", message, "", f"Configured datasets: {len(keys)}", f"Files in metadata: {total_files}", f"Planned jobs: {total_files}", "", "## Blockers", ""]
+        lines += [f"- {b}" for b in blockers] or ["- none"]
+        lines += ["", "## Exact unblock steps", ""] + ([f"- {x}" for x in exact_unblock_steps] or ["- Production can be submitted after explicit user authorization and configuration."])
+        (self.base / "reports" / "production_status.md").write_text("\n".join(lines) + "\n")
+        result = {"status": status, "datasets": len(keys), "files_in_metadata": total_files, "jobs_planned": total_files, "events_processed": 0, "output": str((self.workflow / "production_manifest.json").relative_to(self.repo)), "blockers": blockers}
+        self._record_direct_stage("run_production", "blocked" if blockers else "blocked", result)
+        self._record_direct_stage("condor_production", "blocked", {"status": "not_submitted", "reason": "; ".join(blockers) if blockers else "explicit submission not performed by autonomous_allhad", "cluster_ids": []})
+        return result
+
+    def full_production_normalization(self) -> dict[str, Any]:
+        production = self._load_json_if_exists(self.workflow / "production_state.json", {})
+        metadata = self.load_metadata()
+        sumw_keys = self._metadata_sumw_keys(metadata)
+        blockers = []
+        if production.get("status") != "complete":
+            blockers.append("full production feature table is not complete")
+        if not sumw_keys:
+            blockers.append("metadata does not contain full dataset signed sumw/Runs denominators")
+        blockers.extend(["correction weight products for full production are not available", "systematic shifted event weights are not available"])
+        payload = {
+            "scope": "full-production normalization",
+            "status": "blocked" if blockers else "complete",
+            "luminosity_fb": float(self.config.get("analysis", {}).get("luminosity_fb", 0.0)),
+            "production_state": production.get("status", "missing"),
+            "metadata_sumw_keys_found": sumw_keys,
+            "full_normalization_factors": {},
+            "full_normalized_region_yields": {},
+            "blockers": blockers,
+            "exact_unblock_steps": [
+                "Run full production over the configured NanoAOD files or provide a production feature table with per-dataset signed sumw denominators.",
+                "Add/derive full dataset Runs sumw metadata for every MC and signal dataset.",
+                "Recompute full_normalization_factors.json and full_normalized_yields.json before final search-bin selection.",
+            ],
+            "subset_artifact_for_reference_only": "autonomous_allhad/outputs/normalized_feature_yields.json",
+        }
+        write_json(self.outputs / "full_normalization_factors.json", payload)
+        write_json(self.outputs / "full_normalized_yields.json", payload)
+        (self.docs / "data").mkdir(parents=True, exist_ok=True)
+        shutil.copy2(self.outputs / "full_normalized_yields.json", self.docs / "data" / "full_normalized_yields.json")
+        lines = ["# Full Production Normalization", "", f"Status: `{payload['status']}`", "", "This artifact is intentionally separate from feature-side subset normalization.", "", "## Blockers", ""]
+        lines += [f"- {b}" for b in blockers]
+        lines += ["", "## Exact unblock steps", ""] + [f"- {x}" for x in payload["exact_unblock_steps"]]
+        (self.base / "reports" / "full_normalization_summary.md").write_text("\n".join(lines) + "\n")
+        result = {"status": payload["status"], "output": str((self.outputs / "full_normalized_yields.json").relative_to(self.repo)), "blockers": blockers}
+        self._record_direct_stage("full_production_normalization", "blocked" if blockers else "complete", result)
+        return result
+
+    def select_search_bins(self) -> dict[str, Any]:
+        candidates = self._load_json_if_exists(self.base / "studies" / "search_bins" / "search_bin_candidates.json", {})
+        full_norm = self._load_json_if_exists(self.outputs / "full_normalized_yields.json", {})
+        blockers = []
+        if full_norm.get("status") != "complete":
+            blockers.append("full-production normalized yields are unavailable")
+        if not candidates.get("selected_provisional_scheme"):
+            blockers.append("all candidate bins fail at least one configured statistics threshold in the feature subset")
+        payload = {
+            "scope": "final search-bin selection",
+            "status": "blocked" if blockers else "complete",
+            "selected_scheme": None,
+            "selected_bins": [],
+            "candidate_source": "autonomous_allhad/studies/search_bins/search_bin_candidates.json",
+            "top_tagging_policy": "no top-tag scores, working points, or pass/fail categories in primary categorization",
+            "blockers": blockers,
+            "exact_unblock_steps": [
+                "Produce full-production normalized nominal yields.",
+                "Retune candidate bin thresholds or enlarge the design sample until selected bins satisfy configured MC statistics thresholds.",
+                "Obtain manual legacy validation before adopting any physics binning.",
+            ],
+        }
+        outdir = self.base / "studies" / "search_bins"
+        write_json(outdir / "final_search_bins.json", payload)
+        with (outdir / "final_search_bins.csv").open("w", newline="") as f:
+            w = csv.writer(f)
+            w.writerow(["bin", "status", "definition"])
+        (outdir / "final_search_bin_summary.md").write_text("# Final Search-Bin Selection\n\nStatus: `blocked`\n\nNo final search-bin scheme is selected. Full-production normalized yields and manual validation are required before adoption.\n")
+        (self.docs / "data").mkdir(parents=True, exist_ok=True)
+        shutil.copy2(outdir / "final_search_bins.json", self.docs / "data" / "final_search_bins.json")
+        result = {"status": payload["status"], "selected_scheme": None, "output": str((outdir / "final_search_bins.json").relative_to(self.repo)), "blockers": blockers}
+        self._record_direct_stage("select_search_bins", "blocked" if blockers else "complete", result)
+        return result
+
+    def make_systematic_yields(self) -> dict[str, Any]:
+        final_bins = self._load_json_if_exists(self.base / "studies" / "search_bins" / "final_search_bins.json", {})
+        full_norm = self._load_json_if_exists(self.outputs / "full_normalized_yields.json", {})
+        implemented = []
+        unavailable = ["pileup", "btag", "lepton_id", "lepton_trigger", "photon_id", "trigger", "JES", "JER", "MET_unclustered", "top_pt", "ISR", "PDF/scale"]
+        blockers = []
+        if final_bins.get("status") != "complete":
+            blockers.append("final search bins are not selected")
+        if full_norm.get("status") != "complete":
+            blockers.append("full-production normalized nominal yields are unavailable")
+        if unavailable:
+            blockers.append("systematic shifted feature/yield inputs are unavailable")
+        payload = {
+            "scope": "systematic yields for final datacards",
+            "status": "blocked" if blockers else "complete",
+            "nominal_source": "autonomous_allhad/outputs/full_normalized_yields.json",
+            "bin_source": "autonomous_allhad/studies/search_bins/final_search_bins.json",
+            "implemented_systematics": implemented,
+            "unavailable_systematics": unavailable,
+            "yields": {},
+            "blockers": blockers,
+            "exact_unblock_steps": [
+                "Run full production with nominal and shifted weights/objects needed for the nuisance model.",
+                "Select final search bins after full-production normalization.",
+                "Regenerate systematic_yields.json/csv before make-datacards.",
+            ],
+        }
+        write_json(self.outputs / "systematic_yields.json", payload)
+        with (self.outputs / "systematic_yields.csv").open("w", newline="") as f:
+            w = csv.writer(f)
+            w.writerow(["bin", "process", "systematic", "up", "down", "status"])
+        (self.base / "reports" / "systematic_yields_summary.md").write_text("# Systematic Yields\n\nStatus: `blocked`\n\nFinal bins, full-production nominal yields, and shifted systematic inputs are required before real systematic templates can be produced.\n")
+        (self.docs / "data").mkdir(parents=True, exist_ok=True)
+        shutil.copy2(self.outputs / "systematic_yields.json", self.docs / "data" / "systematic_yields.json")
+        result = {"status": payload["status"], "output": str((self.outputs / "systematic_yields.json").relative_to(self.repo)), "blockers": blockers}
+        self._record_direct_stage("systematic_yields", "blocked" if blockers else "complete", result)
+        return result
+
     def make_plots_stage(self) -> dict[str, Any]:
         result = {"status": "complete", "message": "Current plots are feature-side MET and search-bin yield diagnostics; full publication plots await normalized full production yields.", "plots_dir": str(self.docs / "plots")}
         self._record_direct_stage("make_plots", "complete", result)
@@ -1011,22 +1222,73 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
     def make_datacards_stage(self) -> dict[str, Any]:
         outdir = self.base / "cards"
         outdir.mkdir(parents=True, exist_ok=True)
+        final_bins = self._load_json_if_exists(self.base / "studies" / "search_bins" / "final_search_bins.json", {})
+        systematics = self._load_json_if_exists(self.outputs / "systematic_yields.json", {})
+        full_norm = self._load_json_if_exists(self.outputs / "full_normalized_yields.json", {})
+        blockers = []
+        if final_bins.get("status") != "complete":
+            blockers.append("final search bins are not selected")
+        if full_norm.get("status") != "complete":
+            blockers.append("full-production normalized nominal yields are unavailable")
+        if systematics.get("status") != "complete":
+            blockers.append("systematic yields/templates are unavailable")
+        blockers.append("manual legacy validation boundary has not been supplied by the user")
         note = outdir / "README.md"
-        note.write_text("# Prototype Datacards\n\nDatacard production is prepared but blocked for final physics use until manual legacy validation, systematic templates, and an accepted search-bin scheme are available. No final datacards are claimed.\n")
-        result = {"status": "blocked", "reason": "manual legacy validation, systematic templates, and accepted search bins required", "output": str(note.relative_to(self.repo)), "label": "prototype_datacard_blocked"}
-        self._record_direct_stage("make_datacards", "blocked", result)
+        note.write_text("# Datacard Status\n\nStatus: `blocked`\n\nNo Combine-compatible production datacards are produced by this run. Required before datacards: final selected search bins, full-production nominal yields, systematic yields/templates, and user-provided manual validation against the legacy processor.\n")
+        summary = {
+            "status": "blocked" if blockers else "complete",
+            "datacards_produced": 0,
+            "output_dir": str(outdir.relative_to(self.repo)),
+            "blockers": blockers,
+            "exact_unblock_steps": [
+                "Complete run-production and full-production-normalization.",
+                "Select final search bins after physics review/manual validation.",
+                "Produce systematic_yields.json from shifted inputs.",
+                "Rerun ./autonomous_allhad/analysisctl make-datacards --config autonomous_allhad/configs/run3_2024.yaml.",
+            ],
+        }
+        write_json(outdir / "datacard_summary.json", summary)
+        (self.base / "reports" / "datacard_summary.md").write_text("# Datacards\n\nStatus: `blocked`\n\nNo real datacards were produced.\n\n## Blockers\n" + "".join(f"- {b}\n" for b in blockers))
+        (self.docs / "data").mkdir(parents=True, exist_ok=True)
+        shutil.copy2(outdir / "datacard_summary.json", self.docs / "data" / "datacard_summary.json")
+        result = {"status": summary["status"], "datacards_produced": 0, "output": str(note.relative_to(self.repo)), "blockers": blockers}
+        self._record_direct_stage("make_datacards", "blocked" if blockers else "complete", result)
         return result
 
     def expected_limits_stage(self) -> dict[str, Any]:
-        combine = shutil.which("combine")
+        combine_cmd = self.config.get("execution", {}).get("combine_command", "combine")
+        combine = shutil.which(str(combine_cmd))
+        cmssw = os.environ.get("CMSSW_BASE")
+        cards = self._load_json_if_exists(self.base / "cards" / "datacard_summary.json", {})
         outdir = self.base / "limits"
         outdir.mkdir(parents=True, exist_ok=True)
+        blockers = []
+        if cards.get("datacards_produced", 0) <= 0:
+            blockers.append("no Combine-compatible datacards are available")
         if not combine:
-            result = {"status": "blocked", "reason": "Combine is unavailable in PATH", "setup_instructions": "Set up CMSSW with HiggsAnalysis/CombinedLimit, then rerun ./autonomous_allhad/analysisctl expected-limits --config autonomous_allhad/configs/run3_2024.yaml"}
-        else:
-            result = {"status": "blocked", "reason": "Combine is available but final datacards/templates are not ready", "combine": combine}
+            blockers.append(f"Combine command '{combine_cmd}' is unavailable in PATH")
+        if not cmssw:
+            blockers.append("CMSSW_BASE is not set; cmsenv is not active")
+        result = {
+            "status": "blocked" if blockers else "complete",
+            "limits_produced": 0,
+            "combine_command": combine_cmd,
+            "combine_path": combine,
+            "cmssw_base": cmssw,
+            "blockers": blockers,
+            "setup_instructions": [
+                "Set up an analysis-approved CMSSW/Combine environment and run cmsenv.",
+                "Ensure `combine` is in PATH and rerun `which combine`.",
+                "After real datacards exist, run ./autonomous_allhad/analysisctl expected-limits --config autonomous_allhad/configs/run3_2024.yaml.",
+            ],
+            "warning": "No real Combine limits are produced or claimed. Proxy values must not be interpreted as expected limits.",
+        }
         write_json(outdir / "expected_limits_status.json", result)
-        self._record_direct_stage("expected_limits", "blocked", result)
+        write_json(self.outputs / "expected_limits.json", result)
+        (self.base / "reports" / "expected_limit_summary.md").write_text("# Expected Limits\n\nStatus: `blocked`\n\nNo real Combine limits were produced.\n\n## Blockers\n" + "".join(f"- {b}\n" for b in blockers))
+        (self.docs / "data").mkdir(parents=True, exist_ok=True)
+        shutil.copy2(outdir / "expected_limits_status.json", self.docs / "data" / "expected_limits_status.json")
+        self._record_direct_stage("expected_limits", "blocked" if blockers else "complete", result)
         return result
 
     def _public_history_entry(self, entry: dict[str, Any] | None) -> dict[str, Any] | None:
@@ -1061,7 +1323,7 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
         completed = [k for k, v in stages.items() if v.get("status") == "complete"]
         failed = [k for k, v in stages.items() if v.get("status") == "failed"]
         blocked = [k for k, v in stages.items() if v.get("status") == "blocked"]
-        for expected in ["make_datacards", "expected_limits", "condor_production", "systematic_yields"]:
+        for expected in ["run_production", "full_production_normalization", "select_search_bins", "make_datacards", "expected_limits", "condor_production", "systematic_yields"]:
             if expected not in completed and expected not in failed and expected not in blocked:
                 blocked.append(expected)
         latest = None
@@ -1094,7 +1356,7 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             "normalization_blocked_datasets": len(norm.get("blocked_datasets", [])) if isinstance(norm, dict) else None,
             "manual_validation_status": validation.get("legacy_validation_status", "external/manual"),
             "agreement_claim": validation.get("agreement_claim", "No independent agreement with stop_processor_v4.py is claimed by autonomous_allhad unless explicitly provided by the user."),
-            "next_recommended_action": "./autonomous_allhad/analysisctl make-feature-yields --config autonomous_allhad/configs/run3_2024.yaml",
+            "next_recommended_action": "Unblock full production: enable/authorize Condor production or configure an explicit bounded local full-production fallback, then run ./autonomous_allhad/analysisctl run-production --config autonomous_allhad/configs/run3_2024.yaml",
         }
         write_json(self.workflow / "monitor_state.json", payload)
         (self.docs / "data").mkdir(parents=True, exist_ok=True)
@@ -1160,6 +1422,11 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             self.outputs / "normalization_factors.json",
             self.outputs / "normalized_feature_yields.json",
             self.outputs / "feature_yields.json",
+            self.outputs / "full_normalized_yields.json",
+            self.outputs / "systematic_yields.json",
+            self.workflow / "production_manifest.json",
+            self.base / "studies" / "search_bins" / "final_search_bins.json",
+            self.base / "cards" / "datacard_summary.json",
             self.base / "limits" / "expected_limits_status.json",
         ]
         for src in copy_sources:
@@ -1311,8 +1578,8 @@ jobs:
             f"Skipped corrupted files: 0 confirmed; {bad['bad_or_inaccessible']} inaccessible first-file probes require authenticated ROOT retry.",
             "Physics differences from baseline: none adopted; top-tagging-independent categorization remains a proposal.",
             "Categories tested: " + ", ".join(CATEGORY_SCHEMES),
-            "Condor cluster IDs: none; submission disabled in config.",
-            "Expected limits: local proxy artifacts generated; Combine not run without templates/tool availability.",
+            "Condor cluster IDs: none; submission disabled in config, so full production remains externally blocked.",
+            "Expected limits: blocked; no real datacards and Combine/CMSSW are unavailable in the current environment.",
             "Website: docs/index.html",
             f"GitHub Pages: {gh.get('status', 'ready' if gh.get('sensitive_scan', {}).get('status') == 'clean' else 'blocked')}; {gh.get('remaining_step', 'publish docs/ via GitHub Pages workflow')}",
         ]

@@ -1,5 +1,14 @@
 {
   "stages": {
+    "condor_production": {
+      "result": {
+        "cluster_ids": [],
+        "reason": "execution.allow_condor_submit is false in autonomous_allhad/configs/run3_2024.yaml; no explicit bounded local full-production fallback is configured",
+        "status": "not_submitted"
+      },
+      "status": "blocked",
+      "updated_at": "2026-06-17T12:50:50Z"
+    },
     "design_search_bins": {
       "result": {
         "output": "autonomous_allhad/studies/search_bins/search_bin_candidates.json",
@@ -8,26 +17,58 @@
         "selection_status": "no provisional scheme selected because all candidate bins fail at least one configured statistics threshold"
       },
       "status": "complete",
-      "updated_at": "2026-06-17T12:03:22Z"
+      "updated_at": "2026-06-17T12:51:45Z"
     },
     "expected_limits": {
       "result": {
-        "reason": "Combine is unavailable in PATH",
-        "setup_instructions": "Set up CMSSW with HiggsAnalysis/CombinedLimit, then rerun ./autonomous_allhad/analysisctl expected-limits --config autonomous_allhad/configs/run3_2024.yaml",
+        "blockers": [
+          "no Combine-compatible datacards are available",
+          "Combine command 'combine' is unavailable in PATH",
+          "CMSSW_BASE is not set; cmsenv is not active"
+        ],
+        "cmssw_base": null,
+        "combine_command": "combine",
+        "combine_path": null,
+        "limits_produced": 0,
+        "setup_instructions": [
+          "Set up an analysis-approved CMSSW/Combine environment and run cmsenv.",
+          "Ensure `combine` is in PATH and rerun `which combine`.",
+          "After real datacards exist, run ./autonomous_allhad/analysisctl expected-limits --config autonomous_allhad/configs/run3_2024.yaml."
+        ],
+        "status": "blocked",
+        "warning": "No real Combine limits are produced or claimed. Proxy values must not be interpreted as expected limits."
+      },
+      "status": "blocked",
+      "updated_at": "2026-06-17T12:51:46Z"
+    },
+    "full_production_normalization": {
+      "result": {
+        "blockers": [
+          "full production feature table is not complete",
+          "metadata does not contain full dataset signed sumw/Runs denominators",
+          "correction weight products for full production are not available",
+          "systematic shifted event weights are not available"
+        ],
+        "output": "autonomous_allhad/outputs/full_normalized_yields.json",
         "status": "blocked"
       },
       "status": "blocked",
-      "updated_at": "2026-06-17T12:03:23Z"
+      "updated_at": "2026-06-17T12:50:50Z"
     },
     "make_datacards": {
       "result": {
-        "label": "prototype_datacard_blocked",
+        "blockers": [
+          "final search bins are not selected",
+          "full-production normalized nominal yields are unavailable",
+          "systematic yields/templates are unavailable",
+          "manual legacy validation boundary has not been supplied by the user"
+        ],
+        "datacards_produced": 0,
         "output": "autonomous_allhad/cards/README.md",
-        "reason": "manual legacy validation, systematic templates, and accepted search bins required",
         "status": "blocked"
       },
       "status": "blocked",
-      "updated_at": "2026-06-17T12:03:23Z"
+      "updated_at": "2026-06-17T12:51:46Z"
     },
     "make_feature_yields": {
       "result": {
@@ -35,7 +76,7 @@
         "status": "exploratory_provisional"
       },
       "status": "complete",
-      "updated_at": "2026-06-17T12:03:23Z"
+      "updated_at": "2026-06-17T12:51:46Z"
     },
     "make_plots": {
       "result": {
@@ -44,7 +85,7 @@
         "status": "complete"
       },
       "status": "complete",
-      "updated_at": "2026-06-17T12:03:23Z"
+      "updated_at": "2026-06-17T12:51:46Z"
     },
     "normalization_audit": {
       "result": {
@@ -52,7 +93,7 @@
         "output": "autonomous_allhad/validation/normalization_audit.json"
       },
       "status": "complete",
-      "updated_at": "2026-06-17T12:02:26Z"
+      "updated_at": "2026-06-17T12:50:42Z"
     },
     "normalize_feature_yields": {
       "result": {
@@ -61,7 +102,7 @@
         "output": "autonomous_allhad/outputs/normalized_feature_yields.json"
       },
       "status": "complete",
-      "updated_at": "2026-06-17T12:02:34Z"
+      "updated_at": "2026-06-17T12:50:50Z"
     },
     "publish_github_pages": {
       "result": {
@@ -70,7 +111,7 @@
         "docs_path": "docs",
         "expected_url": "https://resisov.github.io/run3_stop/",
         "index": "docs/index.html",
-        "last_publication_time_utc": "2026-06-17T12:29:20Z",
+        "last_publication_time_utc": "2026-06-17T12:51:46Z",
         "monitor": "docs/monitor.html",
         "published": false,
         "remaining_step": "Commit/push docs and confirm the GitHub Pages deployment in GitHub Actions.",
@@ -81,7 +122,49 @@
         "workflow": ".github/workflows/pages.yml"
       },
       "status": "complete",
-      "updated_at": "2026-06-17T12:29:21Z"
+      "updated_at": "2026-06-17T12:51:48Z"
+    },
+    "run_production": {
+      "result": {
+        "blockers": [
+          "execution.allow_condor_submit is false in autonomous_allhad/configs/run3_2024.yaml",
+          "no explicit bounded local full-production fallback is configured"
+        ],
+        "datasets": 5331,
+        "events_processed": 0,
+        "files_in_metadata": 52772,
+        "jobs_planned": 52772,
+        "output": "autonomous_allhad/workflow/production_manifest.json",
+        "status": "blocked"
+      },
+      "status": "blocked",
+      "updated_at": "2026-06-17T12:50:50Z"
+    },
+    "select_search_bins": {
+      "result": {
+        "blockers": [
+          "full-production normalized yields are unavailable",
+          "all candidate bins fail at least one configured statistics threshold in the feature subset"
+        ],
+        "output": "autonomous_allhad/studies/search_bins/final_search_bins.json",
+        "selected_scheme": null,
+        "status": "blocked"
+      },
+      "status": "blocked",
+      "updated_at": "2026-06-17T12:51:45Z"
+    },
+    "systematic_yields": {
+      "result": {
+        "blockers": [
+          "final search bins are not selected",
+          "full-production normalized nominal yields are unavailable",
+          "systematic shifted feature/yield inputs are unavailable"
+        ],
+        "output": "autonomous_allhad/outputs/systematic_yields.json",
+        "status": "blocked"
+      },
+      "status": "blocked",
+      "updated_at": "2026-06-17T12:51:46Z"
     }
   },
   "started_at": "2026-06-17T11:01:36Z"

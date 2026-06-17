@@ -1,5 +1,18 @@
 {
-  "reason": "Combine is unavailable in PATH",
-  "setup_instructions": "Set up CMSSW with HiggsAnalysis/CombinedLimit, then rerun ./autonomous_allhad/analysisctl expected-limits --config autonomous_allhad/configs/run3_2024.yaml",
-  "status": "blocked"
+  "blockers": [
+    "no Combine-compatible datacards are available",
+    "Combine command 'combine' is unavailable in PATH",
+    "CMSSW_BASE is not set; cmsenv is not active"
+  ],
+  "cmssw_base": null,
+  "combine_command": "combine",
+  "combine_path": null,
+  "limits_produced": 0,
+  "setup_instructions": [
+    "Set up an analysis-approved CMSSW/Combine environment and run cmsenv.",
+    "Ensure `combine` is in PATH and rerun `which combine`.",
+    "After real datacards exist, run ./autonomous_allhad/analysisctl expected-limits --config autonomous_allhad/configs/run3_2024.yaml."
+  ],
+  "status": "blocked",
+  "warning": "No real Combine limits are produced or claimed. Proxy values must not be interpreted as expected limits."
 }

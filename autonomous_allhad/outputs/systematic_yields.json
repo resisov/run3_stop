@@ -1,0 +1,32 @@
+{
+  "bin_source": "autonomous_allhad/studies/search_bins/final_search_bins.json",
+  "blockers": [
+    "final search bins are not selected",
+    "full-production normalized nominal yields are unavailable",
+    "systematic shifted feature/yield inputs are unavailable"
+  ],
+  "exact_unblock_steps": [
+    "Run full production with nominal and shifted weights/objects needed for the nuisance model.",
+    "Select final search bins after full-production normalization.",
+    "Regenerate systematic_yields.json/csv before make-datacards."
+  ],
+  "implemented_systematics": [],
+  "nominal_source": "autonomous_allhad/outputs/full_normalized_yields.json",
+  "scope": "systematic yields for final datacards",
+  "status": "blocked",
+  "unavailable_systematics": [
+    "pileup",
+    "btag",
+    "lepton_id",
+    "lepton_trigger",
+    "photon_id",
+    "trigger",
+    "JES",
+    "JER",
+    "MET_unclustered",
+    "top_pt",
+    "ISR",
+    "PDF/scale"
+  ],
+  "yields": {}
+}
