@@ -8,4 +8,4 @@ Categories tested: minimal_njet_nb_met, resolved_kinematics, isr_sensitive, ak8_
 Condor cluster IDs: none; submission disabled in config.
 Expected limits: local proxy artifacts generated; Combine not run without templates/tool availability.
 Website: docs/index.html
-GitHub Pages: ready; Review docs/, then run: git add docs .github/workflows/pages.yml autonomous_allhad && git commit -m 'Update autonomous allhad dashboard' && git push
+GitHub Pages: ready; Commit/push docs and confirm the GitHub Pages deployment in GitHub Actions.

@@ -8,7 +8,7 @@
         "selection_status": "no provisional scheme selected because all candidate bins fail at least one configured statistics threshold"
       },
       "status": "complete",
-      "updated_at": "2026-06-17T11:50:16Z"
+      "updated_at": "2026-06-17T12:03:22Z"
     },
     "expected_limits": {
       "result": {
@@ -17,7 +17,7 @@
         "status": "blocked"
       },
       "status": "blocked",
-      "updated_at": "2026-06-17T11:50:17Z"
+      "updated_at": "2026-06-17T12:03:23Z"
     },
     "make_datacards": {
       "result": {
@@ -27,7 +27,7 @@
         "status": "blocked"
       },
       "status": "blocked",
-      "updated_at": "2026-06-17T11:50:17Z"
+      "updated_at": "2026-06-17T12:03:23Z"
     },
     "make_feature_yields": {
       "result": {
@@ -35,7 +35,7 @@
         "status": "exploratory_provisional"
       },
       "status": "complete",
-      "updated_at": "2026-06-17T11:50:16Z"
+      "updated_at": "2026-06-17T12:03:23Z"
     },
     "make_plots": {
       "result": {
@@ -44,7 +44,7 @@
         "status": "complete"
       },
       "status": "complete",
-      "updated_at": "2026-06-17T11:50:16Z"
+      "updated_at": "2026-06-17T12:03:23Z"
     },
     "normalization_audit": {
       "result": {
@@ -52,7 +52,7 @@
         "output": "autonomous_allhad/validation/normalization_audit.json"
       },
       "status": "complete",
-      "updated_at": "2026-06-17T11:49:17Z"
+      "updated_at": "2026-06-17T12:02:26Z"
     },
     "normalize_feature_yields": {
       "result": {
@@ -61,7 +61,7 @@
         "output": "autonomous_allhad/outputs/normalized_feature_yields.json"
       },
       "status": "complete",
-      "updated_at": "2026-06-17T11:49:25Z"
+      "updated_at": "2026-06-17T12:02:34Z"
     },
     "publish_github_pages": {
       "result": {
@@ -70,7 +70,7 @@
         "docs_path": "docs",
         "expected_url": "https://resisov.github.io/run3_stop/",
         "index": "docs/index.html",
-        "last_publication_time_utc": "2026-06-17T12:00:27Z",
+        "last_publication_time_utc": "2026-06-17T12:03:42Z",
         "monitor": "docs/monitor.html",
         "published": false,
         "remaining_step": "Commit/push docs and confirm the GitHub Pages deployment in GitHub Actions.",
@@ -81,7 +81,7 @@
         "workflow": ".github/workflows/pages.yml"
       },
       "status": "complete",
-      "updated_at": "2026-06-17T12:00:27Z"
+      "updated_at": "2026-06-17T12:03:43Z"
     }
   },
   "started_at": "2026-06-17T11:01:36Z"

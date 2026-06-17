@@ -4,7 +4,7 @@
   "docs_path": "docs",
   "expected_url": "https://resisov.github.io/run3_stop/",
   "index": "docs/index.html",
-  "last_publication_time_utc": "2026-06-17T12:00:27Z",
+  "last_publication_time_utc": "2026-06-17T12:03:42Z",
   "monitor": "docs/monitor.html",
   "published": false,
   "remaining_step": "Commit/push docs and confirm the GitHub Pages deployment in GitHub Actions.",
