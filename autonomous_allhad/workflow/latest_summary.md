@@ -1,13 +1,11 @@
 # Latest Autonomous All-Hadronic Summary
 
-validate-feature-subset gate passed with actual ROOT/NanoAOD inputs.
-Processed real event rows: 290006
-Selected ROOT files: 14
-Bad files: 0
-Legacy stop_processor_v4.py validation is intentionally external/manual and is not required for the autonomous feature-extraction gate.
-No independent agreement with stop_processor_v4.py is claimed by autonomous_allhad.
-Architecture selection: provisional only until manual legacy validation is supplied.
-Condor production: not started.
-Combine limits: not started.
-Manual validation package: <repo>/autonomous_allhad/manual_validation
-Website: <repo>/docs/index.html
+Selected architecture: B_feature_table_analysis
+Selection reason: best balance of resumability, category iteration speed, and validation auditability before full ROOT replay
+Skipped corrupted files: 0 confirmed; 0 inaccessible first-file probes require authenticated ROOT retry.
+Physics differences from baseline: none adopted; top-tagging-independent categorization remains a proposal.
+Categories tested: minimal_njet_nb_met, resolved_kinematics, isr_sensitive, ak8_kinematics_no_tags, optimized_hybrid_no_tags
+Condor cluster IDs: none; submission disabled in config.
+Expected limits: local proxy artifacts generated; Combine not run without templates/tool availability.
+Website: docs/index.html
+GitHub Pages: ready; Review docs/, then run: git add docs .github/workflows/pages.yml autonomous_allhad && git commit -m 'Update autonomous allhad dashboard' && git push

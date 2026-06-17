@@ -2,30 +2,66 @@
   "stages": {
     "design_search_bins": {
       "result": {
-        "output": "<repo>/autonomous_allhad/studies/search_bins/search_bin_candidates.json",
+        "output": "autonomous_allhad/studies/search_bins/search_bin_candidates.json",
         "schemes": 5,
         "selected_provisional_scheme": null,
         "selection_status": "no provisional scheme selected because all candidate bins fail at least one configured statistics threshold"
       },
       "status": "complete",
-      "updated_at": "2026-06-17T11:15:39Z"
+      "updated_at": "2026-06-17T11:50:16Z"
+    },
+    "expected_limits": {
+      "result": {
+        "reason": "Combine is unavailable in PATH",
+        "setup_instructions": "Set up CMSSW with HiggsAnalysis/CombinedLimit, then rerun ./autonomous_allhad/analysisctl expected-limits --config autonomous_allhad/configs/run3_2024.yaml",
+        "status": "blocked"
+      },
+      "status": "blocked",
+      "updated_at": "2026-06-17T11:50:17Z"
+    },
+    "make_datacards": {
+      "result": {
+        "label": "prototype_datacard_blocked",
+        "output": "autonomous_allhad/cards/README.md",
+        "reason": "manual legacy validation, systematic templates, and accepted search bins required",
+        "status": "blocked"
+      },
+      "status": "blocked",
+      "updated_at": "2026-06-17T11:50:17Z"
+    },
+    "make_feature_yields": {
+      "result": {
+        "output": "autonomous_allhad/outputs/feature_yields.json",
+        "status": "exploratory_provisional"
+      },
+      "status": "complete",
+      "updated_at": "2026-06-17T11:50:16Z"
+    },
+    "make_plots": {
+      "result": {
+        "message": "Current plots are feature-side MET and search-bin yield diagnostics; full publication plots await normalized full production yields.",
+        "plots_dir": "docs/plots",
+        "status": "complete"
+      },
+      "status": "complete",
+      "updated_at": "2026-06-17T11:50:16Z"
     },
     "normalization_audit": {
       "result": {
         "blocked_datasets": 0,
-        "output": "<repo>/autonomous_allhad/validation/normalization_audit.json"
+        "output": "autonomous_allhad/validation/normalization_audit.json"
       },
       "status": "complete",
-      "updated_at": "2026-06-17T11:14:29Z"
+      "updated_at": "2026-06-17T11:49:17Z"
     },
     "normalize_feature_yields": {
       "result": {
         "blocked_datasets": 0,
-        "factors": "<repo>/autonomous_allhad/outputs/normalization_factors.json",
-        "output": "<repo>/autonomous_allhad/outputs/normalized_feature_yields.json"
+        "factors": "autonomous_allhad/outputs/normalization_factors.json",
+        "output": "autonomous_allhad/outputs/normalized_feature_yields.json"
       },
       "status": "complete",
-      "updated_at": "2026-06-17T11:14:47Z"
+      "updated_at": "2026-06-17T11:49:25Z"
     },
     "publish_github_pages": {
       "result": {
@@ -41,7 +77,7 @@
         "workflow": ".github/workflows/pages.yml"
       },
       "status": "complete",
-      "updated_at": "2026-06-17T11:29:54Z"
+      "updated_at": "2026-06-17T11:50:17Z"
     }
   },
   "started_at": "2026-06-17T11:01:36Z"

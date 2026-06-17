@@ -2,13 +2,15 @@
   "agreement_claim": "No independent agreement with stop_processor_v4.py is claimed by autonomous_allhad.",
   "bad_files": 0,
   "blocked_gates": [
-    "make_datacards",
     "expected_limits",
+    "make_datacards",
     "condor_production",
     "systematic_yields"
   ],
   "completed_gates": [
     "design_search_bins",
+    "make_feature_yields",
+    "make_plots",
     "normalization_audit",
     "normalize_feature_yields",
     "publish_github_pages"

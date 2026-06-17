@@ -582,12 +582,28 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
         return payload
 
 
+    def _public_value(self, value: Any) -> Any:
+        if isinstance(value, dict):
+            return {k: self._public_value(v) for k, v in value.items()}
+        if isinstance(value, list):
+            return [self._public_value(v) for v in value]
+        if isinstance(value, str):
+            try:
+                path = Path(value)
+                if path.is_absolute():
+                    return str(path.resolve().relative_to(self.repo))
+            except Exception:
+                if value.startswith("/eos/"):
+                    return "<workspace>/" + Path(value).name
+        return value
+
     def _record_direct_stage(self, name: str, status: str, result: dict[str, Any]) -> None:
         self.workflow.mkdir(parents=True, exist_ok=True)
-        self.state.setdefault("stages", {})[name] = {"status": status, "result": result, "updated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
+        public_result = self._public_value(result)
+        self.state.setdefault("stages", {})[name] = {"status": status, "result": public_result, "updated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
         write_json(self.state_path, self.state)
         with self.history.open("a") as f:
-            f.write(json.dumps({"stage": name, "status": status, "result": result}) + "\n")
+            f.write(json.dumps({"stage": name, "status": status, "result": public_result}) + "\n")
 
     def _load_json_if_exists(self, path: Path, default: Any) -> Any:
         return json.loads(path.read_text()) if path.exists() and path.stat().st_size else default
@@ -1221,7 +1237,7 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             "Categories tested: " + ", ".join(CATEGORY_SCHEMES),
             "Condor cluster IDs: none; submission disabled in config.",
             "Expected limits: local proxy artifacts generated; Combine not run without templates/tool availability.",
-            f"Website: {self.docs / 'index.html'}",
-            f"GitHub Pages: {gh['status']}; {gh['remaining_step']}",
+            "Website: docs/index.html",
+            f"GitHub Pages: {gh.get('status', 'ready' if gh.get('sensitive_scan', {}).get('status') == 'clean' else 'blocked')}; {gh.get('remaining_step', 'publish docs/ via GitHub Pages workflow')}",
         ]
         (self.workflow / "latest_summary.md").write_text("\n".join(lines) + "\n")

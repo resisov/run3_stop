@@ -1,0 +1,5 @@
+{
+  "reason": "Combine is unavailable in PATH",
+  "setup_instructions": "Set up CMSSW with HiggsAnalysis/CombinedLimit, then rerun ./autonomous_allhad/analysisctl expected-limits --config autonomous_allhad/configs/run3_2024.yaml",
+  "status": "blocked"
+}
