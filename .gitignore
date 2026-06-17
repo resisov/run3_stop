@@ -37,3 +37,22 @@ autonomous_allhad/autonomous_allhad/__pycache__/
 *.pickle
 autonomous_allhad/datacards/
 autonomous_allhad/limits/expected_limits_proxy.json
+
+# Credentials / proxies / private keys
+analysis/proxy/
+*x509*
+*proxy*
+*.pem
+*.key
+*.crt
+*.cert
+
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+
+# Heavy analysis outputs
+*.root
+*.futures
+autonomous_allhad/outputs/real_feature_table.csv
