@@ -1,0 +1,11 @@
+channels:
+  - "cat1_preselection"
+  - "cat2_LLCR_highDeltaM"
+  - "cat3_QCDCR_highDeltaM"
+  - "cat4_GCR_highDeltaM"
+  - "cat5_DY2E_highDeltaM"
+  - "cat6_DY2M_highDeltaM"
+  - "cat7_SR_highDeltaM"
+autoMCStats: 10
+current_script: "analysis/make_datacard.py"
+external_tool: "missing"

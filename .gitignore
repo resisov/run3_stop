@@ -1,0 +1,39 @@
+# Python caches
+__pycache__/
+*.py[cod]
+
+# Large runtime artifacts
+*.tgz
+*.tar
+*.tar.gz
+*.root
+
+# Condor outputs
+condor_log/
+analysis/hists/
+analysis/condor/generated/
+
+# Fast-analysis runtime artifacts
+fast_outputs/
+*.parquet
+*.sqlite
+*.db
+*.log
+*.stdout
+*.stderr
+*.done
+# Autonomous all-hadronic runtime products not for GitHub
+analysis/proxy/
+analysis/metadata/autonomous_real_subset.json.gz
+autonomous_allhad/outputs/real_feature_table.csv
+autonomous_allhad/workflow/history.jsonl
+autonomous_allhad/autonomous_allhad/__pycache__/
+**/__pycache__/
+*.futures
+*.scaled
+*.merged
+*.processor
+*.pkl
+*.pickle
+autonomous_allhad/datacards/
+autonomous_allhad/limits/expected_limits_proxy.json

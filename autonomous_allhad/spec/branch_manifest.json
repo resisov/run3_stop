@@ -1,0 +1,24 @@
+{
+  "event": [
+    "run",
+    "luminosityBlock",
+    "event",
+    "genWeight"
+  ],
+  "objects": [
+    "Electron",
+    "Muon",
+    "Photon",
+    "Tau",
+    "Jet",
+    "FatJet",
+    "IsoTrack",
+    "MET",
+    "PuppiMET",
+    "CaloMET",
+    "Pileup",
+    "GenPart",
+    "HLT",
+    "Flag"
+  ]
+}

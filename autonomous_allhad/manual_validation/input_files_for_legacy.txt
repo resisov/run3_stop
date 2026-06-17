@@ -1,0 +1,14 @@
+root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/TTTT_TuneCP5_13p6TeV_amcatnlo-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/2520000/fd0094d9-bfbd-4bf2-bc9c-6591e78513dc.root
+root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/Zto2Nu-2Jets_Bin-1J-PTNuNu-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/100000/af5f19cf-64a4-484f-bff1-e03492433a43.root
+root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/WtoLNu-2Jets_Bin-1J-PTLNu-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/2810000/72501794-e01d-4692-b93a-03fecffd0a21.root
+root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/QCD_Bin-PT-1000to1500_TuneCP5_13p6TeV_pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/2560000/6e17243d-509f-4c31-96b4-6a8f683b3892.root
+root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/GJ_Bin-PTG-600_TuneCP5_13p6TeV_amcatnlo-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/2810000/f02ac269-1d71-4679-9735-6432a76bec43.root
+root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/DYto2L-2Jets_Bin-MLL-50-PTLL-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v3/2820000/2d1deb1c-7ab2-405e-bfc8-6bfde675db03.root
+root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/TBbarQto2Q-t-channel-4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/2810000/3d2c26bb-7917-4746-acea-4d0a810140cd.root
+root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/WW_TuneCP5_13p6TeV_pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/120000/81fd8b3f-980c-4f7e-81e2-91cf3ed34212.root
+root://cms-xrd-global.cern.ch//store/data/Run2024C/JetMET0/NANOAOD/MINIv6NANOv15-v1/2540000/064aaf18-b694-49d9-b2cd-2fae03f98476.root
+root://cms-xrd-global.cern.ch//store/data/Run2024C/EGamma0/NANOAOD/MINIv6NANOv15-v1/2540000/3151ab41-a5bd-48f1-be40-449b760a60e6.root
+root://cms-xrd-global.cern.ch//store/data/Run2024C/Muon0/NANOAOD/MINIv6NANOv15-v1/2530000/677e3bb0-8199-4ffb-83af-165410a7b7a6.root
+root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/SMS-2Stop_Par-mStop-1000_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/120000/c9e86344-a334-4359-b778-b2acedeb1865.root
+root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/SMS-2Stop_Par-mStop-600_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/110000/f1b66c57-e1d2-443a-a28e-b9879280bc61.root
+root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/SMS-2Stop_Par-mStop-1500_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/110000/2c76cfbd-6a5f-493d-904f-526b1219ddbb.root

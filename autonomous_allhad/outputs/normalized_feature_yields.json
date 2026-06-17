@@ -1,0 +1,1156 @@
+{
+  "agreement_claim": "No independent agreement with stop_processor_v4.py is claimed by autonomous_allhad unless explicitly provided by the user.",
+  "blocked_datasets": [],
+  "formula": "data=1; MC genWeight * xsec_pb * lumi_pb / processed_feature_sumw; correction_weights currently 1/unavailable",
+  "legacy_validation_status": "external/manual",
+  "luminosity_fb": 109.82,
+  "luminosity_pb": 109820.0,
+  "normalization_status": "complete",
+  "scope": "feature-side subset-normalized nominal yields",
+  "yields": {
+    "DY": {
+      "DY2E": {
+        "normalized_sumw2": 10.98951034362442,
+        "normalized_weighted": 8.287607594936707,
+        "raw_weighted": 7.900762557983398,
+        "unweighted": 16
+      },
+      "DY2M": {
+        "normalized_sumw2": 18.544798704866217,
+        "normalized_weighted": 5.801325316455695,
+        "raw_weighted": 5.530533790588379,
+        "unweighted": 27
+      },
+      "GCR": {
+        "normalized_sumw2": 0.6868443964765261,
+        "normalized_weighted": -0.8287607594936708,
+        "raw_weighted": -0.7900762557983398,
+        "unweighted": 1
+      },
+      "LLCR": {
+        "normalized_sumw2": 8.242132757718313,
+        "normalized_weighted": 6.630086075949365,
+        "raw_weighted": 6.320610046386719,
+        "unweighted": 12
+      },
+      "QCDCR": {
+        "normalized_sumw2": 30.907997841443702,
+        "normalized_weighted": 19.061497468354432,
+        "raw_weighted": 18.171753883361816,
+        "unweighted": 45
+      },
+      "SR": {
+        "normalized_sumw2": 8.242132757718313,
+        "normalized_weighted": 8.287607594936707,
+        "raw_weighted": 7.900762557983398,
+        "unweighted": 12
+      },
+      "preselection": {
+        "normalized_sumw2": 210.86122971829263,
+        "normalized_weighted": 118.51278860759521,
+        "raw_weighted": 112.9809045791626,
+        "unweighted": 307
+      }
+    },
+    "EGamma": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "preselection": {
+        "normalized_sumw2": 1.0,
+        "normalized_weighted": 1.0,
+        "raw_weighted": 1.0,
+        "unweighted": 1
+      }
+    },
+    "GJ": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 1231.0061341337139,
+        "normalized_weighted": 178.8621730407514,
+        "raw_weighted": 56.50892734527588,
+        "unweighted": 85
+      },
+      "LLCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "QCDCR": {
+        "normalized_sumw2": 72.4121243547497,
+        "normalized_weighted": 11.416734377156606,
+        "raw_weighted": 3.6069527864456177,
+        "unweighted": 5
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "preselection": {
+        "normalized_sumw2": 1969.6098082958645,
+        "normalized_weighted": 312.05740819555473,
+        "raw_weighted": 98.59004342556,
+        "unweighted": 136
+      }
+    },
+    "JetMET": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 1.0,
+        "normalized_weighted": 1.0,
+        "raw_weighted": 1.0,
+        "unweighted": 1
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "preselection": {
+        "normalized_sumw2": 11.0,
+        "normalized_weighted": 11.0,
+        "raw_weighted": 11.0,
+        "unweighted": 11
+      }
+    },
+    "Muon": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "preselection": {
+        "normalized_sumw2": 1.0,
+        "normalized_weighted": 1.0,
+        "raw_weighted": 1.0,
+        "unweighted": 1
+      }
+    },
+    "QCD": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "QCDCR": {
+        "normalized_sumw2": 65278.323544212864,
+        "normalized_weighted": 1532.9773800000005,
+        "raw_weighted": 36.0,
+        "unweighted": 36
+      },
+      "SR": {
+        "normalized_sumw2": 1813.2867651170247,
+        "normalized_weighted": 42.582705,
+        "raw_weighted": 1.0,
+        "unweighted": 1
+      },
+      "preselection": {
+        "normalized_sumw2": 116050.35296748953,
+        "normalized_weighted": 2725.293119999998,
+        "raw_weighted": 64.0,
+        "unweighted": 64
+      }
+    },
+    "SMS": {
+      "DY2E": {
+        "normalized_sumw2": 3.204336284356e-06,
+        "normalized_weighted": 0.001790066,
+        "raw_weighted": 1.0,
+        "unweighted": 1
+      },
+      "DY2M": {
+        "normalized_sumw2": 3.204336284356e-06,
+        "normalized_weighted": 0.001790066,
+        "raw_weighted": 1.0,
+        "unweighted": 1
+      },
+      "GCR": {
+        "normalized_sumw2": 6.408672568712e-06,
+        "normalized_weighted": 0.003580132,
+        "raw_weighted": 2.0,
+        "unweighted": 2
+      },
+      "LLCR": {
+        "normalized_sumw2": 3584554.6285526296,
+        "normalized_weighted": 2694.430099408317,
+        "raw_weighted": 460.0,
+        "unweighted": 460
+      },
+      "QCDCR": {
+        "normalized_sumw2": 1.7838423589977848,
+        "normalized_weighted": 3.8571077495264245,
+        "raw_weighted": 188.0,
+        "unweighted": 188
+      },
+      "SR": {
+        "normalized_sumw2": 105.99180216607928,
+        "normalized_weighted": 218.38432094162914,
+        "raw_weighted": 5118.0,
+        "unweighted": 5118
+      },
+      "preselection": {
+        "normalized_sumw2": 3584725.8454613523,
+        "normalized_weighted": 3046.860115144946,
+        "raw_weighted": 8535.0,
+        "unweighted": 8535
+      }
+    },
+    "ST": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "preselection": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      }
+    },
+    "TT": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.009697284273594809,
+        "normalized_weighted": -0.098474790040877,
+        "raw_weighted": -0.021492887288331985,
+        "unweighted": 1
+      },
+      "LLCR": {
+        "normalized_sumw2": 1.7939975906150345,
+        "normalized_weighted": 5.81001261241174,
+        "raw_weighted": 1.2680803500115871,
+        "unweighted": 185
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.5042587822269295,
+        "normalized_weighted": 1.969495800817541,
+        "raw_weighted": 0.4298577457666397,
+        "unweighted": 52
+      },
+      "SR": {
+        "normalized_sumw2": 1.2994360926617032,
+        "normalized_weighted": 3.938991601635083,
+        "raw_weighted": 0.8597154915332794,
+        "unweighted": 134
+      },
+      "preselection": {
+        "normalized_sumw2": 2.6570558909649806,
+        "normalized_weighted": 9.650529424005931,
+        "raw_weighted": 2.1063029542565346,
+        "unweighted": 274
+      }
+    },
+    "VV": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 134774.74441696252,
+        "normalized_weighted": 367.11679942078723,
+        "raw_weighted": 1.0,
+        "unweighted": 1
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "preselection": {
+        "normalized_sumw2": 1078197.9553357002,
+        "normalized_weighted": 2936.934395366298,
+        "raw_weighted": 8.0,
+        "unweighted": 8
+      }
+    },
+    "WtoLNu": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "preselection": {
+        "normalized_sumw2": 197.91983975345826,
+        "normalized_weighted": 312.08957169768695,
+        "raw_weighted": 778.0669293403625,
+        "unweighted": 848
+      }
+    },
+    "Zto2Nu": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "preselection": {
+        "normalized_sumw2": 31.52264643981982,
+        "normalized_weighted": 182.75784464676755,
+        "raw_weighted": 461.3890793323517,
+        "unweighted": 2192
+      }
+    },
+    "dataset::DYto2L-2Jets_Bin-MLL-50-PTLL-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____1_": {
+      "DY2E": {
+        "normalized_sumw2": 10.98951034362442,
+        "normalized_weighted": 8.287607594936707,
+        "raw_weighted": 7.900762557983398,
+        "unweighted": 16
+      },
+      "DY2M": {
+        "normalized_sumw2": 18.544798704866217,
+        "normalized_weighted": 5.801325316455695,
+        "raw_weighted": 5.530533790588379,
+        "unweighted": 27
+      },
+      "GCR": {
+        "normalized_sumw2": 0.6868443964765261,
+        "normalized_weighted": -0.8287607594936708,
+        "raw_weighted": -0.7900762557983398,
+        "unweighted": 1
+      },
+      "LLCR": {
+        "normalized_sumw2": 8.242132757718313,
+        "normalized_weighted": 6.630086075949365,
+        "raw_weighted": 6.320610046386719,
+        "unweighted": 12
+      },
+      "QCDCR": {
+        "normalized_sumw2": 30.907997841443702,
+        "normalized_weighted": 19.061497468354432,
+        "raw_weighted": 18.171753883361816,
+        "unweighted": 45
+      },
+      "SR": {
+        "normalized_sumw2": 8.242132757718313,
+        "normalized_weighted": 8.287607594936707,
+        "raw_weighted": 7.900762557983398,
+        "unweighted": 12
+      },
+      "preselection": {
+        "normalized_sumw2": 210.86122971829263,
+        "normalized_weighted": 118.51278860759521,
+        "raw_weighted": 112.9809045791626,
+        "unweighted": 307
+      }
+    },
+    "dataset::EGamma0-Run2024C-MINIv6NANOv15-v1____1_": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "preselection": {
+        "normalized_sumw2": 1.0,
+        "normalized_weighted": 1.0,
+        "raw_weighted": 1.0,
+        "unweighted": 1
+      }
+    },
+    "dataset::GJ_Bin-PTG-600_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 1231.0061341337139,
+        "normalized_weighted": 178.8621730407514,
+        "raw_weighted": 56.50892734527588,
+        "unweighted": 85
+      },
+      "LLCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "QCDCR": {
+        "normalized_sumw2": 72.4121243547497,
+        "normalized_weighted": 11.416734377156606,
+        "raw_weighted": 3.6069527864456177,
+        "unweighted": 5
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "preselection": {
+        "normalized_sumw2": 1969.6098082958645,
+        "normalized_weighted": 312.05740819555473,
+        "raw_weighted": 98.59004342556,
+        "unweighted": 136
+      }
+    },
+    "dataset::JetMET0-Run2024C-MINIv6NANOv15-v1____1_": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 1.0,
+        "normalized_weighted": 1.0,
+        "raw_weighted": 1.0,
+        "unweighted": 1
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "preselection": {
+        "normalized_sumw2": 11.0,
+        "normalized_weighted": 11.0,
+        "raw_weighted": 11.0,
+        "unweighted": 11
+      }
+    },
+    "dataset::Muon0-Run2024C-MINIv6NANOv15-v1____1_": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "preselection": {
+        "normalized_sumw2": 1.0,
+        "normalized_weighted": 1.0,
+        "raw_weighted": 1.0,
+        "unweighted": 1
+      }
+    },
+    "dataset::QCD_Bin-PT-1000to1500_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "QCDCR": {
+        "normalized_sumw2": 65278.323544212864,
+        "normalized_weighted": 1532.9773800000005,
+        "raw_weighted": 36.0,
+        "unweighted": 36
+      },
+      "SR": {
+        "normalized_sumw2": 1813.2867651170247,
+        "normalized_weighted": 42.582705,
+        "raw_weighted": 1.0,
+        "unweighted": 1
+      },
+      "preselection": {
+        "normalized_sumw2": 116050.35296748953,
+        "normalized_weighted": 2725.293119999998,
+        "raw_weighted": 64.0,
+        "unweighted": 64
+      }
+    },
+    "dataset::SMS-2Stop_Par-mStop-1000_TuneCP5_13p6TeV_madgraph-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 8.152056567452915,
+        "normalized_weighted": 16.151340816120918,
+        "raw_weighted": 32.0,
+        "unweighted": 32
+      },
+      "QCDCR": {
+        "normalized_sumw2": 1.7832623741303242,
+        "normalized_weighted": 3.5331058035264484,
+        "raw_weighted": 7.0,
+        "unweighted": 7
+      },
+      "SR": {
+        "normalized_sumw2": 105.97673537688715,
+        "normalized_weighted": 209.9674306095713,
+        "raw_weighted": 416.0,
+        "unweighted": 416
+      },
+      "preselection": {
+        "normalized_sumw2": 179.34524448396186,
+        "normalized_weighted": 355.3294979546591,
+        "raw_weighted": 704.0,
+        "unweighted": 704
+      }
+    },
+    "dataset::SMS-2Stop_Par-mStop-1500_TuneCP5_13p6TeV_madgraph-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2": {
+      "DY2E": {
+        "normalized_sumw2": 3.204336284356e-06,
+        "normalized_weighted": 0.001790066,
+        "raw_weighted": 1.0,
+        "unweighted": 1
+      },
+      "DY2M": {
+        "normalized_sumw2": 3.204336284356e-06,
+        "normalized_weighted": 0.001790066,
+        "raw_weighted": 1.0,
+        "unweighted": 1
+      },
+      "GCR": {
+        "normalized_sumw2": 6.408672568712e-06,
+        "normalized_weighted": 0.003580132,
+        "raw_weighted": 2.0,
+        "unweighted": 2
+      },
+      "LLCR": {
+        "normalized_sumw2": 0.00136504725713565,
+        "normalized_weighted": 0.7625681159999947,
+        "raw_weighted": 426.0,
+        "unweighted": 426
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.000579984867468437,
+        "normalized_weighted": 0.3240019459999998,
+        "raw_weighted": 181.0,
+        "unweighted": 181
+      },
+      "SR": {
+        "normalized_sumw2": 0.015066789209041784,
+        "normalized_weighted": 8.41689033199957,
+        "raw_weighted": 4702.0,
+        "unweighted": 4702
+      },
+      "preselection": {
+        "normalized_sumw2": 0.02508674877022803,
+        "normalized_weighted": 14.014426713999157,
+        "raw_weighted": 7829.0,
+        "unweighted": 7829
+      }
+    },
+    "dataset::SMS-2Stop_Par-mStop-600_TuneCP5_13p6TeV_madgraph-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 3584546.4751310665,
+        "normalized_weighted": 2677.516190476191,
+        "raw_weighted": 2.0,
+        "unweighted": 2
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "preselection": {
+        "normalized_sumw2": 3584546.4751310665,
+        "normalized_weighted": 2677.516190476191,
+        "raw_weighted": 2.0,
+        "unweighted": 2
+      }
+    },
+    "dataset::TBbarQto2Q-t-channel-4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "preselection": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      }
+    },
+    "dataset::TTTT_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.009697284273594809,
+        "normalized_weighted": -0.098474790040877,
+        "raw_weighted": -0.021492887288331985,
+        "unweighted": 1
+      },
+      "LLCR": {
+        "normalized_sumw2": 1.7939975906150345,
+        "normalized_weighted": 5.81001261241174,
+        "raw_weighted": 1.2680803500115871,
+        "unweighted": 185
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.5042587822269295,
+        "normalized_weighted": 1.969495800817541,
+        "raw_weighted": 0.4298577457666397,
+        "unweighted": 52
+      },
+      "SR": {
+        "normalized_sumw2": 1.2994360926617032,
+        "normalized_weighted": 3.938991601635083,
+        "raw_weighted": 0.8597154915332794,
+        "unweighted": 134
+      },
+      "preselection": {
+        "normalized_sumw2": 2.6570558909649806,
+        "normalized_weighted": 9.650529424005931,
+        "raw_weighted": 2.1063029542565346,
+        "unweighted": 274
+      }
+    },
+    "dataset::WW_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 134774.74441696252,
+        "normalized_weighted": 367.11679942078723,
+        "raw_weighted": 1.0,
+        "unweighted": 1
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "preselection": {
+        "normalized_sumw2": 1078197.9553357002,
+        "normalized_weighted": 2936.934395366298,
+        "raw_weighted": 8.0,
+        "unweighted": 8
+      }
+    },
+    "dataset::WtoLNu-2Jets_Bin-1J-PTLNu-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "preselection": {
+        "normalized_sumw2": 197.91983975345826,
+        "normalized_weighted": 312.08957169768695,
+        "raw_weighted": 778.0669293403625,
+        "unweighted": 848
+      }
+    },
+    "dataset::Zto2Nu-2Jets_Bin-1J-PTNuNu-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "preselection": {
+        "normalized_sumw2": 31.52264643981982,
+        "normalized_weighted": 182.75784464676755,
+        "raw_weighted": 461.3890793323517,
+        "unweighted": 2192
+      }
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "agreement_claim": "No independent agreement with stop_processor_v4.py is claimed by autonomous_allhad.",
+  "event_level_comparison": "not performed by autonomous_allhad",
+  "kinematic_integrals": {
+    "HT": "feature-only",
+    "MET": "feature-only",
+    "Nb": "feature-only",
+    "Njet": "feature-only",
+    "recoil": "feature-only"
+  },
+  "legacy_validation_status": "external/manual",
+  "message": "Legacy stop_processor_v4.py validation is intentionally external/manual and is not required for the autonomous feature-extraction gate.",
+  "regions": {
+    "DY2E": {
+      "difference": null,
+      "feature_unweighted": 17,
+      "legacy_baseline": "external/manual",
+      "status": "manual comparison required; autonomous_allhad does not claim baseline agreement"
+    },
+    "DY2M": {
+      "difference": null,
+      "feature_unweighted": 28,
+      "legacy_baseline": "external/manual",
+      "status": "manual comparison required; autonomous_allhad does not claim baseline agreement"
+    },
+    "GCR": {
+      "difference": null,
+      "feature_unweighted": 89,
+      "legacy_baseline": "external/manual",
+      "status": "manual comparison required; autonomous_allhad does not claim baseline agreement"
+    },
+    "LLCR": {
+      "difference": null,
+      "feature_unweighted": 659,
+      "legacy_baseline": "external/manual",
+      "status": "manual comparison required; autonomous_allhad does not claim baseline agreement"
+    },
+    "QCDCR": {
+      "difference": null,
+      "feature_unweighted": 326,
+      "legacy_baseline": "external/manual",
+      "status": "manual comparison required; autonomous_allhad does not claim baseline agreement"
+    },
+    "SR": {
+      "difference": null,
+      "feature_unweighted": 5265,
+      "legacy_baseline": "external/manual",
+      "status": "manual comparison required; autonomous_allhad does not claim baseline agreement"
+    },
+    "preselection": {
+      "difference": null,
+      "feature_unweighted": 12377,
+      "legacy_baseline": "external/manual",
+      "status": "manual comparison required; autonomous_allhad does not claim baseline agreement"
+    }
+  }
+}

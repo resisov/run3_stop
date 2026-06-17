@@ -1,0 +1,11 @@
+filters:
+  - "Flag.goodVertices"
+  - "globalSuperTightHalo2016Filter"
+  - "HBHENoiseFilter"
+  - "HBHENoiseIsoFilter"
+  - "EcalDeadCellTriggerPrimitiveFilter"
+  - "BadPFMuonFilter"
+  - "BadPFMuonDzFilter"
+  - "eeBadScFilter"
+trace:
+  source: "analysis/processors/stop_processor_v4.py met_filters selection"

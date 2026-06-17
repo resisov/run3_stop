@@ -1,0 +1,40 @@
+{
+  "input": "representative_subset.json",
+  "results": [
+    {
+      "bytes_read_proxy": 360,
+      "cpu_time_s": 0.0134,
+      "description": "Coffea-compatible processor rewrite preserving current Run-3 selections.",
+      "events_per_second_proxy": 12000,
+      "name": "A_optimized_faithful_rewrite",
+      "peak_rss_mb_proxy": 350,
+      "physics_change": "none intended",
+      "stability_score": 1.0007,
+      "wall_time_s": 0.0224
+    },
+    {
+      "bytes_read_proxy": 120,
+      "cpu_time_s": 0.0254,
+      "description": "Reusable event-level feature table for rapid region/category/stat-model iteration.",
+      "events_per_second_proxy": 9600,
+      "name": "B_feature_table_analysis",
+      "peak_rss_mb_proxy": 280,
+      "physics_change": "none for feature extraction; category scans are proposals",
+      "stability_score": 0.5007,
+      "wall_time_s": 0.0424
+    },
+    {
+      "bytes_read_proxy": 120,
+      "cpu_time_s": 0.0374,
+      "description": "Top-tagging-independent category and search-bin optimization.",
+      "events_per_second_proxy": 8000,
+      "name": "C_redesigned_top_tag_independent",
+      "peak_rss_mb_proxy": 210,
+      "physics_change": "proposal requiring closure and expected-limit validation",
+      "stability_score": 0.334,
+      "wall_time_s": 0.0624
+    }
+  ],
+  "selected_for_representative_pipeline": "B_feature_table_analysis",
+  "selection_reason": "best balance of resumability, category iteration speed, and validation auditability before full ROOT replay"
+}

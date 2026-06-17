@@ -1,0 +1,238 @@
+{
+  "artifacts": {
+    "autonomous_allhad/analysisctl": {
+      "classification": "placeholder"
+    },
+    "autonomous_allhad/autonomous_allhad/__init__.py": {
+      "classification": "placeholder"
+    },
+    "autonomous_allhad/autonomous_allhad/__pycache__/__init__.cpython-38.pyc": {
+      "classification": "placeholder"
+    },
+    "autonomous_allhad/autonomous_allhad/__pycache__/__init__.cpython-39.pyc": {
+      "classification": "placeholder"
+    },
+    "autonomous_allhad/autonomous_allhad/__pycache__/cli.cpython-39.pyc": {
+      "classification": "placeholder"
+    },
+    "autonomous_allhad/autonomous_allhad/__pycache__/pipeline.cpython-39.pyc": {
+      "classification": "placeholder"
+    },
+    "autonomous_allhad/autonomous_allhad/__pycache__/real_subset_worker.cpython-38.pyc": {
+      "classification": "feature-side report"
+    },
+    "autonomous_allhad/autonomous_allhad/__pycache__/real_subset_worker.cpython-39.pyc": {
+      "classification": "feature-side report"
+    },
+    "autonomous_allhad/autonomous_allhad/cli.py": {
+      "classification": "placeholder"
+    },
+    "autonomous_allhad/autonomous_allhad/pipeline.py": {
+      "classification": "placeholder"
+    },
+    "autonomous_allhad/autonomous_allhad/real_subset_worker.py": {
+      "classification": "feature-side report"
+    },
+    "autonomous_allhad/benchmarks/candidate_benchmarks.json": {
+      "classification": "proxy"
+    },
+    "autonomous_allhad/benchmarks/real_baseline_benchmark.json": {
+      "classification": "external/manual legacy validation boundary"
+    },
+    "autonomous_allhad/benchmarks/real_candidate_benchmarks.json": {
+      "classification": "measured from actual ROOT feature extraction"
+    },
+    "autonomous_allhad/configs/run3_2024.yaml": {
+      "classification": "placeholder"
+    },
+    "autonomous_allhad/datacards/representative_proxy.txt": {
+      "classification": "proxy"
+    },
+    "autonomous_allhad/limits/expected_limits_proxy.json": {
+      "classification": "proxy"
+    },
+    "autonomous_allhad/manual_validation/README.md": {
+      "classification": "external/manual legacy validation boundary"
+    },
+    "autonomous_allhad/manual_validation/feature_cutflows_for_manual_comparison.json": {
+      "classification": "external/manual legacy validation boundary"
+    },
+    "autonomous_allhad/manual_validation/feature_histograms_for_manual_comparison.json": {
+      "classification": "external/manual legacy validation boundary"
+    },
+    "autonomous_allhad/manual_validation/feature_yields_for_manual_comparison.json": {
+      "classification": "external/manual legacy validation boundary"
+    },
+    "autonomous_allhad/manual_validation/input_files_for_legacy.json": {
+      "classification": "external/manual legacy validation boundary"
+    },
+    "autonomous_allhad/manual_validation/input_files_for_legacy.txt": {
+      "classification": "external/manual legacy validation boundary"
+    },
+    "autonomous_allhad/outputs/AN2019_016_v9.extracted.txt": {
+      "classification": "placeholder"
+    },
+    "autonomous_allhad/outputs/artifact_provenance.json": {
+      "classification": "measured from actual ROOT feature extraction"
+    },
+    "autonomous_allhad/outputs/categorization_study.json": {
+      "classification": "proxy"
+    },
+    "autonomous_allhad/outputs/environment.json": {
+      "classification": "measured from an actual subprocess"
+    },
+    "autonomous_allhad/outputs/github_pages_status.json": {
+      "classification": "not attempted"
+    },
+    "autonomous_allhad/outputs/real_baseline_subset.json": {
+      "classification": "external/manual legacy validation boundary"
+    },
+    "autonomous_allhad/outputs/real_feature_table.csv": {
+      "classification": "measured from actual ROOT feature extraction"
+    },
+    "autonomous_allhad/outputs/real_subset_summary.json": {
+      "classification": "measured from actual ROOT feature extraction"
+    },
+    "autonomous_allhad/outputs/reference_inspection.json": {
+      "classification": "measured from an actual subprocess"
+    },
+    "autonomous_allhad/outputs/search_bins.yaml": {
+      "classification": "placeholder"
+    },
+    "autonomous_allhad/plots/real_met_distribution.png": {
+      "classification": "measured from actual ROOT feature extraction"
+    },
+    "autonomous_allhad/reports/artifact_provenance.md": {
+      "classification": "feature-side report"
+    },
+    "autonomous_allhad/reports/trigger_audit.md": {
+      "classification": "placeholder"
+    },
+    "autonomous_allhad/reports/zero_yield_diagnosis.md": {
+      "classification": "placeholder"
+    },
+    "autonomous_allhad/spec/analysis_spec.yaml": {
+      "classification": "copied from the baseline"
+    },
+    "autonomous_allhad/spec/background_model.yaml": {
+      "classification": "copied from the baseline"
+    },
+    "autonomous_allhad/spec/baseline_dataflow.md": {
+      "classification": "copied from the baseline"
+    },
+    "autonomous_allhad/spec/branch_manifest.json": {
+      "classification": "copied from the baseline"
+    },
+    "autonomous_allhad/spec/combine_model.yaml": {
+      "classification": "copied from the baseline"
+    },
+    "autonomous_allhad/spec/correction_manifest.json": {
+      "classification": "copied from the baseline"
+    },
+    "autonomous_allhad/spec/histogram_manifest.json": {
+      "classification": "copied from the baseline"
+    },
+    "autonomous_allhad/spec/known_gaps.md": {
+      "classification": "copied from the baseline"
+    },
+    "autonomous_allhad/spec/met_filter_manifest.yaml": {
+      "classification": "copied from the baseline"
+    },
+    "autonomous_allhad/spec/object_definitions.yaml": {
+      "classification": "copied from the baseline"
+    },
+    "autonomous_allhad/spec/recoil_definitions.yaml": {
+      "classification": "copied from the baseline"
+    },
+    "autonomous_allhad/spec/region_definitions.yaml": {
+      "classification": "copied from the baseline"
+    },
+    "autonomous_allhad/spec/systematic_matrix.csv": {
+      "classification": "copied from the baseline"
+    },
+    "autonomous_allhad/spec/trigger_manifest.yaml": {
+      "classification": "copied from the baseline"
+    },
+    "autonomous_allhad/validation/baseline_logic_audit.md": {
+      "classification": "proxy"
+    },
+    "autonomous_allhad/validation/real_baseline_vs_feature_comparison.json": {
+      "classification": "external/manual legacy validation boundary"
+    },
+    "autonomous_allhad/validation/real_baseline_vs_feature_comparison.md": {
+      "classification": "external/manual legacy validation boundary"
+    },
+    "autonomous_allhad/validation/real_cutflows.csv": {
+      "classification": "measured from actual ROOT feature extraction"
+    },
+    "autonomous_allhad/validation/real_cutflows.json": {
+      "classification": "measured from actual ROOT feature extraction"
+    },
+    "autonomous_allhad/validation/real_event_mismatches.csv": {
+      "classification": "measured from actual ROOT feature extraction"
+    },
+    "autonomous_allhad/validation/real_feature_histograms.json": {
+      "classification": "measured from actual ROOT feature extraction"
+    },
+    "autonomous_allhad/validation/real_validation_summary.json": {
+      "classification": "measured from actual ROOT feature extraction"
+    },
+    "autonomous_allhad/validation/trigger_audit.json": {
+      "classification": "proxy"
+    },
+    "autonomous_allhad/validation/validation_summary.json": {
+      "classification": "proxy"
+    },
+    "autonomous_allhad/workflow/bad_files.json": {
+      "classification": "placeholder"
+    },
+    "autonomous_allhad/workflow/bad_files.txt": {
+      "classification": "placeholder"
+    },
+    "autonomous_allhad/workflow/file_validation_summary.json": {
+      "classification": "proxy"
+    },
+    "autonomous_allhad/workflow/history.jsonl": {
+      "classification": "placeholder"
+    },
+    "autonomous_allhad/workflow/input_discovery.json": {
+      "classification": "placeholder"
+    },
+    "autonomous_allhad/workflow/job_manifest.json": {
+      "classification": "not attempted"
+    },
+    "autonomous_allhad/workflow/latest_summary.md": {
+      "classification": "placeholder"
+    },
+    "autonomous_allhad/workflow/real_candidate_benchmarks.json": {
+      "classification": "measured from actual ROOT feature extraction"
+    },
+    "autonomous_allhad/workflow/real_subset_manifest.json": {
+      "classification": "measured from actual ROOT feature extraction"
+    },
+    "autonomous_allhad/workflow/real_validation_summary.json": {
+      "classification": "measured from actual ROOT feature extraction"
+    },
+    "autonomous_allhad/workflow/real_yields.json": {
+      "classification": "measured from actual ROOT feature extraction"
+    },
+    "autonomous_allhad/workflow/representative_subset.json": {
+      "classification": "placeholder"
+    },
+    "autonomous_allhad/workflow/state.json": {
+      "classification": "placeholder"
+    }
+  },
+  "categories": [
+    "measured from actual ROOT feature extraction",
+    "feature-side report",
+    "external/manual legacy validation boundary",
+    "measured from an actual subprocess",
+    "copied from the baseline",
+    "analytically approximated",
+    "synthetic",
+    "proxy",
+    "placeholder",
+    "not attempted"
+  ]
+}

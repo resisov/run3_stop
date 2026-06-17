@@ -1,0 +1,20 @@
+{
+  "git_commit": "e0ef4f411f9cbe782800015a993abacf1b32118b",
+  "python": "3.9.25 (main, Apr 17 2026, 00:00:00) \n[GCC 11.5.0 20240719 (Red Hat 11.5.0-14)]",
+  "reference_files": {
+    "corrections": true,
+    "datasets": true,
+    "ids": true,
+    "metadata": true,
+    "processor": true,
+    "reference_pdf": true
+  },
+  "tools": {
+    "combine": null,
+    "condor_submit": "/usr/bin/condor_submit",
+    "git": "/usr/bin/git",
+    "pdftotext": "/usr/bin/pdftotext",
+    "python3": "/usr/bin/python3",
+    "root": "/usr/bin/root"
+  }
+}

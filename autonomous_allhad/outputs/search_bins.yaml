@@ -1,0 +1,22 @@
+proposal: "optimized_hybrid_no_tags"
+met_bins:
+  - 250
+  - 300
+  - 350
+  - 400
+  - 500
+  - 800
+  - 1500
+ht_bins:
+  - 300
+  - 600
+  - 1000
+  - 1500
+nb_bins:
+  - "1"
+  - "2"
+  - ">=3"
+njet_bins:
+  - "5-6"
+  - ">=7"
+top_tagging_scores_used: False

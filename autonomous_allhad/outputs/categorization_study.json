@@ -1,0 +1,75 @@
+{
+  "adoption_status": "physics proposal, not adopted without full CR closure and Combine validation",
+  "schemes": [
+    {
+      "closure_proxy": 0.925,
+      "expected_limit_proxy": 0.624,
+      "scheme": "minimal_njet_nb_met",
+      "stable_bins_proxy": 12,
+      "uses_top_tag_scores": false,
+      "variables": [
+        "njet",
+        "nb",
+        "met"
+      ]
+    },
+    {
+      "closure_proxy": 0.875,
+      "expected_limit_proxy": 0.511,
+      "scheme": "resolved_kinematics",
+      "stable_bins_proxy": 7,
+      "uses_top_tag_scores": false,
+      "variables": [
+        "njet",
+        "nb",
+        "ht",
+        "min_dphi",
+        "mtb"
+      ]
+    },
+    {
+      "closure_proxy": 0.875,
+      "expected_limit_proxy": 0.511,
+      "scheme": "isr_sensitive",
+      "stable_bins_proxy": 7,
+      "uses_top_tag_scores": false,
+      "variables": [
+        "met",
+        "ht",
+        "isr_pt",
+        "recoil_pt",
+        "njet"
+      ]
+    },
+    {
+      "closure_proxy": 0.9,
+      "expected_limit_proxy": 0.556,
+      "scheme": "ak8_kinematics_no_tags",
+      "stable_bins_proxy": 9,
+      "uses_top_tag_scores": false,
+      "variables": [
+        "ak8_count",
+        "ak8_pt",
+        "ak8_msd",
+        "recoil_pt"
+      ]
+    },
+    {
+      "closure_proxy": 0.825,
+      "expected_limit_proxy": 0.458,
+      "scheme": "optimized_hybrid_no_tags",
+      "stable_bins_proxy": 5,
+      "uses_top_tag_scores": false,
+      "variables": [
+        "njet",
+        "nb",
+        "met",
+        "ht",
+        "min_dphi",
+        "isr_pt",
+        "ak8_count"
+      ]
+    }
+  ],
+  "selected_proposal": "optimized_hybrid_no_tags"
+}

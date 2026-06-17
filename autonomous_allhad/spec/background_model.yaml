@@ -1,0 +1,16 @@
+backgrounds:
+  - "TT"
+  - "QCD"
+  - "Zto2Nu"
+  - "WtoLNu"
+  - "ST"
+  - "GJ"
+  - "DY"
+  - "VV"
+control_regions:
+  - "LLCR"
+  - "QCDCR"
+  - "GCR"
+  - "DY2E"
+  - "DY2M"
+strategy: "transfer-factor constrained simultaneous fit; first-pass Run-3 implementation still histogram driven"

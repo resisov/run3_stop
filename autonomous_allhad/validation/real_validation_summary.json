@@ -1,0 +1,24 @@
+{
+  "agreement_claim": "No independent agreement with stop_processor_v4.py is claimed by autonomous_allhad.",
+  "automatic_legacy_subprocess_attempted": false,
+  "event_level_comparison": "not claimed by autonomous_allhad",
+  "feature_regions_nonzero": {
+    "DY2E": 17,
+    "DY2M": 28,
+    "GCR": 89,
+    "LLCR": 659,
+    "QCDCR": 326,
+    "SR": 5265,
+    "preselection": 12377
+  },
+  "gate": "validate-feature-subset",
+  "gate_status": "passed",
+  "join_keys": [
+    "run",
+    "luminosityBlock",
+    "event"
+  ],
+  "legacy_validation_status": "external/manual",
+  "message": "Legacy stop_processor_v4.py validation is intentionally external/manual and is not required for the autonomous feature-extraction gate.",
+  "processed_event_rows": 290006
+}

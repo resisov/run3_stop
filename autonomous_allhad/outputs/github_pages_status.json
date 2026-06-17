@@ -1,0 +1,12 @@
+{
+  "docs_path": "docs",
+  "index": "docs/index.html",
+  "monitor": "docs/monitor.html",
+  "published": false,
+  "remaining_step": "Review docs/, then run: git add docs .github/workflows/pages.yml autonomous_allhad && git commit -m 'Update autonomous allhad dashboard' && git push",
+  "sensitive_scan": {
+    "findings": [],
+    "status": "clean"
+  },
+  "workflow": ".github/workflows/pages.yml"
+}

@@ -1,0 +1,55 @@
+{
+  "message": "No independent agreement with stop_processor_v4.py is claimed by autonomous_allhad. Legacy stop_processor_v4.py validation is intentionally external/manual and is not required for the autonomous feature-extraction gate.",
+  "method": "absolute mean difference divided by pooled RMS between SMS and non-SMS rows",
+  "ranking": [
+    {
+      "non_sms_mean": 0.45156439393939396,
+      "separation_score": 1.2606957899880862,
+      "sms_mean": 1.501499653926017,
+      "variable": "nb_medium"
+    },
+    {
+      "non_sms_mean": 2.578246212121212,
+      "separation_score": 1.1723755584225917,
+      "sms_mean": 4.955087287549027,
+      "variable": "njet"
+    },
+    {
+      "non_sms_mean": 164.12568711735742,
+      "separation_score": 0.6791287728637156,
+      "sms_mean": 333.6461849328711,
+      "variable": "met"
+    },
+    {
+      "non_sms_mean": 0.31740151515151516,
+      "separation_score": 0.5647400585373423,
+      "sms_mean": 0.7061062831654233,
+      "variable": "nfj"
+    },
+    {
+      "non_sms_mean": 107.09875266514429,
+      "separation_score": 0.4823360874540291,
+      "sms_mean": 1.8948526205320315,
+      "variable": "min_dphi4"
+    },
+    {
+      "non_sms_mean": 419.2447276870265,
+      "separation_score": 0.3714058608853573,
+      "sms_mean": 295.9533977735907,
+      "variable": "j1pt"
+    },
+    {
+      "non_sms_mean": 133.76194708806818,
+      "separation_score": 0.08925922871158992,
+      "sms_mean": 155.67385831635008,
+      "variable": "j2pt"
+    },
+    {
+      "non_sms_mean": 693.4177525449811,
+      "separation_score": 0.03493233610347482,
+      "sms_mean": 673.041168985042,
+      "variable": "ht"
+    }
+  ],
+  "scope": "feature-side heuristic only"
+}

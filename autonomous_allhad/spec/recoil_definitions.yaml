@@ -1,0 +1,6 @@
+recoil:
+  SR/LLCR/QCD: "MET"
+  GCR: "MET + leading photon"
+  DY2E/DY2M: "MET + dilepton"
+trace:
+  source: "analysis/processors/stop_processor_v4.py:979-1006"

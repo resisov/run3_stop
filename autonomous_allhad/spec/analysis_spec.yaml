@@ -1,0 +1,36 @@
+analysis:
+  name: "run3_2024_allhad_stop"
+  year: "2024"
+  luminosity_fb: 109.82
+reference_hierarchy:
+  - "AN2019_016_v9.pdf"
+  - "stop_processor_v4.py"
+  - "ids.py"
+  - "corrections.py"
+baseline_regions:
+  - "cat1_preselection"
+  - "cat2_LLCR_highDeltaM"
+  - "cat3_QCDCR_highDeltaM"
+  - "cat4_GCR_highDeltaM"
+  - "cat5_DY2E_highDeltaM"
+  - "cat6_DY2M_highDeltaM"
+  - "cat7_SR_highDeltaM"
+architecture_candidates:
+  -
+    name: "A_optimized_faithful_rewrite"
+    description: "Coffea-compatible processor rewrite preserving current Run-3 selections."
+    physics_change: "none intended"
+  -
+    name: "B_feature_table_analysis"
+    description: "Reusable event-level feature table for rapid region/category/stat-model iteration."
+    physics_change: "none for feature extraction; category scans are proposals"
+  -
+    name: "C_redesigned_top_tag_independent"
+    description: "Top-tagging-independent category and search-bin optimization."
+    physics_change: "proposal requiring closure and expected-limit validation"
+trace:
+  regions: "analysis/processors/stop_processor_v4.py:1120"
+  objects: "analysis/utils/ids.py:12"
+  corrections: "analysis/utils/corrections.py:23"
+  run2_strategy: "AN2019_016_v9.pdf text: search/control/binning/statistical interpretation sections"
+status: "machine extracted plus curated first-pass reverse engineering"

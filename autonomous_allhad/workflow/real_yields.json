@@ -1,0 +1,229 @@
+{
+  "sampling_method": {
+    "chunk_size": 2000,
+    "seed": null,
+    "strata": 12,
+    "top_tagging_used": false
+  },
+  "scope": "deterministic_stratified_chunks",
+  "unweighted_event_chunk_yields": {
+    "DY": {
+      "DY2E": 16,
+      "DY2M": 27,
+      "GCR": 1,
+      "LLCR": 12,
+      "QCDCR": 45,
+      "SR": 12,
+      "preselection": 307
+    },
+    "EGamma": {
+      "DY2E": 0,
+      "DY2M": 0,
+      "GCR": 0,
+      "LLCR": 0,
+      "QCDCR": 0,
+      "SR": 0,
+      "preselection": 1
+    },
+    "GJ": {
+      "DY2E": 0,
+      "DY2M": 0,
+      "GCR": 85,
+      "LLCR": 0,
+      "QCDCR": 5,
+      "SR": 0,
+      "preselection": 136
+    },
+    "JetMET": {
+      "DY2E": 0,
+      "DY2M": 0,
+      "GCR": 0,
+      "LLCR": 1,
+      "QCDCR": 0,
+      "SR": 0,
+      "preselection": 11
+    },
+    "Muon": {
+      "DY2E": 0,
+      "DY2M": 0,
+      "GCR": 0,
+      "LLCR": 0,
+      "QCDCR": 0,
+      "SR": 0,
+      "preselection": 1
+    },
+    "QCD": {
+      "DY2E": 0,
+      "DY2M": 0,
+      "GCR": 0,
+      "LLCR": 0,
+      "QCDCR": 36,
+      "SR": 1,
+      "preselection": 64
+    },
+    "SMS": {
+      "DY2E": 1,
+      "DY2M": 1,
+      "GCR": 2,
+      "LLCR": 460,
+      "QCDCR": 188,
+      "SR": 5118,
+      "preselection": 8535
+    },
+    "ST": {
+      "DY2E": 0,
+      "DY2M": 0,
+      "GCR": 0,
+      "LLCR": 0,
+      "QCDCR": 0,
+      "SR": 0,
+      "preselection": 0
+    },
+    "TT": {
+      "DY2E": 0,
+      "DY2M": 0,
+      "GCR": 1,
+      "LLCR": 185,
+      "QCDCR": 52,
+      "SR": 134,
+      "preselection": 274
+    },
+    "VV": {
+      "DY2E": 0,
+      "DY2M": 0,
+      "GCR": 0,
+      "LLCR": 1,
+      "QCDCR": 0,
+      "SR": 0,
+      "preselection": 8
+    },
+    "WtoLNu": {
+      "DY2E": 0,
+      "DY2M": 0,
+      "GCR": 0,
+      "LLCR": 0,
+      "QCDCR": 0,
+      "SR": 0,
+      "preselection": 848
+    },
+    "Zto2Nu": {
+      "DY2E": 0,
+      "DY2M": 0,
+      "GCR": 0,
+      "LLCR": 0,
+      "QCDCR": 0,
+      "SR": 0,
+      "preselection": 2192
+    }
+  },
+  "weighted_event_chunk_yields": {
+    "DY": {
+      "DY2E": 7.900762557983398,
+      "DY2M": 5.530533790588379,
+      "GCR": -0.7900762557983398,
+      "LLCR": 6.320610046386719,
+      "QCDCR": 18.171753883361816,
+      "SR": 7.900762557983398,
+      "preselection": 112.9809045791626
+    },
+    "EGamma": {
+      "DY2E": 0.0,
+      "DY2M": 0.0,
+      "GCR": 0.0,
+      "LLCR": 0.0,
+      "QCDCR": 0.0,
+      "SR": 0.0,
+      "preselection": 1.0
+    },
+    "GJ": {
+      "DY2E": 0.0,
+      "DY2M": 0.0,
+      "GCR": 56.50892734527588,
+      "LLCR": 0.0,
+      "QCDCR": 3.6069527864456177,
+      "SR": 0.0,
+      "preselection": 98.59004342556
+    },
+    "JetMET": {
+      "DY2E": 0.0,
+      "DY2M": 0.0,
+      "GCR": 0.0,
+      "LLCR": 1.0,
+      "QCDCR": 0.0,
+      "SR": 0.0,
+      "preselection": 11.0
+    },
+    "Muon": {
+      "DY2E": 0.0,
+      "DY2M": 0.0,
+      "GCR": 0.0,
+      "LLCR": 0.0,
+      "QCDCR": 0.0,
+      "SR": 0.0,
+      "preselection": 1.0
+    },
+    "QCD": {
+      "DY2E": 0.0,
+      "DY2M": 0.0,
+      "GCR": 0.0,
+      "LLCR": 0.0,
+      "QCDCR": 36.0,
+      "SR": 1.0,
+      "preselection": 64.0
+    },
+    "SMS": {
+      "DY2E": 1.0,
+      "DY2M": 1.0,
+      "GCR": 2.0,
+      "LLCR": 460.0,
+      "QCDCR": 188.0,
+      "SR": 5118.0,
+      "preselection": 8535.0
+    },
+    "ST": {
+      "DY2E": 0.0,
+      "DY2M": 0.0,
+      "GCR": 0.0,
+      "LLCR": 0.0,
+      "QCDCR": 0.0,
+      "SR": 0.0,
+      "preselection": 0.0
+    },
+    "TT": {
+      "DY2E": 0.0,
+      "DY2M": 0.0,
+      "GCR": -0.021492887288331985,
+      "LLCR": 1.2680803500115871,
+      "QCDCR": 0.4298577457666397,
+      "SR": 0.8597154915332794,
+      "preselection": 2.1063029542565346
+    },
+    "VV": {
+      "DY2E": 0.0,
+      "DY2M": 0.0,
+      "GCR": 0.0,
+      "LLCR": 1.0,
+      "QCDCR": 0.0,
+      "SR": 0.0,
+      "preselection": 8.0
+    },
+    "WtoLNu": {
+      "DY2E": 0.0,
+      "DY2M": 0.0,
+      "GCR": 0.0,
+      "LLCR": 0.0,
+      "QCDCR": 0.0,
+      "SR": 0.0,
+      "preselection": 778.0669293403625
+    },
+    "Zto2Nu": {
+      "DY2E": 0.0,
+      "DY2M": 0.0,
+      "GCR": 0.0,
+      "LLCR": 0.0,
+      "QCDCR": 0.0,
+      "SR": 0.0,
+      "preselection": 461.3890793323517
+    }
+  }
+}

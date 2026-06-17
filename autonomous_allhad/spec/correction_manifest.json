@@ -1,0 +1,15 @@
+{
+  "corrections": [
+    "pileup",
+    "MET XY",
+    "JEC",
+    "JER",
+    "fatJet JEC/JER",
+    "electron ID/HLT",
+    "muon ID/HLT",
+    "photon ID",
+    "b tagging",
+    "top pT"
+  ],
+  "trace": "analysis/utils/corrections.py:23-963"
+}

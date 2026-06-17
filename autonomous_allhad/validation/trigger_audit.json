@@ -1,0 +1,391 @@
+[
+  {
+    "available_hlt_branches": [
+      "HLT_PFMET120_PFMHT120_IDTight",
+      "HLT_PFMET130_PFMHT130_IDTight",
+      "HLT_PFMET140_PFMHT140_IDTight",
+      "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight",
+      "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight",
+      "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight"
+    ],
+    "dataset": "TTTT_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_",
+    "events_after_trigger": 5813,
+    "events_before_trigger": 20000,
+    "expected_trigger_family": "signal",
+    "is_data": false,
+    "is_signal": false,
+    "matches_stop_processor_v4_behavior": true,
+    "missing_hlt_branches": [],
+    "policy": "stop_processor_v4 initializes trigger masks false, ORs available requested HLT branches, skips missing branches, and applies masks to data and MC.",
+    "process": "TT",
+    "requested_hlt_branches": [
+      "HLT_PFMET120_PFMHT120_IDTight",
+      "HLT_PFMET130_PFMHT130_IDTight",
+      "HLT_PFMET140_PFMHT140_IDTight",
+      "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight",
+      "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight",
+      "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight"
+    ],
+    "trigger_mask_all_false": false
+  },
+  {
+    "available_hlt_branches": [
+      "HLT_PFMET120_PFMHT120_IDTight",
+      "HLT_PFMET130_PFMHT130_IDTight",
+      "HLT_PFMET140_PFMHT140_IDTight",
+      "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight",
+      "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight",
+      "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight"
+    ],
+    "dataset": "Zto2Nu-2Jets_Bin-1J-PTNuNu-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_",
+    "events_after_trigger": 19856,
+    "events_before_trigger": 20000,
+    "expected_trigger_family": "signal",
+    "is_data": false,
+    "is_signal": false,
+    "matches_stop_processor_v4_behavior": true,
+    "missing_hlt_branches": [],
+    "policy": "stop_processor_v4 initializes trigger masks false, ORs available requested HLT branches, skips missing branches, and applies masks to data and MC.",
+    "process": "Zto2Nu",
+    "requested_hlt_branches": [
+      "HLT_PFMET120_PFMHT120_IDTight",
+      "HLT_PFMET130_PFMHT130_IDTight",
+      "HLT_PFMET140_PFMHT140_IDTight",
+      "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight",
+      "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight",
+      "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight"
+    ],
+    "trigger_mask_all_false": false
+  },
+  {
+    "available_hlt_branches": [
+      "HLT_PFMET120_PFMHT120_IDTight",
+      "HLT_PFMET130_PFMHT130_IDTight",
+      "HLT_PFMET140_PFMHT140_IDTight",
+      "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight",
+      "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight",
+      "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight"
+    ],
+    "dataset": "WtoLNu-2Jets_Bin-1J-PTLNu-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_",
+    "events_after_trigger": 17845,
+    "events_before_trigger": 20000,
+    "expected_trigger_family": "signal",
+    "is_data": false,
+    "is_signal": false,
+    "matches_stop_processor_v4_behavior": true,
+    "missing_hlt_branches": [],
+    "policy": "stop_processor_v4 initializes trigger masks false, ORs available requested HLT branches, skips missing branches, and applies masks to data and MC.",
+    "process": "WtoLNu",
+    "requested_hlt_branches": [
+      "HLT_PFMET120_PFMHT120_IDTight",
+      "HLT_PFMET130_PFMHT130_IDTight",
+      "HLT_PFMET140_PFMHT140_IDTight",
+      "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight",
+      "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight",
+      "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight"
+    ],
+    "trigger_mask_all_false": false
+  },
+  {
+    "available_hlt_branches": [
+      "HLT_PFMET120_PFMHT120_IDTight",
+      "HLT_PFMET130_PFMHT130_IDTight",
+      "HLT_PFMET140_PFMHT140_IDTight",
+      "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight",
+      "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight",
+      "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight"
+    ],
+    "dataset": "QCD_Bin-PT-1000to1500_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_",
+    "events_after_trigger": 2623,
+    "events_before_trigger": 20000,
+    "expected_trigger_family": "signal",
+    "is_data": false,
+    "is_signal": false,
+    "matches_stop_processor_v4_behavior": true,
+    "missing_hlt_branches": [],
+    "policy": "stop_processor_v4 initializes trigger masks false, ORs available requested HLT branches, skips missing branches, and applies masks to data and MC.",
+    "process": "QCD",
+    "requested_hlt_branches": [
+      "HLT_PFMET120_PFMHT120_IDTight",
+      "HLT_PFMET130_PFMHT130_IDTight",
+      "HLT_PFMET140_PFMHT140_IDTight",
+      "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight",
+      "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight",
+      "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight"
+    ],
+    "trigger_mask_all_false": false
+  },
+  {
+    "available_hlt_branches": [
+      "HLT_Photon200",
+      "HLT_Photon175",
+      "HLT_Photon120"
+    ],
+    "dataset": "GJ_Bin-PTG-600_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_",
+    "events_after_trigger": 18826,
+    "events_before_trigger": 20000,
+    "expected_trigger_family": "photon",
+    "is_data": false,
+    "is_signal": false,
+    "matches_stop_processor_v4_behavior": true,
+    "missing_hlt_branches": [],
+    "policy": "stop_processor_v4 initializes trigger masks false, ORs available requested HLT branches, skips missing branches, and applies masks to data and MC.",
+    "process": "GJ",
+    "requested_hlt_branches": [
+      "HLT_Photon200",
+      "HLT_Photon175",
+      "HLT_Photon120"
+    ],
+    "trigger_mask_all_false": false
+  },
+  {
+    "available_hlt_branches": [
+      "HLT_PFMET120_PFMHT120_IDTight",
+      "HLT_PFMET130_PFMHT130_IDTight",
+      "HLT_PFMET140_PFMHT140_IDTight",
+      "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight",
+      "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight",
+      "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight"
+    ],
+    "dataset": "DYto2L-2Jets_Bin-MLL-50-PTLL-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____1_",
+    "events_after_trigger": 13673,
+    "events_before_trigger": 20000,
+    "expected_trigger_family": "signal",
+    "is_data": false,
+    "is_signal": false,
+    "matches_stop_processor_v4_behavior": true,
+    "missing_hlt_branches": [],
+    "policy": "stop_processor_v4 initializes trigger masks false, ORs available requested HLT branches, skips missing branches, and applies masks to data and MC.",
+    "process": "DY",
+    "requested_hlt_branches": [
+      "HLT_PFMET120_PFMHT120_IDTight",
+      "HLT_PFMET130_PFMHT130_IDTight",
+      "HLT_PFMET140_PFMHT140_IDTight",
+      "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight",
+      "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight",
+      "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight"
+    ],
+    "trigger_mask_all_false": false
+  },
+  {
+    "available_hlt_branches": [
+      "HLT_PFMET120_PFMHT120_IDTight",
+      "HLT_PFMET130_PFMHT130_IDTight",
+      "HLT_PFMET140_PFMHT140_IDTight",
+      "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight",
+      "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight",
+      "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight"
+    ],
+    "dataset": "TBbarQto2Q-t-channel-4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_",
+    "events_after_trigger": 33,
+    "events_before_trigger": 20000,
+    "expected_trigger_family": "signal",
+    "is_data": false,
+    "is_signal": false,
+    "matches_stop_processor_v4_behavior": true,
+    "missing_hlt_branches": [],
+    "policy": "stop_processor_v4 initializes trigger masks false, ORs available requested HLT branches, skips missing branches, and applies masks to data and MC.",
+    "process": "ST",
+    "requested_hlt_branches": [
+      "HLT_PFMET120_PFMHT120_IDTight",
+      "HLT_PFMET130_PFMHT130_IDTight",
+      "HLT_PFMET140_PFMHT140_IDTight",
+      "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight",
+      "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight",
+      "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight"
+    ],
+    "trigger_mask_all_false": false
+  },
+  {
+    "available_hlt_branches": [],
+    "dataset": "WW_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_",
+    "error": "FileNotFoundError: file not found ([ERROR] Server responded with an error: [3014] Unable to open file  /store/mc/RunIII2024Summer24NanoAODv15/WW_TuneCP5_13p6TeV_pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/120000/81fd8b3f-980c-4f7e-81e2-91cf3ed34212.root; Network is unreachable\n)\n\n    'root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/WW_TuneCP5_13p6TeV_pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/120000/81fd8b3f-980c-4f7e-81e2-91cf3ed34212.root'\n\nFiles may be specified as:\n   * str/bytes: relative or absolute filesystem path or URL, without any colons\n         other than Windows drive letter or URL schema.\n         Examples: \"rel/file.root\", \"C:\\abs\\file.root\", \"http://where/what.root\"\n   * str/bytes: same with an object-within-ROOT path, separated by a colon.\n         Example: \"rel/file.root:tdirectory/ttree\"\n   * pathlib.Path: always interpreted as a filesystem path or URL only (no\n         object-within-ROOT path), regardless of whether there are any colons.\n         Examples: Path(\"rel:/file.root\"), Path(\"/abs/path:stuff.root\")\n\nFunctions that accept many files (uproot.iterate, etc.) also allow:\n   * glob syntax in str/bytes and pathlib.Path.\n         Examples: Path(\"rel/*.root\"), \"/abs/*.root:tdirectory/ttree\"\n   * dict: keys are filesystem paths, values are objects-within-ROOT paths.\n         Example: {\"/data_v1/*.root\": \"ttree_v1\", \"/data_v2/*.root\": \"ttree_v2\"}\n   * already-open TTree objects.\n   * iterables of the above.\n",
+    "events_after_trigger": null,
+    "events_before_trigger": null,
+    "expected_trigger_family": "signal",
+    "is_data": false,
+    "is_signal": false,
+    "matches_stop_processor_v4_behavior": null,
+    "missing_hlt_branches": [
+      "HLT_PFMET120_PFMHT120_IDTight",
+      "HLT_PFMET130_PFMHT130_IDTight",
+      "HLT_PFMET140_PFMHT140_IDTight",
+      "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight",
+      "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight",
+      "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight"
+    ],
+    "policy": "stop_processor_v4 initializes trigger masks false, ORs available requested HLT branches, skips missing branches, and applies masks to data and MC.",
+    "process": "VV",
+    "requested_hlt_branches": [
+      "HLT_PFMET120_PFMHT120_IDTight",
+      "HLT_PFMET130_PFMHT130_IDTight",
+      "HLT_PFMET140_PFMHT140_IDTight",
+      "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight",
+      "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight",
+      "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight"
+    ],
+    "trigger_mask_all_false": null
+  },
+  {
+    "available_hlt_branches": [
+      "HLT_PFMET120_PFMHT120_IDTight",
+      "HLT_PFMET130_PFMHT130_IDTight",
+      "HLT_PFMET140_PFMHT140_IDTight",
+      "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight",
+      "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight",
+      "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight"
+    ],
+    "dataset": "JetMET0-Run2024C-MINIv6NANOv15-v1____1_",
+    "events_after_trigger": 2550,
+    "events_before_trigger": 20000,
+    "expected_trigger_family": "signal",
+    "is_data": true,
+    "is_signal": false,
+    "matches_stop_processor_v4_behavior": true,
+    "missing_hlt_branches": [],
+    "policy": "stop_processor_v4 initializes trigger masks false, ORs available requested HLT branches, skips missing branches, and applies masks to data and MC.",
+    "process": "JetMET",
+    "requested_hlt_branches": [
+      "HLT_PFMET120_PFMHT120_IDTight",
+      "HLT_PFMET130_PFMHT130_IDTight",
+      "HLT_PFMET140_PFMHT140_IDTight",
+      "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight",
+      "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight",
+      "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight"
+    ],
+    "trigger_mask_all_false": false
+  },
+  {
+    "available_hlt_branches": [
+      "HLT_Photon200",
+      "HLT_Photon175",
+      "HLT_Photon120"
+    ],
+    "dataset": "EGamma0-Run2024C-MINIv6NANOv15-v1____1_",
+    "events_after_trigger": 378,
+    "events_before_trigger": 20000,
+    "expected_trigger_family": "photon",
+    "is_data": true,
+    "is_signal": false,
+    "matches_stop_processor_v4_behavior": true,
+    "missing_hlt_branches": [],
+    "policy": "stop_processor_v4 initializes trigger masks false, ORs available requested HLT branches, skips missing branches, and applies masks to data and MC.",
+    "process": "EGamma",
+    "requested_hlt_branches": [
+      "HLT_Photon200",
+      "HLT_Photon175",
+      "HLT_Photon120"
+    ],
+    "trigger_mask_all_false": false
+  },
+  {
+    "available_hlt_branches": [
+      "HLT_IsoMu24",
+      "HLT_IsoMu27",
+      "HLT_Mu50"
+    ],
+    "dataset": "Muon0-Run2024C-MINIv6NANOv15-v1____1_",
+    "events_after_trigger": 10126,
+    "events_before_trigger": 20000,
+    "expected_trigger_family": "muon",
+    "is_data": true,
+    "is_signal": false,
+    "matches_stop_processor_v4_behavior": true,
+    "missing_hlt_branches": [],
+    "policy": "stop_processor_v4 initializes trigger masks false, ORs available requested HLT branches, skips missing branches, and applies masks to data and MC.",
+    "process": "Muon",
+    "requested_hlt_branches": [
+      "HLT_IsoMu24",
+      "HLT_IsoMu27",
+      "HLT_Mu50"
+    ],
+    "trigger_mask_all_false": false
+  },
+  {
+    "available_hlt_branches": [
+      "HLT_PFMET120_PFMHT120_IDTight",
+      "HLT_PFMET130_PFMHT130_IDTight",
+      "HLT_PFMET140_PFMHT140_IDTight",
+      "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight",
+      "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight",
+      "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight"
+    ],
+    "dataset": "SMS-2Stop_Par-mStop-1000_TuneCP5_13p6TeV_madgraph-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_",
+    "events_after_trigger": 1575,
+    "events_before_trigger": 1985,
+    "expected_trigger_family": "signal",
+    "is_data": false,
+    "is_signal": true,
+    "matches_stop_processor_v4_behavior": true,
+    "missing_hlt_branches": [],
+    "policy": "stop_processor_v4 initializes trigger masks false, ORs available requested HLT branches, skips missing branches, and applies masks to data and MC.",
+    "process": "SMS",
+    "requested_hlt_branches": [
+      "HLT_PFMET120_PFMHT120_IDTight",
+      "HLT_PFMET130_PFMHT130_IDTight",
+      "HLT_PFMET140_PFMHT140_IDTight",
+      "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight",
+      "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight",
+      "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight"
+    ],
+    "trigger_mask_all_false": false
+  },
+  {
+    "available_hlt_branches": [
+      "HLT_PFMET120_PFMHT120_IDTight",
+      "HLT_PFMET130_PFMHT130_IDTight",
+      "HLT_PFMET140_PFMHT140_IDTight",
+      "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight",
+      "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight",
+      "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight"
+    ],
+    "dataset": "SMS-2Stop_Par-mStop-600_TuneCP5_13p6TeV_madgraph-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+    "events_after_trigger": 15,
+    "events_before_trigger": 21,
+    "expected_trigger_family": "signal",
+    "is_data": false,
+    "is_signal": true,
+    "matches_stop_processor_v4_behavior": true,
+    "missing_hlt_branches": [],
+    "policy": "stop_processor_v4 initializes trigger masks false, ORs available requested HLT branches, skips missing branches, and applies masks to data and MC.",
+    "process": "SMS",
+    "requested_hlt_branches": [
+      "HLT_PFMET120_PFMHT120_IDTight",
+      "HLT_PFMET130_PFMHT130_IDTight",
+      "HLT_PFMET140_PFMHT140_IDTight",
+      "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight",
+      "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight",
+      "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight"
+    ],
+    "trigger_mask_all_false": false
+  },
+  {
+    "available_hlt_branches": [
+      "HLT_PFMET120_PFMHT120_IDTight",
+      "HLT_PFMET130_PFMHT130_IDTight",
+      "HLT_PFMET140_PFMHT140_IDTight",
+      "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight",
+      "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight",
+      "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight"
+    ],
+    "dataset": "SMS-2Stop_Par-mStop-1500_TuneCP5_13p6TeV_madgraph-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+    "events_after_trigger": 14646,
+    "events_before_trigger": 20000,
+    "expected_trigger_family": "signal",
+    "is_data": false,
+    "is_signal": true,
+    "matches_stop_processor_v4_behavior": true,
+    "missing_hlt_branches": [],
+    "policy": "stop_processor_v4 initializes trigger masks false, ORs available requested HLT branches, skips missing branches, and applies masks to data and MC.",
+    "process": "SMS",
+    "requested_hlt_branches": [
+      "HLT_PFMET120_PFMHT120_IDTight",
+      "HLT_PFMET130_PFMHT130_IDTight",
+      "HLT_PFMET140_PFMHT140_IDTight",
+      "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight",
+      "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight",
+      "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight"
+    ],
+    "trigger_mask_all_false": false
+  }
+]

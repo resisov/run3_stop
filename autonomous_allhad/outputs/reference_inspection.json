@@ -1,0 +1,65 @@
+{
+  "corrections": {
+    "definitions": [
+      "get_pu_weight",
+      "get_met_xy_correction",
+      "get_jec_correction",
+      "get_jec_uncertainty",
+      "get_fjec_correction",
+      "get_jer_sf",
+      "get_fjer_sf",
+      "get_mu_highpt_id_sf",
+      "get_mu_loose_iso_sf",
+      "get_mu_hlt_sf",
+      "get_mu_sf",
+      "get_mu_loose_id_sf",
+      "get_mu_medium_id_sf",
+      "get_mu_tight_id_sf",
+      "get_mu_tight_iso_sf",
+      "get_photon_id_sf",
+      "get_ele_veto_id_sf",
+      "get_ele_loose_id_sf",
+      "get_ele_medium_id_sf",
+      "get_ele_tight_id_sf",
+      "get_ele_hlt_sf",
+      "get_top_pt_reweight",
+      "BTagCorrector"
+    ],
+    "lines": 987,
+    "path": "analysis/utils/corrections.py",
+    "sha256": "2a4680b68d557af27ca5914299aea75ac801c7d7ab3880aa7232719ccb12635c"
+  },
+  "ids": {
+    "definitions": [
+      "isTrackElectron",
+      "isTrackMuon",
+      "isTrackPion",
+      "isVetoElectron",
+      "isMediumElectron",
+      "isLooseMuon",
+      "isMediumMuon",
+      "isMediumPhoton",
+      "isMediumTau",
+      "isGoodJet",
+      "isGoodJet",
+      "isJetVeto",
+      "isGoodFatJet"
+    ],
+    "lines": 278,
+    "path": "analysis/utils/ids.py",
+    "sha256": "868e14682bec718599c106ff0f0db6c72b92a4fd1305564724c3555b28ee55fc"
+  },
+  "processor": {
+    "definitions": [
+      "AnalysisProcessor"
+    ],
+    "lines": 1486,
+    "path": "analysis/processors/stop_processor_v4.py",
+    "sha256": "3695c2c30261cba906b0aa0ef54266a8a24f7d7ba9d56d3abf0173fe60cdfec3"
+  },
+  "reference_pdf": {
+    "extracted_text": true,
+    "path": "AN2019_016_v9.pdf",
+    "sha256": "46d8acc9219b58d8914401454919fbcf5207dfbdb5b0d7ab7dceaa1a1b24426f"
+  }
+}

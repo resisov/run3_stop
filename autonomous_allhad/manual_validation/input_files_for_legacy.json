@@ -1,0 +1,742 @@
+{
+  "files": [
+    {
+      "dataset_key": "TTTT_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_",
+      "number_of_entries": 137400,
+      "physical_file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/TTTT_TuneCP5_13p6TeV_amcatnlo-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/2520000/fd0094d9-bfbd-4bf2-bc9c-6591e78513dc.root",
+      "process": "TT",
+      "processed_entry_ranges": [
+        [
+          0,
+          2000
+        ],
+        [
+          12309,
+          14309
+        ],
+        [
+          24618,
+          26618
+        ],
+        [
+          36927,
+          38927
+        ],
+        [
+          49236,
+          51236
+        ],
+        [
+          61545,
+          63545
+        ],
+        [
+          73854,
+          75854
+        ],
+        [
+          86163,
+          88163
+        ],
+        [
+          98472,
+          100472
+        ],
+        [
+          110781,
+          112781
+        ],
+        [
+          123090,
+          125090
+        ],
+        [
+          135400,
+          137400
+        ]
+      ],
+      "processing_status": "processed_real_chunks",
+      "read_status": "success",
+      "signal_point": null
+    },
+    {
+      "dataset_key": "Zto2Nu-2Jets_Bin-1J-PTNuNu-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_",
+      "number_of_entries": 686482,
+      "physical_file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/Zto2Nu-2Jets_Bin-1J-PTNuNu-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/100000/af5f19cf-64a4-484f-bff1-e03492433a43.root",
+      "process": "Zto2Nu",
+      "processed_entry_ranges": [
+        [
+          0,
+          2000
+        ],
+        [
+          62225,
+          64225
+        ],
+        [
+          124451,
+          126451
+        ],
+        [
+          186676,
+          188676
+        ],
+        [
+          248902,
+          250902
+        ],
+        [
+          311128,
+          313128
+        ],
+        [
+          373353,
+          375353
+        ],
+        [
+          435579,
+          437579
+        ],
+        [
+          497805,
+          499805
+        ],
+        [
+          560030,
+          562030
+        ],
+        [
+          622256,
+          624256
+        ],
+        [
+          684482,
+          686482
+        ]
+      ],
+      "processing_status": "processed_real_chunks",
+      "read_status": "success",
+      "signal_point": null
+    },
+    {
+      "dataset_key": "WtoLNu-2Jets_Bin-1J-PTLNu-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_",
+      "number_of_entries": 56567,
+      "physical_file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/WtoLNu-2Jets_Bin-1J-PTLNu-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/2810000/72501794-e01d-4692-b93a-03fecffd0a21.root",
+      "process": "WtoLNu",
+      "processed_entry_ranges": [
+        [
+          0,
+          2000
+        ],
+        [
+          4960,
+          6960
+        ],
+        [
+          9921,
+          11921
+        ],
+        [
+          14881,
+          16881
+        ],
+        [
+          19842,
+          21842
+        ],
+        [
+          24803,
+          26803
+        ],
+        [
+          29763,
+          31763
+        ],
+        [
+          34724,
+          36724
+        ],
+        [
+          39685,
+          41685
+        ],
+        [
+          44645,
+          46645
+        ],
+        [
+          49606,
+          51606
+        ],
+        [
+          54567,
+          56567
+        ]
+      ],
+      "processing_status": "processed_real_chunks",
+      "read_status": "success",
+      "signal_point": null
+    },
+    {
+      "dataset_key": "QCD_Bin-PT-1000to1500_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_",
+      "number_of_entries": 147490,
+      "physical_file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/QCD_Bin-PT-1000to1500_TuneCP5_13p6TeV_pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/2560000/6e17243d-509f-4c31-96b4-6a8f683b3892.root",
+      "process": "QCD",
+      "processed_entry_ranges": [
+        [
+          0,
+          2000
+        ],
+        [
+          13226,
+          15226
+        ],
+        [
+          26452,
+          28452
+        ],
+        [
+          39679,
+          41679
+        ],
+        [
+          52905,
+          54905
+        ],
+        [
+          66131,
+          68131
+        ],
+        [
+          79358,
+          81358
+        ],
+        [
+          92584,
+          94584
+        ],
+        [
+          105810,
+          107810
+        ],
+        [
+          119037,
+          121037
+        ],
+        [
+          132263,
+          134263
+        ],
+        [
+          145490,
+          147490
+        ]
+      ],
+      "processing_status": "processed_real_chunks",
+      "read_status": "success",
+      "signal_point": null
+    },
+    {
+      "dataset_key": "GJ_Bin-PTG-600_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_",
+      "number_of_entries": 408601,
+      "physical_file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/GJ_Bin-PTG-600_TuneCP5_13p6TeV_amcatnlo-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/2810000/f02ac269-1d71-4679-9735-6432a76bec43.root",
+      "process": "GJ",
+      "processed_entry_ranges": [
+        [
+          0,
+          2000
+        ],
+        [
+          36963,
+          38963
+        ],
+        [
+          73927,
+          75927
+        ],
+        [
+          110891,
+          112891
+        ],
+        [
+          147854,
+          149854
+        ],
+        [
+          184818,
+          186818
+        ],
+        [
+          221782,
+          223782
+        ],
+        [
+          258746,
+          260746
+        ],
+        [
+          295709,
+          297709
+        ],
+        [
+          332673,
+          334673
+        ],
+        [
+          369637,
+          371637
+        ],
+        [
+          406601,
+          408601
+        ]
+      ],
+      "processing_status": "processed_real_chunks",
+      "read_status": "success",
+      "signal_point": null
+    },
+    {
+      "dataset_key": "DYto2L-2Jets_Bin-MLL-50-PTLL-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____1_",
+      "number_of_entries": 154198,
+      "physical_file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/DYto2L-2Jets_Bin-MLL-50-PTLL-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v3/2820000/2d1deb1c-7ab2-405e-bfc8-6bfde675db03.root",
+      "process": "DY",
+      "processed_entry_ranges": [
+        [
+          0,
+          2000
+        ],
+        [
+          13836,
+          15836
+        ],
+        [
+          27672,
+          29672
+        ],
+        [
+          41508,
+          43508
+        ],
+        [
+          55344,
+          57344
+        ],
+        [
+          69180,
+          71180
+        ],
+        [
+          83017,
+          85017
+        ],
+        [
+          96853,
+          98853
+        ],
+        [
+          110689,
+          112689
+        ],
+        [
+          124525,
+          126525
+        ],
+        [
+          138361,
+          140361
+        ],
+        [
+          152198,
+          154198
+        ]
+      ],
+      "processing_status": "processed_real_chunks",
+      "read_status": "success",
+      "signal_point": null
+    },
+    {
+      "dataset_key": "TBbarQto2Q-t-channel-4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_",
+      "number_of_entries": 143228,
+      "physical_file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/TBbarQto2Q-t-channel-4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/2810000/3d2c26bb-7917-4746-acea-4d0a810140cd.root",
+      "process": "ST",
+      "processed_entry_ranges": [
+        [
+          0,
+          2000
+        ],
+        [
+          12838,
+          14838
+        ],
+        [
+          25677,
+          27677
+        ],
+        [
+          38516,
+          40516
+        ],
+        [
+          51355,
+          53355
+        ],
+        [
+          64194,
+          66194
+        ],
+        [
+          77033,
+          79033
+        ],
+        [
+          89872,
+          91872
+        ],
+        [
+          102711,
+          104711
+        ],
+        [
+          115550,
+          117550
+        ],
+        [
+          128389,
+          130389
+        ],
+        [
+          141228,
+          143228
+        ]
+      ],
+      "processing_status": "processed_real_chunks",
+      "read_status": "success",
+      "signal_point": null
+    },
+    {
+      "dataset_key": "WW_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_",
+      "number_of_entries": 39096,
+      "physical_file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/WW_TuneCP5_13p6TeV_pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/120000/81fd8b3f-980c-4f7e-81e2-91cf3ed34212.root",
+      "process": "VV",
+      "processed_entry_ranges": [
+        [
+          0,
+          2000
+        ],
+        [
+          3372,
+          5372
+        ],
+        [
+          6744,
+          8744
+        ],
+        [
+          10117,
+          12117
+        ],
+        [
+          13489,
+          15489
+        ],
+        [
+          16861,
+          18861
+        ],
+        [
+          20234,
+          22234
+        ],
+        [
+          23606,
+          25606
+        ],
+        [
+          26978,
+          28978
+        ],
+        [
+          30351,
+          32351
+        ],
+        [
+          33723,
+          35723
+        ],
+        [
+          37096,
+          39096
+        ]
+      ],
+      "processing_status": "processed_real_chunks",
+      "read_status": "success",
+      "signal_point": null
+    },
+    {
+      "dataset_key": "JetMET0-Run2024C-MINIv6NANOv15-v1____1_",
+      "number_of_entries": 742056,
+      "physical_file_path": "root://cms-xrd-global.cern.ch//store/data/Run2024C/JetMET0/NANOAOD/MINIv6NANOv15-v1/2540000/064aaf18-b694-49d9-b2cd-2fae03f98476.root",
+      "process": "JetMET",
+      "processed_entry_ranges": [
+        [
+          0,
+          2000
+        ],
+        [
+          67277,
+          69277
+        ],
+        [
+          134555,
+          136555
+        ],
+        [
+          201833,
+          203833
+        ],
+        [
+          269111,
+          271111
+        ],
+        [
+          336389,
+          338389
+        ],
+        [
+          403666,
+          405666
+        ],
+        [
+          470944,
+          472944
+        ],
+        [
+          538222,
+          540222
+        ],
+        [
+          605500,
+          607500
+        ],
+        [
+          672778,
+          674778
+        ],
+        [
+          740056,
+          742056
+        ]
+      ],
+      "processing_status": "processed_real_chunks",
+      "read_status": "success",
+      "signal_point": null
+    },
+    {
+      "dataset_key": "EGamma0-Run2024C-MINIv6NANOv15-v1____1_",
+      "number_of_entries": 704556,
+      "physical_file_path": "root://cms-xrd-global.cern.ch//store/data/Run2024C/EGamma0/NANOAOD/MINIv6NANOv15-v1/2540000/3151ab41-a5bd-48f1-be40-449b760a60e6.root",
+      "process": "EGamma",
+      "processed_entry_ranges": [
+        [
+          0,
+          2000
+        ],
+        [
+          63868,
+          65868
+        ],
+        [
+          127737,
+          129737
+        ],
+        [
+          191606,
+          193606
+        ],
+        [
+          255474,
+          257474
+        ],
+        [
+          319343,
+          321343
+        ],
+        [
+          383212,
+          385212
+        ],
+        [
+          447081,
+          449081
+        ],
+        [
+          510949,
+          512949
+        ],
+        [
+          574818,
+          576818
+        ],
+        [
+          638687,
+          640687
+        ],
+        [
+          702556,
+          704556
+        ]
+      ],
+      "processing_status": "processed_real_chunks",
+      "read_status": "success",
+      "signal_point": null
+    },
+    {
+      "dataset_key": "Muon0-Run2024C-MINIv6NANOv15-v1____1_",
+      "number_of_entries": 1354629,
+      "physical_file_path": "root://cms-xrd-global.cern.ch//store/data/Run2024C/Muon0/NANOAOD/MINIv6NANOv15-v1/2530000/677e3bb0-8199-4ffb-83af-165410a7b7a6.root",
+      "process": "Muon",
+      "processed_entry_ranges": [
+        [
+          0,
+          2000
+        ],
+        [
+          122966,
+          124966
+        ],
+        [
+          245932,
+          247932
+        ],
+        [
+          368898,
+          370898
+        ],
+        [
+          491865,
+          493865
+        ],
+        [
+          614831,
+          616831
+        ],
+        [
+          737797,
+          739797
+        ],
+        [
+          860763,
+          862763
+        ],
+        [
+          983730,
+          985730
+        ],
+        [
+          1106696,
+          1108696
+        ],
+        [
+          1229662,
+          1231662
+        ],
+        [
+          1352629,
+          1354629
+        ]
+      ],
+      "processing_status": "processed_real_chunks",
+      "read_status": "success",
+      "signal_point": null
+    },
+    {
+      "dataset_key": "SMS-2Stop_Par-mStop-1000_TuneCP5_13p6TeV_madgraph-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_",
+      "number_of_entries": 1985,
+      "physical_file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/SMS-2Stop_Par-mStop-1000_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/120000/c9e86344-a334-4359-b778-b2acedeb1865.root",
+      "process": "SMS",
+      "processed_entry_ranges": [
+        [
+          0,
+          1985
+        ]
+      ],
+      "processing_status": "processed_real_chunks",
+      "read_status": "success",
+      "signal_point": "mStop-1000"
+    },
+    {
+      "dataset_key": "SMS-2Stop_Par-mStop-600_TuneCP5_13p6TeV_madgraph-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "number_of_entries": 21,
+      "physical_file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/SMS-2Stop_Par-mStop-600_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/110000/f1b66c57-e1d2-443a-a28e-b9879280bc61.root",
+      "process": "SMS",
+      "processed_entry_ranges": [
+        [
+          0,
+          21
+        ]
+      ],
+      "processing_status": "processed_real_chunks",
+      "read_status": "success",
+      "signal_point": "mStop-600"
+    },
+    {
+      "dataset_key": "SMS-2Stop_Par-mStop-1500_TuneCP5_13p6TeV_madgraph-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "number_of_entries": 137556,
+      "physical_file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/SMS-2Stop_Par-mStop-1500_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/110000/2c76cfbd-6a5f-493d-904f-526b1219ddbb.root",
+      "process": "SMS",
+      "processed_entry_ranges": [
+        [
+          0,
+          2000
+        ],
+        [
+          12323,
+          14323
+        ],
+        [
+          24646,
+          26646
+        ],
+        [
+          36969,
+          38969
+        ],
+        [
+          49293,
+          51293
+        ],
+        [
+          61616,
+          63616
+        ],
+        [
+          73939,
+          75939
+        ],
+        [
+          86262,
+          88262
+        ],
+        [
+          98586,
+          100586
+        ],
+        [
+          110909,
+          112909
+        ],
+        [
+          123232,
+          125232
+        ],
+        [
+          135556,
+          137556
+        ]
+      ],
+      "processing_status": "processed_real_chunks",
+      "read_status": "success",
+      "signal_point": "mStop-1500"
+    }
+  ]
+}

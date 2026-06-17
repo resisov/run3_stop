@@ -1,0 +1,48 @@
+{
+  "stages": {
+    "design_search_bins": {
+      "result": {
+        "output": "<repo>/autonomous_allhad/studies/search_bins/search_bin_candidates.json",
+        "schemes": 5,
+        "selected_provisional_scheme": null,
+        "selection_status": "no provisional scheme selected because all candidate bins fail at least one configured statistics threshold"
+      },
+      "status": "complete",
+      "updated_at": "2026-06-17T11:15:39Z"
+    },
+    "normalization_audit": {
+      "result": {
+        "blocked_datasets": 0,
+        "output": "<repo>/autonomous_allhad/validation/normalization_audit.json"
+      },
+      "status": "complete",
+      "updated_at": "2026-06-17T11:14:29Z"
+    },
+    "normalize_feature_yields": {
+      "result": {
+        "blocked_datasets": 0,
+        "factors": "<repo>/autonomous_allhad/outputs/normalization_factors.json",
+        "output": "<repo>/autonomous_allhad/outputs/normalized_feature_yields.json"
+      },
+      "status": "complete",
+      "updated_at": "2026-06-17T11:14:47Z"
+    },
+    "publish_github_pages": {
+      "result": {
+        "docs_path": "docs",
+        "index": "docs/index.html",
+        "monitor": "docs/monitor.html",
+        "published": false,
+        "remaining_step": "Review docs/, then run: git add docs .github/workflows/pages.yml autonomous_allhad && git commit -m 'Update autonomous allhad dashboard' && git push",
+        "sensitive_scan": {
+          "findings": [],
+          "status": "clean"
+        },
+        "workflow": ".github/workflows/pages.yml"
+      },
+      "status": "complete",
+      "updated_at": "2026-06-17T11:29:54Z"
+    }
+  },
+  "started_at": "2026-06-17T11:01:36Z"
+}

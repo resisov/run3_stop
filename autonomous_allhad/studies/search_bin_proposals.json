@@ -1,0 +1,87 @@
+{
+  "bins": [
+    {
+      "bin": "Njet5to6_Nb1_MET250to400",
+      "unweighted_SR_events": 523,
+      "weighted_SR_sum": 521.5586596243083
+    },
+    {
+      "bin": "Njet5to6_Nb2plus_MET250to400",
+      "unweighted_SR_events": 860,
+      "weighted_SR_sum": 837.3653790839016
+    },
+    {
+      "bin": "Njet7plus_Nb1_MET250to400",
+      "unweighted_SR_events": 213,
+      "weighted_SR_sum": 208.02149288728833
+    },
+    {
+      "bin": "Njet7plus_Nb2plus_MET250to400",
+      "unweighted_SR_events": 565,
+      "weighted_SR_sum": 476.2794075347483
+    },
+    {
+      "bin": "Njet5to6_Nb1_MET400to600",
+      "unweighted_SR_events": 438,
+      "weighted_SR_sum": 437.5801525115967
+    },
+    {
+      "bin": "Njet5to6_Nb2plus_MET400to600",
+      "unweighted_SR_events": 652,
+      "weighted_SR_sum": 649.0214928872883
+    },
+    {
+      "bin": "Njet7plus_Nb1_MET400to600",
+      "unweighted_SR_events": 197,
+      "weighted_SR_sum": 196.79007625579834
+    },
+    {
+      "bin": "Njet7plus_Nb2plus_MET400to600",
+      "unweighted_SR_events": 468,
+      "weighted_SR_sum": 454.94052646681666
+    },
+    {
+      "bin": "Njet5to6_Nb1_MET600to1000",
+      "unweighted_SR_events": 234,
+      "weighted_SR_sum": 234.0
+    },
+    {
+      "bin": "Njet5to6_Nb2plus_MET600to1000",
+      "unweighted_SR_events": 386,
+      "weighted_SR_sum": 384.8115691430867
+    },
+    {
+      "bin": "Njet7plus_Nb1_MET600to1000",
+      "unweighted_SR_events": 165,
+      "weighted_SR_sum": 164.58015251159668
+    },
+    {
+      "bin": "Njet7plus_Nb2plus_MET600to1000",
+      "unweighted_SR_events": 337,
+      "weighted_SR_sum": 336.02149288728833
+    },
+    {
+      "bin": "Njet5to6_Nb1_MET1000toInf",
+      "unweighted_SR_events": 45,
+      "weighted_SR_sum": 44.79007625579834
+    },
+    {
+      "bin": "Njet5to6_Nb2plus_MET1000toInf",
+      "unweighted_SR_events": 78,
+      "weighted_SR_sum": 78.0
+    },
+    {
+      "bin": "Njet7plus_Nb1_MET1000toInf",
+      "unweighted_SR_events": 34,
+      "weighted_SR_sum": 34.0
+    },
+    {
+      "bin": "Njet7plus_Nb2plus_MET1000toInf",
+      "unweighted_SR_events": 70,
+      "weighted_SR_sum": 70.0
+    }
+  ],
+  "message": "No independent agreement with stop_processor_v4.py is claimed by autonomous_allhad. Legacy stop_processor_v4.py validation is intentionally external/manual and is not required for the autonomous feature-extraction gate.",
+  "scope": "feature-side provisional only",
+  "top_tagging_used": false
+}

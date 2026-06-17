@@ -1,0 +1,60 @@
+{
+  "agreement_claim": "No independent agreement with stop_processor_v4.py is claimed by autonomous_allhad.",
+  "bad_files": 0,
+  "blocked_gates": [
+    "make_datacards",
+    "expected_limits",
+    "condor_production",
+    "systematic_yields"
+  ],
+  "completed_gates": [
+    "design_search_bins",
+    "normalization_audit",
+    "normalize_feature_yields",
+    "publish_github_pages"
+  ],
+  "current_pipeline_stage": "publish_github_pages",
+  "failed_gates": [],
+  "feature_rows": 290006,
+  "github_pages_site_status": "ready",
+  "latest_command": {
+    "result": {
+      "docs_path": "docs",
+      "index": "docs/index.html",
+      "monitor": "docs/monitor.html",
+      "published": false,
+      "workflow": ".github/workflows/pages.yml"
+    },
+    "stage": "publish_github_pages",
+    "status": "complete"
+  },
+  "latest_failure": null,
+  "latest_successful_command": {
+    "result": {
+      "docs_path": "docs",
+      "index": "docs/index.html",
+      "monitor": "docs/monitor.html",
+      "published": false,
+      "workflow": ".github/workflows/pages.yml"
+    },
+    "stage": "publish_github_pages",
+    "status": "complete"
+  },
+  "manual_validation_status": "external/manual",
+  "next_recommended_action": "./autonomous_allhad/analysisctl make-feature-yields --config autonomous_allhad/configs/run3_2024.yaml",
+  "normalization_blocked_datasets": 0,
+  "normalization_luminosity_fb": 109.82,
+  "normalization_status": "complete",
+  "normalized_datasets": 14,
+  "raw_vs_normalized_yield_status": "raw_genWeight_sums; normalized_feature_yields.json available",
+  "region_yields": {
+    "DY2E": 17,
+    "DY2M": 28,
+    "GCR": 89,
+    "LLCR": 659,
+    "QCDCR": 326,
+    "SR": 5265,
+    "preselection": 12377
+  },
+  "root_files_read": 14
+}

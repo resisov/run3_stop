@@ -1,0 +1,55 @@
+{
+  "checks": [
+    {
+      "baseline_agreement": "pending event replay",
+      "level": "file",
+      "status": "proxy_complete"
+    },
+    {
+      "baseline_agreement": "pending event replay",
+      "level": "event",
+      "status": "blocked_for_full_ROOT_replay"
+    },
+    {
+      "baseline_agreement": "pending event replay",
+      "level": "object",
+      "status": "blocked_for_full_ROOT_replay"
+    },
+    {
+      "baseline_agreement": "exact definition match",
+      "level": "region",
+      "status": "proxy_complete"
+    },
+    {
+      "baseline_agreement": "pending event replay",
+      "level": "category",
+      "status": "proxy_complete"
+    },
+    {
+      "baseline_agreement": "pending event replay",
+      "level": "search_bin",
+      "status": "proxy_complete"
+    },
+    {
+      "baseline_agreement": "pending event replay",
+      "level": "yield",
+      "status": "blocked_for_full_ROOT_replay"
+    },
+    {
+      "baseline_agreement": "pending event replay",
+      "level": "shape",
+      "status": "blocked_for_full_ROOT_replay"
+    },
+    {
+      "baseline_agreement": "pending event replay",
+      "level": "systematic",
+      "status": "blocked_for_full_ROOT_replay"
+    },
+    {
+      "baseline_agreement": "pending event replay",
+      "level": "expected_limit",
+      "status": "blocked_for_full_ROOT_replay"
+    }
+  ],
+  "note": "Full event/object/yield/shape equality requires accessible ROOT inputs."
+}

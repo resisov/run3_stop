@@ -1,0 +1,25 @@
+year: "2024"
+triggers:
+  signal:
+    - "PFMET120_PFMHT120_IDTight"
+    - "PFMET130_PFMHT130_IDTight"
+    - "PFMET140_PFMHT140_IDTight"
+    - "PFMETNoMu120_PFMHTNoMu120_IDTight"
+    - "PFMETNoMu130_PFMHTNoMu130_IDTight"
+    - "PFMETNoMu140_PFMHTNoMu140_IDTight"
+  electron_reference:
+    - "Ele30_WPTight_Gsf"
+    - "Ele32_WPTight_Gsf"
+    - "Ele35_WPTight_Gsf"
+    - "Ele38_WPTight_Gsf"
+    - "Ele40_WPTight_Gsf"
+  photon:
+    - "Photon200"
+    - "Photon175"
+    - "Photon120"
+  muon:
+    - "IsoMu24"
+    - "IsoMu27"
+    - "Mu50"
+trace:
+  source: "analysis/processors/stop_processor_v4.py:125-190 and nearby trigger dictionaries"

@@ -1,0 +1,75 @@
+{
+  "candidates": {
+    "ak8_kinematics_no_tag_scores": [
+      {
+        "name": "ak8_present_highMET",
+        "unweighted_events": 9398,
+        "weighted_sum": 7828.580481670797
+      },
+      {
+        "name": "ak8_two_or_more",
+        "unweighted_events": 21222,
+        "weighted_sum": 15814.422993075103
+      },
+      {
+        "name": "ak8_highHT",
+        "unweighted_events": 27386,
+        "weighted_sum": 21401.207386445254
+      }
+    ],
+    "isr_sensitive": [
+      {
+        "name": "hardISR_lowB",
+        "unweighted_events": 114579,
+        "weighted_sum": 76642.93358664215
+      },
+      {
+        "name": "hardISR_highMET",
+        "unweighted_events": 39050,
+        "weighted_sum": 18442.444878406823
+      },
+      {
+        "name": "monojet_like_multijet_veto",
+        "unweighted_events": 105370,
+        "weighted_sum": 69453.39620262757
+      }
+    ],
+    "minimal_njet_nb_met": [
+      {
+        "name": "Njet2to4_Nb0_MET250to400",
+        "unweighted_events": 3299,
+        "weighted_sum": 2089.5779720805585
+      },
+      {
+        "name": "Njet5plus_Nb1_MET250to400",
+        "unweighted_events": 1538,
+        "weighted_sum": 1372.3216548264027
+      },
+      {
+        "name": "Njet5plus_Nb2plus_MET400plus",
+        "unweighted_events": 3529,
+        "weighted_sum": 3301.66640118137
+      }
+    ],
+    "resolved_kinematics": [
+      {
+        "name": "highHT_highNjet",
+        "unweighted_events": 10244,
+        "weighted_sum": 6225.931683331728
+      },
+      {
+        "name": "boosted_resolved_balance",
+        "unweighted_events": 23910,
+        "weighted_sum": 23345.623087402433
+      },
+      {
+        "name": "many_b_resolved",
+        "unweighted_events": 17453,
+        "weighted_sum": 11150.420554529876
+      }
+    ]
+  },
+  "message": "No independent agreement with stop_processor_v4.py is claimed by autonomous_allhad. Legacy stop_processor_v4.py validation is intentionally external/manual and is not required for the autonomous feature-extraction gate.",
+  "scope": "feature-side provisional only",
+  "top_tagging_used": false
+}

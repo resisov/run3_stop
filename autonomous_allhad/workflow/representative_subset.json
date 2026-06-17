@@ -1,0 +1,77 @@
+{
+  "missing_groups": [],
+  "selected": [
+    {
+      "dataset": "TTTT_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____10_",
+      "files": 10,
+      "group": "TT",
+      "metadata_present": true
+    },
+    {
+      "dataset": "Zto2Nu-2Jets_Bin-1J-PTNuNu-100to200_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____10_",
+      "files": 10,
+      "group": "Zto2Nu",
+      "metadata_present": true
+    },
+    {
+      "dataset": "WtoLNu-2Jets_Bin-1J-PTLNu-100to200_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____100_",
+      "files": 10,
+      "group": "WtoLNu",
+      "metadata_present": true
+    },
+    {
+      "dataset": "QCD_Bin-PT-1000to1500_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____10_",
+      "files": 10,
+      "group": "QCD",
+      "metadata_present": true
+    },
+    {
+      "dataset": "GJ_Bin-PTG-100to200_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____100_",
+      "files": 10,
+      "group": "GJ",
+      "metadata_present": true
+    },
+    {
+      "dataset": "DYto2L-2Jets_Bin-MLL-50-PTLL-100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____100_",
+      "files": 10,
+      "group": "DY",
+      "metadata_present": true
+    },
+    {
+      "dataset": "TWminusto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____10_",
+      "files": 10,
+      "group": "ST",
+      "metadata_present": true
+    },
+    {
+      "dataset": "WW_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____10_",
+      "files": 10,
+      "group": "VV",
+      "metadata_present": true
+    },
+    {
+      "dataset": "JetMET0-Run2024C-MINIv6NANOv15-v1____10_",
+      "files": 10,
+      "group": "JetMET",
+      "metadata_present": true
+    },
+    {
+      "dataset": "EGamma0-Run2024C-MINIv6NANOv15-v1____10_",
+      "files": 10,
+      "group": "EGamma",
+      "metadata_present": true
+    },
+    {
+      "dataset": "Muon0-Run2024C-MINIv6NANOv15-v1____10_",
+      "files": 10,
+      "group": "Muon",
+      "metadata_present": true
+    },
+    {
+      "dataset": "SMS-2Stop_Par-mStop-1000_TuneCP5_13p6TeV_madgraph-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_",
+      "files": 10,
+      "group": "SMS",
+      "metadata_present": true
+    }
+  ]
+}

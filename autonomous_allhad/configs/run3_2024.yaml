@@ -1,0 +1,36 @@
+analysis:
+  name: run3_2024_allhad_stop
+  year: "2024"
+  luminosity_fb: 109.82
+paths:
+  repo_root: "."
+  reference_pdf: "AN2019_016_v9.pdf"
+  processor: "analysis/processors/stop_processor_v4.py"
+  ids: "analysis/utils/ids.py"
+  corrections: "analysis/utils/corrections.py"
+  baseline_config: "configs/stop_2024.yaml"
+  metadata: "analysis/metadata/KNU_2024_v4.json.gz"
+  datasets: "analysis/datasets/datasets_2024.txt"
+workflow:
+  representative_max_datasets: 18
+  representative_groups:
+    - TT
+    - Zto2Nu
+    - WtoLNu
+    - QCD
+    - GJ
+    - DY
+    - ST
+    - VV
+    - JetMET
+    - EGamma
+    - Muon
+    - SMS
+  corruption_retry_attempts: 2
+  skip_fraction_warning: 0.01
+execution:
+  python: python
+  tree_name: Events
+  allow_condor_submit: false
+  allow_github_publish: false
+  combine_command: combine

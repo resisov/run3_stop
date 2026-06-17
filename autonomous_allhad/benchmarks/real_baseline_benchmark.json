@@ -1,0 +1,6 @@
+{
+  "agreement_claim": "No independent agreement with stop_processor_v4.py is claimed by autonomous_allhad.",
+  "automatic_subprocess_attempted": false,
+  "legacy_validation_status": "external/manual",
+  "message": "Legacy stop_processor_v4.py validation is intentionally external/manual and is not required for the autonomous feature-extraction gate."
+}

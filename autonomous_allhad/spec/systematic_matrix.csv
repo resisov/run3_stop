@@ -1,0 +1,16 @@
+systematic,type,applies_to,source
+pileup,shape_or_weight,MC,stop_processor_v4.py:1227-1446
+btagSF_bc_correlated,shape_or_weight,MC,stop_processor_v4.py:1227-1446
+btagSF_bc_uncorrelated,shape_or_weight,MC,stop_processor_v4.py:1227-1446
+btagSF_light_correlated,shape_or_weight,MC,stop_processor_v4.py:1227-1446
+btagSF_light_uncorrelated,shape_or_weight,MC,stop_processor_v4.py:1227-1446
+electron_id,shape_or_weight,MC,stop_processor_v4.py:1227-1446
+electron_hlt,shape_or_weight,MC,stop_processor_v4.py:1227-1446
+muon_id,shape_or_weight,MC,stop_processor_v4.py:1227-1446
+muon_hlt,shape_or_weight,MC,stop_processor_v4.py:1227-1446
+photon_id,shape_or_weight,MC,stop_processor_v4.py:1227-1446
+jesTotal,shape_or_weight,MC,stop_processor_v4.py:1227-1446
+jer,shape_or_weight,MC,stop_processor_v4.py:1227-1446
+metUnclustered,shape_or_weight,MC,stop_processor_v4.py:1227-1446
+top_pt_reweight,shape_or_weight,MC,stop_processor_v4.py:1227-1446
+mc_stat,shape_or_weight,MC,stop_processor_v4.py:1227-1446

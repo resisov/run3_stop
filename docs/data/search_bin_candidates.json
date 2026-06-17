@@ -1,0 +1,2362 @@
+{
+  "allowed_variables": [
+    "Njet",
+    "Nb",
+    "HT",
+    "MET",
+    "recoil pT",
+    "leading jet pT",
+    "subleading jet pT",
+    "min delta phi",
+    "AK8 jet pT",
+    "AK8 jet mass",
+    "AK8 multiplicity",
+    "b-jet topology",
+    "ISR-sensitive variables",
+    "event-shape variables"
+  ],
+  "exploratory_scheme": {
+    "bins": [
+      {
+        "background_effective_events": 1.5187146420989794,
+        "background_sumw2": 1821.908754748362,
+        "background_unweighted": 122,
+        "background_weighted": 52.60189637650582,
+        "bin": "AK8one_Njet5plus_Nb1_MET250plus",
+        "definition": {
+          "met": {
+            "min": 250
+          },
+          "nb_medium": {
+            "min": 1
+          },
+          "nfj": {
+            "min": 1
+          },
+          "njet": {
+            "min": 5
+          }
+        },
+        "process_yields": {
+          "DY": {
+            "raw_weighted": 7.110686302185059,
+            "unweighted": 11,
+            "weight_source": "normalized_feature_weight",
+            "weighted": 7.458846835443036
+          },
+          "QCD": {
+            "raw_weighted": 1.0,
+            "unweighted": 1,
+            "weight_source": "normalized_feature_weight",
+            "weighted": 42.582705
+          },
+          "SMS": {
+            "raw_weighted": 3985.0,
+            "unweighted": 3985,
+            "weight_source": "normalized_feature_weight",
+            "weighted": 175.61809006881026
+          },
+          "TT": {
+            "raw_weighted": 0.5588150694966316,
+            "unweighted": 110,
+            "weight_source": "normalized_feature_weight",
+            "weighted": 2.5603445410628036
+          }
+        },
+        "region_coverage": {
+          "DY2E": {
+            "background": 0,
+            "signal": 1,
+            "total": 1
+          },
+          "DY2M": {
+            "background": 0,
+            "signal": 1,
+            "total": 1
+          },
+          "GCR": {
+            "background": 0,
+            "signal": 0,
+            "total": 0
+          },
+          "LLCR": {
+            "background": 164,
+            "signal": 315,
+            "total": 480
+          },
+          "QCDCR": {
+            "background": 96,
+            "signal": 145,
+            "total": 241
+          },
+          "SR": {
+            "background": 122,
+            "signal": 3985,
+            "total": 4107
+          },
+          "preselection": {
+            "background": 267,
+            "signal": 4667,
+            "total": 4935
+          }
+        },
+        "s_over_sqrt_b_proxy": 24.214112117980008,
+        "scheme": "ak8_kinematics_no_tag_scores",
+        "signal_weighted": 175.61809006881026,
+        "unweighted_total": 4107,
+        "warnings": [
+          "below_minimum_effective_mc_events"
+        ],
+        "weight_source": "normalized_feature_weight"
+      },
+      {
+        "background_effective_events": 1.306576532350431,
+        "background_sumw2": 1817.9508794152052,
+        "background_unweighted": 63,
+        "background_weighted": 48.73696703745254,
+        "bin": "highHT_Njet5plus_Nb1_MET250plus",
+        "definition": {
+          "ht": {
+            "min": 1000
+          },
+          "met": {
+            "min": 250
+          },
+          "nb_medium": {
+            "min": 1
+          },
+          "njet": {
+            "min": 5
+          }
+        },
+        "process_yields": {
+          "DY": {
+            "raw_weighted": 4.740457534790039,
+            "unweighted": 6,
+            "weight_source": "normalized_feature_weight",
+            "weighted": 4.972564556962024
+          },
+          "QCD": {
+            "raw_weighted": 1.0,
+            "unweighted": 1,
+            "weight_source": "normalized_feature_weight",
+            "weighted": 42.582705
+          },
+          "SMS": {
+            "raw_weighted": 1673.0,
+            "unweighted": 1673,
+            "weight_source": "normalized_feature_weight",
+            "weighted": 93.52386062867707
+          },
+          "TT": {
+            "raw_weighted": 0.2579146474599838,
+            "unweighted": 56,
+            "weight_source": "normalized_feature_weight",
+            "weighted": 1.181697480490524
+          }
+        },
+        "region_coverage": {
+          "DY2E": {
+            "background": 0,
+            "signal": 0,
+            "total": 0
+          },
+          "DY2M": {
+            "background": 0,
+            "signal": 0,
+            "total": 0
+          },
+          "GCR": {
+            "background": 0,
+            "signal": 0,
+            "total": 0
+          },
+          "LLCR": {
+            "background": 80,
+            "signal": 96,
+            "total": 176
+          },
+          "QCDCR": {
+            "background": 115,
+            "signal": 111,
+            "total": 226
+          },
+          "SR": {
+            "background": 63,
+            "signal": 1673,
+            "total": 1736
+          },
+          "preselection": {
+            "background": 180,
+            "signal": 2123,
+            "total": 2303
+          }
+        },
+        "s_over_sqrt_b_proxy": 13.396556391050348,
+        "scheme": "resolved_kinematics",
+        "signal_weighted": 93.52386062867707,
+        "unweighted_total": 1736,
+        "warnings": [
+          "below_minimum_effective_mc_events"
+        ],
+        "weight_source": "normalized_feature_weight"
+      },
+      {
+        "background_effective_events": 1.1948837507082375,
+        "background_sumw2": 1816.3735476525067,
+        "background_unweighted": 40,
+        "background_weighted": 46.58707156826081,
+        "bin": "hybrid_AK8_highHT",
+        "definition": {
+          "ht": {
+            "min": 1200
+          },
+          "met": {
+            "min": 250
+          },
+          "nb_medium": {
+            "min": 1
+          },
+          "nfj": {
+            "min": 1
+          },
+          "njet": {
+            "min": 5
+          }
+        },
+        "process_yields": {
+          "DY": {
+            "raw_weighted": 3.1603050231933594,
+            "unweighted": 4,
+            "weight_source": "normalized_feature_weight",
+            "weighted": 3.315043037974683
+          },
+          "QCD": {
+            "raw_weighted": 1.0,
+            "unweighted": 1,
+            "weight_source": "normalized_feature_weight",
+            "weighted": 42.582705
+          },
+          "SMS": {
+            "raw_weighted": 923.0,
+            "unweighted": 923,
+            "weight_source": "normalized_feature_weight",
+            "weighted": 48.425589026849735
+          },
+          "TT": {
+            "raw_weighted": 0.1504502110183239,
+            "unweighted": 35,
+            "weight_source": "normalized_feature_weight",
+            "weighted": 0.689323530286139
+          }
+        },
+        "region_coverage": {
+          "DY2E": {
+            "background": 0,
+            "signal": 0,
+            "total": 0
+          },
+          "DY2M": {
+            "background": 0,
+            "signal": 0,
+            "total": 0
+          },
+          "GCR": {
+            "background": 0,
+            "signal": 0,
+            "total": 0
+          },
+          "LLCR": {
+            "background": 41,
+            "signal": 45,
+            "total": 86
+          },
+          "QCDCR": {
+            "background": 75,
+            "signal": 71,
+            "total": 146
+          },
+          "SR": {
+            "background": 40,
+            "signal": 923,
+            "total": 963
+          },
+          "preselection": {
+            "background": 124,
+            "signal": 1178,
+            "total": 1302
+          }
+        },
+        "s_over_sqrt_b_proxy": 7.094833468535472,
+        "scheme": "optimized_hybrid_no_tags",
+        "signal_weighted": 48.425589026849735,
+        "unweighted_total": 963,
+        "warnings": [
+          "below_minimum_effective_mc_events"
+        ],
+        "weight_source": "normalized_feature_weight"
+      },
+      {
+        "background_effective_events": 1.181060421265549,
+        "background_sumw2": 1815.6980633272524,
+        "background_unweighted": 110,
+        "background_weighted": 46.30819710984575,
+        "bin": "Njet7plus_Nb1plus_MET250to600",
+        "definition": {
+          "met": [
+            250,
+            600
+          ],
+          "nb_medium": {
+            "min": 1
+          },
+          "njet": {
+            "min": 7
+          }
+        },
+        "process_yields": {
+          "DY": {
+            "raw_weighted": 1.5801525115966797,
+            "unweighted": 2,
+            "weight_source": "normalized_feature_weight",
+            "weighted": 1.6575215189873416
+          },
+          "QCD": {
+            "raw_weighted": 1.0,
+            "unweighted": 1,
+            "weight_source": "normalized_feature_weight",
+            "weighted": 42.582705
+          },
+          "SMS": {
+            "raw_weighted": 1333.0,
+            "unweighted": 1333,
+            "weight_source": "normalized_feature_weight",
+            "weighted": 55.1947881008943
+          },
+          "TT": {
+            "raw_weighted": 0.4513506330549717,
+            "unweighted": 107,
+            "weight_source": "normalized_feature_weight",
+            "weighted": 2.067970590858418
+          }
+        },
+        "region_coverage": {
+          "DY2E": {
+            "background": 0,
+            "signal": 0,
+            "total": 0
+          },
+          "DY2M": {
+            "background": 0,
+            "signal": 0,
+            "total": 0
+          },
+          "GCR": {
+            "background": 0,
+            "signal": 0,
+            "total": 0
+          },
+          "LLCR": {
+            "background": 145,
+            "signal": 126,
+            "total": 271
+          },
+          "QCDCR": {
+            "background": 51,
+            "signal": 53,
+            "total": 104
+          },
+          "SR": {
+            "background": 110,
+            "signal": 1333,
+            "total": 1443
+          },
+          "preselection": {
+            "background": 228,
+            "signal": 1622,
+            "total": 1850
+          }
+        },
+        "s_over_sqrt_b_proxy": 8.11090162113847,
+        "scheme": "minimal_njet_nb_met",
+        "signal_weighted": 55.1947881008943,
+        "unweighted_total": 1443,
+        "warnings": [
+          "below_minimum_effective_mc_events"
+        ],
+        "weight_source": "normalized_feature_weight"
+      },
+      {
+        "background_effective_events": 1.168054997345724,
+        "background_sumw2": 1815.7933733830398,
+        "background_unweighted": 50,
+        "background_weighted": 46.053735178889774,
+        "bin": "AK8two_Njet5plus",
+        "definition": {
+          "nfj": {
+            "min": 2
+          },
+          "njet": {
+            "min": 5
+          }
+        },
+        "process_yields": {
+          "DY": {
+            "raw_weighted": 2.3702287673950195,
+            "unweighted": 3,
+            "weight_source": "normalized_feature_weight",
+            "weighted": 2.4862822784810126
+          },
+          "QCD": {
+            "raw_weighted": 1.0,
+            "unweighted": 1,
+            "weight_source": "normalized_feature_weight",
+            "weighted": 42.582705
+          },
+          "SMS": {
+            "raw_weighted": 1399.0,
+            "unweighted": 1399,
+            "weight_source": "normalized_feature_weight",
+            "weighted": 69.89817315750376
+          },
+          "TT": {
+            "raw_weighted": 0.21492887288331985,
+            "unweighted": 46,
+            "weight_source": "normalized_feature_weight",
+            "weighted": 0.9847479004087699
+          }
+        },
+        "region_coverage": {
+          "DY2E": {
+            "background": 7,
+            "signal": 0,
+            "total": 7
+          },
+          "DY2M": {
+            "background": 12,
+            "signal": 0,
+            "total": 12
+          },
+          "GCR": {
+            "background": 11,
+            "signal": 0,
+            "total": 11
+          },
+          "LLCR": {
+            "background": 73,
+            "signal": 75,
+            "total": 148
+          },
+          "QCDCR": {
+            "background": 44,
+            "signal": 54,
+            "total": 98
+          },
+          "SR": {
+            "background": 50,
+            "signal": 1399,
+            "total": 1449
+          },
+          "preselection": {
+            "background": 144,
+            "signal": 1694,
+            "total": 1838
+          }
+        },
+        "s_over_sqrt_b_proxy": 10.299909187181223,
+        "scheme": "ak8_kinematics_no_tag_scores",
+        "signal_weighted": 69.89817315750376,
+        "unweighted_total": 1449,
+        "warnings": [
+          "below_minimum_effective_mc_events"
+        ],
+        "weight_source": "normalized_feature_weight"
+      },
+      {
+        "background_effective_events": 1.1266755212154553,
+        "background_sumw2": 1815.3392638091295,
+        "background_unweighted": 73,
+        "background_weighted": 45.224974419396105,
+        "bin": "hybrid_lowMET_multijet",
+        "definition": {
+          "ht": {
+            "min": 800
+          },
+          "met": [
+            250,
+            400
+          ],
+          "min_dphi4": {
+            "min": 0.5
+          },
+          "nb_medium": {
+            "min": 1
+          },
+          "njet": {
+            "min": 5
+          }
+        },
+        "process_yields": {
+          "DY": {
+            "raw_weighted": 1.5801525115966797,
+            "unweighted": 2,
+            "weight_source": "normalized_feature_weight",
+            "weighted": 1.6575215189873416
+          },
+          "QCD": {
+            "raw_weighted": 1.0,
+            "unweighted": 1,
+            "weight_source": "normalized_feature_weight",
+            "weighted": 42.582705
+          },
+          "SMS": {
+            "raw_weighted": 621.0,
+            "unweighted": 621,
+            "weight_source": "normalized_feature_weight",
+            "weighted": 24.749779707678517
+          },
+          "TT": {
+            "raw_weighted": 0.21492887288331985,
+            "unweighted": 70,
+            "weight_source": "normalized_feature_weight",
+            "weighted": 0.9847479004087699
+          }
+        },
+        "region_coverage": {
+          "DY2E": {
+            "background": 0,
+            "signal": 0,
+            "total": 0
+          },
+          "DY2M": {
+            "background": 0,
+            "signal": 0,
+            "total": 0
+          },
+          "GCR": {
+            "background": 0,
+            "signal": 0,
+            "total": 0
+          },
+          "LLCR": {
+            "background": 96,
+            "signal": 67,
+            "total": 163
+          },
+          "QCDCR": {
+            "background": 0,
+            "signal": 0,
+            "total": 0
+          },
+          "SR": {
+            "background": 73,
+            "signal": 621,
+            "total": 694
+          },
+          "preselection": {
+            "background": 73,
+            "signal": 622,
+            "total": 695
+          }
+        },
+        "s_over_sqrt_b_proxy": 3.680291111542413,
+        "scheme": "optimized_hybrid_no_tags",
+        "signal_weighted": 24.749779707678517,
+        "unweighted_total": 694,
+        "warnings": [
+          "below_minimum_effective_mc_events"
+        ],
+        "weight_source": "normalized_feature_weight"
+      }
+    ],
+    "label": "exploratory_not_selected",
+    "reason": "no candidate bin passed all configured thresholds"
+  },
+  "forbidden_variables": [
+    "top-tag discriminator scores",
+    "top-tag working points",
+    "top-tag pass/fail categories"
+  ],
+  "message": "Legacy stop_processor_v4.py validation is external/manual. No independent agreement with stop_processor_v4.py is claimed by autonomous_allhad unless explicitly provided by the user.",
+  "schemes": [
+    {
+      "bins": [
+        {
+          "background_effective_events": 0.0,
+          "background_sumw2": 0.0,
+          "background_unweighted": 0,
+          "background_weighted": 0.0,
+          "bin": "Njet2to4_Nb0_MET250to400",
+          "definition": {
+            "met": [
+              250,
+              400
+            ],
+            "nb_medium": {
+              "eq": 0
+            },
+            "njet": [
+              2,
+              5
+            ]
+          },
+          "process_yields": {},
+          "region_coverage": {
+            "DY2E": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "DY2M": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "GCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "LLCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "QCDCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "SR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "preselection": {
+              "background": 261,
+              "signal": 104,
+              "total": 375
+            }
+          },
+          "s_over_sqrt_b_proxy": null,
+          "scheme": "minimal_njet_nb_met",
+          "signal_weighted": 0.0,
+          "unweighted_total": 0,
+          "warnings": [
+            "below_minimum_background_yield",
+            "below_minimum_effective_mc_events",
+            "low_background_yield_warning"
+          ],
+          "weight_source": "normalized_feature_weight"
+        },
+        {
+          "background_effective_events": 0.0,
+          "background_sumw2": 0.0,
+          "background_unweighted": 0,
+          "background_weighted": 0.0,
+          "bin": "Njet2to4_Nb1plus_MET250to400",
+          "definition": {
+            "met": [
+              250,
+              400
+            ],
+            "nb_medium": {
+              "min": 1
+            },
+            "njet": [
+              2,
+              5
+            ]
+          },
+          "process_yields": {},
+          "region_coverage": {
+            "DY2E": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "DY2M": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "GCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "LLCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "QCDCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "SR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "preselection": {
+              "background": 61,
+              "signal": 854,
+              "total": 917
+            }
+          },
+          "s_over_sqrt_b_proxy": null,
+          "scheme": "minimal_njet_nb_met",
+          "signal_weighted": 0.0,
+          "unweighted_total": 0,
+          "warnings": [
+            "below_minimum_background_yield",
+            "below_minimum_effective_mc_events",
+            "low_background_yield_warning"
+          ],
+          "weight_source": "normalized_feature_weight"
+        },
+        {
+          "background_effective_events": 1.7570125527874956,
+          "background_sumw2": 1.383386077226647,
+          "background_unweighted": 3,
+          "background_weighted": 1.5590467289464645,
+          "bin": "Njet5to6_Nb1_MET250to400",
+          "definition": {
+            "met": [
+              250,
+              400
+            ],
+            "nb_medium": {
+              "eq": 1
+            },
+            "njet": [
+              5,
+              7
+            ]
+          },
+          "process_yields": {
+            "DY": {
+              "raw_weighted": 1.5801525115966797,
+              "unweighted": 2,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 1.6575215189873416
+            },
+            "SMS": {
+              "raw_weighted": 520.0,
+              "unweighted": 520,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 20.545468365648148
+            },
+            "TT": {
+              "raw_weighted": -0.021492887288331985,
+              "unweighted": 1,
+              "weight_source": "normalized_feature_weight",
+              "weighted": -0.098474790040877
+            }
+          },
+          "region_coverage": {
+            "DY2E": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "DY2M": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "GCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "LLCR": {
+              "background": 10,
+              "signal": 73,
+              "total": 83
+            },
+            "QCDCR": {
+              "background": 36,
+              "signal": 21,
+              "total": 57
+            },
+            "SR": {
+              "background": 3,
+              "signal": 520,
+              "total": 523
+            },
+            "preselection": {
+              "background": 17,
+              "signal": 623,
+              "total": 640
+            }
+          },
+          "s_over_sqrt_b_proxy": 16.454567816681678,
+          "scheme": "minimal_njet_nb_met",
+          "signal_weighted": 20.545468365648148,
+          "unweighted_total": 523,
+          "warnings": [
+            "below_minimum_background_yield",
+            "below_minimum_effective_mc_events",
+            "low_background_yield_warning"
+          ],
+          "weight_source": "normalized_feature_weight"
+        },
+        {
+          "background_effective_events": 1.9558478064510993,
+          "background_sumw2": 1.6064236155193277,
+          "background_unweighted": 26,
+          "background_weighted": 1.772546220735787,
+          "bin": "Njet5to6_Nb2plus_MET250to600",
+          "definition": {
+            "met": [
+              250,
+              600
+            ],
+            "nb_medium": {
+              "min": 2
+            },
+            "njet": [
+              5,
+              7
+            ]
+          },
+          "process_yields": {
+            "DY": {
+              "raw_weighted": 0.0,
+              "unweighted": 2,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 0.0
+            },
+            "SMS": {
+              "raw_weighted": 1486.0,
+              "unweighted": 1486,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 55.97160753339779
+            },
+            "TT": {
+              "raw_weighted": 0.38687197118997574,
+              "unweighted": 24,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 1.7725462207357867
+            }
+          },
+          "region_coverage": {
+            "DY2E": {
+              "background": 0,
+              "signal": 1,
+              "total": 1
+            },
+            "DY2M": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "GCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "LLCR": {
+              "background": 33,
+              "signal": 153,
+              "total": 187
+            },
+            "QCDCR": {
+              "background": 18,
+              "signal": 56,
+              "total": 74
+            },
+            "SR": {
+              "background": 26,
+              "signal": 1486,
+              "total": 1512
+            },
+            "preselection": {
+              "background": 48,
+              "signal": 1739,
+              "total": 1788
+            }
+          },
+          "s_over_sqrt_b_proxy": 42.04060874321176,
+          "scheme": "minimal_njet_nb_met",
+          "signal_weighted": 55.97160753339779,
+          "unweighted_total": 1512,
+          "warnings": [
+            "below_minimum_background_yield",
+            "below_minimum_effective_mc_events",
+            "low_background_yield_warning"
+          ],
+          "weight_source": "normalized_feature_weight"
+        },
+        {
+          "background_effective_events": 1.181060421265549,
+          "background_sumw2": 1815.6980633272524,
+          "background_unweighted": 110,
+          "background_weighted": 46.30819710984575,
+          "bin": "Njet7plus_Nb1plus_MET250to600",
+          "definition": {
+            "met": [
+              250,
+              600
+            ],
+            "nb_medium": {
+              "min": 1
+            },
+            "njet": {
+              "min": 7
+            }
+          },
+          "process_yields": {
+            "DY": {
+              "raw_weighted": 1.5801525115966797,
+              "unweighted": 2,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 1.6575215189873416
+            },
+            "QCD": {
+              "raw_weighted": 1.0,
+              "unweighted": 1,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 42.582705
+            },
+            "SMS": {
+              "raw_weighted": 1333.0,
+              "unweighted": 1333,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 55.1947881008943
+            },
+            "TT": {
+              "raw_weighted": 0.4513506330549717,
+              "unweighted": 107,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 2.067970590858418
+            }
+          },
+          "region_coverage": {
+            "DY2E": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "DY2M": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "GCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "LLCR": {
+              "background": 145,
+              "signal": 126,
+              "total": 271
+            },
+            "QCDCR": {
+              "background": 51,
+              "signal": 53,
+              "total": 104
+            },
+            "SR": {
+              "background": 110,
+              "signal": 1333,
+              "total": 1443
+            },
+            "preselection": {
+              "background": 228,
+              "signal": 1622,
+              "total": 1850
+            }
+          },
+          "s_over_sqrt_b_proxy": 8.11090162113847,
+          "scheme": "minimal_njet_nb_met",
+          "signal_weighted": 55.1947881008943,
+          "unweighted_total": 1443,
+          "warnings": [
+            "below_minimum_effective_mc_events"
+          ],
+          "weight_source": "normalized_feature_weight"
+        },
+        {
+          "background_effective_events": 4.457935623441349,
+          "background_sumw2": 2.7667721544532937,
+          "background_unweighted": 6,
+          "background_weighted": 3.5119926180564374,
+          "bin": "Njet5plus_Nb1plus_MET600plus",
+          "definition": {
+            "met": {
+              "min": 600
+            },
+            "nb_medium": {
+              "min": 1
+            },
+            "njet": {
+              "min": 5
+            }
+          },
+          "process_yields": {
+            "DY": {
+              "raw_weighted": 3.1603050231933594,
+              "unweighted": 4,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 3.315043037974683
+            },
+            "SMS": {
+              "raw_weighted": 1343.0,
+              "unweighted": 1343,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 71.80968679951899
+            },
+            "TT": {
+              "raw_weighted": 0.04298577457666397,
+              "unweighted": 2,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 0.196949580081754
+            }
+          },
+          "region_coverage": {
+            "DY2E": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "DY2M": {
+              "background": 0,
+              "signal": 1,
+              "total": 1
+            },
+            "GCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "LLCR": {
+              "background": 4,
+              "signal": 61,
+              "total": 65
+            },
+            "QCDCR": {
+              "background": 13,
+              "signal": 47,
+              "total": 60
+            },
+            "SR": {
+              "background": 6,
+              "signal": 1343,
+              "total": 1349
+            },
+            "preselection": {
+              "background": 11,
+              "signal": 1566,
+              "total": 1577
+            }
+          },
+          "s_over_sqrt_b_proxy": 38.31830018428898,
+          "scheme": "minimal_njet_nb_met",
+          "signal_weighted": 71.80968679951899,
+          "unweighted_total": 1349,
+          "warnings": [
+            "below_minimum_background_yield",
+            "low_background_yield_warning"
+          ],
+          "weight_source": "normalized_feature_weight"
+        }
+      ],
+      "low_stat_bins": 6,
+      "provisional": true,
+      "sane_bins": 0,
+      "scheme": "minimal_njet_nb_met",
+      "score_proxy": 0,
+      "top_tagging_used": false
+    },
+    {
+      "bins": [
+        {
+          "background_effective_events": 1.306576532350431,
+          "background_sumw2": 1817.9508794152052,
+          "background_unweighted": 63,
+          "background_weighted": 48.73696703745254,
+          "bin": "highHT_Njet5plus_Nb1_MET250plus",
+          "definition": {
+            "ht": {
+              "min": 1000
+            },
+            "met": {
+              "min": 250
+            },
+            "nb_medium": {
+              "min": 1
+            },
+            "njet": {
+              "min": 5
+            }
+          },
+          "process_yields": {
+            "DY": {
+              "raw_weighted": 4.740457534790039,
+              "unweighted": 6,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 4.972564556962024
+            },
+            "QCD": {
+              "raw_weighted": 1.0,
+              "unweighted": 1,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 42.582705
+            },
+            "SMS": {
+              "raw_weighted": 1673.0,
+              "unweighted": 1673,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 93.52386062867707
+            },
+            "TT": {
+              "raw_weighted": 0.2579146474599838,
+              "unweighted": 56,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 1.181697480490524
+            }
+          },
+          "region_coverage": {
+            "DY2E": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "DY2M": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "GCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "LLCR": {
+              "background": 80,
+              "signal": 96,
+              "total": 176
+            },
+            "QCDCR": {
+              "background": 115,
+              "signal": 111,
+              "total": 226
+            },
+            "SR": {
+              "background": 63,
+              "signal": 1673,
+              "total": 1736
+            },
+            "preselection": {
+              "background": 180,
+              "signal": 2123,
+              "total": 2303
+            }
+          },
+          "s_over_sqrt_b_proxy": 13.396556391050348,
+          "scheme": "resolved_kinematics",
+          "signal_weighted": 93.52386062867707,
+          "unweighted_total": 1736,
+          "warnings": [
+            "below_minimum_effective_mc_events"
+          ],
+          "weight_source": "normalized_feature_weight"
+        },
+        {
+          "background_effective_events": 1.0641172480092802,
+          "background_sumw2": 1814.7865186055346,
+          "background_unweighted": 16,
+          "background_weighted": 43.9448021488647,
+          "bin": "veryHighHT_Njet6plus_Nb1_MET250plus",
+          "definition": {
+            "ht": {
+              "min": 1500
+            },
+            "met": {
+              "min": 250
+            },
+            "nb_medium": {
+              "min": 1
+            },
+            "njet": {
+              "min": 6
+            }
+          },
+          "process_yields": {
+            "DY": {
+              "raw_weighted": 1.5801525115966797,
+              "unweighted": 2,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 1.6575215189873416
+            },
+            "QCD": {
+              "raw_weighted": 1.0,
+              "unweighted": 1,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 42.582705
+            },
+            "SMS": {
+              "raw_weighted": 349.0,
+              "unweighted": 349,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 17.72467040712899
+            },
+            "TT": {
+              "raw_weighted": -0.06447866186499596,
+              "unweighted": 13,
+              "weight_source": "normalized_feature_weight",
+              "weighted": -0.295424370122631
+            }
+          },
+          "region_coverage": {
+            "DY2E": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "DY2M": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "GCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "LLCR": {
+              "background": 14,
+              "signal": 14,
+              "total": 28
+            },
+            "QCDCR": {
+              "background": 41,
+              "signal": 32,
+              "total": 73
+            },
+            "SR": {
+              "background": 16,
+              "signal": 349,
+              "total": 365
+            },
+            "preselection": {
+              "background": 63,
+              "signal": 492,
+              "total": 555
+            }
+          },
+          "s_over_sqrt_b_proxy": 2.6737722487607902,
+          "scheme": "resolved_kinematics",
+          "signal_weighted": 17.72467040712899,
+          "unweighted_total": 365,
+          "warnings": [
+            "below_minimum_effective_mc_events"
+          ],
+          "weight_source": "normalized_feature_weight"
+        },
+        {
+          "background_effective_events": 4.611946404008712,
+          "background_sumw2": 2.186597884986311,
+          "background_unweighted": 16,
+          "background_weighted": 3.175605808767151,
+          "bin": "twoB_highHT_MET400plus",
+          "definition": {
+            "ht": {
+              "min": 800
+            },
+            "met": {
+              "min": 400
+            },
+            "nb_medium": {
+              "min": 2
+            }
+          },
+          "process_yields": {
+            "DY": {
+              "raw_weighted": 2.3702287673950195,
+              "unweighted": 3,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 2.4862822784810126
+            },
+            "SMS": {
+              "raw_weighted": 1378.0,
+              "unweighted": 1378,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 81.9311257995945
+            },
+            "TT": {
+              "raw_weighted": 0.1504502110183239,
+              "unweighted": 13,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 0.689323530286139
+            }
+          },
+          "region_coverage": {
+            "DY2E": {
+              "background": 0,
+              "signal": 1,
+              "total": 1
+            },
+            "DY2M": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "GCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "LLCR": {
+              "background": 26,
+              "signal": 75,
+              "total": 101
+            },
+            "QCDCR": {
+              "background": 17,
+              "signal": 61,
+              "total": 78
+            },
+            "SR": {
+              "background": 16,
+              "signal": 1378,
+              "total": 1394
+            },
+            "preselection": {
+              "background": 47,
+              "signal": 1949,
+              "total": 1996
+            }
+          },
+          "s_over_sqrt_b_proxy": 45.97647051252151,
+          "scheme": "resolved_kinematics",
+          "signal_weighted": 81.9311257995945,
+          "unweighted_total": 1394,
+          "warnings": [
+            "below_minimum_background_yield",
+            "low_background_yield_warning"
+          ],
+          "weight_source": "normalized_feature_weight"
+        },
+        {
+          "background_effective_events": 8.255836359000433,
+          "background_sumw2": 7.023600513142778,
+          "background_unweighted": 26,
+          "background_weighted": 7.614833976358135,
+          "bin": "cleanDphi_Njet5plus_Nb1_MET400plus",
+          "definition": {
+            "met": {
+              "min": 400
+            },
+            "min_dphi4": {
+              "min": 0.5
+            },
+            "nb_medium": {
+              "min": 1
+            },
+            "njet": {
+              "min": 5
+            }
+          },
+          "process_yields": {
+            "DY": {
+              "raw_weighted": 6.320610046386719,
+              "unweighted": 10,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 6.630086075949365
+            },
+            "SMS": {
+              "raw_weighted": 3078.0,
+              "unweighted": 3078,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 139.29168612603934
+            },
+            "TT": {
+              "raw_weighted": 0.21492887288331985,
+              "unweighted": 16,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 0.98474790040877
+            }
+          },
+          "region_coverage": {
+            "DY2E": {
+              "background": 0,
+              "signal": 1,
+              "total": 1
+            },
+            "DY2M": {
+              "background": 0,
+              "signal": 1,
+              "total": 1
+            },
+            "GCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "LLCR": {
+              "background": 41,
+              "signal": 203,
+              "total": 244
+            },
+            "QCDCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "SR": {
+              "background": 26,
+              "signal": 3078,
+              "total": 3104
+            },
+            "preselection": {
+              "background": 26,
+              "signal": 3078,
+              "total": 3104
+            }
+          },
+          "s_over_sqrt_b_proxy": 50.47716742352849,
+          "scheme": "resolved_kinematics",
+          "signal_weighted": 139.29168612603934,
+          "unweighted_total": 3104,
+          "warnings": [
+            "low_background_yield_warning"
+          ],
+          "weight_source": "normalized_feature_weight"
+        }
+      ],
+      "low_stat_bins": 4,
+      "provisional": true,
+      "sane_bins": 0,
+      "scheme": "resolved_kinematics",
+      "score_proxy": 0,
+      "top_tagging_used": false
+    },
+    {
+      "bins": [
+        {
+          "background_effective_events": 1.0824598104080545,
+          "background_sumw2": 1816.1602073984877,
+          "background_unweighted": 18,
+          "background_weighted": 44.33870130902821,
+          "bin": "hardJ1_Njet2plus_MET250to500",
+          "definition": {
+            "j1pt": {
+              "min": 500
+            },
+            "met": [
+              250,
+              500
+            ],
+            "njet": {
+              "min": 2
+            }
+          },
+          "process_yields": {
+            "DY": {
+              "raw_weighted": 1.5801525115966797,
+              "unweighted": 4,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 1.6575215189873416
+            },
+            "QCD": {
+              "raw_weighted": 1.0,
+              "unweighted": 1,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 42.582705
+            },
+            "SMS": {
+              "raw_weighted": 196.0,
+              "unweighted": 196,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 9.90670029157177
+            },
+            "TT": {
+              "raw_weighted": 0.021492887288331985,
+              "unweighted": 13,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 0.098474790040877
+            }
+          },
+          "region_coverage": {
+            "DY2E": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "DY2M": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "GCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "LLCR": {
+              "background": 21,
+              "signal": 18,
+              "total": 39
+            },
+            "QCDCR": {
+              "background": 74,
+              "signal": 43,
+              "total": 117
+            },
+            "SR": {
+              "background": 18,
+              "signal": 196,
+              "total": 214
+            },
+            "preselection": {
+              "background": 596,
+              "signal": 506,
+              "total": 1102
+            }
+          },
+          "s_over_sqrt_b_proxy": 1.4877759712998906,
+          "scheme": "isr_sensitive",
+          "signal_weighted": 9.90670029157177,
+          "unweighted_total": 214,
+          "warnings": [
+            "below_minimum_effective_mc_events"
+          ],
+          "weight_source": "normalized_feature_weight"
+        },
+        {
+          "background_effective_events": 2.468669967875388,
+          "background_sumw2": 1.3930833615002416,
+          "background_unweighted": 4,
+          "background_weighted": 1.8544710990690956,
+          "bin": "hardJ1_Njet2plus_MET500plus",
+          "definition": {
+            "j1pt": {
+              "min": 500
+            },
+            "met": {
+              "min": 500
+            },
+            "njet": {
+              "min": 2
+            }
+          },
+          "process_yields": {
+            "DY": {
+              "raw_weighted": 1.5801525115966797,
+              "unweighted": 2,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 1.6575215189873416
+            },
+            "SMS": {
+              "raw_weighted": 837.0,
+              "unweighted": 837,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 42.73931067130833
+            },
+            "TT": {
+              "raw_weighted": 0.04298577457666397,
+              "unweighted": 2,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 0.196949580081754
+            }
+          },
+          "region_coverage": {
+            "DY2E": {
+              "background": 0,
+              "signal": 1,
+              "total": 1
+            },
+            "DY2M": {
+              "background": 0,
+              "signal": 1,
+              "total": 1
+            },
+            "GCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "LLCR": {
+              "background": 6,
+              "signal": 50,
+              "total": 56
+            },
+            "QCDCR": {
+              "background": 23,
+              "signal": 61,
+              "total": 84
+            },
+            "SR": {
+              "background": 4,
+              "signal": 837,
+              "total": 841
+            },
+            "preselection": {
+              "background": 2922,
+              "signal": 1602,
+              "total": 4524
+            }
+          },
+          "s_over_sqrt_b_proxy": 31.38466364143047,
+          "scheme": "isr_sensitive",
+          "signal_weighted": 42.73931067130833,
+          "unweighted_total": 841,
+          "warnings": [
+            "below_minimum_background_yield",
+            "below_minimum_effective_mc_events",
+            "low_background_yield_warning"
+          ],
+          "weight_source": "normalized_feature_weight"
+        },
+        {
+          "background_effective_events": 3.0000000000000004,
+          "background_sumw2": 2.060533189429578,
+          "background_unweighted": 3,
+          "background_weighted": 2.4862822784810126,
+          "bin": "hardJ1_lowB_MET400plus",
+          "definition": {
+            "j1pt": {
+              "min": 500
+            },
+            "met": {
+              "min": 400
+            },
+            "nb_medium": [
+              0,
+              2
+            ]
+          },
+          "process_yields": {
+            "DY": {
+              "raw_weighted": 2.3702287673950195,
+              "unweighted": 3,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 2.4862822784810126
+            },
+            "SMS": {
+              "raw_weighted": 314.0,
+              "unweighted": 314,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 11.626746083083091
+            }
+          },
+          "region_coverage": {
+            "DY2E": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "DY2M": {
+              "background": 0,
+              "signal": 1,
+              "total": 1
+            },
+            "GCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "LLCR": {
+              "background": 4,
+              "signal": 22,
+              "total": 26
+            },
+            "QCDCR": {
+              "background": 27,
+              "signal": 28,
+              "total": 55
+            },
+            "SR": {
+              "background": 3,
+              "signal": 314,
+              "total": 317
+            },
+            "preselection": {
+              "background": 3089,
+              "signal": 758,
+              "total": 3847
+            }
+          },
+          "s_over_sqrt_b_proxy": 7.373657663566647,
+          "scheme": "isr_sensitive",
+          "signal_weighted": 11.626746083083091,
+          "unweighted_total": 317,
+          "warnings": [
+            "below_minimum_background_yield",
+            "low_background_yield_warning"
+          ],
+          "weight_source": "normalized_feature_weight"
+        }
+      ],
+      "low_stat_bins": 3,
+      "provisional": true,
+      "sane_bins": 0,
+      "scheme": "isr_sensitive",
+      "score_proxy": 0,
+      "top_tagging_used": false
+    },
+    {
+      "bins": [
+        {
+          "background_effective_events": 1.5187146420989794,
+          "background_sumw2": 1821.908754748362,
+          "background_unweighted": 122,
+          "background_weighted": 52.60189637650582,
+          "bin": "AK8one_Njet5plus_Nb1_MET250plus",
+          "definition": {
+            "met": {
+              "min": 250
+            },
+            "nb_medium": {
+              "min": 1
+            },
+            "nfj": {
+              "min": 1
+            },
+            "njet": {
+              "min": 5
+            }
+          },
+          "process_yields": {
+            "DY": {
+              "raw_weighted": 7.110686302185059,
+              "unweighted": 11,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 7.458846835443036
+            },
+            "QCD": {
+              "raw_weighted": 1.0,
+              "unweighted": 1,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 42.582705
+            },
+            "SMS": {
+              "raw_weighted": 3985.0,
+              "unweighted": 3985,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 175.61809006881026
+            },
+            "TT": {
+              "raw_weighted": 0.5588150694966316,
+              "unweighted": 110,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 2.5603445410628036
+            }
+          },
+          "region_coverage": {
+            "DY2E": {
+              "background": 0,
+              "signal": 1,
+              "total": 1
+            },
+            "DY2M": {
+              "background": 0,
+              "signal": 1,
+              "total": 1
+            },
+            "GCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "LLCR": {
+              "background": 164,
+              "signal": 315,
+              "total": 480
+            },
+            "QCDCR": {
+              "background": 96,
+              "signal": 145,
+              "total": 241
+            },
+            "SR": {
+              "background": 122,
+              "signal": 3985,
+              "total": 4107
+            },
+            "preselection": {
+              "background": 267,
+              "signal": 4667,
+              "total": 4935
+            }
+          },
+          "s_over_sqrt_b_proxy": 24.214112117980008,
+          "scheme": "ak8_kinematics_no_tag_scores",
+          "signal_weighted": 175.61809006881026,
+          "unweighted_total": 4107,
+          "warnings": [
+            "below_minimum_effective_mc_events"
+          ],
+          "weight_source": "normalized_feature_weight"
+        },
+        {
+          "background_effective_events": 6.655799474316479,
+          "background_sumw2": 4.16955280022713,
+          "background_unweighted": 11,
+          "background_weighted": 5.267988927084655,
+          "bin": "AK8one_highMET",
+          "definition": {
+            "met": {
+              "min": 500
+            },
+            "nfj": {
+              "min": 1
+            }
+          },
+          "process_yields": {
+            "DY": {
+              "raw_weighted": 4.740457534790039,
+              "unweighted": 6,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 4.972564556962024
+            },
+            "SMS": {
+              "raw_weighted": 1846.0,
+              "unweighted": 1846,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 104.3952680712561
+            },
+            "TT": {
+              "raw_weighted": 0.06447866186499596,
+              "unweighted": 5,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 0.295424370122631
+            }
+          },
+          "region_coverage": {
+            "DY2E": {
+              "background": 0,
+              "signal": 1,
+              "total": 1
+            },
+            "DY2M": {
+              "background": 0,
+              "signal": 1,
+              "total": 1
+            },
+            "GCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "LLCR": {
+              "background": 16,
+              "signal": 85,
+              "total": 101
+            },
+            "QCDCR": {
+              "background": 14,
+              "signal": 52,
+              "total": 66
+            },
+            "SR": {
+              "background": 11,
+              "signal": 1846,
+              "total": 1857
+            },
+            "preselection": {
+              "background": 217,
+              "signal": 2885,
+              "total": 3102
+            }
+          },
+          "s_over_sqrt_b_proxy": 45.4839723771907,
+          "scheme": "ak8_kinematics_no_tag_scores",
+          "signal_weighted": 104.3952680712561,
+          "unweighted_total": 1857,
+          "warnings": [
+            "low_background_yield_warning"
+          ],
+          "weight_source": "normalized_feature_weight"
+        },
+        {
+          "background_effective_events": 1.168054997345724,
+          "background_sumw2": 1815.7933733830398,
+          "background_unweighted": 50,
+          "background_weighted": 46.053735178889774,
+          "bin": "AK8two_Njet5plus",
+          "definition": {
+            "nfj": {
+              "min": 2
+            },
+            "njet": {
+              "min": 5
+            }
+          },
+          "process_yields": {
+            "DY": {
+              "raw_weighted": 2.3702287673950195,
+              "unweighted": 3,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 2.4862822784810126
+            },
+            "QCD": {
+              "raw_weighted": 1.0,
+              "unweighted": 1,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 42.582705
+            },
+            "SMS": {
+              "raw_weighted": 1399.0,
+              "unweighted": 1399,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 69.89817315750376
+            },
+            "TT": {
+              "raw_weighted": 0.21492887288331985,
+              "unweighted": 46,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 0.9847479004087699
+            }
+          },
+          "region_coverage": {
+            "DY2E": {
+              "background": 7,
+              "signal": 0,
+              "total": 7
+            },
+            "DY2M": {
+              "background": 12,
+              "signal": 0,
+              "total": 12
+            },
+            "GCR": {
+              "background": 11,
+              "signal": 0,
+              "total": 11
+            },
+            "LLCR": {
+              "background": 73,
+              "signal": 75,
+              "total": 148
+            },
+            "QCDCR": {
+              "background": 44,
+              "signal": 54,
+              "total": 98
+            },
+            "SR": {
+              "background": 50,
+              "signal": 1399,
+              "total": 1449
+            },
+            "preselection": {
+              "background": 144,
+              "signal": 1694,
+              "total": 1838
+            }
+          },
+          "s_over_sqrt_b_proxy": 10.299909187181223,
+          "scheme": "ak8_kinematics_no_tag_scores",
+          "signal_weighted": 69.89817315750376,
+          "unweighted_total": 1449,
+          "warnings": [
+            "below_minimum_effective_mc_events"
+          ],
+          "weight_source": "normalized_feature_weight"
+        }
+      ],
+      "low_stat_bins": 3,
+      "provisional": true,
+      "sane_bins": 0,
+      "scheme": "ak8_kinematics_no_tag_scores",
+      "score_proxy": 0,
+      "top_tagging_used": false
+    },
+    {
+      "bins": [
+        {
+          "background_effective_events": 1.1266755212154553,
+          "background_sumw2": 1815.3392638091295,
+          "background_unweighted": 73,
+          "background_weighted": 45.224974419396105,
+          "bin": "hybrid_lowMET_multijet",
+          "definition": {
+            "ht": {
+              "min": 800
+            },
+            "met": [
+              250,
+              400
+            ],
+            "min_dphi4": {
+              "min": 0.5
+            },
+            "nb_medium": {
+              "min": 1
+            },
+            "njet": {
+              "min": 5
+            }
+          },
+          "process_yields": {
+            "DY": {
+              "raw_weighted": 1.5801525115966797,
+              "unweighted": 2,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 1.6575215189873416
+            },
+            "QCD": {
+              "raw_weighted": 1.0,
+              "unweighted": 1,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 42.582705
+            },
+            "SMS": {
+              "raw_weighted": 621.0,
+              "unweighted": 621,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 24.749779707678517
+            },
+            "TT": {
+              "raw_weighted": 0.21492887288331985,
+              "unweighted": 70,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 0.9847479004087699
+            }
+          },
+          "region_coverage": {
+            "DY2E": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "DY2M": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "GCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "LLCR": {
+              "background": 96,
+              "signal": 67,
+              "total": 163
+            },
+            "QCDCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "SR": {
+              "background": 73,
+              "signal": 621,
+              "total": 694
+            },
+            "preselection": {
+              "background": 73,
+              "signal": 622,
+              "total": 695
+            }
+          },
+          "s_over_sqrt_b_proxy": 3.680291111542413,
+          "scheme": "optimized_hybrid_no_tags",
+          "signal_weighted": 24.749779707678517,
+          "unweighted_total": 694,
+          "warnings": [
+            "below_minimum_effective_mc_events"
+          ],
+          "weight_source": "normalized_feature_weight"
+        },
+        {
+          "background_effective_events": 5.327286681649336,
+          "background_sumw2": 2.863744997189242,
+          "background_unweighted": 16,
+          "background_weighted": 3.905891778219945,
+          "bin": "hybrid_midMET_multijet",
+          "definition": {
+            "ht": {
+              "min": 800
+            },
+            "met": [
+              400,
+              600
+            ],
+            "min_dphi4": {
+              "min": 0.5
+            },
+            "nb_medium": {
+              "min": 1
+            },
+            "njet": {
+              "min": 5
+            }
+          },
+          "process_yields": {
+            "DY": {
+              "raw_weighted": 3.1603050231933594,
+              "unweighted": 4,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 3.315043037974683
+            },
+            "SMS": {
+              "raw_weighted": 852.0,
+              "unweighted": 852,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 44.27497966481964
+            },
+            "TT": {
+              "raw_weighted": 0.1289573237299919,
+              "unweighted": 12,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 0.590848740245262
+            }
+          },
+          "region_coverage": {
+            "DY2E": {
+              "background": 0,
+              "signal": 1,
+              "total": 1
+            },
+            "DY2M": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "GCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "LLCR": {
+              "background": 27,
+              "signal": 65,
+              "total": 92
+            },
+            "QCDCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "SR": {
+              "background": 16,
+              "signal": 852,
+              "total": 868
+            },
+            "preselection": {
+              "background": 16,
+              "signal": 852,
+              "total": 868
+            }
+          },
+          "s_over_sqrt_b_proxy": 22.40259189163829,
+          "scheme": "optimized_hybrid_no_tags",
+          "signal_weighted": 44.27497966481964,
+          "unweighted_total": 868,
+          "warnings": [
+            "below_minimum_background_yield",
+            "low_background_yield_warning"
+          ],
+          "weight_source": "normalized_feature_weight"
+        },
+        {
+          "background_effective_events": 4.457935623441349,
+          "background_sumw2": 2.7667721544532937,
+          "background_unweighted": 6,
+          "background_weighted": 3.5119926180564374,
+          "bin": "hybrid_highMET_anyHT",
+          "definition": {
+            "met": {
+              "min": 600
+            },
+            "min_dphi4": {
+              "min": 0.5
+            },
+            "nb_medium": {
+              "min": 1
+            },
+            "njet": {
+              "min": 5
+            }
+          },
+          "process_yields": {
+            "DY": {
+              "raw_weighted": 3.1603050231933594,
+              "unweighted": 4,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 3.315043037974683
+            },
+            "SMS": {
+              "raw_weighted": 1343.0,
+              "unweighted": 1343,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 71.80968679951899
+            },
+            "TT": {
+              "raw_weighted": 0.04298577457666397,
+              "unweighted": 2,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 0.196949580081754
+            }
+          },
+          "region_coverage": {
+            "DY2E": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "DY2M": {
+              "background": 0,
+              "signal": 1,
+              "total": 1
+            },
+            "GCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "LLCR": {
+              "background": 4,
+              "signal": 61,
+              "total": 65
+            },
+            "QCDCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "SR": {
+              "background": 6,
+              "signal": 1343,
+              "total": 1349
+            },
+            "preselection": {
+              "background": 6,
+              "signal": 1343,
+              "total": 1349
+            }
+          },
+          "s_over_sqrt_b_proxy": 38.31830018428898,
+          "scheme": "optimized_hybrid_no_tags",
+          "signal_weighted": 71.80968679951899,
+          "unweighted_total": 1349,
+          "warnings": [
+            "below_minimum_background_yield",
+            "low_background_yield_warning"
+          ],
+          "weight_source": "normalized_feature_weight"
+        },
+        {
+          "background_effective_events": 1.1948837507082375,
+          "background_sumw2": 1816.3735476525067,
+          "background_unweighted": 40,
+          "background_weighted": 46.58707156826081,
+          "bin": "hybrid_AK8_highHT",
+          "definition": {
+            "ht": {
+              "min": 1200
+            },
+            "met": {
+              "min": 250
+            },
+            "nb_medium": {
+              "min": 1
+            },
+            "nfj": {
+              "min": 1
+            },
+            "njet": {
+              "min": 5
+            }
+          },
+          "process_yields": {
+            "DY": {
+              "raw_weighted": 3.1603050231933594,
+              "unweighted": 4,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 3.315043037974683
+            },
+            "QCD": {
+              "raw_weighted": 1.0,
+              "unweighted": 1,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 42.582705
+            },
+            "SMS": {
+              "raw_weighted": 923.0,
+              "unweighted": 923,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 48.425589026849735
+            },
+            "TT": {
+              "raw_weighted": 0.1504502110183239,
+              "unweighted": 35,
+              "weight_source": "normalized_feature_weight",
+              "weighted": 0.689323530286139
+            }
+          },
+          "region_coverage": {
+            "DY2E": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "DY2M": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "GCR": {
+              "background": 0,
+              "signal": 0,
+              "total": 0
+            },
+            "LLCR": {
+              "background": 41,
+              "signal": 45,
+              "total": 86
+            },
+            "QCDCR": {
+              "background": 75,
+              "signal": 71,
+              "total": 146
+            },
+            "SR": {
+              "background": 40,
+              "signal": 923,
+              "total": 963
+            },
+            "preselection": {
+              "background": 124,
+              "signal": 1178,
+              "total": 1302
+            }
+          },
+          "s_over_sqrt_b_proxy": 7.094833468535472,
+          "scheme": "optimized_hybrid_no_tags",
+          "signal_weighted": 48.425589026849735,
+          "unweighted_total": 963,
+          "warnings": [
+            "below_minimum_effective_mc_events"
+          ],
+          "weight_source": "normalized_feature_weight"
+        }
+      ],
+      "low_stat_bins": 4,
+      "provisional": true,
+      "sane_bins": 0,
+      "scheme": "optimized_hybrid_no_tags",
+      "score_proxy": 0,
+      "top_tagging_used": false
+    }
+  ],
+  "scope": "feature-side provisional search-bin design",
+  "selected_provisional_scheme": null,
+  "selection_status": "no provisional scheme selected because all candidate bins fail at least one configured statistics threshold",
+  "thresholds": {
+    "low_stat_warning_threshold": 10,
+    "maximum_number_of_bins_first_proposal": 32,
+    "minimum_effective_mc_events": 3,
+    "minimum_total_background_yield": 5
+  },
+  "yield_weight_source": "normalized_feature_weight"
+}
