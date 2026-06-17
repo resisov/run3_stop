@@ -1,0 +1,642 @@
+{
+  "plots": [
+    {
+      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "data_visible": true,
+      "docs_path": "docs/plots/metpt_cat1_preselection.png",
+      "overlay_signal_mass_points": [
+        "T2tt:mStop2_mLSP1000",
+        "T2tt:mStop2_mLSP1050",
+        "T2tt:mStop2_mLSP1100",
+        "T2tt:mStop2_mLSP1150"
+      ],
+      "plot_path": "autonomous_allhad/plots/metpt_cat1_preselection.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "GJ",
+        "QCD",
+        "SMS",
+        "TT",
+        "VV",
+        "WtoLNu",
+        "Zto2Nu"
+      ],
+      "ratio_panel_visible": true,
+      "region": "cat1_preselection",
+      "source_hists_npy_keys": [
+        "data/metpt/nominal/cat1_preselection",
+        "background/metpt/nominal/cat1_preselection",
+        "signal/metpt/nominal/cat1_preselection"
+      ],
+      "systematic": "nominal",
+      "variable": "metpt"
+    },
+    {
+      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "data_visible": false,
+      "docs_path": "docs/plots/metpt_cat7_SR_highDeltaM.png",
+      "overlay_signal_mass_points": [
+        "T2tt:mStop2_mLSP1000",
+        "T2tt:mStop2_mLSP1050",
+        "T2tt:mStop2_mLSP1100",
+        "T2tt:mStop2_mLSP1150"
+      ],
+      "plot_path": "autonomous_allhad/plots/metpt_cat7_SR_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "QCD",
+        "SMS",
+        "TT"
+      ],
+      "ratio_panel_visible": false,
+      "region": "cat7_SR_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/metpt/nominal/cat7_SR_highDeltaM",
+        "background/metpt/nominal/cat7_SR_highDeltaM",
+        "signal/metpt/nominal/cat7_SR_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "metpt"
+    },
+    {
+      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "data_visible": true,
+      "docs_path": "docs/plots/metpt_cat2_LLCR_highDeltaM.png",
+      "overlay_signal_mass_points": [
+        "T2tt:mStop2_mLSP1000",
+        "T2tt:mStop2_mLSP1050",
+        "T2tt:mStop2_mLSP1100",
+        "T2tt:mStop2_mLSP1150"
+      ],
+      "plot_path": "autonomous_allhad/plots/metpt_cat2_LLCR_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "SMS",
+        "TT",
+        "VV"
+      ],
+      "ratio_panel_visible": true,
+      "region": "cat2_LLCR_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/metpt/nominal/cat2_LLCR_highDeltaM",
+        "background/metpt/nominal/cat2_LLCR_highDeltaM",
+        "signal/metpt/nominal/cat2_LLCR_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "metpt"
+    },
+    {
+      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "data_visible": false,
+      "docs_path": "docs/plots/metpt_cat3_QCDCR_highDeltaM.png",
+      "overlay_signal_mass_points": [
+        "T2tt:mStop2_mLSP1000",
+        "T2tt:mStop2_mLSP1050",
+        "T2tt:mStop2_mLSP1100",
+        "T2tt:mStop2_mLSP1150"
+      ],
+      "plot_path": "autonomous_allhad/plots/metpt_cat3_QCDCR_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "GJ",
+        "QCD",
+        "SMS",
+        "TT"
+      ],
+      "ratio_panel_visible": false,
+      "region": "cat3_QCDCR_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/metpt/nominal/cat3_QCDCR_highDeltaM",
+        "background/metpt/nominal/cat3_QCDCR_highDeltaM",
+        "signal/metpt/nominal/cat3_QCDCR_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "metpt"
+    },
+    {
+      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "data_visible": true,
+      "docs_path": "docs/plots/ht_cat1_preselection.png",
+      "overlay_signal_mass_points": [
+        "T2tt:mStop2_mLSP1000",
+        "T2tt:mStop2_mLSP1050",
+        "T2tt:mStop2_mLSP1100",
+        "T2tt:mStop2_mLSP1150"
+      ],
+      "plot_path": "autonomous_allhad/plots/ht_cat1_preselection.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "GJ",
+        "QCD",
+        "SMS",
+        "TT",
+        "VV",
+        "WtoLNu",
+        "Zto2Nu"
+      ],
+      "ratio_panel_visible": true,
+      "region": "cat1_preselection",
+      "source_hists_npy_keys": [
+        "data/ht/nominal/cat1_preselection",
+        "background/ht/nominal/cat1_preselection",
+        "signal/ht/nominal/cat1_preselection"
+      ],
+      "systematic": "nominal",
+      "variable": "ht"
+    },
+    {
+      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "data_visible": false,
+      "docs_path": "docs/plots/ht_cat7_SR_highDeltaM.png",
+      "overlay_signal_mass_points": [
+        "T2tt:mStop2_mLSP1000",
+        "T2tt:mStop2_mLSP1050",
+        "T2tt:mStop2_mLSP1100",
+        "T2tt:mStop2_mLSP1150"
+      ],
+      "plot_path": "autonomous_allhad/plots/ht_cat7_SR_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "QCD",
+        "SMS",
+        "TT"
+      ],
+      "ratio_panel_visible": false,
+      "region": "cat7_SR_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/ht/nominal/cat7_SR_highDeltaM",
+        "background/ht/nominal/cat7_SR_highDeltaM",
+        "signal/ht/nominal/cat7_SR_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "ht"
+    },
+    {
+      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "data_visible": true,
+      "docs_path": "docs/plots/ht_cat2_LLCR_highDeltaM.png",
+      "overlay_signal_mass_points": [
+        "T2tt:mStop2_mLSP1000",
+        "T2tt:mStop2_mLSP1050",
+        "T2tt:mStop2_mLSP1100",
+        "T2tt:mStop2_mLSP1150"
+      ],
+      "plot_path": "autonomous_allhad/plots/ht_cat2_LLCR_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "SMS",
+        "TT",
+        "VV"
+      ],
+      "ratio_panel_visible": true,
+      "region": "cat2_LLCR_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/ht/nominal/cat2_LLCR_highDeltaM",
+        "background/ht/nominal/cat2_LLCR_highDeltaM",
+        "signal/ht/nominal/cat2_LLCR_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "ht"
+    },
+    {
+      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "data_visible": false,
+      "docs_path": "docs/plots/ht_cat3_QCDCR_highDeltaM.png",
+      "overlay_signal_mass_points": [
+        "T2tt:mStop2_mLSP1000",
+        "T2tt:mStop2_mLSP1050",
+        "T2tt:mStop2_mLSP1100",
+        "T2tt:mStop2_mLSP1150"
+      ],
+      "plot_path": "autonomous_allhad/plots/ht_cat3_QCDCR_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "GJ",
+        "QCD",
+        "SMS",
+        "TT"
+      ],
+      "ratio_panel_visible": false,
+      "region": "cat3_QCDCR_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/ht/nominal/cat3_QCDCR_highDeltaM",
+        "background/ht/nominal/cat3_QCDCR_highDeltaM",
+        "signal/ht/nominal/cat3_QCDCR_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "ht"
+    },
+    {
+      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "data_visible": true,
+      "docs_path": "docs/plots/njet_cat1_preselection.png",
+      "overlay_signal_mass_points": [
+        "T2tt:mStop2_mLSP1000",
+        "T2tt:mStop2_mLSP1050",
+        "T2tt:mStop2_mLSP1100",
+        "T2tt:mStop2_mLSP1150"
+      ],
+      "plot_path": "autonomous_allhad/plots/njet_cat1_preselection.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "GJ",
+        "QCD",
+        "SMS",
+        "TT",
+        "VV",
+        "WtoLNu",
+        "Zto2Nu"
+      ],
+      "ratio_panel_visible": true,
+      "region": "cat1_preselection",
+      "source_hists_npy_keys": [
+        "data/njet/nominal/cat1_preselection",
+        "background/njet/nominal/cat1_preselection",
+        "signal/njet/nominal/cat1_preselection"
+      ],
+      "systematic": "nominal",
+      "variable": "njet"
+    },
+    {
+      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "data_visible": false,
+      "docs_path": "docs/plots/njet_cat7_SR_highDeltaM.png",
+      "overlay_signal_mass_points": [
+        "T2tt:mStop2_mLSP1000",
+        "T2tt:mStop2_mLSP1050",
+        "T2tt:mStop2_mLSP1100",
+        "T2tt:mStop2_mLSP1150"
+      ],
+      "plot_path": "autonomous_allhad/plots/njet_cat7_SR_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "QCD",
+        "SMS",
+        "TT"
+      ],
+      "ratio_panel_visible": false,
+      "region": "cat7_SR_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/njet/nominal/cat7_SR_highDeltaM",
+        "background/njet/nominal/cat7_SR_highDeltaM",
+        "signal/njet/nominal/cat7_SR_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "njet"
+    },
+    {
+      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "data_visible": true,
+      "docs_path": "docs/plots/njet_cat2_LLCR_highDeltaM.png",
+      "overlay_signal_mass_points": [
+        "T2tt:mStop2_mLSP1000",
+        "T2tt:mStop2_mLSP1050",
+        "T2tt:mStop2_mLSP1100",
+        "T2tt:mStop2_mLSP1150"
+      ],
+      "plot_path": "autonomous_allhad/plots/njet_cat2_LLCR_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "SMS",
+        "TT",
+        "VV"
+      ],
+      "ratio_panel_visible": true,
+      "region": "cat2_LLCR_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/njet/nominal/cat2_LLCR_highDeltaM",
+        "background/njet/nominal/cat2_LLCR_highDeltaM",
+        "signal/njet/nominal/cat2_LLCR_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "njet"
+    },
+    {
+      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "data_visible": false,
+      "docs_path": "docs/plots/njet_cat3_QCDCR_highDeltaM.png",
+      "overlay_signal_mass_points": [
+        "T2tt:mStop2_mLSP1000",
+        "T2tt:mStop2_mLSP1050",
+        "T2tt:mStop2_mLSP1100",
+        "T2tt:mStop2_mLSP1150"
+      ],
+      "plot_path": "autonomous_allhad/plots/njet_cat3_QCDCR_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "GJ",
+        "QCD",
+        "SMS",
+        "TT"
+      ],
+      "ratio_panel_visible": false,
+      "region": "cat3_QCDCR_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/njet/nominal/cat3_QCDCR_highDeltaM",
+        "background/njet/nominal/cat3_QCDCR_highDeltaM",
+        "signal/njet/nominal/cat3_QCDCR_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "njet"
+    },
+    {
+      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "data_visible": true,
+      "docs_path": "docs/plots/nb_cat1_preselection.png",
+      "overlay_signal_mass_points": [
+        "T2tt:mStop2_mLSP1000",
+        "T2tt:mStop2_mLSP1050",
+        "T2tt:mStop2_mLSP1100",
+        "T2tt:mStop2_mLSP1150"
+      ],
+      "plot_path": "autonomous_allhad/plots/nb_cat1_preselection.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "GJ",
+        "QCD",
+        "SMS",
+        "TT",
+        "VV",
+        "WtoLNu",
+        "Zto2Nu"
+      ],
+      "ratio_panel_visible": true,
+      "region": "cat1_preselection",
+      "source_hists_npy_keys": [
+        "data/nb/nominal/cat1_preselection",
+        "background/nb/nominal/cat1_preselection",
+        "signal/nb/nominal/cat1_preselection"
+      ],
+      "systematic": "nominal",
+      "variable": "nb"
+    },
+    {
+      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "data_visible": false,
+      "docs_path": "docs/plots/nb_cat7_SR_highDeltaM.png",
+      "overlay_signal_mass_points": [
+        "T2tt:mStop2_mLSP1000",
+        "T2tt:mStop2_mLSP1050",
+        "T2tt:mStop2_mLSP1100",
+        "T2tt:mStop2_mLSP1150"
+      ],
+      "plot_path": "autonomous_allhad/plots/nb_cat7_SR_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "QCD",
+        "SMS",
+        "TT"
+      ],
+      "ratio_panel_visible": false,
+      "region": "cat7_SR_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/nb/nominal/cat7_SR_highDeltaM",
+        "background/nb/nominal/cat7_SR_highDeltaM",
+        "signal/nb/nominal/cat7_SR_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "nb"
+    },
+    {
+      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "data_visible": true,
+      "docs_path": "docs/plots/nb_cat2_LLCR_highDeltaM.png",
+      "overlay_signal_mass_points": [
+        "T2tt:mStop2_mLSP1000",
+        "T2tt:mStop2_mLSP1050",
+        "T2tt:mStop2_mLSP1100",
+        "T2tt:mStop2_mLSP1150"
+      ],
+      "plot_path": "autonomous_allhad/plots/nb_cat2_LLCR_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "SMS",
+        "TT",
+        "VV"
+      ],
+      "ratio_panel_visible": true,
+      "region": "cat2_LLCR_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/nb/nominal/cat2_LLCR_highDeltaM",
+        "background/nb/nominal/cat2_LLCR_highDeltaM",
+        "signal/nb/nominal/cat2_LLCR_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "nb"
+    },
+    {
+      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "data_visible": false,
+      "docs_path": "docs/plots/nb_cat3_QCDCR_highDeltaM.png",
+      "overlay_signal_mass_points": [
+        "T2tt:mStop2_mLSP1000",
+        "T2tt:mStop2_mLSP1050",
+        "T2tt:mStop2_mLSP1100",
+        "T2tt:mStop2_mLSP1150"
+      ],
+      "plot_path": "autonomous_allhad/plots/nb_cat3_QCDCR_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "GJ",
+        "QCD",
+        "SMS",
+        "TT"
+      ],
+      "ratio_panel_visible": false,
+      "region": "cat3_QCDCR_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/nb/nominal/cat3_QCDCR_highDeltaM",
+        "background/nb/nominal/cat3_QCDCR_highDeltaM",
+        "signal/nb/nominal/cat3_QCDCR_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "nb"
+    },
+    {
+      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "data_visible": true,
+      "docs_path": "docs/plots/min_dphi_cat1_preselection.png",
+      "overlay_signal_mass_points": [
+        "T2tt:mStop2_mLSP1000",
+        "T2tt:mStop2_mLSP1050",
+        "T2tt:mStop2_mLSP1100",
+        "T2tt:mStop2_mLSP1150"
+      ],
+      "plot_path": "autonomous_allhad/plots/min_dphi_cat1_preselection.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "GJ",
+        "QCD",
+        "SMS",
+        "TT",
+        "VV",
+        "WtoLNu",
+        "Zto2Nu"
+      ],
+      "ratio_panel_visible": true,
+      "region": "cat1_preselection",
+      "source_hists_npy_keys": [
+        "data/min_dphi/nominal/cat1_preselection",
+        "background/min_dphi/nominal/cat1_preselection",
+        "signal/min_dphi/nominal/cat1_preselection"
+      ],
+      "systematic": "nominal",
+      "variable": "min_dphi"
+    },
+    {
+      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "data_visible": false,
+      "docs_path": "docs/plots/min_dphi_cat7_SR_highDeltaM.png",
+      "overlay_signal_mass_points": [
+        "T2tt:mStop2_mLSP1000",
+        "T2tt:mStop2_mLSP1050",
+        "T2tt:mStop2_mLSP1100",
+        "T2tt:mStop2_mLSP1150"
+      ],
+      "plot_path": "autonomous_allhad/plots/min_dphi_cat7_SR_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "QCD",
+        "SMS",
+        "TT"
+      ],
+      "ratio_panel_visible": false,
+      "region": "cat7_SR_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/min_dphi/nominal/cat7_SR_highDeltaM",
+        "background/min_dphi/nominal/cat7_SR_highDeltaM",
+        "signal/min_dphi/nominal/cat7_SR_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "min_dphi"
+    },
+    {
+      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "data_visible": true,
+      "docs_path": "docs/plots/min_dphi_cat2_LLCR_highDeltaM.png",
+      "overlay_signal_mass_points": [
+        "T2tt:mStop2_mLSP1000",
+        "T2tt:mStop2_mLSP1050",
+        "T2tt:mStop2_mLSP1100",
+        "T2tt:mStop2_mLSP1150"
+      ],
+      "plot_path": "autonomous_allhad/plots/min_dphi_cat2_LLCR_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "SMS",
+        "TT",
+        "VV"
+      ],
+      "ratio_panel_visible": true,
+      "region": "cat2_LLCR_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/min_dphi/nominal/cat2_LLCR_highDeltaM",
+        "background/min_dphi/nominal/cat2_LLCR_highDeltaM",
+        "signal/min_dphi/nominal/cat2_LLCR_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "min_dphi"
+    },
+    {
+      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "data_visible": false,
+      "docs_path": "docs/plots/min_dphi_cat3_QCDCR_highDeltaM.png",
+      "overlay_signal_mass_points": [
+        "T2tt:mStop2_mLSP1000",
+        "T2tt:mStop2_mLSP1050",
+        "T2tt:mStop2_mLSP1100",
+        "T2tt:mStop2_mLSP1150"
+      ],
+      "plot_path": "autonomous_allhad/plots/min_dphi_cat3_QCDCR_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "GJ",
+        "QCD",
+        "SMS",
+        "TT"
+      ],
+      "ratio_panel_visible": false,
+      "region": "cat3_QCDCR_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/min_dphi/nominal/cat3_QCDCR_highDeltaM",
+        "background/min_dphi/nominal/cat3_QCDCR_highDeltaM",
+        "signal/min_dphi/nominal/cat3_QCDCR_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "min_dphi"
+    },
+    {
+      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "data_visible": true,
+      "docs_path": "docs/plots/search_bin_index_cat7_SR_highDeltaM.png",
+      "overlay_signal_mass_points": [],
+      "plot_path": "autonomous_allhad/plots/search_bin_index_cat7_SR_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "GJ",
+        "ST",
+        "TT",
+        "WtoLNu",
+        "Zto2Nu"
+      ],
+      "ratio_panel_visible": true,
+      "region": "cat7_SR_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/search_bin_index/nominal/cat7_SR_highDeltaM",
+        "background/search_bin_index/nominal/cat7_SR_highDeltaM",
+        "signal/search_bin_index/nominal/cat7_SR_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "search_bin_index"
+    },
+    {
+      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "data_visible": true,
+      "docs_path": "docs/plots/region_yield_summary.png",
+      "overlay_signal_mass_points": [],
+      "plot_path": "autonomous_allhad/plots/region_yield_summary.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "GJ",
+        "QCD",
+        "SMS",
+        "TT",
+        "VV",
+        "WtoLNu",
+        "Zto2Nu"
+      ],
+      "ratio_panel_visible": true,
+      "region": "all_regions",
+      "source_hists_npy_keys": [
+        "data/region_yield/nominal/all_regions",
+        "background/region_yield/nominal/all_regions",
+        "signal/region_yield/nominal/all_regions"
+      ],
+      "systematic": "nominal",
+      "variable": "region_yield"
+    }
+  ],
+  "source": "autonomous_allhad/hists.npy",
+  "status": "complete"
+}

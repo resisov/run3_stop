@@ -13,6 +13,7 @@ import statistics
 import subprocess
 import sys
 import time
+import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -466,6 +467,911 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
                     if "sumw" in low or "sum_gen" in low or low in {"nevents", "n_events", "genweightsum"}:
                         keys.add(key)
         return sorted(keys)
+
+    def _classify_signal_dataset(self, dataset: str) -> str:
+        parts = [p for p in dataset.split("/") if p]
+        primary = parts[0] if parts else ""
+        campaign = parts[1] if len(parts) > 1 else ""
+        tier = parts[2] if len(parts) > 2 else ""
+        if not (primary.startswith("SMS-2Stop_") and "RunIII" in campaign and tier == "NANOAODSIM"):
+            return "unknown"
+        if "madgraphMLM-pythia8" in primary:
+            return "FastSim signal dataset"
+        if "madgraph-pythia8" in primary and "madgraphMLM-pythia8" not in primary:
+            return "FullSim anchor candidate"
+        return "unknown"
+
+    def _campaign_from_dataset(self, dataset: str) -> str:
+        parts = [p for p in dataset.split("/") if p]
+        return parts[1] if len(parts) > 1 else "unknown"
+
+    def _data_tier_from_dataset(self, dataset: str) -> str:
+        parts = [p for p in dataset.split("/") if p]
+        return parts[2] if len(parts) > 2 else "unknown"
+
+    def _metadata_matches_for_das_dataset(self, dataset: str, metadata: dict[str, Any]) -> list[tuple[str, dict[str, Any]]]:
+        parts = [p for p in dataset.split("/") if p]
+        if not parts:
+            return []
+        primary = parts[0]
+        campaign = parts[1] if len(parts) > 1 else ""
+        out = []
+        for key, meta in metadata.items():
+            if not isinstance(meta, dict):
+                continue
+            if primary in key and (not campaign or campaign in key):
+                out.append((key, meta))
+        if not out:
+            for key, meta in metadata.items():
+                if isinstance(meta, dict) and primary in key:
+                    out.append((key, meta))
+        return out
+
+    def _normalize_lfn(self, file_path: Any) -> str:
+        if isinstance(file_path, dict):
+            file_path = file_path.get("path") or file_path.get("url") or file_path.get("lfn") or ""
+        file_path = str(file_path)
+        if file_path.startswith("root://"):
+            return file_path
+        if file_path.startswith("/store/"):
+            return "root://cms-xrd-global.cern.ch/" + file_path
+        return file_path
+
+    def _mass_from_genmodel_branch(self, branch: str) -> tuple[int | None, int | None]:
+        nums = re.findall(r"(\d+)", branch)
+        if len(nums) >= 2:
+            return int(nums[0]), int(nums[1])
+        return None, None
+
+    def _probe_signal_file(self, dataset: str, file_url: str, simulation_type: str) -> dict[str, Any]:
+        policy = "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
+        rec: dict[str, Any] = {
+            "dataset": dataset,
+            "file": file_url,
+            "simulation_type": simulation_type,
+            "file_readable": False,
+            "events_tree_exists": False,
+            "runs_tree_exists": False,
+            "events_entries": None,
+            "runs_entries": None,
+            "genmodel_branches": [],
+            "runs_sumw_branches": [],
+            "hlt_branches_found": [],
+            "hlt_branches_missing": [],
+            "fastsim_trigger_bypass_required": False,
+            "trigger_policy": "standard trigger branches required",
+            "error": None,
+        }
+        try:
+            import uproot  # type: ignore
+            with uproot.open(file_url) as root:
+                keys = {str(k).split(";")[0] for k in root.keys()}
+                rec["file_readable"] = True
+                rec["events_tree_exists"] = "Events" in keys
+                rec["runs_tree_exists"] = "Runs" in keys
+                if rec["events_tree_exists"]:
+                    events = root["Events"]
+                    ev_branches = list(events.keys())
+                    rec["events_entries"] = int(events.num_entries)
+                    rec["genmodel_branches"] = sorted([b for b in ev_branches if str(b).startswith("GenModel_T2tt_")])
+                    rec["hlt_branches_found"] = sorted([b for b in ev_branches if str(b).startswith("HLT_")])[:100]
+                if rec["runs_tree_exists"]:
+                    runs = root["Runs"]
+                    run_branches = list(runs.keys())
+                    rec["runs_entries"] = int(runs.num_entries)
+                    rec["runs_sumw_branches"] = sorted([b for b in run_branches if str(b).startswith("genEventSumw_T2tt_")])
+                if simulation_type == "FastSim signal dataset" and not rec["hlt_branches_found"]:
+                    rec["fastsim_trigger_bypass_required"] = True
+                    rec["trigger_policy"] = policy
+                    rec["hlt_branches_missing"] = ["HLT_* menu absent or no HLT_* branches found"]
+        except Exception as exc:
+            rec["error"] = f"{type(exc).__name__}: {exc}"
+            if simulation_type == "FastSim signal dataset":
+                rec["trigger_policy"] = policy
+        return rec
+
+    def _write_signal_xsec_status(self) -> dict[str, Any]:
+        source = "https://twiki.cern.ch/twiki/bin/view/LHCPhysics/SUSYCrossSections13x6TeVstopsbottom"
+        outdir = self.base / "signals"
+        outdir.mkdir(parents=True, exist_ok=True)
+        docs_data = self.docs / "data"
+        docs_data.mkdir(parents=True, exist_ok=True)
+        status = {
+            "source_url": source,
+            "xsec_table_status": "manual_required",
+            "parsed": False,
+            "values_used_for_physics_outputs": False,
+            "message": "No stop cross sections were extracted or used. Manual table extraction is required before final signal normalization.",
+            "required_manual_input": "Provide a machine-readable 13.6 TeV stop cross-section table with mStop, xsec_pb, and uncertainty fields from the cited SUSY cross-section Twiki.",
+        }
+        try:
+            with urllib.request.urlopen(source, timeout=20) as response:
+                text = response.read(1_000_000).decode("utf-8", errors="replace")
+            status["download_status"] = "downloaded"
+            status["downloaded_bytes_preview"] = len(text)
+            status["message"] = "Twiki content was reachable, but automatic table parsing is not implemented safely for physics use. Manual extraction is required."
+        except Exception as exc:
+            status["download_status"] = "failed"
+            status["download_error"] = f"{type(exc).__name__}: {exc}"
+        write_json(outdir / "stop_xsec_13p6TeV_status.json", status)
+        shutil.copy2(outdir / "stop_xsec_13p6TeV_status.json", docs_data / "stop_xsec_13p6TeV_status.json")
+        (self.base / "reports" / "stop_xsec_status.md").write_text("# Stop Cross-Section Table Status\n\nStatus: `manual_required`\n\nSource: <" + source + ">\n\nNo values are used for physics outputs. Provide a machine-readable 13.6 TeV stop cross-section table before final signal normalization.\n")
+        return status
+
+    def discover_signals_from_das(self) -> dict[str, Any]:
+        exact_query = "dataset dataset=/SMS-2Stop*/*RunIII*NanoAOD*/NANOAODSIM"
+        signals = self.base / "signals"
+        reports = self.base / "reports"
+        docs_data = self.docs / "data"
+        signals.mkdir(parents=True, exist_ok=True)
+        reports.mkdir(parents=True, exist_ok=True)
+        docs_data.mkdir(parents=True, exist_ok=True)
+
+        def run_das(query: str, timeout: int = 180) -> dict[str, Any]:
+            cmd = ["dasgoclient", f"-query={query}"]
+            try:
+                proc = subprocess.run(cmd, cwd=self.repo, text=True, capture_output=True, timeout=timeout)
+                return {
+                    "query": query,
+                    "command": cmd,
+                    "attempted": True,
+                    "exit_status": proc.returncode,
+                    "stdout": proc.stdout,
+                    "stderr_tail": proc.stderr[-4000:],
+                }
+            except Exception as exc:
+                return {"query": query, "command": cmd, "attempted": True, "exit_status": None, "stdout": "", "stderr_tail": f"{type(exc).__name__}: {exc}"}
+
+        das_path = shutil.which("dasgoclient")
+        das_check = subprocess.run(["which", "dasgoclient"], cwd=self.repo, text=True, capture_output=True)
+        proxy_check = subprocess.run(["voms-proxy-info"], cwd=self.repo, text=True, capture_output=True)
+        proxy_stdout = proxy_check.stdout.strip()
+        proxy_stderr = proxy_check.stderr.strip()
+        das_status = {
+            "which_dasgoclient": {"exit_status": das_check.returncode, "stdout": das_check.stdout.strip(), "stderr": das_check.stderr.strip()},
+            "voms_proxy_info": {
+                "exit_status": proxy_check.returncode,
+                "stdout": "<redacted; valid proxy information present>" if proxy_check.returncode == 0 and proxy_stdout else "",
+                "stderr": "<redacted proxy path or certificate details>" if "x509" in proxy_stderr.lower() or "subject" in proxy_stderr.lower() else proxy_stderr[-1000:],
+            },
+        }
+
+        datasets: list[str] = []
+        query_result: dict[str, Any] = {"query": exact_query, "command": ["dasgoclient", f"-query={exact_query}"], "attempted": False}
+        if das_path:
+            query_result = run_das(exact_query, timeout=180)
+            if query_result.get("exit_status") == 0:
+                datasets = [ln.strip() for ln in str(query_result.get("stdout", "")).splitlines() if ln.strip()]
+        else:
+            query_result.update({"attempted": False, "exit_status": None, "stderr_tail": "dasgoclient not found in PATH"})
+
+        dataset_records: list[dict[str, Any]] = []
+        files_payload: dict[str, Any] = {
+            "dataset_search_query_used": exact_query,
+            "file_query_policy": "For each discovered dataset, run exactly dasgoclient -query='file dataset=<DATASET>'. No additional dataset search patterns are used.",
+            "summary_query_policy": "For each discovered dataset, run dasgoclient -query='summary dataset=<DATASET>' for metadata only.",
+            "datasets": [],
+        }
+        all_file_lines: list[str] = []
+        fastsim_count = 0
+        fullsim_count = 0
+        unknown_count = 0
+        total_files = 0
+        total_fastsim_files = 0
+        total_fullsim_files = 0
+        total_unknown_files = 0
+
+        for ds in datasets:
+            classification = self._classify_signal_dataset(ds)
+            fastsim_count += int(classification == "FastSim signal dataset")
+            fullsim_count += int(classification == "FullSim anchor candidate")
+            unknown_count += int(classification == "unknown")
+            file_query = f"file dataset={ds}"
+            summary_query = f"summary dataset={ds}"
+            file_result = run_das(file_query, timeout=240) if das_path else {"query": file_query, "attempted": False, "exit_status": None, "stdout": "", "stderr_tail": "dasgoclient not found in PATH"}
+            summary_result = run_das(summary_query, timeout=180) if das_path else {"query": summary_query, "attempted": False, "exit_status": None, "stdout": "", "stderr_tail": "dasgoclient not found in PATH"}
+            raw_files = [ln.strip() for ln in str(file_result.get("stdout", "")).splitlines() if ln.strip()]
+            unique_files = list(dict.fromkeys(raw_files))
+            xrootd_files = [self._normalize_lfn(f) for f in unique_files]
+            nfiles = len(unique_files)
+            total_files += nfiles
+            if classification == "FastSim signal dataset":
+                total_fastsim_files += nfiles
+            elif classification == "FullSim anchor candidate":
+                total_fullsim_files += nfiles
+            else:
+                total_unknown_files += nfiles
+            summary_stdout = str(summary_result.get("stdout", "")).strip()
+            summary_json: Any = None
+            if summary_stdout:
+                try:
+                    summary_json = json.loads(summary_stdout)
+                except Exception:
+                    summary_json = None
+            number_of_events = None
+            if isinstance(summary_json, list) and summary_json:
+                first = summary_json[0]
+                if isinstance(first, dict):
+                    summary = first.get("summary", first)
+                    if isinstance(summary, list) and summary and isinstance(summary[0], dict):
+                        number_of_events = summary[0].get("nevents") or summary[0].get("num_event")
+                    elif isinstance(summary, dict):
+                        number_of_events = summary.get("nevents") or summary.get("num_event")
+            rec = {
+                "das_dataset": ds,
+                "campaign": self._campaign_from_dataset(ds),
+                "data_tier": self._data_tier_from_dataset(ds),
+                "status": "complete" if file_result.get("exit_status") == 0 else "file_query_failed",
+                "simulation_type": classification,
+                "number_of_files": nfiles,
+                "number_of_events": number_of_events,
+                "first_root_files": xrootd_files[:10],
+                "das_dataset_search_query_used": exact_query,
+                "das_file_query_used": file_query,
+                "das_summary_query_used": summary_query,
+                "file_query_exit_status": file_result.get("exit_status"),
+                "file_query_stderr_tail": file_result.get("stderr_tail", ""),
+                "summary_query_exit_status": summary_result.get("exit_status"),
+                "summary_query_stderr_tail": summary_result.get("stderr_tail", ""),
+                "summary_raw_preview": summary_stdout[:2000],
+            }
+            dataset_records.append(rec)
+            files_payload["datasets"].append({
+                "das_dataset": ds,
+                "simulation_type": classification,
+                "number_of_files": nfiles,
+                "files": unique_files,
+                "xrootd_files": xrootd_files,
+                "das_file_query_used": file_query,
+                "file_query_exit_status": file_result.get("exit_status"),
+            })
+            for f in unique_files:
+                all_file_lines.append(f"{classification}\t{ds}\t{f}")
+
+        auth_hint = "voms-proxy-init --voms cms" if not datasets else None
+        all_fastsim_files_ready = bool(fastsim_count > 0 and total_fastsim_files > 0 and all(d["number_of_files"] > 0 for d in dataset_records if d["simulation_type"] == "FastSim signal dataset"))
+        fastsim_ready_status = "ready" if all_fastsim_files_ready else ("not_applicable_no_fastsim_datasets" if fastsim_count == 0 else "blocked_missing_fastsim_file_lists")
+        summary = {
+            "status": "complete" if datasets else "blocked",
+            "das_dataset_search_query_used": exact_query,
+            "das_query_used": exact_query,
+            "das_status": das_status,
+            "das_query_result": {k: (v[-8000:] if k == "stdout" and isinstance(v, str) else v) for k, v in query_result.items()},
+            "datasets_found": len(datasets),
+            "fastsim_datasets": fastsim_count,
+            "fastsim_candidates": fastsim_count,
+            "fullsim_anchor_candidates": fullsim_count,
+            "fullsim_datasets": fullsim_count,
+            "unknown_candidates": unknown_count,
+            "total_signal_root_files": total_files,
+            "total_fastsim_signal_root_files": total_fastsim_files,
+            "total_fullsim_signal_root_files": total_fullsim_files,
+            "total_unknown_signal_root_files": total_unknown_files,
+            "all_fastsim_files_ready_for_process_signals": all_fastsim_files_ready,
+            "fastsim_process_signals_status": fastsim_ready_status,
+            "authentication_hint": auth_hint,
+            "datasets": dataset_records,
+            "policy": {
+                "single_dataset_search_pattern_only": True,
+                "dataset_search_query": exact_query,
+                "per_dataset_file_queries": "dasgoclient -query='file dataset=<DISCOVERED_DATASET>'",
+                "per_dataset_summary_queries": "dasgoclient -query='summary dataset=<DISCOVERED_DATASET>'",
+                "fastsim_trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level",
+                "fastsim_trigger_warning": "FastSim trigger treatment must later be validated or replaced with an appropriate trigger efficiency/SF treatment.",
+                "fullsim_separation": "FullSim samples are recorded separately and must not be mixed into FastSim signal yields.",
+            },
+        }
+        write_json(signals / "das_signal_datasets.json", summary)
+        (signals / "das_signal_datasets.txt").write_text("\n".join(datasets) + ("\n" if datasets else ""))
+        write_json(signals / "das_signal_files.json", files_payload)
+        (signals / "das_signal_files.txt").write_text("\n".join(all_file_lines) + ("\n" if all_file_lines else ""))
+        shutil.copy2(signals / "das_signal_datasets.json", docs_data / "das_signal_datasets.json")
+        shutil.copy2(signals / "das_signal_files.json", docs_data / "das_signal_files.json")
+
+        fastsim_records = [r for r in dataset_records if r["simulation_type"] == "FastSim signal dataset"]
+        file_map = {row["das_dataset"]: row.get("xrootd_files", []) for row in files_payload["datasets"]}
+        probes = []
+        for rec in fastsim_records:
+            files = file_map.get(rec["das_dataset"], [])
+            if files:
+                probes.append(self._probe_signal_file(rec["das_dataset"], files[0], rec["simulation_type"]))
+            else:
+                probes.append({
+                    "dataset": rec["das_dataset"],
+                    "file": None,
+                    "simulation_type": rec["simulation_type"],
+                    "file_readable": False,
+                    "events_tree_exists": False,
+                    "runs_tree_exists": False,
+                    "events_entries": None,
+                    "runs_entries": None,
+                    "genmodel_branches": [],
+                    "runs_sumw_branches": [],
+                    "hlt_branches_found": [],
+                    "hlt_branches_missing": ["not probed because no file list is available from DAS"],
+                    "fastsim_trigger_bypass_required": True,
+                    "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level",
+                    "error": "No representative file available from the per-dataset DAS file query",
+                })
+        probe_payload = {
+            "das_dataset_search_query_used": exact_query,
+            "probed_fastsim_signal_datasets": len(fastsim_records),
+            "representative_files_probed": sum(1 for p in probes if p.get("file")),
+            "trigger_policy_label": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level",
+            "warning": "FastSim trigger treatment must later be validated or replaced with an appropriate trigger efficiency/SF treatment.",
+            "probes": probes,
+        }
+        write_json(signals / "signal_branch_probe.json", probe_payload)
+        with (signals / "signal_branch_probe.csv").open("w", newline="") as f:
+            w = csv.writer(f)
+            w.writerow(["dataset", "file", "simulation_type", "file_readable", "events_tree_exists", "runs_tree_exists", "events_entries", "genmodel_branch_count", "runs_sumw_branch_count", "hlt_branch_count", "fastsim_trigger_bypass_required", "trigger_policy", "error"])
+            for pr in probes:
+                w.writerow([pr.get("dataset"), pr.get("file"), pr.get("simulation_type"), pr.get("file_readable"), pr.get("events_tree_exists"), pr.get("runs_tree_exists"), pr.get("events_entries"), len(pr.get("genmodel_branches", [])), len(pr.get("runs_sumw_branches", [])), len(pr.get("hlt_branches_found", [])), pr.get("fastsim_trigger_bypass_required"), pr.get("trigger_policy"), pr.get("error")])
+        shutil.copy2(signals / "signal_branch_probe.json", docs_data / "signal_branch_probe.json")
+
+        mass_rows = []
+        seen: dict[tuple[int | None, int | None], int] = {}
+        for pr in probes:
+            sumw = set(pr.get("runs_sumw_branches", []))
+            for br in pr.get("genmodel_branches", []):
+                mstop, mlsp = self._mass_from_genmodel_branch(br)
+                counterpart = br.replace("GenModel_", "genEventSumw_")
+                missing = counterpart not in sumw
+                usable = bool(pr.get("file_readable")) and bool(mstop is not None) and not missing and pr.get("simulation_type") == "FastSim signal dataset"
+                key = (mstop, mlsp)
+                seen[key] = seen.get(key, 0) + 1
+                mass_rows.append({"mStop": mstop, "mLSP": mlsp, "dataset": pr.get("dataset"), "file": pr.get("file"), "simulation_type": pr.get("simulation_type"), "genmodel_branch": br, "runs_sumw_branch": counterpart if counterpart in sumw else None, "missing_bookkeeping_flags": ["missing_runs_sumw_branch"] if missing else [], "hlt_trigger_bypass_required": bool(pr.get("fastsim_trigger_bypass_required")), "usable_for_future_fastsim_signal_yield_production": usable})
+        duplicates = [{"mStop": k[0], "mLSP": k[1], "count": v} for k, v in sorted(seen.items()) if v > 1]
+        missing_sumw = [r for r in mass_rows if "missing_runs_sumw_branch" in r["missing_bookkeeping_flags"]]
+        grid = {"status": "complete" if mass_rows else "blocked", "das_dataset_search_query_used": exact_query, "realized_mass_points": len(mass_rows), "usable_fastsim_mass_points": sum(1 for r in mass_rows if r["usable_for_future_fastsim_signal_yield_production"]), "duplicated_mass_points": duplicates, "mass_points_with_missing_sumw_branch": missing_sumw, "mass_points_with_no_usable_files": len(fastsim_records) - sum(1 for p in probes if p.get("file_readable")), "fastsim_fullsim_separation": {"FastSim signal datasets": fastsim_count, "FullSim anchor candidates": fullsim_count, "unknown": unknown_count}, "mass_grid": mass_rows}
+        write_json(signals / "realized_mass_grid.json", grid)
+        with (signals / "realized_mass_grid.csv").open("w", newline="") as f:
+            w = csv.writer(f)
+            w.writerow(["mStop", "mLSP", "dataset", "file", "simulation_type", "genmodel_branch", "runs_sumw_branch", "missing_bookkeeping_flags", "hlt_trigger_bypass_required", "usable_for_future_fastsim_signal_yield_production"])
+            for row in mass_rows:
+                w.writerow([row["mStop"], row["mLSP"], row["dataset"], row["file"], row["simulation_type"], row["genmodel_branch"], row["runs_sumw_branch"], ";".join(row["missing_bookkeeping_flags"]), row["hlt_trigger_bypass_required"], row["usable_for_future_fastsim_signal_yield_production"]])
+        shutil.copy2(signals / "realized_mass_grid.json", docs_data / "realized_mass_grid.json")
+        xsec_status = self._write_signal_xsec_status()
+
+        report_lines = ["# DAS Signal Discovery", "", f"Exact dataset search query used: `{exact_query}`", "", f"Status: `{summary['status']}`", f"Datasets found: {len(datasets)}", f"FastSim signal datasets: {fastsim_count}", f"FullSim anchor candidates: {fullsim_count}", f"Unknown candidates: {unknown_count}", f"Total signal ROOT files: {total_files}", f"Total FastSim signal ROOT files: {total_fastsim_files}", f"Total FullSim signal ROOT files: {total_fullsim_files}", f"All FastSim files ready for process-signals: {all_fastsim_files_ready} ({fastsim_ready_status})", "", "## Policy", "", "- Exactly one DAS dataset search pattern was used.", "- Per-dataset file queries were run for every discovered dataset.", "- Per-dataset summary queries were run for metadata only.", "- Full file lists are retained for future processing; representative files are only for branch discovery.", "- FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level", "- FastSim trigger treatment must later be validated or replaced with an appropriate trigger efficiency/SF treatment.", "- FullSim samples are recorded separately and must not be mixed into FastSim signal yields.", "", "## Cross sections", "", f"Stop xsec table status: `{xsec_status['xsec_table_status']}`", ""]
+        if auth_hint:
+            report_lines += ["## Authentication/action required", "", f"Run `{auth_hint}` and rerun the discovery command if DAS access failed.", ""]
+        report_lines += ["## Datasets", "", "| Dataset | Type | Files | Events | File query status |", "|---|---|---:|---:|---|"]
+        for rec in dataset_records:
+            report_lines.append(f"| `{rec['das_dataset']}` | {rec['simulation_type']} | {rec['number_of_files']} | {rec['number_of_events'] if rec['number_of_events'] is not None else 'n/a'} | {rec['status']} |")
+        (reports / "das_signal_discovery.md").write_text("\n".join(report_lines) + "\n")
+        probe_lines = ["# Signal Branch Probe", "", f"Representative files probed: {probe_payload['representative_files_probed']}", "", "| Dataset | Readable | Events | GenModel branches | Runs sumw branches | HLT branches | Trigger policy | Error |", "|---|---:|---:|---:|---:|---:|---|---|"]
+        for pr in probes:
+            probe_lines.append(f"| `{pr.get('dataset')}` | {pr.get('file_readable')} | {pr.get('events_entries')} | {len(pr.get('genmodel_branches', []))} | {len(pr.get('runs_sumw_branches', []))} | {len(pr.get('hlt_branches_found', []))} | {pr.get('trigger_policy')} | {str(pr.get('error') or '')[:120]} |")
+        (reports / "signal_branch_probe.md").write_text("\n".join(probe_lines) + "\n")
+        grid_lines = ["# Realized Mass Grid", "", f"Status: `{grid['status']}`", f"Realized mass points from probed GenModel branches: {grid['realized_mass_points']}", f"Usable FastSim mass points: {grid['usable_fastsim_mass_points']}", f"All FastSim files ready for process-signals: {all_fastsim_files_ready} ({fastsim_ready_status})", "", "Mass points are built from actual `GenModel_T2tt_*` branches only, not inferred from dataset names.", ""]
+        (reports / "realized_mass_grid.md").write_text("\n".join(grid_lines) + "\n")
+        result = {"status": summary["status"], "datasets_found": len(datasets), "fastsim_datasets": fastsim_count, "fullsim_anchor_candidates": fullsim_count, "total_signal_root_files": total_files, "total_fastsim_signal_root_files": total_fastsim_files, "total_fullsim_signal_root_files": total_fullsim_files, "representative_files_probed": probe_payload["representative_files_probed"], "realized_mass_points": grid["realized_mass_points"], "usable_fastsim_mass_points": grid["usable_fastsim_mass_points"], "all_fastsim_files_ready_for_process_signals": all_fastsim_files_ready, "fastsim_process_signals_status": fastsim_ready_status, "xsec_table_status": xsec_status["xsec_table_status"], "signal_yields_ready": False, "contour_inputs_ready": False, "authentication_hint": auth_hint, "outputs": [str((signals / "das_signal_datasets.json").relative_to(self.repo)), str((signals / "das_signal_files.json").relative_to(self.repo)), str((signals / "signal_branch_probe.json").relative_to(self.repo)), str((signals / "realized_mass_grid.json").relative_to(self.repo))]}
+        self._record_direct_stage("discover_signals_from_das", "complete" if datasets else "blocked", result)
+        if datasets:
+            signal_result = self.process_signals()
+            result["process_signals"] = signal_result
+        else:
+            self.monitor(json_output=True)
+            self.publish_github_pages()
+        return result
+
+    def process_signals(self) -> dict[str, Any]:
+        from .real_subset_worker import REGION_NAMES as WORKER_REGIONS, validate_and_extract_file, combine_cutflows
+        import numpy as np
+
+        signals_dir = self.base / "signals"
+        files_payload = self._load_json_if_exists(signals_dir / "das_signal_files.json", {})
+        if not files_payload:
+            discovery = self.discover_signals_from_das()
+            files_payload = self._load_json_if_exists(signals_dir / "das_signal_files.json", {})
+        datasets = files_payload.get("datasets", []) if isinstance(files_payload, dict) else []
+        # Reclassify loaded inventories defensively so stale artifacts from earlier
+        # attempts cannot make MLM FastSim datasets disappear.
+        for ds in datasets:
+            if isinstance(ds, dict):
+                ds["simulation_type"] = self._classify_signal_dataset(str(ds.get("das_dataset", "")))
+        if isinstance(files_payload, dict) and datasets:
+            write_json(signals_dir / "das_signal_files.json", files_payload)
+            with (signals_dir / "das_signal_files.txt").open("w") as f:
+                for ds in datasets:
+                    classification = ds.get("simulation_type", "unknown")
+                    dataset = ds.get("das_dataset", "")
+                    for lfn in ds.get("files", []):
+                        f.write(f"{classification}\t{dataset}\t{lfn}\n")
+            (self.docs / "data").mkdir(parents=True, exist_ok=True)
+            shutil.copy2(signals_dir / "das_signal_files.json", self.docs / "data" / "das_signal_files.json")
+        fastsim = [d for d in datasets if d.get("simulation_type") == "FastSim signal dataset"]
+        fullsim = [d for d in datasets if d.get("simulation_type") == "FullSim anchor candidate"]
+        chunk_size = int(os.environ.get("AUTONOMOUS_ALLHAD_SIGNAL_CHUNK", os.environ.get("AUTONOMOUS_ALLHAD_CHUNK", "2000")))
+        manifest_files: list[dict[str, Any]] = []
+        bad_files: list[dict[str, Any]] = []
+        yields_by_mass: dict[str, Any] = {}
+        search_yields: dict[str, Any] = {}
+        processed_rows = 0
+        processed_files = 0
+        attempted_files = 0
+        candidate_defs = self._candidate_definitions()
+        hist_specs = {
+            "met": np.array([0, 100, 200, 250, 300, 400, 500, 600, 800, 1000, 1500, 2500], dtype=float),
+            "ht": np.array([0, 300, 500, 800, 1000, 1200, 1500, 2000, 3000, 5000], dtype=float),
+            "njet": np.array([-0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 9.5, 14.5], dtype=float),
+            "nb_medium": np.array([-0.5, 0.5, 1.5, 2.5, 3.5, 6.5], dtype=float),
+            "min_dphi4": np.array([0, 0.1, 0.15, 0.3, 0.5, 0.8, 1.2, 1.8, 3.2], dtype=float),
+        }
+        hist_counts: dict[str, Any] = {}
+
+        def fill_hist(key: str, region: str, row: dict[str, Any], raw_w: float) -> None:
+            mass_hists = hist_counts.setdefault(key, {}).setdefault(region, {})
+            for var, bins in hist_specs.items():
+                val = row.get(var)
+                try:
+                    value = float(val)
+                except Exception:
+                    continue
+                if not np.isfinite(value):
+                    continue
+                idx = int(np.searchsorted(bins, value, side="right") - 1)
+                if idx < 0 or idx >= len(bins) - 1:
+                    continue
+                rec = mass_hists.setdefault(var, {"bins": bins.tolist(), "unweighted": [0] * (len(bins) - 1), "raw_weighted": [0.0] * (len(bins) - 1)})
+                rec["unweighted"][idx] += 1
+                rec["raw_weighted"][idx] += raw_w
+
+        def mass_key(row: dict[str, Any]) -> str:
+            ms = row.get("mStop")
+            ml = row.get("mLSP")
+            if ms in {None, ""} or ml in {None, ""}:
+                return "unknown"
+            return f"mStop-{ms}_mLSP-{ml}"
+
+        def ensure_mass(key: str, row: dict[str, Any]) -> dict[str, Any]:
+            rec = yields_by_mass.setdefault(key, {
+                "mStop": row.get("mStop", ""),
+                "mLSP": row.get("mLSP", ""),
+                "genmodel_branch": row.get("genmodel_branch", ""),
+                "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+                "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level",
+                "regions": {r: {"unweighted": 0, "raw_weighted": 0.0} for r in WORKER_REGIONS},
+                "datasets": {},
+            })
+            rec["datasets"].setdefault(row.get("dataset", ""), 0)
+            rec["datasets"][row.get("dataset", "")] += 1
+            return rec
+
+        for ds in fastsim:
+            dataset = ds.get("das_dataset")
+            files = ds.get("xrootd_files") or [self._normalize_lfn(f) for f in ds.get("files", [])]
+            for file_url in files:
+                attempted_files += 1
+                rec, rows, bad = validate_and_extract_file(file_url, dataset, "SMS", None, str(self.config.get("analysis", {}).get("year", "2024")), chunk_size, fastsim_trigger_bypass=True)
+                manifest_files.append(rec)
+                bad_files.extend(bad)
+                if rec.get("processing_status") != "excluded":
+                    processed_files += 1
+                processed_rows += len(rows)
+                for row in rows:
+                    key = mass_key(row)
+                    mass_rec = ensure_mass(key, row)
+                    raw_w = float(row.get("nominal_weight", 1.0))
+                    fill_hist(key, "all", row, raw_w)
+                    for region in WORKER_REGIONS:
+                        if row.get(f"feature_{region}"):
+                            mass_rec["regions"][region]["unweighted"] += 1
+                            mass_rec["regions"][region]["raw_weighted"] += raw_w
+                            fill_hist(key, region, row, raw_w)
+                    for scheme, defs in candidate_defs.items():
+                        for bin_name, definition in defs:
+                            if self._bin_mask(row, definition, "SR"):
+                                b = search_yields.setdefault(scheme, {}).setdefault(bin_name, {}).setdefault(key, {"unweighted": 0, "raw_weighted": 0.0, "mStop": row.get("mStop", ""), "mLSP": row.get("mLSP", ""), "genmodel_branch": row.get("genmodel_branch", "")})
+                                b["unweighted"] += 1
+                                b["raw_weighted"] += raw_w
+                # Let rows from this file go out of scope before the next file.
+        cutflows = combine_cutflows(manifest_files)
+        signal_histogram_cache = {
+            "scope": "in-memory raw feature-side signal histograms; persisted later only inside autonomous_allhad/hists.npy",
+            "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level",
+            "variables": {name: bins.tolist() for name, bins in hist_specs.items()},
+            "histograms": hist_counts,
+        }
+        signal_cutflows = {
+            "scope": "raw feature-side signal chunks from all discovered FastSim signal files",
+            "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level",
+            "chunk_size": chunk_size,
+            "attempted_files": attempted_files,
+            "processed_files": processed_files,
+            "bad_files": bad_files,
+            "histogram_cache_policy": "signal shapes are persisted only by make-hists-npy into autonomous_allhad/hists.npy",
+            "signal_histogram_cache_mass_points": len(signal_histogram_cache.get("histograms", {})),
+            "cutflows": cutflows,
+        }
+        by_mass_payload = {
+            "status": "complete" if attempted_files and processed_files else "blocked",
+            "scope": "raw feature-side signal chunks from all discovered FastSim SMS-2Stop signal files; no cross-section normalization applied",
+            "fastsim_trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level",
+            "datasets_processed": len(fastsim),
+            "fullsim_anchor_datasets_recorded_not_processed": len(fullsim),
+            "attempted_files": attempted_files,
+            "processed_files": processed_files,
+            "bad_files": len(bad_files),
+            "processed_event_rows": processed_rows,
+            "mass_points": yields_by_mass,
+            "xsec_normalization_status": "not_applied_manual_xsec_required",
+        }
+        search_payload = {
+            "status": by_mass_payload["status"],
+            "scope": "raw feature-side search-bin signal yields from all discovered FastSim SMS-2Stop signal files; no cross-section normalization applied",
+            "search_bin_source": "autonomous_allhad internal candidate definitions; no final search-bin scheme is adopted",
+            "fastsim_trigger_policy": by_mass_payload["fastsim_trigger_policy"],
+            "attempted_files": attempted_files,
+            "processed_files": processed_files,
+            "processed_event_rows": processed_rows,
+            "yields": search_yields,
+        }
+        write_json(self.outputs / "signal_yields_by_mass.json", by_mass_payload)
+        write_json(self.outputs / "signal_searchbin_yields.json", search_payload)
+        write_json(self.outputs / "signal_cutflows.json", signal_cutflows)
+        (self.docs / "data").mkdir(parents=True, exist_ok=True)
+        shutil.copy2(self.outputs / "signal_yields_by_mass.json", self.docs / "data" / "signal_yields_by_mass.json")
+        shutil.copy2(self.outputs / "signal_searchbin_yields.json", self.docs / "data" / "signal_searchbin_yields.json")
+        shutil.copy2(self.outputs / "signal_cutflows.json", self.docs / "data" / "signal_cutflows.json")
+        lines = ["# Signal Yield Summary", "", f"Status: `{by_mass_payload['status']}`", "", f"Datasets processed: {len(fastsim)}", f"Files attempted: {attempted_files}", f"Files processed: {processed_files}", f"Bad files: {len(bad_files)}", f"Processed event rows: {processed_rows}", "", "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level", "", "No cross-section normalization is applied. The 13.6 TeV stop cross-section table is still manual-required.", "", "| Mass point | SR unweighted | SR raw weighted | GenModel branch |", "|---|---:|---:|---|"]
+        for key, rec in sorted(yields_by_mass.items()):
+            sr = rec["regions"].get("SR", {})
+            lines.append(f"| `{key}` | {sr.get('unweighted', 0)} | {sr.get('raw_weighted', 0.0):.6g} | `{rec.get('genmodel_branch', '')}` |")
+        (self.base / "reports" / "signal_yield_summary.md").write_text("\n".join(lines) + "\n")
+        result = {"status": by_mass_payload["status"], "fastsim_datasets": len(fastsim), "fullsim_anchor_datasets_recorded_not_processed": len(fullsim), "attempted_files": attempted_files, "processed_files": processed_files, "bad_files": len(bad_files), "processed_event_rows": processed_rows, "realized_mass_points_with_yields": len(yields_by_mass), "signal_yields_ready": by_mass_payload["status"] == "complete", "xsec_normalization_status": "not_applied_manual_xsec_required", "histogram_cache_policy": "persisted only by make-hists-npy into autonomous_allhad/hists.npy", "outputs": ["autonomous_allhad/outputs/signal_yields_by_mass.json", "autonomous_allhad/outputs/signal_searchbin_yields.json", "autonomous_allhad/outputs/signal_cutflows.json"]}
+        self._record_direct_stage("process_signals", "complete" if result["status"] == "complete" else "blocked", result)
+        self.monitor(json_output=True)
+        self.publish_github_pages()
+        return result
+
+
+    def make_hists_npy(self) -> dict[str, Any]:
+        import numpy as np
+
+        table = self.outputs / "real_feature_table.csv"
+        hists_path = self.base / "hists.npy"
+        index_path = self.base / "hist_index.json"
+        outputs = self.outputs
+        reports = self.base / "reports"
+        reports.mkdir(parents=True, exist_ok=True)
+        if not table.exists():
+            payload = {"status": "blocked", "external_blocker": "required input feature table unavailable", "missing": str(table.relative_to(self.repo))}
+            write_json(index_path, {"status": "blocked", "reason": payload["external_blocker"], "items": []})
+            return payload
+
+        year = str(self.config.get("analysis", {}).get("year", "2024"))
+        lumi_fb = float(self.config.get("analysis", {}).get("luminosity_fb", 0.0))
+        regions = {
+            "preselection": "cat1_preselection",
+            "LLCR": "cat2_LLCR_highDeltaM",
+            "QCDCR": "cat3_QCDCR_highDeltaM",
+            "GCR": "cat4_GCR_highDeltaM",
+            "DY2E": "cat5_DY2E_highDeltaM",
+            "DY2M": "cat6_DY2M_highDeltaM",
+            "SR": "cat7_SR_highDeltaM",
+        }
+        variables = {
+            "metpt": ("met", np.array([0, 100, 200, 250, 300, 400, 500, 600, 800, 1000, 1500, 2500], dtype=float)),
+            "recoil_pt": ("recoil_gcr", np.array([0, 100, 200, 250, 300, 400, 500, 600, 800, 1000, 1500, 2500], dtype=float)),
+            "ht": ("ht", np.array([0, 300, 500, 800, 1000, 1200, 1500, 2000, 3000, 5000], dtype=float)),
+            "njet": ("njet", np.array([-0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 9.5, 14.5], dtype=float)),
+            "nb": ("nb_medium", np.array([-0.5, 0.5, 1.5, 2.5, 3.5, 6.5], dtype=float)),
+            "min_dphi": ("min_dphi4", np.array([0, 0.1, 0.15, 0.3, 0.5, 0.8, 1.2, 1.8, 3.2], dtype=float)),
+            "leading_jet_pt": ("j1pt", np.array([0, 50, 100, 150, 200, 300, 500, 800, 1200, 2000], dtype=float)),
+            "subleading_jet_pt": ("j2pt", np.array([0, 30, 50, 100, 150, 200, 300, 500, 800, 1200], dtype=float)),
+            "leading_ak8_pt": ("fj1pt", np.array([0, 100, 200, 300, 500, 800, 1200, 2000], dtype=float)),
+            "leading_ak8_msd": ("fj1msd", np.array([0, 40, 60, 80, 100, 140, 180, 240, 400], dtype=float)),
+            "dilepton_mass_ee": ("mee", np.array([0, 50, 70, 81, 91, 101, 120, 160, 250, 500], dtype=float)),
+            "dilepton_mass_mm": ("mmm", np.array([0, 50, 70, 81, 91, 101, 120, 160, 250, 500], dtype=float)),
+        }
+        hists: dict[str, Any] = {"data": {}, "background": {}, "signal": {}}
+        data_processes = {"JetMET", "EGamma", "Muon"}
+        data_yields: dict[str, dict[str, float]] = {}
+        bkg_yields: dict[str, dict[str, float]] = {}
+        region_yields = {name: {"data": 0.0, "background": 0.0, "signal": 0.0} for name in regions.values()}
+        searchbin_yields: dict[str, Any] = {}
+        candidate_defs = self._candidate_definitions()
+
+        def empty_leaf(kind: str, variable: str, region: str, process: str, systematic: str, mass_key: str, bins: np.ndarray, normalized: bool, sample: str | None = None, signal_mass: dict[str, Any] | None = None, notes: str = "") -> dict[str, Any]:
+            n = len(bins) - 1
+            return {
+                "schema_version": "hist_object_v1",
+                "kind": kind,
+                "year": year,
+                "region": region,
+                "variable": variable,
+                "process": process,
+                "sample": sample or process,
+                "systematic": systematic,
+                "mass_key": mass_key,
+                "bin_edges": bins.copy(),
+                "values": np.zeros(n, dtype=float),
+                "sumw2": np.zeros(n, dtype=float),
+                "entries": np.zeros(n, dtype=float),
+                "lumi_fb": lumi_fb,
+                "normalized": bool(normalized),
+                "signal_mass": signal_mass,
+                "notes": notes,
+            }
+
+        def leaf(kind: str, variable: str, systematic: str, region: str, process: str, mass_key: str, bins: np.ndarray, normalized: bool, sample: str | None = None, signal_mass: dict[str, Any] | None = None, notes: str = "") -> dict[str, Any]:
+            node = hists.setdefault(kind, {}).setdefault(variable, {}).setdefault(systematic, {}).setdefault(region, {}).setdefault(process, {})
+            if mass_key not in node:
+                node[mass_key] = empty_leaf(kind, variable, region, process, systematic, mass_key, bins, normalized, sample=sample, signal_mass=signal_mass, notes=notes)
+            return node[mass_key]
+
+        def fill(hist: dict[str, Any], value: float, weight: float) -> None:
+            bins = hist["bin_edges"]
+            idx = int(np.searchsorted(bins, value, side="right") - 1)
+            if 0 <= idx < len(bins) - 1:
+                hist["values"][idx] += weight
+                hist["sumw2"][idx] += weight * weight
+                hist["entries"][idx] += 1.0
+
+        rows_seen = 0
+        data_files: set[str] = set()
+        background_files: set[str] = set()
+        with table.open(newline="") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                rows_seen += 1
+                process = row.get("process", "unknown") or "unknown"
+                dataset = row.get("dataset", "")
+                is_data = process in data_processes
+                kind = "data" if is_data else "background"
+                process_label = "Data" if is_data else process
+                if is_data:
+                    data_files.add(row.get("file", ""))
+                    weight = 1.0
+                else:
+                    background_files.add(row.get("file", ""))
+                    weight, _ = self._analysis_weight(row)
+                for short_region, region_name in regions.items():
+                    if str(row.get(f"feature_{short_region}", "")).lower() not in {"true", "1", "yes"}:
+                        continue
+                    target = data_yields if is_data else bkg_yields
+                    target.setdefault(process_label, {}).setdefault(region_name, 0.0)
+                    target[process_label][region_name] += weight
+                    region_yields[region_name]["data" if is_data else "background"] += weight
+                    for variable, (column, bins) in variables.items():
+                        try:
+                            val = float(row.get(column, "nan"))
+                        except Exception:
+                            continue
+                        if not np.isfinite(val) or val < -90:
+                            continue
+                        fill(leaf(kind, variable, "nominal", region_name, process_label, "inclusive", bins, normalized=not is_data, sample=dataset, notes="feature-table nominal histogram"), val, weight)
+                for scheme, defs in candidate_defs.items():
+                    for ibin, (bin_name, definition) in enumerate(defs):
+                        if self._bin_mask(row, definition, "SR"):
+                            rec = searchbin_yields.setdefault(scheme, {}).setdefault(bin_name, {}).setdefault(process_label, {"yield": 0.0, "entries": 0})
+                            rec["yield"] += weight
+                            rec["entries"] += 1
+                            bins = np.arange(-0.5, len(defs) + 0.5, 1.0, dtype=float)
+                            fill(leaf(kind, "search_bin_index", "nominal", "cat7_SR_highDeltaM", process_label, "inclusive", bins, normalized=not is_data, sample=dataset, notes=scheme), float(ibin), weight)
+
+        signal_yields = self._load_json_if_exists(self.outputs / "signal_yields_by_mass.json", {})
+        signal_files_processed = int(signal_yields.get("processed_files", 0)) if isinstance(signal_yields, dict) else 0
+        signal_mass_points = signal_yields.get("mass_points", {}) if isinstance(signal_yields, dict) else {}
+        signal_hist_source = self.base / "hists_npy" / "signal" / "signal_histograms.npy"
+        if signal_hist_source.exists():
+            try:
+                signal_hist_payload = np.load(signal_hist_source, allow_pickle=True).item()
+                var_map = {"met": "metpt", "ht": "ht", "njet": "njet", "nb_medium": "nb", "min_dphi4": "min_dphi"}
+                region_map = {"all": "all", **regions}
+                for mass_key_old, by_region in signal_hist_payload.get("histograms", {}).items():
+                    mass_key = str(mass_key_old).replace("mStop-", "mStop").replace("_mLSP-", "_mLSP")
+                    mass = None
+                    m = re.search(r"mStop(\d+)_mLSP(\d+)", mass_key)
+                    if m:
+                        mass = {"mStop": int(m.group(1)), "mLSP": int(m.group(2))}
+                    for region_old, by_var in by_region.items():
+                        region_name = region_map.get(region_old, str(region_old))
+                        for var_old, rec in by_var.items():
+                            variable = var_map.get(var_old, str(var_old))
+                            bins = np.asarray(rec.get("bins", []), dtype=float)
+                            if len(bins) < 2:
+                                continue
+                            hist = leaf("signal", variable, "nominal", region_name, "T2tt", mass_key, bins, normalized=False, sample="SMS-2Stop FastSim", signal_mass=mass, notes="raw unnormalized FastSim signal chunks; xsec manual_required")
+                            vals = np.asarray(rec.get("raw_weighted", []), dtype=float)
+                            ent = np.asarray(rec.get("unweighted", []), dtype=float)
+                            if len(vals) == len(hist["values"]):
+                                hist["values"] += vals
+                                hist["sumw2"] += vals * vals
+                            if len(ent) == len(hist["entries"]):
+                                hist["entries"] += ent
+            except Exception as exc:
+                signal_yields.setdefault("histogram_fold_warning", f"{type(exc).__name__}: {exc}") if isinstance(signal_yields, dict) else None
+
+        for key, rec in signal_mass_points.items() if isinstance(signal_mass_points, dict) else []:
+            mass_key = str(key).replace("mStop-", "mStop").replace("_mLSP-", "_mLSP")
+            mass = {"mStop": rec.get("mStop"), "mLSP": rec.get("mLSP")}
+            for short_region, vals in rec.get("regions", {}).items():
+                region_name = regions.get(short_region, short_region)
+                y = float(vals.get("raw_weighted", 0.0))
+                e = float(vals.get("unweighted", 0.0))
+                bins = np.array([-0.5, 0.5], dtype=float)
+                hist = leaf("signal", "region_yield", "nominal", region_name, "T2tt", mass_key, bins, normalized=False, sample="SMS-2Stop FastSim", signal_mass=mass, notes="raw signal region yield; xsec manual_required")
+                hist["values"][0] += y
+                hist["sumw2"][0] += y * y
+                hist["entries"][0] += e
+                if region_name in region_yields:
+                    region_yields[region_name]["signal"] += y
+
+        # Region-yield summary histograms for data/background are filled from aggregate yields.
+        region_bins = np.arange(-0.5, len(regions) - 0.5 + 1, 1.0, dtype=float)
+        for kind, proc_yields in [("data", data_yields), ("background", bkg_yields)]:
+            for proc, vals in proc_yields.items():
+                hist = leaf(kind, "region_yield", "nominal", "all_regions", proc, "inclusive", region_bins, normalized=(kind == "background"), notes="aggregate region-yield histogram")
+                for i, region_name in enumerate(regions.values()):
+                    y = float(vals.get(region_name, 0.0))
+                    hist["values"][i] += y
+                    hist["sumw2"][i] += y * y
+                    hist["entries"][i] += y if kind == "data" else 0.0
+
+        np.save(hists_path, hists, allow_pickle=True)
+        items = []
+        for kind, by_var in hists.items():
+            for variable, by_syst in by_var.items():
+                for systematic, by_region in by_syst.items():
+                    for region, by_proc in by_region.items():
+                        for process, by_mass in by_proc.items():
+                            for mass_key in by_mass:
+                                items.append({"kind": kind, "variable": variable, "systematic": systematic, "region": region, "process": process, "mass_key": mass_key, "year": year, "plot_used": variable in {"metpt", "ht", "njet", "nb", "search_bin_index", "region_yield"}, "datacard_used": variable in {"search_bin_index", "region_yield"}})
+        index = {"status": "complete", "schema_version": "hist_index_v1", "hists_npy": str(hists_path.relative_to(self.repo)), "items": items, "data_files_processed": len([x for x in data_files if x]), "background_files_processed": len([x for x in background_files if x]), "signal_files_processed": signal_files_processed, "rows_read_from_feature_table": rows_seen, "notes": ["DATA/background histograms from real_feature_table.csv", "signal histograms folded from signal process output when available", "signal normalization remains raw until 13.6 TeV stop xsec table is provided"]}
+        write_json(index_path, index)
+        write_json(outputs / "data_yields.json", {"status": "complete" if data_yields else "blocked", "source": "real_feature_table.csv", "files_processed": len([x for x in data_files if x]), "yields": data_yields})
+        write_json(outputs / "background_yields.json", {"status": "complete" if bkg_yields else "blocked", "source": "real_feature_table.csv", "files_processed": len([x for x in background_files if x]), "normalization": "feature-side subset-normalized when factors are available", "yields": bkg_yields})
+        write_json(outputs / "region_yields.json", {"status": "complete", "regions": region_yields})
+        write_json(outputs / "searchbin_yields.json", {"status": "complete" if searchbin_yields else "blocked", "scope": "feature-side search-bin yields from hists/feature table", "yields": searchbin_yields})
+        write_json(outputs / "cutflows.json", self._load_json_if_exists(self.base / "validation" / "real_cutflows.json", {"status": "missing"}))
+        shutil.copy2(index_path, self.docs / "data" / "hist_index.json")
+        for src in [outputs / "data_yields.json", outputs / "background_yields.json", outputs / "region_yields.json", outputs / "searchbin_yields.json", outputs / "cutflows.json"]:
+            shutil.copy2(src, self.docs / "data" / src.name)
+        lines = ["# Yield Summary", "", f"Status: `complete`", "", f"DATA files processed: {len([x for x in data_files if x])}", f"Background files processed: {len([x for x in background_files if x])}", f"Signal files processed: {signal_files_processed}", f"Histogram entries indexed: {len(items)}", "", "Signal yields are raw/unnormalized until the 13.6 TeV stop cross-section table is provided."]
+        (reports / "yield_summary.md").write_text("\n".join(lines) + "\n")
+        result = {"status": "complete", "hists_npy": str(hists_path.relative_to(self.repo)), "hist_index": str(index_path.relative_to(self.repo)), "histogram_items": len(items), "data_files_processed": len([x for x in data_files if x]), "background_files_processed": len([x for x in background_files if x]), "signal_files_processed": signal_files_processed, "data_yield_status": "complete" if data_yields else "blocked", "background_yield_status": "complete" if bkg_yields else "blocked", "signal_yield_status": signal_yields.get("status", "missing") if isinstance(signal_yields, dict) else "missing"}
+        self._record_direct_stage("make_hists_npy", "complete", result)
+        return result
+
+    def plot_from_npy(self) -> dict[str, Any]:
+        import numpy as np
+        try:
+            import matplotlib
+            matplotlib.use("Agg")
+            import matplotlib.pyplot as plt
+        except Exception as exc:
+            result = {"status": "blocked", "external_blocker": "matplotlib unavailable", "error": f"{type(exc).__name__}: {exc}"}
+            self._record_direct_stage("plot_from_npy", "blocked", result)
+            return result
+
+        hists_path = self.base / "hists.npy"
+        if not hists_path.exists():
+            mk = self.make_hists_npy()
+            if mk.get("status") != "complete":
+                result = {"status": "blocked", "external_blocker": "hists.npy unavailable", "make_hists_npy": mk}
+                self._record_direct_stage("plot_from_npy", "blocked", result)
+                return result
+        hists = np.load(hists_path, allow_pickle=True).item()
+        plot_dir = self.base / "plots"
+        docs_plot_dir = self.docs / "plots"
+        plot_dir.mkdir(parents=True, exist_ok=True)
+        docs_plot_dir.mkdir(parents=True, exist_ok=True)
+        manifest = []
+        timestamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+
+        def get_leaves(kind: str, variable: str, region: str, systematic: str = "nominal") -> dict[str, dict[str, Any]]:
+            out = {}
+            node = hists.get(kind, {}).get(variable, {}).get(systematic, {}).get(region, {})
+            for proc, by_mass in node.items():
+                for mass_key, hist in by_mass.items():
+                    out[f"{proc}:{mass_key}"] = hist
+            return out
+
+        def save_plot(fig, name: str, keys: list[str], variable: str, region: str, processes: list[str], signals: list[str], data_visible: bool, ratio: bool, systematic: str = "nominal"):
+            png = plot_dir / f"{name}.png"
+            pdf = plot_dir / f"{name}.pdf"
+            fig.savefig(png, dpi=140, bbox_inches="tight")
+            fig.savefig(pdf, bbox_inches="tight")
+            plt.close(fig)
+            shutil.copy2(png, docs_plot_dir / png.name)
+            shutil.copy2(pdf, docs_plot_dir / pdf.name)
+            manifest.append({"plot_path": str(png.relative_to(self.repo)), "docs_path": str((docs_plot_dir / png.name).relative_to(self.repo)), "source_hists_npy_keys": keys, "variable": variable, "region": region, "processes": processes, "overlay_signal_mass_points": signals, "systematic": systematic, "data_visible": data_visible, "ratio_panel_visible": ratio, "creation_timestamp": timestamp, "plotting_status": "complete"})
+
+        def plot_stack(variable: str, region: str, name: str, xlabel: str, logy: bool = True):
+            bkg = get_leaves("background", variable, region)
+            data = get_leaves("data", variable, region)
+            sig = get_leaves("signal", variable, region)
+            if not bkg and not data and not sig:
+                return
+            any_hist = next(iter((bkg or data or sig).values()))
+            edges = np.asarray(any_hist["bin_edges"], dtype=float)
+            def compatible(items: dict[str, Any]) -> dict[str, Any]:
+                out = {}
+                for key, hist in items.items():
+                    test_edges = np.asarray(hist.get("bin_edges", []), dtype=float)
+                    if len(test_edges) == len(edges) and np.allclose(test_edges, edges):
+                        out[key] = hist
+                return out
+            bkg = compatible(bkg)
+            data = compatible(data)
+            sig = compatible(sig)
+            if not bkg and not data and not sig:
+                return
+            centers = 0.5 * (edges[:-1] + edges[1:])
+            widths = np.diff(edges)
+            fig, axes = plt.subplots(2 if data and bkg else 1, 1, figsize=(7.2, 6.2 if data and bkg else 5.0), gridspec_kw={"height_ratios": [3, 1]} if data and bkg else None, sharex=bool(data and bkg))
+            ax = axes[0] if isinstance(axes, np.ndarray) else axes
+            bottom = np.zeros(len(centers))
+            processes = []
+            bkg_sum = np.zeros(len(centers))
+            bkg_sumw2 = np.zeros(len(centers))
+            for key, hist in sorted(bkg.items()):
+                vals = np.asarray(hist["values"], dtype=float)
+                err2 = np.asarray(hist["sumw2"], dtype=float)
+                proc = key.split(":", 1)[0]
+                processes.append(proc)
+                ax.bar(centers, vals, width=widths, bottom=bottom, align="center", alpha=0.75, label=proc, linewidth=0)
+                bottom += vals
+                bkg_sum += vals
+                bkg_sumw2 += err2
+            if bkg:
+                ax.fill_between(centers, bkg_sum - np.sqrt(bkg_sumw2), bkg_sum + np.sqrt(bkg_sumw2), step="mid", color="none", edgecolor="black", hatch="////", linewidth=0, label="MC stat")
+            data_visible = False
+            for key, hist in sorted(data.items()):
+                vals = np.asarray(hist["values"], dtype=float)
+                err = np.sqrt(np.asarray(hist["sumw2"], dtype=float))
+                ax.errorbar(centers, vals, yerr=err, fmt="o", color="black", label="Data", markersize=4)
+                data_visible = True
+            sig_keys = []
+            for key, hist in list(sorted(sig.items()))[:4]:
+                vals = np.asarray(hist["values"], dtype=float)
+                if np.sum(vals) <= 0:
+                    continue
+                ax.step(edges[:-1], vals, where="post", linewidth=1.6, label=key.replace(":", " "))
+                sig_keys.append(key)
+            ax.text(0.02, 0.96, "CMS Work in progress", transform=ax.transAxes, va="top", fontsize=10)
+            ax.text(0.98, 0.96, f"2024, {self.config.get('analysis', {}).get('luminosity_fb', '')} fb$^{{-1}}$", transform=ax.transAxes, ha="right", va="top", fontsize=9)
+            ax.set_ylabel("Events")
+            if logy:
+                ax.set_yscale("log")
+                ymin = max(0.05, np.min(bottom[bottom > 0]) * 0.2) if np.any(bottom > 0) else 0.05
+                ax.set_ylim(bottom=ymin)
+            ax.legend(fontsize=7, ncol=2)
+            ratio_visible = False
+            if data and bkg and isinstance(axes, np.ndarray):
+                rax = axes[1]
+                data_vals = np.zeros(len(centers))
+                data_err2 = np.zeros(len(centers))
+                for hist in data.values():
+                    data_vals += np.asarray(hist["values"], dtype=float)
+                    data_err2 += np.asarray(hist["sumw2"], dtype=float)
+                ratio = np.divide(data_vals, bkg_sum, out=np.zeros_like(data_vals), where=bkg_sum != 0)
+                ratio_err = np.divide(np.sqrt(data_err2), bkg_sum, out=np.zeros_like(data_vals), where=bkg_sum != 0)
+                rax.errorbar(centers, ratio, yerr=ratio_err, fmt="o", color="black", markersize=3)
+                rax.axhline(1.0, color="gray", linewidth=1)
+                rax.set_ylim(0, 2)
+                rax.set_ylabel("Data/MC")
+                rax.set_xlabel(xlabel)
+                ratio_visible = True
+            else:
+                ax.set_xlabel(xlabel)
+            save_plot(fig, name, [f"{k}/{variable}/nominal/{region}" for k in ["data", "background", "signal"]], variable, region, processes, sig_keys, data_visible, ratio_visible)
+
+        for variable, xlabel in [("metpt", "MET [GeV]"), ("ht", "H_T [GeV]"), ("njet", "N_{jet}"), ("nb", "N_b"), ("min_dphi", "min Delta phi")]:
+            for region in ["cat1_preselection", "cat7_SR_highDeltaM", "cat2_LLCR_highDeltaM", "cat3_QCDCR_highDeltaM"]:
+                plot_stack(variable, region, f"{variable}_{region}", xlabel, logy=variable not in {"njet", "nb"})
+        plot_stack("search_bin_index", "cat7_SR_highDeltaM", "search_bin_index_cat7_SR_highDeltaM", "Search-bin index", logy=True)
+        plot_stack("region_yield", "all_regions", "region_yield_summary", "Region index", logy=True)
+
+        write_json(plot_dir / "plot_manifest.json", {"status": "complete" if manifest else "blocked", "source": str(hists_path.relative_to(self.repo)), "plots": manifest})
+        (self.docs / "data").mkdir(parents=True, exist_ok=True)
+        shutil.copy2(plot_dir / "plot_manifest.json", self.docs / "data" / "plot_manifest.json")
+        result = {"status": "complete" if manifest else "blocked", "plots": len(manifest), "plot_manifest": str((plot_dir / "plot_manifest.json").relative_to(self.repo)), "source": str(hists_path.relative_to(self.repo))}
+        self._record_direct_stage("plot_from_npy", "complete" if manifest else "blocked", result)
+        return result
 
     def file_integrity_checks(self) -> dict[str, Any]:
         metadata = self.load_metadata()
@@ -1317,6 +2223,11 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
         factors = self._load_json_if_exists(self.outputs / "normalization_factors.json", {})
         norm_audit = self._load_json_if_exists(self.base / "validation" / "normalization_audit.json", {})
         github_status = self._load_json_if_exists(self.outputs / "github_pages_status.json", {})
+        signal_das = self._load_json_if_exists(self.base / "signals" / "das_signal_datasets.json", {})
+        signal_probe = self._load_json_if_exists(self.base / "signals" / "signal_branch_probe.json", {})
+        signal_grid = self._load_json_if_exists(self.base / "signals" / "realized_mass_grid.json", {})
+        signal_xsec = self._load_json_if_exists(self.base / "signals" / "stop_xsec_13p6TeV_status.json", {})
+        signal_yields = self._load_json_if_exists(self.outputs / "signal_yields_by_mass.json", {})
         yields = summary.get("yields", {})
         regions = ["preselection", "LLCR", "QCDCR", "GCR", "DY2E", "DY2M", "SR"]
         stages = self.state.get("stages", {})
@@ -1356,6 +2267,27 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             "normalization_blocked_datasets": len(norm.get("blocked_datasets", [])) if isinstance(norm, dict) else None,
             "manual_validation_status": validation.get("legacy_validation_status", "external/manual"),
             "agreement_claim": validation.get("agreement_claim", "No independent agreement with stop_processor_v4.py is claimed by autonomous_allhad unless explicitly provided by the user."),
+            "signal_das_discovery": {
+                "status": signal_das.get("status", "missing"),
+                "das_query_used": signal_das.get("das_query_used"),
+                "datasets_found": signal_das.get("datasets_found", 0),
+                "fastsim_datasets": signal_das.get("fastsim_datasets", signal_das.get("fastsim_candidates", 0)),
+                "fullsim_anchor_candidates": signal_das.get("fullsim_anchor_candidates", signal_das.get("fullsim_datasets", 0)),
+                "total_signal_root_files": signal_das.get("total_signal_root_files", 0),
+                "total_fastsim_signal_root_files": signal_das.get("total_fastsim_signal_root_files", 0),
+                "total_fullsim_signal_root_files": signal_das.get("total_fullsim_signal_root_files", 0),
+                "all_fastsim_files_ready_for_process_signals": signal_das.get("all_fastsim_files_ready_for_process_signals", False),
+                "fastsim_process_signals_status": signal_das.get("fastsim_process_signals_status", "missing"),
+                "representative_files_probed": signal_probe.get("representative_files_probed", 0),
+                "realized_mass_points": signal_grid.get("realized_mass_points", 0),
+                "usable_fastsim_mass_points": signal_grid.get("usable_fastsim_mass_points", 0),
+                "trigger_policy": signal_probe.get("trigger_policy_label"),
+                "xsec_table_status": signal_xsec.get("xsec_table_status", "missing"),
+                "signal_yields_ready": signal_yields.get("status") == "complete",
+                "signal_yield_mass_points": len(signal_yields.get("mass_points", {})) if isinstance(signal_yields, dict) else 0,
+                "signal_processed_files": signal_yields.get("processed_files", 0) if isinstance(signal_yields, dict) else 0,
+                "contour_inputs_ready": False,
+            },
             "next_recommended_action": "Unblock full production: enable/authorize Condor production or configure an explicit bounded local full-production fallback, then run ./autonomous_allhad/analysisctl run-production --config autonomous_allhad/configs/run3_2024.yaml",
         }
         write_json(self.workflow / "monitor_state.json", payload)
@@ -1383,7 +2315,7 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
     def render_monitor_html(self, payload: dict[str, Any]) -> None:
         self.docs.mkdir(parents=True, exist_ok=True)
         rows = "".join(f"<tr><td>{html.escape(k)}</td><td>{v}</td></tr>" for k, v in payload.get("region_yields", {}).items())
-        html_text = f"""<!doctype html><html lang='en'><head><meta charset='utf-8'><title>Run-3 stop monitor</title><style>body{{font-family:Arial,sans-serif;background:#f7f8fa;color:#20242a;margin:0}}main{{max-width:1000px;margin:auto;padding:28px}}table{{border-collapse:collapse;width:100%;background:white}}td,th{{border:1px solid #d8dde4;padding:8px;text-align:left}}th{{background:#e9eef5}}.note{{background:#fff3cd;padding:10px;border-radius:4px}}</style></head><body><main><h1>Pipeline Monitor</h1><p class='note'>Legacy stop_processor_v4.py validation is external/manual. No independent agreement with stop_processor_v4.py is claimed by autonomous_allhad unless explicitly provided by the user.</p><p>Current stage: <strong>{html.escape(str(payload.get('current_pipeline_stage')))}</strong></p><p>ROOT files read: {payload.get('root_files_read')} &nbsp; Feature rows: {payload.get('feature_rows')} &nbsp; Bad files: {payload.get('bad_files')}</p><p>Normalization: {html.escape(str(payload.get('normalization_status')))}; {html.escape(str(payload.get('raw_vs_normalized_yield_status')))}</p><p>GitHub Pages: {html.escape(str(payload.get('github_pages_site_status')))}; expected URL <code>{html.escape(str(payload.get('github_pages_expected_url')))}</code>; deployment {html.escape(str(payload.get('github_pages_deployment_status')))}; last publication UTC {html.escape(str(payload.get('github_pages_last_publication_time_utc')))}</p><h2>Region Yields</h2><table><tr><th>Region</th><th>Yield</th></tr>{rows}</table><h2>Next Action</h2><p><code>{html.escape(str(payload.get('next_recommended_action')))}</code></p></main></body></html>"""
+        html_text = f"""<!doctype html><html lang='en'><head><meta charset='utf-8'><title>Run-3 stop monitor</title><style>body{{font-family:Arial,sans-serif;background:#f7f8fa;color:#20242a;margin:0}}main{{max-width:1000px;margin:auto;padding:28px}}table{{border-collapse:collapse;width:100%;background:white}}td,th{{border:1px solid #d8dde4;padding:8px;text-align:left}}th{{background:#e9eef5}}.note{{background:#fff3cd;padding:10px;border-radius:4px}}</style></head><body><main><h1>Pipeline Monitor</h1><p class='note'>Legacy stop_processor_v4.py validation is external/manual. No independent agreement with stop_processor_v4.py is claimed by autonomous_allhad unless explicitly provided by the user.</p><p>Current stage: <strong>{html.escape(str(payload.get('current_pipeline_stage')))}</strong></p><p>ROOT files read: {payload.get('root_files_read')} &nbsp; Feature rows: {payload.get('feature_rows')} &nbsp; Bad files: {payload.get('bad_files')}</p><p>Normalization: {html.escape(str(payload.get('normalization_status')))}; {html.escape(str(payload.get('raw_vs_normalized_yield_status')))}</p><p>GitHub Pages: {html.escape(str(payload.get('github_pages_site_status')))}; expected URL <code>{html.escape(str(payload.get('github_pages_expected_url')))}</code>; deployment {html.escape(str(payload.get('github_pages_deployment_status')))}; last publication UTC {html.escape(str(payload.get('github_pages_last_publication_time_utc')))}</p><h2>Signal DAS Discovery</h2><p>Datasets: {payload.get('signal_das_discovery', {}).get('datasets_found', 0)}; files: {payload.get('signal_das_discovery', {}).get('total_signal_root_files', 0)}; FastSim signal datasets: {payload.get('signal_das_discovery', {}).get('fastsim_datasets', 0)}; realized mass points: {payload.get('signal_das_discovery', {}).get('realized_mass_points', 0)}; xsec table: {html.escape(str(payload.get('signal_das_discovery', {}).get('xsec_table_status', 'missing')))}.</p><p class='note'>FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level. This must later be validated or replaced with trigger efficiency/SF treatment.</p><h2>Region Yields</h2><table><tr><th>Region</th><th>Yield</th></tr>{rows}</table><h2>Next Action</h2><p><code>{html.escape(str(payload.get('next_recommended_action')))}</code></p></main></body></html>"""
         (self.docs / "monitor.html").write_text(html_text)
 
     def publish_github_pages(self) -> dict[str, Any]:
@@ -1422,12 +2354,28 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             self.outputs / "normalization_factors.json",
             self.outputs / "normalized_feature_yields.json",
             self.outputs / "feature_yields.json",
+            self.outputs / "searchbin_yields.json",
+            self.outputs / "final_searchbin_yields.json",
+            self.outputs / "data_yields.json",
+            self.outputs / "background_yields.json",
+            self.outputs / "region_yields.json",
+            self.outputs / "cutflows.json",
             self.outputs / "full_normalized_yields.json",
             self.outputs / "systematic_yields.json",
+            self.base / "hist_index.json",
+            self.base / "plots" / "plot_manifest.json",
             self.workflow / "production_manifest.json",
             self.base / "studies" / "search_bins" / "final_search_bins.json",
             self.base / "cards" / "datacard_summary.json",
             self.base / "limits" / "expected_limits_status.json",
+            self.base / "signals" / "das_signal_datasets.json",
+            self.base / "signals" / "das_signal_files.json",
+            self.base / "signals" / "signal_branch_probe.json",
+            self.base / "signals" / "realized_mass_grid.json",
+            self.base / "signals" / "stop_xsec_13p6TeV_status.json",
+            self.outputs / "signal_yields_by_mass.json",
+            self.outputs / "signal_searchbin_yields.json",
+            self.outputs / "signal_cutflows.json",
         ]
         for src in copy_sources:
             if src.exists():
@@ -1485,6 +2433,8 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             ("Normalization status", str(norm.get("normalization_status", "missing"))),
             ("Raw versus normalized yield status", str(norm_audit.get("current_feature_yields_raw_or_normalized", "unknown")) + ("; normalized feature yields available" if norm else "")),
             ("Search-bin design", "complete" if schemes else "not started"),
+            ("hists.npy", "complete" if (self.base / "hists.npy").exists() else "missing"),
+            ("hists.npy-based plots", "complete" if (self.base / "plots" / "plot_manifest.json").exists() else "missing"),
             ("Systematic-yield status", "not started"),
             ("Datacard status", "prepared/blocked"),
             ("Limit status", "not run"),

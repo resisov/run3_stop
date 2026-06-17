@@ -1,0 +1,53 @@
+{
+  "files_processed": 11,
+  "normalization": "feature-side subset-normalized when factors are available",
+  "source": "real_feature_table.csv",
+  "status": "complete",
+  "yields": {
+    "DY": {
+      "cat1_preselection": 118.51278860759521,
+      "cat2_LLCR_highDeltaM": 6.630086075949365,
+      "cat3_QCDCR_highDeltaM": 19.061497468354432,
+      "cat4_GCR_highDeltaM": -0.8287607594936708,
+      "cat5_DY2E_highDeltaM": 8.287607594936707,
+      "cat6_DY2M_highDeltaM": 5.801325316455695,
+      "cat7_SR_highDeltaM": 8.287607594936707
+    },
+    "GJ": {
+      "cat1_preselection": 312.05740819555473,
+      "cat3_QCDCR_highDeltaM": 11.416734377156606,
+      "cat4_GCR_highDeltaM": 178.8621730407514
+    },
+    "QCD": {
+      "cat1_preselection": 2725.293119999998,
+      "cat3_QCDCR_highDeltaM": 1532.9773800000005,
+      "cat7_SR_highDeltaM": 42.582705
+    },
+    "SMS": {
+      "cat1_preselection": 3046.860115144946,
+      "cat2_LLCR_highDeltaM": 2694.430099408317,
+      "cat3_QCDCR_highDeltaM": 3.8571077495264245,
+      "cat4_GCR_highDeltaM": 0.003580132,
+      "cat5_DY2E_highDeltaM": 0.001790066,
+      "cat6_DY2M_highDeltaM": 0.001790066,
+      "cat7_SR_highDeltaM": 218.38432094162914
+    },
+    "TT": {
+      "cat1_preselection": 9.650529424005931,
+      "cat2_LLCR_highDeltaM": 5.81001261241174,
+      "cat3_QCDCR_highDeltaM": 1.969495800817541,
+      "cat4_GCR_highDeltaM": -0.098474790040877,
+      "cat7_SR_highDeltaM": 3.938991601635083
+    },
+    "VV": {
+      "cat1_preselection": 2936.934395366298,
+      "cat2_LLCR_highDeltaM": 367.11679942078723
+    },
+    "WtoLNu": {
+      "cat1_preselection": 312.08957169768695
+    },
+    "Zto2Nu": {
+      "cat1_preselection": 182.75784464676755
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "download_status": "downloaded",
+  "downloaded_bytes_preview": 218867,
+  "message": "Twiki content was reachable, but automatic table parsing is not implemented safely for physics use. Manual extraction is required.",
+  "parsed": false,
+  "required_manual_input": "Provide a machine-readable 13.6 TeV stop cross-section table with mStop, xsec_pb, and uncertainty fields from the cited SUSY cross-section Twiki.",
+  "source_url": "https://twiki.cern.ch/twiki/bin/view/LHCPhysics/SUSYCrossSections13x6TeVstopsbottom",
+  "values_used_for_physics_outputs": false,
+  "xsec_table_status": "manual_required"
+}

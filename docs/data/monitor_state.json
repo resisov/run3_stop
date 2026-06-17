@@ -2,20 +2,24 @@
   "agreement_claim": "No independent agreement with stop_processor_v4.py is claimed by autonomous_allhad.",
   "bad_files": 0,
   "blocked_gates": [
+    "condor_production",
     "expected_limits",
+    "full_production_normalization",
     "make_datacards",
     "run_production",
-    "condor_production",
-    "full_production_normalization",
     "select_search_bins",
     "systematic_yields"
   ],
   "completed_gates": [
     "design_search_bins",
+    "discover_signals_from_das",
     "make_feature_yields",
+    "make_hists_npy",
     "make_plots",
     "normalization_audit",
     "normalize_feature_yields",
+    "plot_from_npy",
+    "process_signals",
     "publish_github_pages"
   ],
   "current_pipeline_stage": "publish_github_pages",
@@ -24,7 +28,7 @@
   "github_pages_deployment_confirmed": false,
   "github_pages_deployment_status": "not_confirmed",
   "github_pages_expected_url": "https://resisov.github.io/run3_stop/",
-  "github_pages_last_publication_time_utc": "2026-06-17T12:51:46Z",
+  "github_pages_last_publication_time_utc": "2026-06-17T13:59:50Z",
   "github_pages_published_by_pipeline": false,
   "github_pages_site_status": "ready",
   "latest_command": {
@@ -66,5 +70,26 @@
     "SR": 5265,
     "preselection": 12377
   },
-  "root_files_read": 14
+  "root_files_read": 14,
+  "signal_das_discovery": {
+    "all_fastsim_files_ready_for_process_signals": true,
+    "contour_inputs_ready": false,
+    "das_query_used": "dataset dataset=/SMS-2Stop*/*RunIII*NanoAOD*/NANOAODSIM",
+    "datasets_found": 32,
+    "fastsim_datasets": 26,
+    "fastsim_process_signals_status": "ready",
+    "fullsim_anchor_candidates": 6,
+    "realized_mass_points": 326,
+    "representative_files_probed": 26,
+    "signal_processed_files": 61,
+    "signal_yield_mass_points": 25,
+    "signal_yields_ready": true,
+    "status": "complete",
+    "total_fastsim_signal_root_files": 61,
+    "total_fullsim_signal_root_files": 47,
+    "total_signal_root_files": 108,
+    "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level",
+    "usable_fastsim_mass_points": 326,
+    "xsec_table_status": "manual_required"
+  }
 }

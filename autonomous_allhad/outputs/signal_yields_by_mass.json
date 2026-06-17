@@ -1,0 +1,1015 @@
+{
+  "attempted_files": 61,
+  "bad_files": 0,
+  "datasets_processed": 26,
+  "fastsim_trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level",
+  "fullsim_anchor_datasets_recorded_not_processed": 6,
+  "mass_points": {
+    "mStop-2_mLSP-1000": {
+      "datasets": {
+        "/SMS-2Stop_Par-mStop-2500_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": 48000,
+        "/SMS-2Stop_Par-mStop-950_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": 72000
+      },
+      "genmodel_branch": "GenModel_T2tt_1000_600",
+      "mLSP": 1000,
+      "mStop": 2,
+      "regions": {
+        "DY2E": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_weighted": 1542.0,
+          "unweighted": 1542
+        },
+        "QCDCR": {
+          "raw_weighted": 802.0,
+          "unweighted": 802
+        },
+        "SR": {
+          "raw_weighted": 27288.0,
+          "unweighted": 27288
+        },
+        "preselection": {
+          "raw_weighted": 48971.0,
+          "unweighted": 48971
+        }
+      },
+      "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+      "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
+    },
+    "mStop-2_mLSP-1050": {
+      "datasets": {
+        "/SMS-2Stop_Par-mStop-1000_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": 72000
+      },
+      "genmodel_branch": "GenModel_T2tt_1050_1",
+      "mLSP": 1050,
+      "mStop": 2,
+      "regions": {
+        "DY2E": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_weighted": 792.0,
+          "unweighted": 792
+        },
+        "QCDCR": {
+          "raw_weighted": 433.0,
+          "unweighted": 433
+        },
+        "SR": {
+          "raw_weighted": 16139.0,
+          "unweighted": 16139
+        },
+        "preselection": {
+          "raw_weighted": 29461.0,
+          "unweighted": 29461
+        }
+      },
+      "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+      "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
+    },
+    "mStop-2_mLSP-1100": {
+      "datasets": {
+        "/SMS-2Stop_Par-mStop-1050_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": 33379
+      },
+      "genmodel_branch": "GenModel_T2tt_1100_600",
+      "mLSP": 1100,
+      "mStop": 2,
+      "regions": {
+        "DY2E": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_weighted": 391.0,
+          "unweighted": 391
+        },
+        "QCDCR": {
+          "raw_weighted": 257.0,
+          "unweighted": 257
+        },
+        "SR": {
+          "raw_weighted": 8523.0,
+          "unweighted": 8523
+        },
+        "preselection": {
+          "raw_weighted": 15346.0,
+          "unweighted": 15346
+        }
+      },
+      "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+      "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
+    },
+    "mStop-2_mLSP-1150": {
+      "datasets": {
+        "/SMS-2Stop_Par-mStop-1100_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": 48000
+      },
+      "genmodel_branch": "GenModel_T2tt_1150_200",
+      "mLSP": 1150,
+      "mStop": 2,
+      "regions": {
+        "DY2E": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_weighted": 564.0,
+          "unweighted": 564
+        },
+        "QCDCR": {
+          "raw_weighted": 323.0,
+          "unweighted": 323
+        },
+        "SR": {
+          "raw_weighted": 10893.0,
+          "unweighted": 10893
+        },
+        "preselection": {
+          "raw_weighted": 19914.0,
+          "unweighted": 19914
+        }
+      },
+      "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+      "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
+    },
+    "mStop-2_mLSP-1200": {
+      "datasets": {
+        "/SMS-2Stop_Par-mStop-1150_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": 48000
+      },
+      "genmodel_branch": "GenModel_T2tt_1200_100",
+      "mLSP": 1200,
+      "mStop": 2,
+      "regions": {
+        "DY2E": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_weighted": 575.0,
+          "unweighted": 575
+        },
+        "QCDCR": {
+          "raw_weighted": 366.0,
+          "unweighted": 366
+        },
+        "SR": {
+          "raw_weighted": 11966.0,
+          "unweighted": 11966
+        },
+        "preselection": {
+          "raw_weighted": 21636.0,
+          "unweighted": 21636
+        }
+      },
+      "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+      "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
+    },
+    "mStop-2_mLSP-1250": {
+      "datasets": {
+        "/SMS-2Stop_Par-mStop-1200_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": 48000
+      },
+      "genmodel_branch": "GenModel_T2tt_1250_700",
+      "mLSP": 1250,
+      "mStop": 2,
+      "regions": {
+        "DY2E": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_weighted": 505.0,
+          "unweighted": 505
+        },
+        "QCDCR": {
+          "raw_weighted": 335.0,
+          "unweighted": 335
+        },
+        "SR": {
+          "raw_weighted": 11548.0,
+          "unweighted": 11548
+        },
+        "preselection": {
+          "raw_weighted": 21409.0,
+          "unweighted": 21409
+        }
+      },
+      "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+      "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
+    },
+    "mStop-2_mLSP-1300": {
+      "datasets": {
+        "/SMS-2Stop_Par-mStop-1250_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": 72000
+      },
+      "genmodel_branch": "GenModel_T2tt_1300_100",
+      "mLSP": 1300,
+      "mStop": 2,
+      "regions": {
+        "DY2E": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_weighted": 799.0,
+          "unweighted": 799
+        },
+        "QCDCR": {
+          "raw_weighted": 497.0,
+          "unweighted": 497
+        },
+        "SR": {
+          "raw_weighted": 18525.0,
+          "unweighted": 18525
+        },
+        "preselection": {
+          "raw_weighted": 33922.0,
+          "unweighted": 33922
+        }
+      },
+      "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+      "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
+    },
+    "mStop-2_mLSP-1350": {
+      "datasets": {
+        "/SMS-2Stop_Par-mStop-1300_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": 48000
+      },
+      "genmodel_branch": "GenModel_T2tt_1350_1200",
+      "mLSP": 1350,
+      "mStop": 2,
+      "regions": {
+        "DY2E": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_weighted": 494.0,
+          "unweighted": 494
+        },
+        "QCDCR": {
+          "raw_weighted": 347.0,
+          "unweighted": 347
+        },
+        "SR": {
+          "raw_weighted": 11437.0,
+          "unweighted": 11437
+        },
+        "preselection": {
+          "raw_weighted": 21214.0,
+          "unweighted": 21214
+        }
+      },
+      "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+      "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
+    },
+    "mStop-2_mLSP-1400": {
+      "datasets": {
+        "/SMS-2Stop_Par-mStop-1350_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": 48000
+      },
+      "genmodel_branch": "GenModel_T2tt_1400_600",
+      "mLSP": 1400,
+      "mStop": 2,
+      "regions": {
+        "DY2E": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_weighted": 506.0,
+          "unweighted": 506
+        },
+        "QCDCR": {
+          "raw_weighted": 306.0,
+          "unweighted": 306
+        },
+        "SR": {
+          "raw_weighted": 12270.0,
+          "unweighted": 12270
+        },
+        "preselection": {
+          "raw_weighted": 22750.0,
+          "unweighted": 22750
+        }
+      },
+      "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+      "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
+    },
+    "mStop-2_mLSP-1450": {
+      "datasets": {
+        "/SMS-2Stop_Par-mStop-1400_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": 48000
+      },
+      "genmodel_branch": "GenModel_T2tt_1450_1200",
+      "mLSP": 1450,
+      "mStop": 2,
+      "regions": {
+        "DY2E": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_weighted": 484.0,
+          "unweighted": 484
+        },
+        "QCDCR": {
+          "raw_weighted": 353.0,
+          "unweighted": 353
+        },
+        "SR": {
+          "raw_weighted": 11839.0,
+          "unweighted": 11839
+        },
+        "preselection": {
+          "raw_weighted": 22449.0,
+          "unweighted": 22449
+        }
+      },
+      "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+      "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
+    },
+    "mStop-2_mLSP-1500": {
+      "datasets": {
+        "/SMS-2Stop_Par-mStop-1450_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": 66266
+      },
+      "genmodel_branch": "GenModel_T2tt_1500_1000",
+      "mLSP": 1500,
+      "mStop": 2,
+      "regions": {
+        "DY2E": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_weighted": 665.0,
+          "unweighted": 665
+        },
+        "QCDCR": {
+          "raw_weighted": 528.0,
+          "unweighted": 528
+        },
+        "SR": {
+          "raw_weighted": 18146.0,
+          "unweighted": 18146
+        },
+        "preselection": {
+          "raw_weighted": 34713.0,
+          "unweighted": 34713
+        }
+      },
+      "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+      "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
+    },
+    "mStop-2_mLSP-1600": {
+      "datasets": {
+        "/SMS-2Stop_Par-mStop-1500_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": 48000
+      },
+      "genmodel_branch": "GenModel_T2tt_1600_1",
+      "mLSP": 1600,
+      "mStop": 2,
+      "regions": {
+        "DY2E": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_weighted": 489.0,
+          "unweighted": 489
+        },
+        "QCDCR": {
+          "raw_weighted": 375.0,
+          "unweighted": 375
+        },
+        "SR": {
+          "raw_weighted": 12474.0,
+          "unweighted": 12474
+        },
+        "preselection": {
+          "raw_weighted": 24738.0,
+          "unweighted": 24738
+        }
+      },
+      "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+      "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
+    },
+    "mStop-2_mLSP-1700": {
+      "datasets": {
+        "/SMS-2Stop_Par-mStop-1600_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": 58646
+      },
+      "genmodel_branch": "GenModel_T2tt_1700_1500",
+      "mLSP": 1700,
+      "mStop": 2,
+      "regions": {
+        "DY2E": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_weighted": 593.0,
+          "unweighted": 593
+        },
+        "QCDCR": {
+          "raw_weighted": 478.0,
+          "unweighted": 478
+        },
+        "SR": {
+          "raw_weighted": 14934.0,
+          "unweighted": 14934
+        },
+        "preselection": {
+          "raw_weighted": 29712.0,
+          "unweighted": 29712
+        }
+      },
+      "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+      "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
+    },
+    "mStop-2_mLSP-1800": {
+      "datasets": {
+        "/SMS-2Stop_Par-mStop-1700_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": 48000
+      },
+      "genmodel_branch": "GenModel_T2tt_1800_200",
+      "mLSP": 1800,
+      "mStop": 2,
+      "regions": {
+        "DY2E": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_weighted": 429.0,
+          "unweighted": 429
+        },
+        "QCDCR": {
+          "raw_weighted": 379.0,
+          "unweighted": 379
+        },
+        "SR": {
+          "raw_weighted": 13032.0,
+          "unweighted": 13032
+        },
+        "preselection": {
+          "raw_weighted": 26761.0,
+          "unweighted": 26761
+        }
+      },
+      "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+      "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
+    },
+    "mStop-2_mLSP-1900": {
+      "datasets": {
+        "/SMS-2Stop_Par-mStop-1800_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": 48000
+      },
+      "genmodel_branch": "GenModel_T2tt_1900_1000",
+      "mLSP": 1900,
+      "mStop": 2,
+      "regions": {
+        "DY2E": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_weighted": 443.0,
+          "unweighted": 443
+        },
+        "QCDCR": {
+          "raw_weighted": 367.0,
+          "unweighted": 367
+        },
+        "SR": {
+          "raw_weighted": 12535.0,
+          "unweighted": 12535
+        },
+        "preselection": {
+          "raw_weighted": 25102.0,
+          "unweighted": 25102
+        }
+      },
+      "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+      "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
+    },
+    "mStop-2_mLSP-2000": {
+      "datasets": {
+        "/SMS-2Stop_Par-mStop-1900_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": 72000
+      },
+      "genmodel_branch": "GenModel_T2tt_2000_1100",
+      "mLSP": 2000,
+      "mStop": 2,
+      "regions": {
+        "DY2E": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_weighted": 653.0,
+          "unweighted": 653
+        },
+        "QCDCR": {
+          "raw_weighted": 546.0,
+          "unweighted": 546
+        },
+        "SR": {
+          "raw_weighted": 18391.0,
+          "unweighted": 18391
+        },
+        "preselection": {
+          "raw_weighted": 37895.0,
+          "unweighted": 37895
+        }
+      },
+      "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+      "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
+    },
+    "mStop-2_mLSP-2100": {
+      "datasets": {
+        "/SMS-2Stop_Par-mStop-2000_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": 48000
+      },
+      "genmodel_branch": "GenModel_T2tt_2100_400",
+      "mLSP": 2100,
+      "mStop": 2,
+      "regions": {
+        "DY2E": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_weighted": 353.0,
+          "unweighted": 353
+        },
+        "QCDCR": {
+          "raw_weighted": 391.0,
+          "unweighted": 391
+        },
+        "SR": {
+          "raw_weighted": 12528.0,
+          "unweighted": 12528
+        },
+        "preselection": {
+          "raw_weighted": 27023.0,
+          "unweighted": 27023
+        }
+      },
+      "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+      "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
+    },
+    "mStop-2_mLSP-2200": {
+      "datasets": {
+        "/SMS-2Stop_Par-mStop-2100_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": 57989
+      },
+      "genmodel_branch": "GenModel_T2tt_2200_1600",
+      "mLSP": 2200,
+      "mStop": 2,
+      "regions": {
+        "DY2E": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_weighted": 516.0,
+          "unweighted": 516
+        },
+        "QCDCR": {
+          "raw_weighted": 469.0,
+          "unweighted": 469
+        },
+        "SR": {
+          "raw_weighted": 14196.0,
+          "unweighted": 14196
+        },
+        "preselection": {
+          "raw_weighted": 30189.0,
+          "unweighted": 30189
+        }
+      },
+      "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+      "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
+    },
+    "mStop-2_mLSP-2300": {
+      "datasets": {
+        "/SMS-2Stop_Par-mStop-2200_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": 66322
+      },
+      "genmodel_branch": "GenModel_T2tt_2300_1900",
+      "mLSP": 2300,
+      "mStop": 2,
+      "regions": {
+        "DY2E": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_weighted": 453.0,
+          "unweighted": 453
+        },
+        "QCDCR": {
+          "raw_weighted": 559.0,
+          "unweighted": 559
+        },
+        "SR": {
+          "raw_weighted": 16285.0,
+          "unweighted": 16285
+        },
+        "preselection": {
+          "raw_weighted": 37392.0,
+          "unweighted": 37392
+        }
+      },
+      "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+      "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
+    },
+    "mStop-2_mLSP-2400": {
+      "datasets": {
+        "/SMS-2Stop_Par-mStop-2300_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": 48000
+      },
+      "genmodel_branch": "GenModel_T2tt_2400_2100",
+      "mLSP": 2400,
+      "mStop": 2,
+      "regions": {
+        "DY2E": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_weighted": 310.0,
+          "unweighted": 310
+        },
+        "QCDCR": {
+          "raw_weighted": 391.0,
+          "unweighted": 391
+        },
+        "SR": {
+          "raw_weighted": 11785.0,
+          "unweighted": 11785
+        },
+        "preselection": {
+          "raw_weighted": 27975.0,
+          "unweighted": 27975
+        }
+      },
+      "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+      "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
+    },
+    "mStop-2_mLSP-2500": {
+      "datasets": {
+        "/SMS-2Stop_Par-mStop-2400_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": 48000
+      },
+      "genmodel_branch": "GenModel_T2tt_2500_2000",
+      "mLSP": 2500,
+      "mStop": 2,
+      "regions": {
+        "DY2E": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_weighted": 294.0,
+          "unweighted": 294
+        },
+        "QCDCR": {
+          "raw_weighted": 348.0,
+          "unweighted": 348
+        },
+        "SR": {
+          "raw_weighted": 11290.0,
+          "unweighted": 11290
+        },
+        "preselection": {
+          "raw_weighted": 27827.0,
+          "unweighted": 27827
+        }
+      },
+      "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+      "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
+    },
+    "mStop-2_mLSP-600": {
+      "datasets": {
+        "/SMS-2Stop_Par-mStop-600_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": 72000
+      },
+      "genmodel_branch": "GenModel_T2tt_600_300",
+      "mLSP": 600,
+      "mStop": 2,
+      "regions": {
+        "DY2E": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_weighted": 756.0,
+          "unweighted": 756
+        },
+        "QCDCR": {
+          "raw_weighted": 305.0,
+          "unweighted": 305
+        },
+        "SR": {
+          "raw_weighted": 9939.0,
+          "unweighted": 9939
+        },
+        "preselection": {
+          "raw_weighted": 18501.0,
+          "unweighted": 18501
+        }
+      },
+      "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+      "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
+    },
+    "mStop-2_mLSP-700": {
+      "datasets": {
+        "/SMS-2Stop_Par-mStop-700_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": 48000
+      },
+      "genmodel_branch": "GenModel_T2tt_700_300",
+      "mLSP": 700,
+      "mStop": 2,
+      "regions": {
+        "DY2E": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_weighted": 556.0,
+          "unweighted": 556
+        },
+        "QCDCR": {
+          "raw_weighted": 264.0,
+          "unweighted": 264
+        },
+        "SR": {
+          "raw_weighted": 8479.0,
+          "unweighted": 8479
+        },
+        "preselection": {
+          "raw_weighted": 15290.0,
+          "unweighted": 15290
+        }
+      },
+      "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+      "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
+    },
+    "mStop-2_mLSP-900": {
+      "datasets": {
+        "/SMS-2Stop_Par-mStop-800_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": 48000
+      },
+      "genmodel_branch": "GenModel_T2tt_900_1",
+      "mLSP": 900,
+      "mStop": 2,
+      "regions": {
+        "DY2E": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_weighted": 586.0,
+          "unweighted": 586
+        },
+        "QCDCR": {
+          "raw_weighted": 295.0,
+          "unweighted": 295
+        },
+        "SR": {
+          "raw_weighted": 10415.0,
+          "unweighted": 10415
+        },
+        "preselection": {
+          "raw_weighted": 18871.0,
+          "unweighted": 18871
+        }
+      },
+      "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+      "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
+    },
+    "mStop-2_mLSP-950": {
+      "datasets": {
+        "/SMS-2Stop_Par-mStop-900_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": 48000
+      },
+      "genmodel_branch": "GenModel_T2tt_950_500",
+      "mLSP": 950,
+      "mStop": 2,
+      "regions": {
+        "DY2E": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_weighted": 597.0,
+          "unweighted": 597
+        },
+        "QCDCR": {
+          "raw_weighted": 299.0,
+          "unweighted": 299
+        },
+        "SR": {
+          "raw_weighted": 10439.0,
+          "unweighted": 10439
+        },
+        "preselection": {
+          "raw_weighted": 19027.0,
+          "unweighted": 19027
+        }
+      },
+      "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+      "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
+    }
+  },
+  "processed_event_rows": 1410602,
+  "processed_files": 61,
+  "scope": "raw feature-side signal chunks from all discovered FastSim SMS-2Stop signal files; no cross-section normalization applied",
+  "status": "complete",
+  "xsec_normalization_status": "not_applied_manual_xsec_required"
+}

@@ -1,0 +1,3207 @@
+{
+  "attempted_files": 61,
+  "fastsim_trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level",
+  "processed_event_rows": 1410602,
+  "processed_files": 61,
+  "scope": "raw feature-side search-bin signal yields from all discovered FastSim SMS-2Stop signal files; no cross-section normalization applied",
+  "search_bin_source": "autonomous_allhad internal candidate definitions; no final search-bin scheme is adopted",
+  "status": "complete",
+  "yields": {
+    "ak8_kinematics_no_tag_scores": {
+      "AK8one_Njet5plus_Nb1_MET250plus": {
+        "mStop-2_mLSP-1000": {
+          "genmodel_branch": "GenModel_T2tt_1000_600",
+          "mLSP": 1000,
+          "mStop": 2,
+          "raw_weighted": 23825.0,
+          "unweighted": 23825
+        },
+        "mStop-2_mLSP-1050": {
+          "genmodel_branch": "GenModel_T2tt_1050_1",
+          "mLSP": 1050,
+          "mStop": 2,
+          "raw_weighted": 14231.0,
+          "unweighted": 14231
+        },
+        "mStop-2_mLSP-1100": {
+          "genmodel_branch": "GenModel_T2tt_1100_600",
+          "mLSP": 1100,
+          "mStop": 2,
+          "raw_weighted": 7732.0,
+          "unweighted": 7732
+        },
+        "mStop-2_mLSP-1150": {
+          "genmodel_branch": "GenModel_T2tt_1150_200",
+          "mLSP": 1150,
+          "mStop": 2,
+          "raw_weighted": 9601.0,
+          "unweighted": 9601
+        },
+        "mStop-2_mLSP-1200": {
+          "genmodel_branch": "GenModel_T2tt_1200_100",
+          "mLSP": 1200,
+          "mStop": 2,
+          "raw_weighted": 10807.0,
+          "unweighted": 10807
+        },
+        "mStop-2_mLSP-1250": {
+          "genmodel_branch": "GenModel_T2tt_1250_700",
+          "mLSP": 1250,
+          "mStop": 2,
+          "raw_weighted": 10434.0,
+          "unweighted": 10434
+        },
+        "mStop-2_mLSP-1300": {
+          "genmodel_branch": "GenModel_T2tt_1300_100",
+          "mLSP": 1300,
+          "mStop": 2,
+          "raw_weighted": 16876.0,
+          "unweighted": 16876
+        },
+        "mStop-2_mLSP-1350": {
+          "genmodel_branch": "GenModel_T2tt_1350_1200",
+          "mLSP": 1350,
+          "mStop": 2,
+          "raw_weighted": 10277.0,
+          "unweighted": 10277
+        },
+        "mStop-2_mLSP-1400": {
+          "genmodel_branch": "GenModel_T2tt_1400_600",
+          "mLSP": 1400,
+          "mStop": 2,
+          "raw_weighted": 11226.0,
+          "unweighted": 11226
+        },
+        "mStop-2_mLSP-1450": {
+          "genmodel_branch": "GenModel_T2tt_1450_1200",
+          "mLSP": 1450,
+          "mStop": 2,
+          "raw_weighted": 10804.0,
+          "unweighted": 10804
+        },
+        "mStop-2_mLSP-1500": {
+          "genmodel_branch": "GenModel_T2tt_1500_1000",
+          "mLSP": 1500,
+          "mStop": 2,
+          "raw_weighted": 17083.0,
+          "unweighted": 17083
+        },
+        "mStop-2_mLSP-1600": {
+          "genmodel_branch": "GenModel_T2tt_1600_1",
+          "mLSP": 1600,
+          "mStop": 2,
+          "raw_weighted": 11694.0,
+          "unweighted": 11694
+        },
+        "mStop-2_mLSP-1700": {
+          "genmodel_branch": "GenModel_T2tt_1700_1500",
+          "mLSP": 1700,
+          "mStop": 2,
+          "raw_weighted": 13936.0,
+          "unweighted": 13936
+        },
+        "mStop-2_mLSP-1800": {
+          "genmodel_branch": "GenModel_T2tt_1800_200",
+          "mLSP": 1800,
+          "mStop": 2,
+          "raw_weighted": 12473.0,
+          "unweighted": 12473
+        },
+        "mStop-2_mLSP-1900": {
+          "genmodel_branch": "GenModel_T2tt_1900_1000",
+          "mLSP": 1900,
+          "mStop": 2,
+          "raw_weighted": 11638.0,
+          "unweighted": 11638
+        },
+        "mStop-2_mLSP-2000": {
+          "genmodel_branch": "GenModel_T2tt_2000_1100",
+          "mLSP": 2000,
+          "mStop": 2,
+          "raw_weighted": 17226.0,
+          "unweighted": 17226
+        },
+        "mStop-2_mLSP-2100": {
+          "genmodel_branch": "GenModel_T2tt_2100_400",
+          "mLSP": 2100,
+          "mStop": 2,
+          "raw_weighted": 11969.0,
+          "unweighted": 11969
+        },
+        "mStop-2_mLSP-2200": {
+          "genmodel_branch": "GenModel_T2tt_2200_1600",
+          "mLSP": 2200,
+          "mStop": 2,
+          "raw_weighted": 13164.0,
+          "unweighted": 13164
+        },
+        "mStop-2_mLSP-2300": {
+          "genmodel_branch": "GenModel_T2tt_2300_1900",
+          "mLSP": 2300,
+          "mStop": 2,
+          "raw_weighted": 15524.0,
+          "unweighted": 15524
+        },
+        "mStop-2_mLSP-2400": {
+          "genmodel_branch": "GenModel_T2tt_2400_2100",
+          "mLSP": 2400,
+          "mStop": 2,
+          "raw_weighted": 11314.0,
+          "unweighted": 11314
+        },
+        "mStop-2_mLSP-2500": {
+          "genmodel_branch": "GenModel_T2tt_2500_2000",
+          "mLSP": 2500,
+          "mStop": 2,
+          "raw_weighted": 10813.0,
+          "unweighted": 10813
+        },
+        "mStop-2_mLSP-600": {
+          "genmodel_branch": "GenModel_T2tt_600_300",
+          "mLSP": 600,
+          "mStop": 2,
+          "raw_weighted": 7305.0,
+          "unweighted": 7305
+        },
+        "mStop-2_mLSP-700": {
+          "genmodel_branch": "GenModel_T2tt_700_300",
+          "mLSP": 700,
+          "mStop": 2,
+          "raw_weighted": 6610.0,
+          "unweighted": 6610
+        },
+        "mStop-2_mLSP-900": {
+          "genmodel_branch": "GenModel_T2tt_900_1",
+          "mLSP": 900,
+          "mStop": 2,
+          "raw_weighted": 8979.0,
+          "unweighted": 8979
+        },
+        "mStop-2_mLSP-950": {
+          "genmodel_branch": "GenModel_T2tt_950_500",
+          "mLSP": 950,
+          "mStop": 2,
+          "raw_weighted": 9066.0,
+          "unweighted": 9066
+        }
+      },
+      "AK8one_highMET": {
+        "mStop-2_mLSP-1000": {
+          "genmodel_branch": "GenModel_T2tt_1000_600",
+          "mLSP": 1000,
+          "mStop": 2,
+          "raw_weighted": 12822.0,
+          "unweighted": 12822
+        },
+        "mStop-2_mLSP-1050": {
+          "genmodel_branch": "GenModel_T2tt_1050_1",
+          "mLSP": 1050,
+          "mStop": 2,
+          "raw_weighted": 8118.0,
+          "unweighted": 8118
+        },
+        "mStop-2_mLSP-1100": {
+          "genmodel_branch": "GenModel_T2tt_1100_600",
+          "mLSP": 1100,
+          "mStop": 2,
+          "raw_weighted": 4698.0,
+          "unweighted": 4698
+        },
+        "mStop-2_mLSP-1150": {
+          "genmodel_branch": "GenModel_T2tt_1150_200",
+          "mLSP": 1150,
+          "mStop": 2,
+          "raw_weighted": 5768.0,
+          "unweighted": 5768
+        },
+        "mStop-2_mLSP-1200": {
+          "genmodel_branch": "GenModel_T2tt_1200_100",
+          "mLSP": 1200,
+          "mStop": 2,
+          "raw_weighted": 6794.0,
+          "unweighted": 6794
+        },
+        "mStop-2_mLSP-1250": {
+          "genmodel_branch": "GenModel_T2tt_1250_700",
+          "mLSP": 1250,
+          "mStop": 2,
+          "raw_weighted": 6950.0,
+          "unweighted": 6950
+        },
+        "mStop-2_mLSP-1300": {
+          "genmodel_branch": "GenModel_T2tt_1300_100",
+          "mLSP": 1300,
+          "mStop": 2,
+          "raw_weighted": 11165.0,
+          "unweighted": 11165
+        },
+        "mStop-2_mLSP-1350": {
+          "genmodel_branch": "GenModel_T2tt_1350_1200",
+          "mLSP": 1350,
+          "mStop": 2,
+          "raw_weighted": 6954.0,
+          "unweighted": 6954
+        },
+        "mStop-2_mLSP-1400": {
+          "genmodel_branch": "GenModel_T2tt_1400_600",
+          "mLSP": 1400,
+          "mStop": 2,
+          "raw_weighted": 7738.0,
+          "unweighted": 7738
+        },
+        "mStop-2_mLSP-1450": {
+          "genmodel_branch": "GenModel_T2tt_1450_1200",
+          "mLSP": 1450,
+          "mStop": 2,
+          "raw_weighted": 7617.0,
+          "unweighted": 7617
+        },
+        "mStop-2_mLSP-1500": {
+          "genmodel_branch": "GenModel_T2tt_1500_1000",
+          "mLSP": 1500,
+          "mStop": 2,
+          "raw_weighted": 12623.0,
+          "unweighted": 12623
+        },
+        "mStop-2_mLSP-1600": {
+          "genmodel_branch": "GenModel_T2tt_1600_1",
+          "mLSP": 1600,
+          "mStop": 2,
+          "raw_weighted": 8858.0,
+          "unweighted": 8858
+        },
+        "mStop-2_mLSP-1700": {
+          "genmodel_branch": "GenModel_T2tt_1700_1500",
+          "mLSP": 1700,
+          "mStop": 2,
+          "raw_weighted": 10517.0,
+          "unweighted": 10517
+        },
+        "mStop-2_mLSP-1800": {
+          "genmodel_branch": "GenModel_T2tt_1800_200",
+          "mLSP": 1800,
+          "mStop": 2,
+          "raw_weighted": 9979.0,
+          "unweighted": 9979
+        },
+        "mStop-2_mLSP-1900": {
+          "genmodel_branch": "GenModel_T2tt_1900_1000",
+          "mLSP": 1900,
+          "mStop": 2,
+          "raw_weighted": 8704.0,
+          "unweighted": 8704
+        },
+        "mStop-2_mLSP-2000": {
+          "genmodel_branch": "GenModel_T2tt_2000_1100",
+          "mLSP": 2000,
+          "mStop": 2,
+          "raw_weighted": 13392.0,
+          "unweighted": 13392
+        },
+        "mStop-2_mLSP-2100": {
+          "genmodel_branch": "GenModel_T2tt_2100_400",
+          "mLSP": 2100,
+          "mStop": 2,
+          "raw_weighted": 9867.0,
+          "unweighted": 9867
+        },
+        "mStop-2_mLSP-2200": {
+          "genmodel_branch": "GenModel_T2tt_2200_1600",
+          "mLSP": 2200,
+          "mStop": 2,
+          "raw_weighted": 10210.0,
+          "unweighted": 10210
+        },
+        "mStop-2_mLSP-2300": {
+          "genmodel_branch": "GenModel_T2tt_2300_1900",
+          "mLSP": 2300,
+          "mStop": 2,
+          "raw_weighted": 12775.0,
+          "unweighted": 12775
+        },
+        "mStop-2_mLSP-2400": {
+          "genmodel_branch": "GenModel_T2tt_2400_2100",
+          "mLSP": 2400,
+          "mStop": 2,
+          "raw_weighted": 9453.0,
+          "unweighted": 9453
+        },
+        "mStop-2_mLSP-2500": {
+          "genmodel_branch": "GenModel_T2tt_2500_2000",
+          "mLSP": 2500,
+          "mStop": 2,
+          "raw_weighted": 9079.0,
+          "unweighted": 9079
+        },
+        "mStop-2_mLSP-600": {
+          "genmodel_branch": "GenModel_T2tt_600_300",
+          "mLSP": 600,
+          "mStop": 2,
+          "raw_weighted": 1290.0,
+          "unweighted": 1290
+        },
+        "mStop-2_mLSP-700": {
+          "genmodel_branch": "GenModel_T2tt_700_300",
+          "mLSP": 700,
+          "mStop": 2,
+          "raw_weighted": 1909.0,
+          "unweighted": 1909
+        },
+        "mStop-2_mLSP-900": {
+          "genmodel_branch": "GenModel_T2tt_900_1",
+          "mLSP": 900,
+          "mStop": 2,
+          "raw_weighted": 4510.0,
+          "unweighted": 4510
+        },
+        "mStop-2_mLSP-950": {
+          "genmodel_branch": "GenModel_T2tt_950_500",
+          "mLSP": 950,
+          "mStop": 2,
+          "raw_weighted": 5013.0,
+          "unweighted": 5013
+        }
+      },
+      "AK8two_Njet5plus": {
+        "mStop-2_mLSP-1000": {
+          "genmodel_branch": "GenModel_T2tt_1000_600",
+          "mLSP": 1000,
+          "mStop": 2,
+          "raw_weighted": 10348.0,
+          "unweighted": 10348
+        },
+        "mStop-2_mLSP-1050": {
+          "genmodel_branch": "GenModel_T2tt_1050_1",
+          "mLSP": 1050,
+          "mStop": 2,
+          "raw_weighted": 6481.0,
+          "unweighted": 6481
+        },
+        "mStop-2_mLSP-1100": {
+          "genmodel_branch": "GenModel_T2tt_1100_600",
+          "mLSP": 1100,
+          "mStop": 2,
+          "raw_weighted": 3670.0,
+          "unweighted": 3670
+        },
+        "mStop-2_mLSP-1150": {
+          "genmodel_branch": "GenModel_T2tt_1150_200",
+          "mLSP": 1150,
+          "mStop": 2,
+          "raw_weighted": 4545.0,
+          "unweighted": 4545
+        },
+        "mStop-2_mLSP-1200": {
+          "genmodel_branch": "GenModel_T2tt_1200_100",
+          "mLSP": 1200,
+          "mStop": 2,
+          "raw_weighted": 5310.0,
+          "unweighted": 5310
+        },
+        "mStop-2_mLSP-1250": {
+          "genmodel_branch": "GenModel_T2tt_1250_700",
+          "mLSP": 1250,
+          "mStop": 2,
+          "raw_weighted": 5386.0,
+          "unweighted": 5386
+        },
+        "mStop-2_mLSP-1300": {
+          "genmodel_branch": "GenModel_T2tt_1300_100",
+          "mLSP": 1300,
+          "mStop": 2,
+          "raw_weighted": 8860.0,
+          "unweighted": 8860
+        },
+        "mStop-2_mLSP-1350": {
+          "genmodel_branch": "GenModel_T2tt_1350_1200",
+          "mLSP": 1350,
+          "mStop": 2,
+          "raw_weighted": 5409.0,
+          "unweighted": 5409
+        },
+        "mStop-2_mLSP-1400": {
+          "genmodel_branch": "GenModel_T2tt_1400_600",
+          "mLSP": 1400,
+          "mStop": 2,
+          "raw_weighted": 5957.0,
+          "unweighted": 5957
+        },
+        "mStop-2_mLSP-1450": {
+          "genmodel_branch": "GenModel_T2tt_1450_1200",
+          "mLSP": 1450,
+          "mStop": 2,
+          "raw_weighted": 5781.0,
+          "unweighted": 5781
+        },
+        "mStop-2_mLSP-1500": {
+          "genmodel_branch": "GenModel_T2tt_1500_1000",
+          "mLSP": 1500,
+          "mStop": 2,
+          "raw_weighted": 9759.0,
+          "unweighted": 9759
+        },
+        "mStop-2_mLSP-1600": {
+          "genmodel_branch": "GenModel_T2tt_1600_1",
+          "mLSP": 1600,
+          "mStop": 2,
+          "raw_weighted": 6860.0,
+          "unweighted": 6860
+        },
+        "mStop-2_mLSP-1700": {
+          "genmodel_branch": "GenModel_T2tt_1700_1500",
+          "mLSP": 1700,
+          "mStop": 2,
+          "raw_weighted": 8197.0,
+          "unweighted": 8197
+        },
+        "mStop-2_mLSP-1800": {
+          "genmodel_branch": "GenModel_T2tt_1800_200",
+          "mLSP": 1800,
+          "mStop": 2,
+          "raw_weighted": 7770.0,
+          "unweighted": 7770
+        },
+        "mStop-2_mLSP-1900": {
+          "genmodel_branch": "GenModel_T2tt_1900_1000",
+          "mLSP": 1900,
+          "mStop": 2,
+          "raw_weighted": 6820.0,
+          "unweighted": 6820
+        },
+        "mStop-2_mLSP-2000": {
+          "genmodel_branch": "GenModel_T2tt_2000_1100",
+          "mLSP": 2000,
+          "mStop": 2,
+          "raw_weighted": 10385.0,
+          "unweighted": 10385
+        },
+        "mStop-2_mLSP-2100": {
+          "genmodel_branch": "GenModel_T2tt_2100_400",
+          "mLSP": 2100,
+          "mStop": 2,
+          "raw_weighted": 7783.0,
+          "unweighted": 7783
+        },
+        "mStop-2_mLSP-2200": {
+          "genmodel_branch": "GenModel_T2tt_2200_1600",
+          "mLSP": 2200,
+          "mStop": 2,
+          "raw_weighted": 7933.0,
+          "unweighted": 7933
+        },
+        "mStop-2_mLSP-2300": {
+          "genmodel_branch": "GenModel_T2tt_2300_1900",
+          "mLSP": 2300,
+          "mStop": 2,
+          "raw_weighted": 9954.0,
+          "unweighted": 9954
+        },
+        "mStop-2_mLSP-2400": {
+          "genmodel_branch": "GenModel_T2tt_2400_2100",
+          "mLSP": 2400,
+          "mStop": 2,
+          "raw_weighted": 7363.0,
+          "unweighted": 7363
+        },
+        "mStop-2_mLSP-2500": {
+          "genmodel_branch": "GenModel_T2tt_2500_2000",
+          "mLSP": 2500,
+          "mStop": 2,
+          "raw_weighted": 7043.0,
+          "unweighted": 7043
+        },
+        "mStop-2_mLSP-600": {
+          "genmodel_branch": "GenModel_T2tt_600_300",
+          "mLSP": 600,
+          "mStop": 2,
+          "raw_weighted": 1964.0,
+          "unweighted": 1964
+        },
+        "mStop-2_mLSP-700": {
+          "genmodel_branch": "GenModel_T2tt_700_300",
+          "mLSP": 700,
+          "mStop": 2,
+          "raw_weighted": 2014.0,
+          "unweighted": 2014
+        },
+        "mStop-2_mLSP-900": {
+          "genmodel_branch": "GenModel_T2tt_900_1",
+          "mLSP": 900,
+          "mStop": 2,
+          "raw_weighted": 3713.0,
+          "unweighted": 3713
+        },
+        "mStop-2_mLSP-950": {
+          "genmodel_branch": "GenModel_T2tt_950_500",
+          "mLSP": 950,
+          "mStop": 2,
+          "raw_weighted": 3919.0,
+          "unweighted": 3919
+        }
+      }
+    },
+    "isr_sensitive": {
+      "hardJ1_Njet2plus_MET250to500": {
+        "mStop-2_mLSP-1000": {
+          "genmodel_branch": "GenModel_T2tt_1000_600",
+          "mLSP": 1000,
+          "mStop": 2,
+          "raw_weighted": 1828.0,
+          "unweighted": 1828
+        },
+        "mStop-2_mLSP-1050": {
+          "genmodel_branch": "GenModel_T2tt_1050_1",
+          "mLSP": 1050,
+          "mStop": 2,
+          "raw_weighted": 1141.0,
+          "unweighted": 1141
+        },
+        "mStop-2_mLSP-1100": {
+          "genmodel_branch": "GenModel_T2tt_1100_600",
+          "mLSP": 1100,
+          "mStop": 2,
+          "raw_weighted": 616.0,
+          "unweighted": 616
+        },
+        "mStop-2_mLSP-1150": {
+          "genmodel_branch": "GenModel_T2tt_1150_200",
+          "mLSP": 1150,
+          "mStop": 2,
+          "raw_weighted": 782.0,
+          "unweighted": 782
+        },
+        "mStop-2_mLSP-1200": {
+          "genmodel_branch": "GenModel_T2tt_1200_100",
+          "mLSP": 1200,
+          "mStop": 2,
+          "raw_weighted": 812.0,
+          "unweighted": 812
+        },
+        "mStop-2_mLSP-1250": {
+          "genmodel_branch": "GenModel_T2tt_1250_700",
+          "mLSP": 1250,
+          "mStop": 2,
+          "raw_weighted": 815.0,
+          "unweighted": 815
+        },
+        "mStop-2_mLSP-1300": {
+          "genmodel_branch": "GenModel_T2tt_1300_100",
+          "mLSP": 1300,
+          "mStop": 2,
+          "raw_weighted": 1319.0,
+          "unweighted": 1319
+        },
+        "mStop-2_mLSP-1350": {
+          "genmodel_branch": "GenModel_T2tt_1350_1200",
+          "mLSP": 1350,
+          "mStop": 2,
+          "raw_weighted": 845.0,
+          "unweighted": 845
+        },
+        "mStop-2_mLSP-1400": {
+          "genmodel_branch": "GenModel_T2tt_1400_600",
+          "mLSP": 1400,
+          "mStop": 2,
+          "raw_weighted": 915.0,
+          "unweighted": 915
+        },
+        "mStop-2_mLSP-1450": {
+          "genmodel_branch": "GenModel_T2tt_1450_1200",
+          "mLSP": 1450,
+          "mStop": 2,
+          "raw_weighted": 840.0,
+          "unweighted": 840
+        },
+        "mStop-2_mLSP-1500": {
+          "genmodel_branch": "GenModel_T2tt_1500_1000",
+          "mLSP": 1500,
+          "mStop": 2,
+          "raw_weighted": 1408.0,
+          "unweighted": 1408
+        },
+        "mStop-2_mLSP-1600": {
+          "genmodel_branch": "GenModel_T2tt_1600_1",
+          "mLSP": 1600,
+          "mStop": 2,
+          "raw_weighted": 916.0,
+          "unweighted": 916
+        },
+        "mStop-2_mLSP-1700": {
+          "genmodel_branch": "GenModel_T2tt_1700_1500",
+          "mLSP": 1700,
+          "mStop": 2,
+          "raw_weighted": 1121.0,
+          "unweighted": 1121
+        },
+        "mStop-2_mLSP-1800": {
+          "genmodel_branch": "GenModel_T2tt_1800_200",
+          "mLSP": 1800,
+          "mStop": 2,
+          "raw_weighted": 973.0,
+          "unweighted": 973
+        },
+        "mStop-2_mLSP-1900": {
+          "genmodel_branch": "GenModel_T2tt_1900_1000",
+          "mLSP": 1900,
+          "mStop": 2,
+          "raw_weighted": 877.0,
+          "unweighted": 877
+        },
+        "mStop-2_mLSP-2000": {
+          "genmodel_branch": "GenModel_T2tt_2000_1100",
+          "mLSP": 2000,
+          "mStop": 2,
+          "raw_weighted": 1203.0,
+          "unweighted": 1203
+        },
+        "mStop-2_mLSP-2100": {
+          "genmodel_branch": "GenModel_T2tt_2100_400",
+          "mLSP": 2100,
+          "mStop": 2,
+          "raw_weighted": 857.0,
+          "unweighted": 857
+        },
+        "mStop-2_mLSP-2200": {
+          "genmodel_branch": "GenModel_T2tt_2200_1600",
+          "mLSP": 2200,
+          "mStop": 2,
+          "raw_weighted": 876.0,
+          "unweighted": 876
+        },
+        "mStop-2_mLSP-2300": {
+          "genmodel_branch": "GenModel_T2tt_2300_1900",
+          "mLSP": 2300,
+          "mStop": 2,
+          "raw_weighted": 1047.0,
+          "unweighted": 1047
+        },
+        "mStop-2_mLSP-2400": {
+          "genmodel_branch": "GenModel_T2tt_2400_2100",
+          "mLSP": 2400,
+          "mStop": 2,
+          "raw_weighted": 747.0,
+          "unweighted": 747
+        },
+        "mStop-2_mLSP-2500": {
+          "genmodel_branch": "GenModel_T2tt_2500_2000",
+          "mLSP": 2500,
+          "mStop": 2,
+          "raw_weighted": 714.0,
+          "unweighted": 714
+        },
+        "mStop-2_mLSP-600": {
+          "genmodel_branch": "GenModel_T2tt_600_300",
+          "mLSP": 600,
+          "mStop": 2,
+          "raw_weighted": 520.0,
+          "unweighted": 520
+        },
+        "mStop-2_mLSP-700": {
+          "genmodel_branch": "GenModel_T2tt_700_300",
+          "mLSP": 700,
+          "mStop": 2,
+          "raw_weighted": 409.0,
+          "unweighted": 409
+        },
+        "mStop-2_mLSP-900": {
+          "genmodel_branch": "GenModel_T2tt_900_1",
+          "mLSP": 900,
+          "mStop": 2,
+          "raw_weighted": 670.0,
+          "unweighted": 670
+        },
+        "mStop-2_mLSP-950": {
+          "genmodel_branch": "GenModel_T2tt_950_500",
+          "mLSP": 950,
+          "mStop": 2,
+          "raw_weighted": 664.0,
+          "unweighted": 664
+        }
+      },
+      "hardJ1_Njet2plus_MET500plus": {
+        "mStop-2_mLSP-1000": {
+          "genmodel_branch": "GenModel_T2tt_1000_600",
+          "mLSP": 1000,
+          "mStop": 2,
+          "raw_weighted": 4872.0,
+          "unweighted": 4872
+        },
+        "mStop-2_mLSP-1050": {
+          "genmodel_branch": "GenModel_T2tt_1050_1",
+          "mLSP": 1050,
+          "mStop": 2,
+          "raw_weighted": 3359.0,
+          "unweighted": 3359
+        },
+        "mStop-2_mLSP-1100": {
+          "genmodel_branch": "GenModel_T2tt_1100_600",
+          "mLSP": 1100,
+          "mStop": 2,
+          "raw_weighted": 2017.0,
+          "unweighted": 2017
+        },
+        "mStop-2_mLSP-1150": {
+          "genmodel_branch": "GenModel_T2tt_1150_200",
+          "mLSP": 1150,
+          "mStop": 2,
+          "raw_weighted": 2615.0,
+          "unweighted": 2615
+        },
+        "mStop-2_mLSP-1200": {
+          "genmodel_branch": "GenModel_T2tt_1200_100",
+          "mLSP": 1200,
+          "mStop": 2,
+          "raw_weighted": 3335.0,
+          "unweighted": 3335
+        },
+        "mStop-2_mLSP-1250": {
+          "genmodel_branch": "GenModel_T2tt_1250_700",
+          "mLSP": 1250,
+          "mStop": 2,
+          "raw_weighted": 3615.0,
+          "unweighted": 3615
+        },
+        "mStop-2_mLSP-1300": {
+          "genmodel_branch": "GenModel_T2tt_1300_100",
+          "mLSP": 1300,
+          "mStop": 2,
+          "raw_weighted": 5943.0,
+          "unweighted": 5943
+        },
+        "mStop-2_mLSP-1350": {
+          "genmodel_branch": "GenModel_T2tt_1350_1200",
+          "mLSP": 1350,
+          "mStop": 2,
+          "raw_weighted": 3825.0,
+          "unweighted": 3825
+        },
+        "mStop-2_mLSP-1400": {
+          "genmodel_branch": "GenModel_T2tt_1400_600",
+          "mLSP": 1400,
+          "mStop": 2,
+          "raw_weighted": 4505.0,
+          "unweighted": 4505
+        },
+        "mStop-2_mLSP-1450": {
+          "genmodel_branch": "GenModel_T2tt_1450_1200",
+          "mLSP": 1450,
+          "mStop": 2,
+          "raw_weighted": 4552.0,
+          "unweighted": 4552
+        },
+        "mStop-2_mLSP-1500": {
+          "genmodel_branch": "GenModel_T2tt_1500_1000",
+          "mLSP": 1500,
+          "mStop": 2,
+          "raw_weighted": 7835.0,
+          "unweighted": 7835
+        },
+        "mStop-2_mLSP-1600": {
+          "genmodel_branch": "GenModel_T2tt_1600_1",
+          "mLSP": 1600,
+          "mStop": 2,
+          "raw_weighted": 5986.0,
+          "unweighted": 5986
+        },
+        "mStop-2_mLSP-1700": {
+          "genmodel_branch": "GenModel_T2tt_1700_1500",
+          "mLSP": 1700,
+          "mStop": 2,
+          "raw_weighted": 7119.0,
+          "unweighted": 7119
+        },
+        "mStop-2_mLSP-1800": {
+          "genmodel_branch": "GenModel_T2tt_1800_200",
+          "mLSP": 1800,
+          "mStop": 2,
+          "raw_weighted": 7253.0,
+          "unweighted": 7253
+        },
+        "mStop-2_mLSP-1900": {
+          "genmodel_branch": "GenModel_T2tt_1900_1000",
+          "mLSP": 1900,
+          "mStop": 2,
+          "raw_weighted": 5984.0,
+          "unweighted": 5984
+        },
+        "mStop-2_mLSP-2000": {
+          "genmodel_branch": "GenModel_T2tt_2000_1100",
+          "mLSP": 2000,
+          "mStop": 2,
+          "raw_weighted": 9976.0,
+          "unweighted": 9976
+        },
+        "mStop-2_mLSP-2100": {
+          "genmodel_branch": "GenModel_T2tt_2100_400",
+          "mLSP": 2100,
+          "mStop": 2,
+          "raw_weighted": 7808.0,
+          "unweighted": 7808
+        },
+        "mStop-2_mLSP-2200": {
+          "genmodel_branch": "GenModel_T2tt_2200_1600",
+          "mLSP": 2200,
+          "mStop": 2,
+          "raw_weighted": 7847.0,
+          "unweighted": 7847
+        },
+        "mStop-2_mLSP-2300": {
+          "genmodel_branch": "GenModel_T2tt_2300_1900",
+          "mLSP": 2300,
+          "mStop": 2,
+          "raw_weighted": 10417.0,
+          "unweighted": 10417
+        },
+        "mStop-2_mLSP-2400": {
+          "genmodel_branch": "GenModel_T2tt_2400_2100",
+          "mLSP": 2400,
+          "mStop": 2,
+          "raw_weighted": 7763.0,
+          "unweighted": 7763
+        },
+        "mStop-2_mLSP-2500": {
+          "genmodel_branch": "GenModel_T2tt_2500_2000",
+          "mLSP": 2500,
+          "mStop": 2,
+          "raw_weighted": 7596.0,
+          "unweighted": 7596
+        },
+        "mStop-2_mLSP-600": {
+          "genmodel_branch": "GenModel_T2tt_600_300",
+          "mLSP": 600,
+          "mStop": 2,
+          "raw_weighted": 414.0,
+          "unweighted": 414
+        },
+        "mStop-2_mLSP-700": {
+          "genmodel_branch": "GenModel_T2tt_700_300",
+          "mLSP": 700,
+          "mStop": 2,
+          "raw_weighted": 559.0,
+          "unweighted": 559
+        },
+        "mStop-2_mLSP-900": {
+          "genmodel_branch": "GenModel_T2tt_900_1",
+          "mLSP": 900,
+          "mStop": 2,
+          "raw_weighted": 1510.0,
+          "unweighted": 1510
+        },
+        "mStop-2_mLSP-950": {
+          "genmodel_branch": "GenModel_T2tt_950_500",
+          "mLSP": 950,
+          "mStop": 2,
+          "raw_weighted": 1887.0,
+          "unweighted": 1887
+        }
+      },
+      "hardJ1_lowB_MET400plus": {
+        "mStop-2_mLSP-1000": {
+          "genmodel_branch": "GenModel_T2tt_1000_600",
+          "mLSP": 1000,
+          "mStop": 2,
+          "raw_weighted": 1679.0,
+          "unweighted": 1679
+        },
+        "mStop-2_mLSP-1050": {
+          "genmodel_branch": "GenModel_T2tt_1050_1",
+          "mLSP": 1050,
+          "mStop": 2,
+          "raw_weighted": 1107.0,
+          "unweighted": 1107
+        },
+        "mStop-2_mLSP-1100": {
+          "genmodel_branch": "GenModel_T2tt_1100_600",
+          "mLSP": 1100,
+          "mStop": 2,
+          "raw_weighted": 639.0,
+          "unweighted": 639
+        },
+        "mStop-2_mLSP-1150": {
+          "genmodel_branch": "GenModel_T2tt_1150_200",
+          "mLSP": 1150,
+          "mStop": 2,
+          "raw_weighted": 894.0,
+          "unweighted": 894
+        },
+        "mStop-2_mLSP-1200": {
+          "genmodel_branch": "GenModel_T2tt_1200_100",
+          "mLSP": 1200,
+          "mStop": 2,
+          "raw_weighted": 1074.0,
+          "unweighted": 1074
+        },
+        "mStop-2_mLSP-1250": {
+          "genmodel_branch": "GenModel_T2tt_1250_700",
+          "mLSP": 1250,
+          "mStop": 2,
+          "raw_weighted": 1061.0,
+          "unweighted": 1061
+        },
+        "mStop-2_mLSP-1300": {
+          "genmodel_branch": "GenModel_T2tt_1300_100",
+          "mLSP": 1300,
+          "mStop": 2,
+          "raw_weighted": 1793.0,
+          "unweighted": 1793
+        },
+        "mStop-2_mLSP-1350": {
+          "genmodel_branch": "GenModel_T2tt_1350_1200",
+          "mLSP": 1350,
+          "mStop": 2,
+          "raw_weighted": 1182.0,
+          "unweighted": 1182
+        },
+        "mStop-2_mLSP-1400": {
+          "genmodel_branch": "GenModel_T2tt_1400_600",
+          "mLSP": 1400,
+          "mStop": 2,
+          "raw_weighted": 1339.0,
+          "unweighted": 1339
+        },
+        "mStop-2_mLSP-1450": {
+          "genmodel_branch": "GenModel_T2tt_1450_1200",
+          "mLSP": 1450,
+          "mStop": 2,
+          "raw_weighted": 1328.0,
+          "unweighted": 1328
+        },
+        "mStop-2_mLSP-1500": {
+          "genmodel_branch": "GenModel_T2tt_1500_1000",
+          "mLSP": 1500,
+          "mStop": 2,
+          "raw_weighted": 2260.0,
+          "unweighted": 2260
+        },
+        "mStop-2_mLSP-1600": {
+          "genmodel_branch": "GenModel_T2tt_1600_1",
+          "mLSP": 1600,
+          "mStop": 2,
+          "raw_weighted": 1694.0,
+          "unweighted": 1694
+        },
+        "mStop-2_mLSP-1700": {
+          "genmodel_branch": "GenModel_T2tt_1700_1500",
+          "mLSP": 1700,
+          "mStop": 2,
+          "raw_weighted": 2032.0,
+          "unweighted": 2032
+        },
+        "mStop-2_mLSP-1800": {
+          "genmodel_branch": "GenModel_T2tt_1800_200",
+          "mLSP": 1800,
+          "mStop": 2,
+          "raw_weighted": 1958.0,
+          "unweighted": 1958
+        },
+        "mStop-2_mLSP-1900": {
+          "genmodel_branch": "GenModel_T2tt_1900_1000",
+          "mLSP": 1900,
+          "mStop": 2,
+          "raw_weighted": 1720.0,
+          "unweighted": 1720
+        },
+        "mStop-2_mLSP-2000": {
+          "genmodel_branch": "GenModel_T2tt_2000_1100",
+          "mLSP": 2000,
+          "mStop": 2,
+          "raw_weighted": 2637.0,
+          "unweighted": 2637
+        },
+        "mStop-2_mLSP-2100": {
+          "genmodel_branch": "GenModel_T2tt_2100_400",
+          "mLSP": 2100,
+          "mStop": 2,
+          "raw_weighted": 2066.0,
+          "unweighted": 2066
+        },
+        "mStop-2_mLSP-2200": {
+          "genmodel_branch": "GenModel_T2tt_2200_1600",
+          "mLSP": 2200,
+          "mStop": 2,
+          "raw_weighted": 2132.0,
+          "unweighted": 2132
+        },
+        "mStop-2_mLSP-2300": {
+          "genmodel_branch": "GenModel_T2tt_2300_1900",
+          "mLSP": 2300,
+          "mStop": 2,
+          "raw_weighted": 2744.0,
+          "unweighted": 2744
+        },
+        "mStop-2_mLSP-2400": {
+          "genmodel_branch": "GenModel_T2tt_2400_2100",
+          "mLSP": 2400,
+          "mStop": 2,
+          "raw_weighted": 2058.0,
+          "unweighted": 2058
+        },
+        "mStop-2_mLSP-2500": {
+          "genmodel_branch": "GenModel_T2tt_2500_2000",
+          "mLSP": 2500,
+          "mStop": 2,
+          "raw_weighted": 1954.0,
+          "unweighted": 1954
+        },
+        "mStop-2_mLSP-600": {
+          "genmodel_branch": "GenModel_T2tt_600_300",
+          "mLSP": 600,
+          "mStop": 2,
+          "raw_weighted": 167.0,
+          "unweighted": 167
+        },
+        "mStop-2_mLSP-700": {
+          "genmodel_branch": "GenModel_T2tt_700_300",
+          "mLSP": 700,
+          "mStop": 2,
+          "raw_weighted": 226.0,
+          "unweighted": 226
+        },
+        "mStop-2_mLSP-900": {
+          "genmodel_branch": "GenModel_T2tt_900_1",
+          "mLSP": 900,
+          "mStop": 2,
+          "raw_weighted": 527.0,
+          "unweighted": 527
+        },
+        "mStop-2_mLSP-950": {
+          "genmodel_branch": "GenModel_T2tt_950_500",
+          "mLSP": 950,
+          "mStop": 2,
+          "raw_weighted": 626.0,
+          "unweighted": 626
+        }
+      }
+    },
+    "minimal_njet_nb_met": {
+      "Njet5plus_Nb1plus_MET600plus": {
+        "mStop-2_mLSP-1000": {
+          "genmodel_branch": "GenModel_T2tt_1000_600",
+          "mLSP": 1000,
+          "mStop": 2,
+          "raw_weighted": 9192.0,
+          "unweighted": 9192
+        },
+        "mStop-2_mLSP-1050": {
+          "genmodel_branch": "GenModel_T2tt_1050_1",
+          "mLSP": 1050,
+          "mStop": 2,
+          "raw_weighted": 6112.0,
+          "unweighted": 6112
+        },
+        "mStop-2_mLSP-1100": {
+          "genmodel_branch": "GenModel_T2tt_1100_600",
+          "mLSP": 1100,
+          "mStop": 2,
+          "raw_weighted": 3504.0,
+          "unweighted": 3504
+        },
+        "mStop-2_mLSP-1150": {
+          "genmodel_branch": "GenModel_T2tt_1150_200",
+          "mLSP": 1150,
+          "mStop": 2,
+          "raw_weighted": 4399.0,
+          "unweighted": 4399
+        },
+        "mStop-2_mLSP-1200": {
+          "genmodel_branch": "GenModel_T2tt_1200_100",
+          "mLSP": 1200,
+          "mStop": 2,
+          "raw_weighted": 5307.0,
+          "unweighted": 5307
+        },
+        "mStop-2_mLSP-1250": {
+          "genmodel_branch": "GenModel_T2tt_1250_700",
+          "mLSP": 1250,
+          "mStop": 2,
+          "raw_weighted": 5673.0,
+          "unweighted": 5673
+        },
+        "mStop-2_mLSP-1300": {
+          "genmodel_branch": "GenModel_T2tt_1300_100",
+          "mLSP": 1300,
+          "mStop": 2,
+          "raw_weighted": 9020.0,
+          "unweighted": 9020
+        },
+        "mStop-2_mLSP-1350": {
+          "genmodel_branch": "GenModel_T2tt_1350_1200",
+          "mLSP": 1350,
+          "mStop": 2,
+          "raw_weighted": 5811.0,
+          "unweighted": 5811
+        },
+        "mStop-2_mLSP-1400": {
+          "genmodel_branch": "GenModel_T2tt_1400_600",
+          "mLSP": 1400,
+          "mStop": 2,
+          "raw_weighted": 6468.0,
+          "unweighted": 6468
+        },
+        "mStop-2_mLSP-1450": {
+          "genmodel_branch": "GenModel_T2tt_1450_1200",
+          "mLSP": 1450,
+          "mStop": 2,
+          "raw_weighted": 6453.0,
+          "unweighted": 6453
+        },
+        "mStop-2_mLSP-1500": {
+          "genmodel_branch": "GenModel_T2tt_1500_1000",
+          "mLSP": 1500,
+          "mStop": 2,
+          "raw_weighted": 10850.0,
+          "unweighted": 10850
+        },
+        "mStop-2_mLSP-1600": {
+          "genmodel_branch": "GenModel_T2tt_1600_1",
+          "mLSP": 1600,
+          "mStop": 2,
+          "raw_weighted": 7662.0,
+          "unweighted": 7662
+        },
+        "mStop-2_mLSP-1700": {
+          "genmodel_branch": "GenModel_T2tt_1700_1500",
+          "mLSP": 1700,
+          "mStop": 2,
+          "raw_weighted": 9190.0,
+          "unweighted": 9190
+        },
+        "mStop-2_mLSP-1800": {
+          "genmodel_branch": "GenModel_T2tt_1800_200",
+          "mLSP": 1800,
+          "mStop": 2,
+          "raw_weighted": 8857.0,
+          "unweighted": 8857
+        },
+        "mStop-2_mLSP-1900": {
+          "genmodel_branch": "GenModel_T2tt_1900_1000",
+          "mLSP": 1900,
+          "mStop": 2,
+          "raw_weighted": 7606.0,
+          "unweighted": 7606
+        },
+        "mStop-2_mLSP-2000": {
+          "genmodel_branch": "GenModel_T2tt_2000_1100",
+          "mLSP": 2000,
+          "mStop": 2,
+          "raw_weighted": 11933.0,
+          "unweighted": 11933
+        },
+        "mStop-2_mLSP-2100": {
+          "genmodel_branch": "GenModel_T2tt_2100_400",
+          "mLSP": 2100,
+          "mStop": 2,
+          "raw_weighted": 9000.0,
+          "unweighted": 9000
+        },
+        "mStop-2_mLSP-2200": {
+          "genmodel_branch": "GenModel_T2tt_2200_1600",
+          "mLSP": 2200,
+          "mStop": 2,
+          "raw_weighted": 9203.0,
+          "unweighted": 9203
+        },
+        "mStop-2_mLSP-2300": {
+          "genmodel_branch": "GenModel_T2tt_2300_1900",
+          "mLSP": 2300,
+          "mStop": 2,
+          "raw_weighted": 11739.0,
+          "unweighted": 11739
+        },
+        "mStop-2_mLSP-2400": {
+          "genmodel_branch": "GenModel_T2tt_2400_2100",
+          "mLSP": 2400,
+          "mStop": 2,
+          "raw_weighted": 8640.0,
+          "unweighted": 8640
+        },
+        "mStop-2_mLSP-2500": {
+          "genmodel_branch": "GenModel_T2tt_2500_2000",
+          "mLSP": 2500,
+          "mStop": 2,
+          "raw_weighted": 8368.0,
+          "unweighted": 8368
+        },
+        "mStop-2_mLSP-600": {
+          "genmodel_branch": "GenModel_T2tt_600_300",
+          "mLSP": 600,
+          "mStop": 2,
+          "raw_weighted": 536.0,
+          "unweighted": 536
+        },
+        "mStop-2_mLSP-700": {
+          "genmodel_branch": "GenModel_T2tt_700_300",
+          "mLSP": 700,
+          "mStop": 2,
+          "raw_weighted": 875.0,
+          "unweighted": 875
+        },
+        "mStop-2_mLSP-900": {
+          "genmodel_branch": "GenModel_T2tt_900_1",
+          "mLSP": 900,
+          "mStop": 2,
+          "raw_weighted": 3059.0,
+          "unweighted": 3059
+        },
+        "mStop-2_mLSP-950": {
+          "genmodel_branch": "GenModel_T2tt_950_500",
+          "mLSP": 950,
+          "mStop": 2,
+          "raw_weighted": 3601.0,
+          "unweighted": 3601
+        }
+      },
+      "Njet5to6_Nb1_MET250to400": {
+        "mStop-2_mLSP-1000": {
+          "genmodel_branch": "GenModel_T2tt_1000_600",
+          "mLSP": 1000,
+          "mStop": 2,
+          "raw_weighted": 2005.0,
+          "unweighted": 2005
+        },
+        "mStop-2_mLSP-1050": {
+          "genmodel_branch": "GenModel_T2tt_1050_1",
+          "mLSP": 1050,
+          "mStop": 2,
+          "raw_weighted": 1163.0,
+          "unweighted": 1163
+        },
+        "mStop-2_mLSP-1100": {
+          "genmodel_branch": "GenModel_T2tt_1100_600",
+          "mLSP": 1100,
+          "mStop": 2,
+          "raw_weighted": 484.0,
+          "unweighted": 484
+        },
+        "mStop-2_mLSP-1150": {
+          "genmodel_branch": "GenModel_T2tt_1150_200",
+          "mLSP": 1150,
+          "mStop": 2,
+          "raw_weighted": 721.0,
+          "unweighted": 721
+        },
+        "mStop-2_mLSP-1200": {
+          "genmodel_branch": "GenModel_T2tt_1200_100",
+          "mLSP": 1200,
+          "mStop": 2,
+          "raw_weighted": 692.0,
+          "unweighted": 692
+        },
+        "mStop-2_mLSP-1250": {
+          "genmodel_branch": "GenModel_T2tt_1250_700",
+          "mLSP": 1250,
+          "mStop": 2,
+          "raw_weighted": 614.0,
+          "unweighted": 614
+        },
+        "mStop-2_mLSP-1300": {
+          "genmodel_branch": "GenModel_T2tt_1300_100",
+          "mLSP": 1300,
+          "mStop": 2,
+          "raw_weighted": 914.0,
+          "unweighted": 914
+        },
+        "mStop-2_mLSP-1350": {
+          "genmodel_branch": "GenModel_T2tt_1350_1200",
+          "mLSP": 1350,
+          "mStop": 2,
+          "raw_weighted": 632.0,
+          "unweighted": 632
+        },
+        "mStop-2_mLSP-1400": {
+          "genmodel_branch": "GenModel_T2tt_1400_600",
+          "mLSP": 1400,
+          "mStop": 2,
+          "raw_weighted": 599.0,
+          "unweighted": 599
+        },
+        "mStop-2_mLSP-1450": {
+          "genmodel_branch": "GenModel_T2tt_1450_1200",
+          "mLSP": 1450,
+          "mStop": 2,
+          "raw_weighted": 570.0,
+          "unweighted": 570
+        },
+        "mStop-2_mLSP-1500": {
+          "genmodel_branch": "GenModel_T2tt_1500_1000",
+          "mLSP": 1500,
+          "mStop": 2,
+          "raw_weighted": 613.0,
+          "unweighted": 613
+        },
+        "mStop-2_mLSP-1600": {
+          "genmodel_branch": "GenModel_T2tt_1600_1",
+          "mLSP": 1600,
+          "mStop": 2,
+          "raw_weighted": 412.0,
+          "unweighted": 412
+        },
+        "mStop-2_mLSP-1700": {
+          "genmodel_branch": "GenModel_T2tt_1700_1500",
+          "mLSP": 1700,
+          "mStop": 2,
+          "raw_weighted": 516.0,
+          "unweighted": 516
+        },
+        "mStop-2_mLSP-1800": {
+          "genmodel_branch": "GenModel_T2tt_1800_200",
+          "mLSP": 1800,
+          "mStop": 2,
+          "raw_weighted": 340.0,
+          "unweighted": 340
+        },
+        "mStop-2_mLSP-1900": {
+          "genmodel_branch": "GenModel_T2tt_1900_1000",
+          "mLSP": 1900,
+          "mStop": 2,
+          "raw_weighted": 506.0,
+          "unweighted": 506
+        },
+        "mStop-2_mLSP-2000": {
+          "genmodel_branch": "GenModel_T2tt_2000_1100",
+          "mLSP": 2000,
+          "mStop": 2,
+          "raw_weighted": 616.0,
+          "unweighted": 616
+        },
+        "mStop-2_mLSP-2100": {
+          "genmodel_branch": "GenModel_T2tt_2100_1200",
+          "mLSP": 2100,
+          "mStop": 2,
+          "raw_weighted": 292.0,
+          "unweighted": 292
+        },
+        "mStop-2_mLSP-2200": {
+          "genmodel_branch": "GenModel_T2tt_2200_1600",
+          "mLSP": 2200,
+          "mStop": 2,
+          "raw_weighted": 544.0,
+          "unweighted": 544
+        },
+        "mStop-2_mLSP-2300": {
+          "genmodel_branch": "GenModel_T2tt_2300_1900",
+          "mLSP": 2300,
+          "mStop": 2,
+          "raw_weighted": 409.0,
+          "unweighted": 409
+        },
+        "mStop-2_mLSP-2400": {
+          "genmodel_branch": "GenModel_T2tt_2400_2100",
+          "mLSP": 2400,
+          "mStop": 2,
+          "raw_weighted": 279.0,
+          "unweighted": 279
+        },
+        "mStop-2_mLSP-2500": {
+          "genmodel_branch": "GenModel_T2tt_2500_2000",
+          "mLSP": 2500,
+          "mStop": 2,
+          "raw_weighted": 282.0,
+          "unweighted": 282
+        },
+        "mStop-2_mLSP-600": {
+          "genmodel_branch": "GenModel_T2tt_600_300",
+          "mLSP": 600,
+          "mStop": 2,
+          "raw_weighted": 1650.0,
+          "unweighted": 1650
+        },
+        "mStop-2_mLSP-700": {
+          "genmodel_branch": "GenModel_T2tt_700_300",
+          "mLSP": 700,
+          "mStop": 2,
+          "raw_weighted": 1114.0,
+          "unweighted": 1114
+        },
+        "mStop-2_mLSP-900": {
+          "genmodel_branch": "GenModel_T2tt_900_1",
+          "mLSP": 900,
+          "mStop": 2,
+          "raw_weighted": 821.0,
+          "unweighted": 821
+        },
+        "mStop-2_mLSP-950": {
+          "genmodel_branch": "GenModel_T2tt_950_500",
+          "mLSP": 950,
+          "mStop": 2,
+          "raw_weighted": 791.0,
+          "unweighted": 791
+        }
+      },
+      "Njet5to6_Nb2plus_MET250to600": {
+        "mStop-2_mLSP-1000": {
+          "genmodel_branch": "GenModel_T2tt_1000_600",
+          "mLSP": 1000,
+          "mStop": 2,
+          "raw_weighted": 8283.0,
+          "unweighted": 8283
+        },
+        "mStop-2_mLSP-1050": {
+          "genmodel_branch": "GenModel_T2tt_1050_1",
+          "mLSP": 1050,
+          "mStop": 2,
+          "raw_weighted": 4529.0,
+          "unweighted": 4529
+        },
+        "mStop-2_mLSP-1100": {
+          "genmodel_branch": "GenModel_T2tt_1100_600",
+          "mLSP": 1100,
+          "mStop": 2,
+          "raw_weighted": 2331.0,
+          "unweighted": 2331
+        },
+        "mStop-2_mLSP-1150": {
+          "genmodel_branch": "GenModel_T2tt_1150_200",
+          "mLSP": 1150,
+          "mStop": 2,
+          "raw_weighted": 2986.0,
+          "unweighted": 2986
+        },
+        "mStop-2_mLSP-1200": {
+          "genmodel_branch": "GenModel_T2tt_1200_100",
+          "mLSP": 1200,
+          "mStop": 2,
+          "raw_weighted": 3029.0,
+          "unweighted": 3029
+        },
+        "mStop-2_mLSP-1250": {
+          "genmodel_branch": "GenModel_T2tt_1250_700",
+          "mLSP": 1250,
+          "mStop": 2,
+          "raw_weighted": 2643.0,
+          "unweighted": 2643
+        },
+        "mStop-2_mLSP-1300": {
+          "genmodel_branch": "GenModel_T2tt_1300_100",
+          "mLSP": 1300,
+          "mStop": 2,
+          "raw_weighted": 4332.0,
+          "unweighted": 4332
+        },
+        "mStop-2_mLSP-1350": {
+          "genmodel_branch": "GenModel_T2tt_1350_1200",
+          "mLSP": 1350,
+          "mStop": 2,
+          "raw_weighted": 2537.0,
+          "unweighted": 2537
+        },
+        "mStop-2_mLSP-1400": {
+          "genmodel_branch": "GenModel_T2tt_1400_600",
+          "mLSP": 1400,
+          "mStop": 2,
+          "raw_weighted": 2579.0,
+          "unweighted": 2579
+        },
+        "mStop-2_mLSP-1450": {
+          "genmodel_branch": "GenModel_T2tt_1450_1200",
+          "mLSP": 1450,
+          "mStop": 2,
+          "raw_weighted": 2355.0,
+          "unweighted": 2355
+        },
+        "mStop-2_mLSP-1500": {
+          "genmodel_branch": "GenModel_T2tt_1500_1000",
+          "mLSP": 1500,
+          "mStop": 2,
+          "raw_weighted": 3378.0,
+          "unweighted": 3378
+        },
+        "mStop-2_mLSP-1600": {
+          "genmodel_branch": "GenModel_T2tt_1600_1",
+          "mLSP": 1600,
+          "mStop": 2,
+          "raw_weighted": 2185.0,
+          "unweighted": 2185
+        },
+        "mStop-2_mLSP-1700": {
+          "genmodel_branch": "GenModel_T2tt_1700_1500",
+          "mLSP": 1700,
+          "mStop": 2,
+          "raw_weighted": 2627.0,
+          "unweighted": 2627
+        },
+        "mStop-2_mLSP-1800": {
+          "genmodel_branch": "GenModel_T2tt_1800_200",
+          "mLSP": 1800,
+          "mStop": 2,
+          "raw_weighted": 1958.0,
+          "unweighted": 1958
+        },
+        "mStop-2_mLSP-1900": {
+          "genmodel_branch": "GenModel_T2tt_1900_1000",
+          "mLSP": 1900,
+          "mStop": 2,
+          "raw_weighted": 2241.0,
+          "unweighted": 2241
+        },
+        "mStop-2_mLSP-2000": {
+          "genmodel_branch": "GenModel_T2tt_2000_1100",
+          "mLSP": 2000,
+          "mStop": 2,
+          "raw_weighted": 2996.0,
+          "unweighted": 2996
+        },
+        "mStop-2_mLSP-2100": {
+          "genmodel_branch": "GenModel_T2tt_2100_400",
+          "mLSP": 2100,
+          "mStop": 2,
+          "raw_weighted": 1615.0,
+          "unweighted": 1615
+        },
+        "mStop-2_mLSP-2200": {
+          "genmodel_branch": "GenModel_T2tt_2200_1600",
+          "mLSP": 2200,
+          "mStop": 2,
+          "raw_weighted": 2357.0,
+          "unweighted": 2357
+        },
+        "mStop-2_mLSP-2300": {
+          "genmodel_branch": "GenModel_T2tt_2300_1900",
+          "mLSP": 2300,
+          "mStop": 2,
+          "raw_weighted": 2199.0,
+          "unweighted": 2199
+        },
+        "mStop-2_mLSP-2400": {
+          "genmodel_branch": "GenModel_T2tt_2400_2100",
+          "mLSP": 2400,
+          "mStop": 2,
+          "raw_weighted": 1512.0,
+          "unweighted": 1512
+        },
+        "mStop-2_mLSP-2500": {
+          "genmodel_branch": "GenModel_T2tt_2500_2000",
+          "mLSP": 2500,
+          "mStop": 2,
+          "raw_weighted": 1438.0,
+          "unweighted": 1438
+        },
+        "mStop-2_mLSP-600": {
+          "genmodel_branch": "GenModel_T2tt_600_300",
+          "mLSP": 600,
+          "mStop": 2,
+          "raw_weighted": 4238.0,
+          "unweighted": 4238
+        },
+        "mStop-2_mLSP-700": {
+          "genmodel_branch": "GenModel_T2tt_700_300",
+          "mLSP": 700,
+          "mStop": 2,
+          "raw_weighted": 3408.0,
+          "unweighted": 3408
+        },
+        "mStop-2_mLSP-900": {
+          "genmodel_branch": "GenModel_T2tt_900_1",
+          "mLSP": 900,
+          "mStop": 2,
+          "raw_weighted": 3313.0,
+          "unweighted": 3313
+        },
+        "mStop-2_mLSP-950": {
+          "genmodel_branch": "GenModel_T2tt_950_500",
+          "mLSP": 950,
+          "mStop": 2,
+          "raw_weighted": 3044.0,
+          "unweighted": 3044
+        }
+      },
+      "Njet7plus_Nb1plus_MET250to600": {
+        "mStop-2_mLSP-1000": {
+          "genmodel_branch": "GenModel_T2tt_1000_600",
+          "mLSP": 1000,
+          "mStop": 2,
+          "raw_weighted": 5605.0,
+          "unweighted": 5605
+        },
+        "mStop-2_mLSP-1050": {
+          "genmodel_branch": "GenModel_T2tt_1050_1",
+          "mLSP": 1050,
+          "mStop": 2,
+          "raw_weighted": 3137.0,
+          "unweighted": 3137
+        },
+        "mStop-2_mLSP-1100": {
+          "genmodel_branch": "GenModel_T2tt_1100_600",
+          "mLSP": 1100,
+          "mStop": 2,
+          "raw_weighted": 1537.0,
+          "unweighted": 1537
+        },
+        "mStop-2_mLSP-1150": {
+          "genmodel_branch": "GenModel_T2tt_1150_200",
+          "mLSP": 1150,
+          "mStop": 2,
+          "raw_weighted": 1987.0,
+          "unweighted": 1987
+        },
+        "mStop-2_mLSP-1200": {
+          "genmodel_branch": "GenModel_T2tt_1200_100",
+          "mLSP": 1200,
+          "mStop": 2,
+          "raw_weighted": 2088.0,
+          "unweighted": 2088
+        },
+        "mStop-2_mLSP-1250": {
+          "genmodel_branch": "GenModel_T2tt_1250_700",
+          "mLSP": 1250,
+          "mStop": 2,
+          "raw_weighted": 1886.0,
+          "unweighted": 1886
+        },
+        "mStop-2_mLSP-1300": {
+          "genmodel_branch": "GenModel_T2tt_1300_100",
+          "mLSP": 1300,
+          "mStop": 2,
+          "raw_weighted": 3086.0,
+          "unweighted": 3086
+        },
+        "mStop-2_mLSP-1350": {
+          "genmodel_branch": "GenModel_T2tt_1350_1200",
+          "mLSP": 1350,
+          "mStop": 2,
+          "raw_weighted": 1761.0,
+          "unweighted": 1761
+        },
+        "mStop-2_mLSP-1400": {
+          "genmodel_branch": "GenModel_T2tt_1400_600",
+          "mLSP": 1400,
+          "mStop": 2,
+          "raw_weighted": 1939.0,
+          "unweighted": 1939
+        },
+        "mStop-2_mLSP-1450": {
+          "genmodel_branch": "GenModel_T2tt_1450_1200",
+          "mLSP": 1450,
+          "mStop": 2,
+          "raw_weighted": 1791.0,
+          "unweighted": 1791
+        },
+        "mStop-2_mLSP-1500": {
+          "genmodel_branch": "GenModel_T2tt_1500_1000",
+          "mLSP": 1500,
+          "mStop": 2,
+          "raw_weighted": 2394.0,
+          "unweighted": 2394
+        },
+        "mStop-2_mLSP-1600": {
+          "genmodel_branch": "GenModel_T2tt_1600_1",
+          "mLSP": 1600,
+          "mStop": 2,
+          "raw_weighted": 1594.0,
+          "unweighted": 1594
+        },
+        "mStop-2_mLSP-1700": {
+          "genmodel_branch": "GenModel_T2tt_1700_1500",
+          "mLSP": 1700,
+          "mStop": 2,
+          "raw_weighted": 1881.0,
+          "unweighted": 1881
+        },
+        "mStop-2_mLSP-1800": {
+          "genmodel_branch": "GenModel_T2tt_1800_200",
+          "mLSP": 1800,
+          "mStop": 2,
+          "raw_weighted": 1378.0,
+          "unweighted": 1378
+        },
+        "mStop-2_mLSP-1900": {
+          "genmodel_branch": "GenModel_T2tt_1900_1000",
+          "mLSP": 1900,
+          "mStop": 2,
+          "raw_weighted": 1581.0,
+          "unweighted": 1581
+        },
+        "mStop-2_mLSP-2000": {
+          "genmodel_branch": "GenModel_T2tt_2000_1100",
+          "mLSP": 2000,
+          "mStop": 2,
+          "raw_weighted": 2053.0,
+          "unweighted": 2053
+        },
+        "mStop-2_mLSP-2100": {
+          "genmodel_branch": "GenModel_T2tt_2100_400",
+          "mLSP": 2100,
+          "mStop": 2,
+          "raw_weighted": 1193.0,
+          "unweighted": 1193
+        },
+        "mStop-2_mLSP-2200": {
+          "genmodel_branch": "GenModel_T2tt_2200_1600",
+          "mLSP": 2200,
+          "mStop": 2,
+          "raw_weighted": 1522.0,
+          "unweighted": 1522
+        },
+        "mStop-2_mLSP-2300": {
+          "genmodel_branch": "GenModel_T2tt_2300_1900",
+          "mLSP": 2300,
+          "mStop": 2,
+          "raw_weighted": 1414.0,
+          "unweighted": 1414
+        },
+        "mStop-2_mLSP-2400": {
+          "genmodel_branch": "GenModel_T2tt_2400_2100",
+          "mLSP": 2400,
+          "mStop": 2,
+          "raw_weighted": 967.0,
+          "unweighted": 967
+        },
+        "mStop-2_mLSP-2500": {
+          "genmodel_branch": "GenModel_T2tt_2500_2000",
+          "mLSP": 2500,
+          "mStop": 2,
+          "raw_weighted": 854.0,
+          "unweighted": 854
+        },
+        "mStop-2_mLSP-600": {
+          "genmodel_branch": "GenModel_T2tt_600_300",
+          "mLSP": 600,
+          "mStop": 2,
+          "raw_weighted": 2634.0,
+          "unweighted": 2634
+        },
+        "mStop-2_mLSP-700": {
+          "genmodel_branch": "GenModel_T2tt_700_300",
+          "mLSP": 700,
+          "mStop": 2,
+          "raw_weighted": 2202.0,
+          "unweighted": 2202
+        },
+        "mStop-2_mLSP-900": {
+          "genmodel_branch": "GenModel_T2tt_900_1",
+          "mLSP": 900,
+          "mStop": 2,
+          "raw_weighted": 2320.0,
+          "unweighted": 2320
+        },
+        "mStop-2_mLSP-950": {
+          "genmodel_branch": "GenModel_T2tt_950_500",
+          "mLSP": 950,
+          "mStop": 2,
+          "raw_weighted": 2158.0,
+          "unweighted": 2158
+        }
+      }
+    },
+    "optimized_hybrid_no_tags": {
+      "hybrid_AK8_highHT": {
+        "mStop-2_mLSP-1000": {
+          "genmodel_branch": "GenModel_T2tt_1000_600",
+          "mLSP": 1000,
+          "mStop": 2,
+          "raw_weighted": 6344.0,
+          "unweighted": 6344
+        },
+        "mStop-2_mLSP-1050": {
+          "genmodel_branch": "GenModel_T2tt_1050_1",
+          "mLSP": 1050,
+          "mStop": 2,
+          "raw_weighted": 4238.0,
+          "unweighted": 4238
+        },
+        "mStop-2_mLSP-1100": {
+          "genmodel_branch": "GenModel_T2tt_1100_600",
+          "mLSP": 1100,
+          "mStop": 2,
+          "raw_weighted": 2545.0,
+          "unweighted": 2545
+        },
+        "mStop-2_mLSP-1150": {
+          "genmodel_branch": "GenModel_T2tt_1150_200",
+          "mLSP": 1150,
+          "mStop": 2,
+          "raw_weighted": 3224.0,
+          "unweighted": 3224
+        },
+        "mStop-2_mLSP-1200": {
+          "genmodel_branch": "GenModel_T2tt_1200_100",
+          "mLSP": 1200,
+          "mStop": 2,
+          "raw_weighted": 4038.0,
+          "unweighted": 4038
+        },
+        "mStop-2_mLSP-1250": {
+          "genmodel_branch": "GenModel_T2tt_1250_700",
+          "mLSP": 1250,
+          "mStop": 2,
+          "raw_weighted": 4336.0,
+          "unweighted": 4336
+        },
+        "mStop-2_mLSP-1300": {
+          "genmodel_branch": "GenModel_T2tt_1300_100",
+          "mLSP": 1300,
+          "mStop": 2,
+          "raw_weighted": 7259.0,
+          "unweighted": 7259
+        },
+        "mStop-2_mLSP-1350": {
+          "genmodel_branch": "GenModel_T2tt_1350_1200",
+          "mLSP": 1350,
+          "mStop": 2,
+          "raw_weighted": 4652.0,
+          "unweighted": 4652
+        },
+        "mStop-2_mLSP-1400": {
+          "genmodel_branch": "GenModel_T2tt_1400_600",
+          "mLSP": 1400,
+          "mStop": 2,
+          "raw_weighted": 5351.0,
+          "unweighted": 5351
+        },
+        "mStop-2_mLSP-1450": {
+          "genmodel_branch": "GenModel_T2tt_1450_1200",
+          "mLSP": 1450,
+          "mStop": 2,
+          "raw_weighted": 5496.0,
+          "unweighted": 5496
+        },
+        "mStop-2_mLSP-1500": {
+          "genmodel_branch": "GenModel_T2tt_1500_1000",
+          "mLSP": 1500,
+          "mStop": 2,
+          "raw_weighted": 9413.0,
+          "unweighted": 9413
+        },
+        "mStop-2_mLSP-1600": {
+          "genmodel_branch": "GenModel_T2tt_1600_1",
+          "mLSP": 1600,
+          "mStop": 2,
+          "raw_weighted": 6977.0,
+          "unweighted": 6977
+        },
+        "mStop-2_mLSP-1700": {
+          "genmodel_branch": "GenModel_T2tt_1700_1500",
+          "mLSP": 1700,
+          "mStop": 2,
+          "raw_weighted": 8364.0,
+          "unweighted": 8364
+        },
+        "mStop-2_mLSP-1800": {
+          "genmodel_branch": "GenModel_T2tt_1800_200",
+          "mLSP": 1800,
+          "mStop": 2,
+          "raw_weighted": 8412.0,
+          "unweighted": 8412
+        },
+        "mStop-2_mLSP-1900": {
+          "genmodel_branch": "GenModel_T2tt_1900_1000",
+          "mLSP": 1900,
+          "mStop": 2,
+          "raw_weighted": 6918.0,
+          "unweighted": 6918
+        },
+        "mStop-2_mLSP-2000": {
+          "genmodel_branch": "GenModel_T2tt_2000_1100",
+          "mLSP": 2000,
+          "mStop": 2,
+          "raw_weighted": 11240.0,
+          "unweighted": 11240
+        },
+        "mStop-2_mLSP-2100": {
+          "genmodel_branch": "GenModel_T2tt_2100_400",
+          "mLSP": 2100,
+          "mStop": 2,
+          "raw_weighted": 8701.0,
+          "unweighted": 8701
+        },
+        "mStop-2_mLSP-2200": {
+          "genmodel_branch": "GenModel_T2tt_2200_1600",
+          "mLSP": 2200,
+          "mStop": 2,
+          "raw_weighted": 8651.0,
+          "unweighted": 8651
+        },
+        "mStop-2_mLSP-2300": {
+          "genmodel_branch": "GenModel_T2tt_2300_1900",
+          "mLSP": 2300,
+          "mStop": 2,
+          "raw_weighted": 11477.0,
+          "unweighted": 11477
+        },
+        "mStop-2_mLSP-2400": {
+          "genmodel_branch": "GenModel_T2tt_2400_2100",
+          "mLSP": 2400,
+          "mStop": 2,
+          "raw_weighted": 8489.0,
+          "unweighted": 8489
+        },
+        "mStop-2_mLSP-2500": {
+          "genmodel_branch": "GenModel_T2tt_2500_2000",
+          "mLSP": 2500,
+          "mStop": 2,
+          "raw_weighted": 8253.0,
+          "unweighted": 8253
+        },
+        "mStop-2_mLSP-600": {
+          "genmodel_branch": "GenModel_T2tt_600_300",
+          "mLSP": 600,
+          "mStop": 2,
+          "raw_weighted": 831.0,
+          "unweighted": 831
+        },
+        "mStop-2_mLSP-700": {
+          "genmodel_branch": "GenModel_T2tt_700_300",
+          "mLSP": 700,
+          "mStop": 2,
+          "raw_weighted": 927.0,
+          "unweighted": 927
+        },
+        "mStop-2_mLSP-900": {
+          "genmodel_branch": "GenModel_T2tt_900_1",
+          "mLSP": 900,
+          "mStop": 2,
+          "raw_weighted": 2054.0,
+          "unweighted": 2054
+        },
+        "mStop-2_mLSP-950": {
+          "genmodel_branch": "GenModel_T2tt_950_500",
+          "mLSP": 950,
+          "mStop": 2,
+          "raw_weighted": 2415.0,
+          "unweighted": 2415
+        }
+      },
+      "hybrid_highMET_anyHT": {
+        "mStop-2_mLSP-1000": {
+          "genmodel_branch": "GenModel_T2tt_1000_600",
+          "mLSP": 1000,
+          "mStop": 2,
+          "raw_weighted": 9192.0,
+          "unweighted": 9192
+        },
+        "mStop-2_mLSP-1050": {
+          "genmodel_branch": "GenModel_T2tt_1050_1",
+          "mLSP": 1050,
+          "mStop": 2,
+          "raw_weighted": 6112.0,
+          "unweighted": 6112
+        },
+        "mStop-2_mLSP-1100": {
+          "genmodel_branch": "GenModel_T2tt_1100_600",
+          "mLSP": 1100,
+          "mStop": 2,
+          "raw_weighted": 3504.0,
+          "unweighted": 3504
+        },
+        "mStop-2_mLSP-1150": {
+          "genmodel_branch": "GenModel_T2tt_1150_200",
+          "mLSP": 1150,
+          "mStop": 2,
+          "raw_weighted": 4399.0,
+          "unweighted": 4399
+        },
+        "mStop-2_mLSP-1200": {
+          "genmodel_branch": "GenModel_T2tt_1200_100",
+          "mLSP": 1200,
+          "mStop": 2,
+          "raw_weighted": 5307.0,
+          "unweighted": 5307
+        },
+        "mStop-2_mLSP-1250": {
+          "genmodel_branch": "GenModel_T2tt_1250_700",
+          "mLSP": 1250,
+          "mStop": 2,
+          "raw_weighted": 5673.0,
+          "unweighted": 5673
+        },
+        "mStop-2_mLSP-1300": {
+          "genmodel_branch": "GenModel_T2tt_1300_100",
+          "mLSP": 1300,
+          "mStop": 2,
+          "raw_weighted": 9020.0,
+          "unweighted": 9020
+        },
+        "mStop-2_mLSP-1350": {
+          "genmodel_branch": "GenModel_T2tt_1350_1200",
+          "mLSP": 1350,
+          "mStop": 2,
+          "raw_weighted": 5811.0,
+          "unweighted": 5811
+        },
+        "mStop-2_mLSP-1400": {
+          "genmodel_branch": "GenModel_T2tt_1400_600",
+          "mLSP": 1400,
+          "mStop": 2,
+          "raw_weighted": 6468.0,
+          "unweighted": 6468
+        },
+        "mStop-2_mLSP-1450": {
+          "genmodel_branch": "GenModel_T2tt_1450_1200",
+          "mLSP": 1450,
+          "mStop": 2,
+          "raw_weighted": 6453.0,
+          "unweighted": 6453
+        },
+        "mStop-2_mLSP-1500": {
+          "genmodel_branch": "GenModel_T2tt_1500_1000",
+          "mLSP": 1500,
+          "mStop": 2,
+          "raw_weighted": 10850.0,
+          "unweighted": 10850
+        },
+        "mStop-2_mLSP-1600": {
+          "genmodel_branch": "GenModel_T2tt_1600_1",
+          "mLSP": 1600,
+          "mStop": 2,
+          "raw_weighted": 7662.0,
+          "unweighted": 7662
+        },
+        "mStop-2_mLSP-1700": {
+          "genmodel_branch": "GenModel_T2tt_1700_1500",
+          "mLSP": 1700,
+          "mStop": 2,
+          "raw_weighted": 9190.0,
+          "unweighted": 9190
+        },
+        "mStop-2_mLSP-1800": {
+          "genmodel_branch": "GenModel_T2tt_1800_200",
+          "mLSP": 1800,
+          "mStop": 2,
+          "raw_weighted": 8857.0,
+          "unweighted": 8857
+        },
+        "mStop-2_mLSP-1900": {
+          "genmodel_branch": "GenModel_T2tt_1900_1000",
+          "mLSP": 1900,
+          "mStop": 2,
+          "raw_weighted": 7606.0,
+          "unweighted": 7606
+        },
+        "mStop-2_mLSP-2000": {
+          "genmodel_branch": "GenModel_T2tt_2000_1100",
+          "mLSP": 2000,
+          "mStop": 2,
+          "raw_weighted": 11933.0,
+          "unweighted": 11933
+        },
+        "mStop-2_mLSP-2100": {
+          "genmodel_branch": "GenModel_T2tt_2100_400",
+          "mLSP": 2100,
+          "mStop": 2,
+          "raw_weighted": 9000.0,
+          "unweighted": 9000
+        },
+        "mStop-2_mLSP-2200": {
+          "genmodel_branch": "GenModel_T2tt_2200_1600",
+          "mLSP": 2200,
+          "mStop": 2,
+          "raw_weighted": 9203.0,
+          "unweighted": 9203
+        },
+        "mStop-2_mLSP-2300": {
+          "genmodel_branch": "GenModel_T2tt_2300_1900",
+          "mLSP": 2300,
+          "mStop": 2,
+          "raw_weighted": 11739.0,
+          "unweighted": 11739
+        },
+        "mStop-2_mLSP-2400": {
+          "genmodel_branch": "GenModel_T2tt_2400_2100",
+          "mLSP": 2400,
+          "mStop": 2,
+          "raw_weighted": 8640.0,
+          "unweighted": 8640
+        },
+        "mStop-2_mLSP-2500": {
+          "genmodel_branch": "GenModel_T2tt_2500_2000",
+          "mLSP": 2500,
+          "mStop": 2,
+          "raw_weighted": 8368.0,
+          "unweighted": 8368
+        },
+        "mStop-2_mLSP-600": {
+          "genmodel_branch": "GenModel_T2tt_600_300",
+          "mLSP": 600,
+          "mStop": 2,
+          "raw_weighted": 536.0,
+          "unweighted": 536
+        },
+        "mStop-2_mLSP-700": {
+          "genmodel_branch": "GenModel_T2tt_700_300",
+          "mLSP": 700,
+          "mStop": 2,
+          "raw_weighted": 875.0,
+          "unweighted": 875
+        },
+        "mStop-2_mLSP-900": {
+          "genmodel_branch": "GenModel_T2tt_900_1",
+          "mLSP": 900,
+          "mStop": 2,
+          "raw_weighted": 3059.0,
+          "unweighted": 3059
+        },
+        "mStop-2_mLSP-950": {
+          "genmodel_branch": "GenModel_T2tt_950_500",
+          "mLSP": 950,
+          "mStop": 2,
+          "raw_weighted": 3601.0,
+          "unweighted": 3601
+        }
+      },
+      "hybrid_lowMET_multijet": {
+        "mStop-2_mLSP-1000": {
+          "genmodel_branch": "GenModel_T2tt_1000_600",
+          "mLSP": 1000,
+          "mStop": 2,
+          "raw_weighted": 3697.0,
+          "unweighted": 3697
+        },
+        "mStop-2_mLSP-1050": {
+          "genmodel_branch": "GenModel_T2tt_1050_1",
+          "mLSP": 1050,
+          "mStop": 2,
+          "raw_weighted": 2164.0,
+          "unweighted": 2164
+        },
+        "mStop-2_mLSP-1100": {
+          "genmodel_branch": "GenModel_T2tt_1100_600",
+          "mLSP": 1100,
+          "mStop": 2,
+          "raw_weighted": 1048.0,
+          "unweighted": 1048
+        },
+        "mStop-2_mLSP-1150": {
+          "genmodel_branch": "GenModel_T2tt_1150_200",
+          "mLSP": 1150,
+          "mStop": 2,
+          "raw_weighted": 1324.0,
+          "unweighted": 1324
+        },
+        "mStop-2_mLSP-1200": {
+          "genmodel_branch": "GenModel_T2tt_1200_100",
+          "mLSP": 1200,
+          "mStop": 2,
+          "raw_weighted": 1406.0,
+          "unweighted": 1406
+        },
+        "mStop-2_mLSP-1250": {
+          "genmodel_branch": "GenModel_T2tt_1250_700",
+          "mLSP": 1250,
+          "mStop": 2,
+          "raw_weighted": 1276.0,
+          "unweighted": 1276
+        },
+        "mStop-2_mLSP-1300": {
+          "genmodel_branch": "GenModel_T2tt_1300_100",
+          "mLSP": 1300,
+          "mStop": 2,
+          "raw_weighted": 2116.0,
+          "unweighted": 2116
+        },
+        "mStop-2_mLSP-1350": {
+          "genmodel_branch": "GenModel_T2tt_1350_1200",
+          "mLSP": 1350,
+          "mStop": 2,
+          "raw_weighted": 1215.0,
+          "unweighted": 1215
+        },
+        "mStop-2_mLSP-1400": {
+          "genmodel_branch": "GenModel_T2tt_1400_600",
+          "mLSP": 1400,
+          "mStop": 2,
+          "raw_weighted": 1234.0,
+          "unweighted": 1234
+        },
+        "mStop-2_mLSP-1450": {
+          "genmodel_branch": "GenModel_T2tt_1450_1200",
+          "mLSP": 1450,
+          "mStop": 2,
+          "raw_weighted": 1188.0,
+          "unweighted": 1188
+        },
+        "mStop-2_mLSP-1500": {
+          "genmodel_branch": "GenModel_T2tt_1500_1000",
+          "mLSP": 1500,
+          "mStop": 2,
+          "raw_weighted": 1816.0,
+          "unweighted": 1816
+        },
+        "mStop-2_mLSP-1600": {
+          "genmodel_branch": "GenModel_T2tt_1600_1",
+          "mLSP": 1600,
+          "mStop": 2,
+          "raw_weighted": 1102.0,
+          "unweighted": 1102
+        },
+        "mStop-2_mLSP-1700": {
+          "genmodel_branch": "GenModel_T2tt_1700_1500",
+          "mLSP": 1700,
+          "mStop": 2,
+          "raw_weighted": 1369.0,
+          "unweighted": 1369
+        },
+        "mStop-2_mLSP-1800": {
+          "genmodel_branch": "GenModel_T2tt_1800_200",
+          "mLSP": 1800,
+          "mStop": 2,
+          "raw_weighted": 1061.0,
+          "unweighted": 1061
+        },
+        "mStop-2_mLSP-1900": {
+          "genmodel_branch": "GenModel_T2tt_1900_1000",
+          "mLSP": 1900,
+          "mStop": 2,
+          "raw_weighted": 1123.0,
+          "unweighted": 1123
+        },
+        "mStop-2_mLSP-2000": {
+          "genmodel_branch": "GenModel_T2tt_2000_1100",
+          "mLSP": 2000,
+          "mStop": 2,
+          "raw_weighted": 1450.0,
+          "unweighted": 1450
+        },
+        "mStop-2_mLSP-2100": {
+          "genmodel_branch": "GenModel_T2tt_2100_400",
+          "mLSP": 2100,
+          "mStop": 2,
+          "raw_weighted": 875.0,
+          "unweighted": 875
+        },
+        "mStop-2_mLSP-2200": {
+          "genmodel_branch": "GenModel_T2tt_2200_1600",
+          "mLSP": 2200,
+          "mStop": 2,
+          "raw_weighted": 1129.0,
+          "unweighted": 1129
+        },
+        "mStop-2_mLSP-2300": {
+          "genmodel_branch": "GenModel_T2tt_2300_1900",
+          "mLSP": 2300,
+          "mStop": 2,
+          "raw_weighted": 1099.0,
+          "unweighted": 1099
+        },
+        "mStop-2_mLSP-2400": {
+          "genmodel_branch": "GenModel_T2tt_2400_2100",
+          "mLSP": 2400,
+          "mStop": 2,
+          "raw_weighted": 757.0,
+          "unweighted": 757
+        },
+        "mStop-2_mLSP-2500": {
+          "genmodel_branch": "GenModel_T2tt_2500_2000",
+          "mLSP": 2500,
+          "mStop": 2,
+          "raw_weighted": 725.0,
+          "unweighted": 725
+        },
+        "mStop-2_mLSP-600": {
+          "genmodel_branch": "GenModel_T2tt_600_300",
+          "mLSP": 600,
+          "mStop": 2,
+          "raw_weighted": 1670.0,
+          "unweighted": 1670
+        },
+        "mStop-2_mLSP-700": {
+          "genmodel_branch": "GenModel_T2tt_700_300",
+          "mLSP": 700,
+          "mStop": 2,
+          "raw_weighted": 1310.0,
+          "unweighted": 1310
+        },
+        "mStop-2_mLSP-900": {
+          "genmodel_branch": "GenModel_T2tt_900_1",
+          "mLSP": 900,
+          "mStop": 2,
+          "raw_weighted": 1495.0,
+          "unweighted": 1495
+        },
+        "mStop-2_mLSP-950": {
+          "genmodel_branch": "GenModel_T2tt_950_500",
+          "mLSP": 950,
+          "mStop": 2,
+          "raw_weighted": 1351.0,
+          "unweighted": 1351
+        }
+      },
+      "hybrid_midMET_multijet": {
+        "mStop-2_mLSP-1000": {
+          "genmodel_branch": "GenModel_T2tt_1000_600",
+          "mLSP": 1000,
+          "mStop": 2,
+          "raw_weighted": 5683.0,
+          "unweighted": 5683
+        },
+        "mStop-2_mLSP-1050": {
+          "genmodel_branch": "GenModel_T2tt_1050_1",
+          "mLSP": 1050,
+          "mStop": 2,
+          "raw_weighted": 3310.0,
+          "unweighted": 3310
+        },
+        "mStop-2_mLSP-1100": {
+          "genmodel_branch": "GenModel_T2tt_1100_600",
+          "mLSP": 1100,
+          "mStop": 2,
+          "raw_weighted": 1817.0,
+          "unweighted": 1817
+        },
+        "mStop-2_mLSP-1150": {
+          "genmodel_branch": "GenModel_T2tt_1150_200",
+          "mLSP": 1150,
+          "mStop": 2,
+          "raw_weighted": 2235.0,
+          "unweighted": 2235
+        },
+        "mStop-2_mLSP-1200": {
+          "genmodel_branch": "GenModel_T2tt_1200_100",
+          "mLSP": 1200,
+          "mStop": 2,
+          "raw_weighted": 2398.0,
+          "unweighted": 2398
+        },
+        "mStop-2_mLSP-1250": {
+          "genmodel_branch": "GenModel_T2tt_1250_700",
+          "mLSP": 1250,
+          "mStop": 2,
+          "raw_weighted": 2206.0,
+          "unweighted": 2206
+        },
+        "mStop-2_mLSP-1300": {
+          "genmodel_branch": "GenModel_T2tt_1300_100",
+          "mLSP": 1300,
+          "mStop": 2,
+          "raw_weighted": 3559.0,
+          "unweighted": 3559
+        },
+        "mStop-2_mLSP-1350": {
+          "genmodel_branch": "GenModel_T2tt_1350_1200",
+          "mLSP": 1350,
+          "mStop": 2,
+          "raw_weighted": 2116.0,
+          "unweighted": 2116
+        },
+        "mStop-2_mLSP-1400": {
+          "genmodel_branch": "GenModel_T2tt_1400_600",
+          "mLSP": 1400,
+          "mStop": 2,
+          "raw_weighted": 2341.0,
+          "unweighted": 2341
+        },
+        "mStop-2_mLSP-1450": {
+          "genmodel_branch": "GenModel_T2tt_1450_1200",
+          "mLSP": 1450,
+          "mStop": 2,
+          "raw_weighted": 2117.0,
+          "unweighted": 2117
+        },
+        "mStop-2_mLSP-1500": {
+          "genmodel_branch": "GenModel_T2tt_1500_1000",
+          "mLSP": 1500,
+          "mStop": 2,
+          "raw_weighted": 3150.0,
+          "unweighted": 3150
+        },
+        "mStop-2_mLSP-1600": {
+          "genmodel_branch": "GenModel_T2tt_1600_1",
+          "mLSP": 1600,
+          "mStop": 2,
+          "raw_weighted": 2104.0,
+          "unweighted": 2104
+        },
+        "mStop-2_mLSP-1700": {
+          "genmodel_branch": "GenModel_T2tt_1700_1500",
+          "mLSP": 1700,
+          "mStop": 2,
+          "raw_weighted": 2432.0,
+          "unweighted": 2432
+        },
+        "mStop-2_mLSP-1800": {
+          "genmodel_branch": "GenModel_T2tt_1800_200",
+          "mLSP": 1800,
+          "mStop": 2,
+          "raw_weighted": 1979.0,
+          "unweighted": 1979
+        },
+        "mStop-2_mLSP-1900": {
+          "genmodel_branch": "GenModel_T2tt_1900_1000",
+          "mLSP": 1900,
+          "mStop": 2,
+          "raw_weighted": 2014.0,
+          "unweighted": 2014
+        },
+        "mStop-2_mLSP-2000": {
+          "genmodel_branch": "GenModel_T2tt_2000_1100",
+          "mLSP": 2000,
+          "mStop": 2,
+          "raw_weighted": 2738.0,
+          "unweighted": 2738
+        },
+        "mStop-2_mLSP-2100": {
+          "genmodel_branch": "GenModel_T2tt_2100_400",
+          "mLSP": 2100,
+          "mStop": 2,
+          "raw_weighted": 1732.0,
+          "unweighted": 1732
+        },
+        "mStop-2_mLSP-2200": {
+          "genmodel_branch": "GenModel_T2tt_2200_1600",
+          "mLSP": 2200,
+          "mStop": 2,
+          "raw_weighted": 1937.0,
+          "unweighted": 1937
+        },
+        "mStop-2_mLSP-2300": {
+          "genmodel_branch": "GenModel_T2tt_2300_1900",
+          "mLSP": 2300,
+          "mStop": 2,
+          "raw_weighted": 2025.0,
+          "unweighted": 2025
+        },
+        "mStop-2_mLSP-2400": {
+          "genmodel_branch": "GenModel_T2tt_2400_2100",
+          "mLSP": 2400,
+          "mStop": 2,
+          "raw_weighted": 1416.0,
+          "unweighted": 1416
+        },
+        "mStop-2_mLSP-2500": {
+          "genmodel_branch": "GenModel_T2tt_2500_2000",
+          "mLSP": 2500,
+          "mStop": 2,
+          "raw_weighted": 1271.0,
+          "unweighted": 1271
+        },
+        "mStop-2_mLSP-600": {
+          "genmodel_branch": "GenModel_T2tt_600_300",
+          "mLSP": 600,
+          "mStop": 2,
+          "raw_weighted": 1303.0,
+          "unweighted": 1303
+        },
+        "mStop-2_mLSP-700": {
+          "genmodel_branch": "GenModel_T2tt_700_300",
+          "mLSP": 700,
+          "mStop": 2,
+          "raw_weighted": 1507.0,
+          "unweighted": 1507
+        },
+        "mStop-2_mLSP-900": {
+          "genmodel_branch": "GenModel_T2tt_900_1",
+          "mLSP": 900,
+          "mStop": 2,
+          "raw_weighted": 2178.0,
+          "unweighted": 2178
+        },
+        "mStop-2_mLSP-950": {
+          "genmodel_branch": "GenModel_T2tt_950_500",
+          "mLSP": 950,
+          "mStop": 2,
+          "raw_weighted": 2212.0,
+          "unweighted": 2212
+        }
+      }
+    },
+    "resolved_kinematics": {
+      "cleanDphi_Njet5plus_Nb1_MET400plus": {
+        "mStop-2_mLSP-1000": {
+          "genmodel_branch": "GenModel_T2tt_1000_600",
+          "mLSP": 1000,
+          "mStop": 2,
+          "raw_weighted": 18989.0,
+          "unweighted": 18989
+        },
+        "mStop-2_mLSP-1050": {
+          "genmodel_branch": "GenModel_T2tt_1050_1",
+          "mLSP": 1050,
+          "mStop": 2,
+          "raw_weighted": 11508.0,
+          "unweighted": 11508
+        },
+        "mStop-2_mLSP-1100": {
+          "genmodel_branch": "GenModel_T2tt_1100_600",
+          "mLSP": 1100,
+          "mStop": 2,
+          "raw_weighted": 6416.0,
+          "unweighted": 6416
+        },
+        "mStop-2_mLSP-1150": {
+          "genmodel_branch": "GenModel_T2tt_1150_200",
+          "mLSP": 1150,
+          "mStop": 2,
+          "raw_weighted": 8008.0,
+          "unweighted": 8008
+        },
+        "mStop-2_mLSP-1200": {
+          "genmodel_branch": "GenModel_T2tt_1200_100",
+          "mLSP": 1200,
+          "mStop": 2,
+          "raw_weighted": 9088.0,
+          "unweighted": 9088
+        },
+        "mStop-2_mLSP-1250": {
+          "genmodel_branch": "GenModel_T2tt_1250_700",
+          "mLSP": 1250,
+          "mStop": 2,
+          "raw_weighted": 9019.0,
+          "unweighted": 9019
+        },
+        "mStop-2_mLSP-1300": {
+          "genmodel_branch": "GenModel_T2tt_1300_100",
+          "mLSP": 1300,
+          "mStop": 2,
+          "raw_weighted": 14395.0,
+          "unweighted": 14395
+        },
+        "mStop-2_mLSP-1350": {
+          "genmodel_branch": "GenModel_T2tt_1350_1200",
+          "mLSP": 1350,
+          "mStop": 2,
+          "raw_weighted": 8953.0,
+          "unweighted": 8953
+        },
+        "mStop-2_mLSP-1400": {
+          "genmodel_branch": "GenModel_T2tt_1400_600",
+          "mLSP": 1400,
+          "mStop": 2,
+          "raw_weighted": 9787.0,
+          "unweighted": 9787
+        },
+        "mStop-2_mLSP-1450": {
+          "genmodel_branch": "GenModel_T2tt_1450_1200",
+          "mLSP": 1450,
+          "mStop": 2,
+          "raw_weighted": 9515.0,
+          "unweighted": 9515
+        },
+        "mStop-2_mLSP-1500": {
+          "genmodel_branch": "GenModel_T2tt_1500_1000",
+          "mLSP": 1500,
+          "mStop": 2,
+          "raw_weighted": 15261.0,
+          "unweighted": 15261
+        },
+        "mStop-2_mLSP-1600": {
+          "genmodel_branch": "GenModel_T2tt_1600_1",
+          "mLSP": 1600,
+          "mStop": 2,
+          "raw_weighted": 10550.0,
+          "unweighted": 10550
+        },
+        "mStop-2_mLSP-1700": {
+          "genmodel_branch": "GenModel_T2tt_1700_1500",
+          "mLSP": 1700,
+          "mStop": 2,
+          "raw_weighted": 12532.0,
+          "unweighted": 12532
+        },
+        "mStop-2_mLSP-1800": {
+          "genmodel_branch": "GenModel_T2tt_1800_200",
+          "mLSP": 1800,
+          "mStop": 2,
+          "raw_weighted": 11423.0,
+          "unweighted": 11423
+        },
+        "mStop-2_mLSP-1900": {
+          "genmodel_branch": "GenModel_T2tt_1900_1000",
+          "mLSP": 1900,
+          "mStop": 2,
+          "raw_weighted": 10415.0,
+          "unweighted": 10415
+        },
+        "mStop-2_mLSP-2000": {
+          "genmodel_branch": "GenModel_T2tt_2000_1100",
+          "mLSP": 2000,
+          "mStop": 2,
+          "raw_weighted": 15726.0,
+          "unweighted": 15726
+        },
+        "mStop-2_mLSP-2100": {
+          "genmodel_branch": "GenModel_T2tt_2100_400",
+          "mLSP": 2100,
+          "mStop": 2,
+          "raw_weighted": 11161.0,
+          "unweighted": 11161
+        },
+        "mStop-2_mLSP-2200": {
+          "genmodel_branch": "GenModel_T2tt_2200_1600",
+          "mLSP": 2200,
+          "mStop": 2,
+          "raw_weighted": 12000.0,
+          "unweighted": 12000
+        },
+        "mStop-2_mLSP-2300": {
+          "genmodel_branch": "GenModel_T2tt_2300_1900",
+          "mLSP": 2300,
+          "mStop": 2,
+          "raw_weighted": 14392.0,
+          "unweighted": 14392
+        },
+        "mStop-2_mLSP-2400": {
+          "genmodel_branch": "GenModel_T2tt_2400_2100",
+          "mLSP": 2400,
+          "mStop": 2,
+          "raw_weighted": 10544.0,
+          "unweighted": 10544
+        },
+        "mStop-2_mLSP-2500": {
+          "genmodel_branch": "GenModel_T2tt_2500_2000",
+          "mLSP": 2500,
+          "mStop": 2,
+          "raw_weighted": 10088.0,
+          "unweighted": 10088
+        },
+        "mStop-2_mLSP-600": {
+          "genmodel_branch": "GenModel_T2tt_600_300",
+          "mLSP": 600,
+          "mStop": 2,
+          "raw_weighted": 3920.0,
+          "unweighted": 3920
+        },
+        "mStop-2_mLSP-700": {
+          "genmodel_branch": "GenModel_T2tt_700_300",
+          "mLSP": 700,
+          "mStop": 2,
+          "raw_weighted": 4270.0,
+          "unweighted": 4270
+        },
+        "mStop-2_mLSP-900": {
+          "genmodel_branch": "GenModel_T2tt_900_1",
+          "mLSP": 900,
+          "mStop": 2,
+          "raw_weighted": 6959.0,
+          "unweighted": 6959
+        },
+        "mStop-2_mLSP-950": {
+          "genmodel_branch": "GenModel_T2tt_950_500",
+          "mLSP": 950,
+          "mStop": 2,
+          "raw_weighted": 7315.0,
+          "unweighted": 7315
+        }
+      },
+      "highHT_Njet5plus_Nb1_MET250plus": {
+        "mStop-2_mLSP-1000": {
+          "genmodel_branch": "GenModel_T2tt_1000_600",
+          "mLSP": 1000,
+          "mStop": 2,
+          "raw_weighted": 11214.0,
+          "unweighted": 11214
+        },
+        "mStop-2_mLSP-1050": {
+          "genmodel_branch": "GenModel_T2tt_1050_1",
+          "mLSP": 1050,
+          "mStop": 2,
+          "raw_weighted": 7233.0,
+          "unweighted": 7233
+        },
+        "mStop-2_mLSP-1100": {
+          "genmodel_branch": "GenModel_T2tt_1100_600",
+          "mLSP": 1100,
+          "mStop": 2,
+          "raw_weighted": 4226.0,
+          "unweighted": 4226
+        },
+        "mStop-2_mLSP-1150": {
+          "genmodel_branch": "GenModel_T2tt_1150_200",
+          "mLSP": 1150,
+          "mStop": 2,
+          "raw_weighted": 5312.0,
+          "unweighted": 5312
+        },
+        "mStop-2_mLSP-1200": {
+          "genmodel_branch": "GenModel_T2tt_1200_100",
+          "mLSP": 1200,
+          "mStop": 2,
+          "raw_weighted": 6341.0,
+          "unweighted": 6341
+        },
+        "mStop-2_mLSP-1250": {
+          "genmodel_branch": "GenModel_T2tt_1250_700",
+          "mLSP": 1250,
+          "mStop": 2,
+          "raw_weighted": 6614.0,
+          "unweighted": 6614
+        },
+        "mStop-2_mLSP-1300": {
+          "genmodel_branch": "GenModel_T2tt_1300_100",
+          "mLSP": 1300,
+          "mStop": 2,
+          "raw_weighted": 10729.0,
+          "unweighted": 10729
+        },
+        "mStop-2_mLSP-1350": {
+          "genmodel_branch": "GenModel_T2tt_1350_1200",
+          "mLSP": 1350,
+          "mStop": 2,
+          "raw_weighted": 6736.0,
+          "unweighted": 6736
+        },
+        "mStop-2_mLSP-1400": {
+          "genmodel_branch": "GenModel_T2tt_1400_600",
+          "mLSP": 1400,
+          "mStop": 2,
+          "raw_weighted": 7680.0,
+          "unweighted": 7680
+        },
+        "mStop-2_mLSP-1450": {
+          "genmodel_branch": "GenModel_T2tt_1450_1200",
+          "mLSP": 1450,
+          "mStop": 2,
+          "raw_weighted": 7591.0,
+          "unweighted": 7591
+        },
+        "mStop-2_mLSP-1500": {
+          "genmodel_branch": "GenModel_T2tt_1500_1000",
+          "mLSP": 1500,
+          "mStop": 2,
+          "raw_weighted": 12601.0,
+          "unweighted": 12601
+        },
+        "mStop-2_mLSP-1600": {
+          "genmodel_branch": "GenModel_T2tt_1600_1",
+          "mLSP": 1600,
+          "mStop": 2,
+          "raw_weighted": 8899.0,
+          "unweighted": 8899
+        },
+        "mStop-2_mLSP-1700": {
+          "genmodel_branch": "GenModel_T2tt_1700_1500",
+          "mLSP": 1700,
+          "mStop": 2,
+          "raw_weighted": 10702.0,
+          "unweighted": 10702
+        },
+        "mStop-2_mLSP-1800": {
+          "genmodel_branch": "GenModel_T2tt_1800_200",
+          "mLSP": 1800,
+          "mStop": 2,
+          "raw_weighted": 10242.0,
+          "unweighted": 10242
+        },
+        "mStop-2_mLSP-1900": {
+          "genmodel_branch": "GenModel_T2tt_1900_1000",
+          "mLSP": 1900,
+          "mStop": 2,
+          "raw_weighted": 8815.0,
+          "unweighted": 8815
+        },
+        "mStop-2_mLSP-2000": {
+          "genmodel_branch": "GenModel_T2tt_2000_1100",
+          "mLSP": 2000,
+          "mStop": 2,
+          "raw_weighted": 13748.0,
+          "unweighted": 13748
+        },
+        "mStop-2_mLSP-2100": {
+          "genmodel_branch": "GenModel_T2tt_2100_400",
+          "mLSP": 2100,
+          "mStop": 2,
+          "raw_weighted": 10271.0,
+          "unweighted": 10271
+        },
+        "mStop-2_mLSP-2200": {
+          "genmodel_branch": "GenModel_T2tt_2200_1600",
+          "mLSP": 2200,
+          "mStop": 2,
+          "raw_weighted": 10429.0,
+          "unweighted": 10429
+        },
+        "mStop-2_mLSP-2300": {
+          "genmodel_branch": "GenModel_T2tt_2300_1900",
+          "mLSP": 2300,
+          "mStop": 2,
+          "raw_weighted": 13239.0,
+          "unweighted": 13239
+        },
+        "mStop-2_mLSP-2400": {
+          "genmodel_branch": "GenModel_T2tt_2400_2100",
+          "mLSP": 2400,
+          "mStop": 2,
+          "raw_weighted": 9707.0,
+          "unweighted": 9707
+        },
+        "mStop-2_mLSP-2500": {
+          "genmodel_branch": "GenModel_T2tt_2500_2000",
+          "mLSP": 2500,
+          "mStop": 2,
+          "raw_weighted": 9353.0,
+          "unweighted": 9353
+        },
+        "mStop-2_mLSP-600": {
+          "genmodel_branch": "GenModel_T2tt_600_300",
+          "mLSP": 600,
+          "mStop": 2,
+          "raw_weighted": 1779.0,
+          "unweighted": 1779
+        },
+        "mStop-2_mLSP-700": {
+          "genmodel_branch": "GenModel_T2tt_700_300",
+          "mLSP": 700,
+          "mStop": 2,
+          "raw_weighted": 1791.0,
+          "unweighted": 1791
+        },
+        "mStop-2_mLSP-900": {
+          "genmodel_branch": "GenModel_T2tt_900_1",
+          "mLSP": 900,
+          "mStop": 2,
+          "raw_weighted": 3776.0,
+          "unweighted": 3776
+        },
+        "mStop-2_mLSP-950": {
+          "genmodel_branch": "GenModel_T2tt_950_500",
+          "mLSP": 950,
+          "mStop": 2,
+          "raw_weighted": 4265.0,
+          "unweighted": 4265
+        }
+      },
+      "twoB_highHT_MET400plus": {
+        "mStop-2_mLSP-1000": {
+          "genmodel_branch": "GenModel_T2tt_1000_600",
+          "mLSP": 1000,
+          "mStop": 2,
+          "raw_weighted": 9817.0,
+          "unweighted": 9817
+        },
+        "mStop-2_mLSP-1050": {
+          "genmodel_branch": "GenModel_T2tt_1050_1",
+          "mLSP": 1050,
+          "mStop": 2,
+          "raw_weighted": 6254.0,
+          "unweighted": 6254
+        },
+        "mStop-2_mLSP-1100": {
+          "genmodel_branch": "GenModel_T2tt_1100_600",
+          "mLSP": 1100,
+          "mStop": 2,
+          "raw_weighted": 3643.0,
+          "unweighted": 3643
+        },
+        "mStop-2_mLSP-1150": {
+          "genmodel_branch": "GenModel_T2tt_1150_200",
+          "mLSP": 1150,
+          "mStop": 2,
+          "raw_weighted": 4429.0,
+          "unweighted": 4429
+        },
+        "mStop-2_mLSP-1200": {
+          "genmodel_branch": "GenModel_T2tt_1200_100",
+          "mLSP": 1200,
+          "mStop": 2,
+          "raw_weighted": 5309.0,
+          "unweighted": 5309
+        },
+        "mStop-2_mLSP-1250": {
+          "genmodel_branch": "GenModel_T2tt_1250_700",
+          "mLSP": 1250,
+          "mStop": 2,
+          "raw_weighted": 5520.0,
+          "unweighted": 5520
+        },
+        "mStop-2_mLSP-1300": {
+          "genmodel_branch": "GenModel_T2tt_1300_100",
+          "mLSP": 1300,
+          "mStop": 2,
+          "raw_weighted": 8725.0,
+          "unweighted": 8725
+        },
+        "mStop-2_mLSP-1350": {
+          "genmodel_branch": "GenModel_T2tt_1350_1200",
+          "mLSP": 1350,
+          "mStop": 2,
+          "raw_weighted": 5520.0,
+          "unweighted": 5520
+        },
+        "mStop-2_mLSP-1400": {
+          "genmodel_branch": "GenModel_T2tt_1400_600",
+          "mLSP": 1400,
+          "mStop": 2,
+          "raw_weighted": 6188.0,
+          "unweighted": 6188
+        },
+        "mStop-2_mLSP-1450": {
+          "genmodel_branch": "GenModel_T2tt_1450_1200",
+          "mLSP": 1450,
+          "mStop": 2,
+          "raw_weighted": 6050.0,
+          "unweighted": 6050
+        },
+        "mStop-2_mLSP-1500": {
+          "genmodel_branch": "GenModel_T2tt_1500_1000",
+          "mLSP": 1500,
+          "mStop": 2,
+          "raw_weighted": 9939.0,
+          "unweighted": 9939
+        },
+        "mStop-2_mLSP-1600": {
+          "genmodel_branch": "GenModel_T2tt_1600_1",
+          "mLSP": 1600,
+          "mStop": 2,
+          "raw_weighted": 6958.0,
+          "unweighted": 6958
+        },
+        "mStop-2_mLSP-1700": {
+          "genmodel_branch": "GenModel_T2tt_1700_1500",
+          "mLSP": 1700,
+          "mStop": 2,
+          "raw_weighted": 8244.0,
+          "unweighted": 8244
+        },
+        "mStop-2_mLSP-1800": {
+          "genmodel_branch": "GenModel_T2tt_1800_200",
+          "mLSP": 1800,
+          "mStop": 2,
+          "raw_weighted": 7926.0,
+          "unweighted": 7926
+        },
+        "mStop-2_mLSP-1900": {
+          "genmodel_branch": "GenModel_T2tt_1900_1000",
+          "mLSP": 1900,
+          "mStop": 2,
+          "raw_weighted": 6820.0,
+          "unweighted": 6820
+        },
+        "mStop-2_mLSP-2000": {
+          "genmodel_branch": "GenModel_T2tt_2000_1100",
+          "mLSP": 2000,
+          "mStop": 2,
+          "raw_weighted": 10648.0,
+          "unweighted": 10648
+        },
+        "mStop-2_mLSP-2100": {
+          "genmodel_branch": "GenModel_T2tt_2100_400",
+          "mLSP": 2100,
+          "mStop": 2,
+          "raw_weighted": 7884.0,
+          "unweighted": 7884
+        },
+        "mStop-2_mLSP-2200": {
+          "genmodel_branch": "GenModel_T2tt_2200_1600",
+          "mLSP": 2200,
+          "mStop": 2,
+          "raw_weighted": 8007.0,
+          "unweighted": 8007
+        },
+        "mStop-2_mLSP-2300": {
+          "genmodel_branch": "GenModel_T2tt_2300_1900",
+          "mLSP": 2300,
+          "mStop": 2,
+          "raw_weighted": 10073.0,
+          "unweighted": 10073
+        },
+        "mStop-2_mLSP-2400": {
+          "genmodel_branch": "GenModel_T2tt_2400_2100",
+          "mLSP": 2400,
+          "mStop": 2,
+          "raw_weighted": 7394.0,
+          "unweighted": 7394
+        },
+        "mStop-2_mLSP-2500": {
+          "genmodel_branch": "GenModel_T2tt_2500_2000",
+          "mLSP": 2500,
+          "mStop": 2,
+          "raw_weighted": 7133.0,
+          "unweighted": 7133
+        },
+        "mStop-2_mLSP-600": {
+          "genmodel_branch": "GenModel_T2tt_600_300",
+          "mLSP": 600,
+          "mStop": 2,
+          "raw_weighted": 1231.0,
+          "unweighted": 1231
+        },
+        "mStop-2_mLSP-700": {
+          "genmodel_branch": "GenModel_T2tt_700_300",
+          "mLSP": 700,
+          "mStop": 2,
+          "raw_weighted": 1506.0,
+          "unweighted": 1506
+        },
+        "mStop-2_mLSP-900": {
+          "genmodel_branch": "GenModel_T2tt_900_1",
+          "mLSP": 900,
+          "mStop": 2,
+          "raw_weighted": 3413.0,
+          "unweighted": 3413
+        },
+        "mStop-2_mLSP-950": {
+          "genmodel_branch": "GenModel_T2tt_950_500",
+          "mLSP": 950,
+          "mStop": 2,
+          "raw_weighted": 3815.0,
+          "unweighted": 3815
+        }
+      },
+      "veryHighHT_Njet6plus_Nb1_MET250plus": {
+        "mStop-2_mLSP-1000": {
+          "genmodel_branch": "GenModel_T2tt_1000_600",
+          "mLSP": 1000,
+          "mStop": 2,
+          "raw_weighted": 2187.0,
+          "unweighted": 2187
+        },
+        "mStop-2_mLSP-1050": {
+          "genmodel_branch": "GenModel_T2tt_1050_1",
+          "mLSP": 1050,
+          "mStop": 2,
+          "raw_weighted": 1493.0,
+          "unweighted": 1493
+        },
+        "mStop-2_mLSP-1100": {
+          "genmodel_branch": "GenModel_T2tt_1100_600",
+          "mLSP": 1100,
+          "mStop": 2,
+          "raw_weighted": 898.0,
+          "unweighted": 898
+        },
+        "mStop-2_mLSP-1150": {
+          "genmodel_branch": "GenModel_T2tt_1150_200",
+          "mLSP": 1150,
+          "mStop": 2,
+          "raw_weighted": 1116.0,
+          "unweighted": 1116
+        },
+        "mStop-2_mLSP-1200": {
+          "genmodel_branch": "GenModel_T2tt_1200_100",
+          "mLSP": 1200,
+          "mStop": 2,
+          "raw_weighted": 1483.0,
+          "unweighted": 1483
+        },
+        "mStop-2_mLSP-1250": {
+          "genmodel_branch": "GenModel_T2tt_1250_700",
+          "mLSP": 1250,
+          "mStop": 2,
+          "raw_weighted": 1596.0,
+          "unweighted": 1596
+        },
+        "mStop-2_mLSP-1300": {
+          "genmodel_branch": "GenModel_T2tt_1300_100",
+          "mLSP": 1300,
+          "mStop": 2,
+          "raw_weighted": 2695.0,
+          "unweighted": 2695
+        },
+        "mStop-2_mLSP-1350": {
+          "genmodel_branch": "GenModel_T2tt_1350_900",
+          "mLSP": 1350,
+          "mStop": 2,
+          "raw_weighted": 1753.0,
+          "unweighted": 1753
+        },
+        "mStop-2_mLSP-1400": {
+          "genmodel_branch": "GenModel_T2tt_1400_600",
+          "mLSP": 1400,
+          "mStop": 2,
+          "raw_weighted": 2086.0,
+          "unweighted": 2086
+        },
+        "mStop-2_mLSP-1450": {
+          "genmodel_branch": "GenModel_T2tt_1450_1200",
+          "mLSP": 1450,
+          "mStop": 2,
+          "raw_weighted": 2197.0,
+          "unweighted": 2197
+        },
+        "mStop-2_mLSP-1500": {
+          "genmodel_branch": "GenModel_T2tt_1500_1000",
+          "mLSP": 1500,
+          "mStop": 2,
+          "raw_weighted": 3864.0,
+          "unweighted": 3864
+        },
+        "mStop-2_mLSP-1600": {
+          "genmodel_branch": "GenModel_T2tt_1600_1",
+          "mLSP": 1600,
+          "mStop": 2,
+          "raw_weighted": 2984.0,
+          "unweighted": 2984
+        },
+        "mStop-2_mLSP-1700": {
+          "genmodel_branch": "GenModel_T2tt_1700_1500",
+          "mLSP": 1700,
+          "mStop": 2,
+          "raw_weighted": 3526.0,
+          "unweighted": 3526
+        },
+        "mStop-2_mLSP-1800": {
+          "genmodel_branch": "GenModel_T2tt_1800_200",
+          "mLSP": 1800,
+          "mStop": 2,
+          "raw_weighted": 3781.0,
+          "unweighted": 3781
+        },
+        "mStop-2_mLSP-1900": {
+          "genmodel_branch": "GenModel_T2tt_1900_1000",
+          "mLSP": 1900,
+          "mStop": 2,
+          "raw_weighted": 3056.0,
+          "unweighted": 3056
+        },
+        "mStop-2_mLSP-2000": {
+          "genmodel_branch": "GenModel_T2tt_2000_1100",
+          "mLSP": 2000,
+          "mStop": 2,
+          "raw_weighted": 5189.0,
+          "unweighted": 5189
+        },
+        "mStop-2_mLSP-2100": {
+          "genmodel_branch": "GenModel_T2tt_2100_400",
+          "mLSP": 2100,
+          "mStop": 2,
+          "raw_weighted": 4229.0,
+          "unweighted": 4229
+        },
+        "mStop-2_mLSP-2200": {
+          "genmodel_branch": "GenModel_T2tt_2200_1600",
+          "mLSP": 2200,
+          "mStop": 2,
+          "raw_weighted": 4075.0,
+          "unweighted": 4075
+        },
+        "mStop-2_mLSP-2300": {
+          "genmodel_branch": "GenModel_T2tt_2300_1900",
+          "mLSP": 2300,
+          "mStop": 2,
+          "raw_weighted": 5647.0,
+          "unweighted": 5647
+        },
+        "mStop-2_mLSP-2400": {
+          "genmodel_branch": "GenModel_T2tt_2400_2100",
+          "mLSP": 2400,
+          "mStop": 2,
+          "raw_weighted": 4148.0,
+          "unweighted": 4148
+        },
+        "mStop-2_mLSP-2500": {
+          "genmodel_branch": "GenModel_T2tt_2500_2000",
+          "mLSP": 2500,
+          "mStop": 2,
+          "raw_weighted": 4024.0,
+          "unweighted": 4024
+        },
+        "mStop-2_mLSP-600": {
+          "genmodel_branch": "GenModel_T2tt_600_300",
+          "mLSP": 600,
+          "mStop": 2,
+          "raw_weighted": 254.0,
+          "unweighted": 254
+        },
+        "mStop-2_mLSP-700": {
+          "genmodel_branch": "GenModel_T2tt_700_300",
+          "mLSP": 700,
+          "mStop": 2,
+          "raw_weighted": 306.0,
+          "unweighted": 306
+        },
+        "mStop-2_mLSP-900": {
+          "genmodel_branch": "GenModel_T2tt_900_1",
+          "mLSP": 900,
+          "mStop": 2,
+          "raw_weighted": 722.0,
+          "unweighted": 722
+        },
+        "mStop-2_mLSP-950": {
+          "genmodel_branch": "GenModel_T2tt_950_500",
+          "mLSP": 950,
+          "mStop": 2,
+          "raw_weighted": 832.0,
+          "unweighted": 832
+        }
+      }
+    }
+  }
+}

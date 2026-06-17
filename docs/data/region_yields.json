@@ -1,0 +1,40 @@
+{
+  "regions": {
+    "cat1_preselection": {
+      "background": 9644.155773086251,
+      "data": 13.0,
+      "signal": 658088.0
+    },
+    "cat2_LLCR_highDeltaM": {
+      "background": 3073.986997517465,
+      "data": 1.0,
+      "signal": 14345.0
+    },
+    "cat3_QCDCR_highDeltaM": {
+      "background": 1569.2822153958575,
+      "data": 0.0,
+      "signal": 10013.0
+    },
+    "cat4_GCR_highDeltaM": {
+      "background": 177.93851762321688,
+      "data": 0.0,
+      "signal": 0.0
+    },
+    "cat5_DY2E_highDeltaM": {
+      "background": 8.289397660936707,
+      "data": 0.0,
+      "signal": 0.0
+    },
+    "cat6_DY2M_highDeltaM": {
+      "background": 5.803115382455695,
+      "data": 0.0,
+      "signal": 0.0
+    },
+    "cat7_SR_highDeltaM": {
+      "background": 273.1936251382009,
+      "data": 0.0,
+      "signal": 335296.0
+    }
+  },
+  "status": "complete"
+}

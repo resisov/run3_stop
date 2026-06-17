@@ -1,0 +1,11 @@
+{
+  "files_processed": 3,
+  "source": "real_feature_table.csv",
+  "status": "complete",
+  "yields": {
+    "Data": {
+      "cat1_preselection": 13.0,
+      "cat2_LLCR_highDeltaM": 1.0
+    }
+  }
+}

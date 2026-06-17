@@ -130,11 +130,26 @@ def _scheme_rows(search: dict[str, Any]) -> list[list[Any]]:
     return rows
 
 
+def _signal_dataset_rows(signal_das: dict[str, Any], limit: int = 10) -> list[list[Any]]:
+    rows = []
+    for row in signal_das.get("datasets", [])[:limit] if isinstance(signal_das, dict) else []:
+        rows.append([row.get("das_dataset"), row.get("simulation_type"), row.get("number_of_files"), row.get("status")])
+    return rows
+
+
 def _plot_gallery(docs: Path) -> str:
     plots = []
-    for rel in ["plots/real_met_distribution.png", "plots/search_bins/minimal_njet_nb_met.png", "plots/search_bins/resolved_kinematics.png", "plots/search_bins/isr_sensitive.png", "plots/search_bins/ak8_kinematics_no_tag_scores.png", "plots/search_bins/optimized_hybrid_no_tags.png"]:
+    rels = ["plots/real_met_distribution.png", "plots/search_bins/minimal_njet_nb_met.png", "plots/search_bins/resolved_kinematics.png", "plots/search_bins/isr_sensitive.png", "plots/search_bins/ak8_kinematics_no_tag_scores.png", "plots/search_bins/optimized_hybrid_no_tags.png"]
+    rels.extend(str(p.relative_to(docs)) for p in sorted((docs / "plots").glob("*.png")) if p.is_file())
+    seen = set()
+    for rel in rels:
+        if rel in seen:
+            continue
+        seen.add(rel)
         if (docs / rel).exists():
             plots.append(f'<a href="{rel}"><img src="{rel}" loading="lazy"><div class="cap">{_e(Path(rel).stem.replace("_", " "))}</div></a>')
+        if len(plots) >= 12:
+            break
     if not plots:
         return '<div class="callout">사용 가능한 플롯이 없습니다. 섹션은 blocked/missing으로 유지됩니다.</div>'
     return '<div class="gal">' + "".join(plots) + '</div>'
@@ -162,6 +177,17 @@ def render_report_pages(repo: Path, base: Path, docs: Path, monitor: dict[str, A
     systematics = _load(outputs / "systematic_yields.json", {})
     datacards = _load(base / "cards" / "datacard_summary.json", {})
     limits = _load(base / "limits" / "expected_limits_status.json", {})
+    signal_das = _load(base / "signals" / "das_signal_datasets.json", {})
+    signal_probe = _load(base / "signals" / "signal_branch_probe.json", {})
+    signal_grid = _load(base / "signals" / "realized_mass_grid.json", {})
+    signal_xsec = _load(base / "signals" / "stop_xsec_13p6TeV_status.json", {})
+    signal_yields = _load(outputs / "signal_yields_by_mass.json", {})
+    hist_index = _load(base / "hist_index.json", {})
+    plot_manifest = _load(base / "plots" / "plot_manifest.json", {})
+
+    fastsim_datasets = signal_das.get("fastsim_datasets", signal_das.get("fastsim_candidates", 0)) if isinstance(signal_das, dict) else 0
+    fullsim_datasets = signal_das.get("fullsim_anchor_candidates", signal_das.get("fullsim_datasets", 0)) if isinstance(signal_das, dict) else 0
+    signal_yields_ready = signal_yields.get("status") == "complete" if isinstance(signal_yields, dict) else False
 
     root_files = monitor.get("root_files_read", len(real_summary.get("files", [])))
     feature_rows = monitor.get("feature_rows", real_summary.get("processed_events"))
@@ -194,7 +220,8 @@ def render_report_pages(repo: Path, base: Path, docs: Path, monitor: dict[str, A
 </div>
 <div class="card"><h2>Run-3 All-Hadronic Stop Autonomous Analysis</h2><p>이 사이트는 pipeline monitor가 아니라 현재 all-hadronic stop autonomous analysis의 서술형 리포트다. 실제 ROOT subset에서 특징 테이블, trigger/object/cutflow audit, feature-side normalization, exploratory search-bin studies, GitHub Pages publication 상태를 묶어 보여준다.</p><p class="warning">Legacy stop_processor_v4.py validation is external/manual. No independent agreement with stop_processor_v4.py is claimed by autonomous_allhad.</p></div>
 <div class="cards">{links}</div>
-<div class="card"><h2>현재 상태 요약</h2>{_table(["항목","상태"], [["GitHub Pages", pages_status.get("deployment_status", monitor.get("github_pages_deployment_status", "not_confirmed"))], ["Normalization", norm.get("scope", "missing")], ["Search bins", search.get("selection_status", "missing")], ["Feature yields", feature_yields.get("status", "missing")], ["Full production", production.get("status", "missing")], ["Full normalization", full_norm.get("status", "missing")], ["Final search bins", final_bins.get("status", "missing")], ["Systematic yields", systematics.get("status", "missing")], ["Datacards", datacards.get("status", "missing")], ["Expected limits", limits.get("status", "missing")]])}</div>
+<div class="card"><h2>현재 상태 요약</h2>{_table(["항목","상태"], [["GitHub Pages", pages_status.get("deployment_status", monitor.get("github_pages_deployment_status", "not_confirmed"))], ["Normalization", norm.get("scope", "missing")], ["Search bins", search.get("selection_status", "missing")], ["Feature yields", feature_yields.get("status", "missing")], ["Full production", production.get("status", "missing")], ["Full normalization", full_norm.get("status", "missing")], ["Final search bins", final_bins.get("status", "missing")], ["Systematic yields", systematics.get("status", "missing")], ["Datacards", datacards.get("status", "missing")], ["Expected limits", limits.get("status", "missing")], ["Signal DAS discovery", signal_das.get("status", "missing")], ["Signal yields", signal_yields.get("status", "not ready")], ["hists.npy", hist_index.get("status", "missing")], ["hists.npy plots", plot_manifest.get("status", "missing")], ["Limit contours", "not available"]])}</div>
+<div class="card"><h2>Signal DAS Discovery</h2>{_table(["항목", "값"], [["DAS query", signal_das.get("das_query_used", "missing")], ["datasets found", signal_das.get("datasets_found", 0)], ["FastSim datasets", fastsim_datasets], ["FullSim anchor datasets", fullsim_datasets], ["total ROOT files", signal_das.get("total_signal_root_files", 0)], ["FastSim ROOT files", signal_das.get("total_fastsim_signal_root_files", 0)], ["FullSim ROOT files", signal_das.get("total_fullsim_signal_root_files", 0)], ["representative files probed", signal_probe.get("representative_files_probed", 0)], ["realized mass points", signal_grid.get("realized_mass_points", 0)], ["all FastSim files ready", signal_das.get("all_fastsim_files_ready_for_process_signals", False)], ["xsec table", signal_xsec.get("xsec_table_status", "missing")], ["signal yields ready", signal_yields_ready], ["contour inputs ready", False]])}<p class="warning">FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level. This must later be validated or replaced with an appropriate trigger efficiency/SF treatment.</p></div>
 '''
 
     plan_body = '''
@@ -209,6 +236,7 @@ def render_report_pages(repo: Path, base: Path, docs: Path, monitor: dict[str, A
 <div class="card"><h2>샘플 커버리지</h2>{_table(["Process", "preselection", "SR", "LLCR", "QCDCR", "GCR"], _sample_rows(real_yields))}</div>
 <div class="card"><h2>메타데이터와 정규화</h2><p>Data weight = 1. MC weight = genWeight × available correction weights × xsec × lumi / processed feature-subset sumw. 현재 correction weights 일부는 unavailable이며 full dataset sumw가 없으므로 full-production normalization은 주장하지 않는다.</p>{_table(["Process", "status", "xs pb", "processed sumw", "factor"], _normalization_preview(factors))}</div>
 <div class="card"><h2>Full-production manifest</h2>{_table(["항목", "값"], [["status", production.get("status", "missing")], ["configured datasets", production.get("datasets_configured", "missing")], ["files in metadata", production.get("files_in_metadata", "missing")], ["planned jobs", production.get("jobs_planned", "missing")], ["allow_condor_submit", production.get("allow_condor_submit", "missing")]])}</div>
+<div class="card"><h2>Signal DAS inventory</h2>{_table(["항목", "값"], [["total ROOT files", signal_das.get("total_signal_root_files", 0)], ["FastSim ROOT files", signal_das.get("total_fastsim_signal_root_files", 0)], ["FullSim ROOT files", signal_das.get("total_fullsim_signal_root_files", 0)], ["all FastSim files ready for process-signals", signal_das.get("all_fastsim_files_ready_for_process_signals", False)]])}{_table(["Dataset", "Type", "Files", "File query status"], _signal_dataset_rows(signal_das))}<p>{_artifact_link('data/das_signal_datasets.json')} · {_artifact_link('data/das_signal_files.json')} · {_artifact_link('data/signal_branch_probe.json')} · {_artifact_link('data/realized_mass_grid.json')}</p></div>
 <div class="callout"><b>주의:</b> feature-side subset normalization은 full-production normalization이 아니다. Larger design sample/full production 전까지 최종 물리 수율로 사용하지 않는다.</div>
 '''
 
@@ -235,7 +263,8 @@ def render_report_pages(repo: Path, base: Path, docs: Path, monitor: dict[str, A
 <div class="card"><h2>Top-tagging-independent search-bin design</h2><p>Primary categorization excludes top-tag scores, working points, and pass/fail decisions. AK8 kinematics without tagger scores are allowed.</p>{_table(["Allowed variable family"], [[v] for v in search.get('allowed_variables', ['Njet','Nb','HT','MET','recoil pT','min delta phi','AK8 kinematics without top-tag scores','ISR-like variables'])])}</div>
 <div class="grid"><div class="kpi"><b>{len(search.get('schemes', []))}</b><span>schemes tested</span></div><div class="kpi"><b>{sum(len(s.get('bins', [])) for s in search.get('schemes', []))}</b><span>candidate bins</span></div><div class="kpi"><b>none</b><span>selected physics scheme</span></div><div class="kpi"><b>blocked</b><span>real Combine limits</span></div></div>
 <div class="card"><h2>Candidate scheme summary</h2>{_table(["Scheme", "Bins", "Sane bins", "Low-stat bins", "Proxy score"], _scheme_rows(search))}<p class="warning">{_e(search.get('selection_status', 'No selected scheme.'))}</p></div>
-<div class="card"><h2>Cards and limits boundary</h2><ul><li>Downstream feature yields are <code>{_e(feature_yields.get('status', 'missing'))}</code> only.</li><li>Final search-bin selection: <code>{_e(final_bins.get('status', 'missing'))}</code>.</li><li>Systematic yields: <code>{_e(systematics.get('status', 'missing'))}</code>.</li><li>Datacards: <code>{_e(datacards.get('status', 'missing'))}</code>.</li><li>Expected limits: <code>{_e(limits.get('status', 'missing'))}</code>. No real Combine limits are produced or claimed.</li></ul><p>{_artifact_link('data/search_bin_candidates.json')} · {_artifact_link('data/final_search_bins.json')} · {_artifact_link('data/feature_yields.json')} · {_artifact_link('data/systematic_yields.json')} · {_artifact_link('data/datacard_summary.json')} · {_artifact_link('data/expected_limits_status.json')}</p></div>
+<div class="card"><h2>Cards and limits boundary</h2><ul><li>Downstream feature yields are <code>{_e(feature_yields.get('status', 'missing'))}</code> only.</li><li>Final search-bin selection: <code>{_e(final_bins.get('status', 'missing'))}</code>.</li><li>Systematic yields: <code>{_e(systematics.get('status', 'missing'))}</code>.</li><li>Datacards: <code>{_e(datacards.get('status', 'missing'))}</code>.</li><li>Expected limits: <code>{_e(limits.get('status', 'missing'))}</code>. No real Combine limits are produced or claimed.</li><li>Signal yields: <code>{_e(signal_yields.get('status', 'not ready'))}</code>; contour inputs are not ready.</li></ul><p>{_artifact_link('data/search_bin_candidates.json')} · {_artifact_link('data/final_search_bins.json')} · {_artifact_link('data/feature_yields.json')} · {_artifact_link('data/systematic_yields.json')} · {_artifact_link('data/datacard_summary.json')} · {_artifact_link('data/expected_limits_status.json')}</p></div>
+<div class="card"><h2>Signal contour boundary</h2>{_table(["항목", "상태"], [["DAS discovery", signal_das.get("status", "missing")], ["FastSim datasets", fastsim_datasets], ["total ROOT files", signal_das.get("total_signal_root_files", 0)], ["FastSim ROOT files", signal_das.get("total_fastsim_signal_root_files", 0)], ["FullSim ROOT files", signal_das.get("total_fullsim_signal_root_files", 0)], ["GenModel branches", "see signal_branch_probe.json"], ["Runs sumw branches", "see realized_mass_grid.json"], ["xsec table", signal_xsec.get("xsec_table_status", "missing")], ["signal yields", signal_yields.get("status", "not ready")], ["limit contours", "not available"]])}</div>
 '''
 
     completed_rows = [[g, "complete"] for g in ["validate-feature-subset", "normalization-audit", "normalize-feature-yields", "design-search-bins", "make-feature-yields", "make-plots", "publish-github-pages"]]
@@ -244,7 +273,8 @@ def render_report_pages(repo: Path, base: Path, docs: Path, monitor: dict[str, A
 <div class="grid"><div class="kpi"><b>pushed</b><span>GitHub publication status</span></div><div class="kpi"><b>{_e(monitor.get('github_pages_site_status', 'ready'))}</b><span>local site artifact status</span></div><div class="kpi"><b>0</b><span>analysisctl all exit code from latest run</span></div><div class="kpi"><b>no limits</b><span>no exclusion/reach claim</span></div></div>
 <div class="card"><h2>GitHub Pages</h2>{_table(["Item", "Value"], [["Expected URL", monitor.get('github_pages_expected_url', 'https://resisov.github.io/run3_stop/')], ["Deployment status in artifact", monitor.get('github_pages_deployment_status', 'not_confirmed')], ["Last publication UTC", monitor.get('github_pages_last_publication_time_utc', 'missing')]])}</div>
 <div class="card"><h2>Completed gates</h2>{_table(["Gate", "Status"], completed_rows)}</div>
-<div class="card"><h2>Blocked gates</h2>{_table(["Gate", "Reason"], blocked_rows)}{_table(["Artifact", "Status"], [["run_production", production.get("status", "missing")], ["full_production_normalization", full_norm.get("status", "missing")], ["select_search_bins", final_bins.get("status", "missing")], ["systematic_yields", systematics.get("status", "missing")], ["make_datacards", datacards.get("status", "missing")], ["expected_limits", limits.get("status", "missing")]])}</div>
+<div class="card"><h2>Blocked gates</h2>{_table(["Gate", "Reason"], blocked_rows)}{_table(["Artifact", "Status"], [["run_production", production.get("status", "missing")], ["full_production_normalization", full_norm.get("status", "missing")], ["select_search_bins", final_bins.get("status", "missing")], ["systematic_yields", systematics.get("status", "missing")], ["make_datacards", datacards.get("status", "missing")], ["expected_limits", limits.get("status", "missing")], ["signal_yields", signal_yields.get("status", "not ready")], ["limit_contours", "not available"]])}</div>
+<div class="card"><h2>Signal status</h2>{_table(["항목", "값"], [["exact DAS query", signal_das.get("das_query_used", "missing")], ["datasets found", signal_das.get("datasets_found", 0)], ["FastSim datasets", fastsim_datasets], ["total ROOT files", signal_das.get("total_signal_root_files", 0)], ["FastSim ROOT files", signal_das.get("total_fastsim_signal_root_files", 0)], ["FullSim ROOT files", signal_das.get("total_fullsim_signal_root_files", 0)], ["representative files probed", signal_probe.get("representative_files_probed", 0)], ["realized mass points", signal_grid.get("realized_mass_points", 0)], ["all FastSim files ready", signal_das.get("all_fastsim_files_ready_for_process_signals", False)], ["xsec table", signal_xsec.get("xsec_table_status", "missing")]])}</div>
 <div class="card"><h2>Next steps</h2><ol><li>Confirm Pages deployment.</li><li>Improve search-bin diagnostics.</li><li>Build larger design sample.</li><li>Implement systematic yields.</li><li>Prepare real datacards.</li><li>Set up Combine.</li></ol></div>
 <div class="callout badbox"><b>No exclusion limits are claimed.</b> Proxy or approximate metrics are not expected limits.</div>
 '''

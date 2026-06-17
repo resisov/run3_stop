@@ -1,0 +1,583 @@
+{
+  "created_utc": "2026-06-17T13:56:35Z",
+  "final_search_bins_status": "blocked",
+  "message": "Search-bin yields are produced from feature-side hists/feature table. Final adopted search bins remain blocked/provisional until full normalization and physics review.",
+  "source": "autonomous_allhad/outputs/searchbin_yields.json",
+  "status": "provisional",
+  "yields": {
+    "ak8_kinematics_no_tag_scores": {
+      "AK8one_Njet5plus_Nb1_MET250plus": {
+        "DY": {
+          "entries": 170,
+          "yield": 74.58846835443039
+        },
+        "Data": {
+          "entries": 3,
+          "yield": 3.0
+        },
+        "GJ": {
+          "entries": 13,
+          "yield": 41.861359760229035
+        },
+        "QCD": {
+          "entries": 67,
+          "yield": 2853.0412349999974
+        },
+        "SMS": {
+          "entries": 6657,
+          "yield": 4306.310836856176
+        },
+        "TT": {
+          "entries": 1226,
+          "yield": 45.29840341880333
+        }
+      },
+      "AK8one_highMET": {
+        "DY": {
+          "entries": 534,
+          "yield": 248.62822784810027
+        },
+        "Data": {
+          "entries": 9,
+          "yield": 9.0
+        },
+        "GJ": {
+          "entries": 74,
+          "yield": 197.89006291470284
+        },
+        "QCD": {
+          "entries": 67,
+          "yield": 2853.0412349999974
+        },
+        "SMS": {
+          "entries": 4360,
+          "yield": 2918.681149313991
+        },
+        "TT": {
+          "entries": 76,
+          "yield": 2.5603445410628036
+        },
+        "VV": {
+          "entries": 2,
+          "yield": 734.2335988415745
+        },
+        "WtoLNu": {
+          "entries": 447,
+          "yield": 151.21367792782627
+        },
+        "Zto2Nu": {
+          "entries": 857,
+          "yield": 70.39294934885338
+        }
+      },
+      "AK8two_Njet5plus": {
+        "DY": {
+          "entries": 844,
+          "yield": 361.33969113923825
+        },
+        "Data": {
+          "entries": 599,
+          "yield": 599.0
+        },
+        "GJ": {
+          "entries": 210,
+          "yield": 639.3371315352341
+        },
+        "QCD": {
+          "entries": 1916,
+          "yield": 81588.46277999846
+        },
+        "SMS": {
+          "entries": 3198,
+          "yield": 157.61231008817634
+        },
+        "ST": {
+          "entries": 49,
+          "yield": 16280.312699687622
+        },
+        "TT": {
+          "entries": 7891,
+          "yield": 327.03477772576537
+        },
+        "VV": {
+          "entries": 20,
+          "yield": 7342.335988415744
+        }
+      }
+    },
+    "isr_sensitive": {
+      "hardJ1_Njet2plus_MET250to500": {
+        "DY": {
+          "entries": 2839,
+          "yield": 985.3965430379656
+        },
+        "Data": {
+          "entries": 2,
+          "yield": 2.0
+        },
+        "GJ": {
+          "entries": 252,
+          "yield": 639.3371300259482
+        },
+        "QCD": {
+          "entries": 634,
+          "yield": 26997.43497000029
+        },
+        "SMS": {
+          "entries": 897,
+          "yield": 1391.1588671589866
+        },
+        "ST": {
+          "entries": 1,
+          "yield": 378.6119232485498
+        },
+        "TT": {
+          "entries": 283,
+          "yield": 12.309348755109601
+        },
+        "VV": {
+          "entries": 3,
+          "yield": 1101.3503982623618
+        },
+        "WtoLNu": {
+          "entries": 2076,
+          "yield": 718.8688586473046
+        },
+        "Zto2Nu": {
+          "entries": 1,
+          "yield": 0.11991984556874498
+        }
+      },
+      "hardJ1_Njet2plus_MET500plus": {
+        "DY": {
+          "entries": 1297,
+          "yield": 498.08521645569243
+        },
+        "GJ": {
+          "entries": 168,
+          "yield": 456.6693796141217
+        },
+        "QCD": {
+          "entries": 125,
+          "yield": 5322.838124999987
+        },
+        "SMS": {
+          "entries": 2577,
+          "yield": 1472.6247142215948
+        },
+        "TT": {
+          "entries": 42,
+          "yield": 0.98474790040877
+        },
+        "WtoLNu": {
+          "entries": 3275,
+          "yield": 1190.8681025306103
+        },
+        "Zto2Nu": {
+          "entries": 2296,
+          "yield": 190.67255445430473
+        }
+      },
+      "hardJ1_lowB_MET400plus": {
+        "DY": {
+          "entries": 2421,
+          "yield": 948.9310696202444
+        },
+        "Data": {
+          "entries": 1,
+          "yield": 1.0
+        },
+        "GJ": {
+          "entries": 285,
+          "yield": 772.5323648034293
+        },
+        "QCD": {
+          "entries": 222,
+          "yield": 9453.360509999995
+        },
+        "SMS": {
+          "entries": 1309,
+          "yield": 1397.931646365037
+        },
+        "TT": {
+          "entries": 6,
+          "yield": 0.196949580081754
+        },
+        "VV": {
+          "entries": 3,
+          "yield": 1101.3503982623618
+        },
+        "WtoLNu": {
+          "entries": 14167,
+          "yield": 5045.126001918346
+        },
+        "Zto2Nu": {
+          "entries": 23595,
+          "yield": 2044.5134471017766
+        }
+      }
+    },
+    "minimal_njet_nb_met": {
+      "Njet2to4_Nb0_MET250to400": {
+        "DY": {
+          "entries": 1509,
+          "yield": 508.0303455696164
+        },
+        "Data": {
+          "entries": 39,
+          "yield": 39.0
+        },
+        "GJ": {
+          "entries": 181,
+          "yield": 452.8638018657243
+        },
+        "QCD": {
+          "entries": 288,
+          "yield": 12263.819040000042
+        },
+        "SMS": {
+          "entries": 258,
+          "yield": 7.502987711052867
+        },
+        "TT": {
+          "entries": 5,
+          "yield": 0.295424370122631
+        },
+        "VV": {
+          "entries": 31,
+          "yield": 11380.62078204441
+        },
+        "WtoLNu": {
+          "entries": 982,
+          "yield": 339.14377605538124
+        },
+        "Zto2Nu": {
+          "entries": 6,
+          "yield": 0.23983969113748996
+        }
+      },
+      "Njet2to4_Nb1plus_MET250to400": {
+        "DY": {
+          "entries": 359,
+          "yield": 116.85526708860786
+        },
+        "Data": {
+          "entries": 9,
+          "yield": 9.0
+        },
+        "GJ": {
+          "entries": 36,
+          "yield": 83.72271914313657
+        },
+        "QCD": {
+          "entries": 96,
+          "yield": 4087.9396799999918
+        },
+        "SMS": {
+          "entries": 2171,
+          "yield": 4110.684229012086
+        },
+        "ST": {
+          "entries": 2,
+          "yield": 757.2238464970995
+        },
+        "TT": {
+          "entries": 54,
+          "yield": 3.1511932813080663
+        },
+        "VV": {
+          "entries": 6,
+          "yield": 2202.7007965247235
+        },
+        "WtoLNu": {
+          "entries": 109,
+          "yield": 40.09819574443938
+        }
+      },
+      "Njet5plus_Nb1plus_MET600plus": {
+        "DY": {
+          "entries": 41,
+          "yield": 19.061497468354432
+        },
+        "GJ": {
+          "entries": 5,
+          "yield": 19.027890628594342
+        },
+        "QCD": {
+          "entries": 5,
+          "yield": 212.913525
+        },
+        "SMS": {
+          "entries": 2233,
+          "yield": 103.57920560974402
+        },
+        "TT": {
+          "entries": 25,
+          "yield": 0.689323530286139
+        }
+      },
+      "Njet5to6_Nb1_MET250to400": {
+        "DY": {
+          "entries": 94,
+          "yield": 29.835387341772172
+        },
+        "GJ": {
+          "entries": 4,
+          "yield": 15.222312502875475
+        },
+        "QCD": {
+          "entries": 40,
+          "yield": 1703.3082000000006
+        },
+        "SMS": {
+          "entries": 959,
+          "yield": 1379.702246557401
+        },
+        "TT": {
+          "entries": 46,
+          "yield": 2.3633949609810494
+        },
+        "VV": {
+          "entries": 1,
+          "yield": 367.11679942078723
+        }
+      },
+      "Njet5to6_Nb2plus_MET250to600": {
+        "DY": {
+          "entries": 28,
+          "yield": 14.917693670886074
+        },
+        "Data": {
+          "entries": 2,
+          "yield": 2.0
+        },
+        "GJ": {
+          "entries": 1,
+          "yield": -3.8055781257188688
+        },
+        "QCD": {
+          "entries": 17,
+          "yield": 723.905985
+        },
+        "SMS": {
+          "entries": 2690,
+          "yield": 4119.157363283421
+        },
+        "TT": {
+          "entries": 315,
+          "yield": 15.657491616499408
+        }
+      },
+      "Njet7plus_Nb1plus_MET250to600": {
+        "DY": {
+          "entries": 33,
+          "yield": 9.116368354430378
+        },
+        "Data": {
+          "entries": 1,
+          "yield": 1.0
+        },
+        "GJ": {
+          "entries": 1,
+          "yield": -3.8055781257188688
+        },
+        "QCD": {
+          "entries": 12,
+          "yield": 510.9924599999999
+        },
+        "SMS": {
+          "entries": 2164,
+          "yield": 1427.6267555272584
+        },
+        "TT": {
+          "entries": 1005,
+          "yield": 34.36770172426622
+        }
+      }
+    },
+    "optimized_hybrid_no_tags": {
+      "hybrid_AK8_highHT": {
+        "DY": {
+          "entries": 100,
+          "yield": 43.09555949367088
+        },
+        "GJ": {
+          "entries": 9,
+          "yield": 34.2502035087913
+        },
+        "QCD": {
+          "entries": 67,
+          "yield": 2853.0412349999974
+        },
+        "SMS": {
+          "entries": 1693,
+          "yield": 86.51851126562413
+        },
+        "TT": {
+          "entries": 471,
+          "yield": 15.263592456335902
+        }
+      },
+      "hybrid_highMET_anyHT": {
+        "DY": {
+          "entries": 8,
+          "yield": 4.972564556962024
+        },
+        "GJ": {
+          "entries": 2,
+          "yield": 7.6111562514377376
+        },
+        "SMS": {
+          "entries": 1804,
+          "yield": 88.72896592963903
+        },
+        "TT": {
+          "entries": 11,
+          "yield": 0.689323530286139
+        }
+      },
+      "hybrid_lowMET_multijet": {
+        "DY": {
+          "entries": 9,
+          "yield": 4.143803797468354
+        },
+        "QCD": {
+          "entries": 1,
+          "yield": 42.582705
+        },
+        "SMS": {
+          "entries": 808,
+          "yield": 1370.881977904835
+        },
+        "TT": {
+          "entries": 344,
+          "yield": 9.059680683760671
+        }
+      },
+      "hybrid_midMET_multijet": {
+        "DY": {
+          "entries": 11,
+          "yield": 4.143803797468354
+        },
+        "GJ": {
+          "entries": 2,
+          "yield": 3.773214882762943e-07
+        },
+        "SMS": {
+          "entries": 1123,
+          "yield": 1395.5869367510195
+        },
+        "TT": {
+          "entries": 77,
+          "yield": 2.2649201709401723
+        },
+        "VV": {
+          "entries": 1,
+          "yield": 367.11679942078723
+        }
+      }
+    },
+    "resolved_kinematics": {
+      "cleanDphi_Njet5plus_Nb1_MET400plus": {
+        "DY": {
+          "entries": 25,
+          "yield": 10.773889873417719
+        },
+        "GJ": {
+          "entries": 4,
+          "yield": 7.611156628759225
+        },
+        "SMS": {
+          "entries": 4149,
+          "yield": 2855.9389679095216
+        },
+        "TT": {
+          "entries": 108,
+          "yield": 3.742042021553329
+        },
+        "VV": {
+          "entries": 1,
+          "yield": 367.11679942078723
+        }
+      },
+      "highHT_Njet5plus_Nb1_MET250plus": {
+        "DY": {
+          "entries": 217,
+          "yield": 73.75970759493671
+        },
+        "GJ": {
+          "entries": 12,
+          "yield": 45.6669378859479
+        },
+        "QCD": {
+          "entries": 85,
+          "yield": 3619.529924999994
+        },
+        "SMS": {
+          "entries": 3063,
+          "yield": 2833.877382853358
+        },
+        "TT": {
+          "entries": 732,
+          "yield": 26.58819331103691
+        },
+        "VV": {
+          "entries": 1,
+          "yield": 367.11679942078723
+        }
+      },
+      "twoB_highHT_MET400plus": {
+        "DY": {
+          "entries": 58,
+          "yield": 24.862822784810138
+        },
+        "GJ": {
+          "entries": 5,
+          "yield": 11.416734377156606
+        },
+        "QCD": {
+          "entries": 17,
+          "yield": 723.905985
+        },
+        "SMS": {
+          "entries": 2884,
+          "yield": 1503.8535638883282
+        },
+        "TT": {
+          "entries": 199,
+          "yield": 7.385609253065767
+        },
+        "WtoLNu": {
+          "entries": 6,
+          "yield": 1.9324431684067183
+        },
+        "Zto2Nu": {
+          "entries": 1,
+          "yield": 0.11991984556874498
+        }
+      },
+      "veryHighHT_Njet6plus_Nb1_MET250plus": {
+        "DY": {
+          "entries": 34,
+          "yield": 11.60265063291139
+        },
+        "GJ": {
+          "entries": 3,
+          "yield": 11.416734377156606
+        },
+        "QCD": {
+          "entries": 37,
+          "yield": 1575.5600850000005
+        },
+        "SMS": {
+          "entries": 721,
+          "yield": 33.98169432874431
+        },
+        "TT": {
+          "entries": 244,
+          "yield": 6.10543698253437
+        }
+      }
+    }
+  }
+}

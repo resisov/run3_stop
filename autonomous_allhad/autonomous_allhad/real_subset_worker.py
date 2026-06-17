@@ -267,7 +267,7 @@ def invariant_mass(pt1, eta1, phi1, pt2, eta2, phi2):
     return np.sqrt(np.maximum(0, 2 * pt1 * pt2 * (np.cosh(eta1 - eta2) - np.cos(phi1 - phi2))))
 
 
-def extract_chunk(arrays: dict[str, Any], dataset: str, process: str, sp: str | None, year: str, file_path: str, entry_start: int, entry_stop: int) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+def extract_chunk(arrays: dict[str, Any], dataset: str, process: str, sp: str | None, year: str, file_path: str, entry_start: int, entry_stop: int, fastsim_trigger_bypass: bool = False) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     n = len(arrays["run"])
     met_pt = np.asarray(arr(arrays, "PuppiMET_pt", arr(arrays, "PFMET_pt", arr(arrays, "MET_pt"))), dtype=float)
     met_phi = np.asarray(arr(arrays, "PuppiMET_phi", arr(arrays, "PFMET_phi", arr(arrays, "MET_phi"))), dtype=float)
@@ -337,6 +337,10 @@ def extract_chunk(arrays: dict[str, Any], dataset: str, process: str, sp: str | 
     pho_hlt = bool_branch(arrays, PHOTON_HLT, n)
     ele_hlt = bool_branch(arrays, ELECTRON_HLT, n)
     mu_hlt = bool_branch(arrays, MUON_HLT, n)
+    signal_trigger_policy = "standard trigger requirement"
+    if fastsim_trigger_bypass and process == "SMS":
+        sig_hlt = np.ones(n, dtype=bool)
+        signal_trigger_policy = "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
 
     e1pt = first_or(-99, e_pt[e_med]); e2pt = nth_or(-99, e_pt[e_med], 1); e1eta = first_or(0, e_eta[e_med]); e2eta = nth_or(0, e_eta[e_med], 1); e1phi = first_or(0, e_phi[e_med]); e2phi = nth_or(0, e_phi[e_med], 1); e1q = first_or(0, e_charge[e_med]); e2q = nth_or(0, e_charge[e_med], 1)
     mee = invariant_mass(e1pt, e1eta, e1phi, e2pt, e2eta, e2phi); pee = np.sqrt(np.maximum(0, e1pt**2 + e2pt**2 + 2*e1pt*e2pt*np.cos(e1phi-e2phi)))
@@ -398,10 +402,24 @@ def extract_chunk(arrays: dict[str, Any], dataset: str, process: str, sp: str | 
         for item in cutflows[region]:
             item["first_zero_cut"] = first_zero
 
+    genmodel_branches = sorted([name for name in getattr(arrays, "fields", []) if str(name).startswith("GenModel_T2tt_")])
+    genmodel_masks = {name: np.asarray(arrays[name], dtype=bool) for name in genmodel_branches}
+
+    def active_genmodel(i: int) -> tuple[str, int | None, int | None]:
+        for name, mask in genmodel_masks.items():
+            if i < len(mask) and bool(mask[i]):
+                nums = re.findall(r"(\d+)", name)
+                if len(nums) >= 2:
+                    return name, int(nums[0]), int(nums[1])
+                return name, None, None
+        return "", None, None
+
     rows = []
     for i in range(n):
+        gen_branch, gen_mstop, gen_mlsp = active_genmodel(i)
         row = {
             "dataset": dataset, "process": process, "year": year, "signal_point": sp or "", "file": file_path,
+            "genmodel_branch": gen_branch, "mStop": gen_mstop if gen_mstop is not None else "", "mLSP": gen_mlsp if gen_mlsp is not None else "", "trigger_policy": signal_trigger_policy,
             "entry": entry_start + i, "run": int(arrays["run"][i]), "luminosityBlock": int(arrays["luminosityBlock"][i]), "event": int(arrays["event"][i]),
             "met": float(met_pt[i]), "met_phi": float(met_phi[i]), "ht": float(ht[i]), "njet": int(njet[i]), "nb_medium": int(nb[i]),
             "j1pt": float(j1pt[i]), "j1eta": float(j1eta[i]), "j1phi": float(j1phi[i]), "j2pt": float(j2pt[i]),
@@ -416,11 +434,11 @@ def extract_chunk(arrays: dict[str, Any], dataset: str, process: str, sp: str | 
         for rname in REGION_NAMES:
             row[f"feature_{rname}"] = bool(masks[rname][i])
         rows.append(row)
-    summary = {"entries": n, "missing_filters": missing_filters, "regions": {r: int(np.sum(masks[r])) for r in REGION_NAMES}, "cutflows": cutflows}
+    summary = {"entries": n, "missing_filters": missing_filters, "regions": {r: int(np.sum(masks[r])) for r in REGION_NAMES}, "cutflows": cutflows, "trigger_policy": signal_trigger_policy, "genmodel_branch_count": len(genmodel_branches)}
     return rows, summary
 
 
-def validate_and_extract_file(file_path: str, dataset: str, process: str, sp: str | None, year: str, chunk_size: int) -> tuple[dict[str, Any], list[dict[str, Any]], list[dict[str, Any]]]:
+def validate_and_extract_file(file_path: str, dataset: str, process: str, sp: str | None, year: str, chunk_size: int, fastsim_trigger_bypass: bool = False) -> tuple[dict[str, Any], list[dict[str, Any]], list[dict[str, Any]]]:
     rec = {"dataset_key": dataset, "process": process, "signal_point": sp, "physical_file_path": file_path, "tree_name": "Events", "file_size": None, "number_of_entries": None, "required_branch_validation": {}, "read_status": "not_started", "processing_status": "not_started"}
     rows: list[dict[str, Any]] = []
     bad: list[dict[str, Any]] = []
@@ -442,7 +460,10 @@ def validate_and_extract_file(file_path: str, dataset: str, process: str, sp: st
         if not all(rec["required_branch_validation"].values()):
             raise RuntimeError("required branch missing")
         rec["read_status"] = "opened"
-        read_branches = [b for b in set(CORE_BRANCHES + FILTERS + SIGNAL_HLT + PHOTON_HLT + ELECTRON_HLT + MUON_HLT) if b in branches]
+        genmodel_branches = sorted([b for b in branches if str(b).startswith("GenModel_T2tt_")])
+        read_branches = [b for b in set(CORE_BRANCHES + FILTERS + SIGNAL_HLT + PHOTON_HLT + ELECTRON_HLT + MUON_HLT + genmodel_branches) if b in branches]
+        rec["genmodel_branches"] = genmodel_branches
+        rec["fastsim_trigger_bypass"] = bool(fastsim_trigger_bypass and process == "SMS")
         n_strata = int(os.environ.get("AUTONOMOUS_ALLHAD_STRATA", "12"))
         if tree.num_entries <= n_strata * chunk_size:
             ranges = [(0, tree.num_entries)]
@@ -459,7 +480,7 @@ def validate_and_extract_file(file_path: str, dataset: str, process: str, sp: st
         chunk_summaries = []
         for start, stop in ranges:
             arrays = tree.arrays(read_branches, entry_start=start, entry_stop=stop, library="ak")
-            chunk_rows, chunk_summary = extract_chunk(arrays, dataset, process, sp, year, file_path, start, stop)
+            chunk_rows, chunk_summary = extract_chunk(arrays, dataset, process, sp, year, file_path, start, stop, fastsim_trigger_bypass=fastsim_trigger_bypass)
             rows.extend(chunk_rows)
             chunk_summaries.append({"entry_start": start, "entry_stop": stop, **chunk_summary})
         rec["chunk_summaries"] = chunk_summaries
