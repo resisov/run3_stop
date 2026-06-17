@@ -17,6 +17,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from .report_pages import render_report_pages
+
 
 GITHUB_PAGES_URL = "https://resisov.github.io/run3_stop/"
 
@@ -1152,14 +1154,21 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             self.base / "validation" / "real_cutflows.json",
             self.base / "validation" / "object_id_diagnostics.json",
             self.base / "studies" / "search_bins" / "search_bin_candidates.json",
+            self.base / "studies" / "search_bins" / "search_bin_summary.md",
             self.base / "manual_validation" / "feature_yields_for_manual_comparison.json",
             self.base / "validation" / "normalization_audit.json",
             self.outputs / "normalization_factors.json",
             self.outputs / "normalized_feature_yields.json",
+            self.outputs / "feature_yields.json",
+            self.base / "limits" / "expected_limits_status.json",
         ]
         for src in copy_sources:
             if src.exists():
                 shutil.copy2(src, self.docs / "data" / src.name)
+        special_copies = [(self.base / "cards" / "README.md", "cards_README.md")]
+        for src, name in special_copies:
+            if src.exists():
+                shutil.copy2(src, self.docs / "data" / name)
         plot_sources = [self.base / "plots" / "real_met_distribution.png"]
         search_plot_dir = self.base / "studies" / "search_bins" / "search_bin_plots"
         if search_plot_dir.exists():
@@ -1171,6 +1180,7 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
                 shutil.copy2(src, target_dir / src.name)
         self.write_pages_workflow()
         self.render_dashboard(monitor)
+        render_report_pages(self.repo, self.base, self.docs, monitor, self.outputs, self.workflow)
         self.sanitize_public_docs()
         sensitive = self.scan_docs_for_sensitive_strings()
         result["sensitive_scan"] = sensitive
@@ -1178,6 +1188,7 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
         self._record_direct_stage("publish_github_pages", "complete" if not sensitive["findings"] else "blocked", result)
         monitor = self.monitor(json_output=True)
         self.render_dashboard(monitor)
+        render_report_pages(self.repo, self.base, self.docs, monitor, self.outputs, self.workflow)
         self.sanitize_public_docs()
         sensitive = self.scan_docs_for_sensitive_strings()
         result["sensitive_scan"] = sensitive
@@ -1238,8 +1249,44 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
     def write_pages_workflow(self) -> None:
         path = self.repo / ".github" / "workflows" / "pages.yml"
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text("""name: Publish GitHub Pages\n\non:\n  push:\n    branches: [ main, master ]\n  workflow_dispatch:\n\npermissions:\n  contents: read\n  pages: write\n  id-token: write\n\nconcurrency:\n  group: pages\n  cancel-in-progress: false\n\njobs:\n  deploy:\n    environment:\n      name: github-pages\n      url: ${{ steps.deployment.outputs.page_url }}\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/configure-pages@v5\n      - uses: actions/upload-pages-artifact@v3\n        with:\n          path: docs\n      - id: deployment\n        uses: actions/deploy-pages@v4\n""")
+        path.write_text("""name: Deploy GitHub Pages
 
+on:
+  push:
+    branches: ["master"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./docs
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+""")
     def scan_docs_for_sensitive_strings(self) -> dict[str, Any]:
         patterns = ["BEGIN PRIVATE KEY", "BEGIN CERTIFICATE", "x509", "X509", "TOKEN=", "token=", "password", "secret", "/eos/user/", "/eos/home-"]
         findings = []

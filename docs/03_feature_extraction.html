@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Part 3 · 실 ROOT 특징 추출</title>
+<link rel="stylesheet" href="report.css"></head>
+<body>
+<h1>Part 3 · 실 ROOT 특징 추출</h1>
+<div class="sub">NanoAOD 읽기 · XRootD · jet ID · trigger/cutflow diagnostics</div>
+<nav class="crumb"><a href="index.html">홈</a><span class="sep">|</span><a href="01_plan.html">1 플랜</a><a href="02_samples.html">2 샘플</a><a class="here" href="03_feature_extraction.html">3 특징 추출</a><a href="04_yields_validation.html">4 수율 검증</a><a href="05_search_bins_cards.html">5 빈·카드</a><a href="06_results_status.html">6 결과 상태</a><a href="monitor.html">모니터</a></nav>
+
+<div class="card"><h2>Real feature extraction pipeline</h2><ul><li>NanoAOD ROOT files are read through uproot/awkward over XRootD-accessible paths.</li><li>Branches are validated; inaccessible/corrupt files are recorded instead of silently dropped.</li><li>AK4PUPPI_TightLeptonVeto jet ID from correctionlib is used where possible.</li><li>Feature table construction, trigger audit, cutflows, and manual-validation artifacts are produced without running stop_processor_v4.py.</li></ul></div>
+<div class="card"><h2>Object definitions used by autonomous_allhad</h2><table class=""><tr><th>Object</th><th>Feature-side treatment</th></tr><tr><td>AK4 jets</td><td>correctionlib AK4PUPPI_TightLeptonVeto where possible; pT/eta and cleaning stored</td></tr><tr><td>AK8 jets</td><td>Kinematics only for primary studies; no top tag scores/WP/pass-fail in primary categorization</td></tr><tr><td>Leptons/photons/tau/tracks</td><td>Counts and region-veto/control selections represented as features</td></tr><tr><td>MET/recoil</td><td>PuppiMET and recoil-like variables used for signal/control region logic</td></tr></table></div>
+<div class="card"><h2>Stored features</h2><table class=""><tr><th>Group</th><th>Contents</th></tr><tr><td>Event keys</td><td>run, luminosityBlock, event</td></tr><tr><td>Kinematics</td><td>MET, HT, jet multiplicities, b-jet counts, angular quantities</td></tr><tr><td>Region booleans</td><td>preselection, LLCR, QCDCR, GCR, DY2E, DY2M, SR</td></tr><tr><td>Weights</td><td>genWeight/raw and normalized_feature_weight when available</td></tr><tr><td>Provenance</td><td>dataset, process, trigger family, chunk/source metadata</td></tr></table></div>
+<div class="card"><h2>Unavailable or approximate features</h2><table class=""><tr><th>Feature</th><th>Status</th></tr><tr><td>Full correction weights</td><td>incomplete/unavailable in feature-side subset</td></tr><tr><td>Systematic shifted yields</td><td>blocked; required before real datacards</td></tr><tr><td>Full dataset sumw</td><td>missing for full-production normalization</td></tr><tr><td>Legacy event-level agreement</td><td>external/manual; not claimed</td></tr></table></div>
+<div class="card"><h2>Validation artifacts</h2><table class=""><tr><th>Artifact</th><th>Status</th></tr><tr><td>trigger_audit.json</td><td>14 entries</td></tr><tr><td>real_cutflows.json</td><td>14 datasets</td></tr><tr><td>manual_validation/</td><td>input files, feature yields, cutflows, histograms for external comparison</td></tr><tr><td>object_id_diagnostics.json</td><td>jet-ID and object diagnostics</td></tr></table><p><a href="data/trigger_audit.json"><code>data/trigger_audit.json</code></a> · <a href="data/real_cutflows.json"><code>data/real_cutflows.json</code></a> · <a href="data/feature_yields_for_manual_comparison.json"><code>data/feature_yields_for_manual_comparison.json</code></a></p></div>
+
+<div class="pgnav"><a href="02_samples.html">← 2 샘플</a><a href="04_yields_validation.html">4 수율 검증 →</a></div>
+<div class="foot">generated 2026-06-17T12:29:21Z UTC · <code>&lt;repo&gt;</code> · Legacy validation external/manual</div>
+</body></html>

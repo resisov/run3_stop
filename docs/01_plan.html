@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Part 1 · 분석 계획</title>
+<link rel="stylesheet" href="report.css"></head>
+<body>
+<h1>Part 1 · 분석 계획</h1>
+<div class="sub">물리 동기 · 기준 파일 · autonomous_allhad 정책</div>
+<nav class="crumb"><a href="index.html">홈</a><span class="sep">|</span><a class="here" href="01_plan.html">1 플랜</a><a href="02_samples.html">2 샘플</a><a href="03_feature_extraction.html">3 특징 추출</a><a href="04_yields_validation.html">4 수율 검증</a><a href="05_search_bins_cards.html">5 빈·카드</a><a href="06_results_status.html">6 결과 상태</a><a href="monitor.html">모니터</a></nav>
+
+<div class="card"><h2>물리 동기</h2><ul><li>타깃은 stop 쌍생성에서 큰 missing transverse momentum과 hadronic activity가 나타나는 Run-3 all-hadronic topology다.</li><li>13.6 TeV Run-3 데이터에서는 trigger, reconstruction, correction availability, luminosity, NanoAOD content가 Run-2와 달라져 blind copy가 아니라 재검증된 feature-side architecture가 필요하다.</li><li>목표는 빠른 feature extraction과 category/search-bin studies를 통해 larger production과 statistical model로 확장 가능한 구조를 만드는 것이다.</li></ul></div>
+<div class="card"><h2>기준 문서와 코드</h2><table class=""><tr><th>Reference</th><th>용도</th></tr><tr><td>AN2019_016_v9.pdf</td><td>Run-2 all-hadronic stop strategy and validation philosophy</td></tr><tr><td>stop_processor_v4.py</td><td>Run-3 implementation reference for triggers, regions, objects, weights</td></tr><tr><td>ids.py</td><td>lepton/photon/jet/fatjet ID and cleaning reference</td></tr><tr><td>corrections.py</td><td>correction availability and weighting reference</td></tr></table></div>
+<div class="card"><h2>autonomous_allhad 목표</h2><ul><li>기존 processor 단순 refactor가 아니라 reusable event-level feature table을 구축한다.</li><li>top-tagging-independent categorization을 우선 연구한다. Top tag scores/WP/pass-fail은 primary categorization에서 사용하지 않는다.</li><li>search-bin design, nominal/prototype datacard preparation, Combine-ready pipeline boundary를 문서화한다.</li><li>GitHub Pages report는 완료, provisional, blocked 단계를 분리해 보여준다.</li></ul></div>
+<div class="callout"><b>정책:</b> legacy stop_processor_v4.py validation은 external/manual이며, autonomous_allhad는 independent agreement를 주장하지 않는다.</div>
+
+<div class="pgnav"><a href="index.html">← 홈</a><a href="02_samples.html">2 샘플 →</a></div>
+<div class="foot">generated 2026-06-17T12:29:21Z UTC · <code>&lt;repo&gt;</code> · Legacy validation external/manual</div>
+</body></html>
