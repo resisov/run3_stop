@@ -18,7 +18,7 @@ PAGES = [
     ("monitor.html", "모니터"),
 ]
 
-REGIONS = ["preselection", "LLCR", "QCDCR", "GCR", "DY2E", "DY2M", "SR"]
+REGIONS = ["LLCR", "QCDCR", "GCR", "DY2E", "DY2M", "SR"]
 
 
 def _load(path: Path, default: Any) -> Any:
@@ -110,7 +110,7 @@ def _sample_rows(real_yields: dict[str, Any]) -> list[list[Any]]:
     rows = []
     for proc in ["TT", "Zto2Nu", "WtoLNu", "QCD", "GJ", "DY", "ST", "VV", "JetMET", "EGamma", "Muon", "SMS"]:
         vals = yields.get(proc, {})
-        rows.append([proc, vals.get("preselection", 0), vals.get("SR", 0), vals.get("LLCR", 0), vals.get("QCDCR", 0), vals.get("GCR", 0)])
+        rows.append([proc, vals.get("LLCR", 0), vals.get("QCDCR", 0), vals.get("GCR", 0), vals.get("DY2E", 0), vals.get("DY2M", 0), vals.get("SR", 0)])
     return rows
 
 
@@ -233,7 +233,7 @@ def render_report_pages(repo: Path, base: Path, docs: Path, monitor: dict[str, A
 
     samples_body = f'''
 <div class="grid"><div class="kpi"><b>{_fmt(root_files)}</b><span>representative ROOT files</span></div><div class="kpi"><b>{_fmt(feature_rows)}</b><span>feature rows</span></div><div class="kpi"><b>{_fmt(bad_files)}</b><span>bad/corrupt files</span></div><div class="kpi"><b>{_fmt(lumi)} fb⁻¹</b><span>luminosity used for feature-side normalization</span></div></div>
-<div class="card"><h2>샘플 커버리지</h2>{_table(["Process", "preselection", "SR", "LLCR", "QCDCR", "GCR"], _sample_rows(real_yields))}</div>
+<div class="card"><h2>샘플 커버리지</h2>{_table(["Process", "LLCR", "QCDCR", "GCR", "DY2E", "DY2M", "SR"], _sample_rows(real_yields))}<p class="muted">Preselection, when present in older artifacts, is diagnostic preselection, not an analysis region.</p></div>
 <div class="card"><h2>메타데이터와 정규화</h2><p>Data weight = 1. MC weight = genWeight × available correction weights × xsec × lumi / processed feature-subset sumw. 현재 correction weights 일부는 unavailable이며 full dataset sumw가 없으므로 full-production normalization은 주장하지 않는다.</p>{_table(["Process", "status", "xs pb", "processed sumw", "factor"], _normalization_preview(factors))}</div>
 <div class="card"><h2>Full-production manifest</h2>{_table(["항목", "값"], [["status", production.get("status", "missing")], ["configured datasets", production.get("datasets_configured", "missing")], ["files in metadata", production.get("files_in_metadata", "missing")], ["planned jobs", production.get("jobs_planned", "missing")], ["allow_condor_submit", production.get("allow_condor_submit", "missing")]])}</div>
 <div class="card"><h2>Signal DAS inventory</h2>{_table(["항목", "값"], [["total ROOT files", signal_das.get("total_signal_root_files", 0)], ["FastSim ROOT files", signal_das.get("total_fastsim_signal_root_files", 0)], ["FullSim ROOT files", signal_das.get("total_fullsim_signal_root_files", 0)], ["all FastSim files ready for process-signals", signal_das.get("all_fastsim_files_ready_for_process_signals", False)]])}{_table(["Dataset", "Type", "Files", "File query status"], _signal_dataset_rows(signal_das))}<p>{_artifact_link('data/das_signal_datasets.json')} · {_artifact_link('data/das_signal_files.json')} · {_artifact_link('data/signal_branch_probe.json')} · {_artifact_link('data/realized_mass_grid.json')}</p></div>
@@ -241,7 +241,7 @@ def render_report_pages(repo: Path, base: Path, docs: Path, monitor: dict[str, A
 '''
 
     object_rows = [["AK4 jets", "correctionlib AK4PUPPI_TightLeptonVeto where possible; pT/eta and cleaning stored"], ["AK8 jets", "Kinematics only for primary studies; no top tag scores/WP/pass-fail in primary categorization"], ["Leptons/photons/tau/tracks", "Counts and region-veto/control selections represented as features"], ["MET/recoil", "PuppiMET and recoil-like variables used for signal/control region logic"]]
-    feature_rows_table = [["Event keys", "run, luminosityBlock, event"], ["Kinematics", "MET, HT, jet multiplicities, b-jet counts, angular quantities"], ["Region booleans", "preselection, LLCR, QCDCR, GCR, DY2E, DY2M, SR"], ["Weights", "genWeight/raw and normalized_feature_weight when available"], ["Provenance", "dataset, process, trigger family, chunk/source metadata"]]
+    feature_rows_table = [["Event keys", "run, luminosityBlock, event"], ["Kinematics", "MET, HT, jet multiplicities, b-jet counts, angular quantities"], ["Region booleans", "LLCR, QCDCR, GCR, DY2E, DY2M, SR; diagnostic preselection may be retained for cutflow ancestry only"], ["Weights", "genWeight/raw and normalized_feature_weight when available"], ["Provenance", "dataset, process, trigger family, chunk/source metadata"]]
     unavailable_rows = [["Full correction weights", "incomplete/unavailable in feature-side subset"], ["Systematic shifted yields", "blocked; required before real datacards"], ["Full dataset sumw", "missing for full-production normalization"], ["Legacy event-level agreement", "external/manual; not claimed"]]
     validation_rows = [["trigger_audit.json", f"{len(trigger) if isinstance(trigger, list) else 'missing'} entries"], ["real_cutflows.json", f"{len(cutflows) if isinstance(cutflows, dict) else 'missing'} datasets"], ["manual_validation/", "input files, feature yields, cutflows, histograms for external comparison"], ["object_id_diagnostics.json", "jet-ID and object diagnostics"]]
     extraction_body = f'''
@@ -253,7 +253,7 @@ def render_report_pages(repo: Path, base: Path, docs: Path, monitor: dict[str, A
 '''
 
     yields_body = f'''
-<div class="card"><h2>All-hadronic regions</h2>{_table(["Region", "feature-side yield"], _sum_regions(region_yields))}</div>
+<div class="card"><h2>All-hadronic main regions</h2>{_table(["Region", "feature-side yield"], _sum_regions(region_yields))}<p class="muted">Preselection is intentionally omitted from the headline physics-region table.</p></div>
 <div class="card"><h2>Normalization audit</h2><ul><li>Previous/current feature yields are marked: <code>{_e(norm_audit.get('current_feature_yields_raw_or_normalized', 'unknown'))}</code>.</li><li>Normalized feature-side yields were produced: <code>{_e(norm.get('normalization_status', 'missing'))}</code>.</li><li>Scope: <code>{_e(norm.get('scope', 'missing'))}</code>.</li><li>Full-production normalization status: <code>{_e(full_norm.get('status', 'missing'))}</code>.</li></ul><p>{_artifact_link('data/normalization_audit.json')} · {_artifact_link('data/normalized_feature_yields.json')} · {_artifact_link('data/normalization_factors.json')} · {_artifact_link('data/full_normalized_yields.json')}</p></div>
 <div class="callout"><b>주의:</b> These are not final physics yields. They are feature-side subset diagnostics and normalized nominal yields only.</div>
 <div class="card"><h2>Plot gallery</h2>{_plot_gallery(docs)}</div>

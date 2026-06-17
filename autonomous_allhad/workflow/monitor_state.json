@@ -6,9 +6,11 @@
     "expected_limits",
     "full_production_normalization",
     "make_datacards",
+    "process_signals",
     "run_production",
     "select_search_bins",
-    "systematic_yields"
+    "systematic_yields",
+    "make_systematic_yields"
   ],
   "completed_gates": [
     "design_search_bins",
@@ -18,17 +20,23 @@
     "make_plots",
     "normalization_audit",
     "normalize_feature_yields",
+    "parse_signal_xsec",
     "plot_from_npy",
-    "process_signals",
-    "publish_github_pages"
+    "publish_github_pages",
+    "analysisctl_all_start",
+    "validate_feature_subset",
+    "input_discovery",
+    "file_validation",
+    "signal_discovery"
   ],
   "current_pipeline_stage": "publish_github_pages",
+  "diagnostic_preselection_yield": 12377,
   "failed_gates": [],
   "feature_rows": 290006,
   "github_pages_deployment_confirmed": false,
   "github_pages_deployment_status": "not_confirmed",
   "github_pages_expected_url": "https://resisov.github.io/run3_stop/",
-  "github_pages_last_publication_time_utc": "2026-06-17T13:59:50Z",
+  "github_pages_last_publication_time_utc": "2026-06-17T15:41:23Z",
   "github_pages_published_by_pipeline": false,
   "github_pages_site_status": "ready",
   "latest_command": {
@@ -37,6 +45,7 @@
       "index": "docs/index.html",
       "monitor": "docs/monitor.html",
       "published": false,
+      "status": "complete",
       "workflow": ".github/workflows/pages.yml"
     },
     "stage": "publish_github_pages",
@@ -49,6 +58,7 @@
       "index": "docs/index.html",
       "monitor": "docs/monitor.html",
       "published": false,
+      "status": "complete",
       "workflow": ".github/workflows/pages.yml"
     },
     "stage": "publish_github_pages",
@@ -67,8 +77,7 @@
     "GCR": 89,
     "LLCR": 659,
     "QCDCR": 326,
-    "SR": 5265,
-    "preselection": 12377
+    "SR": 5265
   },
   "root_files_read": 14,
   "signal_das_discovery": {
@@ -81,15 +90,15 @@
     "fullsim_anchor_candidates": 6,
     "realized_mass_points": 326,
     "representative_files_probed": 26,
-    "signal_processed_files": 61,
-    "signal_yield_mass_points": 25,
-    "signal_yields_ready": true,
+    "signal_processed_files": 0,
+    "signal_yield_mass_points": 0,
+    "signal_yields_ready": false,
     "status": "complete",
     "total_fastsim_signal_root_files": 61,
     "total_fullsim_signal_root_files": 47,
     "total_signal_root_files": 108,
     "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level",
     "usable_fastsim_mass_points": 326,
-    "xsec_table_status": "manual_required"
+    "xsec_table_status": "parsed"
   }
 }

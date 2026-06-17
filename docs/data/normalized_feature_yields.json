@@ -44,12 +44,6 @@
         "normalized_weighted": 8.287607594936707,
         "raw_weighted": 7.900762557983398,
         "unweighted": 12
-      },
-      "preselection": {
-        "normalized_sumw2": 210.86122971829263,
-        "normalized_weighted": 118.51278860759521,
-        "raw_weighted": 112.9809045791626,
-        "unweighted": 307
       }
     },
     "EGamma": {
@@ -88,12 +82,6 @@
         "normalized_weighted": 0.0,
         "raw_weighted": 0.0,
         "unweighted": 0
-      },
-      "preselection": {
-        "normalized_sumw2": 1.0,
-        "normalized_weighted": 1.0,
-        "raw_weighted": 1.0,
-        "unweighted": 1
       }
     },
     "GJ": {
@@ -132,12 +120,6 @@
         "normalized_weighted": 0.0,
         "raw_weighted": 0.0,
         "unweighted": 0
-      },
-      "preselection": {
-        "normalized_sumw2": 1969.6098082958645,
-        "normalized_weighted": 312.05740819555473,
-        "raw_weighted": 98.59004342556,
-        "unweighted": 136
       }
     },
     "JetMET": {
@@ -176,12 +158,6 @@
         "normalized_weighted": 0.0,
         "raw_weighted": 0.0,
         "unweighted": 0
-      },
-      "preselection": {
-        "normalized_sumw2": 11.0,
-        "normalized_weighted": 11.0,
-        "raw_weighted": 11.0,
-        "unweighted": 11
       }
     },
     "Muon": {
@@ -220,12 +196,6 @@
         "normalized_weighted": 0.0,
         "raw_weighted": 0.0,
         "unweighted": 0
-      },
-      "preselection": {
-        "normalized_sumw2": 1.0,
-        "normalized_weighted": 1.0,
-        "raw_weighted": 1.0,
-        "unweighted": 1
       }
     },
     "QCD": {
@@ -264,12 +234,6 @@
         "normalized_weighted": 42.582705,
         "raw_weighted": 1.0,
         "unweighted": 1
-      },
-      "preselection": {
-        "normalized_sumw2": 116050.35296748953,
-        "normalized_weighted": 2725.293119999998,
-        "raw_weighted": 64.0,
-        "unweighted": 64
       }
     },
     "SMS": {
@@ -308,12 +272,6 @@
         "normalized_weighted": 218.38432094162914,
         "raw_weighted": 5118.0,
         "unweighted": 5118
-      },
-      "preselection": {
-        "normalized_sumw2": 3584725.8454613523,
-        "normalized_weighted": 3046.860115144946,
-        "raw_weighted": 8535.0,
-        "unweighted": 8535
       }
     },
     "ST": {
@@ -348,12 +306,6 @@
         "unweighted": 0
       },
       "SR": {
-        "normalized_sumw2": 0.0,
-        "normalized_weighted": 0.0,
-        "raw_weighted": 0.0,
-        "unweighted": 0
-      },
-      "preselection": {
         "normalized_sumw2": 0.0,
         "normalized_weighted": 0.0,
         "raw_weighted": 0.0,
@@ -396,12 +348,6 @@
         "normalized_weighted": 3.938991601635083,
         "raw_weighted": 0.8597154915332794,
         "unweighted": 134
-      },
-      "preselection": {
-        "normalized_sumw2": 2.6570558909649806,
-        "normalized_weighted": 9.650529424005931,
-        "raw_weighted": 2.1063029542565346,
-        "unweighted": 274
       }
     },
     "VV": {
@@ -440,12 +386,6 @@
         "normalized_weighted": 0.0,
         "raw_weighted": 0.0,
         "unweighted": 0
-      },
-      "preselection": {
-        "normalized_sumw2": 1078197.9553357002,
-        "normalized_weighted": 2936.934395366298,
-        "raw_weighted": 8.0,
-        "unweighted": 8
       }
     },
     "WtoLNu": {
@@ -484,12 +424,6 @@
         "normalized_weighted": 0.0,
         "raw_weighted": 0.0,
         "unweighted": 0
-      },
-      "preselection": {
-        "normalized_sumw2": 197.91983975345826,
-        "normalized_weighted": 312.08957169768695,
-        "raw_weighted": 778.0669293403625,
-        "unweighted": 848
       }
     },
     "Zto2Nu": {
@@ -528,12 +462,6 @@
         "normalized_weighted": 0.0,
         "raw_weighted": 0.0,
         "unweighted": 0
-      },
-      "preselection": {
-        "normalized_sumw2": 31.52264643981982,
-        "normalized_weighted": 182.75784464676755,
-        "raw_weighted": 461.3890793323517,
-        "unweighted": 2192
       }
     },
     "dataset::DYto2L-2Jets_Bin-MLL-50-PTLL-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____1_": {
@@ -572,12 +500,6 @@
         "normalized_weighted": 8.287607594936707,
         "raw_weighted": 7.900762557983398,
         "unweighted": 12
-      },
-      "preselection": {
-        "normalized_sumw2": 210.86122971829263,
-        "normalized_weighted": 118.51278860759521,
-        "raw_weighted": 112.9809045791626,
-        "unweighted": 307
       }
     },
     "dataset::EGamma0-Run2024C-MINIv6NANOv15-v1____1_": {
@@ -616,12 +538,6 @@
         "normalized_weighted": 0.0,
         "raw_weighted": 0.0,
         "unweighted": 0
-      },
-      "preselection": {
-        "normalized_sumw2": 1.0,
-        "normalized_weighted": 1.0,
-        "raw_weighted": 1.0,
-        "unweighted": 1
       }
     },
     "dataset::GJ_Bin-PTG-600_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_": {
@@ -660,12 +576,6 @@
         "normalized_weighted": 0.0,
         "raw_weighted": 0.0,
         "unweighted": 0
-      },
-      "preselection": {
-        "normalized_sumw2": 1969.6098082958645,
-        "normalized_weighted": 312.05740819555473,
-        "raw_weighted": 98.59004342556,
-        "unweighted": 136
       }
     },
     "dataset::JetMET0-Run2024C-MINIv6NANOv15-v1____1_": {
@@ -704,12 +614,6 @@
         "normalized_weighted": 0.0,
         "raw_weighted": 0.0,
         "unweighted": 0
-      },
-      "preselection": {
-        "normalized_sumw2": 11.0,
-        "normalized_weighted": 11.0,
-        "raw_weighted": 11.0,
-        "unweighted": 11
       }
     },
     "dataset::Muon0-Run2024C-MINIv6NANOv15-v1____1_": {
@@ -748,12 +652,6 @@
         "normalized_weighted": 0.0,
         "raw_weighted": 0.0,
         "unweighted": 0
-      },
-      "preselection": {
-        "normalized_sumw2": 1.0,
-        "normalized_weighted": 1.0,
-        "raw_weighted": 1.0,
-        "unweighted": 1
       }
     },
     "dataset::QCD_Bin-PT-1000to1500_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_": {
@@ -792,12 +690,6 @@
         "normalized_weighted": 42.582705,
         "raw_weighted": 1.0,
         "unweighted": 1
-      },
-      "preselection": {
-        "normalized_sumw2": 116050.35296748953,
-        "normalized_weighted": 2725.293119999998,
-        "raw_weighted": 64.0,
-        "unweighted": 64
       }
     },
     "dataset::SMS-2Stop_Par-mStop-1000_TuneCP5_13p6TeV_madgraph-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_": {
@@ -836,12 +728,6 @@
         "normalized_weighted": 209.9674306095713,
         "raw_weighted": 416.0,
         "unweighted": 416
-      },
-      "preselection": {
-        "normalized_sumw2": 179.34524448396186,
-        "normalized_weighted": 355.3294979546591,
-        "raw_weighted": 704.0,
-        "unweighted": 704
       }
     },
     "dataset::SMS-2Stop_Par-mStop-1500_TuneCP5_13p6TeV_madgraph-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2": {
@@ -880,12 +766,6 @@
         "normalized_weighted": 8.41689033199957,
         "raw_weighted": 4702.0,
         "unweighted": 4702
-      },
-      "preselection": {
-        "normalized_sumw2": 0.02508674877022803,
-        "normalized_weighted": 14.014426713999157,
-        "raw_weighted": 7829.0,
-        "unweighted": 7829
       }
     },
     "dataset::SMS-2Stop_Par-mStop-600_TuneCP5_13p6TeV_madgraph-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2": {
@@ -924,12 +804,6 @@
         "normalized_weighted": 0.0,
         "raw_weighted": 0.0,
         "unweighted": 0
-      },
-      "preselection": {
-        "normalized_sumw2": 3584546.4751310665,
-        "normalized_weighted": 2677.516190476191,
-        "raw_weighted": 2.0,
-        "unweighted": 2
       }
     },
     "dataset::TBbarQto2Q-t-channel-4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_": {
@@ -964,12 +838,6 @@
         "unweighted": 0
       },
       "SR": {
-        "normalized_sumw2": 0.0,
-        "normalized_weighted": 0.0,
-        "raw_weighted": 0.0,
-        "unweighted": 0
-      },
-      "preselection": {
         "normalized_sumw2": 0.0,
         "normalized_weighted": 0.0,
         "raw_weighted": 0.0,
@@ -1012,12 +880,6 @@
         "normalized_weighted": 3.938991601635083,
         "raw_weighted": 0.8597154915332794,
         "unweighted": 134
-      },
-      "preselection": {
-        "normalized_sumw2": 2.6570558909649806,
-        "normalized_weighted": 9.650529424005931,
-        "raw_weighted": 2.1063029542565346,
-        "unweighted": 274
       }
     },
     "dataset::WW_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_": {
@@ -1056,12 +918,6 @@
         "normalized_weighted": 0.0,
         "raw_weighted": 0.0,
         "unweighted": 0
-      },
-      "preselection": {
-        "normalized_sumw2": 1078197.9553357002,
-        "normalized_weighted": 2936.934395366298,
-        "raw_weighted": 8.0,
-        "unweighted": 8
       }
     },
     "dataset::WtoLNu-2Jets_Bin-1J-PTLNu-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_": {
@@ -1100,12 +956,6 @@
         "normalized_weighted": 0.0,
         "raw_weighted": 0.0,
         "unweighted": 0
-      },
-      "preselection": {
-        "normalized_sumw2": 197.91983975345826,
-        "normalized_weighted": 312.08957169768695,
-        "raw_weighted": 778.0669293403625,
-        "unweighted": 848
       }
     },
     "dataset::Zto2Nu-2Jets_Bin-1J-PTNuNu-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_": {
@@ -1144,12 +994,6 @@
         "normalized_weighted": 0.0,
         "raw_weighted": 0.0,
         "unweighted": 0
-      },
-      "preselection": {
-        "normalized_sumw2": 31.52264643981982,
-        "normalized_weighted": 182.75784464676755,
-        "raw_weighted": 461.3890793323517,
-        "unweighted": 2192
       }
     }
   }

@@ -12,7 +12,7 @@ def main(argv: list[str] | None = None) -> int:
     config_commands = (
         "all", "resume", "real-subset", "validate-real-subset", "validate-feature-subset",
         "run-production", "full-production-normalization", "select-search-bins",
-        "discover-signals-from-das", "process-signals", "make-hists-npy", "plot-from-npy",
+        "discover-signals-from-das", "parse-signal-xsec", "process-signals", "make-hists-npy", "plot-from-npy",
         "publish-github-pages", "monitor", "design-search-bins", "normalization-audit",
         "normalize-feature-yields", "make-feature-yields", "make-systematic-yields",
         "make-datacards", "expected-limits",
@@ -52,6 +52,9 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(payload, indent=2, sort_keys=True))
     elif args.command == "discover-signals-from-das":
         payload = pipeline.discover_signals_from_das()
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    elif args.command == "parse-signal-xsec":
+        payload = pipeline.parse_signal_xsec()
         print(json.dumps(payload, indent=2, sort_keys=True))
     elif args.command == "process-signals":
         payload = pipeline.process_signals()

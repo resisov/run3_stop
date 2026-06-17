@@ -1,9 +1,9 @@
 {
-  "reason": "Full production was not submitted. This stage only built the production manifest and blocker report.",
+  "reason": "Full production was not submitted; file-level manifests were built and the exact production blockers were recorded.",
   "required_before_table": [
     "execution.allow_condor_submit is false in autonomous_allhad/configs/run3_2024.yaml",
-    "no explicit bounded local full-production fallback is configured"
+    "no autonomous Condor execute/monitor/retry/merge implementation exists for the 52k-file feature-table production campaign"
   ],
-  "status": "blocked",
+  "status": "blocked_not_submitted",
   "table_produced": false
 }

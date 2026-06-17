@@ -14,7 +14,7 @@
   "full_normalized_region_yields": {},
   "luminosity_fb": 109.82,
   "metadata_sumw_keys_found": [],
-  "production_state": "blocked",
+  "production_state": "blocked_not_submitted",
   "scope": "full-production normalization",
   "status": "blocked",
   "subset_artifact_for_reference_only": "autonomous_allhad/outputs/normalized_feature_yields.json"

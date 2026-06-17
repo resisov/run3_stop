@@ -1,47 +1,12 @@
 {
+  "normalization_status": "plots are drawn only from hists.npy; MC/signal values are normalized where the histogram payload is normalized",
   "plots": [
     {
-      "creation_timestamp": "2026-06-17T13:55:56Z",
-      "data_visible": true,
-      "docs_path": "docs/plots/metpt_cat1_preselection.png",
-      "overlay_signal_mass_points": [
-        "T2tt:mStop2_mLSP1000",
-        "T2tt:mStop2_mLSP1050",
-        "T2tt:mStop2_mLSP1100",
-        "T2tt:mStop2_mLSP1150"
-      ],
-      "plot_path": "autonomous_allhad/plots/metpt_cat1_preselection.png",
-      "plotting_status": "complete",
-      "processes": [
-        "DY",
-        "GJ",
-        "QCD",
-        "SMS",
-        "TT",
-        "VV",
-        "WtoLNu",
-        "Zto2Nu"
-      ],
-      "ratio_panel_visible": true,
-      "region": "cat1_preselection",
-      "source_hists_npy_keys": [
-        "data/metpt/nominal/cat1_preselection",
-        "background/metpt/nominal/cat1_preselection",
-        "signal/metpt/nominal/cat1_preselection"
-      ],
-      "systematic": "nominal",
-      "variable": "metpt"
-    },
-    {
-      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "creation_timestamp": "2026-06-17T15:41:06Z",
       "data_visible": false,
       "docs_path": "docs/plots/metpt_cat7_SR_highDeltaM.png",
-      "overlay_signal_mass_points": [
-        "T2tt:mStop2_mLSP1000",
-        "T2tt:mStop2_mLSP1050",
-        "T2tt:mStop2_mLSP1100",
-        "T2tt:mStop2_mLSP1150"
-      ],
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
       "plot_path": "autonomous_allhad/plots/metpt_cat7_SR_highDeltaM.png",
       "plotting_status": "complete",
       "processes": [
@@ -61,15 +26,11 @@
       "variable": "metpt"
     },
     {
-      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "creation_timestamp": "2026-06-17T15:41:06Z",
       "data_visible": true,
       "docs_path": "docs/plots/metpt_cat2_LLCR_highDeltaM.png",
-      "overlay_signal_mass_points": [
-        "T2tt:mStop2_mLSP1000",
-        "T2tt:mStop2_mLSP1050",
-        "T2tt:mStop2_mLSP1100",
-        "T2tt:mStop2_mLSP1150"
-      ],
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
       "plot_path": "autonomous_allhad/plots/metpt_cat2_LLCR_highDeltaM.png",
       "plotting_status": "complete",
       "processes": [
@@ -89,15 +50,11 @@
       "variable": "metpt"
     },
     {
-      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "creation_timestamp": "2026-06-17T15:41:06Z",
       "data_visible": false,
       "docs_path": "docs/plots/metpt_cat3_QCDCR_highDeltaM.png",
-      "overlay_signal_mass_points": [
-        "T2tt:mStop2_mLSP1000",
-        "T2tt:mStop2_mLSP1050",
-        "T2tt:mStop2_mLSP1100",
-        "T2tt:mStop2_mLSP1150"
-      ],
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
       "plot_path": "autonomous_allhad/plots/metpt_cat3_QCDCR_highDeltaM.png",
       "plotting_status": "complete",
       "processes": [
@@ -118,47 +75,79 @@
       "variable": "metpt"
     },
     {
-      "creation_timestamp": "2026-06-17T13:55:56Z",
-      "data_visible": true,
-      "docs_path": "docs/plots/ht_cat1_preselection.png",
-      "overlay_signal_mass_points": [
-        "T2tt:mStop2_mLSP1000",
-        "T2tt:mStop2_mLSP1050",
-        "T2tt:mStop2_mLSP1100",
-        "T2tt:mStop2_mLSP1150"
-      ],
-      "plot_path": "autonomous_allhad/plots/ht_cat1_preselection.png",
+      "creation_timestamp": "2026-06-17T15:41:06Z",
+      "data_visible": false,
+      "docs_path": "docs/plots/metpt_cat4_GCR_highDeltaM.png",
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
+      "plot_path": "autonomous_allhad/plots/metpt_cat4_GCR_highDeltaM.png",
       "plotting_status": "complete",
       "processes": [
         "DY",
         "GJ",
-        "QCD",
         "SMS",
-        "TT",
-        "VV",
-        "WtoLNu",
-        "Zto2Nu"
+        "TT"
       ],
-      "ratio_panel_visible": true,
-      "region": "cat1_preselection",
+      "ratio_panel_visible": false,
+      "region": "cat4_GCR_highDeltaM",
       "source_hists_npy_keys": [
-        "data/ht/nominal/cat1_preselection",
-        "background/ht/nominal/cat1_preselection",
-        "signal/ht/nominal/cat1_preselection"
+        "data/metpt/nominal/cat4_GCR_highDeltaM",
+        "background/metpt/nominal/cat4_GCR_highDeltaM",
+        "signal/metpt/nominal/cat4_GCR_highDeltaM"
       ],
       "systematic": "nominal",
-      "variable": "ht"
+      "variable": "metpt"
     },
     {
-      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "creation_timestamp": "2026-06-17T15:41:06Z",
+      "data_visible": false,
+      "docs_path": "docs/plots/metpt_cat5_DY2E_highDeltaM.png",
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
+      "plot_path": "autonomous_allhad/plots/metpt_cat5_DY2E_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "SMS"
+      ],
+      "ratio_panel_visible": false,
+      "region": "cat5_DY2E_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/metpt/nominal/cat5_DY2E_highDeltaM",
+        "background/metpt/nominal/cat5_DY2E_highDeltaM",
+        "signal/metpt/nominal/cat5_DY2E_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "metpt"
+    },
+    {
+      "creation_timestamp": "2026-06-17T15:41:06Z",
+      "data_visible": false,
+      "docs_path": "docs/plots/metpt_cat6_DY2M_highDeltaM.png",
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
+      "plot_path": "autonomous_allhad/plots/metpt_cat6_DY2M_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "SMS"
+      ],
+      "ratio_panel_visible": false,
+      "region": "cat6_DY2M_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/metpt/nominal/cat6_DY2M_highDeltaM",
+        "background/metpt/nominal/cat6_DY2M_highDeltaM",
+        "signal/metpt/nominal/cat6_DY2M_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "metpt"
+    },
+    {
+      "creation_timestamp": "2026-06-17T15:41:06Z",
       "data_visible": false,
       "docs_path": "docs/plots/ht_cat7_SR_highDeltaM.png",
-      "overlay_signal_mass_points": [
-        "T2tt:mStop2_mLSP1000",
-        "T2tt:mStop2_mLSP1050",
-        "T2tt:mStop2_mLSP1100",
-        "T2tt:mStop2_mLSP1150"
-      ],
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
       "plot_path": "autonomous_allhad/plots/ht_cat7_SR_highDeltaM.png",
       "plotting_status": "complete",
       "processes": [
@@ -178,15 +167,11 @@
       "variable": "ht"
     },
     {
-      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "creation_timestamp": "2026-06-17T15:41:06Z",
       "data_visible": true,
       "docs_path": "docs/plots/ht_cat2_LLCR_highDeltaM.png",
-      "overlay_signal_mass_points": [
-        "T2tt:mStop2_mLSP1000",
-        "T2tt:mStop2_mLSP1050",
-        "T2tt:mStop2_mLSP1100",
-        "T2tt:mStop2_mLSP1150"
-      ],
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
       "plot_path": "autonomous_allhad/plots/ht_cat2_LLCR_highDeltaM.png",
       "plotting_status": "complete",
       "processes": [
@@ -206,15 +191,11 @@
       "variable": "ht"
     },
     {
-      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "creation_timestamp": "2026-06-17T15:41:06Z",
       "data_visible": false,
       "docs_path": "docs/plots/ht_cat3_QCDCR_highDeltaM.png",
-      "overlay_signal_mass_points": [
-        "T2tt:mStop2_mLSP1000",
-        "T2tt:mStop2_mLSP1050",
-        "T2tt:mStop2_mLSP1100",
-        "T2tt:mStop2_mLSP1150"
-      ],
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
       "plot_path": "autonomous_allhad/plots/ht_cat3_QCDCR_highDeltaM.png",
       "plotting_status": "complete",
       "processes": [
@@ -235,47 +216,79 @@
       "variable": "ht"
     },
     {
-      "creation_timestamp": "2026-06-17T13:55:56Z",
-      "data_visible": true,
-      "docs_path": "docs/plots/njet_cat1_preselection.png",
-      "overlay_signal_mass_points": [
-        "T2tt:mStop2_mLSP1000",
-        "T2tt:mStop2_mLSP1050",
-        "T2tt:mStop2_mLSP1100",
-        "T2tt:mStop2_mLSP1150"
-      ],
-      "plot_path": "autonomous_allhad/plots/njet_cat1_preselection.png",
+      "creation_timestamp": "2026-06-17T15:41:06Z",
+      "data_visible": false,
+      "docs_path": "docs/plots/ht_cat4_GCR_highDeltaM.png",
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
+      "plot_path": "autonomous_allhad/plots/ht_cat4_GCR_highDeltaM.png",
       "plotting_status": "complete",
       "processes": [
         "DY",
         "GJ",
-        "QCD",
         "SMS",
-        "TT",
-        "VV",
-        "WtoLNu",
-        "Zto2Nu"
+        "TT"
       ],
-      "ratio_panel_visible": true,
-      "region": "cat1_preselection",
+      "ratio_panel_visible": false,
+      "region": "cat4_GCR_highDeltaM",
       "source_hists_npy_keys": [
-        "data/njet/nominal/cat1_preselection",
-        "background/njet/nominal/cat1_preselection",
-        "signal/njet/nominal/cat1_preselection"
+        "data/ht/nominal/cat4_GCR_highDeltaM",
+        "background/ht/nominal/cat4_GCR_highDeltaM",
+        "signal/ht/nominal/cat4_GCR_highDeltaM"
       ],
       "systematic": "nominal",
-      "variable": "njet"
+      "variable": "ht"
     },
     {
-      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "creation_timestamp": "2026-06-17T15:41:06Z",
+      "data_visible": false,
+      "docs_path": "docs/plots/ht_cat5_DY2E_highDeltaM.png",
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
+      "plot_path": "autonomous_allhad/plots/ht_cat5_DY2E_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "SMS"
+      ],
+      "ratio_panel_visible": false,
+      "region": "cat5_DY2E_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/ht/nominal/cat5_DY2E_highDeltaM",
+        "background/ht/nominal/cat5_DY2E_highDeltaM",
+        "signal/ht/nominal/cat5_DY2E_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "ht"
+    },
+    {
+      "creation_timestamp": "2026-06-17T15:41:06Z",
+      "data_visible": false,
+      "docs_path": "docs/plots/ht_cat6_DY2M_highDeltaM.png",
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
+      "plot_path": "autonomous_allhad/plots/ht_cat6_DY2M_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "SMS"
+      ],
+      "ratio_panel_visible": false,
+      "region": "cat6_DY2M_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/ht/nominal/cat6_DY2M_highDeltaM",
+        "background/ht/nominal/cat6_DY2M_highDeltaM",
+        "signal/ht/nominal/cat6_DY2M_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "ht"
+    },
+    {
+      "creation_timestamp": "2026-06-17T15:41:06Z",
       "data_visible": false,
       "docs_path": "docs/plots/njet_cat7_SR_highDeltaM.png",
-      "overlay_signal_mass_points": [
-        "T2tt:mStop2_mLSP1000",
-        "T2tt:mStop2_mLSP1050",
-        "T2tt:mStop2_mLSP1100",
-        "T2tt:mStop2_mLSP1150"
-      ],
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
       "plot_path": "autonomous_allhad/plots/njet_cat7_SR_highDeltaM.png",
       "plotting_status": "complete",
       "processes": [
@@ -295,15 +308,11 @@
       "variable": "njet"
     },
     {
-      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "creation_timestamp": "2026-06-17T15:41:06Z",
       "data_visible": true,
       "docs_path": "docs/plots/njet_cat2_LLCR_highDeltaM.png",
-      "overlay_signal_mass_points": [
-        "T2tt:mStop2_mLSP1000",
-        "T2tt:mStop2_mLSP1050",
-        "T2tt:mStop2_mLSP1100",
-        "T2tt:mStop2_mLSP1150"
-      ],
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
       "plot_path": "autonomous_allhad/plots/njet_cat2_LLCR_highDeltaM.png",
       "plotting_status": "complete",
       "processes": [
@@ -323,15 +332,11 @@
       "variable": "njet"
     },
     {
-      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "creation_timestamp": "2026-06-17T15:41:06Z",
       "data_visible": false,
       "docs_path": "docs/plots/njet_cat3_QCDCR_highDeltaM.png",
-      "overlay_signal_mass_points": [
-        "T2tt:mStop2_mLSP1000",
-        "T2tt:mStop2_mLSP1050",
-        "T2tt:mStop2_mLSP1100",
-        "T2tt:mStop2_mLSP1150"
-      ],
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
       "plot_path": "autonomous_allhad/plots/njet_cat3_QCDCR_highDeltaM.png",
       "plotting_status": "complete",
       "processes": [
@@ -352,47 +357,79 @@
       "variable": "njet"
     },
     {
-      "creation_timestamp": "2026-06-17T13:55:56Z",
-      "data_visible": true,
-      "docs_path": "docs/plots/nb_cat1_preselection.png",
-      "overlay_signal_mass_points": [
-        "T2tt:mStop2_mLSP1000",
-        "T2tt:mStop2_mLSP1050",
-        "T2tt:mStop2_mLSP1100",
-        "T2tt:mStop2_mLSP1150"
-      ],
-      "plot_path": "autonomous_allhad/plots/nb_cat1_preselection.png",
+      "creation_timestamp": "2026-06-17T15:41:06Z",
+      "data_visible": false,
+      "docs_path": "docs/plots/njet_cat4_GCR_highDeltaM.png",
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
+      "plot_path": "autonomous_allhad/plots/njet_cat4_GCR_highDeltaM.png",
       "plotting_status": "complete",
       "processes": [
         "DY",
         "GJ",
-        "QCD",
         "SMS",
-        "TT",
-        "VV",
-        "WtoLNu",
-        "Zto2Nu"
+        "TT"
       ],
-      "ratio_panel_visible": true,
-      "region": "cat1_preselection",
+      "ratio_panel_visible": false,
+      "region": "cat4_GCR_highDeltaM",
       "source_hists_npy_keys": [
-        "data/nb/nominal/cat1_preselection",
-        "background/nb/nominal/cat1_preselection",
-        "signal/nb/nominal/cat1_preselection"
+        "data/njet/nominal/cat4_GCR_highDeltaM",
+        "background/njet/nominal/cat4_GCR_highDeltaM",
+        "signal/njet/nominal/cat4_GCR_highDeltaM"
       ],
       "systematic": "nominal",
-      "variable": "nb"
+      "variable": "njet"
     },
     {
-      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "creation_timestamp": "2026-06-17T15:41:06Z",
+      "data_visible": false,
+      "docs_path": "docs/plots/njet_cat5_DY2E_highDeltaM.png",
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
+      "plot_path": "autonomous_allhad/plots/njet_cat5_DY2E_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "SMS"
+      ],
+      "ratio_panel_visible": false,
+      "region": "cat5_DY2E_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/njet/nominal/cat5_DY2E_highDeltaM",
+        "background/njet/nominal/cat5_DY2E_highDeltaM",
+        "signal/njet/nominal/cat5_DY2E_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "njet"
+    },
+    {
+      "creation_timestamp": "2026-06-17T15:41:06Z",
+      "data_visible": false,
+      "docs_path": "docs/plots/njet_cat6_DY2M_highDeltaM.png",
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
+      "plot_path": "autonomous_allhad/plots/njet_cat6_DY2M_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "SMS"
+      ],
+      "ratio_panel_visible": false,
+      "region": "cat6_DY2M_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/njet/nominal/cat6_DY2M_highDeltaM",
+        "background/njet/nominal/cat6_DY2M_highDeltaM",
+        "signal/njet/nominal/cat6_DY2M_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "njet"
+    },
+    {
+      "creation_timestamp": "2026-06-17T15:41:06Z",
       "data_visible": false,
       "docs_path": "docs/plots/nb_cat7_SR_highDeltaM.png",
-      "overlay_signal_mass_points": [
-        "T2tt:mStop2_mLSP1000",
-        "T2tt:mStop2_mLSP1050",
-        "T2tt:mStop2_mLSP1100",
-        "T2tt:mStop2_mLSP1150"
-      ],
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
       "plot_path": "autonomous_allhad/plots/nb_cat7_SR_highDeltaM.png",
       "plotting_status": "complete",
       "processes": [
@@ -412,15 +449,11 @@
       "variable": "nb"
     },
     {
-      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "creation_timestamp": "2026-06-17T15:41:06Z",
       "data_visible": true,
       "docs_path": "docs/plots/nb_cat2_LLCR_highDeltaM.png",
-      "overlay_signal_mass_points": [
-        "T2tt:mStop2_mLSP1000",
-        "T2tt:mStop2_mLSP1050",
-        "T2tt:mStop2_mLSP1100",
-        "T2tt:mStop2_mLSP1150"
-      ],
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
       "plot_path": "autonomous_allhad/plots/nb_cat2_LLCR_highDeltaM.png",
       "plotting_status": "complete",
       "processes": [
@@ -440,15 +473,11 @@
       "variable": "nb"
     },
     {
-      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "creation_timestamp": "2026-06-17T15:41:06Z",
       "data_visible": false,
       "docs_path": "docs/plots/nb_cat3_QCDCR_highDeltaM.png",
-      "overlay_signal_mass_points": [
-        "T2tt:mStop2_mLSP1000",
-        "T2tt:mStop2_mLSP1050",
-        "T2tt:mStop2_mLSP1100",
-        "T2tt:mStop2_mLSP1150"
-      ],
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
       "plot_path": "autonomous_allhad/plots/nb_cat3_QCDCR_highDeltaM.png",
       "plotting_status": "complete",
       "processes": [
@@ -469,47 +498,79 @@
       "variable": "nb"
     },
     {
-      "creation_timestamp": "2026-06-17T13:55:56Z",
-      "data_visible": true,
-      "docs_path": "docs/plots/min_dphi_cat1_preselection.png",
-      "overlay_signal_mass_points": [
-        "T2tt:mStop2_mLSP1000",
-        "T2tt:mStop2_mLSP1050",
-        "T2tt:mStop2_mLSP1100",
-        "T2tt:mStop2_mLSP1150"
-      ],
-      "plot_path": "autonomous_allhad/plots/min_dphi_cat1_preselection.png",
+      "creation_timestamp": "2026-06-17T15:41:06Z",
+      "data_visible": false,
+      "docs_path": "docs/plots/nb_cat4_GCR_highDeltaM.png",
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
+      "plot_path": "autonomous_allhad/plots/nb_cat4_GCR_highDeltaM.png",
       "plotting_status": "complete",
       "processes": [
         "DY",
         "GJ",
-        "QCD",
         "SMS",
-        "TT",
-        "VV",
-        "WtoLNu",
-        "Zto2Nu"
+        "TT"
       ],
-      "ratio_panel_visible": true,
-      "region": "cat1_preselection",
+      "ratio_panel_visible": false,
+      "region": "cat4_GCR_highDeltaM",
       "source_hists_npy_keys": [
-        "data/min_dphi/nominal/cat1_preselection",
-        "background/min_dphi/nominal/cat1_preselection",
-        "signal/min_dphi/nominal/cat1_preselection"
+        "data/nb/nominal/cat4_GCR_highDeltaM",
+        "background/nb/nominal/cat4_GCR_highDeltaM",
+        "signal/nb/nominal/cat4_GCR_highDeltaM"
       ],
       "systematic": "nominal",
-      "variable": "min_dphi"
+      "variable": "nb"
     },
     {
-      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "creation_timestamp": "2026-06-17T15:41:06Z",
+      "data_visible": false,
+      "docs_path": "docs/plots/nb_cat5_DY2E_highDeltaM.png",
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
+      "plot_path": "autonomous_allhad/plots/nb_cat5_DY2E_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "SMS"
+      ],
+      "ratio_panel_visible": false,
+      "region": "cat5_DY2E_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/nb/nominal/cat5_DY2E_highDeltaM",
+        "background/nb/nominal/cat5_DY2E_highDeltaM",
+        "signal/nb/nominal/cat5_DY2E_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "nb"
+    },
+    {
+      "creation_timestamp": "2026-06-17T15:41:06Z",
+      "data_visible": false,
+      "docs_path": "docs/plots/nb_cat6_DY2M_highDeltaM.png",
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
+      "plot_path": "autonomous_allhad/plots/nb_cat6_DY2M_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "SMS"
+      ],
+      "ratio_panel_visible": false,
+      "region": "cat6_DY2M_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/nb/nominal/cat6_DY2M_highDeltaM",
+        "background/nb/nominal/cat6_DY2M_highDeltaM",
+        "signal/nb/nominal/cat6_DY2M_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "nb"
+    },
+    {
+      "creation_timestamp": "2026-06-17T15:41:06Z",
       "data_visible": false,
       "docs_path": "docs/plots/min_dphi_cat7_SR_highDeltaM.png",
-      "overlay_signal_mass_points": [
-        "T2tt:mStop2_mLSP1000",
-        "T2tt:mStop2_mLSP1050",
-        "T2tt:mStop2_mLSP1100",
-        "T2tt:mStop2_mLSP1150"
-      ],
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
       "plot_path": "autonomous_allhad/plots/min_dphi_cat7_SR_highDeltaM.png",
       "plotting_status": "complete",
       "processes": [
@@ -529,15 +590,11 @@
       "variable": "min_dphi"
     },
     {
-      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "creation_timestamp": "2026-06-17T15:41:06Z",
       "data_visible": true,
       "docs_path": "docs/plots/min_dphi_cat2_LLCR_highDeltaM.png",
-      "overlay_signal_mass_points": [
-        "T2tt:mStop2_mLSP1000",
-        "T2tt:mStop2_mLSP1050",
-        "T2tt:mStop2_mLSP1100",
-        "T2tt:mStop2_mLSP1150"
-      ],
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
       "plot_path": "autonomous_allhad/plots/min_dphi_cat2_LLCR_highDeltaM.png",
       "plotting_status": "complete",
       "processes": [
@@ -557,15 +614,11 @@
       "variable": "min_dphi"
     },
     {
-      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "creation_timestamp": "2026-06-17T15:41:06Z",
       "data_visible": false,
       "docs_path": "docs/plots/min_dphi_cat3_QCDCR_highDeltaM.png",
-      "overlay_signal_mass_points": [
-        "T2tt:mStop2_mLSP1000",
-        "T2tt:mStop2_mLSP1050",
-        "T2tt:mStop2_mLSP1100",
-        "T2tt:mStop2_mLSP1150"
-      ],
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
       "plot_path": "autonomous_allhad/plots/min_dphi_cat3_QCDCR_highDeltaM.png",
       "plotting_status": "complete",
       "processes": [
@@ -586,9 +639,78 @@
       "variable": "min_dphi"
     },
     {
-      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "creation_timestamp": "2026-06-17T15:41:06Z",
+      "data_visible": false,
+      "docs_path": "docs/plots/min_dphi_cat4_GCR_highDeltaM.png",
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
+      "plot_path": "autonomous_allhad/plots/min_dphi_cat4_GCR_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "GJ",
+        "SMS",
+        "TT"
+      ],
+      "ratio_panel_visible": false,
+      "region": "cat4_GCR_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/min_dphi/nominal/cat4_GCR_highDeltaM",
+        "background/min_dphi/nominal/cat4_GCR_highDeltaM",
+        "signal/min_dphi/nominal/cat4_GCR_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "min_dphi"
+    },
+    {
+      "creation_timestamp": "2026-06-17T15:41:06Z",
+      "data_visible": false,
+      "docs_path": "docs/plots/min_dphi_cat5_DY2E_highDeltaM.png",
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
+      "plot_path": "autonomous_allhad/plots/min_dphi_cat5_DY2E_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "SMS"
+      ],
+      "ratio_panel_visible": false,
+      "region": "cat5_DY2E_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/min_dphi/nominal/cat5_DY2E_highDeltaM",
+        "background/min_dphi/nominal/cat5_DY2E_highDeltaM",
+        "signal/min_dphi/nominal/cat5_DY2E_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "min_dphi"
+    },
+    {
+      "creation_timestamp": "2026-06-17T15:41:06Z",
+      "data_visible": false,
+      "docs_path": "docs/plots/min_dphi_cat6_DY2M_highDeltaM.png",
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
+      "overlay_signal_mass_points": [],
+      "plot_path": "autonomous_allhad/plots/min_dphi_cat6_DY2M_highDeltaM.png",
+      "plotting_status": "complete",
+      "processes": [
+        "DY",
+        "SMS"
+      ],
+      "ratio_panel_visible": false,
+      "region": "cat6_DY2M_highDeltaM",
+      "source_hists_npy_keys": [
+        "data/min_dphi/nominal/cat6_DY2M_highDeltaM",
+        "background/min_dphi/nominal/cat6_DY2M_highDeltaM",
+        "signal/min_dphi/nominal/cat6_DY2M_highDeltaM"
+      ],
+      "systematic": "nominal",
+      "variable": "min_dphi"
+    },
+    {
+      "creation_timestamp": "2026-06-17T15:41:06Z",
       "data_visible": true,
       "docs_path": "docs/plots/search_bin_index_cat7_SR_highDeltaM.png",
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
       "overlay_signal_mass_points": [],
       "plot_path": "autonomous_allhad/plots/search_bin_index_cat7_SR_highDeltaM.png",
       "plotting_status": "complete",
@@ -610,9 +732,10 @@
       "variable": "search_bin_index"
     },
     {
-      "creation_timestamp": "2026-06-17T13:55:56Z",
+      "creation_timestamp": "2026-06-17T15:41:06Z",
       "data_visible": true,
       "docs_path": "docs/plots/region_yield_summary.png",
+      "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true",
       "overlay_signal_mass_points": [],
       "plot_path": "autonomous_allhad/plots/region_yield_summary.png",
       "plotting_status": "complete",
@@ -622,9 +745,7 @@
         "QCD",
         "SMS",
         "TT",
-        "VV",
-        "WtoLNu",
-        "Zto2Nu"
+        "VV"
       ],
       "ratio_panel_visible": true,
       "region": "all_regions",

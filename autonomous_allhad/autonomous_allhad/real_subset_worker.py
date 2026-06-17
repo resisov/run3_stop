@@ -410,7 +410,7 @@ def extract_chunk(arrays: dict[str, Any], dataset: str, process: str, sp: str | 
             if i < len(mask) and bool(mask[i]):
                 nums = re.findall(r"(\d+)", name)
                 if len(nums) >= 2:
-                    return name, int(nums[0]), int(nums[1])
+                    return name, int(nums[-2]), int(nums[-1])
                 return name, None, None
         return "", None, None
 
@@ -465,7 +465,10 @@ def validate_and_extract_file(file_path: str, dataset: str, process: str, sp: st
         rec["genmodel_branches"] = genmodel_branches
         rec["fastsim_trigger_bypass"] = bool(fastsim_trigger_bypass and process == "SMS")
         n_strata = int(os.environ.get("AUTONOMOUS_ALLHAD_STRATA", "12"))
-        if tree.num_entries <= n_strata * chunk_size:
+        full_file_processing = (os.environ.get("AUTONOMOUS_ALLHAD_FULL_FILE") == "1") or (fastsim_trigger_bypass and process == "SMS" and os.environ.get("AUTONOMOUS_ALLHAD_SIGNAL_FULL", "0") == "1")
+        if full_file_processing:
+            ranges = [(start, min(start + chunk_size, tree.num_entries)) for start in range(0, tree.num_entries, chunk_size)]
+        elif tree.num_entries <= n_strata * chunk_size:
             ranges = [(0, tree.num_entries)]
         else:
             starts = np.linspace(0, tree.num_entries - chunk_size, n_strata, dtype=int).tolist()

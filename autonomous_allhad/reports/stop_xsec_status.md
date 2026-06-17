@@ -1,7 +1,13 @@
 # Stop Cross-Section Table Status
 
-Status: `manual_required`
+Status: `parsed`
+Source file: `signal_xsec.txt`
+Rows parsed: 581
+Bad line count: 0
 
-Source: <https://twiki.cern.ch/twiki/bin/view/LHCPhysics/SUSYCrossSections13x6TeVstopsbottom>
+The table is used as the authoritative 13.6 TeV stop-pair cross-section input for FastSim signal normalization.
 
-No values are used for physics outputs. Provide a machine-readable 13.6 TeV stop cross-section table before final signal normalization.
+## Parsed mass range
+
+- Minimum mStop: 100 GeV
+- Maximum mStop: 3000 GeV

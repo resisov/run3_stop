@@ -1,11 +1,11 @@
 {
   "blockers": [
     "execution.allow_condor_submit is false in autonomous_allhad/configs/run3_2024.yaml",
-    "no explicit bounded local full-production fallback is configured"
+    "no autonomous Condor execute/monitor/retry/merge implementation exists for the 52k-file feature-table production campaign"
   ],
   "datasets": 5331,
   "events_processed": 0,
   "files": 52772,
-  "jobs_planned": 52772,
-  "status": "blocked"
+  "jobs_planned": 52809,
+  "status": "blocked_not_submitted"
 }

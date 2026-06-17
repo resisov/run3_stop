@@ -259,22 +259,66 @@ class Pipeline:
         return {"stages": {}, "started_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
 
     def run_all(self) -> None:
+        start = time.time()
+        self._record_direct_stage("analysisctl_all_start", "complete", {"command": "./autonomous_allhad/analysisctl all --config autonomous_allhad/configs/run3_2024.yaml"})
         if not (self.outputs / "real_subset_summary.json").exists():
-            self.run_real_subset()
-        self.normalization_audit()
-        self.normalize_feature_yields()
-        self.run_production()
-        self.full_production_normalization()
-        self.design_search_bins()
-        self.select_search_bins()
-        self.make_feature_yields()
-        self.make_systematic_yields()
-        self.make_plots_stage()
-        self.make_datacards_stage()
-        self.expected_limits_stage()
-        self.publish_github_pages()
-        self.monitor(json_output=True)
-        self.write_summary()
+            self._run_all_step("validate_feature_subset", self.run_real_subset)
+        else:
+            self._record_direct_stage("validate_feature_subset", "complete", {"status": "complete", "cached": True, "source": "autonomous_allhad/outputs/real_subset_summary.json"})
+        steps = [
+            ("input_discovery", self.input_discovery),
+            ("file_validation", self.file_integrity_checks),
+            ("normalization_audit", self.normalization_audit),
+            ("normalize_feature_yields", self.normalize_feature_yields),
+            ("parse_signal_xsec", self.parse_signal_xsec),
+            ("signal_discovery", self.discover_signals_from_das),
+            ("process_signals", self.process_signals),
+            ("run_production", self.run_production),
+            ("full_production_normalization", self.full_production_normalization),
+            ("design_search_bins", self.design_search_bins),
+            ("select_search_bins", self.select_search_bins),
+            ("make_feature_yields", self.make_feature_yields),
+            ("make_systematic_yields", self.make_systematic_yields),
+            ("make_hists_npy", self.make_hists_npy),
+            ("plot_from_npy", self.plot_from_npy),
+            ("make_datacards", self.make_datacards_stage),
+            ("expected_limits", self.expected_limits_stage),
+            ("publish_github_pages", self.publish_github_pages),
+            ("monitor", lambda: self.monitor(json_output=True)),
+        ]
+        for name, func in steps:
+            self._run_all_step(name, func)
+        self._run_all_step("write_summary", self.write_summary)
+        self._record_direct_stage("analysisctl_all", "complete", {"status": "complete", "wall_time_s": round(time.time() - start, 3)})
+
+    def _terminal_status(self, result: Any) -> str:
+        raw = result.get("status") if isinstance(result, dict) else "complete"
+        raw_text = str(raw).lower()
+        if raw_text in {"failed", "failure", "error"}:
+            return "failed"
+        if raw_text.startswith("blocked") or "blocked" in raw_text:
+            return "blocked"
+        if raw_text.startswith("skipped") or "skip" in raw_text:
+            return "skipped_with_reason"
+        return "complete"
+
+    def _run_all_step(self, name: str, func) -> dict[str, Any]:
+        start = time.time()
+        try:
+            result = func()
+            if result is None:
+                result = {"status": "complete"}
+            if not isinstance(result, dict):
+                result = {"status": "complete", "result": result}
+            result.setdefault("status", "complete")
+            result["wall_time_s"] = round(time.time() - start, 3)
+            status = self._terminal_status(result)
+            self._record_direct_stage(name, status, result)
+            return result
+        except Exception as exc:
+            result = {"status": "failed", "error": type(exc).__name__, "message": str(exc), "wall_time_s": round(time.time() - start, 3)}
+            self._record_direct_stage(name, "failed", result)
+            return result
 
 
     def run_real_subset(self) -> None:
@@ -520,8 +564,144 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
     def _mass_from_genmodel_branch(self, branch: str) -> tuple[int | None, int | None]:
         nums = re.findall(r"(\d+)", branch)
         if len(nums) >= 2:
-            return int(nums[0]), int(nums[1])
+            return int(nums[-2]), int(nums[-1])
         return None, None
+
+    def _signal_mass_key(self, mstop: Any, mlsp: Any) -> str:
+        try:
+            return f"mStop{int(mstop)}_mLSP{int(mlsp)}"
+        except Exception:
+            return "unknown"
+
+    def parse_signal_xsec(self) -> dict[str, Any]:
+        candidates = [
+            self.repo / "signal_xsec.txt",
+            self.base / "signals" / "signal_xsec.txt",
+        ]
+        source_path = next((path for path in candidates if path.exists()), None)
+        outdir = self.base / "signals"
+        reports = self.base / "reports"
+        docs_data = self.docs / "data"
+        outdir.mkdir(parents=True, exist_ok=True)
+        reports.mkdir(parents=True, exist_ok=True)
+        docs_data.mkdir(parents=True, exist_ok=True)
+        def public_source(path: Path) -> str:
+            try:
+                return str(path.resolve().relative_to(self.repo.resolve()))
+            except Exception:
+                return str(path)
+
+        if source_path is None:
+            status = {
+                "xsec_table_status": "missing",
+                "parsed": False,
+                "values_used_for_physics_outputs": False,
+                "source_file": None,
+                "records": [],
+                "message": "signal_xsec.txt was not found; signal normalization cannot be applied.",
+            }
+            write_json(outdir / "stop_xsec_13p6TeV.json", status)
+            write_json(outdir / "stop_xsec_13p6TeV_status.json", status)
+            (outdir / "stop_xsec_13p6TeV.csv").write_text("mStop,xsec_pb,uncertainty_percent,uncertainty_relative,source_file,parsing_status\n")
+            (reports / "stop_xsec_status.md").write_text("# Stop Cross-Section Table Status\n\nStatus: `missing`\n\n`signal_xsec.txt` was not found, so signal normalization was not applied.\n")
+            return status
+
+        rows: list[dict[str, Any]] = []
+        bad_lines: list[str] = []
+        row_re = re.compile(r"^\s*(\d+)\s+([0-9]+(?:\.[0-9]*)?(?:[Ee][+-]?\d+)?)\s+([0-9]+(?:\.[0-9]*)?)\s*%?\s*$")
+        for raw in source_path.read_text(errors="replace").splitlines():
+            line = raw.strip()
+            if not line or not line[0].isdigit():
+                continue
+            match = row_re.match(line)
+            if not match:
+                bad_lines.append(raw)
+                continue
+            mass = int(match.group(1))
+            xsec = float(match.group(2))
+            unc_percent = float(match.group(3))
+            rows.append({
+                "mStop": mass,
+                "xsec_pb": xsec,
+                "uncertainty_percent": unc_percent,
+                "uncertainty_relative": unc_percent / 100.0,
+                "uncertainty_up_relative": unc_percent / 100.0,
+                "uncertainty_down_relative": unc_percent / 100.0,
+                "source_file": public_source(source_path),
+                "parsing_status": "parsed",
+            })
+        status = {
+            "xsec_table_status": "parsed" if rows and not bad_lines else ("parsed_with_warnings" if rows else "failed"),
+            "parsed": bool(rows),
+            "values_used_for_physics_outputs": False,
+            "source_file": public_source(source_path),
+            "records_parsed": len(rows),
+            "bad_line_count": len(bad_lines),
+            "bad_lines_preview": bad_lines[:10],
+            "records": rows,
+            "message": "Parsed signal_xsec.txt as the authoritative stop-pair cross-section source for this autonomous analysis." if rows else "No usable cross-section rows were parsed from signal_xsec.txt.",
+        }
+        write_json(outdir / "stop_xsec_13p6TeV.json", status)
+        write_json(outdir / "stop_xsec_13p6TeV_status.json", status)
+        with (outdir / "stop_xsec_13p6TeV.csv").open("w", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=["mStop", "xsec_pb", "uncertainty_percent", "uncertainty_relative", "uncertainty_up_relative", "uncertainty_down_relative", "source_file", "parsing_status"])
+            writer.writeheader()
+            writer.writerows(rows)
+        shutil.copy2(outdir / "stop_xsec_13p6TeV.json", docs_data / "stop_xsec_13p6TeV.json")
+        shutil.copy2(outdir / "stop_xsec_13p6TeV.csv", docs_data / "stop_xsec_13p6TeV.csv")
+        shutil.copy2(outdir / "stop_xsec_13p6TeV_status.json", docs_data / "stop_xsec_13p6TeV_status.json")
+        lines = [
+            "# Stop Cross-Section Table Status",
+            "",
+            f"Status: `{status['xsec_table_status']}`",
+            f"Source file: `{status['source_file']}`",
+            f"Rows parsed: {len(rows)}",
+            f"Bad line count: {len(bad_lines)}",
+            "",
+            "The table is used as the authoritative 13.6 TeV stop-pair cross-section input for FastSim signal normalization.",
+        ]
+        if rows:
+            lines += ["", "## Parsed mass range", "", f"- Minimum mStop: {min(r['mStop'] for r in rows)} GeV", f"- Maximum mStop: {max(r['mStop'] for r in rows)} GeV"]
+        (reports / "stop_xsec_status.md").write_text("\n".join(lines) + "\n")
+        self._record_direct_stage("parse_signal_xsec", "complete" if rows else "blocked", {"status": status["xsec_table_status"], "records_parsed": len(rows), "source_file": status["source_file"]})
+        return status
+
+    def _load_stop_xsec_map(self) -> dict[int, dict[str, Any]]:
+        status_path = self.base / "signals" / "stop_xsec_13p6TeV.json"
+        status = self._load_json_if_exists(status_path, {})
+        if not status.get("parsed"):
+            status = self.parse_signal_xsec()
+        out: dict[int, dict[str, Any]] = {}
+        for row in status.get("records", []) if isinstance(status, dict) else []:
+            try:
+                out[int(row["mStop"])] = row
+            except Exception:
+                continue
+        return out
+
+    def _runs_sumw_by_mass(self, file_url: str) -> dict[str, float]:
+        out: dict[str, float] = {}
+        try:
+            import numpy as np
+            import uproot  # type: ignore
+            with uproot.open(file_url) as root:
+                keys = {str(k).split(";")[0] for k in root.keys()}
+                if "Runs" not in keys:
+                    return out
+                runs = root["Runs"]
+                for branch in runs.keys():
+                    name = str(branch)
+                    if not name.startswith("genEventSumw_T2tt_"):
+                        continue
+                    mstop, mlsp = self._mass_from_genmodel_branch(name)
+                    if mstop is None or mlsp is None:
+                        continue
+                    key = self._signal_mass_key(mstop, mlsp)
+                    arr = runs[name].array(library="np")
+                    out[key] = out.get(key, 0.0) + float(np.sum(np.asarray(arr, dtype=float)))
+        except Exception:
+            return out
+        return out
 
     def _probe_signal_file(self, dataset: str, file_url: str, simulation_type: str) -> dict[str, Any]:
         policy = "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
@@ -571,32 +751,7 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
         return rec
 
     def _write_signal_xsec_status(self) -> dict[str, Any]:
-        source = "https://twiki.cern.ch/twiki/bin/view/LHCPhysics/SUSYCrossSections13x6TeVstopsbottom"
-        outdir = self.base / "signals"
-        outdir.mkdir(parents=True, exist_ok=True)
-        docs_data = self.docs / "data"
-        docs_data.mkdir(parents=True, exist_ok=True)
-        status = {
-            "source_url": source,
-            "xsec_table_status": "manual_required",
-            "parsed": False,
-            "values_used_for_physics_outputs": False,
-            "message": "No stop cross sections were extracted or used. Manual table extraction is required before final signal normalization.",
-            "required_manual_input": "Provide a machine-readable 13.6 TeV stop cross-section table with mStop, xsec_pb, and uncertainty fields from the cited SUSY cross-section Twiki.",
-        }
-        try:
-            with urllib.request.urlopen(source, timeout=20) as response:
-                text = response.read(1_000_000).decode("utf-8", errors="replace")
-            status["download_status"] = "downloaded"
-            status["downloaded_bytes_preview"] = len(text)
-            status["message"] = "Twiki content was reachable, but automatic table parsing is not implemented safely for physics use. Manual extraction is required."
-        except Exception as exc:
-            status["download_status"] = "failed"
-            status["download_error"] = f"{type(exc).__name__}: {exc}"
-        write_json(outdir / "stop_xsec_13p6TeV_status.json", status)
-        shutil.copy2(outdir / "stop_xsec_13p6TeV_status.json", docs_data / "stop_xsec_13p6TeV_status.json")
-        (self.base / "reports" / "stop_xsec_status.md").write_text("# Stop Cross-Section Table Status\n\nStatus: `manual_required`\n\nSource: <" + source + ">\n\nNo values are used for physics outputs. Provide a machine-readable 13.6 TeV stop cross-section table before final signal normalization.\n")
-        return status
+        return self.parse_signal_xsec()
 
     def discover_signals_from_das(self) -> dict[str, Any]:
         exact_query = "dataset dataset=/SMS-2Stop*/*RunIII*NanoAOD*/NANOAODSIM"
@@ -606,6 +761,31 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
         signals.mkdir(parents=True, exist_ok=True)
         reports.mkdir(parents=True, exist_ok=True)
         docs_data.mkdir(parents=True, exist_ok=True)
+        timeout_seconds = int(os.environ.get("AUTONOMOUS_ALLHAD_SIGNAL_DAS_TIMEOUT", "120"))
+        max_datasets = int(os.environ.get("AUTONOMOUS_ALLHAD_SIGNAL_MAX_DATASETS", "50"))
+        max_files_per_dataset = int(os.environ.get("AUTONOMOUS_ALLHAD_SIGNAL_MAX_FILES_PER_DATASET", "5"))
+        use_cache = os.environ.get("AUTONOMOUS_ALLHAD_SIGNAL_REFRESH_DAS", "0") != "1"
+        cached_datasets_path = signals / "das_signal_datasets.json"
+        cached_files_path = signals / "das_signal_files.json"
+        if use_cache and cached_datasets_path.exists() and cached_files_path.exists():
+            cached_summary = self._load_json_if_exists(cached_datasets_path, {})
+            cached_files = self._load_json_if_exists(cached_files_path, {})
+            result = {
+                "status": "complete",
+                "cache_status": "used_existing_signal_inventory",
+                "das_dataset_search_query_used": cached_summary.get("das_dataset_search_query_used", exact_query),
+                "das_query_used": cached_summary.get("das_query_used", exact_query),
+                "datasets_found": cached_summary.get("datasets_found", len(cached_files.get("datasets", [])) if isinstance(cached_files, dict) else 0),
+                "fastsim_datasets": cached_summary.get("fastsim_datasets", cached_summary.get("fastsim_candidates", 0)),
+                "fullsim_anchor_candidates": cached_summary.get("fullsim_anchor_candidates", cached_summary.get("fullsim_datasets", 0)),
+                "total_signal_root_files": cached_summary.get("total_signal_root_files", 0),
+                "total_fastsim_signal_root_files": cached_summary.get("total_fastsim_signal_root_files", 0),
+                "total_fullsim_signal_root_files": cached_summary.get("total_fullsim_signal_root_files", 0),
+                "bounds": {"timeout_seconds": timeout_seconds, "max_datasets": max_datasets, "max_files_per_dataset": max_files_per_dataset},
+                "outputs": ["autonomous_allhad/signals/das_signal_datasets.json", "autonomous_allhad/signals/das_signal_files.json"],
+            }
+            self._record_direct_stage("discover_signals_from_das", "complete", result)
+            return result
 
         def run_das(query: str, timeout: int = 180) -> dict[str, Any]:
             cmd = ["dasgoclient", f"-query={query}"]
@@ -639,9 +819,9 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
         datasets: list[str] = []
         query_result: dict[str, Any] = {"query": exact_query, "command": ["dasgoclient", f"-query={exact_query}"], "attempted": False}
         if das_path:
-            query_result = run_das(exact_query, timeout=180)
+            query_result = run_das(exact_query, timeout=timeout_seconds)
             if query_result.get("exit_status") == 0:
-                datasets = [ln.strip() for ln in str(query_result.get("stdout", "")).splitlines() if ln.strip()]
+                datasets = [ln.strip() for ln in str(query_result.get("stdout", "")).splitlines() if ln.strip()][:max_datasets]
         else:
             query_result.update({"attempted": False, "exit_status": None, "stderr_tail": "dasgoclient not found in PATH"})
 
@@ -668,10 +848,11 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
             unknown_count += int(classification == "unknown")
             file_query = f"file dataset={ds}"
             summary_query = f"summary dataset={ds}"
-            file_result = run_das(file_query, timeout=240) if das_path else {"query": file_query, "attempted": False, "exit_status": None, "stdout": "", "stderr_tail": "dasgoclient not found in PATH"}
-            summary_result = run_das(summary_query, timeout=180) if das_path else {"query": summary_query, "attempted": False, "exit_status": None, "stdout": "", "stderr_tail": "dasgoclient not found in PATH"}
+            file_result = run_das(file_query, timeout=min(timeout_seconds, 90)) if das_path else {"query": file_query, "attempted": False, "exit_status": None, "stdout": "", "stderr_tail": "dasgoclient not found in PATH"}
+            summary_result = run_das(summary_query, timeout=min(timeout_seconds, 60)) if das_path else {"query": summary_query, "attempted": False, "exit_status": None, "stdout": "", "stderr_tail": "dasgoclient not found in PATH"}
             raw_files = [ln.strip() for ln in str(file_result.get("stdout", "")).splitlines() if ln.strip()]
-            unique_files = list(dict.fromkeys(raw_files))
+            all_unique_files = list(dict.fromkeys(raw_files))
+            unique_files = all_unique_files[:max_files_per_dataset]
             xrootd_files = [self._normalize_lfn(f) for f in unique_files]
             nfiles = len(unique_files)
             total_files += nfiles
@@ -704,6 +885,7 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
                 "status": "complete" if file_result.get("exit_status") == 0 else "file_query_failed",
                 "simulation_type": classification,
                 "number_of_files": nfiles,
+                "number_of_files_reported_before_bound": len(all_unique_files),
                 "number_of_events": number_of_events,
                 "first_root_files": xrootd_files[:10],
                 "das_dataset_search_query_used": exact_query,
@@ -738,6 +920,8 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
             "das_status": das_status,
             "das_query_result": {k: (v[-8000:] if k == "stdout" and isinstance(v, str) else v) for k, v in query_result.items()},
             "datasets_found": len(datasets),
+            "bounded_signal_discovery": True,
+            "bounds": {"timeout_seconds": timeout_seconds, "max_datasets": max_datasets, "max_files_per_dataset": max_files_per_dataset},
             "fastsim_datasets": fastsim_count,
             "fastsim_candidates": fastsim_count,
             "fullsim_anchor_candidates": fullsim_count,
@@ -848,18 +1032,17 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
         (reports / "realized_mass_grid.md").write_text("\n".join(grid_lines) + "\n")
         result = {"status": summary["status"], "datasets_found": len(datasets), "fastsim_datasets": fastsim_count, "fullsim_anchor_candidates": fullsim_count, "total_signal_root_files": total_files, "total_fastsim_signal_root_files": total_fastsim_files, "total_fullsim_signal_root_files": total_fullsim_files, "representative_files_probed": probe_payload["representative_files_probed"], "realized_mass_points": grid["realized_mass_points"], "usable_fastsim_mass_points": grid["usable_fastsim_mass_points"], "all_fastsim_files_ready_for_process_signals": all_fastsim_files_ready, "fastsim_process_signals_status": fastsim_ready_status, "xsec_table_status": xsec_status["xsec_table_status"], "signal_yields_ready": False, "contour_inputs_ready": False, "authentication_hint": auth_hint, "outputs": [str((signals / "das_signal_datasets.json").relative_to(self.repo)), str((signals / "das_signal_files.json").relative_to(self.repo)), str((signals / "signal_branch_probe.json").relative_to(self.repo)), str((signals / "realized_mass_grid.json").relative_to(self.repo))]}
         self._record_direct_stage("discover_signals_from_das", "complete" if datasets else "blocked", result)
-        if datasets:
-            signal_result = self.process_signals()
-            result["process_signals"] = signal_result
-        else:
+        if not datasets:
             self.monitor(json_output=True)
-            self.publish_github_pages()
         return result
 
     def process_signals(self) -> dict[str, Any]:
         from .real_subset_worker import REGION_NAMES as WORKER_REGIONS, validate_and_extract_file, combine_cutflows
         import numpy as np
 
+        xsec_status = self.parse_signal_xsec()
+        xsec_map = self._load_stop_xsec_map()
+        lumi_pb = self._lumi_pb()
         signals_dir = self.base / "signals"
         files_payload = self._load_json_if_exists(signals_dir / "das_signal_files.json", {})
         if not files_payload:
@@ -881,13 +1064,18 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
                         f.write(f"{classification}\t{dataset}\t{lfn}\n")
             (self.docs / "data").mkdir(parents=True, exist_ok=True)
             shutil.copy2(signals_dir / "das_signal_files.json", self.docs / "data" / "das_signal_files.json")
-        fastsim = [d for d in datasets if d.get("simulation_type") == "FastSim signal dataset"]
+        max_datasets = int(os.environ.get("AUTONOMOUS_ALLHAD_SIGNAL_MAX_DATASETS", "50"))
+        max_files_per_dataset = int(os.environ.get("AUTONOMOUS_ALLHAD_SIGNAL_MAX_FILES_PER_DATASET", "5"))
+        max_total_files = int(os.environ.get("AUTONOMOUS_ALLHAD_SIGNAL_MAX_TOTAL_FILES", str(max_datasets * max_files_per_dataset)))
+        signal_full = os.environ.get("AUTONOMOUS_ALLHAD_SIGNAL_FULL", "0") == "1"
+        fastsim = [d for d in datasets if d.get("simulation_type") == "FastSim signal dataset"][:max_datasets]
         fullsim = [d for d in datasets if d.get("simulation_type") == "FullSim anchor candidate"]
         chunk_size = int(os.environ.get("AUTONOMOUS_ALLHAD_SIGNAL_CHUNK", os.environ.get("AUTONOMOUS_ALLHAD_CHUNK", "2000")))
         manifest_files: list[dict[str, Any]] = []
         bad_files: list[dict[str, Any]] = []
         yields_by_mass: dict[str, Any] = {}
         search_yields: dict[str, Any] = {}
+        sumw_by_mass: dict[str, float] = {}
         processed_rows = 0
         processed_files = 0
         attempted_files = 0
@@ -914,37 +1102,50 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
                 idx = int(np.searchsorted(bins, value, side="right") - 1)
                 if idx < 0 or idx >= len(bins) - 1:
                     continue
-                rec = mass_hists.setdefault(var, {"bins": bins.tolist(), "unweighted": [0] * (len(bins) - 1), "raw_weighted": [0.0] * (len(bins) - 1)})
+                rec = mass_hists.setdefault(var, {"bins": bins.tolist(), "unweighted": [0] * (len(bins) - 1), "raw_weighted": [0.0] * (len(bins) - 1), "raw_sumw2": [0.0] * (len(bins) - 1)})
                 rec["unweighted"][idx] += 1
                 rec["raw_weighted"][idx] += raw_w
+                rec["raw_sumw2"][idx] += raw_w * raw_w
 
         def mass_key(row: dict[str, Any]) -> str:
-            ms = row.get("mStop")
-            ml = row.get("mLSP")
-            if ms in {None, ""} or ml in {None, ""}:
-                return "unknown"
-            return f"mStop-{ms}_mLSP-{ml}"
+            return self._signal_mass_key(row.get("mStop"), row.get("mLSP"))
 
         def ensure_mass(key: str, row: dict[str, Any]) -> dict[str, Any]:
             rec = yields_by_mass.setdefault(key, {
-                "mStop": row.get("mStop", ""),
-                "mLSP": row.get("mLSP", ""),
+                "mStop": int(row.get("mStop")) if str(row.get("mStop", "")).strip() else None,
+                "mLSP": int(row.get("mLSP")) if str(row.get("mLSP", "")).strip() else None,
                 "genmodel_branch": row.get("genmodel_branch", ""),
-                "scope": "raw feature-side signal chunks from all discovered signal files; no xsec normalization applied",
+                "scope": "feature-side FastSim signal chunks from all discovered FastSim signal files; normalized with signal_xsec.txt and Runs genEventSumw_T2tt where available",
                 "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level",
-                "regions": {r: {"unweighted": 0, "raw_weighted": 0.0} for r in WORKER_REGIONS},
+                "sumw_mass_point": 0.0,
+                "xsec_pb": None,
+                "xsec_uncertainty_relative": None,
+                "normalization_factor": None,
+                "normalization_status": "pending",
+                "regions": {r: {"unweighted": 0, "raw_weighted": 0.0, "raw_sumw2": 0.0, "normalized_weighted": 0.0, "normalized_sumw2": 0.0} for r in WORKER_REGIONS},
                 "datasets": {},
             })
             rec["datasets"].setdefault(row.get("dataset", ""), 0)
             rec["datasets"][row.get("dataset", "")] += 1
             return rec
 
+        total_selected = 0
         for ds in fastsim:
+            if total_selected >= max_total_files:
+                break
             dataset = ds.get("das_dataset")
-            files = ds.get("xrootd_files") or [self._normalize_lfn(f) for f in ds.get("files", [])]
+            files = (ds.get("xrootd_files") or [self._normalize_lfn(f) for f in ds.get("files", [])])[:max_files_per_dataset]
             for file_url in files:
+                if total_selected >= max_total_files:
+                    break
+                total_selected += 1
                 attempted_files += 1
+                file_sumw = self._runs_sumw_by_mass(file_url)
+                for key, val in file_sumw.items():
+                    sumw_by_mass[key] = sumw_by_mass.get(key, 0.0) + float(val)
                 rec, rows, bad = validate_and_extract_file(file_url, dataset, "SMS", None, str(self.config.get("analysis", {}).get("year", "2024")), chunk_size, fastsim_trigger_bypass=True)
+                rec["runs_sumw_by_mass"] = file_sumw
+                rec["full_file_processing_requested"] = bool(signal_full)
                 manifest_files.append(rec)
                 bad_files.extend(bad)
                 if rec.get("processing_status") != "excluded":
@@ -952,42 +1153,78 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
                 processed_rows += len(rows)
                 for row in rows:
                     key = mass_key(row)
+                    if key == "unknown":
+                        continue
                     mass_rec = ensure_mass(key, row)
                     raw_w = float(row.get("nominal_weight", 1.0))
                     fill_hist(key, "all", row, raw_w)
                     for region in WORKER_REGIONS:
                         if row.get(f"feature_{region}"):
-                            mass_rec["regions"][region]["unweighted"] += 1
-                            mass_rec["regions"][region]["raw_weighted"] += raw_w
+                            reg = mass_rec["regions"][region]
+                            reg["unweighted"] += 1
+                            reg["raw_weighted"] += raw_w
+                            reg["raw_sumw2"] += raw_w * raw_w
                             fill_hist(key, region, row, raw_w)
                     for scheme, defs in candidate_defs.items():
                         for bin_name, definition in defs:
                             if self._bin_mask(row, definition, "SR"):
-                                b = search_yields.setdefault(scheme, {}).setdefault(bin_name, {}).setdefault(key, {"unweighted": 0, "raw_weighted": 0.0, "mStop": row.get("mStop", ""), "mLSP": row.get("mLSP", ""), "genmodel_branch": row.get("genmodel_branch", "")})
+                                b = search_yields.setdefault(scheme, {}).setdefault(bin_name, {}).setdefault(key, {"unweighted": 0, "raw_weighted": 0.0, "raw_sumw2": 0.0, "normalized_weighted": 0.0, "normalized_sumw2": 0.0, "mStop": row.get("mStop", ""), "mLSP": row.get("mLSP", ""), "genmodel_branch": row.get("genmodel_branch", ""), "normalization_factor": None, "normalization_status": "pending"})
                                 b["unweighted"] += 1
                                 b["raw_weighted"] += raw_w
+                                b["raw_sumw2"] += raw_w * raw_w
                 # Let rows from this file go out of scope before the next file.
+        for key, rec in yields_by_mass.items():
+            rec["sumw_mass_point"] = float(sumw_by_mass.get(key, 0.0))
+            xsec_rec = xsec_map.get(int(rec["mStop"])) if rec.get("mStop") is not None else None
+            rec["xsec_pb"] = xsec_rec.get("xsec_pb") if xsec_rec else None
+            rec["xsec_uncertainty_relative"] = xsec_rec.get("uncertainty_relative") if xsec_rec else None
+            if not xsec_rec:
+                rec["normalization_status"] = "blocked_missing_signal_xsec_for_mStop"
+            elif rec["sumw_mass_point"] == 0:
+                rec["normalization_status"] = "blocked_missing_or_zero_runs_sumw_mass_point"
+            else:
+                factor = float(xsec_rec["xsec_pb"]) * lumi_pb / rec["sumw_mass_point"]
+                rec["normalization_factor"] = factor
+                rec["normalization_status"] = "normalized_with_signal_xsec_txt_and_Runs_genEventSumw_T2tt"
+                for vals in rec["regions"].values():
+                    vals["normalized_weighted"] = vals["raw_weighted"] * factor
+                    vals["normalized_sumw2"] = vals["raw_sumw2"] * factor * factor
+        for scheme in search_yields.values():
+            for by_mass in scheme.values():
+                for key, vals in by_mass.items():
+                    mass_rec = yields_by_mass.get(key, {})
+                    factor = mass_rec.get("normalization_factor")
+                    vals["normalization_factor"] = factor
+                    vals["normalization_status"] = mass_rec.get("normalization_status", "missing_mass_record")
+                    if factor is not None:
+                        vals["normalized_weighted"] = vals["raw_weighted"] * factor
+                        vals["normalized_sumw2"] = vals["raw_sumw2"] * factor * factor
         cutflows = combine_cutflows(manifest_files)
         signal_histogram_cache = {
-            "scope": "in-memory raw feature-side signal histograms; persisted later only inside autonomous_allhad/hists.npy",
+            "scope": "raw feature-side signal histograms folded by make-hists-npy into autonomous_allhad/hists.npy with signal_xsec.txt normalization where available",
             "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level",
             "variables": {name: bins.tolist() for name, bins in hist_specs.items()},
+            "sumw_by_mass": sumw_by_mass,
             "histograms": hist_counts,
         }
         signal_cutflows = {
-            "scope": "raw feature-side signal chunks from all discovered FastSim signal files",
+            "scope": "bounded/cache-aware feature-side signal chunks from selected FastSim signal files",
             "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level",
             "chunk_size": chunk_size,
+            "full_file_processing_requested": bool(signal_full),
+            "bounds": {"max_datasets": max_datasets, "max_files_per_dataset": max_files_per_dataset, "max_total_files": max_total_files},
             "attempted_files": attempted_files,
             "processed_files": processed_files,
             "bad_files": bad_files,
-            "histogram_cache_policy": "signal shapes are persisted only by make-hists-npy into autonomous_allhad/hists.npy",
+            "histogram_cache_policy": "signal shapes are persisted by make-hists-npy into autonomous_allhad/hists.npy",
             "signal_histogram_cache_mass_points": len(signal_histogram_cache.get("histograms", {})),
+            "signal_histograms": signal_histogram_cache,
             "cutflows": cutflows,
         }
+        all_normalized = bool(yields_by_mass) and all(rec.get("normalization_status") == "normalized_with_signal_xsec_txt_and_Runs_genEventSumw_T2tt" for rec in yields_by_mass.values())
         by_mass_payload = {
             "status": "complete" if attempted_files and processed_files else "blocked",
-            "scope": "raw feature-side signal chunks from all discovered FastSim SMS-2Stop signal files; no cross-section normalization applied",
+            "scope": "bounded/cache-aware feature-side signal yields from selected FastSim SMS-2Stop signal files; normalized with signal_xsec.txt and Runs.genEventSumw_T2tt where available",
             "fastsim_trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level",
             "datasets_processed": len(fastsim),
             "fullsim_anchor_datasets_recorded_not_processed": len(fullsim),
@@ -995,32 +1232,54 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
             "processed_files": processed_files,
             "bad_files": len(bad_files),
             "processed_event_rows": processed_rows,
+            "bounds": {"max_datasets": max_datasets, "max_files_per_dataset": max_files_per_dataset, "max_total_files": max_total_files, "full_file_processing": bool(signal_full)},
+            "lumi_pb": lumi_pb,
+            "lumi_fb": float(self.config.get("analysis", {}).get("luminosity_fb", 0.0)),
+            "sumw_source": "Runs.genEventSumw_T2tt_<mStop>_<mLSP>",
             "mass_points": yields_by_mass,
-            "xsec_normalization_status": "not_applied_manual_xsec_required",
+            "xsec_table_status": xsec_status.get("xsec_table_status"),
+            "xsec_normalization_status": "complete" if all_normalized else "incomplete_missing_xsec_or_sumw",
+            "normalization_formula": "genWeight * xsec_pb(mStop) * lumi_pb / sumw_mass_point",
         }
+        if xsec_status.get("parsed"):
+            xsec_status["values_used_for_physics_outputs"] = True
+            write_json(signals_dir / "stop_xsec_13p6TeV.json", xsec_status)
+            write_json(signals_dir / "stop_xsec_13p6TeV_status.json", xsec_status)
+            shutil.copy2(signals_dir / "stop_xsec_13p6TeV.json", self.docs / "data" / "stop_xsec_13p6TeV.json")
+            shutil.copy2(signals_dir / "stop_xsec_13p6TeV_status.json", self.docs / "data" / "stop_xsec_13p6TeV_status.json")
+        signal_cutflows["status"] = by_mass_payload["status"]
+        signal_cutflows["xsec_normalization_status"] = by_mass_payload["xsec_normalization_status"]
+        signal_cutflows["processed_event_rows"] = processed_rows
+        signal_cutflows["terminal_reason"] = "all bounded FastSim signal files failed to open" if attempted_files and not processed_files else "completed bounded FastSim signal processing"
         search_payload = {
             "status": by_mass_payload["status"],
-            "scope": "raw feature-side search-bin signal yields from all discovered FastSim SMS-2Stop signal files; no cross-section normalization applied",
+            "scope": "bounded/cache-aware feature-side search-bin signal yields from selected FastSim SMS-2Stop signal files; normalized with signal_xsec.txt where available",
             "search_bin_source": "autonomous_allhad internal candidate definitions; no final search-bin scheme is adopted",
             "fastsim_trigger_policy": by_mass_payload["fastsim_trigger_policy"],
             "attempted_files": attempted_files,
             "processed_files": processed_files,
             "processed_event_rows": processed_rows,
+            "xsec_normalization_status": by_mass_payload["xsec_normalization_status"],
             "yields": search_yields,
         }
         write_json(self.outputs / "signal_yields_by_mass.json", by_mass_payload)
         write_json(self.outputs / "signal_searchbin_yields.json", search_payload)
         write_json(self.outputs / "signal_cutflows.json", signal_cutflows)
+        with (self.outputs / "signal_yields_by_mass.csv").open("w", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(["mass_key", "mStop", "mLSP", "region", "unweighted", "raw_weighted", "raw_sumw2", "normalized_weighted", "normalized_sumw2", "sumw_mass_point", "xsec_pb", "xsec_uncertainty_relative", "normalization_factor", "normalization_status"])
+            for key, rec in sorted(yields_by_mass.items()):
+                for region, vals in rec.get("regions", {}).items():
+                    writer.writerow([key, rec.get("mStop"), rec.get("mLSP"), region, vals.get("unweighted"), vals.get("raw_weighted"), vals.get("raw_sumw2"), vals.get("normalized_weighted"), vals.get("normalized_sumw2"), rec.get("sumw_mass_point"), rec.get("xsec_pb"), rec.get("xsec_uncertainty_relative"), rec.get("normalization_factor"), rec.get("normalization_status")])
         (self.docs / "data").mkdir(parents=True, exist_ok=True)
-        shutil.copy2(self.outputs / "signal_yields_by_mass.json", self.docs / "data" / "signal_yields_by_mass.json")
-        shutil.copy2(self.outputs / "signal_searchbin_yields.json", self.docs / "data" / "signal_searchbin_yields.json")
-        shutil.copy2(self.outputs / "signal_cutflows.json", self.docs / "data" / "signal_cutflows.json")
-        lines = ["# Signal Yield Summary", "", f"Status: `{by_mass_payload['status']}`", "", f"Datasets processed: {len(fastsim)}", f"Files attempted: {attempted_files}", f"Files processed: {processed_files}", f"Bad files: {len(bad_files)}", f"Processed event rows: {processed_rows}", "", "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level", "", "No cross-section normalization is applied. The 13.6 TeV stop cross-section table is still manual-required.", "", "| Mass point | SR unweighted | SR raw weighted | GenModel branch |", "|---|---:|---:|---|"]
+        for src in [self.outputs / "signal_yields_by_mass.json", self.outputs / "signal_yields_by_mass.csv", self.outputs / "signal_searchbin_yields.json", self.outputs / "signal_cutflows.json"]:
+            shutil.copy2(src, self.docs / "data" / src.name)
+        lines = ["# Signal Yield Summary", "", f"Status: `{by_mass_payload['status']}`", f"Xsec normalization: `{by_mass_payload['xsec_normalization_status']}`", f"Xsec table status: `{xsec_status.get('xsec_table_status')}`", "", f"Datasets processed: {len(fastsim)}", f"Files attempted: {attempted_files}", f"Files processed: {processed_files}", f"Bad files: {len(bad_files)}", f"Processed event rows: {processed_rows}", "", "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level", "", "Signal normalization formula: `genWeight * xsec_pb(mStop) * lumi_pb / sumw_mass_point` with `sumw_mass_point` from `Runs.genEventSumw_T2tt_<mStop>_<mLSP>`.", "", "| Mass point | SR unweighted | SR raw weighted | SR normalized | sumw | xsec pb | norm status |", "|---|---:|---:|---:|---:|---:|---|"]
         for key, rec in sorted(yields_by_mass.items()):
             sr = rec["regions"].get("SR", {})
-            lines.append(f"| `{key}` | {sr.get('unweighted', 0)} | {sr.get('raw_weighted', 0.0):.6g} | `{rec.get('genmodel_branch', '')}` |")
+            lines.append(f"| `{key}` | {sr.get('unweighted', 0)} | {sr.get('raw_weighted', 0.0):.6g} | {sr.get('normalized_weighted', 0.0):.6g} | {rec.get('sumw_mass_point', 0.0):.6g} | {rec.get('xsec_pb') if rec.get('xsec_pb') is not None else 'n/a'} | {rec.get('normalization_status')} |")
         (self.base / "reports" / "signal_yield_summary.md").write_text("\n".join(lines) + "\n")
-        result = {"status": by_mass_payload["status"], "fastsim_datasets": len(fastsim), "fullsim_anchor_datasets_recorded_not_processed": len(fullsim), "attempted_files": attempted_files, "processed_files": processed_files, "bad_files": len(bad_files), "processed_event_rows": processed_rows, "realized_mass_points_with_yields": len(yields_by_mass), "signal_yields_ready": by_mass_payload["status"] == "complete", "xsec_normalization_status": "not_applied_manual_xsec_required", "histogram_cache_policy": "persisted only by make-hists-npy into autonomous_allhad/hists.npy", "outputs": ["autonomous_allhad/outputs/signal_yields_by_mass.json", "autonomous_allhad/outputs/signal_searchbin_yields.json", "autonomous_allhad/outputs/signal_cutflows.json"]}
+        result = {"status": by_mass_payload["status"], "fastsim_datasets": len(fastsim), "fullsim_anchor_datasets_recorded_not_processed": len(fullsim), "attempted_files": attempted_files, "processed_files": processed_files, "bad_files": len(bad_files), "processed_event_rows": processed_rows, "realized_mass_points_with_yields": len(yields_by_mass), "signal_yields_ready": by_mass_payload["status"] == "complete", "xsec_normalization_status": by_mass_payload["xsec_normalization_status"], "histogram_cache_policy": "persisted by make-hists-npy into autonomous_allhad/hists.npy", "outputs": ["autonomous_allhad/outputs/signal_yields_by_mass.json", "autonomous_allhad/outputs/signal_yields_by_mass.csv", "autonomous_allhad/outputs/signal_searchbin_yields.json", "autonomous_allhad/outputs/signal_cutflows.json"]}
         self._record_direct_stage("process_signals", "complete" if result["status"] == "complete" else "blocked", result)
         self.monitor(json_output=True)
         self.publish_github_pages()
@@ -1044,7 +1303,6 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
         year = str(self.config.get("analysis", {}).get("year", "2024"))
         lumi_fb = float(self.config.get("analysis", {}).get("luminosity_fb", 0.0))
         regions = {
-            "preselection": "cat1_preselection",
             "LLCR": "cat2_LLCR_highDeltaM",
             "QCDCR": "cat3_QCDCR_highDeltaM",
             "GCR": "cat4_GCR_highDeltaM",
@@ -1092,6 +1350,8 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
                 "entries": np.zeros(n, dtype=float),
                 "lumi_fb": lumi_fb,
                 "normalized": bool(normalized),
+                "scale_factor": 1.0,
+                "raw_values": np.zeros(n, dtype=float),
                 "signal_mass": signal_mass,
                 "notes": notes,
             }
@@ -1102,11 +1362,13 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
                 node[mass_key] = empty_leaf(kind, variable, region, process, systematic, mass_key, bins, normalized, sample=sample, signal_mass=signal_mass, notes=notes)
             return node[mass_key]
 
-        def fill(hist: dict[str, Any], value: float, weight: float) -> None:
+        def fill(hist: dict[str, Any], value: float, weight: float, raw_weight: float | None = None) -> None:
             bins = hist["bin_edges"]
             idx = int(np.searchsorted(bins, value, side="right") - 1)
             if 0 <= idx < len(bins) - 1:
+                raw = weight if raw_weight is None else raw_weight
                 hist["values"][idx] += weight
+                hist["raw_values"][idx] += raw
                 hist["sumw2"][idx] += weight * weight
                 hist["entries"][idx] += 1.0
 
@@ -1124,9 +1386,11 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
                 process_label = "Data" if is_data else process
                 if is_data:
                     data_files.add(row.get("file", ""))
+                    raw_weight = 1.0
                     weight = 1.0
                 else:
                     background_files.add(row.get("file", ""))
+                    raw_weight = float(row.get("nominal_weight", 1.0))
                     weight, _ = self._analysis_weight(row)
                 for short_region, region_name in regions.items():
                     if str(row.get(f"feature_{short_region}", "")).lower() not in {"true", "1", "yes"}:
@@ -1142,7 +1406,8 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
                             continue
                         if not np.isfinite(val) or val < -90:
                             continue
-                        fill(leaf(kind, variable, "nominal", region_name, process_label, "inclusive", bins, normalized=not is_data, sample=dataset, notes="feature-table nominal histogram"), val, weight)
+                        hist = leaf(kind, variable, "nominal", region_name, process_label, "inclusive", bins, normalized=not is_data, sample=dataset, notes="feature-table nominal histogram")
+                        fill(hist, val, weight, raw_weight)
                 for scheme, defs in candidate_defs.items():
                     for ibin, (bin_name, definition) in enumerate(defs):
                         if self._bin_mask(row, definition, "SR"):
@@ -1150,36 +1415,47 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
                             rec["yield"] += weight
                             rec["entries"] += 1
                             bins = np.arange(-0.5, len(defs) + 0.5, 1.0, dtype=float)
-                            fill(leaf(kind, "search_bin_index", "nominal", "cat7_SR_highDeltaM", process_label, "inclusive", bins, normalized=not is_data, sample=dataset, notes=scheme), float(ibin), weight)
+                            hist = leaf(kind, "search_bin_index", "nominal", "cat7_SR_highDeltaM", process_label, "inclusive", bins, normalized=not is_data, sample=dataset, notes=scheme)
+                            fill(hist, float(ibin), weight, raw_weight)
 
         signal_yields = self._load_json_if_exists(self.outputs / "signal_yields_by_mass.json", {})
         signal_files_processed = int(signal_yields.get("processed_files", 0)) if isinstance(signal_yields, dict) else 0
         signal_mass_points = signal_yields.get("mass_points", {}) if isinstance(signal_yields, dict) else {}
-        signal_hist_source = self.base / "hists_npy" / "signal" / "signal_histograms.npy"
-        if signal_hist_source.exists():
+        signal_cutflows_payload = self._load_json_if_exists(self.outputs / "signal_cutflows.json", {})
+        signal_hist_payload = signal_cutflows_payload.get("signal_histograms", {}) if isinstance(signal_cutflows_payload, dict) else {}
+        if signal_hist_payload:
             try:
-                signal_hist_payload = np.load(signal_hist_source, allow_pickle=True).item()
                 var_map = {"met": "metpt", "ht": "ht", "njet": "njet", "nb_medium": "nb", "min_dphi4": "min_dphi"}
                 region_map = {"all": "all", **regions}
                 for mass_key_old, by_region in signal_hist_payload.get("histograms", {}).items():
                     mass_key = str(mass_key_old).replace("mStop-", "mStop").replace("_mLSP-", "_mLSP")
+                    mass_rec = signal_mass_points.get(str(mass_key_old), signal_mass_points.get(mass_key, {})) if isinstance(signal_mass_points, dict) else {}
+                    factor = mass_rec.get("normalization_factor") if isinstance(mass_rec, dict) else None
+                    normalized = factor is not None
+                    scale = float(factor) if factor is not None else 1.0
                     mass = None
                     m = re.search(r"mStop(\d+)_mLSP(\d+)", mass_key)
                     if m:
                         mass = {"mStop": int(m.group(1)), "mLSP": int(m.group(2))}
                     for region_old, by_var in by_region.items():
+                        if str(region_old) == "preselection":
+                            continue
                         region_name = region_map.get(region_old, str(region_old))
                         for var_old, rec in by_var.items():
                             variable = var_map.get(var_old, str(var_old))
                             bins = np.asarray(rec.get("bins", []), dtype=float)
                             if len(bins) < 2:
                                 continue
-                            hist = leaf("signal", variable, "nominal", region_name, "T2tt", mass_key, bins, normalized=False, sample="SMS-2Stop FastSim", signal_mass=mass, notes="raw unnormalized FastSim signal chunks; xsec manual_required")
-                            vals = np.asarray(rec.get("raw_weighted", []), dtype=float)
+                            hist = leaf("signal", variable, "nominal", region_name, "T2tt", mass_key, bins, normalized=normalized, sample="SMS-2Stop FastSim", signal_mass=mass, notes="FastSim signal histogram folded from signal_cutflows.json; normalized with signal_xsec.txt when normalization_factor is available")
+                            hist["scale_factor"] = scale
+                            raw_vals = np.asarray(rec.get("raw_weighted", []), dtype=float)
+                            raw_sumw2 = np.asarray(rec.get("raw_sumw2", []), dtype=float)
                             ent = np.asarray(rec.get("unweighted", []), dtype=float)
-                            if len(vals) == len(hist["values"]):
-                                hist["values"] += vals
-                                hist["sumw2"] += vals * vals
+                            if len(raw_vals) == len(hist["values"]):
+                                hist["raw_values"] += raw_vals
+                                hist["values"] += raw_vals * scale
+                            if len(raw_sumw2) == len(hist["sumw2"]):
+                                hist["sumw2"] += raw_sumw2 * scale * scale
                             if len(ent) == len(hist["entries"]):
                                 hist["entries"] += ent
             except Exception as exc:
@@ -1189,13 +1465,20 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
             mass_key = str(key).replace("mStop-", "mStop").replace("_mLSP-", "_mLSP")
             mass = {"mStop": rec.get("mStop"), "mLSP": rec.get("mLSP")}
             for short_region, vals in rec.get("regions", {}).items():
+                if str(short_region) == "preselection":
+                    continue
                 region_name = regions.get(short_region, short_region)
-                y = float(vals.get("raw_weighted", 0.0))
+                raw_y = float(vals.get("raw_weighted", 0.0))
+                y = float(vals.get("normalized_weighted", raw_y))
+                s2 = float(vals.get("normalized_sumw2", vals.get("raw_sumw2", raw_y * raw_y)))
                 e = float(vals.get("unweighted", 0.0))
+                factor = rec.get("normalization_factor")
                 bins = np.array([-0.5, 0.5], dtype=float)
-                hist = leaf("signal", "region_yield", "nominal", region_name, "T2tt", mass_key, bins, normalized=False, sample="SMS-2Stop FastSim", signal_mass=mass, notes="raw signal region yield; xsec manual_required")
+                hist = leaf("signal", "region_yield", "nominal", region_name, "T2tt", mass_key, bins, normalized=factor is not None, sample="SMS-2Stop FastSim", signal_mass=mass, notes="signal region yield normalized with signal_xsec.txt when available")
+                hist["scale_factor"] = float(factor) if factor is not None else 1.0
+                hist["raw_values"][0] += raw_y
                 hist["values"][0] += y
-                hist["sumw2"][0] += y * y
+                hist["sumw2"][0] += s2
                 hist["entries"][0] += e
                 if region_name in region_yields:
                     region_yields[region_name]["signal"] += y
@@ -1208,6 +1491,7 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
                 for i, region_name in enumerate(regions.values()):
                     y = float(vals.get(region_name, 0.0))
                     hist["values"][i] += y
+                    hist["raw_values"][i] += y
                     hist["sumw2"][i] += y * y
                     hist["entries"][i] += y if kind == "data" else 0.0
 
@@ -1220,7 +1504,7 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
                         for process, by_mass in by_proc.items():
                             for mass_key in by_mass:
                                 items.append({"kind": kind, "variable": variable, "systematic": systematic, "region": region, "process": process, "mass_key": mass_key, "year": year, "plot_used": variable in {"metpt", "ht", "njet", "nb", "search_bin_index", "region_yield"}, "datacard_used": variable in {"search_bin_index", "region_yield"}})
-        index = {"status": "complete", "schema_version": "hist_index_v1", "hists_npy": str(hists_path.relative_to(self.repo)), "items": items, "data_files_processed": len([x for x in data_files if x]), "background_files_processed": len([x for x in background_files if x]), "signal_files_processed": signal_files_processed, "rows_read_from_feature_table": rows_seen, "notes": ["DATA/background histograms from real_feature_table.csv", "signal histograms folded from signal process output when available", "signal normalization remains raw until 13.6 TeV stop xsec table is provided"]}
+        index = {"status": "complete", "schema_version": "hist_index_v1", "hists_npy": str(hists_path.relative_to(self.repo)), "items": items, "data_files_processed": len([x for x in data_files if x]), "background_files_processed": len([x for x in background_files if x]), "signal_files_processed": signal_files_processed, "rows_read_from_feature_table": rows_seen, "notes": ["DATA/background histograms from real_feature_table.csv", "signal histograms folded from signal_cutflows.json", "signal histograms are normalized with signal_xsec.txt when per-mass Runs sumw is available", "full DATA/background production is not claimed by this subset-derived hists.npy"]}
         write_json(index_path, index)
         write_json(outputs / "data_yields.json", {"status": "complete" if data_yields else "blocked", "source": "real_feature_table.csv", "files_processed": len([x for x in data_files if x]), "yields": data_yields})
         write_json(outputs / "background_yields.json", {"status": "complete" if bkg_yields else "blocked", "source": "real_feature_table.csv", "files_processed": len([x for x in background_files if x]), "normalization": "feature-side subset-normalized when factors are available", "yields": bkg_yields})
@@ -1230,7 +1514,7 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
         shutil.copy2(index_path, self.docs / "data" / "hist_index.json")
         for src in [outputs / "data_yields.json", outputs / "background_yields.json", outputs / "region_yields.json", outputs / "searchbin_yields.json", outputs / "cutflows.json"]:
             shutil.copy2(src, self.docs / "data" / src.name)
-        lines = ["# Yield Summary", "", f"Status: `complete`", "", f"DATA files processed: {len([x for x in data_files if x])}", f"Background files processed: {len([x for x in background_files if x])}", f"Signal files processed: {signal_files_processed}", f"Histogram entries indexed: {len(items)}", "", "Signal yields are raw/unnormalized until the 13.6 TeV stop cross-section table is provided."]
+        lines = ["# Yield Summary", "", f"Status: `complete`", "", f"DATA files processed: {len([x for x in data_files if x])}", f"Background files processed: {len([x for x in background_files if x])}", f"Signal files processed: {signal_files_processed}", f"Histogram entries indexed: {len(items)}", "", "Signal yields are normalized with `signal_xsec.txt` where per-mass `Runs.genEventSumw_T2tt_*` bookkeeping is available. DATA/background entries remain feature-side subset products until full production is complete."]
         (reports / "yield_summary.md").write_text("\n".join(lines) + "\n")
         result = {"status": "complete", "hists_npy": str(hists_path.relative_to(self.repo)), "hist_index": str(index_path.relative_to(self.repo)), "histogram_items": len(items), "data_files_processed": len([x for x in data_files if x]), "background_files_processed": len([x for x in background_files if x]), "signal_files_processed": signal_files_processed, "data_yield_status": "complete" if data_yields else "blocked", "background_yield_status": "complete" if bkg_yields else "blocked", "signal_yield_status": signal_yields.get("status", "missing") if isinstance(signal_yields, dict) else "missing"}
         self._record_direct_stage("make_hists_npy", "complete", result)
@@ -1278,7 +1562,7 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
             plt.close(fig)
             shutil.copy2(png, docs_plot_dir / png.name)
             shutil.copy2(pdf, docs_plot_dir / pdf.name)
-            manifest.append({"plot_path": str(png.relative_to(self.repo)), "docs_path": str((docs_plot_dir / png.name).relative_to(self.repo)), "source_hists_npy_keys": keys, "variable": variable, "region": region, "processes": processes, "overlay_signal_mass_points": signals, "systematic": systematic, "data_visible": data_visible, "ratio_panel_visible": ratio, "creation_timestamp": timestamp, "plotting_status": "complete"})
+            manifest.append({"plot_path": str(png.relative_to(self.repo)), "docs_path": str((docs_plot_dir / png.name).relative_to(self.repo)), "source_hists_npy_keys": keys, "variable": variable, "region": region, "processes": processes, "overlay_signal_mass_points": signals, "systematic": systematic, "data_visible": data_visible, "ratio_panel_visible": ratio, "normalization_status": "values loaded from autonomous_allhad/hists.npy; MC/signal leaves use normalized values when their payload normalized flag is true", "creation_timestamp": timestamp, "plotting_status": "complete"})
 
         def plot_stack(variable: str, region: str, name: str, xlabel: str, logy: bool = True):
             bkg = get_leaves("background", variable, region)
@@ -1361,12 +1645,12 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
             save_plot(fig, name, [f"{k}/{variable}/nominal/{region}" for k in ["data", "background", "signal"]], variable, region, processes, sig_keys, data_visible, ratio_visible)
 
         for variable, xlabel in [("metpt", "MET [GeV]"), ("ht", "H_T [GeV]"), ("njet", "N_{jet}"), ("nb", "N_b"), ("min_dphi", "min Delta phi")]:
-            for region in ["cat1_preselection", "cat7_SR_highDeltaM", "cat2_LLCR_highDeltaM", "cat3_QCDCR_highDeltaM"]:
+            for region in ["cat7_SR_highDeltaM", "cat2_LLCR_highDeltaM", "cat3_QCDCR_highDeltaM", "cat4_GCR_highDeltaM", "cat5_DY2E_highDeltaM", "cat6_DY2M_highDeltaM"]:
                 plot_stack(variable, region, f"{variable}_{region}", xlabel, logy=variable not in {"njet", "nb"})
         plot_stack("search_bin_index", "cat7_SR_highDeltaM", "search_bin_index_cat7_SR_highDeltaM", "Search-bin index", logy=True)
         plot_stack("region_yield", "all_regions", "region_yield_summary", "Region index", logy=True)
 
-        write_json(plot_dir / "plot_manifest.json", {"status": "complete" if manifest else "blocked", "source": str(hists_path.relative_to(self.repo)), "plots": manifest})
+        write_json(plot_dir / "plot_manifest.json", {"status": "complete" if manifest else "blocked", "source": str(hists_path.relative_to(self.repo)), "normalization_status": "plots are drawn only from hists.npy; MC/signal values are normalized where the histogram payload is normalized", "plots": manifest})
         (self.docs / "data").mkdir(parents=True, exist_ok=True)
         shutil.copy2(plot_dir / "plot_manifest.json", self.docs / "data" / "plot_manifest.json")
         result = {"status": "complete" if manifest else "blocked", "plots": len(manifest), "plot_manifest": str((plot_dir / "plot_manifest.json").relative_to(self.repo)), "source": str(hists_path.relative_to(self.repo))}
@@ -1689,7 +1973,7 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
         data = self._normalization_inputs()
         rows = data["rows"]
         factors = data["datasets"]
-        regions = ["preselection", "LLCR", "QCDCR", "GCR", "DY2E", "DY2M", "SR"]
+        regions = ["LLCR", "QCDCR", "GCR", "DY2E", "DY2M", "SR"]
         yields: dict[str, Any] = {}
         blocked = {ds: rec for ds, rec in factors.items() if rec.get("normalization_factor") is None}
         for row in rows:
@@ -1944,71 +2228,150 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
         metadata = self.load_metadata()
         configured = self._configured_dataset_keys()
         keys = configured or sorted(metadata)
-        datasets = []
-        total_files = 0
+        year = str(self.config.get("analysis", {}).get("year", "2024"))
+        condor = shutil.which("condor_submit")
+        allow_condor = bool(self.config.get("execution", {}).get("allow_condor_submit", False))
+        data_groups = {"JetMET", "EGamma", "Muon"}
+        file_records: list[dict[str, Any]] = []
+        data_records: list[dict[str, Any]] = []
+        background_records: list[dict[str, Any]] = []
+        dataset_summaries: list[dict[str, Any]] = []
         missing_metadata = []
         for name in keys:
             meta = metadata.get(name, {}) if isinstance(metadata, dict) else {}
-            files = self._dataset_files(meta)
-            total_files += len(files)
             if name not in metadata:
                 missing_metadata.append(name)
-            datasets.append({
+            process = self.group(name)
+            files = self._dataset_files(meta)
+            xs = meta.get("xs") if isinstance(meta, dict) else None
+            sumw_source = "metadata sumw not available; requires full Runs bookkeeping" if process not in data_groups else "data_unweighted"
+            dataset_summaries.append({
                 "dataset": name,
-                "process": self.group(name),
+                "process_group": process,
                 "metadata_present": name in metadata,
-                "files": len(files),
-                "xs_pb": meta.get("xs") if isinstance(meta, dict) else None,
+                "root_files": len(files),
+                "xsec_pb": xs,
+                "sumw_source": sumw_source,
+                "year": year,
+                "processing_status": "not_submitted",
             })
-        allow_condor = bool(self.config.get("execution", {}).get("allow_condor_submit", False))
-        condor = shutil.which("condor_submit")
-        local_limit = self.config.get("production", {}).get("local_max_files") if isinstance(self.config.get("production"), dict) else None
+            for idx, raw_file in enumerate(files):
+                file_url = self._normalize_lfn(raw_file)
+                rec = {
+                    "sample_name": name,
+                    "dataset": name,
+                    "process_group": process,
+                    "year": year,
+                    "file_index": idx,
+                    "file_path": file_url,
+                    "xsec_pb": xs,
+                    "sumw_source": sumw_source,
+                    "processing_status": "not_submitted",
+                    "is_data": process in data_groups,
+                    "is_background": process not in data_groups and process != "SMS",
+                    "is_signal": process == "SMS",
+                }
+                file_records.append(rec)
+                if rec["is_data"]:
+                    data_records.append(rec)
+                elif rec["is_background"]:
+                    background_records.append(rec)
+        signal_inventory = self._load_json_if_exists(self.base / "signals" / "das_signal_files.json", {})
+        signal_records: list[dict[str, Any]] = []
+        fastsim_signal_files = 0
+        fullsim_signal_files = 0
+        for ds in signal_inventory.get("datasets", []) if isinstance(signal_inventory, dict) else []:
+            dataset = ds.get("das_dataset", "")
+            simulation_type = self._classify_signal_dataset(str(dataset))
+            files = ds.get("xrootd_files") or [self._normalize_lfn(f) for f in ds.get("files", [])]
+            for idx, file_url in enumerate(files):
+                rec = {
+                    "sample_name": dataset,
+                    "dataset": dataset,
+                    "process_group": "SMS",
+                    "simulation_type": simulation_type,
+                    "year": year,
+                    "file_index": idx,
+                    "file_path": file_url,
+                    "xsec_pb": "from signal_xsec.txt by mStop after branch discovery" if simulation_type == "FastSim signal dataset" else None,
+                    "sumw_source": "Runs.genEventSumw_T2tt_<mStop>_<mLSP>" if simulation_type == "FastSim signal dataset" else "recorded FullSim anchor; not mixed into FastSim normalization",
+                    "processing_status": "processed_by_process_signals_or_pending" if simulation_type == "FastSim signal dataset" else "skipped_fullsim_anchor_not_mixed",
+                }
+                signal_records.append(rec)
+                fastsim_signal_files += int(simulation_type == "FastSim signal dataset")
+                fullsim_signal_files += int(simulation_type == "FullSim anchor candidate")
+        full_input = {
+            "status": "manifest_complete_not_processed",
+            "year": year,
+            "datasets_configured": len(keys),
+            "metadata_root_files": len(file_records),
+            "data_root_files": len(data_records),
+            "background_root_files": len(background_records),
+            "fastsim_signal_root_files": fastsim_signal_files,
+            "fullsim_signal_root_files_recorded_skipped": fullsim_signal_files,
+            "records": file_records + signal_records,
+        }
+        full_data = {"status": "manifest_complete_not_processed", "root_files": len(data_records), "records": data_records}
+        full_background = {"status": "manifest_complete_not_processed", "root_files": len(background_records), "records": background_records}
+        full_signal = {"status": "manifest_complete", "fastsim_root_files": fastsim_signal_files, "fullsim_anchor_root_files": fullsim_signal_files, "records": signal_records}
         blockers = []
         exact_unblock_steps = []
         if not allow_condor:
             blockers.append("execution.allow_condor_submit is false in autonomous_allhad/configs/run3_2024.yaml")
-            exact_unblock_steps.append("Set execution.allow_condor_submit: true only after confirming a valid CERN proxy and intended HTCondor production campaign, then rerun ./autonomous_allhad/analysisctl run-production --config autonomous_allhad/configs/run3_2024.yaml")
+            exact_unblock_steps.append("Enable a reviewed autonomous Condor campaign configuration before submitting full DATA/background production.")
         if not condor:
             blockers.append("condor_submit is unavailable in PATH")
             exact_unblock_steps.append("Enter an environment with HTCondor client tools available, then rerun run-production.")
-        if local_limit is None:
-            blockers.append("no explicit bounded local full-production fallback is configured")
-            exact_unblock_steps.append("Alternatively add an explicit production.local_max_files/local output policy and rerun; do not treat the 14-file validation subset as full production.")
         if missing_metadata:
             blockers.append(f"{len(missing_metadata)} configured datasets are missing metadata entries")
             exact_unblock_steps.append("Refresh analysis/metadata/KNU_2024_v4.json.gz so every configured dataset has file and cross-section metadata.")
-        status = "blocked" if blockers else "ready_not_submitted"
-        message = "Full production was not submitted. This stage only built the production manifest and blocker report."
-        manifest = {
+        blockers.append("no autonomous Condor execute/monitor/retry/merge implementation exists for the 52k-file feature-table production campaign")
+        exact_unblock_steps.append("Implement and validate an autonomous Condor shard runner that writes per-file feature/yield/hist shards, plus merge and retry stages, before submitting the 52k-file campaign.")
+        status = "blocked_not_submitted" if blockers else "ready_not_submitted"
+        message = "Full production was not submitted; file-level manifests were built and the exact production blockers were recorded."
+        production_manifest = {
             "status": status,
             "message": message,
             "datasets_configured": len(keys),
-            "datasets_with_metadata": sum(1 for d in datasets if d["metadata_present"]),
-            "files_in_metadata": total_files,
-            "jobs_planned": total_files,
-            "job_granularity": "one NanoAOD file per planned job",
+            "datasets_with_metadata": sum(1 for d in dataset_summaries if d["metadata_present"]),
+            "files_in_metadata": len(file_records),
+            "data_root_files": len(data_records),
+            "background_root_files": len(background_records),
+            "fastsim_signal_root_files": fastsim_signal_files,
+            "fullsim_signal_root_files_recorded_skipped": fullsim_signal_files,
+            "jobs_planned": len(data_records) + len(background_records) + fastsim_signal_files,
+            "job_granularity": "one NanoAOD file per planned DATA/background job; FastSim signals handled by process-signals",
             "condor_available": bool(condor),
             "condor_submit_path": condor,
             "allow_condor_submit": allow_condor,
-            "local_fallback": {"configured": local_limit is not None, "local_max_files": local_limit},
             "legacy_processor_status": "external/manual; stop_processor_v4.py is not invoked by autonomous_allhad",
-            "datasets": datasets,
+            "datasets": dataset_summaries,
             "blockers": blockers,
             "exact_unblock_steps": exact_unblock_steps,
         }
-        write_json(self.workflow / "production_manifest.json", manifest)
-        write_json(self.workflow / "production_state.json", manifest)
-        write_json(self.workflow / "job_manifest.json", {"status": status, "jobs": [], "planned_jobs": total_files, "cluster_ids": [], "condor_enabled": allow_condor})
+        write_json(self.workflow / "full_input_manifest.json", full_input)
+        write_json(self.workflow / "full_data_manifest.json", full_data)
+        write_json(self.workflow / "full_background_manifest.json", full_background)
+        write_json(self.workflow / "full_signal_manifest.json", full_signal)
+        write_json(self.workflow / "full_production_state.json", production_manifest)
+        write_json(self.workflow / "full_production_manifest.json", production_manifest)
+        write_json(self.workflow / "production_manifest.json", production_manifest)
+        write_json(self.workflow / "production_state.json", production_manifest)
+        write_json(self.workflow / "job_status.json", {"status": status, "cluster_ids": [], "submitted_jobs": 0, "planned_jobs": production_manifest["jobs_planned"], "blockers": blockers})
+        write_json(self.workflow / "retry_manifest.json", {"status": "not_applicable_no_jobs_submitted", "retry_jobs": [], "cluster_ids": []})
+        write_json(self.workflow / "job_manifest.json", {"status": status, "jobs": [], "planned_jobs": production_manifest["jobs_planned"], "cluster_ids": [], "condor_enabled": allow_condor})
         write_json(self.outputs / "production_feature_table.status.json", {"status": status, "table_produced": False, "reason": message, "required_before_table": blockers})
-        write_json(self.base / "benchmarks" / "production_benchmark.json", {"status": status, "datasets": len(keys), "files": total_files, "jobs_planned": total_files, "events_processed": 0, "blockers": blockers})
-        lines = ["# Full Production Status", "", f"Status: `{status}`", "", message, "", f"Configured datasets: {len(keys)}", f"Files in metadata: {total_files}", f"Planned jobs: {total_files}", "", "## Blockers", ""]
+        write_json(self.base / "benchmarks" / "production_benchmark.json", {"status": status, "datasets": len(keys), "files": len(file_records), "jobs_planned": production_manifest["jobs_planned"], "events_processed": 0, "blockers": blockers})
+        lines = ["# Full Production Status", "", f"Status: `{status}`", "", message, "", f"Configured datasets: {len(keys)}", f"DATA files: {len(data_records)}", f"Background files: {len(background_records)}", f"FastSim signal files: {fastsim_signal_files}", f"FullSim signal anchor files skipped: {fullsim_signal_files}", f"Planned jobs: {production_manifest['jobs_planned']}", "", "## Blockers", ""]
         lines += [f"- {b}" for b in blockers] or ["- none"]
         lines += ["", "## Exact unblock steps", ""] + ([f"- {x}" for x in exact_unblock_steps] or ["- Production can be submitted after explicit user authorization and configuration."])
         (self.base / "reports" / "production_status.md").write_text("\n".join(lines) + "\n")
-        result = {"status": status, "datasets": len(keys), "files_in_metadata": total_files, "jobs_planned": total_files, "events_processed": 0, "output": str((self.workflow / "production_manifest.json").relative_to(self.repo)), "blockers": blockers}
-        self._record_direct_stage("run_production", "blocked" if blockers else "blocked", result)
-        self._record_direct_stage("condor_production", "blocked", {"status": "not_submitted", "reason": "; ".join(blockers) if blockers else "explicit submission not performed by autonomous_allhad", "cluster_ids": []})
+        (self.base / "reports" / "full_production_summary.md").write_text("\n".join(lines) + "\n")
+        result = {"status": status, "datasets": len(keys), "files_in_metadata": len(file_records), "data_root_files": len(data_records), "background_root_files": len(background_records), "fastsim_signal_root_files": fastsim_signal_files, "fullsim_signal_root_files_recorded_skipped": fullsim_signal_files, "jobs_planned": production_manifest["jobs_planned"], "events_processed": 0, "output": str((self.workflow / "full_production_manifest.json").relative_to(self.repo)), "blockers": blockers, "cluster_ids": []}
+        self._record_direct_stage("run_production", "blocked" if blockers else "complete", result)
+        self._record_direct_stage("condor_production", "blocked" if blockers else "complete", {"status": "not_submitted" if blockers else "ready_not_submitted", "reason": "; ".join(blockers) if blockers else "ready for reviewed submission", "cluster_ids": []})
         return result
+
 
     def full_production_normalization(self) -> dict[str, Any]:
         production = self._load_json_if_exists(self.workflow / "production_state.json", {})
@@ -2229,12 +2592,12 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
         signal_xsec = self._load_json_if_exists(self.base / "signals" / "stop_xsec_13p6TeV_status.json", {})
         signal_yields = self._load_json_if_exists(self.outputs / "signal_yields_by_mass.json", {})
         yields = summary.get("yields", {})
-        regions = ["preselection", "LLCR", "QCDCR", "GCR", "DY2E", "DY2M", "SR"]
+        regions = ["LLCR", "QCDCR", "GCR", "DY2E", "DY2M", "SR"]
         stages = self.state.get("stages", {})
         completed = [k for k, v in stages.items() if v.get("status") == "complete"]
         failed = [k for k, v in stages.items() if v.get("status") == "failed"]
         blocked = [k for k, v in stages.items() if v.get("status") == "blocked"]
-        for expected in ["run_production", "full_production_normalization", "select_search_bins", "make_datacards", "expected_limits", "condor_production", "systematic_yields"]:
+        for expected in ["input_discovery", "file_validation", "parse_signal_xsec", "signal_discovery", "process_signals", "make_hists_npy", "plot_from_npy", "publish_github_pages", "run_production", "full_production_normalization", "select_search_bins", "make_datacards", "expected_limits", "condor_production", "systematic_yields"]:
             if expected not in completed and expected not in failed and expected not in blocked:
                 blocked.append(expected)
         latest = None
@@ -2251,6 +2614,7 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             "feature_rows": summary.get("processed_events"),
             "bad_files": len(summary.get("bad_files", [])),
             "region_yields": {r: sum(v.get(r, 0) for v in yields.values()) for r in regions},
+            "diagnostic_preselection_yield": sum(v.get("preselection", 0) for v in yields.values()),
             "latest_command": self._public_history_entry(latest),
             "latest_successful_command": self._public_history_entry(next((json.loads(ln) for ln in reversed(self.history.read_text().splitlines()) if ln.strip() and json.loads(ln).get("status") == "complete"), None)) if self.history.exists() else None,
             "latest_failure": self._public_history_entry(next((json.loads(ln) for ln in reversed(self.history.read_text().splitlines()) if ln.strip() and json.loads(ln).get("status") == "failed"), None)) if self.history.exists() else None,
@@ -2417,7 +2781,7 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
         norm = self._load_json_if_exists(self.outputs / "normalized_feature_yields.json", {})
         norm_audit = self._load_json_if_exists(self.base / "validation" / "normalization_audit.json", {})
         yields = summary.get("yields", {})
-        region_names = ["preselection", "LLCR", "QCDCR", "GCR", "DY2E", "DY2M", "SR"]
+        region_names = ["LLCR", "QCDCR", "GCR", "DY2E", "DY2M", "SR"]
         yrows = "".join(f"<tr><td>{html.escape(proc)}</td>" + "".join(f"<td>{vals.get(r,0)}</td>" for r in region_names) + "</tr>" for proc, vals in yields.items())
         schemes = search_bins.get("schemes", [])
         scheme_rows = "".join(f"<tr><td>{html.escape(s['scheme'])}</td><td>{len(s['bins'])}</td><td>{s['sane_bins']}</td><td>{s['low_stat_bins']}</td><td>{s['score_proxy']:.4g}</td></tr>" for s in schemes)

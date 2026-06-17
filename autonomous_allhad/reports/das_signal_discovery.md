@@ -24,7 +24,7 @@ All FastSim files ready for process-signals: True (ready)
 
 ## Cross sections
 
-Stop xsec table status: `manual_required`
+Stop xsec table status: `parsed`
 
 ## Datasets
 

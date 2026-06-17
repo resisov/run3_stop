@@ -2,6 +2,6 @@
   "cluster_ids": [],
   "condor_enabled": false,
   "jobs": [],
-  "planned_jobs": 52772,
-  "status": "blocked"
+  "planned_jobs": 52809,
+  "status": "blocked_not_submitted"
 }

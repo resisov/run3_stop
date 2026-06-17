@@ -1,10 +1,5822 @@
 {
-  "download_status": "downloaded",
-  "downloaded_bytes_preview": 218867,
-  "message": "Twiki content was reachable, but automatic table parsing is not implemented safely for physics use. Manual extraction is required.",
-  "parsed": false,
-  "required_manual_input": "Provide a machine-readable 13.6 TeV stop cross-section table with mStop, xsec_pb, and uncertainty fields from the cited SUSY cross-section Twiki.",
-  "source_url": "https://twiki.cern.ch/twiki/bin/view/LHCPhysics/SUSYCrossSections13x6TeVstopsbottom",
-  "values_used_for_physics_outputs": false,
-  "xsec_table_status": "manual_required"
+  "bad_line_count": 0,
+  "bad_lines_preview": [],
+  "message": "Parsed signal_xsec.txt as the authoritative stop-pair cross-section source for this autonomous analysis.",
+  "parsed": true,
+  "records": [
+    {
+      "mStop": 100,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0461,
+      "uncertainty_percent": 4.61,
+      "uncertainty_relative": 0.0461,
+      "uncertainty_up_relative": 0.0461,
+      "xsec_pb": 2046.0
+    },
+    {
+      "mStop": 105,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.045700000000000005,
+      "uncertainty_percent": 4.57,
+      "uncertainty_relative": 0.045700000000000005,
+      "uncertainty_up_relative": 0.045700000000000005,
+      "xsec_pb": 1666.0
+    },
+    {
+      "mStop": 110,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0453,
+      "uncertainty_percent": 4.53,
+      "uncertainty_relative": 0.0453,
+      "uncertainty_up_relative": 0.0453,
+      "xsec_pb": 1365.0
+    },
+    {
+      "mStop": 115,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.045,
+      "uncertainty_percent": 4.5,
+      "uncertainty_relative": 0.045,
+      "uncertainty_up_relative": 0.045,
+      "xsec_pb": 1125.0
+    },
+    {
+      "mStop": 120,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0447,
+      "uncertainty_percent": 4.47,
+      "uncertainty_relative": 0.0447,
+      "uncertainty_up_relative": 0.0447,
+      "xsec_pb": 932.7
+    },
+    {
+      "mStop": 125,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0444,
+      "uncertainty_percent": 4.44,
+      "uncertainty_relative": 0.0444,
+      "uncertainty_up_relative": 0.0444,
+      "xsec_pb": 777.8
+    },
+    {
+      "mStop": 130,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0441,
+      "uncertainty_percent": 4.41,
+      "uncertainty_relative": 0.0441,
+      "uncertainty_up_relative": 0.0441,
+      "xsec_pb": 652.3
+    },
+    {
+      "mStop": 135,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.043899999999999995,
+      "uncertainty_percent": 4.39,
+      "uncertainty_relative": 0.043899999999999995,
+      "uncertainty_up_relative": 0.043899999999999995,
+      "xsec_pb": 549.9
+    },
+    {
+      "mStop": 140,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0436,
+      "uncertainty_percent": 4.36,
+      "uncertainty_relative": 0.0436,
+      "uncertainty_up_relative": 0.0436,
+      "xsec_pb": 466.0
+    },
+    {
+      "mStop": 145,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0434,
+      "uncertainty_percent": 4.34,
+      "uncertainty_relative": 0.0434,
+      "uncertainty_up_relative": 0.0434,
+      "xsec_pb": 396.8
+    },
+    {
+      "mStop": 150,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0432,
+      "uncertainty_percent": 4.32,
+      "uncertainty_relative": 0.0432,
+      "uncertainty_up_relative": 0.0432,
+      "xsec_pb": 339.5
+    },
+    {
+      "mStop": 155,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0431,
+      "uncertainty_percent": 4.31,
+      "uncertainty_relative": 0.0431,
+      "uncertainty_up_relative": 0.0431,
+      "xsec_pb": 291.8
+    },
+    {
+      "mStop": 160,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0429,
+      "uncertainty_percent": 4.29,
+      "uncertainty_relative": 0.0429,
+      "uncertainty_up_relative": 0.0429,
+      "xsec_pb": 251.9
+    },
+    {
+      "mStop": 165,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.042800000000000005,
+      "uncertainty_percent": 4.28,
+      "uncertainty_relative": 0.042800000000000005,
+      "uncertainty_up_relative": 0.042800000000000005,
+      "xsec_pb": 218.4
+    },
+    {
+      "mStop": 170,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.042699999999999995,
+      "uncertainty_percent": 4.27,
+      "uncertainty_relative": 0.042699999999999995,
+      "uncertainty_up_relative": 0.042699999999999995,
+      "xsec_pb": 190.0
+    },
+    {
+      "mStop": 175,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0426,
+      "uncertainty_percent": 4.26,
+      "uncertainty_relative": 0.0426,
+      "uncertainty_up_relative": 0.0426,
+      "xsec_pb": 166.0
+    },
+    {
+      "mStop": 180,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0425,
+      "uncertainty_percent": 4.25,
+      "uncertainty_relative": 0.0425,
+      "uncertainty_up_relative": 0.0425,
+      "xsec_pb": 145.5
+    },
+    {
+      "mStop": 185,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0425,
+      "uncertainty_percent": 4.25,
+      "uncertainty_relative": 0.0425,
+      "uncertainty_up_relative": 0.0425,
+      "xsec_pb": 128.0
+    },
+    {
+      "mStop": 190,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0424,
+      "uncertainty_percent": 4.24,
+      "uncertainty_relative": 0.0424,
+      "uncertainty_up_relative": 0.0424,
+      "xsec_pb": 113.0
+    },
+    {
+      "mStop": 195,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0424,
+      "uncertainty_percent": 4.24,
+      "uncertainty_relative": 0.0424,
+      "uncertainty_up_relative": 0.0424,
+      "xsec_pb": 99.96
+    },
+    {
+      "mStop": 200,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0424,
+      "uncertainty_percent": 4.24,
+      "uncertainty_relative": 0.0424,
+      "uncertainty_up_relative": 0.0424,
+      "xsec_pb": 88.71
+    },
+    {
+      "mStop": 205,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0424,
+      "uncertainty_percent": 4.24,
+      "uncertainty_relative": 0.0424,
+      "uncertainty_up_relative": 0.0424,
+      "xsec_pb": 78.78
+    },
+    {
+      "mStop": 210,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0425,
+      "uncertainty_percent": 4.25,
+      "uncertainty_relative": 0.0425,
+      "uncertainty_up_relative": 0.0425,
+      "xsec_pb": 70.14
+    },
+    {
+      "mStop": 215,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0425,
+      "uncertainty_percent": 4.25,
+      "uncertainty_relative": 0.0425,
+      "uncertainty_up_relative": 0.0425,
+      "xsec_pb": 62.6
+    },
+    {
+      "mStop": 220,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0426,
+      "uncertainty_percent": 4.26,
+      "uncertainty_relative": 0.0426,
+      "uncertainty_up_relative": 0.0426,
+      "xsec_pb": 56.0
+    },
+    {
+      "mStop": 225,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0426,
+      "uncertainty_percent": 4.26,
+      "uncertainty_relative": 0.0426,
+      "uncertainty_up_relative": 0.0426,
+      "xsec_pb": 50.2
+    },
+    {
+      "mStop": 230,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.042699999999999995,
+      "uncertainty_percent": 4.27,
+      "uncertainty_relative": 0.042699999999999995,
+      "uncertainty_up_relative": 0.042699999999999995,
+      "xsec_pb": 45.1
+    },
+    {
+      "mStop": 235,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.042800000000000005,
+      "uncertainty_percent": 4.28,
+      "uncertainty_relative": 0.042800000000000005,
+      "uncertainty_up_relative": 0.042800000000000005,
+      "xsec_pb": 40.6
+    },
+    {
+      "mStop": 240,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0429,
+      "uncertainty_percent": 4.29,
+      "uncertainty_relative": 0.0429,
+      "uncertainty_up_relative": 0.0429,
+      "xsec_pb": 36.62
+    },
+    {
+      "mStop": 245,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.043,
+      "uncertainty_percent": 4.3,
+      "uncertainty_relative": 0.043,
+      "uncertainty_up_relative": 0.043,
+      "xsec_pb": 33.09
+    },
+    {
+      "mStop": 250,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0431,
+      "uncertainty_percent": 4.31,
+      "uncertainty_relative": 0.0431,
+      "uncertainty_up_relative": 0.0431,
+      "xsec_pb": 29.95
+    },
+    {
+      "mStop": 255,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0432,
+      "uncertainty_percent": 4.32,
+      "uncertainty_relative": 0.0432,
+      "uncertainty_up_relative": 0.0432,
+      "xsec_pb": 27.14
+    },
+    {
+      "mStop": 260,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0434,
+      "uncertainty_percent": 4.34,
+      "uncertainty_relative": 0.0434,
+      "uncertainty_up_relative": 0.0434,
+      "xsec_pb": 24.63
+    },
+    {
+      "mStop": 265,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0435,
+      "uncertainty_percent": 4.35,
+      "uncertainty_relative": 0.0435,
+      "uncertainty_up_relative": 0.0435,
+      "xsec_pb": 22.38
+    },
+    {
+      "mStop": 270,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0437,
+      "uncertainty_percent": 4.37,
+      "uncertainty_relative": 0.0437,
+      "uncertainty_up_relative": 0.0437,
+      "xsec_pb": 20.37
+    },
+    {
+      "mStop": 275,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0438,
+      "uncertainty_percent": 4.38,
+      "uncertainty_relative": 0.0438,
+      "uncertainty_up_relative": 0.0438,
+      "xsec_pb": 18.57
+    },
+    {
+      "mStop": 280,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.044000000000000004,
+      "uncertainty_percent": 4.4,
+      "uncertainty_relative": 0.044000000000000004,
+      "uncertainty_up_relative": 0.044000000000000004,
+      "xsec_pb": 16.96
+    },
+    {
+      "mStop": 285,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0441,
+      "uncertainty_percent": 4.41,
+      "uncertainty_relative": 0.0441,
+      "uncertainty_up_relative": 0.0441,
+      "xsec_pb": 15.5
+    },
+    {
+      "mStop": 290,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0443,
+      "uncertainty_percent": 4.43,
+      "uncertainty_relative": 0.0443,
+      "uncertainty_up_relative": 0.0443,
+      "xsec_pb": 14.19
+    },
+    {
+      "mStop": 295,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.044500000000000005,
+      "uncertainty_percent": 4.45,
+      "uncertainty_relative": 0.044500000000000005,
+      "uncertainty_up_relative": 0.044500000000000005,
+      "xsec_pb": 13.0
+    },
+    {
+      "mStop": 300,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0446,
+      "uncertainty_percent": 4.46,
+      "uncertainty_relative": 0.0446,
+      "uncertainty_up_relative": 0.0446,
+      "xsec_pb": 11.93
+    },
+    {
+      "mStop": 305,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.044800000000000006,
+      "uncertainty_percent": 4.48,
+      "uncertainty_relative": 0.044800000000000006,
+      "uncertainty_up_relative": 0.044800000000000006,
+      "xsec_pb": 10.96
+    },
+    {
+      "mStop": 310,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0449,
+      "uncertainty_percent": 4.49,
+      "uncertainty_relative": 0.0449,
+      "uncertainty_up_relative": 0.0449,
+      "xsec_pb": 10.08
+    },
+    {
+      "mStop": 315,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.045,
+      "uncertainty_percent": 4.5,
+      "uncertainty_relative": 0.045,
+      "uncertainty_up_relative": 0.045,
+      "xsec_pb": 9.275
+    },
+    {
+      "mStop": 320,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0451,
+      "uncertainty_percent": 4.51,
+      "uncertainty_relative": 0.0451,
+      "uncertainty_up_relative": 0.0451,
+      "xsec_pb": 8.546
+    },
+    {
+      "mStop": 325,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0453,
+      "uncertainty_percent": 4.53,
+      "uncertainty_relative": 0.0453,
+      "uncertainty_up_relative": 0.0453,
+      "xsec_pb": 7.883
+    },
+    {
+      "mStop": 330,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0454,
+      "uncertainty_percent": 4.54,
+      "uncertainty_relative": 0.0454,
+      "uncertainty_up_relative": 0.0454,
+      "xsec_pb": 7.279
+    },
+    {
+      "mStop": 335,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0455,
+      "uncertainty_percent": 4.55,
+      "uncertainty_relative": 0.0455,
+      "uncertainty_up_relative": 0.0455,
+      "xsec_pb": 6.728
+    },
+    {
+      "mStop": 340,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.045700000000000005,
+      "uncertainty_percent": 4.57,
+      "uncertainty_relative": 0.045700000000000005,
+      "uncertainty_up_relative": 0.045700000000000005,
+      "xsec_pb": 6.224
+    },
+    {
+      "mStop": 345,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0458,
+      "uncertainty_percent": 4.58,
+      "uncertainty_relative": 0.0458,
+      "uncertainty_up_relative": 0.0458,
+      "xsec_pb": 5.763
+    },
+    {
+      "mStop": 350,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.046,
+      "uncertainty_percent": 4.6,
+      "uncertainty_relative": 0.046,
+      "uncertainty_up_relative": 0.046,
+      "xsec_pb": 5.342
+    },
+    {
+      "mStop": 355,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0461,
+      "uncertainty_percent": 4.61,
+      "uncertainty_relative": 0.0461,
+      "uncertainty_up_relative": 0.0461,
+      "xsec_pb": 4.954
+    },
+    {
+      "mStop": 360,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0463,
+      "uncertainty_percent": 4.63,
+      "uncertainty_relative": 0.0463,
+      "uncertainty_up_relative": 0.0463,
+      "xsec_pb": 4.599
+    },
+    {
+      "mStop": 365,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.04650000000000001,
+      "uncertainty_percent": 4.65,
+      "uncertainty_relative": 0.04650000000000001,
+      "uncertainty_up_relative": 0.04650000000000001,
+      "xsec_pb": 4.272
+    },
+    {
+      "mStop": 370,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0467,
+      "uncertainty_percent": 4.67,
+      "uncertainty_relative": 0.0467,
+      "uncertainty_up_relative": 0.0467,
+      "xsec_pb": 3.972
+    },
+    {
+      "mStop": 375,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.046900000000000004,
+      "uncertainty_percent": 4.69,
+      "uncertainty_relative": 0.046900000000000004,
+      "uncertainty_up_relative": 0.046900000000000004,
+      "xsec_pb": 3.696
+    },
+    {
+      "mStop": 380,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0471,
+      "uncertainty_percent": 4.71,
+      "uncertainty_relative": 0.0471,
+      "uncertainty_up_relative": 0.0471,
+      "xsec_pb": 3.442
+    },
+    {
+      "mStop": 385,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0473,
+      "uncertainty_percent": 4.73,
+      "uncertainty_relative": 0.0473,
+      "uncertainty_up_relative": 0.0473,
+      "xsec_pb": 3.207
+    },
+    {
+      "mStop": 390,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0475,
+      "uncertainty_percent": 4.75,
+      "uncertainty_relative": 0.0475,
+      "uncertainty_up_relative": 0.0475,
+      "xsec_pb": 2.991
+    },
+    {
+      "mStop": 395,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.04769999999999999,
+      "uncertainty_percent": 4.77,
+      "uncertainty_relative": 0.04769999999999999,
+      "uncertainty_up_relative": 0.04769999999999999,
+      "xsec_pb": 2.791
+    },
+    {
+      "mStop": 400,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0479,
+      "uncertainty_percent": 4.79,
+      "uncertainty_relative": 0.0479,
+      "uncertainty_up_relative": 0.0479,
+      "xsec_pb": 2.607
+    },
+    {
+      "mStop": 405,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0481,
+      "uncertainty_percent": 4.81,
+      "uncertainty_relative": 0.0481,
+      "uncertainty_up_relative": 0.0481,
+      "xsec_pb": 2.436
+    },
+    {
+      "mStop": 410,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0483,
+      "uncertainty_percent": 4.83,
+      "uncertainty_relative": 0.0483,
+      "uncertainty_up_relative": 0.0483,
+      "xsec_pb": 2.277
+    },
+    {
+      "mStop": 415,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.048499999999999995,
+      "uncertainty_percent": 4.85,
+      "uncertainty_relative": 0.048499999999999995,
+      "uncertainty_up_relative": 0.048499999999999995,
+      "xsec_pb": 2.13
+    },
+    {
+      "mStop": 420,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0487,
+      "uncertainty_percent": 4.87,
+      "uncertainty_relative": 0.0487,
+      "uncertainty_up_relative": 0.0487,
+      "xsec_pb": 1.994
+    },
+    {
+      "mStop": 425,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0489,
+      "uncertainty_percent": 4.89,
+      "uncertainty_relative": 0.0489,
+      "uncertainty_up_relative": 0.0489,
+      "xsec_pb": 1.868
+    },
+    {
+      "mStop": 430,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0492,
+      "uncertainty_percent": 4.92,
+      "uncertainty_relative": 0.0492,
+      "uncertainty_up_relative": 0.0492,
+      "xsec_pb": 1.751
+    },
+    {
+      "mStop": 435,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.049400000000000006,
+      "uncertainty_percent": 4.94,
+      "uncertainty_relative": 0.049400000000000006,
+      "uncertainty_up_relative": 0.049400000000000006,
+      "xsec_pb": 1.642
+    },
+    {
+      "mStop": 440,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0496,
+      "uncertainty_percent": 4.96,
+      "uncertainty_relative": 0.0496,
+      "uncertainty_up_relative": 0.0496,
+      "xsec_pb": 1.541
+    },
+    {
+      "mStop": 445,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.049800000000000004,
+      "uncertainty_percent": 4.98,
+      "uncertainty_relative": 0.049800000000000004,
+      "uncertainty_up_relative": 0.049800000000000004,
+      "xsec_pb": 1.447
+    },
+    {
+      "mStop": 450,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0501,
+      "uncertainty_percent": 5.01,
+      "uncertainty_relative": 0.0501,
+      "uncertainty_up_relative": 0.0501,
+      "xsec_pb": 1.359
+    },
+    {
+      "mStop": 455,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.050300000000000004,
+      "uncertainty_percent": 5.03,
+      "uncertainty_relative": 0.050300000000000004,
+      "uncertainty_up_relative": 0.050300000000000004,
+      "xsec_pb": 1.277
+    },
+    {
+      "mStop": 460,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.050499999999999996,
+      "uncertainty_percent": 5.05,
+      "uncertainty_relative": 0.050499999999999996,
+      "uncertainty_up_relative": 0.050499999999999996,
+      "xsec_pb": 1.201
+    },
+    {
+      "mStop": 465,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0508,
+      "uncertainty_percent": 5.08,
+      "uncertainty_relative": 0.0508,
+      "uncertainty_up_relative": 0.0508,
+      "xsec_pb": 1.13
+    },
+    {
+      "mStop": 470,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.051,
+      "uncertainty_percent": 5.1,
+      "uncertainty_relative": 0.051,
+      "uncertainty_up_relative": 0.051,
+      "xsec_pb": 1.064
+    },
+    {
+      "mStop": 475,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0513,
+      "uncertainty_percent": 5.13,
+      "uncertainty_relative": 0.0513,
+      "uncertainty_up_relative": 0.0513,
+      "xsec_pb": 1.002
+    },
+    {
+      "mStop": 480,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.051500000000000004,
+      "uncertainty_percent": 5.15,
+      "uncertainty_relative": 0.051500000000000004,
+      "uncertainty_up_relative": 0.051500000000000004,
+      "xsec_pb": 0.9442
+    },
+    {
+      "mStop": 485,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0518,
+      "uncertainty_percent": 5.18,
+      "uncertainty_relative": 0.0518,
+      "uncertainty_up_relative": 0.0518,
+      "xsec_pb": 0.8902
+    },
+    {
+      "mStop": 490,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.052000000000000005,
+      "uncertainty_percent": 5.2,
+      "uncertainty_relative": 0.052000000000000005,
+      "uncertainty_up_relative": 0.052000000000000005,
+      "xsec_pb": 0.8396
+    },
+    {
+      "mStop": 495,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.052300000000000006,
+      "uncertainty_percent": 5.23,
+      "uncertainty_relative": 0.052300000000000006,
+      "uncertainty_up_relative": 0.052300000000000006,
+      "xsec_pb": 0.7922
+    },
+    {
+      "mStop": 500,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0525,
+      "uncertainty_percent": 5.25,
+      "uncertainty_relative": 0.0525,
+      "uncertainty_up_relative": 0.0525,
+      "xsec_pb": 0.7479
+    },
+    {
+      "mStop": 505,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0528,
+      "uncertainty_percent": 5.28,
+      "uncertainty_relative": 0.0528,
+      "uncertainty_up_relative": 0.0528,
+      "xsec_pb": 0.7063
+    },
+    {
+      "mStop": 510,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.053099999999999994,
+      "uncertainty_percent": 5.31,
+      "uncertainty_relative": 0.053099999999999994,
+      "uncertainty_up_relative": 0.053099999999999994,
+      "xsec_pb": 0.6672
+    },
+    {
+      "mStop": 515,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0533,
+      "uncertainty_percent": 5.33,
+      "uncertainty_relative": 0.0533,
+      "uncertainty_up_relative": 0.0533,
+      "xsec_pb": 0.6306
+    },
+    {
+      "mStop": 520,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0536,
+      "uncertainty_percent": 5.36,
+      "uncertainty_relative": 0.0536,
+      "uncertainty_up_relative": 0.0536,
+      "xsec_pb": 0.5963
+    },
+    {
+      "mStop": 525,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0538,
+      "uncertainty_percent": 5.38,
+      "uncertainty_relative": 0.0538,
+      "uncertainty_up_relative": 0.0538,
+      "xsec_pb": 0.564
+    },
+    {
+      "mStop": 530,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0541,
+      "uncertainty_percent": 5.41,
+      "uncertainty_relative": 0.0541,
+      "uncertainty_up_relative": 0.0541,
+      "xsec_pb": 0.5337
+    },
+    {
+      "mStop": 535,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.054400000000000004,
+      "uncertainty_percent": 5.44,
+      "uncertainty_relative": 0.054400000000000004,
+      "uncertainty_up_relative": 0.054400000000000004,
+      "xsec_pb": 0.5052
+    },
+    {
+      "mStop": 540,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0546,
+      "uncertainty_percent": 5.46,
+      "uncertainty_relative": 0.0546,
+      "uncertainty_up_relative": 0.0546,
+      "xsec_pb": 0.4785
+    },
+    {
+      "mStop": 545,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.054900000000000004,
+      "uncertainty_percent": 5.49,
+      "uncertainty_relative": 0.054900000000000004,
+      "uncertainty_up_relative": 0.054900000000000004,
+      "xsec_pb": 0.4533
+    },
+    {
+      "mStop": 550,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0552,
+      "uncertainty_percent": 5.52,
+      "uncertainty_relative": 0.0552,
+      "uncertainty_up_relative": 0.0552,
+      "xsec_pb": 0.4296
+    },
+    {
+      "mStop": 555,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0554,
+      "uncertainty_percent": 5.54,
+      "uncertainty_relative": 0.0554,
+      "uncertainty_up_relative": 0.0554,
+      "xsec_pb": 0.4073
+    },
+    {
+      "mStop": 560,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0557,
+      "uncertainty_percent": 5.57,
+      "uncertainty_relative": 0.0557,
+      "uncertainty_up_relative": 0.0557,
+      "xsec_pb": 0.3863
+    },
+    {
+      "mStop": 565,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.055999999999999994,
+      "uncertainty_percent": 5.6,
+      "uncertainty_relative": 0.055999999999999994,
+      "uncertainty_up_relative": 0.055999999999999994,
+      "xsec_pb": 0.3665
+    },
+    {
+      "mStop": 570,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.056299999999999996,
+      "uncertainty_percent": 5.63,
+      "uncertainty_relative": 0.056299999999999996,
+      "uncertainty_up_relative": 0.056299999999999996,
+      "xsec_pb": 0.3478
+    },
+    {
+      "mStop": 575,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0565,
+      "uncertainty_percent": 5.65,
+      "uncertainty_relative": 0.0565,
+      "uncertainty_up_relative": 0.0565,
+      "xsec_pb": 0.3302
+    },
+    {
+      "mStop": 580,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.056799999999999996,
+      "uncertainty_percent": 5.68,
+      "uncertainty_relative": 0.056799999999999996,
+      "uncertainty_up_relative": 0.056799999999999996,
+      "xsec_pb": 0.3136
+    },
+    {
+      "mStop": 585,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0571,
+      "uncertainty_percent": 5.71,
+      "uncertainty_relative": 0.0571,
+      "uncertainty_up_relative": 0.0571,
+      "xsec_pb": 0.298
+    },
+    {
+      "mStop": 590,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0574,
+      "uncertainty_percent": 5.74,
+      "uncertainty_relative": 0.0574,
+      "uncertainty_up_relative": 0.0574,
+      "xsec_pb": 0.2832
+    },
+    {
+      "mStop": 595,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.057699999999999994,
+      "uncertainty_percent": 5.77,
+      "uncertainty_relative": 0.057699999999999994,
+      "uncertainty_up_relative": 0.057699999999999994,
+      "xsec_pb": 0.2692
+    },
+    {
+      "mStop": 600,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0579,
+      "uncertainty_percent": 5.79,
+      "uncertainty_relative": 0.0579,
+      "uncertainty_up_relative": 0.0579,
+      "xsec_pb": 0.256
+    },
+    {
+      "mStop": 605,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0582,
+      "uncertainty_percent": 5.82,
+      "uncertainty_relative": 0.0582,
+      "uncertainty_up_relative": 0.0582,
+      "xsec_pb": 0.2435
+    },
+    {
+      "mStop": 610,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.058499999999999996,
+      "uncertainty_percent": 5.85,
+      "uncertainty_relative": 0.058499999999999996,
+      "uncertainty_up_relative": 0.058499999999999996,
+      "xsec_pb": 0.2316
+    },
+    {
+      "mStop": 615,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0588,
+      "uncertainty_percent": 5.88,
+      "uncertainty_relative": 0.0588,
+      "uncertainty_up_relative": 0.0588,
+      "xsec_pb": 0.2205
+    },
+    {
+      "mStop": 620,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0591,
+      "uncertainty_percent": 5.91,
+      "uncertainty_relative": 0.0591,
+      "uncertainty_up_relative": 0.0591,
+      "xsec_pb": 0.2099
+    },
+    {
+      "mStop": 625,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0594,
+      "uncertainty_percent": 5.94,
+      "uncertainty_relative": 0.0594,
+      "uncertainty_up_relative": 0.0594,
+      "xsec_pb": 0.1998
+    },
+    {
+      "mStop": 630,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.059699999999999996,
+      "uncertainty_percent": 5.97,
+      "uncertainty_relative": 0.059699999999999996,
+      "uncertainty_up_relative": 0.059699999999999996,
+      "xsec_pb": 0.1904
+    },
+    {
+      "mStop": 635,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.06,
+      "uncertainty_percent": 6.0,
+      "uncertainty_relative": 0.06,
+      "uncertainty_up_relative": 0.06,
+      "xsec_pb": 0.1814
+    },
+    {
+      "mStop": 640,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0603,
+      "uncertainty_percent": 6.03,
+      "uncertainty_relative": 0.0603,
+      "uncertainty_up_relative": 0.0603,
+      "xsec_pb": 0.1729
+    },
+    {
+      "mStop": 645,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.060599999999999994,
+      "uncertainty_percent": 6.06,
+      "uncertainty_relative": 0.060599999999999994,
+      "uncertainty_up_relative": 0.060599999999999994,
+      "xsec_pb": 0.1648
+    },
+    {
+      "mStop": 650,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.061,
+      "uncertainty_percent": 6.1,
+      "uncertainty_relative": 0.061,
+      "uncertainty_up_relative": 0.061,
+      "xsec_pb": 0.1571
+    },
+    {
+      "mStop": 655,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0613,
+      "uncertainty_percent": 6.13,
+      "uncertainty_relative": 0.0613,
+      "uncertainty_up_relative": 0.0613,
+      "xsec_pb": 0.1499
+    },
+    {
+      "mStop": 660,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0616,
+      "uncertainty_percent": 6.16,
+      "uncertainty_relative": 0.0616,
+      "uncertainty_up_relative": 0.0616,
+      "xsec_pb": 0.143
+    },
+    {
+      "mStop": 665,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.061900000000000004,
+      "uncertainty_percent": 6.19,
+      "uncertainty_relative": 0.061900000000000004,
+      "uncertainty_up_relative": 0.061900000000000004,
+      "xsec_pb": 0.1365
+    },
+    {
+      "mStop": 670,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0622,
+      "uncertainty_percent": 6.22,
+      "uncertainty_relative": 0.0622,
+      "uncertainty_up_relative": 0.0622,
+      "xsec_pb": 0.1303
+    },
+    {
+      "mStop": 675,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0625,
+      "uncertainty_percent": 6.25,
+      "uncertainty_relative": 0.0625,
+      "uncertainty_up_relative": 0.0625,
+      "xsec_pb": 0.1244
+    },
+    {
+      "mStop": 680,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.06280000000000001,
+      "uncertainty_percent": 6.28,
+      "uncertainty_relative": 0.06280000000000001,
+      "uncertainty_up_relative": 0.06280000000000001,
+      "xsec_pb": 0.1188
+    },
+    {
+      "mStop": 685,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.06309999999999999,
+      "uncertainty_percent": 6.31,
+      "uncertainty_relative": 0.06309999999999999,
+      "uncertainty_up_relative": 0.06309999999999999,
+      "xsec_pb": 0.1135
+    },
+    {
+      "mStop": 690,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0634,
+      "uncertainty_percent": 6.34,
+      "uncertainty_relative": 0.0634,
+      "uncertainty_up_relative": 0.0634,
+      "xsec_pb": 0.1084
+    },
+    {
+      "mStop": 695,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0637,
+      "uncertainty_percent": 6.37,
+      "uncertainty_relative": 0.0637,
+      "uncertainty_up_relative": 0.0637,
+      "xsec_pb": 0.1036
+    },
+    {
+      "mStop": 700,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.064,
+      "uncertainty_percent": 6.4,
+      "uncertainty_relative": 0.064,
+      "uncertainty_up_relative": 0.064,
+      "xsec_pb": 0.09905
+    },
+    {
+      "mStop": 705,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0643,
+      "uncertainty_percent": 6.43,
+      "uncertainty_relative": 0.0643,
+      "uncertainty_up_relative": 0.0643,
+      "xsec_pb": 0.0947
+    },
+    {
+      "mStop": 710,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0646,
+      "uncertainty_percent": 6.46,
+      "uncertainty_relative": 0.0646,
+      "uncertainty_up_relative": 0.0646,
+      "xsec_pb": 0.09056
+    },
+    {
+      "mStop": 715,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0649,
+      "uncertainty_percent": 6.49,
+      "uncertainty_relative": 0.0649,
+      "uncertainty_up_relative": 0.0649,
+      "xsec_pb": 0.08661
+    },
+    {
+      "mStop": 720,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.06509999999999999,
+      "uncertainty_percent": 6.51,
+      "uncertainty_relative": 0.06509999999999999,
+      "uncertainty_up_relative": 0.06509999999999999,
+      "xsec_pb": 0.08286
+    },
+    {
+      "mStop": 725,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0654,
+      "uncertainty_percent": 6.54,
+      "uncertainty_relative": 0.0654,
+      "uncertainty_up_relative": 0.0654,
+      "xsec_pb": 0.07929
+    },
+    {
+      "mStop": 730,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.06570000000000001,
+      "uncertainty_percent": 6.57,
+      "uncertainty_relative": 0.06570000000000001,
+      "uncertainty_up_relative": 0.06570000000000001,
+      "xsec_pb": 0.07589
+    },
+    {
+      "mStop": 735,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.066,
+      "uncertainty_percent": 6.6,
+      "uncertainty_relative": 0.066,
+      "uncertainty_up_relative": 0.066,
+      "xsec_pb": 0.07265
+    },
+    {
+      "mStop": 740,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0662,
+      "uncertainty_percent": 6.62,
+      "uncertainty_relative": 0.0662,
+      "uncertainty_up_relative": 0.0662,
+      "xsec_pb": 0.06956
+    },
+    {
+      "mStop": 745,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0665,
+      "uncertainty_percent": 6.65,
+      "uncertainty_relative": 0.0665,
+      "uncertainty_up_relative": 0.0665,
+      "xsec_pb": 0.06661
+    },
+    {
+      "mStop": 750,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0668,
+      "uncertainty_percent": 6.68,
+      "uncertainty_relative": 0.0668,
+      "uncertainty_up_relative": 0.0668,
+      "xsec_pb": 0.06381
+    },
+    {
+      "mStop": 755,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.06709999999999999,
+      "uncertainty_percent": 6.71,
+      "uncertainty_relative": 0.06709999999999999,
+      "uncertainty_up_relative": 0.06709999999999999,
+      "xsec_pb": 0.06113
+    },
+    {
+      "mStop": 760,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0674,
+      "uncertainty_percent": 6.74,
+      "uncertainty_relative": 0.0674,
+      "uncertainty_up_relative": 0.0674,
+      "xsec_pb": 0.05858
+    },
+    {
+      "mStop": 765,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0677,
+      "uncertainty_percent": 6.77,
+      "uncertainty_relative": 0.0677,
+      "uncertainty_up_relative": 0.0677,
+      "xsec_pb": 0.05615
+    },
+    {
+      "mStop": 770,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.068,
+      "uncertainty_percent": 6.8,
+      "uncertainty_relative": 0.068,
+      "uncertainty_up_relative": 0.068,
+      "xsec_pb": 0.05382
+    },
+    {
+      "mStop": 775,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0683,
+      "uncertainty_percent": 6.83,
+      "uncertainty_relative": 0.0683,
+      "uncertainty_up_relative": 0.0683,
+      "xsec_pb": 0.05161
+    },
+    {
+      "mStop": 780,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.06860000000000001,
+      "uncertainty_percent": 6.86,
+      "uncertainty_relative": 0.06860000000000001,
+      "uncertainty_up_relative": 0.06860000000000001,
+      "xsec_pb": 0.04949
+    },
+    {
+      "mStop": 785,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0689,
+      "uncertainty_percent": 6.89,
+      "uncertainty_relative": 0.0689,
+      "uncertainty_up_relative": 0.0689,
+      "xsec_pb": 0.04747
+    },
+    {
+      "mStop": 790,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0692,
+      "uncertainty_percent": 6.92,
+      "uncertainty_relative": 0.0692,
+      "uncertainty_up_relative": 0.0692,
+      "xsec_pb": 0.04554
+    },
+    {
+      "mStop": 795,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0695,
+      "uncertainty_percent": 6.95,
+      "uncertainty_relative": 0.0695,
+      "uncertainty_up_relative": 0.0695,
+      "xsec_pb": 0.0437
+    },
+    {
+      "mStop": 800,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0698,
+      "uncertainty_percent": 6.98,
+      "uncertainty_relative": 0.0698,
+      "uncertainty_up_relative": 0.0698,
+      "xsec_pb": 0.04193
+    },
+    {
+      "mStop": 805,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0702,
+      "uncertainty_percent": 7.02,
+      "uncertainty_relative": 0.0702,
+      "uncertainty_up_relative": 0.0702,
+      "xsec_pb": 0.04025
+    },
+    {
+      "mStop": 810,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0705,
+      "uncertainty_percent": 7.05,
+      "uncertainty_relative": 0.0705,
+      "uncertainty_up_relative": 0.0705,
+      "xsec_pb": 0.03864
+    },
+    {
+      "mStop": 815,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0709,
+      "uncertainty_percent": 7.09,
+      "uncertainty_relative": 0.0709,
+      "uncertainty_up_relative": 0.0709,
+      "xsec_pb": 0.0371
+    },
+    {
+      "mStop": 820,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0713,
+      "uncertainty_percent": 7.13,
+      "uncertainty_relative": 0.0713,
+      "uncertainty_up_relative": 0.0713,
+      "xsec_pb": 0.03562
+    },
+    {
+      "mStop": 825,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0717,
+      "uncertainty_percent": 7.17,
+      "uncertainty_relative": 0.0717,
+      "uncertainty_up_relative": 0.0717,
+      "xsec_pb": 0.03421
+    },
+    {
+      "mStop": 830,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0721,
+      "uncertainty_percent": 7.21,
+      "uncertainty_relative": 0.0721,
+      "uncertainty_up_relative": 0.0721,
+      "xsec_pb": 0.03287
+    },
+    {
+      "mStop": 835,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0725,
+      "uncertainty_percent": 7.25,
+      "uncertainty_relative": 0.0725,
+      "uncertainty_up_relative": 0.0725,
+      "xsec_pb": 0.03158
+    },
+    {
+      "mStop": 840,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0729,
+      "uncertainty_percent": 7.29,
+      "uncertainty_relative": 0.0729,
+      "uncertainty_up_relative": 0.0729,
+      "xsec_pb": 0.03034
+    },
+    {
+      "mStop": 845,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0733,
+      "uncertainty_percent": 7.33,
+      "uncertainty_relative": 0.0733,
+      "uncertainty_up_relative": 0.0733,
+      "xsec_pb": 0.02916
+    },
+    {
+      "mStop": 850,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0737,
+      "uncertainty_percent": 7.37,
+      "uncertainty_relative": 0.0737,
+      "uncertainty_up_relative": 0.0737,
+      "xsec_pb": 0.02803
+    },
+    {
+      "mStop": 855,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0741,
+      "uncertainty_percent": 7.41,
+      "uncertainty_relative": 0.0741,
+      "uncertainty_up_relative": 0.0741,
+      "xsec_pb": 0.02695
+    },
+    {
+      "mStop": 860,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0745,
+      "uncertainty_percent": 7.45,
+      "uncertainty_relative": 0.0745,
+      "uncertainty_up_relative": 0.0745,
+      "xsec_pb": 0.02591
+    },
+    {
+      "mStop": 865,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.07490000000000001,
+      "uncertainty_percent": 7.49,
+      "uncertainty_relative": 0.07490000000000001,
+      "uncertainty_up_relative": 0.07490000000000001,
+      "xsec_pb": 0.02492
+    },
+    {
+      "mStop": 870,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0753,
+      "uncertainty_percent": 7.53,
+      "uncertainty_relative": 0.0753,
+      "uncertainty_up_relative": 0.0753,
+      "xsec_pb": 0.02397
+    },
+    {
+      "mStop": 875,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0757,
+      "uncertainty_percent": 7.57,
+      "uncertainty_relative": 0.0757,
+      "uncertainty_up_relative": 0.0757,
+      "xsec_pb": 0.02306
+    },
+    {
+      "mStop": 880,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0761,
+      "uncertainty_percent": 7.61,
+      "uncertainty_relative": 0.0761,
+      "uncertainty_up_relative": 0.0761,
+      "xsec_pb": 0.02218
+    },
+    {
+      "mStop": 885,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0765,
+      "uncertainty_percent": 7.65,
+      "uncertainty_relative": 0.0765,
+      "uncertainty_up_relative": 0.0765,
+      "xsec_pb": 0.02134
+    },
+    {
+      "mStop": 890,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.07690000000000001,
+      "uncertainty_percent": 7.69,
+      "uncertainty_relative": 0.07690000000000001,
+      "uncertainty_up_relative": 0.07690000000000001,
+      "xsec_pb": 0.02054
+    },
+    {
+      "mStop": 895,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0774,
+      "uncertainty_percent": 7.74,
+      "uncertainty_relative": 0.0774,
+      "uncertainty_up_relative": 0.0774,
+      "xsec_pb": 0.01977
+    },
+    {
+      "mStop": 900,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.07780000000000001,
+      "uncertainty_percent": 7.78,
+      "uncertainty_relative": 0.07780000000000001,
+      "uncertainty_up_relative": 0.07780000000000001,
+      "xsec_pb": 0.01903
+    },
+    {
+      "mStop": 905,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0781,
+      "uncertainty_percent": 7.81,
+      "uncertainty_relative": 0.0781,
+      "uncertainty_up_relative": 0.0781,
+      "xsec_pb": 0.01832
+    },
+    {
+      "mStop": 910,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0785,
+      "uncertainty_percent": 7.85,
+      "uncertainty_relative": 0.0785,
+      "uncertainty_up_relative": 0.0785,
+      "xsec_pb": 0.01764
+    },
+    {
+      "mStop": 915,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0789,
+      "uncertainty_percent": 7.89,
+      "uncertainty_relative": 0.0789,
+      "uncertainty_up_relative": 0.0789,
+      "xsec_pb": 0.01699
+    },
+    {
+      "mStop": 920,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0793,
+      "uncertainty_percent": 7.93,
+      "uncertainty_relative": 0.0793,
+      "uncertainty_up_relative": 0.0793,
+      "xsec_pb": 0.01636
+    },
+    {
+      "mStop": 925,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0797,
+      "uncertainty_percent": 7.97,
+      "uncertainty_relative": 0.0797,
+      "uncertainty_up_relative": 0.0797,
+      "xsec_pb": 0.01576
+    },
+    {
+      "mStop": 930,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0801,
+      "uncertainty_percent": 8.01,
+      "uncertainty_relative": 0.0801,
+      "uncertainty_up_relative": 0.0801,
+      "xsec_pb": 0.01518
+    },
+    {
+      "mStop": 935,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.08039999999999999,
+      "uncertainty_percent": 8.04,
+      "uncertainty_relative": 0.08039999999999999,
+      "uncertainty_up_relative": 0.08039999999999999,
+      "xsec_pb": 0.01463
+    },
+    {
+      "mStop": 940,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0808,
+      "uncertainty_percent": 8.08,
+      "uncertainty_relative": 0.0808,
+      "uncertainty_up_relative": 0.0808,
+      "xsec_pb": 0.0141
+    },
+    {
+      "mStop": 945,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0812,
+      "uncertainty_percent": 8.12,
+      "uncertainty_relative": 0.0812,
+      "uncertainty_up_relative": 0.0812,
+      "xsec_pb": 0.01359
+    },
+    {
+      "mStop": 950,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0816,
+      "uncertainty_percent": 8.16,
+      "uncertainty_relative": 0.0816,
+      "uncertainty_up_relative": 0.0816,
+      "xsec_pb": 0.0131
+    },
+    {
+      "mStop": 955,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.08199999999999999,
+      "uncertainty_percent": 8.2,
+      "uncertainty_relative": 0.08199999999999999,
+      "uncertainty_up_relative": 0.08199999999999999,
+      "xsec_pb": 0.01262
+    },
+    {
+      "mStop": 960,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0824,
+      "uncertainty_percent": 8.24,
+      "uncertainty_relative": 0.0824,
+      "uncertainty_up_relative": 0.0824,
+      "xsec_pb": 0.01217
+    },
+    {
+      "mStop": 965,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0828,
+      "uncertainty_percent": 8.28,
+      "uncertainty_relative": 0.0828,
+      "uncertainty_up_relative": 0.0828,
+      "xsec_pb": 0.01174
+    },
+    {
+      "mStop": 970,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0832,
+      "uncertainty_percent": 8.32,
+      "uncertainty_relative": 0.0832,
+      "uncertainty_up_relative": 0.0832,
+      "xsec_pb": 0.01132
+    },
+    {
+      "mStop": 975,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0836,
+      "uncertainty_percent": 8.36,
+      "uncertainty_relative": 0.0836,
+      "uncertainty_up_relative": 0.0836,
+      "xsec_pb": 0.01091
+    },
+    {
+      "mStop": 980,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.084,
+      "uncertainty_percent": 8.4,
+      "uncertainty_relative": 0.084,
+      "uncertainty_up_relative": 0.084,
+      "xsec_pb": 0.01053
+    },
+    {
+      "mStop": 985,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.08439999999999999,
+      "uncertainty_percent": 8.44,
+      "uncertainty_relative": 0.08439999999999999,
+      "uncertainty_up_relative": 0.08439999999999999,
+      "xsec_pb": 0.01016
+    },
+    {
+      "mStop": 990,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0848,
+      "uncertainty_percent": 8.48,
+      "uncertainty_relative": 0.0848,
+      "uncertainty_up_relative": 0.0848,
+      "xsec_pb": 0.009798
+    },
+    {
+      "mStop": 995,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0852,
+      "uncertainty_percent": 8.52,
+      "uncertainty_relative": 0.0852,
+      "uncertainty_up_relative": 0.0852,
+      "xsec_pb": 0.009454
+    },
+    {
+      "mStop": 1000,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0857,
+      "uncertainty_percent": 8.57,
+      "uncertainty_relative": 0.0857,
+      "uncertainty_up_relative": 0.0857,
+      "xsec_pb": 0.009123
+    },
+    {
+      "mStop": 1005,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0861,
+      "uncertainty_percent": 8.61,
+      "uncertainty_relative": 0.0861,
+      "uncertainty_up_relative": 0.0861,
+      "xsec_pb": 0.008805
+    },
+    {
+      "mStop": 1010,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.08650000000000001,
+      "uncertainty_percent": 8.65,
+      "uncertainty_relative": 0.08650000000000001,
+      "uncertainty_up_relative": 0.08650000000000001,
+      "xsec_pb": 0.008498
+    },
+    {
+      "mStop": 1015,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.087,
+      "uncertainty_percent": 8.7,
+      "uncertainty_relative": 0.087,
+      "uncertainty_up_relative": 0.087,
+      "xsec_pb": 0.008203
+    },
+    {
+      "mStop": 1020,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0874,
+      "uncertainty_percent": 8.74,
+      "uncertainty_relative": 0.0874,
+      "uncertainty_up_relative": 0.0874,
+      "xsec_pb": 0.00792
+    },
+    {
+      "mStop": 1025,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.08789999999999999,
+      "uncertainty_percent": 8.79,
+      "uncertainty_relative": 0.08789999999999999,
+      "uncertainty_up_relative": 0.08789999999999999,
+      "xsec_pb": 0.007647
+    },
+    {
+      "mStop": 1030,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.08839999999999999,
+      "uncertainty_percent": 8.84,
+      "uncertainty_relative": 0.08839999999999999,
+      "uncertainty_up_relative": 0.08839999999999999,
+      "xsec_pb": 0.007384
+    },
+    {
+      "mStop": 1035,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0888,
+      "uncertainty_percent": 8.88,
+      "uncertainty_relative": 0.0888,
+      "uncertainty_up_relative": 0.0888,
+      "xsec_pb": 0.007131
+    },
+    {
+      "mStop": 1040,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.08929999999999999,
+      "uncertainty_percent": 8.93,
+      "uncertainty_relative": 0.08929999999999999,
+      "uncertainty_up_relative": 0.08929999999999999,
+      "xsec_pb": 0.006887
+    },
+    {
+      "mStop": 1045,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0898,
+      "uncertainty_percent": 8.98,
+      "uncertainty_relative": 0.0898,
+      "uncertainty_up_relative": 0.0898,
+      "xsec_pb": 0.006652
+    },
+    {
+      "mStop": 1050,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0902,
+      "uncertainty_percent": 9.02,
+      "uncertainty_relative": 0.0902,
+      "uncertainty_up_relative": 0.0902,
+      "xsec_pb": 0.006426
+    },
+    {
+      "mStop": 1055,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0907,
+      "uncertainty_percent": 9.07,
+      "uncertainty_relative": 0.0907,
+      "uncertainty_up_relative": 0.0907,
+      "xsec_pb": 0.006209
+    },
+    {
+      "mStop": 1060,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.09119999999999999,
+      "uncertainty_percent": 9.12,
+      "uncertainty_relative": 0.09119999999999999,
+      "uncertainty_up_relative": 0.09119999999999999,
+      "xsec_pb": 0.005999
+    },
+    {
+      "mStop": 1065,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0917,
+      "uncertainty_percent": 9.17,
+      "uncertainty_relative": 0.0917,
+      "uncertainty_up_relative": 0.0917,
+      "xsec_pb": 0.005797
+    },
+    {
+      "mStop": 1070,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0922,
+      "uncertainty_percent": 9.22,
+      "uncertainty_relative": 0.0922,
+      "uncertainty_up_relative": 0.0922,
+      "xsec_pb": 0.005602
+    },
+    {
+      "mStop": 1075,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.09269999999999999,
+      "uncertainty_percent": 9.27,
+      "uncertainty_relative": 0.09269999999999999,
+      "uncertainty_up_relative": 0.09269999999999999,
+      "xsec_pb": 0.005414
+    },
+    {
+      "mStop": 1080,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0932,
+      "uncertainty_percent": 9.32,
+      "uncertainty_relative": 0.0932,
+      "uncertainty_up_relative": 0.0932,
+      "xsec_pb": 0.005233
+    },
+    {
+      "mStop": 1085,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.09380000000000001,
+      "uncertainty_percent": 9.38,
+      "uncertainty_relative": 0.09380000000000001,
+      "uncertainty_up_relative": 0.09380000000000001,
+      "xsec_pb": 0.005059
+    },
+    {
+      "mStop": 1090,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0943,
+      "uncertainty_percent": 9.43,
+      "uncertainty_relative": 0.0943,
+      "uncertainty_up_relative": 0.0943,
+      "xsec_pb": 0.004891
+    },
+    {
+      "mStop": 1095,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.09480000000000001,
+      "uncertainty_percent": 9.48,
+      "uncertainty_relative": 0.09480000000000001,
+      "uncertainty_up_relative": 0.09480000000000001,
+      "xsec_pb": 0.004729
+    },
+    {
+      "mStop": 1100,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0953,
+      "uncertainty_percent": 9.53,
+      "uncertainty_relative": 0.0953,
+      "uncertainty_up_relative": 0.0953,
+      "xsec_pb": 0.004572
+    },
+    {
+      "mStop": 1105,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0959,
+      "uncertainty_percent": 9.59,
+      "uncertainty_relative": 0.0959,
+      "uncertainty_up_relative": 0.0959,
+      "xsec_pb": 0.004421
+    },
+    {
+      "mStop": 1110,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0965,
+      "uncertainty_percent": 9.65,
+      "uncertainty_relative": 0.0965,
+      "uncertainty_up_relative": 0.0965,
+      "xsec_pb": 0.004276
+    },
+    {
+      "mStop": 1115,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0971,
+      "uncertainty_percent": 9.71,
+      "uncertainty_relative": 0.0971,
+      "uncertainty_up_relative": 0.0971,
+      "xsec_pb": 0.004135
+    },
+    {
+      "mStop": 1120,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0977,
+      "uncertainty_percent": 9.77,
+      "uncertainty_relative": 0.0977,
+      "uncertainty_up_relative": 0.0977,
+      "xsec_pb": 0.004
+    },
+    {
+      "mStop": 1125,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0983,
+      "uncertainty_percent": 9.83,
+      "uncertainty_relative": 0.0983,
+      "uncertainty_up_relative": 0.0983,
+      "xsec_pb": 0.003869
+    },
+    {
+      "mStop": 1130,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.0989,
+      "uncertainty_percent": 9.89,
+      "uncertainty_relative": 0.0989,
+      "uncertainty_up_relative": 0.0989,
+      "xsec_pb": 0.003743
+    },
+    {
+      "mStop": 1135,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.09949999999999999,
+      "uncertainty_percent": 9.95,
+      "uncertainty_relative": 0.09949999999999999,
+      "uncertainty_up_relative": 0.09949999999999999,
+      "xsec_pb": 0.003621
+    },
+    {
+      "mStop": 1140,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1001,
+      "uncertainty_percent": 10.01,
+      "uncertainty_relative": 0.1001,
+      "uncertainty_up_relative": 0.1001,
+      "xsec_pb": 0.003503
+    },
+    {
+      "mStop": 1145,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1007,
+      "uncertainty_percent": 10.07,
+      "uncertainty_relative": 0.1007,
+      "uncertainty_up_relative": 0.1007,
+      "xsec_pb": 0.00339
+    },
+    {
+      "mStop": 1150,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1013,
+      "uncertainty_percent": 10.13,
+      "uncertainty_relative": 0.1013,
+      "uncertainty_up_relative": 0.1013,
+      "xsec_pb": 0.003281
+    },
+    {
+      "mStop": 1155,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.10189999999999999,
+      "uncertainty_percent": 10.19,
+      "uncertainty_relative": 0.10189999999999999,
+      "uncertainty_up_relative": 0.10189999999999999,
+      "xsec_pb": 0.003175
+    },
+    {
+      "mStop": 1160,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1025,
+      "uncertainty_percent": 10.25,
+      "uncertainty_relative": 0.1025,
+      "uncertainty_up_relative": 0.1025,
+      "xsec_pb": 0.003073
+    },
+    {
+      "mStop": 1165,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1032,
+      "uncertainty_percent": 10.32,
+      "uncertainty_relative": 0.1032,
+      "uncertainty_up_relative": 0.1032,
+      "xsec_pb": 0.002975
+    },
+    {
+      "mStop": 1170,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1038,
+      "uncertainty_percent": 10.38,
+      "uncertainty_relative": 0.1038,
+      "uncertainty_up_relative": 0.1038,
+      "xsec_pb": 0.002879
+    },
+    {
+      "mStop": 1175,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.10439999999999999,
+      "uncertainty_percent": 10.44,
+      "uncertainty_relative": 0.10439999999999999,
+      "uncertainty_up_relative": 0.10439999999999999,
+      "xsec_pb": 0.002788
+    },
+    {
+      "mStop": 1180,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.105,
+      "uncertainty_percent": 10.5,
+      "uncertainty_relative": 0.105,
+      "uncertainty_up_relative": 0.105,
+      "xsec_pb": 0.002699
+    },
+    {
+      "mStop": 1185,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1057,
+      "uncertainty_percent": 10.57,
+      "uncertainty_relative": 0.1057,
+      "uncertainty_up_relative": 0.1057,
+      "xsec_pb": 0.002613
+    },
+    {
+      "mStop": 1190,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1063,
+      "uncertainty_percent": 10.63,
+      "uncertainty_relative": 0.1063,
+      "uncertainty_up_relative": 0.1063,
+      "xsec_pb": 0.002531
+    },
+    {
+      "mStop": 1195,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1069,
+      "uncertainty_percent": 10.69,
+      "uncertainty_relative": 0.1069,
+      "uncertainty_up_relative": 0.1069,
+      "xsec_pb": 0.002451
+    },
+    {
+      "mStop": 1200,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1076,
+      "uncertainty_percent": 10.76,
+      "uncertainty_relative": 0.1076,
+      "uncertainty_up_relative": 0.1076,
+      "xsec_pb": 0.002373
+    },
+    {
+      "mStop": 1205,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1082,
+      "uncertainty_percent": 10.82,
+      "uncertainty_relative": 0.1082,
+      "uncertainty_up_relative": 0.1082,
+      "xsec_pb": 0.002299
+    },
+    {
+      "mStop": 1210,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.10869999999999999,
+      "uncertainty_percent": 10.87,
+      "uncertainty_relative": 0.10869999999999999,
+      "uncertainty_up_relative": 0.10869999999999999,
+      "xsec_pb": 0.002227
+    },
+    {
+      "mStop": 1215,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1093,
+      "uncertainty_percent": 10.93,
+      "uncertainty_relative": 0.1093,
+      "uncertainty_up_relative": 0.1093,
+      "xsec_pb": 0.002157
+    },
+    {
+      "mStop": 1220,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1099,
+      "uncertainty_percent": 10.99,
+      "uncertainty_relative": 0.1099,
+      "uncertainty_up_relative": 0.1099,
+      "xsec_pb": 0.00209
+    },
+    {
+      "mStop": 1225,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1105,
+      "uncertainty_percent": 11.05,
+      "uncertainty_relative": 0.1105,
+      "uncertainty_up_relative": 0.1105,
+      "xsec_pb": 0.002025
+    },
+    {
+      "mStop": 1230,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.11109999999999999,
+      "uncertainty_percent": 11.11,
+      "uncertainty_relative": 0.11109999999999999,
+      "uncertainty_up_relative": 0.11109999999999999,
+      "xsec_pb": 0.001962
+    },
+    {
+      "mStop": 1235,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1117,
+      "uncertainty_percent": 11.17,
+      "uncertainty_relative": 0.1117,
+      "uncertainty_up_relative": 0.1117,
+      "xsec_pb": 0.001901
+    },
+    {
+      "mStop": 1240,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.11230000000000001,
+      "uncertainty_percent": 11.23,
+      "uncertainty_relative": 0.11230000000000001,
+      "uncertainty_up_relative": 0.11230000000000001,
+      "xsec_pb": 0.001842
+    },
+    {
+      "mStop": 1245,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.11289999999999999,
+      "uncertainty_percent": 11.29,
+      "uncertainty_relative": 0.11289999999999999,
+      "uncertainty_up_relative": 0.11289999999999999,
+      "xsec_pb": 0.001785
+    },
+    {
+      "mStop": 1250,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.11349999999999999,
+      "uncertainty_percent": 11.35,
+      "uncertainty_relative": 0.11349999999999999,
+      "uncertainty_up_relative": 0.11349999999999999,
+      "xsec_pb": 0.001731
+    },
+    {
+      "mStop": 1255,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.11410000000000001,
+      "uncertainty_percent": 11.41,
+      "uncertainty_relative": 0.11410000000000001,
+      "uncertainty_up_relative": 0.11410000000000001,
+      "xsec_pb": 0.001677
+    },
+    {
+      "mStop": 1260,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1148,
+      "uncertainty_percent": 11.48,
+      "uncertainty_relative": 0.1148,
+      "uncertainty_up_relative": 0.1148,
+      "xsec_pb": 0.001626
+    },
+    {
+      "mStop": 1265,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.11539999999999999,
+      "uncertainty_percent": 11.54,
+      "uncertainty_relative": 0.11539999999999999,
+      "uncertainty_up_relative": 0.11539999999999999,
+      "xsec_pb": 0.001576
+    },
+    {
+      "mStop": 1270,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.11599999999999999,
+      "uncertainty_percent": 11.6,
+      "uncertainty_relative": 0.11599999999999999,
+      "uncertainty_up_relative": 0.11599999999999999,
+      "xsec_pb": 0.001528
+    },
+    {
+      "mStop": 1275,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1167,
+      "uncertainty_percent": 11.67,
+      "uncertainty_relative": 0.1167,
+      "uncertainty_up_relative": 0.1167,
+      "xsec_pb": 0.001482
+    },
+    {
+      "mStop": 1280,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1173,
+      "uncertainty_percent": 11.73,
+      "uncertainty_relative": 0.1173,
+      "uncertainty_up_relative": 0.1173,
+      "xsec_pb": 0.001437
+    },
+    {
+      "mStop": 1285,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.11800000000000001,
+      "uncertainty_percent": 11.8,
+      "uncertainty_relative": 0.11800000000000001,
+      "uncertainty_up_relative": 0.11800000000000001,
+      "xsec_pb": 0.001393
+    },
+    {
+      "mStop": 1290,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1186,
+      "uncertainty_percent": 11.86,
+      "uncertainty_relative": 0.1186,
+      "uncertainty_up_relative": 0.1186,
+      "xsec_pb": 0.001351
+    },
+    {
+      "mStop": 1295,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1193,
+      "uncertainty_percent": 11.93,
+      "uncertainty_relative": 0.1193,
+      "uncertainty_up_relative": 0.1193,
+      "xsec_pb": 0.00131
+    },
+    {
+      "mStop": 1300,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.12,
+      "uncertainty_percent": 12.0,
+      "uncertainty_relative": 0.12,
+      "uncertainty_up_relative": 0.12,
+      "xsec_pb": 0.001271
+    },
+    {
+      "mStop": 1305,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1207,
+      "uncertainty_percent": 12.07,
+      "uncertainty_relative": 0.1207,
+      "uncertainty_up_relative": 0.1207,
+      "xsec_pb": 0.001232
+    },
+    {
+      "mStop": 1310,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.12140000000000001,
+      "uncertainty_percent": 12.14,
+      "uncertainty_relative": 0.12140000000000001,
+      "uncertainty_up_relative": 0.12140000000000001,
+      "xsec_pb": 0.001195
+    },
+    {
+      "mStop": 1315,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.12210000000000001,
+      "uncertainty_percent": 12.21,
+      "uncertainty_relative": 0.12210000000000001,
+      "uncertainty_up_relative": 0.12210000000000001,
+      "xsec_pb": 0.00116
+    },
+    {
+      "mStop": 1320,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1229,
+      "uncertainty_percent": 12.29,
+      "uncertainty_relative": 0.1229,
+      "uncertainty_up_relative": 0.1229,
+      "xsec_pb": 0.001125
+    },
+    {
+      "mStop": 1325,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.12359999999999999,
+      "uncertainty_percent": 12.36,
+      "uncertainty_relative": 0.12359999999999999,
+      "uncertainty_up_relative": 0.12359999999999999,
+      "xsec_pb": 0.001091
+    },
+    {
+      "mStop": 1330,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1244,
+      "uncertainty_percent": 12.44,
+      "uncertainty_relative": 0.1244,
+      "uncertainty_up_relative": 0.1244,
+      "xsec_pb": 0.001059
+    },
+    {
+      "mStop": 1335,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1252,
+      "uncertainty_percent": 12.52,
+      "uncertainty_relative": 0.1252,
+      "uncertainty_up_relative": 0.1252,
+      "xsec_pb": 0.001027
+    },
+    {
+      "mStop": 1340,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1259,
+      "uncertainty_percent": 12.59,
+      "uncertainty_relative": 0.1259,
+      "uncertainty_up_relative": 0.1259,
+      "xsec_pb": 0.0009969
+    },
+    {
+      "mStop": 1345,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1267,
+      "uncertainty_percent": 12.67,
+      "uncertainty_relative": 0.1267,
+      "uncertainty_up_relative": 0.1267,
+      "xsec_pb": 0.0009673
+    },
+    {
+      "mStop": 1350,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1275,
+      "uncertainty_percent": 12.75,
+      "uncertainty_relative": 0.1275,
+      "uncertainty_up_relative": 0.1275,
+      "xsec_pb": 0.0009387
+    },
+    {
+      "mStop": 1355,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1283,
+      "uncertainty_percent": 12.83,
+      "uncertainty_relative": 0.1283,
+      "uncertainty_up_relative": 0.1283,
+      "xsec_pb": 0.0009111
+    },
+    {
+      "mStop": 1360,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1291,
+      "uncertainty_percent": 12.91,
+      "uncertainty_relative": 0.1291,
+      "uncertainty_up_relative": 0.1291,
+      "xsec_pb": 0.0008842
+    },
+    {
+      "mStop": 1365,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.13,
+      "uncertainty_percent": 13.0,
+      "uncertainty_relative": 0.13,
+      "uncertainty_up_relative": 0.13,
+      "xsec_pb": 0.0008582
+    },
+    {
+      "mStop": 1370,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1308,
+      "uncertainty_percent": 13.08,
+      "uncertainty_relative": 0.1308,
+      "uncertainty_up_relative": 0.1308,
+      "xsec_pb": 0.0008331
+    },
+    {
+      "mStop": 1375,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1316,
+      "uncertainty_percent": 13.16,
+      "uncertainty_relative": 0.1316,
+      "uncertainty_up_relative": 0.1316,
+      "xsec_pb": 0.0008087
+    },
+    {
+      "mStop": 1380,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1325,
+      "uncertainty_percent": 13.25,
+      "uncertainty_relative": 0.1325,
+      "uncertainty_up_relative": 0.1325,
+      "xsec_pb": 0.000785
+    },
+    {
+      "mStop": 1385,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1333,
+      "uncertainty_percent": 13.33,
+      "uncertainty_relative": 0.1333,
+      "uncertainty_up_relative": 0.1333,
+      "xsec_pb": 0.0007621
+    },
+    {
+      "mStop": 1390,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.13419999999999999,
+      "uncertainty_percent": 13.42,
+      "uncertainty_relative": 0.13419999999999999,
+      "uncertainty_up_relative": 0.13419999999999999,
+      "xsec_pb": 0.0007399
+    },
+    {
+      "mStop": 1395,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.135,
+      "uncertainty_percent": 13.5,
+      "uncertainty_relative": 0.135,
+      "uncertainty_up_relative": 0.135,
+      "xsec_pb": 0.0007184
+    },
+    {
+      "mStop": 1400,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1359,
+      "uncertainty_percent": 13.59,
+      "uncertainty_relative": 0.1359,
+      "uncertainty_up_relative": 0.1359,
+      "xsec_pb": 0.0006976
+    },
+    {
+      "mStop": 1405,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1368,
+      "uncertainty_percent": 13.68,
+      "uncertainty_relative": 0.1368,
+      "uncertainty_up_relative": 0.1368,
+      "xsec_pb": 0.0006774
+    },
+    {
+      "mStop": 1410,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1377,
+      "uncertainty_percent": 13.77,
+      "uncertainty_relative": 0.1377,
+      "uncertainty_up_relative": 0.1377,
+      "xsec_pb": 0.0006578
+    },
+    {
+      "mStop": 1415,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1386,
+      "uncertainty_percent": 13.86,
+      "uncertainty_relative": 0.1386,
+      "uncertainty_up_relative": 0.1386,
+      "xsec_pb": 0.0006388
+    },
+    {
+      "mStop": 1420,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.13949999999999999,
+      "uncertainty_percent": 13.95,
+      "uncertainty_relative": 0.13949999999999999,
+      "uncertainty_up_relative": 0.13949999999999999,
+      "xsec_pb": 0.0006204
+    },
+    {
+      "mStop": 1425,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1404,
+      "uncertainty_percent": 14.04,
+      "uncertainty_relative": 0.1404,
+      "uncertainty_up_relative": 0.1404,
+      "xsec_pb": 0.0006025
+    },
+    {
+      "mStop": 1430,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1414,
+      "uncertainty_percent": 14.14,
+      "uncertainty_relative": 0.1414,
+      "uncertainty_up_relative": 0.1414,
+      "xsec_pb": 0.0005852
+    },
+    {
+      "mStop": 1435,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1423,
+      "uncertainty_percent": 14.23,
+      "uncertainty_relative": 0.1423,
+      "uncertainty_up_relative": 0.1423,
+      "xsec_pb": 0.0005684
+    },
+    {
+      "mStop": 1440,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1432,
+      "uncertainty_percent": 14.32,
+      "uncertainty_relative": 0.1432,
+      "uncertainty_up_relative": 0.1432,
+      "xsec_pb": 0.0005522
+    },
+    {
+      "mStop": 1445,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1442,
+      "uncertainty_percent": 14.42,
+      "uncertainty_relative": 0.1442,
+      "uncertainty_up_relative": 0.1442,
+      "xsec_pb": 0.0005364
+    },
+    {
+      "mStop": 1450,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1451,
+      "uncertainty_percent": 14.51,
+      "uncertainty_relative": 0.1451,
+      "uncertainty_up_relative": 0.1451,
+      "xsec_pb": 0.0005211
+    },
+    {
+      "mStop": 1455,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1461,
+      "uncertainty_percent": 14.61,
+      "uncertainty_relative": 0.1461,
+      "uncertainty_up_relative": 0.1461,
+      "xsec_pb": 0.0005063
+    },
+    {
+      "mStop": 1460,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1471,
+      "uncertainty_percent": 14.71,
+      "uncertainty_relative": 0.1471,
+      "uncertainty_up_relative": 0.1471,
+      "xsec_pb": 0.0004919
+    },
+    {
+      "mStop": 1465,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1481,
+      "uncertainty_percent": 14.81,
+      "uncertainty_relative": 0.1481,
+      "uncertainty_up_relative": 0.1481,
+      "xsec_pb": 0.0004779
+    },
+    {
+      "mStop": 1470,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.149,
+      "uncertainty_percent": 14.9,
+      "uncertainty_relative": 0.149,
+      "uncertainty_up_relative": 0.149,
+      "xsec_pb": 0.0004644
+    },
+    {
+      "mStop": 1475,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.15,
+      "uncertainty_percent": 15.0,
+      "uncertainty_relative": 0.15,
+      "uncertainty_up_relative": 0.15,
+      "xsec_pb": 0.0004512
+    },
+    {
+      "mStop": 1480,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.151,
+      "uncertainty_percent": 15.1,
+      "uncertainty_relative": 0.151,
+      "uncertainty_up_relative": 0.151,
+      "xsec_pb": 0.0004385
+    },
+    {
+      "mStop": 1485,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.152,
+      "uncertainty_percent": 15.2,
+      "uncertainty_relative": 0.152,
+      "uncertainty_up_relative": 0.152,
+      "xsec_pb": 0.0004261
+    },
+    {
+      "mStop": 1490,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1531,
+      "uncertainty_percent": 15.31,
+      "uncertainty_relative": 0.1531,
+      "uncertainty_up_relative": 0.1531,
+      "xsec_pb": 0.0004141
+    },
+    {
+      "mStop": 1495,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.15410000000000001,
+      "uncertainty_percent": 15.41,
+      "uncertainty_relative": 0.15410000000000001,
+      "uncertainty_up_relative": 0.15410000000000001,
+      "xsec_pb": 0.0004025
+    },
+    {
+      "mStop": 1500,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1551,
+      "uncertainty_percent": 15.51,
+      "uncertainty_relative": 0.1551,
+      "uncertainty_up_relative": 0.1551,
+      "xsec_pb": 0.0003912
+    },
+    {
+      "mStop": 1505,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1561,
+      "uncertainty_percent": 15.61,
+      "uncertainty_relative": 0.1561,
+      "uncertainty_up_relative": 0.1561,
+      "xsec_pb": 0.0003803
+    },
+    {
+      "mStop": 1510,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1572,
+      "uncertainty_percent": 15.72,
+      "uncertainty_relative": 0.1572,
+      "uncertainty_up_relative": 0.1572,
+      "xsec_pb": 0.0003696
+    },
+    {
+      "mStop": 1515,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1582,
+      "uncertainty_percent": 15.82,
+      "uncertainty_relative": 0.1582,
+      "uncertainty_up_relative": 0.1582,
+      "xsec_pb": 0.0003593
+    },
+    {
+      "mStop": 1520,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1592,
+      "uncertainty_percent": 15.92,
+      "uncertainty_relative": 0.1592,
+      "uncertainty_up_relative": 0.1592,
+      "xsec_pb": 0.0003493
+    },
+    {
+      "mStop": 1525,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1603,
+      "uncertainty_percent": 16.03,
+      "uncertainty_relative": 0.1603,
+      "uncertainty_up_relative": 0.1603,
+      "xsec_pb": 0.0003396
+    },
+    {
+      "mStop": 1530,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1613,
+      "uncertainty_percent": 16.13,
+      "uncertainty_relative": 0.1613,
+      "uncertainty_up_relative": 0.1613,
+      "xsec_pb": 0.0003302
+    },
+    {
+      "mStop": 1535,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1624,
+      "uncertainty_percent": 16.24,
+      "uncertainty_relative": 0.1624,
+      "uncertainty_up_relative": 0.1624,
+      "xsec_pb": 0.000321
+    },
+    {
+      "mStop": 1540,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1635,
+      "uncertainty_percent": 16.35,
+      "uncertainty_relative": 0.1635,
+      "uncertainty_up_relative": 0.1635,
+      "xsec_pb": 0.0003121
+    },
+    {
+      "mStop": 1545,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.16449999999999998,
+      "uncertainty_percent": 16.45,
+      "uncertainty_relative": 0.16449999999999998,
+      "uncertainty_up_relative": 0.16449999999999998,
+      "xsec_pb": 0.0003035
+    },
+    {
+      "mStop": 1550,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1656,
+      "uncertainty_percent": 16.56,
+      "uncertainty_relative": 0.1656,
+      "uncertainty_up_relative": 0.1656,
+      "xsec_pb": 0.0002951
+    },
+    {
+      "mStop": 1555,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.16670000000000001,
+      "uncertainty_percent": 16.67,
+      "uncertainty_relative": 0.16670000000000001,
+      "uncertainty_up_relative": 0.16670000000000001,
+      "xsec_pb": 0.000287
+    },
+    {
+      "mStop": 1560,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1678,
+      "uncertainty_percent": 16.78,
+      "uncertainty_relative": 0.1678,
+      "uncertainty_up_relative": 0.1678,
+      "xsec_pb": 0.0002791
+    },
+    {
+      "mStop": 1565,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1689,
+      "uncertainty_percent": 16.89,
+      "uncertainty_relative": 0.1689,
+      "uncertainty_up_relative": 0.1689,
+      "xsec_pb": 0.0002714
+    },
+    {
+      "mStop": 1570,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.17,
+      "uncertainty_percent": 17.0,
+      "uncertainty_relative": 0.17,
+      "uncertainty_up_relative": 0.17,
+      "xsec_pb": 0.000264
+    },
+    {
+      "mStop": 1575,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.17120000000000002,
+      "uncertainty_percent": 17.12,
+      "uncertainty_relative": 0.17120000000000002,
+      "uncertainty_up_relative": 0.17120000000000002,
+      "xsec_pb": 0.0002568
+    },
+    {
+      "mStop": 1580,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1723,
+      "uncertainty_percent": 17.23,
+      "uncertainty_relative": 0.1723,
+      "uncertainty_up_relative": 0.1723,
+      "xsec_pb": 0.0002498
+    },
+    {
+      "mStop": 1585,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.17350000000000002,
+      "uncertainty_percent": 17.35,
+      "uncertainty_relative": 0.17350000000000002,
+      "uncertainty_up_relative": 0.17350000000000002,
+      "xsec_pb": 0.0002429
+    },
+    {
+      "mStop": 1590,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1746,
+      "uncertainty_percent": 17.46,
+      "uncertainty_relative": 0.1746,
+      "uncertainty_up_relative": 0.1746,
+      "xsec_pb": 0.0002363
+    },
+    {
+      "mStop": 1595,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.17579999999999998,
+      "uncertainty_percent": 17.58,
+      "uncertainty_relative": 0.17579999999999998,
+      "uncertainty_up_relative": 0.17579999999999998,
+      "xsec_pb": 0.0002299
+    },
+    {
+      "mStop": 1600,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.177,
+      "uncertainty_percent": 17.7,
+      "uncertainty_relative": 0.177,
+      "uncertainty_up_relative": 0.177,
+      "xsec_pb": 0.0002236
+    },
+    {
+      "mStop": 1605,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1782,
+      "uncertainty_percent": 17.82,
+      "uncertainty_relative": 0.1782,
+      "uncertainty_up_relative": 0.1782,
+      "xsec_pb": 0.0002176
+    },
+    {
+      "mStop": 1610,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1794,
+      "uncertainty_percent": 17.94,
+      "uncertainty_relative": 0.1794,
+      "uncertainty_up_relative": 0.1794,
+      "xsec_pb": 0.0002117
+    },
+    {
+      "mStop": 1615,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.18059999999999998,
+      "uncertainty_percent": 18.06,
+      "uncertainty_relative": 0.18059999999999998,
+      "uncertainty_up_relative": 0.18059999999999998,
+      "xsec_pb": 0.0002059
+    },
+    {
+      "mStop": 1620,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1818,
+      "uncertainty_percent": 18.18,
+      "uncertainty_relative": 0.1818,
+      "uncertainty_up_relative": 0.1818,
+      "xsec_pb": 0.0002004
+    },
+    {
+      "mStop": 1625,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.183,
+      "uncertainty_percent": 18.3,
+      "uncertainty_relative": 0.183,
+      "uncertainty_up_relative": 0.183,
+      "xsec_pb": 0.000195
+    },
+    {
+      "mStop": 1630,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1843,
+      "uncertainty_percent": 18.43,
+      "uncertainty_relative": 0.1843,
+      "uncertainty_up_relative": 0.1843,
+      "xsec_pb": 0.0001897
+    },
+    {
+      "mStop": 1635,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1856,
+      "uncertainty_percent": 18.56,
+      "uncertainty_relative": 0.1856,
+      "uncertainty_up_relative": 0.1856,
+      "xsec_pb": 0.0001846
+    },
+    {
+      "mStop": 1640,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1868,
+      "uncertainty_percent": 18.68,
+      "uncertainty_relative": 0.1868,
+      "uncertainty_up_relative": 0.1868,
+      "xsec_pb": 0.0001796
+    },
+    {
+      "mStop": 1645,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1881,
+      "uncertainty_percent": 18.81,
+      "uncertainty_relative": 0.1881,
+      "uncertainty_up_relative": 0.1881,
+      "xsec_pb": 0.0001748
+    },
+    {
+      "mStop": 1650,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1894,
+      "uncertainty_percent": 18.94,
+      "uncertainty_relative": 0.1894,
+      "uncertainty_up_relative": 0.1894,
+      "xsec_pb": 0.0001701
+    },
+    {
+      "mStop": 1655,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1907,
+      "uncertainty_percent": 19.07,
+      "uncertainty_relative": 0.1907,
+      "uncertainty_up_relative": 0.1907,
+      "xsec_pb": 0.0001656
+    },
+    {
+      "mStop": 1660,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.192,
+      "uncertainty_percent": 19.2,
+      "uncertainty_relative": 0.192,
+      "uncertainty_up_relative": 0.192,
+      "xsec_pb": 0.0001612
+    },
+    {
+      "mStop": 1665,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.19329999999999997,
+      "uncertainty_percent": 19.33,
+      "uncertainty_relative": 0.19329999999999997,
+      "uncertainty_up_relative": 0.19329999999999997,
+      "xsec_pb": 0.0001569
+    },
+    {
+      "mStop": 1670,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1946,
+      "uncertainty_percent": 19.46,
+      "uncertainty_relative": 0.1946,
+      "uncertainty_up_relative": 0.1946,
+      "xsec_pb": 0.0001527
+    },
+    {
+      "mStop": 1675,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.196,
+      "uncertainty_percent": 19.6,
+      "uncertainty_relative": 0.196,
+      "uncertainty_up_relative": 0.196,
+      "xsec_pb": 0.0001486
+    },
+    {
+      "mStop": 1680,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.1973,
+      "uncertainty_percent": 19.73,
+      "uncertainty_relative": 0.1973,
+      "uncertainty_up_relative": 0.1973,
+      "xsec_pb": 0.0001447
+    },
+    {
+      "mStop": 1685,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.19870000000000002,
+      "uncertainty_percent": 19.87,
+      "uncertainty_relative": 0.19870000000000002,
+      "uncertainty_up_relative": 0.19870000000000002,
+      "xsec_pb": 0.0001408
+    },
+    {
+      "mStop": 1690,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.20010000000000003,
+      "uncertainty_percent": 20.01,
+      "uncertainty_relative": 0.20010000000000003,
+      "uncertainty_up_relative": 0.20010000000000003,
+      "xsec_pb": 0.0001371
+    },
+    {
+      "mStop": 1695,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.20149999999999998,
+      "uncertainty_percent": 20.15,
+      "uncertainty_relative": 0.20149999999999998,
+      "uncertainty_up_relative": 0.20149999999999998,
+      "xsec_pb": 0.0001335
+    },
+    {
+      "mStop": 1700,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2029,
+      "uncertainty_percent": 20.29,
+      "uncertainty_relative": 0.2029,
+      "uncertainty_up_relative": 0.2029,
+      "xsec_pb": 0.0001299
+    },
+    {
+      "mStop": 1705,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2043,
+      "uncertainty_percent": 20.43,
+      "uncertainty_relative": 0.2043,
+      "uncertainty_up_relative": 0.2043,
+      "xsec_pb": 0.0001265
+    },
+    {
+      "mStop": 1710,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2057,
+      "uncertainty_percent": 20.57,
+      "uncertainty_relative": 0.2057,
+      "uncertainty_up_relative": 0.2057,
+      "xsec_pb": 0.0001232
+    },
+    {
+      "mStop": 1715,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2071,
+      "uncertainty_percent": 20.71,
+      "uncertainty_relative": 0.2071,
+      "uncertainty_up_relative": 0.2071,
+      "xsec_pb": 0.0001199
+    },
+    {
+      "mStop": 1720,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.20850000000000002,
+      "uncertainty_percent": 20.85,
+      "uncertainty_relative": 0.20850000000000002,
+      "uncertainty_up_relative": 0.20850000000000002,
+      "xsec_pb": 0.0001168
+    },
+    {
+      "mStop": 1725,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.20989999999999998,
+      "uncertainty_percent": 20.99,
+      "uncertainty_relative": 0.20989999999999998,
+      "uncertainty_up_relative": 0.20989999999999998,
+      "xsec_pb": 0.0001137
+    },
+    {
+      "mStop": 1730,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2114,
+      "uncertainty_percent": 21.14,
+      "uncertainty_relative": 0.2114,
+      "uncertainty_up_relative": 0.2114,
+      "xsec_pb": 0.0001107
+    },
+    {
+      "mStop": 1735,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.21280000000000002,
+      "uncertainty_percent": 21.28,
+      "uncertainty_relative": 0.21280000000000002,
+      "uncertainty_up_relative": 0.21280000000000002,
+      "xsec_pb": 0.0001078
+    },
+    {
+      "mStop": 1740,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2143,
+      "uncertainty_percent": 21.43,
+      "uncertainty_relative": 0.2143,
+      "uncertainty_up_relative": 0.2143,
+      "xsec_pb": 0.000105
+    },
+    {
+      "mStop": 1745,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2158,
+      "uncertainty_percent": 21.58,
+      "uncertainty_relative": 0.2158,
+      "uncertainty_up_relative": 0.2158,
+      "xsec_pb": 0.0001022
+    },
+    {
+      "mStop": 1750,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2173,
+      "uncertainty_percent": 21.73,
+      "uncertainty_relative": 0.2173,
+      "uncertainty_up_relative": 0.2173,
+      "xsec_pb": 9.956e-05
+    },
+    {
+      "mStop": 1755,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2188,
+      "uncertainty_percent": 21.88,
+      "uncertainty_relative": 0.2188,
+      "uncertainty_up_relative": 0.2188,
+      "xsec_pb": 9.697e-05
+    },
+    {
+      "mStop": 1760,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.22039999999999998,
+      "uncertainty_percent": 22.04,
+      "uncertainty_relative": 0.22039999999999998,
+      "uncertainty_up_relative": 0.22039999999999998,
+      "xsec_pb": 9.444e-05
+    },
+    {
+      "mStop": 1765,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.22190000000000001,
+      "uncertainty_percent": 22.19,
+      "uncertainty_relative": 0.22190000000000001,
+      "uncertainty_up_relative": 0.22190000000000001,
+      "xsec_pb": 9.198e-05
+    },
+    {
+      "mStop": 1770,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2235,
+      "uncertainty_percent": 22.35,
+      "uncertainty_relative": 0.2235,
+      "uncertainty_up_relative": 0.2235,
+      "xsec_pb": 8.959e-05
+    },
+    {
+      "mStop": 1775,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.22510000000000002,
+      "uncertainty_percent": 22.51,
+      "uncertainty_relative": 0.22510000000000002,
+      "uncertainty_up_relative": 0.22510000000000002,
+      "xsec_pb": 8.727e-05
+    },
+    {
+      "mStop": 1780,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2266,
+      "uncertainty_percent": 22.66,
+      "uncertainty_relative": 0.2266,
+      "uncertainty_up_relative": 0.2266,
+      "xsec_pb": 8.5e-05
+    },
+    {
+      "mStop": 1785,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.22829999999999998,
+      "uncertainty_percent": 22.83,
+      "uncertainty_relative": 0.22829999999999998,
+      "uncertainty_up_relative": 0.22829999999999998,
+      "xsec_pb": 8.28e-05
+    },
+    {
+      "mStop": 1790,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2299,
+      "uncertainty_percent": 22.99,
+      "uncertainty_relative": 0.2299,
+      "uncertainty_up_relative": 0.2299,
+      "xsec_pb": 8.066e-05
+    },
+    {
+      "mStop": 1795,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.23149999999999998,
+      "uncertainty_percent": 23.15,
+      "uncertainty_relative": 0.23149999999999998,
+      "uncertainty_up_relative": 0.23149999999999998,
+      "xsec_pb": 7.857e-05
+    },
+    {
+      "mStop": 1800,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2332,
+      "uncertainty_percent": 23.32,
+      "uncertainty_relative": 0.2332,
+      "uncertainty_up_relative": 0.2332,
+      "xsec_pb": 7.654e-05
+    },
+    {
+      "mStop": 1805,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2349,
+      "uncertainty_percent": 23.49,
+      "uncertainty_relative": 0.2349,
+      "uncertainty_up_relative": 0.2349,
+      "xsec_pb": 7.457e-05
+    },
+    {
+      "mStop": 1810,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2366,
+      "uncertainty_percent": 23.66,
+      "uncertainty_relative": 0.2366,
+      "uncertainty_up_relative": 0.2366,
+      "xsec_pb": 7.265e-05
+    },
+    {
+      "mStop": 1815,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2384,
+      "uncertainty_percent": 23.84,
+      "uncertainty_relative": 0.2384,
+      "uncertainty_up_relative": 0.2384,
+      "xsec_pb": 7.078e-05
+    },
+    {
+      "mStop": 1820,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2402,
+      "uncertainty_percent": 24.02,
+      "uncertainty_relative": 0.2402,
+      "uncertainty_up_relative": 0.2402,
+      "xsec_pb": 6.896e-05
+    },
+    {
+      "mStop": 1825,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.242,
+      "uncertainty_percent": 24.2,
+      "uncertainty_relative": 0.242,
+      "uncertainty_up_relative": 0.242,
+      "xsec_pb": 6.718e-05
+    },
+    {
+      "mStop": 1830,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2438,
+      "uncertainty_percent": 24.38,
+      "uncertainty_relative": 0.2438,
+      "uncertainty_up_relative": 0.2438,
+      "xsec_pb": 6.546e-05
+    },
+    {
+      "mStop": 1835,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.24559999999999998,
+      "uncertainty_percent": 24.56,
+      "uncertainty_relative": 0.24559999999999998,
+      "uncertainty_up_relative": 0.24559999999999998,
+      "xsec_pb": 6.378e-05
+    },
+    {
+      "mStop": 1840,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.24739999999999998,
+      "uncertainty_percent": 24.74,
+      "uncertainty_relative": 0.24739999999999998,
+      "uncertainty_up_relative": 0.24739999999999998,
+      "xsec_pb": 6.215e-05
+    },
+    {
+      "mStop": 1845,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2493,
+      "uncertainty_percent": 24.93,
+      "uncertainty_relative": 0.2493,
+      "uncertainty_up_relative": 0.2493,
+      "xsec_pb": 6.056e-05
+    },
+    {
+      "mStop": 1850,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2511,
+      "uncertainty_percent": 25.11,
+      "uncertainty_relative": 0.2511,
+      "uncertainty_up_relative": 0.2511,
+      "xsec_pb": 5.901e-05
+    },
+    {
+      "mStop": 1855,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.253,
+      "uncertainty_percent": 25.3,
+      "uncertainty_relative": 0.253,
+      "uncertainty_up_relative": 0.253,
+      "xsec_pb": 5.751e-05
+    },
+    {
+      "mStop": 1860,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.25489999999999996,
+      "uncertainty_percent": 25.49,
+      "uncertainty_relative": 0.25489999999999996,
+      "uncertainty_up_relative": 0.25489999999999996,
+      "xsec_pb": 5.604e-05
+    },
+    {
+      "mStop": 1865,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2568,
+      "uncertainty_percent": 25.68,
+      "uncertainty_relative": 0.2568,
+      "uncertainty_up_relative": 0.2568,
+      "xsec_pb": 5.461e-05
+    },
+    {
+      "mStop": 1870,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2587,
+      "uncertainty_percent": 25.87,
+      "uncertainty_relative": 0.2587,
+      "uncertainty_up_relative": 0.2587,
+      "xsec_pb": 5.322e-05
+    },
+    {
+      "mStop": 1875,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2606,
+      "uncertainty_percent": 26.06,
+      "uncertainty_relative": 0.2606,
+      "uncertainty_up_relative": 0.2606,
+      "xsec_pb": 5.187e-05
+    },
+    {
+      "mStop": 1880,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2625,
+      "uncertainty_percent": 26.25,
+      "uncertainty_relative": 0.2625,
+      "uncertainty_up_relative": 0.2625,
+      "xsec_pb": 5.055e-05
+    },
+    {
+      "mStop": 1885,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2645,
+      "uncertainty_percent": 26.45,
+      "uncertainty_relative": 0.2645,
+      "uncertainty_up_relative": 0.2645,
+      "xsec_pb": 4.927e-05
+    },
+    {
+      "mStop": 1890,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2664,
+      "uncertainty_percent": 26.64,
+      "uncertainty_relative": 0.2664,
+      "uncertainty_up_relative": 0.2664,
+      "xsec_pb": 4.803e-05
+    },
+    {
+      "mStop": 1895,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.26839999999999997,
+      "uncertainty_percent": 26.84,
+      "uncertainty_relative": 0.26839999999999997,
+      "uncertainty_up_relative": 0.26839999999999997,
+      "xsec_pb": 4.681e-05
+    },
+    {
+      "mStop": 1900,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2704,
+      "uncertainty_percent": 27.04,
+      "uncertainty_relative": 0.2704,
+      "uncertainty_up_relative": 0.2704,
+      "xsec_pb": 4.563e-05
+    },
+    {
+      "mStop": 1905,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2723,
+      "uncertainty_percent": 27.23,
+      "uncertainty_relative": 0.2723,
+      "uncertainty_up_relative": 0.2723,
+      "xsec_pb": 4.448e-05
+    },
+    {
+      "mStop": 1910,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2742,
+      "uncertainty_percent": 27.42,
+      "uncertainty_relative": 0.2742,
+      "uncertainty_up_relative": 0.2742,
+      "xsec_pb": 4.336e-05
+    },
+    {
+      "mStop": 1915,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2761,
+      "uncertainty_percent": 27.61,
+      "uncertainty_relative": 0.2761,
+      "uncertainty_up_relative": 0.2761,
+      "xsec_pb": 4.227e-05
+    },
+    {
+      "mStop": 1920,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2781,
+      "uncertainty_percent": 27.81,
+      "uncertainty_relative": 0.2781,
+      "uncertainty_up_relative": 0.2781,
+      "xsec_pb": 4.12e-05
+    },
+    {
+      "mStop": 1925,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.28,
+      "uncertainty_percent": 28.0,
+      "uncertainty_relative": 0.28,
+      "uncertainty_up_relative": 0.28,
+      "xsec_pb": 4.017e-05
+    },
+    {
+      "mStop": 1930,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.282,
+      "uncertainty_percent": 28.2,
+      "uncertainty_relative": 0.282,
+      "uncertainty_up_relative": 0.282,
+      "xsec_pb": 3.916e-05
+    },
+    {
+      "mStop": 1935,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.284,
+      "uncertainty_percent": 28.4,
+      "uncertainty_relative": 0.284,
+      "uncertainty_up_relative": 0.284,
+      "xsec_pb": 3.818e-05
+    },
+    {
+      "mStop": 1940,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.28600000000000003,
+      "uncertainty_percent": 28.6,
+      "uncertainty_relative": 0.28600000000000003,
+      "uncertainty_up_relative": 0.28600000000000003,
+      "xsec_pb": 3.723e-05
+    },
+    {
+      "mStop": 1945,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.28800000000000003,
+      "uncertainty_percent": 28.8,
+      "uncertainty_relative": 0.28800000000000003,
+      "uncertainty_up_relative": 0.28800000000000003,
+      "xsec_pb": 3.629e-05
+    },
+    {
+      "mStop": 1950,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.29,
+      "uncertainty_percent": 29.0,
+      "uncertainty_relative": 0.29,
+      "uncertainty_up_relative": 0.29,
+      "xsec_pb": 3.539e-05
+    },
+    {
+      "mStop": 1955,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2921,
+      "uncertainty_percent": 29.21,
+      "uncertainty_relative": 0.2921,
+      "uncertainty_up_relative": 0.2921,
+      "xsec_pb": 3.451e-05
+    },
+    {
+      "mStop": 1960,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.29410000000000003,
+      "uncertainty_percent": 29.41,
+      "uncertainty_relative": 0.29410000000000003,
+      "uncertainty_up_relative": 0.29410000000000003,
+      "xsec_pb": 3.365e-05
+    },
+    {
+      "mStop": 1965,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2962,
+      "uncertainty_percent": 29.62,
+      "uncertainty_relative": 0.2962,
+      "uncertainty_up_relative": 0.2962,
+      "xsec_pb": 3.281e-05
+    },
+    {
+      "mStop": 1970,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.2983,
+      "uncertainty_percent": 29.83,
+      "uncertainty_relative": 0.2983,
+      "uncertainty_up_relative": 0.2983,
+      "xsec_pb": 3.199e-05
+    },
+    {
+      "mStop": 1975,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3004,
+      "uncertainty_percent": 30.04,
+      "uncertainty_relative": 0.3004,
+      "uncertainty_up_relative": 0.3004,
+      "xsec_pb": 3.12e-05
+    },
+    {
+      "mStop": 1980,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3025,
+      "uncertainty_percent": 30.25,
+      "uncertainty_relative": 0.3025,
+      "uncertainty_up_relative": 0.3025,
+      "xsec_pb": 3.042e-05
+    },
+    {
+      "mStop": 1985,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3046,
+      "uncertainty_percent": 30.46,
+      "uncertainty_relative": 0.3046,
+      "uncertainty_up_relative": 0.3046,
+      "xsec_pb": 2.967e-05
+    },
+    {
+      "mStop": 1990,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3068,
+      "uncertainty_percent": 30.68,
+      "uncertainty_relative": 0.3068,
+      "uncertainty_up_relative": 0.3068,
+      "xsec_pb": 2.893e-05
+    },
+    {
+      "mStop": 1995,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3089,
+      "uncertainty_percent": 30.89,
+      "uncertainty_relative": 0.3089,
+      "uncertainty_up_relative": 0.3089,
+      "xsec_pb": 2.822e-05
+    },
+    {
+      "mStop": 2000,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3111,
+      "uncertainty_percent": 31.11,
+      "uncertainty_relative": 0.3111,
+      "uncertainty_up_relative": 0.3111,
+      "xsec_pb": 2.752e-05
+    },
+    {
+      "mStop": 2005,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3134,
+      "uncertainty_percent": 31.34,
+      "uncertainty_relative": 0.3134,
+      "uncertainty_up_relative": 0.3134,
+      "xsec_pb": 2.684e-05
+    },
+    {
+      "mStop": 2010,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3157,
+      "uncertainty_percent": 31.57,
+      "uncertainty_relative": 0.3157,
+      "uncertainty_up_relative": 0.3157,
+      "xsec_pb": 2.618e-05
+    },
+    {
+      "mStop": 2015,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.318,
+      "uncertainty_percent": 31.8,
+      "uncertainty_relative": 0.318,
+      "uncertainty_up_relative": 0.318,
+      "xsec_pb": 2.553e-05
+    },
+    {
+      "mStop": 2020,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.32030000000000003,
+      "uncertainty_percent": 32.03,
+      "uncertainty_relative": 0.32030000000000003,
+      "uncertainty_up_relative": 0.32030000000000003,
+      "xsec_pb": 2.491e-05
+    },
+    {
+      "mStop": 2025,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.32270000000000004,
+      "uncertainty_percent": 32.27,
+      "uncertainty_relative": 0.32270000000000004,
+      "uncertainty_up_relative": 0.32270000000000004,
+      "xsec_pb": 2.429e-05
+    },
+    {
+      "mStop": 2030,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.325,
+      "uncertainty_percent": 32.5,
+      "uncertainty_relative": 0.325,
+      "uncertainty_up_relative": 0.325,
+      "xsec_pb": 2.37e-05
+    },
+    {
+      "mStop": 2035,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3274,
+      "uncertainty_percent": 32.74,
+      "uncertainty_relative": 0.3274,
+      "uncertainty_up_relative": 0.3274,
+      "xsec_pb": 2.312e-05
+    },
+    {
+      "mStop": 2040,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3298,
+      "uncertainty_percent": 32.98,
+      "uncertainty_relative": 0.3298,
+      "uncertainty_up_relative": 0.3298,
+      "xsec_pb": 2.255e-05
+    },
+    {
+      "mStop": 2045,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3322,
+      "uncertainty_percent": 33.22,
+      "uncertainty_relative": 0.3322,
+      "uncertainty_up_relative": 0.3322,
+      "xsec_pb": 2.2e-05
+    },
+    {
+      "mStop": 2050,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3347,
+      "uncertainty_percent": 33.47,
+      "uncertainty_relative": 0.3347,
+      "uncertainty_up_relative": 0.3347,
+      "xsec_pb": 2.146e-05
+    },
+    {
+      "mStop": 2055,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3371,
+      "uncertainty_percent": 33.71,
+      "uncertainty_relative": 0.3371,
+      "uncertainty_up_relative": 0.3371,
+      "xsec_pb": 2.093e-05
+    },
+    {
+      "mStop": 2060,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3396,
+      "uncertainty_percent": 33.96,
+      "uncertainty_relative": 0.3396,
+      "uncertainty_up_relative": 0.3396,
+      "xsec_pb": 2.042e-05
+    },
+    {
+      "mStop": 2065,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3421,
+      "uncertainty_percent": 34.21,
+      "uncertainty_relative": 0.3421,
+      "uncertainty_up_relative": 0.3421,
+      "xsec_pb": 1.992e-05
+    },
+    {
+      "mStop": 2070,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3446,
+      "uncertainty_percent": 34.46,
+      "uncertainty_relative": 0.3446,
+      "uncertainty_up_relative": 0.3446,
+      "xsec_pb": 1.944e-05
+    },
+    {
+      "mStop": 2075,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3471,
+      "uncertainty_percent": 34.71,
+      "uncertainty_relative": 0.3471,
+      "uncertainty_up_relative": 0.3471,
+      "xsec_pb": 1.896e-05
+    },
+    {
+      "mStop": 2080,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3496,
+      "uncertainty_percent": 34.96,
+      "uncertainty_relative": 0.3496,
+      "uncertainty_up_relative": 0.3496,
+      "xsec_pb": 1.85e-05
+    },
+    {
+      "mStop": 2085,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3522,
+      "uncertainty_percent": 35.22,
+      "uncertainty_relative": 0.3522,
+      "uncertainty_up_relative": 0.3522,
+      "xsec_pb": 1.805e-05
+    },
+    {
+      "mStop": 2090,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.35479999999999995,
+      "uncertainty_percent": 35.48,
+      "uncertainty_relative": 0.35479999999999995,
+      "uncertainty_up_relative": 0.35479999999999995,
+      "xsec_pb": 1.761e-05
+    },
+    {
+      "mStop": 2095,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3574,
+      "uncertainty_percent": 35.74,
+      "uncertainty_relative": 0.3574,
+      "uncertainty_up_relative": 0.3574,
+      "xsec_pb": 1.718e-05
+    },
+    {
+      "mStop": 2100,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.36,
+      "uncertainty_percent": 36.0,
+      "uncertainty_relative": 0.36,
+      "uncertainty_up_relative": 0.36,
+      "xsec_pb": 1.677e-05
+    },
+    {
+      "mStop": 2105,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3626,
+      "uncertainty_percent": 36.26,
+      "uncertainty_relative": 0.3626,
+      "uncertainty_up_relative": 0.3626,
+      "xsec_pb": 1.636e-05
+    },
+    {
+      "mStop": 2110,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3652,
+      "uncertainty_percent": 36.52,
+      "uncertainty_relative": 0.3652,
+      "uncertainty_up_relative": 0.3652,
+      "xsec_pb": 1.596e-05
+    },
+    {
+      "mStop": 2115,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3678,
+      "uncertainty_percent": 36.78,
+      "uncertainty_relative": 0.3678,
+      "uncertainty_up_relative": 0.3678,
+      "xsec_pb": 1.557e-05
+    },
+    {
+      "mStop": 2120,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3704,
+      "uncertainty_percent": 37.04,
+      "uncertainty_relative": 0.3704,
+      "uncertainty_up_relative": 0.3704,
+      "xsec_pb": 1.52e-05
+    },
+    {
+      "mStop": 2125,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.373,
+      "uncertainty_percent": 37.3,
+      "uncertainty_relative": 0.373,
+      "uncertainty_up_relative": 0.373,
+      "xsec_pb": 1.483e-05
+    },
+    {
+      "mStop": 2130,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3757,
+      "uncertainty_percent": 37.57,
+      "uncertainty_relative": 0.3757,
+      "uncertainty_up_relative": 0.3757,
+      "xsec_pb": 1.447e-05
+    },
+    {
+      "mStop": 2135,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3784,
+      "uncertainty_percent": 37.84,
+      "uncertainty_relative": 0.3784,
+      "uncertainty_up_relative": 0.3784,
+      "xsec_pb": 1.412e-05
+    },
+    {
+      "mStop": 2140,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3811,
+      "uncertainty_percent": 38.11,
+      "uncertainty_relative": 0.3811,
+      "uncertainty_up_relative": 0.3811,
+      "xsec_pb": 1.378e-05
+    },
+    {
+      "mStop": 2145,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.38380000000000003,
+      "uncertainty_percent": 38.38,
+      "uncertainty_relative": 0.38380000000000003,
+      "uncertainty_up_relative": 0.38380000000000003,
+      "xsec_pb": 1.345e-05
+    },
+    {
+      "mStop": 2150,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3865,
+      "uncertainty_percent": 38.65,
+      "uncertainty_relative": 0.3865,
+      "uncertainty_up_relative": 0.3865,
+      "xsec_pb": 1.312e-05
+    },
+    {
+      "mStop": 2155,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3893,
+      "uncertainty_percent": 38.93,
+      "uncertainty_relative": 0.3893,
+      "uncertainty_up_relative": 0.3893,
+      "xsec_pb": 1.281e-05
+    },
+    {
+      "mStop": 2160,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.3921,
+      "uncertainty_percent": 39.21,
+      "uncertainty_relative": 0.3921,
+      "uncertainty_up_relative": 0.3921,
+      "xsec_pb": 1.25e-05
+    },
+    {
+      "mStop": 2165,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.39490000000000003,
+      "uncertainty_percent": 39.49,
+      "uncertainty_relative": 0.39490000000000003,
+      "uncertainty_up_relative": 0.39490000000000003,
+      "xsec_pb": 1.22e-05
+    },
+    {
+      "mStop": 2170,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.39770000000000005,
+      "uncertainty_percent": 39.77,
+      "uncertainty_relative": 0.39770000000000005,
+      "uncertainty_up_relative": 0.39770000000000005,
+      "xsec_pb": 1.19e-05
+    },
+    {
+      "mStop": 2175,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.4006,
+      "uncertainty_percent": 40.06,
+      "uncertainty_relative": 0.4006,
+      "uncertainty_up_relative": 0.4006,
+      "xsec_pb": 1.162e-05
+    },
+    {
+      "mStop": 2180,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.4035,
+      "uncertainty_percent": 40.35,
+      "uncertainty_relative": 0.4035,
+      "uncertainty_up_relative": 0.4035,
+      "xsec_pb": 1.134e-05
+    },
+    {
+      "mStop": 2185,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.4064,
+      "uncertainty_percent": 40.64,
+      "uncertainty_relative": 0.4064,
+      "uncertainty_up_relative": 0.4064,
+      "xsec_pb": 1.107e-05
+    },
+    {
+      "mStop": 2190,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.4093,
+      "uncertainty_percent": 40.93,
+      "uncertainty_relative": 0.4093,
+      "uncertainty_up_relative": 0.4093,
+      "xsec_pb": 1.08e-05
+    },
+    {
+      "mStop": 2195,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.4122,
+      "uncertainty_percent": 41.22,
+      "uncertainty_relative": 0.4122,
+      "uncertainty_up_relative": 0.4122,
+      "xsec_pb": 1.054e-05
+    },
+    {
+      "mStop": 2200,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.4152,
+      "uncertainty_percent": 41.52,
+      "uncertainty_relative": 0.4152,
+      "uncertainty_up_relative": 0.4152,
+      "xsec_pb": 1.029e-05
+    },
+    {
+      "mStop": 2205,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.4183,
+      "uncertainty_percent": 41.83,
+      "uncertainty_relative": 0.4183,
+      "uncertainty_up_relative": 0.4183,
+      "xsec_pb": 1.004e-05
+    },
+    {
+      "mStop": 2210,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.4214,
+      "uncertainty_percent": 42.14,
+      "uncertainty_relative": 0.4214,
+      "uncertainty_up_relative": 0.4214,
+      "xsec_pb": 9.803e-06
+    },
+    {
+      "mStop": 2215,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.42450000000000004,
+      "uncertainty_percent": 42.45,
+      "uncertainty_relative": 0.42450000000000004,
+      "uncertainty_up_relative": 0.42450000000000004,
+      "xsec_pb": 9.569e-06
+    },
+    {
+      "mStop": 2220,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.4276,
+      "uncertainty_percent": 42.76,
+      "uncertainty_relative": 0.4276,
+      "uncertainty_up_relative": 0.4276,
+      "xsec_pb": 9.341e-06
+    },
+    {
+      "mStop": 2225,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.43079999999999996,
+      "uncertainty_percent": 43.08,
+      "uncertainty_relative": 0.43079999999999996,
+      "uncertainty_up_relative": 0.43079999999999996,
+      "xsec_pb": 9.118e-06
+    },
+    {
+      "mStop": 2230,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.4339,
+      "uncertainty_percent": 43.39,
+      "uncertainty_relative": 0.4339,
+      "uncertainty_up_relative": 0.4339,
+      "xsec_pb": 8.901e-06
+    },
+    {
+      "mStop": 2235,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.4372,
+      "uncertainty_percent": 43.72,
+      "uncertainty_relative": 0.4372,
+      "uncertainty_up_relative": 0.4372,
+      "xsec_pb": 8.689e-06
+    },
+    {
+      "mStop": 2240,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.4404,
+      "uncertainty_percent": 44.04,
+      "uncertainty_relative": 0.4404,
+      "uncertainty_up_relative": 0.4404,
+      "xsec_pb": 8.483e-06
+    },
+    {
+      "mStop": 2245,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.4437,
+      "uncertainty_percent": 44.37,
+      "uncertainty_relative": 0.4437,
+      "uncertainty_up_relative": 0.4437,
+      "xsec_pb": 8.281e-06
+    },
+    {
+      "mStop": 2250,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.44689999999999996,
+      "uncertainty_percent": 44.69,
+      "uncertainty_relative": 0.44689999999999996,
+      "uncertainty_up_relative": 0.44689999999999996,
+      "xsec_pb": 8.084e-06
+    },
+    {
+      "mStop": 2255,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.45030000000000003,
+      "uncertainty_percent": 45.03,
+      "uncertainty_relative": 0.45030000000000003,
+      "uncertainty_up_relative": 0.45030000000000003,
+      "xsec_pb": 7.892e-06
+    },
+    {
+      "mStop": 2260,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.4536,
+      "uncertainty_percent": 45.36,
+      "uncertainty_relative": 0.4536,
+      "uncertainty_up_relative": 0.4536,
+      "xsec_pb": 7.705e-06
+    },
+    {
+      "mStop": 2265,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.4569,
+      "uncertainty_percent": 45.69,
+      "uncertainty_relative": 0.4569,
+      "uncertainty_up_relative": 0.4569,
+      "xsec_pb": 7.523e-06
+    },
+    {
+      "mStop": 2270,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.4603,
+      "uncertainty_percent": 46.03,
+      "uncertainty_relative": 0.4603,
+      "uncertainty_up_relative": 0.4603,
+      "xsec_pb": 7.345e-06
+    },
+    {
+      "mStop": 2275,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.4637,
+      "uncertainty_percent": 46.37,
+      "uncertainty_relative": 0.4637,
+      "uncertainty_up_relative": 0.4637,
+      "xsec_pb": 7.171e-06
+    },
+    {
+      "mStop": 2280,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.4672,
+      "uncertainty_percent": 46.72,
+      "uncertainty_relative": 0.4672,
+      "uncertainty_up_relative": 0.4672,
+      "xsec_pb": 7.001e-06
+    },
+    {
+      "mStop": 2285,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.4706,
+      "uncertainty_percent": 47.06,
+      "uncertainty_relative": 0.4706,
+      "uncertainty_up_relative": 0.4706,
+      "xsec_pb": 6.836e-06
+    },
+    {
+      "mStop": 2290,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.47409999999999997,
+      "uncertainty_percent": 47.41,
+      "uncertainty_relative": 0.47409999999999997,
+      "uncertainty_up_relative": 0.47409999999999997,
+      "xsec_pb": 6.674e-06
+    },
+    {
+      "mStop": 2295,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.47759999999999997,
+      "uncertainty_percent": 47.76,
+      "uncertainty_relative": 0.47759999999999997,
+      "uncertainty_up_relative": 0.47759999999999997,
+      "xsec_pb": 6.516e-06
+    },
+    {
+      "mStop": 2300,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.48109999999999997,
+      "uncertainty_percent": 48.11,
+      "uncertainty_relative": 0.48109999999999997,
+      "uncertainty_up_relative": 0.48109999999999997,
+      "xsec_pb": 6.363e-06
+    },
+    {
+      "mStop": 2305,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.48460000000000003,
+      "uncertainty_percent": 48.46,
+      "uncertainty_relative": 0.48460000000000003,
+      "uncertainty_up_relative": 0.48460000000000003,
+      "xsec_pb": 6.213e-06
+    },
+    {
+      "mStop": 2310,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.48810000000000003,
+      "uncertainty_percent": 48.81,
+      "uncertainty_relative": 0.48810000000000003,
+      "uncertainty_up_relative": 0.48810000000000003,
+      "xsec_pb": 6.066e-06
+    },
+    {
+      "mStop": 2315,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.4917,
+      "uncertainty_percent": 49.17,
+      "uncertainty_relative": 0.4917,
+      "uncertainty_up_relative": 0.4917,
+      "xsec_pb": 5.923e-06
+    },
+    {
+      "mStop": 2320,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.4953,
+      "uncertainty_percent": 49.53,
+      "uncertainty_relative": 0.4953,
+      "uncertainty_up_relative": 0.4953,
+      "xsec_pb": 5.783e-06
+    },
+    {
+      "mStop": 2325,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.4989,
+      "uncertainty_percent": 49.89,
+      "uncertainty_relative": 0.4989,
+      "uncertainty_up_relative": 0.4989,
+      "xsec_pb": 5.647e-06
+    },
+    {
+      "mStop": 2330,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.5025,
+      "uncertainty_percent": 50.25,
+      "uncertainty_relative": 0.5025,
+      "uncertainty_up_relative": 0.5025,
+      "xsec_pb": 5.514e-06
+    },
+    {
+      "mStop": 2335,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.5062,
+      "uncertainty_percent": 50.62,
+      "uncertainty_relative": 0.5062,
+      "uncertainty_up_relative": 0.5062,
+      "xsec_pb": 5.385e-06
+    },
+    {
+      "mStop": 2340,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.5097999999999999,
+      "uncertainty_percent": 50.98,
+      "uncertainty_relative": 0.5097999999999999,
+      "uncertainty_up_relative": 0.5097999999999999,
+      "xsec_pb": 5.258e-06
+    },
+    {
+      "mStop": 2345,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.5135000000000001,
+      "uncertainty_percent": 51.35,
+      "uncertainty_relative": 0.5135000000000001,
+      "uncertainty_up_relative": 0.5135000000000001,
+      "xsec_pb": 5.134e-06
+    },
+    {
+      "mStop": 2350,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.5173,
+      "uncertainty_percent": 51.73,
+      "uncertainty_relative": 0.5173,
+      "uncertainty_up_relative": 0.5173,
+      "xsec_pb": 5.014e-06
+    },
+    {
+      "mStop": 2355,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.521,
+      "uncertainty_percent": 52.1,
+      "uncertainty_relative": 0.521,
+      "uncertainty_up_relative": 0.521,
+      "xsec_pb": 4.896e-06
+    },
+    {
+      "mStop": 2360,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.5247999999999999,
+      "uncertainty_percent": 52.48,
+      "uncertainty_relative": 0.5247999999999999,
+      "uncertainty_up_relative": 0.5247999999999999,
+      "xsec_pb": 4.781e-06
+    },
+    {
+      "mStop": 2365,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.5285,
+      "uncertainty_percent": 52.85,
+      "uncertainty_relative": 0.5285,
+      "uncertainty_up_relative": 0.5285,
+      "xsec_pb": 4.669e-06
+    },
+    {
+      "mStop": 2370,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.5323,
+      "uncertainty_percent": 53.23,
+      "uncertainty_relative": 0.5323,
+      "uncertainty_up_relative": 0.5323,
+      "xsec_pb": 4.56e-06
+    },
+    {
+      "mStop": 2375,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.5362,
+      "uncertainty_percent": 53.62,
+      "uncertainty_relative": 0.5362,
+      "uncertainty_up_relative": 0.5362,
+      "xsec_pb": 4.453e-06
+    },
+    {
+      "mStop": 2380,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.54,
+      "uncertainty_percent": 54.0,
+      "uncertainty_relative": 0.54,
+      "uncertainty_up_relative": 0.54,
+      "xsec_pb": 4.349e-06
+    },
+    {
+      "mStop": 2385,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.5439,
+      "uncertainty_percent": 54.39,
+      "uncertainty_relative": 0.5439,
+      "uncertainty_up_relative": 0.5439,
+      "xsec_pb": 4.247e-06
+    },
+    {
+      "mStop": 2390,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.5478000000000001,
+      "uncertainty_percent": 54.78,
+      "uncertainty_relative": 0.5478000000000001,
+      "uncertainty_up_relative": 0.5478000000000001,
+      "xsec_pb": 4.148e-06
+    },
+    {
+      "mStop": 2395,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.5517,
+      "uncertainty_percent": 55.17,
+      "uncertainty_relative": 0.5517,
+      "uncertainty_up_relative": 0.5517,
+      "xsec_pb": 4.051e-06
+    },
+    {
+      "mStop": 2400,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.5556,
+      "uncertainty_percent": 55.56,
+      "uncertainty_relative": 0.5556,
+      "uncertainty_up_relative": 0.5556,
+      "xsec_pb": 3.957e-06
+    },
+    {
+      "mStop": 2405,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.5596,
+      "uncertainty_percent": 55.96,
+      "uncertainty_relative": 0.5596,
+      "uncertainty_up_relative": 0.5596,
+      "xsec_pb": 3.865e-06
+    },
+    {
+      "mStop": 2410,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.5636,
+      "uncertainty_percent": 56.36,
+      "uncertainty_relative": 0.5636,
+      "uncertainty_up_relative": 0.5636,
+      "xsec_pb": 3.775e-06
+    },
+    {
+      "mStop": 2415,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.5676,
+      "uncertainty_percent": 56.76,
+      "uncertainty_relative": 0.5676,
+      "uncertainty_up_relative": 0.5676,
+      "xsec_pb": 3.687e-06
+    },
+    {
+      "mStop": 2420,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.5716,
+      "uncertainty_percent": 57.16,
+      "uncertainty_relative": 0.5716,
+      "uncertainty_up_relative": 0.5716,
+      "xsec_pb": 3.601e-06
+    },
+    {
+      "mStop": 2425,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.5756,
+      "uncertainty_percent": 57.56,
+      "uncertainty_relative": 0.5756,
+      "uncertainty_up_relative": 0.5756,
+      "xsec_pb": 3.517e-06
+    },
+    {
+      "mStop": 2430,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.5797,
+      "uncertainty_percent": 57.97,
+      "uncertainty_relative": 0.5797,
+      "uncertainty_up_relative": 0.5797,
+      "xsec_pb": 3.436e-06
+    },
+    {
+      "mStop": 2435,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.5838,
+      "uncertainty_percent": 58.38,
+      "uncertainty_relative": 0.5838,
+      "uncertainty_up_relative": 0.5838,
+      "xsec_pb": 3.356e-06
+    },
+    {
+      "mStop": 2440,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.5879,
+      "uncertainty_percent": 58.79,
+      "uncertainty_relative": 0.5879,
+      "uncertainty_up_relative": 0.5879,
+      "xsec_pb": 3.278e-06
+    },
+    {
+      "mStop": 2445,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.5920000000000001,
+      "uncertainty_percent": 59.2,
+      "uncertainty_relative": 0.5920000000000001,
+      "uncertainty_up_relative": 0.5920000000000001,
+      "xsec_pb": 3.202e-06
+    },
+    {
+      "mStop": 2450,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.5962,
+      "uncertainty_percent": 59.62,
+      "uncertainty_relative": 0.5962,
+      "uncertainty_up_relative": 0.5962,
+      "xsec_pb": 3.128e-06
+    },
+    {
+      "mStop": 2455,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.6004,
+      "uncertainty_percent": 60.04,
+      "uncertainty_relative": 0.6004,
+      "uncertainty_up_relative": 0.6004,
+      "xsec_pb": 3.055e-06
+    },
+    {
+      "mStop": 2460,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.6046,
+      "uncertainty_percent": 60.46,
+      "uncertainty_relative": 0.6046,
+      "uncertainty_up_relative": 0.6046,
+      "xsec_pb": 2.985e-06
+    },
+    {
+      "mStop": 2465,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.6088,
+      "uncertainty_percent": 60.88,
+      "uncertainty_relative": 0.6088,
+      "uncertainty_up_relative": 0.6088,
+      "xsec_pb": 2.915e-06
+    },
+    {
+      "mStop": 2470,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.6131,
+      "uncertainty_percent": 61.31,
+      "uncertainty_relative": 0.6131,
+      "uncertainty_up_relative": 0.6131,
+      "xsec_pb": 2.848e-06
+    },
+    {
+      "mStop": 2475,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.6174000000000001,
+      "uncertainty_percent": 61.74,
+      "uncertainty_relative": 0.6174000000000001,
+      "uncertainty_up_relative": 0.6174000000000001,
+      "xsec_pb": 2.782e-06
+    },
+    {
+      "mStop": 2480,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.6217,
+      "uncertainty_percent": 62.17,
+      "uncertainty_relative": 0.6217,
+      "uncertainty_up_relative": 0.6217,
+      "xsec_pb": 2.718e-06
+    },
+    {
+      "mStop": 2485,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.626,
+      "uncertainty_percent": 62.6,
+      "uncertainty_relative": 0.626,
+      "uncertainty_up_relative": 0.626,
+      "xsec_pb": 2.655e-06
+    },
+    {
+      "mStop": 2490,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.6304,
+      "uncertainty_percent": 63.04,
+      "uncertainty_relative": 0.6304,
+      "uncertainty_up_relative": 0.6304,
+      "xsec_pb": 2.594e-06
+    },
+    {
+      "mStop": 2495,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.6347999999999999,
+      "uncertainty_percent": 63.48,
+      "uncertainty_relative": 0.6347999999999999,
+      "uncertainty_up_relative": 0.6347999999999999,
+      "xsec_pb": 2.534e-06
+    },
+    {
+      "mStop": 2500,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.6392,
+      "uncertainty_percent": 63.92,
+      "uncertainty_relative": 0.6392,
+      "uncertainty_up_relative": 0.6392,
+      "xsec_pb": 2.476e-06
+    },
+    {
+      "mStop": 2505,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.6436,
+      "uncertainty_percent": 64.36,
+      "uncertainty_relative": 0.6436,
+      "uncertainty_up_relative": 0.6436,
+      "xsec_pb": 2.419e-06
+    },
+    {
+      "mStop": 2510,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.648,
+      "uncertainty_percent": 64.8,
+      "uncertainty_relative": 0.648,
+      "uncertainty_up_relative": 0.648,
+      "xsec_pb": 2.363e-06
+    },
+    {
+      "mStop": 2515,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.6525,
+      "uncertainty_percent": 65.25,
+      "uncertainty_relative": 0.6525,
+      "uncertainty_up_relative": 0.6525,
+      "xsec_pb": 2.309e-06
+    },
+    {
+      "mStop": 2520,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.657,
+      "uncertainty_percent": 65.7,
+      "uncertainty_relative": 0.657,
+      "uncertainty_up_relative": 0.657,
+      "xsec_pb": 2.255e-06
+    },
+    {
+      "mStop": 2525,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.6615000000000001,
+      "uncertainty_percent": 66.15,
+      "uncertainty_relative": 0.6615000000000001,
+      "uncertainty_up_relative": 0.6615000000000001,
+      "xsec_pb": 2.204e-06
+    },
+    {
+      "mStop": 2530,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.6659999999999999,
+      "uncertainty_percent": 66.6,
+      "uncertainty_relative": 0.6659999999999999,
+      "uncertainty_up_relative": 0.6659999999999999,
+      "xsec_pb": 2.153e-06
+    },
+    {
+      "mStop": 2535,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.6706,
+      "uncertainty_percent": 67.06,
+      "uncertainty_relative": 0.6706,
+      "uncertainty_up_relative": 0.6706,
+      "xsec_pb": 2.103e-06
+    },
+    {
+      "mStop": 2540,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.6751999999999999,
+      "uncertainty_percent": 67.52,
+      "uncertainty_relative": 0.6751999999999999,
+      "uncertainty_up_relative": 0.6751999999999999,
+      "xsec_pb": 2.055e-06
+    },
+    {
+      "mStop": 2545,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.6799,
+      "uncertainty_percent": 67.99,
+      "uncertainty_relative": 0.6799,
+      "uncertainty_up_relative": 0.6799,
+      "xsec_pb": 2.008e-06
+    },
+    {
+      "mStop": 2550,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.6845,
+      "uncertainty_percent": 68.45,
+      "uncertainty_relative": 0.6845,
+      "uncertainty_up_relative": 0.6845,
+      "xsec_pb": 1.962e-06
+    },
+    {
+      "mStop": 2555,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.6892,
+      "uncertainty_percent": 68.92,
+      "uncertainty_relative": 0.6892,
+      "uncertainty_up_relative": 0.6892,
+      "xsec_pb": 1.917e-06
+    },
+    {
+      "mStop": 2560,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.6940000000000001,
+      "uncertainty_percent": 69.4,
+      "uncertainty_relative": 0.6940000000000001,
+      "uncertainty_up_relative": 0.6940000000000001,
+      "xsec_pb": 1.873e-06
+    },
+    {
+      "mStop": 2565,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.6988,
+      "uncertainty_percent": 69.88,
+      "uncertainty_relative": 0.6988,
+      "uncertainty_up_relative": 0.6988,
+      "xsec_pb": 1.83e-06
+    },
+    {
+      "mStop": 2570,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.7036,
+      "uncertainty_percent": 70.36,
+      "uncertainty_relative": 0.7036,
+      "uncertainty_up_relative": 0.7036,
+      "xsec_pb": 1.788e-06
+    },
+    {
+      "mStop": 2575,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.7084,
+      "uncertainty_percent": 70.84,
+      "uncertainty_relative": 0.7084,
+      "uncertainty_up_relative": 0.7084,
+      "xsec_pb": 1.747e-06
+    },
+    {
+      "mStop": 2580,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.7132999999999999,
+      "uncertainty_percent": 71.33,
+      "uncertainty_relative": 0.7132999999999999,
+      "uncertainty_up_relative": 0.7132999999999999,
+      "xsec_pb": 1.707e-06
+    },
+    {
+      "mStop": 2585,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.7182999999999999,
+      "uncertainty_percent": 71.83,
+      "uncertainty_relative": 0.7182999999999999,
+      "uncertainty_up_relative": 0.7182999999999999,
+      "xsec_pb": 1.668e-06
+    },
+    {
+      "mStop": 2590,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.7232999999999999,
+      "uncertainty_percent": 72.33,
+      "uncertainty_relative": 0.7232999999999999,
+      "uncertainty_up_relative": 0.7232999999999999,
+      "xsec_pb": 1.63e-06
+    },
+    {
+      "mStop": 2595,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.7283,
+      "uncertainty_percent": 72.83,
+      "uncertainty_relative": 0.7283,
+      "uncertainty_up_relative": 0.7283,
+      "xsec_pb": 1.593e-06
+    },
+    {
+      "mStop": 2600,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.7333,
+      "uncertainty_percent": 73.33,
+      "uncertainty_relative": 0.7333,
+      "uncertainty_up_relative": 0.7333,
+      "xsec_pb": 1.556e-06
+    },
+    {
+      "mStop": 2605,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.7386,
+      "uncertainty_percent": 73.86,
+      "uncertainty_relative": 0.7386,
+      "uncertainty_up_relative": 0.7386,
+      "xsec_pb": 1.521e-06
+    },
+    {
+      "mStop": 2610,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.7437999999999999,
+      "uncertainty_percent": 74.38,
+      "uncertainty_relative": 0.7437999999999999,
+      "uncertainty_up_relative": 0.7437999999999999,
+      "xsec_pb": 1.486e-06
+    },
+    {
+      "mStop": 2615,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.7491,
+      "uncertainty_percent": 74.91,
+      "uncertainty_relative": 0.7491,
+      "uncertainty_up_relative": 0.7491,
+      "xsec_pb": 1.452e-06
+    },
+    {
+      "mStop": 2620,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.7545000000000001,
+      "uncertainty_percent": 75.45,
+      "uncertainty_relative": 0.7545000000000001,
+      "uncertainty_up_relative": 0.7545000000000001,
+      "xsec_pb": 1.419e-06
+    },
+    {
+      "mStop": 2625,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.7598999999999999,
+      "uncertainty_percent": 75.99,
+      "uncertainty_relative": 0.7598999999999999,
+      "uncertainty_up_relative": 0.7598999999999999,
+      "xsec_pb": 1.387e-06
+    },
+    {
+      "mStop": 2630,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.7653,
+      "uncertainty_percent": 76.53,
+      "uncertainty_relative": 0.7653,
+      "uncertainty_up_relative": 0.7653,
+      "xsec_pb": 1.355e-06
+    },
+    {
+      "mStop": 2635,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.7706999999999999,
+      "uncertainty_percent": 77.07,
+      "uncertainty_relative": 0.7706999999999999,
+      "uncertainty_up_relative": 0.7706999999999999,
+      "xsec_pb": 1.324e-06
+    },
+    {
+      "mStop": 2640,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.7762,
+      "uncertainty_percent": 77.62,
+      "uncertainty_relative": 0.7762,
+      "uncertainty_up_relative": 0.7762,
+      "xsec_pb": 1.294e-06
+    },
+    {
+      "mStop": 2645,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.7817000000000001,
+      "uncertainty_percent": 78.17,
+      "uncertainty_relative": 0.7817000000000001,
+      "uncertainty_up_relative": 0.7817000000000001,
+      "xsec_pb": 1.265e-06
+    },
+    {
+      "mStop": 2650,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.7873,
+      "uncertainty_percent": 78.73,
+      "uncertainty_relative": 0.7873,
+      "uncertainty_up_relative": 0.7873,
+      "xsec_pb": 1.236e-06
+    },
+    {
+      "mStop": 2655,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.7929,
+      "uncertainty_percent": 79.29,
+      "uncertainty_relative": 0.7929,
+      "uncertainty_up_relative": 0.7929,
+      "xsec_pb": 1.208e-06
+    },
+    {
+      "mStop": 2660,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.7985,
+      "uncertainty_percent": 79.85,
+      "uncertainty_relative": 0.7985,
+      "uncertainty_up_relative": 0.7985,
+      "xsec_pb": 1.18e-06
+    },
+    {
+      "mStop": 2665,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.8042,
+      "uncertainty_percent": 80.42,
+      "uncertainty_relative": 0.8042,
+      "uncertainty_up_relative": 0.8042,
+      "xsec_pb": 1.153e-06
+    },
+    {
+      "mStop": 2670,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.8098000000000001,
+      "uncertainty_percent": 80.98,
+      "uncertainty_relative": 0.8098000000000001,
+      "uncertainty_up_relative": 0.8098000000000001,
+      "xsec_pb": 1.127e-06
+    },
+    {
+      "mStop": 2675,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.8155,
+      "uncertainty_percent": 81.55,
+      "uncertainty_relative": 0.8155,
+      "uncertainty_up_relative": 0.8155,
+      "xsec_pb": 1.102e-06
+    },
+    {
+      "mStop": 2680,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.8212999999999999,
+      "uncertainty_percent": 82.13,
+      "uncertainty_relative": 0.8212999999999999,
+      "uncertainty_up_relative": 0.8212999999999999,
+      "xsec_pb": 1.077e-06
+    },
+    {
+      "mStop": 2685,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.8270000000000001,
+      "uncertainty_percent": 82.7,
+      "uncertainty_relative": 0.8270000000000001,
+      "uncertainty_up_relative": 0.8270000000000001,
+      "xsec_pb": 1.052e-06
+    },
+    {
+      "mStop": 2690,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.8328,
+      "uncertainty_percent": 83.28,
+      "uncertainty_relative": 0.8328,
+      "uncertainty_up_relative": 0.8328,
+      "xsec_pb": 1.028e-06
+    },
+    {
+      "mStop": 2695,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.8386,
+      "uncertainty_percent": 83.86,
+      "uncertainty_relative": 0.8386,
+      "uncertainty_up_relative": 0.8386,
+      "xsec_pb": 1.005e-06
+    },
+    {
+      "mStop": 2700,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.8443999999999999,
+      "uncertainty_percent": 84.44,
+      "uncertainty_relative": 0.8443999999999999,
+      "uncertainty_up_relative": 0.8443999999999999,
+      "xsec_pb": 9.821e-07
+    },
+    {
+      "mStop": 2705,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.8502,
+      "uncertainty_percent": 85.02,
+      "uncertainty_relative": 0.8502,
+      "uncertainty_up_relative": 0.8502,
+      "xsec_pb": 9.598e-07
+    },
+    {
+      "mStop": 2710,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.8559,
+      "uncertainty_percent": 85.59,
+      "uncertainty_relative": 0.8559,
+      "uncertainty_up_relative": 0.8559,
+      "xsec_pb": 9.38e-07
+    },
+    {
+      "mStop": 2715,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.8617,
+      "uncertainty_percent": 86.17,
+      "uncertainty_relative": 0.8617,
+      "uncertainty_up_relative": 0.8617,
+      "xsec_pb": 9.167e-07
+    },
+    {
+      "mStop": 2720,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.8675,
+      "uncertainty_percent": 86.75,
+      "uncertainty_relative": 0.8675,
+      "uncertainty_up_relative": 0.8675,
+      "xsec_pb": 8.959e-07
+    },
+    {
+      "mStop": 2725,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.8733,
+      "uncertainty_percent": 87.33,
+      "uncertainty_relative": 0.8733,
+      "uncertainty_up_relative": 0.8733,
+      "xsec_pb": 8.756e-07
+    },
+    {
+      "mStop": 2730,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.8791,
+      "uncertainty_percent": 87.91,
+      "uncertainty_relative": 0.8791,
+      "uncertainty_up_relative": 0.8791,
+      "xsec_pb": 8.557e-07
+    },
+    {
+      "mStop": 2735,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.885,
+      "uncertainty_percent": 88.5,
+      "uncertainty_relative": 0.885,
+      "uncertainty_up_relative": 0.885,
+      "xsec_pb": 8.363e-07
+    },
+    {
+      "mStop": 2740,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.8909,
+      "uncertainty_percent": 89.09,
+      "uncertainty_relative": 0.8909,
+      "uncertainty_up_relative": 0.8909,
+      "xsec_pb": 8.173e-07
+    },
+    {
+      "mStop": 2745,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.8968,
+      "uncertainty_percent": 89.68,
+      "uncertainty_relative": 0.8968,
+      "uncertainty_up_relative": 0.8968,
+      "xsec_pb": 7.988e-07
+    },
+    {
+      "mStop": 2750,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.9028,
+      "uncertainty_percent": 90.28,
+      "uncertainty_relative": 0.9028,
+      "uncertainty_up_relative": 0.9028,
+      "xsec_pb": 7.807e-07
+    },
+    {
+      "mStop": 2755,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.9087000000000001,
+      "uncertainty_percent": 90.87,
+      "uncertainty_relative": 0.9087000000000001,
+      "uncertainty_up_relative": 0.9087000000000001,
+      "xsec_pb": 7.63e-07
+    },
+    {
+      "mStop": 2760,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.9147,
+      "uncertainty_percent": 91.47,
+      "uncertainty_relative": 0.9147,
+      "uncertainty_up_relative": 0.9147,
+      "xsec_pb": 7.458e-07
+    },
+    {
+      "mStop": 2765,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.9208,
+      "uncertainty_percent": 92.08,
+      "uncertainty_relative": 0.9208,
+      "uncertainty_up_relative": 0.9208,
+      "xsec_pb": 7.289e-07
+    },
+    {
+      "mStop": 2770,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.9269,
+      "uncertainty_percent": 92.69,
+      "uncertainty_relative": 0.9269,
+      "uncertainty_up_relative": 0.9269,
+      "xsec_pb": 7.124e-07
+    },
+    {
+      "mStop": 2775,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.9329999999999999,
+      "uncertainty_percent": 93.3,
+      "uncertainty_relative": 0.9329999999999999,
+      "uncertainty_up_relative": 0.9329999999999999,
+      "xsec_pb": 6.963e-07
+    },
+    {
+      "mStop": 2780,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.9390999999999999,
+      "uncertainty_percent": 93.91,
+      "uncertainty_relative": 0.9390999999999999,
+      "uncertainty_up_relative": 0.9390999999999999,
+      "xsec_pb": 6.805e-07
+    },
+    {
+      "mStop": 2785,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.9453,
+      "uncertainty_percent": 94.53,
+      "uncertainty_relative": 0.9453,
+      "uncertainty_up_relative": 0.9453,
+      "xsec_pb": 6.651e-07
+    },
+    {
+      "mStop": 2790,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.9515,
+      "uncertainty_percent": 95.15,
+      "uncertainty_relative": 0.9515,
+      "uncertainty_up_relative": 0.9515,
+      "xsec_pb": 6.501e-07
+    },
+    {
+      "mStop": 2795,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.9577,
+      "uncertainty_percent": 95.77,
+      "uncertainty_relative": 0.9577,
+      "uncertainty_up_relative": 0.9577,
+      "xsec_pb": 6.354e-07
+    },
+    {
+      "mStop": 2800,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.9640000000000001,
+      "uncertainty_percent": 96.4,
+      "uncertainty_relative": 0.9640000000000001,
+      "uncertainty_up_relative": 0.9640000000000001,
+      "xsec_pb": 6.211e-07
+    },
+    {
+      "mStop": 2805,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.9702,
+      "uncertainty_percent": 97.02,
+      "uncertainty_relative": 0.9702,
+      "uncertainty_up_relative": 0.9702,
+      "xsec_pb": 6.071e-07
+    },
+    {
+      "mStop": 2810,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.9765,
+      "uncertainty_percent": 97.65,
+      "uncertainty_relative": 0.9765,
+      "uncertainty_up_relative": 0.9765,
+      "xsec_pb": 5.934e-07
+    },
+    {
+      "mStop": 2815,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.9828,
+      "uncertainty_percent": 98.28,
+      "uncertainty_relative": 0.9828,
+      "uncertainty_up_relative": 0.9828,
+      "xsec_pb": 5.801e-07
+    },
+    {
+      "mStop": 2820,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.9892,
+      "uncertainty_percent": 98.92,
+      "uncertainty_relative": 0.9892,
+      "uncertainty_up_relative": 0.9892,
+      "xsec_pb": 5.67e-07
+    },
+    {
+      "mStop": 2825,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 0.9956,
+      "uncertainty_percent": 99.56,
+      "uncertainty_relative": 0.9956,
+      "uncertainty_up_relative": 0.9956,
+      "xsec_pb": 5.543e-07
+    },
+    {
+      "mStop": 2830,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.0021,
+      "uncertainty_percent": 100.21,
+      "uncertainty_relative": 1.0021,
+      "uncertainty_up_relative": 1.0021,
+      "xsec_pb": 5.418e-07
+    },
+    {
+      "mStop": 2835,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.0086,
+      "uncertainty_percent": 100.86,
+      "uncertainty_relative": 1.0086,
+      "uncertainty_up_relative": 1.0086,
+      "xsec_pb": 5.296e-07
+    },
+    {
+      "mStop": 2840,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.0151000000000001,
+      "uncertainty_percent": 101.51,
+      "uncertainty_relative": 1.0151000000000001,
+      "uncertainty_up_relative": 1.0151000000000001,
+      "xsec_pb": 5.177e-07
+    },
+    {
+      "mStop": 2845,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.0217,
+      "uncertainty_percent": 102.17,
+      "uncertainty_relative": 1.0217,
+      "uncertainty_up_relative": 1.0217,
+      "xsec_pb": 5.061e-07
+    },
+    {
+      "mStop": 2850,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.0284,
+      "uncertainty_percent": 102.84,
+      "uncertainty_relative": 1.0284,
+      "uncertainty_up_relative": 1.0284,
+      "xsec_pb": 4.947e-07
+    },
+    {
+      "mStop": 2855,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.0351000000000001,
+      "uncertainty_percent": 103.51,
+      "uncertainty_relative": 1.0351000000000001,
+      "uncertainty_up_relative": 1.0351000000000001,
+      "xsec_pb": 4.836e-07
+    },
+    {
+      "mStop": 2860,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.0419,
+      "uncertainty_percent": 104.19,
+      "uncertainty_relative": 1.0419,
+      "uncertainty_up_relative": 1.0419,
+      "xsec_pb": 4.728e-07
+    },
+    {
+      "mStop": 2865,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.0487,
+      "uncertainty_percent": 104.87,
+      "uncertainty_relative": 1.0487,
+      "uncertainty_up_relative": 1.0487,
+      "xsec_pb": 4.622e-07
+    },
+    {
+      "mStop": 2870,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.0556,
+      "uncertainty_percent": 105.56,
+      "uncertainty_relative": 1.0556,
+      "uncertainty_up_relative": 1.0556,
+      "xsec_pb": 4.518e-07
+    },
+    {
+      "mStop": 2875,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.0625,
+      "uncertainty_percent": 106.25,
+      "uncertainty_relative": 1.0625,
+      "uncertainty_up_relative": 1.0625,
+      "xsec_pb": 4.417e-07
+    },
+    {
+      "mStop": 2880,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.0695000000000001,
+      "uncertainty_percent": 106.95,
+      "uncertainty_relative": 1.0695000000000001,
+      "uncertainty_up_relative": 1.0695000000000001,
+      "xsec_pb": 4.318e-07
+    },
+    {
+      "mStop": 2885,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.0766,
+      "uncertainty_percent": 107.66,
+      "uncertainty_relative": 1.0766,
+      "uncertainty_up_relative": 1.0766,
+      "xsec_pb": 4.221e-07
+    },
+    {
+      "mStop": 2890,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.0837,
+      "uncertainty_percent": 108.37,
+      "uncertainty_relative": 1.0837,
+      "uncertainty_up_relative": 1.0837,
+      "xsec_pb": 4.127e-07
+    },
+    {
+      "mStop": 2895,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.0909,
+      "uncertainty_percent": 109.09,
+      "uncertainty_relative": 1.0909,
+      "uncertainty_up_relative": 1.0909,
+      "xsec_pb": 4.034e-07
+    },
+    {
+      "mStop": 2900,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.0981999999999998,
+      "uncertainty_percent": 109.82,
+      "uncertainty_relative": 1.0981999999999998,
+      "uncertainty_up_relative": 1.0981999999999998,
+      "xsec_pb": 3.944e-07
+    },
+    {
+      "mStop": 2905,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.1055,
+      "uncertainty_percent": 110.55,
+      "uncertainty_relative": 1.1055,
+      "uncertainty_up_relative": 1.1055,
+      "xsec_pb": 3.855e-07
+    },
+    {
+      "mStop": 2910,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.1129,
+      "uncertainty_percent": 111.29,
+      "uncertainty_relative": 1.1129,
+      "uncertainty_up_relative": 1.1129,
+      "xsec_pb": 3.769e-07
+    },
+    {
+      "mStop": 2915,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.1204,
+      "uncertainty_percent": 112.04,
+      "uncertainty_relative": 1.1204,
+      "uncertainty_up_relative": 1.1204,
+      "xsec_pb": 3.685e-07
+    },
+    {
+      "mStop": 2920,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.1279000000000001,
+      "uncertainty_percent": 112.79,
+      "uncertainty_relative": 1.1279000000000001,
+      "uncertainty_up_relative": 1.1279000000000001,
+      "xsec_pb": 3.602e-07
+    },
+    {
+      "mStop": 2925,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.1356,
+      "uncertainty_percent": 113.56,
+      "uncertainty_relative": 1.1356,
+      "uncertainty_up_relative": 1.1356,
+      "xsec_pb": 3.522e-07
+    },
+    {
+      "mStop": 2930,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.1433,
+      "uncertainty_percent": 114.33,
+      "uncertainty_relative": 1.1433,
+      "uncertainty_up_relative": 1.1433,
+      "xsec_pb": 3.443e-07
+    },
+    {
+      "mStop": 2935,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.1511,
+      "uncertainty_percent": 115.11,
+      "uncertainty_relative": 1.1511,
+      "uncertainty_up_relative": 1.1511,
+      "xsec_pb": 3.366e-07
+    },
+    {
+      "mStop": 2940,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.1589,
+      "uncertainty_percent": 115.89,
+      "uncertainty_relative": 1.1589,
+      "uncertainty_up_relative": 1.1589,
+      "xsec_pb": 3.29e-07
+    },
+    {
+      "mStop": 2945,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.1669,
+      "uncertainty_percent": 116.69,
+      "uncertainty_relative": 1.1669,
+      "uncertainty_up_relative": 1.1669,
+      "xsec_pb": 3.217e-07
+    },
+    {
+      "mStop": 2950,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.1749,
+      "uncertainty_percent": 117.49,
+      "uncertainty_relative": 1.1749,
+      "uncertainty_up_relative": 1.1749,
+      "xsec_pb": 3.145e-07
+    },
+    {
+      "mStop": 2955,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.1831,
+      "uncertainty_percent": 118.31,
+      "uncertainty_relative": 1.1831,
+      "uncertainty_up_relative": 1.1831,
+      "xsec_pb": 3.074e-07
+    },
+    {
+      "mStop": 2960,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.1913,
+      "uncertainty_percent": 119.13,
+      "uncertainty_relative": 1.1913,
+      "uncertainty_up_relative": 1.1913,
+      "xsec_pb": 3.005e-07
+    },
+    {
+      "mStop": 2965,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.1996,
+      "uncertainty_percent": 119.96,
+      "uncertainty_relative": 1.1996,
+      "uncertainty_up_relative": 1.1996,
+      "xsec_pb": 2.938e-07
+    },
+    {
+      "mStop": 2970,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.208,
+      "uncertainty_percent": 120.8,
+      "uncertainty_relative": 1.208,
+      "uncertainty_up_relative": 1.208,
+      "xsec_pb": 2.872e-07
+    },
+    {
+      "mStop": 2975,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.2165000000000001,
+      "uncertainty_percent": 121.65,
+      "uncertainty_relative": 1.2165000000000001,
+      "uncertainty_up_relative": 1.2165000000000001,
+      "xsec_pb": 2.808e-07
+    },
+    {
+      "mStop": 2980,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.2251,
+      "uncertainty_percent": 122.51,
+      "uncertainty_relative": 1.2251,
+      "uncertainty_up_relative": 1.2251,
+      "xsec_pb": 2.745e-07
+    },
+    {
+      "mStop": 2985,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.2337,
+      "uncertainty_percent": 123.37,
+      "uncertainty_relative": 1.2337,
+      "uncertainty_up_relative": 1.2337,
+      "xsec_pb": 2.684e-07
+    },
+    {
+      "mStop": 2990,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.2425,
+      "uncertainty_percent": 124.25,
+      "uncertainty_relative": 1.2425,
+      "uncertainty_up_relative": 1.2425,
+      "xsec_pb": 2.624e-07
+    },
+    {
+      "mStop": 2995,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.2514,
+      "uncertainty_percent": 125.14,
+      "uncertainty_relative": 1.2514,
+      "uncertainty_up_relative": 1.2514,
+      "xsec_pb": 2.565e-07
+    },
+    {
+      "mStop": 3000,
+      "parsing_status": "parsed",
+      "source_file": "signal_xsec.txt",
+      "uncertainty_down_relative": 1.2604,
+      "uncertainty_percent": 126.04,
+      "uncertainty_relative": 1.2604,
+      "uncertainty_up_relative": 1.2604,
+      "xsec_pb": 2.507e-07
+    }
+  ],
+  "records_parsed": 581,
+  "source_file": "signal_xsec.txt",
+  "values_used_for_physics_outputs": true,
+  "xsec_table_status": "parsed"
 }

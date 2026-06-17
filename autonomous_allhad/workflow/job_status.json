@@ -1,0 +1,10 @@
+{
+  "blockers": [
+    "execution.allow_condor_submit is false in autonomous_allhad/configs/run3_2024.yaml",
+    "no autonomous Condor execute/monitor/retry/merge implementation exists for the 52k-file feature-table production campaign"
+  ],
+  "cluster_ids": [],
+  "planned_jobs": 52809,
+  "status": "blocked_not_submitted",
+  "submitted_jobs": 0
+}
