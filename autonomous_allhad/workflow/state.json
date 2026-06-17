@@ -65,11 +65,15 @@
     },
     "publish_github_pages": {
       "result": {
+        "deployment_confirmed": false,
+        "deployment_status": "not_confirmed",
         "docs_path": "docs",
+        "expected_url": "https://resisov.github.io/run3_stop/",
         "index": "docs/index.html",
+        "last_publication_time_utc": "2026-06-17T12:00:27Z",
         "monitor": "docs/monitor.html",
         "published": false,
-        "remaining_step": "Review docs/, then run: git add docs .github/workflows/pages.yml autonomous_allhad && git commit -m 'Update autonomous allhad dashboard' && git push",
+        "remaining_step": "Commit/push docs and confirm the GitHub Pages deployment in GitHub Actions.",
         "sensitive_scan": {
           "findings": [],
           "status": "clean"
@@ -77,7 +81,7 @@
         "workflow": ".github/workflows/pages.yml"
       },
       "status": "complete",
-      "updated_at": "2026-06-17T11:50:17Z"
+      "updated_at": "2026-06-17T12:00:27Z"
     }
   },
   "started_at": "2026-06-17T11:01:36Z"

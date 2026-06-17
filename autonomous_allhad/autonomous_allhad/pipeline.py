@@ -18,6 +18,9 @@ from pathlib import Path
 from typing import Any
 
 
+GITHUB_PAGES_URL = "https://resisov.github.io/run3_stop/"
+
+
 REGIONS = {
     "cat1_preselection": [
         "lumimask", "met_filters", "zero_veto_j", "signal_trigger",
@@ -1049,6 +1052,7 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
         norm = self._load_json_if_exists(self.outputs / "normalized_feature_yields.json", {})
         factors = self._load_json_if_exists(self.outputs / "normalization_factors.json", {})
         norm_audit = self._load_json_if_exists(self.base / "validation" / "normalization_audit.json", {})
+        github_status = self._load_json_if_exists(self.outputs / "github_pages_status.json", {})
         yields = summary.get("yields", {})
         regions = ["preselection", "LLCR", "QCDCR", "GCR", "DY2E", "DY2M", "SR"]
         stages = self.state.get("stages", {})
@@ -1076,6 +1080,11 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             "latest_successful_command": self._public_history_entry(next((json.loads(ln) for ln in reversed(self.history.read_text().splitlines()) if ln.strip() and json.loads(ln).get("status") == "complete"), None)) if self.history.exists() else None,
             "latest_failure": self._public_history_entry(next((json.loads(ln) for ln in reversed(self.history.read_text().splitlines()) if ln.strip() and json.loads(ln).get("status") == "failed"), None)) if self.history.exists() else None,
             "github_pages_site_status": docs_status,
+            "github_pages_expected_url": github_status.get("expected_url", GITHUB_PAGES_URL),
+            "github_pages_last_publication_time_utc": github_status.get("last_publication_time_utc"),
+            "github_pages_deployment_status": github_status.get("deployment_status", "not_confirmed"),
+            "github_pages_deployment_confirmed": bool(github_status.get("deployment_confirmed", False)),
+            "github_pages_published_by_pipeline": bool(github_status.get("published", False)),
             "normalization_status": norm.get("normalization_status", "missing"),
             "raw_vs_normalized_yield_status": norm_audit.get("current_feature_yields_raw_or_normalized", "unknown") + ("; normalized_feature_yields.json available" if norm else ""),
             "normalization_luminosity_fb": norm.get("luminosity_fb", norm_audit.get("luminosity_fb")),
@@ -1101,19 +1110,37 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             "Raw/normalized yields: " + str(payload.get("raw_vs_normalized_yield_status")),
             "Region yields: " + json.dumps(payload.get("region_yields", {}), sort_keys=True),
             "GitHub Pages site status: " + str(payload.get("github_pages_site_status")),
+            "GitHub Pages expected URL: " + str(payload.get("github_pages_expected_url")),
+            "GitHub Pages last publication time UTC: " + str(payload.get("github_pages_last_publication_time_utc")),
+            "GitHub Pages deployment status: " + str(payload.get("github_pages_deployment_status")),
             "Next recommended action: " + str(payload.get("next_recommended_action")),
         ])
 
     def render_monitor_html(self, payload: dict[str, Any]) -> None:
         self.docs.mkdir(parents=True, exist_ok=True)
         rows = "".join(f"<tr><td>{html.escape(k)}</td><td>{v}</td></tr>" for k, v in payload.get("region_yields", {}).items())
-        html_text = f"""<!doctype html><html lang='en'><head><meta charset='utf-8'><title>Run-3 stop monitor</title><style>body{{font-family:Arial,sans-serif;background:#f7f8fa;color:#20242a;margin:0}}main{{max-width:1000px;margin:auto;padding:28px}}table{{border-collapse:collapse;width:100%;background:white}}td,th{{border:1px solid #d8dde4;padding:8px;text-align:left}}th{{background:#e9eef5}}.note{{background:#fff3cd;padding:10px;border-radius:4px}}</style></head><body><main><h1>Pipeline Monitor</h1><p class='note'>Legacy stop_processor_v4.py validation is external/manual. No independent agreement with stop_processor_v4.py is claimed by autonomous_allhad unless explicitly provided by the user.</p><p>Current stage: <strong>{html.escape(str(payload.get('current_pipeline_stage')))}</strong></p><p>ROOT files read: {payload.get('root_files_read')} &nbsp; Feature rows: {payload.get('feature_rows')} &nbsp; Bad files: {payload.get('bad_files')}</p><p>Normalization: {html.escape(str(payload.get('normalization_status')))}; {html.escape(str(payload.get('raw_vs_normalized_yield_status')))}</p><h2>Region Yields</h2><table><tr><th>Region</th><th>Yield</th></tr>{rows}</table><h2>Next Action</h2><p><code>{html.escape(str(payload.get('next_recommended_action')))}</code></p></main></body></html>"""
+        html_text = f"""<!doctype html><html lang='en'><head><meta charset='utf-8'><title>Run-3 stop monitor</title><style>body{{font-family:Arial,sans-serif;background:#f7f8fa;color:#20242a;margin:0}}main{{max-width:1000px;margin:auto;padding:28px}}table{{border-collapse:collapse;width:100%;background:white}}td,th{{border:1px solid #d8dde4;padding:8px;text-align:left}}th{{background:#e9eef5}}.note{{background:#fff3cd;padding:10px;border-radius:4px}}</style></head><body><main><h1>Pipeline Monitor</h1><p class='note'>Legacy stop_processor_v4.py validation is external/manual. No independent agreement with stop_processor_v4.py is claimed by autonomous_allhad unless explicitly provided by the user.</p><p>Current stage: <strong>{html.escape(str(payload.get('current_pipeline_stage')))}</strong></p><p>ROOT files read: {payload.get('root_files_read')} &nbsp; Feature rows: {payload.get('feature_rows')} &nbsp; Bad files: {payload.get('bad_files')}</p><p>Normalization: {html.escape(str(payload.get('normalization_status')))}; {html.escape(str(payload.get('raw_vs_normalized_yield_status')))}</p><p>GitHub Pages: {html.escape(str(payload.get('github_pages_site_status')))}; expected URL <code>{html.escape(str(payload.get('github_pages_expected_url')))}</code>; deployment {html.escape(str(payload.get('github_pages_deployment_status')))}; last publication UTC {html.escape(str(payload.get('github_pages_last_publication_time_utc')))}</p><h2>Region Yields</h2><table><tr><th>Region</th><th>Yield</th></tr>{rows}</table><h2>Next Action</h2><p><code>{html.escape(str(payload.get('next_recommended_action')))}</code></p></main></body></html>"""
         (self.docs / "monitor.html").write_text(html_text)
 
     def publish_github_pages(self) -> dict[str, Any]:
         self.docs.mkdir(parents=True, exist_ok=True)
         for sub in ["data", "plots", "assets"]:
             (self.docs / sub).mkdir(parents=True, exist_ok=True)
+        publication_time = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        result = {
+            "docs_path": "docs",
+            "index": "docs/index.html",
+            "monitor": "docs/monitor.html",
+            "workflow": ".github/workflows/pages.yml",
+            "expected_url": GITHUB_PAGES_URL,
+            "last_publication_time_utc": publication_time,
+            "deployment_status": "not_confirmed",
+            "deployment_confirmed": False,
+            "sensitive_scan": {"status": "pending", "findings": []},
+            "published": False,
+            "remaining_step": "Commit/push docs and confirm the GitHub Pages deployment in GitHub Actions.",
+        }
+        write_json(self.outputs / "github_pages_status.json", result)
         # Refresh monitor and keep docs/data synchronized with core machine-readable outputs.
         monitor = self.monitor(json_output=True)
         copy_sources = [
@@ -1146,17 +1173,15 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
         self.render_dashboard(monitor)
         self.sanitize_public_docs()
         sensitive = self.scan_docs_for_sensitive_strings()
-        result = {
-            "docs_path": "docs",
-            "index": "docs/index.html",
-            "monitor": "docs/monitor.html",
-            "workflow": ".github/workflows/pages.yml",
-            "sensitive_scan": sensitive,
-            "published": False,
-            "remaining_step": "Review docs/, then run: git add docs .github/workflows/pages.yml autonomous_allhad && git commit -m 'Update autonomous allhad dashboard' && git push",
-        }
+        result["sensitive_scan"] = sensitive
         write_json(self.outputs / "github_pages_status.json", result)
         self._record_direct_stage("publish_github_pages", "complete" if not sensitive["findings"] else "blocked", result)
+        monitor = self.monitor(json_output=True)
+        self.render_dashboard(monitor)
+        self.sanitize_public_docs()
+        sensitive = self.scan_docs_for_sensitive_strings()
+        result["sensitive_scan"] = sensitive
+        write_json(self.outputs / "github_pages_status.json", result)
         return result
 
     def render_dashboard(self, monitor: dict[str, Any]) -> None:
@@ -1175,6 +1200,10 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             ("Jet ID correctionlib diagnostic", "complete"),
             ("Trigger/cutflow audit", "complete"),
             ("Feature-side nonzero yields", "complete"),
+            ("GitHub Pages status", str(monitor.get("github_pages_site_status", "missing"))),
+            ("GitHub Pages expected URL", str(monitor.get("github_pages_expected_url", GITHUB_PAGES_URL))),
+            ("GitHub Pages last publication UTC", str(monitor.get("github_pages_last_publication_time_utc", "unknown"))),
+            ("GitHub Pages deployment", str(monitor.get("github_pages_deployment_status", "not_confirmed"))),
             ("Normalization status", str(norm.get("normalization_status", "missing"))),
             ("Raw versus normalized yield status", str(norm_audit.get("current_feature_yields_raw_or_normalized", "unknown")) + ("; normalized feature yields available" if norm else "")),
             ("Search-bin design", "complete" if schemes else "not started"),
