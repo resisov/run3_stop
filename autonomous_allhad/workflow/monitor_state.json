@@ -2,41 +2,719 @@
   "agreement_claim": "No independent agreement with stop_processor_v4.py is claimed by autonomous_allhad.",
   "bad_files": 0,
   "blocked_gates": [
-    "condor_production",
     "expected_limits",
     "full_production_normalization",
     "make_datacards",
-    "process_signals",
+    "make_systematic_yields",
     "run_production",
     "select_search_bins",
     "systematic_yields",
-    "make_systematic_yields"
+    "condor_production"
   ],
   "completed_gates": [
+    "analysisctl_all",
+    "analysisctl_all_start",
     "design_search_bins",
     "discover_signals_from_das",
+    "file_validation",
+    "input_discovery",
     "make_feature_yields",
     "make_hists_npy",
     "make_plots",
+    "monitor",
     "normalization_audit",
     "normalize_feature_yields",
     "parse_signal_xsec",
     "plot_from_npy",
+    "process_signals",
     "publish_github_pages",
-    "analysisctl_all_start",
+    "signal_discovery",
     "validate_feature_subset",
-    "input_discovery",
-    "file_validation",
-    "signal_discovery"
+    "write_summary"
   ],
-  "current_pipeline_stage": "publish_github_pages",
+  "condor_campaign": {
+    "afs_wrapper_large_submission_used": false,
+    "background_files_expected": 39172,
+    "condor_logs": {
+      "delta_retry_invalid_0854": {
+        "failed_procids_sample": [],
+        "log": "autonomous_allhad/workflow/condor_eos_retry_784515_delta_invalid_0854/logs/retry.log",
+        "return_value_counts": {},
+        "terminated_jobs_in_log": 0
+      },
+      "delta_retry_invalid_0859": {
+        "failed_procids_sample": [],
+        "log": "autonomous_allhad/workflow/condor_eos_retry_784515_delta_invalid_0859/logs/retry.log",
+        "return_value_counts": {},
+        "terminated_jobs_in_log": 0
+      },
+      "delta_retry_invalid_0908": {
+        "failed_procids_sample": [],
+        "log": "autonomous_allhad/workflow/condor_eos_retry_784515_delta_invalid_0908/logs/retry.log",
+        "return_value_counts": {},
+        "terminated_jobs_in_log": 0
+      },
+      "original_full": {
+        "failed_procids_sample": [
+          8,
+          16,
+          20,
+          28,
+          47,
+          52,
+          66,
+          70,
+          72,
+          74,
+          81,
+          86,
+          87,
+          92,
+          93,
+          104,
+          109,
+          112,
+          116,
+          119,
+          120,
+          122,
+          125,
+          138,
+          143
+        ],
+        "log": "autonomous_allhad/workflow/condor_eos_full/logs/full_production.log",
+        "return_value_counts": {
+          "0": 410,
+          "1": 1105
+        },
+        "terminated_jobs_in_log": 1516
+      },
+      "targeted_retry_import_io": {
+        "failed_procids_sample": [],
+        "log": "autonomous_allhad/workflow/condor_eos_retry_784515_import_io/logs/retry.log",
+        "return_value_counts": {},
+        "terminated_jobs_in_log": 0
+      }
+    },
+    "data_files_expected": 13576,
+    "delta_retry_2_cluster_id": "784521",
+    "delta_retry_2_jobs": 80,
+    "delta_retry_3_cluster_id": "784522",
+    "delta_retry_3_jobs": 199,
+    "delta_retry_cluster_id": "784519",
+    "delta_retry_jobs": 40,
+    "full_campaign_monitor": {
+      "active_job_covered_shards": 2077,
+      "held_jobs": [],
+      "incomplete_shards": 2077,
+      "inconsistent_file_count_outputs": 0,
+      "merge_can_start": false,
+      "missing_outputs": 0,
+      "nonterminal_status_outputs": 883,
+      "queue": {
+        "delta_retry_invalid_0854": {
+          "cluster_id": "784519",
+          "held": 0,
+          "idle": 0,
+          "jobs_in_queue": 3,
+          "removing": 0,
+          "running": 3,
+          "status_counts": {
+            "running": 3
+          },
+          "suspended": 0,
+          "transferring": 0
+        },
+        "delta_retry_invalid_0859": {
+          "cluster_id": "784521",
+          "held": 0,
+          "idle": 0,
+          "jobs_in_queue": 9,
+          "removing": 0,
+          "running": 9,
+          "status_counts": {
+            "running": 9
+          },
+          "suspended": 0,
+          "transferring": 0
+        },
+        "delta_retry_invalid_0908": {
+          "cluster_id": "784522",
+          "held": 0,
+          "idle": 0,
+          "jobs_in_queue": 40,
+          "removing": 0,
+          "running": 40,
+          "status_counts": {
+            "running": 40
+          },
+          "suspended": 0,
+          "transferring": 0
+        },
+        "original_full": {
+          "cluster_id": "784515",
+          "held": 0,
+          "idle": 7,
+          "jobs_in_queue": 369,
+          "removing": 0,
+          "running": 362,
+          "status_counts": {
+            "idle": 7,
+            "running": 362
+          },
+          "suspended": 0,
+          "transferring": 0
+        },
+        "remaining_invalid_retry_1016": {
+          "cluster_id": "784535",
+          "held": 0,
+          "idle": 2077,
+          "jobs_in_queue": 2077,
+          "removing": 0,
+          "running": 0,
+          "status_counts": {
+            "idle": 2077
+          },
+          "suspended": 0,
+          "transferring": 0
+        },
+        "targeted_retry_import_io": {
+          "cluster_id": "784518",
+          "held": 0,
+          "idle": 0,
+          "jobs_in_queue": 438,
+          "removing": 0,
+          "running": 438,
+          "status_counts": {
+            "running": 438
+          },
+          "suspended": 0,
+          "transferring": 0
+        }
+      },
+      "retry_cluster_id": "784535",
+      "retry_decision": "Submitted one targeted retry after all monitored clusters drained; excluded truly complete shards.",
+      "retry_jobs": 2077,
+      "retry_submitted_this_pass": true,
+      "scan_mode": "full_campaign_state_top_level_monitor_after_targeted_retry_submission",
+      "stale_digest_outputs": 0,
+      "terminal_invalid_needs_retry_outputs": 2077,
+      "timestamp_utc": "2026-06-18T10:18:58Z",
+      "total_shards": 2110,
+      "truly_complete_shards": 33,
+      "unreadable_json_outputs": 0,
+      "zero_byte_outputs": 1194
+    },
+    "held_jobs": [],
+    "merge_can_start": false,
+    "new_terminal_invalid_retry_submitted": {
+      "broad_retry": false,
+      "cluster_id": "784522",
+      "jobs": 199
+    },
+    "next_monitoring_command": "bash -lc 'module load lxbatch/eossubmit && cd /eos/home-t/taiwoo/run3_stop/decaf && condor_q 784515 -totals && condor_q 784518 -totals && condor_q 784519 -totals && condor_q 784521 -totals && condor_q 784522 -totals && condor_q 784535 -totals'",
+    "observed_failure": "Zero-byte/unreadable outputs are not treated as final while corresponding jobs are running or idle. Retried only terminal invalid original shards not covered by active retry clusters.",
+    "one_file_afs_pilot_only": true,
+    "original_cluster_id": "784515",
+    "original_jobs": 2110,
+    "post_784535_kill_report": {
+      "cluster_784535_still_in_queue": true,
+      "held_jobs": [],
+      "merge_can_start": false,
+      "next_monitoring_command": "bash -lc 'module load lxbatch/eossubmit && cd /eos/home-t/taiwoo/run3_stop/decaf && condor_q 784515 -totals && condor_q 784518 -totals && condor_q 784519 -totals && condor_q 784521 -totals && condor_q 784522 -totals && condor_q 784535 -totals'",
+      "queue": {
+        "delta_retry_invalid_0854": {
+          "cluster_id": "784519",
+          "held": 0,
+          "idle": 0,
+          "jobs_in_queue": 3,
+          "removing": 0,
+          "running": 3,
+          "status_counts": {
+            "running": 3
+          },
+          "suspended": 0,
+          "transferring": 0
+        },
+        "delta_retry_invalid_0859": {
+          "cluster_id": "784521",
+          "held": 0,
+          "idle": 0,
+          "jobs_in_queue": 7,
+          "removing": 0,
+          "running": 7,
+          "status_counts": {
+            "running": 7
+          },
+          "suspended": 0,
+          "transferring": 0
+        },
+        "delta_retry_invalid_0908": {
+          "cluster_id": "784522",
+          "held": 0,
+          "idle": 0,
+          "jobs_in_queue": 36,
+          "removing": 0,
+          "running": 36,
+          "status_counts": {
+            "running": 36
+          },
+          "suspended": 0,
+          "transferring": 0
+        },
+        "original_full": {
+          "cluster_id": "784515",
+          "held": 0,
+          "idle": 3,
+          "jobs_in_queue": 365,
+          "removing": 0,
+          "running": 362,
+          "status_counts": {
+            "idle": 3,
+            "running": 362
+          },
+          "suspended": 0,
+          "transferring": 0
+        },
+        "remaining_invalid_retry_1016": {
+          "cluster_id": "784535",
+          "held": 0,
+          "idle": 2061,
+          "jobs_in_queue": 2077,
+          "removing": 0,
+          "running": 16,
+          "status_counts": {
+            "idle": 2061,
+            "running": 16
+          },
+          "suspended": 0,
+          "transferring": 0
+        },
+        "targeted_retry_import_io": {
+          "cluster_id": "784518",
+          "held": 0,
+          "idle": 0,
+          "jobs_in_queue": 423,
+          "removing": 0,
+          "running": 423,
+          "status_counts": {
+            "running": 423
+          },
+          "suspended": 0,
+          "transferring": 0
+        }
+      },
+      "retry_submitted_this_pass": false,
+      "timestamp_utc": "2026-06-18T10:20:25Z",
+      "user_reported_784535_kill": true
+    },
+    "queue": {
+      "delta_retry_invalid_0854": {
+        "cluster_id": "784519",
+        "held": 0,
+        "hold_reasons": [],
+        "idle": 40,
+        "jobs_in_queue": 40,
+        "running": 0,
+        "status_counts": {
+          "idle": 40
+        },
+        "totals_text": "-- Schedd: bigbird24.cern.ch : <188.185.88.162:9618?... @ 06/18/26 11:10:30\nTotal for query: 40 jobs; 0 completed, 0 removed, 40 idle, 0 running, 0 held, 0 suspended \nTotal for all users: 4344 jobs; 66 completed, 0 removed, 3347 idle, 930 running, 1 held, 0 suspended"
+      },
+      "delta_retry_invalid_0859": {
+        "cluster_id": "784521",
+        "held": 0,
+        "hold_reasons": [],
+        "idle": 80,
+        "jobs_in_queue": 80,
+        "running": 0,
+        "status_counts": {
+          "idle": 80
+        },
+        "totals_text": "-- Schedd: bigbird24.cern.ch : <188.185.88.162:9618?... @ 06/18/26 11:10:30\nTotal for query: 80 jobs; 0 completed, 0 removed, 80 idle, 0 running, 0 held, 0 suspended \nTotal for all users: 4344 jobs; 66 completed, 0 removed, 3347 idle, 930 running, 1 held, 0 suspended"
+      },
+      "delta_retry_invalid_0908": {
+        "cluster_id": "784522",
+        "held": 0,
+        "hold_reasons": [],
+        "idle": 199,
+        "jobs_in_queue": 199,
+        "running": 0,
+        "status_counts": {
+          "idle": 199
+        },
+        "totals_text": "-- Schedd: bigbird24.cern.ch : <188.185.88.162:9618?... @ 06/18/26 11:10:31\nTotal for query: 199 jobs; 0 completed, 0 removed, 199 idle, 0 running, 0 held, 0 suspended \nTotal for all users: 4344 jobs; 66 completed, 0 removed, 3350 idle, 927 running, 1 held, 0 suspended"
+      },
+      "original_full": {
+        "cluster_id": "784515",
+        "held": 0,
+        "hold_reasons": [],
+        "idle": 34,
+        "jobs_in_queue": 577,
+        "running": 543,
+        "status_counts": {
+          "idle": 34,
+          "running": 543
+        },
+        "totals_text": "-- Schedd: bigbird24.cern.ch : <188.185.88.162:9618?... @ 06/18/26 11:10:28\nTotal for query: 577 jobs; 0 completed, 0 removed, 34 idle, 543 running, 0 held, 0 suspended \nTotal for all users: 4344 jobs; 66 completed, 0 removed, 3341 idle, 936 running, 1 held, 0 suspended"
+      },
+      "targeted_retry_import_io": {
+        "cluster_id": "784518",
+        "held": 0,
+        "hold_reasons": [],
+        "idle": 742,
+        "jobs_in_queue": 1126,
+        "running": 384,
+        "status_counts": {
+          "idle": 742,
+          "running": 384
+        },
+        "totals_text": "-- Schedd: bigbird24.cern.ch : <188.185.88.162:9618?... @ 06/18/26 11:10:29\nTotal for query: 1126 jobs; 0 completed, 0 removed, 745 idle, 381 running, 0 held, 0 suspended \nTotal for all users: 4344 jobs; 66 completed, 0 removed, 3344 idle, 933 running, 1 held, 0 suspended"
+      }
+    },
+    "remaining_invalid_retry_cluster_id": "784535",
+    "remaining_invalid_retry_jobs": 2077,
+    "shard_manifest_modified": false,
+    "shards": {
+      "all_outputs_terminal_valid": false,
+      "bad_categories": {
+        "local_eos_or_conda_io_error": 4,
+        "xrootd_timeout_or_operation_expired": 247
+      },
+      "bad_files_complete": 0,
+      "bad_files_readable": 251,
+      "bad_reasons_top": [
+        [
+          "XRootD error: [ERROR] Operation expired",
+          246
+        ],
+        [
+          "direct ROOT open failed and cached ROOT open failed: /eos/user/t/taiwoo/miniconda3/envs/py38/lib/python3.8/lib-dynload/mmap.cpython-38-x86_64-linux-gnu.so: cannot read file data: I",
+          4
+        ],
+        [
+          "direct ROOT open failed and all xrdcp fallback sources failed",
+          1
+        ]
+      ],
+      "complete": 2,
+      "events_complete": 6702993,
+      "events_readable": 2580472587,
+      "failed": 0,
+      "failed_sample": [],
+      "invalid_or_nonterminal_sample": [
+        "shard_00000",
+        "shard_00001",
+        "shard_00002",
+        "shard_00003",
+        "shard_00004",
+        "shard_00005",
+        "shard_00006",
+        "shard_00007",
+        "shard_00008",
+        "shard_00009",
+        "shard_00010",
+        "shard_00011",
+        "shard_00012",
+        "shard_00013",
+        "shard_00014",
+        "shard_00015",
+        "shard_00016",
+        "shard_00017",
+        "shard_00018",
+        "shard_00019",
+        "shard_00020",
+        "shard_00021",
+        "shard_00022",
+        "shard_00023",
+        "shard_00024"
+      ],
+      "output_dir": "autonomous_allhad/workflow/production_outputs_eos_full",
+      "processed_background_files_complete": 50,
+      "processed_background_files_readable": 4823,
+      "processed_data_files_complete": 0,
+      "processed_data_files_readable": 2138,
+      "running_or_missing": 2108,
+      "shard_json": 2110,
+      "status_counts": {
+        "complete": 2,
+        "running": 943,
+        "unreadable:zero_byte": 1165
+      },
+      "zero_byte_json": 1165,
+      "zero_byte_or_unreadable": 1165
+    },
+    "sms_in_background_shards": 0,
+    "state": "submitted_waiting_for_outputs_with_targeted_retries",
+    "strict_completion": {
+      "active_job_covered_shards": 2077,
+      "held_jobs": [],
+      "incomplete_shards": 2077,
+      "inconsistent_file_count_outputs": 0,
+      "merge_can_start": false,
+      "missing_outputs": 0,
+      "nonterminal_status_outputs": 883,
+      "queue": {
+        "delta_retry_invalid_0854": {
+          "cluster_id": "784519",
+          "held": 0,
+          "idle": 0,
+          "jobs_in_queue": 3,
+          "removing": 0,
+          "running": 3,
+          "status_counts": {
+            "running": 3
+          },
+          "suspended": 0,
+          "transferring": 0
+        },
+        "delta_retry_invalid_0859": {
+          "cluster_id": "784521",
+          "held": 0,
+          "idle": 0,
+          "jobs_in_queue": 9,
+          "removing": 0,
+          "running": 9,
+          "status_counts": {
+            "running": 9
+          },
+          "suspended": 0,
+          "transferring": 0
+        },
+        "delta_retry_invalid_0908": {
+          "cluster_id": "784522",
+          "held": 0,
+          "idle": 0,
+          "jobs_in_queue": 40,
+          "removing": 0,
+          "running": 40,
+          "status_counts": {
+            "running": 40
+          },
+          "suspended": 0,
+          "transferring": 0
+        },
+        "original_full": {
+          "cluster_id": "784515",
+          "held": 0,
+          "idle": 7,
+          "jobs_in_queue": 369,
+          "removing": 0,
+          "running": 362,
+          "status_counts": {
+            "idle": 7,
+            "running": 362
+          },
+          "suspended": 0,
+          "transferring": 0
+        },
+        "remaining_invalid_retry_1016": {
+          "cluster_id": "784535",
+          "held": 0,
+          "idle": 2077,
+          "jobs_in_queue": 2077,
+          "removing": 0,
+          "running": 0,
+          "status_counts": {
+            "idle": 2077
+          },
+          "suspended": 0,
+          "transferring": 0
+        },
+        "targeted_retry_import_io": {
+          "cluster_id": "784518",
+          "held": 0,
+          "idle": 0,
+          "jobs_in_queue": 438,
+          "removing": 0,
+          "running": 438,
+          "status_counts": {
+            "running": 438
+          },
+          "suspended": 0,
+          "transferring": 0
+        }
+      },
+      "retry_cluster_id": "784535",
+      "retry_decision": "Submitted one targeted retry after all monitored clusters drained; excluded truly complete shards.",
+      "retry_jobs": 2077,
+      "retry_submitted_this_pass": true,
+      "scan_mode": "full_campaign_state_top_level_monitor_after_targeted_retry_submission",
+      "stale_digest_outputs": 0,
+      "terminal_invalid_needs_retry_outputs": 2077,
+      "timestamp_utc": "2026-06-18T10:18:58Z",
+      "total_shards": 2110,
+      "truly_complete_shards": 33,
+      "unreadable_json_outputs": 0,
+      "zero_byte_outputs": 1194
+    },
+    "submit_environment": "EOS-aware lxbatch/eossubmit",
+    "targeted_retry_cluster_id": "784518",
+    "targeted_retry_jobs": 1126,
+    "terminal_invalid_accumulated": [
+      "shard_00000",
+      "shard_00001",
+      "shard_00002",
+      "shard_00003",
+      "shard_00004",
+      "shard_00005",
+      "shard_00006",
+      "shard_00007",
+      "shard_00008",
+      "shard_00009",
+      "shard_00010",
+      "shard_00011",
+      "shard_00012",
+      "shard_00013",
+      "shard_00014",
+      "shard_00015",
+      "shard_00016",
+      "shard_00017",
+      "shard_00018",
+      "shard_00019",
+      "shard_00020",
+      "shard_00021",
+      "shard_00022",
+      "shard_00023",
+      "shard_00024",
+      "shard_00025",
+      "shard_00026",
+      "shard_00027",
+      "shard_00028",
+      "shard_00029",
+      "shard_00030",
+      "shard_00031",
+      "shard_00032",
+      "shard_00033",
+      "shard_00034",
+      "shard_00035",
+      "shard_00036",
+      "shard_00037",
+      "shard_00038",
+      "shard_00039",
+      "shard_00040",
+      "shard_00041",
+      "shard_00042",
+      "shard_00043",
+      "shard_00044",
+      "shard_00045",
+      "shard_00046",
+      "shard_00047",
+      "shard_00048",
+      "shard_00049"
+    ],
+    "terminal_invalid_accumulated_count": 2088
+  },
+  "current_pipeline_stage": "condor_production_monitoring_after_784535_kill_report",
   "diagnostic_preselection_yield": 12377,
   "failed_gates": [],
   "feature_rows": 290006,
+  "full_campaign_monitor": {
+    "active_job_covered_shards": 2077,
+    "held_jobs": [],
+    "incomplete_shards": 2077,
+    "inconsistent_file_count_outputs": 0,
+    "merge_can_start": false,
+    "missing_outputs": 0,
+    "nonterminal_status_outputs": 883,
+    "queue": {
+      "delta_retry_invalid_0854": {
+        "cluster_id": "784519",
+        "held": 0,
+        "idle": 0,
+        "jobs_in_queue": 3,
+        "removing": 0,
+        "running": 3,
+        "status_counts": {
+          "running": 3
+        },
+        "suspended": 0,
+        "transferring": 0
+      },
+      "delta_retry_invalid_0859": {
+        "cluster_id": "784521",
+        "held": 0,
+        "idle": 0,
+        "jobs_in_queue": 9,
+        "removing": 0,
+        "running": 9,
+        "status_counts": {
+          "running": 9
+        },
+        "suspended": 0,
+        "transferring": 0
+      },
+      "delta_retry_invalid_0908": {
+        "cluster_id": "784522",
+        "held": 0,
+        "idle": 0,
+        "jobs_in_queue": 40,
+        "removing": 0,
+        "running": 40,
+        "status_counts": {
+          "running": 40
+        },
+        "suspended": 0,
+        "transferring": 0
+      },
+      "original_full": {
+        "cluster_id": "784515",
+        "held": 0,
+        "idle": 7,
+        "jobs_in_queue": 369,
+        "removing": 0,
+        "running": 362,
+        "status_counts": {
+          "idle": 7,
+          "running": 362
+        },
+        "suspended": 0,
+        "transferring": 0
+      },
+      "remaining_invalid_retry_1016": {
+        "cluster_id": "784535",
+        "held": 0,
+        "idle": 2077,
+        "jobs_in_queue": 2077,
+        "removing": 0,
+        "running": 0,
+        "status_counts": {
+          "idle": 2077
+        },
+        "suspended": 0,
+        "transferring": 0
+      },
+      "targeted_retry_import_io": {
+        "cluster_id": "784518",
+        "held": 0,
+        "idle": 0,
+        "jobs_in_queue": 438,
+        "removing": 0,
+        "running": 438,
+        "status_counts": {
+          "running": 438
+        },
+        "suspended": 0,
+        "transferring": 0
+      }
+    },
+    "retry_cluster_id": "784535",
+    "retry_decision": "Submitted one targeted retry after all monitored clusters drained; excluded truly complete shards.",
+    "retry_jobs": 2077,
+    "retry_submitted_this_pass": true,
+    "scan_mode": "full_campaign_state_top_level_monitor_after_targeted_retry_submission",
+    "stale_digest_outputs": 0,
+    "terminal_invalid_needs_retry_outputs": 2077,
+    "timestamp_utc": "2026-06-18T10:18:58Z",
+    "total_shards": 2110,
+    "truly_complete_shards": 33,
+    "unreadable_json_outputs": 0,
+    "zero_byte_outputs": 1194
+  },
   "github_pages_deployment_confirmed": false,
   "github_pages_deployment_status": "not_confirmed",
   "github_pages_expected_url": "https://resisov.github.io/run3_stop/",
-  "github_pages_last_publication_time_utc": "2026-06-17T15:41:23Z",
+  "github_pages_last_publication_time_utc": "2026-06-18T08:10:19Z",
   "github_pages_published_by_pipeline": false,
   "github_pages_site_status": "ready",
   "latest_command": {
@@ -45,7 +723,6 @@
       "index": "docs/index.html",
       "monitor": "docs/monitor.html",
       "published": false,
-      "status": "complete",
       "workflow": ".github/workflows/pages.yml"
     },
     "stage": "publish_github_pages",
@@ -58,18 +735,108 @@
       "index": "docs/index.html",
       "monitor": "docs/monitor.html",
       "published": false,
-      "status": "complete",
       "workflow": ".github/workflows/pages.yml"
     },
     "stage": "publish_github_pages",
     "status": "complete"
   },
   "manual_validation_status": "external/manual",
-  "next_recommended_action": "Unblock full production: enable/authorize Condor production or configure an explicit bounded local full-production fallback, then run ./autonomous_allhad/analysisctl run-production --config autonomous_allhad/configs/run3_2024.yaml",
+  "next_recommended_action": "bash -lc 'module load lxbatch/eossubmit && cd /eos/home-t/taiwoo/run3_stop/decaf && condor_q 784515 -totals && condor_q 784518 -totals && condor_q 784519 -totals && condor_q 784521 -totals && condor_q 784522 -totals'",
   "normalization_blocked_datasets": 0,
   "normalization_luminosity_fb": 109.82,
   "normalization_status": "complete",
   "normalized_datasets": 14,
+  "post_784535_kill_report": {
+    "cluster_784535_still_in_queue": true,
+    "held_jobs": [],
+    "merge_can_start": false,
+    "next_monitoring_command": "bash -lc 'module load lxbatch/eossubmit && cd /eos/home-t/taiwoo/run3_stop/decaf && condor_q 784515 -totals && condor_q 784518 -totals && condor_q 784519 -totals && condor_q 784521 -totals && condor_q 784522 -totals && condor_q 784535 -totals'",
+    "queue": {
+      "delta_retry_invalid_0854": {
+        "cluster_id": "784519",
+        "held": 0,
+        "idle": 0,
+        "jobs_in_queue": 3,
+        "removing": 0,
+        "running": 3,
+        "status_counts": {
+          "running": 3
+        },
+        "suspended": 0,
+        "transferring": 0
+      },
+      "delta_retry_invalid_0859": {
+        "cluster_id": "784521",
+        "held": 0,
+        "idle": 0,
+        "jobs_in_queue": 7,
+        "removing": 0,
+        "running": 7,
+        "status_counts": {
+          "running": 7
+        },
+        "suspended": 0,
+        "transferring": 0
+      },
+      "delta_retry_invalid_0908": {
+        "cluster_id": "784522",
+        "held": 0,
+        "idle": 0,
+        "jobs_in_queue": 36,
+        "removing": 0,
+        "running": 36,
+        "status_counts": {
+          "running": 36
+        },
+        "suspended": 0,
+        "transferring": 0
+      },
+      "original_full": {
+        "cluster_id": "784515",
+        "held": 0,
+        "idle": 3,
+        "jobs_in_queue": 365,
+        "removing": 0,
+        "running": 362,
+        "status_counts": {
+          "idle": 3,
+          "running": 362
+        },
+        "suspended": 0,
+        "transferring": 0
+      },
+      "remaining_invalid_retry_1016": {
+        "cluster_id": "784535",
+        "held": 0,
+        "idle": 2061,
+        "jobs_in_queue": 2077,
+        "removing": 0,
+        "running": 16,
+        "status_counts": {
+          "idle": 2061,
+          "running": 16
+        },
+        "suspended": 0,
+        "transferring": 0
+      },
+      "targeted_retry_import_io": {
+        "cluster_id": "784518",
+        "held": 0,
+        "idle": 0,
+        "jobs_in_queue": 423,
+        "removing": 0,
+        "running": 423,
+        "status_counts": {
+          "running": 423
+        },
+        "suspended": 0,
+        "transferring": 0
+      }
+    },
+    "retry_submitted_this_pass": false,
+    "timestamp_utc": "2026-06-18T10:20:25Z",
+    "user_reported_784535_kill": true
+  },
   "raw_vs_normalized_yield_status": "raw_genWeight_sums; normalized_feature_yields.json available",
   "region_yields": {
     "DY2E": 17,
@@ -90,9 +857,9 @@
     "fullsim_anchor_candidates": 6,
     "realized_mass_points": 326,
     "representative_files_probed": 26,
-    "signal_processed_files": 0,
-    "signal_yield_mass_points": 0,
-    "signal_yields_ready": false,
+    "signal_processed_files": 61,
+    "signal_yield_mass_points": 352,
+    "signal_yields_ready": true,
     "status": "complete",
     "total_fastsim_signal_root_files": 61,
     "total_fullsim_signal_root_files": 47,
@@ -100,5 +867,108 @@
     "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level",
     "usable_fastsim_mass_points": 326,
     "xsec_table_status": "parsed"
-  }
+  },
+  "strict_completion": {
+    "active_job_covered_shards": 2077,
+    "held_jobs": [],
+    "incomplete_shards": 2077,
+    "inconsistent_file_count_outputs": 0,
+    "merge_can_start": false,
+    "missing_outputs": 0,
+    "nonterminal_status_outputs": 883,
+    "queue": {
+      "delta_retry_invalid_0854": {
+        "cluster_id": "784519",
+        "held": 0,
+        "idle": 0,
+        "jobs_in_queue": 3,
+        "removing": 0,
+        "running": 3,
+        "status_counts": {
+          "running": 3
+        },
+        "suspended": 0,
+        "transferring": 0
+      },
+      "delta_retry_invalid_0859": {
+        "cluster_id": "784521",
+        "held": 0,
+        "idle": 0,
+        "jobs_in_queue": 9,
+        "removing": 0,
+        "running": 9,
+        "status_counts": {
+          "running": 9
+        },
+        "suspended": 0,
+        "transferring": 0
+      },
+      "delta_retry_invalid_0908": {
+        "cluster_id": "784522",
+        "held": 0,
+        "idle": 0,
+        "jobs_in_queue": 40,
+        "removing": 0,
+        "running": 40,
+        "status_counts": {
+          "running": 40
+        },
+        "suspended": 0,
+        "transferring": 0
+      },
+      "original_full": {
+        "cluster_id": "784515",
+        "held": 0,
+        "idle": 7,
+        "jobs_in_queue": 369,
+        "removing": 0,
+        "running": 362,
+        "status_counts": {
+          "idle": 7,
+          "running": 362
+        },
+        "suspended": 0,
+        "transferring": 0
+      },
+      "remaining_invalid_retry_1016": {
+        "cluster_id": "784535",
+        "held": 0,
+        "idle": 2077,
+        "jobs_in_queue": 2077,
+        "removing": 0,
+        "running": 0,
+        "status_counts": {
+          "idle": 2077
+        },
+        "suspended": 0,
+        "transferring": 0
+      },
+      "targeted_retry_import_io": {
+        "cluster_id": "784518",
+        "held": 0,
+        "idle": 0,
+        "jobs_in_queue": 438,
+        "removing": 0,
+        "running": 438,
+        "status_counts": {
+          "running": 438
+        },
+        "suspended": 0,
+        "transferring": 0
+      }
+    },
+    "retry_cluster_id": "784535",
+    "retry_decision": "Submitted one targeted retry after all monitored clusters drained; excluded truly complete shards.",
+    "retry_jobs": 2077,
+    "retry_submitted_this_pass": true,
+    "scan_mode": "full_campaign_state_top_level_monitor_after_targeted_retry_submission",
+    "stale_digest_outputs": 0,
+    "terminal_invalid_needs_retry_outputs": 2077,
+    "timestamp_utc": "2026-06-18T10:18:58Z",
+    "total_shards": 2110,
+    "truly_complete_shards": 33,
+    "unreadable_json_outputs": 0,
+    "zero_byte_outputs": 1194
+  },
+  "updated_at_utc": "2026-06-18T10:20:25Z"
 }

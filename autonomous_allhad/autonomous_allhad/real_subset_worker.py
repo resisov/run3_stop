@@ -3,12 +3,15 @@ from __future__ import annotations
 
 import csv
 import gzip
+import hashlib
 import html
 import json
 import math
 import os
 import re
 import resource
+import shutil
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -16,9 +19,6 @@ from typing import Any
 
 import awkward as ak
 import correctionlib
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import numpy as np
 import uproot
 
@@ -79,6 +79,146 @@ def write_json(path: Path, payload: Any) -> None:
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
 
 
+class RootOpenFailure(RuntimeError):
+    def __init__(self, message: str, access_info: dict[str, Any]):
+        super().__init__(message)
+        self.access_info = access_info
+
+
+def _xrd_cache_path(file_path: str) -> Path:
+    user = os.environ.get("USER") or "unknown"
+    cache_dir = Path(os.environ.get("AUTONOMOUS_ALLHAD_XRD_CACHE", f"/tmp/{user}/autonomous_allhad_xrd_cache"))
+    raw_name = file_path.split("?", 1)[0].rstrip("/").rsplit("/", 1)[-1] or "cached.root"
+    if not raw_name.endswith(".root"):
+        raw_name += ".root"
+    digest = hashlib.sha256(file_path.encode()).hexdigest()[:16]
+    return cache_dir / f"{digest}_{raw_name}"
+
+
+def _xrd_source_candidates(file_path: str) -> list[str]:
+    if not str(file_path).startswith("root://"):
+        return [file_path]
+    candidates = [file_path]
+    idx = str(file_path).find("/store/")
+    if idx >= 0:
+        lfn = str(file_path)[idx:]
+        for host in ["cmsxrootd.fnal.gov", "xrootd-cms.infn.it", "cms-xrd-global.cern.ch"]:
+            candidates.append(f"root://{host}/{lfn}")
+    out: list[str] = []
+    for item in candidates:
+        if item not in out:
+            out.append(item)
+    return out
+
+
+def open_root_with_xrd_fallback(file_path: str, timeout: int = 60) -> tuple[Any, dict[str, Any]]:
+    info: dict[str, Any] = {
+        "source_file_path": file_path,
+        "effective_file_path": file_path,
+        "access_method": "direct",
+        "direct_open_attempted": True,
+        "direct_open_status": "not_started",
+        "direct_open_error": None,
+        "alternate_access_attempted": False,
+        "fallback_status": "not_started",
+        "fallback_sources_considered": [],
+        "xrdcp_attempts": [],
+        "xrdcp_command": None,
+        "xrdcp_exit_status": None,
+        "xrdcp_stdout_tail": "",
+        "xrdcp_stderr_tail": "",
+        "cache_path": None,
+        "cache_reused": False,
+    }
+    try:
+        root = uproot.open(file_path, timeout=timeout)
+        info["direct_open_status"] = "success"
+        info["fallback_status"] = "not_needed"
+        return root, info
+    except Exception as exc:
+        info["direct_open_status"] = "failed"
+        info["direct_open_error"] = f"{type(exc).__name__}: {exc}"
+        if not str(file_path).startswith("root://"):
+            info["fallback_status"] = "not_applicable_non_xrootd"
+            raise RootOpenFailure(f"direct ROOT open failed and xrdcp fallback is not applicable: {exc}", info)
+
+    xrdcp = shutil.which("xrdcp")
+    info["alternate_access_attempted"] = True
+    if not xrdcp:
+        info["fallback_status"] = "xrdcp_unavailable"
+        raise RootOpenFailure("direct ROOT open failed and xrdcp is unavailable", info)
+
+    cache_path = _xrd_cache_path(file_path)
+    cache_path.parent.mkdir(parents=True, exist_ok=True)
+    info["cache_path"] = str(cache_path)
+    info["effective_file_path"] = str(cache_path)
+    if cache_path.exists() and cache_path.stat().st_size > 0:
+        info["cache_reused"] = True
+        info["fallback_status"] = "cache_reused"
+    else:
+        copied = False
+        for source in _xrd_source_candidates(file_path):
+            info["fallback_sources_considered"].append(source)
+            cmd = [xrdcp, "-f", source, str(cache_path)]
+            info["xrdcp_command"] = cmd
+            attempt = {"source": source, "command": cmd, "exit_status": None, "stdout_tail": "", "stderr_tail": "", "status": "not_started"}
+            try:
+                proc = subprocess.run(
+                    cmd,
+                    text=True,
+                    capture_output=True,
+                    timeout=int(os.environ.get("AUTONOMOUS_ALLHAD_XRDCP_TIMEOUT", "3600")),
+                )
+                attempt["exit_status"] = proc.returncode
+                attempt["stdout_tail"] = proc.stdout[-4000:]
+                attempt["stderr_tail"] = proc.stderr[-4000:]
+                attempt["status"] = "success" if proc.returncode == 0 else "failed"
+                info["xrdcp_exit_status"] = proc.returncode
+                info["xrdcp_stdout_tail"] = attempt["stdout_tail"]
+                info["xrdcp_stderr_tail"] = attempt["stderr_tail"]
+            except Exception as exc:
+                attempt["status"] = "exception"
+                attempt["stderr_tail"] = f"{type(exc).__name__}: {exc}"
+                info["xrdcp_stderr_tail"] = attempt["stderr_tail"]
+            info["xrdcp_attempts"].append(attempt)
+            if attempt["status"] == "success" and cache_path.exists() and cache_path.stat().st_size > 0:
+                copied = True
+                info["fallback_status"] = "xrdcp_copied"
+                break
+            try:
+                cache_path.unlink(missing_ok=True)
+            except Exception:
+                pass
+        if not copied:
+            info["fallback_status"] = "xrdcp_failed"
+            raise RootOpenFailure("direct ROOT open failed and all xrdcp fallback sources failed", info)
+
+    try:
+        root = uproot.open(str(cache_path), timeout=timeout)
+        info["access_method"] = "xrdcp_cache"
+        info["cache_open_status"] = "success"
+        return root, info
+    except Exception as exc:
+        info["fallback_status"] = "cache_open_failed"
+        info["cache_open_status"] = "failed"
+        info["cache_open_error"] = f"{type(exc).__name__}: {exc}"
+        raise RootOpenFailure(f"direct ROOT open failed and cached ROOT open failed: {exc}", info)
+
+
+def cleanup_xrd_cache(access_info: dict[str, Any]) -> None:
+    if os.environ.get("AUTONOMOUS_ALLHAD_XRD_KEEP_CACHE", "0") == "1":
+        return
+    if access_info.get("access_method") != "xrdcp_cache":
+        return
+    cache_path = access_info.get("cache_path")
+    if not cache_path:
+        return
+    try:
+        Path(str(cache_path)).unlink(missing_ok=True)
+    except Exception:
+        pass
+
+
 def load_config(path: Path) -> dict[str, str]:
     # The real worker only needs the paths used below; keep parsing intentionally small.
     out: dict[str, str] = {}
@@ -118,10 +258,20 @@ def signal_point(dataset: str) -> str | None:
 
 
 def file_size(path: str) -> int | None:
+    root = None
+    access_info: dict[str, Any] = {}
     try:
-        return int(uproot.open(path).file.source.num_bytes)
+        root, access_info = open_root_with_xrd_fallback(path, timeout=60)
+        return int(root.file.source.num_bytes)
     except Exception:
         return None
+    finally:
+        try:
+            if root is not None:
+                root.close()
+        except Exception:
+            pass
+        cleanup_xrd_cache(access_info)
 
 
 def dataset_score(group: str, key: str) -> tuple[int, list[Any]]:
@@ -442,8 +592,12 @@ def validate_and_extract_file(file_path: str, dataset: str, process: str, sp: st
     rec = {"dataset_key": dataset, "process": process, "signal_point": sp, "physical_file_path": file_path, "tree_name": "Events", "file_size": None, "number_of_entries": None, "required_branch_validation": {}, "read_status": "not_started", "processing_status": "not_started"}
     rows: list[dict[str, Any]] = []
     bad: list[dict[str, Any]] = []
+    root = None
+    access_info: dict[str, Any] = {}
     try:
-        root = uproot.open(file_path, timeout=60)
+        root, access_info = open_root_with_xrd_fallback(file_path, timeout=60)
+        rec["file_access"] = access_info
+        rec["effective_file_path"] = access_info.get("effective_file_path", file_path)
         rec["file_size"] = int(root.file.source.num_bytes)
         keys = set(k.split(";")[0] for k in root.keys())
         rec["events_tree_exists"] = "Events" in keys
@@ -490,10 +644,28 @@ def validate_and_extract_file(file_path: str, dataset: str, process: str, sp: st
         rec["read_status"] = "success"
         rec["processing_status"] = "processed_real_chunks"
     except Exception as exc:
+        if isinstance(exc, RootOpenFailure):
+            access_info = exc.access_info
+            rec["file_access"] = access_info
         rec["read_status"] = "failed"
         rec["processing_status"] = "excluded"
         rec["error"] = f"{type(exc).__name__}: {exc}"
-        bad.append({"dataset": dataset, "file_path": file_path, "failure_stage": "real_subset_open_or_read", "exception_type": type(exc).__name__, "concise_error": str(exc)[:400], "first_failure_time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "last_failure_time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "alternate_access_attempted": False, "permanently_skipped": True})
+        fallback_status = str(access_info.get("fallback_status", "not_attempted"))
+        error_blob = " ".join([
+            str(access_info.get("direct_open_error", "")),
+            str(access_info.get("xrdcp_stderr_tail", "")),
+            " ".join(str(a.get("stderr_tail", "")) for a in access_info.get("xrdcp_attempts", []) if isinstance(a, dict)),
+        ]).lower()
+        external_access_blocker = any(token in error_blob for token in ["redirect limit", "permission denied", "timed out", "operation expired", "certificate", "proxy"])
+        permanently_skipped = (fallback_status in {"xrdcp_failed", "cache_open_failed"} and not external_access_blocker) or (not str(file_path).startswith("root://") and not external_access_blocker)
+        bad.append({"dataset": dataset, "file_path": file_path, "failure_stage": "real_subset_open_or_read", "exception_type": type(exc).__name__, "concise_error": str(exc)[:400], "first_failure_time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "last_failure_time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "alternate_access_attempted": bool(access_info.get("alternate_access_attempted", False)), "external_access_blocker": external_access_blocker, "direct_open_error": access_info.get("direct_open_error"), "fallback_status": fallback_status, "xrdcp_exit_status": access_info.get("xrdcp_exit_status"), "xrdcp_stderr_tail": access_info.get("xrdcp_stderr_tail", ""), "xrdcp_attempts": access_info.get("xrdcp_attempts", []), "permanently_skipped": permanently_skipped})
+    finally:
+        try:
+            if root is not None:
+                root.close()
+        except Exception:
+            pass
+        cleanup_xrd_cache(access_info)
     return rec, rows, bad
 
 
@@ -863,6 +1035,10 @@ def main(argv: list[str] | None = None) -> int:
 
     # Real validation plot from actual processed chunks.
     if all_rows:
+        import matplotlib
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+
         met = [r["met"] for r in all_rows]
         plt.figure(figsize=(7, 5))
         plt.hist(met, bins=[0,100,200,250,300,400,500,800,1200,2000], histtype="step", linewidth=1.8)

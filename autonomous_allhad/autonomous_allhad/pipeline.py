@@ -681,26 +681,33 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
 
     def _runs_sumw_by_mass(self, file_url: str) -> dict[str, float]:
         out: dict[str, float] = {}
+        root = None
         try:
             import numpy as np
-            import uproot  # type: ignore
-            with uproot.open(file_url) as root:
-                keys = {str(k).split(";")[0] for k in root.keys()}
-                if "Runs" not in keys:
-                    return out
-                runs = root["Runs"]
-                for branch in runs.keys():
-                    name = str(branch)
-                    if not name.startswith("genEventSumw_T2tt_"):
-                        continue
-                    mstop, mlsp = self._mass_from_genmodel_branch(name)
-                    if mstop is None or mlsp is None:
-                        continue
-                    key = self._signal_mass_key(mstop, mlsp)
-                    arr = runs[name].array(library="np")
-                    out[key] = out.get(key, 0.0) + float(np.sum(np.asarray(arr, dtype=float)))
+            from .real_subset_worker import open_root_with_xrd_fallback
+            root, _access = open_root_with_xrd_fallback(file_url, timeout=60)
+            keys = {str(k).split(";")[0] for k in root.keys()}
+            if "Runs" not in keys:
+                return out
+            runs = root["Runs"]
+            for branch in runs.keys():
+                name = str(branch)
+                if not name.startswith("genEventSumw_T2tt_"):
+                    continue
+                mstop, mlsp = self._mass_from_genmodel_branch(name)
+                if mstop is None or mlsp is None:
+                    continue
+                key = self._signal_mass_key(mstop, mlsp)
+                arr = runs[name].array(library="np")
+                out[key] = out.get(key, 0.0) + float(np.sum(np.asarray(arr, dtype=float)))
         except Exception:
             return out
+        finally:
+            try:
+                if root is not None:
+                    root.close()
+            except Exception:
+                pass
         return out
 
     def _probe_signal_file(self, dataset: str, file_url: str, simulation_type: str) -> dict[str, Any]:
@@ -722,32 +729,48 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
             "trigger_policy": "standard trigger branches required",
             "error": None,
         }
+        root = None
+        access_info: dict[str, Any] = {}
         try:
-            import uproot  # type: ignore
-            with uproot.open(file_url) as root:
-                keys = {str(k).split(";")[0] for k in root.keys()}
-                rec["file_readable"] = True
-                rec["events_tree_exists"] = "Events" in keys
-                rec["runs_tree_exists"] = "Runs" in keys
-                if rec["events_tree_exists"]:
-                    events = root["Events"]
-                    ev_branches = list(events.keys())
-                    rec["events_entries"] = int(events.num_entries)
-                    rec["genmodel_branches"] = sorted([b for b in ev_branches if str(b).startswith("GenModel_T2tt_")])
-                    rec["hlt_branches_found"] = sorted([b for b in ev_branches if str(b).startswith("HLT_")])[:100]
-                if rec["runs_tree_exists"]:
-                    runs = root["Runs"]
-                    run_branches = list(runs.keys())
-                    rec["runs_entries"] = int(runs.num_entries)
-                    rec["runs_sumw_branches"] = sorted([b for b in run_branches if str(b).startswith("genEventSumw_T2tt_")])
-                if simulation_type == "FastSim signal dataset" and not rec["hlt_branches_found"]:
-                    rec["fastsim_trigger_bypass_required"] = True
-                    rec["trigger_policy"] = policy
-                    rec["hlt_branches_missing"] = ["HLT_* menu absent or no HLT_* branches found"]
+            from .real_subset_worker import cleanup_xrd_cache, open_root_with_xrd_fallback
+            root, access_info = open_root_with_xrd_fallback(file_url, timeout=60)
+            rec["file_access"] = access_info
+            keys = {str(k).split(";")[0] for k in root.keys()}
+            rec["file_readable"] = True
+            rec["events_tree_exists"] = "Events" in keys
+            rec["runs_tree_exists"] = "Runs" in keys
+            if rec["events_tree_exists"]:
+                events = root["Events"]
+                ev_branches = list(events.keys())
+                rec["events_entries"] = int(events.num_entries)
+                rec["genmodel_branches"] = sorted([b for b in ev_branches if str(b).startswith("GenModel_T2tt_")])
+                rec["hlt_branches_found"] = sorted([b for b in ev_branches if str(b).startswith("HLT_")])[:100]
+            if rec["runs_tree_exists"]:
+                runs = root["Runs"]
+                run_branches = list(runs.keys())
+                rec["runs_entries"] = int(runs.num_entries)
+                rec["runs_sumw_branches"] = sorted([b for b in run_branches if str(b).startswith("genEventSumw_T2tt_")])
+            if simulation_type == "FastSim signal dataset" and not rec["hlt_branches_found"]:
+                rec["fastsim_trigger_bypass_required"] = True
+                rec["trigger_policy"] = policy
+                rec["hlt_branches_missing"] = ["HLT_* menu absent or no HLT_* branches found"]
         except Exception as exc:
+            access_info = getattr(exc, "access_info", access_info)
+            rec["file_access"] = access_info
             rec["error"] = f"{type(exc).__name__}: {exc}"
             if simulation_type == "FastSim signal dataset":
                 rec["trigger_policy"] = policy
+        finally:
+            try:
+                if root is not None:
+                    root.close()
+            except Exception:
+                pass
+            try:
+                from .real_subset_worker import cleanup_xrd_cache
+                cleanup_xrd_cache(access_info)
+            except Exception:
+                pass
         return rec
 
     def _write_signal_xsec_status(self) -> dict[str, Any]:
@@ -1064,12 +1087,18 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
                         f.write(f"{classification}\t{dataset}\t{lfn}\n")
             (self.docs / "data").mkdir(parents=True, exist_ok=True)
             shutil.copy2(signals_dir / "das_signal_files.json", self.docs / "data" / "das_signal_files.json")
-        max_datasets = int(os.environ.get("AUTONOMOUS_ALLHAD_SIGNAL_MAX_DATASETS", "50"))
-        max_files_per_dataset = int(os.environ.get("AUTONOMOUS_ALLHAD_SIGNAL_MAX_FILES_PER_DATASET", "5"))
-        max_total_files = int(os.environ.get("AUTONOMOUS_ALLHAD_SIGNAL_MAX_TOTAL_FILES", str(max_datasets * max_files_per_dataset)))
         signal_full = os.environ.get("AUTONOMOUS_ALLHAD_SIGNAL_FULL", "0") == "1"
-        fastsim = [d for d in datasets if d.get("simulation_type") == "FastSim signal dataset"][:max_datasets]
+        all_fastsim = [d for d in datasets if d.get("simulation_type") == "FastSim signal dataset"]
         fullsim = [d for d in datasets if d.get("simulation_type") == "FullSim anchor candidate"]
+        if signal_full:
+            max_datasets = len(all_fastsim)
+            max_files_per_dataset = max((len(d.get("xrootd_files") or d.get("files", [])) for d in all_fastsim), default=0)
+            max_total_files = sum(len(d.get("xrootd_files") or d.get("files", [])) for d in all_fastsim)
+        else:
+            max_datasets = int(os.environ.get("AUTONOMOUS_ALLHAD_SIGNAL_MAX_DATASETS", "50"))
+            max_files_per_dataset = int(os.environ.get("AUTONOMOUS_ALLHAD_SIGNAL_MAX_FILES_PER_DATASET", "5"))
+            max_total_files = int(os.environ.get("AUTONOMOUS_ALLHAD_SIGNAL_MAX_TOTAL_FILES", str(max_datasets * max_files_per_dataset)))
+        fastsim = all_fastsim[:max_datasets]
         chunk_size = int(os.environ.get("AUTONOMOUS_ALLHAD_SIGNAL_CHUNK", os.environ.get("AUTONOMOUS_ALLHAD_CHUNK", "2000")))
         manifest_files: list[dict[str, Any]] = []
         bad_files: list[dict[str, Any]] = []
@@ -1131,12 +1160,13 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
 
         total_selected = 0
         for ds in fastsim:
-            if total_selected >= max_total_files:
+            if not signal_full and total_selected >= max_total_files:
                 break
             dataset = ds.get("das_dataset")
-            files = (ds.get("xrootd_files") or [self._normalize_lfn(f) for f in ds.get("files", [])])[:max_files_per_dataset]
+            all_files_for_dataset = ds.get("xrootd_files") or [self._normalize_lfn(f) for f in ds.get("files", [])]
+            files = all_files_for_dataset if signal_full else all_files_for_dataset[:max_files_per_dataset]
             for file_url in files:
-                if total_selected >= max_total_files:
+                if not signal_full and total_selected >= max_total_files:
                     break
                 total_selected += 1
                 attempted_files += 1
@@ -1208,7 +1238,7 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
             "histograms": hist_counts,
         }
         signal_cutflows = {
-            "scope": "bounded/cache-aware feature-side signal chunks from selected FastSim signal files",
+            "scope": ("full-inventory/cache-aware feature-side signal chunks from all discovered FastSim signal files" if signal_full else "bounded/cache-aware feature-side signal chunks from selected FastSim signal files"),
             "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level",
             "chunk_size": chunk_size,
             "full_file_processing_requested": bool(signal_full),
@@ -1224,7 +1254,7 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
         all_normalized = bool(yields_by_mass) and all(rec.get("normalization_status") == "normalized_with_signal_xsec_txt_and_Runs_genEventSumw_T2tt" for rec in yields_by_mass.values())
         by_mass_payload = {
             "status": "complete" if attempted_files and processed_files else "blocked",
-            "scope": "bounded/cache-aware feature-side signal yields from selected FastSim SMS-2Stop signal files; normalized with signal_xsec.txt and Runs.genEventSumw_T2tt where available",
+            "scope": ("full-inventory/cache-aware feature-side signal yields from all discovered FastSim SMS-2Stop signal files; normalized with signal_xsec.txt and Runs.genEventSumw_T2tt where available" if signal_full else "bounded/cache-aware feature-side signal yields from selected FastSim SMS-2Stop signal files; normalized with signal_xsec.txt and Runs.genEventSumw_T2tt where available"),
             "fastsim_trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level",
             "datasets_processed": len(fastsim),
             "fullsim_anchor_datasets_recorded_not_processed": len(fullsim),
@@ -1253,7 +1283,7 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
         signal_cutflows["terminal_reason"] = "all bounded FastSim signal files failed to open" if attempted_files and not processed_files else "completed bounded FastSim signal processing"
         search_payload = {
             "status": by_mass_payload["status"],
-            "scope": "bounded/cache-aware feature-side search-bin signal yields from selected FastSim SMS-2Stop signal files; normalized with signal_xsec.txt where available",
+            "scope": ("full-inventory/cache-aware feature-side search-bin signal yields from all discovered FastSim SMS-2Stop signal files; normalized with signal_xsec.txt where available" if signal_full else "bounded/cache-aware feature-side search-bin signal yields from selected FastSim SMS-2Stop signal files; normalized with signal_xsec.txt where available"),
             "search_bin_source": "autonomous_allhad internal candidate definitions; no final search-bin scheme is adopted",
             "fastsim_trigger_policy": by_mass_payload["fastsim_trigger_policy"],
             "attempted_files": attempted_files,
@@ -2224,27 +2254,29 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
         self._record_direct_stage("make_feature_yields", "complete", {"output": str(path.relative_to(self.repo)), "status": out["status"]})
         return {"output": str(path), "status": out["status"]}
 
-    def run_production(self) -> dict[str, Any]:
+    def _full_production_inventory(self) -> dict[str, Any]:
         metadata = self.load_metadata()
         configured = self._configured_dataset_keys()
         keys = configured or sorted(metadata)
         year = str(self.config.get("analysis", {}).get("year", "2024"))
-        condor = shutil.which("condor_submit")
-        allow_condor = bool(self.config.get("execution", {}).get("allow_condor_submit", False))
         data_groups = {"JetMET", "EGamma", "Muon"}
         file_records: list[dict[str, Any]] = []
         data_records: list[dict[str, Any]] = []
         background_records: list[dict[str, Any]] = []
         dataset_summaries: list[dict[str, Any]] = []
         missing_metadata = []
+        sms_metadata_records = 0
         for name in keys:
             meta = metadata.get(name, {}) if isinstance(metadata, dict) else {}
             if name not in metadata:
                 missing_metadata.append(name)
             process = self.group(name)
+            if process == "SMS":
+                sms_metadata_records += len(self._dataset_files(meta))
+                continue
             files = self._dataset_files(meta)
             xs = meta.get("xs") if isinstance(meta, dict) else None
-            sumw_source = "metadata sumw not available; requires full Runs bookkeeping" if process not in data_groups else "data_unweighted"
+            sumw_source = "Runs.genEventSumw preferred; Events.genWeight fallback after full file read" if process not in data_groups else "data_unweighted"
             dataset_summaries.append({
                 "dataset": name,
                 "process_group": process,
@@ -2269,7 +2301,7 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
                     "processing_status": "not_submitted",
                     "is_data": process in data_groups,
                     "is_background": process not in data_groups and process != "SMS",
-                    "is_signal": process == "SMS",
+                    "is_signal": False,
                 }
                 file_records.append(rec)
                 if rec["is_data"]:
@@ -2296,81 +2328,524 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
                     "xsec_pb": "from signal_xsec.txt by mStop after branch discovery" if simulation_type == "FastSim signal dataset" else None,
                     "sumw_source": "Runs.genEventSumw_T2tt_<mStop>_<mLSP>" if simulation_type == "FastSim signal dataset" else "recorded FullSim anchor; not mixed into FastSim normalization",
                     "processing_status": "processed_by_process_signals_or_pending" if simulation_type == "FastSim signal dataset" else "skipped_fullsim_anchor_not_mixed",
+                    "is_signal": True,
                 }
                 signal_records.append(rec)
                 fastsim_signal_files += int(simulation_type == "FastSim signal dataset")
                 fullsim_signal_files += int(simulation_type == "FullSim anchor candidate")
-        full_input = {
-            "status": "manifest_complete_not_processed",
+        return {
             "year": year,
-            "datasets_configured": len(keys),
-            "metadata_root_files": len(file_records),
-            "data_root_files": len(data_records),
-            "background_root_files": len(background_records),
-            "fastsim_signal_root_files": fastsim_signal_files,
-            "fullsim_signal_root_files_recorded_skipped": fullsim_signal_files,
-            "records": file_records + signal_records,
+            "keys": keys,
+            "dataset_summaries": dataset_summaries,
+            "missing_metadata": missing_metadata,
+            "sms_metadata_records_excluded_from_background": sms_metadata_records,
+            "file_records": file_records,
+            "data_records": data_records,
+            "background_records": background_records,
+            "signal_records": signal_records,
+            "fastsim_signal_files": fastsim_signal_files,
+            "fullsim_signal_files": fullsim_signal_files,
         }
-        full_data = {"status": "manifest_complete_not_processed", "root_files": len(data_records), "records": data_records}
-        full_background = {"status": "manifest_complete_not_processed", "root_files": len(background_records), "records": background_records}
-        full_signal = {"status": "manifest_complete", "fastsim_root_files": fastsim_signal_files, "fullsim_anchor_root_files": fullsim_signal_files, "records": signal_records}
-        blockers = []
-        exact_unblock_steps = []
-        if not allow_condor:
-            blockers.append("execution.allow_condor_submit is false in autonomous_allhad/configs/run3_2024.yaml")
-            exact_unblock_steps.append("Enable a reviewed autonomous Condor campaign configuration before submitting full DATA/background production.")
-        if not condor:
-            blockers.append("condor_submit is unavailable in PATH")
-            exact_unblock_steps.append("Enter an environment with HTCondor client tools available, then rerun run-production.")
-        if missing_metadata:
-            blockers.append(f"{len(missing_metadata)} configured datasets are missing metadata entries")
-            exact_unblock_steps.append("Refresh analysis/metadata/KNU_2024_v4.json.gz so every configured dataset has file and cross-section metadata.")
-        blockers.append("no autonomous Condor execute/monitor/retry/merge implementation exists for the 52k-file feature-table production campaign")
-        exact_unblock_steps.append("Implement and validate an autonomous Condor shard runner that writes per-file feature/yield/hist shards, plus merge and retry stages, before submitting the 52k-file campaign.")
-        status = "blocked_not_submitted" if blockers else "ready_not_submitted"
-        message = "Full production was not submitted; file-level manifests were built and the exact production blockers were recorded."
-        production_manifest = {
+
+    def _write_full_input_manifests(self, inventory: dict[str, Any], status: str) -> None:
+        full_input = {
             "status": status,
-            "message": message,
-            "datasets_configured": len(keys),
-            "datasets_with_metadata": sum(1 for d in dataset_summaries if d["metadata_present"]),
-            "files_in_metadata": len(file_records),
-            "data_root_files": len(data_records),
-            "background_root_files": len(background_records),
-            "fastsim_signal_root_files": fastsim_signal_files,
-            "fullsim_signal_root_files_recorded_skipped": fullsim_signal_files,
-            "jobs_planned": len(data_records) + len(background_records) + fastsim_signal_files,
-            "job_granularity": "one NanoAOD file per planned DATA/background job; FastSim signals handled by process-signals",
+            "year": inventory["year"],
+            "datasets_configured": len(inventory["keys"]),
+            "metadata_root_files": len(inventory["file_records"]),
+            "data_root_files": len(inventory["data_records"]),
+            "background_root_files": len(inventory["background_records"]),
+            "sms_metadata_records_excluded_from_background": inventory.get("sms_metadata_records_excluded_from_background", 0),
+            "fastsim_signal_root_files": inventory["fastsim_signal_files"],
+            "fullsim_signal_root_files_recorded_skipped": inventory["fullsim_signal_files"],
+            "records": inventory["file_records"] + inventory["signal_records"],
+        }
+        write_json(self.workflow / "full_input_manifest.json", full_input)
+        write_json(self.workflow / "full_data_manifest.json", {"status": status, "root_files": len(inventory["data_records"]), "records": inventory["data_records"]})
+        write_json(self.workflow / "full_background_manifest.json", {"status": status, "root_files": len(inventory["background_records"]), "records": inventory["background_records"]})
+        write_json(self.workflow / "full_signal_manifest.json", {"status": "manifest_complete", "fastsim_root_files": inventory["fastsim_signal_files"], "fullsim_anchor_root_files": inventory["fullsim_signal_files"], "records": inventory["signal_records"]})
+
+    def _full_region_name(self, short: str) -> str:
+        return {
+            "LLCR": "cat2_LLCR_highDeltaM",
+            "QCDCR": "cat3_QCDCR_highDeltaM",
+            "GCR": "cat4_GCR_highDeltaM",
+            "DY2E": "cat5_DY2E_highDeltaM",
+            "DY2M": "cat6_DY2M_highDeltaM",
+            "SR": "cat7_SR_highDeltaM",
+        }.get(short, short)
+
+    def _merge_hist_payload(self, target: dict[str, Any], source: dict[str, Any], factor: float) -> None:
+        edges = source.get("bin_edges", [])
+        if not target:
+            n = max(0, len(edges) - 1)
+            target.update({"bin_edges": edges, "values": [0.0] * n, "sumw2": [0.0] * n, "raw_values": [0.0] * n, "entries": [0.0] * n})
+        for idx, raw in enumerate(source.get("raw_values", [])):
+            if idx < len(target["values"]):
+                target["raw_values"][idx] += float(raw)
+                target["values"][idx] += float(raw) * factor
+        for idx, raw2 in enumerate(source.get("raw_sumw2", [])):
+            if idx < len(target["sumw2"]):
+                target["sumw2"][idx] += float(raw2) * factor * factor
+        for idx, ent in enumerate(source.get("entries", [])):
+            if idx < len(target["entries"]):
+                target["entries"][idx] += float(ent)
+
+    def _merge_full_production_shards(self, inventory: dict[str, Any], shard_outputs: list[Path], submit_info: dict[str, Any] | None = None) -> dict[str, Any]:
+        completed_payloads = []
+        missing = []
+        incomplete = []
+        failed = []
+        for path in shard_outputs:
+            if not path.exists():
+                missing.append(str(path.relative_to(self.repo)))
+                continue
+            payload = self._load_json_if_exists(path, {})
+            status = str(payload.get("status", "missing"))
+            if status in {"complete", "complete_with_bad_files"}:
+                completed_payloads.append(payload)
+            elif status == "failed":
+                failed.append(str(path.relative_to(self.repo)))
+            else:
+                incomplete.append({"path": str(path.relative_to(self.repo)), "status": status})
+        attempted_shards = len(shard_outputs)
+        if missing or incomplete or failed:
+            result = {
+                "status": "blocked",
+                "reason": "full production shard outputs are not all complete",
+                "shards_expected": attempted_shards,
+                "shards_complete": len(completed_payloads),
+                "shards_missing": len(missing),
+                "shards_incomplete": len(incomplete),
+                "shards_failed": len(failed),
+                "missing_preview": missing[:10],
+                "incomplete_preview": incomplete[:10],
+                "failed_preview": failed[:10],
+                "submit_info": submit_info or {},
+            }
+            self._record_direct_stage("run_production", "blocked", result)
+            return result
+
+        datasets: dict[str, Any] = {}
+        bad_files: list[dict[str, Any]] = []
+        file_summaries: list[dict[str, Any]] = []
+        files_attempted = 0
+        files_processed = 0
+        for payload in completed_payloads:
+            files_attempted += int(payload.get("files_attempted", 0))
+            files_processed += int(payload.get("files_processed", 0))
+            bad_files.extend(payload.get("bad_files", []))
+            file_summaries.extend(payload.get("file_summaries", []))
+            for ds, rec in payload.get("datasets", {}).items():
+                target = datasets.setdefault(ds, {
+                    "dataset": ds, "process": rec.get("process"), "xsec_pb": rec.get("xsec_pb"), "is_data": rec.get("is_data"), "is_background": rec.get("is_background"),
+                    "files_attempted": 0, "files_processed": 0, "events_read": 0, "sumw": 0.0, "sumw2": 0.0, "sumw_source_counts": {}, "regions": {}, "histograms": {}, "search_bins": {},
+                })
+                target["files_attempted"] += int(rec.get("files_attempted", 0))
+                target["files_processed"] += int(rec.get("files_processed", 0))
+                target["events_read"] += int(rec.get("events_read", 0))
+                target["sumw"] += float(rec.get("sumw", 0.0))
+                target["sumw2"] += float(rec.get("sumw2", 0.0))
+                for key, val in rec.get("sumw_source_counts", {}).items():
+                    target["sumw_source_counts"][key] = target["sumw_source_counts"].get(key, 0) + int(val)
+                for region, counter in rec.get("regions", {}).items():
+                    reg = target["regions"].setdefault(region, {"unweighted": 0, "raw_weighted": 0.0, "raw_sumw2": 0.0})
+                    reg["unweighted"] += int(counter.get("unweighted", 0))
+                    reg["raw_weighted"] += float(counter.get("raw_weighted", 0.0))
+                    reg["raw_sumw2"] += float(counter.get("raw_sumw2", 0.0))
+                for region, by_var in rec.get("histograms", {}).items():
+                    for variable, hist in by_var.items():
+                        dest = target["histograms"].setdefault(region, {}).setdefault(variable, {})
+                        self._merge_hist_payload(dest, hist, 1.0)
+                for scheme, by_bin in rec.get("search_bins", {}).items():
+                    for bin_name, counter in by_bin.items():
+                        dest = target["search_bins"].setdefault(scheme, {}).setdefault(bin_name, {"unweighted": 0, "raw_weighted": 0.0, "raw_sumw2": 0.0})
+                        dest["unweighted"] += int(counter.get("unweighted", 0))
+                        dest["raw_weighted"] += float(counter.get("raw_weighted", 0.0))
+                        dest["raw_sumw2"] += float(counter.get("raw_sumw2", 0.0))
+
+        events_processed = sum(int(rec.get("events_read", 0)) for rec in file_summaries)
+        lumi_pb = self._lumi_pb()
+        norm_factors: dict[str, Any] = {}
+        normalized_by_process: dict[str, Any] = {}
+        normalized_by_dataset: dict[str, Any] = {}
+        histograms: dict[str, Any] = {"data": {}, "background": {}}
+        search_bins: dict[str, Any] = {}
+        region_totals = {self._full_region_name(r): {"data": 0.0, "background": 0.0, "signal": 0.0} for r in ["LLCR", "QCDCR", "GCR", "DY2E", "DY2M", "SR"]}
+        blocked_datasets = []
+        for ds, rec in sorted(datasets.items()):
+            proc = rec.get("process", "unknown")
+            is_data = bool(rec.get("is_data"))
+            xs = rec.get("xsec_pb")
+            sumw = float(rec.get("sumw", 0.0))
+            factor = None
+            status = "blocked"
+            if is_data:
+                factor = 1.0
+                status = "data_unscaled"
+            elif not isinstance(xs, (int, float)) or float(xs) <= 0:
+                status = "blocked_missing_positive_xsec"
+            elif sumw == 0:
+                status = "blocked_zero_sumw"
+            else:
+                factor = float(xs) * lumi_pb / sumw
+                status = "normalized_with_metadata_xsec_and_retained_file_sumw"
+            norm_factors[ds] = {"dataset": ds, "process": proc, "is_data": is_data, "xsec_pb": xs, "sumw": sumw, "sumw2": rec.get("sumw2", 0.0), "sumw_source_counts": rec.get("sumw_source_counts", {}), "files_processed": rec.get("files_processed", 0), "files_attempted": rec.get("files_attempted", 0), "normalization_factor": factor, "normalization_status": status}
+            if factor is None:
+                blocked_datasets.append(ds)
+                continue
+            kind = "data" if is_data else "background"
+            for region, counter in rec.get("regions", {}).items():
+                full_region = self._full_region_name(region)
+                dtarget = normalized_by_dataset.setdefault(ds, {}).setdefault(region, {"unweighted": 0, "raw_weighted": 0.0, "normalized_weighted": 0.0, "normalized_sumw2": 0.0})
+                ptarget = normalized_by_process.setdefault(proc, {}).setdefault(region, {"unweighted": 0, "raw_weighted": 0.0, "normalized_weighted": 0.0, "normalized_sumw2": 0.0})
+                raw = float(counter.get("raw_weighted", 0.0))
+                raw2 = float(counter.get("raw_sumw2", 0.0))
+                for target in [dtarget, ptarget]:
+                    target["unweighted"] += int(counter.get("unweighted", 0))
+                    target["raw_weighted"] += raw
+                    target["normalized_weighted"] += raw * factor
+                    target["normalized_sumw2"] += raw2 * factor * factor
+                region_totals[full_region][kind] += raw * factor
+            for region, by_var in rec.get("histograms", {}).items():
+                full_region = self._full_region_name(region)
+                for variable, hist in by_var.items():
+                    if variable.startswith("search_bin_index::"):
+                        continue
+                    dest = histograms.setdefault(kind, {}).setdefault(variable, {}).setdefault(full_region, {}).setdefault(proc, {})
+                    self._merge_hist_payload(dest, hist, factor)
+            for scheme, by_bin in rec.get("search_bins", {}).items():
+                for bin_name, counter in by_bin.items():
+                    dest = search_bins.setdefault(scheme, {}).setdefault(bin_name, {}).setdefault(proc, {"unweighted": 0, "raw_weighted": 0.0, "normalized_weighted": 0.0, "normalized_sumw2": 0.0, "kind": kind})
+                    raw = float(counter.get("raw_weighted", 0.0))
+                    raw2 = float(counter.get("raw_sumw2", 0.0))
+                    dest["unweighted"] += int(counter.get("unweighted", 0))
+                    dest["raw_weighted"] += raw
+                    dest["normalized_weighted"] += raw * factor
+                    dest["normalized_sumw2"] += raw2 * factor * factor
+
+        scheme_summaries = []
+        selected_scheme = None
+        best_key = None
+        for scheme, by_bin in search_bins.items():
+            bins = []
+            for bin_name, by_proc in by_bin.items():
+                bkg = sum(v.get("normalized_weighted", 0.0) for v in by_proc.values() if v.get("kind") == "background")
+                bkg_s2 = sum(v.get("normalized_sumw2", 0.0) for v in by_proc.values() if v.get("kind") == "background")
+                data = sum(v.get("unweighted", 0) for v in by_proc.values() if v.get("kind") == "data")
+                neff = bkg * bkg / bkg_s2 if bkg_s2 > 0 else 0.0
+                warnings = []
+                if bkg < 5:
+                    warnings.append("below_minimum_background_yield")
+                if neff < 3:
+                    warnings.append("below_minimum_effective_mc_events")
+                if bkg < 10:
+                    warnings.append("low_background_yield_warning")
+                bins.append({"bin": bin_name, "background_weighted": bkg, "background_sumw2": bkg_s2, "background_effective_events": neff, "data_unweighted": data, "warnings": warnings, "process_yields": by_proc})
+            sane = sum(1 for b in bins if not b["warnings"])
+            score = sum(b["background_effective_events"] for b in bins if not b["warnings"])
+            scheme_summaries.append({"scheme": scheme, "top_tagging_used": False, "bins": bins, "sane_bins": sane, "low_stat_bins": sum(1 for b in bins if b["warnings"]), "score_proxy": score})
+            key = (sane, score, -sum(1 for b in bins if b["warnings"]))
+            if best_key is None or key > best_key:
+                best_key = key
+                selected_scheme = scheme
+        if selected_scheme and search_bins.get(selected_scheme):
+            selected_bins = list(search_bins[selected_scheme].items())
+            edges = [float(i) - 0.5 for i in range(len(selected_bins) + 1)]
+            for kind in ["data", "background"]:
+                processes = sorted({p for _b, by_proc in selected_bins for p, v in by_proc.items() if v.get("kind") == kind})
+                for proc in processes:
+                    dest = histograms.setdefault(kind, {}).setdefault("search_bin_index", {}).setdefault("cat7_SR_highDeltaM", {}).setdefault(proc, {"bin_edges": edges, "values": [0.0] * len(selected_bins), "sumw2": [0.0] * len(selected_bins), "raw_values": [0.0] * len(selected_bins), "entries": [0.0] * len(selected_bins)})
+                    for idx, (_bin_name, by_proc) in enumerate(selected_bins):
+                        val = by_proc.get(proc, {})
+                        dest["values"][idx] += float(val.get("normalized_weighted", 0.0))
+                        dest["sumw2"][idx] += float(val.get("normalized_sumw2", 0.0))
+                        dest["raw_values"][idx] += float(val.get("raw_weighted", 0.0))
+                        dest["entries"][idx] += float(val.get("unweighted", 0))
+
+        expected_full_files = len(inventory["data_records"]) + len(inventory["background_records"])
+        full_inventory_complete = files_attempted == expected_full_files
+        payload_status = "complete" if full_inventory_complete else "blocked"
+        payload_scope = "full DATA/background production aggregate over all configured non-SMS metadata files with valid completed shards" if full_inventory_complete else "bounded debug or partial DATA/background aggregate; not a full-production physics output"
+        payload = {
+            "schema_version": "full_normalized_yields_v1",
+            "status": payload_status,
+            "scope": payload_scope,
+            "expected_full_files": expected_full_files,
+            "full_inventory_complete": full_inventory_complete,
+            "normalization_status": "complete" if not blocked_datasets else "incomplete_blocked_datasets",
+            "luminosity_fb": float(self.config.get("analysis", {}).get("luminosity_fb", 0.0)),
+            "luminosity_pb": lumi_pb,
+            "formula": "DATA weight=1; background MC weight=genWeight * xsec_from_metadata * lumi_pb / retained_valid_file_sumw; correction weights currently unavailable in aggregate worker",
+            "sms_policy": "SMS metadata records are excluded from DATA/background production and background stacks; FastSim SMS is handled only by process-signals.",
+            "files_attempted": files_attempted,
+            "files_processed": files_processed,
+            "bad_files": len(bad_files),
+            "events_processed": events_processed,
+            "normalization_blocked_datasets": blocked_datasets,
+            "normalization_factors": norm_factors,
+            "region_yields_by_process": normalized_by_process,
+            "region_yields_by_dataset": normalized_by_dataset,
+            "regions": region_totals,
+            "histograms": histograms,
+            "search_bins": {"selected_provisional_scheme": selected_scheme, "selection_status": "provisional_full_production_selected" if selected_scheme else "exploratory_provisional_no_scheme", "schemes": scheme_summaries},
+            "shards": {"expected": attempted_shards, "complete": len(completed_payloads)},
+        }
+        write_json(self.outputs / "full_normalized_yields.json", payload)
+        write_json(self.outputs / "full_normalization_factors.json", {"status": "complete", "normalization_status": payload["normalization_status"], "factors": norm_factors})
+        write_json(self.outputs / "data_yields.json", {"status": "complete", "source": "full_production", "files_processed": sum(1 for f in file_summaries if f.get("process") in {"JetMET", "EGamma", "Muon"} and f.get("processing_status") == "processed_full_file"), "yields": {p: v for p, v in normalized_by_process.items() if p in {"JetMET", "EGamma", "Muon"}}})
+        write_json(self.outputs / "background_yields.json", {"status": "complete", "source": "full_production", "normalization": payload["formula"], "files_processed": sum(1 for f in file_summaries if f.get("process") not in {"JetMET", "EGamma", "Muon", "SMS"} and f.get("processing_status") == "processed_full_file"), "yields": {p: v for p, v in normalized_by_process.items() if p not in {"JetMET", "EGamma", "Muon", "SMS"}}})
+        write_json(self.outputs / "region_yields.json", {"status": "complete", "source": "full_production", "regions": region_totals})
+        write_json(self.workflow / "bad_files.json", bad_files)
+        (self.workflow / "bad_files.txt").write_text("\n".join(str(b.get("file_path", "")) for b in bad_files) + ("\n" if bad_files else ""))
+        write_json(self.workflow / "file_validation_summary.json", {"status": "complete", "files_attempted": files_attempted, "files_processed": files_processed, "bad_files": len(bad_files), "bad_file_reason_categories": {}})
+        production_manifest = {"status": payload_status, "datasets_configured": len(inventory["keys"]), "datasets_with_metadata": sum(1 for d in inventory["dataset_summaries"] if d["metadata_present"]), "files_in_metadata": len(inventory["file_records"]), "data_root_files": len(inventory["data_records"]), "background_root_files": len(inventory["background_records"]), "fastsim_signal_root_files": inventory["fastsim_signal_files"], "fullsim_signal_root_files_recorded_skipped": inventory["fullsim_signal_files"], "jobs_planned": attempted_shards, "job_granularity": "sharded aggregate production; multiple ROOT files per shard", "files_attempted": files_attempted, "files_processed": files_processed, "bad_files": len(bad_files), "events_processed": events_processed, "normalization_status": payload["normalization_status"], "selected_provisional_search_scheme": selected_scheme, "submit_info": submit_info or {}}
+        for name in ["full_production_state.json", "full_production_manifest.json", "production_manifest.json", "production_state.json"]:
+            write_json(self.workflow / name, production_manifest)
+        write_json(self.workflow / "job_status.json", {"status": "complete", "cluster_ids": (submit_info or {}).get("cluster_ids", []), "submitted_jobs": attempted_shards, "completed_shards": attempted_shards})
+        write_json(self.outputs / "production_feature_table.status.json", {"status": "complete", "table_produced": False, "aggregate_output": "autonomous_allhad/outputs/full_normalized_yields.json", "reason": "full production writes aggregate shard outputs instead of an all-events feature table"})
+        write_json(self.base / "benchmarks" / "production_benchmark.json", {"status": "complete", "files": files_attempted, "events_processed": events_processed, "shards": attempted_shards})
+        (self.docs / "data").mkdir(parents=True, exist_ok=True)
+        for src in [self.outputs / "full_normalized_yields.json", self.outputs / "full_normalization_factors.json", self.outputs / "data_yields.json", self.outputs / "background_yields.json", self.outputs / "region_yields.json", self.workflow / "production_manifest.json", self.workflow / "bad_files.json", self.workflow / "file_validation_summary.json"]:
+            shutil.copy2(src, self.docs / "data" / src.name)
+        lines = ["# Full Production Summary", "", f"Status: `{payload_status}`", "", f"Files attempted: {files_attempted}", f"Files processed: {files_processed}", f"Bad files: {len(bad_files)}", f"Events processed: {events_processed}", f"Normalization: `{payload['normalization_status']}`", "", "SMS samples are excluded from the DATA/background stack and are handled by the signal stage."]
+        (self.base / "reports" / "full_production_summary.md").write_text("\n".join(lines) + "\n")
+        (self.base / "reports" / "production_status.md").write_text("\n".join(lines) + "\n")
+        result = {"status": payload_status, "files_attempted": files_attempted, "files_processed": files_processed, "bad_files": len(bad_files), "events_processed": events_processed, "normalization_status": payload["normalization_status"], "output": str((self.outputs / "full_normalized_yields.json").relative_to(self.repo)), "selected_provisional_search_scheme": selected_scheme}
+        stage_status = "complete" if full_inventory_complete else "blocked"
+        self._record_direct_stage("run_production", stage_status, result)
+        self._record_direct_stage("condor_production", stage_status, {"status": payload_status, "cluster_ids": (submit_info or {}).get("cluster_ids", []), "shards": attempted_shards})
+        return result
+
+    def _public_path(self, path: Path) -> str:
+        try:
+            return str(path.resolve().relative_to(self.repo))
+        except Exception:
+            return str(path)
+
+    def _eossubmit_environment(self) -> dict[str, Any]:
+        loaded_modules = os.environ.get("LOADEDMODULES", "")
+        lmfiles = os.environ.get("_LMFILES_", "")
+        mysched_pool = os.environ.get("_myschedd_POOL", "")
+        condor_host = os.environ.get("_condor_CONDOR_HOST", "")
+        loaded = ("lxbatch/eossubmit" in loaded_modules) or ("lxbatch/eossubmit" in lmfiles) or (mysched_pool == "eossubmit")
+        return {
+            "required_module": "lxbatch/eossubmit",
+            "setup_command": "module load lxbatch/eossubmit",
+            "loaded": bool(loaded),
+            "loaded_modules_has_lxbatch_eossubmit": "lxbatch/eossubmit" in loaded_modules,
+            "lmfiles_has_lxbatch_eossubmit": "lxbatch/eossubmit" in lmfiles,
+            "myschedd_pool": mysched_pool,
+            "condor_host": condor_host,
+            "exact_command_needed": "module load lxbatch/eossubmit",
+        }
+
+    def _write_condor_submit(self, shard_specs: list[tuple[str, Path, Path]], condor_dir: Path, proxy_path: Path | None, allow_afs_wrapper: bool = False) -> tuple[Path, Path]:
+        condor_dir.mkdir(parents=True, exist_ok=True)
+        logs = condor_dir / "logs"
+        logs.mkdir(parents=True, exist_ok=True)
+        args_path = condor_dir / "full_production_args.txt"
+        python = os.environ.get("AUTONOMOUS_ALLHAD_CONDOR_PYTHON") or "/eos/user/t/taiwoo/miniconda3/envs/py38/bin/python"
+        chunk = os.environ.get("AUTONOMOUS_ALLHAD_FULL_CHUNK", "50000")
+        xrd_timeout = os.environ.get("AUTONOMOUS_ALLHAD_XRDCP_TIMEOUT", "300")
+        use_wrapper = allow_afs_wrapper and (str(condor_dir).startswith("/afs/") or os.environ.get("AUTONOMOUS_ALLHAD_CONDOR_AFS_WRAPPER", "0") == "1")
+        if use_wrapper:
+            with args_path.open("w") as f:
+                for name, _shard, _output in shard_specs:
+                    f.write(f"{name}\n")
+            proxy_for_job = proxy_path
+            if proxy_path and not str(proxy_path).startswith("/afs/"):
+                proxy_for_job = condor_dir / f"x509up_u{os.getuid()}"
+                shutil.copy2(proxy_path, proxy_for_job)
+                proxy_for_job.chmod(0o600)
+            wrapper = condor_dir / "run_full_production_worker.sh"
+            wrapper.write_text("\n".join([
+                "#!/usr/bin/env bash",
+                "set -euo pipefail",
+                'name="$1"',
+                f"export PYTHONPATH={self.repo / 'autonomous_allhad'}:${{PYTHONPATH:-}}",
+                f"export AUTONOMOUS_ALLHAD_FULL_CHUNK={chunk}",
+                f"export AUTONOMOUS_ALLHAD_XRDCP_TIMEOUT={xrd_timeout}",
+                (f"export X509_USER_PROXY={proxy_for_job}" if proxy_for_job else ""),
+                f"exec {python} -m autonomous_allhad.full_production_worker --repo {self.repo} --shard {self.workflow / 'production_shards'}/${{name}}.json --output {self.workflow / 'production_outputs'}/${{name}}.json",
+                "",
+            ]))
+            wrapper.chmod(0o755)
+            submit = condor_dir / "full_production.sub"
+            submit.write_text("\n".join([
+                "universe = vanilla",
+                f"executable = {wrapper}",
+                f"initialdir = {condor_dir}",
+                "arguments = $(name)",
+                "getenv = True",
+                f"output = {logs}/$(name).out",
+                f"error = {logs}/$(name).err",
+                f"log = {logs}/full_production.log",
+                "request_cpus = 1",
+                "request_memory = 3500MB",
+                '+JobFlavour = "workday"',
+                f"queue name from {args_path}",
+                "",
+            ]))
+            return submit, args_path
+        with args_path.open("w") as f:
+            for name, shard, output in shard_specs:
+                f.write(f"{name} {shard} {output}\n")
+        env_items = [
+            f"PYTHONPATH={self.repo / 'autonomous_allhad'}",
+            f"AUTONOMOUS_ALLHAD_FULL_CHUNK={chunk}",
+            f"AUTONOMOUS_ALLHAD_XRDCP_TIMEOUT={xrd_timeout}",
+        ]
+        if proxy_path:
+            env_items.append(f"X509_USER_PROXY={proxy_path}")
+        submit = condor_dir / "full_production.sub"
+        submit.write_text("\n".join([
+            "universe = vanilla",
+            f"executable = {python}",
+            f"initialdir = {self.repo}",
+            "arguments = -m autonomous_allhad.full_production_worker --repo " + str(self.repo) + " --shard $(shard) --output $(output)",
+            "getenv = True",
+            "environment = \"" + " ".join(env_items) + "\"",
+            f"output = {logs}/$(name).out",
+            f"error = {logs}/$(name).err",
+            f"log = {logs}/full_production.log",
+            "request_cpus = 1",
+            "request_memory = 3500MB",
+            '+JobFlavour = "workday"',
+            f"queue name,shard,output from {args_path}",
+            "",
+        ]))
+        return submit, args_path
+
+    def run_production(self) -> dict[str, Any]:
+        inventory = self._full_production_inventory()
+        self._write_full_input_manifests(inventory, status="manifest_complete")
+        condor = shutil.which("condor_submit")
+        allow_condor = bool(self.config.get("execution", {}).get("allow_condor_submit", False)) or os.environ.get("AUTONOMOUS_ALLHAD_ALLOW_CONDOR", "0") == "1"
+        submit_condor = os.environ.get("AUTONOMOUS_ALLHAD_SUBMIT_CONDOR", "0") == "1"
+        run_local = os.environ.get("AUTONOMOUS_ALLHAD_RUN_LOCAL_FULL", "0") == "1"
+        eossubmit = self._eossubmit_environment()
+        records = inventory["data_records"] + inventory["background_records"]
+        max_files_env = os.environ.get("AUTONOMOUS_ALLHAD_FULL_MAX_FILES")
+        bounded_debug = False
+        if max_files_env:
+            bounded_debug = True
+            records = records[: int(max_files_env)]
+        shard_size = int(os.environ.get("AUTONOMOUS_ALLHAD_FULL_SHARD_SIZE", "100"))
+        production_tag = os.environ.get("AUTONOMOUS_ALLHAD_PRODUCTION_TAG") or ("pilot" if bounded_debug else "eos_full")
+        shard_dir = self.workflow / f"production_shards_{production_tag}"
+        output_dir = self.workflow / f"production_outputs_{production_tag}"
+        condor_dir = Path(os.environ.get("AUTONOMOUS_ALLHAD_CONDOR_DIR", str(self.workflow / f"condor_{production_tag}"))).expanduser()
+        shard_dir.mkdir(parents=True, exist_ok=True)
+        output_dir.mkdir(parents=True, exist_ok=True)
+        shard_specs: list[tuple[str, Path, Path]] = []
+        for ish, start in enumerate(range(0, len(records), shard_size)):
+            chunk = records[start:start + shard_size]
+            name = f"shard_{ish:05d}"
+            shard_path = shard_dir / f"{name}.json"
+            output_path = output_dir / f"{name}.json"
+            record_digest = hashlib.sha256(json.dumps(chunk, sort_keys=True).encode()).hexdigest()[:16]
+            write_json(shard_path, {"schema_version": "full_production_shard_spec_v1", "shard_id": name, "record_digest": record_digest, "records": chunk})
+            if output_path.exists():
+                old_payload = self._load_json_if_exists(output_path, {})
+                if old_payload.get("record_digest") != record_digest:
+                    stale = output_path.with_name(output_path.name + f".stale_{int(time.time())}")
+                    output_path.rename(stale)
+            shard_specs.append((name, shard_path, output_path))
+        proxy_candidates = [Path(os.environ.get("X509_USER_PROXY", ""))] if os.environ.get("X509_USER_PROXY") else []
+        proxy_candidates.append(self.repo / "analysis" / "proxy" / f"x509up_u{os.getuid()}")
+        proxy_path = next((p for p in proxy_candidates if p and p.exists()), None)
+        allow_afs_wrapper = bool(bounded_debug and os.environ.get("AUTONOMOUS_ALLHAD_ALLOW_AFS_PILOT_WRAPPER", "0") == "1")
+        submit_path, args_path = self._write_condor_submit(shard_specs, condor_dir, proxy_path, allow_afs_wrapper=allow_afs_wrapper)
+        production_manifest = {
+            "status": "prepared",
+            "datasets_configured": len(inventory["keys"]),
+            "datasets_with_metadata": sum(1 for d in inventory["dataset_summaries"] if d["metadata_present"]),
+            "files_in_metadata": len(inventory["file_records"]),
+            "data_root_files": len(inventory["data_records"]),
+            "background_root_files": len(inventory["background_records"]),
+            "sms_metadata_records_excluded_from_background": inventory.get("sms_metadata_records_excluded_from_background", 0),
+            "fastsim_signal_root_files": inventory["fastsim_signal_files"],
+            "fullsim_signal_root_files_recorded_skipped": inventory["fullsim_signal_files"],
+            "jobs_planned": len(shard_specs),
+            "job_granularity": f"{shard_size} ROOT files per aggregate shard",
             "condor_available": bool(condor),
             "condor_submit_path": condor,
             "allow_condor_submit": allow_condor,
-            "legacy_processor_status": "external/manual; stop_processor_v4.py is not invoked by autonomous_allhad",
-            "datasets": dataset_summaries,
-            "blockers": blockers,
-            "exact_unblock_steps": exact_unblock_steps,
+            "submit_condor_requested": submit_condor,
+            "local_full_requested": run_local,
+            "bounded_debug": bounded_debug,
+            "production_tag": production_tag,
+            "eossubmit_environment": eossubmit,
+            "eos_aware_submit_required_for_large_campaign": True,
+            "afs_wrapper_allowed_only_for_bounded_pilot": allow_afs_wrapper,
+            "afs_wrapper_large_submission_prevented": (not bounded_debug and str(condor_dir).startswith("/afs/")),
+            "shard_manifest_dir": str(shard_dir.relative_to(self.repo)),
+            "shard_output_dir": str(output_dir.relative_to(self.repo)),
+            "submit_file": self._public_path(submit_path),
+            "args_file": self._public_path(args_path),
+            "sms_policy": "SMS records are excluded from DATA/background production and background stacks.",
         }
-        write_json(self.workflow / "full_input_manifest.json", full_input)
-        write_json(self.workflow / "full_data_manifest.json", full_data)
-        write_json(self.workflow / "full_background_manifest.json", full_background)
-        write_json(self.workflow / "full_signal_manifest.json", full_signal)
-        write_json(self.workflow / "full_production_state.json", production_manifest)
-        write_json(self.workflow / "full_production_manifest.json", production_manifest)
-        write_json(self.workflow / "production_manifest.json", production_manifest)
-        write_json(self.workflow / "production_state.json", production_manifest)
-        write_json(self.workflow / "job_status.json", {"status": status, "cluster_ids": [], "submitted_jobs": 0, "planned_jobs": production_manifest["jobs_planned"], "blockers": blockers})
-        write_json(self.workflow / "retry_manifest.json", {"status": "not_applicable_no_jobs_submitted", "retry_jobs": [], "cluster_ids": []})
-        write_json(self.workflow / "job_manifest.json", {"status": status, "jobs": [], "planned_jobs": production_manifest["jobs_planned"], "cluster_ids": [], "condor_enabled": allow_condor})
-        write_json(self.outputs / "production_feature_table.status.json", {"status": status, "table_produced": False, "reason": message, "required_before_table": blockers})
-        write_json(self.base / "benchmarks" / "production_benchmark.json", {"status": status, "datasets": len(keys), "files": len(file_records), "jobs_planned": production_manifest["jobs_planned"], "events_processed": 0, "blockers": blockers})
-        lines = ["# Full Production Status", "", f"Status: `{status}`", "", message, "", f"Configured datasets: {len(keys)}", f"DATA files: {len(data_records)}", f"Background files: {len(background_records)}", f"FastSim signal files: {fastsim_signal_files}", f"FullSim signal anchor files skipped: {fullsim_signal_files}", f"Planned jobs: {production_manifest['jobs_planned']}", "", "## Blockers", ""]
-        lines += [f"- {b}" for b in blockers] or ["- none"]
-        lines += ["", "## Exact unblock steps", ""] + ([f"- {x}" for x in exact_unblock_steps] or ["- Production can be submitted after explicit user authorization and configuration."])
-        (self.base / "reports" / "production_status.md").write_text("\n".join(lines) + "\n")
-        (self.base / "reports" / "full_production_summary.md").write_text("\n".join(lines) + "\n")
-        result = {"status": status, "datasets": len(keys), "files_in_metadata": len(file_records), "data_root_files": len(data_records), "background_root_files": len(background_records), "fastsim_signal_root_files": fastsim_signal_files, "fullsim_signal_root_files_recorded_skipped": fullsim_signal_files, "jobs_planned": production_manifest["jobs_planned"], "events_processed": 0, "output": str((self.workflow / "full_production_manifest.json").relative_to(self.repo)), "blockers": blockers, "cluster_ids": []}
-        self._record_direct_stage("run_production", "blocked" if blockers else "complete", result)
-        self._record_direct_stage("condor_production", "blocked" if blockers else "complete", {"status": "not_submitted" if blockers else "ready_not_submitted", "reason": "; ".join(blockers) if blockers else "ready for reviewed submission", "cluster_ids": []})
-        return result
+        for name in ["full_production_state.json", "full_production_manifest.json", "production_manifest.json", "production_state.json"]:
+            write_json(self.workflow / name, production_manifest)
+        write_json(self.workflow / "job_manifest.json", {"status": "prepared", "jobs": [{"name": n, "shard": str(s.relative_to(self.repo)), "output": str(o.relative_to(self.repo))} for n, s, o in shard_specs], "planned_jobs": len(shard_specs), "cluster_ids": [], "condor_enabled": allow_condor})
+        blockers = []
+        submit_info: dict[str, Any] = {"cluster_ids": []}
+        if run_local:
+            worker_cmd_base = [sys.executable, "-m", "autonomous_allhad.full_production_worker", "--repo", str(self.repo)]
+            env = os.environ.copy()
+            env["PYTHONPATH"] = str(self.repo / "autonomous_allhad") + os.pathsep + env.get("PYTHONPATH", "")
+            for _name, shard, output in shard_specs:
+                if output.exists() and self._load_json_if_exists(output, {}).get("status") in {"complete", "complete_with_bad_files"}:
+                    continue
+                proc = subprocess.run(worker_cmd_base + ["--shard", str(shard), "--output", str(output)], cwd=self.repo, env=env, text=True, capture_output=True)
+                if proc.returncode != 0:
+                    blockers.append(f"local shard failed for {shard.name}: {proc.stderr[-500:] or proc.stdout[-500:]}")
+                    break
+        elif submit_condor:
+            if not bounded_debug and not eossubmit.get("loaded"):
+                blockers.append("blocked_eossubmit_environment_not_loaded: load the EOS-aware CERN batch environment with `module load lxbatch/eossubmit` before large full-production submission")
+            if not bounded_debug and str(condor_dir).startswith("/afs/"):
+                blockers.append("AFS-wrapper large submission prevented; full DATA/background production must use the EOS-aware eossubmit steering path")
+            if not bounded_debug and allow_afs_wrapper:
+                blockers.append("AFS wrapper is not permitted for large full-production campaigns")
+            if not allow_condor:
+                blockers.append("Condor submission requested but execution.allow_condor_submit is false and AUTONOMOUS_ALLHAD_ALLOW_CONDOR is not set")
+            if not condor:
+                blockers.append("condor_submit is unavailable in PATH")
+            if not proxy_path:
+                blockers.append("valid X509 proxy path for Condor jobs was not found")
+            if not blockers:
+                proc = subprocess.run([condor, str(submit_path)], cwd=self.repo, text=True, capture_output=True)
+                submit_info = {"exit_status": proc.returncode, "stdout": proc.stdout[-4000:], "stderr_tail": proc.stderr[-4000:], "cluster_ids": re.findall(r"cluster\s+(\d+)", proc.stdout, flags=re.IGNORECASE)}
+                if proc.returncode != 0:
+                    blockers.append(f"condor_submit failed: {proc.stderr[-1000:] or proc.stdout[-1000:]}")
+                write_json(self.workflow / "job_status.json", {"status": "submitted" if proc.returncode == 0 else "failed", "cluster_ids": submit_info["cluster_ids"], "submitted_jobs": len(shard_specs), "submit_info": submit_info})
+        if blockers:
+            production_manifest["status"] = "blocked"
+            production_manifest["blockers"] = blockers
+            for name in ["full_production_state.json", "full_production_manifest.json", "production_manifest.json", "production_state.json"]:
+                write_json(self.workflow / name, production_manifest)
+            status_label = "blocked_eossubmit_environment_not_loaded" if any("blocked_eossubmit_environment_not_loaded" in b for b in blockers) else "blocked"
+            result = {"status": status_label, "blockers": blockers, "jobs_planned": len(shard_specs), "files_in_metadata": len(inventory["file_records"]), "data_root_files": len(inventory["data_records"]), "background_root_files": len(inventory["background_records"]), "eossubmit_environment": eossubmit, "exact_command_needed": "module load lxbatch/eossubmit" if status_label == "blocked_eossubmit_environment_not_loaded" else None}
+            self._record_direct_stage("run_production", status_label, result)
+            self._record_direct_stage("condor_production", status_label, {"status": status_label, "blockers": blockers, "cluster_ids": submit_info.get("cluster_ids", []), "eossubmit_environment": eossubmit, "exact_command_needed": "module load lxbatch/eossubmit" if status_label == "blocked_eossubmit_environment_not_loaded" else None})
+            return result
+        if not submit_condor and not run_local:
+            self._record_direct_stage("condor_production", "blocked_eos_preflight_complete_not_submitted", {"status": "blocked_eos_preflight_complete_not_submitted", "message": "EOS-aware submit description and shard manifest were generated/dry-runnable, but the large campaign was not submitted in this preflight step.", "eossubmit_environment": eossubmit, "submit_file": self._public_path(submit_path), "args_file": self._public_path(args_path), "jobs_planned": len(shard_specs), "afs_wrapper_large_submission_prevented": (not bounded_debug and str(condor_dir).startswith("/afs/")), "next_safe_command": "module load lxbatch/eossubmit && AUTONOMOUS_ALLHAD_ALLOW_CONDOR=1 AUTONOMOUS_ALLHAD_SUBMIT_CONDOR=1 AUTONOMOUS_ALLHAD_FULL_SHARD_SIZE=25 AUTONOMOUS_ALLHAD_PRODUCTION_TAG=eos_full ./autonomous_allhad/analysisctl run-production --config autonomous_allhad/configs/run3_2024.yaml"})
+        merge = self._merge_full_production_shards(inventory, [out for _name, _shard, out in shard_specs], submit_info=submit_info)
+        if merge.get("status") == "blocked" and submit_condor and submit_info.get("exit_status") == 0:
+            merge["reason"] = "Condor campaign submitted successfully; waiting for shard outputs to complete before normalization/plots can be finalized."
+            submitted_state = {**production_manifest, "status": "submitted_waiting_for_outputs", "submit_info": submit_info}
+            write_json(self.workflow / "production_state.json", submitted_state)
+            manifest = self._load_json_if_exists(self.workflow / "job_manifest.json", {})
+            manifest["status"] = "submitted_waiting_for_outputs"
+            manifest["cluster_ids"] = submit_info.get("cluster_ids", [])
+            manifest["submitted_jobs"] = len(shard_specs)
+            manifest["submit_info"] = submit_info
+            write_json(self.workflow / "job_manifest.json", manifest)
+            self._record_direct_stage("condor_production", "submitted_waiting_for_outputs", {"status": "submitted_waiting_for_outputs", "cluster_ids": submit_info.get("cluster_ids", []), "submitted_jobs": len(shard_specs), "jobs_planned": len(shard_specs), "eossubmit_environment": eossubmit, "submit_file": self._public_path(submit_path), "reason": merge["reason"]})
+        return merge
 
 
     def full_production_normalization(self) -> dict[str, Any]:
@@ -2594,9 +3069,9 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
         yields = summary.get("yields", {})
         regions = ["LLCR", "QCDCR", "GCR", "DY2E", "DY2M", "SR"]
         stages = self.state.get("stages", {})
-        completed = [k for k, v in stages.items() if v.get("status") == "complete"]
-        failed = [k for k, v in stages.items() if v.get("status") == "failed"]
-        blocked = [k for k, v in stages.items() if v.get("status") == "blocked"]
+        completed = [k for k, v in stages.items() if str(v.get("status")) == "complete"]
+        failed = [k for k, v in stages.items() if str(v.get("status")).startswith("failed")]
+        blocked = [k for k, v in stages.items() if str(v.get("status")).startswith("blocked")]
         for expected in ["input_discovery", "file_validation", "parse_signal_xsec", "signal_discovery", "process_signals", "make_hists_npy", "plot_from_npy", "publish_github_pages", "run_production", "full_production_normalization", "select_search_bins", "make_datacards", "expected_limits", "condor_production", "systematic_yields"]:
             if expected not in completed and expected not in failed and expected not in blocked:
                 blocked.append(expected)
@@ -2652,7 +3127,7 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
                 "signal_processed_files": signal_yields.get("processed_files", 0) if isinstance(signal_yields, dict) else 0,
                 "contour_inputs_ready": False,
             },
-            "next_recommended_action": "Unblock full production: enable/authorize Condor production or configure an explicit bounded local full-production fallback, then run ./autonomous_allhad/analysisctl run-production --config autonomous_allhad/configs/run3_2024.yaml",
+            "next_recommended_action": "Load the EOS-aware batch environment with `module load lxbatch/eossubmit`, then run the EOS-aware full-production Condor preflight/submission; do not use the AFS-wrapper path for the large campaign.",
         }
         write_json(self.workflow / "monitor_state.json", payload)
         (self.docs / "data").mkdir(parents=True, exist_ok=True)
@@ -2884,15 +3359,18 @@ jobs:
         bench = json.loads((self.base / "benchmarks" / "candidate_benchmarks.json").read_text())
         bad = json.loads((self.workflow / "file_validation_summary.json").read_text())
         gh = json.loads((self.outputs / "github_pages_status.json").read_text())
+        prod = self._load_json_if_exists(self.workflow / "production_state.json", {})
+        job = self._load_json_if_exists(self.workflow / "job_manifest.json", {})
         lines = [
             "# Latest Autonomous All-Hadronic Summary",
             "",
             f"Selected architecture: {bench['selected_for_representative_pipeline']}",
             f"Selection reason: {bench['selection_reason']}",
-            f"Skipped corrupted files: 0 confirmed; {bad['bad_or_inaccessible']} inaccessible first-file probes require authenticated ROOT retry.",
+            f"Skipped corrupted files: 0 confirmed; {bad.get('bad_or_inaccessible', bad.get('bad_files', 0))} inaccessible/bad probes require authenticated ROOT retry.",
             "Physics differences from baseline: none adopted; top-tagging-independent categorization remains a proposal.",
             "Categories tested: " + ", ".join(CATEGORY_SCHEMES),
-            "Condor cluster IDs: none; submission disabled in config, so full production remains externally blocked.",
+            f"Full DATA/background production: {prod.get('status', 'missing')} with {prod.get('jobs_planned', job.get('planned_jobs', 'missing'))} planned EOS-aware shards; full campaign not submitted unless explicitly run with eossubmit loaded.",
+            "Condor steering: large campaigns require `module load lxbatch/eossubmit`; the AFS wrapper is kept only for the completed/active one-file pilot test and must not be scaled.",
             "Expected limits: blocked; no real datacards and Combine/CMSSW are unavailable in the current environment.",
             "Website: docs/index.html",
             f"GitHub Pages: {gh.get('status', 'ready' if gh.get('sensitive_scan', {}).get('status') == 'clean' else 'blocked')}; {gh.get('remaining_step', 'publish docs/ via GitHub Pages workflow')}",

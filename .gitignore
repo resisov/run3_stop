@@ -60,3 +60,30 @@ autonomous_allhad/outputs/real_feature_table.csv
 # Full production inventories are local runtime artifacts; compact summaries are published.
 autonomous_allhad/workflow/full_input_manifest.json
 autonomous_allhad/workflow/full_background_manifest.json
+
+# Condor/full-production heavy artifacts
+autonomous_allhad/workflow/production_outputs_eos_full/
+autonomous_allhad/workflow/production_shards_eos_full/
+autonomous_allhad/workflow/condor_eos_full/
+autonomous_allhad/workflow/condor_eos_retry_*/
+autonomous_allhad/workflow/**/*.log
+autonomous_allhad/workflow/**/*.out
+autonomous_allhad/workflow/**/*.err
+
+# Heavy analysis outputs
+*.root
+*.npy
+*.parquet
+*.csv
+autonomous_allhad/outputs/*.json
+!autonomous_allhad/outputs/*.status.json
+
+# Credentials
+analysis/proxy/
+x509up*
+*.pem
+*.key
+
+# Python/cache
+__pycache__/
+*.pyc

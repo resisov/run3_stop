@@ -92,3 +92,44 @@ artifacts:
   futures_dir: "{hist_dir}/{processor_name}"
   merged_file: "{hist_dir}/{processor_name}.merged"
   scaled_file: "{hist_dir}/{processor_name}.scaled"
+plotting:
+  script: analysis/distribution_draw_v5.py
+  input_scaled: analysis/hists/stop_2024_nominal.scaled
+  output_dir: analysis/plots/stop_2024
+  year: "2024"
+  luminosity_fb: 109.82
+  preliminary: true
+  mask_signal_region_data: true
+  external_shifts:
+    metUnclusteredUp: analysis/hists/stop_2024_metUnclusteredUp.scaled
+    metUnclusteredDown: analysis/hists/stop_2024_metUnclusteredDown.scaled
+    jesTotalUp: analysis/hists/stop_2024_jesTotalUp.scaled
+    jesTotalDown: analysis/hists/stop_2024_jesTotalDown.scaled
+
+template:
+  script: analysis/make_template.py
+  nominal_scaled: analysis/hists/stop_2024_nominal.scaled
+  external_shifts:
+    jesTotalUp: analysis/hists/stop_2024_jesTotalUp.scaled
+    jesTotalDown: analysis/hists/stop_2024_jesTotalDown.scaled
+    metUnclusteredUp: analysis/hists/stop_2024_metUnclusteredUp.scaled
+    metUnclusteredDown: analysis/hists/stop_2024_metUnclusteredDown.scaled
+    jerUp: analysis/hists/stop_2024_jerUp.scaled
+    jerDown: analysis/hists/stop_2024_jerDown.scaled
+  output_root: analysis/templates/templates_metpt.root
+
+
+datacard:
+  output_dir: analysis/datacards
+  output_name: stop_2024_shapes.txt
+  signal: null
+  use_asimov: true
+  auto_mc_stats: 10
+
+limit:
+  output_dir: analysis/limits
+  datacard: analysis/datacards/stop_2024_shapes.txt
+  combine: combine
+
+report:
+  output: analysis/report/index.html
