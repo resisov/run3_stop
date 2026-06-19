@@ -41,68 +41,12 @@
       {
         "bin": "Njet5plus_Nb1plus_MET600plus",
         "scheme": "minimal_njet_nb_met"
-      },
-      {
-        "bin": "highHT_Njet5plus_Nb1_MET250plus",
-        "scheme": "resolved_kinematics"
-      },
-      {
-        "bin": "veryHighHT_Njet6plus_Nb1_MET250plus",
-        "scheme": "resolved_kinematics"
-      },
-      {
-        "bin": "twoB_highHT_MET400plus",
-        "scheme": "resolved_kinematics"
-      },
-      {
-        "bin": "cleanDphi_Njet5plus_Nb1_MET400plus",
-        "scheme": "resolved_kinematics"
-      },
-      {
-        "bin": "hardJ1_Njet2plus_MET250to500",
-        "scheme": "isr_sensitive"
-      },
-      {
-        "bin": "hardJ1_Njet2plus_MET500plus",
-        "scheme": "isr_sensitive"
-      },
-      {
-        "bin": "hardJ1_lowB_MET400plus",
-        "scheme": "isr_sensitive"
-      },
-      {
-        "bin": "hybrid_lowMET_multijet",
-        "scheme": "optimized_hybrid_no_tags"
-      },
-      {
-        "bin": "hybrid_midMET_multijet",
-        "scheme": "optimized_hybrid_no_tags"
-      },
-      {
-        "bin": "hybrid_highMET_anyHT",
-        "scheme": "optimized_hybrid_no_tags"
-      },
-      {
-        "bin": "hybrid_AK8_highHT",
-        "scheme": "optimized_hybrid_no_tags"
-      },
-      {
-        "bin": "AK8one_Njet5plus_Nb1_MET250plus",
-        "scheme": "ak8_kinematics_no_tag_scores"
-      },
-      {
-        "bin": "AK8one_highMET",
-        "scheme": "ak8_kinematics_no_tag_scores"
-      },
-      {
-        "bin": "AK8two_Njet5plus",
-        "scheme": "ak8_kinematics_no_tag_scores"
       }
     ],
     "name": "partial_search_bin_number_precomputed_sr",
     "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bin_number_precomputed_sr.pdf",
     "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bin_number_precomputed_sr.png",
-    "title": "SR precomputed search-bin number"
+    "title": "Search-bin preview, SR only"
   },
   "region_variable_plots": [
     {
@@ -438,7 +382,7 @@
     "cat6_DY2M_highDeltaM",
     "cat7_SR_highDeltaM"
   ],
-  "search_bin_note": "The wide search-bin-number plot uses SR-only precomputed counters from completed shards. The exact 12 SR + 60 CR top-tag-collapsed strategy is not present in current shard counters and needs a categorization-only pass or final worker update.",
+  "search_bin_note": "The search-bin number plot uses stored SR counters only. Only SR search-bin counts are available in current shard JSONs. CR search-bin counts will be added later.",
   "search_bin_plots": [
     {
       "bin_labels": [
@@ -513,7 +457,7 @@
   ],
   "source": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/partial_normalized_yields.json",
   "status": "partial_preview_cms_style",
-  "timestamp_utc": "2026-06-19T12:46:52Z",
+  "timestamp_utc": "2026-06-19T13:04:10Z",
   "variables": [
     "recoil_pt",
     "metpt",

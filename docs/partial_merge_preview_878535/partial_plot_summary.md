@@ -1,12 +1,12 @@
 # Partial Plot Summary 878535
 
-Timestamp UTC: `2026-06-19T12:46:52Z`
+Timestamp UTC: `2026-06-19T13:04:10Z`
 
 Status: `partial_preview_cms_style`
 
 Completed shards used: `1240`
 
-CMS-style plots were generated with `mplhep` for all available CR/SR categories. Backgrounds are grouped as `Z+jets`, `W+jets`, `QCD Multijet`, `Top`, and `others`.
+CMS-style plots were generated with mplhep for all available CR/SR categories. Backgrounds are grouped as Z+jets, W+jets, QCD Multijet, Top, and others.
 
 ## Region Variable Plots
 
@@ -19,14 +19,14 @@ CMS-style plots were generated with `mplhep` for all available CR/SR categories.
 | `cat6 DY2M` | [png](plots/partial_recoil_pt_cat6_DY2M_highDeltaM.png) | [png](plots/partial_metpt_cat6_DY2M_highDeltaM.png) | [png](plots/partial_ht_cat6_DY2M_highDeltaM.png) | [png](plots/partial_njet_cat6_DY2M_highDeltaM.png) | [png](plots/partial_nb_cat6_DY2M_highDeltaM.png) | [png](plots/partial_nfj_cat6_DY2M_highDeltaM.png) |
 | `cat7 SR` | [png](plots/partial_recoil_pt_cat7_SR_highDeltaM.png) | [png](plots/partial_metpt_cat7_SR_highDeltaM.png) | [png](plots/partial_ht_cat7_SR_highDeltaM.png) | [png](plots/partial_njet_cat7_SR_highDeltaM.png) | [png](plots/partial_nb_cat7_SR_highDeltaM.png) | [png](plots/partial_nfj_cat7_SR_highDeltaM.png) |
 
-## CR/SR and Search-Bin Plots
+## Search-Bin Plots
 
 - CR/SR category bins: `plots/partial_cr_sr_region_bins.png`
-- AN-style search-bin number preview: `plots/partial_search_bin_number_precomputed_sr.png`
+- Search-bin preview, SR only: `plots/partial_search_bin_number_precomputed_sr.png`
 - `ak8_kinematics_no_tag_scores`: `plots/partial_search_bins_ak8_kinematics_no_tag_scores.png`
 - `isr_sensitive`: `plots/partial_search_bins_isr_sensitive.png`
 - `minimal_njet_nb_met`: `plots/partial_search_bins_minimal_njet_nb_met.png`
 - `optimized_hybrid_no_tags`: `plots/partial_search_bins_optimized_hybrid_no_tags.png`
 - `resolved_kinematics`: `plots/partial_search_bins_resolved_kinematics.png`
 
-The AN-style search-bin-number preview uses currently available SR-only precomputed shard counters, not the final 12 SR + 60 CR top-tag-collapsed scheme. Final publication plots still require `complete + complete_with_bad_files == 2110`.
+Final publication plots still require `complete + complete_with_bad_files == 2110`.
