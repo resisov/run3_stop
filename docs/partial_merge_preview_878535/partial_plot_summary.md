@@ -1,12 +1,12 @@
 # Partial Plot Summary 878535
 
-Timestamp UTC: `2026-06-19T12:32:11Z`
+Timestamp UTC: `2026-06-19T12:46:52Z`
 
 Status: `partial_preview_cms_style`
 
 Completed shards used: `1240`
 
-CMS-style plots were generated with `mplhep` for all available CR/SR categories.
+CMS-style plots were generated with `mplhep` for all available CR/SR categories. Backgrounds are grouped as `Z+jets`, `W+jets`, `QCD Multijet`, `Top`, and `others`.
 
 ## Region Variable Plots
 
@@ -21,11 +21,12 @@ CMS-style plots were generated with `mplhep` for all available CR/SR categories.
 
 ## CR/SR and Search-Bin Plots
 
-- CR/SR category bins: `partial_cr_sr_region_bins.png`
-- `ak8_kinematics_no_tag_scores`: `partial_search_bins_ak8_kinematics_no_tag_scores.png`
-- `isr_sensitive`: `partial_search_bins_isr_sensitive.png`
-- `minimal_njet_nb_met`: `partial_search_bins_minimal_njet_nb_met.png`
-- `optimized_hybrid_no_tags`: `partial_search_bins_optimized_hybrid_no_tags.png`
-- `resolved_kinematics`: `partial_search_bins_resolved_kinematics.png`
+- CR/SR category bins: `plots/partial_cr_sr_region_bins.png`
+- AN-style search-bin number preview: `plots/partial_search_bin_number_precomputed_sr.png`
+- `ak8_kinematics_no_tag_scores`: `plots/partial_search_bins_ak8_kinematics_no_tag_scores.png`
+- `isr_sensitive`: `plots/partial_search_bins_isr_sensitive.png`
+- `minimal_njet_nb_met`: `plots/partial_search_bins_minimal_njet_nb_met.png`
+- `optimized_hybrid_no_tags`: `plots/partial_search_bins_optimized_hybrid_no_tags.png`
+- `resolved_kinematics`: `plots/partial_search_bins_resolved_kinematics.png`
 
-Final publication plots still require `complete + complete_with_bad_files == 2110`.
+The AN-style search-bin-number preview uses currently available SR-only precomputed shard counters, not the final 12 SR + 60 CR top-tag-collapsed scheme. Final publication plots still require `complete + complete_with_bad_files == 2110`.
