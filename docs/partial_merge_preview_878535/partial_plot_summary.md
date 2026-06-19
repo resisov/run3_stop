@@ -1,12 +1,12 @@
 # Partial Plot Summary 878535
 
-Timestamp UTC: `2026-06-19T13:04:10Z`
+Timestamp UTC: `2026-06-19T13:09:06Z`
 
 Status: `partial_preview_cms_style`
 
 Completed shards used: `1240`
 
-CMS-style plots were generated with mplhep for all available CR/SR categories. Backgrounds are grouped as Z+jets, W+jets, QCD Multijet, Top, and others.
+CMS-style plots were generated with mplhep for all available CR/SR categories. Background colors follow the CMS-style palette: VV, Single Top, ttbar, DY, Gamma + Jets, W -> lv, Z -> vv, QCD Multijet, and others.
 
 ## Region Variable Plots
 
