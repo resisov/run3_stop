@@ -19,14 +19,10 @@ CMS-style plots were generated with mplhep for all available CR/SR categories. B
 | `cat6 DY2M` | [png](plots/partial_recoil_pt_cat6_DY2M_highDeltaM.png) | [png](plots/partial_metpt_cat6_DY2M_highDeltaM.png) | [png](plots/partial_ht_cat6_DY2M_highDeltaM.png) | [png](plots/partial_njet_cat6_DY2M_highDeltaM.png) | [png](plots/partial_nb_cat6_DY2M_highDeltaM.png) | [png](plots/partial_nfj_cat6_DY2M_highDeltaM.png) |
 | `cat7 SR` | [png](plots/partial_recoil_pt_cat7_SR_highDeltaM.png) | [png](plots/partial_metpt_cat7_SR_highDeltaM.png) | [png](plots/partial_ht_cat7_SR_highDeltaM.png) | [png](plots/partial_njet_cat7_SR_highDeltaM.png) | [png](plots/partial_nb_cat7_SR_highDeltaM.png) | [png](plots/partial_nfj_cat7_SR_highDeltaM.png) |
 
-## Search-Bin Plots
+## Cat2-Cat7 Search-Bin Plot
 
-- CR/SR category bins: `plots/partial_cr_sr_region_bins.png`
-- Search-bin preview, SR only: `plots/partial_search_bin_number_precomputed_sr.png`
-- `ak8_kinematics_no_tag_scores`: `plots/partial_search_bins_ak8_kinematics_no_tag_scores.png`
-- `isr_sensitive`: `plots/partial_search_bins_isr_sensitive.png`
-- `minimal_njet_nb_met`: `plots/partial_search_bins_minimal_njet_nb_met.png`
-- `optimized_hybrid_no_tags`: `plots/partial_search_bins_optimized_hybrid_no_tags.png`
-- `resolved_kinematics`: `plots/partial_search_bins_resolved_kinematics.png`
+- No signal overlay: `plots/partial_search_bins_cat2_cat7_72bins_no_signal.png`
+- Binning: cat2, cat3, cat4, cat5, cat6, cat7; 12 bins each.
+- Per-category axes: Njet 5-6/>=7, Nb 1/>=2, MET/recoil 250-400/400-600/>=600.
+- cat7 SR data are blinded.
 
-Final publication plots still require `complete + complete_with_bad_files == 2110`.

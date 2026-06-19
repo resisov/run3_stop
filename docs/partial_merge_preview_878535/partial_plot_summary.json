@@ -1,52 +1,34 @@
 {
+  "cat2_cat7_search_bin_plot": {
+    "bins": 72,
+    "bins_per_category": 12,
+    "docs_pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/partial_merge_preview_878535/plots/partial_search_bins_cat2_cat7_72bins_no_signal.pdf",
+    "docs_png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/partial_merge_preview_878535/plots/partial_search_bins_cat2_cat7_72bins_no_signal.png",
+    "name": "partial_search_bins_cat2_cat7_72bins_no_signal",
+    "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bins_cat2_cat7_72bins_no_signal.pdf",
+    "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bins_cat2_cat7_72bins_no_signal.png",
+    "signal_overlay": "omitted_by_request",
+    "sr_data_blinded": true
+  },
+  "cat2_cat7_search_bin_source": {
+    "normalization": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/outputs/normalized_feature_yields.json",
+    "raw_rows_scanned": 290006,
+    "rows_used_after_selection_and_no_sms": 614,
+    "table": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/outputs/real_feature_table.csv"
+  },
   "cms_style": "mplhep",
   "completed_shards_used": 1240,
-  "cr_sr_region_bin_plot": {
-    "bin_labels": [
-      "cat2 LLCR",
-      "cat3 QCDCR",
-      "cat4 GCR",
-      "cat5 DY2E",
-      "cat6 DY2M",
-      "cat7 SR"
-    ],
-    "name": "partial_cr_sr_region_bins",
-    "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_cr_sr_region_bins.pdf",
-    "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_cr_sr_region_bins.png",
-    "title": "CR/SR category bins",
-    "xlabel": "CR/SR category"
-  },
+  "cr_sr_region_bin_plot": null,
   "global_search_bin_number_plot": {
-    "bins": [
-      {
-        "bin": "Njet2to4_Nb0_MET250to400",
-        "scheme": "minimal_njet_nb_met"
-      },
-      {
-        "bin": "Njet2to4_Nb1plus_MET250to400",
-        "scheme": "minimal_njet_nb_met"
-      },
-      {
-        "bin": "Njet5to6_Nb1_MET250to400",
-        "scheme": "minimal_njet_nb_met"
-      },
-      {
-        "bin": "Njet5to6_Nb2plus_MET250to600",
-        "scheme": "minimal_njet_nb_met"
-      },
-      {
-        "bin": "Njet7plus_Nb1plus_MET250to600",
-        "scheme": "minimal_njet_nb_met"
-      },
-      {
-        "bin": "Njet5plus_Nb1plus_MET600plus",
-        "scheme": "minimal_njet_nb_met"
-      }
-    ],
-    "name": "partial_search_bin_number_precomputed_sr",
-    "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bin_number_precomputed_sr.pdf",
-    "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bin_number_precomputed_sr.png",
-    "title": "Search-bin preview, SR only"
+    "bins": 72,
+    "bins_per_category": 12,
+    "docs_pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/partial_merge_preview_878535/plots/partial_search_bins_cat2_cat7_72bins_no_signal.pdf",
+    "docs_png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/partial_merge_preview_878535/plots/partial_search_bins_cat2_cat7_72bins_no_signal.png",
+    "name": "partial_search_bins_cat2_cat7_72bins_no_signal",
+    "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bins_cat2_cat7_72bins_no_signal.pdf",
+    "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bins_cat2_cat7_72bins_no_signal.png",
+    "signal_overlay": "omitted_by_request",
+    "sr_data_blinded": true
   },
   "region_variable_plots": [
     {
@@ -382,82 +364,11 @@
     "cat6_DY2M_highDeltaM",
     "cat7_SR_highDeltaM"
   ],
-  "search_bin_note": "The search-bin number plot uses stored SR counters only. Only SR search-bin counts are available in current shard JSONs. CR search-bin counts will be added later.",
-  "search_bin_plots": [
-    {
-      "bin_labels": [
-        "AK8one_Njet5plus_Nb1_MET250plus",
-        "AK8one_highMET",
-        "AK8two_Njet5plus"
-      ],
-      "name": "partial_search_bins_ak8_kinematics_no_tag_scores",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bins_ak8_kinematics_no_tag_scores.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bins_ak8_kinematics_no_tag_scores.png",
-      "scheme": "ak8_kinematics_no_tag_scores",
-      "title": "ak8_kinematics_no_tag_scores",
-      "xlabel": "Search-bin index"
-    },
-    {
-      "bin_labels": [
-        "hardJ1_Njet2plus_MET250to500",
-        "hardJ1_Njet2plus_MET500plus",
-        "hardJ1_lowB_MET400plus"
-      ],
-      "name": "partial_search_bins_isr_sensitive",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bins_isr_sensitive.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bins_isr_sensitive.png",
-      "scheme": "isr_sensitive",
-      "title": "isr_sensitive",
-      "xlabel": "Search-bin index"
-    },
-    {
-      "bin_labels": [
-        "Njet2to4_Nb0_MET250to400",
-        "Njet2to4_Nb1plus_MET250to400",
-        "Njet5to6_Nb1_MET250to400",
-        "Njet5to6_Nb2plus_MET250to600",
-        "Njet7plus_Nb1plus_MET250to600",
-        "Njet5plus_Nb1plus_MET600plus"
-      ],
-      "name": "partial_search_bins_minimal_njet_nb_met",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bins_minimal_njet_nb_met.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bins_minimal_njet_nb_met.png",
-      "scheme": "minimal_njet_nb_met",
-      "title": "minimal_njet_nb_met",
-      "xlabel": "Search-bin index"
-    },
-    {
-      "bin_labels": [
-        "hybrid_lowMET_multijet",
-        "hybrid_midMET_multijet",
-        "hybrid_highMET_anyHT",
-        "hybrid_AK8_highHT"
-      ],
-      "name": "partial_search_bins_optimized_hybrid_no_tags",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bins_optimized_hybrid_no_tags.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bins_optimized_hybrid_no_tags.png",
-      "scheme": "optimized_hybrid_no_tags",
-      "title": "optimized_hybrid_no_tags",
-      "xlabel": "Search-bin index"
-    },
-    {
-      "bin_labels": [
-        "highHT_Njet5plus_Nb1_MET250plus",
-        "veryHighHT_Njet6plus_Nb1_MET250plus",
-        "twoB_highHT_MET400plus",
-        "cleanDphi_Njet5plus_Nb1_MET400plus"
-      ],
-      "name": "partial_search_bins_resolved_kinematics",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bins_resolved_kinematics.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bins_resolved_kinematics.png",
-      "scheme": "resolved_kinematics",
-      "title": "resolved_kinematics",
-      "xlabel": "Search-bin index"
-    }
-  ],
+  "search_bin_note": "No signal overlay. Search-bin axis uses cat2-cat7, 12 bins per category: Njet 5-6/>=7 x Nb 1/>=2 x MET/recoil 250-400/400-600/>=600. cat7 SR data are blinded.",
+  "search_bin_plots": [],
   "source": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/partial_normalized_yields.json",
   "status": "partial_preview_cms_style",
-  "timestamp_utc": "2026-06-19T13:09:06Z",
+  "timestamp_utc": "2026-06-19T13:25:29Z",
   "variables": [
     "recoil_pt",
     "metpt",
