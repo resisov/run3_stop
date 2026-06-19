@@ -1,0 +1,437 @@
+{
+  "cms_style": "mplhep",
+  "completed_shards_used": 1240,
+  "cr_sr_region_bin_plot": {
+    "bin_labels": [
+      "cat2 LLCR",
+      "cat3 QCDCR",
+      "cat4 GCR",
+      "cat5 DY2E",
+      "cat6 DY2M",
+      "cat7 SR"
+    ],
+    "name": "partial_cr_sr_region_bins",
+    "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_cr_sr_region_bins.pdf",
+    "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_cr_sr_region_bins.png",
+    "title": "CR/SR category bins",
+    "xlabel": "CR/SR category"
+  },
+  "region_variable_plots": [
+    {
+      "name": "partial_recoil_pt_cat2_LLCR_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_recoil_pt_cat2_LLCR_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_recoil_pt_cat2_LLCR_highDeltaM.png",
+      "region": "cat2_LLCR_highDeltaM",
+      "title": "cat2 LLCR",
+      "variable": "recoil_pt",
+      "xlabel": "recoil $p_{T}$ [GeV]"
+    },
+    {
+      "name": "partial_metpt_cat2_LLCR_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_metpt_cat2_LLCR_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_metpt_cat2_LLCR_highDeltaM.png",
+      "region": "cat2_LLCR_highDeltaM",
+      "title": "cat2 LLCR",
+      "variable": "metpt",
+      "xlabel": "$p_{T}^{miss}$ [GeV]"
+    },
+    {
+      "name": "partial_ht_cat2_LLCR_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_ht_cat2_LLCR_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_ht_cat2_LLCR_highDeltaM.png",
+      "region": "cat2_LLCR_highDeltaM",
+      "title": "cat2 LLCR",
+      "variable": "ht",
+      "xlabel": "$H_{T}$ [GeV]"
+    },
+    {
+      "name": "partial_njet_cat2_LLCR_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_njet_cat2_LLCR_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_njet_cat2_LLCR_highDeltaM.png",
+      "region": "cat2_LLCR_highDeltaM",
+      "title": "cat2 LLCR",
+      "variable": "njet",
+      "xlabel": "$N_{jet}$"
+    },
+    {
+      "name": "partial_nb_cat2_LLCR_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_nb_cat2_LLCR_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_nb_cat2_LLCR_highDeltaM.png",
+      "region": "cat2_LLCR_highDeltaM",
+      "title": "cat2 LLCR",
+      "variable": "nb",
+      "xlabel": "$N_{b}$"
+    },
+    {
+      "name": "partial_nfj_cat2_LLCR_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_nfj_cat2_LLCR_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_nfj_cat2_LLCR_highDeltaM.png",
+      "region": "cat2_LLCR_highDeltaM",
+      "title": "cat2 LLCR",
+      "variable": "nfj",
+      "xlabel": "$N_{fj}$"
+    },
+    {
+      "name": "partial_recoil_pt_cat3_QCDCR_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_recoil_pt_cat3_QCDCR_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_recoil_pt_cat3_QCDCR_highDeltaM.png",
+      "region": "cat3_QCDCR_highDeltaM",
+      "title": "cat3 QCDCR",
+      "variable": "recoil_pt",
+      "xlabel": "recoil $p_{T}$ [GeV]"
+    },
+    {
+      "name": "partial_metpt_cat3_QCDCR_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_metpt_cat3_QCDCR_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_metpt_cat3_QCDCR_highDeltaM.png",
+      "region": "cat3_QCDCR_highDeltaM",
+      "title": "cat3 QCDCR",
+      "variable": "metpt",
+      "xlabel": "$p_{T}^{miss}$ [GeV]"
+    },
+    {
+      "name": "partial_ht_cat3_QCDCR_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_ht_cat3_QCDCR_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_ht_cat3_QCDCR_highDeltaM.png",
+      "region": "cat3_QCDCR_highDeltaM",
+      "title": "cat3 QCDCR",
+      "variable": "ht",
+      "xlabel": "$H_{T}$ [GeV]"
+    },
+    {
+      "name": "partial_njet_cat3_QCDCR_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_njet_cat3_QCDCR_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_njet_cat3_QCDCR_highDeltaM.png",
+      "region": "cat3_QCDCR_highDeltaM",
+      "title": "cat3 QCDCR",
+      "variable": "njet",
+      "xlabel": "$N_{jet}$"
+    },
+    {
+      "name": "partial_nb_cat3_QCDCR_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_nb_cat3_QCDCR_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_nb_cat3_QCDCR_highDeltaM.png",
+      "region": "cat3_QCDCR_highDeltaM",
+      "title": "cat3 QCDCR",
+      "variable": "nb",
+      "xlabel": "$N_{b}$"
+    },
+    {
+      "name": "partial_nfj_cat3_QCDCR_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_nfj_cat3_QCDCR_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_nfj_cat3_QCDCR_highDeltaM.png",
+      "region": "cat3_QCDCR_highDeltaM",
+      "title": "cat3 QCDCR",
+      "variable": "nfj",
+      "xlabel": "$N_{fj}$"
+    },
+    {
+      "name": "partial_recoil_pt_cat4_GCR_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_recoil_pt_cat4_GCR_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_recoil_pt_cat4_GCR_highDeltaM.png",
+      "region": "cat4_GCR_highDeltaM",
+      "title": "cat4 GCR",
+      "variable": "recoil_pt",
+      "xlabel": "recoil $p_{T}$ [GeV]"
+    },
+    {
+      "name": "partial_metpt_cat4_GCR_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_metpt_cat4_GCR_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_metpt_cat4_GCR_highDeltaM.png",
+      "region": "cat4_GCR_highDeltaM",
+      "title": "cat4 GCR",
+      "variable": "metpt",
+      "xlabel": "$p_{T}^{miss}$ [GeV]"
+    },
+    {
+      "name": "partial_ht_cat4_GCR_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_ht_cat4_GCR_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_ht_cat4_GCR_highDeltaM.png",
+      "region": "cat4_GCR_highDeltaM",
+      "title": "cat4 GCR",
+      "variable": "ht",
+      "xlabel": "$H_{T}$ [GeV]"
+    },
+    {
+      "name": "partial_njet_cat4_GCR_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_njet_cat4_GCR_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_njet_cat4_GCR_highDeltaM.png",
+      "region": "cat4_GCR_highDeltaM",
+      "title": "cat4 GCR",
+      "variable": "njet",
+      "xlabel": "$N_{jet}$"
+    },
+    {
+      "name": "partial_nb_cat4_GCR_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_nb_cat4_GCR_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_nb_cat4_GCR_highDeltaM.png",
+      "region": "cat4_GCR_highDeltaM",
+      "title": "cat4 GCR",
+      "variable": "nb",
+      "xlabel": "$N_{b}$"
+    },
+    {
+      "name": "partial_nfj_cat4_GCR_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_nfj_cat4_GCR_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_nfj_cat4_GCR_highDeltaM.png",
+      "region": "cat4_GCR_highDeltaM",
+      "title": "cat4 GCR",
+      "variable": "nfj",
+      "xlabel": "$N_{fj}$"
+    },
+    {
+      "name": "partial_recoil_pt_cat5_DY2E_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_recoil_pt_cat5_DY2E_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_recoil_pt_cat5_DY2E_highDeltaM.png",
+      "region": "cat5_DY2E_highDeltaM",
+      "title": "cat5 DY2E",
+      "variable": "recoil_pt",
+      "xlabel": "recoil $p_{T}$ [GeV]"
+    },
+    {
+      "name": "partial_metpt_cat5_DY2E_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_metpt_cat5_DY2E_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_metpt_cat5_DY2E_highDeltaM.png",
+      "region": "cat5_DY2E_highDeltaM",
+      "title": "cat5 DY2E",
+      "variable": "metpt",
+      "xlabel": "$p_{T}^{miss}$ [GeV]"
+    },
+    {
+      "name": "partial_ht_cat5_DY2E_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_ht_cat5_DY2E_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_ht_cat5_DY2E_highDeltaM.png",
+      "region": "cat5_DY2E_highDeltaM",
+      "title": "cat5 DY2E",
+      "variable": "ht",
+      "xlabel": "$H_{T}$ [GeV]"
+    },
+    {
+      "name": "partial_njet_cat5_DY2E_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_njet_cat5_DY2E_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_njet_cat5_DY2E_highDeltaM.png",
+      "region": "cat5_DY2E_highDeltaM",
+      "title": "cat5 DY2E",
+      "variable": "njet",
+      "xlabel": "$N_{jet}$"
+    },
+    {
+      "name": "partial_nb_cat5_DY2E_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_nb_cat5_DY2E_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_nb_cat5_DY2E_highDeltaM.png",
+      "region": "cat5_DY2E_highDeltaM",
+      "title": "cat5 DY2E",
+      "variable": "nb",
+      "xlabel": "$N_{b}$"
+    },
+    {
+      "name": "partial_nfj_cat5_DY2E_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_nfj_cat5_DY2E_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_nfj_cat5_DY2E_highDeltaM.png",
+      "region": "cat5_DY2E_highDeltaM",
+      "title": "cat5 DY2E",
+      "variable": "nfj",
+      "xlabel": "$N_{fj}$"
+    },
+    {
+      "name": "partial_recoil_pt_cat6_DY2M_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_recoil_pt_cat6_DY2M_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_recoil_pt_cat6_DY2M_highDeltaM.png",
+      "region": "cat6_DY2M_highDeltaM",
+      "title": "cat6 DY2M",
+      "variable": "recoil_pt",
+      "xlabel": "recoil $p_{T}$ [GeV]"
+    },
+    {
+      "name": "partial_metpt_cat6_DY2M_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_metpt_cat6_DY2M_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_metpt_cat6_DY2M_highDeltaM.png",
+      "region": "cat6_DY2M_highDeltaM",
+      "title": "cat6 DY2M",
+      "variable": "metpt",
+      "xlabel": "$p_{T}^{miss}$ [GeV]"
+    },
+    {
+      "name": "partial_ht_cat6_DY2M_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_ht_cat6_DY2M_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_ht_cat6_DY2M_highDeltaM.png",
+      "region": "cat6_DY2M_highDeltaM",
+      "title": "cat6 DY2M",
+      "variable": "ht",
+      "xlabel": "$H_{T}$ [GeV]"
+    },
+    {
+      "name": "partial_njet_cat6_DY2M_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_njet_cat6_DY2M_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_njet_cat6_DY2M_highDeltaM.png",
+      "region": "cat6_DY2M_highDeltaM",
+      "title": "cat6 DY2M",
+      "variable": "njet",
+      "xlabel": "$N_{jet}$"
+    },
+    {
+      "name": "partial_nb_cat6_DY2M_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_nb_cat6_DY2M_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_nb_cat6_DY2M_highDeltaM.png",
+      "region": "cat6_DY2M_highDeltaM",
+      "title": "cat6 DY2M",
+      "variable": "nb",
+      "xlabel": "$N_{b}$"
+    },
+    {
+      "name": "partial_nfj_cat6_DY2M_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_nfj_cat6_DY2M_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_nfj_cat6_DY2M_highDeltaM.png",
+      "region": "cat6_DY2M_highDeltaM",
+      "title": "cat6 DY2M",
+      "variable": "nfj",
+      "xlabel": "$N_{fj}$"
+    },
+    {
+      "name": "partial_recoil_pt_cat7_SR_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_recoil_pt_cat7_SR_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_recoil_pt_cat7_SR_highDeltaM.png",
+      "region": "cat7_SR_highDeltaM",
+      "title": "cat7 SR",
+      "variable": "recoil_pt",
+      "xlabel": "recoil $p_{T}$ [GeV]"
+    },
+    {
+      "name": "partial_metpt_cat7_SR_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_metpt_cat7_SR_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_metpt_cat7_SR_highDeltaM.png",
+      "region": "cat7_SR_highDeltaM",
+      "title": "cat7 SR",
+      "variable": "metpt",
+      "xlabel": "$p_{T}^{miss}$ [GeV]"
+    },
+    {
+      "name": "partial_ht_cat7_SR_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_ht_cat7_SR_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_ht_cat7_SR_highDeltaM.png",
+      "region": "cat7_SR_highDeltaM",
+      "title": "cat7 SR",
+      "variable": "ht",
+      "xlabel": "$H_{T}$ [GeV]"
+    },
+    {
+      "name": "partial_njet_cat7_SR_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_njet_cat7_SR_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_njet_cat7_SR_highDeltaM.png",
+      "region": "cat7_SR_highDeltaM",
+      "title": "cat7 SR",
+      "variable": "njet",
+      "xlabel": "$N_{jet}$"
+    },
+    {
+      "name": "partial_nb_cat7_SR_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_nb_cat7_SR_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_nb_cat7_SR_highDeltaM.png",
+      "region": "cat7_SR_highDeltaM",
+      "title": "cat7 SR",
+      "variable": "nb",
+      "xlabel": "$N_{b}$"
+    },
+    {
+      "name": "partial_nfj_cat7_SR_highDeltaM",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_nfj_cat7_SR_highDeltaM.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_nfj_cat7_SR_highDeltaM.png",
+      "region": "cat7_SR_highDeltaM",
+      "title": "cat7 SR",
+      "variable": "nfj",
+      "xlabel": "$N_{fj}$"
+    }
+  ],
+  "regions": [
+    "cat2_LLCR_highDeltaM",
+    "cat3_QCDCR_highDeltaM",
+    "cat4_GCR_highDeltaM",
+    "cat5_DY2E_highDeltaM",
+    "cat6_DY2M_highDeltaM",
+    "cat7_SR_highDeltaM"
+  ],
+  "search_bin_note": "Search-bin plots are aggregated from completed final shard search_bins counters when available; final AN-style binning still requires final full-production outputs and review.",
+  "search_bin_plots": [
+    {
+      "bin_labels": [
+        "AK8one_Njet5plus_Nb1_MET250plus",
+        "AK8one_highMET",
+        "AK8two_Njet5plus"
+      ],
+      "name": "partial_search_bins_ak8_kinematics_no_tag_scores",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bins_ak8_kinematics_no_tag_scores.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bins_ak8_kinematics_no_tag_scores.png",
+      "scheme": "ak8_kinematics_no_tag_scores",
+      "title": "ak8_kinematics_no_tag_scores",
+      "xlabel": "Search-bin index"
+    },
+    {
+      "bin_labels": [
+        "hardJ1_Njet2plus_MET250to500",
+        "hardJ1_Njet2plus_MET500plus",
+        "hardJ1_lowB_MET400plus"
+      ],
+      "name": "partial_search_bins_isr_sensitive",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bins_isr_sensitive.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bins_isr_sensitive.png",
+      "scheme": "isr_sensitive",
+      "title": "isr_sensitive",
+      "xlabel": "Search-bin index"
+    },
+    {
+      "bin_labels": [
+        "Njet2to4_Nb0_MET250to400",
+        "Njet2to4_Nb1plus_MET250to400",
+        "Njet5to6_Nb1_MET250to400",
+        "Njet5to6_Nb2plus_MET250to600",
+        "Njet7plus_Nb1plus_MET250to600",
+        "Njet5plus_Nb1plus_MET600plus"
+      ],
+      "name": "partial_search_bins_minimal_njet_nb_met",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bins_minimal_njet_nb_met.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bins_minimal_njet_nb_met.png",
+      "scheme": "minimal_njet_nb_met",
+      "title": "minimal_njet_nb_met",
+      "xlabel": "Search-bin index"
+    },
+    {
+      "bin_labels": [
+        "hybrid_lowMET_multijet",
+        "hybrid_midMET_multijet",
+        "hybrid_highMET_anyHT",
+        "hybrid_AK8_highHT"
+      ],
+      "name": "partial_search_bins_optimized_hybrid_no_tags",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bins_optimized_hybrid_no_tags.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bins_optimized_hybrid_no_tags.png",
+      "scheme": "optimized_hybrid_no_tags",
+      "title": "optimized_hybrid_no_tags",
+      "xlabel": "Search-bin index"
+    },
+    {
+      "bin_labels": [
+        "highHT_Njet5plus_Nb1_MET250plus",
+        "veryHighHT_Njet6plus_Nb1_MET250plus",
+        "twoB_highHT_MET400plus",
+        "cleanDphi_Njet5plus_Nb1_MET400plus"
+      ],
+      "name": "partial_search_bins_resolved_kinematics",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bins_resolved_kinematics.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/plots/partial_search_bins_resolved_kinematics.png",
+      "scheme": "resolved_kinematics",
+      "title": "resolved_kinematics",
+      "xlabel": "Search-bin index"
+    }
+  ],
+  "source": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/partial_merge_preview_878535/partial_normalized_yields.json",
+  "status": "partial_preview_cms_style",
+  "timestamp_utc": "2026-06-19T12:32:11Z",
+  "variables": [
+    "recoil_pt",
+    "metpt",
+    "ht",
+    "njet",
+    "nb",
+    "nfj"
+  ]
+}

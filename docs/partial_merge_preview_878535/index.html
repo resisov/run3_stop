@@ -6,11 +6,12 @@
   <title>Partial Merge Preview 878535</title>
   <style>
     body { margin: 24px; font-family: Arial, sans-serif; color: #20242a; background: #f7f8fa; }
-    main { max-width: 1120px; margin: 0 auto; }
+    main { max-width: 1180px; margin: 0 auto; }
     a { color: #2459a6; }
     .topnav { margin: 0 0 20px; font-size: 14px; }
     .links { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin: 18px 0 24px; }
     .links a { display: block; padding: 10px 12px; background: #ffffff; border: 1px solid #d8dde4; border-radius: 6px; text-decoration: none; }
+    .region { margin-top: 28px; }
     .plot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
     figure { margin: 0; padding: 12px; background: #ffffff; border: 1px solid #d8dde4; border-radius: 6px; }
     img { width: 100%; height: auto; display: block; }
@@ -22,41 +23,149 @@
 <main>
   <nav class="topnav"><a href="../index.html">Home</a> | <a href="../monitor.html">Monitor</a></nav>
   <h1>Partial Merge Preview 878535</h1>
-  <p>Internal preview artifacts from the current completed-shard subset.</p>
+  <p>Internal preview artifacts from the current completed-shard subset. CMS-style plots use <code>mplhep</code>.</p>
 
   <section class="links" aria-label="Preview files">
     <a href="partial_yield_summary.md">partial_yield_summary.md</a>
     <a href="partial_plot_summary.md">partial_plot_summary.md</a>
+    <a href="partial_plot_summary.json">partial_plot_summary.json</a>
     <a href="partial_normalized_yields.json">partial_normalized_yields.json</a>
     <a href="partial_normalization_factors.json">partial_normalization_factors.json</a>
   </section>
 
-  <section class="plot-grid" aria-label="Partial preview plots">
-    <figure>
-      <img src="plots/partial_recoil_pt_cat7_SR_highDeltaM.png" alt="Partial recoil pT preview plot">
-      <figcaption>Recoil pT | <a href="plots/partial_recoil_pt_cat7_SR_highDeltaM.pdf">PDF</a></figcaption>
-    </figure>
-    <figure>
-      <img src="plots/partial_metpt_cat7_SR_highDeltaM.png" alt="Partial MET pT preview plot">
-      <figcaption>MET pT | <a href="plots/partial_metpt_cat7_SR_highDeltaM.pdf">PDF</a></figcaption>
-    </figure>
-    <figure>
-      <img src="plots/partial_ht_cat7_SR_highDeltaM.png" alt="Partial HT preview plot">
-      <figcaption>HT | <a href="plots/partial_ht_cat7_SR_highDeltaM.pdf">PDF</a></figcaption>
-    </figure>
-    <figure>
-      <img src="plots/partial_njet_cat7_SR_highDeltaM.png" alt="Partial Njet preview plot">
-      <figcaption>Njet | <a href="plots/partial_njet_cat7_SR_highDeltaM.pdf">PDF</a></figcaption>
-    </figure>
-    <figure>
-      <img src="plots/partial_nb_cat7_SR_highDeltaM.png" alt="Partial Nb preview plot">
-      <figcaption>Nb | <a href="plots/partial_nb_cat7_SR_highDeltaM.pdf">PDF</a></figcaption>
-    </figure>
-    <figure>
-      <img src="plots/partial_nfj_cat7_SR_highDeltaM.png" alt="Partial Nfj preview plot">
-      <figcaption>Nfj | <a href="plots/partial_nfj_cat7_SR_highDeltaM.pdf">PDF</a></figcaption>
-    </figure>
-  </section>
+  <section class="region"><h2>CR/SR and Search-Bin Plots</h2><div class="plot-grid"><figure>
+  <img src="plots/partial_cr_sr_region_bins.png" alt="CR/SR category bins">
+  <figcaption>CR/SR category bins | <a href="plots/partial_cr_sr_region_bins.pdf">PDF</a></figcaption>
+</figure>
+<figure>
+  <img src="plots/partial_search_bins_ak8_kinematics_no_tag_scores.png" alt="Search-bin plot ak8_kinematics_no_tag_scores">
+  <figcaption>ak8_kinematics_no_tag_scores | <a href="plots/partial_search_bins_ak8_kinematics_no_tag_scores.pdf">PDF</a></figcaption>
+</figure>
+<figure>
+  <img src="plots/partial_search_bins_isr_sensitive.png" alt="Search-bin plot isr_sensitive">
+  <figcaption>isr_sensitive | <a href="plots/partial_search_bins_isr_sensitive.pdf">PDF</a></figcaption>
+</figure>
+<figure>
+  <img src="plots/partial_search_bins_minimal_njet_nb_met.png" alt="Search-bin plot minimal_njet_nb_met">
+  <figcaption>minimal_njet_nb_met | <a href="plots/partial_search_bins_minimal_njet_nb_met.pdf">PDF</a></figcaption>
+</figure>
+<figure>
+  <img src="plots/partial_search_bins_optimized_hybrid_no_tags.png" alt="Search-bin plot optimized_hybrid_no_tags">
+  <figcaption>optimized_hybrid_no_tags | <a href="plots/partial_search_bins_optimized_hybrid_no_tags.pdf">PDF</a></figcaption>
+</figure>
+<figure>
+  <img src="plots/partial_search_bins_resolved_kinematics.png" alt="Search-bin plot resolved_kinematics">
+  <figcaption>resolved_kinematics | <a href="plots/partial_search_bins_resolved_kinematics.pdf">PDF</a></figcaption>
+</figure></div></section>
+  <section class="region"><h2>cat2 LLCR</h2><div class="plot-grid"><figure>
+  <img src="plots/partial_recoil_pt_cat2_LLCR_highDeltaM.png" alt="cat2 LLCR recoil pT">
+  <figcaption>recoil pT | <a href="plots/partial_recoil_pt_cat2_LLCR_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_metpt_cat2_LLCR_highDeltaM.png" alt="cat2 LLCR MET pT">
+  <figcaption>MET pT | <a href="plots/partial_metpt_cat2_LLCR_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_ht_cat2_LLCR_highDeltaM.png" alt="cat2 LLCR HT">
+  <figcaption>HT | <a href="plots/partial_ht_cat2_LLCR_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_njet_cat2_LLCR_highDeltaM.png" alt="cat2 LLCR Njet">
+  <figcaption>Njet | <a href="plots/partial_njet_cat2_LLCR_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_nb_cat2_LLCR_highDeltaM.png" alt="cat2 LLCR Nb">
+  <figcaption>Nb | <a href="plots/partial_nb_cat2_LLCR_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_nfj_cat2_LLCR_highDeltaM.png" alt="cat2 LLCR Nfj">
+  <figcaption>Nfj | <a href="plots/partial_nfj_cat2_LLCR_highDeltaM.pdf">PDF</a></figcaption>
+</figure></div></section><section class="region"><h2>cat3 QCDCR</h2><div class="plot-grid"><figure>
+  <img src="plots/partial_recoil_pt_cat3_QCDCR_highDeltaM.png" alt="cat3 QCDCR recoil pT">
+  <figcaption>recoil pT | <a href="plots/partial_recoil_pt_cat3_QCDCR_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_metpt_cat3_QCDCR_highDeltaM.png" alt="cat3 QCDCR MET pT">
+  <figcaption>MET pT | <a href="plots/partial_metpt_cat3_QCDCR_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_ht_cat3_QCDCR_highDeltaM.png" alt="cat3 QCDCR HT">
+  <figcaption>HT | <a href="plots/partial_ht_cat3_QCDCR_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_njet_cat3_QCDCR_highDeltaM.png" alt="cat3 QCDCR Njet">
+  <figcaption>Njet | <a href="plots/partial_njet_cat3_QCDCR_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_nb_cat3_QCDCR_highDeltaM.png" alt="cat3 QCDCR Nb">
+  <figcaption>Nb | <a href="plots/partial_nb_cat3_QCDCR_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_nfj_cat3_QCDCR_highDeltaM.png" alt="cat3 QCDCR Nfj">
+  <figcaption>Nfj | <a href="plots/partial_nfj_cat3_QCDCR_highDeltaM.pdf">PDF</a></figcaption>
+</figure></div></section><section class="region"><h2>cat4 GCR</h2><div class="plot-grid"><figure>
+  <img src="plots/partial_recoil_pt_cat4_GCR_highDeltaM.png" alt="cat4 GCR recoil pT">
+  <figcaption>recoil pT | <a href="plots/partial_recoil_pt_cat4_GCR_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_metpt_cat4_GCR_highDeltaM.png" alt="cat4 GCR MET pT">
+  <figcaption>MET pT | <a href="plots/partial_metpt_cat4_GCR_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_ht_cat4_GCR_highDeltaM.png" alt="cat4 GCR HT">
+  <figcaption>HT | <a href="plots/partial_ht_cat4_GCR_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_njet_cat4_GCR_highDeltaM.png" alt="cat4 GCR Njet">
+  <figcaption>Njet | <a href="plots/partial_njet_cat4_GCR_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_nb_cat4_GCR_highDeltaM.png" alt="cat4 GCR Nb">
+  <figcaption>Nb | <a href="plots/partial_nb_cat4_GCR_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_nfj_cat4_GCR_highDeltaM.png" alt="cat4 GCR Nfj">
+  <figcaption>Nfj | <a href="plots/partial_nfj_cat4_GCR_highDeltaM.pdf">PDF</a></figcaption>
+</figure></div></section><section class="region"><h2>cat5 DY2E</h2><div class="plot-grid"><figure>
+  <img src="plots/partial_recoil_pt_cat5_DY2E_highDeltaM.png" alt="cat5 DY2E recoil pT">
+  <figcaption>recoil pT | <a href="plots/partial_recoil_pt_cat5_DY2E_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_metpt_cat5_DY2E_highDeltaM.png" alt="cat5 DY2E MET pT">
+  <figcaption>MET pT | <a href="plots/partial_metpt_cat5_DY2E_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_ht_cat5_DY2E_highDeltaM.png" alt="cat5 DY2E HT">
+  <figcaption>HT | <a href="plots/partial_ht_cat5_DY2E_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_njet_cat5_DY2E_highDeltaM.png" alt="cat5 DY2E Njet">
+  <figcaption>Njet | <a href="plots/partial_njet_cat5_DY2E_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_nb_cat5_DY2E_highDeltaM.png" alt="cat5 DY2E Nb">
+  <figcaption>Nb | <a href="plots/partial_nb_cat5_DY2E_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_nfj_cat5_DY2E_highDeltaM.png" alt="cat5 DY2E Nfj">
+  <figcaption>Nfj | <a href="plots/partial_nfj_cat5_DY2E_highDeltaM.pdf">PDF</a></figcaption>
+</figure></div></section><section class="region"><h2>cat6 DY2M</h2><div class="plot-grid"><figure>
+  <img src="plots/partial_recoil_pt_cat6_DY2M_highDeltaM.png" alt="cat6 DY2M recoil pT">
+  <figcaption>recoil pT | <a href="plots/partial_recoil_pt_cat6_DY2M_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_metpt_cat6_DY2M_highDeltaM.png" alt="cat6 DY2M MET pT">
+  <figcaption>MET pT | <a href="plots/partial_metpt_cat6_DY2M_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_ht_cat6_DY2M_highDeltaM.png" alt="cat6 DY2M HT">
+  <figcaption>HT | <a href="plots/partial_ht_cat6_DY2M_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_njet_cat6_DY2M_highDeltaM.png" alt="cat6 DY2M Njet">
+  <figcaption>Njet | <a href="plots/partial_njet_cat6_DY2M_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_nb_cat6_DY2M_highDeltaM.png" alt="cat6 DY2M Nb">
+  <figcaption>Nb | <a href="plots/partial_nb_cat6_DY2M_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_nfj_cat6_DY2M_highDeltaM.png" alt="cat6 DY2M Nfj">
+  <figcaption>Nfj | <a href="plots/partial_nfj_cat6_DY2M_highDeltaM.pdf">PDF</a></figcaption>
+</figure></div></section><section class="region"><h2>cat7 SR</h2><div class="plot-grid"><figure>
+  <img src="plots/partial_recoil_pt_cat7_SR_highDeltaM.png" alt="cat7 SR recoil pT">
+  <figcaption>recoil pT | <a href="plots/partial_recoil_pt_cat7_SR_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_metpt_cat7_SR_highDeltaM.png" alt="cat7 SR MET pT">
+  <figcaption>MET pT | <a href="plots/partial_metpt_cat7_SR_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_ht_cat7_SR_highDeltaM.png" alt="cat7 SR HT">
+  <figcaption>HT | <a href="plots/partial_ht_cat7_SR_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_njet_cat7_SR_highDeltaM.png" alt="cat7 SR Njet">
+  <figcaption>Njet | <a href="plots/partial_njet_cat7_SR_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_nb_cat7_SR_highDeltaM.png" alt="cat7 SR Nb">
+  <figcaption>Nb | <a href="plots/partial_nb_cat7_SR_highDeltaM.pdf">PDF</a></figcaption>
+</figure><figure>
+  <img src="plots/partial_nfj_cat7_SR_highDeltaM.png" alt="cat7 SR Nfj">
+  <figcaption>Nfj | <a href="plots/partial_nfj_cat7_SR_highDeltaM.pdf">PDF</a></figcaption>
+</figure></div></section>
 </main>
 </body>
 </html>
