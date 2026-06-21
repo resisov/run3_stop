@@ -517,7 +517,7 @@ def plot_variable(payload: dict[str, Any], variable: str, region: str, outbase: 
     if len(edges) < 2:
         return None
     centers = 0.5 * (edges[:-1] + edges[1:])
-    fig, axes = plt.subplots(2, 1, figsize=(8, 7), gridspec_kw={"height_ratios": [3, 1], "hspace": 0.05}, sharex=True)
+    fig, axes = plt.subplots(2, 1, figsize=(10, 9), gridspec_kw={"height_ratios": [3, 1], "hspace": 0.06}, sharex=True)
     ax, rax = axes
 
     total = np.zeros(len(centers))
@@ -630,7 +630,7 @@ def plot_variable(payload: dict[str, Any], variable: str, region: str, outbase: 
         ax.set_yscale("log")
         ax.set_ylim(max(0.03, min(positive) * 0.1), max(max(positive) * 60, 1.0))
     hep.cms.label(llabel="Work in progress", rlabel=r"109.82 fb$^{-1}$ (13.6 TeV)", ax=ax)
-    ax.legend(fontsize=7, ncol=3)
+    ax.legend(fontsize=8, ncol=3, frameon=False)
     outbase.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(outbase.with_suffix(".png"), dpi=160, bbox_inches="tight")
     fig.savefig(outbase.with_suffix(".pdf"), bbox_inches="tight")
@@ -658,7 +658,7 @@ def plot_region_summary(payload: dict[str, Any], outbase: Path) -> dict[str, Any
     bkg = np.asarray([payload["regions"][r]["background"] for r in regions], dtype=float)
     data = np.asarray([payload["regions"][r]["data"] for r in regions], dtype=float)
     labels = [r.split("_")[1] for r in regions]
-    fig, ax = plt.subplots(figsize=(8, 5))
+    fig, ax = plt.subplots(figsize=(10, 7))
     ax.hist(x, bins=bins, weights=bkg, histtype="stepfilled", color="#9ec5b8", edgecolor="black", linewidth=0.7, label="Background")
     ax.errorbar(x[:-1], data[:-1], yerr=np.sqrt(data[:-1]), fmt="o", color="black", label="Data 2024")
     signal_records = []
@@ -669,7 +669,7 @@ def plot_region_summary(payload: dict[str, Any], outbase: Path) -> dict[str, Any
         ax.set_ylim(max(0.03, min(positive) * 0.1), max(max(positive) * 60, 1.0))
     ax.set_ylabel("Events")
     hep.cms.label(llabel="Work in progress", rlabel=r"109.82 fb$^{-1}$ (13.6 TeV)", ax=ax)
-    ax.legend(fontsize=8)
+    ax.legend(fontsize=9, frameon=False)
     outbase.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(outbase.with_suffix(".png"), dpi=160, bbox_inches="tight")
     fig.savefig(outbase.with_suffix(".pdf"), bbox_inches="tight")
@@ -696,12 +696,14 @@ def copy_preview_to_docs(preview_dir: Path, docs_dir: Path) -> None:
 
 def write_preview_index(docs_dir: Path, plot_records: list[dict[str, Any]], payload: dict[str, Any]) -> None:
     cards = []
+    cache = str(payload.get("created_at", utc_now())).replace(":", "").replace("-", "")
     for rec in plot_records:
         rel = "plots/" + Path(rec["png"]).name
-        cards.append(f"<a class='plot' href='{rel}'><img src='{rel}' loading='lazy'><span>{Path(rec['png']).stem}</span></a>")
+        rel_v = f"{rel}?v={cache}"
+        cards.append(f"<a class='plot' href='{rel_v}'><img src='{rel_v}' loading='lazy'><span>{Path(rec['png']).stem}</span></a>")
     html = f"""<!doctype html>
 <html><head><meta charset='utf-8'><title>Partial Merge Preview 878535</title>
-<style>body{{font-family:system-ui,-apple-system,Segoe UI,sans-serif;margin:24px;background:#f6f7f9;color:#111}}.grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}}.plot{{display:block;background:white;border:1px solid #ddd;padding:10px;color:#123;text-decoration:none}}img{{max-width:100%;display:block}}code{{background:#eee;padding:2px 4px}}</style></head>
+<style>body{{font-family:system-ui,-apple-system,Segoe UI,sans-serif;margin:24px;background:#f6f7f9;color:#111}}.grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(520px,1fr));gap:16px}}.plot{{display:block;background:white;border:1px solid #ddd;padding:10px;color:#123;text-decoration:none}}img{{width:100%;max-width:100%;display:block}}code{{background:#eee;padding:2px 4px}}</style></head>
 <body><h1>Partial Merge Preview 878535</h1>
 <p>Snapshot: <code>{payload['created_at']}</code>. Sources: <code>{len(payload['source_shards'])}</code> shard payloads; files processed <code>{payload['files_processed']}</code>; bad entries <code>{payload['bad_files']}</code>.</p>
 <p>This preview includes valid final shard JSONs plus terminal <code>.json.running</code> checkpoints at snapshot time. It is not a final production result.</p>
