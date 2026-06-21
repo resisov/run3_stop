@@ -1,22 +1,22 @@
 # Partial Merge Preview sf_unc_v2_20260621
 
-Timestamp UTC: `2026-06-21T18:57:09Z`
+Timestamp UTC: `2026-06-21T22:01:16Z`
 
 This is a live partial preview over valid final shard JSONs plus terminal `.json.running` checkpoints.
 It is not a final production output and must not be used for Combine or final datacards.
 
-Source payloads used: `2042` (`1365` final, `677` running checkpoints)
-Files attempted in selected payloads: `36319`
-Files processed in selected payloads: `35769`
-Bad file entries retained: `550`
-Events processed: `6045024106`
+Source payloads used: `2108` (`1398` final, `710` running checkpoints)
+Files attempted in selected payloads: `38811`
+Files processed in selected payloads: `38092`
+Bad file entries retained: `719`
+Events processed: `7402917522`
 FastSim signal shards: `61/61` processed, bad `0`
 
 | region | data | background |
 |---|---:|---:|
-| cat2_LLCR_highDeltaM | 6822 | 789943 |
-| cat3_QCDCR_highDeltaM | 5921 | 1.93899e+06 |
-| cat4_GCR_highDeltaM | 2394 | 501584 |
-| cat5_DY2E_highDeltaM | 84 | 30644.6 |
-| cat6_DY2M_highDeltaM | 98 | 43438.8 |
-| cat7_SR_highDeltaM | 5650 | 722828 |
+| cat2_LLCR_highDeltaM | 12850 | 1.33628e+06 |
+| cat3_QCDCR_highDeltaM | 11182 | 2.05626e+06 |
+| cat4_GCR_highDeltaM | 3529 | 551418 |
+| cat5_DY2E_highDeltaM | 129 | 32089.5 |
+| cat6_DY2M_highDeltaM | 196 | 45856.2 |
+| cat7_SR_highDeltaM | 10785 | 1.12782e+06 |
