@@ -3723,7 +3723,7 @@
   "events_processed": 0,
   "files_attempted": 61,
   "files_processed": 61,
-  "normalization_note": "FastSim signal shard JSONs are full-production-style raw aggregates. No signal overlay is applied in the partial DATA/background preview plot.",
+  "normalization_note": "FastSim signal shard JSONs are full-production-style raw aggregates. Mass-point overlays in the preview are loaded from signal_cutflows.json and signal_yields_by_mass.json.",
   "shard_status_counts": {
     "complete": 3
   },
