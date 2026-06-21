@@ -1,5 +1,5 @@
 {
-  "completed_or_checkpoint_shards_used": 12,
+  "completed_or_checkpoint_shards_used": 507,
   "region_variable_plots": [
     {
       "blinded": false,
@@ -254,6 +254,78 @@
       "variable": "min_dphi"
     },
     {
+      "blinded": false,
+      "name": "partial_recoil_pt_cat6_DY2M_highDeltaM",
+      "pdf": "plots/partial_recoil_pt_cat6_DY2M_highDeltaM.pdf",
+      "png": "plots/partial_recoil_pt_cat6_DY2M_highDeltaM.png",
+      "region": "cat6_DY2M_highDeltaM",
+      "signal_overlays": [],
+      "variable": "recoil_pt"
+    },
+    {
+      "blinded": false,
+      "name": "partial_metpt_cat6_DY2M_highDeltaM",
+      "pdf": "plots/partial_metpt_cat6_DY2M_highDeltaM.pdf",
+      "png": "plots/partial_metpt_cat6_DY2M_highDeltaM.png",
+      "region": "cat6_DY2M_highDeltaM",
+      "signal_overlays": [],
+      "variable": "metpt"
+    },
+    {
+      "blinded": false,
+      "name": "partial_ht_cat6_DY2M_highDeltaM",
+      "pdf": "plots/partial_ht_cat6_DY2M_highDeltaM.pdf",
+      "png": "plots/partial_ht_cat6_DY2M_highDeltaM.png",
+      "region": "cat6_DY2M_highDeltaM",
+      "signal_overlays": [],
+      "variable": "ht"
+    },
+    {
+      "blinded": false,
+      "name": "partial_njet_cat6_DY2M_highDeltaM",
+      "pdf": "plots/partial_njet_cat6_DY2M_highDeltaM.pdf",
+      "png": "plots/partial_njet_cat6_DY2M_highDeltaM.png",
+      "region": "cat6_DY2M_highDeltaM",
+      "signal_overlays": [],
+      "variable": "njet"
+    },
+    {
+      "blinded": false,
+      "name": "partial_nb_cat6_DY2M_highDeltaM",
+      "pdf": "plots/partial_nb_cat6_DY2M_highDeltaM.pdf",
+      "png": "plots/partial_nb_cat6_DY2M_highDeltaM.png",
+      "region": "cat6_DY2M_highDeltaM",
+      "signal_overlays": [],
+      "variable": "nb"
+    },
+    {
+      "blinded": false,
+      "name": "partial_nfj_cat6_DY2M_highDeltaM",
+      "pdf": "plots/partial_nfj_cat6_DY2M_highDeltaM.pdf",
+      "png": "plots/partial_nfj_cat6_DY2M_highDeltaM.png",
+      "region": "cat6_DY2M_highDeltaM",
+      "signal_overlays": [],
+      "variable": "nfj"
+    },
+    {
+      "blinded": false,
+      "name": "partial_min_dphi_cat6_DY2M_highDeltaM",
+      "pdf": "plots/partial_min_dphi_cat6_DY2M_highDeltaM.pdf",
+      "png": "plots/partial_min_dphi_cat6_DY2M_highDeltaM.png",
+      "region": "cat6_DY2M_highDeltaM",
+      "signal_overlays": [],
+      "variable": "min_dphi"
+    },
+    {
+      "blinded": true,
+      "name": "partial_recoil_pt_cat7_SR_highDeltaM",
+      "pdf": "plots/partial_recoil_pt_cat7_SR_highDeltaM.pdf",
+      "png": "plots/partial_recoil_pt_cat7_SR_highDeltaM.png",
+      "region": "cat7_SR_highDeltaM",
+      "signal_overlays": [],
+      "variable": "recoil_pt"
+    },
+    {
       "blinded": true,
       "name": "partial_metpt_cat7_SR_highDeltaM",
       "pdf": "plots/partial_metpt_cat7_SR_highDeltaM.pdf",
@@ -351,6 +423,15 @@
     },
     {
       "blinded": true,
+      "name": "partial_nfj_cat7_SR_highDeltaM",
+      "pdf": "plots/partial_nfj_cat7_SR_highDeltaM.pdf",
+      "png": "plots/partial_nfj_cat7_SR_highDeltaM.png",
+      "region": "cat7_SR_highDeltaM",
+      "signal_overlays": [],
+      "variable": "nfj"
+    },
+    {
+      "blinded": true,
       "name": "partial_min_dphi_cat7_SR_highDeltaM",
       "pdf": "plots/partial_min_dphi_cat7_SR_highDeltaM.pdf",
       "png": "plots/partial_min_dphi_cat7_SR_highDeltaM.png",
@@ -394,7 +475,7 @@
   "search_bin_note": "cat7 SR data are blinded. Signal overlays are included only for cat7/SR plots for mStop1000/mLSP1 and mStop1200/mLSP1 where matching signal_cutflows histograms exist.",
   "source": "autonomous_allhad/workflow/partial_merge_preview_sf_unc_v2_20260621/partial_normalized_yields.json",
   "status": "partial_preview_cms_style",
-  "timestamp_utc": "2026-06-21T15:45:56Z",
+  "timestamp_utc": "2026-06-21T15:54:11Z",
   "variables": [
     "recoil_pt",
     "metpt",
