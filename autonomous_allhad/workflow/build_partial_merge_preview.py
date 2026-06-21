@@ -504,11 +504,8 @@ def plot_variable(payload: dict[str, Any], variable: str, region: str, outbase: 
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
-    try:
-        import mplhep as hep
-        hep.style.use("CMS")
-    except Exception:
-        hep = None
+    import mplhep as hep
+    hep.style.use("CMS")
 
     bkg = group_background_hists(payload, variable, region)
     data_by_proc = (((payload.get("histograms") or {}).get("data") or {}).get(variable) or {}).get(region, {})
@@ -638,11 +635,8 @@ def plot_variable(payload: dict[str, Any], variable: str, region: str, outbase: 
     if positive:
         ax.set_yscale("log")
         ax.set_ylim(max(0.03, min(positive) * 0.1), max(max(positive) * 60, 1.0))
-    title = region.replace("cat", "cat ").replace("_", " ")
-    ax.text(0.02, 0.96, "CMS Work in progress", transform=ax.transAxes, va="top", fontsize=10)
-    ax.text(0.98, 0.96, f"Partial merge, {LUMI_FB:.2f} fb$^{{-1}}$ (13.6 TeV)", transform=ax.transAxes, ha="right", va="top", fontsize=9)
-    ax.text(0.02, 0.87, title + (" - data blinded" if blinded else ""), transform=ax.transAxes, va="top", fontsize=9)
-    ax.legend(fontsize=7, ncol=2)
+    hep.cms.label(llabel="Work in progress", rlabel=r"109.82 fb$^{-1}$ (13.6 TeV)", ax=ax)
+    ax.legend(fontsize=7, ncol=3)
     outbase.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(outbase.with_suffix(".png"), dpi=160, bbox_inches="tight")
     fig.savefig(outbase.with_suffix(".pdf"), bbox_inches="tight")
@@ -662,6 +656,8 @@ def plot_region_summary(payload: dict[str, Any], outbase: Path) -> dict[str, Any
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+    import mplhep as hep
+    hep.style.use("CMS")
     regions = REGION_ORDER
     x = np.arange(len(regions), dtype=float)
     bins = np.arange(-0.5, len(regions) + 0.5, 1.0)
@@ -681,7 +677,7 @@ def plot_region_summary(payload: dict[str, Any], outbase: Path) -> dict[str, Any
         ax.set_yscale("log")
         ax.set_ylim(max(0.03, min(positive) * 0.1), max(max(positive) * 60, 1.0))
     ax.set_ylabel("Events")
-    ax.set_title("Partial CR/SR region yields (SR data blinded)")
+    hep.cms.label(llabel="Work in progress", rlabel=r"109.82 fb$^{-1}$ (13.6 TeV)", ax=ax)
     ax.legend(fontsize=8)
     outbase.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(outbase.with_suffix(".png"), dpi=160, bbox_inches="tight")
