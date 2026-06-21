@@ -1,16 +1,16 @@
 {
-  "confirmed_at_utc": "2026-06-21T10:38:15Z",
+  "confirmed_at_utc": "2026-06-21T10:48:10Z",
   "confirmed_url": "https://resisov.github.io/run3_stop/partial_merge_preview_878535/",
   "deployment_confirmed": true,
   "deployment_status": "deployed_confirmed",
   "docs_path": "docs",
   "expected_url": "https://resisov.github.io/run3_stop/",
   "index": "docs/index.html",
-  "last_publication_time_utc": "2026-06-21T10:38:15Z",
-  "last_pushed_commit": "2adc615",
+  "last_publication_time_utc": "2026-06-21T10:48:10Z",
+  "last_pushed_commit": "b27fc7e",
   "monitor": "docs/monitor.html",
   "published": true,
-  "remaining_step": "none; public GitHub Pages URL served preview plots with mplhep CMS labels, no extra plot annotations, signals only in cat7/SR, and cat7 data blinded.",
+  "remaining_step": "none; public GitHub Pages URL served preview plots generated with plt.hist stepfilled edges, mplhep CMS labels only, signals only in cat7/SR, and cat7 data blinded.",
   "sensitive_scan": {
     "findings": [],
     "status": "clean"
