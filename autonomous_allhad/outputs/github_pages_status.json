@@ -1,16 +1,16 @@
 {
-  "confirmed_at_utc": "2026-06-21T10:14:23Z",
+  "confirmed_at_utc": "2026-06-21T10:27:22Z",
   "confirmed_url": "https://resisov.github.io/run3_stop/partial_merge_preview_878535/",
   "deployment_confirmed": true,
   "deployment_status": "deployed_confirmed",
   "docs_path": "docs",
   "expected_url": "https://resisov.github.io/run3_stop/",
   "index": "docs/index.html",
-  "last_publication_time_utc": "2026-06-21T10:14:23Z",
-  "last_pushed_commit": "037a180",
+  "last_publication_time_utc": "2026-06-21T10:27:22Z",
+  "last_pushed_commit": "57b17a3",
   "monitor": "docs/monitor.html",
   "published": true,
-  "remaining_step": "none; public GitHub Pages URL returned HTTP 200 and served the regenerated cat2-7 partial preview with blinded cat7 signal overlays.",
+  "remaining_step": "none; public GitHub Pages URL served the corrected preview: signals only in cat7/SR and cat7 data blinded.",
   "sensitive_scan": {
     "findings": [],
     "status": "clean"
