@@ -1,0 +1,3754 @@
+{
+  "bad_files": 0,
+  "datasets": {
+    "/SMS-2Stop_Par-mStop-1000_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": {
+      "dataset": "/SMS-2Stop_Par-mStop-1000_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM",
+      "events_read": 0,
+      "files_attempted": 3,
+      "files_processed": 3,
+      "process": "SMS",
+      "regions": {
+        "DY2E": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_sumw2": 4983.0,
+          "raw_weighted": 4983.0,
+          "unweighted": 4983
+        },
+        "QCDCR": {
+          "raw_sumw2": 2357.0,
+          "raw_weighted": 2357.0,
+          "unweighted": 2357
+        },
+        "SR": {
+          "raw_sumw2": 90558.0,
+          "raw_weighted": 90558.0,
+          "unweighted": 90558
+        }
+      },
+      "search_bins": {
+        "ak8_kinematics_no_tag_scores": {
+          "AK8one_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 79610.0,
+            "raw_weighted": 79610.0,
+            "unweighted": 79610
+          },
+          "AK8one_highMET": {
+            "raw_sumw2": 45210.0,
+            "raw_weighted": 45210.0,
+            "unweighted": 45210
+          },
+          "AK8two_Njet5plus": {
+            "raw_sumw2": 35980.0,
+            "raw_weighted": 35980.0,
+            "unweighted": 35980
+          }
+        },
+        "isr_sensitive": {
+          "hardJ1_Njet2plus_MET250to500": {
+            "raw_sumw2": 6117.0,
+            "raw_weighted": 6117.0,
+            "unweighted": 6117
+          },
+          "hardJ1_Njet2plus_MET500plus": {
+            "raw_sumw2": 18178.0,
+            "raw_weighted": 18178.0,
+            "unweighted": 18178
+          },
+          "hardJ1_lowB_MET400plus": {
+            "raw_sumw2": 6030.0,
+            "raw_weighted": 6030.0,
+            "unweighted": 6030
+          }
+        },
+        "minimal_njet_nb_met": {
+          "Njet5plus_Nb1plus_MET600plus": {
+            "raw_sumw2": 33345.0,
+            "raw_weighted": 33345.0,
+            "unweighted": 33345
+          },
+          "Njet5to6_Nb1_MET250to400": {
+            "raw_sumw2": 6530.0,
+            "raw_weighted": 6530.0,
+            "unweighted": 6530
+          },
+          "Njet5to6_Nb2plus_MET250to600": {
+            "raw_sumw2": 26541.0,
+            "raw_weighted": 26541.0,
+            "unweighted": 26541
+          },
+          "Njet7plus_Nb1plus_MET250to600": {
+            "raw_sumw2": 17097.0,
+            "raw_weighted": 17097.0,
+            "unweighted": 17097
+          }
+        },
+        "optimized_hybrid_no_tags": {
+          "hybrid_AK8_highHT": {
+            "raw_sumw2": 23025.0,
+            "raw_weighted": 23025.0,
+            "unweighted": 23025
+          },
+          "hybrid_highMET_anyHT": {
+            "raw_sumw2": 33345.0,
+            "raw_weighted": 33345.0,
+            "unweighted": 33345
+          },
+          "hybrid_lowMET_multijet": {
+            "raw_sumw2": 11763.0,
+            "raw_weighted": 11763.0,
+            "unweighted": 11763
+          },
+          "hybrid_midMET_multijet": {
+            "raw_sumw2": 18510.0,
+            "raw_weighted": 18510.0,
+            "unweighted": 18510
+          }
+        },
+        "resolved_kinematics": {
+          "cleanDphi_Njet5plus_Nb1_MET400plus": {
+            "raw_sumw2": 64302.0,
+            "raw_weighted": 64302.0,
+            "unweighted": 64302
+          },
+          "highHT_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 39612.0,
+            "raw_weighted": 39612.0,
+            "unweighted": 39612
+          },
+          "twoB_highHT_MET400plus": {
+            "raw_sumw2": 34505.0,
+            "raw_weighted": 34505.0,
+            "unweighted": 34505
+          },
+          "veryHighHT_Njet6plus_Nb1_MET250plus": {
+            "raw_sumw2": 7823.0,
+            "raw_weighted": 7823.0,
+            "unweighted": 7823
+          }
+        }
+      },
+      "sumw": 38096.0,
+      "sumw2": 0.0
+    },
+    "/SMS-2Stop_Par-mStop-1050_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": {
+      "dataset": "/SMS-2Stop_Par-mStop-1050_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM",
+      "events_read": 0,
+      "files_attempted": 2,
+      "files_processed": 2,
+      "process": "SMS",
+      "regions": {
+        "DY2E": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_sumw2": 4894.0,
+          "raw_weighted": 4894.0,
+          "unweighted": 4894
+        },
+        "QCDCR": {
+          "raw_sumw2": 2595.0,
+          "raw_weighted": 2595.0,
+          "unweighted": 2595
+        },
+        "SR": {
+          "raw_sumw2": 93606.0,
+          "raw_weighted": 93606.0,
+          "unweighted": 93606
+        }
+      },
+      "search_bins": {
+        "ak8_kinematics_no_tag_scores": {
+          "AK8one_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 83624.0,
+            "raw_weighted": 83624.0,
+            "unweighted": 83624
+          },
+          "AK8one_highMET": {
+            "raw_sumw2": 50015.0,
+            "raw_weighted": 50015.0,
+            "unweighted": 50015
+          },
+          "AK8two_Njet5plus": {
+            "raw_sumw2": 39323.0,
+            "raw_weighted": 39323.0,
+            "unweighted": 39323
+          }
+        },
+        "isr_sensitive": {
+          "hardJ1_Njet2plus_MET250to500": {
+            "raw_sumw2": 6472.0,
+            "raw_weighted": 6472.0,
+            "unweighted": 6472
+          },
+          "hardJ1_Njet2plus_MET500plus": {
+            "raw_sumw2": 21487.0,
+            "raw_weighted": 21487.0,
+            "unweighted": 21487
+          },
+          "hardJ1_lowB_MET400plus": {
+            "raw_sumw2": 6927.0,
+            "raw_weighted": 6927.0,
+            "unweighted": 6927
+          }
+        },
+        "minimal_njet_nb_met": {
+          "Njet5plus_Nb1plus_MET600plus": {
+            "raw_sumw2": 37840.0,
+            "raw_weighted": 37840.0,
+            "unweighted": 37840
+          },
+          "Njet5to6_Nb1_MET250to400": {
+            "raw_sumw2": 5740.0,
+            "raw_weighted": 5740.0,
+            "unweighted": 5740
+          },
+          "Njet5to6_Nb2plus_MET250to600": {
+            "raw_sumw2": 25655.0,
+            "raw_weighted": 25655.0,
+            "unweighted": 25655
+          },
+          "Njet7plus_Nb1plus_MET250to600": {
+            "raw_sumw2": 17191.0,
+            "raw_weighted": 17191.0,
+            "unweighted": 17191
+          }
+        },
+        "optimized_hybrid_no_tags": {
+          "hybrid_AK8_highHT": {
+            "raw_sumw2": 26774.0,
+            "raw_weighted": 26774.0,
+            "unweighted": 26774
+          },
+          "hybrid_highMET_anyHT": {
+            "raw_sumw2": 37840.0,
+            "raw_weighted": 37840.0,
+            "unweighted": 37840
+          },
+          "hybrid_lowMET_multijet": {
+            "raw_sumw2": 11760.0,
+            "raw_weighted": 11760.0,
+            "unweighted": 11760
+          },
+          "hybrid_midMET_multijet": {
+            "raw_sumw2": 19166.0,
+            "raw_weighted": 19166.0,
+            "unweighted": 19166
+          }
+        },
+        "resolved_kinematics": {
+          "cleanDphi_Njet5plus_Nb1_MET400plus": {
+            "raw_sumw2": 69129.0,
+            "raw_weighted": 69129.0,
+            "unweighted": 69129
+          },
+          "highHT_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 44694.0,
+            "raw_weighted": 44694.0,
+            "unweighted": 44694
+          },
+          "twoB_highHT_MET400plus": {
+            "raw_sumw2": 38600.0,
+            "raw_weighted": 38600.0,
+            "unweighted": 38600
+          },
+          "veryHighHT_Njet6plus_Nb1_MET250plus": {
+            "raw_sumw2": 9081.0,
+            "raw_weighted": 9081.0,
+            "unweighted": 9081
+          }
+        }
+      },
+      "sumw": 41960.0,
+      "sumw2": 0.0
+    },
+    "/SMS-2Stop_Par-mStop-1100_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": {
+      "dataset": "/SMS-2Stop_Par-mStop-1100_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM",
+      "events_read": 0,
+      "files_attempted": 2,
+      "files_processed": 2,
+      "process": "SMS",
+      "regions": {
+        "DY2E": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_sumw2": 4093.0,
+          "raw_weighted": 4093.0,
+          "unweighted": 4093
+        },
+        "QCDCR": {
+          "raw_sumw2": 2238.0,
+          "raw_weighted": 2238.0,
+          "unweighted": 2238
+        },
+        "SR": {
+          "raw_sumw2": 80767.0,
+          "raw_weighted": 80767.0,
+          "unweighted": 80767
+        }
+      },
+      "search_bins": {
+        "ak8_kinematics_no_tag_scores": {
+          "AK8one_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 71689.0,
+            "raw_weighted": 71689.0,
+            "unweighted": 71689
+          },
+          "AK8one_highMET": {
+            "raw_sumw2": 43445.0,
+            "raw_weighted": 43445.0,
+            "unweighted": 43445
+          },
+          "AK8two_Njet5plus": {
+            "raw_sumw2": 34144.0,
+            "raw_weighted": 34144.0,
+            "unweighted": 34144
+          }
+        },
+        "isr_sensitive": {
+          "hardJ1_Njet2plus_MET250to500": {
+            "raw_sumw2": 5740.0,
+            "raw_weighted": 5740.0,
+            "unweighted": 5740
+          },
+          "hardJ1_Njet2plus_MET500plus": {
+            "raw_sumw2": 19672.0,
+            "raw_weighted": 19672.0,
+            "unweighted": 19672
+          },
+          "hardJ1_lowB_MET400plus": {
+            "raw_sumw2": 6483.0,
+            "raw_weighted": 6483.0,
+            "unweighted": 6483
+          }
+        },
+        "minimal_njet_nb_met": {
+          "Njet5plus_Nb1plus_MET600plus": {
+            "raw_sumw2": 33279.0,
+            "raw_weighted": 33279.0,
+            "unweighted": 33279
+          },
+          "Njet5to6_Nb1_MET250to400": {
+            "raw_sumw2": 5240.0,
+            "raw_weighted": 5240.0,
+            "unweighted": 5240
+          },
+          "Njet5to6_Nb2plus_MET250to600": {
+            "raw_sumw2": 21977.0,
+            "raw_weighted": 21977.0,
+            "unweighted": 21977
+          },
+          "Njet7plus_Nb1plus_MET250to600": {
+            "raw_sumw2": 14521.0,
+            "raw_weighted": 14521.0,
+            "unweighted": 14521
+          }
+        },
+        "optimized_hybrid_no_tags": {
+          "hybrid_AK8_highHT": {
+            "raw_sumw2": 24641.0,
+            "raw_weighted": 24641.0,
+            "unweighted": 24641
+          },
+          "hybrid_highMET_anyHT": {
+            "raw_sumw2": 33279.0,
+            "raw_weighted": 33279.0,
+            "unweighted": 33279
+          },
+          "hybrid_lowMET_multijet": {
+            "raw_sumw2": 9906.0,
+            "raw_weighted": 9906.0,
+            "unweighted": 9906
+          },
+          "hybrid_midMET_multijet": {
+            "raw_sumw2": 16449.0,
+            "raw_weighted": 16449.0,
+            "unweighted": 16449
+          }
+        },
+        "resolved_kinematics": {
+          "cleanDphi_Njet5plus_Nb1_MET400plus": {
+            "raw_sumw2": 59506.0,
+            "raw_weighted": 59506.0,
+            "unweighted": 59506
+          },
+          "highHT_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 39719.0,
+            "raw_weighted": 39719.0,
+            "unweighted": 39719
+          },
+          "twoB_highHT_MET400plus": {
+            "raw_sumw2": 33602.0,
+            "raw_weighted": 33602.0,
+            "unweighted": 33602
+          },
+          "veryHighHT_Njet6plus_Nb1_MET250plus": {
+            "raw_sumw2": 8518.0,
+            "raw_weighted": 8518.0,
+            "unweighted": 8518
+          }
+        }
+      },
+      "sumw": 42392.0,
+      "sumw2": 0.0
+    },
+    "/SMS-2Stop_Par-mStop-1150_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": {
+      "dataset": "/SMS-2Stop_Par-mStop-1150_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM",
+      "events_read": 0,
+      "files_attempted": 2,
+      "files_processed": 2,
+      "process": "SMS",
+      "regions": {
+        "DY2E": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_sumw2": 4233.0,
+          "raw_weighted": 4233.0,
+          "unweighted": 4233
+        },
+        "QCDCR": {
+          "raw_sumw2": 2410.0,
+          "raw_weighted": 2410.0,
+          "unweighted": 2410
+        },
+        "SR": {
+          "raw_sumw2": 88216.0,
+          "raw_weighted": 88216.0,
+          "unweighted": 88216
+        }
+      },
+      "search_bins": {
+        "ak8_kinematics_no_tag_scores": {
+          "AK8one_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 79884.0,
+            "raw_weighted": 79884.0,
+            "unweighted": 79884
+          },
+          "AK8one_highMET": {
+            "raw_sumw2": 50891.0,
+            "raw_weighted": 50891.0,
+            "unweighted": 50891
+          },
+          "AK8two_Njet5plus": {
+            "raw_sumw2": 39912.0,
+            "raw_weighted": 39912.0,
+            "unweighted": 39912
+          }
+        },
+        "isr_sensitive": {
+          "hardJ1_Njet2plus_MET250to500": {
+            "raw_sumw2": 6272.0,
+            "raw_weighted": 6272.0,
+            "unweighted": 6272
+          },
+          "hardJ1_Njet2plus_MET500plus": {
+            "raw_sumw2": 24634.0,
+            "raw_weighted": 24634.0,
+            "unweighted": 24634
+          },
+          "hardJ1_lowB_MET400plus": {
+            "raw_sumw2": 7715.0,
+            "raw_weighted": 7715.0,
+            "unweighted": 7715
+          }
+        },
+        "minimal_njet_nb_met": {
+          "Njet5plus_Nb1plus_MET600plus": {
+            "raw_sumw2": 40272.0,
+            "raw_weighted": 40272.0,
+            "unweighted": 40272
+          },
+          "Njet5to6_Nb1_MET250to400": {
+            "raw_sumw2": 4833.0,
+            "raw_weighted": 4833.0,
+            "unweighted": 4833
+          },
+          "Njet5to6_Nb2plus_MET250to600": {
+            "raw_sumw2": 22367.0,
+            "raw_weighted": 22367.0,
+            "unweighted": 22367
+          },
+          "Njet7plus_Nb1plus_MET250to600": {
+            "raw_sumw2": 14798.0,
+            "raw_weighted": 14798.0,
+            "unweighted": 14798
+          }
+        },
+        "optimized_hybrid_no_tags": {
+          "hybrid_AK8_highHT": {
+            "raw_sumw2": 30237.0,
+            "raw_weighted": 30237.0,
+            "unweighted": 30237
+          },
+          "hybrid_highMET_anyHT": {
+            "raw_sumw2": 40272.0,
+            "raw_weighted": 40272.0,
+            "unweighted": 40272
+          },
+          "hybrid_lowMET_multijet": {
+            "raw_sumw2": 10534.0,
+            "raw_weighted": 10534.0,
+            "unweighted": 10534
+          },
+          "hybrid_midMET_multijet": {
+            "raw_sumw2": 17488.0,
+            "raw_weighted": 17488.0,
+            "unweighted": 17488
+          }
+        },
+        "resolved_kinematics": {
+          "cleanDphi_Njet5plus_Nb1_MET400plus": {
+            "raw_sumw2": 67468.0,
+            "raw_weighted": 67468.0,
+            "unweighted": 67468
+          },
+          "highHT_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 47485.0,
+            "raw_weighted": 47485.0,
+            "unweighted": 47485
+          },
+          "twoB_highHT_MET400plus": {
+            "raw_sumw2": 39833.0,
+            "raw_weighted": 39833.0,
+            "unweighted": 39833
+          },
+          "veryHighHT_Njet6plus_Nb1_MET250plus": {
+            "raw_sumw2": 10567.0,
+            "raw_weighted": 10567.0,
+            "unweighted": 10567
+          }
+        }
+      },
+      "sumw": 46609.0,
+      "sumw2": 0.0
+    },
+    "/SMS-2Stop_Par-mStop-1200_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": {
+      "dataset": "/SMS-2Stop_Par-mStop-1200_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM",
+      "events_read": 0,
+      "files_attempted": 2,
+      "files_processed": 2,
+      "process": "SMS",
+      "regions": {
+        "DY2E": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_sumw2": 4233.0,
+          "raw_weighted": 4233.0,
+          "unweighted": 4233
+        },
+        "QCDCR": {
+          "raw_sumw2": 2468.0,
+          "raw_weighted": 2468.0,
+          "unweighted": 2468
+        },
+        "SR": {
+          "raw_sumw2": 86873.0,
+          "raw_weighted": 86873.0,
+          "unweighted": 86873
+        }
+      },
+      "search_bins": {
+        "ak8_kinematics_no_tag_scores": {
+          "AK8one_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 78129.0,
+            "raw_weighted": 78129.0,
+            "unweighted": 78129
+          },
+          "AK8one_highMET": {
+            "raw_sumw2": 51187.0,
+            "raw_weighted": 51187.0,
+            "unweighted": 51187
+          },
+          "AK8two_Njet5plus": {
+            "raw_sumw2": 39880.0,
+            "raw_weighted": 39880.0,
+            "unweighted": 39880
+          }
+        },
+        "isr_sensitive": {
+          "hardJ1_Njet2plus_MET250to500": {
+            "raw_sumw2": 6229.0,
+            "raw_weighted": 6229.0,
+            "unweighted": 6229
+          },
+          "hardJ1_Njet2plus_MET500plus": {
+            "raw_sumw2": 26270.0,
+            "raw_weighted": 26270.0,
+            "unweighted": 26270
+          },
+          "hardJ1_lowB_MET400plus": {
+            "raw_sumw2": 8099.0,
+            "raw_weighted": 8099.0,
+            "unweighted": 8099
+          }
+        },
+        "minimal_njet_nb_met": {
+          "Njet5plus_Nb1plus_MET600plus": {
+            "raw_sumw2": 41271.0,
+            "raw_weighted": 41271.0,
+            "unweighted": 41271
+          },
+          "Njet5to6_Nb1_MET250to400": {
+            "raw_sumw2": 5004.0,
+            "raw_weighted": 5004.0,
+            "unweighted": 5004
+          },
+          "Njet5to6_Nb2plus_MET250to600": {
+            "raw_sumw2": 20928.0,
+            "raw_weighted": 20928.0,
+            "unweighted": 20928
+          },
+          "Njet7plus_Nb1plus_MET250to600": {
+            "raw_sumw2": 13923.0,
+            "raw_weighted": 13923.0,
+            "unweighted": 13923
+          }
+        },
+        "optimized_hybrid_no_tags": {
+          "hybrid_AK8_highHT": {
+            "raw_sumw2": 31672.0,
+            "raw_weighted": 31672.0,
+            "unweighted": 31672
+          },
+          "hybrid_highMET_anyHT": {
+            "raw_sumw2": 41271.0,
+            "raw_weighted": 41271.0,
+            "unweighted": 41271
+          },
+          "hybrid_lowMET_multijet": {
+            "raw_sumw2": 9755.0,
+            "raw_weighted": 9755.0,
+            "unweighted": 9755
+          },
+          "hybrid_midMET_multijet": {
+            "raw_sumw2": 16718.0,
+            "raw_weighted": 16718.0,
+            "unweighted": 16718
+          }
+        },
+        "resolved_kinematics": {
+          "cleanDphi_Njet5plus_Nb1_MET400plus": {
+            "raw_sumw2": 66783.0,
+            "raw_weighted": 66783.0,
+            "unweighted": 66783
+          },
+          "highHT_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 48404.0,
+            "raw_weighted": 48404.0,
+            "unweighted": 48404
+          },
+          "twoB_highHT_MET400plus": {
+            "raw_sumw2": 40024.0,
+            "raw_weighted": 40024.0,
+            "unweighted": 40024
+          },
+          "veryHighHT_Njet6plus_Nb1_MET250plus": {
+            "raw_sumw2": 11228.0,
+            "raw_weighted": 11228.0,
+            "unweighted": 11228
+          }
+        }
+      },
+      "sumw": 38892.0,
+      "sumw2": 0.0
+    },
+    "/SMS-2Stop_Par-mStop-1250_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": {
+      "dataset": "/SMS-2Stop_Par-mStop-1250_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM",
+      "events_read": 0,
+      "files_attempted": 3,
+      "files_processed": 3,
+      "process": "SMS",
+      "regions": {
+        "DY2E": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_sumw2": 4630.0,
+          "raw_weighted": 4630.0,
+          "unweighted": 4630
+        },
+        "QCDCR": {
+          "raw_sumw2": 2753.0,
+          "raw_weighted": 2753.0,
+          "unweighted": 2753
+        },
+        "SR": {
+          "raw_sumw2": 96897.0,
+          "raw_weighted": 96897.0,
+          "unweighted": 96897
+        }
+      },
+      "search_bins": {
+        "ak8_kinematics_no_tag_scores": {
+          "AK8one_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 88074.0,
+            "raw_weighted": 88074.0,
+            "unweighted": 88074
+          },
+          "AK8one_highMET": {
+            "raw_sumw2": 58693.0,
+            "raw_weighted": 58693.0,
+            "unweighted": 58693
+          },
+          "AK8two_Njet5plus": {
+            "raw_sumw2": 45841.0,
+            "raw_weighted": 45841.0,
+            "unweighted": 45841
+          }
+        },
+        "isr_sensitive": {
+          "hardJ1_Njet2plus_MET250to500": {
+            "raw_sumw2": 6940.0,
+            "raw_weighted": 6940.0,
+            "unweighted": 6940
+          },
+          "hardJ1_Njet2plus_MET500plus": {
+            "raw_sumw2": 31338.0,
+            "raw_weighted": 31338.0,
+            "unweighted": 31338
+          },
+          "hardJ1_lowB_MET400plus": {
+            "raw_sumw2": 9487.0,
+            "raw_weighted": 9487.0,
+            "unweighted": 9487
+          }
+        },
+        "minimal_njet_nb_met": {
+          "Njet5plus_Nb1plus_MET600plus": {
+            "raw_sumw2": 47776.0,
+            "raw_weighted": 47776.0,
+            "unweighted": 47776
+          },
+          "Njet5to6_Nb1_MET250to400": {
+            "raw_sumw2": 4957.0,
+            "raw_weighted": 4957.0,
+            "unweighted": 4957
+          },
+          "Njet5to6_Nb2plus_MET250to600": {
+            "raw_sumw2": 22660.0,
+            "raw_weighted": 22660.0,
+            "unweighted": 22660
+          },
+          "Njet7plus_Nb1plus_MET250to600": {
+            "raw_sumw2": 15385.0,
+            "raw_weighted": 15385.0,
+            "unweighted": 15385
+          }
+        },
+        "optimized_hybrid_no_tags": {
+          "hybrid_AK8_highHT": {
+            "raw_sumw2": 37835.0,
+            "raw_weighted": 37835.0,
+            "unweighted": 37835
+          },
+          "hybrid_highMET_anyHT": {
+            "raw_sumw2": 47776.0,
+            "raw_weighted": 47776.0,
+            "unweighted": 47776
+          },
+          "hybrid_lowMET_multijet": {
+            "raw_sumw2": 10881.0,
+            "raw_weighted": 10881.0,
+            "unweighted": 10881
+          },
+          "hybrid_midMET_multijet": {
+            "raw_sumw2": 18412.0,
+            "raw_weighted": 18412.0,
+            "unweighted": 18412
+          }
+        },
+        "resolved_kinematics": {
+          "cleanDphi_Njet5plus_Nb1_MET400plus": {
+            "raw_sumw2": 75617.0,
+            "raw_weighted": 75617.0,
+            "unweighted": 75617
+          },
+          "highHT_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 56396.0,
+            "raw_weighted": 56396.0,
+            "unweighted": 56396
+          },
+          "twoB_highHT_MET400plus": {
+            "raw_sumw2": 45921.0,
+            "raw_weighted": 45921.0,
+            "unweighted": 45921
+          },
+          "veryHighHT_Njet6plus_Nb1_MET250plus": {
+            "raw_sumw2": 13799.0,
+            "raw_weighted": 13799.0,
+            "unweighted": 13799
+          }
+        }
+      },
+      "sumw": 34756.0,
+      "sumw2": 0.0
+    },
+    "/SMS-2Stop_Par-mStop-1300_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": {
+      "dataset": "/SMS-2Stop_Par-mStop-1300_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM",
+      "events_read": 0,
+      "files_attempted": 2,
+      "files_processed": 2,
+      "process": "SMS",
+      "regions": {
+        "DY2E": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_sumw2": 4031.0,
+          "raw_weighted": 4031.0,
+          "unweighted": 4031
+        },
+        "QCDCR": {
+          "raw_sumw2": 2534.0,
+          "raw_weighted": 2534.0,
+          "unweighted": 2534
+        },
+        "SR": {
+          "raw_sumw2": 91659.0,
+          "raw_weighted": 91659.0,
+          "unweighted": 91659
+        }
+      },
+      "search_bins": {
+        "ak8_kinematics_no_tag_scores": {
+          "AK8one_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 83729.0,
+            "raw_weighted": 83729.0,
+            "unweighted": 83729
+          },
+          "AK8one_highMET": {
+            "raw_sumw2": 57220.0,
+            "raw_weighted": 57220.0,
+            "unweighted": 57220
+          },
+          "AK8two_Njet5plus": {
+            "raw_sumw2": 44459.0,
+            "raw_weighted": 44459.0,
+            "unweighted": 44459
+          }
+        },
+        "isr_sensitive": {
+          "hardJ1_Njet2plus_MET250to500": {
+            "raw_sumw2": 6725.0,
+            "raw_weighted": 6725.0,
+            "unweighted": 6725
+          },
+          "hardJ1_Njet2plus_MET500plus": {
+            "raw_sumw2": 31521.0,
+            "raw_weighted": 31521.0,
+            "unweighted": 31521
+          },
+          "hardJ1_lowB_MET400plus": {
+            "raw_sumw2": 9446.0,
+            "raw_weighted": 9446.0,
+            "unweighted": 9446
+          }
+        },
+        "minimal_njet_nb_met": {
+          "Njet5plus_Nb1plus_MET600plus": {
+            "raw_sumw2": 47186.0,
+            "raw_weighted": 47186.0,
+            "unweighted": 47186
+          },
+          "Njet5to6_Nb1_MET250to400": {
+            "raw_sumw2": 4533.0,
+            "raw_weighted": 4533.0,
+            "unweighted": 4533
+          },
+          "Njet5to6_Nb2plus_MET250to600": {
+            "raw_sumw2": 20466.0,
+            "raw_weighted": 20466.0,
+            "unweighted": 20466
+          },
+          "Njet7plus_Nb1plus_MET250to600": {
+            "raw_sumw2": 13892.0,
+            "raw_weighted": 13892.0,
+            "unweighted": 13892
+          }
+        },
+        "optimized_hybrid_no_tags": {
+          "hybrid_AK8_highHT": {
+            "raw_sumw2": 38057.0,
+            "raw_weighted": 38057.0,
+            "unweighted": 38057
+          },
+          "hybrid_highMET_anyHT": {
+            "raw_sumw2": 47186.0,
+            "raw_weighted": 47186.0,
+            "unweighted": 47186
+          },
+          "hybrid_lowMET_multijet": {
+            "raw_sumw2": 9936.0,
+            "raw_weighted": 9936.0,
+            "unweighted": 9936
+          },
+          "hybrid_midMET_multijet": {
+            "raw_sumw2": 17183.0,
+            "raw_weighted": 17183.0,
+            "unweighted": 17183
+          }
+        },
+        "resolved_kinematics": {
+          "cleanDphi_Njet5plus_Nb1_MET400plus": {
+            "raw_sumw2": 72616.0,
+            "raw_weighted": 72616.0,
+            "unweighted": 72616
+          },
+          "highHT_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 55225.0,
+            "raw_weighted": 55225.0,
+            "unweighted": 55225
+          },
+          "twoB_highHT_MET400plus": {
+            "raw_sumw2": 44842.0,
+            "raw_weighted": 44842.0,
+            "unweighted": 44842
+          },
+          "veryHighHT_Njet6plus_Nb1_MET250plus": {
+            "raw_sumw2": 14117.0,
+            "raw_weighted": 14117.0,
+            "unweighted": 14117
+          }
+        }
+      },
+      "sumw": 37263.0,
+      "sumw2": 0.0
+    },
+    "/SMS-2Stop_Par-mStop-1350_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": {
+      "dataset": "/SMS-2Stop_Par-mStop-1350_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM",
+      "events_read": 0,
+      "files_attempted": 2,
+      "files_processed": 2,
+      "process": "SMS",
+      "regions": {
+        "DY2E": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_sumw2": 3505.0,
+          "raw_weighted": 3505.0,
+          "unweighted": 3505
+        },
+        "QCDCR": {
+          "raw_sumw2": 2138.0,
+          "raw_weighted": 2138.0,
+          "unweighted": 2138
+        },
+        "SR": {
+          "raw_sumw2": 77109.0,
+          "raw_weighted": 77109.0,
+          "unweighted": 77109
+        }
+      },
+      "search_bins": {
+        "ak8_kinematics_no_tag_scores": {
+          "AK8one_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 70503.0,
+            "raw_weighted": 70503.0,
+            "unweighted": 70503
+          },
+          "AK8one_highMET": {
+            "raw_sumw2": 48663.0,
+            "raw_weighted": 48663.0,
+            "unweighted": 48663
+          },
+          "AK8two_Njet5plus": {
+            "raw_sumw2": 37567.0,
+            "raw_weighted": 37567.0,
+            "unweighted": 37567
+          }
+        },
+        "isr_sensitive": {
+          "hardJ1_Njet2plus_MET250to500": {
+            "raw_sumw2": 5599.0,
+            "raw_weighted": 5599.0,
+            "unweighted": 5599
+          },
+          "hardJ1_Njet2plus_MET500plus": {
+            "raw_sumw2": 27929.0,
+            "raw_weighted": 27929.0,
+            "unweighted": 27929
+          },
+          "hardJ1_lowB_MET400plus": {
+            "raw_sumw2": 8383.0,
+            "raw_weighted": 8383.0,
+            "unweighted": 8383
+          }
+        },
+        "minimal_njet_nb_met": {
+          "Njet5plus_Nb1plus_MET600plus": {
+            "raw_sumw2": 40507.0,
+            "raw_weighted": 40507.0,
+            "unweighted": 40507
+          },
+          "Njet5to6_Nb1_MET250to400": {
+            "raw_sumw2": 3681.0,
+            "raw_weighted": 3681.0,
+            "unweighted": 3681
+          },
+          "Njet5to6_Nb2plus_MET250to600": {
+            "raw_sumw2": 16828.0,
+            "raw_weighted": 16828.0,
+            "unweighted": 16828
+          },
+          "Njet7plus_Nb1plus_MET250to600": {
+            "raw_sumw2": 11544.0,
+            "raw_weighted": 11544.0,
+            "unweighted": 11544
+          }
+        },
+        "optimized_hybrid_no_tags": {
+          "hybrid_AK8_highHT": {
+            "raw_sumw2": 33119.0,
+            "raw_weighted": 33119.0,
+            "unweighted": 33119
+          },
+          "hybrid_highMET_anyHT": {
+            "raw_sumw2": 40507.0,
+            "raw_weighted": 40507.0,
+            "unweighted": 40507
+          },
+          "hybrid_lowMET_multijet": {
+            "raw_sumw2": 8175.0,
+            "raw_weighted": 8175.0,
+            "unweighted": 8175
+          },
+          "hybrid_midMET_multijet": {
+            "raw_sumw2": 14141.0,
+            "raw_weighted": 14141.0,
+            "unweighted": 14141
+          }
+        },
+        "resolved_kinematics": {
+          "cleanDphi_Njet5plus_Nb1_MET400plus": {
+            "raw_sumw2": 61334.0,
+            "raw_weighted": 61334.0,
+            "unweighted": 61334
+          },
+          "highHT_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 47478.0,
+            "raw_weighted": 47478.0,
+            "unweighted": 47478
+          },
+          "twoB_highHT_MET400plus": {
+            "raw_sumw2": 38270.0,
+            "raw_weighted": 38270.0,
+            "unweighted": 38270
+          },
+          "veryHighHT_Njet6plus_Nb1_MET250plus": {
+            "raw_sumw2": 12433.0,
+            "raw_weighted": 12433.0,
+            "unweighted": 12433
+          }
+        }
+      },
+      "sumw": 31269.0,
+      "sumw2": 0.0
+    },
+    "/SMS-2Stop_Par-mStop-1400_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": {
+      "dataset": "/SMS-2Stop_Par-mStop-1400_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM",
+      "events_read": 0,
+      "files_attempted": 2,
+      "files_processed": 2,
+      "process": "SMS",
+      "regions": {
+        "DY2E": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_sumw2": 3919.0,
+          "raw_weighted": 3919.0,
+          "unweighted": 3919
+        },
+        "QCDCR": {
+          "raw_sumw2": 2637.0,
+          "raw_weighted": 2637.0,
+          "unweighted": 2637
+        },
+        "SR": {
+          "raw_sumw2": 92386.0,
+          "raw_weighted": 92386.0,
+          "unweighted": 92386
+        }
+      },
+      "search_bins": {
+        "ak8_kinematics_no_tag_scores": {
+          "AK8one_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 85245.0,
+            "raw_weighted": 85245.0,
+            "unweighted": 85245
+          },
+          "AK8one_highMET": {
+            "raw_sumw2": 60359.0,
+            "raw_weighted": 60359.0,
+            "unweighted": 60359
+          },
+          "AK8two_Njet5plus": {
+            "raw_sumw2": 46764.0,
+            "raw_weighted": 46764.0,
+            "unweighted": 46764
+          }
+        },
+        "isr_sensitive": {
+          "hardJ1_Njet2plus_MET250to500": {
+            "raw_sumw2": 6802.0,
+            "raw_weighted": 6802.0,
+            "unweighted": 6802
+          },
+          "hardJ1_Njet2plus_MET500plus": {
+            "raw_sumw2": 35745.0,
+            "raw_weighted": 35745.0,
+            "unweighted": 35745
+          },
+          "hardJ1_lowB_MET400plus": {
+            "raw_sumw2": 10379.0,
+            "raw_weighted": 10379.0,
+            "unweighted": 10379
+          }
+        },
+        "minimal_njet_nb_met": {
+          "Njet5plus_Nb1plus_MET600plus": {
+            "raw_sumw2": 50789.0,
+            "raw_weighted": 50789.0,
+            "unweighted": 50789
+          },
+          "Njet5to6_Nb1_MET250to400": {
+            "raw_sumw2": 4051.0,
+            "raw_weighted": 4051.0,
+            "unweighted": 4051
+          },
+          "Njet5to6_Nb2plus_MET250to600": {
+            "raw_sumw2": 19131.0,
+            "raw_weighted": 19131.0,
+            "unweighted": 19131
+          },
+          "Njet7plus_Nb1plus_MET250to600": {
+            "raw_sumw2": 13243.0,
+            "raw_weighted": 13243.0,
+            "unweighted": 13243
+          }
+        },
+        "optimized_hybrid_no_tags": {
+          "hybrid_AK8_highHT": {
+            "raw_sumw2": 42667.0,
+            "raw_weighted": 42667.0,
+            "unweighted": 42667
+          },
+          "hybrid_highMET_anyHT": {
+            "raw_sumw2": 50789.0,
+            "raw_weighted": 50789.0,
+            "unweighted": 50789
+          },
+          "hybrid_lowMET_multijet": {
+            "raw_sumw2": 9415.0,
+            "raw_weighted": 9415.0,
+            "unweighted": 9415
+          },
+          "hybrid_midMET_multijet": {
+            "raw_sumw2": 16570.0,
+            "raw_weighted": 16570.0,
+            "unweighted": 16570
+          }
+        },
+        "resolved_kinematics": {
+          "cleanDphi_Njet5plus_Nb1_MET400plus": {
+            "raw_sumw2": 74903.0,
+            "raw_weighted": 74903.0,
+            "unweighted": 74903
+          },
+          "highHT_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 59291.0,
+            "raw_weighted": 59291.0,
+            "unweighted": 59291
+          },
+          "twoB_highHT_MET400plus": {
+            "raw_sumw2": 47429.0,
+            "raw_weighted": 47429.0,
+            "unweighted": 47429
+          },
+          "veryHighHT_Njet6plus_Nb1_MET250plus": {
+            "raw_sumw2": 16551.0,
+            "raw_weighted": 16551.0,
+            "unweighted": 16551
+          }
+        }
+      },
+      "sumw": 40839.0,
+      "sumw2": 0.0
+    },
+    "/SMS-2Stop_Par-mStop-1450_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": {
+      "dataset": "/SMS-2Stop_Par-mStop-1450_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM",
+      "events_read": 0,
+      "files_attempted": 3,
+      "files_processed": 3,
+      "process": "SMS",
+      "regions": {
+        "DY2E": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_sumw2": 3892.0,
+          "raw_weighted": 3892.0,
+          "unweighted": 3892
+        },
+        "QCDCR": {
+          "raw_sumw2": 2765.0,
+          "raw_weighted": 2765.0,
+          "unweighted": 2765
+        },
+        "SR": {
+          "raw_sumw2": 95635.0,
+          "raw_weighted": 95635.0,
+          "unweighted": 95635
+        }
+      },
+      "search_bins": {
+        "ak8_kinematics_no_tag_scores": {
+          "AK8one_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 89084.0,
+            "raw_weighted": 89084.0,
+            "unweighted": 89084
+          },
+          "AK8one_highMET": {
+            "raw_sumw2": 64716.0,
+            "raw_weighted": 64716.0,
+            "unweighted": 64716
+          },
+          "AK8two_Njet5plus": {
+            "raw_sumw2": 50415.0,
+            "raw_weighted": 50415.0,
+            "unweighted": 50415
+          }
+        },
+        "isr_sensitive": {
+          "hardJ1_Njet2plus_MET250to500": {
+            "raw_sumw2": 7192.0,
+            "raw_weighted": 7192.0,
+            "unweighted": 7192
+          },
+          "hardJ1_Njet2plus_MET500plus": {
+            "raw_sumw2": 40561.0,
+            "raw_weighted": 40561.0,
+            "unweighted": 40561
+          },
+          "hardJ1_lowB_MET400plus": {
+            "raw_sumw2": 11419.0,
+            "raw_weighted": 11419.0,
+            "unweighted": 11419
+          }
+        },
+        "minimal_njet_nb_met": {
+          "Njet5plus_Nb1plus_MET600plus": {
+            "raw_sumw2": 55147.0,
+            "raw_weighted": 55147.0,
+            "unweighted": 55147
+          },
+          "Njet5to6_Nb1_MET250to400": {
+            "raw_sumw2": 3786.0,
+            "raw_weighted": 3786.0,
+            "unweighted": 3786
+          },
+          "Njet5to6_Nb2plus_MET250to600": {
+            "raw_sumw2": 19030.0,
+            "raw_weighted": 19030.0,
+            "unweighted": 19030
+          },
+          "Njet7plus_Nb1plus_MET250to600": {
+            "raw_sumw2": 12758.0,
+            "raw_weighted": 12758.0,
+            "unweighted": 12758
+          }
+        },
+        "optimized_hybrid_no_tags": {
+          "hybrid_AK8_highHT": {
+            "raw_sumw2": 47975.0,
+            "raw_weighted": 47975.0,
+            "unweighted": 47975
+          },
+          "hybrid_highMET_anyHT": {
+            "raw_sumw2": 55147.0,
+            "raw_weighted": 55147.0,
+            "unweighted": 55147
+          },
+          "hybrid_lowMET_multijet": {
+            "raw_sumw2": 9409.0,
+            "raw_weighted": 9409.0,
+            "unweighted": 9409
+          },
+          "hybrid_midMET_multijet": {
+            "raw_sumw2": 16639.0,
+            "raw_weighted": 16639.0,
+            "unweighted": 16639
+          }
+        },
+        "resolved_kinematics": {
+          "cleanDphi_Njet5plus_Nb1_MET400plus": {
+            "raw_sumw2": 78916.0,
+            "raw_weighted": 78916.0,
+            "unweighted": 78916
+          },
+          "highHT_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 64530.0,
+            "raw_weighted": 64530.0,
+            "unweighted": 64530
+          },
+          "twoB_highHT_MET400plus": {
+            "raw_sumw2": 51152.0,
+            "raw_weighted": 51152.0,
+            "unweighted": 51152
+          },
+          "veryHighHT_Njet6plus_Nb1_MET250plus": {
+            "raw_sumw2": 19058.0,
+            "raw_weighted": 19058.0,
+            "unweighted": 19058
+          }
+        }
+      },
+      "sumw": 32609.0,
+      "sumw2": 0.0
+    },
+    "/SMS-2Stop_Par-mStop-1500_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": {
+      "dataset": "/SMS-2Stop_Par-mStop-1500_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM",
+      "events_read": 0,
+      "files_attempted": 2,
+      "files_processed": 2,
+      "process": "SMS",
+      "regions": {
+        "DY2E": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_sumw2": 3505.0,
+          "raw_weighted": 3505.0,
+          "unweighted": 3505
+        },
+        "QCDCR": {
+          "raw_sumw2": 2577.0,
+          "raw_weighted": 2577.0,
+          "unweighted": 2577
+        },
+        "SR": {
+          "raw_sumw2": 88427.0,
+          "raw_weighted": 88427.0,
+          "unweighted": 88427
+        }
+      },
+      "search_bins": {
+        "ak8_kinematics_no_tag_scores": {
+          "AK8one_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 82417.0,
+            "raw_weighted": 82417.0,
+            "unweighted": 82417
+          },
+          "AK8one_highMET": {
+            "raw_sumw2": 61009.0,
+            "raw_weighted": 61009.0,
+            "unweighted": 61009
+          },
+          "AK8two_Njet5plus": {
+            "raw_sumw2": 47599.0,
+            "raw_weighted": 47599.0,
+            "unweighted": 47599
+          }
+        },
+        "isr_sensitive": {
+          "hardJ1_Njet2plus_MET250to500": {
+            "raw_sumw2": 6544.0,
+            "raw_weighted": 6544.0,
+            "unweighted": 6544
+          },
+          "hardJ1_Njet2plus_MET500plus": {
+            "raw_sumw2": 40196.0,
+            "raw_weighted": 40196.0,
+            "unweighted": 40196
+          },
+          "hardJ1_lowB_MET400plus": {
+            "raw_sumw2": 11406.0,
+            "raw_weighted": 11406.0,
+            "unweighted": 11406
+          }
+        },
+        "minimal_njet_nb_met": {
+          "Njet5plus_Nb1plus_MET600plus": {
+            "raw_sumw2": 52687.0,
+            "raw_weighted": 52687.0,
+            "unweighted": 52687
+          },
+          "Njet5to6_Nb1_MET250to400": {
+            "raw_sumw2": 3341.0,
+            "raw_weighted": 3341.0,
+            "unweighted": 3341
+          },
+          "Njet5to6_Nb2plus_MET250to600": {
+            "raw_sumw2": 16695.0,
+            "raw_weighted": 16695.0,
+            "unweighted": 16695
+          },
+          "Njet7plus_Nb1plus_MET250to600": {
+            "raw_sumw2": 11325.0,
+            "raw_weighted": 11325.0,
+            "unweighted": 11325
+          }
+        },
+        "optimized_hybrid_no_tags": {
+          "hybrid_AK8_highHT": {
+            "raw_sumw2": 46867.0,
+            "raw_weighted": 46867.0,
+            "unweighted": 46867
+          },
+          "hybrid_highMET_anyHT": {
+            "raw_sumw2": 52687.0,
+            "raw_weighted": 52687.0,
+            "unweighted": 52687
+          },
+          "hybrid_lowMET_multijet": {
+            "raw_sumw2": 8291.0,
+            "raw_weighted": 8291.0,
+            "unweighted": 8291
+          },
+          "hybrid_midMET_multijet": {
+            "raw_sumw2": 14929.0,
+            "raw_weighted": 14929.0,
+            "unweighted": 14929
+          }
+        },
+        "resolved_kinematics": {
+          "cleanDphi_Njet5plus_Nb1_MET400plus": {
+            "raw_sumw2": 73566.0,
+            "raw_weighted": 73566.0,
+            "unweighted": 73566
+          },
+          "highHT_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 61416.0,
+            "raw_weighted": 61416.0,
+            "unweighted": 61416
+          },
+          "twoB_highHT_MET400plus": {
+            "raw_sumw2": 48372.0,
+            "raw_weighted": 48372.0,
+            "unweighted": 48372
+          },
+          "veryHighHT_Njet6plus_Nb1_MET250plus": {
+            "raw_sumw2": 19262.0,
+            "raw_weighted": 19262.0,
+            "unweighted": 19262
+          }
+        }
+      },
+      "sumw": 27057.0,
+      "sumw2": 0.0
+    },
+    "/SMS-2Stop_Par-mStop-1600_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": {
+      "dataset": "/SMS-2Stop_Par-mStop-1600_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM",
+      "events_read": 0,
+      "files_attempted": 3,
+      "files_processed": 3,
+      "process": "SMS",
+      "regions": {
+        "DY2E": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_sumw2": 4023.0,
+          "raw_weighted": 4023.0,
+          "unweighted": 4023
+        },
+        "QCDCR": {
+          "raw_sumw2": 3102.0,
+          "raw_weighted": 3102.0,
+          "unweighted": 3102
+        },
+        "SR": {
+          "raw_sumw2": 106621.0,
+          "raw_weighted": 106621.0,
+          "unweighted": 106621
+        }
+      },
+      "search_bins": {
+        "ak8_kinematics_no_tag_scores": {
+          "AK8one_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 100234.0,
+            "raw_weighted": 100234.0,
+            "unweighted": 100234
+          },
+          "AK8one_highMET": {
+            "raw_sumw2": 76723.0,
+            "raw_weighted": 76723.0,
+            "unweighted": 76723
+          },
+          "AK8two_Njet5plus": {
+            "raw_sumw2": 59474.0,
+            "raw_weighted": 59474.0,
+            "unweighted": 59474
+          }
+        },
+        "isr_sensitive": {
+          "hardJ1_Njet2plus_MET250to500": {
+            "raw_sumw2": 7942.0,
+            "raw_weighted": 7942.0,
+            "unweighted": 7942
+          },
+          "hardJ1_Njet2plus_MET500plus": {
+            "raw_sumw2": 53195.0,
+            "raw_weighted": 53195.0,
+            "unweighted": 53195
+          },
+          "hardJ1_lowB_MET400plus": {
+            "raw_sumw2": 14659.0,
+            "raw_weighted": 14659.0,
+            "unweighted": 14659
+          }
+        },
+        "minimal_njet_nb_met": {
+          "Njet5plus_Nb1plus_MET600plus": {
+            "raw_sumw2": 67331.0,
+            "raw_weighted": 67331.0,
+            "unweighted": 67331
+          },
+          "Njet5to6_Nb1_MET250to400": {
+            "raw_sumw2": 3448.0,
+            "raw_weighted": 3448.0,
+            "unweighted": 3448
+          },
+          "Njet5to6_Nb2plus_MET250to600": {
+            "raw_sumw2": 18524.0,
+            "raw_weighted": 18524.0,
+            "unweighted": 18524
+          },
+          "Njet7plus_Nb1plus_MET250to600": {
+            "raw_sumw2": 12419.0,
+            "raw_weighted": 12419.0,
+            "unweighted": 12419
+          }
+        },
+        "optimized_hybrid_no_tags": {
+          "hybrid_AK8_highHT": {
+            "raw_sumw2": 61256.0,
+            "raw_weighted": 61256.0,
+            "unweighted": 61256
+          },
+          "hybrid_highMET_anyHT": {
+            "raw_sumw2": 67331.0,
+            "raw_weighted": 67331.0,
+            "unweighted": 67331
+          },
+          "hybrid_lowMET_multijet": {
+            "raw_sumw2": 9355.0,
+            "raw_weighted": 9355.0,
+            "unweighted": 9355
+          },
+          "hybrid_midMET_multijet": {
+            "raw_sumw2": 17022.0,
+            "raw_weighted": 17022.0,
+            "unweighted": 17022
+          }
+        },
+        "resolved_kinematics": {
+          "cleanDphi_Njet5plus_Nb1_MET400plus": {
+            "raw_sumw2": 90722.0,
+            "raw_weighted": 90722.0,
+            "unweighted": 90722
+          },
+          "highHT_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 78030.0,
+            "raw_weighted": 78030.0,
+            "unweighted": 78030
+          },
+          "twoB_highHT_MET400plus": {
+            "raw_sumw2": 60736.0,
+            "raw_weighted": 60736.0,
+            "unweighted": 60736
+          },
+          "veryHighHT_Njet6plus_Nb1_MET250plus": {
+            "raw_sumw2": 25863.0,
+            "raw_weighted": 25863.0,
+            "unweighted": 25863
+          }
+        }
+      },
+      "sumw": 41101.0,
+      "sumw2": 0.0
+    },
+    "/SMS-2Stop_Par-mStop-1700_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": {
+      "dataset": "/SMS-2Stop_Par-mStop-1700_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM",
+      "events_read": 0,
+      "files_attempted": 2,
+      "files_processed": 2,
+      "process": "SMS",
+      "regions": {
+        "DY2E": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_sumw2": 3533.0,
+          "raw_weighted": 3533.0,
+          "unweighted": 3533
+        },
+        "QCDCR": {
+          "raw_sumw2": 3106.0,
+          "raw_weighted": 3106.0,
+          "unweighted": 3106
+        },
+        "SR": {
+          "raw_sumw2": 100661.0,
+          "raw_weighted": 100661.0,
+          "unweighted": 100661
+        }
+      },
+      "search_bins": {
+        "ak8_kinematics_no_tag_scores": {
+          "AK8one_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 95114.0,
+            "raw_weighted": 95114.0,
+            "unweighted": 95114
+          },
+          "AK8one_highMET": {
+            "raw_sumw2": 74524.0,
+            "raw_weighted": 74524.0,
+            "unweighted": 74524
+          },
+          "AK8two_Njet5plus": {
+            "raw_sumw2": 57825.0,
+            "raw_weighted": 57825.0,
+            "unweighted": 57825
+          }
+        },
+        "isr_sensitive": {
+          "hardJ1_Njet2plus_MET250to500": {
+            "raw_sumw2": 7404.0,
+            "raw_weighted": 7404.0,
+            "unweighted": 7404
+          },
+          "hardJ1_Njet2plus_MET500plus": {
+            "raw_sumw2": 54210.0,
+            "raw_weighted": 54210.0,
+            "unweighted": 54210
+          },
+          "hardJ1_lowB_MET400plus": {
+            "raw_sumw2": 14783.0,
+            "raw_weighted": 14783.0,
+            "unweighted": 14783
+          }
+        },
+        "minimal_njet_nb_met": {
+          "Njet5plus_Nb1plus_MET600plus": {
+            "raw_sumw2": 66322.0,
+            "raw_weighted": 66322.0,
+            "unweighted": 66322
+          },
+          "Njet5to6_Nb1_MET250to400": {
+            "raw_sumw2": 3025.0,
+            "raw_weighted": 3025.0,
+            "unweighted": 3025
+          },
+          "Njet5to6_Nb2plus_MET250to600": {
+            "raw_sumw2": 16261.0,
+            "raw_weighted": 16261.0,
+            "unweighted": 16261
+          },
+          "Njet7plus_Nb1plus_MET250to600": {
+            "raw_sumw2": 10809.0,
+            "raw_weighted": 10809.0,
+            "unweighted": 10809
+          }
+        },
+        "optimized_hybrid_no_tags": {
+          "hybrid_AK8_highHT": {
+            "raw_sumw2": 62024.0,
+            "raw_weighted": 62024.0,
+            "unweighted": 62024
+          },
+          "hybrid_highMET_anyHT": {
+            "raw_sumw2": 66322.0,
+            "raw_weighted": 66322.0,
+            "unweighted": 66322
+          },
+          "hybrid_lowMET_multijet": {
+            "raw_sumw2": 8374.0,
+            "raw_weighted": 8374.0,
+            "unweighted": 8374
+          },
+          "hybrid_midMET_multijet": {
+            "raw_sumw2": 15212.0,
+            "raw_weighted": 15212.0,
+            "unweighted": 15212
+          }
+        },
+        "resolved_kinematics": {
+          "cleanDphi_Njet5plus_Nb1_MET400plus": {
+            "raw_sumw2": 86799.0,
+            "raw_weighted": 86799.0,
+            "unweighted": 86799
+          },
+          "highHT_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 76405.0,
+            "raw_weighted": 76405.0,
+            "unweighted": 76405
+          },
+          "twoB_highHT_MET400plus": {
+            "raw_sumw2": 58971.0,
+            "raw_weighted": 58971.0,
+            "unweighted": 58971
+          },
+          "veryHighHT_Njet6plus_Nb1_MET250plus": {
+            "raw_sumw2": 27248.0,
+            "raw_weighted": 27248.0,
+            "unweighted": 27248
+          }
+        }
+      },
+      "sumw": 36341.0,
+      "sumw2": 0.0
+    },
+    "/SMS-2Stop_Par-mStop-1800_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": {
+      "dataset": "/SMS-2Stop_Par-mStop-1800_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM",
+      "events_read": 0,
+      "files_attempted": 2,
+      "files_processed": 2,
+      "process": "SMS",
+      "regions": {
+        "DY2E": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_sumw2": 3556.0,
+          "raw_weighted": 3556.0,
+          "unweighted": 3556
+        },
+        "QCDCR": {
+          "raw_sumw2": 3013.0,
+          "raw_weighted": 3013.0,
+          "unweighted": 3013
+        },
+        "SR": {
+          "raw_sumw2": 102348.0,
+          "raw_weighted": 102348.0,
+          "unweighted": 102348
+        }
+      },
+      "search_bins": {
+        "ak8_kinematics_no_tag_scores": {
+          "AK8one_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 96169.0,
+            "raw_weighted": 96169.0,
+            "unweighted": 96169
+          },
+          "AK8one_highMET": {
+            "raw_sumw2": 75419.0,
+            "raw_weighted": 75419.0,
+            "unweighted": 75419
+          },
+          "AK8two_Njet5plus": {
+            "raw_sumw2": 58765.0,
+            "raw_weighted": 58765.0,
+            "unweighted": 58765
+          }
+        },
+        "isr_sensitive": {
+          "hardJ1_Njet2plus_MET250to500": {
+            "raw_sumw2": 7317.0,
+            "raw_weighted": 7317.0,
+            "unweighted": 7317
+          },
+          "hardJ1_Njet2plus_MET500plus": {
+            "raw_sumw2": 55748.0,
+            "raw_weighted": 55748.0,
+            "unweighted": 55748
+          },
+          "hardJ1_lowB_MET400plus": {
+            "raw_sumw2": 15089.0,
+            "raw_weighted": 15089.0,
+            "unweighted": 15089
+          }
+        },
+        "minimal_njet_nb_met": {
+          "Njet5plus_Nb1plus_MET600plus": {
+            "raw_sumw2": 67450.0,
+            "raw_weighted": 67450.0,
+            "unweighted": 67450
+          },
+          "Njet5to6_Nb1_MET250to400": {
+            "raw_sumw2": 3218.0,
+            "raw_weighted": 3218.0,
+            "unweighted": 3218
+          },
+          "Njet5to6_Nb2plus_MET250to600": {
+            "raw_sumw2": 16461.0,
+            "raw_weighted": 16461.0,
+            "unweighted": 16461
+          },
+          "Njet7plus_Nb1plus_MET250to600": {
+            "raw_sumw2": 10991.0,
+            "raw_weighted": 10991.0,
+            "unweighted": 10991
+          }
+        },
+        "optimized_hybrid_no_tags": {
+          "hybrid_AK8_highHT": {
+            "raw_sumw2": 63123.0,
+            "raw_weighted": 63123.0,
+            "unweighted": 63123
+          },
+          "hybrid_highMET_anyHT": {
+            "raw_sumw2": 67450.0,
+            "raw_weighted": 67450.0,
+            "unweighted": 67450
+          },
+          "hybrid_lowMET_multijet": {
+            "raw_sumw2": 8233.0,
+            "raw_weighted": 8233.0,
+            "unweighted": 8233
+          },
+          "hybrid_midMET_multijet": {
+            "raw_sumw2": 15289.0,
+            "raw_weighted": 15289.0,
+            "unweighted": 15289
+          }
+        },
+        "resolved_kinematics": {
+          "cleanDphi_Njet5plus_Nb1_MET400plus": {
+            "raw_sumw2": 88053.0,
+            "raw_weighted": 88053.0,
+            "unweighted": 88053
+          },
+          "highHT_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 77428.0,
+            "raw_weighted": 77428.0,
+            "unweighted": 77428
+          },
+          "twoB_highHT_MET400plus": {
+            "raw_sumw2": 60006.0,
+            "raw_weighted": 60006.0,
+            "unweighted": 60006
+          },
+          "veryHighHT_Njet6plus_Nb1_MET250plus": {
+            "raw_sumw2": 28061.0,
+            "raw_weighted": 28061.0,
+            "unweighted": 28061
+          }
+        }
+      },
+      "sumw": 22386.0,
+      "sumw2": 0.0
+    },
+    "/SMS-2Stop_Par-mStop-1900_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": {
+      "dataset": "/SMS-2Stop_Par-mStop-1900_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM",
+      "events_read": 0,
+      "files_attempted": 3,
+      "files_processed": 3,
+      "process": "SMS",
+      "regions": {
+        "DY2E": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_sumw2": 3764.0,
+          "raw_weighted": 3764.0,
+          "unweighted": 3764
+        },
+        "QCDCR": {
+          "raw_sumw2": 3433.0,
+          "raw_weighted": 3433.0,
+          "unweighted": 3433
+        },
+        "SR": {
+          "raw_sumw2": 109601.0,
+          "raw_weighted": 109601.0,
+          "unweighted": 109601
+        }
+      },
+      "search_bins": {
+        "ak8_kinematics_no_tag_scores": {
+          "AK8one_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 103193.0,
+            "raw_weighted": 103193.0,
+            "unweighted": 103193
+          },
+          "AK8one_highMET": {
+            "raw_sumw2": 81545.0,
+            "raw_weighted": 81545.0,
+            "unweighted": 81545
+          },
+          "AK8two_Njet5plus": {
+            "raw_sumw2": 63758.0,
+            "raw_weighted": 63758.0,
+            "unweighted": 63758
+          }
+        },
+        "isr_sensitive": {
+          "hardJ1_Njet2plus_MET250to500": {
+            "raw_sumw2": 7588.0,
+            "raw_weighted": 7588.0,
+            "unweighted": 7588
+          },
+          "hardJ1_Njet2plus_MET500plus": {
+            "raw_sumw2": 61728.0,
+            "raw_weighted": 61728.0,
+            "unweighted": 61728
+          },
+          "hardJ1_lowB_MET400plus": {
+            "raw_sumw2": 16611.0,
+            "raw_weighted": 16611.0,
+            "unweighted": 16611
+          }
+        },
+        "minimal_njet_nb_met": {
+          "Njet5plus_Nb1plus_MET600plus": {
+            "raw_sumw2": 73377.0,
+            "raw_weighted": 73377.0,
+            "unweighted": 73377
+          },
+          "Njet5to6_Nb1_MET250to400": {
+            "raw_sumw2": 3339.0,
+            "raw_weighted": 3339.0,
+            "unweighted": 3339
+          },
+          "Njet5to6_Nb2plus_MET250to600": {
+            "raw_sumw2": 17216.0,
+            "raw_weighted": 17216.0,
+            "unweighted": 17216
+          },
+          "Njet7plus_Nb1plus_MET250to600": {
+            "raw_sumw2": 11194.0,
+            "raw_weighted": 11194.0,
+            "unweighted": 11194
+          }
+        },
+        "optimized_hybrid_no_tags": {
+          "hybrid_AK8_highHT": {
+            "raw_sumw2": 69537.0,
+            "raw_weighted": 69537.0,
+            "unweighted": 69537
+          },
+          "hybrid_highMET_anyHT": {
+            "raw_sumw2": 73377.0,
+            "raw_weighted": 73377.0,
+            "unweighted": 73377
+          },
+          "hybrid_lowMET_multijet": {
+            "raw_sumw2": 8491.0,
+            "raw_weighted": 8491.0,
+            "unweighted": 8491
+          },
+          "hybrid_midMET_multijet": {
+            "raw_sumw2": 15595.0,
+            "raw_weighted": 15595.0,
+            "unweighted": 15595
+          }
+        },
+        "resolved_kinematics": {
+          "cleanDphi_Njet5plus_Nb1_MET400plus": {
+            "raw_sumw2": 94791.0,
+            "raw_weighted": 94791.0,
+            "unweighted": 94791
+          },
+          "highHT_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 84056.0,
+            "raw_weighted": 84056.0,
+            "unweighted": 84056
+          },
+          "twoB_highHT_MET400plus": {
+            "raw_sumw2": 64761.0,
+            "raw_weighted": 64761.0,
+            "unweighted": 64761
+          },
+          "veryHighHT_Njet6plus_Nb1_MET250plus": {
+            "raw_sumw2": 31497.0,
+            "raw_weighted": 31497.0,
+            "unweighted": 31497
+          }
+        }
+      },
+      "sumw": 20242.0,
+      "sumw2": 0.0
+    },
+    "/SMS-2Stop_Par-mStop-2000_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": {
+      "dataset": "/SMS-2Stop_Par-mStop-2000_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM",
+      "events_read": 0,
+      "files_attempted": 2,
+      "files_processed": 2,
+      "process": "SMS",
+      "regions": {
+        "DY2E": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_sumw2": 2887.0,
+          "raw_weighted": 2887.0,
+          "unweighted": 2887
+        },
+        "QCDCR": {
+          "raw_sumw2": 2774.0,
+          "raw_weighted": 2774.0,
+          "unweighted": 2774
+        },
+        "SR": {
+          "raw_sumw2": 88097.0,
+          "raw_weighted": 88097.0,
+          "unweighted": 88097
+        }
+      },
+      "search_bins": {
+        "ak8_kinematics_no_tag_scores": {
+          "AK8one_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 83377.0,
+            "raw_weighted": 83377.0,
+            "unweighted": 83377
+          },
+          "AK8one_highMET": {
+            "raw_sumw2": 66843.0,
+            "raw_weighted": 66843.0,
+            "unweighted": 66843
+          },
+          "AK8two_Njet5plus": {
+            "raw_sumw2": 52058.0,
+            "raw_weighted": 52058.0,
+            "unweighted": 52058
+          }
+        },
+        "isr_sensitive": {
+          "hardJ1_Njet2plus_MET250to500": {
+            "raw_sumw2": 6093.0,
+            "raw_weighted": 6093.0,
+            "unweighted": 6093
+          },
+          "hardJ1_Njet2plus_MET500plus": {
+            "raw_sumw2": 51777.0,
+            "raw_weighted": 51777.0,
+            "unweighted": 51777
+          },
+          "hardJ1_lowB_MET400plus": {
+            "raw_sumw2": 13712.0,
+            "raw_weighted": 13712.0,
+            "unweighted": 13712
+          }
+        },
+        "minimal_njet_nb_met": {
+          "Njet5plus_Nb1plus_MET600plus": {
+            "raw_sumw2": 60351.0,
+            "raw_weighted": 60351.0,
+            "unweighted": 60351
+          },
+          "Njet5to6_Nb1_MET250to400": {
+            "raw_sumw2": 2536.0,
+            "raw_weighted": 2536.0,
+            "unweighted": 2536
+          },
+          "Njet5to6_Nb2plus_MET250to600": {
+            "raw_sumw2": 13160.0,
+            "raw_weighted": 13160.0,
+            "unweighted": 13160
+          },
+          "Njet7plus_Nb1plus_MET250to600": {
+            "raw_sumw2": 8563.0,
+            "raw_weighted": 8563.0,
+            "unweighted": 8563
+          }
+        },
+        "optimized_hybrid_no_tags": {
+          "hybrid_AK8_highHT": {
+            "raw_sumw2": 57906.0,
+            "raw_weighted": 57906.0,
+            "unweighted": 57906
+          },
+          "hybrid_highMET_anyHT": {
+            "raw_sumw2": 60351.0,
+            "raw_weighted": 60351.0,
+            "unweighted": 60351
+          },
+          "hybrid_lowMET_multijet": {
+            "raw_sumw2": 6610.0,
+            "raw_weighted": 6610.0,
+            "unweighted": 6610
+          },
+          "hybrid_midMET_multijet": {
+            "raw_sumw2": 12137.0,
+            "raw_weighted": 12137.0,
+            "unweighted": 12137
+          }
+        },
+        "resolved_kinematics": {
+          "cleanDphi_Njet5plus_Nb1_MET400plus": {
+            "raw_sumw2": 76835.0,
+            "raw_weighted": 76835.0,
+            "unweighted": 76835
+          },
+          "highHT_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 68871.0,
+            "raw_weighted": 68871.0,
+            "unweighted": 68871
+          },
+          "twoB_highHT_MET400plus": {
+            "raw_sumw2": 53050.0,
+            "raw_weighted": 53050.0,
+            "unweighted": 53050
+          },
+          "veryHighHT_Njet6plus_Nb1_MET250plus": {
+            "raw_sumw2": 26755.0,
+            "raw_weighted": 26755.0,
+            "unweighted": 26755
+          }
+        }
+      },
+      "sumw": 22145.0,
+      "sumw2": 0.0
+    },
+    "/SMS-2Stop_Par-mStop-2100_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": {
+      "dataset": "/SMS-2Stop_Par-mStop-2100_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM",
+      "events_read": 0,
+      "files_attempted": 3,
+      "files_processed": 3,
+      "process": "SMS",
+      "regions": {
+        "DY2E": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_sumw2": 3163.0,
+          "raw_weighted": 3163.0,
+          "unweighted": 3163
+        },
+        "QCDCR": {
+          "raw_sumw2": 3011.0,
+          "raw_weighted": 3011.0,
+          "unweighted": 3011
+        },
+        "SR": {
+          "raw_sumw2": 93924.0,
+          "raw_weighted": 93924.0,
+          "unweighted": 93924
+        }
+      },
+      "search_bins": {
+        "ak8_kinematics_no_tag_scores": {
+          "AK8one_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 88602.0,
+            "raw_weighted": 88602.0,
+            "unweighted": 88602
+          },
+          "AK8one_highMET": {
+            "raw_sumw2": 70918.0,
+            "raw_weighted": 70918.0,
+            "unweighted": 70918
+          },
+          "AK8two_Njet5plus": {
+            "raw_sumw2": 55170.0,
+            "raw_weighted": 55170.0,
+            "unweighted": 55170
+          }
+        },
+        "isr_sensitive": {
+          "hardJ1_Njet2plus_MET250to500": {
+            "raw_sumw2": 6156.0,
+            "raw_weighted": 6156.0,
+            "unweighted": 6156
+          },
+          "hardJ1_Njet2plus_MET500plus": {
+            "raw_sumw2": 55331.0,
+            "raw_weighted": 55331.0,
+            "unweighted": 55331
+          },
+          "hardJ1_lowB_MET400plus": {
+            "raw_sumw2": 14734.0,
+            "raw_weighted": 14734.0,
+            "unweighted": 14734
+          }
+        },
+        "minimal_njet_nb_met": {
+          "Njet5plus_Nb1plus_MET600plus": {
+            "raw_sumw2": 64319.0,
+            "raw_weighted": 64319.0,
+            "unweighted": 64319
+          },
+          "Njet5to6_Nb1_MET250to400": {
+            "raw_sumw2": 2853.0,
+            "raw_weighted": 2853.0,
+            "unweighted": 2853
+          },
+          "Njet5to6_Nb2plus_MET250to600": {
+            "raw_sumw2": 14282.0,
+            "raw_weighted": 14282.0,
+            "unweighted": 14282
+          },
+          "Njet7plus_Nb1plus_MET250to600": {
+            "raw_sumw2": 8872.0,
+            "raw_weighted": 8872.0,
+            "unweighted": 8872
+          }
+        },
+        "optimized_hybrid_no_tags": {
+          "hybrid_AK8_highHT": {
+            "raw_sumw2": 61269.0,
+            "raw_weighted": 61269.0,
+            "unweighted": 61269
+          },
+          "hybrid_highMET_anyHT": {
+            "raw_sumw2": 64319.0,
+            "raw_weighted": 64319.0,
+            "unweighted": 64319
+          },
+          "hybrid_lowMET_multijet": {
+            "raw_sumw2": 6934.0,
+            "raw_weighted": 6934.0,
+            "unweighted": 6934
+          },
+          "hybrid_midMET_multijet": {
+            "raw_sumw2": 12574.0,
+            "raw_weighted": 12574.0,
+            "unweighted": 12574
+          }
+        },
+        "resolved_kinematics": {
+          "cleanDphi_Njet5plus_Nb1_MET400plus": {
+            "raw_sumw2": 81526.0,
+            "raw_weighted": 81526.0,
+            "unweighted": 81526
+          },
+          "highHT_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 72841.0,
+            "raw_weighted": 72841.0,
+            "unweighted": 72841
+          },
+          "twoB_highHT_MET400plus": {
+            "raw_sumw2": 56079.0,
+            "raw_weighted": 56079.0,
+            "unweighted": 56079
+          },
+          "veryHighHT_Njet6plus_Nb1_MET250plus": {
+            "raw_sumw2": 28272.0,
+            "raw_weighted": 28272.0,
+            "unweighted": 28272
+          }
+        }
+      },
+      "sumw": 14948.0,
+      "sumw2": 0.0
+    },
+    "/SMS-2Stop_Par-mStop-2200_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": {
+      "dataset": "/SMS-2Stop_Par-mStop-2200_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM",
+      "events_read": 0,
+      "files_attempted": 3,
+      "files_processed": 3,
+      "process": "SMS",
+      "regions": {
+        "DY2E": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_sumw2": 2507.0,
+          "raw_weighted": 2507.0,
+          "unweighted": 2507
+        },
+        "QCDCR": {
+          "raw_sumw2": 2714.0,
+          "raw_weighted": 2714.0,
+          "unweighted": 2714
+        },
+        "SR": {
+          "raw_sumw2": 80285.0,
+          "raw_weighted": 80285.0,
+          "unweighted": 80285
+        }
+      },
+      "search_bins": {
+        "ak8_kinematics_no_tag_scores": {
+          "AK8one_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 76153.0,
+            "raw_weighted": 76153.0,
+            "unweighted": 76153
+          },
+          "AK8one_highMET": {
+            "raw_sumw2": 62649.0,
+            "raw_weighted": 62649.0,
+            "unweighted": 62649
+          },
+          "AK8two_Njet5plus": {
+            "raw_sumw2": 48706.0,
+            "raw_weighted": 48706.0,
+            "unweighted": 48706
+          }
+        },
+        "isr_sensitive": {
+          "hardJ1_Njet2plus_MET250to500": {
+            "raw_sumw2": 5090.0,
+            "raw_weighted": 5090.0,
+            "unweighted": 5090
+          },
+          "hardJ1_Njet2plus_MET500plus": {
+            "raw_sumw2": 50809.0,
+            "raw_weighted": 50809.0,
+            "unweighted": 50809
+          },
+          "hardJ1_lowB_MET400plus": {
+            "raw_sumw2": 13476.0,
+            "raw_weighted": 13476.0,
+            "unweighted": 13476
+          }
+        },
+        "minimal_njet_nb_met": {
+          "Njet5plus_Nb1plus_MET600plus": {
+            "raw_sumw2": 57448.0,
+            "raw_weighted": 57448.0,
+            "unweighted": 57448
+          },
+          "Njet5to6_Nb1_MET250to400": {
+            "raw_sumw2": 2088.0,
+            "raw_weighted": 2088.0,
+            "unweighted": 2088
+          },
+          "Njet5to6_Nb2plus_MET250to600": {
+            "raw_sumw2": 11159.0,
+            "raw_weighted": 11159.0,
+            "unweighted": 11159
+          },
+          "Njet7plus_Nb1plus_MET250to600": {
+            "raw_sumw2": 6782.0,
+            "raw_weighted": 6782.0,
+            "unweighted": 6782
+          }
+        },
+        "optimized_hybrid_no_tags": {
+          "hybrid_AK8_highHT": {
+            "raw_sumw2": 55615.0,
+            "raw_weighted": 55615.0,
+            "unweighted": 55615
+          },
+          "hybrid_highMET_anyHT": {
+            "raw_sumw2": 57448.0,
+            "raw_weighted": 57448.0,
+            "unweighted": 57448
+          },
+          "hybrid_lowMET_multijet": {
+            "raw_sumw2": 5390.0,
+            "raw_weighted": 5390.0,
+            "unweighted": 5390
+          },
+          "hybrid_midMET_multijet": {
+            "raw_sumw2": 10020.0,
+            "raw_weighted": 10020.0,
+            "unweighted": 10020
+          }
+        },
+        "resolved_kinematics": {
+          "cleanDphi_Njet5plus_Nb1_MET400plus": {
+            "raw_sumw2": 70920.0,
+            "raw_weighted": 70920.0,
+            "unweighted": 70920
+          },
+          "highHT_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 64625.0,
+            "raw_weighted": 64625.0,
+            "unweighted": 64625
+          },
+          "twoB_highHT_MET400plus": {
+            "raw_sumw2": 49395.0,
+            "raw_weighted": 49395.0,
+            "unweighted": 49395
+          },
+          "veryHighHT_Njet6plus_Nb1_MET250plus": {
+            "raw_sumw2": 26117.0,
+            "raw_weighted": 26117.0,
+            "unweighted": 26117
+          }
+        }
+      },
+      "sumw": 16543.0,
+      "sumw2": 0.0
+    },
+    "/SMS-2Stop_Par-mStop-2300_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": {
+      "dataset": "/SMS-2Stop_Par-mStop-2300_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM",
+      "events_read": 0,
+      "files_attempted": 2,
+      "files_processed": 2,
+      "process": "SMS",
+      "regions": {
+        "DY2E": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_sumw2": 2727.0,
+          "raw_weighted": 2727.0,
+          "unweighted": 2727
+        },
+        "QCDCR": {
+          "raw_sumw2": 2993.0,
+          "raw_weighted": 2993.0,
+          "unweighted": 2993
+        },
+        "SR": {
+          "raw_sumw2": 93204.0,
+          "raw_weighted": 93204.0,
+          "unweighted": 93204
+        }
+      },
+      "search_bins": {
+        "ak8_kinematics_no_tag_scores": {
+          "AK8one_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 88521.0,
+            "raw_weighted": 88521.0,
+            "unweighted": 88521
+          },
+          "AK8one_highMET": {
+            "raw_sumw2": 73110.0,
+            "raw_weighted": 73110.0,
+            "unweighted": 73110
+          },
+          "AK8two_Njet5plus": {
+            "raw_sumw2": 57193.0,
+            "raw_weighted": 57193.0,
+            "unweighted": 57193
+          }
+        },
+        "isr_sensitive": {
+          "hardJ1_Njet2plus_MET250to500": {
+            "raw_sumw2": 5910.0,
+            "raw_weighted": 5910.0,
+            "unweighted": 5910
+          },
+          "hardJ1_Njet2plus_MET500plus": {
+            "raw_sumw2": 60264.0,
+            "raw_weighted": 60264.0,
+            "unweighted": 60264
+          },
+          "hardJ1_lowB_MET400plus": {
+            "raw_sumw2": 15880.0,
+            "raw_weighted": 15880.0,
+            "unweighted": 15880
+          }
+        },
+        "minimal_njet_nb_met": {
+          "Njet5plus_Nb1plus_MET600plus": {
+            "raw_sumw2": 67312.0,
+            "raw_weighted": 67312.0,
+            "unweighted": 67312
+          },
+          "Njet5to6_Nb1_MET250to400": {
+            "raw_sumw2": 2526.0,
+            "raw_weighted": 2526.0,
+            "unweighted": 2526
+          },
+          "Njet5to6_Nb2plus_MET250to600": {
+            "raw_sumw2": 12629.0,
+            "raw_weighted": 12629.0,
+            "unweighted": 12629
+          },
+          "Njet7plus_Nb1plus_MET250to600": {
+            "raw_sumw2": 7546.0,
+            "raw_weighted": 7546.0,
+            "unweighted": 7546
+          }
+        },
+        "optimized_hybrid_no_tags": {
+          "hybrid_AK8_highHT": {
+            "raw_sumw2": 65870.0,
+            "raw_weighted": 65870.0,
+            "unweighted": 65870
+          },
+          "hybrid_highMET_anyHT": {
+            "raw_sumw2": 67312.0,
+            "raw_weighted": 67312.0,
+            "unweighted": 67312
+          },
+          "hybrid_lowMET_multijet": {
+            "raw_sumw2": 6149.0,
+            "raw_weighted": 6149.0,
+            "unweighted": 6149
+          },
+          "hybrid_midMET_multijet": {
+            "raw_sumw2": 11062.0,
+            "raw_weighted": 11062.0,
+            "unweighted": 11062
+          }
+        },
+        "resolved_kinematics": {
+          "cleanDphi_Njet5plus_Nb1_MET400plus": {
+            "raw_sumw2": 82430.0,
+            "raw_weighted": 82430.0,
+            "unweighted": 82430
+          },
+          "highHT_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 75698.0,
+            "raw_weighted": 75698.0,
+            "unweighted": 75698
+          },
+          "twoB_highHT_MET400plus": {
+            "raw_sumw2": 57463.0,
+            "raw_weighted": 57463.0,
+            "unweighted": 57463
+          },
+          "veryHighHT_Njet6plus_Nb1_MET250plus": {
+            "raw_sumw2": 30953.0,
+            "raw_weighted": 30953.0,
+            "unweighted": 30953
+          }
+        }
+      },
+      "sumw": 18393.0,
+      "sumw2": 0.0
+    },
+    "/SMS-2Stop_Par-mStop-2400_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": {
+      "dataset": "/SMS-2Stop_Par-mStop-2400_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM",
+      "events_read": 0,
+      "files_attempted": 2,
+      "files_processed": 2,
+      "process": "SMS",
+      "regions": {
+        "DY2E": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_sumw2": 2394.0,
+          "raw_weighted": 2394.0,
+          "unweighted": 2394
+        },
+        "QCDCR": {
+          "raw_sumw2": 2722.0,
+          "raw_weighted": 2722.0,
+          "unweighted": 2722
+        },
+        "SR": {
+          "raw_sumw2": 83267.0,
+          "raw_weighted": 83267.0,
+          "unweighted": 83267
+        }
+      },
+      "search_bins": {
+        "ak8_kinematics_no_tag_scores": {
+          "AK8one_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 79279.0,
+            "raw_weighted": 79279.0,
+            "unweighted": 79279
+          },
+          "AK8one_highMET": {
+            "raw_sumw2": 66246.0,
+            "raw_weighted": 66246.0,
+            "unweighted": 66246
+          },
+          "AK8two_Njet5plus": {
+            "raw_sumw2": 51592.0,
+            "raw_weighted": 51592.0,
+            "unweighted": 51592
+          }
+        },
+        "isr_sensitive": {
+          "hardJ1_Njet2plus_MET250to500": {
+            "raw_sumw2": 5136.0,
+            "raw_weighted": 5136.0,
+            "unweighted": 5136
+          },
+          "hardJ1_Njet2plus_MET500plus": {
+            "raw_sumw2": 55588.0,
+            "raw_weighted": 55588.0,
+            "unweighted": 55588
+          },
+          "hardJ1_lowB_MET400plus": {
+            "raw_sumw2": 14434.0,
+            "raw_weighted": 14434.0,
+            "unweighted": 14434
+          }
+        },
+        "minimal_njet_nb_met": {
+          "Njet5plus_Nb1plus_MET600plus": {
+            "raw_sumw2": 61502.0,
+            "raw_weighted": 61502.0,
+            "unweighted": 61502
+          },
+          "Njet5to6_Nb1_MET250to400": {
+            "raw_sumw2": 2091.0,
+            "raw_weighted": 2091.0,
+            "unweighted": 2091
+          },
+          "Njet5to6_Nb2plus_MET250to600": {
+            "raw_sumw2": 10780.0,
+            "raw_weighted": 10780.0,
+            "unweighted": 10780
+          },
+          "Njet7plus_Nb1plus_MET250to600": {
+            "raw_sumw2": 6247.0,
+            "raw_weighted": 6247.0,
+            "unweighted": 6247
+          }
+        },
+        "optimized_hybrid_no_tags": {
+          "hybrid_AK8_highHT": {
+            "raw_sumw2": 60254.0,
+            "raw_weighted": 60254.0,
+            "unweighted": 60254
+          },
+          "hybrid_highMET_anyHT": {
+            "raw_sumw2": 61502.0,
+            "raw_weighted": 61502.0,
+            "unweighted": 61502
+          },
+          "hybrid_lowMET_multijet": {
+            "raw_sumw2": 5217.0,
+            "raw_weighted": 5217.0,
+            "unweighted": 5217
+          },
+          "hybrid_midMET_multijet": {
+            "raw_sumw2": 9463.0,
+            "raw_weighted": 9463.0,
+            "unweighted": 9463
+          }
+        },
+        "resolved_kinematics": {
+          "cleanDphi_Njet5plus_Nb1_MET400plus": {
+            "raw_sumw2": 74258.0,
+            "raw_weighted": 74258.0,
+            "unweighted": 74258
+          },
+          "highHT_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 68696.0,
+            "raw_weighted": 68696.0,
+            "unweighted": 68696
+          },
+          "twoB_highHT_MET400plus": {
+            "raw_sumw2": 52347.0,
+            "raw_weighted": 52347.0,
+            "unweighted": 52347
+          },
+          "veryHighHT_Njet6plus_Nb1_MET250plus": {
+            "raw_sumw2": 28386.0,
+            "raw_weighted": 28386.0,
+            "unweighted": 28386
+          }
+        }
+      },
+      "sumw": 22735.0,
+      "sumw2": 0.0
+    },
+    "/SMS-2Stop_Par-mStop-2500_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": {
+      "dataset": "/SMS-2Stop_Par-mStop-2500_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM",
+      "events_read": 0,
+      "files_attempted": 2,
+      "files_processed": 2,
+      "process": "SMS",
+      "regions": {
+        "DY2E": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_sumw2": 5372.0,
+          "raw_weighted": 5372.0,
+          "unweighted": 5372
+        },
+        "QCDCR": {
+          "raw_sumw2": 2713.0,
+          "raw_weighted": 2713.0,
+          "unweighted": 2713
+        },
+        "SR": {
+          "raw_sumw2": 98328.0,
+          "raw_weighted": 98328.0,
+          "unweighted": 98328
+        }
+      },
+      "search_bins": {
+        "ak8_kinematics_no_tag_scores": {
+          "AK8one_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 86309.0,
+            "raw_weighted": 86309.0,
+            "unweighted": 86309
+          },
+          "AK8one_highMET": {
+            "raw_sumw2": 47621.0,
+            "raw_weighted": 47621.0,
+            "unweighted": 47621
+          },
+          "AK8two_Njet5plus": {
+            "raw_sumw2": 37968.0,
+            "raw_weighted": 37968.0,
+            "unweighted": 37968
+          }
+        },
+        "isr_sensitive": {
+          "hardJ1_Njet2plus_MET250to500": {
+            "raw_sumw2": 6536.0,
+            "raw_weighted": 6536.0,
+            "unweighted": 6536
+          },
+          "hardJ1_Njet2plus_MET500plus": {
+            "raw_sumw2": 18186.0,
+            "raw_weighted": 18186.0,
+            "unweighted": 18186
+          },
+          "hardJ1_lowB_MET400plus": {
+            "raw_sumw2": 6208.0,
+            "raw_weighted": 6208.0,
+            "unweighted": 6208
+          }
+        },
+        "minimal_njet_nb_met": {
+          "Njet5plus_Nb1plus_MET600plus": {
+            "raw_sumw2": 34252.0,
+            "raw_weighted": 34252.0,
+            "unweighted": 34252
+          },
+          "Njet5to6_Nb1_MET250to400": {
+            "raw_sumw2": 7138.0,
+            "raw_weighted": 7138.0,
+            "unweighted": 7138
+          },
+          "Njet5to6_Nb2plus_MET250to600": {
+            "raw_sumw2": 29828.0,
+            "raw_weighted": 29828.0,
+            "unweighted": 29828
+          },
+          "Njet7plus_Nb1plus_MET250to600": {
+            "raw_sumw2": 19088.0,
+            "raw_weighted": 19088.0,
+            "unweighted": 19088
+          }
+        },
+        "optimized_hybrid_no_tags": {
+          "hybrid_AK8_highHT": {
+            "raw_sumw2": 23308.0,
+            "raw_weighted": 23308.0,
+            "unweighted": 23308
+          },
+          "hybrid_highMET_anyHT": {
+            "raw_sumw2": 34252.0,
+            "raw_weighted": 34252.0,
+            "unweighted": 34252
+          },
+          "hybrid_lowMET_multijet": {
+            "raw_sumw2": 13115.0,
+            "raw_weighted": 13115.0,
+            "unweighted": 13115
+          },
+          "hybrid_midMET_multijet": {
+            "raw_sumw2": 20432.0,
+            "raw_weighted": 20432.0,
+            "unweighted": 20432
+          }
+        },
+        "resolved_kinematics": {
+          "cleanDphi_Njet5plus_Nb1_MET400plus": {
+            "raw_sumw2": 69293.0,
+            "raw_weighted": 69293.0,
+            "unweighted": 69293
+          },
+          "highHT_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 40897.0,
+            "raw_weighted": 40897.0,
+            "unweighted": 40897
+          },
+          "twoB_highHT_MET400plus": {
+            "raw_sumw2": 36167.0,
+            "raw_weighted": 36167.0,
+            "unweighted": 36167
+          },
+          "veryHighHT_Njet6plus_Nb1_MET250plus": {
+            "raw_sumw2": 7606.0,
+            "raw_weighted": 7606.0,
+            "unweighted": 7606
+          }
+        }
+      },
+      "sumw": 58847.0,
+      "sumw2": 0.0
+    },
+    "/SMS-2Stop_Par-mStop-600_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": {
+      "dataset": "/SMS-2Stop_Par-mStop-600_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM",
+      "events_read": 0,
+      "files_attempted": 3,
+      "files_processed": 3,
+      "process": "SMS",
+      "regions": {
+        "DY2E": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_sumw2": 4726.0,
+          "raw_weighted": 4726.0,
+          "unweighted": 4726
+        },
+        "QCDCR": {
+          "raw_sumw2": 1820.0,
+          "raw_weighted": 1820.0,
+          "unweighted": 1820
+        },
+        "SR": {
+          "raw_sumw2": 58670.0,
+          "raw_weighted": 58670.0,
+          "unweighted": 58670
+        }
+      },
+      "search_bins": {
+        "ak8_kinematics_no_tag_scores": {
+          "AK8one_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 42500.0,
+            "raw_weighted": 42500.0,
+            "unweighted": 42500
+          },
+          "AK8one_highMET": {
+            "raw_sumw2": 7650.0,
+            "raw_weighted": 7650.0,
+            "unweighted": 7650
+          },
+          "AK8two_Njet5plus": {
+            "raw_sumw2": 11036.0,
+            "raw_weighted": 11036.0,
+            "unweighted": 11036
+          }
+        },
+        "isr_sensitive": {
+          "hardJ1_Njet2plus_MET250to500": {
+            "raw_sumw2": 2842.0,
+            "raw_weighted": 2842.0,
+            "unweighted": 2842
+          },
+          "hardJ1_Njet2plus_MET500plus": {
+            "raw_sumw2": 2523.0,
+            "raw_weighted": 2523.0,
+            "unweighted": 2523
+          },
+          "hardJ1_lowB_MET400plus": {
+            "raw_sumw2": 1201.0,
+            "raw_weighted": 1201.0,
+            "unweighted": 1201
+          }
+        },
+        "minimal_njet_nb_met": {
+          "Njet5plus_Nb1plus_MET600plus": {
+            "raw_sumw2": 3091.0,
+            "raw_weighted": 3091.0,
+            "unweighted": 3091
+          },
+          "Njet5to6_Nb1_MET250to400": {
+            "raw_sumw2": 9893.0,
+            "raw_weighted": 9893.0,
+            "unweighted": 9893
+          },
+          "Njet5to6_Nb2plus_MET250to600": {
+            "raw_sumw2": 25746.0,
+            "raw_weighted": 25746.0,
+            "unweighted": 25746
+          },
+          "Njet7plus_Nb1plus_MET250to600": {
+            "raw_sumw2": 14691.0,
+            "raw_weighted": 14691.0,
+            "unweighted": 14691
+          }
+        },
+        "optimized_hybrid_no_tags": {
+          "hybrid_AK8_highHT": {
+            "raw_sumw2": 4669.0,
+            "raw_weighted": 4669.0,
+            "unweighted": 4669
+          },
+          "hybrid_highMET_anyHT": {
+            "raw_sumw2": 3091.0,
+            "raw_weighted": 3091.0,
+            "unweighted": 3091
+          },
+          "hybrid_lowMET_multijet": {
+            "raw_sumw2": 9272.0,
+            "raw_weighted": 9272.0,
+            "unweighted": 9272
+          },
+          "hybrid_midMET_multijet": {
+            "raw_sumw2": 7828.0,
+            "raw_weighted": 7828.0,
+            "unweighted": 7828
+          }
+        },
+        "resolved_kinematics": {
+          "cleanDphi_Njet5plus_Nb1_MET400plus": {
+            "raw_sumw2": 23059.0,
+            "raw_weighted": 23059.0,
+            "unweighted": 23059
+          },
+          "highHT_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 9951.0,
+            "raw_weighted": 9951.0,
+            "unweighted": 9951
+          },
+          "twoB_highHT_MET400plus": {
+            "raw_sumw2": 7164.0,
+            "raw_weighted": 7164.0,
+            "unweighted": 7164
+          },
+          "veryHighHT_Njet6plus_Nb1_MET250plus": {
+            "raw_sumw2": 1431.0,
+            "raw_weighted": 1431.0,
+            "unweighted": 1431
+          }
+        }
+      },
+      "sumw": 108202.0,
+      "sumw2": 0.0
+    },
+    "/SMS-2Stop_Par-mStop-700_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": {
+      "dataset": "/SMS-2Stop_Par-mStop-700_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM",
+      "events_read": 0,
+      "files_attempted": 2,
+      "files_processed": 2,
+      "process": "SMS",
+      "regions": {
+        "DY2E": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_sumw2": 4673.0,
+          "raw_weighted": 4673.0,
+          "unweighted": 4673
+        },
+        "QCDCR": {
+          "raw_sumw2": 1942.0,
+          "raw_weighted": 1942.0,
+          "unweighted": 1942
+        },
+        "SR": {
+          "raw_sumw2": 69703.0,
+          "raw_weighted": 69703.0,
+          "unweighted": 69703
+        }
+      },
+      "search_bins": {
+        "ak8_kinematics_no_tag_scores": {
+          "AK8one_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 54922.0,
+            "raw_weighted": 54922.0,
+            "unweighted": 54922
+          },
+          "AK8one_highMET": {
+            "raw_sumw2": 16588.0,
+            "raw_weighted": 16588.0,
+            "unweighted": 16588
+          },
+          "AK8two_Njet5plus": {
+            "raw_sumw2": 16851.0,
+            "raw_weighted": 16851.0,
+            "unweighted": 16851
+          }
+        },
+        "isr_sensitive": {
+          "hardJ1_Njet2plus_MET250to500": {
+            "raw_sumw2": 3649.0,
+            "raw_weighted": 3649.0,
+            "unweighted": 3649
+          },
+          "hardJ1_Njet2plus_MET500plus": {
+            "raw_sumw2": 4744.0,
+            "raw_weighted": 4744.0,
+            "unweighted": 4744
+          },
+          "hardJ1_lowB_MET400plus": {
+            "raw_sumw2": 1995.0,
+            "raw_weighted": 1995.0,
+            "unweighted": 1995
+          }
+        },
+        "minimal_njet_nb_met": {
+          "Njet5plus_Nb1plus_MET600plus": {
+            "raw_sumw2": 7691.0,
+            "raw_weighted": 7691.0,
+            "unweighted": 7691
+          },
+          "Njet5to6_Nb1_MET250to400": {
+            "raw_sumw2": 8993.0,
+            "raw_weighted": 8993.0,
+            "unweighted": 8993
+          },
+          "Njet5to6_Nb2plus_MET250to600": {
+            "raw_sumw2": 28933.0,
+            "raw_weighted": 28933.0,
+            "unweighted": 28933
+          },
+          "Njet7plus_Nb1plus_MET250to600": {
+            "raw_sumw2": 16878.0,
+            "raw_weighted": 16878.0,
+            "unweighted": 16878
+          }
+        },
+        "optimized_hybrid_no_tags": {
+          "hybrid_AK8_highHT": {
+            "raw_sumw2": 7528.0,
+            "raw_weighted": 7528.0,
+            "unweighted": 7528
+          },
+          "hybrid_highMET_anyHT": {
+            "raw_sumw2": 7691.0,
+            "raw_weighted": 7691.0,
+            "unweighted": 7691
+          },
+          "hybrid_lowMET_multijet": {
+            "raw_sumw2": 10612.0,
+            "raw_weighted": 10612.0,
+            "unweighted": 10612
+          },
+          "hybrid_midMET_multijet": {
+            "raw_sumw2": 12441.0,
+            "raw_weighted": 12441.0,
+            "unweighted": 12441
+          }
+        },
+        "resolved_kinematics": {
+          "cleanDphi_Njet5plus_Nb1_MET400plus": {
+            "raw_sumw2": 36075.0,
+            "raw_weighted": 36075.0,
+            "unweighted": 36075
+          },
+          "highHT_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 15210.0,
+            "raw_weighted": 15210.0,
+            "unweighted": 15210
+          },
+          "twoB_highHT_MET400plus": {
+            "raw_sumw2": 12720.0,
+            "raw_weighted": 12720.0,
+            "unweighted": 12720
+          },
+          "veryHighHT_Njet6plus_Nb1_MET250plus": {
+            "raw_sumw2": 2383.0,
+            "raw_weighted": 2383.0,
+            "unweighted": 2383
+          }
+        }
+      },
+      "sumw": 90950.0,
+      "sumw2": 0.0
+    },
+    "/SMS-2Stop_Par-mStop-800_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": {
+      "dataset": "/SMS-2Stop_Par-mStop-800_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM",
+      "events_read": 0,
+      "files_attempted": 2,
+      "files_processed": 2,
+      "process": "SMS",
+      "regions": {
+        "DY2E": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_sumw2": 5068.0,
+          "raw_weighted": 5068.0,
+          "unweighted": 5068
+        },
+        "QCDCR": {
+          "raw_sumw2": 2346.0,
+          "raw_weighted": 2346.0,
+          "unweighted": 2346
+        },
+        "SR": {
+          "raw_sumw2": 83184.0,
+          "raw_weighted": 83184.0,
+          "unweighted": 83184
+        }
+      },
+      "search_bins": {
+        "ak8_kinematics_no_tag_scores": {
+          "AK8one_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 71030.0,
+            "raw_weighted": 71030.0,
+            "unweighted": 71030
+          },
+          "AK8one_highMET": {
+            "raw_sumw2": 34485.0,
+            "raw_weighted": 34485.0,
+            "unweighted": 34485
+          },
+          "AK8two_Njet5plus": {
+            "raw_sumw2": 28456.0,
+            "raw_weighted": 28456.0,
+            "unweighted": 28456
+          }
+        },
+        "isr_sensitive": {
+          "hardJ1_Njet2plus_MET250to500": {
+            "raw_sumw2": 5206.0,
+            "raw_weighted": 5206.0,
+            "unweighted": 5206
+          },
+          "hardJ1_Njet2plus_MET500plus": {
+            "raw_sumw2": 11588.0,
+            "raw_weighted": 11588.0,
+            "unweighted": 11588
+          },
+          "hardJ1_lowB_MET400plus": {
+            "raw_sumw2": 4158.0,
+            "raw_weighted": 4158.0,
+            "unweighted": 4158
+          }
+        },
+        "minimal_njet_nb_met": {
+          "Njet5plus_Nb1plus_MET600plus": {
+            "raw_sumw2": 22883.0,
+            "raw_weighted": 22883.0,
+            "unweighted": 22883
+          },
+          "Njet5to6_Nb1_MET250to400": {
+            "raw_sumw2": 7083.0,
+            "raw_weighted": 7083.0,
+            "unweighted": 7083
+          },
+          "Njet5to6_Nb2plus_MET250to600": {
+            "raw_sumw2": 27945.0,
+            "raw_weighted": 27945.0,
+            "unweighted": 27945
+          },
+          "Njet7plus_Nb1plus_MET250to600": {
+            "raw_sumw2": 17876.0,
+            "raw_weighted": 17876.0,
+            "unweighted": 17876
+          }
+        },
+        "optimized_hybrid_no_tags": {
+          "hybrid_AK8_highHT": {
+            "raw_sumw2": 15566.0,
+            "raw_weighted": 15566.0,
+            "unweighted": 15566
+          },
+          "hybrid_highMET_anyHT": {
+            "raw_sumw2": 22883.0,
+            "raw_weighted": 22883.0,
+            "unweighted": 22883
+          },
+          "hybrid_lowMET_multijet": {
+            "raw_sumw2": 11668.0,
+            "raw_weighted": 11668.0,
+            "unweighted": 11668
+          },
+          "hybrid_midMET_multijet": {
+            "raw_sumw2": 17294.0,
+            "raw_weighted": 17294.0,
+            "unweighted": 17294
+          }
+        },
+        "resolved_kinematics": {
+          "cleanDphi_Njet5plus_Nb1_MET400plus": {
+            "raw_sumw2": 54692.0,
+            "raw_weighted": 54692.0,
+            "unweighted": 54692
+          },
+          "highHT_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 28893.0,
+            "raw_weighted": 28893.0,
+            "unweighted": 28893
+          },
+          "twoB_highHT_MET400plus": {
+            "raw_sumw2": 26027.0,
+            "raw_weighted": 26027.0,
+            "unweighted": 26027
+          },
+          "veryHighHT_Njet6plus_Nb1_MET250plus": {
+            "raw_sumw2": 5028.0,
+            "raw_weighted": 5028.0,
+            "unweighted": 5028
+          }
+        }
+      },
+      "sumw": 53826.0,
+      "sumw2": 0.0
+    },
+    "/SMS-2Stop_Par-mStop-900_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": {
+      "dataset": "/SMS-2Stop_Par-mStop-900_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM",
+      "events_read": 0,
+      "files_attempted": 2,
+      "files_processed": 2,
+      "process": "SMS",
+      "regions": {
+        "DY2E": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_sumw2": 4188.0,
+          "raw_weighted": 4188.0,
+          "unweighted": 4188
+        },
+        "QCDCR": {
+          "raw_sumw2": 2064.0,
+          "raw_weighted": 2064.0,
+          "unweighted": 2064
+        },
+        "SR": {
+          "raw_sumw2": 74314.0,
+          "raw_weighted": 74314.0,
+          "unweighted": 74314
+        }
+      },
+      "search_bins": {
+        "ak8_kinematics_no_tag_scores": {
+          "AK8one_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 64264.0,
+            "raw_weighted": 64264.0,
+            "unweighted": 64264
+          },
+          "AK8one_highMET": {
+            "raw_sumw2": 33937.0,
+            "raw_weighted": 33937.0,
+            "unweighted": 33937
+          },
+          "AK8two_Njet5plus": {
+            "raw_sumw2": 27243.0,
+            "raw_weighted": 27243.0,
+            "unweighted": 27243
+          }
+        },
+        "isr_sensitive": {
+          "hardJ1_Njet2plus_MET250to500": {
+            "raw_sumw2": 4798.0,
+            "raw_weighted": 4798.0,
+            "unweighted": 4798
+          },
+          "hardJ1_Njet2plus_MET500plus": {
+            "raw_sumw2": 12354.0,
+            "raw_weighted": 12354.0,
+            "unweighted": 12354
+          },
+          "hardJ1_lowB_MET400plus": {
+            "raw_sumw2": 4305.0,
+            "raw_weighted": 4305.0,
+            "unweighted": 4305
+          }
+        },
+        "minimal_njet_nb_met": {
+          "Njet5plus_Nb1plus_MET600plus": {
+            "raw_sumw2": 23487.0,
+            "raw_weighted": 23487.0,
+            "unweighted": 23487
+          },
+          "Njet5to6_Nb1_MET250to400": {
+            "raw_sumw2": 5841.0,
+            "raw_weighted": 5841.0,
+            "unweighted": 5841
+          },
+          "Njet5to6_Nb2plus_MET250to600": {
+            "raw_sumw2": 23471.0,
+            "raw_weighted": 23471.0,
+            "unweighted": 23471
+          },
+          "Njet7plus_Nb1plus_MET250to600": {
+            "raw_sumw2": 15187.0,
+            "raw_weighted": 15187.0,
+            "unweighted": 15187
+          }
+        },
+        "optimized_hybrid_no_tags": {
+          "hybrid_AK8_highHT": {
+            "raw_sumw2": 15847.0,
+            "raw_weighted": 15847.0,
+            "unweighted": 15847
+          },
+          "hybrid_highMET_anyHT": {
+            "raw_sumw2": 23487.0,
+            "raw_weighted": 23487.0,
+            "unweighted": 23487
+          },
+          "hybrid_lowMET_multijet": {
+            "raw_sumw2": 10022.0,
+            "raw_weighted": 10022.0,
+            "unweighted": 10022
+          },
+          "hybrid_midMET_multijet": {
+            "raw_sumw2": 15572.0,
+            "raw_weighted": 15572.0,
+            "unweighted": 15572
+          }
+        },
+        "resolved_kinematics": {
+          "cleanDphi_Njet5plus_Nb1_MET400plus": {
+            "raw_sumw2": 50811.0,
+            "raw_weighted": 50811.0,
+            "unweighted": 50811
+          },
+          "highHT_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 28517.0,
+            "raw_weighted": 28517.0,
+            "unweighted": 28517
+          },
+          "twoB_highHT_MET400plus": {
+            "raw_sumw2": 25494.0,
+            "raw_weighted": 25494.0,
+            "unweighted": 25494
+          },
+          "veryHighHT_Njet6plus_Nb1_MET250plus": {
+            "raw_sumw2": 5199.0,
+            "raw_weighted": 5199.0,
+            "unweighted": 5199
+          }
+        }
+      },
+      "sumw": 64412.0,
+      "sumw2": 0.0
+    },
+    "/SMS-2Stop_Par-mStop-950_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM": {
+      "dataset": "/SMS-2Stop_Par-mStop-950_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1/NANOAODSIM",
+      "events_read": 0,
+      "files_attempted": 3,
+      "files_processed": 3,
+      "process": "SMS",
+      "regions": {
+        "DY2E": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "DY2M": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "GCR": {
+          "raw_sumw2": 0.0,
+          "raw_weighted": 0.0,
+          "unweighted": 0
+        },
+        "LLCR": {
+          "raw_sumw2": 5426.0,
+          "raw_weighted": 5426.0,
+          "unweighted": 5426
+        },
+        "QCDCR": {
+          "raw_sumw2": 2550.0,
+          "raw_weighted": 2550.0,
+          "unweighted": 2550
+        },
+        "SR": {
+          "raw_sumw2": 95191.0,
+          "raw_weighted": 95191.0,
+          "unweighted": 95191
+        }
+      },
+      "search_bins": {
+        "ak8_kinematics_no_tag_scores": {
+          "AK8one_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 83229.0,
+            "raw_weighted": 83229.0,
+            "unweighted": 83229
+          },
+          "AK8one_highMET": {
+            "raw_sumw2": 45776.0,
+            "raw_weighted": 45776.0,
+            "unweighted": 45776
+          },
+          "AK8two_Njet5plus": {
+            "raw_sumw2": 36624.0,
+            "raw_weighted": 36624.0,
+            "unweighted": 36624
+          }
+        },
+        "isr_sensitive": {
+          "hardJ1_Njet2plus_MET250to500": {
+            "raw_sumw2": 6258.0,
+            "raw_weighted": 6258.0,
+            "unweighted": 6258
+          },
+          "hardJ1_Njet2plus_MET500plus": {
+            "raw_sumw2": 17557.0,
+            "raw_weighted": 17557.0,
+            "unweighted": 17557
+          },
+          "hardJ1_lowB_MET400plus": {
+            "raw_sumw2": 5955.0,
+            "raw_weighted": 5955.0,
+            "unweighted": 5955
+          }
+        },
+        "minimal_njet_nb_met": {
+          "Njet5plus_Nb1plus_MET600plus": {
+            "raw_sumw2": 32835.0,
+            "raw_weighted": 32835.0,
+            "unweighted": 32835
+          },
+          "Njet5to6_Nb1_MET250to400": {
+            "raw_sumw2": 6972.0,
+            "raw_weighted": 6972.0,
+            "unweighted": 6972
+          },
+          "Njet5to6_Nb2plus_MET250to600": {
+            "raw_sumw2": 28597.0,
+            "raw_weighted": 28597.0,
+            "unweighted": 28597
+          },
+          "Njet7plus_Nb1plus_MET250to600": {
+            "raw_sumw2": 18998.0,
+            "raw_weighted": 18998.0,
+            "unweighted": 18998
+          }
+        },
+        "optimized_hybrid_no_tags": {
+          "hybrid_AK8_highHT": {
+            "raw_sumw2": 22409.0,
+            "raw_weighted": 22409.0,
+            "unweighted": 22409
+          },
+          "hybrid_highMET_anyHT": {
+            "raw_sumw2": 32835.0,
+            "raw_weighted": 32835.0,
+            "unweighted": 32835
+          },
+          "hybrid_lowMET_multijet": {
+            "raw_sumw2": 12562.0,
+            "raw_weighted": 12562.0,
+            "unweighted": 12562
+          },
+          "hybrid_midMET_multijet": {
+            "raw_sumw2": 19928.0,
+            "raw_weighted": 19928.0,
+            "unweighted": 19928
+          }
+        },
+        "resolved_kinematics": {
+          "cleanDphi_Njet5plus_Nb1_MET400plus": {
+            "raw_sumw2": 66775.0,
+            "raw_weighted": 66775.0,
+            "unweighted": 66775
+          },
+          "highHT_Njet5plus_Nb1_MET250plus": {
+            "raw_sumw2": 39439.0,
+            "raw_weighted": 39439.0,
+            "unweighted": 39439
+          },
+          "twoB_highHT_MET400plus": {
+            "raw_sumw2": 34754.0,
+            "raw_weighted": 34754.0,
+            "unweighted": 34754
+          },
+          "veryHighHT_Njet6plus_Nb1_MET250plus": {
+            "raw_sumw2": 7417.0,
+            "raw_weighted": 7417.0,
+            "unweighted": 7417
+          }
+        }
+      },
+      "sumw": 64723.0,
+      "sumw2": 0.0
+    }
+  },
+  "events_processed": 0,
+  "files_attempted": 61,
+  "files_processed": 61,
+  "normalization_note": "FastSim signal shard JSONs are full-production-style raw aggregates. No signal overlay is applied in the partial DATA/background preview plot.",
+  "shard_status_counts": {
+    "complete": 3
+  },
+  "shards": [
+    {
+      "bad_files": 0,
+      "files_attempted": 25,
+      "files_processed": 25,
+      "path": "autonomous_allhad/workflow/signal_outputs_fastsim_full/signal_shard_00000.json",
+      "status": "complete"
+    },
+    {
+      "bad_files": 0,
+      "files_attempted": 25,
+      "files_processed": 25,
+      "path": "autonomous_allhad/workflow/signal_outputs_fastsim_full/signal_shard_00001.json",
+      "status": "complete"
+    },
+    {
+      "bad_files": 0,
+      "files_attempted": 11,
+      "files_processed": 11,
+      "path": "autonomous_allhad/workflow/signal_outputs_fastsim_full/signal_shard_00002.json",
+      "status": "complete"
+    }
+  ],
+  "status": "complete"
+}

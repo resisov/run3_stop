@@ -1,10 +1,45 @@
 {
-  "files_processed": 3,
-  "source": "real_feature_table.csv",
+  "files_processed": 1,
+  "source": "full_production",
   "status": "complete",
   "yields": {
-    "Data": {
-      "cat2_LLCR_highDeltaM": 1.0
+    "EGamma": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 2.0,
+        "normalized_weighted": 2.0,
+        "raw_weighted": 2.0,
+        "unweighted": 2
+      },
+      "LLCR": {
+        "normalized_sumw2": 4.0,
+        "normalized_weighted": 4.0,
+        "raw_weighted": 4.0,
+        "unweighted": 4
+      },
+      "QCDCR": {
+        "normalized_sumw2": 3.0,
+        "normalized_weighted": 3.0,
+        "raw_weighted": 3.0,
+        "unweighted": 3
+      },
+      "SR": {
+        "normalized_sumw2": 3.0,
+        "normalized_weighted": 3.0,
+        "raw_weighted": 3.0,
+        "unweighted": 3
+      }
     }
   }
 }

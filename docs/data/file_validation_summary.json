@@ -1,5 +1,7 @@
 {
-  "bad_or_inaccessible": 0,
-  "checked_first_files": 200,
-  "policy": "inaccessible local paths are not marked permanently corrupted without ROOT/tree retry"
+  "bad_file_reason_categories": {},
+  "bad_files": 0,
+  "files_attempted": 1,
+  "files_processed": 1,
+  "status": "complete"
 }

@@ -1,0 +1,21 @@
+{
+  "factors": {
+    "EGamma0-Run2024C-MINIv6NANOv15-v1____10_": {
+      "dataset": "EGamma0-Run2024C-MINIv6NANOv15-v1____10_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 1235612.0,
+      "sumw2": 1235612.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    }
+  },
+  "normalization_status": "complete",
+  "status": "complete"
+}
