@@ -1,0 +1,2977 @@
+{
+  "bad_file_categories": {},
+  "bad_files": 0,
+  "created_at": "2026-06-21T15:45:56Z",
+  "events_processed": 1583954,
+  "fastsim_signal_summary": {
+    "bad_files": 0,
+    "events_processed": 0,
+    "files_attempted": 61,
+    "files_processed": 61,
+    "normalization_note": "FastSim signal shard JSONs are full-production-style raw aggregates. Mass-point overlays in the preview are loaded from signal_cutflows.json and signal_yields_by_mass.json.",
+    "shard_status_counts": {
+      "complete": 3
+    },
+    "status": "complete"
+  },
+  "files_attempted": 17,
+  "files_processed": 17,
+  "final_normalization_complete": false,
+  "formula": "DATA factor=1.0; MC normalization_factor = xsec_pb * lumi_pb / sumw retained from selected final/running checkpoint payloads only.",
+  "histograms": {
+    "background": {},
+    "data": {
+      "ht": {
+        "cat2_LLCR_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              0.0,
+              300.0,
+              500.0,
+              800.0,
+              1000.0,
+              1200.0,
+              1500.0,
+              2000.0,
+              3000.0,
+              5000.0
+            ],
+            "entries": [
+              0.0,
+              0.0,
+              8.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "raw_values": [
+              0.0,
+              0.0,
+              8.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              0.0,
+              0.0,
+              8.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "cat3_QCDCR_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              0.0,
+              300.0,
+              500.0,
+              800.0,
+              1000.0,
+              1200.0,
+              1500.0,
+              2000.0,
+              3000.0,
+              5000.0
+            ],
+            "entries": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "raw_values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "cat4_GCR_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              0.0,
+              300.0,
+              500.0,
+              800.0,
+              1000.0,
+              1200.0,
+              1500.0,
+              2000.0,
+              3000.0,
+              5000.0
+            ],
+            "entries": [
+              0.0,
+              0.0,
+              1.0,
+              2.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "raw_values": [
+              0.0,
+              0.0,
+              1.0,
+              2.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              0.0,
+              0.0,
+              1.0,
+              2.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "cat5_DY2E_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              0.0,
+              300.0,
+              500.0,
+              800.0,
+              1000.0,
+              1200.0,
+              1500.0,
+              2000.0,
+              3000.0,
+              5000.0
+            ],
+            "entries": [
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "raw_values": [
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "metpt": {
+        "cat2_LLCR_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              0.0,
+              100.0,
+              200.0,
+              250.0,
+              300.0,
+              400.0,
+              500.0,
+              600.0,
+              800.0,
+              1000.0,
+              1500.0,
+              2500.0
+            ],
+            "entries": [
+              0.0,
+              0.0,
+              0.0,
+              5.0,
+              3.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "raw_values": [
+              0.0,
+              0.0,
+              0.0,
+              5.0,
+              3.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              5.0,
+              3.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "cat3_QCDCR_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              0.0,
+              100.0,
+              200.0,
+              250.0,
+              300.0,
+              400.0,
+              500.0,
+              600.0,
+              800.0,
+              1000.0,
+              1500.0,
+              2500.0
+            ],
+            "entries": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "raw_values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "cat4_GCR_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              0.0,
+              100.0,
+              200.0,
+              250.0,
+              300.0,
+              400.0,
+              500.0,
+              600.0,
+              800.0,
+              1000.0,
+              1500.0,
+              2500.0
+            ],
+            "entries": [
+              4.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "raw_values": [
+              4.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              4.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "cat5_DY2E_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              0.0,
+              100.0,
+              200.0,
+              250.0,
+              300.0,
+              400.0,
+              500.0,
+              600.0,
+              800.0,
+              1000.0,
+              1500.0,
+              2500.0
+            ],
+            "entries": [
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "raw_values": [
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "min_dphi": {
+        "cat2_LLCR_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              0.0,
+              0.1,
+              0.15,
+              0.3,
+              0.5,
+              0.8,
+              1.2,
+              1.8,
+              3.2
+            ],
+            "entries": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              3.0,
+              2.0,
+              1.0,
+              3.0
+            ],
+            "raw_values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              3.0,
+              2.0,
+              1.0,
+              3.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              3.0,
+              2.0,
+              1.0,
+              3.0
+            ]
+          }
+        },
+        "cat3_QCDCR_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              0.0,
+              0.1,
+              0.15,
+              0.3,
+              0.5,
+              0.8,
+              1.2,
+              1.8,
+              3.2
+            ],
+            "entries": [
+              2.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "raw_values": [
+              2.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              2.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "cat4_GCR_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              0.0,
+              0.1,
+              0.15,
+              0.3,
+              0.5,
+              0.8,
+              1.2,
+              1.8,
+              3.2
+            ],
+            "entries": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              3.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            "raw_values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              3.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              3.0,
+              0.0,
+              1.0,
+              0.0
+            ]
+          }
+        },
+        "cat5_DY2E_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              0.0,
+              0.1,
+              0.15,
+              0.3,
+              0.5,
+              0.8,
+              1.2,
+              1.8,
+              3.2
+            ],
+            "entries": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "raw_values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "nb": {
+        "cat2_LLCR_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              -0.5,
+              0.5,
+              1.5,
+              2.5,
+              3.5,
+              6.5
+            ],
+            "entries": [
+              0.0,
+              3.0,
+              6.0,
+              0.0,
+              0.0
+            ],
+            "raw_values": [
+              0.0,
+              3.0,
+              6.0,
+              0.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              0.0,
+              3.0,
+              6.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "cat3_QCDCR_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              -0.5,
+              0.5,
+              1.5,
+              2.5,
+              3.5,
+              6.5
+            ],
+            "entries": [
+              0.0,
+              2.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "raw_values": [
+              0.0,
+              2.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              0.0,
+              2.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "cat4_GCR_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              -0.5,
+              0.5,
+              1.5,
+              2.5,
+              3.5,
+              6.5
+            ],
+            "entries": [
+              0.0,
+              3.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "raw_values": [
+              0.0,
+              3.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              0.0,
+              3.0,
+              1.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "cat5_DY2E_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              -0.5,
+              0.5,
+              1.5,
+              2.5,
+              3.5,
+              6.5
+            ],
+            "entries": [
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "raw_values": [
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "nfj": {
+        "cat2_LLCR_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              -0.5,
+              0.5,
+              1.5,
+              2.5,
+              3.5,
+              6.5
+            ],
+            "entries": [
+              5.0,
+              4.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "raw_values": [
+              5.0,
+              4.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              5.0,
+              4.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "cat3_QCDCR_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              -0.5,
+              0.5,
+              1.5,
+              2.5,
+              3.5,
+              6.5
+            ],
+            "entries": [
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "raw_values": [
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "cat4_GCR_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              -0.5,
+              0.5,
+              1.5,
+              2.5,
+              3.5,
+              6.5
+            ],
+            "entries": [
+              3.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "raw_values": [
+              3.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              3.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "cat5_DY2E_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              -0.5,
+              0.5,
+              1.5,
+              2.5,
+              3.5,
+              6.5
+            ],
+            "entries": [
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "raw_values": [
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "njet": {
+        "cat2_LLCR_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              -0.5,
+              1.5,
+              2.5,
+              3.5,
+              4.5,
+              5.5,
+              6.5,
+              7.5,
+              9.5,
+              14.5
+            ],
+            "entries": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              6.0,
+              2.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "raw_values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              6.0,
+              2.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              6.0,
+              2.0,
+              1.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "cat3_QCDCR_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              -0.5,
+              1.5,
+              2.5,
+              3.5,
+              4.5,
+              5.5,
+              6.5,
+              7.5,
+              9.5,
+              14.5
+            ],
+            "entries": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              2.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "raw_values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              2.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              2.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "cat4_GCR_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              -0.5,
+              1.5,
+              2.5,
+              3.5,
+              4.5,
+              5.5,
+              6.5,
+              7.5,
+              9.5,
+              14.5
+            ],
+            "entries": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              4.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "raw_values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              4.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              4.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "cat5_DY2E_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              -0.5,
+              1.5,
+              2.5,
+              3.5,
+              4.5,
+              5.5,
+              6.5,
+              7.5,
+              9.5,
+              14.5
+            ],
+            "entries": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "raw_values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "recoil_pt": {
+        "cat2_LLCR_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              0.0,
+              100.0,
+              200.0,
+              250.0,
+              300.0,
+              400.0,
+              500.0,
+              600.0,
+              800.0,
+              1000.0,
+              1500.0,
+              2500.0
+            ],
+            "entries": [
+              0.0,
+              0.0,
+              0.0,
+              5.0,
+              3.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "raw_values": [
+              0.0,
+              0.0,
+              0.0,
+              5.0,
+              3.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              5.0,
+              3.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "cat3_QCDCR_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              0.0,
+              100.0,
+              200.0,
+              250.0,
+              300.0,
+              400.0,
+              500.0,
+              600.0,
+              800.0,
+              1000.0,
+              1500.0,
+              2500.0
+            ],
+            "entries": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "raw_values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "cat4_GCR_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              0.0,
+              100.0,
+              200.0,
+              250.0,
+              300.0,
+              400.0,
+              500.0,
+              600.0,
+              800.0,
+              1000.0,
+              1500.0,
+              2500.0
+            ],
+            "entries": [
+              0.0,
+              0.0,
+              0.0,
+              2.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "raw_values": [
+              0.0,
+              0.0,
+              0.0,
+              2.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              2.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "cat5_DY2E_highDeltaM": {
+          "EGamma": {
+            "bin_edges": [
+              0.0,
+              100.0,
+              200.0,
+              250.0,
+              300.0,
+              400.0,
+              500.0,
+              600.0,
+              800.0,
+              1000.0,
+              1500.0,
+              2500.0
+            ],
+            "entries": [
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "raw_values": [
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "sumw2": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "values": [
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        }
+      }
+    }
+  },
+  "local_recovery_snapshot": {
+    "apply_status_counts": {
+      "applied_and_promoted_running_checkpoint": 25,
+      "applied_to_final": 1,
+      "applied_to_running_checkpoint": 431
+    },
+    "candidate_kind_counts": {
+      "data": 9371,
+      "mc": 2995
+    },
+    "results_done": 457,
+    "status_counts": {
+      "recovered": 451,
+      "still_bad": 6
+    },
+    "updated_at": "2026-06-21T15:45:28Z"
+  },
+  "luminosity_fb": 109.82,
+  "luminosity_pb": 109820.0,
+  "normalization_blocked_datasets": [],
+  "normalization_factors": {
+    "EGamma0-Run2024C-MINIv6NANOv15-v1____3_": {
+      "dataset": "EGamma0-Run2024C-MINIv6NANOv15-v1____3_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 53244.0,
+      "sumw2": 53244.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "EGamma0-Run2024D-MINIv6NANOv15-v1____15_": {
+      "dataset": "EGamma0-Run2024D-MINIv6NANOv15-v1____15_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 129741.0,
+      "sumw2": 129741.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "EGamma0-Run2024E-MINIv6NANOv15-v1____16_": {
+      "dataset": "EGamma0-Run2024E-MINIv6NANOv15-v1____16_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 55478.0,
+      "sumw2": 55478.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "EGamma0-Run2024F-MINIv6NANOv15-v1____14_": {
+      "dataset": "EGamma0-Run2024F-MINIv6NANOv15-v1____14_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 160895.0,
+      "sumw2": 160895.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "EGamma0-Run2024F-MINIv6NANOv15-v1____37_": {
+      "dataset": "EGamma0-Run2024F-MINIv6NANOv15-v1____37_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 110200.0,
+      "sumw2": 110200.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "EGamma0-Run2024F-MINIv6NANOv15-v1____64_": {
+      "dataset": "EGamma0-Run2024F-MINIv6NANOv15-v1____64_",
+      "files_attempted": 3,
+      "files_processed": 3,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 80265.0,
+      "sumw2": 80265.0,
+      "sumw_source_counts": {
+        "data_unweighted": 3
+      },
+      "xsec_pb": -1
+    },
+    "EGamma0-Run2024F-MINIv6NANOv15-v1____70_": {
+      "dataset": "EGamma0-Run2024F-MINIv6NANOv15-v1____70_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 88183.0,
+      "sumw2": 88183.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "EGamma0-Run2024H-MINIv6NANOv15-v2____1_": {
+      "dataset": "EGamma0-Run2024H-MINIv6NANOv15-v2____1_",
+      "files_attempted": 4,
+      "files_processed": 4,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 165472.0,
+      "sumw2": 165472.0,
+      "sumw_source_counts": {
+        "data_unweighted": 4
+      },
+      "xsec_pb": -1
+    },
+    "EGamma0-Run2024I-MINIv6NANOv15-v1____7_": {
+      "dataset": "EGamma0-Run2024I-MINIv6NANOv15-v1____7_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 141893.0,
+      "sumw2": 141893.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "EGamma0-Run2024I-MINIv6NANOv15_v2-v1____1_": {
+      "dataset": "EGamma0-Run2024I-MINIv6NANOv15_v2-v1____1_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 258419.0,
+      "sumw2": 258419.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "EGamma1-Run2024C-MINIv6NANOv15-v1____17_": {
+      "dataset": "EGamma1-Run2024C-MINIv6NANOv15-v1____17_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 73328.0,
+      "sumw2": 73328.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "EGamma1-Run2024D-MINIv6NANOv15-v1____22_": {
+      "dataset": "EGamma1-Run2024D-MINIv6NANOv15-v1____22_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 266836.0,
+      "sumw2": 266836.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    }
+  },
+  "normalization_status": "partial_preview_complete",
+  "preview_directory": "autonomous_allhad/workflow/partial_merge_preview_sf_unc_v2_20260621",
+  "preview_label": "Partial Merge Preview sf_unc_v2_20260621",
+  "region_yields_by_dataset": {
+    "EGamma0-Run2024C-MINIv6NANOv15-v1____3_": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      }
+    },
+    "EGamma0-Run2024D-MINIv6NANOv15-v1____15_": {
+      "DY2E": {
+        "normalized_sumw2": 1.0,
+        "normalized_weighted": 1.0,
+        "raw_weighted": 1.0,
+        "unweighted": 1
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      }
+    },
+    "EGamma0-Run2024E-MINIv6NANOv15-v1____16_": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      }
+    },
+    "EGamma0-Run2024F-MINIv6NANOv15-v1____14_": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      }
+    },
+    "EGamma0-Run2024F-MINIv6NANOv15-v1____37_": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 2.0,
+        "normalized_weighted": 2.0,
+        "raw_weighted": 2.0,
+        "unweighted": 2
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      }
+    },
+    "EGamma0-Run2024F-MINIv6NANOv15-v1____64_": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      }
+    },
+    "EGamma0-Run2024F-MINIv6NANOv15-v1____70_": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      }
+    },
+    "EGamma0-Run2024H-MINIv6NANOv15-v2____1_": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "QCDCR": {
+        "normalized_sumw2": 1.0,
+        "normalized_weighted": 1.0,
+        "raw_weighted": 1.0,
+        "unweighted": 1
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      }
+    },
+    "EGamma0-Run2024I-MINIv6NANOv15-v1____7_": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 1.0,
+        "normalized_weighted": 1.0,
+        "raw_weighted": 1.0,
+        "unweighted": 1
+      },
+      "LLCR": {
+        "normalized_sumw2": 1.0,
+        "normalized_weighted": 1.0,
+        "raw_weighted": 1.0,
+        "unweighted": 1
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      }
+    },
+    "EGamma0-Run2024I-MINIv6NANOv15_v2-v1____1_": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 1.0,
+        "normalized_weighted": 1.0,
+        "raw_weighted": 1.0,
+        "unweighted": 1
+      },
+      "LLCR": {
+        "normalized_sumw2": 1.0,
+        "normalized_weighted": 1.0,
+        "raw_weighted": 1.0,
+        "unweighted": 1
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      }
+    },
+    "EGamma1-Run2024C-MINIv6NANOv15-v1____17_": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 2.0,
+        "normalized_weighted": 2.0,
+        "raw_weighted": 2.0,
+        "unweighted": 2
+      },
+      "LLCR": {
+        "normalized_sumw2": 2.0,
+        "normalized_weighted": 2.0,
+        "raw_weighted": 2.0,
+        "unweighted": 2
+      },
+      "QCDCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      }
+    },
+    "EGamma1-Run2024D-MINIv6NANOv15-v1____22_": {
+      "DY2E": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "LLCR": {
+        "normalized_sumw2": 3.0,
+        "normalized_weighted": 3.0,
+        "raw_weighted": 3.0,
+        "unweighted": 3
+      },
+      "QCDCR": {
+        "normalized_sumw2": 1.0,
+        "normalized_weighted": 1.0,
+        "raw_weighted": 1.0,
+        "unweighted": 1
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      }
+    }
+  },
+  "region_yields_by_process": {
+    "EGamma": {
+      "DY2E": {
+        "normalized_sumw2": 1.0,
+        "normalized_weighted": 1.0,
+        "raw_weighted": 1.0,
+        "unweighted": 1
+      },
+      "DY2M": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      },
+      "GCR": {
+        "normalized_sumw2": 4.0,
+        "normalized_weighted": 4.0,
+        "raw_weighted": 4.0,
+        "unweighted": 4
+      },
+      "LLCR": {
+        "normalized_sumw2": 9.0,
+        "normalized_weighted": 9.0,
+        "raw_weighted": 9.0,
+        "unweighted": 9
+      },
+      "QCDCR": {
+        "normalized_sumw2": 2.0,
+        "normalized_weighted": 2.0,
+        "raw_weighted": 2.0,
+        "unweighted": 2
+      },
+      "SR": {
+        "normalized_sumw2": 0.0,
+        "normalized_weighted": 0.0,
+        "raw_weighted": 0.0,
+        "unweighted": 0
+      }
+    }
+  },
+  "regions": {
+    "cat2_LLCR_highDeltaM": {
+      "background": 0.0,
+      "data": 9.0,
+      "signal": 0.0
+    },
+    "cat3_QCDCR_highDeltaM": {
+      "background": 0.0,
+      "data": 2.0,
+      "signal": 0.0
+    },
+    "cat4_GCR_highDeltaM": {
+      "background": 0.0,
+      "data": 4.0,
+      "signal": 0.0
+    },
+    "cat5_DY2E_highDeltaM": {
+      "background": 0.0,
+      "data": 1.0,
+      "signal": 0.0
+    },
+    "cat6_DY2M_highDeltaM": {
+      "background": 0.0,
+      "data": 0.0,
+      "signal": 0.0
+    },
+    "cat7_SR_highDeltaM": {
+      "background": 0.0,
+      "data": 0.0,
+      "signal": 0.0
+    }
+  },
+  "schema_version": "partial_merge_preview_v2",
+  "scope": "PRELIMINARY partial merge over valid final shard JSONs plus terminal .json.running checkpoints at snapshot time; not a final production output.",
+  "search_bins": {},
+  "shard_directory": "autonomous_allhad/workflow/production_shards_sf_unc_v2_20260621",
+  "shard_status": {
+    "examples": {
+      "final_used": [],
+      "missing_or_empty": [
+        "shard_00000.json",
+        "shard_00001.json",
+        "shard_00002.json",
+        "shard_00003.json",
+        "shard_00005.json"
+      ],
+      "running_used": [
+        "shard_00004.json.running",
+        "shard_00009.json.running",
+        "shard_00016.json.running",
+        "shard_00026.json.running",
+        "shard_00036.json.running"
+      ]
+    },
+    "expected_shards": 2110,
+    "final_payloads_used": 0,
+    "running_payloads_used": 12,
+    "selected_source_payloads": 12,
+    "source_status_counts": {
+      "missing_or_empty": 2098,
+      "running_running_unused": 138,
+      "terminal_running_checkpoint": 12
+    }
+  },
+  "signal_overlay_hists": {
+    "ht": {
+      "cat7_SR_highDeltaM": {
+        "mStop1000_mLSP1": {
+          "bin_edges": [
+            0.0,
+            300.0,
+            500.0,
+            800.0,
+            1000.0,
+            1200.0,
+            1500.0,
+            2000.0,
+            3000.0,
+            5000.0
+          ],
+          "color": "#d62728",
+          "key": "mStop1000_mLSP1",
+          "label": "T2tt mStop1000 mLSP1",
+          "normalization_factor": 0.008107856761349841,
+          "source_variable": "ht",
+          "sumw2": [
+            0.0,
+            0.03635274971819918,
+            0.440045762411619,
+            0.5273449516083071,
+            0.4865220626842534,
+            0.43242023082516134,
+            0.2619633049313268,
+            0.08519559427628597,
+            0.005258987301005306
+          ],
+          "values": [
+            0.0,
+            4.483644789026462,
+            54.27399316047583,
+            65.04122693954842,
+            60.006247890750174,
+            53.33348177615925,
+            32.30980919397911,
+            10.507782362709394,
+            0.6486285409079873
+          ]
+        },
+        "mStop1200_mLSP1": {
+          "bin_edges": [
+            0.0,
+            300.0,
+            500.0,
+            800.0,
+            1000.0,
+            1200.0,
+            1500.0,
+            2000.0,
+            3000.0,
+            5000.0
+          ],
+          "color": "#1f77b4",
+          "key": "mStop1200_mLSP1",
+          "label": "T2tt mStop1200 mLSP1",
+          "normalization_factor": 0.005591256195155442,
+          "source_variable": "ht",
+          "sumw2": [
+            0.0,
+            0.0029386417089472265,
+            0.04498622786356447,
+            0.06830778866010309,
+            0.08584585247626686,
+            0.10404042135506777,
+            0.07796779172462111,
+            0.028636125589315525,
+            0.0026572823963884494
+          ],
+          "values": [
+            0.0,
+            0.5255780823446116,
+            8.045817664828682,
+            12.216894786414642,
+            15.353589511896844,
+            18.607700617477313,
+            13.944592950717674,
+            5.121590674762385,
+            0.4752567765882126
+          ]
+        }
+      }
+    },
+    "metpt": {
+      "cat7_SR_highDeltaM": {
+        "mStop1000_mLSP1": {
+          "bin_edges": [
+            0.0,
+            100.0,
+            200.0,
+            250.0,
+            300.0,
+            400.0,
+            500.0,
+            600.0,
+            800.0,
+            1000.0,
+            1500.0,
+            2500.0
+          ],
+          "color": "#d62728",
+          "key": "mStop1000_mLSP1",
+          "label": "T2tt mStop1000 mLSP1",
+          "normalization_factor": 0.008107856761349841,
+          "source_variable": "met",
+          "sumw2": [
+            0.0,
+            0.0,
+            0.0,
+            0.12759617939064125,
+            0.3082423931801735,
+            0.36720878829269554,
+            0.3679976363878463,
+            0.6413335013575971,
+            0.3528780478974561,
+            0.10682317955167028,
+            0.003155392380603184
+          ],
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            15.737349973780042,
+            38.0177403539694,
+            45.290487868900215,
+            45.38778215003641,
+            79.10025056372905,
+            43.52297509492595,
+            13.175267237193491,
+            0.38917712454479236
+          ]
+        },
+        "mStop1200_mLSP1": {
+          "bin_edges": [
+            0.0,
+            100.0,
+            200.0,
+            250.0,
+            300.0,
+            400.0,
+            500.0,
+            600.0,
+            800.0,
+            1000.0,
+            1500.0,
+            2500.0
+          ],
+          "color": "#1f77b4",
+          "key": "mStop1200_mLSP1",
+          "label": "T2tt mStop1200 mLSP1",
+          "normalization_factor": 0.005591256195155442,
+          "source_variable": "met",
+          "sumw2": [
+            0.0,
+            0.0,
+            0.0,
+            0.01581864579497124,
+            0.039484090195748375,
+            0.04861263678098869,
+            0.05430234732384396,
+            0.10719789808489404,
+            0.08709633830986142,
+            0.06086739795021543,
+            0.002000777333751303
+          ],
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            2.829175634748654,
+            7.061756574481324,
+            8.694403383466712,
+            9.712012010985003,
+            19.17241749318801,
+            15.577239759703062,
+            10.886175811967647,
+            0.3578403964899483
+          ]
+        }
+      }
+    },
+    "min_dphi": {
+      "cat7_SR_highDeltaM": {
+        "mStop1000_mLSP1": {
+          "bin_edges": [
+            0.0,
+            0.1,
+            0.15,
+            0.3,
+            0.5,
+            0.8,
+            1.2,
+            1.8,
+            3.2
+          ],
+          "color": "#d62728",
+          "key": "mStop1000_mLSP1",
+          "label": "T2tt mStop1000 mLSP1",
+          "normalization_factor": 0.008107856761349841,
+          "source_variable": "min_dphi4",
+          "sumw2": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.28457695032564967,
+            0.4276871422542566,
+            0.7831946838022154,
+            0.7797763420565618
+          ],
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            35.09891191988346,
+            52.749716089342066,
+            96.59700545472201,
+            96.17539690313181
+          ]
+        },
+        "mStop1200_mLSP1": {
+          "bin_edges": [
+            0.0,
+            0.1,
+            0.15,
+            0.3,
+            0.5,
+            0.8,
+            1.2,
+            1.8,
+            3.2
+          ],
+          "color": "#1f77b4",
+          "key": "mStop1200_mLSP1",
+          "label": "T2tt mStop1200 mLSP1",
+          "normalization_factor": 0.005591256195155442,
+          "source_variable": "min_dphi4",
+          "sumw2": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.05317691007360886,
+            0.08028119051677104,
+            0.13814742246635953,
+            0.14377460871753506
+          ],
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            9.510726787959408,
+            14.358345909159176,
+            24.7077611263919,
+            25.71418724151988
+          ]
+        }
+      }
+    },
+    "nb": {
+      "cat7_SR_highDeltaM": {
+        "mStop1000_mLSP1": {
+          "bin_edges": [
+            -0.5,
+            0.5,
+            1.5,
+            2.5,
+            3.5,
+            6.5
+          ],
+          "color": "#d62728",
+          "key": "mStop1000_mLSP1",
+          "label": "T2tt mStop1000 mLSP1",
+          "normalization_factor": 0.008107856761349841,
+          "source_variable": "nb_medium",
+          "sumw2": [
+            0.0,
+            0.6602658556412162,
+            1.368651445086631,
+            0.2221264761262116,
+            0.02419134158462441
+          ],
+          "values": [
+            0.0,
+            81.4353133109978,
+            168.8055777713037,
+            27.39644799660111,
+            2.9836912881767415
+          ]
+        },
+        "mStop1200_mLSP1": {
+          "bin_edges": [
+            -0.5,
+            0.5,
+            1.5,
+            2.5,
+            3.5,
+            6.5
+          ],
+          "color": "#1f77b4",
+          "key": "mStop1200_mLSP1",
+          "label": "T2tt mStop1200 mLSP1",
+          "normalization_factor": 0.005591256195155442,
+          "source_variable": "nb_medium",
+          "sumw2": [
+            0.0,
+            0.1118559578150338,
+            0.2544738671364939,
+            0.04379826632164962,
+            0.005252040501097171
+          ],
+          "values": [
+            0.0,
+            20.005514666266173,
+            45.5128254285653,
+            7.833349929412774,
+            0.9393310407861143
+          ]
+        }
+      }
+    },
+    "njet": {
+      "cat7_SR_highDeltaM": {
+        "mStop1000_mLSP1": {
+          "bin_edges": [
+            -0.5,
+            1.5,
+            2.5,
+            3.5,
+            4.5,
+            5.5,
+            6.5,
+            7.5,
+            9.5,
+            14.5
+          ],
+          "color": "#d62728",
+          "key": "mStop1000_mLSP1",
+          "label": "T2tt mStop1000 mLSP1",
+          "normalization_factor": 0.008107856761349841,
+          "source_variable": "njet",
+          "sumw2": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.8626053920473954,
+            0.6841942478607904,
+            0.410792645549777,
+            0.2803040231435829,
+            0.03727307249587511
+          ],
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            106.39129642243262,
+            84.38657317212915,
+            50.66599690167516,
+            34.571901230395724,
+            4.59715478368536
+          ]
+        },
+        "mStop1200_mLSP1": {
+          "bin_edges": [
+            -0.5,
+            1.5,
+            2.5,
+            3.5,
+            4.5,
+            5.5,
+            6.5,
+            7.5,
+            9.5,
+            14.5
+          ],
+          "color": "#1f77b4",
+          "key": "mStop1200_mLSP1",
+          "label": "T2tt mStop1200 mLSP1",
+          "normalization_factor": 0.005591256195155442,
+          "source_variable": "njet",
+          "sumw2": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.1534971360737328,
+            0.1262365449013713,
+            0.07471652855727523,
+            0.05320817221944872,
+            0.0077217500224464365
+          ],
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            27.453067918213222,
+            22.577492516037676,
+            13.363102306421506,
+            9.516318044154563,
+            1.3810402802033943
+          ]
+        }
+      }
+    }
+  },
+  "signal_overlay_summary": {
+    "missing_variable_note": "Mass-point overlays are drawn only in cat7/SR for metpt, ht, njet, nb, and min_dphi; recoil_pt and nfj have no matching signal_cutflows histogram.",
+    "points": [
+      {
+        "color": "#d62728",
+        "key": "mStop1000_mLSP1",
+        "label": "T2tt mStop1000 mLSP1",
+        "mLSP": 1,
+        "mStop": 1000,
+        "normalization_factor": 0.008107856761349841,
+        "normalization_status": "normalized_with_signal_xsec_txt_and_Runs_genEventSumw_T2tt",
+        "xsec_pb": 0.009123
+      },
+      {
+        "color": "#1f77b4",
+        "key": "mStop1200_mLSP1",
+        "label": "T2tt mStop1200 mLSP1",
+        "mLSP": 1,
+        "mStop": 1200,
+        "normalization_factor": 0.005591256195155442,
+        "normalization_status": "normalized_with_signal_xsec_txt_and_Runs_genEventSumw_T2tt",
+        "xsec_pb": 0.002373
+      }
+    ],
+    "source_files": [
+      "autonomous_allhad/outputs/signal_cutflows.json",
+      "autonomous_allhad/outputs/signal_yields_by_mass.json"
+    ],
+    "status": "complete",
+    "variable_map": {
+      "ht": "ht",
+      "metpt": "met",
+      "min_dphi": "min_dphi4",
+      "nb": "nb_medium",
+      "njet": "njet"
+    }
+  },
+  "signal_region_overlay_yields": {
+    "cat7_SR_highDeltaM": {
+      "mStop1000_mLSP1": {
+        "color": "#d62728",
+        "label": "T2tt mStop1000 mLSP1",
+        "normalized_sumw2": 2.275235118438683,
+        "normalized_weighted": 280.62103036707936,
+        "unweighted": 34611
+      },
+      "mStop1200_mLSP1": {
+        "color": "#1f77b4",
+        "label": "T2tt mStop1200 mLSP1",
+        "normalized_sumw2": 0.41538013177427446,
+        "normalized_weighted": 74.29102106503036,
+        "unweighted": 13287
+      }
+    }
+  },
+  "sms_policy": "SMS FastSim mass-point overlays are drawn only in cat7/SR plots for mStop1000/mLSP1 and mStop1200/mLSP1 where signal_cutflows histograms exist; completed FastSim shard JSONs are summarized separately in fastsim_signal_partial_summary.json.",
+  "source_cluster_id": "892849",
+  "source_details_preview": [
+    {
+      "bad_files": 0,
+      "files_attempted": 1,
+      "files_processed": 1,
+      "path": "autonomous_allhad/workflow/production_outputs_sf_unc_v2_20260621/shard_00004.json.running",
+      "shard": "shard_00004.json",
+      "source": "terminal_running_checkpoint"
+    },
+    {
+      "bad_files": 0,
+      "files_attempted": 1,
+      "files_processed": 1,
+      "path": "autonomous_allhad/workflow/production_outputs_sf_unc_v2_20260621/shard_00009.json.running",
+      "shard": "shard_00009.json",
+      "source": "terminal_running_checkpoint"
+    },
+    {
+      "bad_files": 0,
+      "files_attempted": 1,
+      "files_processed": 1,
+      "path": "autonomous_allhad/workflow/production_outputs_sf_unc_v2_20260621/shard_00016.json.running",
+      "shard": "shard_00016.json",
+      "source": "terminal_running_checkpoint"
+    },
+    {
+      "bad_files": 0,
+      "files_attempted": 1,
+      "files_processed": 1,
+      "path": "autonomous_allhad/workflow/production_outputs_sf_unc_v2_20260621/shard_00026.json.running",
+      "shard": "shard_00026.json",
+      "source": "terminal_running_checkpoint"
+    },
+    {
+      "bad_files": 0,
+      "files_attempted": 1,
+      "files_processed": 1,
+      "path": "autonomous_allhad/workflow/production_outputs_sf_unc_v2_20260621/shard_00036.json.running",
+      "shard": "shard_00036.json",
+      "source": "terminal_running_checkpoint"
+    },
+    {
+      "bad_files": 0,
+      "files_attempted": 3,
+      "files_processed": 3,
+      "path": "autonomous_allhad/workflow/production_outputs_sf_unc_v2_20260621/shard_00048.json.running",
+      "shard": "shard_00048.json",
+      "source": "terminal_running_checkpoint"
+    },
+    {
+      "bad_files": 0,
+      "files_attempted": 1,
+      "files_processed": 1,
+      "path": "autonomous_allhad/workflow/production_outputs_sf_unc_v2_20260621/shard_00051.json.running",
+      "shard": "shard_00051.json",
+      "source": "terminal_running_checkpoint"
+    },
+    {
+      "bad_files": 0,
+      "files_attempted": 4,
+      "files_processed": 4,
+      "path": "autonomous_allhad/workflow/production_outputs_sf_unc_v2_20260621/shard_00089.json.running",
+      "shard": "shard_00089.json",
+      "source": "terminal_running_checkpoint"
+    },
+    {
+      "bad_files": 0,
+      "files_attempted": 1,
+      "files_processed": 1,
+      "path": "autonomous_allhad/workflow/production_outputs_sf_unc_v2_20260621/shard_00100.json.running",
+      "shard": "shard_00100.json",
+      "source": "terminal_running_checkpoint"
+    },
+    {
+      "bad_files": 0,
+      "files_attempted": 1,
+      "files_processed": 1,
+      "path": "autonomous_allhad/workflow/production_outputs_sf_unc_v2_20260621/shard_00105.json.running",
+      "shard": "shard_00105.json",
+      "source": "terminal_running_checkpoint"
+    },
+    {
+      "bad_files": 0,
+      "files_attempted": 1,
+      "files_processed": 1,
+      "path": "autonomous_allhad/workflow/production_outputs_sf_unc_v2_20260621/shard_00112.json.running",
+      "shard": "shard_00112.json",
+      "source": "terminal_running_checkpoint"
+    },
+    {
+      "bad_files": 0,
+      "files_attempted": 1,
+      "files_processed": 1,
+      "path": "autonomous_allhad/workflow/production_outputs_sf_unc_v2_20260621/shard_00124.json.running",
+      "shard": "shard_00124.json",
+      "source": "terminal_running_checkpoint"
+    }
+  ],
+  "source_output_directory": "autonomous_allhad/workflow/production_outputs_sf_unc_v2_20260621",
+  "source_shards": [
+    "shard_00004.json",
+    "shard_00009.json",
+    "shard_00016.json",
+    "shard_00026.json",
+    "shard_00036.json",
+    "shard_00048.json",
+    "shard_00051.json",
+    "shard_00089.json",
+    "shard_00100.json",
+    "shard_00105.json",
+    "shard_00112.json",
+    "shard_00124.json"
+  ],
+  "status": "partial_preview",
+  "warnings": [
+    "This is based on a live partial recovery snapshot and will change as more .running records are recovered.",
+    "Process composition may be biased until recovery and all shard promotion are complete.",
+    "Do not use this preview for Combine, final datacards, or physics conclusions."
+  ]
+}

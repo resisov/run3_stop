@@ -1,0 +1,198 @@
+{
+  "expected_shards": 2110,
+  "factors": {
+    "EGamma0-Run2024C-MINIv6NANOv15-v1____3_": {
+      "dataset": "EGamma0-Run2024C-MINIv6NANOv15-v1____3_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 53244.0,
+      "sumw2": 53244.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "EGamma0-Run2024D-MINIv6NANOv15-v1____15_": {
+      "dataset": "EGamma0-Run2024D-MINIv6NANOv15-v1____15_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 129741.0,
+      "sumw2": 129741.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "EGamma0-Run2024E-MINIv6NANOv15-v1____16_": {
+      "dataset": "EGamma0-Run2024E-MINIv6NANOv15-v1____16_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 55478.0,
+      "sumw2": 55478.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "EGamma0-Run2024F-MINIv6NANOv15-v1____14_": {
+      "dataset": "EGamma0-Run2024F-MINIv6NANOv15-v1____14_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 160895.0,
+      "sumw2": 160895.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "EGamma0-Run2024F-MINIv6NANOv15-v1____37_": {
+      "dataset": "EGamma0-Run2024F-MINIv6NANOv15-v1____37_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 110200.0,
+      "sumw2": 110200.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "EGamma0-Run2024F-MINIv6NANOv15-v1____64_": {
+      "dataset": "EGamma0-Run2024F-MINIv6NANOv15-v1____64_",
+      "files_attempted": 3,
+      "files_processed": 3,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 80265.0,
+      "sumw2": 80265.0,
+      "sumw_source_counts": {
+        "data_unweighted": 3
+      },
+      "xsec_pb": -1
+    },
+    "EGamma0-Run2024F-MINIv6NANOv15-v1____70_": {
+      "dataset": "EGamma0-Run2024F-MINIv6NANOv15-v1____70_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 88183.0,
+      "sumw2": 88183.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "EGamma0-Run2024H-MINIv6NANOv15-v2____1_": {
+      "dataset": "EGamma0-Run2024H-MINIv6NANOv15-v2____1_",
+      "files_attempted": 4,
+      "files_processed": 4,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 165472.0,
+      "sumw2": 165472.0,
+      "sumw_source_counts": {
+        "data_unweighted": 4
+      },
+      "xsec_pb": -1
+    },
+    "EGamma0-Run2024I-MINIv6NANOv15-v1____7_": {
+      "dataset": "EGamma0-Run2024I-MINIv6NANOv15-v1____7_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 141893.0,
+      "sumw2": 141893.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "EGamma0-Run2024I-MINIv6NANOv15_v2-v1____1_": {
+      "dataset": "EGamma0-Run2024I-MINIv6NANOv15_v2-v1____1_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 258419.0,
+      "sumw2": 258419.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "EGamma1-Run2024C-MINIv6NANOv15-v1____17_": {
+      "dataset": "EGamma1-Run2024C-MINIv6NANOv15-v1____17_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 73328.0,
+      "sumw2": 73328.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "EGamma1-Run2024D-MINIv6NANOv15-v1____22_": {
+      "dataset": "EGamma1-Run2024D-MINIv6NANOv15-v1____22_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 266836.0,
+      "sumw2": 266836.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    }
+  },
+  "final_normalization_complete": false,
+  "formula": "DATA factor=1.0; MC normalization_factor = xsec_pb * lumi_pb / sumw retained from selected final/running checkpoint payloads only.",
+  "luminosity_fb": 109.82,
+  "luminosity_pb": 109820.0,
+  "normalization_status": "partial_preview_complete",
+  "schema_version": "partial_normalization_factors_v2",
+  "source_completed_or_checkpoint_shards": 12,
+  "status": "partial_preview",
+  "warnings": [
+    "This is based on a live partial recovery snapshot and will change as more .running records are recovered.",
+    "Process composition may be biased until recovery and all shard promotion are complete.",
+    "Do not use this preview for Combine, final datacards, or physics conclusions."
+  ]
+}
