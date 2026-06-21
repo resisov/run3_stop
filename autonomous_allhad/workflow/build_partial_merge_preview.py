@@ -547,18 +547,12 @@ def plot_variable(payload: dict[str, Any], variable: str, region: str, outbase: 
             bins=edges,
             weights=stack_weights,
             stacked=True,
-            histtype="barstacked",
+            histtype="stepfilled",
             color=stack_colors,
             label=stack_labels,
-            edgecolor="none",
-            linewidth=0.0,
+            edgecolor="black",
+            linewidth=0.7,
         )
-        cumulative_outline = np.zeros(len(centers))
-        for vals in stack_weights:
-            cumulative_outline += np.asarray(vals, dtype=float)
-            mask = cumulative_outline > 0
-            if np.any(mask):
-                ax.hlines(cumulative_outline[mask], edges[:-1][mask], edges[1:][mask], colors="0.15", linewidth=0.35)
 
     unc = np.sqrt(total_s2)
     if np.any(total > 0):
@@ -665,10 +659,7 @@ def plot_region_summary(payload: dict[str, Any], outbase: Path) -> dict[str, Any
     data = np.asarray([payload["regions"][r]["data"] for r in regions], dtype=float)
     labels = [r.split("_")[1] for r in regions]
     fig, ax = plt.subplots(figsize=(8, 5))
-    ax.hist(x, bins=bins, weights=bkg, histtype="bar", color="#9ec5b8", edgecolor="none", linewidth=0.0, label="Background")
-    mask = bkg > 0
-    if np.any(mask):
-        ax.hlines(bkg[mask], bins[:-1][mask], bins[1:][mask], colors="0.15", linewidth=0.35)
+    ax.hist(x, bins=bins, weights=bkg, histtype="stepfilled", color="#9ec5b8", edgecolor="black", linewidth=0.7, label="Background")
     ax.errorbar(x[:-1], data[:-1], yerr=np.sqrt(data[:-1]), fmt="o", color="black", label="Data 2024")
     signal_records = []
     positive = [v for v in bkg.tolist() + data[:-1].tolist() if v > 0]
