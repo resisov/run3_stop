@@ -1,5 +1,5 @@
 {
-  "missing_variable_note": "Mass-point overlays are available for metpt, ht, njet, nb, and min_dphi; recoil_pt and nfj have no matching signal_cutflows histogram.",
+  "missing_variable_note": "Mass-point overlays are drawn only in cat7/SR for metpt, ht, njet, nb, and min_dphi; recoil_pt and nfj have no matching signal_cutflows histogram.",
   "points": [
     {
       "color": "#d62728",
@@ -23,86 +23,6 @@
     }
   ],
   "region_yields": {
-    "cat2_LLCR_highDeltaM": {
-      "mStop1000_mLSP1": {
-        "color": "#d62728",
-        "label": "T2tt mStop1000 mLSP1",
-        "normalized_sumw2": 0.09341276193410675,
-        "normalized_weighted": 11.521264457878123,
-        "unweighted": 1421
-      },
-      "mStop1200_mLSP1": {
-        "color": "#1f77b4",
-        "label": "T2tt mStop1200 mLSP1",
-        "normalized_sumw2": 0.014130489919618579,
-        "normalized_weighted": 2.52724780021026,
-        "unweighted": 452
-      }
-    },
-    "cat3_QCDCR_highDeltaM": {
-      "mStop1000_mLSP1": {
-        "color": "#d62728",
-        "label": "T2tt mStop1000 mLSP1",
-        "normalized_sumw2": 0.06251621154070058,
-        "normalized_weighted": 7.710571780043699,
-        "unweighted": 951
-      },
-      "mStop1200_mLSP1": {
-        "color": "#1f77b4",
-        "label": "T2tt mStop1200 mLSP1",
-        "normalized_sumw2": 0.011441945377390265,
-        "normalized_weighted": 2.046399767426892,
-        "unweighted": 366
-      }
-    },
-    "cat4_GCR_highDeltaM": {
-      "mStop1000_mLSP1": {
-        "color": "#d62728",
-        "label": "T2tt mStop1000 mLSP1",
-        "normalized_sumw2": 0.0,
-        "normalized_weighted": 0.0,
-        "unweighted": 0
-      },
-      "mStop1200_mLSP1": {
-        "color": "#1f77b4",
-        "label": "T2tt mStop1200 mLSP1",
-        "normalized_sumw2": 0.0,
-        "normalized_weighted": 0.0,
-        "unweighted": 0
-      }
-    },
-    "cat5_DY2E_highDeltaM": {
-      "mStop1000_mLSP1": {
-        "color": "#d62728",
-        "label": "T2tt mStop1000 mLSP1",
-        "normalized_sumw2": 0.0,
-        "normalized_weighted": 0.0,
-        "unweighted": 0
-      },
-      "mStop1200_mLSP1": {
-        "color": "#1f77b4",
-        "label": "T2tt mStop1200 mLSP1",
-        "normalized_sumw2": 0.0,
-        "normalized_weighted": 0.0,
-        "unweighted": 0
-      }
-    },
-    "cat6_DY2M_highDeltaM": {
-      "mStop1000_mLSP1": {
-        "color": "#d62728",
-        "label": "T2tt mStop1000 mLSP1",
-        "normalized_sumw2": 0.0,
-        "normalized_weighted": 0.0,
-        "unweighted": 0
-      },
-      "mStop1200_mLSP1": {
-        "color": "#1f77b4",
-        "label": "T2tt mStop1200 mLSP1",
-        "normalized_sumw2": 0.0,
-        "normalized_weighted": 0.0,
-        "unweighted": 0
-      }
-    },
     "cat7_SR_highDeltaM": {
       "mStop1000_mLSP1": {
         "color": "#d62728",

@@ -3873,31 +3873,46 @@
     },
     "EGamma0-Run2024C-MINIv6NANOv15-v1____3_": {
       "dataset": "EGamma0-Run2024C-MINIv6NANOv15-v1____3_",
+      "files_attempted": 10,
+      "files_processed": 10,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 5350996.0,
+      "sumw2": 5350996.0,
+      "sumw_source_counts": {
+        "data_unweighted": 10
+      },
+      "xsec_pb": -1
+    },
+    "EGamma0-Run2024C-MINIv6NANOv15-v1____4_": {
+      "dataset": "EGamma0-Run2024C-MINIv6NANOv15-v1____4_",
+      "files_attempted": 10,
+      "files_processed": 10,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 12289331.0,
+      "sumw2": 12289331.0,
+      "sumw_source_counts": {
+        "data_unweighted": 10
+      },
+      "xsec_pb": -1
+    },
+    "EGamma0-Run2024C-MINIv6NANOv15-v1____5_": {
+      "dataset": "EGamma0-Run2024C-MINIv6NANOv15-v1____5_",
       "files_attempted": 9,
       "files_processed": 9,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "EGamma",
-      "sumw": 4139625.0,
-      "sumw2": 4139625.0,
+      "sumw": 11117832.0,
+      "sumw2": 11117832.0,
       "sumw_source_counts": {
         "data_unweighted": 9
-      },
-      "xsec_pb": -1
-    },
-    "EGamma0-Run2024C-MINIv6NANOv15-v1____4_": {
-      "dataset": "EGamma0-Run2024C-MINIv6NANOv15-v1____4_",
-      "files_attempted": 2,
-      "files_processed": 2,
-      "is_data": true,
-      "normalization_factor": 1.0,
-      "normalization_status": "data_unscaled",
-      "process": "EGamma",
-      "sumw": 2471500.0,
-      "sumw2": 2471500.0,
-      "sumw_source_counts": {
-        "data_unweighted": 2
       },
       "xsec_pb": -1
     },
@@ -69365,7 +69380,7 @@
   "luminosity_pb": 109820.0,
   "normalization_status": "partial_preview_incomplete_blocked_datasets",
   "schema_version": "partial_normalization_factors_v2",
-  "source_completed_or_checkpoint_shards": 2002,
+  "source_completed_or_checkpoint_shards": 2003,
   "status": "partial_preview",
   "warnings": [
     "This is based on a live partial recovery snapshot and will change as more .running records are recovered.",

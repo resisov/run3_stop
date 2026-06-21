@@ -439,7 +439,7 @@ def load_signal_overlay_inputs(repo: Path) -> dict[str, Any]:
             "normalization_status": mass_info.get("normalization_status"),
         }
         points.append(point)
-        for short, full in REGION_MAP.items():
+        for short, full in [("SR", REGION_MAP["SR"])]:
             rec = (mass_info.get("regions") or {}).get(short)
             if not isinstance(rec, dict):
                 continue
@@ -452,7 +452,7 @@ def load_signal_overlay_inputs(repo: Path) -> dict[str, Any]:
             }
         by_region = cutflow_hists.get(key) or {}
         for variable, signal_variable in SIGNAL_VAR_MAP.items():
-            for short, full in REGION_MAP.items():
+            for short, full in [("SR", REGION_MAP["SR"])]:
                 hist = (by_region.get(short) or {}).get(signal_variable)
                 if not isinstance(hist, dict):
                     continue
@@ -480,7 +480,7 @@ def load_signal_overlay_inputs(repo: Path) -> dict[str, Any]:
         "region_yields": region_yields,
         "variable_map": SIGNAL_VAR_MAP,
         "source_files": [str(cutflow_path.relative_to(repo)), str(yields_path.relative_to(repo))],
-        "missing_variable_note": "Mass-point overlays are available for metpt, ht, njet, nb, and min_dphi; recoil_pt and nfj have no matching signal_cutflows histogram.",
+        "missing_variable_note": "Mass-point overlays are drawn only in cat7/SR for metpt, ht, njet, nb, and min_dphi; recoil_pt and nfj have no matching signal_cutflows histogram.",
     }
 
 
@@ -512,7 +512,7 @@ def plot_variable(payload: dict[str, Any], variable: str, region: str, outbase: 
 
     bkg = group_background_hists(payload, variable, region)
     data_by_proc = (((payload.get("histograms") or {}).get("data") or {}).get(variable) or {}).get(region, {})
-    signal_by_key = (((payload.get("signal_overlay_hists") or {}).get(variable) or {}).get(region) or {})
+    signal_by_key = (((payload.get("signal_overlay_hists") or {}).get(variable) or {}).get(region) or {}) if region == REGION_MAP["SR"] else {}
     if not bkg and not data_by_proc and not signal_by_key:
         return None
     ref = next(iter(bkg.values()), None) or next(iter(data_by_proc.values()), None) or next(iter(signal_by_key.values()), None)
@@ -553,9 +553,15 @@ def plot_variable(payload: dict[str, Any], variable: str, region: str, outbase: 
             histtype="barstacked",
             color=stack_colors,
             label=stack_labels,
-            edgecolor="black",
-            linewidth=0.35,
+            edgecolor="none",
+            linewidth=0.0,
         )
+        cumulative_outline = np.zeros(len(centers))
+        for vals in stack_weights:
+            cumulative_outline += np.asarray(vals, dtype=float)
+            mask = cumulative_outline > 0
+            if np.any(mask):
+                ax.hlines(cumulative_outline[mask], edges[:-1][mask], edges[1:][mask], colors="0.15", linewidth=0.35)
 
     unc = np.sqrt(total_s2)
     if np.any(total > 0):
@@ -663,22 +669,13 @@ def plot_region_summary(payload: dict[str, Any], outbase: Path) -> dict[str, Any
     data = np.asarray([payload["regions"][r]["data"] for r in regions], dtype=float)
     labels = [r.split("_")[1] for r in regions]
     fig, ax = plt.subplots(figsize=(8, 5))
-    ax.hist(x, bins=bins, weights=bkg, histtype="bar", color="#9ec5b8", edgecolor="black", label="Background")
+    ax.hist(x, bins=bins, weights=bkg, histtype="bar", color="#9ec5b8", edgecolor="none", linewidth=0.0, label="Background")
+    mask = bkg > 0
+    if np.any(mask):
+        ax.hlines(bkg[mask], bins[:-1][mask], bins[1:][mask], colors="0.15", linewidth=0.35)
     ax.errorbar(x[:-1], data[:-1], yerr=np.sqrt(data[:-1]), fmt="o", color="black", label="Data 2024")
-    signal_region_yields = payload.get("signal_region_overlay_yields") or {}
     signal_records = []
     positive = [v for v in bkg.tolist() + data[:-1].tolist() if v > 0]
-    for spec in SIGNAL_OVERLAYS:
-        vals = []
-        for region in regions:
-            rec = (signal_region_yields.get(region) or {}).get(spec["key"]) or {}
-            vals.append(float(rec.get("normalized_weighted") or 0.0))
-        vals_arr = np.asarray(vals, dtype=float)
-        if not np.any(vals_arr > 0):
-            continue
-        ax.hist(x, bins=bins, weights=vals_arr, histtype="step", linewidth=2.0, color=spec["color"], label=spec["label"])
-        positive.extend(vals_arr[vals_arr > 0].tolist())
-        signal_records.append({"key": spec["key"], "label": spec["label"], "yield_sum": float(np.sum(vals_arr))})
     ax.set_xticks(x, labels)
     if positive:
         ax.set_yscale("log")
@@ -758,7 +755,7 @@ def main() -> int:
         "luminosity_fb": LUMI_FB,
         "luminosity_pb": LUMI_PB,
         "formula": "DATA factor=1.0; MC normalization_factor = xsec_pb * lumi_pb / sumw retained from selected final/running checkpoint payloads only.",
-        "sms_policy": "SMS FastSim mass-point overlays are drawn for mStop1000/mLSP1 and mStop1200/mLSP1 where signal_cutflows histograms exist; completed FastSim shard JSONs are summarized separately in fastsim_signal_partial_summary.json.",
+        "sms_policy": "SMS FastSim mass-point overlays are drawn only in cat7/SR plots for mStop1000/mLSP1 and mStop1200/mLSP1 where signal_cutflows histograms exist; completed FastSim shard JSONs are summarized separately in fastsim_signal_partial_summary.json.",
         "final_normalization_complete": False,
         "normalization_status": "partial_preview_complete" if not merged["normalization_blocked_datasets"] else "partial_preview_incomplete_blocked_datasets",
         "normalization_blocked_datasets": merged["normalization_blocked_datasets"],
@@ -800,7 +797,7 @@ def main() -> int:
             if rec:
                 plot_records.append(rec)
     plot_records.append(plot_region_summary(payload, preview_dir / "plots" / "partial_cr_sr_region_bins"))
-    plot_summary = {"status": "partial_preview_cms_style", "timestamp_utc": payload["created_at"], "source": "autonomous_allhad/workflow/partial_merge_preview_878535/partial_normalized_yields.json", "completed_or_checkpoint_shards_used": len(sources), "variables": PLOT_VARIABLES, "regions": REGION_ORDER, "region_variable_plots": plot_records, "search_bin_note": "cat7 SR data are blinded. Signal overlays are included for mStop1000/mLSP1 and mStop1200/mLSP1 where matching signal_cutflows histograms exist."}
+    plot_summary = {"status": "partial_preview_cms_style", "timestamp_utc": payload["created_at"], "source": "autonomous_allhad/workflow/partial_merge_preview_878535/partial_normalized_yields.json", "completed_or_checkpoint_shards_used": len(sources), "variables": PLOT_VARIABLES, "regions": REGION_ORDER, "region_variable_plots": plot_records, "search_bin_note": "cat7 SR data are blinded. Signal overlays are included only for cat7/SR plots for mStop1000/mLSP1 and mStop1200/mLSP1 where matching signal_cutflows histograms exist."}
     write_json(preview_dir / "partial_plot_summary.json", plot_summary)
     summary_lines = [
         "# Partial Merge Preview 878535",
@@ -824,7 +821,7 @@ def main() -> int:
         vals = payload["regions"][region]
         summary_lines.append(f"| {region} | {vals['data']:.6g} | {vals['background']:.6g} |")
     (preview_dir / "partial_yield_summary.md").write_text("\n".join(summary_lines) + "\n")
-    (preview_dir / "partial_plot_summary.md").write_text("\n".join(["# Partial Plot Summary", "", f"Plots: `{len(plot_records)}`", f"Source payloads used: `{len(sources)}`", "", "cat7 SR data are blinded. Signal overlays are included for mStop1000/mLSP1 and mStop1200/mLSP1 where available."]) + "\n")
+    (preview_dir / "partial_plot_summary.md").write_text("\n".join(["# Partial Plot Summary", "", f"Plots: `{len(plot_records)}`", f"Source payloads used: `{len(sources)}`", "", "cat7 SR data are blinded. Signal overlays are included only in cat7/SR plots for mStop1000/mLSP1 and mStop1200/mLSP1 where available."]) + "\n")
     write_json(preview_dir / "partial_preview_manifest.json", {"status": "partial_preview_complete", "created_at": payload["created_at"], "preview_directory": "autonomous_allhad/workflow/partial_merge_preview_878535", "plot_status": plot_summary["status"], "shard_status": payload["shard_status"], "artifacts": ["partial_normalized_yields.json", "partial_normalization_factors.json", "fastsim_signal_partial_summary.json", "partial_plot_summary.json", "partial_yield_summary.md"]})
     copy_preview_to_docs(preview_dir, docs_dir)
     write_preview_index(docs_dir, plot_records, payload)

@@ -1,5 +1,5 @@
 {
-  "completed_or_checkpoint_shards_used": 2002,
+  "completed_or_checkpoint_shards_used": 2003,
   "region_variable_plots": [
     {
       "blinded": false,
@@ -16,22 +16,7 @@
       "pdf": "plots/partial_metpt_cat2_LLCR_highDeltaM.pdf",
       "png": "plots/partial_metpt_cat2_LLCR_highDeltaM.png",
       "region": "cat2_LLCR_highDeltaM",
-      "signal_overlays": [
-        {
-          "key": "mStop1000_mLSP1",
-          "label": "T2tt mStop1000 mLSP1",
-          "normalization_factor": 0.008107856761349841,
-          "source_variable": "met",
-          "yield": 11.521264457878123
-        },
-        {
-          "key": "mStop1200_mLSP1",
-          "label": "T2tt mStop1200 mLSP1",
-          "normalization_factor": 0.005591256195155442,
-          "source_variable": "met",
-          "yield": 2.52724780021026
-        }
-      ],
+      "signal_overlays": [],
       "variable": "metpt"
     },
     {
@@ -40,22 +25,7 @@
       "pdf": "plots/partial_ht_cat2_LLCR_highDeltaM.pdf",
       "png": "plots/partial_ht_cat2_LLCR_highDeltaM.png",
       "region": "cat2_LLCR_highDeltaM",
-      "signal_overlays": [
-        {
-          "key": "mStop1000_mLSP1",
-          "label": "T2tt mStop1000 mLSP1",
-          "normalization_factor": 0.008107856761349841,
-          "source_variable": "ht",
-          "yield": 11.521264457878125
-        },
-        {
-          "key": "mStop1200_mLSP1",
-          "label": "T2tt mStop1200 mLSP1",
-          "normalization_factor": 0.005591256195155442,
-          "source_variable": "ht",
-          "yield": 2.52724780021026
-        }
-      ],
+      "signal_overlays": [],
       "variable": "ht"
     },
     {
@@ -64,22 +34,7 @@
       "pdf": "plots/partial_njet_cat2_LLCR_highDeltaM.pdf",
       "png": "plots/partial_njet_cat2_LLCR_highDeltaM.png",
       "region": "cat2_LLCR_highDeltaM",
-      "signal_overlays": [
-        {
-          "key": "mStop1000_mLSP1",
-          "label": "T2tt mStop1000 mLSP1",
-          "normalization_factor": 0.008107856761349841,
-          "source_variable": "njet",
-          "yield": 11.521264457878125
-        },
-        {
-          "key": "mStop1200_mLSP1",
-          "label": "T2tt mStop1200 mLSP1",
-          "normalization_factor": 0.005591256195155442,
-          "source_variable": "njet",
-          "yield": 2.52724780021026
-        }
-      ],
+      "signal_overlays": [],
       "variable": "njet"
     },
     {
@@ -88,22 +43,7 @@
       "pdf": "plots/partial_nb_cat2_LLCR_highDeltaM.pdf",
       "png": "plots/partial_nb_cat2_LLCR_highDeltaM.png",
       "region": "cat2_LLCR_highDeltaM",
-      "signal_overlays": [
-        {
-          "key": "mStop1000_mLSP1",
-          "label": "T2tt mStop1000 mLSP1",
-          "normalization_factor": 0.008107856761349841,
-          "source_variable": "nb_medium",
-          "yield": 11.521264457878125
-        },
-        {
-          "key": "mStop1200_mLSP1",
-          "label": "T2tt mStop1200 mLSP1",
-          "normalization_factor": 0.005591256195155442,
-          "source_variable": "nb_medium",
-          "yield": 2.52724780021026
-        }
-      ],
+      "signal_overlays": [],
       "variable": "nb"
     },
     {
@@ -121,22 +61,7 @@
       "pdf": "plots/partial_min_dphi_cat2_LLCR_highDeltaM.pdf",
       "png": "plots/partial_min_dphi_cat2_LLCR_highDeltaM.png",
       "region": "cat2_LLCR_highDeltaM",
-      "signal_overlays": [
-        {
-          "key": "mStop1000_mLSP1",
-          "label": "T2tt mStop1000 mLSP1",
-          "normalization_factor": 0.008107856761349841,
-          "source_variable": "min_dphi4",
-          "yield": 11.521264457878125
-        },
-        {
-          "key": "mStop1200_mLSP1",
-          "label": "T2tt mStop1200 mLSP1",
-          "normalization_factor": 0.005591256195155442,
-          "source_variable": "min_dphi4",
-          "yield": 2.52724780021026
-        }
-      ],
+      "signal_overlays": [],
       "variable": "min_dphi"
     },
     {
@@ -154,22 +79,7 @@
       "pdf": "plots/partial_metpt_cat3_QCDCR_highDeltaM.pdf",
       "png": "plots/partial_metpt_cat3_QCDCR_highDeltaM.png",
       "region": "cat3_QCDCR_highDeltaM",
-      "signal_overlays": [
-        {
-          "key": "mStop1000_mLSP1",
-          "label": "T2tt mStop1000 mLSP1",
-          "normalization_factor": 0.008107856761349841,
-          "source_variable": "met",
-          "yield": 7.710571780043699
-        },
-        {
-          "key": "mStop1200_mLSP1",
-          "label": "T2tt mStop1200 mLSP1",
-          "normalization_factor": 0.005591256195155442,
-          "source_variable": "met",
-          "yield": 2.046399767426892
-        }
-      ],
+      "signal_overlays": [],
       "variable": "metpt"
     },
     {
@@ -178,22 +88,7 @@
       "pdf": "plots/partial_ht_cat3_QCDCR_highDeltaM.pdf",
       "png": "plots/partial_ht_cat3_QCDCR_highDeltaM.png",
       "region": "cat3_QCDCR_highDeltaM",
-      "signal_overlays": [
-        {
-          "key": "mStop1000_mLSP1",
-          "label": "T2tt mStop1000 mLSP1",
-          "normalization_factor": 0.008107856761349841,
-          "source_variable": "ht",
-          "yield": 7.702463923282348
-        },
-        {
-          "key": "mStop1200_mLSP1",
-          "label": "T2tt mStop1200 mLSP1",
-          "normalization_factor": 0.005591256195155442,
-          "source_variable": "ht",
-          "yield": 2.046399767426892
-        }
-      ],
+      "signal_overlays": [],
       "variable": "ht"
     },
     {
@@ -202,22 +97,7 @@
       "pdf": "plots/partial_njet_cat3_QCDCR_highDeltaM.pdf",
       "png": "plots/partial_njet_cat3_QCDCR_highDeltaM.png",
       "region": "cat3_QCDCR_highDeltaM",
-      "signal_overlays": [
-        {
-          "key": "mStop1000_mLSP1",
-          "label": "T2tt mStop1000 mLSP1",
-          "normalization_factor": 0.008107856761349841,
-          "source_variable": "njet",
-          "yield": 7.710571780043699
-        },
-        {
-          "key": "mStop1200_mLSP1",
-          "label": "T2tt mStop1200 mLSP1",
-          "normalization_factor": 0.005591256195155442,
-          "source_variable": "njet",
-          "yield": 2.046399767426892
-        }
-      ],
+      "signal_overlays": [],
       "variable": "njet"
     },
     {
@@ -226,22 +106,7 @@
       "pdf": "plots/partial_nb_cat3_QCDCR_highDeltaM.pdf",
       "png": "plots/partial_nb_cat3_QCDCR_highDeltaM.png",
       "region": "cat3_QCDCR_highDeltaM",
-      "signal_overlays": [
-        {
-          "key": "mStop1000_mLSP1",
-          "label": "T2tt mStop1000 mLSP1",
-          "normalization_factor": 0.008107856761349841,
-          "source_variable": "nb_medium",
-          "yield": 7.7105717800437
-        },
-        {
-          "key": "mStop1200_mLSP1",
-          "label": "T2tt mStop1200 mLSP1",
-          "normalization_factor": 0.005591256195155442,
-          "source_variable": "nb_medium",
-          "yield": 2.046399767426892
-        }
-      ],
+      "signal_overlays": [],
       "variable": "nb"
     },
     {
@@ -259,22 +124,7 @@
       "pdf": "plots/partial_min_dphi_cat3_QCDCR_highDeltaM.pdf",
       "png": "plots/partial_min_dphi_cat3_QCDCR_highDeltaM.png",
       "region": "cat3_QCDCR_highDeltaM",
-      "signal_overlays": [
-        {
-          "key": "mStop1000_mLSP1",
-          "label": "T2tt mStop1000 mLSP1",
-          "normalization_factor": 0.008107856761349841,
-          "source_variable": "min_dphi4",
-          "yield": 7.710571780043699
-        },
-        {
-          "key": "mStop1200_mLSP1",
-          "label": "T2tt mStop1200 mLSP1",
-          "normalization_factor": 0.005591256195155442,
-          "source_variable": "min_dphi4",
-          "yield": 2.046399767426892
-        }
-      ],
+      "signal_overlays": [],
       "variable": "min_dphi"
     },
     {
@@ -611,18 +461,7 @@
       "name": "partial_cr_sr_region_bins",
       "pdf": "plots/partial_cr_sr_region_bins.pdf",
       "png": "plots/partial_cr_sr_region_bins.png",
-      "signal_overlays": [
-        {
-          "key": "mStop1000_mLSP1",
-          "label": "T2tt mStop1000 mLSP1",
-          "yield_sum": 299.85286660500117
-        },
-        {
-          "key": "mStop1200_mLSP1",
-          "label": "T2tt mStop1200 mLSP1",
-          "yield_sum": 78.86466863266752
-        }
-      ]
+      "signal_overlays": []
     }
   ],
   "regions": [
@@ -633,10 +472,10 @@
     "cat6_DY2M_highDeltaM",
     "cat7_SR_highDeltaM"
   ],
-  "search_bin_note": "cat7 SR data are blinded. Signal overlays are included for mStop1000/mLSP1 and mStop1200/mLSP1 where matching signal_cutflows histograms exist.",
+  "search_bin_note": "cat7 SR data are blinded. Signal overlays are included only for cat7/SR plots for mStop1000/mLSP1 and mStop1200/mLSP1 where matching signal_cutflows histograms exist.",
   "source": "autonomous_allhad/workflow/partial_merge_preview_878535/partial_normalized_yields.json",
   "status": "partial_preview_cms_style",
-  "timestamp_utc": "2026-06-21T10:10:07Z",
+  "timestamp_utc": "2026-06-21T10:23:56Z",
   "variables": [
     "recoil_pt",
     "metpt",
