@@ -1,5 +1,5 @@
 {
-  "expected_shards": 3939,
+  "expected_shards": 3947,
   "factors": {
     "DYto2L-2Jets_Bin-MLL-50-PTLL-100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____100_": {
       "dataset": "DYto2L-2Jets_Bin-MLL-50-PTLL-100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____100_",
@@ -10743,91 +10743,91 @@
     },
     "EGamma1-Run2024G-MINIv6NANOv15-v2____43_": {
       "dataset": "EGamma1-Run2024G-MINIv6NANOv15-v2____43_",
-      "files_attempted": 8,
-      "files_processed": 8,
+      "files_attempted": 10,
+      "files_processed": 10,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "EGamma",
-      "sumw": 8187907.0,
-      "sumw2": 8187907.0,
+      "sumw": 10210767.0,
+      "sumw2": 10210767.0,
       "sumw_source_counts": {
-        "data_unweighted": 8
+        "data_unweighted": 10
       },
       "xsec_pb": -1
     },
     "EGamma1-Run2024G-MINIv6NANOv15-v2____44_": {
       "dataset": "EGamma1-Run2024G-MINIv6NANOv15-v2____44_",
-      "files_attempted": 5,
-      "files_processed": 5,
+      "files_attempted": 10,
+      "files_processed": 10,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "EGamma",
-      "sumw": 4509025.0,
-      "sumw2": 4509025.0,
+      "sumw": 10460287.0,
+      "sumw2": 10460287.0,
       "sumw_source_counts": {
-        "data_unweighted": 5
+        "data_unweighted": 10
       },
       "xsec_pb": -1
     },
     "EGamma1-Run2024G-MINIv6NANOv15-v2____45_": {
       "dataset": "EGamma1-Run2024G-MINIv6NANOv15-v2____45_",
-      "files_attempted": 7,
-      "files_processed": 6,
+      "files_attempted": 10,
+      "files_processed": 9,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "EGamma",
-      "sumw": 7079083.0,
-      "sumw2": 7079083.0,
+      "sumw": 10699323.0,
+      "sumw2": 10699323.0,
       "sumw_source_counts": {
-        "data_unweighted": 6
+        "data_unweighted": 9
       },
       "xsec_pb": -1
     },
     "EGamma1-Run2024G-MINIv6NANOv15-v2____46_": {
       "dataset": "EGamma1-Run2024G-MINIv6NANOv15-v2____46_",
-      "files_attempted": 6,
-      "files_processed": 5,
+      "files_attempted": 10,
+      "files_processed": 8,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "EGamma",
-      "sumw": 3714543.0,
-      "sumw2": 3714543.0,
+      "sumw": 6721439.0,
+      "sumw2": 6721439.0,
       "sumw_source_counts": {
-        "data_unweighted": 5
+        "data_unweighted": 8
       },
       "xsec_pb": -1
     },
     "EGamma1-Run2024G-MINIv6NANOv15-v2____47_": {
       "dataset": "EGamma1-Run2024G-MINIv6NANOv15-v2____47_",
-      "files_attempted": 3,
-      "files_processed": 2,
+      "files_attempted": 8,
+      "files_processed": 6,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "EGamma",
-      "sumw": 2367408.0,
-      "sumw2": 2367408.0,
+      "sumw": 7138981.0,
+      "sumw2": 7138981.0,
       "sumw_source_counts": {
-        "data_unweighted": 2
+        "data_unweighted": 6
       },
       "xsec_pb": -1
     },
     "EGamma1-Run2024G-MINIv6NANOv15-v2____48_": {
       "dataset": "EGamma1-Run2024G-MINIv6NANOv15-v2____48_",
-      "files_attempted": 1,
-      "files_processed": 1,
+      "files_attempted": 4,
+      "files_processed": 4,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "EGamma",
-      "sumw": 1211419.0,
-      "sumw2": 1211419.0,
+      "sumw": 4867158.0,
+      "sumw2": 4867158.0,
       "sumw_source_counts": {
-        "data_unweighted": 1
+        "data_unweighted": 4
       },
       "xsec_pb": -1
     },
@@ -64026,7 +64026,7 @@
   "luminosity_pb": 109820.0,
   "normalization_status": "partial_preview_incomplete_blocked_datasets",
   "schema_version": "partial_normalization_factors_v2",
-  "source_completed_or_checkpoint_shards": 3862,
+  "source_completed_or_checkpoint_shards": 3870,
   "status": "partial_preview",
   "warnings": [
     "This is based on a live partial recovery snapshot and will change as more .running records are recovered.",
