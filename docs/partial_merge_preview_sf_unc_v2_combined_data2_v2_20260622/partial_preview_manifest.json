@@ -6,7 +6,7 @@
     "partial_plot_summary.json",
     "partial_yield_summary.md"
   ],
-  "created_at": "2026-06-22T10:29:33Z",
+  "created_at": "2026-06-22T10:42:40Z",
   "plot_status": "partial_preview_cms_style",
   "preview_directory": "autonomous_allhad/workflow/partial_merge_preview_sf_unc_v2_combined_data2_v2_20260622",
   "shard_status": {
@@ -14,34 +14,33 @@
       "final_used": [
         "shard_data2_00000.json",
         "shard_data2_00001.json",
+        "shard_data2_00002.json",
         "shard_data2_00003.json",
-        "shard_data2_00004.json",
-        "shard_data2_00005.json"
+        "shard_data2_00004.json"
       ],
       "missing_or_empty": [
-        "shard_data2_00162.json",
-        "shard_data2_00168.json",
-        "shard_data2_00169.json",
-        "shard_data2_00170.json",
-        "shard_data2_00172.json"
+        "shard_data2_00193.json",
+        "shard_data2_00194.json",
+        "shard_data2_00196.json",
+        "shard_data2_00203.json"
       ],
       "running_used": [
-        "shard_data2_00002.json.running",
-        "shard_data2_00021.json.running",
-        "shard_data2_00053.json.running",
-        "shard_data2_00075.json.running",
-        "shard_data2_00109.json.running"
+        "shard_data2_00156.json.running",
+        "shard_data2_00170.json.running",
+        "shard_data2_00172.json.running",
+        "shard_data2_00176.json.running",
+        "shard_data2_00177.json.running"
       ]
     },
-    "expected_shards": 1758,
-    "final_payloads_used": 1528,
-    "running_payloads_used": 210,
-    "selected_source_payloads": 1738,
+    "expected_shards": 1771,
+    "final_payloads_used": 1561,
+    "running_payloads_used": 206,
+    "selected_source_payloads": 1767,
     "source_status_counts": {
-      "final": 1528,
-      "missing_or_empty": 20,
-      "running_running_unused": 19,
-      "terminal_running_checkpoint": 210
+      "final": 1561,
+      "missing_or_empty": 4,
+      "running_running_unused": 4,
+      "terminal_running_checkpoint": 206
     }
   },
   "status": "partial_preview_complete"
