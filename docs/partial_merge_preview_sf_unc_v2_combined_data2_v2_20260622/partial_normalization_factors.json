@@ -4323,16 +4323,16 @@
     },
     "EGamma0-Run2024E-MINIv6NANOv15-v1____18_": {
       "dataset": "EGamma0-Run2024E-MINIv6NANOv15-v1____18_",
-      "files_attempted": 4,
-      "files_processed": 4,
+      "files_attempted": 6,
+      "files_processed": 6,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "EGamma",
-      "sumw": 1312409.0,
-      "sumw2": 1312409.0,
+      "sumw": 2528525.0,
+      "sumw2": 2528525.0,
       "sumw_source_counts": {
-        "data_unweighted": 4
+        "data_unweighted": 6
       },
       "xsec_pb": -1
     },
@@ -57531,7 +57531,7 @@
   "luminosity_pb": 109820.0,
   "normalization_status": "partial_preview_incomplete_blocked_datasets",
   "schema_version": "partial_normalization_factors_v2",
-  "source_completed_or_checkpoint_shards": 1779,
+  "source_completed_or_checkpoint_shards": 1780,
   "status": "partial_preview",
   "warnings": [
     "This is based on a live partial recovery snapshot and will change as more .running records are recovered.",
