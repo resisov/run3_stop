@@ -6,42 +6,42 @@
     "partial_plot_summary.json",
     "partial_yield_summary.md"
   ],
-  "created_at": "2026-06-22T10:14:47Z",
+  "created_at": "2026-06-22T10:29:33Z",
   "plot_status": "partial_preview_cms_style",
   "preview_directory": "autonomous_allhad/workflow/partial_merge_preview_sf_unc_v2_combined_data2_v2_20260622",
   "shard_status": {
     "examples": {
       "final_used": [
+        "shard_data2_00000.json",
+        "shard_data2_00001.json",
         "shard_data2_00003.json",
         "shard_data2_00004.json",
-        "shard_data2_00005.json",
-        "shard_data2_00006.json",
-        "shard_data2_00008.json"
+        "shard_data2_00005.json"
       ],
       "missing_or_empty": [
-        "shard_data2_00076.json",
-        "shard_data2_00106.json",
-        "shard_data2_00127.json",
-        "shard_data2_00128.json",
-        "shard_data2_00130.json"
+        "shard_data2_00162.json",
+        "shard_data2_00168.json",
+        "shard_data2_00169.json",
+        "shard_data2_00170.json",
+        "shard_data2_00172.json"
       ],
       "running_used": [
-        "shard_data2_00000.json.running",
-        "shard_data2_00001.json.running",
         "shard_data2_00002.json.running",
-        "shard_data2_00007.json.running",
-        "shard_data2_00010.json.running"
+        "shard_data2_00021.json.running",
+        "shard_data2_00053.json.running",
+        "shard_data2_00075.json.running",
+        "shard_data2_00109.json.running"
       ]
     },
-    "expected_shards": 1729,
-    "final_payloads_used": 1460,
-    "running_payloads_used": 239,
-    "selected_source_payloads": 1699,
+    "expected_shards": 1758,
+    "final_payloads_used": 1528,
+    "running_payloads_used": 210,
+    "selected_source_payloads": 1738,
     "source_status_counts": {
-      "final": 1460,
-      "missing_or_empty": 30,
-      "running_running_unused": 28,
-      "terminal_running_checkpoint": 239
+      "final": 1528,
+      "missing_or_empty": 20,
+      "running_running_unused": 19,
+      "terminal_running_checkpoint": 210
     }
   },
   "status": "partial_preview_complete"
