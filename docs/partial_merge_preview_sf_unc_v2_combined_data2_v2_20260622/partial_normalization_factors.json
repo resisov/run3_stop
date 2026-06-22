@@ -1,5 +1,5 @@
 {
-  "expected_shards": 7593,
+  "expected_shards": 7844,
   "factors": {
     "DYto2L-2Jets_Bin-MLL-50-PTLL-100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____100_": {
       "dataset": "DYto2L-2Jets_Bin-MLL-50-PTLL-100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____100_",
@@ -25949,16 +25949,16 @@
     },
     "Muon0-Run2024I-MINIv6NANOv15-v1____14_": {
       "dataset": "Muon0-Run2024I-MINIv6NANOv15-v1____14_",
-      "files_attempted": 8,
-      "files_processed": 8,
+      "files_attempted": 10,
+      "files_processed": 10,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 2123425.0,
-      "sumw2": 2123425.0,
+      "sumw": 3006070.0,
+      "sumw2": 3006070.0,
       "sumw_source_counts": {
-        "data_unweighted": 8
+        "data_unweighted": 10
       },
       "xsec_pb": -1
     },
@@ -26189,31 +26189,31 @@
     },
     "Muon0-Run2024I-MINIv6NANOv15_v2-v1____12_": {
       "dataset": "Muon0-Run2024I-MINIv6NANOv15_v2-v1____12_",
-      "files_attempted": 8,
-      "files_processed": 8,
+      "files_attempted": 10,
+      "files_processed": 10,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 2621639.0,
-      "sumw2": 2621639.0,
+      "sumw": 3326861.0,
+      "sumw2": 3326861.0,
       "sumw_source_counts": {
-        "data_unweighted": 8
+        "data_unweighted": 10
       },
       "xsec_pb": -1
     },
     "Muon0-Run2024I-MINIv6NANOv15_v2-v1____13_": {
       "dataset": "Muon0-Run2024I-MINIv6NANOv15_v2-v1____13_",
-      "files_attempted": 6,
-      "files_processed": 6,
+      "files_attempted": 7,
+      "files_processed": 7,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 3285978.0,
-      "sumw2": 3285978.0,
+      "sumw": 4100023.0,
+      "sumw2": 4100023.0,
       "sumw_source_counts": {
-        "data_unweighted": 6
+        "data_unweighted": 7
       },
       "xsec_pb": -1
     },
@@ -26249,31 +26249,31 @@
     },
     "Muon0-Run2024I-MINIv6NANOv15_v2-v1____16_": {
       "dataset": "Muon0-Run2024I-MINIv6NANOv15_v2-v1____16_",
-      "files_attempted": 8,
-      "files_processed": 7,
+      "files_attempted": 10,
+      "files_processed": 9,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 2860263.0,
-      "sumw2": 2860263.0,
+      "sumw": 3783304.0,
+      "sumw2": 3783304.0,
       "sumw_source_counts": {
-        "data_unweighted": 7
+        "data_unweighted": 9
       },
       "xsec_pb": -1
     },
     "Muon0-Run2024I-MINIv6NANOv15_v2-v1____17_": {
       "dataset": "Muon0-Run2024I-MINIv6NANOv15_v2-v1____17_",
-      "files_attempted": 8,
-      "files_processed": 8,
+      "files_attempted": 10,
+      "files_processed": 10,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 1794328.0,
-      "sumw2": 1794328.0,
+      "sumw": 1917388.0,
+      "sumw2": 1917388.0,
       "sumw_source_counts": {
-        "data_unweighted": 8
+        "data_unweighted": 10
       },
       "xsec_pb": -1
     },
@@ -26294,61 +26294,61 @@
     },
     "Muon0-Run2024I-MINIv6NANOv15_v2-v1____1_": {
       "dataset": "Muon0-Run2024I-MINIv6NANOv15_v2-v1____1_",
-      "files_attempted": 4,
-      "files_processed": 4,
-      "is_data": true,
-      "normalization_factor": 1.0,
-      "normalization_status": "data_unscaled",
-      "process": "Muon",
-      "sumw": 4187879.0,
-      "sumw2": 4187879.0,
-      "sumw_source_counts": {
-        "data_unweighted": 4
-      },
-      "xsec_pb": -1
-    },
-    "Muon0-Run2024I-MINIv6NANOv15_v2-v1____2_": {
-      "dataset": "Muon0-Run2024I-MINIv6NANOv15_v2-v1____2_",
-      "files_attempted": 9,
-      "files_processed": 9,
-      "is_data": true,
-      "normalization_factor": 1.0,
-      "normalization_status": "data_unscaled",
-      "process": "Muon",
-      "sumw": 7332185.0,
-      "sumw2": 7332185.0,
-      "sumw_source_counts": {
-        "data_unweighted": 9
-      },
-      "xsec_pb": -1
-    },
-    "Muon0-Run2024I-MINIv6NANOv15_v2-v1____3_": {
-      "dataset": "Muon0-Run2024I-MINIv6NANOv15_v2-v1____3_",
       "files_attempted": 7,
       "files_processed": 7,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 5003589.0,
-      "sumw2": 5003589.0,
+      "sumw": 6978845.0,
+      "sumw2": 6978845.0,
       "sumw_source_counts": {
         "data_unweighted": 7
       },
       "xsec_pb": -1
     },
-    "Muon0-Run2024I-MINIv6NANOv15_v2-v1____4_": {
-      "dataset": "Muon0-Run2024I-MINIv6NANOv15_v2-v1____4_",
-      "files_attempted": 8,
-      "files_processed": 8,
+    "Muon0-Run2024I-MINIv6NANOv15_v2-v1____2_": {
+      "dataset": "Muon0-Run2024I-MINIv6NANOv15_v2-v1____2_",
+      "files_attempted": 10,
+      "files_processed": 10,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 7437963.0,
-      "sumw2": 7437963.0,
+      "sumw": 8055909.0,
+      "sumw2": 8055909.0,
       "sumw_source_counts": {
-        "data_unweighted": 8
+        "data_unweighted": 10
+      },
+      "xsec_pb": -1
+    },
+    "Muon0-Run2024I-MINIv6NANOv15_v2-v1____3_": {
+      "dataset": "Muon0-Run2024I-MINIv6NANOv15_v2-v1____3_",
+      "files_attempted": 9,
+      "files_processed": 9,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 7006334.0,
+      "sumw2": 7006334.0,
+      "sumw_source_counts": {
+        "data_unweighted": 9
+      },
+      "xsec_pb": -1
+    },
+    "Muon0-Run2024I-MINIv6NANOv15_v2-v1____4_": {
+      "dataset": "Muon0-Run2024I-MINIv6NANOv15_v2-v1____4_",
+      "files_attempted": 9,
+      "files_processed": 9,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 8438408.0,
+      "sumw2": 8438408.0,
+      "sumw_source_counts": {
+        "data_unweighted": 9
       },
       "xsec_pb": -1
     },
@@ -26369,211 +26369,211 @@
     },
     "Muon0-Run2024I-MINIv6NANOv15_v2-v1____6_": {
       "dataset": "Muon0-Run2024I-MINIv6NANOv15_v2-v1____6_",
-      "files_attempted": 7,
-      "files_processed": 6,
+      "files_attempted": 10,
+      "files_processed": 9,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 6393839.0,
-      "sumw2": 6393839.0,
+      "sumw": 9335177.0,
+      "sumw2": 9335177.0,
       "sumw_source_counts": {
-        "data_unweighted": 6
+        "data_unweighted": 9
       },
       "xsec_pb": -1
     },
     "Muon0-Run2024I-MINIv6NANOv15_v2-v1____7_": {
       "dataset": "Muon0-Run2024I-MINIv6NANOv15_v2-v1____7_",
-      "files_attempted": 4,
-      "files_processed": 4,
+      "files_attempted": 8,
+      "files_processed": 8,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 2542288.0,
-      "sumw2": 2542288.0,
+      "sumw": 4833060.0,
+      "sumw2": 4833060.0,
       "sumw_source_counts": {
-        "data_unweighted": 4
+        "data_unweighted": 8
       },
       "xsec_pb": -1
     },
     "Muon0-Run2024I-MINIv6NANOv15_v2-v1____8_": {
       "dataset": "Muon0-Run2024I-MINIv6NANOv15_v2-v1____8_",
-      "files_attempted": 6,
-      "files_processed": 5,
+      "files_attempted": 10,
+      "files_processed": 9,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 3651805.0,
-      "sumw2": 3651805.0,
+      "sumw": 6252458.0,
+      "sumw2": 6252458.0,
       "sumw_source_counts": {
-        "data_unweighted": 5
+        "data_unweighted": 9
       },
       "xsec_pb": -1
     },
     "Muon0-Run2024I-MINIv6NANOv15_v2-v1____9_": {
       "dataset": "Muon0-Run2024I-MINIv6NANOv15_v2-v1____9_",
-      "files_attempted": 4,
-      "files_processed": 4,
+      "files_attempted": 8,
+      "files_processed": 8,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 1704882.0,
-      "sumw2": 1704882.0,
+      "sumw": 3336345.0,
+      "sumw2": 3336345.0,
       "sumw_source_counts": {
-        "data_unweighted": 4
+        "data_unweighted": 8
       },
       "xsec_pb": -1
     },
     "Muon1-Run2024C-MINIv6NANOv15-v1____10_": {
       "dataset": "Muon1-Run2024C-MINIv6NANOv15-v1____10_",
-      "files_attempted": 2,
-      "files_processed": 2,
-      "is_data": true,
-      "normalization_factor": 1.0,
-      "normalization_status": "data_unscaled",
-      "process": "Muon",
-      "sumw": 2106491.0,
-      "sumw2": 2106491.0,
-      "sumw_source_counts": {
-        "data_unweighted": 2
-      },
-      "xsec_pb": -1
-    },
-    "Muon1-Run2024C-MINIv6NANOv15-v1____1_": {
-      "dataset": "Muon1-Run2024C-MINIv6NANOv15-v1____1_",
-      "files_attempted": 4,
-      "files_processed": 4,
-      "is_data": true,
-      "normalization_factor": 1.0,
-      "normalization_status": "data_unscaled",
-      "process": "Muon",
-      "sumw": 2168771.0,
-      "sumw2": 2168771.0,
-      "sumw_source_counts": {
-        "data_unweighted": 4
-      },
-      "xsec_pb": -1
-    },
-    "Muon1-Run2024C-MINIv6NANOv15-v1____2_": {
-      "dataset": "Muon1-Run2024C-MINIv6NANOv15-v1____2_",
       "files_attempted": 3,
       "files_processed": 3,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 1715708.0,
-      "sumw2": 1715708.0,
+      "sumw": 3485735.0,
+      "sumw2": 3485735.0,
       "sumw_source_counts": {
         "data_unweighted": 3
       },
       "xsec_pb": -1
     },
+    "Muon1-Run2024C-MINIv6NANOv15-v1____1_": {
+      "dataset": "Muon1-Run2024C-MINIv6NANOv15-v1____1_",
+      "files_attempted": 9,
+      "files_processed": 8,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 4534203.0,
+      "sumw2": 4534203.0,
+      "sumw_source_counts": {
+        "data_unweighted": 8
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024C-MINIv6NANOv15-v1____2_": {
+      "dataset": "Muon1-Run2024C-MINIv6NANOv15-v1____2_",
+      "files_attempted": 6,
+      "files_processed": 6,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 3791545.0,
+      "sumw2": 3791545.0,
+      "sumw_source_counts": {
+        "data_unweighted": 6
+      },
+      "xsec_pb": -1
+    },
     "Muon1-Run2024C-MINIv6NANOv15-v1____3_": {
       "dataset": "Muon1-Run2024C-MINIv6NANOv15-v1____3_",
+      "files_attempted": 10,
+      "files_processed": 10,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 1860450.0,
+      "sumw2": 1860450.0,
+      "sumw_source_counts": {
+        "data_unweighted": 10
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024C-MINIv6NANOv15-v1____4_": {
+      "dataset": "Muon1-Run2024C-MINIv6NANOv15-v1____4_",
       "files_attempted": 7,
       "files_processed": 7,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 1006626.0,
-      "sumw2": 1006626.0,
+      "sumw": 7367218.0,
+      "sumw2": 7367218.0,
       "sumw_source_counts": {
         "data_unweighted": 7
       },
       "xsec_pb": -1
     },
-    "Muon1-Run2024C-MINIv6NANOv15-v1____4_": {
-      "dataset": "Muon1-Run2024C-MINIv6NANOv15-v1____4_",
-      "files_attempted": 6,
-      "files_processed": 6,
-      "is_data": true,
-      "normalization_factor": 1.0,
-      "normalization_status": "data_unscaled",
-      "process": "Muon",
-      "sumw": 6034590.0,
-      "sumw2": 6034590.0,
-      "sumw_source_counts": {
-        "data_unweighted": 6
-      },
-      "xsec_pb": -1
-    },
     "Muon1-Run2024C-MINIv6NANOv15-v1____5_": {
       "dataset": "Muon1-Run2024C-MINIv6NANOv15-v1____5_",
-      "files_attempted": 5,
-      "files_processed": 4,
+      "files_attempted": 8,
+      "files_processed": 7,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 5350480.0,
-      "sumw2": 5350480.0,
+      "sumw": 9383391.0,
+      "sumw2": 9383391.0,
       "sumw_source_counts": {
-        "data_unweighted": 4
+        "data_unweighted": 7
       },
       "xsec_pb": -1
     },
     "Muon1-Run2024C-MINIv6NANOv15-v1____6_": {
       "dataset": "Muon1-Run2024C-MINIv6NANOv15-v1____6_",
-      "files_attempted": 4,
-      "files_processed": 4,
+      "files_attempted": 8,
+      "files_processed": 8,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 5372058.0,
-      "sumw2": 5372058.0,
+      "sumw": 10649880.0,
+      "sumw2": 10649880.0,
       "sumw_source_counts": {
-        "data_unweighted": 4
+        "data_unweighted": 8
       },
       "xsec_pb": -1
     },
     "Muon1-Run2024C-MINIv6NANOv15-v1____7_": {
       "dataset": "Muon1-Run2024C-MINIv6NANOv15-v1____7_",
-      "files_attempted": 6,
-      "files_processed": 6,
+      "files_attempted": 10,
+      "files_processed": 10,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 7472498.0,
-      "sumw2": 7472498.0,
+      "sumw": 12744873.0,
+      "sumw2": 12744873.0,
       "sumw_source_counts": {
-        "data_unweighted": 6
+        "data_unweighted": 10
       },
       "xsec_pb": -1
     },
     "Muon1-Run2024C-MINIv6NANOv15-v1____8_": {
       "dataset": "Muon1-Run2024C-MINIv6NANOv15-v1____8_",
+      "files_attempted": 9,
+      "files_processed": 9,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 12090223.0,
+      "sumw2": 12090223.0,
+      "sumw_source_counts": {
+        "data_unweighted": 9
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024C-MINIv6NANOv15-v1____9_": {
+      "dataset": "Muon1-Run2024C-MINIv6NANOv15-v1____9_",
       "files_attempted": 5,
       "files_processed": 5,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 6715829.0,
-      "sumw2": 6715829.0,
+      "sumw": 6663991.0,
+      "sumw2": 6663991.0,
       "sumw_source_counts": {
         "data_unweighted": 5
-      },
-      "xsec_pb": -1
-    },
-    "Muon1-Run2024C-MINIv6NANOv15-v1____9_": {
-      "dataset": "Muon1-Run2024C-MINIv6NANOv15-v1____9_",
-      "files_attempted": 4,
-      "files_processed": 4,
-      "is_data": true,
-      "normalization_factor": 1.0,
-      "normalization_status": "data_unscaled",
-      "process": "Muon",
-      "sumw": 5361375.0,
-      "sumw2": 5361375.0,
-      "sumw_source_counts": {
-        "data_unweighted": 4
       },
       "xsec_pb": -1
     },
@@ -26594,46 +26594,61 @@
     },
     "Muon1-Run2024D-MINIv6NANOv15-v1____11_": {
       "dataset": "Muon1-Run2024D-MINIv6NANOv15-v1____11_",
-      "files_attempted": 8,
-      "files_processed": 7,
+      "files_attempted": 10,
+      "files_processed": 9,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 6371304.0,
-      "sumw2": 6371304.0,
+      "sumw": 8705977.0,
+      "sumw2": 8705977.0,
       "sumw_source_counts": {
-        "data_unweighted": 7
+        "data_unweighted": 9
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024D-MINIv6NANOv15-v1____12_": {
+      "dataset": "Muon1-Run2024D-MINIv6NANOv15-v1____12_",
+      "files_attempted": 3,
+      "files_processed": 3,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 1796334.0,
+      "sumw2": 1796334.0,
+      "sumw_source_counts": {
+        "data_unweighted": 3
       },
       "xsec_pb": -1
     },
     "Muon1-Run2024D-MINIv6NANOv15-v1____13_": {
       "dataset": "Muon1-Run2024D-MINIv6NANOv15-v1____13_",
-      "files_attempted": 2,
-      "files_processed": 2,
+      "files_attempted": 7,
+      "files_processed": 6,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 1493111.0,
-      "sumw2": 1493111.0,
+      "sumw": 5956925.0,
+      "sumw2": 5956925.0,
       "sumw_source_counts": {
-        "data_unweighted": 2
+        "data_unweighted": 6
       },
       "xsec_pb": -1
     },
     "Muon1-Run2024D-MINIv6NANOv15-v1____14_": {
       "dataset": "Muon1-Run2024D-MINIv6NANOv15-v1____14_",
-      "files_attempted": 2,
-      "files_processed": 1,
+      "files_attempted": 5,
+      "files_processed": 4,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 1342378.0,
-      "sumw2": 1342378.0,
+      "sumw": 3459240.0,
+      "sumw2": 3459240.0,
       "sumw_source_counts": {
-        "data_unweighted": 1
+        "data_unweighted": 4
       },
       "xsec_pb": -1
     },
@@ -26669,46 +26684,46 @@
     },
     "Muon1-Run2024D-MINIv6NANOv15-v1____17_": {
       "dataset": "Muon1-Run2024D-MINIv6NANOv15-v1____17_",
-      "files_attempted": 3,
-      "files_processed": 3,
+      "files_attempted": 6,
+      "files_processed": 6,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 702468.0,
-      "sumw2": 702468.0,
+      "sumw": 1397817.0,
+      "sumw2": 1397817.0,
       "sumw_source_counts": {
-        "data_unweighted": 3
+        "data_unweighted": 6
       },
       "xsec_pb": -1
     },
     "Muon1-Run2024D-MINIv6NANOv15-v1____1_": {
       "dataset": "Muon1-Run2024D-MINIv6NANOv15-v1____1_",
-      "files_attempted": 3,
-      "files_processed": 3,
+      "files_attempted": 8,
+      "files_processed": 8,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 1530948.0,
-      "sumw2": 1530948.0,
+      "sumw": 5170511.0,
+      "sumw2": 5170511.0,
       "sumw_source_counts": {
-        "data_unweighted": 3
+        "data_unweighted": 8
       },
       "xsec_pb": -1
     },
     "Muon1-Run2024D-MINIv6NANOv15-v1____2_": {
       "dataset": "Muon1-Run2024D-MINIv6NANOv15-v1____2_",
-      "files_attempted": 2,
-      "files_processed": 1,
+      "files_attempted": 5,
+      "files_processed": 4,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 686877.0,
-      "sumw2": 686877.0,
+      "sumw": 3101736.0,
+      "sumw2": 3101736.0,
       "sumw_source_counts": {
-        "data_unweighted": 1
+        "data_unweighted": 4
       },
       "xsec_pb": -1
     },
@@ -26729,16 +26744,16 @@
     },
     "Muon1-Run2024D-MINIv6NANOv15-v1____4_": {
       "dataset": "Muon1-Run2024D-MINIv6NANOv15-v1____4_",
-      "files_attempted": 1,
-      "files_processed": 1,
+      "files_attempted": 6,
+      "files_processed": 6,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 752764.0,
-      "sumw2": 752764.0,
+      "sumw": 2868889.0,
+      "sumw2": 2868889.0,
       "sumw_source_counts": {
-        "data_unweighted": 1
+        "data_unweighted": 6
       },
       "xsec_pb": -1
     },
@@ -26759,46 +26774,46 @@
     },
     "Muon1-Run2024D-MINIv6NANOv15-v1____6_": {
       "dataset": "Muon1-Run2024D-MINIv6NANOv15-v1____6_",
-      "files_attempted": 3,
-      "files_processed": 3,
+      "files_attempted": 6,
+      "files_processed": 6,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 3770595.0,
-      "sumw2": 3770595.0,
+      "sumw": 6477045.0,
+      "sumw2": 6477045.0,
       "sumw_source_counts": {
-        "data_unweighted": 3
+        "data_unweighted": 6
       },
       "xsec_pb": -1
     },
     "Muon1-Run2024D-MINIv6NANOv15-v1____7_": {
       "dataset": "Muon1-Run2024D-MINIv6NANOv15-v1____7_",
-      "files_attempted": 2,
-      "files_processed": 2,
+      "files_attempted": 4,
+      "files_processed": 4,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 1441148.0,
-      "sumw2": 1441148.0,
+      "sumw": 3141276.0,
+      "sumw2": 3141276.0,
       "sumw_source_counts": {
-        "data_unweighted": 2
+        "data_unweighted": 4
       },
       "xsec_pb": -1
     },
     "Muon1-Run2024D-MINIv6NANOv15-v1____8_": {
       "dataset": "Muon1-Run2024D-MINIv6NANOv15-v1____8_",
-      "files_attempted": 1,
-      "files_processed": 1,
+      "files_attempted": 6,
+      "files_processed": 5,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 1141953.0,
-      "sumw2": 1141953.0,
+      "sumw": 4710576.0,
+      "sumw2": 4710576.0,
       "sumw_source_counts": {
-        "data_unweighted": 1
+        "data_unweighted": 5
       },
       "xsec_pb": -1
     },
@@ -26834,61 +26849,61 @@
     },
     "Muon1-Run2024E-MINIv6NANOv15-v1____11_": {
       "dataset": "Muon1-Run2024E-MINIv6NANOv15-v1____11_",
-      "files_attempted": 6,
-      "files_processed": 5,
+      "files_attempted": 8,
+      "files_processed": 6,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 6023181.0,
-      "sumw2": 6023181.0,
+      "sumw": 7334803.0,
+      "sumw2": 7334803.0,
       "sumw_source_counts": {
-        "data_unweighted": 5
+        "data_unweighted": 6
       },
       "xsec_pb": -1
     },
     "Muon1-Run2024E-MINIv6NANOv15-v1____12_": {
       "dataset": "Muon1-Run2024E-MINIv6NANOv15-v1____12_",
-      "files_attempted": 1,
-      "files_processed": 1,
+      "files_attempted": 2,
+      "files_processed": 2,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 1332452.0,
-      "sumw2": 1332452.0,
+      "sumw": 2658678.0,
+      "sumw2": 2658678.0,
       "sumw_source_counts": {
-        "data_unweighted": 1
+        "data_unweighted": 2
       },
       "xsec_pb": -1
     },
     "Muon1-Run2024E-MINIv6NANOv15-v1____15_": {
       "dataset": "Muon1-Run2024E-MINIv6NANOv15-v1____15_",
-      "files_attempted": 1,
-      "files_processed": 1,
+      "files_attempted": 2,
+      "files_processed": 2,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 1337856.0,
-      "sumw2": 1337856.0,
+      "sumw": 2660872.0,
+      "sumw2": 2660872.0,
       "sumw_source_counts": {
-        "data_unweighted": 1
+        "data_unweighted": 2
       },
       "xsec_pb": -1
     },
     "Muon1-Run2024E-MINIv6NANOv15-v1____16_": {
       "dataset": "Muon1-Run2024E-MINIv6NANOv15-v1____16_",
-      "files_attempted": 4,
-      "files_processed": 3,
+      "files_attempted": 6,
+      "files_processed": 4,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 1685216.0,
-      "sumw2": 1685216.0,
+      "sumw": 2381726.0,
+      "sumw2": 2381726.0,
       "sumw_source_counts": {
-        "data_unweighted": 3
+        "data_unweighted": 4
       },
       "xsec_pb": -1
     },
@@ -26907,108 +26922,228 @@
       },
       "xsec_pb": -1
     },
-    "Muon1-Run2024E-MINIv6NANOv15-v1____1_": {
-      "dataset": "Muon1-Run2024E-MINIv6NANOv15-v1____1_",
-      "files_attempted": 2,
-      "files_processed": 1,
-      "is_data": true,
-      "normalization_factor": 1.0,
-      "normalization_status": "data_unscaled",
-      "process": "Muon",
-      "sumw": 698856.0,
-      "sumw2": 698856.0,
-      "sumw_source_counts": {
-        "data_unweighted": 1
-      },
-      "xsec_pb": -1
-    },
-    "Muon1-Run2024E-MINIv6NANOv15-v1____3_": {
-      "dataset": "Muon1-Run2024E-MINIv6NANOv15-v1____3_",
+    "Muon1-Run2024E-MINIv6NANOv15-v1____18_": {
+      "dataset": "Muon1-Run2024E-MINIv6NANOv15-v1____18_",
       "files_attempted": 1,
       "files_processed": 1,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 988900.0,
-      "sumw2": 988900.0,
+      "sumw": 28148.0,
+      "sumw2": 28148.0,
       "sumw_source_counts": {
         "data_unweighted": 1
       },
       "xsec_pb": -1
     },
-    "Muon1-Run2024E-MINIv6NANOv15-v1____5_": {
-      "dataset": "Muon1-Run2024E-MINIv6NANOv15-v1____5_",
-      "files_attempted": 2,
-      "files_processed": 1,
+    "Muon1-Run2024E-MINIv6NANOv15-v1____1_": {
+      "dataset": "Muon1-Run2024E-MINIv6NANOv15-v1____1_",
+      "files_attempted": 6,
+      "files_processed": 3,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 545808.0,
-      "sumw2": 545808.0,
+      "sumw": 2275182.0,
+      "sumw2": 2275182.0,
       "sumw_source_counts": {
-        "data_unweighted": 1
+        "data_unweighted": 3
       },
       "xsec_pb": -1
     },
-    "Muon1-Run2024E-MINIv6NANOv15-v1____7_": {
-      "dataset": "Muon1-Run2024E-MINIv6NANOv15-v1____7_",
-      "files_attempted": 2,
-      "files_processed": 2,
+    "Muon1-Run2024E-MINIv6NANOv15-v1____2_": {
+      "dataset": "Muon1-Run2024E-MINIv6NANOv15-v1____2_",
+      "files_attempted": 4,
+      "files_processed": 4,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 2226351.0,
-      "sumw2": 2226351.0,
+      "sumw": 2377804.0,
+      "sumw2": 2377804.0,
       "sumw_source_counts": {
-        "data_unweighted": 2
+        "data_unweighted": 4
       },
       "xsec_pb": -1
     },
-    "Muon1-Run2024F-MINIv6NANOv15-v1____12_": {
-      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____12_",
+    "Muon1-Run2024E-MINIv6NANOv15-v1____3_": {
+      "dataset": "Muon1-Run2024E-MINIv6NANOv15-v1____3_",
+      "files_attempted": 5,
+      "files_processed": 3,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 1267433.0,
+      "sumw2": 1267433.0,
+      "sumw_source_counts": {
+        "data_unweighted": 3
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024E-MINIv6NANOv15-v1____4_": {
+      "dataset": "Muon1-Run2024E-MINIv6NANOv15-v1____4_",
       "files_attempted": 3,
       "files_processed": 2,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 947082.0,
-      "sumw2": 947082.0,
+      "sumw": 2121739.0,
+      "sumw2": 2121739.0,
       "sumw_source_counts": {
         "data_unweighted": 2
       },
       "xsec_pb": -1
     },
-    "Muon1-Run2024F-MINIv6NANOv15-v1____13_": {
-      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____13_",
-      "files_attempted": 1,
-      "files_processed": 1,
+    "Muon1-Run2024E-MINIv6NANOv15-v1____5_": {
+      "dataset": "Muon1-Run2024E-MINIv6NANOv15-v1____5_",
+      "files_attempted": 5,
+      "files_processed": 2,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 743737.0,
-      "sumw2": 743737.0,
+      "sumw": 851454.0,
+      "sumw2": 851454.0,
       "sumw_source_counts": {
-        "data_unweighted": 1
+        "data_unweighted": 2
       },
       "xsec_pb": -1
     },
-    "Muon1-Run2024F-MINIv6NANOv15-v1____14_": {
-      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____14_",
+    "Muon1-Run2024E-MINIv6NANOv15-v1____6_": {
+      "dataset": "Muon1-Run2024E-MINIv6NANOv15-v1____6_",
       "files_attempted": 2,
       "files_processed": 2,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 1468404.0,
-      "sumw2": 1468404.0,
+      "sumw": 2626207.0,
+      "sumw2": 2626207.0,
       "sumw_source_counts": {
         "data_unweighted": 2
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024E-MINIv6NANOv15-v1____7_": {
+      "dataset": "Muon1-Run2024E-MINIv6NANOv15-v1____7_",
+      "files_attempted": 5,
+      "files_processed": 5,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 5786575.0,
+      "sumw2": 5786575.0,
+      "sumw_source_counts": {
+        "data_unweighted": 5
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024E-MINIv6NANOv15-v1____8_": {
+      "dataset": "Muon1-Run2024E-MINIv6NANOv15-v1____8_",
+      "files_attempted": 2,
+      "files_processed": 2,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 2661385.0,
+      "sumw2": 2661385.0,
+      "sumw_source_counts": {
+        "data_unweighted": 2
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024E-MINIv6NANOv15-v1____9_": {
+      "dataset": "Muon1-Run2024E-MINIv6NANOv15-v1____9_",
+      "files_attempted": 3,
+      "files_processed": 2,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 2133365.0,
+      "sumw2": 2133365.0,
+      "sumw_source_counts": {
+        "data_unweighted": 2
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____10_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____10_",
+      "files_attempted": 5,
+      "files_processed": 3,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 2730416.0,
+      "sumw2": 2730416.0,
+      "sumw_source_counts": {
+        "data_unweighted": 3
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____11_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____11_",
+      "files_attempted": 3,
+      "files_processed": 3,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 2068553.0,
+      "sumw2": 2068553.0,
+      "sumw_source_counts": {
+        "data_unweighted": 3
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____12_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____12_",
+      "files_attempted": 4,
+      "files_processed": 3,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 1611287.0,
+      "sumw2": 1611287.0,
+      "sumw_source_counts": {
+        "data_unweighted": 3
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____13_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____13_",
+      "files_attempted": 4,
+      "files_processed": 3,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 2147076.0,
+      "sumw2": 2147076.0,
+      "sumw_source_counts": {
+        "data_unweighted": 3
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____14_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____14_",
+      "files_attempted": 4,
+      "files_processed": 3,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 1889241.0,
+      "sumw2": 1889241.0,
+      "sumw_source_counts": {
+        "data_unweighted": 3
       },
       "xsec_pb": -1
     },
@@ -27044,209 +27179,899 @@
     },
     "Muon1-Run2024F-MINIv6NANOv15-v1____17_": {
       "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____17_",
-      "files_attempted": 2,
-      "files_processed": 2,
+      "files_attempted": 5,
+      "files_processed": 4,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 1393238.0,
-      "sumw2": 1393238.0,
+      "sumw": 2756526.0,
+      "sumw2": 2756526.0,
       "sumw_source_counts": {
-        "data_unweighted": 2
+        "data_unweighted": 4
       },
       "xsec_pb": -1
     },
     "Muon1-Run2024F-MINIv6NANOv15-v1____18_": {
       "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____18_",
-      "files_attempted": 2,
-      "files_processed": 1,
+      "files_attempted": 7,
+      "files_processed": 4,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 426764.0,
-      "sumw2": 426764.0,
+      "sumw": 2766476.0,
+      "sumw2": 2766476.0,
       "sumw_source_counts": {
-        "data_unweighted": 1
+        "data_unweighted": 4
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____19_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____19_",
+      "files_attempted": 4,
+      "files_processed": 4,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 4587421.0,
+      "sumw2": 4587421.0,
+      "sumw_source_counts": {
+        "data_unweighted": 4
       },
       "xsec_pb": -1
     },
     "Muon1-Run2024F-MINIv6NANOv15-v1____1_": {
       "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____1_",
-      "files_attempted": 5,
-      "files_processed": 5,
+      "files_attempted": 9,
+      "files_processed": 8,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 3762242.0,
-      "sumw2": 3762242.0,
+      "sumw": 5789169.0,
+      "sumw2": 5789169.0,
       "sumw_source_counts": {
-        "data_unweighted": 5
+        "data_unweighted": 8
       },
       "xsec_pb": -1
     },
     "Muon1-Run2024F-MINIv6NANOv15-v1____20_": {
       "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____20_",
-      "files_attempted": 3,
-      "files_processed": 2,
+      "files_attempted": 5,
+      "files_processed": 4,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 1130637.0,
-      "sumw2": 1130637.0,
+      "sumw": 2604069.0,
+      "sumw2": 2604069.0,
       "sumw_source_counts": {
-        "data_unweighted": 2
+        "data_unweighted": 4
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____21_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____21_",
+      "files_attempted": 2,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 761268.0,
+      "sumw2": 761268.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____22_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____22_",
+      "files_attempted": 2,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 926710.0,
+      "sumw2": 926710.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____24_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____24_",
+      "files_attempted": 5,
+      "files_processed": 4,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 3009715.0,
+      "sumw2": 3009715.0,
+      "sumw_source_counts": {
+        "data_unweighted": 4
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____25_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____25_",
+      "files_attempted": 5,
+      "files_processed": 4,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 3562273.0,
+      "sumw2": 3562273.0,
+      "sumw_source_counts": {
+        "data_unweighted": 4
       },
       "xsec_pb": -1
     },
     "Muon1-Run2024F-MINIv6NANOv15-v1____26_": {
       "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____26_",
-      "files_attempted": 2,
-      "files_processed": 2,
+      "files_attempted": 8,
+      "files_processed": 6,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 689715.0,
-      "sumw2": 689715.0,
+      "sumw": 4943995.0,
+      "sumw2": 4943995.0,
       "sumw_source_counts": {
-        "data_unweighted": 2
+        "data_unweighted": 6
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____27_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____27_",
+      "files_attempted": 10,
+      "files_processed": 9,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 7060880.0,
+      "sumw2": 7060880.0,
+      "sumw_source_counts": {
+        "data_unweighted": 9
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____28_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____28_",
+      "files_attempted": 5,
+      "files_processed": 3,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 3061015.0,
+      "sumw2": 3061015.0,
+      "sumw_source_counts": {
+        "data_unweighted": 3
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____29_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____29_",
+      "files_attempted": 4,
+      "files_processed": 4,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 4463649.0,
+      "sumw2": 4463649.0,
+      "sumw_source_counts": {
+        "data_unweighted": 4
       },
       "xsec_pb": -1
     },
     "Muon1-Run2024F-MINIv6NANOv15-v1____2_": {
       "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____2_",
-      "files_attempted": 2,
-      "files_processed": 2,
+      "files_attempted": 6,
+      "files_processed": 5,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 1666132.0,
-      "sumw2": 1666132.0,
+      "sumw": 4198236.0,
+      "sumw2": 4198236.0,
       "sumw_source_counts": {
-        "data_unweighted": 2
+        "data_unweighted": 5
       },
       "xsec_pb": -1
     },
     "Muon1-Run2024F-MINIv6NANOv15-v1____30_": {
       "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____30_",
-      "files_attempted": 1,
-      "files_processed": 1,
+      "files_attempted": 4,
+      "files_processed": 4,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 728708.0,
-      "sumw2": 728708.0,
+      "sumw": 3251023.0,
+      "sumw2": 3251023.0,
       "sumw_source_counts": {
-        "data_unweighted": 1
+        "data_unweighted": 4
       },
       "xsec_pb": -1
     },
-    "Muon1-Run2024F-MINIv6NANOv15-v1____33_": {
-      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____33_",
-      "files_attempted": 1,
-      "files_processed": 1,
+    "Muon1-Run2024F-MINIv6NANOv15-v1____31_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____31_",
+      "files_attempted": 8,
+      "files_processed": 8,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 126577.0,
-      "sumw2": 126577.0,
+      "sumw": 6397005.0,
+      "sumw2": 6397005.0,
       "sumw_source_counts": {
-        "data_unweighted": 1
+        "data_unweighted": 8
       },
       "xsec_pb": -1
     },
-    "Muon1-Run2024F-MINIv6NANOv15-v1____35_": {
-      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____35_",
-      "files_attempted": 1,
-      "files_processed": 1,
-      "is_data": true,
-      "normalization_factor": 1.0,
-      "normalization_status": "data_unscaled",
-      "process": "Muon",
-      "sumw": 656733.0,
-      "sumw2": 656733.0,
-      "sumw_source_counts": {
-        "data_unweighted": 1
-      },
-      "xsec_pb": -1
-    },
-    "Muon1-Run2024F-MINIv6NANOv15-v1____36_": {
-      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____36_",
-      "files_attempted": 1,
-      "files_processed": 1,
-      "is_data": true,
-      "normalization_factor": 1.0,
-      "normalization_status": "data_unscaled",
-      "process": "Muon",
-      "sumw": 755769.0,
-      "sumw2": 755769.0,
-      "sumw_source_counts": {
-        "data_unweighted": 1
-      },
-      "xsec_pb": -1
-    },
-    "Muon1-Run2024F-MINIv6NANOv15-v1____3_": {
-      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____3_",
+    "Muon1-Run2024F-MINIv6NANOv15-v1____32_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____32_",
       "files_attempted": 3,
       "files_processed": 3,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 2044666.0,
-      "sumw2": 2044666.0,
+      "sumw": 2207613.0,
+      "sumw2": 2207613.0,
       "sumw_source_counts": {
         "data_unweighted": 3
       },
       "xsec_pb": -1
     },
-    "Muon1-Run2024F-MINIv6NANOv15-v1____41_": {
-      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____41_",
-      "files_attempted": 1,
-      "files_processed": 1,
+    "Muon1-Run2024F-MINIv6NANOv15-v1____33_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____33_",
+      "files_attempted": 5,
+      "files_processed": 5,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 747588.0,
-      "sumw2": 747588.0,
+      "sumw": 2799666.0,
+      "sumw2": 2799666.0,
       "sumw_source_counts": {
-        "data_unweighted": 1
+        "data_unweighted": 5
       },
       "xsec_pb": -1
     },
-    "Muon1-Run2024F-MINIv6NANOv15-v1____42_": {
-      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____42_",
+    "Muon1-Run2024F-MINIv6NANOv15-v1____34_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____34_",
+      "files_attempted": 6,
+      "files_processed": 5,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 3057991.0,
+      "sumw2": 3057991.0,
+      "sumw_source_counts": {
+        "data_unweighted": 5
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____35_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____35_",
+      "files_attempted": 5,
+      "files_processed": 4,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 3078939.0,
+      "sumw2": 3078939.0,
+      "sumw_source_counts": {
+        "data_unweighted": 4
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____36_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____36_",
       "files_attempted": 2,
       "files_processed": 2,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 83627.0,
-      "sumw2": 83627.0,
+      "sumw": 1738137.0,
+      "sumw2": 1738137.0,
       "sumw_source_counts": {
         "data_unweighted": 2
       },
       "xsec_pb": -1
     },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____37_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____37_",
+      "files_attempted": 5,
+      "files_processed": 5,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 5068449.0,
+      "sumw2": 5068449.0,
+      "sumw_source_counts": {
+        "data_unweighted": 5
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____38_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____38_",
+      "files_attempted": 4,
+      "files_processed": 2,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 1289822.0,
+      "sumw2": 1289822.0,
+      "sumw_source_counts": {
+        "data_unweighted": 2
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____39_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____39_",
+      "files_attempted": 5,
+      "files_processed": 5,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 4968139.0,
+      "sumw2": 4968139.0,
+      "sumw_source_counts": {
+        "data_unweighted": 5
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____3_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____3_",
+      "files_attempted": 8,
+      "files_processed": 7,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 4911823.0,
+      "sumw2": 4911823.0,
+      "sumw_source_counts": {
+        "data_unweighted": 7
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____40_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____40_",
+      "files_attempted": 5,
+      "files_processed": 5,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 4171065.0,
+      "sumw2": 4171065.0,
+      "sumw_source_counts": {
+        "data_unweighted": 5
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____41_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____41_",
+      "files_attempted": 7,
+      "files_processed": 7,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 4371073.0,
+      "sumw2": 4371073.0,
+      "sumw_source_counts": {
+        "data_unweighted": 7
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____42_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____42_",
+      "files_attempted": 6,
+      "files_processed": 6,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 1961285.0,
+      "sumw2": 1961285.0,
+      "sumw_source_counts": {
+        "data_unweighted": 6
+      },
+      "xsec_pb": -1
+    },
     "Muon1-Run2024F-MINIv6NANOv15-v1____43_": {
       "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____43_",
+      "files_attempted": 5,
+      "files_processed": 3,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 2498429.0,
+      "sumw2": 2498429.0,
+      "sumw_source_counts": {
+        "data_unweighted": 3
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____44_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____44_",
+      "files_attempted": 5,
+      "files_processed": 4,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 1776574.0,
+      "sumw2": 1776574.0,
+      "sumw_source_counts": {
+        "data_unweighted": 4
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____45_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____45_",
+      "files_attempted": 2,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 678510.0,
+      "sumw2": 678510.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____46_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____46_",
       "files_attempted": 1,
       "files_processed": 1,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 659036.0,
-      "sumw2": 659036.0,
+      "sumw": 1286579.0,
+      "sumw2": 1286579.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____48_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____48_",
+      "files_attempted": 3,
+      "files_processed": 2,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 2007653.0,
+      "sumw2": 2007653.0,
+      "sumw_source_counts": {
+        "data_unweighted": 2
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____4_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____4_",
+      "files_attempted": 2,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 443690.0,
+      "sumw2": 443690.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____50_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____50_",
+      "files_attempted": 2,
+      "files_processed": 2,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 2478836.0,
+      "sumw2": 2478836.0,
+      "sumw_source_counts": {
+        "data_unweighted": 2
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____51_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____51_",
+      "files_attempted": 2,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 657897.0,
+      "sumw2": 657897.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____52_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____52_",
+      "files_attempted": 3,
+      "files_processed": 3,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 517918.0,
+      "sumw2": 517918.0,
+      "sumw_source_counts": {
+        "data_unweighted": 3
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____53_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____53_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 688369.0,
+      "sumw2": 688369.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____54_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____54_",
+      "files_attempted": 6,
+      "files_processed": 5,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 1942754.0,
+      "sumw2": 1942754.0,
+      "sumw_source_counts": {
+        "data_unweighted": 5
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____5_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____5_",
+      "files_attempted": 2,
+      "files_processed": 2,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 1556130.0,
+      "sumw2": 1556130.0,
+      "sumw_source_counts": {
+        "data_unweighted": 2
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____6_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____6_",
+      "files_attempted": 2,
+      "files_processed": 2,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 1981884.0,
+      "sumw2": 1981884.0,
+      "sumw_source_counts": {
+        "data_unweighted": 2
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____7_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____7_",
+      "files_attempted": 2,
+      "files_processed": 2,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 1998185.0,
+      "sumw2": 1998185.0,
+      "sumw_source_counts": {
+        "data_unweighted": 2
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____8_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____8_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 667403.0,
+      "sumw2": 667403.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024F-MINIv6NANOv15-v1____9_": {
+      "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____9_",
+      "files_attempted": 2,
+      "files_processed": 2,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 2021231.0,
+      "sumw2": 2021231.0,
+      "sumw_source_counts": {
+        "data_unweighted": 2
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024G-MINIv6NANOv15-v2____13_": {
+      "dataset": "Muon1-Run2024G-MINIv6NANOv15-v2____13_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 1186652.0,
+      "sumw2": 1186652.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024G-MINIv6NANOv15-v2____14_": {
+      "dataset": "Muon1-Run2024G-MINIv6NANOv15-v2____14_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 1297179.0,
+      "sumw2": 1297179.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024G-MINIv6NANOv15-v2____15_": {
+      "dataset": "Muon1-Run2024G-MINIv6NANOv15-v2____15_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 1306814.0,
+      "sumw2": 1306814.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024G-MINIv6NANOv15-v2____16_": {
+      "dataset": "Muon1-Run2024G-MINIv6NANOv15-v2____16_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 1296783.0,
+      "sumw2": 1296783.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024G-MINIv6NANOv15-v2____19_": {
+      "dataset": "Muon1-Run2024G-MINIv6NANOv15-v2____19_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 1298766.0,
+      "sumw2": 1298766.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024G-MINIv6NANOv15-v2____1_": {
+      "dataset": "Muon1-Run2024G-MINIv6NANOv15-v2____1_",
+      "files_attempted": 5,
+      "files_processed": 4,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 1616436.0,
+      "sumw2": 1616436.0,
+      "sumw_source_counts": {
+        "data_unweighted": 4
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024G-MINIv6NANOv15-v2____20_": {
+      "dataset": "Muon1-Run2024G-MINIv6NANOv15-v2____20_",
+      "files_attempted": 2,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 716623.0,
+      "sumw2": 716623.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024G-MINIv6NANOv15-v2____21_": {
+      "dataset": "Muon1-Run2024G-MINIv6NANOv15-v2____21_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 472000.0,
+      "sumw2": 472000.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024G-MINIv6NANOv15-v2____23_": {
+      "dataset": "Muon1-Run2024G-MINIv6NANOv15-v2____23_",
+      "files_attempted": 2,
+      "files_processed": 2,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 2213076.0,
+      "sumw2": 2213076.0,
+      "sumw_source_counts": {
+        "data_unweighted": 2
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024G-MINIv6NANOv15-v2____25_": {
+      "dataset": "Muon1-Run2024G-MINIv6NANOv15-v2____25_",
+      "files_attempted": 2,
+      "files_processed": 2,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 2389158.0,
+      "sumw2": 2389158.0,
+      "sumw_source_counts": {
+        "data_unweighted": 2
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024G-MINIv6NANOv15-v2____26_": {
+      "dataset": "Muon1-Run2024G-MINIv6NANOv15-v2____26_",
+      "files_attempted": 3,
+      "files_processed": 2,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 1486499.0,
+      "sumw2": 1486499.0,
+      "sumw_source_counts": {
+        "data_unweighted": 2
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024G-MINIv6NANOv15-v2____28_": {
+      "dataset": "Muon1-Run2024G-MINIv6NANOv15-v2____28_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 1281277.0,
+      "sumw2": 1281277.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024G-MINIv6NANOv15-v2____2_": {
+      "dataset": "Muon1-Run2024G-MINIv6NANOv15-v2____2_",
+      "files_attempted": 2,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 681157.0,
+      "sumw2": 681157.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024G-MINIv6NANOv15-v2____33_": {
+      "dataset": "Muon1-Run2024G-MINIv6NANOv15-v2____33_",
+      "files_attempted": 3,
+      "files_processed": 3,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 3524621.0,
+      "sumw2": 3524621.0,
+      "sumw_source_counts": {
+        "data_unweighted": 3
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024G-MINIv6NANOv15-v2____34_": {
+      "dataset": "Muon1-Run2024G-MINIv6NANOv15-v2____34_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 1280698.0,
+      "sumw2": 1280698.0,
+      "sumw_source_counts": {
+        "data_unweighted": 1
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024G-MINIv6NANOv15-v2____37_": {
+      "dataset": "Muon1-Run2024G-MINIv6NANOv15-v2____37_",
+      "files_attempted": 1,
+      "files_processed": 1,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 1277578.0,
+      "sumw2": 1277578.0,
       "sumw_source_counts": {
         "data_unweighted": 1
       },
@@ -75529,7 +76354,7 @@
   "luminosity_pb": 109820.0,
   "normalization_status": "partial_preview_incomplete_blocked_datasets",
   "schema_version": "partial_normalization_factors_v2",
-  "source_completed_or_checkpoint_shards": 7432,
+  "source_completed_or_checkpoint_shards": 7618,
   "status": "partial_preview",
   "warnings": [
     "This is based on a live partial recovery snapshot and will change as more .running records are recovered.",
