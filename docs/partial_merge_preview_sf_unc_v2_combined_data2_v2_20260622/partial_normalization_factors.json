@@ -1,5 +1,5 @@
 {
-  "expected_shards": 4108,
+  "expected_shards": 4121,
   "factors": {
     "DYto2L-2Jets_Bin-MLL-50-PTLL-100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____100_": {
       "dataset": "DYto2L-2Jets_Bin-MLL-50-PTLL-100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____100_",
@@ -10923,16 +10923,16 @@
     },
     "EGamma1-Run2024G-MINIv6NANOv15-v2____54_": {
       "dataset": "EGamma1-Run2024G-MINIv6NANOv15-v2____54_",
-      "files_attempted": 9,
-      "files_processed": 8,
+      "files_attempted": 10,
+      "files_processed": 9,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "EGamma",
-      "sumw": 6684294.0,
-      "sumw2": 6684294.0,
+      "sumw": 6937049.0,
+      "sumw2": 6937049.0,
       "sumw_source_counts": {
-        "data_unweighted": 8
+        "data_unweighted": 9
       },
       "xsec_pb": -1
     },
@@ -11103,16 +11103,16 @@
     },
     "EGamma1-Run2024G-MINIv6NANOv15-v2____65_": {
       "dataset": "EGamma1-Run2024G-MINIv6NANOv15-v2____65_",
-      "files_attempted": 9,
-      "files_processed": 8,
+      "files_attempted": 10,
+      "files_processed": 9,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "EGamma",
-      "sumw": 9524330.0,
-      "sumw2": 9524330.0,
+      "sumw": 10730450.0,
+      "sumw2": 10730450.0,
       "sumw_source_counts": {
-        "data_unweighted": 8
+        "data_unweighted": 9
       },
       "xsec_pb": -1
     },
@@ -11133,16 +11133,16 @@
     },
     "EGamma1-Run2024G-MINIv6NANOv15-v2____67_": {
       "dataset": "EGamma1-Run2024G-MINIv6NANOv15-v2____67_",
-      "files_attempted": 9,
-      "files_processed": 8,
+      "files_attempted": 10,
+      "files_processed": 9,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "EGamma",
-      "sumw": 9493694.0,
-      "sumw2": 9493694.0,
+      "sumw": 10733477.0,
+      "sumw2": 10733477.0,
       "sumw_source_counts": {
-        "data_unweighted": 8
+        "data_unweighted": 9
       },
       "xsec_pb": -1
     },
@@ -11223,16 +11223,16 @@
     },
     "EGamma1-Run2024G-MINIv6NANOv15-v2____72_": {
       "dataset": "EGamma1-Run2024G-MINIv6NANOv15-v2____72_",
-      "files_attempted": 9,
-      "files_processed": 9,
+      "files_attempted": 10,
+      "files_processed": 10,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "EGamma",
-      "sumw": 8471765.0,
-      "sumw2": 8471765.0,
+      "sumw": 9669599.0,
+      "sumw2": 9669599.0,
       "sumw_source_counts": {
-        "data_unweighted": 9
+        "data_unweighted": 10
       },
       "xsec_pb": -1
     },
@@ -11253,61 +11253,121 @@
     },
     "EGamma1-Run2024G-MINIv6NANOv15-v2____74_": {
       "dataset": "EGamma1-Run2024G-MINIv6NANOv15-v2____74_",
+      "files_attempted": 10,
+      "files_processed": 10,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 10936547.0,
+      "sumw2": 10936547.0,
+      "sumw_source_counts": {
+        "data_unweighted": 10
+      },
+      "xsec_pb": -1
+    },
+    "EGamma1-Run2024G-MINIv6NANOv15-v2____75_": {
+      "dataset": "EGamma1-Run2024G-MINIv6NANOv15-v2____75_",
+      "files_attempted": 9,
+      "files_processed": 9,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 9243022.0,
+      "sumw2": 9243022.0,
+      "sumw_source_counts": {
+        "data_unweighted": 9
+      },
+      "xsec_pb": -1
+    },
+    "EGamma1-Run2024G-MINIv6NANOv15-v2____76_": {
+      "dataset": "EGamma1-Run2024G-MINIv6NANOv15-v2____76_",
+      "files_attempted": 10,
+      "files_processed": 9,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 10329952.0,
+      "sumw2": 10329952.0,
+      "sumw_source_counts": {
+        "data_unweighted": 9
+      },
+      "xsec_pb": -1
+    },
+    "EGamma1-Run2024G-MINIv6NANOv15-v2____77_": {
+      "dataset": "EGamma1-Run2024G-MINIv6NANOv15-v2____77_",
+      "files_attempted": 9,
+      "files_processed": 8,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 7937210.0,
+      "sumw2": 7937210.0,
+      "sumw_source_counts": {
+        "data_unweighted": 8
+      },
+      "xsec_pb": -1
+    },
+    "EGamma1-Run2024G-MINIv6NANOv15-v2____78_": {
+      "dataset": "EGamma1-Run2024G-MINIv6NANOv15-v2____78_",
       "files_attempted": 7,
       "files_processed": 7,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "EGamma",
-      "sumw": 7355156.0,
-      "sumw2": 7355156.0,
+      "sumw": 7260291.0,
+      "sumw2": 7260291.0,
       "sumw_source_counts": {
         "data_unweighted": 7
       },
       "xsec_pb": -1
     },
-    "EGamma1-Run2024G-MINIv6NANOv15-v2____75_": {
-      "dataset": "EGamma1-Run2024G-MINIv6NANOv15-v2____75_",
-      "files_attempted": 5,
-      "files_processed": 5,
+    "EGamma1-Run2024G-MINIv6NANOv15-v2____79_": {
+      "dataset": "EGamma1-Run2024G-MINIv6NANOv15-v2____79_",
+      "files_attempted": 2,
+      "files_processed": 2,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "EGamma",
-      "sumw": 5036955.0,
-      "sumw2": 5036955.0,
+      "sumw": 676705.0,
+      "sumw2": 676705.0,
       "sumw_source_counts": {
-        "data_unweighted": 5
+        "data_unweighted": 2
       },
       "xsec_pb": -1
     },
-    "EGamma1-Run2024G-MINIv6NANOv15-v2____76_": {
-      "dataset": "EGamma1-Run2024G-MINIv6NANOv15-v2____76_",
-      "files_attempted": 5,
-      "files_processed": 4,
+    "EGamma1-Run2024G-MINIv6NANOv15-v2____7_": {
+      "dataset": "EGamma1-Run2024G-MINIv6NANOv15-v2____7_",
+      "files_attempted": 1,
+      "files_processed": 1,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "EGamma",
-      "sumw": 4758474.0,
-      "sumw2": 4758474.0,
+      "sumw": 734886.0,
+      "sumw2": 734886.0,
       "sumw_source_counts": {
-        "data_unweighted": 4
+        "data_unweighted": 1
       },
       "xsec_pb": -1
     },
-    "EGamma1-Run2024G-MINIv6NANOv15-v2____77_": {
-      "dataset": "EGamma1-Run2024G-MINIv6NANOv15-v2____77_",
-      "files_attempted": 4,
-      "files_processed": 4,
+    "EGamma1-Run2024G-MINIv6NANOv15-v2____80_": {
+      "dataset": "EGamma1-Run2024G-MINIv6NANOv15-v2____80_",
+      "files_attempted": 2,
+      "files_processed": 2,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "EGamma",
-      "sumw": 3608780.0,
-      "sumw2": 3608780.0,
+      "sumw": 1289508.0,
+      "sumw2": 1289508.0,
       "sumw_source_counts": {
-        "data_unweighted": 4
+        "data_unweighted": 2
       },
       "xsec_pb": -1
     },
@@ -64506,7 +64566,7 @@
   "luminosity_pb": 109820.0,
   "normalization_status": "partial_preview_incomplete_blocked_datasets",
   "schema_version": "partial_normalization_factors_v2",
-  "source_completed_or_checkpoint_shards": 4025,
+  "source_completed_or_checkpoint_shards": 4040,
   "status": "partial_preview",
   "warnings": [
     "This is based on a live partial recovery snapshot and will change as more .running records are recovered.",
