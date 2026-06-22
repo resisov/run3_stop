@@ -1,5 +1,5 @@
 {
-  "completed_or_checkpoint_shards_used": 7618,
+  "completed_or_checkpoint_shards_used": 7865,
   "region_variable_plots": [
     {
       "blinded": false,
@@ -475,7 +475,7 @@
   "search_bin_note": "cat7 SR data are blinded. Signal overlays are included only for cat7/SR plots for mStop1000/mLSP1 and mStop1200/mLSP1 where matching signal_cutflows histograms exist.",
   "source": "autonomous_allhad/workflow/partial_merge_preview_sf_unc_v2_combined_data2_v2_20260622/partial_normalized_yields.json",
   "status": "partial_preview_cms_style",
-  "timestamp_utc": "2026-06-22T23:35:34Z",
+  "timestamp_utc": "2026-06-22T23:55:41Z",
   "variables": [
     "recoil_pt",
     "metpt",
