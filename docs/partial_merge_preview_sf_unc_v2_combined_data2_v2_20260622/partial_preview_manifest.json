@@ -6,7 +6,7 @@
     "partial_plot_summary.json",
     "partial_yield_summary.md"
   ],
-  "created_at": "2026-06-22T11:36:22Z",
+  "created_at": "2026-06-22T11:51:44Z",
   "plot_status": "partial_preview_cms_style",
   "preview_directory": "autonomous_allhad/workflow/partial_merge_preview_sf_unc_v2_combined_data2_v2_20260622",
   "shard_status": {
@@ -27,12 +27,12 @@
         "shard_oldmc_00604.json.running"
       ]
     },
-    "expected_shards": 1775,
-    "final_payloads_used": 1593,
+    "expected_shards": 1776,
+    "final_payloads_used": 1594,
     "running_payloads_used": 182,
-    "selected_source_payloads": 1775,
+    "selected_source_payloads": 1776,
     "source_status_counts": {
-      "final": 1593,
+      "final": 1594,
       "terminal_running_checkpoint": 182
     }
   },
