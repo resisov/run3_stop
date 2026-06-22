@@ -6,7 +6,7 @@
     "partial_plot_summary.json",
     "partial_yield_summary.md"
   ],
-  "created_at": "2026-06-22T16:19:50Z",
+  "created_at": "2026-06-22T16:34:16Z",
   "plot_status": "partial_preview_cms_style",
   "preview_directory": "autonomous_allhad/workflow/partial_merge_preview_sf_unc_v2_combined_data2_v2_20260622",
   "shard_status": {
@@ -26,23 +26,23 @@
         "shard_data2_00946.json"
       ],
       "running_used": [
-        "shard_data2_02235.json.running",
-        "shard_data2_02239.json.running",
-        "shard_data2_02241.json.running",
-        "shard_data2_02242.json.running",
-        "shard_data2_02243.json.running"
+        "shard_data2_02301.json.running",
+        "shard_data2_02303.json.running",
+        "shard_data2_02304.json.running",
+        "shard_data2_02306.json.running",
+        "shard_data2_02307.json.running"
       ]
     },
-    "expected_shards": 3870,
-    "final_payloads_used": 3560,
-    "running_payloads_used": 228,
-    "selected_source_payloads": 3788,
+    "expected_shards": 3888,
+    "final_payloads_used": 3618,
+    "running_payloads_used": 195,
+    "selected_source_payloads": 3813,
     "source_status_counts": {
-      "final": 3560,
+      "final": 3618,
       "final_failed": 71,
-      "missing_or_empty": 82,
-      "running_running_unused": 8,
-      "terminal_running_checkpoint": 228
+      "missing_or_empty": 75,
+      "running_running_unused": 4,
+      "terminal_running_checkpoint": 195
     }
   },
   "status": "partial_preview_complete"
