@@ -1,5 +1,5 @@
 {
-  "expected_shards": 5858,
+  "expected_shards": 6044,
   "factors": {
     "DYto2L-2Jets_Bin-MLL-50-PTLL-100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____100_": {
       "dataset": "DYto2L-2Jets_Bin-MLL-50-PTLL-100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____100_",
@@ -21134,16 +21134,16 @@
     },
     "JetMET1-Run2024F-MINIv6NANOv15-v2____31_": {
       "dataset": "JetMET1-Run2024F-MINIv6NANOv15-v2____31_",
-      "files_attempted": 9,
-      "files_processed": 9,
+      "files_attempted": 10,
+      "files_processed": 10,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "JetMET",
-      "sumw": 5655190.0,
-      "sumw2": 5655190.0,
+      "sumw": 6272056.0,
+      "sumw2": 6272056.0,
       "sumw_source_counts": {
-        "data_unweighted": 9
+        "data_unweighted": 10
       },
       "xsec_pb": -1
     },
@@ -21164,16 +21164,16 @@
     },
     "JetMET1-Run2024F-MINIv6NANOv15-v2____33_": {
       "dataset": "JetMET1-Run2024F-MINIv6NANOv15-v2____33_",
-      "files_attempted": 7,
-      "files_processed": 7,
+      "files_attempted": 10,
+      "files_processed": 10,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "JetMET",
-      "sumw": 5190481.0,
-      "sumw2": 5190481.0,
+      "sumw": 7519940.0,
+      "sumw2": 7519940.0,
       "sumw_source_counts": {
-        "data_unweighted": 7
+        "data_unweighted": 10
       },
       "xsec_pb": -1
     },
@@ -21194,16 +21194,16 @@
     },
     "JetMET1-Run2024F-MINIv6NANOv15-v2____35_": {
       "dataset": "JetMET1-Run2024F-MINIv6NANOv15-v2____35_",
-      "files_attempted": 8,
-      "files_processed": 8,
+      "files_attempted": 9,
+      "files_processed": 9,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "JetMET",
-      "sumw": 7328725.0,
-      "sumw2": 7328725.0,
+      "sumw": 8031134.0,
+      "sumw2": 8031134.0,
       "sumw_source_counts": {
-        "data_unweighted": 8
+        "data_unweighted": 9
       },
       "xsec_pb": -1
     },
@@ -21239,16 +21239,16 @@
     },
     "JetMET1-Run2024F-MINIv6NANOv15-v2____38_": {
       "dataset": "JetMET1-Run2024F-MINIv6NANOv15-v2____38_",
-      "files_attempted": 8,
-      "files_processed": 8,
+      "files_attempted": 10,
+      "files_processed": 10,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "JetMET",
-      "sumw": 7168696.0,
-      "sumw2": 7168696.0,
+      "sumw": 8842293.0,
+      "sumw2": 8842293.0,
       "sumw_source_counts": {
-        "data_unweighted": 8
+        "data_unweighted": 10
       },
       "xsec_pb": -1
     },
@@ -21299,16 +21299,16 @@
     },
     "JetMET1-Run2024F-MINIv6NANOv15-v2____5_": {
       "dataset": "JetMET1-Run2024F-MINIv6NANOv15-v2____5_",
-      "files_attempted": 8,
-      "files_processed": 8,
+      "files_attempted": 9,
+      "files_processed": 9,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "JetMET",
-      "sumw": 4770893.0,
-      "sumw2": 4770893.0,
+      "sumw": 5891605.0,
+      "sumw2": 5891605.0,
       "sumw_source_counts": {
-        "data_unweighted": 8
+        "data_unweighted": 9
       },
       "xsec_pb": -1
     },
@@ -21374,16 +21374,16 @@
     },
     "JetMET1-Run2024G-MINIv6NANOv15-v2____10_": {
       "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____10_",
-      "files_attempted": 8,
-      "files_processed": 8,
+      "files_attempted": 10,
+      "files_processed": 10,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "JetMET",
-      "sumw": 5237873.0,
-      "sumw2": 5237873.0,
+      "sumw": 7098672.0,
+      "sumw2": 7098672.0,
       "sumw_source_counts": {
-        "data_unweighted": 8
+        "data_unweighted": 10
       },
       "xsec_pb": -1
     },
@@ -21404,121 +21404,121 @@
     },
     "JetMET1-Run2024G-MINIv6NANOv15-v2____12_": {
       "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____12_",
-      "files_attempted": 6,
-      "files_processed": 6,
-      "is_data": true,
-      "normalization_factor": 1.0,
-      "normalization_status": "data_unscaled",
-      "process": "JetMET",
-      "sumw": 3931013.0,
-      "sumw2": 3931013.0,
-      "sumw_source_counts": {
-        "data_unweighted": 6
-      },
-      "xsec_pb": -1
-    },
-    "JetMET1-Run2024G-MINIv6NANOv15-v2____13_": {
-      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____13_",
-      "files_attempted": 8,
-      "files_processed": 8,
-      "is_data": true,
-      "normalization_factor": 1.0,
-      "normalization_status": "data_unscaled",
-      "process": "JetMET",
-      "sumw": 5737586.0,
-      "sumw2": 5737586.0,
-      "sumw_source_counts": {
-        "data_unweighted": 8
-      },
-      "xsec_pb": -1
-    },
-    "JetMET1-Run2024G-MINIv6NANOv15-v2____14_": {
-      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____14_",
-      "files_attempted": 2,
-      "files_processed": 2,
-      "is_data": true,
-      "normalization_factor": 1.0,
-      "normalization_status": "data_unscaled",
-      "process": "JetMET",
-      "sumw": 1704755.0,
-      "sumw2": 1704755.0,
-      "sumw_source_counts": {
-        "data_unweighted": 2
-      },
-      "xsec_pb": -1
-    },
-    "JetMET1-Run2024G-MINIv6NANOv15-v2____15_": {
-      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____15_",
       "files_attempted": 7,
       "files_processed": 7,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "JetMET",
-      "sumw": 6814815.0,
-      "sumw2": 6814815.0,
+      "sumw": 4812682.0,
+      "sumw2": 4812682.0,
       "sumw_source_counts": {
         "data_unweighted": 7
       },
       "xsec_pb": -1
     },
-    "JetMET1-Run2024G-MINIv6NANOv15-v2____16_": {
-      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____16_",
-      "files_attempted": 6,
-      "files_processed": 6,
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____13_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____13_",
+      "files_attempted": 10,
+      "files_processed": 10,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "JetMET",
-      "sumw": 5575711.0,
-      "sumw2": 5575711.0,
+      "sumw": 7490105.0,
+      "sumw2": 7490105.0,
       "sumw_source_counts": {
-        "data_unweighted": 6
+        "data_unweighted": 10
       },
       "xsec_pb": -1
     },
-    "JetMET1-Run2024G-MINIv6NANOv15-v2____17_": {
-      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____17_",
-      "files_attempted": 5,
-      "files_processed": 5,
-      "is_data": true,
-      "normalization_factor": 1.0,
-      "normalization_status": "data_unscaled",
-      "process": "JetMET",
-      "sumw": 4972618.0,
-      "sumw2": 4972618.0,
-      "sumw_source_counts": {
-        "data_unweighted": 5
-      },
-      "xsec_pb": -1
-    },
-    "JetMET1-Run2024G-MINIv6NANOv15-v2____18_": {
-      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____18_",
-      "files_attempted": 9,
-      "files_processed": 9,
-      "is_data": true,
-      "normalization_factor": 1.0,
-      "normalization_status": "data_unscaled",
-      "process": "JetMET",
-      "sumw": 9434896.0,
-      "sumw2": 9434896.0,
-      "sumw_source_counts": {
-        "data_unweighted": 9
-      },
-      "xsec_pb": -1
-    },
-    "JetMET1-Run2024G-MINIv6NANOv15-v2____19_": {
-      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____19_",
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____14_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____14_",
       "files_attempted": 3,
       "files_processed": 3,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "JetMET",
-      "sumw": 3122087.0,
-      "sumw2": 3122087.0,
+      "sumw": 2773536.0,
+      "sumw2": 2773536.0,
       "sumw_source_counts": {
         "data_unweighted": 3
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____15_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____15_",
+      "files_attempted": 9,
+      "files_processed": 9,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 8791658.0,
+      "sumw2": 8791658.0,
+      "sumw_source_counts": {
+        "data_unweighted": 9
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____16_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____16_",
+      "files_attempted": 8,
+      "files_processed": 8,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 7695915.0,
+      "sumw2": 7695915.0,
+      "sumw_source_counts": {
+        "data_unweighted": 8
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____17_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____17_",
+      "files_attempted": 8,
+      "files_processed": 8,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 8190302.0,
+      "sumw2": 8190302.0,
+      "sumw_source_counts": {
+        "data_unweighted": 8
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____18_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____18_",
+      "files_attempted": 10,
+      "files_processed": 10,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 10520808.0,
+      "sumw2": 10520808.0,
+      "sumw_source_counts": {
+        "data_unweighted": 10
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____19_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____19_",
+      "files_attempted": 8,
+      "files_processed": 8,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 8117262.0,
+      "sumw2": 8117262.0,
+      "sumw_source_counts": {
+        "data_unweighted": 8
       },
       "xsec_pb": -1
     },
@@ -21539,91 +21539,661 @@
     },
     "JetMET1-Run2024G-MINIv6NANOv15-v2____20_": {
       "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____20_",
+      "files_attempted": 9,
+      "files_processed": 9,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 9654274.0,
+      "sumw2": 9654274.0,
+      "sumw_source_counts": {
+        "data_unweighted": 9
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____21_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____21_",
+      "files_attempted": 9,
+      "files_processed": 9,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 9386554.0,
+      "sumw2": 9386554.0,
+      "sumw_source_counts": {
+        "data_unweighted": 9
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____22_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____22_",
       "files_attempted": 8,
       "files_processed": 8,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "JetMET",
-      "sumw": 8577737.0,
-      "sumw2": 8577737.0,
+      "sumw": 6234347.0,
+      "sumw2": 6234347.0,
       "sumw_source_counts": {
         "data_unweighted": 8
       },
       "xsec_pb": -1
     },
-    "JetMET1-Run2024G-MINIv6NANOv15-v2____21_": {
-      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____21_",
-      "files_attempted": 7,
-      "files_processed": 7,
-      "is_data": true,
-      "normalization_factor": 1.0,
-      "normalization_status": "data_unscaled",
-      "process": "JetMET",
-      "sumw": 7234141.0,
-      "sumw2": 7234141.0,
-      "sumw_source_counts": {
-        "data_unweighted": 7
-      },
-      "xsec_pb": -1
-    },
-    "JetMET1-Run2024G-MINIv6NANOv15-v2____22_": {
-      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____22_",
-      "files_attempted": 2,
-      "files_processed": 2,
-      "is_data": true,
-      "normalization_factor": 1.0,
-      "normalization_status": "data_unscaled",
-      "process": "JetMET",
-      "sumw": 1451143.0,
-      "sumw2": 1451143.0,
-      "sumw_source_counts": {
-        "data_unweighted": 2
-      },
-      "xsec_pb": -1
-    },
     "JetMET1-Run2024G-MINIv6NANOv15-v2____23_": {
       "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____23_",
-      "files_attempted": 5,
-      "files_processed": 5,
+      "files_attempted": 9,
+      "files_processed": 9,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "JetMET",
-      "sumw": 4685347.0,
-      "sumw2": 4685347.0,
+      "sumw": 8287741.0,
+      "sumw2": 8287741.0,
       "sumw_source_counts": {
-        "data_unweighted": 5
+        "data_unweighted": 9
       },
       "xsec_pb": -1
     },
     "JetMET1-Run2024G-MINIv6NANOv15-v2____24_": {
       "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____24_",
+      "files_attempted": 8,
+      "files_processed": 8,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 6689349.0,
+      "sumw2": 6689349.0,
+      "sumw_source_counts": {
+        "data_unweighted": 8
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____25_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____25_",
+      "files_attempted": 6,
+      "files_processed": 6,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 5331979.0,
+      "sumw2": 5331979.0,
+      "sumw_source_counts": {
+        "data_unweighted": 6
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____26_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____26_",
+      "files_attempted": 8,
+      "files_processed": 8,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 8169194.0,
+      "sumw2": 8169194.0,
+      "sumw_source_counts": {
+        "data_unweighted": 8
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____27_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____27_",
       "files_attempted": 3,
       "files_processed": 3,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "JetMET",
-      "sumw": 2249272.0,
-      "sumw2": 2249272.0,
+      "sumw": 3223772.0,
+      "sumw2": 3223772.0,
       "sumw_source_counts": {
         "data_unweighted": 3
       },
       "xsec_pb": -1
     },
-    "JetMET1-Run2024G-MINIv6NANOv15-v2____25_": {
-      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____25_",
-      "files_attempted": 1,
-      "files_processed": 1,
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____28_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____28_",
+      "files_attempted": 6,
+      "files_processed": 6,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "JetMET",
-      "sumw": 828279.0,
-      "sumw2": 828279.0,
+      "sumw": 6098722.0,
+      "sumw2": 6098722.0,
       "sumw_source_counts": {
-        "data_unweighted": 1
+        "data_unweighted": 6
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____29_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____29_",
+      "files_attempted": 8,
+      "files_processed": 8,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 7059516.0,
+      "sumw2": 7059516.0,
+      "sumw_source_counts": {
+        "data_unweighted": 8
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____2_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____2_",
+      "files_attempted": 10,
+      "files_processed": 10,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 7201651.0,
+      "sumw2": 7201651.0,
+      "sumw_source_counts": {
+        "data_unweighted": 10
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____30_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____30_",
+      "files_attempted": 5,
+      "files_processed": 5,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 4656403.0,
+      "sumw2": 4656403.0,
+      "sumw_source_counts": {
+        "data_unweighted": 5
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____31_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____31_",
+      "files_attempted": 2,
+      "files_processed": 2,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 1993698.0,
+      "sumw2": 1993698.0,
+      "sumw_source_counts": {
+        "data_unweighted": 2
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____32_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____32_",
+      "files_attempted": 4,
+      "files_processed": 4,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 4388870.0,
+      "sumw2": 4388870.0,
+      "sumw_source_counts": {
+        "data_unweighted": 4
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____33_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____33_",
+      "files_attempted": 2,
+      "files_processed": 2,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 2132488.0,
+      "sumw2": 2132488.0,
+      "sumw_source_counts": {
+        "data_unweighted": 2
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____34_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____34_",
+      "files_attempted": 4,
+      "files_processed": 4,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 4258648.0,
+      "sumw2": 4258648.0,
+      "sumw_source_counts": {
+        "data_unweighted": 4
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____35_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____35_",
+      "files_attempted": 5,
+      "files_processed": 5,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 4947482.0,
+      "sumw2": 4947482.0,
+      "sumw_source_counts": {
+        "data_unweighted": 5
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____36_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____36_",
+      "files_attempted": 5,
+      "files_processed": 5,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 4697896.0,
+      "sumw2": 4697896.0,
+      "sumw_source_counts": {
+        "data_unweighted": 5
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____37_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____37_",
+      "files_attempted": 7,
+      "files_processed": 7,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 7052911.0,
+      "sumw2": 7052911.0,
+      "sumw_source_counts": {
+        "data_unweighted": 7
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____38_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____38_",
+      "files_attempted": 7,
+      "files_processed": 7,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 7003913.0,
+      "sumw2": 7003913.0,
+      "sumw_source_counts": {
+        "data_unweighted": 7
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____39_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____39_",
+      "files_attempted": 4,
+      "files_processed": 4,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 3636609.0,
+      "sumw2": 3636609.0,
+      "sumw_source_counts": {
+        "data_unweighted": 4
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____3_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____3_",
+      "files_attempted": 6,
+      "files_processed": 6,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 4591610.0,
+      "sumw2": 4591610.0,
+      "sumw_source_counts": {
+        "data_unweighted": 6
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____40_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____40_",
+      "files_attempted": 4,
+      "files_processed": 4,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 2520808.0,
+      "sumw2": 2520808.0,
+      "sumw_source_counts": {
+        "data_unweighted": 4
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____41_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____41_",
+      "files_attempted": 7,
+      "files_processed": 7,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 6455374.0,
+      "sumw2": 6455374.0,
+      "sumw_source_counts": {
+        "data_unweighted": 7
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____42_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____42_",
+      "files_attempted": 5,
+      "files_processed": 5,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 4301493.0,
+      "sumw2": 4301493.0,
+      "sumw_source_counts": {
+        "data_unweighted": 5
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____43_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____43_",
+      "files_attempted": 7,
+      "files_processed": 7,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 3778600.0,
+      "sumw2": 3778600.0,
+      "sumw_source_counts": {
+        "data_unweighted": 7
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____44_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____44_",
+      "files_attempted": 7,
+      "files_processed": 7,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 2327362.0,
+      "sumw2": 2327362.0,
+      "sumw_source_counts": {
+        "data_unweighted": 7
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____45_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____45_",
+      "files_attempted": 8,
+      "files_processed": 8,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 2108703.0,
+      "sumw2": 2108703.0,
+      "sumw_source_counts": {
+        "data_unweighted": 8
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____4_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____4_",
+      "files_attempted": 7,
+      "files_processed": 7,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 2711916.0,
+      "sumw2": 2711916.0,
+      "sumw_source_counts": {
+        "data_unweighted": 7
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____5_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____5_",
+      "files_attempted": 2,
+      "files_processed": 2,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 833669.0,
+      "sumw2": 833669.0,
+      "sumw_source_counts": {
+        "data_unweighted": 2
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____6_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____6_",
+      "files_attempted": 3,
+      "files_processed": 3,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 2693561.0,
+      "sumw2": 2693561.0,
+      "sumw_source_counts": {
+        "data_unweighted": 3
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____7_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____7_",
+      "files_attempted": 3,
+      "files_processed": 3,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 2428947.0,
+      "sumw2": 2428947.0,
+      "sumw_source_counts": {
+        "data_unweighted": 3
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024G-MINIv6NANOv15-v2____8_": {
+      "dataset": "JetMET1-Run2024G-MINIv6NANOv15-v2____8_",
+      "files_attempted": 2,
+      "files_processed": 2,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 1727435.0,
+      "sumw2": 1727435.0,
+      "sumw_source_counts": {
+        "data_unweighted": 2
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024H-MINIv6NANOv15-v2____1_": {
+      "dataset": "JetMET1-Run2024H-MINIv6NANOv15-v2____1_",
+      "files_attempted": 4,
+      "files_processed": 4,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 1894603.0,
+      "sumw2": 1894603.0,
+      "sumw_source_counts": {
+        "data_unweighted": 4
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024H-MINIv6NANOv15-v2____2_": {
+      "dataset": "JetMET1-Run2024H-MINIv6NANOv15-v2____2_",
+      "files_attempted": 4,
+      "files_processed": 4,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 3032967.0,
+      "sumw2": 3032967.0,
+      "sumw_source_counts": {
+        "data_unweighted": 4
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024H-MINIv6NANOv15-v2____3_": {
+      "dataset": "JetMET1-Run2024H-MINIv6NANOv15-v2____3_",
+      "files_attempted": 4,
+      "files_processed": 4,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 3615224.0,
+      "sumw2": 3615224.0,
+      "sumw_source_counts": {
+        "data_unweighted": 4
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024H-MINIv6NANOv15-v2____4_": {
+      "dataset": "JetMET1-Run2024H-MINIv6NANOv15-v2____4_",
+      "files_attempted": 4,
+      "files_processed": 4,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 1091954.0,
+      "sumw2": 1091954.0,
+      "sumw_source_counts": {
+        "data_unweighted": 4
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024H-MINIv6NANOv15-v2____5_": {
+      "dataset": "JetMET1-Run2024H-MINIv6NANOv15-v2____5_",
+      "files_attempted": 4,
+      "files_processed": 4,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 2255936.0,
+      "sumw2": 2255936.0,
+      "sumw_source_counts": {
+        "data_unweighted": 4
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024H-MINIv6NANOv15-v2____6_": {
+      "dataset": "JetMET1-Run2024H-MINIv6NANOv15-v2____6_",
+      "files_attempted": 2,
+      "files_processed": 2,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 1138685.0,
+      "sumw2": 1138685.0,
+      "sumw_source_counts": {
+        "data_unweighted": 2
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024H-MINIv6NANOv15-v2____7_": {
+      "dataset": "JetMET1-Run2024H-MINIv6NANOv15-v2____7_",
+      "files_attempted": 2,
+      "files_processed": 2,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 1367118.0,
+      "sumw2": 1367118.0,
+      "sumw_source_counts": {
+        "data_unweighted": 2
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024H-MINIv6NANOv15-v2____8_": {
+      "dataset": "JetMET1-Run2024H-MINIv6NANOv15-v2____8_",
+      "files_attempted": 3,
+      "files_processed": 3,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 1495781.0,
+      "sumw2": 1495781.0,
+      "sumw_source_counts": {
+        "data_unweighted": 3
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024I-MINIv6NANOv15-v1____1_": {
+      "dataset": "JetMET1-Run2024I-MINIv6NANOv15-v1____1_",
+      "files_attempted": 4,
+      "files_processed": 4,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 1512994.0,
+      "sumw2": 1512994.0,
+      "sumw_source_counts": {
+        "data_unweighted": 4
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024I-MINIv6NANOv15-v1____2_": {
+      "dataset": "JetMET1-Run2024I-MINIv6NANOv15-v1____2_",
+      "files_attempted": 3,
+      "files_processed": 3,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 1320303.0,
+      "sumw2": 1320303.0,
+      "sumw_source_counts": {
+        "data_unweighted": 3
+      },
+      "xsec_pb": -1
+    },
+    "JetMET1-Run2024I-MINIv6NANOv15-v1____3_": {
+      "dataset": "JetMET1-Run2024I-MINIv6NANOv15-v1____3_",
+      "files_attempted": 2,
+      "files_processed": 2,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "JetMET",
+      "sumw": 339813.0,
+      "sumw2": 339813.0,
+      "sumw_source_counts": {
+        "data_unweighted": 2
       },
       "xsec_pb": -1
     },
@@ -69904,7 +70474,7 @@
   "luminosity_pb": 109820.0,
   "normalization_status": "partial_preview_incomplete_blocked_datasets",
   "schema_version": "partial_normalization_factors_v2",
-  "source_completed_or_checkpoint_shards": 5753,
+  "source_completed_or_checkpoint_shards": 5916,
   "status": "partial_preview",
   "warnings": [
     "This is based on a live partial recovery snapshot and will change as more .running records are recovered.",
