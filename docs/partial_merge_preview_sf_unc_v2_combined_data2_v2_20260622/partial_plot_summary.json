@@ -1,0 +1,488 @@
+{
+  "completed_or_checkpoint_shards_used": 1599,
+  "region_variable_plots": [
+    {
+      "blinded": false,
+      "name": "partial_recoil_pt_cat2_LLCR_highDeltaM",
+      "pdf": "plots/partial_recoil_pt_cat2_LLCR_highDeltaM.pdf",
+      "png": "plots/partial_recoil_pt_cat2_LLCR_highDeltaM.png",
+      "region": "cat2_LLCR_highDeltaM",
+      "signal_overlays": [],
+      "variable": "recoil_pt"
+    },
+    {
+      "blinded": false,
+      "name": "partial_metpt_cat2_LLCR_highDeltaM",
+      "pdf": "plots/partial_metpt_cat2_LLCR_highDeltaM.pdf",
+      "png": "plots/partial_metpt_cat2_LLCR_highDeltaM.png",
+      "region": "cat2_LLCR_highDeltaM",
+      "signal_overlays": [],
+      "variable": "metpt"
+    },
+    {
+      "blinded": false,
+      "name": "partial_ht_cat2_LLCR_highDeltaM",
+      "pdf": "plots/partial_ht_cat2_LLCR_highDeltaM.pdf",
+      "png": "plots/partial_ht_cat2_LLCR_highDeltaM.png",
+      "region": "cat2_LLCR_highDeltaM",
+      "signal_overlays": [],
+      "variable": "ht"
+    },
+    {
+      "blinded": false,
+      "name": "partial_njet_cat2_LLCR_highDeltaM",
+      "pdf": "plots/partial_njet_cat2_LLCR_highDeltaM.pdf",
+      "png": "plots/partial_njet_cat2_LLCR_highDeltaM.png",
+      "region": "cat2_LLCR_highDeltaM",
+      "signal_overlays": [],
+      "variable": "njet"
+    },
+    {
+      "blinded": false,
+      "name": "partial_nb_cat2_LLCR_highDeltaM",
+      "pdf": "plots/partial_nb_cat2_LLCR_highDeltaM.pdf",
+      "png": "plots/partial_nb_cat2_LLCR_highDeltaM.png",
+      "region": "cat2_LLCR_highDeltaM",
+      "signal_overlays": [],
+      "variable": "nb"
+    },
+    {
+      "blinded": false,
+      "name": "partial_nfj_cat2_LLCR_highDeltaM",
+      "pdf": "plots/partial_nfj_cat2_LLCR_highDeltaM.pdf",
+      "png": "plots/partial_nfj_cat2_LLCR_highDeltaM.png",
+      "region": "cat2_LLCR_highDeltaM",
+      "signal_overlays": [],
+      "variable": "nfj"
+    },
+    {
+      "blinded": false,
+      "name": "partial_min_dphi_cat2_LLCR_highDeltaM",
+      "pdf": "plots/partial_min_dphi_cat2_LLCR_highDeltaM.pdf",
+      "png": "plots/partial_min_dphi_cat2_LLCR_highDeltaM.png",
+      "region": "cat2_LLCR_highDeltaM",
+      "signal_overlays": [],
+      "variable": "min_dphi"
+    },
+    {
+      "blinded": false,
+      "name": "partial_recoil_pt_cat3_QCDCR_highDeltaM",
+      "pdf": "plots/partial_recoil_pt_cat3_QCDCR_highDeltaM.pdf",
+      "png": "plots/partial_recoil_pt_cat3_QCDCR_highDeltaM.png",
+      "region": "cat3_QCDCR_highDeltaM",
+      "signal_overlays": [],
+      "variable": "recoil_pt"
+    },
+    {
+      "blinded": false,
+      "name": "partial_metpt_cat3_QCDCR_highDeltaM",
+      "pdf": "plots/partial_metpt_cat3_QCDCR_highDeltaM.pdf",
+      "png": "plots/partial_metpt_cat3_QCDCR_highDeltaM.png",
+      "region": "cat3_QCDCR_highDeltaM",
+      "signal_overlays": [],
+      "variable": "metpt"
+    },
+    {
+      "blinded": false,
+      "name": "partial_ht_cat3_QCDCR_highDeltaM",
+      "pdf": "plots/partial_ht_cat3_QCDCR_highDeltaM.pdf",
+      "png": "plots/partial_ht_cat3_QCDCR_highDeltaM.png",
+      "region": "cat3_QCDCR_highDeltaM",
+      "signal_overlays": [],
+      "variable": "ht"
+    },
+    {
+      "blinded": false,
+      "name": "partial_njet_cat3_QCDCR_highDeltaM",
+      "pdf": "plots/partial_njet_cat3_QCDCR_highDeltaM.pdf",
+      "png": "plots/partial_njet_cat3_QCDCR_highDeltaM.png",
+      "region": "cat3_QCDCR_highDeltaM",
+      "signal_overlays": [],
+      "variable": "njet"
+    },
+    {
+      "blinded": false,
+      "name": "partial_nb_cat3_QCDCR_highDeltaM",
+      "pdf": "plots/partial_nb_cat3_QCDCR_highDeltaM.pdf",
+      "png": "plots/partial_nb_cat3_QCDCR_highDeltaM.png",
+      "region": "cat3_QCDCR_highDeltaM",
+      "signal_overlays": [],
+      "variable": "nb"
+    },
+    {
+      "blinded": false,
+      "name": "partial_nfj_cat3_QCDCR_highDeltaM",
+      "pdf": "plots/partial_nfj_cat3_QCDCR_highDeltaM.pdf",
+      "png": "plots/partial_nfj_cat3_QCDCR_highDeltaM.png",
+      "region": "cat3_QCDCR_highDeltaM",
+      "signal_overlays": [],
+      "variable": "nfj"
+    },
+    {
+      "blinded": false,
+      "name": "partial_min_dphi_cat3_QCDCR_highDeltaM",
+      "pdf": "plots/partial_min_dphi_cat3_QCDCR_highDeltaM.pdf",
+      "png": "plots/partial_min_dphi_cat3_QCDCR_highDeltaM.png",
+      "region": "cat3_QCDCR_highDeltaM",
+      "signal_overlays": [],
+      "variable": "min_dphi"
+    },
+    {
+      "blinded": false,
+      "name": "partial_recoil_pt_cat4_GCR_highDeltaM",
+      "pdf": "plots/partial_recoil_pt_cat4_GCR_highDeltaM.pdf",
+      "png": "plots/partial_recoil_pt_cat4_GCR_highDeltaM.png",
+      "region": "cat4_GCR_highDeltaM",
+      "signal_overlays": [],
+      "variable": "recoil_pt"
+    },
+    {
+      "blinded": false,
+      "name": "partial_metpt_cat4_GCR_highDeltaM",
+      "pdf": "plots/partial_metpt_cat4_GCR_highDeltaM.pdf",
+      "png": "plots/partial_metpt_cat4_GCR_highDeltaM.png",
+      "region": "cat4_GCR_highDeltaM",
+      "signal_overlays": [],
+      "variable": "metpt"
+    },
+    {
+      "blinded": false,
+      "name": "partial_ht_cat4_GCR_highDeltaM",
+      "pdf": "plots/partial_ht_cat4_GCR_highDeltaM.pdf",
+      "png": "plots/partial_ht_cat4_GCR_highDeltaM.png",
+      "region": "cat4_GCR_highDeltaM",
+      "signal_overlays": [],
+      "variable": "ht"
+    },
+    {
+      "blinded": false,
+      "name": "partial_njet_cat4_GCR_highDeltaM",
+      "pdf": "plots/partial_njet_cat4_GCR_highDeltaM.pdf",
+      "png": "plots/partial_njet_cat4_GCR_highDeltaM.png",
+      "region": "cat4_GCR_highDeltaM",
+      "signal_overlays": [],
+      "variable": "njet"
+    },
+    {
+      "blinded": false,
+      "name": "partial_nb_cat4_GCR_highDeltaM",
+      "pdf": "plots/partial_nb_cat4_GCR_highDeltaM.pdf",
+      "png": "plots/partial_nb_cat4_GCR_highDeltaM.png",
+      "region": "cat4_GCR_highDeltaM",
+      "signal_overlays": [],
+      "variable": "nb"
+    },
+    {
+      "blinded": false,
+      "name": "partial_nfj_cat4_GCR_highDeltaM",
+      "pdf": "plots/partial_nfj_cat4_GCR_highDeltaM.pdf",
+      "png": "plots/partial_nfj_cat4_GCR_highDeltaM.png",
+      "region": "cat4_GCR_highDeltaM",
+      "signal_overlays": [],
+      "variable": "nfj"
+    },
+    {
+      "blinded": false,
+      "name": "partial_min_dphi_cat4_GCR_highDeltaM",
+      "pdf": "plots/partial_min_dphi_cat4_GCR_highDeltaM.pdf",
+      "png": "plots/partial_min_dphi_cat4_GCR_highDeltaM.png",
+      "region": "cat4_GCR_highDeltaM",
+      "signal_overlays": [],
+      "variable": "min_dphi"
+    },
+    {
+      "blinded": false,
+      "name": "partial_recoil_pt_cat5_DY2E_highDeltaM",
+      "pdf": "plots/partial_recoil_pt_cat5_DY2E_highDeltaM.pdf",
+      "png": "plots/partial_recoil_pt_cat5_DY2E_highDeltaM.png",
+      "region": "cat5_DY2E_highDeltaM",
+      "signal_overlays": [],
+      "variable": "recoil_pt"
+    },
+    {
+      "blinded": false,
+      "name": "partial_metpt_cat5_DY2E_highDeltaM",
+      "pdf": "plots/partial_metpt_cat5_DY2E_highDeltaM.pdf",
+      "png": "plots/partial_metpt_cat5_DY2E_highDeltaM.png",
+      "region": "cat5_DY2E_highDeltaM",
+      "signal_overlays": [],
+      "variable": "metpt"
+    },
+    {
+      "blinded": false,
+      "name": "partial_ht_cat5_DY2E_highDeltaM",
+      "pdf": "plots/partial_ht_cat5_DY2E_highDeltaM.pdf",
+      "png": "plots/partial_ht_cat5_DY2E_highDeltaM.png",
+      "region": "cat5_DY2E_highDeltaM",
+      "signal_overlays": [],
+      "variable": "ht"
+    },
+    {
+      "blinded": false,
+      "name": "partial_njet_cat5_DY2E_highDeltaM",
+      "pdf": "plots/partial_njet_cat5_DY2E_highDeltaM.pdf",
+      "png": "plots/partial_njet_cat5_DY2E_highDeltaM.png",
+      "region": "cat5_DY2E_highDeltaM",
+      "signal_overlays": [],
+      "variable": "njet"
+    },
+    {
+      "blinded": false,
+      "name": "partial_nb_cat5_DY2E_highDeltaM",
+      "pdf": "plots/partial_nb_cat5_DY2E_highDeltaM.pdf",
+      "png": "plots/partial_nb_cat5_DY2E_highDeltaM.png",
+      "region": "cat5_DY2E_highDeltaM",
+      "signal_overlays": [],
+      "variable": "nb"
+    },
+    {
+      "blinded": false,
+      "name": "partial_nfj_cat5_DY2E_highDeltaM",
+      "pdf": "plots/partial_nfj_cat5_DY2E_highDeltaM.pdf",
+      "png": "plots/partial_nfj_cat5_DY2E_highDeltaM.png",
+      "region": "cat5_DY2E_highDeltaM",
+      "signal_overlays": [],
+      "variable": "nfj"
+    },
+    {
+      "blinded": false,
+      "name": "partial_min_dphi_cat5_DY2E_highDeltaM",
+      "pdf": "plots/partial_min_dphi_cat5_DY2E_highDeltaM.pdf",
+      "png": "plots/partial_min_dphi_cat5_DY2E_highDeltaM.png",
+      "region": "cat5_DY2E_highDeltaM",
+      "signal_overlays": [],
+      "variable": "min_dphi"
+    },
+    {
+      "blinded": false,
+      "name": "partial_recoil_pt_cat6_DY2M_highDeltaM",
+      "pdf": "plots/partial_recoil_pt_cat6_DY2M_highDeltaM.pdf",
+      "png": "plots/partial_recoil_pt_cat6_DY2M_highDeltaM.png",
+      "region": "cat6_DY2M_highDeltaM",
+      "signal_overlays": [],
+      "variable": "recoil_pt"
+    },
+    {
+      "blinded": false,
+      "name": "partial_metpt_cat6_DY2M_highDeltaM",
+      "pdf": "plots/partial_metpt_cat6_DY2M_highDeltaM.pdf",
+      "png": "plots/partial_metpt_cat6_DY2M_highDeltaM.png",
+      "region": "cat6_DY2M_highDeltaM",
+      "signal_overlays": [],
+      "variable": "metpt"
+    },
+    {
+      "blinded": false,
+      "name": "partial_ht_cat6_DY2M_highDeltaM",
+      "pdf": "plots/partial_ht_cat6_DY2M_highDeltaM.pdf",
+      "png": "plots/partial_ht_cat6_DY2M_highDeltaM.png",
+      "region": "cat6_DY2M_highDeltaM",
+      "signal_overlays": [],
+      "variable": "ht"
+    },
+    {
+      "blinded": false,
+      "name": "partial_njet_cat6_DY2M_highDeltaM",
+      "pdf": "plots/partial_njet_cat6_DY2M_highDeltaM.pdf",
+      "png": "plots/partial_njet_cat6_DY2M_highDeltaM.png",
+      "region": "cat6_DY2M_highDeltaM",
+      "signal_overlays": [],
+      "variable": "njet"
+    },
+    {
+      "blinded": false,
+      "name": "partial_nb_cat6_DY2M_highDeltaM",
+      "pdf": "plots/partial_nb_cat6_DY2M_highDeltaM.pdf",
+      "png": "plots/partial_nb_cat6_DY2M_highDeltaM.png",
+      "region": "cat6_DY2M_highDeltaM",
+      "signal_overlays": [],
+      "variable": "nb"
+    },
+    {
+      "blinded": false,
+      "name": "partial_nfj_cat6_DY2M_highDeltaM",
+      "pdf": "plots/partial_nfj_cat6_DY2M_highDeltaM.pdf",
+      "png": "plots/partial_nfj_cat6_DY2M_highDeltaM.png",
+      "region": "cat6_DY2M_highDeltaM",
+      "signal_overlays": [],
+      "variable": "nfj"
+    },
+    {
+      "blinded": false,
+      "name": "partial_min_dphi_cat6_DY2M_highDeltaM",
+      "pdf": "plots/partial_min_dphi_cat6_DY2M_highDeltaM.pdf",
+      "png": "plots/partial_min_dphi_cat6_DY2M_highDeltaM.png",
+      "region": "cat6_DY2M_highDeltaM",
+      "signal_overlays": [],
+      "variable": "min_dphi"
+    },
+    {
+      "blinded": true,
+      "name": "partial_recoil_pt_cat7_SR_highDeltaM",
+      "pdf": "plots/partial_recoil_pt_cat7_SR_highDeltaM.pdf",
+      "png": "plots/partial_recoil_pt_cat7_SR_highDeltaM.png",
+      "region": "cat7_SR_highDeltaM",
+      "signal_overlays": [],
+      "variable": "recoil_pt"
+    },
+    {
+      "blinded": true,
+      "name": "partial_metpt_cat7_SR_highDeltaM",
+      "pdf": "plots/partial_metpt_cat7_SR_highDeltaM.pdf",
+      "png": "plots/partial_metpt_cat7_SR_highDeltaM.png",
+      "region": "cat7_SR_highDeltaM",
+      "signal_overlays": [
+        {
+          "key": "mStop1000_mLSP1",
+          "label": "T2tt mStop1000 mLSP1",
+          "normalization_factor": 0.008107856761349841,
+          "source_variable": "met",
+          "yield": 280.62103036707936
+        },
+        {
+          "key": "mStop1200_mLSP1",
+          "label": "T2tt mStop1200 mLSP1",
+          "normalization_factor": 0.005591256195155442,
+          "source_variable": "met",
+          "yield": 74.29102106503036
+        }
+      ],
+      "variable": "metpt"
+    },
+    {
+      "blinded": true,
+      "name": "partial_ht_cat7_SR_highDeltaM",
+      "pdf": "plots/partial_ht_cat7_SR_highDeltaM.pdf",
+      "png": "plots/partial_ht_cat7_SR_highDeltaM.png",
+      "region": "cat7_SR_highDeltaM",
+      "signal_overlays": [
+        {
+          "key": "mStop1000_mLSP1",
+          "label": "T2tt mStop1000 mLSP1",
+          "normalization_factor": 0.008107856761349841,
+          "source_variable": "ht",
+          "yield": 280.6048146535566
+        },
+        {
+          "key": "mStop1200_mLSP1",
+          "label": "T2tt mStop1200 mLSP1",
+          "normalization_factor": 0.005591256195155442,
+          "source_variable": "ht",
+          "yield": 74.29102106503036
+        }
+      ],
+      "variable": "ht"
+    },
+    {
+      "blinded": true,
+      "name": "partial_njet_cat7_SR_highDeltaM",
+      "pdf": "plots/partial_njet_cat7_SR_highDeltaM.pdf",
+      "png": "plots/partial_njet_cat7_SR_highDeltaM.png",
+      "region": "cat7_SR_highDeltaM",
+      "signal_overlays": [
+        {
+          "key": "mStop1000_mLSP1",
+          "label": "T2tt mStop1000 mLSP1",
+          "normalization_factor": 0.008107856761349841,
+          "source_variable": "njet",
+          "yield": 280.612922510318
+        },
+        {
+          "key": "mStop1200_mLSP1",
+          "label": "T2tt mStop1200 mLSP1",
+          "normalization_factor": 0.005591256195155442,
+          "source_variable": "njet",
+          "yield": 74.29102106503036
+        }
+      ],
+      "variable": "njet"
+    },
+    {
+      "blinded": true,
+      "name": "partial_nb_cat7_SR_highDeltaM",
+      "pdf": "plots/partial_nb_cat7_SR_highDeltaM.pdf",
+      "png": "plots/partial_nb_cat7_SR_highDeltaM.png",
+      "region": "cat7_SR_highDeltaM",
+      "signal_overlays": [
+        {
+          "key": "mStop1000_mLSP1",
+          "label": "T2tt mStop1000 mLSP1",
+          "normalization_factor": 0.008107856761349841,
+          "source_variable": "nb_medium",
+          "yield": 280.6210303670793
+        },
+        {
+          "key": "mStop1200_mLSP1",
+          "label": "T2tt mStop1200 mLSP1",
+          "normalization_factor": 0.005591256195155442,
+          "source_variable": "nb_medium",
+          "yield": 74.29102106503036
+        }
+      ],
+      "variable": "nb"
+    },
+    {
+      "blinded": true,
+      "name": "partial_nfj_cat7_SR_highDeltaM",
+      "pdf": "plots/partial_nfj_cat7_SR_highDeltaM.pdf",
+      "png": "plots/partial_nfj_cat7_SR_highDeltaM.png",
+      "region": "cat7_SR_highDeltaM",
+      "signal_overlays": [],
+      "variable": "nfj"
+    },
+    {
+      "blinded": true,
+      "name": "partial_min_dphi_cat7_SR_highDeltaM",
+      "pdf": "plots/partial_min_dphi_cat7_SR_highDeltaM.pdf",
+      "png": "plots/partial_min_dphi_cat7_SR_highDeltaM.png",
+      "region": "cat7_SR_highDeltaM",
+      "signal_overlays": [
+        {
+          "key": "mStop1000_mLSP1",
+          "label": "T2tt mStop1000 mLSP1",
+          "normalization_factor": 0.008107856761349841,
+          "source_variable": "min_dphi4",
+          "yield": 280.62103036707936
+        },
+        {
+          "key": "mStop1200_mLSP1",
+          "label": "T2tt mStop1200 mLSP1",
+          "normalization_factor": 0.005591256195155442,
+          "source_variable": "min_dphi4",
+          "yield": 74.29102106503036
+        }
+      ],
+      "variable": "min_dphi"
+    },
+    {
+      "blinded_regions": [
+        "cat7_SR_highDeltaM"
+      ],
+      "name": "partial_cr_sr_region_bins",
+      "pdf": "plots/partial_cr_sr_region_bins.pdf",
+      "png": "plots/partial_cr_sr_region_bins.png",
+      "signal_overlays": []
+    }
+  ],
+  "regions": [
+    "cat2_LLCR_highDeltaM",
+    "cat3_QCDCR_highDeltaM",
+    "cat4_GCR_highDeltaM",
+    "cat5_DY2E_highDeltaM",
+    "cat6_DY2M_highDeltaM",
+    "cat7_SR_highDeltaM"
+  ],
+  "search_bin_note": "cat7 SR data are blinded. Signal overlays are included only for cat7/SR plots for mStop1000/mLSP1 and mStop1200/mLSP1 where matching signal_cutflows histograms exist.",
+  "source": "autonomous_allhad/workflow/partial_merge_preview_sf_unc_v2_combined_data2_v2_20260622/partial_normalized_yields.json",
+  "status": "partial_preview_cms_style",
+  "timestamp_utc": "2026-06-22T09:58:24Z",
+  "variables": [
+    "recoil_pt",
+    "metpt",
+    "ht",
+    "njet",
+    "nb",
+    "nfj",
+    "min_dphi"
+  ]
+}
