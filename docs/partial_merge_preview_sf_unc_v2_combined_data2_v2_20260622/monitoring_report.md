@@ -1,11 +1,11 @@
 # Monitoring report: sf_unc_v2_combined_data2_v2_20260622
 
-Timestamp UTC: `2026-06-22T20:37:08Z`
+Timestamp UTC: `2026-06-22T20:51:58Z`
 Web URL: https://resisov.github.io/run3_stop/partial_merge_preview_sf_unc_v2_combined_data2_v2_20260622/
 
 ## Condor
 Cluster: `892908`
-Status counts: `{'idle': 2496, 'running': 92}`
+Status counts: `{'idle': 2430, 'running': 110}`
 Unexpected clusters: `{}`
 
 ## Merge policy
@@ -14,11 +14,11 @@ DATA uses only sf_unc_v2_data2_20260622 outputs; old DATA payloads are excluded.
 
 ## Output counts
 Old MC final payloads: `1412`
-DATA2 final/running: `4201` / `61`
-Combined final/running/shards: `5568` / `3564` / `5815`
+DATA2 final/running: `4248` / `110`
+Combined final/running/shards: `5629` / `3603` / `5858`
 
 ## Partial preview
 Status: `partial_preview_complete`
-Files processed: `43427`
+Files processed: `43517`
 Bad files: `866`
-Source payloads: `5724`
+Source payloads: `5753`
