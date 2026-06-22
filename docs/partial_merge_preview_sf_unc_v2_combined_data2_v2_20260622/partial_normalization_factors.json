@@ -1,5 +1,5 @@
 {
-  "expected_shards": 1773,
+  "expected_shards": 1774,
   "factors": {
     "DYto2L-2Jets_Bin-MLL-50-PTLL-100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____100_": {
       "dataset": "DYto2L-2Jets_Bin-MLL-50-PTLL-100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____100_",
@@ -4263,16 +4263,16 @@
     },
     "EGamma0-Run2024E-MINIv6NANOv15-v1____14_": {
       "dataset": "EGamma0-Run2024E-MINIv6NANOv15-v1____14_",
-      "files_attempted": 9,
-      "files_processed": 9,
+      "files_attempted": 10,
+      "files_processed": 10,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "EGamma",
-      "sumw": 11193518.0,
-      "sumw2": 11193518.0,
+      "sumw": 12413048.0,
+      "sumw2": 12413048.0,
       "sumw_source_counts": {
-        "data_unweighted": 9
+        "data_unweighted": 10
       },
       "xsec_pb": -1
     },
@@ -4308,16 +4308,16 @@
     },
     "EGamma0-Run2024E-MINIv6NANOv15-v1____17_": {
       "dataset": "EGamma0-Run2024E-MINIv6NANOv15-v1____17_",
-      "files_attempted": 2,
-      "files_processed": 2,
+      "files_attempted": 3,
+      "files_processed": 3,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "EGamma",
-      "sumw": 44425.0,
-      "sumw2": 44425.0,
+      "sumw": 667302.0,
+      "sumw2": 667302.0,
       "sumw_source_counts": {
-        "data_unweighted": 2
+        "data_unweighted": 3
       },
       "xsec_pb": -1
     },
@@ -57516,7 +57516,7 @@
   "luminosity_pb": 109820.0,
   "normalization_status": "partial_preview_incomplete_blocked_datasets",
   "schema_version": "partial_normalization_factors_v2",
-  "source_completed_or_checkpoint_shards": 1773,
+  "source_completed_or_checkpoint_shards": 1774,
   "status": "partial_preview",
   "warnings": [
     "This is based on a live partial recovery snapshot and will change as more .running records are recovered.",
