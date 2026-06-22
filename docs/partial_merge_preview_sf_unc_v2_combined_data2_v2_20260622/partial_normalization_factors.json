@@ -10803,31 +10803,46 @@
     },
     "EGamma1-Run2024G-MINIv6NANOv15-v2____47_": {
       "dataset": "EGamma1-Run2024G-MINIv6NANOv15-v2____47_",
-      "files_attempted": 8,
-      "files_processed": 6,
+      "files_attempted": 10,
+      "files_processed": 8,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "EGamma",
-      "sumw": 7138981.0,
-      "sumw2": 7138981.0,
+      "sumw": 9208633.0,
+      "sumw2": 9208633.0,
       "sumw_source_counts": {
-        "data_unweighted": 6
+        "data_unweighted": 8
       },
       "xsec_pb": -1
     },
     "EGamma1-Run2024G-MINIv6NANOv15-v2____48_": {
       "dataset": "EGamma1-Run2024G-MINIv6NANOv15-v2____48_",
-      "files_attempted": 4,
-      "files_processed": 4,
+      "files_attempted": 9,
+      "files_processed": 9,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "EGamma",
-      "sumw": 4867158.0,
-      "sumw2": 4867158.0,
+      "sumw": 10187171.0,
+      "sumw2": 10187171.0,
       "sumw_source_counts": {
-        "data_unweighted": 4
+        "data_unweighted": 9
+      },
+      "xsec_pb": -1
+    },
+    "EGamma1-Run2024G-MINIv6NANOv15-v2____49_": {
+      "dataset": "EGamma1-Run2024G-MINIv6NANOv15-v2____49_",
+      "files_attempted": 4,
+      "files_processed": 3,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "EGamma",
+      "sumw": 3566847.0,
+      "sumw2": 3566847.0,
+      "sumw_source_counts": {
+        "data_unweighted": 3
       },
       "xsec_pb": -1
     },
@@ -64026,7 +64041,7 @@
   "luminosity_pb": 109820.0,
   "normalization_status": "partial_preview_incomplete_blocked_datasets",
   "schema_version": "partial_normalization_factors_v2",
-  "source_completed_or_checkpoint_shards": 3870,
+  "source_completed_or_checkpoint_shards": 3874,
   "status": "partial_preview",
   "warnings": [
     "This is based on a live partial recovery snapshot and will change as more .running records are recovered.",
