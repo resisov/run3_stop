@@ -103,6 +103,19 @@ def process_to_group(process: str, dataset: str = "") -> str:
     return "others"
 
 
+def canonical_process(process: str, dataset: str = "") -> str:
+    group = process_to_group(process, dataset)
+    return {
+        "VV": "VV",
+        "Single Top": "ST",
+        "ttbar": "TT",
+        "DY": "DY",
+        "Gamma + Jets": "GJ",
+        "W -> lv": "WtoLNu",
+        "Z -> vv": "Zto2Nu",
+        "QCD Multijet": "QCD",
+    }.get(group, process or "other")
+
 def empty_counter() -> dict[str, Any]:
     return {"unweighted": 0, "raw_weighted": 0.0, "raw_sumw2": 0.0}
 
@@ -158,10 +171,7 @@ def usable_running_payload(payload: dict[str, Any]) -> bool:
     return processed > 0 and bool(payload.get("datasets"))
 
 
-def select_sources(repo: Path) -> tuple[list[dict[str, Any]], dict[str, Any]]:
-    workflow = repo / "autonomous_allhad/workflow"
-    shard_dir = workflow / "production_shards_eos_full"
-    output_dir = workflow / "production_outputs_eos_full"
+def select_sources(repo: Path, shard_dir: Path, output_dir: Path) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     sources: list[dict[str, Any]] = []
     status = Counter()
     examples: dict[str, list[str]] = {"running_used": [], "final_used": [], "missing_or_empty": []}
@@ -236,9 +246,10 @@ def merge_background_payloads(repo: Path, sources: list[dict[str, Any]]) -> dict
         for ds, rec in (payload.get("datasets") or {}).items():
             if rec.get("process") == "SMS":
                 continue
+            process = canonical_process(rec.get("process") or "other", ds)
             target = datasets.setdefault(ds, {
                 "dataset": ds,
-                "process": rec.get("process"),
+                "process": process,
                 "xsec_pb": rec.get("xsec_pb"),
                 "is_data": rec.get("is_data"),
                 "is_background": rec.get("is_background"),
@@ -697,14 +708,15 @@ def copy_preview_to_docs(preview_dir: Path, docs_dir: Path) -> None:
 def write_preview_index(docs_dir: Path, plot_records: list[dict[str, Any]], payload: dict[str, Any]) -> None:
     cards = []
     cache = str(payload.get("created_at", utc_now())).replace(":", "").replace("-", "")
+    title = str(payload.get("preview_label") or "Partial Merge Preview")
     for rec in plot_records:
         rel = "plots/" + Path(rec["png"]).name
         rel_v = f"{rel}?v={cache}"
         cards.append(f"<a class='plot' href='{rel_v}'><img src='{rel_v}' loading='lazy'><span>{Path(rec['png']).stem}</span></a>")
     html = f"""<!doctype html>
-<html><head><meta charset='utf-8'><title>Partial Merge Preview 878535</title>
+<html><head><meta charset='utf-8'><title>{title}</title>
 <style>body{{font-family:system-ui,-apple-system,Segoe UI,sans-serif;margin:24px;background:#f6f7f9;color:#111}}.grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(520px,1fr));gap:16px}}.plot{{display:block;background:white;border:1px solid #ddd;padding:10px;color:#123;text-decoration:none}}img{{width:100%;max-width:100%;display:block}}code{{background:#eee;padding:2px 4px}}</style></head>
-<body><h1>Partial Merge Preview 878535</h1>
+<body><h1>{title}</h1>
 <p>Snapshot: <code>{payload['created_at']}</code>. Sources: <code>{len(payload['source_shards'])}</code> shard payloads; files processed <code>{payload['files_processed']}</code>; bad entries <code>{payload['bad_files']}</code>.</p>
 <p>This preview includes valid final shard JSONs plus terminal <code>.json.running</code> checkpoints at snapshot time. It is not a final production result.</p>
 <p><a href='partial_normalized_yields.json'>partial_normalized_yields.json</a> · <a href='partial_normalization_factors.json'>partial_normalization_factors.json</a> · <a href='fastsim_signal_partial_summary.json'>FastSim signal summary</a> · <a href='signal_overlay_summary.json'>signal overlay summary</a> · <a href='partial_yield_summary.md'>summary</a></p>
@@ -718,11 +730,17 @@ def main() -> int:
     parser.add_argument("--repo", default="/eos/user/t/taiwoo/run3_stop/decaf")
     parser.add_argument("--preview-dir", default="autonomous_allhad/workflow/partial_merge_preview_878535")
     parser.add_argument("--docs-dir", default="docs/partial_merge_preview_878535")
+    parser.add_argument("--output-dir", default="autonomous_allhad/workflow/production_outputs_eos_full")
+    parser.add_argument("--shard-dir", default="autonomous_allhad/workflow/production_shards_eos_full")
+    parser.add_argument("--label", default="Partial Merge Preview 878535")
+    parser.add_argument("--source-cluster-id", default="878535")
     args = parser.parse_args()
     repo = Path(args.repo).resolve()
     preview_dir = (repo / args.preview_dir).resolve()
     docs_dir = (repo / args.docs_dir).resolve()
-    sources, shard_status = select_sources(repo)
+    output_dir = (repo / args.output_dir).resolve()
+    shard_dir = (repo / args.shard_dir).resolve()
+    sources, shard_status = select_sources(repo, shard_dir, output_dir)
     merged = merge_background_payloads(repo, sources)
     signal = merge_signal_shards(repo)
     signal_overlays = load_signal_overlay_inputs(repo)
@@ -738,9 +756,11 @@ def main() -> int:
         "status": "partial_preview",
         "scope": "PRELIMINARY partial merge over valid final shard JSONs plus terminal .json.running checkpoints at snapshot time; not a final production output.",
         "created_at": utc_now(),
-        "source_cluster_id": "878535",
-        "source_output_directory": "autonomous_allhad/workflow/production_outputs_eos_full",
-        "preview_directory": "autonomous_allhad/workflow/partial_merge_preview_878535",
+        "preview_label": args.label,
+        "source_cluster_id": args.source_cluster_id,
+        "source_output_directory": str(output_dir.relative_to(repo)),
+        "preview_directory": str(preview_dir.relative_to(repo)),
+        "shard_directory": str(shard_dir.relative_to(repo)),
         "luminosity_fb": LUMI_FB,
         "luminosity_pb": LUMI_PB,
         "formula": "DATA factor=1.0; MC normalization_factor = xsec_pb * lumi_pb / sumw retained from selected final/running checkpoint payloads only.",
@@ -786,10 +806,10 @@ def main() -> int:
             if rec:
                 plot_records.append(rec)
     plot_records.append(plot_region_summary(payload, preview_dir / "plots" / "partial_cr_sr_region_bins"))
-    plot_summary = {"status": "partial_preview_cms_style", "timestamp_utc": payload["created_at"], "source": "autonomous_allhad/workflow/partial_merge_preview_878535/partial_normalized_yields.json", "completed_or_checkpoint_shards_used": len(sources), "variables": PLOT_VARIABLES, "regions": REGION_ORDER, "region_variable_plots": plot_records, "search_bin_note": "cat7 SR data are blinded. Signal overlays are included only for cat7/SR plots for mStop1000/mLSP1 and mStop1200/mLSP1 where matching signal_cutflows histograms exist."}
+    plot_summary = {"status": "partial_preview_cms_style", "timestamp_utc": payload["created_at"], "source": f"{payload['preview_directory']}/partial_normalized_yields.json", "completed_or_checkpoint_shards_used": len(sources), "variables": PLOT_VARIABLES, "regions": REGION_ORDER, "region_variable_plots": plot_records, "search_bin_note": "cat7 SR data are blinded. Signal overlays are included only for cat7/SR plots for mStop1000/mLSP1 and mStop1200/mLSP1 where matching signal_cutflows histograms exist."}
     write_json(preview_dir / "partial_plot_summary.json", plot_summary)
     summary_lines = [
-        "# Partial Merge Preview 878535",
+        f"# {args.label}",
         "",
         f"Timestamp UTC: `{payload['created_at']}`",
         "",
@@ -811,7 +831,7 @@ def main() -> int:
         summary_lines.append(f"| {region} | {vals['data']:.6g} | {vals['background']:.6g} |")
     (preview_dir / "partial_yield_summary.md").write_text("\n".join(summary_lines) + "\n")
     (preview_dir / "partial_plot_summary.md").write_text("\n".join(["# Partial Plot Summary", "", f"Plots: `{len(plot_records)}`", f"Source payloads used: `{len(sources)}`", "", "cat7 SR data are blinded. Signal overlays are included only in cat7/SR plots for mStop1000/mLSP1 and mStop1200/mLSP1 where available."]) + "\n")
-    write_json(preview_dir / "partial_preview_manifest.json", {"status": "partial_preview_complete", "created_at": payload["created_at"], "preview_directory": "autonomous_allhad/workflow/partial_merge_preview_878535", "plot_status": plot_summary["status"], "shard_status": payload["shard_status"], "artifacts": ["partial_normalized_yields.json", "partial_normalization_factors.json", "fastsim_signal_partial_summary.json", "partial_plot_summary.json", "partial_yield_summary.md"]})
+    write_json(preview_dir / "partial_preview_manifest.json", {"status": "partial_preview_complete", "created_at": payload["created_at"], "preview_directory": payload["preview_directory"], "plot_status": plot_summary["status"], "shard_status": payload["shard_status"], "artifacts": ["partial_normalized_yields.json", "partial_normalization_factors.json", "fastsim_signal_partial_summary.json", "partial_plot_summary.json", "partial_yield_summary.md"]})
     copy_preview_to_docs(preview_dir, docs_dir)
     write_preview_index(docs_dir, plot_records, payload)
     print(json.dumps({"status": "partial_preview_complete", "source_payloads": len(sources), "final_payloads": payload["shard_status"]["final_payloads_used"], "running_payloads": payload["shard_status"]["running_payloads_used"], "files_processed": payload["files_processed"], "bad_files": payload["bad_files"], "fastsim_processed": signal["files_processed"], "plots": len(plot_records)}, sort_keys=True))
