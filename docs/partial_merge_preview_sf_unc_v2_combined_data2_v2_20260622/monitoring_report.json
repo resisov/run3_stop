@@ -1,10 +1,10 @@
 {
-  "combined_final_outputs": 8071,
+  "combined_final_outputs": 8161,
   "combined_running_outputs": 4948,
   "combined_shards": 8355,
   "combined_view_counts": {
-    "combined_final_outputs": 8071,
-    "combined_running_outputs": 284,
+    "combined_final_outputs": 8161,
+    "combined_running_outputs": 194,
     "combined_shards": 8355,
     "data2_output_shards_seen": 6788,
     "data2_shards_linked": 6788,
@@ -17,19 +17,19 @@
   "condor_cluster": "892908",
   "condor_error": "",
   "condor_status_counts": {
-    "running": 60
+    "running": 8
   },
-  "data2_final": 6728,
-  "data2_running": 60,
+  "data2_final": 6780,
+  "data2_running": 8,
   "data_policy": "DATA uses only sf_unc_v2_data2_20260622 outputs; old DATA payloads are excluded.",
-  "last_git_commit": "f48fe3d",
+  "last_git_commit": "6a14421",
   "mc_policy": "MC uses existing sf_unc_v2_20260621 outputs.",
   "old_mc_source_final": 1412,
-  "partial_bad_files": 1308,
-  "partial_files_processed": 47795,
+  "partial_bad_files": 1328,
+  "partial_files_processed": 47911,
   "partial_preview_status": "partial_preview_complete",
-  "partial_source_payloads": 8130,
-  "timestamp_utc": "2026-06-23T00:15:32Z",
+  "partial_source_payloads": 8177,
+  "timestamp_utc": "2026-06-23T00:32:57Z",
   "unexpected_clusters": {},
   "web_url": "https://resisov.github.io/run3_stop/partial_merge_preview_sf_unc_v2_combined_data2_v2_20260622/"
 }
