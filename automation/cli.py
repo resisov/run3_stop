@@ -16,6 +16,9 @@ from .config import AnalysisConfig, ConfigError, load_config
 from .paths import ResolvedPaths, load_dataset_list, resolve_dataset_names, resolve_paths
 from .validation import has_errors, print_validation, validate_condor_inputs, validate_config
 
+LUMI_UNCERTAINTY_NAME = "Lumi_2024"
+LUMI_UNCERTAINTY_LNN = 1.016
+
 SMALL_TEST_EXAMPLE = """
 Safe small-test dry-run example:
   python -m automation.cli run \
@@ -933,6 +936,7 @@ def build_minimal_datacard(config: AnalysisConfig, template_root: Path, signal: 
     lines.append("process " + " ".join(idx_cols))
     lines.append("rate " + " ".join(rate_cols))
     lines.append("------------")
+    lines.append(f"{LUMI_UNCERTAINTY_NAME} lnN " + " ".join([f"{LUMI_UNCERTAINTY_LNN:.3f}"] * len(bin_cols)))
     lines.append("* autoMCStats 10")
     return "\n".join(lines) + "\n"
 

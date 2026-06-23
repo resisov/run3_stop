@@ -1,5 +1,6 @@
 {
   "available_systematics_for_plot": [
+    "Lumi_2024",
     "btagSF_bc_correlatedDown",
     "btagSF_bc_correlatedUp",
     "btagSF_bc_uncorrelatedDown",
@@ -32,9 +33,15 @@
     "cat6_DY2M_highDeltaM": "recoil_pt",
     "cat7_SR_highDeltaM": "metpt"
   },
+  "lumi_uncertainty": {
+    "fraction": 0.016,
+    "lnN": 1.016,
+    "name": "Lumi_2024"
+  },
+  "lumi_update_note": "Lumi_2024 is reflected in fit-template numerical uncertainty summaries. Diagnostic PNG/PDF plot bands are refreshed by the next full preview render.",
   "nb_binning_policy": "Nb plots merge b >= 3 into a single >=3 bin.",
   "plot_refresh_mode": "reused_existing_partial_normalized_yields_with_exact_mc_systematics",
-  "plot_uncertainty_policy": "DATA error bars show statistical uncertainty. MC bands show sqrt(stat^2 + available systematic envelope^2); available worker payload systematics are included where present.",
+  "plot_uncertainty_policy": "DATA error bars show statistical uncertainty. MC bands show sqrt(stat^2 + available systematic envelope^2 + Lumi_2024^2); available worker payload systematics are included where present, and Lumi_2024 is a fixed 1.6% MC rate uncertainty.",
   "region_variable_plots": [
     {
       "binning": {
@@ -76,9 +83,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 273.6986188416087,
         "syst_sum": 591.7061887420358,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -135,9 +144,11 @@
       "blinded": false,
       "fit_template": true,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 265.19348844713807,
-        "syst_sum": 588.9894587179502,
+        "syst_sum": 882.8225235422607,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -149,7 +160,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 654.6401659055954
+        "total_sum": 929.5820209285343
       },
       "name": "partial_metpt_cat2_LLCR_highDeltaM",
       "pdf": "plots/partial_metpt_cat2_LLCR_highDeltaM.pdf",
@@ -194,9 +205,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 334.3872562804748,
         "syst_sum": 614.8336051776959,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -253,9 +266,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 278.64013276307554,
         "syst_sum": 642.0937063011108,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -302,9 +317,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 240.50485600174085,
         "syst_sum": 797.5423285800421,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -353,9 +370,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 254.34290860288561,
         "syst_sum": 589.9917567330447,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -410,9 +429,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 297.3694752771821,
         "syst_sum": 608.4100593717261,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -473,9 +494,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 3042.749980938589,
         "syst_sum": 920.912939483569,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -532,9 +555,11 @@
       "blinded": false,
       "fit_template": true,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 3029.1102913314635,
-        "syst_sum": 918.3170912999228,
+        "syst_sum": 1082.7668307756007,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -546,7 +571,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 3183.2198818178763
+        "total_sum": 3253.8702143830974
       },
       "name": "partial_metpt_cat3_QCDCR_highDeltaM",
       "pdf": "plots/partial_metpt_cat3_QCDCR_highDeltaM.pdf",
@@ -591,9 +616,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 3632.232163078757,
         "syst_sum": 1809.1004468672056,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -650,9 +677,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 3092.6710114190328,
         "syst_sum": 1137.0981360799437,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -699,9 +728,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 3005.11765347854,
         "syst_sum": 1309.774372864147,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -750,9 +781,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 2814.0043017874405,
         "syst_sum": 1558.6368064919673,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -807,9 +840,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 2254.8787535590986,
         "syst_sum": 745.4607270466239,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -866,9 +901,11 @@
       "blinded": false,
       "fit_template": true,
       "mc_uncertainty": {
-        "stat_sum": 1170.8185649858485,
-        "syst_sum": 920.2457408782316,
+        "lumi_rate_uncertainty_fraction": 0.016,
+        "stat_sum": 1170.8185649858488,
+        "syst_sum": 935.8069060365156,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -880,7 +917,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 1518.8671208233118
+        "total_sum": 1527.8231163667954
       },
       "name": "partial_recoil_pt_cat4_GCR_highDeltaM",
       "pdf": "plots/partial_recoil_pt_cat4_GCR_highDeltaM.pdf",
@@ -929,9 +966,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 780.4564741056641,
         "syst_sum": 600.9094619538693,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -988,9 +1027,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 1229.6729821555066,
         "syst_sum": 1131.2626423001345,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -1047,9 +1088,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 1045.3209244255859,
         "syst_sum": 806.6164116548217,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -1096,9 +1139,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 1209.476892682987,
         "syst_sum": 855.6001758093547,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -1147,9 +1192,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 1185.4760921113746,
         "syst_sum": 664.3030372485271,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -1204,9 +1251,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 1398.2155998166152,
         "syst_sum": 1039.1378955820878,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -1263,9 +1312,11 @@
       "blinded": false,
       "fit_template": true,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 25.610899254807165,
-        "syst_sum": 23.361131245737866,
+        "syst_sum": 24.378491783198378,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -1277,7 +1328,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 35.25063540791123
+        "total_sum": 35.97059414057234
       },
       "name": "partial_recoil_pt_cat5_DY2E_highDeltaM",
       "pdf": "plots/partial_recoil_pt_cat5_DY2E_highDeltaM.pdf",
@@ -1326,9 +1377,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 14.458443877454807,
         "syst_sum": 22.687191276670536,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -1385,9 +1438,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 26.01165845170929,
         "syst_sum": 29.759021261347648,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -1444,9 +1499,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 19.094390212881876,
         "syst_sum": 24.531760423786928,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -1493,9 +1550,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 16.519673859908295,
         "syst_sum": 20.564183707227702,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -1544,9 +1603,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 18.770341103028247,
         "syst_sum": 23.86978167439179,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -1601,9 +1662,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 22.90076106701612,
         "syst_sum": 25.807070186705722,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -1660,9 +1723,11 @@
       "blinded": false,
       "fit_template": true,
       "mc_uncertainty": {
-        "stat_sum": 18.8524143475354,
-        "syst_sum": 21.03949961922858,
+        "lumi_rate_uncertainty_fraction": 0.016,
+        "stat_sum": 18.852414347535404,
+        "syst_sum": 23.11758196146794,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -1674,7 +1739,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 28.908319745516653
+        "total_sum": 30.56244061489794
       },
       "name": "partial_recoil_pt_cat6_DY2M_highDeltaM",
       "pdf": "plots/partial_recoil_pt_cat6_DY2M_highDeltaM.pdf",
@@ -1723,9 +1788,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 18.825861552876123,
         "syst_sum": 21.09680655367133,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -1782,9 +1849,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 33.15614168862631,
         "syst_sum": 28.953624525242176,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -1841,9 +1910,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 24.095254214257643,
         "syst_sum": 24.03185061486323,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -1890,9 +1961,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 20.92615522856976,
         "syst_sum": 23.599727003883626,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -1941,9 +2014,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 23.912106980450513,
         "syst_sum": 24.678189245986847,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -1998,9 +2073,11 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 30.090859723411526,
         "syst_sum": 39.32704913044178,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -2061,9 +2138,11 @@
       "blinded": true,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 571.5326664241553,
         "syst_sum": 333.9073162147816,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -2120,9 +2199,11 @@
       "blinded": true,
       "fit_template": true,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 568.2537493509413,
-        "syst_sum": 333.9254268381104,
+        "syst_sum": 658.5179547952722,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -2134,7 +2215,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 666.4790373414265
+        "total_sum": 871.6064856546928
       },
       "name": "partial_metpt_cat7_SR_highDeltaM",
       "pdf": "plots/partial_metpt_cat7_SR_highDeltaM.pdf",
@@ -2194,9 +2275,11 @@
       "blinded": true,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 676.0142309172876,
         "syst_sum": 470.8587740734686,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -2268,9 +2351,11 @@
       "blinded": true,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 552.6539812008889,
         "syst_sum": 328.49260513019806,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -2332,9 +2417,11 @@
       "blinded": true,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 528.763169639032,
         "syst_sum": 469.59306975446555,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -2398,9 +2485,11 @@
       "blinded": true,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 502.31859001698393,
         "syst_sum": 324.70941338285917,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -2455,9 +2544,11 @@
       "blinded": true,
       "fit_template": false,
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 674.142140901409,
         "syst_sum": 425.16982818026884,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",
@@ -2498,9 +2589,11 @@
         "cat7_SR_highDeltaM"
       ],
       "mc_uncertainty": {
+        "lumi_rate_uncertainty_fraction": 0.016,
         "stat_sum": 3540.0487074523508,
         "syst_sum": 2243.877093378596,
         "systematic_sources": [
+          "Lumi_2024",
           "btagSF_bc_correlated",
           "btagSF_bc_uncorrelated",
           "btagSF_light_correlated",

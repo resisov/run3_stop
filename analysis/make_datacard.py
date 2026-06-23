@@ -4,6 +4,9 @@ from __future__ import annotations
 from optparse import OptionParser
 from pathlib import Path
 
+LUMI_UNCERTAINTY_NAME = 'Lumi_2024'
+LUMI_UNCERTAINTY_LNN = 1.016
+
 
 def sanitize_name(name):
     return name.replace(' ', '_').replace('+', 'plus').replace('(', '').replace(')', '').replace('-', '_')
@@ -47,6 +50,7 @@ def make_datacard(template_root, output, signal, regions, backgrounds, auto_mc_s
     lines.append('process ' + ' '.join(ids))
     lines.append('rate ' + ' '.join(rates))
     lines.append('------------')
+    lines.append('%s lnN %s' % (LUMI_UNCERTAINTY_NAME, ' '.join(['%.3f' % LUMI_UNCERTAINTY_LNN] * len(bins))))
     lines.append('* autoMCStats %s' % auto_mc_stats)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text('\n'.join(lines) + '\n')

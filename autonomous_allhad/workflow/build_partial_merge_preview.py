@@ -19,6 +19,9 @@ DATA_PROCESSES = {"JetMET", "EGamma", "Muon"}
 FINAL_STATUSES = {"complete", "complete_with_bad_files"}
 LUMI_FB = 109.82
 LUMI_PB = LUMI_FB * 1000.0
+LUMI_UNCERTAINTY_NAME = "Lumi_2024"
+LUMI_UNCERTAINTY_FRACTION = 0.016
+LUMI_UNCERTAINTY_LNN = 1.0 + LUMI_UNCERTAINTY_FRACTION
 REGION_MAP = {
     "LLCR": "cat2_LLCR_highDeltaM",
     "QCDCR": "cat3_QCDCR_highDeltaM",
@@ -130,6 +133,24 @@ def data_process_for_region(region: str):
 def data_process_allowed(process: str, region: str) -> bool:
     expected = data_process_for_region(region)
     return expected is None or process == expected
+
+
+def add_lumi_rate_uncertainty(syst2: np.ndarray, nominal: np.ndarray, sources: list[str]) -> tuple[np.ndarray, list[str]]:
+    nominal = np.asarray(nominal, dtype=float)
+    out = np.asarray(syst2, dtype=float).copy()
+    nbin = max(len(out), len(nominal))
+    if len(out) != nbin:
+        padded = np.zeros(nbin, dtype=float)
+        padded[:len(out)] = out
+        out = padded
+    if len(nominal) != nbin:
+        padded_nominal = np.zeros(nbin, dtype=float)
+        padded_nominal[:len(nominal)] = nominal
+        nominal = padded_nominal
+    if np.any(nominal != 0.0):
+        out += (LUMI_UNCERTAINTY_FRACTION * nominal) ** 2
+        sources = sorted(set(sources) | {LUMI_UNCERTAINTY_NAME})
+    return out, sources
 
 
 def process_to_group(process: str, dataset: str = "") -> str:
@@ -871,7 +892,7 @@ def background_systematic_uncertainty(payload: dict[str, Any], variable: str, re
     rec = ((((payload.get("histogram_systematics") or {}).get("background") or {}).get(variable) or {}).get(region) or {})
     nbin = len(nominal_total)
     syst2 = hist_values({"values": rec.get("syst2", [])}, nbin)
-    return syst2, list(rec.get("sources") or [])
+    return add_lumi_rate_uncertainty(syst2, nominal_total, list(rec.get("sources") or []))
 
 
 def populated_xlimits(edges: np.ndarray, arrays: list[np.ndarray]) -> tuple[float, float]:
@@ -1086,7 +1107,9 @@ def region_mc_uncertainties(payload: dict[str, Any], regions: list[str]) -> tupl
         rec = region_systs.get(region) or {}
         syst2[idx] = float(rec.get("syst2") or 0.0)
         used.update(str(src) for src in (rec.get("sources") or []))
-    return stat2, syst2, sorted(used)
+    nominal = np.asarray([payload["regions"][r]["background"] for r in regions], dtype=float)
+    syst2, sources = add_lumi_rate_uncertainty(syst2, nominal, sorted(used))
+    return stat2, syst2, sources
 
 def plot_region_summary(payload: dict[str, Any], outbase: Path) -> dict[str, Any]:
     import matplotlib
@@ -1258,6 +1281,7 @@ def main() -> int:
         "shard_directory": str(shard_dir.relative_to(repo)),
         "luminosity_fb": LUMI_FB,
         "luminosity_pb": LUMI_PB,
+        "lumi_uncertainty": {"name": LUMI_UNCERTAINTY_NAME, "fraction": LUMI_UNCERTAINTY_FRACTION, "lnN": LUMI_UNCERTAINTY_LNN},
         "formula": "DATA factor=1.0; MC normalization_factor = xsec_pb * lumi_pb / physical_dataset_sumw, where physical_dataset strips metadata split suffixes like ____12_; selected final/running payloads only.",
         "normalization_grouping_policy": "MC metadata records split as <dataset>____N_ share one physical-dataset denominator; this prevents reapplying the full cross section once per split shard.",
         "data_region_process_policy": merged["data_region_process_policy"],
@@ -1265,8 +1289,8 @@ def main() -> int:
         "fit_template_variable_by_region": FIT_TEMPLATE_VARIABLE_BY_REGION,
         "template_binning_policy": "cat2/cat3/cat7 use MET templates; cat4/cat5/cat6 use recoil templates; template bins with lower edge >= 800 GeV are merged into [800, inf] and displayed with an infinity symbol at the right edge.",
         "nb_binning_policy": "Nb plots merge b >= 3 into a single >=3 bin.",
-        "plot_uncertainty_policy": "DATA error bars show statistical uncertainty. MC bands show sqrt(stat^2 + available systematic envelope^2); available worker payload systematics are included where present.",
-        "available_systematics_for_plot": merged["available_systematics"],
+        "plot_uncertainty_policy": "DATA error bars show statistical uncertainty. MC bands show sqrt(stat^2 + available systematic envelope^2 + Lumi_2024^2); available worker payload systematics are included where present, and Lumi_2024 is a fixed 1.6% MC rate uncertainty.",
+        "available_systematics_for_plot": sorted(set(merged["available_systematics"]) | {LUMI_UNCERTAINTY_NAME}),
         "available_systematic_dataset_counts": merged["available_systematic_dataset_counts"],
         "sms_policy": "SMS FastSim mass-point overlays are drawn only in cat7/SR plots for mStop1000/mLSP1 and mStop1200/mLSP1 where signal_cutflows histograms exist; completed FastSim shard JSONs are summarized separately in fastsim_signal_partial_summary.json.",
         "final_normalization_complete": False,
@@ -1301,7 +1325,7 @@ def main() -> int:
     }
     preview_dir.mkdir(parents=True, exist_ok=True)
     write_json(preview_dir / "partial_normalized_yields.json", payload)
-    write_json(preview_dir / "partial_normalization_factors.json", {"schema_version": "partial_normalization_factors_v3", "status": "partial_preview", "normalization_status": payload["normalization_status"], "expected_shards": shard_status["expected_shards"], "source_completed_or_checkpoint_shards": len(sources), "luminosity_fb": LUMI_FB, "luminosity_pb": LUMI_PB, "formula": payload["formula"], "normalization_grouping_policy": payload["normalization_grouping_policy"], "final_normalization_complete": False, "factors": merged["normalization_factors"], "physical_factors": merged["physical_normalization_factors"], "physical_dataset_split_counts": merged["physical_dataset_split_counts"], "warnings": payload["warnings"]})
+    write_json(preview_dir / "partial_normalization_factors.json", {"schema_version": "partial_normalization_factors_v3", "status": "partial_preview", "normalization_status": payload["normalization_status"], "expected_shards": shard_status["expected_shards"], "source_completed_or_checkpoint_shards": len(sources), "luminosity_fb": LUMI_FB, "luminosity_pb": LUMI_PB, "lumi_uncertainty": payload["lumi_uncertainty"], "formula": payload["formula"], "normalization_grouping_policy": payload["normalization_grouping_policy"], "final_normalization_complete": False, "factors": merged["normalization_factors"], "physical_factors": merged["physical_normalization_factors"], "physical_dataset_split_counts": merged["physical_dataset_split_counts"], "warnings": payload["warnings"]})
     write_json(preview_dir / "fastsim_signal_partial_summary.json", signal)
     write_json(preview_dir / "signal_overlay_summary.json", {**payload["signal_overlay_summary"], "region_yields": payload["signal_region_overlay_yields"]})
 
