@@ -312,35 +312,120 @@ def collect_limits(limit_dir: Path, mass_keys: list[str], output_json: Path) -> 
 
 
 def plot_contour(limit_payload: dict[str, Any], output_png: Path) -> bool:
-    points = []
-    for key, rec in (limit_payload.get("points") or {}).items():
-        if "expected" in rec:
-            points.append((float(rec["mStop"]), float(rec["mLSP"]), float(rec["expected"])))
+    records = list((limit_payload.get("points") or {}).values())
+    points = [rec for rec in records if "expected" in rec and float(rec["expected"]) > 0]
     if not points:
         return False
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+    from matplotlib.lines import Line2D
+    from matplotlib.ticker import FormatStrFormatter, MultipleLocator
     from scipy.interpolate import griddata
 
-    xs = np.asarray([p[0] for p in points])
-    ys = np.asarray([p[1] for p in points])
-    zs = np.asarray([p[2] for p in points])
-    xi = np.linspace(xs.min(), xs.max(), 160)
-    yi = np.linspace(ys.min(), ys.max(), 160)
+    xmin = 600.0
+    xmax = max(1500.0, math.ceil(max(float(p["mStop"]) for p in points) / 100.0) * 100.0)
+    ymin = 0.0
+    ymax = max(1500.0, math.ceil(max(float(p["mLSP"]) for p in points) / 100.0) * 100.0)
+    xi = np.linspace(xmin, xmax, 260)
+    yi = np.linspace(ymin, ymax, 260)
     xx, yy = np.meshgrid(xi, yi)
-    zz = griddata((xs, ys), zs, (xx, yy), method="linear")
-    fig, ax = plt.subplots(figsize=(8, 6))
-    mesh = ax.contourf(xx, yy, zz, levels=[0, 0.5, 1.0, 2.0, 5.0, max(10.0, float(np.nanmax(zs)))], cmap="viridis_r", alpha=0.85)
-    fig.colorbar(mesh, ax=ax, label="Expected r")
-    cs = ax.contour(xx, yy, zz, levels=[1.0], colors="red", linewidths=2)
-    ax.clabel(cs, fmt={1.0: "r=1"})
-    ax.scatter(xs, ys, c="black", s=10)
-    ax.set_xlabel("mStop [GeV]")
-    ax.set_ylabel("mLSP [GeV]")
-    ax.set_title("Expected limit contour")
+
+    def interpolated_log_grid(quantity: str) -> np.ndarray | None:
+        vals = []
+        for rec in records:
+            val = rec.get(quantity)
+            if val is None or float(val) <= 0:
+                continue
+            vals.append((float(rec["mStop"]), float(rec["mLSP"]), math.log10(float(val))))
+        if not vals:
+            return None
+        xs = np.asarray([v[0] for v in vals])
+        ys = np.asarray([v[1] for v in vals])
+        zs = np.asarray([v[2] for v in vals])
+        linear = griddata((xs, ys), zs, (xx, yy), method="linear")
+        nearest = griddata((xs, ys), zs, (xx, yy), method="nearest")
+        return np.where(np.isnan(linear), nearest, linear)
+
+    expected_grid = interpolated_log_grid("expected")
+    if expected_grid is None:
+        return False
+    minus1_grid = interpolated_log_grid("expected_m1")
+    plus1_grid = interpolated_log_grid("expected_p1")
+
+    matplotlib.rcParams.update({
+        "font.family": "DejaVu Sans",
+        "mathtext.fontset": "dejavusans",
+        "axes.linewidth": 1.8,
+        "xtick.major.width": 1.3,
+        "ytick.major.width": 1.3,
+        "xtick.minor.width": 1.0,
+        "ytick.minor.width": 1.0,
+    })
+    fig, ax = plt.subplots(figsize=(9.0, 7.2))
+    fig.subplots_adjust(left=0.13, right=0.86, bottom=0.12, top=0.88)
+
+    color_min, color_max = -1.5, 1.5
+    filled = ax.contourf(
+        xx,
+        yy,
+        np.clip(expected_grid, color_min, color_max),
+        levels=np.linspace(color_min, color_max, 121),
+        cmap="viridis",
+    )
+    cbar = fig.colorbar(filled, ax=ax, pad=0.055, fraction=0.055)
+    cbar.set_label(
+        r"$\log_{10}$ (expected 95% CL limit on $\sigma/\sigma_{\mathrm{theory}}$)",
+        fontsize=15,
+        rotation=90,
+        labelpad=18,
+    )
+    cbar.set_ticks(np.arange(color_min, color_max + 0.001, 0.5))
+    cbar.ax.yaxis.set_major_formatter(FormatStrFormatter("%.1f"))
+    cbar.ax.tick_params(labelsize=20, direction="in", length=7, width=1.2)
+    cbar.outline.set_linewidth(1.8)
+
+    xs = np.asarray([float(p["mStop"]) for p in points])
+    ys = np.asarray([float(p["mLSP"]) for p in points])
+    ax.scatter(xs, ys, s=8, c="black", alpha=0.35, linewidths=0, zorder=3)
+
+    diag_x = np.linspace(xmin, xmax, 400)
+    diag_y = diag_x - 172.5
+    keep = (diag_y >= ymin) & (diag_y <= ymax)
+    ax.plot(diag_x[keep], diag_y[keep], color="0.45", linestyle=":", linewidth=1.1, zorder=4)
+
+    ax.contour(xx, yy, expected_grid, levels=[0.0], colors="red", linewidths=3.0, zorder=6)
+    for band_grid in (minus1_grid, plus1_grid):
+        if band_grid is not None:
+            ax.contour(xx, yy, band_grid, levels=[0.0], colors="red", linewidths=1.7, linestyles="--", zorder=5)
+
+    ax.set_xlim(xmin, xmax)
+    ax.set_ylim(ymin, ymax)
+    ax.set_xlabel(r"$m_{\tilde{t}}$ (GeV)", fontsize=25, loc="right")
+    ax.set_ylabel(r"$m_{\tilde{\chi}_1^0}$ (GeV)", fontsize=25)
+    ax.xaxis.set_major_locator(MultipleLocator(200))
+    ax.yaxis.set_major_locator(MultipleLocator(200))
+    ax.xaxis.set_minor_locator(MultipleLocator(50))
+    ax.yaxis.set_minor_locator(MultipleLocator(50))
+    ax.tick_params(axis="both", which="major", direction="in", top=True, right=True, labelsize=21, length=9)
+    ax.tick_params(axis="both", which="minor", direction="in", top=True, right=True, length=5)
+    for spine in ax.spines.values():
+        spine.set_linewidth(1.8)
+
+    ax.text(0.00, 1.005, r"$\bf{CMS}$ $\it{Work\ in\ progress}$", transform=ax.transAxes, fontsize=20, va="bottom", ha="left")
+    ax.text(1.00, 1.005, r"109.82 fb$^{-1}$ (13.6 TeV)", transform=ax.transAxes, fontsize=17, va="bottom", ha="right")
+    ax.text(0.14, 0.95, r"$pp\rightarrow \tilde{t}\tilde{t},\ \tilde{t}\rightarrow t\tilde{\chi}_1^0$", transform=ax.transAxes, fontsize=15, va="top")
+
+    legend_handles = [
+        Line2D([0], [0], color="red", lw=3.0, label="Expected"),
+        Line2D([0], [0], color="red", lw=1.8, linestyle="--", label=r"Expected $\pm1\sigma_{\mathrm{exp}}$"),
+        Line2D([0], [0], color="0.45", lw=1.1, linestyle=":", label=r"$m_{\tilde{\chi}_1^0}=m_{\tilde{t}}-m_t$"),
+    ]
+    ax.legend(handles=legend_handles, loc="upper left", bbox_to_anchor=(0.02, 0.90), frameon=False, fontsize=14, handlelength=2.8)
+
     output_png.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(output_png, dpi=160, bbox_inches="tight")
+    fig.savefig(output_png, dpi=180)
+    fig.savefig(output_png.with_suffix(".pdf"))
     plt.close(fig)
     return True
 
