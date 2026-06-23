@@ -1,6 +1,6 @@
 # Monitoring report: sf_unc_v2_combined_data2_v2_20260622
 
-Timestamp UTC: `2026-06-23T09:04:32Z`
+Timestamp UTC: `2026-06-23T12:12:03Z`
 Web URL: https://resisov.github.io/run3_stop/partial_merge_preview_sf_unc_v2_combined_data2_v2_20260622/
 
 ## Condor
