@@ -116,6 +116,10 @@ def canonical_process(process: str, dataset: str = "") -> str:
         "QCD Multijet": "QCD",
     }.get(group, process or "other")
 
+
+def physical_dataset_key(dataset: str) -> str:
+    return str(dataset or "unknown").split("____", 1)[0]
+
 def empty_counter() -> dict[str, Any]:
     return {"unweighted": 0, "raw_weighted": 0.0, "raw_sumw2": 0.0}
 
@@ -280,6 +284,57 @@ def merge_background_payloads(repo: Path, sources: list[dict[str, Any]]) -> dict
                     dest = target["search_bins"].setdefault(scheme, {}).setdefault(bin_name, empty_counter())
                     add_region_counter(dest, counter)
 
+    physical_norm: dict[str, Any] = {}
+    physical_dataset_split_counts = Counter()
+    for ds, rec in sorted(datasets.items()):
+        proc = rec.get("process", "unknown")
+        is_data = bool(rec.get("is_data")) or proc in DATA_PROCESSES
+        phys = physical_dataset_key(ds) if not is_data else ds
+        physical_dataset_split_counts[phys] += 1
+        prec = physical_norm.setdefault(phys, {
+            "physical_dataset": phys,
+            "process": proc,
+            "is_data": is_data,
+            "xsec_pb": rec.get("xsec_pb"),
+            "sumw": 0.0,
+            "sumw2": 0.0,
+            "files_processed": 0,
+            "files_attempted": 0,
+            "split_datasets": [],
+            "sumw_source_counts": {},
+            "xsec_conflicts": [],
+        })
+        xs = rec.get("xsec_pb")
+        if not is_data and isinstance(xs, (int, float)) and isinstance(prec.get("xsec_pb"), (int, float)) and abs(float(xs) - float(prec["xsec_pb"])) > 1e-12:
+            prec["xsec_conflicts"].append({"dataset": ds, "xsec_pb": xs})
+        elif prec.get("xsec_pb") is None:
+            prec["xsec_pb"] = xs
+        prec["sumw"] += float(rec.get("sumw") or 0.0)
+        prec["sumw2"] += float(rec.get("sumw2") or 0.0)
+        prec["files_processed"] += int(rec.get("files_processed") or 0)
+        prec["files_attempted"] += int(rec.get("files_attempted") or 0)
+        prec["split_datasets"].append(ds)
+        for key, val in (rec.get("sumw_source_counts") or {}).items():
+            prec["sumw_source_counts"][key] = prec["sumw_source_counts"].get(key, 0) + int(val)
+    for phys, prec in physical_norm.items():
+        xs = prec.get("xsec_pb")
+        sumw = float(prec.get("sumw") or 0.0)
+        if prec.get("is_data"):
+            prec["normalization_factor"] = 1.0
+            prec["normalization_status"] = "data_unscaled"
+        elif prec.get("xsec_conflicts"):
+            prec["normalization_factor"] = None
+            prec["normalization_status"] = "blocked_inconsistent_xsec_across_split_datasets"
+        elif isinstance(xs, (int, float)) and float(xs) > 0 and sumw != 0.0:
+            prec["normalization_factor"] = float(xs) * LUMI_PB / sumw
+            prec["normalization_status"] = "normalized_with_metadata_xsec_and_physical_dataset_sumw_partial"
+        elif not isinstance(xs, (int, float)) or float(xs or 0) <= 0:
+            prec["normalization_factor"] = None
+            prec["normalization_status"] = "blocked_missing_positive_xsec"
+        else:
+            prec["normalization_factor"] = None
+            prec["normalization_status"] = "blocked_zero_sumw"
+
     norm_factors: dict[str, Any] = {}
     normalized_by_process: dict[str, Any] = {}
     normalized_by_dataset: dict[str, Any] = {}
@@ -292,28 +347,26 @@ def merge_background_payloads(repo: Path, sources: list[dict[str, Any]]) -> dict
         is_data = bool(rec.get("is_data")) or proc in DATA_PROCESSES
         xs = rec.get("xsec_pb")
         sumw = float(rec.get("sumw") or 0.0)
-        factor = None
-        nstatus = "blocked"
-        if is_data:
-            factor = 1.0
-            nstatus = "data_unscaled"
-        elif isinstance(xs, (int, float)) and float(xs) > 0 and sumw != 0.0:
-            factor = float(xs) * LUMI_PB / sumw
-            nstatus = "normalized_with_metadata_xsec_and_retained_file_sumw_partial"
-        elif not isinstance(xs, (int, float)) or float(xs or 0) <= 0:
-            nstatus = "blocked_missing_positive_xsec"
-        else:
-            nstatus = "blocked_zero_sumw"
+        phys = physical_dataset_key(ds) if not is_data else ds
+        prec = physical_norm.get(phys, {})
+        factor = prec.get("normalization_factor")
+        nstatus = prec.get("normalization_status", "blocked_missing_physical_dataset_norm")
         norm_factors[ds] = {
             "dataset": ds,
+            "physical_dataset": phys,
             "process": proc,
             "is_data": is_data,
             "xsec_pb": xs,
             "sumw": sumw,
+            "physical_dataset_sumw": prec.get("sumw"),
             "sumw2": rec.get("sumw2", 0.0),
             "sumw_source_counts": rec.get("sumw_source_counts", {}),
+            "physical_sumw_source_counts": prec.get("sumw_source_counts", {}),
             "files_processed": rec.get("files_processed", 0),
             "files_attempted": rec.get("files_attempted", 0),
+            "physical_files_processed": prec.get("files_processed"),
+            "physical_files_attempted": prec.get("files_attempted"),
+            "physical_split_datasets": len(prec.get("split_datasets", [])),
             "normalization_factor": factor,
             "normalization_status": nstatus,
         }
@@ -351,6 +404,8 @@ def merge_background_payloads(repo: Path, sources: list[dict[str, Any]]) -> dict
     return {
         "datasets": datasets,
         "normalization_factors": norm_factors,
+        "physical_normalization_factors": physical_norm,
+        "physical_dataset_split_counts": dict(physical_dataset_split_counts),
         "normalization_blocked_datasets": blocked_datasets,
         "region_yields_by_process": normalized_by_process,
         "region_yields_by_dataset": normalized_by_dataset,
@@ -763,12 +818,15 @@ def main() -> int:
         "shard_directory": str(shard_dir.relative_to(repo)),
         "luminosity_fb": LUMI_FB,
         "luminosity_pb": LUMI_PB,
-        "formula": "DATA factor=1.0; MC normalization_factor = xsec_pb * lumi_pb / sumw retained from selected final/running checkpoint payloads only.",
+        "formula": "DATA factor=1.0; MC normalization_factor = xsec_pb * lumi_pb / physical_dataset_sumw, where physical_dataset strips metadata split suffixes like ____12_; selected final/running payloads only.",
+        "normalization_grouping_policy": "MC metadata records split as <dataset>____N_ share one physical-dataset denominator; this prevents reapplying the full cross section once per split shard.",
         "sms_policy": "SMS FastSim mass-point overlays are drawn only in cat7/SR plots for mStop1000/mLSP1 and mStop1200/mLSP1 where signal_cutflows histograms exist; completed FastSim shard JSONs are summarized separately in fastsim_signal_partial_summary.json.",
         "final_normalization_complete": False,
         "normalization_status": "partial_preview_complete" if not merged["normalization_blocked_datasets"] else "partial_preview_incomplete_blocked_datasets",
         "normalization_blocked_datasets": merged["normalization_blocked_datasets"],
         "normalization_factors": merged["normalization_factors"],
+        "physical_normalization_factors": merged["physical_normalization_factors"],
+        "physical_dataset_split_counts": merged["physical_dataset_split_counts"],
         "files_attempted": merged["files_attempted"],
         "files_processed": merged["files_processed"],
         "bad_files": len(merged["bad_files"]),
@@ -795,7 +853,7 @@ def main() -> int:
     }
     preview_dir.mkdir(parents=True, exist_ok=True)
     write_json(preview_dir / "partial_normalized_yields.json", payload)
-    write_json(preview_dir / "partial_normalization_factors.json", {"schema_version": "partial_normalization_factors_v2", "status": "partial_preview", "normalization_status": payload["normalization_status"], "expected_shards": shard_status["expected_shards"], "source_completed_or_checkpoint_shards": len(sources), "luminosity_fb": LUMI_FB, "luminosity_pb": LUMI_PB, "formula": payload["formula"], "final_normalization_complete": False, "factors": merged["normalization_factors"], "warnings": payload["warnings"]})
+    write_json(preview_dir / "partial_normalization_factors.json", {"schema_version": "partial_normalization_factors_v3", "status": "partial_preview", "normalization_status": payload["normalization_status"], "expected_shards": shard_status["expected_shards"], "source_completed_or_checkpoint_shards": len(sources), "luminosity_fb": LUMI_FB, "luminosity_pb": LUMI_PB, "formula": payload["formula"], "normalization_grouping_policy": payload["normalization_grouping_policy"], "final_normalization_complete": False, "factors": merged["normalization_factors"], "physical_factors": merged["physical_normalization_factors"], "physical_dataset_split_counts": merged["physical_dataset_split_counts"], "warnings": payload["warnings"]})
     write_json(preview_dir / "fastsim_signal_partial_summary.json", signal)
     write_json(preview_dir / "signal_overlay_summary.json", {**payload["signal_overlay_summary"], "region_yields": payload["signal_region_overlay_yields"]})
 
