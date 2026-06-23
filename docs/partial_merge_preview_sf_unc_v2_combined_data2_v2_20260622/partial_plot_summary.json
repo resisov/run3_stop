@@ -475,7 +475,7 @@
   "search_bin_note": "cat7 SR data are blinded. Signal overlays are included only for cat7/SR plots for mStop1000/mLSP1 and mStop1200/mLSP1 where matching signal_cutflows histograms exist.",
   "source": "autonomous_allhad/workflow/partial_merge_preview_sf_unc_v2_combined_data2_v2_20260622/partial_normalized_yields.json",
   "status": "partial_preview_cms_style",
-  "timestamp_utc": "2026-06-23T06:08:28Z",
+  "timestamp_utc": "2026-06-23T06:33:25Z",
   "variables": [
     "recoil_pt",
     "metpt",
