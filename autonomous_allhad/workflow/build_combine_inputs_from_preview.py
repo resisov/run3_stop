@@ -319,57 +319,55 @@ def plot_contour(limit_payload: dict[str, Any], output_png: Path) -> bool:
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+    import mplhep as hep
     from matplotlib.lines import Line2D
     from matplotlib.ticker import FormatStrFormatter, MultipleLocator
     from scipy.interpolate import griddata
 
-    xmin = 600.0
-    xmax = max(1500.0, math.ceil(max(float(p["mStop"]) for p in points) / 100.0) * 100.0)
-    ymin = 0.0
-    ymax = max(1500.0, math.ceil(max(float(p["mLSP"]) for p in points) / 100.0) * 100.0)
+    # Match the reference view and avoid extrapolating into unsupported/off-shell regions.
+    xmin, xmax = 600.0, 1500.0
+    ymin, ymax = 0.0, 1500.0
+    top_mass = 172.5
     xi = np.linspace(xmin, xmax, 260)
     yi = np.linspace(ymin, ymax, 260)
     xx, yy = np.meshgrid(xi, yi)
+    offshell_mask = yy > (xx - top_mass)
 
-    def interpolated_log_grid(quantity: str) -> np.ndarray | None:
+    def interpolated_log_grid(quantity: str) -> np.ma.MaskedArray | None:
         vals = []
         for rec in records:
             val = rec.get(quantity)
             if val is None or float(val) <= 0:
                 continue
-            vals.append((float(rec["mStop"]), float(rec["mLSP"]), math.log10(float(val))))
+            x = float(rec["mStop"])
+            y = float(rec["mLSP"])
+            if not (xmin <= x <= xmax and ymin <= y <= ymax) or y > x - top_mass:
+                continue
+            vals.append((x, y, math.log10(float(val))))
         if not vals:
             return None
         xs = np.asarray([v[0] for v in vals])
         ys = np.asarray([v[1] for v in vals])
         zs = np.asarray([v[2] for v in vals])
         linear = griddata((xs, ys), zs, (xx, yy), method="linear")
-        nearest = griddata((xs, ys), zs, (xx, yy), method="nearest")
-        return np.where(np.isnan(linear), nearest, linear)
+        return np.ma.array(linear, mask=np.isnan(linear) | offshell_mask)
 
     expected_grid = interpolated_log_grid("expected")
-    if expected_grid is None:
+    if expected_grid is None or expected_grid.count() == 0:
         return False
     minus1_grid = interpolated_log_grid("expected_m1")
     plus1_grid = interpolated_log_grid("expected_p1")
 
-    matplotlib.rcParams.update({
-        "font.family": "DejaVu Sans",
-        "mathtext.fontset": "dejavusans",
-        "axes.linewidth": 1.8,
-        "xtick.major.width": 1.3,
-        "ytick.major.width": 1.3,
-        "xtick.minor.width": 1.0,
-        "ytick.minor.width": 1.0,
-    })
+    plt.style.use(hep.style.CMS)
     fig, ax = plt.subplots(figsize=(9.0, 7.2))
-    fig.subplots_adjust(left=0.13, right=0.86, bottom=0.12, top=0.88)
+    fig.subplots_adjust(left=0.13, right=0.86, bottom=0.12, top=0.89)
 
     color_min, color_max = -1.5, 1.5
+    plot_grid = np.ma.clip(expected_grid, color_min, color_max)
     filled = ax.contourf(
         xx,
         yy,
-        np.clip(expected_grid, color_min, color_max),
+        plot_grid,
         levels=np.linspace(color_min, color_max, 121),
         cmap="viridis",
     )
@@ -385,18 +383,18 @@ def plot_contour(limit_payload: dict[str, Any], output_png: Path) -> bool:
     cbar.ax.tick_params(labelsize=20, direction="in", length=7, width=1.2)
     cbar.outline.set_linewidth(1.8)
 
-    xs = np.asarray([float(p["mStop"]) for p in points])
-    ys = np.asarray([float(p["mLSP"]) for p in points])
-    ax.scatter(xs, ys, s=8, c="black", alpha=0.35, linewidths=0, zorder=3)
+    xs = np.asarray([float(p["mStop"]) for p in points if xmin <= float(p["mStop"]) <= xmax and ymin <= float(p["mLSP"]) <= ymax and float(p["mLSP"]) <= float(p["mStop"]) - top_mass])
+    ys = np.asarray([float(p["mLSP"]) for p in points if xmin <= float(p["mStop"]) <= xmax and ymin <= float(p["mLSP"]) <= ymax and float(p["mLSP"]) <= float(p["mStop"]) - top_mass])
+    ax.scatter(xs, ys, s=9, c="black", alpha=0.35, linewidths=0, zorder=3)
 
     diag_x = np.linspace(xmin, xmax, 400)
-    diag_y = diag_x - 172.5
+    diag_y = diag_x - top_mass
     keep = (diag_y >= ymin) & (diag_y <= ymax)
     ax.plot(diag_x[keep], diag_y[keep], color="0.45", linestyle=":", linewidth=1.1, zorder=4)
 
     ax.contour(xx, yy, expected_grid, levels=[0.0], colors="red", linewidths=3.0, zorder=6)
     for band_grid in (minus1_grid, plus1_grid):
-        if band_grid is not None:
+        if band_grid is not None and band_grid.count() > 0:
             ax.contour(xx, yy, band_grid, levels=[0.0], colors="red", linewidths=1.7, linestyles="--", zorder=5)
 
     ax.set_xlim(xmin, xmax)
@@ -412,8 +410,7 @@ def plot_contour(limit_payload: dict[str, Any], output_png: Path) -> bool:
     for spine in ax.spines.values():
         spine.set_linewidth(1.8)
 
-    ax.text(0.00, 1.005, r"$\bf{CMS}$ $\it{Work\ in\ progress}$", transform=ax.transAxes, fontsize=20, va="bottom", ha="left")
-    ax.text(1.00, 1.005, r"109.82 fb$^{-1}$ (13.6 TeV)", transform=ax.transAxes, fontsize=17, va="bottom", ha="right")
+    hep.cms.label("Work in progress", data=False, lumi=109.82, com=13.6, ax=ax)
     ax.text(0.14, 0.95, r"$pp\rightarrow \tilde{t}\tilde{t},\ \tilde{t}\rightarrow t\tilde{\chi}_1^0$", transform=ax.transAxes, fontsize=15, va="top")
 
     legend_handles = [
