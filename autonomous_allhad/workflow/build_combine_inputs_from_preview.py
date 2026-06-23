@@ -410,7 +410,7 @@ def plot_contour(limit_payload: dict[str, Any], output_png: Path) -> bool:
     for spine in ax.spines.values():
         spine.set_linewidth(1.8)
 
-    hep.cms.label("Work in progress", data=False, lumi=109.82, com=13.6, ax=ax)
+    hep.cms.label(llabel="Simulation Work in progress", rlabel=r"109.82 fb$^{-1}$ (13.6 TeV)", ax=ax)
     ax.text(0.14, 0.95, r"$pp\rightarrow \tilde{t}\tilde{t},\ \tilde{t}\rightarrow t\tilde{\chi}_1^0$", transform=ax.transAxes, fontsize=15, va="top")
 
     legend_handles = [
