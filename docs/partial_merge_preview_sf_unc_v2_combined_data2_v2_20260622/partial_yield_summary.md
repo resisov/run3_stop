@@ -1,6 +1,6 @@
 # Partial Merge Preview sf_unc_v2_combined_data2_v2_20260622 (MC old shards + DATA 2 files/shard)
 
-Timestamp UTC: `2026-06-23T08:15:05Z`
+Timestamp UTC: `2026-06-23T08:38:55Z`
 
 This is a live partial preview over valid final shard JSONs plus terminal `.json.running` checkpoints.
 It is not a final production output and must not be used for Combine or final datacards.
@@ -14,9 +14,9 @@ FastSim signal shards: `61/61` processed, bad `0`
 
 | region | data | background |
 |---|---:|---:|
-| cat2_LLCR_highDeltaM | 57970 | 1.70731e+06 |
-| cat3_QCDCR_highDeltaM | 49780 | 2.11582e+06 |
-| cat4_GCR_highDeltaM | 17220 | 581186 |
-| cat5_DY2E_highDeltaM | 669 | 32505.6 |
-| cat6_DY2M_highDeltaM | 856 | 46260 |
-| cat7_SR_highDeltaM | 48317 | 1.41071e+06 |
+| cat2_LLCR_highDeltaM | 57970 | 41000.9 |
+| cat3_QCDCR_highDeltaM | 49780 | 33923.2 |
+| cat4_GCR_highDeltaM | 17220 | 10183 |
+| cat5_DY2E_highDeltaM | 669 | 412.325 |
+| cat6_DY2M_highDeltaM | 856 | 587.196 |
+| cat7_SR_highDeltaM | 48317 | 34859.7 |
