@@ -27,6 +27,14 @@ REGION_MAP = {
 }
 REGION_ORDER = list(REGION_MAP.values())
 REGION_SHORT = {v: k for k, v in REGION_MAP.items()}
+DATA_PROCESS_BY_REGION = {
+    REGION_MAP["LLCR"]: "JetMET",
+    REGION_MAP["QCDCR"]: "JetMET",
+    REGION_MAP["GCR"]: "EGamma",
+    REGION_MAP["DY2E"]: "EGamma",
+    REGION_MAP["DY2M"]: "Muon",
+    REGION_MAP["SR"]: "JetMET",
+}
 VARIABLE_LABELS = {
     "recoil_pt": "recoil pT [GeV]",
     "metpt": "MET [GeV]",
@@ -79,6 +87,15 @@ def write_json(path: Path, payload: Any) -> None:
 
 def full_region(short: str) -> str:
     return REGION_MAP.get(short, short)
+
+
+def data_process_for_region(region: str):
+    return DATA_PROCESS_BY_REGION.get(full_region(region))
+
+
+def data_process_allowed(process: str, region: str) -> bool:
+    expected = data_process_for_region(region)
+    return expected is None or process == expected
 
 
 def process_to_group(process: str, dataset: str = "") -> str:
@@ -340,6 +357,7 @@ def merge_background_payloads(repo: Path, sources: list[dict[str, Any]]) -> dict
     normalized_by_dataset: dict[str, Any] = {}
     histograms: dict[str, Any] = {"data": {}, "background": {}}
     search_bins: dict[str, Any] = {}
+    data_stream_exclusions: dict[str, dict[str, Any]] = {}
     region_totals = {region: {"data": 0.0, "background": 0.0, "signal": 0.0} for region in REGION_ORDER}
     blocked_datasets = []
     for ds, rec in sorted(datasets.items()):
@@ -384,15 +402,25 @@ def merge_background_payloads(repo: Path, sources: list[dict[str, Any]]) -> dict
                 target["normalized_weighted"] += raw * factor
                 target["normalized_sumw2"] += raw2 * factor * factor
             if fregion in region_totals:
-                region_totals[fregion][kind] += raw * factor
+                if not is_data or data_process_allowed(proc, fregion):
+                    region_totals[fregion][kind] += raw * factor
+                else:
+                    excluded = data_stream_exclusions.setdefault(fregion, {}).setdefault(proc, {"normalized_weighted": 0.0, "raw_weighted": 0.0, "unweighted": 0})
+                    excluded["normalized_weighted"] += raw * factor
+                    excluded["raw_weighted"] += raw
+                    excluded["unweighted"] += int(counter.get("unweighted", 0))
         for region, by_var in (rec.get("histograms") or {}).items():
             fregion = full_region(region)
+            if is_data and not data_process_allowed(proc, fregion):
+                continue
             for variable, hist in (by_var or {}).items():
                 if str(variable).startswith("search_bin_index::"):
                     continue
                 dest = histograms.setdefault(kind, {}).setdefault(variable, {}).setdefault(fregion, {}).setdefault(proc, {})
                 merge_hist_payload(dest, hist, factor)
         for scheme, by_bin in (rec.get("search_bins") or {}).items():
+            if is_data and not data_process_allowed(proc, REGION_MAP["SR"]):
+                continue
             for bin_name, counter in (by_bin or {}).items():
                 dest = search_bins.setdefault(scheme, {}).setdefault(bin_name, {}).setdefault(proc, {"unweighted": 0, "raw_weighted": 0.0, "normalized_weighted": 0.0, "normalized_sumw2": 0.0, "kind": kind})
                 raw = float(counter.get("raw_weighted", 0.0))
@@ -412,6 +440,8 @@ def merge_background_payloads(repo: Path, sources: list[dict[str, Any]]) -> dict
         "regions": region_totals,
         "histograms": histograms,
         "search_bins": search_bins,
+        "data_region_process_policy": DATA_PROCESS_BY_REGION,
+        "data_stream_exclusions": data_stream_exclusions,
         "files_attempted": files_attempted,
         "files_processed": files_processed,
         "bad_files": bad_files,
@@ -820,6 +850,8 @@ def main() -> int:
         "luminosity_pb": LUMI_PB,
         "formula": "DATA factor=1.0; MC normalization_factor = xsec_pb * lumi_pb / physical_dataset_sumw, where physical_dataset strips metadata split suffixes like ____12_; selected final/running payloads only.",
         "normalization_grouping_policy": "MC metadata records split as <dataset>____N_ share one physical-dataset denominator; this prevents reapplying the full cross section once per split shard.",
+        "data_region_process_policy": merged["data_region_process_policy"],
+        "data_stream_exclusions": merged["data_stream_exclusions"],
         "sms_policy": "SMS FastSim mass-point overlays are drawn only in cat7/SR plots for mStop1000/mLSP1 and mStop1200/mLSP1 where signal_cutflows histograms exist; completed FastSim shard JSONs are summarized separately in fastsim_signal_partial_summary.json.",
         "final_normalization_complete": False,
         "normalization_status": "partial_preview_complete" if not merged["normalization_blocked_datasets"] else "partial_preview_incomplete_blocked_datasets",

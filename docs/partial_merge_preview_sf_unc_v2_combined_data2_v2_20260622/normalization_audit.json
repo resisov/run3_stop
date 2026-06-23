@@ -1,0 +1,543 @@
+{
+  "conclusion": [
+    "MC split-record normalization now passes formula checks at physical-dataset level.",
+    "The remaining large discrepancy came from DATA stream aggregation: EGamma/Muon/JetMET were all counted in every region.",
+    "Region totals, plots, and search-bin data now use the stop-processor-style primary data stream per region."
+  ],
+  "counts": {
+    "bad_files": 1328,
+    "files_processed": 47925,
+    "per_split_records": 5170,
+    "physical_data_records": 1379,
+    "physical_mc_datasets": 65,
+    "source_shards": 8179
+  },
+  "created_at": "2026-06-23T09:06:05Z",
+  "data_region_process_policy": {
+    "cat2_LLCR_highDeltaM": "JetMET",
+    "cat3_QCDCR_highDeltaM": "JetMET",
+    "cat4_GCR_highDeltaM": "EGamma",
+    "cat5_DY2E_highDeltaM": "EGamma",
+    "cat6_DY2M_highDeltaM": "Muon",
+    "cat7_SR_highDeltaM": "JetMET"
+  },
+  "histogram_data_process_mismatches": [],
+  "luminosity_fb": 109.82,
+  "luminosity_pb": 109820.0,
+  "mc_factor_formula_check": {
+    "max_relative_error": 0.0,
+    "sumw_source_counts": {
+      "Runs.genEventSumw": 35500
+    },
+    "top_relative_errors": [
+      {
+        "expected_factor": 2.0914453147006423e-05,
+        "factor": 2.0914453147006423e-05,
+        "files_processed": 1427,
+        "physical_dataset": "DYto2L-2Jets_Bin-MLL-50-PTLL-100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3",
+        "process": "DY",
+        "relative_error": 0.0,
+        "splits": 145,
+        "sumw": 559747458741.2604,
+        "xsec_pb": 106.6
+      },
+      {
+        "expected_factor": 0.00018616757400679833,
+        "factor": 0.00018616757400679833,
+        "files_processed": 65,
+        "physical_dataset": "DYto2L-2Jets_Bin-MLL-50-PTLL-200_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1",
+        "process": "DY",
+        "relative_error": 0.0,
+        "splits": 17,
+        "sumw": 6388602345.737009,
+        "xsec_pb": 10.83
+      },
+      {
+        "expected_factor": 0.0004371431637938992,
+        "factor": 0.0004371431637938992,
+        "files_processed": 66,
+        "physical_dataset": "DYto2L-2Jets_Bin-MLL-50-PTLL-400_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+        "process": "DY",
+        "relative_error": 0.0,
+        "splits": 18,
+        "sumw": 149301261.93342718,
+        "xsec_pb": 0.5943
+      },
+      {
+        "expected_factor": 0.0002696434939184434,
+        "factor": 0.0002696434939184434,
+        "files_processed": 642,
+        "physical_dataset": "DYto2L-2Jets_Bin-MLL-50-PTLL-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3",
+        "process": "DY",
+        "relative_error": 0.0,
+        "splits": 65,
+        "sumw": 33022141.460209582,
+        "xsec_pb": 0.08108
+      },
+      {
+        "expected_factor": 6.132935213641201e-05,
+        "factor": 6.132935213641201e-05,
+        "files_processed": 2545,
+        "physical_dataset": "GJ_Bin-PTG-100to200_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3",
+        "process": "GJ",
+        "relative_error": 0.0,
+        "splits": 276,
+        "sumw": 2490807658626.883,
+        "xsec_pb": 1391
+      },
+      {
+        "expected_factor": 0.0005366379087578868,
+        "factor": 0.0005366379087578868,
+        "files_processed": 165,
+        "physical_dataset": "GJ_Bin-PTG-200to400_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+        "process": "GJ",
+        "relative_error": 0.0,
+        "splits": 32,
+        "sumw": 18057831252.417236,
+        "xsec_pb": 88.24
+      },
+      {
+        "expected_factor": 0.003260517345250285,
+        "factor": 0.003260517345250285,
+        "files_processed": 85,
+        "physical_dataset": "GJ_Bin-PTG-400to600_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+        "process": "GJ",
+        "relative_error": 0.0,
+        "splits": 10,
+        "sumw": 126980278.33010001,
+        "xsec_pb": 3.77
+      },
+      {
+        "expected_factor": 0.0041192697377117685,
+        "factor": 0.0041192697377117685,
+        "files_processed": 91,
+        "physical_dataset": "GJ_Bin-PTG-600_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+        "process": "GJ",
+        "relative_error": 0.0,
+        "splits": 10,
+        "sumw": 15356197.585433803,
+        "xsec_pb": 0.576
+      },
+      {
+        "expected_factor": 0.013028298877053698,
+        "factor": 0.013028298877053698,
+        "files_processed": 613,
+        "physical_dataset": "QCD_Bin-PT-1000to1500_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+        "process": "QCD",
+        "relative_error": 0.0,
+        "splits": 63,
+        "sumw": 78443466.0,
+        "xsec_pb": 9.306
+      },
+      {
+        "expected_factor": 484.1436162943474,
+        "factor": 484.1436162943474,
+        "files_processed": 667,
+        "physical_dataset": "QCD_Bin-PT-120to170_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+        "process": "QCD",
+        "relative_error": 0.0,
+        "splits": 67,
+        "sumw": 99761381.48775156,
+        "xsec_pb": 439800
+      }
+    ],
+    "xsec_conflict_count": 0,
+    "xsec_conflicts": []
+  },
+  "normalization_formula": "DATA factor=1.0; MC normalization_factor = xsec_pb * lumi_pb / physical_dataset_sumw, where physical_dataset strips metadata split suffixes like ____12_; selected final/running payloads only.",
+  "normalization_grouping_policy": "MC metadata records split as <dataset>____N_ share one physical-dataset denominator; this prevents reapplying the full cross section once per split shard.",
+  "process_region_yields_including_unselected_data_streams_for_audit": [
+    {
+      "DY2E": 385.1549861754872,
+      "DY2M": 546.726881315682,
+      "GCR": 5.680345397069659,
+      "LLCR": 157.70040516883194,
+      "QCDCR": 109.58763368126385,
+      "SR": 76.76132912393746,
+      "process": "DY"
+    },
+    {
+      "DY2E": 351.0,
+      "DY2M": 27.0,
+      "GCR": 9907.0,
+      "LLCR": 9937.0,
+      "QCDCR": 6655.0,
+      "SR": 3625.0,
+      "process": "EGamma"
+    },
+    {
+      "DY2E": 0.0,
+      "DY2M": 0.0,
+      "GCR": 4951.341315657663,
+      "LLCR": 6.0520410979800845,
+      "QCDCR": 63.317353290649,
+      "SR": 74.17132290537522,
+      "process": "GJ"
+    },
+    {
+      "DY2E": 287.0,
+      "DY2M": 457.0,
+      "GCR": 6772.0,
+      "LLCR": 31980.0,
+      "QCDCR": 30377.0,
+      "SR": 36664.0,
+      "process": "JetMET"
+    },
+    {
+      "DY2E": 31.0,
+      "DY2M": 372.0,
+      "GCR": 541.0,
+      "LLCR": 16053.0,
+      "QCDCR": 12748.0,
+      "SR": 8028.0,
+      "process": "Muon"
+    },
+    {
+      "DY2E": 0.0,
+      "DY2M": 0.0,
+      "GCR": 4830.670836690838,
+      "LLCR": 116.07004609621828,
+      "QCDCR": 27058.69554509652,
+      "SR": 1310.8795007057915,
+      "process": "QCD"
+    },
+    {
+      "DY2E": 1.5299987220942886,
+      "DY2M": 2.0509139024627507,
+      "GCR": 50.225172800398255,
+      "LLCR": 2737.815595019754,
+      "QCDCR": 588.9103823173241,
+      "SR": 1518.4082792446518,
+      "process": "ST"
+    },
+    {
+      "DY2E": 22.64601408165704,
+      "DY2M": 34.78476951689077,
+      "GCR": 316.772108656181,
+      "LLCR": 33578.94010317911,
+      "QCDCR": 5404.600182564825,
+      "SR": 24796.55676330847,
+      "process": "TT"
+    },
+    {
+      "DY2E": 3.009774093991969,
+      "DY2M": 3.633775051947278,
+      "GCR": 4.548783207017412,
+      "LLCR": 71.31323526749235,
+      "QCDCR": 17.677168523375585,
+      "SR": 98.64701779142051,
+      "process": "VV"
+    },
+    {
+      "DY2E": -0.01554063223629294,
+      "DY2M": 0.0,
+      "GCR": 22.60479513106633,
+      "LLCR": 4159.829920136827,
+      "QCDCR": 422.9979702885497,
+      "SR": 2923.36465608194,
+      "process": "WtoLNu"
+    },
+    {
+      "DY2E": 0.0,
+      "DY2M": 0.0,
+      "GCR": 1.1914628903080864,
+      "LLCR": 173.18048783125116,
+      "QCDCR": 257.45405542730975,
+      "SR": 4060.9578713879337,
+      "process": "Zto2Nu"
+    }
+  ],
+  "region_summary": [
+    {
+      "background": 41000.90183379743,
+      "data_over_mc": 0.7799828435392752,
+      "data_selected": 31980.0,
+      "excluded_data_stream_yield": 25990.0,
+      "excluded_streams": {
+        "EGamma": {
+          "normalized_weighted": 9937.0,
+          "raw_weighted": 9937.0,
+          "unweighted": 9937
+        },
+        "Muon": {
+          "normalized_weighted": 16053.0,
+          "raw_weighted": 16053.0,
+          "unweighted": 16053
+        }
+      },
+      "region": "cat2_LLCR_highDeltaM",
+      "selected_data_process": "JetMET",
+      "unfiltered_data_before_fix": 57970.0,
+      "unfiltered_data_over_mc_before_fix": 1.4138713395863598
+    },
+    {
+      "background": 33923.24029118983,
+      "data_over_mc": 0.8954628077757413,
+      "data_selected": 30377.0,
+      "excluded_data_stream_yield": 19403.0,
+      "excluded_streams": {
+        "EGamma": {
+          "normalized_weighted": 6655.0,
+          "raw_weighted": 6655.0,
+          "unweighted": 6655
+        },
+        "Muon": {
+          "normalized_weighted": 12748.0,
+          "raw_weighted": 12748.0,
+          "unweighted": 12748
+        }
+      },
+      "region": "cat3_QCDCR_highDeltaM",
+      "selected_data_process": "JetMET",
+      "unfiltered_data_before_fix": 49780.0,
+      "unfiltered_data_over_mc_before_fix": 1.4674305748124041
+    },
+    {
+      "background": 10183.034820430534,
+      "data_over_mc": 0.9728926763682751,
+      "data_selected": 9907.0,
+      "excluded_data_stream_yield": 7313.0,
+      "excluded_streams": {
+        "JetMET": {
+          "normalized_weighted": 6772.0,
+          "raw_weighted": 6772.0,
+          "unweighted": 6772
+        },
+        "Muon": {
+          "normalized_weighted": 541.0,
+          "raw_weighted": 541.0,
+          "unweighted": 541
+        }
+      },
+      "region": "cat4_GCR_highDeltaM",
+      "selected_data_process": "EGamma",
+      "unfiltered_data_before_fix": 17220.0,
+      "unfiltered_data_over_mc_before_fix": 1.6910479344969918
+    },
+    {
+      "background": 412.3252324409942,
+      "data_over_mc": 0.8512697559692272,
+      "data_selected": 351.0,
+      "excluded_data_stream_yield": 318.0,
+      "excluded_streams": {
+        "JetMET": {
+          "normalized_weighted": 287.0,
+          "raw_weighted": 287.0,
+          "unweighted": 287
+        },
+        "Muon": {
+          "normalized_weighted": 31.0,
+          "raw_weighted": 31.0,
+          "unweighted": 31
+        }
+      },
+      "region": "cat5_DY2E_highDeltaM",
+      "selected_data_process": "EGamma",
+      "unfiltered_data_before_fix": 669.0,
+      "unfiltered_data_over_mc_before_fix": 1.6225056032575866
+    },
+    {
+      "background": 587.1963397869835,
+      "data_over_mc": 0.6335189353103768,
+      "data_selected": 372.0,
+      "excluded_data_stream_yield": 484.0,
+      "excluded_streams": {
+        "EGamma": {
+          "normalized_weighted": 27.0,
+          "raw_weighted": 27.0,
+          "unweighted": 27
+        },
+        "JetMET": {
+          "normalized_weighted": 457.0,
+          "raw_weighted": 457.0,
+          "unweighted": 457
+        }
+      },
+      "region": "cat6_DY2M_highDeltaM",
+      "selected_data_process": "Muon",
+      "unfiltered_data_before_fix": 856.0,
+      "unfiltered_data_over_mc_before_fix": 1.4577747543701143
+    },
+    {
+      "background": 34859.746740549504,
+      "data_over_mc": 1.0517574976341337,
+      "data_selected": 36664.0,
+      "excluded_data_stream_yield": 11653.0,
+      "excluded_streams": {
+        "EGamma": {
+          "normalized_weighted": 3625.0,
+          "raw_weighted": 3625.0,
+          "unweighted": 3625
+        },
+        "Muon": {
+          "normalized_weighted": 8028.0,
+          "raw_weighted": 8028.0,
+          "unweighted": 8028
+        }
+      },
+      "region": "cat7_SR_highDeltaM",
+      "selected_data_process": "JetMET",
+      "unfiltered_data_before_fix": 48317.0,
+      "unfiltered_data_over_mc_before_fix": 1.3860399032617403
+    }
+  ],
+  "schema_version": "normalization_audit_v1",
+  "search_bin_data_processes": {
+    "ak8_kinematics_no_tag_scores": [
+      "JetMET"
+    ],
+    "isr_sensitive": [
+      "JetMET"
+    ],
+    "minimal_njet_nb_met": [
+      "JetMET"
+    ],
+    "optimized_hybrid_no_tags": [
+      "JetMET"
+    ],
+    "resolved_kinematics": [
+      "JetMET"
+    ]
+  },
+  "source": "partial_normalized_yields.json + partial_normalization_factors.json",
+  "status": {
+    "blocked_dataset_count": 0,
+    "normalization_status": "partial_preview_complete",
+    "per_split_status_counts": {
+      "data_unscaled": 1379,
+      "normalized_with_metadata_xsec_and_physical_dataset_sumw_partial": 3791
+    },
+    "physical_status_counts": {
+      "data_unscaled": 1379,
+      "normalized_with_metadata_xsec_and_physical_dataset_sumw_partial": 65
+    }
+  },
+  "top_physical_mc_datasets_in_SR": [
+    {
+      "SR": 22936.930800620863,
+      "physical_dataset": "TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "TT",
+      "splits": 45
+    },
+    {
+      "SR": 2968.060381823653,
+      "physical_dataset": "Zto2Nu-2Jets_Bin-2J-PTNuNu-200to400_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "Zto2Nu",
+      "splits": 8
+    },
+    {
+      "SR": 2238.379782488438,
+      "physical_dataset": "WtoLNu-2Jets_Bin-2J-PTLNu-200to400_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "WtoLNu",
+      "splits": 10
+    },
+    {
+      "SR": 1655.9550525141342,
+      "physical_dataset": "TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3",
+      "process": "TT",
+      "splits": 57
+    },
+    {
+      "SR": 715.4515044049584,
+      "physical_dataset": "QCD_Bin-PT-170to300_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "QCD",
+      "splits": 68
+    },
+    {
+      "SR": 658.1477681776496,
+      "physical_dataset": "Zto2Nu-2Jets_Bin-2J-PTNuNu-400to600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "Zto2Nu",
+      "splits": 6
+    },
+    {
+      "SR": 581.6989850202838,
+      "physical_dataset": "TWminustoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "ST",
+      "splits": 26
+    },
+    {
+      "SR": 581.2357140783462,
+      "physical_dataset": "TbarWplustoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "ST",
+      "splits": 26
+    },
+    {
+      "SR": 420.61554620818697,
+      "physical_dataset": "WtoLNu-2Jets_Bin-2J-PTLNu-400to600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "WtoLNu",
+      "splits": 5
+    },
+    {
+      "SR": 330.0682674671864,
+      "physical_dataset": "QCD_Bin-PT-300to470_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "QCD",
+      "splits": 63
+    },
+    {
+      "SR": 254.15073356360207,
+      "physical_dataset": "Zto2Nu-2Jets_Bin-2J-PTNuNu-100to200_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "Zto2Nu",
+      "splits": 24
+    },
+    {
+      "SR": 180.10912522909888,
+      "physical_dataset": "WtoLNu-2Jets_Bin-2J-PTLNu-100to200_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3",
+      "process": "WtoLNu",
+      "splits": 327
+    },
+    {
+      "SR": 169.2578846032784,
+      "physical_dataset": "TBbarQtoLNu-t-channel-4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "ST",
+      "splits": 40
+    },
+    {
+      "SR": 168.3787888939166,
+      "physical_dataset": "Zto2Nu-2Jets_Bin-2J-PTNuNu-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "Zto2Nu",
+      "splits": 7
+    },
+    {
+      "SR": 121.87206894248315,
+      "physical_dataset": "QCD_Bin-PT-470to600_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "QCD",
+      "splits": 60
+    },
+    {
+      "SR": 83.83292238706429,
+      "physical_dataset": "QCD_Bin-PT-600to800_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "QCD",
+      "splits": 69
+    },
+    {
+      "SR": 83.38351087235512,
+      "physical_dataset": "TTZ-ZtoQQ-1Jets_TuneCP5_13p6TeV_amcatnloFXFXold-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "TT",
+      "splits": 7
+    },
+    {
+      "SR": 80.12114397837134,
+      "physical_dataset": "WtoLNu-2Jets_Bin-2J-PTLNu-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "WtoLNu",
+      "splits": 7
+    },
+    {
+      "SR": 76.828673565645,
+      "physical_dataset": "TbarBQtoLNu-t-channel-4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "ST",
+      "splits": 25
+    },
+    {
+      "SR": 59.74973991381012,
+      "physical_dataset": "TTW-WtoQQ-1Jets_TuneCP5_13p6TeV_amcatnloFXFXold-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "TT",
+      "splits": 9
+    }
+  ],
+  "warnings": [
+    "This is based on a live partial recovery snapshot and will change as more .running records are recovered.",
+    "Process composition may be biased until recovery and all shard promotion are complete.",
+    "Do not use this preview for Combine, final datacards, or physics conclusions."
+  ],
+  "web_url": "https://resisov.github.io/run3_stop/partial_merge_preview_sf_unc_v2_combined_data2_v2_20260622/"
+}
