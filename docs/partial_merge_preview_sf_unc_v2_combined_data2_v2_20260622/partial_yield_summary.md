@@ -1,6 +1,6 @@
 # Partial Merge Preview sf_unc_v2_combined_data2_v2_20260622 (MC old shards + DATA 2 files/shard)
 
-Timestamp UTC: `2026-06-23T07:26:35Z`
+Timestamp UTC: `2026-06-23T07:51:36Z`
 
 This is a live partial preview over valid final shard JSONs plus terminal `.json.running` checkpoints.
 It is not a final production output and must not be used for Combine or final datacards.
