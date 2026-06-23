@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import argparse
+import ctypes
+import gc
 import json
 import math
 import os
@@ -35,6 +37,18 @@ DATA_PROCESS_BY_REGION = {
     REGION_MAP["DY2M"]: "Muon",
     REGION_MAP["SR"]: "JetMET",
 }
+FIT_TEMPLATE_VARIABLE_BY_REGION = {
+    REGION_MAP["LLCR"]: "metpt",
+    REGION_MAP["QCDCR"]: "metpt",
+    REGION_MAP["GCR"]: "recoil_pt",
+    REGION_MAP["DY2E"]: "recoil_pt",
+    REGION_MAP["DY2M"]: "recoil_pt",
+    REGION_MAP["SR"]: "metpt",
+}
+TEMPLATE_OVERFLOW_LOW = 800.0
+TEMPLATE_OVERFLOW_LABEL = "∞"
+NB_OVERFLOW_LOW = 2.5
+NB_OVERFLOW_LABEL = ">=3"
 VARIABLE_LABELS = {
     "recoil_pt": "recoil pT [GeV]",
     "metpt": "MET [GeV]",
@@ -68,6 +82,26 @@ GROUP_COLORS = {
     "QCD Multijet": "#d798a5",
     "others": "#6a625f",
 }
+try:
+    _LIBC = ctypes.CDLL("libc.so.6")
+except Exception:
+    _LIBC = None
+
+_RELEASE_COUNTER = 0
+_RELEASE_INTERVAL = max(1, int(os.environ.get("PARTIAL_MERGE_GC_INTERVAL", "250")))
+
+
+def release_json_memory() -> None:
+    global _RELEASE_COUNTER
+    _RELEASE_COUNTER += 1
+    if _RELEASE_COUNTER % _RELEASE_INTERVAL != 0:
+        return
+    gc.collect()
+    if _LIBC is not None:
+        try:
+            _LIBC.malloc_trim(0)
+        except Exception:
+            pass
 
 
 def utc_now() -> str:
@@ -164,6 +198,123 @@ def merge_hist_payload(target: dict[str, Any], source: dict[str, Any], factor: f
             target["entries"][idx] += float(ent)
 
 
+def is_fit_template_plot(variable: str, region: str) -> bool:
+    return FIT_TEMPLATE_VARIABLE_BY_REGION.get(full_region(region)) == variable
+
+
+def systematic_base_name(name: str) -> str | None:
+    if not name or name == "nominal":
+        return None
+    if name.endswith("Down"):
+        return name[:-4]
+    if name.endswith("Up"):
+        return name[:-2]
+    return name
+
+
+def add_available_systematics(target: dict[str, Any], names: list[str]) -> None:
+    seen = set(target.get("available_systematics", []))
+    for name in names:
+        if name:
+            seen.add(str(name))
+    target["available_systematics"] = sorted(seen)
+
+
+def collapse_hist_overflow(hist: dict[str, Any], overflow_low: float, label: str) -> dict[str, Any]:
+    edges = [float(x) for x in hist.get("bin_edges", [])]
+    if len(edges) < 2:
+        return dict(hist)
+    lows = edges[:-1]
+    cut = None
+    for idx, low in enumerate(lows):
+        if low >= overflow_low - 1e-9:
+            cut = idx
+            break
+    if cut is None or cut >= len(lows) - 1:
+        out = dict(hist)
+        out["plot_bin_edges"] = edges
+        out["physics_bin_edges"] = edges
+        out["overflow_label"] = None
+        return out
+    display_edge = edges[cut + 1] if cut + 1 < len(edges) else overflow_low + 1.0
+    plot_edges = edges[:cut + 1] + [display_edge]
+    physics_edges = edges[:cut + 1] + ["inf"]
+    out = {k: v for k, v in hist.items() if k not in {"bin_edges", "values", "sumw2", "raw_values", "entries", "plot_bin_edges", "physics_bin_edges", "overflow_label", "overflow_low"}}
+    out.update({"bin_edges": plot_edges, "plot_bin_edges": plot_edges, "physics_bin_edges": physics_edges, "overflow_label": label, "overflow_low": overflow_low})
+    n_old = len(edges) - 1
+    n_new = len(plot_edges) - 1
+    for key in ["values", "sumw2", "raw_values", "entries"]:
+        arr = [float(x) for x in hist.get(key, [])]
+        if len(arr) != n_old:
+            arr = (arr + [0.0] * n_old)[:n_old]
+        merged = arr[:cut] + [float(sum(arr[cut:]))]
+        out[key] = (merged + [0.0] * n_new)[:n_new]
+    return out
+
+
+def prepare_hist_for_plot(hist: dict[str, Any], variable: str, region: str) -> dict[str, Any]:
+    if is_fit_template_plot(variable, region) and variable in {"metpt", "recoil_pt"}:
+        return collapse_hist_overflow(hist, TEMPLATE_OVERFLOW_LOW, TEMPLATE_OVERFLOW_LABEL)
+    if variable == "nb":
+        return collapse_hist_overflow(hist, NB_OVERFLOW_LOW, NB_OVERFLOW_LABEL)
+    out = dict(hist)
+    edges = [float(x) for x in hist.get("bin_edges", [])]
+    out["plot_bin_edges"] = edges
+    out["physics_bin_edges"] = edges
+    out["overflow_label"] = None
+    return out
+
+
+def hist_values(hist: dict[str, Any], n: int, key: str = "values") -> np.ndarray:
+    arr = np.asarray(hist.get(key, []), dtype=float)
+    if len(arr) != n:
+        out = np.zeros(n, dtype=float)
+        out[:min(n, len(arr))] = arr[:min(n, len(arr))]
+        return out
+    return arr
+
+
+def format_template_tick_labels(edges: np.ndarray, overflow_label: str | None, variable: str) -> list[str]:
+    labels = []
+    for idx, edge in enumerate(edges):
+        if overflow_label and idx == len(edges) - 1:
+            labels.append(overflow_label)
+        elif variable == "nb":
+            labels.append(str(int(round(edge + 0.5))) if edge < 2.5 else NB_OVERFLOW_LABEL)
+        elif abs(edge - round(edge)) < 1e-6:
+            labels.append(str(int(round(edge))))
+        else:
+            labels.append(f"{edge:g}")
+    return labels
+
+
+def histogram_variation_needed(variable: str, region: str) -> bool:
+    return full_region(region) in REGION_ORDER and variable in PLOT_VARIABLES
+
+
+def add_array_delta(store: dict[tuple[str, ...], np.ndarray], key: tuple[str, ...], delta: np.ndarray) -> None:
+    delta = np.asarray(delta, dtype=float)
+    if key not in store:
+        store[key] = delta.copy()
+        return
+    current = store[key]
+    if len(current) != len(delta):
+        n = max(len(current), len(delta))
+        padded_current = np.zeros(n, dtype=float)
+        padded_delta = np.zeros(n, dtype=float)
+        padded_current[:len(current)] = current
+        padded_delta[:len(delta)] = delta
+        store[key] = padded_current + padded_delta
+    else:
+        store[key] = current + delta
+
+
+def scaled_prepared_hist(hist: dict[str, Any], factor: float, variable: str, region: str) -> dict[str, Any]:
+    tmp: dict[str, Any] = {}
+    merge_hist_payload(tmp, hist or {}, factor)
+    return prepare_hist_for_plot(tmp, variable, region)
+
+
 def source_manifest_name(name: str) -> str:
     return name.replace(".running", "")
 
@@ -237,7 +388,19 @@ def select_sources(repo: Path, shard_dir: Path, output_dir: Path) -> tuple[list[
             examples["final_used"].append(path.name)
         if kind != "final" and len(examples["running_used"]) < 5:
             examples["running_used"].append(path.name)
-        sources.append({"kind": kind, "path": path, "payload": payload, "records_expected": records_expected, "shard_name": shard_name})
+        sources.append({
+            "kind": kind,
+            "path": path,
+            "records_expected": records_expected,
+            "shard_name": shard_name,
+            "payload_summary": {
+                "files_attempted": payload.get("files_attempted", 0),
+                "files_processed": payload.get("files_processed", 0),
+                "bad_files": len(payload.get("bad_files") or []),
+            },
+        })
+        del candidates, payload
+        release_json_memory()
     return sources, {"expected_shards": len(list(shard_dir.glob('shard_*.json'))), "source_status_counts": dict(status), "examples": examples}
 
 
@@ -250,7 +413,10 @@ def merge_background_payloads(repo: Path, sources: list[dict[str, Any]]) -> dict
     source_shards: list[str] = []
     source_details: list[dict[str, Any]] = []
     for item in sources:
-        payload = item["payload"]
+        try:
+            payload = read_json(item["path"])
+        except Exception:
+            continue
         source_shards.append(source_manifest_name(item["path"].name))
         source_details.append({
             "source": item["kind"],
@@ -280,9 +446,7 @@ def merge_background_payloads(repo: Path, sources: list[dict[str, Any]]) -> dict
                 "sumw": 0.0,
                 "sumw2": 0.0,
                 "sumw_source_counts": {},
-                "regions": {},
-                "histograms": {},
-                "search_bins": {},
+                "available_systematics": [],
             })
             target["files_attempted"] += int(rec.get("files_attempted") or 0)
             target["files_processed"] += int(rec.get("files_processed") or 0)
@@ -291,15 +455,9 @@ def merge_background_payloads(repo: Path, sources: list[dict[str, Any]]) -> dict
             target["sumw2"] += float(rec.get("sumw2") or 0.0)
             for key, val in (rec.get("sumw_source_counts") or {}).items():
                 target["sumw_source_counts"][key] = target["sumw_source_counts"].get(key, 0) + int(val)
-            for region, counter in (rec.get("regions") or {}).items():
-                add_region_counter(target["regions"].setdefault(region, empty_counter()), counter)
-            for region, by_var in (rec.get("histograms") or {}).items():
-                for variable, hist in (by_var or {}).items():
-                    merge_hist_payload(target["histograms"].setdefault(region, {}).setdefault(variable, {}), hist, 1.0)
-            for scheme, by_bin in (rec.get("search_bins") or {}).items():
-                for bin_name, counter in (by_bin or {}).items():
-                    dest = target["search_bins"].setdefault(scheme, {}).setdefault(bin_name, empty_counter())
-                    add_region_counter(dest, counter)
+            add_available_systematics(target, list(rec.get("available_systematics") or []))
+        del payload
+        release_json_memory()
 
     physical_norm: dict[str, Any] = {}
     physical_dataset_split_counts = Counter()
@@ -356,6 +514,11 @@ def merge_background_payloads(repo: Path, sources: list[dict[str, Any]]) -> dict
     normalized_by_process: dict[str, Any] = {}
     normalized_by_dataset: dict[str, Any] = {}
     histograms: dict[str, Any] = {"data": {}, "background": {}}
+    histogram_systematics: dict[str, Any] = {"background": {}}
+    region_systematics: dict[str, Any] = {"background": {}}
+    histogram_syst_deltas: dict[tuple[str, str, str, str], np.ndarray] = {}
+    region_syst_deltas: dict[tuple[str, str, str], float] = {}
+    available_systematics = Counter()
     search_bins: dict[str, Any] = {}
     data_stream_exclusions: dict[str, dict[str, Any]] = {}
     region_totals = {region: {"data": 0.0, "background": 0.0, "signal": 0.0} for region in REGION_ORDER}
@@ -391,44 +554,135 @@ def merge_background_payloads(repo: Path, sources: list[dict[str, Any]]) -> dict
         if factor is None:
             blocked_datasets.append(ds)
             continue
-        kind = "data" if is_data else "background"
-        for region, counter in (rec.get("regions") or {}).items():
-            fregion = full_region(region)
-            raw = float(counter.get("raw_weighted", 0.0))
-            raw2 = float(counter.get("raw_sumw2", 0.0))
-            for target in [normalized_by_dataset.setdefault(ds, {}).setdefault(region, {"unweighted": 0, "raw_weighted": 0.0, "normalized_weighted": 0.0, "normalized_sumw2": 0.0}), normalized_by_process.setdefault(proc, {}).setdefault(region, {"unweighted": 0, "raw_weighted": 0.0, "normalized_weighted": 0.0, "normalized_sumw2": 0.0})]:
-                target["unweighted"] += int(counter.get("unweighted", 0))
-                target["raw_weighted"] += raw
-                target["normalized_weighted"] += raw * factor
-                target["normalized_sumw2"] += raw2 * factor * factor
-            if fregion in region_totals:
-                if not is_data or data_process_allowed(proc, fregion):
-                    region_totals[fregion][kind] += raw * factor
-                else:
-                    excluded = data_stream_exclusions.setdefault(fregion, {}).setdefault(proc, {"normalized_weighted": 0.0, "raw_weighted": 0.0, "unweighted": 0})
-                    excluded["normalized_weighted"] += raw * factor
-                    excluded["raw_weighted"] += raw
-                    excluded["unweighted"] += int(counter.get("unweighted", 0))
-        for region, by_var in (rec.get("histograms") or {}).items():
-            fregion = full_region(region)
-            if is_data and not data_process_allowed(proc, fregion):
+        if not is_data:
+            for name in rec.get("available_systematics", []) or []:
+                available_systematics[str(name)] += 1
+
+    for item in sources:
+        try:
+            payload = read_json(item["path"])
+        except Exception:
+            continue
+        for ds, rec in (payload.get("datasets") or {}).items():
+            if rec.get("process") == "SMS":
                 continue
-            for variable, hist in (by_var or {}).items():
-                if str(variable).startswith("search_bin_index::"):
-                    continue
-                dest = histograms.setdefault(kind, {}).setdefault(variable, {}).setdefault(fregion, {}).setdefault(proc, {})
-                merge_hist_payload(dest, hist, factor)
-        for scheme, by_bin in (rec.get("search_bins") or {}).items():
-            if is_data and not data_process_allowed(proc, REGION_MAP["SR"]):
+            proc = canonical_process(rec.get("process") or "other", ds)
+            is_data = bool(rec.get("is_data")) or proc in DATA_PROCESSES
+            phys = physical_dataset_key(ds) if not is_data else ds
+            factor = (physical_norm.get(phys) or {}).get("normalization_factor")
+            if factor is None:
                 continue
-            for bin_name, counter in (by_bin or {}).items():
-                dest = search_bins.setdefault(scheme, {}).setdefault(bin_name, {}).setdefault(proc, {"unweighted": 0, "raw_weighted": 0.0, "normalized_weighted": 0.0, "normalized_sumw2": 0.0, "kind": kind})
+            kind = "data" if is_data else "background"
+            for region, counter in (rec.get("regions") or {}).items():
+                fregion = full_region(region)
                 raw = float(counter.get("raw_weighted", 0.0))
                 raw2 = float(counter.get("raw_sumw2", 0.0))
-                dest["unweighted"] += int(counter.get("unweighted", 0))
-                dest["raw_weighted"] += raw
-                dest["normalized_weighted"] += raw * factor
-                dest["normalized_sumw2"] += raw2 * factor * factor
+                for target in [normalized_by_dataset.setdefault(ds, {}).setdefault(region, {"unweighted": 0, "raw_weighted": 0.0, "normalized_weighted": 0.0, "normalized_sumw2": 0.0}), normalized_by_process.setdefault(proc, {}).setdefault(region, {"unweighted": 0, "raw_weighted": 0.0, "normalized_weighted": 0.0, "normalized_sumw2": 0.0})]:
+                    target["unweighted"] += int(counter.get("unweighted", 0))
+                    target["raw_weighted"] += raw
+                    target["normalized_weighted"] += raw * factor
+                    target["normalized_sumw2"] += raw2 * factor * factor
+                if fregion in region_totals:
+                    if not is_data or data_process_allowed(proc, fregion):
+                        region_totals[fregion][kind] += raw * factor
+                    else:
+                        excluded = data_stream_exclusions.setdefault(fregion, {}).setdefault(proc, {"normalized_weighted": 0.0, "raw_weighted": 0.0, "unweighted": 0})
+                        excluded["normalized_weighted"] += raw * factor
+                        excluded["raw_weighted"] += raw
+                        excluded["unweighted"] += int(counter.get("unweighted", 0))
+            for region, by_var in (rec.get("histograms") or {}).items():
+                fregion = full_region(region)
+                if is_data and not data_process_allowed(proc, fregion):
+                    continue
+                for variable, hist in (by_var or {}).items():
+                    if str(variable).startswith("search_bin_index::"):
+                        continue
+                    dest = histograms.setdefault(kind, {}).setdefault(variable, {}).setdefault(fregion, {}).setdefault(proc, {})
+                    merge_hist_payload(dest, hist, factor)
+            for scheme, by_bin in (rec.get("search_bins") or {}).items():
+                if is_data and not data_process_allowed(proc, REGION_MAP["SR"]):
+                    continue
+                for bin_name, counter in (by_bin or {}).items():
+                    dest = search_bins.setdefault(scheme, {}).setdefault(bin_name, {}).setdefault(proc, {"unweighted": 0, "raw_weighted": 0.0, "normalized_weighted": 0.0, "normalized_sumw2": 0.0, "kind": kind})
+                    raw = float(counter.get("raw_weighted", 0.0))
+                    raw2 = float(counter.get("raw_sumw2", 0.0))
+                    dest["unweighted"] += int(counter.get("unweighted", 0))
+                    dest["raw_weighted"] += raw
+                    dest["normalized_weighted"] += raw * factor
+                    dest["normalized_sumw2"] += raw2 * factor * factor
+            if is_data:
+                continue
+            nominal_regions = rec.get("regions") or {}
+            for region, by_variation in (rec.get("weight_variations") or {}).items():
+                fregion = full_region(region)
+                if fregion not in REGION_ORDER:
+                    continue
+                nominal_counter = nominal_regions.get(region) or {}
+                nominal_value = float(nominal_counter.get("raw_weighted", 0.0)) * factor
+                for variation_name, counter in (by_variation or {}).items():
+                    base = systematic_base_name(str(variation_name))
+                    if not base:
+                        continue
+                    varied = float(counter.get("raw_weighted", 0.0)) * factor
+                    key = (fregion, base, str(variation_name))
+                    region_syst_deltas[key] = region_syst_deltas.get(key, 0.0) + (varied - nominal_value)
+            nominal_histograms = rec.get("histograms") or {}
+            for region, by_var in (rec.get("histogram_variations") or {}).items():
+                fregion = full_region(region)
+                if fregion not in REGION_ORDER:
+                    continue
+                nominal_by_var = nominal_histograms.get(region) or {}
+                for variable, by_variation in (by_var or {}).items():
+                    variable = str(variable)
+                    if str(variable).startswith("search_bin_index::") or not histogram_variation_needed(variable, fregion):
+                        continue
+                    nominal_hist = nominal_by_var.get(variable) or {}
+                    nominal_prepared = scaled_prepared_hist(nominal_hist, factor, variable, fregion)
+                    for variation_name, hist in (by_variation or {}).items():
+                        base = systematic_base_name(str(variation_name))
+                        if not base:
+                            continue
+                        varied_prepared = scaled_prepared_hist(hist, factor, variable, fregion)
+                        nbin = max(len(varied_prepared.get("values", [])), len(nominal_prepared.get("values", [])))
+                        if nbin <= 0:
+                            continue
+                        delta = hist_values(varied_prepared, nbin) - hist_values(nominal_prepared, nbin)
+                        add_array_delta(histogram_syst_deltas, (variable, fregion, base, str(variation_name)), delta)
+        del payload
+        release_json_memory()
+
+    hist_by_base: dict[tuple[str, str, str], list[np.ndarray]] = {}
+    for (variable, region, base, _variation_name), delta in histogram_syst_deltas.items():
+        hist_by_base.setdefault((variable, region, base), []).append(delta)
+    for (variable, region, base), deltas in sorted(hist_by_base.items()):
+        if not deltas:
+            continue
+        nbin = max(len(delta) for delta in deltas)
+        padded = []
+        for delta in deltas:
+            arr = np.zeros(nbin, dtype=float)
+            arr[:len(delta)] = delta
+            padded.append(np.abs(arr))
+        max_abs = np.maximum.reduce(padded)
+        rec = histogram_systematics.setdefault("background", {}).setdefault(variable, {}).setdefault(region, {"syst2": [0.0] * nbin, "sources": []})
+        current = np.asarray(rec.get("syst2", []), dtype=float)
+        if len(current) != nbin:
+            tmp = np.zeros(nbin, dtype=float)
+            tmp[:min(len(current), nbin)] = current[:min(len(current), nbin)]
+            current = tmp
+        rec["syst2"] = (current + max_abs * max_abs).tolist()
+        rec["sources"] = sorted(set(rec.get("sources", [])) | {base})
+
+    region_by_base: dict[tuple[str, str], list[float]] = {}
+    for (region, base, _variation_name), delta in region_syst_deltas.items():
+        region_by_base.setdefault((region, base), []).append(float(delta))
+    for (region, base), deltas in sorted(region_by_base.items()):
+        if not deltas:
+            continue
+        max_abs = max(abs(delta) for delta in deltas)
+        rec = region_systematics.setdefault("background", {}).setdefault(region, {"syst2": 0.0, "sources": []})
+        rec["syst2"] = float(rec.get("syst2", 0.0)) + max_abs * max_abs
+        rec["sources"] = sorted(set(rec.get("sources", [])) | {base})
     return {
         "datasets": datasets,
         "normalization_factors": norm_factors,
@@ -439,6 +693,10 @@ def merge_background_payloads(repo: Path, sources: list[dict[str, Any]]) -> dict
         "region_yields_by_dataset": normalized_by_dataset,
         "regions": region_totals,
         "histograms": histograms,
+        "histogram_systematics": histogram_systematics,
+        "region_systematics": region_systematics,
+        "available_systematics": sorted(available_systematics),
+        "available_systematic_dataset_counts": dict(available_systematics),
         "search_bins": search_bins,
         "data_region_process_policy": DATA_PROCESS_BY_REGION,
         "data_stream_exclusions": data_stream_exclusions,
@@ -592,8 +850,53 @@ def group_background_hists(payload: dict[str, Any], variable: str, region: str) 
     by_proc = (((payload.get("histograms") or {}).get("background") or {}).get(variable) or {}).get(region, {})
     for proc, hist in by_proc.items():
         group = process_to_group(proc)
-        merge_hist_payload(out.setdefault(group, {}), {"bin_edges": hist.get("bin_edges", []), "raw_values": hist.get("values", []), "raw_sumw2": hist.get("sumw2", []), "entries": hist.get("entries", [])}, 1.0)
+        prepared = prepare_hist_for_plot(hist, variable, region)
+        merge_hist_payload(out.setdefault(group, {}), {"bin_edges": prepared.get("bin_edges", []), "raw_values": prepared.get("values", []), "raw_sumw2": prepared.get("sumw2", []), "entries": prepared.get("entries", [])}, 1.0)
+        out[group]["plot_bin_edges"] = prepared.get("plot_bin_edges", prepared.get("bin_edges", []))
+        out[group]["physics_bin_edges"] = prepared.get("physics_bin_edges", prepared.get("bin_edges", []))
+        out[group]["overflow_label"] = prepared.get("overflow_label")
+        out[group]["overflow_low"] = prepared.get("overflow_low")
     return out
+
+
+def background_process_hists(payload: dict[str, Any], variable: str, region: str) -> dict[str, dict[str, Any]]:
+    out: dict[str, dict[str, Any]] = {}
+    by_proc = (((payload.get("histograms") or {}).get("background") or {}).get(variable) or {}).get(region, {})
+    for proc, hist in by_proc.items():
+        out[proc] = prepare_hist_for_plot(hist, variable, region)
+    return out
+
+
+def background_systematic_uncertainty(payload: dict[str, Any], variable: str, region: str, nominal_by_proc: dict[str, dict[str, Any]], nominal_total: np.ndarray) -> tuple[np.ndarray, list[str]]:
+    rec = ((((payload.get("histogram_systematics") or {}).get("background") or {}).get(variable) or {}).get(region) or {})
+    nbin = len(nominal_total)
+    syst2 = hist_values({"values": rec.get("syst2", [])}, nbin)
+    return syst2, list(rec.get("sources") or [])
+
+
+def populated_xlimits(edges: np.ndarray, arrays: list[np.ndarray]) -> tuple[float, float]:
+    edge_values = np.asarray(edges, dtype=float)
+    if len(edge_values) < 2:
+        return 0.0, 1.0
+    nbin = len(edge_values) - 1
+    occupied = np.zeros(nbin, dtype=bool)
+    for arr in arrays:
+        vals = np.asarray(arr, dtype=float)
+        if vals.size == 0:
+            continue
+        padded = np.zeros(nbin, dtype=float)
+        ncopy = min(nbin, vals.size)
+        padded[:ncopy] = vals[:ncopy]
+        occupied |= np.isfinite(padded) & (np.abs(padded) > 0.0)
+    if np.any(occupied):
+        first = int(np.argmax(occupied))
+        last = int(nbin - np.argmax(occupied[::-1]) - 1)
+        lo, hi = float(edge_values[first]), float(edge_values[last + 1])
+    else:
+        lo, hi = float(edge_values[0]), float(edge_values[-1])
+    if not (math.isfinite(lo) and math.isfinite(hi)) or hi <= lo:
+        return float(edge_values[0]), float(edge_values[-1])
+    return lo, hi
 
 
 def plot_variable(payload: dict[str, Any], variable: str, region: str, outbase: Path) -> dict[str, Any] | None:
@@ -604,8 +907,11 @@ def plot_variable(payload: dict[str, Any], variable: str, region: str, outbase: 
     hep.style.use("CMS")
 
     bkg = group_background_hists(payload, variable, region)
-    data_by_proc = (((payload.get("histograms") or {}).get("data") or {}).get(variable) or {}).get(region, {})
-    signal_by_key = (((payload.get("signal_overlay_hists") or {}).get(variable) or {}).get(region) or {}) if region == REGION_MAP["SR"] else {}
+    nominal_by_proc = background_process_hists(payload, variable, region)
+    raw_data_by_proc = (((payload.get("histograms") or {}).get("data") or {}).get(variable) or {}).get(region, {})
+    data_by_proc = {proc: prepare_hist_for_plot(hist, variable, region) for proc, hist in raw_data_by_proc.items()}
+    raw_signal_by_key = (((payload.get("signal_overlay_hists") or {}).get(variable) or {}).get(region) or {}) if region == REGION_MAP["SR"] else {}
+    signal_by_key = {key: prepare_hist_for_plot(hist, variable, region) for key, hist in raw_signal_by_key.items()}
     if not bkg and not data_by_proc and not signal_by_key:
         return None
     ref = next(iter(bkg.values()), None) or next(iter(data_by_proc.values()), None) or next(iter(signal_by_key.values()), None)
@@ -626,17 +932,14 @@ def plot_variable(payload: dict[str, Any], variable: str, region: str, outbase: 
         hist = bkg.get(group)
         if not hist:
             continue
-        vals = np.asarray(hist.get("values", []), dtype=float)
-        s2 = np.asarray(hist.get("sumw2", []), dtype=float)
-        if len(vals) != len(centers):
-            continue
+        vals = hist_values(hist, len(centers))
+        s2 = hist_values(hist, len(centers), key="sumw2")
         stack_inputs.append(centers.copy())
         stack_weights.append(vals)
         stack_colors.append(GROUP_COLORS.get(group, "0.7"))
         stack_labels.append(group)
         total += vals
-        if len(s2) == len(centers):
-            total_s2 += s2
+        total_s2 += s2
     if stack_inputs:
         ax.hist(
             stack_inputs,
@@ -650,10 +953,13 @@ def plot_variable(payload: dict[str, Any], variable: str, region: str, outbase: 
             linewidth=0.7,
         )
 
-    unc = np.sqrt(total_s2)
+    syst_s2, syst_sources = background_systematic_uncertainty(payload, variable, region, nominal_by_proc, total)
+    stat_unc = np.sqrt(total_s2)
+    syst_unc = np.sqrt(syst_s2)
+    total_unc = np.sqrt(total_s2 + syst_s2)
     if np.any(total > 0):
-        lower = np.maximum(total - unc, 1e-12)
-        upper = np.maximum(total + unc, 1e-12)
+        lower = np.maximum(total - total_unc, 1e-12)
+        upper = np.maximum(total + total_unc, 1e-12)
         ax.fill_between(
             edges,
             np.r_[lower, lower[-1]],
@@ -664,7 +970,7 @@ def plot_variable(payload: dict[str, Any], variable: str, region: str, outbase: 
             hatch="////",
             linewidth=0.0,
             alpha=0.35,
-            label="Stat. unc.",
+            label="MC stat+syst unc." if syst_sources else "MC stat unc.",
         )
 
     signal_records = []
@@ -674,8 +980,8 @@ def plot_variable(payload: dict[str, Any], variable: str, region: str, outbase: 
         if not hist:
             continue
         sig_edges = np.asarray(hist.get("bin_edges", []), dtype=float)
-        vals = np.asarray(hist.get("values", []), dtype=float)
-        if len(vals) != len(centers) or len(sig_edges) != len(edges) or not np.allclose(sig_edges, edges):
+        vals = hist_values(hist, len(centers))
+        if len(sig_edges) != len(edges) or not np.allclose(sig_edges, edges):
             continue
         ax.hist(
             centers,
@@ -699,18 +1005,15 @@ def plot_variable(payload: dict[str, Any], variable: str, region: str, outbase: 
     data_vals = np.zeros(len(centers))
     data_s2 = np.zeros(len(centers))
     for hist in data_by_proc.values():
-        vals = np.asarray(hist.get("values", []), dtype=float)
-        s2 = np.asarray(hist.get("sumw2", []), dtype=float)
-        if len(vals) == len(centers):
-            data_vals += vals
-            if len(s2) == len(centers):
-                data_s2 += s2
+        data_vals += hist_values(hist, len(centers))
+        data_s2 += hist_values(hist, len(centers), key="sumw2")
+    data_unc = np.sqrt(data_s2)
     if not blinded and np.any(data_vals > 0):
-        ax.errorbar(centers, data_vals, yerr=np.sqrt(data_s2), fmt="o", color="black", markersize=4, label="Data 2024")
+        ax.errorbar(centers, data_vals, yerr=data_unc, fmt="o", color="black", markersize=4, label="Data 2024")
         ratio = np.divide(data_vals, total, out=np.full_like(data_vals, np.nan), where=total > 0)
-        ratio_err = np.divide(np.sqrt(data_s2), total, out=np.full_like(data_vals, np.nan), where=total > 0)
+        ratio_err = np.divide(data_unc, total, out=np.full_like(data_vals, np.nan), where=total > 0)
         rax.errorbar(centers, ratio, yerr=ratio_err, fmt="o", color="black", markersize=3)
-    rel = np.divide(unc, total, out=np.zeros_like(unc), where=total > 0)
+    rel = np.divide(total_unc, total, out=np.zeros_like(total_unc), where=total > 0)
     rax.fill_between(centers, np.maximum(0, 1 - rel), 1 + rel, step="mid", color="0.85")
     rax.axhline(1.0, color="0.45", linewidth=1)
     rax.set_ylim(0, 2)
@@ -718,15 +1021,26 @@ def plot_variable(payload: dict[str, Any], variable: str, region: str, outbase: 
     rax.set_xlabel(VARIABLE_LABELS.get(variable, variable))
     ax.set_ylabel("Events")
 
+    overflow_label = ref.get("overflow_label")
+    if overflow_label and variable == "nb":
+        rax.set_xticks(centers)
+        rax.set_xticklabels([str(i) for i in range(len(centers) - 1)] + [NB_OVERFLOW_LABEL])
+    elif overflow_label:
+        rax.set_xticks(edges)
+        rax.set_xticklabels(format_template_tick_labels(edges, overflow_label, variable))
+
+    xlo, xhi = populated_xlimits(edges, [total + total_unc] + ([] if blinded else [data_vals + data_unc]) + signal_arrays)
+    rax.set_xlim(xlo, xhi)
+
     positive = []
-    for arr in [total + unc] + ([] if blinded else [data_vals + np.sqrt(data_s2)]) + signal_arrays:
+    for arr in [total + total_unc] + ([] if blinded else [data_vals + data_unc]) + signal_arrays:
         arr = np.asarray(arr, dtype=float)
         positive.extend(arr[arr > 0].tolist())
     if positive:
         ax.set_yscale("log")
         ax.set_ylim(max(0.03, min(positive) * 0.1), max(max(positive) * 60, 1.0))
     hep.cms.label(llabel="Work in progress", rlabel=r"109.82 fb$^{-1}$ (13.6 TeV)", ax=ax)
-    ax.legend(fontsize=8, ncol=3, frameon=False)
+    ax.legend(fontsize=10, ncol=4, frameon=False, columnspacing=1.0, handlelength=1.6)
     outbase.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(outbase.with_suffix(".png"), dpi=160, bbox_inches="tight")
     fig.savefig(outbase.with_suffix(".pdf"), bbox_inches="tight")
@@ -738,9 +1052,41 @@ def plot_variable(payload: dict[str, Any], variable: str, region: str, outbase: 
         "png": str(Path("plots") / outbase.with_suffix(".png").name),
         "pdf": str(Path("plots") / outbase.with_suffix(".pdf").name),
         "blinded": blinded,
+        "fit_template": is_fit_template_plot(variable, region),
+        "binning": {
+            "plot_bin_edges": edges.tolist(),
+            "physics_bin_edges": ref.get("physics_bin_edges", edges.tolist()),
+            "visible_xlim": [xlo, xhi],
+            "overflow_label": overflow_label,
+            "overflow_low": ref.get("overflow_low"),
+        },
+        "mc_uncertainty": {
+            "stat_sum": float(np.sum(stat_unc)),
+            "syst_sum": float(np.sum(syst_unc)),
+            "total_sum": float(np.sum(total_unc)),
+            "systematic_sources": syst_sources,
+        },
         "signal_overlays": signal_records,
     }
 
+
+def region_mc_uncertainties(payload: dict[str, Any], regions: list[str]) -> tuple[np.ndarray, np.ndarray, list[str]]:
+    stat2 = np.zeros(len(regions), dtype=float)
+    for proc, by_region in (payload.get("region_yields_by_process") or {}).items():
+        if proc in DATA_PROCESSES:
+            continue
+        for idx, region in enumerate(regions):
+            short = REGION_SHORT.get(region, region)
+            rec = (by_region or {}).get(short) or {}
+            stat2[idx] += float(rec.get("normalized_sumw2") or 0.0)
+    syst2 = np.zeros(len(regions), dtype=float)
+    used: set[str] = set()
+    region_systs = ((payload.get("region_systematics") or {}).get("background") or {})
+    for idx, region in enumerate(regions):
+        rec = region_systs.get(region) or {}
+        syst2[idx] = float(rec.get("syst2") or 0.0)
+        used.update(str(src) for src in (rec.get("sources") or []))
+    return stat2, syst2, sorted(used)
 
 def plot_region_summary(payload: dict[str, Any], outbase: Path) -> dict[str, Any]:
     import matplotlib
@@ -755,27 +1101,91 @@ def plot_region_summary(payload: dict[str, Any], outbase: Path) -> dict[str, Any
     data = np.asarray([payload["regions"][r]["data"] for r in regions], dtype=float)
     labels = [r.split("_")[1] for r in regions]
     fig, ax = plt.subplots(figsize=(10, 7))
+    stat2, syst2, syst_sources = region_mc_uncertainties(payload, regions)
+    total_unc = np.sqrt(stat2 + syst2)
     ax.hist(x, bins=bins, weights=bkg, histtype="stepfilled", color="#9ec5b8", edgecolor="black", linewidth=0.7, label="Background")
+    ax.errorbar(x, bkg, yerr=total_unc, fmt="none", ecolor="0.35", elinewidth=1.2, capsize=0, label="MC stat+syst unc." if syst_sources else "MC stat unc.")
     ax.errorbar(x[:-1], data[:-1], yerr=np.sqrt(data[:-1]), fmt="o", color="black", label="Data 2024")
     signal_records = []
-    positive = [v for v in bkg.tolist() + data[:-1].tolist() if v > 0]
+    positive = [v for v in (bkg + total_unc).tolist() + data[:-1].tolist() if v > 0]
     ax.set_xticks(x, labels)
+    ax.set_xlim(bins[0], bins[-1])
     if positive:
         ax.set_yscale("log")
         ax.set_ylim(max(0.03, min(positive) * 0.1), max(max(positive) * 60, 1.0))
     ax.set_ylabel("Events")
     hep.cms.label(llabel="Work in progress", rlabel=r"109.82 fb$^{-1}$ (13.6 TeV)", ax=ax)
-    ax.legend(fontsize=9, frameon=False)
+    ax.legend(fontsize=10, ncol=4, frameon=False, columnspacing=1.0, handlelength=1.6)
     outbase.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(outbase.with_suffix(".png"), dpi=160, bbox_inches="tight")
     fig.savefig(outbase.with_suffix(".pdf"), bbox_inches="tight")
     plt.close(fig)
-    return {"name": outbase.name, "png": str(Path("plots") / outbase.with_suffix(".png").name), "pdf": str(Path("plots") / outbase.with_suffix(".pdf").name), "blinded_regions": [REGION_MAP["SR"]], "signal_overlays": signal_records}
+    return {"name": outbase.name, "png": str(Path("plots") / outbase.with_suffix(".png").name), "pdf": str(Path("plots") / outbase.with_suffix(".pdf").name), "blinded_regions": [REGION_MAP["SR"]], "mc_uncertainty": {"systematic_sources": syst_sources, "stat_sum": float(np.sum(np.sqrt(stat2))), "syst_sum": float(np.sum(np.sqrt(syst2))), "total_sum": float(np.sum(total_unc))}, "signal_overlays": signal_records}
+
+
+def build_fit_template_summary(payload: dict[str, Any]) -> dict[str, Any]:
+    templates: dict[str, Any] = {}
+    for region, variable in FIT_TEMPLATE_VARIABLE_BY_REGION.items():
+        bkg_by_group = group_background_hists(payload, variable, region)
+        nominal_by_proc = background_process_hists(payload, variable, region)
+        data_raw = (((payload.get("histograms") or {}).get("data") or {}).get(variable) or {}).get(region, {})
+        data_by_proc = {proc: prepare_hist_for_plot(hist, variable, region) for proc, hist in data_raw.items()}
+        ref = next(iter(bkg_by_group.values()), None) or next(iter(data_by_proc.values()), None)
+        if not ref:
+            templates[region] = {"variable": variable, "status": "missing_histograms"}
+            continue
+        edges = np.asarray(ref.get("bin_edges", []), dtype=float)
+        if len(edges) < 2:
+            templates[region] = {"variable": variable, "status": "invalid_binning"}
+            continue
+        nbin = len(edges) - 1
+        bkg_total = np.zeros(nbin, dtype=float)
+        bkg_stat2 = np.zeros(nbin, dtype=float)
+        bkg_groups: dict[str, Any] = {}
+        for group, hist in sorted(bkg_by_group.items()):
+            vals = hist_values(hist, nbin)
+            s2 = hist_values(hist, nbin, key="sumw2")
+            bkg_total += vals
+            bkg_stat2 += s2
+            bkg_groups[group] = {"values": vals.tolist(), "sumw2": s2.tolist()}
+        syst2, syst_sources = background_systematic_uncertainty(payload, variable, region, nominal_by_proc, bkg_total)
+        data_total = np.zeros(nbin, dtype=float)
+        data_s2 = np.zeros(nbin, dtype=float)
+        for hist in data_by_proc.values():
+            data_total += hist_values(hist, nbin)
+            data_s2 += hist_values(hist, nbin, key="sumw2")
+        templates[region] = {
+            "status": "complete",
+            "variable": variable,
+            "region_short": REGION_SHORT.get(region, region),
+            "physics_bin_edges": ref.get("physics_bin_edges", edges.tolist()),
+            "plot_bin_edges": edges.tolist(),
+            "overflow_low": ref.get("overflow_low"),
+            "overflow_label": ref.get("overflow_label"),
+            "background_total": bkg_total.tolist(),
+            "background_stat_unc": np.sqrt(bkg_stat2).tolist(),
+            "background_syst_unc": np.sqrt(syst2).tolist(),
+            "background_total_unc": np.sqrt(bkg_stat2 + syst2).tolist(),
+            "background_by_group": bkg_groups,
+            "data": data_total.tolist(),
+            "data_stat_unc": np.sqrt(data_s2).tolist(),
+            "systematic_sources": syst_sources,
+            "data_blinded_in_plots": region == REGION_MAP["SR"],
+        }
+    return {
+        "schema_version": "fit_template_summary_v1",
+        "created_at": utc_now(),
+        "template_variable_by_region": FIT_TEMPLATE_VARIABLE_BY_REGION,
+        "template_binning_policy": "For cat2/cat3/cat7 MET and cat4/cat5/cat6 recoil templates, all bins with lower edge >= 800 GeV are merged into [800, inf].",
+        "nb_binning_policy": "Nb plots merge b >= 3 into a single >=3 bin.",
+        "uncertainty_policy": "DATA uncertainties are statistical. Background uncertainty is sqrt(MC stat^2 + available systematic envelope^2), where available Up/Down variations include pileup, btag SF, lepton/photon ID, and lepton HLT weights present in worker payloads.",
+        "templates": templates,
+    }
 
 
 def copy_preview_to_docs(preview_dir: Path, docs_dir: Path) -> None:
     docs_dir.mkdir(parents=True, exist_ok=True)
-    for name in ["partial_normalized_yields.json", "partial_normalization_factors.json", "partial_preview_manifest.json", "partial_plot_summary.json", "partial_plot_summary.md", "partial_yield_summary.md", "fastsim_signal_partial_summary.json", "signal_overlay_summary.json"]:
+    for name in ["partial_normalized_yields.json", "partial_normalization_factors.json", "partial_preview_manifest.json", "partial_plot_summary.json", "partial_plot_summary.md", "partial_yield_summary.md", "fastsim_signal_partial_summary.json", "signal_overlay_summary.json", "fit_template_summary.json"]:
         src = preview_dir / name
         if src.exists():
             shutil.copy2(src, docs_dir / name)
@@ -804,7 +1214,7 @@ def write_preview_index(docs_dir: Path, plot_records: list[dict[str, Any]], payl
 <body><h1>{title}</h1>
 <p>Snapshot: <code>{payload['created_at']}</code>. Sources: <code>{len(payload['source_shards'])}</code> shard payloads; files processed <code>{payload['files_processed']}</code>; bad entries <code>{payload['bad_files']}</code>.</p>
 <p>This preview includes valid final shard JSONs plus terminal <code>.json.running</code> checkpoints at snapshot time. It is not a final production result.</p>
-<p><a href='partial_normalized_yields.json'>partial_normalized_yields.json</a> · <a href='partial_normalization_factors.json'>partial_normalization_factors.json</a> · <a href='fastsim_signal_partial_summary.json'>FastSim signal summary</a> · <a href='signal_overlay_summary.json'>signal overlay summary</a> · <a href='partial_yield_summary.md'>summary</a></p>
+<p><a href='partial_normalized_yields.json'>partial_normalized_yields.json</a> · <a href='partial_normalization_factors.json'>partial_normalization_factors.json</a> · <a href='fit_template_summary.json'>fit template summary</a> · <a href='fastsim_signal_partial_summary.json'>FastSim signal summary</a> · <a href='signal_overlay_summary.json'>signal overlay summary</a> · <a href='partial_yield_summary.md'>summary</a></p>
 <div class='grid'>{''.join(cards)}</div>
 </body></html>"""
     (docs_dir / "index.html").write_text(html)
@@ -852,6 +1262,12 @@ def main() -> int:
         "normalization_grouping_policy": "MC metadata records split as <dataset>____N_ share one physical-dataset denominator; this prevents reapplying the full cross section once per split shard.",
         "data_region_process_policy": merged["data_region_process_policy"],
         "data_stream_exclusions": merged["data_stream_exclusions"],
+        "fit_template_variable_by_region": FIT_TEMPLATE_VARIABLE_BY_REGION,
+        "template_binning_policy": "cat2/cat3/cat7 use MET templates; cat4/cat5/cat6 use recoil templates; template bins with lower edge >= 800 GeV are merged into [800, inf] and displayed with an infinity symbol at the right edge.",
+        "nb_binning_policy": "Nb plots merge b >= 3 into a single >=3 bin.",
+        "plot_uncertainty_policy": "DATA error bars show statistical uncertainty. MC bands show sqrt(stat^2 + available systematic envelope^2); available worker payload systematics are included where present.",
+        "available_systematics_for_plot": merged["available_systematics"],
+        "available_systematic_dataset_counts": merged["available_systematic_dataset_counts"],
         "sms_policy": "SMS FastSim mass-point overlays are drawn only in cat7/SR plots for mStop1000/mLSP1 and mStop1200/mLSP1 where signal_cutflows histograms exist; completed FastSim shard JSONs are summarized separately in fastsim_signal_partial_summary.json.",
         "final_normalization_complete": False,
         "normalization_status": "partial_preview_complete" if not merged["normalization_blocked_datasets"] else "partial_preview_incomplete_blocked_datasets",
@@ -889,14 +1305,18 @@ def main() -> int:
     write_json(preview_dir / "fastsim_signal_partial_summary.json", signal)
     write_json(preview_dir / "signal_overlay_summary.json", {**payload["signal_overlay_summary"], "region_yields": payload["signal_region_overlay_yields"]})
 
+    plot_payload = {**payload, "histogram_systematics": merged["histogram_systematics"], "region_systematics": merged["region_systematics"]}
+    fit_template_summary = build_fit_template_summary(plot_payload)
+    write_json(preview_dir / "fit_template_summary.json", fit_template_summary)
+
     plot_records: list[dict[str, Any]] = []
     for region in REGION_ORDER:
         for variable in PLOT_VARIABLES:
-            rec = plot_variable(payload, variable, region, preview_dir / "plots" / f"partial_{variable}_{region}")
+            rec = plot_variable(plot_payload, variable, region, preview_dir / "plots" / f"partial_{variable}_{region}")
             if rec:
                 plot_records.append(rec)
-    plot_records.append(plot_region_summary(payload, preview_dir / "plots" / "partial_cr_sr_region_bins"))
-    plot_summary = {"status": "partial_preview_cms_style", "timestamp_utc": payload["created_at"], "source": f"{payload['preview_directory']}/partial_normalized_yields.json", "completed_or_checkpoint_shards_used": len(sources), "variables": PLOT_VARIABLES, "regions": REGION_ORDER, "region_variable_plots": plot_records, "search_bin_note": "cat7 SR data are blinded. Signal overlays are included only for cat7/SR plots for mStop1000/mLSP1 and mStop1200/mLSP1 where matching signal_cutflows histograms exist."}
+    plot_records.append(plot_region_summary(plot_payload, preview_dir / "plots" / "partial_cr_sr_region_bins"))
+    plot_summary = {"status": "partial_preview_cms_style", "timestamp_utc": payload["created_at"], "source": f"{payload['preview_directory']}/partial_normalized_yields.json", "completed_or_checkpoint_shards_used": len(sources), "variables": PLOT_VARIABLES, "regions": REGION_ORDER, "fit_template_variable_by_region": FIT_TEMPLATE_VARIABLE_BY_REGION, "template_binning_policy": payload["template_binning_policy"], "nb_binning_policy": payload["nb_binning_policy"], "plot_uncertainty_policy": payload["plot_uncertainty_policy"], "available_systematics_for_plot": payload["available_systematics_for_plot"], "fit_template_summary": "fit_template_summary.json", "region_variable_plots": plot_records, "search_bin_note": "cat7 SR data are blinded. Signal overlays are included only for cat7/SR plots for mStop1000/mLSP1 and mStop1200/mLSP1 where matching signal_cutflows histograms exist."}
     write_json(preview_dir / "partial_plot_summary.json", plot_summary)
     summary_lines = [
         f"# {args.label}",
@@ -921,7 +1341,7 @@ def main() -> int:
         summary_lines.append(f"| {region} | {vals['data']:.6g} | {vals['background']:.6g} |")
     (preview_dir / "partial_yield_summary.md").write_text("\n".join(summary_lines) + "\n")
     (preview_dir / "partial_plot_summary.md").write_text("\n".join(["# Partial Plot Summary", "", f"Plots: `{len(plot_records)}`", f"Source payloads used: `{len(sources)}`", "", "cat7 SR data are blinded. Signal overlays are included only in cat7/SR plots for mStop1000/mLSP1 and mStop1200/mLSP1 where available."]) + "\n")
-    write_json(preview_dir / "partial_preview_manifest.json", {"status": "partial_preview_complete", "created_at": payload["created_at"], "preview_directory": payload["preview_directory"], "plot_status": plot_summary["status"], "shard_status": payload["shard_status"], "artifacts": ["partial_normalized_yields.json", "partial_normalization_factors.json", "fastsim_signal_partial_summary.json", "partial_plot_summary.json", "partial_yield_summary.md"]})
+    write_json(preview_dir / "partial_preview_manifest.json", {"status": "partial_preview_complete", "created_at": payload["created_at"], "preview_directory": payload["preview_directory"], "plot_status": plot_summary["status"], "shard_status": payload["shard_status"], "artifacts": ["partial_normalized_yields.json", "partial_normalization_factors.json", "fit_template_summary.json", "fastsim_signal_partial_summary.json", "partial_plot_summary.json", "partial_yield_summary.md"]})
     copy_preview_to_docs(preview_dir, docs_dir)
     write_preview_index(docs_dir, plot_records, payload)
     print(json.dumps({"status": "partial_preview_complete", "source_payloads": len(sources), "final_payloads": payload["shard_status"]["final_payloads_used"], "running_payloads": payload["shard_status"]["running_payloads_used"], "files_processed": payload["files_processed"], "bad_files": payload["bad_files"], "fastsim_processed": signal["files_processed"], "plots": len(plot_records)}, sort_keys=True))

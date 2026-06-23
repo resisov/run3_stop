@@ -4,3 +4,4 @@ Plots: `43`
 Source payloads used: `8179`
 
 cat7 SR data are blinded. Signal overlays are included only in cat7/SR plots for mStop1000/mLSP1 and mStop1200/mLSP1 where available.
+Plot refresh mode: `reused_existing_partial_normalized_yields_with_exact_mc_systematics`.
