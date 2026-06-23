@@ -27044,16 +27044,16 @@
     },
     "Muon1-Run2024E-MINIv6NANOv15-v1____6_": {
       "dataset": "Muon1-Run2024E-MINIv6NANOv15-v1____6_",
-      "files_attempted": 7,
-      "files_processed": 7,
+      "files_attempted": 8,
+      "files_processed": 8,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 8388624.0,
-      "sumw2": 8388624.0,
+      "sumw": 9718184.0,
+      "sumw2": 9718184.0,
       "sumw_source_counts": {
-        "data_unweighted": 7
+        "data_unweighted": 8
       },
       "xsec_pb": -1
     },
@@ -27389,16 +27389,16 @@
     },
     "Muon1-Run2024F-MINIv6NANOv15-v1____28_": {
       "dataset": "Muon1-Run2024F-MINIv6NANOv15-v1____28_",
-      "files_attempted": 9,
-      "files_processed": 6,
+      "files_attempted": 10,
+      "files_processed": 7,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 6470000.0,
-      "sumw2": 6470000.0,
+      "sumw": 7757721.0,
+      "sumw2": 7757721.0,
       "sumw_source_counts": {
-        "data_unweighted": 6
+        "data_unweighted": 7
       },
       "xsec_pb": -1
     },
@@ -27944,16 +27944,16 @@
     },
     "Muon1-Run2024G-MINIv6NANOv15-v2____12_": {
       "dataset": "Muon1-Run2024G-MINIv6NANOv15-v2____12_",
-      "files_attempted": 8,
-      "files_processed": 5,
+      "files_attempted": 9,
+      "files_processed": 6,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 6541043.0,
-      "sumw2": 6541043.0,
+      "sumw": 7812407.0,
+      "sumw2": 7812407.0,
       "sumw_source_counts": {
-        "data_unweighted": 5
+        "data_unweighted": 6
       },
       "xsec_pb": -1
     },
@@ -28304,16 +28304,16 @@
     },
     "Muon1-Run2024G-MINIv6NANOv15-v2____34_": {
       "dataset": "Muon1-Run2024G-MINIv6NANOv15-v2____34_",
-      "files_attempted": 9,
-      "files_processed": 7,
+      "files_attempted": 10,
+      "files_processed": 8,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 8497230.0,
-      "sumw2": 8497230.0,
+      "sumw": 9798058.0,
+      "sumw2": 9798058.0,
       "sumw_source_counts": {
-        "data_unweighted": 7
+        "data_unweighted": 8
       },
       "xsec_pb": -1
     },
@@ -28529,16 +28529,16 @@
     },
     "Muon1-Run2024G-MINIv6NANOv15-v2____48_": {
       "dataset": "Muon1-Run2024G-MINIv6NANOv15-v2____48_",
-      "files_attempted": 9,
-      "files_processed": 5,
+      "files_attempted": 10,
+      "files_processed": 6,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 5518441.0,
-      "sumw2": 5518441.0,
+      "sumw": 6805499.0,
+      "sumw2": 6805499.0,
       "sumw_source_counts": {
-        "data_unweighted": 5
+        "data_unweighted": 6
       },
       "xsec_pb": -1
     },
@@ -28604,16 +28604,16 @@
     },
     "Muon1-Run2024G-MINIv6NANOv15-v2____52_": {
       "dataset": "Muon1-Run2024G-MINIv6NANOv15-v2____52_",
-      "files_attempted": 7,
-      "files_processed": 6,
+      "files_attempted": 8,
+      "files_processed": 7,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 6033045.0,
-      "sumw2": 6033045.0,
+      "sumw": 7316700.0,
+      "sumw2": 7316700.0,
       "sumw_source_counts": {
-        "data_unweighted": 6
+        "data_unweighted": 7
       },
       "xsec_pb": -1
     },
@@ -28664,16 +28664,16 @@
     },
     "Muon1-Run2024G-MINIv6NANOv15-v2____56_": {
       "dataset": "Muon1-Run2024G-MINIv6NANOv15-v2____56_",
-      "files_attempted": 9,
-      "files_processed": 6,
+      "files_attempted": 10,
+      "files_processed": 7,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 3069326.0,
-      "sumw2": 3069326.0,
+      "sumw": 4431639.0,
+      "sumw2": 4431639.0,
       "sumw_source_counts": {
-        "data_unweighted": 6
+        "data_unweighted": 7
       },
       "xsec_pb": -1
     },
@@ -28739,16 +28739,16 @@
     },
     "Muon1-Run2024G-MINIv6NANOv15-v2____8_": {
       "dataset": "Muon1-Run2024G-MINIv6NANOv15-v2____8_",
-      "files_attempted": 3,
-      "files_processed": 3,
+      "files_attempted": 4,
+      "files_processed": 4,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 3878356.0,
-      "sumw2": 3878356.0,
+      "sumw": 5165964.0,
+      "sumw2": 5165964.0,
       "sumw_source_counts": {
-        "data_unweighted": 3
+        "data_unweighted": 4
       },
       "xsec_pb": -1
     },
@@ -28844,16 +28844,16 @@
     },
     "Muon1-Run2024H-MINIv6NANOv15-v2____5_": {
       "dataset": "Muon1-Run2024H-MINIv6NANOv15-v2____5_",
-      "files_attempted": 8,
-      "files_processed": 7,
+      "files_attempted": 10,
+      "files_processed": 9,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 6518835.0,
-      "sumw2": 6518835.0,
+      "sumw": 9095818.0,
+      "sumw2": 9095818.0,
       "sumw_source_counts": {
-        "data_unweighted": 7
+        "data_unweighted": 9
       },
       "xsec_pb": -1
     },
@@ -28904,16 +28904,16 @@
     },
     "Muon1-Run2024H-MINIv6NANOv15-v2____9_": {
       "dataset": "Muon1-Run2024H-MINIv6NANOv15-v2____9_",
-      "files_attempted": 9,
-      "files_processed": 8,
+      "files_attempted": 10,
+      "files_processed": 9,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 10113402.0,
-      "sumw2": 10113402.0,
+      "sumw": 10834655.0,
+      "sumw2": 10834655.0,
       "sumw_source_counts": {
-        "data_unweighted": 8
+        "data_unweighted": 9
       },
       "xsec_pb": -1
     },
@@ -29084,31 +29084,31 @@
     },
     "Muon1-Run2024I-MINIv6NANOv15_v2-v1____11_": {
       "dataset": "Muon1-Run2024I-MINIv6NANOv15_v2-v1____11_",
-      "files_attempted": 9,
-      "files_processed": 6,
-      "is_data": true,
-      "normalization_factor": 1.0,
-      "normalization_status": "data_unscaled",
-      "process": "Muon",
-      "sumw": 5512167.0,
-      "sumw2": 5512167.0,
-      "sumw_source_counts": {
-        "data_unweighted": 6
-      },
-      "xsec_pb": -1
-    },
-    "Muon1-Run2024I-MINIv6NANOv15_v2-v1____12_": {
-      "dataset": "Muon1-Run2024I-MINIv6NANOv15_v2-v1____12_",
-      "files_attempted": 7,
+      "files_attempted": 10,
       "files_processed": 7,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 6078859.0,
-      "sumw2": 6078859.0,
+      "sumw": 6848746.0,
+      "sumw2": 6848746.0,
       "sumw_source_counts": {
         "data_unweighted": 7
+      },
+      "xsec_pb": -1
+    },
+    "Muon1-Run2024I-MINIv6NANOv15_v2-v1____12_": {
+      "dataset": "Muon1-Run2024I-MINIv6NANOv15_v2-v1____12_",
+      "files_attempted": 8,
+      "files_processed": 8,
+      "is_data": true,
+      "normalization_factor": 1.0,
+      "normalization_status": "data_unscaled",
+      "process": "Muon",
+      "sumw": 6760907.0,
+      "sumw2": 6760907.0,
+      "sumw_source_counts": {
+        "data_unweighted": 8
       },
       "xsec_pb": -1
     },
@@ -29189,16 +29189,16 @@
     },
     "Muon1-Run2024I-MINIv6NANOv15_v2-v1____4_": {
       "dataset": "Muon1-Run2024I-MINIv6NANOv15_v2-v1____4_",
-      "files_attempted": 9,
-      "files_processed": 8,
+      "files_attempted": 10,
+      "files_processed": 9,
       "is_data": true,
       "normalization_factor": 1.0,
       "normalization_status": "data_unscaled",
       "process": "Muon",
-      "sumw": 6416805.0,
-      "sumw2": 6416805.0,
+      "sumw": 7611093.0,
+      "sumw2": 7611093.0,
       "sumw_source_counts": {
-        "data_unweighted": 8
+        "data_unweighted": 9
       },
       "xsec_pb": -1
     },
@@ -77554,7 +77554,7 @@
   "luminosity_pb": 109820.0,
   "normalization_status": "partial_preview_incomplete_blocked_datasets",
   "schema_version": "partial_normalization_factors_v2",
-  "source_completed_or_checkpoint_shards": 8177,
+  "source_completed_or_checkpoint_shards": 8179,
   "status": "partial_preview",
   "warnings": [
     "This is based on a live partial recovery snapshot and will change as more .running records are recovered.",
