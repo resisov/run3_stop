@@ -1,0 +1,16 @@
+universe = vanilla
+executable = /eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/condor_shape_jesTotalUp_20260624/run_full_production_worker.sh
+arguments = $(name) $(shard) $(result_json)
+getenv = False
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+transfer_input_files = /eos/user/t/taiwoo/run3_stop/decaf/condor/py38.tgz, /eos/user/t/taiwoo/decaf/analysis/proxy/x509up_u147757
+transfer_output_files = ""
+output = /eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/condor_shape_jesTotalUp_20260624/logs/$(name).out
+error = /eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/condor_shape_jesTotalUp_20260624/logs/$(name).err
+log = /eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/condor_shape_jesTotalUp_20260624/logs/full_production.log
+request_cpus = 4
+request_memory = 3500MB
+request_disk = 5000MB
++JobFlavour = "workday"
+queue name,shard,result_json from /eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/condor_shape_jesTotalUp_20260624/full_production_args.txt

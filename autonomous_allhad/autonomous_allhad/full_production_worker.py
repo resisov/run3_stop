@@ -24,11 +24,13 @@ from .real_subset_worker import (
     cleanup_xrd_cache,
     extract_chunk,
     open_root_with_xrd_fallback,
+    validate_shift_name,
 )
 
 
 FOCUS_REGIONS = ["LLCR", "QCDCR", "GCR", "DY2E", "DY2M", "SR"]
 DATA_PROCESSES = {"JetMET", "EGamma", "Muon"}
+FINAL_STATUSES = {"complete", "complete_with_bad_files"}
 
 VARIABLES: dict[str, tuple[str, list[float]]] = {
     "recoil_pt": ("recoil_gcr", [0, 100, 200, 250, 300, 400, 500, 600, 800, 1000, 1500, 2500]),
@@ -44,7 +46,7 @@ VARIABLES: dict[str, tuple[str, list[float]]] = {
 def write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     data = json.dumps(payload, indent=2, sort_keys=True) + "\n"
-    tmp = path.with_name(f".{path.name}.{os.getpid()}.tmp")
+    tmp = path.with_name(f"{path.name}.tmp.{os.getpid()}")
     try:
         with tmp.open("w") as handle:
             handle.write(data)
@@ -56,6 +58,41 @@ def write_json(path: Path, payload: Any) -> None:
             tmp.unlink(missing_ok=True)
         except Exception:
             pass
+
+
+def progress_path_for(output_path: Path) -> Path:
+    return output_path.with_name(output_path.name + ".running")
+
+
+def valid_final_output(path: Path, shard: dict[str, Any], shift_name: str = "nominal") -> bool:
+    if not path.exists() or path.stat().st_size <= 0:
+        return False
+    try:
+        payload = json.loads(path.read_text())
+    except Exception:
+        return False
+    records_in_shard = len(shard.get("records", []))
+    if payload.get("schema_version") != "full_production_shard_v2":
+        return False
+    if payload.get("status") not in FINAL_STATUSES:
+        return False
+    if payload.get("record_digest") != shard.get("record_digest"):
+        return False
+    if payload.get("records_in_shard") != records_in_shard:
+        return False
+    attempted = payload.get("files_attempted")
+    processed = payload.get("files_processed")
+    if not isinstance(attempted, int) or not isinstance(processed, int):
+        return False
+    if attempted != records_in_shard:
+        return False
+    if processed < 0 or processed > attempted:
+        return False
+    if payload.get("status") == "complete" and processed != attempted:
+        return False
+    if str(payload.get("shape_shift", "nominal")) != validate_shift_name(shift_name):
+        return False
+    return bool(payload.get("completed_at"))
 
 
 def empty_counter() -> dict[str, Any]:
@@ -87,6 +124,17 @@ def fill_hist(hist: dict[str, Any], value: float, weight: float) -> None:
         hist["raw_values"][idx] += float(weight)
         hist["raw_sumw2"][idx] += float(weight) * float(weight)
         hist["entries"][idx] += 1
+
+
+def add_available_systematics(target: dict[str, Any], names: list[str]) -> None:
+    seen = set(target.get("available_systematics", []))
+    seen.update(str(name) for name in names)
+    target["available_systematics"] = sorted(seen)
+
+
+def merge_histogram(into: dict[str, Any], source: dict[str, Any]) -> None:
+    for key in ["raw_values", "raw_sumw2", "entries"]:
+        into[key] = [float(a) + float(b) for a, b in zip(into[key], source[key])]
 
 
 def candidate_definitions() -> dict[str, list[tuple[str, dict[str, Any]]]]:
@@ -188,8 +236,12 @@ def ensure_dataset(payload: dict[str, Any], record: dict[str, Any]) -> dict[str,
             "sumw2": 0.0,
             "sumw_source_counts": {},
             "regions": {region: empty_counter() for region in FOCUS_REGIONS},
+            "weight_variations": {region: {} for region in FOCUS_REGIONS},
             "histograms": {},
+            "histogram_variations": {},
             "search_bins": {},
+            "search_bin_variations": {},
+            "available_systematics": [],
         },
     )
     return rec
@@ -201,7 +253,7 @@ def merge_counter(into: dict[str, Any], source: dict[str, Any]) -> None:
     into["raw_sumw2"] += float(source.get("raw_sumw2", 0.0))
 
 
-def process_file(record: dict[str, Any], repo: Path, chunk_size: int) -> tuple[dict[str, Any], dict[str, Any] | None, list[dict[str, Any]]]:
+def process_file(record: dict[str, Any], repo: Path, chunk_size: int, shift_name: str = "nominal") -> tuple[dict[str, Any], dict[str, Any] | None, list[dict[str, Any]]]:
     file_path = record["file_path"]
     dataset = record["dataset"]
     process = record["process_group"]
@@ -215,15 +267,22 @@ def process_file(record: dict[str, Any], repo: Path, chunk_size: int) -> tuple[d
         "processing_status": "not_started",
         "events_read": 0,
         "region_counts": {region: 0 for region in FOCUS_REGIONS},
+        "shape_shift": shift_name,
     }
     bad: list[dict[str, Any]] = []
     file_payload = {
+        "events_read": 0,
+        "shape_shift": shift_name,
         "sumw": 0.0,
         "sumw2": 0.0,
         "sumw_source": "data_unweighted" if is_data else "events_genWeight_sum",
         "regions": {region: empty_counter() for region in FOCUS_REGIONS},
+        "weight_variations": {region: {} for region in FOCUS_REGIONS},
         "histograms": {},
+        "histogram_variations": {},
         "search_bins": {},
+        "search_bin_variations": {},
+        "available_systematics": [],
     }
     root = None
     access_info: dict[str, Any] = {}
@@ -260,24 +319,36 @@ def process_file(record: dict[str, Any], repo: Path, chunk_size: int) -> tuple[d
         read_branches = [b for b in set(CORE_BRANCHES + FILTERS + SIGNAL_HLT + PHOTON_HLT + ELECTRON_HLT + MUON_HLT + genmodel_branches) if b in branches]
         file_summary["number_of_entries"] = int(tree.num_entries)
         file_summary["read_status"] = "opened"
+        fastsim_trigger_bypass = bool(record.get("is_signal") and process == "SMS" and str(record.get("simulation_type") or "") == "FastSim signal dataset")
+        file_summary["fastsim_trigger_bypass"] = fastsim_trigger_bypass
+        file_summary["simulation_type"] = record.get("simulation_type")
         file_summary["processed_entry_ranges"] = []
         for start in range(0, int(tree.num_entries), chunk_size):
             stop = min(start + chunk_size, int(tree.num_entries))
             arrays = tree.arrays(read_branches, entry_start=start, entry_stop=stop, library="ak")
-            rows, chunk_summary = extract_chunk(arrays, dataset, process, record.get("signal_point") or None, str(record.get("year", "")), file_path, start, stop, fastsim_trigger_bypass=False)
+            rows, chunk_summary = extract_chunk(arrays, dataset, process, record.get("signal_point") or None, str(record.get("year", "")), file_path, start, stop, fastsim_trigger_bypass=fastsim_trigger_bypass, shift_name=shift_name)
             file_summary["processed_entry_ranges"].append({"entry_start": start, "entry_stop": stop})
             file_summary["events_read"] += len(rows)
+            file_payload["events_read"] += len(rows)
+            add_available_systematics(file_payload, list(chunk_summary.get("available_systematics", [])))
             if not is_data and file_payload["sumw_source"] != "Runs.genEventSumw":
-                weights = np.asarray([float(r.get("nominal_weight", 1.0)) for r in rows], dtype=float)
-                file_payload["sumw"] += float(np.sum(weights))
-                file_payload["sumw2"] += float(np.sum(weights * weights))
+                gen_weights = np.asarray([float(r.get("gen_weight", r.get("nominal_weight", 1.0))) for r in rows], dtype=float)
+                file_payload["sumw"] += float(np.sum(gen_weights))
+                file_payload["sumw2"] += float(np.sum(gen_weights * gen_weights))
             for row in rows:
                 event_weight = 1.0 if is_data else float(row.get("nominal_weight", 1.0))
+                variation_weights = row.get("weight_variations") if isinstance(row.get("weight_variations"), dict) else {"nominal": event_weight}
+                if is_data:
+                    variation_weights = {"nominal": 1.0}
+                add_available_systematics(file_payload, list(variation_weights.keys()))
                 for region in FOCUS_REGIONS:
                     if row.get(f"feature_{region}") is not True:
                         continue
                     file_summary["region_counts"][region] += 1
                     add_counter(file_payload["regions"][region], event_weight)
+                    for variation_name, variation_weight in variation_weights.items():
+                        target = file_payload["weight_variations"].setdefault(region, {}).setdefault(variation_name, empty_counter())
+                        add_counter(target, float(variation_weight))
                     for variable, (column, edges) in VARIABLES.items():
                         try:
                             value = float(row.get(column, float("nan")))
@@ -285,17 +356,29 @@ def process_file(record: dict[str, Any], repo: Path, chunk_size: int) -> tuple[d
                             continue
                         hist = file_payload["histograms"].setdefault(region, {}).setdefault(variable, empty_hist(edges))
                         fill_hist(hist, value, event_weight)
+                        by_variation = file_payload["histogram_variations"].setdefault(region, {}).setdefault(variable, {})
+                        for variation_name, variation_weight in variation_weights.items():
+                            vh = by_variation.setdefault(variation_name, empty_hist(edges))
+                            fill_hist(vh, value, float(variation_weight))
                 for scheme, defs in candidate_definitions().items():
                     for ibin, (bin_name, definition) in enumerate(defs):
                         if not bin_mask(row, definition, "SR"):
                             continue
                         rec = file_payload["search_bins"].setdefault(scheme, {}).setdefault(bin_name, empty_counter())
                         add_counter(rec, event_weight)
+                        for variation_name, variation_weight in variation_weights.items():
+                            vrec = file_payload["search_bin_variations"].setdefault(scheme, {}).setdefault(bin_name, {}).setdefault(variation_name, empty_counter())
+                            add_counter(vrec, float(variation_weight))
+                        edges = [float(x) - 0.5 for x in range(len(defs) + 1)]
                         hist = file_payload["histograms"].setdefault("SR", {}).setdefault(
                             f"search_bin_index::{scheme}",
-                            empty_hist([float(x) - 0.5 for x in range(len(defs) + 1)]),
+                            empty_hist(edges),
                         )
                         fill_hist(hist, float(ibin), event_weight)
+                        by_variation = file_payload["histogram_variations"].setdefault("SR", {}).setdefault(f"search_bin_index::{scheme}", {})
+                        for variation_name, variation_weight in variation_weights.items():
+                            vh = by_variation.setdefault(variation_name, empty_hist(edges))
+                            fill_hist(vh, float(ibin), float(variation_weight))
             file_summary.setdefault("chunk_summaries", []).append({"entry_start": start, "entry_stop": stop, **chunk_summary})
         if is_data:
             file_payload["sumw"] = float(file_summary["events_read"])
@@ -348,7 +431,7 @@ def process_file(record: dict[str, Any], repo: Path, chunk_size: int) -> tuple[d
 
 
 def merge_file_payload(dataset_rec: dict[str, Any], file_payload: dict[str, Any]) -> None:
-    dataset_rec["events_read"] += int(file_payload.get("sumw", 0.0) if dataset_rec.get("is_data") else 0)
+    dataset_rec["events_read"] += int(file_payload.get("events_read", 0))
     if not dataset_rec.get("is_data"):
         dataset_rec["sumw"] += float(file_payload.get("sumw", 0.0))
         dataset_rec["sumw2"] += float(file_payload.get("sumw2", 0.0))
@@ -357,17 +440,31 @@ def merge_file_payload(dataset_rec: dict[str, Any], file_payload: dict[str, Any]
         dataset_rec["sumw2"] += float(file_payload.get("sumw2", 0.0))
     src = str(file_payload.get("sumw_source", "unknown"))
     dataset_rec["sumw_source_counts"][src] = dataset_rec["sumw_source_counts"].get(src, 0) + 1
+    add_available_systematics(dataset_rec, list(file_payload.get("available_systematics", [])))
     for region, counter in file_payload.get("regions", {}).items():
         merge_counter(dataset_rec["regions"].setdefault(region, empty_counter()), counter)
+    for region, by_variation in file_payload.get("weight_variations", {}).items():
+        for variation_name, counter in by_variation.items():
+            target = dataset_rec["weight_variations"].setdefault(region, {}).setdefault(variation_name, empty_counter())
+            merge_counter(target, counter)
     for region, by_var in file_payload.get("histograms", {}).items():
         for variable, hist in by_var.items():
             target = dataset_rec["histograms"].setdefault(region, {}).setdefault(variable, empty_hist(hist["bin_edges"]))
-            for key in ["raw_values", "raw_sumw2", "entries"]:
-                target[key] = [float(a) + float(b) for a, b in zip(target[key], hist[key])]
+            merge_histogram(target, hist)
+    for region, by_var in file_payload.get("histogram_variations", {}).items():
+        for variable, by_variation in by_var.items():
+            for variation_name, hist in by_variation.items():
+                target = dataset_rec["histogram_variations"].setdefault(region, {}).setdefault(variable, {}).setdefault(variation_name, empty_hist(hist["bin_edges"]))
+                merge_histogram(target, hist)
     for scheme, by_bin in file_payload.get("search_bins", {}).items():
         for bin_name, counter in by_bin.items():
             target = dataset_rec["search_bins"].setdefault(scheme, {}).setdefault(bin_name, empty_counter())
             merge_counter(target, counter)
+    for scheme, by_bin in file_payload.get("search_bin_variations", {}).items():
+        for bin_name, by_variation in by_bin.items():
+            for variation_name, counter in by_variation.items():
+                target = dataset_rec["search_bin_variations"].setdefault(scheme, {}).setdefault(bin_name, {}).setdefault(variation_name, empty_counter())
+                merge_counter(target, counter)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -376,15 +473,20 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--shard", required=True)
     parser.add_argument("--output", required=True)
     parser.add_argument("--chunk-size", type=int, default=int(os.environ.get("AUTONOMOUS_ALLHAD_FULL_CHUNK", "50000")))
+    parser.add_argument("--shift", default=os.environ.get("AUTONOMOUS_ALLHAD_PRODUCTION_SHIFT", "nominal"))
     args = parser.parse_args(argv)
+    shift_name = validate_shift_name(args.shift)
 
     repo = Path(args.repo).resolve()
     shard_path = Path(args.shard)
     output_path = Path(args.output)
     shard = json.loads(shard_path.read_text())
+    progress_path = progress_path_for(output_path)
+    if valid_final_output(output_path, shard, shift_name):
+        return 0
     start = time.time()
     payload: dict[str, Any] = {
-        "schema_version": "full_production_shard_v1",
+        "schema_version": "full_production_shard_v2",
         "status": "running",
         "shard_id": shard.get("shard_id"),
         "record_digest": shard.get("record_digest"),
@@ -397,25 +499,36 @@ def main(argv: list[str] | None = None) -> int:
         "file_summaries": [],
         "datasets": {},
         "chunk_size": args.chunk_size,
+        "shape_shift": shift_name,
     }
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    write_json(output_path, payload)
+    write_json(progress_path, payload)
     for record in shard.get("records", []):
         payload["files_attempted"] += 1
         dataset_rec = ensure_dataset(payload, record)
         dataset_rec["files_attempted"] += 1
-        file_summary, file_payload, bad = process_file(record, repo, args.chunk_size)
+        file_summary, file_payload, bad = process_file(record, repo, args.chunk_size, shift_name=shift_name)
         payload["file_summaries"].append(file_summary)
         payload["bad_files"].extend(bad)
         if file_payload is not None:
             payload["files_processed"] += 1
             dataset_rec["files_processed"] += 1
             merge_file_payload(dataset_rec, file_payload)
-        write_json(output_path, {**payload, "status": "running"})
+        write_json(progress_path, {**payload, "status": "running"})
     payload["status"] = "complete" if payload["files_processed"] == payload["files_attempted"] else ("complete_with_bad_files" if payload["files_processed"] > 0 else "failed")
     payload["completed_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     payload["wall_time_s"] = round(time.time() - start, 3)
+    if valid_final_output(output_path, shard, shift_name):
+        try:
+            progress_path.unlink(missing_ok=True)
+        except Exception:
+            pass
+        return 0
     write_json(output_path, payload)
+    try:
+        progress_path.unlink(missing_ok=True)
+    except Exception:
+        pass
     return 0 if payload["files_processed"] > 0 or payload["files_attempted"] == 0 else 1
 
 

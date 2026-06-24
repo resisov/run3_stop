@@ -186,7 +186,7 @@ def get_jec_uncertainty(year, pt, eta):
     elif year == '2023post':
         pass
     elif year == '2024':
-        unc_name = "Summer24Prompt24_V2_MC_Total_AK4PFPuppi"
+        unc_name = "Summer24Prompt24_V3_MC_Total_AK4PFPuppi"
     elif year == '2025':
         unc_name = "Winter25Prompt25_V3_MC_Total_AK4PFPuppi"
     unc = evaluator[unc_name].evaluate(eta, pt)

@@ -1,0 +1,17 @@
+{
+  "already_backed_up_before_parallel_wrapper": 156,
+  "args_file": "autonomous_allhad/workflow/condor_sf_unc_v2_data2_badonly_20260624/full_production_args.txt",
+  "backup_dir": "autonomous_allhad/workflow/production_outputs_sf_unc_v2_data2_20260622_resubmit_backup_20260624",
+  "backup_policy": "each Condor job moves its own pre-existing result JSON/checkpoint before rerun",
+  "bad_files_in_source_diagnostic": 1151,
+  "cluster_ids": [
+    "900248"
+  ],
+  "condor_dir": "autonomous_allhad/workflow/condor_sf_unc_v2_data2_badonly_20260624",
+  "reason": "targeted DATA resubmission for shards with external-access bad files",
+  "shards_planned": 975,
+  "source_diagnostic": "autonomous_allhad/workflow/data2_bad_files_by_data_type.json",
+  "status": "submitted_waiting_for_outputs",
+  "submit_file": "autonomous_allhad/workflow/condor_sf_unc_v2_data2_badonly_20260624/full_production.sub",
+  "submitted_jobs": 975
+}

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import csv
+import contextlib
 import gzip
 import hashlib
 import html
@@ -21,6 +22,7 @@ import awkward as ak
 import correctionlib
 import numpy as np
 import uproot
+from coffea.util import load as coffea_load
 
 REQUIRED_GROUPS = [
     ("TT", lambda k: k.startswith("TT") or "TTto" in k),
@@ -39,30 +41,49 @@ SMS_RE = re.compile(r"mStop-(\d+)")
 REGION_NAMES = [
     "preselection", "LLCR", "QCDCR", "GCR", "DY2E", "DY2M", "SR",
 ]
+SHAPE_SHIFT_NAMES = {"jesTotalUp", "jesTotalDown", "metUnclusteredUp", "metUnclusteredDown"}
+JES_SHIFT_NAMES = {"jesTotalUp", "jesTotalDown"}
+MET_UNCLUSTERED_SHIFT_NAMES = {"metUnclusteredUp", "metUnclusteredDown"}
+MET_COLLECTION_PREFIXES = ("PuppiMET", "PFMET", "MET")
+MET_UNCLUSTERED_BRANCHES = [
+    f"{prefix}_{field}Unclustered{direction}"
+    for prefix in MET_COLLECTION_PREFIXES
+    for field in ("pt", "phi")
+    for direction in ("Up", "Down")
+]
 CORE_BRANCHES = [
     "run", "luminosityBlock", "event", "MET_pt", "MET_phi", "PFMET_pt", "PFMET_phi", "PuppiMET_pt", "PuppiMET_phi",
-    "Jet_pt", "Jet_eta", "Jet_phi", "Jet_mass", "Jet_jetId", "Jet_btagUParTAK4B",
+    *MET_UNCLUSTERED_BRANCHES,
+    "Rho_fixedGridRhoFastjetAll",
+    "Jet_pt", "Jet_eta", "Jet_phi", "Jet_mass", "Jet_area", "Jet_jetId", "Jet_btagUParTAK4B", "Jet_hadronFlavour",
     "Jet_chHEF", "Jet_neHEF", "Jet_chEmEF", "Jet_neEmEF", "Jet_muEF", "Jet_chMultiplicity", "Jet_neMultiplicity",
-    "FatJet_pt", "FatJet_eta", "FatJet_phi", "FatJet_mass", "FatJet_msoftdrop",
-    "Electron_pt", "Electron_eta", "Electron_phi", "Electron_charge", "Electron_cutBased", "Electron_miniPFRelIso_all",
-    "Muon_pt", "Muon_eta", "Muon_phi", "Muon_charge", "Muon_looseId", "Muon_mediumId", "Muon_miniPFRelIso_all",
+    "FatJet_pt", "FatJet_eta", "FatJet_phi", "FatJet_mass", "FatJet_area", "FatJet_msoftdrop",
+    "FatJet_chHEF", "FatJet_neHEF", "FatJet_chEmEF", "FatJet_neEmEF", "FatJet_muEF", "FatJet_chMultiplicity", "FatJet_neMultiplicity",
+    "Electron_pt", "Electron_eta", "Electron_deltaEtaSC", "Electron_phi", "Electron_mass", "Electron_charge", "Electron_cutBased", "Electron_miniPFRelIso_all",
+    "Muon_pt", "Muon_eta", "Muon_phi", "Muon_mass", "Muon_charge", "Muon_looseId", "Muon_mediumId", "Muon_miniPFRelIso_all",
     "Photon_pt", "Photon_eta", "Photon_phi", "Photon_cutBased",
     "Tau_pt", "Tau_eta", "Tau_phi", "Tau_dz", "Tau_decayMode", "Tau_idDeepTau2018v2p5VSjet",
     "IsoTrack_pt", "IsoTrack_eta", "IsoTrack_phi", "IsoTrack_pdgId", "IsoTrack_pfRelIso03_all",
-    "CaloMET_pt", "genWeight",
+    "CaloMET_pt", "Pileup_nTrueInt", "GenPart_pt", "GenPart_pdgId", "GenPart_statusFlags", "genWeight",
 ]
 FILTERS = [
     "Flag_goodVertices", "Flag_globalSuperTightHalo2016Filter", "Flag_HBHENoiseFilter",
     "Flag_HBHENoiseIsoFilter", "Flag_EcalDeadCellTriggerPrimitiveFilter", "Flag_BadPFMuonFilter",
-    "Flag_BadPFMuonDzFilter", "Flag_eeBadScFilter",
+    "Flag_BadPFMuonDzFilter", "Flag_eeBadScFilter", "Flag_ecalBadCalibFilter",
 ]
 SIGNAL_HLT = [
     "HLT_PFMET120_PFMHT120_IDTight", "HLT_PFMET130_PFMHT130_IDTight", "HLT_PFMET140_PFMHT140_IDTight",
     "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight", "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight", "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight",
 ]
-PHOTON_HLT = ["HLT_Photon200", "HLT_Photon175", "HLT_Photon120"]
-ELECTRON_HLT = ["HLT_Ele30_WPTight_Gsf", "HLT_Ele32_WPTight_Gsf", "HLT_Ele35_WPTight_Gsf", "HLT_Ele38_WPTight_Gsf", "HLT_Ele40_WPTight_Gsf"]
-MUON_HLT = ["HLT_IsoMu24", "HLT_IsoMu27", "HLT_Mu50"]
+PHOTON_HLT = ["HLT_Photon175", "HLT_Photon200"]
+ELECTRON_HLT = [
+    "HLT_Ele115_CaloIdVT_GsfTrkIdT", "HLT_Ele135_CaloIdVT_GsfTrkIdT",
+    "HLT_Ele30_WPTight_Gsf", "HLT_Ele32_WPTight_Gsf", "HLT_Ele35_WPTight_Gsf",
+    "HLT_Ele38_WPTight_Gsf", "HLT_Ele40_WPTight_Gsf",
+    "HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ", "HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL",
+    "HLT_DoubleEle25_CaloIdL_MW", "HLT_DoubleEle27_CaloIdL_MW", "HLT_DoubleEle33_CaloIdL_MW",
+]
+MUON_HLT = ["HLT_IsoMu20", "HLT_IsoMu24", "HLT_IsoMu27", "HLT_IsoMu24_eta2p1", "HLT_Mu50", "HLT_Mu55"]
 TRIGGER_FAMILIES = {
     "signal": SIGNAL_HLT,
     "photon": PHOTON_HLT,
@@ -72,6 +93,359 @@ TRIGGER_FAMILIES = {
 JET_ID_INPUTS = [
     "Jet_chHEF", "Jet_neHEF", "Jet_chEmEF", "Jet_neEmEF", "Jet_muEF", "Jet_chMultiplicity", "Jet_neMultiplicity",
 ]
+FATJET_ID_INPUTS = [
+    "FatJet_chHEF", "FatJet_neHEF", "FatJet_chEmEF", "FatJet_neEmEF", "FatJet_muEF", "FatJet_chMultiplicity", "FatJet_neMultiplicity",
+]
+LUMIMASK_RELATIVE_PATH = Path("analysis/data/lumiMask/Cert_Collisions2024_378981_386951_Golden.json")
+JET_VETO_MAP_RELATIVE_PATH = Path("analysis/data/JMESF/2024/jetvetomaps.json.gz")
+JET_VETO_MAP_CORRECTION = "Summer24Prompt24_RunBCDEFGHI_V1"
+
+_LUMIMASK_CACHE: dict[Path, dict[int, list[tuple[int, int]]]] = {}
+_CORRECTION_CACHE: dict[tuple[str, str], Any] = {}
+_ANALYSIS_CORRECTIONS_CACHE: dict[Path, dict[str, Any]] = {}
+_BTAG_CORRECTOR_CACHE: dict[tuple[Path, str, str, str, str], Any] = {}
+
+
+@contextlib.contextmanager
+def analysis_workdir(repo: Path):
+    old = Path.cwd()
+    os.chdir(repo / "analysis")
+    try:
+        yield
+    finally:
+        os.chdir(old)
+
+
+def load_analysis_corrections(repo: Path) -> dict[str, Any]:
+    key = repo.resolve()
+    if key not in _ANALYSIS_CORRECTIONS_CACHE:
+        with analysis_workdir(repo):
+            _ANALYSIS_CORRECTIONS_CACHE[key] = coffea_load("data/corrections.coffea")
+    return _ANALYSIS_CORRECTIONS_CACHE[key]
+
+
+def analysis_year(year: str) -> str:
+    return year if year in {"2022pre", "2022post", "2023pre", "2023post", "2024", "2025"} else "2024"
+
+
+def np_filled(values: Any, n: int, fill: float = 1.0) -> np.ndarray:
+    try:
+        out = np.asarray(ak.to_numpy(ak.fill_none(values, fill)), dtype=float)
+    except Exception:
+        out = np.asarray(values, dtype=float)
+    if out.shape == ():
+        out = np.full(n, float(out), dtype=float)
+    if len(out) != n:
+        return np.full(n, fill, dtype=float)
+    return np.where(np.isfinite(out), out, fill).astype(float)
+
+
+def jagged_prod(values: Any, n: int, fill: float = 1.0) -> np.ndarray:
+    try:
+        return np_filled(ak.prod(ak.fill_none(values, fill), axis=1), n, fill)
+    except Exception:
+        return np.full(n, fill, dtype=float)
+
+
+def replace_component(base: dict[str, np.ndarray], name: str, varied: np.ndarray) -> np.ndarray:
+    out = np.ones_like(next(iter(base.values())))
+    for comp_name, comp in base.items():
+        out = out * (varied if comp_name == name else comp)
+    return out
+
+
+def get_btag_corrector(repo: Path, year: str, caller: str, tagger: str = "UParTAK4", workingpoint: str = "medium") -> Any:
+    key = (repo.resolve(), analysis_year(year), caller, tagger, workingpoint)
+    if key not in _BTAG_CORRECTOR_CACHE:
+        corrections = load_analysis_corrections(repo)
+        with analysis_workdir(repo):
+            _BTAG_CORRECTOR_CACHE[key] = corrections["get_btag_weight"](tagger, analysis_year(year), workingpoint, caller)
+    return _BTAG_CORRECTOR_CACHE[key]
+
+
+def normalize_shift_name(shift_name: str | None) -> str:
+    shift = str(shift_name or "nominal").strip()
+    return "nominal" if shift in {"", "none", "None"} else shift
+
+
+def validate_shift_name(shift_name: str | None) -> str:
+    shift = normalize_shift_name(shift_name)
+    if shift != "nominal" and shift not in SHAPE_SHIFT_NAMES:
+        raise ValueError(f"Unsupported shape shift {shift!r}; expected nominal or one of {sorted(SHAPE_SHIFT_NAMES)}")
+    return shift
+
+
+def shifted_met(arrays: dict[str, Any], n: int, shift_name: str | None, process: str) -> tuple[np.ndarray, np.ndarray, dict[str, Any]]:
+    shift = validate_shift_name(shift_name)
+    is_data = is_data_process(process)
+    prefix = next((p for p in MET_COLLECTION_PREFIXES if has_field(arrays, f"{p}_pt") and has_field(arrays, f"{p}_phi")), None)
+    if prefix is None:
+        raise RuntimeError("No usable MET collection found; need PuppiMET, PFMET, or MET pt/phi branches")
+    pt_name = f"{prefix}_pt"
+    phi_name = f"{prefix}_phi"
+    status: dict[str, Any] = {"collection": prefix, "shift": shift, "applied": False, "source": "nominal", "is_data": bool(is_data)}
+    if shift in MET_UNCLUSTERED_SHIFT_NAMES and is_data:
+        status.update({"reason": "data_uncertainty_not_applied", "pt_branch": pt_name, "phi_branch": phi_name})
+        return np.asarray(arrays[pt_name], dtype=float), np.asarray(arrays[phi_name], dtype=float), status
+    if shift in MET_UNCLUSTERED_SHIFT_NAMES:
+        direction = "Up" if shift.endswith("Up") else "Down"
+        pt_name = f"{prefix}_ptUnclustered{direction}"
+        phi_name = f"{prefix}_phiUnclustered{direction}"
+        missing = [name for name in (pt_name, phi_name) if not has_field(arrays, name)]
+        if missing:
+            raise RuntimeError(f"Requested {shift} but {prefix} is missing unclustered MET branches: {missing}")
+        status.update({"applied": True, "source": "NanoAOD_MET_unclustered", "pt_branch": pt_name, "phi_branch": phi_name})
+    else:
+        status.update({"pt_branch": pt_name, "phi_branch": phi_name})
+    return np.asarray(arrays[pt_name], dtype=float), np.asarray(arrays[phi_name], dtype=float), status
+
+
+def apply_jec(arrays: dict[str, Any], repo: Path, year: str, process: str, prefix: str, pt: Any, eta: Any, phi: Any, mass: Any, shift_name: str | None = None) -> tuple[Any, Any, dict[str, Any]]:
+    is_data = is_data_process(process)
+    shift = validate_shift_name(shift_name)
+    area_name = f"{prefix}_area"
+    needed = [area_name, "Rho_fixedGridRhoFastjetAll", "run"]
+    missing = [name for name in needed if not has_field(arrays, name)]
+    label = "AK8" if prefix == "FatJet" else "AK4"
+    status: dict[str, Any] = {"object": label, "applied": False, "source": "raw", "missing_inputs": missing, "shift": shift, "shift_applied": False}
+    if missing:
+        status["reason"] = "missing_jec_inputs"
+        if prefix == "Jet" and shift in JES_SHIFT_NAMES and not is_data:
+            raise RuntimeError(f"Requested {shift} but AK4 JEC inputs are missing: {missing}")
+        return pt, mass, status
+    try:
+        corrections = load_analysis_corrections(repo)
+        fn_name = "get_fjec_correction" if prefix == "FatJet" else "get_jec_correction"
+        with analysis_workdir(repo):
+            corr = corrections[fn_name](analysis_year(year), pt, eta, phi, arrays["Rho_fixedGridRhoFastjetAll"], arrays[area_name], arrays["run"], is_data)
+        out_pt = pt * corr
+        out_mass = mass * corr
+        status.update({"applied": True, "source": f"analysis.utils.corrections.{fn_name}", "is_data": bool(is_data)})
+        if prefix == "Jet" and shift in JES_SHIFT_NAMES and not is_data:
+            with analysis_workdir(repo):
+                jec_unc = corrections["get_jec_uncertainty"](analysis_year(year), out_pt, eta)
+            sign = 1.0 if shift == "jesTotalUp" else -1.0
+            varied = 1.0 + sign * jec_unc
+            out_pt = out_pt * varied
+            out_mass = out_mass * varied
+            status.update({"shift_applied": True, "shift_source": "analysis.utils.corrections.get_jec_uncertainty", "shift_scope": "AK4_MC_only"})
+        elif prefix == "Jet" and shift in JES_SHIFT_NAMES and is_data:
+            status.update({"shift_applied": False, "shift_reason": "data_uncertainty_not_applied"})
+        elif prefix == "FatJet" and shift in JES_SHIFT_NAMES:
+            status.update({"shift_applied": False, "shift_reason": "AK8 JES total shift not applied in stop_processor_v4 reference"})
+        return out_pt, out_mass, status
+    except Exception as exc:
+        if prefix == "Jet" and shift in JES_SHIFT_NAMES and not is_data:
+            raise RuntimeError(f"Requested {shift} but AK4 JEC/JES evaluation failed: {type(exc).__name__}: {exc}") from exc
+        status.update({"reason": "jec_exception", "error": f"{type(exc).__name__}: {exc}"[:400]})
+        return pt, mass, status
+
+
+def compute_weight_bundle(
+    arrays: dict[str, Any],
+    repo: Path,
+    dataset: str,
+    process: str,
+    year: str,
+    n: int,
+    jet_pt: Any,
+    jet_eta: Any,
+    jet_hadflav: Any,
+    b_med: Any,
+    e_eta: Any,
+    e_delta_eta_sc: Any,
+    e_pt: Any,
+    e_phi: Any,
+    e_veto: Any,
+    e_med: Any,
+    n_e_veto: np.ndarray,
+    n_e_med: np.ndarray,
+    m_eta: Any,
+    m_pt: Any,
+    m_phi: Any,
+    m_loose: Any,
+    m_med: Any,
+    n_m_loose: np.ndarray,
+    n_m_med: np.ndarray,
+    p_eta: Any,
+    p_pt: Any,
+    p_phi: Any,
+    p_med: Any,
+    gcr_mask: np.ndarray,
+) -> tuple[np.ndarray, dict[str, np.ndarray], dict[str, Any]]:
+    if is_data_process(process):
+        ones = np.ones(n, dtype=float)
+        return ones, {"nominal": ones}, {"applied": False, "reason": "data", "available_variations": ["nominal"], "components": {}}
+
+    corrections = load_analysis_corrections(repo)
+    y = analysis_year(year)
+    gen = np_filled(arr(arrays, "genWeight", np.ones(n)), n, 1.0)
+    one = np.ones(n, dtype=float)
+    components: dict[str, np.ndarray] = {}
+    alternates: dict[str, tuple[str, np.ndarray]] = {}
+    status: dict[str, Any] = {"applied": True, "available_variations": ["nominal"], "components": {}}
+
+    def record(name: str, applied: bool, source: str, error: str | None = None) -> None:
+        item = {"applied": applied, "source": source}
+        if error:
+            item["error"] = error[:400]
+        status["components"][name] = item
+
+    if has_field(arrays, "Pileup_nTrueInt"):
+        try:
+            with analysis_workdir(repo):
+                pu_nom, pu_up, pu_down = corrections["get_pu_weight"](y, arrays["Pileup_nTrueInt"])
+            components["pileup"] = np_filled(pu_nom, n, 1.0)
+            alternates["pileupUp"] = ("pileup", np_filled(pu_up, n, 1.0))
+            alternates["pileupDown"] = ("pileup", np_filled(pu_down, n, 1.0))
+            record("pileup", True, "analysis.utils.corrections.get_pu_weight")
+        except Exception as exc:
+            components["pileup"] = one
+            record("pileup", False, "unity_fallback", f"{type(exc).__name__}: {exc}")
+    else:
+        components["pileup"] = one
+        record("pileup", False, "unity_fallback_missing_Pileup_nTrueInt")
+
+    top_pt_sf = one.copy()
+    if "TTto" in dataset and has_field(arrays, "GenPart_pt") and has_field(arrays, "GenPart_pdgId") and has_field(arrays, "GenPart_statusFlags"):
+        try:
+            gen_pt = arrays["GenPart_pt"]
+            gen_pdg = arrays["GenPart_pdgId"]
+            gen_flags = ak.values_astype(arrays["GenPart_statusFlags"], np.int64)
+            is_top = (abs(gen_pdg) == 6) & ((gen_flags & (1 << 8)) != 0) & ((gen_flags & (1 << 13)) != 0)
+            tops = gen_pt[is_top]
+            t1 = ak.fill_none(ak.pad_none(tops, 2, axis=1, clip=False)[:, 0], 0.0)
+            t2 = ak.fill_none(ak.pad_none(tops, 2, axis=1, clip=False)[:, 1], 0.0)
+            both = ak.num(tops, axis=1) >= 2
+            with analysis_workdir(repo):
+                vals = np.sqrt(corrections["get_top_pt_reweight"](t1) * corrections["get_top_pt_reweight"](t2))
+            top_pt_sf = np.where(ak.to_numpy(both), np_filled(vals, n, 1.0), 1.0)
+            record("top_pt_reweight", True, "analysis.utils.corrections.get_top_pt_reweight")
+        except Exception as exc:
+            record("top_pt_reweight", False, "unity_fallback", f"{type(exc).__name__}: {exc}")
+    else:
+        reason = "not_TTto_dataset" if "TTto" not in dataset else "missing_GenPart_inputs"
+        record("top_pt_reweight", False, f"unity_fallback_{reason}")
+    components["top_pt_reweight"] = top_pt_sf
+
+    if has_field(arrays, "Jet_hadronFlavour"):
+        try:
+            caller = dataset.split("____")[0]
+            btag_corrector = get_btag_corrector(repo, y, caller)
+            btag = btag_corrector.btag_weight(jet_pt, jet_eta, jet_hadflav, b_med)
+            names = [
+                "btagSF", "btagSF_bc_correlatedUp", "btagSF_bc_correlatedDown", "btagSF_bc_uncorrelatedUp", "btagSF_bc_uncorrelatedDown",
+                "btagSF_light_correlatedUp", "btagSF_light_correlatedDown", "btagSF_light_uncorrelatedUp", "btagSF_light_uncorrelatedDown",
+            ]
+            bvals = {name: np_filled(val, n, 1.0) for name, val in zip(names, btag)}
+            components["btagSF"] = bvals["btagSF"]
+            for name in names[1:]:
+                alternates[name] = ("btagSF", bvals[name])
+            record("btagSF", True, "analysis.utils.corrections.BTagCorrector")
+        except Exception as exc:
+            components["btagSF"] = one
+            record("btagSF", False, "unity_fallback", f"{type(exc).__name__}: {exc}")
+    else:
+        components["btagSF"] = one
+        record("btagSF", False, "unity_fallback_missing_Jet_hadronFlavour")
+
+    def add_triplet(component: str, nominal: np.ndarray, up: np.ndarray, down: np.ndarray, source: str) -> None:
+        components[component] = nominal
+        alternates[f"{component}Up"] = (component, up)
+        alternates[f"{component}Down"] = (component, down)
+        record(component, True, source)
+
+    try:
+        with analysis_workdir(repo):
+            ev_nom, ev_up, ev_down = corrections["get_ele_veto_id_sf"](y, e_eta + e_delta_eta_sc, e_pt, e_phi)
+            em_nom, em_up, em_down = corrections["get_ele_medium_id_sf"](y, e_eta + e_delta_eta_sc, e_pt, e_phi)
+        ele_nom = one.copy(); ele_up = one.copy(); ele_down = one.copy()
+        mask_one = np.asarray(n_e_veto == 1, dtype=bool)
+        mask_two = np.asarray(n_e_med == 2, dtype=bool)
+        vals = [
+            (ele_nom, jagged_prod(ak.where(e_veto, ev_nom, ak.ones_like(e_pt)), n), jagged_prod(ak.where(e_med, em_nom, ak.ones_like(e_pt)), n)),
+            (ele_up, jagged_prod(ak.where(e_veto, ev_up, ak.ones_like(e_pt)), n), jagged_prod(ak.where(e_med, em_up, ak.ones_like(e_pt)), n)),
+            (ele_down, jagged_prod(ak.where(e_veto, ev_down, ak.ones_like(e_pt)), n), jagged_prod(ak.where(e_med, em_down, ak.ones_like(e_pt)), n)),
+        ]
+        for target, veto_vals, med_vals in vals:
+            target[mask_one] = veto_vals[mask_one]
+            target[mask_two] = med_vals[mask_two]
+        add_triplet("electron_id", ele_nom, ele_up, ele_down, "analysis.utils.corrections electron ID SF")
+    except Exception as exc:
+        components["electron_id"] = one
+        record("electron_id", False, "unity_fallback", f"{type(exc).__name__}: {exc}")
+
+    try:
+        with analysis_workdir(repo):
+            eh_nom, eh_up, eh_down = corrections["get_ele_hlt_sf"](y, e_eta, e_pt, e_phi)
+        mask_two = np.asarray(n_e_med == 2, dtype=bool)
+        nom = one.copy(); up = one.copy(); down = one.copy()
+        nom_vals = jagged_prod(ak.where(e_med, eh_nom, ak.ones_like(e_pt)), n)
+        up_vals = jagged_prod(ak.where(e_med, eh_up, ak.ones_like(e_pt)), n)
+        down_vals = jagged_prod(ak.where(e_med, eh_down, ak.ones_like(e_pt)), n)
+        nom[mask_two] = nom_vals[mask_two]; up[mask_two] = up_vals[mask_two]; down[mask_two] = down_vals[mask_two]
+        add_triplet("electron_hlt", nom, up, down, "analysis.utils.corrections.get_ele_hlt_sf")
+    except Exception as exc:
+        components["electron_hlt"] = one
+        record("electron_hlt", False, "unity_fallback", f"{type(exc).__name__}: {exc}")
+
+    try:
+        with analysis_workdir(repo):
+            ml_nom, ml_up, ml_down = corrections["get_mu_loose_id_sf"](y, m_eta, m_pt)
+            mm_nom, mm_up, mm_down = corrections["get_mu_medium_id_sf"](y, m_eta, m_pt)
+        mu_nom = one.copy(); mu_up = one.copy(); mu_down = one.copy()
+        mask_one = np.asarray(n_m_loose == 1, dtype=bool)
+        mask_two = np.asarray(n_m_med == 2, dtype=bool)
+        vals = [
+            (mu_nom, jagged_prod(ak.where(m_loose, ml_nom, ak.ones_like(m_pt)), n), jagged_prod(ak.where(m_med, mm_nom, ak.ones_like(m_pt)), n)),
+            (mu_up, jagged_prod(ak.where(m_loose, ml_up, ak.ones_like(m_pt)), n), jagged_prod(ak.where(m_med, mm_up, ak.ones_like(m_pt)), n)),
+            (mu_down, jagged_prod(ak.where(m_loose, ml_down, ak.ones_like(m_pt)), n), jagged_prod(ak.where(m_med, mm_down, ak.ones_like(m_pt)), n)),
+        ]
+        for target, loose_vals, med_vals in vals:
+            target[mask_one] = loose_vals[mask_one]
+            target[mask_two] = med_vals[mask_two]
+        add_triplet("muon_id", mu_nom, mu_up, mu_down, "analysis.utils.corrections muon ID SF")
+    except Exception as exc:
+        components["muon_id"] = one
+        record("muon_id", False, "unity_fallback", f"{type(exc).__name__}: {exc}")
+
+    try:
+        with analysis_workdir(repo):
+            mh_nom, mh_up, mh_down = corrections["get_mu_hlt_sf"](y, m_eta, m_pt)
+        mask_two = np.asarray(n_m_med == 2, dtype=bool)
+        nom = one.copy(); up = one.copy(); down = one.copy()
+        nom_vals = jagged_prod(ak.where(m_med, mh_nom, ak.ones_like(m_pt)), n)
+        up_vals = jagged_prod(ak.where(m_med, mh_up, ak.ones_like(m_pt)), n)
+        down_vals = jagged_prod(ak.where(m_med, mh_down, ak.ones_like(m_pt)), n)
+        nom[mask_two] = nom_vals[mask_two]; up[mask_two] = up_vals[mask_two]; down[mask_two] = down_vals[mask_two]
+        add_triplet("muon_hlt", nom, up, down, "analysis.utils.corrections.get_mu_hlt_sf")
+    except Exception as exc:
+        components["muon_hlt"] = one
+        record("muon_hlt", False, "unity_fallback", f"{type(exc).__name__}: {exc}")
+
+    try:
+        with analysis_workdir(repo):
+            ph_nom, ph_up, ph_down = corrections["get_photon_id_sf"](y, "Medium", p_eta, p_pt, p_phi)
+        nom = one.copy(); up = one.copy(); down = one.copy()
+        mask_g = np.asarray(gcr_mask, dtype=bool)
+        nom_vals = jagged_prod(ak.where(p_med, ph_nom, ak.ones_like(p_pt)), n)
+        up_vals = jagged_prod(ak.where(p_med, ph_up, ak.ones_like(p_pt)), n)
+        down_vals = jagged_prod(ak.where(p_med, ph_down, ak.ones_like(p_pt)), n)
+        nom[mask_g] = nom_vals[mask_g]; up[mask_g] = up_vals[mask_g]; down[mask_g] = down_vals[mask_g]
+        add_triplet("photon_id", nom, up, down, "analysis.utils.corrections.get_photon_id_sf")
+    except Exception as exc:
+        components["photon_id"] = one
+        record("photon_id", False, "unity_fallback", f"{type(exc).__name__}: {exc}")
+
+    nominal_sf = np.ones(n, dtype=float)
+    for comp in components.values():
+        nominal_sf = nominal_sf * comp
+    nominal = gen * nominal_sf
+    variations = {"nominal": nominal}
+    for variation, (component, varied) in alternates.items():
+        variations[variation] = gen * replace_component(components, component, varied)
+    status["available_variations"] = sorted(variations)
+    return gen, variations, status
 
 
 def write_json(path: Path, payload: Any) -> None:
@@ -409,53 +783,174 @@ def ak4_tight_lepton_veto_mask(arrays: dict[str, Any], jet_pt: Any, jet_eta: Any
     return jet_pt == jet_pt, "raw_kinematic_fallback_missing_baseline_jet_id_inputs"
 
 
-def transverse_mass(pt: Any, phi: Any, met_pt: Any, met_phi: Any) -> Any:
-    return np.sqrt(2 * pt * met_pt * (1 - np.cos(phi - met_phi)))
+def _correction(repo: Path, relative_path: Path, correction_name: str) -> Any:
+    path = repo / relative_path
+    key = (str(path), correction_name)
+    if key not in _CORRECTION_CACHE:
+        _CORRECTION_CACHE[key] = correctionlib.CorrectionSet.from_file(str(path))[correction_name]
+    return _CORRECTION_CACHE[key]
 
 
-def invariant_mass(pt1, eta1, phi1, pt2, eta2, phi2):
-    return np.sqrt(np.maximum(0, 2 * pt1 * pt2 * (np.cosh(eta1 - eta2) - np.cos(phi1 - phi2))))
+def load_lumimask(repo: Path) -> dict[int, list[tuple[int, int]]]:
+    path = repo / LUMIMASK_RELATIVE_PATH
+    if path not in _LUMIMASK_CACHE:
+        raw = json.loads(path.read_text())
+        _LUMIMASK_CACHE[path] = {int(run): [(int(lo), int(hi)) for lo, hi in ranges] for run, ranges in raw.items()}
+    return _LUMIMASK_CACHE[path]
 
 
-def extract_chunk(arrays: dict[str, Any], dataset: str, process: str, sp: str | None, year: str, file_path: str, entry_start: int, entry_stop: int, fastsim_trigger_bypass: bool = False) -> tuple[list[dict[str, Any]], dict[str, Any]]:
-    n = len(arrays["run"])
-    met_pt = np.asarray(arr(arrays, "PuppiMET_pt", arr(arrays, "PFMET_pt", arr(arrays, "MET_pt"))), dtype=float)
-    met_phi = np.asarray(arr(arrays, "PuppiMET_phi", arr(arrays, "PFMET_phi", arr(arrays, "MET_phi"))), dtype=float)
-    calo_pt = np.asarray(arr(arrays, "CaloMET_pt", np.ones(n) * np.nan), dtype=float)
-    puppi_calo = np.divide(met_pt, calo_pt, out=np.ones(n) * np.inf, where=calo_pt != 0)
+def golden_lumi_mask(arrays: dict[str, Any], process: str, repo: Path, n: int) -> tuple[np.ndarray, str]:
+    if not is_data_process(process):
+        return np.ones(n, dtype=bool), "not_applicable_mc"
+    lumi_ranges = load_lumimask(repo)
+    runs = np.asarray(arrays["run"], dtype=np.int64)
+    lumis = np.asarray(arrays["luminosityBlock"], dtype=np.int64)
+    out = np.zeros(n, dtype=bool)
+    for run in np.unique(runs):
+        idx = runs == run
+        ranges = lumi_ranges.get(int(run), [])
+        if not ranges:
+            continue
+        run_lumis = lumis[idx]
+        keep = np.zeros(np.sum(idx), dtype=bool)
+        for lo, hi in ranges:
+            keep |= (run_lumis >= lo) & (run_lumis <= hi)
+        out[idx] = keep
+    return out, str(repo / LUMIMASK_RELATIVE_PATH)
 
-    jet_pt = arr(arrays, "Jet_pt", ak.Array([[]] * n))
-    jet_eta = arr(arrays, "Jet_eta", ak.Array([[]] * n))
-    jet_phi = arr(arrays, "Jet_phi", ak.Array([[]] * n))
-    jet_id_mask, jet_id_source = ak4_tight_lepton_veto_mask(arrays, jet_pt, jet_eta, Path.cwd().resolve())
-    btag = arr(arrays, "Jet_btagUParTAK4B", ak.zeros_like(jet_pt))
-    good_j = (jet_pt > 30) & (abs(jet_eta) < 2.4) & jet_id_mask
-    b_med = good_j & (btag > 0.1272)
-    njet = count(good_j)
-    nb = count(b_med)
-    ht = ak.to_numpy(ak.sum(jet_pt[good_j], axis=1))
-    jphi_good = jet_phi[good_j]
-    jpt_good = jet_pt[good_j]
-    jeta_good = jet_eta[good_j]
-    j1pt = first_or(-99, jpt_good)
-    j1eta = first_or(-99, jeta_good)
-    j1phi = first_or(-99, jphi_good)
-    j2pt = nth_or(-99, jpt_good, 1)
-    dphis = delta_phi(jphi_good, met_phi)
+
+def ak4_jet_veto_mask(jet_pt: Any, jet_eta: Any, jet_phi: Any, repo: Path) -> tuple[Any, str]:
+    corr = _correction(repo, JET_VETO_MAP_RELATIVE_PATH, JET_VETO_MAP_CORRECTION)
+    counts = ak.num(jet_eta)
+    flat_eta = ak.to_numpy(ak.flatten(jet_eta))
+    flat_phi = ak.to_numpy(ak.flatten(jet_phi))
+    flat_pt = ak.to_numpy(ak.flatten(jet_pt))
+    if len(flat_eta) == 0:
+        return ak.unflatten(np.zeros(0, dtype=bool), counts), f"correctionlib_{JET_VETO_MAP_CORRECTION}"
+    veto = np.asarray(corr.evaluate("jetvetomap", flat_eta, flat_phi)) != 0
+    return ak.unflatten((flat_pt > 30) & veto, counts), f"correctionlib_{JET_VETO_MAP_CORRECTION}"
+
+
+def ak8_tight_lepton_veto_mask(arrays: dict[str, Any], fj_pt: Any, fj_eta: Any, repo: Path) -> tuple[Any, str]:
+    if all(has_field(arrays, name) for name in FATJET_ID_INPUTS):
+        corr = _correction(repo, Path("analysis/data/JMESF/2024/jetid.json.gz"), "AK8PUPPI_TightLeptonVeto")
+        counts = ak.num(fj_eta)
+        ch_mult = arr(arrays, "FatJet_chMultiplicity")
+        ne_mult = arr(arrays, "FatJet_neMultiplicity")
+        multiplicity = ch_mult + ne_mult
+        args = (
+            ak.flatten(fj_eta),
+            ak.flatten(arr(arrays, "FatJet_chHEF")),
+            ak.flatten(arr(arrays, "FatJet_neHEF")),
+            ak.flatten(arr(arrays, "FatJet_chEmEF")),
+            ak.flatten(arr(arrays, "FatJet_neEmEF")),
+            ak.flatten(arr(arrays, "FatJet_muEF")),
+            ak.flatten(ch_mult),
+            ak.flatten(ne_mult),
+            ak.flatten(multiplicity),
+        )
+        return ak.unflatten(corr.evaluate(*args), counts) == 1, "correctionlib_AK8PUPPI_TightLeptonVeto"
+    return fj_pt == fj_pt, "raw_kinematic_fallback_missing_baseline_fatjet_id_inputs"
+
+
+def clean_by_delta_r(obj_eta: Any, obj_phi: Any, ref_eta: Any, ref_phi: Any, dr_min: float) -> Any:
+    deta = obj_eta[:, :, None] - ref_eta[:, None, :]
+    dphi = delta_phi(obj_phi[:, :, None], ref_phi[:, None, :])
+    return ak.all((deta * deta + dphi * dphi) > dr_min * dr_min, axis=2)
+
+
+def jet_feature_block(jet_pt: Any, jet_eta: Any, jet_phi: Any, good_mask: Any, b_mask: Any, met_phi: Any) -> dict[str, Any]:
+    jphi = jet_phi[good_mask]
+    jpt = jet_pt[good_mask]
+    jeta = jet_eta[good_mask]
+    dphis = delta_phi(jphi, met_phi)
     j1dphi = first_or(999, dphis)
     j2dphi = nth_or(999, dphis, 1)
     j3dphi = nth_or(999, dphis, 2)
     j4dphi = nth_or(999, dphis, 3)
-    min_dphi4 = np.minimum.reduce([j1dphi, j2dphi, j3dphi, j4dphi])
+    return {
+        "njet": count(good_mask),
+        "nb": count(b_mask),
+        "ht": ak.to_numpy(ak.sum(jet_pt[good_mask], axis=1)),
+        "jpt": jpt,
+        "jeta": jeta,
+        "jphi": jphi,
+        "j1pt": first_or(-99, jpt),
+        "j1eta": first_or(-99, jeta),
+        "j1phi": first_or(-99, jphi),
+        "j2pt": nth_or(-99, jpt, 1),
+        "j1dphi": j1dphi,
+        "j2dphi": j2dphi,
+        "j3dphi": j3dphi,
+        "j4dphi": j4dphi,
+        "min_dphi4": np.minimum.reduce([j1dphi, j2dphi, j3dphi, j4dphi]),
+        "open_pre": (j1dphi > 0.5) & (j2dphi > 0.15) & (j3dphi > 0.15),
+        "open_high": (j1dphi > 0.5) & (j2dphi > 0.5) & (j3dphi > 0.5) & (j4dphi > 0.5),
+        "qcd_open": (j1dphi < 0.5) | (j2dphi < 0.5) | (j3dphi < 0.5) | (j4dphi < 0.5),
+        "dphi123_0p1": (j1dphi < 0.1) | (j2dphi < 0.1) | (j3dphi < 0.1),
+    }
 
-    e_pt = arr(arrays, "Electron_pt", ak.Array([[]] * n)); e_eta = arr(arrays, "Electron_eta", ak.Array([[]] * n)); e_phi = arr(arrays, "Electron_phi", ak.Array([[]] * n))
+
+def transverse_mass(pt: Any, phi: Any, met_pt: Any, met_phi: Any) -> Any:
+    return np.sqrt(2 * pt * met_pt * (1 - np.cos(phi - met_phi)))
+
+
+def invariant_mass(pt1, eta1, phi1, mass1, pt2, eta2, phi2, mass2):
+    px1 = pt1 * np.cos(phi1)
+    py1 = pt1 * np.sin(phi1)
+    pz1 = pt1 * np.sinh(eta1)
+    e1 = np.sqrt(np.maximum(0, mass1 * mass1 + px1 * px1 + py1 * py1 + pz1 * pz1))
+    px2 = pt2 * np.cos(phi2)
+    py2 = pt2 * np.sin(phi2)
+    pz2 = pt2 * np.sinh(eta2)
+    e2 = np.sqrt(np.maximum(0, mass2 * mass2 + px2 * px2 + py2 * py2 + pz2 * pz2))
+    mass2_out = (e1 + e2) ** 2 - (px1 + px2) ** 2 - (py1 + py2) ** 2 - (pz1 + pz2) ** 2
+    return np.sqrt(np.maximum(0, mass2_out))
+
+
+def extract_chunk(arrays: dict[str, Any], dataset: str, process: str, sp: str | None, year: str, file_path: str, entry_start: int, entry_stop: int, fastsim_trigger_bypass: bool = False, shift_name: str | None = None) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    n = len(arrays["run"])
+    repo = Path.cwd().resolve()
+    year = analysis_year(year)
+    shift = validate_shift_name(shift_name)
+    met_pt, met_phi, met_shift_status = shifted_met(arrays, n, shift, process)
+    calo_pt = np.asarray(arr(arrays, "CaloMET_pt", np.ones(n) * np.nan), dtype=float)
+    puppi_calo = np.divide(met_pt, calo_pt, out=np.ones(n) * np.inf, where=calo_pt != 0)
+
+    jet_pt_raw = arr(arrays, "Jet_pt", ak.Array([[]] * n))
+    jet_eta = arr(arrays, "Jet_eta", ak.Array([[]] * n))
+    jet_phi = arr(arrays, "Jet_phi", ak.Array([[]] * n))
+    jet_mass_raw = arr(arrays, "Jet_mass", ak.zeros_like(jet_pt_raw))
+    jet_pt, jet_mass, jec_status = apply_jec(arrays, repo, year, process, "Jet", jet_pt_raw, jet_eta, jet_phi, jet_mass_raw, shift)
+    jet_id_mask, jet_id_source = ak4_tight_lepton_veto_mask(arrays, jet_pt, jet_eta, repo)
+    veto_j, jet_veto_source = ak4_jet_veto_mask(jet_pt, jet_eta, jet_phi, repo)
+    zero_veto_j = count(veto_j) == 0
+    btag = arr(arrays, "Jet_btagUParTAK4B", ak.zeros_like(jet_pt))
+    good_j = (jet_pt > 30) & (abs(jet_eta) < 2.4) & jet_id_mask
+    b_med = good_j & (btag > 0.1272)
+    jet_nominal = jet_feature_block(jet_pt, jet_eta, jet_phi, good_j, b_med, met_phi)
+    njet = jet_nominal["njet"]
+    nb = jet_nominal["nb"]
+    ht = jet_nominal["ht"]
+    j1pt = jet_nominal["j1pt"]
+    j1eta = jet_nominal["j1eta"]
+    j1phi = jet_nominal["j1phi"]
+    j2pt = jet_nominal["j2pt"]
+    j1dphi = jet_nominal["j1dphi"]
+    j2dphi = jet_nominal["j2dphi"]
+    j3dphi = jet_nominal["j3dphi"]
+    j4dphi = jet_nominal["j4dphi"]
+    min_dphi4 = jet_nominal["min_dphi4"]
+
+    e_pt = arr(arrays, "Electron_pt", ak.Array([[]] * n)); e_eta = arr(arrays, "Electron_eta", ak.Array([[]] * n)); e_phi = arr(arrays, "Electron_phi", ak.Array([[]] * n)); e_mass = arr(arrays, "Electron_mass", ak.zeros_like(e_pt))
+    e_delta_eta_sc = arr(arrays, "Electron_deltaEtaSC", ak.zeros_like(e_pt))
     e_charge = arr(arrays, "Electron_charge", ak.zeros_like(e_pt)); e_cb = arr(arrays, "Electron_cutBased", ak.zeros_like(e_pt)); e_iso = arr(arrays, "Electron_miniPFRelIso_all", ak.ones_like(e_pt) * 99)
     e_fid = ((abs(e_eta) < 1.4442) | ((abs(e_eta) > 1.5660) & (abs(e_eta) < 2.5)))
     e_veto = (e_pt > 5) & e_fid & (e_cb >= 1) & (e_iso < 0.1)
     e_med = (e_pt > 10) & e_fid & (e_cb >= 3) & (e_iso < 0.1)
     n_e_veto = count(e_veto); n_e_med = count(e_med)
 
-    m_pt = arr(arrays, "Muon_pt", ak.Array([[]] * n)); m_eta = arr(arrays, "Muon_eta", ak.Array([[]] * n)); m_phi = arr(arrays, "Muon_phi", ak.Array([[]] * n))
+    m_pt = arr(arrays, "Muon_pt", ak.Array([[]] * n)); m_eta = arr(arrays, "Muon_eta", ak.Array([[]] * n)); m_phi = arr(arrays, "Muon_phi", ak.Array([[]] * n)); m_mass = arr(arrays, "Muon_mass", ak.zeros_like(m_pt))
     m_charge = arr(arrays, "Muon_charge", ak.zeros_like(m_pt)); m_looseid = arr(arrays, "Muon_looseId", ak.zeros_like(m_pt)); m_medid = arr(arrays, "Muon_mediumId", ak.zeros_like(m_pt)); m_iso = arr(arrays, "Muon_miniPFRelIso_all", ak.ones_like(m_pt) * 99)
     m_loose = (m_pt > 5) & (abs(m_eta) < 2.4) & m_looseid & (m_iso < 0.2)
     m_med = (m_pt > 10) & (abs(m_eta) < 2.4) & m_medid & (m_iso < 0.2)
@@ -477,8 +972,10 @@ def extract_chunk(arrays: dict[str, Any], dataset: str, process: str, sp: str | 
     tr_m = (tr_pt > 5) & (abs(tr_eta) < 2.5) & (tr_pdg == 13) & (tr_iso < 0.2) & (tr_mt < 100)
     tr_pi = (tr_pt > 10) & (abs(tr_eta) < 2.5) & (tr_pdg == 211) & (tr_iso < 0.1) & (tr_mt < 100)
 
-    fj_pt = arr(arrays, "FatJet_pt", ak.Array([[]] * n)); fj_eta = arr(arrays, "FatJet_eta", ak.Array([[]] * n)); fj_phi = arr(arrays, "FatJet_phi", ak.Array([[]] * n)); fj_msd = arr(arrays, "FatJet_msoftdrop", ak.zeros_like(fj_pt)); fj_mass = arr(arrays, "FatJet_mass", ak.zeros_like(fj_pt))
-    good_fj = (fj_pt > 200) & (abs(fj_eta) < 2.0) & (fj_msd > 60)
+    fj_pt_raw = arr(arrays, "FatJet_pt", ak.Array([[]] * n)); fj_eta = arr(arrays, "FatJet_eta", ak.Array([[]] * n)); fj_phi = arr(arrays, "FatJet_phi", ak.Array([[]] * n)); fj_msd = arr(arrays, "FatJet_msoftdrop", ak.zeros_like(fj_pt_raw)); fj_mass_raw = arr(arrays, "FatJet_mass", ak.zeros_like(fj_pt_raw))
+    fj_pt, fj_mass, fjec_status = apply_jec(arrays, repo, year, process, "FatJet", fj_pt_raw, fj_eta, fj_phi, fj_mass_raw, shift)
+    fj_id_mask, fatjet_id_source = ak8_tight_lepton_veto_mask(arrays, fj_pt, fj_eta, repo)
+    good_fj = (fj_pt > 200) & (abs(fj_eta) < 2.0) & (fj_msd > 60) & fj_id_mask
     n_fj = count(good_fj)
     fj1pt = first_or(-99, fj_pt[good_fj]); fj1eta = first_or(-99, fj_eta[good_fj]); fj1phi = first_or(-99, fj_phi[good_fj]); fj1mass = first_or(-99, fj_mass[good_fj]); fj1msd = first_or(-99, fj_msd[good_fj])
 
@@ -492,50 +989,75 @@ def extract_chunk(arrays: dict[str, Any], dataset: str, process: str, sp: str | 
         sig_hlt = np.ones(n, dtype=bool)
         signal_trigger_policy = "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level"
 
-    e1pt = first_or(-99, e_pt[e_med]); e2pt = nth_or(-99, e_pt[e_med], 1); e1eta = first_or(0, e_eta[e_med]); e2eta = nth_or(0, e_eta[e_med], 1); e1phi = first_or(0, e_phi[e_med]); e2phi = nth_or(0, e_phi[e_med], 1); e1q = first_or(0, e_charge[e_med]); e2q = nth_or(0, e_charge[e_med], 1)
-    mee = invariant_mass(e1pt, e1eta, e1phi, e2pt, e2eta, e2phi); pee = np.sqrt(np.maximum(0, e1pt**2 + e2pt**2 + 2*e1pt*e2pt*np.cos(e1phi-e2phi)))
-    m1pt = first_or(-99, m_pt[m_med]); m2pt = nth_or(-99, m_pt[m_med], 1); m1eta = first_or(0, m_eta[m_med]); m2eta = nth_or(0, m_eta[m_med], 1); m1phi = first_or(0, m_phi[m_med]); m2phi = nth_or(0, m_phi[m_med], 1); m1q = first_or(0, m_charge[m_med]); m2q = nth_or(0, m_charge[m_med], 1)
-    mmm = invariant_mass(m1pt, m1eta, m1phi, m2pt, m2eta, m2phi); pmm = np.sqrt(np.maximum(0, m1pt**2 + m2pt**2 + 2*m1pt*m2pt*np.cos(m1phi-m2phi)))
+    e1pt = first_or(-99, e_pt[e_med]); e2pt = nth_or(-99, e_pt[e_med], 1); e1eta = first_or(0, e_eta[e_med]); e2eta = nth_or(0, e_eta[e_med], 1); e1phi = first_or(0, e_phi[e_med]); e2phi = nth_or(0, e_phi[e_med], 1); e1m = first_or(0, e_mass[e_med]); e2m = nth_or(0, e_mass[e_med], 1); e1q = first_or(0, e_charge[e_med]); e2q = nth_or(0, e_charge[e_med], 1)
+    mee = invariant_mass(e1pt, e1eta, e1phi, e1m, e2pt, e2eta, e2phi, e2m); pee = np.sqrt(np.maximum(0, e1pt**2 + e2pt**2 + 2*e1pt*e2pt*np.cos(e1phi-e2phi)))
+    m1pt = first_or(-99, m_pt[m_med]); m2pt = nth_or(-99, m_pt[m_med], 1); m1eta = first_or(0, m_eta[m_med]); m2eta = nth_or(0, m_eta[m_med], 1); m1phi = first_or(0, m_phi[m_med]); m2phi = nth_or(0, m_phi[m_med], 1); m1m = first_or(0, m_mass[m_med]); m2m = nth_or(0, m_mass[m_med], 1); m1q = first_or(0, m_charge[m_med]); m2q = nth_or(0, m_charge[m_med], 1)
+    mmm = invariant_mass(m1pt, m1eta, m1phi, m1m, m2pt, m2eta, m2phi, m2m); pmm = np.sqrt(np.maximum(0, m1pt**2 + m2pt**2 + 2*m1pt*m2pt*np.cos(m1phi-m2phi)))
     e_mt = transverse_mass(e_pt[e_veto], e_phi[e_veto], met_pt, met_phi)
     m_mt = transverse_mass(m_pt[m_loose], m_phi[m_loose], met_pt, met_phi)
     mt_100 = ak.to_numpy(ak.all(e_mt < 100, axis=1) & ak.all(m_mt < 100, axis=1))
 
+    photon_clean_j = clean_by_delta_r(jet_eta, jet_phi, p_eta[p_med], p_phi[p_med], 0.2)
+    lepton_clean_eta = ak.concatenate([e_eta[e_med], m_eta[m_med]], axis=1)
+    lepton_clean_phi = ak.concatenate([e_phi[e_med], m_phi[m_med]], axis=1)
+    lepton_clean_j = clean_by_delta_r(jet_eta, jet_phi, lepton_clean_eta, lepton_clean_phi, 0.2)
+    jet_photon_clean = jet_feature_block(jet_pt, jet_eta, jet_phi, good_j & photon_clean_j, b_med & photon_clean_j, met_phi)
+    jet_lepton_clean = jet_feature_block(jet_pt, jet_eta, jet_phi, good_j & lepton_clean_j, b_med & lepton_clean_j, met_phi)
+
     one_veto_lepton = ((n_e_veto == 1) & (n_m_loose == 0)) | ((n_e_veto == 0) & (n_m_loose == 1))
-    base_common = met_filters & (count(tr_e) == 0) & (count(tr_m) == 0) & (count(tr_pi) == 0) & (puppi_calo < 5)
-    open_pre = (j1dphi > 0.5) & (j2dphi > 0.15) & (j3dphi > 0.15)
-    open_high = (j1dphi > 0.5) & (j2dphi > 0.5) & (j3dphi > 0.5) & (j4dphi > 0.5)
-    qcd_open = (j1dphi < 0.5) | (j2dphi < 0.5) | (j3dphi < 0.5) | (j4dphi < 0.5)
-    dphi123_0p1 = (j1dphi < 0.1) | (j2dphi < 0.1) | (j3dphi < 0.1)
+    valid_met = np.isfinite(met_pt) & (met_pt >= 0)
+    lumi_mask, lumi_mask_source = golden_lumi_mask(arrays, process, repo, n)
+    no_tracks = (count(tr_e) == 0) & (count(tr_m) == 0) & (count(tr_pi) == 0)
+    zero_e = n_e_veto == 0
+    zero_m = n_m_loose == 0
+    no_veto_leptons = zero_e & zero_m
+    zero_tau = n_tau == 0
+    base_common = valid_met & lumi_mask & met_filters & no_tracks & zero_veto_j & (puppi_calo < 5)
     met_250 = met_pt > 250
     ht_300 = ht > 300
+    ht_photon_300 = jet_photon_clean["ht"] > 300
+    ht_lepton_300 = jet_lepton_clean["ht"] > 300
     recoil_g = np.sqrt(np.maximum(0, met_pt**2 + first_or(0, p_pt[p_med])**2 + 2*met_pt*first_or(0, p_pt[p_med])*np.cos(met_phi-first_or(0, p_phi[p_med]))))
 
-    valid_met = np.isfinite(met_pt) & (met_pt >= 0)
-    no_tracks = (count(tr_e) == 0) & (count(tr_m) == 0) & (count(tr_pi) == 0)
-    no_leptons = (n_m_med == 0) & (n_e_med == 0)
-    zero_tau = n_tau == 0
-    zero_veto_j = np.ones(n, dtype=bool)
     masks = {
-        "preselection": base_common & sig_hlt & no_leptons & zero_tau & (njet >= 2) & met_250 & open_pre & ht_300,
-        "LLCR": base_common & sig_hlt & zero_tau & (njet >= 5) & (nb >= 1) & one_veto_lepton & mt_100 & met_250 & open_high & ht_300,
-        "QCDCR": base_common & sig_hlt & no_leptons & zero_tau & (njet >= 5) & (nb >= 1) & met_250 & qcd_open & dphi123_0p1 & ht_300,
-        "GCR": base_common & pho_hlt & (n_p_med == 1) & no_leptons & zero_tau & (njet >= 5) & (nb >= 1) & (met_pt < 250) & (recoil_g > 250) & open_high & ht_300,
-        "DY2E": base_common & ele_hlt & zero_tau & (njet >= 5) & (nb >= 1) & (n_m_med == 0) & (n_e_med == 2) & (e1pt > 40) & (e2pt > 20) & (mee > 50) & (e1q != e2q) & (pee > 200) & (mee > 81) & (mee < 101) & open_high & ht_300,
-        "DY2M": base_common & mu_hlt & zero_tau & (njet >= 5) & (nb >= 1) & (n_e_med == 0) & (n_m_med == 2) & (m1pt > 50) & (m2pt > 20) & (mmm > 50) & (m1q != m2q) & (pmm > 200) & (mmm > 81) & (mmm < 101) & open_high & ht_300,
-        "SR": base_common & sig_hlt & no_leptons & zero_tau & (njet >= 5) & (nb >= 1) & met_250 & open_high & ht_300,
+        "preselection": base_common & sig_hlt & no_veto_leptons & zero_tau & (njet >= 2) & met_250 & jet_nominal["open_pre"] & ht_300,
+        "LLCR": base_common & sig_hlt & zero_tau & (njet >= 5) & (nb >= 1) & one_veto_lepton & mt_100 & met_250 & jet_nominal["open_high"] & ht_300,
+        "QCDCR": base_common & sig_hlt & no_veto_leptons & zero_tau & (njet >= 5) & (nb >= 1) & met_250 & jet_nominal["qcd_open"] & jet_nominal["dphi123_0p1"] & ht_300,
+        "GCR": base_common & pho_hlt & (n_p_med == 1) & no_veto_leptons & zero_tau & (jet_photon_clean["njet"] >= 5) & (jet_photon_clean["nb"] >= 1) & (met_pt < 250) & (recoil_g > 250) & jet_photon_clean["open_high"] & ht_photon_300,
+        "DY2E": base_common & ele_hlt & zero_tau & (jet_lepton_clean["njet"] >= 5) & (jet_lepton_clean["nb"] >= 1) & zero_m & (n_e_med == 2) & (e1pt > 40) & (e2pt > 20) & (mee > 50) & (e1q != e2q) & (pee > 200) & (mee > 81) & (mee < 101) & jet_lepton_clean["open_high"] & ht_lepton_300,
+        "DY2M": base_common & mu_hlt & zero_tau & (jet_lepton_clean["njet"] >= 5) & (jet_lepton_clean["nb"] >= 1) & zero_e & (n_m_med == 2) & (m1pt > 50) & (m2pt > 20) & (mmm > 50) & (m1q != m2q) & (pmm > 200) & (mmm > 81) & (mmm < 101) & jet_lepton_clean["open_high"] & ht_lepton_300,
+        "SR": base_common & sig_hlt & no_veto_leptons & zero_tau & (njet >= 5) & (nb >= 1) & met_250 & jet_nominal["open_high"] & ht_300,
     }
-    weight = np.asarray(arr(arrays, "genWeight", np.ones(n)), dtype=float)
-    if process in {"JetMET", "EGamma", "Muon"}:
-        weight = np.ones(n)
+    jet_hadflav = arr(arrays, "Jet_hadronFlavour", ak.zeros_like(jet_pt))
+    gen_weight, weight_variations, scale_factor_status = compute_weight_bundle(
+        arrays, repo, dataset, process, year, n,
+        jet_pt[good_j], jet_eta[good_j], jet_hadflav[good_j], b_med[good_j],
+        e_eta, e_delta_eta_sc, e_pt, e_phi, e_veto, e_med, n_e_veto, n_e_med,
+        m_eta, m_pt, m_phi, m_loose, m_med, n_m_loose, n_m_med,
+        p_eta, p_pt, p_phi, p_med, masks["GCR"],
+    )
+    weight = weight_variations["nominal"]
+    unavailable_features = list(missing_filters)
+    if jet_id_source.startswith("raw_kinematic"):
+        unavailable_features.append("baseline AK4 correctionlib jet ID inputs missing; raw kinematic fallback used")
+    if fatjet_id_source.startswith("raw_kinematic"):
+        unavailable_features.append("baseline AK8 correctionlib jet ID inputs missing; raw kinematic fallback used")
+    if not jec_status.get("applied"):
+        unavailable_features.append("AK4 JEC not applied: " + str(jec_status.get("reason", jec_status.get("source", "unknown"))))
+    if not fjec_status.get("applied"):
+        unavailable_features.append("AK8 JEC not applied: " + str(fjec_status.get("reason", fjec_status.get("source", "unknown"))))
+    for comp_name, comp_status in scale_factor_status.get("components", {}).items():
+        if not comp_status.get("applied") and not str(comp_status.get("source", "")).startswith("unity_fallback_not_TTto"):
+            unavailable_features.append(f"{comp_name} not applied: {comp_status.get('source', 'unknown')}")
 
     cut_sequences = {
-        "preselection": [("total_read_events", np.ones(n, dtype=bool)), ("valid_MET", valid_met), ("MET_filters", met_filters), ("trigger_requirement", sig_hlt), ("lepton_veto_or_selection", no_leptons), ("tau_veto", zero_tau), ("isolated_track_veto", no_tracks), ("jet_multiplicity", njet >= 2), ("bjet_multiplicity", np.ones(n, dtype=bool)), ("MET_or_recoil_threshold", met_250), ("HT_threshold", ht_300), ("delta_phi_requirements", open_pre), ("final_region_selection", masks["preselection"])],
-        "LLCR": [("total_read_events", np.ones(n, dtype=bool)), ("valid_MET", valid_met), ("MET_filters", met_filters), ("trigger_requirement", sig_hlt), ("lepton_veto_or_selection", one_veto_lepton), ("tau_veto", zero_tau), ("isolated_track_veto", no_tracks), ("jet_multiplicity", njet >= 5), ("bjet_multiplicity", nb >= 1), ("MET_or_recoil_threshold", met_250), ("HT_threshold", ht_300), ("delta_phi_requirements", open_high), ("final_region_selection", masks["LLCR"])],
-        "QCDCR": [("total_read_events", np.ones(n, dtype=bool)), ("valid_MET", valid_met), ("MET_filters", met_filters), ("trigger_requirement", sig_hlt), ("lepton_veto_or_selection", no_leptons), ("tau_veto", zero_tau), ("isolated_track_veto", no_tracks), ("jet_multiplicity", njet >= 5), ("bjet_multiplicity", nb >= 1), ("MET_or_recoil_threshold", met_250), ("HT_threshold", ht_300), ("delta_phi_requirements", qcd_open & dphi123_0p1), ("final_region_selection", masks["QCDCR"])],
-        "GCR": [("total_read_events", np.ones(n, dtype=bool)), ("valid_MET", valid_met), ("MET_filters", met_filters), ("trigger_requirement", pho_hlt), ("lepton_veto_or_selection", (n_p_med == 1) & no_leptons), ("tau_veto", zero_tau), ("isolated_track_veto", no_tracks), ("jet_multiplicity", njet >= 5), ("bjet_multiplicity", nb >= 1), ("MET_or_recoil_threshold", (met_pt < 250) & (recoil_g > 250)), ("HT_threshold", ht_300), ("delta_phi_requirements", open_high), ("final_region_selection", masks["GCR"])],
-        "DY2E": [("total_read_events", np.ones(n, dtype=bool)), ("valid_MET", valid_met), ("MET_filters", met_filters), ("trigger_requirement", ele_hlt), ("lepton_veto_or_selection", (n_e_med == 2) & (n_m_med == 0) & (e1pt > 40) & (e2pt > 20) & (mee > 81) & (mee < 101)), ("tau_veto", zero_tau), ("isolated_track_veto", no_tracks), ("jet_multiplicity", njet >= 5), ("bjet_multiplicity", nb >= 1), ("MET_or_recoil_threshold", pee > 200), ("HT_threshold", ht_300), ("delta_phi_requirements", open_high), ("final_region_selection", masks["DY2E"])],
-        "DY2M": [("total_read_events", np.ones(n, dtype=bool)), ("valid_MET", valid_met), ("MET_filters", met_filters), ("trigger_requirement", mu_hlt), ("lepton_veto_or_selection", (n_m_med == 2) & (n_e_med == 0) & (m1pt > 50) & (m2pt > 20) & (mmm > 81) & (mmm < 101)), ("tau_veto", zero_tau), ("isolated_track_veto", no_tracks), ("jet_multiplicity", njet >= 5), ("bjet_multiplicity", nb >= 1), ("MET_or_recoil_threshold", pmm > 200), ("HT_threshold", ht_300), ("delta_phi_requirements", open_high), ("final_region_selection", masks["DY2M"])],
-        "SR": [("total_read_events", np.ones(n, dtype=bool)), ("valid_MET", valid_met), ("MET_filters", met_filters), ("trigger_requirement", sig_hlt), ("lepton_veto_or_selection", no_leptons), ("tau_veto", zero_tau), ("isolated_track_veto", no_tracks), ("jet_multiplicity", njet >= 5), ("bjet_multiplicity", nb >= 1), ("MET_or_recoil_threshold", met_250), ("HT_threshold", ht_300), ("delta_phi_requirements", open_high), ("final_region_selection", masks["SR"])],
+        "preselection": [("total_read_events", np.ones(n, dtype=bool)), ("valid_MET", valid_met), ("lumimask", lumi_mask), ("MET_filters", met_filters), ("trigger_requirement", sig_hlt), ("lepton_veto_or_selection", no_veto_leptons), ("tau_veto", zero_tau), ("isolated_track_veto", no_tracks), ("jet_veto_map", zero_veto_j), ("jet_multiplicity", njet >= 2), ("bjet_multiplicity", np.ones(n, dtype=bool)), ("MET_or_recoil_threshold", met_250), ("HT_threshold", ht_300), ("delta_phi_requirements", jet_nominal["open_pre"]), ("final_region_selection", masks["preselection"])],
+        "LLCR": [("total_read_events", np.ones(n, dtype=bool)), ("valid_MET", valid_met), ("lumimask", lumi_mask), ("MET_filters", met_filters), ("trigger_requirement", sig_hlt), ("lepton_veto_or_selection", one_veto_lepton & mt_100), ("tau_veto", zero_tau), ("isolated_track_veto", no_tracks), ("jet_veto_map", zero_veto_j), ("jet_multiplicity", njet >= 5), ("bjet_multiplicity", nb >= 1), ("MET_or_recoil_threshold", met_250), ("HT_threshold", ht_300), ("delta_phi_requirements", jet_nominal["open_high"]), ("final_region_selection", masks["LLCR"])],
+        "QCDCR": [("total_read_events", np.ones(n, dtype=bool)), ("valid_MET", valid_met), ("lumimask", lumi_mask), ("MET_filters", met_filters), ("trigger_requirement", sig_hlt), ("lepton_veto_or_selection", no_veto_leptons), ("tau_veto", zero_tau), ("isolated_track_veto", no_tracks), ("jet_veto_map", zero_veto_j), ("jet_multiplicity", njet >= 5), ("bjet_multiplicity", nb >= 1), ("MET_or_recoil_threshold", met_250), ("HT_threshold", ht_300), ("delta_phi_requirements", jet_nominal["qcd_open"] & jet_nominal["dphi123_0p1"]), ("final_region_selection", masks["QCDCR"])],
+        "GCR": [("total_read_events", np.ones(n, dtype=bool)), ("valid_MET", valid_met), ("lumimask", lumi_mask), ("MET_filters", met_filters), ("trigger_requirement", pho_hlt), ("lepton_veto_or_selection", (n_p_med == 1) & no_veto_leptons), ("tau_veto", zero_tau), ("isolated_track_veto", no_tracks), ("jet_veto_map", zero_veto_j), ("jet_multiplicity", jet_photon_clean["njet"] >= 5), ("bjet_multiplicity", jet_photon_clean["nb"] >= 1), ("MET_or_recoil_threshold", (met_pt < 250) & (recoil_g > 250)), ("HT_threshold", ht_photon_300), ("delta_phi_requirements", jet_photon_clean["open_high"]), ("final_region_selection", masks["GCR"])],
+        "DY2E": [("total_read_events", np.ones(n, dtype=bool)), ("valid_MET", valid_met), ("lumimask", lumi_mask), ("MET_filters", met_filters), ("trigger_requirement", ele_hlt), ("lepton_veto_or_selection", zero_m & (n_e_med == 2) & (e1pt > 40) & (e2pt > 20) & (mee > 50) & (e1q != e2q) & (mee > 81) & (mee < 101)), ("tau_veto", zero_tau), ("isolated_track_veto", no_tracks), ("jet_veto_map", zero_veto_j), ("jet_multiplicity", jet_lepton_clean["njet"] >= 5), ("bjet_multiplicity", jet_lepton_clean["nb"] >= 1), ("MET_or_recoil_threshold", pee > 200), ("HT_threshold", ht_lepton_300), ("delta_phi_requirements", jet_lepton_clean["open_high"]), ("final_region_selection", masks["DY2E"])],
+        "DY2M": [("total_read_events", np.ones(n, dtype=bool)), ("valid_MET", valid_met), ("lumimask", lumi_mask), ("MET_filters", met_filters), ("trigger_requirement", mu_hlt), ("lepton_veto_or_selection", zero_e & (n_m_med == 2) & (m1pt > 50) & (m2pt > 20) & (mmm > 50) & (m1q != m2q) & (mmm > 81) & (mmm < 101)), ("tau_veto", zero_tau), ("isolated_track_veto", no_tracks), ("jet_veto_map", zero_veto_j), ("jet_multiplicity", jet_lepton_clean["njet"] >= 5), ("bjet_multiplicity", jet_lepton_clean["nb"] >= 1), ("MET_or_recoil_threshold", pmm > 200), ("HT_threshold", ht_lepton_300), ("delta_phi_requirements", jet_lepton_clean["open_high"]), ("final_region_selection", masks["DY2M"])],
+        "SR": [("total_read_events", np.ones(n, dtype=bool)), ("valid_MET", valid_met), ("lumimask", lumi_mask), ("MET_filters", met_filters), ("trigger_requirement", sig_hlt), ("lepton_veto_or_selection", no_veto_leptons), ("tau_veto", zero_tau), ("isolated_track_veto", no_tracks), ("jet_veto_map", zero_veto_j), ("jet_multiplicity", njet >= 5), ("bjet_multiplicity", nb >= 1), ("MET_or_recoil_threshold", met_250), ("HT_threshold", ht_300), ("delta_phi_requirements", jet_nominal["open_high"]), ("final_region_selection", masks["SR"])],
     }
     cutflows = {}
     for region, seq in cut_sequences.items():
@@ -568,27 +1090,33 @@ def extract_chunk(arrays: dict[str, Any], dataset: str, process: str, sp: str | 
     for i in range(n):
         gen_branch, gen_mstop, gen_mlsp = active_genmodel(i)
         row = {
-            "dataset": dataset, "process": process, "year": year, "signal_point": sp or "", "file": file_path,
+            "dataset": dataset, "process": process, "year": year, "signal_point": sp or "", "file": file_path, "shape_shift": shift,
             "genmodel_branch": gen_branch, "mStop": gen_mstop if gen_mstop is not None else "", "mLSP": gen_mlsp if gen_mlsp is not None else "", "trigger_policy": signal_trigger_policy,
             "entry": entry_start + i, "run": int(arrays["run"][i]), "luminosityBlock": int(arrays["luminosityBlock"][i]), "event": int(arrays["event"][i]),
             "met": float(met_pt[i]), "met_phi": float(met_phi[i]), "ht": float(ht[i]), "njet": int(njet[i]), "nb_medium": int(nb[i]),
+            "ht_photon_clean": float(jet_photon_clean["ht"][i]), "njet_photon_clean": int(jet_photon_clean["njet"][i]), "nb_photon_clean": int(jet_photon_clean["nb"][i]),
+            "ht_lepton_clean": float(jet_lepton_clean["ht"][i]), "njet_lepton_clean": int(jet_lepton_clean["njet"][i]), "nb_lepton_clean": int(jet_lepton_clean["nb"][i]),
             "j1pt": float(j1pt[i]), "j1eta": float(j1eta[i]), "j1phi": float(j1phi[i]), "j2pt": float(j2pt[i]),
             "j1_met_dphi": float(j1dphi[i]), "j2_met_dphi": float(j2dphi[i]), "min_dphi4": float(min_dphi4[i]),
             "nfj": int(n_fj[i]), "fj1pt": float(fj1pt[i]), "fj1eta": float(fj1eta[i]), "fj1phi": float(fj1phi[i]), "fj1mass": float(fj1mass[i]), "fj1msd": float(fj1msd[i]),
             "n_e_veto": int(n_e_veto[i]), "n_e_medium": int(n_e_med[i]), "n_m_loose": int(n_m_loose[i]), "n_m_medium": int(n_m_med[i]), "n_photon_medium": int(n_p_med[i]),
-            "mee": float(mee[i]), "pee": float(pee[i]), "mmm": float(mmm[i]), "pmm": float(pmm[i]), "recoil_gcr": float(recoil_g[i]), "nominal_weight": float(weight[i]),
-            "available_systematics": "genWeight" if has_field(arrays, "genWeight") else "none_in_branch_subset",
+            "mee": float(mee[i]), "pee": float(pee[i]), "mmm": float(mmm[i]), "pmm": float(pmm[i]), "recoil_gcr": float(recoil_g[i]), "gen_weight": float(gen_weight[i]), "nominal_weight": float(weight[i]),
+            "weight_variations": {name: float(vals[i]) for name, vals in weight_variations.items()},
+            "available_systematics": ";".join(sorted(weight_variations)),
+            "lumi_mask_source": lumi_mask_source,
             "jet_id_source": jet_id_source,
-            "unavailable_features": ";".join(["JEC/JER corrected quantities", "correctionlib jet veto map", "btag SF weights", "PU weights"] + missing_filters + (["baseline AK4 correctionlib jet ID inputs missing; raw kinematic fallback used"] if jet_id_source.startswith("raw_kinematic") else [])),
+            "fatjet_id_source": fatjet_id_source,
+            "jet_veto_source": jet_veto_source,
+            "unavailable_features": ";".join(unavailable_features),
         }
         for rname in REGION_NAMES:
             row[f"feature_{rname}"] = bool(masks[rname][i])
         rows.append(row)
-    summary = {"entries": n, "missing_filters": missing_filters, "regions": {r: int(np.sum(masks[r])) for r in REGION_NAMES}, "cutflows": cutflows, "trigger_policy": signal_trigger_policy, "genmodel_branch_count": len(genmodel_branches)}
+    summary = {"entries": n, "missing_filters": missing_filters, "regions": {r: int(np.sum(masks[r])) for r in REGION_NAMES}, "cutflows": cutflows, "shape_shift": shift, "trigger_policy": signal_trigger_policy, "met_shift_status": met_shift_status, "lumi_mask_source": lumi_mask_source, "jet_id_source": jet_id_source, "fatjet_id_source": fatjet_id_source, "jet_veto_source": jet_veto_source, "ak4_jec_status": jec_status, "ak8_jec_status": fjec_status, "scale_factor_status": scale_factor_status, "available_systematics": sorted(weight_variations), "genmodel_branch_count": len(genmodel_branches)}
     return rows, summary
 
 
-def validate_and_extract_file(file_path: str, dataset: str, process: str, sp: str | None, year: str, chunk_size: int, fastsim_trigger_bypass: bool = False) -> tuple[dict[str, Any], list[dict[str, Any]], list[dict[str, Any]]]:
+def validate_and_extract_file(file_path: str, dataset: str, process: str, sp: str | None, year: str, chunk_size: int, fastsim_trigger_bypass: bool = False, shift_name: str | None = None) -> tuple[dict[str, Any], list[dict[str, Any]], list[dict[str, Any]]]:
     rec = {"dataset_key": dataset, "process": process, "signal_point": sp, "physical_file_path": file_path, "tree_name": "Events", "file_size": None, "number_of_entries": None, "required_branch_validation": {}, "read_status": "not_started", "processing_status": "not_started"}
     rows: list[dict[str, Any]] = []
     bad: list[dict[str, Any]] = []
@@ -637,7 +1165,7 @@ def validate_and_extract_file(file_path: str, dataset: str, process: str, sp: st
         chunk_summaries = []
         for start, stop in ranges:
             arrays = tree.arrays(read_branches, entry_start=start, entry_stop=stop, library="ak")
-            chunk_rows, chunk_summary = extract_chunk(arrays, dataset, process, sp, year, file_path, start, stop, fastsim_trigger_bypass=fastsim_trigger_bypass)
+            chunk_rows, chunk_summary = extract_chunk(arrays, dataset, process, sp, year, file_path, start, stop, fastsim_trigger_bypass=fastsim_trigger_bypass, shift_name=shift_name)
             rows.extend(chunk_rows)
             chunk_summaries.append({"entry_start": start, "entry_stop": stop, **chunk_summary})
         rec["chunk_summaries"] = chunk_summaries
@@ -731,7 +1259,7 @@ def combine_cutflows(manifest_files: list[dict[str, Any]]) -> dict[str, Any]:
                         item["weighted"] += float(step["weighted"])
         for region, reg in combined[key]["regions"].items():
             first_zero = None
-            for cut in ["total_read_events", "valid_MET", "MET_filters", "trigger_requirement", "lepton_veto_or_selection", "tau_veto", "isolated_track_veto", "jet_multiplicity", "bjet_multiplicity", "MET_or_recoil_threshold", "HT_threshold", "delta_phi_requirements", "final_region_selection"]:
+            for cut in ["total_read_events", "valid_MET", "lumimask", "MET_filters", "trigger_requirement", "lepton_veto_or_selection", "tau_veto", "isolated_track_veto", "jet_veto_map", "jet_multiplicity", "bjet_multiplicity", "MET_or_recoil_threshold", "HT_threshold", "delta_phi_requirements", "final_region_selection"]:
                 if cut in reg and reg[cut]["unweighted"] == 0 and first_zero is None:
                     first_zero = cut
             for item in reg.values():
@@ -745,7 +1273,7 @@ def write_cutflow_artifacts(repo: Path, manifest_files: list[dict[str, Any]]) ->
     cutflows = combine_cutflows(manifest_files)
     write_json(validation / "real_cutflows.json", cutflows)
     rows = []
-    order = ["total_read_events", "valid_MET", "MET_filters", "trigger_requirement", "lepton_veto_or_selection", "tau_veto", "isolated_track_veto", "jet_multiplicity", "bjet_multiplicity", "MET_or_recoil_threshold", "HT_threshold", "delta_phi_requirements", "final_region_selection"]
+    order = ["total_read_events", "valid_MET", "lumimask", "MET_filters", "trigger_requirement", "lepton_veto_or_selection", "tau_veto", "isolated_track_veto", "jet_veto_map", "jet_multiplicity", "bjet_multiplicity", "MET_or_recoil_threshold", "HT_threshold", "delta_phi_requirements", "final_region_selection"]
     for key, info in cutflows.items():
         for region, cuts in info["regions"].items():
             for cut in order:
@@ -812,9 +1340,25 @@ def write_trigger_audit(repo: Path, manifest_files: list[dict[str, Any]]) -> lis
 
 
 def write_baseline_logic_audit(repo: Path) -> None:
-    text = """# Baseline Logic Audit\n\n- AK4 jet ID: baseline calls `ids.isGoodJet`, which uses correctionlib `AK4PUPPI_TightLeptonVeto`; feature validation evaluates the same correctionlib when the NanoAOD composition branches are present, falls back to `Jet_jetId` bits if available, and labels any raw-kinematic fallback explicitly.\n- Electron veto/medium IDs: baseline calls `isVetoElectron` and `isMediumElectron` from `ids.py`; feature validation mirrors the documented pt/eta/cutBased/miniIso cuts.\n- Muon loose/medium IDs: baseline calls `isLooseMuon` and `isMediumMuon`; feature validation mirrors pt/eta/ID/miniIso cuts.\n- Photon selection: baseline calls `isMediumPhoton`; feature validation mirrors pt/eta/cutBased medium selection.\n- Tau veto and isolated-track veto: feature validation mirrors the scalar cuts from `ids.py`.\n- B-tag WP: baseline UParTAK4 medium threshold is `0.1272`; feature validation uses the same threshold.\n- Object cleaning: baseline uses metric-table cleaning against selected photons/leptons; feature validation does not yet apply full object cleaning for cleaned-jet CRs and records this discrepancy.\n- Recoil construction: feature validation computes photon recoil for GCR and dilepton kinematics for DY regions, but full vector behavior is a lightweight mirror, not the coffea processor output.\n- Year behavior: validation is fixed to 2024 inputs and correction availability.\n\nThe feature-table validation is therefore not a substitute for the actual `stop_processor_v4.py` subprocess.\n"""
-    (repo / "autonomous_allhad/validation/baseline_logic_audit.md").write_text(text)
+    text = """# Baseline Logic Audit
 
+- Trigger lists: the 2024 signal, photon, electron, and muon HLT lists mirror the corresponding `stop_processor_v4.py` masks. Missing HLT branches are skipped in the same false-initialized OR policy.
+- Lumimask and MET filters: data events use the 2024 Golden JSON lumi mask, and the MET-filter list includes `Flag_ecalBadCalibFilter`.
+- AK4 jet ID: baseline calls `ids.isGoodJet`, which uses correctionlib `AK4PUPPI_TightLeptonVeto`; feature validation evaluates the same correctionlib when the NanoAOD composition branches are present, falls back to `Jet_jetId` bits if available, and labels any raw-kinematic fallback explicitly.
+- Jet veto map: the 2024 `Summer24Prompt24_RunBCDEFGHI_V1` jet-veto map is applied as a separate zero-veto-jet event requirement.
+- AK8 fat jet ID: baseline calls the correctionlib `AK8PUPPI_TightLeptonVeto`; feature validation now evaluates the same correction when the NanoAOD composition branches are present.
+- Electron veto/medium IDs: baseline calls `isVetoElectron` and `isMediumElectron` from `ids.py`; feature validation mirrors the documented pt/eta/cutBased/miniIso cuts.
+- Muon loose/medium IDs: baseline calls `isLooseMuon` and `isMediumMuon`; feature validation mirrors pt/eta/ID/miniIso cuts.
+- Photon selection: baseline calls `isMediumPhoton`; feature validation mirrors pt/eta/cutBased medium selection.
+- Tau veto and isolated-track veto: feature validation mirrors the scalar cuts from `ids.py`.
+- B-tag WP: baseline UParTAK4 medium threshold is `0.1272`; feature validation uses the same threshold.
+- Object cleaning: photon-cleaned jets are used for GCR and lepton-cleaned jets are used for DY2E/DY2M before Njet/Nb/HT/dphi requirements.
+- Recoil construction: photon recoil for GCR and dilepton vector pT for DY regions are computed with the same nominal scalar definitions used by the region masks.
+- Correction parity: nominal AK4/AK8 JEC and event weights for PU, btag, lepton/photon ID/HLT, and top-pT where applicable are applied and recorded with extractable Up/Down variations. Nominal JEC is applied to DATA and MC, while `jesTotalUp/Down` and `metUnclusteredUp/Down` are MC-only uncertainty shift-production jobs; JER remains separate.
+
+This worker is the efficient implementation path; it must match the baseline selection semantics without directly running `stop_processor_v4.py`.
+"""
+    (repo / "autonomous_allhad/validation/baseline_logic_audit.md").write_text(text)
 
 def compare_baseline_feature(repo: Path, feature_yields: dict[str, Any]) -> dict[str, Any]:
     result = {

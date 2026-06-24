@@ -1,0 +1,21 @@
+{
+  "cluster_ids": [
+    "906067"
+  ],
+  "previous_cluster_ids": [
+    "900143"
+  ],
+  "resubmission_reason": "Fixed 2024 JEC uncertainty correction key from Summer24Prompt24_V2_MC_Total_AK4PFPuppi to Summer24Prompt24_V3_MC_Total_AK4PFPuppi after global jesTotal failures",
+  "resubmitted_at_local": "2026-06-24T12:44:12+0200",
+  "shape_shift": "jesTotalUp",
+  "status": "resubmitted_after_jec_uncertainty_key_fix",
+  "submit_info": {
+    "cluster_ids": [
+      "906067"
+    ],
+    "exit_status": 0,
+    "stderr_tail": "",
+    "stdout": "1567 job(s) submitted to cluster 906067."
+  },
+  "submitted_jobs": 1567
+}

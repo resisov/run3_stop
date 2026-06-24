@@ -22,6 +22,16 @@ from .report_pages import render_report_pages
 
 
 GITHUB_PAGES_URL = "https://resisov.github.io/run3_stop/"
+PRODUCTION_SHAPE_SHIFTS = {"nominal", "jesTotalUp", "jesTotalDown", "metUnclusteredUp", "metUnclusteredDown"}
+
+
+def normalize_production_shift(value: Any) -> str:
+    shift = str(value or "nominal").strip()
+    if shift in {"", "none", "None"}:
+        shift = "nominal"
+    if shift not in PRODUCTION_SHAPE_SHIFTS:
+        raise RuntimeError(f"Unsupported AUTONOMOUS_ALLHAD_PRODUCTION_SHIFT={shift!r}; use one of {sorted(PRODUCTION_SHAPE_SHIFTS)}")
+    return shift
 
 
 REGIONS = {
@@ -238,7 +248,9 @@ class Pipeline:
     def from_config(cls, config_path: str, resume: bool = False) -> "Pipeline":
         path = Path(config_path).resolve()
         config = parse_simple_yaml(path)
-        repo = Path(config["paths"]["repo_root"]).resolve()
+        repo = Path(config["paths"]["repo_root"]).expanduser()
+        if not repo.is_absolute():
+            repo = Path(os.environ.get("PWD", str(Path.cwd()))) / repo
         if not (repo / "AGENTS.md").exists():
             repo = path.parents[2]
         return cls(path, config, repo, resume)
@@ -572,6 +584,205 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
             return f"mStop{int(mstop)}_mLSP{int(mlsp)}"
         except Exception:
             return "unknown"
+
+    def _dataset_par_mstop_values(self, rec: dict[str, Any]) -> set[int]:
+        out: set[int] = set()
+        for dataset in (rec.get("datasets") or {}):
+            match = re.search(r"Par-mStop-(\d+)", str(dataset))
+            if match:
+                out.add(int(match.group(1)))
+        return out
+
+    def _signal_fit_interpolation_policy(self, signal_mass_points: dict[str, Any]) -> dict[str, Any]:
+        target_mstop = 800
+        lower_mstop = 700
+        upper_mstop = 900
+        problematic_dataset_mstop = 800
+        lower_weight = (upper_mstop - target_mstop) / float(upper_mstop - lower_mstop)
+        upper_weight = (target_mstop - lower_mstop) / float(upper_mstop - lower_mstop)
+        lower_mlsp: set[int] = set()
+        upper_mlsp: set[int] = set()
+        dataset_label_anchors: dict[str, list[str]] = {}
+        for key, rec in signal_mass_points.items():
+            if not isinstance(rec, dict):
+                continue
+            try:
+                mstop = int(rec.get("mStop"))
+                mlsp = int(rec.get("mLSP"))
+            except Exception:
+                continue
+            par_values = self._dataset_par_mstop_values(rec)
+            for par_mstop in par_values:
+                dataset_label_anchors.setdefault(f"Par-mStop-{par_mstop}", []).append(str(key))
+            if mstop == lower_mstop:
+                lower_mlsp.add(mlsp)
+            if mstop == upper_mstop:
+                upper_mlsp.add(mlsp)
+
+        virtual_points: list[dict[str, Any]] = []
+        skipped: list[dict[str, Any]] = []
+        for mlsp in sorted(lower_mlsp | upper_mlsp):
+            lower_key = self._signal_mass_key(lower_mstop, mlsp)
+            upper_key = self._signal_mass_key(upper_mstop, mlsp)
+            target_key = self._signal_mass_key(target_mstop, mlsp)
+            lower_rec = signal_mass_points.get(lower_key)
+            upper_rec = signal_mass_points.get(upper_key)
+            reasons = []
+            if not isinstance(lower_rec, dict):
+                reasons.append("missing_lower_anchor_mStop700")
+            if not isinstance(upper_rec, dict):
+                reasons.append("missing_upper_anchor_mStop900")
+            if isinstance(lower_rec, dict) and problematic_dataset_mstop in self._dataset_par_mstop_values(lower_rec):
+                reasons.append("lower_anchor_uses_problematic_Par-mStop-800_dataset")
+            if isinstance(upper_rec, dict) and problematic_dataset_mstop in self._dataset_par_mstop_values(upper_rec):
+                reasons.append("upper_anchor_uses_problematic_Par-mStop-800_dataset")
+            if reasons:
+                skipped.append({
+                    "target_key": target_key,
+                    "mStop": target_mstop,
+                    "mLSP": mlsp,
+                    "lower_anchor": lower_key,
+                    "upper_anchor": upper_key,
+                    "reasons": reasons,
+                })
+                continue
+            virtual_points.append({
+                "target_key": target_key,
+                "mStop": target_mstop,
+                "mLSP": mlsp,
+                "lower_anchor": lower_key,
+                "upper_anchor": upper_key,
+                "weights": {lower_key: lower_weight, upper_key: upper_weight},
+                "interpolation": "linear_in_mStop_at_fixed_mLSP",
+                "xsec_policy": "use target mStop=800 stop-pair xsec when normalizing final fit templates; do not inherit anchor xsecs",
+            })
+
+        high_anchor_from_problem_dataset = []
+        for key, rec in signal_mass_points.items():
+            if not isinstance(rec, dict):
+                continue
+            try:
+                if int(rec.get("mStop")) != upper_mstop:
+                    continue
+            except Exception:
+                continue
+            if problematic_dataset_mstop in self._dataset_par_mstop_values(rec):
+                high_anchor_from_problem_dataset.append(str(key))
+        status = "ready" if virtual_points else "blocked"
+        return {
+            "schema_version": "signal_fit_interpolation_policy_v1",
+            "status": status,
+            "scope": "datacard_and_template_fit_only",
+            "processing_outputs_modified": False,
+            "target": {"mStop": target_mstop, "label": "mStop800"},
+            "requested_anchors": {"lower_mStop": lower_mstop, "upper_mStop": upper_mstop},
+            "problematic_dataset_rule": {
+                "exclude_dataset_label": f"Par-mStop-{problematic_dataset_mstop}",
+                "reason": "current Par-mStop-800 FastSim sample is known problematic and must not seed fit templates",
+            },
+            "anchor_cleanliness": {
+                "mStop900_keys_using_problematic_Par_mStop_800": sorted(high_anchor_from_problem_dataset),
+                "dataset_label_anchor_candidates": {k: sorted(v) for k, v in sorted(dataset_label_anchors.items()) if k in {"Par-mStop-700", "Par-mStop-800", "Par-mStop-900"}},
+                "decision": "do_not_interpolate_until_clean_mStop700_and_mStop900_anchors_exist" if not virtual_points else "clean_anchors_available",
+            },
+            "virtual_points": virtual_points,
+            "skipped_points": skipped,
+            "fit_template_variables": ["search_bin_index", "region_yield"],
+            "uncertainty_policy": [
+                "interpolate nominal and each available shape variation bin-by-bin with the same mStop weights",
+                "propagate MC statistical variance as w_low^2*var_low + w_high^2*var_high",
+                "add a dedicated interpolation/modeling nuisance before unblinding final cards",
+            ],
+        }
+
+    def _write_fit_signal_interpolation_inputs(self, outdir: Path) -> dict[str, Any]:
+        signal_yields = self._load_json_if_exists(self.outputs / "signal_yields_by_mass.json", {})
+        signal_mass_points = signal_yields.get("mass_points", {}) if isinstance(signal_yields, dict) else {}
+        policy = self._signal_fit_interpolation_policy(signal_mass_points if isinstance(signal_mass_points, dict) else {})
+        policy_path = outdir / "signal_fit_interpolation_policy.json"
+        write_json(policy_path, policy)
+        templates_path = outdir / "signal_fit_interpolation_templates.json"
+        templates: dict[str, Any] = {
+            "schema_version": "signal_fit_interpolation_templates_v1",
+            "status": "blocked",
+            "scope": policy["scope"],
+            "policy": str(policy_path.relative_to(self.repo)),
+            "source": str((self.base / "hists.npy").relative_to(self.repo)),
+            "templates": {},
+            "skipped_templates": [],
+        }
+        if not policy.get("virtual_points"):
+            templates["reason"] = "no clean interpolation anchors are currently available"
+            write_json(templates_path, templates)
+            return {"policy": policy, "policy_path": policy_path, "templates": templates, "templates_path": templates_path}
+
+        hists_path = self.base / "hists.npy"
+        if not hists_path.exists():
+            templates["reason"] = "hists.npy is unavailable"
+            write_json(templates_path, templates)
+            return {"policy": policy, "policy_path": policy_path, "templates": templates, "templates_path": templates_path}
+
+        import numpy as np
+        hists = np.load(hists_path, allow_pickle=True).item()
+        fit_variables = set(policy.get("fit_template_variables", []))
+        signal_node = hists.get("signal", {}) if isinstance(hists, dict) else {}
+
+        def compatible(a: dict[str, Any], b: dict[str, Any]) -> bool:
+            ea = np.asarray(a.get("bin_edges", []), dtype=float)
+            eb = np.asarray(b.get("bin_edges", []), dtype=float)
+            return len(ea) == len(eb) and len(ea) > 1 and np.allclose(ea, eb)
+
+        for point in policy.get("virtual_points", []):
+            target_key = point["target_key"]
+            lower_key = point["lower_anchor"]
+            upper_key = point["upper_anchor"]
+            weights = point.get("weights", {})
+            wl = float(weights.get(lower_key, 0.5))
+            wu = float(weights.get(upper_key, 0.5))
+            target = templates["templates"].setdefault(target_key, {
+                "target": {"mStop": point.get("mStop"), "mLSP": point.get("mLSP")},
+                "process": "T2tt",
+                "source_anchors": [lower_key, upper_key],
+                "weights": {lower_key: wl, upper_key: wu},
+                "variables": {},
+            })
+            for variable, by_syst in signal_node.items():
+                if variable not in fit_variables:
+                    continue
+                for systematic, by_region in by_syst.items():
+                    for region, by_proc in by_region.items():
+                        by_mass = by_proc.get("T2tt", {}) if isinstance(by_proc, dict) else {}
+                        low = by_mass.get(lower_key)
+                        high = by_mass.get(upper_key)
+                        if not isinstance(low, dict) or not isinstance(high, dict):
+                            templates["skipped_templates"].append({"target_key": target_key, "variable": variable, "systematic": systematic, "region": region, "reason": "missing_anchor_histogram"})
+                            continue
+                        if not compatible(low, high):
+                            templates["skipped_templates"].append({"target_key": target_key, "variable": variable, "systematic": systematic, "region": region, "reason": "incompatible_anchor_binning"})
+                            continue
+                        edges = np.asarray(low.get("bin_edges", []), dtype=float)
+                        low_values = np.asarray(low.get("values", []), dtype=float)
+                        high_values = np.asarray(high.get("values", []), dtype=float)
+                        low_sumw2 = np.asarray(low.get("sumw2", []), dtype=float)
+                        high_sumw2 = np.asarray(high.get("sumw2", []), dtype=float)
+                        low_raw = np.asarray(low.get("raw_values", low_values), dtype=float)
+                        high_raw = np.asarray(high.get("raw_values", high_values), dtype=float)
+                        low_entries = np.asarray(low.get("entries", []), dtype=float)
+                        high_entries = np.asarray(high.get("entries", []), dtype=float)
+                        target.setdefault("variables", {}).setdefault(variable, {}).setdefault(systematic, {})[region] = {
+                            "bin_edges": edges.tolist(),
+                            "values": (wl * low_values + wu * high_values).tolist(),
+                            "sumw2": (wl * wl * low_sumw2 + wu * wu * high_sumw2).tolist(),
+                            "raw_values": (wl * low_raw + wu * high_raw).tolist(),
+                            "entries": (wl * low_entries + wu * high_entries).tolist() if len(low_entries) == len(high_entries) else [],
+                            "interpolation": point["interpolation"],
+                            "fit_only": True,
+                        }
+        templates["status"] = "complete" if templates["templates"] else "blocked"
+        if templates["status"] == "blocked":
+            templates.setdefault("reason", "no compatible fit template histograms were produced")
+        write_json(templates_path, templates)
+        return {"policy": policy, "policy_path": policy_path, "templates": templates, "templates_path": templates_path}
 
     def parse_signal_xsec(self) -> dict[str, Any]:
         candidates = [
@@ -1864,6 +2075,97 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
     def _load_json_if_exists(self, path: Path, default: Any) -> Any:
         return json.loads(path.read_text()) if path.exists() and path.stat().st_size else default
 
+    def _full_production_shard_for_output(self, output_path: Path) -> Path | None:
+        parent = output_path.parent.name
+        if parent.startswith("production_outputs"):
+            shard_parent = parent.replace("production_outputs", "production_shards", 1)
+            candidate = output_path.parent.parent / shard_parent / output_path.name
+            if candidate.exists():
+                return candidate
+        for dirname in ["production_shards_eos_full", "production_shards"]:
+            candidate = self.workflow / dirname / output_path.name
+            if candidate.exists():
+                return candidate
+        return None
+
+    def _strict_full_production_output_status(self, output_path: Path, shard_path: Path | None = None, shard_payload: dict[str, Any] | None = None, expected_shift: str | None = None) -> dict[str, Any]:
+        if shard_payload is None and shard_path is not None and shard_path.exists() and shard_path.stat().st_size:
+            try:
+                shard_payload = json.loads(shard_path.read_text())
+            except Exception as exc:
+                shard_payload = {"_load_error": f"{type(exc).__name__}: {exc}"}
+        record_digest = shard_payload.get("record_digest") if isinstance(shard_payload, dict) else None
+        records = shard_payload.get("records", []) if isinstance(shard_payload, dict) else []
+        records_in_shard = len(records) if isinstance(records, list) else None
+        result: dict[str, Any] = {
+            "valid_final": False,
+            "classification": "missing",
+            "status": "missing",
+            "record_digest_expected": record_digest,
+            "records_in_shard_expected": records_in_shard,
+        }
+        if not output_path.exists():
+            result["classification"] = "missing"
+            return result
+        try:
+            stat = output_path.stat()
+            result["size"] = int(stat.st_size)
+            result["mtime"] = int(stat.st_mtime)
+        except Exception as exc:
+            result.update({"classification": "unreadable_json", "error": f"stat {type(exc).__name__}: {exc}"})
+            return result
+        if int(result.get("size", 0)) <= 0:
+            result["classification"] = "zero_byte"
+            return result
+        try:
+            payload = json.loads(output_path.read_text())
+        except Exception as exc:
+            result.update({"classification": "unreadable_json", "error": f"{type(exc).__name__}: {exc}"})
+            return result
+        status = str(payload.get("status", "missing"))
+        attempted = payload.get("files_attempted")
+        processed = payload.get("files_processed")
+        result.update({
+            "payload": payload,
+            "status": status,
+            "completed_at": payload.get("completed_at"),
+            "record_digest_observed": payload.get("record_digest"),
+            "records_in_shard_observed": payload.get("records_in_shard"),
+            "files_attempted": attempted,
+            "files_processed": processed,
+            "shape_shift_observed": payload.get("shape_shift", "nominal"),
+        })
+        if status not in {"complete", "complete_with_bad_files"}:
+            result["classification"] = "failed_json" if status == "failed" else "nonterminal_status"
+            return result
+        if record_digest is not None and payload.get("record_digest") != record_digest:
+            result["classification"] = "stale_digest"
+            return result
+        if records_in_shard is not None and payload.get("records_in_shard") != records_in_shard:
+            result["classification"] = "inconsistent_file_counts"
+            return result
+        if not isinstance(attempted, int) or not isinstance(processed, int):
+            result["classification"] = "inconsistent_file_counts"
+            return result
+        if records_in_shard is not None and attempted != records_in_shard:
+            result["classification"] = "inconsistent_file_counts"
+            return result
+        if processed < 0 or processed > attempted:
+            result["classification"] = "inconsistent_file_counts"
+            return result
+        if status == "complete" and processed != attempted:
+            result["classification"] = "inconsistent_file_counts"
+            return result
+        if not payload.get("completed_at"):
+            result["classification"] = "inconsistent_file_counts"
+            return result
+        if expected_shift is not None and str(payload.get("shape_shift", "nominal")) != normalize_production_shift(expected_shift):
+            result["classification"] = "stale_shift"
+            return result
+        result["classification"] = "complete"
+        result["valid_final"] = True
+        return result
+
     def _feature_rows(self) -> list[dict[str, Any]]:
         path = self.outputs / "real_feature_table.csv"
         if not path.exists():
@@ -2375,6 +2677,23 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             "SR": "cat7_SR_highDeltaM",
         }.get(short, short)
 
+    def _data_process_by_region(self) -> dict[str, str]:
+        return {
+            self._full_region_name("LLCR"): "JetMET",
+            self._full_region_name("QCDCR"): "JetMET",
+            self._full_region_name("GCR"): "EGamma",
+            self._full_region_name("DY2E"): "EGamma",
+            self._full_region_name("DY2M"): "Muon",
+            self._full_region_name("SR"): "JetMET",
+        }
+
+    def _data_process_allowed(self, process: str, region: str) -> bool:
+        expected = self._data_process_by_region().get(self._full_region_name(region))
+        return expected is None or process == expected
+
+    def _physical_dataset_key(self, dataset: str) -> str:
+        return str(dataset or "unknown").split("____", 1)[0]
+
     def _merge_hist_payload(self, target: dict[str, Any], source: dict[str, Any], factor: float) -> None:
         edges = source.get("bin_edges", [])
         if not target:
@@ -2397,17 +2716,18 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
         incomplete = []
         failed = []
         for path in shard_outputs:
-            if not path.exists():
-                missing.append(str(path.relative_to(self.repo)))
-                continue
-            payload = self._load_json_if_exists(path, {})
-            status = str(payload.get("status", "missing"))
-            if status in {"complete", "complete_with_bad_files"}:
+            shard_path = self._full_production_shard_for_output(path)
+            check = self._strict_full_production_output_status(path, shard_path=shard_path)
+            payload = check.pop("payload", None)
+            rel = str(path.relative_to(self.repo))
+            if check.get("valid_final") and isinstance(payload, dict):
                 completed_payloads.append(payload)
-            elif status == "failed":
-                failed.append(str(path.relative_to(self.repo)))
+            elif check.get("classification") == "missing":
+                missing.append(rel)
+            elif check.get("classification") == "failed_json":
+                failed.append(rel)
             else:
-                incomplete.append({"path": str(path.relative_to(self.repo)), "status": status})
+                incomplete.append({"path": rel, "status": check.get("status"), "classification": check.get("classification")})
         attempted_shards = len(shard_outputs)
         if missing or incomplete or failed:
             result = {
@@ -2466,11 +2786,51 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
 
         events_processed = sum(int(rec.get("events_read", 0)) for rec in file_summaries)
         lumi_pb = self._lumi_pb()
+        physical_norm: dict[str, Any] = {}
+        physical_dataset_split_counts: dict[str, int] = {}
+        for ds, rec in sorted(datasets.items()):
+            proc = rec.get("process", "unknown")
+            is_data = bool(rec.get("is_data"))
+            phys = self._physical_dataset_key(ds) if not is_data else ds
+            physical_dataset_split_counts[phys] = physical_dataset_split_counts.get(phys, 0) + 1
+            prec = physical_norm.setdefault(phys, {"physical_dataset": phys, "process": proc, "is_data": is_data, "xsec_pb": rec.get("xsec_pb"), "sumw": 0.0, "sumw2": 0.0, "files_processed": 0, "files_attempted": 0, "split_datasets": [], "sumw_source_counts": {}, "xsec_conflicts": []})
+            xs = rec.get("xsec_pb")
+            if not is_data and isinstance(xs, (int, float)) and isinstance(prec.get("xsec_pb"), (int, float)) and abs(float(xs) - float(prec["xsec_pb"])) > 1e-12:
+                prec["xsec_conflicts"].append({"dataset": ds, "xsec_pb": xs})
+            elif prec.get("xsec_pb") is None:
+                prec["xsec_pb"] = xs
+            prec["sumw"] += float(rec.get("sumw", 0.0))
+            prec["sumw2"] += float(rec.get("sumw2", 0.0))
+            prec["files_processed"] += int(rec.get("files_processed", 0))
+            prec["files_attempted"] += int(rec.get("files_attempted", 0))
+            prec["split_datasets"].append(ds)
+            for key, val in rec.get("sumw_source_counts", {}).items():
+                prec["sumw_source_counts"][key] = prec["sumw_source_counts"].get(key, 0) + int(val)
+        for phys, prec in physical_norm.items():
+            xs = prec.get("xsec_pb")
+            sumw = float(prec.get("sumw", 0.0))
+            if prec.get("is_data"):
+                prec["normalization_factor"] = 1.0
+                prec["normalization_status"] = "data_unscaled"
+            elif prec.get("xsec_conflicts"):
+                prec["normalization_factor"] = None
+                prec["normalization_status"] = "blocked_inconsistent_xsec_across_split_datasets"
+            elif not isinstance(xs, (int, float)) or float(xs) <= 0:
+                prec["normalization_factor"] = None
+                prec["normalization_status"] = "blocked_missing_positive_xsec"
+            elif sumw == 0:
+                prec["normalization_factor"] = None
+                prec["normalization_status"] = "blocked_zero_sumw"
+            else:
+                prec["normalization_factor"] = float(xs) * lumi_pb / sumw
+                prec["normalization_status"] = "normalized_with_metadata_xsec_and_physical_dataset_sumw"
+
         norm_factors: dict[str, Any] = {}
         normalized_by_process: dict[str, Any] = {}
         normalized_by_dataset: dict[str, Any] = {}
         histograms: dict[str, Any] = {"data": {}, "background": {}}
         search_bins: dict[str, Any] = {}
+        data_stream_exclusions: dict[str, dict[str, Any]] = {}
         region_totals = {self._full_region_name(r): {"data": 0.0, "background": 0.0, "signal": 0.0} for r in ["LLCR", "QCDCR", "GCR", "DY2E", "DY2M", "SR"]}
         blocked_datasets = []
         for ds, rec in sorted(datasets.items()):
@@ -2478,19 +2838,11 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             is_data = bool(rec.get("is_data"))
             xs = rec.get("xsec_pb")
             sumw = float(rec.get("sumw", 0.0))
-            factor = None
-            status = "blocked"
-            if is_data:
-                factor = 1.0
-                status = "data_unscaled"
-            elif not isinstance(xs, (int, float)) or float(xs) <= 0:
-                status = "blocked_missing_positive_xsec"
-            elif sumw == 0:
-                status = "blocked_zero_sumw"
-            else:
-                factor = float(xs) * lumi_pb / sumw
-                status = "normalized_with_metadata_xsec_and_retained_file_sumw"
-            norm_factors[ds] = {"dataset": ds, "process": proc, "is_data": is_data, "xsec_pb": xs, "sumw": sumw, "sumw2": rec.get("sumw2", 0.0), "sumw_source_counts": rec.get("sumw_source_counts", {}), "files_processed": rec.get("files_processed", 0), "files_attempted": rec.get("files_attempted", 0), "normalization_factor": factor, "normalization_status": status}
+            phys = self._physical_dataset_key(ds) if not is_data else ds
+            prec = physical_norm.get(phys, {})
+            factor = prec.get("normalization_factor")
+            status = prec.get("normalization_status", "blocked_missing_physical_dataset_norm")
+            norm_factors[ds] = {"dataset": ds, "physical_dataset": phys, "process": proc, "is_data": is_data, "xsec_pb": xs, "sumw": sumw, "physical_dataset_sumw": prec.get("sumw"), "sumw2": rec.get("sumw2", 0.0), "sumw_source_counts": rec.get("sumw_source_counts", {}), "physical_sumw_source_counts": prec.get("sumw_source_counts", {}), "files_processed": rec.get("files_processed", 0), "files_attempted": rec.get("files_attempted", 0), "physical_files_processed": prec.get("files_processed"), "physical_files_attempted": prec.get("files_attempted"), "physical_split_datasets": len(prec.get("split_datasets", [])), "normalization_factor": factor, "normalization_status": status}
             if factor is None:
                 blocked_datasets.append(ds)
                 continue
@@ -2506,15 +2858,25 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
                     target["raw_weighted"] += raw
                     target["normalized_weighted"] += raw * factor
                     target["normalized_sumw2"] += raw2 * factor * factor
-                region_totals[full_region][kind] += raw * factor
+                if not is_data or self._data_process_allowed(proc, full_region):
+                    region_totals[full_region][kind] += raw * factor
+                else:
+                    excluded = data_stream_exclusions.setdefault(full_region, {}).setdefault(proc, {"normalized_weighted": 0.0, "raw_weighted": 0.0, "unweighted": 0})
+                    excluded["normalized_weighted"] += raw * factor
+                    excluded["raw_weighted"] += raw
+                    excluded["unweighted"] += int(counter.get("unweighted", 0))
             for region, by_var in rec.get("histograms", {}).items():
                 full_region = self._full_region_name(region)
+                if is_data and not self._data_process_allowed(proc, full_region):
+                    continue
                 for variable, hist in by_var.items():
                     if variable.startswith("search_bin_index::"):
                         continue
                     dest = histograms.setdefault(kind, {}).setdefault(variable, {}).setdefault(full_region, {}).setdefault(proc, {})
                     self._merge_hist_payload(dest, hist, factor)
             for scheme, by_bin in rec.get("search_bins", {}).items():
+                if is_data and not self._data_process_allowed(proc, self._full_region_name("SR")):
+                    continue
                 for bin_name, counter in by_bin.items():
                     dest = search_bins.setdefault(scheme, {}).setdefault(bin_name, {}).setdefault(proc, {"unweighted": 0, "raw_weighted": 0.0, "normalized_weighted": 0.0, "normalized_sumw2": 0.0, "kind": kind})
                     raw = float(counter.get("raw_weighted", 0.0))
@@ -2576,7 +2938,10 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             "normalization_status": "complete" if not blocked_datasets else "incomplete_blocked_datasets",
             "luminosity_fb": float(self.config.get("analysis", {}).get("luminosity_fb", 0.0)),
             "luminosity_pb": lumi_pb,
-            "formula": "DATA weight=1; background MC weight=genWeight * xsec_from_metadata * lumi_pb / retained_valid_file_sumw; correction weights currently unavailable in aggregate worker",
+            "formula": "DATA weight=1; background MC weight=genWeight * xsec_from_metadata * lumi_pb / physical_dataset_sumw, where physical_dataset strips metadata split suffixes like ____12_; correction weights currently unavailable in aggregate worker",
+            "normalization_grouping_policy": "MC metadata records split as <dataset>____N_ share one physical-dataset denominator; this prevents reapplying the full cross section once per split shard.",
+            "data_region_process_policy": self._data_process_by_region(),
+            "data_stream_exclusions": data_stream_exclusions,
             "sms_policy": "SMS metadata records are excluded from DATA/background production and background stacks; FastSim SMS is handled only by process-signals.",
             "files_attempted": files_attempted,
             "files_processed": files_processed,
@@ -2584,6 +2949,8 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             "events_processed": events_processed,
             "normalization_blocked_datasets": blocked_datasets,
             "normalization_factors": norm_factors,
+            "physical_normalization_factors": physical_norm,
+            "physical_dataset_split_counts": physical_dataset_split_counts,
             "region_yields_by_process": normalized_by_process,
             "region_yields_by_dataset": normalized_by_dataset,
             "regions": region_totals,
@@ -2640,19 +3007,20 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             "exact_command_needed": "module load lxbatch/eossubmit",
         }
 
-    def _write_condor_submit(self, shard_specs: list[tuple[str, Path, Path]], condor_dir: Path, proxy_path: Path | None, allow_afs_wrapper: bool = False) -> tuple[Path, Path]:
+    def _write_condor_submit(self, shard_specs: list[tuple[str, Path, Path]], condor_dir: Path, proxy_path: Path | None, allow_afs_wrapper: bool = False, shift_name: str = "nominal") -> tuple[Path, Path]:
+        shift_name = normalize_production_shift(shift_name)
         condor_dir.mkdir(parents=True, exist_ok=True)
         logs = condor_dir / "logs"
         logs.mkdir(parents=True, exist_ok=True)
         args_path = condor_dir / "full_production_args.txt"
-        python = os.environ.get("AUTONOMOUS_ALLHAD_CONDOR_PYTHON") or "/eos/user/t/taiwoo/miniconda3/envs/py38/bin/python"
         chunk = os.environ.get("AUTONOMOUS_ALLHAD_FULL_CHUNK", "50000")
         xrd_timeout = os.environ.get("AUTONOMOUS_ALLHAD_XRDCP_TIMEOUT", "300")
         use_wrapper = allow_afs_wrapper and (str(condor_dir).startswith("/afs/") or os.environ.get("AUTONOMOUS_ALLHAD_CONDOR_AFS_WRAPPER", "0") == "1")
         if use_wrapper:
+            python = os.environ.get("AUTONOMOUS_ALLHAD_CONDOR_PYTHON") or sys.executable
             with args_path.open("w") as f:
-                for name, _shard, _output in shard_specs:
-                    f.write(f"{name}\n")
+                for name, shard, result_json in shard_specs:
+                    f.write(f"{name} {shard} {result_json}\n")
             proxy_for_job = proxy_path
             if proxy_path and not str(proxy_path).startswith("/afs/"):
                 proxy_for_job = condor_dir / f"x509up_u{os.getuid()}"
@@ -2663,11 +3031,13 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
                 "#!/usr/bin/env bash",
                 "set -euo pipefail",
                 'name="$1"',
+                'shard="$2"',
+                'result_json="$3"',
                 f"export PYTHONPATH={self.repo / 'autonomous_allhad'}:${{PYTHONPATH:-}}",
                 f"export AUTONOMOUS_ALLHAD_FULL_CHUNK={chunk}",
                 f"export AUTONOMOUS_ALLHAD_XRDCP_TIMEOUT={xrd_timeout}",
                 (f"export X509_USER_PROXY={proxy_for_job}" if proxy_for_job else ""),
-                f"exec {python} -m autonomous_allhad.full_production_worker --repo {self.repo} --shard {self.workflow / 'production_shards'}/${{name}}.json --output {self.workflow / 'production_outputs'}/${{name}}.json",
+                f'exec {python} -m autonomous_allhad.full_production_worker --repo {self.repo} --shard "$shard" --output "$result_json" --shift {shift_name}',
                 "",
             ]))
             wrapper.chmod(0o755)
@@ -2676,43 +3046,78 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
                 "universe = vanilla",
                 f"executable = {wrapper}",
                 f"initialdir = {condor_dir}",
-                "arguments = $(name)",
+                "arguments = $(name) $(shard) $(result_json)",
                 "getenv = True",
                 f"output = {logs}/$(name).out",
                 f"error = {logs}/$(name).err",
                 f"log = {logs}/full_production.log",
-                "request_cpus = 1",
+                "request_cpus = 4",
                 "request_memory = 3500MB",
                 '+JobFlavour = "workday"',
-                f"queue name from {args_path}",
+                f"queue name,shard,result_json from {args_path}",
                 "",
             ]))
             return submit, args_path
+
+        py38_tgz = Path("/eos/user/t/taiwoo/run3_stop/decaf/condor/py38.tgz")
+        transfer_proxy = Path("/eos/user/t/taiwoo/decaf/analysis/proxy/x509up_u147757")
+        missing_inputs = [str(path) for path in [py38_tgz, transfer_proxy] if not path.exists()]
+        if missing_inputs:
+            raise RuntimeError("required Condor transfer input missing: " + ", ".join(missing_inputs))
         with args_path.open("w") as f:
-            for name, shard, output in shard_specs:
-                f.write(f"{name} {shard} {output}\n")
-        env_items = [
-            f"PYTHONPATH={self.repo / 'autonomous_allhad'}",
-            f"AUTONOMOUS_ALLHAD_FULL_CHUNK={chunk}",
-            f"AUTONOMOUS_ALLHAD_XRDCP_TIMEOUT={xrd_timeout}",
-        ]
-        if proxy_path:
-            env_items.append(f"X509_USER_PROXY={proxy_path}")
+            for name, shard, result_json in shard_specs:
+                f.write(f"{name} {shard} {result_json}\n")
+        wrapper = condor_dir / "run_full_production_worker.sh"
+        wrapper.write_text("\n".join([
+            "#!/usr/bin/env bash",
+            "set -euo pipefail",
+            "echo CONDOR_SCRATCH=$(pwd)",
+            'name="$1"',
+            'shard="$2"',
+            'result_json="$3"',
+            f"export AUTONOMOUS_ALLHAD_FULL_CHUNK={chunk}",
+            f"export AUTONOMOUS_ALLHAD_XRDCP_TIMEOUT={xrd_timeout}",
+            "export PYTHONNOUSERSITE=1",
+            'export X509_USER_PROXY="$PWD/x509up_u147757"',
+            'chmod 600 "$X509_USER_PROXY" || true',
+            "tar -xzf py38.tgz",
+            'PYROOT="$PWD/py38"',
+            'if [ ! -x "$PYROOT/bin/python" ]; then PYBIN=$(find "$PWD" -maxdepth 3 -type f -path "*/bin/python" | head -1); PYROOT=$(dirname "$(dirname "$PYBIN")"); fi',
+            'PYTHON="$PYROOT/bin/python"',
+            'if [ ! -x "$PYTHON" ]; then echo "local python not found after unpacking py38.tgz" >&2; exit 66; fi',
+            'export PATH="$PYROOT/bin:$PATH"',
+            'export LD_LIBRARY_PATH="$PYROOT/lib:${LD_LIBRARY_PATH:-}"',
+            f"export PYTHONPATH={self.repo / 'autonomous_allhad'}:${{PYTHONPATH:-}}",
+            '"$PYTHON" - <<\'PY\'',
+            "import sys",
+            "import numpy, awkward, uproot",
+            "print('sys.executable', sys.executable)",
+            "print('numpy.__file__', numpy.__file__)",
+            "print('awkward.__file__', awkward.__file__)",
+            "print('uproot.__file__', uproot.__file__)",
+            "PY",
+            f'exec "$PYTHON" -m autonomous_allhad.full_production_worker --repo {self.repo} --shard "$shard" --output "$result_json" --shift {shift_name}',
+            "",
+        ]))
+        wrapper.chmod(0o755)
         submit = condor_dir / "full_production.sub"
         submit.write_text("\n".join([
             "universe = vanilla",
-            f"executable = {python}",
-            f"initialdir = {self.repo}",
-            "arguments = -m autonomous_allhad.full_production_worker --repo " + str(self.repo) + " --shard $(shard) --output $(output)",
-            "getenv = True",
-            "environment = \"" + " ".join(env_items) + "\"",
+            f"executable = {wrapper}",
+            "arguments = $(name) $(shard) $(result_json)",
+            "getenv = False",
+            "should_transfer_files = YES",
+            "when_to_transfer_output = ON_EXIT",
+            f"transfer_input_files = {py38_tgz}, {transfer_proxy}",
+            'transfer_output_files = ""',
             f"output = {logs}/$(name).out",
             f"error = {logs}/$(name).err",
             f"log = {logs}/full_production.log",
-            "request_cpus = 1",
+            "request_cpus = 4",
             "request_memory = 3500MB",
+            "request_disk = 5000MB",
             '+JobFlavour = "workday"',
-            f"queue name,shard,output from {args_path}",
+            f"queue name,shard,result_json from {args_path}",
             "",
         ]))
         return submit, args_path
@@ -2725,14 +3130,29 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
         submit_condor = os.environ.get("AUTONOMOUS_ALLHAD_SUBMIT_CONDOR", "0") == "1"
         run_local = os.environ.get("AUTONOMOUS_ALLHAD_RUN_LOCAL_FULL", "0") == "1"
         eossubmit = self._eossubmit_environment()
-        records = inventory["data_records"] + inventory["background_records"]
+        shape_shift = normalize_production_shift(os.environ.get("AUTONOMOUS_ALLHAD_PRODUCTION_SHIFT", "nominal"))
+        record_scope = os.environ.get("AUTONOMOUS_ALLHAD_FULL_RECORD_SCOPE", "all").strip().lower()
+        if record_scope in {"data", "data_only", "data-only"}:
+            records = list(inventory["data_records"])
+            record_scope = "data"
+        elif record_scope in {"background", "backgrounds", "mc", "mc_only", "mc-only"}:
+            records = list(inventory["background_records"])
+            record_scope = "background"
+        elif record_scope in {"all", "full", "data_background", "data+background"}:
+            records = inventory["data_records"] + inventory["background_records"]
+            record_scope = "all"
+        else:
+            raise RuntimeError(f"Unsupported AUTONOMOUS_ALLHAD_FULL_RECORD_SCOPE={record_scope!r}; use all, data, or background")
         max_files_env = os.environ.get("AUTONOMOUS_ALLHAD_FULL_MAX_FILES")
         bounded_debug = False
         if max_files_env:
             bounded_debug = True
             records = records[: int(max_files_env)]
         shard_size = int(os.environ.get("AUTONOMOUS_ALLHAD_FULL_SHARD_SIZE", "100"))
-        production_tag = os.environ.get("AUTONOMOUS_ALLHAD_PRODUCTION_TAG") or ("pilot" if bounded_debug else "eos_full")
+        production_tag_env = os.environ.get("AUTONOMOUS_ALLHAD_PRODUCTION_TAG")
+        production_tag = production_tag_env or ("pilot" if bounded_debug else "eos_full")
+        if shape_shift != "nominal" and not production_tag_env:
+            production_tag = f"{production_tag}_{shape_shift}"
         shard_dir = self.workflow / f"production_shards_{production_tag}"
         output_dir = self.workflow / f"production_outputs_{production_tag}"
         condor_dir = Path(os.environ.get("AUTONOMOUS_ALLHAD_CONDOR_DIR", str(self.workflow / f"condor_{production_tag}"))).expanduser()
@@ -2756,7 +3176,7 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
         proxy_candidates.append(self.repo / "analysis" / "proxy" / f"x509up_u{os.getuid()}")
         proxy_path = next((p for p in proxy_candidates if p and p.exists()), None)
         allow_afs_wrapper = bool(bounded_debug and os.environ.get("AUTONOMOUS_ALLHAD_ALLOW_AFS_PILOT_WRAPPER", "0") == "1")
-        submit_path, args_path = self._write_condor_submit(shard_specs, condor_dir, proxy_path, allow_afs_wrapper=allow_afs_wrapper)
+        submit_path, args_path = self._write_condor_submit(shard_specs, condor_dir, proxy_path, allow_afs_wrapper=allow_afs_wrapper, shift_name=shape_shift)
         production_manifest = {
             "status": "prepared",
             "datasets_configured": len(inventory["keys"]),
@@ -2776,6 +3196,9 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             "local_full_requested": run_local,
             "bounded_debug": bounded_debug,
             "production_tag": production_tag,
+            "shape_shift": shape_shift,
+            "shape_shift_policy": "non-nominal shifts are written to shift-specific shard outputs and are not merged into nominal normalized yields in this stage",
+            "record_scope": record_scope,
             "eossubmit_environment": eossubmit,
             "eos_aware_submit_required_for_large_campaign": True,
             "afs_wrapper_allowed_only_for_bounded_pilot": allow_afs_wrapper,
@@ -2786,17 +3209,27 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             "args_file": self._public_path(args_path),
             "sms_policy": "SMS records are excluded from DATA/background production and background stacks.",
         }
-        for name in ["full_production_state.json", "full_production_manifest.json", "production_manifest.json", "production_state.json"]:
+        if shape_shift == "nominal":
+            state_names = ["full_production_state.json", "full_production_manifest.json", "production_manifest.json", "production_state.json"]
+            job_manifest_path = self.workflow / "job_manifest.json"
+            job_status_path = self.workflow / "job_status.json"
+            run_stage_name = "run_production"
+        else:
+            state_names = [f"full_production_state_{shape_shift}.json", f"full_production_manifest_{shape_shift}.json", f"production_manifest_{shape_shift}.json", f"production_state_{shape_shift}.json"]
+            job_manifest_path = self.workflow / f"job_manifest_{shape_shift}.json"
+            job_status_path = self.workflow / f"job_status_{shape_shift}.json"
+            run_stage_name = f"run_production_{shape_shift}"
+        for name in state_names:
             write_json(self.workflow / name, production_manifest)
-        write_json(self.workflow / "job_manifest.json", {"status": "prepared", "jobs": [{"name": n, "shard": str(s.relative_to(self.repo)), "output": str(o.relative_to(self.repo))} for n, s, o in shard_specs], "planned_jobs": len(shard_specs), "cluster_ids": [], "condor_enabled": allow_condor})
+        write_json(job_manifest_path, {"status": "prepared", "shape_shift": shape_shift, "jobs": [{"name": n, "shard": str(s.relative_to(self.repo)), "output": str(o.relative_to(self.repo)), "shape_shift": shape_shift} for n, s, o in shard_specs], "planned_jobs": len(shard_specs), "cluster_ids": [], "condor_enabled": allow_condor})
         blockers = []
         submit_info: dict[str, Any] = {"cluster_ids": []}
         if run_local:
-            worker_cmd_base = [sys.executable, "-m", "autonomous_allhad.full_production_worker", "--repo", str(self.repo)]
+            worker_cmd_base = [sys.executable, "-m", "autonomous_allhad.full_production_worker", "--repo", str(self.repo), "--shift", shape_shift]
             env = os.environ.copy()
             env["PYTHONPATH"] = str(self.repo / "autonomous_allhad") + os.pathsep + env.get("PYTHONPATH", "")
             for _name, shard, output in shard_specs:
-                if output.exists() and self._load_json_if_exists(output, {}).get("status") in {"complete", "complete_with_bad_files"}:
+                if self._strict_full_production_output_status(output, shard_path=shard, expected_shift=shape_shift).get("valid_final"):
                     continue
                 proc = subprocess.run(worker_cmd_base + ["--shard", str(shard), "--output", str(output)], cwd=self.repo, env=env, text=True, capture_output=True)
                 if proc.returncode != 0:
@@ -2820,17 +3253,40 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
                 submit_info = {"exit_status": proc.returncode, "stdout": proc.stdout[-4000:], "stderr_tail": proc.stderr[-4000:], "cluster_ids": re.findall(r"cluster\s+(\d+)", proc.stdout, flags=re.IGNORECASE)}
                 if proc.returncode != 0:
                     blockers.append(f"condor_submit failed: {proc.stderr[-1000:] or proc.stdout[-1000:]}")
-                write_json(self.workflow / "job_status.json", {"status": "submitted" if proc.returncode == 0 else "failed", "cluster_ids": submit_info["cluster_ids"], "submitted_jobs": len(shard_specs), "submit_info": submit_info})
+                write_json(job_status_path, {"status": "submitted" if proc.returncode == 0 else "failed", "shape_shift": shape_shift, "cluster_ids": submit_info["cluster_ids"], "submitted_jobs": len(shard_specs), "submit_info": submit_info})
         if blockers:
             production_manifest["status"] = "blocked"
             production_manifest["blockers"] = blockers
-            for name in ["full_production_state.json", "full_production_manifest.json", "production_manifest.json", "production_state.json"]:
+            for name in state_names:
                 write_json(self.workflow / name, production_manifest)
             status_label = "blocked_eossubmit_environment_not_loaded" if any("blocked_eossubmit_environment_not_loaded" in b for b in blockers) else "blocked"
             result = {"status": status_label, "blockers": blockers, "jobs_planned": len(shard_specs), "files_in_metadata": len(inventory["file_records"]), "data_root_files": len(inventory["data_records"]), "background_root_files": len(inventory["background_records"]), "eossubmit_environment": eossubmit, "exact_command_needed": "module load lxbatch/eossubmit" if status_label == "blocked_eossubmit_environment_not_loaded" else None}
-            self._record_direct_stage("run_production", status_label, result)
+            self._record_direct_stage(run_stage_name, status_label, result)
             self._record_direct_stage("condor_production", status_label, {"status": status_label, "blockers": blockers, "cluster_ids": submit_info.get("cluster_ids", []), "eossubmit_environment": eossubmit, "exact_command_needed": "module load lxbatch/eossubmit" if status_label == "blocked_eossubmit_environment_not_loaded" else None})
             return result
+        if shape_shift != "nominal":
+            valid_outputs = sum(1 for _name, shard, output in shard_specs if self._strict_full_production_output_status(output, shard_path=shard, expected_shift=shape_shift).get("valid_final"))
+            if valid_outputs == len(shard_specs) and shard_specs:
+                shift_status = "complete"
+            elif submit_condor and submit_info.get("cluster_ids"):
+                shift_status = "submitted_waiting_for_outputs"
+            else:
+                shift_status = "prepared"
+            shift_result = {
+                "status": shift_status,
+                "shape_shift": shape_shift,
+                "jobs_planned": len(shard_specs),
+                "valid_outputs": valid_outputs,
+                "shard_output_dir": str(output_dir.relative_to(self.repo)),
+                "submit_file": self._public_path(submit_path),
+                "args_file": self._public_path(args_path),
+                "cluster_ids": submit_info.get("cluster_ids", []),
+                "merge_policy": "not_merged_into_nominal_full_normalized_yields",
+            }
+            write_json(self.workflow / f"production_state_{shape_shift}.json", {**production_manifest, **shift_result})
+            self._record_direct_stage(run_stage_name, shift_status, shift_result)
+            self._record_direct_stage("condor_production", shift_status, shift_result)
+            return shift_result
         if not submit_condor and not run_local:
             self._record_direct_stage("condor_production", "blocked_eos_preflight_complete_not_submitted", {"status": "blocked_eos_preflight_complete_not_submitted", "message": "EOS-aware submit description and shard manifest were generated/dry-runnable, but the large campaign was not submitted in this preflight step.", "eossubmit_environment": eossubmit, "submit_file": self._public_path(submit_path), "args_file": self._public_path(args_path), "jobs_planned": len(shard_specs), "afs_wrapper_large_submission_prevented": (not bounded_debug and str(condor_dir).startswith("/afs/")), "next_safe_command": "module load lxbatch/eossubmit && AUTONOMOUS_ALLHAD_ALLOW_CONDOR=1 AUTONOMOUS_ALLHAD_SUBMIT_CONDOR=1 AUTONOMOUS_ALLHAD_FULL_SHARD_SIZE=25 AUTONOMOUS_ALLHAD_PRODUCTION_TAG=eos_full ./autonomous_allhad/analysisctl run-production --config autonomous_allhad/configs/run3_2024.yaml"})
         merge = self._merge_full_production_shards(inventory, [out for _name, _shard, out in shard_specs], submit_info=submit_info)
@@ -2966,6 +3422,9 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
     def make_datacards_stage(self) -> dict[str, Any]:
         outdir = self.base / "cards"
         outdir.mkdir(parents=True, exist_ok=True)
+        fit_interp = self._write_fit_signal_interpolation_inputs(outdir)
+        fit_policy = fit_interp.get("policy", {})
+        fit_templates = fit_interp.get("templates", {})
         final_bins = self._load_json_if_exists(self.base / "studies" / "search_bins" / "final_search_bins.json", {})
         systematics = self._load_json_if_exists(self.outputs / "systematic_yields.json", {})
         full_norm = self._load_json_if_exists(self.outputs / "full_normalized_yields.json", {})
@@ -2978,24 +3437,59 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             blockers.append("systematic yields/templates are unavailable")
         blockers.append("manual legacy validation boundary has not been supplied by the user")
         note = outdir / "README.md"
-        note.write_text("# Datacard Status\n\nStatus: `blocked`\n\nNo Combine-compatible production datacards are produced by this run. Required before datacards: final selected search bins, full-production nominal yields, systematic yields/templates, and user-provided manual validation against the legacy processor.\n")
+        note.write_text("# Datacard Status\n\nStatus: `blocked`\n\nNo Combine-compatible production datacards are produced by this run. Required before datacards: final selected search bins, full-production nominal yields, systematic yields/templates, and user-provided manual validation against the legacy processor.\n\n## Fit-only signal interpolation\n\nThe mStop800 FastSim replacement policy is scoped only to datacard/template-fit inputs. Current processing outputs are not modified. The policy refuses to seed mStop800 from the known problematic Par-mStop-800 dataset.\n")
+        signal_fit_interpolation = {
+            "status": fit_policy.get("status", "missing"),
+            "scope": fit_policy.get("scope", "datacard_and_template_fit_only"),
+            "policy": str(fit_interp["policy_path"].relative_to(self.repo)),
+            "templates": str(fit_interp["templates_path"].relative_to(self.repo)),
+            "target": fit_policy.get("target"),
+            "requested_anchors": fit_policy.get("requested_anchors"),
+            "anchor_cleanliness": fit_policy.get("anchor_cleanliness"),
+            "virtual_points": len(fit_policy.get("virtual_points", [])),
+            "skipped_points": len(fit_policy.get("skipped_points", [])),
+            "template_status": fit_templates.get("status", "missing"),
+            "template_count": len(fit_templates.get("templates", {})),
+        }
         summary = {
             "status": "blocked" if blockers else "complete",
             "datacards_produced": 0,
             "output_dir": str(outdir.relative_to(self.repo)),
             "blockers": blockers,
+            "signal_fit_interpolation": signal_fit_interpolation,
             "exact_unblock_steps": [
                 "Complete run-production and full-production-normalization.",
                 "Select final search bins after physics review/manual validation.",
                 "Produce systematic_yields.json from shifted inputs.",
+                "For mStop800 cards, provide clean mStop700 and mStop900 anchors that do not use the problematic Par-mStop-800 dataset, or keep mStop800 cards disabled.",
                 "Rerun ./autonomous_allhad/analysisctl make-datacards --config autonomous_allhad/configs/run3_2024.yaml.",
             ],
         }
         write_json(outdir / "datacard_summary.json", summary)
-        (self.base / "reports" / "datacard_summary.md").write_text("# Datacards\n\nStatus: `blocked`\n\nNo real datacards were produced.\n\n## Blockers\n" + "".join(f"- {b}\n" for b in blockers))
+        report_lines = [
+            "# Datacards",
+            "",
+            "Status: `blocked`" if blockers else "Status: `complete`",
+            "",
+            "No real datacards were produced." if blockers else "Datacard inputs are ready.",
+            "",
+            "## Blockers",
+            *[f"- {b}" for b in blockers],
+            "",
+            "## Fit-only signal interpolation",
+            f"- Scope: `{signal_fit_interpolation['scope']}`",
+            f"- mStop800 policy status: `{signal_fit_interpolation['status']}`",
+            f"- Template status: `{signal_fit_interpolation['template_status']}`",
+            f"- Policy JSON: `{signal_fit_interpolation['policy']}`",
+            f"- Template JSON: `{signal_fit_interpolation['templates']}`",
+            "- The known problematic `Par-mStop-800` dataset is explicitly excluded from interpolation anchors.",
+        ]
+        (self.base / "reports" / "datacard_summary.md").write_text("\n".join(report_lines) + "\n")
         (self.docs / "data").mkdir(parents=True, exist_ok=True)
         shutil.copy2(outdir / "datacard_summary.json", self.docs / "data" / "datacard_summary.json")
-        result = {"status": summary["status"], "datacards_produced": 0, "output": str(note.relative_to(self.repo)), "blockers": blockers}
+        shutil.copy2(fit_interp["policy_path"], self.docs / "data" / fit_interp["policy_path"].name)
+        shutil.copy2(fit_interp["templates_path"], self.docs / "data" / fit_interp["templates_path"].name)
+        result = {"status": summary["status"], "datacards_produced": 0, "output": str(note.relative_to(self.repo)), "blockers": blockers, "signal_fit_interpolation_status": signal_fit_interpolation["status"]}
         self._record_direct_stage("make_datacards", "blocked" if blockers else "complete", result)
         return result
 
@@ -3066,6 +3560,7 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
         signal_grid = self._load_json_if_exists(self.base / "signals" / "realized_mass_grid.json", {})
         signal_xsec = self._load_json_if_exists(self.base / "signals" / "stop_xsec_13p6TeV_status.json", {})
         signal_yields = self._load_json_if_exists(self.outputs / "signal_yields_by_mass.json", {})
+        condor_true_done = self._load_json_if_exists(self.workflow / "condor_done_vs_true_done_diagnosis.json", {})
         yields = summary.get("yields", {})
         regions = ["LLCR", "QCDCR", "GCR", "DY2E", "DY2M", "SR"]
         stages = self.state.get("stages", {})
@@ -3127,7 +3622,8 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
                 "signal_processed_files": signal_yields.get("processed_files", 0) if isinstance(signal_yields, dict) else 0,
                 "contour_inputs_ready": False,
             },
-            "next_recommended_action": "Load the EOS-aware batch environment with `module load lxbatch/eossubmit`, then run the EOS-aware full-production Condor preflight/submission; do not use the AFS-wrapper path for the large campaign.",
+            "condor_true_done_diagnosis": condor_true_done.get("monitor_summary", condor_true_done) if isinstance(condor_true_done, dict) else {},
+            "next_recommended_action": (condor_true_done.get("next_action") if isinstance(condor_true_done, dict) and condor_true_done.get("next_action") else "Load the EOS-aware batch environment with `module load lxbatch/eossubmit`, then run the EOS-aware full-production Condor preflight/submission; do not use the AFS-wrapper path for the large campaign."),
         }
         write_json(self.workflow / "monitor_state.json", payload)
         (self.docs / "data").mkdir(parents=True, exist_ok=True)
@@ -3148,13 +3644,16 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             "GitHub Pages expected URL: " + str(payload.get("github_pages_expected_url")),
             "GitHub Pages last publication time UTC: " + str(payload.get("github_pages_last_publication_time_utc")),
             "GitHub Pages deployment status: " + str(payload.get("github_pages_deployment_status")),
+            "Condor true-done diagnosis: " + json.dumps(payload.get("condor_true_done_diagnosis", {}), sort_keys=True),
             "Next recommended action: " + str(payload.get("next_recommended_action")),
         ])
 
     def render_monitor_html(self, payload: dict[str, Any]) -> None:
         self.docs.mkdir(parents=True, exist_ok=True)
         rows = "".join(f"<tr><td>{html.escape(k)}</td><td>{v}</td></tr>" for k, v in payload.get("region_yields", {}).items())
-        html_text = f"""<!doctype html><html lang='en'><head><meta charset='utf-8'><title>Run-3 stop monitor</title><style>body{{font-family:Arial,sans-serif;background:#f7f8fa;color:#20242a;margin:0}}main{{max-width:1000px;margin:auto;padding:28px}}table{{border-collapse:collapse;width:100%;background:white}}td,th{{border:1px solid #d8dde4;padding:8px;text-align:left}}th{{background:#e9eef5}}.note{{background:#fff3cd;padding:10px;border-radius:4px}}</style></head><body><main><h1>Pipeline Monitor</h1><p class='note'>Legacy stop_processor_v4.py validation is external/manual. No independent agreement with stop_processor_v4.py is claimed by autonomous_allhad unless explicitly provided by the user.</p><p>Current stage: <strong>{html.escape(str(payload.get('current_pipeline_stage')))}</strong></p><p>ROOT files read: {payload.get('root_files_read')} &nbsp; Feature rows: {payload.get('feature_rows')} &nbsp; Bad files: {payload.get('bad_files')}</p><p>Normalization: {html.escape(str(payload.get('normalization_status')))}; {html.escape(str(payload.get('raw_vs_normalized_yield_status')))}</p><p>GitHub Pages: {html.escape(str(payload.get('github_pages_site_status')))}; expected URL <code>{html.escape(str(payload.get('github_pages_expected_url')))}</code>; deployment {html.escape(str(payload.get('github_pages_deployment_status')))}; last publication UTC {html.escape(str(payload.get('github_pages_last_publication_time_utc')))}</p><h2>Signal DAS Discovery</h2><p>Datasets: {payload.get('signal_das_discovery', {}).get('datasets_found', 0)}; files: {payload.get('signal_das_discovery', {}).get('total_signal_root_files', 0)}; FastSim signal datasets: {payload.get('signal_das_discovery', {}).get('fastsim_datasets', 0)}; realized mass points: {payload.get('signal_das_discovery', {}).get('realized_mass_points', 0)}; xsec table: {html.escape(str(payload.get('signal_das_discovery', {}).get('xsec_table_status', 'missing')))}.</p><p class='note'>FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level. This must later be validated or replaced with trigger efficiency/SF treatment.</p><h2>Region Yields</h2><table><tr><th>Region</th><th>Yield</th></tr>{rows}</table><h2>Next Action</h2><p><code>{html.escape(str(payload.get('next_recommended_action')))}</code></p></main></body></html>"""
+        condor_diag = payload.get("condor_true_done_diagnosis", {}) if isinstance(payload.get("condor_true_done_diagnosis"), dict) else {}
+        condor_rows = "".join(f"<tr><td>{html.escape(str(k))}</td><td>{html.escape(str(v))}</td></tr>" for k, v in condor_diag.items() if k not in {"queue_totals", "held_jobs"})
+        html_text = f"""<!doctype html><html lang='en'><head><meta charset='utf-8'><title>Run-3 stop monitor</title><style>body{{font-family:Arial,sans-serif;background:#f7f8fa;color:#20242a;margin:0}}main{{max-width:1000px;margin:auto;padding:28px}}table{{border-collapse:collapse;width:100%;background:white}}td,th{{border:1px solid #d8dde4;padding:8px;text-align:left}}th{{background:#e9eef5}}.note{{background:#fff3cd;padding:10px;border-radius:4px}}</style></head><body><main><h1>Pipeline Monitor</h1><p class='note'>Legacy stop_processor_v4.py validation is external/manual. No independent agreement with stop_processor_v4.py is claimed by autonomous_allhad unless explicitly provided by the user.</p><p>Current stage: <strong>{html.escape(str(payload.get('current_pipeline_stage')))}</strong></p><p>ROOT files read: {payload.get('root_files_read')} &nbsp; Feature rows: {payload.get('feature_rows')} &nbsp; Bad files: {payload.get('bad_files')}</p><p>Normalization: {html.escape(str(payload.get('normalization_status')))}; {html.escape(str(payload.get('raw_vs_normalized_yield_status')))}</p><p>GitHub Pages: {html.escape(str(payload.get('github_pages_site_status')))}; expected URL <code>{html.escape(str(payload.get('github_pages_expected_url')))}</code>; deployment {html.escape(str(payload.get('github_pages_deployment_status')))}; last publication UTC {html.escape(str(payload.get('github_pages_last_publication_time_utc')))}</p><h2>Condor True-Done Diagnosis</h2><p class='note'>Condor done is not JSON complete. Final JSON complete requires status complete/complete_with_bad_files, matching shard digest, complete file-attempt accounting, and no active retry coverage.</p><table><tr><th>Metric</th><th>Value</th></tr>{condor_rows}</table><h2>Signal DAS Discovery</h2><p>Datasets: {payload.get('signal_das_discovery', {}).get('datasets_found', 0)}; files: {payload.get('signal_das_discovery', {}).get('total_signal_root_files', 0)}; FastSim signal datasets: {payload.get('signal_das_discovery', {}).get('fastsim_datasets', 0)}; realized mass points: {payload.get('signal_das_discovery', {}).get('realized_mass_points', 0)}; xsec table: {html.escape(str(payload.get('signal_das_discovery', {}).get('xsec_table_status', 'missing')))}.</p><p class='note'>FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level. This must later be validated or replaced with trigger efficiency/SF treatment.</p><h2>Region Yields</h2><table><tr><th>Region</th><th>Yield</th></tr>{rows}</table><h2>Next Action</h2><p><code>{html.escape(str(payload.get('next_recommended_action')))}</code></p></main></body></html>"""
         (self.docs / "monitor.html").write_text(html_text)
 
     def publish_github_pages(self) -> dict[str, Any]:
