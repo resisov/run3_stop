@@ -1,0 +1,41 @@
+{
+  "created_at": "2026-06-24T14:48:33Z",
+  "nb_binning_policy": "Nb plots merge b >= 3 into a single >=3 bin.",
+  "schema_version": "fit_template_summary_v1",
+  "template_binning_policy": "For cat2/cat3/cat7 MET and cat4/cat5/cat6 recoil templates, all bins with lower edge >= 800 GeV are merged into [800, inf].",
+  "template_variable_by_region": {
+    "cat2_LLCR_highDeltaM": "metpt",
+    "cat3_QCDCR_highDeltaM": "metpt",
+    "cat4_GCR_highDeltaM": "recoil_pt",
+    "cat5_DY2E_highDeltaM": "recoil_pt",
+    "cat6_DY2M_highDeltaM": "recoil_pt",
+    "cat7_SR_highDeltaM": "metpt"
+  },
+  "templates": {
+    "cat2_LLCR_highDeltaM": {
+      "status": "missing_histograms",
+      "variable": "metpt"
+    },
+    "cat3_QCDCR_highDeltaM": {
+      "status": "missing_histograms",
+      "variable": "metpt"
+    },
+    "cat4_GCR_highDeltaM": {
+      "status": "missing_histograms",
+      "variable": "recoil_pt"
+    },
+    "cat5_DY2E_highDeltaM": {
+      "status": "missing_histograms",
+      "variable": "recoil_pt"
+    },
+    "cat6_DY2M_highDeltaM": {
+      "status": "missing_histograms",
+      "variable": "recoil_pt"
+    },
+    "cat7_SR_highDeltaM": {
+      "status": "missing_histograms",
+      "variable": "metpt"
+    }
+  },
+  "uncertainty_policy": "DATA uncertainties are statistical. Background uncertainty is sqrt(MC stat^2 + available systematic envelope^2), where available Up/Down variations include pileup, btag SF, lepton/photon ID, and lepton HLT weights present in worker payloads."
+}

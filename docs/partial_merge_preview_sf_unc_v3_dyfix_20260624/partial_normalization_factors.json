@@ -1,0 +1,25 @@
+{
+  "expected_shards": 2110,
+  "factors": {},
+  "final_normalization_complete": false,
+  "formula": "DATA factor=1.0; MC normalization_factor = xsec_pb * lumi_pb / physical_dataset_sumw, where physical_dataset strips metadata split suffixes like ____12_; selected final/running payloads only.",
+  "lumi_uncertainty": {
+    "fraction": 0.016,
+    "lnN": 1.016,
+    "name": "Lumi_2024"
+  },
+  "luminosity_fb": 109.82,
+  "luminosity_pb": 109820.0,
+  "normalization_grouping_policy": "MC metadata records split as <dataset>____N_ share one physical-dataset denominator; this prevents reapplying the full cross section once per split shard.",
+  "normalization_status": "partial_preview_complete",
+  "physical_dataset_split_counts": {},
+  "physical_factors": {},
+  "schema_version": "partial_normalization_factors_v3",
+  "source_completed_or_checkpoint_shards": 0,
+  "status": "partial_preview",
+  "warnings": [
+    "This is based on a live partial recovery snapshot and will change as more .running records are recovered.",
+    "Process composition may be biased until recovery and all shard promotion are complete.",
+    "Do not use this preview for Combine, final datacards, or physics conclusions."
+  ]
+}

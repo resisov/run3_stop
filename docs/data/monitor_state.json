@@ -6,6 +6,7 @@
     "full_production_normalization",
     "make_datacards",
     "make_systematic_yields",
+    "publish_github_pages",
     "run_production",
     "select_search_bins",
     "systematic_yields",
@@ -27,7 +28,6 @@
     "parse_signal_xsec",
     "plot_from_npy",
     "process_signals",
-    "publish_github_pages",
     "signal_discovery",
     "validate_feature_subset",
     "write_summary"
@@ -61,7 +61,7 @@
   "github_pages_deployment_confirmed": false,
   "github_pages_deployment_status": "not_confirmed",
   "github_pages_expected_url": "https://resisov.github.io/run3_stop/",
-  "github_pages_last_publication_time_utc": "2026-06-21T09:48:33Z",
+  "github_pages_last_publication_time_utc": "2026-06-24T14:49:09Z",
   "github_pages_published_by_pipeline": false,
   "github_pages_site_status": "ready",
   "latest_command": {
@@ -73,7 +73,7 @@
       "workflow": ".github/workflows/pages.yml"
     },
     "stage": "publish_github_pages",
-    "status": "complete"
+    "status": "blocked"
   },
   "latest_failure": null,
   "latest_successful_command": {
@@ -88,7 +88,7 @@
     "status": "complete"
   },
   "manual_validation_status": "external/manual",
-  "next_recommended_action": "module load lxbatch/eossubmit && cd <repo> && condor_q 784541 -totals",
+  "next_recommended_action": "module load lxbatch/eossubmit && cd /eos/home-t/taiwoo/run3_stop/decaf && condor_q 784541 -totals",
   "normalization_blocked_datasets": 0,
   "normalization_luminosity_fb": 109.82,
   "normalization_status": "complete",

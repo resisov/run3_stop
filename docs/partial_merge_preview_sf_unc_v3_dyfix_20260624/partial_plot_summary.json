@@ -1,0 +1,359 @@
+{
+  "available_systematics_for_plot": [
+    "Lumi_2024"
+  ],
+  "completed_or_checkpoint_shards_used": 0,
+  "fit_template_summary": "fit_template_summary.json",
+  "fit_template_variable_by_region": {
+    "cat2_LLCR_highDeltaM": "metpt",
+    "cat3_QCDCR_highDeltaM": "metpt",
+    "cat4_GCR_highDeltaM": "recoil_pt",
+    "cat5_DY2E_highDeltaM": "recoil_pt",
+    "cat6_DY2M_highDeltaM": "recoil_pt",
+    "cat7_SR_highDeltaM": "metpt"
+  },
+  "nb_binning_policy": "Nb plots merge b >= 3 into a single >=3 bin.",
+  "plot_uncertainty_policy": "DATA error bars show statistical uncertainty. MC bands show sqrt(stat^2 + available systematic envelope^2 + Lumi_2024^2); available worker payload systematics are included where present, and Lumi_2024 is a fixed 1.6% MC rate uncertainty.",
+  "region_variable_plots": [
+    {
+      "binning": {
+        "overflow_label": "\u221e",
+        "overflow_low": 800.0,
+        "physics_bin_edges": [
+          0.0,
+          100.0,
+          200.0,
+          250.0,
+          300.0,
+          400.0,
+          500.0,
+          600.0,
+          800.0,
+          "inf"
+        ],
+        "plot_bin_edges": [
+          0.0,
+          100.0,
+          200.0,
+          250.0,
+          300.0,
+          400.0,
+          500.0,
+          600.0,
+          800.0,
+          1000.0
+        ],
+        "visible_xlim": [
+          250.0,
+          1000.0
+        ]
+      },
+      "blinded": true,
+      "fit_template": true,
+      "mc_uncertainty": {
+        "stat_sum": 0.0,
+        "syst_sum": 0.0,
+        "systematic_sources": [],
+        "total_sum": 0.0
+      },
+      "name": "partial_metpt_cat7_SR_highDeltaM",
+      "pdf": "plots/partial_metpt_cat7_SR_highDeltaM.pdf",
+      "png": "plots/partial_metpt_cat7_SR_highDeltaM.png",
+      "region": "cat7_SR_highDeltaM",
+      "signal_overlays": [
+        {
+          "key": "mStop1000_mLSP1",
+          "label": "T2tt mStop1000 mLSP1",
+          "normalization_factor": 0.008107856761349841,
+          "source_variable": "met",
+          "yield": 280.62103036707936
+        },
+        {
+          "key": "mStop1200_mLSP1",
+          "label": "T2tt mStop1200 mLSP1",
+          "normalization_factor": 0.005591256195155442,
+          "source_variable": "met",
+          "yield": 74.29102106503035
+        }
+      ],
+      "variable": "metpt"
+    },
+    {
+      "binning": {
+        "overflow_label": null,
+        "overflow_low": null,
+        "physics_bin_edges": [
+          0.0,
+          300.0,
+          500.0,
+          800.0,
+          1000.0,
+          1200.0,
+          1500.0,
+          2000.0,
+          3000.0,
+          5000.0
+        ],
+        "plot_bin_edges": [
+          0.0,
+          300.0,
+          500.0,
+          800.0,
+          1000.0,
+          1200.0,
+          1500.0,
+          2000.0,
+          3000.0,
+          5000.0
+        ],
+        "visible_xlim": [
+          300.0,
+          5000.0
+        ]
+      },
+      "blinded": true,
+      "fit_template": false,
+      "mc_uncertainty": {
+        "stat_sum": 0.0,
+        "syst_sum": 0.0,
+        "systematic_sources": [],
+        "total_sum": 0.0
+      },
+      "name": "partial_ht_cat7_SR_highDeltaM",
+      "pdf": "plots/partial_ht_cat7_SR_highDeltaM.pdf",
+      "png": "plots/partial_ht_cat7_SR_highDeltaM.png",
+      "region": "cat7_SR_highDeltaM",
+      "signal_overlays": [
+        {
+          "key": "mStop1000_mLSP1",
+          "label": "T2tt mStop1000 mLSP1",
+          "normalization_factor": 0.008107856761349841,
+          "source_variable": "ht",
+          "yield": 280.6048146535566
+        },
+        {
+          "key": "mStop1200_mLSP1",
+          "label": "T2tt mStop1200 mLSP1",
+          "normalization_factor": 0.005591256195155442,
+          "source_variable": "ht",
+          "yield": 74.29102106503036
+        }
+      ],
+      "variable": "ht"
+    },
+    {
+      "binning": {
+        "overflow_label": null,
+        "overflow_low": null,
+        "physics_bin_edges": [
+          -0.5,
+          1.5,
+          2.5,
+          3.5,
+          4.5,
+          5.5,
+          6.5,
+          7.5,
+          9.5,
+          14.5
+        ],
+        "plot_bin_edges": [
+          -0.5,
+          1.5,
+          2.5,
+          3.5,
+          4.5,
+          5.5,
+          6.5,
+          7.5,
+          9.5,
+          14.5
+        ],
+        "visible_xlim": [
+          4.5,
+          14.5
+        ]
+      },
+      "blinded": true,
+      "fit_template": false,
+      "mc_uncertainty": {
+        "stat_sum": 0.0,
+        "syst_sum": 0.0,
+        "systematic_sources": [],
+        "total_sum": 0.0
+      },
+      "name": "partial_njet_cat7_SR_highDeltaM",
+      "pdf": "plots/partial_njet_cat7_SR_highDeltaM.pdf",
+      "png": "plots/partial_njet_cat7_SR_highDeltaM.png",
+      "region": "cat7_SR_highDeltaM",
+      "signal_overlays": [
+        {
+          "key": "mStop1000_mLSP1",
+          "label": "T2tt mStop1000 mLSP1",
+          "normalization_factor": 0.008107856761349841,
+          "source_variable": "njet",
+          "yield": 280.612922510318
+        },
+        {
+          "key": "mStop1200_mLSP1",
+          "label": "T2tt mStop1200 mLSP1",
+          "normalization_factor": 0.005591256195155442,
+          "source_variable": "njet",
+          "yield": 74.29102106503036
+        }
+      ],
+      "variable": "njet"
+    },
+    {
+      "binning": {
+        "overflow_label": ">=3",
+        "overflow_low": 2.5,
+        "physics_bin_edges": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          "inf"
+        ],
+        "plot_bin_edges": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          3.5
+        ],
+        "visible_xlim": [
+          0.5,
+          3.5
+        ]
+      },
+      "blinded": true,
+      "fit_template": false,
+      "mc_uncertainty": {
+        "stat_sum": 0.0,
+        "syst_sum": 0.0,
+        "systematic_sources": [],
+        "total_sum": 0.0
+      },
+      "name": "partial_nb_cat7_SR_highDeltaM",
+      "pdf": "plots/partial_nb_cat7_SR_highDeltaM.pdf",
+      "png": "plots/partial_nb_cat7_SR_highDeltaM.png",
+      "region": "cat7_SR_highDeltaM",
+      "signal_overlays": [
+        {
+          "key": "mStop1000_mLSP1",
+          "label": "T2tt mStop1000 mLSP1",
+          "normalization_factor": 0.008107856761349841,
+          "source_variable": "nb_medium",
+          "yield": 280.62103036707936
+        },
+        {
+          "key": "mStop1200_mLSP1",
+          "label": "T2tt mStop1200 mLSP1",
+          "normalization_factor": 0.005591256195155442,
+          "source_variable": "nb_medium",
+          "yield": 74.29102106503036
+        }
+      ],
+      "variable": "nb"
+    },
+    {
+      "binning": {
+        "overflow_label": null,
+        "overflow_low": null,
+        "physics_bin_edges": [
+          0.0,
+          0.1,
+          0.15,
+          0.3,
+          0.5,
+          0.8,
+          1.2,
+          1.8,
+          3.2
+        ],
+        "plot_bin_edges": [
+          0.0,
+          0.1,
+          0.15,
+          0.3,
+          0.5,
+          0.8,
+          1.2,
+          1.8,
+          3.2
+        ],
+        "visible_xlim": [
+          0.5,
+          3.2
+        ]
+      },
+      "blinded": true,
+      "fit_template": false,
+      "mc_uncertainty": {
+        "stat_sum": 0.0,
+        "syst_sum": 0.0,
+        "systematic_sources": [],
+        "total_sum": 0.0
+      },
+      "name": "partial_min_dphi_cat7_SR_highDeltaM",
+      "pdf": "plots/partial_min_dphi_cat7_SR_highDeltaM.pdf",
+      "png": "plots/partial_min_dphi_cat7_SR_highDeltaM.png",
+      "region": "cat7_SR_highDeltaM",
+      "signal_overlays": [
+        {
+          "key": "mStop1000_mLSP1",
+          "label": "T2tt mStop1000 mLSP1",
+          "normalization_factor": 0.008107856761349841,
+          "source_variable": "min_dphi4",
+          "yield": 280.62103036707936
+        },
+        {
+          "key": "mStop1200_mLSP1",
+          "label": "T2tt mStop1200 mLSP1",
+          "normalization_factor": 0.005591256195155442,
+          "source_variable": "min_dphi4",
+          "yield": 74.29102106503036
+        }
+      ],
+      "variable": "min_dphi"
+    },
+    {
+      "blinded_regions": [
+        "cat7_SR_highDeltaM"
+      ],
+      "mc_uncertainty": {
+        "stat_sum": 0.0,
+        "syst_sum": 0.0,
+        "systematic_sources": [],
+        "total_sum": 0.0
+      },
+      "name": "partial_cr_sr_region_bins",
+      "pdf": "plots/partial_cr_sr_region_bins.pdf",
+      "png": "plots/partial_cr_sr_region_bins.png",
+      "signal_overlays": []
+    }
+  ],
+  "regions": [
+    "cat2_LLCR_highDeltaM",
+    "cat3_QCDCR_highDeltaM",
+    "cat4_GCR_highDeltaM",
+    "cat5_DY2E_highDeltaM",
+    "cat6_DY2M_highDeltaM",
+    "cat7_SR_highDeltaM"
+  ],
+  "search_bin_note": "cat7 SR data are blinded. Signal overlays are included only for cat7/SR plots for mStop1000/mLSP1 and mStop1200/mLSP1 where matching signal_cutflows histograms exist.",
+  "source": "autonomous_allhad/workflow/partial_merge_preview_sf_unc_v3_dyfix_20260624/partial_normalized_yields.json",
+  "status": "partial_preview_cms_style",
+  "template_binning_policy": "cat2/cat3/cat7 use MET templates; cat4/cat5/cat6 use recoil templates; template bins with lower edge >= 800 GeV are merged into [800, inf] and displayed with an infinity symbol at the right edge.",
+  "timestamp_utc": "2026-06-24T14:48:33Z",
+  "variables": [
+    "recoil_pt",
+    "metpt",
+    "ht",
+    "njet",
+    "nb",
+    "nfj",
+    "min_dphi"
+  ]
+}

@@ -1,0 +1,620 @@
+{
+  "available_systematic_dataset_counts": {},
+  "available_systematics_for_plot": [
+    "Lumi_2024"
+  ],
+  "bad_file_categories": {},
+  "bad_files": 0,
+  "created_at": "2026-06-24T14:48:33Z",
+  "data_region_process_policy": {
+    "cat2_LLCR_highDeltaM": "JetMET",
+    "cat3_QCDCR_highDeltaM": "JetMET",
+    "cat4_GCR_highDeltaM": "EGamma",
+    "cat5_DY2E_highDeltaM": "EGamma",
+    "cat6_DY2M_highDeltaM": "Muon",
+    "cat7_SR_highDeltaM": "JetMET"
+  },
+  "data_stream_exclusions": {},
+  "events_processed": 0,
+  "fastsim_signal_summary": {
+    "bad_files": 0,
+    "events_processed": 0,
+    "files_attempted": 61,
+    "files_processed": 61,
+    "normalization_note": "FastSim signal shard JSONs are full-production-style raw aggregates. Mass-point overlays in the preview are loaded from signal_cutflows.json and signal_yields_by_mass.json.",
+    "shard_status_counts": {
+      "complete": 3
+    },
+    "status": "complete"
+  },
+  "files_attempted": 0,
+  "files_processed": 0,
+  "final_normalization_complete": false,
+  "fit_template_variable_by_region": {
+    "cat2_LLCR_highDeltaM": "metpt",
+    "cat3_QCDCR_highDeltaM": "metpt",
+    "cat4_GCR_highDeltaM": "recoil_pt",
+    "cat5_DY2E_highDeltaM": "recoil_pt",
+    "cat6_DY2M_highDeltaM": "recoil_pt",
+    "cat7_SR_highDeltaM": "metpt"
+  },
+  "formula": "DATA factor=1.0; MC normalization_factor = xsec_pb * lumi_pb / physical_dataset_sumw, where physical_dataset strips metadata split suffixes like ____12_; selected final/running payloads only.",
+  "histograms": {
+    "background": {},
+    "data": {}
+  },
+  "local_recovery_snapshot": {
+    "apply_status_counts": {
+      "applied_and_promoted_running_checkpoint": 124,
+      "applied_to_final": 2,
+      "applied_to_running_checkpoint": 2178,
+      "not_recovered": 4
+    },
+    "candidate_kind_counts": {
+      "data": 9371,
+      "mc": 2995
+    },
+    "results_done": 2308,
+    "status_counts": {
+      "recovered": 2211,
+      "still_bad": 97
+    },
+    "updated_at": "2026-06-22T09:21:13Z"
+  },
+  "lumi_uncertainty": {
+    "fraction": 0.016,
+    "lnN": 1.016,
+    "name": "Lumi_2024"
+  },
+  "luminosity_fb": 109.82,
+  "luminosity_pb": 109820.0,
+  "nb_binning_policy": "Nb plots merge b >= 3 into a single >=3 bin.",
+  "normalization_blocked_datasets": [],
+  "normalization_factors": {},
+  "normalization_grouping_policy": "MC metadata records split as <dataset>____N_ share one physical-dataset denominator; this prevents reapplying the full cross section once per split shard.",
+  "normalization_status": "partial_preview_complete",
+  "physical_dataset_split_counts": {},
+  "physical_normalization_factors": {},
+  "plot_uncertainty_policy": "DATA error bars show statistical uncertainty. MC bands show sqrt(stat^2 + available systematic envelope^2 + Lumi_2024^2); available worker payload systematics are included where present, and Lumi_2024 is a fixed 1.6% MC rate uncertainty.",
+  "preview_directory": "autonomous_allhad/workflow/partial_merge_preview_sf_unc_v3_dyfix_20260624",
+  "preview_label": "Partial Merge Preview sf_unc_v3_dyfix_20260624 (v3 DY recoil fix)",
+  "region_yields_by_dataset": {},
+  "region_yields_by_process": {},
+  "regions": {
+    "cat2_LLCR_highDeltaM": {
+      "background": 0.0,
+      "data": 0.0,
+      "signal": 0.0
+    },
+    "cat3_QCDCR_highDeltaM": {
+      "background": 0.0,
+      "data": 0.0,
+      "signal": 0.0
+    },
+    "cat4_GCR_highDeltaM": {
+      "background": 0.0,
+      "data": 0.0,
+      "signal": 0.0
+    },
+    "cat5_DY2E_highDeltaM": {
+      "background": 0.0,
+      "data": 0.0,
+      "signal": 0.0
+    },
+    "cat6_DY2M_highDeltaM": {
+      "background": 0.0,
+      "data": 0.0,
+      "signal": 0.0
+    },
+    "cat7_SR_highDeltaM": {
+      "background": 0.0,
+      "data": 0.0,
+      "signal": 0.0
+    }
+  },
+  "schema_version": "partial_merge_preview_v2",
+  "scope": "PRELIMINARY partial merge over valid final shard JSONs plus terminal .json.running checkpoints at snapshot time; not a final production output.",
+  "search_bins": {},
+  "shard_directory": "autonomous_allhad/workflow/production_shards_sf_unc_v3_dyfix_20260624",
+  "shard_status": {
+    "examples": {
+      "final_used": [],
+      "missing_or_empty": [
+        "shard_00000.json",
+        "shard_00001.json",
+        "shard_00002.json",
+        "shard_00003.json",
+        "shard_00004.json"
+      ],
+      "running_used": []
+    },
+    "expected_shards": 2110,
+    "final_payloads_used": 0,
+    "running_payloads_used": 0,
+    "selected_source_payloads": 0,
+    "source_status_counts": {
+      "missing_or_empty": 2110
+    }
+  },
+  "signal_overlay_hists": {
+    "ht": {
+      "cat7_SR_highDeltaM": {
+        "mStop1000_mLSP1": {
+          "bin_edges": [
+            0.0,
+            300.0,
+            500.0,
+            800.0,
+            1000.0,
+            1200.0,
+            1500.0,
+            2000.0,
+            3000.0,
+            5000.0
+          ],
+          "color": "#d62728",
+          "key": "mStop1000_mLSP1",
+          "label": "T2tt mStop1000 mLSP1",
+          "normalization_factor": 0.008107856761349841,
+          "source_variable": "ht",
+          "sumw2": [
+            0.0,
+            0.03635274971819918,
+            0.440045762411619,
+            0.5273449516083071,
+            0.4865220626842534,
+            0.43242023082516134,
+            0.2619633049313268,
+            0.08519559427628597,
+            0.005258987301005306
+          ],
+          "values": [
+            0.0,
+            4.483644789026462,
+            54.27399316047583,
+            65.04122693954842,
+            60.006247890750174,
+            53.33348177615925,
+            32.30980919397911,
+            10.507782362709394,
+            0.6486285409079873
+          ]
+        },
+        "mStop1200_mLSP1": {
+          "bin_edges": [
+            0.0,
+            300.0,
+            500.0,
+            800.0,
+            1000.0,
+            1200.0,
+            1500.0,
+            2000.0,
+            3000.0,
+            5000.0
+          ],
+          "color": "#1f77b4",
+          "key": "mStop1200_mLSP1",
+          "label": "T2tt mStop1200 mLSP1",
+          "normalization_factor": 0.005591256195155442,
+          "source_variable": "ht",
+          "sumw2": [
+            0.0,
+            0.0029386417089472265,
+            0.04498622786356447,
+            0.06830778866010309,
+            0.08584585247626686,
+            0.10404042135506777,
+            0.07796779172462111,
+            0.028636125589315525,
+            0.0026572823963884494
+          ],
+          "values": [
+            0.0,
+            0.5255780823446116,
+            8.045817664828682,
+            12.216894786414642,
+            15.353589511896844,
+            18.607700617477313,
+            13.944592950717674,
+            5.121590674762385,
+            0.4752567765882126
+          ]
+        }
+      }
+    },
+    "metpt": {
+      "cat7_SR_highDeltaM": {
+        "mStop1000_mLSP1": {
+          "bin_edges": [
+            0.0,
+            100.0,
+            200.0,
+            250.0,
+            300.0,
+            400.0,
+            500.0,
+            600.0,
+            800.0,
+            1000.0,
+            1500.0,
+            2500.0
+          ],
+          "color": "#d62728",
+          "key": "mStop1000_mLSP1",
+          "label": "T2tt mStop1000 mLSP1",
+          "normalization_factor": 0.008107856761349841,
+          "source_variable": "met",
+          "sumw2": [
+            0.0,
+            0.0,
+            0.0,
+            0.12759617939064125,
+            0.3082423931801735,
+            0.36720878829269554,
+            0.3679976363878463,
+            0.6413335013575971,
+            0.3528780478974561,
+            0.10682317955167028,
+            0.003155392380603184
+          ],
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            15.737349973780042,
+            38.0177403539694,
+            45.290487868900215,
+            45.38778215003641,
+            79.10025056372905,
+            43.52297509492595,
+            13.175267237193491,
+            0.38917712454479236
+          ]
+        },
+        "mStop1200_mLSP1": {
+          "bin_edges": [
+            0.0,
+            100.0,
+            200.0,
+            250.0,
+            300.0,
+            400.0,
+            500.0,
+            600.0,
+            800.0,
+            1000.0,
+            1500.0,
+            2500.0
+          ],
+          "color": "#1f77b4",
+          "key": "mStop1200_mLSP1",
+          "label": "T2tt mStop1200 mLSP1",
+          "normalization_factor": 0.005591256195155442,
+          "source_variable": "met",
+          "sumw2": [
+            0.0,
+            0.0,
+            0.0,
+            0.01581864579497124,
+            0.039484090195748375,
+            0.04861263678098869,
+            0.05430234732384396,
+            0.10719789808489404,
+            0.08709633830986142,
+            0.06086739795021543,
+            0.002000777333751303
+          ],
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            2.829175634748654,
+            7.061756574481324,
+            8.694403383466712,
+            9.712012010985003,
+            19.17241749318801,
+            15.577239759703062,
+            10.886175811967647,
+            0.3578403964899483
+          ]
+        }
+      }
+    },
+    "min_dphi": {
+      "cat7_SR_highDeltaM": {
+        "mStop1000_mLSP1": {
+          "bin_edges": [
+            0.0,
+            0.1,
+            0.15,
+            0.3,
+            0.5,
+            0.8,
+            1.2,
+            1.8,
+            3.2
+          ],
+          "color": "#d62728",
+          "key": "mStop1000_mLSP1",
+          "label": "T2tt mStop1000 mLSP1",
+          "normalization_factor": 0.008107856761349841,
+          "source_variable": "min_dphi4",
+          "sumw2": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.28457695032564967,
+            0.4276871422542566,
+            0.7831946838022154,
+            0.7797763420565618
+          ],
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            35.09891191988346,
+            52.749716089342066,
+            96.59700545472201,
+            96.17539690313181
+          ]
+        },
+        "mStop1200_mLSP1": {
+          "bin_edges": [
+            0.0,
+            0.1,
+            0.15,
+            0.3,
+            0.5,
+            0.8,
+            1.2,
+            1.8,
+            3.2
+          ],
+          "color": "#1f77b4",
+          "key": "mStop1200_mLSP1",
+          "label": "T2tt mStop1200 mLSP1",
+          "normalization_factor": 0.005591256195155442,
+          "source_variable": "min_dphi4",
+          "sumw2": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.05317691007360886,
+            0.08028119051677104,
+            0.13814742246635953,
+            0.14377460871753506
+          ],
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            9.510726787959408,
+            14.358345909159176,
+            24.7077611263919,
+            25.71418724151988
+          ]
+        }
+      }
+    },
+    "nb": {
+      "cat7_SR_highDeltaM": {
+        "mStop1000_mLSP1": {
+          "bin_edges": [
+            -0.5,
+            0.5,
+            1.5,
+            2.5,
+            3.5,
+            6.5
+          ],
+          "color": "#d62728",
+          "key": "mStop1000_mLSP1",
+          "label": "T2tt mStop1000 mLSP1",
+          "normalization_factor": 0.008107856761349841,
+          "source_variable": "nb_medium",
+          "sumw2": [
+            0.0,
+            0.6602658556412162,
+            1.368651445086631,
+            0.2221264761262116,
+            0.02419134158462441
+          ],
+          "values": [
+            0.0,
+            81.4353133109978,
+            168.8055777713037,
+            27.39644799660111,
+            2.9836912881767415
+          ]
+        },
+        "mStop1200_mLSP1": {
+          "bin_edges": [
+            -0.5,
+            0.5,
+            1.5,
+            2.5,
+            3.5,
+            6.5
+          ],
+          "color": "#1f77b4",
+          "key": "mStop1200_mLSP1",
+          "label": "T2tt mStop1200 mLSP1",
+          "normalization_factor": 0.005591256195155442,
+          "source_variable": "nb_medium",
+          "sumw2": [
+            0.0,
+            0.1118559578150338,
+            0.2544738671364939,
+            0.04379826632164962,
+            0.005252040501097171
+          ],
+          "values": [
+            0.0,
+            20.005514666266173,
+            45.5128254285653,
+            7.833349929412774,
+            0.9393310407861143
+          ]
+        }
+      }
+    },
+    "njet": {
+      "cat7_SR_highDeltaM": {
+        "mStop1000_mLSP1": {
+          "bin_edges": [
+            -0.5,
+            1.5,
+            2.5,
+            3.5,
+            4.5,
+            5.5,
+            6.5,
+            7.5,
+            9.5,
+            14.5
+          ],
+          "color": "#d62728",
+          "key": "mStop1000_mLSP1",
+          "label": "T2tt mStop1000 mLSP1",
+          "normalization_factor": 0.008107856761349841,
+          "source_variable": "njet",
+          "sumw2": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.8626053920473954,
+            0.6841942478607904,
+            0.410792645549777,
+            0.2803040231435829,
+            0.03727307249587511
+          ],
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            106.39129642243262,
+            84.38657317212915,
+            50.66599690167516,
+            34.571901230395724,
+            4.59715478368536
+          ]
+        },
+        "mStop1200_mLSP1": {
+          "bin_edges": [
+            -0.5,
+            1.5,
+            2.5,
+            3.5,
+            4.5,
+            5.5,
+            6.5,
+            7.5,
+            9.5,
+            14.5
+          ],
+          "color": "#1f77b4",
+          "key": "mStop1200_mLSP1",
+          "label": "T2tt mStop1200 mLSP1",
+          "normalization_factor": 0.005591256195155442,
+          "source_variable": "njet",
+          "sumw2": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.1534971360737328,
+            0.1262365449013713,
+            0.07471652855727523,
+            0.05320817221944872,
+            0.0077217500224464365
+          ],
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            27.453067918213222,
+            22.577492516037676,
+            13.363102306421506,
+            9.516318044154563,
+            1.3810402802033943
+          ]
+        }
+      }
+    }
+  },
+  "signal_overlay_summary": {
+    "missing_variable_note": "Mass-point overlays are drawn only in cat7/SR for metpt, ht, njet, nb, and min_dphi; recoil_pt and nfj have no matching signal_cutflows histogram.",
+    "points": [
+      {
+        "color": "#d62728",
+        "key": "mStop1000_mLSP1",
+        "label": "T2tt mStop1000 mLSP1",
+        "mLSP": 1,
+        "mStop": 1000,
+        "normalization_factor": 0.008107856761349841,
+        "normalization_status": "normalized_with_signal_xsec_txt_and_Runs_genEventSumw_T2tt",
+        "xsec_pb": 0.009123
+      },
+      {
+        "color": "#1f77b4",
+        "key": "mStop1200_mLSP1",
+        "label": "T2tt mStop1200 mLSP1",
+        "mLSP": 1,
+        "mStop": 1200,
+        "normalization_factor": 0.005591256195155442,
+        "normalization_status": "normalized_with_signal_xsec_txt_and_Runs_genEventSumw_T2tt",
+        "xsec_pb": 0.002373
+      }
+    ],
+    "source_files": [
+      "autonomous_allhad/outputs/signal_cutflows.json",
+      "autonomous_allhad/outputs/signal_yields_by_mass.json"
+    ],
+    "status": "complete",
+    "variable_map": {
+      "ht": "ht",
+      "metpt": "met",
+      "min_dphi": "min_dphi4",
+      "nb": "nb_medium",
+      "njet": "njet"
+    }
+  },
+  "signal_region_overlay_yields": {
+    "cat7_SR_highDeltaM": {
+      "mStop1000_mLSP1": {
+        "color": "#d62728",
+        "label": "T2tt mStop1000 mLSP1",
+        "normalized_sumw2": 2.275235118438683,
+        "normalized_weighted": 280.62103036707936,
+        "unweighted": 34611
+      },
+      "mStop1200_mLSP1": {
+        "color": "#1f77b4",
+        "label": "T2tt mStop1200 mLSP1",
+        "normalized_sumw2": 0.41538013177427446,
+        "normalized_weighted": 74.29102106503036,
+        "unweighted": 13287
+      }
+    }
+  },
+  "sms_policy": "SMS FastSim mass-point overlays are drawn only in cat7/SR plots for mStop1000/mLSP1 and mStop1200/mLSP1 where signal_cutflows histograms exist; completed FastSim shard JSONs are summarized separately in fastsim_signal_partial_summary.json.",
+  "source_cluster_id": "923877",
+  "source_details_preview": [],
+  "source_output_directory": "autonomous_allhad/workflow/production_outputs_sf_unc_v3_dyfix_20260624",
+  "source_shards": [],
+  "status": "partial_preview",
+  "template_binning_policy": "cat2/cat3/cat7 use MET templates; cat4/cat5/cat6 use recoil templates; template bins with lower edge >= 800 GeV are merged into [800, inf] and displayed with an infinity symbol at the right edge.",
+  "warnings": [
+    "This is based on a live partial recovery snapshot and will change as more .running records are recovered.",
+    "Process composition may be biased until recovery and all shard promotion are complete.",
+    "Do not use this preview for Combine, final datacards, or physics conclusions."
+  ]
+}

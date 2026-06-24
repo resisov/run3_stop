@@ -2,7 +2,7 @@
   "afs_wrapper_allowed_only_for_bounded_pilot": false,
   "afs_wrapper_large_submission_prevented": false,
   "allow_condor_submit": true,
-  "args_file": "autonomous_allhad/workflow/condor_eos_full/full_production_args.txt",
+  "args_file": "<repo>/autonomous_allhad/workflow/condor_sf_unc_v3_dyfix_20260624/full_production_args.txt",
   "background_root_files": 39172,
   "bounded_debug": false,
   "condor_available": true,
@@ -27,12 +27,15 @@
   "job_granularity": "25 ROOT files per aggregate shard",
   "jobs_planned": 2110,
   "local_full_requested": false,
-  "production_tag": "eos_full",
-  "shard_manifest_dir": "autonomous_allhad/workflow/production_shards_eos_full",
-  "shard_output_dir": "autonomous_allhad/workflow/production_outputs_eos_full",
+  "production_tag": "sf_unc_v3_dyfix_20260624",
+  "record_scope": "all",
+  "shape_shift": "nominal",
+  "shape_shift_policy": "non-nominal shifts are written to shift-specific shard outputs and are not merged into nominal normalized yields in this stage",
+  "shard_manifest_dir": "autonomous_allhad/workflow/production_shards_sf_unc_v3_dyfix_20260624",
+  "shard_output_dir": "autonomous_allhad/workflow/production_outputs_sf_unc_v3_dyfix_20260624",
   "sms_metadata_records_excluded_from_background": 24,
   "sms_policy": "SMS records are excluded from DATA/background production and background stacks.",
   "status": "prepared",
   "submit_condor_requested": true,
-  "submit_file": "autonomous_allhad/workflow/condor_eos_full/full_production.sub"
+  "submit_file": "<repo>/autonomous_allhad/workflow/condor_sf_unc_v3_dyfix_20260624/full_production.sub"
 }

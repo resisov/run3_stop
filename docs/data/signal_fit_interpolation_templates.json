@@ -1,0 +1,10 @@
+{
+  "policy": "autonomous_allhad/cards/signal_fit_interpolation_policy.json",
+  "reason": "no clean interpolation anchors are currently available",
+  "schema_version": "signal_fit_interpolation_templates_v1",
+  "scope": "datacard_and_template_fit_only",
+  "skipped_templates": [],
+  "source": "autonomous_allhad/hists.npy",
+  "status": "blocked",
+  "templates": {}
+}
