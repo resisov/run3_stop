@@ -17,6 +17,7 @@ import numpy as np
 
 DATA_PROCESSES = {"JetMET", "EGamma", "Muon"}
 FINAL_STATUSES = {"complete", "complete_with_bad_files"}
+REQUIRED_SHARD_SCHEMA_VERSION = "full_production_shard_v3"
 LUMI_FB = 109.82
 LUMI_PB = LUMI_FB * 1000.0
 LUMI_UNCERTAINTY_NAME = "Lumi_2024"
@@ -342,6 +343,8 @@ def source_manifest_name(name: str) -> str:
 
 def valid_final_payload(payload: dict[str, Any], records_expected: int | None) -> bool:
     if payload.get("status") not in FINAL_STATUSES:
+        return False
+    if payload.get("schema_version") != REQUIRED_SHARD_SCHEMA_VERSION:
         return False
     attempted = payload.get("files_attempted")
     processed = payload.get("files_processed")

@@ -486,11 +486,15 @@ def _xrd_source_candidates(file_path: str) -> list[str]:
 
 
 def open_root_with_xrd_fallback(file_path: str, timeout: int = 60) -> tuple[Any, dict[str, Any]]:
+    prefer_cache = (
+        os.environ.get("AUTONOMOUS_ALLHAD_XRD_PREFER_CACHE", "0") == "1"
+        and str(file_path).startswith("root://")
+    )
     info: dict[str, Any] = {
         "source_file_path": file_path,
         "effective_file_path": file_path,
         "access_method": "direct",
-        "direct_open_attempted": True,
+        "direct_open_attempted": not prefer_cache,
         "direct_open_status": "not_started",
         "direct_open_error": None,
         "alternate_access_attempted": False,
@@ -503,18 +507,22 @@ def open_root_with_xrd_fallback(file_path: str, timeout: int = 60) -> tuple[Any,
         "xrdcp_stderr_tail": "",
         "cache_path": None,
         "cache_reused": False,
+        "prefer_cache": prefer_cache,
     }
-    try:
-        root = uproot.open(file_path, timeout=timeout)
-        info["direct_open_status"] = "success"
-        info["fallback_status"] = "not_needed"
-        return root, info
-    except Exception as exc:
-        info["direct_open_status"] = "failed"
-        info["direct_open_error"] = f"{type(exc).__name__}: {exc}"
-        if not str(file_path).startswith("root://"):
-            info["fallback_status"] = "not_applicable_non_xrootd"
-            raise RootOpenFailure(f"direct ROOT open failed and xrdcp fallback is not applicable: {exc}", info)
+    if prefer_cache:
+        info["direct_open_status"] = "skipped_prefer_cache"
+    else:
+        try:
+            root = uproot.open(file_path, timeout=timeout)
+            info["direct_open_status"] = "success"
+            info["fallback_status"] = "not_needed"
+            return root, info
+        except Exception as exc:
+            info["direct_open_status"] = "failed"
+            info["direct_open_error"] = f"{type(exc).__name__}: {exc}"
+            if not str(file_path).startswith("root://"):
+                info["fallback_status"] = "not_applicable_non_xrootd"
+                raise RootOpenFailure(f"direct ROOT open failed and xrdcp fallback is not applicable: {exc}", info)
 
     xrdcp = shutil.which("xrdcp")
     info["alternate_access_attempted"] = True
@@ -895,6 +903,15 @@ def transverse_mass(pt: Any, phi: Any, met_pt: Any, met_phi: Any) -> Any:
     return np.sqrt(2 * pt * met_pt * (1 - np.cos(phi - met_phi)))
 
 
+def transverse_vector_sum_pt(*pt_phi_pairs: Any) -> Any:
+    px = 0.0
+    py = 0.0
+    for pt, phi in pt_phi_pairs:
+        px = px + pt * np.cos(phi)
+        py = py + pt * np.sin(phi)
+    return np.sqrt(np.maximum(0, px * px + py * py))
+
+
 def invariant_mass(pt1, eta1, phi1, mass1, pt2, eta2, phi2, mass2):
     px1 = pt1 * np.cos(phi1)
     py1 = pt1 * np.sin(phi1)
@@ -1017,7 +1034,9 @@ def extract_chunk(arrays: dict[str, Any], dataset: str, process: str, sp: str | 
     ht_300 = ht > 300
     ht_photon_300 = jet_photon_clean["ht"] > 300
     ht_lepton_300 = jet_lepton_clean["ht"] > 300
-    recoil_g = np.sqrt(np.maximum(0, met_pt**2 + first_or(0, p_pt[p_med])**2 + 2*met_pt*first_or(0, p_pt[p_med])*np.cos(met_phi-first_or(0, p_phi[p_med]))))
+    recoil_g = transverse_vector_sum_pt((met_pt, met_phi), (first_or(0, p_pt[p_med]), first_or(0, p_phi[p_med])))
+    recoil_dy2e = transverse_vector_sum_pt((met_pt, met_phi), (e1pt, e1phi), (e2pt, e2phi))
+    recoil_dy2m = transverse_vector_sum_pt((met_pt, met_phi), (m1pt, m1phi), (m2pt, m2phi))
 
     masks = {
         "preselection": base_common & sig_hlt & no_veto_leptons & zero_tau & (njet >= 2) & met_250 & jet_nominal["open_pre"] & ht_300,
@@ -1100,7 +1119,7 @@ def extract_chunk(arrays: dict[str, Any], dataset: str, process: str, sp: str | 
             "j1_met_dphi": float(j1dphi[i]), "j2_met_dphi": float(j2dphi[i]), "min_dphi4": float(min_dphi4[i]),
             "nfj": int(n_fj[i]), "fj1pt": float(fj1pt[i]), "fj1eta": float(fj1eta[i]), "fj1phi": float(fj1phi[i]), "fj1mass": float(fj1mass[i]), "fj1msd": float(fj1msd[i]),
             "n_e_veto": int(n_e_veto[i]), "n_e_medium": int(n_e_med[i]), "n_m_loose": int(n_m_loose[i]), "n_m_medium": int(n_m_med[i]), "n_photon_medium": int(n_p_med[i]),
-            "mee": float(mee[i]), "pee": float(pee[i]), "mmm": float(mmm[i]), "pmm": float(pmm[i]), "recoil_gcr": float(recoil_g[i]), "gen_weight": float(gen_weight[i]), "nominal_weight": float(weight[i]),
+            "mee": float(mee[i]), "pee": float(pee[i]), "mmm": float(mmm[i]), "pmm": float(pmm[i]), "recoil_gcr": float(recoil_g[i]), "recoil_dy2e": float(recoil_dy2e[i]), "recoil_dy2m": float(recoil_dy2m[i]), "gen_weight": float(gen_weight[i]), "nominal_weight": float(weight[i]),
             "weight_variations": {name: float(vals[i]) for name, vals in weight_variations.items()},
             "available_systematics": ";".join(sorted(weight_variations)),
             "lumi_mask_source": lumi_mask_source,

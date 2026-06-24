@@ -31,9 +31,19 @@ from .real_subset_worker import (
 FOCUS_REGIONS = ["LLCR", "QCDCR", "GCR", "DY2E", "DY2M", "SR"]
 DATA_PROCESSES = {"JetMET", "EGamma", "Muon"}
 FINAL_STATUSES = {"complete", "complete_with_bad_files"}
+SHARD_SCHEMA_VERSION = "full_production_shard_v3"
+RECOIL_PT_BINS = [250, 300, 350, 400, 500, 800, 1500]
+RECOIL_COLUMN_BY_REGION = {
+    "LLCR": "met",
+    "QCDCR": "met",
+    "GCR": "recoil_gcr",
+    "DY2E": "recoil_dy2e",
+    "DY2M": "recoil_dy2m",
+    "SR": "met",
+}
 
 VARIABLES: dict[str, tuple[str, list[float]]] = {
-    "recoil_pt": ("recoil_gcr", [0, 100, 200, 250, 300, 400, 500, 600, 800, 1000, 1500, 2500]),
+    "recoil_pt": ("region_recoil_pt", RECOIL_PT_BINS),
     "metpt": ("met", [0, 100, 200, 250, 300, 400, 500, 600, 800, 1000, 1500, 2500]),
     "ht": ("ht", [0, 300, 500, 800, 1000, 1200, 1500, 2000, 3000, 5000]),
     "njet": ("njet", [-0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 9.5, 14.5]),
@@ -41,6 +51,12 @@ VARIABLES: dict[str, tuple[str, list[float]]] = {
     "nfj": ("nfj", [-0.5, 0.5, 1.5, 2.5, 3.5, 6.5]),
     "min_dphi": ("min_dphi4", [0, 0.1, 0.15, 0.3, 0.5, 0.8, 1.2, 1.8, 3.2]),
 }
+
+
+def variable_column(variable: str, column: str, region: str) -> str:
+    if variable == "recoil_pt" and column == "region_recoil_pt":
+        return RECOIL_COLUMN_BY_REGION.get(region, "met")
+    return column
 
 
 def write_json(path: Path, payload: Any) -> None:
@@ -72,7 +88,7 @@ def valid_final_output(path: Path, shard: dict[str, Any], shift_name: str = "nom
     except Exception:
         return False
     records_in_shard = len(shard.get("records", []))
-    if payload.get("schema_version") != "full_production_shard_v2":
+    if payload.get("schema_version") != SHARD_SCHEMA_VERSION:
         return False
     if payload.get("status") not in FINAL_STATUSES:
         return False
@@ -349,7 +365,8 @@ def process_file(record: dict[str, Any], repo: Path, chunk_size: int, shift_name
                     for variation_name, variation_weight in variation_weights.items():
                         target = file_payload["weight_variations"].setdefault(region, {}).setdefault(variation_name, empty_counter())
                         add_counter(target, float(variation_weight))
-                    for variable, (column, edges) in VARIABLES.items():
+                    for variable, (column_spec, edges) in VARIABLES.items():
+                        column = variable_column(variable, column_spec, region)
                         try:
                             value = float(row.get(column, float("nan")))
                         except Exception:
@@ -486,7 +503,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     start = time.time()
     payload: dict[str, Any] = {
-        "schema_version": "full_production_shard_v2",
+        "schema_version": SHARD_SCHEMA_VERSION,
         "status": "running",
         "shard_id": shard.get("shard_id"),
         "record_digest": shard.get("record_digest"),

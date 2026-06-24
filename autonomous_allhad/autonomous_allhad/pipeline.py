@@ -1551,9 +1551,18 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
             "DY2M": "cat6_DY2M_highDeltaM",
             "SR": "cat7_SR_highDeltaM",
         }
+        recoil_pt_bins = np.array([250, 300, 350, 400, 500, 800, 1500], dtype=float)
+        recoil_column_by_region = {
+            "LLCR": "met",
+            "QCDCR": "met",
+            "GCR": "recoil_gcr",
+            "DY2E": "recoil_dy2e",
+            "DY2M": "recoil_dy2m",
+            "SR": "met",
+        }
         variables = {
             "metpt": ("met", np.array([0, 100, 200, 250, 300, 400, 500, 600, 800, 1000, 1500, 2500], dtype=float)),
-            "recoil_pt": ("recoil_gcr", np.array([0, 100, 200, 250, 300, 400, 500, 600, 800, 1000, 1500, 2500], dtype=float)),
+            "recoil_pt": ("region_recoil_pt", recoil_pt_bins),
             "ht": ("ht", np.array([0, 300, 500, 800, 1000, 1200, 1500, 2000, 3000, 5000], dtype=float)),
             "njet": ("njet", np.array([-0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 9.5, 14.5], dtype=float)),
             "nb": ("nb_medium", np.array([-0.5, 0.5, 1.5, 2.5, 3.5, 6.5], dtype=float)),
@@ -1640,7 +1649,8 @@ Trace: `analysis/processors/stop_processor_v4.py`, `configs/stop_2024.yaml`.
                     target.setdefault(process_label, {}).setdefault(region_name, 0.0)
                     target[process_label][region_name] += weight
                     region_yields[region_name]["data" if is_data else "background"] += weight
-                    for variable, (column, bins) in variables.items():
+                    for variable, (column_spec, bins) in variables.items():
+                        column = recoil_column_by_region.get(short_region, "met") if variable == "recoil_pt" and column_spec == "region_recoil_pt" else column_spec
                         try:
                             val = float(row.get(column, "nan"))
                         except Exception:
@@ -2174,7 +2184,7 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
         with path.open(newline="") as f:
             for row in csv.DictReader(f):
                 out = dict(row)
-                for key in ["met", "ht", "njet", "nb_medium", "nfj", "j1pt", "j2pt", "min_dphi4", "nominal_weight", "recoil_gcr"]:
+                for key in ["met", "ht", "njet", "nb_medium", "nfj", "j1pt", "j2pt", "min_dphi4", "nominal_weight", "recoil_gcr", "recoil_dy2e", "recoil_dy2m"]:
                     try:
                         out[key] = float(out.get(key, "nan"))
                     except ValueError:
@@ -3014,7 +3024,8 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
         logs.mkdir(parents=True, exist_ok=True)
         args_path = condor_dir / "full_production_args.txt"
         chunk = os.environ.get("AUTONOMOUS_ALLHAD_FULL_CHUNK", "50000")
-        xrd_timeout = os.environ.get("AUTONOMOUS_ALLHAD_XRDCP_TIMEOUT", "300")
+        xrd_timeout = os.environ.get("AUTONOMOUS_ALLHAD_XRDCP_TIMEOUT", "1800")
+        xrd_network = os.environ.get("XRD_NETWORKSTACK", "IPv4")
         use_wrapper = allow_afs_wrapper and (str(condor_dir).startswith("/afs/") or os.environ.get("AUTONOMOUS_ALLHAD_CONDOR_AFS_WRAPPER", "0") == "1")
         if use_wrapper:
             python = os.environ.get("AUTONOMOUS_ALLHAD_CONDOR_PYTHON") or sys.executable
@@ -3036,6 +3047,7 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
                 f"export PYTHONPATH={self.repo / 'autonomous_allhad'}:${{PYTHONPATH:-}}",
                 f"export AUTONOMOUS_ALLHAD_FULL_CHUNK={chunk}",
                 f"export AUTONOMOUS_ALLHAD_XRDCP_TIMEOUT={xrd_timeout}",
+                f"export XRD_NETWORKSTACK={xrd_network}",
                 (f"export X509_USER_PROXY={proxy_for_job}" if proxy_for_job else ""),
                 f'exec {python} -m autonomous_allhad.full_production_worker --repo {self.repo} --shard "$shard" --output "$result_json" --shift {shift_name}',
                 "",
@@ -3077,6 +3089,7 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             'result_json="$3"',
             f"export AUTONOMOUS_ALLHAD_FULL_CHUNK={chunk}",
             f"export AUTONOMOUS_ALLHAD_XRDCP_TIMEOUT={xrd_timeout}",
+            f"export XRD_NETWORKSTACK={xrd_network}",
             "export PYTHONNOUSERSITE=1",
             'export X509_USER_PROXY="$PWD/x509up_u147757"',
             'chmod 600 "$X509_USER_PROXY" || true',
@@ -3789,6 +3802,10 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
         replacements = {
             str(self.repo): "<repo>",
             str(Path.home()): "<home>",
+            "/eos/home-t/taiwoo/run3_stop/decaf": "<repo>",
+            "/eos/user/t/taiwoo/run3_stop/decaf": "<repo>",
+            "/eos/home-t/taiwoo": "<workspace>",
+            "/eos/user/t/taiwoo": "<workspace>",
             "/store": "/store",
         }
         for path in self.docs.glob("**/*"):
@@ -3798,6 +3815,8 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             new = text
             for old, repl in replacements.items():
                 new = new.replace(old, repl)
+            new = re.sub(r"/eos/home-[A-Za-z0-9_-]+/[^\s'\"<>]+", "<workspace>", new)
+            new = re.sub(r"/eos/user/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/[^\s'\"<>]+", "<workspace>", new)
             if new != text:
                 path.write_text(new)
 
