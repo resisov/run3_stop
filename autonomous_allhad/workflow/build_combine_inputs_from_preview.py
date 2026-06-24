@@ -324,7 +324,7 @@ def plot_contour(limit_payload: dict[str, Any], output_png: Path) -> bool:
     from matplotlib.ticker import FormatStrFormatter, MultipleLocator
     from scipy.interpolate import griddata
 
-    # Match the reference view and avoid extrapolating into unsupported/off-shell regions.
+    # Match the reference view, use all generated mass points, and mask unsupported/off-shell regions.
     xmin, xmax = 600.0, 1500.0
     ymin, ymax = 0.0, 1500.0
     top_mass = 172.5
@@ -341,8 +341,6 @@ def plot_contour(limit_payload: dict[str, Any], output_png: Path) -> bool:
                 continue
             x = float(rec["mStop"])
             y = float(rec["mLSP"])
-            if not (xmin <= x <= xmax and ymin <= y <= ymax) or y > x - top_mass:
-                continue
             vals.append((x, y, math.log10(float(val))))
         if not vals:
             return None
@@ -383,8 +381,8 @@ def plot_contour(limit_payload: dict[str, Any], output_png: Path) -> bool:
     cbar.ax.tick_params(labelsize=20, direction="in", length=7, width=1.2)
     cbar.outline.set_linewidth(1.8)
 
-    xs = np.asarray([float(p["mStop"]) for p in points if xmin <= float(p["mStop"]) <= xmax and ymin <= float(p["mLSP"]) <= ymax and float(p["mLSP"]) <= float(p["mStop"]) - top_mass])
-    ys = np.asarray([float(p["mLSP"]) for p in points if xmin <= float(p["mStop"]) <= xmax and ymin <= float(p["mLSP"]) <= ymax and float(p["mLSP"]) <= float(p["mStop"]) - top_mass])
+    xs = np.asarray([float(p["mStop"]) for p in points])
+    ys = np.asarray([float(p["mLSP"]) for p in points])
     ax.scatter(xs, ys, s=9, c="black", alpha=0.35, linewidths=0, zorder=3)
 
     diag_x = np.linspace(xmin, xmax, 400)
