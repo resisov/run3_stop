@@ -417,7 +417,7 @@ def plot_contour(limit_payload: dict[str, Any], output_png: Path) -> bool:
         Line2D([0], [0], color="red", lw=1.8, linestyle="--", label=r"Expected $\pm1\sigma_{\mathrm{exp}}$"),
         Line2D([0], [0], color="0.45", lw=1.1, linestyle=":", label=r"$m_{\tilde{\chi}_1^0}=m_{\tilde{t}}-m_t$"),
     ]
-    ax.legend(handles=legend_handles, loc="upper left", bbox_to_anchor=(0.02, 0.90), frameon=False, fontsize=14, handlelength=2.8)
+    ax.legend(handles=legend_handles, loc="upper left", bbox_to_anchor=(0.02, 0.90), frameon=False, fontsize=16, handlelength=2.8)
 
     output_png.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(output_png, dpi=180, bbox_inches="tight")
