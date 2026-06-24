@@ -17,12 +17,12 @@
     "query_status": "ok",
     "returncode": 0,
     "stderr_tail": "",
-    "stdout_tail": "\n\n-- Schedd: bigbird24.cern.ch : <188.185.88.162:9618?... @ 06/24/26 16:49:54\nTotal for query: 8378 jobs; 0 completed, 0 removed, 7977 idle, 401 running, 0 held, 0 suspended \nTotal for all users: 14878 jobs; 0 completed, 0 removed, 9224 idle, 5314 running, 340 held, 0 suspended\n\n"
+    "stdout_tail": "\n\n-- Schedd: bigbird24.cern.ch : <188.185.88.162:9618?... @ 06/24/26 19:56:15\nTotal for query: 8367 jobs; 0 completed, 0 removed, 7953 idle, 414 running, 0 held, 0 suspended \nTotal for all users: 14919 jobs; 0 completed, 0 removed, 12873 idle, 1830 running, 216 held, 0 suspended\n\n"
   },
   "github_pages_url": "https://resisov.github.io/run3_stop/",
   "partial_preview_url": "https://resisov.github.io/run3_stop/partial_merge_preview_sf_unc_v3_dyfix_20260624/",
   "phase": "deploy",
-  "status": "pushed",
+  "status": "prepared",
   "tag": "sf_unc_v3_dyfix_20260624",
-  "updated_at": "2026-06-24T14:49:54Z"
+  "updated_at": "2026-06-24T17:56:15Z"
 }
