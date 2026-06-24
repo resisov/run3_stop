@@ -408,7 +408,7 @@ def plot_contour(limit_payload: dict[str, Any], output_png: Path) -> bool:
     for spine in ax.spines.values():
         spine.set_linewidth(1.8)
 
-    hep.cms.label(llabel="Simulation Work in progress", rlabel=r"109.82 fb$^{-1}$ (13.6 TeV)", ax=ax)
+    hep.cms.label(llabel="Work in progress", rlabel=r"109.82 fb$^{-1}$ (13.6 TeV)", ax=ax)
     ax.text(0.14, 0.95, r"$pp\rightarrow \tilde{t}\tilde{t},\ \tilde{t}\rightarrow t\tilde{\chi}_1^0$", transform=ax.transAxes, fontsize=15, va="top")
 
     legend_handles = [
@@ -419,8 +419,8 @@ def plot_contour(limit_payload: dict[str, Any], output_png: Path) -> bool:
     ax.legend(handles=legend_handles, loc="upper left", bbox_to_anchor=(0.02, 0.90), frameon=False, fontsize=14, handlelength=2.8)
 
     output_png.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(output_png, dpi=180)
-    fig.savefig(output_png.with_suffix(".pdf"))
+    fig.savefig(output_png, dpi=180, bbox_inches="tight")
+    fig.savefig(output_png.with_suffix(".pdf"), bbox_inches="tight")
     plt.close(fig)
     return True
 
