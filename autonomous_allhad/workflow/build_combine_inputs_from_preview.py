@@ -356,8 +356,8 @@ def plot_contour(limit_payload: dict[str, Any], output_png: Path) -> bool:
     minus1_grid = interpolated_log_grid("expected_m1")
     plus1_grid = interpolated_log_grid("expected_p1")
 
-    plt.style.use(hep.style.CMS)
-    fig, ax = plt.subplots(figsize=(9.0, 7.2))
+    hep.style.use("CMS")
+    fig, ax = plt.subplots(figsize=(10.0, 7.2))
     fig.subplots_adjust(left=0.13, right=0.86, bottom=0.12, top=0.89)
 
     color_min, color_max = -1.5, 1.5
