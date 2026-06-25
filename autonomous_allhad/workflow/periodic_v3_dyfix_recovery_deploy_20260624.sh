@@ -6,13 +6,17 @@ set +o pipefail 2>/dev/null || true
 REPO=/eos/user/t/taiwoo/run3_stop/decaf
 PY=/eos/user/t/taiwoo/miniconda3/envs/py38/bin/python
 TAG=sf_unc_v3_dyfix_20260624
+DATA2_TAG=sf_unc_v3_dyfix_data2_20260625
 DOCS_REL=docs/partial_merge_preview_${TAG}
 PREVIEW_REL=autonomous_allhad/workflow/partial_merge_preview_${TAG}
 OUTPUT_REL=autonomous_allhad/workflow/production_outputs_${TAG}
 SHARD_REL=autonomous_allhad/workflow/production_shards_${TAG}
+DATA2_OUTPUT_REL=autonomous_allhad/workflow/production_outputs_${DATA2_TAG}
+DATA2_SHARD_REL=autonomous_allhad/workflow/production_shards_${DATA2_TAG}
+DATA2_RECORDS_REL=autonomous_allhad/workflow/condor_${DATA2_TAG}/${DATA2_TAG}_data_records.json
 LABEL="Partial Merge Preview ${TAG} (v3 DY recoil fix)"
 SOURCE_CLUSTER_ID=923877
-CLUSTERS="923877 923878 923880 923881 923882"
+CLUSTERS="923877 923878 923880 923881 923882 924704"
 RECOVERY_INTERVAL=${RECOVERY_INTERVAL:-3600}
 DEPLOY_INTERVAL=${DEPLOY_INTERVAL:-10800}
 SLEEP_SECONDS=${PERIODIC_SLEEP_SECONDS:-300}
@@ -110,10 +114,81 @@ run_recovery_campaign() {
   return ${rc}
 }
 
+materialize_manifest_bad_shards() {
+  local tag="$1"
+  local records_rel="$2"
+  local output_rel="$3"
+  local shard_rel="$4"
+  if [ ! -f "${REPO}/${records_rel}" ]; then
+    log "manifest shard materialize skip ${tag}: missing records manifest ${records_rel}"
+    return 0
+  fi
+  mkdir -p "${REPO}/${shard_rel}"
+  TAG="${tag}" RECORDS_JSON="${REPO}/${records_rel}" OUTPUT_DIR="${REPO}/${output_rel}" SHARD_DIR="${REPO}/${shard_rel}" REPO="${REPO}" "${PY}" - <<'MANIFESTPY'
+import hashlib
+import json
+import os
+import sys
+from pathlib import Path
+
+repo = Path(os.environ["REPO"])
+sys.path.insert(0, str(repo / "autonomous_allhad/workflow"))
+from local_bad_file_recovery_generic import extract_top_level_array
+
+records_json = Path(os.environ["RECORDS_JSON"])
+output_dir = Path(os.environ["OUTPUT_DIR"])
+shard_dir = Path(os.environ["SHARD_DIR"])
+payload = json.loads(records_json.read_text())
+records = payload.get("records") or []
+created = 0
+checked = 0
+for source in sorted(output_dir.glob("shard_*.json")) + sorted(output_dir.glob("shard_*.json.running")):
+    try:
+        bad_files = extract_top_level_array(source, "bad_files")
+    except Exception:
+        continue
+    if not bad_files:
+        continue
+    shard_id = source.name.replace(".json.running", "").replace(".json", "")
+    try:
+        index = int(shard_id.split("_", 1)[1])
+    except Exception:
+        continue
+    chunk = records[index * 2:index * 2 + 2]
+    if not chunk:
+        continue
+    checked += 1
+    digest = hashlib.sha256(json.dumps(chunk, sort_keys=True).encode()).hexdigest()[:16]
+    shard_path = shard_dir / f"{shard_id}.json"
+    if shard_path.exists():
+        try:
+            old = json.loads(shard_path.read_text())
+            if old.get("record_digest") == digest:
+                continue
+        except Exception:
+            pass
+    shard_path.write_text(json.dumps({
+        "schema_version": "full_production_shard_spec_v1",
+        "shard_id": shard_id,
+        "record_digest": digest,
+        "records": chunk,
+    }, separators=(",", ":"), sort_keys=True) + "\n")
+    created += 1
+print(json.dumps({"tag": os.environ["TAG"], "bad_output_shards_checked": checked, "shards_materialized": created}, sort_keys=True))
+MANIFESTPY
+  local rc=$?
+  log "manifest shard materialize tag=${tag} rc=${rc}"
+  return ${rc}
+}
+
 run_recovery_once() {
   log "hourly recovery sweep start"
   write_state recovery running
-  run_recovery_campaign "sf_unc_v3_dyfix_20260624" "nominal" "data,mc" \
+  materialize_manifest_bad_shards "${DATA2_TAG}" "${DATA2_RECORDS_REL}" "${DATA2_OUTPUT_REL}" "${DATA2_SHARD_REL}"
+  run_recovery_campaign "${DATA2_TAG}" "nominal" "data" \
+    "${DATA2_OUTPUT_REL}" \
+    "${DATA2_SHARD_REL}"
+  run_recovery_campaign "sf_unc_v3_dyfix_20260624" "nominal" "mc" \
     "autonomous_allhad/workflow/production_outputs_sf_unc_v3_dyfix_20260624" \
     "autonomous_allhad/workflow/production_shards_sf_unc_v3_dyfix_20260624"
   run_recovery_campaign "shape_v3_dyfix_jesTotalUp_20260624" "jesTotalUp" "mc" \
