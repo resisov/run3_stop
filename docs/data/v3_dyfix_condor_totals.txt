@@ -1,6 +1,6 @@
 
 
--- Schedd: bigbird24.cern.ch : <188.185.88.162:9618?... @ 06/25/26 00:02:47
-Total for query: 8214 jobs; 0 completed, 0 removed, 8013 idle, 201 running, 0 held, 0 suspended 
-Total for all users: 12862 jobs; 0 completed, 0 removed, 10830 idle, 1746 running, 286 held, 0 suspended
+-- Schedd: bigbird24.cern.ch : <188.185.88.162:9618?... @ 06/25/26 04:31:50
+Total for query: 7492 jobs; 0 completed, 0 removed, 6511 idle, 981 running, 0 held, 0 suspended 
+Total for all users: 21453 jobs; 0 completed, 0 removed, 19039 idle, 2065 running, 349 held, 0 suspended
 

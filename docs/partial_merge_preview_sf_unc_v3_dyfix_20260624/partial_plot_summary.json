@@ -23,7 +23,7 @@
     "pileupDown",
     "pileupUp"
   ],
-  "completed_or_checkpoint_shards_used": 738,
+  "completed_or_checkpoint_shards_used": 1842,
   "fit_template_summary": "fit_template_summary.json",
   "fit_template_variable_by_region": {
     "cat2_LLCR_highDeltaM": "metpt",
@@ -66,8 +66,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 15.539328900904964,
-        "syst_sum": 12.987077283105672,
+        "stat_sum": 680.6559089547799,
+        "syst_sum": 953.411633862516,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -81,7 +81,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 20.53366958664294
+        "total_sum": 1187.856934226073
       },
       "name": "partial_recoil_pt_cat2_LLCR_highDeltaM",
       "pdf": "plots/partial_recoil_pt_cat2_LLCR_highDeltaM.pdf",
@@ -126,8 +126,8 @@
       "blinded": false,
       "fit_template": true,
       "mc_uncertainty": {
-        "stat_sum": 14.495450522131643,
-        "syst_sum": 12.987081962245501,
+        "stat_sum": 619.3972106011227,
+        "syst_sum": 950.4813700189237,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -141,7 +141,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 19.68981543012565
+        "total_sum": 1150.1352091518754
       },
       "name": "partial_metpt_cat2_LLCR_highDeltaM",
       "pdf": "plots/partial_metpt_cat2_LLCR_highDeltaM.pdf",
@@ -186,8 +186,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 17.50433029708074,
-        "syst_sum": 20.042838211891493,
+        "stat_sum": 768.7777914955315,
+        "syst_sum": 961.702520448981,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -201,7 +201,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 27.64693452587789
+        "total_sum": 1252.0724896035583
       },
       "name": "partial_ht_cat2_LLCR_highDeltaM",
       "pdf": "plots/partial_ht_cat2_LLCR_highDeltaM.pdf",
@@ -246,8 +246,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 13.311846945866401,
-        "syst_sum": 14.362508205822715,
+        "stat_sum": 662.4876641076602,
+        "syst_sum": 998.8450516861398,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -261,7 +261,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 19.748714903371624
+        "total_sum": 1217.8335531186676
       },
       "name": "partial_njet_cat2_LLCR_highDeltaM",
       "pdf": "plots/partial_njet_cat2_LLCR_highDeltaM.pdf",
@@ -296,8 +296,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 11.082939081380568,
-        "syst_sum": 12.868905055431007,
+        "stat_sum": 568.1837765384298,
+        "syst_sum": 1037.3974222277623,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -311,7 +311,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 17.45645918710887
+        "total_sum": 1183.0176560457728
       },
       "name": "partial_nb_cat2_LLCR_highDeltaM",
       "pdf": "plots/partial_nb_cat2_LLCR_highDeltaM.pdf",
@@ -348,8 +348,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 12.406288761514885,
-        "syst_sum": 13.033287591278096,
+        "stat_sum": 600.1434333660862,
+        "syst_sum": 925.058812489332,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -363,7 +363,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 18.573134294944282
+        "total_sum": 1118.96268877898
       },
       "name": "partial_nfj_cat2_LLCR_highDeltaM",
       "pdf": "plots/partial_nfj_cat2_LLCR_highDeltaM.pdf",
@@ -406,8 +406,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 15.007290600026538,
-        "syst_sum": 13.120913386671141,
+        "stat_sum": 692.5626970106728,
+        "syst_sum": 919.6269105701722,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -421,7 +421,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 20.17804919771588
+        "total_sum": 1152.6321975314895
       },
       "name": "partial_min_dphi_cat2_LLCR_highDeltaM",
       "pdf": "plots/partial_min_dphi_cat2_LLCR_highDeltaM.pdf",
@@ -460,8 +460,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 15.700199002414609,
-        "syst_sum": 11.16850553211858,
+        "stat_sum": 3575.9348930464116,
+        "syst_sum": 1206.4837000498271,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -475,7 +475,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 19.431859953140044
+        "total_sum": 3821.4115898342434
       },
       "name": "partial_recoil_pt_cat3_QCDCR_highDeltaM",
       "pdf": "plots/partial_recoil_pt_cat3_QCDCR_highDeltaM.pdf",
@@ -520,8 +520,8 @@
       "blinded": false,
       "fit_template": true,
       "mc_uncertainty": {
-        "stat_sum": 14.754535004146941,
-        "syst_sum": 9.390543735318158,
+        "stat_sum": 3476.36759902179,
+        "syst_sum": 1185.3118695972842,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -535,7 +535,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 17.63066798269617
+        "total_sum": 3713.192075645291
       },
       "name": "partial_metpt_cat3_QCDCR_highDeltaM",
       "pdf": "plots/partial_metpt_cat3_QCDCR_highDeltaM.pdf",
@@ -580,8 +580,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 19.390573352176713,
-        "syst_sum": 13.683384658750894,
+        "stat_sum": 4120.281874789084,
+        "syst_sum": 2153.623047244621,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -595,7 +595,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 24.200108421920675
+        "total_sum": 4860.258429159182
       },
       "name": "partial_ht_cat3_QCDCR_highDeltaM",
       "pdf": "plots/partial_ht_cat3_QCDCR_highDeltaM.pdf",
@@ -640,8 +640,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 12.925797168696675,
-        "syst_sum": 8.31170016026044,
+        "stat_sum": 3528.1587513760614,
+        "syst_sum": 1343.680055357451,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -655,7 +655,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 15.421827480396125
+        "total_sum": 3937.8728082518332
       },
       "name": "partial_njet_cat3_QCDCR_highDeltaM",
       "pdf": "plots/partial_njet_cat3_QCDCR_highDeltaM.pdf",
@@ -690,8 +690,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 10.380118167239946,
-        "syst_sum": 6.865930676438921,
+        "stat_sum": 3424.5655518685603,
+        "syst_sum": 1537.4960415523967,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -705,7 +705,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 12.447797464658278
+        "total_sum": 3806.1601751494504
       },
       "name": "partial_nb_cat3_QCDCR_highDeltaM",
       "pdf": "plots/partial_nb_cat3_QCDCR_highDeltaM.pdf",
@@ -742,8 +742,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 13.019286981944324,
-        "syst_sum": 6.865975314242018,
+        "stat_sum": 3252.7083081873993,
+        "syst_sum": 1757.9353673897238,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -757,7 +757,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 14.7470837908473
+        "total_sum": 3914.9182379810195
       },
       "name": "partial_nfj_cat3_QCDCR_highDeltaM",
       "pdf": "plots/partial_nfj_cat3_QCDCR_highDeltaM.pdf",
@@ -800,8 +800,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 7.314059508153233,
-        "syst_sum": 5.963708448732737,
+        "stat_sum": 2629.9483901887183,
+        "syst_sum": 939.2488523079438,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -815,7 +815,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 9.437228668962776
+        "total_sum": 2792.636199295931
       },
       "name": "partial_min_dphi_cat3_QCDCR_highDeltaM",
       "pdf": "plots/partial_min_dphi_cat3_QCDCR_highDeltaM.pdf",
@@ -854,8 +854,8 @@
       "blinded": false,
       "fit_template": true,
       "mc_uncertainty": {
-        "stat_sum": 112.85406618279697,
-        "syst_sum": 181.4260231153357,
+        "stat_sum": 1434.9976516874551,
+        "syst_sum": 1015.033076840697,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -869,7 +869,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 214.68863405309418
+        "total_sum": 1800.1926613947767
       },
       "name": "partial_recoil_pt_cat4_GCR_highDeltaM",
       "pdf": "plots/partial_recoil_pt_cat4_GCR_highDeltaM.pdf",
@@ -918,8 +918,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 64.0106803340833,
-        "syst_sum": 184.39266442134902,
+        "stat_sum": 815.6058005420306,
+        "syst_sum": 651.7147458871051,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -933,7 +933,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 196.310951516804
+        "total_sum": 1046.3065360200187
       },
       "name": "partial_metpt_cat4_GCR_highDeltaM",
       "pdf": "plots/partial_metpt_cat4_GCR_highDeltaM.pdf",
@@ -978,8 +978,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 114.13073091315194,
-        "syst_sum": 200.185717697305,
+        "stat_sum": 1288.648977594098,
+        "syst_sum": 1168.9279013610558,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -993,7 +993,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 232.59690172496258
+        "total_sum": 1742.1893880744524
       },
       "name": "partial_ht_cat4_GCR_highDeltaM",
       "pdf": "plots/partial_ht_cat4_GCR_highDeltaM.pdf",
@@ -1038,8 +1038,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 92.30773598604836,
-        "syst_sum": 189.58900759760596,
+        "stat_sum": 1092.4691668645642,
+        "syst_sum": 848.7749918544572,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -1053,7 +1053,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 213.40314874825685
+        "total_sum": 1392.373395726996
       },
       "name": "partial_njet_cat4_GCR_highDeltaM",
       "pdf": "plots/partial_njet_cat4_GCR_highDeltaM.pdf",
@@ -1088,8 +1088,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 80.41976862947061,
-        "syst_sum": 180.2004566235093,
+        "stat_sum": 1246.8105085530938,
+        "syst_sum": 939.2442227360167,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -1103,7 +1103,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 199.85409860305435
+        "total_sum": 1569.8917159475643
       },
       "name": "partial_nb_cat4_GCR_highDeltaM",
       "pdf": "plots/partial_nb_cat4_GCR_highDeltaM.pdf",
@@ -1140,8 +1140,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 91.99439435589967,
-        "syst_sum": 181.35809046184363,
+        "stat_sum": 1228.4074428410731,
+        "syst_sum": 692.8678730003911,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -1155,7 +1155,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 205.07242061106137
+        "total_sum": 1412.102203738708
       },
       "name": "partial_nfj_cat4_GCR_highDeltaM",
       "pdf": "plots/partial_nfj_cat4_GCR_highDeltaM.pdf",
@@ -1198,8 +1198,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 113.90990686065061,
-        "syst_sum": 187.48123162665829,
+        "stat_sum": 1451.81088196401,
+        "syst_sum": 1044.1764711621227,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -1213,7 +1213,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 221.28705771030687
+        "total_sum": 1789.336736808139
       },
       "name": "partial_min_dphi_cat4_GCR_highDeltaM",
       "pdf": "plots/partial_min_dphi_cat4_GCR_highDeltaM.pdf",
@@ -1252,8 +1252,8 @@
       "blinded": false,
       "fit_template": true,
       "mc_uncertainty": {
-        "stat_sum": 20.961978429607708,
-        "syst_sum": 14.310148448779648,
+        "stat_sum": 27.415965017203938,
+        "syst_sum": 17.94971948680498,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -1267,7 +1267,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 25.48772265925302
+        "total_sum": 33.17566021433533
       },
       "name": "partial_recoil_pt_cat5_DY2E_highDeltaM",
       "pdf": "plots/partial_recoil_pt_cat5_DY2E_highDeltaM.pdf",
@@ -1310,14 +1310,14 @@
         ],
         "visible_xlim": [
           0.0,
-          800.0
+          1000.0
         ]
       },
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 12.529076569739875,
-        "syst_sum": 20.412573297069443,
+        "stat_sum": 18.708546673219434,
+        "syst_sum": 21.54639720652356,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -1331,7 +1331,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 24.09570524421931
+        "total_sum": 29.524542602920846
       },
       "name": "partial_metpt_cat5_DY2E_highDeltaM",
       "pdf": "plots/partial_metpt_cat5_DY2E_highDeltaM.pdf",
@@ -1376,8 +1376,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 24.743319501811865,
-        "syst_sum": 26.52456274428322,
+        "stat_sum": 31.899890908240604,
+        "syst_sum": 33.63963469371015,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -1391,7 +1391,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 36.88845551239965
+        "total_sum": 47.20962490410725
       },
       "name": "partial_ht_cat5_DY2E_highDeltaM",
       "pdf": "plots/partial_ht_cat5_DY2E_highDeltaM.pdf",
@@ -1436,8 +1436,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 18.11795236550287,
-        "syst_sum": 21.259943803822118,
+        "stat_sum": 23.206022906028352,
+        "syst_sum": 26.75469348304187,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -1451,7 +1451,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 28.37001864564319
+        "total_sum": 35.943715730507634
       },
       "name": "partial_njet_cat5_DY2E_highDeltaM",
       "pdf": "plots/partial_njet_cat5_DY2E_highDeltaM.pdf",
@@ -1486,8 +1486,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 15.710526739737592,
-        "syst_sum": 18.564934500923883,
+        "stat_sum": 20.499515194105026,
+        "syst_sum": 20.915575238002933,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -1501,7 +1501,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 24.80887952716638
+        "total_sum": 29.50180022199918
       },
       "name": "partial_nb_cat5_DY2E_highDeltaM",
       "pdf": "plots/partial_nb_cat5_DY2E_highDeltaM.pdf",
@@ -1538,8 +1538,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 17.926752553903277,
-        "syst_sum": 20.916825933745603,
+        "stat_sum": 23.16052015907224,
+        "syst_sum": 22.494138780540368,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -1553,7 +1553,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 28.070513598870065
+        "total_sum": 32.8099628438151
       },
       "name": "partial_nfj_cat5_DY2E_highDeltaM",
       "pdf": "plots/partial_nfj_cat5_DY2E_highDeltaM.pdf",
@@ -1596,8 +1596,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 21.8315751526508,
-        "syst_sum": 23.515585438333435,
+        "stat_sum": 28.198558378292873,
+        "syst_sum": 25.364690245357977,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -1611,7 +1611,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 33.08322793776925
+        "total_sum": 39.05215046522914
       },
       "name": "partial_min_dphi_cat5_DY2E_highDeltaM",
       "pdf": "plots/partial_min_dphi_cat5_DY2E_highDeltaM.pdf",
@@ -1650,8 +1650,8 @@
       "blinded": false,
       "fit_template": true,
       "mc_uncertainty": {
-        "stat_sum": 23.94259591525329,
-        "syst_sum": 15.51495373578322,
+        "stat_sum": 34.56119354812497,
+        "syst_sum": 29.239054556855123,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -1665,7 +1665,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 28.75117615409249
+        "total_sum": 45.34935822002011
       },
       "name": "partial_recoil_pt_cat6_DY2M_highDeltaM",
       "pdf": "plots/partial_recoil_pt_cat6_DY2M_highDeltaM.pdf",
@@ -1708,14 +1708,14 @@
         ],
         "visible_xlim": [
           0.0,
-          1000.0
+          1500.0
         ]
       },
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 15.511900595675009,
-        "syst_sum": 18.6503350750598,
+        "stat_sum": 26.37778754201539,
+        "syst_sum": 17.537635209260625,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -1729,7 +1729,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 24.378299959016342
+        "total_sum": 31.813123564190505
       },
       "name": "partial_metpt_cat6_DY2M_highDeltaM",
       "pdf": "plots/partial_metpt_cat6_DY2M_highDeltaM.pdf",
@@ -1774,8 +1774,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 31.236730243494993,
-        "syst_sum": 26.292674307610255,
+        "stat_sum": 45.01531207195404,
+        "syst_sum": 31.909283191086974,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -1789,7 +1789,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 42.12424414364396
+        "total_sum": 57.21902285746249
       },
       "name": "partial_ht_cat6_DY2M_highDeltaM",
       "pdf": "plots/partial_ht_cat6_DY2M_highDeltaM.pdf",
@@ -1834,8 +1834,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 22.557911472414435,
-        "syst_sum": 22.59811909379437,
+        "stat_sum": 34.21732153501166,
+        "syst_sum": 25.7019355352205,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -1849,7 +1849,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 32.79989936497034
+        "total_sum": 43.25599837192844
       },
       "name": "partial_njet_cat6_DY2M_highDeltaM",
       "pdf": "plots/partial_njet_cat6_DY2M_highDeltaM.pdf",
@@ -1884,8 +1884,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 19.486322686412134,
-        "syst_sum": 22.803098187119424,
+        "stat_sum": 27.477440385605547,
+        "syst_sum": 17.565005943676493,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -1899,7 +1899,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 30.542370653341056
+        "total_sum": 32.68338164659943
       },
       "name": "partial_nb_cat6_DY2M_highDeltaM",
       "pdf": "plots/partial_nb_cat6_DY2M_highDeltaM.pdf",
@@ -1936,8 +1936,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 22.64878410796704,
-        "syst_sum": 25.710813730325473,
+        "stat_sum": 31.632086452127602,
+        "syst_sum": 16.960134345154106,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -1951,7 +1951,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 35.21802989170277
+        "total_sum": 35.96411207771068
       },
       "name": "partial_nfj_cat6_DY2M_highDeltaM",
       "pdf": "plots/partial_nfj_cat6_DY2M_highDeltaM.pdf",
@@ -1994,8 +1994,8 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 27.82948675280836,
-        "syst_sum": 41.29351197210789,
+        "stat_sum": 41.38727470424474,
+        "syst_sum": 30.91787225085023,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -2009,7 +2009,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 50.72114704815246
+        "total_sum": 51.92719481594725
       },
       "name": "partial_min_dphi_cat6_DY2M_highDeltaM",
       "pdf": "plots/partial_min_dphi_cat6_DY2M_highDeltaM.pdf",
@@ -2048,8 +2048,8 @@
       "blinded": true,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 17.198979432517977,
-        "syst_sum": 12.623702789662161,
+        "stat_sum": 856.1772888954072,
+        "syst_sum": 717.5355197146406,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -2063,7 +2063,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 21.74127566953043
+        "total_sum": 1120.753593057444
       },
       "name": "partial_recoil_pt_cat7_SR_highDeltaM",
       "pdf": "plots/partial_recoil_pt_cat7_SR_highDeltaM.pdf",
@@ -2108,8 +2108,8 @@
       "blinded": true,
       "fit_template": true,
       "mc_uncertainty": {
-        "stat_sum": 15.635496262404013,
-        "syst_sum": 11.705980705293099,
+        "stat_sum": 791.9751562132088,
+        "syst_sum": 707.3658296614315,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -2123,7 +2123,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 19.6487280687504
+        "total_sum": 1062.6549452885906
       },
       "name": "partial_metpt_cat7_SR_highDeltaM",
       "pdf": "plots/partial_metpt_cat7_SR_highDeltaM.pdf",
@@ -2183,8 +2183,8 @@
       "blinded": true,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 18.6357048331623,
-        "syst_sum": 14.052644422710047,
+        "stat_sum": 959.5277997467562,
+        "syst_sum": 740.237120169557,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -2198,7 +2198,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 23.656587545637294
+        "total_sum": 1214.6656434896895
       },
       "name": "partial_ht_cat7_SR_highDeltaM",
       "pdf": "plots/partial_ht_cat7_SR_highDeltaM.pdf",
@@ -2258,8 +2258,8 @@
       "blinded": true,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 15.9961015837997,
-        "syst_sum": 17.739511758178743,
+        "stat_sum": 816.1811806060647,
+        "syst_sum": 802.104365873317,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -2273,7 +2273,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 24.49546764374758
+        "total_sum": 1148.487969844612
       },
       "name": "partial_njet_cat7_SR_highDeltaM",
       "pdf": "plots/partial_njet_cat7_SR_highDeltaM.pdf",
@@ -2323,8 +2323,8 @@
       "blinded": true,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 12.045018953884453,
-        "syst_sum": 9.492609506550854,
+        "stat_sum": 730.8643005259903,
+        "syst_sum": 780.0388036563354,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -2338,7 +2338,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 15.780636016365118
+        "total_sum": 1073.1587489047915
       },
       "name": "partial_nb_cat7_SR_highDeltaM",
       "pdf": "plots/partial_nb_cat7_SR_highDeltaM.pdf",
@@ -2390,8 +2390,8 @@
       "blinded": true,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 14.583327571925738,
-        "syst_sum": 12.524799637579875,
+        "stat_sum": 741.1277806615764,
+        "syst_sum": 746.072947452937,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -2405,7 +2405,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 19.590297505641804
+        "total_sum": 1060.5922306862478
       },
       "name": "partial_nfj_cat7_SR_highDeltaM",
       "pdf": "plots/partial_nfj_cat7_SR_highDeltaM.pdf",
@@ -2448,8 +2448,8 @@
       "blinded": true,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 17.682233805432055,
-        "syst_sum": 11.079144526921585,
+        "stat_sum": 914.0549394816586,
+        "syst_sum": 727.1838262187225,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -2463,7 +2463,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 21.33420062760556
+        "total_sum": 1173.0076740609106
       },
       "name": "partial_min_dphi_cat7_SR_highDeltaM",
       "pdf": "plots/partial_min_dphi_cat7_SR_highDeltaM.pdf",
@@ -2492,8 +2492,8 @@
         "cat7_SR_highDeltaM"
       ],
       "mc_uncertainty": {
-        "stat_sum": 102.98272468548177,
-        "syst_sum": 241.0291657263856,
+        "stat_sum": 4251.012385434737,
+        "syst_sum": 3152.30702401801,
         "systematic_sources": [
           "Lumi_2024",
           "btagSF_bc_correlated",
@@ -2507,7 +2507,7 @@
           "photon_id",
           "pileup"
         ],
-        "total_sum": 265.83727976079297
+        "total_sum": 5595.385782237843
       },
       "name": "partial_cr_sr_region_bins",
       "pdf": "plots/partial_cr_sr_region_bins.pdf",
@@ -2527,7 +2527,7 @@
   "source": "autonomous_allhad/workflow/partial_merge_preview_sf_unc_v3_dyfix_20260624/partial_normalized_yields.json",
   "status": "partial_preview_cms_style",
   "template_binning_policy": "cat2/cat3/cat7 use MET templates; cat4/cat5/cat6 use recoil templates; template bins with lower edge >= 800 GeV are merged into [800, inf] and displayed with an infinity symbol at the right edge.",
-  "timestamp_utc": "2026-06-24T22:12:59Z",
+  "timestamp_utc": "2026-06-25T02:42:35Z",
   "variables": [
     "recoil_pt",
     "metpt",
