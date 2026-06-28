@@ -24,7 +24,6 @@
     "pileupUp"
   ],
   "completed_or_checkpoint_shards_used": 8085,
-  "created_at": "2026-06-28T10:46:13Z",
   "fit_template_summary": "fit_template_summary.json",
   "fit_template_variable_by_region": {
     "cat2_LLCR_highDeltaM": "metpt",
@@ -35,25 +34,7 @@
     "cat7_SR_highDeltaM": "metpt"
   },
   "nb_binning_policy": "Nb plots merge b >= 3 into a single >=3 bin.",
-  "plot_count": 43,
   "plot_uncertainty_policy": "DATA error bars show statistical uncertainty. MC bands show sqrt(stat^2 + available systematic envelope^2 + Lumi_2024^2); available worker payload systematics are included where present, and Lumi_2024 is a fixed 1.6% MC rate uncertainty.",
-  "region_summary_plot": {
-    "blinded_regions": [
-      "cat7_SR_highDeltaM"
-    ],
-    "mc_uncertainty": {
-      "stat_sum": 3880.432748303078,
-      "syst_sum": 1861.7446499343819,
-      "systematic_sources": [
-        "Lumi_2024"
-      ],
-      "total_sum": 4711.88577555574
-    },
-    "name": "partial_cr_sr_region_bins",
-    "pdf": "plots/partial_cr_sr_region_bins.pdf",
-    "png": "plots/partial_cr_sr_region_bins.png",
-    "signal_overlays": []
-  },
   "region_variable_plots": [
     {
       "binning": {
@@ -85,12 +66,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 321.5198702816794,
-        "syst_sum": 650.6302842424591,
+        "stat_sum": 321.45707299971906,
+        "syst_sum": 867.9959296804473,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 735.0575591670432
+        "total_sum": 933.1046257169913
       },
       "name": "partial_recoil_pt_cat2_LLCR_highDeltaM",
       "pdf": "plots/partial_recoil_pt_cat2_LLCR_highDeltaM.pdf",
@@ -135,12 +126,22 @@
       "blinded": false,
       "fit_template": true,
       "mc_uncertainty": {
-        "stat_sum": 292.96542978948725,
-        "syst_sum": 650.6435625663491,
+        "stat_sum": 292.9054219517859,
+        "syst_sum": 868.6001399158039,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 723.8248584363382
+        "total_sum": 925.7070637175201
       },
       "name": "partial_metpt_cat2_LLCR_highDeltaM",
       "pdf": "plots/partial_metpt_cat2_LLCR_highDeltaM.pdf",
@@ -185,12 +186,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 371.98979086695675,
-        "syst_sum": 650.641481777219,
+        "stat_sum": 371.92640365637953,
+        "syst_sum": 922.4532709657377,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 767.5628194727132
+        "total_sum": 1008.3523221689554
       },
       "name": "partial_ht_cat2_LLCR_highDeltaM",
       "pdf": "plots/partial_ht_cat2_LLCR_highDeltaM.pdf",
@@ -235,12 +246,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 313.223446409922,
-        "syst_sum": 650.6396762218651,
+        "stat_sum": 313.17909886029986,
+        "syst_sum": 906.7137750434949,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 733.4670119786877
+        "total_sum": 969.5948320060013
       },
       "name": "partial_njet_cat2_LLCR_highDeltaM",
       "pdf": "plots/partial_njet_cat2_LLCR_highDeltaM.pdf",
@@ -275,12 +296,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 265.96554397757524,
-        "syst_sum": 650.6435243516947,
+        "stat_sum": 265.92778363976504,
+        "syst_sum": 1026.0053341752566,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 706.1612413333825
+        "total_sum": 1060.8959680912435
       },
       "name": "partial_nb_cat2_LLCR_highDeltaM",
       "pdf": "plots/partial_nb_cat2_LLCR_highDeltaM.pdf",
@@ -317,12 +348,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 281.9784581843753,
-        "syst_sum": 650.643564040004,
+        "stat_sum": 281.9354447209884,
+        "syst_sum": 907.5793180261355,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 717.5314320288263
+        "total_sum": 959.5184138578952
       },
       "name": "partial_nfj_cat2_LLCR_highDeltaM",
       "pdf": "plots/partial_nfj_cat2_LLCR_highDeltaM.pdf",
@@ -365,12 +406,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 330.0565178356314,
-        "syst_sum": 650.643562619332,
+        "stat_sum": 330.00302830596,
+        "syst_sum": 882.1862018598938,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 730.41128438431
+        "total_sum": 942.13668905135
       },
       "name": "partial_min_dphi_cat2_LLCR_highDeltaM",
       "pdf": "plots/partial_min_dphi_cat2_LLCR_highDeltaM.pdf",
@@ -409,12 +460,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 3350.983905709743,
-        "syst_sum": 547.7665276334877,
+        "stat_sum": 3350.962593749002,
+        "syst_sum": 1102.8436952402387,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 3430.5052778278955
+        "total_sum": 3562.832130620051
       },
       "name": "partial_recoil_pt_cat3_QCDCR_highDeltaM",
       "pdf": "plots/partial_recoil_pt_cat3_QCDCR_highDeltaM.pdf",
@@ -459,12 +520,22 @@
       "blinded": false,
       "fit_template": true,
       "mc_uncertainty": {
-        "stat_sum": 3248.8938993466427,
-        "syst_sum": 547.792414510166,
+        "stat_sum": 3248.869480095799,
+        "syst_sum": 1079.3254506145288,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 3321.2512055885973
+        "total_sum": 3451.118855974653
       },
       "name": "partial_metpt_cat3_QCDCR_highDeltaM",
       "pdf": "plots/partial_metpt_cat3_QCDCR_highDeltaM.pdf",
@@ -509,12 +580,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 3915.7571154071347,
-        "syst_sum": 547.5485771461946,
+        "stat_sum": 3915.736083853271,
+        "syst_sum": 2029.0448550137805,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 4021.9321962496056
+        "total_sum": 4580.947979642416
       },
       "name": "partial_ht_cat3_QCDCR_highDeltaM",
       "pdf": "plots/partial_ht_cat3_QCDCR_highDeltaM.pdf",
@@ -559,12 +640,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 3321.950247706883,
-        "syst_sum": 547.7926611555238,
+        "stat_sum": 3321.9458877339457,
+        "syst_sum": 1278.3891151556152,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 3398.5788583725202
+        "total_sum": 3710.4750230322325
       },
       "name": "partial_njet_cat3_QCDCR_highDeltaM",
       "pdf": "plots/partial_njet_cat3_QCDCR_highDeltaM.pdf",
@@ -599,12 +690,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 3242.038026303767,
-        "syst_sum": 547.7926866085378,
+        "stat_sum": 3242.036166528321,
+        "syst_sum": 1473.9357907657168,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 3295.9798708510752
+        "total_sum": 3595.5977904093015
       },
       "name": "partial_nb_cat3_QCDCR_highDeltaM",
       "pdf": "plots/partial_nb_cat3_QCDCR_highDeltaM.pdf",
@@ -641,12 +742,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 3016.80005988285,
-        "syst_sum": 547.7926854216081,
+        "stat_sum": 3016.792549426969,
+        "syst_sum": 1644.8548856832103,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 3100.0554258353864
+        "total_sum": 3636.0855208151656
       },
       "name": "partial_nfj_cat3_QCDCR_highDeltaM",
       "pdf": "plots/partial_nfj_cat3_QCDCR_highDeltaM.pdf",
@@ -689,12 +800,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 2411.5559941445845,
-        "syst_sum": 547.7926854216079,
+        "stat_sum": 2411.5548973518985,
+        "syst_sum": 888.0966950217004,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 2472.9899189232638
+        "total_sum": 2569.88574894885
       },
       "name": "partial_min_dphi_cat3_QCDCR_highDeltaM",
       "pdf": "plots/partial_min_dphi_cat3_QCDCR_highDeltaM.pdf",
@@ -733,12 +854,22 @@
       "blinded": false,
       "fit_template": true,
       "mc_uncertainty": {
-        "stat_sum": 1381.712517013196,
-        "syst_sum": 157.91535084524725,
+        "stat_sum": 1381.7120794033065,
+        "syst_sum": 1018.1534053682124,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 1393.681811493083
+        "total_sum": 1752.625319683794
       },
       "name": "partial_recoil_pt_cat4_GCR_highDeltaM",
       "pdf": "plots/partial_recoil_pt_cat4_GCR_highDeltaM.pdf",
@@ -787,12 +918,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 806.7463020605041,
-        "syst_sum": 157.95171978024584,
+        "stat_sum": 806.7453775900814,
+        "syst_sum": 688.0580779981404,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 822.187914746873
+        "total_sum": 1060.889259459378
       },
       "name": "partial_metpt_cat4_GCR_highDeltaM",
       "pdf": "plots/partial_metpt_cat4_GCR_highDeltaM.pdf",
@@ -837,12 +978,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 1243.032550402878,
-        "syst_sum": 157.94858323505034,
+        "stat_sum": 1243.031450534824,
+        "syst_sum": 1155.3977541406514,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 1255.863364724701
+        "total_sum": 1699.6386512995546
       },
       "name": "partial_ht_cat4_GCR_highDeltaM",
       "pdf": "plots/partial_ht_cat4_GCR_highDeltaM.pdf",
@@ -887,12 +1038,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 1074.911150776559,
-        "syst_sum": 157.9517173785449,
+        "stat_sum": 1074.9092553947874,
+        "syst_sum": 868.1511136976663,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 1086.6245795137534
+        "total_sum": 1390.5002603034839
       },
       "name": "partial_njet_cat4_GCR_highDeltaM",
       "pdf": "plots/partial_njet_cat4_GCR_highDeltaM.pdf",
@@ -927,12 +1088,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 1261.3923742750476,
-        "syst_sum": 157.95171978024584,
+        "stat_sum": 1261.392069777648,
+        "syst_sum": 860.1224450343675,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 1275.7489468735885
+        "total_sum": 1532.9722403376077
       },
       "name": "partial_nb_cat4_GCR_highDeltaM",
       "pdf": "plots/partial_nb_cat4_GCR_highDeltaM.pdf",
@@ -969,12 +1140,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 1219.8039275139524,
-        "syst_sum": 157.95171978024584,
+        "stat_sum": 1219.80345536932,
+        "syst_sum": 750.3983373438407,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 1230.2185439623906
+        "total_sum": 1435.8074565761328
       },
       "name": "partial_nfj_cat4_GCR_highDeltaM",
       "pdf": "plots/partial_nfj_cat4_GCR_highDeltaM.pdf",
@@ -1017,12 +1198,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 1426.7943329925572,
-        "syst_sum": 157.95171978024587,
+        "stat_sum": 1426.7887647695527,
+        "syst_sum": 1034.4726925841032,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 1437.891446011693
+        "total_sum": 1766.3105419600606
       },
       "name": "partial_min_dphi_cat4_GCR_highDeltaM",
       "pdf": "plots/partial_min_dphi_cat4_GCR_highDeltaM.pdf",
@@ -1061,12 +1252,22 @@
       "blinded": false,
       "fit_template": true,
       "mc_uncertainty": {
-        "stat_sum": 166.0066667965221,
-        "syst_sum": 5.52856659941394,
+        "stat_sum": 165.56697152294169,
+        "syst_sum": 67.75184739319471,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 166.11880248799557
+        "total_sum": 182.27875445001004
       },
       "name": "partial_recoil_pt_cat5_DY2E_highDeltaM",
       "pdf": "plots/partial_recoil_pt_cat5_DY2E_highDeltaM.pdf",
@@ -1115,12 +1316,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 107.38046295662383,
-        "syst_sum": 6.276562412588993,
+        "stat_sum": 107.24793393277464,
+        "syst_sum": 37.13115396881468,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 107.58122427076466
+        "total_sum": 115.20157095879999
       },
       "name": "partial_metpt_cat5_DY2E_highDeltaM",
       "pdf": "plots/partial_metpt_cat5_DY2E_highDeltaM.pdf",
@@ -1165,12 +1376,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 166.56692998184127,
-        "syst_sum": 6.276505461661901,
+        "stat_sum": 165.60970160588818,
+        "syst_sum": 41.681840330575305,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 166.717705384159
+        "total_sum": 171.19409827964867
       },
       "name": "partial_ht_cat5_DY2E_highDeltaM",
       "pdf": "plots/partial_ht_cat5_DY2E_highDeltaM.pdf",
@@ -1215,12 +1436,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 124.79593297532429,
-        "syst_sum": 6.276562412588999,
+        "stat_sum": 124.41497338785273,
+        "syst_sum": 48.384376298490224,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 124.95807965369244
+        "total_sum": 136.04390933900362
       },
       "name": "partial_njet_cat5_DY2E_highDeltaM",
       "pdf": "plots/partial_njet_cat5_DY2E_highDeltaM.pdf",
@@ -1255,12 +1486,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 127.50515033322458,
-        "syst_sum": 6.276562412588994,
+        "stat_sum": 127.34601083321542,
+        "syst_sum": 37.810778066140244,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 127.7336490698003
+        "total_sum": 133.69868612782818
       },
       "name": "partial_nb_cat5_DY2E_highDeltaM",
       "pdf": "plots/partial_nb_cat5_DY2E_highDeltaM.pdf",
@@ -1297,12 +1538,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 140.8204797152496,
-        "syst_sum": 6.278300842445089,
+        "stat_sum": 140.48117084837378,
+        "syst_sum": 45.77232526472918,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 140.97078467182274
+        "total_sum": 148.28506059060592
       },
       "name": "partial_nfj_cat5_DY2E_highDeltaM",
       "pdf": "plots/partial_nfj_cat5_DY2E_highDeltaM.pdf",
@@ -1345,12 +1596,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 149.441850402965,
-        "syst_sum": 6.276562412588996,
+        "stat_sum": 148.91683487554374,
+        "syst_sum": 52.30135545047277,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 149.5848173316764
+        "total_sum": 157.88016810420737
       },
       "name": "partial_min_dphi_cat5_DY2E_highDeltaM",
       "pdf": "plots/partial_min_dphi_cat5_DY2E_highDeltaM.pdf",
@@ -1389,12 +1650,22 @@
       "blinded": false,
       "fit_template": true,
       "mc_uncertainty": {
-        "stat_sum": 131.95679848959963,
-        "syst_sum": 6.3836356807079015,
+        "stat_sum": 131.29610866083874,
+        "syst_sum": 70.05897171214025,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 132.134428634222
+        "total_sum": 149.3254647249447
       },
       "name": "partial_recoil_pt_cat6_DY2M_highDeltaM",
       "pdf": "plots/partial_recoil_pt_cat6_DY2M_highDeltaM.pdf",
@@ -1443,12 +1714,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 124.05818570306806,
-        "syst_sum": 9.190187033962793,
+        "stat_sum": 123.89489471865204,
+        "syst_sum": 160.9703334483377,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 124.42608126164421
+        "total_sum": 209.22692660685829
       },
       "name": "partial_metpt_cat6_DY2M_highDeltaM",
       "pdf": "plots/partial_metpt_cat6_DY2M_highDeltaM.pdf",
@@ -1493,12 +1774,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 212.88813976263475,
-        "syst_sum": 8.962995693031337,
+        "stat_sum": 212.38382157189622,
+        "syst_sum": 177.94072139721536,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 213.09430885753537
+        "total_sum": 298.15116091102516
       },
       "name": "partial_ht_cat6_DY2M_highDeltaM",
       "pdf": "plots/partial_ht_cat6_DY2M_highDeltaM.pdf",
@@ -1543,12 +1834,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 160.32390556680366,
-        "syst_sum": 9.190175781120034,
+        "stat_sum": 159.92640704741268,
+        "syst_sum": 153.6108115840224,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 160.6910671688659
+        "total_sum": 237.21640280796856
       },
       "name": "partial_njet_cat6_DY2M_highDeltaM",
       "pdf": "plots/partial_njet_cat6_DY2M_highDeltaM.pdf",
@@ -1583,12 +1884,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 144.65304661359673,
-        "syst_sum": 9.190179640245542,
+        "stat_sum": 144.4438649198272,
+        "syst_sum": 148.4051878136027,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 145.0574232710551
+        "total_sum": 216.3129267170236
       },
       "name": "partial_nb_cat6_DY2M_highDeltaM",
       "pdf": "plots/partial_nb_cat6_DY2M_highDeltaM.pdf",
@@ -1625,12 +1936,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 163.63579694731973,
-        "syst_sum": 9.190179640245553,
+        "stat_sum": 163.3877095642813,
+        "syst_sum": 148.76611652843698,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 163.92686122124235
+        "total_sum": 230.68543537323905
       },
       "name": "partial_nfj_cat6_DY2M_highDeltaM",
       "pdf": "plots/partial_nfj_cat6_DY2M_highDeltaM.pdf",
@@ -1673,12 +1994,22 @@
       "blinded": false,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 190.6660679228978,
-        "syst_sum": 9.190179640245546,
+        "stat_sum": 190.18514479730382,
+        "syst_sum": 146.1115017583184,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 190.9087056158658
+        "total_sum": 262.58153557680885
       },
       "name": "partial_min_dphi_cat6_DY2M_highDeltaM",
       "pdf": "plots/partial_min_dphi_cat6_DY2M_highDeltaM.pdf",
@@ -1717,12 +2048,22 @@
       "blinded": true,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 522.3119772925216,
-        "syst_sum": 489.8805225588042,
+        "stat_sum": 522.2835440584075,
+        "syst_sum": 603.2371796866298,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 721.0366917447827
+        "total_sum": 807.1293958911108
       },
       "name": "partial_recoil_pt_cat7_SR_highDeltaM",
       "pdf": "plots/partial_recoil_pt_cat7_SR_highDeltaM.pdf",
@@ -1767,12 +2108,22 @@
       "blinded": true,
       "fit_template": true,
       "mc_uncertainty": {
-        "stat_sum": 497.63694101328366,
-        "syst_sum": 489.88974496891046,
+        "stat_sum": 497.61072856383544,
+        "syst_sum": 558.9175321769717,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 709.6010891627664
+        "total_sum": 758.6670660318878
       },
       "name": "partial_metpt_cat7_SR_highDeltaM",
       "pdf": "plots/partial_metpt_cat7_SR_highDeltaM.pdf",
@@ -1832,12 +2183,22 @@
       "blinded": true,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 606.7943306939331,
-        "syst_sum": 489.8617393987826,
+        "stat_sum": 606.7655960742804,
+        "syst_sum": 660.9901440778287,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 791.8460011700164
+        "total_sum": 909.8107465264978
       },
       "name": "partial_ht_cat7_SR_highDeltaM",
       "pdf": "plots/partial_ht_cat7_SR_highDeltaM.pdf",
@@ -1897,12 +2258,22 @@
       "blinded": true,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 557.6691679984339,
-        "syst_sum": 489.8899468957205,
+        "stat_sum": 557.6545016283754,
+        "syst_sum": 604.8536005831156,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 746.3525121057966
+        "total_sum": 828.479925238721
       },
       "name": "partial_njet_cat7_SR_highDeltaM",
       "pdf": "plots/partial_njet_cat7_SR_highDeltaM.pdf",
@@ -1952,12 +2323,22 @@
       "blinded": true,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 528.2259492105374,
-        "syst_sum": 489.8899280087402,
+        "stat_sum": 528.2158333696098,
+        "syst_sum": 670.8127415346437,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 724.0771227672304
+        "total_sum": 863.0134935731651
       },
       "name": "partial_nb_cat7_SR_highDeltaM",
       "pdf": "plots/partial_nb_cat7_SR_highDeltaM.pdf",
@@ -2009,12 +2390,22 @@
       "blinded": true,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 500.4872869114362,
-        "syst_sum": 489.8899400603612,
+        "stat_sum": 500.47147980076716,
+        "syst_sum": 538.9865933395013,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 730.4633869922098
+        "total_sum": 762.9514114544448
       },
       "name": "partial_nfj_cat7_SR_highDeltaM",
       "pdf": "plots/partial_nfj_cat7_SR_highDeltaM.pdf",
@@ -2057,12 +2448,22 @@
       "blinded": true,
       "fit_template": false,
       "mc_uncertainty": {
-        "stat_sum": 633.7330290506272,
-        "syst_sum": 489.88994006036114,
+        "stat_sum": 633.7134961287084,
+        "syst_sum": 569.5212359651687,
         "systematic_sources": [
-          "Lumi_2024"
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
         ],
-        "total_sum": 804.2722506868271
+        "total_sum": 854.421079459673
       },
       "name": "partial_min_dphi_cat7_SR_highDeltaM",
       "pdf": "plots/partial_min_dphi_cat7_SR_highDeltaM.pdf",
@@ -2085,7 +2486,55 @@
         }
       ],
       "variable": "min_dphi"
+    },
+    {
+      "blinded_regions": [
+        "cat7_SR_highDeltaM"
+      ],
+      "mc_uncertainty": {
+        "stat_sum": 3880.1530092940075,
+        "syst_sum": 3121.4838548001085,
+        "systematic_sources": [
+          "Lumi_2024",
+          "btagSF_bc_correlated",
+          "btagSF_bc_uncorrelated",
+          "btagSF_light_correlated",
+          "btagSF_light_uncorrelated",
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
+        ],
+        "total_sum": 5360.397007682505
+      },
+      "name": "partial_cr_sr_region_bins",
+      "pdf": "plots/partial_cr_sr_region_bins.pdf",
+      "png": "plots/partial_cr_sr_region_bins.png",
+      "signal_overlays": []
     }
   ],
-  "status": "partial_preview_cms_style"
+  "regions": [
+    "cat2_LLCR_highDeltaM",
+    "cat3_QCDCR_highDeltaM",
+    "cat4_GCR_highDeltaM",
+    "cat5_DY2E_highDeltaM",
+    "cat6_DY2M_highDeltaM",
+    "cat7_SR_highDeltaM"
+  ],
+  "search_bin_note": "cat7 SR data are blinded. Signal overlays are included only for cat7/SR plots for mStop1000/mLSP1 and mStop1200/mLSP1 where matching signal_cutflows histograms exist.",
+  "source": "autonomous_allhad/workflow/partial_merge_preview_sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627/partial_normalized_yields.json",
+  "status": "partial_preview_cms_style",
+  "template_binning_policy": "cat2/cat3/cat7 use MET templates; cat4/cat5/cat6 use recoil templates; template bins with lower edge >= 800 GeV are merged into [800, inf] and displayed with an infinity symbol at the right edge.",
+  "timestamp_utc": "2026-06-28T11:11:51Z",
+  "variables": [
+    "recoil_pt",
+    "metpt",
+    "ht",
+    "njet",
+    "nb",
+    "nfj",
+    "min_dphi"
+  ]
 }

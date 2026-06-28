@@ -1,48 +1,6 @@
-# Partial plot summary
+# Partial Plot Summary
 
-Created at: `2026-06-28T10:46:13Z`
-Plot count: `43`
+Plots: `43`
+Source payloads used: `8085`
 
-- `partial_recoil_pt_cat2_LLCR_highDeltaM`: `plots/partial_recoil_pt_cat2_LLCR_highDeltaM.png`
-- `partial_metpt_cat2_LLCR_highDeltaM`: `plots/partial_metpt_cat2_LLCR_highDeltaM.png`
-- `partial_ht_cat2_LLCR_highDeltaM`: `plots/partial_ht_cat2_LLCR_highDeltaM.png`
-- `partial_njet_cat2_LLCR_highDeltaM`: `plots/partial_njet_cat2_LLCR_highDeltaM.png`
-- `partial_nb_cat2_LLCR_highDeltaM`: `plots/partial_nb_cat2_LLCR_highDeltaM.png`
-- `partial_nfj_cat2_LLCR_highDeltaM`: `plots/partial_nfj_cat2_LLCR_highDeltaM.png`
-- `partial_min_dphi_cat2_LLCR_highDeltaM`: `plots/partial_min_dphi_cat2_LLCR_highDeltaM.png`
-- `partial_recoil_pt_cat3_QCDCR_highDeltaM`: `plots/partial_recoil_pt_cat3_QCDCR_highDeltaM.png`
-- `partial_metpt_cat3_QCDCR_highDeltaM`: `plots/partial_metpt_cat3_QCDCR_highDeltaM.png`
-- `partial_ht_cat3_QCDCR_highDeltaM`: `plots/partial_ht_cat3_QCDCR_highDeltaM.png`
-- `partial_njet_cat3_QCDCR_highDeltaM`: `plots/partial_njet_cat3_QCDCR_highDeltaM.png`
-- `partial_nb_cat3_QCDCR_highDeltaM`: `plots/partial_nb_cat3_QCDCR_highDeltaM.png`
-- `partial_nfj_cat3_QCDCR_highDeltaM`: `plots/partial_nfj_cat3_QCDCR_highDeltaM.png`
-- `partial_min_dphi_cat3_QCDCR_highDeltaM`: `plots/partial_min_dphi_cat3_QCDCR_highDeltaM.png`
-- `partial_recoil_pt_cat4_GCR_highDeltaM`: `plots/partial_recoil_pt_cat4_GCR_highDeltaM.png`
-- `partial_metpt_cat4_GCR_highDeltaM`: `plots/partial_metpt_cat4_GCR_highDeltaM.png`
-- `partial_ht_cat4_GCR_highDeltaM`: `plots/partial_ht_cat4_GCR_highDeltaM.png`
-- `partial_njet_cat4_GCR_highDeltaM`: `plots/partial_njet_cat4_GCR_highDeltaM.png`
-- `partial_nb_cat4_GCR_highDeltaM`: `plots/partial_nb_cat4_GCR_highDeltaM.png`
-- `partial_nfj_cat4_GCR_highDeltaM`: `plots/partial_nfj_cat4_GCR_highDeltaM.png`
-- `partial_min_dphi_cat4_GCR_highDeltaM`: `plots/partial_min_dphi_cat4_GCR_highDeltaM.png`
-- `partial_recoil_pt_cat5_DY2E_highDeltaM`: `plots/partial_recoil_pt_cat5_DY2E_highDeltaM.png`
-- `partial_metpt_cat5_DY2E_highDeltaM`: `plots/partial_metpt_cat5_DY2E_highDeltaM.png`
-- `partial_ht_cat5_DY2E_highDeltaM`: `plots/partial_ht_cat5_DY2E_highDeltaM.png`
-- `partial_njet_cat5_DY2E_highDeltaM`: `plots/partial_njet_cat5_DY2E_highDeltaM.png`
-- `partial_nb_cat5_DY2E_highDeltaM`: `plots/partial_nb_cat5_DY2E_highDeltaM.png`
-- `partial_nfj_cat5_DY2E_highDeltaM`: `plots/partial_nfj_cat5_DY2E_highDeltaM.png`
-- `partial_min_dphi_cat5_DY2E_highDeltaM`: `plots/partial_min_dphi_cat5_DY2E_highDeltaM.png`
-- `partial_recoil_pt_cat6_DY2M_highDeltaM`: `plots/partial_recoil_pt_cat6_DY2M_highDeltaM.png`
-- `partial_metpt_cat6_DY2M_highDeltaM`: `plots/partial_metpt_cat6_DY2M_highDeltaM.png`
-- `partial_ht_cat6_DY2M_highDeltaM`: `plots/partial_ht_cat6_DY2M_highDeltaM.png`
-- `partial_njet_cat6_DY2M_highDeltaM`: `plots/partial_njet_cat6_DY2M_highDeltaM.png`
-- `partial_nb_cat6_DY2M_highDeltaM`: `plots/partial_nb_cat6_DY2M_highDeltaM.png`
-- `partial_nfj_cat6_DY2M_highDeltaM`: `plots/partial_nfj_cat6_DY2M_highDeltaM.png`
-- `partial_min_dphi_cat6_DY2M_highDeltaM`: `plots/partial_min_dphi_cat6_DY2M_highDeltaM.png`
-- `partial_recoil_pt_cat7_SR_highDeltaM`: `plots/partial_recoil_pt_cat7_SR_highDeltaM.png`
-- `partial_metpt_cat7_SR_highDeltaM`: `plots/partial_metpt_cat7_SR_highDeltaM.png`
-- `partial_ht_cat7_SR_highDeltaM`: `plots/partial_ht_cat7_SR_highDeltaM.png`
-- `partial_njet_cat7_SR_highDeltaM`: `plots/partial_njet_cat7_SR_highDeltaM.png`
-- `partial_nb_cat7_SR_highDeltaM`: `plots/partial_nb_cat7_SR_highDeltaM.png`
-- `partial_nfj_cat7_SR_highDeltaM`: `plots/partial_nfj_cat7_SR_highDeltaM.png`
-- `partial_min_dphi_cat7_SR_highDeltaM`: `plots/partial_min_dphi_cat7_SR_highDeltaM.png`
-- `partial_cr_sr_region_bins`: `plots/partial_cr_sr_region_bins.png`
+cat7 SR data are blinded. Signal overlays are included only in cat7/SR plots for mStop1000/mLSP1 and mStop1200/mLSP1 where available.
