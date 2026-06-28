@@ -2,7 +2,7 @@
   "afs_wrapper_allowed_only_for_bounded_pilot": false,
   "afs_wrapper_large_submission_prevented": false,
   "allow_condor_submit": true,
-  "args_file": "<repo>/autonomous_allhad/workflow/condor_sf_unc_v3_dyfix_20260624/full_production_args.txt",
+  "args_file": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/condor_sf_unc_v3_dyfix_20260624/full_production_args.txt",
   "background_root_files": 39172,
   "bounded_debug": false,
   "condor_available": true,
@@ -37,5 +37,5 @@
   "sms_policy": "SMS records are excluded from DATA/background production and background stacks.",
   "status": "prepared",
   "submit_condor_requested": true,
-  "submit_file": "<repo>/autonomous_allhad/workflow/condor_sf_unc_v3_dyfix_20260624/full_production.sub"
+  "submit_file": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/condor_sf_unc_v3_dyfix_20260624/full_production.sub"
 }

@@ -5,32 +5,21 @@
     "expected_limits",
     "full_production_normalization",
     "make_datacards",
-    "make_systematic_yields",
+    "systematic_yields",
+    "input_discovery",
+    "file_validation",
+    "parse_signal_xsec",
+    "signal_discovery",
+    "process_signals",
+    "make_hists_npy",
+    "plot_from_npy",
     "run_production",
     "select_search_bins",
-    "systematic_yields",
     "condor_production"
   ],
   "completed_gates": [
-    "analysisctl_all",
-    "analysisctl_all_start",
-    "design_search_bins",
-    "discover_signals_from_das",
-    "file_validation",
-    "input_discovery",
     "make_feature_yields",
-    "make_hists_npy",
-    "make_plots",
-    "monitor",
-    "normalization_audit",
-    "normalize_feature_yields",
-    "parse_signal_xsec",
-    "plot_from_npy",
-    "process_signals",
-    "publish_github_pages",
-    "signal_discovery",
-    "validate_feature_subset",
-    "write_summary"
+    "publish_github_pages"
   ],
   "condor_true_done_diagnosis": {
     "active_condor_jobs": 2110,
@@ -54,41 +43,34 @@
     "truly_complete_shards": 0,
     "worker_progress_path_policy": "running checkpoints go to shard_XXXXX.json.running; final JSON is reserved for complete/complete_with_bad_files/failed"
   },
-  "current_pipeline_stage": "publish_github_pages",
+  "current_pipeline_stage": "expected_limits",
   "diagnostic_preselection_yield": 12377,
   "failed_gates": [],
   "feature_rows": 290006,
   "github_pages_deployment_confirmed": false,
   "github_pages_deployment_status": "not_confirmed",
   "github_pages_expected_url": "https://resisov.github.io/run3_stop/",
-  "github_pages_last_publication_time_utc": "2026-06-25T02:45:47Z",
+  "github_pages_last_publication_time_utc": "2026-06-28T02:09:18Z",
   "github_pages_published_by_pipeline": false,
   "github_pages_site_status": "ready",
   "latest_command": {
     "result": {
-      "docs_path": "docs",
-      "index": "docs/index.html",
-      "monitor": "docs/monitor.html",
-      "published": false,
-      "workflow": ".github/workflows/pages.yml"
+      "status": "blocked"
     },
-    "stage": "publish_github_pages",
-    "status": "complete"
+    "stage": "expected_limits",
+    "status": "blocked"
   },
   "latest_failure": null,
   "latest_successful_command": {
     "result": {
-      "docs_path": "docs",
-      "index": "docs/index.html",
-      "monitor": "docs/monitor.html",
-      "published": false,
-      "workflow": ".github/workflows/pages.yml"
+      "output": "autonomous_allhad/outputs/feature_yields.json",
+      "status": "exploratory_provisional"
     },
-    "stage": "publish_github_pages",
+    "stage": "make_feature_yields",
     "status": "complete"
   },
   "manual_validation_status": "external/manual",
-  "next_recommended_action": "module load lxbatch/eossubmit && cd <repo> && condor_q 784541 -totals",
+  "next_recommended_action": "module load lxbatch/eossubmit && cd /eos/home-t/taiwoo/run3_stop/decaf && condor_q 784541 -totals",
   "normalization_blocked_datasets": 0,
   "normalization_luminosity_fb": 109.82,
   "normalization_status": "complete",

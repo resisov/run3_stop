@@ -1,12 +1,10 @@
 {
   "blockers": [
-    "no Combine-compatible datacards are available",
-    "Combine command 'combine' is unavailable in PATH",
-    "CMSSW_BASE is not set; cmsenv is not active"
+    "no Combine-compatible datacards are available"
   ],
-  "cmssw_base": null,
+  "cmssw_base": "/tmp/taiwoo/combine_runtime_20260628/CMSSW_14_1_0_pre4",
   "combine_command": "combine",
-  "combine_path": null,
+  "combine_path": "/tmp/taiwoo/combine_runtime_20260628/CMSSW_14_1_0_pre4/bin/el9_amd64_gcc12/combine",
   "limits_produced": 0,
   "setup_instructions": [
     "Set up an analysis-approved CMSSW/Combine environment and run cmsenv.",

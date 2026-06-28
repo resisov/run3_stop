@@ -4,7 +4,8 @@
     "923878",
     "923880",
     "923881",
-    "923882"
+    "923882",
+    "924704"
   ],
   "condor": {
     "clusters": [
@@ -12,17 +13,18 @@
       "923878",
       "923880",
       "923881",
-      "923882"
+      "923882",
+      "924704"
     ],
     "query_status": "ok",
     "returncode": 0,
     "stderr_tail": "",
-    "stdout_tail": "\n\n-- Schedd: bigbird24.cern.ch : <188.185.88.162:9618?... @ 06/25/26 04:46:59\nTotal for query: 7248 jobs; 0 completed, 0 removed, 5889 idle, 1359 running, 0 held, 0 suspended \nTotal for all users: 20880 jobs; 0 completed, 0 removed, 18258 idle, 2267 running, 355 held, 0 suspended\n\n"
+    "stdout_tail": "\n\n-- Schedd: bigbird24.cern.ch : <188.185.88.162:9618?... @ 06/25/26 07:05:14\nTotal for query: 10224 jobs; 0 completed, 0 removed, 9409 idle, 813 running, 2 held, 0 suspended \nTotal for all users: 11741 jobs; 0 completed, 0 removed, 9970 idle, 1410 running, 361 held, 0 suspended\n\n"
   },
   "github_pages_url": "https://resisov.github.io/run3_stop/",
   "partial_preview_url": "https://resisov.github.io/run3_stop/partial_merge_preview_sf_unc_v3_dyfix_20260624/",
-  "phase": "deploy",
-  "status": "prepared",
+  "phase": "recovery",
+  "status": "running",
   "tag": "sf_unc_v3_dyfix_20260624",
-  "updated_at": "2026-06-25T02:46:59Z"
+  "updated_at": "2026-06-25T05:05:14Z"
 }
