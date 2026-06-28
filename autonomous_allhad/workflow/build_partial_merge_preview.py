@@ -23,6 +23,18 @@ LUMI_PB = LUMI_FB * 1000.0
 LUMI_UNCERTAINTY_NAME = "Lumi_2024"
 LUMI_UNCERTAINTY_FRACTION = 0.016
 LUMI_UNCERTAINTY_LNN = 1.0 + LUMI_UNCERTAINTY_FRACTION
+EXTERNAL_SHAPE_SYSTEMATICS = {
+    "metUnclustered": {
+        "metUnclusteredUp": {
+            "shard_dir": "autonomous_allhad/workflow/production_shards_shape_v3_dyfix_metUnclusteredUp_20260624",
+            "output_dir": "autonomous_allhad/workflow/production_outputs_shape_v3_dyfix_metUnclusteredUp_20260624",
+        },
+        "metUnclusteredDown": {
+            "shard_dir": "autonomous_allhad/workflow/production_shards_shape_v3_dyfix_metUnclusteredDown_20260624",
+            "output_dir": "autonomous_allhad/workflow/production_outputs_shape_v3_dyfix_metUnclusteredDown_20260624",
+        },
+    }
+}
 REGION_MAP = {
     "LLCR": "cat2_LLCR_highDeltaM",
     "QCDCR": "cat3_QCDCR_highDeltaM",
@@ -54,8 +66,8 @@ TEMPLATE_OVERFLOW_LABEL = "∞"
 NB_OVERFLOW_LOW = 2.5
 NB_OVERFLOW_LABEL = ">=3"
 VARIABLE_LABELS = {
-    "recoil_pt": "recoil pT [GeV]",
-    "metpt": "MET [GeV]",
+    "recoil_pt": r"$U\!\!\!/_{\mathrm{T}}$ [GeV]",
+    "metpt": r"$E\!\!\!/_{\mathrm{T}}$ [GeV]",
     "ht": "HT [GeV]",
     "njet": "Njet",
     "nb": "Nb",
@@ -92,7 +104,7 @@ except Exception:
     _LIBC = None
 
 _RELEASE_COUNTER = 0
-_RELEASE_INTERVAL = max(1, int(os.environ.get("PARTIAL_MERGE_GC_INTERVAL", "250")))
+_RELEASE_INTERVAL = max(1, int(os.environ.get("PARTIAL_MERGE_GC_INTERVAL", "1")))
 
 
 def release_json_memory() -> None:
@@ -121,6 +133,13 @@ def write_json(path: Path, payload: Any) -> None:
     tmp = path.with_name(f"{path.name}.tmp.{os.getpid()}")
     tmp.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
     os.replace(tmp, path)
+
+
+def display_path(path: Path, repo: Path) -> str:
+    try:
+        return str(path.relative_to(repo))
+    except ValueError:
+        return str(path)
 
 
 def full_region(short: str) -> str:
@@ -296,6 +315,35 @@ def hist_values(hist: dict[str, Any], n: int, key: str = "values") -> np.ndarray
     return arr
 
 
+def fill_ratio_uncertainty_band(ax: Any, edges: np.ndarray, rel_unc: np.ndarray, valid: np.ndarray) -> None:
+    """Draw ratio uncertainty bands with the actual histogram bin edges."""
+    edges = np.asarray(edges, dtype=float)
+    rel_unc = np.asarray(rel_unc, dtype=float)
+    valid = np.asarray(valid, dtype=bool) & np.isfinite(rel_unc)
+    if len(edges) != len(rel_unc) + 1:
+        return
+    lower = np.maximum(0.0, 1.0 - rel_unc)
+    upper = 1.0 + rel_unc
+    idx = 0
+    while idx < len(rel_unc):
+        while idx < len(rel_unc) and not valid[idx]:
+            idx += 1
+        start = idx
+        while idx < len(rel_unc) and valid[idx]:
+            idx += 1
+        stop = idx
+        if stop <= start:
+            continue
+        ax.fill_between(
+            edges[start:stop + 1],
+            np.r_[lower[start:stop], lower[stop - 1]],
+            np.r_[upper[start:stop], upper[stop - 1]],
+            step="post",
+            color="0.85",
+            linewidth=0.0,
+        )
+
+
 def format_template_tick_labels(edges: np.ndarray, overflow_label: str | None, variable: str) -> list[str]:
     labels = []
     for idx, edge in enumerate(edges):
@@ -320,15 +368,13 @@ def add_array_delta(store: dict[tuple[str, ...], np.ndarray], key: tuple[str, ..
         store[key] = delta.copy()
         return
     current = store[key]
-    if len(current) != len(delta):
+    if len(current) < len(delta):
         n = max(len(current), len(delta))
         padded_current = np.zeros(n, dtype=float)
-        padded_delta = np.zeros(n, dtype=float)
         padded_current[:len(current)] = current
-        padded_delta[:len(delta)] = delta
-        store[key] = padded_current + padded_delta
-    else:
-        store[key] = current + delta
+        store[key] = padded_current
+        current = padded_current
+    current[:len(delta)] += delta
 
 
 def scaled_prepared_hist(hist: dict[str, Any], factor: float, variable: str, region: str) -> dict[str, Any]:
@@ -377,11 +423,12 @@ def select_sources(repo: Path, shard_dir: Path, output_dir: Path) -> tuple[list[
             shard = read_json(shard_path)
         except Exception:
             shard = {}
-        records_expected = len(shard.get("records") or []) if isinstance(shard, dict) else None
+        records = shard.get("records") if isinstance(shard, dict) else None
+        records_expected = len(records) if isinstance(records, list) and records else None
         final_path = output_dir / shard_name
         running_path = output_dir / f"{shard_name}.running"
         candidates: list[tuple[str, Path, dict[str, Any]]] = []
-        if final_path.exists():
+        if final_path.exists() or final_path.is_symlink():
             try:
                 payload = read_json(final_path)
                 if isinstance(payload, dict) and valid_final_payload(payload, records_expected):
@@ -390,7 +437,7 @@ def select_sources(repo: Path, shard_dir: Path, output_dir: Path) -> tuple[list[
                     status[f"final_{payload.get('status', 'invalid') if isinstance(payload, dict) else 'invalid'}"] += 1
             except Exception:
                 status["final_unreadable"] += 1
-        if running_path.exists():
+        if running_path.exists() or running_path.is_symlink():
             try:
                 payload = read_json(running_path)
                 if isinstance(payload, dict) and usable_running_payload(payload):
@@ -428,10 +475,315 @@ def select_sources(repo: Path, shard_dir: Path, output_dir: Path) -> tuple[list[
     return sources, {"expected_shards": len(list(shard_dir.glob('shard_*.json'))), "source_status_counts": dict(status), "examples": examples}
 
 
+def external_shape_shard_names(shard_dir: Path, output_dir: Path) -> list[str]:
+    names: set[str] = set()
+    try:
+        names.update(path.name for path in shard_dir.glob("shard_*.json"))
+    except Exception:
+        names = set()
+    if names:
+        return sorted(names)
+    try:
+        names.update(path.name for path in output_dir.glob("shard_*.json"))
+        names.update(path.name.replace(".running", "") for path in output_dir.glob("shard_*.json.running"))
+    except Exception:
+        pass
+    return sorted(names)
+
+
+def select_external_shape_sources(repo: Path, base: str, variation_name: str, spec: dict[str, str]) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    shard_dir = (repo / spec["shard_dir"]).resolve()
+    output_dir = (repo / spec["output_dir"]).resolve()
+    sources: list[dict[str, Any]] = []
+    status = Counter()
+    examples: dict[str, list[str]] = {"running_used": [], "final_used": [], "missing_or_empty": [], "unreadable": []}
+    shard_names = external_shape_shard_names(shard_dir, output_dir)
+    readable_list = os.environ.get(f"PARTIAL_MERGE_{variation_name}_READABLE_LIST")
+    if readable_list:
+        selected: dict[str, tuple[str, Path]] = {}
+        skipped_entries = 0
+        try:
+            list_lines = Path(readable_list).read_text(errors="replace").splitlines()
+        except Exception:
+            list_lines = []
+            status["readable_list_unreadable"] += 1
+        for raw_line in list_lines:
+            raw_line = raw_line.strip()
+            if not raw_line:
+                continue
+            payload_path = Path(raw_line)
+            if not payload_path.is_absolute():
+                payload_path = (repo / payload_path).resolve()
+            name = payload_path.name
+            if not (name.startswith("shard_") and (name.endswith(".json") or name.endswith(".json.running"))):
+                skipped_entries += 1
+                continue
+            kind = "running_checkpoint" if name.endswith(".running") else "final"
+            shard_name = source_manifest_name(name)
+            existing = selected.get(shard_name)
+            if existing is None or (existing[0] != "final" and kind == "final"):
+                selected[shard_name] = (kind, payload_path)
+        for shard_name, (kind, payload_path) in sorted(selected.items()):
+            status[f"{kind}_from_readable_list"] += 1
+            if kind == "final" and len(examples["final_used"]) < 5:
+                examples["final_used"].append(payload_path.name)
+            if kind != "final" and len(examples["running_used"]) < 5:
+                examples["running_used"].append(payload_path.name)
+            sources.append({
+                "kind": kind,
+                "path": payload_path,
+                "shard_name": shard_name,
+                "systematic_base": base,
+                "variation_name": variation_name,
+                "payload_summary": {},
+            })
+        status["readable_list_entries"] += len(list_lines)
+        status["readable_list_skipped_entries"] += skipped_entries
+        return sources, {
+            "expected_shards": len(shard_names),
+            "source_status_counts": dict(status),
+            "examples": examples,
+            "shard_directory": display_path(shard_dir, repo),
+            "output_directory": display_path(output_dir, repo),
+            "readable_list": str(readable_list),
+        }
+    for shard_name in shard_names:
+        final_path = output_dir / shard_name
+        running_path = output_dir / f"{shard_name}.running"
+        if final_path.exists() or final_path.is_symlink():
+            kind = "final"
+            payload_path = final_path
+            status["final_candidate"] += 1
+            if len(examples["final_used"]) < 5:
+                examples["final_used"].append(payload_path.name)
+        elif running_path.exists() or running_path.is_symlink():
+            kind = "running_checkpoint"
+            payload_path = running_path
+            status["running_candidate"] += 1
+            if len(examples["running_used"]) < 5:
+                examples["running_used"].append(payload_path.name)
+        else:
+            status["missing_or_empty"] += 1
+            if len(examples["missing_or_empty"]) < 5:
+                examples["missing_or_empty"].append(shard_name)
+            continue
+        sources.append({
+            "kind": kind,
+            "path": payload_path,
+            "shard_name": shard_name,
+            "systematic_base": base,
+            "variation_name": variation_name,
+            "payload_summary": {},
+        })
+    return sources, {
+        "expected_shards": len(shard_names),
+        "source_status_counts": dict(status),
+        "examples": examples,
+        "shard_directory": display_path(shard_dir, repo),
+        "output_directory": display_path(output_dir, repo),
+    }
+
+
+def background_nominal_hist_total(histograms: dict[str, Any], variable: str, region: str) -> np.ndarray:
+    prepared = []
+    by_proc = (((histograms.get("background") or {}).get(variable) or {}).get(region) or {})
+    for hist in by_proc.values():
+        prepared.append(prepare_hist_for_plot(hist, variable, region))
+    if not prepared:
+        return np.zeros(0, dtype=float)
+    nbin = max(len(hist.get("values", [])) for hist in prepared)
+    total = np.zeros(nbin, dtype=float)
+    for hist in prepared:
+        total += hist_values(hist, nbin)
+    return total
+
+
+def merge_external_shape_systematics(
+    repo: Path,
+    physical_norm: dict[str, Any],
+    region_totals: dict[str, Any],
+    histograms: dict[str, Any],
+    histogram_syst_deltas: dict[tuple[str, str, str, str], np.ndarray],
+    region_syst_deltas: dict[tuple[str, str, str], float],
+    available_systematics: Counter,
+) -> dict[str, Any]:
+    del physical_norm
+    summary: dict[str, Any] = {}
+    for base, variations in EXTERNAL_SHAPE_SYSTEMATICS.items():
+        base_summary: dict[str, Any] = {
+            "source": "external_shape_production",
+            "delta_policy": "Preview-only external shape treatment: each shifted aggregate is normalized with the shifted campaign physical-dataset sumw, then prepared with the plot binning policy and compared to the nominal background aggregate. This removes file-coverage normalization artifacts in partial previews.",
+            "coverage_warning": "This is not the final datacard treatment. The final systematic should be built from nominal/shifted payloads over the same intended file set or from a completed campaign-level normalization.",
+            "variations": {},
+        }
+        for variation_name, spec in variations.items():
+            sources, source_summary = select_external_shape_sources(repo, base, variation_name, spec)
+            valid_sources: list[dict[str, Any]] = []
+            shape_norm: dict[str, dict[str, Any]] = {}
+            datasets_seen: set[str] = set()
+            selected_read_errors = 0
+            invalid_payloads = 0
+            files_attempted = files_processed = bad_files = 0
+
+            for item in sources:
+                try:
+                    payload = read_json(item["path"])
+                except Exception:
+                    selected_read_errors += 1
+                    continue
+                if not isinstance(payload, dict) or payload.get("shape_shift") != variation_name:
+                    invalid_payloads += 1
+                    continue
+                if item["kind"] == "final" and not valid_final_payload(payload, None):
+                    invalid_payloads += 1
+                    continue
+                if item["kind"] != "final" and not usable_running_payload(payload):
+                    invalid_payloads += 1
+                    continue
+                valid_sources.append(item)
+                files_attempted += int(payload.get("files_attempted") or 0)
+                files_processed += int(payload.get("files_processed") or 0)
+                bad_files += len(payload.get("bad_files") or [])
+                for ds, rec in (payload.get("datasets") or {}).items():
+                    if rec.get("process") == "SMS":
+                        continue
+                    proc = canonical_process(rec.get("process") or "other", ds)
+                    is_data = bool(rec.get("is_data")) or proc in DATA_PROCESSES
+                    if is_data:
+                        continue
+                    datasets_seen.add(ds)
+                    phys = physical_dataset_key(ds)
+                    target = shape_norm.setdefault(phys, {
+                        "physical_dataset": phys,
+                        "process": proc,
+                        "xsec_pb": rec.get("xsec_pb"),
+                        "sumw": 0.0,
+                        "files_processed": 0,
+                        "files_attempted": 0,
+                        "xsec_conflicts": [],
+                    })
+                    xs = rec.get("xsec_pb")
+                    if isinstance(xs, (int, float)) and isinstance(target.get("xsec_pb"), (int, float)) and abs(float(xs) - float(target["xsec_pb"])) > 1e-12:
+                        target["xsec_conflicts"].append({"dataset": ds, "xsec_pb": xs})
+                    elif target.get("xsec_pb") is None:
+                        target["xsec_pb"] = xs
+                    target["sumw"] += float(rec.get("sumw") or 0.0)
+                    target["files_processed"] += int(rec.get("files_processed") or 0)
+                    target["files_attempted"] += int(rec.get("files_attempted") or 0)
+                del payload
+                release_json_memory()
+
+            shape_norm_blocked: dict[str, int] = Counter()
+            for phys, rec in shape_norm.items():
+                xs = rec.get("xsec_pb")
+                sumw = float(rec.get("sumw") or 0.0)
+                if rec.get("xsec_conflicts"):
+                    rec["normalization_factor"] = None
+                    rec["normalization_status"] = "blocked_inconsistent_xsec_across_shifted_split_datasets"
+                elif isinstance(xs, (int, float)) and float(xs) > 0 and sumw != 0.0:
+                    rec["normalization_factor"] = float(xs) * LUMI_PB / sumw
+                    rec["normalization_status"] = "normalized_with_shifted_campaign_sumw_partial_preview"
+                elif not isinstance(xs, (int, float)) or float(xs or 0) <= 0:
+                    rec["normalization_factor"] = None
+                    rec["normalization_status"] = "blocked_missing_positive_xsec"
+                else:
+                    rec["normalization_factor"] = None
+                    rec["normalization_status"] = "blocked_zero_shifted_sumw"
+                if rec["normalization_factor"] is None:
+                    shape_norm_blocked[str(rec["normalization_status"])] += 1
+
+            varied_histograms: dict[tuple[str, str], dict[str, Any]] = {}
+            varied_regions: dict[str, float] = {region: 0.0 for region in REGION_ORDER}
+            physical_datasets_with_norm: set[str] = set()
+            blocked_dataset_records = 0
+            blocked_examples: list[str] = []
+            merge_read_errors = 0
+
+            for item in valid_sources:
+                try:
+                    payload = read_json(item["path"])
+                except Exception:
+                    merge_read_errors += 1
+                    continue
+                for ds, rec in (payload.get("datasets") or {}).items():
+                    if rec.get("process") == "SMS":
+                        continue
+                    proc = canonical_process(rec.get("process") or "other", ds)
+                    is_data = bool(rec.get("is_data")) or proc in DATA_PROCESSES
+                    if is_data:
+                        continue
+                    phys = physical_dataset_key(ds)
+                    factor = (shape_norm.get(phys) or {}).get("normalization_factor")
+                    if factor is None:
+                        blocked_dataset_records += 1
+                        if len(blocked_examples) < 5:
+                            blocked_examples.append(ds)
+                        continue
+                    physical_datasets_with_norm.add(phys)
+                    for region, counter in (rec.get("regions") or {}).items():
+                        fregion = full_region(region)
+                        if fregion in varied_regions:
+                            varied_regions[fregion] += float(counter.get("raw_weighted", 0.0)) * factor
+                    for region, by_var in (rec.get("histograms") or {}).items():
+                        fregion = full_region(region)
+                        if fregion not in REGION_ORDER:
+                            continue
+                        for variable, hist in (by_var or {}).items():
+                            variable = str(variable)
+                            if variable.startswith("search_bin_index::") or not histogram_variation_needed(variable, fregion):
+                                continue
+                            merge_hist_payload(varied_histograms.setdefault((variable, fregion), {}), hist or {}, factor)
+                del payload
+                release_json_memory()
+
+            hist_deltas_added = 0
+            for (variable, region), hist in sorted(varied_histograms.items()):
+                varied_prepared = prepare_hist_for_plot(hist, variable, region)
+                nominal_total = background_nominal_hist_total(histograms, variable, region)
+                nbin = max(len(varied_prepared.get("values", [])), len(nominal_total))
+                if nbin <= 0:
+                    continue
+                nominal_padded = np.zeros(nbin, dtype=float)
+                nominal_padded[:len(nominal_total)] = nominal_total[:len(nominal_total)]
+                delta = hist_values(varied_prepared, nbin) - nominal_padded
+                add_array_delta(histogram_syst_deltas, (variable, region, base, variation_name), delta)
+                hist_deltas_added += 1
+            region_deltas_added = 0
+            if physical_datasets_with_norm:
+                for region, varied in sorted(varied_regions.items()):
+                    nominal = float((region_totals.get(region) or {}).get("background") or 0.0)
+                    region_syst_deltas[(region, base, variation_name)] = region_syst_deltas.get((region, base, variation_name), 0.0) + (float(varied) - nominal)
+                    region_deltas_added += 1
+            if hist_deltas_added or region_deltas_added:
+                available_systematics[variation_name] += max(1, len(physical_datasets_with_norm))
+            base_summary["variations"][variation_name] = {
+                **source_summary,
+                "normalization_policy": "shifted_campaign_sumw_partial_preview",
+                "selected_payloads": len(sources),
+                "valid_payloads_used": len(valid_sources),
+                "final_payloads_used": sum(1 for item in valid_sources if item["kind"] == "final"),
+                "running_payloads_used": sum(1 for item in valid_sources if item["kind"] != "final"),
+                "selected_read_errors": selected_read_errors,
+                "merge_read_errors": merge_read_errors,
+                "invalid_payloads": invalid_payloads,
+                "files_attempted": files_attempted,
+                "files_processed": files_processed,
+                "bad_files": bad_files,
+                "datasets_seen": len(datasets_seen),
+                "physical_datasets_with_shifted_normalization": len(physical_datasets_with_norm),
+                "shape_normalization_blocked_physical_datasets": dict(shape_norm_blocked),
+                "normalization_blocked_dataset_records": blocked_dataset_records,
+                "normalization_blocked_examples": blocked_examples,
+                "histogram_deltas_added": hist_deltas_added,
+                "region_deltas_added": region_deltas_added,
+            }
+        summary[base] = base_summary
+    return summary
+
 def merge_background_payloads(repo: Path, sources: list[dict[str, Any]]) -> dict[str, Any]:
     datasets: dict[str, Any] = {}
     bad_files: list[dict[str, Any]] = []
-    file_summaries: list[dict[str, Any]] = []
+    events_processed = 0
     files_attempted = 0
     files_processed = 0
     source_shards: list[str] = []
@@ -444,7 +796,7 @@ def merge_background_payloads(repo: Path, sources: list[dict[str, Any]]) -> dict
         source_shards.append(source_manifest_name(item["path"].name))
         source_details.append({
             "source": item["kind"],
-            "path": str(item["path"].relative_to(repo)),
+            "path": display_path(item["path"], repo),
             "shard": item["shard_name"],
             "files_attempted": payload.get("files_attempted", 0),
             "files_processed": payload.get("files_processed", 0),
@@ -453,7 +805,9 @@ def merge_background_payloads(repo: Path, sources: list[dict[str, Any]]) -> dict
         files_attempted += int(payload.get("files_attempted") or 0)
         files_processed += int(payload.get("files_processed") or 0)
         bad_files.extend(payload.get("bad_files") or [])
-        file_summaries.extend(payload.get("file_summaries") or [])
+        for summary in payload.get("file_summaries") or []:
+            if isinstance(summary, dict):
+                events_processed += int(summary.get("events_read") or 0)
         for ds, rec in (payload.get("datasets") or {}).items():
             if rec.get("process") == "SMS":
                 continue
@@ -675,6 +1029,8 @@ def merge_background_payloads(repo: Path, sources: list[dict[str, Any]]) -> dict
         del payload
         release_json_memory()
 
+    external_shape_summary = merge_external_shape_systematics(repo, physical_norm, region_totals, histograms, histogram_syst_deltas, region_syst_deltas, available_systematics)
+
     hist_by_base: dict[tuple[str, str, str], list[np.ndarray]] = {}
     for (variable, region, base, _variation_name), delta in histogram_syst_deltas.items():
         hist_by_base.setdefault((variable, region, base), []).append(delta)
@@ -708,7 +1064,6 @@ def merge_background_payloads(repo: Path, sources: list[dict[str, Any]]) -> dict
         rec["syst2"] = float(rec.get("syst2", 0.0)) + max_abs * max_abs
         rec["sources"] = sorted(set(rec.get("sources", [])) | {base})
     return {
-        "datasets": datasets,
         "normalization_factors": norm_factors,
         "physical_normalization_factors": physical_norm,
         "physical_dataset_split_counts": dict(physical_dataset_split_counts),
@@ -721,14 +1076,14 @@ def merge_background_payloads(repo: Path, sources: list[dict[str, Any]]) -> dict
         "region_systematics": region_systematics,
         "available_systematics": sorted(available_systematics),
         "available_systematic_dataset_counts": dict(available_systematics),
+        "external_shape_systematics": external_shape_summary,
         "search_bins": search_bins,
         "data_region_process_policy": DATA_PROCESS_BY_REGION,
         "data_stream_exclusions": data_stream_exclusions,
         "files_attempted": files_attempted,
         "files_processed": files_processed,
         "bad_files": bad_files,
-        "file_summaries": file_summaries,
-        "events_processed": sum(int(s.get("events_read") or 0) for s in file_summaries if isinstance(s, dict)),
+        "events_processed": events_processed,
         "source_shards": sorted(set(source_shards)),
         "source_details": source_details,
     }
@@ -1037,8 +1392,8 @@ def plot_variable(payload: dict[str, Any], variable: str, region: str, outbase: 
         ratio = np.divide(data_vals, total, out=np.full_like(data_vals, np.nan), where=total > 0)
         ratio_err = np.divide(data_unc, total, out=np.full_like(data_vals, np.nan), where=total > 0)
         rax.errorbar(centers, ratio, yerr=ratio_err, fmt="o", color="black", markersize=3)
-    rel = np.divide(total_unc, total, out=np.zeros_like(total_unc), where=total > 0)
-    rax.fill_between(centers, np.maximum(0, 1 - rel), 1 + rel, step="mid", color="0.85")
+    rel = np.divide(total_unc, total, out=np.full_like(total_unc, np.nan), where=total > 0)
+    fill_ratio_uncertainty_band(rax, edges, rel, total > 0)
     rax.axhline(1.0, color="0.45", linewidth=1)
     rax.set_ylim(0, 2)
     rax.set_ylabel("Data/MC")
@@ -1204,7 +1559,7 @@ def build_fit_template_summary(payload: dict[str, Any]) -> dict[str, Any]:
         "template_variable_by_region": FIT_TEMPLATE_VARIABLE_BY_REGION,
         "template_binning_policy": "For cat2/cat3/cat7 MET and cat4/cat5/cat6 recoil templates, all bins with lower edge >= 800 GeV are merged into [800, inf].",
         "nb_binning_policy": "Nb plots merge b >= 3 into a single >=3 bin.",
-        "uncertainty_policy": "DATA uncertainties are statistical. Background uncertainty is sqrt(MC stat^2 + available systematic envelope^2), where available Up/Down variations include pileup, btag SF, lepton/photon ID, and lepton HLT weights present in worker payloads.",
+        "uncertainty_policy": "DATA uncertainties are statistical. Background uncertainty is sqrt(MC stat^2 + available systematic envelope^2), where available Up/Down variations include pileup, btag SF, lepton/photon ID, lepton HLT weights present in worker payloads, and external MET unclustered shape shifts when available.",
         "templates": templates,
     }
 
@@ -1234,6 +1589,24 @@ def write_preview_index(docs_dir: Path, plot_records: list[dict[str, Any]], payl
         rel = "plots/" + Path(rec["png"]).name
         rel_v = f"{rel}?v={cache}"
         cards.append(f"<a class='plot' href='{rel_v}'><img src='{rel_v}' loading='lazy'><span>{Path(rec['png']).stem}</span></a>")
+    limit_html = ""
+    limit_path = docs_dir / "limit_summary.json"
+    if limit_path.exists():
+        try:
+            summary = json.loads(limit_path.read_text())
+            limit_html = (
+                "<!-- limit-summary-start --><section class='limits'>"
+                f"<h2>Expected limits ({summary.get('label', 'data')})</h2>"
+                f"<p>Status: <code>{summary.get('limit_status')}</code>; "
+                f"collected <code>{summary.get('collected_point_count')}</code> / <code>{summary.get('requested_point_count')}</code> points.</p>"
+                "<p><a href='expected_limits.json'>expected_limits.json</a> · "
+                "<a href='expected_limit_contour.png'>expected contour</a> · "
+                "<a href='combine_input_manifest.json'>combine manifest</a> · "
+                "<a href='limit_summary.md'>limit summary</a></p>"
+                "</section><!-- limit-summary-end -->"
+            )
+        except Exception:
+            limit_html = ""
     html = f"""<!doctype html>
 <html><head><meta charset='utf-8'><title>{title}</title>
 <style>body{{font-family:system-ui,-apple-system,Segoe UI,sans-serif;margin:24px;background:#f6f7f9;color:#111}}.grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(520px,1fr));gap:16px}}.plot{{display:block;background:white;border:1px solid #ddd;padding:10px;color:#123;text-decoration:none}}img{{width:100%;max-width:100%;display:block}}code{{background:#eee;padding:2px 4px}}</style></head>
@@ -1241,6 +1614,7 @@ def write_preview_index(docs_dir: Path, plot_records: list[dict[str, Any]], payl
 <p>Snapshot: <code>{payload['created_at']}</code>. Sources: <code>{len(payload['source_shards'])}</code> shard payloads; files processed <code>{payload['files_processed']}</code>; bad entries <code>{payload['bad_files']}</code>.</p>
 <p>This preview includes valid final shard JSONs plus terminal <code>.json.running</code> checkpoints at snapshot time. It is not a final production result.</p>
 <p><a href='partial_normalized_yields.json'>partial_normalized_yields.json</a> · <a href='partial_normalization_factors.json'>partial_normalization_factors.json</a> · <a href='fit_template_summary.json'>fit template summary</a> · <a href='fastsim_signal_partial_summary.json'>FastSim signal summary</a> · <a href='signal_overlay_summary.json'>signal overlay summary</a> · <a href='partial_yield_summary.md'>summary</a></p>
+{limit_html}
 <div class='grid'>{''.join(cards)}</div>
 </body></html>"""
     (docs_dir / "index.html").write_text(html)
@@ -1279,9 +1653,9 @@ def main() -> int:
         "created_at": utc_now(),
         "preview_label": args.label,
         "source_cluster_id": args.source_cluster_id,
-        "source_output_directory": str(output_dir.relative_to(repo)),
-        "preview_directory": str(preview_dir.relative_to(repo)),
-        "shard_directory": str(shard_dir.relative_to(repo)),
+        "source_output_directory": display_path(output_dir, repo),
+        "preview_directory": display_path(preview_dir, repo),
+        "shard_directory": display_path(shard_dir, repo),
         "luminosity_fb": LUMI_FB,
         "luminosity_pb": LUMI_PB,
         "lumi_uncertainty": {"name": LUMI_UNCERTAINTY_NAME, "fraction": LUMI_UNCERTAINTY_FRACTION, "lnN": LUMI_UNCERTAINTY_LNN},
@@ -1292,9 +1666,10 @@ def main() -> int:
         "fit_template_variable_by_region": FIT_TEMPLATE_VARIABLE_BY_REGION,
         "template_binning_policy": "cat2/cat3/cat7 use MET templates; cat4/cat5/cat6 use recoil templates; template bins with lower edge >= 800 GeV are merged into [800, inf] and displayed with an infinity symbol at the right edge.",
         "nb_binning_policy": "Nb plots merge b >= 3 into a single >=3 bin.",
-        "plot_uncertainty_policy": "DATA error bars show statistical uncertainty. MC bands show sqrt(stat^2 + available systematic envelope^2 + Lumi_2024^2); available worker payload systematics are included where present, and Lumi_2024 is a fixed 1.6% MC rate uncertainty.",
-        "available_systematics_for_plot": sorted(set(merged["available_systematics"]) | {LUMI_UNCERTAINTY_NAME}),
+        "plot_uncertainty_policy": "DATA error bars show statistical uncertainty. MC bands show sqrt(stat^2 + available systematic envelope^2 + Lumi_2024^2); available worker payload systematics and external MET unclustered shape shifts are included where present, and Lumi_2024 is a fixed 1.6% MC rate uncertainty.",
+        "available_systematics_for_plot": sorted(set(merged["available_systematics"]) | set((merged.get("external_shape_systematics") or {}).keys()) | {LUMI_UNCERTAINTY_NAME}),
         "available_systematic_dataset_counts": merged["available_systematic_dataset_counts"],
+        "external_shape_systematics": merged.get("external_shape_systematics", {}),
         "sms_policy": "SMS FastSim mass-point overlays are drawn only in cat7/SR plots for mStop1000/mLSP1 and mStop1200/mLSP1 where signal_cutflows histograms exist; completed FastSim shard JSONs are summarized separately in fastsim_signal_partial_summary.json.",
         "final_normalization_complete": False,
         "normalization_status": "partial_preview_complete" if not merged["normalization_blocked_datasets"] else "partial_preview_incomplete_blocked_datasets",
@@ -1311,6 +1686,8 @@ def main() -> int:
         "region_yields_by_dataset": merged["region_yields_by_dataset"],
         "regions": merged["regions"],
         "histograms": merged["histograms"],
+        "histogram_systematics": merged["histogram_systematics"],
+        "region_systematics": merged["region_systematics"],
         "search_bins": merged["search_bins"],
         "source_shards": merged["source_shards"],
         "source_details_preview": merged["source_details"][:200],
