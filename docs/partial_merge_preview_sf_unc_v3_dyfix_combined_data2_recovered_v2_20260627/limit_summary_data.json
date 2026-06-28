@@ -1,0 +1,19 @@
+{
+  "collected_point_count": 352,
+  "combine_dir": "analysis/combine/sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627_data",
+  "copied": {
+    "combine_input_manifest.json": true,
+    "combine_input_manifest_data.json": true,
+    "expected_limit_contour.pdf": true,
+    "expected_limit_contour.png": true,
+    "expected_limit_contour_data.pdf": true,
+    "expected_limit_contour_data.png": true,
+    "expected_limits.json": true,
+    "expected_limits_data.json": true
+  },
+  "label": "data",
+  "limit_status": "complete",
+  "missing_point_count": 0,
+  "requested_point_count": 352,
+  "updated_at": "2026-06-28T03:41:14Z"
+}
