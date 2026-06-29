@@ -3,6 +3,279 @@
 >>> Random number generator seed is 123456
 Will use a-priori instead of a-posteriori expected background.
 >>> Method used is AsymptoticLimits
+============================================================
+Analyzing bin errors for: prop_bincat2_LLCR_highDeltaM
+Poisson cut-off: 10
+Processes excluded for sums: sig_mStop1250_mLSP500
+============================================================
+Bin        Contents        Error           Notes                         
+0          0.000000        0.000000        total sum                     
+0          0.000000        0.000000        excluding marked processes    
+  => Error is zero, ignore      
+------------------------------------------------------------
+1          0.000000        0.000000        total sum                     
+1          0.000000        0.000000        excluding marked processes    
+  => Error is zero, ignore      
+------------------------------------------------------------
+2          0.000000        0.000000        total sum                     
+2          0.000000        0.000000        excluding marked processes    
+  => Error is zero, ignore      
+------------------------------------------------------------
+3          23150.310183    130.239374      total sum                     
+3          23150.087891    130.239369      excluding marked processes    
+3          31595.000000    177.749824      Unweighted events, alpha=0.732721
+  => Total parameter prop_bincat2_LLCR_highDeltaM_bin3[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+4          13661.237540    94.098472       total sum                     
+4          13660.818359    94.098458       excluding marked processes    
+4          21076.000000    145.175756      Unweighted events, alpha=0.648189
+  => Total parameter prop_bincat2_LLCR_highDeltaM_bin4[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+5          2860.132082     38.092939       total sum                     
+5          2859.693848     38.092902       excluding marked processes    
+5          5636.000000     75.073298       Unweighted events, alpha=0.507476
+  => Total parameter prop_bincat2_LLCR_highDeltaM_bin5[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+6          754.261786      17.145278       total sum                     
+6          753.925171      17.145216       excluding marked processes    
+6          1934.000000     43.977267       Unweighted events, alpha=0.390001
+  => Total parameter prop_bincat2_LLCR_highDeltaM_bin6[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+7          348.029963      10.220689       total sum                     
+7          347.604431      10.220557       excluding marked processes    
+7          1157.000000     34.014703       Unweighted events, alpha=0.300804
+  => Total parameter prop_bincat2_LLCR_highDeltaM_bin7[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+8          80.094019       3.798181        total sum                     
+8          79.846321       3.797973        excluding marked processes    
+8          442.000000      21.023796       Unweighted events, alpha=0.181208
+  => Total parameter prop_bincat2_LLCR_highDeltaM_bin8[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+============================================================
+Analyzing bin errors for: prop_bincat3_QCDCR_highDeltaM
+Poisson cut-off: 10
+Processes excluded for sums: sig_mStop1250_mLSP500
+============================================================
+Bin        Contents        Error           Notes                         
+0          0.000000        0.000000        total sum                     
+0          0.000000        0.000000        excluding marked processes    
+  => Error is zero, ignore      
+------------------------------------------------------------
+1          0.000000        0.000000        total sum                     
+1          0.000000        0.000000        excluding marked processes    
+  => Error is zero, ignore      
+------------------------------------------------------------
+2          0.000000        0.000000        total sum                     
+2          0.000000        0.000000        excluding marked processes    
+  => Error is zero, ignore      
+------------------------------------------------------------
+3          18893.071874    771.124278      total sum                     
+3          18892.900391    771.124278      excluding marked processes    
+3          600.000000      24.494897       Unweighted events, alpha=31.488453
+  => Total parameter prop_bincat3_QCDCR_highDeltaM_bin3[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+4          12235.499223    2280.015529     total sum                     
+4          12235.143555    2280.015529     excluding marked processes    
+4          29.000000       5.385165        Unweighted events, alpha=421.913766
+  => Total parameter prop_bincat3_QCDCR_highDeltaM_bin4[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+5          2308.782635     147.849504      total sum                     
+5          2308.490479     147.849498      excluding marked processes    
+5          244.000000      15.620499       Unweighted events, alpha=9.462224
+  => Total parameter prop_bincat3_QCDCR_highDeltaM_bin5[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+6          650.509341      23.163862       total sum                     
+6          650.287048      23.163832       excluding marked processes    
+6          788.000000      28.071338       Unweighted events, alpha=0.825519
+  => Total parameter prop_bincat3_QCDCR_highDeltaM_bin6[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+7          313.966596      12.209468       total sum                     
+7          313.617279      12.209377       excluding marked processes    
+7          660.000000      25.690465       Unweighted events, alpha=0.475707
+  => Total parameter prop_bincat3_QCDCR_highDeltaM_bin7[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+8          103.839840      14.750430       total sum                     
+8          103.655655      14.750391       excluding marked processes    
+8          49.000000       7.000000        Unweighted events, alpha=2.119180
+  => Total parameter prop_bincat3_QCDCR_highDeltaM_bin8[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+============================================================
+Analyzing bin errors for: prop_bincat4_GCR_highDeltaM
+Poisson cut-off: 10
+============================================================
+Bin        Contents        Error           Notes                         
+0          3574.023193     397.125610      total sum                     
+0          81.000000       9.000000        Unweighted events, alpha=44.123743
+  => Total parameter prop_bincat4_GCR_highDeltaM_bin0[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+1          2730.054932     561.150229      total sum                     
+1          24.000000       4.898979        Unweighted events, alpha=113.752289
+  => Total parameter prop_bincat4_GCR_highDeltaM_bin1[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+2          1628.895142     330.225742      total sum                     
+2          24.000000       4.898979        Unweighted events, alpha=67.870631
+  => Total parameter prop_bincat4_GCR_highDeltaM_bin2[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+3          1154.448364     62.616827       total sum                     
+3          340.000000      18.439089       Unweighted events, alpha=3.395436
+  => Total parameter prop_bincat4_GCR_highDeltaM_bin3[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+4          690.506470      28.010237       total sum                     
+4          608.000000      24.657656       Unweighted events, alpha=1.135701
+  => Total parameter prop_bincat4_GCR_highDeltaM_bin4[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+5          93.022324       2.670639        total sum                     
+5          1213.000000     34.828150       Unweighted events, alpha=0.076688
+  => Total parameter prop_bincat4_GCR_highDeltaM_bin5[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+============================================================
+Analyzing bin errors for: prop_bincat5_DY2E_highDeltaM
+Poisson cut-off: 10
+============================================================
+Bin        Contents        Error           Notes                         
+0          61.666706       40.799775       total sum                     
+0          2.000000        1.414214        Unweighted events, alpha=30.833353
+  => Number of weighted events is below Poisson threshold
+    background           61.666706       40.799775                                     
+                         2.000000        1.414214        Unweighted events, alpha=30.833353
+      => Product of prop_bincat5_DY2E_highDeltaM_bin0_background[2.00,0.00,33.79] and const [0.5000] to be Poisson constrained
+  ----------------------------------------------------------
+------------------------------------------------------------
+1          42.549282       30.956402       total sum                     
+1          2.000000        1.414214        Unweighted events, alpha=21.274641
+  => Number of weighted events is below Poisson threshold
+    background           42.549282       30.956402                                     
+                         2.000000        1.414214        Unweighted events, alpha=21.274641
+      => Product of prop_bincat5_DY2E_highDeltaM_bin1_background[2.00,0.00,33.79] and const [0.5000] to be Poisson constrained
+  ----------------------------------------------------------
+------------------------------------------------------------
+2          46.731277       29.983738       total sum                     
+2          2.000000        1.414214        Unweighted events, alpha=23.365639
+  => Number of weighted events is below Poisson threshold
+    background           46.731277       29.983738                                     
+                         2.000000        1.414214        Unweighted events, alpha=23.365639
+      => Product of prop_bincat5_DY2E_highDeltaM_bin2_background[2.00,0.00,33.79] and const [0.5000] to be Poisson constrained
+  ----------------------------------------------------------
+------------------------------------------------------------
+3          115.401894      39.323070       total sum                     
+3          9.000000        3.000000        Unweighted events, alpha=12.822433
+  => Number of weighted events is below Poisson threshold
+    background           115.401894      39.323070                                     
+                         9.000000        3.000000        Unweighted events, alpha=12.822433
+      => Product of prop_bincat5_DY2E_highDeltaM_bin3_background[9.00,0.20,49.98] and const [0.1111] to be Poisson constrained
+  ----------------------------------------------------------
+------------------------------------------------------------
+4          74.436615       24.148557       total sum                     
+4          10.000000       3.162278        Unweighted events, alpha=7.443661
+  => Number of weighted events is below Poisson threshold
+    background           74.436615       24.148557                                     
+                         10.000000       3.162278        Unweighted events, alpha=7.443661
+      => Product of prop_bincat5_DY2E_highDeltaM_bin4_background[10.00,0.30,52.00] and const [0.1000] to be Poisson constrained
+  ----------------------------------------------------------
+------------------------------------------------------------
+5          7.657652        0.355430        total sum                     
+5          464.000000      21.540659       Unweighted events, alpha=0.016504
+  => Total parameter prop_bincat5_DY2E_highDeltaM_bin5[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+============================================================
+Analyzing bin errors for: prop_bincat6_DY2M_highDeltaM
+Poisson cut-off: 10
+============================================================
+Bin        Contents        Error           Notes                         
+0          72.661308       39.565527       total sum                     
+0          3.000000        1.732051        Unweighted events, alpha=24.220436
+  => Number of weighted events is below Poisson threshold
+    background           72.661308       39.565527                                     
+                         3.000000        1.732051        Unweighted events, alpha=24.220436
+      => Product of prop_bincat6_DY2M_highDeltaM_bin0_background[3.00,0.00,36.46] and const [0.3333] to be Poisson constrained
+  ----------------------------------------------------------
+------------------------------------------------------------
+1          87.359673       29.126141       total sum                     
+1          9.000000        3.000000        Unweighted events, alpha=9.706630
+  => Number of weighted events is below Poisson threshold
+    background           87.359673       29.126141                                     
+                         9.000000        3.000000        Unweighted events, alpha=9.706630
+      => Product of prop_bincat6_DY2M_highDeltaM_bin1_background[9.00,0.20,49.98] and const [0.1111] to be Poisson constrained
+  ----------------------------------------------------------
+------------------------------------------------------------
+2          56.971451       18.075800       total sum                     
+2          10.000000       3.162278        Unweighted events, alpha=5.697145
+  => Number of weighted events is below Poisson threshold
+    background           56.971451       18.075800                                     
+                         10.000000       3.162278        Unweighted events, alpha=5.697145
+      => Product of prop_bincat6_DY2M_highDeltaM_bin2_background[10.00,0.30,52.00] and const [0.1000] to be Poisson constrained
+  ----------------------------------------------------------
+------------------------------------------------------------
+3          108.986160      34.698873       total sum                     
+3          10.000000       3.162278        Unweighted events, alpha=10.898616
+  => Number of weighted events is below Poisson threshold
+    background           108.986160      34.698873                                     
+                         10.000000       3.162278        Unweighted events, alpha=10.898616
+      => Product of prop_bincat6_DY2M_highDeltaM_bin3_background[10.00,0.30,52.00] and const [0.1000] to be Poisson constrained
+  ----------------------------------------------------------
+------------------------------------------------------------
+4          52.702194       9.452999        total sum                     
+4          31.000000       5.567764        Unweighted events, alpha=1.700071
+  => Total parameter prop_bincat6_DY2M_highDeltaM_bin4[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+5          8.437284        0.376768        total sum                     
+5          501.000000      22.383029       Unweighted events, alpha=0.016841
+  => Total parameter prop_bincat6_DY2M_highDeltaM_bin5[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+============================================================
+Analyzing bin errors for: prop_bincat7_SR_highDeltaM
+Poisson cut-off: 10
+Processes excluded for sums: sig_mStop1250_mLSP500
+============================================================
+Bin        Contents        Error           Notes                         
+0          0.000000        0.000000        total sum                     
+0          0.000000        0.000000        excluding marked processes    
+  => Error is zero, ignore      
+------------------------------------------------------------
+1          0.000000        0.000000        total sum                     
+1          0.000000        0.000000        excluding marked processes    
+  => Error is zero, ignore      
+------------------------------------------------------------
+2          0.000000        0.000000        total sum                     
+2          0.000000        0.000000        excluding marked processes    
+  => Error is zero, ignore      
+------------------------------------------------------------
+3          20083.102162    350.501050      total sum                     
+3          20080.294922    350.501024      excluding marked processes    
+3          3282.000000     57.288742       Unweighted events, alpha=6.119166
+  => Total parameter prop_bincat7_SR_highDeltaM_bin3[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+4          11150.181371    94.130653       total sum                     
+4          11143.703125    94.130434       excluding marked processes    
+4          14015.000000    118.384965      Unweighted events, alpha=0.795589
+  => Total parameter prop_bincat7_SR_highDeltaM_bin4[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+5          2397.310969     35.837170       total sum                     
+5          2389.600586     35.836486       excluding marked processes    
+5          4446.000000     66.678332       Unweighted events, alpha=0.539206
+  => Total parameter prop_bincat7_SR_highDeltaM_bin5[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+6          680.114885      15.254506       total sum                     
+6          671.712219      15.252757       excluding marked processes    
+6          1939.000000     44.034078       Unweighted events, alpha=0.350755
+  => Total parameter prop_bincat7_SR_highDeltaM_bin6[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+7          349.293170      12.075784       total sum                     
+7          334.202667      12.071815       excluding marked processes    
+7          766.000000      27.676705       Unweighted events, alpha=0.455996
+  => Total parameter prop_bincat7_SR_highDeltaM_bin7[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+8          100.990060      3.417394        total sum                     
+8          87.398445       3.404741        excluding marked processes    
+8          659.000000      25.670995       Unweighted events, alpha=0.153247
+  => Total parameter prop_bincat7_SR_highDeltaM_bin8[0.00,-7.00,7.00] to be Gaussian constrained
+------------------------------------------------------------
+Channel cat2_LLCR_highDeltaM will use autoMCStats with settings: event-threshold=10, include-signal=0, hist-mode=1
+Channel cat3_QCDCR_highDeltaM will use autoMCStats with settings: event-threshold=10, include-signal=0, hist-mode=1
+Channel cat4_GCR_highDeltaM will use autoMCStats with settings: event-threshold=10, include-signal=0, hist-mode=1
+Channel cat5_DY2E_highDeltaM will use autoMCStats with settings: event-threshold=10, include-signal=0, hist-mode=1
+Channel cat6_DY2M_highDeltaM will use autoMCStats with settings: event-threshold=10, include-signal=0, hist-mode=1
+Channel cat7_SR_highDeltaM will use autoMCStats with settings: event-threshold=10, include-signal=0, hist-mode=1
 
  -- AsymptoticLimits ( CLs ) --
 Expected  2.5%: r < 0.7299

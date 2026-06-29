@@ -3,39 +3,17 @@
     "partial_normalized_yields.json",
     "partial_normalization_factors.json",
     "fit_template_summary.json",
-    "fastsim_signal_partial_summary.json",
     "partial_plot_summary.json",
     "partial_yield_summary.md"
   ],
-  "created_at": "2026-06-29T11:48:09Z",
-  "plot_status": "partial_preview_cms_style",
-  "preview_directory": "autonomous_allhad/workflow/partial_merge_preview_sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627",
-  "shard_status": {
-    "examples": {
-      "final_used": [
-        "shard_data2_00000.json",
-        "shard_data2_00001.json",
-        "shard_data2_00002.json",
-        "shard_data2_00003.json",
-        "shard_data2_00004.json"
-      ],
-      "missing_or_empty": [
-        "shard_oldmc_00600.json",
-        "shard_oldmc_00601.json",
-        "shard_oldmc_00602.json",
-        "shard_oldmc_00603.json",
-        "shard_oldmc_00604.json"
-      ],
-      "running_used": []
-    },
-    "expected_shards": 8298,
-    "final_payloads_used": 6788,
-    "running_payloads_used": 0,
-    "selected_source_payloads": 6788,
-    "source_status_counts": {
-      "final": 6788,
-      "missing_or_empty": 1510
-    }
+  "created_at": "2026-06-29T12:53:20Z",
+  "hybrid_recovery": {
+    "data_payload": "docs/partial_merge_preview_sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627/partial_normalized_yields.json",
+    "internal_shape_variations": "docs/partial_merge_preview_sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627_all_shape_systs/internal_shape_variations.json",
+    "mc_payload": "docs/partial_merge_preview_sf_unc_v3_dyfix_20260624/partial_normalized_yields.json",
+    "met_unclustered_variations": "docs/partial_merge_preview_sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627_metUnclustered_shape/met_unclustered_variations.json"
   },
-  "status": "partial_preview_complete"
+  "plot_status": "partial_preview_cms_style_hybrid_mc_data2_recovered",
+  "preview_directory": "autonomous_allhad/workflow/partial_merge_preview_sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627",
+  "status": "partial_preview_complete_hybrid_mc_data2_recovered"
 }

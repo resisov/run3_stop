@@ -1,5 +1,5 @@
 {
-  "root": "higgsCombine_mStop1250_mLSP500_asimov_uncfix_bonly_uncfix.AsymptoticLimits.mH1250.root",
+  "root": "higgsCombine_mStop1250_mLSP500_asimov_bonly_uncfix.AsymptoticLimits.mH1250.root",
   "rows": [
     {
       "limit": 0.729949951171875,
@@ -27,7 +27,5 @@
       "quantileExpected": 0.9750000238418579
     }
   ],
-  "schema_version": "asymptotic_limit_summary_v1",
-  "source": "corrected_uncertainty_recompute",
-  "workspace": "workspace_mStop1250_mLSP500.root"
+  "schema_version": "asymptotic_limit_summary_v1"
 }
