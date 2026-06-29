@@ -1,35 +1,30 @@
 {
-  "root": "higgsCombine_mStop1250_mLSP500_asimov_bonly_uncfix.AsymptoticLimits.mH1250.root",
+  "root": "higgsCombine_mStop1250_mLSP500_asimov_uncfix_bonly_uncfix.AsymptoticLimits.mH1250.root",
   "rows": [
     {
-      "label": "observed_asimov",
-      "limit": 1.3944,
-      "quantileExpected": -1.0
+      "limit": 0.729949951171875,
+      "limitErr": 0.0,
+      "quantileExpected": 0.02500000037252903
     },
     {
-      "label": "expected_2.5pct",
-      "limit": 0.7299,
-      "quantileExpected": 0.025
+      "limit": 0.9843599796295166,
+      "limitErr": 0.0,
+      "quantileExpected": 0.1599999964237213
     },
     {
-      "label": "expected_16pct",
-      "limit": 0.9844,
-      "quantileExpected": 0.16
-    },
-    {
-      "label": "expected_50pct",
-      "limit": 1.3945,
+      "limit": 1.39453125,
+      "limitErr": 0.0,
       "quantileExpected": 0.5
     },
     {
-      "label": "expected_84pct",
-      "limit": 2.0004,
-      "quantileExpected": 0.84
+      "limit": 2.000425338745117,
+      "limitErr": 0.0,
+      "quantileExpected": 0.8399999737739563
     },
     {
-      "label": "expected_97.5pct",
-      "limit": 2.7792,
-      "quantileExpected": 0.975
+      "limit": 2.779224157333374,
+      "limitErr": 0.0,
+      "quantileExpected": 0.9750000238418579
     }
   ],
   "schema_version": "asymptotic_limit_summary_v1",

@@ -1,24 +1,12 @@
 {
-  "background_shape_nuisances": [
-    "btagSF_bc_correlated",
-    "btagSF_bc_uncorrelated",
-    "btagSF_light_correlated",
-    "btagSF_light_uncorrelated",
-    "electron_hlt",
-    "electron_id",
-    "metUnclustered",
-    "muon_hlt",
-    "muon_id",
-    "photon_id",
-    "pileup"
-  ],
+  "background_shape_nuisances": [],
   "background_syst_policy": "Use individual background shape nuisances from fit_template_summary.background_systematic_variations when available; otherwise fall back to aggregate BkgSyst. Lumi_2024 is separate lnN.",
-  "combine_path": "/tmp/taiwoo/combine_impact_build_20260628/CMSSW_14_1_0_pre4/bin/el9_amd64_gcc12/combine",
+  "combine_path": "/eos/home-t/taiwoo/decaf/analysis/CombinedArea/CMSSW_14_1_0_pre4/bin/el9_amd64_gcc12/combine",
   "contour_png": null,
   "data_mode": "asimov",
   "datacard_dir": "analysis/combine/sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627_zinvfix_all_shape_systs/datacards",
   "fit_template_summary": "docs/partial_merge_preview_sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627_zinvfix_all_shape_systs/fit_template_summary.json",
-  "limit_collection_status": "no_combine_outputs",
+  "limit_collection_status": "complete",
   "limit_dir": "analysis/combine/sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627_zinvfix_all_shape_systs/limits",
   "lumi_uncertainty": {
     "fraction": 0.016,
@@ -29,162 +17,7 @@
   "mass_points": [
     "mStop1250_mLSP500"
   ],
-  "root_summary": {
-    "background_shape_nuisances": [
-      "btagSF_bc_correlated",
-      "btagSF_bc_uncorrelated",
-      "btagSF_light_correlated",
-      "btagSF_light_uncorrelated",
-      "electron_hlt",
-      "electron_id",
-      "metUnclustered",
-      "muon_hlt",
-      "muon_id",
-      "photon_id",
-      "pileup"
-    ],
-    "channels": {
-      "cat2_LLCR_highDeltaM": {
-        "background_shape_nuisances": [
-          "btagSF_bc_correlated",
-          "btagSF_bc_uncorrelated",
-          "btagSF_light_correlated",
-          "btagSF_light_uncorrelated",
-          "electron_hlt",
-          "electron_id",
-          "metUnclustered",
-          "muon_hlt",
-          "muon_id",
-          "photon_id",
-          "pileup"
-        ],
-        "background_yield": 40851.975073835674,
-        "data_mode": "asimov",
-        "data_yield": 40851.975073835674,
-        "lumi_background_syst_sum": 653.6316011813707,
-        "non_lumi_background_syst_sum": 752.914479783975,
-        "variable": "metpt"
-      },
-      "cat3_QCDCR_highDeltaM": {
-        "background_shape_nuisances": [
-          "btagSF_bc_correlated",
-          "btagSF_bc_uncorrelated",
-          "btagSF_light_correlated",
-          "btagSF_light_uncorrelated",
-          "electron_hlt",
-          "electron_id",
-          "metUnclustered",
-          "muon_hlt",
-          "muon_id",
-          "photon_id",
-          "pileup"
-        ],
-        "background_yield": 34504.094098853166,
-        "data_mode": "asimov",
-        "data_yield": 34504.094098853166,
-        "lumi_background_syst_sum": 552.0655055816507,
-        "non_lumi_background_syst_sum": 3661.1967039158144,
-        "variable": "metpt"
-      },
-      "cat4_GCR_highDeltaM": {
-        "background_shape_nuisances": [
-          "btagSF_bc_correlated",
-          "btagSF_bc_uncorrelated",
-          "btagSF_light_correlated",
-          "btagSF_light_uncorrelated",
-          "electron_hlt",
-          "electron_id",
-          "metUnclustered",
-          "muon_hlt",
-          "muon_id",
-          "photon_id",
-          "pileup"
-        ],
-        "background_yield": 9870.95064236348,
-        "data_mode": "asimov",
-        "data_yield": 9870.95064236348,
-        "lumi_background_syst_sum": 157.9352102778157,
-        "non_lumi_background_syst_sum": 1552.0326598754812,
-        "variable": "recoil_pt"
-      },
-      "cat5_DY2E_highDeltaM": {
-        "background_shape_nuisances": [
-          "btagSF_bc_correlated",
-          "btagSF_bc_uncorrelated",
-          "btagSF_light_correlated",
-          "btagSF_light_uncorrelated",
-          "electron_hlt",
-          "electron_id",
-          "metUnclustered",
-          "muon_hlt",
-          "muon_id",
-          "photon_id",
-          "pileup"
-        ],
-        "background_yield": 348.44342216686255,
-        "data_mode": "asimov",
-        "data_yield": 348.44342216686255,
-        "lumi_background_syst_sum": 5.575094754669801,
-        "non_lumi_background_syst_sum": 163.0856732341816,
-        "variable": "recoil_pt"
-      },
-      "cat6_DY2M_highDeltaM": {
-        "background_shape_nuisances": [
-          "btagSF_bc_correlated",
-          "btagSF_bc_uncorrelated",
-          "btagSF_light_correlated",
-          "btagSF_light_uncorrelated",
-          "electron_hlt",
-          "electron_id",
-          "metUnclustered",
-          "muon_hlt",
-          "muon_id",
-          "photon_id",
-          "pileup"
-        ],
-        "background_yield": 387.11807379598565,
-        "data_mode": "asimov",
-        "data_yield": 387.11807379598565,
-        "lumi_background_syst_sum": 6.19388918073577,
-        "non_lumi_background_syst_sum": 156.83918882169274,
-        "variable": "recoil_pt"
-      },
-      "cat7_SR_highDeltaM": {
-        "background_shape_nuisances": [
-          "btagSF_bc_correlated",
-          "btagSF_bc_uncorrelated",
-          "btagSF_light_correlated",
-          "btagSF_light_uncorrelated",
-          "electron_hlt",
-          "electron_id",
-          "metUnclustered",
-          "muon_hlt",
-          "muon_id",
-          "photon_id",
-          "pileup"
-        ],
-        "background_yield": 34706.912123467395,
-        "data_mode": "asimov",
-        "data_yield": 34706.912123467395,
-        "lumi_background_syst_sum": 555.3105939754784,
-        "non_lumi_background_syst_sum": 877.1214881841705,
-        "variable": "metpt"
-      }
-    },
-    "signals": {
-      "mStop1250_mLSP500": {
-        "channels": {
-          "cat2_LLCR_highDeltaM": 2.0895519755437504,
-          "cat3_QCDCR_highDeltaM": 1.575103008920517,
-          "cat4_GCR_highDeltaM": 0.0,
-          "cat5_DY2E_highDeltaM": 0.0,
-          "cat6_DY2M_highDeltaM": 0.0,
-          "cat7_SR_highDeltaM": 54.08065371354114
-        },
-        "process": "sig_mStop1250_mLSP500"
-      }
-    }
-  },
+  "root_summary": {},
   "runner": "analysis/combine/sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627_zinvfix_all_shape_systs/run_combine_expected.sh",
   "signal_cutflows": "autonomous_allhad/outputs/signal_cutflows.json",
   "signal_yields": "autonomous_allhad/outputs/signal_yields_by_mass.json",

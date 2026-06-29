@@ -25,11 +25,6 @@
       "limit": 2.779224157333374,
       "limitErr": 0.0,
       "quantileExpected": 0.9750000238418579
-    },
-    {
-      "limit": 1.39444705244098,
-      "limitErr": 0.005998057478453167,
-      "quantileExpected": -1.0
     }
   ],
   "schema_version": "asymptotic_limit_summary_v1"

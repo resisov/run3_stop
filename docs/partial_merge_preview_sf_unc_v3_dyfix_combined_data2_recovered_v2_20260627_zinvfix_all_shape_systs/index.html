@@ -10,8 +10,8 @@
 
 <div class="grid">
   <div class="kpi"><b>1.3945</b><span>Asimov expected median r</span></div>
-  <div class="kpi"><b>1.3944</b><span>Asimov observed r</span></div>
-  <div class="kpi"><b>0.0516</b><span>metUnclustered impact on r</span></div>
+  <div class="kpi"><b>blind</b><span>observed row not produced</span></div>
+  <div class="kpi"><b>0.0517</b><span>metUnclustered impact on r</span></div>
   <div class="kpi"><b>128 / 143</b><span>Z→νν tail payloads used</span></div>
 </div>
 
@@ -59,26 +59,24 @@
     <tr><td>Expected 50%</td><td class="num">1.39453</td></tr>
     <tr><td>Expected 84%</td><td class="num">2.00043</td></tr>
     <tr><td>Expected 97.5%</td><td class="num">2.77922</td></tr>
-    <tr><td>Observed on b-only Asimov</td><td class="num">1.39445</td></tr>
   </table>
-  <p>The limit is unchanged within print precision because the datacard uses the individual shape nuisances, not the stale plotting aggregate.</p>
+  <p>The blind expected limit is unchanged within print precision because the datacard uses the individual shape nuisances, not the stale plotting aggregate.</p>
   <p><a href="limit_mStop1250_mLSP500_asimov_bonly_uncfix.json">corrected limit JSON</a> · <a href="limit_mStop1250_mLSP500_asimov_bonly_uncfix.log">corrected combine log</a> · <a href="limit_mStop1250_mLSP500_asimov_bonly.json">previous limit JSON</a></p>
 </div>
 
 <div class="card">
   <h2>Impact Summary</h2>
-  <p>Initial Asimov fit: <code>r = 1.000 -0.688/+0.737</code>. Largest impacts are currently dominated by SR bin statistical nuisances and signal theory. The corrected <code>metUnclustered</code> impact is now moderate at <code>0.05161</code>.</p>
+  <p>Initial Asimov fit: <code>r = 1.000 -0.688/+0.737</code>. Largest impacts are currently dominated by SR bin statistical nuisances and signal theory. The corrected <code>metUnclustered</code> impact is now moderate at <code>0.05166</code>.</p>
   <table>
     <tr><th>Nuisance</th><th>impact on r</th></tr>
-    <tr><td><code>prop_bincat7_SR_highDeltaM_bin8</code></td><td class="num">0.19595</td></tr>
-    <tr><td><code>prop_bincat7_SR_highDeltaM_bin7</code></td><td class="num">0.19073</td></tr>
-    <tr><td><code>SignalTheory</code></td><td class="num">0.11144</td></tr>
-    <tr><td><code>prop_bincat3_QCDCR_highDeltaM_bin3</code></td><td class="num">0.10118</td></tr>
-    <tr><td><code>btagSF_light_correlated</code></td><td class="num">0.09359</td></tr>
-    <tr><td><code>electron_id</code></td><td class="num">0.07109</td></tr>
-    <tr><td><code>pileup</code></td><td class="num">0.06175</td></tr>
-    <tr><td><code>photon_id</code></td><td class="num">0.06010</td></tr>
-    <tr><td><code>metUnclustered</code></td><td class="num">0.05161</td></tr>
+    <tr><td><code>prop_bincat7_SR_highDeltaM_bin8</code></td><td>0.19592</td></tr>
+    <tr><td><code>prop_bincat7_SR_highDeltaM_bin7</code></td><td>0.19074</td></tr>
+    <tr><td><code>SignalTheory</code></td><td>0.11145</td></tr>
+    <tr><td><code>prop_bincat3_QCDCR_highDeltaM_bin3</code></td><td>0.10116</td></tr>
+    <tr><td><code>btagSF_light_correlated</code></td><td>0.09352</td></tr>
+    <tr><td><code>prop_bincat3_QCDCR_highDeltaM_bin5</code></td><td>0.08439</td></tr>
+    <tr><td><code>prop_bincat4_GCR_highDeltaM_bin1</code></td><td>0.08180</td></tr>
+    <tr><td><code>prop_bincat7_SR_highDeltaM_bin3</code></td><td>0.08176</td></tr>
   </table>
   <p><a href="impacts_mStop1250_mLSP500.json">impact JSON</a> · <a href="impacts_mStop1250_mLSP500.pdf">impact PDF</a></p>
 </div>

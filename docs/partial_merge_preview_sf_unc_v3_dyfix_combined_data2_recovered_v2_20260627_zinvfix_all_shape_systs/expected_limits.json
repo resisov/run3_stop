@@ -1,9 +1,17 @@
 {
-  "collected_point_count": 0,
-  "missing_points": [
-    "mStop1250_mLSP500"
-  ],
-  "points": {},
+  "collected_point_count": 1,
+  "missing_points": [],
+  "points": {
+    "mStop1250_mLSP500": {
+      "expected": 1.39453125,
+      "expected_m1": 0.9843599796295166,
+      "expected_m2": 0.729949951171875,
+      "expected_p1": 2.000425338745117,
+      "expected_p2": 2.779224157333374,
+      "mLSP": 500,
+      "mStop": 1250
+    }
+  },
   "requested_point_count": 1,
-  "status": "no_combine_outputs"
+  "status": "complete"
 }
