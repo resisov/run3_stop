@@ -1,0 +1,13 @@
+ <<< Combine >>> 
+ <<< v10.5.1 >>>
+>>> Random number generator seed is 123456
+>>> Method used is AsymptoticLimits
+
+ -- AsymptoticLimits ( CLs ) --
+Observed Limit: r < 1.3944
+Expected  2.5%: r < 0.7299
+Expected 16.0%: r < 0.9844
+Expected 50.0%: r < 1.3945
+Expected 84.0%: r < 2.0004
+Expected 97.5%: r < 2.7792
+

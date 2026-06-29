@@ -1,0 +1,30 @@
+imax * number of channels
+jmax * number of backgrounds
+kmax * number of nuisance parameters
+------------
+shapes * * /eos/user/t/taiwoo/run3_stop/decaf/analysis/combine/sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627_zinvfix_all_shape_systs/templates_stop_2024_partial.root $CHANNEL/$PROCESS $CHANNEL/$PROCESS_$SYSTEMATIC
+------------
+bin cat2_LLCR_highDeltaM cat3_QCDCR_highDeltaM cat4_GCR_highDeltaM cat5_DY2E_highDeltaM cat6_DY2M_highDeltaM cat7_SR_highDeltaM
+observation -1 -1 -1 -1 -1 -1
+------------
+bin cat2_LLCR_highDeltaM cat2_LLCR_highDeltaM cat3_QCDCR_highDeltaM cat3_QCDCR_highDeltaM cat4_GCR_highDeltaM cat5_DY2E_highDeltaM cat6_DY2M_highDeltaM cat7_SR_highDeltaM cat7_SR_highDeltaM
+process sig_mStop1250_mLSP500 background sig_mStop1250_mLSP500 background background background background sig_mStop1250_mLSP500 background
+process 0 1 0 1 1 1 1 0 1
+rate -1 -1 -1 -1 -1 -1 -1 -1 -1
+------------
+btagSF_bc_correlated shape - 1 - 1 1 1 1 - 1
+btagSF_bc_uncorrelated shape - 1 - 1 1 1 1 - 1
+btagSF_light_correlated shape - 1 - 1 1 1 1 - 1
+btagSF_light_uncorrelated shape - 1 - 1 1 1 1 - 1
+electron_hlt shape - 1 - 1 1 1 1 - 1
+electron_id shape - 1 - 1 1 1 1 - 1
+metUnclustered shape - 1 - 1 1 1 1 - 1
+muon_hlt shape - 1 - 1 1 1 1 - 1
+muon_id shape - 1 - 1 1 1 1 - 1
+photon_id shape - 1 - 1 1 1 1 - 1
+pileup shape - 1 - 1 1 1 1 - 1
+Lumi_2024 lnN 1.016 1.016 1.016 1.016 1.016 1.016 1.016 1.016 1.016
+SignalTheory lnN 1.1135 - 1.1135 - - - - 1.1135 -
+* autoMCStats 10
+# Expected-limit card generated from partial preview fit templates.
+# Background shape nuisances are individual partial-preview variations from fit_template_summary.json.

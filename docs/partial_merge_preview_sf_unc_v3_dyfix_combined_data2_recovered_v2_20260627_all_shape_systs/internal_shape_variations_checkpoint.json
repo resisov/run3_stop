@@ -1,0 +1,21 @@
+{
+  "background_records": 3200,
+  "elapsed_s": 64.8,
+  "processed_payloads": 1000,
+  "read_error_count": 0,
+  "records_with_variations": 1805,
+  "running_fallbacks": 108,
+  "schema_version": "internal_shape_variations_checkpoint_v1",
+  "variation_bases": [
+    "btagSF_bc_correlated",
+    "btagSF_bc_uncorrelated",
+    "btagSF_light_correlated",
+    "btagSF_light_uncorrelated",
+    "electron_hlt",
+    "electron_id",
+    "muon_hlt",
+    "muon_id",
+    "photon_id",
+    "pileup"
+  ]
+}

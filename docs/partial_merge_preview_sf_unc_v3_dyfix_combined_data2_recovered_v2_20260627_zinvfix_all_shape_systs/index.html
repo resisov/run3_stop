@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zinv-fixed Asimov Impact and Limit</title>
+<link rel="stylesheet" href="../report.css"></head>
+<body>
+<h1>Zinv-fixed Asimov Impact and Limit</h1>
+<div class="sub">sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627 · Z→νν tail correction · all internal shape systematics</div>
+<nav class="crumb"><a href="../index.html">홈</a><span class="sep">|</span><span class="here">Zinv-fix impact/limit</span><span class="sep">|</span><a href="../partial_merge_preview_sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627/">previous preview</a></nav>
+
+<div class="grid">
+  <div class="kpi"><b>1.3945</b><span>Asimov expected median r</span></div>
+  <div class="kpi"><b>1.3944</b><span>Asimov observed r</span></div>
+  <div class="kpi"><b>0.0516</b><span>metUnclustered impact on r</span></div>
+  <div class="kpi"><b>128 / 143</b><span>Z→νν tail payloads used</span></div>
+</div>
+
+<div class="card">
+  <h2>Result Scope</h2>
+  <p>This page publishes the current combine result for <code>mStop=1250</code>, <code>mLSP=500</code> using the corrected Z→νν tail in the nominal template and the internal shape systematics available in this partial production snapshot.</p>
+  <p class="warning">This is not yet a final full-production result. The original full preview missed old-MC Z→νν tail shards after <code>shard_oldmc_01966</code>; this page applies a direct correction from the readable tail payloads. Fifteen tail payloads still failed EOS reads/timeouts and are listed in <a href="zinv_tail_correction.json">zinv_tail_correction.json</a>.</p>
+</div>
+
+<div class="card">
+  <h2>Asimov Limit</h2>
+  <table>
+    <tr><th>Quantile</th><th>r limit</th></tr>
+    <tr><td>Expected 2.5%</td><td class="num">0.72995</td></tr>
+    <tr><td>Expected 16%</td><td class="num">0.98436</td></tr>
+    <tr><td>Expected 50%</td><td class="num">1.39453</td></tr>
+    <tr><td>Expected 84%</td><td class="num">2.00043</td></tr>
+    <tr><td>Expected 97.5%</td><td class="num">2.77922</td></tr>
+    <tr><td>Observed on b-only Asimov</td><td class="num">1.39445</td></tr>
+  </table>
+  <p><a href="limit_mStop1250_mLSP500_asimov_bonly.json">limit JSON</a> · <a href="limit_mStop1250_mLSP500_asimov_bonly.log">combine log</a> · <a href="expected_limits.json">expected limits summary</a></p>
+</div>
+
+<div class="card">
+  <h2>Impact Summary</h2>
+  <p>Initial Asimov fit: <code>r = 1.000 -0.688/+0.737</code>. Largest impacts are currently dominated by SR bin statistical nuisances and signal theory. The corrected <code>metUnclustered</code> impact is now moderate at <code>0.05161</code>.</p>
+  <table>
+    <tr><th>Nuisance</th><th>impact on r</th></tr>
+    <tr><td><code>prop_bincat7_SR_highDeltaM_bin8</code></td><td class="num">0.19595</td></tr>
+    <tr><td><code>prop_bincat7_SR_highDeltaM_bin7</code></td><td class="num">0.19073</td></tr>
+    <tr><td><code>SignalTheory</code></td><td class="num">0.11144</td></tr>
+    <tr><td><code>prop_bincat3_QCDCR_highDeltaM_bin3</code></td><td class="num">0.10118</td></tr>
+    <tr><td><code>btagSF_light_correlated</code></td><td class="num">0.09359</td></tr>
+    <tr><td><code>electron_id</code></td><td class="num">0.07109</td></tr>
+    <tr><td><code>pileup</code></td><td class="num">0.06175</td></tr>
+    <tr><td><code>photon_id</code></td><td class="num">0.06010</td></tr>
+    <tr><td><code>metUnclustered</code></td><td class="num">0.05161</td></tr>
+  </table>
+  <p><a href="impacts_mStop1250_mLSP500.json">impact JSON</a> · <a href="impacts_mStop1250_mLSP500.pdf">impact PDF</a></p>
+</div>
+
+<div class="gal">
+  <a href="impacts_mStop1250_mLSP500-1.png"><img src="impacts_mStop1250_mLSP500-1.png" alt="Impact plot page 1"><div class="cap">Impact plot page 1</div></a>
+  <a href="impacts_mStop1250_mLSP500-2.png"><img src="impacts_mStop1250_mLSP500-2.png" alt="Impact plot page 2"><div class="cap">Impact plot page 2</div></a>
+</div>
+
+<div class="card">
+  <h2>Z→νν and metUnclustered Check</h2>
+  <table>
+    <tr><th>Region</th><th>Old bkg</th><th>Z→νν tail added</th><th>New bkg</th><th>metUncl. old up/down</th><th>metUncl. new up/down</th></tr>
+    <tr><td><code>cat7_SR_highDeltaM</code></td><td class="num">30621.419</td><td class="num">4085.493</td><td class="num">34706.912</td><td class="num">+4448.715 / +4005.110</td><td class="num">+363.222 / -80.383</td></tr>
+    <tr><td><code>cat3_QCDCR_highDeltaM</code></td><td class="num">34236.968</td><td class="num">267.126</td><td class="num">34504.094</td><td class="num">-79.379 / -3240.061</td><td class="num">-346.505 / -3507.187</td></tr>
+    <tr><td><code>cat2_LLCR_highDeltaM</code></td><td class="num">40662.867</td><td class="num">189.109</td><td class="num">40851.975</td><td class="num">+403.996 / -272.622</td><td class="num">+214.888 / -461.731</td></tr>
+  </table>
+  <p>The one-direction-looking <code>metUnclustered</code> behavior was driven by the missing nominal Z→νν tail. After correcting the nominal, the SR up/down deltas are no longer both large and positive.</p>
+</div>
+
+<div class="card">
+  <h2>Artifacts</h2>
+  <p><a href="datacard_mStop1250_mLSP500.txt">datacard</a> · <a href="combine_input_manifest.json">combine input manifest</a> · <a href="fit_template_summary.json">fit template summary</a> · <a href="zinv_tail_correction.json">Z→νν correction metadata</a></p>
+  <p class="muted">Published 2026-06-29 UTC from the current partial production state.</p>
+</div>
+
+<div class="pgnav"><a href="../index.html">← 홈</a><a href="../partial_merge_preview_sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627/">previous preview →</a></div>
+<div class="foot">generated 2026-06-29 UTC · preliminary combine publication</div>
+</body></html>

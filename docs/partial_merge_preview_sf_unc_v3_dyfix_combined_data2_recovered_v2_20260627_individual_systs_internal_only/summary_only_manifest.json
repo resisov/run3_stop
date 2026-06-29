@@ -1,0 +1,38 @@
+{
+  "fit_template_summary": "fit_template_summary.json",
+  "note": "Summary-only regeneration with external shape systematics disabled; internal worker weight/histogram variations preserved for Combine shape nuisances.",
+  "shard_status": {
+    "examples": {
+      "final_used": [
+        "shard_oldmc_00600.json",
+        "shard_oldmc_00601.json",
+        "shard_oldmc_00602.json",
+        "shard_oldmc_00603.json",
+        "shard_oldmc_00604.json"
+      ],
+      "missing_or_empty": [
+        "shard_oldmc_00646.json",
+        "shard_oldmc_00661.json",
+        "shard_oldmc_00662.json",
+        "shard_oldmc_00746.json",
+        "shard_oldmc_00759.json"
+      ],
+      "running_used": [
+        "shard_oldmc_00617.json.running",
+        "shard_oldmc_00619.json.running",
+        "shard_oldmc_00620.json.running",
+        "shard_oldmc_00621.json.running",
+        "shard_oldmc_00623.json.running"
+      ]
+    },
+    "expected_shards": 423,
+    "source_status_counts": {
+      "final": 382,
+      "missing_or_empty": 18,
+      "running_running_unused": 1,
+      "terminal_running_checkpoint": 23
+    }
+  },
+  "sources": 405,
+  "status": "complete"
+}
