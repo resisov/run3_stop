@@ -19,7 +19,7 @@
     "zinv_tail_correction": "docs/partial_merge_preview_sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627_zinvfix_all_shape_systs/zinv_tail_correction.json"
   },
   "nb_binning_policy": "Nb plots merge b >= 3 into a single >=3 bin.",
-  "schema_version": "fit_template_summary_v2_zinv_tail_fixed_unc_recomputed_public",
+  "schema_version": "fit_template_summary_v2_zinv_tail_fixed_public",
   "template_binning_policy": "For cat2/cat3/cat7 MET and cat4/cat5/cat6 recoil templates, all bins with lower edge >= 800 GeV are merged into [800, inf].",
   "template_variable_by_region": {
     "cat2_LLCR_highDeltaM": "metpt",
@@ -4279,7 +4279,7 @@
       "variable": "metpt"
     }
   },
-  "uncertainty_policy": "DATA uncertainties are statistical. Background uncertainty is recomputed as sqrt(MC stat^2 + lumi^2 + sum individual shape-envelope^2) after the Zinv tail correction; stale aggregate metUnclustered envelopes are retained only in *_old_stale fields.",
+  "uncertainty_policy": "DATA uncertainties are statistical. Background uncertainty is sqrt(MC stat^2 + lumi^2 + sum individual shape-envelope^2) with the Zinv tail correction applied.",
   "zinv_tail_fix": {
     "blocked_physical_datasets": [],
     "physical_datasets": {
