@@ -11,7 +11,7 @@
 <div class="grid">
   <div class="kpi"><b>1.3945</b><span>Asimov expected median r</span></div>
   <div class="kpi"><b>blind</b><span>observed row not produced</span></div>
-  <div class="kpi"><b>0.0517</b><span>metUnclustered impact on r</span></div>
+  <div class="kpi"><b>0.0518</b><span>metUnclustered impact on r</span></div>
   <div class="kpi"><b>128 / 143</b><span>Z→νν tail payloads used</span></div>
 </div>
 
@@ -65,8 +65,17 @@
 </div>
 
 <div class="card">
+  <h2>2D Expected Limit Contour</h2>
+  <p>The full <code>352</code>-point Asimov expected limit grid was recomputed with the Zinv-fix all-shape datacards, including <code>metUnclustered</code> and the other individual shape nuisances.</p>
+  <p><a href="expected_limit_contour.png">expected contour PNG</a> · <a href="expected_limit_contour.pdf">PDF</a> · <a href="expected_limits.json">352-point expected limits JSON</a> · <a href="limit_summary.md">limit summary</a></p>
+  <div class="gal">
+    <a href="expected_limit_contour.png"><img src="expected_limit_contour.png" alt="352-point expected limit contour"><div class="cap">352-point expected limit contour, Zinv-fix all-shape nuisances</div></a>
+  </div>
+</div>
+
+<div class="card">
   <h2>Impact Summary</h2>
-  <p>Initial Asimov fit: <code>r = 1.000 -0.688/+0.737</code>. Largest impacts are currently dominated by SR bin statistical nuisances and signal theory. The corrected <code>metUnclustered</code> impact is now moderate at <code>0.05166</code>.</p>
+  <p>Initial Asimov fit: <code>r = 1.000 -0.688/+0.737</code>. Largest impacts are currently dominated by SR bin statistical nuisances and signal theory. The corrected <code>metUnclustered</code> impact is now moderate at <code>0.05186</code>.</p>
   <table>
     <tr><th>Nuisance</th><th>impact on r</th></tr>
     <tr><td><code>prop_bincat7_SR_highDeltaM_bin8</code></td><td>0.19592</td></tr>

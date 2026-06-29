@@ -1,12 +1,13 @@
 {
-  "background_syst_policy": "BkgSyst shape uses aggregate non-lumi background uncertainty from fit_template_summary.json; Lumi_2024 is separate lnN.",
-  "combine_path": "/tmp/taiwoo/combine_runtime_20260628/CMSSW_14_1_0_pre4/bin/el9_amd64_gcc12/combine",
-  "contour_png": "analysis/combine/sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627_data/expected_limit_contour.png",
+  "background_shape_nuisances": [],
+  "background_syst_policy": "Use individual background shape nuisances from fit_template_summary.background_systematic_variations when available; otherwise fall back to aggregate BkgSyst. Lumi_2024 is separate lnN.",
+  "combine_path": "/eos/home-t/taiwoo/decaf/analysis/CombinedArea/CMSSW_14_1_0_pre4/bin/el9_amd64_gcc12/combine",
+  "contour_png": "analysis/combine/sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627_zinvfix_all_shape_systs/expected_limit_contour.png",
   "data_mode": "asimov",
-  "datacard_dir": "analysis/combine/sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627_data/datacards",
-  "fit_template_summary": "docs/partial_merge_preview_sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627/fit_template_summary.json",
+  "datacard_dir": "analysis/combine/sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627_zinvfix_all_shape_systs/datacards",
+  "fit_template_summary": "docs/partial_merge_preview_sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627_zinvfix_all_shape_systs/fit_template_summary.json",
   "limit_collection_status": "complete",
-  "limit_dir": "analysis/combine/sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627_data/limits",
+  "limit_dir": "analysis/combine/sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627_zinvfix_all_shape_systs/limits",
   "lumi_uncertainty": {
     "fraction": 0.016,
     "lnN": 1.016,
@@ -368,9 +369,9 @@
     "mStop2500_mLSP2300"
   ],
   "root_summary": {},
-  "runner": "analysis/combine/sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627_data/run_combine_expected.sh",
+  "runner": "analysis/combine/sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627_zinvfix_all_shape_systs/run_combine_expected.sh",
   "signal_cutflows": "autonomous_allhad/outputs/signal_cutflows.json",
   "signal_yields": "autonomous_allhad/outputs/signal_yields_by_mass.json",
   "status": "combine_available",
-  "template_root": "analysis/combine/sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627_data/templates_stop_2024_partial.root"
+  "template_root": "analysis/combine/sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627_zinvfix_all_shape_systs/templates_stop_2024_partial.root"
 }
