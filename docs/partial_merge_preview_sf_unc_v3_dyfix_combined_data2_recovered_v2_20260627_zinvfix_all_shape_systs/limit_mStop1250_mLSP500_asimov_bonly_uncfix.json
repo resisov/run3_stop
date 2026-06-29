@@ -1,0 +1,38 @@
+{
+  "root": "higgsCombine_mStop1250_mLSP500_asimov_bonly_uncfix.AsymptoticLimits.mH1250.root",
+  "rows": [
+    {
+      "label": "observed_asimov",
+      "limit": 1.3944,
+      "quantileExpected": -1.0
+    },
+    {
+      "label": "expected_2.5pct",
+      "limit": 0.7299,
+      "quantileExpected": 0.025
+    },
+    {
+      "label": "expected_16pct",
+      "limit": 0.9844,
+      "quantileExpected": 0.16
+    },
+    {
+      "label": "expected_50pct",
+      "limit": 1.3945,
+      "quantileExpected": 0.5
+    },
+    {
+      "label": "expected_84pct",
+      "limit": 2.0004,
+      "quantileExpected": 0.84
+    },
+    {
+      "label": "expected_97.5pct",
+      "limit": 2.7792,
+      "quantileExpected": 0.975
+    }
+  ],
+  "schema_version": "asymptotic_limit_summary_v1",
+  "source": "corrected_uncertainty_recompute",
+  "workspace": "workspace_mStop1250_mLSP500.root"
+}

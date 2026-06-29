@@ -62,7 +62,7 @@
         "data_mode": "asimov",
         "data_yield": 40851.975073835674,
         "lumi_background_syst_sum": 653.6316011813707,
-        "non_lumi_background_syst_sum": 722.5370801830181,
+        "non_lumi_background_syst_sum": 752.914479783975,
         "variable": "metpt"
       },
       "cat3_QCDCR_highDeltaM": {
@@ -83,7 +83,7 @@
         "data_mode": "asimov",
         "data_yield": 34504.094098853166,
         "lumi_background_syst_sum": 552.0655055816507,
-        "non_lumi_background_syst_sum": 3429.9119686148524,
+        "non_lumi_background_syst_sum": 3661.1967039158144,
         "variable": "metpt"
       },
       "cat4_GCR_highDeltaM": {
@@ -104,7 +104,7 @@
         "data_mode": "asimov",
         "data_yield": 9870.95064236348,
         "lumi_background_syst_sum": 157.9352102778157,
-        "non_lumi_background_syst_sum": 1552.1133090962292,
+        "non_lumi_background_syst_sum": 1552.0326598754812,
         "variable": "recoil_pt"
       },
       "cat5_DY2E_highDeltaM": {
@@ -125,7 +125,7 @@
         "data_mode": "asimov",
         "data_yield": 348.44342216686255,
         "lumi_background_syst_sum": 5.575094754669801,
-        "non_lumi_background_syst_sum": 163.08566638773962,
+        "non_lumi_background_syst_sum": 163.0856732341816,
         "variable": "recoil_pt"
       },
       "cat6_DY2M_highDeltaM": {
@@ -146,7 +146,7 @@
         "data_mode": "asimov",
         "data_yield": 387.11807379598565,
         "lumi_background_syst_sum": 6.19388918073577,
-        "non_lumi_background_syst_sum": 156.8329098968666,
+        "non_lumi_background_syst_sum": 156.83918882169274,
         "variable": "recoil_pt"
       },
       "cat7_SR_highDeltaM": {
@@ -167,7 +167,7 @@
         "data_mode": "asimov",
         "data_yield": 34706.912123467395,
         "lumi_background_syst_sum": 555.3105939754784,
-        "non_lumi_background_syst_sum": 4449.977503978303,
+        "non_lumi_background_syst_sum": 877.1214881841705,
         "variable": "metpt"
       }
     },

@@ -27,7 +27,31 @@
 </div>
 
 <div class="card">
-  <h2>Asimov Limit</h2>
+  <h2>Corrected SR Plot</h2>
+  <p>The SR MET plot below is redrawn after recomputing <code>background_syst_unc</code> and <code>background_total_unc</code> from the corrected individual shape variations. The old plot used a stale aggregate uncertainty array from before the Z→νν nominal-tail correction.</p>
+  <p><a href="plots/partial_metpt_cat7_SR_highDeltaM_zinvfix_uncfix.png">corrected SR MET PNG</a> · <a href="plots/partial_metpt_cat7_SR_highDeltaM_zinvfix_uncfix.pdf">PDF</a></p>
+  <div class="gal">
+    <a href="plots/partial_metpt_cat7_SR_highDeltaM_zinvfix_uncfix.png"><img src="plots/partial_metpt_cat7_SR_highDeltaM_zinvfix_uncfix.png" alt="Corrected SR MET plot"><div class="cap">SR MET after Z→νν and uncertainty aggregate fix</div></a>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Uncertainty Aggregate Fix</h2>
+  <p>The individual shape variations were already corrected, but the plotting summary still carried the old aggregate band. Recomputing the aggregate shrinks the SR relative uncertainty to the expected few-percent level.</p>
+  <table>
+    <tr><th>SR MET bin [GeV]</th><th>old total unc.</th><th>corrected total unc.</th></tr>
+    <tr><td>250-300</td><td class="num">7.9%</td><td class="num">2.9%</td></tr>
+    <tr><td>300-400</td><td class="num">17.7%</td><td class="num">4.6%</td></tr>
+    <tr><td>400-500</td><td class="num">24.2%</td><td class="num">3.0%</td></tr>
+    <tr><td>500-600</td><td class="num">31.2%</td><td class="num">3.8%</td></tr>
+    <tr><td>600-800</td><td class="num">42.1%</td><td class="num">4.4%</td></tr>
+    <tr><td>800-inf</td><td class="num">53.4%</td><td class="num">5.4%</td></tr>
+  </table>
+  <p><a href="uncertainty_recompute_summary.json">uncertainty recompute audit</a></p>
+</div>
+
+<div class="card">
+  <h2>Asimov Limit After Fix</h2>
   <table>
     <tr><th>Quantile</th><th>r limit</th></tr>
     <tr><td>Expected 2.5%</td><td class="num">0.72995</td></tr>
@@ -37,7 +61,8 @@
     <tr><td>Expected 97.5%</td><td class="num">2.77922</td></tr>
     <tr><td>Observed on b-only Asimov</td><td class="num">1.39445</td></tr>
   </table>
-  <p><a href="limit_mStop1250_mLSP500_asimov_bonly.json">limit JSON</a> · <a href="limit_mStop1250_mLSP500_asimov_bonly.log">combine log</a> · <a href="expected_limits.json">expected limits summary</a></p>
+  <p>The limit is unchanged within print precision because the datacard uses the individual shape nuisances, not the stale plotting aggregate.</p>
+  <p><a href="limit_mStop1250_mLSP500_asimov_bonly_uncfix.json">corrected limit JSON</a> · <a href="limit_mStop1250_mLSP500_asimov_bonly_uncfix.log">corrected combine log</a> · <a href="limit_mStop1250_mLSP500_asimov_bonly.json">previous limit JSON</a></p>
 </div>
 
 <div class="card">
@@ -76,10 +101,10 @@
 
 <div class="card">
   <h2>Artifacts</h2>
-  <p><a href="datacard_mStop1250_mLSP500.txt">datacard</a> · <a href="combine_input_manifest.json">combine input manifest</a> · <a href="fit_template_summary.json">fit template summary</a> · <a href="zinv_tail_correction.json">Z→νν correction metadata</a></p>
-  <p class="muted">Published 2026-06-29 UTC from the current partial production state.</p>
+  <p><a href="datacard_mStop1250_mLSP500.txt">datacard</a> · <a href="combine_input_manifest.json">combine input manifest</a> · <a href="fit_template_summary.json">fit template summary</a> · <a href="zinv_tail_correction.json">Z→νν correction metadata</a> · <a href="uncertainty_recompute_summary.json">uncertainty recompute audit</a></p>
+  <p class="muted">Republished 2026-06-29 UTC after recomputing the plotting uncertainty aggregate.</p>
 </div>
 
 <div class="pgnav"><a href="../index.html">← 홈</a><a href="../partial_merge_preview_sf_unc_v3_dyfix_combined_data2_recovered_v2_20260627/">previous preview →</a></div>
-<div class="foot">generated 2026-06-29 UTC · preliminary combine publication</div>
+<div class="foot">generated 2026-06-29 UTC · preliminary combine publication · uncertainty aggregate fixed</div>
 </body></html>
