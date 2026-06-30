@@ -85,17 +85,73 @@ def poisson_unc(data: np.ndarray) -> np.ndarray:
     return np.sqrt(np.maximum(data, 0.0))
 
 
-def flatten_cr_templates(fit: dict) -> dict:
+def recoil_record_from_payload(payload: dict, region: str) -> tuple[dict, int] | None:
+    raw_bkg = (((payload.get("histograms") or {}).get("background") or {}).get("recoil_pt") or {}).get(region) or {}
+    raw_data = (((payload.get("histograms") or {}).get("data") or {}).get("recoil_pt") or {}).get(region) or {}
+    ref = next(iter(raw_bkg.values()), None) or next(iter(raw_data.values()), None)
+    if not ref:
+        return None
+    nbin = max(0, len(ref.get("bin_edges") or []) - 1)
+    if nbin <= 0:
+        return None
+    groups = {group: {"values": [0.0] * nbin, "sumw2": [0.0] * nbin} for group in GROUP_ORDER}
+    bkg_total = np.zeros(nbin, dtype=float)
+    bkg_stat2 = np.zeros(nbin, dtype=float)
+    for proc, hist in raw_bkg.items():
+        group = process_to_group(proc)
+        vals = as_array(hist.get("values"), nbin)
+        s2 = as_array(hist.get("sumw2"), nbin)
+        bkg_total += vals
+        bkg_stat2 += s2
+        groups[group]["values"] = (np.asarray(groups[group]["values"], dtype=float) + vals).tolist()
+        groups[group]["sumw2"] = (np.asarray(groups[group]["sumw2"], dtype=float) + s2).tolist()
+    data = np.zeros(nbin, dtype=float)
+    data_s2 = np.zeros(nbin, dtype=float)
+    for hist in raw_data.values():
+        data += as_array(hist.get("values"), nbin)
+        data_s2 += as_array(hist.get("sumw2"), nbin)
+    syst2 = np.zeros(nbin, dtype=float)
+    variations = ((((payload.get("histogram_systematic_variations") or {}).get("background") or {}).get("recoil_pt") or {}).get(region) or {})
+    for var in variations.values():
+        up = as_array(var.get("up_delta"), nbin)
+        down = as_array(var.get("down_delta"), nbin)
+        syst2 += np.maximum(np.abs(up), np.abs(down)) ** 2
+    syst2 += (0.016 * bkg_total) ** 2
+    rec = {
+        "status": "complete",
+        "variable": "recoil_pt",
+        "region_short": REGION_LABELS.get(region, region),
+        "plot_bin_edges": ref.get("bin_edges") or [],
+        "physics_bin_edges": ref.get("bin_edges") or [],
+        "background_total": bkg_total.tolist(),
+        "background_stat_unc": np.sqrt(bkg_stat2).tolist(),
+        "background_syst_unc": np.sqrt(syst2).tolist(),
+        "background_total_unc": np.sqrt(bkg_stat2 + syst2).tolist(),
+        "background_by_group": {k: v for k, v in groups.items() if any(abs(x) > 0 for x in v["values"])},
+        "data": data.tolist(),
+        "data_stat_unc": np.sqrt(data_s2).tolist(),
+        "data_blinded_in_plots": False,
+    }
+    return rec, nbin
+
+
+def flatten_cr_templates(fit: dict, payload: dict) -> dict:
     templates = fit.get("templates") or {}
     records = []
     boundaries = [0]
     labels = []
     for region in REGION_ORDER:
-        rec = templates.get(region) or {}
-        values = rec.get("background_total") or []
-        nbin = len(values)
-        if rec.get("status") != "complete" or nbin == 0:
-            continue
+        if region in {"cat2_LLCR_highDeltaM", "cat3_QCDCR_highDeltaM"}:
+            built = recoil_record_from_payload(payload, region)
+            if not built:
+                continue
+            rec, nbin = built
+        else:
+            rec = templates.get(region) or {}
+            values = rec.get("background_total") or []
+            nbin = len(values)
+            if rec.get("status") != "complete" or nbin == 0:
+                continue
         records.append((region, rec, nbin))
         boundaries.append(boundaries[-1] + nbin)
         labels.append(REGION_LABELS.get(region, rec.get("region_short") or region))
@@ -213,7 +269,7 @@ def draw(fit_path: Path, payload_path: Path, signal_searchbin_path: Path, outbas
     fit = load_json(fit_path)
     payload = load_json(payload_path)
     signal_payload = load_json(signal_searchbin_path) if signal_searchbin_path.exists() else {}
-    cr = flatten_cr_templates(fit)
+    cr = flatten_cr_templates(fit, payload)
     sr = boosted_search_bins(payload, signal_payload)
     flat = concat(cr, sr)
 
