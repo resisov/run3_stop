@@ -1,18 +1,28 @@
 {
   "adapter_preview_dir": "autonomous_allhad/workflow/current_available_pipeline_20260702/preview_20260629_style",
-  "created_at_utc": "2026-07-02T09:52:19.967323+00:00",
+  "created_at_utc": "2026-07-02T10:38:39.856573+00:00",
+  "data_region_process_policy": {
+    "DY2E": "EGamma",
+    "DY2M": "Muon",
+    "GCR": "EGamma",
+    "LLCR": "JetMET",
+    "QCDCR": "JetMET",
+    "SR": "JetMET",
+    "SR_Nt1": "JetMET"
+  },
   "events_processed": 300743579,
   "input_roots": 4271,
-  "note": "Current flat histograms were adapted into the existing 2026-06-29 partial preview JSON schema, then rendered by plot_control_search_bins_style.py. SR data are blinded.",
+  "note": "Corrected data-stream policy applied. Main comparison uses ordinary SR vs nTop >= 1 SR in the 6 flat bins; SR data are blinded on the public plot.",
   "rendering_script": "autonomous_allhad/workflow/plot_control_search_bins_style.py",
+  "samples_include_other": false,
   "snapshot_counts": {
     "data": 2716,
     "mc": 1552,
     "other": 0,
     "signal": 3
   },
-  "source_histograms": "autonomous_allhad/workflow/current_available_pipeline_20260702/boosted_recoil_hists.json",
-  "status": "current_available_plots_ready_20260629_style",
+  "source_histograms": "autonomous_allhad/workflow/current_available_pipeline_20260702/boosted_recoil_hists_streamfixed.json",
+  "status": "current_available_plots_ready_20260629_style_streamfixed",
   "style_reference": "autonomous_allhad/workflow/plot_control_search_bins_style.py and docs/partial_merge_preview_boosted_an17_20260629_current/plots/partial_control_search_bins_style.png",
   "weight_failures": 0
 }
