@@ -1,73 +1,22 @@
 {
-  "created_at_utc": "2026-07-02T09:39:28.618987+00:00",
+  "adapter_preview_dir": "autonomous_allhad/workflow/current_available_pipeline_20260702/preview_20260629_style",
+  "created_at_utc": "2026-07-02T09:52:19.967323+00:00",
   "events_processed": 300743579,
   "input_roots": 4271,
-  "note": "Partial current-available snapshot. SR data are blinded in plots. MC recovery was still in progress when this snapshot was made.",
+  "note": "Current flat histograms were adapted into the existing 2026-06-29 partial preview JSON schema, then rendered by plot_control_search_bins_style.py. SR data are blinded.",
   "plots": [
     {
-      "blinded": false,
-      "name": "current_available_recoil_LLCR",
-      "pdf": "plots/current_available_recoil_LLCR.pdf",
-      "png": "plots/current_available_recoil_LLCR.png",
-      "title": "LLCR recoil pT"
-    },
-    {
-      "blinded": false,
-      "name": "current_available_recoil_QCDCR",
-      "pdf": "plots/current_available_recoil_QCDCR.pdf",
-      "png": "plots/current_available_recoil_QCDCR.png",
-      "title": "QCDCR recoil pT"
-    },
-    {
-      "blinded": false,
-      "name": "current_available_recoil_GCR",
-      "pdf": "plots/current_available_recoil_GCR.pdf",
-      "png": "plots/current_available_recoil_GCR.png",
-      "title": "GCR recoil pT"
-    },
-    {
-      "blinded": false,
-      "name": "current_available_recoil_DY2E",
-      "pdf": "plots/current_available_recoil_DY2E.pdf",
-      "png": "plots/current_available_recoil_DY2E.png",
-      "title": "DY2E recoil pT"
-    },
-    {
-      "blinded": false,
-      "name": "current_available_recoil_DY2M",
-      "pdf": "plots/current_available_recoil_DY2M.pdf",
-      "png": "plots/current_available_recoil_DY2M.png",
-      "title": "DY2M recoil pT"
-    },
-    {
+      "bins": 47,
       "blinded": true,
-      "name": "current_available_recoil_SR",
-      "pdf": "plots/current_available_recoil_SR.pdf",
-      "png": "plots/current_available_recoil_SR.png",
-      "title": "SR inclusive recoil pT"
-    },
-    {
-      "blinded": true,
-      "name": "current_available_recoil_SR_Nt1",
-      "pdf": "plots/current_available_recoil_SR_Nt1.pdf",
-      "png": "plots/current_available_recoil_SR_Nt1.png",
-      "title": "SR Nt>=1 recoil pT"
-    },
-    {
-      "blinded": true,
-      "name": "current_available_sr_an17_search_bins",
-      "pdf": "plots/current_available_sr_an17_search_bins.pdf",
-      "png": "plots/current_available_sr_an17_search_bins.png",
-      "title": "SR Nt>=1 AN17 search bins"
-    },
-    {
-      "blinded": true,
-      "name": "current_available_region_yields",
-      "pdf": "plots/current_available_region_yields.pdf",
-      "png": "plots/current_available_region_yields.png",
-      "title": "Region yield summary"
+      "control_bins": 30,
+      "name": "current_available_control_search_bins_style",
+      "pdf": "plots/current_available_control_search_bins_style.pdf",
+      "png": "plots/current_available_control_search_bins_style.png",
+      "sr_search_bins": 17,
+      "title": "CR recoil + SR AN17 search bins"
     }
   ],
+  "rendering_script": "autonomous_allhad/workflow/plot_control_search_bins_style.py",
   "snapshot_counts": {
     "data": 2716,
     "mc": 1552,
@@ -75,6 +24,7 @@
     "signal": 3
   },
   "source_histograms": "autonomous_allhad/workflow/current_available_pipeline_20260702/boosted_recoil_hists.json",
-  "status": "current_available_plots_ready",
+  "status": "current_available_plots_ready_20260629_style",
+  "style_reference": "autonomous_allhad/workflow/plot_control_search_bins_style.py and docs/partial_merge_preview_boosted_an17_20260629_current/plots/partial_control_search_bins_style.png",
   "weight_failures": 0
 }
