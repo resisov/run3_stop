@@ -12,7 +12,7 @@
   },
   "events_processed": 300743579,
   "input_roots": 4271,
-  "note": "Corrected data-stream policy applied. Main comparison uses ordinary SR vs nTop >= 1 SR in the 6 flat bins; SR data are blinded on the public plot.",
+  "note": "Corrected data-stream policy applied. Plot compares ordinary SR vs nTop >= 1 SR in the 6 flat bins; no AN17 17-bin search-bin comparison is used. SR data are blinded on the public plot.",
   "plots": [
     {
       "bins": 6,
@@ -22,17 +22,6 @@
       "png": "plots/current_available_sr_vs_sr_ntop1.png",
       "title": "SR vs SR nTop >= 1 comparison",
       "uses_an17_17bin": false
-    },
-    {
-      "bins": 47,
-      "blinded": true,
-      "control_bins": 30,
-      "name": "current_available_control_search_bins_style",
-      "pdf": "plots/current_available_control_search_bins_style.pdf",
-      "png": "plots/current_available_control_search_bins_style.png",
-      "sr_search_bins": 17,
-      "title": "CR recoil + SR AN17 search bins",
-      "uses_an17_17bin": true
     }
   ],
   "rendering_script": "autonomous_allhad/workflow/plot_control_search_bins_style.py",

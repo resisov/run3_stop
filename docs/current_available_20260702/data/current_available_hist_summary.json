@@ -12,7 +12,7 @@
   },
   "events_processed": 300743579,
   "input_roots": 4271,
-  "note": "Corrected data-stream policy applied. Main comparison uses ordinary SR vs nTop >= 1 SR in the 6 flat bins; SR data are blinded on the public plot.",
+  "note": "Corrected data-stream policy applied. Plot compares ordinary SR vs nTop >= 1 SR in the 6 flat bins; no AN17 17-bin search-bin comparison is used. SR data are blinded on the public plot.",
   "rendering_script": "autonomous_allhad/workflow/plot_control_search_bins_style.py",
   "samples_include_other": false,
   "snapshot_counts": {
