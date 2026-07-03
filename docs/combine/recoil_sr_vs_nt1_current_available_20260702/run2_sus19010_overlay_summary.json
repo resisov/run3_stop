@@ -19,5 +19,14 @@
   "run2_observed_points": 110,
   "run2_source": "/eos/user/t/taiwoo/run2_sus19010_contours.json",
   "run2_source_note": "CMS-SUS-19-010 (arXiv:2103.01290, Phys. Rev. D 104 (2021) 052001, 137 fb^-1), Figure 8-a (T2tt: pp -> stop stop -> t tbar chi10 chi10), all-hadronic (0-lepton) final state, 95% CL exclusion contours. Central observed/expected exclusion contour lines from HEPData record ins1849522 (hepdata.net record 103065 v1), tables 'Figure 08-a Observed Lines' (t21, central group 'Observed Exclusion Contour') and 'Figure 08-a Expected Lines' (t22, central group 'Expected Exclusion Contour'), retrieved via the hepdata.net /record/data/103065/<tableid>/1 API. Note: CMS public-results ROOT/CSV files for this analysis return HTTP 404 (not published), and the HEPData /download/table endpoints are blocked by Cloudflare; the record/data JSON API is the working official source. Points are [mStop_GeV, mLSP_GeV] ordered along the contour.",
-  "status": "complete"
+  "run3_mass_point_markers": false,
+  "status": "complete",
+  "view_xlim": [
+    600.0,
+    1500.0
+  ],
+  "view_ylim": [
+    0.0,
+    1500.0
+  ]
 }
