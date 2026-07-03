@@ -1,0 +1,27 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Recoil SR Limit Comparison</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 24px; line-height: 1.45; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 18px; }
+img { max-width: 100%; border: 1px solid #ccc; }
+</style>
+<h1>Recoil SR vs Recoil SR + nTop Expected Limits</h1>
+<p>
+Common mass points: 188.
+Median SR_Nt1/SR expected-limit ratio: 0.606.
+Ratio &lt; 1 means SR_Nt1 is stronger.
+Point counts: SR_Nt1 better 137, SR better 51.
+Expected-excluded grid points: SR 47, SR_Nt1 63.
+</p>
+<div class="grid">
+  <figure>
+    <img src="expected_limit_contour_recoil_sr.png" alt="Recoil-bin SR expected limit contour">
+    <figcaption>Recoil-bin SR</figcaption>
+  </figure>
+  <figure>
+    <img src="expected_limit_contour_recoil_sr_nt1.png" alt="Recoil-bin SR plus nTop condition expected limit contour">
+    <figcaption>Recoil-bin SR + nTop condition</figcaption>
+  </figure>
+</div>
+<p><a href="limit_comparison.json">limit_comparison.json</a> · <a href="summary.md">summary.md</a></p>

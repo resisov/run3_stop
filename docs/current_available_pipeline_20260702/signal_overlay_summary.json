@@ -1,0 +1,55 @@
+{
+  "missing_variable_note": "Mass-point overlays are drawn only in cat7/SR for metpt, ht, njet, nb, and min_dphi; recoil_pt and nfj have no matching signal_cutflows histogram.",
+  "points": [
+    {
+      "color": "#d62728",
+      "key": "mStop1000_mLSP1",
+      "label": "T2tt mStop1000 mLSP1",
+      "mLSP": 1,
+      "mStop": 1000,
+      "normalization_factor": 0.008107856761349841,
+      "normalization_status": "normalized_with_signal_xsec_txt_and_Runs_genEventSumw_T2tt",
+      "xsec_pb": 0.009123
+    },
+    {
+      "color": "#1f77b4",
+      "key": "mStop1200_mLSP1",
+      "label": "T2tt mStop1200 mLSP1",
+      "mLSP": 1,
+      "mStop": 1200,
+      "normalization_factor": 0.005591256195155442,
+      "normalization_status": "normalized_with_signal_xsec_txt_and_Runs_genEventSumw_T2tt",
+      "xsec_pb": 0.002373
+    }
+  ],
+  "region_yields": {
+    "cat7_SR_highDeltaM": {
+      "mStop1000_mLSP1": {
+        "color": "#d62728",
+        "label": "T2tt mStop1000 mLSP1",
+        "normalized_sumw2": 2.4391616705109334,
+        "normalized_weighted": 221.4492752557536,
+        "unweighted": 27334
+      },
+      "mStop1200_mLSP1": {
+        "color": "#1f77b4",
+        "label": "T2tt mStop1200 mLSP1",
+        "normalized_sumw2": 0.43926259070486867,
+        "normalized_weighted": 58.29919047498594,
+        "unweighted": 10474
+      }
+    }
+  },
+  "source_files": [
+    "autonomous_allhad/outputs/signal_cutflows.json",
+    "autonomous_allhad/outputs/signal_yields_by_mass.json"
+  ],
+  "status": "complete",
+  "variable_map": {
+    "ht": "ht",
+    "metpt": "met",
+    "min_dphi": "min_dphi4",
+    "nb": "nb_medium",
+    "njet": "njet"
+  }
+}

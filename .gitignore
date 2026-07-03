@@ -1,89 +1,101 @@
-# Python caches
+# Python/cache
 __pycache__/
-*.py[cod]
-
-# Large runtime artifacts
-*.tgz
-*.tar
-*.tar.gz
-*.root
-
-# Condor outputs
-condor_log/
-analysis/hists/
-analysis/condor/generated/
-
-# Fast-analysis runtime artifacts
-fast_outputs/
-*.parquet
-*.sqlite
-*.db
-*.log
-*.stdout
-*.stderr
-*.done
-# Autonomous all-hadronic runtime products not for GitHub
-analysis/proxy/
-analysis/metadata/autonomous_real_subset.json.gz
-autonomous_allhad/outputs/real_feature_table.csv
-autonomous_allhad/workflow/history.jsonl
-autonomous_allhad/autonomous_allhad/__pycache__/
 **/__pycache__/
-*.futures
-*.scaled
-*.merged
-*.processor
-*.pkl
-*.pickle
-autonomous_allhad/datacards/
-autonomous_allhad/limits/expected_limits_proxy.json
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
-# Credentials / proxies / private keys
+# Editor/local settings
+.vscode/
+.DS_Store
+
+# Credentials/proxies/private keys
 analysis/proxy/
 *x509*
+x509up*
 *proxy*
 *.pem
 *.key
 *.crt
 *.cert
 
-# Python caches
-__pycache__/
-*.pyc
-*.pyo
-
-# Heavy analysis outputs
-*.root
-*.futures
-autonomous_allhad/outputs/real_feature_table.csv
-
-# Full production inventories are local runtime artifacts; compact summaries are published.
-autonomous_allhad/workflow/full_input_manifest.json
-autonomous_allhad/workflow/full_background_manifest.json
-
-# Condor/full-production heavy artifacts
-autonomous_allhad/workflow/production_outputs_eos_full/
-autonomous_allhad/workflow/production_shards_eos_full/
-autonomous_allhad/workflow/condor_eos_full/
-autonomous_allhad/workflow/condor_eos_retry_*/
-autonomous_allhad/workflow/**/*.log
-autonomous_allhad/workflow/**/*.out
-autonomous_allhad/workflow/**/*.err
-
-# Heavy analysis outputs
+# Large binary/runtime artifacts
 *.root
 *.npy
 *.parquet
-*.csv
+*.sqlite
+*.db
+*.tgz
+*.tar
+*.tar.gz
+*.futures
+*.scaled
+*.merged
+*.processor
+*.pkl
+*.pickle
+
+# Logs and batch outputs
+*.log
+*.stdout
+*.stderr
+*.out
+*.err
+*.done
+condor_log/
+
+# Analysis runtime directories
+analysis/hists/
+analysis/condor/generated/
+analysis/combine/
+fast_outputs/
+
+# Autonomous all-hadronic generated outputs
+autonomous_allhad/datacards/
+autonomous_allhad/limits/expected_limits_proxy.json
+autonomous_allhad/outputs/real_feature_table.csv
+
+# Workflow runtime products: generated, resumable, or reproducible from manifests/configs.
+autonomous_allhad/workflow/history.jsonl
+autonomous_allhad/workflow/full_input_manifest.json
+autonomous_allhad/workflow/full_background_manifest.json
+autonomous_allhad/workflow/production_outputs_*/
+autonomous_allhad/workflow/production_shards_*/
+autonomous_allhad/workflow/signal_outputs_*/
+autonomous_allhad/workflow/signal_shards_*/
+autonomous_allhad/workflow/flat_ntuple_*_outputs/
+autonomous_allhad/workflow/flat_ntuple_*_micro_outputs/
+autonomous_allhad/workflow/condor_*/
+autonomous_allhad/workflow/*_logs/
+autonomous_allhad/workflow/*_watch_*_logs/
+autonomous_allhad/workflow/local_*_recovery*/
+autonomous_allhad/workflow/local_*_repair*/
+autonomous_allhad/workflow/local_*_current.json
+autonomous_allhad/workflow/local_*_current.tsv
+autonomous_allhad/workflow/local_*_state.json
+autonomous_allhad/workflow/data_bad_file_local_recovery_*/
+autonomous_allhad/workflow/mc_bad_file_local_recovery_*/
+autonomous_allhad/workflow/partial_merge_preview_*/
+autonomous_allhad/workflow/current_available_pipeline_*/hist_chunks/
+autonomous_allhad/workflow/current_available_pipeline_*/hists_*/hist_chunks/
+
+# Combine generated internals under docs are published selectively; keep source docs files explicit.
+docs/**/higgsCombine*.root
+docs/**/*.log
+# Generated compact output payloads
+analysis/metadata/autonomous_real_subset.json.gz
 autonomous_allhad/outputs/*.json
 !autonomous_allhad/outputs/*.status.json
-
-# Credentials
-analysis/proxy/
-x509up*
-*.pem
-*.key
-
-# Python/cache
-__pycache__/
-*.pyc
+autonomous_allhad/outputs/*.csv
+autonomous_allhad/workflow/current_available_pipeline_*/
+autonomous_allhad/workflow/current_available_pipeline_*/**
+autonomous_allhad/workflow/data_signal_only_*/
+autonomous_allhad/workflow/known_corrupt_exclusion_backups_*/
+autonomous_allhad/workflow/local_recovery_then_pipeline_*/
+autonomous_allhad/workflow/*.pid
+autonomous_allhad/workflow/*_state.json
+autonomous_allhad/workflow/*_current.txt
+autonomous_allhad/workflow/*_current.json
+autonomous_allhad/workflow/*_current.tsv
