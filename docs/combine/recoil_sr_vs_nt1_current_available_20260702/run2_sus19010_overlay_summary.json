@@ -1,4 +1,11 @@
 {
+  "cache_note": "Index now references x600_nodots filenames to avoid stale browser cache from earlier overlay PNG names.",
+  "cache_safe_outputs": {
+    "recoil_sr_nt1_pdf": "expected_limit_contour_recoil_sr_nt1_run2_sus19010_overlay_x600_nodots.pdf",
+    "recoil_sr_nt1_png": "expected_limit_contour_recoil_sr_nt1_run2_sus19010_overlay_x600_nodots.png",
+    "recoil_sr_pdf": "expected_limit_contour_recoil_sr_run2_sus19010_overlay_x600_nodots.pdf",
+    "recoil_sr_png": "expected_limit_contour_recoil_sr_run2_sus19010_overlay_x600_nodots.png"
+  },
   "inputs": {
     "recoil_sr": "analysis/combine/recoil_sr_current_available_20260702/expected_limits.json",
     "recoil_sr_nt1": "analysis/combine/recoil_sr_nt1_current_available_20260702/expected_limits.json"
