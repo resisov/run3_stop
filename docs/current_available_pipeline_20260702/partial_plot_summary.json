@@ -39,6 +39,7 @@
   },
   "flat_recoil_sr_nt1_plot_summary": "flat_recoil_sr_nt1_plot_summary.json",
   "nb_binning_policy": "Nb plots merge b >= 3 into a single >=3 bin.",
+  "nboosted_region_plot_summary": "nboosted_region_plot_summary.json",
   "plot_uncertainty_policy": "DATA error bars show statistical uncertainty. MC bands show sqrt(stat^2 + available systematic envelope^2 + Lumi_2024^2); available worker payload systematics and external jesTotal/MET unclustered shape shifts are included where present, and Lumi_2024 is a fixed 1.6% MC rate uncertainty.",
   "region_variable_plots": [
     {
@@ -2636,6 +2637,546 @@
       ],
       "source_histogram": "autonomous_allhad/workflow/current_available_pipeline_20260702/boosted_recoil_hists_streamfixed.json",
       "variable": "recoil_pt"
+    },
+    {
+      "binning": {
+        "overflow_label": null,
+        "overflow_low": null,
+        "physics_bin_edges": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          3.5,
+          6.5
+        ],
+        "plot_bin_edges": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          3.5,
+          6.5
+        ],
+        "visible_xlim": [
+          -0.5,
+          6.5
+        ]
+      },
+      "blinded": false,
+      "display_label": "Ntop",
+      "fit_template": false,
+      "mc_uncertainty": {
+        "stat_sum": 115.58642912960046,
+        "syst_sum": 652.0631089601436,
+        "systematic_sources": [
+          "Lumi_2024"
+        ],
+        "total_sum": 664.9408435187537
+      },
+      "name": "partial_nboosted_top_cat2_LLCR_highDeltaM",
+      "pdf": "plots/partial_nboosted_top_cat2_LLCR_highDeltaM.pdf",
+      "png": "plots/partial_nboosted_top_cat2_LLCR_highDeltaM.png",
+      "region": "cat2_LLCR_highDeltaM",
+      "signal_overlays": [],
+      "source_payload": "docs/current_available_pipeline_20260702/partial_normalized_yields.json",
+      "systematic_note": "No per-variable shape systematic record was present for this variable; the existing plotter therefore shows MC statistical uncertainty plus luminosity rate uncertainty.",
+      "variable": "nboosted_top"
+    },
+    {
+      "binning": {
+        "overflow_label": null,
+        "overflow_low": null,
+        "physics_bin_edges": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          3.5,
+          6.5
+        ],
+        "plot_bin_edges": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          3.5,
+          6.5
+        ],
+        "visible_xlim": [
+          -0.5,
+          3.5
+        ]
+      },
+      "blinded": false,
+      "display_label": "Ntop",
+      "fit_template": false,
+      "mc_uncertainty": {
+        "stat_sum": 2320.920762198557,
+        "syst_sum": 543.3166627726717,
+        "systematic_sources": [
+          "Lumi_2024"
+        ],
+        "total_sum": 2393.164646456555
+      },
+      "name": "partial_nboosted_top_cat3_QCDCR_highDeltaM",
+      "pdf": "plots/partial_nboosted_top_cat3_QCDCR_highDeltaM.pdf",
+      "png": "plots/partial_nboosted_top_cat3_QCDCR_highDeltaM.png",
+      "region": "cat3_QCDCR_highDeltaM",
+      "signal_overlays": [],
+      "source_payload": "docs/current_available_pipeline_20260702/partial_normalized_yields.json",
+      "systematic_note": "No per-variable shape systematic record was present for this variable; the existing plotter therefore shows MC statistical uncertainty plus luminosity rate uncertainty.",
+      "variable": "nboosted_top"
+    },
+    {
+      "binning": {
+        "overflow_label": null,
+        "overflow_low": null,
+        "physics_bin_edges": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          3.5,
+          6.5
+        ],
+        "plot_bin_edges": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          3.5,
+          6.5
+        ],
+        "visible_xlim": [
+          -0.5,
+          6.5
+        ]
+      },
+      "blinded": false,
+      "display_label": "Ntop",
+      "fit_template": false,
+      "mc_uncertainty": {
+        "stat_sum": 767.8252607933915,
+        "syst_sum": 163.2213657505641,
+        "systematic_sources": [
+          "Lumi_2024"
+        ],
+        "total_sum": 784.9890192080609
+      },
+      "name": "partial_nboosted_top_cat4_GCR_highDeltaM",
+      "pdf": "plots/partial_nboosted_top_cat4_GCR_highDeltaM.pdf",
+      "png": "plots/partial_nboosted_top_cat4_GCR_highDeltaM.png",
+      "region": "cat4_GCR_highDeltaM",
+      "signal_overlays": [],
+      "source_payload": "docs/current_available_pipeline_20260702/partial_normalized_yields.json",
+      "systematic_note": "No per-variable shape systematic record was present for this variable; the existing plotter therefore shows MC statistical uncertainty plus luminosity rate uncertainty.",
+      "variable": "nboosted_top"
+    },
+    {
+      "binning": {
+        "overflow_label": null,
+        "overflow_low": null,
+        "physics_bin_edges": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          3.5,
+          6.5
+        ],
+        "plot_bin_edges": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          3.5,
+          6.5
+        ],
+        "visible_xlim": [
+          -0.5,
+          3.5
+        ]
+      },
+      "blinded": false,
+      "display_label": "Ntop",
+      "fit_template": false,
+      "mc_uncertainty": {
+        "stat_sum": 11.80970074491112,
+        "syst_sum": 6.7164047679784415,
+        "systematic_sources": [
+          "Lumi_2024"
+        ],
+        "total_sum": 13.770934563790597
+      },
+      "name": "partial_nboosted_top_cat5_DY2E_highDeltaM",
+      "pdf": "plots/partial_nboosted_top_cat5_DY2E_highDeltaM.pdf",
+      "png": "plots/partial_nboosted_top_cat5_DY2E_highDeltaM.png",
+      "region": "cat5_DY2E_highDeltaM",
+      "signal_overlays": [],
+      "source_payload": "docs/current_available_pipeline_20260702/partial_normalized_yields.json",
+      "systematic_note": "No per-variable shape systematic record was present for this variable; the existing plotter therefore shows MC statistical uncertainty plus luminosity rate uncertainty.",
+      "variable": "nboosted_top"
+    },
+    {
+      "binning": {
+        "overflow_label": null,
+        "overflow_low": null,
+        "physics_bin_edges": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          3.5,
+          6.5
+        ],
+        "plot_bin_edges": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          3.5,
+          6.5
+        ],
+        "visible_xlim": [
+          -0.5,
+          3.5
+        ]
+      },
+      "blinded": false,
+      "display_label": "Ntop",
+      "fit_template": false,
+      "mc_uncertainty": {
+        "stat_sum": 15.618975490192053,
+        "syst_sum": 9.348058411329818,
+        "systematic_sources": [
+          "Lumi_2024"
+        ],
+        "total_sum": 18.490842675373223
+      },
+      "name": "partial_nboosted_top_cat6_DY2M_highDeltaM",
+      "pdf": "plots/partial_nboosted_top_cat6_DY2M_highDeltaM.pdf",
+      "png": "plots/partial_nboosted_top_cat6_DY2M_highDeltaM.png",
+      "region": "cat6_DY2M_highDeltaM",
+      "signal_overlays": [],
+      "source_payload": "docs/current_available_pipeline_20260702/partial_normalized_yields.json",
+      "systematic_note": "No per-variable shape systematic record was present for this variable; the existing plotter therefore shows MC statistical uncertainty plus luminosity rate uncertainty.",
+      "variable": "nboosted_top"
+    },
+    {
+      "binning": {
+        "overflow_label": null,
+        "overflow_low": null,
+        "physics_bin_edges": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          3.5,
+          6.5
+        ],
+        "plot_bin_edges": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          3.5,
+          6.5
+        ],
+        "visible_xlim": [
+          -0.5,
+          6.5
+        ]
+      },
+      "blinded": true,
+      "display_label": "Ntop",
+      "fit_template": false,
+      "mc_uncertainty": {
+        "stat_sum": 374.79861354823424,
+        "syst_sum": 557.5272474973182,
+        "systematic_sources": [
+          "Lumi_2024"
+        ],
+        "total_sum": 673.3184644102938
+      },
+      "name": "partial_nboosted_top_cat7_SR_highDeltaM",
+      "pdf": "plots/partial_nboosted_top_cat7_SR_highDeltaM.pdf",
+      "png": "plots/partial_nboosted_top_cat7_SR_highDeltaM.png",
+      "region": "cat7_SR_highDeltaM",
+      "signal_overlays": [],
+      "source_payload": "docs/current_available_pipeline_20260702/partial_normalized_yields.json",
+      "systematic_note": "No per-variable shape systematic record was present for this variable; the existing plotter therefore shows MC statistical uncertainty plus luminosity rate uncertainty.",
+      "variable": "nboosted_top"
+    },
+    {
+      "binning": {
+        "overflow_label": null,
+        "overflow_low": null,
+        "physics_bin_edges": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          3.5,
+          6.5
+        ],
+        "plot_bin_edges": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          3.5,
+          6.5
+        ],
+        "visible_xlim": [
+          -0.5,
+          3.5
+        ]
+      },
+      "blinded": false,
+      "display_label": "Nw",
+      "fit_template": false,
+      "mc_uncertainty": {
+        "stat_sum": 110.96993051335738,
+        "syst_sum": 652.0631048914363,
+        "systematic_sources": [
+          "Lumi_2024"
+        ],
+        "total_sum": 663.7323511664616
+      },
+      "name": "partial_nboosted_w_cat2_LLCR_highDeltaM",
+      "pdf": "plots/partial_nboosted_w_cat2_LLCR_highDeltaM.pdf",
+      "png": "plots/partial_nboosted_w_cat2_LLCR_highDeltaM.png",
+      "region": "cat2_LLCR_highDeltaM",
+      "signal_overlays": [],
+      "source_payload": "docs/current_available_pipeline_20260702/partial_normalized_yields.json",
+      "systematic_note": "No per-variable shape systematic record was present for this variable; the existing plotter therefore shows MC statistical uncertainty plus luminosity rate uncertainty.",
+      "variable": "nboosted_w"
+    },
+    {
+      "binning": {
+        "overflow_label": null,
+        "overflow_low": null,
+        "physics_bin_edges": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          3.5,
+          6.5
+        ],
+        "plot_bin_edges": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          3.5,
+          6.5
+        ],
+        "visible_xlim": [
+          -0.5,
+          3.5
+        ]
+      },
+      "blinded": false,
+      "display_label": "Nw",
+      "fit_template": false,
+      "mc_uncertainty": {
+        "stat_sum": 2292.18294177174,
+        "syst_sum": 543.3166627726713,
+        "systematic_sources": [
+          "Lumi_2024"
+        ],
+        "total_sum": 2356.0889640722703
+      },
+      "name": "partial_nboosted_w_cat3_QCDCR_highDeltaM",
+      "pdf": "plots/partial_nboosted_w_cat3_QCDCR_highDeltaM.pdf",
+      "png": "plots/partial_nboosted_w_cat3_QCDCR_highDeltaM.png",
+      "region": "cat3_QCDCR_highDeltaM",
+      "signal_overlays": [],
+      "source_payload": "docs/current_available_pipeline_20260702/partial_normalized_yields.json",
+      "systematic_note": "No per-variable shape systematic record was present for this variable; the existing plotter therefore shows MC statistical uncertainty plus luminosity rate uncertainty.",
+      "variable": "nboosted_w"
+    },
+    {
+      "binning": {
+        "overflow_label": null,
+        "overflow_low": null,
+        "physics_bin_edges": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          3.5,
+          6.5
+        ],
+        "plot_bin_edges": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          3.5,
+          6.5
+        ],
+        "visible_xlim": [
+          -0.5,
+          2.5
+        ]
+      },
+      "blinded": false,
+      "display_label": "Nw",
+      "fit_template": false,
+      "mc_uncertainty": {
+        "stat_sum": 759.3924129726837,
+        "syst_sum": 163.22136575056402,
+        "systematic_sources": [
+          "Lumi_2024"
+        ],
+        "total_sum": 776.7785298901648
+      },
+      "name": "partial_nboosted_w_cat4_GCR_highDeltaM",
+      "pdf": "plots/partial_nboosted_w_cat4_GCR_highDeltaM.pdf",
+      "png": "plots/partial_nboosted_w_cat4_GCR_highDeltaM.png",
+      "region": "cat4_GCR_highDeltaM",
+      "signal_overlays": [],
+      "source_payload": "docs/current_available_pipeline_20260702/partial_normalized_yields.json",
+      "systematic_note": "No per-variable shape systematic record was present for this variable; the existing plotter therefore shows MC statistical uncertainty plus luminosity rate uncertainty.",
+      "variable": "nboosted_w"
+    },
+    {
+      "binning": {
+        "overflow_label": null,
+        "overflow_low": null,
+        "physics_bin_edges": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          3.5,
+          6.5
+        ],
+        "plot_bin_edges": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          3.5,
+          6.5
+        ],
+        "visible_xlim": [
+          -0.5,
+          2.5
+        ]
+      },
+      "blinded": false,
+      "display_label": "Nw",
+      "fit_template": false,
+      "mc_uncertainty": {
+        "stat_sum": 11.33769214710839,
+        "syst_sum": 6.716404767978442,
+        "systematic_sources": [
+          "Lumi_2024"
+        ],
+        "total_sum": 13.33548960554637
+      },
+      "name": "partial_nboosted_w_cat5_DY2E_highDeltaM",
+      "pdf": "plots/partial_nboosted_w_cat5_DY2E_highDeltaM.pdf",
+      "png": "plots/partial_nboosted_w_cat5_DY2E_highDeltaM.png",
+      "region": "cat5_DY2E_highDeltaM",
+      "signal_overlays": [],
+      "source_payload": "docs/current_available_pipeline_20260702/partial_normalized_yields.json",
+      "systematic_note": "No per-variable shape systematic record was present for this variable; the existing plotter therefore shows MC statistical uncertainty plus luminosity rate uncertainty.",
+      "variable": "nboosted_w"
+    },
+    {
+      "binning": {
+        "overflow_label": null,
+        "overflow_low": null,
+        "physics_bin_edges": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          3.5,
+          6.5
+        ],
+        "plot_bin_edges": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          3.5,
+          6.5
+        ],
+        "visible_xlim": [
+          -0.5,
+          2.5
+        ]
+      },
+      "blinded": false,
+      "display_label": "Nw",
+      "fit_template": false,
+      "mc_uncertainty": {
+        "stat_sum": 13.715755150221652,
+        "syst_sum": 9.348013261238917,
+        "systematic_sources": [
+          "Lumi_2024"
+        ],
+        "total_sum": 16.788420752940567
+      },
+      "name": "partial_nboosted_w_cat6_DY2M_highDeltaM",
+      "pdf": "plots/partial_nboosted_w_cat6_DY2M_highDeltaM.pdf",
+      "png": "plots/partial_nboosted_w_cat6_DY2M_highDeltaM.png",
+      "region": "cat6_DY2M_highDeltaM",
+      "signal_overlays": [],
+      "source_payload": "docs/current_available_pipeline_20260702/partial_normalized_yields.json",
+      "systematic_note": "No per-variable shape systematic record was present for this variable; the existing plotter therefore shows MC statistical uncertainty plus luminosity rate uncertainty.",
+      "variable": "nboosted_w"
+    },
+    {
+      "binning": {
+        "overflow_label": null,
+        "overflow_low": null,
+        "physics_bin_edges": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          3.5,
+          6.5
+        ],
+        "plot_bin_edges": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          3.5,
+          6.5
+        ],
+        "visible_xlim": [
+          -0.5,
+          3.5
+        ]
+      },
+      "blinded": true,
+      "display_label": "Nw",
+      "fit_template": false,
+      "mc_uncertainty": {
+        "stat_sum": 375.27025987145385,
+        "syst_sum": 557.5272398512433,
+        "systematic_sources": [
+          "Lumi_2024"
+        ],
+        "total_sum": 672.8672430761203
+      },
+      "name": "partial_nboosted_w_cat7_SR_highDeltaM",
+      "pdf": "plots/partial_nboosted_w_cat7_SR_highDeltaM.pdf",
+      "png": "plots/partial_nboosted_w_cat7_SR_highDeltaM.png",
+      "region": "cat7_SR_highDeltaM",
+      "signal_overlays": [],
+      "source_payload": "docs/current_available_pipeline_20260702/partial_normalized_yields.json",
+      "systematic_note": "No per-variable shape systematic record was present for this variable; the existing plotter therefore shows MC statistical uncertainty plus luminosity rate uncertainty.",
+      "variable": "nboosted_w"
     }
   ],
   "regions": [
@@ -2658,6 +3199,8 @@
     "njet",
     "nb",
     "nfj",
-    "min_dphi"
+    "min_dphi",
+    "nboosted_top",
+    "nboosted_w"
   ]
 }
