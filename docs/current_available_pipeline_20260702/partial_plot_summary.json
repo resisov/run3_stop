@@ -2664,7 +2664,7 @@
         ]
       },
       "blinded": false,
-      "display_label": "Ntop",
+      "display_label": "$N_{\\mathrm{top}}$",
       "fit_template": false,
       "mc_uncertainty": {
         "stat_sum": 115.58642912960046,
@@ -2709,7 +2709,7 @@
         ]
       },
       "blinded": false,
-      "display_label": "Ntop",
+      "display_label": "$N_{\\mathrm{top}}$",
       "fit_template": false,
       "mc_uncertainty": {
         "stat_sum": 2320.920762198557,
@@ -2754,7 +2754,7 @@
         ]
       },
       "blinded": false,
-      "display_label": "Ntop",
+      "display_label": "$N_{\\mathrm{top}}$",
       "fit_template": false,
       "mc_uncertainty": {
         "stat_sum": 767.8252607933915,
@@ -2799,7 +2799,7 @@
         ]
       },
       "blinded": false,
-      "display_label": "Ntop",
+      "display_label": "$N_{\\mathrm{top}}$",
       "fit_template": false,
       "mc_uncertainty": {
         "stat_sum": 11.80970074491112,
@@ -2844,7 +2844,7 @@
         ]
       },
       "blinded": false,
-      "display_label": "Ntop",
+      "display_label": "$N_{\\mathrm{top}}$",
       "fit_template": false,
       "mc_uncertainty": {
         "stat_sum": 15.618975490192053,
@@ -2889,7 +2889,7 @@
         ]
       },
       "blinded": true,
-      "display_label": "Ntop",
+      "display_label": "$N_{\\mathrm{top}}$",
       "fit_template": false,
       "mc_uncertainty": {
         "stat_sum": 374.79861354823424,
@@ -2903,7 +2903,23 @@
       "pdf": "plots/partial_nboosted_top_cat7_SR_highDeltaM.pdf",
       "png": "plots/partial_nboosted_top_cat7_SR_highDeltaM.png",
       "region": "cat7_SR_highDeltaM",
-      "signal_overlays": [],
+      "signal_overlays": [
+        {
+          "key": "mStop1000_mLSP1",
+          "label": "T2tt mStop1000 mLSP1",
+          "normalization_factor": 0.008107856761349841,
+          "source_variable": "nboosted_top_flat_ntuple_rescaled_to_SR_recoil",
+          "yield": 221.43260659402262
+        },
+        {
+          "key": "mStop1200_mLSP1",
+          "label": "T2tt mStop1200 mLSP1",
+          "normalization_factor": 0.005591256195155442,
+          "source_variable": "nboosted_top_flat_ntuple_rescaled_to_SR_recoil",
+          "yield": 58.30727280802892
+        }
+      ],
+      "signal_shape_note": "SR signal overlays are derived from flat ntuple nboosted_top/nboosted_w shapes and rescaled to the existing flat recoil SR signal yields.",
       "source_payload": "docs/current_available_pipeline_20260702/partial_normalized_yields.json",
       "systematic_note": "No per-variable shape systematic record was present for this variable; the existing plotter therefore shows MC statistical uncertainty plus luminosity rate uncertainty.",
       "variable": "nboosted_top"
@@ -2934,7 +2950,7 @@
         ]
       },
       "blinded": false,
-      "display_label": "Nw",
+      "display_label": "$N_{\\mathrm{W}}$",
       "fit_template": false,
       "mc_uncertainty": {
         "stat_sum": 110.96993051335738,
@@ -2979,7 +2995,7 @@
         ]
       },
       "blinded": false,
-      "display_label": "Nw",
+      "display_label": "$N_{\\mathrm{W}}$",
       "fit_template": false,
       "mc_uncertainty": {
         "stat_sum": 2292.18294177174,
@@ -3024,7 +3040,7 @@
         ]
       },
       "blinded": false,
-      "display_label": "Nw",
+      "display_label": "$N_{\\mathrm{W}}$",
       "fit_template": false,
       "mc_uncertainty": {
         "stat_sum": 759.3924129726837,
@@ -3069,7 +3085,7 @@
         ]
       },
       "blinded": false,
-      "display_label": "Nw",
+      "display_label": "$N_{\\mathrm{W}}$",
       "fit_template": false,
       "mc_uncertainty": {
         "stat_sum": 11.33769214710839,
@@ -3114,7 +3130,7 @@
         ]
       },
       "blinded": false,
-      "display_label": "Nw",
+      "display_label": "$N_{\\mathrm{W}}$",
       "fit_template": false,
       "mc_uncertainty": {
         "stat_sum": 13.715755150221652,
@@ -3159,7 +3175,7 @@
         ]
       },
       "blinded": true,
-      "display_label": "Nw",
+      "display_label": "$N_{\\mathrm{W}}$",
       "fit_template": false,
       "mc_uncertainty": {
         "stat_sum": 375.27025987145385,
@@ -3173,7 +3189,23 @@
       "pdf": "plots/partial_nboosted_w_cat7_SR_highDeltaM.pdf",
       "png": "plots/partial_nboosted_w_cat7_SR_highDeltaM.png",
       "region": "cat7_SR_highDeltaM",
-      "signal_overlays": [],
+      "signal_overlays": [
+        {
+          "key": "mStop1000_mLSP1",
+          "label": "T2tt mStop1000 mLSP1",
+          "normalization_factor": 0.008107856761349841,
+          "source_variable": "nboosted_w_flat_ntuple_rescaled_to_SR_recoil",
+          "yield": 221.4326065940226
+        },
+        {
+          "key": "mStop1200_mLSP1",
+          "label": "T2tt mStop1200 mLSP1",
+          "normalization_factor": 0.005591256195155442,
+          "source_variable": "nboosted_w_flat_ntuple_rescaled_to_SR_recoil",
+          "yield": 58.30727280802893
+        }
+      ],
+      "signal_shape_note": "SR signal overlays are derived from flat ntuple nboosted_top/nboosted_w shapes and rescaled to the existing flat recoil SR signal yields.",
       "source_payload": "docs/current_available_pipeline_20260702/partial_normalized_yields.json",
       "systematic_note": "No per-variable shape systematic record was present for this variable; the existing plotter therefore shows MC statistical uncertainty plus luminosity rate uncertainty.",
       "variable": "nboosted_w"
