@@ -37,6 +37,7 @@
     "cat6_DY2M_highDeltaM": "recoil_pt",
     "cat7_SR_highDeltaM": "metpt"
   },
+  "flat_recoil_sr_nt1_plot_summary": "flat_recoil_sr_nt1_plot_summary.json",
   "nb_binning_policy": "Nb plots merge b >= 3 into a single >=3 bin.",
   "plot_uncertainty_policy": "DATA error bars show statistical uncertainty. MC bands show sqrt(stat^2 + available systematic envelope^2 + Lumi_2024^2); available worker payload systematics and external jesTotal/MET unclustered shape shifts are included where present, and Lumi_2024 is a fixed 1.6% MC rate uncertainty.",
   "region_variable_plots": [
@@ -2085,31 +2086,41 @@
         ]
       },
       "blinded": true,
+      "display_label": "SR recoil, flat signal overlay",
       "fit_template": false,
+      "flat_region": "SR",
       "mc_uncertainty": {
-        "stat_sum": 546.2261471049104,
-        "syst_sum": 767.8744417722459,
+        "stat_sum": 574.6521725435764,
+        "syst_sum": 558.7252994798273,
         "systematic_sources": [
           "Lumi_2024",
-          "btagSF_bc_correlated",
-          "btagSF_bc_uncorrelated",
-          "btagSF_light_correlated",
-          "btagSF_light_uncorrelated",
-          "electron_hlt",
-          "electron_id",
-          "metUnclustered",
-          "muon_hlt",
-          "muon_id",
-          "photon_id",
-          "pileup"
+          "flat_recoil_nominal_stat_plus_lumi"
         ],
-        "total_sum": 955.3230266471456
+        "total_sum": 809.2607967260742
       },
       "name": "partial_recoil_pt_cat7_SR_highDeltaM",
       "pdf": "plots/partial_recoil_pt_cat7_SR_highDeltaM.pdf",
       "png": "plots/partial_recoil_pt_cat7_SR_highDeltaM.png",
       "region": "cat7_SR_highDeltaM",
-      "signal_overlays": [],
+      "signal_overlays": [
+        {
+          "key": "mStop1000_mLSP1",
+          "label": "T2tt mStop1000 mLSP1",
+          "normalization_factor": null,
+          "source": "boosted_recoil_hists_streamfixed.json",
+          "source_variable": "flat_recoil_pt",
+          "yield": 221.12476877114352
+        },
+        {
+          "key": "mStop1200_mLSP1",
+          "label": "T2tt mStop1200 mLSP1",
+          "normalization_factor": null,
+          "source": "boosted_recoil_hists_streamfixed.json",
+          "source_variable": "flat_recoil_pt",
+          "yield": 57.97326131590739
+        }
+      ],
+      "source_histogram": "autonomous_allhad/workflow/current_available_pipeline_20260702/boosted_recoil_hists_streamfixed.json",
       "variable": "recoil_pt"
     },
     {
@@ -2560,6 +2571,71 @@
       "pdf": "plots/partial_cr_sr_region_bins.pdf",
       "png": "plots/partial_cr_sr_region_bins.png",
       "signal_overlays": []
+    },
+    {
+      "binning": {
+        "overflow_label": null,
+        "overflow_low": null,
+        "physics_bin_edges": [
+          250.0,
+          300.0,
+          350.0,
+          400.0,
+          500.0,
+          800.0,
+          1500.0
+        ],
+        "plot_bin_edges": [
+          250.0,
+          300.0,
+          350.0,
+          400.0,
+          500.0,
+          800.0,
+          1500.0
+        ],
+        "visible_xlim": [
+          250.0,
+          1500.0
+        ]
+      },
+      "blinded": true,
+      "display_label": "SR with nTop >= 1 recoil",
+      "fit_template": false,
+      "flat_region": "SR_Nt1",
+      "mc_uncertainty": {
+        "stat_sum": 46.498634279278214,
+        "syst_sum": 49.39247366290722,
+        "systematic_sources": [
+          "Lumi_2024",
+          "flat_recoil_nominal_stat_plus_lumi"
+        ],
+        "total_sum": 68.50293307517089
+      },
+      "name": "partial_recoil_pt_cat7_SR_Nt1_highDeltaM",
+      "pdf": "plots/partial_recoil_pt_cat7_SR_Nt1_highDeltaM.pdf",
+      "png": "plots/partial_recoil_pt_cat7_SR_Nt1_highDeltaM.png",
+      "region": "cat7_SR_Nt1_highDeltaM",
+      "signal_overlays": [
+        {
+          "key": "mStop1000_mLSP1",
+          "label": "T2tt mStop1000 mLSP1",
+          "normalization_factor": null,
+          "source": "boosted_recoil_hists_streamfixed.json",
+          "source_variable": "flat_recoil_pt",
+          "yield": 135.68423481154792
+        },
+        {
+          "key": "mStop1200_mLSP1",
+          "label": "T2tt mStop1200 mLSP1",
+          "normalization_factor": null,
+          "source": "boosted_recoil_hists_streamfixed.json",
+          "source_variable": "flat_recoil_pt",
+          "yield": 40.68241998101613
+        }
+      ],
+      "source_histogram": "autonomous_allhad/workflow/current_available_pipeline_20260702/boosted_recoil_hists_streamfixed.json",
+      "variable": "recoil_pt"
     }
   ],
   "regions": [

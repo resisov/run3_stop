@@ -1,0 +1,138 @@
+{
+  "created_at": "2026-07-03T08:20:13Z",
+  "method": "existing build_partial_merge_preview.plot_variable reused with flat recoil histogram payload",
+  "plots": [
+    {
+      "binning": {
+        "overflow_label": null,
+        "overflow_low": null,
+        "physics_bin_edges": [
+          250.0,
+          300.0,
+          350.0,
+          400.0,
+          500.0,
+          800.0,
+          1500.0
+        ],
+        "plot_bin_edges": [
+          250.0,
+          300.0,
+          350.0,
+          400.0,
+          500.0,
+          800.0,
+          1500.0
+        ],
+        "visible_xlim": [
+          250.0,
+          1500.0
+        ]
+      },
+      "blinded": true,
+      "display_label": "SR recoil, flat signal overlay",
+      "fit_template": false,
+      "flat_region": "SR",
+      "mc_uncertainty": {
+        "stat_sum": 574.6521725435764,
+        "syst_sum": 558.7252994798273,
+        "systematic_sources": [
+          "Lumi_2024",
+          "flat_recoil_nominal_stat_plus_lumi"
+        ],
+        "total_sum": 809.2607967260742
+      },
+      "name": "partial_recoil_pt_cat7_SR_highDeltaM",
+      "pdf": "plots/partial_recoil_pt_cat7_SR_highDeltaM.pdf",
+      "png": "plots/partial_recoil_pt_cat7_SR_highDeltaM.png",
+      "region": "cat7_SR_highDeltaM",
+      "signal_overlays": [
+        {
+          "key": "mStop1000_mLSP1",
+          "label": "T2tt mStop1000 mLSP1",
+          "normalization_factor": null,
+          "source": "boosted_recoil_hists_streamfixed.json",
+          "source_variable": "flat_recoil_pt",
+          "yield": 221.12476877114352
+        },
+        {
+          "key": "mStop1200_mLSP1",
+          "label": "T2tt mStop1200 mLSP1",
+          "normalization_factor": null,
+          "source": "boosted_recoil_hists_streamfixed.json",
+          "source_variable": "flat_recoil_pt",
+          "yield": 57.97326131590739
+        }
+      ],
+      "source_histogram": "autonomous_allhad/workflow/current_available_pipeline_20260702/boosted_recoil_hists_streamfixed.json",
+      "variable": "recoil_pt"
+    },
+    {
+      "binning": {
+        "overflow_label": null,
+        "overflow_low": null,
+        "physics_bin_edges": [
+          250.0,
+          300.0,
+          350.0,
+          400.0,
+          500.0,
+          800.0,
+          1500.0
+        ],
+        "plot_bin_edges": [
+          250.0,
+          300.0,
+          350.0,
+          400.0,
+          500.0,
+          800.0,
+          1500.0
+        ],
+        "visible_xlim": [
+          250.0,
+          1500.0
+        ]
+      },
+      "blinded": true,
+      "display_label": "SR with nTop >= 1 recoil",
+      "fit_template": false,
+      "flat_region": "SR_Nt1",
+      "mc_uncertainty": {
+        "stat_sum": 46.498634279278214,
+        "syst_sum": 49.39247366290722,
+        "systematic_sources": [
+          "Lumi_2024",
+          "flat_recoil_nominal_stat_plus_lumi"
+        ],
+        "total_sum": 68.50293307517089
+      },
+      "name": "partial_recoil_pt_cat7_SR_Nt1_highDeltaM",
+      "pdf": "plots/partial_recoil_pt_cat7_SR_Nt1_highDeltaM.pdf",
+      "png": "plots/partial_recoil_pt_cat7_SR_Nt1_highDeltaM.png",
+      "region": "cat7_SR_Nt1_highDeltaM",
+      "signal_overlays": [
+        {
+          "key": "mStop1000_mLSP1",
+          "label": "T2tt mStop1000 mLSP1",
+          "normalization_factor": null,
+          "source": "boosted_recoil_hists_streamfixed.json",
+          "source_variable": "flat_recoil_pt",
+          "yield": 135.68423481154792
+        },
+        {
+          "key": "mStop1200_mLSP1",
+          "label": "T2tt mStop1200 mLSP1",
+          "normalization_factor": null,
+          "source": "boosted_recoil_hists_streamfixed.json",
+          "source_variable": "flat_recoil_pt",
+          "yield": 40.68241998101613
+        }
+      ],
+      "source_histogram": "autonomous_allhad/workflow/current_available_pipeline_20260702/boosted_recoil_hists_streamfixed.json",
+      "variable": "recoil_pt"
+    }
+  ],
+  "source": "autonomous_allhad/workflow/current_available_pipeline_20260702/boosted_recoil_hists_streamfixed.json",
+  "status": "complete"
+}
