@@ -1,0 +1,109 @@
+{
+  "created_at": "2026-07-04T09:35:26.809447+00:00",
+  "note": "Uses the existing 17-bin control/search-bin stack style, adapted to the recoil-bin and nTop-split channel definitions.",
+  "plot_style_source": "autonomous_allhad/workflow/plot_control_search_bins_style.py",
+  "plots": [
+    {
+      "bins": 36,
+      "blinded_channels": [
+        "SR"
+      ],
+      "channels": [
+        "LLCR",
+        "QCDCR",
+        "GCR",
+        "DY2E",
+        "DY2M",
+        "SR"
+      ],
+      "key": "recoil_sr",
+      "name": "search_bins_recoil_sr",
+      "pdf": "plots/search_bins_recoil_sr.pdf",
+      "png": "plots/search_bins_recoil_sr.png",
+      "signal_overlays": [
+        "mStop1000_mLSP1",
+        "mStop1200_mLSP1"
+      ],
+      "systematic_sources": [
+        "electron_hlt",
+        "electron_id",
+        "muon_hlt",
+        "muon_id",
+        "photon_id",
+        "pileup"
+      ],
+      "title": "Inclusive Recoil-bin SR"
+    },
+    {
+      "bins": 36,
+      "blinded_channels": [
+        "SR_Nt1"
+      ],
+      "channels": [
+        "LLCR",
+        "QCDCR",
+        "GCR",
+        "DY2E",
+        "DY2M",
+        "SR_Nt1"
+      ],
+      "key": "recoil_sr_nt1",
+      "name": "search_bins_recoil_sr_nt1",
+      "pdf": "plots/search_bins_recoil_sr_nt1.pdf",
+      "png": "plots/search_bins_recoil_sr_nt1.png",
+      "signal_overlays": [
+        "mStop1000_mLSP1",
+        "mStop1200_mLSP1"
+      ],
+      "systematic_sources": [
+        "electron_hlt",
+        "electron_id",
+        "muon_hlt",
+        "muon_id",
+        "photon_id",
+        "pileup"
+      ],
+      "title": "Recoil-bin SR with nTop >= 1"
+    },
+    {
+      "bins": 72,
+      "blinded_channels": [
+        "SR_Nt1",
+        "SR_Nt0"
+      ],
+      "channels": [
+        "LLCR_Nt1",
+        "LLCR_Nt0",
+        "QCDCR_Nt1",
+        "QCDCR_Nt0",
+        "GCR_Nt1",
+        "GCR_Nt0",
+        "DY2E_Nt1",
+        "DY2E_Nt0",
+        "DY2M_Nt1",
+        "DY2M_Nt0",
+        "SR_Nt1",
+        "SR_Nt0"
+      ],
+      "key": "recoil_ntop_split_crsr",
+      "name": "search_bins_recoil_ntop_split_crsr",
+      "pdf": "plots/search_bins_recoil_ntop_split_crsr.pdf",
+      "png": "plots/search_bins_recoil_ntop_split_crsr.png",
+      "signal_overlays": [
+        "mStop1000_mLSP1",
+        "mStop1200_mLSP1"
+      ],
+      "systematic_sources": [
+        "electron_hlt",
+        "electron_id",
+        "muon_hlt",
+        "muon_id",
+        "photon_id",
+        "pileup"
+      ],
+      "title": "nTop split CR/SR recoil-bin model"
+    }
+  ],
+  "source_histograms": "autonomous_allhad/workflow/current_available_pipeline_20260702/boosted_recoil_hists_allsyst_btag_ntop_crsplit.json",
+  "status": "complete"
+}
