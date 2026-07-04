@@ -1,0 +1,16 @@
+{
+  "pdf": "analysis/combine/recoil_sr_ntop_split_crsplit_current_available_20260704/expected_limit_contour_run2_overlay_nodots_x600.pdf",
+  "png": "analysis/combine/recoil_sr_ntop_split_crsplit_current_available_20260704/expected_limit_contour_run2_overlay_nodots_x600.png",
+  "run2_overlay": [
+    "observed",
+    "expected"
+  ],
+  "run2_source": "/eos/user/t/taiwoo/run2_sus19010_contours.json",
+  "signal_mass_point_dots": "removed",
+  "source_limits": "analysis/combine/recoil_sr_ntop_split_crsplit_current_available_20260704/expected_limits.json",
+  "status": "complete",
+  "xlim": [
+    600.0,
+    1500.0
+  ]
+}

@@ -1,0 +1,157 @@
+{
+  "max_abs_split_diff_overall": 1.9895196601282805e-11,
+  "recoil_pt_bins": [
+    250.0,
+    300.0,
+    350.0,
+    400.0,
+    500.0,
+    800.0,
+    1500.0
+  ],
+  "regions_checked": [
+    "LLCR",
+    "QCDCR",
+    "GCR",
+    "DY2E",
+    "DY2M",
+    "SR"
+  ],
+  "source": "autonomous_allhad/workflow/current_available_pipeline_20260702/boosted_recoil_hists_allsyst_btag_ntop_crsplit.json",
+  "split_closure_summary": {
+    "DY2E": {
+      "background": 315.40673091620647,
+      "data": 242.0,
+      "max_abs_split_diff": 2.1316282072803006e-14,
+      "max_bin": 3,
+      "max_sample": "DY",
+      "nt0_background": 300.25014345803527,
+      "nt0_data": 224.0,
+      "nt0_signal_mStop1000_mLSP1": 0.0,
+      "nt0_signal_mStop1200_mLSP1": 0.0,
+      "nt1_background": 15.15658745817113,
+      "nt1_data": 18.0,
+      "nt1_signal_mStop1000_mLSP1": 0.0,
+      "nt1_signal_mStop1200_mLSP1": 0.0,
+      "signal_mStop1000_mLSP1": 0.0,
+      "signal_mStop1200_mLSP1": 0.0
+    },
+    "DY2M": {
+      "background": 416.6671731241318,
+      "data": 307.0,
+      "max_abs_split_diff": 2.842170943040401e-14,
+      "max_bin": 0,
+      "max_sample": "DY",
+      "nt0_background": 375.9540444902747,
+      "nt0_data": 283.0,
+      "nt0_signal_mStop1000_mLSP1": 0.0,
+      "nt0_signal_mStop1200_mLSP1": 0.0,
+      "nt1_background": 40.71312863385704,
+      "nt1_data": 24.0,
+      "nt1_signal_mStop1000_mLSP1": 0.0,
+      "nt1_signal_mStop1200_mLSP1": 0.0,
+      "signal_mStop1000_mLSP1": 0.0,
+      "signal_mStop1200_mLSP1": 0.0
+    },
+    "GCR": {
+      "background": 10075.522358767486,
+      "data": 10818.0,
+      "max_abs_split_diff": 4.547473508864641e-13,
+      "max_bin": 0,
+      "max_sample": "QCD",
+      "nt0_background": 9699.330971544243,
+      "nt0_data": 10289.0,
+      "nt0_signal_mStop1000_mLSP1": 0.0,
+      "nt0_signal_mStop1200_mLSP1": 0.0,
+      "nt1_background": 376.1913872232434,
+      "nt1_data": 529.0,
+      "nt1_signal_mStop1000_mLSP1": 0.0,
+      "nt1_signal_mStop1200_mLSP1": 0.0,
+      "signal_mStop1000_mLSP1": 0.0,
+      "signal_mStop1200_mLSP1": 0.0
+    },
+    "LLCR": {
+      "background": 40857.33321598798,
+      "data": 32050.0,
+      "max_abs_split_diff": 9.094947017729282e-13,
+      "max_bin": 1,
+      "max_sample": "TT",
+      "nt0_background": 35716.99281321649,
+      "nt0_data": 27714.0,
+      "nt0_signal_mStop1000_mLSP1": 5.081824285954714,
+      "nt0_signal_mStop1200_mLSP1": 1.0331495734234988,
+      "nt1_background": 5140.340402771472,
+      "nt1_data": 4336.0,
+      "nt1_signal_mStop1000_mLSP1": 4.854002069094628,
+      "nt1_signal_mStop1200_mLSP1": 1.251768747952199,
+      "signal_mStop1000_mLSP1": 9.93582635504934,
+      "signal_mStop1200_mLSP1": 2.284918321375698
+    },
+    "QCDCR": {
+      "background": 33987.821295432994,
+      "data": 30424.0,
+      "max_abs_split_diff": 1.4779288903810084e-12,
+      "max_bin": 4,
+      "max_sample": "QCD",
+      "nt0_background": 30775.72123975724,
+      "nt0_data": 26539.0,
+      "nt0_signal_mStop1000_mLSP1": 2.0357049242922196,
+      "nt0_signal_mStop1200_mLSP1": 0.40413258001353636,
+      "nt1_background": 3212.100055675741,
+      "nt1_data": 3885.0,
+      "nt1_signal_mStop1000_mLSP1": 4.180034984124816,
+      "nt1_signal_mStop1200_mLSP1": 1.1195226003282182,
+      "signal_mStop1000_mLSP1": 6.215739908417036,
+      "signal_mStop1200_mLSP1": 1.5236551803417544
+    },
+    "SR": {
+      "background": 34920.33121748921,
+      "data": 36744.0,
+      "max_abs_split_diff": 1.9895196601282805e-11,
+      "max_bin": 4,
+      "max_sample": "T2tt_mStop600_mLSP1",
+      "nt0_background": 31833.301613557516,
+      "nt0_data": 33348.0,
+      "nt0_signal_mStop1000_mLSP1": 85.44053395959405,
+      "nt0_signal_mStop1200_mLSP1": 17.290841334891496,
+      "nt1_background": 3087.029603931701,
+      "nt1_data": 3396.0,
+      "nt1_signal_mStop1000_mLSP1": 135.68423481154792,
+      "nt1_signal_mStop1200_mLSP1": 40.68241998101613,
+      "signal_mStop1000_mLSP1": 221.12476877114352,
+      "signal_mStop1200_mLSP1": 57.97326131590739
+    }
+  },
+  "split_policy": {
+    "axis": "nboosted_top",
+    "note": "SR_Nt1 is the feature-side SR nTop>=1 branch. Other *_Nt1 regions are built as base region AND nboosted_top>=1; *_Nt0 regions are base region AND nboosted_top==0.",
+    "split_regions": {
+      "DY2E": {
+        "Nt0": "DY2E_Nt0",
+        "Nt1": "DY2E_Nt1"
+      },
+      "DY2M": {
+        "Nt0": "DY2M_Nt0",
+        "Nt1": "DY2M_Nt1"
+      },
+      "GCR": {
+        "Nt0": "GCR_Nt0",
+        "Nt1": "GCR_Nt1"
+      },
+      "LLCR": {
+        "Nt0": "LLCR_Nt0",
+        "Nt1": "LLCR_Nt1"
+      },
+      "QCDCR": {
+        "Nt0": "QCDCR_Nt0",
+        "Nt1": "QCDCR_Nt1"
+      },
+      "SR": {
+        "Nt0": "SR_Nt0",
+        "Nt1": "SR_Nt1"
+      }
+    },
+    "status": "included"
+  },
+  "status": "complete"
+}

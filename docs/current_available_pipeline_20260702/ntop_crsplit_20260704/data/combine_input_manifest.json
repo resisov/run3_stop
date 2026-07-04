@@ -1,0 +1,3752 @@
+{
+  "channels": [
+    "cat2_LLCR_Nt1_highDeltaM",
+    "cat2_LLCR_Nt0_highDeltaM",
+    "cat3_QCDCR_Nt1_highDeltaM",
+    "cat3_QCDCR_Nt0_highDeltaM",
+    "cat4_GCR_Nt1_highDeltaM",
+    "cat4_GCR_Nt0_highDeltaM",
+    "cat5_DY2E_Nt1_highDeltaM",
+    "cat5_DY2E_Nt0_highDeltaM",
+    "cat6_DY2M_Nt1_highDeltaM",
+    "cat6_DY2M_Nt0_highDeltaM",
+    "cat7_SR_Nt1_recoil",
+    "cat7_SR_Nt0_recoil"
+  ],
+  "control_split_regions": {
+    "DY2E_Nt0": "cat5_DY2E_Nt0_highDeltaM",
+    "DY2E_Nt1": "cat5_DY2E_Nt1_highDeltaM",
+    "DY2M_Nt0": "cat6_DY2M_Nt0_highDeltaM",
+    "DY2M_Nt1": "cat6_DY2M_Nt1_highDeltaM",
+    "GCR_Nt0": "cat4_GCR_Nt0_highDeltaM",
+    "GCR_Nt1": "cat4_GCR_Nt1_highDeltaM",
+    "LLCR_Nt0": "cat2_LLCR_Nt0_highDeltaM",
+    "LLCR_Nt1": "cat2_LLCR_Nt1_highDeltaM",
+    "QCDCR_Nt0": "cat3_QCDCR_Nt0_highDeltaM",
+    "QCDCR_Nt1": "cat3_QCDCR_Nt1_highDeltaM"
+  },
+  "data_mode": "asimov",
+  "datacard_dir": "analysis/combine/recoil_sr_ntop_split_crsplit_current_available_20260704/datacards",
+  "hists": "autonomous_allhad/workflow/current_available_pipeline_20260702/boosted_recoil_hists_allsyst_btag_ntop_crsplit.json",
+  "limit_dir": "analysis/combine/recoil_sr_ntop_split_crsplit_current_available_20260704/limits",
+  "mass_point_count": 188,
+  "mass_points": [
+    "mStop600_mLSP1",
+    "mStop600_mLSP100",
+    "mStop600_mLSP200",
+    "mStop600_mLSP300",
+    "mStop600_mLSP400",
+    "mStop700_mLSP1",
+    "mStop700_mLSP100",
+    "mStop700_mLSP200",
+    "mStop700_mLSP300",
+    "mStop700_mLSP400",
+    "mStop700_mLSP500",
+    "mStop900_mLSP1",
+    "mStop900_mLSP100",
+    "mStop900_mLSP200",
+    "mStop900_mLSP300",
+    "mStop900_mLSP400",
+    "mStop900_mLSP500",
+    "mStop900_mLSP600",
+    "mStop900_mLSP700",
+    "mStop950_mLSP1",
+    "mStop950_mLSP100",
+    "mStop950_mLSP200",
+    "mStop950_mLSP300",
+    "mStop950_mLSP400",
+    "mStop950_mLSP500",
+    "mStop950_mLSP600",
+    "mStop950_mLSP700",
+    "mStop950_mLSP800",
+    "mStop1000_mLSP1",
+    "mStop1000_mLSP100",
+    "mStop1000_mLSP200",
+    "mStop1000_mLSP300",
+    "mStop1000_mLSP400",
+    "mStop1000_mLSP500",
+    "mStop1000_mLSP600",
+    "mStop1000_mLSP700",
+    "mStop1000_mLSP800",
+    "mStop1050_mLSP1",
+    "mStop1050_mLSP100",
+    "mStop1050_mLSP200",
+    "mStop1050_mLSP300",
+    "mStop1050_mLSP400",
+    "mStop1050_mLSP500",
+    "mStop1050_mLSP600",
+    "mStop1050_mLSP700",
+    "mStop1050_mLSP800",
+    "mStop1050_mLSP900",
+    "mStop1100_mLSP1",
+    "mStop1100_mLSP100",
+    "mStop1100_mLSP200",
+    "mStop1100_mLSP300",
+    "mStop1100_mLSP400",
+    "mStop1100_mLSP500",
+    "mStop1100_mLSP600",
+    "mStop1100_mLSP700",
+    "mStop1100_mLSP800",
+    "mStop1100_mLSP900",
+    "mStop1150_mLSP1",
+    "mStop1150_mLSP100",
+    "mStop1150_mLSP200",
+    "mStop1150_mLSP300",
+    "mStop1150_mLSP400",
+    "mStop1150_mLSP500",
+    "mStop1150_mLSP600",
+    "mStop1150_mLSP700",
+    "mStop1150_mLSP800",
+    "mStop1150_mLSP900",
+    "mStop1150_mLSP1000",
+    "mStop1200_mLSP1",
+    "mStop1200_mLSP100",
+    "mStop1200_mLSP200",
+    "mStop1200_mLSP300",
+    "mStop1200_mLSP400",
+    "mStop1200_mLSP500",
+    "mStop1200_mLSP600",
+    "mStop1200_mLSP700",
+    "mStop1200_mLSP800",
+    "mStop1200_mLSP900",
+    "mStop1200_mLSP1000",
+    "mStop1250_mLSP1",
+    "mStop1250_mLSP100",
+    "mStop1250_mLSP200",
+    "mStop1250_mLSP300",
+    "mStop1250_mLSP400",
+    "mStop1250_mLSP500",
+    "mStop1250_mLSP600",
+    "mStop1250_mLSP700",
+    "mStop1250_mLSP800",
+    "mStop1250_mLSP900",
+    "mStop1250_mLSP1000",
+    "mStop1250_mLSP1100",
+    "mStop1300_mLSP1",
+    "mStop1300_mLSP100",
+    "mStop1300_mLSP200",
+    "mStop1300_mLSP300",
+    "mStop1300_mLSP400",
+    "mStop1300_mLSP500",
+    "mStop1300_mLSP600",
+    "mStop1300_mLSP700",
+    "mStop1300_mLSP800",
+    "mStop1300_mLSP900",
+    "mStop1300_mLSP1000",
+    "mStop1300_mLSP1100",
+    "mStop1350_mLSP1",
+    "mStop1350_mLSP100",
+    "mStop1350_mLSP200",
+    "mStop1350_mLSP300",
+    "mStop1350_mLSP400",
+    "mStop1350_mLSP500",
+    "mStop1350_mLSP600",
+    "mStop1350_mLSP700",
+    "mStop1350_mLSP800",
+    "mStop1350_mLSP900",
+    "mStop1350_mLSP1000",
+    "mStop1350_mLSP1100",
+    "mStop1350_mLSP1200",
+    "mStop1400_mLSP1",
+    "mStop1400_mLSP100",
+    "mStop1400_mLSP200",
+    "mStop1400_mLSP300",
+    "mStop1400_mLSP400",
+    "mStop1400_mLSP500",
+    "mStop1400_mLSP600",
+    "mStop1400_mLSP700",
+    "mStop1400_mLSP800",
+    "mStop1400_mLSP900",
+    "mStop1400_mLSP1000",
+    "mStop1400_mLSP1100",
+    "mStop1400_mLSP1200",
+    "mStop1450_mLSP1",
+    "mStop1450_mLSP100",
+    "mStop1450_mLSP200",
+    "mStop1450_mLSP300",
+    "mStop1450_mLSP400",
+    "mStop1450_mLSP500",
+    "mStop1450_mLSP600",
+    "mStop1450_mLSP700",
+    "mStop1450_mLSP800",
+    "mStop1450_mLSP900",
+    "mStop1450_mLSP1000",
+    "mStop1450_mLSP1100",
+    "mStop1450_mLSP1200",
+    "mStop1450_mLSP1300",
+    "mStop1500_mLSP1",
+    "mStop1500_mLSP100",
+    "mStop1500_mLSP200",
+    "mStop1500_mLSP300",
+    "mStop1500_mLSP400",
+    "mStop1500_mLSP500",
+    "mStop1500_mLSP600",
+    "mStop1500_mLSP700",
+    "mStop1500_mLSP800",
+    "mStop1500_mLSP900",
+    "mStop1500_mLSP1000",
+    "mStop1500_mLSP1100",
+    "mStop1500_mLSP1200",
+    "mStop1500_mLSP1300",
+    "mStop1600_mLSP1",
+    "mStop1600_mLSP100",
+    "mStop1600_mLSP200",
+    "mStop1600_mLSP300",
+    "mStop1600_mLSP400",
+    "mStop1600_mLSP500",
+    "mStop1600_mLSP600",
+    "mStop1600_mLSP700",
+    "mStop1600_mLSP800",
+    "mStop1600_mLSP900",
+    "mStop1600_mLSP1000",
+    "mStop1600_mLSP1100",
+    "mStop1600_mLSP1200",
+    "mStop1600_mLSP1300",
+    "mStop1600_mLSP1400",
+    "mStop1700_mLSP1",
+    "mStop1700_mLSP100",
+    "mStop1700_mLSP200",
+    "mStop1700_mLSP300",
+    "mStop1700_mLSP400",
+    "mStop1700_mLSP500",
+    "mStop1700_mLSP600",
+    "mStop1700_mLSP700",
+    "mStop1700_mLSP800",
+    "mStop1700_mLSP900",
+    "mStop1700_mLSP1000",
+    "mStop1700_mLSP1100",
+    "mStop1700_mLSP1200",
+    "mStop1700_mLSP1300",
+    "mStop1700_mLSP1400",
+    "mStop1700_mLSP1500"
+  ],
+  "max_mstop_policy": "mStop < 1800",
+  "root_summary": {
+    "background_shape_nuisances": [
+      "electron_hlt",
+      "electron_id",
+      "muon_hlt",
+      "muon_id",
+      "photon_id",
+      "pileup"
+    ],
+    "channels": {
+      "cat2_LLCR_Nt0_highDeltaM": {
+        "background_shape_nuisances": [
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
+        ],
+        "background_yield": 35716.99281321649,
+        "bin_count": 6,
+        "bin_labels": [
+          "250-300",
+          "300-350",
+          "350-400",
+          "400-500",
+          "500-800",
+          "800-1500"
+        ],
+        "data_mode": "asimov",
+        "data_yield": 35716.99281321649,
+        "kind": "control_recoil_6bin_flat_nTop_split",
+        "source_region": "LLCR_Nt0"
+      },
+      "cat2_LLCR_Nt1_highDeltaM": {
+        "background_shape_nuisances": [
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
+        ],
+        "background_yield": 5140.340402771471,
+        "bin_count": 6,
+        "bin_labels": [
+          "250-300",
+          "300-350",
+          "350-400",
+          "400-500",
+          "500-800",
+          "800-1500"
+        ],
+        "data_mode": "asimov",
+        "data_yield": 5140.340402771471,
+        "kind": "control_recoil_6bin_flat_nTop_split",
+        "source_region": "LLCR_Nt1"
+      },
+      "cat3_QCDCR_Nt0_highDeltaM": {
+        "background_shape_nuisances": [
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
+        ],
+        "background_yield": 30775.721239757237,
+        "bin_count": 6,
+        "bin_labels": [
+          "250-300",
+          "300-350",
+          "350-400",
+          "400-500",
+          "500-800",
+          "800-1500"
+        ],
+        "data_mode": "asimov",
+        "data_yield": 30775.721239757237,
+        "kind": "control_recoil_6bin_flat_nTop_split",
+        "source_region": "QCDCR_Nt0"
+      },
+      "cat3_QCDCR_Nt1_highDeltaM": {
+        "background_shape_nuisances": [
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
+        ],
+        "background_yield": 3212.1000556757404,
+        "bin_count": 6,
+        "bin_labels": [
+          "250-300",
+          "300-350",
+          "350-400",
+          "400-500",
+          "500-800",
+          "800-1500"
+        ],
+        "data_mode": "asimov",
+        "data_yield": 3212.1000556757404,
+        "kind": "control_recoil_6bin_flat_nTop_split",
+        "source_region": "QCDCR_Nt1"
+      },
+      "cat4_GCR_Nt0_highDeltaM": {
+        "background_shape_nuisances": [
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
+        ],
+        "background_yield": 9699.330971544241,
+        "bin_count": 6,
+        "bin_labels": [
+          "250-300",
+          "300-350",
+          "350-400",
+          "400-500",
+          "500-800",
+          "800-1500"
+        ],
+        "data_mode": "asimov",
+        "data_yield": 9699.330971544241,
+        "kind": "control_recoil_6bin_flat_nTop_split",
+        "source_region": "GCR_Nt0"
+      },
+      "cat4_GCR_Nt1_highDeltaM": {
+        "background_shape_nuisances": [
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
+        ],
+        "background_yield": 376.1913872232434,
+        "bin_count": 6,
+        "bin_labels": [
+          "250-300",
+          "300-350",
+          "350-400",
+          "400-500",
+          "500-800",
+          "800-1500"
+        ],
+        "data_mode": "asimov",
+        "data_yield": 376.1913872232434,
+        "kind": "control_recoil_6bin_flat_nTop_split",
+        "source_region": "GCR_Nt1"
+      },
+      "cat5_DY2E_Nt0_highDeltaM": {
+        "background_shape_nuisances": [
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
+        ],
+        "background_yield": 300.2501434580352,
+        "bin_count": 6,
+        "bin_labels": [
+          "250-300",
+          "300-350",
+          "350-400",
+          "400-500",
+          "500-800",
+          "800-1500"
+        ],
+        "data_mode": "asimov",
+        "data_yield": 300.2501434580352,
+        "kind": "control_recoil_6bin_flat_nTop_split",
+        "source_region": "DY2E_Nt0"
+      },
+      "cat5_DY2E_Nt1_highDeltaM": {
+        "background_shape_nuisances": [
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
+        ],
+        "background_yield": 15.156587458171128,
+        "bin_count": 6,
+        "bin_labels": [
+          "250-300",
+          "300-350",
+          "350-400",
+          "400-500",
+          "500-800",
+          "800-1500"
+        ],
+        "data_mode": "asimov",
+        "data_yield": 15.156587458171128,
+        "kind": "control_recoil_6bin_flat_nTop_split",
+        "source_region": "DY2E_Nt1"
+      },
+      "cat6_DY2M_Nt0_highDeltaM": {
+        "background_shape_nuisances": [
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
+        ],
+        "background_yield": 375.9540444902748,
+        "bin_count": 6,
+        "bin_labels": [
+          "250-300",
+          "300-350",
+          "350-400",
+          "400-500",
+          "500-800",
+          "800-1500"
+        ],
+        "data_mode": "asimov",
+        "data_yield": 375.9540444902748,
+        "kind": "control_recoil_6bin_flat_nTop_split",
+        "source_region": "DY2M_Nt0"
+      },
+      "cat6_DY2M_Nt1_highDeltaM": {
+        "background_shape_nuisances": [
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
+        ],
+        "background_yield": 40.713128633857046,
+        "bin_count": 6,
+        "bin_labels": [
+          "250-300",
+          "300-350",
+          "350-400",
+          "400-500",
+          "500-800",
+          "800-1500"
+        ],
+        "data_mode": "asimov",
+        "data_yield": 40.713128633857046,
+        "kind": "control_recoil_6bin_flat_nTop_split",
+        "source_region": "DY2M_Nt1"
+      },
+      "cat7_SR_Nt0_recoil": {
+        "background_shape_nuisances": [
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
+        ],
+        "background_yield": 31833.301613557513,
+        "bin_count": 6,
+        "bin_labels": [
+          "250-300",
+          "300-350",
+          "350-400",
+          "400-500",
+          "500-800",
+          "800-1500"
+        ],
+        "data_mode": "asimov",
+        "data_yield": 31833.301613557513,
+        "kind": "signal_recoil_6bin_flat_nTop_eq_0",
+        "source_region": "SR_Nt0"
+      },
+      "cat7_SR_Nt1_recoil": {
+        "background_shape_nuisances": [
+          "electron_hlt",
+          "electron_id",
+          "muon_hlt",
+          "muon_id",
+          "photon_id",
+          "pileup"
+        ],
+        "background_yield": 3087.0296039317013,
+        "bin_count": 6,
+        "bin_labels": [
+          "250-300",
+          "300-350",
+          "350-400",
+          "400-500",
+          "500-800",
+          "800-1500"
+        ],
+        "data_mode": "asimov",
+        "data_yield": 3087.0296039317013,
+        "kind": "signal_recoil_6bin_flat_nTop_ge_1",
+        "source_region": "SR_Nt1"
+      }
+    },
+    "signals": {
+      "mStop1000_mLSP1": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 85.44053395959405,
+          "cat7_SR_Nt1_recoil": 135.68423481154792
+        },
+        "process": "sig_mStop1000_mLSP1"
+      },
+      "mStop1000_mLSP100": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 87.15236436388815,
+          "cat7_SR_Nt1_recoil": 133.80867058896192
+        },
+        "process": "sig_mStop1000_mLSP100"
+      },
+      "mStop1000_mLSP200": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 89.43074966114145,
+          "cat7_SR_Nt1_recoil": 130.25258596093363
+        },
+        "process": "sig_mStop1000_mLSP200"
+      },
+      "mStop1000_mLSP300": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 97.02656621816203,
+          "cat7_SR_Nt1_recoil": 122.09149104828788
+        },
+        "process": "sig_mStop1000_mLSP300"
+      },
+      "mStop1000_mLSP400": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 104.45531037519825,
+          "cat7_SR_Nt1_recoil": 104.6691096327242
+        },
+        "process": "sig_mStop1000_mLSP400"
+      },
+      "mStop1000_mLSP500": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 116.52377175750904,
+          "cat7_SR_Nt1_recoil": 83.82469386765078
+        },
+        "process": "sig_mStop1000_mLSP500"
+      },
+      "mStop1000_mLSP600": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 127.15318224579009,
+          "cat7_SR_Nt1_recoil": 50.56211224908338
+        },
+        "process": "sig_mStop1000_mLSP600"
+      },
+      "mStop1000_mLSP700": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 112.20945817568553,
+          "cat7_SR_Nt1_recoil": 17.868894434337676
+        },
+        "process": "sig_mStop1000_mLSP700"
+      },
+      "mStop1000_mLSP800": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 42.330785780830205,
+          "cat7_SR_Nt1_recoil": 1.7299885069761278
+        },
+        "process": "sig_mStop1000_mLSP800"
+      },
+      "mStop1050_mLSP1": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 56.148982469351246,
+          "cat7_SR_Nt1_recoil": 102.96024080902956
+        },
+        "process": "sig_mStop1050_mLSP1"
+      },
+      "mStop1050_mLSP100": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 57.59780434057414,
+          "cat7_SR_Nt1_recoil": 99.4151859607136
+        },
+        "process": "sig_mStop1050_mLSP100"
+      },
+      "mStop1050_mLSP200": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 59.943023509849205,
+          "cat7_SR_Nt1_recoil": 97.04910736096838
+        },
+        "process": "sig_mStop1050_mLSP200"
+      },
+      "mStop1050_mLSP300": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 60.85785406790066,
+          "cat7_SR_Nt1_recoil": 92.18906703861136
+        },
+        "process": "sig_mStop1050_mLSP300"
+      },
+      "mStop1050_mLSP400": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 71.1882697652501,
+          "cat7_SR_Nt1_recoil": 82.89700687818566
+        },
+        "process": "sig_mStop1050_mLSP400"
+      },
+      "mStop1050_mLSP500": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 77.8207219848512,
+          "cat7_SR_Nt1_recoil": 68.7844786779186
+        },
+        "process": "sig_mStop1050_mLSP500"
+      },
+      "mStop1050_mLSP600": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 84.74345537339182,
+          "cat7_SR_Nt1_recoil": 50.24706749010888
+        },
+        "process": "sig_mStop1050_mLSP600"
+      },
+      "mStop1050_mLSP700": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 86.5623921167774,
+          "cat7_SR_Nt1_recoil": 25.74460569482703
+        },
+        "process": "sig_mStop1050_mLSP700"
+      },
+      "mStop1050_mLSP800": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 57.88221898094638,
+          "cat7_SR_Nt1_recoil": 4.959109378770387
+        },
+        "process": "sig_mStop1050_mLSP800"
+      },
+      "mStop1050_mLSP900": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 20.869654900911733,
+          "cat7_SR_Nt1_recoil": 0.5004119904286355
+        },
+        "process": "sig_mStop1050_mLSP900"
+      },
+      "mStop1100_mLSP1": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 35.46942272157567,
+          "cat7_SR_Nt1_recoil": 74.04040879513437
+        },
+        "process": "sig_mStop1100_mLSP1"
+      },
+      "mStop1100_mLSP100": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 37.94962855371461,
+          "cat7_SR_Nt1_recoil": 72.28310125630155
+        },
+        "process": "sig_mStop1100_mLSP100"
+      },
+      "mStop1100_mLSP200": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 39.78337389309638,
+          "cat7_SR_Nt1_recoil": 71.95175620276011
+        },
+        "process": "sig_mStop1100_mLSP200"
+      },
+      "mStop1100_mLSP300": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 41.15031895457132,
+          "cat7_SR_Nt1_recoil": 71.52733171210322
+        },
+        "process": "sig_mStop1100_mLSP300"
+      },
+      "mStop1100_mLSP400": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 47.06140754762997,
+          "cat7_SR_Nt1_recoil": 64.72661376570447
+        },
+        "process": "sig_mStop1100_mLSP400"
+      },
+      "mStop1100_mLSP500": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 51.44035333561841,
+          "cat7_SR_Nt1_recoil": 58.46941727422072
+        },
+        "process": "sig_mStop1100_mLSP500"
+      },
+      "mStop1100_mLSP600": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 58.320360890904645,
+          "cat7_SR_Nt1_recoil": 43.71962745339103
+        },
+        "process": "sig_mStop1100_mLSP600"
+      },
+      "mStop1100_mLSP700": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 64.48478251400356,
+          "cat7_SR_Nt1_recoil": 28.128602111744154
+        },
+        "process": "sig_mStop1100_mLSP700"
+      },
+      "mStop1100_mLSP800": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 58.63724257201654,
+          "cat7_SR_Nt1_recoil": 9.386437320616274
+        },
+        "process": "sig_mStop1100_mLSP800"
+      },
+      "mStop1100_mLSP900": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 22.71974122181145,
+          "cat7_SR_Nt1_recoil": 1.2104602526593948
+        },
+        "process": "sig_mStop1100_mLSP900"
+      },
+      "mStop1150_mLSP1": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 26.028020851719685,
+          "cat7_SR_Nt1_recoil": 55.42589932714683
+        },
+        "process": "sig_mStop1150_mLSP1"
+      },
+      "mStop1150_mLSP100": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 25.529771095546725,
+          "cat7_SR_Nt1_recoil": 56.81352196368684
+        },
+        "process": "sig_mStop1150_mLSP100"
+      },
+      "mStop1150_mLSP1000": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 12.080028109255382,
+          "cat7_SR_Nt1_recoil": 0.3293327605879449
+        },
+        "process": "sig_mStop1150_mLSP1000"
+      },
+      "mStop1150_mLSP200": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 27.028585120233284,
+          "cat7_SR_Nt1_recoil": 55.10643292003485
+        },
+        "process": "sig_mStop1150_mLSP200"
+      },
+      "mStop1150_mLSP300": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 28.05863316197763,
+          "cat7_SR_Nt1_recoil": 51.45212779281074
+        },
+        "process": "sig_mStop1150_mLSP300"
+      },
+      "mStop1150_mLSP400": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 30.080866282457528,
+          "cat7_SR_Nt1_recoil": 49.64107410995985
+        },
+        "process": "sig_mStop1150_mLSP400"
+      },
+      "mStop1150_mLSP500": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 34.03795138526215,
+          "cat7_SR_Nt1_recoil": 45.26468471998203
+        },
+        "process": "sig_mStop1150_mLSP500"
+      },
+      "mStop1150_mLSP600": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 39.193784286429825,
+          "cat7_SR_Nt1_recoil": 37.75503982351942
+        },
+        "process": "sig_mStop1150_mLSP600"
+      },
+      "mStop1150_mLSP700": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 44.38436274558104,
+          "cat7_SR_Nt1_recoil": 27.010221941234004
+        },
+        "process": "sig_mStop1150_mLSP700"
+      },
+      "mStop1150_mLSP800": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 47.52143583032909,
+          "cat7_SR_Nt1_recoil": 13.361392658570638
+        },
+        "process": "sig_mStop1150_mLSP800"
+      },
+      "mStop1150_mLSP900": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 31.931322176959156,
+          "cat7_SR_Nt1_recoil": 2.7784460270189837
+        },
+        "process": "sig_mStop1150_mLSP900"
+      },
+      "mStop1200_mLSP1": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 17.290841334891496,
+          "cat7_SR_Nt1_recoil": 40.68241998101613
+        },
+        "process": "sig_mStop1200_mLSP1"
+      },
+      "mStop1200_mLSP100": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 17.11354200909054,
+          "cat7_SR_Nt1_recoil": 41.02612580457328
+        },
+        "process": "sig_mStop1200_mLSP100"
+      },
+      "mStop1200_mLSP1000": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 13.159576537513798,
+          "cat7_SR_Nt1_recoil": 0.39610136599446466
+        },
+        "process": "sig_mStop1200_mLSP1000"
+      },
+      "mStop1200_mLSP200": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 17.48816680890261,
+          "cat7_SR_Nt1_recoil": 40.98643385379146
+        },
+        "process": "sig_mStop1200_mLSP200"
+      },
+      "mStop1200_mLSP300": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 18.971307777363403,
+          "cat7_SR_Nt1_recoil": 39.782791891264324
+        },
+        "process": "sig_mStop1200_mLSP300"
+      },
+      "mStop1200_mLSP400": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 20.373256910267003,
+          "cat7_SR_Nt1_recoil": 38.30954905448496
+        },
+        "process": "sig_mStop1200_mLSP400"
+      },
+      "mStop1200_mLSP500": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 22.910397536902984,
+          "cat7_SR_Nt1_recoil": 36.0345815653334
+        },
+        "process": "sig_mStop1200_mLSP500"
+      },
+      "mStop1200_mLSP600": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 25.40427832193239,
+          "cat7_SR_Nt1_recoil": 30.959572949865464
+        },
+        "process": "sig_mStop1200_mLSP600"
+      },
+      "mStop1200_mLSP700": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 29.647712858913234,
+          "cat7_SR_Nt1_recoil": 24.767670932962144
+        },
+        "process": "sig_mStop1200_mLSP700"
+      },
+      "mStop1200_mLSP800": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 32.71739934532501,
+          "cat7_SR_Nt1_recoil": 14.712605654696441
+        },
+        "process": "sig_mStop1200_mLSP800"
+      },
+      "mStop1200_mLSP900": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 30.96294594088385,
+          "cat7_SR_Nt1_recoil": 5.034340252188642
+        },
+        "process": "sig_mStop1200_mLSP900"
+      },
+      "mStop1250_mLSP1": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 11.813185924376842,
+          "cat7_SR_Nt1_recoil": 30.1998760169986
+        },
+        "process": "sig_mStop1250_mLSP1"
+      },
+      "mStop1250_mLSP100": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 12.12856018227803,
+          "cat7_SR_Nt1_recoil": 29.569573141131116
+        },
+        "process": "sig_mStop1250_mLSP100"
+      },
+      "mStop1250_mLSP1000": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 17.527251451488166,
+          "cat7_SR_Nt1_recoil": 1.3874832908517671
+        },
+        "process": "sig_mStop1250_mLSP1000"
+      },
+      "mStop1250_mLSP1100": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 6.690486467231877,
+          "cat7_SR_Nt1_recoil": 0.17903783462397155
+        },
+        "process": "sig_mStop1250_mLSP1100"
+      },
+      "mStop1250_mLSP200": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 12.39038681847067,
+          "cat7_SR_Nt1_recoil": 30.433744742513284
+        },
+        "process": "sig_mStop1250_mLSP200"
+      },
+      "mStop1250_mLSP300": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 12.883965463417933,
+          "cat7_SR_Nt1_recoil": 29.68501193619577
+        },
+        "process": "sig_mStop1250_mLSP300"
+      },
+      "mStop1250_mLSP400": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 13.8492046128239,
+          "cat7_SR_Nt1_recoil": 28.952820404939395
+        },
+        "process": "sig_mStop1250_mLSP400"
+      },
+      "mStop1250_mLSP500": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 15.36262411234759,
+          "cat7_SR_Nt1_recoil": 27.699153222176747
+        },
+        "process": "sig_mStop1250_mLSP500"
+      },
+      "mStop1250_mLSP600": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 17.770735585073496,
+          "cat7_SR_Nt1_recoil": 24.738913940220367
+        },
+        "process": "sig_mStop1250_mLSP600"
+      },
+      "mStop1250_mLSP700": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 19.7417841586723,
+          "cat7_SR_Nt1_recoil": 20.979535797034956
+        },
+        "process": "sig_mStop1250_mLSP700"
+      },
+      "mStop1250_mLSP800": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 23.343839472738242,
+          "cat7_SR_Nt1_recoil": 14.8209204524132
+        },
+        "process": "sig_mStop1250_mLSP800"
+      },
+      "mStop1250_mLSP900": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 24.349877437776982,
+          "cat7_SR_Nt1_recoil": 7.241312958121418
+        },
+        "process": "sig_mStop1250_mLSP900"
+      },
+      "mStop1300_mLSP1": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 7.977762718068058,
+          "cat7_SR_Nt1_recoil": 23.061620726993617
+        },
+        "process": "sig_mStop1300_mLSP1"
+      },
+      "mStop1300_mLSP100": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 8.596416637922184,
+          "cat7_SR_Nt1_recoil": 22.78806771545719
+        },
+        "process": "sig_mStop1300_mLSP100"
+      },
+      "mStop1300_mLSP1000": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 16.582078833645273,
+          "cat7_SR_Nt1_recoil": 2.8137975962316872
+        },
+        "process": "sig_mStop1300_mLSP1000"
+      },
+      "mStop1300_mLSP1100": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 7.195410118017889,
+          "cat7_SR_Nt1_recoil": 0.23119638948829135
+        },
+        "process": "sig_mStop1300_mLSP1100"
+      },
+      "mStop1300_mLSP200": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 8.55922281064565,
+          "cat7_SR_Nt1_recoil": 22.190218599310143
+        },
+        "process": "sig_mStop1300_mLSP200"
+      },
+      "mStop1300_mLSP300": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 8.850047401180918,
+          "cat7_SR_Nt1_recoil": 21.96224281963546
+        },
+        "process": "sig_mStop1300_mLSP300"
+      },
+      "mStop1300_mLSP400": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 9.449123744598538,
+          "cat7_SR_Nt1_recoil": 21.9860107896358
+        },
+        "process": "sig_mStop1300_mLSP400"
+      },
+      "mStop1300_mLSP500": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 10.843212414115861,
+          "cat7_SR_Nt1_recoil": 20.85006379824688
+        },
+        "process": "sig_mStop1300_mLSP500"
+      },
+      "mStop1300_mLSP600": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 11.697629549015991,
+          "cat7_SR_Nt1_recoil": 19.523164448655763
+        },
+        "process": "sig_mStop1300_mLSP600"
+      },
+      "mStop1300_mLSP700": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 14.069410887890037,
+          "cat7_SR_Nt1_recoil": 17.255670498084097
+        },
+        "process": "sig_mStop1300_mLSP700"
+      },
+      "mStop1300_mLSP800": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 15.635243590045363,
+          "cat7_SR_Nt1_recoil": 13.842738538744866
+        },
+        "process": "sig_mStop1300_mLSP800"
+      },
+      "mStop1300_mLSP900": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 18.389133219367444,
+          "cat7_SR_Nt1_recoil": 8.600640538064315
+        },
+        "process": "sig_mStop1300_mLSP900"
+      },
+      "mStop1350_mLSP1": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 5.7249710596898264,
+          "cat7_SR_Nt1_recoil": 16.629146138708965
+        },
+        "process": "sig_mStop1350_mLSP1"
+      },
+      "mStop1350_mLSP100": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 5.949379991502513,
+          "cat7_SR_Nt1_recoil": 16.598496129998477
+        },
+        "process": "sig_mStop1350_mLSP100"
+      },
+      "mStop1350_mLSP1000": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 13.94320098872644,
+          "cat7_SR_Nt1_recoil": 4.116428379330839
+        },
+        "process": "sig_mStop1350_mLSP1000"
+      },
+      "mStop1350_mLSP1100": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 9.835914006917953,
+          "cat7_SR_Nt1_recoil": 0.8673754548011536
+        },
+        "process": "sig_mStop1350_mLSP1100"
+      },
+      "mStop1350_mLSP1200": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 3.7838490738308397,
+          "cat7_SR_Nt1_recoil": 0.09814691488146338
+        },
+        "process": "sig_mStop1350_mLSP1200"
+      },
+      "mStop1350_mLSP200": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 6.147476062624607,
+          "cat7_SR_Nt1_recoil": 16.688053481403017
+        },
+        "process": "sig_mStop1350_mLSP200"
+      },
+      "mStop1350_mLSP300": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 6.259764673083098,
+          "cat7_SR_Nt1_recoil": 16.54379657598341
+        },
+        "process": "sig_mStop1350_mLSP300"
+      },
+      "mStop1350_mLSP400": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 6.801711889456906,
+          "cat7_SR_Nt1_recoil": 16.56061708835621
+        },
+        "process": "sig_mStop1350_mLSP400"
+      },
+      "mStop1350_mLSP500": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 7.041620093968451,
+          "cat7_SR_Nt1_recoil": 16.01359592309956
+        },
+        "process": "sig_mStop1350_mLSP500"
+      },
+      "mStop1350_mLSP600": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 8.205685755595072,
+          "cat7_SR_Nt1_recoil": 15.20542442908166
+        },
+        "process": "sig_mStop1350_mLSP600"
+      },
+      "mStop1350_mLSP700": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 9.343135047755679,
+          "cat7_SR_Nt1_recoil": 14.327261479268238
+        },
+        "process": "sig_mStop1350_mLSP700"
+      },
+      "mStop1350_mLSP800": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 11.032513286936002,
+          "cat7_SR_Nt1_recoil": 11.591896715921285
+        },
+        "process": "sig_mStop1350_mLSP800"
+      },
+      "mStop1350_mLSP900": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 12.851810569526148,
+          "cat7_SR_Nt1_recoil": 8.54695801330532
+        },
+        "process": "sig_mStop1350_mLSP900"
+      },
+      "mStop1400_mLSP1": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 3.9042364173625654,
+          "cat7_SR_Nt1_recoil": 12.785655465361724
+        },
+        "process": "sig_mStop1400_mLSP1"
+      },
+      "mStop1400_mLSP100": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 3.9403999138257424,
+          "cat7_SR_Nt1_recoil": 13.050449797889222
+        },
+        "process": "sig_mStop1400_mLSP100"
+      },
+      "mStop1400_mLSP1000": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 10.082415103045658,
+          "cat7_SR_Nt1_recoil": 4.573283309089977
+        },
+        "process": "sig_mStop1400_mLSP1000"
+      },
+      "mStop1400_mLSP1100": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 9.513873170860606,
+          "cat7_SR_Nt1_recoil": 1.6410312143198778
+        },
+        "process": "sig_mStop1400_mLSP1100"
+      },
+      "mStop1400_mLSP1200": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 4.250889793519775,
+          "cat7_SR_Nt1_recoil": 0.15082991554075265
+        },
+        "process": "sig_mStop1400_mLSP1200"
+      },
+      "mStop1400_mLSP200": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 4.436364629750978,
+          "cat7_SR_Nt1_recoil": 13.027590013949867
+        },
+        "process": "sig_mStop1400_mLSP200"
+      },
+      "mStop1400_mLSP300": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 4.399704610789673,
+          "cat7_SR_Nt1_recoil": 12.787215929491126
+        },
+        "process": "sig_mStop1400_mLSP300"
+      },
+      "mStop1400_mLSP400": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 4.631101460040698,
+          "cat7_SR_Nt1_recoil": 12.39792609982393
+        },
+        "process": "sig_mStop1400_mLSP400"
+      },
+      "mStop1400_mLSP500": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 4.939595375630061,
+          "cat7_SR_Nt1_recoil": 12.28288248436336
+        },
+        "process": "sig_mStop1400_mLSP500"
+      },
+      "mStop1400_mLSP600": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 5.314832103486642,
+          "cat7_SR_Nt1_recoil": 11.555141256614695
+        },
+        "process": "sig_mStop1400_mLSP600"
+      },
+      "mStop1400_mLSP700": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 6.405956273597742,
+          "cat7_SR_Nt1_recoil": 11.021089406060492
+        },
+        "process": "sig_mStop1400_mLSP700"
+      },
+      "mStop1400_mLSP800": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 7.348305261495396,
+          "cat7_SR_Nt1_recoil": 9.90295172217663
+        },
+        "process": "sig_mStop1400_mLSP800"
+      },
+      "mStop1400_mLSP900": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 8.49184832020017,
+          "cat7_SR_Nt1_recoil": 7.575084636708503
+        },
+        "process": "sig_mStop1400_mLSP900"
+      },
+      "mStop1450_mLSP1": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 2.923080655518793,
+          "cat7_SR_Nt1_recoil": 9.073518480894359
+        },
+        "process": "sig_mStop1450_mLSP1"
+      },
+      "mStop1450_mLSP100": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 3.0440258405738962,
+          "cat7_SR_Nt1_recoil": 9.50920660422002
+        },
+        "process": "sig_mStop1450_mLSP100"
+      },
+      "mStop1450_mLSP1000": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 7.196554085270966,
+          "cat7_SR_Nt1_recoil": 4.686457569087912
+        },
+        "process": "sig_mStop1450_mLSP1000"
+      },
+      "mStop1450_mLSP1100": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 7.387913396807693,
+          "cat7_SR_Nt1_recoil": 2.2449070128401427
+        },
+        "process": "sig_mStop1450_mLSP1100"
+      },
+      "mStop1450_mLSP1200": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 5.506169214856811,
+          "cat7_SR_Nt1_recoil": 0.4478620515768464
+        },
+        "process": "sig_mStop1450_mLSP1200"
+      },
+      "mStop1450_mLSP1300": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 2.0909756949994436,
+          "cat7_SR_Nt1_recoil": 0.05667466339357709
+        },
+        "process": "sig_mStop1450_mLSP1300"
+      },
+      "mStop1450_mLSP200": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 2.9693196516414613,
+          "cat7_SR_Nt1_recoil": 9.408698335174146
+        },
+        "process": "sig_mStop1450_mLSP200"
+      },
+      "mStop1450_mLSP300": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 3.083648434201482,
+          "cat7_SR_Nt1_recoil": 9.696547124744013
+        },
+        "process": "sig_mStop1450_mLSP300"
+      },
+      "mStop1450_mLSP400": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 3.3702668668290228,
+          "cat7_SR_Nt1_recoil": 9.340203097652779
+        },
+        "process": "sig_mStop1450_mLSP400"
+      },
+      "mStop1450_mLSP500": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 3.4053761231604662,
+          "cat7_SR_Nt1_recoil": 9.510025163955163
+        },
+        "process": "sig_mStop1450_mLSP500"
+      },
+      "mStop1450_mLSP600": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 3.9164055633933987,
+          "cat7_SR_Nt1_recoil": 9.04265972820564
+        },
+        "process": "sig_mStop1450_mLSP600"
+      },
+      "mStop1450_mLSP700": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 4.366248347741483,
+          "cat7_SR_Nt1_recoil": 8.851082700141653
+        },
+        "process": "sig_mStop1450_mLSP700"
+      },
+      "mStop1450_mLSP800": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 5.063553409468588,
+          "cat7_SR_Nt1_recoil": 7.917044035256264
+        },
+        "process": "sig_mStop1450_mLSP800"
+      },
+      "mStop1450_mLSP900": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 5.88706461162107,
+          "cat7_SR_Nt1_recoil": 6.850333529491432
+        },
+        "process": "sig_mStop1450_mLSP900"
+      },
+      "mStop1500_mLSP1": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 2.053513136321116,
+          "cat7_SR_Nt1_recoil": 7.230541233569289
+        },
+        "process": "sig_mStop1500_mLSP1"
+      },
+      "mStop1500_mLSP100": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 2.1370431140129087,
+          "cat7_SR_Nt1_recoil": 7.149634415667897
+        },
+        "process": "sig_mStop1500_mLSP100"
+      },
+      "mStop1500_mLSP1000": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 4.925484023646857,
+          "cat7_SR_Nt1_recoil": 4.48528891397393
+        },
+        "process": "sig_mStop1500_mLSP1000"
+      },
+      "mStop1500_mLSP1100": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 5.57732383921124,
+          "cat7_SR_Nt1_recoil": 2.710385121697238
+        },
+        "process": "sig_mStop1500_mLSP1100"
+      },
+      "mStop1500_mLSP1200": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 5.338286369363206,
+          "cat7_SR_Nt1_recoil": 0.8820782982039564
+        },
+        "process": "sig_mStop1500_mLSP1200"
+      },
+      "mStop1500_mLSP1300": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 2.2114008745042524,
+          "cat7_SR_Nt1_recoil": 0.11069926850683745
+        },
+        "process": "sig_mStop1500_mLSP1300"
+      },
+      "mStop1500_mLSP200": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 2.0724520456562665,
+          "cat7_SR_Nt1_recoil": 7.0861805881949085
+        },
+        "process": "sig_mStop1500_mLSP200"
+      },
+      "mStop1500_mLSP300": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 2.2228272811675063,
+          "cat7_SR_Nt1_recoil": 7.124445471453347
+        },
+        "process": "sig_mStop1500_mLSP300"
+      },
+      "mStop1500_mLSP400": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 2.2343709994667242,
+          "cat7_SR_Nt1_recoil": 7.129821287119765
+        },
+        "process": "sig_mStop1500_mLSP400"
+      },
+      "mStop1500_mLSP500": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 2.453741682621404,
+          "cat7_SR_Nt1_recoil": 7.105854998494735
+        },
+        "process": "sig_mStop1500_mLSP500"
+      },
+      "mStop1500_mLSP600": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 2.648664170896965,
+          "cat7_SR_Nt1_recoil": 6.8925046976217725
+        },
+        "process": "sig_mStop1500_mLSP600"
+      },
+      "mStop1500_mLSP700": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 2.9108204592695497,
+          "cat7_SR_Nt1_recoil": 6.755894794125419
+        },
+        "process": "sig_mStop1500_mLSP700"
+      },
+      "mStop1500_mLSP800": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 3.404117653803616,
+          "cat7_SR_Nt1_recoil": 6.403668288673159
+        },
+        "process": "sig_mStop1500_mLSP800"
+      },
+      "mStop1500_mLSP900": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 4.023188583961104,
+          "cat7_SR_Nt1_recoil": 5.578634045853864
+        },
+        "process": "sig_mStop1500_mLSP900"
+      },
+      "mStop1600_mLSP1": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 1.0817704975459206,
+          "cat7_SR_Nt1_recoil": 3.906991361533458
+        },
+        "process": "sig_mStop1600_mLSP1"
+      },
+      "mStop1600_mLSP100": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 1.0852345752584325,
+          "cat7_SR_Nt1_recoil": 3.9108741689657336
+        },
+        "process": "sig_mStop1600_mLSP100"
+      },
+      "mStop1600_mLSP1000": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 2.308276801825488,
+          "cat7_SR_Nt1_recoil": 3.2451670161693715
+        },
+        "process": "sig_mStop1600_mLSP1000"
+      },
+      "mStop1600_mLSP1100": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 2.7786425936999155,
+          "cat7_SR_Nt1_recoil": 2.6357172483938283
+        },
+        "process": "sig_mStop1600_mLSP1100"
+      },
+      "mStop1600_mLSP1200": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 3.2580960450429415,
+          "cat7_SR_Nt1_recoil": 1.634738572894458
+        },
+        "process": "sig_mStop1600_mLSP1200"
+      },
+      "mStop1600_mLSP1300": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 3.195482325515087,
+          "cat7_SR_Nt1_recoil": 0.5182552053606905
+        },
+        "process": "sig_mStop1600_mLSP1300"
+      },
+      "mStop1600_mLSP1400": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 1.3971842985030247,
+          "cat7_SR_Nt1_recoil": 0.04242559238663905
+        },
+        "process": "sig_mStop1600_mLSP1400"
+      },
+      "mStop1600_mLSP200": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 1.0943759041845222,
+          "cat7_SR_Nt1_recoil": 3.936912437739057
+        },
+        "process": "sig_mStop1600_mLSP200"
+      },
+      "mStop1600_mLSP300": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 1.0738438040924563,
+          "cat7_SR_Nt1_recoil": 3.9616700229141935
+        },
+        "process": "sig_mStop1600_mLSP300"
+      },
+      "mStop1600_mLSP400": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 1.1416629465902777,
+          "cat7_SR_Nt1_recoil": 4.075012747484211
+        },
+        "process": "sig_mStop1600_mLSP400"
+      },
+      "mStop1600_mLSP500": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 1.3008344570641714,
+          "cat7_SR_Nt1_recoil": 3.973621759493134
+        },
+        "process": "sig_mStop1600_mLSP500"
+      },
+      "mStop1600_mLSP600": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 1.3222868424469292,
+          "cat7_SR_Nt1_recoil": 4.055004905554434
+        },
+        "process": "sig_mStop1600_mLSP600"
+      },
+      "mStop1600_mLSP700": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 1.4648632347804809,
+          "cat7_SR_Nt1_recoil": 4.125943918430133
+        },
+        "process": "sig_mStop1600_mLSP700"
+      },
+      "mStop1600_mLSP800": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 1.6040947360764717,
+          "cat7_SR_Nt1_recoil": 3.8687777851363636
+        },
+        "process": "sig_mStop1600_mLSP800"
+      },
+      "mStop1600_mLSP900": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 1.9088927570143888,
+          "cat7_SR_Nt1_recoil": 3.7238157781227343
+        },
+        "process": "sig_mStop1600_mLSP900"
+      },
+      "mStop1700_mLSP1": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 0.521979312934746,
+          "cat7_SR_Nt1_recoil": 2.226633365541912
+        },
+        "process": "sig_mStop1700_mLSP1"
+      },
+      "mStop1700_mLSP100": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 0.5603775894687278,
+          "cat7_SR_Nt1_recoil": 2.244585939802814
+        },
+        "process": "sig_mStop1700_mLSP100"
+      },
+      "mStop1700_mLSP1000": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 1.1334885839427589,
+          "cat7_SR_Nt1_recoil": 2.206951355762519
+        },
+        "process": "sig_mStop1700_mLSP1000"
+      },
+      "mStop1700_mLSP1100": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 1.2931789700311722,
+          "cat7_SR_Nt1_recoil": 1.8982336884140687
+        },
+        "process": "sig_mStop1700_mLSP1100"
+      },
+      "mStop1700_mLSP1200": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 1.610139758413043,
+          "cat7_SR_Nt1_recoil": 1.5334185941591743
+        },
+        "process": "sig_mStop1700_mLSP1200"
+      },
+      "mStop1700_mLSP1300": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 1.9128617989206438,
+          "cat7_SR_Nt1_recoil": 0.9817092493439803
+        },
+        "process": "sig_mStop1700_mLSP1300"
+      },
+      "mStop1700_mLSP1400": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 1.8376457481287334,
+          "cat7_SR_Nt1_recoil": 0.3034171983968655
+        },
+        "process": "sig_mStop1700_mLSP1400"
+      },
+      "mStop1700_mLSP1500": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 0.8340790118147097,
+          "cat7_SR_Nt1_recoil": 0.029996970132607305
+        },
+        "process": "sig_mStop1700_mLSP1500"
+      },
+      "mStop1700_mLSP200": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 0.5864287662614924,
+          "cat7_SR_Nt1_recoil": 2.161854515307757
+        },
+        "process": "sig_mStop1700_mLSP200"
+      },
+      "mStop1700_mLSP300": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 0.5946963112708443,
+          "cat7_SR_Nt1_recoil": 2.2096035026891894
+        },
+        "process": "sig_mStop1700_mLSP300"
+      },
+      "mStop1700_mLSP400": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 0.6484005994483465,
+          "cat7_SR_Nt1_recoil": 2.296753865396787
+        },
+        "process": "sig_mStop1700_mLSP400"
+      },
+      "mStop1700_mLSP500": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 0.6554362582815161,
+          "cat7_SR_Nt1_recoil": 2.3061827384462097
+        },
+        "process": "sig_mStop1700_mLSP500"
+      },
+      "mStop1700_mLSP600": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 0.6723276030424298,
+          "cat7_SR_Nt1_recoil": 2.350945194213122
+        },
+        "process": "sig_mStop1700_mLSP600"
+      },
+      "mStop1700_mLSP700": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 0.7609479379582085,
+          "cat7_SR_Nt1_recoil": 2.329919409767618
+        },
+        "process": "sig_mStop1700_mLSP700"
+      },
+      "mStop1700_mLSP800": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 0.8649361763722117,
+          "cat7_SR_Nt1_recoil": 2.3569342997785148
+        },
+        "process": "sig_mStop1700_mLSP800"
+      },
+      "mStop1700_mLSP900": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 0.925342156950778,
+          "cat7_SR_Nt1_recoil": 2.354980281786087
+        },
+        "process": "sig_mStop1700_mLSP900"
+      },
+      "mStop600_mLSP1": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 3184.394458917504,
+          "cat7_SR_Nt1_recoil": 1253.5894083545118
+        },
+        "process": "sig_mStop600_mLSP1"
+      },
+      "mStop600_mLSP100": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 3261.539717634915,
+          "cat7_SR_Nt1_recoil": 1189.219239717267
+        },
+        "process": "sig_mStop600_mLSP100"
+      },
+      "mStop600_mLSP200": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 3059.6269862834433,
+          "cat7_SR_Nt1_recoil": 808.9814633661273
+        },
+        "process": "sig_mStop600_mLSP200"
+      },
+      "mStop600_mLSP300": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 2232.6415513662914,
+          "cat7_SR_Nt1_recoil": 352.7799766097332
+        },
+        "process": "sig_mStop600_mLSP300"
+      },
+      "mStop600_mLSP400": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 617.6899898920855,
+          "cat7_SR_Nt1_recoil": 36.7650581414289
+        },
+        "process": "sig_mStop600_mLSP400"
+      },
+      "mStop700_mLSP1": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 1252.9180826394734,
+          "cat7_SR_Nt1_recoil": 785.2447460418149
+        },
+        "process": "sig_mStop700_mLSP1"
+      },
+      "mStop700_mLSP100": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 1267.7009364724054,
+          "cat7_SR_Nt1_recoil": 730.5051403240413
+        },
+        "process": "sig_mStop700_mLSP100"
+      },
+      "mStop700_mLSP200": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 1298.9646755064687,
+          "cat7_SR_Nt1_recoil": 613.4691201764252
+        },
+        "process": "sig_mStop700_mLSP200"
+      },
+      "mStop700_mLSP300": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 1270.6805481901895,
+          "cat7_SR_Nt1_recoil": 394.0477631999579
+        },
+        "process": "sig_mStop700_mLSP300"
+      },
+      "mStop700_mLSP400": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 990.2194032785671,
+          "cat7_SR_Nt1_recoil": 150.0191251427319
+        },
+        "process": "sig_mStop700_mLSP400"
+      },
+      "mStop700_mLSP500": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 304.12182518719527,
+          "cat7_SR_Nt1_recoil": 17.44776954308327
+        },
+        "process": "sig_mStop700_mLSP500"
+      },
+      "mStop900_mLSP1": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 196.27807534372724,
+          "cat7_SR_Nt1_recoil": 256.607876156869
+        },
+        "process": "sig_mStop900_mLSP1"
+      },
+      "mStop900_mLSP100": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 206.24779630606213,
+          "cat7_SR_Nt1_recoil": 243.5443771104911
+        },
+        "process": "sig_mStop900_mLSP100"
+      },
+      "mStop900_mLSP200": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 208.46648071152828,
+          "cat7_SR_Nt1_recoil": 232.62648652910735
+        },
+        "process": "sig_mStop900_mLSP200"
+      },
+      "mStop900_mLSP300": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 227.0770160617143,
+          "cat7_SR_Nt1_recoil": 201.39710851764573
+        },
+        "process": "sig_mStop900_mLSP300"
+      },
+      "mStop900_mLSP400": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 245.88902292908887,
+          "cat7_SR_Nt1_recoil": 159.69840737612975
+        },
+        "process": "sig_mStop900_mLSP400"
+      },
+      "mStop900_mLSP500": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 258.5959461356758,
+          "cat7_SR_Nt1_recoil": 101.08759253709425
+        },
+        "process": "sig_mStop900_mLSP500"
+      },
+      "mStop900_mLSP600": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 218.2820141461063,
+          "cat7_SR_Nt1_recoil": 37.34743921041961
+        },
+        "process": "sig_mStop900_mLSP600"
+      },
+      "mStop900_mLSP700": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 77.99784891160225,
+          "cat7_SR_Nt1_recoil": 3.4550516314612914
+        },
+        "process": "sig_mStop900_mLSP700"
+      },
+      "mStop950_mLSP1": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 129.05674113665307,
+          "cat7_SR_Nt1_recoil": 183.6377132458088
+        },
+        "process": "sig_mStop950_mLSP1"
+      },
+      "mStop950_mLSP100": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 131.17365670203768,
+          "cat7_SR_Nt1_recoil": 179.31420652568363
+        },
+        "process": "sig_mStop950_mLSP100"
+      },
+      "mStop950_mLSP200": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 134.5409890700229,
+          "cat7_SR_Nt1_recoil": 174.69227349087592
+        },
+        "process": "sig_mStop950_mLSP200"
+      },
+      "mStop950_mLSP300": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 149.24854396166276,
+          "cat7_SR_Nt1_recoil": 151.15654494634862
+        },
+        "process": "sig_mStop950_mLSP300"
+      },
+      "mStop950_mLSP400": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 159.54470498094256,
+          "cat7_SR_Nt1_recoil": 137.35583311665394
+        },
+        "process": "sig_mStop950_mLSP400"
+      },
+      "mStop950_mLSP500": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 181.08754074037068,
+          "cat7_SR_Nt1_recoil": 91.76798986888983
+        },
+        "process": "sig_mStop950_mLSP500"
+      },
+      "mStop950_mLSP600": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 172.56772182853592,
+          "cat7_SR_Nt1_recoil": 49.04222310708049
+        },
+        "process": "sig_mStop950_mLSP600"
+      },
+      "mStop950_mLSP700": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 114.37788362414696,
+          "cat7_SR_Nt1_recoil": 10.644749304125392
+        },
+        "process": "sig_mStop950_mLSP700"
+      },
+      "mStop950_mLSP800": {
+        "channels": {
+          "cat2_LLCR_Nt0_highDeltaM": 0.0,
+          "cat2_LLCR_Nt1_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt0_highDeltaM": 0.0,
+          "cat3_QCDCR_Nt1_highDeltaM": 0.0,
+          "cat4_GCR_Nt0_highDeltaM": 0.0,
+          "cat4_GCR_Nt1_highDeltaM": 0.0,
+          "cat5_DY2E_Nt0_highDeltaM": 0.0,
+          "cat5_DY2E_Nt1_highDeltaM": 0.0,
+          "cat6_DY2M_Nt0_highDeltaM": 0.0,
+          "cat6_DY2M_Nt1_highDeltaM": 0.0,
+          "cat7_SR_Nt0_recoil": 42.76922143046294,
+          "cat7_SR_Nt1_recoil": 1.1751713573236315
+        },
+        "process": "sig_mStop950_mLSP800"
+      }
+    }
+  },
+  "runner": "analysis/combine/recoil_sr_ntop_split_crsplit_current_available_20260704/run_combine_expected.sh",
+  "schema": "flat_recoil_ntop_split_cr_sr_6bin_v1",
+  "signal_split_regions": {
+    "SR_Nt0": "cat7_SR_Nt0_recoil",
+    "SR_Nt1": "cat7_SR_Nt1_recoil"
+  },
+  "sr_bin_count_per_channel": 6,
+  "sr_bin_edges": [
+    250.0,
+    300.0,
+    350.0,
+    400.0,
+    500.0,
+    800.0,
+    1500.0
+  ],
+  "status": "combine_inputs_ready",
+  "systematics_policy": {
+    "autoMCStats": 10,
+    "deferred": [
+      "jesTotal",
+      "metUnclustered"
+    ],
+    "lumi": {
+      "lnN": 1.016,
+      "name": "Lumi_2024"
+    },
+    "source": "shape variations already present in the input flat histogram payload"
+  },
+  "template_root": "analysis/combine/recoil_sr_ntop_split_crsplit_current_available_20260704/templates_recoil_ntop_split.root"
+}
