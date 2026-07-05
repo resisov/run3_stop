@@ -1,0 +1,105 @@
+{
+  "ntop_order": "N_t = 0 blocks are placed left of N_t >= 1 blocks.",
+  "output_dir": "docs/highlowdm_full_20260705/plots",
+  "plots": [
+    {
+      "bins": 60,
+      "labels": [
+        "LLCR\\n$N_{t}=0$",
+        "LLCR\\n$N_{t}\\geq1$",
+        "QCDCR\\n$N_{t}=0$",
+        "QCDCR\\n$N_{t}\\geq1$",
+        "GCR\\n$N_{t}=0$",
+        "GCR\\n$N_{t}\\geq1$",
+        "DY2E\\n$N_{t}=0$",
+        "DY2E\\n$N_{t}\\geq1$",
+        "DY2M\\n$N_{t}=0$",
+        "DY2M\\n$N_{t}\\geq1$"
+      ],
+      "name": "highdm_cr_recoil_ntop_split",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_cr_recoil_ntop_split.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_cr_recoil_ntop_split.png",
+      "signals": [],
+      "status": "complete"
+    },
+    {
+      "bins": 6,
+      "labels": [
+        "SR"
+      ],
+      "name": "highdm_sr_recoil_inclusive",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_sr_recoil_inclusive.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_sr_recoil_inclusive.png",
+      "signals": [
+        "mStop1000_mLSP1",
+        "mStop1200_mLSP1"
+      ],
+      "status": "complete"
+    },
+    {
+      "bins": 12,
+      "labels": [
+        "SR\\n$N_{t}=0$",
+        "SR\\n$N_{t}\\geq1$"
+      ],
+      "name": "highdm_sr_recoil_ntop_split",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_sr_recoil_ntop_split.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_sr_recoil_ntop_split.png",
+      "signals": [
+        "mStop1000_mLSP1",
+        "mStop1200_mLSP1"
+      ],
+      "status": "complete"
+    },
+    {
+      "bins": 17,
+      "labels": [
+        "SR\\n$N_{t}\\geq1$"
+      ],
+      "name": "highdm_sr_nt1_an17_search_bins",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_sr_nt1_an17_search_bins.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_sr_nt1_an17_search_bins.png",
+      "signals": [
+        "mStop1000_mLSP1",
+        "mStop1200_mLSP1"
+      ],
+      "status": "complete"
+    },
+    {
+      "bins": 6,
+      "labels": [
+        "LLCR low $\\Delta m$",
+        "QCDCR low $\\Delta m$",
+        "GCR low $\\Delta m$",
+        "DY2E low $\\Delta m$",
+        "DY2M low $\\Delta m$",
+        "SR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_sr_onebin",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_sr_onebin.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_sr_onebin.png",
+      "signals": [
+        "mStop1000_mLSP1",
+        "mStop1200_mLSP1"
+      ],
+      "status": "complete"
+    },
+    {
+      "bins": 1,
+      "labels": [
+        "SR low $\\Delta m$"
+      ],
+      "name": "lowdm_sr_onebin",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_sr_onebin.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_sr_onebin.png",
+      "signals": [
+        "mStop1000_mLSP1",
+        "mStop1200_mLSP1"
+      ],
+      "status": "complete"
+    }
+  ],
+  "signal_policy": "Signals are drawn only in SR plots; CR blocks exclude T2tt overlays.",
+  "source": "autonomous_allhad/workflow/highlowdm_full_20260705_flat_hists.json",
+  "status": "complete"
+}

@@ -371,6 +371,295 @@ def draw(fit_path: Path, payload_path: Path, signal_searchbin_path: Path, outbas
     }
 
 
+
+FLAT_REGION_LABELS = {
+    "LLCR": "LLCR",
+    "QCDCR": "QCDCR",
+    "GCR": "GCR",
+    "DY2E": "DY2E",
+    "DY2M": "DY2M",
+    "SR": "SR",
+    "LLCR_Nt0": r"LLCR\n$N_{t}=0$",
+    "QCDCR_Nt0": r"QCDCR\n$N_{t}=0$",
+    "GCR_Nt0": r"GCR\n$N_{t}=0$",
+    "DY2E_Nt0": r"DY2E\n$N_{t}=0$",
+    "DY2M_Nt0": r"DY2M\n$N_{t}=0$",
+    "SR_Nt0": r"SR\n$N_{t}=0$",
+    "LLCR_Nt1": r"LLCR\n$N_{t}\geq1$",
+    "QCDCR_Nt1": r"QCDCR\n$N_{t}\geq1$",
+    "GCR_Nt1": r"GCR\n$N_{t}\geq1$",
+    "DY2E_Nt1": r"DY2E\n$N_{t}\geq1$",
+    "DY2M_Nt1": r"DY2M\n$N_{t}\geq1$",
+    "SR_Nt1": r"SR\n$N_{t}\geq1$",
+}
+
+
+def is_signal_sample(sample: str) -> bool:
+    return sample.startswith("T2tt")
+
+
+def flat_values(rec: dict, nbin: int) -> tuple[np.ndarray, np.ndarray]:
+    nominal = rec.get("nominal") or rec
+    return as_array(nominal.get("sumw"), nbin), as_array(nominal.get("sumw2"), nbin)
+
+
+def flat_hist_record(payload: dict, region: str, allow_signal: bool) -> dict | None:
+    raw = (payload.get("histograms") or {}).get(region) or {}
+    if not raw:
+        return None
+    nbin = 0
+    for rec in raw.values():
+        nominal = rec.get("nominal") or rec
+        nbin = max(nbin, len(nominal.get("sumw") or []))
+    if nbin <= 0:
+        return None
+    groups = {group: np.zeros(nbin, dtype=float) for group in GROUP_ORDER}
+    stat2 = np.zeros(nbin, dtype=float)
+    data = np.zeros(nbin, dtype=float)
+    data2 = np.zeros(nbin, dtype=float)
+    signals = {spec["key"]: np.zeros(nbin, dtype=float) for spec in SIGNAL_OVERLAYS}
+    for sample, rec in raw.items():
+        vals, s2 = flat_values(rec, nbin)
+        if sample == "data_obs":
+            data += vals
+            data2 += s2
+        elif is_signal_sample(sample):
+            if allow_signal:
+                for spec in SIGNAL_OVERLAYS:
+                    flat_key = "T2tt_" + spec["key"].replace("mStop", "mStop").replace("_mLSP", "_mLSP")
+                    if sample == flat_key:
+                        signals[spec["key"]] += vals
+        else:
+            group = process_to_group(sample)
+            groups[group] += vals
+            stat2 += s2
+    bkg = np.zeros(nbin, dtype=float)
+    for vals in groups.values():
+        bkg += vals
+    syst2 = np.zeros(nbin, dtype=float)
+    for source in ["pileup", "electron_id", "electron_hlt", "muon_id", "muon_hlt", "photon_id"]:
+        up_total = np.zeros(nbin, dtype=float)
+        down_total = np.zeros(nbin, dtype=float)
+        have = False
+        for sample, rec in raw.items():
+            if sample == "data_obs" or is_signal_sample(sample):
+                continue
+            nom, _ = flat_values(rec, nbin)
+            up_rec = rec.get(source + "Up")
+            down_rec = rec.get(source + "Down")
+            if up_rec:
+                up_total += as_array(up_rec.get("sumw"), nbin) - nom
+                have = True
+            if down_rec:
+                down_total += as_array(down_rec.get("sumw"), nbin) - nom
+                have = True
+        if have:
+            syst2 += np.maximum(np.abs(up_total), np.abs(down_total)) ** 2
+    syst2 += (0.016 * bkg) ** 2
+    signals = {key: vals for key, vals in signals.items() if np.any(vals > 0)}
+    return {
+        "groups": groups,
+        "background": bkg,
+        "background_unc": np.sqrt(stat2 + syst2),
+        "data": data,
+        "data_unc": np.sqrt(data2),
+        "signals": signals,
+        "label": FLAT_REGION_LABELS.get(region, region),
+        "nbin": nbin,
+    }
+
+
+def flat_search_record(payload: dict, scheme: str, label: str, allow_signal: bool) -> dict | None:
+    raw = (payload.get("search_bin_histograms") or {}).get(scheme) or {}
+    if not raw:
+        return None
+    nbin = 0
+    for rec in raw.values():
+        nominal = rec.get("nominal") or rec
+        nbin = max(nbin, len(nominal.get("sumw") or []))
+    if nbin <= 0:
+        return None
+    groups = {group: np.zeros(nbin, dtype=float) for group in GROUP_ORDER}
+    stat2 = np.zeros(nbin, dtype=float)
+    data = np.zeros(nbin, dtype=float)
+    data2 = np.zeros(nbin, dtype=float)
+    signals = {spec["key"]: np.zeros(nbin, dtype=float) for spec in SIGNAL_OVERLAYS}
+    for sample, rec in raw.items():
+        vals, s2 = flat_values(rec, nbin)
+        if sample == "data_obs":
+            data += vals
+            data2 += s2
+        elif is_signal_sample(sample):
+            if allow_signal:
+                for spec in SIGNAL_OVERLAYS:
+                    if sample == "T2tt_" + spec["key"]:
+                        signals[spec["key"]] += vals
+        else:
+            groups[process_to_group(sample)] += vals
+            stat2 += s2
+    bkg = np.zeros(nbin, dtype=float)
+    for vals in groups.values():
+        bkg += vals
+    unc = np.sqrt(stat2 + (0.016 * bkg) ** 2)
+    signals = {key: vals for key, vals in signals.items() if np.any(vals > 0)}
+    return {"groups": groups, "background": bkg, "background_unc": unc, "data": data, "data_unc": np.sqrt(data2), "signals": signals, "label": label, "nbin": nbin}
+
+
+def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/search bin number") -> dict:
+    import matplotlib
+
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import mplhep as hep
+
+    hep.style.use("CMS")
+    nbin = sum(int(block["nbin"]) for block in blocks)
+    centers = np.arange(1, nbin + 1, dtype=float)
+    edges = np.arange(0.5, nbin + 1.5, 1.0)
+    boundaries = [0]
+    labels = []
+    for block in blocks:
+        boundaries.append(boundaries[-1] + int(block["nbin"]))
+        labels.append(block["label"])
+    groups = {group: np.zeros(nbin, dtype=float) for group in GROUP_ORDER}
+    bkg = np.zeros(nbin, dtype=float)
+    unc = np.zeros(nbin, dtype=float)
+    data = np.zeros(nbin, dtype=float)
+    data_unc = np.zeros(nbin, dtype=float)
+    data_mask = np.ones(nbin, dtype=bool)
+    signals = {spec["key"]: np.zeros(nbin, dtype=float) for spec in SIGNAL_OVERLAYS}
+    offset = 0
+    for block in blocks:
+        n = int(block["nbin"])
+        slc = slice(offset, offset + n)
+        for group in GROUP_ORDER:
+            groups[group][slc] = block["groups"].get(group, np.zeros(n))
+        bkg[slc] = block["background"]
+        unc[slc] = block["background_unc"]
+        data[slc] = block["data"]
+        data_unc[slc] = block["data_unc"]
+        if block.get("blind_data"):
+            data_mask[slc] = False
+        for key, vals in block.get("signals", {}).items():
+            signals[key][slc] = vals
+        offset += n
+    signals = {key: vals for key, vals in signals.items() if np.any(vals > 0)}
+
+    fig, (ax, rax) = plt.subplots(2, 1, figsize=(max(12.0, nbin * 0.26), 8.4), gridspec_kw={"height_ratios": [3.2, 1.1], "hspace": 0.04}, sharex=True)
+    stack_inputs = []
+    stack_weights = []
+    stack_colors = []
+    stack_labels = []
+    for group in GROUP_ORDER:
+        vals = groups[group]
+        if np.any(vals > 0):
+            stack_inputs.append(centers.copy())
+            stack_weights.append(vals)
+            stack_colors.append(GROUP_COLORS.get(group, "0.7"))
+            stack_labels.append(group)
+    if stack_inputs:
+        ax.hist(stack_inputs, bins=edges, weights=stack_weights, stacked=True, histtype="stepfilled", color=stack_colors, label=stack_labels, edgecolor="black", linewidth=0.7)
+    lower = np.maximum(bkg - unc, 1.0e-12)
+    upper = np.maximum(bkg + unc, 1.0e-12)
+    if np.any(bkg > 0):
+        ax.fill_between(edges, np.r_[lower, lower[-1]], np.r_[upper, upper[-1]], step="post", facecolor="0.85", edgecolor="0.35", hatch="////", linewidth=0.0, alpha=0.35, label="MC stat+syst unc.")
+    for spec in SIGNAL_OVERLAYS:
+        vals = signals.get(spec["key"])
+        if vals is not None:
+            ax.hist(centers, bins=edges, weights=vals, histtype="step", linewidth=2.0, color=spec["color"], label=spec["label"])
+    mask = data_mask & (data > 0)
+    ax.errorbar(centers[mask], data[mask], yerr=np.where(data_unc[mask] > 0, data_unc[mask], poisson_unc(data[mask])), fmt="o", color="black", markersize=4, label="Data 2024", zorder=10)
+    ratio = np.divide(data, bkg, out=np.full_like(data, np.nan), where=(bkg > 0) & data_mask)
+    ratio_err = np.divide(data_unc, bkg, out=np.full_like(data, np.nan), where=(bkg > 0) & data_mask)
+    rmask = np.isfinite(ratio)
+    rax.errorbar(centers[rmask], ratio[rmask], yerr=ratio_err[rmask], fmt="o", color="black", markersize=3)
+    rel = np.divide(unc, bkg, out=np.zeros_like(unc), where=bkg > 0)
+    rax.fill_between(edges, np.r_[1.0 - rel, 1.0 - rel[-1]], np.r_[1.0 + rel, 1.0 + rel[-1]], step="post", facecolor="0.85", edgecolor="none", alpha=0.6)
+    rax.axhline(1.0, color="0.45", linewidth=1)
+    for axis in (ax, rax):
+        for boundary in boundaries[1:-1]:
+            axis.axvline(boundary + 0.5, color="black", linewidth=1.2)
+        axis.set_xlim(0.5, nbin + 0.5)
+        axis.tick_params(which="both", direction="in", top=True, right=True)
+        axis.minorticks_on()
+    for start, end, label in zip(boundaries[:-1], boundaries[1:], labels):
+        center = 0.5 * (start + end) + 0.5
+        ax.text(center, 0.965, label, transform=ax.get_xaxis_transform(), ha="center", va="top", fontsize=15, fontweight="bold")
+    positive = []
+    for arr in [bkg + unc, data[mask] if np.any(mask) else np.array([]), *signals.values()]:
+        arr = np.asarray(arr, dtype=float)
+        positive.extend(arr[arr > 0].tolist())
+    ax.set_yscale("log")
+    if positive:
+        ax.set_ylim(max(0.03, min(positive) * 0.1), max(max(positive) * 60, 1.0))
+    ax.set_ylabel("Events / bin")
+    rax.set_ylabel("Data/MC")
+    rax.set_ylim(0, 2)
+    rax.set_xlabel(xlabel)
+    rax.set_xticks(centers)
+    rax.set_xticklabels([str(i) for i in range(1, nbin + 1)], fontsize=8 if nbin > 24 else 10)
+    hep.cms.label(llabel="Work in progress", rlabel=r"109.82 fb$^{-1}$ (13.6 TeV)", ax=ax)
+    ax.legend(fontsize=10, ncol=4, frameon=False, columnspacing=1.0, handlelength=1.6, loc="upper center", bbox_to_anchor=(0.5, 0.995))
+    outbase.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(outbase.with_suffix(".png"), dpi=180, bbox_inches="tight")
+    fig.savefig(outbase.with_suffix(".pdf"), bbox_inches="tight")
+    plt.close(fig)
+    return {"status": "complete", "name": outbase.name, "png": str(outbase.with_suffix(".png")), "pdf": str(outbase.with_suffix(".pdf")), "bins": nbin, "labels": labels, "signals": list(signals)}
+
+
+def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
+    payload = load_json(flat_hists)
+    plots = []
+    output_dir.mkdir(parents=True, exist_ok=True)
+    cr_regions = ["LLCR", "QCDCR", "GCR", "DY2E", "DY2M"]
+    cr_split = []
+    for base in cr_regions:
+        for suffix in ["Nt0", "Nt1"]:
+            rec = flat_hist_record(payload, f"{base}_{suffix}", allow_signal=False)
+            if rec:
+                cr_split.append(rec)
+    if cr_split:
+        plots.append(draw_flat_blocks(cr_split, output_dir / "highdm_cr_recoil_ntop_split"))
+    sr_inc = flat_hist_record(payload, "SR", allow_signal=True)
+    if sr_inc:
+        sr_inc["blind_data"] = True
+        plots.append(draw_flat_blocks([sr_inc], output_dir / "highdm_sr_recoil_inclusive"))
+    sr_split = []
+    for region in ["SR_Nt0", "SR_Nt1"]:
+        rec = flat_hist_record(payload, region, allow_signal=True)
+        if rec:
+            rec["blind_data"] = True
+            sr_split.append(rec)
+    if sr_split:
+        plots.append(draw_flat_blocks(sr_split, output_dir / "highdm_sr_recoil_ntop_split"))
+    an17 = flat_search_record(payload, "boosted_an_17_SR_Nt1", r"SR\n$N_{t}\geq1$", allow_signal=True)
+    if an17:
+        an17["blind_data"] = True
+        plots.append(draw_flat_blocks([an17], output_dir / "highdm_sr_nt1_an17_search_bins", xlabel="High-dM SR search bin number"))
+    low_blocks = []
+    low_map = [
+        ("cat2_LLCR_lowDeltaM", "LLCR low $\Delta m$", False),
+        ("cat3_QCDCR_lowDeltaM", "QCDCR low $\Delta m$", False),
+        ("cat4_GCR_lowDeltaM", "GCR low $\Delta m$", False),
+        ("cat5_DY2E_lowDeltaM", "DY2E low $\Delta m$", False),
+        ("cat6_DY2M_lowDeltaM", "DY2M low $\Delta m$", False),
+        ("cat7_SR_lowDeltaM", "SR low $\Delta m$", True),
+    ]
+    for scheme, label, is_sr in low_map:
+        rec = flat_search_record(payload, scheme, label, allow_signal=is_sr)
+        if rec:
+            rec["blind_data"] = is_sr
+            low_blocks.append(rec)
+    if low_blocks:
+        plots.append(draw_flat_blocks(low_blocks, output_dir / "lowdm_cr_sr_onebin", xlabel="Low-dM region bin number"))
+    low_sr = flat_search_record(payload, "cat7_SR_lowDeltaM", "SR low $\Delta m$", allow_signal=True)
+    if low_sr:
+        low_sr["blind_data"] = True
+        plots.append(draw_flat_blocks([low_sr], output_dir / "lowdm_sr_onebin", xlabel="Low-dM SR bin number"))
+    summary = {"status": "complete", "source": str(flat_hists), "output_dir": str(output_dir), "plots": plots, "signal_policy": "Signals are drawn only in SR plots; CR blocks exclude T2tt overlays.", "ntop_order": "N_t = 0 blocks are placed left of N_t >= 1 blocks."}
+    (output_dir / "flat_plot_summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
+    return summary
+
 def add_to_index(docs_dir: Path, plot_name: str) -> None:
     index = docs_dir / "index.html"
     if not index.exists():
@@ -391,7 +680,14 @@ def main() -> int:
     parser.add_argument("--docs-dir", type=Path)
     parser.add_argument("--signal-searchbin-yields", default="docs/data/signal_searchbin_yields.json", type=Path)
     parser.add_argument("--name", default="partial_control_search_bins_style")
+    parser.add_argument("--flat-hists", type=Path)
+    parser.add_argument("--flat-output-dir", type=Path)
     args = parser.parse_args()
+
+    if args.flat_hists:
+        outdir = args.flat_output_dir or Path(args.docs_dir or ".") / "plots"
+        print(json.dumps(draw_flat_report(args.flat_hists, outdir), sort_keys=True))
+        return 0
 
     fit = args.preview_dir / "fit_template_summary.json"
     payload = args.preview_dir / "partial_normalized_yields.json"

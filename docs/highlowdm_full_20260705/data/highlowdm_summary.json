@@ -1,0 +1,84 @@
+{
+  "comparison_to_inclusive": [
+    {
+      "common_points": 346,
+      "label": "High-dM SR, N_t >= 1",
+      "median_ratio_to_inclusive": 0.5378378378378378,
+      "points_better_than_inclusive": 284,
+      "points_worse_than_inclusive": 61,
+      "variant": "nt1"
+    },
+    {
+      "common_points": 351,
+      "label": "High-dM SR, N_t = 0",
+      "median_ratio_to_inclusive": 4.045454545454546,
+      "points_better_than_inclusive": 22,
+      "points_worse_than_inclusive": 327,
+      "variant": "nt0"
+    },
+    {
+      "common_points": 351,
+      "label": "High-dM CR/SR split by N_t",
+      "median_ratio_to_inclusive": 0.5331125827814569,
+      "points_better_than_inclusive": 349,
+      "points_worse_than_inclusive": 0,
+      "variant": "ntop_split"
+    },
+    {
+      "common_points": 351,
+      "label": "High-dM N_t split + low-dM SR",
+      "median_ratio_to_inclusive": 0.5324074074074074,
+      "points_better_than_inclusive": 349,
+      "points_worse_than_inclusive": 0,
+      "variant": "ntop_split_lowdm"
+    }
+  ],
+  "notes": {
+    "lowdm_combine_policy": "Only the one-bin low-dM SR is included in the low-dM limit variant; exact low-dM CRs are plotted for inspection but not used in Combine.",
+    "shape_systematics": "JEC and MET unclustered shape uncertainties are intentionally deferred in this round.",
+    "sr_no_cut_definition": "Inclusive high-dM SR means the nominal high-dM signal-region selection with no N_t requirement, not removal of the SR selection."
+  },
+  "status": "complete",
+  "variants": {
+    "inclusive": {
+      "collected": 352,
+      "dir": "analysis/combine/highlowdm_full_20260705_recoil_sr_inclusive",
+      "label": "Inclusive high-dM SR (no N_t condition)",
+      "missing": [],
+      "requested": 352,
+      "status": "complete"
+    },
+    "nt0": {
+      "collected": 352,
+      "dir": "analysis/combine/highlowdm_full_20260705_recoil_sr_nt0",
+      "label": "High-dM SR, N_t = 0",
+      "missing": [],
+      "requested": 352,
+      "status": "complete"
+    },
+    "nt1": {
+      "collected": 352,
+      "dir": "analysis/combine/highlowdm_full_20260705_recoil_sr_nt1",
+      "label": "High-dM SR, N_t >= 1",
+      "missing": [],
+      "requested": 352,
+      "status": "complete"
+    },
+    "ntop_split": {
+      "collected": 352,
+      "dir": "analysis/combine/highlowdm_full_20260705_recoil_ntop_split",
+      "label": "High-dM CR/SR split by N_t",
+      "missing": [],
+      "requested": 352,
+      "status": "complete"
+    },
+    "ntop_split_lowdm": {
+      "collected": 352,
+      "dir": "analysis/combine/highlowdm_full_20260705_recoil_ntop_split_lowdm",
+      "label": "High-dM N_t split + low-dM SR",
+      "missing": [],
+      "requested": 352,
+      "status": "complete"
+    }
+  }
+}

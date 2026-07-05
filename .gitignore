@@ -99,3 +99,9 @@ autonomous_allhad/workflow/*_state.json
 autonomous_allhad/workflow/*_current.txt
 autonomous_allhad/workflow/*_current.json
 autonomous_allhad/workflow/*_current.tsv
+
+# High/low-dM flat-hist runtime products generated for the 2026-07-05 campaign.
+autonomous_allhad/workflow/highlowdm_full_20260705_*.json
+autonomous_allhad/workflow/highlowdm_full_20260705_*.txt
+autonomous_allhad/workflow/highlowdm_full_20260705_hist_work*/
+autonomous_allhad/workflow/local_repair_data_shard_*/
