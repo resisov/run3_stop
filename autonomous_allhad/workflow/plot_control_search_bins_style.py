@@ -632,10 +632,14 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
             sr_split.append(rec)
     if sr_split:
         plots.append(draw_flat_blocks(sr_split, output_dir / "highdm_sr_recoil_ntop_split"))
-    an17 = flat_search_record(payload, "boosted_an_17_SR_Nt1", r"SR\n$N_{t}\geq1$", allow_signal=True)
+    an17 = flat_search_record(payload, "boosted_an_17_SR", "SR", allow_signal=True)
     if an17:
         an17["blind_data"] = True
-        plots.append(draw_flat_blocks([an17], output_dir / "highdm_sr_nt1_an17_search_bins", xlabel="High-dM SR search bin number"))
+        plots.append(draw_flat_blocks([an17], output_dir / "highdm_sr_an17_search_bins", xlabel="High-dM SR search bin number"))
+    an17_nt1 = flat_search_record(payload, "boosted_an_17_SR_Nt1", r"SR\n$N_{t}\geq1$", allow_signal=True)
+    if an17_nt1:
+        an17_nt1["blind_data"] = True
+        plots.append(draw_flat_blocks([an17_nt1], output_dir / "highdm_sr_nt1_an17_search_bins", xlabel="High-dM SR, $N_{t}\geq1$ search bin number"))
     low_blocks = []
     low_map = [
         ("cat2_LLCR_lowDeltaM", "LLCR low $\Delta m$", False),

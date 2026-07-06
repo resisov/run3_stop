@@ -105,3 +105,7 @@ autonomous_allhad/workflow/highlowdm_full_20260705_*.json
 autonomous_allhad/workflow/highlowdm_full_20260705_*.txt
 autonomous_allhad/workflow/highlowdm_full_20260705_hist_work*/
 autonomous_allhad/workflow/local_repair_data_shard_*/
+
+# High/low-dM inclusive AN17 histogram rebuild runtime products.
+autonomous_allhad/workflow/highlowdm_full_20260706_*.json
+autonomous_allhad/workflow/highlowdm_full_20260706_hist_work*/

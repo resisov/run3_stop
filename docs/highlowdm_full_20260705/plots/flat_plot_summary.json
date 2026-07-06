@@ -54,6 +54,20 @@
     {
       "bins": 17,
       "labels": [
+        "SR"
+      ],
+      "name": "highdm_sr_an17_search_bins",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_sr_an17_search_bins.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_sr_an17_search_bins.png",
+      "signals": [
+        "mStop1000_mLSP1",
+        "mStop1200_mLSP1"
+      ],
+      "status": "complete"
+    },
+    {
+      "bins": 17,
+      "labels": [
         "SR\\n$N_{t}\\geq1$"
       ],
       "name": "highdm_sr_nt1_an17_search_bins",
@@ -100,6 +114,6 @@
     }
   ],
   "signal_policy": "Signals are drawn only in SR plots; CR blocks exclude T2tt overlays.",
-  "source": "autonomous_allhad/workflow/highlowdm_full_20260705_flat_hists.json",
+  "source": "autonomous_allhad/workflow/highlowdm_full_20260706_flat_hists_inclusive_an17.json",
   "status": "complete"
 }
