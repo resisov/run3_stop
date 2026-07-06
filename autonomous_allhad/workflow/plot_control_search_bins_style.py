@@ -358,6 +358,8 @@ def draw(fit_path: Path, payload_path: Path, signal_searchbin_path: Path, outbas
     ax.set_yscale("log")
     if positive:
         ax.set_ylim(max(0.03, min(positive) * 0.1), max(max(positive) * 60, 1.0))
+    else:
+        ax.set_ylim(0.03, 1.0)
     ax.set_ylabel("Events / bin")
     rax.set_ylabel("Data/MC")
     rax.set_ylim(0, 2)
@@ -522,6 +524,77 @@ def flat_search_record(payload: dict, scheme: str, label: str, allow_signal: boo
     signals = {key: vals for key, vals in signals.items() if np.any(vals > 0)}
     return {"groups": groups, "background": bkg, "background_unc": unc, "data": data, "data_unc": np.sqrt(data2), "signals": signals, "label": label, "nbin": nbin}
 
+
+
+def lowdm_variable_record(payload: dict, scheme: str, variable: str, label: str, allow_signal: bool) -> dict | None:
+    raw = (((payload.get("lowdm_variable_histograms") or {}).get(scheme) or {}).get(variable) or {})
+    if not raw:
+        return None
+    spec = ((payload.get("lowdm_variable_specs") or {}).get(variable) or {})
+    edges = spec.get("bins") or []
+    nbin = max(0, len(edges) - 1)
+    if nbin <= 0:
+        for rec in raw.values():
+            nominal = rec.get("nominal") or rec
+            nbin = max(nbin, len(nominal.get("sumw") or []))
+        edges = []
+    if nbin <= 0:
+        return None
+    groups = {group: np.zeros(nbin, dtype=float) for group in GROUP_ORDER}
+    stat2 = np.zeros(nbin, dtype=float)
+    data = np.zeros(nbin, dtype=float)
+    data2 = np.zeros(nbin, dtype=float)
+    signals = {sig["key"]: np.zeros(nbin, dtype=float) for sig in SIGNAL_OVERLAYS}
+    for sample, rec in raw.items():
+        vals, s2 = flat_values(rec, nbin)
+        if sample == "data_obs":
+            data += vals
+            data2 += s2
+        elif is_signal_sample(sample):
+            if allow_signal:
+                for sig in SIGNAL_OVERLAYS:
+                    if sample == "T2tt_" + sig["key"]:
+                        signals[sig["key"]] += vals
+        else:
+            groups[process_to_group(sample)] += vals
+            stat2 += s2
+    bkg = np.zeros(nbin, dtype=float)
+    for vals in groups.values():
+        bkg += vals
+    syst2 = np.zeros(nbin, dtype=float)
+    for source in ["pileup", "electron_id", "electron_hlt", "muon_id", "muon_hlt", "photon_id"]:
+        up_total = np.zeros(nbin, dtype=float)
+        down_total = np.zeros(nbin, dtype=float)
+        have = False
+        for sample, rec in raw.items():
+            if sample == "data_obs" or is_signal_sample(sample):
+                continue
+            nom, _ = flat_values(rec, nbin)
+            up_rec = rec.get(source + "Up")
+            down_rec = rec.get(source + "Down")
+            if up_rec:
+                up_total += as_array(up_rec.get("sumw"), nbin) - nom
+                have = True
+            if down_rec:
+                down_total += as_array(down_rec.get("sumw"), nbin) - nom
+                have = True
+        if have:
+            syst2 += np.maximum(np.abs(up_total), np.abs(down_total)) ** 2
+    syst2 += (0.016 * bkg) ** 2
+    signals = {key: vals for key, vals in signals.items() if np.any(vals > 0)}
+    return {
+        "groups": groups,
+        "background": bkg,
+        "background_unc": np.sqrt(stat2 + syst2),
+        "data": data,
+        "data_unc": np.sqrt(data2),
+        "signals": signals,
+        "label": label,
+        "nbin": nbin,
+        "edges": edges,
+        "xlabel": spec.get("xlabel") or variable,
+        "variable": variable,
+    }
 
 
 
@@ -747,6 +820,8 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
     ax.set_yscale("log")
     if positive:
         ax.set_ylim(max(0.03, min(positive) * 0.1), max(max(positive) * 60, 1.0))
+    else:
+        ax.set_ylim(0.03, 1.0)
     ax.set_ylabel("Events / bin")
     rax.set_ylabel("Data/MC")
     rax.set_ylim(0, 2)
@@ -827,14 +902,14 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
     low_cr_blocks = []
     low_blocks = []
     low_map = [
-        ("cat2_LLCR_lowDeltaM", "LLCR low $\Delta m$", False),
-        ("cat3_QCDCR_lowDeltaM", "QCDCR low $\Delta m$", False),
-        ("cat4_GCR_lowDeltaM", "GCR low $\Delta m$", False),
-        ("cat5_DY2E_lowDeltaM", "DY2E low $\Delta m$", False),
-        ("cat6_DY2M_lowDeltaM", "DY2M low $\Delta m$", False),
-        ("cat7_SR_lowDeltaM", "SR low $\Delta m$", True),
+        ("cat2_LLCR_lowDeltaM", "LLCR low $\Delta m$", False, "LLCR"),
+        ("cat3_QCDCR_lowDeltaM", "QCDCR low $\Delta m$", False, "QCDCR"),
+        ("cat4_GCR_lowDeltaM", "GCR low $\Delta m$", False, "GCR"),
+        ("cat5_DY2E_lowDeltaM", "DY2E low $\Delta m$", False, "DY2E"),
+        ("cat6_DY2M_lowDeltaM", "DY2M low $\Delta m$", False, "DY2M"),
+        ("cat7_SR_lowDeltaM", "SR low $\Delta m$", True, "SR"),
     ]
-    for scheme, label, is_sr in low_map:
+    for scheme, label, is_sr, base_region in low_map:
         rec = flat_search_record(payload, scheme, label, allow_signal=False)
         if rec:
             rec["blind_data"] = is_sr
@@ -844,6 +919,24 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
                 low_cr_blocks.append(rec)
                 plots.append(draw_flat_blocks([rec], output_dir / f"lowdm_cr_{short}_onebin", xlabel=f"Low-dM {clean_label} bin number"))
             low_blocks.append(rec)
+    lowdm_variable_plots = []
+    lowdm_region_variables = payload.get("lowdm_region_variables") or {}
+    for scheme, label, is_sr, base_region in low_map:
+        available = ((payload.get("lowdm_variable_histograms") or {}).get(scheme) or {})
+        variables = lowdm_region_variables.get(base_region) or sorted(available)
+        short = scheme.replace("_lowDeltaM", "").split("_", 1)[1].lower()
+        kind = "sr" if is_sr else "cr"
+        for variable in variables:
+            rec = lowdm_variable_record(payload, scheme, variable, label, allow_signal=is_sr)
+            if not rec:
+                continue
+            rec["blind_data"] = is_sr
+            outname = f"lowdm_{kind}_{short}_{variable}"
+            plot = draw_flat_blocks([rec], output_dir / outname, xlabel=rec.get("xlabel", variable))
+            plot["variable"] = variable
+            plot["region"] = base_region
+            lowdm_variable_plots.append(plot)
+            plots.append(plot)
     if low_cr_blocks:
         plots.append(draw_flat_blocks(low_cr_blocks, output_dir / "lowdm_cr_onebin", xlabel="Low-dM CR region bin number"))
     if low_blocks:
@@ -852,7 +945,7 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
     if low_sr:
         low_sr["blind_data"] = True
         plots.append(draw_flat_blocks([low_sr], output_dir / "lowdm_sr_onebin", xlabel="Low-dM SR bin number"))
-    summary = {"status": "complete", "source": str(flat_hists), "output_dir": str(output_dir), "plots": plots, "signal_policy": "Signals are drawn only in SR plots; CR blocks exclude T2tt overlays.", "cr_plot_policy": "High-dM and low-dM CRs are drawn both as combined overview plots and as individual region plots.", "ntop_order": "N_t = 0 blocks are placed left of N_t >= 1 blocks."}
+    summary = {"status": "complete", "source": str(flat_hists), "output_dir": str(output_dir), "plots": plots, "lowdm_variable_plot_count": len([p for p in plots if str(p.get("name", "")).startswith("lowdm_") and p.get("variable")]), "signal_policy": "Signals are drawn only in SR plots; CR blocks exclude T2tt overlays.", "cr_plot_policy": "High-dM and low-dM CRs are drawn both as combined overview plots and as individual region plots.", "ntop_order": "N_t = 0 blocks are placed left of N_t >= 1 blocks."}
     (output_dir / "flat_plot_summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     return summary
 

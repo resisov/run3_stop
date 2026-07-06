@@ -84,12 +84,56 @@ LOWDM_READ_BRANCHES = [
     "pass_zero_tau", "pass_no_veto_leptons", "pass_one_veto_lepton", "pass_mt_100",
     "pass_met_250", "pass_ht_300", "pass_ht_photon_300", "pass_ht_lepton_300",
     "pass_open_pre", "pass_qcd_open", "pass_dphi123_0p1",
-    "met", "ht", "njet", "nb_medium_lowdm", "n_photon_medium",
+    "met", "ht", "njet", "nb_medium_lowdm", "nb_loose_lowdm", "n_photon_medium",
     "njet_photon_clean", "nb_photon_clean", "ht_photon_clean",
     "njet_lepton_clean", "nb_lepton_clean", "ht_lepton_clean",
     "mee", "pee", "mmm", "pmm", "recoil_gcr", "recoil_dy2e", "recoil_dy2m",
+    "lowdm_mtb", "lowdm_met_sqrt_ht", "lowdm_isr_pt", "lowdm_isr_dphi", "lowdm_ptb", "n_lowdm_isr",
+    "lowdm_fatjet_pt", "lowdm_fatjet_msd",
 ]
-READ_BRANCHES = sorted(set(WEIGHT_BRANCHES + SEARCH_BIN_BRANCHES + LOWDM_READ_BRANCHES + [b for pair in REGION_VARIABLES.values() for b in pair]))
+LOWDM_VARIABLE_SPECS = {
+    "met": {"branch": "met", "bins": [0, 100, 150, 200, 250, 300, 350, 400, 500, 650, 800, 1000, 1500], "xlabel": r"$p_{T}^{miss}$ (GeV)"},
+    "ht": {"branch": "ht", "bins": [0, 300, 500, 700, 1000, 1500, 2000, 3000], "xlabel": r"$H_{T}$ (GeV)"},
+    "njet": {"branch": "njet", "bins": [-0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 8.5, 12.5], "xlabel": r"$N_{j}$"},
+    "nb_medium_lowdm": {"branch": "nb_medium_lowdm", "bins": [-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 6.5], "xlabel": r"$N_{b}$ medium"},
+    "nb_loose_lowdm": {"branch": "nb_loose_lowdm", "bins": [-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 6.5], "xlabel": r"$N_{b}$ loose"},
+    "n_e_veto": {"branch": "n_e_veto", "bins": [-0.5, 0.5, 1.5, 2.5, 3.5], "xlabel": r"$N_{e}$ veto"},
+    "n_m_loose": {"branch": "n_m_loose", "bins": [-0.5, 0.5, 1.5, 2.5, 3.5], "xlabel": r"$N_{\mu}$ loose"},
+    "lowdm_mtb": {"branch": "lowdm_mtb", "bins": [0, 50, 100, 150, 200, 300, 500, 800, 1200], "xlabel": r"low-$\Delta m$ $m_{T}^{b}$ (GeV)"},
+    "lowdm_met_sqrt_ht": {"branch": "lowdm_met_sqrt_ht", "bins": [0, 5, 10, 15, 20, 25, 30, 40, 60], "xlabel": r"$p_{T}^{miss}/\sqrt{H_{T}}$"},
+    "lowdm_isr_pt": {"branch": "lowdm_isr_pt", "bins": [0, 200, 250, 300, 350, 400, 500, 650, 800, 1000, 1500], "xlabel": r"ISR $p_{T}$ (GeV)"},
+    "lowdm_isr_dphi": {"branch": "lowdm_isr_dphi", "bins": [0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.1416], "xlabel": r"$\Delta\phi$(ISR, $p_{T}^{miss}$)"},
+    "lowdm_ptb": {"branch": "lowdm_ptb", "bins": [0, 30, 60, 100, 150, 200, 300, 500, 800], "xlabel": r"low-$\Delta m$ $p_{T}^{b}$ (GeV)"},
+    "n_lowdm_isr": {"branch": "n_lowdm_isr", "bins": [-0.5, 0.5, 1.5, 2.5, 3.5, 5.5], "xlabel": r"$N_{ISR}$"},
+    "recoil_gcr": {"branch": "recoil_gcr", "bins": [0, 200, 250, 300, 350, 400, 500, 650, 800, 1000, 1500], "xlabel": r"Photon recoil $p_{T}$ (GeV)"},
+    "recoil_dy2e": {"branch": "recoil_dy2e", "bins": [0, 200, 250, 300, 350, 400, 500, 650, 800, 1000, 1500], "xlabel": r"Dielectron recoil $p_{T}$ (GeV)"},
+    "recoil_dy2m": {"branch": "recoil_dy2m", "bins": [0, 200, 250, 300, 350, 400, 500, 650, 800, 1000, 1500], "xlabel": r"Dimuon recoil $p_{T}$ (GeV)"},
+    "mee": {"branch": "mee", "bins": [50, 70, 81, 86, 91, 96, 101, 120, 150], "xlabel": r"$m_{ee}$ (GeV)"},
+    "mmm": {"branch": "mmm", "bins": [50, 70, 81, 86, 91, 96, 101, 120, 150], "xlabel": r"$m_{\mu\mu}$ (GeV)"},
+    "n_photon_medium": {"branch": "n_photon_medium", "bins": [-0.5, 0.5, 1.5, 2.5, 3.5], "xlabel": r"$N_{\gamma}$ medium"},
+    "njet_photon_clean": {"branch": "njet_photon_clean", "bins": [-0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 8.5, 12.5], "xlabel": r"$N_{j}$ photon-cleaned"},
+    "nb_photon_clean": {"branch": "nb_photon_clean", "bins": [-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 6.5], "xlabel": r"$N_{b}$ photon-cleaned"},
+    "ht_photon_clean": {"branch": "ht_photon_clean", "bins": [0, 300, 500, 700, 1000, 1500, 2000, 3000], "xlabel": r"Photon-cleaned $H_{T}$ (GeV)"},
+    "njet_lepton_clean": {"branch": "njet_lepton_clean", "bins": [-0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 8.5, 12.5], "xlabel": r"$N_{j}$ lepton-cleaned"},
+    "nb_lepton_clean": {"branch": "nb_lepton_clean", "bins": [-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 6.5], "xlabel": r"$N_{b}$ lepton-cleaned"},
+    "ht_lepton_clean": {"branch": "ht_lepton_clean", "bins": [0, 300, 500, 700, 1000, 1500, 2000, 3000], "xlabel": r"Lepton-cleaned $H_{T}$ (GeV)"},
+    "leading_lowdm_fatjet_pt": {"branch": "lowdm_fatjet_pt", "source": "first", "bins": [0, 200, 250, 300, 350, 400, 500, 650, 800, 1000, 1500], "xlabel": r"Leading low-$\Delta m$ AK8 $p_{T}$ (GeV)"},
+    "leading_lowdm_fatjet_msd": {"branch": "lowdm_fatjet_msd", "source": "first", "bins": [0, 30, 50, 70, 90, 110, 140, 200, 300], "xlabel": r"Leading low-$\Delta m$ AK8 $m_{SD}$ (GeV)"},
+}
+COMMON_LOWDM_VARIABLES = [
+    "met", "ht", "njet", "nb_medium_lowdm", "nb_loose_lowdm", "n_e_veto", "n_m_loose",
+    "lowdm_mtb", "lowdm_met_sqrt_ht", "lowdm_isr_pt", "lowdm_isr_dphi", "lowdm_ptb", "n_lowdm_isr",
+    "leading_lowdm_fatjet_pt", "leading_lowdm_fatjet_msd",
+]
+LOWDM_REGION_VARIABLES = {
+    "SR": COMMON_LOWDM_VARIABLES,
+    "LLCR": COMMON_LOWDM_VARIABLES,
+    "QCDCR": COMMON_LOWDM_VARIABLES,
+    "GCR": COMMON_LOWDM_VARIABLES + ["n_photon_medium", "recoil_gcr", "njet_photon_clean", "nb_photon_clean", "ht_photon_clean"],
+    "DY2E": COMMON_LOWDM_VARIABLES + ["recoil_dy2e", "mee", "njet_lepton_clean", "nb_lepton_clean", "ht_lepton_clean"],
+    "DY2M": COMMON_LOWDM_VARIABLES + ["recoil_dy2m", "mmm", "njet_lepton_clean", "nb_lepton_clean", "ht_lepton_clean"],
+}
+READ_BRANCHES = sorted(set(WEIGHT_BRANCHES + SEARCH_BIN_BRANCHES + LOWDM_READ_BRANCHES + [spec["branch"] for spec in LOWDM_VARIABLE_SPECS.values()] + [b for pair in REGION_VARIABLES.values() for b in pair]))
 
 
 def read_json(path: Path) -> Any:
@@ -99,6 +143,9 @@ def read_json(path: Path) -> Any:
 def write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2, sort_keys=True, allow_nan=False) + "\n")
+
+
+MAX_ABS_HIST_WEIGHT = 1.0e12
 
 
 def finite_array(values: Any, n: int, fill: float = 0.0) -> np.ndarray:
@@ -305,13 +352,15 @@ def empty_hist() -> dict[str, Any]:
 
 
 def add_hist(target: dict[str, Any], values: np.ndarray, weights: np.ndarray, mask: np.ndarray) -> None:
-    vals = values[mask]
-    w = weights[mask]
-    if vals.size == 0:
+    vals = np.asarray(values, dtype=float)[mask]
+    w = np.asarray(weights, dtype=float)[mask]
+    good = np.isfinite(vals) & finite_hist_weight_mask(w)
+    if not np.any(good):
         return
-    h, _ = np.histogram(vals, bins=np.asarray(RECOIL_PT_BINS, dtype=float), weights=w)
-    h2, _ = np.histogram(vals, bins=np.asarray(RECOIL_PT_BINS, dtype=float), weights=w * w)
-    e, _ = np.histogram(vals, bins=np.asarray(RECOIL_PT_BINS, dtype=float))
+    bins = np.asarray(RECOIL_PT_BINS, dtype=float)
+    h, _ = np.histogram(vals[good], bins=bins, weights=w[good])
+    h2, _ = np.histogram(vals[good], bins=bins, weights=finite_weight_square(w[good]))
+    e, _ = np.histogram(vals[good], bins=bins)
     target["sumw"] = (np.asarray(target["sumw"], dtype=float) + h).tolist()
     target["sumw2"] = (np.asarray(target["sumw2"], dtype=float) + h2).tolist()
     target["entries"] = (np.asarray(target["entries"], dtype=int) + e).astype(int).tolist()
@@ -394,15 +443,58 @@ def empty_index_hist(nbin: int) -> dict[str, Any]:
     return {"sumw": [0.0] * nbin, "sumw2": [0.0] * nbin, "entries": [0] * nbin}
 
 
+def empty_binned_hist(edges: list[float]) -> dict[str, Any]:
+    nb = max(0, len(edges) - 1)
+    return {"sumw": [0.0] * nb, "sumw2": [0.0] * nb, "entries": [0] * nb}
+
+
+def finite_hist_weight_mask(weights: np.ndarray) -> np.ndarray:
+    w = np.asarray(weights, dtype=float)
+    return np.isfinite(w) & (np.abs(w) <= MAX_ABS_HIST_WEIGHT)
+
+
+def finite_weight_square(weights: np.ndarray) -> np.ndarray:
+    w = np.asarray(weights, dtype=float)
+    w = np.where(finite_hist_weight_mask(w), w, 0.0)
+    with np.errstate(over="ignore", invalid="ignore"):
+        squared = w * w
+    return np.nan_to_num(squared, nan=0.0, posinf=0.0, neginf=0.0)
+
+
+def add_binned_hist(target: dict[str, Any], values: np.ndarray, weights: np.ndarray, mask: np.ndarray, edges: list[float]) -> None:
+    vals = np.asarray(values, dtype=float)[mask]
+    w = np.asarray(weights, dtype=float)[mask]
+    good = np.isfinite(vals) & finite_hist_weight_mask(w)
+    if not np.any(good):
+        return
+    bins = np.asarray(edges, dtype=float)
+    h, _ = np.histogram(vals[good], bins=bins, weights=w[good])
+    h2, _ = np.histogram(vals[good], bins=bins, weights=finite_weight_square(w[good]))
+    e, _ = np.histogram(vals[good], bins=bins)
+    target["sumw"] = (np.asarray(target["sumw"], dtype=float) + h).tolist()
+    target["sumw2"] = (np.asarray(target["sumw2"], dtype=float) + h2).tolist()
+    target["entries"] = (np.asarray(target["entries"], dtype=int) + e).astype(int).tolist()
+
+
+def lowdm_variable_values(chunk: dict[str, Any], spec: dict[str, Any], n: int) -> np.ndarray:
+    branch = spec["branch"]
+    fill = float(spec.get("fill", -99.0))
+    if branch not in chunk:
+        return np.full(n, fill, dtype=float)
+    if spec.get("source") == "first":
+        return finite_array(ak.fill_none(ak.firsts(chunk[branch]), fill), n, fill)
+    return finite_array(chunk[branch], n, fill)
+
+
 def add_index_hist(target: dict[str, Any], indices: np.ndarray, weights: np.ndarray) -> None:
     nbin = len(target["sumw"])
     idx = np.asarray(indices, dtype=int)
     w = np.asarray(weights, dtype=float)
-    mask = (idx >= 0) & (idx < nbin) & np.isfinite(w)
+    mask = (idx >= 0) & (idx < nbin) & finite_hist_weight_mask(w)
     if not np.any(mask):
         return
     h = np.bincount(idx[mask], weights=w[mask], minlength=nbin)[:nbin]
-    h2 = np.bincount(idx[mask], weights=w[mask] * w[mask], minlength=nbin)[:nbin]
+    h2 = np.bincount(idx[mask], weights=finite_weight_square(w[mask]), minlength=nbin)[:nbin]
     e = np.bincount(idx[mask], minlength=nbin)[:nbin]
     target["sumw"] = (np.asarray(target["sumw"], dtype=float) + h).tolist()
     target["sumw2"] = (np.asarray(target["sumw2"], dtype=float) + h2).tolist()
@@ -463,7 +555,7 @@ def selected_an17_recoil6_indices(chunk: dict[str, Any], n: int, sr_mask: np.nda
     return out
 
 
-def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: dict[str, Any], search_histograms: dict[str, Any], summary: dict[str, Any], step_size: int) -> None:
+def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: dict[str, Any], search_histograms: dict[str, Any], lowdm_variable_histograms: dict[str, Any], summary: dict[str, Any], step_size: int) -> None:
     meta_path = root_path.with_suffix(".json")
     if not meta_path.exists():
         summary.setdefault("missing_sidecars", []).append(str(root_path))
@@ -550,14 +642,24 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
 
                     for lowdm_region, lowdm_channel in LOWDM_REGION_MAP.items():
                         lowdm_mask = lowdm_region_mask(sub_group, lowdm_region, inputs["n"])
+                        if not np.any(lowdm_mask):
+                            continue
                         lowdm_indices = np.where(lowdm_mask, 0, -1)
                         if is_data and not data_process_allowed(process, lowdm_channel):
                             note_data_exclusion(summary, lowdm_channel, process, int(np.count_nonzero(lowdm_mask)))
                             continue
+                        lowdm_values = {
+                            var_name: lowdm_variable_values(sub_group, LOWDM_VARIABLE_SPECS[var_name], inputs["n"])
+                            for var_name in LOWDM_REGION_VARIABLES.get(lowdm_region, [])
+                        }
                         for vname, wraw in variations.items():
                             weights = finite_array(wraw, inputs["n"], 0.0) * normv
                             target = search_histograms.setdefault(lowdm_channel, {}).setdefault(label, {}).setdefault(vname, empty_index_hist(len(LOWDM_ONEBIN_LABELS)))
                             add_index_hist(target, lowdm_indices, weights)
+                            for var_name, values in lowdm_values.items():
+                                spec = LOWDM_VARIABLE_SPECS[var_name]
+                                vtarget = lowdm_variable_histograms.setdefault(lowdm_channel, {}).setdefault(var_name, {}).setdefault(label, {}).setdefault(vname, empty_binned_hist(spec["bins"]))
+                                add_binned_hist(vtarget, values, weights, lowdm_mask, spec["bins"])
                     summary["events_processed"] = int(summary.get("events_processed", 0)) + inputs["n"]
 
 
@@ -591,12 +693,13 @@ def main() -> int:
     norm = read_json(Path(args.normalization))
     histograms: dict[str, Any] = {}
     search_histograms: dict[str, Any] = {}
+    lowdm_variable_histograms: dict[str, Any] = {}
     summary: dict[str, Any] = {"events_processed": 0, "input_roots": []}
     for root_path in expand_roots(args.inputs):
         if root_path.name.startswith("validation") or not root_path.exists():
             continue
         summary["input_roots"].append(str(root_path))
-        process_root(repo, root_path, norm, histograms, search_histograms, summary, args.step_size)
+        process_root(repo, root_path, norm, histograms, search_histograms, lowdm_variable_histograms, summary, args.step_size)
     payload = {
         "schema_version": "flat_boosted_recoil_hists_v1",
         "status": "complete" if not summary.get("weight_failures") else "complete_with_weight_fallbacks",
@@ -625,14 +728,17 @@ def main() -> int:
             "regions": LOWDM_REGION_MAP,
             "note": "Low-dM uses the same CR/SR region names as high-dM: LLCR, QCDCR, GCR, DY2E, DY2M, SR. Current flat skim lacks dilepton charge and recoil-phi branches, so DY low-dM CRs are provisional Z-window/dilepton-count/recoil selections in this post-skim builder; exact OS and recoil-phi based CR flags should be added to the next skim schema.",
         },
+        "lowdm_variable_specs": LOWDM_VARIABLE_SPECS,
+        "lowdm_region_variables": LOWDM_REGION_VARIABLES,
         "normalization": str(args.normalization),
         "data_region_process_policy": DATA_PROCESS_BY_REGION,
         "summary": summary,
         "histograms": histograms,
         "search_bin_histograms": search_histograms,
+        "lowdm_variable_histograms": lowdm_variable_histograms,
     }
     write_json(Path(args.output), payload)
-    print(json.dumps({"status": payload["status"], "input_roots": len(summary["input_roots"]), "events_processed": summary["events_processed"], "regions": len(histograms), "search_bin_schemes": len(search_histograms), "output": args.output}, sort_keys=True))
+    print(json.dumps({"status": payload["status"], "input_roots": len(summary["input_roots"]), "events_processed": summary["events_processed"], "regions": len(histograms), "search_bin_schemes": len(search_histograms), "lowdm_variable_regions": len(lowdm_variable_histograms), "output": args.output}, sort_keys=True))
     return 0 if payload["status"] == "complete" else 2
 
 
