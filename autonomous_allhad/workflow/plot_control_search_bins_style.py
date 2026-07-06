@@ -759,12 +759,26 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
     plots = []
     output_dir.mkdir(parents=True, exist_ok=True)
     cr_regions = ["LLCR", "QCDCR", "GCR", "DY2E", "DY2M"]
+
+    cr_inclusive = []
+    for base in cr_regions:
+        rec = flat_hist_record(payload, base, allow_signal=False)
+        if rec:
+            cr_inclusive.append(rec)
+            plots.append(draw_flat_blocks([rec], output_dir / f"highdm_cr_{base.lower()}_recoil", xlabel=f"High-dM {base} recoil bin number"))
+    if cr_inclusive:
+        plots.append(draw_flat_blocks(cr_inclusive, output_dir / "highdm_cr_recoil_inclusive", xlabel="High-dM CR recoil bin number"))
+
     cr_split = []
     for base in cr_regions:
+        split_blocks = []
         for suffix in ["Nt0", "Nt1"]:
             rec = flat_hist_record(payload, f"{base}_{suffix}", allow_signal=False)
             if rec:
+                split_blocks.append(rec)
                 cr_split.append(rec)
+        if split_blocks:
+            plots.append(draw_flat_blocks(split_blocks, output_dir / f"highdm_cr_{base.lower()}_recoil_ntop_split", xlabel=f"High-dM {base} recoil bin number"))
     if cr_split:
         plots.append(draw_flat_blocks(cr_split, output_dir / "highdm_cr_recoil_ntop_split"))
     sr_inc = flat_hist_record(payload, "SR", allow_signal=True)
@@ -790,6 +804,7 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
     selected_recoil_blocks = selected_an17_recoil_blocks(payload)
     if selected_recoil_blocks:
         plots.append(draw_flat_blocks(selected_recoil_blocks, output_dir / "highdm_sr_selected_recoil6_bins", xlabel="Search bin number"))
+    low_cr_blocks = []
     low_blocks = []
     low_map = [
         ("cat2_LLCR_lowDeltaM", "LLCR low $\Delta m$", False),
@@ -800,17 +815,24 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
         ("cat7_SR_lowDeltaM", "SR low $\Delta m$", True),
     ]
     for scheme, label, is_sr in low_map:
-        rec = flat_search_record(payload, scheme, label, allow_signal=is_sr)
+        rec = flat_search_record(payload, scheme, label, allow_signal=False)
         if rec:
             rec["blind_data"] = is_sr
+            if not is_sr:
+                short = scheme.replace("_lowDeltaM", "").split("_", 1)[1].lower()
+                clean_label = label.replace(" low $\Delta m$", "")
+                low_cr_blocks.append(rec)
+                plots.append(draw_flat_blocks([rec], output_dir / f"lowdm_cr_{short}_onebin", xlabel=f"Low-dM {clean_label} bin number"))
             low_blocks.append(rec)
+    if low_cr_blocks:
+        plots.append(draw_flat_blocks(low_cr_blocks, output_dir / "lowdm_cr_onebin", xlabel="Low-dM CR region bin number"))
     if low_blocks:
         plots.append(draw_flat_blocks(low_blocks, output_dir / "lowdm_cr_sr_onebin", xlabel="Low-dM region bin number"))
     low_sr = flat_search_record(payload, "cat7_SR_lowDeltaM", "SR low $\Delta m$", allow_signal=True)
     if low_sr:
         low_sr["blind_data"] = True
         plots.append(draw_flat_blocks([low_sr], output_dir / "lowdm_sr_onebin", xlabel="Low-dM SR bin number"))
-    summary = {"status": "complete", "source": str(flat_hists), "output_dir": str(output_dir), "plots": plots, "signal_policy": "Signals are drawn only in SR plots; CR blocks exclude T2tt overlays.", "ntop_order": "N_t = 0 blocks are placed left of N_t >= 1 blocks."}
+    summary = {"status": "complete", "source": str(flat_hists), "output_dir": str(output_dir), "plots": plots, "signal_policy": "Signals are drawn only in SR plots; CR blocks exclude T2tt overlays.", "cr_plot_policy": "High-dM and low-dM CRs are drawn both as combined overview plots and as individual region plots.", "ntop_order": "N_t = 0 blocks are placed left of N_t >= 1 blocks."}
     (output_dir / "flat_plot_summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     return summary
 

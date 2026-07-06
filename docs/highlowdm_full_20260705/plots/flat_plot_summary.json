@@ -1,7 +1,138 @@
 {
+  "cr_plot_policy": "High-dM and low-dM CRs are drawn both as combined overview plots and as individual region plots.",
   "ntop_order": "N_t = 0 blocks are placed left of N_t >= 1 blocks.",
-  "output_dir": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots",
+  "output_dir": "docs/highlowdm_full_20260705/plots",
   "plots": [
+    {
+      "bins": 6,
+      "labels": [
+        "LLCR"
+      ],
+      "name": "highdm_cr_llcr_recoil",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_cr_llcr_recoil.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_cr_llcr_recoil.png",
+      "signals": [],
+      "status": "complete"
+    },
+    {
+      "bins": 6,
+      "labels": [
+        "QCDCR"
+      ],
+      "name": "highdm_cr_qcdcr_recoil",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_cr_qcdcr_recoil.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_cr_qcdcr_recoil.png",
+      "signals": [],
+      "status": "complete"
+    },
+    {
+      "bins": 6,
+      "labels": [
+        "GCR"
+      ],
+      "name": "highdm_cr_gcr_recoil",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_cr_gcr_recoil.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_cr_gcr_recoil.png",
+      "signals": [],
+      "status": "complete"
+    },
+    {
+      "bins": 6,
+      "labels": [
+        "DY2E"
+      ],
+      "name": "highdm_cr_dy2e_recoil",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_cr_dy2e_recoil.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_cr_dy2e_recoil.png",
+      "signals": [],
+      "status": "complete"
+    },
+    {
+      "bins": 6,
+      "labels": [
+        "DY2M"
+      ],
+      "name": "highdm_cr_dy2m_recoil",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_cr_dy2m_recoil.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_cr_dy2m_recoil.png",
+      "signals": [],
+      "status": "complete"
+    },
+    {
+      "bins": 30,
+      "labels": [
+        "LLCR",
+        "QCDCR",
+        "GCR",
+        "DY2E",
+        "DY2M"
+      ],
+      "name": "highdm_cr_recoil_inclusive",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_cr_recoil_inclusive.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_cr_recoil_inclusive.png",
+      "signals": [],
+      "status": "complete"
+    },
+    {
+      "bins": 12,
+      "labels": [
+        "LLCR\\n$N_{t}=0$",
+        "LLCR\\n$N_{t}\\geq1$"
+      ],
+      "name": "highdm_cr_llcr_recoil_ntop_split",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_cr_llcr_recoil_ntop_split.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_cr_llcr_recoil_ntop_split.png",
+      "signals": [],
+      "status": "complete"
+    },
+    {
+      "bins": 12,
+      "labels": [
+        "QCDCR\\n$N_{t}=0$",
+        "QCDCR\\n$N_{t}\\geq1$"
+      ],
+      "name": "highdm_cr_qcdcr_recoil_ntop_split",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_cr_qcdcr_recoil_ntop_split.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_cr_qcdcr_recoil_ntop_split.png",
+      "signals": [],
+      "status": "complete"
+    },
+    {
+      "bins": 12,
+      "labels": [
+        "GCR\\n$N_{t}=0$",
+        "GCR\\n$N_{t}\\geq1$"
+      ],
+      "name": "highdm_cr_gcr_recoil_ntop_split",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_cr_gcr_recoil_ntop_split.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_cr_gcr_recoil_ntop_split.png",
+      "signals": [],
+      "status": "complete"
+    },
+    {
+      "bins": 12,
+      "labels": [
+        "DY2E\\n$N_{t}=0$",
+        "DY2E\\n$N_{t}\\geq1$"
+      ],
+      "name": "highdm_cr_dy2e_recoil_ntop_split",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_cr_dy2e_recoil_ntop_split.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_cr_dy2e_recoil_ntop_split.png",
+      "signals": [],
+      "status": "complete"
+    },
+    {
+      "bins": 12,
+      "labels": [
+        "DY2M\\n$N_{t}=0$",
+        "DY2M\\n$N_{t}\\geq1$"
+      ],
+      "name": "highdm_cr_dy2m_recoil_ntop_split",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_cr_dy2m_recoil_ntop_split.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_cr_dy2m_recoil_ntop_split.png",
+      "signals": [],
+      "status": "complete"
+    },
     {
       "bins": 60,
       "labels": [
@@ -17,8 +148,8 @@
         "DY2M\\n$N_{t}\\geq1$"
       ],
       "name": "highdm_cr_recoil_ntop_split",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_recoil_ntop_split.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_recoil_ntop_split.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_cr_recoil_ntop_split.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_cr_recoil_ntop_split.png",
       "signals": [],
       "status": "complete"
     },
@@ -28,8 +159,8 @@
         "SR"
       ],
       "name": "highdm_sr_recoil_inclusive",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_recoil_inclusive.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_recoil_inclusive.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_sr_recoil_inclusive.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_sr_recoil_inclusive.png",
       "signals": [
         "mStop1000_mLSP1",
         "mStop1200_mLSP1"
@@ -43,8 +174,8 @@
         "SR\\n$N_{t}\\geq1$"
       ],
       "name": "highdm_sr_recoil_ntop_split",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_recoil_ntop_split.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_recoil_ntop_split.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_sr_recoil_ntop_split.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_sr_recoil_ntop_split.png",
       "signals": [
         "mStop1000_mLSP1",
         "mStop1200_mLSP1"
@@ -57,8 +188,8 @@
         "SR"
       ],
       "name": "highdm_sr_an17_search_bins",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_an17_search_bins.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_an17_search_bins.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_sr_an17_search_bins.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_sr_an17_search_bins.png",
       "signals": [
         "mStop1000_mLSP1",
         "mStop1200_mLSP1"
@@ -71,8 +202,8 @@
         "SR\\n$N_{t}\\geq1$"
       ],
       "name": "highdm_sr_nt1_an17_search_bins",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_nt1_an17_search_bins.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_nt1_an17_search_bins.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_sr_nt1_an17_search_bins.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_sr_nt1_an17_search_bins.png",
       "signals": [
         "mStop1000_mLSP1",
         "mStop1200_mLSP1"
@@ -91,12 +222,82 @@
         "$N_{b}\\geq3$, $N_{t}=2$\n$N_{W}=0$"
       ],
       "name": "highdm_sr_selected_recoil6_bins",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_selected_recoil6_bins.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_selected_recoil6_bins.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_sr_selected_recoil6_bins.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_sr_selected_recoil6_bins.png",
       "signals": [
         "mStop1000_mLSP1",
         "mStop1200_mLSP1"
       ],
+      "status": "complete"
+    },
+    {
+      "bins": 1,
+      "labels": [
+        "LLCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_llcr_onebin",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_onebin.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_onebin.png",
+      "signals": [],
+      "status": "complete"
+    },
+    {
+      "bins": 1,
+      "labels": [
+        "QCDCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_qcdcr_onebin",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_onebin.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_onebin.png",
+      "signals": [],
+      "status": "complete"
+    },
+    {
+      "bins": 1,
+      "labels": [
+        "GCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_gcr_onebin",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_onebin.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_onebin.png",
+      "signals": [],
+      "status": "complete"
+    },
+    {
+      "bins": 1,
+      "labels": [
+        "DY2E low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_dy2e_onebin",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_onebin.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_onebin.png",
+      "signals": [],
+      "status": "complete"
+    },
+    {
+      "bins": 1,
+      "labels": [
+        "DY2M low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_dy2m_onebin",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_onebin.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_onebin.png",
+      "signals": [],
+      "status": "complete"
+    },
+    {
+      "bins": 5,
+      "labels": [
+        "LLCR low $\\Delta m$",
+        "QCDCR low $\\Delta m$",
+        "GCR low $\\Delta m$",
+        "DY2E low $\\Delta m$",
+        "DY2M low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_onebin",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_onebin.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_onebin.png",
+      "signals": [],
       "status": "complete"
     },
     {
@@ -110,12 +311,9 @@
         "SR low $\\Delta m$"
       ],
       "name": "lowdm_cr_sr_onebin",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_sr_onebin.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_sr_onebin.png",
-      "signals": [
-        "mStop1000_mLSP1",
-        "mStop1200_mLSP1"
-      ],
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_sr_onebin.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_sr_onebin.png",
+      "signals": [],
       "status": "complete"
     },
     {
@@ -124,8 +322,8 @@
         "SR low $\\Delta m$"
       ],
       "name": "lowdm_sr_onebin",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_onebin.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_onebin.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_sr_onebin.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_sr_onebin.png",
       "signals": [
         "mStop1000_mLSP1",
         "mStop1200_mLSP1"
@@ -134,6 +332,6 @@
     }
   ],
   "signal_policy": "Signals are drawn only in SR plots; CR blocks exclude T2tt overlays.",
-  "source": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/highlowdm_full_20260706_flat_hists_selected_an17_recoil6.json",
+  "source": "autonomous_allhad/workflow/highlowdm_full_20260706_flat_hists_selected_an17_recoil6.json",
   "status": "complete"
 }
