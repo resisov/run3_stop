@@ -427,6 +427,9 @@ def flat_hist_record(payload: dict, region: str, allow_signal: bool) -> dict | N
         nbin = max(nbin, len(nominal.get("sumw") or []))
     if nbin <= 0:
         return None
+    recoil_edges = payload.get("recoil_pt_bins") or []
+    if len(recoil_edges) != nbin + 1:
+        recoil_edges = []
     groups = {group: np.zeros(nbin, dtype=float) for group in GROUP_ORDER}
     stat2 = np.zeros(nbin, dtype=float)
     data = np.zeros(nbin, dtype=float)
@@ -480,6 +483,7 @@ def flat_hist_record(payload: dict, region: str, allow_signal: bool) -> dict | N
         "signals": signals,
         "label": FLAT_REGION_LABELS.get(region, region),
         "nbin": nbin,
+        "edges": recoil_edges,
     }
 
 
@@ -640,8 +644,17 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
 
     hep.style.use("CMS")
     nbin = sum(int(block["nbin"]) for block in blocks)
-    centers = np.arange(1, nbin + 1, dtype=float)
-    edges = np.arange(0.5, nbin + 1.5, 1.0)
+    physical_edges = None
+    if len(blocks) == 1:
+        candidate_edges = np.asarray(blocks[0].get("edges") or [], dtype=float)
+        if len(candidate_edges) == int(blocks[0]["nbin"]) + 1 and np.all(np.diff(candidate_edges) > 0):
+            physical_edges = candidate_edges
+    if physical_edges is not None:
+        edges = physical_edges
+        centers = 0.5 * (edges[:-1] + edges[1:])
+    else:
+        centers = np.arange(1, nbin + 1, dtype=float)
+        edges = np.arange(0.5, nbin + 1.5, 1.0)
     boundaries = [0]
     labels = []
     for block in blocks:
@@ -703,13 +716,16 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
     rax.fill_between(edges, np.r_[1.0 - rel, 1.0 - rel[-1]], np.r_[1.0 + rel, 1.0 + rel[-1]], step="post", facecolor="0.85", edgecolor="none", alpha=0.6)
     rax.axhline(1.0, color="0.45", linewidth=1)
     for axis in (ax, rax):
-        for boundary in boundaries[1:-1]:
-            axis.axvline(boundary + 0.5, color="black", linewidth=1.2)
-        axis.set_xlim(0.5, nbin + 0.5)
+        if physical_edges is None:
+            for boundary in boundaries[1:-1]:
+                axis.axvline(boundary + 0.5, color="black", linewidth=1.2)
+            axis.set_xlim(0.5, nbin + 0.5)
+        else:
+            axis.set_xlim(float(edges[0]), float(edges[-1]))
         axis.tick_params(which="both", direction="in", top=True, right=True)
         axis.minorticks_on()
     for start, end, label, block in zip(boundaries[:-1], boundaries[1:], labels, blocks):
-        center = 0.5 * (start + end) + 0.5
+        center = 0.5 * (start + end) + 0.5 if physical_edges is None else 0.5 * (float(edges[0]) + float(edges[-1]))
         if block.get("label_box"):
             rax.text(
                 center,
@@ -735,16 +751,20 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
     rax.set_ylabel("Data/MC")
     rax.set_ylim(0, 2)
     rax.set_xlabel(xlabel)
-    xlabels = []
-    for block in blocks:
-        block_labels = block.get("xlabels") or []
-        if len(block_labels) == int(block["nbin"]):
-            xlabels.extend(block_labels)
-        else:
-            start = len(xlabels) + 1
-            xlabels.extend(str(i) for i in range(start, start + int(block["nbin"])))
-    rax.set_xticks(centers)
-    rax.set_xticklabels(xlabels, fontsize=7 if any("\n" in lab for lab in xlabels) else (8 if nbin > 24 else 10))
+    if physical_edges is not None:
+        rax.set_xticks(edges)
+        rax.set_xticklabels([f"{edge:g}" for edge in edges], fontsize=10)
+    else:
+        xlabels = []
+        for block in blocks:
+            block_labels = block.get("xlabels") or []
+            if len(block_labels) == int(block["nbin"]):
+                xlabels.extend(block_labels)
+            else:
+                start = len(xlabels) + 1
+                xlabels.extend(str(i) for i in range(start, start + int(block["nbin"])))
+        rax.set_xticks(centers)
+        rax.set_xticklabels(xlabels, fontsize=7 if any("\n" in lab for lab in xlabels) else (8 if nbin > 24 else 10))
     hep.cms.label(llabel="Work in progress", rlabel=r"109.82 fb$^{-1}$ (13.6 TeV)", ax=ax)
     ax.legend(fontsize=12, ncol=4, frameon=False, columnspacing=1.05, handlelength=2.0, loc="upper center", bbox_to_anchor=(0.5, 0.995))
     outbase.parent.mkdir(parents=True, exist_ok=True)
@@ -765,7 +785,7 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
         rec = flat_hist_record(payload, base, allow_signal=False)
         if rec:
             cr_inclusive.append(rec)
-            plots.append(draw_flat_blocks([rec], output_dir / f"highdm_cr_{base.lower()}_recoil", xlabel=f"High-dM {base} recoil bin number"))
+            plots.append(draw_flat_blocks([rec], output_dir / f"highdm_cr_{base.lower()}_recoil", xlabel=r"Recoil $p_{T}$ (GeV)"))
     if cr_inclusive:
         plots.append(draw_flat_blocks(cr_inclusive, output_dir / "highdm_cr_recoil_inclusive", xlabel="High-dM CR recoil bin number"))
 
@@ -784,7 +804,7 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
     sr_inc = flat_hist_record(payload, "SR", allow_signal=True)
     if sr_inc:
         sr_inc["blind_data"] = True
-        plots.append(draw_flat_blocks([sr_inc], output_dir / "highdm_sr_recoil_inclusive"))
+        plots.append(draw_flat_blocks([sr_inc], output_dir / "highdm_sr_recoil_inclusive", xlabel=r"Recoil $p_{T}$ (GeV)"))
     sr_split = []
     for region in ["SR_Nt0", "SR_Nt1"]:
         rec = flat_hist_record(payload, region, allow_signal=True)
