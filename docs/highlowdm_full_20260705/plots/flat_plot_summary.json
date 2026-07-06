@@ -82,17 +82,17 @@
     {
       "bins": 42,
       "labels": [
-        "AN17 bin 4\n$N_{b}=1$, $N_{t}\\geq1$, $N_{W}=0$",
-        "AN17 bin 5\n$N_{b}=1$, $N_{t}\\geq1$, $N_{W}\\geq1$",
-        "AN17 bin 8\n$N_{b}=2$, $N_{t}=1$, $N_{W}=0$",
-        "AN17 bin 9\n$N_{b}=2$, $N_{t}=1$, $N_{W}=1$",
-        "AN17 bin 14\n$N_{b}\\geq3$, $N_{t}=1$, $N_{W}=0$",
-        "AN17 bin 15\n$N_{b}\\geq3$, $N_{t}=1$, $N_{W}=1$",
-        "AN17 bin 16\n$N_{b}\\geq3$, $N_{t}=2$, $N_{W}=0$"
+        "$N_{b}=1$, $N_{t}\\geq1$\n$N_{W}=0$",
+        "$N_{b}=1$, $N_{t}\\geq1$\n$N_{W}\\geq1$",
+        "$N_{b}=2$, $N_{t}=1$\n$N_{W}=0$",
+        "$N_{b}=2$, $N_{t}=1$\n$N_{W}=1$",
+        "$N_{b}\\geq3$, $N_{t}=1$\n$N_{W}=0$",
+        "$N_{b}\\geq3$, $N_{t}=1$\n$N_{W}=1$",
+        "$N_{b}\\geq3$, $N_{t}=2$\n$N_{W}=0$"
       ],
-      "name": "highdm_sr_selected_an17_recoil6_bins",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_selected_an17_recoil6_bins.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_selected_an17_recoil6_bins.png",
+      "name": "highdm_sr_selected_recoil6_bins",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_selected_recoil6_bins.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_selected_recoil6_bins.png",
       "signals": [
         "mStop1000_mLSP1",
         "mStop1200_mLSP1"

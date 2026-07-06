@@ -43,22 +43,23 @@ GROUP_COLORS = {
     "others": "#6a625f",
 }
 SIGNAL_OVERLAYS = [
-    {"key": "mStop1000_mLSP1", "label": "T2tt mStop1000 mLSP1", "color": "#d62728"},
-    {"key": "mStop1200_mLSP1", "label": "T2tt mStop1200 mLSP1", "color": "#1f77b4"},
+    {"key": "mStop1000_mLSP1", "label": '$m_{\\tilde{t}}=1000$ GeV, $m_{\\tilde{\\chi}^{0}_{1}}=1$ GeV', "color": "#ff0000"},
+    {"key": "mStop1200_mLSP1", "label": '$m_{\\tilde{t}}=1200$ GeV, $m_{\\tilde{\\chi}^{0}_{1}}=1$ GeV', "color": "#00ff00"},
 ]
 PARTIAL_AN17_SPLIT_BINS = [4, 5, 8, 9, 14, 15, 16]
 SELECTED_AN17_RECOIL_SCHEME = "boosted_an17_selected_recoil6_SR"
 SELECTED_AN17_RECOIL_BINS = [4, 5, 8, 9, 14, 15, 16]
 RECOIL6_LABELS = ["250-300", "300-350", "350-400", "400-500", "500-800", "800-1500"]
 SELECTED_AN17_CATEGORY_LABELS = {
-    "Nb1_T1plus_W0": r"$N_{b}=1$, $N_{t}\geq1$, $N_{W}=0$",
-    "Nb1_T1plus_W1plus": r"$N_{b}=1$, $N_{t}\geq1$, $N_{W}\geq1$",
-    "Nb2_T1_W0": r"$N_{b}=2$, $N_{t}=1$, $N_{W}=0$",
-    "Nb2_T1_W1": r"$N_{b}=2$, $N_{t}=1$, $N_{W}=1$",
-    "Nb3plus_T1_W0": r"$N_{b}\geq3$, $N_{t}=1$, $N_{W}=0$",
-    "Nb3plus_T1_W1": r"$N_{b}\geq3$, $N_{t}=1$, $N_{W}=1$",
-    "Nb3plus_T2_W0": r"$N_{b}\geq3$, $N_{t}=2$, $N_{W}=0$",
+    'Nb1_T1plus_W0': '$N_{b}=1$, $N_{t}\\geq1$\n$N_{W}=0$',
+    'Nb1_T1plus_W1plus': '$N_{b}=1$, $N_{t}\\geq1$\n$N_{W}\\geq1$',
+    'Nb2_T1_W0': '$N_{b}=2$, $N_{t}=1$\n$N_{W}=0$',
+    'Nb2_T1_W1': '$N_{b}=2$, $N_{t}=1$\n$N_{W}=1$',
+    'Nb3plus_T1_W0': '$N_{b}\\geq3$, $N_{t}=1$\n$N_{W}=0$',
+    'Nb3plus_T1_W1': '$N_{b}\\geq3$, $N_{t}=1$\n$N_{W}=1$',
+    'Nb3plus_T2_W0': '$N_{b}\\geq3$, $N_{t}=2$\n$N_{W}=0$',
 }
+
 
 
 def load_json(path: Path) -> dict:
@@ -613,9 +614,7 @@ def selected_an17_recoil_blocks(payload: dict) -> list[dict]:
             marker = f"AN17_{bin_number}_"
             if raw.startswith(marker):
                 category = raw[len(marker):].split("_recoil_")[0]
-        label = f"AN17 bin {bin_number}"
-        if category:
-            label += "\n" + SELECTED_AN17_CATEGORY_LABELS.get(category, category)
+        label = SELECTED_AN17_CATEGORY_LABELS.get(category, category) if category else f"category {pos + 1}"
         block = {
             "groups": {group: vals[slc] for group, vals in rec["groups"].items()},
             "background": rec["background"][slc],
@@ -625,8 +624,9 @@ def selected_an17_recoil_blocks(payload: dict) -> list[dict]:
             "signals": {key: vals[slc] for key, vals in rec.get("signals", {}).items()},
             "label": label,
             "nbin": n_recoil,
-            "xlabels": RECOIL6_LABELS,
+            "xlabels": [],
             "blind_data": True,
+            "label_box": True,
         }
         blocks.append(block)
     return blocks
@@ -692,7 +692,7 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
     for spec in SIGNAL_OVERLAYS:
         vals = signals.get(spec["key"])
         if vals is not None:
-            ax.hist(centers, bins=edges, weights=vals, histtype="step", linewidth=2.0, color=spec["color"], label=spec["label"])
+            ax.hist(centers, bins=edges, weights=vals, histtype="step", linewidth=2.8, linestyle="--", color=spec["color"], label=spec["label"])
     mask = data_mask & (data > 0)
     ax.errorbar(centers[mask], data[mask], yerr=np.where(data_unc[mask] > 0, data_unc[mask], poisson_unc(data[mask])), fmt="o", color="black", markersize=4, label="Data 2024", zorder=10)
     ratio = np.divide(data, bkg, out=np.full_like(data, np.nan), where=(bkg > 0) & data_mask)
@@ -708,9 +708,21 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
         axis.set_xlim(0.5, nbin + 0.5)
         axis.tick_params(which="both", direction="in", top=True, right=True)
         axis.minorticks_on()
-    for start, end, label in zip(boundaries[:-1], boundaries[1:], labels):
+    for start, end, label, block in zip(boundaries[:-1], boundaries[1:], labels, blocks):
         center = 0.5 * (start + end) + 0.5
-        ax.text(center, 0.965, label, transform=ax.get_xaxis_transform(), ha="center", va="top", fontsize=15, fontweight="bold")
+        if block.get("label_box"):
+            ax.text(
+                center,
+                0.15,
+                label,
+                transform=ax.get_xaxis_transform(),
+                ha="center",
+                va="bottom",
+                fontsize=13,
+                bbox={"boxstyle": "round,pad=0.28", "facecolor": "white", "edgecolor": "0.7", "alpha": 0.96},
+            )
+        else:
+            ax.text(center, 0.965, label, transform=ax.get_xaxis_transform(), ha="center", va="top", fontsize=15, fontweight="bold")
     positive = []
     for arr in [bkg + unc, data[mask] if np.any(mask) else np.array([]), *signals.values()]:
         arr = np.asarray(arr, dtype=float)
@@ -776,7 +788,7 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
         plots.append(draw_flat_blocks([an17_nt1], output_dir / "highdm_sr_nt1_an17_search_bins", xlabel="High-dM SR, $N_{t}\geq1$ search bin number"))
     selected_recoil_blocks = selected_an17_recoil_blocks(payload)
     if selected_recoil_blocks:
-        plots.append(draw_flat_blocks(selected_recoil_blocks, output_dir / "highdm_sr_selected_an17_recoil6_bins", xlabel="High-dM SR selected AN17 category and recoil bin"))
+        plots.append(draw_flat_blocks(selected_recoil_blocks, output_dir / "highdm_sr_selected_recoil6_bins", xlabel="Search bin number"))
     low_blocks = []
     low_map = [
         ("cat2_LLCR_lowDeltaM", "LLCR low $\Delta m$", False),
