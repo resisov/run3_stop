@@ -203,7 +203,7 @@ def draw_multi_overlay(variants: list[dict[str, str]], run2_path: Path, output: 
     from matplotlib.ticker import MultipleLocator
 
     hep.style.use("CMS")
-    colors = ["#d62728", "#1f77b4", "#2ca02c", "#9467bd", "#ff7f0e"]
+    colors = ["#d62728", "#1f77b4", "#2ca02c", "#9467bd", "#ff7f0e", "#e377c2", "#17becf", "#8c564b"]
     fig, ax = plt.subplots(figsize=(10.0, 7.2))
     fig.subplots_adjust(left=0.13, right=0.96, bottom=0.12, top=0.89)
 
