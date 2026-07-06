@@ -15,6 +15,11 @@ from autonomous_allhad.real_subset_worker import compute_weight_bundle
 
 RECOIL_PT_BINS = [250.0, 300.0, 350.0, 400.0, 500.0, 800.0, 1500.0]
 LOWDM_ONEBIN_LABELS = ["lowdm_inclusive"]
+SELECTED_AN17_RECOIL_BINS_1BASED = [4, 5, 8, 9, 14, 15, 16]
+RECOIL_BIN_LABELS = [
+    f"{int(RECOIL_PT_BINS[i])}-{int(RECOIL_PT_BINS[i + 1])}"
+    for i in range(len(RECOIL_PT_BINS) - 1)
+]
 LOWDM_REGION_MAP = {
     "LLCR": "cat2_LLCR_lowDeltaM",
     "QCDCR": "cat3_QCDCR_lowDeltaM",
@@ -436,6 +441,28 @@ def boosted_an17_indices(chunk: dict[str, Any], n: int, sr_mask: np.ndarray) -> 
     return out
 
 
+def selected_an17_recoil_labels() -> list[str]:
+    labels = []
+    for bin_number in SELECTED_AN17_RECOIL_BINS_1BASED:
+        category = SEARCH_BIN_ORDER[bin_number - 1]
+        for recoil_label in RECOIL_BIN_LABELS:
+            labels.append(f"AN17_{bin_number}_{category}_recoil_{recoil_label}")
+    return labels
+
+
+def selected_an17_recoil6_indices(chunk: dict[str, Any], n: int, sr_mask: np.ndarray) -> np.ndarray:
+    search_indices = boosted_an17_indices(chunk, n, sr_mask)
+    selected_zero_based = [idx - 1 for idx in SELECTED_AN17_RECOIL_BINS_1BASED]
+    selected_map = {search_idx: pos for pos, search_idx in enumerate(selected_zero_based)}
+    recoil = finite_array(chunk["met"], n, 0.0)
+    recoil_idx = np.searchsorted(np.asarray(RECOIL_PT_BINS, dtype=float), recoil, side="right") - 1
+    out = np.full(n, -1, dtype=int)
+    for search_idx, category_pos in selected_map.items():
+        mask = (search_indices == search_idx) & (recoil_idx >= 0) & (recoil_idx < len(RECOIL_PT_BINS) - 1)
+        out[mask] = category_pos * (len(RECOIL_PT_BINS) - 1) + recoil_idx[mask]
+    return out
+
+
 def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: dict[str, Any], search_histograms: dict[str, Any], summary: dict[str, Any], step_size: int) -> None:
     meta_path = root_path.with_suffix(".json")
     if not meta_path.exists():
@@ -510,6 +537,17 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                                 target = search_histograms.setdefault(scheme, {}).setdefault(label, {}).setdefault(vname, empty_index_hist(len(SEARCH_BIN_ORDER)))
                                 add_index_hist(target, search_indices, weights)
 
+                    sr_mask = as_bool(sub_group["feature_SR"], inputs["n"])
+                    selected_recoil_indices = selected_an17_recoil6_indices(sub_group, inputs["n"], sr_mask)
+                    selected_scheme = "boosted_an17_selected_recoil6_SR"
+                    if is_data and not data_process_allowed(process, "SR"):
+                        note_data_exclusion(summary, selected_scheme, process, int(np.count_nonzero(selected_recoil_indices >= 0)))
+                    else:
+                        for vname, wraw in variations.items():
+                            weights = finite_array(wraw, inputs["n"], 0.0) * normv
+                            target = search_histograms.setdefault(selected_scheme, {}).setdefault(label, {}).setdefault(vname, empty_index_hist(len(selected_an17_recoil_labels())))
+                            add_index_hist(target, selected_recoil_indices, weights)
+
                     for lowdm_region, lowdm_channel in LOWDM_REGION_MAP.items():
                         lowdm_mask = lowdm_region_mask(sub_group, lowdm_region, inputs["n"])
                         lowdm_indices = np.where(lowdm_mask, 0, -1)
@@ -573,6 +611,12 @@ def main() -> int:
         "search_bin_schemes": {
             "boosted_an_17_SR": {"bin_labels": SEARCH_BIN_ORDER, "selection": "feature_SR"},
             "boosted_an_17_SR_Nt1": {"bin_labels": SEARCH_BIN_ORDER, "selection": "feature_SR_Nt1"},
+            "boosted_an17_selected_recoil6_SR": {
+                "bin_labels": selected_an17_recoil_labels(),
+                "selection": "feature_SR and AN17 bins 4,5,8,9,14,15,16 split into six recoil/MET bins",
+                "selected_an17_bins_1based": SELECTED_AN17_RECOIL_BINS_1BASED,
+                "recoil_pt_bins": RECOIL_PT_BINS,
+            },
             **{channel: {"bin_labels": LOWDM_ONEBIN_LABELS, "selection": f"lowdm_common_and_{region}", "delta_m": "low", "region": region} for region, channel in LOWDM_REGION_MAP.items()},
         },
         "lowdm_region_policy": {

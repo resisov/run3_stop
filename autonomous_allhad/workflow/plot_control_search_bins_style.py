@@ -47,6 +47,18 @@ SIGNAL_OVERLAYS = [
     {"key": "mStop1200_mLSP1", "label": "T2tt mStop1200 mLSP1", "color": "#1f77b4"},
 ]
 PARTIAL_AN17_SPLIT_BINS = [4, 5, 8, 9, 14, 15, 16]
+SELECTED_AN17_RECOIL_SCHEME = "boosted_an17_selected_recoil6_SR"
+SELECTED_AN17_RECOIL_BINS = [4, 5, 8, 9, 14, 15, 16]
+RECOIL6_LABELS = ["250-300", "300-350", "350-400", "400-500", "500-800", "800-1500"]
+SELECTED_AN17_CATEGORY_LABELS = {
+    "Nb1_T1plus_W0": r"$N_{b}=1$, $N_{t}\geq1$, $N_{W}=0$",
+    "Nb1_T1plus_W1plus": r"$N_{b}=1$, $N_{t}\geq1$, $N_{W}\geq1$",
+    "Nb2_T1_W0": r"$N_{b}=2$, $N_{t}=1$, $N_{W}=0$",
+    "Nb2_T1_W1": r"$N_{b}=2$, $N_{t}=1$, $N_{W}=1$",
+    "Nb3plus_T1_W0": r"$N_{b}\geq3$, $N_{t}=1$, $N_{W}=0$",
+    "Nb3plus_T1_W1": r"$N_{b}\geq3$, $N_{t}=1$, $N_{W}=1$",
+    "Nb3plus_T2_W0": r"$N_{b}\geq3$, $N_{t}=2$, $N_{W}=0$",
+}
 
 
 def load_json(path: Path) -> dict:
@@ -582,6 +594,43 @@ def partial_an17_search_record(payload: dict, label: str, split_bins: list[int],
         "xlabels": xlabels,
     }
 
+
+def selected_an17_recoil_blocks(payload: dict) -> list[dict]:
+    rec = flat_search_record(payload, SELECTED_AN17_RECOIL_SCHEME, "selected AN17 recoil", allow_signal=True)
+    if not rec:
+        return []
+    scheme = (payload.get("search_bin_schemes") or {}).get(SELECTED_AN17_RECOIL_SCHEME) or {}
+    raw_labels = scheme.get("bin_labels") or []
+    blocks = []
+    n_recoil = len(RECOIL6_LABELS)
+    for pos, bin_number in enumerate(SELECTED_AN17_RECOIL_BINS):
+        slc = slice(pos * n_recoil, (pos + 1) * n_recoil)
+        if slc.stop > int(rec["nbin"]):
+            continue
+        category = ""
+        if raw_labels and pos * n_recoil < len(raw_labels):
+            raw = raw_labels[pos * n_recoil]
+            marker = f"AN17_{bin_number}_"
+            if raw.startswith(marker):
+                category = raw[len(marker):].split("_recoil_")[0]
+        label = f"AN17 bin {bin_number}"
+        if category:
+            label += "\n" + SELECTED_AN17_CATEGORY_LABELS.get(category, category)
+        block = {
+            "groups": {group: vals[slc] for group, vals in rec["groups"].items()},
+            "background": rec["background"][slc],
+            "background_unc": rec["background_unc"][slc],
+            "data": rec["data"][slc],
+            "data_unc": rec["data_unc"][slc],
+            "signals": {key: vals[slc] for key, vals in rec.get("signals", {}).items()},
+            "label": label,
+            "nbin": n_recoil,
+            "xlabels": RECOIL6_LABELS,
+            "blind_data": True,
+        }
+        blocks.append(block)
+    return blocks
+
 def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/search bin number") -> dict:
     import matplotlib
 
@@ -725,10 +774,9 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
     if an17_nt1:
         an17_nt1["blind_data"] = True
         plots.append(draw_flat_blocks([an17_nt1], output_dir / "highdm_sr_nt1_an17_search_bins", xlabel="High-dM SR, $N_{t}\geq1$ search bin number"))
-    an17_partial = partial_an17_search_record(payload, "SR: selected AN17 bins split", PARTIAL_AN17_SPLIT_BINS, allow_signal=True)
-    if an17_partial:
-        an17_partial["blind_data"] = True
-        plots.append(draw_flat_blocks([an17_partial], output_dir / "highdm_sr_partial_ntop_an17_search_bins", xlabel="High-dM SR partial $N_{t}$-split search bin number"))
+    selected_recoil_blocks = selected_an17_recoil_blocks(payload)
+    if selected_recoil_blocks:
+        plots.append(draw_flat_blocks(selected_recoil_blocks, output_dir / "highdm_sr_selected_an17_recoil6_bins", xlabel="High-dM SR selected AN17 category and recoil bin"))
     low_blocks = []
     low_map = [
         ("cat2_LLCR_lowDeltaM", "LLCR low $\Delta m$", False),
