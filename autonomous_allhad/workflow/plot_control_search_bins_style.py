@@ -326,7 +326,7 @@ def draw(fit_path: Path, payload_path: Path, signal_searchbin_path: Path, outbas
     data = flat["data"]
     data_unc = flat["data_unc"]
     mask = flat["data_mask"] & (data > 0)
-    ax.errorbar(centers[mask], data[mask], yerr=np.where(data_unc[mask] > 0, data_unc[mask], poisson_unc(data[mask])), fmt="o", color="black", markersize=4, label="Data 2024", zorder=10)
+    ax.errorbar(centers[mask], data[mask], yerr=np.where(data_unc[mask] > 0, data_unc[mask], poisson_unc(data[mask])), fmt="o", color="black", markersize=4, label="DATA", zorder=10)
 
     ratio = np.divide(data, bkg, out=np.full_like(data, np.nan), where=(bkg > 0) & flat["data_mask"])
     ratio_err = np.divide(data_unc, bkg, out=np.full_like(data, np.nan), where=(bkg > 0) & flat["data_mask"])
@@ -365,7 +365,7 @@ def draw(fit_path: Path, payload_path: Path, signal_searchbin_path: Path, outbas
     rax.set_xticks(centers)
     rax.set_xticklabels([str(i) for i in range(1, nbin + 1)], fontsize=8)
     hep.cms.label(llabel="Work in progress", rlabel=r"109.82 fb$^{-1}$ (13.6 TeV)", ax=ax)
-    ax.legend(fontsize=10, ncol=4, frameon=False, columnspacing=1.0, handlelength=1.6, loc="upper center", bbox_to_anchor=(0.5, 0.995))
+    ax.legend(fontsize=12, ncol=4, frameon=False, columnspacing=1.05, handlelength=2.0, loc="upper center", bbox_to_anchor=(0.5, 0.995))
 
     outbase.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(outbase.with_suffix(".png"), dpi=180, bbox_inches="tight")
@@ -694,7 +694,7 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
         if vals is not None:
             ax.hist(centers, bins=edges, weights=vals, histtype="step", linewidth=2.8, linestyle="--", color=spec["color"], label=spec["label"])
     mask = data_mask & (data > 0)
-    ax.errorbar(centers[mask], data[mask], yerr=np.where(data_unc[mask] > 0, data_unc[mask], poisson_unc(data[mask])), fmt="o", color="black", markersize=4, label="Data 2024", zorder=10)
+    ax.errorbar(centers[mask], data[mask], yerr=np.where(data_unc[mask] > 0, data_unc[mask], poisson_unc(data[mask])), fmt="o", color="black", markersize=4, label="DATA", zorder=10)
     ratio = np.divide(data, bkg, out=np.full_like(data, np.nan), where=(bkg > 0) & data_mask)
     ratio_err = np.divide(data_unc, bkg, out=np.full_like(data, np.nan), where=(bkg > 0) & data_mask)
     rmask = np.isfinite(ratio)
@@ -711,15 +711,16 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
     for start, end, label, block in zip(boundaries[:-1], boundaries[1:], labels, blocks):
         center = 0.5 * (start + end) + 0.5
         if block.get("label_box"):
-            ax.text(
+            rax.text(
                 center,
-                0.15,
+                0.5,
                 label,
-                transform=ax.get_xaxis_transform(),
+                transform=rax.get_xaxis_transform(),
                 ha="center",
-                va="bottom",
+                va="center",
                 fontsize=13,
                 bbox={"boxstyle": "round,pad=0.28", "facecolor": "white", "edgecolor": "0.7", "alpha": 0.96},
+                zorder=20,
             )
         else:
             ax.text(center, 0.965, label, transform=ax.get_xaxis_transform(), ha="center", va="top", fontsize=15, fontweight="bold")
@@ -745,7 +746,7 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
     rax.set_xticks(centers)
     rax.set_xticklabels(xlabels, fontsize=7 if any("\n" in lab for lab in xlabels) else (8 if nbin > 24 else 10))
     hep.cms.label(llabel="Work in progress", rlabel=r"109.82 fb$^{-1}$ (13.6 TeV)", ax=ax)
-    ax.legend(fontsize=10, ncol=4, frameon=False, columnspacing=1.0, handlelength=1.6, loc="upper center", bbox_to_anchor=(0.5, 0.995))
+    ax.legend(fontsize=12, ncol=4, frameon=False, columnspacing=1.05, handlelength=2.0, loc="upper center", bbox_to_anchor=(0.5, 0.995))
     outbase.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(outbase.with_suffix(".png"), dpi=180, bbox_inches="tight")
     fig.savefig(outbase.with_suffix(".pdf"), bbox_inches="tight")
