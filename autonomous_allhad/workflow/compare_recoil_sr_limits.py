@@ -203,9 +203,9 @@ def draw_multi_overlay(variants: list[dict[str, str]], run2_path: Path, output: 
     from matplotlib.ticker import MultipleLocator
 
     hep.style.use("CMS")
-    colors = ["#d62728", "#1f77b4", "#2ca02c", "#9467bd", "#ff7f0e", "#e377c2", "#17becf", "#8c564b"]
-    fig, ax = plt.subplots(figsize=(10.0, 7.2))
-    fig.subplots_adjust(left=0.13, right=0.96, bottom=0.12, top=0.89)
+    colors = ["#d7191c", "#2c7bb6", "#1a9641", "#984ea3", "#ff7f00", "#c51b8a", "#17becf", "#8c564b"]
+    fig, ax = plt.subplots(figsize=(10.0, 10.0))
+    fig.subplots_adjust(left=0.13, right=0.97, bottom=0.11, top=0.90)
 
     diag_x = np.linspace(600.0, 1500.0, 400)
     diag_y = diag_x - 172.5
@@ -213,7 +213,19 @@ def draw_multi_overlay(variants: list[dict[str, str]], run2_path: Path, output: 
     ax.plot(diag_x[keep], diag_y[keep], color="0.55", linestyle=":", linewidth=1.1, zorder=2)
 
     rows = []
-    handles: list[Any] = []
+    run3_handles: list[Any] = []
+    reference_handles: list[Any] = []
+
+    def plot_label(label: str) -> str:
+        mapping = {
+            "Inclusive SR": r"Inclusive high-$\Delta m$ SR",
+            "SR, N_t >= 1": r"High-$\Delta m$ SR, $N_t\geq1$",
+            "SR, N_t = 0": r"High-$\Delta m$ SR, $N_t=0$",
+            "CR/SR N_t split": r"CR/SR split by $N_t$",
+            "CR/SR N_t split + low-dM": r"CR/SR split by $N_t$ + low-$\Delta m$ SR",
+            "Selected 7x6 + low-dM": r"Selected 7$\times$6 recoil categories + low-$\Delta m$ SR",
+        }
+        return mapping.get(label, label)
     for idx, spec in enumerate(variants):
         points = load_points(Path(spec["dir"]) / "expected_limits.json")
         grid = contour_grid(points)
@@ -222,8 +234,8 @@ def draw_multi_overlay(variants: list[dict[str, str]], run2_path: Path, output: 
             continue
         xx, yy, zz = grid
         color = colors[idx % len(colors)]
-        ax.contour(xx, yy, zz, levels=[0.0], colors=color, linewidths=2.7, zorder=5)
-        handles.append(Line2D([0], [0], color=color, lw=2.7, label=spec["label"]))
+        ax.contour(xx, yy, zz, levels=[0.0], colors=color, linewidths=3.0, zorder=5)
+        run3_handles.append(Line2D([0], [0], color=color, lw=3.0, label=plot_label(spec["label"])))
         rows.append({"label": spec["label"], "status": "plotted", "points": len(points)})
 
     run2 = load_run2_contours(run2_path)
@@ -233,14 +245,15 @@ def draw_multi_overlay(variants: list[dict[str, str]], run2_path: Path, output: 
     ]:
         arr = np.asarray(run2.get(key) or [], dtype=float)
         if arr.ndim == 2 and arr.shape[1] >= 2:
-            ax.plot(arr[:, 0], arr[:, 1], color="black", linestyle=style, linewidth=2.2, zorder=6)
-            handles.append(Line2D([0], [0], color="black", lw=2.2, linestyle=style, label=label))
+            ax.plot(arr[:, 0], arr[:, 1], color="black", linestyle=style, linewidth=2.4, zorder=6)
+            reference_handles.append(Line2D([0], [0], color="black", lw=2.4, linestyle=style, label=label))
 
-    handles.append(Line2D([0], [0], color="0.55", lw=1.1, linestyle=":", label=r"$m_{\tilde{\chi}_1^0}=m_{\tilde{t}}-m_t$"))
+    reference_handles.append(Line2D([0], [0], color="0.55", lw=1.2, linestyle=":", label=r"$m_{\tilde{\chi}_1^0}=m_{\tilde{t}}-m_t$"))
     ax.set_xlim(600.0, 1500.0)
     ax.set_ylim(0.0, 1500.0)
-    ax.set_xlabel(r"$m_{\tilde{t}}$ (GeV)", fontsize=25, loc="right")
-    ax.set_ylabel(r"$m_{\tilde{\chi}_1^0}$ (GeV)", fontsize=25)
+    ax.set_aspect("equal", adjustable="box")
+    ax.set_xlabel(r"$m_{\tilde{t}}$ (GeV)", fontsize=30, loc="right")
+    ax.set_ylabel(r"$m_{\tilde{\chi}_1^0}$ (GeV)", fontsize=30)
     ax.xaxis.set_major_locator(MultipleLocator(200))
     ax.yaxis.set_major_locator(MultipleLocator(200))
     ax.xaxis.set_minor_locator(MultipleLocator(50))
@@ -251,10 +264,34 @@ def draw_multi_overlay(variants: list[dict[str, str]], run2_path: Path, output: 
         spine.set_linewidth(1.8)
     hep.cms.label(llabel="Work in progress", rlabel=r"109.82 fb$^{-1}$ (13.6 TeV)", ax=ax)
     ax.text(0.14, 0.95, r"$pp\rightarrow \tilde{t}\tilde{t},\ \tilde{t}\rightarrow t\tilde{\chi}_1^0$", transform=ax.transAxes, fontsize=15, va="top")
-    ax.legend(handles=handles, loc="upper left", bbox_to_anchor=(0.02, 0.90), frameon=False, fontsize=13, handlelength=2.7)
+    ref_legend = ax.legend(
+        handles=reference_handles,
+        loc="upper left",
+        bbox_to_anchor=(0.02, 0.855),
+        frameon=False,
+        fontsize=13.5,
+        handlelength=3.0,
+        labelspacing=0.45,
+    )
+    ax.add_artist(ref_legend)
+    ax.legend(
+        handles=run3_handles,
+        loc="lower right",
+        bbox_to_anchor=(0.985, 0.025),
+        frameon=True,
+        facecolor="white",
+        edgecolor="0.72",
+        framealpha=0.92,
+        fontsize=11.5,
+        title="Run-3 expected contours",
+        title_fontsize=13.0,
+        handlelength=3.0,
+        borderpad=0.65,
+        labelspacing=0.45,
+    )
     output.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(output, dpi=180, bbox_inches="tight")
-    fig.savefig(output.with_suffix(".pdf"), bbox_inches="tight")
+    fig.savefig(output, dpi=180)
+    fig.savefig(output.with_suffix(".pdf"))
     plt.close(fig)
     return {"status": "complete", "output_png": str(output), "output_pdf": str(output.with_suffix(".pdf")), "variants": rows, "run2": str(run2_path)}
 

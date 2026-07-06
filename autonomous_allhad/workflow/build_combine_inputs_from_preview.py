@@ -320,6 +320,7 @@ def plot_contour(limit_payload: dict[str, Any], output_png: Path) -> bool:
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     import mplhep as hep
+    from matplotlib.colors import LinearSegmentedColormap
     from matplotlib.lines import Line2D
     from matplotlib.ticker import FormatStrFormatter, MultipleLocator
     from scipy.interpolate import griddata
@@ -357,33 +358,36 @@ def plot_contour(limit_payload: dict[str, Any], output_png: Path) -> bool:
     plus1_grid = interpolated_log_grid("expected_p1")
 
     hep.style.use("CMS")
-    fig, ax = plt.subplots(figsize=(10.0, 7.2))
-    fig.subplots_adjust(left=0.13, right=0.86, bottom=0.12, top=0.89)
+    fig, ax = plt.subplots(figsize=(10.0, 10.0))
+    fig.subplots_adjust(left=0.13, right=0.84, bottom=0.11, top=0.90)
 
     color_min, color_max = -1.5, 1.5
+    limit_cmap = LinearSegmentedColormap.from_list(
+        "cms_limit_reference",
+        ["#5965f2", "#62a9ff", "#55d7f2", "#7ef0c9", "#d7fb80", "#fff176", "#ffb45e", "#ff6f6f"],
+        N=256,
+    )
     plot_grid = np.ma.clip(expected_grid, color_min, color_max)
     filled = ax.contourf(
         xx,
         yy,
         plot_grid,
         levels=np.linspace(color_min, color_max, 121),
-        cmap="viridis",
+        cmap=limit_cmap,
     )
-    cbar = fig.colorbar(filled, ax=ax, pad=0.055, fraction=0.055)
+    cbar = fig.colorbar(filled, ax=ax, pad=0.04, fraction=0.048, aspect=34)
     cbar.set_label(
         r"$\log_{10}$ (expected 95% CL limit on $\sigma/\sigma_{\mathrm{theory}}$)",
-        fontsize=15,
+        fontsize=18,
         rotation=90,
         labelpad=18,
     )
     cbar.set_ticks(np.arange(color_min, color_max + 0.001, 0.5))
     cbar.ax.yaxis.set_major_formatter(FormatStrFormatter("%.1f"))
-    cbar.ax.tick_params(labelsize=20, direction="in", length=7, width=1.2)
+    cbar.ax.yaxis.set_minor_locator(MultipleLocator(0.1))
+    cbar.ax.tick_params(which="major", labelsize=20, direction="in", length=12, width=1.4)
+    cbar.ax.tick_params(which="minor", direction="in", length=7, width=1.1)
     cbar.outline.set_linewidth(1.8)
-
-    xs = np.asarray([float(p["mStop"]) for p in points])
-    ys = np.asarray([float(p["mLSP"]) for p in points])
-    ax.scatter(xs, ys, s=9, c="black", alpha=0.35, linewidths=0, zorder=3)
 
     diag_x = np.linspace(xmin, xmax, 400)
     diag_y = diag_x - top_mass
@@ -397,8 +401,9 @@ def plot_contour(limit_payload: dict[str, Any], output_png: Path) -> bool:
 
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(ymin, ymax)
-    ax.set_xlabel(r"$m_{\tilde{t}}$ (GeV)", fontsize=25, loc="right")
-    ax.set_ylabel(r"$m_{\tilde{\chi}_1^0}$ (GeV)", fontsize=25)
+    ax.set_aspect("equal", adjustable="box")
+    ax.set_xlabel(r"$m_{\tilde{t}}$ (GeV)", fontsize=30, loc="right")
+    ax.set_ylabel(r"$m_{\tilde{\chi}_1^0}$ (GeV)", fontsize=30)
     ax.xaxis.set_major_locator(MultipleLocator(200))
     ax.yaxis.set_major_locator(MultipleLocator(200))
     ax.xaxis.set_minor_locator(MultipleLocator(50))
@@ -420,8 +425,8 @@ def plot_contour(limit_payload: dict[str, Any], output_png: Path) -> bool:
     ax.legend(handles=legend_handles, loc="upper left", bbox_to_anchor=(0.02, 0.90), frameon=False, fontsize=16, handlelength=2.8)
 
     output_png.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(output_png, dpi=180, bbox_inches="tight")
-    fig.savefig(output_png.with_suffix(".pdf"), bbox_inches="tight")
+    fig.savefig(output_png, dpi=180)
+    fig.savefig(output_png.with_suffix(".pdf"))
     plt.close(fig)
     return True
 

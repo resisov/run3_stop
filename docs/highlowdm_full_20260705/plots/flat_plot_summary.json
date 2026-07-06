@@ -2,7 +2,7 @@
   "cr_plot_policy": "High-dM and low-dM CRs are drawn both as combined overview plots and as individual region plots.",
   "lowdm_variable_plot_count": 105,
   "ntop_order": "N_t = 0 blocks are placed left of N_t >= 1 blocks.",
-  "output_dir": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots",
+  "output_dir": "docs/highlowdm_full_20260705/plots",
   "plots": [
     {
       "bins": 6,
@@ -10,8 +10,8 @@
         "LLCR"
       ],
       "name": "highdm_cr_llcr_recoil",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_llcr_recoil.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_llcr_recoil.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_cr_llcr_recoil.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_cr_llcr_recoil.png",
       "signals": [],
       "status": "complete"
     },
@@ -21,8 +21,8 @@
         "QCDCR"
       ],
       "name": "highdm_cr_qcdcr_recoil",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_qcdcr_recoil.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_qcdcr_recoil.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_cr_qcdcr_recoil.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_cr_qcdcr_recoil.png",
       "signals": [],
       "status": "complete"
     },
@@ -32,8 +32,8 @@
         "GCR"
       ],
       "name": "highdm_cr_gcr_recoil",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_gcr_recoil.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_gcr_recoil.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_cr_gcr_recoil.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_cr_gcr_recoil.png",
       "signals": [],
       "status": "complete"
     },
@@ -43,8 +43,8 @@
         "DY2E"
       ],
       "name": "highdm_cr_dy2e_recoil",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_dy2e_recoil.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_dy2e_recoil.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_cr_dy2e_recoil.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_cr_dy2e_recoil.png",
       "signals": [],
       "status": "complete"
     },
@@ -54,8 +54,8 @@
         "DY2M"
       ],
       "name": "highdm_cr_dy2m_recoil",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_dy2m_recoil.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_dy2m_recoil.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_cr_dy2m_recoil.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_cr_dy2m_recoil.png",
       "signals": [],
       "status": "complete"
     },
@@ -69,8 +69,8 @@
         "DY2M"
       ],
       "name": "highdm_cr_recoil_inclusive",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_recoil_inclusive.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_recoil_inclusive.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_cr_recoil_inclusive.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_cr_recoil_inclusive.png",
       "signals": [],
       "status": "complete"
     },
@@ -81,8 +81,8 @@
         "LLCR\\n$N_{t}\\geq1$"
       ],
       "name": "highdm_cr_llcr_recoil_ntop_split",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_llcr_recoil_ntop_split.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_llcr_recoil_ntop_split.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_cr_llcr_recoil_ntop_split.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_cr_llcr_recoil_ntop_split.png",
       "signals": [],
       "status": "complete"
     },
@@ -93,8 +93,8 @@
         "QCDCR\\n$N_{t}\\geq1$"
       ],
       "name": "highdm_cr_qcdcr_recoil_ntop_split",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_qcdcr_recoil_ntop_split.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_qcdcr_recoil_ntop_split.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_cr_qcdcr_recoil_ntop_split.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_cr_qcdcr_recoil_ntop_split.png",
       "signals": [],
       "status": "complete"
     },
@@ -105,8 +105,8 @@
         "GCR\\n$N_{t}\\geq1$"
       ],
       "name": "highdm_cr_gcr_recoil_ntop_split",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_gcr_recoil_ntop_split.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_gcr_recoil_ntop_split.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_cr_gcr_recoil_ntop_split.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_cr_gcr_recoil_ntop_split.png",
       "signals": [],
       "status": "complete"
     },
@@ -117,8 +117,8 @@
         "DY2E\\n$N_{t}\\geq1$"
       ],
       "name": "highdm_cr_dy2e_recoil_ntop_split",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_dy2e_recoil_ntop_split.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_dy2e_recoil_ntop_split.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_cr_dy2e_recoil_ntop_split.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_cr_dy2e_recoil_ntop_split.png",
       "signals": [],
       "status": "complete"
     },
@@ -129,8 +129,8 @@
         "DY2M\\n$N_{t}\\geq1$"
       ],
       "name": "highdm_cr_dy2m_recoil_ntop_split",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_dy2m_recoil_ntop_split.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_dy2m_recoil_ntop_split.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_cr_dy2m_recoil_ntop_split.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_cr_dy2m_recoil_ntop_split.png",
       "signals": [],
       "status": "complete"
     },
@@ -149,8 +149,8 @@
         "DY2M\\n$N_{t}\\geq1$"
       ],
       "name": "highdm_cr_recoil_ntop_split",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_recoil_ntop_split.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_recoil_ntop_split.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_cr_recoil_ntop_split.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_cr_recoil_ntop_split.png",
       "signals": [],
       "status": "complete"
     },
@@ -160,8 +160,8 @@
         "SR"
       ],
       "name": "highdm_sr_recoil_inclusive",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_recoil_inclusive.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_recoil_inclusive.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_sr_recoil_inclusive.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_sr_recoil_inclusive.png",
       "signals": [
         "mStop1000_mLSP1",
         "mStop1200_mLSP1"
@@ -175,8 +175,8 @@
         "SR\\n$N_{t}\\geq1$"
       ],
       "name": "highdm_sr_recoil_ntop_split",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_recoil_ntop_split.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_recoil_ntop_split.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_sr_recoil_ntop_split.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_sr_recoil_ntop_split.png",
       "signals": [
         "mStop1000_mLSP1",
         "mStop1200_mLSP1"
@@ -189,8 +189,8 @@
         "SR"
       ],
       "name": "highdm_sr_an17_search_bins",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_an17_search_bins.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_an17_search_bins.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_sr_an17_search_bins.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_sr_an17_search_bins.png",
       "signals": [
         "mStop1000_mLSP1",
         "mStop1200_mLSP1"
@@ -203,8 +203,8 @@
         "SR\\n$N_{t}\\geq1$"
       ],
       "name": "highdm_sr_nt1_an17_search_bins",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_nt1_an17_search_bins.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_nt1_an17_search_bins.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_sr_nt1_an17_search_bins.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_sr_nt1_an17_search_bins.png",
       "signals": [
         "mStop1000_mLSP1",
         "mStop1200_mLSP1"
@@ -223,8 +223,8 @@
         "$N_{b}\\geq3$, $N_{t}=2$\n$N_{W}=0$"
       ],
       "name": "highdm_sr_selected_recoil6_bins",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_selected_recoil6_bins.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_selected_recoil6_bins.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/highdm_sr_selected_recoil6_bins.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/highdm_sr_selected_recoil6_bins.png",
       "signals": [
         "mStop1000_mLSP1",
         "mStop1200_mLSP1"
@@ -237,8 +237,8 @@
         "LLCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_llcr_onebin",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_onebin.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_onebin.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_onebin.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_onebin.png",
       "signals": [],
       "status": "complete"
     },
@@ -248,8 +248,8 @@
         "QCDCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_qcdcr_onebin",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_onebin.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_onebin.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_onebin.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_onebin.png",
       "signals": [],
       "status": "complete"
     },
@@ -259,8 +259,8 @@
         "GCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_gcr_onebin",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_onebin.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_onebin.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_onebin.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_onebin.png",
       "signals": [],
       "status": "complete"
     },
@@ -270,8 +270,8 @@
         "DY2E low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2e_onebin",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_onebin.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_onebin.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_onebin.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_onebin.png",
       "signals": [],
       "status": "complete"
     },
@@ -281,8 +281,8 @@
         "DY2M low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2m_onebin",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_onebin.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_onebin.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_onebin.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_onebin.png",
       "signals": [],
       "status": "complete"
     },
@@ -292,8 +292,8 @@
         "LLCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_llcr_met",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_met.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_met.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_met.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_met.png",
       "region": "LLCR",
       "signals": [],
       "status": "complete",
@@ -305,8 +305,8 @@
         "LLCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_llcr_ht",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_ht.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_ht.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_ht.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_ht.png",
       "region": "LLCR",
       "signals": [],
       "status": "complete",
@@ -318,8 +318,8 @@
         "LLCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_llcr_njet",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_njet.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_njet.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_njet.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_njet.png",
       "region": "LLCR",
       "signals": [],
       "status": "complete",
@@ -331,8 +331,8 @@
         "LLCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_llcr_nb_medium_lowdm",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_nb_medium_lowdm.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_nb_medium_lowdm.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_nb_medium_lowdm.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_nb_medium_lowdm.png",
       "region": "LLCR",
       "signals": [],
       "status": "complete",
@@ -344,8 +344,8 @@
         "LLCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_llcr_nb_loose_lowdm",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_nb_loose_lowdm.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_nb_loose_lowdm.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_nb_loose_lowdm.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_nb_loose_lowdm.png",
       "region": "LLCR",
       "signals": [],
       "status": "complete",
@@ -357,8 +357,8 @@
         "LLCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_llcr_n_e_veto",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_n_e_veto.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_n_e_veto.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_n_e_veto.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_n_e_veto.png",
       "region": "LLCR",
       "signals": [],
       "status": "complete",
@@ -370,8 +370,8 @@
         "LLCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_llcr_n_m_loose",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_n_m_loose.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_n_m_loose.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_n_m_loose.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_n_m_loose.png",
       "region": "LLCR",
       "signals": [],
       "status": "complete",
@@ -383,8 +383,8 @@
         "LLCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_llcr_lowdm_mtb",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_lowdm_mtb.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_lowdm_mtb.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_lowdm_mtb.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_lowdm_mtb.png",
       "region": "LLCR",
       "signals": [],
       "status": "complete",
@@ -396,8 +396,8 @@
         "LLCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_llcr_lowdm_met_sqrt_ht",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_lowdm_met_sqrt_ht.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_lowdm_met_sqrt_ht.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_lowdm_met_sqrt_ht.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_lowdm_met_sqrt_ht.png",
       "region": "LLCR",
       "signals": [],
       "status": "complete",
@@ -409,8 +409,8 @@
         "LLCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_llcr_lowdm_isr_pt",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_lowdm_isr_pt.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_lowdm_isr_pt.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_lowdm_isr_pt.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_lowdm_isr_pt.png",
       "region": "LLCR",
       "signals": [],
       "status": "complete",
@@ -422,8 +422,8 @@
         "LLCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_llcr_lowdm_isr_dphi",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_lowdm_isr_dphi.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_lowdm_isr_dphi.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_lowdm_isr_dphi.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_lowdm_isr_dphi.png",
       "region": "LLCR",
       "signals": [],
       "status": "complete",
@@ -435,8 +435,8 @@
         "LLCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_llcr_lowdm_ptb",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_lowdm_ptb.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_lowdm_ptb.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_lowdm_ptb.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_lowdm_ptb.png",
       "region": "LLCR",
       "signals": [],
       "status": "complete",
@@ -448,8 +448,8 @@
         "LLCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_llcr_n_lowdm_isr",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_n_lowdm_isr.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_n_lowdm_isr.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_n_lowdm_isr.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_n_lowdm_isr.png",
       "region": "LLCR",
       "signals": [],
       "status": "complete",
@@ -461,8 +461,8 @@
         "LLCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_llcr_leading_lowdm_fatjet_pt",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_leading_lowdm_fatjet_pt.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_leading_lowdm_fatjet_pt.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_leading_lowdm_fatjet_pt.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_leading_lowdm_fatjet_pt.png",
       "region": "LLCR",
       "signals": [],
       "status": "complete",
@@ -474,8 +474,8 @@
         "LLCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_llcr_leading_lowdm_fatjet_msd",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_leading_lowdm_fatjet_msd.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_leading_lowdm_fatjet_msd.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_leading_lowdm_fatjet_msd.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_llcr_leading_lowdm_fatjet_msd.png",
       "region": "LLCR",
       "signals": [],
       "status": "complete",
@@ -487,8 +487,8 @@
         "QCDCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_qcdcr_met",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_met.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_met.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_met.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_met.png",
       "region": "QCDCR",
       "signals": [],
       "status": "complete",
@@ -500,8 +500,8 @@
         "QCDCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_qcdcr_ht",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_ht.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_ht.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_ht.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_ht.png",
       "region": "QCDCR",
       "signals": [],
       "status": "complete",
@@ -513,8 +513,8 @@
         "QCDCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_qcdcr_njet",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_njet.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_njet.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_njet.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_njet.png",
       "region": "QCDCR",
       "signals": [],
       "status": "complete",
@@ -526,8 +526,8 @@
         "QCDCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_qcdcr_nb_medium_lowdm",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_nb_medium_lowdm.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_nb_medium_lowdm.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_nb_medium_lowdm.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_nb_medium_lowdm.png",
       "region": "QCDCR",
       "signals": [],
       "status": "complete",
@@ -539,8 +539,8 @@
         "QCDCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_qcdcr_nb_loose_lowdm",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_nb_loose_lowdm.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_nb_loose_lowdm.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_nb_loose_lowdm.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_nb_loose_lowdm.png",
       "region": "QCDCR",
       "signals": [],
       "status": "complete",
@@ -552,8 +552,8 @@
         "QCDCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_qcdcr_n_e_veto",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_n_e_veto.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_n_e_veto.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_n_e_veto.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_n_e_veto.png",
       "region": "QCDCR",
       "signals": [],
       "status": "complete",
@@ -565,8 +565,8 @@
         "QCDCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_qcdcr_n_m_loose",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_n_m_loose.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_n_m_loose.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_n_m_loose.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_n_m_loose.png",
       "region": "QCDCR",
       "signals": [],
       "status": "complete",
@@ -578,8 +578,8 @@
         "QCDCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_qcdcr_lowdm_mtb",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_lowdm_mtb.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_lowdm_mtb.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_lowdm_mtb.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_lowdm_mtb.png",
       "region": "QCDCR",
       "signals": [],
       "status": "complete",
@@ -591,8 +591,8 @@
         "QCDCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_qcdcr_lowdm_met_sqrt_ht",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_lowdm_met_sqrt_ht.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_lowdm_met_sqrt_ht.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_lowdm_met_sqrt_ht.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_lowdm_met_sqrt_ht.png",
       "region": "QCDCR",
       "signals": [],
       "status": "complete",
@@ -604,8 +604,8 @@
         "QCDCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_qcdcr_lowdm_isr_pt",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_lowdm_isr_pt.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_lowdm_isr_pt.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_lowdm_isr_pt.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_lowdm_isr_pt.png",
       "region": "QCDCR",
       "signals": [],
       "status": "complete",
@@ -617,8 +617,8 @@
         "QCDCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_qcdcr_lowdm_isr_dphi",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_lowdm_isr_dphi.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_lowdm_isr_dphi.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_lowdm_isr_dphi.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_lowdm_isr_dphi.png",
       "region": "QCDCR",
       "signals": [],
       "status": "complete",
@@ -630,8 +630,8 @@
         "QCDCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_qcdcr_lowdm_ptb",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_lowdm_ptb.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_lowdm_ptb.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_lowdm_ptb.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_lowdm_ptb.png",
       "region": "QCDCR",
       "signals": [],
       "status": "complete",
@@ -643,8 +643,8 @@
         "QCDCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_qcdcr_n_lowdm_isr",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_n_lowdm_isr.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_n_lowdm_isr.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_n_lowdm_isr.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_n_lowdm_isr.png",
       "region": "QCDCR",
       "signals": [],
       "status": "complete",
@@ -656,8 +656,8 @@
         "QCDCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_qcdcr_leading_lowdm_fatjet_pt",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_leading_lowdm_fatjet_pt.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_leading_lowdm_fatjet_pt.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_leading_lowdm_fatjet_pt.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_leading_lowdm_fatjet_pt.png",
       "region": "QCDCR",
       "signals": [],
       "status": "complete",
@@ -669,8 +669,8 @@
         "QCDCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_qcdcr_leading_lowdm_fatjet_msd",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_leading_lowdm_fatjet_msd.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_leading_lowdm_fatjet_msd.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_leading_lowdm_fatjet_msd.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_qcdcr_leading_lowdm_fatjet_msd.png",
       "region": "QCDCR",
       "signals": [],
       "status": "complete",
@@ -682,8 +682,8 @@
         "GCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_gcr_met",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_met.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_met.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_met.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_met.png",
       "region": "GCR",
       "signals": [],
       "status": "complete",
@@ -695,8 +695,8 @@
         "GCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_gcr_ht",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_ht.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_ht.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_ht.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_ht.png",
       "region": "GCR",
       "signals": [],
       "status": "complete",
@@ -708,8 +708,8 @@
         "GCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_gcr_njet",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_njet.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_njet.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_njet.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_njet.png",
       "region": "GCR",
       "signals": [],
       "status": "complete",
@@ -721,8 +721,8 @@
         "GCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_gcr_nb_medium_lowdm",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_nb_medium_lowdm.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_nb_medium_lowdm.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_nb_medium_lowdm.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_nb_medium_lowdm.png",
       "region": "GCR",
       "signals": [],
       "status": "complete",
@@ -734,8 +734,8 @@
         "GCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_gcr_nb_loose_lowdm",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_nb_loose_lowdm.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_nb_loose_lowdm.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_nb_loose_lowdm.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_nb_loose_lowdm.png",
       "region": "GCR",
       "signals": [],
       "status": "complete",
@@ -747,8 +747,8 @@
         "GCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_gcr_n_e_veto",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_n_e_veto.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_n_e_veto.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_n_e_veto.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_n_e_veto.png",
       "region": "GCR",
       "signals": [],
       "status": "complete",
@@ -760,8 +760,8 @@
         "GCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_gcr_n_m_loose",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_n_m_loose.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_n_m_loose.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_n_m_loose.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_n_m_loose.png",
       "region": "GCR",
       "signals": [],
       "status": "complete",
@@ -773,8 +773,8 @@
         "GCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_gcr_lowdm_mtb",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_lowdm_mtb.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_lowdm_mtb.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_lowdm_mtb.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_lowdm_mtb.png",
       "region": "GCR",
       "signals": [],
       "status": "complete",
@@ -786,8 +786,8 @@
         "GCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_gcr_lowdm_met_sqrt_ht",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_lowdm_met_sqrt_ht.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_lowdm_met_sqrt_ht.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_lowdm_met_sqrt_ht.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_lowdm_met_sqrt_ht.png",
       "region": "GCR",
       "signals": [],
       "status": "complete",
@@ -799,8 +799,8 @@
         "GCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_gcr_lowdm_isr_pt",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_lowdm_isr_pt.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_lowdm_isr_pt.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_lowdm_isr_pt.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_lowdm_isr_pt.png",
       "region": "GCR",
       "signals": [],
       "status": "complete",
@@ -812,8 +812,8 @@
         "GCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_gcr_lowdm_isr_dphi",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_lowdm_isr_dphi.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_lowdm_isr_dphi.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_lowdm_isr_dphi.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_lowdm_isr_dphi.png",
       "region": "GCR",
       "signals": [],
       "status": "complete",
@@ -825,8 +825,8 @@
         "GCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_gcr_lowdm_ptb",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_lowdm_ptb.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_lowdm_ptb.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_lowdm_ptb.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_lowdm_ptb.png",
       "region": "GCR",
       "signals": [],
       "status": "complete",
@@ -838,8 +838,8 @@
         "GCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_gcr_n_lowdm_isr",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_n_lowdm_isr.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_n_lowdm_isr.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_n_lowdm_isr.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_n_lowdm_isr.png",
       "region": "GCR",
       "signals": [],
       "status": "complete",
@@ -851,8 +851,8 @@
         "GCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_gcr_leading_lowdm_fatjet_pt",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_leading_lowdm_fatjet_pt.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_leading_lowdm_fatjet_pt.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_leading_lowdm_fatjet_pt.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_leading_lowdm_fatjet_pt.png",
       "region": "GCR",
       "signals": [],
       "status": "complete",
@@ -864,8 +864,8 @@
         "GCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_gcr_leading_lowdm_fatjet_msd",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_leading_lowdm_fatjet_msd.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_leading_lowdm_fatjet_msd.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_leading_lowdm_fatjet_msd.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_leading_lowdm_fatjet_msd.png",
       "region": "GCR",
       "signals": [],
       "status": "complete",
@@ -877,8 +877,8 @@
         "GCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_gcr_n_photon_medium",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_n_photon_medium.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_n_photon_medium.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_n_photon_medium.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_n_photon_medium.png",
       "region": "GCR",
       "signals": [],
       "status": "complete",
@@ -890,8 +890,8 @@
         "GCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_gcr_recoil_gcr",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_recoil_gcr.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_recoil_gcr.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_recoil_gcr.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_recoil_gcr.png",
       "region": "GCR",
       "signals": [],
       "status": "complete",
@@ -903,8 +903,8 @@
         "GCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_gcr_njet_photon_clean",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_njet_photon_clean.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_njet_photon_clean.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_njet_photon_clean.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_njet_photon_clean.png",
       "region": "GCR",
       "signals": [],
       "status": "complete",
@@ -916,8 +916,8 @@
         "GCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_gcr_nb_photon_clean",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_nb_photon_clean.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_nb_photon_clean.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_nb_photon_clean.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_nb_photon_clean.png",
       "region": "GCR",
       "signals": [],
       "status": "complete",
@@ -929,8 +929,8 @@
         "GCR low $\\Delta m$"
       ],
       "name": "lowdm_cr_gcr_ht_photon_clean",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_ht_photon_clean.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_ht_photon_clean.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_ht_photon_clean.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_gcr_ht_photon_clean.png",
       "region": "GCR",
       "signals": [],
       "status": "complete",
@@ -942,8 +942,8 @@
         "DY2E low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2e_met",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_met.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_met.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_met.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_met.png",
       "region": "DY2E",
       "signals": [],
       "status": "complete",
@@ -955,8 +955,8 @@
         "DY2E low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2e_ht",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_ht.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_ht.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_ht.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_ht.png",
       "region": "DY2E",
       "signals": [],
       "status": "complete",
@@ -968,8 +968,8 @@
         "DY2E low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2e_njet",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_njet.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_njet.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_njet.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_njet.png",
       "region": "DY2E",
       "signals": [],
       "status": "complete",
@@ -981,8 +981,8 @@
         "DY2E low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2e_nb_medium_lowdm",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_nb_medium_lowdm.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_nb_medium_lowdm.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_nb_medium_lowdm.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_nb_medium_lowdm.png",
       "region": "DY2E",
       "signals": [],
       "status": "complete",
@@ -994,8 +994,8 @@
         "DY2E low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2e_nb_loose_lowdm",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_nb_loose_lowdm.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_nb_loose_lowdm.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_nb_loose_lowdm.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_nb_loose_lowdm.png",
       "region": "DY2E",
       "signals": [],
       "status": "complete",
@@ -1007,8 +1007,8 @@
         "DY2E low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2e_n_e_veto",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_n_e_veto.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_n_e_veto.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_n_e_veto.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_n_e_veto.png",
       "region": "DY2E",
       "signals": [],
       "status": "complete",
@@ -1020,8 +1020,8 @@
         "DY2E low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2e_n_m_loose",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_n_m_loose.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_n_m_loose.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_n_m_loose.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_n_m_loose.png",
       "region": "DY2E",
       "signals": [],
       "status": "complete",
@@ -1033,8 +1033,8 @@
         "DY2E low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2e_lowdm_mtb",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_lowdm_mtb.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_lowdm_mtb.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_lowdm_mtb.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_lowdm_mtb.png",
       "region": "DY2E",
       "signals": [],
       "status": "complete",
@@ -1046,8 +1046,8 @@
         "DY2E low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2e_lowdm_met_sqrt_ht",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_lowdm_met_sqrt_ht.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_lowdm_met_sqrt_ht.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_lowdm_met_sqrt_ht.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_lowdm_met_sqrt_ht.png",
       "region": "DY2E",
       "signals": [],
       "status": "complete",
@@ -1059,8 +1059,8 @@
         "DY2E low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2e_lowdm_isr_pt",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_lowdm_isr_pt.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_lowdm_isr_pt.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_lowdm_isr_pt.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_lowdm_isr_pt.png",
       "region": "DY2E",
       "signals": [],
       "status": "complete",
@@ -1072,8 +1072,8 @@
         "DY2E low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2e_lowdm_isr_dphi",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_lowdm_isr_dphi.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_lowdm_isr_dphi.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_lowdm_isr_dphi.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_lowdm_isr_dphi.png",
       "region": "DY2E",
       "signals": [],
       "status": "complete",
@@ -1085,8 +1085,8 @@
         "DY2E low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2e_lowdm_ptb",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_lowdm_ptb.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_lowdm_ptb.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_lowdm_ptb.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_lowdm_ptb.png",
       "region": "DY2E",
       "signals": [],
       "status": "complete",
@@ -1098,8 +1098,8 @@
         "DY2E low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2e_n_lowdm_isr",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_n_lowdm_isr.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_n_lowdm_isr.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_n_lowdm_isr.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_n_lowdm_isr.png",
       "region": "DY2E",
       "signals": [],
       "status": "complete",
@@ -1111,8 +1111,8 @@
         "DY2E low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2e_leading_lowdm_fatjet_pt",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_leading_lowdm_fatjet_pt.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_leading_lowdm_fatjet_pt.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_leading_lowdm_fatjet_pt.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_leading_lowdm_fatjet_pt.png",
       "region": "DY2E",
       "signals": [],
       "status": "complete",
@@ -1124,8 +1124,8 @@
         "DY2E low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2e_leading_lowdm_fatjet_msd",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_leading_lowdm_fatjet_msd.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_leading_lowdm_fatjet_msd.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_leading_lowdm_fatjet_msd.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_leading_lowdm_fatjet_msd.png",
       "region": "DY2E",
       "signals": [],
       "status": "complete",
@@ -1137,8 +1137,8 @@
         "DY2E low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2e_recoil_dy2e",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_recoil_dy2e.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_recoil_dy2e.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_recoil_dy2e.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_recoil_dy2e.png",
       "region": "DY2E",
       "signals": [],
       "status": "complete",
@@ -1150,8 +1150,8 @@
         "DY2E low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2e_mee",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_mee.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_mee.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_mee.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_mee.png",
       "region": "DY2E",
       "signals": [],
       "status": "complete",
@@ -1163,8 +1163,8 @@
         "DY2E low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2e_njet_lepton_clean",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_njet_lepton_clean.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_njet_lepton_clean.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_njet_lepton_clean.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_njet_lepton_clean.png",
       "region": "DY2E",
       "signals": [],
       "status": "complete",
@@ -1176,8 +1176,8 @@
         "DY2E low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2e_nb_lepton_clean",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_nb_lepton_clean.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_nb_lepton_clean.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_nb_lepton_clean.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_nb_lepton_clean.png",
       "region": "DY2E",
       "signals": [],
       "status": "complete",
@@ -1189,8 +1189,8 @@
         "DY2E low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2e_ht_lepton_clean",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_ht_lepton_clean.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_ht_lepton_clean.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_ht_lepton_clean.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2e_ht_lepton_clean.png",
       "region": "DY2E",
       "signals": [],
       "status": "complete",
@@ -1202,8 +1202,8 @@
         "DY2M low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2m_met",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_met.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_met.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_met.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_met.png",
       "region": "DY2M",
       "signals": [],
       "status": "complete",
@@ -1215,8 +1215,8 @@
         "DY2M low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2m_ht",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_ht.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_ht.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_ht.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_ht.png",
       "region": "DY2M",
       "signals": [],
       "status": "complete",
@@ -1228,8 +1228,8 @@
         "DY2M low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2m_njet",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_njet.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_njet.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_njet.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_njet.png",
       "region": "DY2M",
       "signals": [],
       "status": "complete",
@@ -1241,8 +1241,8 @@
         "DY2M low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2m_nb_medium_lowdm",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_nb_medium_lowdm.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_nb_medium_lowdm.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_nb_medium_lowdm.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_nb_medium_lowdm.png",
       "region": "DY2M",
       "signals": [],
       "status": "complete",
@@ -1254,8 +1254,8 @@
         "DY2M low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2m_nb_loose_lowdm",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_nb_loose_lowdm.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_nb_loose_lowdm.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_nb_loose_lowdm.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_nb_loose_lowdm.png",
       "region": "DY2M",
       "signals": [],
       "status": "complete",
@@ -1267,8 +1267,8 @@
         "DY2M low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2m_n_e_veto",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_n_e_veto.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_n_e_veto.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_n_e_veto.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_n_e_veto.png",
       "region": "DY2M",
       "signals": [],
       "status": "complete",
@@ -1280,8 +1280,8 @@
         "DY2M low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2m_n_m_loose",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_n_m_loose.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_n_m_loose.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_n_m_loose.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_n_m_loose.png",
       "region": "DY2M",
       "signals": [],
       "status": "complete",
@@ -1293,8 +1293,8 @@
         "DY2M low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2m_lowdm_mtb",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_lowdm_mtb.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_lowdm_mtb.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_lowdm_mtb.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_lowdm_mtb.png",
       "region": "DY2M",
       "signals": [],
       "status": "complete",
@@ -1306,8 +1306,8 @@
         "DY2M low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2m_lowdm_met_sqrt_ht",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_lowdm_met_sqrt_ht.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_lowdm_met_sqrt_ht.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_lowdm_met_sqrt_ht.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_lowdm_met_sqrt_ht.png",
       "region": "DY2M",
       "signals": [],
       "status": "complete",
@@ -1319,8 +1319,8 @@
         "DY2M low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2m_lowdm_isr_pt",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_lowdm_isr_pt.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_lowdm_isr_pt.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_lowdm_isr_pt.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_lowdm_isr_pt.png",
       "region": "DY2M",
       "signals": [],
       "status": "complete",
@@ -1332,8 +1332,8 @@
         "DY2M low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2m_lowdm_isr_dphi",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_lowdm_isr_dphi.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_lowdm_isr_dphi.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_lowdm_isr_dphi.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_lowdm_isr_dphi.png",
       "region": "DY2M",
       "signals": [],
       "status": "complete",
@@ -1345,8 +1345,8 @@
         "DY2M low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2m_lowdm_ptb",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_lowdm_ptb.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_lowdm_ptb.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_lowdm_ptb.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_lowdm_ptb.png",
       "region": "DY2M",
       "signals": [],
       "status": "complete",
@@ -1358,8 +1358,8 @@
         "DY2M low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2m_n_lowdm_isr",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_n_lowdm_isr.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_n_lowdm_isr.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_n_lowdm_isr.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_n_lowdm_isr.png",
       "region": "DY2M",
       "signals": [],
       "status": "complete",
@@ -1371,8 +1371,8 @@
         "DY2M low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2m_leading_lowdm_fatjet_pt",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_leading_lowdm_fatjet_pt.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_leading_lowdm_fatjet_pt.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_leading_lowdm_fatjet_pt.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_leading_lowdm_fatjet_pt.png",
       "region": "DY2M",
       "signals": [],
       "status": "complete",
@@ -1384,8 +1384,8 @@
         "DY2M low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2m_leading_lowdm_fatjet_msd",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_leading_lowdm_fatjet_msd.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_leading_lowdm_fatjet_msd.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_leading_lowdm_fatjet_msd.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_leading_lowdm_fatjet_msd.png",
       "region": "DY2M",
       "signals": [],
       "status": "complete",
@@ -1397,8 +1397,8 @@
         "DY2M low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2m_recoil_dy2m",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_recoil_dy2m.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_recoil_dy2m.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_recoil_dy2m.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_recoil_dy2m.png",
       "region": "DY2M",
       "signals": [],
       "status": "complete",
@@ -1410,8 +1410,8 @@
         "DY2M low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2m_mmm",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_mmm.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_mmm.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_mmm.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_mmm.png",
       "region": "DY2M",
       "signals": [],
       "status": "complete",
@@ -1423,8 +1423,8 @@
         "DY2M low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2m_njet_lepton_clean",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_njet_lepton_clean.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_njet_lepton_clean.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_njet_lepton_clean.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_njet_lepton_clean.png",
       "region": "DY2M",
       "signals": [],
       "status": "complete",
@@ -1436,8 +1436,8 @@
         "DY2M low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2m_nb_lepton_clean",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_nb_lepton_clean.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_nb_lepton_clean.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_nb_lepton_clean.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_nb_lepton_clean.png",
       "region": "DY2M",
       "signals": [],
       "status": "complete",
@@ -1449,8 +1449,8 @@
         "DY2M low $\\Delta m$"
       ],
       "name": "lowdm_cr_dy2m_ht_lepton_clean",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_ht_lepton_clean.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_ht_lepton_clean.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_ht_lepton_clean.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_dy2m_ht_lepton_clean.png",
       "region": "DY2M",
       "signals": [],
       "status": "complete",
@@ -1462,8 +1462,8 @@
         "SR low $\\Delta m$"
       ],
       "name": "lowdm_sr_sr_met",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_met.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_met.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_met.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_met.png",
       "region": "SR",
       "signals": [
         "mStop1000_mLSP1",
@@ -1478,8 +1478,8 @@
         "SR low $\\Delta m$"
       ],
       "name": "lowdm_sr_sr_ht",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_ht.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_ht.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_ht.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_ht.png",
       "region": "SR",
       "signals": [
         "mStop1000_mLSP1",
@@ -1494,8 +1494,8 @@
         "SR low $\\Delta m$"
       ],
       "name": "lowdm_sr_sr_njet",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_njet.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_njet.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_njet.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_njet.png",
       "region": "SR",
       "signals": [
         "mStop1000_mLSP1",
@@ -1510,8 +1510,8 @@
         "SR low $\\Delta m$"
       ],
       "name": "lowdm_sr_sr_nb_medium_lowdm",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_nb_medium_lowdm.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_nb_medium_lowdm.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_nb_medium_lowdm.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_nb_medium_lowdm.png",
       "region": "SR",
       "signals": [
         "mStop1000_mLSP1",
@@ -1526,8 +1526,8 @@
         "SR low $\\Delta m$"
       ],
       "name": "lowdm_sr_sr_nb_loose_lowdm",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_nb_loose_lowdm.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_nb_loose_lowdm.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_nb_loose_lowdm.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_nb_loose_lowdm.png",
       "region": "SR",
       "signals": [
         "mStop1000_mLSP1",
@@ -1542,8 +1542,8 @@
         "SR low $\\Delta m$"
       ],
       "name": "lowdm_sr_sr_n_e_veto",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_n_e_veto.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_n_e_veto.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_n_e_veto.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_n_e_veto.png",
       "region": "SR",
       "signals": [
         "mStop1000_mLSP1",
@@ -1558,8 +1558,8 @@
         "SR low $\\Delta m$"
       ],
       "name": "lowdm_sr_sr_n_m_loose",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_n_m_loose.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_n_m_loose.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_n_m_loose.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_n_m_loose.png",
       "region": "SR",
       "signals": [
         "mStop1000_mLSP1",
@@ -1574,8 +1574,8 @@
         "SR low $\\Delta m$"
       ],
       "name": "lowdm_sr_sr_lowdm_mtb",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_lowdm_mtb.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_lowdm_mtb.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_lowdm_mtb.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_lowdm_mtb.png",
       "region": "SR",
       "signals": [
         "mStop1000_mLSP1",
@@ -1590,8 +1590,8 @@
         "SR low $\\Delta m$"
       ],
       "name": "lowdm_sr_sr_lowdm_met_sqrt_ht",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_lowdm_met_sqrt_ht.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_lowdm_met_sqrt_ht.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_lowdm_met_sqrt_ht.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_lowdm_met_sqrt_ht.png",
       "region": "SR",
       "signals": [
         "mStop1000_mLSP1",
@@ -1606,8 +1606,8 @@
         "SR low $\\Delta m$"
       ],
       "name": "lowdm_sr_sr_lowdm_isr_pt",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_lowdm_isr_pt.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_lowdm_isr_pt.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_lowdm_isr_pt.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_lowdm_isr_pt.png",
       "region": "SR",
       "signals": [
         "mStop1000_mLSP1",
@@ -1622,8 +1622,8 @@
         "SR low $\\Delta m$"
       ],
       "name": "lowdm_sr_sr_lowdm_isr_dphi",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_lowdm_isr_dphi.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_lowdm_isr_dphi.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_lowdm_isr_dphi.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_lowdm_isr_dphi.png",
       "region": "SR",
       "signals": [
         "mStop1000_mLSP1",
@@ -1638,8 +1638,8 @@
         "SR low $\\Delta m$"
       ],
       "name": "lowdm_sr_sr_lowdm_ptb",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_lowdm_ptb.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_lowdm_ptb.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_lowdm_ptb.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_lowdm_ptb.png",
       "region": "SR",
       "signals": [
         "mStop1000_mLSP1",
@@ -1654,8 +1654,8 @@
         "SR low $\\Delta m$"
       ],
       "name": "lowdm_sr_sr_n_lowdm_isr",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_n_lowdm_isr.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_n_lowdm_isr.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_n_lowdm_isr.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_n_lowdm_isr.png",
       "region": "SR",
       "signals": [
         "mStop1000_mLSP1",
@@ -1670,8 +1670,8 @@
         "SR low $\\Delta m$"
       ],
       "name": "lowdm_sr_sr_leading_lowdm_fatjet_pt",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_leading_lowdm_fatjet_pt.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_leading_lowdm_fatjet_pt.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_leading_lowdm_fatjet_pt.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_leading_lowdm_fatjet_pt.png",
       "region": "SR",
       "signals": [
         "mStop1000_mLSP1",
@@ -1686,8 +1686,8 @@
         "SR low $\\Delta m$"
       ],
       "name": "lowdm_sr_sr_leading_lowdm_fatjet_msd",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_leading_lowdm_fatjet_msd.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_sr_leading_lowdm_fatjet_msd.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_leading_lowdm_fatjet_msd.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_sr_sr_leading_lowdm_fatjet_msd.png",
       "region": "SR",
       "signals": [
         "mStop1000_mLSP1",
@@ -1706,8 +1706,8 @@
         "DY2M low $\\Delta m$"
       ],
       "name": "lowdm_cr_onebin",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_onebin.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_onebin.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_onebin.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_onebin.png",
       "signals": [],
       "status": "complete"
     },
@@ -1722,8 +1722,8 @@
         "SR low $\\Delta m$"
       ],
       "name": "lowdm_cr_sr_onebin",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_sr_onebin.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_sr_onebin.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_sr_onebin.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_sr_onebin.png",
       "signals": [],
       "status": "complete"
     },
@@ -1733,8 +1733,8 @@
         "SR low $\\Delta m$"
       ],
       "name": "lowdm_sr_onebin",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_onebin.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_onebin.png",
+      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_sr_onebin.pdf",
+      "png": "docs/highlowdm_full_20260705/plots/lowdm_sr_onebin.png",
       "signals": [
         "mStop1000_mLSP1",
         "mStop1200_mLSP1"
@@ -1743,6 +1743,6 @@
     }
   ],
   "signal_policy": "Signals are drawn only in SR plots; CR blocks exclude T2tt overlays.",
-  "source": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/highlowdm_full_20260706_flat_hists_selected_an17_recoil6_with_lowdm_variables.json",
+  "source": "autonomous_allhad/workflow/highlowdm_full_20260706_flat_hists_selected_an17_recoil6_with_lowdm_variables.json",
   "status": "complete"
 }

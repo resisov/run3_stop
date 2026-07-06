@@ -30,11 +30,11 @@ REGION_LABELS = {
 }
 
 # This is intentionally identical to build_partial_merge_preview.py.
-GROUP_ORDER = ["VV", "Single Top", "ttbar", "DY", "Gamma + Jets", "W -> lv", "Z -> vv", "QCD Multijet", "others"]
+GROUP_ORDER = ["VV", "Single Top", "TT", "DY", "Gamma + Jets", "W -> lv", "Z -> vv", "QCD Multijet", "others"]
 GROUP_COLORS = {
     "VV": "#6f7661",
     "Single Top": "#8f7cc2",
-    "ttbar": "#9ec5b8",
+    "TT": "#9ec5b8",
     "DY": "#23c9c8",
     "Gamma + Jets": "#800080",
     "W -> lv": "#eadac8",
@@ -81,7 +81,7 @@ def process_to_group(process: str) -> str:
     if process == "ST":
         return "Single Top"
     if process == "TT":
-        return "ttbar"
+        return "TT"
     if process == "DY":
         return "DY"
     if process == "GJ":
@@ -293,7 +293,8 @@ def draw(fit_path: Path, payload_path: Path, signal_searchbin_path: Path, outbas
     centers = np.arange(1, nbin + 1, dtype=float)
     edges = np.arange(0.5, nbin + 1.5, 1.0)
 
-    fig, (ax, rax) = plt.subplots(2, 1, figsize=(18, 8.7), gridspec_kw={"height_ratios": [3.2, 1.1], "hspace": 0.04}, sharex=True)
+    fig, (ax, rax) = plt.subplots(2, 1, figsize=(11.0, 11.0), gridspec_kw={"height_ratios": [3.2, 1.1], "hspace": 0.04}, sharex=True)
+    fig.subplots_adjust(left=0.14, right=0.98, bottom=0.12, top=0.92)
 
     stack_inputs = []
     stack_weights = []
@@ -344,12 +345,10 @@ def draw(fit_path: Path, payload_path: Path, signal_searchbin_path: Path, outbas
             if boundary not in flat["boundaries"]:
                 axis.axvline(boundary + 0.5, color="0.65", linestyle=":", linewidth=0.8, zorder=0)
         axis.set_xlim(0.5, nbin + 0.5)
-        axis.tick_params(which="both", direction="in", top=True, right=True)
+        axis.tick_params(which="major", direction="in", top=True, right=True, labelsize=20, length=9)
+        axis.tick_params(which="minor", direction="in", top=True, right=True, length=5)
         axis.minorticks_on()
 
-    for start, end, label in zip(flat["boundaries"][:-1], flat["boundaries"][1:], flat["labels"]):
-        center = 0.5 * (start + end) + 0.5
-        ax.text(center, 0.965, label, transform=ax.get_xaxis_transform(), ha="center", va="top", fontsize=17, fontweight="bold")
 
     positive = []
     for arr in [bkg + unc, data[mask] if np.any(mask) else np.array([]), *flat["signals"].values()]:
@@ -360,18 +359,18 @@ def draw(fit_path: Path, payload_path: Path, signal_searchbin_path: Path, outbas
         ax.set_ylim(max(0.03, min(positive) * 0.1), max(max(positive) * 60, 1.0))
     else:
         ax.set_ylim(0.03, 1.0)
-    ax.set_ylabel("Events / bin")
-    rax.set_ylabel("Data/MC")
+    ax.set_ylabel("Events / bin", fontsize=30)
+    rax.set_ylabel("Data/MC", fontsize=26)
     rax.set_ylim(0, 2)
-    rax.set_xlabel("Control/search bin number")
+    rax.set_xlabel("Control/search bin number", fontsize=30, loc="right")
     rax.set_xticks(centers)
-    rax.set_xticklabels([str(i) for i in range(1, nbin + 1)], fontsize=8)
+    rax.set_xticklabels([str(i) for i in range(1, nbin + 1)], fontsize=13)
     hep.cms.label(llabel="Work in progress", rlabel=r"109.82 fb$^{-1}$ (13.6 TeV)", ax=ax)
     ax.legend(fontsize=12, ncol=4, frameon=False, columnspacing=1.05, handlelength=2.0, loc="upper center", bbox_to_anchor=(0.5, 0.995))
 
     outbase.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(outbase.with_suffix(".png"), dpi=180, bbox_inches="tight")
-    fig.savefig(outbase.with_suffix(".pdf"), bbox_inches="tight")
+    fig.savefig(outbase.with_suffix(".png"), dpi=180)
+    fig.savefig(outbase.with_suffix(".pdf"))
     plt.close(fig)
     return {
         "status": "complete",
@@ -526,6 +525,15 @@ def flat_search_record(payload: dict, scheme: str, label: str, allow_signal: boo
 
 
 
+VARIABLE_XLABELS = {
+    "met": r"$\not\!E_{T}$ (GeV)",
+    "recoil_gcr": r"$\not\!U_{T}$ (GeV)",
+    "recoil_dy2e": r"$\not\!U_{T}$ (GeV)",
+    "recoil_dy2m": r"$\not\!U_{T}$ (GeV)",
+    "lowdm_met_sqrt_ht": r"$\not\!E_{T}/\sqrt{H_{T}}$",
+}
+
+
 def lowdm_variable_record(payload: dict, scheme: str, variable: str, label: str, allow_signal: bool) -> dict | None:
     raw = (((payload.get("lowdm_variable_histograms") or {}).get(scheme) or {}).get(variable) or {})
     if not raw:
@@ -592,7 +600,7 @@ def lowdm_variable_record(payload: dict, scheme: str, variable: str, label: str,
         "label": label,
         "nbin": nbin,
         "edges": edges,
-        "xlabel": spec.get("xlabel") or variable,
+        "xlabel": VARIABLE_XLABELS.get(variable, spec.get("xlabel") or variable),
         "variable": variable,
     }
 
@@ -757,7 +765,9 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
         offset += n
     signals = {key: vals for key, vals in signals.items() if np.any(vals > 0)}
 
-    fig, (ax, rax) = plt.subplots(2, 1, figsize=(max(12.0, nbin * 0.26), 8.4), gridspec_kw={"height_ratios": [3.2, 1.1], "hspace": 0.04}, sharex=True)
+    size = 11.0 if nbin <= 24 else 12.0 if nbin <= 60 else 13.0
+    fig, (ax, rax) = plt.subplots(2, 1, figsize=(size, size), gridspec_kw={"height_ratios": [3.2, 1.1], "hspace": 0.04}, sharex=True)
+    fig.subplots_adjust(left=0.14, right=0.98, bottom=0.12, top=0.92)
     stack_inputs = []
     stack_weights = []
     stack_colors = []
@@ -795,7 +805,8 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
             axis.set_xlim(0.5, nbin + 0.5)
         else:
             axis.set_xlim(float(edges[0]), float(edges[-1]))
-        axis.tick_params(which="both", direction="in", top=True, right=True)
+        axis.tick_params(which="major", direction="in", top=True, right=True, labelsize=20, length=9)
+        axis.tick_params(which="minor", direction="in", top=True, right=True, length=5)
         axis.minorticks_on()
     for start, end, label, block in zip(boundaries[:-1], boundaries[1:], labels, blocks):
         center = 0.5 * (start + end) + 0.5 if physical_edges is None else 0.5 * (float(edges[0]) + float(edges[-1]))
@@ -807,12 +818,10 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
                 transform=rax.get_xaxis_transform(),
                 ha="center",
                 va="center",
-                fontsize=13,
+                fontsize=15,
                 bbox={"boxstyle": "round,pad=0.28", "facecolor": "white", "edgecolor": "0.7", "alpha": 0.96},
                 zorder=20,
             )
-        else:
-            ax.text(center, 0.965, label, transform=ax.get_xaxis_transform(), ha="center", va="top", fontsize=15, fontweight="bold")
     positive = []
     for arr in [bkg + unc, data[mask] if np.any(mask) else np.array([]), *signals.values()]:
         arr = np.asarray(arr, dtype=float)
@@ -822,13 +831,13 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
         ax.set_ylim(max(0.03, min(positive) * 0.1), max(max(positive) * 60, 1.0))
     else:
         ax.set_ylim(0.03, 1.0)
-    ax.set_ylabel("Events / bin")
-    rax.set_ylabel("Data/MC")
+    ax.set_ylabel("Events / bin", fontsize=30)
+    rax.set_ylabel("Data/MC", fontsize=26)
     rax.set_ylim(0, 2)
-    rax.set_xlabel(xlabel)
+    rax.set_xlabel(xlabel, fontsize=30, loc="right")
     if physical_edges is not None:
         rax.set_xticks(edges)
-        rax.set_xticklabels([f"{edge:g}" for edge in edges], fontsize=10)
+        rax.set_xticklabels([f"{edge:g}" for edge in edges], fontsize=18)
     else:
         xlabels = []
         for block in blocks:
@@ -839,12 +848,13 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
                 start = len(xlabels) + 1
                 xlabels.extend(str(i) for i in range(start, start + int(block["nbin"])))
         rax.set_xticks(centers)
-        rax.set_xticklabels(xlabels, fontsize=7 if any("\n" in lab for lab in xlabels) else (8 if nbin > 24 else 10))
+        label_fontsize = 12 if any("\n" in lab for lab in xlabels) else (13 if nbin > 24 else 16)
+        rax.set_xticklabels(xlabels, fontsize=label_fontsize)
     hep.cms.label(llabel="Work in progress", rlabel=r"109.82 fb$^{-1}$ (13.6 TeV)", ax=ax)
     ax.legend(fontsize=12, ncol=4, frameon=False, columnspacing=1.05, handlelength=2.0, loc="upper center", bbox_to_anchor=(0.5, 0.995))
     outbase.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(outbase.with_suffix(".png"), dpi=180, bbox_inches="tight")
-    fig.savefig(outbase.with_suffix(".pdf"), bbox_inches="tight")
+    fig.savefig(outbase.with_suffix(".png"), dpi=180)
+    fig.savefig(outbase.with_suffix(".pdf"))
     plt.close(fig)
     return {"status": "complete", "name": outbase.name, "png": str(outbase.with_suffix(".png")), "pdf": str(outbase.with_suffix(".pdf")), "bins": nbin, "labels": labels, "signals": list(signals)}
 
@@ -860,9 +870,9 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
         rec = flat_hist_record(payload, base, allow_signal=False)
         if rec:
             cr_inclusive.append(rec)
-            plots.append(draw_flat_blocks([rec], output_dir / f"highdm_cr_{base.lower()}_recoil", xlabel=r"Recoil $p_{T}$ (GeV)"))
+            plots.append(draw_flat_blocks([rec], output_dir / f"highdm_cr_{base.lower()}_recoil", xlabel=r"$\not\!U_{T}$ (GeV)"))
     if cr_inclusive:
-        plots.append(draw_flat_blocks(cr_inclusive, output_dir / "highdm_cr_recoil_inclusive", xlabel="High-dM CR recoil bin number"))
+        plots.append(draw_flat_blocks(cr_inclusive, output_dir / "highdm_cr_recoil_inclusive", xlabel=r"High-dM CR $\not\!U_{T}$ bin number"))
 
     cr_split = []
     for base in cr_regions:
@@ -873,13 +883,13 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
                 split_blocks.append(rec)
                 cr_split.append(rec)
         if split_blocks:
-            plots.append(draw_flat_blocks(split_blocks, output_dir / f"highdm_cr_{base.lower()}_recoil_ntop_split", xlabel=f"High-dM {base} recoil bin number"))
+            plots.append(draw_flat_blocks(split_blocks, output_dir / f"highdm_cr_{base.lower()}_recoil_ntop_split", xlabel=fr"High-dM {base} $\not\!U_{{T}}$ bin number"))
     if cr_split:
         plots.append(draw_flat_blocks(cr_split, output_dir / "highdm_cr_recoil_ntop_split"))
     sr_inc = flat_hist_record(payload, "SR", allow_signal=True)
     if sr_inc:
         sr_inc["blind_data"] = True
-        plots.append(draw_flat_blocks([sr_inc], output_dir / "highdm_sr_recoil_inclusive", xlabel=r"Recoil $p_{T}$ (GeV)"))
+        plots.append(draw_flat_blocks([sr_inc], output_dir / "highdm_sr_recoil_inclusive", xlabel=r"$\not\!U_{T}$ (GeV)"))
     sr_split = []
     for region in ["SR_Nt0", "SR_Nt1"]:
         rec = flat_hist_record(payload, region, allow_signal=True)
@@ -887,7 +897,7 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
             rec["blind_data"] = True
             sr_split.append(rec)
     if sr_split:
-        plots.append(draw_flat_blocks(sr_split, output_dir / "highdm_sr_recoil_ntop_split"))
+        plots.append(draw_flat_blocks(sr_split, output_dir / "highdm_sr_recoil_ntop_split", xlabel=r"High-dM SR $\not\!U_{T}$ bin number"))
     an17 = flat_search_record(payload, "boosted_an_17_SR", "SR", allow_signal=True)
     if an17:
         an17["blind_data"] = True
