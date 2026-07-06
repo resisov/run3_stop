@@ -1,31 +1,36 @@
 {
-  "output_pdf": "docs/highlowdm_full_20260705/limits/expected_limit_overlay_run2.pdf",
-  "output_png": "docs/highlowdm_full_20260705/limits/expected_limit_overlay_run2.png",
+  "output_pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/limits/expected_limit_overlay_run2.pdf",
+  "output_png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/limits/expected_limit_overlay_run2.png",
   "run2": "/eos/user/t/taiwoo/run2_sus19010_contours.json",
   "status": "complete",
   "variants": [
     {
-      "label": "Run-3 inclusive SR",
+      "label": "Inclusive high-dM SR",
       "points": 352,
       "status": "plotted"
     },
     {
-      "label": "Run-3 SR, N_t >= 1",
+      "label": "High-dM SR, N_t >= 1",
       "points": 352,
       "status": "plotted"
     },
     {
-      "label": "Run-3 SR, N_t = 0",
+      "label": "High-dM SR, N_t = 0",
       "points": 352,
       "status": "plotted"
     },
     {
-      "label": "Run-3 CR/SR split by N_t",
+      "label": "High-dM CR/SR split by N_t",
       "points": 352,
       "status": "plotted"
     },
     {
-      "label": "Run-3 N_t split + low-dM SR",
+      "label": "High-dM N_t split + low-dM SR",
+      "points": 352,
+      "status": "plotted"
+    },
+    {
+      "label": "AN17 bins 4,5,8,9,14,15,16 split + low-dM SR",
       "points": 352,
       "status": "plotted"
     }

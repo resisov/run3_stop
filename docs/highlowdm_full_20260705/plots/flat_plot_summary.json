@@ -1,6 +1,6 @@
 {
   "ntop_order": "N_t = 0 blocks are placed left of N_t >= 1 blocks.",
-  "output_dir": "docs/highlowdm_full_20260705/plots",
+  "output_dir": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots",
   "plots": [
     {
       "bins": 60,
@@ -17,8 +17,8 @@
         "DY2M\\n$N_{t}\\geq1$"
       ],
       "name": "highdm_cr_recoil_ntop_split",
-      "pdf": "docs/highlowdm_full_20260705/plots/highdm_cr_recoil_ntop_split.pdf",
-      "png": "docs/highlowdm_full_20260705/plots/highdm_cr_recoil_ntop_split.png",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_recoil_ntop_split.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_cr_recoil_ntop_split.png",
       "signals": [],
       "status": "complete"
     },
@@ -28,8 +28,8 @@
         "SR"
       ],
       "name": "highdm_sr_recoil_inclusive",
-      "pdf": "docs/highlowdm_full_20260705/plots/highdm_sr_recoil_inclusive.pdf",
-      "png": "docs/highlowdm_full_20260705/plots/highdm_sr_recoil_inclusive.png",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_recoil_inclusive.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_recoil_inclusive.png",
       "signals": [
         "mStop1000_mLSP1",
         "mStop1200_mLSP1"
@@ -43,8 +43,8 @@
         "SR\\n$N_{t}\\geq1$"
       ],
       "name": "highdm_sr_recoil_ntop_split",
-      "pdf": "docs/highlowdm_full_20260705/plots/highdm_sr_recoil_ntop_split.pdf",
-      "png": "docs/highlowdm_full_20260705/plots/highdm_sr_recoil_ntop_split.png",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_recoil_ntop_split.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_recoil_ntop_split.png",
       "signals": [
         "mStop1000_mLSP1",
         "mStop1200_mLSP1"
@@ -57,8 +57,8 @@
         "SR"
       ],
       "name": "highdm_sr_an17_search_bins",
-      "pdf": "docs/highlowdm_full_20260705/plots/highdm_sr_an17_search_bins.pdf",
-      "png": "docs/highlowdm_full_20260705/plots/highdm_sr_an17_search_bins.png",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_an17_search_bins.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_an17_search_bins.png",
       "signals": [
         "mStop1000_mLSP1",
         "mStop1200_mLSP1"
@@ -71,8 +71,22 @@
         "SR\\n$N_{t}\\geq1$"
       ],
       "name": "highdm_sr_nt1_an17_search_bins",
-      "pdf": "docs/highlowdm_full_20260705/plots/highdm_sr_nt1_an17_search_bins.pdf",
-      "png": "docs/highlowdm_full_20260705/plots/highdm_sr_nt1_an17_search_bins.png",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_nt1_an17_search_bins.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_nt1_an17_search_bins.png",
+      "signals": [
+        "mStop1000_mLSP1",
+        "mStop1200_mLSP1"
+      ],
+      "status": "complete"
+    },
+    {
+      "bins": 24,
+      "labels": [
+        "SR partial $N_{t}$ split"
+      ],
+      "name": "highdm_sr_partial_ntop_an17_search_bins",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_partial_ntop_an17_search_bins.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_partial_ntop_an17_search_bins.png",
       "signals": [
         "mStop1000_mLSP1",
         "mStop1200_mLSP1"
@@ -90,8 +104,8 @@
         "SR low $\\Delta m$"
       ],
       "name": "lowdm_cr_sr_onebin",
-      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_cr_sr_onebin.pdf",
-      "png": "docs/highlowdm_full_20260705/plots/lowdm_cr_sr_onebin.png",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_sr_onebin.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_cr_sr_onebin.png",
       "signals": [
         "mStop1000_mLSP1",
         "mStop1200_mLSP1"
@@ -104,8 +118,8 @@
         "SR low $\\Delta m$"
       ],
       "name": "lowdm_sr_onebin",
-      "pdf": "docs/highlowdm_full_20260705/plots/lowdm_sr_onebin.pdf",
-      "png": "docs/highlowdm_full_20260705/plots/lowdm_sr_onebin.png",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_onebin.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/lowdm_sr_onebin.png",
       "signals": [
         "mStop1000_mLSP1",
         "mStop1200_mLSP1"
@@ -114,6 +128,6 @@
     }
   ],
   "signal_policy": "Signals are drawn only in SR plots; CR blocks exclude T2tt overlays.",
-  "source": "autonomous_allhad/workflow/highlowdm_full_20260706_flat_hists_inclusive_an17.json",
+  "source": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/highlowdm_full_20260706_flat_hists_inclusive_an17.json",
   "status": "complete"
 }

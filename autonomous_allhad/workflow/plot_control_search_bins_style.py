@@ -46,6 +46,7 @@ SIGNAL_OVERLAYS = [
     {"key": "mStop1000_mLSP1", "label": "T2tt mStop1000 mLSP1", "color": "#d62728"},
     {"key": "mStop1200_mLSP1", "label": "T2tt mStop1200 mLSP1", "color": "#1f77b4"},
 ]
+PARTIAL_AN17_SPLIT_BINS = [4, 5, 8, 9, 14, 15, 16]
 
 
 def load_json(path: Path) -> dict:
@@ -505,6 +506,75 @@ def flat_search_record(payload: dict, scheme: str, label: str, allow_signal: boo
     return {"groups": groups, "background": bkg, "background_unc": unc, "data": data, "data_unc": np.sqrt(data2), "signals": signals, "label": label, "nbin": nbin}
 
 
+
+
+def partial_an17_search_record(payload: dict, label: str, split_bins: list[int], allow_signal: bool) -> dict | None:
+    raw_inc = (payload.get("search_bin_histograms") or {}).get("boosted_an_17_SR") or {}
+    raw_nt1 = (payload.get("search_bin_histograms") or {}).get("boosted_an_17_SR_Nt1") or {}
+    if not raw_inc or not raw_nt1:
+        return None
+    labels = (((payload.get("search_bin_schemes") or {}).get("boosted_an_17_SR") or {}).get("bin_labels") or [])
+    nbin_in = len(labels)
+    if nbin_in <= 0:
+        for rec in raw_inc.values():
+            nominal = rec.get("nominal") or rec
+            nbin_in = max(nbin_in, len(nominal.get("sumw") or []))
+    if nbin_in <= 0:
+        return None
+    split = set(split_bins)
+    nbin = nbin_in + sum(1 for idx in range(1, nbin_in + 1) if idx in split)
+
+    def expanded(sample: str) -> tuple[np.ndarray, np.ndarray]:
+        inc_vals, inc_s2 = flat_values(raw_inc.get(sample) or {}, nbin_in)
+        nt1_vals, nt1_s2 = flat_values(raw_nt1.get(sample) or {}, nbin_in)
+        nt0_vals = np.maximum(inc_vals - nt1_vals, 0.0)
+        nt0_s2 = np.maximum(inc_s2 - nt1_s2, 0.0)
+        vals = []
+        s2 = []
+        for idx in range(nbin_in):
+            if idx + 1 in split:
+                vals.extend([float(nt0_vals[idx]), float(nt1_vals[idx])])
+                s2.extend([float(nt0_s2[idx]), float(nt1_s2[idx])])
+            else:
+                vals.append(float(inc_vals[idx]))
+                s2.append(float(inc_s2[idx]))
+        return np.asarray(vals, dtype=float), np.asarray(s2, dtype=float)
+
+    groups = {group: np.zeros(nbin, dtype=float) for group in GROUP_ORDER}
+    stat2 = np.zeros(nbin, dtype=float)
+    data = np.zeros(nbin, dtype=float)
+    data2 = np.zeros(nbin, dtype=float)
+    signals = {spec["key"]: np.zeros(nbin, dtype=float) for spec in SIGNAL_OVERLAYS}
+    for sample in sorted(raw_inc):
+        vals, s2 = expanded(sample)
+        if sample == "data_obs":
+            data += vals
+            data2 += s2
+        elif is_signal_sample(sample):
+            if allow_signal:
+                for spec in SIGNAL_OVERLAYS:
+                    if sample == "T2tt_" + spec["key"]:
+                        signals[spec["key"]] += vals
+        else:
+            groups[process_to_group(sample)] += vals
+            stat2 += s2
+    bkg = np.zeros(nbin, dtype=float)
+    for vals in groups.values():
+        bkg += vals
+    unc = np.sqrt(stat2 + (0.016 * bkg) ** 2)
+    signals = {key: vals for key, vals in signals.items() if np.any(vals > 0)}
+    return {
+        "groups": groups,
+        "background": bkg,
+        "background_unc": unc,
+        "data": data,
+        "data_unc": np.sqrt(data2),
+        "signals": signals,
+        "label": label,
+        "nbin": nbin,
+        "split_bins_1based": split_bins,
+    }
+
 def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/search bin number") -> dict:
     import matplotlib
 
@@ -640,6 +710,10 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
     if an17_nt1:
         an17_nt1["blind_data"] = True
         plots.append(draw_flat_blocks([an17_nt1], output_dir / "highdm_sr_nt1_an17_search_bins", xlabel="High-dM SR, $N_{t}\geq1$ search bin number"))
+    an17_partial = partial_an17_search_record(payload, "SR partial $N_{t}$ split", PARTIAL_AN17_SPLIT_BINS, allow_signal=True)
+    if an17_partial:
+        an17_partial["blind_data"] = True
+        plots.append(draw_flat_blocks([an17_partial], output_dir / "highdm_sr_partial_ntop_an17_search_bins", xlabel="High-dM SR partial $N_{t}$-split search bin number"))
     low_blocks = []
     low_map = [
         ("cat2_LLCR_lowDeltaM", "LLCR low $\Delta m$", False),

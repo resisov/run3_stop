@@ -1,4 +1,12 @@
 {
+  "combine_outputs": {
+    "partial_an17_bins_4_5_8_9_14_15_16_lowdm": {
+      "contour": "limits/expected_limit_contour_partial_an17_bins_4_5_8_9_14_15_16_lowdm.png",
+      "dir": "analysis/combine/highlowdm_full_20260706_partial_an17_bins_4_5_8_9_14_15_16_lowdm",
+      "expected_limits": "data/expected_limits_partial_an17_bins_4_5_8_9_14_15_16_lowdm.json",
+      "policy": "Only AN17 high-dM SR bins 4,5,8,9,14,15,16 are split into N_t=0 and N_t>=1; all other AN17 SR bins remain inclusive; one low-dM SR bin is included."
+    }
+  },
   "comparison_to_inclusive": [
     {
       "common_points": 346,
@@ -31,6 +39,15 @@
       "points_better_than_inclusive": 349,
       "points_worse_than_inclusive": 0,
       "variant": "ntop_split_lowdm"
+    }
+  ],
+  "limit_variants": [
+    {
+      "expected_excluded_points": 44,
+      "label": "AN17 bins 4,5,8,9,14,15,16 split by N_t + low-dM SR",
+      "median_expected_r": 27.375,
+      "points": 352,
+      "variant": "partial_an17_bins_4_5_8_9_14_15_16_lowdm"
     }
   ],
   "notes": {
