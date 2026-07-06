@@ -82,7 +82,7 @@
     {
       "bins": 24,
       "labels": [
-        "SR partial $N_{t}$ split"
+        "SR: selected AN17 bins split"
       ],
       "name": "highdm_sr_partial_ntop_an17_search_bins",
       "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highlowdm_full_20260705/plots/highdm_sr_partial_ntop_an17_search_bins.pdf",

@@ -563,6 +563,12 @@ def partial_an17_search_record(payload: dict, label: str, split_bins: list[int],
         bkg += vals
     unc = np.sqrt(stat2 + (0.016 * bkg) ** 2)
     signals = {key: vals for key, vals in signals.items() if np.any(vals > 0)}
+    xlabels = []
+    for idx in range(1, nbin_in + 1):
+        if idx in split:
+            xlabels.extend([rf"{idx}\n$N_{{t}}=0$", rf"{idx}\n$N_{{t}}\geq1$"])
+        else:
+            xlabels.append(str(idx))
     return {
         "groups": groups,
         "background": bkg,
@@ -573,6 +579,7 @@ def partial_an17_search_record(payload: dict, label: str, split_bins: list[int],
         "label": label,
         "nbin": nbin,
         "split_bins_1based": split_bins,
+        "xlabels": xlabels,
     }
 
 def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/search bin number") -> dict:
@@ -666,8 +673,16 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
     rax.set_ylabel("Data/MC")
     rax.set_ylim(0, 2)
     rax.set_xlabel(xlabel)
+    xlabels = []
+    for block in blocks:
+        block_labels = block.get("xlabels") or []
+        if len(block_labels) == int(block["nbin"]):
+            xlabels.extend(block_labels)
+        else:
+            start = len(xlabels) + 1
+            xlabels.extend(str(i) for i in range(start, start + int(block["nbin"])))
     rax.set_xticks(centers)
-    rax.set_xticklabels([str(i) for i in range(1, nbin + 1)], fontsize=8 if nbin > 24 else 10)
+    rax.set_xticklabels(xlabels, fontsize=7 if any("\n" in lab for lab in xlabels) else (8 if nbin > 24 else 10))
     hep.cms.label(llabel="Work in progress", rlabel=r"109.82 fb$^{-1}$ (13.6 TeV)", ax=ax)
     ax.legend(fontsize=10, ncol=4, frameon=False, columnspacing=1.0, handlelength=1.6, loc="upper center", bbox_to_anchor=(0.5, 0.995))
     outbase.parent.mkdir(parents=True, exist_ok=True)
@@ -710,7 +725,7 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
     if an17_nt1:
         an17_nt1["blind_data"] = True
         plots.append(draw_flat_blocks([an17_nt1], output_dir / "highdm_sr_nt1_an17_search_bins", xlabel="High-dM SR, $N_{t}\geq1$ search bin number"))
-    an17_partial = partial_an17_search_record(payload, "SR partial $N_{t}$ split", PARTIAL_AN17_SPLIT_BINS, allow_signal=True)
+    an17_partial = partial_an17_search_record(payload, "SR: selected AN17 bins split", PARTIAL_AN17_SPLIT_BINS, allow_signal=True)
     if an17_partial:
         an17_partial["blind_data"] = True
         plots.append(draw_flat_blocks([an17_partial], output_dir / "highdm_sr_partial_ntop_an17_search_bins", xlabel="High-dM SR partial $N_{t}$-split search bin number"))
