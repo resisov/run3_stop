@@ -43,8 +43,8 @@ from build_flat_recoil_ntop_split_lowdm_combine_inputs import (  # noqa: E402
 from build_flat_recoil_sr_combine_inputs import signal_process_name  # noqa: E402
 
 
-SELECTED_RECOIL6_SCHEME = "boosted_an17_selected_recoil6_with_nt0_SR"
-SELECTED_RECOIL6_CHANNEL = "cat7_SR_selected_an17_recoil6_with_nt0"
+SELECTED_RECOIL6_SCHEME = "boosted_an17_selected_recoil6_with_nt0_wsplit_SR"
+SELECTED_RECOIL6_CHANNEL = "cat9_SR_selected_an17_recoil6_with_nt0_wsplit"
 MIN_BIN = 1.0e-9
 
 
@@ -67,14 +67,14 @@ def selected_recoil6_channel(flat: dict[str, Any]) -> dict[str, Any]:
         "name": SELECTED_RECOIL6_CHANNEL,
         "source_region": SELECTED_RECOIL6_SCHEME,
         "source_kind": "search_bin_histograms",
-        "kind": "signal_region_selected_an17_recoil6_with_nt0",
+        "kind": "signal_region_selected_an17_recoil6_with_nt0_wsplit",
         "edges": unit_edges(nbin),
         "background": bkg,
         "background_sumw2": bkg_s2,
         "data": data,
         "data_sumw2": data_s2,
         "variations": aggregate_variations(by_sample, backgrounds, nbin, bkg),
-        "variable": "selected_an17_recoil6_with_nt0_bin",
+        "variable": "selected_an17_recoil6_with_nt0_wsplit_bin",
         "bin_labels": labels,
         "background_samples": backgrounds,
     }
@@ -184,7 +184,7 @@ def selected_lowdm_datacard_text(
         "# Boosted AN17 datacard: CR channels use 6-bin recoil/U_T histograms; SR uses 17 boosted top/W tagged search bins.\n"
         "# SR background shape nuisances are reconstructed from shard-level search_bin_variations plus JES/MET unclustered shape shards.\n",
         "# Selected AN17 recoil6 datacard: high-dM CRs are inclusive 6-bin recoil templates; "
-        "high-dM SR uses the selected 8 x 6 recoil category bins, with Nb>=1,Nt=0,NW=0 prepended; "
+        "high-dM SR uses the selected 9 x 6 recoil category bins, with Nb>=1,Nt=0,NW=0 and Nb>=1,Nt=0,NW>=1 prepended; "
         f"{lowdm_note}. JES/MET shape nuisances remain deferred.\n",
     )
 
@@ -208,7 +208,7 @@ def write_datacards(
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Build Combine inputs with selected high-dM recoil6 SR categories plus the prepended Nt=0,NW=0 category.")
+    parser = argparse.ArgumentParser(description="Build Combine inputs with selected high-dM recoil6 SR categories plus the prepended Nt=0,NW=0 and Nt=0,NW>=1 categories.")
     parser.add_argument("--hists", required=True)
     parser.add_argument("--output-dir", required=True)
     parser.add_argument("--no-lowdm", action="store_true", help="Do not add the one-bin low-dM SR channel.")
@@ -238,7 +238,7 @@ def main() -> int:
         raise SystemExit("no signal mass points selected from selected high-dM SR or low-dM SR")
 
     outdir = Path(args.output_dir)
-    template_root = outdir / ("templates_selected_an17_recoil6_lowdm.root" if include_lowdm else "templates_selected_an17_recoil6.root")
+    template_root = outdir / ("templates_selected_an17_recoil6_nt0_wsplit_lowdm.root" if include_lowdm else "templates_selected_an17_recoil6_nt0_wsplit.root")
     datacard_dir = outdir / "datacards"
     limit_dir = outdir / "limits"
     runner = outdir / "run_combine_expected.sh"
@@ -248,7 +248,7 @@ def main() -> int:
 
     manifest = {
         "status": "combine_inputs_ready",
-        "schema": "flat_selected_an17_recoil6_with_nt0_plus_lowdm_sr_v1" if include_lowdm else "flat_selected_an17_recoil6_with_nt0_sr_v1",
+        "schema": "flat_selected_an17_recoil6_with_nt0_wsplit_plus_lowdm_sr_v1" if include_lowdm else "flat_selected_an17_recoil6_with_nt0_wsplit_sr_v1",
         "hists": str(hists_path),
         "template_root": str(template_root),
         "datacard_dir": str(datacard_dir),
@@ -260,7 +260,7 @@ def main() -> int:
         "control_regions": CONTROL_REGION_MAP,
         "selected_recoil6_scheme": SELECTED_RECOIL6_SCHEME,
         "selected_recoil6_channel": SELECTED_RECOIL6_CHANNEL,
-        "selected_recoil6_policy": "Prepended Nb>=1,Nt=0,NW=0 category plus requested AN17 bins 4,5,8,9,14,15,16 are expanded into six recoil bins each, ordered by the plotted category blocks.",
+        "selected_recoil6_policy": "Prepended Nb>=1,Nt=0,NW=0 and Nb>=1,Nt=0,NW>=1 categories plus requested AN17 bins 4,5,8,9,14,15,16 are expanded into six recoil bins each, ordered by the plotted category blocks.",
         "lowdm_signal_scheme": LOWDM_SIGNAL_SCHEME if include_lowdm else None,
         "lowdm_channel": LOWDM_CHANNEL if include_lowdm else None,
         "lowdm_policy": "one inclusive low-dM SR bin added" if include_lowdm else "not included",
@@ -277,7 +277,7 @@ def main() -> int:
     print(json.dumps({
         "status": manifest["status"],
         "channels": len(channels),
-        "highdm_selected_bins": 48,
+        "highdm_selected_bins": 54,
         "include_lowdm": include_lowdm,
         "mass_points": len(mass_keys),
         "datacards": len(cards),

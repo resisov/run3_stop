@@ -47,11 +47,12 @@ SIGNAL_OVERLAYS = [
     {"key": "mStop1200_mLSP1", "label": '$m_{\\tilde{t}}=1200$ GeV, $m_{\\tilde{\\chi}^{0}_{1}}=1$ GeV', "color": "#00ff00"},
 ]
 PARTIAL_AN17_SPLIT_BINS = [4, 5, 8, 9, 14, 15, 16]
-SELECTED_AN17_RECOIL_SCHEME = "boosted_an17_selected_recoil6_with_nt0_SR"
+SELECTED_AN17_RECOIL_SCHEME = "boosted_an17_selected_recoil6_with_nt0_wsplit_SR"
 SELECTED_AN17_RECOIL_BINS = [4, 5, 8, 9, 14, 15, 16]
 RECOIL6_LABELS = ["250-300", "300-350", "350-400", "400-500", "500-800", "800-1500"]
 SELECTED_AN17_CATEGORY_LABELS = {
     'Nb1plus_T0_W0': '$N_{b}\\geq1$, $N_{t}=0$\n$N_{W}=0$',
+    'Nb1plus_T0_W1plus': '$N_{b}\\geq1$, $N_{t}=0$\n$N_{W}\\geq1$',
     'Nb1_T1plus_W0': '$N_{b}=1$, $N_{t}\\geq1$\n$N_{W}=0$',
     'Nb1_T1plus_W1plus': '$N_{b}=1$, $N_{t}\\geq1$\n$N_{W}\\geq1$',
     'Nb2_T1_W0': '$N_{b}=2$, $N_{t}=1$\n$N_{W}=0$',
@@ -750,6 +751,8 @@ def partial_an17_search_record(payload: dict, label: str, split_bins: list[int],
 def selected_recoil_category_from_label(raw: str) -> str:
     if raw.startswith("NT0_Nb1plus_T0_W0_recoil_"):
         return "Nb1plus_T0_W0"
+    if raw.startswith("NT0_Nb1plus_T0_W1plus_recoil_"):
+        return "Nb1plus_T0_W1plus"
     if raw.startswith("AN17_") and "_recoil_" in raw:
         parts = raw.split("_", 2)
         if len(parts) == 3:
@@ -841,7 +844,7 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
 
     count_axis = len(blocks) == 1 and bool(blocks[0].get("count_labels"))
     if physical_edges is None and not count_axis:
-        figsize = (12.0, 8.0)
+        figsize = (14.0, 8.0) if outbase.name == "highdm_sr_selected_recoil6_bins" and nbin >= 54 else (12.0, 8.0)
         subplot_args = {"left": 0.12, "right": 0.98, "bottom": 0.14, "top": 0.91}
     else:
         figsize = (11.0, 11.0)

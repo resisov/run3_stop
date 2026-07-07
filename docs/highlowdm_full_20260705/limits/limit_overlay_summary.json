@@ -10,22 +10,22 @@
       "status": "plotted"
     },
     {
-      "label": "SR, N_t >= 1",
+      "label": "SR, Nt>=1",
       "points": 352,
       "status": "plotted"
     },
     {
-      "label": "SR, N_t = 0",
+      "label": "SR, Nt=0",
       "points": 352,
       "status": "plotted"
     },
     {
-      "label": "CR/SR N_t split",
+      "label": "CR/SR Nt split",
       "points": 352,
       "status": "plotted"
     },
     {
-      "label": "CR/SR N_t split + low-dM",
+      "label": "CR/SR Nt split + low-dM",
       "points": 352,
       "status": "plotted"
     },
@@ -36,6 +36,11 @@
     },
     {
       "label": "Selected 8x6 + low-dM",
+      "points": 352,
+      "status": "plotted"
+    },
+    {
+      "label": "Selected 9x6 + low-dM",
       "points": 352,
       "status": "plotted"
     }

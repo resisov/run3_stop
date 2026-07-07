@@ -17,6 +17,7 @@ RECOIL_PT_BINS = [250.0, 300.0, 350.0, 400.0, 500.0, 800.0, 1500.0]
 LOWDM_ONEBIN_LABELS = ["lowdm_inclusive"]
 SELECTED_AN17_RECOIL_BINS_1BASED = [4, 5, 8, 9, 14, 15, 16]
 SELECTED_RECOIL6_WITH_NT0_SCHEME = "boosted_an17_selected_recoil6_with_nt0_SR"
+SELECTED_RECOIL6_WITH_NT0_WSPLIT_SCHEME = "boosted_an17_selected_recoil6_with_nt0_wsplit_SR"
 RECOIL_BIN_LABELS = [
     f"{int(RECOIL_PT_BINS[i])}-{int(RECOIL_PT_BINS[i + 1])}"
     for i in range(len(RECOIL_PT_BINS) - 1)
@@ -549,6 +550,13 @@ def selected_recoil6_with_nt0_labels() -> list[str]:
     return labels
 
 
+def selected_recoil6_with_nt0_wsplit_labels() -> list[str]:
+    labels = [f"NT0_Nb1plus_T0_W0_recoil_{recoil_label}" for recoil_label in RECOIL_BIN_LABELS]
+    labels.extend(f"NT0_Nb1plus_T0_W1plus_recoil_{recoil_label}" for recoil_label in RECOIL_BIN_LABELS)
+    labels.extend(selected_an17_recoil_labels())
+    return labels
+
+
 def selected_an17_recoil6_indices(chunk: dict[str, Any], n: int, sr_mask: np.ndarray) -> np.ndarray:
     search_indices = boosted_an17_indices(chunk, n, sr_mask)
     selected_zero_based = [idx - 1 for idx in SELECTED_AN17_RECOIL_BINS_1BASED]
@@ -574,6 +582,24 @@ def selected_recoil6_with_nt0_indices(chunk: dict[str, Any], n: int, sr_mask: np
     out[prepend] = recoil_idx[prepend]
     keep_old = base >= 0
     out[keep_old] = len(RECOIL_BIN_LABELS) + base[keep_old]
+    return out
+
+
+def selected_recoil6_with_nt0_wsplit_indices(chunk: dict[str, Any], n: int, sr_mask: np.ndarray) -> np.ndarray:
+    base = selected_an17_recoil6_indices(chunk, n, sr_mask)
+    recoil = finite_array(chunk["met"], n, 0.0)
+    recoil_idx = np.searchsorted(np.asarray(RECOIL_PT_BINS, dtype=float), recoil, side="right") - 1
+    nb = np.asarray(chunk["nb_medium"], dtype=int)
+    nt = np.asarray(chunk["nboosted_top"], dtype=int)
+    nw = np.asarray(chunk["nboosted_w"], dtype=int)
+    out = np.full(n, -1, dtype=int)
+    valid_recoil = (recoil_idx >= 0) & (recoil_idx < len(RECOIL_PT_BINS) - 1)
+    nt0_w0 = sr_mask & (nb >= 1) & (nt == 0) & (nw == 0) & valid_recoil
+    nt0_w1 = sr_mask & (nb >= 1) & (nt == 0) & (nw >= 1) & valid_recoil
+    out[nt0_w0] = recoil_idx[nt0_w0]
+    out[nt0_w1] = len(RECOIL_BIN_LABELS) + recoil_idx[nt0_w1]
+    keep_old = base >= 0
+    out[keep_old] = 2 * len(RECOIL_BIN_LABELS) + base[keep_old]
     return out
 
 
@@ -655,6 +681,7 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                     selected_outputs = [
                         ("boosted_an17_selected_recoil6_SR", selected_an17_recoil6_indices(sub_group, inputs["n"], sr_mask), len(selected_an17_recoil_labels())),
                         (SELECTED_RECOIL6_WITH_NT0_SCHEME, selected_recoil6_with_nt0_indices(sub_group, inputs["n"], sr_mask), len(selected_recoil6_with_nt0_labels())),
+                        (SELECTED_RECOIL6_WITH_NT0_WSPLIT_SCHEME, selected_recoil6_with_nt0_wsplit_indices(sub_group, inputs["n"], sr_mask), len(selected_recoil6_with_nt0_wsplit_labels())),
                     ]
                     for selected_scheme, selected_recoil_indices, selected_nbin in selected_outputs:
                         if is_data and not data_process_allowed(process, "SR"):
@@ -749,6 +776,13 @@ def main() -> int:
                 "bin_labels": selected_recoil6_with_nt0_labels(),
                 "selection": "feature_SR and prepended Nb>=1,Nt=0,NW=0 category plus AN17 bins 4,5,8,9,14,15,16, all split into six recoil/MET bins",
                 "prepended_category": "Nb>=1,Nt=0,NW=0",
+                "selected_an17_bins_1based": SELECTED_AN17_RECOIL_BINS_1BASED,
+                "recoil_pt_bins": RECOIL_PT_BINS,
+            },
+            SELECTED_RECOIL6_WITH_NT0_WSPLIT_SCHEME: {
+                "bin_labels": selected_recoil6_with_nt0_wsplit_labels(),
+                "selection": "feature_SR and prepended Nb>=1,Nt=0,NW=0 plus Nb>=1,Nt=0,NW>=1 categories plus AN17 bins 4,5,8,9,14,15,16, all split into six recoil/MET bins",
+                "prepended_categories": ["Nb>=1,Nt=0,NW=0", "Nb>=1,Nt=0,NW>=1"],
                 "selected_an17_bins_1based": SELECTED_AN17_RECOIL_BINS_1BASED,
                 "recoil_pt_bins": RECOIL_PT_BINS,
             },
