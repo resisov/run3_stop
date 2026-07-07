@@ -293,8 +293,8 @@ def draw(fit_path: Path, payload_path: Path, signal_searchbin_path: Path, outbas
     centers = np.arange(1, nbin + 1, dtype=float)
     edges = np.arange(0.5, nbin + 1.5, 1.0)
 
-    fig, (ax, rax) = plt.subplots(2, 1, figsize=(11.0, 11.0), gridspec_kw={"height_ratios": [3.2, 1.1], "hspace": 0.04}, sharex=True)
-    fig.subplots_adjust(left=0.14, right=0.98, bottom=0.12, top=0.92)
+    fig, (ax, rax) = plt.subplots(2, 1, figsize=(12.0, 8.0), gridspec_kw={"height_ratios": [3.2, 1.1], "hspace": 0.04}, sharex=True)
+    fig.subplots_adjust(left=0.12, right=0.98, bottom=0.14, top=0.91)
 
     stack_inputs = []
     stack_weights = []
@@ -525,13 +525,76 @@ def flat_search_record(payload: dict, scheme: str, label: str, allow_signal: boo
 
 
 
+SLASHED_ET = r"$E\!\!\!\!/_{T}$"
+SLASHED_UT = r"$U\!\!\!\!/_{T}$"
+
 VARIABLE_XLABELS = {
-    "met": r"$\not\!E_{T}$ (GeV)",
-    "recoil_gcr": r"$\not\!U_{T}$ (GeV)",
-    "recoil_dy2e": r"$\not\!U_{T}$ (GeV)",
-    "recoil_dy2m": r"$\not\!U_{T}$ (GeV)",
-    "lowdm_met_sqrt_ht": r"$\not\!E_{T}/\sqrt{H_{T}}$",
+    "met": SLASHED_ET + " (GeV)",
+    "recoil_gcr": SLASHED_UT + " (GeV)",
+    "recoil_dy2e": SLASHED_UT + " (GeV)",
+    "recoil_dy2m": SLASHED_UT + " (GeV)",
+    "lowdm_met_sqrt_ht": r"$E\!\!\!\!/_{T}/\sqrt{H_{T}}$",
 }
+
+
+def count_axis_labels(variable: str, edges: list[float] | np.ndarray) -> list[str]:
+    if not (variable.startswith("n") or variable.startswith("nb")):
+        return []
+    vals = [float(x) for x in edges]
+    if len(vals) < 2:
+        return []
+    labels = []
+    for idx, (lo, hi) in enumerate(zip(vals[:-1], vals[1:])):
+        start = int(round(lo + 0.5))
+        end = int(round(hi - 0.5))
+        is_last = idx == len(vals) - 2
+        if end < start:
+            labels.append(str(int(round(0.5 * (lo + hi)))))
+        elif start == end:
+            labels.append(str(start))
+        elif lo <= -0.5 and end == 1:
+            labels.append(r"$\leq1$")
+        elif is_last:
+            labels.append(rf"$\geq{start}$")
+        else:
+            labels.append(f"{start}-{end}")
+    return labels
+
+
+def collapse_nb_ge3(record: dict, variable: str) -> dict:
+    if not variable.startswith("nb_"):
+        return record
+    old_edges = np.asarray(record.get("edges") or [], dtype=float)
+    if len(old_edges) != int(record["nbin"]) + 1:
+        return record
+    centers = 0.5 * (old_edges[:-1] + old_edges[1:])
+    mapping = [min(max(int(round(center)), 0), 3) for center in centers]
+    nbin = 4
+
+    def sum_bins(arr: np.ndarray) -> np.ndarray:
+        out = np.zeros(nbin, dtype=float)
+        for idx, target in enumerate(mapping):
+            if idx < len(arr):
+                out[target] += float(arr[idx])
+        return out
+
+    def sum_unc(arr: np.ndarray) -> np.ndarray:
+        out2 = np.zeros(nbin, dtype=float)
+        for idx, target in enumerate(mapping):
+            if idx < len(arr):
+                out2[target] += float(arr[idx]) ** 2
+        return np.sqrt(out2)
+
+    record["groups"] = {group: sum_bins(vals) for group, vals in record["groups"].items()}
+    record["background"] = sum_bins(record["background"])
+    record["background_unc"] = sum_unc(record["background_unc"])
+    record["data"] = sum_bins(record["data"])
+    record["data_unc"] = sum_unc(record["data_unc"])
+    record["signals"] = {key: sum_bins(vals) for key, vals in record.get("signals", {}).items()}
+    record["nbin"] = nbin
+    record["edges"] = [-0.5, 0.5, 1.5, 2.5, 3.5]
+    record["count_labels"] = ["0", "1", "2", r"$\geq3$"]
+    return record
 
 
 def lowdm_variable_record(payload: dict, scheme: str, variable: str, label: str, allow_signal: bool) -> dict | None:
@@ -590,7 +653,7 @@ def lowdm_variable_record(payload: dict, scheme: str, variable: str, label: str,
             syst2 += np.maximum(np.abs(up_total), np.abs(down_total)) ** 2
     syst2 += (0.016 * bkg) ** 2
     signals = {key: vals for key, vals in signals.items() if np.any(vals > 0)}
-    return {
+    record = {
         "groups": groups,
         "background": bkg,
         "background_unc": np.sqrt(stat2 + syst2),
@@ -603,6 +666,8 @@ def lowdm_variable_record(payload: dict, scheme: str, variable: str, label: str,
         "xlabel": VARIABLE_XLABELS.get(variable, spec.get("xlabel") or variable),
         "variable": variable,
     }
+    record["count_labels"] = count_axis_labels(variable, edges)
+    return collapse_nb_ge3(record, variable)
 
 
 
@@ -765,9 +830,15 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
         offset += n
     signals = {key: vals for key, vals in signals.items() if np.any(vals > 0)}
 
-    size = 11.0 if nbin <= 24 else 12.0 if nbin <= 60 else 13.0
-    fig, (ax, rax) = plt.subplots(2, 1, figsize=(size, size), gridspec_kw={"height_ratios": [3.2, 1.1], "hspace": 0.04}, sharex=True)
-    fig.subplots_adjust(left=0.14, right=0.98, bottom=0.12, top=0.92)
+    count_axis = len(blocks) == 1 and bool(blocks[0].get("count_labels"))
+    if physical_edges is None and not count_axis:
+        figsize = (12.0, 8.0)
+        subplot_args = {"left": 0.12, "right": 0.98, "bottom": 0.14, "top": 0.91}
+    else:
+        figsize = (11.0, 11.0)
+        subplot_args = {"left": 0.14, "right": 0.98, "bottom": 0.12, "top": 0.92}
+    fig, (ax, rax) = plt.subplots(2, 1, figsize=figsize, gridspec_kw={"height_ratios": [3.2, 1.1], "hspace": 0.04}, sharex=True)
+    fig.subplots_adjust(**subplot_args)
     stack_inputs = []
     stack_weights = []
     stack_colors = []
@@ -836,8 +907,13 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
     rax.set_ylim(0, 2)
     rax.set_xlabel(xlabel, fontsize=30, loc="right")
     if physical_edges is not None:
-        rax.set_xticks(edges)
-        rax.set_xticklabels([f"{edge:g}" for edge in edges], fontsize=18)
+        count_labels = blocks[0].get("count_labels") if len(blocks) == 1 else []
+        if count_labels and len(count_labels) == nbin:
+            rax.set_xticks(centers)
+            rax.set_xticklabels(count_labels, fontsize=20)
+        else:
+            rax.set_xticks(edges)
+            rax.set_xticklabels([f"{edge:g}" for edge in edges], fontsize=18)
     else:
         xlabels = []
         for block in blocks:
@@ -870,9 +946,9 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
         rec = flat_hist_record(payload, base, allow_signal=False)
         if rec:
             cr_inclusive.append(rec)
-            plots.append(draw_flat_blocks([rec], output_dir / f"highdm_cr_{base.lower()}_recoil", xlabel=r"$\not\!U_{T}$ (GeV)"))
+            plots.append(draw_flat_blocks([rec], output_dir / f"highdm_cr_{base.lower()}_recoil", xlabel=SLASHED_UT + " (GeV)"))
     if cr_inclusive:
-        plots.append(draw_flat_blocks(cr_inclusive, output_dir / "highdm_cr_recoil_inclusive", xlabel=r"High-dM CR $\not\!U_{T}$ bin number"))
+        plots.append(draw_flat_blocks(cr_inclusive, output_dir / "highdm_cr_recoil_inclusive", xlabel="High-dM CR " + SLASHED_UT + " bin number"))
 
     cr_split = []
     for base in cr_regions:
@@ -883,13 +959,13 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
                 split_blocks.append(rec)
                 cr_split.append(rec)
         if split_blocks:
-            plots.append(draw_flat_blocks(split_blocks, output_dir / f"highdm_cr_{base.lower()}_recoil_ntop_split", xlabel=fr"High-dM {base} $\not\!U_{{T}}$ bin number"))
+            plots.append(draw_flat_blocks(split_blocks, output_dir / f"highdm_cr_{base.lower()}_recoil_ntop_split", xlabel=f"High-dM {base} " + SLASHED_UT + " bin number"))
     if cr_split:
         plots.append(draw_flat_blocks(cr_split, output_dir / "highdm_cr_recoil_ntop_split"))
     sr_inc = flat_hist_record(payload, "SR", allow_signal=True)
     if sr_inc:
         sr_inc["blind_data"] = True
-        plots.append(draw_flat_blocks([sr_inc], output_dir / "highdm_sr_recoil_inclusive", xlabel=r"$\not\!U_{T}$ (GeV)"))
+        plots.append(draw_flat_blocks([sr_inc], output_dir / "highdm_sr_recoil_inclusive", xlabel=SLASHED_UT + " (GeV)"))
     sr_split = []
     for region in ["SR_Nt0", "SR_Nt1"]:
         rec = flat_hist_record(payload, region, allow_signal=True)
@@ -897,7 +973,7 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
             rec["blind_data"] = True
             sr_split.append(rec)
     if sr_split:
-        plots.append(draw_flat_blocks(sr_split, output_dir / "highdm_sr_recoil_ntop_split", xlabel=r"High-dM SR $\not\!U_{T}$ bin number"))
+        plots.append(draw_flat_blocks(sr_split, output_dir / "highdm_sr_recoil_ntop_split", xlabel="High-dM SR " + SLASHED_UT + " bin number"))
     an17 = flat_search_record(payload, "boosted_an_17_SR", "SR", allow_signal=True)
     if an17:
         an17["blind_data"] = True

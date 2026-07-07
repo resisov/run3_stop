@@ -204,7 +204,7 @@ def draw_multi_overlay(variants: list[dict[str, str]], run2_path: Path, output: 
 
     hep.style.use("CMS")
     colors = ["#d7191c", "#2c7bb6", "#1a9641", "#984ea3", "#ff7f00", "#c51b8a", "#17becf", "#8c564b"]
-    fig, ax = plt.subplots(figsize=(10.0, 10.0))
+    fig, ax = plt.subplots(figsize=(10.0, 8.0))
     fig.subplots_adjust(left=0.13, right=0.97, bottom=0.11, top=0.90)
 
     diag_x = np.linspace(600.0, 1500.0, 400)
@@ -251,7 +251,6 @@ def draw_multi_overlay(variants: list[dict[str, str]], run2_path: Path, output: 
     reference_handles.append(Line2D([0], [0], color="0.55", lw=1.2, linestyle=":", label=r"$m_{\tilde{\chi}_1^0}=m_{\tilde{t}}-m_t$"))
     ax.set_xlim(600.0, 1500.0)
     ax.set_ylim(0.0, 1500.0)
-    ax.set_aspect("equal", adjustable="box")
     ax.set_xlabel(r"$m_{\tilde{t}}$ (GeV)", fontsize=30, loc="right")
     ax.set_ylabel(r"$m_{\tilde{\chi}_1^0}$ (GeV)", fontsize=30)
     ax.xaxis.set_major_locator(MultipleLocator(200))

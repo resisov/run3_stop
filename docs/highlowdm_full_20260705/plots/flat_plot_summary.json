@@ -326,7 +326,7 @@
       "variable": "njet"
     },
     {
-      "bins": 6,
+      "bins": 4,
       "labels": [
         "LLCR low $\\Delta m$"
       ],
@@ -339,7 +339,7 @@
       "variable": "nb_medium_lowdm"
     },
     {
-      "bins": 6,
+      "bins": 4,
       "labels": [
         "LLCR low $\\Delta m$"
       ],
@@ -521,7 +521,7 @@
       "variable": "njet"
     },
     {
-      "bins": 6,
+      "bins": 4,
       "labels": [
         "QCDCR low $\\Delta m$"
       ],
@@ -534,7 +534,7 @@
       "variable": "nb_medium_lowdm"
     },
     {
-      "bins": 6,
+      "bins": 4,
       "labels": [
         "QCDCR low $\\Delta m$"
       ],
@@ -716,7 +716,7 @@
       "variable": "njet"
     },
     {
-      "bins": 6,
+      "bins": 4,
       "labels": [
         "GCR low $\\Delta m$"
       ],
@@ -729,7 +729,7 @@
       "variable": "nb_medium_lowdm"
     },
     {
-      "bins": 6,
+      "bins": 4,
       "labels": [
         "GCR low $\\Delta m$"
       ],
@@ -911,7 +911,7 @@
       "variable": "njet_photon_clean"
     },
     {
-      "bins": 6,
+      "bins": 4,
       "labels": [
         "GCR low $\\Delta m$"
       ],
@@ -976,7 +976,7 @@
       "variable": "njet"
     },
     {
-      "bins": 6,
+      "bins": 4,
       "labels": [
         "DY2E low $\\Delta m$"
       ],
@@ -989,7 +989,7 @@
       "variable": "nb_medium_lowdm"
     },
     {
-      "bins": 6,
+      "bins": 4,
       "labels": [
         "DY2E low $\\Delta m$"
       ],
@@ -1171,7 +1171,7 @@
       "variable": "njet_lepton_clean"
     },
     {
-      "bins": 6,
+      "bins": 4,
       "labels": [
         "DY2E low $\\Delta m$"
       ],
@@ -1236,7 +1236,7 @@
       "variable": "njet"
     },
     {
-      "bins": 6,
+      "bins": 4,
       "labels": [
         "DY2M low $\\Delta m$"
       ],
@@ -1249,7 +1249,7 @@
       "variable": "nb_medium_lowdm"
     },
     {
-      "bins": 6,
+      "bins": 4,
       "labels": [
         "DY2M low $\\Delta m$"
       ],
@@ -1431,7 +1431,7 @@
       "variable": "njet_lepton_clean"
     },
     {
-      "bins": 6,
+      "bins": 4,
       "labels": [
         "DY2M low $\\Delta m$"
       ],
@@ -1505,7 +1505,7 @@
       "variable": "njet"
     },
     {
-      "bins": 6,
+      "bins": 4,
       "labels": [
         "SR low $\\Delta m$"
       ],
@@ -1521,7 +1521,7 @@
       "variable": "nb_medium_lowdm"
     },
     {
-      "bins": 6,
+      "bins": 4,
       "labels": [
         "SR low $\\Delta m$"
       ],
@@ -1743,6 +1743,6 @@
     }
   ],
   "signal_policy": "Signals are drawn only in SR plots; CR blocks exclude T2tt overlays.",
-  "source": "autonomous_allhad/workflow/highlowdm_full_20260706_flat_hists_selected_an17_recoil6_with_lowdm_variables.json",
+  "source": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/highlowdm_full_20260706_flat_hists_selected_an17_recoil6_with_lowdm_variables.json",
   "status": "complete"
 }
