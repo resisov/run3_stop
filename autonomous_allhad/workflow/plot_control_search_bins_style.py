@@ -926,10 +926,13 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
             rax.set_xticklabels(count_labels, fontsize=20)
         else:
             is_slashed_energy_axis = (SLASHED_UT in xlabel) or (SLASHED_ET in xlabel)
-            tick_labels = [f"{edge:g}" for edge in edges]
-            if is_slashed_energy_axis and len(tick_labels) > 0 and float(edges[-1]) >= 1500.0:
+            tick_edges = list(edges)
+            if is_slashed_energy_axis:
+                tick_edges = [edge for edge in tick_edges if abs(float(edge) - 250.0) > 1.0e-6]
+            tick_labels = [f"{edge:g}" for edge in tick_edges]
+            if is_slashed_energy_axis and len(tick_labels) > 0 and float(tick_edges[-1]) >= 1500.0:
                 tick_labels[-1] = r"$\infty$"
-            rax.set_xticks(edges)
+            rax.set_xticks(tick_edges)
             labels_out = rax.set_xticklabels(tick_labels, fontsize=22 if is_slashed_energy_axis else 18)
             if is_slashed_energy_axis:
                 for idx, label in enumerate(labels_out):
