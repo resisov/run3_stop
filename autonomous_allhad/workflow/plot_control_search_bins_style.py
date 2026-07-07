@@ -937,7 +937,7 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
             if is_slashed_energy_axis:
                 for idx, label in enumerate(labels_out):
                     label.set_rotation(45)
-                    label.set_ha("left" if idx == 0 else "right")
+                    label.set_ha("right")
                     label.set_rotation_mode("anchor")
     else:
         xlabels = []
