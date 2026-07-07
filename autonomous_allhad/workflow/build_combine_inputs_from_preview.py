@@ -311,7 +311,7 @@ def collect_limits(limit_dir: Path, mass_keys: list[str], output_json: Path) -> 
     return payload
 
 
-def plot_contour(limit_payload: dict[str, Any], output_png: Path) -> bool:
+def plot_contour(limit_payload: dict[str, Any], output_png: Path, run2_contours: Path | None = Path("/eos/user/t/taiwoo/run2_sus19010_contours.json")) -> bool:
     records = list((limit_payload.get("points") or {}).values())
     points = [rec for rec in records if "expected" in rec and float(rec["expected"]) > 0]
     if not points:
@@ -378,9 +378,9 @@ def plot_contour(limit_payload: dict[str, Any], output_png: Path) -> bool:
     cbar = fig.colorbar(filled, ax=ax, pad=0.04, fraction=0.048, aspect=34)
     cbar.set_label(
         r"$\log_{10}$ (expected 95% CL limit on $\sigma/\sigma_{\mathrm{theory}}$)",
-        fontsize=18,
+        fontsize=24,
         rotation=90,
-        labelpad=18,
+        labelpad=22,
     )
     cbar.set_ticks(np.arange(color_min, color_max + 0.001, 0.5))
     cbar.ax.yaxis.set_major_formatter(FormatStrFormatter("%.1f"))
@@ -398,6 +398,23 @@ def plot_contour(limit_payload: dict[str, Any], output_png: Path) -> bool:
     for band_grid in (minus1_grid, plus1_grid):
         if band_grid is not None and band_grid.count() > 0:
             ax.contour(xx, yy, band_grid, levels=[0.0], colors="red", linewidths=1.7, linestyles="--", zorder=5)
+
+    run2_handles: list[Any] = []
+    if run2_contours is not None:
+        run2_path = Path(run2_contours)
+        if run2_path.exists():
+            try:
+                run2_payload = read_json(run2_path)
+            except Exception:
+                run2_payload = {}
+            for key, style, label in [
+                ("observed", "-", "Run-2 SUS-19-010 observed"),
+                ("expected", "--", "Run-2 SUS-19-010 expected"),
+            ]:
+                arr = np.asarray(run2_payload.get(key) or [], dtype=float)
+                if arr.ndim == 2 and arr.shape[1] >= 2:
+                    ax.plot(arr[:, 0], arr[:, 1], color="black", linestyle=style, linewidth=2.4, zorder=7)
+                    run2_handles.append(Line2D([0], [0], color="black", lw=2.4, linestyle=style, label=label))
 
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(ymin, ymax)
@@ -417,8 +434,9 @@ def plot_contour(limit_payload: dict[str, Any], output_png: Path) -> bool:
     ax.text(0.14, 0.95, r"$pp\rightarrow \tilde{t}\tilde{t},\ \tilde{t}\rightarrow t\tilde{\chi}_1^0$", transform=ax.transAxes, fontsize=15, va="top")
 
     legend_handles = [
-        Line2D([0], [0], color="red", lw=3.0, label="Expected"),
-        Line2D([0], [0], color="red", lw=1.8, linestyle="--", label=r"Expected $\pm1\sigma_{\mathrm{exp}}$"),
+        Line2D([0], [0], color="red", lw=3.0, label="Run-3 expected"),
+        Line2D([0], [0], color="red", lw=1.8, linestyle="--", label=r"Run-3 expected $\pm1\sigma_{\mathrm{exp}}$"),
+        *run2_handles,
         Line2D([0], [0], color="0.45", lw=1.1, linestyle=":", label=r"$m_{\tilde{\chi}_1^0}=m_{\tilde{t}}-m_t$"),
     ]
     ax.legend(handles=legend_handles, loc="upper left", bbox_to_anchor=(0.02, 0.90), frameon=False, fontsize=16, handlelength=2.8)

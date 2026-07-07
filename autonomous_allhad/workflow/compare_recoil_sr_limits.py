@@ -193,7 +193,7 @@ def load_run2_contours(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text())
 
 
-def draw_multi_overlay(variants: list[dict[str, str]], run2_path: Path, output: Path) -> dict[str, Any]:
+def draw_multi_overlay(variants: list[dict[str, str]], run2_path: Path, output: Path, focused: bool = False) -> dict[str, Any]:
     import matplotlib
 
     matplotlib.use("Agg")
@@ -227,6 +227,12 @@ def draw_multi_overlay(variants: list[dict[str, str]], run2_path: Path, output: 
             "Selected 8x6 + low-dM": r"Selected 8$\times$6 recoil categories + low-$\Delta m$ SR",
             "Selected 9x6 + low-dM": r"Selected 9$\times$6 recoil categories + low-$\Delta m$ SR",
         }
+        if focused:
+            focused_mapping = {
+                "Inclusive SR": "Inclusive SR",
+                "Selected 9x6 + low-dM": "After high dM categorization",
+            }
+            return focused_mapping.get(label, mapping.get(label, label))
         return mapping.get(label, label)
     for idx, spec in enumerate(variants):
         points = load_points(Path(spec["dir"]) / "expected_limits.json")
@@ -265,31 +271,42 @@ def draw_multi_overlay(variants: list[dict[str, str]], run2_path: Path, output: 
         spine.set_linewidth(1.8)
     hep.cms.label(llabel="Work in progress", rlabel=r"109.82 fb$^{-1}$ (13.6 TeV)", ax=ax)
     ax.text(0.14, 0.95, r"$pp\rightarrow \tilde{t}\tilde{t},\ \tilde{t}\rightarrow t\tilde{\chi}_1^0$", transform=ax.transAxes, fontsize=15, va="top")
-    ref_legend = ax.legend(
-        handles=reference_handles,
-        loc="upper left",
-        bbox_to_anchor=(0.02, 0.855),
-        frameon=False,
-        fontsize=13.5,
-        handlelength=3.0,
-        labelspacing=0.45,
-    )
-    ax.add_artist(ref_legend)
-    ax.legend(
-        handles=run3_handles,
-        loc="lower right",
-        bbox_to_anchor=(0.985, 0.025),
-        frameon=True,
-        facecolor="white",
-        edgecolor="0.72",
-        framealpha=0.92,
-        fontsize=11.5,
-        title="Run-3 expected contours",
-        title_fontsize=13.0,
-        handlelength=3.0,
-        borderpad=0.65,
-        labelspacing=0.45,
-    )
+    if focused:
+        ax.legend(
+            handles=run3_handles + reference_handles,
+            loc="upper left",
+            bbox_to_anchor=(0.02, 0.855),
+            frameon=False,
+            fontsize=13.5,
+            handlelength=3.0,
+            labelspacing=0.45,
+        )
+    else:
+        ref_legend = ax.legend(
+            handles=reference_handles,
+            loc="upper left",
+            bbox_to_anchor=(0.02, 0.855),
+            frameon=False,
+            fontsize=13.5,
+            handlelength=3.0,
+            labelspacing=0.45,
+        )
+        ax.add_artist(ref_legend)
+        ax.legend(
+            handles=run3_handles,
+            loc="lower right",
+            bbox_to_anchor=(0.985, 0.025),
+            frameon=True,
+            facecolor="white",
+            edgecolor="0.72",
+            framealpha=0.92,
+            fontsize=11.5,
+            title="Run-3 expected contours",
+            title_fontsize=13.0,
+            handlelength=3.0,
+            borderpad=0.65,
+            labelspacing=0.45,
+        )
     output.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(output, dpi=180)
     fig.savefig(output.with_suffix(".pdf"))
@@ -305,8 +322,10 @@ def run_multi_overlay(args: argparse.Namespace) -> int:
     variants = [{"label": label, "dir": directory} for label, directory in zip(labels, dirs)]
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
-    summary = draw_multi_overlay(variants, Path(args.run2_contours), output_dir / "expected_limit_overlay_run2.png")
-    (output_dir / "limit_overlay_summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
+    output_name = args.output_name or "expected_limit_overlay_run2.png"
+    summary_name = args.summary_name or "limit_overlay_summary.json"
+    summary = draw_multi_overlay(variants, Path(args.run2_contours), output_dir / output_name, focused=bool(args.focused_overlay))
+    (output_dir / summary_name).write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     print(json.dumps(summary, sort_keys=True))
     return 0
 
@@ -318,6 +337,9 @@ def main() -> int:
     parser.add_argument("--multi-overlay", action="store_true")
     parser.add_argument("--variant-dir", action="append")
     parser.add_argument("--label", action="append")
+    parser.add_argument("--output-name", default="expected_limit_overlay_run2.png")
+    parser.add_argument("--summary-name", default="limit_overlay_summary.json")
+    parser.add_argument("--focused-overlay", action="store_true")
     parser.add_argument("--run2-contours", default="/eos/user/t/taiwoo/run2_sus19010_contours.json")
     args = parser.parse_args()
 

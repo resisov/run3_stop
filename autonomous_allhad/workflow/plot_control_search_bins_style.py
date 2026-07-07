@@ -887,7 +887,8 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
                 axis.axvline(boundary + 0.5, color="black", linewidth=1.2)
             axis.set_xlim(0.5, nbin + 0.5)
         else:
-            axis.set_xlim(float(edges[0]), float(edges[-1]))
+            left_edge = 250.0 if SLASHED_UT in xlabel else float(edges[0])
+            axis.set_xlim(left_edge, float(edges[-1]))
         axis.tick_params(which="major", direction="in", top=True, right=True, labelsize=20, length=9)
         axis.tick_params(which="minor", direction="in", top=True, right=True, length=5)
         axis.minorticks_on()
@@ -924,8 +925,17 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
             rax.set_xticks(centers)
             rax.set_xticklabels(count_labels, fontsize=20)
         else:
+            is_slashed_energy_axis = (SLASHED_UT in xlabel) or (SLASHED_ET in xlabel)
+            tick_labels = [f"{edge:g}" for edge in edges]
+            if is_slashed_energy_axis and len(tick_labels) > 0 and float(edges[-1]) >= 1500.0:
+                tick_labels[-1] = r"$\infty$"
             rax.set_xticks(edges)
-            rax.set_xticklabels([f"{edge:g}" for edge in edges], fontsize=18)
+            labels_out = rax.set_xticklabels(tick_labels, fontsize=22 if is_slashed_energy_axis else 18)
+            if is_slashed_energy_axis:
+                for idx, label in enumerate(labels_out):
+                    label.set_rotation(45)
+                    label.set_ha("left" if idx == 0 else "right")
+                    label.set_rotation_mode("anchor")
     else:
         xlabels = []
         for block in blocks:
