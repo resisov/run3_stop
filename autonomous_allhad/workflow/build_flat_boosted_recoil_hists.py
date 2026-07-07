@@ -16,6 +16,7 @@ from autonomous_allhad.real_subset_worker import compute_weight_bundle
 RECOIL_PT_BINS = [250.0, 300.0, 350.0, 400.0, 500.0, 800.0, 1500.0]
 LOWDM_ONEBIN_LABELS = ["lowdm_inclusive"]
 SELECTED_AN17_RECOIL_BINS_1BASED = [4, 5, 8, 9, 14, 15, 16]
+SELECTED_RECOIL6_WITH_NT0_SCHEME = "boosted_an17_selected_recoil6_with_nt0_SR"
 RECOIL_BIN_LABELS = [
     f"{int(RECOIL_PT_BINS[i])}-{int(RECOIL_PT_BINS[i + 1])}"
     for i in range(len(RECOIL_PT_BINS) - 1)
@@ -542,6 +543,12 @@ def selected_an17_recoil_labels() -> list[str]:
     return labels
 
 
+def selected_recoil6_with_nt0_labels() -> list[str]:
+    labels = [f"NT0_Nb1plus_T0_W0_recoil_{recoil_label}" for recoil_label in RECOIL_BIN_LABELS]
+    labels.extend(selected_an17_recoil_labels())
+    return labels
+
+
 def selected_an17_recoil6_indices(chunk: dict[str, Any], n: int, sr_mask: np.ndarray) -> np.ndarray:
     search_indices = boosted_an17_indices(chunk, n, sr_mask)
     selected_zero_based = [idx - 1 for idx in SELECTED_AN17_RECOIL_BINS_1BASED]
@@ -552,6 +559,21 @@ def selected_an17_recoil6_indices(chunk: dict[str, Any], n: int, sr_mask: np.nda
     for search_idx, category_pos in selected_map.items():
         mask = (search_indices == search_idx) & (recoil_idx >= 0) & (recoil_idx < len(RECOIL_PT_BINS) - 1)
         out[mask] = category_pos * (len(RECOIL_PT_BINS) - 1) + recoil_idx[mask]
+    return out
+
+
+def selected_recoil6_with_nt0_indices(chunk: dict[str, Any], n: int, sr_mask: np.ndarray) -> np.ndarray:
+    base = selected_an17_recoil6_indices(chunk, n, sr_mask)
+    recoil = finite_array(chunk["met"], n, 0.0)
+    recoil_idx = np.searchsorted(np.asarray(RECOIL_PT_BINS, dtype=float), recoil, side="right") - 1
+    nb = np.asarray(chunk["nb_medium"], dtype=int)
+    nt = np.asarray(chunk["nboosted_top"], dtype=int)
+    nw = np.asarray(chunk["nboosted_w"], dtype=int)
+    out = np.full(n, -1, dtype=int)
+    prepend = sr_mask & (nb >= 1) & (nt == 0) & (nw == 0) & (recoil_idx >= 0) & (recoil_idx < len(RECOIL_PT_BINS) - 1)
+    out[prepend] = recoil_idx[prepend]
+    keep_old = base >= 0
+    out[keep_old] = len(RECOIL_BIN_LABELS) + base[keep_old]
     return out
 
 
@@ -630,15 +652,18 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                                 add_index_hist(target, search_indices, weights)
 
                     sr_mask = as_bool(sub_group["feature_SR"], inputs["n"])
-                    selected_recoil_indices = selected_an17_recoil6_indices(sub_group, inputs["n"], sr_mask)
-                    selected_scheme = "boosted_an17_selected_recoil6_SR"
-                    if is_data and not data_process_allowed(process, "SR"):
-                        note_data_exclusion(summary, selected_scheme, process, int(np.count_nonzero(selected_recoil_indices >= 0)))
-                    else:
-                        for vname, wraw in variations.items():
-                            weights = finite_array(wraw, inputs["n"], 0.0) * normv
-                            target = search_histograms.setdefault(selected_scheme, {}).setdefault(label, {}).setdefault(vname, empty_index_hist(len(selected_an17_recoil_labels())))
-                            add_index_hist(target, selected_recoil_indices, weights)
+                    selected_outputs = [
+                        ("boosted_an17_selected_recoil6_SR", selected_an17_recoil6_indices(sub_group, inputs["n"], sr_mask), len(selected_an17_recoil_labels())),
+                        (SELECTED_RECOIL6_WITH_NT0_SCHEME, selected_recoil6_with_nt0_indices(sub_group, inputs["n"], sr_mask), len(selected_recoil6_with_nt0_labels())),
+                    ]
+                    for selected_scheme, selected_recoil_indices, selected_nbin in selected_outputs:
+                        if is_data and not data_process_allowed(process, "SR"):
+                            note_data_exclusion(summary, selected_scheme, process, int(np.count_nonzero(selected_recoil_indices >= 0)))
+                        else:
+                            for vname, wraw in variations.items():
+                                weights = finite_array(wraw, inputs["n"], 0.0) * normv
+                                target = search_histograms.setdefault(selected_scheme, {}).setdefault(label, {}).setdefault(vname, empty_index_hist(selected_nbin))
+                                add_index_hist(target, selected_recoil_indices, weights)
 
                     for lowdm_region, lowdm_channel in LOWDM_REGION_MAP.items():
                         lowdm_mask = lowdm_region_mask(sub_group, lowdm_region, inputs["n"])
@@ -717,6 +742,13 @@ def main() -> int:
             "boosted_an17_selected_recoil6_SR": {
                 "bin_labels": selected_an17_recoil_labels(),
                 "selection": "feature_SR and AN17 bins 4,5,8,9,14,15,16 split into six recoil/MET bins",
+                "selected_an17_bins_1based": SELECTED_AN17_RECOIL_BINS_1BASED,
+                "recoil_pt_bins": RECOIL_PT_BINS,
+            },
+            SELECTED_RECOIL6_WITH_NT0_SCHEME: {
+                "bin_labels": selected_recoil6_with_nt0_labels(),
+                "selection": "feature_SR and prepended Nb>=1,Nt=0,NW=0 category plus AN17 bins 4,5,8,9,14,15,16, all split into six recoil/MET bins",
+                "prepended_category": "Nb>=1,Nt=0,NW=0",
                 "selected_an17_bins_1based": SELECTED_AN17_RECOIL_BINS_1BASED,
                 "recoil_pt_bins": RECOIL_PT_BINS,
             },

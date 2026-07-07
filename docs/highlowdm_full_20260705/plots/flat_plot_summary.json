@@ -212,8 +212,9 @@
       "status": "complete"
     },
     {
-      "bins": 42,
+      "bins": 48,
       "labels": [
+        "$N_{b}\\geq1$, $N_{t}=0$\n$N_{W}=0$",
         "$N_{b}=1$, $N_{t}\\geq1$\n$N_{W}=0$",
         "$N_{b}=1$, $N_{t}\\geq1$\n$N_{W}\\geq1$",
         "$N_{b}=2$, $N_{t}=1$\n$N_{W}=0$",
@@ -1743,6 +1744,6 @@
     }
   ],
   "signal_policy": "Signals are drawn only in SR plots; CR blocks exclude T2tt overlays.",
-  "source": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/highlowdm_full_20260706_flat_hists_selected_an17_recoil6_with_lowdm_variables.json",
+  "source": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/highlowdm_full_20260707_flat_hists_selected_recoil6_with_nt0_lowdm_variables.json",
   "status": "complete"
 }

@@ -47,10 +47,11 @@ SIGNAL_OVERLAYS = [
     {"key": "mStop1200_mLSP1", "label": '$m_{\\tilde{t}}=1200$ GeV, $m_{\\tilde{\\chi}^{0}_{1}}=1$ GeV', "color": "#00ff00"},
 ]
 PARTIAL_AN17_SPLIT_BINS = [4, 5, 8, 9, 14, 15, 16]
-SELECTED_AN17_RECOIL_SCHEME = "boosted_an17_selected_recoil6_SR"
+SELECTED_AN17_RECOIL_SCHEME = "boosted_an17_selected_recoil6_with_nt0_SR"
 SELECTED_AN17_RECOIL_BINS = [4, 5, 8, 9, 14, 15, 16]
 RECOIL6_LABELS = ["250-300", "300-350", "350-400", "400-500", "500-800", "800-1500"]
 SELECTED_AN17_CATEGORY_LABELS = {
+    'Nb1plus_T0_W0': '$N_{b}\\geq1$, $N_{t}=0$\n$N_{W}=0$',
     'Nb1_T1plus_W0': '$N_{b}=1$, $N_{t}\\geq1$\n$N_{W}=0$',
     'Nb1_T1plus_W1plus': '$N_{b}=1$, $N_{t}\\geq1$\n$N_{W}\\geq1$',
     'Nb2_T1_W0': '$N_{b}=2$, $N_{t}=1$\n$N_{W}=0$',
@@ -746,6 +747,16 @@ def partial_an17_search_record(payload: dict, label: str, split_bins: list[int],
     }
 
 
+def selected_recoil_category_from_label(raw: str) -> str:
+    if raw.startswith("NT0_Nb1plus_T0_W0_recoil_"):
+        return "Nb1plus_T0_W0"
+    if raw.startswith("AN17_") and "_recoil_" in raw:
+        parts = raw.split("_", 2)
+        if len(parts) == 3:
+            return parts[2].split("_recoil_")[0]
+    return ""
+
+
 def selected_an17_recoil_blocks(payload: dict) -> list[dict]:
     rec = flat_search_record(payload, SELECTED_AN17_RECOIL_SCHEME, "selected AN17 recoil", allow_signal=True)
     if not rec:
@@ -754,16 +765,14 @@ def selected_an17_recoil_blocks(payload: dict) -> list[dict]:
     raw_labels = scheme.get("bin_labels") or []
     blocks = []
     n_recoil = len(RECOIL6_LABELS)
-    for pos, bin_number in enumerate(SELECTED_AN17_RECOIL_BINS):
+    n_blocks = int(rec["nbin"]) // n_recoil
+    for pos in range(n_blocks):
         slc = slice(pos * n_recoil, (pos + 1) * n_recoil)
         if slc.stop > int(rec["nbin"]):
             continue
         category = ""
         if raw_labels and pos * n_recoil < len(raw_labels):
-            raw = raw_labels[pos * n_recoil]
-            marker = f"AN17_{bin_number}_"
-            if raw.startswith(marker):
-                category = raw[len(marker):].split("_recoil_")[0]
+            category = selected_recoil_category_from_label(str(raw_labels[pos * n_recoil]))
         label = SELECTED_AN17_CATEGORY_LABELS.get(category, category) if category else f"category {pos + 1}"
         block = {
             "groups": {group: vals[slc] for group, vals in rec["groups"].items()},

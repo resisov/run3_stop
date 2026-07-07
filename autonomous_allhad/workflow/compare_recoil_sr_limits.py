@@ -224,6 +224,7 @@ def draw_multi_overlay(variants: list[dict[str, str]], run2_path: Path, output: 
             "CR/SR N_t split": r"CR/SR split by $N_t$",
             "CR/SR N_t split + low-dM": r"CR/SR split by $N_t$ + low-$\Delta m$ SR",
             "Selected 7x6 + low-dM": r"Selected 7$\times$6 recoil categories + low-$\Delta m$ SR",
+            "Selected 8x6 + low-dM": r"Selected 8$\times$6 recoil categories + low-$\Delta m$ SR",
         }
         return mapping.get(label, label)
     for idx, spec in enumerate(variants):

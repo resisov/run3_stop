@@ -33,6 +33,11 @@
       "label": "Selected 7x6 + low-dM",
       "points": 352,
       "status": "plotted"
+    },
+    {
+      "label": "Selected 8x6 + low-dM",
+      "points": 352,
+      "status": "plotted"
     }
   ]
 }
