@@ -1,0 +1,31 @@
+{
+  "canvas_inches": [
+    10,
+    10
+  ],
+  "display_mlsp_range_gev": [
+    0,
+    1500
+  ],
+  "display_mstop_range_gev": [
+    600,
+    1500
+  ],
+  "run2_contours": "run2_sus19010_contours.json",
+  "run2_lines": {
+    "expected": "black dashed",
+    "observed": "black solid"
+  },
+  "run2_reference": "CMS SUS-19-010",
+  "run3_lines": {
+    "expected_54bin": "red solid"
+  },
+  "status": "complete",
+  "variants": [
+    {
+      "label": "54-bin Nt0 W-split + low-dM",
+      "points": 352,
+      "status": "plotted"
+    }
+  ]
+}

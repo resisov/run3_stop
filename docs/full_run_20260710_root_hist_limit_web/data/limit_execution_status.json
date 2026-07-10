@@ -1,12 +1,18 @@
 {
+  "category_blocks": 9,
   "combine_version": "v10.0.1",
   "datacards": 352,
-  "generated_at": "2026-07-10T16:20:33.572126+00:00",
+  "expanded_rmax_recovery": [
+    "mStop2500_mLSP2300"
+  ],
+  "generated_at": "2026-07-10T17:17:17.506127+00:00",
+  "highdm_search_bins": 54,
   "invalid_outputs": 0,
   "limit_root_outputs": 352,
   "method": "AsymptoticLimits",
   "missing_outputs": 0,
   "path_policy": "EOS outputs only; no AFS or system /tmp writes",
   "run_mode": "blind_expected",
+  "selected_scheme": "boosted_an17_selected_recoil6_with_nt0_wsplit_SR",
   "status": "complete"
 }
