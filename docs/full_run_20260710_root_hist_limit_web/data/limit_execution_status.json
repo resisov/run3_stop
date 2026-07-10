@@ -1,0 +1,12 @@
+{
+  "combine_version": "v10.0.1",
+  "datacards": 352,
+  "generated_at": "2026-07-10T16:20:33.572126+00:00",
+  "invalid_outputs": 0,
+  "limit_root_outputs": 352,
+  "method": "AsymptoticLimits",
+  "missing_outputs": 0,
+  "path_policy": "EOS outputs only; no AFS or system /tmp writes",
+  "run_mode": "blind_expected",
+  "status": "complete"
+}
