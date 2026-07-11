@@ -1,4 +1,5 @@
 {
+  "axis_aspect": "legacy unconstrained axis aspect; equal-aspect forcing disabled",
   "background": {
     "quantity": "log10(expected 95% CL limit on sigma/sigma_theory)",
     "range": [
