@@ -476,7 +476,15 @@ def build_root(channels: list[dict[str, Any]], signal_searchbins: dict[str, Any]
     return summary
 
 
-def datacard_text(template_root: Path, channels: list[dict[str, Any]], mass_key: str, root_summary: dict[str, Any], auto_mc_stats: int) -> str:
+def datacard_text(
+    template_root: Path,
+    channels: list[dict[str, Any]],
+    mass_key: str,
+    root_summary: dict[str, Any],
+    auto_mc_stats: int,
+    lumi_name: str = LUMI_NAME,
+    lumi_lnn: float = LUMI_LNN,
+) -> str:
     channel_names = [ch["name"] for ch in channels]
     proc = signal_process_name(mass_key)
     columns: list[tuple[str, str, int]] = []
@@ -485,7 +493,10 @@ def datacard_text(template_root: Path, channels: list[dict[str, Any]], mass_key:
         if sig_yield > 0.0:
             columns.append((channel, proc, 0))
         columns.append((channel, BACKGROUND_NAME, 1))
-    all_systs = sorted({s for ch in channels for s in (ch.get("variations") or {})})
+    signal_systs = set(
+        (((root_summary.get("signals") or {}).get(mass_key) or {}).get("shape_nuisances") or {}).keys()
+    )
+    all_systs = sorted({s for ch in channels for s in (ch.get("variations") or {})} | signal_systs)
     lines = [
         "imax * number of channels",
         "jmax * number of backgrounds",
@@ -506,9 +517,17 @@ def datacard_text(template_root: Path, channels: list[dict[str, Any]], mass_key:
         mask = []
         for channel, process, _ in columns:
             has = syst_name in (((root_summary.get("channels") or {}).get(channel) or {}).get("background_shape_nuisances") or [])
-            mask.append("1" if process == BACKGROUND_NAME and has else "-")
+            signal_channels = (
+                (((root_summary.get("signals") or {}).get(mass_key) or {}).get("shape_nuisances") or {}).get(syst_name)
+                or []
+            )
+            mask.append(
+                "1"
+                if (process == BACKGROUND_NAME and has) or (process == proc and channel in signal_channels)
+                else "-"
+            )
         lines.append(syst_name + " shape " + " ".join(mask))
-    lines.append(LUMI_NAME + " lnN " + " ".join(f"{LUMI_LNN:.3f}" for _ in columns))
+    lines.append(lumi_name + " lnN " + " ".join(f"{lumi_lnn:.3f}" for _ in columns))
     lines.extend([
         f"* autoMCStats {auto_mc_stats}",
         "# Boosted AN17 datacard: CR channels use 6-bin recoil/U_T histograms; SR uses 17 boosted top/W tagged search bins.",

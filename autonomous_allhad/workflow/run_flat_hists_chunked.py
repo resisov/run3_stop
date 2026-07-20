@@ -101,18 +101,22 @@ def merge_payloads(chunks: list[Path], output: Path, normalization: Path) -> dic
             merged = {
                 key: value
                 for key, value in payload.items()
-                if key not in {"histograms", "search_bin_histograms", "lowdm_variable_histograms", "summary", "status", "normalization"}
+                if key not in {"histograms", "search_bin_histograms", "lowdm_variable_histograms", "highdm_variable_histograms", "summary", "status", "normalization"}
             }
             merged["histograms"] = {}
             merged["search_bin_histograms"] = {}
             merged["lowdm_variable_histograms"] = {}
+            merged["highdm_variable_histograms"] = {}
         merge_tree(merged["histograms"], payload.get("histograms") or {})
         merge_tree(merged["search_bin_histograms"], payload.get("search_bin_histograms") or {})
         merge_tree(merged["lowdm_variable_histograms"], payload.get("lowdm_variable_histograms") or {})
+        merge_tree(merged["highdm_variable_histograms"], payload.get("highdm_variable_histograms") or {})
         src_summary = payload.get("summary") or {}
+        if src_summary.get("region_filter"):
+            summary["region_filter"] = src_summary["region_filter"]
         summary["events_processed"] += int(src_summary.get("events_processed") or 0)
         summary["input_roots"].extend(src_summary.get("input_roots") or [])
-        for key in ("weight_failures", "missing_sidecars"):
+        for key in ("weight_failures", "missing_sidecars", "zero_entry_roots"):
             if src_summary.get(key):
                 summary.setdefault(key, []).extend(src_summary.get(key) or [])
         merge_status(summary["scale_factor_status"], src_summary.get("scale_factor_status") or {})
@@ -139,6 +143,19 @@ def split_roots_by_size(paths: list[str], chunk_size: int) -> list[list[str]]:
     return [paths[start:start + size] for start in range(0, len(paths), size)]
 
 
+def completed_chunk_matches(path: Path, expected_roots: list[str]) -> bool:
+    if not path.exists():
+        return False
+    try:
+        payload = read_json(path)
+    except Exception:
+        return False
+    if not str(payload.get("status") or "").startswith("complete"):
+        return False
+    recorded = list((payload.get("summary") or {}).get("input_roots") or [])
+    return len(recorded) == len(expected_roots) and set(recorded) == set(expected_roots)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run flat boosted histogram builder in local chunks and merge outputs.")
     parser.add_argument("--repo", required=True)
@@ -152,6 +169,12 @@ def main() -> int:
     parser.add_argument("--step-size", type=int, default=50000)
     parser.add_argument("--python", default=sys.executable)
     parser.add_argument("--local-analysis-data", choices=["0", "1"], default="0")
+    parser.add_argument("--only-regions", nargs="+", choices=["HighDMVR_Nb1", "HighDMVR_Nb2", "HighDMVR_Nb3plus"])
+    parser.add_argument("--only-variables", nargs="+", choices=["nb", "njet", "nfatjet", "ntop", "nw", "ht", "ut", "met", "jet_pt", "fatjet_pt", "bjet_pt"])
+    parser.add_argument("--require-btag", action="store_true")
+    parser.add_argument("--distribution-only", action="store_true")
+    parser.add_argument("--only-signal-mass", nargs=2, type=int, metavar=("MSTOP", "MLSP"))
+    parser.add_argument("--resume", action="store_true")
     args = parser.parse_args()
 
     repo = Path(args.repo).resolve()
@@ -188,18 +211,36 @@ def main() -> int:
             "--step-size",
             str(args.step_size),
         ]
+        if args.only_regions:
+            cmd.extend(["--only-regions", *args.only_regions])
+        if args.only_variables:
+            cmd.extend(["--only-variables", *args.only_variables])
+        if args.distribution_only:
+            cmd.append("--distribution-only")
+        if args.require_btag:
+            cmd.append("--require-btag")
+        if args.only_signal_mass:
+            cmd.extend(["--only-signal-mass", *(str(value) for value in args.only_signal_mass)])
         proc = subprocess.Popen(cmd, cwd=str(repo), stdout=handle, stderr=subprocess.STDOUT, env=env)
         print(json.dumps({"stage": "chunk_started", "chunk": idx, "roots": len(chunk), "output": str(output), "log": str(log)}, sort_keys=True), flush=True)
         return idx, output, log, proc, handle
 
     ok = True
     finished: list[Path] = []
+    todo: list[int] = []
+    for idx, chunk in enumerate(chunks):
+        output = chunk_dir / f"chunk_{idx:03d}.json"
+        if args.resume and completed_chunk_matches(output, chunk):
+            finished.append(output)
+        else:
+            todo.append(idx)
+    print(json.dumps({"stage": "chunk_resume_scan", "reused": len(finished), "remaining": len(todo)}, sort_keys=True), flush=True)
     pending: list[tuple[int, Path, Path, subprocess.Popen[Any], Any]] = []
-    next_chunk = 0
-    while pending or next_chunk < len(chunks):
-        while next_chunk < len(chunks) and len(pending) < max_parallel:
-            pending.append(launch(next_chunk))
-            next_chunk += 1
+    next_todo = 0
+    while pending or next_todo < len(todo):
+        while next_todo < len(todo) and len(pending) < max_parallel:
+            pending.append(launch(todo[next_todo]))
+            next_todo += 1
         still: list[tuple[int, Path, Path, subprocess.Popen[Any], Any]] = []
         for idx, output, log, proc, handle in pending:
             rc = proc.poll()
@@ -213,7 +254,7 @@ def main() -> int:
             else:
                 ok = False
         pending = still
-        if pending or next_chunk < len(chunks):
+        if pending or next_todo < len(todo):
             time.sleep(5)
 
     if not ok:

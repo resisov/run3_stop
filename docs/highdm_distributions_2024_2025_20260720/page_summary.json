@@ -1,0 +1,17 @@
+{
+  "impact": {
+    "asimov_expect_signal": 1,
+    "benchmark": "mStop1250_mLSP500",
+    "json": "impacts/impacts_mStop1250_mLSP500.json",
+    "pdf": "impacts/impacts_mStop1250_mLSP500.pdf",
+    "png": "impacts/impacts_mStop1250_mLSP500.png",
+    "status": "complete"
+  },
+  "page": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highdm_distributions_2024_2025_20260720/index.html",
+  "plot_count": 349,
+  "status": "complete",
+  "years": [
+    "2024",
+    "2025"
+  ]
+}

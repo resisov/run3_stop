@@ -1,0 +1,18 @@
+{
+  "cards": 349,
+  "kinds": {
+    "CR": 108,
+    "Impact": 1,
+    "SR": 180,
+    "VR": 60
+  },
+  "missing_references": [],
+  "page": "/eos/user/t/taiwoo/run3_stop/decaf/docs/highdm_distributions_2024_2025_20260720/index.html",
+  "referenced_files": 698,
+  "status": "complete",
+  "years": {
+    "2024": 174,
+    "2025": 174,
+    "Combined": 1
+  }
+}

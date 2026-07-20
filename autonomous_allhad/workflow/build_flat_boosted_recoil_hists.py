@@ -16,8 +16,8 @@ from autonomous_allhad.real_subset_worker import compute_weight_bundle
 RECOIL_PT_BINS = [250.0, 300.0, 350.0, 400.0, 500.0, 800.0, 1500.0]
 LOWDM_ONEBIN_LABELS = ["lowdm_inclusive"]
 SELECTED_AN17_RECOIL_BINS_1BASED = [4, 5, 8, 9, 14, 15, 16]
-SELECTED_RECOIL6_WITH_NT0_SCHEME = "boosted_an17_selected_recoil6_with_nt0_SR"
-SELECTED_RECOIL6_WITH_NT0_WSPLIT_SCHEME = "boosted_an17_selected_recoil6_with_nt0_wsplit_SR"
+SELECTED_RECOIL54_SCHEME = "boosted_an17_selected_recoil6_with_nt0_wsplit_SR"
+NT0_RECOIL_CATEGORY_KEYS = ["NT0_Nb1plus_T0_W0", "NT0_Nb1plus_T0_W1plus"]
 RECOIL_BIN_LABELS = [
     f"{int(RECOIL_PT_BINS[i])}-{int(RECOIL_PT_BINS[i + 1])}"
     for i in range(len(RECOIL_PT_BINS) - 1)
@@ -36,6 +36,9 @@ BASE_REGION_VARIABLES = {
     "GCR": ("feature_GCR", "recoil_gcr"),
     "DY2E": ("feature_DY2E", "recoil_dy2e"),
     "DY2M": ("feature_DY2M", "recoil_dy2m"),
+    "HighDMVR_Nb1": ("pass_base_common", "met"),
+    "HighDMVR_Nb2": ("pass_base_common", "met"),
+    "HighDMVR_Nb3plus": ("pass_base_common", "met"),
     "SR": ("feature_SR", "met"),
     "SR_Nt1": ("feature_SR_Nt1", "met"),
 }
@@ -52,6 +55,9 @@ DATA_PROCESS_BY_REGION = {
     "GCR": "EGamma",
     "DY2E": "EGamma",
     "DY2M": "Muon",
+    "HighDMVR_Nb1": "JetMET",
+    "HighDMVR_Nb2": "JetMET",
+    "HighDMVR_Nb3plus": "JetMET",
     "SR": "JetMET",
     "SR_Nt1": "JetMET",
 }
@@ -86,6 +92,7 @@ LOWDM_READ_BRANCHES = [
     "pass_zero_tau", "pass_no_veto_leptons", "pass_one_veto_lepton", "pass_mt_100",
     "pass_met_250", "pass_ht_300", "pass_ht_photon_300", "pass_ht_lepton_300",
     "pass_open_pre", "pass_qcd_open", "pass_dphi123_0p1",
+    "j1_met_dphi", "j2_met_dphi", "j3_met_dphi", "j4_met_dphi",
     "met", "ht", "njet", "nb_medium_lowdm", "nb_loose_lowdm", "n_photon_medium",
     "njet_photon_clean", "nb_photon_clean", "ht_photon_clean",
     "njet_lepton_clean", "nb_lepton_clean", "ht_lepton_clean",
@@ -135,7 +142,74 @@ LOWDM_REGION_VARIABLES = {
     "DY2E": COMMON_LOWDM_VARIABLES + ["recoil_dy2e", "mee", "njet_lepton_clean", "nb_lepton_clean", "ht_lepton_clean"],
     "DY2M": COMMON_LOWDM_VARIABLES + ["recoil_dy2m", "mmm", "njet_lepton_clean", "nb_lepton_clean", "ht_lepton_clean"],
 }
-READ_BRANCHES = sorted(set(WEIGHT_BRANCHES + SEARCH_BIN_BRANCHES + LOWDM_READ_BRANCHES + [spec["branch"] for spec in LOWDM_VARIABLE_SPECS.values()] + [b for pair in REGION_VARIABLES.values() for b in pair]))
+HIGHDM_DISTRIBUTION_VARIABLE_SPECS = {
+    "nb": {
+        "branch": "nb_medium",
+        "branch_by_region": {"GCR": "nb_photon_clean", "DY2E": "nb_lepton_clean", "DY2M": "nb_lepton_clean"},
+        "bins": [-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 6.5],
+        "xlabel": r"$N_{b}$",
+    },
+    "njet": {
+        "branch": "njet",
+        "branch_by_region": {"GCR": "njet_photon_clean", "DY2E": "njet_lepton_clean", "DY2M": "njet_lepton_clean"},
+        "bins": [-0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 8.5, 10.5, 12.5, 16.5],
+        "xlabel": r"$N_{j}$",
+    },
+    "nfatjet": {
+        "branch": "nfj",
+        "bins": [-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 6.5],
+        "xlabel": r"$N_{fj}$",
+    },
+    "ntop": {"branch": "nboosted_top", "bins": [-0.5, 0.5, 1.5, 2.5, 3.5, 5.5], "xlabel": r"$N_{top}$"},
+    "nw": {"branch": "nboosted_w", "bins": [-0.5, 0.5, 1.5, 2.5, 3.5, 5.5], "xlabel": r"$N_{W}$"},
+    "ht": {
+        "branch": "ht",
+        "branch_by_region": {"GCR": "ht_photon_clean", "DY2E": "ht_lepton_clean", "DY2M": "ht_lepton_clean"},
+        "bins": [0, 300, 500, 700, 900, 1200, 1500, 2000, 2500, 3000],
+        "xlabel": r"$H_{T}$ (GeV)",
+    },
+    "ut": {
+        "branch": "met",
+        "branch_by_region": {"GCR": "recoil_gcr", "DY2E": "recoil_dy2e", "DY2M": "recoil_dy2m"},
+        "regions": ["LLCR", "QCDCR", "GCR", "DY2E", "DY2M"],
+        "bins": [250, 300, 350, 400, 500, 650, 800, 1000, 1500],
+        "xlabel": r"$U_{T}$ (GeV)",
+    },
+    "met": {"branch": "met", "bins": [250, 300, 350, 400, 500, 650, 800, 1000, 1500], "xlabel": r"$p_{T}^{miss}$ (GeV)"},
+    "jet_pt": {
+        "branch": "j1pt",
+        "bins": [20, 30, 40, 50, 70, 100, 150, 200, 300, 500, 800, 1200, 1600],
+        "xlabel": r"Leading Jet $p_{T}$ (GeV)",
+    },
+    "fatjet_pt": {
+        "branch": "fj1pt",
+        "bins": [200, 250, 300, 350, 400, 500, 650, 800, 1000, 1500],
+        "xlabel": r"Leading FatJet $p_{T}$ (GeV)",
+    },
+    "bjet_pt": {
+        "branch": "good_jet_pt", "mask_branch": "good_jet_b_medium", "source": "masked_first",
+        "bins": [20, 30, 40, 50, 70, 100, 150, 200, 300, 500, 800, 1200],
+        "xlabel": r"Leading b-jet $p_{T}$ (GeV)",
+    },
+}
+
+HIGHDM_CR_REGIONS = ["LLCR", "QCDCR", "GCR", "DY2E", "DY2M"]
+HIGHDM_VR_REGIONS = ["HighDMVR_Nb1", "HighDMVR_Nb2", "HighDMVR_Nb3plus"]
+HIGHDM_SR_CATEGORY_KEYS = [
+    "SR_Nb1plus_T0_W0", "SR_Nb1plus_T0_W1plus",
+    "SR_Nb1_T1plus_W0", "SR_Nb1_T1plus_W1plus",
+    "SR_Nb2_T1_W0", "SR_Nb2_T1_W1",
+    "SR_Nb3plus_T1_W0", "SR_Nb3plus_T1_W1", "SR_Nb3plus_T2_W0",
+]
+
+READ_BRANCHES = sorted(set(
+    WEIGHT_BRANCHES + SEARCH_BIN_BRANCHES + LOWDM_READ_BRANCHES
+    + [spec["branch"] for spec in LOWDM_VARIABLE_SPECS.values()]
+    + [spec["branch"] for spec in HIGHDM_DISTRIBUTION_VARIABLE_SPECS.values()]
+    + [spec["mask_branch"] for spec in HIGHDM_DISTRIBUTION_VARIABLE_SPECS.values() if spec.get("mask_branch")]
+    + [branch for spec in HIGHDM_DISTRIBUTION_VARIABLE_SPECS.values() for branch in (spec.get("branch_by_region") or {}).values()]
+    + [b for pair in REGION_VARIABLES.values() for b in pair]
+))
 
 
 def read_json(path: Path) -> Any:
@@ -148,6 +222,16 @@ def write_json(path: Path, payload: Any) -> None:
 
 
 MAX_ABS_HIST_WEIGHT = 1.0e12
+SIGNAL_BTAG_EFFICIENCY_DATASETS = {
+    600: "SMS-2Stop_Par-mStop-600_TuneCP5_13p6TeV_madgraph-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2.futures",
+    1000: "SMS-2Stop_Par-mStop-1000_TuneCP5_13p6TeV_madgraph-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+    1500: "SMS-2Stop_Par-mStop-1500_TuneCP5_13p6TeV_madgraph-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2.futures",
+}
+
+
+def signal_btag_efficiency_dataset(mstop: int) -> tuple[int, str]:
+    anchor = min(SIGNAL_BTAG_EFFICIENCY_DATASETS, key=lambda value: (abs(value - int(mstop)), value))
+    return anchor, SIGNAL_BTAG_EFFICIENCY_DATASETS[anchor]
 
 
 def finite_array(values: Any, n: int, fill: float = 0.0) -> np.ndarray:
@@ -370,6 +454,34 @@ def add_hist(target: dict[str, Any], values: np.ndarray, weights: np.ndarray, ma
 
 
 def region_mask(chunk: dict[str, Any], region: str, flag: str, n: int) -> np.ndarray:
+    if region.startswith("HighDMVR_"):
+        j1 = float_field(chunk, "j1_met_dphi", n, 999.0)
+        j2 = float_field(chunk, "j2_met_dphi", n, 999.0)
+        j3 = float_field(chunk, "j3_met_dphi", n, 999.0)
+        j4 = float_field(chunk, "j4_met_dphi", n, 999.0)
+        medium_dphi = (
+            (j1 > 0.5)
+            & (j2 > 0.15)
+            & (j3 > 0.15)
+            & ((j2 < 0.5) | (j3 < 0.5) | (j4 < 0.5))
+        )
+        nb = int_field(chunk, "nb_medium", n)
+        nb_mask = {
+            "HighDMVR_Nb1": nb == 1,
+            "HighDMVR_Nb2": nb == 2,
+            "HighDMVR_Nb3plus": nb >= 3,
+        }[region]
+        return (
+            bool_field(chunk, "pass_base_common", n)
+            & bool_field(chunk, "pass_signal_trigger", n)
+            & bool_field(chunk, "pass_zero_tau", n)
+            & bool_field(chunk, "pass_no_veto_leptons", n)
+            & (int_field(chunk, "njet", n) >= 5)
+            & nb_mask
+            & bool_field(chunk, "pass_met_250", n)
+            & bool_field(chunk, "pass_ht_300", n)
+            & medium_dphi
+        )
     base = as_bool(chunk[flag], n)
     if region.endswith("_Nt0"):
         return base & (np.asarray(chunk["nboosted_top"], dtype=int) == 0)
@@ -488,6 +600,126 @@ def lowdm_variable_values(chunk: dict[str, Any], spec: dict[str, Any], n: int) -
     return finite_array(chunk[branch], n, fill)
 
 
+def highdm_base_region(region: str) -> str:
+    return "SR" if region.startswith("SR_") else region
+
+
+def highdm_distribution_masks(chunk: dict[str, Any], n: int) -> dict[str, np.ndarray]:
+    masks: dict[str, np.ndarray] = {}
+    for region in HIGHDM_CR_REGIONS + HIGHDM_VR_REGIONS:
+        flag, _variable = REGION_VARIABLES[region]
+        masks[region] = region_mask(chunk, region, flag, n)
+
+    sr = bool_field(chunk, "feature_SR", n)
+    nb = int_field(chunk, "nb_medium", n)
+    nt = int_field(chunk, "nboosted_top", n)
+    nw = int_field(chunk, "nboosted_w", n)
+    rules = [
+        (nb >= 1) & (nt == 0) & (nw == 0),
+        (nb >= 1) & (nt == 0) & (nw >= 1),
+        (nb == 1) & (nt >= 1) & (nw == 0),
+        (nb == 1) & (nt >= 1) & (nw >= 1),
+        (nb == 2) & (nt == 1) & (nw == 0),
+        (nb == 2) & (nt == 1) & (nw == 1),
+        (nb >= 3) & (nt == 1) & (nw == 0),
+        (nb >= 3) & (nt == 1) & (nw == 1),
+        (nb >= 3) & (nt == 2) & (nw == 0),
+    ]
+    for key, category_mask in zip(HIGHDM_SR_CATEGORY_KEYS, rules):
+        masks[key] = sr & category_mask
+    return masks
+
+
+def highdm_variable_values(
+    chunk: dict[str, Any], region: str, spec: dict[str, Any], n: int
+) -> tuple[str, Any] | None:
+    base_region = highdm_base_region(region)
+    allowed_regions = spec.get("regions")
+    if allowed_regions and base_region not in allowed_regions:
+        return None
+    branch = (spec.get("branch_by_region") or {}).get(base_region, spec["branch"])
+    if branch not in chunk:
+        return None
+    source = spec.get("source", "scalar")
+    if source == "count":
+        return "scalar", np.asarray(ak.num(chunk[branch], axis=1), dtype=float)
+    if source == "all":
+        return "jagged", chunk[branch]
+    if source == "masked":
+        mask_branch = spec.get("mask_branch")
+        if not mask_branch or mask_branch not in chunk:
+            return None
+        return "jagged", chunk[branch][ak.values_astype(chunk[mask_branch], np.bool_)]
+    if source == "masked_first":
+        mask_branch = spec.get("mask_branch")
+        if not mask_branch or mask_branch not in chunk:
+            return None
+        selected = chunk[branch][ak.values_astype(chunk[mask_branch], np.bool_)]
+        fill = float(spec.get("fill", -99.0))
+        return "scalar", finite_array(ak.fill_none(ak.firsts(selected), fill), n, fill)
+    return "scalar", finite_array(chunk[branch], n, float(spec.get("fill", -99.0)))
+
+
+def add_jagged_binned_hist(
+    target: dict[str, Any], values: Any, weights: np.ndarray, mask: np.ndarray, edges: list[float]
+) -> None:
+    event_mask = np.asarray(mask, dtype=bool)
+    selected = values[event_mask]
+    if len(selected) == 0:
+        return
+    selected_weights = ak.Array(np.asarray(weights, dtype=float)[event_mask])
+    _, object_weights = ak.broadcast_arrays(selected, selected_weights)
+    flat_values = np.asarray(ak.to_numpy(ak.flatten(selected, axis=1)), dtype=float)
+    flat_weights = np.asarray(ak.to_numpy(ak.flatten(object_weights, axis=1)), dtype=float)
+    fill_mask = np.ones(len(flat_values), dtype=bool)
+    add_binned_hist(target, flat_values, flat_weights, fill_mask, edges)
+
+
+def fill_highdm_distribution_histograms(
+    chunk: dict[str, Any],
+    variations: dict[str, Any],
+    normv: np.ndarray,
+    label: str,
+    process: str,
+    is_data: bool,
+    output: dict[str, Any],
+    summary: dict[str, Any],
+    only_regions: list[str] | None = None,
+    only_variables: list[str] | None = None,
+) -> None:
+    n = len(normv)
+    masks = highdm_distribution_masks(chunk, n)
+    if only_regions:
+        requested = set(only_regions)
+        masks = {region: mask for region, mask in masks.items() if region in requested}
+    for region, region_event_mask in masks.items():
+        data_region = "SR" if region.startswith("SR_") else region
+        if is_data and not data_process_allowed(process, data_region):
+            note_data_exclusion(summary, region, process, int(np.count_nonzero(region_event_mask)))
+            continue
+        if not np.any(region_event_mask):
+            continue
+        for variable, spec in HIGHDM_DISTRIBUTION_VARIABLE_SPECS.items():
+            if only_variables and variable not in only_variables:
+                continue
+            prepared = highdm_variable_values(chunk, region, spec, n)
+            if prepared is None:
+                continue
+            value_kind, values = prepared
+            for variation_name, raw_weights in variations.items():
+                weights = finite_array(raw_weights, n, 0.0) * normv
+                target = (
+                    output.setdefault(region, {})
+                    .setdefault(variable, {})
+                    .setdefault(label, {})
+                    .setdefault(variation_name, empty_binned_hist(spec["bins"]))
+                )
+                if value_kind == "jagged":
+                    add_jagged_binned_hist(target, values, weights, region_event_mask, spec["bins"])
+                else:
+                    add_binned_hist(target, values, weights, region_event_mask, spec["bins"])
+
+
 def add_index_hist(target: dict[str, Any], indices: np.ndarray, weights: np.ndarray) -> None:
     nbin = len(target["sumw"])
     idx = np.asarray(indices, dtype=int)
@@ -544,15 +776,12 @@ def selected_an17_recoil_labels() -> list[str]:
     return labels
 
 
-def selected_recoil6_with_nt0_labels() -> list[str]:
-    labels = [f"NT0_Nb1plus_T0_W0_recoil_{recoil_label}" for recoil_label in RECOIL_BIN_LABELS]
-    labels.extend(selected_an17_recoil_labels())
-    return labels
-
-
-def selected_recoil6_with_nt0_wsplit_labels() -> list[str]:
-    labels = [f"NT0_Nb1plus_T0_W0_recoil_{recoil_label}" for recoil_label in RECOIL_BIN_LABELS]
-    labels.extend(f"NT0_Nb1plus_T0_W1plus_recoil_{recoil_label}" for recoil_label in RECOIL_BIN_LABELS)
+def selected_an17_recoil54_labels() -> list[str]:
+    labels = [
+        f"{category}_recoil_{recoil_label}"
+        for category in NT0_RECOIL_CATEGORY_KEYS
+        for recoil_label in RECOIL_BIN_LABELS
+    ]
     labels.extend(selected_an17_recoil_labels())
     return labels
 
@@ -570,40 +799,31 @@ def selected_an17_recoil6_indices(chunk: dict[str, Any], n: int, sr_mask: np.nda
     return out
 
 
-def selected_recoil6_with_nt0_indices(chunk: dict[str, Any], n: int, sr_mask: np.ndarray) -> np.ndarray:
-    base = selected_an17_recoil6_indices(chunk, n, sr_mask)
+def selected_an17_recoil54_indices(chunk: dict[str, Any], n: int, sr_mask: np.ndarray) -> np.ndarray:
     recoil = finite_array(chunk["met"], n, 0.0)
     recoil_idx = np.searchsorted(np.asarray(RECOIL_PT_BINS, dtype=float), recoil, side="right") - 1
-    nb = np.asarray(chunk["nb_medium"], dtype=int)
-    nt = np.asarray(chunk["nboosted_top"], dtype=int)
-    nw = np.asarray(chunk["nboosted_w"], dtype=int)
-    out = np.full(n, -1, dtype=int)
-    prepend = sr_mask & (nb >= 1) & (nt == 0) & (nw == 0) & (recoil_idx >= 0) & (recoil_idx < len(RECOIL_PT_BINS) - 1)
-    out[prepend] = recoil_idx[prepend]
-    keep_old = base >= 0
-    out[keep_old] = len(RECOIL_BIN_LABELS) + base[keep_old]
-    return out
-
-
-def selected_recoil6_with_nt0_wsplit_indices(chunk: dict[str, Any], n: int, sr_mask: np.ndarray) -> np.ndarray:
-    base = selected_an17_recoil6_indices(chunk, n, sr_mask)
-    recoil = finite_array(chunk["met"], n, 0.0)
-    recoil_idx = np.searchsorted(np.asarray(RECOIL_PT_BINS, dtype=float), recoil, side="right") - 1
-    nb = np.asarray(chunk["nb_medium"], dtype=int)
-    nt = np.asarray(chunk["nboosted_top"], dtype=int)
-    nw = np.asarray(chunk["nboosted_w"], dtype=int)
-    out = np.full(n, -1, dtype=int)
     valid_recoil = (recoil_idx >= 0) & (recoil_idx < len(RECOIL_PT_BINS) - 1)
-    nt0_w0 = sr_mask & (nb >= 1) & (nt == 0) & (nw == 0) & valid_recoil
-    nt0_w1 = sr_mask & (nb >= 1) & (nt == 0) & (nw >= 1) & valid_recoil
-    out[nt0_w0] = recoil_idx[nt0_w0]
-    out[nt0_w1] = len(RECOIL_BIN_LABELS) + recoil_idx[nt0_w1]
-    keep_old = base >= 0
-    out[keep_old] = 2 * len(RECOIL_BIN_LABELS) + base[keep_old]
+    nb = np.asarray(chunk["nb_medium"], dtype=int)
+    nt = np.asarray(chunk["nboosted_top"], dtype=int)
+    nw = np.asarray(chunk["nboosted_w"], dtype=int)
+    out = np.full(n, -1, dtype=int)
+
+    nt0_categories = [
+        (nb >= 1) & (nt == 0) & (nw == 0),
+        (nb >= 1) & (nt == 0) & (nw >= 1),
+    ]
+    bins_per_category = len(RECOIL_PT_BINS) - 1
+    for category_pos, category_mask in enumerate(nt0_categories):
+        mask = sr_mask & valid_recoil & category_mask
+        out[mask] = category_pos * bins_per_category + recoil_idx[mask]
+
+    selected = selected_an17_recoil6_indices(chunk, n, sr_mask)
+    selected_mask = selected >= 0
+    out[selected_mask] = len(NT0_RECOIL_CATEGORY_KEYS) * bins_per_category + selected[selected_mask]
     return out
 
 
-def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: dict[str, Any], search_histograms: dict[str, Any], lowdm_variable_histograms: dict[str, Any], summary: dict[str, Any], step_size: int) -> None:
+def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: dict[str, Any], search_histograms: dict[str, Any], lowdm_variable_histograms: dict[str, Any], highdm_variable_histograms: dict[str, Any], summary: dict[str, Any], step_size: int, only_regions: list[str] | None = None, require_btag: bool = False, distribution_only: bool = False, only_variables: list[str] | None = None, only_signal_mass: tuple[int, int] | None = None) -> None:
     meta_path = root_path.with_suffix(".json")
     if not meta_path.exists():
         summary.setdefault("missing_sidecars", []).append(str(root_path))
@@ -611,6 +831,9 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
     meta = read_json(meta_path)
     with uproot.open(root_path) as root_file:
         tree = root_file["Events"]
+        if tree.num_entries == 0:
+            summary.setdefault("zero_entry_roots", []).append(str(root_path))
+            return
         present = set(tree.keys())
         branches = [b for b in READ_BRANCHES if b in present]
         for chunk in tree.iterate(branches, step_size=step_size, library="ak"):
@@ -627,6 +850,8 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                     mstops = np.asarray(sub["mStop"], dtype=int)
                     mlsps = np.asarray(sub["mLSP"], dtype=int)
                     pairs = sorted(set(zip(mstops.tolist(), mlsps.tolist())))
+                    if only_signal_mass is not None:
+                        pairs = [pair for pair in pairs if pair == only_signal_mass]
                     subgroups = [(mstops == ms) & (mlsps == ml) for ms, ml in pairs]
                 else:
                     subgroups = [np.ones(int(np.count_nonzero(mask_ds)), dtype=bool)]
@@ -635,25 +860,53 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                     if not np.any(mask_group):
                         continue
                     sub_group = {name: arr[mask_group] for name, arr in sub.items()}
+                    original_n = len(sub_group["dataset_id"])
+                    if only_regions:
+                        selected = np.zeros(original_n, dtype=bool)
+                        for region in only_regions:
+                            flag, _var = REGION_VARIABLES[region]
+                            selected |= region_mask(sub_group, region, flag, original_n)
+                        if not np.any(selected):
+                            summary["events_processed"] = int(summary.get("events_processed", 0)) + original_n
+                            continue
+                        sub_group = {name: arr[selected] for name, arr in sub_group.items()}
                     arrays, inputs = flat_arrays_for_weights(sub_group)
                     year_vals = np.asarray(sub_group["year"], dtype=int)
                     year = str(int(year_vals[0])) if len(year_vals) else "2024"
+                    correction_dataset = dataset
+                    btag_efficiency_anchor = None
+                    if is_signal:
+                        mstop_values = np.asarray(sub_group["mStop"], dtype=int)
+                        btag_efficiency_anchor, correction_dataset = signal_btag_efficiency_dataset(
+                            int(mstop_values[0]) if len(mstop_values) else 1000
+                        )
                     try:
                         _gen, variations, status = compute_weight_bundle(
-                            arrays, repo, dataset, process, year, inputs["n"],
+                            arrays, repo, correction_dataset, process, year, inputs["n"],
                             inputs["jet_pt"], inputs["jet_eta"], inputs["jet_hadflav"], inputs["b_med"],
                             inputs["e_eta"], inputs["e_delta_eta_sc"], inputs["e_pt"], inputs["e_phi"], inputs["e_veto"], inputs["e_med"], inputs["n_e_veto"], inputs["n_e_med"],
                             inputs["m_eta"], inputs["m_pt"], inputs["m_phi"], inputs["m_loose"], inputs["m_med"], inputs["n_m_loose"], inputs["n_m_med"],
                             inputs["p_eta"], inputs["p_pt"], inputs["p_phi"], inputs["p_med"], inputs["gcr_mask"],
                         )
+                        if is_signal:
+                            btag_status = (status.get("components") or {}).get("btagSF") or {}
+                            btag_status.update({
+                                "efficiency_anchor_mstop": btag_efficiency_anchor,
+                                "efficiency_dataset": correction_dataset,
+                                "source_dataset": dataset,
+                            })
                     except Exception as exc:
                         summary.setdefault("weight_failures", []).append({"root": str(root_path), "dataset_id": dsid, "dataset": dataset, "process": process, "label": sample_label(process, is_data, is_signal, sub_group), "error": f"{type(exc).__name__}: {exc}"[:500]})
                         variations = {"nominal": np.asarray(sub_group["gen_weight"], dtype=float)} if not is_data else {"nominal": np.ones(inputs["n"], dtype=float)}
                         status = {"applied": False, "error": "fallback_raw_gen_weight"}
+                    btag_status = (status.get("components") or {}).get("btagSF") or {}
+                    if require_btag and not is_data and not btag_status.get("applied"):
+                        raise RuntimeError(f"Required btagSF is unavailable for {dataset}: {btag_status}")
                     normv = norm_vector(norm, sub_group, dsid, is_data, is_signal)
                     label = sample_label(process, is_data, is_signal, sub_group)
                     summary.setdefault("scale_factor_status", {}).setdefault(label, status)
-                    for region, (flag, var) in REGION_VARIABLES.items():
+                    active_regions = {region: REGION_VARIABLES[region] for region in only_regions} if only_regions else REGION_VARIABLES
+                    for region, (flag, var) in active_regions.items():
                         rmask = region_mask(sub_group, region, flag, inputs["n"])
                         if is_data and not data_process_allowed(process, region):
                             note_data_exclusion(summary, region, process, int(np.count_nonzero(rmask)))
@@ -663,6 +916,17 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                             weights = finite_array(wraw, inputs["n"], 0.0) * normv
                             target = histograms.setdefault(region, {}).setdefault(label, {}).setdefault(vname, empty_hist())
                             add_hist(target, values, weights, rmask)
+                    fill_highdm_distribution_histograms(
+                        sub_group, variations, normv, label, process, is_data,
+                        highdm_variable_histograms, summary, only_regions,
+                        only_variables,
+                    )
+                    if distribution_only:
+                        summary["events_processed"] = int(summary.get("events_processed", 0)) + original_n
+                        continue
+                    if only_regions:
+                        summary["events_processed"] = int(summary.get("events_processed", 0)) + original_n
+                        continue
                     for scheme, flag_name, data_region in [
                         ("boosted_an_17_SR", "feature_SR", "SR"),
                         ("boosted_an_17_SR_Nt1", "feature_SR_Nt1", "SR_Nt1"),
@@ -678,19 +942,24 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                                 add_index_hist(target, search_indices, weights)
 
                     sr_mask = as_bool(sub_group["feature_SR"], inputs["n"])
-                    selected_outputs = [
-                        ("boosted_an17_selected_recoil6_SR", selected_an17_recoil6_indices(sub_group, inputs["n"], sr_mask), len(selected_an17_recoil_labels())),
-                        (SELECTED_RECOIL6_WITH_NT0_SCHEME, selected_recoil6_with_nt0_indices(sub_group, inputs["n"], sr_mask), len(selected_recoil6_with_nt0_labels())),
-                        (SELECTED_RECOIL6_WITH_NT0_WSPLIT_SCHEME, selected_recoil6_with_nt0_wsplit_indices(sub_group, inputs["n"], sr_mask), len(selected_recoil6_with_nt0_wsplit_labels())),
-                    ]
-                    for selected_scheme, selected_recoil_indices, selected_nbin in selected_outputs:
-                        if is_data and not data_process_allowed(process, "SR"):
-                            note_data_exclusion(summary, selected_scheme, process, int(np.count_nonzero(selected_recoil_indices >= 0)))
-                        else:
-                            for vname, wraw in variations.items():
-                                weights = finite_array(wraw, inputs["n"], 0.0) * normv
-                                target = search_histograms.setdefault(selected_scheme, {}).setdefault(label, {}).setdefault(vname, empty_index_hist(selected_nbin))
-                                add_index_hist(target, selected_recoil_indices, weights)
+                    selected_recoil_indices = selected_an17_recoil6_indices(sub_group, inputs["n"], sr_mask)
+                    selected_scheme = "boosted_an17_selected_recoil6_SR"
+                    if is_data and not data_process_allowed(process, "SR"):
+                        note_data_exclusion(summary, selected_scheme, process, int(np.count_nonzero(selected_recoil_indices >= 0)))
+                    else:
+                        for vname, wraw in variations.items():
+                            weights = finite_array(wraw, inputs["n"], 0.0) * normv
+                            target = search_histograms.setdefault(selected_scheme, {}).setdefault(label, {}).setdefault(vname, empty_index_hist(len(selected_an17_recoil_labels())))
+                            add_index_hist(target, selected_recoil_indices, weights)
+
+                    selected_recoil54_indices = selected_an17_recoil54_indices(sub_group, inputs["n"], sr_mask)
+                    if is_data and not data_process_allowed(process, "SR"):
+                        note_data_exclusion(summary, SELECTED_RECOIL54_SCHEME, process, int(np.count_nonzero(selected_recoil54_indices >= 0)))
+                    else:
+                        for vname, wraw in variations.items():
+                            weights = finite_array(wraw, inputs["n"], 0.0) * normv
+                            target = search_histograms.setdefault(SELECTED_RECOIL54_SCHEME, {}).setdefault(label, {}).setdefault(vname, empty_index_hist(len(selected_an17_recoil54_labels())))
+                            add_index_hist(target, selected_recoil54_indices, weights)
 
                     for lowdm_region, lowdm_channel in LOWDM_REGION_MAP.items():
                         lowdm_mask = lowdm_region_mask(sub_group, lowdm_region, inputs["n"])
@@ -740,23 +1009,44 @@ def main() -> int:
     parser.add_argument("--normalization", required=True)
     parser.add_argument("--output", required=True)
     parser.add_argument("--step-size", type=int, default=200000)
+    parser.add_argument("--only-regions", nargs="+", choices=sorted(REGION_VARIABLES))
+    parser.add_argument("--require-btag", action="store_true")
+    parser.add_argument("--distribution-only", action="store_true")
+    parser.add_argument("--only-signal-mass", nargs=2, type=int, metavar=("MSTOP", "MLSP"))
+    parser.add_argument("--only-variables", nargs="+", choices=sorted(HIGHDM_DISTRIBUTION_VARIABLE_SPECS))
     args = parser.parse_args()
     repo = Path(args.repo).resolve()
     norm = read_json(Path(args.normalization))
     histograms: dict[str, Any] = {}
     search_histograms: dict[str, Any] = {}
     lowdm_variable_histograms: dict[str, Any] = {}
-    summary: dict[str, Any] = {"events_processed": 0, "input_roots": []}
+    highdm_variable_histograms: dict[str, Any] = {}
+    summary: dict[str, Any] = {"events_processed": 0, "input_roots": [], "region_filter": args.only_regions, "variable_filter": args.only_variables}
     for root_path in expand_roots(args.inputs):
         if root_path.name.startswith("validation") or not root_path.exists():
             continue
         summary["input_roots"].append(str(root_path))
-        process_root(repo, root_path, norm, histograms, search_histograms, lowdm_variable_histograms, summary, args.step_size)
+        process_root(
+            repo,
+            root_path,
+            norm,
+            histograms,
+            search_histograms,
+            lowdm_variable_histograms,
+            highdm_variable_histograms,
+            summary,
+            args.step_size,
+            args.only_regions,
+            args.require_btag,
+            args.distribution_only,
+            args.only_variables,
+            tuple(args.only_signal_mass) if args.only_signal_mass else None,
+        )
     payload = {
         "schema_version": "flat_boosted_recoil_hists_v1",
         "status": "complete" if not summary.get("weight_failures") else "complete_with_weight_fallbacks",
         "recoil_pt_bins": RECOIL_PT_BINS,
-        "regions": REGION_VARIABLES,
+        "regions": {region: REGION_VARIABLES[region] for region in args.only_regions} if args.only_regions else REGION_VARIABLES,
         "ntop_split_policy": {
             "status": "included",
             "axis": "nboosted_top",
@@ -772,19 +1062,12 @@ def main() -> int:
                 "selected_an17_bins_1based": SELECTED_AN17_RECOIL_BINS_1BASED,
                 "recoil_pt_bins": RECOIL_PT_BINS,
             },
-            SELECTED_RECOIL6_WITH_NT0_SCHEME: {
-                "bin_labels": selected_recoil6_with_nt0_labels(),
-                "selection": "feature_SR and prepended Nb>=1,Nt=0,NW=0 category plus AN17 bins 4,5,8,9,14,15,16, all split into six recoil/MET bins",
-                "prepended_category": "Nb>=1,Nt=0,NW=0",
+            SELECTED_RECOIL54_SCHEME: {
+                "bin_labels": selected_an17_recoil54_labels(),
+                "selection": "feature_SR, categories Nb>=1,Nt=0,NW=0 and Nb>=1,Nt=0,NW>=1, followed by selected AN17 bins 4,5,8,9,14,15,16, all split into six recoil/MET bins",
                 "selected_an17_bins_1based": SELECTED_AN17_RECOIL_BINS_1BASED,
                 "recoil_pt_bins": RECOIL_PT_BINS,
-            },
-            SELECTED_RECOIL6_WITH_NT0_WSPLIT_SCHEME: {
-                "bin_labels": selected_recoil6_with_nt0_wsplit_labels(),
-                "selection": "feature_SR and prepended Nb>=1,Nt=0,NW=0 plus Nb>=1,Nt=0,NW>=1 categories plus AN17 bins 4,5,8,9,14,15,16, all split into six recoil/MET bins",
-                "prepended_categories": ["Nb>=1,Nt=0,NW=0", "Nb>=1,Nt=0,NW>=1"],
-                "selected_an17_bins_1based": SELECTED_AN17_RECOIL_BINS_1BASED,
-                "recoil_pt_bins": RECOIL_PT_BINS,
+                "source_scheme_for_existing_42_bins": "boosted_an17_selected_recoil6_SR",
             },
             **{channel: {"bin_labels": LOWDM_ONEBIN_LABELS, "selection": f"lowdm_common_and_{region}", "delta_m": "low", "region": region} for region, channel in LOWDM_REGION_MAP.items()},
         },
@@ -794,6 +1077,12 @@ def main() -> int:
             "regions": LOWDM_REGION_MAP,
             "note": "Low-dM uses the same CR/SR region names as high-dM: LLCR, QCDCR, GCR, DY2E, DY2M, SR. Current flat skim lacks dilepton charge and recoil-phi branches, so DY low-dM CRs are provisional Z-window/dilepton-count/recoil selections in this post-skim builder; exact OS and recoil-phi based CR flags should be added to the next skim schema.",
         },
+        "highdm_distribution_variable_specs": HIGHDM_DISTRIBUTION_VARIABLE_SPECS,
+        "highdm_distribution_regions": {
+            "control": HIGHDM_CR_REGIONS,
+            "validation": HIGHDM_VR_REGIONS,
+            "signal_categories": HIGHDM_SR_CATEGORY_KEYS,
+        },
         "lowdm_variable_specs": LOWDM_VARIABLE_SPECS,
         "lowdm_region_variables": LOWDM_REGION_VARIABLES,
         "normalization": str(args.normalization),
@@ -802,9 +1091,10 @@ def main() -> int:
         "histograms": histograms,
         "search_bin_histograms": search_histograms,
         "lowdm_variable_histograms": lowdm_variable_histograms,
+        "highdm_variable_histograms": highdm_variable_histograms,
     }
     write_json(Path(args.output), payload)
-    print(json.dumps({"status": payload["status"], "input_roots": len(summary["input_roots"]), "events_processed": summary["events_processed"], "regions": len(histograms), "search_bin_schemes": len(search_histograms), "lowdm_variable_regions": len(lowdm_variable_histograms), "output": args.output}, sort_keys=True))
+    print(json.dumps({"status": payload["status"], "input_roots": len(summary["input_roots"]), "events_processed": summary["events_processed"], "regions": len(histograms), "search_bin_schemes": len(search_histograms), "lowdm_variable_regions": len(lowdm_variable_histograms), "highdm_variable_regions": len(highdm_variable_histograms), "output": args.output}, sort_keys=True))
     return 0 if payload["status"] == "complete" else 2
 
 
