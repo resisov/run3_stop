@@ -1,0 +1,32 @@
+{
+  "dimension_mismatches": [],
+  "missing_pairs": [],
+  "small_files": [],
+  "status": "complete",
+  "years": {
+    "2024": {
+      "figure_size_inches": [
+        [
+          12.0,
+          10.0
+        ]
+      ],
+      "pdf_count": 174,
+      "png_count": 174,
+      "summary_count": 174,
+      "summary_status": "complete"
+    },
+    "2025": {
+      "figure_size_inches": [
+        [
+          12.0,
+          10.0
+        ]
+      ],
+      "pdf_count": 174,
+      "png_count": 174,
+      "summary_count": 174,
+      "summary_status": "complete"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "cards": 348,
+  "image_links": 348,
+  "kinds": {
+    "CR": 108,
+    "SR": 180,
+    "VR": 60
+  },
+  "missing_files": [],
+  "pdf_links": 348,
+  "status": "complete",
+  "years": {
+    "2024": 174,
+    "2025": 174
+  }
+}
