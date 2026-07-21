@@ -881,6 +881,7 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
     import matplotlib
 
     matplotlib.use("Agg")
+    matplotlib.rcParams["hatch.linewidth"] = 1.4
     import matplotlib.pyplot as plt
     import mplhep as hep
 
@@ -946,7 +947,7 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
     lower = np.maximum(bkg - unc, 1.0e-12)
     upper = np.maximum(bkg + unc, 1.0e-12)
     if np.any(bkg > 0):
-        ax.fill_between(edges, np.r_[lower, lower[-1]], np.r_[upper, upper[-1]], step="post", facecolor="0.85", edgecolor="0.35", hatch="////", linewidth=0.0, alpha=0.35, label="Stat. syst. unc" if reference_style else "MC stat+syst unc.")
+        ax.fill_between(edges, np.r_[lower, lower[-1]], np.r_[upper, upper[-1]], step="post", facecolor="0.82", edgecolor="0.15", hatch="////", linewidth=0.0, alpha=0.65, label="Stat. syst. unc" if reference_style else "MC stat+syst unc.")
     if reference_style and np.any(bkg > 0):
         ax.stairs(bkg, edges, color="black", linewidth=1.4, zorder=6)
     for spec in SIGNAL_OVERLAYS:
@@ -961,7 +962,10 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
         yerr=np.where(data_unc[mask] > 0, data_unc[mask], poisson_unc(data[mask])),
         fmt="o",
         color="black",
-        markersize=6.5 if reference_style else 4,
+        markersize=8.0 if reference_style else 5.5,
+        capsize=4.5,
+        capthick=1.4,
+        elinewidth=1.4,
         label="Data" if reference_style else "DATA",
         zorder=10,
     )
@@ -975,10 +979,13 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
         yerr=ratio_err[rmask],
         fmt="o",
         color="black",
-        markersize=5.5 if reference_style else 3,
+        markersize=7.0 if reference_style else 4.5,
+        capsize=4.5,
+        capthick=1.4,
+        elinewidth=1.4,
     )
     rel = np.divide(unc, bkg, out=np.zeros_like(unc), where=bkg > 0)
-    rax.fill_between(edges, np.r_[1.0 - rel, 1.0 - rel[-1]], np.r_[1.0 + rel, 1.0 + rel[-1]], step="post", facecolor="0.85", edgecolor="none", alpha=0.6)
+    rax.fill_between(edges, np.r_[1.0 - rel, 1.0 - rel[-1]], np.r_[1.0 + rel, 1.0 + rel[-1]], step="post", facecolor="0.82", edgecolor="0.15", hatch="////", linewidth=0.0, alpha=0.65)
     rax.axhline(1.0, color="0.45", linewidth=1)
     for axis in (ax, rax):
         axis.set_xmargin(0)
