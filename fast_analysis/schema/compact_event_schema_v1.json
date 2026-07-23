@@ -1,0 +1,15 @@
+{
+  "schema_version": "fast_stop_compact_v1",
+  "selection_version": "allhadronic_highDeltaM_v1",
+  "format": "parquet",
+  "required_columns": {
+    "identity": ["run", "luminosityBlock", "event", "dataset", "process", "year", "is_data", "source_file_id", "source_entry"],
+    "bookkeeping": ["genWeight", "sumw_denom", "weight_nominal", "pileup_weight", "btag_weight", "top_pt_weight", "model", "stop_mass", "lsp_mass", "point_sumw", "xsec_pb"],
+    "event": ["met_pt", "met_phi", "recoil_pt", "recoil_phi", "ht", "n_jet", "n_fatjet", "n_b_loose", "n_b_medium", "n_b_tight"],
+    "jets": ["j1_pt", "j1_eta", "j1_phi", "j2_pt", "j2_eta", "j2_phi", "fj1_pt", "fj1_eta", "fj1_phi", "fj1_mass", "fj1_msoftdrop", "fj1_top_vs_qcd", "fj1_w_vs_qcd"],
+    "angles": ["min_dphi_j1234_met", "dphi_j1_met", "dphi_j2_met", "dphi_j3_met", "dphi_j4_met"],
+    "leptons_photons": ["n_electron", "n_muon", "n_photon", "leading_lepton_pt", "leading_photon_pt", "mll", "pll"],
+    "flags": ["passes_lumimask", "passes_met_filters", "passes_signal_trigger", "passes_reference_trigger", "region_mask_word"]
+  },
+  "metadata": ["git_commit", "creation_timestamp", "input_files", "entry_range", "processed_events", "selected_events", "output_checksum", "command_line", "environment_id", "validation_status"]
+}

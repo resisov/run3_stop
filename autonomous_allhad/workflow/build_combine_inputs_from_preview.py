@@ -51,6 +51,15 @@ def signal_process_name(key: str) -> str:
     return "sig_" + sanitize(key)
 
 
+def shape_nuisance_names(fit: dict[str, Any]) -> list[str]:
+    names: set[str] = set()
+    for rec in (fit.get("templates") or {}).values():
+        if rec.get("status") != "complete":
+            continue
+        names.update((rec.get("background_systematic_variations") or {}).keys())
+    return sorted(names)
+
+
 def stable_path(path: Path) -> str:
     return str(path.absolute()).replace("/eos/home-t/taiwoo", "/eos/user/t/taiwoo")
 
@@ -155,7 +164,8 @@ def build_root(fit: dict[str, Any], signal_histograms: dict[str, Any], signal_me
     output_root.parent.mkdir(parents=True, exist_ok=True)
     root_file = ROOT.TFile(str(output_root), "RECREATE")
     templates = fit.get("templates") or {}
-    summary: dict[str, Any] = {"channels": {}, "signals": {}}
+    shape_systs = shape_nuisance_names(fit)
+    summary: dict[str, Any] = {"channels": {}, "signals": {}, "background_shape_nuisances": shape_systs}
     try:
         for region, rec in templates.items():
             if rec.get("status") != "complete":
@@ -171,8 +181,25 @@ def build_root(fit: dict[str, Any], signal_histograms: dict[str, Any], signal_me
             data = bkg if data_mode == "asimov" else np.asarray(rec.get("data") or [], dtype=float)
             write_hist(directory, "data_obs", data, np.maximum(data, 0.0), edges)
             write_hist(directory, BACKGROUND_NAME, bkg, stat * stat, edges)
-            write_hist(directory, f"{BACKGROUND_NAME}_{BKG_SYST_NAME}Up", bkg + non_lumi, stat * stat, edges)
-            write_hist(directory, f"{BACKGROUND_NAME}_{BKG_SYST_NAME}Down", np.maximum(bkg - non_lumi, MIN_BIN), stat * stat, edges)
+            variations = rec.get("background_systematic_variations") or {}
+            if shape_systs:
+                for syst_name in shape_systs:
+                    var_rec = variations.get(syst_name) or {}
+                    up = np.asarray(var_rec.get("up") or bkg, dtype=float)
+                    down = np.asarray(var_rec.get("down") or bkg, dtype=float)
+                    if len(up) != len(bkg):
+                        tmp = bkg.copy()
+                        tmp[:min(len(up), len(bkg))] = up[:min(len(up), len(bkg))]
+                        up = tmp
+                    if len(down) != len(bkg):
+                        tmp = bkg.copy()
+                        tmp[:min(len(down), len(bkg))] = down[:min(len(down), len(bkg))]
+                        down = tmp
+                    write_hist(directory, f"{BACKGROUND_NAME}_{syst_name}Up", np.maximum(up, MIN_BIN), stat * stat, edges)
+                    write_hist(directory, f"{BACKGROUND_NAME}_{syst_name}Down", np.maximum(down, MIN_BIN), stat * stat, edges)
+            else:
+                write_hist(directory, f"{BACKGROUND_NAME}_{BKG_SYST_NAME}Up", bkg + non_lumi, stat * stat, edges)
+                write_hist(directory, f"{BACKGROUND_NAME}_{BKG_SYST_NAME}Down", np.maximum(bkg - non_lumi, MIN_BIN), stat * stat, edges)
             summary["channels"][region] = {
                 "variable": rec.get("variable"),
                 "background_yield": float(np.sum(bkg)),
@@ -180,6 +207,7 @@ def build_root(fit: dict[str, Any], signal_histograms: dict[str, Any], signal_me
                 "data_yield": float(np.sum(data)),
                 "non_lumi_background_syst_sum": float(np.sum(non_lumi)),
                 "lumi_background_syst_sum": float(np.sum(lumi)),
+                "background_shape_nuisances": shape_systs or [BKG_SYST_NAME],
             }
             for mass_key in mass_keys:
                 proc = signal_process_name(mass_key)
@@ -201,6 +229,10 @@ def datacard_text(template_root: Path, fit: dict[str, Any], mass_key: str, root_
             columns.append((region, proc, 0))
         columns.append((region, BACKGROUND_NAME, 1))
     rel_root = stable_path(template_root)
+    shape_systs = sorted((root_summary.get("background_shape_nuisances") or []))
+    use_aggregate_bkg_syst = not shape_systs
+    if use_aggregate_bkg_syst:
+        shape_systs = [BKG_SYST_NAME]
     lines = [
         "imax * number of channels",
         "jmax * number of backgrounds",
@@ -216,17 +248,23 @@ def datacard_text(template_root: Path, fit: dict[str, Any], mass_key: str, root_
         "process " + " ".join(str(c[2]) for c in columns),
         "rate " + " ".join(["-1"] * len(columns)),
         "------------",
-        BKG_SYST_NAME + " shape " + " ".join("1" if c[1] == BACKGROUND_NAME else "-" for c in columns),
-        LUMI_NAME + " lnN " + " ".join(f"{LUMI_LNN:.3f}" for _ in columns),
     ]
+    for syst_name in shape_systs:
+        lines.append(syst_name + " shape " + " ".join("1" if c[1] == BACKGROUND_NAME else "-" for c in columns))
+    lines.append(LUMI_NAME + " lnN " + " ".join(f"{LUMI_LNN:.3f}" for _ in columns))
     xsec_unc = (signal_meta.get(mass_key) or {}).get("xsec_uncertainty_relative")
     if xsec_unc is not None:
         factor = 1.0 + float(xsec_unc)
         lines.append("SignalTheory lnN " + " ".join(f"{factor:.4f}" if c[1] == proc else "-" for c in columns))
+    note = (
+        "# Background shape nuisances are individual partial-preview variations from fit_template_summary.json."
+        if not use_aggregate_bkg_syst
+        else "# BkgSyst is the aggregate non-lumi background shape envelope from fit_template_summary.json."
+    )
     lines.extend([
         f"* autoMCStats {auto_mc_stats}",
         "# Expected-limit card generated from partial preview fit templates.",
-        "# BkgSyst is the aggregate non-lumi background shape envelope from fit_template_summary.json.",
+        note,
     ])
     return "\n".join(lines) + "\n"
 
@@ -306,15 +344,35 @@ def collect_limits(limit_dir: Path, mass_keys: list[str], output_json: Path) -> 
             mstop, mlsp = parse_mass_key(mass_key)
             parsed.update({"mStop": mstop, "mLSP": mlsp})
             results[mass_key] = parsed
-    payload = {"status": "complete" if results else "no_combine_outputs", "points": results}
+    if len(results) == len(mass_keys):
+        status = "complete"
+    elif results:
+        status = "partial"
+    else:
+        status = "no_combine_outputs"
+    payload = {
+        "status": status,
+        "points": results,
+        "requested_point_count": len(mass_keys),
+        "collected_point_count": len(results),
+        "missing_points": [key for key in mass_keys if key not in results],
+    }
     write_json(output_json, payload)
     return payload
 
 
-def plot_contour(limit_payload: dict[str, Any], output_png: Path, run2_contours: Path | None = Path("/eos/user/t/taiwoo/run2_sus19010_contours.json")) -> bool:
+def plot_contour(
+    limit_payload: dict[str, Any],
+    output_png: Path,
+    run2_contours: Path | None = Path("/eos/user/t/taiwoo/run2_sus19010_contours.json"),
+    luminosity_label: str = r"109.82 fb$^{-1}$ (13.6 TeV)",
+) -> bool:
     records = list((limit_payload.get("points") or {}).values())
     points = [rec for rec in records if "expected" in rec and float(rec["expected"]) > 0]
     if not points:
+        return False
+    unique_points = {(float(rec["mStop"]), float(rec["mLSP"])) for rec in points}
+    if len(unique_points) < 4:
         return False
     import matplotlib
     matplotlib.use("Agg")
@@ -326,7 +384,7 @@ def plot_contour(limit_payload: dict[str, Any], output_png: Path, run2_contours:
     from scipy.interpolate import griddata
 
     # Match the reference view, use all generated mass points, and mask unsupported/off-shell regions.
-    xmin, xmax = 600.0, 1500.0
+    xmin, xmax = 600.0, 1700.0
     ymin, ymax = 0.0, 1500.0
     top_mass = 172.5
     xi = np.linspace(xmin, xmax, 260)
@@ -358,7 +416,7 @@ def plot_contour(limit_payload: dict[str, Any], output_png: Path, run2_contours:
     plus1_grid = interpolated_log_grid("expected_p1")
 
     hep.style.use("CMS")
-    fig, ax = plt.subplots(figsize=(10.0, 8.0))
+    fig, ax = plt.subplots(figsize=(12.0, 10.0))
     fig.subplots_adjust(left=0.13, right=0.84, bottom=0.11, top=0.90)
 
     color_min, color_max = -1.5, 1.5
@@ -378,14 +436,14 @@ def plot_contour(limit_payload: dict[str, Any], output_png: Path, run2_contours:
     cbar = fig.colorbar(filled, ax=ax, pad=0.04, fraction=0.048, aspect=34)
     cbar.set_label(
         r"$\log_{10}$ (expected 95% CL limit on $\sigma/\sigma_{\mathrm{theory}}$)",
-        fontsize=24,
+        fontsize=27,
         rotation=90,
         labelpad=22,
     )
     cbar.set_ticks(np.arange(color_min, color_max + 0.001, 0.5))
     cbar.ax.yaxis.set_major_formatter(FormatStrFormatter("%.1f"))
     cbar.ax.yaxis.set_minor_locator(MultipleLocator(0.1))
-    cbar.ax.tick_params(which="major", labelsize=20, direction="in", length=12, width=1.4)
+    cbar.ax.tick_params(which="major", labelsize=23, direction="in", length=12, width=1.4)
     cbar.ax.tick_params(which="minor", direction="in", length=7, width=1.1)
     cbar.outline.set_linewidth(1.8)
 
@@ -418,28 +476,31 @@ def plot_contour(limit_payload: dict[str, Any], output_png: Path, run2_contours:
 
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(ymin, ymax)
-    ax.set_xlabel(r"$m_{\tilde{t}}$ (GeV)", fontsize=30, loc="right")
-    ax.set_ylabel(r"$m_{\tilde{\chi}_1^0}$ (GeV)", fontsize=30)
+    ax.set_xlabel(r"$m_{\tilde{t}}$ (GeV)", fontsize=34, loc="right")
+    ax.set_ylabel(r"$m_{\tilde{\chi}_1^0}$ (GeV)", fontsize=34)
     ax.xaxis.set_major_locator(MultipleLocator(200))
     ax.yaxis.set_major_locator(MultipleLocator(200))
     ax.xaxis.set_minor_locator(MultipleLocator(50))
     ax.yaxis.set_minor_locator(MultipleLocator(50))
-    ax.tick_params(axis="both", which="major", direction="in", top=True, right=True, labelsize=21, length=9)
+    ax.tick_params(axis="both", which="major", direction="in", top=True, right=True, labelsize=24, length=9)
     ax.tick_params(axis="both", which="minor", direction="in", top=True, right=True, length=5)
     for spine in ax.spines.values():
         spine.set_linewidth(1.8)
 
-    with plt.rc_context({"font.size": 18}):
-        hep.cms.label(llabel="Work in progress", rlabel=r"109.82 fb$^{-1}$ (13.6 TeV)", ax=ax)
-    ax.text(0.14, 0.95, r"$pp\rightarrow \tilde{t}\tilde{t},\ \tilde{t}\rightarrow t\tilde{\chi}_1^0$", transform=ax.transAxes, fontsize=15, va="top")
+    with plt.rc_context({"font.size": 22}):
+        hep.cms.label(
+            llabel="Work in progress",
+            rlabel=luminosity_label,
+            fontsize=27,
+            ax=ax,
+        )
+    ax.text(0.14, 0.95, r"$pp\rightarrow \tilde{t}\tilde{t},\ \tilde{t}\rightarrow t\tilde{\chi}_1^0$", transform=ax.transAxes, fontsize=19, va="top")
 
     legend_handles = [
         Line2D([0], [0], color="red", lw=3.0, label="Run-3 expected"),
-        Line2D([0], [0], color="red", lw=1.8, linestyle="--", label=r"Run-3 expected $\pm1\sigma_{\mathrm{exp}}$"),
         *run2_handles,
-        Line2D([0], [0], color="0.45", lw=1.1, linestyle=":", label=r"$m_{\tilde{\chi}_1^0}=m_{\tilde{t}}-m_t$"),
     ]
-    ax.legend(handles=legend_handles, loc="upper left", bbox_to_anchor=(0.02, 0.90), frameon=False, fontsize=16, handlelength=2.8)
+    ax.legend(handles=legend_handles, loc="upper left", bbox_to_anchor=(0.02, 0.90), frameon=False, fontsize=19, handlelength=2.8)
 
     output_png.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(output_png, dpi=180)
@@ -520,7 +581,8 @@ def main() -> int:
         "mass_point_count": len(mass_keys),
         "data_mode": args.data_mode,
         "lumi_uncertainty": {"name": LUMI_NAME, "lnN": LUMI_LNN, "fraction": LUMI_FRAC},
-        "background_syst_policy": "BkgSyst shape uses aggregate non-lumi background uncertainty from fit_template_summary.json; Lumi_2024 is separate lnN.",
+        "background_syst_policy": "Use individual background shape nuisances from fit_template_summary.background_systematic_variations when available; otherwise fall back to aggregate BkgSyst. Lumi_2024 is separate lnN.",
+        "background_shape_nuisances": root_summary.get("background_shape_nuisances", []),
         "limit_collection_status": limit_payload.get("status"),
         "contour_png": str(contour_png) if contour_written else None,
         "root_summary": root_summary,

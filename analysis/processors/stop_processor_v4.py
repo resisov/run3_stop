@@ -101,8 +101,9 @@ class AnalysisProcessor(processor.ProcessorABC):
         ]
     }
 
-    def __init__(self, year, xsec, corrections, ids, common, shift_name=None):
+    def __init__(self, year, xsec, corrections, ids, common, shift_name=None, correction_year=None):
         self._year = year
+        self._correction_year = correction_year or year
         self._lumi = 1000 * float(self.lumis[year])
         self._xsec = xsec
 
@@ -786,9 +787,9 @@ class AnalysisProcessor(processor.ProcessorABC):
         e['isveto'] = isVetoElectron(e, self._year)
         e['ismedium'] = isMediumElectron(e, self._year)
         if not isData:
-            e_sf_veto, e_sf_veto_up, e_sf_veto_down = get_ele_veto_id_sf(self._year, e.eta+e.deltaEtaSC, e.pt, e.phi)
-            e_sf_medium, e_sf_medium_up, e_sf_medium_down = get_ele_medium_id_sf(self._year, e.eta+e.deltaEtaSC, e.pt, e.phi)
-            e_sf_hlt, e_sf_hlt_up, e_sf_hlt_down = get_ele_hlt_sf(self._year, e.eta, e.pt, e.phi)
+            e_sf_veto, e_sf_veto_up, e_sf_veto_down = get_ele_veto_id_sf(self._correction_year, e.eta+e.deltaEtaSC, e.pt, e.phi)
+            e_sf_medium, e_sf_medium_up, e_sf_medium_down = get_ele_medium_id_sf(self._correction_year, e.eta+e.deltaEtaSC, e.pt, e.phi)
+            e_sf_hlt, e_sf_hlt_up, e_sf_hlt_down = get_ele_hlt_sf(self._correction_year, e.eta, e.pt, e.phi)
             e['veto_id_sf'] = ak.where(e.isveto, e_sf_veto, ak.ones_like(e.pt))
             e['veto_id_sf_up'] = ak.where(e.isveto, e_sf_veto_up, ak.ones_like(e.pt))
             e['veto_id_sf_down'] = ak.where(e.isveto, e_sf_veto_down, ak.ones_like(e.pt))
@@ -817,9 +818,9 @@ class AnalysisProcessor(processor.ProcessorABC):
         m['isloose'] = isLooseMuon(m, self._year)
         m['ismedium'] = isMediumMuon(m, self._year)
         if not isData:
-            m_sf_loose, m_sf_loose_up, m_sf_loose_down = get_mu_loose_id_sf(self._year, m.eta, m.pt)
-            m_sf_medium, m_sf_medium_up, m_sf_medium_down = get_mu_medium_id_sf(self._year, m.eta, m.pt)
-            m_sf_hlt, m_sf_hlt_up, m_sf_hlt_down = get_mu_hlt_sf(self._year, m.eta, m.pt)
+            m_sf_loose, m_sf_loose_up, m_sf_loose_down = get_mu_loose_id_sf(self._correction_year, m.eta, m.pt)
+            m_sf_medium, m_sf_medium_up, m_sf_medium_down = get_mu_medium_id_sf(self._correction_year, m.eta, m.pt)
+            m_sf_hlt, m_sf_hlt_up, m_sf_hlt_down = get_mu_hlt_sf(self._correction_year, m.eta, m.pt)
             m['loose_id_sf'] = ak.where(m.isloose, m_sf_loose, ak.ones_like(m.pt))
             m['loose_id_sf_up'] = ak.where(m.isloose, m_sf_loose_up, ak.ones_like(m.pt))
             m['loose_id_sf_down'] = ak.where(m.isloose, m_sf_loose_down, ak.ones_like(m.pt))
@@ -847,7 +848,7 @@ class AnalysisProcessor(processor.ProcessorABC):
         p['ismedium'] = isMediumPhoton(p, self._year)
 
         if not isData:
-            p_sf_id, p_sf_id_up, p_sf_id_down = get_photon_id_sf(self._year, "Medium", p.eta, p.pt, p.phi)
+            p_sf_id, p_sf_id_up, p_sf_id_down = get_photon_id_sf(self._correction_year, "Medium", p.eta, p.pt, p.phi)
             p['id_sf'] = ak.where(p.ismedium, p_sf_id, ak.ones_like(p.pt))
             p['id_sf_up'] = ak.where(p.ismedium, p_sf_id_up, ak.ones_like(p.pt))
             p['id_sf_down'] = ak.where(p.ismedium, p_sf_id_down, ak.ones_like(p.pt))
@@ -874,13 +875,13 @@ class AnalysisProcessor(processor.ProcessorABC):
         rho_density = events.Rho.fixedGridRhoFastjetAll
         j_raw_pt = j.pt #* (1.0 - j.rawFactor)
         j_raw_mass = j.mass #* (1.0 - j.rawFactor)
-        jec_corr = get_jec_correction(self._year, j_raw_pt, j.eta, j.phi, rho_density, j.area, run, isData)
+        jec_corr = get_jec_correction(self._correction_year, j_raw_pt, j.eta, j.phi, rho_density, j.area, run, isData)
         j['pt'] = j_raw_pt * jec_corr
         j['mass'] = j_raw_mass * jec_corr
 
         ## JEC Shift variation for systematics
         if (not isData) and self._shift_name in ["jesTotalUp", "jesTotalDown"]:
-            jec_unc = get_jec_uncertainty(self._year, j.pt, j.eta)
+            jec_unc = get_jec_uncertainty(self._correction_year, j.pt, j.eta)
             if self._shift_name == "jesTotalUp":
                 j['pt'] = j.pt * (1 + jec_unc)
                 j['mass'] = j.mass * (1 + jec_unc)
@@ -946,7 +947,7 @@ class AnalysisProcessor(processor.ProcessorABC):
         ### Appling JECs
         fj_raw_pt = fj.pt #* (1.0 - fj.rawFactor)
         fj_raw_mass = fj.mass #* (1.0 - fj.rawFactor)
-        fjec_corr = get_fjec_correction(self._year, fj_raw_pt, fj.eta, fj.phi, rho_density, fj.area, run, isData)
+        fjec_corr = get_fjec_correction(self._correction_year, fj_raw_pt, fj.eta, fj.phi, rho_density, fj.area, run, isData)
 
         fj['pt'] = fj_raw_pt * fjec_corr
         fj['mass'] = fj_raw_mass * fjec_corr
@@ -1226,7 +1227,7 @@ class AnalysisProcessor(processor.ProcessorABC):
         if not isData:
             weights.add('genweight', events.genWeight)
             # PU reweighting and uncertainties
-            pu_nom, pu_up, pu_down = get_pu_weight(self._year, events.Pileup.nTrueInt)
+            pu_nom, pu_up, pu_down = get_pu_weight(self._correction_year, events.Pileup.nTrueInt)
             weights.add('pileup', pu_nom, pu_up, pu_down)
             # Top pT reweighting
             gen = events.GenPart
@@ -1238,7 +1239,7 @@ class AnalysisProcessor(processor.ProcessorABC):
             weights.add('top_pt_reweight', top_pt_sf)
             # btagging sf and uncertainties
             btagSF, btagSF_bc_correlatedUp, btagSF_bc_correlatedDown, btagSF_bc_uncorrelatedUp, btagSF_bc_uncorrelatedDown, \
-            btagSF_light_correlatedUp, btagSF_light_correlatedDown, btagSF_light_uncorrelatedUp, btagSF_light_uncorrelatedDown = get_btag_weight('UParTAK4', self._year, 'medium', caller).btag_weight(j_good.pt, j_good.eta, j_good.hadronFlavour, j_good.isupartM)
+            btagSF_light_correlatedUp, btagSF_light_correlatedDown, btagSF_light_uncorrelatedUp, btagSF_light_uncorrelatedDown = get_btag_weight('UParTAK4', self._correction_year, 'medium', caller).btag_weight(j_good.pt, j_good.eta, j_good.hadronFlavour, j_good.isupartM)
             weights.add('btagSF', btagSF)
             weights.add('btagSF_bc_correlated', np.ones(len(events), dtype='float'), btagSF_bc_correlatedUp/btagSF, btagSF_bc_correlatedDown/btagSF)
             weights.add('btagSF_bc_uncorrelated', np.ones(len(events), dtype='float'), btagSF_bc_uncorrelatedUp/btagSF, btagSF_bc_uncorrelatedDown/btagSF)
@@ -1465,7 +1466,8 @@ if __name__ == '__main__':
     parser.add_option('-y', '--year', help='year', dest='year')
     parser.add_option('-m', '--metadata', help='metadata', dest='metadata')
     parser.add_option('-n', '--name', help='name', dest='name')
-    parser.add_option('--shift', help='systematic shift name', dest='shift', default=None)    
+    parser.add_option('--shift', help='systematic shift name', dest='shift', default=None)
+    parser.add_option('--correction-year', help='year to use for SF/JEC/systematic corrections', dest='correction_year', default=None)
     (options, args) = parser.parse_args()
 
     with gzip.open('metadata/'+options.metadata+'.json.gz') as fin:
@@ -1481,6 +1483,7 @@ if __name__ == '__main__':
                                          corrections=corrections,
                                          ids=ids,
                                          common=common,
-                                         shift_name=options.shift)
+                                         shift_name=options.shift,
+                                         correction_year=options.correction_year)
 
     save(processor_instance, 'data/stop_'+options.name+'.processor')

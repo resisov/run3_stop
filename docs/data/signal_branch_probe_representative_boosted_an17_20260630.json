@@ -1,0 +1,76 @@
+{
+  "branch_top": "FatJet_globalParT3_withMassTopvsQCD",
+  "branch_w": "FatJet_globalParT3_withMassWvsQCD",
+  "checked_at": "2026-06-30T08:20:46Z",
+  "rows": [
+    {
+      "access": {
+        "access_method": "xrdcp_cache",
+        "cache_path": "/tmp/taiwoo/autonomous_allhad_xrd_cache/d6016606e8ccd0f8_7384cc4e-b6b3-4f91-929e-82e28d709bc8.root",
+        "cache_reused": false,
+        "fallback_status": "xrdcp_copied",
+        "xrdcp_exit_status": 0,
+        "xrdcp_stderr_tail": ""
+      },
+      "dataset": "/SMS-2Stop_Par-mStop-1000_TuneCP5_13p6TeV_madgraph-pythia8/RunIII2024Summer24NanoAOD-140X_mcRun3_2024_realistic_v26-v2/NANOAODSIM",
+      "error": null,
+      "fatjet_part_branches": [
+        "FatJet_particleNetWithMass_TvsQCD",
+        "FatJet_particleNetWithMass_WvsQCD"
+      ],
+      "file": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAOD/SMS-2Stop_Par-mStop-1000_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/140X_mcRun3_2024_realistic_v26-v2/120000/7384cc4e-b6b3-4f91-929e-82e28d709bc8.root",
+      "has_top": false,
+      "has_w": false,
+      "label": "140X",
+      "n_fatjet_part_branches": 2,
+      "n_keys": 1899,
+      "opened": true
+    },
+    {
+      "access": {
+        "access_method": "xrdcp_cache",
+        "cache_path": "/tmp/taiwoo/autonomous_allhad_xrd_cache/d7a007157e30283c_c9e86344-a334-4359-b778-b2acedeb1865.root",
+        "cache_reused": false,
+        "fallback_status": "xrdcp_copied",
+        "xrdcp_exit_status": 0,
+        "xrdcp_stderr_tail": ""
+      },
+      "dataset": "/SMS-2Stop_Par-mStop-1000_TuneCP5_13p6TeV_madgraph-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM",
+      "error": null,
+      "fatjet_part_branches": [
+        "FatJet_globalParT3_QCD",
+        "FatJet_globalParT3_TopbWev",
+        "FatJet_globalParT3_TopbWmv",
+        "FatJet_globalParT3_TopbWq",
+        "FatJet_globalParT3_TopbWqq",
+        "FatJet_globalParT3_TopbWtauhv",
+        "FatJet_globalParT3_WvsQCD",
+        "FatJet_globalParT3_XWW3q",
+        "FatJet_globalParT3_XWW4q",
+        "FatJet_globalParT3_XWWqqev",
+        "FatJet_globalParT3_XWWqqmv",
+        "FatJet_globalParT3_Xbb",
+        "FatJet_globalParT3_Xcc",
+        "FatJet_globalParT3_Xcs",
+        "FatJet_globalParT3_Xqq",
+        "FatJet_globalParT3_Xtauhtaue",
+        "FatJet_globalParT3_Xtauhtauh",
+        "FatJet_globalParT3_Xtauhtaum",
+        "FatJet_globalParT3_massCorrGeneric",
+        "FatJet_globalParT3_massCorrX2p",
+        "FatJet_globalParT3_withMassTopvsQCD",
+        "FatJet_globalParT3_withMassWvsQCD",
+        "FatJet_globalParT3_withMassZvsQCD",
+        "FatJet_particleNetWithMass_TvsQCD",
+        "FatJet_particleNetWithMass_WvsQCD"
+      ],
+      "file": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/SMS-2Stop_Par-mStop-1000_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/120000/c9e86344-a334-4359-b778-b2acedeb1865.root",
+      "has_top": true,
+      "has_w": true,
+      "label": "150Xv15",
+      "n_fatjet_part_branches": 25,
+      "n_keys": 1985,
+      "opened": true
+    }
+  ]
+}

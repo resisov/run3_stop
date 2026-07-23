@@ -2456,6 +2456,25 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
                 ("AK8one_highMET", {"nfj": {"min": 1}, "met": {"min": 500}}),
                 ("AK8two_Njet5plus", {"nfj": {"min": 2}, "njet": {"min": 5}}),
             ],
+            "boosted_an_17": [
+                ("B0_Nb1", {"nb_medium": {"eq": 1}, "nboosted_total": {"eq": 0}}),
+                ("B0_Nb2plus", {"nb_medium": {"min": 2}, "nboosted_total": {"eq": 0}}),
+                ("Nb1_T1plus_W0", {"nb_medium": {"eq": 1}, "nboosted_top": {"min": 1}, "nboosted_w": {"eq": 0}}),
+                ("Nb1_T0_W1plus", {"nb_medium": {"eq": 1}, "nboosted_top": {"eq": 0}, "nboosted_w": {"min": 1}}),
+                ("Nb1_T1plus_W1plus", {"nb_medium": {"eq": 1}, "nboosted_top": {"min": 1}, "nboosted_w": {"min": 1}}),
+                ("Nb2_T1_W0", {"nb_medium": {"eq": 2}, "nboosted_top": {"eq": 1}, "nboosted_w": {"eq": 0}}),
+                ("Nb2_T0_W1", {"nb_medium": {"eq": 2}, "nboosted_top": {"eq": 0}, "nboosted_w": {"eq": 1}}),
+                ("Nb2_T1_W1", {"nb_medium": {"eq": 2}, "nboosted_top": {"eq": 1}, "nboosted_w": {"eq": 1}}),
+                ("Nb2_T2_W0", {"nb_medium": {"eq": 2}, "nboosted_top": {"eq": 2}, "nboosted_w": {"eq": 0}}),
+                ("Nb2_T0_W2", {"nb_medium": {"eq": 2}, "nboosted_top": {"eq": 0}, "nboosted_w": {"eq": 2}}),
+                ("Nb2_TW_ge3", {"nb_medium": {"eq": 2}, "nboosted_total": {"min": 3}}),
+                ("Nb3plus_T1_W0", {"nb_medium": {"min": 3}, "nboosted_top": {"eq": 1}, "nboosted_w": {"eq": 0}}),
+                ("Nb3plus_T0_W1", {"nb_medium": {"min": 3}, "nboosted_top": {"eq": 0}, "nboosted_w": {"eq": 1}}),
+                ("Nb3plus_T1_W1", {"nb_medium": {"min": 3}, "nboosted_top": {"eq": 1}, "nboosted_w": {"eq": 1}}),
+                ("Nb3plus_T2_W0", {"nb_medium": {"min": 3}, "nboosted_top": {"eq": 2}, "nboosted_w": {"eq": 0}}),
+                ("Nb3plus_T0_W2", {"nb_medium": {"min": 3}, "nboosted_top": {"eq": 0}, "nboosted_w": {"eq": 2}}),
+                ("Nb3plus_TW_ge3", {"nb_medium": {"min": 3}, "nboosted_total": {"min": 3}}),
+            ],
             "optimized_hybrid_no_tags": [
                 ("hybrid_lowMET_multijet", {"njet": {"min": 5}, "nb_medium": {"min": 1}, "met": [250, 400], "ht": {"min": 800}, "min_dphi4": {"min": 0.5}}),
                 ("hybrid_midMET_multijet", {"njet": {"min": 5}, "nb_medium": {"min": 1}, "met": [400, 600], "ht": {"min": 800}, "min_dphi4": {"min": 0.5}}),
@@ -2480,7 +2499,7 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             bins = [self._summarize_bin(rows, definition, name, scheme) for name, definition in defs[:max_bins]]
             sane = [b for b in bins if not b["warnings"]]
             score = sum((b["s_over_sqrt_b_proxy"] or 0.0) for b in sane)
-            schemes.append({"scheme": scheme, "top_tagging_used": False, "provisional": True, "bins": bins, "sane_bins": len(sane), "low_stat_bins": sum(1 for b in bins if b["warnings"]), "score_proxy": score})
+            schemes.append({"scheme": scheme, "top_tagging_used": scheme.startswith("boosted_"), "provisional": True, "bins": bins, "sane_bins": len(sane), "low_stat_bins": sum(1 for b in bins if b["warnings"]), "score_proxy": score})
         best = max(schemes, key=lambda s: (s["sane_bins"], s["score_proxy"], -s["low_stat_bins"])) if schemes else None
         selected = best["scheme"] if best and best["sane_bins"] > 0 else None
         exploratory = None
@@ -2493,8 +2512,8 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             "yield_weight_source": "normalized_feature_weight" if self._normalization_factor_map() else "raw_genWeight",
             "message": "Legacy stop_processor_v4.py validation is external/manual. No independent agreement with stop_processor_v4.py is claimed by autonomous_allhad unless explicitly provided by the user.",
             "thresholds": {"minimum_total_background_yield": 5, "minimum_effective_mc_events": 3, "low_stat_warning_threshold": 10, "maximum_number_of_bins_first_proposal": max_bins},
-            "allowed_variables": ["Njet", "Nb", "HT", "MET", "recoil pT", "leading jet pT", "subleading jet pT", "min delta phi", "AK8 jet pT", "AK8 jet mass", "AK8 multiplicity", "b-jet topology", "ISR-sensitive variables", "event-shape variables"],
-            "forbidden_variables": ["top-tag discriminator scores", "top-tag working points", "top-tag pass/fail categories"],
+            "allowed_variables": ["Njet", "Nb", "HT", "MET", "recoil pT", "leading jet pT", "subleading jet pT", "min delta phi", "AK8 jet pT", "AK8 jet mass", "AK8 multiplicity", "boosted top count", "boosted W count", "b-jet topology", "ISR-sensitive variables", "event-shape variables"],
+            "forbidden_variables": ["resolved-top tag categories until the resolved tagger is available"],
             "selected_provisional_scheme": selected,
             "selection_status": "no provisional scheme selected because all candidate bins fail at least one configured statistics threshold" if selected is None else "provisional scheme selected; still requires manual legacy validation and physics review",
             "exploratory_scheme": exploratory,
@@ -2916,7 +2935,7 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
                 bins.append({"bin": bin_name, "background_weighted": bkg, "background_sumw2": bkg_s2, "background_effective_events": neff, "data_unweighted": data, "warnings": warnings, "process_yields": by_proc})
             sane = sum(1 for b in bins if not b["warnings"])
             score = sum(b["background_effective_events"] for b in bins if not b["warnings"])
-            scheme_summaries.append({"scheme": scheme, "top_tagging_used": False, "bins": bins, "sane_bins": sane, "low_stat_bins": sum(1 for b in bins if b["warnings"]), "score_proxy": score})
+            scheme_summaries.append({"scheme": scheme, "top_tagging_used": scheme.startswith("boosted_"), "bins": bins, "sane_bins": sane, "low_stat_bins": sum(1 for b in bins if b["warnings"]), "score_proxy": score})
             key = (sane, score, -sum(1 for b in bins if b["warnings"]))
             if best_key is None or key > best_key:
                 best_key = key
@@ -3144,24 +3163,43 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
         run_local = os.environ.get("AUTONOMOUS_ALLHAD_RUN_LOCAL_FULL", "0") == "1"
         eossubmit = self._eossubmit_environment()
         shape_shift = normalize_production_shift(os.environ.get("AUTONOMOUS_ALLHAD_PRODUCTION_SHIFT", "nominal"))
-        record_scope = os.environ.get("AUTONOMOUS_ALLHAD_FULL_RECORD_SCOPE", "all").strip().lower()
+        requested_record_scope = os.environ.get("AUTONOMOUS_ALLHAD_FULL_RECORD_SCOPE", "all").strip().lower()
+        record_scope = requested_record_scope
         if record_scope in {"data", "data_only", "data-only"}:
-            records = list(inventory["data_records"])
+            selected_data_records = list(inventory["data_records"])
+            selected_background_records = []
             record_scope = "data"
         elif record_scope in {"background", "backgrounds", "mc", "mc_only", "mc-only"}:
-            records = list(inventory["background_records"])
+            selected_data_records = []
+            selected_background_records = list(inventory["background_records"])
             record_scope = "background"
         elif record_scope in {"all", "full", "data_background", "data+background"}:
-            records = inventory["data_records"] + inventory["background_records"]
+            selected_data_records = list(inventory["data_records"])
+            selected_background_records = list(inventory["background_records"])
             record_scope = "all"
         else:
             raise RuntimeError(f"Unsupported AUTONOMOUS_ALLHAD_FULL_RECORD_SCOPE={record_scope!r}; use all, data, or background")
+        if shape_shift != "nominal":
+            if record_scope == "data":
+                raise RuntimeError("Non-nominal production shifts are MC/background-only; do not run DATA-only shift jobs")
+            selected_data_records = []
+            selected_background_records = list(inventory["background_records"])
+            record_scope = "background"
+            shape_record_policy = "mc_background_only_for_non_nominal_shift"
+        else:
+            shape_record_policy = "nominal_data_and_background_by_requested_scope"
+        records = selected_data_records + selected_background_records
         max_files_env = os.environ.get("AUTONOMOUS_ALLHAD_FULL_MAX_FILES")
         bounded_debug = False
         if max_files_env:
             bounded_debug = True
             records = records[: int(max_files_env)]
-        shard_size = int(os.environ.get("AUTONOMOUS_ALLHAD_FULL_SHARD_SIZE", "100"))
+            selected_data_records = [r for r in records if bool(r.get("is_data"))]
+            selected_background_records = [r for r in records if not bool(r.get("is_data"))]
+        data_shard_size = int(os.environ.get("AUTONOMOUS_ALLHAD_DATA_SHARD_SIZE", "5"))
+        mc_shard_size = int(os.environ.get("AUTONOMOUS_ALLHAD_MC_SHARD_SIZE", os.environ.get("AUTONOMOUS_ALLHAD_FULL_SHARD_SIZE", "25")))
+        if data_shard_size <= 0 or mc_shard_size <= 0:
+            raise RuntimeError("Shard sizes must be positive: AUTONOMOUS_ALLHAD_DATA_SHARD_SIZE and AUTONOMOUS_ALLHAD_MC_SHARD_SIZE")
         production_tag_env = os.environ.get("AUTONOMOUS_ALLHAD_PRODUCTION_TAG")
         production_tag = production_tag_env or ("pilot" if bounded_debug else "eos_full")
         if shape_shift != "nominal" and not production_tag_env:
@@ -3172,19 +3210,25 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
         shard_dir.mkdir(parents=True, exist_ok=True)
         output_dir.mkdir(parents=True, exist_ok=True)
         shard_specs: list[tuple[str, Path, Path]] = []
-        for ish, start in enumerate(range(0, len(records), shard_size)):
-            chunk = records[start:start + shard_size]
-            name = f"shard_{ish:05d}"
-            shard_path = shard_dir / f"{name}.json"
-            output_path = output_dir / f"{name}.json"
-            record_digest = hashlib.sha256(json.dumps(chunk, sort_keys=True).encode()).hexdigest()[:16]
-            write_json(shard_path, {"schema_version": "full_production_shard_spec_v1", "shard_id": name, "record_digest": record_digest, "records": chunk})
-            if output_path.exists():
-                old_payload = self._load_json_if_exists(output_path, {})
-                if old_payload.get("record_digest") != record_digest:
-                    stale = output_path.with_name(output_path.name + f".stale_{int(time.time())}")
-                    output_path.rename(stale)
-            shard_specs.append((name, shard_path, output_path))
+        shard_groups: list[tuple[str, list[dict[str, Any]], int]] = []
+        if selected_data_records:
+            shard_groups.append(("data", selected_data_records, data_shard_size))
+        if selected_background_records:
+            shard_groups.append(("mc", selected_background_records, mc_shard_size))
+        for group_name, group_records, group_shard_size in shard_groups:
+            for ish, start in enumerate(range(0, len(group_records), group_shard_size)):
+                chunk = group_records[start:start + group_shard_size]
+                name = f"{group_name}_shard_{ish:05d}" if len(shard_groups) > 1 else f"shard_{ish:05d}"
+                shard_path = shard_dir / f"{name}.json"
+                output_path = output_dir / f"{name}.json"
+                record_digest = hashlib.sha256(json.dumps(chunk, sort_keys=True).encode()).hexdigest()[:16]
+                write_json(shard_path, {"schema_version": "full_production_shard_spec_v2_boosted", "shard_id": name, "record_digest": record_digest, "record_group": group_name, "records_per_shard": group_shard_size, "records": chunk})
+                if output_path.exists():
+                    old_payload = self._load_json_if_exists(output_path, {})
+                    if old_payload.get("record_digest") != record_digest:
+                        stale = output_path.with_name(output_path.name + f".stale_{int(time.time())}")
+                        output_path.rename(stale)
+                shard_specs.append((name, shard_path, output_path))
         proxy_candidates = [Path(os.environ.get("X509_USER_PROXY", ""))] if os.environ.get("X509_USER_PROXY") else []
         proxy_candidates.append(self.repo / "analysis" / "proxy" / f"x509up_u{os.getuid()}")
         proxy_path = next((p for p in proxy_candidates if p and p.exists()), None)
@@ -3201,7 +3245,12 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             "fastsim_signal_root_files": inventory["fastsim_signal_files"],
             "fullsim_signal_root_files_recorded_skipped": inventory["fullsim_signal_files"],
             "jobs_planned": len(shard_specs),
-            "job_granularity": f"{shard_size} ROOT files per aggregate shard",
+            "files_in_scope": len(records),
+            "selected_data_root_files": len(selected_data_records),
+            "selected_background_root_files": len(selected_background_records),
+            "data_shard_size": data_shard_size,
+            "mc_shard_size": mc_shard_size,
+            "job_granularity": f"DATA {data_shard_size} ROOT files/shard; MC {mc_shard_size} ROOT files/shard",
             "condor_available": bool(condor),
             "condor_submit_path": condor,
             "allow_condor_submit": allow_condor,
@@ -3210,7 +3259,15 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             "bounded_debug": bounded_debug,
             "production_tag": production_tag,
             "shape_shift": shape_shift,
-            "shape_shift_policy": "non-nominal shifts are written to shift-specific shard outputs and are not merged into nominal normalized yields in this stage",
+            "shape_shift_policy": "nominal jobs may include DATA and MC; non-nominal shape shifts are MC/background-only and are written to shift-specific shard outputs",
+            "shape_record_policy": shape_record_policy,
+            "systematic_production_plan": {
+                "nominal": "DATA and background MC, according to requested record scope",
+                "mc_shape_shifts": ["jesTotalUp", "jesTotalDown", "metUnclusteredUp", "metUnclusteredDown"],
+                "data_shape_shifts": [],
+                "weight_systematics": "stored in weight_variations, histogram_variations, and search_bin_variations for every shard",
+                "datacard_requirement": "use nominal plus all MC shape-shift outputs and all stored weight variations",
+            },
             "record_scope": record_scope,
             "eossubmit_environment": eossubmit,
             "eos_aware_submit_required_for_large_campaign": True,
@@ -3301,7 +3358,7 @@ body{{font-family:Arial,sans-serif;margin:0;color:#20242a;background:#f6f7f9}}ma
             self._record_direct_stage("condor_production", shift_status, shift_result)
             return shift_result
         if not submit_condor and not run_local:
-            self._record_direct_stage("condor_production", "blocked_eos_preflight_complete_not_submitted", {"status": "blocked_eos_preflight_complete_not_submitted", "message": "EOS-aware submit description and shard manifest were generated/dry-runnable, but the large campaign was not submitted in this preflight step.", "eossubmit_environment": eossubmit, "submit_file": self._public_path(submit_path), "args_file": self._public_path(args_path), "jobs_planned": len(shard_specs), "afs_wrapper_large_submission_prevented": (not bounded_debug and str(condor_dir).startswith("/afs/")), "next_safe_command": "module load lxbatch/eossubmit && AUTONOMOUS_ALLHAD_ALLOW_CONDOR=1 AUTONOMOUS_ALLHAD_SUBMIT_CONDOR=1 AUTONOMOUS_ALLHAD_FULL_SHARD_SIZE=25 AUTONOMOUS_ALLHAD_PRODUCTION_TAG=eos_full ./autonomous_allhad/analysisctl run-production --config autonomous_allhad/configs/run3_2024.yaml"})
+            self._record_direct_stage("condor_production", "blocked_eos_preflight_complete_not_submitted", {"status": "blocked_eos_preflight_complete_not_submitted", "message": "EOS-aware submit description and shard manifest were generated/dry-runnable, but the large campaign was not submitted in this preflight step.", "eossubmit_environment": eossubmit, "submit_file": self._public_path(submit_path), "args_file": self._public_path(args_path), "jobs_planned": len(shard_specs), "afs_wrapper_large_submission_prevented": (not bounded_debug and str(condor_dir).startswith("/afs/")), "next_safe_command": "module load lxbatch/eossubmit && AUTONOMOUS_ALLHAD_ALLOW_CONDOR=1 AUTONOMOUS_ALLHAD_SUBMIT_CONDOR=1 AUTONOMOUS_ALLHAD_DATA_SHARD_SIZE=5 AUTONOMOUS_ALLHAD_MC_SHARD_SIZE=25 AUTONOMOUS_ALLHAD_PRODUCTION_TAG=eos_full ./autonomous_allhad/analysisctl run-production --config autonomous_allhad/configs/run3_2024.yaml"})
         merge = self._merge_full_production_shards(inventory, [out for _name, _shard, out in shard_specs], submit_info=submit_info)
         if merge.get("status") == "blocked" and submit_condor and submit_info.get("exit_status") == 0:
             merge["reason"] = "Condor campaign submitted successfully; waiting for shard outputs to complete before normalization/plots can be finalized."

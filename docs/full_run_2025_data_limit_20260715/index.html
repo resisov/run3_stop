@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang='ko'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>2025 Data and 2024+2025 Limits</title><style>
+:root{--ink:#182026;--muted:#5b6870;--line:#d8e0e4;--bg:#f4f7f8;--panel:#fff;--accent:#08765d;--ok:#167347}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+header{padding:30px 28px 20px;background:#fff;border-bottom:1px solid var(--line)}main,footer{max-width:1180px;margin:0 auto;padding:22px 18px 36px}
+h1{margin:0 0 7px;font-size:30px;letter-spacing:0}h2{margin:28px 0 10px;font-size:20px;letter-spacing:0}.lead,.small{color:var(--muted)}
+.lead{margin:0;max-width:920px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:12px}
+.metric,.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px}.metric{border-left:4px solid var(--ok)}
+.metric b{display:block;font-size:24px;color:var(--accent)}.metric span{color:var(--muted)}.limits{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.limit,.plot{display:block;background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden;color:var(--ink);text-decoration:none}
+.limit img,.plot img{display:block;width:100%}.limit span,.plot span{display:block;padding:9px 10px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+.plots{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:14px}table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line)}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left}th{width:230px;background:#f9fbfb}a{color:#075e54}
+code{background:#eef3f4;border:1px solid #dbe4e7;border-radius:4px;padding:1px 4px}footer{padding-top:0;color:var(--muted);font-size:13px}
+@media(max-width:760px){.limits{grid-template-columns:1fr}}@media(max-width:520px){header{padding:24px 18px 16px}h1{font-size:25px}.plots{grid-template-columns:1fr}}
+</style></head><body>
+<header><h1>2025 Data and 2024+2025 Limits</h1><p class='lead'>2025 전체 중간 ROOT 검증, 최신 54-bin 히스토그램과 제어영역 플롯, 2025 expected limit, 2024+2025 결합 expected limit을 기록한 독립 결과 페이지입니다.</p></header>
+<main><section class='grid'>
+<div class='metric'><b>7,587</b><span>2025 intermediate ROOT files</span></div>
+<div class='metric'><b>9,685,947</b><span>selected 2025 events</span></div>
+<div class='metric'><b>54</b><span>high-dM search bins</span></div>
+<div class='metric'><b>352/352</b><span>valid 2025 limit ROOTs</span></div>
+<div class='metric'><b>352/352</b><span>valid combined limit ROOTs</span></div>
+<div class='metric'><b>1,400 GeV</b><span>combined max excluded mStop, mLSP &lt;= 100 GeV</span></div>
+</section>
+<h2>Expected Limits</h2><div class='limits'>
+<a class='limit' href='expected_limit_2025.pdf'><img src='expected_limit_2025.png' alt='2025 expected limit with Run-2 SUS-19-010 contours'><span>2025 · 110.84 fb⁻¹ · 12×10 inch</span></a>
+<a class='limit' href='expected_limit_2024plus2025.pdf'><img src='expected_limit_2024plus2025.png' alt='2024 plus 2025 combined expected limit with Run-2 SUS-19-010 contours'><span>2024+2025 · 220.66 fb⁻¹ · 12×10 inch</span></a>
+</div><p class='small'>Combine v10.0.1, AsymptoticLimits, blind expected. 빨강 실선과 점선은 Run-3 median expected와 ±1σ expected contour, 검정 실선과 점선은 Run-2 SUS-19-010 observed와 expected contour입니다.</p>
+<div class='panel'>2025 expected-excluded grid points: <b>70</b>, low-LSP 최대 expected-excluded mStop: <b>1350 GeV</b>. 2024+2025 결합 expected-excluded grid points: <b>87</b>, low-LSP 최대: <b>1400 GeV</b>. 관심 구간 공통 157점의 median <code>r_combined/r_2025=0.683</code>.</div>
+<h2>Pipeline Status</h2><table>
+<tr><th>2025 intermediate ROOT</th><td>complete · 7,587 files · 9,685,947 selected events</td></tr>
+<tr><th>Local recovery</th><td>complete · 5 shards · 0 lost selected events · 0 permanently skipped</td></tr>
+<tr><th>Histograms</th><td>complete · 54 high-dM bins · 9 categories × 6 recoil bins</td></tr>
+<tr><th>b-tag systematics</th><td>complete · 4 nuisance sources · 8 Up/Down shape variations</td></tr>
+<tr><th>Analysis plots</th><td>complete · 130 records · 10 published on this page</td></tr>
+<tr><th>2025 limits</th><td>complete · 352 datacards · 352 valid · 0 missing · 0 invalid</td></tr>
+<tr><th>2024+2025 limits</th><td>complete · 14 year-labelled channels · 352 valid · 0 missing · 0 invalid</td></tr>
+</table>
+<h2>Machine Outputs</h2><div class='panel'><a href='data/run_summary.json'>run summary</a> · <a href='data/analysis_definition.json'>54-bin definition</a> · <a href='data/root_recovery_summary.json'>ROOT recovery</a> · <a href='data/expected_limits_2025.json'>2025 limits</a> · <a href='data/expected_limits_2024plus2025.json'>combined limits</a> · <a href='data/limit_comparison.json'>limit comparison</a> · <a href='data/plots_manifest.json'>plot manifest</a></div>
+<h2>Selected Analysis Plots</h2><div class='plots'><a class='plot' href='plots/highdm_cr_recoil_inclusive.pdf'><img src='plots/highdm_cr_recoil_inclusive.png' loading='lazy' alt='highdm_cr_recoil_inclusive'><span>highdm_cr_recoil_inclusive</span></a><a class='plot' href='plots/highdm_cr_recoil_ntop_split.pdf'><img src='plots/highdm_cr_recoil_ntop_split.png' loading='lazy' alt='highdm_cr_recoil_ntop_split'><span>highdm_cr_recoil_ntop_split</span></a><a class='plot' href='plots/highdm_sr_recoil_inclusive.pdf'><img src='plots/highdm_sr_recoil_inclusive.png' loading='lazy' alt='highdm_sr_recoil_inclusive'><span>highdm_sr_recoil_inclusive</span></a><a class='plot' href='plots/highdm_sr_selected_recoil54_nt0_wsplit_bins.pdf'><img src='plots/highdm_sr_selected_recoil54_nt0_wsplit_bins.png' loading='lazy' alt='highdm_sr_selected_recoil54_nt0_wsplit_bins'><span>highdm_sr_selected_recoil54_nt0_wsplit_bins</span></a><a class='plot' href='plots/lowdm_cr_onebin.pdf'><img src='plots/lowdm_cr_onebin.png' loading='lazy' alt='lowdm_cr_onebin'><span>lowdm_cr_onebin</span></a><a class='plot' href='plots/lowdm_cr_sr_onebin.pdf'><img src='plots/lowdm_cr_sr_onebin.png' loading='lazy' alt='lowdm_cr_sr_onebin'><span>lowdm_cr_sr_onebin</span></a><a class='plot' href='plots/lowdm_sr_onebin.pdf'><img src='plots/lowdm_sr_onebin.png' loading='lazy' alt='lowdm_sr_onebin'><span>lowdm_sr_onebin</span></a><a class='plot' href='plots/lowdm_cr_llcr_met.pdf'><img src='plots/lowdm_cr_llcr_met.png' loading='lazy' alt='lowdm_cr_llcr_met'><span>lowdm_cr_llcr_met</span></a><a class='plot' href='plots/lowdm_cr_qcdcr_met.pdf'><img src='plots/lowdm_cr_qcdcr_met.png' loading='lazy' alt='lowdm_cr_qcdcr_met'><span>lowdm_cr_qcdcr_met</span></a><a class='plot' href='plots/lowdm_sr_sr_met.pdf'><img src='plots/lowdm_sr_sr_met.png' loading='lazy' alt='lowdm_sr_sr_met'><span>lowdm_sr_sr_met</span></a></div>
+<h2>Execution Policy</h2><div class='panel'>산출물과 런타임 디렉터리는 EOS만 사용했습니다. AFS와 시스템 <code>/tmp</code>에는 쓰지 않았고 <code>decaf/analysis</code>는 수정하지 않았습니다. 플롯은 기존 plotting code와 기존 캔버스 크기를 유지했습니다. 이 페이지는 기본 사이트와 분리된 독립 페이지입니다.<p class='small'>Generated 2026-07-15T11:30:16.391085+00:00 from machine-readable outputs.</p></div>
+</main><footer>CMS Work in progress · Run-3 all-hadronic stop analysis</footer></body></html>

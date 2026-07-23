@@ -1,5 +1,10 @@
 {
   "cr_plot_policy": "High-dM and low-dM CRs are drawn both as combined overview plots and as individual region plots.",
+  "lowdm_ut_plot_count": 6,
+  "lowdm_ut_xlim": [
+    250.0,
+    1500.0
+  ],
   "lowdm_variable_plot_count": 105,
   "ntop_order": "N_t = 0 blocks are placed left of N_t >= 1 blocks.",
   "output_dir": "docs/highlowdm_full_20260705/plots",
@@ -212,10 +217,8 @@
       "status": "complete"
     },
     {
-      "bins": 54,
+      "bins": 42,
       "labels": [
-        "$N_{b}\\geq1$, $N_{t}=0$\n$N_{W}=0$",
-        "$N_{b}\\geq1$, $N_{t}=0$\n$N_{W}\\geq1$",
         "$N_{b}=1$, $N_{t}\\geq1$\n$N_{W}=0$",
         "$N_{b}=1$, $N_{t}\\geq1$\n$N_{W}\\geq1$",
         "$N_{b}=2$, $N_{t}=1$\n$N_{W}=0$",
@@ -328,7 +331,7 @@
       "variable": "njet"
     },
     {
-      "bins": 4,
+      "bins": 6,
       "labels": [
         "LLCR low $\\Delta m$"
       ],
@@ -341,7 +344,7 @@
       "variable": "nb_medium_lowdm"
     },
     {
-      "bins": 4,
+      "bins": 6,
       "labels": [
         "LLCR low $\\Delta m$"
       ],
@@ -523,7 +526,7 @@
       "variable": "njet"
     },
     {
-      "bins": 4,
+      "bins": 6,
       "labels": [
         "QCDCR low $\\Delta m$"
       ],
@@ -536,7 +539,7 @@
       "variable": "nb_medium_lowdm"
     },
     {
-      "bins": 4,
+      "bins": 6,
       "labels": [
         "QCDCR low $\\Delta m$"
       ],
@@ -718,7 +721,7 @@
       "variable": "njet"
     },
     {
-      "bins": 4,
+      "bins": 6,
       "labels": [
         "GCR low $\\Delta m$"
       ],
@@ -731,7 +734,7 @@
       "variable": "nb_medium_lowdm"
     },
     {
-      "bins": 4,
+      "bins": 6,
       "labels": [
         "GCR low $\\Delta m$"
       ],
@@ -913,7 +916,7 @@
       "variable": "njet_photon_clean"
     },
     {
-      "bins": 4,
+      "bins": 6,
       "labels": [
         "GCR low $\\Delta m$"
       ],
@@ -978,7 +981,7 @@
       "variable": "njet"
     },
     {
-      "bins": 4,
+      "bins": 6,
       "labels": [
         "DY2E low $\\Delta m$"
       ],
@@ -991,7 +994,7 @@
       "variable": "nb_medium_lowdm"
     },
     {
-      "bins": 4,
+      "bins": 6,
       "labels": [
         "DY2E low $\\Delta m$"
       ],
@@ -1173,7 +1176,7 @@
       "variable": "njet_lepton_clean"
     },
     {
-      "bins": 4,
+      "bins": 6,
       "labels": [
         "DY2E low $\\Delta m$"
       ],
@@ -1238,7 +1241,7 @@
       "variable": "njet"
     },
     {
-      "bins": 4,
+      "bins": 6,
       "labels": [
         "DY2M low $\\Delta m$"
       ],
@@ -1251,7 +1254,7 @@
       "variable": "nb_medium_lowdm"
     },
     {
-      "bins": 4,
+      "bins": 6,
       "labels": [
         "DY2M low $\\Delta m$"
       ],
@@ -1433,7 +1436,7 @@
       "variable": "njet_lepton_clean"
     },
     {
-      "bins": 4,
+      "bins": 6,
       "labels": [
         "DY2M low $\\Delta m$"
       ],
@@ -1507,7 +1510,7 @@
       "variable": "njet"
     },
     {
-      "bins": 4,
+      "bins": 6,
       "labels": [
         "SR low $\\Delta m$"
       ],
@@ -1523,7 +1526,7 @@
       "variable": "nb_medium_lowdm"
     },
     {
-      "bins": 4,
+      "bins": 6,
       "labels": [
         "SR low $\\Delta m$"
       ],
@@ -1742,9 +1745,111 @@
         "mStop1200_mLSP1"
       ],
       "status": "complete"
+    },
+    {
+      "bins": 8,
+      "labels": [
+        "LLCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_llcr_ut",
+      "pdf": "lowdm_cr_llcr_ut.pdf",
+      "png": "lowdm_cr_llcr_ut.png",
+      "region": "cat2_LLCR_lowDeltaM",
+      "signals": [],
+      "source_variable": "met",
+      "variable": "ut",
+      "xlim": [
+        250.0,
+        1500.0
+      ]
+    },
+    {
+      "bins": 8,
+      "labels": [
+        "QCDCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_qcdcr_ut",
+      "pdf": "lowdm_cr_qcdcr_ut.pdf",
+      "png": "lowdm_cr_qcdcr_ut.png",
+      "region": "cat3_QCDCR_lowDeltaM",
+      "signals": [],
+      "source_variable": "met",
+      "variable": "ut",
+      "xlim": [
+        250.0,
+        1500.0
+      ]
+    },
+    {
+      "bins": 8,
+      "labels": [
+        "GCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_gcr_ut",
+      "pdf": "lowdm_cr_gcr_ut.pdf",
+      "png": "lowdm_cr_gcr_ut.png",
+      "region": "cat4_GCR_lowDeltaM",
+      "signals": [],
+      "source_variable": "recoil_gcr",
+      "variable": "ut",
+      "xlim": [
+        250.0,
+        1500.0
+      ]
+    },
+    {
+      "bins": 8,
+      "labels": [
+        "DY2E low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_dy2e_ut",
+      "pdf": "lowdm_cr_dy2e_ut.pdf",
+      "png": "lowdm_cr_dy2e_ut.png",
+      "region": "cat5_DY2E_lowDeltaM",
+      "signals": [],
+      "source_variable": "recoil_dy2e",
+      "variable": "ut",
+      "xlim": [
+        250.0,
+        1500.0
+      ]
+    },
+    {
+      "bins": 8,
+      "labels": [
+        "DY2M low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_dy2m_ut",
+      "pdf": "lowdm_cr_dy2m_ut.pdf",
+      "png": "lowdm_cr_dy2m_ut.png",
+      "region": "cat6_DY2M_lowDeltaM",
+      "signals": [],
+      "source_variable": "recoil_dy2m",
+      "variable": "ut",
+      "xlim": [
+        250.0,
+        1500.0
+      ]
+    },
+    {
+      "bins": 8,
+      "labels": [
+        "SR low $\\Delta m$"
+      ],
+      "name": "lowdm_sr_sr_ut",
+      "pdf": "lowdm_sr_sr_ut.pdf",
+      "png": "lowdm_sr_sr_ut.png",
+      "region": "cat7_SR_lowDeltaM",
+      "signals": [],
+      "source_variable": "met",
+      "variable": "ut",
+      "xlim": [
+        250.0,
+        1500.0
+      ]
     }
   ],
   "signal_policy": "Signals are drawn only in SR plots; CR blocks exclude T2tt overlays.",
-  "source": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/highlowdm_full_20260707_flat_hists_selected_recoil6_with_nt0_wsplit_lowdm_variables.json",
+  "source": "autonomous_allhad/workflow/highlowdm_full_20260706_flat_hists_selected_an17_recoil6_with_lowdm_variables.json",
   "status": "complete"
 }

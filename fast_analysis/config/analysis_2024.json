@@ -1,0 +1,28 @@
+{
+  "analysis": "run3_allhadronic_stop_fast",
+  "year": "2024",
+  "luminosity_fb": 109.82,
+  "maturity": ["prototype", "expected-only", "2024-only", "high-DeltaM-only", "nominal-only"],
+  "approved_roots": ["/eos/user/t/taiwoo/run3_stop/decaf"],
+  "output_root": "/eos/user/t/taiwoo/run3_stop/decaf/fast_outputs",
+  "fixed_python": "/eos/user/t/taiwoo/miniconda3/envs/py38/bin/python",
+  "environment_path": "/eos/user/t/taiwoo/miniconda3/envs/py38",
+  "legacy_scaled_reference": "/eos/user/t/taiwoo/decaf/analysis/hists/stop_2024_nominal.scaled",
+  "storage": {
+    "compact_events": "runtime-selected",
+    "preferred": "parquet-if-pyarrow-installed-else-flat-root",
+    "templates": "root"
+  },
+  "regions": [
+    "cat2_LLCR_highDeltaM",
+    "cat3_QCDCR_highDeltaM",
+    "cat4_GCR_highDeltaM",
+    "cat5_DY2E_highDeltaM",
+    "cat6_DY2M_highDeltaM",
+    "cat7_SR_highDeltaM"
+  ],
+  "recoil_bins": [250, 300, 350, 400, 500, 800, 1500],
+  "blinding": {
+    "cat7_SR_highDeltaM": "blind_observed_data"
+  }
+}

@@ -27,7 +27,7 @@ output = job.$(ClusterId).log
 error  = job.$(ClusterId).log
 log    = job.$(ClusterId).log
 
-request_cpus   = 1
+request_cpus   = 4
 request_memory = 6000
 request_disk   = 12000
 

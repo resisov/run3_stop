@@ -1,0 +1,67 @@
+metadata:
+  purpose: Map current Coffea all-hadronic processor behavior to the independent fast-analysis implementation.
+  source_processor: analysis/processors/stop_processor_v4.py
+  source_config: configs/stop_2024.yaml
+  fast_scope: 2024 high-DeltaM nominal expected-only prototype
+  status: scaffold
+
+entries:
+  - name: luminosity_2024
+    current_source: configs/stop_2024.yaml:100 and analysis/processors/stop_processor_v4.py:23
+    current_behavior: 109.82/fb, multiplied by 1000 in processor for pb normalization.
+    fast_location: fast_analysis/config/analysis_2024.json
+    intended_identical: true
+    simplification: none
+    validation_method: compare normalization factors in fast compare command
+    validation_status: pending
+    known_discrepancy: none
+
+  - name: target_regions
+    current_source: analysis/processors/stop_processor_v4.py:115-121 and 1152-1204
+    current_behavior: cat2 LLCR, cat3 QCDCR, cat4 GCR, cat5 DY2E, cat6 DY2M, cat7 SR high-DeltaM.
+    fast_location: fast_analysis/config/analysis_2024.json
+    intended_identical: true
+    simplification: first prototype may stop before datacards if CR-to-SR model is not defensible
+    validation_method: event-by-event region overlap matrix against processor output
+    validation_status: pending
+    known_discrepancy: none accepted yet
+
+  - name: met_and_recoil_binning
+    current_source: analysis/processors/stop_processor_v4.py:462-485
+    current_behavior: recoil/met validation bins [250,300,350,400,500,800,1500], template bins [250,260,270,280,290,300,350,400,500,800].
+    fast_location: fast_analysis/config/defaults.py and schema/compact_event_schema_v1.json
+    intended_identical: true for validation bins; template bins preserved when ROOT template writer is implemented
+    simplification: none for nominal yield bins
+    validation_method: compare per-bin yields
+    validation_status: pending
+    known_discrepancy: none
+
+  - name: triggers
+    current_source: analysis/processors/stop_processor_v4.py:123-295 and 1100-1130
+    current_behavior: signal MET triggers, photon triggers, electron triggers, and muon triggers with missing-branch guards.
+    fast_location: fast_analysis/selection/triggers.py
+    intended_identical: planned
+    simplification: no implementation yet; benchmark inspects branch availability only
+    validation_method: trigger count comparison on identical NanoAOD files
+    validation_status: pending
+    known_discrepancy: not implemented
+
+  - name: btag_working_points
+    current_source: analysis/utils/common.py:68-83 and analysis/processors/stop_processor_v4.py:880-882
+    current_behavior: UParTAK4 loose 0.0246, medium 0.1272, tight 0.4648 for 2024.
+    fast_location: fast_analysis/selection/objects.py
+    intended_identical: planned
+    simplification: none
+    validation_method: compare loose/medium/tight b-tag multiplicities
+    validation_status: pending
+    known_discrepancy: not implemented
+
+  - name: nominal_weights
+    current_source: analysis/processors/stop_processor_v4.py:1205-1320 and analysis/utils/corrections.py
+    current_behavior: genWeight, pileup, top-pT for TT, UParT b-tag SF, lepton and photon SF components.
+    fast_location: fast_analysis/corrections
+    intended_identical: planned for nominal; variations deferred
+    simplification: first benchmark does not evaluate corrections
+    validation_method: compare component weights and weighted yields
+    validation_status: pending
+    known_discrepancy: corrections require EOS-resident JSON provenance before use

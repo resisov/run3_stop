@@ -1,1 +1,76 @@
-[]
+{
+  "bad_files": [
+    {
+      "alternate_access_attempted": false,
+      "checked_at": "2026-07-15T09:37:51.407781+00:00",
+      "datasets": [
+        "678137115"
+      ],
+      "error": "index -1 is out of bounds for axis 0 with size 0",
+      "exception_type": "IndexError",
+      "failure_stage": "histogram_branch_iteration",
+      "first_failure_time": "2026-07-15T09:37:51.407781+00:00",
+      "last_failure_time": "2026-07-15T09:37:51.407781+00:00",
+      "metadata": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/flat_ntuple_2025_data_2024corr_20260714/outputs/data_shard_03029.json",
+      "metadata_events_written": 1214,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/flat_ntuple_2025_data_2024corr_20260714/outputs/data_shard_03029.root",
+      "permanently_skipped": false,
+      "recovered_tree_entries": 1214,
+      "recovery_attempted": true,
+      "replacement": "../flat_ntuple_2025_data_histread_recovery_rw3_20260715/outputs/data_shard_03029.root",
+      "resolution_status": "recovered",
+      "status": "bad",
+      "tree_entries": 1214
+    },
+    {
+      "alternate_access_attempted": false,
+      "checked_at": "2026-07-15T09:37:54.305888+00:00",
+      "datasets": [
+        "1985935128"
+      ],
+      "error": "index -1 is out of bounds for axis 0 with size 0",
+      "exception_type": "IndexError",
+      "failure_stage": "histogram_branch_iteration",
+      "first_failure_time": "2026-07-15T09:37:54.305888+00:00",
+      "last_failure_time": "2026-07-15T09:37:54.305888+00:00",
+      "metadata": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/flat_ntuple_2025_data_2024corr_20260714/outputs/data_shard_03609.json",
+      "metadata_events_written": 850,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/flat_ntuple_2025_data_2024corr_20260714/outputs/data_shard_03609.root",
+      "permanently_skipped": false,
+      "recovered_tree_entries": 850,
+      "recovery_attempted": true,
+      "replacement": "../flat_ntuple_2025_data_histread_recovery_rw3_20260715/outputs/data_shard_03609.root",
+      "resolution_status": "recovered",
+      "status": "bad",
+      "tree_entries": 850
+    },
+    {
+      "alternate_access_attempted": false,
+      "checked_at": "2026-07-15T09:37:56.686118+00:00",
+      "datasets": [
+        "1386729087",
+        "45987641"
+      ],
+      "error": "index -1 is out of bounds for axis 0 with size 0",
+      "exception_type": "IndexError",
+      "failure_stage": "histogram_branch_iteration",
+      "first_failure_time": "2026-07-15T09:37:56.686118+00:00",
+      "last_failure_time": "2026-07-15T09:37:56.686118+00:00",
+      "metadata": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/flat_ntuple_2025_data_2024corr_20260714/outputs/data_shard_02944.json",
+      "metadata_events_written": 580,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/flat_ntuple_2025_data_2024corr_20260714/outputs/data_shard_02944.root",
+      "permanently_skipped": false,
+      "recovered_tree_entries": 580,
+      "recovery_attempted": true,
+      "replacement": "../flat_ntuple_2025_data_histread_recovery_rw3_20260715/outputs/data_shard_02944.root",
+      "resolution_status": "recovered",
+      "status": "bad",
+      "tree_entries": 580
+    }
+  ],
+  "lost_selected_events": 0,
+  "permanently_skipped_count": 0,
+  "record_count": 3,
+  "status": "complete_with_recovered_files",
+  "updated_at": "2026-07-15T10:59:35.101782+00:00"
+}

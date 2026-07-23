@@ -15,6 +15,12 @@ import json
 
 import hist
 
+
+def _clip_jec_residual_run(year, run):
+    if year == '2024':
+        return ak.where(run < 378971, 378971, ak.where(run >= 387122, 387121, run))
+    return run
+
 ####
 # PU weight
 # https://cms-analysis-corrections.docs.cern.ch/corrections_era/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/LUM/latest/#puweights_cjsongz
@@ -79,7 +85,7 @@ def get_jec_correction(year, pt, eta, phi, rho, area, run, isData):
             # L3Absolute Correction
             corr_L3 = evaluator[jec_names['L3Absolute']].evaluate(eta, pt)
             # L2L3Residual Correction
-            corr_L2L3 = evaluator[jec_names['L2L3Residual']].evaluate(run, eta, pt)
+            corr_L2L3 = evaluator[jec_names['L2L3Residual']].evaluate(_clip_jec_residual_run(year, run), eta, pt)
             corr = corr_L1 * corr_L2 * corr_L3 * corr_L2L3
         ## MC Correction
         else:
@@ -119,7 +125,7 @@ def get_jec_correction(year, pt, eta, phi, rho, area, run, isData):
             # L3Absolute Correction
             corr_L3 = evaluator[jec_names['L3Absolute']].evaluate(eta, pt)
             # L2L3Residual Correction
-            corr_L2L3 = evaluator[jec_names['L2L3Residual']].evaluate(run, eta, pt)
+            corr_L2L3 = evaluator[jec_names['L2L3Residual']].evaluate(_clip_jec_residual_run(year, run), eta, pt)
             corr = corr_L1 * corr_L2 * corr_L3 * corr_L2L3
         ## MC Correction
         else:
@@ -153,7 +159,7 @@ def get_jec_correction(year, pt, eta, phi, rho, area, run, isData):
             # L3Absolute Correction
             corr_L3 = evaluator[jec_names['L3Absolute']].evaluate(eta, pt)
             # L2L3Residual Correction
-            corr_L2L3 = evaluator[jec_names['L2L3Residual']].evaluate(run, eta, pt)
+            corr_L2L3 = evaluator[jec_names['L2L3Residual']].evaluate(_clip_jec_residual_run(year, run), eta, pt)
             corr = corr_L1 * corr_L2 * corr_L3 * corr_L2L3
         ## MC Correction
         else:
@@ -215,7 +221,7 @@ def get_fjec_correction(year, pt, eta, phi, rho, area, run, isData):
             # L3Absolute Correction
             corr_L3 = evaluator[jec_names['L3Absolute']].evaluate(eta, pt)
             # L2L3Residual Correction
-            corr_L2L3 = evaluator[jec_names['L2L3Residual']].evaluate(run, eta, pt)
+            corr_L2L3 = evaluator[jec_names['L2L3Residual']].evaluate(_clip_jec_residual_run(year, run), eta, pt)
             corr = corr_L1 * corr_L2 * corr_L3 * corr_L2L3
         ## MC Correction
         else:
@@ -255,7 +261,7 @@ def get_fjec_correction(year, pt, eta, phi, rho, area, run, isData):
             # L3Absolute Correction
             corr_L3 = evaluator[jec_names['L3Absolute']].evaluate(eta, pt)
             # L2L3Residual Correction
-            corr_L2L3 = evaluator[jec_names['L2L3Residual']].evaluate(run, eta, pt)
+            corr_L2L3 = evaluator[jec_names['L2L3Residual']].evaluate(_clip_jec_residual_run(year, run), eta, pt)
             corr = corr_L1 * corr_L2 * corr_L3 * corr_L2L3
         ## MC Correction
         else:
@@ -289,7 +295,7 @@ def get_fjec_correction(year, pt, eta, phi, rho, area, run, isData):
             # L3Absolute Correction
             corr_L3 = evaluator[jec_names['L3Absolute']].evaluate(eta, pt)
             # L2L3Residual Correction
-            corr_L2L3 = evaluator[jec_names['L2L3Residual']].evaluate(run, eta, pt)
+            corr_L2L3 = evaluator[jec_names['L2L3Residual']].evaluate(_clip_jec_residual_run(year, run), eta, pt)
             corr = corr_L1 * corr_L2 * corr_L3 * corr_L2L3
         ## MC Correction
         else:

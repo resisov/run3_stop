@@ -1,76 +1,30 @@
 {
   "stages": {
-    "analysisctl_all": {
-      "result": {
-        "status": "complete",
-        "wall_time_s": 278.5
-      },
-      "status": "complete",
-      "updated_at": "2026-06-17T15:41:27Z"
-    },
-    "analysisctl_all_start": {
-      "result": {
-        "command": "./autonomous_allhad/analysisctl all --config autonomous_allhad/configs/run3_2024.yaml"
-      },
-      "status": "complete",
-      "updated_at": "2026-06-17T15:36:49Z"
-    },
     "condor_production": {
       "result": {
-        "cluster_ids": [],
-        "reason": "execution.allow_condor_submit is false in autonomous_allhad/configs/run3_2024.yaml; no autonomous Condor execute/monitor/retry/merge implementation exists for the 52k-file feature-table production campaign",
-        "status": "not_submitted"
-      },
-      "status": "blocked",
-      "updated_at": "2026-06-17T15:37:40Z"
-    },
-    "design_search_bins": {
-      "result": {
-        "output": "autonomous_allhad/studies/search_bins/search_bin_candidates.json",
-        "schemes": 5,
-        "selected_provisional_scheme": null,
-        "selection_status": "no provisional scheme selected because all candidate bins fail at least one configured statistics threshold",
-        "status": "complete",
-        "wall_time_s": 41.448
-      },
-      "status": "complete",
-      "updated_at": "2026-06-17T15:38:24Z"
-    },
-    "discover_signals_from_das": {
-      "result": {
-        "bounds": {
-          "max_datasets": 50,
-          "max_files_per_dataset": 5,
-          "timeout_seconds": 120
-        },
-        "cache_status": "used_existing_signal_inventory",
-        "das_dataset_search_query_used": "dataset dataset=/SMS-2Stop*/*RunIII*NanoAOD*/NANOAODSIM",
-        "das_query_used": "dataset dataset=/SMS-2Stop*/*RunIII*NanoAOD*/NANOAODSIM",
-        "datasets_found": 32,
-        "fastsim_datasets": 26,
-        "fullsim_anchor_candidates": 6,
-        "outputs": [
-          "autonomous_allhad/signals/das_signal_datasets.json",
-          "autonomous_allhad/signals/das_signal_files.json"
+        "args_file": "<workspace>/full_production_args.txt",
+        "cluster_ids": [
+          "926283"
         ],
-        "status": "complete",
-        "total_fastsim_signal_root_files": 61,
-        "total_fullsim_signal_root_files": 47,
-        "total_signal_root_files": 108
+        "jobs_planned": 1567,
+        "merge_policy": "not_merged_into_nominal_full_normalized_yields",
+        "shape_shift": "metUnclusteredDown",
+        "shard_output_dir": "autonomous_allhad/workflow/production_outputs_boosted_an17_20260629_metUnclusteredDown",
+        "status": "submitted_waiting_for_outputs",
+        "submit_file": "<workspace>/full_production.sub",
+        "valid_outputs": 0
       },
-      "status": "complete",
-      "updated_at": "2026-06-17T15:37:07Z"
+      "status": "submitted_waiting_for_outputs",
+      "updated_at": "2026-06-29T14:14:59Z"
     },
     "expected_limits": {
       "result": {
         "blockers": [
-          "no Combine-compatible datacards are available",
-          "Combine command 'combine' is unavailable in PATH",
-          "CMSSW_BASE is not set; cmsenv is not active"
+          "no Combine-compatible datacards are available"
         ],
-        "cmssw_base": null,
+        "cmssw_base": "/tmp/taiwoo/combine_runtime_20260628/CMSSW_14_1_0_pre4",
         "combine_command": "combine",
-        "combine_path": null,
+        "combine_path": "/tmp/taiwoo/combine_runtime_20260628/CMSSW_14_1_0_pre4/bin/el9_amd64_gcc12/combine",
         "limits_produced": 0,
         "setup_instructions": [
           "Set up an analysis-approved CMSSW/Combine environment and run cmsenv.",
@@ -78,22 +32,10 @@
           "After real datacards exist, run ./autonomous_allhad/analysisctl expected-limits --config autonomous_allhad/configs/run3_2024.yaml."
         ],
         "status": "blocked",
-        "wall_time_s": 0.122,
         "warning": "No real Combine limits are produced or claimed. Proxy values must not be interpreted as expected limits."
       },
       "status": "blocked",
-      "updated_at": "2026-06-17T15:41:23Z"
-    },
-    "file_validation": {
-      "result": {
-        "bad_or_inaccessible": 0,
-        "checked_first_files": 200,
-        "policy": "inaccessible local paths are not marked permanently corrupted without ROOT/tree retry",
-        "status": "complete",
-        "wall_time_s": 0.222
-      },
-      "status": "complete",
-      "updated_at": "2026-06-17T15:36:49Z"
+      "updated_at": "2026-06-28T02:09:17Z"
     },
     "full_production_normalization": {
       "result": {
@@ -104,21 +46,10 @@
           "systematic shifted event weights are not available"
         ],
         "output": "autonomous_allhad/outputs/full_normalized_yields.json",
-        "status": "blocked",
-        "wall_time_s": 2.786
+        "status": "blocked"
       },
       "status": "blocked",
-      "updated_at": "2026-06-17T15:37:42Z"
-    },
-    "input_discovery": {
-      "result": {
-        "datasets": 5331,
-        "status": "complete",
-        "wall_time_s": 0.204,
-        "with_metadata": 5331
-      },
-      "status": "complete",
-      "updated_at": "2026-06-17T15:36:49Z"
+      "updated_at": "2026-06-28T02:08:40Z"
     },
     "make_datacards": {
       "result": {
@@ -130,196 +61,19 @@
         ],
         "datacards_produced": 0,
         "output": "autonomous_allhad/cards/README.md",
-        "status": "blocked",
-        "wall_time_s": 0.086
+        "signal_fit_interpolation_status": "blocked",
+        "status": "blocked"
       },
       "status": "blocked",
-      "updated_at": "2026-06-17T15:41:23Z"
+      "updated_at": "2026-06-28T02:09:15Z"
     },
     "make_feature_yields": {
       "result": {
         "output": "autonomous_allhad/outputs/feature_yields.json",
-        "status": "exploratory_provisional",
-        "wall_time_s": 0.096
+        "status": "exploratory_provisional"
       },
       "status": "complete",
-      "updated_at": "2026-06-17T15:38:25Z"
-    },
-    "make_hists_npy": {
-      "result": {
-        "background_files_processed": 11,
-        "background_yield_status": "complete",
-        "data_files_processed": 3,
-        "data_yield_status": "complete",
-        "hist_index": "autonomous_allhad/hist_index.json",
-        "histogram_items": 277,
-        "hists_npy": "autonomous_allhad/hists.npy",
-        "signal_files_processed": 0,
-        "signal_yield_status": "blocked",
-        "status": "complete",
-        "wall_time_s": 160.676
-      },
-      "status": "complete",
-      "updated_at": "2026-06-17T15:41:06Z"
-    },
-    "make_plots": {
-      "result": {
-        "message": "Current plots are feature-side MET and search-bin yield diagnostics; full publication plots await normalized full production yields.",
-        "plots_dir": "docs/plots",
-        "status": "complete"
-      },
-      "status": "complete",
-      "updated_at": "2026-06-17T12:51:46Z"
-    },
-    "make_systematic_yields": {
-      "result": {
-        "blockers": [
-          "final search bins are not selected",
-          "full-production normalized nominal yields are unavailable",
-          "systematic shifted feature/yield inputs are unavailable"
-        ],
-        "output": "autonomous_allhad/outputs/systematic_yields.json",
-        "status": "blocked",
-        "wall_time_s": 0.166
-      },
-      "status": "blocked",
-      "updated_at": "2026-06-17T15:38:25Z"
-    },
-    "monitor": {
-      "result": {
-        "agreement_claim": "No independent agreement with stop_processor_v4.py is claimed by autonomous_allhad.",
-        "bad_files": 0,
-        "blocked_gates": [
-          "condor_production",
-          "expected_limits",
-          "full_production_normalization",
-          "make_datacards",
-          "process_signals",
-          "run_production",
-          "select_search_bins",
-          "systematic_yields",
-          "make_systematic_yields"
-        ],
-        "completed_gates": [
-          "design_search_bins",
-          "discover_signals_from_das",
-          "make_feature_yields",
-          "make_hists_npy",
-          "make_plots",
-          "normalization_audit",
-          "normalize_feature_yields",
-          "parse_signal_xsec",
-          "plot_from_npy",
-          "publish_github_pages",
-          "analysisctl_all_start",
-          "validate_feature_subset",
-          "input_discovery",
-          "file_validation",
-          "signal_discovery"
-        ],
-        "current_pipeline_stage": "publish_github_pages",
-        "diagnostic_preselection_yield": 12377,
-        "failed_gates": [],
-        "feature_rows": 290006,
-        "github_pages_deployment_confirmed": false,
-        "github_pages_deployment_status": "not_confirmed",
-        "github_pages_expected_url": "https://resisov.github.io/run3_stop/",
-        "github_pages_last_publication_time_utc": "2026-06-17T15:41:23Z",
-        "github_pages_published_by_pipeline": false,
-        "github_pages_site_status": "ready",
-        "latest_command": {
-          "result": {
-            "docs_path": "docs",
-            "index": "docs/index.html",
-            "monitor": "docs/monitor.html",
-            "published": false,
-            "status": "complete",
-            "workflow": ".github/workflows/pages.yml"
-          },
-          "stage": "publish_github_pages",
-          "status": "complete"
-        },
-        "latest_failure": null,
-        "latest_successful_command": {
-          "result": {
-            "docs_path": "docs",
-            "index": "docs/index.html",
-            "monitor": "docs/monitor.html",
-            "published": false,
-            "status": "complete",
-            "workflow": ".github/workflows/pages.yml"
-          },
-          "stage": "publish_github_pages",
-          "status": "complete"
-        },
-        "manual_validation_status": "external/manual",
-        "next_recommended_action": "Unblock full production: enable/authorize Condor production or configure an explicit bounded local full-production fallback, then run ./autonomous_allhad/analysisctl run-production --config autonomous_allhad/configs/run3_2024.yaml",
-        "normalization_blocked_datasets": 0,
-        "normalization_luminosity_fb": 109.82,
-        "normalization_status": "complete",
-        "normalized_datasets": 14,
-        "raw_vs_normalized_yield_status": "raw_genWeight_sums; normalized_feature_yields.json available",
-        "region_yields": {
-          "DY2E": 17,
-          "DY2M": 28,
-          "GCR": 89,
-          "LLCR": 659,
-          "QCDCR": 326,
-          "SR": 5265
-        },
-        "root_files_read": 14,
-        "signal_das_discovery": {
-          "all_fastsim_files_ready_for_process_signals": true,
-          "contour_inputs_ready": false,
-          "das_query_used": "dataset dataset=/SMS-2Stop*/*RunIII*NanoAOD*/NANOAODSIM",
-          "datasets_found": 32,
-          "fastsim_datasets": 26,
-          "fastsim_process_signals_status": "ready",
-          "fullsim_anchor_candidates": 6,
-          "realized_mass_points": 326,
-          "representative_files_probed": 26,
-          "signal_processed_files": 0,
-          "signal_yield_mass_points": 0,
-          "signal_yields_ready": false,
-          "status": "complete",
-          "total_fastsim_signal_root_files": 61,
-          "total_fullsim_signal_root_files": 47,
-          "total_signal_root_files": 108,
-          "trigger_policy": "FastSim trigger bypass: HLT branches absent; trigger not applied at event-selection level",
-          "usable_fastsim_mass_points": 326,
-          "xsec_table_status": "parsed"
-        },
-        "status": "complete",
-        "wall_time_s": 0.05
-      },
-      "status": "complete",
-      "updated_at": "2026-06-17T15:41:27Z"
-    },
-    "normalization_audit": {
-      "result": {
-        "blocked_datasets": 0,
-        "luminosity_fb": 109.82,
-        "normalized_or_data_datasets": 14,
-        "output": "autonomous_allhad/validation/normalization_audit.json",
-        "raw_or_normalized": "raw_genWeight_sums",
-        "status": "complete",
-        "wall_time_s": 9.288
-      },
-      "status": "complete",
-      "updated_at": "2026-06-17T15:36:59Z"
-    },
-    "normalize_feature_yields": {
-      "result": {
-        "blocked_datasets": 0,
-        "factors": "autonomous_allhad/outputs/normalization_factors.json",
-        "luminosity_fb": 109.82,
-        "normalized_datasets": 14,
-        "output": "autonomous_allhad/outputs/normalized_feature_yields.json",
-        "status": "complete",
-        "wall_time_s": 7.414
-      },
-      "status": "complete",
-      "updated_at": "2026-06-17T15:37:06Z"
+      "updated_at": "2026-06-28T02:09:13Z"
     },
     "parse_signal_xsec": {
       "result": {
@@ -328,23 +82,12 @@
         "status": "parsed"
       },
       "status": "complete",
-      "updated_at": "2026-06-17T15:37:26Z"
-    },
-    "plot_from_npy": {
-      "result": {
-        "plot_manifest": "autonomous_allhad/plots/plot_manifest.json",
-        "plots": 32,
-        "source": "autonomous_allhad/hists.npy",
-        "status": "complete",
-        "wall_time_s": 17.251
-      },
-      "status": "complete",
-      "updated_at": "2026-06-17T15:41:23Z"
+      "updated_at": "2026-06-30T08:26:54Z"
     },
     "process_signals": {
       "result": {
         "attempted_files": 61,
-        "bad_files": 61,
+        "bad_files": 0,
         "fastsim_datasets": 26,
         "fullsim_anchor_datasets_recorded_not_processed": 6,
         "histogram_cache_policy": "persisted by make-hists-npy into autonomous_allhad/hists.npy",
@@ -354,16 +97,15 @@
           "autonomous_allhad/outputs/signal_searchbin_yields.json",
           "autonomous_allhad/outputs/signal_cutflows.json"
         ],
-        "processed_event_rows": 0,
-        "processed_files": 0,
-        "realized_mass_points_with_yields": 0,
-        "signal_yields_ready": false,
-        "status": "blocked",
-        "wall_time_s": 30.42,
-        "xsec_normalization_status": "incomplete_missing_xsec_or_sumw"
+        "processed_event_rows": 12963441,
+        "processed_files": 61,
+        "realized_mass_points_with_yields": 352,
+        "signal_yields_ready": true,
+        "status": "complete",
+        "xsec_normalization_status": "complete"
       },
-      "status": "blocked",
-      "updated_at": "2026-06-17T15:37:38Z"
+      "status": "complete",
+      "updated_at": "2026-06-30T10:22:33Z"
     },
     "publish_github_pages": {
       "result": {
@@ -372,7 +114,7 @@
         "docs_path": "docs",
         "expected_url": "https://resisov.github.io/run3_stop/",
         "index": "docs/index.html",
-        "last_publication_time_utc": "2026-06-17T15:41:23Z",
+        "last_publication_time_utc": "2026-06-30T10:22:34Z",
         "monitor": "docs/monitor.html",
         "published": false,
         "remaining_step": "Commit/push docs and confirm the GitHub Pages deployment in GitHub Actions.",
@@ -380,74 +122,144 @@
           "findings": [],
           "status": "clean"
         },
-        "status": "complete",
-        "wall_time_s": 4.033,
         "workflow": ".github/workflows/pages.yml"
       },
       "status": "complete",
-      "updated_at": "2026-06-17T15:41:27Z"
+      "updated_at": "2026-06-30T10:23:03Z"
+    },
+    "run_2025_data_limit_20260715": {
+      "result": {
+        "analysis_plots": 130,
+        "data_roots": 7587,
+        "limit_2024plus2025": {
+          "expected_excluded_points": 87,
+          "max_expected_excluded_mstop_for_mlsp_le_100": 1400,
+          "status": "complete",
+          "valid_points": 352
+        },
+        "limit_2025": {
+          "expected_excluded_points": 70,
+          "max_expected_excluded_mstop_for_mlsp_le_100": 1350,
+          "status": "complete",
+          "valid_points": 352
+        },
+        "path_policy": "EOS only; no AFS or system /tmp writes; decaf/analysis untouched",
+        "permanently_skipped_files": 0,
+        "recovered_shards": 5,
+        "run_directory": "autonomous_allhad/workflow/full_run_2025_data_limit_20260715",
+        "search_bins": 54,
+        "selected_events": 9685947,
+        "website": {
+          "path": "docs/full_run_2025_data_limit_20260715",
+          "public_deployment_confirmed": false,
+          "status": "independent_page_generated"
+        }
+      },
+      "status": "complete",
+      "updated_at": "2026-07-15T10:59:35.101782+00:00"
     },
     "run_production": {
       "result": {
-        "background_root_files": 39172,
-        "blockers": [
-          "execution.allow_condor_submit is false in autonomous_allhad/configs/run3_2024.yaml",
-          "no autonomous Condor execute/monitor/retry/merge implementation exists for the 52k-file feature-table production campaign"
+        "failed_preview": [],
+        "incomplete_preview": [],
+        "missing_preview": [
+          "autonomous_allhad/workflow/production_outputs_boosted_an17_20260629_nominal/data_shard_00000.json",
+          "autonomous_allhad/workflow/production_outputs_boosted_an17_20260629_nominal/data_shard_00001.json",
+          "autonomous_allhad/workflow/production_outputs_boosted_an17_20260629_nominal/data_shard_00002.json",
+          "autonomous_allhad/workflow/production_outputs_boosted_an17_20260629_nominal/data_shard_00003.json",
+          "autonomous_allhad/workflow/production_outputs_boosted_an17_20260629_nominal/data_shard_00004.json",
+          "autonomous_allhad/workflow/production_outputs_boosted_an17_20260629_nominal/data_shard_00005.json",
+          "autonomous_allhad/workflow/production_outputs_boosted_an17_20260629_nominal/data_shard_00006.json",
+          "autonomous_allhad/workflow/production_outputs_boosted_an17_20260629_nominal/data_shard_00007.json",
+          "autonomous_allhad/workflow/production_outputs_boosted_an17_20260629_nominal/data_shard_00008.json",
+          "autonomous_allhad/workflow/production_outputs_boosted_an17_20260629_nominal/data_shard_00009.json"
         ],
-        "cluster_ids": [],
-        "data_root_files": 13576,
-        "datasets": 5331,
-        "events_processed": 0,
-        "fastsim_signal_root_files": 61,
-        "files_in_metadata": 52772,
-        "fullsim_signal_root_files_recorded_skipped": 47,
-        "jobs_planned": 52809,
-        "output": "autonomous_allhad/workflow/full_production_manifest.json",
-        "status": "blocked_not_submitted",
-        "wall_time_s": 2.045
-      },
-      "status": "blocked",
-      "updated_at": "2026-06-17T15:37:40Z"
-    },
-    "select_search_bins": {
-      "result": {
-        "blockers": [
-          "full-production normalized yields are unavailable",
-          "all candidate bins fail at least one configured statistics threshold in the feature subset"
-        ],
-        "output": "autonomous_allhad/studies/search_bins/final_search_bins.json",
-        "selected_scheme": null,
+        "reason": "full production shard outputs are not all complete",
+        "shards_complete": 0,
+        "shards_expected": 4283,
+        "shards_failed": 0,
+        "shards_incomplete": 0,
+        "shards_missing": 4283,
         "status": "blocked",
-        "wall_time_s": 0.884
+        "submit_info": {
+          "cluster_ids": [
+            "926277"
+          ],
+          "exit_status": 0,
+          "stderr_tail": "",
+          "stdout": "......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................\n4283 job(s) submitted to cluster 926277.\n"
+        }
       },
       "status": "blocked",
-      "updated_at": "2026-06-17T15:38:25Z"
+      "updated_at": "2026-06-29T14:09:26Z"
     },
-    "signal_discovery": {
+    "run_production_jesTotalDown": {
       "result": {
-        "bounds": {
-          "max_datasets": 50,
-          "max_files_per_dataset": 5,
-          "timeout_seconds": 120
-        },
-        "cache_status": "used_existing_signal_inventory",
-        "das_dataset_search_query_used": "dataset dataset=/SMS-2Stop*/*RunIII*NanoAOD*/NANOAODSIM",
-        "das_query_used": "dataset dataset=/SMS-2Stop*/*RunIII*NanoAOD*/NANOAODSIM",
-        "datasets_found": 32,
-        "fastsim_datasets": 26,
-        "fullsim_anchor_candidates": 6,
-        "outputs": [
-          "autonomous_allhad/signals/das_signal_datasets.json",
-          "autonomous_allhad/signals/das_signal_files.json"
+        "args_file": "<workspace>/full_production_args.txt",
+        "cluster_ids": [
+          "926280"
         ],
-        "status": "complete",
-        "total_fastsim_signal_root_files": 61,
-        "total_fullsim_signal_root_files": 47,
-        "total_signal_root_files": 108,
-        "wall_time_s": 0.033
+        "jobs_planned": 1567,
+        "merge_policy": "not_merged_into_nominal_full_normalized_yields",
+        "shape_shift": "jesTotalDown",
+        "shard_output_dir": "autonomous_allhad/workflow/production_outputs_boosted_an17_20260629_jesTotalDown",
+        "status": "submitted_waiting_for_outputs",
+        "submit_file": "<workspace>/full_production.sub",
+        "valid_outputs": 0
       },
-      "status": "complete",
-      "updated_at": "2026-06-17T15:37:07Z"
+      "status": "submitted_waiting_for_outputs",
+      "updated_at": "2026-06-29T14:12:03Z"
+    },
+    "run_production_jesTotalUp": {
+      "result": {
+        "args_file": "<workspace>/full_production_args.txt",
+        "cluster_ids": [
+          "926278"
+        ],
+        "jobs_planned": 1567,
+        "merge_policy": "not_merged_into_nominal_full_normalized_yields",
+        "shape_shift": "jesTotalUp",
+        "shard_output_dir": "autonomous_allhad/workflow/production_outputs_boosted_an17_20260629_jesTotalUp",
+        "status": "submitted_waiting_for_outputs",
+        "submit_file": "<workspace>/full_production.sub",
+        "valid_outputs": 0
+      },
+      "status": "submitted_waiting_for_outputs",
+      "updated_at": "2026-06-29T14:10:47Z"
+    },
+    "run_production_metUnclusteredDown": {
+      "result": {
+        "args_file": "<workspace>/full_production_args.txt",
+        "cluster_ids": [
+          "926283"
+        ],
+        "jobs_planned": 1567,
+        "merge_policy": "not_merged_into_nominal_full_normalized_yields",
+        "shape_shift": "metUnclusteredDown",
+        "shard_output_dir": "autonomous_allhad/workflow/production_outputs_boosted_an17_20260629_metUnclusteredDown",
+        "status": "submitted_waiting_for_outputs",
+        "submit_file": "<workspace>/full_production.sub",
+        "valid_outputs": 0
+      },
+      "status": "submitted_waiting_for_outputs",
+      "updated_at": "2026-06-29T14:14:59Z"
+    },
+    "run_production_metUnclusteredUp": {
+      "result": {
+        "args_file": "<workspace>/full_production_args.txt",
+        "cluster_ids": [
+          "926282"
+        ],
+        "jobs_planned": 1567,
+        "merge_policy": "not_merged_into_nominal_full_normalized_yields",
+        "shape_shift": "metUnclusteredUp",
+        "shard_output_dir": "autonomous_allhad/workflow/production_outputs_boosted_an17_20260629_metUnclusteredUp",
+        "status": "submitted_waiting_for_outputs",
+        "submit_file": "<workspace>/full_production.sub",
+        "valid_outputs": 0
+      },
+      "status": "submitted_waiting_for_outputs",
+      "updated_at": "2026-06-29T14:13:38Z"
     },
     "systematic_yields": {
       "result": {
@@ -460,25 +272,9 @@
         "status": "blocked"
       },
       "status": "blocked",
-      "updated_at": "2026-06-17T15:38:25Z"
-    },
-    "validate_feature_subset": {
-      "result": {
-        "cached": true,
-        "source": "autonomous_allhad/outputs/real_subset_summary.json",
-        "status": "complete"
-      },
-      "status": "complete",
-      "updated_at": "2026-06-17T15:36:49Z"
-    },
-    "write_summary": {
-      "result": {
-        "status": "complete",
-        "wall_time_s": 0.054
-      },
-      "status": "complete",
-      "updated_at": "2026-06-17T15:41:27Z"
+      "updated_at": "2026-06-28T02:09:14Z"
     }
   },
-  "started_at": "2026-06-17T11:01:36Z"
+  "started_at": "2026-06-27T16:24:26Z",
+  "state_load_warning": "OSError: [Errno 121] Remote I/O error"
 }

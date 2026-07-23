@@ -14,7 +14,7 @@ import uproot
 from autonomous_allhad.real_subset_worker import compute_weight_bundle
 
 RECOIL_PT_BINS = [250.0, 300.0, 350.0, 400.0, 500.0, 800.0, 1500.0]
-LOWDM_ONEBIN_LABELS = ["lowdm_inclusive"]
+LOWDM_53BIN_LABELS = [f"lowdm_bin_{index:02d}" for index in range(53)]
 SELECTED_AN17_RECOIL_BINS_1BASED = [4, 5, 8, 9, 14, 15, 16]
 SELECTED_RECOIL54_SCHEME = "boosted_an17_selected_recoil6_with_nt0_wsplit_SR"
 NT0_RECOIL_CATEGORY_KEYS = ["NT0_Nb1plus_T0_W0", "NT0_Nb1plus_T0_W1plus"]
@@ -86,8 +86,10 @@ WEIGHT_BRANCHES = [
     "photon_medium_pt", "photon_medium_eta", "photon_medium_phi", "gen_top_pt",
 ]
 LOWDM_READ_BRANCHES = [
-    "feature_lowdm_sr_base",
-    "pass_lowdm_topology_veto", "pass_lowdm_isr", "pass_lowdm_isr_bveto", "pass_lowdm_met_sqrt_ht", "pass_lowdm_mtb",
+    "feature_lowdm_LLCR", "feature_lowdm_QCDCR", "feature_lowdm_GCR",
+    "feature_lowdm_DY2E", "feature_lowdm_DY2M", "feature_lowdm_SR",
+    "lowdm_search_bin_LLCR", "lowdm_search_bin_QCDCR", "lowdm_search_bin_GCR",
+    "lowdm_search_bin_DY2E", "lowdm_search_bin_DY2M", "lowdm_search_bin_SR",
     "pass_base_common", "pass_signal_trigger", "pass_photon_trigger", "pass_electron_trigger", "pass_muon_trigger",
     "pass_zero_tau", "pass_no_veto_leptons", "pass_one_veto_lepton", "pass_mt_100",
     "pass_met_250", "pass_ht_300", "pass_ht_photon_300", "pass_ht_lepton_300",
@@ -529,28 +531,9 @@ def lowdm_common_mask(chunk: dict[str, Any], n: int) -> np.ndarray:
 
 
 def lowdm_region_mask(chunk: dict[str, Any], region: str, n: int) -> np.ndarray:
-    common = lowdm_common_mask(chunk, n)
-    njet = int_field(chunk, "njet", n)
-    met = float_field(chunk, "met", n)
-    recoil_gcr = float_field(chunk, "recoil_gcr", n)
-    recoil_dy2e = float_field(chunk, "recoil_dy2e", n)
-    recoil_dy2m = float_field(chunk, "recoil_dy2m", n)
-    mee = float_field(chunk, "mee", n, -99.0)
-    mmm = float_field(chunk, "mmm", n, -99.0)
-
-    if region == "SR":
-        return common & bool_field(chunk, "pass_signal_trigger", n) & bool_field(chunk, "pass_no_veto_leptons", n) & (njet >= 2) & bool_field(chunk, "pass_met_250", n) & bool_field(chunk, "pass_open_pre", n) & bool_field(chunk, "pass_ht_300", n)
-    if region == "LLCR":
-        return common & bool_field(chunk, "pass_signal_trigger", n) & bool_field(chunk, "pass_one_veto_lepton", n) & bool_field(chunk, "pass_mt_100", n) & (njet >= 2) & bool_field(chunk, "pass_met_250", n) & bool_field(chunk, "pass_open_pre", n) & bool_field(chunk, "pass_ht_300", n)
-    if region == "QCDCR":
-        return common & bool_field(chunk, "pass_signal_trigger", n) & bool_field(chunk, "pass_no_veto_leptons", n) & (njet >= 2) & bool_field(chunk, "pass_met_250", n) & bool_field(chunk, "pass_qcd_open", n) & bool_field(chunk, "pass_dphi123_0p1", n) & bool_field(chunk, "pass_ht_300", n)
-    if region == "GCR":
-        return common & bool_field(chunk, "pass_photon_trigger", n) & bool_field(chunk, "pass_no_veto_leptons", n) & (int_field(chunk, "n_photon_medium", n) == 1) & (int_field(chunk, "njet_photon_clean", n) >= 2) & (met < 250.0) & (recoil_gcr > 250.0) & bool_field(chunk, "pass_ht_photon_300", n)
-    if region == "DY2E":
-        return common & bool_field(chunk, "pass_electron_trigger", n) & (int_field(chunk, "n_m_loose", n) == 0) & (int_field(chunk, "n_e_medium", n) == 2) & (int_field(chunk, "njet_lepton_clean", n) >= 2) & (recoil_dy2e > 200.0) & (mee > 81.0) & (mee < 101.0) & bool_field(chunk, "pass_ht_lepton_300", n)
-    if region == "DY2M":
-        return common & bool_field(chunk, "pass_muon_trigger", n) & (int_field(chunk, "n_e_veto", n) == 0) & (int_field(chunk, "n_m_medium", n) == 2) & (int_field(chunk, "njet_lepton_clean", n) >= 2) & (recoil_dy2m > 200.0) & (mmm > 81.0) & (mmm < 101.0) & bool_field(chunk, "pass_ht_lepton_300", n)
-    raise ValueError(f"unknown low-dM region: {region}")
+    if region not in LOWDM_REGION_MAP:
+        raise ValueError(f"unknown low-dM region: {region}")
+    return bool_field(chunk, f"feature_lowdm_{region}", n)
 
 
 def empty_index_hist(nbin: int) -> dict[str, Any]:
@@ -927,31 +910,7 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                     if only_regions:
                         summary["events_processed"] = int(summary.get("events_processed", 0)) + original_n
                         continue
-                    for scheme, flag_name, data_region in [
-                        ("boosted_an_17_SR", "feature_SR", "SR"),
-                        ("boosted_an_17_SR_Nt1", "feature_SR_Nt1", "SR_Nt1"),
-                    ]:
-                        sr_search_mask = as_bool(sub_group[flag_name], inputs["n"])
-                        search_indices = boosted_an17_indices(sub_group, inputs["n"], sr_search_mask)
-                        if is_data and not data_process_allowed(process, data_region):
-                            note_data_exclusion(summary, scheme, process, int(np.count_nonzero(search_indices >= 0)))
-                        else:
-                            for vname, wraw in variations.items():
-                                weights = finite_array(wraw, inputs["n"], 0.0) * normv
-                                target = search_histograms.setdefault(scheme, {}).setdefault(label, {}).setdefault(vname, empty_index_hist(len(SEARCH_BIN_ORDER)))
-                                add_index_hist(target, search_indices, weights)
-
                     sr_mask = as_bool(sub_group["feature_SR"], inputs["n"])
-                    selected_recoil_indices = selected_an17_recoil6_indices(sub_group, inputs["n"], sr_mask)
-                    selected_scheme = "boosted_an17_selected_recoil6_SR"
-                    if is_data and not data_process_allowed(process, "SR"):
-                        note_data_exclusion(summary, selected_scheme, process, int(np.count_nonzero(selected_recoil_indices >= 0)))
-                    else:
-                        for vname, wraw in variations.items():
-                            weights = finite_array(wraw, inputs["n"], 0.0) * normv
-                            target = search_histograms.setdefault(selected_scheme, {}).setdefault(label, {}).setdefault(vname, empty_index_hist(len(selected_an17_recoil_labels())))
-                            add_index_hist(target, selected_recoil_indices, weights)
-
                     selected_recoil54_indices = selected_an17_recoil54_indices(sub_group, inputs["n"], sr_mask)
                     if is_data and not data_process_allowed(process, "SR"):
                         note_data_exclusion(summary, SELECTED_RECOIL54_SCHEME, process, int(np.count_nonzero(selected_recoil54_indices >= 0)))
@@ -965,7 +924,13 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                         lowdm_mask = lowdm_region_mask(sub_group, lowdm_region, inputs["n"])
                         if not np.any(lowdm_mask):
                             continue
-                        lowdm_indices = np.where(lowdm_mask, 0, -1)
+                        lowdm_indices = int_field(
+                            sub_group,
+                            f"lowdm_search_bin_{lowdm_region}",
+                            inputs["n"],
+                            -1,
+                        )
+                        lowdm_indices = np.where(lowdm_mask, lowdm_indices, -1)
                         if is_data and not data_process_allowed(process, lowdm_channel):
                             note_data_exclusion(summary, lowdm_channel, process, int(np.count_nonzero(lowdm_mask)))
                             continue
@@ -975,7 +940,7 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                         }
                         for vname, wraw in variations.items():
                             weights = finite_array(wraw, inputs["n"], 0.0) * normv
-                            target = search_histograms.setdefault(lowdm_channel, {}).setdefault(label, {}).setdefault(vname, empty_index_hist(len(LOWDM_ONEBIN_LABELS)))
+                            target = search_histograms.setdefault(lowdm_channel, {}).setdefault(label, {}).setdefault(vname, empty_index_hist(len(LOWDM_53BIN_LABELS)))
                             add_index_hist(target, lowdm_indices, weights)
                             for var_name, values in lowdm_values.items():
                                 spec = LOWDM_VARIABLE_SPECS[var_name]
@@ -1054,28 +1019,19 @@ def main() -> int:
             "note": "SR_Nt1 is the feature-side SR nTop>=1 branch. Other *_Nt1 regions are built as base region AND nboosted_top>=1; *_Nt0 regions are base region AND nboosted_top==0.",
         },
         "search_bin_schemes": {
-            "boosted_an_17_SR": {"bin_labels": SEARCH_BIN_ORDER, "selection": "feature_SR"},
-            "boosted_an_17_SR_Nt1": {"bin_labels": SEARCH_BIN_ORDER, "selection": "feature_SR_Nt1"},
-            "boosted_an17_selected_recoil6_SR": {
-                "bin_labels": selected_an17_recoil_labels(),
-                "selection": "feature_SR and AN17 bins 4,5,8,9,14,15,16 split into six recoil/MET bins",
-                "selected_an17_bins_1based": SELECTED_AN17_RECOIL_BINS_1BASED,
-                "recoil_pt_bins": RECOIL_PT_BINS,
-            },
             SELECTED_RECOIL54_SCHEME: {
                 "bin_labels": selected_an17_recoil54_labels(),
                 "selection": "feature_SR, categories Nb>=1,Nt=0,NW=0 and Nb>=1,Nt=0,NW>=1, followed by selected AN17 bins 4,5,8,9,14,15,16, all split into six recoil/MET bins",
                 "selected_an17_bins_1based": SELECTED_AN17_RECOIL_BINS_1BASED,
                 "recoil_pt_bins": RECOIL_PT_BINS,
-                "source_scheme_for_existing_42_bins": "boosted_an17_selected_recoil6_SR",
             },
-            **{channel: {"bin_labels": LOWDM_ONEBIN_LABELS, "selection": f"lowdm_common_and_{region}", "delta_m": "low", "region": region} for region, channel in LOWDM_REGION_MAP.items()},
+            **{channel: {"bin_labels": LOWDM_53BIN_LABELS, "selection": f"feature_lowdm_{region}", "delta_m": "low", "region": region} for region, channel in LOWDM_REGION_MAP.items()},
         },
         "lowdm_region_policy": {
             "status": "adopted_from_user_2026-07-05",
-            "search_bins": "one inclusive bin per low-dM region",
+            "search_bins": "53 AN-style low-dM bins per region, selected upstream before the flat skim",
             "regions": LOWDM_REGION_MAP,
-            "note": "Low-dM uses the same CR/SR region names as high-dM: LLCR, QCDCR, GCR, DY2E, DY2M, SR. Current flat skim lacks dilepton charge and recoil-phi branches, so DY low-dM CRs are provisional Z-window/dilepton-count/recoil selections in this post-skim builder; exact OS and recoil-phi based CR flags should be added to the next skim schema.",
+            "note": "Low-dM uses upstream exact region flags and region-specific 53-bin branches. GCR and DY use photon/dilepton recoil directions and object-cleaned AK4/AK8 collections; DY also requires OS, on-Z, and pT(ll)>200.",
         },
         "highdm_distribution_variable_specs": HIGHDM_DISTRIBUTION_VARIABLE_SPECS,
         "highdm_distribution_regions": {

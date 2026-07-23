@@ -1,6 +1,5 @@
 {
-  "adapter_preview_dir": "autonomous_allhad/workflow/current_available_pipeline_20260702/preview_20260629_style",
-  "created_at_utc": "2026-07-02T10:38:39.856573+00:00",
+  "created_at_utc": "2026-07-02T10:53:19.733615+00:00",
   "data_region_process_policy": {
     "DY2E": "EGamma",
     "DY2M": "Muon",
@@ -12,27 +11,110 @@
   },
   "events_processed": 300743579,
   "input_roots": 4271,
-  "note": "Corrected data-stream policy applied. Plot compares ordinary SR vs nTop >= 1 SR in the 6 flat bins; no AN17 17-bin search-bin comparison is used. SR data are blinded on the public plot.",
+  "note": "All plots available from the corrected flat-hist payload were regenerated: seven region templates, region yield summary, SR nTop>=1 AN17 search bins, SR-vs-SR_Nt1 comparison, and the June29-style combined CR/SR plot. SR data are blinded on public plots.",
   "plots": [
+    {
+      "bins": 47,
+      "blinded": true,
+      "kind": "cr_sr_combined",
+      "name": "current_available_control_search_bins_style",
+      "pdf": "plots/current_available_control_search_bins_style.pdf",
+      "png": "plots/current_available_control_search_bins_style.png",
+      "title": "CR recoil + SR AN17 search bins"
+    },
+    {
+      "bins": 6,
+      "blinded": false,
+      "kind": "region_template",
+      "name": "current_available_recoil_LLCR",
+      "pdf": "plots/current_available_recoil_LLCR.pdf",
+      "png": "plots/current_available_recoil_LLCR.png",
+      "title": "LLCR 6-bin template"
+    },
+    {
+      "bins": 6,
+      "blinded": false,
+      "kind": "region_template",
+      "name": "current_available_recoil_QCDCR",
+      "pdf": "plots/current_available_recoil_QCDCR.pdf",
+      "png": "plots/current_available_recoil_QCDCR.png",
+      "title": "QCDCR 6-bin template"
+    },
+    {
+      "bins": 6,
+      "blinded": false,
+      "kind": "region_template",
+      "name": "current_available_recoil_GCR",
+      "pdf": "plots/current_available_recoil_GCR.pdf",
+      "png": "plots/current_available_recoil_GCR.png",
+      "title": "GCR 6-bin template"
+    },
+    {
+      "bins": 6,
+      "blinded": false,
+      "kind": "region_template",
+      "name": "current_available_recoil_DY2E",
+      "pdf": "plots/current_available_recoil_DY2E.pdf",
+      "png": "plots/current_available_recoil_DY2E.png",
+      "title": "DY2E 6-bin template"
+    },
+    {
+      "bins": 6,
+      "blinded": false,
+      "kind": "region_template",
+      "name": "current_available_recoil_DY2M",
+      "pdf": "plots/current_available_recoil_DY2M.pdf",
+      "png": "plots/current_available_recoil_DY2M.png",
+      "title": "DY2M 6-bin template"
+    },
     {
       "bins": 6,
       "blinded": true,
+      "kind": "region_template",
+      "name": "current_available_recoil_SR",
+      "pdf": "plots/current_available_recoil_SR.pdf",
+      "png": "plots/current_available_recoil_SR.png",
+      "title": "SR 6-bin template"
+    },
+    {
+      "bins": 6,
+      "blinded": true,
+      "kind": "region_template",
+      "name": "current_available_recoil_SR_Nt1",
+      "pdf": "plots/current_available_recoil_SR_Nt1.pdf",
+      "png": "plots/current_available_recoil_SR_Nt1.png",
+      "title": "SR nTop >= 1 6-bin template"
+    },
+    {
+      "bins": 7,
+      "blinded": true,
+      "kind": "region_yields",
+      "name": "current_available_region_yields",
+      "pdf": "plots/current_available_region_yields.pdf",
+      "png": "plots/current_available_region_yields.png",
+      "title": "Region yield summary"
+    },
+    {
+      "bins": 17,
+      "blinded": true,
+      "kind": "search_bins",
+      "name": "current_available_sr_an17_search_bins",
+      "pdf": "plots/current_available_sr_an17_search_bins.pdf",
+      "png": "plots/current_available_sr_an17_search_bins.png",
+      "title": "SR nTop >= 1 AN17 search bins"
+    },
+    {
+      "bins": 6,
+      "blinded": true,
+      "kind": "sr_comparison",
       "name": "current_available_sr_vs_sr_ntop1",
       "pdf": "plots/current_available_sr_vs_sr_ntop1.pdf",
       "png": "plots/current_available_sr_vs_sr_ntop1.png",
-      "title": "SR vs SR nTop >= 1 comparison",
-      "uses_an17_17bin": false
+      "title": "SR vs SR nTop >= 1 comparison"
     }
   ],
-  "rendering_script": "autonomous_allhad/workflow/plot_control_search_bins_style.py",
-  "snapshot_counts": {
-    "data": 2716,
-    "mc": 1552,
-    "other": 0,
-    "signal": 3
-  },
+  "samples_include_other": false,
   "source_histograms": "autonomous_allhad/workflow/current_available_pipeline_20260702/boosted_recoil_hists_streamfixed.json",
-  "status": "current_available_plots_ready_20260629_style_streamfixed",
-  "style_reference": "autonomous_allhad/workflow/plot_control_search_bins_style.py and docs/partial_merge_preview_boosted_an17_20260629_current/plots/partial_control_search_bins_style.png",
+  "status": "current_available_all_flat_plots_ready_streamfixed",
   "weight_failures": 0
 }

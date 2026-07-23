@@ -30,8 +30,8 @@ from .real_subset_worker import (
 
 FOCUS_REGIONS = ["LLCR", "QCDCR", "GCR", "DY2E", "DY2M", "SR"]
 DATA_PROCESSES = {"JetMET", "EGamma", "Muon"}
-FINAL_STATUSES = {"complete", "complete_with_bad_files"}
-SHARD_SCHEMA_VERSION = "full_production_shard_v3"
+FINAL_STATUSES = {"complete"}
+SHARD_SCHEMA_VERSION = "full_production_shard_v4_boosted"
 RECOIL_PT_BINS = [250, 300, 350, 400, 500, 800, 1500]
 RECOIL_COLUMN_BY_REGION = {
     "LLCR": "met",
@@ -49,6 +49,9 @@ VARIABLES: dict[str, tuple[str, list[float]]] = {
     "njet": ("njet", [-0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 9.5, 14.5]),
     "nb": ("nb_medium", [-0.5, 0.5, 1.5, 2.5, 3.5, 6.5]),
     "nfj": ("nfj", [-0.5, 0.5, 1.5, 2.5, 3.5, 6.5]),
+    "nboosted_top": ("nboosted_top", [-0.5, 0.5, 1.5, 2.5, 3.5, 6.5]),
+    "nboosted_w": ("nboosted_w", [-0.5, 0.5, 1.5, 2.5, 3.5, 6.5]),
+    "nboosted_total": ("nboosted_total", [-0.5, 0.5, 1.5, 2.5, 3.5, 6.5]),
     "min_dphi": ("min_dphi4", [0, 0.1, 0.15, 0.3, 0.5, 0.8, 1.2, 1.8, 3.2]),
 }
 
@@ -59,9 +62,25 @@ def variable_column(variable: str, column: str, region: str) -> str:
     return column
 
 
+def finite_float(value: Any, fill: float = 0.0) -> float:
+    try:
+        out = float(value)
+    except Exception:
+        return float(fill)
+    return out if math.isfinite(out) else float(fill)
+
+
+def finite_weight(value: Any) -> float:
+    return finite_float(value, 0.0)
+
+
+def json_has_nonfinite_literals(text: str) -> bool:
+    return "NaN" in text or "Infinity" in text
+
+
 def write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    data = json.dumps(payload, indent=2, sort_keys=True) + "\n"
+    data = json.dumps(payload, indent=2, sort_keys=True, allow_nan=False) + "\n"
     tmp = path.with_name(f"{path.name}.tmp.{os.getpid()}")
     try:
         with tmp.open("w") as handle:
@@ -84,13 +103,21 @@ def valid_final_output(path: Path, shard: dict[str, Any], shift_name: str = "nom
     if not path.exists() or path.stat().st_size <= 0:
         return False
     try:
-        payload = json.loads(path.read_text())
+        text = path.read_text()
+    except Exception:
+        return False
+    if json_has_nonfinite_literals(text):
+        return False
+    try:
+        payload = json.loads(text)
     except Exception:
         return False
     records_in_shard = len(shard.get("records", []))
     if payload.get("schema_version") != SHARD_SCHEMA_VERSION:
         return False
     if payload.get("status") not in FINAL_STATUSES:
+        return False
+    if payload.get("bad_files"):
         return False
     if payload.get("record_digest") != shard.get("record_digest"):
         return False
@@ -104,11 +131,51 @@ def valid_final_output(path: Path, shard: dict[str, Any], shift_name: str = "nom
         return False
     if processed < 0 or processed > attempted:
         return False
-    if payload.get("status") == "complete" and processed != attempted:
+    if processed != attempted:
         return False
     if str(payload.get("shape_shift", "nominal")) != validate_shift_name(shift_name):
         return False
     return bool(payload.get("completed_at"))
+
+
+def resumable_progress_payload(progress_path: Path, shard: dict[str, Any], shift_name: str, records: list[dict[str, Any]]) -> tuple[dict[str, Any] | None, int]:
+    if not progress_path.exists() or progress_path.stat().st_size <= 0:
+        return None, 0
+    try:
+        payload = json.loads(progress_path.read_text())
+    except Exception:
+        return None, 0
+    attempted = payload.get("files_attempted")
+    processed = payload.get("files_processed")
+    summaries = payload.get("file_summaries")
+    if (
+        payload.get("schema_version") != SHARD_SCHEMA_VERSION
+        or payload.get("status") != "running"
+        or payload.get("record_digest") != shard.get("record_digest")
+        or payload.get("records_in_shard") != len(records)
+        or str(payload.get("shape_shift", "nominal")) != validate_shift_name(shift_name)
+        or payload.get("bad_files")
+        or not isinstance(attempted, int)
+        or not isinstance(processed, int)
+        or not isinstance(summaries, list)
+        or attempted < 0
+        or attempted > len(records)
+        or processed != attempted
+        or len(summaries) != attempted
+    ):
+        return None, 0
+    payload.setdefault("datasets", {})
+    payload.setdefault("file_summaries", summaries)
+    payload.setdefault("bad_files", [])
+    payload["files_attempted"] = attempted
+    payload["files_processed"] = processed
+    payload["records_in_shard"] = len(records)
+    payload["shape_shift"] = validate_shift_name(shift_name)
+    payload["status"] = "running"
+    payload["completed_at"] = None
+    payload["resumed_from_running"] = attempted
+    payload["resume_updated_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    return payload, attempted
 
 
 def empty_counter() -> dict[str, Any]:
@@ -116,9 +183,10 @@ def empty_counter() -> dict[str, Any]:
 
 
 def add_counter(target: dict[str, Any], weight: float) -> None:
+    weight = finite_weight(weight)
     target["unweighted"] += 1
-    target["raw_weighted"] += float(weight)
-    target["raw_sumw2"] += float(weight) * float(weight)
+    target["raw_weighted"] += weight
+    target["raw_sumw2"] += weight * weight
 
 
 def empty_hist(edges: list[float]) -> dict[str, Any]:
@@ -137,8 +205,9 @@ def fill_hist(hist: dict[str, Any], value: float, weight: float) -> None:
     edges = hist["bin_edges"]
     idx = int(np.searchsorted(np.asarray(edges, dtype=float), value, side="right") - 1)
     if 0 <= idx < len(edges) - 1:
-        hist["raw_values"][idx] += float(weight)
-        hist["raw_sumw2"][idx] += float(weight) * float(weight)
+        weight = finite_weight(weight)
+        hist["raw_values"][idx] += weight
+        hist["raw_sumw2"][idx] += weight * weight
         hist["entries"][idx] += 1
 
 
@@ -150,7 +219,7 @@ def add_available_systematics(target: dict[str, Any], names: list[str]) -> None:
 
 def merge_histogram(into: dict[str, Any], source: dict[str, Any]) -> None:
     for key in ["raw_values", "raw_sumw2", "entries"]:
-        into[key] = [float(a) + float(b) for a, b in zip(into[key], source[key])]
+        into[key] = [finite_float(a) + finite_float(b) for a, b in zip(into[key], source[key])]
 
 
 def candidate_definitions() -> dict[str, list[tuple[str, dict[str, Any]]]]:
@@ -178,6 +247,25 @@ def candidate_definitions() -> dict[str, list[tuple[str, dict[str, Any]]]]:
             ("AK8one_Njet5plus_Nb1_MET250plus", {"nfj": {"min": 1}, "njet": {"min": 5}, "nb_medium": {"min": 1}, "met": {"min": 250}}),
             ("AK8one_highMET", {"nfj": {"min": 1}, "met": {"min": 500}}),
             ("AK8two_Njet5plus", {"nfj": {"min": 2}, "njet": {"min": 5}}),
+        ],
+        "boosted_an_17": [
+            ("B0_Nb1", {"nb_medium": {"eq": 1}, "nboosted_total": {"eq": 0}}),
+            ("B0_Nb2plus", {"nb_medium": {"min": 2}, "nboosted_total": {"eq": 0}}),
+            ("Nb1_T1plus_W0", {"nb_medium": {"eq": 1}, "nboosted_top": {"min": 1}, "nboosted_w": {"eq": 0}}),
+            ("Nb1_T0_W1plus", {"nb_medium": {"eq": 1}, "nboosted_top": {"eq": 0}, "nboosted_w": {"min": 1}}),
+            ("Nb1_T1plus_W1plus", {"nb_medium": {"eq": 1}, "nboosted_top": {"min": 1}, "nboosted_w": {"min": 1}}),
+            ("Nb2_T1_W0", {"nb_medium": {"eq": 2}, "nboosted_top": {"eq": 1}, "nboosted_w": {"eq": 0}}),
+            ("Nb2_T0_W1", {"nb_medium": {"eq": 2}, "nboosted_top": {"eq": 0}, "nboosted_w": {"eq": 1}}),
+            ("Nb2_T1_W1", {"nb_medium": {"eq": 2}, "nboosted_top": {"eq": 1}, "nboosted_w": {"eq": 1}}),
+            ("Nb2_T2_W0", {"nb_medium": {"eq": 2}, "nboosted_top": {"eq": 2}, "nboosted_w": {"eq": 0}}),
+            ("Nb2_T0_W2", {"nb_medium": {"eq": 2}, "nboosted_top": {"eq": 0}, "nboosted_w": {"eq": 2}}),
+            ("Nb2_TW_ge3", {"nb_medium": {"eq": 2}, "nboosted_total": {"min": 3}}),
+            ("Nb3plus_T1_W0", {"nb_medium": {"min": 3}, "nboosted_top": {"eq": 1}, "nboosted_w": {"eq": 0}}),
+            ("Nb3plus_T0_W1", {"nb_medium": {"min": 3}, "nboosted_top": {"eq": 0}, "nboosted_w": {"eq": 1}}),
+            ("Nb3plus_T1_W1", {"nb_medium": {"min": 3}, "nboosted_top": {"eq": 1}, "nboosted_w": {"eq": 1}}),
+            ("Nb3plus_T2_W0", {"nb_medium": {"min": 3}, "nboosted_top": {"eq": 2}, "nboosted_w": {"eq": 0}}),
+            ("Nb3plus_T0_W2", {"nb_medium": {"min": 3}, "nboosted_top": {"eq": 0}, "nboosted_w": {"eq": 2}}),
+            ("Nb3plus_TW_ge3", {"nb_medium": {"min": 3}, "nboosted_total": {"min": 3}}),
         ],
         "optimized_hybrid_no_tags": [
             ("hybrid_lowMET_multijet", {"njet": {"min": 5}, "nb_medium": {"min": 1}, "met": [250, 400], "ht": {"min": 800}, "min_dphi4": {"min": 0.5}}),
@@ -265,8 +353,8 @@ def ensure_dataset(payload: dict[str, Any], record: dict[str, Any]) -> dict[str,
 
 def merge_counter(into: dict[str, Any], source: dict[str, Any]) -> None:
     into["unweighted"] += int(source.get("unweighted", 0))
-    into["raw_weighted"] += float(source.get("raw_weighted", 0.0))
-    into["raw_sumw2"] += float(source.get("raw_sumw2", 0.0))
+    into["raw_weighted"] += finite_float(source.get("raw_weighted", 0.0))
+    into["raw_sumw2"] += finite_float(source.get("raw_sumw2", 0.0))
 
 
 def process_file(record: dict[str, Any], repo: Path, chunk_size: int, shift_name: str = "nominal") -> tuple[dict[str, Any], dict[str, Any] | None, list[dict[str, Any]]]:
@@ -348,11 +436,11 @@ def process_file(record: dict[str, Any], repo: Path, chunk_size: int, shift_name
             file_payload["events_read"] += len(rows)
             add_available_systematics(file_payload, list(chunk_summary.get("available_systematics", [])))
             if not is_data and file_payload["sumw_source"] != "Runs.genEventSumw":
-                gen_weights = np.asarray([float(r.get("gen_weight", r.get("nominal_weight", 1.0))) for r in rows], dtype=float)
-                file_payload["sumw"] += float(np.sum(gen_weights))
-                file_payload["sumw2"] += float(np.sum(gen_weights * gen_weights))
+                gen_weights = np.asarray([finite_float(r.get("gen_weight", r.get("nominal_weight", 1.0))) for r in rows], dtype=float)
+                file_payload["sumw"] += finite_float(np.sum(gen_weights))
+                file_payload["sumw2"] += finite_float(np.sum(gen_weights * gen_weights))
             for row in rows:
-                event_weight = 1.0 if is_data else float(row.get("nominal_weight", 1.0))
+                event_weight = 1.0 if is_data else finite_weight(row.get("nominal_weight", 1.0))
                 variation_weights = row.get("weight_variations") if isinstance(row.get("weight_variations"), dict) else {"nominal": event_weight}
                 if is_data:
                     variation_weights = {"nominal": 1.0}
@@ -450,11 +538,11 @@ def process_file(record: dict[str, Any], repo: Path, chunk_size: int, shift_name
 def merge_file_payload(dataset_rec: dict[str, Any], file_payload: dict[str, Any]) -> None:
     dataset_rec["events_read"] += int(file_payload.get("events_read", 0))
     if not dataset_rec.get("is_data"):
-        dataset_rec["sumw"] += float(file_payload.get("sumw", 0.0))
-        dataset_rec["sumw2"] += float(file_payload.get("sumw2", 0.0))
+        dataset_rec["sumw"] += finite_float(file_payload.get("sumw", 0.0))
+        dataset_rec["sumw2"] += finite_float(file_payload.get("sumw2", 0.0))
     else:
-        dataset_rec["sumw"] += float(file_payload.get("sumw", 0.0))
-        dataset_rec["sumw2"] += float(file_payload.get("sumw2", 0.0))
+        dataset_rec["sumw"] += finite_float(file_payload.get("sumw", 0.0))
+        dataset_rec["sumw2"] += finite_float(file_payload.get("sumw2", 0.0))
     src = str(file_payload.get("sumw_source", "unknown"))
     dataset_rec["sumw_source_counts"][src] = dataset_rec["sumw_source_counts"].get(src, 0) + 1
     add_available_systematics(dataset_rec, list(file_payload.get("available_systematics", [])))
@@ -498,6 +586,7 @@ def main(argv: list[str] | None = None) -> int:
     shard_path = Path(args.shard)
     output_path = Path(args.output)
     shard = json.loads(shard_path.read_text())
+    records = list(shard.get("records", []))
     progress_path = progress_path_for(output_path)
     if valid_final_output(output_path, shard, shift_name):
         return 0
@@ -509,7 +598,7 @@ def main(argv: list[str] | None = None) -> int:
         "record_digest": shard.get("record_digest"),
         "started_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "completed_at": None,
-        "records_in_shard": len(shard.get("records", [])),
+        "records_in_shard": len(records),
         "files_attempted": 0,
         "files_processed": 0,
         "bad_files": [],
@@ -518,9 +607,13 @@ def main(argv: list[str] | None = None) -> int:
         "chunk_size": args.chunk_size,
         "shape_shift": shift_name,
     }
+    resume_from = 0
+    resumed_payload, resume_from = resumable_progress_payload(progress_path, shard, shift_name, records)
+    if resumed_payload is not None:
+        payload = resumed_payload
     output_path.parent.mkdir(parents=True, exist_ok=True)
     write_json(progress_path, payload)
-    for record in shard.get("records", []):
+    for record in records[resume_from:]:
         payload["files_attempted"] += 1
         dataset_rec = ensure_dataset(payload, record)
         dataset_rec["files_attempted"] += 1

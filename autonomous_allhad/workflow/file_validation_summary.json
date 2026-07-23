@@ -1,5 +1,14 @@
 {
-  "bad_or_inaccessible": 0,
-  "checked_first_files": 200,
-  "policy": "inaccessible local paths are not marked permanently corrupted without ROOT/tree retry"
+  "branch_validated_recovered_entries": 2644,
+  "campaign": "2025_data_intermediate_root",
+  "input_roots": 7587,
+  "locally_recovered_shards": 5,
+  "lost_selected_events": 0,
+  "permanently_skipped_files": 0,
+  "recovered_corrupt_roots": 3,
+  "selected_events": 9685947,
+  "status": "complete",
+  "updated_at": "2026-07-15T10:59:35.101782+00:00",
+  "valid_roots": 7587,
+  "zero_entry_roots": 1354
 }

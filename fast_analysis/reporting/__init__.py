@@ -1,0 +1,1 @@
+"""Static reporting tools."""

@@ -1,0 +1,54 @@
+# Full Low-deltaM region scheme prepared for the 2024 reprocessing campaign.
+name: lowdm_53bin_fullselection_v2
+status: prepared_for_reprocessing
+adopted_date: 2026-07-23
+search_bin_policy:
+  bins_per_region: 53
+  stored_branch_pattern: lowdm_search_bin_<REGION>
+  valid_indices: [0, 52]
+  binning_source: AN2019_016_v9 Table 15
+  bjet_pt_threshold_gev: 30
+regions:
+  - {name: LLCR, channel: cat2_LLCR_lowDeltaM, data_stream: JetMET, recoil: PuppiMET}
+  - {name: QCDCR, channel: cat3_QCDCR_lowDeltaM, data_stream: JetMET, recoil: PuppiMET}
+  - {name: GCR, channel: cat4_GCR_lowDeltaM, data_stream: EGamma, recoil: photon}
+  - {name: DY2E, channel: cat5_DY2E_lowDeltaM, data_stream: EGamma, recoil: dielectron}
+  - {name: DY2M, channel: cat6_DY2M_lowDeltaM, data_stream: Muon, recoil: dimuon}
+  - {name: SR, channel: cat7_SR_lowDeltaM, data_stream: JetMET, recoil: PuppiMET}
+common_lowdm_requirements:
+  - corrected objects and propagated PuppiMET
+  - Njet >= 2 and HT > 300 GeV in the region-cleaned AK4 collection
+  - region recoil > 250 GeV
+  - low-deltaM opening-angle requirement against the region recoil
+  - Nt = 0 and NW = 0
+  - exactly one cleaned AK8 ISR candidate with pT > 200 GeV and abs(eta) < 2.4
+  - deltaPhi(recoil, ISR) > 2
+  - available UParTAK4 loose-subjet b veto passes
+  - recoil / sqrt(HT) >= 10 sqrt(GeV)
+  - mTb < 175 GeV when Nb >= 1
+region_specific_requirements:
+  GCR:
+    - exactly one medium photon with pT > 220 GeV
+    - explicit Photon_electronVeto
+    - intrinsic PuppiMET < 250 GeV
+    - AK4 dR < 0.2 and AK8 dR < 0.4 photon cleaning
+  DY2E:
+    - exactly two opposite-sign medium electrons
+    - leading/subleading pT > 40/20 GeV
+    - pT(ee) > 200 GeV
+    - 81 < mee < 101 GeV
+    - AK4 dR < 0.2 and AK8 dR < 0.4 electron cleaning
+  DY2M:
+    - exactly two opposite-sign medium muons
+    - leading/subleading pT > 50/20 GeV
+    - pT(mumu) > 200 GeV
+    - 81 < mmumu < 101 GeV
+    - AK4 dR < 0.2 and AK8 dR < 0.4 muon cleaning
+known_limitation:
+  resolved_top_veto: >-
+    The current Run-3 worker has no validated resolved-top tagger branch. Nt/NW vetoes are applied
+    and the missing Nres veto is recorded in every sidecar; no proxy resolved-top selection is fabricated.
+implementation:
+  upstream_flags: feature_lowdm_<REGION>
+  upstream_bins: lowdm_search_bin_<REGION>
+  histogram_builder: autonomous_allhad/workflow/build_flat_boosted_recoil_hists.py

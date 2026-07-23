@@ -1,0 +1,48 @@
+schema_version: 1
+measurement: met_or_2024
+status: physics_proposal
+year: "2024"
+observable: puppi_met_pt
+bin_edges_gev: [100, 120, 140, 160, 180, 200, 220, 240, 250, 260, 270, 280, 290, 300, 350, 400, 500, 650, 800]
+probe_paths:
+  - PFMET120_PFMHT120_IDTight
+  - PFMET130_PFMHT130_IDTight
+  - PFMET140_PFMHT140_IDTight
+  - PFMETNoMu120_PFMHTNoMu120_IDTight
+  - PFMETNoMu130_PFMHTNoMu130_IDTight
+  - PFMETNoMu140_PFMHTNoMu140_IDTight
+reference_paths:
+  - Ele30_WPTight_Gsf
+  - Ele32_WPTight_Gsf
+  - Ele35_WPTight_Gsf
+  - Ele38_WPTight_Gsf
+  - Ele40_WPTight_Gsf
+datasets:
+  data: [EGamma0, EGamma1]
+  mc: [TTtoLNu2Q]
+selection:
+  description: exactly one medium electron; no loose muon; at least two good AK4 jets; HT > 300 GeV; baseline MET filters and golden JSON
+  require_reference_trigger: true
+  apply_probe_trigger_to_denominator: false
+  require_unprescaled_reference: true
+  deduplicate_data_by: [run, luminosityBlock, event]
+plateau:
+  candidate_thresholds_gev: [250, 260, 270, 280, 290, 300]
+  minimum_data_efficiency: 0.98
+  maximum_lower_interval_deficit: 0.02
+  minimum_denominator_events_per_bin: 100
+statistics:
+  confidence_level: 0.682689492
+  data_interval: clopper_pearson
+  mc_interval: effective_entries_wilson
+  scale_factor_uncertainty: independent_data_mc
+required_cross_checks:
+  - per_era
+  - per_probe_path
+  - electron_eta
+  - njet
+  - nb
+  - npv
+  - reference_path_exclusivity
+  - run_stability
+output_directory: autonomous_allhad/outputs/trigger_efficiency/2024

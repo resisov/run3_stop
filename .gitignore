@@ -54,6 +54,7 @@ fast_outputs/
 
 # Autonomous all-hadronic generated outputs
 autonomous_allhad/datacards/
+autonomous_allhad/hist_index.json
 autonomous_allhad/limits/expected_limits_proxy.json
 autonomous_allhad/outputs/real_feature_table.csv
 
@@ -61,6 +62,9 @@ autonomous_allhad/outputs/real_feature_table.csv
 autonomous_allhad/workflow/history.jsonl
 autonomous_allhad/workflow/full_input_manifest.json
 autonomous_allhad/workflow/full_background_manifest.json
+autonomous_allhad/workflow/*manifest*.json
+autonomous_allhad/workflow/job_status*.json
+autonomous_allhad/workflow/input_discovery.json
 autonomous_allhad/workflow/production_outputs_*/
 autonomous_allhad/workflow/production_shards_*/
 autonomous_allhad/workflow/signal_outputs_*/
@@ -68,6 +72,7 @@ autonomous_allhad/workflow/signal_shards_*/
 autonomous_allhad/workflow/flat_ntuple_*_outputs/
 autonomous_allhad/workflow/flat_ntuple_*_micro_outputs/
 autonomous_allhad/workflow/condor_*/
+autonomous_allhad/workflow/toptag_efficiency_*/
 autonomous_allhad/workflow/*_logs/
 autonomous_allhad/workflow/*_watch_*_logs/
 autonomous_allhad/workflow/local_*_recovery*/
@@ -109,3 +114,30 @@ autonomous_allhad/workflow/local_repair_data_shard_*/
 # High/low-dM inclusive AN17 histogram rebuild runtime products.
 autonomous_allhad/workflow/highlowdm_full_20260706_*.json
 autonomous_allhad/workflow/highlowdm_full_20260706_hist_work*/
+autonomous_allhad/workflow/highlowdm_full_*.json
+autonomous_allhad/workflow/highlowdm_full_*.txt
+
+# Local physics references that are not approved for public distribution.
+/AN2019_016_v9.pdf
+
+# Generated diagnostic galleries. Publish selected artifacts through docs/ instead.
+autonomous_allhad/plots/
+autonomous_allhad/outputs/scale_factor_plots/
+autonomous_allhad/outputs/trigger_efficiency/
+
+# Date-stamped campaign workspaces. Their reproducible builders live in scripts/
+# and autonomous_allhad/; ROOT/JSON outputs, shards, bundles, logs, and Condor
+# submission material stay on EOS and are not source-controlled.
+autonomous_allhad/workflow/_codex_*_stage_*/
+autonomous_allhad/workflow/flat_ntuple_*/
+autonomous_allhad/workflow/full_run_*/
+autonomous_allhad/workflow/highdm_distributions_*/
+autonomous_allhad/workflow/highdm_inclusive_vr_*/
+autonomous_allhad/workflow/highdm_nb_vr_*/
+autonomous_allhad/workflow/intermediate_*/
+autonomous_allhad/workflow/jes_met_uncertainty_*/
+autonomous_allhad/workflow/lowdm_cr_distributions_*/
+autonomous_allhad/workflow/nominal_plots_*/
+autonomous_allhad/workflow/shape_hists_*/
+autonomous_allhad/workflow/signal54_*/
+autonomous_allhad/workflow/trigger_efficiency_*/

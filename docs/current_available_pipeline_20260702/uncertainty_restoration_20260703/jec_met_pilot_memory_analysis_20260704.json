@@ -1,0 +1,955 @@
+{
+  "created_at": "2026-07-04T07:47:50Z",
+  "diagnosis": "Resource failure, not physics/JEC map::at failure. Wrapper ran flat_ntuple_worker in parent_rows mode (record_workers=1), so all selected rows in a 25-record shard accumulated in memory until final ROOT writing. High-acceptance DY shards produced millions of rows and hit 16-24 GB RSS plus wall-time removal.",
+  "failed_common_shards": [
+    "mc_shard_00060",
+    "mc_shard_00066",
+    "mc_shard_00077"
+  ],
+  "nominal_failed_shard_reference": {
+    "mc_shard_00060": {
+      "events_read": 21523479,
+      "events_written": 3480582,
+      "max_file_events_written": 139849,
+      "median_file_events_written": 139244,
+      "record_output_mode": "fragments_hadd",
+      "record_workers": 16,
+      "status": "complete",
+      "wall_time_s": 2146.867
+    },
+    "mc_shard_00066": {
+      "events_read": 20397646,
+      "events_written": 3298032,
+      "max_file_events_written": 139886,
+      "median_file_events_written": 139063,
+      "record_output_mode": "fragments_hadd",
+      "record_workers": 16,
+      "status": "complete",
+      "wall_time_s": 1866.53
+    },
+    "mc_shard_00077": {
+      "events_read": 17966398,
+      "events_written": 6206117,
+      "max_file_events_written": 257887,
+      "median_file_events_written": 247821,
+      "record_output_mode": "fragments_hadd",
+      "record_workers": 16,
+      "status": "complete",
+      "wall_time_s": 1949.413
+    }
+  },
+  "pilot_jobs_per_shift": 20,
+  "recommendation": [
+    "Do not full-submit current 6000MB parent_rows shape jobs.",
+    "Run a second pilot on heavy shards with fragments_hadd by setting AUTONOMOUS_ALLHAD_RECORD_WORKERS=4 or passing --record-workers 4.",
+    "Use at least 12000MB request_memory for the fragment-mode pilot, then size full production from measured peak RSS.",
+    "Consider splitting high-acceptance DY shards if fragment-mode pilot still approaches requested memory or wall time."
+  ],
+  "request_cpus": 4,
+  "request_memory_mb": 6000,
+  "root_cause": {
+    "memory_mechanism": "all_rows.extend(rows) for every record; write_root(output, all_rows) only at the end",
+    "nominal_large_shard_comparison": "Some nominal recovered large shards used record_workers=16/fragments_hadd, avoiding parent all_rows accumulation.",
+    "observed_shifted_mode": "parent_rows",
+    "worker_default": "record_workers defaults to 1 from AUTONOMOUS_ALLHAD_RECORD_WORKERS when unset"
+  },
+  "shifts": {
+    "jesTotalDown": {
+      "completed_metadata_top_by_events_written": [
+        {
+          "events_read": 3459759,
+          "events_written": 1410193,
+          "name": "mc_shard_00102",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 9054.237
+        },
+        {
+          "events_read": 2831385,
+          "events_written": 1155464,
+          "name": "mc_shard_00084",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 7904.701
+        },
+        {
+          "events_read": 4088418,
+          "events_written": 76748,
+          "name": "mc_shard_00034",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 10503.695
+        },
+        {
+          "events_read": 3548953,
+          "events_written": 67237,
+          "name": "mc_shard_00031",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 8455.931
+        },
+        {
+          "events_read": 3507177,
+          "events_written": 65932,
+          "name": "mc_shard_00029",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 7643.808
+        },
+        {
+          "events_read": 3297697,
+          "events_written": 62554,
+          "name": "mc_shard_00033",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 8555.319
+        },
+        {
+          "events_read": 3250996,
+          "events_written": 61121,
+          "name": "mc_shard_00048",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 9328.335
+        },
+        {
+          "events_read": 3120580,
+          "events_written": 58641,
+          "name": "mc_shard_00021",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 5874.374
+        }
+      ],
+      "missing_outputs": [
+        "mc_shard_00060",
+        "mc_shard_00066",
+        "mc_shard_00077"
+      ],
+      "outputs_json": 17,
+      "peak_memory_by_pilot_proc": [
+        {
+          "name": "mc_shard_00021",
+          "output_json_exists": true,
+          "peak_memory_mb": 1585,
+          "proc": 0,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00027",
+          "output_json_exists": true,
+          "peak_memory_mb": 1558,
+          "proc": 1,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00029",
+          "output_json_exists": true,
+          "peak_memory_mb": 1622,
+          "proc": 2,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00031",
+          "output_json_exists": true,
+          "peak_memory_mb": 1741,
+          "proc": 3,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00033",
+          "output_json_exists": true,
+          "peak_memory_mb": 1674,
+          "proc": 4,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00034",
+          "output_json_exists": true,
+          "peak_memory_mb": 1794,
+          "proc": 5,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00048",
+          "output_json_exists": true,
+          "peak_memory_mb": 1664,
+          "proc": 6,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00060",
+          "output_json_exists": false,
+          "peak_memory_mb": 15944,
+          "proc": 7,
+          "status_from_condor_log": "aborted"
+        },
+        {
+          "name": "mc_shard_00066",
+          "output_json_exists": false,
+          "peak_memory_mb": 15787,
+          "proc": 8,
+          "status_from_condor_log": "aborted"
+        },
+        {
+          "name": "mc_shard_00077",
+          "output_json_exists": false,
+          "peak_memory_mb": 23620,
+          "proc": 9,
+          "status_from_condor_log": "aborted"
+        },
+        {
+          "name": "mc_shard_00084",
+          "output_json_exists": true,
+          "peak_memory_mb": 10937,
+          "proc": 10,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00102",
+          "output_json_exists": true,
+          "peak_memory_mb": 13235,
+          "proc": 11,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00123",
+          "output_json_exists": true,
+          "peak_memory_mb": 1152,
+          "proc": 12,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00129",
+          "output_json_exists": true,
+          "peak_memory_mb": 1166,
+          "proc": 13,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00134",
+          "output_json_exists": true,
+          "peak_memory_mb": 1159,
+          "proc": 14,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00142",
+          "output_json_exists": true,
+          "peak_memory_mb": 1164,
+          "proc": 15,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00157",
+          "output_json_exists": true,
+          "peak_memory_mb": 1146,
+          "proc": 16,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00175",
+          "output_json_exists": true,
+          "peak_memory_mb": 1150,
+          "proc": 17,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00197",
+          "output_json_exists": true,
+          "peak_memory_mb": 1157,
+          "proc": 18,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00198",
+          "output_json_exists": true,
+          "peak_memory_mb": 1149,
+          "proc": 19,
+          "status_from_condor_log": "terminated"
+        }
+      ]
+    },
+    "jesTotalUp": {
+      "completed_metadata_top_by_events_written": [
+        {
+          "events_read": 3459759,
+          "events_written": 1425273,
+          "name": "mc_shard_00102",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 4442.662
+        },
+        {
+          "events_read": 2831385,
+          "events_written": 1167916,
+          "name": "mc_shard_00084",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 4735.508
+        },
+        {
+          "events_read": 4088418,
+          "events_written": 82643,
+          "name": "mc_shard_00034",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 5048.247
+        },
+        {
+          "events_read": 3548953,
+          "events_written": 72255,
+          "name": "mc_shard_00031",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 4985.319
+        },
+        {
+          "events_read": 3507177,
+          "events_written": 71026,
+          "name": "mc_shard_00029",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 5907.224
+        },
+        {
+          "events_read": 3297697,
+          "events_written": 67153,
+          "name": "mc_shard_00033",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 5610.442
+        },
+        {
+          "events_read": 3250996,
+          "events_written": 65859,
+          "name": "mc_shard_00048",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 4190.968
+        },
+        {
+          "events_read": 3120580,
+          "events_written": 63152,
+          "name": "mc_shard_00021",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 4560.156
+        }
+      ],
+      "missing_outputs": [
+        "mc_shard_00060",
+        "mc_shard_00066",
+        "mc_shard_00077"
+      ],
+      "outputs_json": 17,
+      "peak_memory_by_pilot_proc": [
+        {
+          "name": "mc_shard_00021",
+          "output_json_exists": true,
+          "peak_memory_mb": 1708,
+          "proc": 0,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00027",
+          "output_json_exists": true,
+          "peak_memory_mb": 1482,
+          "proc": 1,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00029",
+          "output_json_exists": true,
+          "peak_memory_mb": 1714,
+          "proc": 2,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00031",
+          "output_json_exists": true,
+          "peak_memory_mb": 1697,
+          "proc": 3,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00033",
+          "output_json_exists": true,
+          "peak_memory_mb": 1671,
+          "proc": 4,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00034",
+          "output_json_exists": true,
+          "peak_memory_mb": 1816,
+          "proc": 5,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00048",
+          "output_json_exists": true,
+          "peak_memory_mb": 1622,
+          "proc": 6,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00060",
+          "output_json_exists": false,
+          "peak_memory_mb": 23591,
+          "proc": 7,
+          "status_from_condor_log": "aborted"
+        },
+        {
+          "name": "mc_shard_00066",
+          "output_json_exists": false,
+          "peak_memory_mb": 23859,
+          "proc": 8,
+          "status_from_condor_log": "aborted"
+        },
+        {
+          "name": "mc_shard_00077",
+          "output_json_exists": false,
+          "peak_memory_mb": 23656,
+          "proc": 9,
+          "status_from_condor_log": "aborted"
+        },
+        {
+          "name": "mc_shard_00084",
+          "output_json_exists": true,
+          "peak_memory_mb": 10909,
+          "proc": 10,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00102",
+          "output_json_exists": true,
+          "peak_memory_mb": 13155,
+          "proc": 11,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00123",
+          "output_json_exists": true,
+          "peak_memory_mb": 1151,
+          "proc": 12,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00129",
+          "output_json_exists": true,
+          "peak_memory_mb": 1163,
+          "proc": 13,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00134",
+          "output_json_exists": true,
+          "peak_memory_mb": 1143,
+          "proc": 14,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00142",
+          "output_json_exists": true,
+          "peak_memory_mb": 1167,
+          "proc": 15,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00157",
+          "output_json_exists": true,
+          "peak_memory_mb": 1143,
+          "proc": 16,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00175",
+          "output_json_exists": true,
+          "peak_memory_mb": 1159,
+          "proc": 17,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00197",
+          "output_json_exists": true,
+          "peak_memory_mb": 1145,
+          "proc": 18,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00198",
+          "output_json_exists": true,
+          "peak_memory_mb": 1110,
+          "proc": 19,
+          "status_from_condor_log": "terminated"
+        }
+      ]
+    },
+    "metUnclusteredDown": {
+      "completed_metadata_top_by_events_written": [
+        {
+          "events_read": 3459759,
+          "events_written": 1418218,
+          "name": "mc_shard_00102",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 9945.214
+        },
+        {
+          "events_read": 2831385,
+          "events_written": 1162165,
+          "name": "mc_shard_00084",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 6784.326
+        },
+        {
+          "events_read": 4088418,
+          "events_written": 79705,
+          "name": "mc_shard_00034",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 10484.422
+        },
+        {
+          "events_read": 3548953,
+          "events_written": 69695,
+          "name": "mc_shard_00031",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 3450.365
+        },
+        {
+          "events_read": 3507177,
+          "events_written": 68449,
+          "name": "mc_shard_00029",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 8124.768
+        },
+        {
+          "events_read": 3297697,
+          "events_written": 64781,
+          "name": "mc_shard_00033",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 8155.374
+        },
+        {
+          "events_read": 3250996,
+          "events_written": 63442,
+          "name": "mc_shard_00048",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 7436.209
+        },
+        {
+          "events_read": 3120580,
+          "events_written": 60819,
+          "name": "mc_shard_00021",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 6402.094
+        }
+      ],
+      "missing_outputs": [
+        "mc_shard_00060",
+        "mc_shard_00066",
+        "mc_shard_00077"
+      ],
+      "outputs_json": 17,
+      "peak_memory_by_pilot_proc": [
+        {
+          "name": "mc_shard_00021",
+          "output_json_exists": true,
+          "peak_memory_mb": 1510,
+          "proc": 0,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00027",
+          "output_json_exists": true,
+          "peak_memory_mb": 1554,
+          "proc": 1,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00029",
+          "output_json_exists": true,
+          "peak_memory_mb": 1750,
+          "proc": 2,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00031",
+          "output_json_exists": true,
+          "peak_memory_mb": 1675,
+          "proc": 3,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00033",
+          "output_json_exists": true,
+          "peak_memory_mb": 1722,
+          "proc": 4,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00034",
+          "output_json_exists": true,
+          "peak_memory_mb": 1825,
+          "proc": 5,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00048",
+          "output_json_exists": true,
+          "peak_memory_mb": 1488,
+          "proc": 6,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00060",
+          "output_json_exists": false,
+          "peak_memory_mb": 18693,
+          "proc": 7,
+          "status_from_condor_log": "aborted"
+        },
+        {
+          "name": "mc_shard_00066",
+          "output_json_exists": false,
+          "peak_memory_mb": 16708,
+          "proc": 8,
+          "status_from_condor_log": "aborted"
+        },
+        {
+          "name": "mc_shard_00077",
+          "output_json_exists": false,
+          "peak_memory_mb": 23668,
+          "proc": 9,
+          "status_from_condor_log": "aborted"
+        },
+        {
+          "name": "mc_shard_00084",
+          "output_json_exists": true,
+          "peak_memory_mb": 10953,
+          "proc": 10,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00102",
+          "output_json_exists": true,
+          "peak_memory_mb": 13292,
+          "proc": 11,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00123",
+          "output_json_exists": true,
+          "peak_memory_mb": 1152,
+          "proc": 12,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00129",
+          "output_json_exists": true,
+          "peak_memory_mb": 1157,
+          "proc": 13,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00134",
+          "output_json_exists": true,
+          "peak_memory_mb": 1144,
+          "proc": 14,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00142",
+          "output_json_exists": true,
+          "peak_memory_mb": 1182,
+          "proc": 15,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00157",
+          "output_json_exists": true,
+          "peak_memory_mb": 1151,
+          "proc": 16,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00175",
+          "output_json_exists": true,
+          "peak_memory_mb": 1154,
+          "proc": 17,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00197",
+          "output_json_exists": true,
+          "peak_memory_mb": 1142,
+          "proc": 18,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00198",
+          "output_json_exists": true,
+          "peak_memory_mb": 1153,
+          "proc": 19,
+          "status_from_condor_log": "terminated"
+        }
+      ]
+    },
+    "metUnclusteredUp": {
+      "completed_metadata_top_by_events_written": [
+        {
+          "events_read": 3459759,
+          "events_written": 1417545,
+          "name": "mc_shard_00102",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 8833.874
+        },
+        {
+          "events_read": 2831385,
+          "events_written": 1161508,
+          "name": "mc_shard_00084",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 7619.757
+        },
+        {
+          "events_read": 4088418,
+          "events_written": 79731,
+          "name": "mc_shard_00034",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 10570.715
+        },
+        {
+          "events_read": 3548953,
+          "events_written": 69720,
+          "name": "mc_shard_00031",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 5176.285
+        },
+        {
+          "events_read": 3507177,
+          "events_written": 68464,
+          "name": "mc_shard_00029",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 9592.63
+        },
+        {
+          "events_read": 3297697,
+          "events_written": 64862,
+          "name": "mc_shard_00033",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 7168.066
+        },
+        {
+          "events_read": 3250996,
+          "events_written": 63517,
+          "name": "mc_shard_00048",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 7032.961
+        },
+        {
+          "events_read": 3120580,
+          "events_written": 60881,
+          "name": "mc_shard_00021",
+          "record_output_mode": "parent_rows",
+          "record_workers": 1,
+          "status": "complete",
+          "wall_time_s": 8023.074
+        }
+      ],
+      "missing_outputs": [
+        "mc_shard_00060",
+        "mc_shard_00066",
+        "mc_shard_00077"
+      ],
+      "outputs_json": 17,
+      "peak_memory_by_pilot_proc": [
+        {
+          "name": "mc_shard_00021",
+          "output_json_exists": true,
+          "peak_memory_mb": 1625,
+          "proc": 0,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00027",
+          "output_json_exists": true,
+          "peak_memory_mb": 1592,
+          "proc": 1,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00029",
+          "output_json_exists": true,
+          "peak_memory_mb": 1702,
+          "proc": 2,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00031",
+          "output_json_exists": true,
+          "peak_memory_mb": 1674,
+          "proc": 3,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00033",
+          "output_json_exists": true,
+          "peak_memory_mb": 1642,
+          "proc": 4,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00034",
+          "output_json_exists": true,
+          "peak_memory_mb": 1813,
+          "proc": 5,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00048",
+          "output_json_exists": true,
+          "peak_memory_mb": 1494,
+          "proc": 6,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00060",
+          "output_json_exists": false,
+          "peak_memory_mb": 16392,
+          "proc": 7,
+          "status_from_condor_log": "aborted"
+        },
+        {
+          "name": "mc_shard_00066",
+          "output_json_exists": false,
+          "peak_memory_mb": 19183,
+          "proc": 8,
+          "status_from_condor_log": "aborted"
+        },
+        {
+          "name": "mc_shard_00077",
+          "output_json_exists": false,
+          "peak_memory_mb": 23622,
+          "proc": 9,
+          "status_from_condor_log": "aborted"
+        },
+        {
+          "name": "mc_shard_00084",
+          "output_json_exists": true,
+          "peak_memory_mb": 11016,
+          "proc": 10,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00102",
+          "output_json_exists": true,
+          "peak_memory_mb": 13540,
+          "proc": 11,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00123",
+          "output_json_exists": true,
+          "peak_memory_mb": 1156,
+          "proc": 12,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00129",
+          "output_json_exists": true,
+          "peak_memory_mb": 1146,
+          "proc": 13,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00134",
+          "output_json_exists": true,
+          "peak_memory_mb": 1160,
+          "proc": 14,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00142",
+          "output_json_exists": true,
+          "peak_memory_mb": 1159,
+          "proc": 15,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00157",
+          "output_json_exists": true,
+          "peak_memory_mb": 1147,
+          "proc": 16,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00175",
+          "output_json_exists": true,
+          "peak_memory_mb": 1151,
+          "proc": 17,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00197",
+          "output_json_exists": true,
+          "peak_memory_mb": 1147,
+          "proc": 18,
+          "status_from_condor_log": "terminated"
+        },
+        {
+          "name": "mc_shard_00198",
+          "output_json_exists": true,
+          "peak_memory_mb": 1150,
+          "proc": 19,
+          "status_from_condor_log": "terminated"
+        }
+      ]
+    }
+  },
+  "status": "analyzed"
+}

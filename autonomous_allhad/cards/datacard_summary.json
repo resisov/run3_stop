@@ -10,8 +10,71 @@
     "Complete run-production and full-production-normalization.",
     "Select final search bins after physics review/manual validation.",
     "Produce systematic_yields.json from shifted inputs.",
+    "For mStop800 cards, provide clean mStop700 and mStop900 anchors that do not use the problematic Par-mStop-800 dataset, or keep mStop800 cards disabled.",
     "Rerun ./autonomous_allhad/analysisctl make-datacards --config autonomous_allhad/configs/run3_2024.yaml."
   ],
   "output_dir": "autonomous_allhad/cards",
+  "signal_fit_interpolation": {
+    "anchor_cleanliness": {
+      "dataset_label_anchor_candidates": {
+        "Par-mStop-700": [
+          "mStop700_mLSP1",
+          "mStop700_mLSP100",
+          "mStop700_mLSP200",
+          "mStop700_mLSP300",
+          "mStop700_mLSP400",
+          "mStop700_mLSP500"
+        ],
+        "Par-mStop-800": [
+          "mStop900_mLSP1",
+          "mStop900_mLSP100",
+          "mStop900_mLSP200",
+          "mStop900_mLSP300",
+          "mStop900_mLSP400",
+          "mStop900_mLSP500",
+          "mStop900_mLSP600",
+          "mStop900_mLSP700"
+        ],
+        "Par-mStop-900": [
+          "mStop950_mLSP1",
+          "mStop950_mLSP100",
+          "mStop950_mLSP200",
+          "mStop950_mLSP300",
+          "mStop950_mLSP400",
+          "mStop950_mLSP500",
+          "mStop950_mLSP600",
+          "mStop950_mLSP700",
+          "mStop950_mLSP800"
+        ]
+      },
+      "decision": "do_not_interpolate_until_clean_mStop700_and_mStop900_anchors_exist",
+      "mStop900_keys_using_problematic_Par_mStop_800": [
+        "mStop900_mLSP1",
+        "mStop900_mLSP100",
+        "mStop900_mLSP200",
+        "mStop900_mLSP300",
+        "mStop900_mLSP400",
+        "mStop900_mLSP500",
+        "mStop900_mLSP600",
+        "mStop900_mLSP700"
+      ]
+    },
+    "policy": "autonomous_allhad/cards/signal_fit_interpolation_policy.json",
+    "requested_anchors": {
+      "lower_mStop": 700,
+      "upper_mStop": 900
+    },
+    "scope": "datacard_and_template_fit_only",
+    "skipped_points": 8,
+    "status": "blocked",
+    "target": {
+      "label": "mStop800",
+      "mStop": 800
+    },
+    "template_count": 0,
+    "template_status": "blocked",
+    "templates": "autonomous_allhad/cards/signal_fit_interpolation_templates.json",
+    "virtual_points": 0
+  },
   "status": "blocked"
 }

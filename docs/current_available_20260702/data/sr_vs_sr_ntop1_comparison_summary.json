@@ -50,8 +50,8 @@
     800.0,
     1500.0
   ],
-  "comparison": "SR vs SR_Nt1, 6 recoil/MET bins; no AN17 17-bin search bins used",
-  "created_at_utc": "2026-07-02T10:38:39.856573+00:00",
+  "comparison": "SR vs SR_Nt1, 6 recoil/MET bins; AN17 17-bin search bins are a separate reference plot.",
+  "created_at_utc": "2026-07-02T10:53:19.733615+00:00",
   "data_blinded_in_plot": true,
   "plots": {
     "pdf": "plots/current_available_sr_vs_sr_ntop1.pdf",
@@ -62,13 +62,13 @@
       "SR": 221.12476877114352,
       "SR_Nt1": 135.68423481154792,
       "SR_Nt1_over_SR": 0.6136093915013945,
-      "label": "T2tt mStop1000 mLSP1"
+      "label": "T2tt 1000/1"
     },
     "T2tt_mStop1200_mLSP1": {
       "SR": 57.97326131590739,
       "SR_Nt1": 40.68241998101613,
       "SR_Nt1_over_SR": 0.7017445466683311,
-      "label": "T2tt mStop1200 mLSP1"
+      "label": "T2tt 1200/1"
     }
   },
   "source_histograms": "autonomous_allhad/workflow/current_available_pipeline_20260702/boosted_recoil_hists_streamfixed.json",

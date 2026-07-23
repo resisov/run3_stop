@@ -27,7 +27,7 @@ output = job.$(ClusterId).$(ProcId).$(shift).out
 error  = job.$(ClusterId).$(ProcId).$(shift).err
 log    = condor.$(ClusterId).log
 
-request_cpus   = 1
+request_cpus   = 4
 request_memory = 6000
 request_disk   = 12000
 

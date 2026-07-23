@@ -1,0 +1,22 @@
+{
+  "schema_version": "fast_benchmark_manifest_v1",
+  "created_for": "architecture benchmark only",
+  "remote_urls": [],
+  "samples": [
+    {
+      "role": "data",
+      "dataset": "replace_with_2024_data_key",
+      "files": ["/eos/user/t/taiwoo/run3_stop/decaf/fast_outputs/manifests/replace_with_eos_data_file.root"]
+    },
+    {
+      "role": "background",
+      "dataset": "replace_with_TT_or_W_key",
+      "files": ["/eos/user/t/taiwoo/run3_stop/decaf/fast_outputs/manifests/replace_with_eos_background_file.root"]
+    },
+    {
+      "role": "signal",
+      "dataset": "replace_with_T2tt_key",
+      "files": ["/eos/user/t/taiwoo/run3_stop/decaf/fast_outputs/manifests/replace_with_eos_signal_file.root"]
+    }
+  ]
+}

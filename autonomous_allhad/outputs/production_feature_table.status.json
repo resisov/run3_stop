@@ -1,9 +1,6 @@
 {
-  "reason": "Full production was not submitted; file-level manifests were built and the exact production blockers were recorded.",
-  "required_before_table": [
-    "execution.allow_condor_submit is false in autonomous_allhad/configs/run3_2024.yaml",
-    "no autonomous Condor execute/monitor/retry/merge implementation exists for the 52k-file feature-table production campaign"
-  ],
-  "status": "blocked_not_submitted",
+  "aggregate_output": "autonomous_allhad/outputs/full_normalized_yields.json",
+  "reason": "full production writes aggregate shard outputs instead of an all-events feature table",
+  "status": "complete",
   "table_produced": false
 }
