@@ -511,7 +511,7 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     campaign_manifest = {
-        "schema_version": "intermediate_2024_fullselection_campaign_v5",
+        "schema_version": "intermediate_2024_fullselection_campaign_v6",
         "status": "prepared_not_submitted",
         "created_at": utc_now(),
         "year": 2024,
@@ -543,9 +543,15 @@ def main(argv: list[str] | None = None) -> int:
             "DY2E": "OS medium electrons, pT(ll)>200, on-Z, electron-cleaned AK4/AK8, opening angle against uT phi, uT>250 GeV",
             "DY2M": "OS medium muons, pT(ll)>200, on-Z, muon-cleaned AK4/AK8, opening angle against uT phi, uT>250 GeV",
         },
-        "photon_selection": "medium photon with explicit Photon_electronVeto and photon-cleaned AK4/AK8 recoil selection",
+        "photon_selection": (
+            "pT>220 GeV fiducial photon with NanoAOD medium cutBased ID (>=2), "
+            "explicit Photon_electronVeto, and photon-cleaned AK4/AK8 recoil selection"
+        ),
         "lowdm_selection": {
-            "categories": 53,
+            "categories": 42,
+            "nsv_policy": "inclusive; Nsv is not used in category assignment",
+            "isr_subjet_bveto_policy": "diagnostic only; not applied",
+            "mtb_policy": "diagnostic only; mTb<175 is not applied",
             "upstream_region_flags": [f"feature_lowdm_{name}" for name in ("LLCR", "QCDCR", "GCR", "DY2E", "DY2M", "SR")],
             "upstream_region_bins": [f"lowdm_search_bin_{name}" for name in ("LLCR", "QCDCR", "GCR", "DY2E", "DY2M", "SR")],
             "bjet_pt_threshold_gev": 30.0,
@@ -592,7 +598,7 @@ def main(argv: list[str] | None = None) -> int:
         f"SHA256 {btag_validation['sha256']}\n"
         "- GCR: explicit Photon_electronVeto, photon-cleaned AK4/AK8, and photon-uT opening angles\n"
         "- DY2E/DY2M: OS/on-Z, pT(ll)>200, channel-specific cleaned AK4/AK8 and uT direction\n"
-        "- Low-dM: upstream exact region flags and 53-bin category branches; b-jet pT threshold fixed at 30 GeV\n"
+        "- Low-dM: 42 Nsv-inclusive category branches; ISR-subjet b veto and mTb<175 are diagnostic-only; b-jet pT threshold fixed at 30 GeV\n"
         "- FastSim: all 61 recorded Run-3 signal NanoAOD files included; FullSim anchors remain excluded\n"
         "- Worker runtime: transferred tgz in Condor scratch; XRootD input and EOS xrdcp stage-out\n"
         "- analysis/ modified: no\n"
