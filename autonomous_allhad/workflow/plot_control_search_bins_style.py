@@ -46,6 +46,38 @@ SIGNAL_OVERLAYS = [
     {"key": "mStop1000_mLSP1", "label": '$m_{\\tilde{t}}=1000$ GeV, $m_{\\tilde{\\chi}^{0}_{1}}=1$ GeV', "color": "#ff0000"},
     {"key": "mStop1200_mLSP1", "label": '$m_{\\tilde{t}}=1200$ GeV, $m_{\\tilde{\\chi}^{0}_{1}}=1$ GeV', "color": "#00ff00"},
 ]
+LOWDM_SIGNAL_OVERLAYS = [
+    {"key": "mStop600_mLSP400", "label": '$m_{\\tilde{t}}=600$ GeV, $m_{\\tilde{\\chi}^{0}_{1}}=400$ GeV', "color": "#0066FF"},
+    {"key": "mStop900_mLSP700", "label": '$m_{\\tilde{t}}=900$ GeV, $m_{\\tilde{\\chi}^{0}_{1}}=700$ GeV', "color": "#FF7A00"},
+]
+LOWDM_NSV_INCLUSIVE_CATEGORY_SIZES = [
+    ("Nb0_Nj2to5_PISR500plus", 4),
+    ("Nb0_Nj6plus_PISR500plus", 4),
+    ("Nb1_PISR300to500_PTb20to40", 4),
+    ("Nb1_PISR300to500_PTb40to70", 4),
+    ("Nb1_PISR500plus_PTb20to40", 4),
+    ("Nb1_PISR500plus_PTb40to70", 4),
+    ("Nb2plus_PISR300to500_PTb40to80_Nj2plus", 3),
+    ("Nb2plus_PISR300to500_PTb80to140_Nj2plus", 3),
+    ("Nb2plus_PISR300to500_PTb140plus_Nj7plus", 3),
+    ("Nb2plus_PISR500plus_PTb40to80_Nj2plus", 3),
+    ("Nb2plus_PISR500plus_PTb80to140_Nj2plus", 3),
+    ("Nb2plus_PISR500plus_PTb140plus_Nj7plus", 3),
+]
+LOWDM_NSV_INCLUSIVE_CATEGORY_LABELS = {
+    "Nb0_Nj2to5_PISR500plus": '$N_{b}=0$\n$2\\leq N_{j}\\leq5$',
+    "Nb0_Nj6plus_PISR500plus": '$N_{b}=0$\n$N_{j}\\geq6$',
+    "Nb1_PISR300to500_PTb20to40": '$N_{b}=1$\n$300\\leq p_{T}^{ISR}<500$\n$30<p_{T}^{b}<40$',
+    "Nb1_PISR300to500_PTb40to70": '$N_{b}=1$\n$300\\leq p_{T}^{ISR}<500$\n$40<p_{T}^{b}<70$',
+    "Nb1_PISR500plus_PTb20to40": '$N_{b}=1$\n$p_{T}^{ISR}\\geq500$\n$30<p_{T}^{b}<40$',
+    "Nb1_PISR500plus_PTb40to70": '$N_{b}=1$\n$p_{T}^{ISR}\\geq500$\n$40<p_{T}^{b}<70$',
+    "Nb2plus_PISR300to500_PTb40to80_Nj2plus": '$N_{b}\\geq2$\n$300\\leq p_{T}^{ISR}<500$\n$40<p_{T}^{b}<80$',
+    "Nb2plus_PISR300to500_PTb80to140_Nj2plus": '$N_{b}\\geq2$\n$300\\leq p_{T}^{ISR}<500$\n$80<p_{T}^{b}<140$',
+    "Nb2plus_PISR300to500_PTb140plus_Nj7plus": '$N_{b}\\geq2$, $N_{j}\\geq7$\n$300\\leq p_{T}^{ISR}<500$\n$p_{T}^{b}>140$',
+    "Nb2plus_PISR500plus_PTb40to80_Nj2plus": '$N_{b}\\geq2$\n$p_{T}^{ISR}\\geq500$\n$40<p_{T}^{b}<80$',
+    "Nb2plus_PISR500plus_PTb80to140_Nj2plus": '$N_{b}\\geq2$\n$p_{T}^{ISR}\\geq500$\n$80<p_{T}^{b}<140$',
+    "Nb2plus_PISR500plus_PTb140plus_Nj7plus": '$N_{b}\\geq2$, $N_{j}\\geq7$\n$p_{T}^{ISR}\\geq500$\n$p_{T}^{b}>140$',
+}
 PARTIAL_AN17_SPLIT_BINS = [4, 5, 8, 9, 14, 15, 16]
 SELECTED_AN17_RECOIL_SCHEME = "boosted_an17_selected_recoil6_SR"
 LATEST_AN17_RECOIL_SCHEME = "boosted_an17_selected_recoil6_with_nt0_wsplit_SR"
@@ -516,7 +548,7 @@ def flat_hist_record(payload: dict, region: str, allow_signal: bool) -> dict | N
     }
 
 
-def flat_search_record(payload: dict, scheme: str, label: str, allow_signal: bool) -> dict | None:
+def flat_search_record(payload: dict, scheme: str, label: str, allow_signal: bool, signal_overlays: list[dict] | None = None) -> dict | None:
     raw = (payload.get("search_bin_histograms") or {}).get(scheme) or {}
     if not raw:
         return None
@@ -530,7 +562,8 @@ def flat_search_record(payload: dict, scheme: str, label: str, allow_signal: boo
     stat2 = np.zeros(nbin, dtype=float)
     data = np.zeros(nbin, dtype=float)
     data2 = np.zeros(nbin, dtype=float)
-    signals = {spec["key"]: np.zeros(nbin, dtype=float) for spec in SIGNAL_OVERLAYS}
+    signal_overlays = signal_overlays or SIGNAL_OVERLAYS
+    signals = {spec["key"]: np.zeros(nbin, dtype=float) for spec in signal_overlays}
     for sample, rec in raw.items():
         vals, s2 = flat_values(rec, nbin)
         if sample == "data_obs":
@@ -538,7 +571,7 @@ def flat_search_record(payload: dict, scheme: str, label: str, allow_signal: boo
             data2 += s2
         elif is_signal_sample(sample):
             if allow_signal:
-                for spec in SIGNAL_OVERLAYS:
+                for spec in signal_overlays:
                     if sample == "T2tt_" + spec["key"]:
                         signals[spec["key"]] += vals
         else:
@@ -877,6 +910,46 @@ def selected_an17_recoil_blocks(payload: dict, scheme_name: str) -> list[dict]:
         blocks.append(block)
     return blocks
 
+
+def lowdm_nsv_inclusive_blocks(payload: dict, scheme_name: str) -> list[dict]:
+    rec = flat_search_record(
+        payload,
+        scheme_name,
+        "Low-dM SR",
+        allow_signal=True,
+        signal_overlays=LOWDM_SIGNAL_OVERLAYS,
+    )
+    if not rec:
+        return []
+    scheme = (payload.get("search_bin_schemes") or {}).get(scheme_name) or {}
+    category_sizes = scheme.get("category_sizes") or LOWDM_NSV_INCLUSIVE_CATEGORY_SIZES
+    normalized_sizes = [(str(category), int(size)) for category, size in category_sizes]
+    if sum(size for _, size in normalized_sizes) != int(rec["nbin"]):
+        return []
+    blocks = []
+    offset = 0
+    for category, size in normalized_sizes:
+        slc = slice(offset, offset + size)
+        blocks.append({
+            "groups": {group: vals[slc] for group, vals in rec["groups"].items()},
+            "background": rec["background"][slc],
+            "background_unc": rec["background_unc"][slc],
+            "data": rec["data"][slc],
+            "data_unc": rec["data_unc"][slc],
+            "signals": {key: vals[slc] for key, vals in rec.get("signals", {}).items()},
+            "signal_specs": LOWDM_SIGNAL_OVERLAYS,
+            "label": LOWDM_NSV_INCLUSIVE_CATEGORY_LABELS.get(category, category),
+            "nbin": size,
+            "xlabels": [],
+            "blind_data": True,
+            "label_box": True,
+            "label_fontsize": 8.2,
+            "figure_width": 14.04,
+        })
+        offset += size
+    return blocks
+
+
 def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/search bin number", reference_style: bool = False) -> dict:
     import matplotlib
 
@@ -911,7 +984,14 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
     data = np.zeros(nbin, dtype=float)
     data_unc = np.zeros(nbin, dtype=float)
     data_mask = np.ones(nbin, dtype=bool)
-    signals = {spec["key"]: np.zeros(nbin, dtype=float) for spec in SIGNAL_OVERLAYS}
+    signal_specs = []
+    seen_signal_keys = set()
+    for block in blocks:
+        for spec in block.get("signal_specs") or SIGNAL_OVERLAYS:
+            if spec["key"] not in seen_signal_keys:
+                signal_specs.append(spec)
+                seen_signal_keys.add(spec["key"])
+    signals = {spec["key"]: np.zeros(nbin, dtype=float) for spec in signal_specs}
     offset = 0
     for block in blocks:
         n = int(block["nbin"])
@@ -929,7 +1009,8 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
         offset += n
     signals = {key: vals for key, vals in signals.items() if np.any(vals > 0)}
 
-    figure_size = (12.0, 10.0) if reference_style else (max(12.0, nbin * 0.26), 8.4)
+    requested_width = max((float(block.get("figure_width", 0.0)) for block in blocks), default=0.0)
+    figure_size = (12.0, 10.0) if reference_style else (max(12.0, nbin * 0.26, requested_width), 8.4)
     fig, (ax, rax) = plt.subplots(2, 1, figsize=figure_size, gridspec_kw={"height_ratios": [3.2, 1.05 if reference_style else 1.1], "hspace": 0.04}, sharex=True)
     stack_inputs = []
     stack_weights = []
@@ -950,7 +1031,7 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
         ax.fill_between(edges, np.r_[lower, lower[-1]], np.r_[upper, upper[-1]], step="post", facecolor="0.82", edgecolor="0.15", hatch="////", linewidth=0.0, alpha=0.65, label="Stat. syst. unc" if reference_style else "MC stat+syst unc.")
     if reference_style and np.any(bkg > 0):
         ax.stairs(bkg, edges, color="black", linewidth=1.4, zorder=6)
-    for spec in SIGNAL_OVERLAYS:
+    for spec in signal_specs:
         vals = signals.get(spec["key"])
         if vals is not None:
             ax.hist(centers, bins=edges, weights=vals, histtype="step", linewidth=2.8, linestyle="--", color=spec["color"], label=spec["label"])
@@ -1009,7 +1090,7 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
                 transform=rax.get_xaxis_transform(),
                 ha="center",
                 va="center",
-                fontsize=15,
+                fontsize=float(block.get("label_fontsize", 15)),
                 bbox={"boxstyle": "round,pad=0.28", "facecolor": "white", "edgecolor": "0.7", "alpha": 0.96},
                 zorder=20,
             )
@@ -1325,10 +1406,9 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
         plots.append(draw_flat_blocks(low_cr_blocks, output_dir / "lowdm_cr_onebin", xlabel="Low-dM CR region bin number"))
     if low_blocks:
         plots.append(draw_flat_blocks(low_blocks, output_dir / "lowdm_cr_sr_onebin", xlabel="Low-dM region bin number"))
-    low_sr = flat_search_record(payload, "cat7_SR_lowDeltaM", "SR low $\Delta m$", allow_signal=True)
-    if low_sr:
-        low_sr["blind_data"] = True
-        plots.append(draw_flat_blocks([low_sr], output_dir / "lowdm_sr_onebin", xlabel="Low-dM SR bin number"))
+    low_sr_blocks = lowdm_nsv_inclusive_blocks(payload, "cat7_SR_lowDeltaM")
+    if low_sr_blocks:
+        plots.append(draw_flat_blocks(low_sr_blocks, output_dir / "lowdm_sr_onebin", xlabel="Search bin number"))
     summary = {"status": "complete", "source": str(flat_hists), "output_dir": str(output_dir), "plots": plots, "lowdm_variable_plot_count": len([p for p in plots if str(p.get("name", "")).startswith("lowdm_") and p.get("variable")]), "signal_policy": "Signals are drawn only in SR plots; CR blocks exclude T2tt overlays.", "cr_plot_policy": "High-dM and low-dM CRs are drawn both as combined overview plots and as individual region plots.", "ntop_order": "N_t = 0 blocks are placed left of N_t >= 1 blocks.", "luminosity_fb": LUMINOSITY_FB, "luminosity_relative_uncertainty": LUMINOSITY_RELATIVE_UNCERTAINTY, "background_systematic_sources": PLOT_SYSTEMATIC_SOURCES}
     (output_dir / "flat_plot_summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     return summary

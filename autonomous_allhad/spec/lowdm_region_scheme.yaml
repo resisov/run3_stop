@@ -1,12 +1,13 @@
 # Full Low-deltaM region scheme prepared for the 2024 reprocessing campaign.
-name: lowdm_53bin_fullselection_v2
+name: lowdm_42bin_nsv_inclusive_v3
 status: prepared_for_reprocessing
-adopted_date: 2026-07-23
+adopted_date: 2026-07-24
 search_bin_policy:
-  bins_per_region: 53
+  bins_per_region: 42
   stored_branch_pattern: lowdm_search_bin_<REGION>
-  valid_indices: [0, 52]
-  binning_source: AN2019_016_v9 Table 15
+  valid_indices: [0, 41]
+  binning_source: AN2019_016_v9 Table 15 with Nsv category splits removed
+  nsv_policy: inclusive; Nsv is not used in category assignment
   bjet_pt_threshold_gev: 30
 regions:
   - {name: LLCR, channel: cat2_LLCR_lowDeltaM, data_stream: JetMET, recoil: PuppiMET}

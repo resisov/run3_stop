@@ -1,10 +1,10 @@
 {
   "events_processed": 387158037,
   "excluded_obsolete_plot_families": [
-    "17-bin",
-    "42-bin"
+    "legacy High-dM 17-bin",
+    "legacy High-dM 42-bin"
   ],
-  "generated_at": "2026-07-24T08:52:26.796718+00:00",
+  "generated_at": "2026-07-24T10:08:12.893324+00:00",
   "histogram_status": "complete",
   "plot_counts": {
     "categories": 26,
@@ -2615,9 +2615,9 @@
     }
   ],
   "snapshot_input_count": 9484,
-  "snapshot_manifest": "snapshot_manifest_fullselection_v2.json",
-  "source_hist_payload": "hists_2024_fullselection_v2.json",
-  "source_hist_payload_sha256": "63db93d1ac748f8e0412717290908d4822c1e966a02670c33c39c08461fbc101",
+  "snapshot_manifest": "workflow/nominal_plots_2024_current_20260723/snapshot_manifest_fullselection_v2.json",
+  "source_hist_payload": "workflow/nominal_plots_2024_current_20260723/render_payloads/categories_2024_lowdm42.json",
+  "source_hist_payload_sha256": "2aa4c4cb33761a53bdeaea44a8b7c85c2c6e73b0fd6aa6479ea22ead9ac457b5",
   "status": "complete",
   "year": 2024
 }

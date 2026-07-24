@@ -1233,6 +1233,10 @@ def lowdm_kinematic_block(
 
 
 def assign_lowdm_search_bin(njet: int, nb: int, nsv: int, pisr: float, ptb: float, met: float, mtb: float) -> int:
+    # Nsv is intentionally not part of the adopted Run-3 categorization.  Keep
+    # the argument for call-site/schema compatibility with the old 53-bin
+    # implementation, but assign every event with the same kinematic rules.
+    del nsv
     if nb >= 1 and not (math.isfinite(mtb) and mtb < 175.0):
         return -1
 
@@ -1243,26 +1247,18 @@ def assign_lowdm_search_bin(njet: int, nb: int, nsv: int, pisr: float, ptb: floa
         return len(edges) - 1 if value >= edges[-1] else -1
 
     idx = 0
-    for nsv_min, nsv_max in [(0, 0), (1, None)]:
-        for nj_min, nj_max in [(2, 5), (6, None)]:
-            for _ in range(4):
-                pass
-            if nb == 0 and nsv >= nsv_min and (nsv_max is None or nsv <= nsv_max) and njet >= nj_min and (nj_max is None or njet <= nj_max) and pisr >= 500.0:
-                mb = met_bin(met, [450.0, 550.0, 650.0, 750.0])
-                return idx + mb if mb >= 0 else -1
-            idx += 4
+    for nj_min, nj_max in [(2, 5), (6, None)]:
+        if nb == 0 and njet >= nj_min and (nj_max is None or njet <= nj_max) and pisr >= 500.0:
+            mb = met_bin(met, [450.0, 550.0, 650.0, 750.0])
+            return idx + mb if mb >= 0 else -1
+        idx += 4
 
     for pisr_min, pisr_max, met_edges in [(300.0, 500.0, [300.0, 400.0, 500.0, 600.0]), (500.0, None, [450.0, 550.0, 650.0, 750.0])]:
         for ptb_min, ptb_max in [(20.0, 40.0), (40.0, 70.0)]:
-            if nb == 1 and nsv == 0 and ptb_min < ptb < ptb_max and pisr >= pisr_min and (pisr_max is None or pisr < pisr_max):
+            if nb == 1 and ptb_min < ptb < ptb_max and pisr >= pisr_min and (pisr_max is None or pisr < pisr_max):
                 mb = met_bin(met, met_edges)
                 return idx + mb if mb >= 0 else -1
             idx += 4
-
-    if nb == 1 and nsv >= 1 and 20.0 <= ptb < 40.0 and pisr >= 300.0:
-        mb = met_bin(met, [300.0, 400.0, 500.0])
-        return idx + mb if mb >= 0 else -1
-    idx += 3
 
     nb2_blocks = [
         (300.0, 500.0, 40.0, 80.0, 2, None, [300.0, 400.0, 500.0]),

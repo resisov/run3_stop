@@ -11,10 +11,28 @@ import awkward as ak
 import numpy as np
 import uproot
 
-from autonomous_allhad.real_subset_worker import compute_weight_bundle
+from autonomous_allhad.real_subset_worker import assign_lowdm_search_bin, compute_weight_bundle
 
 RECOIL_PT_BINS = [250.0, 300.0, 350.0, 400.0, 500.0, 800.0, 1500.0]
-LOWDM_53BIN_LABELS = [f"lowdm_bin_{index:02d}" for index in range(53)]
+LOWDM_NSV_INCLUSIVE_CATEGORY_SIZES = [
+    ("Nb0_Nj2to5_PISR500plus", 4),
+    ("Nb0_Nj6plus_PISR500plus", 4),
+    ("Nb1_PISR300to500_PTb20to40", 4),
+    ("Nb1_PISR300to500_PTb40to70", 4),
+    ("Nb1_PISR500plus_PTb20to40", 4),
+    ("Nb1_PISR500plus_PTb40to70", 4),
+    ("Nb2plus_PISR300to500_PTb40to80_Nj2plus", 3),
+    ("Nb2plus_PISR300to500_PTb80to140_Nj2plus", 3),
+    ("Nb2plus_PISR300to500_PTb140plus_Nj7plus", 3),
+    ("Nb2plus_PISR500plus_PTb40to80_Nj2plus", 3),
+    ("Nb2plus_PISR500plus_PTb80to140_Nj2plus", 3),
+    ("Nb2plus_PISR500plus_PTb140plus_Nj7plus", 3),
+]
+LOWDM_42BIN_LABELS = [
+    f"{category}_recoil_{position + 1}"
+    for category, size in LOWDM_NSV_INCLUSIVE_CATEGORY_SIZES
+    for position in range(size)
+]
 SELECTED_AN17_RECOIL_BINS_1BASED = [4, 5, 8, 9, 14, 15, 16]
 SELECTED_RECOIL54_SCHEME = "boosted_an17_selected_recoil6_with_nt0_wsplit_SR"
 NT0_RECOIL_CATEGORY_KEYS = ["NT0_Nb1plus_T0_W0", "NT0_Nb1plus_T0_W1plus"]
@@ -86,6 +104,7 @@ WEIGHT_BRANCHES = [
     "photon_medium_pt", "photon_medium_eta", "photon_medium_phi", "gen_top_pt",
 ]
 LOWDM_READ_BRANCHES = [
+    "feature_lowdm_preselection",
     "feature_lowdm_LLCR", "feature_lowdm_QCDCR", "feature_lowdm_GCR",
     "feature_lowdm_DY2E", "feature_lowdm_DY2M", "feature_lowdm_SR",
     "lowdm_search_bin_LLCR", "lowdm_search_bin_QCDCR", "lowdm_search_bin_GCR",
@@ -94,8 +113,10 @@ LOWDM_READ_BRANCHES = [
     "pass_zero_tau", "pass_no_veto_leptons", "pass_one_veto_lepton", "pass_mt_100",
     "pass_met_250", "pass_ht_300", "pass_ht_photon_300", "pass_ht_lepton_300",
     "pass_open_pre", "pass_qcd_open", "pass_dphi123_0p1",
+    "pass_lowdm_topology_veto", "pass_lowdm_isr", "pass_lowdm_isr_bveto",
+    "pass_lowdm_met_sqrt_ht", "pass_lowdm_mtb",
     "j1_met_dphi", "j2_met_dphi", "j3_met_dphi", "j4_met_dphi",
-    "met", "ht", "njet", "nb_medium_lowdm", "nb_loose_lowdm", "n_photon_medium",
+    "met", "ht", "njet", "nb_medium_lowdm", "nb_loose_lowdm", "n_sv_softb", "n_photon_medium",
     "njet_photon_clean", "nb_photon_clean", "ht_photon_clean",
     "njet_lepton_clean", "nb_lepton_clean", "ht_lepton_clean",
     "mee", "pee", "mmm", "pmm", "recoil_gcr", "recoil_dy2e", "recoil_dy2m",
@@ -536,6 +557,36 @@ def lowdm_region_mask(chunk: dict[str, Any], region: str, n: int) -> np.ndarray:
     return bool_field(chunk, f"feature_lowdm_{region}", n)
 
 
+def lowdm_nsv_inclusive_sr_indices(chunk: dict[str, Any], n: int) -> np.ndarray:
+    """Rebuild the adopted 42-bin SR from the broad nominal intermediate."""
+    base = (
+        bool_field(chunk, "feature_lowdm_preselection", n)
+        & bool_field(chunk, "pass_lowdm_topology_veto", n)
+        & bool_field(chunk, "pass_lowdm_isr", n)
+        & bool_field(chunk, "pass_lowdm_isr_bveto", n)
+        & bool_field(chunk, "pass_lowdm_met_sqrt_ht", n)
+        & bool_field(chunk, "pass_lowdm_mtb", n)
+    )
+    njet = int_field(chunk, "njet", n, -1)
+    nb = int_field(chunk, "nb_medium_lowdm", n, -1)
+    pisr = float_field(chunk, "lowdm_isr_pt", n, -1.0)
+    ptb = float_field(chunk, "lowdm_ptb", n, -1.0)
+    met = float_field(chunk, "met", n, -1.0)
+    mtb = float_field(chunk, "lowdm_mtb", n, float("nan"))
+    out = np.full(n, -1, dtype=int)
+    for index in np.flatnonzero(base):
+        out[index] = assign_lowdm_search_bin(
+            int(njet[index]),
+            int(nb[index]),
+            0,
+            float(pisr[index]),
+            float(ptb[index]),
+            float(met[index]),
+            float(mtb[index]),
+        )
+    return out
+
+
 def empty_index_hist(nbin: int) -> dict[str, Any]:
     return {"sumw": [0.0] * nbin, "sumw2": [0.0] * nbin, "entries": [0] * nbin}
 
@@ -806,7 +857,7 @@ def selected_an17_recoil54_indices(chunk: dict[str, Any], n: int, sr_mask: np.nd
     return out
 
 
-def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: dict[str, Any], search_histograms: dict[str, Any], lowdm_variable_histograms: dict[str, Any], highdm_variable_histograms: dict[str, Any], summary: dict[str, Any], step_size: int, only_regions: list[str] | None = None, require_btag: bool = False, distribution_only: bool = False, only_variables: list[str] | None = None, only_signal_mass: tuple[int, int] | None = None) -> None:
+def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: dict[str, Any], search_histograms: dict[str, Any], lowdm_variable_histograms: dict[str, Any], highdm_variable_histograms: dict[str, Any], summary: dict[str, Any], step_size: int, only_regions: list[str] | None = None, require_btag: bool = False, distribution_only: bool = False, only_variables: list[str] | None = None, only_signal_mass: tuple[int, int] | None = None, only_lowdm_sr_nsv_inclusive: bool = False, only_lowdm_nsv_repair: bool = False) -> None:
     meta_path = root_path.with_suffix(".json")
     if not meta_path.exists():
         summary.setdefault("missing_sidecars", []).append(str(root_path))
@@ -844,6 +895,31 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                         continue
                     sub_group = {name: arr[mask_group] for name, arr in sub.items()}
                     original_n = len(sub_group["dataset_id"])
+                    focused_lowdm_indices = None
+                    if only_lowdm_sr_nsv_inclusive:
+                        focused_lowdm_indices = lowdm_nsv_inclusive_sr_indices(sub_group, original_n)
+                        selected = focused_lowdm_indices >= 0
+                        if only_lowdm_nsv_repair:
+                            nb_values = int_field(sub_group, "nb_medium_lowdm", original_n, -1)
+                            nsv_values = int_field(sub_group, "n_sv_softb", original_n, -1)
+                            selected &= (
+                                ((nb_values == 0) & (nsv_values < 0))
+                                | ((nb_values == 1) & (nsv_values != 0))
+                            )
+                        if is_data and not data_process_allowed(process, "cat7_SR_lowDeltaM"):
+                            note_data_exclusion(
+                                summary,
+                                "cat7_SR_lowDeltaM",
+                                process,
+                                int(np.count_nonzero(selected)),
+                            )
+                            summary["events_processed"] = int(summary.get("events_processed", 0)) + original_n
+                            continue
+                        if not np.any(selected):
+                            summary["events_processed"] = int(summary.get("events_processed", 0)) + original_n
+                            continue
+                        sub_group = {name: arr[selected] for name, arr in sub_group.items()}
+                        focused_lowdm_indices = focused_lowdm_indices[selected]
                     if only_regions:
                         selected = np.zeros(original_n, dtype=bool)
                         for region in only_regions:
@@ -888,6 +964,18 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                     normv = norm_vector(norm, sub_group, dsid, is_data, is_signal)
                     label = sample_label(process, is_data, is_signal, sub_group)
                     summary.setdefault("scale_factor_status", {}).setdefault(label, status)
+                    if only_lowdm_sr_nsv_inclusive:
+                        for vname, wraw in variations.items():
+                            weights = finite_array(wraw, inputs["n"], 0.0) * normv
+                            target = (
+                                search_histograms
+                                .setdefault("cat7_SR_lowDeltaM", {})
+                                .setdefault(label, {})
+                                .setdefault(vname, empty_index_hist(len(LOWDM_42BIN_LABELS)))
+                            )
+                            add_index_hist(target, focused_lowdm_indices, weights)
+                        summary["events_processed"] = int(summary.get("events_processed", 0)) + original_n
+                        continue
                     active_regions = {region: REGION_VARIABLES[region] for region in only_regions} if only_regions else REGION_VARIABLES
                     for region, (flag, var) in active_regions.items():
                         rmask = region_mask(sub_group, region, flag, inputs["n"])
@@ -940,7 +1028,7 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                         }
                         for vname, wraw in variations.items():
                             weights = finite_array(wraw, inputs["n"], 0.0) * normv
-                            target = search_histograms.setdefault(lowdm_channel, {}).setdefault(label, {}).setdefault(vname, empty_index_hist(len(LOWDM_53BIN_LABELS)))
+                            target = search_histograms.setdefault(lowdm_channel, {}).setdefault(label, {}).setdefault(vname, empty_index_hist(len(LOWDM_42BIN_LABELS)))
                             add_index_hist(target, lowdm_indices, weights)
                             for var_name, values in lowdm_values.items():
                                 spec = LOWDM_VARIABLE_SPECS[var_name]
@@ -978,8 +1066,20 @@ def main() -> int:
     parser.add_argument("--require-btag", action="store_true")
     parser.add_argument("--distribution-only", action="store_true")
     parser.add_argument("--only-signal-mass", nargs=2, type=int, metavar=("MSTOP", "MLSP"))
+    parser.add_argument(
+        "--only-lowdm-sr-nsv-inclusive",
+        action="store_true",
+        help="Rebuild only the adopted Nsv-independent 42-bin Low-dM SR from broad nominal intermediates.",
+    )
+    parser.add_argument(
+        "--only-lowdm-nsv-repair",
+        action="store_true",
+        help="With --only-lowdm-sr-nsv-inclusive, retain only events absent or non-projectable from the old Nsv-split bins.",
+    )
     parser.add_argument("--only-variables", nargs="+", choices=sorted(HIGHDM_DISTRIBUTION_VARIABLE_SPECS))
     args = parser.parse_args()
+    if args.only_lowdm_nsv_repair and not args.only_lowdm_sr_nsv_inclusive:
+        parser.error("--only-lowdm-nsv-repair requires --only-lowdm-sr-nsv-inclusive")
     repo = Path(args.repo).resolve()
     norm = read_json(Path(args.normalization))
     histograms: dict[str, Any] = {}
@@ -1006,6 +1106,8 @@ def main() -> int:
             args.distribution_only,
             args.only_variables,
             tuple(args.only_signal_mass) if args.only_signal_mass else None,
+            args.only_lowdm_sr_nsv_inclusive,
+            args.only_lowdm_nsv_repair,
         )
     payload = {
         "schema_version": "flat_boosted_recoil_hists_v1",
@@ -1025,13 +1127,23 @@ def main() -> int:
                 "selected_an17_bins_1based": SELECTED_AN17_RECOIL_BINS_1BASED,
                 "recoil_pt_bins": RECOIL_PT_BINS,
             },
-            **{channel: {"bin_labels": LOWDM_53BIN_LABELS, "selection": f"feature_lowdm_{region}", "delta_m": "low", "region": region} for region, channel in LOWDM_REGION_MAP.items()},
+            **{
+                channel: {
+                    "bin_labels": LOWDM_42BIN_LABELS,
+                    "selection": f"feature_lowdm_{region}",
+                    "delta_m": "low",
+                    "region": region,
+                    "nsv_policy": "inclusive; Nsv is not used in category assignment",
+                    "category_sizes": LOWDM_NSV_INCLUSIVE_CATEGORY_SIZES,
+                }
+                for region, channel in LOWDM_REGION_MAP.items()
+            },
         },
         "lowdm_region_policy": {
-            "status": "adopted_from_user_2026-07-05",
-            "search_bins": "53 AN-style low-dM bins per region, selected upstream before the flat skim",
+            "status": "adopted_from_user_2026-07-24",
+            "search_bins": "42 low-dM bins per region after removing Nsv from category assignment",
             "regions": LOWDM_REGION_MAP,
-            "note": "Low-dM uses upstream exact region flags and region-specific 53-bin branches. GCR and DY use photon/dilepton recoil directions and object-cleaned AK4/AK8 collections; DY also requires OS, on-Z, and pT(ll)>200.",
+            "note": "Low-dM is Nsv-inclusive. GCR and DY use photon/dilepton recoil directions and object-cleaned AK4/AK8 collections; DY also requires OS, on-Z, and pT(ll)>200.",
         },
         "highdm_distribution_variable_specs": HIGHDM_DISTRIBUTION_VARIABLE_SPECS,
         "highdm_distribution_regions": {

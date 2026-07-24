@@ -174,6 +174,7 @@ def main() -> int:
     parser.add_argument("--require-btag", action="store_true")
     parser.add_argument("--distribution-only", action="store_true")
     parser.add_argument("--only-signal-mass", nargs=2, type=int, metavar=("MSTOP", "MLSP"))
+    parser.add_argument("--only-lowdm-sr-nsv-inclusive", action="store_true")
     parser.add_argument("--resume", action="store_true")
     args = parser.parse_args()
 
@@ -221,6 +222,8 @@ def main() -> int:
             cmd.append("--require-btag")
         if args.only_signal_mass:
             cmd.extend(["--only-signal-mass", *(str(value) for value in args.only_signal_mass)])
+        if args.only_lowdm_sr_nsv_inclusive:
+            cmd.append("--only-lowdm-sr-nsv-inclusive")
         proc = subprocess.Popen(cmd, cwd=str(repo), stdout=handle, stderr=subprocess.STDOUT, env=env)
         print(json.dumps({"stage": "chunk_started", "chunk": idx, "roots": len(chunk), "output": str(output), "log": str(log)}, sort_keys=True), flush=True)
         return idx, output, log, proc, handle
