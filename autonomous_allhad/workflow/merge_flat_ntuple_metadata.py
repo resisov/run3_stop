@@ -16,6 +16,7 @@ FLAT_SCHEMAS = {
     "flat_ntuple_shard_v2_lowdm",
     "flat_ntuple_shard_v4_objectcorr_2024",
     "flat_ntuple_shard_v4_objectcorr_2025_data",
+    "flat_ntuple_shard_v5_fullselection_2024",
 }
 
 
