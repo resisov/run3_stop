@@ -179,10 +179,17 @@ def main() -> int:
     args = parser.parse_args()
 
     repo = Path(args.repo).resolve()
-    roots = [line.strip() for line in Path(args.input_list).read_text().splitlines() if line.strip()]
+    input_list = Path(args.input_list).resolve()
+    normalization = Path(args.normalization).resolve()
+    output_path = Path(args.output).resolve()
+    roots = [
+        str(Path(line.strip()).resolve())
+        for line in input_list.read_text().splitlines()
+        if line.strip()
+    ]
     if not roots:
         raise SystemExit("empty input list")
-    work_dir = Path(args.work_dir)
+    work_dir = Path(args.work_dir).resolve()
     chunk_dir = work_dir / "hist_chunks"
     chunk_dir.mkdir(parents=True, exist_ok=True)
     script = repo / "autonomous_allhad/workflow/build_flat_boosted_recoil_hists.py"
@@ -206,7 +213,7 @@ def main() -> int:
             "--inputs",
             *chunk,
             "--normalization",
-            str(Path(args.normalization).resolve()),
+            str(normalization),
             "--output",
             str(output),
             "--step-size",
@@ -262,9 +269,9 @@ def main() -> int:
 
     if not ok:
         return 2
-    merged = merge_payloads(sorted(finished), Path(args.output), Path(args.normalization).resolve())
-    write_json(work_dir / "chunked_hist_results.json", {"status": merged["status"], "output": str(args.output), "chunks": [str(p) for p in sorted(finished)]})
-    print(json.dumps({"stage": "chunked_hists_done", "status": merged["status"], "events_processed": merged["summary"]["events_processed"], "input_roots": len(merged["summary"]["input_roots"]), "output": str(args.output)}, sort_keys=True), flush=True)
+    merged = merge_payloads(sorted(finished), output_path, normalization)
+    write_json(work_dir / "chunked_hist_results.json", {"status": merged["status"], "output": str(output_path), "chunks": [str(p) for p in sorted(finished)]})
+    print(json.dumps({"stage": "chunked_hists_done", "status": merged["status"], "events_processed": merged["summary"]["events_processed"], "input_roots": len(merged["summary"]["input_roots"]), "output": str(output_path)}, sort_keys=True), flush=True)
     return 0 if merged["status"] == "complete" else 1
 
 

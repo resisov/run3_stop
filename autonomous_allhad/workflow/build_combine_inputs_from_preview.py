@@ -366,6 +366,8 @@ def plot_contour(
     output_png: Path,
     run2_contours: Path | None = Path("/eos/user/t/taiwoo/run2_sus19010_contours.json"),
     luminosity_label: str = r"109.82 fb$^{-1}$ (13.6 TeV)",
+    analysis_label: str | None = None,
+    x_max: float = 1700.0,
 ) -> bool:
     records = list((limit_payload.get("points") or {}).values())
     points = [rec for rec in records if "expected" in rec and float(rec["expected"]) > 0]
@@ -384,7 +386,7 @@ def plot_contour(
     from scipy.interpolate import griddata
 
     # Match the reference view, use all generated mass points, and mask unsupported/off-shell regions.
-    xmin, xmax = 600.0, 1700.0
+    xmin, xmax = 600.0, float(x_max)
     ymin, ymax = 0.0, 1500.0
     top_mass = 172.5
     xi = np.linspace(xmin, xmax, 260)
@@ -495,6 +497,8 @@ def plot_contour(
             ax=ax,
         )
     ax.text(0.14, 0.95, r"$pp\rightarrow \tilde{t}\tilde{t},\ \tilde{t}\rightarrow t\tilde{\chi}_1^0$", transform=ax.transAxes, fontsize=19, va="top")
+    if analysis_label:
+        ax.text(0.14, 0.905, analysis_label, transform=ax.transAxes, fontsize=16, va="top")
 
     legend_handles = [
         Line2D([0], [0], color="red", lw=3.0, label="Run-3 expected"),

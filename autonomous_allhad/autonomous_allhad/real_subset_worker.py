@@ -63,6 +63,7 @@ BOOSTED_W_MSD_MAX = 105.0
 BOOSTED_TOP_MSD_MIN = 105.0
 UPART_AK4_LOOSE_WP = 0.0246
 UPART_AK4_MEDIUM_WP = 0.1272
+PHOTON_MEDIUM_CUTBASED_MIN = 2
 LOWDM_SV_POINTING_ANGLE_MAX = math.acos(0.98)
 CORE_BRANCHES = [
     "run", "luminosityBlock", "event", "MET_pt", "MET_phi", "PFMET_pt", "PFMET_phi", "PuppiMET_pt", "PuppiMET_phi",
@@ -1062,6 +1063,16 @@ def clean_by_delta_r(obj_eta: Any, obj_phi: Any, ref_eta: Any, ref_phi: Any, dr_
     return ak.all((deta * deta + dphi * dphi) > dr_min * dr_min, axis=2)
 
 
+def medium_photon_mask(pt: Any, eta: Any, cutbased: Any, electron_veto: Any) -> Any:
+    fiducial = (abs(eta) < 1.4442) | ((abs(eta) > 1.5660) & (abs(eta) < 2.5))
+    return (
+        (pt > 220)
+        & fiducial
+        & (cutbased >= PHOTON_MEDIUM_CUTBASED_MIN)
+        & (electron_veto == 1)
+    )
+
+
 def jet_feature_block(jet_pt: Any, jet_eta: Any, jet_phi: Any, good_mask: Any, b_mask: Any, met_phi: Any) -> dict[str, Any]:
     jphi = jet_phi[good_mask]
     jpt = jet_pt[good_mask]
@@ -1234,11 +1245,10 @@ def lowdm_kinematic_block(
 
 def assign_lowdm_search_bin(njet: int, nb: int, nsv: int, pisr: float, ptb: float, met: float, mtb: float) -> int:
     # Nsv is intentionally not part of the adopted Run-3 categorization.  Keep
-    # the argument for call-site/schema compatibility with the old 53-bin
-    # implementation, but assign every event with the same kinematic rules.
-    del nsv
-    if nb >= 1 and not (math.isfinite(mtb) and mtb < 175.0):
-        return -1
+    # both legacy-only arguments for call-site/schema compatibility with the
+    # old 53-bin implementation.  Neither Nsv nor mTb participates in the
+    # adopted 42-bin category assignment.
+    del nsv, mtb
 
     def met_bin(value: float, edges: list[float]) -> int:
         for idx in range(len(edges) - 1):
@@ -1359,8 +1369,7 @@ def extract_chunk(
 
     p_pt = arr(arrays, "Photon_pt", ak.Array([[]] * n)); p_eta = arr(arrays, "Photon_eta", ak.Array([[]] * n)); p_phi = arr(arrays, "Photon_phi", ak.Array([[]] * n)); p_cb = arr(arrays, "Photon_cutBased", ak.zeros_like(p_pt))
     p_electron_veto = arr(arrays, "Photon_electronVeto", ak.zeros_like(p_pt))
-    p_fid = ((abs(p_eta) < 1.4442) | ((abs(p_eta) > 1.5660) & (abs(p_eta) < 2.5)))
-    p_med = (p_pt > 220) & p_fid & (p_cb >= 3) & (p_electron_veto == 1)
+    p_med = medium_photon_mask(p_pt, p_eta, p_cb, p_electron_veto)
     n_p_med = count(p_med)
 
     tau_pt = arr(arrays, "Tau_pt", ak.Array([[]] * n)); tau_eta = arr(arrays, "Tau_eta", ak.Array([[]] * n)); tau_phi = arr(arrays, "Tau_phi", ak.Array([[]] * n)); tau_dz = arr(arrays, "Tau_dz", ak.zeros_like(tau_pt)); tau_dm = arr(arrays, "Tau_decayMode", ak.zeros_like(tau_pt)); tau_id = arr(arrays, "Tau_idDeepTau2018v2p5VSjet", ak.zeros_like(tau_pt))
@@ -1543,9 +1552,7 @@ def extract_chunk(
         return (
             block["pass_topology"]
             & block["pass_isr"]
-            & block["pass_isr_bveto"]
             & block["pass_met_sqrt_ht"]
-            & block["pass_mtb"]
         )
 
     lowdm_masks = {
@@ -1846,7 +1853,7 @@ def extract_chunk(
             "nsv_softb_available": bool(sv_available),
             "nsv_required_branches": sv_required,
             "nres_status": "not_available_in_current_worker; Nt/NW veto stored, resolved-top veto requires later branch implementation",
-            "search_bin_definition": "AN low-dM 53-bin map, with pTb computed from pT>30 medium UParT b jets by descending btag score",
+            "search_bin_definition": "Run-3 low-dM 42-bin Nsv-inclusive map, with pTb computed from pT>30 medium UParT b jets by descending btag score; ISR-subjet b veto and mTb are diagnostic-only",
             "region_counts": {region: int(np.sum(mask)) for region, mask in lowdm_masks.items()},
             "region_recoil_policy": {
                 "SR_LLCR_QCDCR": "corrected PuppiMET and uncleaned AK4/AK8 collections",
@@ -1854,7 +1861,7 @@ def extract_chunk(
                 "DY2E": "dielectron recoil with AK4 dR<0.2 and AK8 dR<0.4 electron cleaning",
                 "DY2M": "dimuon recoil with AK4 dR<0.2 and AK8 dR<0.4 muon cleaning",
             },
-            "isr_policy": "exactly one cleaned AK8 ISR candidate, pT>200, abs(eta)<2.4, deltaPhi(recoil,ISR)>2, and an available UParTAK4 loose-subjet veto that passes",
+            "isr_policy": "exactly one cleaned AK8 ISR candidate, pT>200, abs(eta)<2.4, and deltaPhi(recoil,ISR)>2; the UParTAK4 loose-subjet b-veto decision is stored for diagnostics but is not selected",
             "dilepton_policy": "opposite-sign same-flavor, on-Z 81<mll<101, leading/subleading pT thresholds, and pT(ll)>200",
             "photon_policy": "pT>220, fiducial eta, medium cutBased ID, and explicit Photon_electronVeto",
         },

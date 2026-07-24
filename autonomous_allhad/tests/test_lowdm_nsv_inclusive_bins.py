@@ -40,7 +40,7 @@ def test_lowdm_search_bins_are_nsv_independent_and_span_42_bins():
         for nsv in (-1, 0, 1, 4):
             assert HISTS.assign_lowdm_search_bin(njet, nb, nsv, pisr, ptb, met, mtb) == expected
     assert len(HISTS.LOWDM_42BIN_LABELS) == 42
-    assert HISTS.assign_lowdm_search_bin(2, 1, 0, 550.0, 35.0, 450.0, 175.0) == -1
+    assert HISTS.assign_lowdm_search_bin(2, 1, 0, 550.0, 35.0, 450.0, 250.0) == 16
 
 
 def test_lowdm_sr_rebuilder_uses_broad_preselection_and_quality_flags():
@@ -48,9 +48,9 @@ def test_lowdm_sr_rebuilder_uses_broad_preselection_and_quality_flags():
         "feature_lowdm_preselection": np.asarray([True, True, False]),
         "pass_lowdm_topology_veto": np.asarray([True, True, True]),
         "pass_lowdm_isr": np.asarray([True, True, True]),
-        "pass_lowdm_isr_bveto": np.asarray([True, True, True]),
+        "pass_lowdm_isr_bveto": np.asarray([False, True, True]),
         "pass_lowdm_met_sqrt_ht": np.asarray([True, False, True]),
-        "pass_lowdm_mtb": np.asarray([True, True, True]),
+        "pass_lowdm_mtb": np.asarray([False, True, True]),
         "njet": np.asarray([2, 2, 2]),
         "nb_medium_lowdm": np.asarray([0, 0, 0]),
         "lowdm_isr_pt": np.asarray([550.0, 550.0, 550.0]),

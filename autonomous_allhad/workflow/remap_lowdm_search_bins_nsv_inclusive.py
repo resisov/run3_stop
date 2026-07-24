@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Project the existing Low-dM SR payload into the adopted Nsv-inclusive bins."""
+"""Project every Low-dM CR/SR payload into the adopted Nsv-inclusive bins."""
 
 from __future__ import annotations
 
@@ -11,10 +11,11 @@ from typing import Any
 from build_flat_boosted_recoil_hists import (
     LOWDM_42BIN_LABELS,
     LOWDM_NSV_INCLUSIVE_CATEGORY_SIZES,
+    LOWDM_REGION_MAP,
 )
 
 
-SCHEME = "cat7_SR_lowDeltaM"
+SCHEMES = list(LOWDM_REGION_MAP.values())
 
 
 def is_hist_leaf(value: Any) -> bool:
@@ -55,26 +56,27 @@ def main() -> int:
     args = parser.parse_args()
 
     payload = json.loads(args.input.read_text())
-    source = (payload.get("search_bin_histograms") or {}).get(SCHEME) or {}
-    if not source:
-        raise ValueError(f"missing {SCHEME}")
+    repair_payload = json.loads(args.repair.read_text()) if args.repair else {}
+    projection_by_scheme: dict[str, Any] = {}
+    for region, scheme in LOWDM_REGION_MAP.items():
+        source = (payload.get("search_bin_histograms") or {}).get(scheme) or {}
+        if not source:
+            raise ValueError(f"missing {scheme}")
 
-    projected: dict[str, Any] = {}
-    dropped = {"sumw": 0.0, "sumw2": 0.0, "entries": 0}
-    remapped_leaves = 0
-    for sample, variations in source.items():
-        for variation, leaf in variations.items():
-            if not is_hist_leaf(leaf):
-                continue
-            for key in dropped:
-                dropped[key] += sum(leaf[key][32:35])
-            projected.setdefault(sample, {})[variation] = remap_leaf(leaf)
-            remapped_leaves += 1
+        projected: dict[str, Any] = {}
+        dropped = {"sumw": 0.0, "sumw2": 0.0, "entries": 0}
+        remapped_leaves = 0
+        for sample, variations in source.items():
+            for variation, leaf in variations.items():
+                if not is_hist_leaf(leaf):
+                    continue
+                for key in dropped:
+                    dropped[key] += sum(leaf[key][32:35])
+                projected.setdefault(sample, {})[variation] = remap_leaf(leaf)
+                remapped_leaves += 1
 
-    repaired_leaves = 0
-    if args.repair:
-        repair_payload = json.loads(args.repair.read_text())
-        repair = (repair_payload.get("search_bin_histograms") or {}).get(SCHEME) or {}
+        repaired_leaves = 0
+        repair = (repair_payload.get("search_bin_histograms") or {}).get(scheme) or {}
         for sample, variations in repair.items():
             for variation, leaf in variations.items():
                 if not is_hist_leaf(leaf):
@@ -86,24 +88,29 @@ def main() -> int:
                 merge_leaf(target, leaf)
                 repaired_leaves += 1
 
-    payload["search_bin_histograms"][SCHEME] = projected
-    payload.setdefault("search_bin_schemes", {})[SCHEME] = {
-        "bin_labels": LOWDM_42BIN_LABELS,
-        "selection": "Low-dM SR with Nsv excluded from category assignment",
-        "delta_m": "low",
-        "region": "SR",
-        "nsv_policy": "inclusive; Nsv is not used in category assignment",
-        "category_sizes": LOWDM_NSV_INCLUSIVE_CATEGORY_SIZES,
-    }
+        payload["search_bin_histograms"][scheme] = projected
+        payload.setdefault("search_bin_schemes", {})[scheme] = {
+            "bin_labels": LOWDM_42BIN_LABELS,
+            "selection": f"Low-dM {region} with Nsv excluded from category assignment",
+            "delta_m": "low",
+            "region": region,
+            "nsv_policy": "inclusive; Nsv is not used in category assignment",
+            "category_sizes": LOWDM_NSV_INCLUSIVE_CATEGORY_SIZES,
+        }
+        projection_by_scheme[scheme] = {
+            "region": region,
+            "remapped_histogram_leaves": remapped_leaves,
+            "repair_histogram_leaves": repaired_leaves,
+            "removed_old_nb1_nsv_nonzero_contribution_before_repair": dropped,
+        }
+
     payload["lowdm_nsv_inclusive_projection"] = {
         "status": "complete",
         "source": str(args.input),
         "source_bins": 53,
         "output_bins": 42,
-        "remapped_histogram_leaves": remapped_leaves,
         "repair": str(args.repair) if args.repair else None,
-        "repair_histogram_leaves": repaired_leaves,
-        "removed_old_nb1_nsv_nonzero_contribution_before_repair": dropped,
+        "schemes": projection_by_scheme,
         "policy": (
             "Old Nb=0 Nsv blocks are summed exactly; old Nb=1 Nsv=0 and all Nb>=2 blocks "
             "are preserved; old Nb=1,Nsv>=1 bins are replaced by event-level repair output."

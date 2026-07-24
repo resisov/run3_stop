@@ -93,7 +93,7 @@ OBJECTS = {
     "medium_electron": "pt > 10, ECAL barrel/endcap fiducial, cutBased >= 3, miniIso < 0.1",
     "loose_muon": "pt > 5, |eta| < 2.4, looseId, miniIso < 0.2",
     "medium_muon": "pt > 10, |eta| < 2.4, mediumId, miniIso < 0.2",
-    "medium_photon": "pt > 220, ECAL barrel/endcap fiducial, cutBased >= 3",
+    "medium_photon": "pt > 220, ECAL barrel/endcap fiducial, cutBased >= 2, explicit Photon_electronVeto",
     "medium_tau": "pt > 20, |eta| < 2.5, |dz| < 0.2, decayMode not 5/6, DeepTau VSjet >= 5, mT < 100",
     "good_ak4": "pt > 30, |eta| < 2.4, Run-3 correctionlib AK4PUPPI_TightLeptonVeto jet ID",
     "good_ak8": "pt > 200, |eta| < 2.0, msoftdrop > 60, Run-3 correctionlib AK8PUPPI_TightLeptonVeto jet ID",

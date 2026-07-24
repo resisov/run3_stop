@@ -1,6 +1,6 @@
-# Full Low-deltaM region scheme prepared for the 2024 reprocessing campaign.
-name: lowdm_42bin_nsv_inclusive_v3
-status: prepared_for_reprocessing
+# Full Low-deltaM region scheme adopted for the 2024 analysis.
+name: lowdm_42bin_nsv_inclusive_no_bveto_mtb_v4
+status: adopted
 adopted_date: 2026-07-24
 search_bin_policy:
   bins_per_region: 42
@@ -8,6 +8,8 @@ search_bin_policy:
   valid_indices: [0, 41]
   binning_source: AN2019_016_v9 Table 15 with Nsv category splits removed
   nsv_policy: inclusive; Nsv is not used in category assignment
+  isr_subjet_bveto_policy: diagnostic only; not applied to event selection
+  mtb_policy: diagnostic only; not applied to event selection or category assignment
   bjet_pt_threshold_gev: 30
 regions:
   - {name: LLCR, channel: cat2_LLCR_lowDeltaM, data_stream: JetMET, recoil: PuppiMET}
@@ -24,9 +26,10 @@ common_lowdm_requirements:
   - Nt = 0 and NW = 0
   - exactly one cleaned AK8 ISR candidate with pT > 200 GeV and abs(eta) < 2.4
   - deltaPhi(recoil, ISR) > 2
-  - available UParTAK4 loose-subjet b veto passes
   - recoil / sqrt(HT) >= 10 sqrt(GeV)
-  - mTb < 175 GeV when Nb >= 1
+diagnostic_only:
+  - UParTAK4 loose-subjet b-veto pass/fail
+  - mTb < 175 GeV pass/fail when Nb >= 1
 region_specific_requirements:
   GCR:
     - exactly one medium photon with pT > 220 GeV

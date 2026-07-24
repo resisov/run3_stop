@@ -6,6 +6,18 @@
   ],
   "generated_at": "2026-07-24T10:08:12.893324+00:00",
   "histogram_status": "complete",
+  "lowdm_selection_update": {
+    "analysis_summary": "lowdm_selection_update_summary.json",
+    "category_plot": "plots/categories/lowdm_sr_42bin_no_bveto_mtb.png",
+    "combined_limit": "plots/limits/expected_limit_highdm54_lowdm42_no_bveto_mtb_run2_x1600.png",
+    "lowdm_only_limit": "plots/limits/expected_limit_lowdm42_no_bveto_mtb_run2_x1600.png",
+    "selection_change": [
+      "ISR-subjet b veto removed",
+      "mTb < 175 GeV requirement removed"
+    ],
+    "status": "complete",
+    "updated_at": "2026-07-24T17:27:40.713578+00:00"
+  },
   "plot_counts": {
     "categories": 26,
     "highdm": 144,

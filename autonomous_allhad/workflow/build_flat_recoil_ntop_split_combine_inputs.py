@@ -162,6 +162,7 @@ def write_parallel_runner(cards: dict[str, str], output_dir: Path, runner: Path,
     lines = [
         "#!/usr/bin/env bash",
         "set -uo pipefail",
+        "export PYTHONNOUSERSITE=1",
         "COMBINE=${COMBINE:-combine}",
         f"OUTDIR={stable_path(output_dir)}",
         f"MAX_JOBS={int(jobs)}",

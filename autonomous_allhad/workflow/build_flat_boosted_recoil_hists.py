@@ -558,14 +558,17 @@ def lowdm_region_mask(chunk: dict[str, Any], region: str, n: int) -> np.ndarray:
 
 
 def lowdm_nsv_inclusive_sr_indices(chunk: dict[str, Any], n: int) -> np.ndarray:
-    """Rebuild the adopted 42-bin SR from the broad nominal intermediate."""
+    """Rebuild the adopted 42-bin SR from the broad nominal intermediate.
+
+    The ISR-subjet b veto and mTb requirement are intentionally not part of the
+    adopted SR selection.  Their diagnostic branches remain in the broad
+    intermediate for cutflow and comparison studies.
+    """
     base = (
         bool_field(chunk, "feature_lowdm_preselection", n)
         & bool_field(chunk, "pass_lowdm_topology_veto", n)
         & bool_field(chunk, "pass_lowdm_isr", n)
-        & bool_field(chunk, "pass_lowdm_isr_bveto", n)
         & bool_field(chunk, "pass_lowdm_met_sqrt_ht", n)
-        & bool_field(chunk, "pass_lowdm_mtb", n)
     )
     njet = int_field(chunk, "njet", n, -1)
     nb = int_field(chunk, "nb_medium_lowdm", n, -1)
@@ -1130,10 +1133,18 @@ def main() -> int:
             **{
                 channel: {
                     "bin_labels": LOWDM_42BIN_LABELS,
-                    "selection": f"feature_lowdm_{region}",
+                    "selection": (
+                        "feature_lowdm_preselection && pass_lowdm_topology_veto && "
+                        "pass_lowdm_isr && pass_lowdm_met_sqrt_ht; ISR-subjet b veto "
+                        "and mTb requirement removed"
+                        if args.only_lowdm_sr_nsv_inclusive and region == "SR"
+                        else f"feature_lowdm_{region}"
+                    ),
                     "delta_m": "low",
                     "region": region,
                     "nsv_policy": "inclusive; Nsv is not used in category assignment",
+                    "isr_subjet_bveto_policy": "not applied",
+                    "mtb_policy": "not applied",
                     "category_sizes": LOWDM_NSV_INCLUSIVE_CATEGORY_SIZES,
                 }
                 for region, channel in LOWDM_REGION_MAP.items()
@@ -1141,9 +1152,9 @@ def main() -> int:
         },
         "lowdm_region_policy": {
             "status": "adopted_from_user_2026-07-24",
-            "search_bins": "42 low-dM bins per region after removing Nsv from category assignment",
+            "search_bins": "42 low-dM bins per region after removing Nsv, the ISR-subjet b veto, and the mTb requirement from the adopted selection",
             "regions": LOWDM_REGION_MAP,
-            "note": "Low-dM is Nsv-inclusive. GCR and DY use photon/dilepton recoil directions and object-cleaned AK4/AK8 collections; DY also requires OS, on-Z, and pT(ll)>200.",
+            "note": "Low-dM is Nsv-inclusive and does not require the ISR-subjet b veto or mTb<175. GCR and DY use photon/dilepton recoil directions and object-cleaned AK4/AK8 collections; DY also requires OS, on-Z, and pT(ll)>200.",
         },
         "highdm_distribution_variable_specs": HIGHDM_DISTRIBUTION_VARIABLE_SPECS,
         "highdm_distribution_regions": {
