@@ -1,10 +1,10 @@
 {
-  "events_processed": 323274374,
+  "events_processed": 387158037,
   "excluded_obsolete_plot_families": [
     "17-bin",
     "42-bin"
   ],
-  "generated_at": "2026-07-23T14:00:58.124843+00:00",
+  "generated_at": "2026-07-24T08:52:26.796718+00:00",
   "histogram_status": "complete",
   "plot_counts": {
     "categories": 26,
@@ -2614,10 +2614,10 @@
       "variable": "lowdm_sr_onebin"
     }
   ],
-  "snapshot_input_count": 4270,
-  "snapshot_manifest": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/nominal_plots_2024_current_20260723/snapshot_manifest.json",
-  "source_hist_payload": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/nominal_plots_2024_current_20260723/hists_2024_current.json",
-  "source_hist_payload_sha256": "b18fe770b1439575f302f468c14d9fff45ed065db5c956dac07b2957cf8e9c3f",
+  "snapshot_input_count": 9484,
+  "snapshot_manifest": "snapshot_manifest_fullselection_v2.json",
+  "source_hist_payload": "hists_2024_fullselection_v2.json",
+  "source_hist_payload_sha256": "63db93d1ac748f8e0412717290908d4822c1e966a02670c33c39c08461fbc101",
   "status": "complete",
   "year": 2024
 }
