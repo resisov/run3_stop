@@ -5,6 +5,21 @@
     "legacy High-dM 42-bin"
   ],
   "generated_at": "2026-07-24T10:08:12.893324+00:00",
+  "highdm60_limit_update": {
+    "added_category": "Nb=2, Nt>=2, NW=0",
+    "channels": 12,
+    "collected_mass_points": 172,
+    "contour": "plots/limits/expected_limit_highdm60_lowdm42_x1600.png",
+    "expected_limits": "highdm60_lowdm42_expected_limits.json",
+    "highdm_bins": 60,
+    "lowdm_bins": 42,
+    "mlsp1_interpolated_crossing_gev": 1447,
+    "mlsp1_last_excluded_scan_point_gev": 1400,
+    "requested_mass_points": 172,
+    "status": "complete",
+    "total_bins": 342,
+    "updated_at": "2026-07-25T23:54:03.998029+00:00"
+  },
   "histogram_status": "complete",
   "lowdm_selection_update": {
     "analysis_summary": "lowdm_selection_update_summary.json",
