@@ -21,8 +21,8 @@ from autonomous_allhad.shape_histogram_2024_worker import (
 
 
 DEFAULT_REPO = Path("/eos/user/t/taiwoo/run3_stop/decaf")
-DEFAULT_NOMINAL_CAMPAIGN = DEFAULT_REPO / "autonomous_allhad/workflow/intermediate_2024_fullselection_v2_20260723"
-DEFAULT_CAMPAIGN = DEFAULT_REPO / "autonomous_allhad/workflow/shape_hists_2024_fullselection_v4_20260723"
+DEFAULT_NOMINAL_CAMPAIGN = DEFAULT_REPO / "autonomous_allhad/workflow/intermediate_2024_fullselection_v3_lowdm_relaxed_20260724"
+DEFAULT_CAMPAIGN = DEFAULT_REPO / "autonomous_allhad/workflow/shape_hists_2024_fullselection_v5_local1_20260725"
 
 
 def read_json(path: Path) -> Any:
@@ -469,8 +469,8 @@ def main(argv: list[str] | None = None) -> int:
             "data_shape_jobs": 0,
             "fastsim_signal": "deferred_by_user",
             "nano_chunk_read": "once per chunk; nominal/unaffected corrections cached; shifted chunks streamed one at a time",
-            "parallelism": "independent source files processed concurrently inside each multi-core job",
-            "histogram_schema": "nominal regions, variables, and bins; legacy 17-bin and 42-bin search schemes excluded",
+            "parallelism": "one source file per local worker process; independent files processed concurrently",
+            "histogram_schema": "nominal regions, variables, and bins; 54-bin high-dM and 42-bin Nsv-inclusive low-dM",
         },
         "jes_source_policy": {
             "status": "adopted_final_11_sources",
@@ -514,7 +514,7 @@ def main(argv: list[str] | None = None) -> int:
                 "lowdm_variable_histograms",
                 "highdm_variable_histograms",
             ],
-            "search_bins": "54-bin high-dM plus 53-bin low-dM per region",
+            "search_bins": "54-bin high-dM plus 42-bin Nsv-inclusive low-dM per region",
             "normalization": "deferred to nominal campaign metadata merge",
         },
         "runtime_policy": {
@@ -569,9 +569,9 @@ Status: prepared, not submitted.
 - Directional variations: {len(FINAL_SHAPE_VARIATIONS)}
 - Final JES sources: {len(FINAL_JES_PUBLIC_SOURCES)}
 - JES Total and Regrouped Total: excluded
-- Search bins: final 54-bin high-dM SR plus 53-bin Low-dM categories in all six regions
+- Search bins: final 54-bin high-dM SR plus 42-bin Nsv-inclusive Low-dM categories in all six regions
 - Detailed distributions: nominal CR/VR/SR region, variable, and bin definitions
-- Legacy 17-bin and 42-bin schemes: excluded
+- Legacy 17-bin and 53-bin schemes: excluded
 - Runtime: transferred tgz bundles under Condor scratch; {args.request_cpus} files processed concurrently per job
 - Stageout: EOS through xrdcp
 - Pilot: no Condor pilot; replaced by local lxplus all-40 validation

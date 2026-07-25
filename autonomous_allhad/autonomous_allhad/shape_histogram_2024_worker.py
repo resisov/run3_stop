@@ -245,7 +245,7 @@ def fill_shape_histograms(
             target["search_bin_histograms"]
             .setdefault(lowdm_channel, {})
             .setdefault(label, {})
-            .setdefault(variation, builder.empty_index_hist(len(builder.LOWDM_53BIN_LABELS)))
+            .setdefault(variation, builder.empty_index_hist(len(builder.LOWDM_42BIN_LABELS)))
         )
         builder.add_index_hist(leaf, indices, weights)
         lowdm_values = {
@@ -688,7 +688,7 @@ def main(argv: list[str] | None = None) -> int:
             },
             **{
                 channel: {
-                    "bin_labels": builder.LOWDM_53BIN_LABELS,
+                    "bin_labels": builder.LOWDM_42BIN_LABELS,
                     "selection": f"feature_lowdm_{region}",
                     "delta_m": "low",
                     "region": region,
@@ -698,7 +698,9 @@ def main(argv: list[str] | None = None) -> int:
         },
         "lowdm_region_policy": {
             "status": "same_as_nominal_builder",
-            "search_bins": "53-bin Low-dM search scheme per region",
+            "search_bins": "42-bin Nsv-inclusive Low-dM search scheme per region",
+            "isr_subjet_bveto": "diagnostic only; not applied",
+            "mtb_requirement": "diagnostic only; mTb<175 is not applied",
             "regions": builder.LOWDM_REGION_MAP,
         },
         "highdm_distribution_variable_specs": builder.HIGHDM_DISTRIBUTION_VARIABLE_SPECS,

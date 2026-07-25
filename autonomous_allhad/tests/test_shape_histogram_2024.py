@@ -27,6 +27,8 @@ class ShapeHistogram2024Test(unittest.TestCase):
     def test_current_search_bin_definition_is_54_bins(self) -> None:
         builder = load_histogram_builder()
         self.assertEqual(len(builder.selected_an17_recoil54_labels()), 54)
+        self.assertEqual(len(builder.LOWDM_42BIN_LABELS), 42)
+        self.assertFalse(hasattr(builder, "LOWDM_53BIN_LABELS"))
         self.assertEqual(
             builder.SELECTED_RECOIL54_SCHEME,
             "boosted_an17_selected_recoil6_with_nt0_wsplit_SR",
