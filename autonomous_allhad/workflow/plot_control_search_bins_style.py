@@ -51,9 +51,6 @@ LOWDM_SIGNAL_OVERLAYS = [
         "key": "mStop600_mLSP400",
         "label": '$m_{\\tilde{t}}=600$ GeV, $m_{\\tilde{\\chi}^{0}_{1}}=400$ GeV',
         "color": "#0057FF",
-        "outline_color": "white",
-        "outline_alpha": 0.75,
-        "outline_linewidth": 4.4,
     },
     {
         "key": "mStop900_mLSP700",
