@@ -1,0 +1,199 @@
+{
+  "analysis": {
+    "autoMCStats_threshold": 10,
+    "benchmark": {
+      "mLSP_GeV": 500,
+      "mStop_GeV": 1200
+    },
+    "channels": 12,
+    "data_mode": "asimov",
+    "expected_signal": 1.0,
+    "highdm_signal_bins": 60,
+    "lowdm_signal_bins": 42,
+    "total_analysis_bins": 342,
+    "year": 2024
+  },
+  "artifacts": {
+    "combine_input_manifest.json": {
+      "bytes": 55517,
+      "sha256": "8107401981f10cc15a1fe3b200c6c5c6ce7817de7bb94b7f1da6d9858813f16e"
+    },
+    "datacard_mStop1200_mLSP500.txt": {
+      "bytes": 2146,
+      "sha256": "b703d2f7ec0c3f9a155c8baf751306629877128b135b153a4c87ce3cbf5a3b88"
+    },
+    "impact_labels_2024.json": {
+      "bytes": 30390,
+      "sha256": "8a977126ff18bd6817aed6e94a6e41eff0e947d823a7003a4ecc012a84933307"
+    },
+    "impacts_2024_highdm60_lowdm42_mStop1200_mLSP500_full_mcstat.pdf": {
+      "bytes": 110098,
+      "sha256": "2bbdd6c857142221c79cc3e8fa105e9fc04fbd3b2f88e05d4aa4aaf5f8566cfa"
+    },
+    "impacts_2024_highdm60_lowdm42_mStop1200_mLSP500_full_mcstat.png": {
+      "bytes": 190495,
+      "sha256": "344be35ac8981a34154056fa61bce39f0e156c92b6757aea79fd4b909604e452"
+    },
+    "impacts_2024_highdm60_lowdm42_mStop1200_mLSP500_full_mcstat_summary.pdf": {
+      "bytes": 16727,
+      "sha256": "748959747d9bec0d725dc913e7995420da8de00c742fb38f89ff9a972434fbfc"
+    },
+    "impacts_2024_highdm60_lowdm42_mStop1200_mLSP500_full_mcstat_summary.png": {
+      "bytes": 343726,
+      "sha256": "711edf3c7d326c4e97d87b8a961794b6dc8afadd6d80b7e532c68c96e40e628a"
+    },
+    "impacts_mStop1200_mLSP500.json": {
+      "bytes": 149977,
+      "sha256": "105c1daea4153cd2b6e47334aa0783113bdcf5f513c5d2dca7dbacba9b26ffab"
+    }
+  },
+  "checks": {
+    "all_expected_nonstatistical_parameters": true,
+    "all_parameter_fit_roots_present": true,
+    "all_parameter_fit_roots_valid": true,
+    "card_auto_mc_stats_10": true,
+    "card_has_highdm60_channel": true,
+    "card_has_lowdm42_channel": true,
+    "card_has_no_2025_content": true,
+    "impact_json_finite": true,
+    "impact_png_valid": true,
+    "label_map_covers_all_parameters": true,
+    "label_map_values_unique": true,
+    "main_impact_pdf_15_pages": true,
+    "manifest_12_channels": true,
+    "manifest_342_total_bins": true,
+    "manifest_asimov": true,
+    "manifest_auto_mc_stats_10": true,
+    "manifest_highdm_60_bins": true,
+    "manifest_lowdm_42_bins": true,
+    "manifest_mass_point_present": true,
+    "manifest_schema_2024_only": true,
+    "manifest_status_complete": true,
+    "nonstatistical_parameter_count_11": true,
+    "parameter_count_369": true,
+    "parameter_names_unique": true,
+    "poi_fit_is_finite_triplet": true,
+    "poi_is_r": true,
+    "statistical_parameter_count_358": true,
+    "summary_pdf_one_page": true,
+    "summary_png_valid": true
+  },
+  "failed_checks": [],
+  "impact_scan": {
+    "fit_tree_entries_max": 3,
+    "fit_tree_entries_min": 3,
+    "invalid_fit_count": 0,
+    "missing_fit_count": 0,
+    "nonstatistical_parameter_count": 11,
+    "parameter_count": 369,
+    "poi": {
+      "fit": [
+        0.6797630786895752,
+        1.0,
+        1.3614068031311035
+      ],
+      "name": "r"
+    },
+    "statistical_parameter_count": 358,
+    "top_impacts": [
+      {
+        "impact_r": 0.03468132019042969,
+        "name": "prop_bincat7_SR_selected_recoil60_nb2_nt2plus_w0_bin29"
+      },
+      {
+        "impact_r": 0.03393435478210449,
+        "name": "prop_bincat7_SR_selected_recoil60_nb2_nt2plus_w0_bin28"
+      },
+      {
+        "impact_r": 0.024552106857299805,
+        "name": "btagSF_bc_correlated"
+      },
+      {
+        "impact_r": 0.019099950790405273,
+        "name": "prop_bincat3_QCDCR_highDeltaM_bin0"
+      },
+      {
+        "impact_r": 0.018955349922180176,
+        "name": "Lumi_2024"
+      },
+      {
+        "impact_r": 0.01799023151397705,
+        "name": "prop_bincat7_SR_selected_recoil60_nb2_nt2plus_w0_bin17"
+      },
+      {
+        "impact_r": 0.01749885082244873,
+        "name": "prop_bincat7_SR_selected_recoil60_nb2_nt2plus_w0_bin16"
+      },
+      {
+        "impact_r": 0.016296863555908203,
+        "name": "prop_bincat7_SR_selected_recoil60_nb2_nt2plus_w0_bin59_background"
+      },
+      {
+        "impact_r": 0.01593923568725586,
+        "name": "prop_bincat7_SR_selected_recoil60_nb2_nt2plus_w0_bin4"
+      },
+      {
+        "impact_r": 0.015542984008789062,
+        "name": "prop_bincat7_SR_selected_recoil60_nb2_nt2plus_w0_bin41"
+      },
+      {
+        "impact_r": 0.015460014343261719,
+        "name": "prop_bincat7_SR_selected_recoil60_nb2_nt2plus_w0_bin57"
+      },
+      {
+        "impact_r": 0.014663457870483398,
+        "name": "prop_bincat7_SR_selected_recoil60_nb2_nt2plus_w0_bin34_background"
+      },
+      {
+        "impact_r": 0.014470815658569336,
+        "name": "prop_bincat7_SR_selected_recoil60_nb2_nt2plus_w0_bin10"
+      },
+      {
+        "impact_r": 0.013851761817932129,
+        "name": "prop_bincat7_SR_selected_recoil60_nb2_nt2plus_w0_bin22"
+      },
+      {
+        "impact_r": 0.013559699058532715,
+        "name": "prop_bincat7_SR_selected_recoil60_nb2_nt2plus_w0_bin58_sig_mStop1200_mLSP500"
+      },
+      {
+        "impact_r": 0.013379335403442383,
+        "name": "electron_id"
+      },
+      {
+        "impact_r": 0.012864232063293457,
+        "name": "prop_bincat7_SR_selected_recoil60_nb2_nt2plus_w0_bin0"
+      },
+      {
+        "impact_r": 0.012224197387695312,
+        "name": "prop_bincat7_SR_selected_recoil60_nb2_nt2plus_w0_bin40"
+      },
+      {
+        "impact_r": 0.0114784836769104,
+        "name": "prop_bincat7_SR_selected_recoil60_nb2_nt2plus_w0_bin52_background"
+      },
+      {
+        "impact_r": 0.011202096939086914,
+        "name": "prop_bincat3_QCDCR_highDeltaM_bin2"
+      }
+    ]
+  },
+  "invalid_fit_parameters": [],
+  "missing_fit_parameters": [],
+  "rendering": {
+    "main_pdf_pages": 15,
+    "png_dimensions": [
+      1488,
+      2105
+    ],
+    "png_nonwhite_fraction": 0.29824662222562764,
+    "summary_pdf_pages": 1,
+    "summary_png_dimensions": [
+      1488,
+      2105
+    ],
+    "summary_png_nonwhite_fraction": 0.19184896431946466
+  },
+  "schema": "2024_highdm60_lowdm42_full_mcstat_impact_validation_v1",
+  "status": "complete"
+}
