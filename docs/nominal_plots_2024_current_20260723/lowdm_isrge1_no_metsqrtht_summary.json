@@ -1,0 +1,30 @@
+{
+  "adoption_status": "proposed_alternative",
+  "combine_model": {
+    "analysis_bins": 252,
+    "auto_mc_stats_threshold": 10,
+    "channels": 6,
+    "data_mode": "asimov",
+    "search_bins_per_channel": 42
+  },
+  "control_region_policy": "The five current Low-dM control-region templates are frozen; only the Low-dM signal-region template is replaced.",
+  "luminosity_fb": 109.82,
+  "mStop900_mLSP700": {
+    "current_expected_r": 3.328125,
+    "expected_r_improvement_percent": 1.8779342723004744,
+    "new_expected_bands": {
+      "minus_1_sigma": 2.3250436782836914,
+      "minus_2_sigma": 1.72210693359375,
+      "plus_1_sigma": 4.658435344696045,
+      "plus_2_sigma": 6.367669105529785
+    },
+    "new_expected_r": 3.265625,
+    "new_over_current": 0.9812206572769953
+  },
+  "selection_change": [
+    "ISR AK8 multiplicity changed from exactly 1 to at least 1",
+    "MET/sqrt(HT) >= 10 removed"
+  ],
+  "status": "complete",
+  "year": 2024
+}

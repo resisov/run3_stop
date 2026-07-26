@@ -47,8 +47,22 @@ SIGNAL_OVERLAYS = [
     {"key": "mStop1200_mLSP1", "label": '$m_{\\tilde{t}}=1200$ GeV, $m_{\\tilde{\\chi}^{0}_{1}}=1$ GeV', "color": "#00ff00"},
 ]
 LOWDM_SIGNAL_OVERLAYS = [
-    {"key": "mStop600_mLSP400", "label": '$m_{\\tilde{t}}=600$ GeV, $m_{\\tilde{\\chi}^{0}_{1}}=400$ GeV', "color": "#0066FF"},
-    {"key": "mStop900_mLSP700", "label": '$m_{\\tilde{t}}=900$ GeV, $m_{\\tilde{\\chi}^{0}_{1}}=700$ GeV', "color": "#FF7A00"},
+    {
+        "key": "mStop600_mLSP400",
+        "label": '$m_{\\tilde{t}}=600$ GeV, $m_{\\tilde{\\chi}^{0}_{1}}=400$ GeV',
+        "color": "#0057FF",
+        "outline_color": "white",
+        "outline_alpha": 0.75,
+        "outline_linewidth": 4.4,
+    },
+    {
+        "key": "mStop900_mLSP700",
+        "label": '$m_{\\tilde{t}}=900$ GeV, $m_{\\tilde{\\chi}^{0}_{1}}=700$ GeV',
+        "color": "#FFD500",
+        "outline_color": "black",
+        "outline_alpha": 0.45,
+        "outline_linewidth": 4.4,
+    },
 ]
 LOWDM_NSV_INCLUSIVE_CATEGORY_SIZES = [
     ("Nb0_Nj2to5_PISR500plus", 4),
@@ -932,6 +946,10 @@ def lowdm_nsv_inclusive_blocks(payload: dict, scheme_name: str) -> list[dict]:
     offset = 0
     for category, size in normalized_sizes:
         slc = slice(offset, offset + size)
+        emphasize_label = category in {
+            "Nb0_Nj2to5_PISR500plus",
+            "Nb0_Nj6plus_PISR500plus",
+        }
         blocks.append({
             "groups": {group: vals[slc] for group, vals in rec["groups"].items()},
             "background": rec["background"][slc],
@@ -945,7 +963,8 @@ def lowdm_nsv_inclusive_blocks(payload: dict, scheme_name: str) -> list[dict]:
             "xlabels": [],
             "blind_data": True,
             "label_box": True,
-            "label_fontsize": 8.2,
+            "label_fontsize": 9.8 if emphasize_label else 8.2,
+            "label_box_pad": 0.40 if emphasize_label else 0.28,
             "figure_width": 14.04,
         })
         offset += size
@@ -1036,7 +1055,30 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
     for spec in signal_specs:
         vals = signals.get(spec["key"])
         if vals is not None:
-            ax.hist(centers, bins=edges, weights=vals, histtype="step", linewidth=2.8, linestyle="--", color=spec["color"], label=spec["label"])
+            outline_color = spec.get("outline_color")
+            if outline_color:
+                ax.hist(
+                    centers,
+                    bins=edges,
+                    weights=vals,
+                    histtype="step",
+                    linewidth=float(spec.get("outline_linewidth", 4.4)),
+                    linestyle="--",
+                    color=outline_color,
+                    alpha=float(spec.get("outline_alpha", 0.45)),
+                    zorder=7,
+                )
+            ax.hist(
+                centers,
+                bins=edges,
+                weights=vals,
+                histtype="step",
+                linewidth=2.8,
+                linestyle="--",
+                color=spec["color"],
+                label=spec["label"],
+                zorder=8,
+            )
     mask = data_mask & (data > 0)
     ax.errorbar(
         centers[mask],
@@ -1093,7 +1135,12 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
                 ha="center",
                 va="center",
                 fontsize=float(block.get("label_fontsize", 15)),
-                bbox={"boxstyle": "round,pad=0.28", "facecolor": "white", "edgecolor": "0.7", "alpha": 0.96},
+                bbox={
+                    "boxstyle": f"round,pad={float(block.get('label_box_pad', 0.28))}",
+                    "facecolor": "white",
+                    "edgecolor": "0.7",
+                    "alpha": 0.96,
+                },
                 zorder=20,
             )
     positive = []

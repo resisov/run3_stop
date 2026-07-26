@@ -27,6 +27,18 @@
     "updated_at": "2026-07-26T00:23:18.785869+00:00"
   },
   "histogram_status": "complete",
+  "lowdm_isrge1_no_metsqrtht_update": {
+    "adoption_status": "proposed_alternative",
+    "analysis_summary": "lowdm_isrge1_no_metsqrtht_summary.json",
+    "category_plot": "plots/categories/lowdm_sr_42bin_isrge1_no_metsqrtht.png",
+    "lowdm_only_limit": "plots/limits/expected_limit_lowdm42_isrge1_no_metsqrtht.png",
+    "selection_change": [
+      "ISR AK8 multiplicity changed from exactly 1 to at least 1",
+      "MET/sqrt(HT) >= 10 removed"
+    ],
+    "status": "complete",
+    "updated_at": "2026-07-26T12:47:52.278919+00:00"
+  },
   "lowdm_selection_update": {
     "analysis_summary": "lowdm_selection_update_summary.json",
     "category_plot": "plots/categories/lowdm_sr_42bin_no_bveto_mtb.png",
