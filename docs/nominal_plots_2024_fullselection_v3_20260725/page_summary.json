@@ -4,7 +4,7 @@
     "legacy High-dM 17-bin",
     "legacy High-dM 42-bin"
   ],
-  "generated_at": "2026-07-25T21:20:04.559538+00:00",
+  "generated_at": "2026-07-26T12:06:59Z",
   "histogram_status": "complete",
   "known_missing_inputs": {
     "data_shards": 2,
@@ -13,7 +13,7 @@
   "lowdm_selection_update": {
     "analysis_summary": "lowdm_selection_update_summary.json",
     "category_plot": "plots/categories/lowdm_sr_42bin_no_bveto_mtb.png",
-    "combined_limit": "plots/limits/expected_limit_highdm54_lowdm42_no_bveto_mtb_run2_x1600.png",
+    "combined_limit": "plots/limits/expected_limit_highdm60_lowdm42_x1600.png",
     "lowdm_only_limit": "plots/limits/expected_limit_lowdm42_no_bveto_mtb_run2_x1600.png",
     "selection_change": [
       "ISR-subjet b veto removed",
@@ -26,9 +26,9 @@
     "categories": 26,
     "highdm": 174,
     "impacts": 1,
-    "limits": 3,
+    "limits": 2,
     "lowdm": 90,
-    "total": 294
+    "total": 293
   },
   "records": [
     {
@@ -2845,11 +2845,11 @@
       "family": "categories",
       "family_label": "Category/search-bin plots",
       "kind": "SR",
-      "name": "highdm_sr_selected_recoil54_nt0_wsplit_bins",
-      "pdf": "plots/categories/highdm_sr_selected_recoil54_nt0_wsplit_bins.pdf",
-      "png": "plots/categories/highdm_sr_selected_recoil54_nt0_wsplit_bins.png",
+      "name": "highdm_sr_selected_recoil60_nb2_nt2plus_w0_bins",
+      "pdf": "plots/categories/highdm_sr_selected_recoil60_nb2_nt2plus_w0_bins.pdf",
+      "png": "plots/categories/highdm_sr_selected_recoil60_nb2_nt2plus_w0_bins.png",
       "region": "",
-      "variable": "highdm_sr_selected_recoil54_nt0_wsplit_bins"
+      "variable": "High-dM 60-bin search bins"
     },
     {
       "family": "categories",
@@ -2945,21 +2945,11 @@
       "family": "limits",
       "family_label": "Expected limits",
       "kind": "SR",
-      "name": "expected_limit_highdm54_run2_x1600",
-      "pdf": "plots/limits/expected_limit_highdm54_run2_x1600.pdf",
-      "png": "plots/limits/expected_limit_highdm54_run2_x1600.png",
-      "region": "High-dM",
-      "variable": "54-bin CR+SR"
-    },
-    {
-      "family": "limits",
-      "family_label": "Expected limits",
-      "kind": "SR",
-      "name": "expected_limit_highdm54_lowdm42_no_bveto_mtb_run2_x1600",
-      "pdf": "plots/limits/expected_limit_highdm54_lowdm42_no_bveto_mtb_run2_x1600.pdf",
-      "png": "plots/limits/expected_limit_highdm54_lowdm42_no_bveto_mtb_run2_x1600.png",
+      "name": "expected_limit_highdm60_lowdm42_x1600",
+      "pdf": "plots/limits/expected_limit_highdm60_lowdm42_x1600.pdf",
+      "png": "plots/limits/expected_limit_highdm60_lowdm42_x1600.png",
       "region": "Combined",
-      "variable": "High-dM 54 + Low-dM 42"
+      "variable": "High-dM 60 + Low-dM 42"
     },
     {
       "family": "impacts",
@@ -2984,5 +2974,26 @@
     "updated_at": "2026-07-25T21:22:41.920373+00:00"
   },
   "status": "complete",
-  "year": 2024
+  "year": 2024,
+  "highdm60_limit_update": {
+    "added_bin_range_1based": [
+      37,
+      42
+    ],
+    "added_category": "Nb=2, Nt>=2, NW=0",
+    "category_plot": "plots/categories/highdm_sr_selected_recoil60_nb2_nt2plus_w0_bins.png",
+    "channels": 12,
+    "collected_mass_points": 172,
+    "contour": "plots/limits/expected_limit_highdm60_lowdm42_x1600.png",
+    "expected_limits": "highdm60_lowdm42_expected_limits.json",
+    "highdm_bins": 60,
+    "lowdm_bins": 42,
+    "mlsp1_interpolated_crossing_gev": 1447,
+    "mlsp1_last_excluded_scan_point_gev": 1400,
+    "requested_mass_points": 172,
+    "run2_overlay": "SUS-19-010 observed and expected",
+    "status": "complete",
+    "total_bins": 342,
+    "updated_at": "2026-07-26T00:23:18.785869+00:00"
+  }
 }
