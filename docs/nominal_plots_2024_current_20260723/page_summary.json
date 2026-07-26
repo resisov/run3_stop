@@ -7,6 +7,7 @@
   "generated_at": "2026-07-24T10:08:12.893324+00:00",
   "highdm60_limit_update": {
     "added_category": "Nb=2, Nt>=2, NW=0",
+    "category_plot": "plots/categories/highdm_sr_selected_recoil60_nb2_nt2plus_w0_bins.png",
     "channels": 12,
     "collected_mass_points": 172,
     "contour": "plots/limits/expected_limit_highdm60_lowdm42_x1600.png",
@@ -19,7 +20,7 @@
     "run2_overlay": "SUS-19-010 observed and expected",
     "status": "complete",
     "total_bins": 342,
-    "updated_at": "2026-07-25T23:58:00.449713+00:00"
+    "updated_at": "2026-07-26T00:17:54.842710+00:00"
   },
   "histogram_status": "complete",
   "lowdm_selection_update": {

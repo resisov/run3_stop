@@ -81,6 +81,7 @@ LOWDM_NSV_INCLUSIVE_CATEGORY_LABELS = {
 PARTIAL_AN17_SPLIT_BINS = [4, 5, 8, 9, 14, 15, 16]
 SELECTED_AN17_RECOIL_SCHEME = "boosted_an17_selected_recoil6_SR"
 LATEST_AN17_RECOIL_SCHEME = "boosted_an17_selected_recoil6_with_nt0_wsplit_SR"
+EXTENDED_AN17_RECOIL_SCHEME = "boosted_an17_selected_recoil60_nb2_nt2plus_w0_SR"
 RECOIL6_LABELS = ["250-300", "300-350", "350-400", "400-500", "500-800", "800-1500"]
 LUMINOSITY_FB = 109.82
 LUMINOSITY_RELATIVE_UNCERTAINTY = 0.016
@@ -108,6 +109,7 @@ SELECTED_AN17_CATEGORY_LABELS = {
     'Nb3plus_T1_W0': '$N_{b}\\geq3$, $N_{t}=1$\n$N_{W}=0$',
     'Nb3plus_T1_W1': '$N_{b}\\geq3$, $N_{t}=1$\n$N_{W}=1$',
     'Nb3plus_T2_W0': '$N_{b}\\geq3$, $N_{t}=2$\n$N_{W}=0$',
+    'Nb2_Nt2plus_W0': '$N_{b}=2$, $N_{t}\\geq2$\n$N_{W}=0$',
 }
 
 
@@ -1359,10 +1361,21 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
     if an17_nt1:
         an17_nt1["blind_data"] = True
         plots.append(draw_flat_blocks([an17_nt1], output_dir / "highdm_sr_nt1_an17_search_bins", xlabel="High-dM SR, $N_{t}\geq1$ search bin number"))
-    selected_scheme = LATEST_AN17_RECOIL_SCHEME if LATEST_AN17_RECOIL_SCHEME in (payload.get("search_bin_schemes") or {}) else SELECTED_AN17_RECOIL_SCHEME
+    available_schemes = payload.get("search_bin_schemes") or {}
+    if EXTENDED_AN17_RECOIL_SCHEME in available_schemes:
+        selected_scheme = EXTENDED_AN17_RECOIL_SCHEME
+    elif LATEST_AN17_RECOIL_SCHEME in available_schemes:
+        selected_scheme = LATEST_AN17_RECOIL_SCHEME
+    else:
+        selected_scheme = SELECTED_AN17_RECOIL_SCHEME
     selected_recoil_blocks = selected_an17_recoil_blocks(payload, selected_scheme)
     if selected_recoil_blocks:
-        selected_name = "highdm_sr_selected_recoil54_nt0_wsplit_bins" if selected_scheme == LATEST_AN17_RECOIL_SCHEME else "highdm_sr_selected_recoil6_bins"
+        if selected_scheme == EXTENDED_AN17_RECOIL_SCHEME:
+            selected_name = "highdm_sr_selected_recoil60_nb2_nt2plus_w0_bins"
+        elif selected_scheme == LATEST_AN17_RECOIL_SCHEME:
+            selected_name = "highdm_sr_selected_recoil54_nt0_wsplit_bins"
+        else:
+            selected_name = "highdm_sr_selected_recoil6_bins"
         plots.append(draw_flat_blocks(selected_recoil_blocks, output_dir / selected_name, xlabel="Search bin number"))
     low_cr_blocks = []
     low_blocks = []
