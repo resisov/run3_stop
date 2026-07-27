@@ -169,6 +169,7 @@ def plot_path(
     for axis, regime_name in zip(axes, ("highdm", "lowdm")):
         regime = regimes[regime_name]
         edges = np.asarray(regime["edges"], dtype=float)
+        centers = 0.5 * (edges[:-1] + edges[1:])
         panel_finite: list[float] = []
         for group in regime["groups"]:
             record = regime["records"][path["key"]][group]
@@ -197,14 +198,16 @@ def plot_path(
                 linewidth=2.0,
                 label=DISPLAY_GROUP[group],
             )
-            axis.fill_between(
-                edges,
-                step_values(np.maximum(values - uncertainty, 0.0)),
-                step_values(values + uncertainty),
-                step="post",
-                color=path["color"],
-                alpha=0.16,
-                linewidth=0,
+            axis.errorbar(
+                centers[finite],
+                values[finite],
+                yerr=uncertainty[finite],
+                fmt="none",
+                ecolor=path["color"],
+                elinewidth=1.2,
+                capsize=2.5,
+                capthick=1.2,
+                alpha=0.8,
             )
         axis.set_xlim(edges[0], edges[-1])
         axis.set_xticks(edges)
