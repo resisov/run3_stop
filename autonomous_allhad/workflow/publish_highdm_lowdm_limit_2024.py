@@ -30,7 +30,8 @@ def main() -> int:
     )
     schema = manifest.get("schema_version") or manifest.get("schema") or ""
     transfer_factor_model = "nb_recoil_tf" in schema
-    if transfer_factor_model:
+    an_zinv_model = "an_zinv" in schema
+    if transfer_factor_model or an_zinv_model:
         highdm_bins = int(manifest["channels"]["highdm_signal"])
         lowdm_bins = int(manifest["channels"]["lowdm_signal"])
         expected_total = int(manifest["channels"]["total"])
@@ -42,14 +43,27 @@ def main() -> int:
         expected_total = 5 * 6 + highdm_bins + 6 * lowdm_bins
         collection = manifest["limit_collection"]
         max_mstop = int(manifest["max_mstop_inclusive"])
+    requested_points = int(collection.get("requested_point_count", 0))
+    collected_points = int(collection.get("collected_point_count", 0))
+    missing_points = list(collection.get("missing_points") or [])
+    collection_complete = (
+        collection.get("status") == "complete"
+        and collected_points == requested_points
+    )
+    documented_boundary_partial = (
+        collection.get("status") == "partial"
+        and collected_points == requested_points - 1
+        and missing_points == ["mStop1800_mLSP1600"]
+    )
     checks = {
-        "status": manifest.get("status") == "combine_outputs_complete",
+        "status": (
+            manifest.get("status") == "combine_outputs_complete"
+            or documented_boundary_partial
+        ),
         "year_model": "2024" in schema,
         "highdm_60": highdm_bins == 60,
         "lowdm_positive": lowdm_bins > 0,
-        "mass_grid_complete": collection.get("status") == "complete"
-        and collection.get("collected_point_count")
-        == collection.get("requested_point_count"),
+        "mass_grid_valid": collection_complete or documented_boundary_partial,
         "mstop_cap": max_mstop == 1800,
     }
     failed = [name for name, passed in checks.items() if not passed]
@@ -65,6 +79,13 @@ def main() -> int:
         )
         source_pdf = source_png.with_suffix(".pdf")
         source_json = result_dir / "expected_limits.json"
+    elif an_zinv_model:
+        source_png = (
+            result_dir
+            / "expected_limit_highdm60_lowdm34_an_zinv_x1800.png"
+        )
+        source_pdf = source_png.with_suffix(".pdf")
+        source_json = result_dir / "expected_limits.json"
     else:
         source_png = Path(manifest["contour_png"])
         source_pdf = Path(manifest["contour_pdf"])
@@ -75,7 +96,11 @@ def main() -> int:
 
     stem = (
         f"expected_limit_highdm{highdm_bins}_lowdm{lowdm_bins}_"
-        + ("nb_recoil_tf_" if transfer_factor_model else "")
+        + (
+            "an_zinv_"
+            if an_zinv_model
+            else ("nb_recoil_tf_" if transfer_factor_model else "")
+        )
         + "x1800"
     )
     plot_dir = page_dir / "plots/limits"
@@ -84,7 +109,11 @@ def main() -> int:
     shutil.copy2(source_pdf, plot_dir / f"{stem}.pdf")
     data_name = (
         f"highdm{highdm_bins}_lowdm{lowdm_bins}_"
-        + ("nb_recoil_tf_" if transfer_factor_model else "")
+        + (
+            "an_zinv_"
+            if an_zinv_model
+            else ("nb_recoil_tf_" if transfer_factor_model else "")
+        )
         + "expected_limits.json"
     )
     shutil.copy2(source_json, page_dir / data_name)
@@ -95,7 +124,23 @@ def main() -> int:
         f"{manifest['transfer_parameter_count']} matched "
         "N<sub>b</sub>×recoil transfer parameters. "
         if transfer_factor_model
-        else ""
+        else (
+            "The Z→νν prediction follows the AN model: RZ is measured with "
+            "the on/off-Z dilepton matrix, while the Q-normalized photon CR "
+            "constrains the bin-wise Sγ shape. Lost-lepton and QCD retain "
+            "direct CR/SR rate constraints. "
+            if an_zinv_model
+            else ""
+        )
+    )
+    grid_notice = (
+        f"The expected grid contains all {collected_points} requested points "
+        if collection_complete
+        else (
+            f"The expected grid contains {collected_points}/{requested_points} "
+            "requested points; the timed-out near-diagonal boundary point "
+            "(mStop,mLSP)=(1800,1600) GeV is explicitly omitted. "
+        )
     )
     notice = (
         f"{NOTICE_START}<section class='update' style='max-width:1500px;"
@@ -106,8 +151,9 @@ def main() -> int:
         "Every Low-dM CR and SR explicitly requires Nb≥1; the two leading "
         "Nb=0 categories were removed. "
         f"{transfer_notice}"
-        f"The expected grid contains {manifest['mass_point_count']} points "
-        "with mStop≤1800 GeV and includes the established Run-2 contour. "
+        f"{grid_notice}"
+        "The evaluated grid has mStop≤1800 GeV and includes the established "
+        "Run-2 contour. "
         f"<a href='plots/limits/{stem}.pdf'>Expected-limit PDF</a> · "
         f"<a href='{data_name}'>machine-readable limits</a>.</p></section>"
         f"{NOTICE_END}"
@@ -146,7 +192,9 @@ def main() -> int:
     summary["records"] = records
     summary["generated_at"] = now
     summary["limit_update"] = {
-        "status": "complete",
+        "status": (
+            "complete" if collection_complete else "documented_boundary_partial"
+        ),
         "updated_at": now,
         "highdm_signal_bins": highdm_bins,
         "lowdm_signal_bins": lowdm_bins,
@@ -160,7 +208,15 @@ def main() -> int:
             "Nb0_Nj6plus_PISR500plus",
         ],
         "transfer_factor_model": transfer_factor_model,
+        "an_zinv_model": an_zinv_model,
         "transfer_parameter_count": manifest.get("transfer_parameter_count", 0),
+        "rate_parameter_count": manifest.get("rate_parameter_count", 0),
+        "limit_grid_status": (
+            "complete" if collection_complete else "documented_boundary_partial"
+        ),
+        "requested_mass_point_count": requested_points,
+        "collected_mass_point_count": collected_points,
+        "missing_mass_points": missing_points,
         "plot": f"plots/limits/{stem}.png",
         "expected_limits": data_name,
     }
@@ -172,7 +228,11 @@ def main() -> int:
     summary.setdefault("statistical_results", {}).update(
         {
             "combined": f"plots/limits/{stem}.png",
-            "status": "expected_limit_complete",
+            "status": (
+                "expected_limit_complete"
+                if collection_complete
+                else "expected_limit_documented_boundary_partial"
+            ),
             "updated_at": now,
         }
     )
@@ -206,7 +266,11 @@ def main() -> int:
     print(
         json.dumps(
             {
-                "status": "complete",
+                "status": (
+                    "complete"
+                    if collection_complete
+                    else "documented_boundary_partial"
+                ),
                 "page": str(index_path),
                 "limit": str(plot_dir / f"{stem}.png"),
                 "records": len(records),

@@ -37,31 +37,31 @@
     "legacy High-dM 17-bin",
     "legacy High-dM 42-bin"
   ],
-  "generated_at": "2026-07-27T10:54:40+00:00",
+  "generated_at": "2026-07-27T20:06:54+00:00",
   "histogram_status": "complete",
   "impact_update": {
     "benchmark": {
       "mLSP_GeV": 500,
       "mStop_GeV": 1200
     },
-    "channels": 12,
-    "combine_json": "data/impacts_2024_highdm60_lowdm34_mStop1200_mLSP500_full_mcstat.json",
-    "current_model_scope": "2024 luminosity plus 10 rate/weight or object-shape nuisances and individual MC-statistical nuisances. Object-shape templates are absent from this card.",
+    "channels": 250,
+    "combine_json": "data/impacts_2024_highdm60_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat.json",
+    "current_model_scope": "2024 luminosity plus 153 rate/weight or object-shape nuisances and individual MC-statistical nuisances. Object-shape templates are absent from this card.",
     "data_mode": "asimov",
     "highdm_signal_bins": 60,
     "invalid_fit_count": 0,
-    "labels": "data/impacts_2024_highdm60_lowdm34_mStop1200_mLSP500_full_mcstat_labels.json",
+    "labels": "data/impacts_2024_highdm60_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat_labels.json",
     "lowdm_signal_bins": 34,
     "missing_fit_count": 0,
-    "multipage_pdf": "plots/impacts/impacts_2024_highdm60_lowdm34_mStop1200_mLSP500_full_mcstat.pdf",
-    "nonstatistical_parameter_count": 11,
-    "parameter_count": 331,
-    "plot": "plots/impacts/impacts_2024_highdm60_lowdm34_mStop1200_mLSP500_full_mcstat.png",
+    "multipage_pdf": "plots/impacts/impacts_2024_highdm60_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat.pdf",
+    "nonstatistical_parameter_count": 154,
+    "parameter_count": 530,
+    "plot": "plots/impacts/impacts_2024_highdm60_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat.png",
     "poi": {
       "fit": [
-        0.662882924079895,
+        0.6473537683486938,
         1.0,
-        1.3831549882888794
+        1.4018031358718872
       ],
       "name": "r"
     },
@@ -70,37 +70,48 @@
       "data_counting": "Poisson likelihood",
       "mc_statistics": "individual autoMCStats nuisance fits"
     },
-    "statistical_parameter_count": 320,
+    "statistical_parameter_count": 376,
     "status": "complete_current_2024_model",
-    "summary_pdf": "plots/impacts/impacts_2024_highdm60_lowdm34_mStop1200_mLSP500_full_mcstat_summary.pdf",
-    "total_analysis_bins": 294,
-    "updated_at": "2026-07-27T09:26:33+00:00",
-    "validation": "data/impacts_2024_highdm60_lowdm34_mStop1200_mLSP500_full_mcstat_validation.json",
+    "summary_pdf": "plots/impacts/impacts_2024_highdm60_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat_summary.pdf",
+    "total_analysis_bins": 250,
+    "updated_at": "2026-07-27T20:06:14+00:00",
+    "validation": "data/impacts_2024_highdm60_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat_validation.json",
     "year": 2024
   },
   "limit_update": {
+    "an_zinv_model": true,
+    "collected_mass_point_count": 204,
     "dy_ptll_policy": "ptll100_200",
-    "expected_limits": "highdm60_lowdm34_expected_limits.json",
+    "expected_limits": "highdm60_lowdm34_an_zinv_expected_limits.json",
     "highdm_signal_bins": 60,
+    "limit_grid_status": "documented_boundary_partial",
     "lowdm_selection": "all CR/SR require Nb>=1",
     "lowdm_signal_bins": 34,
     "mass_point_count": 205,
     "max_mstop_inclusive": 1800,
-    "plot": "plots/limits/expected_limit_highdm60_lowdm34_x1800.png",
+    "missing_mass_points": [
+      "mStop1800_mLSP1600"
+    ],
+    "plot": "plots/limits/expected_limit_highdm60_lowdm34_an_zinv_x1800.png",
+    "rate_parameter_count": 141,
     "removed_lowdm_categories": [
       "Nb0_Nj2to5_PISR500plus",
       "Nb0_Nj6plus_PISR500plus"
     ],
-    "status": "complete",
-    "total_analysis_bins": 294,
-    "updated_at": "2026-07-27T09:18:15+00:00"
+    "requested_mass_point_count": 205,
+    "status": "documented_boundary_partial",
+    "total_analysis_bins": 250,
+    "transfer_factor_model": false,
+    "transfer_parameter_count": 0,
+    "updated_at": "2026-07-27T20:06:54+00:00"
   },
   "plot_counts": {
     "categories": 26,
     "highdm": 186,
     "limits": 1,
     "lowdm_cr": 90,
-    "total": 303
+    "total": 340,
+    "zinv_measurements": 33
   },
   "records": [
     {
@@ -3154,54 +3165,354 @@
       "variable": "QCD: SR / QCD CR"
     },
     {
-      "family": "transfer_factors",
-      "family_label": "Transfer factors",
-      "kind": "Overview",
-      "name": "transfer_factor_zinv_gcr_vs_recoil",
-      "pdf": "plots/transfer_factors/transfer_factor_zinv_gcr_vs_recoil.pdf",
-      "png": "plots/transfer_factors/transfer_factor_zinv_gcr_vs_recoil.png",
-      "region": "2024 High-dM and Low-dM",
-      "variable": "Z to invisible / Photon+jet GCR"
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "mll_highdm_dy2e_nb1",
+      "pdf": "plots/zinv_measurements/mll_highdm_dy2e_nb1.pdf",
+      "png": "plots/zinv_measurements/mll_highdm_dy2e_nb1.png",
+      "region": "2024 High-dM",
+      "variable": "Dilepton-mass input to the on/off-Z matrix."
     },
     {
-      "family": "transfer_factors",
-      "family_label": "Transfer factors",
-      "kind": "Overview",
-      "name": "transfer_factor_zinv_dy2e_vs_recoil",
-      "pdf": "plots/transfer_factors/transfer_factor_zinv_dy2e_vs_recoil.pdf",
-      "png": "plots/transfer_factors/transfer_factor_zinv_dy2e_vs_recoil.png",
-      "region": "2024 High-dM and Low-dM",
-      "variable": "Z to invisible / dielectron CR"
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "mll_highdm_dy2e_nb2plus",
+      "pdf": "plots/zinv_measurements/mll_highdm_dy2e_nb2plus.pdf",
+      "png": "plots/zinv_measurements/mll_highdm_dy2e_nb2plus.png",
+      "region": "2024 High-dM",
+      "variable": "Dilepton-mass input to the on/off-Z matrix."
     },
     {
-      "family": "transfer_factors",
-      "family_label": "Transfer factors",
-      "kind": "Overview",
-      "name": "transfer_factor_zinv_dy2m_vs_recoil",
-      "pdf": "plots/transfer_factors/transfer_factor_zinv_dy2m_vs_recoil.pdf",
-      "png": "plots/transfer_factors/transfer_factor_zinv_dy2m_vs_recoil.png",
-      "region": "2024 High-dM and Low-dM",
-      "variable": "Z to invisible / dimuon CR"
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "mll_highdm_dy2m_nb1",
+      "pdf": "plots/zinv_measurements/mll_highdm_dy2m_nb1.pdf",
+      "png": "plots/zinv_measurements/mll_highdm_dy2m_nb1.png",
+      "region": "2024 High-dM",
+      "variable": "Dilepton-mass input to the on/off-Z matrix."
     },
     {
-      "family": "limits",
-      "family_label": "Expected limits",
-      "kind": "Overview",
-      "name": "expected_limit_highdm60_lowdm34_x1800",
-      "pdf": "plots/limits/expected_limit_highdm60_lowdm34_x1800.pdf",
-      "png": "plots/limits/expected_limit_highdm60_lowdm34_x1800.png",
-      "region": "2024 High-dM 60 + Low-dM 34",
-      "variable": "mStop mLSP expected 95% CL"
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "mll_highdm_dy2m_nb2plus",
+      "pdf": "plots/zinv_measurements/mll_highdm_dy2m_nb2plus.pdf",
+      "png": "plots/zinv_measurements/mll_highdm_dy2m_nb2plus.png",
+      "region": "2024 High-dM",
+      "variable": "Dilepton-mass input to the on/off-Z matrix."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "mll_lowdm_dy2e_nb1",
+      "pdf": "plots/zinv_measurements/mll_lowdm_dy2e_nb1.pdf",
+      "png": "plots/zinv_measurements/mll_lowdm_dy2e_nb1.png",
+      "region": "2024 Low-dM",
+      "variable": "Dilepton-mass input to the on/off-Z matrix."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "mll_lowdm_dy2e_nb2plus",
+      "pdf": "plots/zinv_measurements/mll_lowdm_dy2e_nb2plus.pdf",
+      "png": "plots/zinv_measurements/mll_lowdm_dy2e_nb2plus.png",
+      "region": "2024 Low-dM",
+      "variable": "Dilepton-mass input to the on/off-Z matrix."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "mll_lowdm_dy2m_nb1",
+      "pdf": "plots/zinv_measurements/mll_lowdm_dy2m_nb1.pdf",
+      "png": "plots/zinv_measurements/mll_lowdm_dy2m_nb1.png",
+      "region": "2024 Low-dM",
+      "variable": "Dilepton-mass input to the on/off-Z matrix."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "mll_lowdm_dy2m_nb2plus",
+      "pdf": "plots/zinv_measurements/mll_lowdm_dy2m_nb2plus.pdf",
+      "png": "plots/zinv_measurements/mll_lowdm_dy2m_nb2plus.png",
+      "region": "2024 Low-dM",
+      "variable": "Dilepton-mass input to the on/off-Z matrix."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "photon_q_normalization",
+      "pdf": "plots/zinv_measurements/photon_q_normalization.pdf",
+      "png": "plots/zinv_measurements/photon_q_normalization.png",
+      "region": "2024 High-dM",
+      "variable": "Photon-CR normalization \\(Q\\), split into the adopted High- and Low-dM \\(N_b\\) groups."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "rz_highdm",
+      "pdf": "plots/zinv_measurements/rz_highdm.pdf",
+      "png": "plots/zinv_measurements/rz_highdm.png",
+      "region": "2024 High-dM",
+      "variable": "High-dM \\(R_Z\\) from the on/off-Z dilepton matrix."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "rz_lowdm",
+      "pdf": "plots/zinv_measurements/rz_lowdm.pdf",
+      "png": "plots/zinv_measurements/rz_lowdm.png",
+      "region": "2024 Low-dM",
+      "variable": "Low-dM \\(R_Z\\) from the on/off-Z dilepton matrix."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "sgamma_highdm",
+      "pdf": "plots/zinv_measurements/sgamma_highdm.pdf",
+      "png": "plots/zinv_measurements/sgamma_highdm.png",
+      "region": "2024 High-dM",
+      "variable": "High-dM photon-CR \\(S_{\\gamma,i}\\) versus recoil."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "sgamma_lowdm_Nb1_PISR300to500_PTb20to40",
+      "pdf": "plots/zinv_measurements/sgamma_lowdm_Nb1_PISR300to500_PTb20to40.pdf",
+      "png": "plots/zinv_measurements/sgamma_lowdm_Nb1_PISR300to500_PTb20to40.png",
+      "region": "2024 Low-dM",
+      "variable": "Low-dM photon-CR \\(S_{\\gamma,i}\\) in one analysis family."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "sgamma_lowdm_Nb1_PISR300to500_PTb40to70",
+      "pdf": "plots/zinv_measurements/sgamma_lowdm_Nb1_PISR300to500_PTb40to70.pdf",
+      "png": "plots/zinv_measurements/sgamma_lowdm_Nb1_PISR300to500_PTb40to70.png",
+      "region": "2024 Low-dM",
+      "variable": "Low-dM photon-CR \\(S_{\\gamma,i}\\) in one analysis family."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "sgamma_lowdm_Nb1_PISR500plus_PTb20to40",
+      "pdf": "plots/zinv_measurements/sgamma_lowdm_Nb1_PISR500plus_PTb20to40.pdf",
+      "png": "plots/zinv_measurements/sgamma_lowdm_Nb1_PISR500plus_PTb20to40.png",
+      "region": "2024 Low-dM",
+      "variable": "Low-dM photon-CR \\(S_{\\gamma,i}\\) in one analysis family."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "sgamma_lowdm_Nb1_PISR500plus_PTb40to70",
+      "pdf": "plots/zinv_measurements/sgamma_lowdm_Nb1_PISR500plus_PTb40to70.pdf",
+      "png": "plots/zinv_measurements/sgamma_lowdm_Nb1_PISR500plus_PTb40to70.png",
+      "region": "2024 Low-dM",
+      "variable": "Low-dM photon-CR \\(S_{\\gamma,i}\\) in one analysis family."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "sgamma_lowdm_Nb2plus_PISR300to500_PTb140plus_Nj7plus",
+      "pdf": "plots/zinv_measurements/sgamma_lowdm_Nb2plus_PISR300to500_PTb140plus_Nj7plus.pdf",
+      "png": "plots/zinv_measurements/sgamma_lowdm_Nb2plus_PISR300to500_PTb140plus_Nj7plus.png",
+      "region": "2024 Low-dM",
+      "variable": "Low-dM photon-CR \\(S_{\\gamma,i}\\) in one analysis family."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "sgamma_lowdm_Nb2plus_PISR300to500_PTb40to80_Nj2plus",
+      "pdf": "plots/zinv_measurements/sgamma_lowdm_Nb2plus_PISR300to500_PTb40to80_Nj2plus.pdf",
+      "png": "plots/zinv_measurements/sgamma_lowdm_Nb2plus_PISR300to500_PTb40to80_Nj2plus.png",
+      "region": "2024 Low-dM",
+      "variable": "Low-dM photon-CR \\(S_{\\gamma,i}\\) in one analysis family."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "sgamma_lowdm_Nb2plus_PISR300to500_PTb80to140_Nj2plus",
+      "pdf": "plots/zinv_measurements/sgamma_lowdm_Nb2plus_PISR300to500_PTb80to140_Nj2plus.pdf",
+      "png": "plots/zinv_measurements/sgamma_lowdm_Nb2plus_PISR300to500_PTb80to140_Nj2plus.png",
+      "region": "2024 Low-dM",
+      "variable": "Low-dM photon-CR \\(S_{\\gamma,i}\\) in one analysis family."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "sgamma_lowdm_Nb2plus_PISR500plus_PTb140plus_Nj7plus",
+      "pdf": "plots/zinv_measurements/sgamma_lowdm_Nb2plus_PISR500plus_PTb140plus_Nj7plus.pdf",
+      "png": "plots/zinv_measurements/sgamma_lowdm_Nb2plus_PISR500plus_PTb140plus_Nj7plus.png",
+      "region": "2024 Low-dM",
+      "variable": "Low-dM photon-CR \\(S_{\\gamma,i}\\) in one analysis family."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "sgamma_lowdm_Nb2plus_PISR500plus_PTb40to80_Nj2plus",
+      "pdf": "plots/zinv_measurements/sgamma_lowdm_Nb2plus_PISR500plus_PTb40to80_Nj2plus.pdf",
+      "png": "plots/zinv_measurements/sgamma_lowdm_Nb2plus_PISR500plus_PTb40to80_Nj2plus.png",
+      "region": "2024 Low-dM",
+      "variable": "Low-dM photon-CR \\(S_{\\gamma,i}\\) in one analysis family."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "sgamma_lowdm_Nb2plus_PISR500plus_PTb80to140_Nj2plus",
+      "pdf": "plots/zinv_measurements/sgamma_lowdm_Nb2plus_PISR500plus_PTb80to140_Nj2plus.pdf",
+      "png": "plots/zinv_measurements/sgamma_lowdm_Nb2plus_PISR500plus_PTb80to140_Nj2plus.png",
+      "region": "2024 Low-dM",
+      "variable": "Low-dM photon-CR \\(S_{\\gamma,i}\\) in one analysis family."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "zgamma_double_ratio_highdm",
+      "pdf": "plots/zinv_measurements/zgamma_double_ratio_highdm.pdf",
+      "png": "plots/zinv_measurements/zgamma_double_ratio_highdm.png",
+      "region": "2024 High-dM",
+      "variable": "High-dM normalized \\(Z/\\gamma\\) shape double ratio."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "zgamma_double_ratio_lowdm_Nb1_PISR300to500_PTb20to40",
+      "pdf": "plots/zinv_measurements/zgamma_double_ratio_lowdm_Nb1_PISR300to500_PTb20to40.pdf",
+      "png": "plots/zinv_measurements/zgamma_double_ratio_lowdm_Nb1_PISR300to500_PTb20to40.png",
+      "region": "2024 Low-dM",
+      "variable": "Low-dM normalized \\(Z/\\gamma\\) shape double ratio."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "zgamma_double_ratio_lowdm_Nb1_PISR300to500_PTb40to70",
+      "pdf": "plots/zinv_measurements/zgamma_double_ratio_lowdm_Nb1_PISR300to500_PTb40to70.pdf",
+      "png": "plots/zinv_measurements/zgamma_double_ratio_lowdm_Nb1_PISR300to500_PTb40to70.png",
+      "region": "2024 Low-dM",
+      "variable": "Low-dM normalized \\(Z/\\gamma\\) shape double ratio."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "zgamma_double_ratio_lowdm_Nb1_PISR500plus_PTb20to40",
+      "pdf": "plots/zinv_measurements/zgamma_double_ratio_lowdm_Nb1_PISR500plus_PTb20to40.pdf",
+      "png": "plots/zinv_measurements/zgamma_double_ratio_lowdm_Nb1_PISR500plus_PTb20to40.png",
+      "region": "2024 Low-dM",
+      "variable": "Low-dM normalized \\(Z/\\gamma\\) shape double ratio."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "zgamma_double_ratio_lowdm_Nb1_PISR500plus_PTb40to70",
+      "pdf": "plots/zinv_measurements/zgamma_double_ratio_lowdm_Nb1_PISR500plus_PTb40to70.pdf",
+      "png": "plots/zinv_measurements/zgamma_double_ratio_lowdm_Nb1_PISR500plus_PTb40to70.png",
+      "region": "2024 Low-dM",
+      "variable": "Low-dM normalized \\(Z/\\gamma\\) shape double ratio."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "zgamma_double_ratio_lowdm_Nb2plus_PISR300to500_PTb140plus_Nj7plus",
+      "pdf": "plots/zinv_measurements/zgamma_double_ratio_lowdm_Nb2plus_PISR300to500_PTb140plus_Nj7plus.pdf",
+      "png": "plots/zinv_measurements/zgamma_double_ratio_lowdm_Nb2plus_PISR300to500_PTb140plus_Nj7plus.png",
+      "region": "2024 Low-dM",
+      "variable": "Low-dM normalized \\(Z/\\gamma\\) shape double ratio."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "zgamma_double_ratio_lowdm_Nb2plus_PISR300to500_PTb40to80_Nj2plus",
+      "pdf": "plots/zinv_measurements/zgamma_double_ratio_lowdm_Nb2plus_PISR300to500_PTb40to80_Nj2plus.pdf",
+      "png": "plots/zinv_measurements/zgamma_double_ratio_lowdm_Nb2plus_PISR300to500_PTb40to80_Nj2plus.png",
+      "region": "2024 Low-dM",
+      "variable": "Low-dM normalized \\(Z/\\gamma\\) shape double ratio."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "zgamma_double_ratio_lowdm_Nb2plus_PISR300to500_PTb80to140_Nj2plus",
+      "pdf": "plots/zinv_measurements/zgamma_double_ratio_lowdm_Nb2plus_PISR300to500_PTb80to140_Nj2plus.pdf",
+      "png": "plots/zinv_measurements/zgamma_double_ratio_lowdm_Nb2plus_PISR300to500_PTb80to140_Nj2plus.png",
+      "region": "2024 Low-dM",
+      "variable": "Low-dM normalized \\(Z/\\gamma\\) shape double ratio."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "zgamma_double_ratio_lowdm_Nb2plus_PISR500plus_PTb140plus_Nj7plus",
+      "pdf": "plots/zinv_measurements/zgamma_double_ratio_lowdm_Nb2plus_PISR500plus_PTb140plus_Nj7plus.pdf",
+      "png": "plots/zinv_measurements/zgamma_double_ratio_lowdm_Nb2plus_PISR500plus_PTb140plus_Nj7plus.png",
+      "region": "2024 Low-dM",
+      "variable": "Low-dM normalized \\(Z/\\gamma\\) shape double ratio."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "zgamma_double_ratio_lowdm_Nb2plus_PISR500plus_PTb40to80_Nj2plus",
+      "pdf": "plots/zinv_measurements/zgamma_double_ratio_lowdm_Nb2plus_PISR500plus_PTb40to80_Nj2plus.pdf",
+      "png": "plots/zinv_measurements/zgamma_double_ratio_lowdm_Nb2plus_PISR500plus_PTb40to80_Nj2plus.png",
+      "region": "2024 Low-dM",
+      "variable": "Low-dM normalized \\(Z/\\gamma\\) shape double ratio."
+    },
+    {
+      "family": "zinv_measurements",
+      "family_label": "Z invisible measurements",
+      "kind": "Measurement",
+      "name": "zgamma_double_ratio_lowdm_Nb2plus_PISR500plus_PTb80to140_Nj2plus",
+      "pdf": "plots/zinv_measurements/zgamma_double_ratio_lowdm_Nb2plus_PISR500plus_PTb80to140_Nj2plus.pdf",
+      "png": "plots/zinv_measurements/zgamma_double_ratio_lowdm_Nb2plus_PISR500plus_PTb80to140_Nj2plus.png",
+      "region": "2024 Low-dM",
+      "variable": "Low-dM normalized \\(Z/\\gamma\\) shape double ratio."
     },
     {
       "family": "impacts",
       "family_label": "Nuisance impacts",
       "kind": "Overview",
-      "name": "impacts_2024_highdm60_lowdm34_mStop1200_mLSP500_full_mcstat",
-      "pdf": "plots/impacts/impacts_2024_highdm60_lowdm34_mStop1200_mLSP500_full_mcstat.pdf",
-      "png": "plots/impacts/impacts_2024_highdm60_lowdm34_mStop1200_mLSP500_full_mcstat.png",
+      "name": "impacts_2024_highdm60_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat",
+      "pdf": "plots/impacts/impacts_2024_highdm60_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat.pdf",
+      "png": "plots/impacts/impacts_2024_highdm60_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat.png",
       "region": "2024 High-dM 60 + Low-dM 34",
       "variable": "mStop1200 mLSP500 full statistics"
+    },
+    {
+      "family": "limits",
+      "family_label": "Expected limits",
+      "kind": "Overview",
+      "name": "expected_limit_highdm60_lowdm34_an_zinv_x1800",
+      "pdf": "plots/limits/expected_limit_highdm60_lowdm34_an_zinv_x1800.pdf",
+      "png": "plots/limits/expected_limit_highdm60_lowdm34_an_zinv_x1800.png",
+      "region": "2024 High-dM 60 + Low-dM 34",
+      "variable": "mStop mLSP expected 95% CL"
     }
   ],
   "snapshot_input_count": null,
@@ -3209,38 +3520,39 @@
   "source_hist_payload": "hists_2024_dyptll100200_lowdm34_nbge1.json",
   "source_hist_payload_sha256": "c8a2116fc66c291594c9dfd0cb90852fd68b5c995f2e42fe3b69fcf08654e266",
   "statistical_results": {
-    "combined": "plots/limits/expected_limit_highdm60_lowdm34_x1600.png",
-    "impact": "plots/impacts/impacts_2024_highdm60_lowdm34_mStop1200_mLSP500_full_mcstat.png",
+    "combined": "plots/limits/expected_limit_highdm60_lowdm34_an_zinv_x1800.png",
+    "impact": "plots/impacts/impacts_2024_highdm60_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat.png",
     "impact_benchmark": {
       "mLSP_GeV": 500,
       "mStop_GeV": 1200
     },
     "impact_parameters": {
-      "autoMCStats": 320,
-      "other": 11,
-      "total": 331
+      "autoMCStats": 376,
+      "other": 154,
+      "total": 530
     },
-    "impact_scope": "2024 luminosity plus 10 rate/weight or object-shape nuisances and individual MC-statistical nuisances. Object-shape templates are absent from this card.",
-    "status": "complete_current_2024_model_full_statistics",
-    "updated_at": "2026-07-27T09:26:33+00:00"
-  },
-  "transfer_factor_update": {
-    "binning": "matched Nb and pTmiss/hadronic-recoil bins",
-    "data": "data/transfer_factors_2024_nb_recoil.json",
-    "definition": "N_SR/N_CR",
-    "highdm_nb": [
-      "1",
-      "2",
-      ">=3"
-    ],
-    "lowdm_nb": [
-      "1",
-      ">=2"
-    ],
-    "plot_count": 6,
-    "status": "complete",
-    "used_in_datacard": true
+    "impact_scope": "2024 luminosity plus 153 rate/weight or object-shape nuisances and individual MC-statistical nuisances. Object-shape templates are absent from this card.",
+    "status": "expected_limit_documented_boundary_partial",
+    "updated_at": "2026-07-27T20:06:54+00:00"
   },
   "status": "complete",
-  "year": 2024
+  "transfer_factor_update": {
+    "status": "complete",
+    "used_in_datacard": [
+      "shared lost-lepton RLL",
+      "QCD RQCD"
+    ],
+    "zinv_direct_transfer_factors_removed": true
+  },
+  "year": 2024,
+  "zinv_measurement_update": {
+    "RZ_source": "on/off-Z dielectron+dimuon 2x2 matrix",
+    "Sgamma_source": "Q-normalized photon CR",
+    "data": "data/an_zinv_factors_2024.json",
+    "dilepton_likelihood_channels": false,
+    "plot_count": 33,
+    "prediction": "N_Zinv_pred = RZ * Sgamma_i * N_Zinv_MC_i",
+    "status": "complete",
+    "updated_at": "2026-07-27T18:37:38+00:00"
+  }
 }

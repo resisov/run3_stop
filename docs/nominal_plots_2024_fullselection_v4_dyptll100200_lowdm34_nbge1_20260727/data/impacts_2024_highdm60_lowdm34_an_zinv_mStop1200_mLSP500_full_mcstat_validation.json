@@ -1,0 +1,360 @@
+{
+  "analysis": {
+    "autoMCStats_threshold": 10,
+    "benchmark": {
+      "mLSP_GeV": 500,
+      "mStop_GeV": 1200
+    },
+    "channels": 250,
+    "data_mode": "asimov",
+    "expected_signal": 1.0,
+    "highdm_signal_bins": 60,
+    "lowdm_signal_bins": 34,
+    "model": "an_zinv",
+    "schema": "highdm60_lowdm34_an_zinv_2024_v1",
+    "systematics": {
+      "autoMCStats": 10,
+      "lnN": [
+        "Lumi_2024",
+        "RZ_highdm_Nb1",
+        "RZ_highdm_Nb2plus",
+        "RZ_lowdm_Nb1",
+        "RZ_lowdm_Nb2plus",
+        "btagSF_bc_correlated",
+        "btagSF_bc_uncorrelated",
+        "btagSF_light_correlated",
+        "btagSF_light_uncorrelated",
+        "electron_id",
+        "muon_id",
+        "photon_id",
+        "pileup"
+      ],
+      "rate_parameters": [
+        "RLL_high_Nb1_u0",
+        "RLL_high_Nb1_u1",
+        "RLL_high_Nb1_u2",
+        "RLL_high_Nb1_u3",
+        "RLL_high_Nb1_u4",
+        "RLL_high_Nb1_u5",
+        "RLL_high_Nb2_u0",
+        "RLL_high_Nb2_u1",
+        "RLL_high_Nb2_u2",
+        "RLL_high_Nb2_u3",
+        "RLL_high_Nb2_u4",
+        "RLL_high_Nb2_u5",
+        "RLL_high_Nb3plus_u0",
+        "RLL_high_Nb3plus_u1",
+        "RLL_high_Nb3plus_u2",
+        "RLL_high_Nb3plus_u3",
+        "RLL_high_Nb3plus_u4",
+        "RLL_high_Nb3plus_u5",
+        "RLL_low_Nb1_b00",
+        "RLL_low_Nb1_b01",
+        "RLL_low_Nb1_b02",
+        "RLL_low_Nb1_b03",
+        "RLL_low_Nb1_b04",
+        "RLL_low_Nb1_b05",
+        "RLL_low_Nb1_b06",
+        "RLL_low_Nb1_b07",
+        "RLL_low_Nb1_b08",
+        "RLL_low_Nb1_b09",
+        "RLL_low_Nb1_b10",
+        "RLL_low_Nb1_b11",
+        "RLL_low_Nb1_b12",
+        "RLL_low_Nb1_b13",
+        "RLL_low_Nb1_b14",
+        "RLL_low_Nb1_b15",
+        "RLL_low_Nb2plus_b16",
+        "RLL_low_Nb2plus_b17",
+        "RLL_low_Nb2plus_b18",
+        "RLL_low_Nb2plus_b19",
+        "RLL_low_Nb2plus_b20",
+        "RLL_low_Nb2plus_b21",
+        "RLL_low_Nb2plus_b22",
+        "RLL_low_Nb2plus_b23",
+        "RLL_low_Nb2plus_b24",
+        "RLL_low_Nb2plus_b25",
+        "RLL_low_Nb2plus_b26",
+        "RLL_low_Nb2plus_b27",
+        "RLL_low_Nb2plus_b28",
+        "RLL_low_Nb2plus_b29",
+        "RLL_low_Nb2plus_b30",
+        "RLL_low_Nb2plus_b31",
+        "RLL_low_Nb2plus_b32",
+        "RLL_low_Nb2plus_b33",
+        "RQCD_high_Nb1_u0",
+        "RQCD_high_Nb1_u1",
+        "RQCD_high_Nb1_u2",
+        "RQCD_high_Nb1_u3",
+        "RQCD_high_Nb1_u4",
+        "RQCD_high_Nb1_u5",
+        "RQCD_high_Nb2_u0",
+        "RQCD_high_Nb2_u1",
+        "RQCD_high_Nb2_u2",
+        "RQCD_high_Nb2_u3",
+        "RQCD_high_Nb2_u4",
+        "RQCD_high_Nb2_u5",
+        "RQCD_high_Nb3plus_u0",
+        "RQCD_high_Nb3plus_u1",
+        "RQCD_high_Nb3plus_u2",
+        "RQCD_high_Nb3plus_u3",
+        "RQCD_high_Nb3plus_u4",
+        "RQCD_high_Nb3plus_u5",
+        "RQCD_low_Nb1_b00",
+        "RQCD_low_Nb1_b01",
+        "RQCD_low_Nb1_b04",
+        "RQCD_low_Nb1_b05",
+        "RQCD_low_Nb1_b08",
+        "RQCD_low_Nb1_b09",
+        "RQCD_low_Nb1_b10",
+        "RQCD_low_Nb1_b11",
+        "RQCD_low_Nb1_b12",
+        "RQCD_low_Nb1_b13",
+        "RQCD_low_Nb1_b14",
+        "RQCD_low_Nb1_b15",
+        "RQCD_low_Nb2plus_b16",
+        "RQCD_low_Nb2plus_b19",
+        "RQCD_low_Nb2plus_b25",
+        "RQCD_low_Nb2plus_b27",
+        "RQCD_low_Nb2plus_b28",
+        "RQCD_low_Nb2plus_b29",
+        "RQCD_low_Nb2plus_b30",
+        "RZshape_high_Nb1_u0",
+        "RZshape_high_Nb1_u1",
+        "RZshape_high_Nb1_u2",
+        "RZshape_high_Nb1_u3",
+        "RZshape_high_Nb1_u4",
+        "RZshape_high_Nb1_u5",
+        "RZshape_high_Nb2_u0",
+        "RZshape_high_Nb2_u1",
+        "RZshape_high_Nb2_u2",
+        "RZshape_high_Nb2_u3",
+        "RZshape_high_Nb2_u4",
+        "RZshape_high_Nb2_u5",
+        "RZshape_high_Nb3plus_u0",
+        "RZshape_high_Nb3plus_u1",
+        "RZshape_high_Nb3plus_u2",
+        "RZshape_high_Nb3plus_u3",
+        "RZshape_high_Nb3plus_u4",
+        "RZshape_high_Nb3plus_u5",
+        "RZshape_low_Nb1_b00",
+        "RZshape_low_Nb1_b01",
+        "RZshape_low_Nb1_b02",
+        "RZshape_low_Nb1_b03",
+        "RZshape_low_Nb1_b04",
+        "RZshape_low_Nb1_b05",
+        "RZshape_low_Nb1_b06",
+        "RZshape_low_Nb1_b07",
+        "RZshape_low_Nb1_b08",
+        "RZshape_low_Nb1_b09",
+        "RZshape_low_Nb1_b10",
+        "RZshape_low_Nb1_b11",
+        "RZshape_low_Nb1_b12",
+        "RZshape_low_Nb1_b13",
+        "RZshape_low_Nb1_b14",
+        "RZshape_low_Nb1_b15",
+        "RZshape_low_Nb2plus_b16",
+        "RZshape_low_Nb2plus_b17",
+        "RZshape_low_Nb2plus_b18",
+        "RZshape_low_Nb2plus_b19",
+        "RZshape_low_Nb2plus_b20",
+        "RZshape_low_Nb2plus_b21",
+        "RZshape_low_Nb2plus_b22",
+        "RZshape_low_Nb2plus_b23",
+        "RZshape_low_Nb2plus_b24",
+        "RZshape_low_Nb2plus_b25",
+        "RZshape_low_Nb2plus_b26",
+        "RZshape_low_Nb2plus_b27",
+        "RZshape_low_Nb2plus_b28",
+        "RZshape_low_Nb2plus_b29",
+        "RZshape_low_Nb2plus_b30",
+        "RZshape_low_Nb2plus_b31",
+        "RZshape_low_Nb2plus_b32",
+        "RZshape_low_Nb2plus_b33"
+      ]
+    },
+    "total_analysis_bins": 250,
+    "year": 2024
+  },
+  "artifacts": {
+    "combine_input_manifest.json": {
+      "bytes": 19284855,
+      "sha256": "4f41ac4abcce7c4999ad4d2aca59421099d15dd17f859db3c7f985a4dae7ded7"
+    },
+    "datacard_mStop1200_mLSP500.txt": {
+      "bytes": 286828,
+      "sha256": "bc68a19b8db7ba0569077a73718d24edfa18de38592999432b3e51d05dd6cfb1"
+    },
+    "impact_labels_2024.json": {
+      "bytes": 38818,
+      "sha256": "63e0237e5841a425ea1d5fb462715807afcaa4e315caaf58f35351e51aa6e12e"
+    },
+    "impacts_2024_highdm60_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat.pdf": {
+      "bytes": 140218,
+      "sha256": "67e8827c0840d206bdb0a206a3bf7684f4bfdf73251f85b2b6d5d82eb194abb0"
+    },
+    "impacts_2024_highdm60_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat.png": {
+      "bytes": 215035,
+      "sha256": "c0c6bf7ce24f6a6bf37c69bf89ed2bc6a2903f6fe1722216e2c8ceebfa9cc052"
+    },
+    "impacts_2024_highdm60_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat_summary.pdf": {
+      "bytes": 16462,
+      "sha256": "b57e279d68fb3f1cf2e2be9b776aeacbf4733ff82042cd884d73d69d6cd7bc3d"
+    },
+    "impacts_2024_highdm60_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat_summary.png": {
+      "bytes": 191363,
+      "sha256": "d53aff00b1aa1fffd4e310ee25e16db39565c409ecf6469d677c9a82130a4fc4"
+    },
+    "impacts_mStop1200_mLSP500.json": {
+      "bytes": 215510,
+      "sha256": "b998d0834eec508acd3e33266e2c5e623e9d663a243f4fa4b9d7316a33ebee91"
+    }
+  },
+  "checks": {
+    "all_expected_nonstatistical_parameters": true,
+    "all_parameter_fit_roots_present": true,
+    "all_parameter_fit_roots_valid": true,
+    "card_auto_mc_stats_10": true,
+    "card_has_expected_highdm_lowdm_channels": true,
+    "card_has_no_2025_content": true,
+    "impact_json_finite": true,
+    "impact_png_valid": true,
+    "label_map_covers_all_parameters": true,
+    "label_map_values_unique": true,
+    "main_impact_pdf_page_count": true,
+    "manifest_auto_mc_stats_10": true,
+    "manifest_channel_count_positive": true,
+    "manifest_highdm_60_bins": true,
+    "manifest_lowdm_bins_positive": true,
+    "manifest_mass_point_present": true,
+    "manifest_schema_2024_only": true,
+    "manifest_status_complete": true,
+    "manifest_total_bins_consistent": true,
+    "nonstatistical_parameter_count_matches_card": true,
+    "parameter_count_positive": true,
+    "parameter_names_unique": true,
+    "poi_fit_is_finite_triplet": true,
+    "poi_is_r": true,
+    "statistical_parameters_present": true,
+    "summary_pdf_one_page": true,
+    "summary_png_valid": true
+  },
+  "failed_checks": [],
+  "impact_scan": {
+    "fit_tree_entries_max": 3,
+    "fit_tree_entries_min": 3,
+    "invalid_fit_count": 0,
+    "missing_fit_count": 0,
+    "nonstatistical_parameter_count": 154,
+    "parameter_count": 530,
+    "poi": {
+      "fit": [
+        0.6473537683486938,
+        1.0,
+        1.4018031358718872
+      ],
+      "name": "r"
+    },
+    "statistical_parameter_count": 376,
+    "top_impacts": [
+      {
+        "impact_r": 0.04965412616729736,
+        "name": "photon_id"
+      },
+      {
+        "impact_r": 0.047924578189849854,
+        "name": "RZshape_high_Nb1_u4"
+      },
+      {
+        "impact_r": 0.046654343605041504,
+        "name": "RZshape_high_Nb1_u5"
+      },
+      {
+        "impact_r": 0.043416500091552734,
+        "name": "RLL_high_Nb2_u5"
+      },
+      {
+        "impact_r": 0.04252588748931885,
+        "name": "RZshape_high_Nb2_u5"
+      },
+      {
+        "impact_r": 0.04153972864151001,
+        "name": "RZshape_high_Nb2_u4"
+      },
+      {
+        "impact_r": 0.03934979438781738,
+        "name": "RLL_high_Nb2_u4"
+      },
+      {
+        "impact_r": 0.036591291427612305,
+        "name": "prop_binhSR_b29_bin0"
+      },
+      {
+        "impact_r": 0.03271043300628662,
+        "name": "prop_binhSR_b28_bin0"
+      },
+      {
+        "impact_r": 0.0325009822845459,
+        "name": "RLL_high_Nb3plus_u5"
+      },
+      {
+        "impact_r": 0.02039945125579834,
+        "name": "RLL_high_Nb3plus_u4"
+      },
+      {
+        "impact_r": 0.01965862512588501,
+        "name": "RLL_high_Nb1_u5"
+      },
+      {
+        "impact_r": 0.019573569297790527,
+        "name": "prop_binhSR_b17_bin0"
+      },
+      {
+        "impact_r": 0.01840043067932129,
+        "name": "RLL_high_Nb1_u4"
+      },
+      {
+        "impact_r": 0.017424583435058594,
+        "name": "prop_binhSR_b41_bin0"
+      },
+      {
+        "impact_r": 0.017362594604492188,
+        "name": "prop_binhSR_b57_bin0"
+      },
+      {
+        "impact_r": 0.016219258308410645,
+        "name": "prop_binhSR_b52_bin0_Top_Nb3plus"
+      },
+      {
+        "impact_r": 0.015996336936950684,
+        "name": "prop_binhSR_b59_bin0_Top_Nb2"
+      },
+      {
+        "impact_r": 0.015932321548461914,
+        "name": "Lumi_2024"
+      },
+      {
+        "impact_r": 0.015742480754852295,
+        "name": "RZshape_high_Nb3plus_u4"
+      }
+    ]
+  },
+  "invalid_fit_parameters": [],
+  "missing_fit_parameters": [],
+  "rendering": {
+    "main_pdf_pages": 18,
+    "png_dimensions": [
+      1872,
+      1323
+    ],
+    "png_nonwhite_fraction": 0.2688718174829286,
+    "summary_pdf_pages": 1,
+    "summary_png_dimensions": [
+      1872,
+      1323
+    ],
+    "summary_png_nonwhite_fraction": 0.1670458069267593
+  },
+  "schema": "2024_highdm60_lowdm34_full_mcstat_impact_validation_v1",
+  "status": "complete"
+}

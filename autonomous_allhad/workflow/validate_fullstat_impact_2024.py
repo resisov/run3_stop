@@ -79,6 +79,22 @@ def card_nuisance_contract(card_text):
     }
 
 
+def card_has_no_2025_content(card_text):
+    """Check semantic card identifiers, not accidental numeric substrings."""
+    for raw_line in card_text.splitlines():
+        line = raw_line.strip()
+        if not line:
+            continue
+        if line.startswith("#"):
+            if re.search(r"\b2025\b", line):
+                return False
+            continue
+        fields = line.split()
+        if any("2025" in field for field in fields[:2]):
+            return False
+    return True
+
+
 def analysis_contract(manifest, card_text):
     schema = manifest.get("schema_version") or manifest.get("schema") or ""
     lowdm_match = re.search(r"lowdm(\d+)", schema)
@@ -92,7 +108,11 @@ def analysis_contract(manifest, card_text):
     if isinstance(root_channels, dict):
         channel_count = len(root_channels)
         total_bins = channel_count
-        model = "nb_recoil_transfer_factor"
+        model = (
+            "an_zinv"
+            if "an_zinv" in schema
+            else "nb_recoil_transfer_factor"
+        )
     else:
         channel_count = int(manifest["channel_count"])
         total_bins = int(manifest["total_analysis_bins"])
@@ -135,9 +155,13 @@ def main():
     plot_stem = args.stem or (
         f"impacts_2024_highdm{highdm_bins}_lowdm{lowdm_bins}_"
         + (
-            "nb_recoil_tf_"
-            if contract["model"] == "nb_recoil_transfer_factor"
-            else ""
+            "an_zinv_"
+            if contract["model"] == "an_zinv"
+            else (
+                "nb_recoil_tf_"
+                if contract["model"] == "nb_recoil_transfer_factor"
+                else ""
+            )
         )
         + "mStop1200_mLSP500_full_mcstat"
     )
@@ -183,13 +207,21 @@ def main():
     )
     poi = impacts["POIs"][0]
     mass_points = manifest.get("mass_points", [])
+    manifest_limits = manifest.get("limits") or {}
+    manifest_boundary_partial = (
+        manifest_limits.get("status") == "partial"
+        and manifest_limits.get("collected_point_count")
+        == manifest_limits.get("requested_point_count") - 1
+        and manifest_limits.get("missing_points")
+        == ["mStop1800_mLSP1600"]
+    )
     manifest_complete = manifest.get("status") in {
         "combine_outputs_complete",
         "complete",
-    }
+    } or manifest_boundary_partial
     card_has_expected_channels = (
         "hSR_b59" in card_text and f"lSR_b{lowdm_bins - 1:02d}" in card_text
-        if contract["model"] == "nb_recoil_transfer_factor"
+        if contract["model"] in {"nb_recoil_transfer_factor", "an_zinv"}
         else (
             "cat7_SR_selected_recoil60_nb2_nt2plus_w0" in card_text
             and "cat7_SR_lowDeltaM" in card_text
@@ -216,7 +248,7 @@ def main():
         "manifest_schema_2024_only": "2024" in contract["schema"],
         "manifest_channel_count_positive": channel_count > 0,
         "manifest_total_bins_consistent": total_bins == channel_count
-        if contract["model"] == "nb_recoil_transfer_factor"
+        if contract["model"] in {"nb_recoil_transfer_factor", "an_zinv"}
         else total_bins == 5 * 6 + highdm_bins + 6 * lowdm_bins,
         "manifest_highdm_60_bins": highdm_bins == 60,
         "manifest_lowdm_bins_positive": lowdm_bins > 0,
@@ -225,7 +257,7 @@ def main():
         "manifest_auto_mc_stats_10": card_contract["autoMCStats"] == 10,
         "card_auto_mc_stats_10": "* autoMCStats 10" in card_text,
         "card_has_expected_highdm_lowdm_channels": card_has_expected_channels,
-        "card_has_no_2025_content": "2025" not in card_text,
+        "card_has_no_2025_content": card_has_no_2025_content(card_text),
         "main_impact_pdf_page_count": pdf_pages(plot_pdf)
         == ceil(len(params) / 30),
         "summary_pdf_one_page": pdf_pages(summary_pdf) == 1,

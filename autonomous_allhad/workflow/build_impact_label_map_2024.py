@@ -37,14 +37,51 @@ SYSTEMATIC_LABELS = {
 }
 
 
+def dynamic_channel_label(channel):
+    match = re.fullmatch(r"hSR_b(\d+)", channel)
+    if match:
+        return f"High-dM SR bin {int(match.group(1)) + 1}"
+    match = re.fullmatch(
+        r"h(LLCR|QCDCR|GCR)_(Nb1|Nb2|Nb3plus)_u(\d+)", channel
+    )
+    if match:
+        region, group, recoil = match.groups()
+        return (
+            f"High-dM {region}, {group}, recoil bin {int(recoil) + 1}"
+        )
+    match = re.fullmatch(r"lSR_b(\d+)", channel)
+    if match:
+        return f"Low-dM SR bin {int(match.group(1)) + 1}"
+    match = re.fullmatch(r"l(LLCR|QCDCR|GCR)_b(\d+)", channel)
+    if match:
+        region, search_bin = match.groups()
+        return f"Low-dM {region}, bin {int(search_bin) + 1}"
+    return CHANNEL_LABELS.get(channel, channel)
+
+
 def label(name):
     if name in SYSTEMATIC_LABELS:
         return SYSTEMATIC_LABELS[name]
+    match = re.fullmatch(
+        r"(RLL|RQCD|RZshape)_(high|low)_(.+)", name
+    )
+    if match:
+        kind, regime, category = match.groups()
+        description = {
+            "RLL": "Lost-lepton CR constraint",
+            "RQCD": "QCD CR constraint",
+            "RZshape": r"Z invisible photon-CR shape",
+        }[kind]
+        return f"{description}, {regime}-dM {category}"
+    match = re.fullmatch(r"RZ_(highdm|lowdm)_(Nb1|Nb2plus)", name)
+    if match:
+        regime, group = match.groups()
+        return f"Z normalization RZ, {regime}, {group}"
     match = re.fullmatch(r"prop_bin(.+)_bin(\d+)(?:_(.+))?", name)
     if not match:
         return name
     channel, zero_based_bin, process = match.groups()
-    channel_label = CHANNEL_LABELS.get(channel, channel)
+    channel_label = dynamic_channel_label(channel)
     suffix = ""
     if process == "background":
         suffix = ", background"

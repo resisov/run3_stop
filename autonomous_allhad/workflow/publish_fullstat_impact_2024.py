@@ -36,9 +36,14 @@ def main() -> int:
     highdm_bins = int(analysis["highdm_signal_bins"])
     lowdm_bins = int(analysis["lowdm_signal_bins"])
     transfer_factor_model = analysis.get("model") == "nb_recoil_transfer_factor"
+    an_zinv_model = analysis.get("model") == "an_zinv"
     stem = (
         f"impacts_2024_highdm{highdm_bins}_lowdm{lowdm_bins}_"
-        + ("nb_recoil_tf_" if transfer_factor_model else "")
+        + (
+            "an_zinv_"
+            if an_zinv_model
+            else ("nb_recoil_tf_" if transfer_factor_model else "")
+        )
         + "mStop1200_mLSP500_full_mcstat"
     )
 
@@ -100,7 +105,13 @@ def main() -> int:
         " The background model uses the published bin-by-bin "
         "N_b×recoil transfer-factor constraints."
         if transfer_factor_model
-        else ""
+        else (
+            " The Z→νν background uses the AN structure: RZ from the "
+            "on/off-Z dilepton matrix and Sγ from the Q-normalized photon CR; "
+            "lost-lepton and QCD retain direct CR/SR rate constraints."
+            if an_zinv_model
+            else ""
+        )
     )
     notice = (
         f"{NOTICE_START}"
@@ -141,10 +152,13 @@ def main() -> int:
 
     summary_path = page_dir / "page_summary.json"
     page_summary = json.loads(summary_path.read_text())
+    replaced_families = {"impacts"}
+    if transfer_factor_model:
+        replaced_families.add("transfer_factors")
     base_records = [
         record
         for record in page_summary["records"]
-        if record.get("family") not in {"impacts", "transfer_factors"}
+        if record.get("family") not in replaced_families
     ]
     transfer_records = []
     if transfer_factor_model:
@@ -263,7 +277,11 @@ def main() -> int:
     statistical = page_summary.setdefault("statistical_results", {})
     limit_stem = (
         f"expected_limit_highdm{highdm_bins}_lowdm{lowdm_bins}_"
-        + ("nb_recoil_tf_" if transfer_factor_model else "")
+        + (
+            "an_zinv_"
+            if an_zinv_model
+            else ("nb_recoil_tf_" if transfer_factor_model else "")
+        )
         + "x1800"
     )
     statistical.update(
