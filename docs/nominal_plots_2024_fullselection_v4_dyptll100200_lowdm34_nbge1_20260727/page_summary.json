@@ -3124,6 +3124,66 @@
       "variable": "lowdm_sr_onebin"
     },
     {
+      "family": "transfer_factors",
+      "family_label": "Transfer factors",
+      "kind": "Overview",
+      "name": "transfer_factor_top_llcr_vs_recoil",
+      "pdf": "plots/transfer_factors/transfer_factor_top_llcr_vs_recoil.pdf",
+      "png": "plots/transfer_factors/transfer_factor_top_llcr_vs_recoil.png",
+      "region": "2024 High-dM and Low-dM",
+      "variable": "Top: SR / lost-lepton CR"
+    },
+    {
+      "family": "transfer_factors",
+      "family_label": "Transfer factors",
+      "kind": "Overview",
+      "name": "transfer_factor_w_llcr_vs_recoil",
+      "pdf": "plots/transfer_factors/transfer_factor_w_llcr_vs_recoil.pdf",
+      "png": "plots/transfer_factors/transfer_factor_w_llcr_vs_recoil.png",
+      "region": "2024 High-dM and Low-dM",
+      "variable": "W+jets: SR / lost-lepton CR"
+    },
+    {
+      "family": "transfer_factors",
+      "family_label": "Transfer factors",
+      "kind": "Overview",
+      "name": "transfer_factor_qcd_qcdcr_vs_recoil",
+      "pdf": "plots/transfer_factors/transfer_factor_qcd_qcdcr_vs_recoil.pdf",
+      "png": "plots/transfer_factors/transfer_factor_qcd_qcdcr_vs_recoil.png",
+      "region": "2024 High-dM and Low-dM",
+      "variable": "QCD: SR / QCD CR"
+    },
+    {
+      "family": "transfer_factors",
+      "family_label": "Transfer factors",
+      "kind": "Overview",
+      "name": "transfer_factor_zinv_gcr_vs_recoil",
+      "pdf": "plots/transfer_factors/transfer_factor_zinv_gcr_vs_recoil.pdf",
+      "png": "plots/transfer_factors/transfer_factor_zinv_gcr_vs_recoil.png",
+      "region": "2024 High-dM and Low-dM",
+      "variable": "Z to invisible / Photon+jet GCR"
+    },
+    {
+      "family": "transfer_factors",
+      "family_label": "Transfer factors",
+      "kind": "Overview",
+      "name": "transfer_factor_zinv_dy2e_vs_recoil",
+      "pdf": "plots/transfer_factors/transfer_factor_zinv_dy2e_vs_recoil.pdf",
+      "png": "plots/transfer_factors/transfer_factor_zinv_dy2e_vs_recoil.png",
+      "region": "2024 High-dM and Low-dM",
+      "variable": "Z to invisible / dielectron CR"
+    },
+    {
+      "family": "transfer_factors",
+      "family_label": "Transfer factors",
+      "kind": "Overview",
+      "name": "transfer_factor_zinv_dy2m_vs_recoil",
+      "pdf": "plots/transfer_factors/transfer_factor_zinv_dy2m_vs_recoil.pdf",
+      "png": "plots/transfer_factors/transfer_factor_zinv_dy2m_vs_recoil.png",
+      "region": "2024 High-dM and Low-dM",
+      "variable": "Z to invisible / dimuon CR"
+    },
+    {
       "family": "limits",
       "family_label": "Expected limits",
       "kind": "Overview",
@@ -3163,6 +3223,23 @@
     "impact_scope": "2024 luminosity plus 10 rate/weight or object-shape nuisances and individual MC-statistical nuisances. Object-shape templates are absent from this card.",
     "status": "complete_current_2024_model_full_statistics",
     "updated_at": "2026-07-27T09:26:33+00:00"
+  },
+  "transfer_factor_update": {
+    "binning": "matched Nb and pTmiss/hadronic-recoil bins",
+    "data": "data/transfer_factors_2024_nb_recoil.json",
+    "definition": "N_SR/N_CR",
+    "highdm_nb": [
+      "1",
+      "2",
+      ">=3"
+    ],
+    "lowdm_nb": [
+      "1",
+      ">=2"
+    ],
+    "plot_count": 6,
+    "status": "complete",
+    "used_in_datacard": true
   },
   "status": "complete",
   "year": 2024

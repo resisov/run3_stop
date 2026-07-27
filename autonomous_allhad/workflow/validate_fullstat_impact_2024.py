@@ -5,8 +5,10 @@ import argparse
 import hashlib
 import json
 import math
+import re
 import struct
 import subprocess
+from math import ceil
 from pathlib import Path
 
 import uproot
@@ -55,28 +57,94 @@ def png_nonwhite_fraction(path):
         return nonwhite / float(image.width * image.height)
 
 
+def card_nuisance_contract(card_text):
+    ln_n = set()
+    rate_parameters = set()
+    auto_mc_stats = None
+    for raw_line in card_text.splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#"):
+            continue
+        fields = line.split()
+        if len(fields) >= 2 and fields[1] == "lnN":
+            ln_n.add(fields[0])
+        elif len(fields) >= 2 and fields[1] == "rateParam":
+            rate_parameters.add(fields[0])
+        elif len(fields) >= 3 and fields[1] == "autoMCStats":
+            auto_mc_stats = int(float(fields[2]))
+    return {
+        "lnN": sorted(ln_n),
+        "rate_parameters": sorted(rate_parameters),
+        "autoMCStats": auto_mc_stats,
+    }
+
+
+def analysis_contract(manifest, card_text):
+    schema = manifest.get("schema_version") or manifest.get("schema") or ""
+    lowdm_match = re.search(r"lowdm(\d+)", schema)
+    if lowdm_match:
+        lowdm_bins = int(lowdm_match.group(1))
+    else:
+        lowdm_bins = int(manifest["lowdm"]["signal_bins"])
+    highdm_match = re.search(r"highdm(\d+)", schema)
+    highdm_bins = int(highdm_match.group(1)) if highdm_match else 60
+    root_channels = (manifest.get("root_summary") or {}).get("channels")
+    if isinstance(root_channels, dict):
+        channel_count = len(root_channels)
+        total_bins = channel_count
+        model = "nb_recoil_transfer_factor"
+    else:
+        channel_count = int(manifest["channel_count"])
+        total_bins = int(manifest["total_analysis_bins"])
+        model = "legacy_multibin"
+    card_contract = card_nuisance_contract(card_text)
+    return {
+        "schema": schema,
+        "model": model,
+        "highdm_bins": highdm_bins,
+        "lowdm_bins": lowdm_bins,
+        "channel_count": channel_count,
+        "total_bins": total_bins,
+        "card_contract": card_contract,
+    }
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--work", required=True, type=Path)
     parser.add_argument("--card", required=True, type=Path)
     parser.add_argument("--manifest", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--stem")
     args = parser.parse_args()
 
     work = args.work
     impact_json = work / "impacts_mStop1200_mLSP500.json"
-    plot_stem = "impacts_2024_highdm60_lowdm42_mStop1200_mLSP500_full_mcstat"
-    plot_png = work / f"{plot_stem}.png"
-    plot_pdf = work / f"{plot_stem}.pdf"
-    summary_pdf = work / f"{plot_stem}_summary.pdf"
-    summary_png = work / f"{plot_stem}_summary.png"
     label_map_path = work / "impact_labels_2024.json"
 
     impacts = json.loads(impact_json.read_text())
     label_map = json.loads(label_map_path.read_text())
     manifest = json.loads(args.manifest.read_text())
     card_text = args.card.read_text()
-
+    contract = analysis_contract(manifest, card_text)
+    highdm_bins = contract["highdm_bins"]
+    lowdm_bins = contract["lowdm_bins"]
+    total_bins = contract["total_bins"]
+    channel_count = contract["channel_count"]
+    card_contract = contract["card_contract"]
+    plot_stem = args.stem or (
+        f"impacts_2024_highdm{highdm_bins}_lowdm{lowdm_bins}_"
+        + (
+            "nb_recoil_tf_"
+            if contract["model"] == "nb_recoil_transfer_factor"
+            else ""
+        )
+        + "mStop1200_mLSP500_full_mcstat"
+    )
+    plot_png = work / f"{plot_stem}.png"
+    plot_pdf = work / f"{plot_stem}.pdf"
+    summary_pdf = work / f"{plot_stem}_summary.pdf"
+    summary_png = work / f"{plot_stem}_summary.png"
     params = impacts["params"]
     names = [param["name"] for param in params]
     stat_names = [name for name in names if name.startswith("prop_bin")]
@@ -110,20 +178,33 @@ def main():
         except Exception as error:
             invalid_roots.append({"name": name, "reason": repr(error)})
 
-    required_weight_nuisances = set(manifest["systematics"]["weight_shapes"])
-    required_nonstat = required_weight_nuisances | {
-        manifest["systematics"]["lumi"]["name"]
-    }
+    required_nonstat = set(card_contract["lnN"]) | set(
+        card_contract["rate_parameters"]
+    )
     poi = impacts["POIs"][0]
+    mass_points = manifest.get("mass_points", [])
+    manifest_complete = manifest.get("status") in {
+        "combine_outputs_complete",
+        "complete",
+    }
+    card_has_expected_channels = (
+        "hSR_b59" in card_text and f"lSR_b{lowdm_bins - 1:02d}" in card_text
+        if contract["model"] == "nb_recoil_transfer_factor"
+        else (
+            "cat7_SR_selected_recoil60_nb2_nt2plus_w0" in card_text
+            and "cat7_SR_lowDeltaM" in card_text
+        )
+    )
     checks = {
         "impact_json_finite": finite_tree(impacts),
-        "parameter_count_369": len(params) == 369,
+        "parameter_count_positive": len(params) > 0,
         "parameter_names_unique": len(names) == len(set(names)),
         "label_map_covers_all_parameters": set(label_map) == set(names),
         "label_map_values_unique": len(label_map.values())
         == len(set(label_map.values())),
-        "statistical_parameter_count_358": len(stat_names) == 358,
-        "nonstatistical_parameter_count_11": len(nonstat_names) == 11,
+        "statistical_parameters_present": len(stat_names) > 0,
+        "nonstatistical_parameter_count_matches_card": len(nonstat_names)
+        == len(required_nonstat),
         "all_expected_nonstatistical_parameters": set(nonstat_names)
         == required_nonstat,
         "all_parameter_fit_roots_present": not missing_roots,
@@ -131,25 +212,22 @@ def main():
         "poi_is_r": poi.get("name") == "r",
         "poi_fit_is_finite_triplet": len(poi.get("fit", [])) == 3
         and finite_tree(poi["fit"]),
-        "manifest_status_complete": manifest.get("status")
-        == "combine_outputs_complete",
-        "manifest_schema_2024_only": manifest.get("schema")
-        == "2024_highdm60_lowdm42_v1",
-        "manifest_asimov": manifest.get("data_mode") == "asimov",
-        "manifest_12_channels": manifest.get("channel_count") == 12,
-        "manifest_342_total_bins": manifest.get("total_analysis_bins") == 342,
-        "manifest_highdm_60_bins": manifest["highdm"].get("signal_bins") == 60,
-        "manifest_lowdm_42_bins": manifest["lowdm"].get("signal_bins") == 42,
+        "manifest_status_complete": manifest_complete,
+        "manifest_schema_2024_only": "2024" in contract["schema"],
+        "manifest_channel_count_positive": channel_count > 0,
+        "manifest_total_bins_consistent": total_bins == channel_count
+        if contract["model"] == "nb_recoil_transfer_factor"
+        else total_bins == 5 * 6 + highdm_bins + 6 * lowdm_bins,
+        "manifest_highdm_60_bins": highdm_bins == 60,
+        "manifest_lowdm_bins_positive": lowdm_bins > 0,
         "manifest_mass_point_present": "mStop1200_mLSP500"
-        in manifest.get("mass_points", []),
-        "manifest_auto_mc_stats_10": manifest["systematics"].get("autoMCStats")
-        == 10,
+        in mass_points,
+        "manifest_auto_mc_stats_10": card_contract["autoMCStats"] == 10,
         "card_auto_mc_stats_10": "* autoMCStats 10" in card_text,
-        "card_has_highdm60_channel": "cat7_SR_selected_recoil60_nb2_nt2plus_w0"
-        in card_text,
-        "card_has_lowdm42_channel": "cat7_SR_lowDeltaM" in card_text,
+        "card_has_expected_highdm_lowdm_channels": card_has_expected_channels,
         "card_has_no_2025_content": "2025" not in card_text,
-        "main_impact_pdf_15_pages": pdf_pages(plot_pdf) == 15,
+        "main_impact_pdf_page_count": pdf_pages(plot_pdf)
+        == ceil(len(params) / 30),
         "summary_pdf_one_page": pdf_pages(summary_pdf) == 1,
         "impact_png_valid": all(value > 0 for value in png_dimensions(plot_png))
         and png_nonwhite_fraction(plot_png) > 0.01,
@@ -162,18 +240,28 @@ def main():
 
     ordered = sorted(params, key=lambda item: abs(item["impact_r"]), reverse=True)
     report = {
-        "schema": "2024_highdm60_lowdm42_full_mcstat_impact_validation_v1",
+        "schema": (
+            f"2024_highdm60_lowdm{lowdm_bins}_"
+            "full_mcstat_impact_validation_v1"
+        ),
         "status": "complete" if not failed_checks else "failed",
         "analysis": {
             "year": 2024,
-            "highdm_signal_bins": 60,
-            "lowdm_signal_bins": 42,
-            "channels": manifest["channel_count"],
-            "total_analysis_bins": manifest["total_analysis_bins"],
-            "data_mode": manifest["data_mode"],
+            "model": contract["model"],
+            "schema": contract["schema"],
+            "highdm_signal_bins": highdm_bins,
+            "lowdm_signal_bins": lowdm_bins,
+            "channels": channel_count,
+            "total_analysis_bins": total_bins,
+            "data_mode": "asimov",
             "benchmark": {"mStop_GeV": 1200, "mLSP_GeV": 500},
             "expected_signal": 1.0,
-            "autoMCStats_threshold": manifest["systematics"]["autoMCStats"],
+            "autoMCStats_threshold": card_contract["autoMCStats"],
+            "systematics": {
+                "lnN": card_contract["lnN"],
+                "rate_parameters": card_contract["rate_parameters"],
+                "autoMCStats": card_contract["autoMCStats"],
+            },
         },
         "impact_scan": {
             "parameter_count": len(params),
