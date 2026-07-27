@@ -168,8 +168,9 @@ def plot_path(
     fig, axes = plt.subplots(1, 2, figsize=(16.0, 6.8), constrained_layout=True)
     for axis, regime_name in zip(axes, ("highdm", "lowdm")):
         regime = regimes[regime_name]
-        edges = np.asarray(regime["edges"], dtype=float)
-        centers = 0.5 * (edges[:-1] + edges[1:])
+        physical_edges = np.asarray(regime["edges"], dtype=float)
+        plot_edges = np.arange(len(physical_edges), dtype=float)
+        centers = plot_edges[:-1] + 0.5
         panel_finite: list[float] = []
         for group in regime["groups"]:
             record = regime["records"][path["key"]][group]
@@ -190,12 +191,12 @@ def plot_path(
             finite = np.isfinite(values)
             panel_finite.extend(values[finite].tolist())
             axis.step(
-                edges,
+                plot_edges,
                 step_values(values),
                 where="post",
                 color=path["color"],
                 linestyle=LINE_STYLE[group],
-                linewidth=2.0,
+                linewidth=2.8,
                 label=DISPLAY_GROUP[group],
             )
             axis.errorbar(
@@ -204,17 +205,17 @@ def plot_path(
                 yerr=uncertainty[finite],
                 fmt="none",
                 ecolor=path["color"],
-                elinewidth=1.2,
-                capsize=2.5,
-                capthick=1.2,
+                elinewidth=1.6,
+                capsize=3.0,
+                capthick=1.6,
                 alpha=0.8,
             )
-        axis.set_xlim(edges[0], edges[-1])
-        axis.set_xticks(edges)
+        axis.set_xlim(plot_edges[0], plot_edges[-1])
+        axis.set_xticks(plot_edges)
         axis.set_xticklabels(
-            [f"{edge:g}" for edge in edges[:-1]] + [r"$\infty$"]
+            [f"{edge:g}" for edge in physical_edges[:-1]] + [r"$\infty$"]
         )
-        axis.tick_params(axis="x", labelsize=9)
+        axis.tick_params(axis="x", labelsize=14)
         axis.set_xlabel(r"$p_{T}^{miss}$ / hadronic recoil $U_T$ (GeV)")
         axis.set_ylabel(r"TF = $N_{\mathrm{SR}}/N_{\mathrm{CR}}$")
         axis.grid(alpha=0.2)
