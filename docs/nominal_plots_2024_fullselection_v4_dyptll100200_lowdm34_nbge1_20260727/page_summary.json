@@ -1,0 +1,3136 @@
+{
+  "events_processed": 390699999,
+  "excluded_obsolete_plot_families": [
+    "legacy High-dM 17-bin",
+    "legacy High-dM 42-bin"
+  ],
+  "generated_at": "2026-07-27T09:26:33+00:00",
+  "histogram_status": "complete",
+  "impact_update": {
+    "benchmark": {
+      "mLSP_GeV": 500,
+      "mStop_GeV": 1200
+    },
+    "channels": 12,
+    "combine_json": "data/impacts_2024_highdm60_lowdm34_mStop1200_mLSP500_full_mcstat.json",
+    "current_model_scope": "2024 luminosity plus 10 rate/weight or object-shape nuisances and individual MC-statistical nuisances. Object-shape templates are absent from this card.",
+    "data_mode": "asimov",
+    "highdm_signal_bins": 60,
+    "invalid_fit_count": 0,
+    "labels": "data/impacts_2024_highdm60_lowdm34_mStop1200_mLSP500_full_mcstat_labels.json",
+    "lowdm_signal_bins": 34,
+    "missing_fit_count": 0,
+    "multipage_pdf": "plots/impacts/impacts_2024_highdm60_lowdm34_mStop1200_mLSP500_full_mcstat.pdf",
+    "nonstatistical_parameter_count": 11,
+    "parameter_count": 331,
+    "plot": "plots/impacts/impacts_2024_highdm60_lowdm34_mStop1200_mLSP500_full_mcstat.png",
+    "poi": {
+      "fit": [
+        0.662882924079895,
+        1.0,
+        1.3831549882888794
+      ],
+      "name": "r"
+    },
+    "statistical_model": {
+      "autoMCStats_threshold": 10,
+      "data_counting": "Poisson likelihood",
+      "mc_statistics": "individual autoMCStats nuisance fits"
+    },
+    "statistical_parameter_count": 320,
+    "status": "complete_current_2024_model",
+    "summary_pdf": "plots/impacts/impacts_2024_highdm60_lowdm34_mStop1200_mLSP500_full_mcstat_summary.pdf",
+    "total_analysis_bins": 294,
+    "updated_at": "2026-07-27T09:26:33+00:00",
+    "validation": "data/impacts_2024_highdm60_lowdm34_mStop1200_mLSP500_full_mcstat_validation.json",
+    "year": 2024
+  },
+  "limit_update": {
+    "dy_ptll_policy": "ptll100_200",
+    "expected_limits": "highdm60_lowdm34_expected_limits.json",
+    "highdm_signal_bins": 60,
+    "lowdm_selection": "all CR/SR require Nb>=1",
+    "lowdm_signal_bins": 34,
+    "mass_point_count": 205,
+    "max_mstop_inclusive": 1800,
+    "plot": "plots/limits/expected_limit_highdm60_lowdm34_x1800.png",
+    "removed_lowdm_categories": [
+      "Nb0_Nj2to5_PISR500plus",
+      "Nb0_Nj6plus_PISR500plus"
+    ],
+    "status": "complete",
+    "total_analysis_bins": 294,
+    "updated_at": "2026-07-27T09:18:15+00:00"
+  },
+  "plot_counts": {
+    "categories": 26,
+    "highdm": 186,
+    "limits": 1,
+    "lowdm_cr": 90,
+    "total": 303
+  },
+  "records": [
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_llcr_bjet_pt",
+      "pdf": "plots/highdm/cr_llcr_bjet_pt.pdf",
+      "png": "plots/highdm/cr_llcr_bjet_pt.png",
+      "region": "LLCR",
+      "variable": "bjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_llcr_fatjet_pt",
+      "pdf": "plots/highdm/cr_llcr_fatjet_pt.pdf",
+      "png": "plots/highdm/cr_llcr_fatjet_pt.png",
+      "region": "LLCR",
+      "variable": "fatjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_llcr_ht",
+      "pdf": "plots/highdm/cr_llcr_ht.pdf",
+      "png": "plots/highdm/cr_llcr_ht.png",
+      "region": "LLCR",
+      "variable": "ht"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_llcr_jet_pt",
+      "pdf": "plots/highdm/cr_llcr_jet_pt.pdf",
+      "png": "plots/highdm/cr_llcr_jet_pt.png",
+      "region": "LLCR",
+      "variable": "jet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_llcr_met",
+      "pdf": "plots/highdm/cr_llcr_met.pdf",
+      "png": "plots/highdm/cr_llcr_met.png",
+      "region": "LLCR",
+      "variable": "met"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_llcr_nb",
+      "pdf": "plots/highdm/cr_llcr_nb.pdf",
+      "png": "plots/highdm/cr_llcr_nb.png",
+      "region": "LLCR",
+      "variable": "nb"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_llcr_nfatjet",
+      "pdf": "plots/highdm/cr_llcr_nfatjet.pdf",
+      "png": "plots/highdm/cr_llcr_nfatjet.png",
+      "region": "LLCR",
+      "variable": "nfatjet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_llcr_njet",
+      "pdf": "plots/highdm/cr_llcr_njet.pdf",
+      "png": "plots/highdm/cr_llcr_njet.png",
+      "region": "LLCR",
+      "variable": "njet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_llcr_ntop",
+      "pdf": "plots/highdm/cr_llcr_ntop.pdf",
+      "png": "plots/highdm/cr_llcr_ntop.png",
+      "region": "LLCR",
+      "variable": "ntop"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_llcr_nw",
+      "pdf": "plots/highdm/cr_llcr_nw.pdf",
+      "png": "plots/highdm/cr_llcr_nw.png",
+      "region": "LLCR",
+      "variable": "nw"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_llcr_ut",
+      "pdf": "plots/highdm/cr_llcr_ut.pdf",
+      "png": "plots/highdm/cr_llcr_ut.png",
+      "region": "LLCR",
+      "variable": "ut"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_qcdcr_bjet_pt",
+      "pdf": "plots/highdm/cr_qcdcr_bjet_pt.pdf",
+      "png": "plots/highdm/cr_qcdcr_bjet_pt.png",
+      "region": "QCDCR",
+      "variable": "bjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_qcdcr_fatjet_pt",
+      "pdf": "plots/highdm/cr_qcdcr_fatjet_pt.pdf",
+      "png": "plots/highdm/cr_qcdcr_fatjet_pt.png",
+      "region": "QCDCR",
+      "variable": "fatjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_qcdcr_ht",
+      "pdf": "plots/highdm/cr_qcdcr_ht.pdf",
+      "png": "plots/highdm/cr_qcdcr_ht.png",
+      "region": "QCDCR",
+      "variable": "ht"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_qcdcr_jet_pt",
+      "pdf": "plots/highdm/cr_qcdcr_jet_pt.pdf",
+      "png": "plots/highdm/cr_qcdcr_jet_pt.png",
+      "region": "QCDCR",
+      "variable": "jet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_qcdcr_met",
+      "pdf": "plots/highdm/cr_qcdcr_met.pdf",
+      "png": "plots/highdm/cr_qcdcr_met.png",
+      "region": "QCDCR",
+      "variable": "met"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_qcdcr_nb",
+      "pdf": "plots/highdm/cr_qcdcr_nb.pdf",
+      "png": "plots/highdm/cr_qcdcr_nb.png",
+      "region": "QCDCR",
+      "variable": "nb"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_qcdcr_nfatjet",
+      "pdf": "plots/highdm/cr_qcdcr_nfatjet.pdf",
+      "png": "plots/highdm/cr_qcdcr_nfatjet.png",
+      "region": "QCDCR",
+      "variable": "nfatjet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_qcdcr_njet",
+      "pdf": "plots/highdm/cr_qcdcr_njet.pdf",
+      "png": "plots/highdm/cr_qcdcr_njet.png",
+      "region": "QCDCR",
+      "variable": "njet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_qcdcr_ntop",
+      "pdf": "plots/highdm/cr_qcdcr_ntop.pdf",
+      "png": "plots/highdm/cr_qcdcr_ntop.png",
+      "region": "QCDCR",
+      "variable": "ntop"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_qcdcr_nw",
+      "pdf": "plots/highdm/cr_qcdcr_nw.pdf",
+      "png": "plots/highdm/cr_qcdcr_nw.png",
+      "region": "QCDCR",
+      "variable": "nw"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_qcdcr_ut",
+      "pdf": "plots/highdm/cr_qcdcr_ut.pdf",
+      "png": "plots/highdm/cr_qcdcr_ut.png",
+      "region": "QCDCR",
+      "variable": "ut"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_gcr_bjet_pt",
+      "pdf": "plots/highdm/cr_gcr_bjet_pt.pdf",
+      "png": "plots/highdm/cr_gcr_bjet_pt.png",
+      "region": "GCR",
+      "variable": "bjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_gcr_fatjet_pt",
+      "pdf": "plots/highdm/cr_gcr_fatjet_pt.pdf",
+      "png": "plots/highdm/cr_gcr_fatjet_pt.png",
+      "region": "GCR",
+      "variable": "fatjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_gcr_ht",
+      "pdf": "plots/highdm/cr_gcr_ht.pdf",
+      "png": "plots/highdm/cr_gcr_ht.png",
+      "region": "GCR",
+      "variable": "ht"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_gcr_jet_pt",
+      "pdf": "plots/highdm/cr_gcr_jet_pt.pdf",
+      "png": "plots/highdm/cr_gcr_jet_pt.png",
+      "region": "GCR",
+      "variable": "jet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_gcr_nb",
+      "pdf": "plots/highdm/cr_gcr_nb.pdf",
+      "png": "plots/highdm/cr_gcr_nb.png",
+      "region": "GCR",
+      "variable": "nb"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_gcr_nfatjet",
+      "pdf": "plots/highdm/cr_gcr_nfatjet.pdf",
+      "png": "plots/highdm/cr_gcr_nfatjet.png",
+      "region": "GCR",
+      "variable": "nfatjet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_gcr_njet",
+      "pdf": "plots/highdm/cr_gcr_njet.pdf",
+      "png": "plots/highdm/cr_gcr_njet.png",
+      "region": "GCR",
+      "variable": "njet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_gcr_ntop",
+      "pdf": "plots/highdm/cr_gcr_ntop.pdf",
+      "png": "plots/highdm/cr_gcr_ntop.png",
+      "region": "GCR",
+      "variable": "ntop"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_gcr_nw",
+      "pdf": "plots/highdm/cr_gcr_nw.pdf",
+      "png": "plots/highdm/cr_gcr_nw.png",
+      "region": "GCR",
+      "variable": "nw"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_gcr_ut",
+      "pdf": "plots/highdm/cr_gcr_ut.pdf",
+      "png": "plots/highdm/cr_gcr_ut.png",
+      "region": "GCR",
+      "variable": "ut"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_dy2e_bjet_pt",
+      "pdf": "plots/highdm/cr_dy2e_bjet_pt.pdf",
+      "png": "plots/highdm/cr_dy2e_bjet_pt.png",
+      "region": "DY2E",
+      "variable": "bjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_dy2e_fatjet_pt",
+      "pdf": "plots/highdm/cr_dy2e_fatjet_pt.pdf",
+      "png": "plots/highdm/cr_dy2e_fatjet_pt.png",
+      "region": "DY2E",
+      "variable": "fatjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_dy2e_ht",
+      "pdf": "plots/highdm/cr_dy2e_ht.pdf",
+      "png": "plots/highdm/cr_dy2e_ht.png",
+      "region": "DY2E",
+      "variable": "ht"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_dy2e_jet_pt",
+      "pdf": "plots/highdm/cr_dy2e_jet_pt.pdf",
+      "png": "plots/highdm/cr_dy2e_jet_pt.png",
+      "region": "DY2E",
+      "variable": "jet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_dy2e_met",
+      "pdf": "plots/highdm/cr_dy2e_met.pdf",
+      "png": "plots/highdm/cr_dy2e_met.png",
+      "region": "DY2E",
+      "variable": "met"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_dy2e_nb",
+      "pdf": "plots/highdm/cr_dy2e_nb.pdf",
+      "png": "plots/highdm/cr_dy2e_nb.png",
+      "region": "DY2E",
+      "variable": "nb"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_dy2e_nfatjet",
+      "pdf": "plots/highdm/cr_dy2e_nfatjet.pdf",
+      "png": "plots/highdm/cr_dy2e_nfatjet.png",
+      "region": "DY2E",
+      "variable": "nfatjet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_dy2e_njet",
+      "pdf": "plots/highdm/cr_dy2e_njet.pdf",
+      "png": "plots/highdm/cr_dy2e_njet.png",
+      "region": "DY2E",
+      "variable": "njet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_dy2e_ntop",
+      "pdf": "plots/highdm/cr_dy2e_ntop.pdf",
+      "png": "plots/highdm/cr_dy2e_ntop.png",
+      "region": "DY2E",
+      "variable": "ntop"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_dy2e_nw",
+      "pdf": "plots/highdm/cr_dy2e_nw.pdf",
+      "png": "plots/highdm/cr_dy2e_nw.png",
+      "region": "DY2E",
+      "variable": "nw"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_dy2e_ptll",
+      "pdf": "plots/highdm/cr_dy2e_ptll.pdf",
+      "png": "plots/highdm/cr_dy2e_ptll.png",
+      "region": "DY2E",
+      "variable": "ptll"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_dy2e_ut",
+      "pdf": "plots/highdm/cr_dy2e_ut.pdf",
+      "png": "plots/highdm/cr_dy2e_ut.png",
+      "region": "DY2E",
+      "variable": "ut"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_dy2m_bjet_pt",
+      "pdf": "plots/highdm/cr_dy2m_bjet_pt.pdf",
+      "png": "plots/highdm/cr_dy2m_bjet_pt.png",
+      "region": "DY2M",
+      "variable": "bjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_dy2m_fatjet_pt",
+      "pdf": "plots/highdm/cr_dy2m_fatjet_pt.pdf",
+      "png": "plots/highdm/cr_dy2m_fatjet_pt.png",
+      "region": "DY2M",
+      "variable": "fatjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_dy2m_ht",
+      "pdf": "plots/highdm/cr_dy2m_ht.pdf",
+      "png": "plots/highdm/cr_dy2m_ht.png",
+      "region": "DY2M",
+      "variable": "ht"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_dy2m_jet_pt",
+      "pdf": "plots/highdm/cr_dy2m_jet_pt.pdf",
+      "png": "plots/highdm/cr_dy2m_jet_pt.png",
+      "region": "DY2M",
+      "variable": "jet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_dy2m_met",
+      "pdf": "plots/highdm/cr_dy2m_met.pdf",
+      "png": "plots/highdm/cr_dy2m_met.png",
+      "region": "DY2M",
+      "variable": "met"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_dy2m_nb",
+      "pdf": "plots/highdm/cr_dy2m_nb.pdf",
+      "png": "plots/highdm/cr_dy2m_nb.png",
+      "region": "DY2M",
+      "variable": "nb"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_dy2m_nfatjet",
+      "pdf": "plots/highdm/cr_dy2m_nfatjet.pdf",
+      "png": "plots/highdm/cr_dy2m_nfatjet.png",
+      "region": "DY2M",
+      "variable": "nfatjet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_dy2m_njet",
+      "pdf": "plots/highdm/cr_dy2m_njet.pdf",
+      "png": "plots/highdm/cr_dy2m_njet.png",
+      "region": "DY2M",
+      "variable": "njet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_dy2m_ntop",
+      "pdf": "plots/highdm/cr_dy2m_ntop.pdf",
+      "png": "plots/highdm/cr_dy2m_ntop.png",
+      "region": "DY2M",
+      "variable": "ntop"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_dy2m_nw",
+      "pdf": "plots/highdm/cr_dy2m_nw.pdf",
+      "png": "plots/highdm/cr_dy2m_nw.png",
+      "region": "DY2M",
+      "variable": "nw"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_dy2m_ptll",
+      "pdf": "plots/highdm/cr_dy2m_ptll.pdf",
+      "png": "plots/highdm/cr_dy2m_ptll.png",
+      "region": "DY2M",
+      "variable": "ptll"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "CR",
+      "name": "cr_dy2m_ut",
+      "pdf": "plots/highdm/cr_dy2m_ut.pdf",
+      "png": "plots/highdm/cr_dy2m_ut.png",
+      "region": "DY2M",
+      "variable": "ut"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb1_bjet_pt",
+      "pdf": "plots/highdm/vr_highdm_vr_nb1_bjet_pt.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb1_bjet_pt.png",
+      "region": "HighDMVR_Nb1",
+      "variable": "bjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb1_fatjet_pt",
+      "pdf": "plots/highdm/vr_highdm_vr_nb1_fatjet_pt.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb1_fatjet_pt.png",
+      "region": "HighDMVR_Nb1",
+      "variable": "fatjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb1_ht",
+      "pdf": "plots/highdm/vr_highdm_vr_nb1_ht.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb1_ht.png",
+      "region": "HighDMVR_Nb1",
+      "variable": "ht"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb1_jet_pt",
+      "pdf": "plots/highdm/vr_highdm_vr_nb1_jet_pt.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb1_jet_pt.png",
+      "region": "HighDMVR_Nb1",
+      "variable": "jet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb1_met",
+      "pdf": "plots/highdm/vr_highdm_vr_nb1_met.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb1_met.png",
+      "region": "HighDMVR_Nb1",
+      "variable": "met"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb1_nb",
+      "pdf": "plots/highdm/vr_highdm_vr_nb1_nb.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb1_nb.png",
+      "region": "HighDMVR_Nb1",
+      "variable": "nb"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb1_nfatjet",
+      "pdf": "plots/highdm/vr_highdm_vr_nb1_nfatjet.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb1_nfatjet.png",
+      "region": "HighDMVR_Nb1",
+      "variable": "nfatjet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb1_njet",
+      "pdf": "plots/highdm/vr_highdm_vr_nb1_njet.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb1_njet.png",
+      "region": "HighDMVR_Nb1",
+      "variable": "njet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb1_ntop",
+      "pdf": "plots/highdm/vr_highdm_vr_nb1_ntop.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb1_ntop.png",
+      "region": "HighDMVR_Nb1",
+      "variable": "ntop"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb1_nw",
+      "pdf": "plots/highdm/vr_highdm_vr_nb1_nw.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb1_nw.png",
+      "region": "HighDMVR_Nb1",
+      "variable": "nw"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb2_bjet_pt",
+      "pdf": "plots/highdm/vr_highdm_vr_nb2_bjet_pt.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb2_bjet_pt.png",
+      "region": "HighDMVR_Nb2",
+      "variable": "bjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb2_fatjet_pt",
+      "pdf": "plots/highdm/vr_highdm_vr_nb2_fatjet_pt.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb2_fatjet_pt.png",
+      "region": "HighDMVR_Nb2",
+      "variable": "fatjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb2_ht",
+      "pdf": "plots/highdm/vr_highdm_vr_nb2_ht.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb2_ht.png",
+      "region": "HighDMVR_Nb2",
+      "variable": "ht"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb2_jet_pt",
+      "pdf": "plots/highdm/vr_highdm_vr_nb2_jet_pt.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb2_jet_pt.png",
+      "region": "HighDMVR_Nb2",
+      "variable": "jet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb2_met",
+      "pdf": "plots/highdm/vr_highdm_vr_nb2_met.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb2_met.png",
+      "region": "HighDMVR_Nb2",
+      "variable": "met"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb2_nb",
+      "pdf": "plots/highdm/vr_highdm_vr_nb2_nb.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb2_nb.png",
+      "region": "HighDMVR_Nb2",
+      "variable": "nb"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb2_nfatjet",
+      "pdf": "plots/highdm/vr_highdm_vr_nb2_nfatjet.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb2_nfatjet.png",
+      "region": "HighDMVR_Nb2",
+      "variable": "nfatjet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb2_njet",
+      "pdf": "plots/highdm/vr_highdm_vr_nb2_njet.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb2_njet.png",
+      "region": "HighDMVR_Nb2",
+      "variable": "njet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb2_ntop",
+      "pdf": "plots/highdm/vr_highdm_vr_nb2_ntop.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb2_ntop.png",
+      "region": "HighDMVR_Nb2",
+      "variable": "ntop"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb2_nw",
+      "pdf": "plots/highdm/vr_highdm_vr_nb2_nw.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb2_nw.png",
+      "region": "HighDMVR_Nb2",
+      "variable": "nw"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb3plus_bjet_pt",
+      "pdf": "plots/highdm/vr_highdm_vr_nb3plus_bjet_pt.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb3plus_bjet_pt.png",
+      "region": "HighDMVR_Nb3plus",
+      "variable": "bjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb3plus_fatjet_pt",
+      "pdf": "plots/highdm/vr_highdm_vr_nb3plus_fatjet_pt.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb3plus_fatjet_pt.png",
+      "region": "HighDMVR_Nb3plus",
+      "variable": "fatjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb3plus_ht",
+      "pdf": "plots/highdm/vr_highdm_vr_nb3plus_ht.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb3plus_ht.png",
+      "region": "HighDMVR_Nb3plus",
+      "variable": "ht"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb3plus_jet_pt",
+      "pdf": "plots/highdm/vr_highdm_vr_nb3plus_jet_pt.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb3plus_jet_pt.png",
+      "region": "HighDMVR_Nb3plus",
+      "variable": "jet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb3plus_met",
+      "pdf": "plots/highdm/vr_highdm_vr_nb3plus_met.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb3plus_met.png",
+      "region": "HighDMVR_Nb3plus",
+      "variable": "met"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb3plus_nb",
+      "pdf": "plots/highdm/vr_highdm_vr_nb3plus_nb.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb3plus_nb.png",
+      "region": "HighDMVR_Nb3plus",
+      "variable": "nb"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb3plus_nfatjet",
+      "pdf": "plots/highdm/vr_highdm_vr_nb3plus_nfatjet.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb3plus_nfatjet.png",
+      "region": "HighDMVR_Nb3plus",
+      "variable": "nfatjet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb3plus_njet",
+      "pdf": "plots/highdm/vr_highdm_vr_nb3plus_njet.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb3plus_njet.png",
+      "region": "HighDMVR_Nb3plus",
+      "variable": "njet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb3plus_ntop",
+      "pdf": "plots/highdm/vr_highdm_vr_nb3plus_ntop.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb3plus_ntop.png",
+      "region": "HighDMVR_Nb3plus",
+      "variable": "ntop"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "VR",
+      "name": "vr_highdm_vr_nb3plus_nw",
+      "pdf": "plots/highdm/vr_highdm_vr_nb3plus_nw.pdf",
+      "png": "plots/highdm/vr_highdm_vr_nb3plus_nw.png",
+      "region": "HighDMVR_Nb3plus",
+      "variable": "nw"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1plus_t0_w0_bjet_pt",
+      "pdf": "plots/highdm/sr_sr_nb1plus_t0_w0_bjet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb1plus_t0_w0_bjet_pt.png",
+      "region": "SR_Nb1plus_T0_W0",
+      "variable": "bjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1plus_t0_w0_fatjet_pt",
+      "pdf": "plots/highdm/sr_sr_nb1plus_t0_w0_fatjet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb1plus_t0_w0_fatjet_pt.png",
+      "region": "SR_Nb1plus_T0_W0",
+      "variable": "fatjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1plus_t0_w0_ht",
+      "pdf": "plots/highdm/sr_sr_nb1plus_t0_w0_ht.pdf",
+      "png": "plots/highdm/sr_sr_nb1plus_t0_w0_ht.png",
+      "region": "SR_Nb1plus_T0_W0",
+      "variable": "ht"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1plus_t0_w0_jet_pt",
+      "pdf": "plots/highdm/sr_sr_nb1plus_t0_w0_jet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb1plus_t0_w0_jet_pt.png",
+      "region": "SR_Nb1plus_T0_W0",
+      "variable": "jet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1plus_t0_w0_met",
+      "pdf": "plots/highdm/sr_sr_nb1plus_t0_w0_met.pdf",
+      "png": "plots/highdm/sr_sr_nb1plus_t0_w0_met.png",
+      "region": "SR_Nb1plus_T0_W0",
+      "variable": "met"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1plus_t0_w0_nb",
+      "pdf": "plots/highdm/sr_sr_nb1plus_t0_w0_nb.pdf",
+      "png": "plots/highdm/sr_sr_nb1plus_t0_w0_nb.png",
+      "region": "SR_Nb1plus_T0_W0",
+      "variable": "nb"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1plus_t0_w0_nfatjet",
+      "pdf": "plots/highdm/sr_sr_nb1plus_t0_w0_nfatjet.pdf",
+      "png": "plots/highdm/sr_sr_nb1plus_t0_w0_nfatjet.png",
+      "region": "SR_Nb1plus_T0_W0",
+      "variable": "nfatjet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1plus_t0_w0_njet",
+      "pdf": "plots/highdm/sr_sr_nb1plus_t0_w0_njet.pdf",
+      "png": "plots/highdm/sr_sr_nb1plus_t0_w0_njet.png",
+      "region": "SR_Nb1plus_T0_W0",
+      "variable": "njet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1plus_t0_w0_ntop",
+      "pdf": "plots/highdm/sr_sr_nb1plus_t0_w0_ntop.pdf",
+      "png": "plots/highdm/sr_sr_nb1plus_t0_w0_ntop.png",
+      "region": "SR_Nb1plus_T0_W0",
+      "variable": "ntop"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1plus_t0_w0_nw",
+      "pdf": "plots/highdm/sr_sr_nb1plus_t0_w0_nw.pdf",
+      "png": "plots/highdm/sr_sr_nb1plus_t0_w0_nw.png",
+      "region": "SR_Nb1plus_T0_W0",
+      "variable": "nw"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1plus_t0_w1plus_bjet_pt",
+      "pdf": "plots/highdm/sr_sr_nb1plus_t0_w1plus_bjet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb1plus_t0_w1plus_bjet_pt.png",
+      "region": "SR_Nb1plus_T0_W1plus",
+      "variable": "bjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1plus_t0_w1plus_fatjet_pt",
+      "pdf": "plots/highdm/sr_sr_nb1plus_t0_w1plus_fatjet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb1plus_t0_w1plus_fatjet_pt.png",
+      "region": "SR_Nb1plus_T0_W1plus",
+      "variable": "fatjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1plus_t0_w1plus_ht",
+      "pdf": "plots/highdm/sr_sr_nb1plus_t0_w1plus_ht.pdf",
+      "png": "plots/highdm/sr_sr_nb1plus_t0_w1plus_ht.png",
+      "region": "SR_Nb1plus_T0_W1plus",
+      "variable": "ht"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1plus_t0_w1plus_jet_pt",
+      "pdf": "plots/highdm/sr_sr_nb1plus_t0_w1plus_jet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb1plus_t0_w1plus_jet_pt.png",
+      "region": "SR_Nb1plus_T0_W1plus",
+      "variable": "jet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1plus_t0_w1plus_met",
+      "pdf": "plots/highdm/sr_sr_nb1plus_t0_w1plus_met.pdf",
+      "png": "plots/highdm/sr_sr_nb1plus_t0_w1plus_met.png",
+      "region": "SR_Nb1plus_T0_W1plus",
+      "variable": "met"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1plus_t0_w1plus_nb",
+      "pdf": "plots/highdm/sr_sr_nb1plus_t0_w1plus_nb.pdf",
+      "png": "plots/highdm/sr_sr_nb1plus_t0_w1plus_nb.png",
+      "region": "SR_Nb1plus_T0_W1plus",
+      "variable": "nb"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1plus_t0_w1plus_nfatjet",
+      "pdf": "plots/highdm/sr_sr_nb1plus_t0_w1plus_nfatjet.pdf",
+      "png": "plots/highdm/sr_sr_nb1plus_t0_w1plus_nfatjet.png",
+      "region": "SR_Nb1plus_T0_W1plus",
+      "variable": "nfatjet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1plus_t0_w1plus_njet",
+      "pdf": "plots/highdm/sr_sr_nb1plus_t0_w1plus_njet.pdf",
+      "png": "plots/highdm/sr_sr_nb1plus_t0_w1plus_njet.png",
+      "region": "SR_Nb1plus_T0_W1plus",
+      "variable": "njet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1plus_t0_w1plus_ntop",
+      "pdf": "plots/highdm/sr_sr_nb1plus_t0_w1plus_ntop.pdf",
+      "png": "plots/highdm/sr_sr_nb1plus_t0_w1plus_ntop.png",
+      "region": "SR_Nb1plus_T0_W1plus",
+      "variable": "ntop"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1plus_t0_w1plus_nw",
+      "pdf": "plots/highdm/sr_sr_nb1plus_t0_w1plus_nw.pdf",
+      "png": "plots/highdm/sr_sr_nb1plus_t0_w1plus_nw.png",
+      "region": "SR_Nb1plus_T0_W1plus",
+      "variable": "nw"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1_t1plus_w0_bjet_pt",
+      "pdf": "plots/highdm/sr_sr_nb1_t1plus_w0_bjet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb1_t1plus_w0_bjet_pt.png",
+      "region": "SR_Nb1_T1plus_W0",
+      "variable": "bjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1_t1plus_w0_fatjet_pt",
+      "pdf": "plots/highdm/sr_sr_nb1_t1plus_w0_fatjet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb1_t1plus_w0_fatjet_pt.png",
+      "region": "SR_Nb1_T1plus_W0",
+      "variable": "fatjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1_t1plus_w0_ht",
+      "pdf": "plots/highdm/sr_sr_nb1_t1plus_w0_ht.pdf",
+      "png": "plots/highdm/sr_sr_nb1_t1plus_w0_ht.png",
+      "region": "SR_Nb1_T1plus_W0",
+      "variable": "ht"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1_t1plus_w0_jet_pt",
+      "pdf": "plots/highdm/sr_sr_nb1_t1plus_w0_jet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb1_t1plus_w0_jet_pt.png",
+      "region": "SR_Nb1_T1plus_W0",
+      "variable": "jet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1_t1plus_w0_met",
+      "pdf": "plots/highdm/sr_sr_nb1_t1plus_w0_met.pdf",
+      "png": "plots/highdm/sr_sr_nb1_t1plus_w0_met.png",
+      "region": "SR_Nb1_T1plus_W0",
+      "variable": "met"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1_t1plus_w0_nb",
+      "pdf": "plots/highdm/sr_sr_nb1_t1plus_w0_nb.pdf",
+      "png": "plots/highdm/sr_sr_nb1_t1plus_w0_nb.png",
+      "region": "SR_Nb1_T1plus_W0",
+      "variable": "nb"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1_t1plus_w0_nfatjet",
+      "pdf": "plots/highdm/sr_sr_nb1_t1plus_w0_nfatjet.pdf",
+      "png": "plots/highdm/sr_sr_nb1_t1plus_w0_nfatjet.png",
+      "region": "SR_Nb1_T1plus_W0",
+      "variable": "nfatjet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1_t1plus_w0_njet",
+      "pdf": "plots/highdm/sr_sr_nb1_t1plus_w0_njet.pdf",
+      "png": "plots/highdm/sr_sr_nb1_t1plus_w0_njet.png",
+      "region": "SR_Nb1_T1plus_W0",
+      "variable": "njet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1_t1plus_w0_ntop",
+      "pdf": "plots/highdm/sr_sr_nb1_t1plus_w0_ntop.pdf",
+      "png": "plots/highdm/sr_sr_nb1_t1plus_w0_ntop.png",
+      "region": "SR_Nb1_T1plus_W0",
+      "variable": "ntop"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1_t1plus_w0_nw",
+      "pdf": "plots/highdm/sr_sr_nb1_t1plus_w0_nw.pdf",
+      "png": "plots/highdm/sr_sr_nb1_t1plus_w0_nw.png",
+      "region": "SR_Nb1_T1plus_W0",
+      "variable": "nw"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1_t1plus_w1plus_bjet_pt",
+      "pdf": "plots/highdm/sr_sr_nb1_t1plus_w1plus_bjet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb1_t1plus_w1plus_bjet_pt.png",
+      "region": "SR_Nb1_T1plus_W1plus",
+      "variable": "bjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1_t1plus_w1plus_fatjet_pt",
+      "pdf": "plots/highdm/sr_sr_nb1_t1plus_w1plus_fatjet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb1_t1plus_w1plus_fatjet_pt.png",
+      "region": "SR_Nb1_T1plus_W1plus",
+      "variable": "fatjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1_t1plus_w1plus_ht",
+      "pdf": "plots/highdm/sr_sr_nb1_t1plus_w1plus_ht.pdf",
+      "png": "plots/highdm/sr_sr_nb1_t1plus_w1plus_ht.png",
+      "region": "SR_Nb1_T1plus_W1plus",
+      "variable": "ht"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1_t1plus_w1plus_jet_pt",
+      "pdf": "plots/highdm/sr_sr_nb1_t1plus_w1plus_jet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb1_t1plus_w1plus_jet_pt.png",
+      "region": "SR_Nb1_T1plus_W1plus",
+      "variable": "jet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1_t1plus_w1plus_met",
+      "pdf": "plots/highdm/sr_sr_nb1_t1plus_w1plus_met.pdf",
+      "png": "plots/highdm/sr_sr_nb1_t1plus_w1plus_met.png",
+      "region": "SR_Nb1_T1plus_W1plus",
+      "variable": "met"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1_t1plus_w1plus_nb",
+      "pdf": "plots/highdm/sr_sr_nb1_t1plus_w1plus_nb.pdf",
+      "png": "plots/highdm/sr_sr_nb1_t1plus_w1plus_nb.png",
+      "region": "SR_Nb1_T1plus_W1plus",
+      "variable": "nb"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1_t1plus_w1plus_nfatjet",
+      "pdf": "plots/highdm/sr_sr_nb1_t1plus_w1plus_nfatjet.pdf",
+      "png": "plots/highdm/sr_sr_nb1_t1plus_w1plus_nfatjet.png",
+      "region": "SR_Nb1_T1plus_W1plus",
+      "variable": "nfatjet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1_t1plus_w1plus_njet",
+      "pdf": "plots/highdm/sr_sr_nb1_t1plus_w1plus_njet.pdf",
+      "png": "plots/highdm/sr_sr_nb1_t1plus_w1plus_njet.png",
+      "region": "SR_Nb1_T1plus_W1plus",
+      "variable": "njet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1_t1plus_w1plus_ntop",
+      "pdf": "plots/highdm/sr_sr_nb1_t1plus_w1plus_ntop.pdf",
+      "png": "plots/highdm/sr_sr_nb1_t1plus_w1plus_ntop.png",
+      "region": "SR_Nb1_T1plus_W1plus",
+      "variable": "ntop"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb1_t1plus_w1plus_nw",
+      "pdf": "plots/highdm/sr_sr_nb1_t1plus_w1plus_nw.pdf",
+      "png": "plots/highdm/sr_sr_nb1_t1plus_w1plus_nw.png",
+      "region": "SR_Nb1_T1plus_W1plus",
+      "variable": "nw"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_t1_w0_bjet_pt",
+      "pdf": "plots/highdm/sr_sr_nb2_t1_w0_bjet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb2_t1_w0_bjet_pt.png",
+      "region": "SR_Nb2_T1_W0",
+      "variable": "bjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_t1_w0_fatjet_pt",
+      "pdf": "plots/highdm/sr_sr_nb2_t1_w0_fatjet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb2_t1_w0_fatjet_pt.png",
+      "region": "SR_Nb2_T1_W0",
+      "variable": "fatjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_t1_w0_ht",
+      "pdf": "plots/highdm/sr_sr_nb2_t1_w0_ht.pdf",
+      "png": "plots/highdm/sr_sr_nb2_t1_w0_ht.png",
+      "region": "SR_Nb2_T1_W0",
+      "variable": "ht"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_t1_w0_jet_pt",
+      "pdf": "plots/highdm/sr_sr_nb2_t1_w0_jet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb2_t1_w0_jet_pt.png",
+      "region": "SR_Nb2_T1_W0",
+      "variable": "jet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_t1_w0_met",
+      "pdf": "plots/highdm/sr_sr_nb2_t1_w0_met.pdf",
+      "png": "plots/highdm/sr_sr_nb2_t1_w0_met.png",
+      "region": "SR_Nb2_T1_W0",
+      "variable": "met"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_t1_w0_nb",
+      "pdf": "plots/highdm/sr_sr_nb2_t1_w0_nb.pdf",
+      "png": "plots/highdm/sr_sr_nb2_t1_w0_nb.png",
+      "region": "SR_Nb2_T1_W0",
+      "variable": "nb"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_t1_w0_nfatjet",
+      "pdf": "plots/highdm/sr_sr_nb2_t1_w0_nfatjet.pdf",
+      "png": "plots/highdm/sr_sr_nb2_t1_w0_nfatjet.png",
+      "region": "SR_Nb2_T1_W0",
+      "variable": "nfatjet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_t1_w0_njet",
+      "pdf": "plots/highdm/sr_sr_nb2_t1_w0_njet.pdf",
+      "png": "plots/highdm/sr_sr_nb2_t1_w0_njet.png",
+      "region": "SR_Nb2_T1_W0",
+      "variable": "njet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_t1_w0_ntop",
+      "pdf": "plots/highdm/sr_sr_nb2_t1_w0_ntop.pdf",
+      "png": "plots/highdm/sr_sr_nb2_t1_w0_ntop.png",
+      "region": "SR_Nb2_T1_W0",
+      "variable": "ntop"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_t1_w0_nw",
+      "pdf": "plots/highdm/sr_sr_nb2_t1_w0_nw.pdf",
+      "png": "plots/highdm/sr_sr_nb2_t1_w0_nw.png",
+      "region": "SR_Nb2_T1_W0",
+      "variable": "nw"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_t1_w1_bjet_pt",
+      "pdf": "plots/highdm/sr_sr_nb2_t1_w1_bjet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb2_t1_w1_bjet_pt.png",
+      "region": "SR_Nb2_T1_W1",
+      "variable": "bjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_t1_w1_fatjet_pt",
+      "pdf": "plots/highdm/sr_sr_nb2_t1_w1_fatjet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb2_t1_w1_fatjet_pt.png",
+      "region": "SR_Nb2_T1_W1",
+      "variable": "fatjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_t1_w1_ht",
+      "pdf": "plots/highdm/sr_sr_nb2_t1_w1_ht.pdf",
+      "png": "plots/highdm/sr_sr_nb2_t1_w1_ht.png",
+      "region": "SR_Nb2_T1_W1",
+      "variable": "ht"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_t1_w1_jet_pt",
+      "pdf": "plots/highdm/sr_sr_nb2_t1_w1_jet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb2_t1_w1_jet_pt.png",
+      "region": "SR_Nb2_T1_W1",
+      "variable": "jet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_t1_w1_met",
+      "pdf": "plots/highdm/sr_sr_nb2_t1_w1_met.pdf",
+      "png": "plots/highdm/sr_sr_nb2_t1_w1_met.png",
+      "region": "SR_Nb2_T1_W1",
+      "variable": "met"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_t1_w1_nb",
+      "pdf": "plots/highdm/sr_sr_nb2_t1_w1_nb.pdf",
+      "png": "plots/highdm/sr_sr_nb2_t1_w1_nb.png",
+      "region": "SR_Nb2_T1_W1",
+      "variable": "nb"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_t1_w1_nfatjet",
+      "pdf": "plots/highdm/sr_sr_nb2_t1_w1_nfatjet.pdf",
+      "png": "plots/highdm/sr_sr_nb2_t1_w1_nfatjet.png",
+      "region": "SR_Nb2_T1_W1",
+      "variable": "nfatjet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_t1_w1_njet",
+      "pdf": "plots/highdm/sr_sr_nb2_t1_w1_njet.pdf",
+      "png": "plots/highdm/sr_sr_nb2_t1_w1_njet.png",
+      "region": "SR_Nb2_T1_W1",
+      "variable": "njet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_t1_w1_ntop",
+      "pdf": "plots/highdm/sr_sr_nb2_t1_w1_ntop.pdf",
+      "png": "plots/highdm/sr_sr_nb2_t1_w1_ntop.png",
+      "region": "SR_Nb2_T1_W1",
+      "variable": "ntop"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_t1_w1_nw",
+      "pdf": "plots/highdm/sr_sr_nb2_t1_w1_nw.pdf",
+      "png": "plots/highdm/sr_sr_nb2_t1_w1_nw.png",
+      "region": "SR_Nb2_T1_W1",
+      "variable": "nw"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t1_w0_bjet_pt",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t1_w0_bjet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t1_w0_bjet_pt.png",
+      "region": "SR_Nb3plus_T1_W0",
+      "variable": "bjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t1_w0_fatjet_pt",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t1_w0_fatjet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t1_w0_fatjet_pt.png",
+      "region": "SR_Nb3plus_T1_W0",
+      "variable": "fatjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t1_w0_ht",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t1_w0_ht.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t1_w0_ht.png",
+      "region": "SR_Nb3plus_T1_W0",
+      "variable": "ht"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t1_w0_jet_pt",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t1_w0_jet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t1_w0_jet_pt.png",
+      "region": "SR_Nb3plus_T1_W0",
+      "variable": "jet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t1_w0_met",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t1_w0_met.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t1_w0_met.png",
+      "region": "SR_Nb3plus_T1_W0",
+      "variable": "met"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t1_w0_nb",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t1_w0_nb.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t1_w0_nb.png",
+      "region": "SR_Nb3plus_T1_W0",
+      "variable": "nb"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t1_w0_nfatjet",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t1_w0_nfatjet.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t1_w0_nfatjet.png",
+      "region": "SR_Nb3plus_T1_W0",
+      "variable": "nfatjet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t1_w0_njet",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t1_w0_njet.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t1_w0_njet.png",
+      "region": "SR_Nb3plus_T1_W0",
+      "variable": "njet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t1_w0_ntop",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t1_w0_ntop.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t1_w0_ntop.png",
+      "region": "SR_Nb3plus_T1_W0",
+      "variable": "ntop"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t1_w0_nw",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t1_w0_nw.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t1_w0_nw.png",
+      "region": "SR_Nb3plus_T1_W0",
+      "variable": "nw"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t1_w1_bjet_pt",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t1_w1_bjet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t1_w1_bjet_pt.png",
+      "region": "SR_Nb3plus_T1_W1",
+      "variable": "bjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t1_w1_fatjet_pt",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t1_w1_fatjet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t1_w1_fatjet_pt.png",
+      "region": "SR_Nb3plus_T1_W1",
+      "variable": "fatjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t1_w1_ht",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t1_w1_ht.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t1_w1_ht.png",
+      "region": "SR_Nb3plus_T1_W1",
+      "variable": "ht"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t1_w1_jet_pt",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t1_w1_jet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t1_w1_jet_pt.png",
+      "region": "SR_Nb3plus_T1_W1",
+      "variable": "jet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t1_w1_met",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t1_w1_met.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t1_w1_met.png",
+      "region": "SR_Nb3plus_T1_W1",
+      "variable": "met"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t1_w1_nb",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t1_w1_nb.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t1_w1_nb.png",
+      "region": "SR_Nb3plus_T1_W1",
+      "variable": "nb"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t1_w1_nfatjet",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t1_w1_nfatjet.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t1_w1_nfatjet.png",
+      "region": "SR_Nb3plus_T1_W1",
+      "variable": "nfatjet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t1_w1_njet",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t1_w1_njet.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t1_w1_njet.png",
+      "region": "SR_Nb3plus_T1_W1",
+      "variable": "njet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t1_w1_ntop",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t1_w1_ntop.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t1_w1_ntop.png",
+      "region": "SR_Nb3plus_T1_W1",
+      "variable": "ntop"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t1_w1_nw",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t1_w1_nw.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t1_w1_nw.png",
+      "region": "SR_Nb3plus_T1_W1",
+      "variable": "nw"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t2_w0_bjet_pt",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t2_w0_bjet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t2_w0_bjet_pt.png",
+      "region": "SR_Nb3plus_T2_W0",
+      "variable": "bjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t2_w0_fatjet_pt",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t2_w0_fatjet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t2_w0_fatjet_pt.png",
+      "region": "SR_Nb3plus_T2_W0",
+      "variable": "fatjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t2_w0_ht",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t2_w0_ht.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t2_w0_ht.png",
+      "region": "SR_Nb3plus_T2_W0",
+      "variable": "ht"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t2_w0_jet_pt",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t2_w0_jet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t2_w0_jet_pt.png",
+      "region": "SR_Nb3plus_T2_W0",
+      "variable": "jet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t2_w0_met",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t2_w0_met.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t2_w0_met.png",
+      "region": "SR_Nb3plus_T2_W0",
+      "variable": "met"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t2_w0_nb",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t2_w0_nb.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t2_w0_nb.png",
+      "region": "SR_Nb3plus_T2_W0",
+      "variable": "nb"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t2_w0_nfatjet",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t2_w0_nfatjet.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t2_w0_nfatjet.png",
+      "region": "SR_Nb3plus_T2_W0",
+      "variable": "nfatjet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t2_w0_njet",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t2_w0_njet.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t2_w0_njet.png",
+      "region": "SR_Nb3plus_T2_W0",
+      "variable": "njet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t2_w0_ntop",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t2_w0_ntop.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t2_w0_ntop.png",
+      "region": "SR_Nb3plus_T2_W0",
+      "variable": "ntop"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb3plus_t2_w0_nw",
+      "pdf": "plots/highdm/sr_sr_nb3plus_t2_w0_nw.pdf",
+      "png": "plots/highdm/sr_sr_nb3plus_t2_w0_nw.png",
+      "region": "SR_Nb3plus_T2_W0",
+      "variable": "nw"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_nt2plus_w0_bjet_pt",
+      "pdf": "plots/highdm/sr_sr_nb2_nt2plus_w0_bjet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb2_nt2plus_w0_bjet_pt.png",
+      "region": "SR_Nb2_Nt2plus_W0",
+      "variable": "bjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_nt2plus_w0_fatjet_pt",
+      "pdf": "plots/highdm/sr_sr_nb2_nt2plus_w0_fatjet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb2_nt2plus_w0_fatjet_pt.png",
+      "region": "SR_Nb2_Nt2plus_W0",
+      "variable": "fatjet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_nt2plus_w0_ht",
+      "pdf": "plots/highdm/sr_sr_nb2_nt2plus_w0_ht.pdf",
+      "png": "plots/highdm/sr_sr_nb2_nt2plus_w0_ht.png",
+      "region": "SR_Nb2_Nt2plus_W0",
+      "variable": "ht"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_nt2plus_w0_jet_pt",
+      "pdf": "plots/highdm/sr_sr_nb2_nt2plus_w0_jet_pt.pdf",
+      "png": "plots/highdm/sr_sr_nb2_nt2plus_w0_jet_pt.png",
+      "region": "SR_Nb2_Nt2plus_W0",
+      "variable": "jet_pt"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_nt2plus_w0_met",
+      "pdf": "plots/highdm/sr_sr_nb2_nt2plus_w0_met.pdf",
+      "png": "plots/highdm/sr_sr_nb2_nt2plus_w0_met.png",
+      "region": "SR_Nb2_Nt2plus_W0",
+      "variable": "met"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_nt2plus_w0_nb",
+      "pdf": "plots/highdm/sr_sr_nb2_nt2plus_w0_nb.pdf",
+      "png": "plots/highdm/sr_sr_nb2_nt2plus_w0_nb.png",
+      "region": "SR_Nb2_Nt2plus_W0",
+      "variable": "nb"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_nt2plus_w0_nfatjet",
+      "pdf": "plots/highdm/sr_sr_nb2_nt2plus_w0_nfatjet.pdf",
+      "png": "plots/highdm/sr_sr_nb2_nt2plus_w0_nfatjet.png",
+      "region": "SR_Nb2_Nt2plus_W0",
+      "variable": "nfatjet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_nt2plus_w0_njet",
+      "pdf": "plots/highdm/sr_sr_nb2_nt2plus_w0_njet.pdf",
+      "png": "plots/highdm/sr_sr_nb2_nt2plus_w0_njet.png",
+      "region": "SR_Nb2_Nt2plus_W0",
+      "variable": "njet"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_nt2plus_w0_ntop",
+      "pdf": "plots/highdm/sr_sr_nb2_nt2plus_w0_ntop.pdf",
+      "png": "plots/highdm/sr_sr_nb2_nt2plus_w0_ntop.png",
+      "region": "SR_Nb2_Nt2plus_W0",
+      "variable": "ntop"
+    },
+    {
+      "family": "highdm",
+      "family_label": "High-dM distributions",
+      "kind": "SR",
+      "name": "sr_sr_nb2_nt2plus_w0_nw",
+      "pdf": "plots/highdm/sr_sr_nb2_nt2plus_w0_nw.pdf",
+      "png": "plots/highdm/sr_sr_nb2_nt2plus_w0_nw.png",
+      "region": "SR_Nb2_Nt2plus_W0",
+      "variable": "nw"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_llcr_ht",
+      "pdf": "plots/lowdm/lowdm_cr_llcr_ht.pdf",
+      "png": "plots/lowdm/lowdm_cr_llcr_ht.png",
+      "region": "LLCR",
+      "variable": "ht"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_llcr_leading_lowdm_fatjet_msd",
+      "pdf": "plots/lowdm/lowdm_cr_llcr_leading_lowdm_fatjet_msd.pdf",
+      "png": "plots/lowdm/lowdm_cr_llcr_leading_lowdm_fatjet_msd.png",
+      "region": "LLCR",
+      "variable": "leading_lowdm_fatjet_msd"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_llcr_leading_lowdm_fatjet_pt",
+      "pdf": "plots/lowdm/lowdm_cr_llcr_leading_lowdm_fatjet_pt.pdf",
+      "png": "plots/lowdm/lowdm_cr_llcr_leading_lowdm_fatjet_pt.png",
+      "region": "LLCR",
+      "variable": "leading_lowdm_fatjet_pt"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_llcr_lowdm_isr_dphi",
+      "pdf": "plots/lowdm/lowdm_cr_llcr_lowdm_isr_dphi.pdf",
+      "png": "plots/lowdm/lowdm_cr_llcr_lowdm_isr_dphi.png",
+      "region": "LLCR",
+      "variable": "lowdm_isr_dphi"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_llcr_lowdm_isr_pt",
+      "pdf": "plots/lowdm/lowdm_cr_llcr_lowdm_isr_pt.pdf",
+      "png": "plots/lowdm/lowdm_cr_llcr_lowdm_isr_pt.png",
+      "region": "LLCR",
+      "variable": "lowdm_isr_pt"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_llcr_lowdm_met_sqrt_ht",
+      "pdf": "plots/lowdm/lowdm_cr_llcr_lowdm_met_sqrt_ht.pdf",
+      "png": "plots/lowdm/lowdm_cr_llcr_lowdm_met_sqrt_ht.png",
+      "region": "LLCR",
+      "variable": "lowdm_met_sqrt_ht"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_llcr_lowdm_mtb",
+      "pdf": "plots/lowdm/lowdm_cr_llcr_lowdm_mtb.pdf",
+      "png": "plots/lowdm/lowdm_cr_llcr_lowdm_mtb.png",
+      "region": "LLCR",
+      "variable": "lowdm_mtb"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_llcr_lowdm_ptb",
+      "pdf": "plots/lowdm/lowdm_cr_llcr_lowdm_ptb.pdf",
+      "png": "plots/lowdm/lowdm_cr_llcr_lowdm_ptb.png",
+      "region": "LLCR",
+      "variable": "lowdm_ptb"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_llcr_met",
+      "pdf": "plots/lowdm/lowdm_cr_llcr_met.pdf",
+      "png": "plots/lowdm/lowdm_cr_llcr_met.png",
+      "region": "LLCR",
+      "variable": "met"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_llcr_n_e_veto",
+      "pdf": "plots/lowdm/lowdm_cr_llcr_n_e_veto.pdf",
+      "png": "plots/lowdm/lowdm_cr_llcr_n_e_veto.png",
+      "region": "LLCR",
+      "variable": "n_e_veto"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_llcr_n_lowdm_isr",
+      "pdf": "plots/lowdm/lowdm_cr_llcr_n_lowdm_isr.pdf",
+      "png": "plots/lowdm/lowdm_cr_llcr_n_lowdm_isr.png",
+      "region": "LLCR",
+      "variable": "n_lowdm_isr"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_llcr_n_m_loose",
+      "pdf": "plots/lowdm/lowdm_cr_llcr_n_m_loose.pdf",
+      "png": "plots/lowdm/lowdm_cr_llcr_n_m_loose.png",
+      "region": "LLCR",
+      "variable": "n_m_loose"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_llcr_nb_loose_lowdm",
+      "pdf": "plots/lowdm/lowdm_cr_llcr_nb_loose_lowdm.pdf",
+      "png": "plots/lowdm/lowdm_cr_llcr_nb_loose_lowdm.png",
+      "region": "LLCR",
+      "variable": "nb_loose_lowdm"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_llcr_nb_medium_lowdm",
+      "pdf": "plots/lowdm/lowdm_cr_llcr_nb_medium_lowdm.pdf",
+      "png": "plots/lowdm/lowdm_cr_llcr_nb_medium_lowdm.png",
+      "region": "LLCR",
+      "variable": "nb_medium_lowdm"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_llcr_njet",
+      "pdf": "plots/lowdm/lowdm_cr_llcr_njet.pdf",
+      "png": "plots/lowdm/lowdm_cr_llcr_njet.png",
+      "region": "LLCR",
+      "variable": "njet"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_qcdcr_ht",
+      "pdf": "plots/lowdm/lowdm_cr_qcdcr_ht.pdf",
+      "png": "plots/lowdm/lowdm_cr_qcdcr_ht.png",
+      "region": "QCDCR",
+      "variable": "ht"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_qcdcr_leading_lowdm_fatjet_msd",
+      "pdf": "plots/lowdm/lowdm_cr_qcdcr_leading_lowdm_fatjet_msd.pdf",
+      "png": "plots/lowdm/lowdm_cr_qcdcr_leading_lowdm_fatjet_msd.png",
+      "region": "QCDCR",
+      "variable": "leading_lowdm_fatjet_msd"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_qcdcr_leading_lowdm_fatjet_pt",
+      "pdf": "plots/lowdm/lowdm_cr_qcdcr_leading_lowdm_fatjet_pt.pdf",
+      "png": "plots/lowdm/lowdm_cr_qcdcr_leading_lowdm_fatjet_pt.png",
+      "region": "QCDCR",
+      "variable": "leading_lowdm_fatjet_pt"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_qcdcr_lowdm_isr_dphi",
+      "pdf": "plots/lowdm/lowdm_cr_qcdcr_lowdm_isr_dphi.pdf",
+      "png": "plots/lowdm/lowdm_cr_qcdcr_lowdm_isr_dphi.png",
+      "region": "QCDCR",
+      "variable": "lowdm_isr_dphi"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_qcdcr_lowdm_isr_pt",
+      "pdf": "plots/lowdm/lowdm_cr_qcdcr_lowdm_isr_pt.pdf",
+      "png": "plots/lowdm/lowdm_cr_qcdcr_lowdm_isr_pt.png",
+      "region": "QCDCR",
+      "variable": "lowdm_isr_pt"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_qcdcr_lowdm_met_sqrt_ht",
+      "pdf": "plots/lowdm/lowdm_cr_qcdcr_lowdm_met_sqrt_ht.pdf",
+      "png": "plots/lowdm/lowdm_cr_qcdcr_lowdm_met_sqrt_ht.png",
+      "region": "QCDCR",
+      "variable": "lowdm_met_sqrt_ht"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_qcdcr_lowdm_mtb",
+      "pdf": "plots/lowdm/lowdm_cr_qcdcr_lowdm_mtb.pdf",
+      "png": "plots/lowdm/lowdm_cr_qcdcr_lowdm_mtb.png",
+      "region": "QCDCR",
+      "variable": "lowdm_mtb"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_qcdcr_lowdm_ptb",
+      "pdf": "plots/lowdm/lowdm_cr_qcdcr_lowdm_ptb.pdf",
+      "png": "plots/lowdm/lowdm_cr_qcdcr_lowdm_ptb.png",
+      "region": "QCDCR",
+      "variable": "lowdm_ptb"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_qcdcr_met",
+      "pdf": "plots/lowdm/lowdm_cr_qcdcr_met.pdf",
+      "png": "plots/lowdm/lowdm_cr_qcdcr_met.png",
+      "region": "QCDCR",
+      "variable": "met"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_qcdcr_n_e_veto",
+      "pdf": "plots/lowdm/lowdm_cr_qcdcr_n_e_veto.pdf",
+      "png": "plots/lowdm/lowdm_cr_qcdcr_n_e_veto.png",
+      "region": "QCDCR",
+      "variable": "n_e_veto"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_qcdcr_n_lowdm_isr",
+      "pdf": "plots/lowdm/lowdm_cr_qcdcr_n_lowdm_isr.pdf",
+      "png": "plots/lowdm/lowdm_cr_qcdcr_n_lowdm_isr.png",
+      "region": "QCDCR",
+      "variable": "n_lowdm_isr"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_qcdcr_n_m_loose",
+      "pdf": "plots/lowdm/lowdm_cr_qcdcr_n_m_loose.pdf",
+      "png": "plots/lowdm/lowdm_cr_qcdcr_n_m_loose.png",
+      "region": "QCDCR",
+      "variable": "n_m_loose"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_qcdcr_nb_loose_lowdm",
+      "pdf": "plots/lowdm/lowdm_cr_qcdcr_nb_loose_lowdm.pdf",
+      "png": "plots/lowdm/lowdm_cr_qcdcr_nb_loose_lowdm.png",
+      "region": "QCDCR",
+      "variable": "nb_loose_lowdm"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_qcdcr_nb_medium_lowdm",
+      "pdf": "plots/lowdm/lowdm_cr_qcdcr_nb_medium_lowdm.pdf",
+      "png": "plots/lowdm/lowdm_cr_qcdcr_nb_medium_lowdm.png",
+      "region": "QCDCR",
+      "variable": "nb_medium_lowdm"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_qcdcr_njet",
+      "pdf": "plots/lowdm/lowdm_cr_qcdcr_njet.pdf",
+      "png": "plots/lowdm/lowdm_cr_qcdcr_njet.png",
+      "region": "QCDCR",
+      "variable": "njet"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_gcr_ht",
+      "pdf": "plots/lowdm/lowdm_cr_gcr_ht.pdf",
+      "png": "plots/lowdm/lowdm_cr_gcr_ht.png",
+      "region": "GCR",
+      "variable": "ht"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_gcr_ht_photon_clean",
+      "pdf": "plots/lowdm/lowdm_cr_gcr_ht_photon_clean.pdf",
+      "png": "plots/lowdm/lowdm_cr_gcr_ht_photon_clean.png",
+      "region": "GCR",
+      "variable": "ht_photon_clean"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_gcr_leading_lowdm_fatjet_msd",
+      "pdf": "plots/lowdm/lowdm_cr_gcr_leading_lowdm_fatjet_msd.pdf",
+      "png": "plots/lowdm/lowdm_cr_gcr_leading_lowdm_fatjet_msd.png",
+      "region": "GCR",
+      "variable": "leading_lowdm_fatjet_msd"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_gcr_leading_lowdm_fatjet_pt",
+      "pdf": "plots/lowdm/lowdm_cr_gcr_leading_lowdm_fatjet_pt.pdf",
+      "png": "plots/lowdm/lowdm_cr_gcr_leading_lowdm_fatjet_pt.png",
+      "region": "GCR",
+      "variable": "leading_lowdm_fatjet_pt"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_gcr_lowdm_isr_dphi",
+      "pdf": "plots/lowdm/lowdm_cr_gcr_lowdm_isr_dphi.pdf",
+      "png": "plots/lowdm/lowdm_cr_gcr_lowdm_isr_dphi.png",
+      "region": "GCR",
+      "variable": "lowdm_isr_dphi"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_gcr_lowdm_isr_pt",
+      "pdf": "plots/lowdm/lowdm_cr_gcr_lowdm_isr_pt.pdf",
+      "png": "plots/lowdm/lowdm_cr_gcr_lowdm_isr_pt.png",
+      "region": "GCR",
+      "variable": "lowdm_isr_pt"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_gcr_lowdm_met_sqrt_ht",
+      "pdf": "plots/lowdm/lowdm_cr_gcr_lowdm_met_sqrt_ht.pdf",
+      "png": "plots/lowdm/lowdm_cr_gcr_lowdm_met_sqrt_ht.png",
+      "region": "GCR",
+      "variable": "lowdm_met_sqrt_ht"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_gcr_lowdm_mtb",
+      "pdf": "plots/lowdm/lowdm_cr_gcr_lowdm_mtb.pdf",
+      "png": "plots/lowdm/lowdm_cr_gcr_lowdm_mtb.png",
+      "region": "GCR",
+      "variable": "lowdm_mtb"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_gcr_lowdm_ptb",
+      "pdf": "plots/lowdm/lowdm_cr_gcr_lowdm_ptb.pdf",
+      "png": "plots/lowdm/lowdm_cr_gcr_lowdm_ptb.png",
+      "region": "GCR",
+      "variable": "lowdm_ptb"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_gcr_met",
+      "pdf": "plots/lowdm/lowdm_cr_gcr_met.pdf",
+      "png": "plots/lowdm/lowdm_cr_gcr_met.png",
+      "region": "GCR",
+      "variable": "met"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_gcr_n_e_veto",
+      "pdf": "plots/lowdm/lowdm_cr_gcr_n_e_veto.pdf",
+      "png": "plots/lowdm/lowdm_cr_gcr_n_e_veto.png",
+      "region": "GCR",
+      "variable": "n_e_veto"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_gcr_n_lowdm_isr",
+      "pdf": "plots/lowdm/lowdm_cr_gcr_n_lowdm_isr.pdf",
+      "png": "plots/lowdm/lowdm_cr_gcr_n_lowdm_isr.png",
+      "region": "GCR",
+      "variable": "n_lowdm_isr"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_gcr_n_m_loose",
+      "pdf": "plots/lowdm/lowdm_cr_gcr_n_m_loose.pdf",
+      "png": "plots/lowdm/lowdm_cr_gcr_n_m_loose.png",
+      "region": "GCR",
+      "variable": "n_m_loose"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_gcr_n_photon_medium",
+      "pdf": "plots/lowdm/lowdm_cr_gcr_n_photon_medium.pdf",
+      "png": "plots/lowdm/lowdm_cr_gcr_n_photon_medium.png",
+      "region": "GCR",
+      "variable": "n_photon_medium"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_gcr_nb_loose_lowdm",
+      "pdf": "plots/lowdm/lowdm_cr_gcr_nb_loose_lowdm.pdf",
+      "png": "plots/lowdm/lowdm_cr_gcr_nb_loose_lowdm.png",
+      "region": "GCR",
+      "variable": "nb_loose_lowdm"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_gcr_nb_medium_lowdm",
+      "pdf": "plots/lowdm/lowdm_cr_gcr_nb_medium_lowdm.pdf",
+      "png": "plots/lowdm/lowdm_cr_gcr_nb_medium_lowdm.png",
+      "region": "GCR",
+      "variable": "nb_medium_lowdm"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_gcr_nb_photon_clean",
+      "pdf": "plots/lowdm/lowdm_cr_gcr_nb_photon_clean.pdf",
+      "png": "plots/lowdm/lowdm_cr_gcr_nb_photon_clean.png",
+      "region": "GCR",
+      "variable": "nb_photon_clean"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_gcr_njet",
+      "pdf": "plots/lowdm/lowdm_cr_gcr_njet.pdf",
+      "png": "plots/lowdm/lowdm_cr_gcr_njet.png",
+      "region": "GCR",
+      "variable": "njet"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_gcr_njet_photon_clean",
+      "pdf": "plots/lowdm/lowdm_cr_gcr_njet_photon_clean.pdf",
+      "png": "plots/lowdm/lowdm_cr_gcr_njet_photon_clean.png",
+      "region": "GCR",
+      "variable": "njet_photon_clean"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_gcr_recoil_gcr",
+      "pdf": "plots/lowdm/lowdm_cr_gcr_recoil_gcr.pdf",
+      "png": "plots/lowdm/lowdm_cr_gcr_recoil_gcr.png",
+      "region": "GCR",
+      "variable": "recoil_gcr"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2e_ht",
+      "pdf": "plots/lowdm/lowdm_cr_dy2e_ht.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2e_ht.png",
+      "region": "DY2E",
+      "variable": "ht"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2e_ht_lepton_clean",
+      "pdf": "plots/lowdm/lowdm_cr_dy2e_ht_lepton_clean.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2e_ht_lepton_clean.png",
+      "region": "DY2E",
+      "variable": "ht_lepton_clean"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2e_leading_lowdm_fatjet_msd",
+      "pdf": "plots/lowdm/lowdm_cr_dy2e_leading_lowdm_fatjet_msd.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2e_leading_lowdm_fatjet_msd.png",
+      "region": "DY2E",
+      "variable": "leading_lowdm_fatjet_msd"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2e_leading_lowdm_fatjet_pt",
+      "pdf": "plots/lowdm/lowdm_cr_dy2e_leading_lowdm_fatjet_pt.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2e_leading_lowdm_fatjet_pt.png",
+      "region": "DY2E",
+      "variable": "leading_lowdm_fatjet_pt"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2e_lowdm_isr_dphi",
+      "pdf": "plots/lowdm/lowdm_cr_dy2e_lowdm_isr_dphi.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2e_lowdm_isr_dphi.png",
+      "region": "DY2E",
+      "variable": "lowdm_isr_dphi"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2e_lowdm_isr_pt",
+      "pdf": "plots/lowdm/lowdm_cr_dy2e_lowdm_isr_pt.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2e_lowdm_isr_pt.png",
+      "region": "DY2E",
+      "variable": "lowdm_isr_pt"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2e_lowdm_met_sqrt_ht",
+      "pdf": "plots/lowdm/lowdm_cr_dy2e_lowdm_met_sqrt_ht.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2e_lowdm_met_sqrt_ht.png",
+      "region": "DY2E",
+      "variable": "lowdm_met_sqrt_ht"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2e_lowdm_mtb",
+      "pdf": "plots/lowdm/lowdm_cr_dy2e_lowdm_mtb.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2e_lowdm_mtb.png",
+      "region": "DY2E",
+      "variable": "lowdm_mtb"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2e_lowdm_ptb",
+      "pdf": "plots/lowdm/lowdm_cr_dy2e_lowdm_ptb.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2e_lowdm_ptb.png",
+      "region": "DY2E",
+      "variable": "lowdm_ptb"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2e_mee",
+      "pdf": "plots/lowdm/lowdm_cr_dy2e_mee.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2e_mee.png",
+      "region": "DY2E",
+      "variable": "mee"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2e_met",
+      "pdf": "plots/lowdm/lowdm_cr_dy2e_met.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2e_met.png",
+      "region": "DY2E",
+      "variable": "met"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2e_n_e_veto",
+      "pdf": "plots/lowdm/lowdm_cr_dy2e_n_e_veto.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2e_n_e_veto.png",
+      "region": "DY2E",
+      "variable": "n_e_veto"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2e_n_lowdm_isr",
+      "pdf": "plots/lowdm/lowdm_cr_dy2e_n_lowdm_isr.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2e_n_lowdm_isr.png",
+      "region": "DY2E",
+      "variable": "n_lowdm_isr"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2e_n_m_loose",
+      "pdf": "plots/lowdm/lowdm_cr_dy2e_n_m_loose.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2e_n_m_loose.png",
+      "region": "DY2E",
+      "variable": "n_m_loose"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2e_nb_lepton_clean",
+      "pdf": "plots/lowdm/lowdm_cr_dy2e_nb_lepton_clean.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2e_nb_lepton_clean.png",
+      "region": "DY2E",
+      "variable": "nb_lepton_clean"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2e_nb_loose_lowdm",
+      "pdf": "plots/lowdm/lowdm_cr_dy2e_nb_loose_lowdm.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2e_nb_loose_lowdm.png",
+      "region": "DY2E",
+      "variable": "nb_loose_lowdm"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2e_nb_medium_lowdm",
+      "pdf": "plots/lowdm/lowdm_cr_dy2e_nb_medium_lowdm.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2e_nb_medium_lowdm.png",
+      "region": "DY2E",
+      "variable": "nb_medium_lowdm"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2e_njet",
+      "pdf": "plots/lowdm/lowdm_cr_dy2e_njet.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2e_njet.png",
+      "region": "DY2E",
+      "variable": "njet"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2e_njet_lepton_clean",
+      "pdf": "plots/lowdm/lowdm_cr_dy2e_njet_lepton_clean.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2e_njet_lepton_clean.png",
+      "region": "DY2E",
+      "variable": "njet_lepton_clean"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2e_recoil_dy2e",
+      "pdf": "plots/lowdm/lowdm_cr_dy2e_recoil_dy2e.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2e_recoil_dy2e.png",
+      "region": "DY2E",
+      "variable": "recoil_dy2e"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2m_ht",
+      "pdf": "plots/lowdm/lowdm_cr_dy2m_ht.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2m_ht.png",
+      "region": "DY2M",
+      "variable": "ht"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2m_ht_lepton_clean",
+      "pdf": "plots/lowdm/lowdm_cr_dy2m_ht_lepton_clean.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2m_ht_lepton_clean.png",
+      "region": "DY2M",
+      "variable": "ht_lepton_clean"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2m_leading_lowdm_fatjet_msd",
+      "pdf": "plots/lowdm/lowdm_cr_dy2m_leading_lowdm_fatjet_msd.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2m_leading_lowdm_fatjet_msd.png",
+      "region": "DY2M",
+      "variable": "leading_lowdm_fatjet_msd"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2m_leading_lowdm_fatjet_pt",
+      "pdf": "plots/lowdm/lowdm_cr_dy2m_leading_lowdm_fatjet_pt.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2m_leading_lowdm_fatjet_pt.png",
+      "region": "DY2M",
+      "variable": "leading_lowdm_fatjet_pt"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2m_lowdm_isr_dphi",
+      "pdf": "plots/lowdm/lowdm_cr_dy2m_lowdm_isr_dphi.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2m_lowdm_isr_dphi.png",
+      "region": "DY2M",
+      "variable": "lowdm_isr_dphi"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2m_lowdm_isr_pt",
+      "pdf": "plots/lowdm/lowdm_cr_dy2m_lowdm_isr_pt.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2m_lowdm_isr_pt.png",
+      "region": "DY2M",
+      "variable": "lowdm_isr_pt"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2m_lowdm_met_sqrt_ht",
+      "pdf": "plots/lowdm/lowdm_cr_dy2m_lowdm_met_sqrt_ht.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2m_lowdm_met_sqrt_ht.png",
+      "region": "DY2M",
+      "variable": "lowdm_met_sqrt_ht"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2m_lowdm_mtb",
+      "pdf": "plots/lowdm/lowdm_cr_dy2m_lowdm_mtb.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2m_lowdm_mtb.png",
+      "region": "DY2M",
+      "variable": "lowdm_mtb"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2m_lowdm_ptb",
+      "pdf": "plots/lowdm/lowdm_cr_dy2m_lowdm_ptb.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2m_lowdm_ptb.png",
+      "region": "DY2M",
+      "variable": "lowdm_ptb"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2m_met",
+      "pdf": "plots/lowdm/lowdm_cr_dy2m_met.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2m_met.png",
+      "region": "DY2M",
+      "variable": "met"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2m_mmm",
+      "pdf": "plots/lowdm/lowdm_cr_dy2m_mmm.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2m_mmm.png",
+      "region": "DY2M",
+      "variable": "mmm"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2m_n_e_veto",
+      "pdf": "plots/lowdm/lowdm_cr_dy2m_n_e_veto.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2m_n_e_veto.png",
+      "region": "DY2M",
+      "variable": "n_e_veto"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2m_n_lowdm_isr",
+      "pdf": "plots/lowdm/lowdm_cr_dy2m_n_lowdm_isr.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2m_n_lowdm_isr.png",
+      "region": "DY2M",
+      "variable": "n_lowdm_isr"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2m_n_m_loose",
+      "pdf": "plots/lowdm/lowdm_cr_dy2m_n_m_loose.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2m_n_m_loose.png",
+      "region": "DY2M",
+      "variable": "n_m_loose"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2m_nb_lepton_clean",
+      "pdf": "plots/lowdm/lowdm_cr_dy2m_nb_lepton_clean.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2m_nb_lepton_clean.png",
+      "region": "DY2M",
+      "variable": "nb_lepton_clean"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2m_nb_loose_lowdm",
+      "pdf": "plots/lowdm/lowdm_cr_dy2m_nb_loose_lowdm.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2m_nb_loose_lowdm.png",
+      "region": "DY2M",
+      "variable": "nb_loose_lowdm"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2m_nb_medium_lowdm",
+      "pdf": "plots/lowdm/lowdm_cr_dy2m_nb_medium_lowdm.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2m_nb_medium_lowdm.png",
+      "region": "DY2M",
+      "variable": "nb_medium_lowdm"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2m_njet",
+      "pdf": "plots/lowdm/lowdm_cr_dy2m_njet.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2m_njet.png",
+      "region": "DY2M",
+      "variable": "njet"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2m_njet_lepton_clean",
+      "pdf": "plots/lowdm/lowdm_cr_dy2m_njet_lepton_clean.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2m_njet_lepton_clean.png",
+      "region": "DY2M",
+      "variable": "njet_lepton_clean"
+    },
+    {
+      "family": "lowdm",
+      "family_label": "Low-dM CR distributions",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2m_recoil_dy2m",
+      "pdf": "plots/lowdm/lowdm_cr_dy2m_recoil_dy2m.pdf",
+      "png": "plots/lowdm/lowdm_cr_dy2m_recoil_dy2m.png",
+      "region": "DY2M",
+      "variable": "recoil_dy2m"
+    },
+    {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "CR",
+      "name": "highdm_cr_llcr_recoil",
+      "pdf": "plots/categories/highdm_cr_llcr_recoil.pdf",
+      "png": "plots/categories/highdm_cr_llcr_recoil.png",
+      "region": "",
+      "variable": "highdm_cr_llcr_recoil"
+    },
+    {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "CR",
+      "name": "highdm_cr_qcdcr_recoil",
+      "pdf": "plots/categories/highdm_cr_qcdcr_recoil.pdf",
+      "png": "plots/categories/highdm_cr_qcdcr_recoil.png",
+      "region": "",
+      "variable": "highdm_cr_qcdcr_recoil"
+    },
+    {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "CR",
+      "name": "highdm_cr_gcr_recoil",
+      "pdf": "plots/categories/highdm_cr_gcr_recoil.pdf",
+      "png": "plots/categories/highdm_cr_gcr_recoil.png",
+      "region": "",
+      "variable": "highdm_cr_gcr_recoil"
+    },
+    {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "CR",
+      "name": "highdm_cr_dy2e_recoil",
+      "pdf": "plots/categories/highdm_cr_dy2e_recoil.pdf",
+      "png": "plots/categories/highdm_cr_dy2e_recoil.png",
+      "region": "",
+      "variable": "highdm_cr_dy2e_recoil"
+    },
+    {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "CR",
+      "name": "highdm_cr_dy2m_recoil",
+      "pdf": "plots/categories/highdm_cr_dy2m_recoil.pdf",
+      "png": "plots/categories/highdm_cr_dy2m_recoil.png",
+      "region": "",
+      "variable": "highdm_cr_dy2m_recoil"
+    },
+    {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "CR",
+      "name": "highdm_cr_recoil_inclusive",
+      "pdf": "plots/categories/highdm_cr_recoil_inclusive.pdf",
+      "png": "plots/categories/highdm_cr_recoil_inclusive.png",
+      "region": "",
+      "variable": "highdm_cr_recoil_inclusive"
+    },
+    {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "CR",
+      "name": "highdm_cr_llcr_recoil_ntop_split",
+      "pdf": "plots/categories/highdm_cr_llcr_recoil_ntop_split.pdf",
+      "png": "plots/categories/highdm_cr_llcr_recoil_ntop_split.png",
+      "region": "",
+      "variable": "highdm_cr_llcr_recoil_ntop_split"
+    },
+    {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "CR",
+      "name": "highdm_cr_qcdcr_recoil_ntop_split",
+      "pdf": "plots/categories/highdm_cr_qcdcr_recoil_ntop_split.pdf",
+      "png": "plots/categories/highdm_cr_qcdcr_recoil_ntop_split.png",
+      "region": "",
+      "variable": "highdm_cr_qcdcr_recoil_ntop_split"
+    },
+    {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "CR",
+      "name": "highdm_cr_gcr_recoil_ntop_split",
+      "pdf": "plots/categories/highdm_cr_gcr_recoil_ntop_split.pdf",
+      "png": "plots/categories/highdm_cr_gcr_recoil_ntop_split.png",
+      "region": "",
+      "variable": "highdm_cr_gcr_recoil_ntop_split"
+    },
+    {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "CR",
+      "name": "highdm_cr_dy2e_recoil_ntop_split",
+      "pdf": "plots/categories/highdm_cr_dy2e_recoil_ntop_split.pdf",
+      "png": "plots/categories/highdm_cr_dy2e_recoil_ntop_split.png",
+      "region": "",
+      "variable": "highdm_cr_dy2e_recoil_ntop_split"
+    },
+    {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "CR",
+      "name": "highdm_cr_dy2m_recoil_ntop_split",
+      "pdf": "plots/categories/highdm_cr_dy2m_recoil_ntop_split.pdf",
+      "png": "plots/categories/highdm_cr_dy2m_recoil_ntop_split.png",
+      "region": "",
+      "variable": "highdm_cr_dy2m_recoil_ntop_split"
+    },
+    {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "CR",
+      "name": "highdm_cr_recoil_ntop_split",
+      "pdf": "plots/categories/highdm_cr_recoil_ntop_split.pdf",
+      "png": "plots/categories/highdm_cr_recoil_ntop_split.png",
+      "region": "",
+      "variable": "highdm_cr_recoil_ntop_split"
+    },
+    {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "VR",
+      "name": "highdm_vr_nb1_met",
+      "pdf": "plots/categories/highdm_vr_nb1_met.pdf",
+      "png": "plots/categories/highdm_vr_nb1_met.png",
+      "region": "",
+      "variable": "highdm_vr_nb1_met"
+    },
+    {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "VR",
+      "name": "highdm_vr_nb2_met",
+      "pdf": "plots/categories/highdm_vr_nb2_met.pdf",
+      "png": "plots/categories/highdm_vr_nb2_met.png",
+      "region": "",
+      "variable": "highdm_vr_nb2_met"
+    },
+    {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "VR",
+      "name": "highdm_vr_nb3plus_met",
+      "pdf": "plots/categories/highdm_vr_nb3plus_met.pdf",
+      "png": "plots/categories/highdm_vr_nb3plus_met.png",
+      "region": "",
+      "variable": "highdm_vr_nb3plus_met"
+    },
+    {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "SR",
+      "name": "highdm_sr_recoil_inclusive",
+      "pdf": "plots/categories/highdm_sr_recoil_inclusive.pdf",
+      "png": "plots/categories/highdm_sr_recoil_inclusive.png",
+      "region": "",
+      "variable": "highdm_sr_recoil_inclusive"
+    },
+    {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "SR",
+      "name": "highdm_sr_recoil_ntop_split",
+      "pdf": "plots/categories/highdm_sr_recoil_ntop_split.pdf",
+      "png": "plots/categories/highdm_sr_recoil_ntop_split.png",
+      "region": "",
+      "variable": "highdm_sr_recoil_ntop_split"
+    },
+    {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "SR",
+      "name": "highdm_sr_selected_recoil60_nb2_nt2plus_w0_bins",
+      "pdf": "plots/categories/highdm_sr_selected_recoil60_nb2_nt2plus_w0_bins.pdf",
+      "png": "plots/categories/highdm_sr_selected_recoil60_nb2_nt2plus_w0_bins.png",
+      "region": "",
+      "variable": "highdm_sr_selected_recoil60_nb2_nt2plus_w0_bins"
+    },
+    {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "CR",
+      "name": "lowdm_cr_llcr_onebin",
+      "pdf": "plots/categories/lowdm_cr_llcr_onebin.pdf",
+      "png": "plots/categories/lowdm_cr_llcr_onebin.png",
+      "region": "",
+      "variable": "lowdm_cr_llcr_onebin"
+    },
+    {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "CR",
+      "name": "lowdm_cr_qcdcr_onebin",
+      "pdf": "plots/categories/lowdm_cr_qcdcr_onebin.pdf",
+      "png": "plots/categories/lowdm_cr_qcdcr_onebin.png",
+      "region": "",
+      "variable": "lowdm_cr_qcdcr_onebin"
+    },
+    {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "CR",
+      "name": "lowdm_cr_gcr_onebin",
+      "pdf": "plots/categories/lowdm_cr_gcr_onebin.pdf",
+      "png": "plots/categories/lowdm_cr_gcr_onebin.png",
+      "region": "",
+      "variable": "lowdm_cr_gcr_onebin"
+    },
+    {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2e_onebin",
+      "pdf": "plots/categories/lowdm_cr_dy2e_onebin.pdf",
+      "png": "plots/categories/lowdm_cr_dy2e_onebin.png",
+      "region": "",
+      "variable": "lowdm_cr_dy2e_onebin"
+    },
+    {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "CR",
+      "name": "lowdm_cr_dy2m_onebin",
+      "pdf": "plots/categories/lowdm_cr_dy2m_onebin.pdf",
+      "png": "plots/categories/lowdm_cr_dy2m_onebin.png",
+      "region": "",
+      "variable": "lowdm_cr_dy2m_onebin"
+    },
+    {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "CR",
+      "name": "lowdm_cr_onebin",
+      "pdf": "plots/categories/lowdm_cr_onebin.pdf",
+      "png": "plots/categories/lowdm_cr_onebin.png",
+      "region": "",
+      "variable": "lowdm_cr_onebin"
+    },
+    {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "CR",
+      "name": "lowdm_cr_sr_onebin",
+      "pdf": "plots/categories/lowdm_cr_sr_onebin.pdf",
+      "png": "plots/categories/lowdm_cr_sr_onebin.png",
+      "region": "",
+      "variable": "lowdm_cr_sr_onebin"
+    },
+    {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "SR",
+      "name": "lowdm_sr_onebin",
+      "pdf": "plots/categories/lowdm_sr_onebin.pdf",
+      "png": "plots/categories/lowdm_sr_onebin.png",
+      "region": "",
+      "variable": "lowdm_sr_onebin"
+    },
+    {
+      "family": "limits",
+      "family_label": "Expected limits",
+      "kind": "Overview",
+      "name": "expected_limit_highdm60_lowdm34_x1800",
+      "pdf": "plots/limits/expected_limit_highdm60_lowdm34_x1800.pdf",
+      "png": "plots/limits/expected_limit_highdm60_lowdm34_x1800.png",
+      "region": "2024 High-dM 60 + Low-dM 34",
+      "variable": "mStop mLSP expected 95% CL"
+    },
+    {
+      "family": "impacts",
+      "family_label": "Nuisance impacts",
+      "kind": "Overview",
+      "name": "impacts_2024_highdm60_lowdm34_mStop1200_mLSP500_full_mcstat",
+      "pdf": "plots/impacts/impacts_2024_highdm60_lowdm34_mStop1200_mLSP500_full_mcstat.pdf",
+      "png": "plots/impacts/impacts_2024_highdm60_lowdm34_mStop1200_mLSP500_full_mcstat.png",
+      "region": "2024 High-dM 60 + Low-dM 34",
+      "variable": "mStop1200 mLSP500 full statistics"
+    }
+  ],
+  "snapshot_input_count": null,
+  "snapshot_manifest": "validated_nominal_input_snapshot_20260725",
+  "source_hist_payload": "hists_2024_dyptll100200_lowdm34_nbge1.json",
+  "source_hist_payload_sha256": "c8a2116fc66c291594c9dfd0cb90852fd68b5c995f2e42fe3b69fcf08654e266",
+  "statistical_results": {
+    "combined": "plots/limits/expected_limit_highdm60_lowdm34_x1600.png",
+    "impact": "plots/impacts/impacts_2024_highdm60_lowdm34_mStop1200_mLSP500_full_mcstat.png",
+    "impact_benchmark": {
+      "mLSP_GeV": 500,
+      "mStop_GeV": 1200
+    },
+    "impact_parameters": {
+      "autoMCStats": 320,
+      "other": 11,
+      "total": 331
+    },
+    "impact_scope": "2024 luminosity plus 10 rate/weight or object-shape nuisances and individual MC-statistical nuisances. Object-shape templates are absent from this card.",
+    "status": "complete_current_2024_model_full_statistics",
+    "updated_at": "2026-07-27T09:26:33+00:00"
+  },
+  "status": "complete",
+  "year": 2024
+}
