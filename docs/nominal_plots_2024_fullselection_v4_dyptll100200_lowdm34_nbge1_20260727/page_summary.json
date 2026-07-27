@@ -23,12 +23,21 @@
     ],
     "status": "complete"
   },
+  "background_process_palette": {
+    "DY": "#35B6B4",
+    "Photon+jet": "#8E3B9E",
+    "QCD Multijet": "#C995A2",
+    "Top": "#7A9FC2",
+    "VV+VVV": "#6F7661",
+    "W -> lv": "#D9C6A5",
+    "Z -> vv": "#E6A84F"
+  },
   "events_processed": 396510313,
   "excluded_obsolete_plot_families": [
     "legacy High-dM 17-bin",
     "legacy High-dM 42-bin"
   ],
-  "generated_at": "2026-07-27T10:25:23+00:00",
+  "generated_at": "2026-07-27T10:54:40+00:00",
   "histogram_status": "complete",
   "impact_update": {
     "benchmark": {

@@ -47,13 +47,13 @@ GROUP_ORDER = [
     BACKGROUND_DISPLAY_LABELS[process] for process in BACKGROUND_PROCESS_ORDER
 ]
 GROUP_COLORS = {
-    "VV+VVV": "#6f7661",
-    "Top": "#9ec5b8",
-    "DY": "#23c9c8",
-    "Photon+jet": "#800080",
-    "W -> lv": "#eadac8",
-    "Z -> vv": "#f2c58f",
-    "QCD Multijet": "#d798a5",
+    "VV+VVV": "#6F7661",
+    "Top": "#7A9FC2",
+    "DY": "#35B6B4",
+    "Photon+jet": "#8E3B9E",
+    "W -> lv": "#D9C6A5",
+    "Z -> vv": "#E6A84F",
+    "QCD Multijet": "#C995A2",
     "Others": "#6a625f",
 }
 SIGNAL_OVERLAYS = [
