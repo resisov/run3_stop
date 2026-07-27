@@ -122,6 +122,18 @@ SELECTED_AN17_CATEGORY_LABELS = {
     'Nb3plus_T2_W0': '$N_{b}\\geq3$, $N_{t}=2$\n$N_{W}=0$',
     'Nb2_Nt2plus_W0': '$N_{b}=2$, $N_{t}\\geq2$\n$N_{W}=0$',
 }
+SELECTED_AN17_CATEGORY_ORDER = [
+    "Nb1plus_T0_W0",
+    "Nb1plus_T0_W1plus",
+    "Nb1_T1plus_W0",
+    "Nb1_T1plus_W1plus",
+    "Nb2_T1_W0",
+    "Nb2_T1_W1",
+    "Nb2_Nt2plus_W0",
+    "Nb3plus_T1_W0",
+    "Nb3plus_T1_W1",
+    "Nb3plus_T2_W0",
+]
 
 
 
@@ -919,8 +931,18 @@ def selected_an17_recoil_blocks(payload: dict, scheme_name: str) -> list[dict]:
             "xlabels": [],
             "blind_data": True,
             "label_box": True,
+            "label_fontsize": 11.2,
+            "label_box_pad": 0.18,
+            "category_key": category,
         }
         blocks.append(block)
+    if scheme_name == EXTENDED_AN17_RECOIL_SCHEME:
+        keyed = {
+            str(block.get("category_key") or ""): block
+            for block in blocks
+        }
+        if set(keyed) == set(SELECTED_AN17_CATEGORY_ORDER):
+            blocks = [keyed[category] for category in SELECTED_AN17_CATEGORY_ORDER]
     return blocks
 
 
@@ -943,10 +965,6 @@ def lowdm_nsv_inclusive_blocks(payload: dict, scheme_name: str) -> list[dict]:
     offset = 0
     for category, size in normalized_sizes:
         slc = slice(offset, offset + size)
-        emphasize_label = category in {
-            "Nb0_Nj2to5_PISR500plus",
-            "Nb0_Nj6plus_PISR500plus",
-        }
         blocks.append({
             "groups": {group: vals[slc] for group, vals in rec["groups"].items()},
             "background": rec["background"][slc],
@@ -960,9 +978,9 @@ def lowdm_nsv_inclusive_blocks(payload: dict, scheme_name: str) -> list[dict]:
             "xlabels": [],
             "blind_data": True,
             "label_box": True,
-            "label_fontsize": 9.8 if emphasize_label else 8.2,
-            "label_box_pad": 0.40 if emphasize_label else 0.28,
-            "figure_width": 14.04,
+            "label_fontsize": 10.2,
+            "label_box_pad": 0.42,
+            "figure_width": 16.4,
         })
         offset += size
     return blocks
