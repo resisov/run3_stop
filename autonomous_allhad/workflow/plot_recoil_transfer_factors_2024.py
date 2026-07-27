@@ -225,8 +225,8 @@ def plot_path(
             bbox_to_anchor=(0.99, 0.91),
         )
         hep.cms.label(
-            "Preliminary",
-            data=False,
+            "Work in progress",
+            data=True,
             year="2024",
             com=13.6,
             fontsize=18,
