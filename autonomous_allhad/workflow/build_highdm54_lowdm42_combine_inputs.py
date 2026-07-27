@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build 2024 High-dM 54-bin and High+Low-dM 54+42-bin limit models."""
+"""Build 2024 High-dM 54/60-bin and corresponding High+Low-dM limit models."""
 
 from __future__ import annotations
 
@@ -43,10 +43,22 @@ from build_lowdm42_combine_inputs import (  # noqa: E402
     lowdm_channel,
     signal_array as lowdm_signal_array,
 )
+from background_process_groups import (  # noqa: E402
+    BACKGROUND_PROCESS_ORDER,
+    background_grouping_contract,
+)
 
 
-HIGHDM_SCHEME = "boosted_an17_selected_recoil6_with_nt0_wsplit_SR"
-HIGHDM_CHANNEL = "cat7_SR_selected_recoil54_nt0_wsplit"
+HIGHDM_SCHEMES = {
+    54: (
+        "boosted_an17_selected_recoil6_with_nt0_wsplit_SR",
+        "cat7_SR_selected_recoil54_nt0_wsplit",
+    ),
+    60: (
+        "boosted_an17_selected_recoil60_nb2_nt2plus_w0_SR",
+        "cat7_SR_selected_recoil60_nb2_nt2plus_w0",
+    ),
+}
 MIN_BIN = 1.0e-9
 
 
@@ -65,11 +77,12 @@ def nominal_signal_yield(flat: dict[str, Any], scheme: str, mass_key: str) -> fl
 
 def mass_points(
     flat: dict[str, Any],
+    highdm_scheme: str,
     include_lowdm: bool,
     only: list[str] | None,
     max_mstop: int | None,
 ) -> list[str]:
-    schemes = [HIGHDM_SCHEME]
+    schemes = [highdm_scheme]
     if include_lowdm:
         schemes.append(LOWDM_REGION_MAP["SR"])
     selected: set[str] = set()
@@ -103,6 +116,7 @@ def build_root(
     selected_masses: list[str],
     output_root: Path,
     data_mode: str,
+    highdm_scheme: str,
 ) -> dict[str, Any]:
     import ROOT
 
@@ -112,6 +126,7 @@ def build_root(
         "channels": {},
         "signals": {},
         "background_shape_nuisances": sorted({name for channel in channels for name in channel["variations"]}),
+        "background_grouping_contract": background_grouping_contract(),
     }
     try:
         for channel in channels:
@@ -123,22 +138,56 @@ def build_root(
             background_sumw2 = np.asarray(channel["background_sumw2"], dtype=float)
             data = background if data_mode == "asimov" else np.asarray(channel["data"], dtype=float)
             write_hist(directory, "data_obs", data, np.maximum(data, 0.0), edges)
-            write_hist(directory, BACKGROUND_NAME, np.maximum(background, MIN_BIN), background_sumw2, edges)
-            for nuisance, pair in channel["variations"].items():
-                write_hist(
-                    directory,
-                    f"{BACKGROUND_NAME}_{nuisance}Up",
-                    np.maximum(np.asarray(pair["up"], dtype=float), MIN_BIN),
-                    background_sumw2,
-                    edges,
+            grouped = channel.get("background_processes") or {}
+            if not grouped:
+                raise ValueError(f"{name}: missing grouped background processes")
+            grouped_sumw = np.zeros(len(background), dtype=float)
+            grouped_sumw2 = np.zeros(len(background), dtype=float)
+            process_summary: dict[str, Any] = {}
+            for process in BACKGROUND_PROCESS_ORDER:
+                record = grouped.get(process) or {}
+                raw_values = record.get("sumw")
+                raw_sumw2 = record.get("sumw2")
+                values = np.asarray(
+                    [] if raw_values is None else raw_values, dtype=float
                 )
-                write_hist(
-                    directory,
-                    f"{BACKGROUND_NAME}_{nuisance}Down",
-                    np.maximum(np.asarray(pair["down"], dtype=float), MIN_BIN),
-                    background_sumw2,
-                    edges,
+                sumw2 = np.asarray(
+                    [] if raw_sumw2 is None else raw_sumw2, dtype=float
                 )
+                if len(values) != len(background) or len(sumw2) != len(background):
+                    raise ValueError(f"{name}/{process}: grouped template has wrong bin count")
+                grouped_sumw += values
+                grouped_sumw2 += sumw2
+                sources = list(record.get("source_samples") or [])
+                if not sources:
+                    continue
+                write_hist(directory, process, np.maximum(values, MIN_BIN), sumw2, edges)
+                nuisances = record.get("variations") or {}
+                for nuisance, pair in nuisances.items():
+                    write_hist(
+                        directory,
+                        f"{process}_{nuisance}Up",
+                        np.maximum(np.asarray(pair["up"], dtype=float), MIN_BIN),
+                        sumw2,
+                        edges,
+                    )
+                    write_hist(
+                        directory,
+                        f"{process}_{nuisance}Down",
+                        np.maximum(np.asarray(pair["down"], dtype=float), MIN_BIN),
+                        sumw2,
+                        edges,
+                    )
+                process_summary[process] = {
+                    "display_label": record.get("display_label", process),
+                    "yield": float(np.sum(values)),
+                    "source_samples": sources,
+                    "shape_nuisances": sorted(nuisances),
+                }
+            if not np.allclose(grouped_sumw, background, rtol=1.0e-10, atol=1.0e-8):
+                raise ValueError(f"{name}: grouped yields do not reproduce the background total")
+            if not np.allclose(grouped_sumw2, background_sumw2, rtol=1.0e-10, atol=1.0e-8):
+                raise ValueError(f"{name}: grouped sumw2 does not reproduce the background total")
             summary["channels"][name] = {
                 "source_region": source_region,
                 "kind": channel["kind"],
@@ -147,22 +196,23 @@ def build_root(
                 "data_yield": float(np.sum(data)),
                 "data_mode": data_mode,
                 "background_shape_nuisances": sorted(channel["variations"]),
+                "background_processes": process_summary,
                 "bin_labels": channel.get("bin_labels") or [],
             }
 
             for mass_key in selected_masses:
                 process = signal_process_name(mass_key)
                 signal_variations: dict[str, dict[str, np.ndarray]] = {}
-                if source_region == HIGHDM_SCHEME:
+                if source_region == highdm_scheme:
                     signal, signal_sumw2 = signal_array_from_selected(
                         flat,
-                        HIGHDM_SCHEME,
+                        highdm_scheme,
                         mass_key,
                         len(background),
                     )
                     high_variations = signal_variations_from_selected(
                         flat,
-                        HIGHDM_SCHEME,
+                        highdm_scheme,
                         mass_key,
                         len(background),
                     )
@@ -215,13 +265,15 @@ def write_datacards(
     output_dir: Path,
     auto_mc_stats: int,
     include_lowdm: bool,
+    highdm_bins: int,
+    lowdm_bins: int,
 ) -> dict[str, str]:
     output_dir.mkdir(parents=True, exist_ok=True)
     cards = {}
     model_note = (
-        "# 2024 model: five 6-bin High-dM CRs plus 54-bin High-dM SR"
+        f"# 2024 model: five 6-bin High-dM CRs plus {highdm_bins}-bin High-dM SR"
         + (
-            "; five 42-bin Low-dM CRs plus 42-bin Low-dM SR are also included.\n"
+            f"; five {lowdm_bins}-bin Low-dM CRs plus {lowdm_bins}-bin Low-dM SR are also included.\n"
             if include_lowdm
             else "; no Low-dM channel is included.\n"
         )
@@ -251,6 +303,7 @@ def main() -> int:
     parser.add_argument("--hists", required=True, type=Path)
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--no-lowdm", action="store_true")
+    parser.add_argument("--highdm-bins", type=int, choices=(54, 60), default=54)
     parser.add_argument("--data-mode", choices=["asimov", "observed"], default="asimov")
     parser.add_argument("--auto-mc-stats", type=int, default=10)
     parser.add_argument("--only", nargs="*")
@@ -262,25 +315,49 @@ def main() -> int:
     args = parser.parse_args()
 
     include_lowdm = not args.no_lowdm
+    highdm_scheme, highdm_channel = HIGHDM_SCHEMES[args.highdm_bins]
     flat = read_json(args.hists)
     channels = [
         cr_channel(flat, source_region, channel_name)
         for source_region, channel_name in CONTROL_REGION_MAP.items()
     ]
-    channels.append(selected_recoil6_channel(flat, HIGHDM_SCHEME, HIGHDM_CHANNEL))
+    channels.append(selected_recoil6_channel(flat, highdm_scheme, highdm_channel))
     if include_lowdm:
         channels.extend(
             lowdm_channel(flat, region, scheme)
             for region, scheme in LOWDM_REGION_MAP.items()
         )
-    selected_masses = mass_points(flat, include_lowdm, args.only, args.max_mstop)
+    lowdm_bins = (
+        len(
+            next(
+                channel["background"]
+                for channel in channels
+                if channel["source_region"] == LOWDM_REGION_MAP["SR"]
+            )
+        )
+        if include_lowdm
+        else 0
+    )
+    if include_lowdm and any(
+        len(channel["background"]) != lowdm_bins
+        for channel in channels
+        if channel["source_region"] in LOWDM_REGION_MAP.values()
+    ):
+        raise ValueError("Low-dM regions do not have a common bin count")
+    selected_masses = mass_points(
+        flat, highdm_scheme, include_lowdm, args.only, args.max_mstop
+    )
     if args.max_points is not None:
         selected_masses = selected_masses[: args.max_points]
     if not selected_masses:
         raise SystemExit("no signal mass points selected")
 
     outdir = args.output_dir
-    tag = "highdm54_lowdm42" if include_lowdm else "highdm54_only"
+    tag = (
+        f"highdm{args.highdm_bins}_lowdm{lowdm_bins}"
+        if include_lowdm
+        else f"highdm{args.highdm_bins}_only"
+    )
     template_root = outdir / f"templates_{tag}.root"
     datacard_dir = outdir / "datacards"
     limit_dir = outdir / "limits"
@@ -288,7 +365,14 @@ def main() -> int:
     if args.collect_only:
         root_summary: dict[str, Any] = {}
     else:
-        root_summary = build_root(channels, flat, selected_masses, template_root, args.data_mode)
+        root_summary = build_root(
+            channels,
+            flat,
+            selected_masses,
+            template_root,
+            args.data_mode,
+            highdm_scheme,
+        )
         cards = write_datacards(
             channels,
             selected_masses,
@@ -297,22 +381,25 @@ def main() -> int:
             datacard_dir,
             args.auto_mc_stats,
             include_lowdm,
+            args.highdm_bins,
+            lowdm_bins,
         )
         write_parallel_runner(cards, limit_dir, runner, args.runner_jobs, args.point_timeout)
 
     limit_payload = collect_limits(limit_dir, selected_masses, outdir / "expected_limits.json")
     contour_png = outdir / f"expected_limit_contour_{tag}.png"
     analysis_label = (
-        r"High-$\Delta m$ 54-bin + Low-$\Delta m$ 42-bin"
+        rf"High-$\Delta m$ {args.highdm_bins}-bin + Low-$\Delta m$ {lowdm_bins}-bin"
         if include_lowdm
-        else r"High-$\Delta m$ 54-bin only"
+        else rf"High-$\Delta m$ {args.highdm_bins}-bin only"
     )
     contour_written = plot_contour(
         limit_payload,
         contour_png,
-        run2_contours=None,
+        run2_contours=Path("/eos/user/t/taiwoo/run2_sus19010_contours.json"),
         luminosity_label=r"109.82 fb$^{-1}$ (13.6 TeV)",
         analysis_label=analysis_label,
+        x_max=float(args.max_mstop),
     )
     manifest = {
         "status": "combine_outputs_complete" if limit_payload["status"] == "complete" else "combine_inputs_ready",
@@ -323,15 +410,15 @@ def main() -> int:
         "highdm": {
             "control_channels": 5,
             "control_bins_each": 6,
-            "signal_channel": HIGHDM_CHANNEL,
-            "signal_bins": 54,
+            "signal_channel": highdm_channel,
+            "signal_bins": args.highdm_bins,
         },
         "lowdm": {
             "included": include_lowdm,
             "control_channels": 5 if include_lowdm else 0,
-            "control_bins_each": 42 if include_lowdm else 0,
+            "control_bins_each": lowdm_bins if include_lowdm else 0,
             "signal_channel": LOWDM_REGION_MAP["SR"] if include_lowdm else None,
-            "signal_bins": 42 if include_lowdm else 0,
+            "signal_bins": lowdm_bins if include_lowdm else 0,
         },
         "total_analysis_bins": sum(len(channel["background"]) for channel in channels),
         "data_mode": args.data_mode,
@@ -349,7 +436,14 @@ def main() -> int:
             "weight_shapes": sorted({name for channel in channels for name in channel["variations"]}),
             "lumi": {"name": LUMI_NAME, "lnN": LUMI_LNN},
             "autoMCStats": args.auto_mc_stats,
-            "object_shape_variations": "not present in the current nominal plotting payload",
+            "object_shape_variations": sorted(
+                {
+                    name
+                    for channel in channels
+                    for name in channel["variations"]
+                    if name == "jesFlavorQCD"
+                }
+            ),
         },
         "root_summary": root_summary,
         "limit_collection": limit_payload,

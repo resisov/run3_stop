@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build an expected-limit model using only the six 42-bin Low-dM regions."""
+"""Build an expected-limit model using the six configured Low-dM regions."""
 
 from __future__ import annotations
 
@@ -16,7 +16,6 @@ if str(THIS_DIR) not in sys.path:
     sys.path.insert(0, str(THIS_DIR))
 
 from build_boosted_an17_combine_inputs import (  # noqa: E402
-    BACKGROUND_NAME,
     LUMI_LNN,
     LUMI_NAME,
     datacard_text,
@@ -26,6 +25,11 @@ from build_boosted_an17_combine_inputs import (  # noqa: E402
 )
 from build_combine_inputs_from_preview import collect_limits, plot_contour  # noqa: E402
 from build_flat_recoil_ntop_split_combine_inputs import write_parallel_runner  # noqa: E402
+from background_process_groups import (  # noqa: E402
+    aggregate_background_processes,
+    background_grouping_contract,
+    materialize_grouped_background_templates,
+)
 from build_flat_recoil_sr_combine_inputs import (  # noqa: E402
     SIGNAL_PREFIX,
     aggregate_nominal,
@@ -44,6 +48,7 @@ LOWDM_REGION_MAP = {
     "DY2M": "cat6_DY2M_lowDeltaM",
     "SR": "cat7_SR_lowDeltaM",
 }
+MIN_BIN = 1.0e-9
 
 
 def read_json(path: Path) -> Any:
@@ -52,8 +57,10 @@ def read_json(path: Path) -> Any:
 
 def lowdm_channel(flat: dict[str, Any], region: str, scheme: str) -> dict[str, Any]:
     labels = list((((flat.get("search_bin_schemes") or {}).get(scheme) or {}).get("bin_labels") or []))
-    if len(labels) != 42:
-        raise ValueError(f"{scheme} has {len(labels)} bins; exactly 42 are required")
+    if len(labels) not in {34, 42}:
+        raise ValueError(
+            f"{scheme} has {len(labels)} bins; supported Low-dM schemes have 34 or 42"
+        )
     by_sample = ((flat.get("search_bin_histograms") or {}).get(scheme) or {})
     if not by_sample:
         raise ValueError(f"missing Low-dM histogram scheme {scheme}")
@@ -62,7 +69,11 @@ def lowdm_channel(flat: dict[str, Any], region: str, scheme: str) -> dict[str, A
         "name": scheme,
         "source_region": scheme,
         "region": region,
-        "kind": "lowdm_42bin_control" if region != "SR" else "lowdm_42bin_signal",
+        "kind": (
+            f"lowdm_{len(labels)}bin_control"
+            if region != "SR"
+            else f"lowdm_{len(labels)}bin_signal"
+        ),
         "edges": np.arange(len(labels) + 1, dtype=float),
         "background": bkg,
         "background_sumw2": bkg_s2,
@@ -71,6 +82,9 @@ def lowdm_channel(flat: dict[str, Any], region: str, scheme: str) -> dict[str, A
         "variations": aggregate_variations(by_sample, backgrounds, len(labels), bkg),
         "bin_labels": labels,
         "background_samples": backgrounds,
+        "background_processes": aggregate_background_processes(
+            by_sample, len(labels), hist_arrays, signal_prefix=SIGNAL_PREFIX
+        ),
     }
 
 
@@ -92,11 +106,16 @@ def mass_points(flat: dict[str, Any], only: list[str] | None, max_mstop: int | N
 
 
 def signal_array(flat: dict[str, Any], scheme: str, mass_key: str) -> tuple[np.ndarray, np.ndarray]:
+    nbin = len(
+        (((flat.get("search_bin_schemes") or {}).get(scheme) or {}).get("bin_labels") or [])
+    )
+    if nbin <= 0:
+        raise ValueError(f"missing bin labels for Low-dM scheme {scheme}")
     rec = (
         (((flat.get("search_bin_histograms") or {}).get(scheme) or {}).get(SIGNAL_PREFIX + mass_key) or {})
         .get("nominal")
     )
-    return hist_arrays(rec, 42)
+    return hist_arrays(rec, nbin)
 
 
 def build_root(
@@ -114,6 +133,7 @@ def build_root(
         "channels": {},
         "signals": {},
         "background_shape_nuisances": sorted({name for ch in channels for name in ch["variations"]}),
+        "background_grouping_contract": background_grouping_contract(),
     }
     try:
         for channel in channels:
@@ -124,18 +144,24 @@ def build_root(
             bkg_s2 = np.asarray(channel["background_sumw2"], dtype=float)
             data = bkg if data_mode == "asimov" else np.asarray(channel["data"], dtype=float)
             write_hist(directory, "data_obs", data, np.maximum(data, 0.0), edges)
-            write_hist(directory, BACKGROUND_NAME, bkg, bkg_s2, edges)
-            for nuisance, pair in channel["variations"].items():
-                write_hist(directory, f"{BACKGROUND_NAME}_{nuisance}Up", np.asarray(pair["up"]), bkg_s2, edges)
-                write_hist(directory, f"{BACKGROUND_NAME}_{nuisance}Down", np.asarray(pair["down"]), bkg_s2, edges)
+            process_summary = materialize_grouped_background_templates(
+                directory,
+                channel.get("background_processes") or {},
+                bkg,
+                bkg_s2,
+                edges,
+                write_hist,
+                min_bin=MIN_BIN,
+            )
             summary["channels"][name] = {
                 "region": channel["region"],
                 "kind": channel["kind"],
-                "bin_count": 42,
+                "bin_count": len(bkg),
                 "background_yield": float(np.sum(bkg)),
                 "data_yield": float(np.sum(data)),
                 "data_mode": data_mode,
                 "background_shape_nuisances": sorted(channel["variations"]),
+                "background_processes": process_summary,
                 "bin_labels": channel["bin_labels"],
             }
             for mass_key in selected_masses:
@@ -151,7 +177,7 @@ def build_root(
                 signal_variations = aggregate_variations(
                     by_sample,
                     [SIGNAL_PREFIX + mass_key],
-                    42,
+                    len(values),
                     values,
                 )
                 for nuisance, pair in signal_variations.items():
@@ -173,9 +199,10 @@ def write_datacards(
 ) -> dict[str, str]:
     output_dir.mkdir(parents=True, exist_ok=True)
     cards: dict[str, str] = {}
+    lowdm_bins = len(channels[0]["background"])
     note = (
         "# Low-dM-only datacard: LLCR, QCDCR, GCR, DY2E, DY2M, and SR each use "
-        "the adopted 42 Nsv-inclusive categories; no high-dM channel is present.\n"
+        f"the adopted {lowdm_bins} Nsv-inclusive categories; no high-dM channel is present.\n"
     )
     for mass_key in selected_masses:
         card = output_dir / f"datacard_{mass_key}.txt"
@@ -217,6 +244,9 @@ def main() -> int:
         lowdm_channel(flat, region, scheme)
         for region, scheme in LOWDM_REGION_MAP.items()
     ]
+    lowdm_bins = len(channels[0]["background"])
+    if any(len(channel["background"]) != lowdm_bins for channel in channels):
+        raise ValueError("Low-dM regions do not have a common bin count")
     selected_masses = mass_points(flat, args.only, args.max_mstop)
     if args.max_points is not None:
         selected_masses = selected_masses[: args.max_points]
@@ -224,7 +254,8 @@ def main() -> int:
         raise SystemExit("no Low-dM signal mass points selected")
 
     outdir = args.output_dir
-    template_root = outdir / "templates_lowdm42.root"
+    tag = f"lowdm{lowdm_bins}"
+    template_root = outdir / f"templates_{tag}.root"
     datacard_dir = outdir / "datacards"
     limit_dir = outdir / "limits"
     runner = outdir / "run_combine_expected.sh"
@@ -243,22 +274,22 @@ def main() -> int:
         write_parallel_runner(cards, limit_dir, runner, args.runner_jobs, args.point_timeout)
 
     limit_payload = collect_limits(limit_dir, selected_masses, outdir / "expected_limits.json")
-    contour_png = outdir / "expected_limit_contour_lowdm42.png"
+    contour_png = outdir / f"expected_limit_contour_{tag}.png"
     contour_written = plot_contour(
         limit_payload,
         contour_png,
         run2_contours=None,
         luminosity_label=r"109.82 fb$^{-1}$ (13.6 TeV)",
-        analysis_label=r"Low-$\Delta m$ CR+SR only, $6\times42$ bins",
+        analysis_label=rf"Low-$\Delta m$ CR+SR only, $6\times{lowdm_bins}$ bins",
     )
     contour_pdf = contour_png.with_suffix(".pdf")
     manifest = {
         "status": "combine_outputs_complete" if limit_payload["status"] == "complete" else "combine_inputs_ready",
-        "schema": "lowdm_only_6region_42bin_v1",
+        "schema": f"lowdm_only_6region_{lowdm_bins}bin_v1",
         "hists": str(args.hists),
         "channels": [channel["name"] for channel in channels],
-        "bins_per_channel": 42,
-        "total_analysis_bins": 42 * len(channels),
+        "bins_per_channel": lowdm_bins,
+        "total_analysis_bins": lowdm_bins * len(channels),
         "highdm_included": False,
         "data_mode": args.data_mode,
         "mass_points": selected_masses,

@@ -15,7 +15,6 @@ if str(THIS_DIR) not in sys.path:
     sys.path.insert(0, str(THIS_DIR))
 
 from build_boosted_an17_combine_inputs import (  # noqa: E402
-    BACKGROUND_NAME,
     LUMI_LNN,
     LUMI_NAME,
     SR_CHANNEL,
@@ -28,6 +27,11 @@ from build_boosted_an17_combine_inputs import (  # noqa: E402
     write_datacards,
     write_json,
     write_limit_runner,
+)
+from background_process_groups import (  # noqa: E402
+    aggregate_background_processes,
+    background_grouping_contract,
+    materialize_grouped_background_templates,
 )
 
 CONTROL_REGION_MAP = {
@@ -123,6 +127,9 @@ def cr_channel(flat: dict[str, Any], flat_region: str, channel_name: str) -> dic
         "variations": aggregate_variations(by_sample, backgrounds, nbin, bkg),
         "variable": "recoil_or_met",
         "background_samples": backgrounds,
+        "background_processes": aggregate_background_processes(
+            by_sample, nbin, hist_arrays, signal_prefix=SIGNAL_PREFIX
+        ),
     }
 
 
@@ -146,6 +153,9 @@ def sr_channel(flat: dict[str, Any]) -> dict[str, Any]:
         "variations": aggregate_variations(by_sample, backgrounds, nbin, bkg),
         "bin_labels": labels,
         "background_samples": backgrounds,
+        "background_processes": aggregate_background_processes(
+            by_sample, nbin, hist_arrays, signal_prefix=SIGNAL_PREFIX
+        ),
     }
 
 
@@ -195,7 +205,14 @@ def build_root_from_flat(channels: list[dict[str, Any]], flat: dict[str, Any], m
 
     output_root.parent.mkdir(parents=True, exist_ok=True)
     root_file = ROOT.TFile(str(output_root), "RECREATE")
-    summary: dict[str, Any] = {"channels": {}, "signals": {}, "background_shape_nuisances": sorted({name for ch in channels for name in ch.get("variations", {})})}
+    summary: dict[str, Any] = {
+        "channels": {},
+        "signals": {},
+        "background_shape_nuisances": sorted(
+            {name for ch in channels for name in ch.get("variations", {})}
+        ),
+        "background_grouping_contract": background_grouping_contract(),
+    }
     try:
         for channel in channels:
             name = channel["name"]
@@ -207,14 +224,15 @@ def build_root_from_flat(channels: list[dict[str, Any]], flat: dict[str, Any], m
             from build_boosted_an17_combine_inputs import write_hist
 
             write_hist(directory, "data_obs", data, np.maximum(data, 0.0), edges)
-            write_hist(directory, BACKGROUND_NAME, bkg, bkg_s2, edges)
-            for syst_name, pair in (channel.get("variations") or {}).items():
-                up = np.asarray(pair.get("up", bkg), dtype=float)
-                down = np.asarray(pair.get("down", bkg), dtype=float)
-                if len(up) == len(bkg):
-                    write_hist(directory, f"{BACKGROUND_NAME}_{syst_name}Up", up, bkg_s2, edges)
-                if len(down) == len(bkg):
-                    write_hist(directory, f"{BACKGROUND_NAME}_{syst_name}Down", down, bkg_s2, edges)
+            process_summary = materialize_grouped_background_templates(
+                directory,
+                channel.get("background_processes") or {},
+                bkg,
+                bkg_s2,
+                edges,
+                write_hist,
+                min_bin=MIN_BIN,
+            )
             summary["channels"][name] = {
                 "kind": channel.get("kind"),
                 "bin_count": int(len(bkg)),
@@ -222,6 +240,7 @@ def build_root_from_flat(channels: list[dict[str, Any]], flat: dict[str, Any], m
                 "data_yield": float(np.sum(data)),
                 "data_mode": data_mode,
                 "background_shape_nuisances": sorted((channel.get("variations") or {}).keys()),
+                "background_processes": process_summary,
             }
             if channel.get("bin_labels"):
                 summary["channels"][name]["bin_labels"] = channel.get("bin_labels")

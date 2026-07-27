@@ -488,11 +488,33 @@ def datacard_text(
     channel_names = [ch["name"] for ch in channels]
     proc = signal_process_name(mass_key)
     columns: list[tuple[str, str, int]] = []
+    grouping = root_summary.get("background_grouping_contract") or {}
+    grouped_process_order = list(grouping.get("process_order") or [])
+    grouped_model = bool(grouped_process_order)
+    grouped_process_ids = {
+        process: index + 1 for index, process in enumerate(grouped_process_order)
+    }
     for channel in channel_names:
         sig_yield = float((((root_summary.get("signals") or {}).get(mass_key) or {}).get("channels") or {}).get(channel, 0.0))
         if sig_yield > 0.0:
             columns.append((channel, proc, 0))
-        columns.append((channel, BACKGROUND_NAME, 1))
+        if grouped_model:
+            available = (
+                ((root_summary.get("channels") or {}).get(channel) or {})
+                .get("background_processes")
+                or {}
+            )
+            for background_process in grouped_process_order:
+                if background_process in available:
+                    columns.append(
+                        (
+                            channel,
+                            background_process,
+                            grouped_process_ids[background_process],
+                        )
+                    )
+        else:
+            columns.append((channel, BACKGROUND_NAME, 1))
     signal_systs = set(
         (((root_summary.get("signals") or {}).get(mass_key) or {}).get("shape_nuisances") or {}).keys()
     )
@@ -516,20 +538,39 @@ def datacard_text(
     for syst_name in all_systs:
         mask = []
         for channel, process, _ in columns:
-            has = syst_name in (((root_summary.get("channels") or {}).get(channel) or {}).get("background_shape_nuisances") or [])
+            channel_summary = (root_summary.get("channels") or {}).get(channel) or {}
+            if grouped_model and process != proc:
+                has = syst_name in (
+                    ((channel_summary.get("background_processes") or {}).get(process) or {})
+                    .get("shape_nuisances")
+                    or []
+                )
+            else:
+                has = syst_name in (
+                    channel_summary.get("background_shape_nuisances") or []
+                )
             signal_channels = (
                 (((root_summary.get("signals") or {}).get(mass_key) or {}).get("shape_nuisances") or {}).get(syst_name)
                 or []
             )
             mask.append(
                 "1"
-                if (process == BACKGROUND_NAME and has) or (process == proc and channel in signal_channels)
+                if (
+                    (process != proc and has)
+                    or (process == proc and channel in signal_channels)
+                )
                 else "-"
             )
         lines.append(syst_name + " shape " + " ".join(mask))
     lines.append(lumi_name + " lnN " + " ".join(f"{lumi_lnn:.3f}" for _ in columns))
     lines.extend([
         f"* autoMCStats {auto_mc_stats}",
+        (
+            "# Background grouping: Top=TT+ST; VV_VVV is displayed as VV+VVV; "
+            "PhotonJet is displayed as Photon+jet."
+            if grouped_model
+            else "# Backgrounds use the legacy single-template model."
+        ),
         "# Boosted AN17 datacard: CR channels use 6-bin recoil/U_T histograms; SR uses 17 boosted top/W tagged search bins.",
         "# SR background shape nuisances are reconstructed from shard-level search_bin_variations plus JES/MET unclustered shape shards.",
     ])

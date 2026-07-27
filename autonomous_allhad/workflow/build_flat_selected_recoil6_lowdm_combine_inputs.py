@@ -14,7 +14,6 @@ if str(THIS_DIR) not in sys.path:
     sys.path.insert(0, str(THIS_DIR))
 
 from build_boosted_an17_combine_inputs import (  # noqa: E402
-    BACKGROUND_NAME,
     LUMI_LNN,
     LUMI_NAME,
     datacard_text,
@@ -41,6 +40,11 @@ from build_flat_recoil_ntop_split_lowdm_combine_inputs import (  # noqa: E402
     signal_array_from_search,
 )
 from build_flat_recoil_sr_combine_inputs import signal_process_name  # noqa: E402
+from background_process_groups import (  # noqa: E402
+    aggregate_background_processes,
+    background_grouping_contract,
+    materialize_grouped_background_templates,
+)
 
 
 DEFAULT_SELECTED_SCHEME = "boosted_an17_selected_recoil6_SR"
@@ -78,6 +82,9 @@ def selected_recoil6_channel(flat: dict[str, Any], scheme_name: str, channel_nam
         "variable": "selected_an17_recoil6_bin",
         "bin_labels": labels,
         "background_samples": backgrounds,
+        "background_processes": aggregate_background_processes(
+            by_sample, nbin, hist_arrays, signal_prefix=SIGNAL_PREFIX
+        ),
     }
 
 
@@ -143,6 +150,7 @@ def build_root_from_flat(
         "channels": {},
         "signals": {},
         "background_shape_nuisances": sorted({name for ch in channels for name in ch.get("variations", {})}),
+        "background_grouping_contract": background_grouping_contract(),
     }
     try:
         for channel in channels:
@@ -155,14 +163,15 @@ def build_root_from_flat(
             data = bkg if data_mode == "asimov" else np.asarray(channel["data"], dtype=float)
 
             write_hist(directory, "data_obs", data, np.maximum(data, 0.0), edges)
-            write_hist(directory, BACKGROUND_NAME, np.maximum(bkg, MIN_BIN), bkg_s2, edges)
-            for syst_name, pair in (channel.get("variations") or {}).items():
-                up = np.asarray(pair.get("up", bkg), dtype=float)
-                down = np.asarray(pair.get("down", bkg), dtype=float)
-                if len(up) == len(bkg):
-                    write_hist(directory, f"{BACKGROUND_NAME}_{syst_name}Up", np.maximum(up, MIN_BIN), bkg_s2, edges)
-                if len(down) == len(bkg):
-                    write_hist(directory, f"{BACKGROUND_NAME}_{syst_name}Down", np.maximum(down, MIN_BIN), bkg_s2, edges)
+            process_summary = materialize_grouped_background_templates(
+                directory,
+                channel.get("background_processes") or {},
+                bkg,
+                bkg_s2,
+                edges,
+                write_hist,
+                min_bin=MIN_BIN,
+            )
 
             summary["channels"][name] = {
                 "kind": channel.get("kind"),
@@ -173,6 +182,7 @@ def build_root_from_flat(
                 "data_yield": float(np.sum(data)),
                 "data_mode": data_mode,
                 "background_shape_nuisances": sorted((channel.get("variations") or {}).keys()),
+                "background_processes": process_summary,
                 "bin_labels": channel.get("bin_labels") or [],
             }
             for mass_key in mass_keys:

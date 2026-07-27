@@ -6,9 +6,20 @@ from __future__ import annotations
 import argparse
 import json
 import shutil
+import sys
 from pathlib import Path
 
 import numpy as np
+
+THIS_DIR = Path(__file__).resolve().parent
+if str(THIS_DIR) not in sys.path:
+    sys.path.insert(0, str(THIS_DIR))
+
+from background_process_groups import (
+    BACKGROUND_DISPLAY_LABELS,
+    BACKGROUND_PROCESS_ORDER,
+    background_process_for_sample,
+)
 
 
 REGION_ORDER = [
@@ -30,17 +41,20 @@ REGION_LABELS = {
 }
 
 # Keep this process order fixed across control-region and search-bin plots.
-GROUP_ORDER = ["VV", "Single Top", "TT", "DY", "Gamma + Jets", "W -> lv", "Z -> vv", "QCD Multijet", "others"]
+# Raw histogram process names stay unchanged; this is the adopted presentation
+# and statistical-model grouping contract.
+GROUP_ORDER = [
+    BACKGROUND_DISPLAY_LABELS[process] for process in BACKGROUND_PROCESS_ORDER
+]
 GROUP_COLORS = {
-    "VV": "#6f7661",
-    "Single Top": "#8f7cc2",
-    "TT": "#9ec5b8",
+    "VV+VVV": "#6f7661",
+    "Top": "#9ec5b8",
     "DY": "#23c9c8",
-    "Gamma + Jets": "#800080",
+    "Photon+jet": "#800080",
     "W -> lv": "#eadac8",
     "Z -> vv": "#f2c58f",
     "QCD Multijet": "#d798a5",
-    "others": "#6a625f",
+    "Others": "#6a625f",
 }
 SIGNAL_OVERLAYS = [
     {"key": "mStop1000_mLSP1", "label": '$m_{\\tilde{t}}=1000$ GeV, $m_{\\tilde{\\chi}^{0}_{1}}=1$ GeV', "color": "#ff0000"},
@@ -78,9 +92,9 @@ LOWDM_NSV_INCLUSIVE_CATEGORY_SIZES = [
 LOWDM_NSV_INCLUSIVE_CATEGORY_LABELS = {
     "Nb0_Nj2to5_PISR500plus": '$N_{b}=0$\n$2\\leq N_{j}\\leq5$',
     "Nb0_Nj6plus_PISR500plus": '$N_{b}=0$\n$N_{j}\\geq6$',
-    "Nb1_PISR300to500_PTb20to40": '$N_{b}=1$\n$300\\leq p_{T}^{ISR}<500$\n$30<p_{T}^{b}<40$',
+    "Nb1_PISR300to500_PTb20to40": '$N_{b}=1$\n$300\\leq p_{T}^{ISR}<500$\n$20<p_{T}^{b}<40$',
     "Nb1_PISR300to500_PTb40to70": '$N_{b}=1$\n$300\\leq p_{T}^{ISR}<500$\n$40<p_{T}^{b}<70$',
-    "Nb1_PISR500plus_PTb20to40": '$N_{b}=1$\n$p_{T}^{ISR}\\geq500$\n$30<p_{T}^{b}<40$',
+    "Nb1_PISR500plus_PTb20to40": '$N_{b}=1$\n$p_{T}^{ISR}\\geq500$\n$20<p_{T}^{b}<40$',
     "Nb1_PISR500plus_PTb40to70": '$N_{b}=1$\n$p_{T}^{ISR}\\geq500$\n$40<p_{T}^{b}<70$',
     "Nb2plus_PISR300to500_PTb40to80_Nj2plus": '$N_{b}\\geq2$\n$300\\leq p_{T}^{ISR}<500$\n$40<p_{T}^{b}<80$',
     "Nb2plus_PISR300to500_PTb80to140_Nj2plus": '$N_{b}\\geq2$\n$300\\leq p_{T}^{ISR}<500$\n$80<p_{T}^{b}<140$',
@@ -107,6 +121,7 @@ PLOT_SYSTEMATIC_SOURCES = [
     "btagSF_bc_uncorrelated",
     "btagSF_light_correlated",
     "btagSF_light_uncorrelated",
+    "jesFlavorQCD",
     "jesTotal",
     "metUnclustered",
 ]
@@ -151,23 +166,7 @@ def as_array(values: list[float] | None, nbin: int) -> np.ndarray:
 
 
 def process_to_group(process: str) -> str:
-    if process == "VV":
-        return "VV"
-    if process == "ST":
-        return "Single Top"
-    if process == "TT":
-        return "TT"
-    if process == "DY":
-        return "DY"
-    if process == "GJ":
-        return "Gamma + Jets"
-    if process == "WtoLNu":
-        return "W -> lv"
-    if process == "Zto2Nu":
-        return "Z -> vv"
-    if process == "QCD":
-        return "QCD Multijet"
-    return "others"
+    return BACKGROUND_DISPLAY_LABELS[background_process_for_sample(process)]
 
 
 def poisson_unc(data: np.ndarray) -> np.ndarray:
@@ -696,15 +695,14 @@ HIGHDM_DISTRIBUTION_REGION_LABELS = {
 }
 
 GROUP_DISPLAY_LABELS = {
-    "VV": "VV",
-    "Single Top": "Single Top",
-    "TT": r"$\mathrm{t\bar{t}}$",
+    "VV+VVV": "VV+VVV",
+    "Top": "Top",
     "DY": "DY",
-    "Gamma + Jets": "Gamma + Jets",
+    "Photon+jet": "Photon+jet",
     "W -> lv": r"$\mathrm{W}\to\ell\nu$",
     "Z -> vv": r"$\mathrm{Z}\to\nu\bar{\nu}$",
     "QCD Multijet": "QCD Multijet",
-    "others": "Others",
+    "Others": "Others",
 }
 
 
@@ -1198,7 +1196,7 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
     hep.cms.label(llabel="Work in progress", rlabel=rf"{LUMINOSITY_FB:.2f} fb$^{{-1}}$ (13.6 TeV)", ax=ax)
     if reference_style:
         handles, legend_labels = ax.get_legend_handles_labels()
-        desired = ["Stat. syst. unc", "VV", "Single Top", r"$\mathrm{t\bar{t}}$", "DY", "Gamma + Jets", r"$\mathrm{W}\to\ell\nu$", r"$\mathrm{Z}\to\nu\bar{\nu}$", "QCD Multijet", "Others", "Data"]
+        desired = ["Stat. syst. unc", "VV+VVV", "Top", "DY", "Photon+jet", r"$\mathrm{W}\to\ell\nu$", r"$\mathrm{Z}\to\nu\bar{\nu}$", "QCD Multijet", "Others", "Data"]
         ordered = [(handles[legend_labels.index(label)], label) for label in desired if label in legend_labels]
         if ordered:
             ax.legend([item[0] for item in ordered], [item[1] for item in ordered], fontsize=15, ncol=3, frameon=False, columnspacing=1.2, handlelength=1.8, loc="upper center", bbox_to_anchor=(0.52, 0.995))
