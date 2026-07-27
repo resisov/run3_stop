@@ -64,15 +64,12 @@ LOWDM_SIGNAL_OVERLAYS = [
     {
         "key": "mStop600_mLSP400",
         "label": '$m_{\\tilde{t}}=600$ GeV, $m_{\\tilde{\\chi}^{0}_{1}}=400$ GeV',
-        "color": "#0057FF",
+        "color": "#FF007F",
     },
     {
         "key": "mStop900_mLSP700",
         "label": '$m_{\\tilde{t}}=900$ GeV, $m_{\\tilde{\\chi}^{0}_{1}}=700$ GeV',
         "color": "#FFD500",
-        "outline_color": "black",
-        "outline_alpha": 0.45,
-        "outline_linewidth": 4.4,
     },
 ]
 LOWDM_NSV_INCLUSIVE_CATEGORY_SIZES = [
