@@ -18,8 +18,13 @@ import mplhep as hep
 import numpy as np
 
 
-LUMI_LABEL = r"2024, 20.87 fb$^{-1}$ (13.6 TeV)"
-CMS_LABEL = {"llabel": "Work in progress", "rlabel": LUMI_LABEL}
+hep.style.use("CMS")
+
+CMS_LABEL = {
+    "llabel": "Work in progress",
+    "rlabel": "2024 (13.6 TeV)",
+    "fontsize": 24,
+}
 HIGH_GROUPS = ("Nb1", "Nb2", "Nb3plus")
 HIGH_RZ_GROUP = {"Nb1": "Nb1", "Nb2": "Nb2plus", "Nb3plus": "Nb2plus"}
 LOW_GROUPS = ("Nb1", "Nb2plus")
@@ -104,6 +109,27 @@ def factor(
 
 def low_family(label: str) -> str:
     return re.sub(r"_recoil_[0-9]+$", "", label)
+
+
+def low_ut_tick_labels(family: str, nbin: int) -> list[str]:
+    if "PISR300to500" in family:
+        thresholds = [300, 400, 500, 600] if nbin == 4 else [300, 400, 500]
+    elif "PISR500plus" in family:
+        thresholds = [450, 550, 650, 750] if nbin == 4 else [450, 550, 650]
+    else:
+        raise ValueError(f"cannot infer Low-dM U_T bins for {family}")
+    if len(thresholds) != nbin:
+        raise ValueError(
+            f"Low-dM U_T bin mismatch for {family}: {nbin} bins"
+        )
+    return [
+        (
+            f"{thresholds[index]}–{thresholds[index + 1]}"
+            if index + 1 < nbin
+            else rf"$\geq {thresholds[index]}$"
+        )
+        for index in range(nbin)
+    ]
 
 
 def build_q_sgamma(
@@ -360,7 +386,7 @@ def save_figure(fig: plt.Figure, base: Path) -> list[str]:
 def plot_rz(
     rz: dict[str, Any], regime: str, output_dir: Path
 ) -> list[str]:
-    fig, ax = plt.subplots(figsize=(7.2, 5.7))
+    fig, ax = plt.subplots(figsize=(10.2, 10.2))
     groups = ["Nb1", "Nb2plus"]
     x = np.arange(len(groups), dtype=float)
     colors = {"DY2E": "#D62728", "DY2M": "#1F77B4", "combined": "#111111"}
@@ -405,8 +431,11 @@ def plot_rz(
         label="combined",
     )
     ax.axhline(1.0, color="0.55", lw=1.5, ls=":")
-    ax.set_xticks(x, [r"$N_b=1$", r"$N_b\geq2$"], fontsize=13)
-    ax.set_ylabel(r"$R_Z$", fontsize=15)
+    ax.set_xticks(x, [r"$N_b=1$", r"$N_b\geq2$"], fontsize=26)
+    ax.set_xlim(-0.5, len(groups) - 0.5)
+    ax.set_xmargin(0)
+    ax.set_ylabel(r"$R_Z$", fontsize=30)
+    ax.tick_params(axis="y", labelsize=24)
     ax.legend(frameon=False, fontsize=12)
     ax.grid(axis="y", alpha=0.18)
     hep.cms.label(**CMS_LABEL, ax=ax)
@@ -437,7 +466,7 @@ def plot_q(factors: dict[str, Any], output_dir: Path) -> list[str]:
             errors.append(float("nan"))
     x = np.arange(len(labels), dtype=float)
     colors = ["#D62728"] * 3 + ["#7B2CBF"] * 2
-    fig, ax = plt.subplots(figsize=(8.4, 5.8))
+    fig, ax = plt.subplots(figsize=(10.2, 10.2))
     for index in range(len(labels)):
         ax.errorbar(
             x[index],
@@ -451,10 +480,12 @@ def plot_q(factors: dict[str, Any], output_dir: Path) -> list[str]:
         )
     ax.axhline(1.0, color="0.45", lw=1.5, ls=":")
     ax.axvline(2.5, color="0.75", lw=1.2)
-    ax.set_xticks(x, labels, rotation=18, ha="right", fontsize=12)
+    ax.set_xticks(x, labels, rotation=18, ha="right", fontsize=24)
+    ax.set_xlim(-0.5, len(labels) - 0.5)
+    ax.set_xmargin(0)
     ax.set_ylabel(r"$Q=(N_{\mathrm{data}}-N_{\mathrm{other}})"
-                  r"/N_{\gamma,\mathrm{MC}}$", fontsize=14)
-    ax.tick_params(axis="y", labelsize=12)
+                  r"/N_{\gamma,\mathrm{MC}}$", fontsize=28)
+    ax.tick_params(axis="y", labelsize=24)
     ax.grid(axis="y", alpha=0.16)
     hep.cms.label(**CMS_LABEL, ax=ax)
     return save_figure(fig, output_dir / "photon_q_normalization")
@@ -468,11 +499,11 @@ def plot_sgamma(
         edges = np.asarray([250, 300, 350, 400, 500, 800, 1500], dtype=float)
         centers = 0.5 * (edges[:-1] + edges[1:])
         widths = 0.5 * (edges[1:] - edges[:-1])
-        fig, ax = plt.subplots(figsize=(8.0, 5.8))
+        fig, ax = plt.subplots(figsize=(10.2, 10.2))
         styles = {
-            "Nb1": ("-", r"$N_b=1$"),
-            "Nb2": ("--", r"$N_b=2$"),
-            "Nb3plus": ("-.", r"$N_b\geq3$"),
+            "Nb1": ("o", r"$N_b=1$"),
+            "Nb2": ("s", r"$N_b=2$"),
+            "Nb3plus": ("^", r"$N_b\geq3$"),
         }
         for group in HIGH_GROUPS:
             records = factors[group]["bins"]
@@ -492,23 +523,25 @@ def plot_sgamma(
                     for item in records
                 ]
             )
-            style, label = styles[group]
+            marker, label = styles[group]
             ax.errorbar(
                 centers,
                 values,
                 xerr=widths,
                 yerr=errors,
-                fmt="o",
-                ls=style,
+                fmt=marker,
+                ls="none",
                 lw=2.6,
                 ms=4.5,
                 capsize=3,
                 label=label,
             )
         ax.axhline(1.0, color="0.45", lw=1.5, ls=":")
-        ax.set_xlabel(r"Hadronic recoil $U_T$ [GeV]", fontsize=15)
-        ax.set_ylabel(r"$S_{\gamma,i}$", fontsize=15)
-        ax.tick_params(labelsize=12)
+        ax.set_xlabel(r"$U_T$ (GeV)", fontsize=30)
+        ax.set_xlim(float(edges[0]), float(edges[-1]))
+        ax.set_xmargin(0)
+        ax.set_ylabel(r"$S_{\gamma,i}$", fontsize=30)
+        ax.tick_params(labelsize=24)
         ax.legend(frameon=False, fontsize=12)
         ax.grid(alpha=0.16)
         hep.cms.label(**CMS_LABEL, ax=ax)
@@ -533,22 +566,26 @@ def plot_sgamma(
                     for item in records
                 ]
             )
-            fig, ax = plt.subplots(figsize=(7.0, 5.4))
+            fig, ax = plt.subplots(figsize=(10.2, 10.2))
             ax.errorbar(
                 x,
                 values,
+                xerr=np.full_like(x, 0.5),
                 yerr=errors,
-                fmt="o-",
+                fmt="o",
+                ls="none",
                 lw=2.6,
                 ms=5,
                 capsize=3,
                 color="#D62728" if payload["group"] == "Nb1" else "#7B2CBF",
             )
             ax.axhline(1.0, color="0.45", lw=1.5, ls=":")
-            ax.set_xticks(x)
-            ax.set_xlabel("Recoil-bin index", fontsize=14)
-            ax.set_ylabel(r"$S_{\gamma,i}$", fontsize=15)
-            ax.tick_params(labelsize=12)
+            ax.set_xticks(x, low_ut_tick_labels(family, len(records)))
+            ax.set_xlim(0.5, len(records) + 0.5)
+            ax.set_xmargin(0)
+            ax.set_xlabel(r"$U_T$ (GeV)", fontsize=28)
+            ax.set_ylabel(r"$S_{\gamma,i}$", fontsize=30)
+            ax.tick_params(labelsize=24)
             ax.grid(alpha=0.16)
             hep.cms.label(**CMS_LABEL, ax=ax)
             safe = re.sub(r"[^A-Za-z0-9]+", "_", family).strip("_")
@@ -570,7 +607,7 @@ def plot_double_ratios(
             "Nb2": ("--", r"$N_b=2$"),
             "Nb3plus": ("-.", r"$N_b\geq3$"),
         }
-        fig, ax = plt.subplots(figsize=(8.0, 5.8))
+        fig, ax = plt.subplots(figsize=(10.2, 10.2))
         for group in HIGH_GROUPS:
             values = np.asarray(
                 [
@@ -590,11 +627,13 @@ def plot_double_ratios(
                 label=label,
             )
         ax.axhline(1.0, color="0.45", lw=1.5, ls=":")
-        ax.set_xlabel(r"Hadronic recoil $U_T$ [GeV]", fontsize=15)
+        ax.set_xlabel(r"$U_T$ (GeV)", fontsize=30)
+        ax.set_xlim(float(edges[0]), float(edges[-1]))
+        ax.set_xmargin(0)
         ax.set_ylabel(
-            r"$(Z_i/\sum Z)/(\gamma_i/\sum\gamma)$", fontsize=14
+            r"$(Z_i/\sum Z)/(\gamma_i/\sum\gamma)$", fontsize=28
         )
-        ax.tick_params(labelsize=12)
+        ax.tick_params(labelsize=24)
         ax.grid(alpha=0.16)
         ax.legend(frameon=False, fontsize=12)
         hep.cms.label(**CMS_LABEL, ax=ax)
@@ -611,7 +650,7 @@ def plot_double_ratios(
                 dtype=float,
             )
             x = np.arange(1, len(values) + 1, dtype=float)
-            fig, ax = plt.subplots(figsize=(7.0, 5.4))
+            fig, ax = plt.subplots(figsize=(10.2, 10.2))
             ax.plot(
                 x,
                 values,
@@ -625,12 +664,14 @@ def plot_double_ratios(
                 ),
             )
             ax.axhline(1.0, color="0.45", lw=1.5, ls=":")
-            ax.set_xticks(x)
-            ax.set_xlabel("Recoil-bin index", fontsize=14)
+            ax.set_xticks(x, low_ut_tick_labels(family, len(values)))
+            ax.set_xlim(0.5, len(values) + 0.5)
+            ax.set_xmargin(0)
+            ax.set_xlabel(r"$U_T$ (GeV)", fontsize=28)
             ax.set_ylabel(
-                r"$(Z_i/\sum Z)/(\gamma_i/\sum\gamma)$", fontsize=14
+                r"$(Z_i/\sum Z)/(\gamma_i/\sum\gamma)$", fontsize=28
             )
-            ax.tick_params(labelsize=12)
+            ax.tick_params(labelsize=24)
             ax.grid(alpha=0.16)
             hep.cms.label(**CMS_LABEL, ax=ax)
             safe = re.sub(r"[^A-Za-z0-9]+", "_", family).strip("_")
@@ -660,37 +701,151 @@ def plot_mll(
             edges = np.asarray(first["edges"], dtype=float)
             centers = 0.5 * (edges[:-1] + edges[1:])
             data = np.asarray((node.get("data") or {}).get("sumw", []), dtype=float)
+            data2 = np.asarray(
+                (node.get("data") or {}).get("sumw2", []), dtype=float
+            )
             zll = np.asarray((node.get("zll") or {}).get("sumw", []), dtype=float)
+            zll2 = np.asarray(
+                (node.get("zll") or {}).get("sumw2", []), dtype=float
+            )
             other = np.asarray((node.get("other") or {}).get("sumw", []), dtype=float)
+            other2 = np.asarray(
+                (node.get("other") or {}).get("sumw2", []), dtype=float
+            )
             if not len(data):
                 continue
-            fig, ax = plt.subplots(figsize=(7.4, 5.6))
-            ax.stairs(other, edges, fill=True, color="#B39DDB", label="Other")
+            total = zll + other
+            total_error = np.sqrt(np.maximum(zll2 + other2, 0.0))
+            data_error = np.sqrt(np.maximum(data2, 0.0))
+            valid_ratio = total > 0.0
+            ratio = np.full_like(data, np.nan)
+            ratio_error = np.full_like(data, np.nan)
+            ratio[valid_ratio] = data[valid_ratio] / total[valid_ratio]
+            ratio_error[valid_ratio] = (
+                data_error[valid_ratio] / total[valid_ratio]
+            )
+            relative_mc_error = np.zeros_like(total)
+            relative_mc_error[valid_ratio] = (
+                total_error[valid_ratio] / total[valid_ratio]
+            )
+
+            fig, (ax, rax) = plt.subplots(
+                2,
+                1,
+                figsize=(10.2, 10.2),
+                sharex=True,
+                gridspec_kw={
+                    "height_ratios": [3.2, 1.1],
+                    "hspace": 0.04,
+                },
+            )
             ax.stairs(
-                other + zll,
+                other,
+                edges,
+                fill=True,
+                baseline=0.0,
+                color="#6A625F",
+                edgecolor="black",
+                linewidth=0.7,
+                label="Others",
+            )
+            ax.stairs(
+                total,
                 edges,
                 fill=True,
                 baseline=other,
-                color="#4C78A8",
-                label=r"$Z/\gamma^*\to\ell\ell$",
+                color="#35B6B4",
+                edgecolor="black",
+                linewidth=0.7,
+                label="DY",
+            )
+            ax.stairs(
+                total + total_error,
+                edges,
+                baseline=np.maximum(total - total_error, 0.0),
+                fill=True,
+                facecolor="none",
+                edgecolor="0.35",
+                hatch="////",
+                linewidth=0.0,
+                label="Stat. unc.",
             )
             ax.errorbar(
                 centers,
                 data,
-                yerr=np.sqrt(np.maximum(data, 0.0)),
+                yerr=data_error,
                 fmt="o",
                 color="black",
-                ms=4,
-                lw=1.4,
+                ms=6,
+                lw=2.0,
+                capsize=2,
                 label="Data",
             )
             ax.axvspan(81.0, 101.0, color="#FFD166", alpha=0.18)
-            ax.set_xlabel(r"$m_{\ell\ell}$ [GeV]", fontsize=14)
-            ax.set_ylabel("Events / bin", fontsize=14)
+            rax.axvspan(81.0, 101.0, color="#FFD166", alpha=0.18)
+            rax.stairs(
+                1.0 + relative_mc_error,
+                edges,
+                baseline=1.0 - relative_mc_error,
+                fill=True,
+                facecolor="0.75",
+                edgecolor="0.55",
+                alpha=0.55,
+                linewidth=0.0,
+            )
+            rax.errorbar(
+                centers[valid_ratio],
+                ratio[valid_ratio],
+                yerr=ratio_error[valid_ratio],
+                fmt="o",
+                color="black",
+                ms=6,
+                lw=2.0,
+                capsize=2,
+            )
+            rax.axhline(1.0, color="black", lw=1.5)
+            ax.set_ylabel("Events / bin", fontsize=30)
+            rax.set_ylabel("Data/MC", fontsize=28)
+            rax.set_xlabel(
+                r"$m_{\ell\ell}$ (GeV)", fontsize=30, loc="right"
+            )
             ax.set_yscale("log")
             ax.set_ylim(bottom=0.2)
-            ax.legend(frameon=False, fontsize=11)
-            ax.tick_params(labelsize=12)
+            rax.set_ylim(0.0, 2.0)
+            for axis in (ax, rax):
+                axis.set_xlim(float(edges[0]), float(edges[-1]))
+                axis.set_xmargin(0)
+                axis.tick_params(
+                    which="major",
+                    direction="in",
+                    top=True,
+                    right=True,
+                    labelsize=24,
+                    length=9,
+                )
+                axis.tick_params(
+                    which="minor",
+                    direction="in",
+                    top=True,
+                    right=True,
+                    length=5,
+                )
+                axis.minorticks_on()
+            handles, labels = ax.get_legend_handles_labels()
+            order = ["Stat. unc.", "DY", "Others", "Data"]
+            ordered = [
+                (handles[labels.index(label)], label)
+                for label in order
+                if label in labels
+            ]
+            ax.legend(
+                [item[0] for item in ordered],
+                [item[1] for item in ordered],
+                frameon=False,
+                fontsize=18,
+                ncol=2,
+                loc="upper right",
+            )
             hep.cms.label(**CMS_LABEL, ax=ax)
             paths.extend(
                 save_figure(
