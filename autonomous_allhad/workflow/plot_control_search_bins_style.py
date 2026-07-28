@@ -486,7 +486,7 @@ FLAT_REGION_LABELS = {
 
 
 def is_signal_sample(sample: str) -> bool:
-    return sample.startswith("T2tt")
+    return sample.startswith(("T2tt", "T2tb", "T2bW"))
 
 
 def flat_values(rec: dict, nbin: int) -> tuple[np.ndarray, np.ndarray]:

@@ -4,7 +4,7 @@
     "legacy High-dM 17-bin",
     "legacy High-dM 42-bin"
   ],
-  "generated_at": "2026-07-28T15:00:45.643449+00:00",
+  "generated_at": "2026-07-28T17:18:41.785865+00:00",
   "histogram_status": "complete",
   "plot_counts": {
     "categories": 26,
@@ -3035,9 +3035,9 @@
     }
   ],
   "snapshot_input_count": null,
-  "snapshot_manifest": "input_union_manifest_2024_dyexclusive_t2models",
-  "source_hist_payload": "hists_2024_dyexclusive_t2models",
-  "source_hist_payload_sha256": "d903780e9070e87b94fe2cb42404ca28d80f679b63f4b7f13ab83aabece3d150",
+  "snapshot_manifest": "input_union_manifest_2024_dyexclusive4_t2models",
+  "source_hist_payload": "hists_2024_dyexclusive4_t2models_noother",
+  "source_hist_payload_sha256": "b73c9d56626868f0a6124089449fb13b04f6249185a7f492ae8f25f47841a319",
   "status": "complete",
   "year": 2024
 }

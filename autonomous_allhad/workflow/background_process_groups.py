@@ -34,7 +34,13 @@ RAW_TO_BACKGROUND_PROCESS = {
 
 
 def background_process_for_sample(sample: str) -> str:
-    return RAW_TO_BACKGROUND_PROCESS.get(str(sample), "Other")
+    raw_sample = str(sample)
+    if raw_sample not in RAW_TO_BACKGROUND_PROCESS:
+        raise ValueError(
+            f"unmapped background sample {raw_sample!r}; explicitly classify it "
+            "instead of silently publishing it as Others"
+        )
+    return RAW_TO_BACKGROUND_PROCESS[raw_sample]
 
 
 def _pair_variations(
@@ -62,10 +68,19 @@ def aggregate_background_processes(
     nbin: int,
     hist_arrays: Callable[[dict[str, Any] | None, int], tuple[np.ndarray, np.ndarray]],
     *,
-    signal_prefix: str = "T2tt_",
+    signal_prefix: str | tuple[str, ...] = ("T2tt_", "T2tb_", "T2bW_"),
     data_samples: tuple[str, ...] = ("data_obs",),
 ) -> OrderedDict[str, dict[str, Any]]:
     """Aggregate raw background samples into the adopted process groups."""
+
+    configured_signal_prefixes = (
+        (signal_prefix,) if isinstance(signal_prefix, str) else tuple(signal_prefix)
+    )
+    signal_prefixes = tuple(
+        dict.fromkeys(
+            (*configured_signal_prefixes, "T2tt_", "T2tb_", "T2bW_")
+        )
+    )
 
     records: OrderedDict[str, dict[str, Any]] = OrderedDict()
     for process in BACKGROUND_PROCESS_ORDER:
@@ -78,7 +93,7 @@ def aggregate_background_processes(
         }
 
     for sample, sample_variations in sorted(by_sample.items()):
-        if sample in data_samples or str(sample).startswith(signal_prefix):
+        if sample in data_samples or str(sample).startswith(signal_prefixes):
             continue
         process = background_process_for_sample(sample)
         values, sumw2 = hist_arrays((sample_variations or {}).get("nominal"), nbin)
