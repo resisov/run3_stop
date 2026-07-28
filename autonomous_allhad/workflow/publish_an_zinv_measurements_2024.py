@@ -36,6 +36,16 @@ def caption(name: str) -> str:
         return r"High-dM photon-CR \(S_{\gamma,i}\) versus recoil."
     if name == "zgamma_double_ratio_highdm":
         return r"High-dM normalized \(Z/\gamma\) shape double ratio."
+    if name == "sgamma_lowdm_nb_isr_shared":
+        return (
+            r"Low-dM photon-CR \(S_{\gamma,i}\), shared within the four "
+            r"\(N_b\times p_T^{ISR}\) groups."
+        )
+    if name == "zgamma_double_ratio_lowdm_nb_isr_shared":
+        return (
+            r"Low-dM normalized \(Z/\gamma\) shape double ratio in the four "
+            r"\(N_b\times p_T^{ISR}\) groups."
+        )
     if name.startswith("sgamma_lowdm_"):
         return r"Low-dM photon-CR \(S_{\gamma,i}\) in one analysis family."
     if name.startswith("zgamma_double_ratio_lowdm_"):
@@ -62,12 +72,27 @@ def main() -> int:
         "rz_lowdm",
         "photon_q_normalization",
         "sgamma_highdm",
+        "sgamma_lowdm_nb_isr_shared",
         "zgamma_double_ratio_highdm",
+        "zgamma_double_ratio_lowdm_nb_isr_shared",
     }
     missing = sorted(required - set(stems))
     if missing:
         raise RuntimeError("required Zinv plots missing: " + ", ".join(missing))
     target_plot_dir = args.page_dir / "plots/zinv_measurements"
+    expected_assets = {
+        path.with_suffix(suffix).name
+        for path in plot_sources
+        for suffix in (".png", ".pdf")
+    }
+    if target_plot_dir.exists():
+        for existing in target_plot_dir.iterdir():
+            if (
+                existing.is_file()
+                and existing.suffix in {".png", ".pdf"}
+                and existing.name not in expected_assets
+            ):
+                existing.unlink()
     records = []
     for png in plot_sources:
         pdf = png.with_suffix(".pdf")
@@ -114,7 +139,8 @@ def main() -> int:
         "N<sub>pred</sub>=R<sub>Z</sub>S<sub>γ,i</sub>N<sub>MC,i</sub>: "
         "R<sub>Z</sub> comes from the on/off-Z dielectron and dimuon matrix, "
         "and S<sub>γ,i</sub> comes from the photon CR after Q normalization "
-        "within the adopted N<sub>b</sub>/category groups. Dilepton CRs are "
+        "within the adopted N<sub>b</sub> and p<sub>T</sub><sup>ISR</sup> "
+        "groups. Dilepton CRs are "
         "measurement-only and are not direct Z transfer-factor likelihood "
         "channels. <a href='data/an_zinv_factors_2024.json'>Machine-readable "
         "measurement</a>.</p><div class='tf-grid'>"

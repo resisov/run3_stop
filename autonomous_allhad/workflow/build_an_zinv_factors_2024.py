@@ -28,6 +28,36 @@ CMS_LABEL = {
 HIGH_GROUPS = ("Nb1", "Nb2", "Nb3plus")
 HIGH_RZ_GROUP = {"Nb1": "Nb1", "Nb2": "Nb2plus", "Nb3plus": "Nb2plus"}
 LOW_GROUPS = ("Nb1", "Nb2plus")
+LOW_SHARED_GROUPS = (
+    (
+        "Nb1",
+        "PISR300to500",
+        r"$N_b=1,\ 300\leq p_T^{ISR}<500$",
+        "#D62728",
+        "o",
+    ),
+    (
+        "Nb1",
+        "PISR500plus",
+        r"$N_b=1,\ p_T^{ISR}\geq500$",
+        "#FF8C00",
+        "s",
+    ),
+    (
+        "Nb2plus",
+        "PISR300to500",
+        r"$N_b\geq2,\ 300\leq p_T^{ISR}<500$",
+        "#1F77B4",
+        "^",
+    ),
+    (
+        "Nb2plus",
+        "PISR500plus",
+        r"$N_b\geq2,\ p_T^{ISR}\geq500$",
+        "#7B2CBF",
+        "D",
+    ),
+)
 
 
 def read_json(path: Path) -> Any:
@@ -130,6 +160,186 @@ def low_ut_tick_labels(family: str, nbin: int) -> list[str]:
         )
         for index in range(nbin)
     ]
+
+
+def low_ut_geometry(isr_group: str, nbin: int) -> tuple[np.ndarray, np.ndarray]:
+    if isr_group == "PISR300to500":
+        lower = 300.0
+    elif isr_group == "PISR500plus":
+        lower = 450.0
+    else:
+        raise ValueError(f"unknown Low-dM ISR group: {isr_group}")
+    edges = lower + 100.0 * np.arange(nbin + 1, dtype=float)
+    return 0.5 * (edges[:-1] + edges[1:]), 0.5 * np.diff(edges)
+
+
+def aggregate_low_sgamma(
+    factors: dict[str, Any],
+) -> dict[str, dict[str, Any]]:
+    output: dict[str, dict[str, Any]] = {}
+    for group, isr_group, label, color, marker in LOW_SHARED_GROUPS:
+        selected = [
+            payload
+            for family, payload in factors.items()
+            if payload["group"] == group and isr_group in family
+        ]
+        if not selected:
+            raise ValueError(f"no Low-dM Sgamma inputs for {group}/{isr_group}")
+        nbin = len(selected[0]["bins"])
+        if any(len(payload["bins"]) != nbin for payload in selected):
+            raise ValueError(
+                f"inconsistent Low-dM Sgamma bins for {group}/{isr_group}"
+            )
+        q = selected[0]["Q"]
+        records = []
+        for offset in range(nbin):
+            data = sum(payload["bins"][offset]["data"] for payload in selected)
+            data2 = sum(
+                payload["bins"][offset]["data_variance"]
+                for payload in selected
+            )
+            gamma = sum(
+                payload["bins"][offset]["gamma_mc"] for payload in selected
+            )
+            gamma2 = sum(
+                payload["bins"][offset]["gamma_mc_variance"]
+                for payload in selected
+            )
+            other = sum(
+                payload["bins"][offset]["other_mc"] for payload in selected
+            )
+            other2 = sum(
+                payload["bins"][offset]["other_mc_variance"]
+                for payload in selected
+            )
+            denominator = (
+                float(q["value"]) * gamma
+                if q["status"] == "complete"
+                else 0.0
+            )
+            denominator_variance = (
+                gamma**2 * float(q["stat"]) ** 2
+                + float(q["value"]) ** 2 * gamma2
+                if q["status"] == "complete"
+                else 0.0
+            )
+            records.append(
+                factor(
+                    data - other,
+                    data2 + other2,
+                    denominator,
+                    denominator_variance,
+                )
+            )
+        output[f"{group}_{isr_group}"] = {
+            "group": group,
+            "isr_group": isr_group,
+            "label": label,
+            "color": color,
+            "marker": marker,
+            "source_family_count": len(selected),
+            "bins": records,
+        }
+    return output
+
+
+def normalized_double_ratio(
+    z: np.ndarray,
+    z2: np.ndarray,
+    gamma: np.ndarray,
+    gamma2: np.ndarray,
+) -> tuple[list[float | None], list[float | None]]:
+    z_total = float(np.sum(z))
+    gamma_total = float(np.sum(gamma))
+    z2_total = float(np.sum(z2))
+    gamma2_total = float(np.sum(gamma2))
+    values: list[float | None] = []
+    errors: list[float | None] = []
+    for index in range(len(z)):
+        if z_total <= 0.0 or gamma_total <= 0.0 or gamma[index] <= 0.0:
+            values.append(None)
+            errors.append(None)
+            continue
+        z_fraction = float(z[index] / z_total)
+        gamma_fraction = float(gamma[index] / gamma_total)
+        value = z_fraction / gamma_fraction
+        z_fraction_variance = (
+            (z_total - z[index]) ** 2 * z2[index]
+            + z[index] ** 2 * max(z2_total - z2[index], 0.0)
+        ) / z_total**4
+        gamma_fraction_variance = (
+            (gamma_total - gamma[index]) ** 2 * gamma2[index]
+            + gamma[index] ** 2
+            * max(gamma2_total - gamma2[index], 0.0)
+        ) / gamma_total**4
+        variance = (
+            z_fraction_variance / gamma_fraction**2
+            + z_fraction**2
+            * gamma_fraction_variance
+            / gamma_fraction**4
+        )
+        values.append(float(value))
+        errors.append(float(math.sqrt(max(variance, 0.0))))
+    return values, errors
+
+
+def aggregate_low_double_ratios(
+    ratios: dict[str, Any],
+) -> dict[str, dict[str, Any]]:
+    output: dict[str, dict[str, Any]] = {}
+    for group, isr_group, label, color, marker in LOW_SHARED_GROUPS:
+        selected = [
+            payload
+            for family, payload in ratios.items()
+            if payload["group"] == group and isr_group in family
+        ]
+        if not selected:
+            raise ValueError(
+                f"no Low-dM double-ratio inputs for {group}/{isr_group}"
+            )
+        nbin = len(selected[0]["double_ratio"])
+        if any(len(payload["double_ratio"]) != nbin for payload in selected):
+            raise ValueError(
+                f"inconsistent Low-dM double-ratio bins for "
+                f"{group}/{isr_group}"
+            )
+        z = np.sum(
+            [np.asarray(payload["Z_shape"], dtype=float) for payload in selected],
+            axis=0,
+        )
+        z2 = np.sum(
+            [
+                np.asarray(payload["Z_shape_sumw2"], dtype=float)
+                for payload in selected
+            ],
+            axis=0,
+        )
+        gamma = np.sum(
+            [
+                np.asarray(payload["gamma_shape"], dtype=float)
+                for payload in selected
+            ],
+            axis=0,
+        )
+        gamma2 = np.sum(
+            [
+                np.asarray(payload["gamma_shape_sumw2"], dtype=float)
+                for payload in selected
+            ],
+            axis=0,
+        )
+        values, errors = normalized_double_ratio(z, z2, gamma, gamma2)
+        output[f"{group}_{isr_group}"] = {
+            "group": group,
+            "isr_group": isr_group,
+            "label": label,
+            "color": color,
+            "marker": marker,
+            "source_family_count": len(selected),
+            "double_ratio": values,
+            "double_ratio_stat": errors,
+        }
+    return output
 
 
 def build_q_sgamma(
@@ -314,21 +524,14 @@ def build_double_ratios(exact: dict[str, Any]) -> dict[str, Any]:
         z2 = np.asarray(
             [np.sum(sr2[index::high_nbin]) for index in range(high_nbin)]
         )
-        z_total = float(np.sum(z))
-        g_total = float(np.sum(gcr))
-        ratio = []
-        for index in range(high_nbin):
-            zshape = z[index] / z_total if z_total > 0 else 0.0
-            gshape = gcr[index] / g_total if g_total > 0 else 0.0
-            ratio.append(
-                float(zshape / gshape) if gshape > 0.0 else None
-            )
+        ratio, ratio_stat = normalized_double_ratio(z, z2, gcr, gcr2)
         output["highdm"][group] = {
             "Z_shape": z.tolist(),
             "Z_shape_sumw2": z2.tolist(),
             "gamma_shape": gcr.tolist(),
             "gamma_shape_sumw2": gcr2.tolist(),
             "double_ratio": ratio,
+            "double_ratio_stat": ratio_stat,
         }
 
     labels = exact["lowdm"]["search_bin_labels"]
@@ -351,15 +554,7 @@ def build_double_ratios(exact: dict[str, Any]) -> dict[str, Any]:
         z2 = sr2[indices]
         g = gcr[indices]
         g2 = gcr2[indices]
-        z_total = float(np.sum(z))
-        g_total = float(np.sum(g))
-        ratio = []
-        for offset in range(len(indices)):
-            zshape = z[offset] / z_total if z_total > 0 else 0.0
-            gshape = g[offset] / g_total if g_total > 0 else 0.0
-            ratio.append(
-                float(zshape / gshape) if gshape > 0.0 else None
-            )
+        ratio, ratio_stat = normalized_double_ratio(z, z2, g, g2)
         output["lowdm"][family] = {
             "group": group,
             "indices": indices,
@@ -368,6 +563,7 @@ def build_double_ratios(exact: dict[str, Any]) -> dict[str, Any]:
             "gamma_shape": g.tolist(),
             "gamma_shape_sumw2": g2.tolist(),
             "double_ratio": ratio,
+            "double_ratio_stat": ratio_stat,
         }
     return output
 
@@ -547,51 +743,54 @@ def plot_sgamma(
         hep.cms.label(**CMS_LABEL, ax=ax)
         paths.extend(save_figure(fig, output_dir / "sgamma_highdm"))
     else:
-        for family, payload in factors.items():
+        shared = aggregate_low_sgamma(factors)
+        fig, ax = plt.subplots(figsize=(10.2, 10.2))
+        for payload in shared.values():
             records = payload["bins"]
-            x = np.arange(1, len(records) + 1, dtype=float)
+            centers, widths = low_ut_geometry(
+                payload["isr_group"], len(records)
+            )
             values = np.asarray(
                 [
-                    item["Sgamma"]["value"]
-                    if item["Sgamma"]["status"] == "complete"
+                    item["value"]
+                    if item["status"] == "complete"
                     else np.nan
                     for item in records
                 ]
             )
             errors = np.asarray(
                 [
-                    item["Sgamma"]["stat"]
-                    if item["Sgamma"]["status"] == "complete"
+                    item["stat"]
+                    if item["status"] == "complete"
                     else np.nan
                     for item in records
                 ]
             )
-            fig, ax = plt.subplots(figsize=(10.2, 10.2))
             ax.errorbar(
-                x,
+                centers,
                 values,
-                xerr=np.full_like(x, 0.5),
+                xerr=widths,
                 yerr=errors,
-                fmt="o",
+                fmt=payload["marker"],
                 ls="none",
                 lw=2.6,
-                ms=5,
+                ms=6,
                 capsize=3,
-                color="#D62728" if payload["group"] == "Nb1" else "#7B2CBF",
+                color=payload["color"],
+                label=payload["label"],
             )
-            ax.axhline(1.0, color="0.45", lw=1.5, ls=":")
-            ax.set_xticks(x, low_ut_tick_labels(family, len(records)))
-            ax.set_xlim(0.5, len(records) + 0.5)
-            ax.set_xmargin(0)
-            ax.set_xlabel(r"$U_T$ (GeV)", fontsize=28)
-            ax.set_ylabel(r"$S_{\gamma,i}$", fontsize=30)
-            ax.tick_params(labelsize=24)
-            ax.grid(alpha=0.16)
-            hep.cms.label(**CMS_LABEL, ax=ax)
-            safe = re.sub(r"[^A-Za-z0-9]+", "_", family).strip("_")
-            paths.extend(
-                save_figure(fig, output_dir / f"sgamma_lowdm_{safe}")
-            )
+        ax.axhline(1.0, color="0.45", lw=1.5, ls=":")
+        ax.set_xlim(300.0, 850.0)
+        ax.set_xmargin(0)
+        ax.set_xlabel(r"$U_T$ (GeV)", fontsize=30)
+        ax.set_ylabel(r"$S_{\gamma,i}$", fontsize=30)
+        ax.tick_params(labelsize=24)
+        ax.grid(alpha=0.16)
+        ax.legend(frameon=False, fontsize=16, ncol=1)
+        hep.cms.label(**CMS_LABEL, ax=ax)
+        paths.extend(
+            save_figure(fig, output_dir / "sgamma_lowdm_nb_isr_shared")
+        )
     return paths
 
 
@@ -602,10 +801,11 @@ def plot_double_ratios(
     if regime == "highdm":
         edges = np.asarray([250, 300, 350, 400, 500, 800, 1500], dtype=float)
         centers = 0.5 * (edges[:-1] + edges[1:])
+        widths = 0.5 * (edges[1:] - edges[:-1])
         styles = {
-            "Nb1": ("-", r"$N_b=1$"),
-            "Nb2": ("--", r"$N_b=2$"),
-            "Nb3plus": ("-.", r"$N_b\geq3$"),
+            "Nb1": ("o", r"$N_b=1$"),
+            "Nb2": ("s", r"$N_b=2$"),
+            "Nb3plus": ("^", r"$N_b\geq3$"),
         }
         fig, ax = plt.subplots(figsize=(10.2, 10.2))
         for group in HIGH_GROUPS:
@@ -616,14 +816,24 @@ def plot_double_ratios(
                 ],
                 dtype=float,
             )
-            style, label = styles[group]
-            ax.plot(
+            errors = np.asarray(
+                [
+                    np.nan if value is None else value
+                    for value in ratios[group]["double_ratio_stat"]
+                ],
+                dtype=float,
+            )
+            marker, label = styles[group]
+            ax.errorbar(
                 centers,
                 values,
-                marker="o",
-                ls=style,
+                xerr=widths,
+                yerr=errors,
+                fmt=marker,
+                ls="none",
                 lw=2.6,
                 ms=4.5,
+                capsize=3,
                 label=label,
             )
         ax.axhline(1.0, color="0.45", lw=1.5, ls=":")
@@ -641,7 +851,9 @@ def plot_double_ratios(
             save_figure(fig, output_dir / "zgamma_double_ratio_highdm")
         )
     else:
-        for family, payload in ratios.items():
+        shared = aggregate_low_double_ratios(ratios)
+        fig, ax = plt.subplots(figsize=(10.2, 10.2))
+        for payload in shared.values():
             values = np.asarray(
                 [
                     np.nan if value is None else value
@@ -649,38 +861,45 @@ def plot_double_ratios(
                 ],
                 dtype=float,
             )
-            x = np.arange(1, len(values) + 1, dtype=float)
-            fig, ax = plt.subplots(figsize=(10.2, 10.2))
-            ax.plot(
-                x,
+            errors = np.asarray(
+                [
+                    np.nan if value is None else value
+                    for value in payload["double_ratio_stat"]
+                ],
+                dtype=float,
+            )
+            centers, widths = low_ut_geometry(
+                payload["isr_group"], len(values)
+            )
+            ax.errorbar(
+                centers,
                 values,
-                "o-",
+                xerr=widths,
+                yerr=errors,
+                fmt=payload["marker"],
+                ls="none",
                 lw=2.6,
-                ms=5,
-                color=(
-                    "#D62728"
-                    if payload["group"] == "Nb1"
-                    else "#7B2CBF"
-                ),
+                ms=6,
+                capsize=3,
+                color=payload["color"],
+                label=payload["label"],
             )
-            ax.axhline(1.0, color="0.45", lw=1.5, ls=":")
-            ax.set_xticks(x, low_ut_tick_labels(family, len(values)))
-            ax.set_xlim(0.5, len(values) + 0.5)
-            ax.set_xmargin(0)
-            ax.set_xlabel(r"$U_T$ (GeV)", fontsize=28)
-            ax.set_ylabel(
-                r"$(Z_i/\sum Z)/(\gamma_i/\sum\gamma)$", fontsize=28
+        ax.axhline(1.0, color="0.45", lw=1.5, ls=":")
+        ax.set_xlim(300.0, 850.0)
+        ax.set_xmargin(0)
+        ax.set_xlabel(r"$U_T$ (GeV)", fontsize=30)
+        ax.set_ylabel(
+            r"$(Z_i/\sum Z)/(\gamma_i/\sum\gamma)$", fontsize=28
+        )
+        ax.tick_params(labelsize=24)
+        ax.grid(alpha=0.16)
+        ax.legend(frameon=False, fontsize=16, ncol=1)
+        hep.cms.label(**CMS_LABEL, ax=ax)
+        paths.extend(
+            save_figure(
+                fig, output_dir / "zgamma_double_ratio_lowdm_nb_isr_shared"
             )
-            ax.tick_params(labelsize=24)
-            ax.grid(alpha=0.16)
-            hep.cms.label(**CMS_LABEL, ax=ax)
-            safe = re.sub(r"[^A-Za-z0-9]+", "_", family).strip("_")
-            paths.extend(
-                save_figure(
-                    fig,
-                    output_dir / f"zgamma_double_ratio_lowdm_{safe}",
-                )
-            )
+        )
     return paths
 
 
@@ -887,6 +1106,12 @@ def main() -> int:
 
     factors = build_q_sgamma(measurement, exact)
     double_ratios = build_double_ratios(exact)
+    factors["lowdm_nb_isr_shared"] = aggregate_low_sgamma(
+        factors["lowdm"]
+    )
+    double_ratios["lowdm_nb_isr_shared"] = (
+        aggregate_low_double_ratios(double_ratios["lowdm"])
+    )
     plot_dir = args.plot_dir
     plots = {
         "rz_high": plot_rz(measurement["rz_high"], "highdm", plot_dir),
@@ -917,6 +1142,12 @@ def main() -> int:
             "RZ": "on/off-Z 2x2 matrix solution, combined ee+mumu",
             "high_Q_categories": ["Nb1", "Nb2", "Nb3plus"],
             "low_Q_categories": ["Nb1", "Nb2plus"],
+            "low_Sgamma_shared_categories": [
+                "Nb1_PISR300to500",
+                "Nb1_PISR500plus",
+                "Nb2plus_PISR300to500",
+                "Nb2plus_PISR500plus",
+            ],
         },
         "RZ": {"highdm": measurement["rz_high"], "lowdm": low_rz},
         "photon": factors,
