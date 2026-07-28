@@ -736,10 +736,7 @@ def main() -> int:
         contour_complete = plot_contour(
             limits,
             contour_png,
-            analysis_label=(
-                r"2024 High-$\Delta m$ 60-bin + Low-$\Delta m$ 34-bin, "
-                r"AN-style $Z\to\nu\bar{\nu}$"
-            ),
+            analysis_label=None,
             x_max=float(args.max_mstop),
         )
     rate_parameters = sorted(
