@@ -37,7 +37,7 @@
     "legacy High-dM 17-bin",
     "legacy High-dM 42-bin"
   ],
-  "generated_at": "2026-07-28T00:45:01+00:00",
+  "generated_at": "2026-07-28T00:54:10+00:00",
   "histogram_status": "complete",
   "impact_update": {
     "benchmark": {
@@ -3192,7 +3192,7 @@
       "pdf": "plots/zinv_measurements/mll_highdm_dy2e_nb1.pdf",
       "png": "plots/zinv_measurements/mll_highdm_dy2e_nb1.png",
       "region": "2024 High-dM",
-      "variable": "Dilepton-mass input to the on/off-Z matrix."
+      "variable": "High-dM dielectron (\\(e^+e^-\\), DY2E) control region with \\(N_b=1\\). The \\(m_{\\ell\\ell}\\) on-Z window and off-Z sidebands provide this channel's \\(R_Z\\) matrix input; the combined \\(e^+e^-+\\mu^+\\mu^-\\) value is used downstream."
     },
     {
       "family": "zinv_measurements",
@@ -3202,7 +3202,7 @@
       "pdf": "plots/zinv_measurements/mll_highdm_dy2e_nb2plus.pdf",
       "png": "plots/zinv_measurements/mll_highdm_dy2e_nb2plus.png",
       "region": "2024 High-dM",
-      "variable": "Dilepton-mass input to the on/off-Z matrix."
+      "variable": "High-dM dielectron (\\(e^+e^-\\), DY2E) control region with \\(N_b\\geq2\\). The \\(m_{\\ell\\ell}\\) on-Z window and off-Z sidebands provide this channel's \\(R_Z\\) matrix input; the combined \\(e^+e^-+\\mu^+\\mu^-\\) value is used downstream."
     },
     {
       "family": "zinv_measurements",
@@ -3212,7 +3212,7 @@
       "pdf": "plots/zinv_measurements/mll_highdm_dy2m_nb1.pdf",
       "png": "plots/zinv_measurements/mll_highdm_dy2m_nb1.png",
       "region": "2024 High-dM",
-      "variable": "Dilepton-mass input to the on/off-Z matrix."
+      "variable": "High-dM dimuon (\\(\\mu^+\\mu^-\\), DY2M) control region with \\(N_b=1\\). The \\(m_{\\ell\\ell}\\) on-Z window and off-Z sidebands provide this channel's \\(R_Z\\) matrix input; the combined \\(e^+e^-+\\mu^+\\mu^-\\) value is used downstream."
     },
     {
       "family": "zinv_measurements",
@@ -3222,7 +3222,7 @@
       "pdf": "plots/zinv_measurements/mll_highdm_dy2m_nb2plus.pdf",
       "png": "plots/zinv_measurements/mll_highdm_dy2m_nb2plus.png",
       "region": "2024 High-dM",
-      "variable": "Dilepton-mass input to the on/off-Z matrix."
+      "variable": "High-dM dimuon (\\(\\mu^+\\mu^-\\), DY2M) control region with \\(N_b\\geq2\\). The \\(m_{\\ell\\ell}\\) on-Z window and off-Z sidebands provide this channel's \\(R_Z\\) matrix input; the combined \\(e^+e^-+\\mu^+\\mu^-\\) value is used downstream."
     },
     {
       "family": "zinv_measurements",
@@ -3232,7 +3232,7 @@
       "pdf": "plots/zinv_measurements/mll_lowdm_dy2e_nb1.pdf",
       "png": "plots/zinv_measurements/mll_lowdm_dy2e_nb1.png",
       "region": "2024 Low-dM",
-      "variable": "Dilepton-mass input to the on/off-Z matrix."
+      "variable": "Low-dM dielectron (\\(e^+e^-\\), DY2E) control region with \\(N_b=1\\). The \\(m_{\\ell\\ell}\\) on-Z window and off-Z sidebands provide this channel's \\(R_Z\\) matrix input; the combined \\(e^+e^-+\\mu^+\\mu^-\\) value is used downstream."
     },
     {
       "family": "zinv_measurements",
@@ -3242,7 +3242,7 @@
       "pdf": "plots/zinv_measurements/mll_lowdm_dy2e_nb2plus.pdf",
       "png": "plots/zinv_measurements/mll_lowdm_dy2e_nb2plus.png",
       "region": "2024 Low-dM",
-      "variable": "Dilepton-mass input to the on/off-Z matrix."
+      "variable": "Low-dM dielectron (\\(e^+e^-\\), DY2E) control region with \\(N_b\\geq2\\). The \\(m_{\\ell\\ell}\\) on-Z window and off-Z sidebands provide this channel's \\(R_Z\\) matrix input; the combined \\(e^+e^-+\\mu^+\\mu^-\\) value is used downstream."
     },
     {
       "family": "zinv_measurements",
@@ -3252,7 +3252,7 @@
       "pdf": "plots/zinv_measurements/mll_lowdm_dy2m_nb1.pdf",
       "png": "plots/zinv_measurements/mll_lowdm_dy2m_nb1.png",
       "region": "2024 Low-dM",
-      "variable": "Dilepton-mass input to the on/off-Z matrix."
+      "variable": "Low-dM dimuon (\\(\\mu^+\\mu^-\\), DY2M) control region with \\(N_b=1\\). The \\(m_{\\ell\\ell}\\) on-Z window and off-Z sidebands provide this channel's \\(R_Z\\) matrix input; the combined \\(e^+e^-+\\mu^+\\mu^-\\) value is used downstream."
     },
     {
       "family": "zinv_measurements",
@@ -3262,7 +3262,7 @@
       "pdf": "plots/zinv_measurements/mll_lowdm_dy2m_nb2plus.pdf",
       "png": "plots/zinv_measurements/mll_lowdm_dy2m_nb2plus.png",
       "region": "2024 Low-dM",
-      "variable": "Dilepton-mass input to the on/off-Z matrix."
+      "variable": "Low-dM dimuon (\\(\\mu^+\\mu^-\\), DY2M) control region with \\(N_b\\geq2\\). The \\(m_{\\ell\\ell}\\) on-Z window and off-Z sidebands provide this channel's \\(R_Z\\) matrix input; the combined \\(e^+e^-+\\mu^+\\mu^-\\) value is used downstream."
     },
     {
       "family": "zinv_measurements",
@@ -3373,6 +3373,6 @@
     "plot_count": 15,
     "prediction": "N_Zinv_pred = RZ * Sgamma_i * N_Zinv_MC_i",
     "status": "complete",
-    "updated_at": "2026-07-28T00:45:01+00:00"
+    "updated_at": "2026-07-28T00:54:10+00:00"
   }
 }

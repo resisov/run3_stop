@@ -23,6 +23,24 @@ def copy(source: Path, destination: Path) -> None:
 
 
 def caption(name: str) -> str:
+    mll_match = re.fullmatch(
+        r"mll_(highdm|lowdm)_(dy2e|dy2m)_(nb1|nb2plus)", name
+    )
+    if mll_match:
+        regime_key, channel_key, nb_key = mll_match.groups()
+        regime = "High-dM" if regime_key == "highdm" else "Low-dM"
+        channel = (
+            r"dielectron (\(e^+e^-\), DY2E)"
+            if channel_key == "dy2e"
+            else r"dimuon (\(\mu^+\mu^-\), DY2M)"
+        )
+        nb = r"\(N_b=1\)" if nb_key == "nb1" else r"\(N_b\geq2\)"
+        return (
+            f"{regime} {channel} control region with {nb}. "
+            r"The \(m_{\ell\ell}\) on-Z window and off-Z sidebands provide "
+            r"this channel's \(R_Z\) matrix input; the combined "
+            r"\(e^+e^-+\mu^+\mu^-\) value is used downstream."
+        )
     if name == "rz_highdm":
         return r"High-dM \(R_Z\) from the on/off-Z dilepton matrix."
     if name == "rz_lowdm":
@@ -50,8 +68,6 @@ def caption(name: str) -> str:
         return r"Low-dM photon-CR \(S_{\gamma,i}\) in one analysis family."
     if name.startswith("zgamma_double_ratio_lowdm_"):
         return r"Low-dM normalized \(Z/\gamma\) shape double ratio."
-    if name.startswith("mll_"):
-        return "Dilepton-mass input to the on/off-Z matrix."
     return name.replace("_", " ")
 
 
