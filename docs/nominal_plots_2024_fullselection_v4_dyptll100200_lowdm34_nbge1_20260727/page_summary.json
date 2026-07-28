@@ -37,7 +37,7 @@
     "legacy High-dM 17-bin",
     "legacy High-dM 42-bin"
   ],
-  "generated_at": "2026-07-28T00:54:10+00:00",
+  "generated_at": "2026-07-28T03:50:22+00:00",
   "histogram_status": "complete",
   "impact_update": {
     "benchmark": {
@@ -46,7 +46,7 @@
     },
     "channels": 250,
     "combine_json": "data/impacts_2024_highdm60_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat.json",
-    "current_model_scope": "2024 luminosity plus 153 rate/weight or object-shape nuisances and individual MC-statistical nuisances. Object-shape templates are absent from this card.",
+    "current_model_scope": "2024 luminosity plus 133 rate/weight or object-shape nuisances and individual MC-statistical nuisances. Low-dM S\u03b3 uses 14 shared Nb\u00d7ISR-pT\u00d7recoil parameters. Object-shape templates are absent from this card.",
     "data_mode": "asimov",
     "highdm_signal_bins": 60,
     "invalid_fit_count": 0,
@@ -54,14 +54,14 @@
     "lowdm_signal_bins": 34,
     "missing_fit_count": 0,
     "multipage_pdf": "plots/impacts/impacts_2024_highdm60_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat.pdf",
-    "nonstatistical_parameter_count": 154,
-    "parameter_count": 530,
+    "nonstatistical_parameter_count": 134,
+    "parameter_count": 510,
     "plot": "plots/impacts/impacts_2024_highdm60_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat.png",
     "poi": {
       "fit": [
-        0.6473537683486938,
+        0.6475781798362732,
         1.0,
-        1.4018031358718872
+        1.4017189741134644
       ],
       "name": "r"
     },
@@ -74,36 +74,44 @@
     "status": "complete_current_2024_model",
     "summary_pdf": "plots/impacts/impacts_2024_highdm60_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat_summary.pdf",
     "total_analysis_bins": 250,
-    "updated_at": "2026-07-27T20:06:14+00:00",
+    "updated_at": "2026-07-28T03:50:22+00:00",
     "validation": "data/impacts_2024_highdm60_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat_validation.json",
     "year": 2024
   },
   "limit_update": {
     "an_zinv_model": true,
-    "collected_mass_point_count": 204,
+    "collected_mass_point_count": 205,
     "dy_ptll_policy": "ptll100_200",
     "expected_limits": "highdm60_lowdm34_an_zinv_expected_limits.json",
     "highdm_signal_bins": 60,
-    "limit_grid_status": "documented_boundary_partial",
+    "limit_grid_status": "complete",
     "lowdm_selection": "all CR/SR require Nb>=1",
+    "lowdm_sgamma_sharing": {
+      "groups": [
+        "Nb1_PISR300to500",
+        "Nb1_PISR500plus",
+        "Nb2plus_PISR300to500",
+        "Nb2plus_PISR500plus"
+      ],
+      "mapping": "one Sgamma rateParam per Nb x ISR-pT x recoil bin, shared across the Low-dM PTb/Nj categories",
+      "recoil_shape_parameter_count": 14
+    },
     "lowdm_signal_bins": 34,
     "mass_point_count": 205,
     "max_mstop_inclusive": 1800,
-    "missing_mass_points": [
-      "mStop1800_mLSP1600"
-    ],
+    "missing_mass_points": [],
     "plot": "plots/limits/expected_limit_highdm60_lowdm34_an_zinv_x1800.png",
-    "rate_parameter_count": 141,
+    "rate_parameter_count": 121,
     "removed_lowdm_categories": [
       "Nb0_Nj2to5_PISR500plus",
       "Nb0_Nj6plus_PISR500plus"
     ],
     "requested_mass_point_count": 205,
-    "status": "documented_boundary_partial",
+    "status": "complete",
     "total_analysis_bins": 250,
     "transfer_factor_model": false,
     "transfer_parameter_count": 0,
-    "updated_at": "2026-07-27T20:06:54+00:00"
+    "updated_at": "2026-07-28T03:50:22+00:00"
   },
   "plot_counts": {
     "categories": 26,
@@ -3165,26 +3173,6 @@
       "variable": "QCD: SR / QCD CR"
     },
     {
-      "family": "impacts",
-      "family_label": "Nuisance impacts",
-      "kind": "Overview",
-      "name": "impacts_2024_highdm60_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat",
-      "pdf": "plots/impacts/impacts_2024_highdm60_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat.pdf",
-      "png": "plots/impacts/impacts_2024_highdm60_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat.png",
-      "region": "2024 High-dM 60 + Low-dM 34",
-      "variable": "mStop1200 mLSP500 full statistics"
-    },
-    {
-      "family": "limits",
-      "family_label": "Expected limits",
-      "kind": "Overview",
-      "name": "expected_limit_highdm60_lowdm34_an_zinv_x1800",
-      "pdf": "plots/limits/expected_limit_highdm60_lowdm34_an_zinv_x1800.pdf",
-      "png": "plots/limits/expected_limit_highdm60_lowdm34_an_zinv_x1800.png",
-      "region": "2024 High-dM 60 + Low-dM 34",
-      "variable": "mStop mLSP expected 95% CL"
-    },
-    {
       "family": "zinv_measurements",
       "family_label": "Z invisible measurements",
       "kind": "Measurement",
@@ -3333,6 +3321,26 @@
       "png": "plots/zinv_measurements/zgamma_double_ratio_lowdm_nb_isr_shared.png",
       "region": "2024 Low-dM",
       "variable": "Low-dM normalized \\(Z/\\gamma\\) shape double ratio in the four \\(N_b\\times p_T^{ISR}\\) groups."
+    },
+    {
+      "family": "limits",
+      "family_label": "Expected limits",
+      "kind": "Overview",
+      "name": "expected_limit_highdm60_lowdm34_an_zinv_x1800",
+      "pdf": "plots/limits/expected_limit_highdm60_lowdm34_an_zinv_x1800.pdf",
+      "png": "plots/limits/expected_limit_highdm60_lowdm34_an_zinv_x1800.png",
+      "region": "2024 High-dM 60 + Low-dM 34",
+      "variable": "mStop mLSP expected 95% CL"
+    },
+    {
+      "family": "impacts",
+      "family_label": "Nuisance impacts",
+      "kind": "Overview",
+      "name": "impacts_2024_highdm60_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat",
+      "pdf": "plots/impacts/impacts_2024_highdm60_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat.pdf",
+      "png": "plots/impacts/impacts_2024_highdm60_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat.png",
+      "region": "2024 High-dM 60 + Low-dM 34",
+      "variable": "mStop1200 mLSP500 full statistics"
     }
   ],
   "snapshot_input_count": null,
@@ -3348,12 +3356,12 @@
     },
     "impact_parameters": {
       "autoMCStats": 376,
-      "other": 154,
-      "total": 530
+      "other": 134,
+      "total": 510
     },
-    "impact_scope": "2024 luminosity plus 153 rate/weight or object-shape nuisances and individual MC-statistical nuisances. Object-shape templates are absent from this card.",
-    "status": "expected_limit_documented_boundary_partial",
-    "updated_at": "2026-07-27T20:06:54+00:00"
+    "impact_scope": "2024 luminosity plus 133 rate/weight or object-shape nuisances and individual MC-statistical nuisances. Low-dM S\u03b3 uses 14 shared Nb\u00d7ISR-pT\u00d7recoil parameters. Object-shape templates are absent from this card.",
+    "status": "complete_current_2024_model_full_statistics",
+    "updated_at": "2026-07-28T03:50:22+00:00"
   },
   "status": "complete",
   "transfer_factor_update": {

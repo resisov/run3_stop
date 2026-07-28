@@ -280,6 +280,7 @@ def main():
         "analysis": {
             "year": 2024,
             "model": contract["model"],
+            "model_details": manifest.get("model") or {},
             "schema": contract["schema"],
             "highdm_signal_bins": highdm_bins,
             "lowdm_signal_bins": lowdm_bins,

@@ -37,6 +37,10 @@ def main() -> int:
     lowdm_bins = int(analysis["lowdm_signal_bins"])
     transfer_factor_model = analysis.get("model") == "nb_recoil_transfer_factor"
     an_zinv_model = analysis.get("model") == "an_zinv"
+    lowdm_sgamma_sharing = (
+        ((analysis.get("model_details") or {}).get("lowdm_sgamma_sharing"))
+        or {}
+    )
     stem = (
         f"impacts_2024_highdm{highdm_bins}_lowdm{lowdm_bins}_"
         + (
@@ -108,7 +112,14 @@ def main() -> int:
         else (
             " The Z→νν background uses the AN structure: RZ from the "
             "on/off-Z dilepton matrix and Sγ from the Q-normalized photon CR; "
-            "lost-lepton and QCD retain direct CR/SR rate constraints."
+            + (
+                f"Low-dM Sγ is represented by "
+                f"{int(lowdm_sgamma_sharing['recoil_shape_parameter_count'])} "
+                "recoil-shape parameters shared within four Nb×ISR-pT groups; "
+                if lowdm_sgamma_sharing
+                else ""
+            )
+            + "lost-lepton and QCD retain direct CR/SR rate constraints."
             if an_zinv_model
             else ""
         )
@@ -254,7 +265,15 @@ def main() -> int:
         "current_model_scope": (
             f"2024 luminosity plus {max(0, nonstat_count - 1)} "
             "rate/weight or object-shape nuisances and individual "
-            f"MC-statistical nuisances.{object_scope}"
+            f"MC-statistical nuisances."
+            + (
+                f" Low-dM Sγ uses "
+                f"{int(lowdm_sgamma_sharing['recoil_shape_parameter_count'])} "
+                "shared Nb×ISR-pT×recoil parameters."
+                if lowdm_sgamma_sharing
+                else ""
+            )
+            + object_scope
         ),
         "plot": f"plots/impacts/{stem}.png",
         "multipage_pdf": f"plots/impacts/{stem}.pdf",

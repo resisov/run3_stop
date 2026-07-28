@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import re
 from pathlib import Path
 from typing import Any
 
@@ -115,6 +116,41 @@ def high_parameter(kind: str, group: str, recoil_bin: int) -> str:
 
 def low_parameter(kind: str, group: str, source_bin: int) -> str:
     return f"{kind}_low_{group}_b{source_bin:02d}"
+
+
+def low_shared_sgamma_payload(
+    factors: dict[str, Any],
+    label: str,
+) -> tuple[str, float, str, int]:
+    match = re.fullmatch(
+        r"(Nb1|Nb2plus)_(PISR300to500|PISR500plus)_.+_recoil_(\d+)",
+        label,
+    )
+    if not match:
+        raise ValueError(f"cannot map Low-dM Sgamma sharing for {label}")
+    group, isr_group, one_based_bin = match.groups()
+    recoil_bin = int(one_based_bin) - 1
+    shared_key = f"{group}_{isr_group}"
+    shared = factors["photon"]["lowdm_nb_isr_shared"][shared_key]
+    if shared.get("group") != group or shared.get("isr_group") != isr_group:
+        raise ValueError(
+            f"Low-dM shared Sgamma metadata mismatch for {shared_key}"
+        )
+    bins = shared["bins"]
+    if recoil_bin < 0 or recoil_bin >= len(bins):
+        raise ValueError(
+            f"Low-dM shared Sgamma bin out of range for {label}: "
+            f"{recoil_bin}/{len(bins)}"
+        )
+    parameter = (
+        f"RZshape_low_{group}_{isr_group}_u{recoil_bin}"
+    )
+    return (
+        parameter,
+        initial_factor(bins[recoil_bin]),
+        shared_key,
+        recoil_bin,
+    )
 
 
 def build_channels(
@@ -295,6 +331,8 @@ def build_channels(
             backgrounds = {}
             rate_params = {}
             rate_initial = {}
+            shared_key = None
+            shared_bin = None
             for process in BACKGROUND_PROCESS_ORDER:
                 record = one_bin_background(
                     by_sample, process, source_bin, low_nbin
@@ -314,18 +352,14 @@ def build_channels(
                 rate_params["QCD"] = parameter
                 rate_initial["QCD"] = 1.0
             elif region == "GCR" and "PhotonJet" in backgrounds:
-                parameter = low_parameter(
-                    "RZshape", group, source_bin
-                )
-                sgamma = initial_factor(
-                    next(
-                        item["Sgamma"]
-                        for item in photon_low[family]["bins"]
-                        if item["index"] == source_bin
-                    ),
+                parameter, sgamma, shared_key, shared_bin = (
+                    low_shared_sgamma_payload(factors, label)
                 )
                 rate_params["PhotonJet"] = parameter
                 rate_initial["PhotonJet"] = sgamma
+            else:
+                shared_key = None
+                shared_bin = None
             observation = (
                 float(
                     (data_low.get(str(source_bin), {}) or {}).get(
@@ -344,6 +378,8 @@ def build_channels(
                     "nb_group": group,
                     "source_bin": source_bin,
                     "bin_label": label,
+                    "sgamma_shared_group": shared_key,
+                    "sgamma_shared_bin": shared_bin,
                     "backgrounds": backgrounds,
                     "rate_params": rate_params,
                     "rate_initial": rate_initial,
@@ -356,6 +392,12 @@ def build_channels(
     for source_bin, label in enumerate(labels):
         group = "Nb1" if source_bin < 16 else "Nb2plus"
         by_sample = low["search_components"]["SR"][group]
+        (
+            shared_parameter,
+            shared_sgamma,
+            shared_key,
+            shared_bin,
+        ) = low_shared_sgamma_payload(factors, label)
         backgrounds = {}
         rate_params = {}
         rate_initial = {}
@@ -371,17 +413,8 @@ def build_channels(
                     factors, "lowdm", group
                 )
                 record = scaled_record(record, rz)
-                parameter = low_parameter(
-                    "RZshape", group, source_bin
-                )
-                family = low_family(label)
-                sgamma = initial_factor(
-                    next(
-                        item["Sgamma"]
-                        for item in photon_low[family]["bins"]
-                        if item["index"] == source_bin
-                    ),
-                )
+                parameter = shared_parameter
+                sgamma = shared_sgamma
                 rz_lnN[process] = {
                     "name": nuisance,
                     "factor": 1.0 + rz_stat / rz,
@@ -408,6 +441,8 @@ def build_channels(
                 "nb_group": group,
                 "source_bin": source_bin,
                 "bin_label": label,
+                "sgamma_shared_group": shared_key,
+                "sgamma_shared_bin": shared_bin,
                 "backgrounds": backgrounds,
                 "rate_params": rate_params,
                 "rate_initial": rate_initial,
@@ -516,8 +551,9 @@ def datacard_text(
     )
     lines = [
         "# 2024 AN-style Zinv model: RZ from off/on-Z dilepton matrix; "
-        "Q-normalized photon CR supplies Sgamma; only RLL and RQCD are "
-        "direct CR/SR transfer factors.",
+        "Q-normalized photon CR supplies Sgamma; Low-dM Sgamma is shared "
+        "within four Nb x ISR-pT groups and 14 recoil-shape bins; only RLL "
+        "and RQCD are direct CR/SR transfer factors.",
         "imax * number of channels",
         "jmax * number of backgrounds",
         "kmax * number of nuisance parameters",
@@ -713,15 +749,56 @@ def main() -> int:
             for parameter in channel["rate_params"].values()
         }
     )
+    low_sgamma_parameters = [
+        parameter
+        for parameter in rate_parameters
+        if parameter.startswith("RZshape_low_")
+    ]
+    shared_factor_groups = factors["photon"]["lowdm_nb_isr_shared"]
+    expected_low_sgamma_count = sum(
+        len(payload["bins"]) for payload in shared_factor_groups.values()
+    )
+    if set(shared_factor_groups) != {
+        "Nb1_PISR300to500",
+        "Nb1_PISR500plus",
+        "Nb2plus_PISR300to500",
+        "Nb2plus_PISR500plus",
+    }:
+        raise ValueError(
+            "Low-dM Sgamma sharing does not contain the four adopted groups"
+        )
+    if (
+        expected_low_sgamma_count != 14
+        or len(low_sgamma_parameters) != expected_low_sgamma_count
+    ):
+        raise ValueError(
+            "Low-dM shared Sgamma parameter count mismatch: "
+            f"{len(low_sgamma_parameters)}/{expected_low_sgamma_count}"
+        )
     manifest = {
-        "schema_version": "highdm60_lowdm34_an_zinv_2024_v1",
+        "schema_version": (
+            "highdm60_lowdm34_an_zinv_2024_v2_nb_isr_shared_sgamma"
+        ),
         "status": (
             "combine_outputs_complete"
             if limits["status"] == "complete" and contour_complete
             else "combine_inputs_ready"
         ),
         "model": {
-            "zinv": "RZ normalization from on/off-Z matrix; Q-normalized photon CR Sgamma shape",
+            "zinv": (
+                "RZ normalization from on/off-Z matrix; Q-normalized photon "
+                "CR Sgamma shape"
+            ),
+            "lowdm_sgamma_sharing": {
+                "groups": sorted(shared_factor_groups),
+                "recoil_shape_parameter_count": len(
+                    low_sgamma_parameters
+                ),
+                "mapping": (
+                    "one Sgamma rateParam per Nb x ISR-pT x recoil bin, "
+                    "shared across the Low-dM PTb/Nj categories"
+                ),
+            },
             "lost_lepton": "direct shared RLL CR/SR rateParams",
             "qcd": "direct RQCD CR/SR rateParams",
             "dilepton_in_likelihood": False,

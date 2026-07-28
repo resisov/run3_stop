@@ -43,6 +43,9 @@ def main() -> int:
         expected_total = 5 * 6 + highdm_bins + 6 * lowdm_bins
         collection = manifest["limit_collection"]
         max_mstop = int(manifest["max_mstop_inclusive"])
+    lowdm_sgamma_sharing = (
+        ((manifest.get("model") or {}).get("lowdm_sgamma_sharing")) or {}
+    )
     requested_points = int(collection.get("requested_point_count", 0))
     collected_points = int(collection.get("collected_point_count", 0))
     missing_points = list(collection.get("missing_points") or [])
@@ -127,8 +130,16 @@ def main() -> int:
         else (
             "The Z→νν prediction follows the AN model: RZ is measured with "
             "the on/off-Z dilepton matrix, while the Q-normalized photon CR "
-            "constrains the bin-wise Sγ shape. Lost-lepton and QCD retain "
-            "direct CR/SR rate constraints. "
+            "constrains the Sγ shape. "
+            + (
+                f"Low-dM Sγ uses "
+                f"{int(lowdm_sgamma_sharing['recoil_shape_parameter_count'])} "
+                "recoil-shape parameters shared within four Nb×ISR-pT groups. "
+                if lowdm_sgamma_sharing
+                else ""
+            )
+            + "Lost-lepton and QCD retain "
+            + "direct CR/SR rate constraints. "
             if an_zinv_model
             else ""
         )
@@ -211,6 +222,7 @@ def main() -> int:
         "an_zinv_model": an_zinv_model,
         "transfer_parameter_count": manifest.get("transfer_parameter_count", 0),
         "rate_parameter_count": manifest.get("rate_parameter_count", 0),
+        "lowdm_sgamma_sharing": lowdm_sgamma_sharing,
         "limit_grid_status": (
             "complete" if collection_complete else "documented_boundary_partial"
         ),
