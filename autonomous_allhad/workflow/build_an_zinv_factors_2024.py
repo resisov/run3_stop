@@ -1029,7 +1029,7 @@ def plot_mll(
                 r"$m_{\ell\ell}$ (GeV)", fontsize=30, loc="right"
             )
             ax.set_yscale("log")
-            ax.set_ylim(bottom=0.2)
+            ax.set_ylim(1.0e-1, 1.0e3)
             rax.set_ylim(0.0, 2.0)
             for axis in (ax, rax):
                 axis.set_xlim(float(edges[0]), float(edges[-1]))
