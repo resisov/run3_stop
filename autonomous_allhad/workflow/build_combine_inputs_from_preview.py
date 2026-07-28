@@ -368,6 +368,10 @@ def plot_contour(
     luminosity_label: str = r"109.82 fb$^{-1}$ (13.6 TeV)",
     analysis_label: str | None = None,
     x_max: float = 1700.0,
+    decay_label: str | None = (
+        r"$pp\rightarrow \tilde{t}\tilde{t},\ "
+        r"\tilde{t}\rightarrow t\tilde{\chi}_1^0$"
+    ),
 ) -> bool:
     records = list((limit_payload.get("points") or {}).values())
     points = [rec for rec in records if "expected" in rec and float(rec["expected"]) > 0]
@@ -496,7 +500,15 @@ def plot_contour(
             fontsize=27,
             ax=ax,
         )
-    ax.text(0.14, 0.95, r"$pp\rightarrow \tilde{t}\tilde{t},\ \tilde{t}\rightarrow t\tilde{\chi}_1^0$", transform=ax.transAxes, fontsize=19, va="top")
+    if decay_label:
+        ax.text(
+            0.14,
+            0.95,
+            decay_label,
+            transform=ax.transAxes,
+            fontsize=19,
+            va="top",
+        )
     if analysis_label:
         ax.text(0.14, 0.905, analysis_label, transform=ax.transAxes, fontsize=16, va="top")
 

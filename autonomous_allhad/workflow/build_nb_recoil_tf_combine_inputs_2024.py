@@ -37,7 +37,8 @@ from build_flat_recoil_ntop_split_combine_inputs import (  # noqa: E402
 
 HIGH_SCHEME = "boosted_an17_selected_recoil60_nb2_nt2plus_w0_SR"
 LOW_SCHEME = "cat7_SR_lowDeltaM"
-SIGNAL_PREFIX = "T2tt_"
+DEFAULT_SIGNAL_TOPOLOGY = "T2tt"
+SUPPORTED_SIGNAL_TOPOLOGIES = ("T2tt", "T2tb", "T2bW")
 MIN_BIN = 1.0e-9
 MIN_VARIATION_RATIO = 1.0e-3
 RAW_COMPONENTS = {
@@ -378,11 +379,12 @@ def signal_histogram(
     hists: dict[str, Any],
     regime: str,
     mass_key: str,
+    topology: str = DEFAULT_SIGNAL_TOPOLOGY,
 ) -> dict[str, Any]:
     scheme = HIGH_SCHEME if regime == "highdm" else LOW_SCHEME
     return (
         ((hists.get("search_bin_histograms") or {}).get(scheme) or {}).get(
-            SIGNAL_PREFIX + mass_key
+            f"{topology}_{mass_key}"
         )
         or {}
     )
@@ -393,8 +395,9 @@ def signal_leaf(
     regime: str,
     mass_key: str,
     variation: str,
+    topology: str = DEFAULT_SIGNAL_TOPOLOGY,
 ) -> tuple[np.ndarray, np.ndarray]:
-    variations = signal_histogram(hists, regime, mass_key)
+    variations = signal_histogram(hists, regime, mass_key, topology)
     record = variations.get(variation) or variations.get("nominal") or {}
     return (
         np.asarray(record.get("sumw") or [], dtype=float),
@@ -406,8 +409,9 @@ def signal_variations(
     hists: dict[str, Any],
     regime: str,
     mass_key: str,
+    topology: str = DEFAULT_SIGNAL_TOPOLOGY,
 ) -> list[str]:
-    names = set(signal_histogram(hists, regime, mass_key))
+    names = set(signal_histogram(hists, regime, mass_key, topology))
     return sorted(
         {
             name[:-2]
@@ -421,13 +425,17 @@ def mass_points(
     hists: dict[str, Any],
     only: list[str] | None,
     max_mstop: int,
+    topology: str = DEFAULT_SIGNAL_TOPOLOGY,
 ) -> list[str]:
     selected = set()
     for scheme in (HIGH_SCHEME, LOW_SCHEME):
         for sample, variations in (
             (hists.get("search_bin_histograms") or {}).get(scheme) or {}
         ).items():
-            match = re.fullmatch(r"T2tt_(mStop\d+_mLSP\d+)", sample)
+            match = re.fullmatch(
+                rf"{re.escape(topology)}_(mStop\d+_mLSP\d+)",
+                sample,
+            )
             if not match:
                 continue
             mass_key = match.group(1)
@@ -445,6 +453,7 @@ def build_root(
     hists: dict[str, Any],
     masses: list[str],
     output_root: Path,
+    topology: str = DEFAULT_SIGNAL_TOPOLOGY,
 ) -> dict[str, Any]:
     import ROOT
 
@@ -515,7 +524,7 @@ def build_root(
                 if channel["signal_source"]:
                     regime, source_bin = channel["signal_source"]
                     nominal, sumw2 = signal_leaf(
-                        hists, regime, mass_key, "nominal"
+                        hists, regime, mass_key, "nominal", topology
                     )
                     if source_bin < len(nominal):
                         signal[0] = max(float(nominal[source_bin]), MIN_BIN)
@@ -523,13 +532,21 @@ def build_root(
                             float(sumw2[source_bin]), 0.0
                         )
                     for nuisance in signal_variations(
-                        hists, regime, mass_key
+                        hists, regime, mass_key, topology
                     ):
                         up = signal_leaf(
-                            hists, regime, mass_key, nuisance + "Up"
+                            hists,
+                            regime,
+                            mass_key,
+                            nuisance + "Up",
+                            topology,
                         )[0]
                         down = signal_leaf(
-                            hists, regime, mass_key, nuisance + "Down"
+                            hists,
+                            regime,
+                            mass_key,
+                            nuisance + "Down",
+                            topology,
                         )[0]
                         if source_bin >= len(up) or source_bin >= len(down):
                             continue
@@ -571,6 +588,7 @@ def build_root(
                 signal_summary = summary["signals"].setdefault(
                     mass_key,
                     {
+                        "topology": topology,
                         "process": process,
                         "channels": {},
                         "weight_nuisances": {},
@@ -730,6 +748,11 @@ def main() -> int:
     parser.add_argument("--transfer-factors", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--only", nargs="*")
+    parser.add_argument(
+        "--topology",
+        choices=SUPPORTED_SIGNAL_TOPOLOGIES,
+        default=DEFAULT_SIGNAL_TOPOLOGY,
+    )
     parser.add_argument("--max-mstop", type=int, default=1800)
     parser.add_argument("--auto-mc-stats", type=int, default=10)
     parser.add_argument("--runner-jobs", type=int, default=12)
@@ -744,7 +767,7 @@ def main() -> int:
     if transfer.get("status") != "complete":
         raise SystemExit(f"transfer factors are not complete: {transfer.get('status')}")
     channels = build_channels(exact)
-    masses = mass_points(hists, args.only, args.max_mstop)
+    masses = mass_points(hists, args.only, args.max_mstop, args.topology)
     if not masses:
         raise SystemExit("no signal mass points selected")
 
@@ -753,7 +776,13 @@ def main() -> int:
     card_dir = output_dir / "datacards"
     limit_dir = output_dir / "limits"
     runner = output_dir / "run_combine_expected.sh"
-    summary = build_root(channels, hists, masses, template_root)
+    summary = build_root(
+        channels,
+        hists,
+        masses,
+        template_root,
+        args.topology,
+    )
     cards = write_cards(
         channels,
         masses,
@@ -812,6 +841,7 @@ def main() -> int:
         "limit_dir": str(limit_dir),
         "runner": str(runner),
         "mass_points": masses,
+        "signal_topology": args.topology,
         "mass_point_count": len(masses),
         "max_mstop": args.max_mstop,
         "channels": {
