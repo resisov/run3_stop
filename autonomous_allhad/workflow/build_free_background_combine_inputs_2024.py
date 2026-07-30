@@ -36,11 +36,24 @@ from build_boosted_an17_combine_inputs import (
 
 DECAY_LABELS = {
     "T2tt": (
-        r"$pp\rightarrow \tilde{t}\tilde{t},\ "
-        r"\tilde{t}\rightarrow t\tilde{\chi}_1^0$"
+        r"$pp\rightarrow \tilde{t}_1\bar{\tilde{t}}_1,\ "
+        r"\tilde{t}_1\rightarrow t\tilde{\chi}_1^0$"
     ),
-    "T2tb": r"$pp\rightarrow \tilde{t}\tilde{t}$, T2tb",
-    "T2bW": r"$pp\rightarrow \tilde{t}\tilde{t}$, T2bW",
+    "T2tb": (
+        r"$pp\rightarrow \tilde{t}_1\bar{\tilde{t}}_1,$"
+        "\n"
+        r"$\tilde{t}_1\rightarrow b\tilde{\chi}_1^+"
+        r"\rightarrow bW^{+*}\tilde{\chi}_1^0,\ "
+        r"\bar{\tilde{t}}_1\rightarrow\bar{t}\tilde{\chi}_1^0"
+        r"\ (+\mathrm{c.c.})$"
+    ),
+    "T2bW": (
+        r"$pp\rightarrow \tilde{t}_1\bar{\tilde{t}}_1,$"
+        "\n"
+        r"$\tilde{t}_1\rightarrow b\tilde{\chi}_1^+"
+        r"\rightarrow bW^+\tilde{\chi}_1^0"
+        r"\ (+\mathrm{c.c.})$"
+    ),
 }
 
 

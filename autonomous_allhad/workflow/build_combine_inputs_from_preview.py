@@ -501,14 +501,18 @@ def plot_contour(
             ax=ax,
         )
     if decay_label:
+        multiline_decay_label = "\n" in decay_label
         ax.text(
             0.14,
             0.95,
             decay_label,
             transform=ax.transAxes,
-            fontsize=19,
+            fontsize=17 if multiline_decay_label else 19,
             va="top",
+            linespacing=1.15,
         )
+    else:
+        multiline_decay_label = False
     if analysis_label:
         ax.text(0.14, 0.905, analysis_label, transform=ax.transAxes, fontsize=16, va="top")
 
@@ -516,7 +520,14 @@ def plot_contour(
         Line2D([0], [0], color="red", lw=3.0, label="Run-3 expected"),
         *run2_handles,
     ]
-    ax.legend(handles=legend_handles, loc="upper left", bbox_to_anchor=(0.02, 0.90), frameon=False, fontsize=19, handlelength=2.8)
+    ax.legend(
+        handles=legend_handles,
+        loc="upper left",
+        bbox_to_anchor=(0.02, 0.84 if multiline_decay_label else 0.90),
+        frameon=False,
+        fontsize=19,
+        handlelength=2.8,
+    )
 
     output_png.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(output_png, dpi=180)
