@@ -4,7 +4,7 @@
     "legacy High-dM 17-bin",
     "legacy High-dM 42-bin"
   ],
-  "generated_at": "2026-07-30T01:45:47.177976+00:00",
+  "generated_at": "2026-07-30T07:53:22+00:00",
   "histogram_status": "complete",
   "plot_counts": {
     "categories": 26,
@@ -3032,12 +3032,85 @@
       "png": "plots/categories/lowdm_sr_onebin.png",
       "region": "",
       "variable": "lowdm_sr_onebin"
+    },
+    {
+      "family": "limits",
+      "family_label": "Expected limits",
+      "kind": "Overview",
+      "name": "expected_limit_t2tt_highdm60_lowdm34_free_background_x1800",
+      "pdf": "plots/limits/expected_limit_t2tt_highdm60_lowdm34_free_background_x1800.pdf",
+      "png": "plots/limits/expected_limit_t2tt_highdm60_lowdm34_free_background_x1800.png",
+      "region": "2024 High-dM 60 + Low-dM 34",
+      "variable": "T2tt free-background expected limit"
+    },
+    {
+      "family": "limits",
+      "family_label": "Expected limits",
+      "kind": "Overview",
+      "name": "expected_limit_t2tb_highdm60_lowdm34_free_background_x1800",
+      "pdf": "plots/limits/expected_limit_t2tb_highdm60_lowdm34_free_background_x1800.pdf",
+      "png": "plots/limits/expected_limit_t2tb_highdm60_lowdm34_free_background_x1800.png",
+      "region": "2024 High-dM 60 + Low-dM 34",
+      "variable": "T2tb free-background expected limit"
+    },
+    {
+      "family": "limits",
+      "family_label": "Expected limits",
+      "kind": "Overview",
+      "name": "expected_limit_t2bw_highdm60_lowdm34_free_background_x1800",
+      "pdf": "plots/limits/expected_limit_t2bw_highdm60_lowdm34_free_background_x1800.pdf",
+      "png": "plots/limits/expected_limit_t2bw_highdm60_lowdm34_free_background_x1800.png",
+      "region": "2024 High-dM 60 + Low-dM 34",
+      "variable": "T2bW free-background expected limit"
     }
   ],
   "snapshot_input_count": null,
-  "snapshot_manifest": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/nominal_plots_2024_fullselection_v6_dyto2x4jets_t2models_freebkg_20260729/input_union_manifest.json",
-  "source_hist_payload": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/nominal_plots_2024_fullselection_v6_dyto2x4jets_t2models_freebkg_20260729/hists_2024_dyto2x4jets_btagsf_t2models_noother.json",
+  "snapshot_manifest": "input_union_manifest.json",
+  "source_hist_payload": "hists_2024_dyto2x4jets_btagsf_t2models_noother.json",
   "source_hist_payload_sha256": "d7c2d6082dcfe7f796924f411859389db304e67476d2cd62822126f0fb2de952",
+  "statistical_results": {
+    "autoMCStats": 10,
+    "background_rate_parameters": 7,
+    "external_background_constraints": [],
+    "max_mstop_GeV": 1800,
+    "model": "free_background_global_process_normalizations",
+    "signals": {
+      "T2bW": {
+        "collected_mass_point_count": 354,
+        "limits": "data/expected_limit_t2bw_highdm60_lowdm34_free_background_x1800.json",
+        "manifest": "data/expected_limit_t2bw_highdm60_lowdm34_free_background_x1800_manifest.json",
+        "mass_point_count": 354,
+        "missing_mass_points": [],
+        "plot": "plots/limits/expected_limit_t2bw_highdm60_lowdm34_free_background_x1800.png",
+        "run2_overlay": true
+      },
+      "T2tb": {
+        "collected_mass_point_count": 364,
+        "limits": "data/expected_limit_t2tb_highdm60_lowdm34_free_background_x1800.json",
+        "manifest": "data/expected_limit_t2tb_highdm60_lowdm34_free_background_x1800_manifest.json",
+        "mass_point_count": 365,
+        "missing_mass_points": [
+          "mStop1550_mLSP1450"
+        ],
+        "plot": "plots/limits/expected_limit_t2tb_highdm60_lowdm34_free_background_x1800.png",
+        "run2_overlay": true
+      },
+      "T2tt": {
+        "collected_mass_point_count": 202,
+        "limits": "data/expected_limit_t2tt_highdm60_lowdm34_free_background_x1800.json",
+        "manifest": "data/expected_limit_t2tt_highdm60_lowdm34_free_background_x1800_manifest.json",
+        "mass_point_count": 205,
+        "missing_mass_points": [
+          "mStop1700_mLSP1500",
+          "mStop1800_mLSP1500",
+          "mStop1800_mLSP1600"
+        ],
+        "plot": "plots/limits/expected_limit_t2tt_highdm60_lowdm34_free_background_x1800.png",
+        "run2_overlay": true
+      }
+    },
+    "status": "complete_free_background_2024"
+  },
   "status": "complete",
   "year": 2024
 }

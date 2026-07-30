@@ -295,26 +295,35 @@ def main() -> int:
     )
     contour_complete = False
     if limits["status"] in {"complete", "partial"}:
+        run2_contour_paths = {
+            "T2tt": Path(
+                "/eos/user/t/taiwoo/run2_sus19010_contours.json"
+            ),
+            "T2tb": Path(
+                "/eos/user/t/taiwoo/run2_sus19010_contours_t2tb.json"
+            ),
+            "T2bW": Path(
+                "/eos/user/t/taiwoo/run2_sus19010_contours_t2bw.json"
+            ),
+        }
         contour_complete = plot_contour(
             limits,
             contour_png,
-            run2_contours=(
-                Path("/eos/user/t/taiwoo/run2_sus19010_contours.json")
-                if args.topology == "T2tt"
-                else None
-            ),
-            luminosity_label="2024 (13.6 TeV)",
+            run2_contours=run2_contour_paths[args.topology],
+            luminosity_label=r"109.82 fb$^{-1}$ (13.6 TeV)",
             analysis_label=None,
             x_max=float(args.max_mstop),
             decay_label=DECAY_LABELS[args.topology],
         )
 
+    output_status = "combine_inputs_ready"
+    if contour_complete:
+        if limits["status"] == "complete":
+            output_status = "combine_outputs_complete"
+        elif limits["status"] == "partial":
+            output_status = "combine_outputs_partial"
     manifest = {
-        "status": (
-            "combine_outputs_complete"
-            if limits["status"] == "complete" and contour_complete
-            else "combine_inputs_ready"
-        ),
+        "status": output_status,
         "schema_version": "highdm60_lowdm34_free_background_2024_v1",
         "model": "free_background_global_process_normalizations",
         "signal_topology": args.topology,
@@ -359,11 +368,10 @@ def main() -> int:
             if contour_complete
             else None
         ),
-        "run2_overlay": args.topology == "T2tt",
+        "run2_overlay": True,
         "run2_overlay_policy": (
-            "SUS-19-010 overlay retained for T2tt"
-            if args.topology == "T2tt"
-            else f"no Run-2 result or contour is drawn for {args.topology}"
+            f"topology-matched CMS-SUS-19-010 {args.topology} "
+            "observed and expected contours"
         ),
         "data_mode": "asimov",
     }

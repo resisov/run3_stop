@@ -63,14 +63,31 @@ def main() -> int:
         source_dir = args.results_dir / f"free_background_{topology.lower()}"
         manifest_path = source_dir / "combine_input_manifest.json"
         manifest = json.loads(manifest_path.read_text())
-        if manifest.get("status") != "combine_outputs_complete":
+        if manifest.get("status") not in {
+            "combine_outputs_complete",
+            "combine_outputs_partial",
+        }:
             raise RuntimeError(
                 f"{topology} result is incomplete: {manifest.get('status')}"
             )
-        if (topology == "T2tt") != bool(manifest.get("run2_overlay")):
+        limits = manifest.get("limits") or {}
+        if limits.get("status") not in {"complete", "partial"}:
+            raise RuntimeError(
+                f"{topology} limit collection is invalid: "
+                f"{limits.get('status')}"
+            )
+        if (
+            int(limits.get("collected_point_count", 0))
+            + len(limits.get("missing_points") or [])
+            != int(limits.get("requested_point_count", 0))
+        ):
+            raise RuntimeError(
+                f"{topology} limit coverage does not reconcile"
+            )
+        if not bool(manifest.get("run2_overlay")):
             raise RuntimeError(f"wrong Run-2 overlay policy for {topology}")
-        png = Path(manifest["contour_png"])
-        pdf = Path(manifest["contour_pdf"])
+        png = source_dir / Path(manifest["contour_png"]).name
+        pdf = source_dir / Path(manifest["contour_pdf"]).name
         stem = png.stem
         copy(png, plot_dir / png.name)
         copy(pdf, plot_dir / pdf.name)
@@ -96,7 +113,19 @@ def main() -> int:
 
     links = []
     cards = []
+    coverage_notes = []
     for record, topology in zip(records, topologies):
+        limits = manifests[topology]["limits"]
+        missing = limits.get("missing_points") or []
+        coverage_notes.append(
+            f"{topology}: {limits['collected_point_count']}/"
+            f"{limits['requested_point_count']} points"
+            + (
+                " (missing " + ", ".join(missing) + ")"
+                if missing
+                else ""
+            )
+        )
         links.append(
             f"<a href='{html.escape(record['pdf'])}'>{topology} PDF</a>"
         )
@@ -126,20 +155,11 @@ def main() -> int:
         "background normalizations are unconstrained global rate parameters, "
         "while shape/weight nuisances and autoMCStats remain. The evaluated "
         "grid has mStop≤1800 GeV. "
-        + (
-            "The established Run-2 contour is shown only for T2tt. "
-            if "T2tt" in topologies
-            else ""
-        )
-        + (
-            "No Run-2 result is drawn for "
-            + " or ".join(
-                topology for topology in topologies if topology != "T2tt"
-            )
-            + ". "
-            if any(topology != "T2tt" for topology in topologies)
-            else ""
-        )
+        + "Official topology-matched CMS-SUS-19-010 observed and expected "
+        "Run-2 contours are overlaid for every displayed signal model. "
+        + "Coverage: "
+        + "; ".join(coverage_notes)
+        + ". "
         + " · ".join(links)
         + ".</p></section>"
         + NOTICE_END
@@ -187,6 +207,12 @@ def main() -> int:
                 "limits": f"data/{record['name']}.json",
                 "manifest": f"data/{record['name']}_manifest.json",
                 "mass_point_count": manifests[topology]["mass_point_count"],
+                "collected_mass_point_count": manifests[topology][
+                    "limits"
+                ]["collected_point_count"],
+                "missing_mass_points": manifests[topology]["limits"][
+                    "missing_points"
+                ],
                 "run2_overlay": manifests[topology]["run2_overlay"],
             }
             for topology, record in zip(topologies, records)
@@ -201,6 +227,7 @@ def main() -> int:
         "max_mstop_GeV": 1800,
         "signals": prior_signals,
     }
+    summary = public_value(summary)
     summary_path.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     print(
         json.dumps(
