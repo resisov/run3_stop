@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-07-31T09:53:29+00:00",
+  "generated_utc": "2026-07-31T09:59:01+00:00",
   "lowdm_search_bin_gof": {
     "bin_data_corrected": [
       0.9527415090269362,
@@ -91,8 +91,13 @@
   },
   "provenance": {
     "an_factor_sha256": "4400308a08b607efa2c6b12edb7bf814fc382517c7dd76c47d5432abe2f2e87a",
+    "an_input_sha256": "57002175fc9f6b8cff3018ddd655ff919df13be5254be3c40bfc7cf4654164a7",
     "dy2m_and_combined_published": false,
     "measurement_sha256": "24a1c7fefd00f9d5977234c8896ede9f4fce9f2b28ade2c3faa3c69893d82907",
+    "mll_stack_order": [
+      "DY_times_RZ",
+      "Others_times_RT"
+    ],
     "new_dy_datasets": [
       "DYto2E-4Jets_Bin-MLL-50_TuneCP5_13p6TeV_madgraphMLM-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3",
       "DYto2Mu-4Jets_Bin-MLL-50_TuneCP5_13p6TeV_madgraphMLM-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3",

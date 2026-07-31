@@ -159,6 +159,172 @@ def plot_factors(summary: dict[str, Any], output: Path) -> None:
     plt.close(fig)
 
 
+def plot_corrected_mll(
+    inputs: dict[str, Any],
+    factors: dict[str, Any],
+    regime: str,
+    group: str,
+    output: Path,
+) -> None:
+    source_key = "mll_high" if regime == "highdm" else "mll_low_feature"
+    node = inputs[source_key]["DY2E"][group]
+    data_leaf = node["data"]
+    dy_leaf = node["zll"]
+    other_leaf = node["other"]
+    edges = np.asarray(data_leaf["edges"], dtype=float)
+    centers = 0.5 * (edges[:-1] + edges[1:])
+    data = np.asarray(data_leaf["sumw"], dtype=float)
+    data2 = np.asarray(data_leaf["sumw2"], dtype=float)
+    dy = np.asarray(dy_leaf["sumw"], dtype=float)
+    dy2 = np.asarray(dy_leaf["sumw2"], dtype=float)
+    other = np.asarray(other_leaf["sumw"], dtype=float)
+    other2 = np.asarray(other_leaf["sumw2"], dtype=float)
+
+    correction = factors["RZ"][regime]["channels"]["DY2E"][group]
+    rz = finite_number(correction["RZ"], f"{regime}.{group}.RZ")
+    rt = finite_number(correction["RT"], f"{regime}.{group}.RT")
+    corrected_dy = rz * dy
+    corrected_other = rt * other
+    corrected_total = corrected_dy + corrected_other
+    corrected_variance = rz**2 * dy2 + rt**2 * other2
+    corrected_error = np.sqrt(np.maximum(corrected_variance, 0.0))
+    data_error = np.sqrt(np.maximum(data2, 0.0))
+    valid = corrected_total > 0.0
+    ratio = np.full_like(data, np.nan)
+    ratio_error = np.full_like(data, np.nan)
+    relative_mc_error = np.zeros_like(corrected_total)
+    ratio[valid] = data[valid] / corrected_total[valid]
+    ratio_error[valid] = data_error[valid] / corrected_total[valid]
+    relative_mc_error[valid] = corrected_error[valid] / corrected_total[valid]
+
+    fig, (ax, rax) = plt.subplots(
+        2,
+        1,
+        figsize=(10, 10),
+        sharex=True,
+        gridspec_kw={"height_ratios": [3.2, 1.1], "hspace": 0.04},
+    )
+    # Requested stack order: corrected DY on the bottom, corrected Others above.
+    ax.stairs(
+        corrected_dy,
+        edges,
+        fill=True,
+        baseline=0.0,
+        color="#35B6B4",
+        edgecolor="black",
+        linewidth=0.7,
+        label=r"DY $\times R_Z$",
+    )
+    ax.stairs(
+        corrected_total,
+        edges,
+        fill=True,
+        baseline=corrected_dy,
+        color="#6A625F",
+        edgecolor="black",
+        linewidth=0.7,
+        label=r"Others $\times R_T$",
+    )
+    ax.stairs(
+        corrected_total + corrected_error,
+        edges,
+        baseline=np.maximum(corrected_total - corrected_error, 0.0),
+        fill=True,
+        facecolor="none",
+        edgecolor="0.35",
+        hatch="////",
+        linewidth=0.0,
+        label="MC stat. unc.",
+    )
+    ax.errorbar(
+        centers,
+        data,
+        yerr=data_error,
+        fmt="o",
+        color="black",
+        ms=6,
+        lw=2.0,
+        capsize=2,
+        label="Data",
+    )
+    for axis in (ax, rax):
+        axis.axvspan(81.0, 101.0, color="#FFD166", alpha=0.18)
+        axis.set_xlim(float(edges[0]), float(edges[-1]))
+        axis.set_xmargin(0)
+        axis.tick_params(
+            which="major",
+            direction="in",
+            top=True,
+            right=True,
+            labelsize=22,
+            length=9,
+        )
+        axis.tick_params(
+            which="minor",
+            direction="in",
+            top=True,
+            right=True,
+            length=5,
+        )
+        axis.minorticks_on()
+    rax.stairs(
+        1.0 + relative_mc_error,
+        edges,
+        baseline=1.0 - relative_mc_error,
+        fill=True,
+        facecolor="0.75",
+        edgecolor="0.55",
+        alpha=0.55,
+        linewidth=0.0,
+    )
+    rax.errorbar(
+        centers[valid],
+        ratio[valid],
+        yerr=ratio_error[valid],
+        fmt="o",
+        color="black",
+        ms=6,
+        lw=2.0,
+        capsize=2,
+    )
+    rax.axhline(1.0, color="black", lw=1.5)
+    ax.set_ylabel("Events / bin", fontsize=28)
+    rax.set_ylabel("Data/MC", fontsize=25)
+    rax.set_xlabel(r"$m_{ee}$ (GeV)", fontsize=28, loc="right")
+    ax.set_yscale("log")
+    ax.set_ylim(1.0e-1, 1.0e3)
+    rax.set_ylim(0.0, 2.0)
+    handles, labels = ax.get_legend_handles_labels()
+    order = ["MC stat. unc.", r"Others $\times R_T$", r"DY $\times R_Z$", "Data"]
+    ordered = [
+        (handles[labels.index(label)], label) for label in order if label in labels
+    ]
+    ax.legend(
+        [item[0] for item in ordered],
+        [item[1] for item in ordered],
+        frameon=False,
+        fontsize=16,
+        ncol=2,
+        loc="upper right",
+    )
+    regime_label = "High" if regime == "highdm" else "Low"
+    group_label = r"N_b=1" if group == "Nb1" else r"N_b\geq2"
+    ax.text(
+        0.02,
+        0.05,
+        rf"{regime_label}-$\Delta m$, ${group_label}$" + "\n" + rf"$R_Z={rz:.3f}$, $R_T={rt:.3f}$",
+        transform=ax.transAxes,
+        fontsize=16,
+        va="bottom",
+    )
+    hep.cms.label(ax=ax, **CMS_LABEL)
+    fig.tight_layout()
+    output.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(output.with_suffix(".png"), dpi=180)
+    fig.savefig(output.with_suffix(".pdf"))
+    plt.close(fig)
+
+
 def fmt(value: float, digits: int = 3) -> str:
     return f"{value:.{digits}f}"
 
@@ -194,10 +360,10 @@ def build_html(summary: dict[str, Any], generated: str) -> str:
         ("plots/highdm_ut_dy2e.png", "plots/highdm_ut_dy2e.pdf", "High-Δm DYCR: U<sub>T</sub>", "The DY-only correction lowers the prefit prediction. The U<sub>T</sub> goodness-of-fit improves from χ²/ndof = 2.52 to 1.09."),
         ("plots/lowdm_ut_dy2e.png", "plots/lowdm_ut_dy2e.pdf", "Low-Δm DYCR: U<sub>T</sub>", "The low-Δm U<sub>T</sub> agreement improves from χ²/ndof = 4.76 to 0.57. The last populated bins remain statistically limited."),
         ("plots/lowdm_search_bins_dy2e.png", "plots/lowdm_search_bins_dy2e.pdf", "Low-Δm DYCR: search bins", "Across 34 bins the correction improves χ²/ndof from 1.98 to 1.35. Individual sparse bins can still fluctuate strongly."),
-        ("plots/mll_highdm_dy2e_nb1.png", "plots/mll_highdm_dy2e_nb1.pdf", "High-Δm, N<sub>b</sub> = 1: m<sub>ee</sub>", "On-Z and off-Z yields used by the simultaneous R<sub>Z</sub>–R<sub>T</sub> extraction."),
-        ("plots/mll_highdm_dy2e_nb2plus.png", "plots/mll_highdm_dy2e_nb2plus.pdf", "High-Δm, N<sub>b</sub> ≥ 2: m<sub>ee</sub>", "The non-DY fraction grows in the off-Z sideband and is fitted through R<sub>T</sub>."),
-        ("plots/mll_lowdm_dy2e_nb1.png", "plots/mll_lowdm_dy2e_nb1.pdf", "Low-Δm, N<sub>b</sub> = 1: m<sub>ee</sub>", "The Z window is shown explicitly; no postfit result is used."),
-        ("plots/mll_lowdm_dy2e_nb2plus.png", "plots/mll_lowdm_dy2e_nb2plus.pdf", "Low-Δm, N<sub>b</sub> ≥ 2: m<sub>ee</sub>", "This is the statistically weakest DY2E b-tag category and has the largest R<sub>Z</sub> uncertainty."),
+        ("plots/mll_highdm_dy2e_nb1.png", "plots/mll_highdm_dy2e_nb1.pdf", "High-Δm, N<sub>b</sub> = 1: corrected m<sub>ee</sub>", "DY is scaled by the measured R<sub>Z</sub> and drawn at the bottom; Others is scaled by R<sub>T</sub> and stacked above it."),
+        ("plots/mll_highdm_dy2e_nb2plus.png", "plots/mll_highdm_dy2e_nb2plus.pdf", "High-Δm, N<sub>b</sub> ≥ 2: corrected m<sub>ee</sub>", "The displayed Data/MC denominator is R<sub>Z</sub>N<sub>DY</sub> + R<sub>T</sub>N<sub>other</sub>."),
+        ("plots/mll_lowdm_dy2e_nb1.png", "plots/mll_lowdm_dy2e_nb1.pdf", "Low-Δm, N<sub>b</sub> = 1: corrected m<sub>ee</sub>", "The Z window is shown explicitly with the matrix-extracted normalizations applied."),
+        ("plots/mll_lowdm_dy2e_nb2plus.png", "plots/mll_lowdm_dy2e_nb2plus.pdf", "Low-Δm, N<sub>b</sub> ≥ 2: corrected m<sub>ee</sub>", "This is the statistically weakest DY2E b-tag category and retains the largest R<sub>Z</sub> uncertainty."),
     ]
     card_html = "\n".join(
         f'''<article class="plot-card"><a href="{pdf}"><img loading="lazy" src="{png}" alt="{html.escape(caption)}"></a><div class="plot-copy"><h3>{caption}</h3><p>{description}</p><a class="download" href="{pdf}">PDF</a></div></article>'''
@@ -300,6 +466,8 @@ def main() -> int:
     factors_path = report_dir / "an_zinv_factors_2024.json"
     measurement = read_json(measurement_path)
     factors = read_json(factors_path)
+    inputs_path = report_dir / "inputs" / "an_zinv_measurement_inputs_dyto2x_btagsf_2024.json"
+    inputs = read_json(inputs_path)
     if measurement.get("status") != "complete":
         raise ValueError("direct DY measurement is not complete")
     if factors.get("status") != "complete":
@@ -309,9 +477,11 @@ def main() -> int:
     summary["provenance"] = {
         "measurement_sha256": sha256_file(measurement_path),
         "an_factor_sha256": sha256_file(factors_path),
+        "an_input_sha256": sha256_file(inputs_path),
         "new_dy_datasets": measurement["input_audit"]["new_dy_datasets"],
         "ptll_dataset_count": measurement["input_audit"]["ptll_dataset_count"],
         "dy2m_and_combined_published": False,
+        "mll_stack_order": ["DY_times_RZ", "Others_times_RT"],
     }
 
     plot_dir = output_dir / "plots"
@@ -322,10 +492,6 @@ def main() -> int:
         "highdm_ut_dy2e": report_dir / "plots" / "highdm_ut_dy2e",
         "lowdm_ut_dy2e": report_dir / "plots" / "lowdm_ut_dy2e",
         "lowdm_search_bins_dy2e": report_dir / "plots" / "lowdm_search_bins_dy2e",
-        "mll_highdm_dy2e_nb1": report_dir / "plots" / "an_zinv" / "mll_highdm_dy2e_nb1",
-        "mll_highdm_dy2e_nb2plus": report_dir / "plots" / "an_zinv" / "mll_highdm_dy2e_nb2plus",
-        "mll_lowdm_dy2e_nb1": report_dir / "plots" / "an_zinv" / "mll_lowdm_dy2e_nb1",
-        "mll_lowdm_dy2e_nb2plus": report_dir / "plots" / "an_zinv" / "mll_lowdm_dy2e_nb2plus",
     }
     copied = []
     for name, stem in sources.items():
@@ -336,6 +502,11 @@ def main() -> int:
             target = plot_dir / f"{name}{suffix}"
             shutil.copy2(source, target)
             copied.append(target.relative_to(output_dir).as_posix())
+    for regime in ("highdm", "lowdm"):
+        for group in ("Nb1", "Nb2plus"):
+            name = f"mll_{regime}_dy2e_{group.lower()}"
+            plot_corrected_mll(inputs, factors, regime, group, plot_dir / name)
+            copied.extend([f"plots/{name}.png", f"plots/{name}.pdf"])
     summary["published_files"] = sorted(
         copied + ["plots/dy2e_rz_comparison.png", "plots/dy2e_rz_comparison.pdf"]
     )
