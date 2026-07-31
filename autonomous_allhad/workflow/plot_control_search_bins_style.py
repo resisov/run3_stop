@@ -121,6 +121,7 @@ PLOT_SYSTEMATIC_SOURCES = [
     "jesFlavorQCD",
     "jesTotal",
     "metUnclustered",
+    "zinvRZ",
 ]
 SELECTED_AN17_CATEGORY_LABELS = {
     'Nb1plus_T0_W0': '$N_{b}\\geq1$, $N_{t}=0$\n$N_{W}=0$',
@@ -151,6 +152,115 @@ SELECTED_AN17_CATEGORY_ORDER = [
 
 def load_json(path: Path) -> dict:
     return json.loads(path.read_text())
+
+
+def load_dy2e_rz_factors(path: Path) -> dict[str, dict[str, float]]:
+    measurement = load_json(path)
+    factors = measurement.get("factors") or {}
+    result = {}
+    for regime in ("highdm", "lowdm"):
+        record = ((((factors.get(regime) or {}).get("inclusive") or {}).get("DY2E")) or {})
+        if record.get("status") != "complete":
+            raise ValueError(f"incomplete {regime} inclusive DY2E RZ factor in {path}")
+        value = float(record["value"])
+        total = float(record["total"])
+        if not np.isfinite(value) or value <= 0.0:
+            raise ValueError(f"invalid {regime} DY2E RZ value: {value}")
+        if not np.isfinite(total) or total < 0.0:
+            raise ValueError(f"invalid {regime} DY2E RZ uncertainty: {total}")
+        result[regime] = {"value": value, "total": total}
+    return result
+
+
+def _scale_histogram_leaf(leaf: dict, scale: float) -> None:
+    if "sumw" in leaf:
+        leaf["sumw"] = (np.asarray(leaf.get("sumw") or [], dtype=float) * scale).tolist()
+    if "sumw2" in leaf:
+        leaf["sumw2"] = (np.asarray(leaf.get("sumw2") or [], dtype=float) * scale * scale).tolist()
+
+
+def _apply_rz_to_sample_record(record: dict, value: float, total: float) -> tuple[float, float]:
+    if "sumw" in record:
+        nominal = dict(record)
+        record.clear()
+        record["nominal"] = nominal
+    nominal = record.get("nominal") or {}
+    before = float(np.sum(np.asarray(nominal.get("sumw") or [], dtype=float)))
+    for name, leaf in record.items():
+        if name in {"zinvRZUp", "zinvRZDown"}:
+            continue
+        if isinstance(leaf, dict) and "sumw" in leaf:
+            _scale_histogram_leaf(leaf, value)
+    scaled_nominal = record.get("nominal") or {}
+    up = json.loads(json.dumps(scaled_nominal))
+    down = json.loads(json.dumps(scaled_nominal))
+    _scale_histogram_leaf(up, (value + total) / value)
+    _scale_histogram_leaf(down, max(value - total, 0.0) / value)
+    record["zinvRZUp"] = up
+    record["zinvRZDown"] = down
+    after = float(np.sum(np.asarray(scaled_nominal.get("sumw") or [], dtype=float)))
+    return before, after
+
+
+def _apply_rz_to_sample_map(raw: dict, value: float, total: float) -> dict[str, float]:
+    result = {"records": 0, "yield_before": 0.0, "yield_after": 0.0}
+    for sample, record in raw.items():
+        if sample == "data_obs" or is_signal_sample(sample):
+            continue
+        try:
+            is_dy = process_to_group(sample) == "DY"
+        except (KeyError, ValueError):
+            is_dy = False
+        if not is_dy:
+            continue
+        before, after = _apply_rz_to_sample_record(record, value, total)
+        result["records"] += 1
+        result["yield_before"] += before
+        result["yield_after"] += after
+    return result
+
+
+def apply_dy2e_rz(payload: dict, measurement_path: Path) -> dict:
+    factors = load_dy2e_rz_factors(measurement_path)
+    audit = {
+        "status": "complete",
+        "scope": "DY2E CR only",
+        "factor_policy": "one inclusive DY2E factor per high-/low-dM regime",
+        "measurement": str(measurement_path),
+        "highdm": dict(factors["highdm"]),
+        "lowdm": dict(factors["lowdm"]),
+        "containers": 0,
+        "records": 0,
+        "yield_before": {"highdm": 0.0, "lowdm": 0.0},
+        "yield_after": {"highdm": 0.0, "lowdm": 0.0},
+    }
+
+    def apply_container(raw: dict, regime: str) -> None:
+        if not raw:
+            return
+        scaled = _apply_rz_to_sample_map(raw, **factors[regime])
+        audit["containers"] += 1
+        audit["records"] += int(scaled["records"])
+        audit["yield_before"][regime] += float(scaled["yield_before"])
+        audit["yield_after"][regime] += float(scaled["yield_after"])
+
+    for region, raw in (payload.get("histograms") or {}).items():
+        if region == "DY2E" or region.startswith("DY2E_"):
+            apply_container(raw, "highdm")
+    for variable_map in [
+        (payload.get("highdm_variable_histograms") or {}).get("DY2E") or {},
+    ]:
+        for raw in variable_map.values():
+            apply_container(raw, "highdm")
+    for scheme, raw in (payload.get("search_bin_histograms") or {}).items():
+        if "DY2E" in scheme and "lowDeltaM" in scheme:
+            apply_container(raw, "lowdm")
+    for scheme, variable_map in (payload.get("lowdm_variable_histograms") or {}).items():
+        if "DY2E" in scheme and "lowDeltaM" in scheme:
+            for raw in variable_map.values():
+                apply_container(raw, "lowdm")
+    payload["_dy2e_rz_application"] = audit
+    return audit
 
 
 def as_array(values: list[float] | None, nbin: int) -> np.ndarray:
@@ -556,7 +666,7 @@ def flat_hist_record(payload: dict, region: str, allow_signal: bool) -> dict | N
     syst2 = background_systematic_variance(raw, nbin)
     syst2 += (LUMINOSITY_RELATIVE_UNCERTAINTY * bkg) ** 2
     signals = {key: vals for key, vals in signals.items() if np.any(vals > 0)}
-    return {
+    result = {
         "groups": groups,
         "background": bkg,
         "background_unc": np.sqrt(stat2 + syst2),
@@ -567,6 +677,9 @@ def flat_hist_record(payload: dict, region: str, allow_signal: bool) -> dict | N
         "nbin": nbin,
         "edges": recoil_edges,
     }
+    if payload.get("_dy2e_rz_application") and (region == "DY2E" or region.startswith("DY2E_")):
+        result["group_labels"] = {"DY": r"DY $\times R_{Z}$"}
+    return result
 
 
 def flat_search_record(payload: dict, scheme: str, label: str, allow_signal: bool, signal_overlays: list[dict] | None = None) -> dict | None:
@@ -604,16 +717,19 @@ def flat_search_record(payload: dict, scheme: str, label: str, allow_signal: boo
     syst2 = background_systematic_variance(raw, nbin)
     unc = np.sqrt(stat2 + syst2 + (LUMINOSITY_RELATIVE_UNCERTAINTY * bkg) ** 2)
     signals = {key: vals for key, vals in signals.items() if np.any(vals > 0)}
-    return {"groups": groups, "background": bkg, "background_unc": unc, "data": data, "data_unc": np.sqrt(data2), "signals": signals, "label": label, "nbin": nbin}
+    result = {"groups": groups, "background": bkg, "background_unc": unc, "data": data, "data_unc": np.sqrt(data2), "signals": signals, "label": label, "nbin": nbin}
+    if payload.get("_dy2e_rz_application") and "DY2E" in scheme:
+        result["group_labels"] = {"DY": r"DY $\times R_{Z}$"}
+    return result
 
 
 
 VARIABLE_XLABELS = {
-    "met": r"$\not\!E_{T}$ (GeV)",
-    "recoil_gcr": r"$\not\!U_{T}$ (GeV)",
-    "recoil_dy2e": r"$\not\!U_{T}$ (GeV)",
-    "recoil_dy2m": r"$\not\!U_{T}$ (GeV)",
-    "lowdm_met_sqrt_ht": r"$\not\!E_{T}/\sqrt{H_{T}}$",
+    "met": r"$p_{T}^{miss}$ (GeV)",
+    "recoil_gcr": r"$U_{T}$ (GeV)",
+    "recoil_dy2e": r"$U_{T}$ (GeV)",
+    "recoil_dy2m": r"$U_{T}$ (GeV)",
+    "lowdm_met_sqrt_ht": r"$p_{T}^{miss}/\sqrt{H_{T}}$",
 }
 
 
@@ -655,7 +771,7 @@ def lowdm_variable_record(payload: dict, scheme: str, variable: str, label: str,
     syst2 = background_systematic_variance(raw, nbin)
     syst2 += (LUMINOSITY_RELATIVE_UNCERTAINTY * bkg) ** 2
     signals = {key: vals for key, vals in signals.items() if np.any(vals > 0)}
-    return {
+    result = {
         "groups": groups,
         "background": bkg,
         "background_unc": np.sqrt(stat2 + syst2),
@@ -668,6 +784,9 @@ def lowdm_variable_record(payload: dict, scheme: str, variable: str, label: str,
         "xlabel": VARIABLE_XLABELS.get(variable, spec.get("xlabel") or variable),
         "variable": variable,
     }
+    if payload.get("_dy2e_rz_application") and "DY2E" in scheme:
+        result["group_labels"] = {"DY": r"DY $\times R_{Z}$"}
+    return result
 
 
 
@@ -796,7 +915,7 @@ def highdm_variable_record(payload: dict, region: str, variable: str) -> dict | 
     visible = background if region.startswith("SR_") else background + data
     first_visible_bin = next((index for index, value in enumerate(visible) if value > 0), 0)
     xlim_left = float(edges[0] if xlabels else edges[first_visible_bin])
-    return {
+    result = {
         "groups": groups,
         "background": background,
         "background_unc": np.sqrt(stat2 + syst2),
@@ -815,6 +934,9 @@ def highdm_variable_record(payload: dict, region: str, variable: str) -> dict | 
         "annotation": HIGHDM_DISTRIBUTION_REGION_LABELS.get(region, region),
         "reference_style": True,
     }
+    if payload.get("_dy2e_rz_application") and region == "DY2E":
+        result["group_labels"] = {"DY": r"DY $\times R_{Z}$"}
+    return result
 
 
 def partial_an17_search_record(payload: dict, label: str, split_bins: list[int], allow_signal: bool) -> dict | None:
@@ -1023,6 +1145,9 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
                 signal_specs.append(spec)
                 seen_signal_keys.add(spec["key"])
     signals = {spec["key"]: np.zeros(nbin, dtype=float) for spec in signal_specs}
+    group_labels = {}
+    for block in blocks:
+        group_labels.update(block.get("group_labels") or {})
     offset = 0
     for block in blocks:
         n = int(block["nbin"])
@@ -1053,7 +1178,12 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
             stack_inputs.append(centers.copy())
             stack_weights.append(vals)
             stack_colors.append(GROUP_COLORS.get(group, "0.7"))
-            stack_labels.append(GROUP_DISPLAY_LABELS.get(group, group) if reference_style else group)
+            stack_labels.append(
+                group_labels.get(
+                    group,
+                    GROUP_DISPLAY_LABELS.get(group, group) if reference_style else group,
+                )
+            )
     if stack_inputs:
         ax.hist(stack_inputs, bins=edges, weights=stack_weights, stacked=True, histtype="stepfilled", color=stack_colors, label=stack_labels, edgecolor="black", linewidth=0.7)
     lower = np.maximum(bkg - unc, 1.0e-12)
@@ -1130,7 +1260,11 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
             axis.set_xlim(0.5, nbin + 0.5)
         else:
             requested_left = blocks[0].get("xlim_left") if len(blocks) == 1 else None
-            axis.set_xlim(float(edges[0] if requested_left is None else requested_left), float(edges[-1]))
+            requested_right = blocks[0].get("xlim_right") if len(blocks) == 1 else None
+            axis.set_xlim(
+                float(edges[0] if requested_left is None else requested_left),
+                float(edges[-1] if requested_right is None else requested_right),
+            )
         axis.tick_params(which="major", direction="in", top=True, right=True, labelsize=22 if reference_style else 20, length=9)
         axis.tick_params(which="minor", direction="in", top=True, right=True, length=5)
         axis.minorticks_on()
@@ -1193,7 +1327,7 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
     hep.cms.label(llabel="Work in progress", rlabel=rf"{LUMINOSITY_FB:.2f} fb$^{{-1}}$ (13.6 TeV)", ax=ax)
     if reference_style:
         handles, legend_labels = ax.get_legend_handles_labels()
-        desired = ["Stat. syst. unc", "VV+VVV", "Top", "DY", "Photon+jet", r"$\mathrm{W}\to\ell\nu$", r"$\mathrm{Z}\to\nu\bar{\nu}$", "QCD Multijet", "Others", "Data"]
+        desired = ["Stat. syst. unc", "VV+VVV", "Top", group_labels.get("DY", "DY"), "Photon+jet", r"$\mathrm{W}\to\ell\nu$", r"$\mathrm{Z}\to\nu\bar{\nu}$", "QCD Multijet", "Others", "Data"]
         ordered = [(handles[legend_labels.index(label)], label) for label in desired if label in legend_labels]
         if ordered:
             ax.legend([item[0] for item in ordered], [item[1] for item in ordered], fontsize=15, ncol=3, frameon=False, columnspacing=1.2, handlelength=1.8, loc="upper center", bbox_to_anchor=(0.52, 0.995))
@@ -1207,14 +1341,23 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
     return {"status": "complete", "name": outbase.name, "png": str(outbase.with_suffix(".png")), "pdf": str(outbase.with_suffix(".pdf")), "bins": nbin, "labels": labels, "signals": list(signals)}
 
 
-def draw_highdm_distribution_report(payload_path: Path, output_dir: Path, year: str) -> dict:
+def draw_highdm_distribution_report(
+    payload_path: Path,
+    output_dir: Path,
+    year: str,
+    dy2e_rz_measurement: Path | None = None,
+    only_regions: set[str] | None = None,
+) -> dict:
     payload = load_json(payload_path)
+    rz_application = apply_dy2e_rz(payload, dy2e_rz_measurement) if dy2e_rz_measurement else None
     region_groups = payload.get("highdm_distribution_regions") or {}
     variable_specs = payload.get("highdm_distribution_variable_specs") or {}
     plots = []
     output_dir.mkdir(parents=True, exist_ok=True)
     for kind, metadata_key in [("CR", "control"), ("VR", "validation"), ("SR", "signal_categories")]:
         for region in region_groups.get(metadata_key) or []:
+            if only_regions and region not in only_regions:
+                continue
             for variable in variable_specs:
                 record = highdm_variable_record(payload, region, variable)
                 if not record:
@@ -1249,6 +1392,8 @@ def draw_highdm_distribution_report(payload_path: Path, output_dir: Path, year: 
         "output_dir": str(output_dir),
         "plot_count": len(plots),
         "plots": plots,
+        "dy2e_rz_application": rz_application,
+        "only_regions": sorted(only_regions) if only_regions else None,
     }
     (output_dir / "plot_summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     return summary
@@ -1356,8 +1501,9 @@ bind('years',value=>year=value);bind('kinds',value=>kind=value);document.getElem
     return result
 
 
-def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
+def draw_flat_report(flat_hists: Path, output_dir: Path, dy2e_rz_measurement: Path | None = None) -> dict:
     payload = load_json(flat_hists)
+    rz_application = apply_dy2e_rz(payload, dy2e_rz_measurement) if dy2e_rz_measurement else None
     plots = []
     output_dir.mkdir(parents=True, exist_ok=True)
     cr_regions = ["LLCR", "QCDCR", "GCR", "DY2E", "DY2M"]
@@ -1367,9 +1513,9 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
         rec = flat_hist_record(payload, base, allow_signal=False)
         if rec:
             cr_inclusive.append(rec)
-            plots.append(draw_flat_blocks([rec], output_dir / f"highdm_cr_{base.lower()}_recoil", xlabel=r"$\not\!U_{T}$ (GeV)"))
+            plots.append(draw_flat_blocks([rec], output_dir / f"highdm_cr_{base.lower()}_recoil", xlabel=r"$U_{T}$ (GeV)"))
     if cr_inclusive:
-        plots.append(draw_flat_blocks(cr_inclusive, output_dir / "highdm_cr_recoil_inclusive", xlabel=r"High-dM CR $\not\!U_{T}$ bin number"))
+        plots.append(draw_flat_blocks(cr_inclusive, output_dir / "highdm_cr_recoil_inclusive", xlabel=r"High-dM CR $U_{T}$ bin number"))
 
     cr_split = []
     for base in cr_regions:
@@ -1380,7 +1526,7 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
                 split_blocks.append(rec)
                 cr_split.append(rec)
         if split_blocks:
-            plots.append(draw_flat_blocks(split_blocks, output_dir / f"highdm_cr_{base.lower()}_recoil_ntop_split", xlabel=fr"High-dM {base} $\not\!U_{{T}}$ bin number"))
+            plots.append(draw_flat_blocks(split_blocks, output_dir / f"highdm_cr_{base.lower()}_recoil_ntop_split", xlabel=fr"High-dM {base} $U_{{T}}$ bin number"))
     if cr_split:
         plots.append(draw_flat_blocks(cr_split, output_dir / "highdm_cr_recoil_ntop_split"))
     for region, slug in [
@@ -1401,7 +1547,7 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
     sr_inc = flat_hist_record(payload, "SR", allow_signal=True)
     if sr_inc:
         sr_inc["blind_data"] = True
-        plots.append(draw_flat_blocks([sr_inc], output_dir / "highdm_sr_recoil_inclusive", xlabel=r"$\not\!U_{T}$ (GeV)"))
+        plots.append(draw_flat_blocks([sr_inc], output_dir / "highdm_sr_recoil_inclusive", xlabel=r"$U_{T}$ (GeV)"))
     sr_split = []
     for region in ["SR_Nt0", "SR_Nt1"]:
         rec = flat_hist_record(payload, region, allow_signal=True)
@@ -1409,7 +1555,7 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
             rec["blind_data"] = True
             sr_split.append(rec)
     if sr_split:
-        plots.append(draw_flat_blocks(sr_split, output_dir / "highdm_sr_recoil_ntop_split", xlabel=r"High-dM SR $\not\!U_{T}$ bin number"))
+        plots.append(draw_flat_blocks(sr_split, output_dir / "highdm_sr_recoil_ntop_split", xlabel=r"High-dM SR $U_{T}$ bin number"))
     an17 = flat_search_record(payload, "boosted_an_17_SR", "SR", allow_signal=True)
     if an17:
         an17["blind_data"] = True
@@ -1479,7 +1625,7 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
     low_sr_blocks = lowdm_nsv_inclusive_blocks(payload, "cat7_SR_lowDeltaM")
     if low_sr_blocks:
         plots.append(draw_flat_blocks(low_sr_blocks, output_dir / "lowdm_sr_onebin", xlabel="Search bin number"))
-    summary = {"status": "complete", "source": str(flat_hists), "output_dir": str(output_dir), "plots": plots, "lowdm_variable_plot_count": len([p for p in plots if str(p.get("name", "")).startswith("lowdm_") and p.get("variable")]), "signal_policy": "Signals are drawn only in SR plots; CR blocks exclude T2tt overlays.", "cr_plot_policy": "High-dM and low-dM CRs are drawn both as combined overview plots and as individual region plots.", "ntop_order": "N_t = 0 blocks are placed left of N_t >= 1 blocks.", "luminosity_fb": LUMINOSITY_FB, "luminosity_relative_uncertainty": LUMINOSITY_RELATIVE_UNCERTAINTY, "background_systematic_sources": PLOT_SYSTEMATIC_SOURCES}
+    summary = {"status": "complete", "source": str(flat_hists), "output_dir": str(output_dir), "plots": plots, "lowdm_variable_plot_count": len([p for p in plots if str(p.get("name", "")).startswith("lowdm_") and p.get("variable")]), "signal_policy": "Signals are drawn only in SR plots; CR blocks exclude T2tt overlays.", "cr_plot_policy": "High-dM and low-dM CRs are drawn both as combined overview plots and as individual region plots.", "ntop_order": "N_t = 0 blocks are placed left of N_t >= 1 blocks.", "luminosity_fb": LUMINOSITY_FB, "luminosity_relative_uncertainty": LUMINOSITY_RELATIVE_UNCERTAINTY, "background_systematic_sources": PLOT_SYSTEMATIC_SOURCES, "dy2e_rz_application": rz_application}
     (output_dir / "flat_plot_summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     return summary
 
@@ -1514,6 +1660,8 @@ def main() -> int:
     parser.add_argument("--impact-json", type=Path)
     parser.add_argument("--flat-hists", type=Path)
     parser.add_argument("--flat-output-dir", type=Path)
+    parser.add_argument("--dy2e-rz-measurement", type=Path)
+    parser.add_argument("--only-region", action="append", default=[])
     parser.add_argument("--luminosity-fb", type=float, default=LUMINOSITY_FB)
     parser.add_argument("--luminosity-relative-uncertainty", type=float, default=LUMINOSITY_RELATIVE_UNCERTAINTY)
     args = parser.parse_args()
@@ -1537,12 +1685,18 @@ def main() -> int:
         if not args.year:
             parser.error("--year is required with --highdm-distributions")
         outdir = args.flat_output_dir or Path(args.docs_dir or ".") / "plots" / args.year
-        print(json.dumps(draw_highdm_distribution_report(args.highdm_distributions, outdir, args.year), sort_keys=True))
+        print(json.dumps(draw_highdm_distribution_report(
+            args.highdm_distributions,
+            outdir,
+            args.year,
+            args.dy2e_rz_measurement,
+            set(args.only_region) or None,
+        ), sort_keys=True))
         return 0
 
     if args.flat_hists:
         outdir = args.flat_output_dir or Path(args.docs_dir or ".") / "plots"
-        print(json.dumps(draw_flat_report(args.flat_hists, outdir), sort_keys=True))
+        print(json.dumps(draw_flat_report(args.flat_hists, outdir, args.dy2e_rz_measurement), sort_keys=True))
         return 0
 
     if not args.preview_dir:

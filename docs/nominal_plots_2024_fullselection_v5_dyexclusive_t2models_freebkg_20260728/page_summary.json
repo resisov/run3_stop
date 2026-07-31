@@ -1,10 +1,131 @@
 {
+  "dy2e_rz_application": {
+    "applied_at": "2026-07-31T10:46:40Z",
+    "explicitly_unchanged": [
+      "DY2M CR",
+      "other CRs",
+      "all VRs",
+      "all SRs"
+    ],
+    "factor_policy": "one inclusive DY2E factor per high-/low-dM regime",
+    "main_plotter": "autonomous_allhad/workflow/plot_control_search_bins_style.py",
+    "main_plotter_sha256": "bc9edee1137e03b5456840d81e2a4022bdc535f4f8675ab6298dacb6240798b5",
+    "render_inputs": [
+      "render_payloads/highdm_source_2024.json",
+      "render_payloads/support_source_2024.json"
+    ],
+    "render_policy": "existing main plotter only; High-dM distributions restricted to DY2E with --only-region, category and Low-dM plots rendered through the standard flat-report path",
+    "highdm": {
+      "total": 0.07692247882985169,
+      "value": 0.7348089314331238
+    },
+    "hist_extract": "autonomous_allhad/reports/dy_zinv_estimation_dyto2x_btagsf_20260730/inputs/dy_zinv_dyto2x_btagsf_hist_extract_20260730.json",
+    "hist_extract_sha256": "cc11593971733eabf71943b1b3094971eb2c6fcebebb87bc1bf23f00445e1be3",
+    "lowdm": {
+      "total": 0.059246236700739176,
+      "value": 0.6507995789518364
+    },
+    "measurement": "autonomous_allhad/reports/dy_zinv_estimation_dyto2x_btagsf_20260730/measurement.json",
+    "measurement_sha256": "24a1c7fefd00f9d5977234c8896ede9f4fce9f2b28ade2c3faa3c69893d82907",
+    "modified_histogram_records": 36,
+    "replaced_files": [
+      "plots/categories/highdm_cr_dy2e_recoil.pdf",
+      "plots/categories/highdm_cr_dy2e_recoil.png",
+      "plots/categories/highdm_cr_dy2e_recoil_ntop_split.pdf",
+      "plots/categories/highdm_cr_dy2e_recoil_ntop_split.png",
+      "plots/categories/lowdm_cr_dy2e_onebin.pdf",
+      "plots/categories/lowdm_cr_dy2e_onebin.png",
+      "plots/highdm/cr_dy2e_bjet_pt.pdf",
+      "plots/highdm/cr_dy2e_bjet_pt.png",
+      "plots/highdm/cr_dy2e_fatjet_pt.pdf",
+      "plots/highdm/cr_dy2e_fatjet_pt.png",
+      "plots/highdm/cr_dy2e_ht.pdf",
+      "plots/highdm/cr_dy2e_ht.png",
+      "plots/highdm/cr_dy2e_jet_pt.pdf",
+      "plots/highdm/cr_dy2e_jet_pt.png",
+      "plots/highdm/cr_dy2e_met.pdf",
+      "plots/highdm/cr_dy2e_met.png",
+      "plots/highdm/cr_dy2e_nb.pdf",
+      "plots/highdm/cr_dy2e_nb.png",
+      "plots/highdm/cr_dy2e_nfatjet.pdf",
+      "plots/highdm/cr_dy2e_nfatjet.png",
+      "plots/highdm/cr_dy2e_njet.pdf",
+      "plots/highdm/cr_dy2e_njet.png",
+      "plots/highdm/cr_dy2e_ntop.pdf",
+      "plots/highdm/cr_dy2e_ntop.png",
+      "plots/highdm/cr_dy2e_nw.pdf",
+      "plots/highdm/cr_dy2e_nw.png",
+      "plots/highdm/cr_dy2e_ptll.pdf",
+      "plots/highdm/cr_dy2e_ptll.png",
+      "plots/highdm/cr_dy2e_ut.pdf",
+      "plots/highdm/cr_dy2e_ut.png",
+      "plots/lowdm/lowdm_cr_dy2e_ht.pdf",
+      "plots/lowdm/lowdm_cr_dy2e_ht.png",
+      "plots/lowdm/lowdm_cr_dy2e_ht_lepton_clean.pdf",
+      "plots/lowdm/lowdm_cr_dy2e_ht_lepton_clean.png",
+      "plots/lowdm/lowdm_cr_dy2e_leading_lowdm_fatjet_msd.pdf",
+      "plots/lowdm/lowdm_cr_dy2e_leading_lowdm_fatjet_msd.png",
+      "plots/lowdm/lowdm_cr_dy2e_leading_lowdm_fatjet_pt.pdf",
+      "plots/lowdm/lowdm_cr_dy2e_leading_lowdm_fatjet_pt.png",
+      "plots/lowdm/lowdm_cr_dy2e_lowdm_isr_dphi.pdf",
+      "plots/lowdm/lowdm_cr_dy2e_lowdm_isr_dphi.png",
+      "plots/lowdm/lowdm_cr_dy2e_lowdm_isr_pt.pdf",
+      "plots/lowdm/lowdm_cr_dy2e_lowdm_isr_pt.png",
+      "plots/lowdm/lowdm_cr_dy2e_lowdm_met_sqrt_ht.pdf",
+      "plots/lowdm/lowdm_cr_dy2e_lowdm_met_sqrt_ht.png",
+      "plots/lowdm/lowdm_cr_dy2e_lowdm_mtb.pdf",
+      "plots/lowdm/lowdm_cr_dy2e_lowdm_mtb.png",
+      "plots/lowdm/lowdm_cr_dy2e_lowdm_ptb.pdf",
+      "plots/lowdm/lowdm_cr_dy2e_lowdm_ptb.png",
+      "plots/lowdm/lowdm_cr_dy2e_mee.pdf",
+      "plots/lowdm/lowdm_cr_dy2e_mee.png",
+      "plots/lowdm/lowdm_cr_dy2e_met.pdf",
+      "plots/lowdm/lowdm_cr_dy2e_met.png",
+      "plots/lowdm/lowdm_cr_dy2e_n_e_veto.pdf",
+      "plots/lowdm/lowdm_cr_dy2e_n_e_veto.png",
+      "plots/lowdm/lowdm_cr_dy2e_n_lowdm_isr.pdf",
+      "plots/lowdm/lowdm_cr_dy2e_n_lowdm_isr.png",
+      "plots/lowdm/lowdm_cr_dy2e_n_m_loose.pdf",
+      "plots/lowdm/lowdm_cr_dy2e_n_m_loose.png",
+      "plots/lowdm/lowdm_cr_dy2e_nb_lepton_clean.pdf",
+      "plots/lowdm/lowdm_cr_dy2e_nb_lepton_clean.png",
+      "plots/lowdm/lowdm_cr_dy2e_nb_loose_lowdm.pdf",
+      "plots/lowdm/lowdm_cr_dy2e_nb_loose_lowdm.png",
+      "plots/lowdm/lowdm_cr_dy2e_nb_medium_lowdm.pdf",
+      "plots/lowdm/lowdm_cr_dy2e_nb_medium_lowdm.png",
+      "plots/lowdm/lowdm_cr_dy2e_njet.pdf",
+      "plots/lowdm/lowdm_cr_dy2e_njet.png",
+      "plots/lowdm/lowdm_cr_dy2e_njet_lepton_clean.pdf",
+      "plots/lowdm/lowdm_cr_dy2e_njet_lepton_clean.png",
+      "plots/lowdm/lowdm_cr_dy2e_recoil_dy2e.pdf",
+      "plots/lowdm/lowdm_cr_dy2e_recoil_dy2e.png"
+    ],
+    "replaced_plot_count": 35,
+    "scope": "DY2E CR only",
+    "status": "complete",
+    "target_process": "DY",
+    "uncertainty": "RZ total uncertainty encoded as zinvRZUp/Down and included in the main uncertainty band",
+    "yield_audit": {
+      "after": {
+        "highdm_dy2e": 304.5520973117312,
+        "highdm_dy2m": 546.4781982561082,
+        "lowdm_dy2e": 359.11869108598336,
+        "lowdm_dy2m": 607.7304065176056
+      },
+      "before": {
+        "highdm_dy2e": 414.46433798477716,
+        "highdm_dy2m": 546.4781982561082,
+        "lowdm_dy2e": 551.8114988094678,
+        "lowdm_dy2m": 607.7304065176056
+      }
+    }
+  },
   "events_processed": 259598258,
   "excluded_obsolete_plot_families": [
     "legacy High-dM 17-bin",
     "legacy High-dM 42-bin"
   ],
-  "generated_at": "2026-07-30T08:05:52+00:00",
+  "generated_at": "2026-07-31T10:46:40Z",
   "histogram_status": "complete",
   "plot_counts": {
     "categories": 26,
@@ -334,6 +455,10 @@
       "variable": "ut"
     },
     {
+      "dy2e_rz": {
+        "total": 0.07692247882985169,
+        "value": 0.7348089314331238
+      },
       "family": "highdm",
       "family_label": "High-dM distributions",
       "kind": "CR",
@@ -344,6 +469,10 @@
       "variable": "bjet_pt"
     },
     {
+      "dy2e_rz": {
+        "total": 0.07692247882985169,
+        "value": 0.7348089314331238
+      },
       "family": "highdm",
       "family_label": "High-dM distributions",
       "kind": "CR",
@@ -354,6 +483,10 @@
       "variable": "fatjet_pt"
     },
     {
+      "dy2e_rz": {
+        "total": 0.07692247882985169,
+        "value": 0.7348089314331238
+      },
       "family": "highdm",
       "family_label": "High-dM distributions",
       "kind": "CR",
@@ -364,6 +497,10 @@
       "variable": "ht"
     },
     {
+      "dy2e_rz": {
+        "total": 0.07692247882985169,
+        "value": 0.7348089314331238
+      },
       "family": "highdm",
       "family_label": "High-dM distributions",
       "kind": "CR",
@@ -374,6 +511,10 @@
       "variable": "jet_pt"
     },
     {
+      "dy2e_rz": {
+        "total": 0.07692247882985169,
+        "value": 0.7348089314331238
+      },
       "family": "highdm",
       "family_label": "High-dM distributions",
       "kind": "CR",
@@ -384,6 +525,10 @@
       "variable": "met"
     },
     {
+      "dy2e_rz": {
+        "total": 0.07692247882985169,
+        "value": 0.7348089314331238
+      },
       "family": "highdm",
       "family_label": "High-dM distributions",
       "kind": "CR",
@@ -394,6 +539,10 @@
       "variable": "nb"
     },
     {
+      "dy2e_rz": {
+        "total": 0.07692247882985169,
+        "value": 0.7348089314331238
+      },
       "family": "highdm",
       "family_label": "High-dM distributions",
       "kind": "CR",
@@ -404,6 +553,10 @@
       "variable": "nfatjet"
     },
     {
+      "dy2e_rz": {
+        "total": 0.07692247882985169,
+        "value": 0.7348089314331238
+      },
       "family": "highdm",
       "family_label": "High-dM distributions",
       "kind": "CR",
@@ -414,6 +567,10 @@
       "variable": "njet"
     },
     {
+      "dy2e_rz": {
+        "total": 0.07692247882985169,
+        "value": 0.7348089314331238
+      },
       "family": "highdm",
       "family_label": "High-dM distributions",
       "kind": "CR",
@@ -424,6 +581,10 @@
       "variable": "ntop"
     },
     {
+      "dy2e_rz": {
+        "total": 0.07692247882985169,
+        "value": 0.7348089314331238
+      },
       "family": "highdm",
       "family_label": "High-dM distributions",
       "kind": "CR",
@@ -434,6 +595,10 @@
       "variable": "nw"
     },
     {
+      "dy2e_rz": {
+        "total": 0.07692247882985169,
+        "value": 0.7348089314331238
+      },
       "family": "highdm",
       "family_label": "High-dM distributions",
       "kind": "CR",
@@ -444,6 +609,10 @@
       "variable": "ptll"
     },
     {
+      "dy2e_rz": {
+        "total": 0.07692247882985169,
+        "value": 0.7348089314331238
+      },
       "family": "highdm",
       "family_label": "High-dM distributions",
       "kind": "CR",
@@ -2374,6 +2543,10 @@
       "variable": "recoil_gcr"
     },
     {
+      "dy2e_rz": {
+        "total": 0.059246236700739176,
+        "value": 0.6507995789518364
+      },
       "family": "lowdm",
       "family_label": "Low-dM CR distributions",
       "kind": "CR",
@@ -2384,6 +2557,10 @@
       "variable": "ht"
     },
     {
+      "dy2e_rz": {
+        "total": 0.059246236700739176,
+        "value": 0.6507995789518364
+      },
       "family": "lowdm",
       "family_label": "Low-dM CR distributions",
       "kind": "CR",
@@ -2394,6 +2571,10 @@
       "variable": "ht_lepton_clean"
     },
     {
+      "dy2e_rz": {
+        "total": 0.059246236700739176,
+        "value": 0.6507995789518364
+      },
       "family": "lowdm",
       "family_label": "Low-dM CR distributions",
       "kind": "CR",
@@ -2404,6 +2585,10 @@
       "variable": "leading_lowdm_fatjet_msd"
     },
     {
+      "dy2e_rz": {
+        "total": 0.059246236700739176,
+        "value": 0.6507995789518364
+      },
       "family": "lowdm",
       "family_label": "Low-dM CR distributions",
       "kind": "CR",
@@ -2414,6 +2599,10 @@
       "variable": "leading_lowdm_fatjet_pt"
     },
     {
+      "dy2e_rz": {
+        "total": 0.059246236700739176,
+        "value": 0.6507995789518364
+      },
       "family": "lowdm",
       "family_label": "Low-dM CR distributions",
       "kind": "CR",
@@ -2424,6 +2613,10 @@
       "variable": "lowdm_isr_dphi"
     },
     {
+      "dy2e_rz": {
+        "total": 0.059246236700739176,
+        "value": 0.6507995789518364
+      },
       "family": "lowdm",
       "family_label": "Low-dM CR distributions",
       "kind": "CR",
@@ -2434,6 +2627,10 @@
       "variable": "lowdm_isr_pt"
     },
     {
+      "dy2e_rz": {
+        "total": 0.059246236700739176,
+        "value": 0.6507995789518364
+      },
       "family": "lowdm",
       "family_label": "Low-dM CR distributions",
       "kind": "CR",
@@ -2444,6 +2641,10 @@
       "variable": "lowdm_met_sqrt_ht"
     },
     {
+      "dy2e_rz": {
+        "total": 0.059246236700739176,
+        "value": 0.6507995789518364
+      },
       "family": "lowdm",
       "family_label": "Low-dM CR distributions",
       "kind": "CR",
@@ -2454,6 +2655,10 @@
       "variable": "lowdm_mtb"
     },
     {
+      "dy2e_rz": {
+        "total": 0.059246236700739176,
+        "value": 0.6507995789518364
+      },
       "family": "lowdm",
       "family_label": "Low-dM CR distributions",
       "kind": "CR",
@@ -2464,6 +2669,10 @@
       "variable": "lowdm_ptb"
     },
     {
+      "dy2e_rz": {
+        "total": 0.059246236700739176,
+        "value": 0.6507995789518364
+      },
       "family": "lowdm",
       "family_label": "Low-dM CR distributions",
       "kind": "CR",
@@ -2474,6 +2683,10 @@
       "variable": "mee"
     },
     {
+      "dy2e_rz": {
+        "total": 0.059246236700739176,
+        "value": 0.6507995789518364
+      },
       "family": "lowdm",
       "family_label": "Low-dM CR distributions",
       "kind": "CR",
@@ -2484,6 +2697,10 @@
       "variable": "met"
     },
     {
+      "dy2e_rz": {
+        "total": 0.059246236700739176,
+        "value": 0.6507995789518364
+      },
       "family": "lowdm",
       "family_label": "Low-dM CR distributions",
       "kind": "CR",
@@ -2494,6 +2711,10 @@
       "variable": "n_e_veto"
     },
     {
+      "dy2e_rz": {
+        "total": 0.059246236700739176,
+        "value": 0.6507995789518364
+      },
       "family": "lowdm",
       "family_label": "Low-dM CR distributions",
       "kind": "CR",
@@ -2504,6 +2725,10 @@
       "variable": "n_lowdm_isr"
     },
     {
+      "dy2e_rz": {
+        "total": 0.059246236700739176,
+        "value": 0.6507995789518364
+      },
       "family": "lowdm",
       "family_label": "Low-dM CR distributions",
       "kind": "CR",
@@ -2514,6 +2739,10 @@
       "variable": "n_m_loose"
     },
     {
+      "dy2e_rz": {
+        "total": 0.059246236700739176,
+        "value": 0.6507995789518364
+      },
       "family": "lowdm",
       "family_label": "Low-dM CR distributions",
       "kind": "CR",
@@ -2524,6 +2753,10 @@
       "variable": "nb_lepton_clean"
     },
     {
+      "dy2e_rz": {
+        "total": 0.059246236700739176,
+        "value": 0.6507995789518364
+      },
       "family": "lowdm",
       "family_label": "Low-dM CR distributions",
       "kind": "CR",
@@ -2534,6 +2767,10 @@
       "variable": "nb_loose_lowdm"
     },
     {
+      "dy2e_rz": {
+        "total": 0.059246236700739176,
+        "value": 0.6507995789518364
+      },
       "family": "lowdm",
       "family_label": "Low-dM CR distributions",
       "kind": "CR",
@@ -2544,6 +2781,10 @@
       "variable": "nb_medium_lowdm"
     },
     {
+      "dy2e_rz": {
+        "total": 0.059246236700739176,
+        "value": 0.6507995789518364
+      },
       "family": "lowdm",
       "family_label": "Low-dM CR distributions",
       "kind": "CR",
@@ -2554,6 +2795,10 @@
       "variable": "njet"
     },
     {
+      "dy2e_rz": {
+        "total": 0.059246236700739176,
+        "value": 0.6507995789518364
+      },
       "family": "lowdm",
       "family_label": "Low-dM CR distributions",
       "kind": "CR",
@@ -2564,6 +2809,10 @@
       "variable": "njet_lepton_clean"
     },
     {
+      "dy2e_rz": {
+        "total": 0.059246236700739176,
+        "value": 0.6507995789518364
+      },
       "family": "lowdm",
       "family_label": "Low-dM CR distributions",
       "kind": "CR",
@@ -2804,6 +3053,10 @@
       "variable": "highdm_cr_gcr_recoil"
     },
     {
+      "dy2e_rz": {
+        "total": 0.07692247882985169,
+        "value": 0.7348089314331238
+      },
       "family": "categories",
       "family_label": "Category/search-bin plots",
       "kind": "CR",
@@ -2864,6 +3117,10 @@
       "variable": "highdm_cr_gcr_recoil_ntop_split"
     },
     {
+      "dy2e_rz": {
+        "total": 0.07692247882985169,
+        "value": 0.7348089314331238
+      },
       "family": "categories",
       "family_label": "Category/search-bin plots",
       "kind": "CR",
@@ -2984,6 +3241,10 @@
       "variable": "lowdm_cr_gcr_onebin"
     },
     {
+      "dy2e_rz": {
+        "total": 0.059246236700739176,
+        "value": 0.6507995789518364
+      },
       "family": "categories",
       "family_label": "Category/search-bin plots",
       "kind": "CR",
