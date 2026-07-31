@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>2024 RZ(Nb) measurement</title>
+  <style>
+    :root { color-scheme: light; --blue:#0f62fe; --ink:#161616; --line:#d7d7d7; --panel:#f4f4f4; }
+    body { font-family: Arial, sans-serif; max-width: 1240px; margin: 0 auto; padding: 28px; color: var(--ink); line-height: 1.48; }
+    h1 { margin-bottom: .25rem; }
+    .status { display:inline-block; background:#defbe6; color:#0e6027; padding:.25rem .6rem; border-radius:999px; font-weight:700; }
+    .note { background:var(--panel); border-left:5px solid var(--blue); padding:15px 18px; margin:20px 0; }
+    .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:18px; margin:24px 0; }
+    .card { border:1px solid var(--line); padding:20px; text-decoration:none; color:inherit; }
+    .card:hover { border-color:var(--blue); }
+    table { width:100%; border-collapse:collapse; margin:20px 0 28px; }
+    th, td { border:1px solid var(--line); padding:10px; text-align:center; }
+    th { background:var(--panel); }
+    code { background:var(--panel); padding:.1rem .3rem; }
+    @media (max-width:720px) { body{padding:16px} table{font-size:.86rem} th,td{padding:7px} }
+  </style>
+</head>
+<body>
+  <h1>2024 R<sub>Z</sub>(N<sub>b</sub>) measurement</h1>
+  <p><span class="status">Complete</span> &nbsp;ee, &mu;&mu;, and statistically combined results</p>
+
+  <div class="note">
+    Run-2-style on/off-Z matrix measurement using the current Run-3 event and object selections.
+    The on-Z window is 81 &lt; m<sub>&ell;&ell;</sub> &lt; 101 GeV; the off-Z region is
+    50 &lt; m<sub>&ell;&ell;</sub> &lt; 81 GeV or m<sub>&ell;&ell;</sub> &gt; 101 GeV.
+    R<sub>Z</sub> and R<sub>T</sub> are fitted separately for N<sub>b</sub>=1 and N<sub>b</sub>&ge;2.
+    No U<sub>T</sub>-dependent R<sub>Z</sub> or saturated post-fit reconstruction is used.
+  </div>
+
+  <div class="cards">
+    <a class="card" href="highdm/"><h2>High-&Delta;m</h2><p>R<sub>Z</sub>, R<sub>T</sub>, and four m<sub>&ell;&ell;</sub> input distributions.</p></a>
+    <a class="card" href="lowdm/"><h2>Low-&Delta;m</h2><p>Exact sparse NanoAOD recovery plus the lossless feature baseline.</p></a>
+  </div>
+
+  <h2>R<sub>Z</sub> results</h2>
+  <table>
+    <thead><tr><th>Selection</th><th>Category</th><th>ee</th><th>&mu;&mu;</th><th>Combined</th></tr></thead>
+    <tbody>
+      <tr><td>High-&Delta;m</td><td>N<sub>b</sub>=1</td><td>0.796 &plusmn; 0.077</td><td>0.679 &plusmn; 0.059</td><td>0.722 &plusmn; 0.047</td></tr>
+      <tr><td>High-&Delta;m</td><td>N<sub>b</sub>&ge;2</td><td>0.655 &plusmn; 0.105</td><td>0.751 &plusmn; 0.108</td><td>0.701 &plusmn; 0.075</td></tr>
+      <tr><td>Low-&Delta;m</td><td>N<sub>b</sub>=1</td><td>0.624 &plusmn; 0.052</td><td>0.599 &plusmn; 0.044</td><td>0.609 &plusmn; 0.033</td></tr>
+      <tr><td>Low-&Delta;m</td><td>N<sub>b</sub>&ge;2</td><td>0.800 &plusmn; 0.141</td><td>0.557 &plusmn; 0.090</td><td>0.628 &plusmn; 0.076</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Low-&Delta;m accounting</h2>
+  <p>509/509 sparse partitions completed; 2,541/2,541 source files and 21,967/21,967 candidate events matched; 15,458 events passed the exact topology reevaluation; no failed partition remained.</p>
+</body>
+</html>

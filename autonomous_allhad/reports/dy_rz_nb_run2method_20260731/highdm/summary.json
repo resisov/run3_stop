@@ -1,0 +1,348 @@
+{
+  "inputs": {
+    "ee": "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/dy2e_matrix_v1/merged_feature.json",
+    "mumu": "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/dy2m_matrix_v1/merged_feature.json"
+  },
+  "method": {
+    "categories": [
+      "Nb1",
+      "Nb2plus"
+    ],
+    "channels": [
+      "DY2E",
+      "DY2M"
+    ],
+    "combination": "inverse-variance weighted RZ across ee and mumu",
+    "mass_windows": {
+      "off": "50 < mll < 81 GeV or mll > 101 GeV",
+      "on": "81 < mll < 101 GeV"
+    },
+    "ut_dependent_rz": false
+  },
+  "plots": {
+    "mll": [
+      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2e_nb1.png",
+      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2e_nb1.pdf",
+      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2e_nb2plus.png",
+      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2e_nb2plus.pdf",
+      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2m_nb1.png",
+      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2m_nb1.pdf",
+      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2m_nb2plus.png",
+      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2m_nb2plus.pdf"
+    ],
+    "rt": [
+      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/rt_highdm.png",
+      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/rt_highdm.pdf"
+    ],
+    "rz": [
+      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/rz_highdm.png",
+      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/rz_highdm.pdf"
+    ]
+  },
+  "rz_high": {
+    "channels": {
+      "DY2E": {
+        "Nb1": {
+          "RT": 0.5484127468732211,
+          "RT_stat": 0.15428913861698224,
+          "RZ": 0.7956219718951804,
+          "RZ_stat": 0.07714936676703654,
+          "boundary": {
+            "RT": false,
+            "RZ": false
+          },
+          "correlation": -0.39529050517234,
+          "covariance": [
+            [
+              0.0059520247925547234,
+              -0.004705265163548225
+            ],
+            [
+              -0.0047052651635482255,
+              0.02380513829517036
+            ]
+          ],
+          "determinant": 24652.86903868939,
+          "fit_converged": true,
+          "fit_expectation": [
+            239.0,
+            94.0
+          ],
+          "fit_message": "analytic interior maximum",
+          "fit_nll": -1402.9444984450113,
+          "inputs": {
+            "data_off": {
+              "entries": 94,
+              "sumw": 94.0,
+              "sumw2": 94.0
+            },
+            "data_on": {
+              "entries": 239,
+              "sumw": 239.0,
+              "sumw2": 239.0
+            },
+            "other_off": {
+              "entries": 4696,
+              "sumw": 85.20186297349488,
+              "sumw2": 3.1230309394799587
+            },
+            "other_on": {
+              "entries": 415,
+              "sumw": 7.96681886414471,
+              "sumw2": 0.3650382944891742
+            },
+            "zll_off": {
+              "entries": 789,
+              "sumw": 59.41793208071187,
+              "sumw2": 80.95128072790415
+            },
+            "zll_on": {
+              "entries": 5806,
+              "sumw": 294.90248292663364,
+              "sumw2": 407.4540782154821
+            }
+          },
+          "profiled_templates": [
+            294.90248292663364,
+            59.41793208071187,
+            7.96681886414471,
+            85.20186297349488
+          ],
+          "solver": "nonnegative_profile_likelihood_poisson_data_gaussian_mcstat",
+          "status": "complete"
+        },
+        "Nb2plus": {
+          "RT": 0.7195653616242308,
+          "RT_stat": 0.10467570088824793,
+          "RZ": 0.6547029430664236,
+          "RZ_stat": 0.10501984356169773,
+          "boundary": {
+            "RT": false,
+            "RZ": false
+          },
+          "correlation": -0.2678116393229255,
+          "covariance": [
+            [
+              0.011029167541723466,
+              -0.002944060242404647
+            ],
+            [
+              -0.002944060242404647,
+              0.010957002356445948
+            ]
+          ],
+          "determinant": 12441.760159561509,
+          "fit_converged": true,
+          "fit_expectation": [
+            87.0,
+            87.0
+          ],
+          "fit_message": "analytic interior maximum",
+          "fit_nll": -603.0680126458975,
+          "inputs": {
+            "data_off": {
+              "entries": 87,
+              "sumw": 87.0,
+              "sumw2": 87.0
+            },
+            "data_on": {
+              "entries": 87,
+              "sumw": 87.0,
+              "sumw2": 87.0
+            },
+            "other_off": {
+              "entries": 8306,
+              "sumw": 102.07988521623987,
+              "sumw2": 3.2495111848554004
+            },
+            "other_on": {
+              "entries": 670,
+              "sumw": 8.451643912889342,
+              "sumw2": 0.2820197626466819
+            },
+            "zll_off": {
+              "entries": 1306,
+              "sumw": 20.69159856891307,
+              "sumw2": 41.47566028709755
+            },
+            "zll_on": {
+              "entries": 8600,
+              "sumw": 123.5957324592214,
+              "sumw2": 177.22848962714394
+            }
+          },
+          "profiled_templates": [
+            123.5957324592214,
+            20.69159856891307,
+            8.451643912889342,
+            102.07988521623987
+          ],
+          "solver": "nonnegative_profile_likelihood_poisson_data_gaussian_mcstat",
+          "status": "complete"
+        }
+      },
+      "DY2M": {
+        "Nb1": {
+          "RT": 0.7598013435720404,
+          "RT_stat": 0.11316696451139341,
+          "RZ": 0.6792547511819805,
+          "RZ_stat": 0.05899354449155688,
+          "boundary": {
+            "RT": false,
+            "RZ": false
+          },
+          "correlation": -0.35199540448426864,
+          "covariance": [
+            [
+              0.0034802382916773013,
+              -0.0023499636850526986
+            ],
+            [
+              -0.002349963685052698,
+              0.012806761856722975
+            ]
+          ],
+          "determinant": 54187.89018919282,
+          "fit_converged": true,
+          "fit_expectation": [
+            296.0,
+            150.0
+          ],
+          "fit_message": "analytic interior maximum",
+          "fit_nll": -1989.9416925943601,
+          "inputs": {
+            "data_off": {
+              "entries": 150,
+              "sumw": 150.0,
+              "sumw2": 150.0
+            },
+            "data_on": {
+              "entries": 296,
+              "sumw": 296.0,
+              "sumw2": 296.0
+            },
+            "other_off": {
+              "entries": 6826,
+              "sumw": 132.4368405121483,
+              "sumw2": 5.341472374097484
+            },
+            "other_on": {
+              "entries": 635,
+              "sumw": 15.959486160395205,
+              "sumw2": 1.0510251970852083
+            },
+            "zll_off": {
+              "entries": 1170,
+              "sumw": 72.68894410310236,
+              "sumw2": 96.84820290108617
+            },
+            "zll_on": {
+              "entries": 7860,
+              "sumw": 417.9197281706743,
+              "sumw2": 613.7045714527105
+            }
+          },
+          "profiled_templates": [
+            417.9197281706743,
+            72.68894410310236,
+            15.959486160395205,
+            132.4368405121483
+          ],
+          "solver": "nonnegative_profile_likelihood_poisson_data_gaussian_mcstat",
+          "status": "complete"
+        },
+        "Nb2plus": {
+          "RT": 0.8837512963165545,
+          "RT_stat": 0.09274001244274037,
+          "RZ": 0.750825639500108,
+          "RZ_stat": 0.1079461774016156,
+          "boundary": {
+            "RT": false,
+            "RZ": false
+          },
+          "correlation": -0.21453114353493477,
+          "covariance": [
+            [
+              0.011652377215621068,
+              -0.002147656225430371
+            ],
+            [
+              -0.002147656225430371,
+              0.00860070990787964
+            ]
+          ],
+          "determinant": 17849.7829185071,
+          "fit_converged": true,
+          "fit_expectation": [
+            109.0,
+            133.0
+          ],
+          "fit_message": "analytic interior maximum",
+          "fit_nll": -919.7733532164699,
+          "inputs": {
+            "data_off": {
+              "entries": 133,
+              "sumw": 133.0,
+              "sumw2": 133.0
+            },
+            "data_on": {
+              "entries": 109,
+              "sumw": 109.0,
+              "sumw2": 109.0
+            },
+            "other_off": {
+              "entries": 11490,
+              "sumw": 135.7383984428724,
+              "sumw2": 7.427586226787499
+            },
+            "other_on": {
+              "entries": 873,
+              "sumw": 10.476772598096874,
+              "sumw2": 0.31993212586981085
+            },
+            "zll_off": {
+              "entries": 1761,
+              "sumw": 17.368898623202465,
+              "sumw2": 23.157509980913797
+            },
+            "zll_on": {
+              "entries": 11097,
+              "sumw": 132.8419454370588,
+              "sumw2": 162.03494367242573
+            }
+          },
+          "profiled_templates": [
+            132.8419454370588,
+            17.368898623202465,
+            10.476772598096874,
+            135.7383984428724
+          ],
+          "solver": "nonnegative_profile_likelihood_poisson_data_gaussian_mcstat",
+          "status": "complete"
+        }
+      }
+    },
+    "combined": {
+      "Nb1": {
+        "RZ": 0.7221909642419363,
+        "RZ_stat": 0.04686287228377772,
+        "channels": [
+          "DY2E",
+          "DY2M"
+        ],
+        "status": "complete"
+      },
+      "Nb2plus": {
+        "RZ": 0.7014437332053335,
+        "RZ_stat": 0.07527353640388311,
+        "channels": [
+          "DY2E",
+          "DY2M"
+        ],
+        "status": "complete"
+      }
+    }
+  },
+  "schema_version": "an_zinv_rz_nb_2024_v1",
+  "status": "complete"
+}
