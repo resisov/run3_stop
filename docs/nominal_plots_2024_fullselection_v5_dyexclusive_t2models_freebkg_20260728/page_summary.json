@@ -1,6 +1,6 @@
 {
   "dy2e_rz_application": {
-    "applied_at": "2026-07-31T10:46:40Z",
+    "applied_at": "2026-07-31T11:21:39Z",
     "explicitly_unchanged": [
       "DY2M CR",
       "other CRs",
@@ -9,12 +9,12 @@
     ],
     "factor_policy": "one inclusive DY2E factor per high-/low-dM regime",
     "main_plotter": "autonomous_allhad/workflow/plot_control_search_bins_style.py",
-    "main_plotter_sha256": "bc9edee1137e03b5456840d81e2a4022bdc535f4f8675ab6298dacb6240798b5",
+    "main_plotter_sha256": "d868900e75a0bb113415f8553d29106245bc7871ee8d18249fe11c8bfe7d8239",
     "render_inputs": [
       "render_payloads/highdm_source_2024.json",
       "render_payloads/support_source_2024.json"
     ],
-    "render_policy": "existing main plotter only; High-dM distributions restricted to DY2E with --only-region, category and Low-dM plots rendered through the standard flat-report path",
+    "render_policy": "DY2E DY central sumw multiplied by RZ and sumw2 by RZ squared in an ephemeral payload; unchanged main plotter reran the complete High-dM and standard flat/Low-dM plot sets",
     "highdm": {
       "total": 0.07692247882985169,
       "value": 0.7348089314331238
@@ -104,7 +104,7 @@
     "scope": "DY2E CR only",
     "status": "complete",
     "target_process": "DY",
-    "uncertainty": "RZ total uncertainty encoded as zinvRZUp/Down and included in the main uncertainty band",
+    "uncertainty": "RZ central-value multiplication in these distribution plots; measured total uncertainties remain recorded in the measurement artifact",
     "yield_audit": {
       "after": {
         "highdm_dy2e": 304.5520973117312,
@@ -118,6 +118,10 @@
         "lowdm_dy2e": 551.8114988094678,
         "lowdm_dy2m": 607.7304065176056
       }
+    },
+    "rerendered_plot_counts": {
+      "highdm_distribution_pairs": 186,
+      "flat_category_lowdm_pairs": 131
     }
   },
   "events_processed": 259598258,
