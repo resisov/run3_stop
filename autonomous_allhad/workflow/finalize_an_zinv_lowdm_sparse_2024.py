@@ -42,9 +42,11 @@ from build_an_zinv_measurement_inputs_2024 import (  # noqa: E402
     CHANNELS,
     MLL_EDGES,
     MASS_WINDOWS,
+    RZ_LOW_UT_EDGES,
     fill_histogram,
     empty_yield,
     finalize_rz,
+    finalize_rz_ut,
     merge_tree,
     nested_histogram,
     nested_yield,
@@ -135,6 +137,7 @@ def process_source(task: dict[str, Any]) -> dict[str, Any]:
     max_gap = int(task["max_gap"])
     output: dict[str, Any] = {
         "raw": {},
+        "raw_ut": {},
         "mll": {},
         "summary": {
             "file_id": int(task["file_id"]),
@@ -245,6 +248,7 @@ def process_source(task: dict[str, Any]) -> dict[str, Any]:
                             f"unsupported mass window {window}"
                         )
                     component = str(candidate["component"])
+                    recoil = float(row[f"recoil_{channel.lower()}"])
                     add_yield(
                         nested_yield(
                             output["raw"],
@@ -252,6 +256,28 @@ def process_source(task: dict[str, Any]) -> dict[str, Any]:
                         ),
                         [float(candidate["flat_weight"])],
                     )
+                    if np.isfinite(recoil) and recoil >= RZ_LOW_UT_EDGES[0]:
+                        ut_bin = int(
+                            np.searchsorted(
+                                RZ_LOW_UT_EDGES,
+                                recoil,
+                                side="right",
+                            )
+                            - 1
+                        )
+                        ut_bin = min(ut_bin, len(RZ_LOW_UT_EDGES) - 2)
+                        add_yield(
+                            nested_yield(
+                                output["raw_ut"],
+                                (
+                                    channel,
+                                    str(ut_bin),
+                                    window,
+                                    component,
+                                ),
+                            ),
+                            [float(candidate["flat_weight"])],
+                        )
                     fill_histogram(
                         nested_histogram(
                             output["mll"],
@@ -318,6 +344,9 @@ def main() -> int:
         "rz_low_raw": json.loads(
             json.dumps(feature.get("rz_low_feature_raw") or {})
         ),
+        "rz_low_ut_raw": json.loads(
+            json.dumps(feature.get("rz_low_feature_ut_raw") or {})
+        ),
         "mll_low": json.loads(
             json.dumps(feature.get("mll_low_feature") or {})
         ),
@@ -382,6 +411,7 @@ def main() -> int:
             )
             merged["summary"]["read_windows"] += int(summary["windows"])
             merge_tree(merged["rz_low_raw"], result["raw"])
+            merge_tree(merged["rz_low_ut_raw"], result["raw_ut"])
             merge_tree(merged["mll_low"], result["mll"])
             completed = int(merged["summary"]["completed_files"])
             if completed and completed % 25 == 0:
@@ -404,6 +434,16 @@ def main() -> int:
                     flush=True,
                 )
     merged["rz_low"] = finalize_rz(merged["rz_low_raw"])
+    channels = tuple(
+        str(channel)
+        for channel in (
+            (feature.get("provenance") or {}).get("channels")
+            or CHANNELS
+        )
+    )
+    merged["rz_low_ut"] = finalize_rz_ut(
+        merged["rz_low_ut_raw"], RZ_LOW_UT_EDGES, channels
+    )
     complete = (
         not merged["summary"]["failures"]
         and merged["summary"]["matched_events"]

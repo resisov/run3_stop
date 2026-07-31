@@ -21,13 +21,18 @@ import json
 import math
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 from typing import Any
 
 import awkward as ak
 import numpy as np
 import uproot
+from scipy.optimize import minimize
 
 THIS_DIR = Path(__file__).resolve().parent
+PACKAGE_ROOT = THIS_DIR.parent
+if str(PACKAGE_ROOT) not in sys.path:
+    sys.path.insert(0, str(PACKAGE_ROOT))
 if str(THIS_DIR) not in sys.path:
     sys.path.insert(0, str(THIS_DIR))
 
@@ -35,6 +40,14 @@ import build_flat_boosted_recoil_hists as bh  # noqa: E402
 
 
 HIGH_EDGES = np.asarray(bh.RECOIL_PT_BINS, dtype=float)
+RZ_HIGH_UT_EDGES = np.asarray(
+    [250.0, 300.0, 350.0, 400.0, 500.0, 650.0, 800.0, 1500.0],
+    dtype=float,
+)
+RZ_LOW_UT_EDGES = np.asarray(
+    [300.0, 350.0, 400.0, 500.0, 650.0, 800.0, 1500.0],
+    dtype=float,
+)
 MLL_EDGES = np.asarray(
     [50.0, 70.0, 81.0, 91.0, 101.0, 120.0, 160.0, 250.0, 500.0],
     dtype=float,
@@ -103,6 +116,42 @@ def nested_yield(
     for key in keys[:-1]:
         target = target.setdefault(key, {})
     return target.setdefault(keys[-1], empty_yield())
+
+
+def fill_rz_ut_yields(
+    target: dict[str, Any],
+    channel: str,
+    component: str,
+    base_mask: np.ndarray,
+    masks: dict[str, np.ndarray],
+    weights: np.ndarray,
+    edges: np.ndarray,
+) -> None:
+    """Fill exclusive UT-bin inputs for the on/off-Z matrix.
+
+    The final bin contains the overflow, matching the nominal recoil
+    histogram convention used by the analysis plots.
+    """
+
+    recoil = np.asarray(masks["recoil"], dtype=float)
+    valid = np.asarray(base_mask, dtype=bool) & np.isfinite(recoil)
+    if not np.any(valid):
+        return
+    indices = np.searchsorted(edges, recoil, side="right") - 1
+    indices = np.minimum(indices, len(edges) - 2)
+    valid &= indices >= 0
+    for bin_index in range(len(edges) - 1):
+        ut_bin = valid & (indices == bin_index)
+        for window in MASS_WINDOWS:
+            selected = ut_bin & masks[window]
+            if np.any(selected):
+                add_yield(
+                    nested_yield(
+                        target,
+                        (channel, str(bin_index), window, component),
+                    ),
+                    weights[selected],
+                )
 
 
 def empty_histogram(edges: np.ndarray) -> dict[str, Any]:
@@ -244,7 +293,11 @@ def medium_charge_pair(
         pt = chunk["muon_pt_all"]
         eta = chunk["muon_eta_all"]
         iso = chunk["muon_mini_iso_all"]
-        medium_id = chunk["muon_medium_id_all"]
+        # The decorated flat tree stores NanoAOD boolean ID branches as
+        # integer 0/1 vectors.  Cast explicitly before jagged masking;
+        # otherwise Awkward interprets the mask as integer indices and the
+        # reconstructed charge pair is wrong for most dimuon events.
+        medium_id = chunk["muon_medium_id_all"] != 0
         charge = chunk["muon_charge_all"]
         medium = (
             (pt > 10.0)
@@ -326,7 +379,7 @@ def lowdm_feature_decision(
         medium = (
             (chunk["muon_pt_all"] > 10.0)
             & (abs(chunk["muon_eta_all"]) < 2.4)
-            & chunk["muon_medium_id_all"]
+            & (chunk["muon_medium_id_all"] != 0)
             & (chunk["muon_mini_iso_all"] < 0.2)
         )
         lepton_eta = chunk["muon_eta_all"][medium]
@@ -510,6 +563,7 @@ def channel_masks(
         "high": high,
         "sparse_low": sparse_low,
         "mass": mass,
+        "recoil": recoil,
     }
 
 
@@ -519,6 +573,7 @@ def process_root(
     normalization_name: str,
     dy_policy: str,
     step_size: int,
+    channels: tuple[str, ...] = CHANNELS,
 ) -> dict[str, Any]:
     root_path = Path(root_name)
     repo = Path(repo_name)
@@ -526,6 +581,8 @@ def process_root(
     result: dict[str, Any] = {
         "rz_high": {},
         "rz_low_feature": {},
+        "rz_high_ut": {},
+        "rz_low_feature_ut": {},
         "mll_high": {},
         "mll_low_feature": {},
         "gcr_data": {"highdm": {}, "lowdm": {}},
@@ -596,7 +653,7 @@ def process_root(
                     "DY2E": (not is_data) or process == "EGamma",
                     "DY2M": (not is_data) or process == "Muon",
                 }
-                for pre_channel in CHANNELS:
+                for pre_channel in channels:
                     if not pre_stream_ok[pre_channel]:
                         continue
                     pre_masks = channel_masks(sub, pre_channel)
@@ -632,6 +689,7 @@ def process_root(
                         normalization,
                         sub,
                         dataset_id,
+                        dataset,
                         is_data=False,
                         is_signal=False,
                         require_normalization=True,
@@ -681,10 +739,35 @@ def process_root(
                     "DY2E": (not is_data) or process == "EGamma",
                     "DY2M": (not is_data) or process == "Muon",
                 }
-                for channel in CHANNELS:
+                for channel in channels:
                     if not stream_ok[channel]:
                         continue
                     masks = channel_masks(sub, channel)
+                    low_selected, low_ambiguous, low_indices = (
+                        lowdm_feature_decision(
+                            sub,
+                            channel,
+                            masks["common"],
+                        )
+                    )
+                    fill_rz_ut_yields(
+                        result["rz_high_ut"],
+                        channel,
+                        component,
+                        masks["high"],
+                        masks,
+                        weights,
+                        RZ_HIGH_UT_EDGES,
+                    )
+                    fill_rz_ut_yields(
+                        result["rz_low_feature_ut"],
+                        channel,
+                        component,
+                        low_selected,
+                        masks,
+                        weights,
+                        RZ_LOW_UT_EDGES,
+                    )
                     nb = bh.int_field(sub, "nb_lepton_clean", n, -1)
                     groups = {"Nb1": nb == 1, "Nb2plus": nb >= 2}
                     for group, group_mask in groups.items():
@@ -720,13 +803,6 @@ def process_root(
                                     ),
                                     weights[selected],
                                 )
-                    low_selected, low_ambiguous, low_indices = (
-                        lowdm_feature_decision(
-                            sub,
-                            channel,
-                            masks["common"],
-                        )
-                    )
                     for group, group_mask in {
                         "Nb1": low_indices < 16,
                         "Nb2plus": low_indices >= 16,
@@ -780,6 +856,9 @@ def process_root(
                                     else "off"
                                 ),
                                 "mass": float(masks["mass"][index]),
+                                "flat_recoil": float(
+                                    masks["recoil"][index]
+                                ),
                                 "run": int(sub["run"][index]),
                                 "luminosityBlock": int(
                                     sub["luminosityBlock"][index]
@@ -858,6 +937,15 @@ def solve_matrix(
     other_off: float,
     variances: list[float],
 ) -> dict[str, Any]:
+    """Fit non-negative DY and non-DY normalizations in on/off-Z data.
+
+    The two observed counts are described with Poisson terms.  The four
+    weighted-MC template yields are profiled with Gaussian constraints whose
+    variances are their sumw2 values.  This is the likelihood counterpart of
+    the 2x2 matrix solution, but it remains physical when a low-count bin would
+    otherwise return a negative component normalization.
+    """
+
     matrix = np.asarray(
         [[z_on, other_on], [z_off, other_off]], dtype=float
     )
@@ -870,48 +958,153 @@ def solve_matrix(
             "RZ": None,
             "RT": None,
         }
-    solution = np.linalg.solve(matrix, data)
-    variables = np.asarray(
-        [data_on, data_off, z_on, z_off, other_on, other_off],
+    nominal = np.asarray([z_on, z_off, other_on, other_off], dtype=float)
+    template_variance = np.maximum(
+        np.asarray(variances[2:], dtype=float), 0.0
+    )
+    floating = np.flatnonzero(template_variance > 0.0)
+
+    try:
+        algebraic = np.linalg.solve(matrix, data)
+    except np.linalg.LinAlgError:
+        algebraic = np.asarray([1.0, 1.0], dtype=float)
+
+    def unpack(parameters: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+        scale = np.asarray(parameters[:2], dtype=float)
+        templates = nominal.copy()
+        templates[floating] = parameters[2:]
+        return scale, templates
+
+    def nll(parameters: np.ndarray) -> float:
+        scale, templates = unpack(parameters)
+        expectation = np.asarray(
+            [
+                scale[0] * templates[0] + scale[1] * templates[2],
+                scale[0] * templates[1] + scale[1] * templates[3],
+            ],
+            dtype=float,
+        )
+        if np.any(~np.isfinite(expectation)) or np.any(expectation <= 0.0):
+            return 1.0e100
+        poisson = float(np.sum(expectation - data * np.log(expectation)))
+        if len(floating):
+            delta = templates[floating] - nominal[floating]
+            constraint = 0.5 * float(
+                np.sum(delta * delta / template_variance[floating])
+            )
+        else:
+            constraint = 0.0
+        return poisson + constraint
+
+    clipped = np.maximum(algebraic, 0.0)
+    seeds = (
+        clipped,
+        np.asarray([1.0, 1.0], dtype=float),
+        np.asarray(
+            [
+                max((data_on + data_off) / max(z_on + z_off, 1.0e-9), 0.0),
+                0.0,
+            ],
+            dtype=float,
+        ),
+    )
+    best = None
+    bounds = [(0.0, None), (0.0, None)] + [
+        (0.0, None) for _ in floating
+    ]
+    if np.all(algebraic >= 0.0):
+        # With two observations and two positive scale factors, the algebraic
+        # solution reproduces both Poisson means exactly while leaving every
+        # constrained MC template at its nominal value.  It is therefore the
+        # global interior likelihood maximum; no numerical minimizer is needed.
+        parameters = np.concatenate(
+            [algebraic, np.maximum(nominal[floating], 0.0)]
+        )
+        best = SimpleNamespace(
+            x=parameters,
+            fun=nll(parameters),
+            success=True,
+            message="analytic interior maximum",
+        )
+    else:
+        for seed in seeds:
+            initial = np.concatenate(
+                [seed, np.maximum(nominal[floating], 0.0)]
+            )
+            candidate = minimize(
+                nll,
+                initial,
+                method="L-BFGS-B",
+                bounds=bounds,
+                options={"ftol": 1.0e-12, "gtol": 1.0e-8, "maxiter": 5000},
+            )
+            if np.isfinite(candidate.fun) and (
+                best is None or candidate.fun < best.fun
+            ):
+                best = candidate
+    if best is None:
+        return {
+            "status": "fit_failed",
+            "determinant": determinant,
+            "message": "no finite likelihood candidate",
+            "RZ": None,
+            "RT": None,
+        }
+
+    scale, templates = unpack(best.x)
+    expectation = np.asarray(
+        [
+            scale[0] * templates[0] + scale[1] * templates[2],
+            scale[0] * templates[1] + scale[1] * templates[3],
+        ],
         dtype=float,
     )
 
-    def evaluate(values: np.ndarray) -> np.ndarray:
-        return np.linalg.solve(
-            np.asarray(
-                [
-                    [values[2], values[4]],
-                    [values[3], values[5]],
-                ],
-                dtype=float,
-            ),
-            values[:2],
+    # Expected Fisher information for the fitted scale factors and profiled MC
+    # template yields.  Its inverse gives the local covariance after profiling.
+    dimension = 2 + len(floating)
+    information = np.zeros((dimension, dimension), dtype=float)
+    template_to_parameter = {
+        int(template_index): 2 + position
+        for position, template_index in enumerate(floating)
+    }
+    for window_index in range(2):
+        if window_index == 0:
+            gradient = np.asarray([templates[0], templates[2]], dtype=float)
+            template_indices = (0, 2)
+        else:
+            gradient = np.asarray([templates[1], templates[3]], dtype=float)
+            template_indices = (1, 3)
+        full_gradient = np.zeros(dimension, dtype=float)
+        full_gradient[:2] = gradient
+        for component_index, template_index in enumerate(template_indices):
+            parameter_index = template_to_parameter.get(template_index)
+            if parameter_index is not None:
+                full_gradient[parameter_index] = scale[component_index]
+        information += np.outer(full_gradient, full_gradient) / max(
+            expectation[window_index], 1.0e-12
         )
-
-    jacobian = np.zeros((2, len(variables)), dtype=float)
-    for index, value in enumerate(variables):
-        step = max(abs(float(value)) * 1.0e-5, 1.0e-5)
-        plus = variables.copy()
-        minus = variables.copy()
-        plus[index] += step
-        minus[index] -= step
-        try:
-            jacobian[:, index] = (
-                evaluate(plus) - evaluate(minus)
-            ) / (2.0 * step)
-        except np.linalg.LinAlgError:
-            return {
-                "status": "unstable",
-                "determinant": determinant,
-                "RZ": float(solution[0]),
-                "RT": float(solution[1]),
-            }
-    covariance = jacobian @ np.diag(np.asarray(variances)) @ jacobian.T
+    for position, template_index in enumerate(floating):
+        information[2 + position, 2 + position] += (
+            1.0 / template_variance[template_index]
+        )
+    covariance_full = np.linalg.pinv(information, hermitian=True)
+    covariance = covariance_full[:2, :2]
     return {
         "status": "complete",
         "determinant": determinant,
-        "RZ": float(solution[0]),
-        "RT": float(solution[1]),
+        "solver": "nonnegative_profile_likelihood_poisson_data_gaussian_mcstat",
+        "fit_converged": bool(best.success),
+        "fit_message": str(best.message),
+        "fit_nll": float(best.fun),
+        "fit_expectation": expectation.tolist(),
+        "profiled_templates": templates.tolist(),
+        "boundary": {
+            "RZ": bool(scale[0] <= 1.0e-8),
+            "RT": bool(scale[1] <= 1.0e-8),
+        },
+        "RZ": float(scale[0]),
+        "RT": float(scale[1]),
         "RZ_stat": float(math.sqrt(max(covariance[0, 0], 0.0))),
         "RT_stat": float(math.sqrt(max(covariance[1, 1], 0.0))),
         "correlation": float(
@@ -1001,6 +1194,73 @@ def finalize_rz(payload: dict[str, Any]) -> dict[str, Any]:
     return output
 
 
+def finalize_rz_ut(
+    payload: dict[str, Any],
+    edges: np.ndarray,
+    channels: tuple[str, ...] = CHANNELS,
+) -> dict[str, Any]:
+    """Solve the on/off-Z matrix independently in each UT bin."""
+
+    output: dict[str, Any] = {
+        "edges": edges.tolist(),
+        "overflow_in_last_bin": True,
+        "channels": {},
+    }
+    for channel in channels:
+        records: list[dict[str, Any]] = []
+        channel_source = payload.get(channel) or {}
+        for bin_index, (low, high) in enumerate(zip(edges[:-1], edges[1:])):
+            source = channel_source.get(str(bin_index)) or {}
+
+            def leaf(window: str, component: str) -> dict[str, Any]:
+                return (
+                    (source.get(window) or {}).get(component)
+                    or empty_yield()
+                )
+
+            data_on = leaf("on", "data")
+            data_off = leaf("off", "data")
+            z_on = leaf("on", "zll")
+            z_off = leaf("off", "zll")
+            other_on = leaf("on", "other")
+            other_off = leaf("off", "other")
+            solution = solve_matrix(
+                float(data_on["sumw"]),
+                float(data_off["sumw"]),
+                float(z_on["sumw"]),
+                float(z_off["sumw"]),
+                float(other_on["sumw"]),
+                float(other_off["sumw"]),
+                [
+                    max(float(data_on["sumw"]), 0.0),
+                    max(float(data_off["sumw"]), 0.0),
+                    float(z_on["sumw2"]),
+                    float(z_off["sumw2"]),
+                    float(other_on["sumw2"]),
+                    float(other_off["sumw2"]),
+                ],
+            )
+            solution.update(
+                {
+                    "bin": bin_index,
+                    "low": float(low),
+                    "high": float(high),
+                    "overflow": bin_index == len(edges) - 2,
+                    "inputs": {
+                        "data_on": data_on,
+                        "data_off": data_off,
+                        "zll_on": z_on,
+                        "zll_off": z_off,
+                        "other_on": other_on,
+                        "other_off": other_off,
+                    },
+                }
+            )
+            records.append(solution)
+        output["channels"][channel] = {"bins": records}
+    return output
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repo", type=Path, required=True)
@@ -1018,7 +1278,15 @@ def main() -> int:
     parser.add_argument("--jobs", type=int, default=12)
     parser.add_argument("--step-size", type=int, default=100000)
     parser.add_argument("--dy-ptll-policy", default="ptll100_200")
+    parser.add_argument(
+        "--channels",
+        nargs="+",
+        choices=CHANNELS,
+        default=list(CHANNELS),
+        help="Dilepton channel(s) to process; use DY2E for the first staged run.",
+    )
     args = parser.parse_args()
+    channels = tuple(dict.fromkeys(args.channels))
 
     roots = [
         line.strip()
@@ -1038,6 +1306,8 @@ def main() -> int:
         "status": "running",
         "rz_high_raw": {},
         "rz_low_feature_raw": {},
+        "rz_high_ut_raw": {},
+        "rz_low_feature_ut_raw": {},
         "mll_high": {},
         "mll_low_feature": {},
         "gcr_data": {
@@ -1065,6 +1335,7 @@ def main() -> int:
             "dy_ptll_policy": args.dy_ptll_policy,
             "jobs": args.jobs,
             "step_size": args.step_size,
+            "channels": list(channels),
             "zll_partition": (
                 "DY plus sample names containing TTZ/WZ/ZZ/WWZ/WZZ/ZZZ/WZG"
             ),
@@ -1081,6 +1352,7 @@ def main() -> int:
                 str(args.normalization),
                 args.dy_ptll_policy,
                 args.step_size,
+                channels,
             ): root
             for root in roots
         }
@@ -1104,9 +1376,14 @@ def main() -> int:
                     + int(count)
                 )
             merge_tree(merged["rz_high_raw"], result["rz_high"])
+            merge_tree(merged["rz_high_ut_raw"], result["rz_high_ut"])
             merge_tree(
                 merged["rz_low_feature_raw"],
                 result["rz_low_feature"],
+            )
+            merge_tree(
+                merged["rz_low_feature_ut_raw"],
+                result["rz_low_feature_ut"],
             )
             merge_tree(merged["mll_high"], result["mll_high"])
             merge_tree(
@@ -1149,6 +1426,12 @@ def main() -> int:
     merged["rz_high"] = finalize_rz(merged["rz_high_raw"])
     merged["rz_low_feature"] = finalize_rz(
         merged["rz_low_feature_raw"]
+    )
+    merged["rz_high_ut"] = finalize_rz_ut(
+        merged["rz_high_ut_raw"], RZ_HIGH_UT_EDGES, channels
+    )
+    merged["rz_low_feature_ut"] = finalize_rz_ut(
+        merged["rz_low_feature_ut_raw"], RZ_LOW_UT_EDGES, channels
     )
     merged["status"] = (
         "feature_stage_complete"
