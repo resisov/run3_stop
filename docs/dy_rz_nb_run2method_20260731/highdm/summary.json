@@ -17,10 +17,11 @@
       "off": "50 < mll < 81 GeV or mll > 101 GeV",
       "on": "81 < mll < 101 GeV"
     },
+    "post_mll_scaling": "zll *= channel RZ(Nb); other *= channel RT(Nb)",
     "ut_dependent_rz": false
   },
   "plots": {
-    "mll": [
+    "mll_input": [
       "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2e_nb1.png",
       "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2e_nb1.pdf",
       "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2e_nb2plus.png",
@@ -29,6 +30,16 @@
       "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2m_nb1.pdf",
       "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2m_nb2plus.png",
       "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2m_nb2plus.pdf"
+    ],
+    "mll_post": [
+      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2e_nb1_post.png",
+      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2e_nb1_post.pdf",
+      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2e_nb2plus_post.png",
+      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2e_nb2plus_post.pdf",
+      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2m_nb1_post.png",
+      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2m_nb1_post.pdf",
+      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2m_nb2plus_post.png",
+      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2m_nb2plus_post.pdf"
     ],
     "rt": [
       "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/rt_highdm.png",
