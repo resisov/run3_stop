@@ -96,7 +96,7 @@ def plot_rt(
     fig, ax = plt.subplots(figsize=(10.2, 10.2))
     x = np.arange(len(GROUPS), dtype=float)
     colors = {"DY2E": "#D62728", "DY2M": "#1F77B4"}
-    offsets = {"DY2E": -0.10, "DY2M": 0.10}
+    markers = {"DY2E": "o", "DY2M": "^"}
     labels = {"DY2E": r"$ee$", "DY2M": r"$\mu\mu$"}
     for channel in CHANNELS:
         values: list[float] = []
@@ -108,15 +108,15 @@ def plot_rt(
             )
             if record.get("status") != "complete":
                 continue
-            positions.append(float(x[index] + offsets[channel]))
+            positions.append(float(x[index]))
             values.append(float(record["RT"]))
             errors.append(float(record["RT_stat"]))
         ax.errorbar(
             positions,
             values,
-            xerr=np.full(len(positions), 0.08, dtype=float),
+            xerr=np.full(len(positions), 0.5, dtype=float),
             yerr=errors,
-            fmt="o",
+            fmt=markers[channel],
             color=colors[channel],
             lw=2.0,
             capsize=4,
@@ -128,7 +128,7 @@ def plot_rt(
     ax.set_xmargin(0)
     ax.set_ylabel(r"$R_T$", fontsize=30)
     ax.tick_params(axis="y", labelsize=24)
-    ax.legend(frameon=False, fontsize=20)
+    ax.legend(frameon=False, fontsize=24)
     ax.grid(axis="y", alpha=0.18)
     hep.cms.label(**CMS_LABEL, ax=ax)
     return save_figure(fig, output_dir / f"rt_{selection}")
@@ -139,41 +139,29 @@ def plot_rz_nb(
 ) -> list[str]:
     fig, ax = plt.subplots(figsize=(10.2, 10.2))
     x = np.arange(len(GROUPS), dtype=float)
-    colors = {"DY2E": "#D62728", "DY2M": "#1F77B4", "combined": "#111111"}
-    offsets = {"DY2E": -0.16, "DY2M": 0.0, "combined": 0.16}
+    colors = {"DY2E": "#D62728", "DY2M": "#1F77B4"}
+    markers = {"DY2E": "o", "DY2M": "^"}
     labels = {"DY2E": r"$ee$", "DY2M": r"$\mu\mu$"}
     for channel in CHANNELS:
         records = [rz["channels"][channel][group] for group in GROUPS]
         ax.errorbar(
-            x + offsets[channel],
+            x,
             [record["RZ"] for record in records],
-            xerr=np.full(len(records), 0.08, dtype=float),
+            xerr=np.full(len(records), 0.5, dtype=float),
             yerr=[record["RZ_stat"] for record in records],
-            fmt="o",
+            fmt=markers[channel],
             color=colors[channel],
             lw=2.0,
             capsize=4,
             label=labels[channel],
         )
-    combined = [rz["combined"][group] for group in GROUPS]
-    ax.errorbar(
-        x + offsets["combined"],
-        [record["RZ"] for record in combined],
-        xerr=np.full(len(combined), 0.08, dtype=float),
-        yerr=[record["RZ_stat"] for record in combined],
-        fmt="s",
-        color=colors["combined"],
-        lw=2.2,
-        capsize=4,
-        label="Combined",
-    )
     ax.axhline(1.0, color="0.55", lw=1.5, ls=":")
     ax.set_xticks(x, [r"$N_b=1$", r"$N_b\geq2$"], fontsize=26)
     ax.set_xlim(-0.5, len(GROUPS) - 0.5)
     ax.set_xmargin(0)
     ax.set_ylabel(r"$R_Z$", fontsize=30)
     ax.tick_params(axis="y", labelsize=24)
-    ax.legend(frameon=False, fontsize=20)
+    ax.legend(frameon=False, fontsize=24)
     ax.grid(axis="y", alpha=0.18)
     hep.cms.label(**CMS_LABEL, ax=ax)
     return save_figure(fig, output_dir / f"rz_{selection}")
@@ -359,7 +347,7 @@ def plot_mll(
                 [item[0] for item in ordered],
                 [item[1] for item in ordered],
                 frameon=False,
-                fontsize=18,
+                fontsize=22,
                 ncol=2,
                 loc="upper right",
             )
