@@ -1,7 +1,33 @@
 {
   "inputs": {
-    "ee": "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/dy2e_matrix_v1/merged_feature.json",
-    "mumu": "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/dy2m_matrix_v1/merged_feature.json"
+    "ee": {
+      "candidate_events": 7879,
+      "completed_roots": 2392,
+      "file": "dy_ee_feature_2024.json",
+      "input_roots": 2392,
+      "sha256": "e23f8df03c61cb7ce3292f951be9bc031faff8645b1304ee46a0f6c4f3bdbcfa"
+    },
+    "low_exact": {
+      "file": "dy_lowdm_exact_2024.json",
+      "sha256": "a87304e7b138555c4140bf58dd940ea685d65b4edc791b54c368ce78ff8721ef",
+      "summary": {
+        "candidate_events": 21967,
+        "candidate_files": 2541,
+        "completed_partitions": 509,
+        "expected_partitions": 509,
+        "failures": [],
+        "matched_events": 21967,
+        "read_windows": 16233,
+        "selected_events": 15458
+      }
+    },
+    "mumu": {
+      "candidate_events": 14088,
+      "completed_roots": 2325,
+      "file": "dy_mumu_feature_2024.json",
+      "input_roots": 2325,
+      "sha256": "78a4c336ea83d9ec1cafedd1490eebd740cb53fe6f0cfb7f4a014a2921cf85d5"
+    }
   },
   "method": {
     "categories": [
@@ -22,32 +48,32 @@
   },
   "plots": {
     "mll_input": [
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_lowdm/mll_lowdm_dy2e_nb1.png",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_lowdm/mll_lowdm_dy2e_nb1.pdf",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_lowdm/mll_lowdm_dy2e_nb2plus.png",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_lowdm/mll_lowdm_dy2e_nb2plus.pdf",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_lowdm/mll_lowdm_dy2m_nb1.png",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_lowdm/mll_lowdm_dy2m_nb1.pdf",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_lowdm/mll_lowdm_dy2m_nb2plus.png",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_lowdm/mll_lowdm_dy2m_nb2plus.pdf"
+      "mll_lowdm_dy2e_nb1.png",
+      "mll_lowdm_dy2e_nb1.pdf",
+      "mll_lowdm_dy2e_nb2plus.png",
+      "mll_lowdm_dy2e_nb2plus.pdf",
+      "mll_lowdm_dy2m_nb1.png",
+      "mll_lowdm_dy2m_nb1.pdf",
+      "mll_lowdm_dy2m_nb2plus.png",
+      "mll_lowdm_dy2m_nb2plus.pdf"
     ],
     "mll_post": [
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_lowdm/mll_lowdm_dy2e_nb1_post.png",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_lowdm/mll_lowdm_dy2e_nb1_post.pdf",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_lowdm/mll_lowdm_dy2e_nb2plus_post.png",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_lowdm/mll_lowdm_dy2e_nb2plus_post.pdf",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_lowdm/mll_lowdm_dy2m_nb1_post.png",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_lowdm/mll_lowdm_dy2m_nb1_post.pdf",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_lowdm/mll_lowdm_dy2m_nb2plus_post.png",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_lowdm/mll_lowdm_dy2m_nb2plus_post.pdf"
+      "mll_lowdm_dy2e_nb1_post.png",
+      "mll_lowdm_dy2e_nb1_post.pdf",
+      "mll_lowdm_dy2e_nb2plus_post.png",
+      "mll_lowdm_dy2e_nb2plus_post.pdf",
+      "mll_lowdm_dy2m_nb1_post.png",
+      "mll_lowdm_dy2m_nb1_post.pdf",
+      "mll_lowdm_dy2m_nb2plus_post.png",
+      "mll_lowdm_dy2m_nb2plus_post.pdf"
     ],
     "rt": [
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_lowdm/rt_lowdm.png",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_lowdm/rt_lowdm.pdf"
+      "rt_lowdm.png",
+      "rt_lowdm.pdf"
     ],
     "rz": [
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_lowdm/rz_lowdm.png",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_lowdm/rz_lowdm.pdf"
+      "rz_lowdm.png",
+      "rz_lowdm.pdf"
     ]
   },
   "rz_low": {
@@ -55,22 +81,22 @@
       "DY2E": {
         "Nb1": {
           "RT": 0.6504988979227925,
-          "RT_stat": 0.1045777938028424,
+          "RT_stat": 0.10457779380284045,
           "RZ": 0.6242885433272645,
-          "RZ_stat": 0.051575190369705225,
+          "RZ_stat": 0.05157519036970099,
           "boundary": {
             "RT": false,
             "RZ": false
           },
-          "correlation": -0.3545414564367512,
+          "correlation": -0.3545414564367147,
           "covariance": [
             [
-              0.002660000261671335,
-              -0.0019122617568968913
+              0.0026600002616708977,
+              -0.0019122617568965014
             ],
             [
-              -0.0019122617568968913,
-              0.010936514956669823
+              -0.0019122617568965012,
+              0.010936514956669415
             ]
           ],
           "determinant": 74860.64556001752,
@@ -124,22 +150,22 @@
         },
         "Nb2plus": {
           "RT": 0.9243686459460951,
-          "RT_stat": 0.0894760614059381,
-          "RZ": 0.7996132657524655,
-          "RZ_stat": 0.14115455147933947,
+          "RT_stat": 0.08947606140593796,
+          "RZ": 0.7996132657524656,
+          "RZ_stat": 0.14115455147933623,
           "boundary": {
             "RT": false,
             "RZ": false
           },
-          "correlation": -0.24529353227772707,
+          "correlation": -0.24529353227772083,
           "covariance": [
             [
-              0.0199246074033335,
-              -0.003098045861358193
+              0.019924607403332583,
+              -0.0030980458613580385
             ],
             [
-              -0.0030980458613581933,
-              0.008005965564719206
+              -0.003098045861358038,
+              0.008005965564719181
             ]
           ],
           "determinant": 12146.175965969667,
@@ -195,22 +221,22 @@
       "DY2M": {
         "Nb1": {
           "RT": 0.8245983955728448,
-          "RT_stat": 0.07833640721808745,
+          "RT_stat": 0.07833640721808768,
           "RZ": 0.5985045784169216,
-          "RZ_stat": 0.043687657959916304,
+          "RZ_stat": 0.04368765795991779,
           "boundary": {
             "RT": false,
             "RZ": false
           },
-          "correlation": -0.32108968428781376,
+          "correlation": -0.3210896842878199,
           "covariance": [
             [
-              0.0019086114580226386,
-              -0.0010988761963593506
+              0.001908611458022768,
+              -0.0010988761963594122
             ],
             [
-              -0.0010988761963593506,
-              0.006136592695838023
+              -0.0010988761963594122,
+              0.00613659269583806
             ]
           ],
           "determinant": 147953.2959794471,
@@ -263,33 +289,33 @@
           "status": "complete"
         },
         "Nb2plus": {
-          "RT": 0.872252454456476,
-          "RT_stat": 0.07603913628220531,
+          "RT": 0.8722524544564763,
+          "RT_stat": 0.07603913628220532,
           "RZ": 0.5574163275293518,
-          "RZ_stat": 0.09026677539066064,
+          "RZ_stat": 0.09026677539066046,
           "boundary": {
             "RT": false,
             "RZ": false
           },
-          "correlation": -0.28132815820707335,
+          "correlation": -0.2813281582070739,
           "covariance": [
             [
-              0.008148090739427977,
-              -0.001930982360435094
+              0.008148090739427944,
+              -0.0019309823604350938
             ],
             [
-              -0.0019309823604350938,
-              0.0057819502465437924
+              -0.0019309823604350932,
+              0.005781950246543793
             ]
           ],
           "determinant": 25500.663196331923,
           "fit_converged": true,
           "fit_expectation": [
             89.0,
-            186.0
+            186.00000000000003
           ],
           "fit_message": "analytic interior maximum",
-          "fit_nll": -1096.4775182168157,
+          "fit_nll": -1096.477518216816,
           "inputs": {
             "data_off": {
               "entries": 186,
@@ -335,8 +361,8 @@
     },
     "combined": {
       "Nb1": {
-        "RZ": 0.609276246897523,
-        "RZ_stat": 0.03333553874545275,
+        "RZ": 0.6092762468975245,
+        "RZ_stat": 0.03333553874545227,
         "channels": [
           "DY2E",
           "DY2M"
@@ -344,8 +370,8 @@
         "status": "complete"
       },
       "Nb2plus": {
-        "RZ": 0.6277139034665765,
-        "RZ_stat": 0.07604676373631637,
+        "RZ": 0.6277139034665786,
+        "RZ_stat": 0.07604676373631575,
         "channels": [
           "DY2E",
           "DY2M"
@@ -354,6 +380,6 @@
       }
     }
   },
-  "schema_version": "an_zinv_rz_nb_2024_v1",
+  "schema_version": "dy_estimation_report_2024_v1",
   "status": "complete"
 }

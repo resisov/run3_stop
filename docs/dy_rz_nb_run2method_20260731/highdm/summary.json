@@ -1,7 +1,19 @@
 {
   "inputs": {
-    "ee": "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/dy2e_matrix_v1/merged_feature.json",
-    "mumu": "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/dy2m_matrix_v1/merged_feature.json"
+    "ee": {
+      "candidate_events": 7879,
+      "completed_roots": 2392,
+      "file": "dy_ee_feature_2024.json",
+      "input_roots": 2392,
+      "sha256": "e23f8df03c61cb7ce3292f951be9bc031faff8645b1304ee46a0f6c4f3bdbcfa"
+    },
+    "mumu": {
+      "candidate_events": 14088,
+      "completed_roots": 2325,
+      "file": "dy_mumu_feature_2024.json",
+      "input_roots": 2325,
+      "sha256": "78a4c336ea83d9ec1cafedd1490eebd740cb53fe6f0cfb7f4a014a2921cf85d5"
+    }
   },
   "method": {
     "categories": [
@@ -22,55 +34,55 @@
   },
   "plots": {
     "mll_input": [
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2e_nb1.png",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2e_nb1.pdf",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2e_nb2plus.png",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2e_nb2plus.pdf",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2m_nb1.png",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2m_nb1.pdf",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2m_nb2plus.png",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2m_nb2plus.pdf"
+      "mll_highdm_dy2e_nb1.png",
+      "mll_highdm_dy2e_nb1.pdf",
+      "mll_highdm_dy2e_nb2plus.png",
+      "mll_highdm_dy2e_nb2plus.pdf",
+      "mll_highdm_dy2m_nb1.png",
+      "mll_highdm_dy2m_nb1.pdf",
+      "mll_highdm_dy2m_nb2plus.png",
+      "mll_highdm_dy2m_nb2plus.pdf"
     ],
     "mll_post": [
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2e_nb1_post.png",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2e_nb1_post.pdf",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2e_nb2plus_post.png",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2e_nb2plus_post.pdf",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2m_nb1_post.png",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2m_nb1_post.pdf",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2m_nb2plus_post.png",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/mll_highdm_dy2m_nb2plus_post.pdf"
+      "mll_highdm_dy2e_nb1_post.png",
+      "mll_highdm_dy2e_nb1_post.pdf",
+      "mll_highdm_dy2e_nb2plus_post.png",
+      "mll_highdm_dy2e_nb2plus_post.pdf",
+      "mll_highdm_dy2m_nb1_post.png",
+      "mll_highdm_dy2m_nb1_post.pdf",
+      "mll_highdm_dy2m_nb2plus_post.png",
+      "mll_highdm_dy2m_nb2plus_post.pdf"
     ],
     "rt": [
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/rt_highdm.png",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/rt_highdm.pdf"
+      "rt_highdm.png",
+      "rt_highdm.pdf"
     ],
     "rz": [
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/rz_highdm.png",
-      "autonomous_allhad/workflow/dy_rz_onoff_ut_20260731/rz_nb_run2method_highdm/rz_highdm.pdf"
+      "rz_highdm.png",
+      "rz_highdm.pdf"
     ]
   },
   "rz_high": {
     "channels": {
       "DY2E": {
         "Nb1": {
-          "RT": 0.5484127468732211,
-          "RT_stat": 0.15428913861698224,
+          "RT": 0.5484127468732212,
+          "RT_stat": 0.15428913861698335,
           "RZ": 0.7956219718951804,
-          "RZ_stat": 0.07714936676703654,
+          "RZ_stat": 0.07714936676704229,
           "boundary": {
             "RT": false,
             "RZ": false
           },
-          "correlation": -0.39529050517234,
+          "correlation": -0.3952905051723584,
           "covariance": [
             [
-              0.0059520247925547234,
-              -0.004705265163548225
+              0.00595202479255561,
+              -0.004705265163548828
             ],
             [
-              -0.0047052651635482255,
-              0.02380513829517036
+              -0.004705265163548828,
+              0.023805138295170704
             ]
           ],
           "determinant": 24652.86903868939,
@@ -80,7 +92,7 @@
             94.0
           ],
           "fit_message": "analytic interior maximum",
-          "fit_nll": -1402.9444984450113,
+          "fit_nll": -1402.9444984450115,
           "inputs": {
             "data_off": {
               "entries": 94,
@@ -123,30 +135,30 @@
           "status": "complete"
         },
         "Nb2plus": {
-          "RT": 0.7195653616242308,
-          "RT_stat": 0.10467570088824793,
+          "RT": 0.7195653616242309,
+          "RT_stat": 0.10467570088824758,
           "RZ": 0.6547029430664236,
-          "RZ_stat": 0.10501984356169773,
+          "RZ_stat": 0.10501984356169418,
           "boundary": {
             "RT": false,
             "RZ": false
           },
-          "correlation": -0.2678116393229255,
+          "correlation": -0.26781163932291585,
           "covariance": [
             [
-              0.011029167541723466,
-              -0.002944060242404647
+              0.011029167541722718,
+              -0.0029440602424044317
             ],
             [
-              -0.002944060242404647,
-              0.010957002356445948
+              -0.0029440602424044317,
+              0.010957002356445877
             ]
           ],
           "determinant": 12441.760159561509,
           "fit_converged": true,
           "fit_expectation": [
             87.0,
-            87.0
+            87.00000000000001
           ],
           "fit_message": "analytic interior maximum",
           "fit_nll": -603.0680126458975,
@@ -194,23 +206,23 @@
       },
       "DY2M": {
         "Nb1": {
-          "RT": 0.7598013435720404,
-          "RT_stat": 0.11316696451139341,
+          "RT": 0.7598013435720403,
+          "RT_stat": 0.11316696451139278,
           "RZ": 0.6792547511819805,
-          "RZ_stat": 0.05899354449155688,
+          "RZ_stat": 0.05899354449155582,
           "boundary": {
             "RT": false,
             "RZ": false
           },
-          "correlation": -0.35199540448426864,
+          "correlation": -0.3519954044842564,
           "covariance": [
             [
-              0.0034802382916773013,
-              -0.0023499636850526986
+              0.0034802382916771755,
+              -0.002349963685052562
             ],
             [
-              -0.002349963685052698,
-              0.012806761856722975
+              -0.0023499636850525625,
+              0.012806761856722835
             ]
           ],
           "determinant": 54187.89018919282,
@@ -266,20 +278,20 @@
           "RT": 0.8837512963165545,
           "RT_stat": 0.09274001244274037,
           "RZ": 0.750825639500108,
-          "RZ_stat": 0.1079461774016156,
+          "RZ_stat": 0.10794617740161379,
           "boundary": {
             "RT": false,
             "RZ": false
           },
-          "correlation": -0.21453114353493477,
+          "correlation": -0.21453114353493577,
           "covariance": [
             [
-              0.011652377215621068,
-              -0.002147656225430371
+              0.011652377215620674,
+              -0.0021476562254303445
             ],
             [
-              -0.002147656225430371,
-              0.00860070990787964
+              -0.0021476562254303445,
+              0.008600709907879638
             ]
           ],
           "determinant": 17849.7829185071,
@@ -335,8 +347,8 @@
     },
     "combined": {
       "Nb1": {
-        "RZ": 0.7221909642419363,
-        "RZ_stat": 0.04686287228377772,
+        "RZ": 0.7221909642419314,
+        "RZ_stat": 0.04686287228377847,
         "channels": [
           "DY2E",
           "DY2M"
@@ -344,8 +356,8 @@
         "status": "complete"
       },
       "Nb2plus": {
-        "RZ": 0.7014437332053335,
-        "RZ_stat": 0.07527353640388311,
+        "RZ": 0.7014437332053325,
+        "RZ_stat": 0.07527353640388118,
         "channels": [
           "DY2E",
           "DY2M"
@@ -354,6 +366,6 @@
       }
     }
   },
-  "schema_version": "an_zinv_rz_nb_2024_v1",
+  "schema_version": "dy_estimation_report_2024_v1",
   "status": "complete"
 }

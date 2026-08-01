@@ -6,27 +6,24 @@ from __future__ import annotations
 import argparse
 import concurrent.futures
 import json
-import os
 from pathlib import Path
 from typing import Any
 
-os.environ["AUTONOMOUS_ALLHAD_LOWDMSPARSE_LIGHT"] = "1"
-
-from finalize_an_zinv_lowdm_sparse_2024 import (
+from .lowdm_recovery import (
     merge_tree,
-    process_source_topology_only,
+    process_source,
     read_json,
 )
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repo", type=Path, required=True)
     parser.add_argument("--manifest", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--jobs", type=int, default=2)
     parser.add_argument("--max-tasks", type=int)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     manifest = read_json(args.manifest)
     if args.output.is_file():
@@ -53,11 +50,10 @@ def main() -> int:
     if args.max_tasks is not None:
         tasks = tasks[: max(0, args.max_tasks)]
     merged: dict[str, Any] = {
-        "schema_version": "an_zinv_lowdm_sparse_partition_v1",
+        "schema_version": "dy_estimation_lowdm_partition_2024_v1",
         "status": "running",
         "stem": manifest.get("stem"),
         "raw": {},
-        "raw_ut": {},
         "mll": {},
         "summary": {
             "candidate_files": len(tasks),
@@ -76,7 +72,6 @@ def main() -> int:
         merged["summary"]["selected_events"] += int(summary["selected"])
         merged["summary"]["read_windows"] += int(summary["windows"])
         merge_tree(merged["raw"], result["raw"])
-        merge_tree(merged["raw_ut"], result["raw_ut"])
         merge_tree(merged["mll"], result["mll"])
 
     if args.jobs <= 1:
@@ -85,7 +80,7 @@ def main() -> int:
         # provides file-level concurrency across partitions.
         for task in tasks:
             try:
-                consume(task, process_source_topology_only(task))
+                consume(task, process_source(task))
             except Exception as exc:
                 merged["summary"]["failures"].append(
                     {
@@ -97,7 +92,7 @@ def main() -> int:
     else:
         with concurrent.futures.ProcessPoolExecutor(max_workers=args.jobs) as executor:
             futures = {
-                executor.submit(process_source_topology_only, task): task
+                executor.submit(process_source, task): task
                 for task in tasks
             }
             for future in concurrent.futures.as_completed(futures):

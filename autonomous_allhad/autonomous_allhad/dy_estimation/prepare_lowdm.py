@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from finalize_an_zinv_lowdm_sparse_2024 import read_json, source_map
+from .lowdm_recovery import read_json, source_map
 
 
 def write_json(path: Path, payload: dict[str, Any]) -> None:
@@ -16,8 +16,9 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.write_text(json.dumps(payload, sort_keys=True, separators=(",", ":")))
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--repo", type=Path, required=True)
     parser.add_argument("--ee", type=Path, required=True)
     parser.add_argument("--mumu", type=Path, required=True)
     parser.add_argument("--shard-bundle", type=Path, required=True)
@@ -26,7 +27,13 @@ def main() -> int:
     parser.add_argument("--files-per-job", type=int, default=5)
     parser.add_argument("--max-span", type=int, default=50000)
     parser.add_argument("--max-gap", type=int, default=5000)
-    args = parser.parse_args()
+    parser.add_argument(
+        "--python",
+        type=Path,
+        default=Path("/eos/user/t/taiwoo/miniconda3/envs/py38/bin/python"),
+    )
+    parser.add_argument("--memory-mb", type=int, default=6000)
+    args = parser.parse_args(argv)
 
     features = {"DY2E": read_json(args.ee), "DY2M": read_json(args.mumu)}
     candidates: dict[str, list[dict[str, Any]]] = {}
@@ -85,7 +92,7 @@ def main() -> int:
         manifest_path = manifests_dir / f"{stem}.json"
         output_path = outputs_dir / f"{stem}.json"
         manifest = {
-            "schema_version": "an_zinv_lowdm_sparse_partition_manifest_v1",
+            "schema_version": "dy_estimation_lowdm_manifest_2024_v1",
             "stem": stem,
             "tasks": partition,
             "summary": {
@@ -105,8 +112,37 @@ def main() -> int:
         )
 
     (output_dir / "queue.tsv").write_text("\n".join(queue_lines) + "\n")
+    run_directory = args.repo.resolve() / "autonomous_allhad"
+    submit_path = output_dir / "submit.sub"
+    submit_path.write_text(
+        "\n".join(
+            [
+                "universe = vanilla",
+                f"executable = {args.python}",
+                (
+                    "arguments = -m autonomous_allhad.dy_estimation "
+                    "run-lowdm-partition "
+                    f"--repo {args.repo.resolve()} "
+                    "--manifest $(manifest) --output $(output) --jobs 1"
+                ),
+                f"initialdir = {run_directory}",
+                f'environment = "PYTHONPATH={run_directory};PYTHONUNBUFFERED=1"',
+                "should_transfer_files = NO",
+                "request_cpus = 1",
+                f"request_memory = {args.memory_mb}",
+                '+JobFlavour = "tomorrow"',
+                '+JobBatchName = "DY_RZ_lowdm_exact"',
+                f"output = {logs_dir}/$(stem).out",
+                f"error = {logs_dir}/$(stem).err",
+                f"log = {logs_dir}/$(stem).log",
+                "on_exit_remove = (ExitBySignal == False) && (ExitCode == 0)",
+                f"queue manifest, output, stem from {output_dir / 'queue.tsv'}",
+                "",
+            ]
+        )
+    )
     expected = {
-        "schema_version": "an_zinv_lowdm_sparse_expected_v1",
+        "schema_version": "dy_estimation_lowdm_expected_2024_v1",
         "status": "prepared",
         "inputs": {"ee": str(args.ee), "mumu": str(args.mumu)},
         "candidate_files": len(tasks),
@@ -114,6 +150,7 @@ def main() -> int:
         "partitions": len(manifests),
         "files_per_job": files_per_job,
         "source_lists": source_lists,
+        "submit": str(submit_path),
         "manifests": manifests,
     }
     write_json(output_dir / "expected.json", expected)

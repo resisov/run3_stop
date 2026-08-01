@@ -1,28 +1,15 @@
 #!/usr/bin/env python3
-"""Deterministically merge partitioned AN Z->nunu measurement inputs."""
+"""Deterministically merge disjoint DY feature-stage partitions."""
 
 from __future__ import annotations
 
 import argparse
 import hashlib
 import json
-import sys
 from pathlib import Path
 from typing import Any
 
-
-THIS_DIR = Path(__file__).resolve().parent
-if str(THIS_DIR) not in sys.path:
-    sys.path.insert(0, str(THIS_DIR))
-
-from build_an_zinv_measurement_inputs_2024 import (  # noqa: E402
-    CHANNELS,
-    RZ_HIGH_UT_EDGES,
-    RZ_LOW_UT_EDGES,
-    finalize_rz,
-    finalize_rz_ut,
-    merge_tree,
-)
+from .model import CHANNELS, finalize_rz, merge_tree
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -37,32 +24,19 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--inputs", type=Path, nargs="+", required=True)
     parser.add_argument("--output", type=Path, required=True)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     merged: dict[str, Any] = {
-        "schema_version": "an_zinv_measurement_inputs_2024_v1",
+        "schema_version": "dy_estimation_feature_2024_v1",
         "status": "running",
         "rz_high_raw": {},
         "rz_low_feature_raw": {},
-        "rz_high_ut_raw": {},
-        "rz_low_feature_ut_raw": {},
         "mll_high": {},
         "mll_low_feature": {},
-        "gcr_data": {
-            "highdm": {
-                "recoil_edges": None,
-                "nb_groups": None,
-                "yields": {},
-            },
-            "lowdm": {
-                "search_bin_labels": None,
-                "yields": {},
-            },
-        },
         "sparse_low_candidates": {},
         "summary": {
             "input_roots": 0,
@@ -89,7 +63,11 @@ def main() -> int:
                 "path": str(path),
                 "sha256": sha256_file(path),
                 "normalization_sha256": provenance.get("normalization_sha256"),
-                "dy_ptll_policy": provenance.get("dy_ptll_policy"),
+                "dy_dataset_policy": provenance.get(
+                    "dy_dataset_policy",
+                    "legacy_input_policy="
+                    + str(provenance.get("dy_ptll_policy")),
+                ),
             }
         )
         for channel in provenance.get("channels") or CHANNELS:
@@ -119,28 +97,10 @@ def main() -> int:
         for key in (
             "rz_high_raw",
             "rz_low_feature_raw",
-            "rz_high_ut_raw",
-            "rz_low_feature_ut_raw",
             "mll_high",
             "mll_low_feature",
         ):
             merge_tree(merged[key], payload.get(key) or {})
-        for regime in ("highdm", "lowdm"):
-            source = (payload.get("gcr_data") or {}).get(regime) or {}
-            target = merged["gcr_data"][regime]
-            for geometry_key in (
-                ("recoil_edges", "nb_groups")
-                if regime == "highdm"
-                else ("search_bin_labels",)
-            ):
-                value = source.get(geometry_key)
-                if target[geometry_key] is None:
-                    target[geometry_key] = value
-                elif target[geometry_key] != value:
-                    raise RuntimeError(
-                        f"{regime} {geometry_key} differs in {path}"
-                    )
-            merge_tree(target["yields"], source.get("yields") or {})
         for file_id, records in (
             payload.get("sparse_low_candidates") or {}
         ).items():
@@ -157,13 +117,6 @@ def main() -> int:
     merged["rz_high"] = finalize_rz(merged["rz_high_raw"])
     merged["rz_low_feature"] = finalize_rz(
         merged["rz_low_feature_raw"]
-    )
-    channels = tuple(merged["provenance"]["channels"])
-    merged["rz_high_ut"] = finalize_rz_ut(
-        merged["rz_high_ut_raw"], RZ_HIGH_UT_EDGES, channels
-    )
-    merged["rz_low_feature_ut"] = finalize_rz_ut(
-        merged["rz_low_feature_ut_raw"], RZ_LOW_UT_EDGES, channels
     )
     merged["status"] = (
         "feature_stage_complete"

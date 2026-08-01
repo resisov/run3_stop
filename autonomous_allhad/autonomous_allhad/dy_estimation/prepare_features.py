@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Prepare an auditable HTCondor campaign for the UT-binned RZ matrix fit."""
+"""Prepare the auditable HTCondor feature-stage campaign."""
 
 from __future__ import annotations
 
@@ -50,7 +50,7 @@ def resolve_root(raw: str, run_directory: Path) -> Path:
     return path if path.is_absolute() else run_directory / path
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repo", type=Path, required=True)
     parser.add_argument("--input-roots", type=Path, nargs="+", required=True)
@@ -61,18 +61,15 @@ def main() -> int:
     parser.add_argument("--cpus", type=int, default=4)
     parser.add_argument("--memory-mb", type=int, default=8000)
     parser.add_argument(
-        "--worker-name",
-        default="build_an_zinv_measurement_inputs_2024.py",
-        help="Versioned worker filename under autonomous_allhad/workflow.",
+        "--python",
+        type=Path,
+        default=Path("/eos/user/t/taiwoo/miniconda3/envs/py38/bin/python"),
     )
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     repo = args.repo.resolve()
     run_directory = repo / "autonomous_allhad"
     output_dir = args.output_dir.resolve()
-    worker_path = run_directory / "workflow" / args.worker_name
-    if not worker_path.is_file():
-        raise FileNotFoundError(worker_path)
     partitions_dir = output_dir / "partitions"
     outputs_dir = output_dir / "outputs"
     logs_dir = output_dir / "logs"
@@ -153,14 +150,13 @@ def main() -> int:
         "\n".join(
             [
                 "universe = vanilla",
-                "executable = /eos/user/t/taiwoo/miniconda3/envs/py38/bin/python",
+                f"executable = {args.python}",
                 (
-                    "arguments = "
-                    f"{worker_path} "
+                    "arguments = -m autonomous_allhad.dy_estimation build-features "
                     f"--repo {repo} --input-list $(input_list) "
                     f"--normalization {args.normalization.resolve()} "
                     "--output $(output_json) "
-                    f"--jobs {args.cpus} --step-size 100000 --dy-ptll-policy all "
+                    f"--jobs {args.cpus} --step-size 100000 "
                     f"--channels {args.channel}"
                 ),
                 f"initialdir = {run_directory}",
@@ -172,7 +168,7 @@ def main() -> int:
                 f"request_cpus = {args.cpus}",
                 f"request_memory = {args.memory_mb}",
                 '+JobFlavour = "tomorrow"',
-                '+JobBatchName = "RZ_UT_%s"' % args.channel,
+                '+JobBatchName = "DY_RZ_%s"' % args.channel,
                 f"output = {logs_dir}/$(stem).out",
                 f"error = {logs_dir}/$(stem).err",
                 f"log = {logs_dir}/$(stem).log",
@@ -184,7 +180,7 @@ def main() -> int:
     )
 
     manifest = {
-        "schema": "an_zinv_rz_ut_campaign_2024_v1",
+        "schema_version": "dy_estimation_feature_campaign_2024_v1",
         "status": "prepared",
         "created_at": dt.datetime.now(dt.timezone.utc).isoformat(),
         "channel": args.channel,
@@ -193,12 +189,15 @@ def main() -> int:
             "on_z": "81 < mll < 101 GeV",
             "off_z": "50 < mll < 81 GeV or mll > 101 GeV",
             "fit": (
-                "per-UT-bin simultaneous non-negative profile likelihood "
-                "for RZ and RT, with Poisson data and Gaussian MC-stat constraints"
+                "RZ and RT in Nb=1 and Nb>=2, with Poisson data and "
+                "Gaussian MC-stat constraints"
             ),
             "normalization": str(args.normalization.resolve()),
-            "worker": str(worker_path),
-            "worker_sha256": sha256_file(worker_path),
+            "entrypoint": "python -m autonomous_allhad.dy_estimation build-features",
+            "code_sha256": {
+                path.name: sha256_file(path)
+                for path in sorted(Path(__file__).parent.glob("*.py"))
+            },
         },
         "input": {
             "source": [str(path.resolve()) for path in args.input_roots],

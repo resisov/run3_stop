@@ -9,6 +9,7 @@ algebraically saturated and are not closure tests.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import html
 import json
 from pathlib import Path
@@ -21,7 +22,7 @@ import matplotlib.pyplot as plt
 import mplhep as hep
 import numpy as np
 
-from build_an_zinv_measurement_inputs_2024 import finalize_rz, merge_tree
+from .model import finalize_rz, merge_tree
 
 
 hep.style.use("CMS")
@@ -43,13 +44,32 @@ def write_json(path: Path, payload: Any) -> None:
     path.write_text(json.dumps(payload, sort_keys=True, indent=2) + "\n")
 
 
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def feature_provenance(path: Path, payload: dict[str, Any]) -> dict[str, Any]:
+    summary = payload.get("summary") or {}
+    return {
+        "file": path.name,
+        "sha256": sha256_file(path),
+        "input_roots": int(summary.get("input_roots", 0)),
+        "completed_roots": int(summary.get("completed_roots", 0)),
+        "candidate_events": int(summary.get("candidate_events", 0)),
+    }
+
+
 def save_figure(fig: plt.Figure, base: Path) -> list[str]:
     base.parent.mkdir(parents=True, exist_ok=True)
     paths: list[str] = []
     for suffix in (".png", ".pdf"):
         path = base.with_suffix(suffix)
         fig.savefig(path, dpi=180, bbox_inches="tight")
-        paths.append(str(path))
+        paths.append(path.name)
     plt.close(fig)
     return paths
 
@@ -425,14 +445,14 @@ table{{border-collapse:collapse;width:100%;margin:22px 0}} th,td{{border:1px sol
     (output_dir / "index.html").write_text(document)
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--ee", type=Path, required=True)
     parser.add_argument("--mumu", type=Path, required=True)
     parser.add_argument("--selection", choices=("highdm", "lowdm"), default="highdm")
     parser.add_argument("--low-exact", type=Path)
     parser.add_argument("--output-dir", type=Path, required=True)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     ee = read_json(args.ee)
     mumu = read_json(args.mumu)
@@ -448,7 +468,10 @@ def main() -> int:
         low = read_json(args.low_exact)
         if low.get("status") != "complete":
             raise SystemExit(f"{args.low_exact}: exact Low-dM input is incomplete")
-        result = {"rz_low": low["rz_low"], "mll_low": low["mll_low"]}
+        result = {
+            "rz_low": finalize_rz(low["rz_low_raw"]),
+            "mll_low": low["mll_low"],
+        }
         rz_key = "rz_low"
         mll_key = "mll_low"
     output_dir = args.output_dir
@@ -472,7 +495,7 @@ def main() -> int:
         ),
     }
     payload = {
-        "schema_version": "an_zinv_rz_nb_2024_v1",
+        "schema_version": "dy_estimation_report_2024_v1",
         "status": "complete",
         "method": {
             "mass_windows": {
@@ -485,7 +508,21 @@ def main() -> int:
             "ut_dependent_rz": False,
             "post_mll_scaling": "zll *= channel RZ(Nb); other *= channel RT(Nb)",
         },
-        "inputs": {"ee": str(args.ee), "mumu": str(args.mumu)},
+        "inputs": {
+            "ee": feature_provenance(args.ee, ee),
+            "mumu": feature_provenance(args.mumu, mumu),
+            **(
+                {
+                    "low_exact": {
+                        "file": args.low_exact.name,
+                        "sha256": sha256_file(args.low_exact),
+                        "summary": low.get("summary") or {},
+                    }
+                }
+                if args.selection == "lowdm" and args.low_exact is not None
+                else {}
+            ),
+        },
         rz_key: result[rz_key],
         "plots": plots,
     }

@@ -8,12 +8,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from build_an_zinv_measurement_inputs_2024 import (
-    RZ_LOW_UT_EDGES,
-    finalize_rz,
-    finalize_rz_ut,
-    merge_tree,
-)
+from .model import finalize_rz, merge_tree
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -23,21 +18,20 @@ def read_json(path: Path) -> dict[str, Any]:
     return payload
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--ee", type=Path, required=True)
     parser.add_argument("--mumu", type=Path, required=True)
     parser.add_argument("--expected", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     expected = read_json(args.expected)
     bases = [read_json(args.ee), read_json(args.mumu)]
     merged: dict[str, Any] = {
-        "schema_version": "an_zinv_lowdm_sparse_merged_v1",
+        "schema_version": "dy_estimation_lowdm_merged_2024_v1",
         "status": "running",
         "rz_low_raw": {},
-        "rz_low_ut_raw": {},
         "mll_low": {},
         "summary": {
             "expected_partitions": int(expected["partitions"]),
@@ -60,7 +54,6 @@ def main() -> int:
         if base.get("status") != "feature_stage_complete":
             raise SystemExit("feature baseline is incomplete")
         merge_tree(merged["rz_low_raw"], base.get("rz_low_feature_raw") or {})
-        merge_tree(merged["rz_low_ut_raw"], base.get("rz_low_feature_ut_raw") or {})
         merge_tree(merged["mll_low"], base.get("mll_low_feature") or {})
 
     seen: set[str] = set()
@@ -82,7 +75,6 @@ def main() -> int:
         for key in ("candidate_files", "candidate_events", "matched_events", "selected_events", "read_windows"):
             merged["summary"][key] += int(summary[key])
         merge_tree(merged["rz_low_raw"], payload.get("raw") or {})
-        merge_tree(merged["rz_low_ut_raw"], payload.get("raw_ut") or {})
         merge_tree(merged["mll_low"], payload.get("mll") or {})
 
     summary = merged["summary"]
@@ -94,9 +86,6 @@ def main() -> int:
         and summary["matched_events"] == expected["candidate_events"]
     )
     merged["rz_low"] = finalize_rz(merged["rz_low_raw"])
-    merged["rz_low_ut"] = finalize_rz_ut(
-        merged["rz_low_ut_raw"], RZ_LOW_UT_EDGES, ("DY2E", "DY2M")
-    )
     merged["status"] = "complete" if complete else "incomplete"
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(merged, sort_keys=True, separators=(",", ":")))
