@@ -25,6 +25,7 @@ from ..real_subset_worker import (
     assign_lowdm_search_bin,
     compute_weight_bundle,
 )
+from ..sidecar_store import read_root_metadata
 from .model import (
     CHANNELS,
     MASS_WINDOWS,
@@ -730,11 +731,14 @@ def process_root(
             "candidate_events": 0,
         },
     }
-    sidecar = root_path.with_suffix(".json")
-    if not root_path.exists() or not sidecar.exists():
+    if not root_path.exists():
         result["summary"]["missing"] = True
         return result
-    metadata = read_json(sidecar)
+    try:
+        metadata = read_root_metadata(root_path, fallback=normalization)
+    except FileNotFoundError:
+        result["summary"]["missing"] = True
+        return result
     with uproot.open(root_path) as root_file:
         tree = root_file["Events"]
         present = set(tree.keys())

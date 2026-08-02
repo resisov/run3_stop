@@ -11,6 +11,8 @@ import math
 from pathlib import Path
 from typing import Any
 
+from ..sidecar_store import read_root_metadata
+
 
 def read_lines(path: Path) -> list[str]:
     return [
@@ -92,8 +94,11 @@ def main(argv: list[str] | None = None) -> int:
 
     for raw in raw_roots:
         root = resolve_root(raw, run_directory)
-        sidecar = root.with_suffix(".json")
-        metadata = json.loads(sidecar.read_text())
+        try:
+            metadata = read_root_metadata(root)
+        except FileNotFoundError:
+            exclusions["incomplete_sidecar"] += 1
+            continue
         if not str(metadata.get("status") or "").startswith("complete"):
             exclusions["incomplete_sidecar"] += 1
             continue

@@ -52,7 +52,13 @@ cd /eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad
 DY_PYTHON=/eos/user/t/taiwoo/miniconda3/envs/py38/bin/python
 DY_REPO=/eos/home-t/taiwoo/run3_stop/decaf
 DY_WORK=/eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dy_estimation_2024
+AUTONOMOUS_ALLHAD_SIDECAR_STORE=$DY_REPO/autonomous_allhad/workflow/sidecars_main.sqlite
 ~~~
+
+The reader first accepts an adjacent legacy JSON sidecar and otherwise uses
+the indexed main store above. The current nominal input has no adjacent JSON
+sidecars: all 2,919 payloads are losslessly stored and checksum-verified in
+`sidecars_main.sqlite`.
 
 Every command has help:
 

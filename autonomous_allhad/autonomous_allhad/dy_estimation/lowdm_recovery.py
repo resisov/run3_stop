@@ -33,6 +33,7 @@ from ..real_subset_worker import (
     cleanup_xrd_cache,
     clean_by_delta_r,
 )
+from ..sidecar_store import read_root_metadata
 from .model import (
     CHANNELS,
     MASS_WINDOWS,
@@ -113,10 +114,10 @@ def source_map(
             for record in payload.get("records") or []:
                 add_source(mapping, record, wanted_ids)
     for root_name in feature_roots:
-        sidecar = Path(root_name).with_suffix(".json")
-        if not sidecar.is_file():
+        try:
+            metadata = read_root_metadata(Path(root_name))
+        except FileNotFoundError:
             continue
-        metadata = read_json(sidecar)
         for record in metadata.get("files") or []:
             add_source(mapping, record, wanted_ids)
     return mapping
