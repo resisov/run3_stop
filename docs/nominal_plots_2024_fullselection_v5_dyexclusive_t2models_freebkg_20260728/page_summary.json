@@ -6,6 +6,15 @@
     "signal_overlays": true,
     "status": "complete"
   },
+  "clean_rebuild": {
+    "background_groups": "Top=ST+TT; VV+VVV; Photon+jet; DY",
+    "btag_efficiency_sha256": "03524e9ae28110814f336eafc887e60d54b495a7b8dec7cda59bd792f56feaf4",
+    "highdm_bins": 55,
+    "input_roots": 2919,
+    "lowdm_bins": 34,
+    "plot_files_validated": 634,
+    "status": "complete"
+  },
   "dy_rz_application": {
     "channels": {
       "DY2E": {
@@ -166,12 +175,12 @@
       }
     }
   },
-  "events_processed": 259598258,
+  "events_processed": 259597861,
   "excluded_obsolete_plot_families": [
     "legacy High-dM 17-bin",
     "legacy High-dM 42-bin"
   ],
-  "generated_at": "2026-08-03T03:49:15+00:00",
+  "generated_at": "2026-08-03T18:43:28Z",
   "histogram_status": "complete",
   "plot_counts": {
     "categories": 26,
@@ -3374,8 +3383,8 @@
   ],
   "snapshot_input_count": null,
   "snapshot_manifest": "input_union_manifest.json",
-  "source_hist_payload": "hists_2024_dyto2x4jets_btagsf_t2models_noother.json",
-  "source_hist_payload_sha256": "d7c2d6082dcfe7f796924f411859389db304e67476d2cd62822126f0fb2de952",
+  "source_hist_payload": "hists.json",
+  "source_hist_payload_sha256": "fe6fb6fdbc449ffede89c0125e30776aa85d1d84f7f3ba593d52fa0b6f8bf069",
   "statistical_results": {
     "autoMCStats": 10,
     "background_rate_parameters": 7,
