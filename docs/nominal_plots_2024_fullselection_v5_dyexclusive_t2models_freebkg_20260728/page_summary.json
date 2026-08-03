@@ -6,7 +6,42 @@
     "signal_overlays": true,
     "status": "complete"
   },
-  "dy2e_rz_application": {
+  "dy_rz_application": {
+    "channels": {
+      "DY2E": {
+        "highdm": {
+          "Nb1": 0.7956219718951804,
+          "Nb2plus": 0.6547029430664236,
+          "effective": 0.7538180297974927
+        },
+        "lowdm": {
+          "Nb1": 0.6242885433272645,
+          "Nb2plus": 0.7996132657524656,
+          "effective": 0.6491810522205995
+        }
+      },
+      "DY2M": {
+        "highdm": {
+          "Nb1": 0.6792547511819805,
+          "Nb2plus": 0.750825639500108,
+          "effective": 0.6964603717441671
+        },
+        "lowdm": {
+          "Nb1": 0.5985045784169216,
+          "Nb2plus": 0.5574163275293518,
+          "effective": 0.5913413126323562
+        }
+      }
+    },
+    "factor_policy": "channel-specific RZ(Nb); exact for explicit Nb/search-bin axes and DY-yield-weighted effective factor for inclusive one-dimensional CR distributions",
+    "legend_label": "DY",
+    "main_plotter": "autonomous_allhad/workflow/plot_control_search_bins_style.py",
+    "modified_histogram_records_per_render_payload": 72,
+    "other_regions": "unchanged",
+    "source": "autonomous_allhad/reports/dy_rz_nb_run2method_20260731",
+    "status": "complete"
+  },
+  "superseded_dy2e_rz_application": {
     "applied_at": "2026-07-31T11:21:39Z",
     "explicitly_unchanged": [
       "DY2M CR",
