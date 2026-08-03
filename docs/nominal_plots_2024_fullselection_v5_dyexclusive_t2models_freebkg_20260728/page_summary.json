@@ -1,4 +1,11 @@
 {
+  "an_signal_category_update": {
+    "background_stack": true,
+    "highdm_bins": 55,
+    "plot": "plots/categories/highdm_sr_selected_recoil55_tailmerged_except_cats1_2_3_5_8_nb2_nt2plus_w0_bins.png",
+    "signal_overlays": true,
+    "status": "complete"
+  },
   "dy2e_rz_application": {
     "applied_at": "2026-07-31T11:21:39Z",
     "explicitly_unchanged": [
@@ -8,13 +15,6 @@
       "all SRs"
     ],
     "factor_policy": "one inclusive DY2E factor per high-/low-dM regime",
-    "main_plotter": "autonomous_allhad/workflow/plot_control_search_bins_style.py",
-    "main_plotter_sha256": "d868900e75a0bb113415f8553d29106245bc7871ee8d18249fe11c8bfe7d8239",
-    "render_inputs": [
-      "render_payloads/highdm_source_2024.json",
-      "render_payloads/support_source_2024.json"
-    ],
-    "render_policy": "DY2E DY central sumw multiplied by RZ and sumw2 by RZ squared in an ephemeral payload; unchanged main plotter reran the complete High-dM and standard flat/Low-dM plot sets",
     "highdm": {
       "total": 0.07692247882985169,
       "value": 0.7348089314331238
@@ -25,9 +25,16 @@
       "total": 0.059246236700739176,
       "value": 0.6507995789518364
     },
+    "main_plotter": "autonomous_allhad/workflow/plot_control_search_bins_style.py",
+    "main_plotter_sha256": "d868900e75a0bb113415f8553d29106245bc7871ee8d18249fe11c8bfe7d8239",
     "measurement": "autonomous_allhad/reports/dy_zinv_estimation_dyto2x_btagsf_20260730/measurement.json",
     "measurement_sha256": "24a1c7fefd00f9d5977234c8896ede9f4fce9f2b28ade2c3faa3c69893d82907",
     "modified_histogram_records": 36,
+    "render_inputs": [
+      "render_payloads/highdm_source_2024.json",
+      "render_payloads/support_source_2024.json"
+    ],
+    "render_policy": "DY2E DY central sumw multiplied by RZ and sumw2 by RZ squared in an ephemeral payload; unchanged main plotter reran the complete High-dM and standard flat/Low-dM plot sets",
     "replaced_files": [
       "plots/categories/highdm_cr_dy2e_recoil.pdf",
       "plots/categories/highdm_cr_dy2e_recoil.png",
@@ -101,6 +108,10 @@
       "plots/lowdm/lowdm_cr_dy2e_recoil_dy2e.png"
     ],
     "replaced_plot_count": 35,
+    "rerendered_plot_counts": {
+      "flat_category_lowdm_pairs": 131,
+      "highdm_distribution_pairs": 186
+    },
     "scope": "DY2E CR only",
     "status": "complete",
     "target_process": "DY",
@@ -118,10 +129,6 @@
         "lowdm_dy2e": 551.8114988094678,
         "lowdm_dy2m": 607.7304065176056
       }
-    },
-    "rerendered_plot_counts": {
-      "highdm_distribution_pairs": 186,
-      "flat_category_lowdm_pairs": 131
     }
   },
   "events_processed": 259598258,
@@ -129,13 +136,14 @@
     "legacy High-dM 17-bin",
     "legacy High-dM 42-bin"
   ],
-  "generated_at": "2026-07-31T10:46:40Z",
+  "generated_at": "2026-08-03T03:49:15+00:00",
   "histogram_status": "complete",
   "plot_counts": {
     "categories": 26,
     "highdm": 186,
+    "limits": 3,
     "lowdm_cr": 90,
-    "total": 302
+    "total": 305
   },
   "records": [
     {
@@ -3207,16 +3215,6 @@
     {
       "family": "categories",
       "family_label": "Category/search-bin plots",
-      "kind": "SR",
-      "name": "highdm_sr_selected_recoil60_nb2_nt2plus_w0_bins",
-      "pdf": "plots/categories/highdm_sr_selected_recoil60_nb2_nt2plus_w0_bins.pdf",
-      "png": "plots/categories/highdm_sr_selected_recoil60_nb2_nt2plus_w0_bins.png",
-      "region": "",
-      "variable": "highdm_sr_selected_recoil60_nb2_nt2plus_w0_bins"
-    },
-    {
-      "family": "categories",
-      "family_label": "Category/search-bin plots",
       "kind": "CR",
       "name": "lowdm_cr_llcr_onebin",
       "pdf": "plots/categories/lowdm_cr_llcr_onebin.pdf",
@@ -3299,33 +3297,43 @@
       "variable": "lowdm_sr_onebin"
     },
     {
+      "family": "categories",
+      "family_label": "Category/search-bin plots",
+      "kind": "SR",
+      "name": "highdm_sr_selected_recoil55_tailmerged_except_cats1_2_3_5_8_nb2_nt2plus_w0_bins",
+      "pdf": "plots/categories/highdm_sr_selected_recoil55_tailmerged_except_cats1_2_3_5_8_nb2_nt2plus_w0_bins.pdf",
+      "png": "plots/categories/highdm_sr_selected_recoil55_tailmerged_except_cats1_2_3_5_8_nb2_nt2plus_w0_bins.png",
+      "region": "High-dM 55-bin SR categories",
+      "variable": "background stack and signal overlays"
+    },
+    {
       "family": "limits",
       "family_label": "Expected limits",
       "kind": "Overview",
-      "name": "expected_limit_t2tt_highdm60_lowdm34_free_background_x1800",
-      "pdf": "plots/limits/expected_limit_t2tt_highdm60_lowdm34_free_background_x1800.pdf",
-      "png": "plots/limits/expected_limit_t2tt_highdm60_lowdm34_free_background_x1800.png",
-      "region": "2024 High-dM 60 + Low-dM 34",
+      "name": "expected_limit_t2tt_highdm55_tailmerged_lowdm34_free_background_x1800",
+      "pdf": "plots/limits/expected_limit_t2tt_highdm55_tailmerged_lowdm34_free_background_x1800.pdf",
+      "png": "plots/limits/expected_limit_t2tt_highdm55_tailmerged_lowdm34_free_background_x1800.png",
+      "region": "2024 High-dM 55 + Low-dM 34",
       "variable": "T2tt free-background expected limit"
     },
     {
       "family": "limits",
       "family_label": "Expected limits",
       "kind": "Overview",
-      "name": "expected_limit_t2tb_highdm60_lowdm34_free_background_x1800",
-      "pdf": "plots/limits/expected_limit_t2tb_highdm60_lowdm34_free_background_x1800.pdf",
-      "png": "plots/limits/expected_limit_t2tb_highdm60_lowdm34_free_background_x1800.png",
-      "region": "2024 High-dM 60 + Low-dM 34",
+      "name": "expected_limit_t2tb_highdm55_tailmerged_lowdm34_free_background_x1800",
+      "pdf": "plots/limits/expected_limit_t2tb_highdm55_tailmerged_lowdm34_free_background_x1800.pdf",
+      "png": "plots/limits/expected_limit_t2tb_highdm55_tailmerged_lowdm34_free_background_x1800.png",
+      "region": "2024 High-dM 55 + Low-dM 34",
       "variable": "T2tb free-background expected limit"
     },
     {
       "family": "limits",
       "family_label": "Expected limits",
       "kind": "Overview",
-      "name": "expected_limit_t2bw_highdm60_lowdm34_free_background_x1800",
-      "pdf": "plots/limits/expected_limit_t2bw_highdm60_lowdm34_free_background_x1800.pdf",
-      "png": "plots/limits/expected_limit_t2bw_highdm60_lowdm34_free_background_x1800.png",
-      "region": "2024 High-dM 60 + Low-dM 34",
+      "name": "expected_limit_t2bw_highdm55_tailmerged_lowdm34_free_background_x1800",
+      "pdf": "plots/limits/expected_limit_t2bw_highdm55_tailmerged_lowdm34_free_background_x1800.pdf",
+      "png": "plots/limits/expected_limit_t2bw_highdm55_tailmerged_lowdm34_free_background_x1800.png",
+      "region": "2024 High-dM 55 + Low-dM 34",
       "variable": "T2bW free-background expected limit"
     }
   ],
@@ -3342,35 +3350,29 @@
     "signals": {
       "T2bW": {
         "collected_mass_point_count": 354,
-        "limits": "data/expected_limit_t2bw_highdm60_lowdm34_free_background_x1800.json",
-        "manifest": "data/expected_limit_t2bw_highdm60_lowdm34_free_background_x1800_manifest.json",
+        "limits": "data/expected_limit_t2bw_highdm55_tailmerged_lowdm34_free_background_x1800.json",
+        "manifest": "data/expected_limit_t2bw_highdm55_tailmerged_lowdm34_free_background_x1800_manifest.json",
         "mass_point_count": 354,
         "missing_mass_points": [],
-        "plot": "plots/limits/expected_limit_t2bw_highdm60_lowdm34_free_background_x1800.png",
+        "plot": "plots/limits/expected_limit_t2bw_highdm55_tailmerged_lowdm34_free_background_x1800.png",
         "run2_overlay": true
       },
       "T2tb": {
-        "collected_mass_point_count": 364,
-        "limits": "data/expected_limit_t2tb_highdm60_lowdm34_free_background_x1800.json",
-        "manifest": "data/expected_limit_t2tb_highdm60_lowdm34_free_background_x1800_manifest.json",
+        "collected_mass_point_count": 365,
+        "limits": "data/expected_limit_t2tb_highdm55_tailmerged_lowdm34_free_background_x1800.json",
+        "manifest": "data/expected_limit_t2tb_highdm55_tailmerged_lowdm34_free_background_x1800_manifest.json",
         "mass_point_count": 365,
-        "missing_mass_points": [
-          "mStop1550_mLSP1450"
-        ],
-        "plot": "plots/limits/expected_limit_t2tb_highdm60_lowdm34_free_background_x1800.png",
+        "missing_mass_points": [],
+        "plot": "plots/limits/expected_limit_t2tb_highdm55_tailmerged_lowdm34_free_background_x1800.png",
         "run2_overlay": true
       },
       "T2tt": {
-        "collected_mass_point_count": 202,
-        "limits": "data/expected_limit_t2tt_highdm60_lowdm34_free_background_x1800.json",
-        "manifest": "data/expected_limit_t2tt_highdm60_lowdm34_free_background_x1800_manifest.json",
+        "collected_mass_point_count": 205,
+        "limits": "data/expected_limit_t2tt_highdm55_tailmerged_lowdm34_free_background_x1800.json",
+        "manifest": "data/expected_limit_t2tt_highdm55_tailmerged_lowdm34_free_background_x1800_manifest.json",
         "mass_point_count": 205,
-        "missing_mass_points": [
-          "mStop1700_mLSP1500",
-          "mStop1800_mLSP1500",
-          "mStop1800_mLSP1600"
-        ],
-        "plot": "plots/limits/expected_limit_t2tt_highdm60_lowdm34_free_background_x1800.png",
+        "missing_mass_points": [],
+        "plot": "plots/limits/expected_limit_t2tt_highdm55_tailmerged_lowdm34_free_background_x1800.png",
         "run2_overlay": true
       }
     },
