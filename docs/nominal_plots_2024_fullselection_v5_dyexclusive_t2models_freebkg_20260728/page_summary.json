@@ -62,8 +62,48 @@
     "legacy High-dM 17-bin",
     "legacy High-dM 42-bin"
   ],
-  "generated_at": "2026-08-05T08:54:59Z",
+  "generated_at": "2026-08-05T11:25:23+00:00",
   "histogram_status": "complete",
+  "impact_update": {
+    "benchmark": {
+      "mLSP_GeV": 500,
+      "mStop_GeV": 1200
+    },
+    "channels": 249,
+    "combine_json": "data/impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat.json",
+    "current_model_scope": "2024 luminosity plus 19 rate/weight or object-shape nuisances and individual MC-statistical nuisances. Object-shape templates are absent from this card.",
+    "data_mode": "asimov",
+    "highdm_signal_bins": 55,
+    "invalid_fit_count": 0,
+    "labels": "data/impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat_labels.json",
+    "lowdm_signal_bins": 34,
+    "missing_fit_count": 0,
+    "multipage_pdf": "plots/impacts/impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat.pdf",
+    "nonstatistical_parameter_count": 20,
+    "parameter_count": 403,
+    "plot": "plots/impacts/impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat.png",
+    "poi": {
+      "fit": [
+        0.6516677737236023,
+        0.9999999403953552,
+        1.3936794996261597
+      ],
+      "name": "r"
+    },
+    "statistical_model": {
+      "autoMCStats_threshold": 10,
+      "background_normalization": "seven global unconstrained process rate parameters",
+      "data_counting": "Poisson likelihood",
+      "mc_statistics": "individual autoMCStats nuisance fits"
+    },
+    "statistical_parameter_count": 383,
+    "status": "complete_current_2024_model",
+    "summary_pdf": "plots/impacts/impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat_summary.pdf",
+    "total_analysis_bins": 249,
+    "updated_at": "2026-08-05T11:25:23+00:00",
+    "validation": "data/impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat_validation.json",
+    "year": 2024
+  },
   "plot_counts": {
     "categories": 26,
     "highdm": 186,
@@ -3273,6 +3313,16 @@
       "png": "plots/limits/expected_limit_t2bw_highdm55_tailmerged_lowdm34_free_background_x1800.png",
       "region": "2024 High-dM 55 + Low-dM 34",
       "variable": "T2bW free-background expected limit"
+    },
+    {
+      "family": "impacts",
+      "family_label": "Nuisance impacts",
+      "kind": "Overview",
+      "name": "impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat",
+      "pdf": "plots/impacts/impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat.pdf",
+      "png": "plots/impacts/impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat.png",
+      "region": "2024 High-dM 55 + Low-dM 34",
+      "variable": "mStop1200 mLSP500 full statistics"
     }
   ],
   "snapshot_input_count": null,
@@ -3282,7 +3332,19 @@
   "statistical_results": {
     "autoMCStats": 10,
     "background_rate_parameters": 7,
+    "combined": "plots/limits/expected_limit_t2tt_highdm55_lowdm34_free_background_x1800.png",
     "external_background_constraints": [],
+    "impact": "plots/impacts/impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat.png",
+    "impact_benchmark": {
+      "mLSP_GeV": 500,
+      "mStop_GeV": 1200
+    },
+    "impact_parameters": {
+      "autoMCStats": 383,
+      "other": 20,
+      "total": 403
+    },
+    "impact_scope": "2024 luminosity plus 19 rate/weight or object-shape nuisances and individual MC-statistical nuisances. Object-shape templates are absent from this card.",
     "max_mstop_GeV": 1800,
     "model": "free_background_global_process_normalizations",
     "signals": {
@@ -3314,7 +3376,8 @@
         "run2_overlay": true
       }
     },
-    "status": "complete_free_background_2024"
+    "status": "complete_current_2024_model_full_statistics",
+    "updated_at": "2026-08-05T11:25:23+00:00"
   },
   "status": "complete",
   "superseded_dy2e_rz_application": {
