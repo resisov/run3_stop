@@ -62,7 +62,7 @@
     "legacy High-dM 17-bin",
     "legacy High-dM 42-bin"
   ],
-  "generated_at": "2026-08-05T12:32:30+00:00",
+  "generated_at": "2026-08-05T12:38:57+00:00",
   "histogram_status": "complete",
   "impact_update": {
     "benchmark": {
@@ -100,7 +100,7 @@
     "status": "complete_current_2024_model",
     "summary_pdf": "plots/impacts/impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat_summary.pdf",
     "total_analysis_bins": 249,
-    "updated_at": "2026-08-05T12:32:30+00:00",
+    "updated_at": "2026-08-05T12:38:57+00:00",
     "validation": "data/impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat_validation.json",
     "year": 2024
   },
@@ -3377,7 +3377,7 @@
       }
     },
     "status": "complete_current_2024_model_full_statistics",
-    "updated_at": "2026-08-05T12:32:30+00:00"
+    "updated_at": "2026-08-05T12:38:57+00:00"
   },
   "status": "complete",
   "superseded_dy2e_rz_application": {
