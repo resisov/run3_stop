@@ -61,20 +61,20 @@
       "sha256": "3cfa51f1059ce57880148c99b959fcdde70d6c62b0c29fdabc273826698e812d"
     },
     "impact_labels_2024.json": {
-      "bytes": 29401,
-      "sha256": "ecdfbda7ab3392f993781ef191ee10fa2f9f996cc71a86bd254f7e9919ee5cd7"
+      "bytes": 30533,
+      "sha256": "495aafbe72c1b2a466f81fa1a0bd8a9536ab6176dffde66f08a6f5324a1ff6d7"
     },
     "impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat.pdf": {
-      "bytes": 112973,
-      "sha256": "9b79ef26a641d303fe64eee9f57250e0ba7f614378a21ed5541cc110527635a4"
+      "bytes": 113332,
+      "sha256": "ab4ea0445278536783dddd70949f844040f021d0e24a3ba39b61775617049cfc"
     },
     "impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat.png": {
-      "bytes": 182146,
-      "sha256": "4d574b25e0e763ed7e4d5604c47f3a72351a83cb429de872f7263e8d057b7594"
+      "bytes": 195009,
+      "sha256": "75e95ac29353c731dcbb5e84b5bd540f110cf3311992fd70f808d179ce4c237a"
     },
     "impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat_summary.pdf": {
       "bytes": 16651,
-      "sha256": "013d1b07694bf6a52c9af1a3dce851cd17e12b37d40974986dc12376b065bd5a"
+      "sha256": "6857641fb538797c99d34f574f3ee8e5b90b59d27189c618274c3efe0d92825b"
     },
     "impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat_summary.png": {
       "bytes": 215554,
@@ -226,7 +226,7 @@
       1872,
       1323
     ],
-    "png_nonwhite_fraction": 0.25896894845307544,
+    "png_nonwhite_fraction": 0.2597672022275197,
     "summary_pdf_pages": 1,
     "summary_png_dimensions": [
       1872,
