@@ -64,8 +64,8 @@
     "legacy High-dM 17-bin",
     "legacy High-dM 42-bin"
   ],
-  "generated_at": "2026-08-11T13:23:47.366783+00:00",
-  "histogram_status": "complete_provisional_qcd_btag_unity",
+  "generated_at": "2026-08-11T17:52:42.435102+00:00",
+  "histogram_status": "complete",
   "impact_update": {
     "benchmark": {
       "mLSP_GeV": 500,
@@ -116,8 +116,11 @@
     "total": 317
   },
   "qcd_ht_update": {
-    "btag_efficiency": "Coffea measurement running; plots will be regenerated after payload adoption",
-    "btag_sf": "unity_fallback_provisional",
+    "btag_efficiency": "complete: 223 validated Coffea shards, 11 merged datasets, 2,178 source files exactly once",
+    "btag_efficiency_sha256": "8c22f169156fcaaab028520a30d73c49e9f8cd949a13a41cca7a905327b55409",
+    "btag_sf": "applied",
+    "canonical_histogram_sha256": "f315229893cbe6d07ad33c8db9fc44d55fac4e6357448746e8ebe780c608de35",
+    "histogram_source_sha256": "c0ae01d5f516191279c4fbd9edf8ee1e1c03550c5a3c2f5fe6f1b489a3c18dc9",
     "new_ht_roots": 218,
     "nonzero_hist_roots": 213,
     "normalization": "XSDB cross section times 109.82 fb^-1 divided by retained physical-dataset Runs.genEventSumw",
@@ -125,7 +128,7 @@
     "old_pt_bin_roots_removed": 219,
     "sample_family": "QCD-4Jets HT bins",
     "selected_events": 12618969,
-    "status": "plots_complete_btag_efficiency_measurement_running",
+    "status": "complete",
     "xsec_pb": {
       "1000to1200": 890.3,
       "100to200": 25310000,
@@ -3356,7 +3359,7 @@
   "snapshot_input_count": null,
   "snapshot_manifest": "input_union_manifest.json",
   "source_hist_payload": "hists.json",
-  "source_hist_payload_sha256": "e29d1da6e547ccdf2b1595f3c1a24551ac8baa12aff3a8c2b990a52ea75ae269",
+  "source_hist_payload_sha256": "f315229893cbe6d07ad33c8db9fc44d55fac4e6357448746e8ebe780c608de35",
   "statistical_results": {
     "autoMCStats": 10,
     "background_rate_parameters": 7,
