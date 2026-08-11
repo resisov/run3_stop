@@ -16,11 +16,12 @@
     "background_groups": "Top=ST+TT; VV+VVV; Photon+jet; DY",
     "btag_efficiency_sha256": "03524e9ae28110814f336eafc887e60d54b495a7b8dec7cda59bd792f56feaf4",
     "highdm_bins": 55,
-    "histogram_sha256": "887dc6ffb025ae2770d94ee3d08c87df49eda0f4657bdc5fe5ed1d8233f1f8a4",
-    "input_roots": 2919,
+    "histogram_sha256": "e29d1da6e547ccdf2b1595f3c1a24551ac8baa12aff3a8c2b990a52ea75ae269",
+    "input_roots": 2918,
     "lowdm_bins": 34,
     "plot_files_validated": 634,
-    "status": "complete"
+    "qcd_btag_sf": "unity_fallback_provisional",
+    "status": "complete_provisional_qcd_btag_unity"
   },
   "dy_rz_application": {
     "channels": {
@@ -57,13 +58,14 @@
     "source": "autonomous_allhad/reports/dy_rz_nb_run2method_20260731",
     "status": "complete"
   },
-  "events_processed": 259597861,
+  "events_processed": null,
+  "events_processed_note": "Global value intentionally unset after process-only QCD substitution; QCD selected event count is recorded in qcd_ht_update.",
   "excluded_obsolete_plot_families": [
     "legacy High-dM 17-bin",
     "legacy High-dM 42-bin"
   ],
-  "generated_at": "2026-08-05T12:52:14+00:00",
-  "histogram_status": "complete",
+  "generated_at": "2026-08-11T13:23:47.366783+00:00",
+  "histogram_status": "complete_provisional_qcd_btag_unity",
   "impact_update": {
     "benchmark": {
       "mLSP_GeV": 500,
@@ -112,6 +114,32 @@
     "lowdm_cr": 90,
     "lowdm_sr": 15,
     "total": 317
+  },
+  "qcd_ht_update": {
+    "btag_efficiency": "Coffea measurement running; plots will be regenerated after payload adoption",
+    "btag_sf": "unity_fallback_provisional",
+    "new_ht_roots": 218,
+    "nonzero_hist_roots": 213,
+    "normalization": "XSDB cross section times 109.82 fb^-1 divided by retained physical-dataset Runs.genEventSumw",
+    "old_dataset_ids_removed": 878,
+    "old_pt_bin_roots_removed": 219,
+    "sample_family": "QCD-4Jets HT bins",
+    "selected_events": 12618969,
+    "status": "plots_complete_btag_efficiency_measurement_running",
+    "xsec_pb": {
+      "1000to1200": 890.3,
+      "100to200": 25310000,
+      "1200to1500": 384.8,
+      "1500to2000": 127.3,
+      "2000": 26.26,
+      "200to400": 1960000,
+      "400to600": 97400,
+      "40to70": 312300000,
+      "600to800": 13560,
+      "70to100": 58470000,
+      "800to1000": 3010
+    },
+    "zero_entry_roots": 5
   },
   "records": [
     {
@@ -3328,7 +3356,7 @@
   "snapshot_input_count": null,
   "snapshot_manifest": "input_union_manifest.json",
   "source_hist_payload": "hists.json",
-  "source_hist_payload_sha256": "887dc6ffb025ae2770d94ee3d08c87df49eda0f4657bdc5fe5ed1d8233f1f8a4",
+  "source_hist_payload_sha256": "e29d1da6e547ccdf2b1595f3c1a24551ac8baa12aff3a8c2b990a52ea75ae269",
   "statistical_results": {
     "autoMCStats": 10,
     "background_rate_parameters": 7,
