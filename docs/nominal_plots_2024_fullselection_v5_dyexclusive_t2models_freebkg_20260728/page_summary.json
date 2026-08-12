@@ -64,8 +64,8 @@
     "legacy High-dM 17-bin",
     "legacy High-dM 42-bin"
   ],
-  "generated_at": "2026-08-11T17:52:42.435102+00:00",
-  "histogram_status": "complete",
+  "generated_at": "2026-08-12T08:45:34+00:00",
+  "histogram_status": "complete_with_gj_btag_unity_fallback",
   "impact_update": {
     "benchmark": {
       "mLSP_GeV": 500,
@@ -114,6 +114,24 @@
     "lowdm_cr": 90,
     "lowdm_sr": 15,
     "total": 317
+  },
+  "gj_4jets_update": {
+    "btag_efficiency": "running in parallel with Coffea; provisional plots use unity fallback",
+    "btag_sf": "unity_fallback",
+    "canonical_histogram_sha256": "889bcd2411276bb9313664886c1d87080dd4e8ca7a92221ca637fdbc2891e574",
+    "generator_filter": "dRGJ > 0.25",
+    "histogram_source_sha256": "edc392c7671fd1923436c03d278f831d48df4a88d0ce0b18c173d968b692fafe",
+    "new_datasets": 16,
+    "new_roots": 402,
+    "normalization": "XSDB cross section times 109.82 fb^-1 divided by retained physical-dataset Runs.genEventSumw",
+    "old_dataset_ids_removed": 337,
+    "old_pt_bin_roots_removed": 84,
+    "sample_family": "GJ-4Jets HT x PTG bins",
+    "selected_events": 29694490,
+    "source_nanoaod_files": 3930,
+    "status": "complete_provisional_btag_unity",
+    "xsec_sha256": "b458d21ad56b2ffde8e1eca0a4cefe45622af5c81bd58a78b311f42ae84718bc",
+    "zero_entry_roots": 66
   },
   "qcd_ht_update": {
     "btag_efficiency": "complete: 223 validated Coffea shards, 11 merged datasets, 2,178 source files exactly once",
@@ -3359,7 +3377,7 @@
   "snapshot_input_count": null,
   "snapshot_manifest": "input_union_manifest.json",
   "source_hist_payload": "hists.json",
-  "source_hist_payload_sha256": "f315229893cbe6d07ad33c8db9fc44d55fac4e6357448746e8ebe780c608de35",
+  "source_hist_payload_sha256": "889bcd2411276bb9313664886c1d87080dd4e8ca7a92221ca637fdbc2891e574",
   "statistical_results": {
     "autoMCStats": 10,
     "background_rate_parameters": 7,
