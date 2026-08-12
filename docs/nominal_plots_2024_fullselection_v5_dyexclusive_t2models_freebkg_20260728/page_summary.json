@@ -64,7 +64,15 @@
     "legacy High-dM 17-bin",
     "legacy High-dM 42-bin"
   ],
-  "generated_at": "2026-08-12T08:45:34+00:00",
+  "generated_at": "2026-08-12T09:20:22+00:00",
+  "highdm_rz_render": {
+    "containers_scaled": 72,
+    "dy2e_effective": 0.7538180297974927,
+    "dy2m_effective": 0.6964603717441671,
+    "plot_count": 186,
+    "status": "complete",
+    "validated_at": "2026-08-12T09:20:22+00:00"
+  },
   "histogram_status": "complete_with_gj_btag_unity_fallback",
   "impact_update": {
     "benchmark": {
