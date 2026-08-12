@@ -64,7 +64,25 @@
     "legacy High-dM 17-bin",
     "legacy High-dM 42-bin"
   ],
-  "generated_at": "2026-08-12T09:20:22+00:00",
+  "generated_at": "2026-08-12T12:26:55+00:00",
+  "gcr_unit_area_update": {
+    "data_normalization": "one common factor over the full plotted figure",
+    "data_source": "EGamma",
+    "flat_summary": "data/gcr_flat_plot_summary.json",
+    "highdm_plot_pairs": 12,
+    "highdm_summary": "data/gcr_highdm_plot_summary.json",
+    "legend_policy": "each displayed MC process and Data include the corresponding pre-normalization yield in parentheses",
+    "lowdm_plot_pairs": 21,
+    "mc_normalization": "one common factor over every process, bin, and block in the plotted figure",
+    "plot_files": 66,
+    "plot_pairs": 33,
+    "plotter_sha256": "b2efc93a2dbd2486d4e4c0e188838500e8b5c482ae0e4b4cc78cdfd6b73bda82",
+    "ratio": "normalized data divided by normalized total MC",
+    "status": "complete",
+    "uncertainty": "MC statistical plus unit-area-normalized Up/Down shape envelopes; luminosity omitted",
+    "updated_at": "2026-08-12T12:26:55+00:00",
+    "validation": "data/gcr_unit_area_validation.json"
+  },
   "highdm_rz_render": {
     "containers_scaled": 72,
     "dy2e_effective": 0.7538180297974927,
