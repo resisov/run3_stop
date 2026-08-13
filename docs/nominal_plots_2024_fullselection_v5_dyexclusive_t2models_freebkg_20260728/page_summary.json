@@ -14,14 +14,14 @@
       "loose_muon_5to10"
     ],
     "background_groups": "Top=ST+TT; VV+VVV; Photon+jet; DY",
-    "btag_efficiency_sha256": "03524e9ae28110814f336eafc887e60d54b495a7b8dec7cda59bd792f56feaf4",
+    "btag_efficiency_sha256": "9a9bf0161018d7f8d072221f0f2902659cf834ed0824aba68c456783a7f7b224",
     "highdm_bins": 55,
-    "histogram_sha256": "e29d1da6e547ccdf2b1595f3c1a24551ac8baa12aff3a8c2b990a52ea75ae269",
-    "input_roots": 2918,
+    "histogram_sha256": "84480cc7798e9f9d478afb90878980c55f603114ed01902d879f72738a5c8395",
+    "input_roots": 3236,
     "lowdm_bins": 34,
     "plot_files_validated": 634,
-    "qcd_btag_sf": "unity_fallback_provisional",
-    "status": "complete_provisional_qcd_btag_unity"
+    "qcd_btag_sf": "applied",
+    "status": "complete"
   },
   "dy_rz_application": {
     "channels": {
@@ -64,7 +64,7 @@
     "legacy High-dM 17-bin",
     "legacy High-dM 42-bin"
   ],
-  "generated_at": "2026-08-12T12:26:55+00:00",
+  "generated_at": "2026-08-13T06:33:00+00:00",
   "gcr_unit_area_update": {
     "data_normalization": "one common factor over the full plotted figure",
     "data_source": "EGamma",
@@ -89,9 +89,9 @@
     "dy2m_effective": 0.6964603717441671,
     "plot_count": 186,
     "status": "complete",
-    "validated_at": "2026-08-12T09:20:22+00:00"
+    "validated_at": "2026-08-13T06:33:00+00:00"
   },
-  "histogram_status": "complete_with_gj_btag_unity_fallback",
+  "histogram_status": "complete_with_gj_btag_applied",
   "impact_update": {
     "benchmark": {
       "mLSP_GeV": 500,
@@ -142,11 +142,12 @@
     "total": 317
   },
   "gj_4jets_update": {
-    "btag_efficiency": "running in parallel with Coffea; provisional plots use unity fallback",
-    "btag_sf": "unity_fallback",
-    "canonical_histogram_sha256": "889bcd2411276bb9313664886c1d87080dd4e8ca7a92221ca637fdbc2891e574",
+    "btag_efficiency": "complete: 3,930 validated Coffea shards, 16 merged datasets, and 3,930 source files represented exactly once",
+    "btag_efficiency_sha256": "9a9bf0161018d7f8d072221f0f2902659cf834ed0824aba68c456783a7f7b224",
+    "btag_sf": "applied",
+    "canonical_histogram_sha256": "84480cc7798e9f9d478afb90878980c55f603114ed01902d879f72738a5c8395",
     "generator_filter": "dRGJ > 0.25",
-    "histogram_source_sha256": "edc392c7671fd1923436c03d278f831d48df4a88d0ce0b18c173d968b692fafe",
+    "histogram_source_sha256": "9716f514216af702083194ebac440852b26b35dc6f2401a02398291b91957beb",
     "new_datasets": 16,
     "new_roots": 402,
     "normalization": "XSDB cross section times 109.82 fb^-1 divided by retained physical-dataset Runs.genEventSumw",
@@ -155,7 +156,7 @@
     "sample_family": "GJ-4Jets HT x PTG bins",
     "selected_events": 29694490,
     "source_nanoaod_files": 3930,
-    "status": "complete_provisional_btag_unity",
+    "status": "complete",
     "xsec_sha256": "b458d21ad56b2ffde8e1eca0a4cefe45622af5c81bd58a78b311f42ae84718bc",
     "zero_entry_roots": 66
   },
