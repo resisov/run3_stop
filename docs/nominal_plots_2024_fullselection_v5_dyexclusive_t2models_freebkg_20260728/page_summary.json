@@ -68,21 +68,21 @@
     "data_normalization": "one common factor over the full plotted figure",
     "data_source": "EGamma",
     "flat_summary": "data/gcr_flat_plot_summary.json",
-    "highdm_plot_pairs": 12,
+    "highdm_plot_pairs": 10,
     "highdm_summary": "data/gcr_highdm_plot_summary.json",
     "legend_policy": "each displayed MC process and Data include the corresponding pre-normalization yield in parentheses",
-    "lowdm_plot_pairs": 21,
+    "lowdm_plot_pairs": 23,
     "mc_normalization": "one common factor over every process, bin, and block in the plotted figure",
     "plot_files": 66,
     "plot_pairs": 33,
-    "plotter_sha256": "394bf538707691b049475eec7025e35da613b90ae0e5d7910730974eb760f21a",
+    "plotter_sha256": "c454b84dd03519c1297bb343e31b9aced20eef60eb7ada5a6dcd2fc1f44c3260",
     "ratio": "normalized data divided by normalized total MC",
     "status": "complete",
     "uncertainty": "MC statistical plus unit-area-normalized Up/Down shape envelopes; luminosity omitted",
-    "updated_at": "2026-08-13T09:56:17+00:00",
+    "updated_at": "2026-08-13T10:26:44+00:00",
     "validation": "data/gcr_unit_area_validation.json"
   },
-  "generated_at": "2026-08-13T09:56:17+00:00",
+  "generated_at": "2026-08-13T10:26:44+00:00",
   "gj_4jets_update": {
     "btag_efficiency": "complete: 3,930 validated Coffea shards, 16 merged datasets, and 3,930 source files represented exactly once",
     "btag_efficiency_sha256": "9a9bf0161018d7f8d072221f0f2902659cf834ed0824aba68c456783a7f7b224",
@@ -108,7 +108,7 @@
     "dy2m_effective": 0.6964603717441671,
     "plot_count": 186,
     "status": "complete",
-    "validated_at": "2026-08-13T09:56:17+00:00"
+    "validated_at": "2026-08-13T10:26:44+00:00"
   },
   "histogram_status": "complete_with_gj_btag_applied",
   "impact_update": {
@@ -3595,8 +3595,8 @@
   },
   "xlabel_update": {
     "plot_pairs": 317,
-    "plotter_sha256": "394bf538707691b049475eec7025e35da613b90ae0e5d7910730974eb760f21a",
-    "policy": "concise physics-symbol labels; internal object-cleaning qualifiers are omitted from displayed axes",
+    "plotter_sha256": "c454b84dd03519c1297bb343e31b9aced20eef60eb7ada5a6dcd2fc1f44c3260",
+    "policy": "concise physics-symbol labels while retaining Leading for leading-object observables; internal object-cleaning qualifiers are omitted from displayed axes",
     "removed_display_qualifiers": [
       "photon-cleaned",
       "lepton-cleaned",

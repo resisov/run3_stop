@@ -36,10 +36,10 @@
       2160,
       1800
     ],
-    "flat_summary_sha256": "57fa9567fe3f0db64edec8c016c49a1eea9cf137f5dc39dff7e44bd8f21ded2f",
-    "highdm_plot_pairs": 12,
-    "highdm_summary_sha256": "297847c76ea73e187404bac97641ef9b6703d439d007ea10ffa69d9269a10686",
-    "lowdm_plot_pairs": 21,
+    "flat_summary_sha256": "5cb2ac6812c2ac990f6dac77cff396dcdfb2f83a6ce756746f628f2de82f3f08",
+    "highdm_plot_pairs": 10,
+    "highdm_summary_sha256": "82ff4555f64b0f5dd95f480e99751a158696469c032159cafec6349d7a75e48b",
+    "lowdm_plot_pairs": 23,
     "non_gcr_outputs_generated": 0,
     "pdf_count": 33,
     "png_count": 33,
@@ -47,11 +47,11 @@
   },
   "plotter": {
     "path": "autonomous_allhad/workflow/plot_control_search_bins_style.py",
-    "sha256": "394bf538707691b049475eec7025e35da613b90ae0e5d7910730974eb760f21a"
+    "sha256": "c454b84dd03519c1297bb343e31b9aced20eef60eb7ada5a6dcd2fc1f44c3260"
   },
   "scope": "2024 GCR-only unit-area plots",
   "status": "complete",
-  "timestamp_utc": "2026-08-13T09:56:17Z",
+  "timestamp_utc": "2026-08-13T10:26:44Z",
   "uncertainty_model": {
     "combination": "MC statistical and shape-systematic components added in quadrature",
     "data": "Poisson statistical uncertainty divided by the raw data integral",

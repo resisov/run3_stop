@@ -3079,5 +3079,5 @@
   "signal_policy": "Signals are drawn only in SR plots; CR blocks exclude T2tt overlays.",
   "source": "plot2024/hists.json",
   "status": "complete",
-  "uncertainty_model": "MC stat plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+  "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
 }

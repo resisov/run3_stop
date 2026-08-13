@@ -863,8 +863,8 @@ VARIABLE_XLABELS = {
     "njet_lepton_clean": r"$N_{j}$",
     "nb_lepton_clean": r"$N_{b}$",
     "ht_lepton_clean": r"$H_{T}$ (GeV)",
-    "leading_lowdm_fatjet_pt": r"$p_{T}^{\mathrm{AK8},1}$ (GeV)",
-    "leading_lowdm_fatjet_msd": r"$m_{\mathrm{SD}}^{\mathrm{AK8},1}$ (GeV)",
+    "leading_lowdm_fatjet_pt": r"Leading AK8 jet $p_{T}$ (GeV)",
+    "leading_lowdm_fatjet_msd": r"Leading AK8 jet $m_{\mathrm{SD}}$ (GeV)",
 }
 
 
@@ -878,9 +878,9 @@ HIGHDM_VARIABLE_XLABELS = {
     "ut": r"$U_{T}$ (GeV)",
     "ptll": r"$p_{T}(\ell\ell)$ (GeV)",
     "met": r"$p_{T}^{miss}$ (GeV)",
-    "jet_pt": r"$p_{T}^{j_{1}}$ (GeV)",
-    "fatjet_pt": r"$p_{T}^{\mathrm{AK8},1}$ (GeV)",
-    "bjet_pt": r"$p_{T}^{b_{1}}$ (GeV)",
+    "jet_pt": r"Leading jet $p_{T}$ (GeV)",
+    "fatjet_pt": r"Leading AK8 jet $p_{T}$ (GeV)",
+    "bjet_pt": r"Leading b-jet $p_{T}$ (GeV)",
 }
 
 
