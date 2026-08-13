@@ -82,7 +82,7 @@
     "updated_at": "2026-08-13T10:26:44+00:00",
     "validation": "data/gcr_unit_area_validation.json"
   },
-  "generated_at": "2026-08-13T10:26:44+00:00",
+  "generated_at": "2026-08-13T10:44:23+00:00",
   "gj_4jets_update": {
     "btag_efficiency": "complete: 3,930 validated Coffea shards, 16 merged datasets, and 3,930 source files represented exactly once",
     "btag_efficiency_sha256": "9a9bf0161018d7f8d072221f0f2902659cf834ed0824aba68c456783a7f7b224",
@@ -3595,8 +3595,8 @@
   },
   "xlabel_update": {
     "plot_pairs": 317,
-    "plotter_sha256": "c454b84dd03519c1297bb343e31b9aced20eef60eb7ada5a6dcd2fc1f44c3260",
-    "policy": "concise physics-symbol labels while retaining Leading for leading-object observables; internal object-cleaning qualifiers are omitted from displayed axes",
+    "plotter_sha256": "1fe767091a1f7b974ac04c1048d589a7d6432bd04e65e3df4cc45888175a85bf",
+    "policy": "concise physics-symbol labels while retaining Leading for leading-object observables; low-dM b-tag working points are shown parenthetically rather than as superscripts; internal object-cleaning qualifiers are omitted from displayed axes",
     "removed_display_qualifiers": [
       "photon-cleaned",
       "lepton-cleaned",
