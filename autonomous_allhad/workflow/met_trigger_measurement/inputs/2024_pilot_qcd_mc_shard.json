@@ -1,0 +1,15 @@
+{
+  "shard_id": "met_qcd_2024_mc_pilot",
+  "records": [
+    {
+      "dataset": "QCD_Bin-PT-300to470_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_",
+      "process_group": "QCD",
+      "is_data": false,
+      "is_background": true,
+      "year": "2024",
+      "file_index": 0,
+      "xsec_pb": 7581.0,
+      "file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/QCD_Bin-PT-300to470_TuneCP5_13p6TeV_pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/130000/53bc32c0-fd87-4942-9bdb-12a687d29941.root"
+    }
+  ]
+}

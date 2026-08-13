@@ -17,10 +17,17 @@ import awkward as ak
 import numpy as np
 import uproot
 
+from .signal_models import (
+    signal_genmodel_branch,
+    signal_runs_sumw_branch,
+)
+
 from .real_subset_worker import (
     CORE_BRANCHES,
     ELECTRON_HLT,
+    ELECTRON_REFERENCE_HLT,
     FILTERS,
+    HT_REFERENCE_HLT,
     MUON_HLT,
     PHOTON_HLT,
     SIGNAL_HLT,
@@ -59,6 +66,14 @@ DEFERRED_WEIGHT_VARIATIONS = [
     "muon_hltDown",
     "photon_idUp",
     "photon_idDown",
+    "veto_electron_5to10Up",
+    "veto_electron_5to10Down",
+    "loose_muon_5to10Up",
+    "loose_muon_5to10Down",
+    "photon_triggerUp",
+    "photon_triggerDown",
+    "met_triggerUp",
+    "met_triggerDown",
 ]
 
 
@@ -71,6 +86,7 @@ INT32_FIELDS = [
     "year",
     "mStop",
     "mLSP",
+    "signal_topology_id",
     "njet",
     "nb_medium",
     "nb_loose",
@@ -149,6 +165,9 @@ BOOL_FIELDS = [
     "feature_flat_preselection",
     "feature_lowdm_preselection",
     "feature_lowdm_sr_base",
+    "feature_met_trigger_genuine_measurement",
+    "feature_met_trigger_qcd_measurement",
+    "feature_photon_trigger_measurement",
     "feature_lowdm_LLCR",
     "feature_lowdm_QCDCR",
     "feature_lowdm_GCR",
@@ -173,7 +192,9 @@ BOOL_FIELDS = [
     "pass_any_analysis_trigger",
     "pass_signal_trigger",
     "pass_photon_trigger",
+    "pass_ht_reference_trigger",
     "pass_electron_trigger",
+    "pass_electron_reference_trigger",
     "pass_muon_trigger",
     "pass_zero_tau",
     "pass_no_tracks",
@@ -208,9 +229,11 @@ VECTOR_FLOAT_FIELDS = [
     "lowdm_fatjet_phi",
     "lowdm_fatjet_msd",
     "electron_veto_pt",
+    "electron_veto_eta",
     "electron_veto_eta_sc",
     "electron_veto_phi",
     "electron_medium_pt",
+    "electron_medium_eta",
     "electron_medium_eta_sc",
     "electron_medium_phi",
     "muon_loose_pt",
@@ -323,7 +346,7 @@ def read_runs_sumw(root: Any) -> dict[str, Any]:
     generic = [b for b in branches if b == "genEventSumw"]
     generic += [
         b for b in branches
-        if "geneventsumw" in b.lower() and not b.startswith("genEventSumw_T2tt_") and b not in generic
+        if "geneventsumw" in b.lower() and not signal_runs_sumw_branch(b) and b not in generic
     ]
     info["generic_candidates"] = generic
     for branch in generic:
@@ -332,7 +355,7 @@ def read_runs_sumw(root: Any) -> dict[str, Any]:
             info["generic_sumw"] = val
             info["generic_sumw_branch"] = branch
             break
-    for branch in sorted(b for b in branches if b.startswith("genEventSumw_T2tt_")):
+    for branch in sorted(b for b in branches if signal_runs_sumw_branch(b)):
         val = sum_tree_branch(runs, branch)
         if val is None:
             continue
@@ -602,8 +625,10 @@ def process_record(record: dict[str, Any], repo: Path, chunk_size: int, shift_na
         summary["required_branch_validation"] = required
         if not all(required.values()):
             raise RuntimeError("required branch missing")
-        genmodel_branches = sorted([b for b in branches if str(b).startswith("GenModel_T2tt_")])
-        read_branches = [b for b in set(CORE_BRANCHES + FILTERS + SIGNAL_HLT + PHOTON_HLT + ELECTRON_HLT + MUON_HLT + genmodel_branches) if b in branches]
+        genmodel_branches = sorted(
+            b for b in branches if signal_genmodel_branch(str(b))
+        )
+        read_branches = [b for b in set(CORE_BRANCHES + FILTERS + SIGNAL_HLT + PHOTON_HLT + HT_REFERENCE_HLT + ELECTRON_HLT + ELECTRON_REFERENCE_HLT + MUON_HLT + genmodel_branches) if b in branches]
         summary["number_of_entries"] = int(tree.num_entries)
         summary["read_status"] = "opened"
         summary["processed_entry_ranges"] = []
@@ -913,7 +938,10 @@ def main(argv: list[str] | None = None) -> int:
             runs_info = summary.get("runs_sumw") if isinstance(summary.get("runs_sumw"), dict) else {}
             add_float_map(ds_meta["signal_sumw_by_genmodel"], runs_info.get("signal_sumw_by_genmodel") or {})
             if runs_info.get("signal_sumw_by_genmodel"):
-                bump(ds_meta["signal_runs_sumw_source_counts"], "Runs.genEventSumw_T2tt_<mStop>_<mLSP>")
+                bump(
+                    ds_meta["signal_runs_sumw_source_counts"],
+                    "Runs.genEventSumw_<topology>_<mStop>_<mLSP>",
+                )
             fallback_map = summary.get("signal_event_genweight_sum_by_genmodel")
             if isinstance(fallback_map, dict):
                 add_float_map(ds_meta["signal_event_genweight_sum_by_genmodel"], fallback_map)

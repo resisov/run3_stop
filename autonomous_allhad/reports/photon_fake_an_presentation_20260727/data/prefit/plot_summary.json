@@ -1,0 +1,383 @@
+{
+  "adoption_decision": {
+    "adoption_gate": "All four predeclared GCR U_T metrics must strictly improve over nominal: Poisson deviance, chi2 using data+MC statistical variance, log-ratio RMS, and absolute log integral ratio. Normalization must be complete. A truth-fake-only pass remains conditional until QCD/GJets prompt overlap is resolved.",
+    "blocked_normalization_datasets": {
+      "electron": 0,
+      "prompt": 0,
+      "qcd_all": 0,
+      "qcd_electron": 0,
+      "qcd_fake": 0,
+      "qcd_prompt": 0
+    },
+    "entire_qcd_replacement": "reject",
+    "normalization_complete": true,
+    "primary_distribution": "GCR/ut",
+    "truth_fake_only_replacement": "conditional_pass_requires_qcd_gjets_overlap_decision"
+  },
+  "closure_status": "measured",
+  "closure_uncertainty": 0.4517827097000658,
+  "evaluation": "/eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_fake_2024_snapshot_complete_20260726T1917Z/datamc_evaluation_all_background_contamination.json",
+  "excluded_distributions": [
+    {
+      "distribution": "GCR/met",
+      "reason": "all target, application, contamination, and fake histograms are zero; real_subset_worker.py selects GCR pTmiss < 250 GeV while the supplied histogram bins start at 250 GeV"
+    }
+  ],
+  "gcr_event_key_audit": "/eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_fake_2024_local2400k_v3_20260726/diagnostics/gcr_event_key_audit_all_examples.json",
+  "gcr_event_key_audit_status": "different",
+  "index": "/eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_fake_plots_complete_originaware_20260726T1935Z/index.html",
+  "measurement": "/eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_fake_2024_snapshot_complete_20260726T1917Z/measurement_all_background_contamination.json",
+  "measurement_sha256": "6090b956bc001a475b43727753f60c464c5ba0a7b4a6b75c16b47276a113d04b",
+  "measurement_status": "complete",
+  "nominal_target_authoritative": true,
+  "nominal_target_subset_loss_fraction": 0.002000413878733531,
+  "pdf_count": 57,
+  "plot_count": 57,
+  "plots": [
+    {
+      "category": "transfer factor",
+      "pdf": "01_transfer_factor_inputs_EB.pdf",
+      "png": "01_transfer_factor_inputs_EB.png",
+      "title": "EB measurement pass/fail inputs vs photon pT"
+    },
+    {
+      "category": "transfer factor",
+      "pdf": "01_transfer_factor_inputs_EE.pdf",
+      "png": "01_transfer_factor_inputs_EE.png",
+      "title": "EE measurement pass/fail inputs vs photon pT"
+    },
+    {
+      "category": "transfer factor",
+      "pdf": "02_transfer_factors_EB.pdf",
+      "png": "02_transfer_factors_EB.png",
+      "title": "EB fake factors vs photon pT"
+    },
+    {
+      "category": "transfer factor",
+      "pdf": "02_transfer_factors_EE.pdf",
+      "png": "02_transfer_factors_EE.png",
+      "title": "EE fake factors vs photon pT"
+    },
+    {
+      "category": "application",
+      "pdf": "GCR__bjet_pt__application.pdf",
+      "png": "GCR__bjet_pt__application.png",
+      "title": "GCR/bjet_pt application composition"
+    },
+    {
+      "category": "target validation",
+      "pdf": "GCR__bjet_pt__target_validation.pdf",
+      "png": "GCR__bjet_pt__target_validation.png",
+      "title": "GCR/bjet_pt target validation"
+    },
+    {
+      "category": "systematics",
+      "pdf": "GCR__bjet_pt__systematics.pdf",
+      "png": "GCR__bjet_pt__systematics.png",
+      "title": "GCR/bjet_pt systematic variations"
+    },
+    {
+      "category": "application",
+      "pdf": "GCR__fatjet_pt__application.pdf",
+      "png": "GCR__fatjet_pt__application.png",
+      "title": "GCR/fatjet_pt application composition"
+    },
+    {
+      "category": "target validation",
+      "pdf": "GCR__fatjet_pt__target_validation.pdf",
+      "png": "GCR__fatjet_pt__target_validation.png",
+      "title": "GCR/fatjet_pt target validation"
+    },
+    {
+      "category": "systematics",
+      "pdf": "GCR__fatjet_pt__systematics.pdf",
+      "png": "GCR__fatjet_pt__systematics.png",
+      "title": "GCR/fatjet_pt systematic variations"
+    },
+    {
+      "category": "application",
+      "pdf": "GCR__ht__application.pdf",
+      "png": "GCR__ht__application.png",
+      "title": "GCR/ht application composition"
+    },
+    {
+      "category": "target validation",
+      "pdf": "GCR__ht__target_validation.pdf",
+      "png": "GCR__ht__target_validation.png",
+      "title": "GCR/ht target validation"
+    },
+    {
+      "category": "systematics",
+      "pdf": "GCR__ht__systematics.pdf",
+      "png": "GCR__ht__systematics.png",
+      "title": "GCR/ht systematic variations"
+    },
+    {
+      "category": "application",
+      "pdf": "GCR__jet_pt__application.pdf",
+      "png": "GCR__jet_pt__application.png",
+      "title": "GCR/jet_pt application composition"
+    },
+    {
+      "category": "target validation",
+      "pdf": "GCR__jet_pt__target_validation.pdf",
+      "png": "GCR__jet_pt__target_validation.png",
+      "title": "GCR/jet_pt target validation"
+    },
+    {
+      "category": "systematics",
+      "pdf": "GCR__jet_pt__systematics.pdf",
+      "png": "GCR__jet_pt__systematics.png",
+      "title": "GCR/jet_pt systematic variations"
+    },
+    {
+      "category": "application",
+      "pdf": "GCR__nb__application.pdf",
+      "png": "GCR__nb__application.png",
+      "title": "GCR/nb application composition"
+    },
+    {
+      "category": "target validation",
+      "pdf": "GCR__nb__target_validation.pdf",
+      "png": "GCR__nb__target_validation.png",
+      "title": "GCR/nb target validation"
+    },
+    {
+      "category": "systematics",
+      "pdf": "GCR__nb__systematics.pdf",
+      "png": "GCR__nb__systematics.png",
+      "title": "GCR/nb systematic variations"
+    },
+    {
+      "category": "application",
+      "pdf": "GCR__nfatjet__application.pdf",
+      "png": "GCR__nfatjet__application.png",
+      "title": "GCR/nfatjet application composition"
+    },
+    {
+      "category": "target validation",
+      "pdf": "GCR__nfatjet__target_validation.pdf",
+      "png": "GCR__nfatjet__target_validation.png",
+      "title": "GCR/nfatjet target validation"
+    },
+    {
+      "category": "systematics",
+      "pdf": "GCR__nfatjet__systematics.pdf",
+      "png": "GCR__nfatjet__systematics.png",
+      "title": "GCR/nfatjet systematic variations"
+    },
+    {
+      "category": "application",
+      "pdf": "GCR__njet__application.pdf",
+      "png": "GCR__njet__application.png",
+      "title": "GCR/njet application composition"
+    },
+    {
+      "category": "target validation",
+      "pdf": "GCR__njet__target_validation.pdf",
+      "png": "GCR__njet__target_validation.png",
+      "title": "GCR/njet target validation"
+    },
+    {
+      "category": "systematics",
+      "pdf": "GCR__njet__systematics.pdf",
+      "png": "GCR__njet__systematics.png",
+      "title": "GCR/njet systematic variations"
+    },
+    {
+      "category": "application",
+      "pdf": "GCR__ntop__application.pdf",
+      "png": "GCR__ntop__application.png",
+      "title": "GCR/ntop application composition"
+    },
+    {
+      "category": "target validation",
+      "pdf": "GCR__ntop__target_validation.pdf",
+      "png": "GCR__ntop__target_validation.png",
+      "title": "GCR/ntop target validation"
+    },
+    {
+      "category": "systematics",
+      "pdf": "GCR__ntop__systematics.pdf",
+      "png": "GCR__ntop__systematics.png",
+      "title": "GCR/ntop systematic variations"
+    },
+    {
+      "category": "application",
+      "pdf": "GCR__nw__application.pdf",
+      "png": "GCR__nw__application.png",
+      "title": "GCR/nw application composition"
+    },
+    {
+      "category": "target validation",
+      "pdf": "GCR__nw__target_validation.pdf",
+      "png": "GCR__nw__target_validation.png",
+      "title": "GCR/nw target validation"
+    },
+    {
+      "category": "systematics",
+      "pdf": "GCR__nw__systematics.pdf",
+      "png": "GCR__nw__systematics.png",
+      "title": "GCR/nw systematic variations"
+    },
+    {
+      "category": "application",
+      "pdf": "GCR__recoil__application.pdf",
+      "png": "GCR__recoil__application.png",
+      "title": "GCR/recoil application composition"
+    },
+    {
+      "category": "target validation",
+      "pdf": "GCR__recoil__target_validation.pdf",
+      "png": "GCR__recoil__target_validation.png",
+      "title": "GCR/recoil target validation"
+    },
+    {
+      "category": "systematics",
+      "pdf": "GCR__recoil__systematics.pdf",
+      "png": "GCR__recoil__systematics.png",
+      "title": "GCR/recoil systematic variations"
+    },
+    {
+      "category": "application",
+      "pdf": "GCR__ut__application.pdf",
+      "png": "GCR__ut__application.png",
+      "title": "GCR/ut application composition"
+    },
+    {
+      "category": "target validation",
+      "pdf": "GCR__ut__target_validation.pdf",
+      "png": "GCR__ut__target_validation.png",
+      "title": "GCR/ut target validation"
+    },
+    {
+      "category": "systematics",
+      "pdf": "GCR__ut__systematics.pdf",
+      "png": "GCR__ut__systematics.png",
+      "title": "GCR/ut systematic variations"
+    },
+    {
+      "category": "application",
+      "pdf": "GCR_Nt0__recoil__application.pdf",
+      "png": "GCR_Nt0__recoil__application.png",
+      "title": "GCR_Nt0/recoil application composition"
+    },
+    {
+      "category": "target validation",
+      "pdf": "GCR_Nt0__recoil__target_validation.pdf",
+      "png": "GCR_Nt0__recoil__target_validation.png",
+      "title": "GCR_Nt0/recoil target validation"
+    },
+    {
+      "category": "systematics",
+      "pdf": "GCR_Nt0__recoil__systematics.pdf",
+      "png": "GCR_Nt0__recoil__systematics.png",
+      "title": "GCR_Nt0/recoil systematic variations"
+    },
+    {
+      "category": "application",
+      "pdf": "GCR_Nt1__recoil__application.pdf",
+      "png": "GCR_Nt1__recoil__application.png",
+      "title": "GCR_Nt1/recoil application composition"
+    },
+    {
+      "category": "target validation",
+      "pdf": "GCR_Nt1__recoil__target_validation.pdf",
+      "png": "GCR_Nt1__recoil__target_validation.png",
+      "title": "GCR_Nt1/recoil target validation"
+    },
+    {
+      "category": "systematics",
+      "pdf": "GCR_Nt1__recoil__systematics.pdf",
+      "png": "GCR_Nt1__recoil__systematics.png",
+      "title": "GCR_Nt1/recoil systematic variations"
+    },
+    {
+      "category": "QCD closure",
+      "pdf": "GCR__bjet_pt__qcd_closure.pdf",
+      "png": "GCR__bjet_pt__qcd_closure.png",
+      "title": "GCR/bjet_pt QCD truth-fake closure"
+    },
+    {
+      "category": "QCD closure",
+      "pdf": "GCR__fatjet_pt__qcd_closure.pdf",
+      "png": "GCR__fatjet_pt__qcd_closure.png",
+      "title": "GCR/fatjet_pt QCD truth-fake closure"
+    },
+    {
+      "category": "QCD closure",
+      "pdf": "GCR__ht__qcd_closure.pdf",
+      "png": "GCR__ht__qcd_closure.png",
+      "title": "GCR/ht QCD truth-fake closure"
+    },
+    {
+      "category": "QCD closure",
+      "pdf": "GCR__jet_pt__qcd_closure.pdf",
+      "png": "GCR__jet_pt__qcd_closure.png",
+      "title": "GCR/jet_pt QCD truth-fake closure"
+    },
+    {
+      "category": "QCD closure",
+      "pdf": "GCR__nb__qcd_closure.pdf",
+      "png": "GCR__nb__qcd_closure.png",
+      "title": "GCR/nb QCD truth-fake closure"
+    },
+    {
+      "category": "QCD closure",
+      "pdf": "GCR__nfatjet__qcd_closure.pdf",
+      "png": "GCR__nfatjet__qcd_closure.png",
+      "title": "GCR/nfatjet QCD truth-fake closure"
+    },
+    {
+      "category": "QCD closure",
+      "pdf": "GCR__njet__qcd_closure.pdf",
+      "png": "GCR__njet__qcd_closure.png",
+      "title": "GCR/njet QCD truth-fake closure"
+    },
+    {
+      "category": "QCD closure",
+      "pdf": "GCR__ntop__qcd_closure.pdf",
+      "png": "GCR__ntop__qcd_closure.png",
+      "title": "GCR/ntop QCD truth-fake closure"
+    },
+    {
+      "category": "QCD closure",
+      "pdf": "GCR__nw__qcd_closure.pdf",
+      "png": "GCR__nw__qcd_closure.png",
+      "title": "GCR/nw QCD truth-fake closure"
+    },
+    {
+      "category": "QCD closure",
+      "pdf": "GCR__recoil__qcd_closure.pdf",
+      "png": "GCR__recoil__qcd_closure.png",
+      "title": "GCR/recoil QCD truth-fake closure"
+    },
+    {
+      "category": "QCD closure",
+      "pdf": "GCR__ut__qcd_closure.pdf",
+      "png": "GCR__ut__qcd_closure.png",
+      "title": "GCR/ut QCD truth-fake closure"
+    },
+    {
+      "category": "QCD closure",
+      "pdf": "GCR_Nt0__recoil__qcd_closure.pdf",
+      "png": "GCR_Nt0__recoil__qcd_closure.png",
+      "title": "GCR_Nt0/recoil QCD truth-fake closure"
+    },
+    {
+      "category": "QCD closure",
+      "pdf": "GCR_Nt1__recoil__qcd_closure.pdf",
+      "png": "GCR_Nt1__recoil__qcd_closure.png",
+      "title": "GCR_Nt1/recoil QCD truth-fake closure"
+    },
+    {
+      "category": "QCD replacement",
+      "pdf": "GCR__ut__qcd_replacement_comparison.pdf",
+      "png": "GCR__ut__qcd_replacement_comparison.png",
+      "title": "GCR U_T: nominal, entire-QCD, and truth-fake-only policies"
+    }
+  ],
+  "png_count": 57,
+  "schema_version": "photon_fake_2024_plot_summary_v1",
+  "status": "complete"
+}

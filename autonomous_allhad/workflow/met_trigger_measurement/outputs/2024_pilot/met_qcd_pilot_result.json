@@ -1,0 +1,720 @@
+{
+  "schema_version": 1,
+  "measurement": "met_trigger_sf_2024",
+  "category": "qcd",
+  "status": "validation_pending",
+  "bin_edges_gev": [
+    100.0,
+    120.0,
+    140.0,
+    160.0,
+    180.0,
+    200.0,
+    220.0,
+    240.0,
+    250.0,
+    260.0,
+    270.0,
+    280.0,
+    290.0,
+    300.0,
+    350.0,
+    400.0,
+    500.0,
+    650.0,
+    800.0
+  ],
+  "data": {
+    "total": [
+      56.0,
+      36.0,
+      25.0,
+      11.0,
+      8.0,
+      7.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    "passed": [
+      7.0,
+      4.0,
+      7.0,
+      3.0,
+      6.0,
+      5.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    "sumw_total": [
+      56.0,
+      36.0,
+      25.0,
+      11.0,
+      8.0,
+      7.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    "sumw_passed": [
+      7.0,
+      4.0,
+      7.0,
+      3.0,
+      6.0,
+      5.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    "sumw2_total": [
+      56.0,
+      36.0,
+      25.0,
+      11.0,
+      8.0,
+      7.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    "sumw2_passed": [
+      7.0,
+      4.0,
+      7.0,
+      3.0,
+      6.0,
+      5.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ]
+  },
+  "mc": {
+    "total": [
+      383.0,
+      181.0,
+      88.0,
+      49.0,
+      31.0,
+      14.0,
+      10.0,
+      6.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      4.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "passed": [
+      26.0,
+      26.0,
+      23.0,
+      20.0,
+      11.0,
+      8.0,
+      7.0,
+      3.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      4.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "sumw_total": [
+      383.0,
+      181.0,
+      88.0,
+      49.0,
+      31.0,
+      14.0,
+      10.0,
+      6.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      4.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "sumw_passed": [
+      26.0,
+      26.0,
+      23.0,
+      20.0,
+      11.0,
+      8.0,
+      7.0,
+      3.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      4.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "sumw2_total": [
+      383.0,
+      181.0,
+      88.0,
+      49.0,
+      31.0,
+      14.0,
+      10.0,
+      6.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      4.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "sumw2_passed": [
+      26.0,
+      26.0,
+      23.0,
+      20.0,
+      11.0,
+      8.0,
+      7.0,
+      3.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      4.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "bins": [
+    {
+      "flat_index": 0,
+      "data_total": 56,
+      "data_passed": 7,
+      "data_efficiency": 0.125,
+      "data_interval": [
+        0.08007286720899058,
+        0.18582415777464334
+      ],
+      "mc_sumw_total": 383.0,
+      "mc_sumw_passed": 26.0,
+      "mc_sumw2_total": 383.0,
+      "mc_effective_entries": 383.0,
+      "mc_efficiency": 0.06788511749347259,
+      "mc_interval": [
+        0.056124399252110366,
+        0.08189643407995124
+      ],
+      "scale_factor": 1.8413461538461537,
+      "scale_factor_uncertainty": 0.97325712488403,
+      "valid": true,
+      "low_gev": 100.0,
+      "high_gev": 120.0
+    },
+    {
+      "flat_index": 1,
+      "data_total": 36,
+      "data_passed": 4,
+      "data_efficiency": 0.1111111111111111,
+      "data_interval": [
+        0.058705274839139995,
+        0.19028280919878626
+      ],
+      "mc_sumw_total": 181.0,
+      "mc_sumw_passed": 26.0,
+      "mc_sumw2_total": 181.0,
+      "mc_effective_entries": 181.0,
+      "mc_efficiency": 0.143646408839779,
+      "mc_interval": [
+        0.11953286955673455,
+        0.1716759216498503
+      ],
+      "scale_factor": 0.7735042735042735,
+      "scale_factor_uncertainty": 0.5714495057243305,
+      "valid": true,
+      "low_gev": 120.0,
+      "high_gev": 140.0
+    },
+    {
+      "flat_index": 2,
+      "data_total": 25,
+      "data_passed": 7,
+      "data_efficiency": 0.28,
+      "data_interval": [
+        0.18302456310973447,
+        0.3978971656216488
+      ],
+      "mc_sumw_total": 88.0,
+      "mc_sumw_passed": 23.0,
+      "mc_sumw2_total": 88.0,
+      "mc_effective_entries": 88.0,
+      "mc_efficiency": 0.26136363636363635,
+      "mc_interval": [
+        0.21739389119107833,
+        0.31069599644636703
+      ],
+      "scale_factor": 1.071304347826087,
+      "scale_factor_uncertainty": 0.49433370983188846,
+      "valid": true,
+      "low_gev": 140.0,
+      "high_gev": 160.0
+    },
+    {
+      "flat_index": 3,
+      "data_total": 11,
+      "data_passed": 3,
+      "data_efficiency": 0.2727272727272727,
+      "data_interval": [
+        0.12833138101436523,
+        0.4687996314104712
+      ],
+      "mc_sumw_total": 49.0,
+      "mc_sumw_passed": 20.0,
+      "mc_sumw2_total": 49.0,
+      "mc_effective_entries": 49.0,
+      "mc_efficiency": 0.40816326530612246,
+      "mc_interval": [
+        0.3404680370260792,
+        0.4795319629718813
+      ],
+      "scale_factor": 0.6681818181818181,
+      "scale_factor_uncertainty": 0.4943808929133137,
+      "valid": true,
+      "low_gev": 160.0,
+      "high_gev": 180.0
+    },
+    {
+      "flat_index": 4,
+      "data_total": 8,
+      "data_passed": 6,
+      "data_efficiency": 0.75,
+      "data_interval": [
+        0.510433197316371,
+        0.9096593477919259
+      ],
+      "mc_sumw_total": 31.0,
+      "mc_sumw_passed": 11.0,
+      "mc_sumw2_total": 31.0,
+      "mc_effective_entries": 31.0,
+      "mc_efficiency": 0.3548387096774194,
+      "mc_interval": [
+        0.27467208287278466,
+        0.444077917122236
+      ],
+      "scale_factor": 2.1136363636363633,
+      "scale_factor_uncertainty": 0.85928886168608,
+      "valid": true,
+      "low_gev": 180.0,
+      "high_gev": 200.0
+    },
+    {
+      "flat_index": 5,
+      "data_total": 7,
+      "data_passed": 5,
+      "data_efficiency": 0.7142857142857143,
+      "data_interval": [
+        0.4543478387662838,
+        0.8964147422670101
+      ],
+      "mc_sumw_total": 14.0,
+      "mc_sumw_passed": 8.0,
+      "mc_sumw2_total": 14.0,
+      "mc_effective_entries": 14.0,
+      "mc_efficiency": 0.5714285714285714,
+      "mc_interval": [
+        0.43880265163544113,
+        0.6945306817029282
+      ],
+      "scale_factor": 1.25,
+      "scale_factor_uncertainty": 0.5395324165704302,
+      "valid": true,
+      "low_gev": 200.0,
+      "high_gev": 220.0
+    },
+    {
+      "flat_index": 6,
+      "data_total": 0,
+      "data_passed": 0,
+      "data_efficiency": null,
+      "data_interval": [
+        null,
+        null
+      ],
+      "mc_sumw_total": 10.0,
+      "mc_sumw_passed": 7.0,
+      "mc_sumw2_total": 10.0,
+      "mc_effective_entries": 10.0,
+      "mc_efficiency": 0.7,
+      "mc_interval": [
+        0.5424571844389914,
+        0.8211791792161007
+      ],
+      "scale_factor": null,
+      "scale_factor_uncertainty": null,
+      "valid": false,
+      "low_gev": 220.0,
+      "high_gev": 240.0
+    },
+    {
+      "flat_index": 7,
+      "data_total": 0,
+      "data_passed": 0,
+      "data_efficiency": null,
+      "data_interval": [
+        null,
+        null
+      ],
+      "mc_sumw_total": 6.0,
+      "mc_sumw_passed": 3.0,
+      "mc_sumw2_total": 6.0,
+      "mc_effective_entries": 6.0,
+      "mc_efficiency": 0.5,
+      "mc_interval": [
+        0.31101776354127175,
+        0.6889822364587282
+      ],
+      "scale_factor": null,
+      "scale_factor_uncertainty": null,
+      "valid": false,
+      "low_gev": 240.0,
+      "high_gev": 250.0
+    },
+    {
+      "flat_index": 8,
+      "data_total": 0,
+      "data_passed": 0,
+      "data_efficiency": null,
+      "data_interval": [
+        null,
+        null
+      ],
+      "mc_sumw_total": 0.0,
+      "mc_sumw_passed": 0.0,
+      "mc_sumw2_total": 0.0,
+      "mc_effective_entries": 0.0,
+      "mc_efficiency": null,
+      "mc_interval": [
+        null,
+        null
+      ],
+      "scale_factor": null,
+      "scale_factor_uncertainty": null,
+      "valid": false,
+      "low_gev": 250.0,
+      "high_gev": 260.0
+    },
+    {
+      "flat_index": 9,
+      "data_total": 0,
+      "data_passed": 0,
+      "data_efficiency": null,
+      "data_interval": [
+        null,
+        null
+      ],
+      "mc_sumw_total": 1.0,
+      "mc_sumw_passed": 1.0,
+      "mc_sumw2_total": 1.0,
+      "mc_effective_entries": 1.0,
+      "mc_efficiency": 1.0,
+      "mc_interval": [
+        0.5000000001416348,
+        0.9999999999999999
+      ],
+      "scale_factor": null,
+      "scale_factor_uncertainty": null,
+      "valid": false,
+      "low_gev": 260.0,
+      "high_gev": 270.0
+    },
+    {
+      "flat_index": 10,
+      "data_total": 0,
+      "data_passed": 0,
+      "data_efficiency": null,
+      "data_interval": [
+        null,
+        null
+      ],
+      "mc_sumw_total": 0.0,
+      "mc_sumw_passed": 0.0,
+      "mc_sumw2_total": 0.0,
+      "mc_effective_entries": 0.0,
+      "mc_efficiency": null,
+      "mc_interval": [
+        null,
+        null
+      ],
+      "scale_factor": null,
+      "scale_factor_uncertainty": null,
+      "valid": false,
+      "low_gev": 270.0,
+      "high_gev": 280.0
+    },
+    {
+      "flat_index": 11,
+      "data_total": 0,
+      "data_passed": 0,
+      "data_efficiency": null,
+      "data_interval": [
+        null,
+        null
+      ],
+      "mc_sumw_total": 0.0,
+      "mc_sumw_passed": 0.0,
+      "mc_sumw2_total": 0.0,
+      "mc_effective_entries": 0.0,
+      "mc_efficiency": null,
+      "mc_interval": [
+        null,
+        null
+      ],
+      "scale_factor": null,
+      "scale_factor_uncertainty": null,
+      "valid": false,
+      "low_gev": 280.0,
+      "high_gev": 290.0
+    },
+    {
+      "flat_index": 12,
+      "data_total": 0,
+      "data_passed": 0,
+      "data_efficiency": null,
+      "data_interval": [
+        null,
+        null
+      ],
+      "mc_sumw_total": 0.0,
+      "mc_sumw_passed": 0.0,
+      "mc_sumw2_total": 0.0,
+      "mc_effective_entries": 0.0,
+      "mc_efficiency": null,
+      "mc_interval": [
+        null,
+        null
+      ],
+      "scale_factor": null,
+      "scale_factor_uncertainty": null,
+      "valid": false,
+      "low_gev": 290.0,
+      "high_gev": 300.0
+    },
+    {
+      "flat_index": 13,
+      "data_total": 1,
+      "data_passed": 1,
+      "data_efficiency": 1.0,
+      "data_interval": [
+        0.15865525400000002,
+        1.0
+      ],
+      "mc_sumw_total": 4.0,
+      "mc_sumw_passed": 4.0,
+      "mc_sumw2_total": 4.0,
+      "mc_effective_entries": 4.0,
+      "mc_efficiency": 1.0,
+      "mc_interval": [
+        0.8000000000906464,
+        1.0
+      ],
+      "scale_factor": 1.0,
+      "scale_factor_uncertainty": 0.8647895591330563,
+      "valid": true,
+      "low_gev": 300.0,
+      "high_gev": 350.0
+    },
+    {
+      "flat_index": 14,
+      "data_total": 0,
+      "data_passed": 0,
+      "data_efficiency": null,
+      "data_interval": [
+        null,
+        null
+      ],
+      "mc_sumw_total": 0.0,
+      "mc_sumw_passed": 0.0,
+      "mc_sumw2_total": 0.0,
+      "mc_effective_entries": 0.0,
+      "mc_efficiency": null,
+      "mc_interval": [
+        null,
+        null
+      ],
+      "scale_factor": null,
+      "scale_factor_uncertainty": null,
+      "valid": false,
+      "low_gev": 350.0,
+      "high_gev": 400.0
+    },
+    {
+      "flat_index": 15,
+      "data_total": 0,
+      "data_passed": 0,
+      "data_efficiency": null,
+      "data_interval": [
+        null,
+        null
+      ],
+      "mc_sumw_total": 0.0,
+      "mc_sumw_passed": 0.0,
+      "mc_sumw2_total": 0.0,
+      "mc_effective_entries": 0.0,
+      "mc_efficiency": null,
+      "mc_interval": [
+        null,
+        null
+      ],
+      "scale_factor": null,
+      "scale_factor_uncertainty": null,
+      "valid": false,
+      "low_gev": 400.0,
+      "high_gev": 500.0
+    },
+    {
+      "flat_index": 16,
+      "data_total": 1,
+      "data_passed": 1,
+      "data_efficiency": 1.0,
+      "data_interval": [
+        0.15865525400000002,
+        1.0
+      ],
+      "mc_sumw_total": 0.0,
+      "mc_sumw_passed": 0.0,
+      "mc_sumw2_total": 0.0,
+      "mc_effective_entries": 0.0,
+      "mc_efficiency": null,
+      "mc_interval": [
+        null,
+        null
+      ],
+      "scale_factor": null,
+      "scale_factor_uncertainty": null,
+      "valid": false,
+      "low_gev": 500.0,
+      "high_gev": 650.0
+    },
+    {
+      "flat_index": 17,
+      "data_total": 0,
+      "data_passed": 0,
+      "data_efficiency": null,
+      "data_interval": [
+        null,
+        null
+      ],
+      "mc_sumw_total": 0.0,
+      "mc_sumw_passed": 0.0,
+      "mc_sumw2_total": 0.0,
+      "mc_effective_entries": 0.0,
+      "mc_efficiency": null,
+      "mc_interval": [
+        null,
+        null
+      ],
+      "scale_factor": null,
+      "scale_factor_uncertainty": null,
+      "valid": false,
+      "low_gev": 650.0,
+      "high_gev": 800.0
+    }
+  ],
+  "processing": {
+    "roots_processed": 2,
+    "roots_skipped": 2,
+    "roots_failed": [],
+    "duplicates_removed": 0,
+    "started_unix": 1785752631.5459986,
+    "completed_unix": 1785752631.6905842
+  },
+  "adoption_gates": [
+    "PFHT reference path presence and per-run prescale audit",
+    "per-era closure",
+    "genuine and QCD data/MC numerator-denominator counts",
+    "finite positive scale factors in every analysis bin",
+    "alternate binning stability"
+  ]
+}

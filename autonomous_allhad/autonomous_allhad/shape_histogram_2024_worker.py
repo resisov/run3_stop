@@ -17,6 +17,7 @@ import numpy as np
 from . import flat_ntuple_worker as flat
 from . import intermediate_2024_worker as intermediate
 from . import real_subset_worker as baseline
+from .analysis_scale_factors import REQUIRED_ANALYSIS_SF_COMPONENTS
 from .object_corrections_2024 import (
     JES_SOURCES,
     branch_audit,
@@ -83,6 +84,12 @@ VARIATION_GROUPS = {
         "tauEnergyScaleDown",
     ),
 }
+VARIATION_GROUPS.update(
+    {
+        nuisance: (f"{nuisance}Up", f"{nuisance}Down")
+        for nuisance in FINAL_SHAPE_NUISANCES
+    }
+)
 OUTPUT_SCHEMA = "shape_histogram_2024_shard_v4_streamed_parallel_fullselection"
 OUTPUT_SECTIONS = (
     "histograms",
@@ -229,6 +236,17 @@ def fill_shape_histograms(
         .setdefault(variation, builder.empty_index_hist(len(builder.selected_an17_recoil54_labels())))
     )
     builder.add_index_hist(leaf54, indices54, weights)
+    indices60 = builder.selected_an17_recoil60_indices(chunk, n, sr_mask)
+    leaf60 = (
+        target["search_bin_histograms"]
+        .setdefault(builder.EXTENDED_RECOIL60_SCHEME, {})
+        .setdefault(label, {})
+        .setdefault(
+            variation,
+            builder.empty_index_hist(len(builder.selected_an17_recoil60_labels())),
+        )
+    )
+    builder.add_index_hist(leaf60, indices60, weights)
 
     for lowdm_region, lowdm_channel in builder.LOWDM_REGION_MAP.items():
         mask = builder.lowdm_region_mask(chunk, lowdm_region, n)
@@ -240,12 +258,12 @@ def fill_shape_histograms(
             n,
             -1,
         )
-        indices = np.where(mask, indices, -1)
+        indices = builder.lowdm_nbge1_indices(np.where(mask, indices, -1))
         leaf = (
             target["search_bin_histograms"]
             .setdefault(lowdm_channel, {})
             .setdefault(label, {})
-            .setdefault(variation, builder.empty_index_hist(len(builder.LOWDM_42BIN_LABELS)))
+            .setdefault(variation, builder.empty_index_hist(len(builder.LOWDM_34BIN_LABELS)))
         )
         builder.add_index_hist(leaf, indices, weights)
         lowdm_values = {
@@ -292,6 +310,24 @@ def weight_fallbacks(chunk_summary: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def record_entry_bounds(record: dict[str, Any], tree_entries: int) -> tuple[int, int]:
+    """Return the validated half-open Events range assigned to one record."""
+    entry_start = int(record.get("entry_start", 0))
+    entry_stop = int(record.get("entry_stop", tree_entries))
+    if entry_start < 0 or entry_stop < entry_start or entry_stop > int(tree_entries):
+        raise RuntimeError(
+            "invalid Events entry range "
+            f"[{entry_start}, {entry_stop}) for tree with {tree_entries} entries"
+        )
+    expected_events = record.get("segment_events")
+    if expected_events is not None and int(expected_events) != entry_stop - entry_start:
+        raise RuntimeError(
+            "segment event count does not match its entry range: "
+            f"{expected_events} vs {entry_stop - entry_start}"
+        )
+    return entry_start, entry_stop
+
+
 def process_record(
     builder: Any,
     record: dict[str, Any],
@@ -318,13 +354,17 @@ def process_record(
             raise RuntimeError("Events tree missing")
         tree = root_file["Events"]
         branches = required_read_branches(tree)
+        assigned_start, assigned_stop = record_entry_bounds(
+            record,
+            int(tree.num_entries),
+        )
         chunks_seen = 0
         file_events = 0
         file_evaluations = 0
-        for entry_start in range(0, int(tree.num_entries), chunk_size):
+        for entry_start in range(assigned_start, assigned_stop, chunk_size):
             if max_chunks_per_file is not None and chunks_seen >= max_chunks_per_file:
                 break
-            entry_stop = min(entry_start + chunk_size, int(tree.num_entries))
+            entry_stop = min(entry_start + chunk_size, assigned_stop)
             arrays = tree.arrays(branches, entry_start=entry_start, entry_stop=entry_stop, library="ak")
             raw_entries = len(arrays)
             file_events += raw_entries
@@ -364,6 +404,17 @@ def process_record(
                 btag = ((chunk_summary.get("scale_factor_status") or {}).get("components") or {}).get("btagSF") or {}
                 if not btag.get("applied"):
                     raise RuntimeError(f"btagSF unavailable for {dataset}: {btag}")
+                for component in REQUIRED_ANALYSIS_SF_COMPONENTS:
+                    component_status = (
+                        (chunk_summary.get("scale_factor_status") or {})
+                        .get("components", {})
+                        .get(component, {})
+                    )
+                    if not component_status.get("applied"):
+                        raise RuntimeError(
+                            f"required analysis SF {component} unavailable for "
+                            f"{dataset}: {component_status}"
+                        )
                 summary.setdefault("btag_sf_status", {}).setdefault(variation, btag)
                 if fallback:
                     summary.setdefault("weight_fallbacks", {}).setdefault(variation, {}).update(fallback)
@@ -378,6 +429,14 @@ def process_record(
                     variation, chunk_summary.get("object_corrections_2024")
                 )
             chunks_seen += 1
+        if (
+            max_chunks_per_file is None
+            and file_events != assigned_stop - assigned_start
+        ):
+            raise RuntimeError(
+                "processed Events entries do not match the assigned range: "
+                f"{file_events} vs {assigned_stop - assigned_start}"
+            )
         target["files_processed"] += 1
         target["events_read"] += file_events
         target["variation_event_evaluations"] += file_evaluations
@@ -388,6 +447,11 @@ def process_record(
             {
                 "dataset": dataset,
                 "file_path": file_path,
+                "source_record_digest": record.get("source_record_digest"),
+                "segment_id": record.get("segment_id"),
+                "entry_start": assigned_start,
+                "entry_stop": assigned_stop,
+                "tree_entries": int(tree.num_entries),
                 "events_read": file_events,
                 "variation_event_evaluations": file_evaluations,
                 "wall_time_s": round(time.time() - start_time, 3),
@@ -582,6 +646,10 @@ def main(argv: list[str] | None = None) -> int:
         "source_shard": str(shard_path),
         "source_record_digest": shard.get("record_digest"),
         "files_attempted": len(records),
+        "segments_attempted": len(records),
+        "physical_files_attempted": len(
+            {str(record.get("file_path") or "") for record in records}
+        ),
         "files_processed": 0,
         "events_read": 0,
         "variation_event_evaluations": 0,
@@ -650,6 +718,14 @@ def main(argv: list[str] | None = None) -> int:
             _merge_dataset_records(datasets, result["datasets"])
             _merge_record_summary(summary, result["summary"])
 
+    summary["segments_processed"] = int(summary["files_processed"])
+    summary["physical_files_processed"] = len(
+        {
+            str(record.get("file_path") or "")
+            for record in summary.get("file_records") or []
+            if record.get("status") == "complete"
+        }
+    )
     if summary["files_processed"] == summary["files_attempted"]:
         status = "complete"
     elif summary["files_processed"] > 0:
@@ -686,19 +762,28 @@ def main(argv: list[str] | None = None) -> int:
                 "selected_an17_bins_1based": builder.SELECTED_AN17_RECOIL_BINS_1BASED,
                 "recoil_pt_bins": builder.RECOIL_PT_BINS,
             },
+            builder.EXTENDED_RECOIL60_SCHEME: {
+                "bin_labels": builder.selected_an17_recoil60_labels(),
+                "selection": "the adopted feature_SR categorization with Nb=2,Nt>=2,NW=0 inserted as bins 37--42, all classes split into six recoil/MET bins",
+                "base_scheme": builder.SELECTED_RECOIL54_SCHEME,
+                "extra_category": builder.EXTENDED_RECOIL60_CATEGORY_KEY,
+                "recoil_pt_bins": builder.RECOIL_PT_BINS,
+            },
             **{
                 channel: {
-                    "bin_labels": builder.LOWDM_42BIN_LABELS,
-                    "selection": f"feature_lowdm_{region}",
+                    "bin_labels": builder.LOWDM_34BIN_LABELS,
+                    "selection": f"feature_lowdm_{region} && Nb>=1",
                     "delta_m": "low",
                     "region": region,
+                    "category_sizes": builder.LOWDM_NBGE1_CATEGORY_SIZES,
+                    "removed_categories": builder.LOWDM_REMOVED_NB0_CATEGORY_SIZES,
                 }
                 for region, channel in builder.LOWDM_REGION_MAP.items()
             },
         },
         "lowdm_region_policy": {
             "status": "same_as_nominal_builder",
-            "search_bins": "42-bin Nsv-inclusive Low-dM search scheme per region",
+            "search_bins": "34-bin Nsv-inclusive Low-dM search scheme per region with explicit Nb>=1",
             "isr_subjet_bveto": "diagnostic only; not applied",
             "mtb_requirement": "diagnostic only; mTb<175 is not applied",
             "regions": builder.LOWDM_REGION_MAP,
@@ -720,9 +805,9 @@ def main(argv: list[str] | None = None) -> int:
         "shape_nuisances": list(FINAL_SHAPE_NUISANCES),
         "variations": list(variations),
         "search_bin_scheme": {
-            "name": builder.SELECTED_RECOIL54_SCHEME,
-            "bins": len(builder.selected_an17_recoil54_labels()),
-            "labels": builder.selected_an17_recoil54_labels(),
+            "name": builder.EXTENDED_RECOIL60_SCHEME,
+            "bins": len(builder.selected_an17_recoil60_labels()),
+            "labels": builder.selected_an17_recoil60_labels(),
         },
         "output_policy": {
             "event_rows_stored": False,

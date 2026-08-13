@@ -1,0 +1,14 @@
+root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/GJ_Bin-PTG-100to200_TuneCP5_13p6TeV_amcatnlo-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v3/90000/1367f784-a9a0-43de-b259-af5d3269cae1.root
+root://cms-xrd-global.cern.ch//store/data/Run2024D/ParkingDoubleMuonLowMass6/NANOAOD/MINIv6NANOv15-v1/2520000/1cc7af93-6930-4c17-a760-9f8f2e78d988.root
+root://cms-xrd-global.cern.ch//store/data/Run2024D/ParkingDoubleMuonLowMass6/NANOAOD/MINIv6NANOv15-v1/2520000/24412a8b-bf55-44d4-9a0e-a88f0910ac63.root
+root://cms-xrd-global.cern.ch//store/data/Run2024D/ParkingDoubleMuonLowMass6/NANOAOD/MINIv6NANOv15-v1/2520000/31e5e5a0-8c84-4f8d-a788-daf4b720eec3.root
+root://cms-xrd-global.cern.ch//store/data/Run2024D/ParkingDoubleMuonLowMass6/NANOAOD/MINIv6NANOv15-v1/2520000/8ae50be8-77c5-4a8e-90d5-ef904a890cbe.root
+root://cms-xrd-global.cern.ch//store/data/Run2024D/ParkingDoubleMuonLowMass6/NANOAOD/MINIv6NANOv15-v1/2560000/40c92b2f-fa45-4156-b35e-c07c08a71ac3.root
+root://cms-xrd-global.cern.ch//store/data/Run2024D/ParkingDoubleMuonLowMass6/NANOAOD/MINIv6NANOv15-v1/2810000/1ae5892f-26d8-4a89-90a3-b715827f7a65.root
+root://cms-xrd-global.cern.ch//store/data/Run2024G/ParkingDoubleMuonLowMass6/NANOAOD/MINIv6NANOv15-v3/2810000/b6c98f68-6c83-4c5a-bec7-296d39cf2616.root
+root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/dfe43cb6-175b-4cb9-937a-96fd5168ad06.root
+root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/e67ceb1c-c83d-495b-b047-063eae1f019c.root
+root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/e9946784-6078-4afa-96d8-9a1f9ca57eec.root
+root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/eaba22a0-c9a1-4949-8739-eadfc931d354.root
+root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/eada218b-07e0-482b-bbe1-f108d43a648b.root
+root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/ebd5d1da-2e83-4dae-9a48-c9467a7bdec5.root

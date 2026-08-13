@@ -1,0 +1,59 @@
+{
+  "status": "complete",
+  "timestamp_utc": "2026-08-12T12:26:55Z",
+  "scope": "2024 GCR-only unit-area plots",
+  "inputs": {
+    "histograms": "plot2024/hists.json",
+    "histograms_sha256": "889bcd2411276bb9313664886c1d87080dd4e8ca7a92221ca637fdbc2891e574",
+    "manifest": "plot2024/manifest.json",
+    "manifest_sha256": "59fff15ff899210016b7c291d49375c8644be8546748f736c2000295581b9c03",
+    "data_stream": "EGamma"
+  },
+  "plotter": {
+    "path": "autonomous_allhad/workflow/plot_control_search_bins_style.py",
+    "sha256": "b2efc93a2dbd2486d4e4c0e188838500e8b5c482ae0e4b4cc78cdfd6b73bda82"
+  },
+  "outputs": {
+    "highdm_plot_pairs": 12,
+    "lowdm_plot_pairs": 21,
+    "total_plot_pairs": 33,
+    "png_count": 33,
+    "pdf_count": 33,
+    "non_gcr_outputs_generated": 0,
+    "canvas_pixels": [2160, 1800],
+    "highdm_summary_sha256": "762b3b6848eeb2c9d8a466b2e28acf201dd6c3b35a9a4efdda1e027ade084eff",
+    "flat_summary_sha256": "0ab2de4c8137d83771ded60ccf3982b11b4935597dd947c675ced02465bc35af"
+  },
+  "normalization": {
+    "data": "one common factor over every bin and block in each plot",
+    "mc": "one common factor over every process, bin, and block in each plot",
+    "ratio": "normalized data divided by normalized total MC",
+    "ntop_split_policy": "one common data factor and one common MC factor across both Nt blocks"
+  },
+  "uncertainty_model": {
+    "data": "Poisson statistical uncertainty divided by the raw data integral",
+    "mc_stat": "raw MC statistical uncertainty divided by the raw MC integral",
+    "mc_shape_systematics": "each stored Up and Down total background shape independently normalized to unit area before the maximum envelope is evaluated",
+    "combination": "MC statistical and shape-systematic components added in quadrature",
+    "luminosity_included": false
+  },
+  "legend": {
+    "policy": "append the pre-normalization weighted yield to every displayed MC process and the raw event count to Data",
+    "example": "Top (12345)",
+    "normalization_unchanged": true
+  },
+  "checks": {
+    "data_integrals_equal_one": true,
+    "mc_integrals_equal_one": true,
+    "process_group_sums_match_total_mc": true,
+    "process_fractions_preserved": true,
+    "normalized_ratios_match_global_factor_formula": true,
+    "all_stored_systematic_shapes_integrate_to_one": true,
+    "luminosity_uncertainty_omitted": true,
+    "all_png_pdf_pairs_nonempty": true,
+    "all_canvases_consistent": true,
+    "raw_yields_recorded_for_all_plots": true,
+    "visual_qa_complete": true,
+    "public_site_modified": false
+  }
+}

@@ -37,6 +37,14 @@ x509up*
 *.pkl
 *.pickle
 
+# Repository-root scratch and rendered handoff outputs. Canonical analysis
+# artifacts belong under autonomous_allhad/reports, results, validation, or docs.
+/output/
+/tmp/
+
+# Local communication audit records may contain personal recipients.
+autonomous_allhad/reports/**/email-send-record.json
+
 # Logs and batch outputs
 *.log
 *.stdout

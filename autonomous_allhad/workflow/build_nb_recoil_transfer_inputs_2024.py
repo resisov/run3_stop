@@ -21,6 +21,7 @@ if str(THIS_DIR) not in sys.path:
     sys.path.insert(0, str(THIS_DIR))
 
 import build_flat_boosted_recoil_hists as bh  # noqa: E402
+from autonomous_allhad.sidecar_store import read_root_metadata  # noqa: E402
 
 
 HIGH_EDGES = np.asarray(bh.RECOIL_PT_BINS, dtype=float)
@@ -79,8 +80,9 @@ def fill_leaf(
     valid = (
         mask
         & np.isfinite(values)
-        & np.isfinite(weights)
+        & bh.finite_hist_weight_mask(weights)
         & (values >= edges[0])
+        & (values <= edges[-1])
     )
     if not np.any(valid):
         return
@@ -111,7 +113,7 @@ def fill_index_leaf(
 ) -> None:
     valid = (
         mask
-        & np.isfinite(weights)
+        & bh.finite_hist_weight_mask(weights)
         & (indices >= 0)
         & (indices < len(leaf["sumw"]))
     )
@@ -165,6 +167,11 @@ def process_root(
     normalization_name: str,
     dy_policy: str,
     step_size: int,
+    include_data: bool,
+    nominal_only: bool,
+    lowdm_llcr_nb1_only: bool,
+    analysis_sf_components: tuple[str, ...],
+    regions: tuple[str, ...],
 ) -> dict[str, Any]:
     root_path = Path(root_name)
     repo = Path(repo_name)
@@ -179,11 +186,14 @@ def process_root(
             "datasets": {},
         },
     }
-    meta_path = root_path.with_suffix(".json")
-    if not root_path.exists() or not meta_path.exists():
+    if not root_path.exists():
         output["summary"]["missing"] = True
         return output
-    meta = read_json(meta_path)
+    try:
+        meta = read_root_metadata(root_path)
+    except FileNotFoundError:
+        output["summary"]["missing"] = True
+        return output
     with uproot.open(root_path) as root_file:
         tree = root_file["Events"]
         present = set(tree.keys())
@@ -208,8 +218,19 @@ def process_root(
                 dataset, process, is_data, is_signal = bh.dataset_label(
                     meta, dataset_id
                 )
-                if is_data or is_signal or not bh.dy_ptll_dataset_allowed(
+                if (
+                    is_signal
+                    or (is_data and not include_data)
+                    or (
+                        is_data
+                        and not any(
+                            bh.data_process_allowed(process, region)
+                            for region in regions
+                        )
+                    )
+                    or not bh.dy_ptll_dataset_allowed(
                     dataset, process, dy_policy
+                    )
                 ):
                     continue
                 arrays, inputs = bh.flat_arrays_for_weights(sub)
@@ -219,57 +240,134 @@ def process_root(
                     norm,
                     sub,
                     dataset_id,
-                    is_data=False,
-                    is_signal=False,
-                    require_normalization=True,
-                )
-                _generator, variations, status = bh.compute_weight_bundle(
-                    arrays,
-                    repo,
                     dataset,
-                    process,
-                    year,
-                    inputs["n"],
-                    inputs["jet_pt"],
-                    inputs["jet_eta"],
-                    inputs["jet_hadflav"],
-                    inputs["b_med"],
-                    inputs["e_eta"],
-                    inputs["e_delta_eta_sc"],
-                    inputs["e_pt"],
-                    inputs["e_phi"],
-                    inputs["e_veto"],
-                    inputs["e_med"],
-                    inputs["n_e_veto"],
-                    inputs["n_e_med"],
-                    inputs["m_eta"],
-                    inputs["m_pt"],
-                    inputs["m_phi"],
-                    inputs["m_loose"],
-                    inputs["m_med"],
-                    inputs["n_m_loose"],
-                    inputs["n_m_med"],
-                    inputs["p_eta"],
-                    inputs["p_pt"],
-                    inputs["p_phi"],
-                    inputs["p_med"],
-                    inputs["gcr_mask"],
+                    is_data=is_data,
+                    is_signal=False,
+                    require_normalization=not is_data,
                 )
-                btag_status = (status.get("components") or {}).get("btagSF") or {}
-                if not btag_status.get("applied"):
-                    raise RuntimeError(
-                        f"{root_path}: btagSF unavailable for {dataset}: {btag_status}"
+                if is_data:
+                    variations = {"nominal": np.ones(inputs["n"], dtype=float)}
+                else:
+                    _generator, variations, status = bh.compute_weight_bundle(
+                        arrays,
+                        repo,
+                        dataset,
+                        process,
+                        year,
+                        inputs["n"],
+                        inputs["jet_pt"],
+                        inputs["jet_eta"],
+                        inputs["jet_hadflav"],
+                        inputs["b_med"],
+                        inputs["e_eta"],
+                        inputs["e_delta_eta_sc"],
+                        inputs["e_pt"],
+                        inputs["e_phi"],
+                        inputs["e_veto"],
+                        inputs["e_med"],
+                        inputs["n_e_veto"],
+                        inputs["n_e_med"],
+                        inputs["m_eta"],
+                        inputs["m_pt"],
+                        inputs["m_phi"],
+                        inputs["m_loose"],
+                        inputs["m_med"],
+                        inputs["n_m_loose"],
+                        inputs["n_m_med"],
+                        inputs["p_eta"],
+                        inputs["p_pt"],
+                        inputs["p_phi"],
+                        inputs["p_med"],
+                        inputs["gcr_mask"],
+                        met_pt=inputs["met_pt"],
+                        met_trigger_mask=inputs["met_trigger_mask"],
+                        analysis_sf_components=analysis_sf_components,
                     )
-                label = bh.sample_label(process, False, False, sub)
+                    btag_status = (
+                        (status.get("components") or {}).get("btagSF") or {}
+                    )
+                    if not btag_status.get("applied"):
+                        raise RuntimeError(
+                            f"{root_path}: btagSF unavailable for {dataset}: "
+                            f"{btag_status}"
+                        )
+                    for component in analysis_sf_components:
+                        component_status = (
+                            (status.get("components") or {}).get(component) or {}
+                        )
+                        if not component_status.get("applied"):
+                            raise RuntimeError(
+                                f"{root_path}: required analysis SF {component} "
+                                f"unavailable for {dataset}: {component_status}"
+                            )
+                    variations = bh.histogram_variations(
+                        variations,
+                        nominal_only=nominal_only,
+                    )
+                label = bh.sample_label(
+                    process,
+                    is_data,
+                    False,
+                    sub,
+                    dataset,
+                )
                 output["summary"]["datasets"][dataset] = (
                     int(output["summary"]["datasets"].get(dataset, 0)) + inputs["n"]
                 )
                 output["summary"]["events_weighted"] += inputs["n"]
 
-                high_sr_index = bh.selected_an17_recoil60_indices(
-                    sub,
-                    inputs["n"],
-                    bh.as_bool(sub["feature_SR"], inputs["n"]),
+                if lowdm_llcr_nb1_only:
+                    if is_data and not bh.data_process_allowed(process, "LLCR"):
+                        continue
+                    low_index = bh.lowdm_nbge1_indices(
+                        np.where(
+                            bh.lowdm_region_mask(sub, "LLCR", inputs["n"]),
+                            bh.int_field(
+                                sub,
+                                "lowdm_search_bin_LLCR",
+                                inputs["n"],
+                                -1,
+                            ),
+                            -1,
+                        )
+                    )
+                    group_mask = (low_index >= 0) & (low_index < 16)
+                    low_values = bh.finite_array(
+                        sub["met"],
+                        inputs["n"],
+                        0.0,
+                    )
+                    for variation_name, raw_weight in variations.items():
+                        weights = (
+                            bh.finite_array(raw_weight, inputs["n"], 0.0)
+                            * norm_values
+                        )
+                        fill_leaf(
+                            nested_leaf(
+                                output["lowdm"]["recoil"],
+                                (
+                                    "LLCR",
+                                    "Nb1",
+                                    label,
+                                    variation_name,
+                                ),
+                                len(LOW_EDGES) - 1,
+                            ),
+                            low_values,
+                            weights,
+                            group_mask,
+                            LOW_EDGES,
+                        )
+                    continue
+
+                high_sr_index = (
+                    bh.selected_an17_recoil60_indices(
+                        sub,
+                        inputs["n"],
+                        bh.as_bool(sub["feature_SR"], inputs["n"]),
+                    )
+                    if "SR" in regions
+                    else np.full(inputs["n"], -1, dtype=np.int64)
                 )
                 low_indices = {
                     region: bh.lowdm_nbge1_indices(
@@ -284,13 +382,18 @@ def process_root(
                             -1,
                         )
                     )
-                    for region in REGIONS
+                    for region in regions
                 }
                 for variation_name, raw_weight in variations.items():
                     weights = (
                         bh.finite_array(raw_weight, inputs["n"], 0.0) * norm_values
                     )
-                    for region in REGIONS:
+                    for region in regions:
+                        # Never record the blinded signal-region observation.
+                        if is_data and region == "SR":
+                            continue
+                        if is_data and not bh.data_process_allowed(process, region):
+                            continue
                         if region == "SR":
                             high_mask = high_sr_index >= 0
                             high_values = bh.finite_array(
@@ -422,12 +525,32 @@ def main() -> int:
     parser.add_argument("--jobs", type=int, default=12)
     parser.add_argument("--step-size", type=int, default=100000)
     parser.add_argument("--dy-ptll-policy", default="ptll100_200")
+    parser.add_argument("--include-data", action="store_true")
+    parser.add_argument("--nominal-only", action="store_true")
+    parser.add_argument("--lowdm-llcr-nb1-only", action="store_true")
+    parser.add_argument(
+        "--regions",
+        nargs="+",
+        choices=REGIONS,
+        default=list(REGIONS),
+    )
+    parser.add_argument("--exclude-root", action="append", default=[])
+    parser.add_argument(
+        "--analysis-sf-components",
+        nargs="+",
+        choices=bh.REQUIRED_ANALYSIS_SF_COMPONENTS,
+        default=list(bh.REQUIRED_ANALYSIS_SF_COMPONENTS),
+        help=(
+            "Analysis-specific SF components to apply and retain as "
+            "Up/Down variations."
+        ),
+    )
     args = parser.parse_args()
 
     roots = [
         line.strip()
         for line in args.input_list.read_text().splitlines()
-        if line.strip()
+        if line.strip() and line.strip() not in set(args.exclude_root)
     ]
     if len(set(roots)) != len(roots):
         raise SystemExit("duplicate ROOT paths in input list")
@@ -460,6 +583,12 @@ def main() -> int:
             "dy_ptll_policy": args.dy_ptll_policy,
             "jobs": args.jobs,
             "step_size": args.step_size,
+            "include_data": args.include_data,
+            "nominal_only": args.nominal_only,
+            "lowdm_llcr_nb1_only": args.lowdm_llcr_nb1_only,
+            "analysis_sf_components": list(args.analysis_sf_components),
+            "regions": list(args.regions),
+            "excluded_roots": list(args.exclude_root),
         },
     }
     with concurrent.futures.ProcessPoolExecutor(
@@ -473,6 +602,11 @@ def main() -> int:
                 str(args.normalization),
                 args.dy_ptll_policy,
                 args.step_size,
+                args.include_data,
+                args.nominal_only,
+                args.lowdm_llcr_nb1_only,
+                tuple(args.analysis_sf_components),
+                tuple(args.regions),
             ): root
             for root in roots
         }

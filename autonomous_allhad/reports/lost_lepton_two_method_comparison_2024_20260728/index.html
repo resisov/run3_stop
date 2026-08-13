@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>2024 Lost-lepton 두 방법 비교</title>
+<style>
+body { font-family: Arial, sans-serif; max-width: 1250px; margin: 2rem auto; padding: 0 1rem; color: #202124; }
+h1,h2 { color: #17365d; }
+.decision { background:#f8e7ea; border-left:5px solid #a51c30; padding:1rem; }
+.note { background:#eaf2f8; border-left:5px solid #2f6fae; padding:1rem; }
+table { border-collapse:collapse; width:100%; margin:1rem 0 2rem; }
+th,td { border:1px solid #b8bec6; padding:.55rem; text-align:left; }
+th { background:#17365d; color:white; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(420px,1fr)); gap:1rem; }
+figure { margin:0; border:1px solid #ccd2d8; padding:.5rem; }
+figure img { width:100%; }
+figcaption { color:#5f6368; font-size:.9rem; }
+a { color:#175ea8; }
+</style>
+</head>
+<body>
+<h1>2024 Lost-lepton 배경추정 두 방법의 상세 비교</h1>
+<p class="decision"><b>최종 판정:</b> MC-derived transfer factor와 현재의 monolithic event-level lepton-removal은 모두 nominal 배경추정에 채택하지 않는다.</p>
+<p class="note"><b>공통 정책:</b> Top = TT + ST이며 W만 독립 성분이다. 두 연구 모두 1,153개 ROOT와 361,054,245개 event를 처리했고 nominal 중간산출물은 수정하지 않았다.</p>
+<h2>문서</h2>
+<ul>
+<li><a href="output/pdf/lost_lepton_two_method_report_2024_ko.pdf">그림 포함 PDF 보고서</a></li>
+<li><a href="detailed_report_ko.md">상세 Markdown 원문</a></li>
+<li><a href="source_manifest.json">입력 파일 및 SHA-256 manifest</a></li>
+</ul>
+<h2>Data validation 요약</h2>
+<table>
+<thead><tr><th>Validation region</th><th>Raw Top+W MC</th><th>Removal</th><th>Removal max |pull|</th></tr></thead>
+<tbody><tr><td>high-Δm, Nb=0</td><td>0.644</td><td>0.598</td><td>16.06</td></tr><tr><td>high-Δm, Top enriched</td><td>0.741</td><td>0.807</td><td>23.42</td></tr><tr><td>low-Δm, low ISR</td><td>1.026</td><td>0.542</td><td>23.25</td></tr><tr><td>low-Δm, low pTmiss</td><td>0.993</td><td>0.367</td><td>30.92</td></tr><tr><td>low-Δm, low MET significance</td><td>1.140</td><td>0.273</td><td>2.72</td></tr></tbody>
+</table>
+<h2>핵심 차이</h2>
+<ul>
+<li>Transfer factor: MC technical closure는 통과하지만 data residual closure가 실패한다.</li>
+<li>Event removal: 적분 normalization 후에도 MC U_T/search-bin shape closure가 실패한다.</li>
+<li>두 방법 모두 low-Δm의 잘 맞는 raw MC를 악화시키므로 nominal central value로 사용할 수 없다.</li>
+</ul>
+<h2>Figures</h2>
+<div class="grid"><figure><a href="plots/tf_top_w_scale_factors.png"><img src="plots/tf_top_w_scale_factors.png"></a><figcaption>Top/W fitted scale factors</figcaption></figure><figure><a href="plots/tf_highdm_top_enriched_data_closure.png"><img src="plots/tf_highdm_top_enriched_data_closure.png"></a><figcaption>High-Δm: raw MC vs combined TF vs Top/W split</figcaption></figure><figure><a href="plots/tf_lowdm_met_data_closure.png"><img src="plots/tf_lowdm_met_data_closure.png"></a><figcaption>Low-Δm low-pTmiss: raw MC vs two TF estimates</figcaption></figure><figure><a href="plots/tf_lowdm_nb1_control_validation.png"><img src="plots/tf_lowdm_nb1_control_validation.png"></a><figcaption>Held-out low-Δm Nb=1 only; fit anchors are excluded</figcaption></figure><figure><a href="plots/removal_mc_highdm_ut.png"><img src="plots/removal_mc_highdm_ut.png"></a><figcaption>Removal MC high-Δm U_T closure</figcaption></figure><figure><a href="plots/removal_mc_lowdm_search42.png"><img src="plots/removal_mc_lowdm_search42.png"></a><figcaption>Removal MC low-Δm search-bin closure</figcaption></figure><figure><a href="plots/removal_highdm_top_enriched_data_closure.png"><img src="plots/removal_highdm_top_enriched_data_closure.png"></a><figcaption>Removal high-Δm data closure</figcaption></figure><figure><a href="plots/removal_lowdm_met_data_closure.png"><img src="plots/removal_lowdm_met_data_closure.png"></a><figcaption>Removal low-Δm low-pTmiss closure</figcaption></figure></div>
+</body>
+</html>

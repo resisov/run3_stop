@@ -1,0 +1,21 @@
+{
+  "audited_at": "2026-08-10T12:20:11Z",
+  "by_process": {
+    "EGamma": 644,
+    "GJ": 308,
+    "QCD": 592
+  },
+  "campaign": "autonomous_allhad/workflow/photon_fake_template_partial_followup_20260810T121110Z",
+  "checksum_verification": false,
+  "events_read": 3418425431,
+  "expected_jobs": 5795,
+  "files_attempted": 13370,
+  "files_processed": 13370,
+  "invalid_outputs": 0,
+  "missing_outputs": 4251,
+  "schema_version": "photon_fake_template_partial_snapshot_audit_2024_v1",
+  "selected_events": 393225,
+  "source_live_audit": "photon_fake_template_run2method_20260810/partial_followup_audit_20260810T121110Z.json",
+  "status": "incomplete",
+  "valid_outputs": 1544
+}

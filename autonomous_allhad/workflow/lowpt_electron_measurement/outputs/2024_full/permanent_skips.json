@@ -1,0 +1,216 @@
+{
+  "created_unix": 1785792582.5924637,
+  "data_lumi_coverage_complete": false,
+  "dataset_incomplete_threshold": 0.01,
+  "dataset_loss_summary": [
+    {
+      "dataset": "/EGamma0/Run2024G-MINIv6NANOv15-v2/NANOAOD",
+      "file_loss_fraction": 0.007058823529411765,
+      "files_permanently_skipped": 6,
+      "files_total": 850,
+      "incomplete": false
+    }
+  ],
+  "file_loss_fraction": 0.0011029411764705882,
+  "files_before_permanent_skips": 5440,
+  "files_permanently_skipped": 6,
+  "files_retained": 5434,
+  "incomplete_datasets": [],
+  "measurement": "veto_electron_5to10_sf_2024",
+  "records": [
+    {
+      "alternate_access_attempted": true,
+      "dataset": "/EGamma0/Run2024G-MINIv6NANOv15-v2/NANOAOD",
+      "failure_diagnostic": {
+        "access_attempts": [
+          {
+            "access_path": "root://eoscms.cern.ch//eos/cms/store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/dfe43cb6-175b-4cb9-937a-96fd5168ad06.root",
+            "error": "FileNotFoundError: file not found ([ERROR] Server responded with an error: [3011] Unable to open file /eos/cms/store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/dfe43cb6-175b-4cb9-937a-96fd5168ad06.root; No such file or directory\n)\n\n    'root://eoscms.cern.ch//eos/cms/store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/dfe43cb6-175b-4cb9-937a-96fd5168ad06.root'\n\nFiles may be specified as:\n   * str/bytes: relative or absolute filesystem path or URL, without any colons\n         other than Windows drive letter or URL schema.\n         Examples: \"rel/file.root\", \"C:\\abs\\file.root\", \"http://where/what.root\"\n   * str/bytes: same with an object-within-ROOT path, separated by a colon.\n         Example: \"rel/file.root:tdirectory/ttree\"\n   * pathlib.Path: always interpreted as a filesystem path or URL only (no\n         object-within-ROOT path), regardless of whether there are any colons.\n         Examples: Path(\"rel:/file.root\"), Path(\"/abs/path:stuff.root\")\n\nFunctions that accept many files (uproot.iterate, etc.) also allow:\n   * glob syntax in str/bytes and pathlib.Path.\n         Examples: Path(\"rel/*.root\"), \"/abs/*.root:tdirectory/ttree\"\n   * dict: keys are filesystem paths, values are objects-within-ROOT paths.\n         Example: {\"/data_v1/*.root\": \"ttree_v1\", \"/data_v2/*.root\": \"ttree_v2\"}\n   * already-open TTree objects.\n   * iterables of the above.\n"
+          },
+          {
+            "access_path": "root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/dfe43cb6-175b-4cb9-937a-96fd5168ad06.root",
+            "error": "OSError: XRootD error: [ERROR] Operation expired\nin file root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/dfe43cb6-175b-4cb9-937a-96fd5168ad06.root"
+          },
+          {
+            "access_path": "root://xrootd-cms.infn.it//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/dfe43cb6-175b-4cb9-937a-96fd5168ad06.root",
+            "error": "OSError: XRootD error: [ERROR] Operation expired\nin file root://xrootd-cms.infn.it//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/dfe43cb6-175b-4cb9-937a-96fd5168ad06.root"
+          },
+          {
+            "access_path": "root://cmsxrootd.fnal.gov//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/dfe43cb6-175b-4cb9-937a-96fd5168ad06.root",
+            "error": "OSError: XRootD error: [ERROR] Operation expired\nin file root://cmsxrootd.fnal.gov//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/dfe43cb6-175b-4cb9-937a-96fd5168ad06.root"
+          }
+        ],
+        "error": "OSError: XRootD error: [ERROR] Operation expired\nin file root://cmsxrootd.fnal.gov//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/dfe43cb6-175b-4cb9-937a-96fd5168ad06.root",
+        "path": "root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/dfe43cb6-175b-4cb9-937a-96fd5168ad06.root"
+      },
+      "file_index": 794,
+      "file_path": "root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/dfe43cb6-175b-4cb9-937a-96fd5168ad06.root",
+      "is_data": true,
+      "permanently_skipped": true,
+      "sample": "data",
+      "year": "2024"
+    },
+    {
+      "alternate_access_attempted": true,
+      "dataset": "/EGamma0/Run2024G-MINIv6NANOv15-v2/NANOAOD",
+      "failure_diagnostic": {
+        "access_attempts": [
+          {
+            "access_path": "root://eoscms.cern.ch//eos/cms/store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/e67ceb1c-c83d-495b-b047-063eae1f019c.root",
+            "error": "FileNotFoundError: file not found ([ERROR] Server responded with an error: [3011] Unable to open file /eos/cms/store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/e67ceb1c-c83d-495b-b047-063eae1f019c.root; No such file or directory\n)\n\n    'root://eoscms.cern.ch//eos/cms/store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/e67ceb1c-c83d-495b-b047-063eae1f019c.root'\n\nFiles may be specified as:\n   * str/bytes: relative or absolute filesystem path or URL, without any colons\n         other than Windows drive letter or URL schema.\n         Examples: \"rel/file.root\", \"C:\\abs\\file.root\", \"http://where/what.root\"\n   * str/bytes: same with an object-within-ROOT path, separated by a colon.\n         Example: \"rel/file.root:tdirectory/ttree\"\n   * pathlib.Path: always interpreted as a filesystem path or URL only (no\n         object-within-ROOT path), regardless of whether there are any colons.\n         Examples: Path(\"rel:/file.root\"), Path(\"/abs/path:stuff.root\")\n\nFunctions that accept many files (uproot.iterate, etc.) also allow:\n   * glob syntax in str/bytes and pathlib.Path.\n         Examples: Path(\"rel/*.root\"), \"/abs/*.root:tdirectory/ttree\"\n   * dict: keys are filesystem paths, values are objects-within-ROOT paths.\n         Example: {\"/data_v1/*.root\": \"ttree_v1\", \"/data_v2/*.root\": \"ttree_v2\"}\n   * already-open TTree objects.\n   * iterables of the above.\n"
+          },
+          {
+            "access_path": "root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/e67ceb1c-c83d-495b-b047-063eae1f019c.root",
+            "error": "OSError: XRootD error: [ERROR] Operation expired\nin file root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/e67ceb1c-c83d-495b-b047-063eae1f019c.root"
+          },
+          {
+            "access_path": "root://xrootd-cms.infn.it//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/e67ceb1c-c83d-495b-b047-063eae1f019c.root",
+            "error": "OSError: XRootD error: [ERROR] Operation expired\nin file root://xrootd-cms.infn.it//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/e67ceb1c-c83d-495b-b047-063eae1f019c.root"
+          },
+          {
+            "access_path": "root://cmsxrootd.fnal.gov//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/e67ceb1c-c83d-495b-b047-063eae1f019c.root",
+            "error": "OSError: XRootD error: [ERROR] Operation expired\nin file root://cmsxrootd.fnal.gov//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/e67ceb1c-c83d-495b-b047-063eae1f019c.root"
+          }
+        ],
+        "error": "OSError: XRootD error: [ERROR] Operation expired\nin file root://cmsxrootd.fnal.gov//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/e67ceb1c-c83d-495b-b047-063eae1f019c.root",
+        "path": "root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/e67ceb1c-c83d-495b-b047-063eae1f019c.root"
+      },
+      "file_index": 799,
+      "file_path": "root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/e67ceb1c-c83d-495b-b047-063eae1f019c.root",
+      "is_data": true,
+      "permanently_skipped": true,
+      "sample": "data",
+      "year": "2024"
+    },
+    {
+      "alternate_access_attempted": true,
+      "dataset": "/EGamma0/Run2024G-MINIv6NANOv15-v2/NANOAOD",
+      "failure_diagnostic": {
+        "access_attempts": [
+          {
+            "access_path": "root://eoscms.cern.ch//eos/cms/store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/e9946784-6078-4afa-96d8-9a1f9ca57eec.root",
+            "error": "FileNotFoundError: file not found ([ERROR] Server responded with an error: [3011] Unable to open file /eos/cms/store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/e9946784-6078-4afa-96d8-9a1f9ca57eec.root; No such file or directory\n)\n\n    'root://eoscms.cern.ch//eos/cms/store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/e9946784-6078-4afa-96d8-9a1f9ca57eec.root'\n\nFiles may be specified as:\n   * str/bytes: relative or absolute filesystem path or URL, without any colons\n         other than Windows drive letter or URL schema.\n         Examples: \"rel/file.root\", \"C:\\abs\\file.root\", \"http://where/what.root\"\n   * str/bytes: same with an object-within-ROOT path, separated by a colon.\n         Example: \"rel/file.root:tdirectory/ttree\"\n   * pathlib.Path: always interpreted as a filesystem path or URL only (no\n         object-within-ROOT path), regardless of whether there are any colons.\n         Examples: Path(\"rel:/file.root\"), Path(\"/abs/path:stuff.root\")\n\nFunctions that accept many files (uproot.iterate, etc.) also allow:\n   * glob syntax in str/bytes and pathlib.Path.\n         Examples: Path(\"rel/*.root\"), \"/abs/*.root:tdirectory/ttree\"\n   * dict: keys are filesystem paths, values are objects-within-ROOT paths.\n         Example: {\"/data_v1/*.root\": \"ttree_v1\", \"/data_v2/*.root\": \"ttree_v2\"}\n   * already-open TTree objects.\n   * iterables of the above.\n"
+          },
+          {
+            "access_path": "root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/e9946784-6078-4afa-96d8-9a1f9ca57eec.root",
+            "error": "OSError: XRootD error: [ERROR] Operation expired\nin file root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/e9946784-6078-4afa-96d8-9a1f9ca57eec.root"
+          },
+          {
+            "access_path": "root://xrootd-cms.infn.it//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/e9946784-6078-4afa-96d8-9a1f9ca57eec.root",
+            "error": "OSError: XRootD error: [ERROR] Operation expired\nin file root://xrootd-cms.infn.it//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/e9946784-6078-4afa-96d8-9a1f9ca57eec.root"
+          },
+          {
+            "access_path": "root://cmsxrootd.fnal.gov//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/e9946784-6078-4afa-96d8-9a1f9ca57eec.root",
+            "error": "OSError: XRootD error: [FATAL] Redirect limit has been reached\nin file root://cmsxrootd.fnal.gov//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/e9946784-6078-4afa-96d8-9a1f9ca57eec.root"
+          }
+        ],
+        "error": "OSError: XRootD error: [FATAL] Redirect limit has been reached\nin file root://cmsxrootd.fnal.gov//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/e9946784-6078-4afa-96d8-9a1f9ca57eec.root",
+        "path": "root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/e9946784-6078-4afa-96d8-9a1f9ca57eec.root"
+      },
+      "file_index": 804,
+      "file_path": "root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/e9946784-6078-4afa-96d8-9a1f9ca57eec.root",
+      "is_data": true,
+      "permanently_skipped": true,
+      "sample": "data",
+      "year": "2024"
+    },
+    {
+      "alternate_access_attempted": true,
+      "dataset": "/EGamma0/Run2024G-MINIv6NANOv15-v2/NANOAOD",
+      "failure_diagnostic": {
+        "access_attempts": [
+          {
+            "access_path": "root://eoscms.cern.ch//eos/cms/store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/eaba22a0-c9a1-4949-8739-eadfc931d354.root",
+            "error": "FileNotFoundError: file not found ([ERROR] Server responded with an error: [3011] Unable to open file /eos/cms/store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/eaba22a0-c9a1-4949-8739-eadfc931d354.root; No such file or directory\n)\n\n    'root://eoscms.cern.ch//eos/cms/store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/eaba22a0-c9a1-4949-8739-eadfc931d354.root'\n\nFiles may be specified as:\n   * str/bytes: relative or absolute filesystem path or URL, without any colons\n         other than Windows drive letter or URL schema.\n         Examples: \"rel/file.root\", \"C:\\abs\\file.root\", \"http://where/what.root\"\n   * str/bytes: same with an object-within-ROOT path, separated by a colon.\n         Example: \"rel/file.root:tdirectory/ttree\"\n   * pathlib.Path: always interpreted as a filesystem path or URL only (no\n         object-within-ROOT path), regardless of whether there are any colons.\n         Examples: Path(\"rel:/file.root\"), Path(\"/abs/path:stuff.root\")\n\nFunctions that accept many files (uproot.iterate, etc.) also allow:\n   * glob syntax in str/bytes and pathlib.Path.\n         Examples: Path(\"rel/*.root\"), \"/abs/*.root:tdirectory/ttree\"\n   * dict: keys are filesystem paths, values are objects-within-ROOT paths.\n         Example: {\"/data_v1/*.root\": \"ttree_v1\", \"/data_v2/*.root\": \"ttree_v2\"}\n   * already-open TTree objects.\n   * iterables of the above.\n"
+          },
+          {
+            "access_path": "root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/eaba22a0-c9a1-4949-8739-eadfc931d354.root",
+            "error": "OSError: XRootD error: [ERROR] Operation expired\nin file root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/eaba22a0-c9a1-4949-8739-eadfc931d354.root"
+          },
+          {
+            "access_path": "root://xrootd-cms.infn.it//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/eaba22a0-c9a1-4949-8739-eadfc931d354.root",
+            "error": "OSError: XRootD error: [ERROR] Operation expired\nin file root://xrootd-cms.infn.it//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/eaba22a0-c9a1-4949-8739-eadfc931d354.root"
+          },
+          {
+            "access_path": "root://cmsxrootd.fnal.gov//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/eaba22a0-c9a1-4949-8739-eadfc931d354.root",
+            "error": "OSError: XRootD error: [FATAL] Redirect limit has been reached\nin file root://cmsxrootd.fnal.gov//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/eaba22a0-c9a1-4949-8739-eadfc931d354.root"
+          }
+        ],
+        "error": "OSError: XRootD error: [FATAL] Redirect limit has been reached\nin file root://cmsxrootd.fnal.gov//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/eaba22a0-c9a1-4949-8739-eadfc931d354.root",
+        "path": "root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/eaba22a0-c9a1-4949-8739-eadfc931d354.root"
+      },
+      "file_index": 808,
+      "file_path": "root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/eaba22a0-c9a1-4949-8739-eadfc931d354.root",
+      "is_data": true,
+      "permanently_skipped": true,
+      "sample": "data",
+      "year": "2024"
+    },
+    {
+      "alternate_access_attempted": true,
+      "dataset": "/EGamma0/Run2024G-MINIv6NANOv15-v2/NANOAOD",
+      "failure_diagnostic": {
+        "access_attempts": [
+          {
+            "access_path": "root://eoscms.cern.ch//eos/cms/store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/eada218b-07e0-482b-bbe1-f108d43a648b.root",
+            "error": "FileNotFoundError: file not found ([ERROR] Server responded with an error: [3011] Unable to open file /eos/cms/store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/eada218b-07e0-482b-bbe1-f108d43a648b.root; No such file or directory\n)\n\n    'root://eoscms.cern.ch//eos/cms/store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/eada218b-07e0-482b-bbe1-f108d43a648b.root'\n\nFiles may be specified as:\n   * str/bytes: relative or absolute filesystem path or URL, without any colons\n         other than Windows drive letter or URL schema.\n         Examples: \"rel/file.root\", \"C:\\abs\\file.root\", \"http://where/what.root\"\n   * str/bytes: same with an object-within-ROOT path, separated by a colon.\n         Example: \"rel/file.root:tdirectory/ttree\"\n   * pathlib.Path: always interpreted as a filesystem path or URL only (no\n         object-within-ROOT path), regardless of whether there are any colons.\n         Examples: Path(\"rel:/file.root\"), Path(\"/abs/path:stuff.root\")\n\nFunctions that accept many files (uproot.iterate, etc.) also allow:\n   * glob syntax in str/bytes and pathlib.Path.\n         Examples: Path(\"rel/*.root\"), \"/abs/*.root:tdirectory/ttree\"\n   * dict: keys are filesystem paths, values are objects-within-ROOT paths.\n         Example: {\"/data_v1/*.root\": \"ttree_v1\", \"/data_v2/*.root\": \"ttree_v2\"}\n   * already-open TTree objects.\n   * iterables of the above.\n"
+          },
+          {
+            "access_path": "root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/eada218b-07e0-482b-bbe1-f108d43a648b.root",
+            "error": "OSError: XRootD error: [ERROR] Operation expired\nin file root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/eada218b-07e0-482b-bbe1-f108d43a648b.root"
+          },
+          {
+            "access_path": "root://xrootd-cms.infn.it//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/eada218b-07e0-482b-bbe1-f108d43a648b.root",
+            "error": "OSError: XRootD error: [ERROR] Operation expired\nin file root://xrootd-cms.infn.it//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/eada218b-07e0-482b-bbe1-f108d43a648b.root"
+          },
+          {
+            "access_path": "root://cmsxrootd.fnal.gov//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/eada218b-07e0-482b-bbe1-f108d43a648b.root",
+            "error": "OSError: XRootD error: [ERROR] Operation expired\nin file root://cmsxrootd.fnal.gov//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/eada218b-07e0-482b-bbe1-f108d43a648b.root"
+          }
+        ],
+        "error": "OSError: XRootD error: [ERROR] Operation expired\nin file root://cmsxrootd.fnal.gov//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/eada218b-07e0-482b-bbe1-f108d43a648b.root",
+        "path": "root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/eada218b-07e0-482b-bbe1-f108d43a648b.root"
+      },
+      "file_index": 809,
+      "file_path": "root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/eada218b-07e0-482b-bbe1-f108d43a648b.root",
+      "is_data": true,
+      "permanently_skipped": true,
+      "sample": "data",
+      "year": "2024"
+    },
+    {
+      "alternate_access_attempted": true,
+      "dataset": "/EGamma0/Run2024G-MINIv6NANOv15-v2/NANOAOD",
+      "failure_diagnostic": {
+        "access_attempts": [
+          {
+            "access_path": "root://eoscms.cern.ch//eos/cms/store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/ebd5d1da-2e83-4dae-9a48-c9467a7bdec5.root",
+            "error": "FileNotFoundError: file not found ([ERROR] Server responded with an error: [3011] Unable to open file /eos/cms/store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/ebd5d1da-2e83-4dae-9a48-c9467a7bdec5.root; No such file or directory\n)\n\n    'root://eoscms.cern.ch//eos/cms/store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/ebd5d1da-2e83-4dae-9a48-c9467a7bdec5.root'\n\nFiles may be specified as:\n   * str/bytes: relative or absolute filesystem path or URL, without any colons\n         other than Windows drive letter or URL schema.\n         Examples: \"rel/file.root\", \"C:\\abs\\file.root\", \"http://where/what.root\"\n   * str/bytes: same with an object-within-ROOT path, separated by a colon.\n         Example: \"rel/file.root:tdirectory/ttree\"\n   * pathlib.Path: always interpreted as a filesystem path or URL only (no\n         object-within-ROOT path), regardless of whether there are any colons.\n         Examples: Path(\"rel:/file.root\"), Path(\"/abs/path:stuff.root\")\n\nFunctions that accept many files (uproot.iterate, etc.) also allow:\n   * glob syntax in str/bytes and pathlib.Path.\n         Examples: Path(\"rel/*.root\"), \"/abs/*.root:tdirectory/ttree\"\n   * dict: keys are filesystem paths, values are objects-within-ROOT paths.\n         Example: {\"/data_v1/*.root\": \"ttree_v1\", \"/data_v2/*.root\": \"ttree_v2\"}\n   * already-open TTree objects.\n   * iterables of the above.\n"
+          },
+          {
+            "access_path": "root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/ebd5d1da-2e83-4dae-9a48-c9467a7bdec5.root",
+            "error": "OSError: XRootD error: [ERROR] Operation expired\nin file root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/ebd5d1da-2e83-4dae-9a48-c9467a7bdec5.root"
+          },
+          {
+            "access_path": "root://xrootd-cms.infn.it//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/ebd5d1da-2e83-4dae-9a48-c9467a7bdec5.root",
+            "error": "OSError: XRootD error: [ERROR] Operation expired\nin file root://xrootd-cms.infn.it//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/ebd5d1da-2e83-4dae-9a48-c9467a7bdec5.root"
+          },
+          {
+            "access_path": "root://cmsxrootd.fnal.gov//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/ebd5d1da-2e83-4dae-9a48-c9467a7bdec5.root",
+            "error": "OSError: XRootD error: [FATAL] Redirect limit has been reached\nin file root://cmsxrootd.fnal.gov//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/ebd5d1da-2e83-4dae-9a48-c9467a7bdec5.root"
+          }
+        ],
+        "error": "OSError: XRootD error: [FATAL] Redirect limit has been reached\nin file root://cmsxrootd.fnal.gov//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/ebd5d1da-2e83-4dae-9a48-c9467a7bdec5.root",
+        "path": "root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/ebd5d1da-2e83-4dae-9a48-c9467a7bdec5.root"
+      },
+      "file_index": 812,
+      "file_path": "root://cms-xrd-global.cern.ch//store/data/Run2024G/EGamma0/NANOAOD/MINIv6NANOv15-v2/2810000/ebd5d1da-2e83-4dae-9a48-c9467a7bdec5.root",
+      "is_data": true,
+      "permanently_skipped": true,
+      "sample": "data",
+      "year": "2024"
+    }
+  ],
+  "schema_version": 1,
+  "status": "permanently_skipped"
+}

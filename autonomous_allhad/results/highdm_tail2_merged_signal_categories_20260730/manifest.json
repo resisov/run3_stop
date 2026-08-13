@@ -1,0 +1,156 @@
+{
+  "event_count_definition": {
+    "generated": "mass-point Runs.genEventSumw; unit generator weights make this the generated event count",
+    "selected": "sum of nominal unweighted search-bin entries in the specified SR"
+  },
+  "highdm_bins": 50,
+  "highdm_merge_pairs_1based": [
+    [
+      5,
+      6
+    ],
+    [
+      11,
+      12
+    ],
+    [
+      17,
+      18
+    ],
+    [
+      23,
+      24
+    ],
+    [
+      29,
+      30
+    ],
+    [
+      35,
+      36
+    ],
+    [
+      41,
+      42
+    ],
+    [
+      47,
+      48
+    ],
+    [
+      53,
+      54
+    ],
+    [
+      59,
+      60
+    ]
+  ],
+  "highdm_tail_merged": true,
+  "inputs": {
+    "T2bW": {
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/nominal_plots_2024_fullselection_v6_dyto2x4jets_t2models_freebkg_20260729/diagnostics/highdm_tail2_merged_fullgrid_fast_20260730/T2bW/templates.root",
+      "sha256": "aec85918dbd344fcd7f28e6e5c0032f1c53ab393d9bab4bff9da5af53f66ec61"
+    },
+    "T2tb": {
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/nominal_plots_2024_fullselection_v6_dyto2x4jets_t2models_freebkg_20260729/diagnostics/highdm_tail2_merged_fullgrid_fast_20260730/T2tb/templates.root",
+      "sha256": "e170a111b05d32a91ebd002879bb9eca817c475101a45cb658a3d784897478ab"
+    },
+    "T2tt": {
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/nominal_plots_2024_fullselection_v6_dyto2x4jets_t2models_freebkg_20260729/diagnostics/highdm_tail2_merged_fullgrid_fast_20260730/T2tt/templates.root",
+      "sha256": "0e56bc2e47a00ca29ffabf8301d2f426a314c28cb2365b081e7c216db587732f"
+    }
+  },
+  "luminosity_fb": 109.82,
+  "mass_points": [
+    "mStop1250_mLSP400",
+    "mStop1300_mLSP400"
+  ],
+  "plots": [
+    {
+      "bins": 50,
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/nominal_plots_2024_fullselection_v6_dyto2x4jets_t2models_freebkg_20260729/diagnostics/highdm_tail2_merged_fullgrid_fast_20260730/signal_category_plots/t2tt_highdm_sr_mstop1250_1300_mlsp400_tailmerged_signal_statunc.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/nominal_plots_2024_fullselection_v6_dyto2x4jets_t2models_freebkg_20260729/diagnostics/highdm_tail2_merged_fullgrid_fast_20260730/signal_category_plots/t2tt_highdm_sr_mstop1250_1300_mlsp400_tailmerged_signal_statunc.png",
+      "points": {
+        "mStop1250_mLSP400": {
+          "nonzero_bins": 50,
+          "selected_entries": 9034,
+          "selection_efficiency": 0.2158558730765555,
+          "stat_unc_sum": 0.5086008655326553,
+          "total_generated": 41852,
+          "yield_sum": 41.003659251163306
+        },
+        "mStop1300_mLSP400": {
+          "nonzero_bins": 50,
+          "selected_entries": 11191,
+          "selection_efficiency": 0.21412034822538983,
+          "stat_unc_sum": 0.33614740703488927,
+          "total_generated": 52265,
+          "yield_sum": 30.04500423501208
+        }
+      },
+      "regime": "High-dM",
+      "suspected_bins": [],
+      "topology": "T2tt"
+    },
+    {
+      "bins": 50,
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/nominal_plots_2024_fullselection_v6_dyto2x4jets_t2models_freebkg_20260729/diagnostics/highdm_tail2_merged_fullgrid_fast_20260730/signal_category_plots/t2bw_highdm_sr_mstop1250_1300_mlsp400_tailmerged_signal_statunc.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/nominal_plots_2024_fullselection_v6_dyto2x4jets_t2models_freebkg_20260729/diagnostics/highdm_tail2_merged_fullgrid_fast_20260730/signal_category_plots/t2bw_highdm_sr_mstop1250_1300_mlsp400_tailmerged_signal_statunc.png",
+      "points": {
+        "mStop1250_mLSP400": {
+          "nonzero_bins": 50,
+          "selected_entries": 4987,
+          "selection_efficiency": 0.17906642728904848,
+          "stat_unc_sum": 0.5675014323569157,
+          "total_generated": 27850,
+          "yield_sum": 34.05175303749412
+        },
+        "mStop1300_mLSP400": {
+          "nonzero_bins": 44,
+          "selected_entries": 2370,
+          "selection_efficiency": 0.16986811926605505,
+          "stat_unc_sum": 0.573292077267785,
+          "total_generated": 13952,
+          "yield_sum": 23.648040010014522
+        }
+      },
+      "regime": "High-dM",
+      "suspected_bins": [],
+      "topology": "T2bW"
+    },
+    {
+      "bins": 50,
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/nominal_plots_2024_fullselection_v6_dyto2x4jets_t2models_freebkg_20260729/diagnostics/highdm_tail2_merged_fullgrid_fast_20260730/signal_category_plots/t2tb_highdm_sr_mstop1250_1300_mlsp400_tailmerged_signal_statunc.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/nominal_plots_2024_fullselection_v6_dyto2x4jets_t2models_freebkg_20260729/diagnostics/highdm_tail2_merged_fullgrid_fast_20260730/signal_category_plots/t2tb_highdm_sr_mstop1250_1300_mlsp400_tailmerged_signal_statunc.png",
+      "points": {
+        "mStop1250_mLSP400": {
+          "nonzero_bins": 49,
+          "selected_entries": 2699,
+          "selection_efficiency": 0.195494712443865,
+          "stat_unc_sum": 0.8791131643709728,
+          "total_generated": 13806,
+          "yield_sum": 38.164112829953616
+        },
+        "mStop1300_mLSP400": {
+          "nonzero_bins": 48,
+          "selected_entries": 2610,
+          "selection_efficiency": 0.19786217875824424,
+          "stat_unc_sum": 0.646484511967391,
+          "total_generated": 13191,
+          "yield_sum": 27.96183761847133
+        }
+      },
+      "regime": "High-dM",
+      "suspected_bins": [],
+      "topology": "T2tb"
+    }
+  ],
+  "status": "complete",
+  "suspected_bin_annotation": {
+    "meaning": "sparse High-dM signal bin selected for the adjacent-bin merge diagnostic",
+    "physics_inputs_modified": false,
+    "style": "unfilled red box"
+  },
+  "uncertainty": "signal MC statistical uncertainty from TH1 sumw2"
+}

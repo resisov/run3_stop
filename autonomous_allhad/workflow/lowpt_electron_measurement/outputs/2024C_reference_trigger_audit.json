@@ -1,0 +1,124 @@
+{
+  "created_unix": 1785751151.1620662,
+  "event_counts": {
+    "HLT_DoubleEle10_eta1p22_mMax6": 4551,
+    "HLT_DoubleEle6p5_eta1p22_mMax6": 9838,
+    "HLT_DoubleEle8_eta1p22_mMax6": 7581,
+    "all": 300000,
+    "reference_or": 9838
+  },
+  "events_read": 300000,
+  "exact_filter_bits_by_path": {
+    "HLT_DoubleEle10_eta1p22_mMax6": {
+      "256": 4,
+      "295426": 1,
+      "301107": 1,
+      "32768": 16,
+      "33024": 1,
+      "440763": 1,
+      "49": 1,
+      "512": 2,
+      "576": 1
+    },
+    "HLT_DoubleEle6p5_eta1p22_mMax6": {
+      "256": 4,
+      "295426": 1,
+      "296962": 1,
+      "301107": 1,
+      "32768": 17,
+      "33024": 1,
+      "440763": 1,
+      "49": 1,
+      "512": 2,
+      "576": 1
+    },
+    "HLT_DoubleEle8_eta1p22_mMax6": {
+      "256": 4,
+      "295426": 1,
+      "296962": 1,
+      "301107": 1,
+      "32768": 17,
+      "33024": 1,
+      "440763": 1,
+      "49": 1,
+      "512": 2,
+      "576": 1
+    }
+  },
+  "file_failures": [],
+  "files_processed": 1,
+  "files_requested": 1,
+  "individual_bit_index_counts_by_path": {
+    "HLT_DoubleEle10_eta1p22_mMax6": {
+      "0": 3,
+      "1": 3,
+      "11": 2,
+      "12": 2,
+      "13": 1,
+      "15": 20,
+      "17": 1,
+      "18": 3,
+      "3": 1,
+      "4": 3,
+      "5": 3,
+      "6": 1,
+      "7": 1,
+      "8": 6,
+      "9": 4
+    },
+    "HLT_DoubleEle6p5_eta1p22_mMax6": {
+      "0": 3,
+      "1": 4,
+      "11": 3,
+      "12": 2,
+      "13": 1,
+      "15": 22,
+      "17": 1,
+      "18": 4,
+      "3": 1,
+      "4": 3,
+      "5": 3,
+      "6": 1,
+      "7": 1,
+      "8": 6,
+      "9": 4
+    },
+    "HLT_DoubleEle8_eta1p22_mMax6": {
+      "0": 3,
+      "1": 4,
+      "11": 3,
+      "12": 2,
+      "13": 1,
+      "15": 22,
+      "17": 1,
+      "18": 4,
+      "3": 1,
+      "4": 3,
+      "5": 3,
+      "6": 1,
+      "7": 1,
+      "8": 6,
+      "9": 4
+    }
+  },
+  "kind": "electron",
+  "matched_trigger_objects": {
+    "HLT_DoubleEle10_eta1p22_mMax6": 28,
+    "HLT_DoubleEle6p5_eta1p22_mMax6": 30,
+    "HLT_DoubleEle8_eta1p22_mMax6": 30
+  },
+  "matching": {
+    "delta_r_max": 0.1,
+    "electron_tag": "pt>5, fiducial, cutBased>=4, miniPFRelIso_all<0.1",
+    "muon_tag": "pt>5, abs(eta)<2.4, tightId, miniPFRelIso_all<0.1"
+  },
+  "paths_present_by_file": {
+    "root://cms-xrd-global.cern.ch//store/data/Run2024C/EGamma0/NANOAOD/MINIv6NANOv15-v1/2540000/3151ab41-a5bd-48f1-be40-449b760a60e6.root": [
+      "HLT_DoubleEle6p5_eta1p22_mMax6",
+      "HLT_DoubleEle8_eta1p22_mMax6",
+      "HLT_DoubleEle10_eta1p22_mMax6"
+    ]
+  },
+  "schema_version": 1,
+  "status": "diagnostic_not_for_adoption"
+}

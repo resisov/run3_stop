@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "status": "complete",
+  "year": "2024",
+  "payloads": {
+    "met_trigger": {
+      "path": "analysis/data/AnalysisSF/2024/met_trigger_sf.json.gz",
+      "sha256": "bdee67458fc9fe8ffa406d20f543296799193b02dcf7f3a74924003b4e62285f",
+      "correction": "met_trigger_sf_genuine",
+      "bins": 18
+    },
+    "photon_trigger": {
+      "path": "analysis/data/AnalysisSF/2024/photon_trigger_sf.json.gz",
+      "sha256": "2e1a18287ae7d0f7d1dcbf10374ce97328854f26ec739430364da6c5ed0adc57",
+      "correction": "photon_trigger_sf",
+      "bins": 20
+    },
+    "veto_electron_5to10": {
+      "path": "analysis/data/AnalysisSF/2024/veto_electron_5to10_sf.json.gz",
+      "sha256": "3c873fb083c55dd00fcd285934f9ac2e49c65ed3424e215d9ebb535a0cb95778",
+      "correction": "veto_electron_5to10_sf",
+      "bins": 3
+    },
+    "loose_muon_5to10": {
+      "path": "analysis/data/AnalysisSF/2024/loose_muon_5to10_sf.json.gz",
+      "sha256": "c401c5a2867d47963a33d1493a4e40bfc0ef295ab94e5454effc8159acb4f0b6",
+      "correction": "loose_muon_5to10_sf",
+      "bins": 20
+    }
+  },
+  "histogram_stage": "autonomous_allhad/workflow/build_flat_boosted_recoil_hists.py -> autonomous_allhad.real_subset_worker.compute_weight_bundle",
+  "nominal_components": [
+    "met_trigger",
+    "photon_trigger",
+    "veto_electron_5to10",
+    "loose_muon_5to10"
+  ],
+  "uncertainty_variations": [
+    "met_triggerUp",
+    "met_triggerDown",
+    "photon_triggerUp",
+    "photon_triggerDown",
+    "veto_electron_5to10Up",
+    "veto_electron_5to10Down",
+    "loose_muon_5to10Up",
+    "loose_muon_5to10Down"
+  ],
+  "lowpt_boundary_policy": {
+    "selected_object_threshold_gev": 5.0,
+    "analysis_payload_domain_gev": "5 < pT < 10",
+    "official_payload_handoff_gev": 10.0,
+    "official_edge_clipping_below_10_gev_contribution": "removed_to_unity_before_multiplying the analysis-owned low-pT SF",
+    "double_counting": false
+  },
+  "production_policy": {
+    "required_weight_components": [
+      "met_trigger",
+      "photon_trigger",
+      "veto_electron_5to10",
+      "loose_muon_5to10"
+    ],
+    "nominal_only": false,
+    "missing_payload_behavior": "fail closed",
+    "resume_invalidation": "histogram execution hash includes analysis_scale_factors.py and all four payload files"
+  },
+  "validated_consumers": [
+    "autonomous_allhad/workflow/build_flat_boosted_recoil_hists.py",
+    "autonomous_allhad/workflow/run_flat_hists_chunked.py",
+    "autonomous_allhad/workflow/watch_flat_ntuple_pipeline.py",
+    "autonomous_allhad/autonomous_allhad/shape_histogram_2024_worker.py",
+    "autonomous_allhad/workflow/build_nb_recoil_transfer_inputs_2024.py",
+    "autonomous_allhad/workflow/run_lost_lepton_closure_2024.py"
+  ],
+  "tests": {
+    "runtime": "/eos/user/t/taiwoo/miniconda3/envs/py38/bin/python",
+    "analysis_sf_tests": {
+      "passed": 7,
+      "failed": 0
+    },
+    "shape_histogram_tests": {
+      "passed": 7,
+      "failed": 0
+    },
+    "explicit_boundary_points_gev": [
+      5.001,
+      9.999,
+      10.0
+    ],
+    "synthetic_histogram_result": "all eight analysis-SF Up/Down weights were filled through the production histogram leaf filler"
+  },
+  "representative_real_histogram": {
+    "path": "autonomous_allhad/workflow/analysis_sf_integration_validation/representative_mc_shard_01359_hist.json",
+    "sha256": "61338a5be0e9bea1768eaed46a70ded9ff99dbb6b98247301822bb1dffcc2837",
+    "events_processed": 59458,
+    "datasets": [
+      "DYto2L-2Jets_Bin-MLL-50-PTLL-600",
+      "GJ_Bin-PTG-100to200"
+    ],
+    "status": "complete",
+    "weight_failures": 0,
+    "all_four_components_applied_to_every_mc_group": true,
+    "all_eight_variation_leaves_present": true,
+    "dy_llcr_integrals": {
+      "nominal": 0.0034143261593796172,
+      "met_trigger_up": 0.003421149181617265,
+      "met_trigger_down": 0.0034075031371419706
+    },
+    "note": "This shard contains no selected 5-10 GeV LLCR lepton, so the real-shard low-pT Up/Down leaves equal nominal; their non-unity behavior and the exact boundary handoff are covered by the dedicated synthetic production-filler test."
+  },
+  "known_unrelated_gate": {
+    "component": "btag efficiency",
+    "expected_sha256": "9ab6ae6c13d8a3c6fd09150518d2b81fdcc0df21fe1d948d854392b217b80930",
+    "current_eos_sha256": "03524e9ae28110814f336eafc887e60d54b495a7b8dec7cda59bd792f56feaf4",
+    "effect_on_this_validation": "The representative run omitted --require-btag; btagSF still evaluated successfully. No b-tag payload or policy was changed."
+  }
+}

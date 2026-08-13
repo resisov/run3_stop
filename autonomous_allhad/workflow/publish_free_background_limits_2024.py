@@ -46,6 +46,14 @@ def main() -> int:
     parser.add_argument("--page-dir", type=Path, required=True)
     parser.add_argument("--results-dir", type=Path, required=True)
     parser.add_argument(
+        "--layout",
+        choices=("free_background", "tailmerged"),
+        default="free_background",
+    )
+    parser.add_argument("--highdm-bins", type=int, default=60)
+    parser.add_argument("--an-category-plot", type=Path)
+    parser.add_argument("--an-category-summary", type=Path)
+    parser.add_argument(
         "--topologies",
         nargs="+",
         choices=TOPOLOGIES,
@@ -60,13 +68,23 @@ def main() -> int:
     records = []
     manifests = {}
     for topology in topologies:
-        source_dir = args.results_dir / f"free_background_{topology.lower()}"
-        manifest_path = source_dir / "combine_input_manifest.json"
+        source_dir = (
+            args.results_dir / f"free_background_{topology.lower()}"
+            if args.layout == "free_background"
+            else args.results_dir / topology
+        )
+        manifest_path = source_dir / (
+            "combine_input_manifest.json"
+            if args.layout == "free_background"
+            else "limit_manifest.json"
+        )
         manifest = json.loads(manifest_path.read_text())
-        if manifest.get("status") not in {
-            "combine_outputs_complete",
-            "combine_outputs_partial",
-        }:
+        valid_statuses = (
+            {"combine_outputs_complete", "combine_outputs_partial"}
+            if args.layout == "free_background"
+            else {"complete", "partial"}
+        )
+        if manifest.get("status") not in valid_statuses:
             raise RuntimeError(
                 f"{topology} result is incomplete: {manifest.get('status')}"
             )
@@ -105,7 +123,7 @@ def main() -> int:
                 "name": stem,
                 "pdf": f"plots/limits/{pdf.name}",
                 "png": f"plots/limits/{png.name}",
-                "region": "2024 High-dM 60 + Low-dM 34",
+                "region": f"2024 High-dM {args.highdm_bins} + Low-dM 34",
                 "variable": f"{topology} free-background expected limit",
             }
         )
@@ -132,13 +150,53 @@ def main() -> int:
         cards.append(
             "<a class='plot' data-family='limits' data-kind='Overview' "
             f"data-search='2024 expected limit free background {topology.lower()} "
-            "high-dm 60 low-dm 34' "
+            f"high-dm {args.highdm_bins} low-dm 34' "
             f"href='{html.escape(record['pdf'])}'>"
             f"<img src='{html.escape(record['png'])}' loading='lazy' "
             f"alt='2024 {topology} expected limit with free background "
             "normalizations'>"
-            f"<span>2024 expected limit · {topology} · High-dM 60 + "
+            f"<span>2024 expected limit · {topology} · High-dM {args.highdm_bins} + "
             "Low-dM 34 · free background normalizations</span></a>"
+        )
+    category_record = None
+    if args.an_category_plot:
+        if not args.an_category_summary:
+            raise RuntimeError(
+                "--an-category-summary is required with --an-category-plot"
+            )
+        category_summary = json.loads(args.an_category_summary.read_text())
+        if category_summary.get("status") != "complete":
+            raise RuntimeError("AN category plot summary is incomplete")
+        if int(category_summary.get("highdm_search_bins", 0)) != args.highdm_bins:
+            raise RuntimeError("AN category plot High-dM bin count mismatch")
+        if "background stack" not in str(category_summary.get("signal_policy", "")):
+            raise RuntimeError(
+                "AN category plot does not document the background stack"
+            )
+        source_png = args.an_category_plot
+        source_pdf = source_png.with_suffix(".pdf")
+        copy(source_png, page_dir / "plots/categories" / source_png.name)
+        copy(source_pdf, page_dir / "plots/categories" / source_pdf.name)
+        category_record = {
+            "family": "categories",
+            "family_label": "Category/search-bin plots",
+            "kind": "SR",
+            "name": source_png.stem,
+            "pdf": f"plots/categories/{source_pdf.name}",
+            "png": f"plots/categories/{source_png.name}",
+            "region": f"High-dM {args.highdm_bins}-bin SR categories",
+            "variable": "background stack and signal overlays",
+        }
+        cards.insert(
+            0,
+            "<a class='plot' data-family='categories' data-kind='SR' "
+            f"data-search='high-dm {args.highdm_bins} an signal categories "
+            f"background stack' href='{category_record['pdf']}'>"
+            f"<img src='{category_record['png']}' loading='lazy' "
+            f"alt='High-dM {args.highdm_bins}-bin SR categories with "
+            "background stack and signal overlays'><span>AN signal "
+            f"categories · High-dM {args.highdm_bins} bins · background "
+            "stack + signal overlays</span></a>"
         )
     notice = (
         NOTICE_START
@@ -155,6 +213,13 @@ def main() -> int:
         "background normalizations are unconstrained global rate parameters, "
         "while shape/weight nuisances and autoMCStats remain. The evaluated "
         "grid has mStop≤1800 GeV. "
+        + (
+            "The High-dM signal model has 55 bins: categories 1, 2, 3, "
+            "5, and 8 retain six bins, while the final two bins are merged "
+            "in the other five categories. "
+            if args.layout == "tailmerged" and args.highdm_bins == 55
+            else ""
+        )
         + "Official topology-matched CMS-SUS-19-010 observed and expected "
         "Run-2 contours are overlaid for every displayed signal model. "
         + "Coverage: "
@@ -168,6 +233,13 @@ def main() -> int:
 
     index_path = page_dir / "index.html"
     page = index_path.read_text()
+    page = re.sub(
+        r"<a class='plot'[^>]*href='plots/categories/"
+        r"highdm_sr_selected_recoil[^']*'[^>]*>.*?</a>",
+        "",
+        page,
+        flags=re.DOTALL,
+    )
     page = re.sub(
         re.escape(NOTICE_START) + r".*?" + re.escape(NOTICE_END),
         "",
@@ -187,13 +259,27 @@ def main() -> int:
     summary_path = page_dir / "page_summary.json"
     summary = json.loads(summary_path.read_text())
     replaced_names = {record["name"] for record in records}
+    if category_record:
+        replaced_names.add(category_record["name"])
     current = [
         record
         for record in summary.get("records", [])
-        if record.get("family") != "limits"
-        or record.get("name") not in replaced_names
+        if not (
+            record.get("name") in replaced_names
+            or (
+                record.get("family") == "limits"
+                and str(record.get("name", "")).startswith("expected_limit_t2")
+            )
+            or (
+                category_record
+                and record.get("family") == "categories"
+                and str(record.get("name", "")).startswith(
+                    "highdm_sr_selected_recoil"
+                )
+            )
+        )
     ]
-    summary["records"] = current + records
+    summary["records"] = current + ([category_record] if category_record else []) + records
     summary["generated_at"] = datetime.now(timezone.utc).replace(
         microsecond=0
     ).isoformat()
@@ -227,6 +313,19 @@ def main() -> int:
         "max_mstop_GeV": 1800,
         "signals": prior_signals,
     }
+    summary["plot_counts"] = {
+        **(summary.get("plot_counts") or {}),
+        "limits": len(records),
+        "total": len(summary["records"]),
+    }
+    if category_record:
+        summary["an_signal_category_update"] = {
+            "status": "complete",
+            "highdm_bins": args.highdm_bins,
+            "background_stack": True,
+            "signal_overlays": True,
+            "plot": category_record["png"],
+        }
     summary = public_value(summary)
     summary_path.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     print(

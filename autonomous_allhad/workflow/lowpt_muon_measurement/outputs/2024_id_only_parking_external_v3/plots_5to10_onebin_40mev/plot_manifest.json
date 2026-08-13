@@ -1,0 +1,43 @@
+{
+  "captions": {
+    "efficiency": "Tag-and-probe efficiencies in data and simulation; error bars are statistical. The horizontal axis is probe |eta| for 5 < pT < 10 GeV.",
+    "mass_fit_bin_00": "Probe bin 0 < |eta| < 0.9, 5 < pT < 10 GeV. Panels are data pass, data fail, simulation pass, and simulation fail in reading order. The nominal data fit has chi2/ndf=18.039; The resulting scale factor is 0.9986 +/- 0.0026.",
+    "mass_fit_bin_01": "Probe bin 0.9 < |eta| < 1.2, 5 < pT < 10 GeV. Panels are data pass, data fail, simulation pass, and simulation fail in reading order. The nominal data fit has chi2/ndf=4.127; The resulting scale factor is 1.0003 +/- 0.0032.",
+    "mass_fit_bin_02": "Probe bin 1.2 < |eta| < 2.1, 5 < pT < 10 GeV. Panels are data pass, data fail, simulation pass, and simulation fail in reading order. The nominal data fit has chi2/ndf=10.731; The scale-factor extraction in this bin is invalid and is not exported.",
+    "mass_fit_bin_03": "Probe bin 2.1 < |eta| < 2.4, 5 < pT < 10 GeV. Panels are data pass, data fail, simulation pass, and simulation fail in reading order. The nominal data fit has chi2/ndf=3.280; The scale-factor extraction in this bin is invalid and is not exported.",
+    "scale_factor": "Data-to-simulation scale factors with total uncertainties; bins without a valid fit are omitted. The horizontal axis is probe |eta| for the single 5-10 GeV pT bin.",
+    "scale_factor_heatmap": "Two-dimensional scale-factor map; each cell shows the central value and total uncertainty."
+  },
+  "files": [
+    "autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2024_id_only_parking_external_v3/plots_5to10_onebin_40mev/scale_factor.png",
+    "autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2024_id_only_parking_external_v3/plots_5to10_onebin_40mev/scale_factor.pdf",
+    "autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2024_id_only_parking_external_v3/plots_5to10_onebin_40mev/scale_factor_heatmap.png",
+    "autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2024_id_only_parking_external_v3/plots_5to10_onebin_40mev/scale_factor_heatmap.pdf",
+    "autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2024_id_only_parking_external_v3/plots_5to10_onebin_40mev/efficiency.png",
+    "autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2024_id_only_parking_external_v3/plots_5to10_onebin_40mev/efficiency.pdf",
+    "autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2024_id_only_parking_external_v3/plots_5to10_onebin_40mev/mass_fit_bin_00.png",
+    "autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2024_id_only_parking_external_v3/plots_5to10_onebin_40mev/mass_fit_bin_00.pdf",
+    "autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2024_id_only_parking_external_v3/plots_5to10_onebin_40mev/mass_fit_bin_01.png",
+    "autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2024_id_only_parking_external_v3/plots_5to10_onebin_40mev/mass_fit_bin_01.pdf",
+    "autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2024_id_only_parking_external_v3/plots_5to10_onebin_40mev/mass_fit_bin_02.png",
+    "autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2024_id_only_parking_external_v3/plots_5to10_onebin_40mev/mass_fit_bin_02.pdf",
+    "autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2024_id_only_parking_external_v3/plots_5to10_onebin_40mev/mass_fit_bin_03.png",
+    "autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2024_id_only_parking_external_v3/plots_5to10_onebin_40mev/mass_fit_bin_03.pdf"
+  ],
+  "measurement": "loose_muon_id_5to10_sf_2024_parking_external",
+  "schema_version": 1,
+  "style": {
+    "cms_label_fontsize": 17,
+    "cms_llabel": "Work in progress",
+    "cms_rlabel": "109.82 fb$^{-1}$ (13.6 TeV)",
+    "colorbar_figure_inches": [
+      12.0,
+      10.0
+    ],
+    "standard_figure_inches": [
+      8.0,
+      8.0
+    ],
+    "titles": false
+  }
+}

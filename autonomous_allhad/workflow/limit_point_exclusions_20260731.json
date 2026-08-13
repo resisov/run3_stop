@@ -1,0 +1,14 @@
+{
+  "campaign": "highdm_tail2_merged_fullgrid_fast_20260730",
+  "exclusions": [
+    {
+      "model": "T2tt",
+      "mStop_GeV": 1800,
+      "mLSP_GeV": 1600,
+      "status": "excluded_by_user",
+      "reason": "Combine AsymptoticLimits exceeded the 1800-second point timeout (rc=124); user directed that this point be dropped from the limit grid.",
+      "excluded_at": "2026-07-31T15:13:40+02:00",
+      "artifacts_policy": "Preserve the failed datacard, output, and log under the campaign excluded_points directory; do not use them in validation or plotting."
+    }
+  ]
+}

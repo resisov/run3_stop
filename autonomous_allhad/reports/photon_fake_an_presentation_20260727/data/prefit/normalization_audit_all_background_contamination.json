@@ -1,0 +1,1906 @@
+{
+  "background_formula": "gen_weight * post_skim_sf_weight * xsec_pb * lumi_pb / physical_dataset_sumw",
+  "blocked_by_component": {
+    "electron": 0,
+    "prompt": 0,
+    "qcd_all": 0,
+    "qcd_electron": 0,
+    "qcd_fake": 0,
+    "qcd_prompt": 0
+  },
+  "datasets": [
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 1443,
+      "files_processed": 1443,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 2.0661524367727453e-05,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "DYto2L-2Jets_Bin-MLL-50-PTLL-100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3",
+      "process": "DY",
+      "recomputed_factor": 2.0661524367727453e-05,
+      "sumw": 566599626999.72,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 1443
+      },
+      "xsec_pb": 106.6
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 343,
+      "files_processed": 343,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 3.563004471310118e-05,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "DYto2L-2Jets_Bin-MLL-50-PTLL-200_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1",
+      "process": "DY",
+      "recomputed_factor": 3.563004471310118e-05,
+      "sumw": 33380553114.003685,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 343
+      },
+      "xsec_pb": 10.83
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 276,
+      "files_processed": 276,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.00010226013713767867,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "DYto2L-2Jets_Bin-MLL-50-PTLL-400_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "DY",
+      "recomputed_factor": 0.00010226013713767867,
+      "sumw": 638235267.6891937,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 276
+      },
+      "xsec_pb": 0.5943
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 657,
+      "files_processed": 657,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.00026487972513208647,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "DYto2L-2Jets_Bin-MLL-50-PTLL-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3",
+      "process": "DY",
+      "recomputed_factor": 0.00026487972513208647,
+      "sumw": 33616033.071462065,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 657
+      },
+      "xsec_pb": 0.08108
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 2751,
+      "files_processed": 2750,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 5.647505759531179e-05,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "GJ_Bin-PTG-100to200_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3",
+      "process": "GJ",
+      "recomputed_factor": 5.647505759531179e-05,
+      "sumw": 2704904191415.666,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 2750
+      },
+      "xsec_pb": 1391.0
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 397,
+      "files_processed": 396,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.0002168745846912046,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "GJ_Bin-PTG-200to400_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "GJ",
+      "recomputed_factor": 0.0002168745846912046,
+      "sumw": 44682583778.99732,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 396
+      },
+      "xsec_pb": 88.24
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 103,
+      "files_processed": 103,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.002409799576129694,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "GJ_Bin-PTG-400to600_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "GJ",
+      "recomputed_factor": 0.002409799576129694,
+      "sumw": 171807400.12617448,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 103
+      },
+      "xsec_pb": 3.77
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 91,
+      "files_processed": 91,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.0041192697377117685,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "GJ_Bin-PTG-600_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "GJ",
+      "recomputed_factor": 0.0041192697377117685,
+      "sumw": 15356197.585433803,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 91
+      },
+      "xsec_pb": 0.576
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt",
+        "qcd_all",
+        "qcd_electron",
+        "qcd_fake",
+        "qcd_prompt"
+      ],
+      "files_attempted": 621,
+      "files_processed": 621,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.01277886591468308,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "QCD_Bin-PT-1000to1500_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "QCD",
+      "recomputed_factor": 0.01277886591468308,
+      "sumw": 79974618.0,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 621
+      },
+      "xsec_pb": 9.306
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt",
+        "qcd_all",
+        "qcd_electron",
+        "qcd_fake",
+        "qcd_prompt"
+      ],
+      "files_attempted": 668,
+      "files_processed": 668,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 483.1942111367461,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "QCD_Bin-PT-120to170_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "QCD",
+      "recomputed_factor": 483.1942111367461,
+      "sumw": 99957397.84707648,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 668
+      },
+      "xsec_pb": 439800.0
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt",
+        "qcd_all",
+        "qcd_electron",
+        "qcd_fake",
+        "qcd_prompt"
+      ],
+      "files_attempted": 225,
+      "files_processed": 225,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.0027541072028295006,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "QCD_Bin-PT-1500to2000_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "QCD",
+      "recomputed_factor": 0.0027541072028295006,
+      "sumw": 19997308.0,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 225
+      },
+      "xsec_pb": 0.5015
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt",
+        "qcd_all",
+        "qcd_electron",
+        "qcd_fake",
+        "qcd_prompt"
+      ],
+      "files_attempted": 566,
+      "files_processed": 566,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 972413.6825468721,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "QCD_Bin-PT-15to20_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "QCD",
+      "recomputed_factor": 972413.6825468721,
+      "sumw": 100026949.17377567,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 566
+      },
+      "xsec_pb": 885700000.0
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt",
+        "qcd_all",
+        "qcd_electron",
+        "qcd_fake",
+        "qcd_prompt"
+      ],
+      "files_attempted": 678,
+      "files_processed": 678,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 124.5992966320724,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "QCD_Bin-PT-170to300_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "QCD",
+      "recomputed_factor": 124.5992966320724,
+      "sumw": 99860965.0,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 678
+      },
+      "xsec_pb": 113300.0
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt",
+        "qcd_all",
+        "qcd_electron",
+        "qcd_fake",
+        "qcd_prompt"
+      ],
+      "files_attempted": 250,
+      "files_processed": 250,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.00024248926780818869,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "QCD_Bin-PT-2000to2500_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "QCD",
+      "recomputed_factor": 0.00024248926780818869,
+      "sumw": 19311060.0,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 250
+      },
+      "xsec_pb": 0.04264
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt",
+        "qcd_all",
+        "qcd_electron",
+        "qcd_fake",
+        "qcd_prompt"
+      ],
+      "files_attempted": 578,
+      "files_processed": 578,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 456647.6188185499,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "QCD_Bin-PT-20to30_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "QCD",
+      "recomputed_factor": 456647.6188185499,
+      "sumw": 99972434.14541927,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 578
+      },
+      "xsec_pb": 415700000.0
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt",
+        "qcd_all",
+        "qcd_electron",
+        "qcd_fake",
+        "qcd_prompt"
+      ],
+      "files_attempted": 222,
+      "files_processed": 222,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 2.446091947556412e-05,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "QCD_Bin-PT-2500to3000_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "QCD",
+      "recomputed_factor": 2.446091947556412e-05,
+      "sumw": 19996725.0,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 222
+      },
+      "xsec_pb": 0.004454
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt",
+        "qcd_all",
+        "qcd_electron",
+        "qcd_fake",
+        "qcd_prompt"
+      ],
+      "files_attempted": 315,
+      "files_processed": 315,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 3.144007165297244e-06,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "QCD_Bin-PT-3000_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "QCD",
+      "recomputed_factor": 3.144007165297244e-06,
+      "sumw": 19347697.0,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 315
+      },
+      "xsec_pb": 0.0005539
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt",
+        "qcd_all",
+        "qcd_electron",
+        "qcd_fake",
+        "qcd_prompt"
+      ],
+      "files_attempted": 631,
+      "files_processed": 630,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 10.430104234562746,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "QCD_Bin-PT-300to470_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "QCD",
+      "recomputed_factor": 10.430104234562746,
+      "sumw": 79821390.2063561,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 630
+      },
+      "xsec_pb": 7581.0
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt",
+        "qcd_all",
+        "qcd_electron",
+        "qcd_fake",
+        "qcd_prompt"
+      ],
+      "files_attempted": 631,
+      "files_processed": 631,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 123348.45672530399,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "QCD_Bin-PT-30to50_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "QCD",
+      "recomputed_factor": 123348.45672530399,
+      "sumw": 99983302.0,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 631
+      },
+      "xsec_pb": 112300000.0
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt",
+        "qcd_all",
+        "qcd_electron",
+        "qcd_fake",
+        "qcd_prompt"
+      ],
+      "files_attempted": 600,
+      "files_processed": 600,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.8829048932474451,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "QCD_Bin-PT-470to600_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "QCD",
+      "recomputed_factor": 0.8829048932474451,
+      "sumw": 77529082.15088554,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 600
+      },
+      "xsec_pb": 623.3
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt",
+        "qcd_all",
+        "qcd_electron",
+        "qcd_fake",
+        "qcd_prompt"
+      ],
+      "files_attempted": 660,
+      "files_processed": 660,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 18783.307274608524,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "QCD_Bin-PT-50to80_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "QCD",
+      "recomputed_factor": 18783.307274608524,
+      "sumw": 97814968.0,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 660
+      },
+      "xsec_pb": 16730000.0
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt",
+        "qcd_all",
+        "qcd_electron",
+        "qcd_fake",
+        "qcd_prompt"
+      ],
+      "files_attempted": 690,
+      "files_processed": 690,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.24620748196052317,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "QCD_Bin-PT-600to800_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "QCD",
+      "recomputed_factor": 0.24620748196052317,
+      "sumw": 79708520.0,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 690
+      },
+      "xsec_pb": 178.7
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt",
+        "qcd_all",
+        "qcd_electron",
+        "qcd_fake",
+        "qcd_prompt"
+      ],
+      "files_attempted": 650,
+      "files_processed": 650,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.04229496674701317,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "QCD_Bin-PT-800to1000_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "QCD",
+      "recomputed_factor": 0.04229496674701317,
+      "sumw": 79505640.0,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 650
+      },
+      "xsec_pb": 30.62
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt",
+        "qcd_all",
+        "qcd_electron",
+        "qcd_fake",
+        "qcd_prompt"
+      ],
+      "files_attempted": 750,
+      "files_processed": 750,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 2772.787804364492,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "QCD_Bin-PT-80to120_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "QCD",
+      "recomputed_factor": 2772.787804364492,
+      "sumw": 99253509.25404708,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 750
+      },
+      "xsec_pb": 2506000.0
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 779,
+      "files_processed": 778,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.0012484695570486302,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "TBbarQto2Q-t-channel-4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "ST",
+      "recomputed_factor": 0.0012484695570486302,
+      "sumw": 6796075364.510876,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 778
+      },
+      "xsec_pb": 77.26
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 391,
+      "files_processed": 391,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.002470927911439161,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "TBbarQtoLNu-t-channel-4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "ST",
+      "recomputed_factor": 0.002470927911439161,
+      "sumw": 1715570891.5566936,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 391
+      },
+      "xsec_pb": 38.6
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 94,
+      "files_processed": 94,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.008451108707842206,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "TBbartoLplusNuBbar-s-channel-4FS_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "ST",
+      "recomputed_factor": 0.008451108707842206,
+      "sumw": 29602028.402244408,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 94
+      },
+      "xsec_pb": 2.278
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 101,
+      "files_processed": 101,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.011215521221644188,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "TTTT_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "TT",
+      "recomputed_factor": 0.011215521221644188,
+      "sumw": 94510.33251619201,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 101
+      },
+      "xsec_pb": 0.009652
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 88,
+      "files_processed": 88,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.011110588578486206,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "TTW-WtoQQ-1Jets_TuneCP5_13p6TeV_amcatnloFXFXold-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "TT",
+      "recomputed_factor": 0.011110588578486206,
+      "sumw": 4623859.0905505,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 88
+      },
+      "xsec_pb": 0.4678
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 65,
+      "files_processed": 65,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.013641349838801433,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "TTZ-ZtoQQ-1Jets_TuneCP5_13p6TeV_amcatnloFXFXold-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "TT",
+      "recomputed_factor": 0.013641349838801433,
+      "sumw": 5173266.050202001,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 65
+      },
+      "xsec_pb": 0.6426
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 780,
+      "files_processed": 780,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.00028468325931030173,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3",
+      "process": "TT",
+      "recomputed_factor": 0.00028468325931030173,
+      "sumw": 37820112169.870705,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 780
+      },
+      "xsec_pb": 98.04
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 773,
+      "files_processed": 773,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.0002809086146335769,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "TTto4Q_TuneCP5_13p6TeV_powheg-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "TT",
+      "recomputed_factor": 0.0002809086146335769,
+      "sumw": 164126801380.3701,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 773
+      },
+      "xsec_pb": 419.82
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 790,
+      "files_processed": 790,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.00027511366419084296,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "TT",
+      "recomputed_factor": 0.00027511366419084296,
+      "sumw": 161967473084.469,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 790
+      },
+      "xsec_pb": 405.75
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 176,
+      "files_processed": 176,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.007403856648242248,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "TWminusto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "ST",
+      "recomputed_factor": 0.007403856648242248,
+      "sumw": 56972823.76477995,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 176
+      },
+      "xsec_pb": 3.841
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 154,
+      "files_processed": 154,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.004550917391242053,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "TWminusto4Q_TuneCP5_13p6TeV_powheg-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "ST",
+      "recomputed_factor": 0.004550917391242053,
+      "sumw": 393607236.96000093,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 154
+      },
+      "xsec_pb": 16.311
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 252,
+      "files_processed": 252,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.0016796389295480544,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "TWminustoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "ST",
+      "recomputed_factor": 0.0016796389295480544,
+      "sumw": 1035079855.209,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 252
+      },
+      "xsec_pb": 15.831
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 825,
+      "files_processed": 825,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.00253306724409548,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "TbarBQto2Q-t-channel-4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "ST",
+      "recomputed_factor": 0.00253306724409548,
+      "sumw": 2025958296.9865136,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 825
+      },
+      "xsec_pb": 46.73
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 249,
+      "files_processed": 249,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.004957754694922694,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "TbarBQtoLNu-t-channel-4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "ST",
+      "recomputed_factor": 0.004957754694922694,
+      "sumw": 517007992.0704846,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 249
+      },
+      "xsec_pb": 23.34
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 68,
+      "files_processed": 68,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.013772049295505705,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "TbarBtoLminusNuB-s-channel-4FS_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "ST",
+      "recomputed_factor": 0.013772049295505705,
+      "sumw": 11402994.327884698,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 68
+      },
+      "xsec_pb": 1.43
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 90,
+      "files_processed": 90,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.007402478642724178,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "TbarWplusto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "ST",
+      "recomputed_factor": 0.007402478642724178,
+      "sumw": 57087278.51789979,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 90
+      },
+      "xsec_pb": 3.848
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 195,
+      "files_processed": 195,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.004549710870994256,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "TbarWplusto4Q_TuneCP5_13p6TeV_powheg-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "ST",
+      "recomputed_factor": 0.004549710870994256,
+      "sumw": 394363336.676799,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 195
+      },
+      "xsec_pb": 16.338
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 252,
+      "files_processed": 252,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.001643124095277771,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "TbarWplustoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "ST",
+      "recomputed_factor": 0.001643124095277771,
+      "sumw": 1059819976.4733002,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 252
+      },
+      "xsec_pb": 15.857
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 518,
+      "files_processed": 518,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.1376966325170572,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "WW_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "VV",
+      "recomputed_factor": 0.1376966325170572,
+      "sumw": 63987466.06173214,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 518
+      },
+      "xsec_pb": 80.23
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 307,
+      "files_processed": 307,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.10461504215111878,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "WZ_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "VV",
+      "recomputed_factor": 0.10461504215111878,
+      "sumw": 30547825.0,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 307
+      },
+      "xsec_pb": 29.1
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 3089,
+      "files_processed": 3089,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 3.3426732110495635e-05,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "WtoLNu-2Jets_Bin-1J-PTLNu-100to200_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3",
+      "process": "WtoLNu",
+      "recomputed_factor": 3.3426732110495635e-05,
+      "sumw": 1124590518622.57,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 3089
+      },
+      "xsec_pb": 342.3
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 109,
+      "files_processed": 109,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.00035018713219139223,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "WtoLNu-2Jets_Bin-1J-PTLNu-200to400_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "WtoLNu",
+      "recomputed_factor": 0.00035018713219139223,
+      "sumw": 6849106033.653841,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 109
+      },
+      "xsec_pb": 21.84
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 62,
+      "files_processed": 62,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.0008246944491791504,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "WtoLNu-2Jets_Bin-1J-PTLNu-400to600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "WtoLNu",
+      "recomputed_factor": 0.0008246944491791504,
+      "sumw": 91151080.34839003,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 62
+      },
+      "xsec_pb": 0.6845
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 3384,
+      "files_processed": 3384,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 2.2057623266558304e-05,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "WtoLNu-2Jets_Bin-1J-PTLNu-40to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3",
+      "process": "WtoLNu",
+      "recomputed_factor": 2.2057623266558304e-05,
+      "sumw": 20965632353560.336,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 3384
+      },
+      "xsec_pb": 4211.0
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 27,
+      "files_processed": 27,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.000624427611722841,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "WtoLNu-2Jets_Bin-1J-PTLNu-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "WtoLNu",
+      "recomputed_factor": 0.000624427611722841,
+      "sumw": 13635438.984686002,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 27
+      },
+      "xsec_pb": 0.07753
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 3262,
+      "files_processed": 3262,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 3.787364832090779e-05,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "WtoLNu-2Jets_Bin-2J-PTLNu-100to200_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3",
+      "process": "WtoLNu",
+      "recomputed_factor": 3.787364832090779e-05,
+      "sumw": 1192042594298.3958,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 3262
+      },
+      "xsec_pb": 411.1
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 136,
+      "files_processed": 136,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.000431705526448025,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "WtoLNu-2Jets_Bin-2J-PTLNu-200to400_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "WtoLNu",
+      "recomputed_factor": 0.000431705526448025,
+      "sumw": 13632565347.084,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 136
+      },
+      "xsec_pb": 53.59
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 51,
+      "files_processed": 51,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.0032190046295786554,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "WtoLNu-2Jets_Bin-2J-PTLNu-400to600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "WtoLNu",
+      "recomputed_factor": 0.0032190046295786554,
+      "sumw": 105725905.7265,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 51
+      },
+      "xsec_pb": 3.099
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 3309,
+      "files_processed": 3309,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 1.599649765672178e-05,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "WtoLNu-2Jets_Bin-2J-PTLNu-40to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3",
+      "process": "WtoLNu",
+      "recomputed_factor": 1.599649765672178e-05,
+      "sumw": 10853964644382.143,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 3309
+      },
+      "xsec_pb": 1581.0
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 67,
+      "files_processed": 67,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.0038723015628618325,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "WtoLNu-2Jets_Bin-2J-PTLNu-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "WtoLNu",
+      "recomputed_factor": 0.0038723015628618325,
+      "sumw": 14914731.474920703,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 67
+      },
+      "xsec_pb": 0.5259
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 76,
+      "files_processed": 76,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.291709375,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "ZZ_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "VV",
+      "recomputed_factor": 0.291709375,
+      "sumw": 4800000.0,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 76
+      },
+      "xsec_pb": 12.75
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 344,
+      "files_processed": 344,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 5.5565209297698104e-05,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "Zto2Nu-2Jets_Bin-1J-PTNuNu-100to200_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "Zto2Nu",
+      "recomputed_factor": 5.5565209297698104e-05,
+      "sumw": 155959031011.1367,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 344
+      },
+      "xsec_pb": 78.91
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 70,
+      "files_processed": 70,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.0006017198496435017,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "Zto2Nu-2Jets_Bin-1J-PTNuNu-200to400_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "Zto2Nu",
+      "recomputed_factor": 0.0006017198496435017,
+      "sumw": 986650050.43749,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 70
+      },
+      "xsec_pb": 5.406
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 53,
+      "files_processed": 53,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.0006992709981994435,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "Zto2Nu-2Jets_Bin-1J-PTNuNu-400to600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "Zto2Nu",
+      "recomputed_factor": 0.0006992709981994435,
+      "sumw": 26588441.4595686,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 53
+      },
+      "xsec_pb": 0.1693
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 1341,
+      "files_processed": 1341,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 4.594045246778051e-05,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "Zto2Nu-2Jets_Bin-1J-PTNuNu-40to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3",
+      "process": "Zto2Nu",
+      "recomputed_factor": 4.594045246778051e-05,
+      "sumw": 2117253287137.6663,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 1341
+      },
+      "xsec_pb": 885.7
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 52,
+      "files_processed": 52,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.0006334991034981116,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "Zto2Nu-2Jets_Bin-1J-PTNuNu-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "Zto2Nu",
+      "recomputed_factor": 0.0006334991034981116,
+      "sumw": 3285070.1579662203,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 52
+      },
+      "xsec_pb": 0.01895
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 355,
+      "files_processed": 354,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 6.343321702869942e-05,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "Zto2Nu-2Jets_Bin-2J-PTNuNu-100to200_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "Zto2Nu",
+      "recomputed_factor": 6.343321702869942e-05,
+      "sumw": 173473213490.36136,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 354
+      },
+      "xsec_pb": 100.2
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 102,
+      "files_processed": 102,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.0006666335936736205,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "Zto2Nu-2Jets_Bin-2J-PTNuNu-200to400_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "Zto2Nu",
+      "recomputed_factor": 0.0006666335936736205,
+      "sumw": 2266797254.6547604,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 102
+      },
+      "xsec_pb": 13.76
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 66,
+      "files_processed": 66,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.0029001475904709,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "Zto2Nu-2Jets_Bin-2J-PTNuNu-400to600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "Zto2Nu",
+      "recomputed_factor": 0.0029001475904709,
+      "sumw": 29346954.713494603,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 66
+      },
+      "xsec_pb": 0.775
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 1412,
+      "files_processed": 1412,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 3.421744010278563e-05,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "Zto2Nu-2Jets_Bin-2J-PTNuNu-40to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3",
+      "process": "Zto2Nu",
+      "recomputed_factor": 3.421744010278563e-05,
+      "sumw": 1054633306629.5682,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 1412
+      },
+      "xsec_pb": 328.6
+    },
+    {
+      "checks": {
+        "finite_positive_factor": true,
+        "formula_matches": true,
+        "measurement_matches_normalization": true,
+        "no_xsec_conflict": true,
+        "process_matches": true,
+        "retained_files_nonzero": true,
+        "status": true
+      },
+      "components": [
+        "electron",
+        "prompt"
+      ],
+      "files_attempted": 66,
+      "files_processed": 66,
+      "luminosity_pb": 109820.0,
+      "normalization_factor": 0.0037561733457863473,
+      "normalization_status": "normalized_with_xsec_lumi_physical_dataset_sumw",
+      "physical_dataset": "Zto2Nu-2Jets_Bin-2J-PTNuNu-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
+      "process": "Zto2Nu",
+      "recomputed_factor": 0.0037561733457863473,
+      "sumw": 3812531.18045382,
+      "sumw_source_counts": {
+        "Runs.genEventSumw": 66
+      },
+      "xsec_pb": 0.1304
+    }
+  ],
+  "errors": [],
+  "factor_application": "photon_fake_2024_worker stores gen_weight \u00d7 nominal post-skim scale factors; measure_photon_fakes_2024 multiplies each physical dataset once by xsec \u00d7 luminosity / retained physical-dataset sumw",
+  "luminosity_pb": 109820.0,
+  "measurement": "workflow/photon_fake_2024_snapshot_complete_20260726T1917Z/measurement_all_background_contamination.json",
+  "normalization": "workflow/intermediate_2024_fullselection_v3_lowdm_relaxed_20260724/final_nominal_inputs_20260725/normalization.json",
+  "normalization_status": "complete",
+  "schema_version": "photon_fake_2024_normalization_audit_v1",
+  "status": "pass",
+  "unique_datasets_checked": 65
+}

@@ -367,7 +367,9 @@ def plot_contour(
     run2_contours: Path | None = Path("/eos/user/t/taiwoo/run2_sus19010_contours.json"),
     luminosity_label: str = r"109.82 fb$^{-1}$ (13.6 TeV)",
     analysis_label: str | None = None,
-    x_max: float = 1700.0,
+    x_max: float = 1800.0,
+    y_min: float = 1.0,
+    y_max: float = 1200.0,
     decay_label: str | None = (
         r"$pp\rightarrow \tilde{t}\tilde{t},\ "
         r"\tilde{t}\rightarrow t\tilde{\chi}_1^0$"
@@ -391,7 +393,7 @@ def plot_contour(
 
     # Match the reference view, use all generated mass points, and mask unsupported/off-shell regions.
     xmin, xmax = 600.0, float(x_max)
-    ymin, ymax = 0.0, 1500.0
+    ymin, ymax = float(y_min), float(y_max)
     top_mass = 172.5
     xi = np.linspace(xmin, xmax, 260)
     yi = np.linspace(ymin, ymax, 260)
@@ -472,8 +474,8 @@ def plot_contour(
             except Exception:
                 run2_payload = {}
             for key, style, label in [
-                ("observed", "-", "Run-2 SUS-19-010 observed"),
-                ("expected", "--", "Run-2 SUS-19-010 expected"),
+                ("observed", "-", "SUS-19-010 obs."),
+                ("expected", "--", "SUS-19-010 exp."),
             ]:
                 arr = np.asarray(run2_payload.get(key) or [], dtype=float)
                 if arr.ndim == 2 and arr.shape[1] >= 2:
@@ -502,12 +504,13 @@ def plot_contour(
         )
     if decay_label:
         multiline_decay_label = "\n" in decay_label
+        decay_fontsize = 19 if len(decay_label) > 100 else 23
         ax.text(
-            0.14,
+            0.06,
             0.95,
             decay_label,
             transform=ax.transAxes,
-            fontsize=17 if multiline_decay_label else 19,
+            fontsize=20 if multiline_decay_label else decay_fontsize,
             va="top",
             linespacing=1.15,
         )
@@ -517,7 +520,7 @@ def plot_contour(
         ax.text(0.14, 0.905, analysis_label, transform=ax.transAxes, fontsize=16, va="top")
 
     legend_handles = [
-        Line2D([0], [0], color="red", lw=3.0, label="Run-3 expected"),
+        Line2D([0], [0], color="red", lw=3.0, label=r"Expected $\pm 1\sigma$"),
         *run2_handles,
     ]
     ax.legend(

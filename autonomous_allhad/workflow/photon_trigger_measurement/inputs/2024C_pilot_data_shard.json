@@ -1,0 +1,14 @@
+{
+  "shard_id": "photon_trigger_2024C_data_pilot",
+  "records": [
+    {
+      "dataset": "JetMET0-Run2024C-MINIv6NANOv15-v1____1_",
+      "process_group": "JetMET",
+      "is_data": true,
+      "year": "2024",
+      "file_index": 0,
+      "xsec_pb": -1,
+      "file_path": "root://cms-xrd-global.cern.ch//store/data/Run2024C/JetMET0/NANOAOD/MINIv6NANOv15-v1/2540000/064aaf18-b694-49d9-b2cd-2fae03f98476.root"
+    }
+  ]
+}

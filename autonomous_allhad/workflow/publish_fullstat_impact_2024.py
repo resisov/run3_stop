@@ -37,6 +37,7 @@ def main() -> int:
     lowdm_bins = int(analysis["lowdm_signal_bins"])
     transfer_factor_model = analysis.get("model") == "nb_recoil_transfer_factor"
     an_zinv_model = analysis.get("model") == "an_zinv"
+    free_background_model = analysis.get("model") == "free_background"
     lowdm_sgamma_sharing = (
         ((analysis.get("model_details") or {}).get("lowdm_sgamma_sharing"))
         or {}
@@ -54,7 +55,7 @@ def main() -> int:
     required = {
         "status": validation.get("status") == "complete",
         "year": analysis.get("year") == 2024,
-        "highdm_bins": highdm_bins == 60,
+        "highdm_bins": highdm_bins > 0,
         "lowdm_bins": lowdm_bins > 0,
         "benchmark": analysis.get("benchmark")
         == {"mStop_GeV": 1200, "mLSP_GeV": 500},
@@ -121,8 +122,19 @@ def main() -> int:
             )
             + "lost-lepton and QCD retain direct CR/SR rate constraints."
             if an_zinv_model
-            else ""
+            else (
+                " The seven canonical background process normalizations are "
+                "global unconstrained rate parameters; external background-"
+                "estimation constraints are intentionally absent."
+                if free_background_model
+                else ""
+            )
         )
+    )
+    region_scope = (
+        "and the corresponding control-region observations"
+        if free_background_model
+        else "with their control-region constraints"
     )
     notice = (
         f"{NOTICE_START}"
@@ -132,7 +144,7 @@ def main() -> int:
         "<strong>2024-only High-dM + Low-dM nuisance impacts "
         "for (mStop, mLSP)=(1200, 500) GeV</strong>"
         f"<p>The expected Asimov fit uses the High-dM {highdm_bins}-bin and Low-dM "
-        f"{lowdm_bins}-bin signal regions with their control-region constraints "
+        f"{lowdm_bins}-bin signal regions {region_scope} "
         f"({channel_count} channels, {total_bins} analysis bins). The Poisson likelihood includes "
         f"data-counting statistics, and {stat_count} individual autoMCStats nuisance "
         f"parameters are scanned alongside {nonstat_count} luminosity/rate/weight "
@@ -261,6 +273,11 @@ def main() -> int:
             "data_counting": "Poisson likelihood",
             "mc_statistics": "individual autoMCStats nuisance fits",
             "autoMCStats_threshold": analysis["autoMCStats_threshold"],
+            "background_normalization": (
+                "seven global unconstrained process rate parameters"
+                if free_background_model
+                else "control-region-constrained background model"
+            ),
         },
         "current_model_scope": (
             f"2024 luminosity plus {max(0, nonstat_count - 1)} "
@@ -295,13 +312,20 @@ def main() -> int:
         }
     statistical = page_summary.setdefault("statistical_results", {})
     limit_stem = (
-        f"expected_limit_highdm{highdm_bins}_lowdm{lowdm_bins}_"
-        + (
-            "an_zinv_"
-            if an_zinv_model
-            else ("nb_recoil_tf_" if transfer_factor_model else "")
+        (
+            f"expected_limit_t2tt_highdm{highdm_bins}_lowdm{lowdm_bins}_"
+            "free_background_x1800"
         )
-        + "x1800"
+        if free_background_model
+        else (
+            f"expected_limit_highdm{highdm_bins}_lowdm{lowdm_bins}_"
+            + (
+                "an_zinv_"
+                if an_zinv_model
+                else ("nb_recoil_tf_" if transfer_factor_model else "")
+            )
+            + "x1800"
+        )
     )
     statistical.update(
         {

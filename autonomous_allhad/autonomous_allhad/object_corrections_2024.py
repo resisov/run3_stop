@@ -178,8 +178,6 @@ REQUIRED_BRANCHES = {
 
 
 EXTERNAL_FINAL_WEIGHT_DEPENDENCIES = {
-    "met_trigger": "No analysis-specific 2024 MET trigger efficiency/SF payload has been supplied.",
-    "photon_trigger": "No analysis-specific 2024 Photon175/Photon200 OR trigger efficiency/SF payload has been supplied.",
     "top_tag": "Run-3 data/MC top-tag SF payload and decorrelation prescription have not been supplied.",
     "w_tag": "Run-3 data/MC W-tag SF payload and decorrelation prescription have not been supplied.",
     "soft_sv": "Run-3 soft-SV tagging/veto efficiency and SF payload have not been supplied.",

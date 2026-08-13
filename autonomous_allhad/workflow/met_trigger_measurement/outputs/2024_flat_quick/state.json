@@ -1,0 +1,12 @@
+{
+  "roots_total": 4159,
+  "roots_processed": 1157,
+  "roots_skipped_process": 3002,
+  "roots_failed": [],
+  "data_duplicates_removed": 0,
+  "data_selected": 1094055,
+  "mc_selected": 146686,
+  "started_unix": 1784284045.3377967,
+  "status": "complete",
+  "completed_unix": 1784284811.0459769
+}

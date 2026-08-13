@@ -1,0 +1,40 @@
+{
+  "captions": {
+    "efficiency": "Tag-and-probe efficiencies in data and simulation; error bars are statistical. The horizontal axis is probe |eta| for 5 < pT < 10 GeV.",
+    "mass_fit_bin_00": "Probe bin 0 < |eta| < 0.8, 5 < pT < 10 GeV. Panels are data pass, data fail, simulation pass, and simulation fail in reading order. The nominal data fit has chi2/ndf=1.547; the resulting scale factor is 0.8993 +/- 0.0629.",
+    "mass_fit_bin_01": "Probe bin 0.8 < |eta| < 1.4442, 5 < pT < 10 GeV. Panels are data pass, data fail, simulation pass, and simulation fail in reading order. The nominal data fit has chi2/ndf=1.180; the resulting scale factor is 0.8079 +/- 0.0821.",
+    "mass_fit_bin_02": "Probe bin 1.4442 < |eta| < 2.5, 5 < pT < 10 GeV. Panels are data pass, data fail, simulation pass, and simulation fail in reading order. The nominal data fit has chi2/ndf=1.204; the resulting scale factor is 1.0374 +/- 0.2243.",
+    "scale_factor": "Data-to-simulation scale factors with total uncertainties. The horizontal axis is probe |eta| for the single 5-10 GeV pT bin.",
+    "scale_factor_heatmap": "Two-dimensional scale-factor map; each cell shows the central value and total uncertainty."
+  },
+  "files": [
+    "autonomous_allhad/workflow/lowpt_electron_measurement/plots/2024_full/scale_factor.png",
+    "autonomous_allhad/workflow/lowpt_electron_measurement/plots/2024_full/scale_factor.pdf",
+    "autonomous_allhad/workflow/lowpt_electron_measurement/plots/2024_full/scale_factor_heatmap.png",
+    "autonomous_allhad/workflow/lowpt_electron_measurement/plots/2024_full/scale_factor_heatmap.pdf",
+    "autonomous_allhad/workflow/lowpt_electron_measurement/plots/2024_full/efficiency.png",
+    "autonomous_allhad/workflow/lowpt_electron_measurement/plots/2024_full/efficiency.pdf",
+    "autonomous_allhad/workflow/lowpt_electron_measurement/plots/2024_full/mass_fit_bin_00.png",
+    "autonomous_allhad/workflow/lowpt_electron_measurement/plots/2024_full/mass_fit_bin_00.pdf",
+    "autonomous_allhad/workflow/lowpt_electron_measurement/plots/2024_full/mass_fit_bin_01.png",
+    "autonomous_allhad/workflow/lowpt_electron_measurement/plots/2024_full/mass_fit_bin_01.pdf",
+    "autonomous_allhad/workflow/lowpt_electron_measurement/plots/2024_full/mass_fit_bin_02.png",
+    "autonomous_allhad/workflow/lowpt_electron_measurement/plots/2024_full/mass_fit_bin_02.pdf"
+  ],
+  "measurement": "veto_electron_5to10_sf_2024",
+  "schema_version": 1,
+  "style": {
+    "cms_label_fontsize": 17,
+    "cms_llabel": "Work in progress",
+    "cms_rlabel": "109.82 fb$^{-1}$ (13.6 TeV)",
+    "colorbar_figure_inches": [
+      12.0,
+      10.0
+    ],
+    "standard_figure_inches": [
+      8.0,
+      8.0
+    ],
+    "titles": false
+  }
+}

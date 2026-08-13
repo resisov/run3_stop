@@ -26,6 +26,7 @@ SECTIONS = (
 )
 ADOPTED_SEARCH_BIN_SCHEMES = {
     "boosted_an17_selected_recoil6_with_nt0_wsplit_SR",
+    "boosted_an17_selected_recoil60_nb2_nt2plus_w0_SR",
     "cat2_LLCR_lowDeltaM",
     "cat3_QCDCR_lowDeltaM",
     "cat4_GCR_lowDeltaM",
@@ -113,12 +114,15 @@ def merge_variations(
     source: dict[str, Any],
     scale: float,
     coverage: dict[str, int],
+    coverage_increment: int = 1,
 ) -> None:
     for variation, leaf in source.items():
         if not hist_leaf(leaf):
             raise ValueError(f"invalid shape histogram leaf for {variation}")
         merge_scaled_leaf(target.setdefault(variation, {}), leaf, scale)
-        coverage[variation] = int(coverage.get(variation, 0)) + 1
+        coverage[variation] = (
+            int(coverage.get(variation, 0)) + int(coverage_increment)
+        )
 
 
 def physical_normalization(norm: dict[str, Any], physical_dataset: str) -> tuple[float | None, str]:
@@ -147,7 +151,34 @@ def verify_histogram_file(path: Path) -> dict[str, Any]:
     actual = sha256(path)
     if expected != actual:
         raise RuntimeError(f"shape histogram checksum mismatch for {path}: {actual} != {expected}")
-    if metadata.get("status") not in {"complete", "complete_with_bad_files"}:
+    status = metadata.get("status")
+    if status == "partial":
+        summary = metadata.get("summary") or {}
+        variations = set(metadata.get("variations") or [])
+        expected_pair = {
+            f"{metadata.get('nuisance')}Up",
+            f"{metadata.get('nuisance')}Down",
+        }
+        partial_seed_is_complete = (
+            metadata.get("schema_version")
+            == "shape_histogram_2024_nuisance_pair_v1_metadata"
+            and metadata.get("nuisance") in FINAL_SHAPE_NUISANCES
+            and int(metadata.get("variation_count") or 0) == 2
+            and variations == expected_pair
+            and not (summary.get("bad_files") or [])
+            and int(summary.get("files_attempted") or 0) > 0
+            and int(summary.get("files_attempted") or 0)
+            == int(summary.get("files_processed") or -1)
+            == int(summary.get("source_record_count") or -2)
+            and set((summary.get("btag_sf_status") or {})) == expected_pair
+            and all(
+                record.get("applied") is True
+                for record in (summary.get("btag_sf_status") or {}).values()
+            )
+        )
+        if not partial_seed_is_complete:
+            raise RuntimeError(f"partial shape seed is not internally complete: {sidecar}")
+    elif status not in {"complete", "complete_with_bad_files"}:
         raise RuntimeError(f"shape histogram sidecar is not successful: {sidecar}")
     return metadata
 
@@ -157,7 +188,7 @@ def expand_inputs(items: list[str]) -> list[Path]:
     for item in items:
         path = Path(item)
         if path.is_dir():
-            paths.extend(sorted(path.glob("*.json.gz")))
+            paths.extend(sorted(path.rglob("*.json.gz")))
         else:
             paths.append(path)
     unique: list[Path] = []
@@ -188,14 +219,38 @@ def merge_histograms(
     for path in paths:
         metadata = verify_histogram_file(path)
         payload = read_payload(path)
-        if payload.get("schema_version") != OUTPUT_SCHEMA:
+        payload_schema = payload.get("schema_version")
+        validated_local_seed_schema = (
+            metadata.get("status") == "partial"
+            and metadata.get("schema_version")
+            == "shape_histogram_2024_nuisance_pair_v1_metadata"
+            and payload_schema == "shape_histogram_2024_nuisance_pair_v1"
+        )
+        if payload_schema != OUTPUT_SCHEMA and not validated_local_seed_schema:
             raise RuntimeError(f"unexpected shape histogram schema in {path}: {payload.get('schema_version')}")
-        digest = str((payload.get("summary") or {}).get("source_record_digest") or metadata.get("source_record_digest") or "")
-        if not digest:
-            raise RuntimeError(f"missing source record digest in {path}")
-        if digest in processed_digests:
-            raise RuntimeError(f"duplicate source record digest {digest} in {path}")
-        processed_digests.add(digest)
+        payload_summary = payload.get("summary") or {}
+        source_digests = set(
+            payload_summary.get("source_record_digests")
+            or metadata.get("source_record_digests")
+            or []
+        )
+        if not source_digests:
+            digest = str(
+                payload_summary.get("source_record_digest")
+                or metadata.get("source_record_digest")
+                or ""
+            )
+            if digest:
+                source_digests = {digest}
+        if not source_digests:
+            raise RuntimeError(f"missing source record digest coverage in {path}")
+        duplicate_digests = source_digests & processed_digests
+        if duplicate_digests:
+            raise RuntimeError(
+                f"duplicate source record digests in {path}: "
+                f"{sorted(duplicate_digests)[:3]}"
+            )
+        processed_digests.update(source_digests)
         current_definitions = {field: payload.get(field) for field in DEFINITION_FIELDS}
         if definitions is None:
             definitions = current_definitions
@@ -215,16 +270,33 @@ def merge_histograms(
                 continue
             process = str(dataset_record.get("process") or "unknown")
             process_datasets.setdefault(process, []).append(physical_dataset)
+            coverage_increment = int(dataset_record.get("files_processed") or 0)
+            if coverage_increment <= 0:
+                raise RuntimeError(
+                    f"invalid source-file coverage for {physical_dataset} in {path}"
+                )
 
             for region, by_sample in (dataset_record.get("histograms") or {}).items():
                 source = (by_sample or {}).get(physical_dataset) or {}
                 target = merged["histograms"].setdefault(region, {}).setdefault(process, {})
-                merge_variations(target, source, factor, coverage)
+                merge_variations(
+                    target,
+                    source,
+                    factor,
+                    coverage,
+                    coverage_increment,
+                )
 
             for scheme, by_sample in (dataset_record.get("search_bin_histograms") or {}).items():
                 source = (by_sample or {}).get(physical_dataset) or {}
                 target = merged["search_bin_histograms"].setdefault(scheme, {}).setdefault(process, {})
-                merge_variations(target, source, factor, coverage)
+                merge_variations(
+                    target,
+                    source,
+                    factor,
+                    coverage,
+                    coverage_increment,
+                )
 
             for region, by_variable in (dataset_record.get("lowdm_variable_histograms") or {}).items():
                 for variable, by_sample in (by_variable or {}).items():
@@ -235,7 +307,13 @@ def merge_histograms(
                         .setdefault(variable, {})
                         .setdefault(process, {})
                     )
-                    merge_variations(target, source, factor, coverage)
+                    merge_variations(
+                        target,
+                        source,
+                        factor,
+                        coverage,
+                        coverage_increment,
+                    )
 
             for region, by_variable in (dataset_record.get("highdm_variable_histograms") or {}).items():
                 for variable, by_sample in (by_variable or {}).items():
@@ -246,7 +324,13 @@ def merge_histograms(
                         .setdefault(variable, {})
                         .setdefault(process, {})
                     )
-                    merge_variations(target, source, factor, coverage)
+                    merge_variations(
+                        target,
+                        source,
+                        factor,
+                        coverage,
+                        coverage_increment,
+                    )
 
     missing_shards = None if expected_shards is None else max(0, expected_shards - len(processed_digests))
     status = "complete"
@@ -287,6 +371,7 @@ def zero_missing_variations(
     nominal_by_sample: dict[str, Any],
     shape_by_sample: dict[str, Any],
     background_processes: set[str],
+    variations: tuple[str, ...],
 ) -> tuple[int, int]:
     attached = 0
     zeroed = 0
@@ -297,7 +382,7 @@ def zero_missing_variations(
         if not hist_leaf(nominal_leaf):
             continue
         source_variations = shape_by_sample.get(process) or {}
-        for variation in FINAL_SHAPE_VARIATIONS:
+        for variation in variations:
             source = source_variations.get(variation)
             if hist_leaf(source):
                 nominal_variations[variation] = source
@@ -308,14 +393,23 @@ def zero_missing_variations(
     return attached, zeroed
 
 
-def attach_to_nominal(nominal: dict[str, Any], shapes: dict[str, Any]) -> dict[str, Any]:
+def attach_to_nominal(
+    nominal: dict[str, Any],
+    shapes: dict[str, Any],
+    variations: tuple[str, ...] = FINAL_SHAPE_VARIATIONS,
+) -> dict[str, Any]:
     background_processes = set((shapes.get("summary") or {}).get("process_datasets") or {})
     attached = 0
     zeroed = 0
 
     for region, nominal_by_sample in (nominal.get("histograms") or {}).items():
         shape_by_sample = (shapes.get("histograms") or {}).get(region) or {}
-        a, z = zero_missing_variations(nominal_by_sample, shape_by_sample, background_processes)
+        a, z = zero_missing_variations(
+            nominal_by_sample,
+            shape_by_sample,
+            background_processes,
+            variations,
+        )
         attached += a
         zeroed += z
 
@@ -323,7 +417,12 @@ def attach_to_nominal(nominal: dict[str, Any], shapes: dict[str, Any]) -> dict[s
         if scheme not in ADOPTED_SEARCH_BIN_SCHEMES:
             continue
         shape_by_sample = (shapes.get("search_bin_histograms") or {}).get(scheme) or {}
-        a, z = zero_missing_variations(nominal_by_sample, shape_by_sample, background_processes)
+        a, z = zero_missing_variations(
+            nominal_by_sample,
+            shape_by_sample,
+            background_processes,
+            variations,
+        )
         attached += a
         zeroed += z
 
@@ -331,7 +430,12 @@ def attach_to_nominal(nominal: dict[str, Any], shapes: dict[str, Any]) -> dict[s
         shape_by_variable = (shapes.get("lowdm_variable_histograms") or {}).get(region) or {}
         for variable, nominal_by_sample in (nominal_by_variable or {}).items():
             shape_by_sample = (shape_by_variable or {}).get(variable) or {}
-            a, z = zero_missing_variations(nominal_by_sample, shape_by_sample, background_processes)
+            a, z = zero_missing_variations(
+                nominal_by_sample,
+                shape_by_sample,
+                background_processes,
+                variations,
+            )
             attached += a
             zeroed += z
 
@@ -339,7 +443,12 @@ def attach_to_nominal(nominal: dict[str, Any], shapes: dict[str, Any]) -> dict[s
         shape_by_variable = (shapes.get("highdm_variable_histograms") or {}).get(region) or {}
         for variable, nominal_by_sample in (nominal_by_variable or {}).items():
             shape_by_sample = (shape_by_variable or {}).get(variable) or {}
-            a, z = zero_missing_variations(nominal_by_sample, shape_by_sample, background_processes)
+            a, z = zero_missing_variations(
+                nominal_by_sample,
+                shape_by_sample,
+                background_processes,
+                variations,
+            )
             attached += a
             zeroed += z
 
@@ -347,7 +456,12 @@ def attach_to_nominal(nominal: dict[str, Any], shapes: dict[str, Any]) -> dict[s
         "status": shapes.get("status"),
         "schema_version": shapes.get("schema_version"),
         "jes_source_policy": shapes.get("jes_source_policy"),
-        "shape_nuisances": shapes.get("shape_nuisances"),
+        "shape_nuisances": sorted(
+            {
+                variation[:-2] if variation.endswith("Up") else variation[:-4]
+                for variation in variations
+            }
+        ),
         "attached_variation_leaves": attached,
         "zero_filled_variation_leaves": zeroed,
         "signal_shape_status": "not_included_fastsim_deferred_by_user",
@@ -365,6 +479,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--expected-shards", type=int)
     parser.add_argument("--nominal-hists")
     parser.add_argument("--attached-output")
+    parser.add_argument(
+        "--include-nuisance",
+        action="append",
+        choices=FINAL_SHAPE_NUISANCES,
+        help="Attach only the named nuisance pair; repeat to include more than one.",
+    )
     args = parser.parse_args(argv)
 
     paths = expand_inputs(args.inputs)
@@ -374,6 +494,14 @@ def main(argv: list[str] | None = None) -> int:
     if normalization.get("schema_version") != "flat_ntuple_campaign_normalization_v1":
         raise RuntimeError(f"unexpected normalization schema: {normalization.get('schema_version')}")
     merged = merge_histograms(paths, normalization, args.expected_shards)
+    selected_nuisances = tuple(args.include_nuisance or FINAL_SHAPE_NUISANCES)
+    selected_variations = tuple(
+        variation
+        for nuisance in selected_nuisances
+        for variation in (f"{nuisance}Up", f"{nuisance}Down")
+    )
+    merged["shape_nuisances"] = list(selected_nuisances)
+    merged["variations"] = list(selected_variations)
     write_payload(Path(args.output), merged)
 
     attached_output = None
@@ -381,7 +509,7 @@ def main(argv: list[str] | None = None) -> int:
         if not args.attached_output:
             raise ValueError("--attached-output is required with --nominal-hists")
         nominal = read_payload(Path(args.nominal_hists))
-        combined = attach_to_nominal(nominal, merged)
+        combined = attach_to_nominal(nominal, merged, selected_variations)
         attached_output = Path(args.attached_output)
         write_payload(attached_output, combined)
 
