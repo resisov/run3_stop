@@ -841,7 +841,7 @@ VARIABLE_XLABELS = {
     "met": r"$p_{T}^{miss}$ (GeV)",
     "ht": r"$H_{T}$ (GeV)",
     "njet": r"$N_{j}$",
-    "nb_medium_lowdm": r"$N_{b}$ (medium WP)",
+    "nb_medium_lowdm": r"$N_{b}$",
     "nb_loose_lowdm": r"$N_{b}$ (loose WP)",
     "n_e_veto": r"$N_{e}^{\mathrm{veto}}$",
     "n_m_loose": r"$N_{\mu}^{\mathrm{loose}}$",
@@ -1279,7 +1279,13 @@ def lowdm_nsv_inclusive_blocks(payload: dict, scheme_name: str) -> list[dict]:
     return blocks
 
 
-def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Bin", reference_style: bool = False) -> dict:
+def draw_flat_blocks(
+    blocks: list[dict],
+    outbase: Path,
+    xlabel: str = "Bin",
+    reference_style: bool = False,
+    show_yields: bool = False,
+) -> dict:
     import matplotlib
 
     matplotlib.use("Agg")
@@ -1367,7 +1373,13 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Bin", ref
     )
     unit_area_audit = None
     uncertainty_label = "Stat. syst. unc" if reference_style else "MC stat+syst unc."
-    raw_legend_yields = {}
+    raw_legend_yields = {
+        group: float(np.sum(values)) for group, values in groups.items()
+    }
+    raw_legend_yields["Data"] = float(np.sum(data[data_mask]))
+    raw_signal_yields = {
+        key: float(np.sum(values)) for key, values in signals.items()
+    }
     if unit_area:
         raw_groups = {group: values.copy() for group, values in groups.items()}
         raw_bkg = bkg.copy()
@@ -1379,9 +1391,6 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Bin", ref
             raise RuntimeError(f"GCR data integral is not positive and finite: {data_integral}")
         if not np.isfinite(mc_integral) or mc_integral <= 0:
             raise RuntimeError(f"GCR MC integral is not positive and finite: {mc_integral}")
-        raw_legend_yields = {
-            group: float(np.sum(values)) for group, values in raw_groups.items()
-        }
         raw_legend_yields["Data"] = data_integral
 
         for group in groups:
@@ -1538,7 +1547,7 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Bin", ref
             )
             legend_group_labels[group] = (
                 f"{base_label} ({compact_yield(raw_legend_yields[group])})"
-                if unit_area
+                if show_yields
                 else base_label
             )
             stack_labels.append(legend_group_labels[group])
@@ -1550,9 +1559,16 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Bin", ref
         ax.fill_between(edges, np.r_[lower, lower[-1]], np.r_[upper, upper[-1]], step="post", facecolor="0.82", edgecolor="0.15", hatch="////", linewidth=0.0, alpha=0.65, label=uncertainty_label)
     if reference_style and np.any(bkg > 0):
         ax.stairs(bkg, edges, color="black", linewidth=1.4, zorder=6)
+    legend_signal_labels = {}
     for spec in signal_specs:
         vals = signals.get(spec["key"])
         if vals is not None:
+            signal_label = (
+                f"{spec['label']} ({compact_yield(raw_signal_yields[spec['key']])})"
+                if show_yields
+                else spec["label"]
+            )
+            legend_signal_labels[spec["key"]] = signal_label
             outline_color = spec.get("outline_color")
             if outline_color:
                 ax.hist(
@@ -1574,13 +1590,19 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Bin", ref
                 linewidth=2.8,
                 linestyle="--",
                 color=spec["color"],
-                label=spec["label"],
+                label=signal_label,
                 zorder=8,
             )
     mask = data_mask & (data > 0)
-    data_legend_label = "Data" if reference_style else "DATA"
-    if unit_area:
-        data_legend_label = f"Data ({compact_yield(raw_legend_yields['Data'])})"
+    data_base_label = "Data" if reference_style else "DATA"
+    if show_yields:
+        data_legend_label = (
+            f"{data_base_label} ({compact_yield(raw_legend_yields['Data'])})"
+            if np.any(data_mask)
+            else f"{data_base_label} (blinded)"
+        )
+    else:
+        data_legend_label = data_base_label
     ax.errorbar(
         centers[mask],
         data[mask],
@@ -1708,10 +1730,16 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Bin", ref
             for group in desired_groups
             if group in legend_group_labels
         )
+        desired.extend(
+            legend_signal_labels[spec["key"]]
+            for spec in signal_specs
+            if spec["key"] in legend_signal_labels
+        )
         desired.append(data_legend_label)
         ordered = [(handles[legend_labels.index(label)], label) for label in desired if label in legend_labels]
         if ordered:
-            ax.legend([item[0] for item in ordered], [item[1] for item in ordered], fontsize=15, ncol=3, frameon=False, columnspacing=1.2, handlelength=1.8, loc="upper center", bbox_to_anchor=(0.52, 0.995))
+            legend_fontsize = 13 if len(ordered) > 10 else 15
+            ax.legend([item[0] for item in ordered], [item[1] for item in ordered], fontsize=legend_fontsize, ncol=3, frameon=False, columnspacing=1.2, handlelength=1.8, loc="upper center", bbox_to_anchor=(0.52, 0.995))
     else:
         ax.legend(fontsize=12, ncol=4, frameon=False, columnspacing=1.05, handlelength=2.0, loc="upper center", bbox_to_anchor=(0.5, 0.995))
     outbase.parent.mkdir(parents=True, exist_ok=True)
@@ -1727,6 +1755,7 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Bin", ref
         "bins": nbin,
         "labels": labels,
         "signals": list(signals),
+        "legend_yields_displayed": show_yields,
         "unit_area": unit_area,
         "unit_area_audit": unit_area_audit,
     }
@@ -1765,6 +1794,7 @@ def draw_highdm_distribution_report(
                     output_dir / name,
                     xlabel=record["xlabel"],
                     reference_style=True,
+                    show_yields=True,
                 )
                 plot.update({
                     "year": year,
@@ -1985,6 +2015,7 @@ def draw_flat_report(
                 [record],
                 output_dir / f"lowdm_cr_gcr_{variable}",
                 xlabel=record.get("xlabel", variable),
+                show_yields=True,
             )
             plot["variable"] = variable
             plot["region"] = "GCR"
@@ -2173,7 +2204,12 @@ def draw_flat_report(
                 continue
             rec["blind_data"] = is_sr
             outname = f"lowdm_{kind}_{short}_{variable}"
-            plot = draw_flat_blocks([rec], output_dir / outname, xlabel=rec.get("xlabel", variable))
+            plot = draw_flat_blocks(
+                [rec],
+                output_dir / outname,
+                xlabel=rec.get("xlabel", variable),
+                show_yields=True,
+            )
             plot["variable"] = variable
             plot["region"] = base_region
             lowdm_variable_plots.append(plot)

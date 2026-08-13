@@ -48,10 +48,11 @@
     "source": "dy_rz_nb_run2method_20260731",
     "status": "complete"
   },
+  "legend_policy": "each displayed process and Data include the pre-normalization yield in parentheses",
   "luminosity_fb": 109.82,
-  "luminosity_relative_uncertainty": 0.016,
+  "luminosity_relative_uncertainty": 0.013,
   "luminosity_uncertainty_applied": true,
-  "output_dir": "plots",
+  "output_dir": "plots/highdm",
   "plot_count": 10,
   "plots": [
     {
@@ -65,6 +66,7 @@
       "labels": [
         "GCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_gcr_bjet_pt",
       "pdf": "plots/highdm/cr_gcr_bjet_pt.pdf",
       "png": "plots/highdm/cr_gcr_bjet_pt.png",
@@ -205,6 +207,7 @@
       "labels": [
         "GCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_gcr_fatjet_pt",
       "pdf": "plots/highdm/cr_gcr_fatjet_pt.pdf",
       "png": "plots/highdm/cr_gcr_fatjet_pt.png",
@@ -345,6 +348,7 @@
       "labels": [
         "GCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_gcr_ht",
       "pdf": "plots/highdm/cr_gcr_ht.pdf",
       "png": "plots/highdm/cr_gcr_ht.png",
@@ -485,6 +489,7 @@
       "labels": [
         "GCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_gcr_jet_pt",
       "pdf": "plots/highdm/cr_gcr_jet_pt.pdf",
       "png": "plots/highdm/cr_gcr_jet_pt.png",
@@ -625,6 +630,7 @@
       "labels": [
         "GCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_gcr_nb",
       "pdf": "plots/highdm/cr_gcr_nb.pdf",
       "png": "plots/highdm/cr_gcr_nb.png",
@@ -765,6 +771,7 @@
       "labels": [
         "GCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_gcr_nfatjet",
       "pdf": "plots/highdm/cr_gcr_nfatjet.pdf",
       "png": "plots/highdm/cr_gcr_nfatjet.png",
@@ -905,6 +912,7 @@
       "labels": [
         "GCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_gcr_njet",
       "pdf": "plots/highdm/cr_gcr_njet.pdf",
       "png": "plots/highdm/cr_gcr_njet.png",
@@ -1045,6 +1053,7 @@
       "labels": [
         "GCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_gcr_ntop",
       "pdf": "plots/highdm/cr_gcr_ntop.pdf",
       "png": "plots/highdm/cr_gcr_ntop.png",
@@ -1185,6 +1194,7 @@
       "labels": [
         "GCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_gcr_nw",
       "pdf": "plots/highdm/cr_gcr_nw.pdf",
       "png": "plots/highdm/cr_gcr_nw.png",
@@ -1325,6 +1335,7 @@
       "labels": [
         "GCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_gcr_ut",
       "pdf": "plots/highdm/cr_gcr_ut.pdf",
       "png": "plots/highdm/cr_gcr_ut.png",
@@ -1455,6 +1466,7 @@
       "year": "2024"
     }
   ],
+  "scope": "High-dM GCR-only distributions",
   "source": "plot2024/hists.json",
   "status": "complete",
   "uncertainty_model": "MC stat plus luminosity plus per-source max(abs(Up-Nominal), abs(Down-Nominal)) envelopes in quadrature",

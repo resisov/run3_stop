@@ -49,9 +49,9 @@
     "status": "complete"
   },
   "luminosity_fb": 109.82,
-  "luminosity_relative_uncertainty": 0.016,
+  "luminosity_relative_uncertainty": 0.013,
   "luminosity_uncertainty_applied": true,
-  "output_dir": "plots",
+  "output_dir": "plots/highdm",
   "plot_count": 186,
   "plots": [
     {
@@ -65,6 +65,7 @@
       "labels": [
         "LLCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_llcr_bjet_pt",
       "pdf": "plots/highdm/cr_llcr_bjet_pt.pdf",
       "png": "plots/highdm/cr_llcr_bjet_pt.png",
@@ -89,6 +90,7 @@
       "labels": [
         "LLCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_llcr_fatjet_pt",
       "pdf": "plots/highdm/cr_llcr_fatjet_pt.pdf",
       "png": "plots/highdm/cr_llcr_fatjet_pt.png",
@@ -113,6 +115,7 @@
       "labels": [
         "LLCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_llcr_ht",
       "pdf": "plots/highdm/cr_llcr_ht.pdf",
       "png": "plots/highdm/cr_llcr_ht.png",
@@ -137,6 +140,7 @@
       "labels": [
         "LLCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_llcr_jet_pt",
       "pdf": "plots/highdm/cr_llcr_jet_pt.pdf",
       "png": "plots/highdm/cr_llcr_jet_pt.png",
@@ -161,6 +165,7 @@
       "labels": [
         "LLCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_llcr_met",
       "pdf": "plots/highdm/cr_llcr_met.pdf",
       "png": "plots/highdm/cr_llcr_met.png",
@@ -185,6 +190,7 @@
       "labels": [
         "LLCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_llcr_nb",
       "pdf": "plots/highdm/cr_llcr_nb.pdf",
       "png": "plots/highdm/cr_llcr_nb.png",
@@ -209,6 +215,7 @@
       "labels": [
         "LLCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_llcr_nfatjet",
       "pdf": "plots/highdm/cr_llcr_nfatjet.pdf",
       "png": "plots/highdm/cr_llcr_nfatjet.png",
@@ -233,6 +240,7 @@
       "labels": [
         "LLCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_llcr_njet",
       "pdf": "plots/highdm/cr_llcr_njet.pdf",
       "png": "plots/highdm/cr_llcr_njet.png",
@@ -257,6 +265,7 @@
       "labels": [
         "LLCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_llcr_ntop",
       "pdf": "plots/highdm/cr_llcr_ntop.pdf",
       "png": "plots/highdm/cr_llcr_ntop.png",
@@ -281,6 +290,7 @@
       "labels": [
         "LLCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_llcr_nw",
       "pdf": "plots/highdm/cr_llcr_nw.pdf",
       "png": "plots/highdm/cr_llcr_nw.png",
@@ -305,6 +315,7 @@
       "labels": [
         "LLCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_llcr_ut",
       "pdf": "plots/highdm/cr_llcr_ut.pdf",
       "png": "plots/highdm/cr_llcr_ut.png",
@@ -329,6 +340,7 @@
       "labels": [
         "QCDCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_qcdcr_bjet_pt",
       "pdf": "plots/highdm/cr_qcdcr_bjet_pt.pdf",
       "png": "plots/highdm/cr_qcdcr_bjet_pt.png",
@@ -353,6 +365,7 @@
       "labels": [
         "QCDCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_qcdcr_fatjet_pt",
       "pdf": "plots/highdm/cr_qcdcr_fatjet_pt.pdf",
       "png": "plots/highdm/cr_qcdcr_fatjet_pt.png",
@@ -377,6 +390,7 @@
       "labels": [
         "QCDCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_qcdcr_ht",
       "pdf": "plots/highdm/cr_qcdcr_ht.pdf",
       "png": "plots/highdm/cr_qcdcr_ht.png",
@@ -401,6 +415,7 @@
       "labels": [
         "QCDCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_qcdcr_jet_pt",
       "pdf": "plots/highdm/cr_qcdcr_jet_pt.pdf",
       "png": "plots/highdm/cr_qcdcr_jet_pt.png",
@@ -425,6 +440,7 @@
       "labels": [
         "QCDCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_qcdcr_met",
       "pdf": "plots/highdm/cr_qcdcr_met.pdf",
       "png": "plots/highdm/cr_qcdcr_met.png",
@@ -449,6 +465,7 @@
       "labels": [
         "QCDCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_qcdcr_nb",
       "pdf": "plots/highdm/cr_qcdcr_nb.pdf",
       "png": "plots/highdm/cr_qcdcr_nb.png",
@@ -473,6 +490,7 @@
       "labels": [
         "QCDCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_qcdcr_nfatjet",
       "pdf": "plots/highdm/cr_qcdcr_nfatjet.pdf",
       "png": "plots/highdm/cr_qcdcr_nfatjet.png",
@@ -497,6 +515,7 @@
       "labels": [
         "QCDCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_qcdcr_njet",
       "pdf": "plots/highdm/cr_qcdcr_njet.pdf",
       "png": "plots/highdm/cr_qcdcr_njet.png",
@@ -521,6 +540,7 @@
       "labels": [
         "QCDCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_qcdcr_ntop",
       "pdf": "plots/highdm/cr_qcdcr_ntop.pdf",
       "png": "plots/highdm/cr_qcdcr_ntop.png",
@@ -545,6 +565,7 @@
       "labels": [
         "QCDCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_qcdcr_nw",
       "pdf": "plots/highdm/cr_qcdcr_nw.pdf",
       "png": "plots/highdm/cr_qcdcr_nw.png",
@@ -569,6 +590,7 @@
       "labels": [
         "QCDCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_qcdcr_ut",
       "pdf": "plots/highdm/cr_qcdcr_ut.pdf",
       "png": "plots/highdm/cr_qcdcr_ut.png",
@@ -593,6 +615,7 @@
       "labels": [
         "GCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_gcr_bjet_pt",
       "pdf": "plots/highdm/cr_gcr_bjet_pt.pdf",
       "png": "plots/highdm/cr_gcr_bjet_pt.png",
@@ -733,6 +756,7 @@
       "labels": [
         "GCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_gcr_fatjet_pt",
       "pdf": "plots/highdm/cr_gcr_fatjet_pt.pdf",
       "png": "plots/highdm/cr_gcr_fatjet_pt.png",
@@ -873,6 +897,7 @@
       "labels": [
         "GCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_gcr_ht",
       "pdf": "plots/highdm/cr_gcr_ht.pdf",
       "png": "plots/highdm/cr_gcr_ht.png",
@@ -1013,6 +1038,7 @@
       "labels": [
         "GCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_gcr_jet_pt",
       "pdf": "plots/highdm/cr_gcr_jet_pt.pdf",
       "png": "plots/highdm/cr_gcr_jet_pt.png",
@@ -1153,6 +1179,7 @@
       "labels": [
         "GCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_gcr_nb",
       "pdf": "plots/highdm/cr_gcr_nb.pdf",
       "png": "plots/highdm/cr_gcr_nb.png",
@@ -1293,6 +1320,7 @@
       "labels": [
         "GCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_gcr_nfatjet",
       "pdf": "plots/highdm/cr_gcr_nfatjet.pdf",
       "png": "plots/highdm/cr_gcr_nfatjet.png",
@@ -1433,6 +1461,7 @@
       "labels": [
         "GCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_gcr_njet",
       "pdf": "plots/highdm/cr_gcr_njet.pdf",
       "png": "plots/highdm/cr_gcr_njet.png",
@@ -1573,6 +1602,7 @@
       "labels": [
         "GCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_gcr_ntop",
       "pdf": "plots/highdm/cr_gcr_ntop.pdf",
       "png": "plots/highdm/cr_gcr_ntop.png",
@@ -1713,6 +1743,7 @@
       "labels": [
         "GCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_gcr_nw",
       "pdf": "plots/highdm/cr_gcr_nw.pdf",
       "png": "plots/highdm/cr_gcr_nw.png",
@@ -1853,6 +1884,7 @@
       "labels": [
         "GCR"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_gcr_ut",
       "pdf": "plots/highdm/cr_gcr_ut.pdf",
       "png": "plots/highdm/cr_gcr_ut.png",
@@ -1993,6 +2025,7 @@
       "labels": [
         "DY2E"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_dy2e_bjet_pt",
       "pdf": "plots/highdm/cr_dy2e_bjet_pt.pdf",
       "png": "plots/highdm/cr_dy2e_bjet_pt.png",
@@ -2017,6 +2050,7 @@
       "labels": [
         "DY2E"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_dy2e_fatjet_pt",
       "pdf": "plots/highdm/cr_dy2e_fatjet_pt.pdf",
       "png": "plots/highdm/cr_dy2e_fatjet_pt.png",
@@ -2041,6 +2075,7 @@
       "labels": [
         "DY2E"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_dy2e_ht",
       "pdf": "plots/highdm/cr_dy2e_ht.pdf",
       "png": "plots/highdm/cr_dy2e_ht.png",
@@ -2065,6 +2100,7 @@
       "labels": [
         "DY2E"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_dy2e_jet_pt",
       "pdf": "plots/highdm/cr_dy2e_jet_pt.pdf",
       "png": "plots/highdm/cr_dy2e_jet_pt.png",
@@ -2089,6 +2125,7 @@
       "labels": [
         "DY2E"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_dy2e_met",
       "pdf": "plots/highdm/cr_dy2e_met.pdf",
       "png": "plots/highdm/cr_dy2e_met.png",
@@ -2113,6 +2150,7 @@
       "labels": [
         "DY2E"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_dy2e_nb",
       "pdf": "plots/highdm/cr_dy2e_nb.pdf",
       "png": "plots/highdm/cr_dy2e_nb.png",
@@ -2137,6 +2175,7 @@
       "labels": [
         "DY2E"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_dy2e_nfatjet",
       "pdf": "plots/highdm/cr_dy2e_nfatjet.pdf",
       "png": "plots/highdm/cr_dy2e_nfatjet.png",
@@ -2161,6 +2200,7 @@
       "labels": [
         "DY2E"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_dy2e_njet",
       "pdf": "plots/highdm/cr_dy2e_njet.pdf",
       "png": "plots/highdm/cr_dy2e_njet.png",
@@ -2185,6 +2225,7 @@
       "labels": [
         "DY2E"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_dy2e_ntop",
       "pdf": "plots/highdm/cr_dy2e_ntop.pdf",
       "png": "plots/highdm/cr_dy2e_ntop.png",
@@ -2209,6 +2250,7 @@
       "labels": [
         "DY2E"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_dy2e_nw",
       "pdf": "plots/highdm/cr_dy2e_nw.pdf",
       "png": "plots/highdm/cr_dy2e_nw.png",
@@ -2233,6 +2275,7 @@
       "labels": [
         "DY2E"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_dy2e_ptll",
       "pdf": "plots/highdm/cr_dy2e_ptll.pdf",
       "png": "plots/highdm/cr_dy2e_ptll.png",
@@ -2257,6 +2300,7 @@
       "labels": [
         "DY2E"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_dy2e_ut",
       "pdf": "plots/highdm/cr_dy2e_ut.pdf",
       "png": "plots/highdm/cr_dy2e_ut.png",
@@ -2281,6 +2325,7 @@
       "labels": [
         "DY2M"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_dy2m_bjet_pt",
       "pdf": "plots/highdm/cr_dy2m_bjet_pt.pdf",
       "png": "plots/highdm/cr_dy2m_bjet_pt.png",
@@ -2305,6 +2350,7 @@
       "labels": [
         "DY2M"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_dy2m_fatjet_pt",
       "pdf": "plots/highdm/cr_dy2m_fatjet_pt.pdf",
       "png": "plots/highdm/cr_dy2m_fatjet_pt.png",
@@ -2329,6 +2375,7 @@
       "labels": [
         "DY2M"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_dy2m_ht",
       "pdf": "plots/highdm/cr_dy2m_ht.pdf",
       "png": "plots/highdm/cr_dy2m_ht.png",
@@ -2353,6 +2400,7 @@
       "labels": [
         "DY2M"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_dy2m_jet_pt",
       "pdf": "plots/highdm/cr_dy2m_jet_pt.pdf",
       "png": "plots/highdm/cr_dy2m_jet_pt.png",
@@ -2377,6 +2425,7 @@
       "labels": [
         "DY2M"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_dy2m_met",
       "pdf": "plots/highdm/cr_dy2m_met.pdf",
       "png": "plots/highdm/cr_dy2m_met.png",
@@ -2401,6 +2450,7 @@
       "labels": [
         "DY2M"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_dy2m_nb",
       "pdf": "plots/highdm/cr_dy2m_nb.pdf",
       "png": "plots/highdm/cr_dy2m_nb.png",
@@ -2425,6 +2475,7 @@
       "labels": [
         "DY2M"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_dy2m_nfatjet",
       "pdf": "plots/highdm/cr_dy2m_nfatjet.pdf",
       "png": "plots/highdm/cr_dy2m_nfatjet.png",
@@ -2449,6 +2500,7 @@
       "labels": [
         "DY2M"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_dy2m_njet",
       "pdf": "plots/highdm/cr_dy2m_njet.pdf",
       "png": "plots/highdm/cr_dy2m_njet.png",
@@ -2473,6 +2525,7 @@
       "labels": [
         "DY2M"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_dy2m_ntop",
       "pdf": "plots/highdm/cr_dy2m_ntop.pdf",
       "png": "plots/highdm/cr_dy2m_ntop.png",
@@ -2497,6 +2550,7 @@
       "labels": [
         "DY2M"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_dy2m_nw",
       "pdf": "plots/highdm/cr_dy2m_nw.pdf",
       "png": "plots/highdm/cr_dy2m_nw.png",
@@ -2521,6 +2575,7 @@
       "labels": [
         "DY2M"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_dy2m_ptll",
       "pdf": "plots/highdm/cr_dy2m_ptll.pdf",
       "png": "plots/highdm/cr_dy2m_ptll.png",
@@ -2545,6 +2600,7 @@
       "labels": [
         "DY2M"
       ],
+      "legend_yields_displayed": true,
       "name": "cr_dy2m_ut",
       "pdf": "plots/highdm/cr_dy2m_ut.pdf",
       "png": "plots/highdm/cr_dy2m_ut.png",
@@ -2569,6 +2625,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb1_bjet_pt",
       "pdf": "plots/highdm/vr_highdm_vr_nb1_bjet_pt.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb1_bjet_pt.png",
@@ -2593,6 +2650,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb1_fatjet_pt",
       "pdf": "plots/highdm/vr_highdm_vr_nb1_fatjet_pt.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb1_fatjet_pt.png",
@@ -2617,6 +2675,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb1_ht",
       "pdf": "plots/highdm/vr_highdm_vr_nb1_ht.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb1_ht.png",
@@ -2641,6 +2700,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb1_jet_pt",
       "pdf": "plots/highdm/vr_highdm_vr_nb1_jet_pt.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb1_jet_pt.png",
@@ -2665,6 +2725,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb1_met",
       "pdf": "plots/highdm/vr_highdm_vr_nb1_met.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb1_met.png",
@@ -2689,6 +2750,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb1_nb",
       "pdf": "plots/highdm/vr_highdm_vr_nb1_nb.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb1_nb.png",
@@ -2713,6 +2775,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb1_nfatjet",
       "pdf": "plots/highdm/vr_highdm_vr_nb1_nfatjet.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb1_nfatjet.png",
@@ -2737,6 +2800,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb1_njet",
       "pdf": "plots/highdm/vr_highdm_vr_nb1_njet.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb1_njet.png",
@@ -2761,6 +2825,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb1_ntop",
       "pdf": "plots/highdm/vr_highdm_vr_nb1_ntop.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb1_ntop.png",
@@ -2785,6 +2850,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb1_nw",
       "pdf": "plots/highdm/vr_highdm_vr_nb1_nw.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb1_nw.png",
@@ -2809,6 +2875,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}=2$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb2_bjet_pt",
       "pdf": "plots/highdm/vr_highdm_vr_nb2_bjet_pt.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb2_bjet_pt.png",
@@ -2833,6 +2900,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}=2$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb2_fatjet_pt",
       "pdf": "plots/highdm/vr_highdm_vr_nb2_fatjet_pt.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb2_fatjet_pt.png",
@@ -2857,6 +2925,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}=2$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb2_ht",
       "pdf": "plots/highdm/vr_highdm_vr_nb2_ht.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb2_ht.png",
@@ -2881,6 +2950,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}=2$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb2_jet_pt",
       "pdf": "plots/highdm/vr_highdm_vr_nb2_jet_pt.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb2_jet_pt.png",
@@ -2905,6 +2975,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}=2$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb2_met",
       "pdf": "plots/highdm/vr_highdm_vr_nb2_met.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb2_met.png",
@@ -2929,6 +3000,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}=2$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb2_nb",
       "pdf": "plots/highdm/vr_highdm_vr_nb2_nb.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb2_nb.png",
@@ -2953,6 +3025,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}=2$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb2_nfatjet",
       "pdf": "plots/highdm/vr_highdm_vr_nb2_nfatjet.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb2_nfatjet.png",
@@ -2977,6 +3050,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}=2$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb2_njet",
       "pdf": "plots/highdm/vr_highdm_vr_nb2_njet.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb2_njet.png",
@@ -3001,6 +3075,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}=2$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb2_ntop",
       "pdf": "plots/highdm/vr_highdm_vr_nb2_ntop.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb2_ntop.png",
@@ -3025,6 +3100,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}=2$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb2_nw",
       "pdf": "plots/highdm/vr_highdm_vr_nb2_nw.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb2_nw.png",
@@ -3049,6 +3125,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}\\geq3$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb3plus_bjet_pt",
       "pdf": "plots/highdm/vr_highdm_vr_nb3plus_bjet_pt.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb3plus_bjet_pt.png",
@@ -3073,6 +3150,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}\\geq3$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb3plus_fatjet_pt",
       "pdf": "plots/highdm/vr_highdm_vr_nb3plus_fatjet_pt.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb3plus_fatjet_pt.png",
@@ -3097,6 +3175,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}\\geq3$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb3plus_ht",
       "pdf": "plots/highdm/vr_highdm_vr_nb3plus_ht.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb3plus_ht.png",
@@ -3121,6 +3200,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}\\geq3$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb3plus_jet_pt",
       "pdf": "plots/highdm/vr_highdm_vr_nb3plus_jet_pt.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb3plus_jet_pt.png",
@@ -3145,6 +3225,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}\\geq3$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb3plus_met",
       "pdf": "plots/highdm/vr_highdm_vr_nb3plus_met.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb3plus_met.png",
@@ -3169,6 +3250,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}\\geq3$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb3plus_nb",
       "pdf": "plots/highdm/vr_highdm_vr_nb3plus_nb.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb3plus_nb.png",
@@ -3193,6 +3275,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}\\geq3$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb3plus_nfatjet",
       "pdf": "plots/highdm/vr_highdm_vr_nb3plus_nfatjet.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb3plus_nfatjet.png",
@@ -3217,6 +3300,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}\\geq3$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb3plus_njet",
       "pdf": "plots/highdm/vr_highdm_vr_nb3plus_njet.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb3plus_njet.png",
@@ -3241,6 +3325,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}\\geq3$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb3plus_ntop",
       "pdf": "plots/highdm/vr_highdm_vr_nb3plus_ntop.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb3plus_ntop.png",
@@ -3265,6 +3350,7 @@
       "labels": [
         "High-$\\Delta m$ VR, $N_{b}\\geq3$"
       ],
+      "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb3plus_nw",
       "pdf": "plots/highdm/vr_highdm_vr_nb3plus_nw.pdf",
       "png": "plots/highdm/vr_highdm_vr_nb3plus_nw.png",
@@ -3289,6 +3375,7 @@
       "labels": [
         "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w0_bjet_pt",
       "pdf": "plots/highdm/sr_sr_nb1plus_t0_w0_bjet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb1plus_t0_w0_bjet_pt.png",
@@ -3313,6 +3400,7 @@
       "labels": [
         "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w0_fatjet_pt",
       "pdf": "plots/highdm/sr_sr_nb1plus_t0_w0_fatjet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb1plus_t0_w0_fatjet_pt.png",
@@ -3337,6 +3425,7 @@
       "labels": [
         "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w0_ht",
       "pdf": "plots/highdm/sr_sr_nb1plus_t0_w0_ht.pdf",
       "png": "plots/highdm/sr_sr_nb1plus_t0_w0_ht.png",
@@ -3361,6 +3450,7 @@
       "labels": [
         "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w0_jet_pt",
       "pdf": "plots/highdm/sr_sr_nb1plus_t0_w0_jet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb1plus_t0_w0_jet_pt.png",
@@ -3385,6 +3475,7 @@
       "labels": [
         "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w0_met",
       "pdf": "plots/highdm/sr_sr_nb1plus_t0_w0_met.pdf",
       "png": "plots/highdm/sr_sr_nb1plus_t0_w0_met.png",
@@ -3409,6 +3500,7 @@
       "labels": [
         "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w0_nb",
       "pdf": "plots/highdm/sr_sr_nb1plus_t0_w0_nb.pdf",
       "png": "plots/highdm/sr_sr_nb1plus_t0_w0_nb.png",
@@ -3433,6 +3525,7 @@
       "labels": [
         "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w0_nfatjet",
       "pdf": "plots/highdm/sr_sr_nb1plus_t0_w0_nfatjet.pdf",
       "png": "plots/highdm/sr_sr_nb1plus_t0_w0_nfatjet.png",
@@ -3457,6 +3550,7 @@
       "labels": [
         "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w0_njet",
       "pdf": "plots/highdm/sr_sr_nb1plus_t0_w0_njet.pdf",
       "png": "plots/highdm/sr_sr_nb1plus_t0_w0_njet.png",
@@ -3481,6 +3575,7 @@
       "labels": [
         "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w0_ntop",
       "pdf": "plots/highdm/sr_sr_nb1plus_t0_w0_ntop.pdf",
       "png": "plots/highdm/sr_sr_nb1plus_t0_w0_ntop.png",
@@ -3505,6 +3600,7 @@
       "labels": [
         "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w0_nw",
       "pdf": "plots/highdm/sr_sr_nb1plus_t0_w0_nw.pdf",
       "png": "plots/highdm/sr_sr_nb1plus_t0_w0_nw.png",
@@ -3529,6 +3625,7 @@
       "labels": [
         "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w1plus_bjet_pt",
       "pdf": "plots/highdm/sr_sr_nb1plus_t0_w1plus_bjet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb1plus_t0_w1plus_bjet_pt.png",
@@ -3553,6 +3650,7 @@
       "labels": [
         "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w1plus_fatjet_pt",
       "pdf": "plots/highdm/sr_sr_nb1plus_t0_w1plus_fatjet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb1plus_t0_w1plus_fatjet_pt.png",
@@ -3577,6 +3675,7 @@
       "labels": [
         "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w1plus_ht",
       "pdf": "plots/highdm/sr_sr_nb1plus_t0_w1plus_ht.pdf",
       "png": "plots/highdm/sr_sr_nb1plus_t0_w1plus_ht.png",
@@ -3601,6 +3700,7 @@
       "labels": [
         "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w1plus_jet_pt",
       "pdf": "plots/highdm/sr_sr_nb1plus_t0_w1plus_jet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb1plus_t0_w1plus_jet_pt.png",
@@ -3625,6 +3725,7 @@
       "labels": [
         "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w1plus_met",
       "pdf": "plots/highdm/sr_sr_nb1plus_t0_w1plus_met.pdf",
       "png": "plots/highdm/sr_sr_nb1plus_t0_w1plus_met.png",
@@ -3649,6 +3750,7 @@
       "labels": [
         "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w1plus_nb",
       "pdf": "plots/highdm/sr_sr_nb1plus_t0_w1plus_nb.pdf",
       "png": "plots/highdm/sr_sr_nb1plus_t0_w1plus_nb.png",
@@ -3673,6 +3775,7 @@
       "labels": [
         "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w1plus_nfatjet",
       "pdf": "plots/highdm/sr_sr_nb1plus_t0_w1plus_nfatjet.pdf",
       "png": "plots/highdm/sr_sr_nb1plus_t0_w1plus_nfatjet.png",
@@ -3697,6 +3800,7 @@
       "labels": [
         "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w1plus_njet",
       "pdf": "plots/highdm/sr_sr_nb1plus_t0_w1plus_njet.pdf",
       "png": "plots/highdm/sr_sr_nb1plus_t0_w1plus_njet.png",
@@ -3721,6 +3825,7 @@
       "labels": [
         "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w1plus_ntop",
       "pdf": "plots/highdm/sr_sr_nb1plus_t0_w1plus_ntop.pdf",
       "png": "plots/highdm/sr_sr_nb1plus_t0_w1plus_ntop.png",
@@ -3745,6 +3850,7 @@
       "labels": [
         "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w1plus_nw",
       "pdf": "plots/highdm/sr_sr_nb1plus_t0_w1plus_nw.pdf",
       "png": "plots/highdm/sr_sr_nb1plus_t0_w1plus_nw.png",
@@ -3769,6 +3875,7 @@
       "labels": [
         "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w0_bjet_pt",
       "pdf": "plots/highdm/sr_sr_nb1_t1plus_w0_bjet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb1_t1plus_w0_bjet_pt.png",
@@ -3793,6 +3900,7 @@
       "labels": [
         "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w0_fatjet_pt",
       "pdf": "plots/highdm/sr_sr_nb1_t1plus_w0_fatjet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb1_t1plus_w0_fatjet_pt.png",
@@ -3817,6 +3925,7 @@
       "labels": [
         "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w0_ht",
       "pdf": "plots/highdm/sr_sr_nb1_t1plus_w0_ht.pdf",
       "png": "plots/highdm/sr_sr_nb1_t1plus_w0_ht.png",
@@ -3841,6 +3950,7 @@
       "labels": [
         "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w0_jet_pt",
       "pdf": "plots/highdm/sr_sr_nb1_t1plus_w0_jet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb1_t1plus_w0_jet_pt.png",
@@ -3865,6 +3975,7 @@
       "labels": [
         "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w0_met",
       "pdf": "plots/highdm/sr_sr_nb1_t1plus_w0_met.pdf",
       "png": "plots/highdm/sr_sr_nb1_t1plus_w0_met.png",
@@ -3889,6 +4000,7 @@
       "labels": [
         "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w0_nb",
       "pdf": "plots/highdm/sr_sr_nb1_t1plus_w0_nb.pdf",
       "png": "plots/highdm/sr_sr_nb1_t1plus_w0_nb.png",
@@ -3913,6 +4025,7 @@
       "labels": [
         "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w0_nfatjet",
       "pdf": "plots/highdm/sr_sr_nb1_t1plus_w0_nfatjet.pdf",
       "png": "plots/highdm/sr_sr_nb1_t1plus_w0_nfatjet.png",
@@ -3937,6 +4050,7 @@
       "labels": [
         "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w0_njet",
       "pdf": "plots/highdm/sr_sr_nb1_t1plus_w0_njet.pdf",
       "png": "plots/highdm/sr_sr_nb1_t1plus_w0_njet.png",
@@ -3961,6 +4075,7 @@
       "labels": [
         "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w0_ntop",
       "pdf": "plots/highdm/sr_sr_nb1_t1plus_w0_ntop.pdf",
       "png": "plots/highdm/sr_sr_nb1_t1plus_w0_ntop.png",
@@ -3985,6 +4100,7 @@
       "labels": [
         "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w0_nw",
       "pdf": "plots/highdm/sr_sr_nb1_t1plus_w0_nw.pdf",
       "png": "plots/highdm/sr_sr_nb1_t1plus_w0_nw.png",
@@ -4009,6 +4125,7 @@
       "labels": [
         "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w1plus_bjet_pt",
       "pdf": "plots/highdm/sr_sr_nb1_t1plus_w1plus_bjet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb1_t1plus_w1plus_bjet_pt.png",
@@ -4033,6 +4150,7 @@
       "labels": [
         "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w1plus_fatjet_pt",
       "pdf": "plots/highdm/sr_sr_nb1_t1plus_w1plus_fatjet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb1_t1plus_w1plus_fatjet_pt.png",
@@ -4057,6 +4175,7 @@
       "labels": [
         "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w1plus_ht",
       "pdf": "plots/highdm/sr_sr_nb1_t1plus_w1plus_ht.pdf",
       "png": "plots/highdm/sr_sr_nb1_t1plus_w1plus_ht.png",
@@ -4081,6 +4200,7 @@
       "labels": [
         "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w1plus_jet_pt",
       "pdf": "plots/highdm/sr_sr_nb1_t1plus_w1plus_jet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb1_t1plus_w1plus_jet_pt.png",
@@ -4105,6 +4225,7 @@
       "labels": [
         "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w1plus_met",
       "pdf": "plots/highdm/sr_sr_nb1_t1plus_w1plus_met.pdf",
       "png": "plots/highdm/sr_sr_nb1_t1plus_w1plus_met.png",
@@ -4129,6 +4250,7 @@
       "labels": [
         "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w1plus_nb",
       "pdf": "plots/highdm/sr_sr_nb1_t1plus_w1plus_nb.pdf",
       "png": "plots/highdm/sr_sr_nb1_t1plus_w1plus_nb.png",
@@ -4153,6 +4275,7 @@
       "labels": [
         "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w1plus_nfatjet",
       "pdf": "plots/highdm/sr_sr_nb1_t1plus_w1plus_nfatjet.pdf",
       "png": "plots/highdm/sr_sr_nb1_t1plus_w1plus_nfatjet.png",
@@ -4177,6 +4300,7 @@
       "labels": [
         "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w1plus_njet",
       "pdf": "plots/highdm/sr_sr_nb1_t1plus_w1plus_njet.pdf",
       "png": "plots/highdm/sr_sr_nb1_t1plus_w1plus_njet.png",
@@ -4201,6 +4325,7 @@
       "labels": [
         "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w1plus_ntop",
       "pdf": "plots/highdm/sr_sr_nb1_t1plus_w1plus_ntop.pdf",
       "png": "plots/highdm/sr_sr_nb1_t1plus_w1plus_ntop.png",
@@ -4225,6 +4350,7 @@
       "labels": [
         "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w1plus_nw",
       "pdf": "plots/highdm/sr_sr_nb1_t1plus_w1plus_nw.pdf",
       "png": "plots/highdm/sr_sr_nb1_t1plus_w1plus_nw.png",
@@ -4249,6 +4375,7 @@
       "labels": [
         "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w0_bjet_pt",
       "pdf": "plots/highdm/sr_sr_nb2_t1_w0_bjet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb2_t1_w0_bjet_pt.png",
@@ -4273,6 +4400,7 @@
       "labels": [
         "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w0_fatjet_pt",
       "pdf": "plots/highdm/sr_sr_nb2_t1_w0_fatjet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb2_t1_w0_fatjet_pt.png",
@@ -4297,6 +4425,7 @@
       "labels": [
         "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w0_ht",
       "pdf": "plots/highdm/sr_sr_nb2_t1_w0_ht.pdf",
       "png": "plots/highdm/sr_sr_nb2_t1_w0_ht.png",
@@ -4321,6 +4450,7 @@
       "labels": [
         "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w0_jet_pt",
       "pdf": "plots/highdm/sr_sr_nb2_t1_w0_jet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb2_t1_w0_jet_pt.png",
@@ -4345,6 +4475,7 @@
       "labels": [
         "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w0_met",
       "pdf": "plots/highdm/sr_sr_nb2_t1_w0_met.pdf",
       "png": "plots/highdm/sr_sr_nb2_t1_w0_met.png",
@@ -4369,6 +4500,7 @@
       "labels": [
         "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w0_nb",
       "pdf": "plots/highdm/sr_sr_nb2_t1_w0_nb.pdf",
       "png": "plots/highdm/sr_sr_nb2_t1_w0_nb.png",
@@ -4393,6 +4525,7 @@
       "labels": [
         "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w0_nfatjet",
       "pdf": "plots/highdm/sr_sr_nb2_t1_w0_nfatjet.pdf",
       "png": "plots/highdm/sr_sr_nb2_t1_w0_nfatjet.png",
@@ -4417,6 +4550,7 @@
       "labels": [
         "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w0_njet",
       "pdf": "plots/highdm/sr_sr_nb2_t1_w0_njet.pdf",
       "png": "plots/highdm/sr_sr_nb2_t1_w0_njet.png",
@@ -4441,6 +4575,7 @@
       "labels": [
         "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w0_ntop",
       "pdf": "plots/highdm/sr_sr_nb2_t1_w0_ntop.pdf",
       "png": "plots/highdm/sr_sr_nb2_t1_w0_ntop.png",
@@ -4465,6 +4600,7 @@
       "labels": [
         "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w0_nw",
       "pdf": "plots/highdm/sr_sr_nb2_t1_w0_nw.pdf",
       "png": "plots/highdm/sr_sr_nb2_t1_w0_nw.png",
@@ -4489,6 +4625,7 @@
       "labels": [
         "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w1_bjet_pt",
       "pdf": "plots/highdm/sr_sr_nb2_t1_w1_bjet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb2_t1_w1_bjet_pt.png",
@@ -4513,6 +4650,7 @@
       "labels": [
         "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w1_fatjet_pt",
       "pdf": "plots/highdm/sr_sr_nb2_t1_w1_fatjet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb2_t1_w1_fatjet_pt.png",
@@ -4537,6 +4675,7 @@
       "labels": [
         "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w1_ht",
       "pdf": "plots/highdm/sr_sr_nb2_t1_w1_ht.pdf",
       "png": "plots/highdm/sr_sr_nb2_t1_w1_ht.png",
@@ -4561,6 +4700,7 @@
       "labels": [
         "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w1_jet_pt",
       "pdf": "plots/highdm/sr_sr_nb2_t1_w1_jet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb2_t1_w1_jet_pt.png",
@@ -4585,6 +4725,7 @@
       "labels": [
         "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w1_met",
       "pdf": "plots/highdm/sr_sr_nb2_t1_w1_met.pdf",
       "png": "plots/highdm/sr_sr_nb2_t1_w1_met.png",
@@ -4609,6 +4750,7 @@
       "labels": [
         "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w1_nb",
       "pdf": "plots/highdm/sr_sr_nb2_t1_w1_nb.pdf",
       "png": "plots/highdm/sr_sr_nb2_t1_w1_nb.png",
@@ -4633,6 +4775,7 @@
       "labels": [
         "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w1_nfatjet",
       "pdf": "plots/highdm/sr_sr_nb2_t1_w1_nfatjet.pdf",
       "png": "plots/highdm/sr_sr_nb2_t1_w1_nfatjet.png",
@@ -4657,6 +4800,7 @@
       "labels": [
         "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w1_njet",
       "pdf": "plots/highdm/sr_sr_nb2_t1_w1_njet.pdf",
       "png": "plots/highdm/sr_sr_nb2_t1_w1_njet.png",
@@ -4681,6 +4825,7 @@
       "labels": [
         "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w1_ntop",
       "pdf": "plots/highdm/sr_sr_nb2_t1_w1_ntop.pdf",
       "png": "plots/highdm/sr_sr_nb2_t1_w1_ntop.png",
@@ -4705,6 +4850,7 @@
       "labels": [
         "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w1_nw",
       "pdf": "plots/highdm/sr_sr_nb2_t1_w1_nw.pdf",
       "png": "plots/highdm/sr_sr_nb2_t1_w1_nw.png",
@@ -4729,6 +4875,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w0_bjet_pt",
       "pdf": "plots/highdm/sr_sr_nb3plus_t1_w0_bjet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t1_w0_bjet_pt.png",
@@ -4753,6 +4900,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w0_fatjet_pt",
       "pdf": "plots/highdm/sr_sr_nb3plus_t1_w0_fatjet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t1_w0_fatjet_pt.png",
@@ -4777,6 +4925,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w0_ht",
       "pdf": "plots/highdm/sr_sr_nb3plus_t1_w0_ht.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t1_w0_ht.png",
@@ -4801,6 +4950,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w0_jet_pt",
       "pdf": "plots/highdm/sr_sr_nb3plus_t1_w0_jet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t1_w0_jet_pt.png",
@@ -4825,6 +4975,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w0_met",
       "pdf": "plots/highdm/sr_sr_nb3plus_t1_w0_met.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t1_w0_met.png",
@@ -4849,6 +5000,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w0_nb",
       "pdf": "plots/highdm/sr_sr_nb3plus_t1_w0_nb.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t1_w0_nb.png",
@@ -4873,6 +5025,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w0_nfatjet",
       "pdf": "plots/highdm/sr_sr_nb3plus_t1_w0_nfatjet.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t1_w0_nfatjet.png",
@@ -4897,6 +5050,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w0_njet",
       "pdf": "plots/highdm/sr_sr_nb3plus_t1_w0_njet.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t1_w0_njet.png",
@@ -4921,6 +5075,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w0_ntop",
       "pdf": "plots/highdm/sr_sr_nb3plus_t1_w0_ntop.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t1_w0_ntop.png",
@@ -4945,6 +5100,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w0_nw",
       "pdf": "plots/highdm/sr_sr_nb3plus_t1_w0_nw.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t1_w0_nw.png",
@@ -4969,6 +5125,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w1_bjet_pt",
       "pdf": "plots/highdm/sr_sr_nb3plus_t1_w1_bjet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t1_w1_bjet_pt.png",
@@ -4993,6 +5150,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w1_fatjet_pt",
       "pdf": "plots/highdm/sr_sr_nb3plus_t1_w1_fatjet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t1_w1_fatjet_pt.png",
@@ -5017,6 +5175,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w1_ht",
       "pdf": "plots/highdm/sr_sr_nb3plus_t1_w1_ht.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t1_w1_ht.png",
@@ -5041,6 +5200,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w1_jet_pt",
       "pdf": "plots/highdm/sr_sr_nb3plus_t1_w1_jet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t1_w1_jet_pt.png",
@@ -5065,6 +5225,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w1_met",
       "pdf": "plots/highdm/sr_sr_nb3plus_t1_w1_met.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t1_w1_met.png",
@@ -5089,6 +5250,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w1_nb",
       "pdf": "plots/highdm/sr_sr_nb3plus_t1_w1_nb.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t1_w1_nb.png",
@@ -5113,6 +5275,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w1_nfatjet",
       "pdf": "plots/highdm/sr_sr_nb3plus_t1_w1_nfatjet.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t1_w1_nfatjet.png",
@@ -5137,6 +5300,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w1_njet",
       "pdf": "plots/highdm/sr_sr_nb3plus_t1_w1_njet.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t1_w1_njet.png",
@@ -5161,6 +5325,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w1_ntop",
       "pdf": "plots/highdm/sr_sr_nb3plus_t1_w1_ntop.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t1_w1_ntop.png",
@@ -5185,6 +5350,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w1_nw",
       "pdf": "plots/highdm/sr_sr_nb3plus_t1_w1_nw.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t1_w1_nw.png",
@@ -5209,6 +5375,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t2_w0_bjet_pt",
       "pdf": "plots/highdm/sr_sr_nb3plus_t2_w0_bjet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t2_w0_bjet_pt.png",
@@ -5233,6 +5400,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t2_w0_fatjet_pt",
       "pdf": "plots/highdm/sr_sr_nb3plus_t2_w0_fatjet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t2_w0_fatjet_pt.png",
@@ -5257,6 +5425,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t2_w0_ht",
       "pdf": "plots/highdm/sr_sr_nb3plus_t2_w0_ht.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t2_w0_ht.png",
@@ -5281,6 +5450,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t2_w0_jet_pt",
       "pdf": "plots/highdm/sr_sr_nb3plus_t2_w0_jet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t2_w0_jet_pt.png",
@@ -5305,6 +5475,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t2_w0_met",
       "pdf": "plots/highdm/sr_sr_nb3plus_t2_w0_met.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t2_w0_met.png",
@@ -5329,6 +5500,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t2_w0_nb",
       "pdf": "plots/highdm/sr_sr_nb3plus_t2_w0_nb.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t2_w0_nb.png",
@@ -5353,6 +5525,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t2_w0_nfatjet",
       "pdf": "plots/highdm/sr_sr_nb3plus_t2_w0_nfatjet.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t2_w0_nfatjet.png",
@@ -5377,6 +5550,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t2_w0_njet",
       "pdf": "plots/highdm/sr_sr_nb3plus_t2_w0_njet.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t2_w0_njet.png",
@@ -5401,6 +5575,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t2_w0_ntop",
       "pdf": "plots/highdm/sr_sr_nb3plus_t2_w0_ntop.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t2_w0_ntop.png",
@@ -5425,6 +5600,7 @@
       "labels": [
         "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t2_w0_nw",
       "pdf": "plots/highdm/sr_sr_nb3plus_t2_w0_nw.pdf",
       "png": "plots/highdm/sr_sr_nb3plus_t2_w0_nw.png",
@@ -5449,6 +5625,7 @@
       "labels": [
         "SR_Nb2_Nt2plus_W0"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_nt2plus_w0_bjet_pt",
       "pdf": "plots/highdm/sr_sr_nb2_nt2plus_w0_bjet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb2_nt2plus_w0_bjet_pt.png",
@@ -5473,6 +5650,7 @@
       "labels": [
         "SR_Nb2_Nt2plus_W0"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_nt2plus_w0_fatjet_pt",
       "pdf": "plots/highdm/sr_sr_nb2_nt2plus_w0_fatjet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb2_nt2plus_w0_fatjet_pt.png",
@@ -5497,6 +5675,7 @@
       "labels": [
         "SR_Nb2_Nt2plus_W0"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_nt2plus_w0_ht",
       "pdf": "plots/highdm/sr_sr_nb2_nt2plus_w0_ht.pdf",
       "png": "plots/highdm/sr_sr_nb2_nt2plus_w0_ht.png",
@@ -5521,6 +5700,7 @@
       "labels": [
         "SR_Nb2_Nt2plus_W0"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_nt2plus_w0_jet_pt",
       "pdf": "plots/highdm/sr_sr_nb2_nt2plus_w0_jet_pt.pdf",
       "png": "plots/highdm/sr_sr_nb2_nt2plus_w0_jet_pt.png",
@@ -5545,6 +5725,7 @@
       "labels": [
         "SR_Nb2_Nt2plus_W0"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_nt2plus_w0_met",
       "pdf": "plots/highdm/sr_sr_nb2_nt2plus_w0_met.pdf",
       "png": "plots/highdm/sr_sr_nb2_nt2plus_w0_met.png",
@@ -5569,6 +5750,7 @@
       "labels": [
         "SR_Nb2_Nt2plus_W0"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_nt2plus_w0_nb",
       "pdf": "plots/highdm/sr_sr_nb2_nt2plus_w0_nb.pdf",
       "png": "plots/highdm/sr_sr_nb2_nt2plus_w0_nb.png",
@@ -5593,6 +5775,7 @@
       "labels": [
         "SR_Nb2_Nt2plus_W0"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_nt2plus_w0_nfatjet",
       "pdf": "plots/highdm/sr_sr_nb2_nt2plus_w0_nfatjet.pdf",
       "png": "plots/highdm/sr_sr_nb2_nt2plus_w0_nfatjet.png",
@@ -5617,6 +5800,7 @@
       "labels": [
         "SR_Nb2_Nt2plus_W0"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_nt2plus_w0_njet",
       "pdf": "plots/highdm/sr_sr_nb2_nt2plus_w0_njet.pdf",
       "png": "plots/highdm/sr_sr_nb2_nt2plus_w0_njet.png",
@@ -5641,6 +5825,7 @@
       "labels": [
         "SR_Nb2_Nt2plus_W0"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_nt2plus_w0_ntop",
       "pdf": "plots/highdm/sr_sr_nb2_nt2plus_w0_ntop.pdf",
       "png": "plots/highdm/sr_sr_nb2_nt2plus_w0_ntop.png",
@@ -5665,6 +5850,7 @@
       "labels": [
         "SR_Nb2_Nt2plus_W0"
       ],
+      "legend_yields_displayed": true,
       "name": "sr_sr_nb2_nt2plus_w0_nw",
       "pdf": "plots/highdm/sr_sr_nb2_nt2plus_w0_nw.pdf",
       "png": "plots/highdm/sr_sr_nb2_nt2plus_w0_nw.png",

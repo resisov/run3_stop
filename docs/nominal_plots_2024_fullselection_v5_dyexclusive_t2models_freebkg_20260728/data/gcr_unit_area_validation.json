@@ -3,6 +3,7 @@
     "all_canvases_consistent": true,
     "all_png_pdf_pairs_nonempty": true,
     "all_stored_systematic_shapes_integrate_to_one": true,
+    "category_plots_remain_yield_free": true,
     "data_integrals_equal_one": true,
     "luminosity_uncertainty_omitted": true,
     "mc_integrals_equal_one": true,
@@ -10,7 +11,7 @@
     "process_fractions_preserved": true,
     "process_group_sums_match_total_mc": true,
     "public_site_modified": true,
-    "raw_yields_recorded_for_all_plots": true,
+    "raw_yields_recorded_for_all_distribution_plots": true,
     "visual_qa_complete": true
   },
   "inputs": {
@@ -23,7 +24,7 @@
   "legend": {
     "example": "Top (12345)",
     "normalization_unchanged": true,
-    "policy": "append the pre-normalization weighted yield to every displayed MC process and the raw event count to Data"
+    "policy": "append pre-normalization yields to variable-distribution legends; do not append yields to category/search-bin legends"
   },
   "normalization": {
     "data": "one common factor over every bin and block in each plot",
@@ -36,9 +37,9 @@
       2160,
       1800
     ],
-    "flat_summary_sha256": "5cb2ac6812c2ac990f6dac77cff396dcdfb2f83a6ce756746f628f2de82f3f08",
+    "flat_summary_sha256": "93603faa5aead901add2dda1e5fb30d59d680dd7b8da5266c3c65db06397df90",
     "highdm_plot_pairs": 10,
-    "highdm_summary_sha256": "82ff4555f64b0f5dd95f480e99751a158696469c032159cafec6349d7a75e48b",
+    "highdm_summary_sha256": "584171a7c086f6db285a77916881e6cf254d12a1612336643e8392c1d1756d1b",
     "lowdm_plot_pairs": 23,
     "non_gcr_outputs_generated": 0,
     "pdf_count": 33,
@@ -47,11 +48,11 @@
   },
   "plotter": {
     "path": "autonomous_allhad/workflow/plot_control_search_bins_style.py",
-    "sha256": "c454b84dd03519c1297bb343e31b9aced20eef60eb7ada5a6dcd2fc1f44c3260"
+    "sha256": "51e579548cc3fefd829d54df75595354edd439915a572871afe807c5fb7706f5"
   },
   "scope": "2024 GCR-only unit-area plots",
   "status": "complete",
-  "timestamp_utc": "2026-08-13T10:26:44Z",
+  "timestamp_utc": "2026-08-13T11:42:49Z",
   "uncertainty_model": {
     "combination": "MC statistical and shape-systematic components added in quadrature",
     "data": "Poisson statistical uncertainty divided by the raw data integral",

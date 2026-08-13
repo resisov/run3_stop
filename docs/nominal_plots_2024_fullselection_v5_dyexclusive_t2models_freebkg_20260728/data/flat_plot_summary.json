@@ -60,7 +60,7 @@
   ],
   "lowdm_variable_plot_count": 105,
   "luminosity_fb": 109.82,
-  "luminosity_relative_uncertainty": 0.016,
+  "luminosity_relative_uncertainty": 0.013,
   "ntop_order": "N_t = 0 blocks are placed left of N_t >= 1 blocks.",
   "output_dir": "plots",
   "plots": [
@@ -69,6 +69,7 @@
       "labels": [
         "LLCR"
       ],
+      "legend_yields_displayed": false,
       "name": "highdm_cr_llcr_recoil",
       "pdf": "plots/categories/highdm_cr_llcr_recoil.pdf",
       "png": "plots/categories/highdm_cr_llcr_recoil.png",
@@ -82,6 +83,7 @@
       "labels": [
         "QCDCR"
       ],
+      "legend_yields_displayed": false,
       "name": "highdm_cr_qcdcr_recoil",
       "pdf": "plots/categories/highdm_cr_qcdcr_recoil.pdf",
       "png": "plots/categories/highdm_cr_qcdcr_recoil.png",
@@ -95,6 +97,7 @@
       "labels": [
         "GCR"
       ],
+      "legend_yields_displayed": false,
       "name": "highdm_cr_gcr_recoil",
       "pdf": "plots/categories/highdm_cr_gcr_recoil.pdf",
       "png": "plots/categories/highdm_cr_gcr_recoil.png",
@@ -224,6 +227,7 @@
       "labels": [
         "DY2E"
       ],
+      "legend_yields_displayed": false,
       "name": "highdm_cr_dy2e_recoil",
       "pdf": "plots/categories/highdm_cr_dy2e_recoil.pdf",
       "png": "plots/categories/highdm_cr_dy2e_recoil.png",
@@ -237,6 +241,7 @@
       "labels": [
         "DY2M"
       ],
+      "legend_yields_displayed": false,
       "name": "highdm_cr_dy2m_recoil",
       "pdf": "plots/categories/highdm_cr_dy2m_recoil.pdf",
       "png": "plots/categories/highdm_cr_dy2m_recoil.png",
@@ -254,6 +259,7 @@
         "DY2E",
         "DY2M"
       ],
+      "legend_yields_displayed": false,
       "name": "highdm_cr_recoil_inclusive",
       "pdf": "plots/categories/highdm_cr_recoil_inclusive.pdf",
       "png": "plots/categories/highdm_cr_recoil_inclusive.png",
@@ -268,6 +274,7 @@
         "LLCR\\n$N_{t}=0$",
         "LLCR\\n$N_{t}\\geq1$"
       ],
+      "legend_yields_displayed": false,
       "name": "highdm_cr_llcr_recoil_ntop_split",
       "pdf": "plots/categories/highdm_cr_llcr_recoil_ntop_split.pdf",
       "png": "plots/categories/highdm_cr_llcr_recoil_ntop_split.png",
@@ -282,6 +289,7 @@
         "QCDCR\\n$N_{t}=0$",
         "QCDCR\\n$N_{t}\\geq1$"
       ],
+      "legend_yields_displayed": false,
       "name": "highdm_cr_qcdcr_recoil_ntop_split",
       "pdf": "plots/categories/highdm_cr_qcdcr_recoil_ntop_split.pdf",
       "png": "plots/categories/highdm_cr_qcdcr_recoil_ntop_split.png",
@@ -296,6 +304,7 @@
         "GCR\\n$N_{t}=0$",
         "GCR\\n$N_{t}\\geq1$"
       ],
+      "legend_yields_displayed": false,
       "name": "highdm_cr_gcr_recoil_ntop_split",
       "pdf": "plots/categories/highdm_cr_gcr_recoil_ntop_split.pdf",
       "png": "plots/categories/highdm_cr_gcr_recoil_ntop_split.png",
@@ -426,6 +435,7 @@
         "DY2E\\n$N_{t}=0$",
         "DY2E\\n$N_{t}\\geq1$"
       ],
+      "legend_yields_displayed": false,
       "name": "highdm_cr_dy2e_recoil_ntop_split",
       "pdf": "plots/categories/highdm_cr_dy2e_recoil_ntop_split.pdf",
       "png": "plots/categories/highdm_cr_dy2e_recoil_ntop_split.png",
@@ -440,6 +450,7 @@
         "DY2M\\n$N_{t}=0$",
         "DY2M\\n$N_{t}\\geq1$"
       ],
+      "legend_yields_displayed": false,
       "name": "highdm_cr_dy2m_recoil_ntop_split",
       "pdf": "plots/categories/highdm_cr_dy2m_recoil_ntop_split.pdf",
       "png": "plots/categories/highdm_cr_dy2m_recoil_ntop_split.png",
@@ -462,6 +473,7 @@
         "DY2M\\n$N_{t}=0$",
         "DY2M\\n$N_{t}\\geq1$"
       ],
+      "legend_yields_displayed": false,
       "name": "highdm_cr_recoil_ntop_split",
       "pdf": "plots/categories/highdm_cr_recoil_ntop_split.pdf",
       "png": "plots/categories/highdm_cr_recoil_ntop_split.png",
@@ -475,6 +487,7 @@
       "labels": [
         "High-dM VR\n$N_{b}=1$"
       ],
+      "legend_yields_displayed": false,
       "name": "highdm_vr_nb1_met",
       "pdf": "plots/categories/highdm_vr_nb1_met.pdf",
       "png": "plots/categories/highdm_vr_nb1_met.png",
@@ -488,6 +501,7 @@
       "labels": [
         "High-dM VR\n$N_{b}=2$"
       ],
+      "legend_yields_displayed": false,
       "name": "highdm_vr_nb2_met",
       "pdf": "plots/categories/highdm_vr_nb2_met.pdf",
       "png": "plots/categories/highdm_vr_nb2_met.png",
@@ -501,6 +515,7 @@
       "labels": [
         "High-dM VR\n$N_{b}\\geq3$"
       ],
+      "legend_yields_displayed": false,
       "name": "highdm_vr_nb3plus_met",
       "pdf": "plots/categories/highdm_vr_nb3plus_met.pdf",
       "png": "plots/categories/highdm_vr_nb3plus_met.png",
@@ -514,6 +529,7 @@
       "labels": [
         "SR"
       ],
+      "legend_yields_displayed": false,
       "name": "highdm_sr_recoil_inclusive",
       "pdf": "plots/categories/highdm_sr_recoil_inclusive.pdf",
       "png": "plots/categories/highdm_sr_recoil_inclusive.png",
@@ -531,6 +547,7 @@
         "SR\\n$N_{t}=0$",
         "SR\\n$N_{t}\\geq1$"
       ],
+      "legend_yields_displayed": false,
       "name": "highdm_sr_recoil_ntop_split",
       "pdf": "plots/categories/highdm_sr_recoil_ntop_split.pdf",
       "png": "plots/categories/highdm_sr_recoil_ntop_split.png",
@@ -556,6 +573,7 @@
         "$N_{b}\\geq3$, $N_{t}=1$\n$N_{W}=1$",
         "$N_{b}\\geq3$, $N_{t}=2$\n$N_{W}=0$"
       ],
+      "legend_yields_displayed": false,
       "name": "highdm_sr_selected_recoil55_tailmerged_except_cats1_2_3_5_8_nb2_nt2plus_w0_bins",
       "pdf": "plots/categories/highdm_sr_selected_recoil55_tailmerged_except_cats1_2_3_5_8_nb2_nt2plus_w0_bins.pdf",
       "png": "plots/categories/highdm_sr_selected_recoil55_tailmerged_except_cats1_2_3_5_8_nb2_nt2plus_w0_bins.png",
@@ -572,6 +590,7 @@
       "labels": [
         "LLCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": false,
       "name": "lowdm_cr_llcr_onebin",
       "pdf": "plots/categories/lowdm_cr_llcr_onebin.pdf",
       "png": "plots/categories/lowdm_cr_llcr_onebin.png",
@@ -585,6 +604,7 @@
       "labels": [
         "QCDCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": false,
       "name": "lowdm_cr_qcdcr_onebin",
       "pdf": "plots/categories/lowdm_cr_qcdcr_onebin.pdf",
       "png": "plots/categories/lowdm_cr_qcdcr_onebin.png",
@@ -598,6 +618,7 @@
       "labels": [
         "GCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": false,
       "name": "lowdm_cr_gcr_onebin",
       "pdf": "plots/categories/lowdm_cr_gcr_onebin.pdf",
       "png": "plots/categories/lowdm_cr_gcr_onebin.png",
@@ -727,6 +748,7 @@
       "labels": [
         "DY2E low $\\Delta m$"
       ],
+      "legend_yields_displayed": false,
       "name": "lowdm_cr_dy2e_onebin",
       "pdf": "plots/categories/lowdm_cr_dy2e_onebin.pdf",
       "png": "plots/categories/lowdm_cr_dy2e_onebin.png",
@@ -740,6 +762,7 @@
       "labels": [
         "DY2M low $\\Delta m$"
       ],
+      "legend_yields_displayed": false,
       "name": "lowdm_cr_dy2m_onebin",
       "pdf": "plots/categories/lowdm_cr_dy2m_onebin.pdf",
       "png": "plots/categories/lowdm_cr_dy2m_onebin.png",
@@ -753,6 +776,7 @@
       "labels": [
         "LLCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_llcr_met",
       "pdf": "plots/lowdm/lowdm_cr_llcr_met.pdf",
       "png": "plots/lowdm/lowdm_cr_llcr_met.png",
@@ -768,6 +792,7 @@
       "labels": [
         "LLCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_llcr_ht",
       "pdf": "plots/lowdm/lowdm_cr_llcr_ht.pdf",
       "png": "plots/lowdm/lowdm_cr_llcr_ht.png",
@@ -783,6 +808,7 @@
       "labels": [
         "LLCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_llcr_njet",
       "pdf": "plots/lowdm/lowdm_cr_llcr_njet.pdf",
       "png": "plots/lowdm/lowdm_cr_llcr_njet.png",
@@ -798,6 +824,7 @@
       "labels": [
         "LLCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_llcr_nb_medium_lowdm",
       "pdf": "plots/lowdm/lowdm_cr_llcr_nb_medium_lowdm.pdf",
       "png": "plots/lowdm/lowdm_cr_llcr_nb_medium_lowdm.png",
@@ -813,6 +840,7 @@
       "labels": [
         "LLCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_llcr_nb_loose_lowdm",
       "pdf": "plots/lowdm/lowdm_cr_llcr_nb_loose_lowdm.pdf",
       "png": "plots/lowdm/lowdm_cr_llcr_nb_loose_lowdm.png",
@@ -828,6 +856,7 @@
       "labels": [
         "LLCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_llcr_n_e_veto",
       "pdf": "plots/lowdm/lowdm_cr_llcr_n_e_veto.pdf",
       "png": "plots/lowdm/lowdm_cr_llcr_n_e_veto.png",
@@ -843,6 +872,7 @@
       "labels": [
         "LLCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_llcr_n_m_loose",
       "pdf": "plots/lowdm/lowdm_cr_llcr_n_m_loose.pdf",
       "png": "plots/lowdm/lowdm_cr_llcr_n_m_loose.png",
@@ -858,6 +888,7 @@
       "labels": [
         "LLCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_llcr_lowdm_mtb",
       "pdf": "plots/lowdm/lowdm_cr_llcr_lowdm_mtb.pdf",
       "png": "plots/lowdm/lowdm_cr_llcr_lowdm_mtb.png",
@@ -873,6 +904,7 @@
       "labels": [
         "LLCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_llcr_lowdm_met_sqrt_ht",
       "pdf": "plots/lowdm/lowdm_cr_llcr_lowdm_met_sqrt_ht.pdf",
       "png": "plots/lowdm/lowdm_cr_llcr_lowdm_met_sqrt_ht.png",
@@ -888,6 +920,7 @@
       "labels": [
         "LLCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_llcr_lowdm_isr_pt",
       "pdf": "plots/lowdm/lowdm_cr_llcr_lowdm_isr_pt.pdf",
       "png": "plots/lowdm/lowdm_cr_llcr_lowdm_isr_pt.png",
@@ -903,6 +936,7 @@
       "labels": [
         "LLCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_llcr_lowdm_isr_dphi",
       "pdf": "plots/lowdm/lowdm_cr_llcr_lowdm_isr_dphi.pdf",
       "png": "plots/lowdm/lowdm_cr_llcr_lowdm_isr_dphi.png",
@@ -918,6 +952,7 @@
       "labels": [
         "LLCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_llcr_lowdm_ptb",
       "pdf": "plots/lowdm/lowdm_cr_llcr_lowdm_ptb.pdf",
       "png": "plots/lowdm/lowdm_cr_llcr_lowdm_ptb.png",
@@ -933,6 +968,7 @@
       "labels": [
         "LLCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_llcr_n_lowdm_isr",
       "pdf": "plots/lowdm/lowdm_cr_llcr_n_lowdm_isr.pdf",
       "png": "plots/lowdm/lowdm_cr_llcr_n_lowdm_isr.png",
@@ -948,6 +984,7 @@
       "labels": [
         "LLCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_llcr_leading_lowdm_fatjet_pt",
       "pdf": "plots/lowdm/lowdm_cr_llcr_leading_lowdm_fatjet_pt.pdf",
       "png": "plots/lowdm/lowdm_cr_llcr_leading_lowdm_fatjet_pt.png",
@@ -963,6 +1000,7 @@
       "labels": [
         "LLCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_llcr_leading_lowdm_fatjet_msd",
       "pdf": "plots/lowdm/lowdm_cr_llcr_leading_lowdm_fatjet_msd.pdf",
       "png": "plots/lowdm/lowdm_cr_llcr_leading_lowdm_fatjet_msd.png",
@@ -978,6 +1016,7 @@
       "labels": [
         "QCDCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_qcdcr_met",
       "pdf": "plots/lowdm/lowdm_cr_qcdcr_met.pdf",
       "png": "plots/lowdm/lowdm_cr_qcdcr_met.png",
@@ -993,6 +1032,7 @@
       "labels": [
         "QCDCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_qcdcr_ht",
       "pdf": "plots/lowdm/lowdm_cr_qcdcr_ht.pdf",
       "png": "plots/lowdm/lowdm_cr_qcdcr_ht.png",
@@ -1008,6 +1048,7 @@
       "labels": [
         "QCDCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_qcdcr_njet",
       "pdf": "plots/lowdm/lowdm_cr_qcdcr_njet.pdf",
       "png": "plots/lowdm/lowdm_cr_qcdcr_njet.png",
@@ -1023,6 +1064,7 @@
       "labels": [
         "QCDCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_qcdcr_nb_medium_lowdm",
       "pdf": "plots/lowdm/lowdm_cr_qcdcr_nb_medium_lowdm.pdf",
       "png": "plots/lowdm/lowdm_cr_qcdcr_nb_medium_lowdm.png",
@@ -1038,6 +1080,7 @@
       "labels": [
         "QCDCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_qcdcr_nb_loose_lowdm",
       "pdf": "plots/lowdm/lowdm_cr_qcdcr_nb_loose_lowdm.pdf",
       "png": "plots/lowdm/lowdm_cr_qcdcr_nb_loose_lowdm.png",
@@ -1053,6 +1096,7 @@
       "labels": [
         "QCDCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_qcdcr_n_e_veto",
       "pdf": "plots/lowdm/lowdm_cr_qcdcr_n_e_veto.pdf",
       "png": "plots/lowdm/lowdm_cr_qcdcr_n_e_veto.png",
@@ -1068,6 +1112,7 @@
       "labels": [
         "QCDCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_qcdcr_n_m_loose",
       "pdf": "plots/lowdm/lowdm_cr_qcdcr_n_m_loose.pdf",
       "png": "plots/lowdm/lowdm_cr_qcdcr_n_m_loose.png",
@@ -1083,6 +1128,7 @@
       "labels": [
         "QCDCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_qcdcr_lowdm_mtb",
       "pdf": "plots/lowdm/lowdm_cr_qcdcr_lowdm_mtb.pdf",
       "png": "plots/lowdm/lowdm_cr_qcdcr_lowdm_mtb.png",
@@ -1098,6 +1144,7 @@
       "labels": [
         "QCDCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_qcdcr_lowdm_met_sqrt_ht",
       "pdf": "plots/lowdm/lowdm_cr_qcdcr_lowdm_met_sqrt_ht.pdf",
       "png": "plots/lowdm/lowdm_cr_qcdcr_lowdm_met_sqrt_ht.png",
@@ -1113,6 +1160,7 @@
       "labels": [
         "QCDCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_qcdcr_lowdm_isr_pt",
       "pdf": "plots/lowdm/lowdm_cr_qcdcr_lowdm_isr_pt.pdf",
       "png": "plots/lowdm/lowdm_cr_qcdcr_lowdm_isr_pt.png",
@@ -1128,6 +1176,7 @@
       "labels": [
         "QCDCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_qcdcr_lowdm_isr_dphi",
       "pdf": "plots/lowdm/lowdm_cr_qcdcr_lowdm_isr_dphi.pdf",
       "png": "plots/lowdm/lowdm_cr_qcdcr_lowdm_isr_dphi.png",
@@ -1143,6 +1192,7 @@
       "labels": [
         "QCDCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_qcdcr_lowdm_ptb",
       "pdf": "plots/lowdm/lowdm_cr_qcdcr_lowdm_ptb.pdf",
       "png": "plots/lowdm/lowdm_cr_qcdcr_lowdm_ptb.png",
@@ -1158,6 +1208,7 @@
       "labels": [
         "QCDCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_qcdcr_n_lowdm_isr",
       "pdf": "plots/lowdm/lowdm_cr_qcdcr_n_lowdm_isr.pdf",
       "png": "plots/lowdm/lowdm_cr_qcdcr_n_lowdm_isr.png",
@@ -1173,6 +1224,7 @@
       "labels": [
         "QCDCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_qcdcr_leading_lowdm_fatjet_pt",
       "pdf": "plots/lowdm/lowdm_cr_qcdcr_leading_lowdm_fatjet_pt.pdf",
       "png": "plots/lowdm/lowdm_cr_qcdcr_leading_lowdm_fatjet_pt.png",
@@ -1188,6 +1240,7 @@
       "labels": [
         "QCDCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_qcdcr_leading_lowdm_fatjet_msd",
       "pdf": "plots/lowdm/lowdm_cr_qcdcr_leading_lowdm_fatjet_msd.pdf",
       "png": "plots/lowdm/lowdm_cr_qcdcr_leading_lowdm_fatjet_msd.png",
@@ -1203,6 +1256,7 @@
       "labels": [
         "GCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_gcr_met",
       "pdf": "plots/lowdm/lowdm_cr_gcr_met.pdf",
       "png": "plots/lowdm/lowdm_cr_gcr_met.png",
@@ -1334,6 +1388,7 @@
       "labels": [
         "GCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_gcr_ht",
       "pdf": "plots/lowdm/lowdm_cr_gcr_ht.pdf",
       "png": "plots/lowdm/lowdm_cr_gcr_ht.png",
@@ -1465,6 +1520,7 @@
       "labels": [
         "GCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_gcr_njet",
       "pdf": "plots/lowdm/lowdm_cr_gcr_njet.pdf",
       "png": "plots/lowdm/lowdm_cr_gcr_njet.png",
@@ -1596,6 +1652,7 @@
       "labels": [
         "GCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_gcr_nb_medium_lowdm",
       "pdf": "plots/lowdm/lowdm_cr_gcr_nb_medium_lowdm.pdf",
       "png": "plots/lowdm/lowdm_cr_gcr_nb_medium_lowdm.png",
@@ -1727,6 +1784,7 @@
       "labels": [
         "GCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_gcr_nb_loose_lowdm",
       "pdf": "plots/lowdm/lowdm_cr_gcr_nb_loose_lowdm.pdf",
       "png": "plots/lowdm/lowdm_cr_gcr_nb_loose_lowdm.png",
@@ -1858,6 +1916,7 @@
       "labels": [
         "GCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_gcr_n_e_veto",
       "pdf": "plots/lowdm/lowdm_cr_gcr_n_e_veto.pdf",
       "png": "plots/lowdm/lowdm_cr_gcr_n_e_veto.png",
@@ -1989,6 +2048,7 @@
       "labels": [
         "GCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_gcr_n_m_loose",
       "pdf": "plots/lowdm/lowdm_cr_gcr_n_m_loose.pdf",
       "png": "plots/lowdm/lowdm_cr_gcr_n_m_loose.png",
@@ -2120,6 +2180,7 @@
       "labels": [
         "GCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_gcr_lowdm_mtb",
       "pdf": "plots/lowdm/lowdm_cr_gcr_lowdm_mtb.pdf",
       "png": "plots/lowdm/lowdm_cr_gcr_lowdm_mtb.png",
@@ -2251,6 +2312,7 @@
       "labels": [
         "GCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_gcr_lowdm_met_sqrt_ht",
       "pdf": "plots/lowdm/lowdm_cr_gcr_lowdm_met_sqrt_ht.pdf",
       "png": "plots/lowdm/lowdm_cr_gcr_lowdm_met_sqrt_ht.png",
@@ -2382,6 +2444,7 @@
       "labels": [
         "GCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_gcr_lowdm_isr_pt",
       "pdf": "plots/lowdm/lowdm_cr_gcr_lowdm_isr_pt.pdf",
       "png": "plots/lowdm/lowdm_cr_gcr_lowdm_isr_pt.png",
@@ -2513,6 +2576,7 @@
       "labels": [
         "GCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_gcr_lowdm_isr_dphi",
       "pdf": "plots/lowdm/lowdm_cr_gcr_lowdm_isr_dphi.pdf",
       "png": "plots/lowdm/lowdm_cr_gcr_lowdm_isr_dphi.png",
@@ -2644,6 +2708,7 @@
       "labels": [
         "GCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_gcr_lowdm_ptb",
       "pdf": "plots/lowdm/lowdm_cr_gcr_lowdm_ptb.pdf",
       "png": "plots/lowdm/lowdm_cr_gcr_lowdm_ptb.png",
@@ -2775,6 +2840,7 @@
       "labels": [
         "GCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_gcr_n_lowdm_isr",
       "pdf": "plots/lowdm/lowdm_cr_gcr_n_lowdm_isr.pdf",
       "png": "plots/lowdm/lowdm_cr_gcr_n_lowdm_isr.png",
@@ -2906,6 +2972,7 @@
       "labels": [
         "GCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_gcr_leading_lowdm_fatjet_pt",
       "pdf": "plots/lowdm/lowdm_cr_gcr_leading_lowdm_fatjet_pt.pdf",
       "png": "plots/lowdm/lowdm_cr_gcr_leading_lowdm_fatjet_pt.png",
@@ -3037,6 +3104,7 @@
       "labels": [
         "GCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_gcr_leading_lowdm_fatjet_msd",
       "pdf": "plots/lowdm/lowdm_cr_gcr_leading_lowdm_fatjet_msd.pdf",
       "png": "plots/lowdm/lowdm_cr_gcr_leading_lowdm_fatjet_msd.png",
@@ -3168,6 +3236,7 @@
       "labels": [
         "GCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_gcr_n_photon_medium",
       "pdf": "plots/lowdm/lowdm_cr_gcr_n_photon_medium.pdf",
       "png": "plots/lowdm/lowdm_cr_gcr_n_photon_medium.png",
@@ -3299,6 +3368,7 @@
       "labels": [
         "GCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_gcr_recoil_gcr",
       "pdf": "plots/lowdm/lowdm_cr_gcr_recoil_gcr.pdf",
       "png": "plots/lowdm/lowdm_cr_gcr_recoil_gcr.png",
@@ -3430,6 +3500,7 @@
       "labels": [
         "GCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_gcr_njet_photon_clean",
       "pdf": "plots/lowdm/lowdm_cr_gcr_njet_photon_clean.pdf",
       "png": "plots/lowdm/lowdm_cr_gcr_njet_photon_clean.png",
@@ -3561,6 +3632,7 @@
       "labels": [
         "GCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_gcr_nb_photon_clean",
       "pdf": "plots/lowdm/lowdm_cr_gcr_nb_photon_clean.pdf",
       "png": "plots/lowdm/lowdm_cr_gcr_nb_photon_clean.png",
@@ -3692,6 +3764,7 @@
       "labels": [
         "GCR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_gcr_ht_photon_clean",
       "pdf": "plots/lowdm/lowdm_cr_gcr_ht_photon_clean.pdf",
       "png": "plots/lowdm/lowdm_cr_gcr_ht_photon_clean.png",
@@ -3823,6 +3896,7 @@
       "labels": [
         "DY2E low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2e_met",
       "pdf": "plots/lowdm/lowdm_cr_dy2e_met.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2e_met.png",
@@ -3838,6 +3912,7 @@
       "labels": [
         "DY2E low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2e_ht",
       "pdf": "plots/lowdm/lowdm_cr_dy2e_ht.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2e_ht.png",
@@ -3853,6 +3928,7 @@
       "labels": [
         "DY2E low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2e_njet",
       "pdf": "plots/lowdm/lowdm_cr_dy2e_njet.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2e_njet.png",
@@ -3868,6 +3944,7 @@
       "labels": [
         "DY2E low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2e_nb_medium_lowdm",
       "pdf": "plots/lowdm/lowdm_cr_dy2e_nb_medium_lowdm.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2e_nb_medium_lowdm.png",
@@ -3883,6 +3960,7 @@
       "labels": [
         "DY2E low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2e_nb_loose_lowdm",
       "pdf": "plots/lowdm/lowdm_cr_dy2e_nb_loose_lowdm.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2e_nb_loose_lowdm.png",
@@ -3898,6 +3976,7 @@
       "labels": [
         "DY2E low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2e_n_e_veto",
       "pdf": "plots/lowdm/lowdm_cr_dy2e_n_e_veto.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2e_n_e_veto.png",
@@ -3913,6 +3992,7 @@
       "labels": [
         "DY2E low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2e_n_m_loose",
       "pdf": "plots/lowdm/lowdm_cr_dy2e_n_m_loose.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2e_n_m_loose.png",
@@ -3928,6 +4008,7 @@
       "labels": [
         "DY2E low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2e_lowdm_mtb",
       "pdf": "plots/lowdm/lowdm_cr_dy2e_lowdm_mtb.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2e_lowdm_mtb.png",
@@ -3943,6 +4024,7 @@
       "labels": [
         "DY2E low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2e_lowdm_met_sqrt_ht",
       "pdf": "plots/lowdm/lowdm_cr_dy2e_lowdm_met_sqrt_ht.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2e_lowdm_met_sqrt_ht.png",
@@ -3958,6 +4040,7 @@
       "labels": [
         "DY2E low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2e_lowdm_isr_pt",
       "pdf": "plots/lowdm/lowdm_cr_dy2e_lowdm_isr_pt.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2e_lowdm_isr_pt.png",
@@ -3973,6 +4056,7 @@
       "labels": [
         "DY2E low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2e_lowdm_isr_dphi",
       "pdf": "plots/lowdm/lowdm_cr_dy2e_lowdm_isr_dphi.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2e_lowdm_isr_dphi.png",
@@ -3988,6 +4072,7 @@
       "labels": [
         "DY2E low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2e_lowdm_ptb",
       "pdf": "plots/lowdm/lowdm_cr_dy2e_lowdm_ptb.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2e_lowdm_ptb.png",
@@ -4003,6 +4088,7 @@
       "labels": [
         "DY2E low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2e_n_lowdm_isr",
       "pdf": "plots/lowdm/lowdm_cr_dy2e_n_lowdm_isr.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2e_n_lowdm_isr.png",
@@ -4018,6 +4104,7 @@
       "labels": [
         "DY2E low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2e_leading_lowdm_fatjet_pt",
       "pdf": "plots/lowdm/lowdm_cr_dy2e_leading_lowdm_fatjet_pt.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2e_leading_lowdm_fatjet_pt.png",
@@ -4033,6 +4120,7 @@
       "labels": [
         "DY2E low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2e_leading_lowdm_fatjet_msd",
       "pdf": "plots/lowdm/lowdm_cr_dy2e_leading_lowdm_fatjet_msd.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2e_leading_lowdm_fatjet_msd.png",
@@ -4048,6 +4136,7 @@
       "labels": [
         "DY2E low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2e_recoil_dy2e",
       "pdf": "plots/lowdm/lowdm_cr_dy2e_recoil_dy2e.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2e_recoil_dy2e.png",
@@ -4063,6 +4152,7 @@
       "labels": [
         "DY2E low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2e_mee",
       "pdf": "plots/lowdm/lowdm_cr_dy2e_mee.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2e_mee.png",
@@ -4078,6 +4168,7 @@
       "labels": [
         "DY2E low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2e_njet_lepton_clean",
       "pdf": "plots/lowdm/lowdm_cr_dy2e_njet_lepton_clean.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2e_njet_lepton_clean.png",
@@ -4093,6 +4184,7 @@
       "labels": [
         "DY2E low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2e_nb_lepton_clean",
       "pdf": "plots/lowdm/lowdm_cr_dy2e_nb_lepton_clean.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2e_nb_lepton_clean.png",
@@ -4108,6 +4200,7 @@
       "labels": [
         "DY2E low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2e_ht_lepton_clean",
       "pdf": "plots/lowdm/lowdm_cr_dy2e_ht_lepton_clean.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2e_ht_lepton_clean.png",
@@ -4123,6 +4216,7 @@
       "labels": [
         "DY2M low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2m_met",
       "pdf": "plots/lowdm/lowdm_cr_dy2m_met.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2m_met.png",
@@ -4138,6 +4232,7 @@
       "labels": [
         "DY2M low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2m_ht",
       "pdf": "plots/lowdm/lowdm_cr_dy2m_ht.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2m_ht.png",
@@ -4153,6 +4248,7 @@
       "labels": [
         "DY2M low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2m_njet",
       "pdf": "plots/lowdm/lowdm_cr_dy2m_njet.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2m_njet.png",
@@ -4168,6 +4264,7 @@
       "labels": [
         "DY2M low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2m_nb_medium_lowdm",
       "pdf": "plots/lowdm/lowdm_cr_dy2m_nb_medium_lowdm.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2m_nb_medium_lowdm.png",
@@ -4183,6 +4280,7 @@
       "labels": [
         "DY2M low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2m_nb_loose_lowdm",
       "pdf": "plots/lowdm/lowdm_cr_dy2m_nb_loose_lowdm.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2m_nb_loose_lowdm.png",
@@ -4198,6 +4296,7 @@
       "labels": [
         "DY2M low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2m_n_e_veto",
       "pdf": "plots/lowdm/lowdm_cr_dy2m_n_e_veto.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2m_n_e_veto.png",
@@ -4213,6 +4312,7 @@
       "labels": [
         "DY2M low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2m_n_m_loose",
       "pdf": "plots/lowdm/lowdm_cr_dy2m_n_m_loose.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2m_n_m_loose.png",
@@ -4228,6 +4328,7 @@
       "labels": [
         "DY2M low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2m_lowdm_mtb",
       "pdf": "plots/lowdm/lowdm_cr_dy2m_lowdm_mtb.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2m_lowdm_mtb.png",
@@ -4243,6 +4344,7 @@
       "labels": [
         "DY2M low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2m_lowdm_met_sqrt_ht",
       "pdf": "plots/lowdm/lowdm_cr_dy2m_lowdm_met_sqrt_ht.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2m_lowdm_met_sqrt_ht.png",
@@ -4258,6 +4360,7 @@
       "labels": [
         "DY2M low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2m_lowdm_isr_pt",
       "pdf": "plots/lowdm/lowdm_cr_dy2m_lowdm_isr_pt.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2m_lowdm_isr_pt.png",
@@ -4273,6 +4376,7 @@
       "labels": [
         "DY2M low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2m_lowdm_isr_dphi",
       "pdf": "plots/lowdm/lowdm_cr_dy2m_lowdm_isr_dphi.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2m_lowdm_isr_dphi.png",
@@ -4288,6 +4392,7 @@
       "labels": [
         "DY2M low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2m_lowdm_ptb",
       "pdf": "plots/lowdm/lowdm_cr_dy2m_lowdm_ptb.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2m_lowdm_ptb.png",
@@ -4303,6 +4408,7 @@
       "labels": [
         "DY2M low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2m_n_lowdm_isr",
       "pdf": "plots/lowdm/lowdm_cr_dy2m_n_lowdm_isr.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2m_n_lowdm_isr.png",
@@ -4318,6 +4424,7 @@
       "labels": [
         "DY2M low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2m_leading_lowdm_fatjet_pt",
       "pdf": "plots/lowdm/lowdm_cr_dy2m_leading_lowdm_fatjet_pt.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2m_leading_lowdm_fatjet_pt.png",
@@ -4333,6 +4440,7 @@
       "labels": [
         "DY2M low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2m_leading_lowdm_fatjet_msd",
       "pdf": "plots/lowdm/lowdm_cr_dy2m_leading_lowdm_fatjet_msd.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2m_leading_lowdm_fatjet_msd.png",
@@ -4348,6 +4456,7 @@
       "labels": [
         "DY2M low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2m_recoil_dy2m",
       "pdf": "plots/lowdm/lowdm_cr_dy2m_recoil_dy2m.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2m_recoil_dy2m.png",
@@ -4363,6 +4472,7 @@
       "labels": [
         "DY2M low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2m_mmm",
       "pdf": "plots/lowdm/lowdm_cr_dy2m_mmm.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2m_mmm.png",
@@ -4378,6 +4488,7 @@
       "labels": [
         "DY2M low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2m_njet_lepton_clean",
       "pdf": "plots/lowdm/lowdm_cr_dy2m_njet_lepton_clean.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2m_njet_lepton_clean.png",
@@ -4393,6 +4504,7 @@
       "labels": [
         "DY2M low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2m_nb_lepton_clean",
       "pdf": "plots/lowdm/lowdm_cr_dy2m_nb_lepton_clean.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2m_nb_lepton_clean.png",
@@ -4408,6 +4520,7 @@
       "labels": [
         "DY2M low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_cr_dy2m_ht_lepton_clean",
       "pdf": "plots/lowdm/lowdm_cr_dy2m_ht_lepton_clean.pdf",
       "png": "plots/lowdm/lowdm_cr_dy2m_ht_lepton_clean.png",
@@ -4423,6 +4536,7 @@
       "labels": [
         "SR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_sr_sr_met",
       "pdf": "plots/lowdm/lowdm_sr_sr_met.pdf",
       "png": "plots/lowdm/lowdm_sr_sr_met.png",
@@ -4441,6 +4555,7 @@
       "labels": [
         "SR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_sr_sr_ht",
       "pdf": "plots/lowdm/lowdm_sr_sr_ht.pdf",
       "png": "plots/lowdm/lowdm_sr_sr_ht.png",
@@ -4459,6 +4574,7 @@
       "labels": [
         "SR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_sr_sr_njet",
       "pdf": "plots/lowdm/lowdm_sr_sr_njet.pdf",
       "png": "plots/lowdm/lowdm_sr_sr_njet.png",
@@ -4477,6 +4593,7 @@
       "labels": [
         "SR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_sr_sr_nb_medium_lowdm",
       "pdf": "plots/lowdm/lowdm_sr_sr_nb_medium_lowdm.pdf",
       "png": "plots/lowdm/lowdm_sr_sr_nb_medium_lowdm.png",
@@ -4495,6 +4612,7 @@
       "labels": [
         "SR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_sr_sr_nb_loose_lowdm",
       "pdf": "plots/lowdm/lowdm_sr_sr_nb_loose_lowdm.pdf",
       "png": "plots/lowdm/lowdm_sr_sr_nb_loose_lowdm.png",
@@ -4513,6 +4631,7 @@
       "labels": [
         "SR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_sr_sr_n_e_veto",
       "pdf": "plots/lowdm/lowdm_sr_sr_n_e_veto.pdf",
       "png": "plots/lowdm/lowdm_sr_sr_n_e_veto.png",
@@ -4531,6 +4650,7 @@
       "labels": [
         "SR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_sr_sr_n_m_loose",
       "pdf": "plots/lowdm/lowdm_sr_sr_n_m_loose.pdf",
       "png": "plots/lowdm/lowdm_sr_sr_n_m_loose.png",
@@ -4549,6 +4669,7 @@
       "labels": [
         "SR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_sr_sr_lowdm_mtb",
       "pdf": "plots/lowdm/lowdm_sr_sr_lowdm_mtb.pdf",
       "png": "plots/lowdm/lowdm_sr_sr_lowdm_mtb.png",
@@ -4567,6 +4688,7 @@
       "labels": [
         "SR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_sr_sr_lowdm_met_sqrt_ht",
       "pdf": "plots/lowdm/lowdm_sr_sr_lowdm_met_sqrt_ht.pdf",
       "png": "plots/lowdm/lowdm_sr_sr_lowdm_met_sqrt_ht.png",
@@ -4585,6 +4707,7 @@
       "labels": [
         "SR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_sr_sr_lowdm_isr_pt",
       "pdf": "plots/lowdm/lowdm_sr_sr_lowdm_isr_pt.pdf",
       "png": "plots/lowdm/lowdm_sr_sr_lowdm_isr_pt.png",
@@ -4603,6 +4726,7 @@
       "labels": [
         "SR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_sr_sr_lowdm_isr_dphi",
       "pdf": "plots/lowdm/lowdm_sr_sr_lowdm_isr_dphi.pdf",
       "png": "plots/lowdm/lowdm_sr_sr_lowdm_isr_dphi.png",
@@ -4621,6 +4745,7 @@
       "labels": [
         "SR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_sr_sr_lowdm_ptb",
       "pdf": "plots/lowdm/lowdm_sr_sr_lowdm_ptb.pdf",
       "png": "plots/lowdm/lowdm_sr_sr_lowdm_ptb.png",
@@ -4639,6 +4764,7 @@
       "labels": [
         "SR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_sr_sr_n_lowdm_isr",
       "pdf": "plots/lowdm/lowdm_sr_sr_n_lowdm_isr.pdf",
       "png": "plots/lowdm/lowdm_sr_sr_n_lowdm_isr.png",
@@ -4657,6 +4783,7 @@
       "labels": [
         "SR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_sr_sr_leading_lowdm_fatjet_pt",
       "pdf": "plots/lowdm/lowdm_sr_sr_leading_lowdm_fatjet_pt.pdf",
       "png": "plots/lowdm/lowdm_sr_sr_leading_lowdm_fatjet_pt.png",
@@ -4675,6 +4802,7 @@
       "labels": [
         "SR low $\\Delta m$"
       ],
+      "legend_yields_displayed": true,
       "name": "lowdm_sr_sr_leading_lowdm_fatjet_msd",
       "pdf": "plots/lowdm/lowdm_sr_sr_leading_lowdm_fatjet_msd.pdf",
       "png": "plots/lowdm/lowdm_sr_sr_leading_lowdm_fatjet_msd.png",
@@ -4697,6 +4825,7 @@
         "DY2E low $\\Delta m$",
         "DY2M low $\\Delta m$"
       ],
+      "legend_yields_displayed": false,
       "name": "lowdm_cr_onebin",
       "pdf": "plots/categories/lowdm_cr_onebin.pdf",
       "png": "plots/categories/lowdm_cr_onebin.png",
@@ -4715,6 +4844,7 @@
         "DY2M low $\\Delta m$",
         "SR low $\\Delta m$"
       ],
+      "legend_yields_displayed": false,
       "name": "lowdm_cr_sr_onebin",
       "pdf": "plots/categories/lowdm_cr_sr_onebin.pdf",
       "png": "plots/categories/lowdm_cr_sr_onebin.png",
@@ -4737,6 +4867,7 @@
         "$N_{b}\\geq2$\n$p_{T}^{ISR}\\geq500$\n$80<p_{T}^{b}<140$",
         "$N_{b}\\geq2$, $N_{j}\\geq7$\n$p_{T}^{ISR}\\geq500$\n$p_{T}^{b}>140$"
       ],
+      "legend_yields_displayed": false,
       "name": "lowdm_sr_onebin",
       "pdf": "plots/categories/lowdm_sr_onebin.pdf",
       "png": "plots/categories/lowdm_sr_onebin.png",

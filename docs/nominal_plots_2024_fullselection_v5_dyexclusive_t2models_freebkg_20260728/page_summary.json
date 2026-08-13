@@ -70,19 +70,19 @@
     "flat_summary": "data/gcr_flat_plot_summary.json",
     "highdm_plot_pairs": 10,
     "highdm_summary": "data/gcr_highdm_plot_summary.json",
-    "legend_policy": "each displayed MC process and Data include the corresponding pre-normalization yield in parentheses",
+    "legend_policy": "variable distributions show pre-normalization yields; category/search-bin plots remain yield-free",
     "lowdm_plot_pairs": 23,
     "mc_normalization": "one common factor over every process, bin, and block in the plotted figure",
     "plot_files": 66,
     "plot_pairs": 33,
-    "plotter_sha256": "c454b84dd03519c1297bb343e31b9aced20eef60eb7ada5a6dcd2fc1f44c3260",
+    "plotter_sha256": "51e579548cc3fefd829d54df75595354edd439915a572871afe807c5fb7706f5",
     "ratio": "normalized data divided by normalized total MC",
     "status": "complete",
     "uncertainty": "MC statistical plus unit-area-normalized Up/Down shape envelopes; luminosity omitted",
-    "updated_at": "2026-08-13T10:26:44+00:00",
+    "updated_at": "2026-08-13T11:42:49+00:00",
     "validation": "data/gcr_unit_area_validation.json"
   },
-  "generated_at": "2026-08-13T10:44:23+00:00",
+  "generated_at": "2026-08-13T11:42:49+00:00",
   "gj_4jets_update": {
     "btag_efficiency": "complete: 3,930 validated Coffea shards, 16 merged datasets, and 3,930 source files represented exactly once",
     "btag_efficiency_sha256": "9a9bf0161018d7f8d072221f0f2902659cf834ed0824aba68c456783a7f7b224",
@@ -150,6 +150,19 @@
     "updated_at": "2026-08-05T12:52:14+00:00",
     "validation": "data/impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat_validation.json",
     "year": 2024
+  },
+  "legend_yield_update": {
+    "background_policy": "plot-integrated weighted yield in parentheses",
+    "category_plot_pairs_without_yields": 26,
+    "data_policy": "visible yield in parentheses; blinded SR displayed as Data (blinded)",
+    "excluded_scope": "category and search-bin plots",
+    "highdm_distribution_plot_pairs": 186,
+    "lowdm_distribution_plot_pairs": 105,
+    "plotter_sha256": "51e579548cc3fefd829d54df75595354edd439915a572871afe807c5fb7706f5",
+    "scope": "all Low-dM and High-dM variable-distribution plots",
+    "signal_policy": "plot-integrated signal yield in parentheses whenever a signal overlay is present",
+    "status": "complete",
+    "updated_at": "2026-08-13T11:42:49+00:00"
   },
   "plot_counts": {
     "categories": 26,
@@ -3595,9 +3608,10 @@
   },
   "xlabel_update": {
     "plot_pairs": 317,
-    "plotter_sha256": "1fe767091a1f7b974ac04c1048d589a7d6432bd04e65e3df4cc45888175a85bf",
-    "policy": "concise physics-symbol labels while retaining Leading for leading-object observables; low-dM b-tag working points are shown parenthetically rather than as superscripts; internal object-cleaning qualifiers are omitted from displayed axes",
+    "plotter_sha256": "51e579548cc3fefd829d54df75595354edd439915a572871afe807c5fb7706f5",
+    "policy": "concise physics-symbol labels while retaining Leading for leading-object observables; the default medium b-tag multiplicity is displayed simply as N_b; only the explicitly loose comparison retains the loose WP qualifier; internal object-cleaning qualifiers are omitted",
     "removed_display_qualifiers": [
+      "medium WP for the default N_b observable",
       "photon-cleaned",
       "lepton-cleaned",
       "low-dM prefixes"
