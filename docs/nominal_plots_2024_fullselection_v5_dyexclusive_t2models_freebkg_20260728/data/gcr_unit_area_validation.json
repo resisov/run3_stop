@@ -36,9 +36,9 @@
       2160,
       1800
     ],
-    "flat_summary_sha256": "6f91a2f81d3f1bcdbc91fd33933c55f498ae4f1aaab68d3287702e0398c70fba",
+    "flat_summary_sha256": "57fa9567fe3f0db64edec8c016c49a1eea9cf137f5dc39dff7e44bd8f21ded2f",
     "highdm_plot_pairs": 12,
-    "highdm_summary_sha256": "92c73a3375429654be0bc3af72ef2ebceb60ce871d7977ea7d13833b97281e8a",
+    "highdm_summary_sha256": "297847c76ea73e187404bac97641ef9b6703d439d007ea10ffa69d9269a10686",
     "lowdm_plot_pairs": 21,
     "non_gcr_outputs_generated": 0,
     "pdf_count": 33,
@@ -47,11 +47,11 @@
   },
   "plotter": {
     "path": "autonomous_allhad/workflow/plot_control_search_bins_style.py",
-    "sha256": "b2efc93a2dbd2486d4e4c0e188838500e8b5c482ae0e4b4cc78cdfd6b73bda82"
+    "sha256": "394bf538707691b049475eec7025e35da613b90ae0e5d7910730974eb760f21a"
   },
   "scope": "2024 GCR-only unit-area plots",
   "status": "complete",
-  "timestamp_utc": "2026-08-13T06:33:00Z",
+  "timestamp_utc": "2026-08-13T09:56:17Z",
   "uncertainty_model": {
     "combination": "MC statistical and shape-systematic components added in quadrature",
     "data": "Poisson statistical uncertainty divided by the raw data integral",

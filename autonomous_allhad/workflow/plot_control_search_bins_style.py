@@ -166,6 +166,105 @@ def process_to_group(process: str) -> str:
     return BACKGROUND_DISPLAY_LABELS[background_process_for_sample(process)]
 
 
+def apply_dy_rz(payload: dict, manifest_path: Path) -> dict:
+    """Apply the adopted DY2E/DY2M RZ factors in the main render payload."""
+    manifest = load_json(manifest_path)
+    config = manifest.get("dy_rz") or {}
+    if config.get("status") != "complete":
+        raise ValueError(f"missing complete dy_rz configuration in {manifest_path}")
+    channels = config.get("channels") or {}
+    audit = {
+        "status": "complete",
+        "source": config.get("source"),
+        "factor_policy": config.get("factor_policy"),
+        "legend_label": "DY",
+        "containers": 0,
+        "records": 0,
+        "channels": channels,
+    }
+
+    def factors(channel: str, regime: str, nbin: int, variable: str | None) -> np.ndarray:
+        record = ((channels.get(channel) or {}).get(regime) or {})
+        effective = float(record["effective"])
+        result = np.full(nbin, effective, dtype=float)
+        if variable and variable.startswith("nb"):
+            specs = (
+                payload.get("highdm_distribution_variable_specs")
+                if regime == "highdm"
+                else payload.get("lowdm_variable_specs")
+            ) or {}
+            edges = np.asarray((specs.get(variable) or {}).get("bins") or [], dtype=float)
+            if len(edges) == nbin + 1:
+                centers = 0.5 * (edges[:-1] + edges[1:])
+                result[centers == 1] = float(record["Nb1"])
+                result[centers >= 2] = float(record["Nb2plus"])
+        return result
+
+    def scale_leaf(leaf: dict, scale: np.ndarray) -> None:
+        if "sumw" in leaf:
+            values = as_array(leaf.get("sumw"), len(scale))
+            leaf["sumw"] = (values * scale).tolist()
+        if "sumw2" in leaf:
+            values = as_array(leaf.get("sumw2"), len(scale))
+            leaf["sumw2"] = (values * scale * scale).tolist()
+
+    def scale_container(raw: dict, channel: str, regime: str, variable: str | None = None) -> None:
+        if not raw:
+            return
+        nbin = 0
+        for record in raw.values():
+            nominal = record.get("nominal") or record
+            nbin = max(nbin, len(nominal.get("sumw") or []))
+        if nbin <= 0:
+            return
+        scale = factors(channel, regime, nbin, variable)
+        changed = 0
+        for sample, record in raw.items():
+            if sample == "data_obs" or is_signal_sample(sample):
+                continue
+            try:
+                is_dy = process_to_group(sample) == "DY"
+            except (KeyError, ValueError):
+                is_dy = False
+            if not is_dy:
+                continue
+            if "sumw" in record:
+                scale_leaf(record, scale)
+            else:
+                for leaf in record.values():
+                    if isinstance(leaf, dict) and "sumw" in leaf:
+                        scale_leaf(leaf, scale)
+            changed += 1
+        if changed:
+            audit["containers"] += 1
+            audit["records"] += changed
+
+    for region, raw in (payload.get("histograms") or {}).items():
+        for channel in ("DY2E", "DY2M"):
+            if region == channel or region.startswith(channel + "_"):
+                scale_container(raw, channel, "highdm")
+    for channel in ("DY2E", "DY2M"):
+        variable_map = (payload.get("highdm_variable_histograms") or {}).get(channel) or {}
+        for variable, raw in variable_map.items():
+            scale_container(raw, channel, "highdm", variable)
+    lowdm_channels = {
+        "cat5_DY2E_lowDeltaM": "DY2E",
+        "cat6_DY2M_lowDeltaM": "DY2M",
+    }
+    for scheme, channel in lowdm_channels.items():
+        scale_container(
+            (payload.get("search_bin_histograms") or {}).get(scheme) or {},
+            channel,
+            "lowdm",
+        )
+        for variable, raw in (
+            (payload.get("lowdm_variable_histograms") or {}).get(scheme) or {}
+        ).items():
+            scale_container(raw, channel, "lowdm", variable)
+    payload["_dy_rz_application"] = audit
+    return audit
+
+
 def poisson_unc(data: np.ndarray) -> np.ndarray:
     return np.sqrt(np.maximum(data, 0.0))
 
@@ -434,7 +533,7 @@ def draw(fit_path: Path, payload_path: Path, signal_searchbin_path: Path, outbas
     ax.set_ylabel("Events / bin", fontsize=30)
     rax.set_ylabel("Data/MC", fontsize=26)
     rax.set_ylim(0, 2)
-    rax.set_xlabel("Control/search bin number", fontsize=30, loc="right")
+    rax.set_xlabel("Bin", fontsize=30, loc="right")
     rax.set_xticks(centers)
     rax.set_xticklabels([str(i) for i in range(1, nbin + 1)], fontsize=13)
     hep.cms.label(llabel="Work in progress", rlabel=rf"{LUMINOSITY_FB:.2f} fb$^{{-1}}$ (13.6 TeV)", ax=ax)
@@ -517,6 +616,36 @@ def background_systematic_variance(raw: dict, nbin: int) -> np.ndarray:
     return syst2
 
 
+def background_systematic_totals(raw: dict, nbin: int) -> dict[str, dict[str, np.ndarray]]:
+    """Return absolute total-background Up/Down shapes for each stored source."""
+    nominal_total = np.zeros(nbin, dtype=float)
+    for sample, rec in raw.items():
+        if sample == "data_obs" or is_signal_sample(sample):
+            continue
+        nominal, _ = flat_values(rec, nbin)
+        nominal_total += nominal
+    totals: dict[str, dict[str, np.ndarray]] = {}
+    for source in PLOT_SYSTEMATIC_SOURCES:
+        up_total = nominal_total.copy()
+        down_total = nominal_total.copy()
+        have = False
+        for sample, rec in raw.items():
+            if sample == "data_obs" or is_signal_sample(sample):
+                continue
+            nominal, _ = flat_values(rec, nbin)
+            up_rec = rec.get(source + "Up")
+            down_rec = rec.get(source + "Down")
+            if up_rec:
+                up_total += as_array(up_rec.get("sumw"), nbin) - nominal
+                have = True
+            if down_rec:
+                down_total += as_array(down_rec.get("sumw"), nbin) - nominal
+                have = True
+        if have:
+            totals[source] = {"up": up_total, "down": down_total}
+    return totals
+
+
 def flat_hist_record(payload: dict, region: str, allow_signal: bool) -> dict | None:
     raw = (payload.get("histograms") or {}).get(region) or {}
     if not raw:
@@ -560,12 +689,17 @@ def flat_hist_record(payload: dict, region: str, allow_signal: bool) -> dict | N
         "groups": groups,
         "background": bkg,
         "background_unc": np.sqrt(stat2 + syst2),
+        "background_stat_unc": np.sqrt(stat2),
+        "background_systematic_totals": background_systematic_totals(raw, nbin),
         "data": data,
         "data_unc": np.sqrt(data2),
         "signals": signals,
         "label": FLAT_REGION_LABELS.get(region, region),
         "nbin": nbin,
         "edges": recoil_edges,
+        "unit_area": region == "GCR" or region.startswith("GCR_"),
+        "physics_scope": "GCR" if region == "GCR" or region.startswith("GCR_") else region,
+        "reference_style": region == "GCR" or region.startswith("GCR_"),
     }
     return result
 
@@ -605,17 +739,148 @@ def flat_search_record(payload: dict, scheme: str, label: str, allow_signal: boo
     syst2 = background_systematic_variance(raw, nbin)
     unc = np.sqrt(stat2 + syst2 + (LUMINOSITY_RELATIVE_UNCERTAINTY * bkg) ** 2)
     signals = {key: vals for key, vals in signals.items() if np.any(vals > 0)}
-    result = {"groups": groups, "background": bkg, "background_unc": unc, "data": data, "data_unc": np.sqrt(data2), "signals": signals, "label": label, "nbin": nbin}
+    is_gcr = scheme == "cat4_GCR_lowDeltaM"
+    result = {
+        "groups": groups,
+        "background": bkg,
+        "background_unc": unc,
+        "background_stat_unc": np.sqrt(stat2),
+        "background_systematic_totals": background_systematic_totals(raw, nbin),
+        "data": data,
+        "data_unc": np.sqrt(data2),
+        "signals": signals,
+        "label": label,
+        "nbin": nbin,
+        "unit_area": is_gcr,
+        "physics_scope": "GCR" if is_gcr else scheme,
+        "reference_style": is_gcr,
+    }
     return result
+
+
+def apply_highdm_tail_merge(
+    payload: dict,
+    preserve_categories: set[int] | None = None,
+) -> None:
+    """Merge the last two recoil bins in every adopted High-dM category.
+
+    The merge is performed on every nominal and shifted histogram before the
+    standard plotting uncertainty is evaluated.  This preserves the existing
+    process grouping and systematic-correlation treatment of the main plotter.
+    """
+    scheme_name = EXTENDED_AN17_RECOIL_SCHEME
+    schemes = payload.get("search_bin_schemes") or {}
+    histograms = payload.get("search_bin_histograms") or {}
+    scheme = schemes.get(scheme_name)
+    raw = histograms.get(scheme_name)
+    if not scheme or not raw:
+        raise RuntimeError(f"missing High-dM search-bin scheme: {scheme_name}")
+
+    bin_labels = list(scheme.get("bin_labels") or [])
+    if len(bin_labels) != 60:
+        raise RuntimeError(f"expected 60 High-dM bin labels, found {len(bin_labels)}")
+
+    preserve_categories = set(preserve_categories or set())
+    invalid_categories = preserve_categories - set(range(1, 11))
+    if invalid_categories:
+        raise RuntimeError(
+            "invalid one-based High-dM category indices: "
+            + ", ".join(str(value) for value in sorted(invalid_categories))
+        )
+    category_sizes = [
+        6 if category in preserve_categories else 5
+        for category in range(1, 11)
+    ]
+
+    def merge_values(values: list[float] | None) -> list[float]:
+        if values is None:
+            return []
+        if len(values) != 60:
+            raise RuntimeError(f"expected 60 High-dM values, found {len(values)}")
+        merged = []
+        for category, start in enumerate(range(0, 60, 6), start=1):
+            if category in preserve_categories:
+                merged.extend(values[start : start + 6])
+            else:
+                merged.extend(values[start : start + 4])
+                merged.append(values[start + 4] + values[start + 5])
+        return merged
+
+    for variations in raw.values():
+        for record in variations.values():
+            for field in ("sumw", "sumw2", "entries"):
+                if field in record:
+                    record[field] = merge_values(record[field])
+
+    merged_labels = []
+    for category, start in enumerate(range(0, 60, 6), start=1):
+        keep = 6 if category in preserve_categories else 5
+        merged_labels.extend(bin_labels[start : start + keep])
+    scheme["bin_labels"] = merged_labels
+    scheme["category_sizes"] = category_sizes
+    recoil_edges = list(scheme.get("recoil_pt_bins") or [])
+    if len(recoil_edges) != 7:
+        raise RuntimeError(
+            f"expected seven High-dM recoil edges, found {len(recoil_edges)}"
+        )
+    if not preserve_categories:
+        scheme["recoil_pt_bins"] = recoil_edges[:5] + recoil_edges[-1:]
+    scheme["selection"] = (
+        str(scheme.get("selection") or "")
+        + "; final two recoil bins merged except in categories "
+        + (
+            ",".join(str(value) for value in sorted(preserve_categories))
+            if preserve_categories
+            else "none"
+        )
+    )
 
 
 
 VARIABLE_XLABELS = {
     "met": r"$p_{T}^{miss}$ (GeV)",
+    "ht": r"$H_{T}$ (GeV)",
+    "njet": r"$N_{j}$",
+    "nb_medium_lowdm": r"$N_{b}^{\mathrm{medium}}$",
+    "nb_loose_lowdm": r"$N_{b}^{\mathrm{loose}}$",
+    "n_e_veto": r"$N_{e}^{\mathrm{veto}}$",
+    "n_m_loose": r"$N_{\mu}^{\mathrm{loose}}$",
+    "lowdm_mtb": r"$m_{T}^{b}$ (GeV)",
     "recoil_gcr": r"$U_{T}$ (GeV)",
     "recoil_dy2e": r"$U_{T}$ (GeV)",
     "recoil_dy2m": r"$U_{T}$ (GeV)",
     "lowdm_met_sqrt_ht": r"$p_{T}^{miss}/\sqrt{H_{T}}$",
+    "lowdm_isr_pt": r"$p_{T}^{\mathrm{ISR}}$ (GeV)",
+    "lowdm_isr_dphi": r"$\Delta\phi(\mathrm{ISR},p_{T}^{miss})$",
+    "lowdm_ptb": r"$p_{T}^{b}$ (GeV)",
+    "n_lowdm_isr": r"$N_{\mathrm{ISR}}$",
+    "mee": r"$m_{ee}$ (GeV)",
+    "mmm": r"$m_{\mu\mu}$ (GeV)",
+    "n_photon_medium": r"$N_{\gamma}$",
+    "njet_photon_clean": r"$N_{j}$",
+    "nb_photon_clean": r"$N_{b}$",
+    "ht_photon_clean": r"$H_{T}$ (GeV)",
+    "njet_lepton_clean": r"$N_{j}$",
+    "nb_lepton_clean": r"$N_{b}$",
+    "ht_lepton_clean": r"$H_{T}$ (GeV)",
+    "leading_lowdm_fatjet_pt": r"$p_{T}^{\mathrm{AK8},1}$ (GeV)",
+    "leading_lowdm_fatjet_msd": r"$m_{\mathrm{SD}}^{\mathrm{AK8},1}$ (GeV)",
+}
+
+
+HIGHDM_VARIABLE_XLABELS = {
+    "nb": r"$N_{b}$",
+    "njet": r"$N_{j}$",
+    "nfatjet": r"$N_{\mathrm{AK8}}$",
+    "ntop": r"$N_{t}$",
+    "nw": r"$N_{W}$",
+    "ht": r"$H_{T}$ (GeV)",
+    "ut": r"$U_{T}$ (GeV)",
+    "ptll": r"$p_{T}(\ell\ell)$ (GeV)",
+    "met": r"$p_{T}^{miss}$ (GeV)",
+    "jet_pt": r"$p_{T}^{j_{1}}$ (GeV)",
+    "fatjet_pt": r"$p_{T}^{\mathrm{AK8},1}$ (GeV)",
+    "bjet_pt": r"$p_{T}^{b_{1}}$ (GeV)",
 }
 
 
@@ -664,6 +929,8 @@ def lowdm_variable_record(payload: dict, scheme: str, variable: str, label: str,
         "groups": groups,
         "background": bkg,
         "background_unc": np.sqrt(stat2 + syst2),
+        "background_stat_unc": np.sqrt(stat2),
+        "background_systematic_totals": background_systematic_totals(raw, nbin),
         "data": data,
         "data_unc": np.sqrt(data2),
         "signals": signals,
@@ -674,6 +941,8 @@ def lowdm_variable_record(payload: dict, scheme: str, variable: str, label: str,
         "variable": variable,
         "reference_style": True,
         "xlim_left": xlim_left,
+        "unit_area": scheme == "cat4_GCR_lowDeltaM",
+        "physics_scope": "GCR" if scheme == "cat4_GCR_lowDeltaM" else scheme,
     }
     return result
 
@@ -808,6 +1077,8 @@ def highdm_variable_record(payload: dict, region: str, variable: str) -> dict | 
         "groups": groups,
         "background": background,
         "background_unc": np.sqrt(stat2 + syst2),
+        "background_stat_unc": np.sqrt(stat2),
+        "background_systematic_totals": background_systematic_totals(raw, nbin),
         "data": data,
         "data_unc": np.sqrt(data2),
         "signals": {},
@@ -816,12 +1087,14 @@ def highdm_variable_record(payload: dict, region: str, variable: str) -> dict | 
         "edges": edges,
         "xlabels": xlabels,
         "xlim_left": xlim_left,
-        "xlabel": spec.get("xlabel") or variable,
+        "xlabel": HIGHDM_VARIABLE_XLABELS.get(variable, spec.get("xlabel") or variable),
         "variable": variable,
         "region": region,
         "blind_data": region.startswith("SR_"),
         "annotation": HIGHDM_DISTRIBUTION_REGION_LABELS.get(region, region),
         "reference_style": True,
+        "unit_area": region == "GCR",
+        "physics_scope": "GCR" if region == "GCR" else region,
     }
     return result
 
@@ -907,16 +1180,31 @@ def selected_an17_recoil_blocks(payload: dict, scheme_name: str) -> list[dict]:
         return []
     scheme = (payload.get("search_bin_schemes") or {}).get(scheme_name) or {}
     raw_labels = scheme.get("bin_labels") or []
+    category_sizes = [int(value) for value in (scheme.get("category_sizes") or [])]
+    if (
+        scheme_name == EXTENDED_AN17_RECOIL_SCHEME
+        and len(category_sizes) == len(SELECTED_AN17_CATEGORY_ORDER)
+        and sum(category_sizes) == int(rec["nbin"])
+    ):
+        category_layout = list(zip(SELECTED_AN17_CATEGORY_ORDER, category_sizes))
+    else:
+        recoil_edges = list(scheme.get("recoil_pt_bins") or [])
+        n_recoil = (
+            len(recoil_edges) - 1
+            if len(recoil_edges) >= 2
+            else len(RECOIL6_LABELS)
+        )
+        category_count = int(rec["nbin"]) // n_recoil
+        category_layout = [("", n_recoil) for _ in range(category_count)]
+
     blocks = []
-    n_recoil = len(RECOIL6_LABELS)
-    category_count = int(rec["nbin"]) // n_recoil
-    for pos in range(category_count):
-        slc = slice(pos * n_recoil, (pos + 1) * n_recoil)
+    offset = 0
+    for category, n_recoil in category_layout:
+        slc = slice(offset, offset + n_recoil)
         if slc.stop > int(rec["nbin"]):
-            continue
-        category = ""
-        if raw_labels and pos * n_recoil < len(raw_labels):
-            raw = raw_labels[pos * n_recoil]
+            break
+        if not category and raw_labels and offset < len(raw_labels):
+            raw = raw_labels[offset]
             category = raw.split("_recoil_")[0]
             if category.startswith("NT0_"):
                 category = category[len("NT0_"):]
@@ -940,6 +1228,7 @@ def selected_an17_recoil_blocks(payload: dict, scheme_name: str) -> list[dict]:
             "category_key": category,
         }
         blocks.append(block)
+        offset += n_recoil
     if scheme_name == EXTENDED_AN17_RECOIL_SCHEME:
         keyed = {
             str(block.get("category_key") or ""): block
@@ -990,7 +1279,7 @@ def lowdm_nsv_inclusive_blocks(payload: dict, scheme_name: str) -> list[dict]:
     return blocks
 
 
-def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/search bin number", reference_style: bool = False) -> dict:
+def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Bin", reference_style: bool = False) -> dict:
     import matplotlib
 
     matplotlib.use("Agg")
@@ -1021,6 +1310,7 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
     groups = {group: np.zeros(nbin, dtype=float) for group in GROUP_ORDER}
     bkg = np.zeros(nbin, dtype=float)
     unc = np.zeros(nbin, dtype=float)
+    stat_unc = np.zeros(nbin, dtype=float)
     data = np.zeros(nbin, dtype=float)
     data_unc = np.zeros(nbin, dtype=float)
     data_mask = np.ones(nbin, dtype=bool)
@@ -1035,6 +1325,14 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
     group_labels = {}
     for block in blocks:
         group_labels.update(block.get("group_labels") or {})
+    systematic_totals = {
+        source: {
+            "up": np.zeros(nbin, dtype=float),
+            "down": np.zeros(nbin, dtype=float),
+        }
+        for source in PLOT_SYSTEMATIC_SOURCES
+    }
+    available_systematic_sources = set()
     offset = 0
     for block in blocks:
         n = int(block["nbin"])
@@ -1043,14 +1341,173 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
             groups[group][slc] = block["groups"].get(group, np.zeros(n))
         bkg[slc] = block["background"]
         unc[slc] = block["background_unc"]
+        stat_unc[slc] = block.get("background_stat_unc", block["background_unc"])
         data[slc] = block["data"]
         data_unc[slc] = block["data_unc"]
+        block_systematics = block.get("background_systematic_totals") or {}
+        for source in PLOT_SYSTEMATIC_SOURCES:
+            varied = block_systematics.get(source)
+            if varied:
+                systematic_totals[source]["up"][slc] = varied["up"]
+                systematic_totals[source]["down"][slc] = varied["down"]
+                available_systematic_sources.add(source)
+            else:
+                systematic_totals[source]["up"][slc] = block["background"]
+                systematic_totals[source]["down"][slc] = block["background"]
         if block.get("blind_data"):
             data_mask[slc] = False
         for key, vals in block.get("signals", {}).items():
             signals[key][slc] = vals
         offset += n
     signals = {key: vals for key, vals in signals.items() if np.any(vals > 0)}
+
+    unit_area = bool(blocks) and all(
+        bool(block.get("unit_area")) and block.get("physics_scope") == "GCR"
+        for block in blocks
+    )
+    unit_area_audit = None
+    uncertainty_label = "Stat. syst. unc" if reference_style else "MC stat+syst unc."
+    raw_legend_yields = {}
+    if unit_area:
+        raw_groups = {group: values.copy() for group, values in groups.items()}
+        raw_bkg = bkg.copy()
+        raw_data = data.copy()
+        raw_stat_unc = stat_unc.copy()
+        data_integral = float(np.sum(raw_data))
+        mc_integral = float(np.sum(raw_bkg))
+        if not np.isfinite(data_integral) or data_integral <= 0:
+            raise RuntimeError(f"GCR data integral is not positive and finite: {data_integral}")
+        if not np.isfinite(mc_integral) or mc_integral <= 0:
+            raise RuntimeError(f"GCR MC integral is not positive and finite: {mc_integral}")
+        raw_legend_yields = {
+            group: float(np.sum(values)) for group, values in raw_groups.items()
+        }
+        raw_legend_yields["Data"] = data_integral
+
+        for group in groups:
+            groups[group] = raw_groups[group] / mc_integral
+        bkg = raw_bkg / mc_integral
+        data = raw_data / data_integral
+        data_unc = data_unc / data_integral
+        stat_unc = raw_stat_unc / mc_integral
+        signals = {key: values / mc_integral for key, values in signals.items()}
+
+        shape_syst2 = np.zeros(nbin, dtype=float)
+        normalized_systematic_integrals = {}
+        for source in sorted(available_systematic_sources):
+            up_raw = systematic_totals[source]["up"]
+            down_raw = systematic_totals[source]["down"]
+            up_integral = float(np.sum(up_raw))
+            down_integral = float(np.sum(down_raw))
+            if not np.isfinite(up_integral) or up_integral <= 0:
+                raise RuntimeError(
+                    f"GCR {source}Up integral is not positive and finite: {up_integral}"
+                )
+            if not np.isfinite(down_integral) or down_integral <= 0:
+                raise RuntimeError(
+                    f"GCR {source}Down integral is not positive and finite: {down_integral}"
+                )
+            up = up_raw / up_integral
+            down = down_raw / down_integral
+            up_sum = float(np.sum(up))
+            down_sum = float(np.sum(down))
+            if not np.isclose(up_sum, 1.0, rtol=0.0, atol=1.0e-10):
+                raise RuntimeError(f"GCR {source}Up normalized sum is {up_sum}")
+            if not np.isclose(down_sum, 1.0, rtol=0.0, atol=1.0e-10):
+                raise RuntimeError(f"GCR {source}Down normalized sum is {down_sum}")
+            envelope = np.maximum(np.abs(up - bkg), np.abs(down - bkg))
+            shape_syst2 += envelope * envelope
+            normalized_systematic_integrals[source] = {
+                "up": up_sum,
+                "down": down_sum,
+            }
+        unc = np.sqrt(stat_unc * stat_unc + shape_syst2)
+        uncertainty_label = (
+            "MC stat.+shape syst. unc."
+            if reference_style
+            else "MC stat.+shape syst. unc."
+        )
+
+        normalized_data_sum = float(np.sum(data))
+        normalized_mc_sum = float(np.sum(bkg))
+        group_sum = np.zeros(nbin, dtype=float)
+        for values in groups.values():
+            group_sum += values
+        group_match = bool(np.allclose(group_sum, bkg, rtol=0.0, atol=1.0e-12))
+        if not np.isclose(normalized_data_sum, 1.0, rtol=0.0, atol=1.0e-10):
+            raise RuntimeError(f"GCR normalized data sum is {normalized_data_sum}")
+        if not np.isclose(normalized_mc_sum, 1.0, rtol=0.0, atol=1.0e-10):
+            raise RuntimeError(f"GCR normalized MC sum is {normalized_mc_sum}")
+        if not group_match:
+            raise RuntimeError("GCR normalized process-group sum does not match total MC")
+
+        raw_ratio = np.divide(
+            raw_data,
+            raw_bkg,
+            out=np.full_like(raw_data, np.nan),
+            where=raw_bkg > 0,
+        )
+        normalized_ratio = np.divide(
+            data,
+            bkg,
+            out=np.full_like(data, np.nan),
+            where=bkg > 0,
+        )
+        ratio_expected = raw_ratio * (mc_integral / data_integral)
+        ratio_mask = np.isfinite(normalized_ratio) & np.isfinite(ratio_expected)
+        ratio_match = bool(
+            np.allclose(
+                normalized_ratio[ratio_mask],
+                ratio_expected[ratio_mask],
+                rtol=1.0e-12,
+                atol=1.0e-12,
+            )
+        )
+        if not ratio_match:
+            raise RuntimeError("GCR normalized Data/MC ratio fails the global-factor check")
+
+        process_fractions = {}
+        process_fraction_match = True
+        for group in GROUP_ORDER:
+            raw_fraction = float(np.sum(raw_groups[group]) / mc_integral)
+            normalized_fraction = float(np.sum(groups[group]))
+            matched = bool(
+                np.isclose(raw_fraction, normalized_fraction, rtol=0.0, atol=1.0e-12)
+            )
+            process_fraction_match = process_fraction_match and matched
+            process_fractions[group] = {
+                "raw_fraction": raw_fraction,
+                "normalized_fraction": normalized_fraction,
+                "matched": matched,
+            }
+        if not process_fraction_match:
+            raise RuntimeError("GCR process fractions changed under normalization")
+
+        unit_area_audit = {
+            "status": "complete",
+            "scope": "GCR only",
+            "normalization": "data and total MC independently normalized over the entire plotted figure",
+            "data_source": "EGamma",
+            "raw_integrals": {
+                "data": data_integral,
+                "mc": mc_integral,
+                "data_over_mc": data_integral / mc_integral,
+                "process_groups": raw_legend_yields,
+            },
+            "normalized_integrals": {
+                "data": normalized_data_sum,
+                "mc": normalized_mc_sum,
+            },
+            "process_fractions": process_fractions,
+            "systematic_shape_integrals": normalized_systematic_integrals,
+            "checks": {
+                "process_group_sum_matches_total_mc": group_match,
+                "process_fractions_preserved": process_fraction_match,
+                "ratio_global_factor_relation": ratio_match,
+                "luminosity_uncertainty_omitted": True,
+            },
+            "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted",
+        }
 
     requested_width = max((float(block.get("figure_width", 0.0)) for block in blocks), default=0.0)
     figure_size = (12.0, 10.0) if reference_style else (max(12.0, nbin * 0.26, requested_width), 8.4)
@@ -1059,24 +1516,38 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
     stack_weights = []
     stack_colors = []
     stack_labels = []
+    legend_group_labels = {}
+
+    def compact_yield(value: float) -> str:
+        magnitude = abs(value)
+        if magnitude >= 10.0:
+            return f"{value:.0f}"
+        if magnitude >= 1.0:
+            return f"{value:.1f}".rstrip("0").rstrip(".")
+        return f"{value:.2g}"
+
     for group in GROUP_ORDER:
         vals = groups[group]
         if np.any(vals > 0):
             stack_inputs.append(centers.copy())
             stack_weights.append(vals)
             stack_colors.append(GROUP_COLORS.get(group, "0.7"))
-            stack_labels.append(
-                group_labels.get(
-                    group,
-                    GROUP_DISPLAY_LABELS.get(group, group) if reference_style else group,
-                )
+            base_label = group_labels.get(
+                group,
+                GROUP_DISPLAY_LABELS.get(group, group) if reference_style else group,
             )
+            legend_group_labels[group] = (
+                f"{base_label} ({compact_yield(raw_legend_yields[group])})"
+                if unit_area
+                else base_label
+            )
+            stack_labels.append(legend_group_labels[group])
     if stack_inputs:
         ax.hist(stack_inputs, bins=edges, weights=stack_weights, stacked=True, histtype="stepfilled", color=stack_colors, label=stack_labels, edgecolor="black", linewidth=0.7)
     lower = np.maximum(bkg - unc, 1.0e-12)
     upper = np.maximum(bkg + unc, 1.0e-12)
     if np.any(bkg > 0):
-        ax.fill_between(edges, np.r_[lower, lower[-1]], np.r_[upper, upper[-1]], step="post", facecolor="0.82", edgecolor="0.15", hatch="////", linewidth=0.0, alpha=0.65, label="Stat. syst. unc" if reference_style else "MC stat+syst unc.")
+        ax.fill_between(edges, np.r_[lower, lower[-1]], np.r_[upper, upper[-1]], step="post", facecolor="0.82", edgecolor="0.15", hatch="////", linewidth=0.0, alpha=0.65, label=uncertainty_label)
     if reference_style and np.any(bkg > 0):
         ax.stairs(bkg, edges, color="black", linewidth=1.4, zorder=6)
     for spec in signal_specs:
@@ -1107,6 +1578,9 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
                 zorder=8,
             )
     mask = data_mask & (data > 0)
+    data_legend_label = "Data" if reference_style else "DATA"
+    if unit_area:
+        data_legend_label = f"Data ({compact_yield(raw_legend_yields['Data'])})"
     ax.errorbar(
         centers[mask],
         data[mask],
@@ -1118,7 +1592,7 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
         capsize=4.5,
         capthick=1.4,
         elinewidth=1.4,
-        label="Data" if reference_style else "DATA",
+        label=data_legend_label,
         zorder=10,
     )
     ratio = np.divide(data, bkg, out=np.full_like(data, np.nan), where=(bkg > 0) & data_mask)
@@ -1180,14 +1654,18 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
         positive.extend(arr[arr > 0].tolist())
     ax.set_yscale("log")
     if positive:
-        if reference_style:
+        if reference_style and not unit_area:
             ymax = 10.0 ** np.ceil(np.log10(max(max(positive) * 60.0, 1.0)))
             ax.set_ylim(1.0e-1, ymax)
         else:
-            ax.set_ylim(max(0.03, min(positive) * 0.1), max(max(positive) * 60, 1.0))
+            floor = 1.0e-5 if unit_area else 0.03
+            ax.set_ylim(max(floor, min(positive) * 0.1), max(max(positive) * 60, 1.0))
     else:
         ax.set_ylim(0.03, 1.0)
-    ax.set_ylabel("Events" if reference_style else "Events / bin", fontsize=32 if reference_style else 30)
+    ax.set_ylabel(
+        "Normalized events" if unit_area else ("Events" if reference_style else "Events / bin"),
+        fontsize=32 if reference_style else 30,
+    )
     rax.set_ylabel("Data/MC", fontsize=30 if reference_style else 26)
     rax.set_ylim(0, 2)
     rax.set_xlabel(xlabel, fontsize=32 if reference_style else 30, loc="right")
@@ -1214,7 +1692,23 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
     hep.cms.label(llabel="Work in progress", rlabel=rf"{LUMINOSITY_FB:.2f} fb$^{{-1}}$ (13.6 TeV)", ax=ax)
     if reference_style:
         handles, legend_labels = ax.get_legend_handles_labels()
-        desired = ["Stat. syst. unc", "VV+VVV", "Top", group_labels.get("DY", "DY"), "Photon+jet", r"$\mathrm{W}\to\ell\nu$", r"$\mathrm{Z}\to\nu\bar{\nu}$", "QCD Multijet", "Others", "Data"]
+        desired_groups = [
+            "VV+VVV",
+            "Top",
+            "DY",
+            "Photon+jet",
+            "W -> lv",
+            "Z -> vv",
+            "QCD Multijet",
+            "Others",
+        ]
+        desired = [uncertainty_label]
+        desired.extend(
+            legend_group_labels[group]
+            for group in desired_groups
+            if group in legend_group_labels
+        )
+        desired.append(data_legend_label)
         ordered = [(handles[legend_labels.index(label)], label) for label in desired if label in legend_labels]
         if ordered:
             ax.legend([item[0] for item in ordered], [item[1] for item in ordered], fontsize=15, ncol=3, frameon=False, columnspacing=1.2, handlelength=1.8, loc="upper center", bbox_to_anchor=(0.52, 0.995))
@@ -1225,18 +1719,42 @@ def draw_flat_blocks(blocks: list[dict], outbase: Path, xlabel: str = "Recoil/se
     fig.savefig(outbase.with_suffix(".png"), dpi=180, **save_kwargs)
     fig.savefig(outbase.with_suffix(".pdf"), **save_kwargs)
     plt.close(fig)
-    return {"status": "complete", "name": outbase.name, "png": str(outbase.with_suffix(".png")), "pdf": str(outbase.with_suffix(".pdf")), "bins": nbin, "labels": labels, "signals": list(signals)}
+    return {
+        "status": "complete",
+        "name": outbase.name,
+        "png": str(outbase.with_suffix(".png")),
+        "pdf": str(outbase.with_suffix(".pdf")),
+        "bins": nbin,
+        "labels": labels,
+        "signals": list(signals),
+        "unit_area": unit_area,
+        "unit_area_audit": unit_area_audit,
+    }
 
 
-def draw_highdm_distribution_report(payload_path: Path, output_dir: Path, year: str) -> dict:
+def draw_highdm_distribution_report(
+    payload_path: Path,
+    output_dir: Path,
+    year: str,
+    dy_rz_manifest: Path | None = None,
+    only_region: str | None = None,
+    only_variable: str | None = None,
+) -> dict:
     payload = load_json(payload_path)
+    dy_rz_application = (
+        apply_dy_rz(payload, dy_rz_manifest) if dy_rz_manifest else None
+    )
     region_groups = payload.get("highdm_distribution_regions") or {}
     variable_specs = payload.get("highdm_distribution_variable_specs") or {}
     plots = []
     output_dir.mkdir(parents=True, exist_ok=True)
     for kind, metadata_key in [("CR", "control"), ("VR", "validation"), ("SR", "signal_categories")]:
         for region in region_groups.get(metadata_key) or []:
+            if only_region and region != only_region:
+                continue
             for variable in variable_specs:
+                if only_variable and variable != only_variable:
+                    continue
                 record = highdm_variable_record(payload, region, variable)
                 if not record:
                     continue
@@ -1265,11 +1783,19 @@ def draw_highdm_distribution_report(payload_path: Path, output_dir: Path, year: 
         "luminosity_fb": LUMINOSITY_FB,
         "luminosity_relative_uncertainty": LUMINOSITY_RELATIVE_UNCERTAINTY,
         "background_systematic_sources": list(PLOT_SYSTEMATIC_SOURCES),
-        "uncertainty_model": "MC stat plus luminosity plus per-source max(abs(Up-Nominal), abs(Down-Nominal)) envelopes in quadrature",
+        "uncertainty_model": (
+            "MC stat plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+            if plots and all(plot.get("unit_area") for plot in plots)
+            else "MC stat plus luminosity plus per-source max(abs(Up-Nominal), abs(Down-Nominal)) envelopes in quadrature"
+        ),
+        "luminosity_uncertainty_applied": not (
+            plots and all(plot.get("unit_area") for plot in plots)
+        ),
         "source": str(payload_path),
         "output_dir": str(output_dir),
         "plot_count": len(plots),
         "plots": plots,
+        "dy_rz_application": dy_rz_application,
     }
     (output_dir / "plot_summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     return summary
@@ -1377,10 +1903,158 @@ bind('years',value=>year=value);bind('kinds',value=>kind=value);document.getElem
     return result
 
 
-def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
+def draw_flat_report(
+    flat_hists: Path,
+    output_dir: Path,
+    highdm_tail_merged: bool = False,
+    highdm_tail_preserve_categories: set[int] | None = None,
+    selected_highdm_sr_only: bool = False,
+    dy_rz_manifest: Path | None = None,
+    gcr_only: bool = False,
+) -> dict:
     payload = load_json(flat_hists)
+    dy_rz_application = (
+        apply_dy_rz(payload, dy_rz_manifest) if dy_rz_manifest else None
+    )
+    highdm_tail_preserve_categories = set(
+        highdm_tail_preserve_categories or set()
+    )
+    if highdm_tail_merged:
+        apply_highdm_tail_merge(
+            payload,
+            preserve_categories=highdm_tail_preserve_categories,
+        )
     plots = []
     output_dir.mkdir(parents=True, exist_ok=True)
+    if gcr_only:
+        highdm = flat_hist_record(payload, "GCR", allow_signal=False)
+        if highdm:
+            plots.append(
+                draw_flat_blocks(
+                    [highdm],
+                    output_dir / "highdm_cr_gcr_recoil",
+                    xlabel=r"$U_{T}$ (GeV)",
+                )
+            )
+        highdm_split = []
+        for suffix in ("Nt0", "Nt1"):
+            record = flat_hist_record(payload, f"GCR_{suffix}", allow_signal=False)
+            if record:
+                highdm_split.append(record)
+        if highdm_split:
+            plots.append(
+                draw_flat_blocks(
+                    highdm_split,
+                    output_dir / "highdm_cr_gcr_recoil_ntop_split",
+                    xlabel=r"$U_{T}$ bin",
+                )
+            )
+
+        lowdm_scheme = "cat4_GCR_lowDeltaM"
+        lowdm_label = r"GCR low $\Delta m$"
+        lowdm = flat_search_record(
+            payload,
+            lowdm_scheme,
+            lowdm_label,
+            allow_signal=False,
+        )
+        if lowdm:
+            plots.append(
+                draw_flat_blocks(
+                    [lowdm],
+                    output_dir / "lowdm_cr_gcr_onebin",
+                    xlabel="Bin",
+                )
+            )
+        lowdm_region_variables = payload.get("lowdm_region_variables") or {}
+        available = (
+            (payload.get("lowdm_variable_histograms") or {}).get(lowdm_scheme) or {}
+        )
+        variables = lowdm_region_variables.get("GCR") or sorted(available)
+        for variable in variables:
+            record = lowdm_variable_record(
+                payload,
+                lowdm_scheme,
+                variable,
+                lowdm_label,
+                allow_signal=False,
+            )
+            if not record:
+                continue
+            plot = draw_flat_blocks(
+                [record],
+                output_dir / f"lowdm_cr_gcr_{variable}",
+                xlabel=record.get("xlabel", variable),
+            )
+            plot["variable"] = variable
+            plot["region"] = "GCR"
+            plots.append(plot)
+        if not plots:
+            raise RuntimeError("no flat GCR histograms were available")
+        if not all(plot.get("unit_area") for plot in plots):
+            raise RuntimeError("a GCR-only plot was rendered without unit-area normalization")
+        summary = {
+            "status": "complete",
+            "source": str(flat_hists),
+            "output_dir": str(output_dir),
+            "gcr_only": True,
+            "plots": plots,
+            "plot_count": len(plots),
+            "uncertainty_model": "MC stat plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted",
+            "luminosity_uncertainty_applied": False,
+            "background_systematic_sources": PLOT_SYSTEMATIC_SOURCES,
+            "dy_rz_application": dy_rz_application,
+        }
+        (output_dir / "flat_plot_summary.json").write_text(
+            json.dumps(summary, indent=2, sort_keys=True) + "\n"
+        )
+        return summary
+    if selected_highdm_sr_only:
+        available_schemes = payload.get("search_bin_schemes") or {}
+        if EXTENDED_AN17_RECOIL_SCHEME not in available_schemes:
+            raise RuntimeError(
+                f"missing High-dM search-bin scheme: {EXTENDED_AN17_RECOIL_SCHEME}"
+            )
+        blocks = selected_an17_recoil_blocks(
+            payload, EXTENDED_AN17_RECOIL_SCHEME
+        )
+        if not blocks:
+            raise RuntimeError("High-dM selected SR blocks are empty")
+        bin_count = sum(int(block["nbin"]) for block in blocks)
+        preserved = "_".join(
+            str(value)
+            for value in sorted(highdm_tail_preserve_categories)
+        )
+        name = (
+            f"highdm_sr_selected_recoil{bin_count}"
+            f"_tailmerged_except_cats{preserved}_nb2_nt2plus_w0_bins"
+        )
+        plots.append(
+            draw_flat_blocks(
+                blocks,
+                output_dir / name,
+                xlabel="Search bin",
+            )
+        )
+        summary = {
+            "status": "complete",
+            "source": str(flat_hists),
+            "output_dir": str(output_dir),
+            "plots": plots,
+            "signal_policy": "Signals are overlaid on the full background stack in the blinded SR.",
+            "highdm_tail_merged": highdm_tail_merged,
+            "highdm_tail_preserve_categories": sorted(
+                highdm_tail_preserve_categories
+            ),
+            "highdm_search_bins": bin_count,
+            "luminosity_fb": LUMINOSITY_FB,
+            "luminosity_relative_uncertainty": LUMINOSITY_RELATIVE_UNCERTAINTY,
+            "background_systematic_sources": PLOT_SYSTEMATIC_SOURCES,
+        }
+        (output_dir / "flat_plot_summary.json").write_text(
+            json.dumps(summary, indent=2, sort_keys=True) + "\n"
+        )
+        return summary
     cr_regions = ["LLCR", "QCDCR", "GCR", "DY2E", "DY2M"]
 
     cr_inclusive = []
@@ -1390,7 +2064,7 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
             cr_inclusive.append(rec)
             plots.append(draw_flat_blocks([rec], output_dir / f"highdm_cr_{base.lower()}_recoil", xlabel=r"$U_{T}$ (GeV)"))
     if cr_inclusive:
-        plots.append(draw_flat_blocks(cr_inclusive, output_dir / "highdm_cr_recoil_inclusive", xlabel=r"High-dM CR $U_{T}$ bin number"))
+        plots.append(draw_flat_blocks(cr_inclusive, output_dir / "highdm_cr_recoil_inclusive", xlabel=r"$U_{T}$ bin"))
 
     cr_split = []
     for base in cr_regions:
@@ -1401,7 +2075,7 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
                 split_blocks.append(rec)
                 cr_split.append(rec)
         if split_blocks:
-            plots.append(draw_flat_blocks(split_blocks, output_dir / f"highdm_cr_{base.lower()}_recoil_ntop_split", xlabel=fr"High-dM {base} $U_{{T}}$ bin number"))
+            plots.append(draw_flat_blocks(split_blocks, output_dir / f"highdm_cr_{base.lower()}_recoil_ntop_split", xlabel=r"$U_{T}$ bin"))
     if cr_split:
         plots.append(draw_flat_blocks(cr_split, output_dir / "highdm_cr_recoil_ntop_split"))
     for region, slug in [
@@ -1430,15 +2104,15 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
             rec["blind_data"] = True
             sr_split.append(rec)
     if sr_split:
-        plots.append(draw_flat_blocks(sr_split, output_dir / "highdm_sr_recoil_ntop_split", xlabel=r"High-dM SR $U_{T}$ bin number"))
+        plots.append(draw_flat_blocks(sr_split, output_dir / "highdm_sr_recoil_ntop_split", xlabel=r"$U_{T}$ bin"))
     an17 = flat_search_record(payload, "boosted_an_17_SR", "SR", allow_signal=True)
     if an17:
         an17["blind_data"] = True
-        plots.append(draw_flat_blocks([an17], output_dir / "highdm_sr_an17_search_bins", xlabel="High-dM SR search bin number"))
+        plots.append(draw_flat_blocks([an17], output_dir / "highdm_sr_an17_search_bins", xlabel="Search bin"))
     an17_nt1 = flat_search_record(payload, "boosted_an_17_SR_Nt1", r"SR\n$N_{t}\geq1$", allow_signal=True)
     if an17_nt1:
         an17_nt1["blind_data"] = True
-        plots.append(draw_flat_blocks([an17_nt1], output_dir / "highdm_sr_nt1_an17_search_bins", xlabel="High-dM SR, $N_{t}\geq1$ search bin number"))
+        plots.append(draw_flat_blocks([an17_nt1], output_dir / "highdm_sr_nt1_an17_search_bins", xlabel="Search bin"))
     available_schemes = payload.get("search_bin_schemes") or {}
     if EXTENDED_AN17_RECOIL_SCHEME in available_schemes:
         selected_scheme = EXTENDED_AN17_RECOIL_SCHEME
@@ -1449,12 +2123,24 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
     selected_recoil_blocks = selected_an17_recoil_blocks(payload, selected_scheme)
     if selected_recoil_blocks:
         if selected_scheme == EXTENDED_AN17_RECOIL_SCHEME:
-            selected_name = "highdm_sr_selected_recoil60_nb2_nt2plus_w0_bins"
+            if highdm_tail_merged and highdm_tail_preserve_categories:
+                preserved = "_".join(
+                    str(value)
+                    for value in sorted(highdm_tail_preserve_categories)
+                )
+                selected_name = (
+                    f"highdm_sr_selected_recoil{sum(len(block['background']) for block in selected_recoil_blocks)}"
+                    f"_tailmerged_except_cats{preserved}_nb2_nt2plus_w0_bins"
+                )
+            elif highdm_tail_merged:
+                selected_name = "highdm_sr_selected_recoil50_tailmerged_nb2_nt2plus_w0_bins"
+            else:
+                selected_name = "highdm_sr_selected_recoil60_nb2_nt2plus_w0_bins"
         elif selected_scheme == LATEST_AN17_RECOIL_SCHEME:
             selected_name = "highdm_sr_selected_recoil54_nt0_wsplit_bins"
         else:
             selected_name = "highdm_sr_selected_recoil6_bins"
-        plots.append(draw_flat_blocks(selected_recoil_blocks, output_dir / selected_name, xlabel="Search bin number"))
+        plots.append(draw_flat_blocks(selected_recoil_blocks, output_dir / selected_name, xlabel="Search bin"))
     low_cr_blocks = []
     low_blocks = []
     low_map = [
@@ -1471,9 +2157,8 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
             rec["blind_data"] = is_sr
             if not is_sr:
                 short = scheme.replace("_lowDeltaM", "").split("_", 1)[1].lower()
-                clean_label = label.replace(" low $\Delta m$", "")
                 low_cr_blocks.append(rec)
-                plots.append(draw_flat_blocks([rec], output_dir / f"lowdm_cr_{short}_onebin", xlabel=f"Low-dM {clean_label} bin number"))
+                plots.append(draw_flat_blocks([rec], output_dir / f"lowdm_cr_{short}_onebin", xlabel="Bin"))
             low_blocks.append(rec)
     lowdm_variable_plots = []
     lowdm_region_variables = payload.get("lowdm_region_variables") or {}
@@ -1494,13 +2179,16 @@ def draw_flat_report(flat_hists: Path, output_dir: Path) -> dict:
             lowdm_variable_plots.append(plot)
             plots.append(plot)
     if low_cr_blocks:
-        plots.append(draw_flat_blocks(low_cr_blocks, output_dir / "lowdm_cr_onebin", xlabel="Low-dM CR region bin number"))
+        plots.append(draw_flat_blocks(low_cr_blocks, output_dir / "lowdm_cr_onebin", xlabel="Bin"))
     if low_blocks:
-        plots.append(draw_flat_blocks(low_blocks, output_dir / "lowdm_cr_sr_onebin", xlabel="Low-dM region bin number"))
+        plots.append(draw_flat_blocks(low_blocks, output_dir / "lowdm_cr_sr_onebin", xlabel="Bin"))
     low_sr_blocks = lowdm_nsv_inclusive_blocks(payload, "cat7_SR_lowDeltaM")
     if low_sr_blocks:
-        plots.append(draw_flat_blocks(low_sr_blocks, output_dir / "lowdm_sr_onebin", xlabel="Search bin number"))
-    summary = {"status": "complete", "source": str(flat_hists), "output_dir": str(output_dir), "plots": plots, "lowdm_variable_plot_count": len([p for p in plots if str(p.get("name", "")).startswith("lowdm_") and p.get("variable")]), "signal_policy": "Signals are drawn only in SR plots; CR blocks exclude T2tt overlays.", "cr_plot_policy": "High-dM and low-dM CRs are drawn both as combined overview plots and as individual region plots.", "ntop_order": "N_t = 0 blocks are placed left of N_t >= 1 blocks.", "luminosity_fb": LUMINOSITY_FB, "luminosity_relative_uncertainty": LUMINOSITY_RELATIVE_UNCERTAINTY, "background_systematic_sources": PLOT_SYSTEMATIC_SOURCES}
+        plots.append(draw_flat_blocks(low_sr_blocks, output_dir / "lowdm_sr_onebin", xlabel="Search bin"))
+    highdm_search_bins = len(
+        (((payload.get("search_bin_schemes") or {}).get(EXTENDED_AN17_RECOIL_SCHEME) or {}).get("bin_labels") or [])
+    )
+    summary = {"status": "complete", "source": str(flat_hists), "output_dir": str(output_dir), "plots": plots, "lowdm_variable_plot_count": len([p for p in plots if str(p.get("name", "")).startswith("lowdm_") and p.get("variable")]), "signal_policy": "Signals are drawn only in SR plots; CR blocks exclude T2tt overlays.", "cr_plot_policy": "High-dM and low-dM CRs are drawn both as combined overview plots and as individual region plots.", "ntop_order": "N_t = 0 blocks are placed left of N_t >= 1 blocks.", "highdm_tail_merged": highdm_tail_merged, "highdm_tail_preserve_categories": sorted(highdm_tail_preserve_categories), "highdm_search_bins": highdm_search_bins, "luminosity_fb": LUMINOSITY_FB, "luminosity_relative_uncertainty": LUMINOSITY_RELATIVE_UNCERTAINTY, "background_systematic_sources": PLOT_SYSTEMATIC_SOURCES, "dy_rz_application": dy_rz_application}
     (output_dir / "flat_plot_summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     return summary
 
@@ -1535,6 +2223,35 @@ def main() -> int:
     parser.add_argument("--impact-json", type=Path)
     parser.add_argument("--flat-hists", type=Path)
     parser.add_argument("--flat-output-dir", type=Path)
+    parser.add_argument("--dy-rz-manifest", type=Path)
+    parser.add_argument("--only-region")
+    parser.add_argument("--only-variable")
+    parser.add_argument(
+        "--gcr-only",
+        action="store_true",
+        help="Draw only GCR plots with the adopted unit-area shape comparison",
+    )
+    parser.add_argument(
+        "--highdm-tail-merged",
+        action="store_true",
+        help="Merge the final two recoil bins in each High-dM SR category",
+    )
+    parser.add_argument(
+        "--highdm-tail-preserve-categories",
+        default="",
+        help=(
+            "Comma-separated one-based High-dM categories that retain all six "
+            "recoil bins when --highdm-tail-merged is used"
+        ),
+    )
+    parser.add_argument(
+        "--selected-highdm-sr-only",
+        action="store_true",
+        help=(
+            "Draw only the adopted High-dM SR category/search-bin plot "
+            "with the standard background stack and signal overlays"
+        ),
+    )
     parser.add_argument("--luminosity-fb", type=float, default=LUMINOSITY_FB)
     parser.add_argument("--luminosity-relative-uncertainty", type=float, default=LUMINOSITY_RELATIVE_UNCERTAINTY)
     args = parser.parse_args()
@@ -1558,12 +2275,32 @@ def main() -> int:
         if not args.year:
             parser.error("--year is required with --highdm-distributions")
         outdir = args.flat_output_dir or Path(args.docs_dir or ".") / "plots" / args.year
-        print(json.dumps(draw_highdm_distribution_report(args.highdm_distributions, outdir, args.year), sort_keys=True))
+        print(json.dumps(draw_highdm_distribution_report(
+            args.highdm_distributions,
+            outdir,
+            args.year,
+            dy_rz_manifest=args.dy_rz_manifest,
+            only_region=args.only_region,
+            only_variable=args.only_variable,
+        ), sort_keys=True))
         return 0
 
     if args.flat_hists:
         outdir = args.flat_output_dir or Path(args.docs_dir or ".") / "plots"
-        print(json.dumps(draw_flat_report(args.flat_hists, outdir), sort_keys=True))
+        preserve_categories = {
+            int(value.strip())
+            for value in args.highdm_tail_preserve_categories.split(",")
+            if value.strip()
+        }
+        print(json.dumps(draw_flat_report(
+            args.flat_hists,
+            outdir,
+            highdm_tail_merged=args.highdm_tail_merged,
+            highdm_tail_preserve_categories=preserve_categories,
+            selected_highdm_sr_only=args.selected_highdm_sr_only,
+            dy_rz_manifest=args.dy_rz_manifest,
+            gcr_only=args.gcr_only,
+        ), sort_keys=True))
         return 0
 
     if not args.preview_dir:

@@ -64,7 +64,6 @@
     "legacy High-dM 17-bin",
     "legacy High-dM 42-bin"
   ],
-  "generated_at": "2026-08-13T06:33:00+00:00",
   "gcr_unit_area_update": {
     "data_normalization": "one common factor over the full plotted figure",
     "data_source": "EGamma",
@@ -76,12 +75,32 @@
     "mc_normalization": "one common factor over every process, bin, and block in the plotted figure",
     "plot_files": 66,
     "plot_pairs": 33,
-    "plotter_sha256": "b2efc93a2dbd2486d4e4c0e188838500e8b5c482ae0e4b4cc78cdfd6b73bda82",
+    "plotter_sha256": "394bf538707691b049475eec7025e35da613b90ae0e5d7910730974eb760f21a",
     "ratio": "normalized data divided by normalized total MC",
     "status": "complete",
     "uncertainty": "MC statistical plus unit-area-normalized Up/Down shape envelopes; luminosity omitted",
-    "updated_at": "2026-08-12T12:26:55+00:00",
+    "updated_at": "2026-08-13T09:56:17+00:00",
     "validation": "data/gcr_unit_area_validation.json"
+  },
+  "generated_at": "2026-08-13T09:56:17+00:00",
+  "gj_4jets_update": {
+    "btag_efficiency": "complete: 3,930 validated Coffea shards, 16 merged datasets, and 3,930 source files represented exactly once",
+    "btag_efficiency_sha256": "9a9bf0161018d7f8d072221f0f2902659cf834ed0824aba68c456783a7f7b224",
+    "btag_sf": "applied",
+    "canonical_histogram_sha256": "84480cc7798e9f9d478afb90878980c55f603114ed01902d879f72738a5c8395",
+    "generator_filter": "dRGJ > 0.25",
+    "histogram_source_sha256": "9716f514216af702083194ebac440852b26b35dc6f2401a02398291b91957beb",
+    "new_datasets": 16,
+    "new_roots": 402,
+    "normalization": "XSDB cross section times 109.82 fb^-1 divided by retained physical-dataset Runs.genEventSumw",
+    "old_dataset_ids_removed": 337,
+    "old_pt_bin_roots_removed": 84,
+    "sample_family": "GJ-4Jets HT x PTG bins",
+    "selected_events": 29694490,
+    "source_nanoaod_files": 3930,
+    "status": "complete",
+    "xsec_sha256": "b458d21ad56b2ffde8e1eca0a4cefe45622af5c81bd58a78b311f42ae84718bc",
+    "zero_entry_roots": 66
   },
   "highdm_rz_render": {
     "containers_scaled": 72,
@@ -89,7 +108,7 @@
     "dy2m_effective": 0.6964603717441671,
     "plot_count": 186,
     "status": "complete",
-    "validated_at": "2026-08-13T06:33:00+00:00"
+    "validated_at": "2026-08-13T09:56:17+00:00"
   },
   "histogram_status": "complete_with_gj_btag_applied",
   "impact_update": {
@@ -140,25 +159,6 @@
     "lowdm_cr": 90,
     "lowdm_sr": 15,
     "total": 317
-  },
-  "gj_4jets_update": {
-    "btag_efficiency": "complete: 3,930 validated Coffea shards, 16 merged datasets, and 3,930 source files represented exactly once",
-    "btag_efficiency_sha256": "9a9bf0161018d7f8d072221f0f2902659cf834ed0824aba68c456783a7f7b224",
-    "btag_sf": "applied",
-    "canonical_histogram_sha256": "84480cc7798e9f9d478afb90878980c55f603114ed01902d879f72738a5c8395",
-    "generator_filter": "dRGJ > 0.25",
-    "histogram_source_sha256": "9716f514216af702083194ebac440852b26b35dc6f2401a02398291b91957beb",
-    "new_datasets": 16,
-    "new_roots": 402,
-    "normalization": "XSDB cross section times 109.82 fb^-1 divided by retained physical-dataset Runs.genEventSumw",
-    "old_dataset_ids_removed": 337,
-    "old_pt_bin_roots_removed": 84,
-    "sample_family": "GJ-4Jets HT x PTG bins",
-    "selected_events": 29694490,
-    "source_nanoaod_files": 3930,
-    "status": "complete",
-    "xsec_sha256": "b458d21ad56b2ffde8e1eca0a4cefe45622af5c81bd58a78b311f42ae84718bc",
-    "zero_entry_roots": 66
   },
   "qcd_ht_update": {
     "btag_efficiency": "complete: 223 validated Coffea shards, 11 merged datasets, 2,178 source files exactly once",
@@ -3592,6 +3592,17 @@
     "muon_5to10_sha256": "595906a588036ba9f152614dffa505ca8c0cbfef8770bc8ee50c3a3ccb6509ad",
     "status": "complete",
     "variations": "nominal, Up, and Down propagated into histogram payload"
+  },
+  "xlabel_update": {
+    "plot_pairs": 317,
+    "plotter_sha256": "394bf538707691b049475eec7025e35da613b90ae0e5d7910730974eb760f21a",
+    "policy": "concise physics-symbol labels; internal object-cleaning qualifiers are omitted from displayed axes",
+    "removed_display_qualifiers": [
+      "photon-cleaned",
+      "lepton-cleaned",
+      "low-dM prefixes"
+    ],
+    "status": "complete"
   },
   "year": 2024
 }

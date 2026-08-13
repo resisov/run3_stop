@@ -64,7 +64,7 @@
   "luminosity_relative_uncertainty": 0.016,
   "luminosity_uncertainty_applied": false,
   "ntop_order": "N_t = 0 blocks are placed left of N_t >= 1 blocks.",
-  "output_dir": "plots/categories and plots/lowdm",
+  "output_dir": "plots",
   "plot_count": 23,
   "plots": [
     {
