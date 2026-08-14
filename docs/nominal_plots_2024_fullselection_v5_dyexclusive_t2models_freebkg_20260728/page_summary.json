@@ -14,10 +14,10 @@
       "loose_muon_5to10"
     ],
     "background_groups": "Top=ST+TT; VV+VVV; Photon+jet; DY",
-    "btag_efficiency_sha256": "9a9bf0161018d7f8d072221f0f2902659cf834ed0824aba68c456783a7f7b224",
+    "btag_efficiency_sha256": "5a96f6b7dcd806a10c64dab7ecefd18a13767fa4645bc003bef5716798246563",
     "highdm_bins": 55,
-    "histogram_sha256": "84480cc7798e9f9d478afb90878980c55f603114ed01902d879f72738a5c8395",
-    "input_roots": 3236,
+    "histogram_sha256": "10645b41b31074bcfaa941595dcddea9da043ebb7657a2f6727d6c0684ce4962",
+    "input_roots": 3231,
     "lowdm_bins": 34,
     "plot_files_validated": 634,
     "qcd_btag_sf": "applied",
@@ -58,8 +58,8 @@
     "source": "autonomous_allhad/reports/dy_rz_nb_run2method_20260731",
     "status": "complete"
   },
-  "events_processed": null,
-  "events_processed_note": "Global value intentionally unset after process-only QCD substitution; QCD selected event count is recorded in qcd_ht_update.",
+  "events_processed": 230820819,
+  "events_processed_note": "Selected Events represented by the validated canonical histogram payload after restoring the TT decay-mode and W pT(LNu)-binned sample families.",
   "excluded_obsolete_plot_families": [
     "legacy High-dM 17-bin",
     "legacy High-dM 42-bin"
@@ -82,12 +82,12 @@
     "updated_at": "2026-08-13T11:42:49+00:00",
     "validation": "data/gcr_unit_area_validation.json"
   },
-  "generated_at": "2026-08-13T11:42:49+00:00",
+  "generated_at": "2026-08-14T11:26:25+00:00",
   "gj_4jets_update": {
     "btag_efficiency": "complete: 3,930 validated Coffea shards, 16 merged datasets, and 3,930 source files represented exactly once",
-    "btag_efficiency_sha256": "9a9bf0161018d7f8d072221f0f2902659cf834ed0824aba68c456783a7f7b224",
+    "btag_efficiency_sha256": "5a96f6b7dcd806a10c64dab7ecefd18a13767fa4645bc003bef5716798246563",
     "btag_sf": "applied",
-    "canonical_histogram_sha256": "84480cc7798e9f9d478afb90878980c55f603114ed01902d879f72738a5c8395",
+    "canonical_histogram_sha256": "10645b41b31074bcfaa941595dcddea9da043ebb7657a2f6727d6c0684ce4962",
     "generator_filter": "dRGJ > 0.25",
     "histogram_source_sha256": "9716f514216af702083194ebac440852b26b35dc6f2401a02398291b91957beb",
     "new_datasets": 16,
@@ -108,9 +108,9 @@
     "dy2m_effective": 0.6964603717441671,
     "plot_count": 186,
     "status": "complete",
-    "validated_at": "2026-08-13T10:26:44+00:00"
+    "validated_at": "2026-08-14T11:26:25+00:00"
   },
-  "histogram_status": "complete_with_gj_btag_applied",
+  "histogram_status": "complete_with_tt_w_pt_binned_rollback",
   "impact_update": {
     "benchmark": {
       "mLSP_GeV": 500,
@@ -162,7 +162,7 @@
     "scope": "all Low-dM and High-dM variable-distribution plots",
     "signal_policy": "plot-integrated signal yield in parentheses whenever a signal overlay is present",
     "status": "complete",
-    "updated_at": "2026-08-13T11:42:49+00:00"
+    "updated_at": "2026-08-14T11:26:25+00:00"
   },
   "plot_counts": {
     "categories": 26,
@@ -177,7 +177,7 @@
     "btag_efficiency": "complete: 223 validated Coffea shards, 11 merged datasets, 2,178 source files exactly once",
     "btag_efficiency_sha256": "8c22f169156fcaaab028520a30d73c49e9f8cd949a13a41cca7a905327b55409",
     "btag_sf": "applied",
-    "canonical_histogram_sha256": "f315229893cbe6d07ad33c8db9fc44d55fac4e6357448746e8ebe780c608de35",
+    "canonical_histogram_sha256": "10645b41b31074bcfaa941595dcddea9da043ebb7657a2f6727d6c0684ce4962",
     "histogram_source_sha256": "c0ae01d5f516191279c4fbd9edf8ee1e1c03550c5a3c2f5fe6f1b489a3c18dc9",
     "new_ht_roots": 218,
     "nonzero_hist_roots": 213,
@@ -3414,10 +3414,25 @@
       "variable": "mStop1200 mLSP500 full statistics"
     }
   ],
-  "snapshot_input_count": null,
+  "snapshot_input_count": 3231,
   "snapshot_manifest": "input_union_manifest.json",
   "source_hist_payload": "hists.json",
-  "source_hist_payload_sha256": "889bcd2411276bb9313664886c1d87080dd4e8ca7a92221ca637fdbc2891e574",
+  "source_hist_payload_sha256": "10645b41b31074bcfaa941595dcddea9da043ebb7657a2f6727d6c0684ce4962",
+  "tt_w_sample_rollback": {
+    "btag_efficiency_sha256": "5a96f6b7dcd806a10c64dab7ecefd18a13767fa4645bc003bef5716798246563",
+    "btag_sf": "applied",
+    "input_sha256": "ef8d9f71c5e29999e31dda6909c4b3127cd642e8bb4e6a2d488aa28907b4160f",
+    "normalization_sha256": "5fbf6d188316287c02101d8ad68659c444d3d084a104dce822344ddb4fa779ec",
+    "removed_tt_w_ht_roots": 1206,
+    "restored_sample_families": [
+      "TT decay-mode samples",
+      "WtoLNu-2Jets PTLNu bins"
+    ],
+    "restored_tt_roots": 65,
+    "restored_w_ptlnu_roots": 339,
+    "status": "complete",
+    "validated_manifest_sha256": "f7215b1b007cb8f0dfbde3fb57d79559b0b7a22f47d65c81cd8e3cb13f264d58"
+  },
   "statistical_results": {
     "autoMCStats": 10,
     "background_rate_parameters": 7,
