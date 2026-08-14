@@ -82,7 +82,7 @@
     "updated_at": "2026-08-13T11:42:49+00:00",
     "validation": "data/gcr_unit_area_validation.json"
   },
-  "generated_at": "2026-08-14T11:26:25+00:00",
+  "generated_at": "2026-08-14T13:40:51+00:00",
   "gj_4jets_update": {
     "btag_efficiency": "complete: 3,930 validated Coffea shards, 16 merged datasets, and 3,930 source files represented exactly once",
     "btag_efficiency_sha256": "5a96f6b7dcd806a10c64dab7ecefd18a13767fa4645bc003bef5716798246563",
@@ -116,39 +116,39 @@
       "mLSP_GeV": 500,
       "mStop_GeV": 1200
     },
-    "channels": 249,
-    "combine_json": "data/impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat.json",
-    "current_model_scope": "2024 luminosity plus 19 rate/weight or object-shape nuisances and individual MC-statistical nuisances. Object-shape templates are absent from this card.",
+    "channels": 227,
+    "combine_json": "data/impacts_2024_highdm55_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat.json",
+    "current_model_scope": "2024 luminosity plus 194 rate/weight or object-shape nuisances and individual MC-statistical nuisances. Object-shape templates are absent from this card.",
     "data_mode": "asimov",
     "highdm_signal_bins": 55,
     "invalid_fit_count": 0,
-    "labels": "data/impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat_labels.json",
+    "labels": "data/impacts_2024_highdm55_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat_labels.json",
     "lowdm_signal_bins": 34,
     "missing_fit_count": 0,
-    "multipage_pdf": "plots/impacts/impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat.pdf",
-    "nonstatistical_parameter_count": 20,
-    "parameter_count": 403,
-    "plot": "plots/impacts/impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat.png",
+    "multipage_pdf": "plots/impacts/impacts_2024_highdm55_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat.pdf",
+    "nonstatistical_parameter_count": 195,
+    "parameter_count": 479,
+    "plot": "plots/impacts/impacts_2024_highdm55_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat.png",
     "poi": {
       "fit": [
-        0.6516677737236023,
-        0.9999999403953552,
-        1.3936794996261597
+        0.6531717777252197,
+        1.0,
+        1.3913300037384033
       ],
       "name": "r"
     },
     "statistical_model": {
       "autoMCStats_threshold": 10,
-      "background_normalization": "seven global unconstrained process rate parameters",
+      "background_normalization": "control-region-constrained background model",
       "data_counting": "Poisson likelihood",
       "mc_statistics": "individual autoMCStats nuisance fits"
     },
-    "statistical_parameter_count": 383,
-    "status": "complete_current_2024_model",
-    "summary_pdf": "plots/impacts/impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat_summary.pdf",
-    "total_analysis_bins": 249,
-    "updated_at": "2026-08-05T12:52:14+00:00",
-    "validation": "data/impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat_validation.json",
+    "statistical_parameter_count": 284,
+    "status": "complete_fit_temporary_rz_covariance",
+    "summary_pdf": "plots/impacts/impacts_2024_highdm55_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat_summary.pdf",
+    "total_analysis_bins": 227,
+    "updated_at": "2026-08-14T13:40:51+00:00",
+    "validation": "data/impacts_2024_highdm55_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat_validation.json",
     "year": 2024
   },
   "legend_yield_update": {
@@ -3407,9 +3407,9 @@
       "family": "impacts",
       "family_label": "Nuisance impacts",
       "kind": "Overview",
-      "name": "impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat",
-      "pdf": "plots/impacts/impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat.pdf",
-      "png": "plots/impacts/impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat.png",
+      "name": "impacts_2024_highdm55_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat",
+      "pdf": "plots/impacts/impacts_2024_highdm55_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat.pdf",
+      "png": "plots/impacts/impacts_2024_highdm55_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat.png",
       "region": "2024 High-dM 55 + Low-dM 34",
       "variable": "mStop1200 mLSP500 full statistics"
     }
@@ -3418,37 +3418,22 @@
   "snapshot_manifest": "input_union_manifest.json",
   "source_hist_payload": "hists.json",
   "source_hist_payload_sha256": "10645b41b31074bcfaa941595dcddea9da043ebb7657a2f6727d6c0684ce4962",
-  "tt_w_sample_rollback": {
-    "btag_efficiency_sha256": "5a96f6b7dcd806a10c64dab7ecefd18a13767fa4645bc003bef5716798246563",
-    "btag_sf": "applied",
-    "input_sha256": "ef8d9f71c5e29999e31dda6909c4b3127cd642e8bb4e6a2d488aa28907b4160f",
-    "normalization_sha256": "5fbf6d188316287c02101d8ad68659c444d3d084a104dce822344ddb4fa779ec",
-    "removed_tt_w_ht_roots": 1206,
-    "restored_sample_families": [
-      "TT decay-mode samples",
-      "WtoLNu-2Jets PTLNu bins"
-    ],
-    "restored_tt_roots": 65,
-    "restored_w_ptlnu_roots": 339,
-    "status": "complete",
-    "validated_manifest_sha256": "f7215b1b007cb8f0dfbde3fb57d79559b0b7a22f47d65c81cd8e3cb13f264d58"
-  },
   "statistical_results": {
     "autoMCStats": 10,
     "background_rate_parameters": 7,
-    "combined": "plots/limits/expected_limit_t2tt_highdm55_lowdm34_free_background_x1800.png",
+    "combined": "plots/limits/expected_limit_highdm55_lowdm34_an_zinv_x1800.png",
     "external_background_constraints": [],
-    "impact": "plots/impacts/impacts_2024_highdm55_lowdm34_mStop1200_mLSP500_full_mcstat.png",
+    "impact": "plots/impacts/impacts_2024_highdm55_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat.png",
     "impact_benchmark": {
       "mLSP_GeV": 500,
       "mStop_GeV": 1200
     },
     "impact_parameters": {
-      "autoMCStats": 383,
-      "other": 20,
-      "total": 403
+      "autoMCStats": 284,
+      "other": 195,
+      "total": 479
     },
-    "impact_scope": "2024 luminosity plus 19 rate/weight or object-shape nuisances and individual MC-statistical nuisances. Object-shape templates are absent from this card.",
+    "impact_scope": "2024 luminosity plus 194 rate/weight or object-shape nuisances and individual MC-statistical nuisances. Object-shape templates are absent from this card.",
     "max_mstop_GeV": 1800,
     "model": "free_background_global_process_normalizations",
     "signals": {
@@ -3480,8 +3465,8 @@
         "run2_overlay": true
       }
     },
-    "status": "complete_current_2024_model_full_statistics",
-    "updated_at": "2026-08-05T12:52:14+00:00"
+    "status": "complete_fit_temporary_rz_covariance_full_statistics",
+    "updated_at": "2026-08-14T13:40:51+00:00"
   },
   "status": "complete",
   "superseded_dy2e_rz_application": {
@@ -3620,6 +3605,21 @@
     "muon_5to10_sha256": "595906a588036ba9f152614dffa505ca8c0cbfef8770bc8ee50c3a3ccb6509ad",
     "status": "complete",
     "variations": "nominal, Up, and Down propagated into histogram payload"
+  },
+  "tt_w_sample_rollback": {
+    "btag_efficiency_sha256": "5a96f6b7dcd806a10c64dab7ecefd18a13767fa4645bc003bef5716798246563",
+    "btag_sf": "applied",
+    "input_sha256": "ef8d9f71c5e29999e31dda6909c4b3127cd642e8bb4e6a2d488aa28907b4160f",
+    "normalization_sha256": "5fbf6d188316287c02101d8ad68659c444d3d084a104dce822344ddb4fa779ec",
+    "removed_tt_w_ht_roots": 1206,
+    "restored_sample_families": [
+      "TT decay-mode samples",
+      "WtoLNu-2Jets PTLNu bins"
+    ],
+    "restored_tt_roots": 65,
+    "restored_w_ptlnu_roots": 339,
+    "status": "complete",
+    "validated_manifest_sha256": "f7215b1b007cb8f0dfbde3fb57d79559b0b7a22f47d65c81cd8e3cb13f264d58"
   },
   "xlabel_update": {
     "plot_pairs": 317,

@@ -1,0 +1,421 @@
+{
+  "analysis": {
+    "autoMCStats_threshold": 10,
+    "benchmark": {
+      "mLSP_GeV": 500,
+      "mStop_GeV": 1200
+    },
+    "channels": 227,
+    "data_mode": "asimov",
+    "expected_signal": 1.0,
+    "highdm_signal_bins": 55,
+    "lowdm_signal_bins": 34,
+    "model": "an_zinv",
+    "model_details": {
+      "external_background_constraints": [],
+      "free_background_parameters": [],
+      "model": {
+        "dilepton_poisson_channels": false,
+        "highdm_bins": 55,
+        "lost_lepton": "one free ll_norm shared by Top and W per matched bin",
+        "lowdm_bins": 34,
+        "qcd": "one free qcd_norm per matched QCDCR/SR bin",
+        "rz_covariance": "temporary_statistical_only",
+        "simultaneous_control_regions": [
+          "LLCR",
+          "QCDCR",
+          "GCR"
+        ],
+        "top_w_composition": "MC-derived log-ratio nuisance, anti-correlated at fixed total to first order",
+        "zgamma_nonclosure": "central abs(D-1), Z SR only",
+        "zinv": "GCR Poisson rho shared with RZ*Sgamma-scaled Z SR"
+      }
+    },
+    "schema": "highdm55_lowdm34_an_zinv_cr_transfer_model_2024_v1",
+    "systematics": {
+      "autoMCStats": 10,
+      "lnN": [
+        "CMS_SUS26090_RZstat_highdm_Nb1_2024",
+        "CMS_SUS26090_RZstat_highdm_Nb2plus_2024",
+        "CMS_SUS26090_RZstat_lowdm_Nb1_2024",
+        "CMS_SUS26090_RZstat_lowdm_Nb2plus_2024",
+        "CMS_SUS26090_eff_met_trigger_2024",
+        "CMS_SUS26090_topWComposition_highdm_Nb1_bin0_2024",
+        "CMS_SUS26090_topWComposition_highdm_Nb1_bin1_2024",
+        "CMS_SUS26090_topWComposition_highdm_Nb1_bin2_2024",
+        "CMS_SUS26090_topWComposition_highdm_Nb1_bin3_2024",
+        "CMS_SUS26090_topWComposition_highdm_Nb1_bin4_2024",
+        "CMS_SUS26090_topWComposition_highdm_Nb1_bin5_2024",
+        "CMS_SUS26090_topWComposition_highdm_Nb2plus_bin0_2024",
+        "CMS_SUS26090_topWComposition_highdm_Nb2plus_bin1_2024",
+        "CMS_SUS26090_topWComposition_highdm_Nb2plus_bin2_2024",
+        "CMS_SUS26090_topWComposition_highdm_Nb2plus_bin3_2024",
+        "CMS_SUS26090_topWComposition_highdm_Nb2plus_bin4_2024",
+        "CMS_SUS26090_topWComposition_highdm_Nb2plus_bin5_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb1_bin0_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb1_bin10_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb1_bin11_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb1_bin12_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb1_bin13_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb1_bin14_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb1_bin15_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb1_bin1_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb1_bin2_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb1_bin3_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb1_bin4_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb1_bin5_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb1_bin6_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb1_bin7_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb1_bin8_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb1_bin9_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb2plus_bin16_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb2plus_bin17_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb2plus_bin18_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb2plus_bin19_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb2plus_bin20_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb2plus_bin21_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb2plus_bin22_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb2plus_bin23_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb2plus_bin24_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb2plus_bin25_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb2plus_bin26_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb2plus_bin27_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb2plus_bin28_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb2plus_bin29_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb2plus_bin30_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb2plus_bin31_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb2plus_bin32_2024",
+        "CMS_SUS26090_topWComposition_lowdm_Nb2plus_bin33_2024",
+        "CMS_SUS26090_zgammaNonclosure_highdm_u250to300_2024",
+        "CMS_SUS26090_zgammaNonclosure_highdm_u300to350_2024",
+        "CMS_SUS26090_zgammaNonclosure_highdm_u350to400_2024",
+        "CMS_SUS26090_zgammaNonclosure_highdm_u400to500_2024",
+        "CMS_SUS26090_zgammaNonclosure_highdm_u500to800_2024",
+        "CMS_SUS26090_zgammaNonclosure_highdm_u800to1500_2024",
+        "CMS_SUS26090_zgammaNonclosure_lowdm_u300to400_2024",
+        "CMS_SUS26090_zgammaNonclosure_lowdm_u400to500_2024",
+        "CMS_SUS26090_zgammaNonclosure_lowdm_u450to550_2024",
+        "CMS_SUS26090_zgammaNonclosure_lowdm_u500to600_2024",
+        "CMS_SUS26090_zgammaNonclosure_lowdm_u500toInf_2024",
+        "CMS_SUS26090_zgammaNonclosure_lowdm_u550to650_2024",
+        "CMS_SUS26090_zgammaNonclosure_lowdm_u600toInf_2024",
+        "CMS_SUS26090_zgammaNonclosure_lowdm_u650to750_2024",
+        "CMS_SUS26090_zgammaNonclosure_lowdm_u650toInf_2024",
+        "CMS_SUS26090_zgammaNonclosure_lowdm_u750toInf_2024",
+        "CMS_btag_mediumWP_bc_correlated",
+        "CMS_btag_mediumWP_bc_uncorrelated_2024",
+        "CMS_btag_mediumWP_light_correlated",
+        "CMS_btag_mediumWP_light_uncorrelated_2024",
+        "CMS_pileup_2024",
+        "lumi_13p6TeV_2024"
+      ],
+      "rate_parameters": [
+        "ll_norm_highdm_Nb1_bin0",
+        "ll_norm_highdm_Nb1_bin1",
+        "ll_norm_highdm_Nb1_bin2",
+        "ll_norm_highdm_Nb1_bin3",
+        "ll_norm_highdm_Nb1_bin4",
+        "ll_norm_highdm_Nb1_bin5",
+        "ll_norm_highdm_Nb2plus_bin0",
+        "ll_norm_highdm_Nb2plus_bin1",
+        "ll_norm_highdm_Nb2plus_bin2",
+        "ll_norm_highdm_Nb2plus_bin3",
+        "ll_norm_highdm_Nb2plus_bin4",
+        "ll_norm_highdm_Nb2plus_bin5",
+        "ll_norm_lowdm_Nb1_bin0",
+        "ll_norm_lowdm_Nb1_bin1",
+        "ll_norm_lowdm_Nb1_bin10",
+        "ll_norm_lowdm_Nb1_bin11",
+        "ll_norm_lowdm_Nb1_bin12",
+        "ll_norm_lowdm_Nb1_bin13",
+        "ll_norm_lowdm_Nb1_bin14",
+        "ll_norm_lowdm_Nb1_bin15",
+        "ll_norm_lowdm_Nb1_bin2",
+        "ll_norm_lowdm_Nb1_bin3",
+        "ll_norm_lowdm_Nb1_bin4",
+        "ll_norm_lowdm_Nb1_bin5",
+        "ll_norm_lowdm_Nb1_bin6",
+        "ll_norm_lowdm_Nb1_bin7",
+        "ll_norm_lowdm_Nb1_bin8",
+        "ll_norm_lowdm_Nb1_bin9",
+        "ll_norm_lowdm_Nb2plus_bin16",
+        "ll_norm_lowdm_Nb2plus_bin17",
+        "ll_norm_lowdm_Nb2plus_bin18",
+        "ll_norm_lowdm_Nb2plus_bin19",
+        "ll_norm_lowdm_Nb2plus_bin20",
+        "ll_norm_lowdm_Nb2plus_bin21",
+        "ll_norm_lowdm_Nb2plus_bin22",
+        "ll_norm_lowdm_Nb2plus_bin23",
+        "ll_norm_lowdm_Nb2plus_bin24",
+        "ll_norm_lowdm_Nb2plus_bin25",
+        "ll_norm_lowdm_Nb2plus_bin26",
+        "ll_norm_lowdm_Nb2plus_bin27",
+        "ll_norm_lowdm_Nb2plus_bin28",
+        "ll_norm_lowdm_Nb2plus_bin29",
+        "ll_norm_lowdm_Nb2plus_bin30",
+        "ll_norm_lowdm_Nb2plus_bin31",
+        "ll_norm_lowdm_Nb2plus_bin32",
+        "ll_norm_lowdm_Nb2plus_bin33",
+        "qcd_norm_highdm_Nb1_bin0",
+        "qcd_norm_highdm_Nb1_bin1",
+        "qcd_norm_highdm_Nb1_bin2",
+        "qcd_norm_highdm_Nb1_bin3",
+        "qcd_norm_highdm_Nb1_bin4",
+        "qcd_norm_highdm_Nb1_bin5",
+        "qcd_norm_highdm_Nb2plus_bin0",
+        "qcd_norm_highdm_Nb2plus_bin1",
+        "qcd_norm_highdm_Nb2plus_bin2",
+        "qcd_norm_highdm_Nb2plus_bin3",
+        "qcd_norm_highdm_Nb2plus_bin4",
+        "qcd_norm_highdm_Nb2plus_bin5",
+        "qcd_norm_lowdm_Nb1_bin0",
+        "qcd_norm_lowdm_Nb1_bin1",
+        "qcd_norm_lowdm_Nb1_bin12",
+        "qcd_norm_lowdm_Nb1_bin13",
+        "qcd_norm_lowdm_Nb1_bin14",
+        "qcd_norm_lowdm_Nb1_bin4",
+        "qcd_norm_lowdm_Nb1_bin5",
+        "qcd_norm_lowdm_Nb1_bin8",
+        "qcd_norm_lowdm_Nb1_bin9",
+        "qcd_norm_lowdm_Nb2plus_bin16",
+        "qcd_norm_lowdm_Nb2plus_bin17",
+        "qcd_norm_lowdm_Nb2plus_bin19",
+        "qcd_norm_lowdm_Nb2plus_bin20",
+        "qcd_norm_lowdm_Nb2plus_bin22",
+        "qcd_norm_lowdm_Nb2plus_bin25",
+        "qcd_norm_lowdm_Nb2plus_bin26",
+        "qcd_norm_lowdm_Nb2plus_bin28",
+        "qcd_norm_lowdm_Nb2plus_bin29",
+        "zg_norm_highdm_Nb1_bin0",
+        "zg_norm_highdm_Nb1_bin1",
+        "zg_norm_highdm_Nb1_bin2",
+        "zg_norm_highdm_Nb1_bin3",
+        "zg_norm_highdm_Nb1_bin4",
+        "zg_norm_highdm_Nb1_bin5",
+        "zg_norm_highdm_Nb2plus_bin0",
+        "zg_norm_highdm_Nb2plus_bin1",
+        "zg_norm_highdm_Nb2plus_bin2",
+        "zg_norm_highdm_Nb2plus_bin3",
+        "zg_norm_highdm_Nb2plus_bin4",
+        "zg_norm_highdm_Nb2plus_bin5",
+        "zg_norm_lowdm_Nb1_bin0",
+        "zg_norm_lowdm_Nb1_bin1",
+        "zg_norm_lowdm_Nb1_bin10",
+        "zg_norm_lowdm_Nb1_bin11",
+        "zg_norm_lowdm_Nb1_bin12",
+        "zg_norm_lowdm_Nb1_bin13",
+        "zg_norm_lowdm_Nb1_bin14",
+        "zg_norm_lowdm_Nb1_bin15",
+        "zg_norm_lowdm_Nb1_bin2",
+        "zg_norm_lowdm_Nb1_bin3",
+        "zg_norm_lowdm_Nb1_bin4",
+        "zg_norm_lowdm_Nb1_bin5",
+        "zg_norm_lowdm_Nb1_bin6",
+        "zg_norm_lowdm_Nb1_bin7",
+        "zg_norm_lowdm_Nb1_bin8",
+        "zg_norm_lowdm_Nb1_bin9",
+        "zg_norm_lowdm_Nb2plus_bin16",
+        "zg_norm_lowdm_Nb2plus_bin17",
+        "zg_norm_lowdm_Nb2plus_bin18",
+        "zg_norm_lowdm_Nb2plus_bin19",
+        "zg_norm_lowdm_Nb2plus_bin20",
+        "zg_norm_lowdm_Nb2plus_bin21",
+        "zg_norm_lowdm_Nb2plus_bin22",
+        "zg_norm_lowdm_Nb2plus_bin23",
+        "zg_norm_lowdm_Nb2plus_bin24",
+        "zg_norm_lowdm_Nb2plus_bin25",
+        "zg_norm_lowdm_Nb2plus_bin26",
+        "zg_norm_lowdm_Nb2plus_bin27",
+        "zg_norm_lowdm_Nb2plus_bin28",
+        "zg_norm_lowdm_Nb2plus_bin29",
+        "zg_norm_lowdm_Nb2plus_bin30",
+        "zg_norm_lowdm_Nb2plus_bin31",
+        "zg_norm_lowdm_Nb2plus_bin32",
+        "zg_norm_lowdm_Nb2plus_bin33"
+      ]
+    },
+    "total_analysis_bins": 227,
+    "year": 2024
+  },
+  "artifacts": {
+    "datacard_mStop1200_mLSP500.txt": {
+      "bytes": 236241,
+      "sha256": "a6d135076b8e5dfbdcf26b62b086ab9855fc46f37a7a16b75100ed97d152900f"
+    },
+    "impact_labels_2024.json": {
+      "bytes": 35969,
+      "sha256": "df60d44576c65bbb9995ce2b6cfe001a5e5be652234f0703496bd2517708b367"
+    },
+    "impacts_2024_highdm55_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat.pdf": {
+      "bytes": 127216,
+      "sha256": "2376553ec5f9c6ca5d2847198c9fa06639e86f9971a8ab4de91f98f2cdc29dbd"
+    },
+    "impacts_2024_highdm55_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat.png": {
+      "bytes": 197379,
+      "sha256": "bf43afcf7b58fd43349a68c6dafe75e76767bd9c7b185bdd466f33eb94ca1e8b"
+    },
+    "impacts_2024_highdm55_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat_summary.pdf": {
+      "bytes": 16334,
+      "sha256": "2203fa0452b042947443c51fd94684473a6cbe231608eedc10ba5933d6a34057"
+    },
+    "impacts_2024_highdm55_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat_summary.png": {
+      "bytes": 259216,
+      "sha256": "d1ea5b37ea3aab1d722476e2ff0ce0d673fff20a26f4bf1e7ed4ef5c29455f8e"
+    },
+    "impacts_mStop1200_mLSP500.json": {
+      "bytes": 199905,
+      "sha256": "e511ae97f0ea33b1c92c62219ea613d55e49c380f861c634d123ba5b2cf165e5"
+    },
+    "manifest.json": {
+      "bytes": 468356,
+      "sha256": "414087daef5a1063dce0580a44b0e8be52be8f911fb8ca22a4d797e5099c4441"
+    }
+  },
+  "checks": {
+    "all_expected_nonstatistical_parameters": true,
+    "all_parameter_fit_roots_present": true,
+    "all_parameter_fit_roots_valid": true,
+    "card_auto_mc_stats_10": true,
+    "card_has_expected_highdm_lowdm_channels": true,
+    "card_has_no_2025_content": true,
+    "impact_json_finite": true,
+    "impact_png_valid": true,
+    "label_map_covers_all_parameters": true,
+    "label_map_values_unique": true,
+    "main_impact_pdf_page_count": true,
+    "manifest_auto_mc_stats_10": true,
+    "manifest_channel_count_positive": true,
+    "manifest_highdm_bins_positive": true,
+    "manifest_lowdm_bins_positive": true,
+    "manifest_mass_point_present": true,
+    "manifest_schema_2024_only": true,
+    "manifest_status_complete": true,
+    "manifest_total_bins_consistent": true,
+    "nonstatistical_parameter_count_matches_card": true,
+    "parameter_count_positive": true,
+    "parameter_names_unique": true,
+    "poi_fit_is_finite_triplet": true,
+    "poi_is_r": true,
+    "statistical_parameters_present": true,
+    "summary_pdf_one_page": true,
+    "summary_png_valid": true
+  },
+  "failed_checks": [],
+  "impact_scan": {
+    "fit_tree_entries_max": 3,
+    "fit_tree_entries_min": 3,
+    "invalid_fit_count": 0,
+    "missing_fit_count": 0,
+    "nonstatistical_parameter_count": 195,
+    "parameter_count": 479,
+    "poi": {
+      "fit": [
+        0.6531717777252197,
+        1.0,
+        1.3913300037384033
+      ],
+      "name": "r"
+    },
+    "statistical_parameter_count": 284,
+    "top_impacts": [
+      {
+        "impact_r": 0.059732139110565186,
+        "name": "ll_norm_highdm_Nb2plus_bin5"
+      },
+      {
+        "impact_r": 0.05133354663848877,
+        "name": "ll_norm_highdm_Nb2plus_bin4"
+      },
+      {
+        "impact_r": 0.03761112689971924,
+        "name": "prop_binSR_highdm_bin28_bin0"
+      },
+      {
+        "impact_r": 0.031095147132873535,
+        "name": "prop_binSR_highdm_bin27_bin0"
+      },
+      {
+        "impact_r": 0.028417766094207764,
+        "name": "CMS_SUS26090_zgammaNonclosure_highdm_u500to800_2024"
+      },
+      {
+        "impact_r": 0.02715480327606201,
+        "name": "ll_norm_highdm_Nb1_bin5"
+      },
+      {
+        "impact_r": 0.024035990238189697,
+        "name": "prop_binSR_highdm_bin38_bin0_Top_Nb2plus_u5"
+      },
+      {
+        "impact_r": 0.023467421531677246,
+        "name": "CMS_pileup_2024"
+      },
+      {
+        "impact_r": 0.020476341247558594,
+        "name": "prop_binSR_highdm_bin17_bin0"
+      },
+      {
+        "impact_r": 0.018579721450805664,
+        "name": "prop_binSR_highdm_bin33_bin0_Top_Nb2plus_u4"
+      },
+      {
+        "impact_r": 0.01815617084503174,
+        "name": "ll_norm_highdm_Nb1_bin4"
+      },
+      {
+        "impact_r": 0.017155051231384277,
+        "name": "prop_binSR_highdm_bin22_bin0_Top_Nb1_u4"
+      },
+      {
+        "impact_r": 0.016983628273010254,
+        "name": "prop_binSR_highdm_bin37_bin0"
+      },
+      {
+        "impact_r": 0.01626455783843994,
+        "name": "prop_binSR_highdm_bin44_bin0"
+      },
+      {
+        "impact_r": 0.01589512825012207,
+        "name": "prop_binSR_highdm_bin38_bin0_sig_mStop1200_mLSP500"
+      },
+      {
+        "impact_r": 0.015318572521209717,
+        "name": "lumi_13p6TeV_2024"
+      },
+      {
+        "impact_r": 0.015084445476531982,
+        "name": "prop_binLLCR_highdm_Nb2plus_bin5_bin0"
+      },
+      {
+        "impact_r": 0.014991164207458496,
+        "name": "prop_binSR_highdm_bin16_bin0"
+      },
+      {
+        "impact_r": 0.014856278896331787,
+        "name": "prop_binSR_highdm_bin54_bin0_Top_Nb2plus_u4"
+      },
+      {
+        "impact_r": 0.014769315719604492,
+        "name": "CMS_SUS26090_zgammaNonclosure_highdm_u800to1500_2024"
+      }
+    ]
+  },
+  "invalid_fit_parameters": [],
+  "missing_fit_parameters": [],
+  "rendering": {
+    "main_pdf_pages": 16,
+    "png_dimensions": [
+      1872,
+      1323
+    ],
+    "png_nonwhite_fraction": 0.261573266533584,
+    "summary_pdf_pages": 1,
+    "summary_png_dimensions": [
+      1872,
+      1323
+    ],
+    "summary_png_nonwhite_fraction": 0.17374920053491483
+  },
+  "schema": "2024_highdm55_lowdm34_full_mcstat_impact_validation_v1",
+  "status": "complete"
+}
