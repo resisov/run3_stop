@@ -88,11 +88,19 @@ autonomous_allhad/workflow/local_*_repair*/
 autonomous_allhad/workflow/local_*_current.json
 autonomous_allhad/workflow/local_*_current.tsv
 autonomous_allhad/workflow/local_*_state.json
+autonomous_allhad/workflow/*_measurement/outputs/
+autonomous_allhad/workflow/*_measurement/plots/
+autonomous_allhad/workflow/*_integration_validation/*_hist.json
 autonomous_allhad/workflow/data_bad_file_local_recovery_*/
 autonomous_allhad/workflow/mc_bad_file_local_recovery_*/
 autonomous_allhad/workflow/partial_merge_preview_*/
 autonomous_allhad/workflow/current_available_pipeline_*/hist_chunks/
 autonomous_allhad/workflow/current_available_pipeline_*/hists_*/hist_chunks/
+
+# Report build inputs are reproducible; retain only final summaries and plots.
+autonomous_allhad/reports/**/inputs/
+autonomous_allhad/reports/**/*_stream.jsonl
+autonomous_allhad/reports/**/histogram_*_inputs.json
 
 # Combine generated internals under docs are published selectively; keep source docs files explicit.
 docs/**/higgsCombine*.root
