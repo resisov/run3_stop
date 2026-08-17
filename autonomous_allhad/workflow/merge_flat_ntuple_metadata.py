@@ -23,6 +23,7 @@ FLAT_SCHEMAS = {
     "flat_ntuple_shard_v4_objectcorr_2025_data",
     "flat_ntuple_shard_v5_fullselection_2024",
     "flat_ntuple_shard_v6_signal_cutflow_2024",
+    "flat_ntuple_shard_v7_float32_fullselection_2024",
     "flat_ntuple_merged_data_balanced20_v1",
     "flat_ntuple_merged_mc_balanced20_v1",
 }

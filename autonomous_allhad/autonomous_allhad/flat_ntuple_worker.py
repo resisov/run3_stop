@@ -255,6 +255,39 @@ VECTOR_INT_FIELDS = [
     "lowdm_fatjet_subjet_idx2",
 ]
 
+# Storage precision is configured by year-specific intermediate workers.  The
+# generic writer remains backward compatible (all floating-point branches are
+# float64) until a worker explicitly opts into compact storage.  In particular,
+# the 2024 worker keeps gen_weight in float64 while storing kinematics and
+# object vectors as float32.
+FLOAT64_STORAGE_FIELDS = set(FLOAT_FIELDS)
+VECTOR_FLOAT64_STORAGE_FIELDS = set(VECTOR_FLOAT_FIELDS)
+
+
+def configure_float_storage(
+    *,
+    float32: bool,
+    keep_float64: set[str] | None = None,
+    keep_vector_float64: set[str] | None = None,
+) -> None:
+    global FLOAT64_STORAGE_FIELDS, VECTOR_FLOAT64_STORAGE_FIELDS
+    if float32:
+        scalar_fields = set(keep_float64 or set())
+        vector_fields = set(keep_vector_float64 or set())
+    else:
+        scalar_fields = set(FLOAT_FIELDS)
+        vector_fields = set(VECTOR_FLOAT_FIELDS)
+
+    unknown_scalars = scalar_fields - set(FLOAT_FIELDS)
+    unknown_vectors = vector_fields - set(VECTOR_FLOAT_FIELDS)
+    if unknown_scalars or unknown_vectors:
+        raise RuntimeError(
+            "float storage policy references unknown branches: "
+            f"scalars={sorted(unknown_scalars)}, vectors={sorted(unknown_vectors)}"
+        )
+    FLOAT64_STORAGE_FIELDS = scalar_fields
+    VECTOR_FLOAT64_STORAGE_FIELDS = vector_fields
+
 
 def write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -420,11 +453,15 @@ def branch_types() -> dict[str, Any]:
     for field in INT32_FIELDS:
         out[field] = np.int32
     for field in FLOAT_FIELDS:
-        out[field] = np.float64
+        out[field] = np.float64 if field in FLOAT64_STORAGE_FIELDS else np.float32
     for field in BOOL_FIELDS:
         out[field] = np.bool_
     for field in VECTOR_FLOAT_FIELDS:
-        out[field] = "var * float64"
+        out[field] = (
+            "var * float64"
+            if field in VECTOR_FLOAT64_STORAGE_FIELDS
+            else "var * float32"
+        )
     for field in VECTOR_INT_FIELDS:
         out[field] = "var * int32"
     return out
@@ -437,11 +474,23 @@ def rows_to_arrays(rows: list[dict[str, Any]]) -> dict[str, Any]:
     for field in INT32_FIELDS:
         arrays[field] = np.asarray([int_value(row.get(field), -1) for row in rows], dtype=np.int32)
     for field in FLOAT_FIELDS:
-        arrays[field] = np.asarray([finite(row.get(field), 0.0) for row in rows], dtype=np.float64)
+        dtype = np.float64 if field in FLOAT64_STORAGE_FIELDS else np.float32
+        arrays[field] = np.asarray(
+            [finite(row.get(field), 0.0) for row in rows], dtype=dtype
+        )
     for field in BOOL_FIELDS:
         arrays[field] = np.asarray([bool(row.get(field, False)) for row in rows], dtype=np.bool_)
     for field in VECTOR_FLOAT_FIELDS:
-        arrays[field] = ak.Array([[finite(x, 0.0) for x in (row.get(field) or [])] for row in rows])
+        dtype = np.float64 if field in VECTOR_FLOAT64_STORAGE_FIELDS else np.float32
+        arrays[field] = ak.values_astype(
+            ak.Array(
+                [
+                    [finite(x, 0.0) for x in (row.get(field) or [])]
+                    for row in rows
+                ]
+            ),
+            dtype,
+        )
     for field in VECTOR_INT_FIELDS:
         arrays[field] = ak.Array([[int_value(x, 0) for x in (row.get(field) or [])] for row in rows])
     return arrays
@@ -989,9 +1038,23 @@ def main(argv: list[str] | None = None) -> int:
     payload["branch_schema"] = {
         "int64": INT64_FIELDS,
         "int32": INT32_FIELDS,
-        "float64": FLOAT_FIELDS,
+        "float32": [
+            field for field in FLOAT_FIELDS if field not in FLOAT64_STORAGE_FIELDS
+        ],
+        "float64": [
+            field for field in FLOAT_FIELDS if field in FLOAT64_STORAGE_FIELDS
+        ],
         "bool": BOOL_FIELDS,
-        "vector_float64": VECTOR_FLOAT_FIELDS,
+        "vector_float32": [
+            field
+            for field in VECTOR_FLOAT_FIELDS
+            if field not in VECTOR_FLOAT64_STORAGE_FIELDS
+        ],
+        "vector_float64": [
+            field
+            for field in VECTOR_FLOAT_FIELDS
+            if field in VECTOR_FLOAT64_STORAGE_FIELDS
+        ],
         "vector_int32": VECTOR_INT_FIELDS,
     }
     update_physical_norm(payload)

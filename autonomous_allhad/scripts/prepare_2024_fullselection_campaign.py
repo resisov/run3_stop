@@ -511,7 +511,7 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     campaign_manifest = {
-        "schema_version": "intermediate_2024_fullselection_campaign_v6",
+        "schema_version": "intermediate_2024_fullselection_campaign_v7_float32",
         "status": "prepared_not_submitted",
         "created_at": utc_now(),
         "year": 2024,
@@ -572,6 +572,13 @@ def main(argv: list[str] | None = None) -> int:
             "command": f"condor_submit {submit}",
         },
         "intermediate_root_ready": True,
+        "intermediate_storage": {
+            "compression": "uproot default ZLIB(1)",
+            "scalar_float32": "all floating-point event features except gen_weight",
+            "scalar_float64": ["gen_weight"],
+            "vector_float32": "all floating-point object vectors",
+            "selection_policy": "unchanged feature_flat_preselection",
+        },
         "nominal_kinematic_corrections": correction_manifest()["nominal_kinematic_corrections"],
         "final_histogram_weight_gate": {
             "ready": False,

@@ -23,6 +23,9 @@ from .object_corrections_2024 import (
 )
 
 
+INTERMEDIATE_SCHEMA = "flat_ntuple_shard_v7_float32_fullselection_2024"
+
+
 EXTRA_FLOAT_FIELDS = [
     "rho",
     "lhe_vpt",
@@ -393,7 +396,7 @@ def extract_chunk_2024(
     summary["object_corrections_2024"] = calibration
     summary["object_branch_audit"] = audit
     summary["payload_status"] = payload_status
-    summary["intermediate_schema"] = "flat_ntuple_shard_v5_fullselection_2024"
+    summary["intermediate_schema"] = INTERMEDIATE_SCHEMA
     summary["dy_recoil_selection"] = {
         "DY2E": "OS medium electrons, pT(ll)>200, on-Z, electron-cleaned AK4/AK8 jets, deltaPhi against uT, uT>250 GeV",
         "DY2M": "OS medium muons, pT(ll)>200, on-Z, muon-cleaned AK4/AK8 jets, deltaPhi against uT, uT>250 GeV",
@@ -418,7 +421,8 @@ def install_backend() -> None:
     for name in EXTRA_VECTOR_INT_FIELDS:
         if name not in flat.VECTOR_INT_FIELDS:
             flat.VECTOR_INT_FIELDS.append(name)
-    flat.SCHEMA_VERSION = "flat_ntuple_shard_v5_fullselection_2024"
+    flat.configure_float_storage(float32=True, keep_float64={"gen_weight"})
+    flat.SCHEMA_VERSION = INTERMEDIATE_SCHEMA
     baseline.SHAPE_SHIFT_NAMES = set(SHAPE_VARIATIONS) - {"nominal"}
     baseline.validate_shift_name = validate_shift
     baseline.apply_jec = _passthrough_jec
