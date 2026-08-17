@@ -80,6 +80,8 @@ def dataset_files(metadata: Any) -> list[str]:
 
 
 def normalize_lfn(path: str) -> str:
+    if path.startswith("root://") and "//store/" in path:
+        path = "/store/" + path.split("//store/", 1)[1]
     if path.startswith("root://"):
         return path
     if path.startswith("/store/"):
@@ -191,6 +193,57 @@ def input_records(repo: Path, bad_paths: set[str]) -> tuple[list[dict[str, Any]]
     }
 
 
+def frozen_input_records(path: Path, bad_paths: set[str]) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    payload = json.loads(path.read_text())
+    raw_records = payload.get("records", []) if isinstance(payload, dict) else []
+    if not isinstance(raw_records, list) or not raw_records:
+        raise RuntimeError(f"frozen input manifest has no records: {path}")
+    required = {
+        "sample_name", "dataset", "process_group", "year", "file_path",
+        "is_data", "is_background", "is_signal", "sumw_source",
+    }
+    records = []
+    excluded_bad = []
+    seen = set()
+    for index, item in enumerate(raw_records):
+        if not isinstance(item, dict):
+            raise RuntimeError(f"frozen input record {index} is not an object")
+        missing = sorted(required - set(item))
+        if missing:
+            raise RuntimeError(f"frozen input record {index} missing fields: {missing}")
+        record = dict(item)
+        record["file_path"] = normalize_lfn(str(record["file_path"]))
+        if record["file_path"] in bad_paths:
+            excluded_bad.append({
+                "dataset": str(record["dataset"]),
+                "file_path": record["file_path"],
+            })
+            continue
+        if record["file_path"] in seen:
+            raise RuntimeError(f"duplicate frozen input file: {record['file_path']}")
+        seen.add(record["file_path"])
+        flags = tuple(bool(record[name]) for name in ("is_data", "is_background", "is_signal"))
+        if sum(flags) != 1:
+            raise RuntimeError(f"frozen input record {index} has invalid role flags: {flags}")
+        record.setdefault("file_index", index)
+        record.setdefault("xsec_pb", None)
+        records.append(record)
+    digest = hashlib.sha256(path.read_bytes()).hexdigest()
+    return records, {
+        "source": "frozen_input_manifest",
+        "path": str(path),
+        "sha256": digest,
+        "schema_version": payload.get("schema_version"),
+        "records": len(records),
+        "data_records": sum(bool(item["is_data"]) for item in records),
+        "background_records": sum(bool(item["is_background"]) for item in records),
+        "fastsim_signal_records": sum(bool(item["is_signal"]) for item in records),
+        "excluded_bad_files": excluded_bad,
+        "process_groups": dict(sorted(Counter(str(item["process_group"]) for item in records).items())),
+        "datasets": len({str(item["dataset"]) for item in records}),
+    }
+
+
 def record_digest(records: list[dict[str, Any]]) -> str:
     return hashlib.sha256(json.dumps(records, sort_keys=True).encode()).hexdigest()[:16]
 
@@ -299,8 +352,9 @@ def build_payload_bundle(repo: Path, destination: Path, btag_path: Path) -> dict
     return {"path": str(destination), "size": destination.stat().st_size, "sha256": sha256(destination)}
 
 
-def build_worker_bundle(repo: Path, destination: Path) -> dict[str, Any]:
-    package = repo / "autonomous_allhad/autonomous_allhad"
+def build_worker_bundle(package: Path, destination: Path) -> dict[str, Any]:
+    if not package.is_dir():
+        raise RuntimeError(f"missing worker package: {package}")
     destination.parent.mkdir(parents=True, exist_ok=True)
     files = sorted(path for path in package.glob("*.py") if path.is_file())
     with tarfile.open(destination, "w:gz") as archive:
@@ -425,6 +479,8 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Prepare the corrected 2024 full-selection DATA, background, and FastSim intermediate ROOT campaign.")
     parser.add_argument("--repo", type=Path, default=DEFAULT_REPO)
     parser.add_argument("--campaign", type=Path, default=DEFAULT_CAMPAIGN)
+    parser.add_argument("--records-json", type=Path)
+    parser.add_argument("--worker-package", type=Path)
     parser.add_argument("--data-shard-size", type=int, default=2)
     parser.add_argument("--mc-shard-size", type=int, default=8)
     parser.add_argument("--signal-shard-size", type=int, default=2)
@@ -455,11 +511,17 @@ def main(argv: list[str] | None = None) -> int:
     btag_validation = validate_btag_efficiency(btag_path)
     if btag_validation["status"] != "valid":
         raise RuntimeError(f"b-tag efficiency validation failed: {btag_validation}")
-    records, input_summary = input_records(repo, bad_file_paths(bad_path))
-    if input_summary["missing_metadata"]:
-        raise RuntimeError(f"configured datasets missing metadata: {len(input_summary['missing_metadata'])}")
-    if input_summary["excluded_unclassified_datasets"]:
-        raise RuntimeError(f"unclassified configured datasets: {len(input_summary['excluded_unclassified_datasets'])}")
+    bad_paths = bad_file_paths(bad_path)
+    if args.records_json:
+        records_path = args.records_json.absolute()
+        require_eos(records_path, "frozen input manifest")
+        records, input_summary = frozen_input_records(records_path, bad_paths)
+    else:
+        records, input_summary = input_records(repo, bad_paths)
+        if input_summary["missing_metadata"]:
+            raise RuntimeError(f"configured datasets missing metadata: {len(input_summary['missing_metadata'])}")
+        if input_summary["excluded_unclassified_datasets"]:
+            raise RuntimeError(f"unclassified configured datasets: {len(input_summary['excluded_unclassified_datasets'])}")
     btag_coverage = btag_efficiency_coverage(records, btag_validation)
     btag_validation["coverage"] = btag_coverage
     if btag_coverage["status"] != "complete":
@@ -480,7 +542,12 @@ def main(argv: list[str] | None = None) -> int:
     )
     worker_bundle_path = campaign / "bundles/objectcorr_2024_worker.tgz"
     payload_bundle_path = campaign / "bundles/objectcorr_2024_payloads.tgz"
-    worker_bundle = build_worker_bundle(repo, worker_bundle_path)
+    worker_package = (
+        args.worker_package.absolute()
+        if args.worker_package
+        else repo / "autonomous_allhad/autonomous_allhad"
+    )
+    worker_bundle = build_worker_bundle(worker_package, worker_bundle_path)
     payload_bundle = build_payload_bundle(repo, payload_bundle_path, btag_path)
 
     wrapper = campaign / "condor/run_intermediate_2024.sh"
