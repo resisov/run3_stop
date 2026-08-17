@@ -2,8 +2,10 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
+import os
 from pathlib import Path
 from typing import Any
 
@@ -11,7 +13,18 @@ import awkward as ak
 import numpy as np
 import uproot
 
+from autonomous_allhad.signal_models import (
+    signal_mass_key,
+    signal_topology,
+)
+from autonomous_allhad.sidecar_store import read_root_metadata
+from autonomous_allhad.analysis_scale_factors import (
+    REQUIRED_ANALYSIS_SF_COMPONENTS,
+    REQUIRED_ANALYSIS_SF_VARIATIONS,
+)
+
 from autonomous_allhad.real_subset_worker import assign_lowdm_search_bin, compute_weight_bundle
+from autonomous_allhad.dy_ptll_policy import dataset_id_prefilter_plan, dy_ptll_dataset_allowed
 
 RECOIL_PT_BINS = [250.0, 300.0, 350.0, 400.0, 500.0, 800.0, 1500.0]
 LOWDM_NSV_INCLUSIVE_CATEGORY_SIZES = [
@@ -33,8 +46,21 @@ LOWDM_42BIN_LABELS = [
     for category, size in LOWDM_NSV_INCLUSIVE_CATEGORY_SIZES
     for position in range(size)
 ]
+LOWDM_REMOVED_NB0_CATEGORY_SIZES = LOWDM_NSV_INCLUSIVE_CATEGORY_SIZES[:2]
+LOWDM_REMOVED_NB0_BIN_COUNT = sum(
+    size for _, size in LOWDM_REMOVED_NB0_CATEGORY_SIZES
+)
+LOWDM_NBGE1_CATEGORY_SIZES = LOWDM_NSV_INCLUSIVE_CATEGORY_SIZES[2:]
+LOWDM_34BIN_LABELS = [
+    f"{category}_recoil_{position + 1}"
+    for category, size in LOWDM_NBGE1_CATEGORY_SIZES
+    for position in range(size)
+]
 SELECTED_AN17_RECOIL_BINS_1BASED = [4, 5, 8, 9, 14, 15, 16]
 SELECTED_RECOIL54_SCHEME = "boosted_an17_selected_recoil6_with_nt0_wsplit_SR"
+EXTENDED_RECOIL60_SCHEME = "boosted_an17_selected_recoil60_nb2_nt2plus_w0_SR"
+EXTENDED_RECOIL60_CATEGORY_KEY = "Nb2_Nt2plus_W0"
+EXTENDED_RECOIL60_INSERTION_BIN = 36
 NT0_RECOIL_CATEGORY_KEYS = ["NT0_Nb1plus_T0_W0", "NT0_Nb1plus_T0_W1plus"]
 RECOIL_BIN_LABELS = [
     f"{int(RECOIL_PT_BINS[i])}-{int(RECOIL_PT_BINS[i + 1])}"
@@ -98,10 +124,28 @@ WEIGHT_BRANCHES = [
     "n_e_veto", "n_e_medium", "n_m_loose", "n_m_medium",
     "good_jet_pt", "good_jet_eta", "good_jet_hadron_flavour", "good_jet_b_medium",
     "electron_veto_pt", "electron_veto_eta_sc", "electron_veto_phi",
+    "electron_veto_eta",
     "electron_medium_pt", "electron_medium_eta_sc", "electron_medium_phi",
+    "electron_medium_eta",
     "muon_loose_pt", "muon_loose_eta", "muon_loose_phi",
     "muon_medium_pt", "muon_medium_eta", "muon_medium_phi",
     "photon_medium_pt", "photon_medium_eta", "photon_medium_phi", "gen_top_pt",
+]
+OPTIONAL_FORWARD_SCHEMA_BRANCHES = {
+    "electron_veto_eta",
+    "electron_medium_eta",
+}
+GCR_PHOTON_POLICY_BRANCHES = [
+    "photon_pt_all",
+    "photon_eta_all",
+    "photon_cutbased_all",
+    "photon_electron_veto_all",
+]
+GCR_PREFILTER_BRANCHES = [
+    "dataset_id",
+    "feature_GCR",
+    "feature_lowdm_GCR",
+    "nb_medium_lowdm",
 ]
 LOWDM_READ_BRANCHES = [
     "feature_lowdm_preselection",
@@ -170,12 +214,14 @@ HIGHDM_DISTRIBUTION_VARIABLE_SPECS = {
         "branch": "nb_medium",
         "branch_by_region": {"GCR": "nb_photon_clean", "DY2E": "nb_lepton_clean", "DY2M": "nb_lepton_clean"},
         "bins": [-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 6.5],
+        "overflow_policy": "exclude",
         "xlabel": r"$N_{b}$",
     },
     "njet": {
         "branch": "njet",
         "branch_by_region": {"GCR": "njet_photon_clean", "DY2E": "njet_lepton_clean", "DY2M": "njet_lepton_clean"},
         "bins": [-0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 8.5, 10.5, 12.5, 16.5],
+        "overflow_policy": "exclude",
         "xlabel": r"$N_{j}$",
     },
     "nfatjet": {
@@ -189,6 +235,7 @@ HIGHDM_DISTRIBUTION_VARIABLE_SPECS = {
         "branch": "ht",
         "branch_by_region": {"GCR": "ht_photon_clean", "DY2E": "ht_lepton_clean", "DY2M": "ht_lepton_clean"},
         "bins": [0, 300, 500, 700, 900, 1200, 1500, 2000, 2500, 3000],
+        "overflow_policy": "exclude",
         "xlabel": r"$H_{T}$ (GeV)",
     },
     "ut": {
@@ -196,7 +243,16 @@ HIGHDM_DISTRIBUTION_VARIABLE_SPECS = {
         "branch_by_region": {"GCR": "recoil_gcr", "DY2E": "recoil_dy2e", "DY2M": "recoil_dy2m"},
         "regions": ["LLCR", "QCDCR", "GCR", "DY2E", "DY2M"],
         "bins": [250, 300, 350, 400, 500, 650, 800, 1000, 1500],
+        "overflow_policy": "exclude",
         "xlabel": r"$U_{T}$ (GeV)",
+    },
+    "ptll": {
+        "branch": "pee",
+        "branch_by_region": {"DY2E": "pee", "DY2M": "pmm"},
+        "regions": ["DY2E", "DY2M"],
+        "bins": [200, 210, 220, 240, 260, 300, 350, 400, 500, 650, 800, 1000, 1500],
+        "overflow_policy": "exclude",
+        "xlabel": r"$p_{T}(\ell\ell)$ (GeV)",
     },
     "met": {"branch": "met", "bins": [250, 300, 350, 400, 500, 650, 800, 1000, 1500], "xlabel": r"$p_{T}^{miss}$ (GeV)"},
     "jet_pt": {
@@ -223,6 +279,7 @@ HIGHDM_SR_CATEGORY_KEYS = [
     "SR_Nb1_T1plus_W0", "SR_Nb1_T1plus_W1plus",
     "SR_Nb2_T1_W0", "SR_Nb2_T1_W1",
     "SR_Nb3plus_T1_W0", "SR_Nb3plus_T1_W1", "SR_Nb3plus_T2_W0",
+    "SR_Nb2_Nt2plus_W0",
 ]
 
 READ_BRANCHES = sorted(set(
@@ -241,18 +298,110 @@ def read_json(path: Path) -> Any:
 
 def write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=2, sort_keys=True, allow_nan=False) + "\n")
+    temporary = path.with_name(path.name + ".tmp")
+    with temporary.open("w") as handle:
+        json.dump(payload, handle, indent=2, sort_keys=True, allow_nan=False)
+        handle.write("\n")
+    os.replace(temporary, path)
+
+
+def file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+EXECUTION_CONTRACT_PATHS = (
+    "autonomous_allhad/workflow/build_flat_boosted_recoil_hists.py",
+    "autonomous_allhad/workflow/run_flat_hists_chunked.py",
+    "autonomous_allhad/autonomous_allhad/analysis_scale_factors.py",
+    "autonomous_allhad/autonomous_allhad/real_subset_worker.py",
+    "autonomous_allhad/autonomous_allhad/dy_ptll_policy.py",
+    "analysis/utils/corrections.py",
+    "analysis/data/corrections.coffea",
+    "analysis/data/PUweight/2024/puWeights.json.gz",
+    "analysis/data/BTVSF/2024/btagging.json.gz",
+    "analysis/data/EGammaSF/2024/electron.json.gz",
+    "analysis/data/EGammaSF/2024/electronHlt.json.gz",
+    "analysis/data/EGammaSF/2024/photon.json.gz",
+    "analysis/data/MuonSF/2024/muon_Z.json.gz",
+    "analysis/data/AnalysisSF/2024/met_trigger_sf.json.gz",
+    "analysis/data/AnalysisSF/2024/photon_trigger_sf.json.gz",
+    "analysis/data/AnalysisSF/2024/veto_electron_5to10_sf.json.gz",
+    "analysis/data/AnalysisSF/2024/loose_muon_5to10_sf.json.gz",
+)
+EXPECTED_BTAG_EFFICIENCY_SHA256_2024 = (
+    "03524e9ae28110814f336eafc887e60d54b495a7b8dec7cda59bd792f56feaf4"
+)
+BTAG_EFFICIENCY_RELATIVE_PATH = "analysis/hists/btageff2024.merged"
+
+
+def execution_code_sha256(repo: Path) -> dict[str, str]:
+    return {
+        relative_path: file_sha256(repo / relative_path)
+        for relative_path in EXECUTION_CONTRACT_PATHS
+    }
+
+
+def btag_efficiency_contract(
+    repo: Path,
+    expected_sha256: str,
+    required: bool,
+) -> dict[str, Any]:
+    path = repo / BTAG_EFFICIENCY_RELATIVE_PATH
+    if not path.exists():
+        if required:
+            raise RuntimeError(f"required b-tag efficiency payload is missing: {path}")
+        return {
+            "path": BTAG_EFFICIENCY_RELATIVE_PATH,
+            "exists": False,
+            "expected_sha256": expected_sha256,
+        }
+    actual_sha256 = file_sha256(path)
+    matches = not expected_sha256 or actual_sha256 == expected_sha256
+    if required and not matches:
+        raise RuntimeError(
+            f"b-tag efficiency SHA256 mismatch for {path}: "
+            f"expected {expected_sha256}, found {actual_sha256}"
+        )
+    return {
+        "path": BTAG_EFFICIENCY_RELATIVE_PATH,
+        "exists": True,
+        "sha256": actual_sha256,
+        "expected_sha256": expected_sha256,
+        "matches_expected": matches,
+    }
 
 
 MAX_ABS_HIST_WEIGHT = 1.0e12
+SIGNAL_BTAG_FASTSIM_MASSES = (
+    600, 700, 800, 900, 950,
+    1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500,
+    1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500,
+)
 SIGNAL_BTAG_EFFICIENCY_DATASETS = {
-    600: "SMS-2Stop_Par-mStop-600_TuneCP5_13p6TeV_madgraph-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2.futures",
-    1000: "SMS-2Stop_Par-mStop-1000_TuneCP5_13p6TeV_madgraph-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2",
-    1500: "SMS-2Stop_Par-mStop-1500_TuneCP5_13p6TeV_madgraph-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2.futures",
+    mstop: (
+        f"SMS-2Stop_Par-mStop-{mstop}_TuneCP5_13p6TeV_madgraphMLM-pythia8-"
+        "RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1"
+    )
+    for mstop in SIGNAL_BTAG_FASTSIM_MASSES
 }
 
 
-def signal_btag_efficiency_dataset(mstop: int) -> tuple[int, str]:
+def signal_btag_efficiency_dataset(
+    mstop: int,
+    source_dataset: str = "",
+) -> tuple[int, str]:
+    topology = signal_topology(source_dataset)
+    if topology in {"T2tb", "T2bW"}:
+        parts = str(source_dataset).strip("/").split("/")
+        if len(parts) >= 2:
+            return int(mstop), f"{parts[0]}-{parts[1]}"
+        raise RuntimeError(
+            f"cannot derive b-tag efficiency key from signal dataset {source_dataset!r}"
+        )
     anchor = min(SIGNAL_BTAG_EFFICIENCY_DATASETS, key=lambda value: (abs(value - int(mstop)), value))
     return anchor, SIGNAL_BTAG_EFFICIENCY_DATASETS[anchor]
 
@@ -281,6 +430,96 @@ def as_bool(values: Any, n: int) -> np.ndarray:
     return out
 
 
+def gcr_photon_policy_mask(
+    chunk: Any,
+    policy: str,
+    n: int,
+) -> np.ndarray:
+    if policy == "nominal":
+        return np.ones(n, dtype=bool)
+    if policy != "tight_eb":
+        raise ValueError(f"unknown GCR photon policy: {policy}")
+    required = set(GCR_PHOTON_POLICY_BRANCHES)
+    present = set(ak.fields(chunk))
+    missing = sorted(required - present)
+    if missing:
+        raise RuntimeError(
+            "tight-EB GCR photon policy requires missing branches: "
+            + ", ".join(missing)
+        )
+    tight_eb = (
+        (chunk["photon_pt_all"] > 220.0)
+        & (abs(chunk["photon_eta_all"]) < 1.4442)
+        & (chunk["photon_cutbased_all"] >= 3)
+        & ak.values_astype(chunk["photon_electron_veto_all"], np.bool_)
+    )
+    return np.asarray(ak.sum(tight_eb, axis=1) == 1, dtype=bool)
+
+
+def gcr_region_masks(
+    chunk: Any,
+    photon_policy: str,
+) -> dict[str, np.ndarray]:
+    n = len(chunk["dataset_id"])
+    nominal_highdm = as_bool(chunk["feature_GCR"], n)
+    nominal_lowdm = (
+        as_bool(chunk["feature_lowdm_GCR"], n)
+        & (np.asarray(chunk["nb_medium_lowdm"], dtype=int) >= 1)
+    )
+    photon_mask = gcr_photon_policy_mask(chunk, photon_policy, n)
+    return {
+        "nominal_highdm": nominal_highdm,
+        "nominal_lowdm": nominal_lowdm,
+        "selected_highdm": nominal_highdm & photon_mask,
+        "selected_lowdm": nominal_lowdm & photon_mask,
+    }
+
+
+def record_gcr_selection_audit(
+    summary: dict[str, Any],
+    meta: dict[str, Any],
+    dataset_ids: np.ndarray,
+    masks: dict[str, np.ndarray],
+) -> None:
+    for dataset_id in sorted(set(int(value) for value in dataset_ids)):
+        dataset_mask = dataset_ids == dataset_id
+        dataset, process, is_data, is_signal = dataset_label(meta, dataset_id)
+        label = (
+            "data_obs"
+            if is_data
+            else process_to_group(process, dataset)
+            if not is_signal
+            else "signal"
+        )
+        record = (
+            summary
+            .setdefault("gcr_photon_selection_audit", {})
+            .setdefault(label, {})
+            .setdefault(dataset, {})
+        )
+        for region in ("highdm", "lowdm"):
+            nominal = int(
+                np.count_nonzero(
+                    dataset_mask & masks[f"nominal_{region}"]
+                )
+            )
+            selected = int(
+                np.count_nonzero(
+                    dataset_mask & masks[f"selected_{region}"]
+                )
+            )
+            region_record = record.setdefault(
+                region,
+                {"nominal_entries": 0, "selected_entries": 0},
+            )
+            region_record["nominal_entries"] = (
+                int(region_record.get("nominal_entries", 0)) + nominal
+            )
+            region_record["selected_entries"] = (
+                int(region_record.get("selected_entries", 0)) + selected
+            )
+
+
 def ones_mask(jagged: Any) -> Any:
     return ak.values_astype(ak.ones_like(jagged), np.bool_)
 
@@ -300,14 +539,24 @@ def flat_arrays_for_weights(chunk: dict[str, Any]) -> tuple[dict[str, Any], dict
     jet_had = chunk["good_jet_hadron_flavour"]
     b_med = ak.values_astype(chunk["good_jet_b_medium"], np.bool_)
 
-    ev_pt, ev_eta, ev_phi = chunk["electron_veto_pt"], chunk["electron_veto_eta_sc"], chunk["electron_veto_phi"]
-    em_pt, em_eta, em_phi = chunk["electron_medium_pt"], chunk["electron_medium_eta_sc"], chunk["electron_medium_phi"]
+    ev_pt = chunk["electron_veto_pt"]
+    ev_eta_sc = chunk["electron_veto_eta_sc"]
+    ev_phi = chunk["electron_veto_phi"]
+    em_pt = chunk["electron_medium_pt"]
+    em_eta_sc = chunk["electron_medium_eta_sc"]
+    em_phi = chunk["electron_medium_phi"]
+    raw_eta_available = (
+        "electron_veto_eta" in chunk and "electron_medium_eta" in chunk
+    )
+    ev_eta = chunk["electron_veto_eta"] if raw_eta_available else ev_eta_sc
+    em_eta = chunk["electron_medium_eta"] if raw_eta_available else em_eta_sc
     e_pt = combine_two(ev_pt, em_pt)
     e_eta = combine_two(ev_eta, em_eta)
+    e_eta_sc = combine_two(ev_eta_sc, em_eta_sc)
     e_phi = combine_two(ev_phi, em_phi)
     e_veto = combine_two(ones_mask(ev_pt), zeros_mask(em_pt))
     e_med = combine_two(zeros_mask(ev_pt), ones_mask(em_pt))
-    e_delta_eta_sc = ak.zeros_like(e_eta)
+    e_delta_eta_sc = e_eta_sc - e_eta
 
     ml_pt, ml_eta, ml_phi = chunk["muon_loose_pt"], chunk["muon_loose_eta"], chunk["muon_loose_phi"]
     mm_pt, mm_eta, mm_phi = chunk["muon_medium_pt"], chunk["muon_medium_eta"], chunk["muon_medium_phi"]
@@ -358,7 +607,27 @@ def flat_arrays_for_weights(chunk: dict[str, Any]) -> tuple[dict[str, Any], dict
         "p_pt": p_pt,
         "p_phi": p_phi,
         "p_med": p_med,
-        "gcr_mask": as_bool(chunk["feature_GCR"], n),
+        "gcr_mask": (
+            as_bool(chunk["feature_GCR"], n)
+            | as_bool(chunk["feature_lowdm_GCR"], n)
+        ),
+        "met_pt": np.asarray(chunk["met"], dtype=float),
+        "met_trigger_mask": (
+            as_bool(chunk["feature_LLCR"], n)
+            | as_bool(chunk["feature_QCDCR"], n)
+            | as_bool(chunk["feature_SR"], n)
+            | as_bool(chunk["feature_lowdm_LLCR"], n)
+            | as_bool(chunk["feature_lowdm_QCDCR"], n)
+            | as_bool(chunk["feature_lowdm_SR"], n)
+            | region_mask(chunk, "HighDMVR_Nb1", "pass_base_common", n)
+            | region_mask(chunk, "HighDMVR_Nb2", "pass_base_common", n)
+            | region_mask(chunk, "HighDMVR_Nb3plus", "pass_base_common", n)
+        ),
+        "electron_eta_source": (
+            "raw_eta_with_delta_eta_sc"
+            if raw_eta_available
+            else "eta_sc_fallback_current_schema"
+        ),
     }
     return arrays, inputs
 
@@ -422,7 +691,15 @@ def dataset_label(meta: dict[str, Any], dataset_id: int) -> tuple[str, str, bool
     return dataset, process, is_data, is_signal
 
 
-def norm_vector(norm: dict[str, Any], chunk: dict[str, Any], dataset_id: int, is_data: bool, is_signal: bool) -> np.ndarray:
+def norm_vector(
+    norm: dict[str, Any],
+    chunk: dict[str, Any],
+    dataset_id: int,
+    dataset: str,
+    is_data: bool,
+    is_signal: bool,
+    require_normalization: bool = False,
+) -> np.ndarray:
     n = len(chunk["dataset_id"])
     if is_data:
         return np.ones(n, dtype=float)
@@ -430,29 +707,118 @@ def norm_vector(norm: dict[str, Any], chunk: dict[str, Any], dataset_id: int, is
         out = np.zeros(n, dtype=float)
         mstops = np.asarray(chunk["mStop"], dtype=int)
         mlsps = np.asarray(chunk["mLSP"], dtype=int)
+        topology = signal_topology(dataset)
         for i, (ms, ml) in enumerate(zip(mstops, mlsps)):
-            key = f"mStop{int(ms)}_mLSP{int(ml)}"
+            key = signal_mass_key(topology or "T2tt", int(ms), int(ml))
             fac = ((norm.get("signal_mass_points") or {}).get(key) or {}).get("normalization_factor")
-            out[i] = float(fac) if fac is not None and math.isfinite(float(fac)) else 0.0
+            try:
+                finite_factor = fac is not None and math.isfinite(float(fac))
+            except (TypeError, ValueError, OverflowError):
+                finite_factor = False
+            positive_factor = finite_factor and float(fac) > 0.0
+            if not finite_factor or (require_normalization and not positive_factor):
+                if require_normalization:
+                    raise RuntimeError(
+                        "missing, non-finite, or non-positive signal "
+                        f"normalization factor for {key}"
+                    )
+                continue
+            out[i] = float(fac)
         return out
     fac = ((norm.get("dataset_factors") or {}).get(str(int(dataset_id))) or {}).get("normalization_factor")
-    if fac is None:
+    try:
+        finite_factor = fac is not None and math.isfinite(float(fac))
+    except (TypeError, ValueError, OverflowError):
+        finite_factor = False
+    positive_factor = finite_factor and float(fac) > 0.0
+    if not finite_factor or (require_normalization and not positive_factor):
+        if require_normalization:
+            raise RuntimeError(
+                "missing, non-finite, or non-positive background "
+                "normalization factor for "
+                f"dataset_id={int(dataset_id)}"
+            )
         return np.zeros(n, dtype=float)
     return np.full(n, float(fac), dtype=float)
 
 
-def sample_label(process: str, is_data: bool, is_signal: bool, chunk: dict[str, Any]) -> str:
+def histogram_variations(
+    variations: dict[str, Any],
+    nominal_only: bool,
+) -> dict[str, Any]:
+    if not nominal_only:
+        return variations
+    if "nominal" not in variations:
+        raise RuntimeError("nominal-only histogramming requested but nominal weight is absent")
+    return {"nominal": variations["nominal"]}
+
+
+def sample_label(
+    process: str,
+    is_data: bool,
+    is_signal: bool,
+    chunk: dict[str, Any],
+    dataset: str = "",
+) -> str:
     if is_data:
         return "data_obs"
     if is_signal:
+        topology = signal_topology(dataset) or "T2tt"
         mstops = np.asarray(chunk["mStop"], dtype=int)
         mlsps = np.asarray(chunk["mLSP"], dtype=int)
         if len(mstops):
             pairs, counts = np.unique(np.stack([mstops, mlsps], axis=1), axis=0, return_counts=True)
             pair = pairs[int(np.argmax(counts))]
-            return f"T2tt_mStop{int(pair[0])}_mLSP{int(pair[1])}"
-        return "T2tt_unknown"
+            return f"{topology}_mStop{int(pair[0])}_mLSP{int(pair[1])}"
+        return f"{topology}_unknown"
     return process
+
+
+def record_scale_factor_audit(
+    summary: dict[str, Any],
+    label: str,
+    dataset: str,
+    status: dict[str, Any],
+    events: int,
+) -> None:
+    if events <= 0:
+        return
+    dataset_record = (
+        summary.setdefault("scale_factor_status_audit", {})
+        .setdefault(label, {})
+        .setdefault("datasets", {})
+        .setdefault(
+            dataset,
+            {
+                "events": 0,
+                "groups": 0,
+                "components": {},
+            },
+        )
+    )
+    dataset_record["events"] = int(dataset_record.get("events", 0)) + int(events)
+    dataset_record["groups"] = int(dataset_record.get("groups", 0)) + 1
+    for component, component_status in sorted(
+        (status.get("components") or {}).items()
+    ):
+        component_record = dataset_record["components"].setdefault(
+            component,
+            {
+                "applied_events": 0,
+                "failed_events": 0,
+                "reasons": {},
+            },
+        )
+        applied = bool((component_status or {}).get("applied"))
+        counter = "applied_events" if applied else "failed_events"
+        component_record[counter] = int(component_record.get(counter, 0)) + int(events)
+        reason = str(
+            (component_status or {}).get("reason")
+            or (component_status or {}).get("error")
+            or ("applied" if applied else "not_applied")
+        )
+        reasons = component_record.setdefault("reasons", {})
+        reasons[reason] = int(reasons.get(reason, 0)) + int(events)
 
 
 def empty_hist() -> dict[str, Any]:
@@ -554,11 +920,20 @@ def lowdm_common_mask(chunk: dict[str, Any], n: int) -> np.ndarray:
 def lowdm_region_mask(chunk: dict[str, Any], region: str, n: int) -> np.ndarray:
     if region not in LOWDM_REGION_MAP:
         raise ValueError(f"unknown low-dM region: {region}")
-    return bool_field(chunk, f"feature_lowdm_{region}", n)
+    return (
+        bool_field(chunk, f"feature_lowdm_{region}", n)
+        & (int_field(chunk, "nb_medium_lowdm", n, -1) >= 1)
+    )
+
+
+def lowdm_nbge1_indices(indices: np.ndarray) -> np.ndarray:
+    """Drop the two leading Nb=0 categories and remap 42 bins to 34."""
+    raw = np.asarray(indices, dtype=int)
+    return np.where(raw >= LOWDM_REMOVED_NB0_BIN_COUNT, raw - LOWDM_REMOVED_NB0_BIN_COUNT, -1)
 
 
 def lowdm_nsv_inclusive_sr_indices(chunk: dict[str, Any], n: int) -> np.ndarray:
-    """Rebuild the adopted 42-bin SR from the broad nominal intermediate.
+    """Rebuild the adopted 34-bin, Nb>=1 SR from the broad intermediate.
 
     The ISR-subjet b veto and mTb requirement are intentionally not part of the
     adopted SR selection.  Their diagnostic branches remain in the broad
@@ -569,6 +944,7 @@ def lowdm_nsv_inclusive_sr_indices(chunk: dict[str, Any], n: int) -> np.ndarray:
         & bool_field(chunk, "pass_lowdm_topology_veto", n)
         & bool_field(chunk, "pass_lowdm_isr", n)
         & bool_field(chunk, "pass_lowdm_met_sqrt_ht", n)
+        & (int_field(chunk, "nb_medium_lowdm", n, -1) >= 1)
     )
     njet = int_field(chunk, "njet", n, -1)
     nb = int_field(chunk, "nb_medium_lowdm", n, -1)
@@ -587,7 +963,7 @@ def lowdm_nsv_inclusive_sr_indices(chunk: dict[str, Any], n: int) -> np.ndarray:
             float(met[index]),
             float(mtb[index]),
         )
-    return out
+    return lowdm_nbge1_indices(out)
 
 
 def empty_index_hist(nbin: int) -> dict[str, Any]:
@@ -612,16 +988,37 @@ def finite_weight_square(weights: np.ndarray) -> np.ndarray:
     return np.nan_to_num(squared, nan=0.0, posinf=0.0, neginf=0.0)
 
 
-def add_binned_hist(target: dict[str, Any], values: np.ndarray, weights: np.ndarray, mask: np.ndarray, edges: list[float]) -> None:
+def add_binned_hist(
+    target: dict[str, Any],
+    values: np.ndarray,
+    weights: np.ndarray,
+    mask: np.ndarray,
+    edges: list[float],
+    *,
+    overflow_policy: str = "exclude",
+) -> None:
     vals = np.asarray(values, dtype=float)[mask]
     w = np.asarray(weights, dtype=float)[mask]
     good = np.isfinite(vals) & finite_hist_weight_mask(w)
     if not np.any(good):
         return
     bins = np.asarray(edges, dtype=float)
-    h, _ = np.histogram(vals[good], bins=bins, weights=w[good])
-    h2, _ = np.histogram(vals[good], bins=bins, weights=finite_weight_square(w[good]))
-    e, _ = np.histogram(vals[good], bins=bins)
+    if overflow_policy not in {"exclude", "fold"}:
+        raise ValueError(f"unsupported histogram overflow policy: {overflow_policy!r}")
+    selected_values = vals[good]
+    if overflow_policy == "fold":
+        selected_values = np.where(
+            selected_values > bins[-1],
+            np.nextafter(bins[-1], bins[0]),
+            selected_values,
+        )
+    h, _ = np.histogram(selected_values, bins=bins, weights=w[good])
+    h2, _ = np.histogram(
+        selected_values,
+        bins=bins,
+        weights=finite_weight_square(w[good]),
+    )
+    e, _ = np.histogram(selected_values, bins=bins)
     target["sumw"] = (np.asarray(target["sumw"], dtype=float) + h).tolist()
     target["sumw2"] = (np.asarray(target["sumw2"], dtype=float) + h2).tolist()
     target["entries"] = (np.asarray(target["entries"], dtype=int) + e).astype(int).tolist()
@@ -661,6 +1058,7 @@ def highdm_distribution_masks(chunk: dict[str, Any], n: int) -> dict[str, np.nda
         (nb >= 3) & (nt == 1) & (nw == 0),
         (nb >= 3) & (nt == 1) & (nw == 1),
         (nb >= 3) & (nt == 2) & (nw == 0),
+        (nb == 2) & (nt >= 2) & (nw == 0),
     ]
     for key, category_mask in zip(HIGHDM_SR_CATEGORY_KEYS, rules):
         masks[key] = sr & category_mask
@@ -698,7 +1096,13 @@ def highdm_variable_values(
 
 
 def add_jagged_binned_hist(
-    target: dict[str, Any], values: Any, weights: np.ndarray, mask: np.ndarray, edges: list[float]
+    target: dict[str, Any],
+    values: Any,
+    weights: np.ndarray,
+    mask: np.ndarray,
+    edges: list[float],
+    *,
+    overflow_policy: str = "exclude",
 ) -> None:
     event_mask = np.asarray(mask, dtype=bool)
     selected = values[event_mask]
@@ -709,7 +1113,14 @@ def add_jagged_binned_hist(
     flat_values = np.asarray(ak.to_numpy(ak.flatten(selected, axis=1)), dtype=float)
     flat_weights = np.asarray(ak.to_numpy(ak.flatten(object_weights, axis=1)), dtype=float)
     fill_mask = np.ones(len(flat_values), dtype=bool)
-    add_binned_hist(target, flat_values, flat_weights, fill_mask, edges)
+    add_binned_hist(
+        target,
+        flat_values,
+        flat_weights,
+        fill_mask,
+        edges,
+        overflow_policy=overflow_policy,
+    )
 
 
 def fill_highdm_distribution_histograms(
@@ -743,6 +1154,32 @@ def fill_highdm_distribution_histograms(
             if prepared is None:
                 continue
             value_kind, values = prepared
+            overflow_policy = str(spec.get("overflow_policy", "exclude"))
+            if value_kind == "scalar":
+                selected_values = np.asarray(values, dtype=float)[region_event_mask]
+                finite_values = selected_values[np.isfinite(selected_values)]
+                below = int(np.count_nonzero(finite_values < float(spec["bins"][0])))
+                above = int(np.count_nonzero(finite_values > float(spec["bins"][-1])))
+                excluded_above = above if overflow_policy == "exclude" else 0
+                if below or excluded_above:
+                    range_record = (
+                        summary.setdefault("histogram_range_exclusions", {})
+                        .setdefault(region, {})
+                        .setdefault(variable, {})
+                        .setdefault(label, {"below": 0, "above_or_equal": 0})
+                    )
+                    range_record["below"] = int(range_record.get("below", 0)) + below
+                    range_record["above_or_equal"] = (
+                        int(range_record.get("above_or_equal", 0)) + excluded_above
+                    )
+                if above and overflow_policy == "fold":
+                    flow_record = (
+                        summary.setdefault("histogram_folded_flow", {})
+                        .setdefault(region, {})
+                        .setdefault(variable, {})
+                        .setdefault(label, {"above": 0})
+                    )
+                    flow_record["above"] = int(flow_record.get("above", 0)) + above
             for variation_name, raw_weights in variations.items():
                 weights = finite_array(raw_weights, n, 0.0) * normv
                 target = (
@@ -752,9 +1189,23 @@ def fill_highdm_distribution_histograms(
                     .setdefault(variation_name, empty_binned_hist(spec["bins"]))
                 )
                 if value_kind == "jagged":
-                    add_jagged_binned_hist(target, values, weights, region_event_mask, spec["bins"])
+                    add_jagged_binned_hist(
+                        target,
+                        values,
+                        weights,
+                        region_event_mask,
+                        spec["bins"],
+                        overflow_policy=overflow_policy,
+                    )
                 else:
-                    add_binned_hist(target, values, weights, region_event_mask, spec["bins"])
+                    add_binned_hist(
+                        target,
+                        values,
+                        weights,
+                        region_event_mask,
+                        spec["bins"],
+                        overflow_policy=overflow_policy,
+                    )
 
 
 def add_index_hist(target: dict[str, Any], indices: np.ndarray, weights: np.ndarray) -> None:
@@ -823,6 +1274,19 @@ def selected_an17_recoil54_labels() -> list[str]:
     return labels
 
 
+def selected_an17_recoil60_labels() -> list[str]:
+    base = selected_an17_recoil54_labels()
+    extra = [
+        f"{EXTENDED_RECOIL60_CATEGORY_KEY}_recoil_{recoil_label}"
+        for recoil_label in RECOIL_BIN_LABELS
+    ]
+    return (
+        base[:EXTENDED_RECOIL60_INSERTION_BIN]
+        + extra
+        + base[EXTENDED_RECOIL60_INSERTION_BIN:]
+    )
+
+
 def selected_an17_recoil6_indices(chunk: dict[str, Any], n: int, sr_mask: np.ndarray) -> np.ndarray:
     search_indices = boosted_an17_indices(chunk, n, sr_mask)
     selected_zero_based = [idx - 1 for idx in SELECTED_AN17_RECOIL_BINS_1BASED]
@@ -860,20 +1324,206 @@ def selected_an17_recoil54_indices(chunk: dict[str, Any], n: int, sr_mask: np.nd
     return out
 
 
-def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: dict[str, Any], search_histograms: dict[str, Any], lowdm_variable_histograms: dict[str, Any], highdm_variable_histograms: dict[str, Any], summary: dict[str, Any], step_size: int, only_regions: list[str] | None = None, require_btag: bool = False, distribution_only: bool = False, only_variables: list[str] | None = None, only_signal_mass: tuple[int, int] | None = None, only_lowdm_sr_nsv_inclusive: bool = False, only_lowdm_nsv_repair: bool = False) -> None:
-    meta_path = root_path.with_suffix(".json")
-    if not meta_path.exists():
+def selected_an17_recoil60_indices(chunk: dict[str, Any], n: int, sr_mask: np.ndarray) -> np.ndarray:
+    out = selected_an17_recoil54_indices(chunk, n, sr_mask)
+    shift = out >= EXTENDED_RECOIL60_INSERTION_BIN
+    out[shift] += len(RECOIL_BIN_LABELS)
+    recoil = finite_array(chunk["met"], n, 0.0)
+    recoil_idx = np.searchsorted(np.asarray(RECOIL_PT_BINS, dtype=float), recoil, side="right") - 1
+    valid_recoil = (recoil_idx >= 0) & (recoil_idx < len(RECOIL_PT_BINS) - 1)
+    nb = np.asarray(chunk["nb_medium"], dtype=int)
+    nt = np.asarray(chunk["nboosted_top"], dtype=int)
+    nw = np.asarray(chunk["nboosted_w"], dtype=int)
+    extra = sr_mask & valid_recoil & (nb == 2) & (nt >= 2) & (nw == 0)
+    out[extra] = EXTENDED_RECOIL60_INSERTION_BIN + recoil_idx[extra]
+    return out
+
+
+def iterate_tree_with_dy_policy(
+    tree: Any,
+    branches: list[str],
+    meta: dict[str, Any],
+    policy: str,
+    summary: dict[str, Any],
+    step_size: int,
+) -> Any:
+    """Read only allowed dataset spans for a non-default DY sample policy.
+
+    Balanced process ROOTs contain long contiguous source-dataset segments.
+    A cheap first pass over ``dataset_id`` avoids loading all object branches
+    for the PTLL-100/400/600 segments when constructing the PTLL-200-only
+    candidate.  The default ``all`` path is byte-for-byte the previous
+    iterator behavior.
+    """
+    if policy == "all":
+        yield from tree.iterate(branches, step_size=step_size, library="ak")
+        return
+
+    allowed_ids = {
+        int(dataset_id)
+        for dataset_id in (meta.get("datasets") or {})
+        if dy_ptll_dataset_allowed(
+            *dataset_label(meta, int(dataset_id))[:2],
+            policy,
+        )
+    }
+    prefilter = summary.setdefault(
+        "dy_ptll_prefilter",
+        {"entries_scanned": 0, "entries_loaded": 0, "read_ranges": 0},
+    )
+    num_entries = int(tree.num_entries)
+    for chunk_start in range(0, num_entries, max(1, int(step_size))):
+        chunk_stop = min(num_entries, chunk_start + max(1, int(step_size)))
+        dataset_ids = np.asarray(
+            tree["dataset_id"].array(
+                entry_start=chunk_start,
+                entry_stop=chunk_stop,
+                library="np",
+            ),
+            dtype=np.int64,
+        )
+        plan = dataset_id_prefilter_plan(dataset_ids, allowed_ids)
+        prefilter["entries_scanned"] = int(prefilter.get("entries_scanned", 0)) + int(
+            plan["entries_scanned"]
+        )
+        for dataset_id, count in plan["excluded_counts"].items():
+            dataset, process, _is_data, _is_signal = dataset_label(meta, int(dataset_id))
+            rejected = summary.setdefault("dy_ptll_dataset_exclusions", {}).setdefault(
+                dataset,
+                {"dataset_id": int(dataset_id), "entries": 0, "policy": policy},
+            )
+            rejected["entries"] = int(rejected.get("entries", 0)) + int(count)
+            summary["events_processed"] = int(summary.get("events_processed", 0)) + int(count)
+            if process != "DY":
+                raise RuntimeError(
+                    f"DY policy unexpectedly excluded non-DY dataset {dataset} ({process})"
+                )
+        for local_start, local_stop in plan["ranges"]:
+            entry_start = chunk_start + local_start
+            entry_stop = chunk_start + local_stop
+            prefilter["entries_loaded"] = int(prefilter.get("entries_loaded", 0)) + (
+                entry_stop - entry_start
+            )
+            prefilter["read_ranges"] = int(prefilter.get("read_ranges", 0)) + 1
+            yield tree.arrays(
+                branches,
+                entry_start=entry_start,
+                entry_stop=entry_stop,
+                library="ak",
+            )
+
+
+def iterate_tree_for_gcr_study(
+    tree: Any,
+    branches: list[str],
+    meta: dict[str, Any],
+    photon_policy: str,
+    summary: dict[str, Any],
+    step_size: int,
+) -> Any:
+    light_branches = list(GCR_PREFILTER_BRANCHES)
+    if photon_policy == "tight_eb":
+        light_branches.extend(GCR_PHOTON_POLICY_BRANCHES)
+    prefilter = summary.setdefault(
+        "gcr_prefilter",
+        {
+            "entries_scanned": 0,
+            "entries_selected_highdm": 0,
+            "entries_selected_lowdm": 0,
+            "entries_loaded": 0,
+            "read_ranges": 0,
+        },
+    )
+    num_entries = int(tree.num_entries)
+    stride = max(1, int(step_size))
+    for entry_start in range(0, num_entries, stride):
+        entry_stop = min(num_entries, entry_start + stride)
+        light = tree.arrays(
+            light_branches,
+            entry_start=entry_start,
+            entry_stop=entry_stop,
+            library="ak",
+        )
+        masks = gcr_region_masks(light, photon_policy)
+        selected = masks["selected_highdm"] | masks["selected_lowdm"]
+        dataset_ids = np.asarray(light["dataset_id"], dtype=np.int64)
+        record_gcr_selection_audit(summary, meta, dataset_ids, masks)
+        prefilter["entries_scanned"] = (
+            int(prefilter.get("entries_scanned", 0)) + len(dataset_ids)
+        )
+        prefilter["entries_selected_highdm"] = (
+            int(prefilter.get("entries_selected_highdm", 0))
+            + int(np.count_nonzero(masks["selected_highdm"]))
+        )
+        prefilter["entries_selected_lowdm"] = (
+            int(prefilter.get("entries_selected_lowdm", 0))
+            + int(np.count_nonzero(masks["selected_lowdm"]))
+        )
+        if not np.any(selected):
+            continue
+        full = tree.arrays(
+            branches,
+            entry_start=entry_start,
+            entry_stop=entry_stop,
+            library="ak",
+        )
+        prefilter["entries_loaded"] = (
+            int(prefilter.get("entries_loaded", 0)) + (entry_stop - entry_start)
+        )
+        prefilter["read_ranges"] = int(prefilter.get("read_ranges", 0)) + 1
+        yield full[selected]
+
+
+def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: dict[str, Any], search_histograms: dict[str, Any], lowdm_variable_histograms: dict[str, Any], highdm_variable_histograms: dict[str, Any], summary: dict[str, Any], step_size: int, only_regions: list[str] | None = None, require_btag: bool = False, require_weight_components: list[str] | None = None, analysis_sf_components: list[str] | None = None, require_branches: bool = False, require_normalization: bool = False, nominal_only: bool = False, distribution_only: bool = False, only_variables: list[str] | None = None, only_signal_mass: tuple[int, int] | None = None, only_lowdm_sr_nsv_inclusive: bool = False, only_lowdm_nsv_repair: bool = False, dy_ptll_policy: str = "all", gcr_only: bool = False, gcr_photon_policy: str = "nominal") -> None:
+    try:
+        meta = read_root_metadata(root_path, fallback=norm)
+    except FileNotFoundError:
         summary.setdefault("missing_sidecars", []).append(str(root_path))
         return
-    meta = read_json(meta_path)
+    schema_version = str(meta.get("schema_version") or "unknown")
+    schema_counts = summary.setdefault("input_sidecar_schema_versions", {})
+    schema_counts[schema_version] = int(schema_counts.get(schema_version, 0)) + 1
     with uproot.open(root_path) as root_file:
         tree = root_file["Events"]
         if tree.num_entries == 0:
             summary.setdefault("zero_entry_roots", []).append(str(root_path))
             return
         present = set(tree.keys())
-        branches = [b for b in READ_BRANCHES if b in present]
-        for chunk in tree.iterate(branches, step_size=step_size, library="ak"):
+        effective_read_branches = list(READ_BRANCHES)
+        if gcr_only and gcr_photon_policy == "tight_eb":
+            effective_read_branches = sorted(
+                set(effective_read_branches + GCR_PHOTON_POLICY_BRANCHES)
+            )
+        missing_required_branches = [
+            branch
+            for branch in effective_read_branches
+            if branch not in present and branch not in OPTIONAL_FORWARD_SCHEMA_BRANCHES
+        ]
+        if require_branches and missing_required_branches:
+            raise RuntimeError(
+                f"{root_path}: required flat branches are missing: "
+                + ", ".join(missing_required_branches)
+            )
+        branches = [b for b in effective_read_branches if b in present]
+        if gcr_only:
+            chunk_iterator = iterate_tree_for_gcr_study(
+                tree,
+                branches,
+                meta,
+                gcr_photon_policy,
+                summary,
+                step_size,
+            )
+        else:
+            chunk_iterator = iterate_tree_with_dy_policy(
+                tree,
+                branches,
+                meta,
+                dy_ptll_policy,
+                summary,
+                step_size,
+            )
+        for chunk in chunk_iterator:
             n = len(chunk["dataset_id"])
             if n == 0:
                 continue
@@ -882,6 +1532,15 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                 mask_ds = dsids == dsid
                 sub = {name: chunk[name][mask_ds] for name in ak.fields(chunk)}
                 dataset, process, is_data, is_signal = dataset_label(meta, dsid)
+                dataset_entries = int(np.count_nonzero(mask_ds))
+                if not dy_ptll_dataset_allowed(dataset, process, dy_ptll_policy):
+                    rejected = summary.setdefault("dy_ptll_dataset_exclusions", {}).setdefault(
+                        dataset,
+                        {"dataset_id": int(dsid), "entries": 0, "policy": dy_ptll_policy},
+                    )
+                    rejected["entries"] = int(rejected.get("entries", 0)) + dataset_entries
+                    summary["events_processed"] = int(summary.get("events_processed", 0)) + dataset_entries
+                    continue
                 subgroups: list[np.ndarray]
                 if is_signal:
                     mstops = np.asarray(sub["mStop"], dtype=int)
@@ -898,6 +1557,29 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                         continue
                     sub_group = {name: arr[mask_group] for name, arr in sub.items()}
                     original_n = len(sub_group["dataset_id"])
+                    if gcr_only:
+                        policy_mask = gcr_photon_policy_mask(
+                            sub_group,
+                            gcr_photon_policy,
+                            original_n,
+                        )
+                        highdm_gcr = (
+                            as_bool(sub_group["feature_GCR"], original_n)
+                            & policy_mask
+                        )
+                        lowdm_gcr = (
+                            lowdm_region_mask(sub_group, "GCR", original_n)
+                            & policy_mask
+                        )
+                        selected_gcr = highdm_gcr | lowdm_gcr
+                        if not np.any(selected_gcr):
+                            continue
+                        sub_group["feature_GCR"] = ak.Array(highdm_gcr)
+                        sub_group["feature_lowdm_GCR"] = ak.Array(lowdm_gcr)
+                        sub_group = {
+                            name: arr[selected_gcr]
+                            for name, arr in sub_group.items()
+                        }
                     focused_lowdm_indices = None
                     if only_lowdm_sr_nsv_inclusive:
                         focused_lowdm_indices = lowdm_nsv_inclusive_sr_indices(sub_group, original_n)
@@ -933,6 +1615,16 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                             continue
                         sub_group = {name: arr[selected] for name, arr in sub_group.items()}
                     arrays, inputs = flat_arrays_for_weights(sub_group)
+                    if gcr_only:
+                        inputs["gcr_mask"] = (
+                            as_bool(sub_group["feature_GCR"], inputs["n"])
+                            | lowdm_region_mask(sub_group, "GCR", inputs["n"])
+                        )
+                    eta_source = str(inputs.get("electron_eta_source") or "unknown")
+                    eta_sources = summary.setdefault("electron_eta_sources", {})
+                    eta_sources[eta_source] = int(eta_sources.get(eta_source, 0)) + int(
+                        inputs["n"]
+                    )
                     year_vals = np.asarray(sub_group["year"], dtype=int)
                     year = str(int(year_vals[0])) if len(year_vals) else "2024"
                     correction_dataset = dataset
@@ -940,8 +1632,18 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                     if is_signal:
                         mstop_values = np.asarray(sub_group["mStop"], dtype=int)
                         btag_efficiency_anchor, correction_dataset = signal_btag_efficiency_dataset(
-                            int(mstop_values[0]) if len(mstop_values) else 1000
+                            int(mstop_values[0]) if len(mstop_values) else 1000,
+                            dataset,
                         )
+                    normv = norm_vector(
+                        norm,
+                        sub_group,
+                        dsid,
+                        dataset,
+                        is_data,
+                        is_signal,
+                        require_normalization=require_normalization,
+                    )
                     try:
                         _gen, variations, status = compute_weight_bundle(
                             arrays, repo, correction_dataset, process, year, inputs["n"],
@@ -949,6 +1651,14 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                             inputs["e_eta"], inputs["e_delta_eta_sc"], inputs["e_pt"], inputs["e_phi"], inputs["e_veto"], inputs["e_med"], inputs["n_e_veto"], inputs["n_e_med"],
                             inputs["m_eta"], inputs["m_pt"], inputs["m_phi"], inputs["m_loose"], inputs["m_med"], inputs["n_m_loose"], inputs["n_m_med"],
                             inputs["p_eta"], inputs["p_pt"], inputs["p_phi"], inputs["p_med"], inputs["gcr_mask"],
+                            photon_id_wp=(
+                                "Tight"
+                                if gcr_only and gcr_photon_policy == "tight_eb"
+                                else "Medium"
+                            ),
+                            met_pt=inputs["met_pt"],
+                            met_trigger_mask=inputs["met_trigger_mask"],
+                            analysis_sf_components=analysis_sf_components,
                         )
                         if is_signal:
                             btag_status = (status.get("components") or {}).get("btagSF") or {}
@@ -958,14 +1668,73 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                                 "source_dataset": dataset,
                             })
                     except Exception as exc:
-                        summary.setdefault("weight_failures", []).append({"root": str(root_path), "dataset_id": dsid, "dataset": dataset, "process": process, "label": sample_label(process, is_data, is_signal, sub_group), "error": f"{type(exc).__name__}: {exc}"[:500]})
+                        summary.setdefault("weight_failures", []).append({"root": str(root_path), "dataset_id": dsid, "dataset": dataset, "process": process, "label": sample_label(process, is_data, is_signal, sub_group, dataset), "error": f"{type(exc).__name__}: {exc}"[:500]})
                         variations = {"nominal": np.asarray(sub_group["gen_weight"], dtype=float)} if not is_data else {"nominal": np.ones(inputs["n"], dtype=float)}
                         status = {"applied": False, "error": "fallback_raw_gen_weight"}
                     btag_status = (status.get("components") or {}).get("btagSF") or {}
                     if require_btag and not is_data and not btag_status.get("applied"):
                         raise RuntimeError(f"Required btagSF is unavailable for {dataset}: {btag_status}")
-                    normv = norm_vector(norm, sub_group, dsid, is_data, is_signal)
-                    label = sample_label(process, is_data, is_signal, sub_group)
+                    if not is_data:
+                        for component_name in require_weight_components or []:
+                            component_status = (
+                                (status.get("components") or {}).get(component_name) or {}
+                            )
+                            if not component_status.get("applied"):
+                                raise RuntimeError(
+                                    f"Required weight component {component_name} is unavailable "
+                                    f"for {dataset}: {component_status}"
+                                )
+                        required_analysis_variations = {
+                            variation
+                            for variation in REQUIRED_ANALYSIS_SF_VARIATIONS
+                            if any(
+                                variation == f"{component}{direction}"
+                                for component in (require_weight_components or [])
+                                for direction in ("Up", "Down")
+                            )
+                        }
+                        missing_variations = sorted(
+                            required_analysis_variations
+                            - set(status.get("available_variations") or [])
+                        )
+                        if missing_variations:
+                            raise RuntimeError(
+                                "Required analysis SF weight variations are unavailable "
+                                f"for {dataset}: {missing_variations}"
+                            )
+                    variations = histogram_variations(variations, nominal_only)
+                    label = sample_label(process, is_data, is_signal, sub_group, dataset)
+                    record_scale_factor_audit(
+                        summary,
+                        label,
+                        dataset,
+                        status,
+                        inputs["n"],
+                    )
+                    for variation_name, raw_weight in variations.items():
+                        raw_array = np.asarray(raw_weight, dtype=float) * normv
+                        nonfinite = int(np.count_nonzero(~np.isfinite(raw_array)))
+                        excessive = int(
+                            np.count_nonzero(
+                                np.isfinite(raw_array)
+                                & (np.abs(raw_array) > MAX_ABS_HIST_WEIGHT)
+                            )
+                        )
+                        if nonfinite or excessive:
+                            rejection = (
+                                summary.setdefault("weight_rejections", {})
+                                .setdefault(label, {})
+                                .setdefault(
+                                    variation_name,
+                                    {"nonfinite": 0, "excessive_magnitude": 0},
+                                )
+                            )
+                            rejection["nonfinite"] = (
+                                int(rejection.get("nonfinite", 0)) + nonfinite
+                            )
+                            rejection["excessive_magnitude"] = (
+                                int(rejection.get("excessive_magnitude", 0)) + excessive
+                            )
                     summary.setdefault("scale_factor_status", {}).setdefault(label, status)
                     if only_lowdm_sr_nsv_inclusive:
                         for vname, wraw in variations.items():
@@ -974,12 +1743,15 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                                 search_histograms
                                 .setdefault("cat7_SR_lowDeltaM", {})
                                 .setdefault(label, {})
-                                .setdefault(vname, empty_index_hist(len(LOWDM_42BIN_LABELS)))
+                                .setdefault(vname, empty_index_hist(len(LOWDM_34BIN_LABELS)))
                             )
                             add_index_hist(target, focused_lowdm_indices, weights)
                         summary["events_processed"] = int(summary.get("events_processed", 0)) + original_n
                         continue
-                    active_regions = {region: REGION_VARIABLES[region] for region in only_regions} if only_regions else REGION_VARIABLES
+                    if gcr_only:
+                        active_regions = {"GCR": REGION_VARIABLES["GCR"]}
+                    else:
+                        active_regions = {region: REGION_VARIABLES[region] for region in only_regions} if only_regions else REGION_VARIABLES
                     for region, (flag, var) in active_regions.items():
                         rmask = region_mask(sub_group, region, flag, inputs["n"])
                         if is_data and not data_process_allowed(process, region):
@@ -992,7 +1764,8 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                             add_hist(target, values, weights, rmask)
                     fill_highdm_distribution_histograms(
                         sub_group, variations, normv, label, process, is_data,
-                        highdm_variable_histograms, summary, only_regions,
+                        highdm_variable_histograms, summary,
+                        ["GCR"] if gcr_only else only_regions,
                         only_variables,
                     )
                     if distribution_only:
@@ -1001,17 +1774,27 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                     if only_regions:
                         summary["events_processed"] = int(summary.get("events_processed", 0)) + original_n
                         continue
-                    sr_mask = as_bool(sub_group["feature_SR"], inputs["n"])
-                    selected_recoil54_indices = selected_an17_recoil54_indices(sub_group, inputs["n"], sr_mask)
-                    if is_data and not data_process_allowed(process, "SR"):
-                        note_data_exclusion(summary, SELECTED_RECOIL54_SCHEME, process, int(np.count_nonzero(selected_recoil54_indices >= 0)))
-                    else:
-                        for vname, wraw in variations.items():
-                            weights = finite_array(wraw, inputs["n"], 0.0) * normv
-                            target = search_histograms.setdefault(SELECTED_RECOIL54_SCHEME, {}).setdefault(label, {}).setdefault(vname, empty_index_hist(len(selected_an17_recoil54_labels())))
-                            add_index_hist(target, selected_recoil54_indices, weights)
+                    if not gcr_only:
+                        sr_mask = as_bool(sub_group["feature_SR"], inputs["n"])
+                        selected_recoil54_indices = selected_an17_recoil54_indices(sub_group, inputs["n"], sr_mask)
+                        selected_recoil60_indices = selected_an17_recoil60_indices(sub_group, inputs["n"], sr_mask)
+                        if is_data and not data_process_allowed(process, "SR"):
+                            note_data_exclusion(summary, SELECTED_RECOIL54_SCHEME, process, int(np.count_nonzero(selected_recoil54_indices >= 0)))
+                            note_data_exclusion(summary, EXTENDED_RECOIL60_SCHEME, process, int(np.count_nonzero(selected_recoil60_indices >= 0)))
+                        else:
+                            for vname, wraw in variations.items():
+                                weights = finite_array(wraw, inputs["n"], 0.0) * normv
+                                target = search_histograms.setdefault(SELECTED_RECOIL54_SCHEME, {}).setdefault(label, {}).setdefault(vname, empty_index_hist(len(selected_an17_recoil54_labels())))
+                                add_index_hist(target, selected_recoil54_indices, weights)
+                                target60 = search_histograms.setdefault(EXTENDED_RECOIL60_SCHEME, {}).setdefault(label, {}).setdefault(vname, empty_index_hist(len(selected_an17_recoil60_labels())))
+                                add_index_hist(target60, selected_recoil60_indices, weights)
 
-                    for lowdm_region, lowdm_channel in LOWDM_REGION_MAP.items():
+                    lowdm_regions = (
+                        {"GCR": LOWDM_REGION_MAP["GCR"]}
+                        if gcr_only
+                        else LOWDM_REGION_MAP
+                    )
+                    for lowdm_region, lowdm_channel in lowdm_regions.items():
                         lowdm_mask = lowdm_region_mask(sub_group, lowdm_region, inputs["n"])
                         if not np.any(lowdm_mask):
                             continue
@@ -1021,17 +1804,51 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                             inputs["n"],
                             -1,
                         )
-                        lowdm_indices = np.where(lowdm_mask, lowdm_indices, -1)
+                        lowdm_indices = lowdm_nbge1_indices(
+                            np.where(lowdm_mask, lowdm_indices, -1)
+                        )
                         if is_data and not data_process_allowed(process, lowdm_channel):
                             note_data_exclusion(summary, lowdm_channel, process, int(np.count_nonzero(lowdm_mask)))
                             continue
+                        lowdm_assigned_mask = (
+                            (lowdm_indices >= 0)
+                            & (lowdm_indices < len(LOWDM_34BIN_LABELS))
+                        )
+                        selected_lowdm = int(np.count_nonzero(lowdm_mask))
+                        assigned_lowdm = int(np.count_nonzero(lowdm_assigned_mask))
+                        lowdm_entry_record = (
+                            summary
+                            .setdefault("lowdm_search_bin_entry_accounting", {})
+                            .setdefault(lowdm_channel, {})
+                            .setdefault(
+                                label,
+                                {
+                                    "selected_entries": 0,
+                                    "assigned_entries": 0,
+                                    "unassigned_entries": 0,
+                                },
+                            )
+                        )
+                        lowdm_entry_record["selected_entries"] = (
+                            int(lowdm_entry_record.get("selected_entries", 0))
+                            + selected_lowdm
+                        )
+                        lowdm_entry_record["assigned_entries"] = (
+                            int(lowdm_entry_record.get("assigned_entries", 0))
+                            + assigned_lowdm
+                        )
+                        lowdm_entry_record["unassigned_entries"] = (
+                            int(lowdm_entry_record.get("unassigned_entries", 0))
+                            + selected_lowdm
+                            - assigned_lowdm
+                        )
                         lowdm_values = {
                             var_name: lowdm_variable_values(sub_group, LOWDM_VARIABLE_SPECS[var_name], inputs["n"])
                             for var_name in LOWDM_REGION_VARIABLES.get(lowdm_region, [])
                         }
                         for vname, wraw in variations.items():
                             weights = finite_array(wraw, inputs["n"], 0.0) * normv
-                            target = search_histograms.setdefault(lowdm_channel, {}).setdefault(label, {}).setdefault(vname, empty_index_hist(len(LOWDM_42BIN_LABELS)))
+                            target = search_histograms.setdefault(lowdm_channel, {}).setdefault(label, {}).setdefault(vname, empty_index_hist(len(LOWDM_34BIN_LABELS)))
                             add_index_hist(target, lowdm_indices, weights)
                             for var_name, values in lowdm_values.items():
                                 spec = LOWDM_VARIABLE_SPECS[var_name]
@@ -1067,12 +1884,52 @@ def main() -> int:
     parser.add_argument("--step-size", type=int, default=200000)
     parser.add_argument("--only-regions", nargs="+", choices=sorted(REGION_VARIABLES))
     parser.add_argument("--require-btag", action="store_true")
+    parser.add_argument(
+        "--expected-btag-efficiency-sha256",
+        default=EXPECTED_BTAG_EFFICIENCY_SHA256_2024,
+        help="Expected SHA256 for analysis/hists/btageff2024.merged.",
+    )
+    parser.add_argument(
+        "--require-weight-components",
+        nargs="+",
+        default=list(REQUIRED_ANALYSIS_SF_COMPONENTS),
+        help=(
+            "Fail a non-data dataset immediately unless every named component "
+            "is recorded as applied by real_subset_worker.compute_weight_bundle. "
+            "Production defaults require all adopted analysis-owned SF payloads."
+        ),
+    )
+    parser.add_argument(
+        "--analysis-sf-components",
+        nargs="+",
+        choices=list(REQUIRED_ANALYSIS_SF_COMPONENTS),
+        default=list(REQUIRED_ANALYSIS_SF_COMPONENTS),
+        help="Analysis-owned SF components included in nominal and Up/Down weights.",
+    )
+    parser.add_argument(
+        "--require-branches",
+        action="store_true",
+        help="Fail if any branch in the current flat histogram schema is absent.",
+    )
+    parser.add_argument(
+        "--require-normalization",
+        action="store_true",
+        help="Fail on a missing, non-finite, or non-positive MC normalization factor.",
+    )
+    parser.add_argument(
+        "--nominal-only",
+        action="store_true",
+        help=(
+            "Compute and validate the full weight bundle, but fill histogram "
+            "payloads with the nominal variation only."
+        ),
+    )
     parser.add_argument("--distribution-only", action="store_true")
     parser.add_argument("--only-signal-mass", nargs=2, type=int, metavar=("MSTOP", "MLSP"))
     parser.add_argument(
         "--only-lowdm-sr-nsv-inclusive",
         action="store_true",
-        help="Rebuild only the adopted Nsv-independent 42-bin Low-dM SR from broad nominal intermediates.",
+        help="Rebuild only the adopted Nsv-independent, Nb>=1, 34-bin Low-dM SR from broad nominal intermediates.",
     )
     parser.add_argument(
         "--only-lowdm-nsv-repair",
@@ -1080,18 +1937,94 @@ def main() -> int:
         help="With --only-lowdm-sr-nsv-inclusive, retain only events absent or non-projectable from the old Nsv-split bins.",
     )
     parser.add_argument("--only-variables", nargs="+", choices=sorted(HIGHDM_DISTRIBUTION_VARIABLE_SPECS))
+    parser.add_argument(
+        "--gcr-only",
+        action="store_true",
+        help="Build only high- and low-dM GCR histograms using a GCR-specific sparse prefilter.",
+    )
+    parser.add_argument(
+        "--gcr-photon-policy",
+        choices=("nominal", "tight_eb"),
+        default="nominal",
+        help="Photon selection applied as a strict subset of the trusted nominal GCR.",
+    )
+    parser.add_argument(
+        "--dy-ptll-policy",
+        choices=("all", "ptll100_only", "ptll200_only", "ptll100_200"),
+        default="all",
+        help=(
+            "DY sample-family policy. 'ptll100_200' keeps only the PTLL-100 "
+            "and PTLL-200 production bins and excludes PTLL-400/600."
+        ),
+    )
     args = parser.parse_args()
     if args.only_lowdm_nsv_repair and not args.only_lowdm_sr_nsv_inclusive:
         parser.error("--only-lowdm-nsv-repair requires --only-lowdm-sr-nsv-inclusive")
+    if args.gcr_only and args.only_regions:
+        parser.error("--gcr-only cannot be combined with --only-regions")
+    if args.gcr_photon_policy != "nominal" and not args.gcr_only:
+        parser.error("--gcr-photon-policy requires --gcr-only")
+    unavailable_required = (
+        set(args.require_weight_components)
+        & set(REQUIRED_ANALYSIS_SF_COMPONENTS)
+    ) - set(args.analysis_sf_components)
+    if unavailable_required:
+        parser.error(
+            "--require-weight-components contains disabled analysis SFs: "
+            + ", ".join(sorted(unavailable_required))
+        )
     repo = Path(args.repo).resolve()
     norm = read_json(Path(args.normalization))
     histograms: dict[str, Any] = {}
     search_histograms: dict[str, Any] = {}
     lowdm_variable_histograms: dict[str, Any] = {}
     highdm_variable_histograms: dict[str, Any] = {}
-    summary: dict[str, Any] = {"events_processed": 0, "input_roots": [], "region_filter": args.only_regions, "variable_filter": args.only_variables}
+    btag_payload_required = bool(
+        args.require_btag or "btagSF" in args.require_weight_components
+    )
+    build_options = {
+        "step_size": int(args.step_size),
+        "only_regions": list(args.only_regions) if args.only_regions else None,
+        "only_variables": list(args.only_variables) if args.only_variables else None,
+        "require_btag": bool(args.require_btag),
+        "require_weight_components": list(args.require_weight_components),
+        "analysis_sf_components": list(args.analysis_sf_components),
+        "require_branches": bool(args.require_branches),
+        "require_normalization": bool(args.require_normalization),
+        "nominal_only": bool(args.nominal_only),
+        "distribution_only": bool(args.distribution_only),
+        "only_signal_mass": list(args.only_signal_mass) if args.only_signal_mass else None,
+        "only_lowdm_sr_nsv_inclusive": bool(args.only_lowdm_sr_nsv_inclusive),
+        "only_lowdm_nsv_repair": bool(args.only_lowdm_nsv_repair),
+        "dy_ptll_policy": str(args.dy_ptll_policy),
+        "gcr_only": bool(args.gcr_only),
+        "gcr_photon_policy": str(args.gcr_photon_policy),
+        "local_analysis_data": os.environ.get(
+            "AUTONOMOUS_ALLHAD_LOCAL_ANALYSIS_DATA",
+            "0",
+        ),
+        "normalization_sha256": file_sha256(Path(args.normalization)),
+        "code_sha256": execution_code_sha256(repo),
+        "btag_efficiency": btag_efficiency_contract(
+            repo,
+            str(args.expected_btag_efficiency_sha256),
+            btag_payload_required,
+        ),
+    }
+    summary: dict[str, Any] = {
+        "events_processed": 0,
+        "input_roots": [],
+        "region_filter": args.only_regions,
+        "variable_filter": args.only_variables,
+        "dy_ptll_policy": args.dy_ptll_policy,
+        "gcr_photon_policy": args.gcr_photon_policy,
+        "build_options": build_options,
+    }
     for root_path in expand_roots(args.inputs):
-        if root_path.name.startswith("validation") or not root_path.exists():
+        if root_path.name.startswith("validation"):
+            continue
+        if not root_path.exists():
+            summary.setdefault("missing_input_roots", []).append(str(root_path))
             continue
         summary["input_roots"].append(str(root_path))
         process_root(
@@ -1103,20 +2036,63 @@ def main() -> int:
             lowdm_variable_histograms,
             highdm_variable_histograms,
             summary,
-            args.step_size,
-            args.only_regions,
-            args.require_btag,
-            args.distribution_only,
-            args.only_variables,
-            tuple(args.only_signal_mass) if args.only_signal_mass else None,
-            args.only_lowdm_sr_nsv_inclusive,
-            args.only_lowdm_nsv_repair,
+            step_size=args.step_size,
+            only_regions=args.only_regions,
+            require_btag=args.require_btag,
+            require_weight_components=args.require_weight_components,
+            analysis_sf_components=args.analysis_sf_components,
+            require_branches=args.require_branches,
+            require_normalization=args.require_normalization,
+            nominal_only=args.nominal_only,
+            distribution_only=args.distribution_only,
+            only_variables=args.only_variables,
+            only_signal_mass=(
+                tuple(args.only_signal_mass) if args.only_signal_mass else None
+            ),
+            only_lowdm_sr_nsv_inclusive=args.only_lowdm_sr_nsv_inclusive,
+            only_lowdm_nsv_repair=args.only_lowdm_nsv_repair,
+            dy_ptll_policy=args.dy_ptll_policy,
+            gcr_only=args.gcr_only,
+            gcr_photon_policy=args.gcr_photon_policy,
         )
+    if summary.get("weight_failures"):
+        payload_status = "complete_with_weight_fallbacks"
+    elif any(
+        summary.get(key)
+        for key in (
+            "missing_input_roots",
+            "missing_sidecars",
+            "zero_entry_roots",
+            "weight_rejections",
+        )
+    ):
+        payload_status = "complete_with_warnings"
+    else:
+        payload_status = "complete"
     payload = {
         "schema_version": "flat_boosted_recoil_hists_v1",
-        "status": "complete" if not summary.get("weight_failures") else "complete_with_weight_fallbacks",
+        "status": payload_status,
         "recoil_pt_bins": RECOIL_PT_BINS,
-        "regions": {region: REGION_VARIABLES[region] for region in args.only_regions} if args.only_regions else REGION_VARIABLES,
+        "regions": (
+            {"GCR": REGION_VARIABLES["GCR"]}
+            if args.gcr_only
+            else {region: REGION_VARIABLES[region] for region in args.only_regions}
+            if args.only_regions
+            else REGION_VARIABLES
+        ),
+        "gcr_photon_policy": {
+            "name": args.gcr_photon_policy,
+            "baseline": "trusted feature_GCR/feature_lowdm_GCR from real_subset_worker.py",
+            "candidate": (
+                "strict nominal-GCR subset with exactly one photon satisfying "
+                "corrected pT>220 GeV, |eta|<1.4442, cutBased>=3, and electronVeto"
+                if args.gcr_photon_policy == "tight_eb"
+                else "nominal medium-photon selection and fiducial EB-or-EE acceptance"
+            ),
+            "photon_id_scale_factor_working_point": (
+                "Tight" if args.gcr_photon_policy == "tight_eb" else "Medium"
+            ),
+        },
         "ntop_split_policy": {
             "status": "included",
             "axis": "nboosted_top",
@@ -1130,31 +2106,40 @@ def main() -> int:
                 "selected_an17_bins_1based": SELECTED_AN17_RECOIL_BINS_1BASED,
                 "recoil_pt_bins": RECOIL_PT_BINS,
             },
+            EXTENDED_RECOIL60_SCHEME: {
+                "bin_labels": selected_an17_recoil60_labels(),
+                "selection": "the adopted feature_SR categorization with Nb=2,Nt>=2,NW=0 inserted as bins 37--42, all classes split into six recoil/MET bins",
+                "base_scheme": SELECTED_RECOIL54_SCHEME,
+                "extra_category": EXTENDED_RECOIL60_CATEGORY_KEY,
+                "selected_an17_bins_1based": SELECTED_AN17_RECOIL_BINS_1BASED,
+                "recoil_pt_bins": RECOIL_PT_BINS,
+            },
             **{
                 channel: {
-                    "bin_labels": LOWDM_42BIN_LABELS,
+                    "bin_labels": LOWDM_34BIN_LABELS,
                     "selection": (
                         "feature_lowdm_preselection && pass_lowdm_topology_veto && "
-                        "pass_lowdm_isr && pass_lowdm_met_sqrt_ht; ISR-subjet b veto "
+                        "pass_lowdm_isr && pass_lowdm_met_sqrt_ht && Nb>=1; ISR-subjet b veto "
                         "and mTb requirement removed"
                         if args.only_lowdm_sr_nsv_inclusive and region == "SR"
-                        else f"feature_lowdm_{region}"
+                        else f"feature_lowdm_{region} && Nb>=1"
                     ),
                     "delta_m": "low",
                     "region": region,
                     "nsv_policy": "inclusive; Nsv is not used in category assignment",
                     "isr_subjet_bveto_policy": "not applied",
                     "mtb_policy": "not applied",
-                    "category_sizes": LOWDM_NSV_INCLUSIVE_CATEGORY_SIZES,
+                    "category_sizes": LOWDM_NBGE1_CATEGORY_SIZES,
+                    "removed_categories": LOWDM_REMOVED_NB0_CATEGORY_SIZES,
                 }
                 for region, channel in LOWDM_REGION_MAP.items()
             },
         },
         "lowdm_region_policy": {
             "status": "adopted_from_user_2026-07-24",
-            "search_bins": "42 low-dM bins per region after removing Nsv, the ISR-subjet b veto, and the mTb requirement from the adopted selection",
+            "search_bins": "34 low-dM bins per region with explicit Nb>=1 after removing the two leading Nb=0 categories; Nsv, the ISR-subjet b veto, and the mTb requirement are not applied",
             "regions": LOWDM_REGION_MAP,
-            "note": "Low-dM is Nsv-inclusive and does not require the ISR-subjet b veto or mTb<175. GCR and DY use photon/dilepton recoil directions and object-cleaned AK4/AK8 collections; DY also requires OS, on-Z, and pT(ll)>200.",
+            "note": "Every Low-dM CR and SR explicitly requires Nb>=1. Low-dM is Nsv-inclusive and does not require the ISR-subjet b veto or mTb<175. GCR and DY use photon/dilepton recoil directions and object-cleaned AK4/AK8 collections; DY also requires OS, on-Z, and pT(ll)>200.",
         },
         "highdm_distribution_variable_specs": HIGHDM_DISTRIBUTION_VARIABLE_SPECS,
         "highdm_distribution_regions": {

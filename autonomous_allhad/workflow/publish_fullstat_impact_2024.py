@@ -37,9 +37,16 @@ def main() -> int:
     lowdm_bins = int(analysis["lowdm_signal_bins"])
     transfer_factor_model = analysis.get("model") == "nb_recoil_transfer_factor"
     an_zinv_model = analysis.get("model") == "an_zinv"
+    free_background_model = analysis.get("model") == "free_background"
     lowdm_sgamma_sharing = (
         ((analysis.get("model_details") or {}).get("lowdm_sgamma_sharing"))
         or {}
+    )
+    model_payload = ((analysis.get("model_details") or {}).get("model")) or {}
+    rz_covariance_status = (
+        model_payload.get("rz_covariance")
+        if isinstance(model_payload, dict)
+        else None
     )
     stem = (
         f"impacts_2024_highdm{highdm_bins}_lowdm{lowdm_bins}_"
@@ -54,7 +61,7 @@ def main() -> int:
     required = {
         "status": validation.get("status") == "complete",
         "year": analysis.get("year") == 2024,
-        "highdm_bins": highdm_bins == 60,
+        "highdm_bins": highdm_bins > 0,
         "lowdm_bins": lowdm_bins > 0,
         "benchmark": analysis.get("benchmark")
         == {"mStop_GeV": 1200, "mLSP_GeV": 500},
@@ -105,6 +112,12 @@ def main() -> int:
         if isinstance(object_shapes, list) and object_shapes
         else " Object-shape templates are absent from this card."
     )
+    rz_scope = (
+        " The RZ covariance is explicitly the temporary diagonal statistical-only "
+        "model pending the documented final cross-category covariance."
+        if rz_covariance_status == "temporary_statistical_only"
+        else ""
+    )
     transfer_scope = (
         " The background model uses the published bin-by-bin "
         "N_b×recoil transfer-factor constraints."
@@ -121,8 +134,19 @@ def main() -> int:
             )
             + "lost-lepton and QCD retain direct CR/SR rate constraints."
             if an_zinv_model
-            else ""
+            else (
+                " The seven canonical background process normalizations are "
+                "global unconstrained rate parameters; external background-"
+                "estimation constraints are intentionally absent."
+                if free_background_model
+                else ""
+            )
         )
+    )
+    region_scope = (
+        "and the corresponding control-region observations"
+        if free_background_model
+        else "with their control-region constraints"
     )
     notice = (
         f"{NOTICE_START}"
@@ -132,7 +156,7 @@ def main() -> int:
         "<strong>2024-only High-dM + Low-dM nuisance impacts "
         "for (mStop, mLSP)=(1200, 500) GeV</strong>"
         f"<p>The expected Asimov fit uses the High-dM {highdm_bins}-bin and Low-dM "
-        f"{lowdm_bins}-bin signal regions with their control-region constraints "
+        f"{lowdm_bins}-bin signal regions {region_scope} "
         f"({channel_count} channels, {total_bins} analysis bins). The Poisson likelihood includes "
         f"data-counting statistics, and {stat_count} individual autoMCStats nuisance "
         f"parameters are scanned alongside {nonstat_count} luminosity/rate/weight "
@@ -140,7 +164,7 @@ def main() -> int:
         f"The fitted signal strength is r={poi_fit[1]:.2f}"
         f"<sup>+{poi_fit[2] - poi_fit[1]:.2f}</sup>"
         f"<sub>−{poi_fit[1] - poi_fit[0]:.2f}</sub>. "
-        f"{transfer_scope}{object_scope} "
+        f"{transfer_scope}{object_scope}{rz_scope} "
         f"<a href='plots/impacts/{stem}.pdf'>Multipage impact plot</a> · "
         f"<a href='data/{stem}.json'>Combine impact JSON</a> · "
         f"<a href='data/{stem}_validation.json'>validation report</a>.</p>"
@@ -242,7 +266,11 @@ def main() -> int:
     page_summary["records"] = records
     page_summary["generated_at"] = now
     page_summary["impact_update"] = {
-        "status": "complete_current_2024_model",
+        "status": (
+            "complete_fit_temporary_rz_covariance"
+            if rz_covariance_status == "temporary_statistical_only"
+            else "complete_current_2024_model"
+        ),
         "updated_at": now,
         "year": 2024,
         "data_mode": "asimov",
@@ -261,6 +289,11 @@ def main() -> int:
             "data_counting": "Poisson likelihood",
             "mc_statistics": "individual autoMCStats nuisance fits",
             "autoMCStats_threshold": analysis["autoMCStats_threshold"],
+            "background_normalization": (
+                "seven global unconstrained process rate parameters"
+                if free_background_model
+                else "control-region-constrained background model"
+            ),
         },
         "current_model_scope": (
             f"2024 luminosity plus {max(0, nonstat_count - 1)} "
@@ -295,13 +328,20 @@ def main() -> int:
         }
     statistical = page_summary.setdefault("statistical_results", {})
     limit_stem = (
-        f"expected_limit_highdm{highdm_bins}_lowdm{lowdm_bins}_"
-        + (
-            "an_zinv_"
-            if an_zinv_model
-            else ("nb_recoil_tf_" if transfer_factor_model else "")
+        (
+            f"expected_limit_t2tt_highdm{highdm_bins}_lowdm{lowdm_bins}_"
+            "free_background_x1800"
         )
-        + "x1800"
+        if free_background_model
+        else (
+            f"expected_limit_highdm{highdm_bins}_lowdm{lowdm_bins}_"
+            + (
+                "an_zinv_"
+                if an_zinv_model
+                else ("nb_recoil_tf_" if transfer_factor_model else "")
+            )
+            + "x1800"
+        )
     )
     statistical.update(
         {
@@ -319,7 +359,11 @@ def main() -> int:
                 "autoMCStats": stat_count,
                 "other": nonstat_count,
             },
-            "status": "complete_current_2024_model_full_statistics",
+            "status": (
+                "complete_fit_temporary_rz_covariance_full_statistics"
+                if rz_covariance_status == "temporary_statistical_only"
+                else "complete_current_2024_model_full_statistics"
+            ),
             "updated_at": now,
         }
     )

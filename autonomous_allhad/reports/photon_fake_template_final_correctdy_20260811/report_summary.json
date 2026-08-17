@@ -1,0 +1,131 @@
+{
+  "baseline_comparison": {
+    "nominal_absolute_integral_distance": 0.41557244260456194,
+    "nominal_data_over_mc": 1.415572442604562,
+    "nominal_metrics": {
+      "abs_log_integral_ratio": 0.3475340023630971,
+      "integral_data_over_prediction": 1.415572442604562,
+      "log_ratio_rms": 0.3285734433544793,
+      "max_abs_log_ratio": 0.4558645916354564,
+      "poisson_deviance": 1677.2748024369725
+    },
+    "replacement_absolute_integral_distance": 0.3937237854772784,
+    "replacement_data_over_prediction": 1.3937237854772784,
+    "replacement_metrics": {
+      "abs_log_integral_ratio": 0.3319791474232394,
+      "integral_data_over_prediction": 1.3937237854772784,
+      "log_ratio_rms": 0.33269249788114885,
+      "max_abs_log_ratio": 0.426530369536767,
+      "poisson_deviance": 1478.5118162539327
+    },
+    "replacement_shape_metrics_improve": false
+  },
+  "closure_pass": false,
+  "data_validation_closure": {
+    "chi2": 14.105274424843142,
+    "chi2_over_ndf": 1.7631593031053927,
+    "integral_pull": 1.2987056133079586,
+    "maximum_absolute_log_ratio": 1.1615718339172345,
+    "ndf": 8,
+    "prediction": 210.13267001749776,
+    "prediction_over_target": 2.0670201614760284,
+    "target": 101.65970992147709
+  },
+  "decision": "do not adopt: closure or Data/MC gate failed",
+  "figures": [
+    "plots/fake_factor_vs_photon_pt.png",
+    "plots/mc_template_fit_bias.png",
+    "plots/fit_EB_pt220to300_pass.png",
+    "plots/fit_EB_pt220to300_loose.png",
+    "plots/fit_EB_pt300to400_pass.png",
+    "plots/fit_EB_pt300to400_loose.png",
+    "plots/fit_EB_pt400to600_pass.png",
+    "plots/fit_EB_pt400to600_loose.png",
+    "plots/fit_EB_pt400toinf_pass.png",
+    "plots/fit_EB_pt400toinf_loose.png",
+    "plots/fit_EE_inclusive_pass.png",
+    "plots/fit_EE_inclusive_loose.png",
+    "plots/fit_EE_pt220to300_pass.png",
+    "plots/fit_EE_pt220to300_loose.png",
+    "plots/fit_EE_pt220to400_pass.png",
+    "plots/fit_EE_pt220to400_loose.png",
+    "plots/simulation_closure_ut.png",
+    "plots/data_validation_closure_ut.png",
+    "plots/gcr_fake_prediction_ut.png",
+    "plots/gcr_nominal_vs_fake_replacement_ut.png"
+  ],
+  "gcr_integral_improves": false,
+  "nominal_gcr_validation": {
+    "chi2": 0.006794504439352903,
+    "chi2_over_ndf": 0.0008493130549191129,
+    "integral_pull": -0.015447421693334922,
+    "maximum_absolute_log_ratio": 1.6276207941680914,
+    "ndf": 8,
+    "prediction": 514.0746393968573,
+    "prediction_over_target": 0.6486359639720566,
+    "target": 792.5472344284069
+  },
+  "normalization_audit": {
+    "datasets": 7,
+    "files_attempted": 937,
+    "files_processed": 937,
+    "status": "complete",
+    "wall_time_s": 211.63277959823608
+  },
+  "predeclared_decision_thresholds": {
+    "gcr_require_integral_distance_improvement": true,
+    "gcr_required_shape_metric_improvements": [
+      "log_ratio_rms",
+      "max_abs_log_ratio",
+      "poisson_deviance"
+    ],
+    "maximum_absolute_data_validation_integral_pull": 2.0,
+    "maximum_absolute_log_integral_ratio": 0.35,
+    "maximum_data_validation_chi2_over_ndf": 2.0,
+    "maximum_simulation_chi2_over_ndf": 2.5
+  },
+  "production_audits": [
+    {
+      "campaign": "photon_fake_template_run2method_20260810",
+      "events_read": 12103540422,
+      "expected": 5456,
+      "files_attempted": 42217,
+      "files_processed": 42217,
+      "selected_events": 440093,
+      "status": "complete",
+      "valid": 5456
+    },
+    {
+      "campaign": "photon_fake_template_run2method_20260810_dy2x",
+      "events_read": 1560462096,
+      "expected": 669,
+      "files_attempted": 9367,
+      "files_processed": 9367,
+      "selected_events": 10,
+      "status": "complete",
+      "valid": 669
+    },
+    {
+      "campaign": "photon_fake_template_run2method_20260810_rare",
+      "events_read": 75003040,
+      "expected": 60,
+      "files_attempted": 937,
+      "files_processed": 937,
+      "selected_events": 3792,
+      "status": "complete",
+      "valid": 60
+    }
+  ],
+  "production_complete": true,
+  "simulation_closure": {
+    "chi2": 8.987306349355025,
+    "chi2_over_ndf": 1.1234132936693781,
+    "integral_pull": 0.2174580305624601,
+    "maximum_absolute_log_ratio": 5.840721409097743,
+    "ndf": 8,
+    "prediction": 1033.3796058095106,
+    "prediction_over_target": 55.856536492240735,
+    "target": 18.500602985884413
+  },
+  "status": "complete"
+}

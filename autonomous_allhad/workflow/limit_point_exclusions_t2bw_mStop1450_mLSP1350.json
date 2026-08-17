@@ -1,0 +1,14 @@
+{
+  "campaign": "highdm_tail2_merged_fullgrid_fast_20260730",
+  "exclusions": [
+    {
+      "model": "T2bW",
+      "mStop_GeV": 1450,
+      "mLSP_GeV": 1350,
+      "status": "excluded_by_user_policy",
+      "reason": "Combine AsymptoticLimits failed with rc=185 after an EOS input/output error; user directed failed T2bW/T2tb points to be dropped.",
+      "excluded_at": "2026-08-01T08:49:00+02:00",
+      "artifacts_policy": "Failed datacard, output, and log preserved in the point-specific excluded_points directory."
+    }
+  ]
+}

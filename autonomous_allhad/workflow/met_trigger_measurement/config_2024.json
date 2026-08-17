@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "measurement": "met_trigger_sf_2024",
+  "status": "measurement_definition",
+  "reference": "AN2019_016_v9.pdf section 5.1.1",
+  "year": "2024",
+  "observable": "PuppiMET_pt",
+  "campaign_inputs": {
+    "data_dataset_prefixes": ["EGamma0-Run2024", "EGamma1-Run2024"],
+    "data_process": "EGamma",
+    "mc_datasets": [
+      {
+        "dataset_contains": "TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8-RunIII2024Summer24NanoAODv15",
+        "process": "TT",
+        "xsec_pb": 405.75,
+        "xsec_source": "analysis/metadata/json_maker_lxplus.py"
+      }
+    ],
+    "files_per_condor_shard": 20
+  },
+  "bin_edges_gev": [100, 120, 140, 160, 180, 200, 220, 240, 250, 260, 270, 280, 290, 300, 350, 400, 500, 650, 800],
+  "probe_paths": [
+    "HLT_PFMET120_PFMHT120_IDTight",
+    "HLT_PFMET130_PFMHT130_IDTight",
+    "HLT_PFMET140_PFMHT140_IDTight",
+    "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight",
+    "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight",
+    "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight"
+  ],
+  "categories": {
+    "genuine": {
+      "data_streams": ["EGamma0", "EGamma1"],
+      "reference_paths": [
+        "HLT_Ele30_WPTight_Gsf",
+        "HLT_Ele32_WPTight_Gsf",
+        "HLT_Ele35_WPTight_Gsf",
+        "HLT_Ele38_WPTight_Gsf",
+        "HLT_Ele40_WPTight_Gsf"
+      ],
+      "selection": "baseline/open-preselection without MET threshold or lepton veto; at least one medium electron and zero loose muons"
+    }
+  },
+  "application": {
+    "genuine": "all MC in MET-triggered preselection, SR, LLCR, QCDCR, and validation regions"
+  },
+  "adoption_gates": [
+    "PFHT reference path presence and per-run prescale audit",
+    "per-era closure",
+    "genuine and QCD data/MC numerator-denominator counts",
+    "finite positive scale factors in every analysis bin",
+    "alternate binning stability"
+  ]
+}

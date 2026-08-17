@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -24,10 +25,10 @@ from build_nb_recoil_tf_combine_inputs_2024 import (
     build_root,
     mass_points,
     read_json,
+    sum_one_bin_backgrounds,
 )
 from build_boosted_an17_combine_inputs import (
     LUMI_LNN,
-    LUMI_NAME,
     signal_process_name,
     stable_path,
     write_json,
@@ -40,21 +41,40 @@ DECAY_LABELS = {
         r"\tilde{t}_1\rightarrow t\tilde{\chi}_1^0$"
     ),
     "T2tb": (
-        r"$pp\rightarrow \tilde{t}_1\bar{\tilde{t}}_1,$"
-        "\n"
-        r"$\tilde{t}_1\rightarrow b\tilde{\chi}_1^+"
-        r"\rightarrow bW^{+*}\tilde{\chi}_1^0,\ "
-        r"\bar{\tilde{t}}_1\rightarrow\bar{t}\tilde{\chi}_1^0"
-        r"\ (+\mathrm{c.c.})$"
+        r"$pp\rightarrow \tilde{t}_1\bar{\tilde{t}}_1,\ "
+        r"\tilde{t}_1\rightarrow b\tilde{\chi}_1^+"
+        r"\rightarrow bW^{+*}\tilde{\chi}_1^0\ (50\%),\ "
+        r"\bar{\tilde{t}}_1\rightarrow\bar{t}\tilde{\chi}_1^0\ (50\%)"
+        r"$"
     ),
     "T2bW": (
-        r"$pp\rightarrow \tilde{t}_1\bar{\tilde{t}}_1,$"
-        "\n"
-        r"$\tilde{t}_1\rightarrow b\tilde{\chi}_1^+"
+        r"$pp\rightarrow \tilde{t}_1\bar{\tilde{t}}_1,\ "
+        r"\tilde{t}_1\rightarrow b\tilde{\chi}_1^+"
         r"\rightarrow bW^+\tilde{\chi}_1^0"
-        r"\ (+\mathrm{c.c.})$"
+        r"$"
     ),
 }
+
+NPS_LUMI_NAME = "lumi_13p6TeV_2024"
+NPS_NUISANCE_NAMES = {
+    "btagSF_bc_correlated": "CMS_btag_fixedWP_bc_correlated",
+    "btagSF_bc_uncorrelated": "CMS_btag_fixedWP_bc_uncorrelated_2024",
+    "btagSF_light_correlated": "CMS_btag_fixedWP_light_correlated",
+    "btagSF_light_uncorrelated": (
+        "CMS_btag_fixedWP_light_uncorrelated_2024"
+    ),
+    "electron_hlt": "CMS_SUS26090_eff_e_trigger_2024",
+    "electron_id": "CMS_eff_e_id_13p6TeV",
+    "met_trigger": "CMS_SUS26090_eff_met_trigger_2024",
+    "muon_hlt": "CMS_SUS26090_eff_m_trigger_2024",
+    "muon_id": "CMS_SUS26090_eff_m_id_2024",
+    "photon_id": "CMS_eff_g_id_13p6TeV",
+    "photon_trigger": "CMS_SUS26090_eff_g_trigger_2024",
+    "pileup": "CMS_pileup",
+}
+LOW_SHARED_CR_LABEL = re.compile(
+    r"(Nb1|Nb2plus)_(PISR300to500|PISR500plus)_.+_recoil_(\d+)"
+)
 
 
 def canonical_background(process: str) -> str:
@@ -64,6 +84,92 @@ def canonical_background(process: str) -> str:
     return process
 
 
+def nps_nuisance_name(name: str) -> str:
+    return NPS_NUISANCE_NAMES.get(name, name)
+
+
+def share_lowdm_control_channels(
+    channels: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Share Low-dM controls by Nb x ISR-pT x recoil bin.
+
+    The adopted Low-dM SR categories retain their 34-bin definition.  Only
+    the five control regions are summed over the pTb/Njet category axes that
+    share identical recoil boundaries.  No control observation is copied.
+    """
+
+    grouped: dict[tuple[str, str, str, int], list[dict[str, Any]]] = {}
+    retained: list[dict[str, Any]] = []
+    insertion_index: int | None = None
+    for channel in channels:
+        if channel["kind"] != "lowdm_control_searchbin":
+            retained.append(channel)
+            continue
+        if insertion_index is None:
+            insertion_index = len(retained)
+        match = LOW_SHARED_CR_LABEL.fullmatch(channel["bin_label"])
+        if not match:
+            raise ValueError(
+                "cannot share Low-dM control channel with label "
+                f"{channel['bin_label']!r}"
+            )
+        nb_group, isr_group, one_based_recoil = match.groups()
+        key = (
+            channel["region"],
+            nb_group,
+            isr_group,
+            int(one_based_recoil) - 1,
+        )
+        grouped.setdefault(key, []).append(channel)
+
+    shared: list[dict[str, Any]] = []
+    for (region, nb_group, isr_group, recoil_bin), sources in sorted(
+        grouped.items()
+    ):
+        processes = sorted(
+            {
+                process
+                for channel in sources
+                for process in channel["backgrounds"]
+            }
+        )
+        backgrounds = {}
+        for process in processes:
+            record = sum_one_bin_backgrounds(
+                [channel["backgrounds"].get(process) for channel in sources]
+            )
+            if record is not None:
+                backgrounds[process] = record
+        shared.append(
+            {
+                "name": (
+                    f"l{region}_{nb_group}_{isr_group}_u{recoil_bin}"
+                ),
+                "kind": "lowdm_control_nb_isr_recoil_shared",
+                "regime": "lowdm",
+                "region": region,
+                "nb_group": nb_group,
+                "source_bin": recoil_bin,
+                "bin_label": (
+                    f"{nb_group}_{isr_group}_recoil_{recoil_bin + 1}"
+                ),
+                "backgrounds": backgrounds,
+                "rate_params": {},
+                "signal_source": None,
+            }
+        )
+
+    expected = 5 * (4 + 4 + 3 + 3)
+    if len(shared) != expected:
+        raise ValueError(
+            f"unexpected shared Low-dM control count: {len(shared)} != "
+            f"{expected}"
+        )
+    if insertion_index is None:
+        raise ValueError("no Low-dM control channels found")
+    return retained[:insertion_index] + shared + retained[insertion_index:]
+
+
 def make_backgrounds_free(
     channels: list[dict[str, Any]],
 ) -> list[str]:
@@ -71,7 +177,10 @@ def make_backgrounds_free(
     for channel in channels:
         rate_params = {}
         for process in channel["backgrounds"]:
-            parameter = "free_" + canonical_background(process)
+            parameter = (
+                "CMS_SUS26090_bkgNorm_"
+                + canonical_background(process)
+            )
             rate_params[process] = parameter
             parameters.add(parameter)
         channel["rate_params"] = rate_params
@@ -85,6 +194,11 @@ def datacard_text(
     summary: dict[str, Any],
     auto_mc_stats: int,
 ) -> str:
+    template_reference = (
+        stable_path(template_root)
+        if template_root.is_absolute()
+        else str(template_root)
+    )
     signal = signal_process_name(mass_key)
     channel_names = [channel["name"] for channel in channels]
     background_names = sorted(
@@ -127,7 +241,7 @@ def datacard_text(
         "kmax * number of nuisance parameters",
         "------------",
         (
-            f"shapes * * {stable_path(template_root)} "
+            f"shapes * * {template_reference} "
             "$CHANNEL/$PROCESS $CHANNEL/$PROCESS_$SYSTEMATIC"
         ),
         "------------",
@@ -165,12 +279,12 @@ def datacard_text(
                     f"{float(factors['down']):.8g}/"
                     f"{float(factors['up']):.8g}"
                 )
-        lines.append(nuisance + " lnN " + " ".join(mask))
+        lines.append(nps_nuisance_name(nuisance) + " lnN " + " ".join(mask))
 
     # Background luminosity normalization is redundant with the free
     # rateParams.  Retain the luminosity nuisance on the signal only.
     lines.append(
-        LUMI_NAME
+        NPS_LUMI_NAME
         + " lnN "
         + " ".join(
             f"{LUMI_LNN:.3f}" if process == signal else "-"
@@ -241,7 +355,7 @@ def main() -> int:
         raise SystemExit(
             f"exact inputs are not complete: {exact.get('status')}"
         )
-    channels = build_channels(exact)
+    channels = share_lowdm_control_channels(build_channels(exact))
     free_parameters = make_backgrounds_free(channels)
     masses = mass_points(
         hists,
@@ -337,7 +451,9 @@ def main() -> int:
             output_status = "combine_outputs_partial"
     manifest = {
         "status": output_status,
-        "schema_version": "highdm60_lowdm34_free_background_2024_v1",
+        "schema_version": (
+            "highdm60_lowdm34_sharedcr_free_background_2024_v1"
+        ),
         "model": "free_background_global_process_normalizations",
         "signal_topology": args.topology,
         "hists": str(args.hists),

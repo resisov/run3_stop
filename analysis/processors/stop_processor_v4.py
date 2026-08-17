@@ -15,6 +15,18 @@ from optparse import OptionParser
 from coffea.nanoevents.methods import vector
 import gzip
 
+
+def dataset_group(dataset):
+    """Return the analysis process group for a dataset metadata key."""
+    if dataset.startswith('TT'):
+        return 'TT-' + dataset
+    if 'TWminus' in dataset or 'TbarWplus' in dataset or 'TBbar' in dataset or 'TbarB' in dataset:
+        return 'ST-' + dataset
+    if dataset.startswith(('WW', 'WZ', 'ZZ')):
+        return 'VV-' + dataset
+    return dataset
+
+
 class AnalysisProcessor(processor.ProcessorABC):
     lumis = {
         '2022pre': 7.9804,
@@ -705,12 +717,7 @@ class AnalysisProcessor(processor.ProcessorABC):
             caller = dataset.split("____")[0]
         except:
             caller = dataset
-        ## Grouping Single top samples as ST
-        if 'TWminus' in dataset or 'TbarWplus' in dataset or 'TBbar' in dataset or 'TbarB' in dataset:
-            group = 'ST-' + dataset
-        ## Grouping WW, WZ, ZZ samples as VV
-        if 'WW' in dataset or 'WZ' in dataset or 'ZZ' in dataset:
-            group = 'VV-' + dataset
+        group = dataset_group(dataset)
         selected_regions = []
         for region, samples in self._samples.items():
             for sample in samples:

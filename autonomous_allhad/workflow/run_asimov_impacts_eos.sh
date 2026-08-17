@@ -10,6 +10,17 @@ CARD=$1
 OUTDIR=$2
 MASS=$3
 CMSSW=/eos/user/t/taiwoo/decaf/analysis/CombinedArea/CMSSW_14_1_0_pre4
+IMPACT_PARALLEL=${IMPACT_PARALLEL:-4}
+IMPACT_MINIMIZER_STRATEGY=${IMPACT_MINIMIZER_STRATEGY:-0}
+
+if ! [[ "$IMPACT_PARALLEL" =~ ^[1-9][0-9]*$ ]]; then
+    echo "IMPACT_PARALLEL must be a positive integer" >&2
+    exit 2
+fi
+if ! [[ "$IMPACT_MINIMIZER_STRATEGY" =~ ^[01]$ ]]; then
+    echo "IMPACT_MINIMIZER_STRATEGY must be 0 or 1" >&2
+    exit 2
+fi
 
 case "$OUTDIR" in
     /eos/*) ;;
@@ -24,6 +35,7 @@ export HOME="$OUTDIR/home"
 export TMPDIR="$OUTDIR/tmp"
 export XDG_CACHE_HOME="$OUTDIR/cache"
 export PYTHONNOUSERSITE=1
+export CVS_RSH="${CVS_RSH:-ssh}"
 
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 cd "$CMSSW/src"
@@ -34,12 +46,36 @@ WORKSPACE="workspace_mStop${MASS}_mLSP500.root"
 IMPACT_BASE="impacts_mStop${MASS}_mLSP500"
 
 text2workspace.py "$CARD" -m "$MASS" -o "$WORKSPACE" > text2workspace.log 2>&1
-combineTool.py -M Impacts -d "$WORKSPACE" -m "$MASS" --doInitialFit \
-    --robustFit 1 -t -1 --expectSignal 1 > impacts_initial.log 2>&1
+if ! combineTool.py -M Impacts -d "$WORKSPACE" -m "$MASS" --doInitialFit \
+    --robustFit 1 --cminDefaultMinimizerStrategy "$IMPACT_MINIMIZER_STRATEGY" \
+    -t -1 --expectSignal 1 > impacts_initial.log 2>&1; then
+    combineTool.py -M Impacts -d "$WORKSPACE" -m "$MASS" --doInitialFit \
+        --robustFit 1 --cminDefaultMinimizerStrategy 1 \
+        -t -1 --expectSignal 1 >> impacts_initial.log 2>&1
+fi
+
+# Strategy 0 is substantially faster for the large autoMCStats model.  Keep
+# robustFit enabled, collect the successful results, and rerun only missing
+# nuisance fits with strategy 1 instead of repeating the complete campaign.
 combineTool.py -M Impacts -d "$WORKSPACE" -m "$MASS" --doFits \
-    --robustFit 1 -t -1 --expectSignal 1 --parallel 16 > impacts_fits.log 2>&1
+    --robustFit 1 --cminDefaultMinimizerStrategy "$IMPACT_MINIMIZER_STRATEGY" \
+    -t -1 --expectSignal 1 --parallel "$IMPACT_PARALLEL" \
+    > impacts_fits.log 2>&1 || true
 combineTool.py -M Impacts -d "$WORKSPACE" -m "$MASS" \
-    -o "$IMPACT_BASE.json" > impacts_collect.log 2>&1
+    -o "$IMPACT_BASE.json" > impacts_collect.log 2>&1 || true
+
+MISSING=$(sed -n "s/^Missing inputs: \[\(.*\)\]$/\1/p" impacts_collect.log \
+    | tr -d "' " | tail -n 1)
+if [[ -n "$MISSING" ]]; then
+    printf 'Retrying missing nuisance fits with strategy 1: %s\n' "$MISSING" \
+        >> impacts_fits.log
+    combineTool.py -M Impacts -d "$WORKSPACE" -m "$MASS" --doFits \
+        --named "$MISSING" --robustFit 1 --cminDefaultMinimizerStrategy 1 \
+        -t -1 --expectSignal 1 --parallel "$IMPACT_PARALLEL" \
+        >> impacts_fits.log 2>&1
+    combineTool.py -M Impacts -d "$WORKSPACE" -m "$MASS" \
+        -o "$IMPACT_BASE.json" > impacts_collect.log 2>&1
+fi
 if grep -q '^Missing inputs:' impacts_collect.log; then
     echo "impact collection is incomplete; see $OUTDIR/work/impacts_collect.log" >&2
     exit 1

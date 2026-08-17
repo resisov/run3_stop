@@ -3,12 +3,42 @@
   "campaign": "2025_data_intermediate_root",
   "input_roots": 7587,
   "locally_recovered_shards": 5,
+  "lowpt_electron_measurement_2024": {
+    "campaign_files": 5440,
+    "data_lumi_coverage_complete": false,
+    "file_loss_fraction_campaign": 0.001102941,
+    "files_retained": 5434,
+    "incomplete_datasets": [],
+    "permanently_skipped_files": 6,
+    "status": "complete_with_permanent_skips"
+  },
+  "lowpt_muon_measurement_2024": {
+    "campaign_files": 7714,
+    "data_lumi_coverage_complete": false,
+    "file_loss_fraction_campaign": 0.000907441,
+    "files_retained": 7707,
+    "incomplete_datasets": [
+      "/ParkingDoubleMuonLowMass6/Run2024D-MINIv6NANOv15-v1/NANOAOD"
+    ],
+    "permanently_skipped_files": 7,
+    "status": "complete_with_permanent_skips"
+  },
   "lost_selected_events": 0,
   "permanently_skipped_files": 0,
   "recovered_corrupt_roots": 3,
   "selected_events": 9685947,
   "status": "complete",
-  "updated_at": "2026-07-15T10:59:35.101782+00:00",
+  "trigger_measurement_2024": {
+    "campaign_files": 6717,
+    "file_loss_fraction_campaign": 0.000148876,
+    "file_loss_fraction_physical_dataset": 0.000363504,
+    "generator_sumw_lost": null,
+    "measurement": "photon_trigger_sf_2024",
+    "permanently_skipped_files": 1,
+    "physical_dataset_files": 2751,
+    "status": "complete_with_permanent_skip"
+  },
+  "updated_at": "2026-08-03T21:29:42Z",
   "valid_roots": 7587,
   "zero_entry_roots": 1354
 }

@@ -9,6 +9,11 @@ import re
 from pathlib import Path
 from typing import Any
 
+from autonomous_allhad.signal_models import (
+    signal_mass_from_genmodel,
+    signal_mass_key,
+)
+
 LUMI_FB_DEFAULT = 109.82
 LUMI_PB_DEFAULT = LUMI_FB_DEFAULT * 1000.0
 FLAT_SCHEMAS = {
@@ -17,6 +22,9 @@ FLAT_SCHEMAS = {
     "flat_ntuple_shard_v4_objectcorr_2024",
     "flat_ntuple_shard_v4_objectcorr_2025_data",
     "flat_ntuple_shard_v5_fullselection_2024",
+    "flat_ntuple_shard_v6_signal_cutflow_2024",
+    "flat_ntuple_merged_data_balanced20_v1",
+    "flat_ntuple_merged_mc_balanced20_v1",
 }
 
 
@@ -52,11 +60,61 @@ def add_float_map(target: dict[str, float], source: dict[str, Any]) -> None:
         target[str(key)] = finite(target.get(str(key), 0.0)) + finite(val)
 
 
+def merge_signal_cutflow_histograms(target: dict[str, Any], source: dict[str, Any]) -> None:
+    if not source:
+        return
+    if source.get("schema_version") != "signal_cutflow_histograms_v1":
+        raise RuntimeError(f"unexpected signal cutflow schema: {source.get('schema_version')}")
+    if not target:
+        target.update(
+            {
+                "schema_version": source["schema_version"],
+                "sample_scope": "signal_only",
+                "weight_scope": source.get("weight_scope"),
+                "topologies": {},
+            }
+        )
+    for topology, regions in (source.get("topologies") or {}).items():
+        target_regions = target["topologies"].setdefault(str(topology), {})
+        for region, histogram in (regions or {}).items():
+            labels = [str(value) for value in histogram.get("labels") or []]
+            edges = [finite(value) for value in histogram.get("bin_edges") or []]
+            entries = [int(value) for value in histogram.get("entries") or []]
+            raw_values = [finite(value) for value in histogram.get("raw_values") or []]
+            raw_sumw2 = [finite(value) for value in histogram.get("raw_sumw2") or []]
+            if not (
+                len(labels) == len(entries) == len(raw_values) == len(raw_sumw2)
+                and len(edges) == len(labels) + 1
+            ):
+                raise RuntimeError(f"malformed signal cutflow histogram: {topology}/{region}")
+            existing = target_regions.get(str(region))
+            if existing is None:
+                target_regions[str(region)] = {
+                    "schema_version": "cumulative_cutflow_histogram_v1",
+                    "cumulative": True,
+                    "labels": labels,
+                    "bin_edges": edges,
+                    "entries": entries,
+                    "raw_values": raw_values,
+                    "raw_sumw2": raw_sumw2,
+                }
+                continue
+            if existing["labels"] != labels or existing["bin_edges"] != edges:
+                raise RuntimeError(f"incompatible signal cutflow binning: {topology}/{region}")
+            for key, values in (
+                ("entries", entries),
+                ("raw_values", raw_values),
+                ("raw_sumw2", raw_sumw2),
+            ):
+                existing[key] = [
+                    current + value for current, value in zip(existing[key], values)
+                ]
+
+
 def parse_genmodel(genmodel: str) -> tuple[int | None, int | None, str]:
-    nums = re.findall(r"(\d+)", str(genmodel))
-    if len(nums) >= 2:
-        mstop, mlsp = int(nums[-2]), int(nums[-1])
-        return mstop, mlsp, f"mStop{mstop}_mLSP{mlsp}"
+    topology, mstop, mlsp = signal_mass_from_genmodel(genmodel)
+    if topology and mstop is not None and mlsp is not None:
+        return mstop, mlsp, signal_mass_key(topology, mstop, mlsp)
     return None, None, str(genmodel)
 
 
@@ -84,6 +142,17 @@ def load_signal_xsec(path: Path | None) -> dict[str, dict[str, Any]]:
         return {}
     payload = read_json(path)
     out: dict[str, dict[str, Any]] = {}
+    for rec in payload.get("records") or []:
+        mstop = rec.get("mStop")
+        xsec = positive(rec.get("xsec_pb"))
+        if mstop is None or xsec is None:
+            continue
+        out[f"mStop{int(mstop)}"] = {
+            "xsec_pb": xsec,
+            "xsec_uncertainty_relative": rec.get(
+                "uncertainty_relative"
+            ),
+        }
     for key, rec in (payload.get("mass_points") or {}).items():
         xsec = positive(rec.get("xsec_pb"))
         if xsec is None:
@@ -94,6 +163,56 @@ def load_signal_xsec(path: Path | None) -> dict[str, dict[str, Any]]:
             "xsec_uncertainty_percent": rec.get("xsec_uncertainty_percent"),
         }
     return out
+
+
+def apply_background_xsec_overrides(
+    datasets: dict[str, Any],
+    path: Path | None,
+) -> dict[str, dict[str, Any]]:
+    if path is None:
+        return {}
+    payload = read_json(path)
+    if payload.get("schema") != "background_xsec_overrides_v1":
+        raise RuntimeError(
+            f"unexpected background xsec override schema: {payload.get('schema')}"
+        )
+    if payload.get("status") != "complete":
+        raise RuntimeError(
+            f"background xsec overrides are not complete: {payload.get('status')}"
+        )
+    applied: dict[str, dict[str, Any]] = {}
+    for dsid, override in (payload.get("datasets") or {}).items():
+        key = str(dsid)
+        if key not in datasets:
+            raise RuntimeError(f"background xsec override dataset id is absent: {key}")
+        record = datasets[key]
+        if record.get("is_data") or record.get("is_signal"):
+            raise RuntimeError(
+                f"background xsec override targets non-background dataset: {key}"
+            )
+        expected_dataset = str(override.get("dataset") or "")
+        actual_dataset = str(record.get("dataset") or "")
+        if expected_dataset and expected_dataset != actual_dataset:
+            raise RuntimeError(
+                f"background xsec override dataset mismatch for {key}: "
+                f"{expected_dataset!r} != {actual_dataset!r}"
+            )
+        xsec_pb = positive(override.get("xsec_pb"))
+        if xsec_pb is None:
+            raise RuntimeError(
+                f"background xsec override is not positive for dataset {key}"
+            )
+        previous_xsec_pb = record.get("xsec_pb")
+        record["xsec_pb"] = xsec_pb
+        applied[key] = {
+            "dataset": actual_dataset,
+            "previous_xsec_pb": previous_xsec_pb,
+            "xsec_pb": xsec_pb,
+            "source": override.get("source"),
+            "accuracy": override.get("accuracy"),
+            "total_uncertainty_pb": override.get("total_uncertainty_pb"),
+        }
+    return applied
 
 
 def merge_dataset(target: dict[str, Any], rec: dict[str, Any]) -> None:
@@ -194,10 +313,11 @@ def build_signal_mass_points(datasets: dict[str, Any], signal_xsec: dict[str, di
                 "mass_key": key,
                 "mStop": mstop,
                 "mLSP": mlsp,
+                "topology": signal_mass_from_genmodel(genmodel)[0],
                 "genmodel_branch": genmodel,
                 "sumw_mass_point": 0.0,
                 "event_genweight_sum_fallback": 0.0,
-                "sumw_source": "Runs.genEventSumw_T2tt_<mStop>_<mLSP>",
+                "sumw_source": "Runs.genEventSumw_<topology>_<mStop>_<mLSP>",
                 "datasets": [],
             })
             item["sumw_mass_point"] += finite(sumw)
@@ -208,6 +328,7 @@ def build_signal_mass_points(datasets: dict[str, Any], signal_xsec: dict[str, di
                 "mass_key": key,
                 "mStop": _mstop,
                 "mLSP": _mlsp,
+                "topology": signal_mass_from_genmodel(genmodel)[0],
                 "genmodel_branch": genmodel,
                 "sumw_mass_point": 0.0,
                 "event_genweight_sum_fallback": 0.0,
@@ -216,7 +337,13 @@ def build_signal_mass_points(datasets: dict[str, Any], signal_xsec: dict[str, di
             })
             item["event_genweight_sum_fallback"] += finite(sumw)
     for key, item in points.items():
-        xrec = signal_xsec.get(key) or {}
+        compatibility_key = f"mStop{item['mStop']}_mLSP{item['mLSP']}"
+        xrec = (
+            signal_xsec.get(key)
+            or signal_xsec.get(compatibility_key)
+            or signal_xsec.get(f"mStop{item['mStop']}")
+            or {}
+        )
         xsec = positive(xrec.get("xsec_pb"))
         sumw = finite(item.get("sumw_mass_point"))
         item["xsec_pb"] = xsec
@@ -236,14 +363,39 @@ def build_signal_mass_points(datasets: dict[str, Any], signal_xsec: dict[str, di
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Merge flat ntuple shard sidecars and compute campaign-level normalization factors.")
-    parser.add_argument("--inputs", nargs="+", required=True, help="Sidecar JSON files, directories, or glob patterns")
+    parser.add_argument(
+        "--inputs",
+        nargs="*",
+        default=[],
+        help="Sidecar JSON files, directories, or glob patterns",
+    )
+    parser.add_argument(
+        "--input-list",
+        type=Path,
+        help="Text file containing one sidecar JSON path per line",
+    )
     parser.add_argument("--output", required=True)
     parser.add_argument("--signal-yields", default="autonomous_allhad/outputs/signal_yields_by_mass.json")
+    parser.add_argument(
+        "--background-xsec-overrides",
+        type=Path,
+        help="Validated background cross-section overrides",
+    )
     args = parser.parse_args()
 
-    paths = expand_inputs(args.inputs)
+    input_items = list(args.inputs)
+    if args.input_list:
+        input_items.extend(
+            line.strip()
+            for line in args.input_list.read_text().splitlines()
+            if line.strip() and not line.lstrip().startswith("#")
+        )
+    if not input_items:
+        parser.error("provide --inputs and/or --input-list")
+    paths = expand_inputs(input_items)
     datasets: dict[str, Any] = {}
     source_records = []
+    signal_cutflow_histograms: dict[str, Any] = {}
     lumi_pb = LUMI_PB_DEFAULT
     for path in paths:
         payload = read_json(path)
@@ -258,6 +410,10 @@ def main() -> int:
             "files_attempted": payload.get("files_attempted"),
             "events_written": payload.get("events_written"),
         })
+        merge_signal_cutflow_histograms(
+            signal_cutflow_histograms,
+            payload.get("signal_cutflow_histograms") or {},
+        )
         for dsid, rec in (payload.get("datasets") or {}).items():
             target = datasets.setdefault(str(dsid), {
                 "dataset": rec.get("dataset"),
@@ -280,6 +436,10 @@ def main() -> int:
                 "signal_event_genweight_sum_by_genmodel": {},
             })
             merge_dataset(target, rec)
+    background_xsec_overrides = apply_background_xsec_overrides(
+        datasets,
+        args.background_xsec_overrides,
+    )
     signal_xsec = load_signal_xsec(Path(args.signal_yields) if args.signal_yields else None)
     physical, split_counts, factors = build_physical(datasets, lumi_pb)
     signal_points = build_signal_mass_points(datasets, signal_xsec, lumi_pb)
@@ -296,11 +456,20 @@ def main() -> int:
             "signal_formula": "gen_weight * post_skim_sf_weight * xsec_pb(mStop) * lumi_pb / Runs.genEventSumw_T2tt_<mStop>_<mLSP>",
             "data_formula": "1",
         },
+        "background_xsec_overrides": {
+            "path": (
+                str(args.background_xsec_overrides)
+                if args.background_xsec_overrides
+                else None
+            ),
+            "applied": background_xsec_overrides,
+        },
         "datasets": datasets,
         "dataset_factors": factors,
         "physical_datasets": physical,
         "physical_dataset_split_counts": split_counts,
         "signal_mass_points": signal_points,
+        "signal_cutflow_histograms": signal_cutflow_histograms,
         "blocked_dataset_factors": {k: v for k, v in factors.items() if v.get("normalization_factor") is None and not v.get("is_signal")},
         "blocked_signal_mass_points": {k: v for k, v in signal_points.items() if v.get("normalization_factor") is None},
     }

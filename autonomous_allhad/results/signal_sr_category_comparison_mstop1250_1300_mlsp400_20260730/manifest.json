@@ -1,0 +1,201 @@
+{
+  "event_count_definition": {
+    "generated": "mass-point Runs.genEventSumw; unit generator weights make this the generated event count",
+    "selected": "sum of nominal unweighted search-bin entries in the specified SR"
+  },
+  "inputs": {
+    "T2bW": {
+      "path": "/tmp/templates_highdm60_lowdm34_free_background_t2bw.root",
+      "sha256": "317ec80fadca6f5bbec7e197b7c7f363d9595508e10cc346d083e3910c9a809c"
+    },
+    "T2tb": {
+      "path": "/tmp/templates_highdm60_lowdm34_free_background_t2tb.root",
+      "sha256": "d8b2a1d24d07af67f5a7d9d127b7236499b80260be754e5d14516ce29598cbd6"
+    },
+    "T2tt": {
+      "path": "/tmp/templates_highdm60_lowdm34_free_background_t2tt.root",
+      "sha256": "f2491338759028f62843351d6e9501d0eb044d19fc672a6aa7955be1c5e0e5d5"
+    }
+  },
+  "luminosity_fb": 109.82,
+  "mass_points": [
+    "mStop1250_mLSP400",
+    "mStop1300_mLSP400"
+  ],
+  "plots": [
+    {
+      "bins": 60,
+      "pdf": "autonomous_allhad/results/signal_sr_category_comparison_mstop1250_1300_mlsp400_20260730/t2tt_highdm_sr_mstop1250_1300_mlsp400_signal_statunc.pdf",
+      "png": "autonomous_allhad/results/signal_sr_category_comparison_mstop1250_1300_mlsp400_20260730/t2tt_highdm_sr_mstop1250_1300_mlsp400_signal_statunc.png",
+      "points": {
+        "mStop1250_mLSP400": {
+          "nonzero_bins": 60,
+          "selected_entries": 9034,
+          "selection_efficiency": 0.2158558730765555,
+          "stat_unc_sum": 0.5086008655326553,
+          "total_generated": 41852,
+          "yield_sum": 41.00365925116331
+        },
+        "mStop1300_mLSP400": {
+          "nonzero_bins": 60,
+          "selected_entries": 11191,
+          "selection_efficiency": 0.21412034822538983,
+          "stat_unc_sum": 0.3361474070348893,
+          "total_generated": 52265,
+          "yield_sum": 30.04500423501208
+        }
+      },
+      "regime": "High-dM",
+      "suspected_bins": [],
+      "topology": "T2tt"
+    },
+    {
+      "bins": 34,
+      "pdf": "autonomous_allhad/results/signal_sr_category_comparison_mstop1250_1300_mlsp400_20260730/t2tt_lowdm_sr_mstop1250_1300_mlsp400_signal_statunc.pdf",
+      "png": "autonomous_allhad/results/signal_sr_category_comparison_mstop1250_1300_mlsp400_20260730/t2tt_lowdm_sr_mstop1250_1300_mlsp400_signal_statunc.png",
+      "points": {
+        "mStop1250_mLSP400": {
+          "nonzero_bins": 33,
+          "selected_entries": 497,
+          "selection_efficiency": 0.011875179202905477,
+          "stat_unc_sum": 0.12146188432867855,
+          "total_generated": 41852,
+          "yield_sum": 2.3420469562314783
+        },
+        "mStop1300_mLSP400": {
+          "nonzero_bins": 33,
+          "selected_entries": 519,
+          "selection_efficiency": 0.009930163589400172,
+          "stat_unc_sum": 0.06714121232784791,
+          "total_generated": 52265,
+          "yield_sum": 1.3335069517048264
+        }
+      },
+      "regime": "Low-dM",
+      "suspected_bins": [],
+      "topology": "T2tt"
+    },
+    {
+      "bins": 60,
+      "pdf": "autonomous_allhad/results/signal_sr_category_comparison_mstop1250_1300_mlsp400_20260730/t2bw_highdm_sr_mstop1250_1300_mlsp400_signal_statunc.pdf",
+      "png": "autonomous_allhad/results/signal_sr_category_comparison_mstop1250_1300_mlsp400_20260730/t2bw_highdm_sr_mstop1250_1300_mlsp400_signal_statunc.png",
+      "points": {
+        "mStop1250_mLSP400": {
+          "nonzero_bins": 60,
+          "selected_entries": 4987,
+          "selection_efficiency": 0.17906642728904848,
+          "stat_unc_sum": 0.5675014323569157,
+          "total_generated": 27850,
+          "yield_sum": 34.05175303749413
+        },
+        "mStop1300_mLSP400": {
+          "nonzero_bins": 53,
+          "selected_entries": 2370,
+          "selection_efficiency": 0.16986811926605505,
+          "stat_unc_sum": 0.573292077267785,
+          "total_generated": 13952,
+          "yield_sum": 23.648040009014522
+        }
+      },
+      "regime": "High-dM",
+      "suspected_bins": [
+        24,
+        36,
+        47,
+        48,
+        54
+      ],
+      "topology": "T2bW"
+    },
+    {
+      "bins": 34,
+      "pdf": "autonomous_allhad/results/signal_sr_category_comparison_mstop1250_1300_mlsp400_20260730/t2bw_lowdm_sr_mstop1250_1300_mlsp400_signal_statunc.pdf",
+      "png": "autonomous_allhad/results/signal_sr_category_comparison_mstop1250_1300_mlsp400_20260730/t2bw_lowdm_sr_mstop1250_1300_mlsp400_signal_statunc.png",
+      "points": {
+        "mStop1250_mLSP400": {
+          "nonzero_bins": 32,
+          "selected_entries": 291,
+          "selection_efficiency": 0.01044883303411131,
+          "stat_unc_sum": 0.14241146135613206,
+          "total_generated": 27850,
+          "yield_sum": 2.0482811749955196
+        },
+        "mStop1300_mLSP400": {
+          "nonzero_bins": 29,
+          "selected_entries": 183,
+          "selection_efficiency": 0.013116399082568807,
+          "stat_unc_sum": 0.14497404619271684,
+          "total_generated": 13952,
+          "yield_sum": 1.7289509372038812
+        }
+      },
+      "regime": "Low-dM",
+      "suspected_bins": [],
+      "topology": "T2bW"
+    },
+    {
+      "bins": 60,
+      "pdf": "autonomous_allhad/results/signal_sr_category_comparison_mstop1250_1300_mlsp400_20260730/t2tb_highdm_sr_mstop1250_1300_mlsp400_signal_statunc.pdf",
+      "png": "autonomous_allhad/results/signal_sr_category_comparison_mstop1250_1300_mlsp400_20260730/t2tb_highdm_sr_mstop1250_1300_mlsp400_signal_statunc.png",
+      "points": {
+        "mStop1250_mLSP400": {
+          "nonzero_bins": 59,
+          "selected_entries": 2699,
+          "selection_efficiency": 0.195494712443865,
+          "stat_unc_sum": 0.8791131643709728,
+          "total_generated": 13806,
+          "yield_sum": 38.16411282995361
+        },
+        "mStop1300_mLSP400": {
+          "nonzero_bins": 58,
+          "selected_entries": 2610,
+          "selection_efficiency": 0.19786217875824424,
+          "stat_unc_sum": 0.646484511967391,
+          "total_generated": 13191,
+          "yield_sum": 27.961837618471332
+        }
+      },
+      "regime": "High-dM",
+      "suspected_bins": [
+        24,
+        42,
+        53,
+        59
+      ],
+      "topology": "T2tb"
+    },
+    {
+      "bins": 34,
+      "pdf": "autonomous_allhad/results/signal_sr_category_comparison_mstop1250_1300_mlsp400_20260730/t2tb_lowdm_sr_mstop1250_1300_mlsp400_signal_statunc.pdf",
+      "png": "autonomous_allhad/results/signal_sr_category_comparison_mstop1250_1300_mlsp400_20260730/t2tb_lowdm_sr_mstop1250_1300_mlsp400_signal_statunc.png",
+      "points": {
+        "mStop1250_mLSP400": {
+          "nonzero_bins": 28,
+          "selected_entries": 142,
+          "selection_efficiency": 0.010285383166739099,
+          "stat_unc_sum": 0.19234071937722688,
+          "total_generated": 13806,
+          "yield_sum": 1.964561821157083
+        },
+        "mStop1300_mLSP400": {
+          "nonzero_bins": 29,
+          "selected_entries": 151,
+          "selection_efficiency": 0.011447198847699189,
+          "stat_unc_sum": 0.15421679238761135,
+          "total_generated": 13191,
+          "yield_sum": 1.6125718802074043
+        }
+      },
+      "regime": "Low-dM",
+      "suspected_bins": [],
+      "topology": "T2tb"
+    }
+  ],
+  "status": "complete",
+  "suspected_bin_annotation": {
+    "meaning": "sparse High-dM signal bin selected for the adjacent-bin merge diagnostic",
+    "physics_inputs_modified": false,
+    "style": "unfilled red box"
+  },
+  "uncertainty": "signal MC statistical uncertainty from TH1 sumw2"
+}

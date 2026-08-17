@@ -1,108 +1,72 @@
 #!/usr/bin/env python3
-"""Build concise labels for the full 2024 High-dM + Low-dM impact plot."""
+"""Preserve the exact datacard/Combine parameter names in impact plots."""
 
 import argparse
+from collections import Counter
 import json
 import re
 from pathlib import Path
 
 
-CHANNEL_LABELS = {
-    "cat2_LLCR_highDeltaM": "High-dM lost-lepton CR",
-    "cat3_QCDCR_highDeltaM": "High-dM QCD CR",
-    "cat4_GCR_highDeltaM": "High-dM photon CR",
-    "cat5_DY2E_highDeltaM": "High-dM ee CR",
-    "cat6_DY2M_highDeltaM": "High-dM mumu CR",
-    "cat7_SR_selected_recoil60_nb2_nt2plus_w0": "High-dM SR",
-    "cat2_LLCR_lowDeltaM": "Low-dM lost-lepton CR",
-    "cat3_QCDCR_lowDeltaM": "Low-dM QCD CR",
-    "cat4_GCR_lowDeltaM": "Low-dM photon CR",
-    "cat5_DY2E_lowDeltaM": "Low-dM ee CR",
-    "cat6_DY2M_lowDeltaM": "Low-dM mumu CR",
-    "cat7_SR_lowDeltaM": "Low-dM SR",
-}
+def impact_label(name: str) -> str:
+    """Keep NPS nuisance names; shorten only generated autoMCStats names."""
 
-SYSTEMATIC_LABELS = {
-    "Lumi_2024": "2024 luminosity",
-    "btagSF_bc_correlated": "b tag heavy flavor, correlated",
-    "btagSF_bc_uncorrelated": "b tag heavy flavor, 2024",
-    "btagSF_light_correlated": "b tag light flavor, correlated",
-    "btagSF_light_uncorrelated": "b tag light flavor, 2024",
-    "electron_hlt": "Electron trigger",
-    "electron_id": "Electron identification",
-    "muon_hlt": "Muon trigger",
-    "muon_id": "Muon identification",
-    "photon_id": "Photon identification",
-    "pileup": "Pileup",
-}
-
-
-def dynamic_channel_label(channel):
-    match = re.fullmatch(r"hSR_b(\d+)", channel)
-    if match:
-        return f"High-dM SR bin {int(match.group(1)) + 1}"
-    match = re.fullmatch(
-        r"h(LLCR|QCDCR|GCR)_(Nb1|Nb2|Nb3plus)_u(\d+)", channel
+    adopted = re.fullmatch(
+        r"prop_bin(LLCR|QCDCR|GCR|SR)_(highdm|lowdm)_"
+        r"(?:(Nb1|Nb2plus)_bin(\d+)|bin(\d+))_bin0(?:_(.+))?",
+        name,
     )
-    if match:
-        region, group, recoil = match.groups()
-        return (
-            f"High-dM {region}, {group}, recoil bin {int(recoil) + 1}"
+    if adopted:
+        region, regime, group, control_bin, signal_bin, process = adopted.groups()
+        location = f"bin{int(signal_bin or control_bin)}"
+        process_label = process or "combined"
+        process_label = re.sub(
+            r"_(?:Nb1|Nb2|Nb2plus|Nb3plus)_u\d+$", "", process_label
         )
-    match = re.fullmatch(r"lSR_b(\d+)", channel)
-    if match:
-        return f"Low-dM SR bin {int(match.group(1)) + 1}"
-    match = re.fullmatch(r"l(LLCR|QCDCR|GCR)_b(\d+)", channel)
-    if match:
-        region, search_bin = match.groups()
-        return f"Low-dM {region}, bin {int(search_bin) + 1}"
-    return CHANNEL_LABELS.get(channel, channel)
+        group_label = f"_{group}" if group else ""
+        return f"prop_{region}_{process_label}_{regime}{group_label}_{location}"
 
-
-def label(name):
-    if name in SYSTEMATIC_LABELS:
-        return SYSTEMATIC_LABELS[name]
     match = re.fullmatch(
-        r"(RLL|RQCD|RZshape)_(high|low)_(.+)", name
+        r"prop_bin([hl])([A-Za-z0-9]+)(?:_b(\d+)|_(.+?))_bin0(?:_(.+))?",
+        name,
     )
-    if match:
-        kind, regime, category = match.groups()
-        description = {
-            "RLL": "Lost-lepton CR constraint",
-            "RQCD": "QCD CR constraint",
-            "RZshape": r"Z invisible photon-CR shape",
-        }[kind]
-        return f"{description}, {regime}-dM {category}"
-    match = re.fullmatch(r"RZ_(highdm|lowdm)_(Nb1|Nb2plus)", name)
-    if match:
-        regime, group = match.groups()
-        return f"Z normalization RZ, {regime}, {group}"
-    match = re.fullmatch(r"prop_bin(.+)_bin(\d+)(?:_(.+))?", name)
     if not match:
         return name
-    channel, zero_based_bin, process = match.groups()
-    channel_label = dynamic_channel_label(channel)
-    suffix = ""
-    if process == "background":
-        suffix = ", background"
-    elif process == "sig_mStop1200_mLSP500":
-        suffix = ", signal (1200, 500)"
-    elif process:
-        suffix = ", " + process
-    return f"MC stat: {channel_label} bin {int(zero_based_bin) + 1}{suffix}"
+
+    regime_code, region, sr_bin, category, process = match.groups()
+    regime = "highdm" if regime_code == "h" else "lowdm"
+    process = process or "combined"
+    process = re.sub(r"_(?:Nb1|Nb2|Nb2plus|Nb3plus)$", "", process)
+    location = f"bin{int(sr_bin)}" if sr_bin is not None else category
+    location = re.sub(r"_u(\d+)$", r"_bin\1", location)
+    return f"prop_{region}_{process}_{regime}_{location}"
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--impacts", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
 
     impacts = json.loads(args.impacts.read_text())
-    translations = {
-        parameter["name"]: label(parameter["name"])
+    candidates = {
+        parameter["name"]: impact_label(parameter["name"])
         for parameter in impacts["params"]
     }
+    multiplicities = Counter(candidates.values())
+    translations = {}
+    for name, candidate in candidates.items():
+        if multiplicities[candidate] == 1:
+            translations[name] = candidate
+            continue
+        process_match = re.search(
+            r"_(Nb1|Nb2|Nb2plus|Nb3plus)_u(\d+)$", name
+        )
+        if process_match:
+            group, recoil_bin = process_match.groups()
+            translations[name] = f"{candidate}_{group}_UTbin{int(recoil_bin)}"
+        else:
+            translations[name] = name
     args.output.write_text(
         json.dumps(translations, indent=2, sort_keys=True) + "\n"
     )

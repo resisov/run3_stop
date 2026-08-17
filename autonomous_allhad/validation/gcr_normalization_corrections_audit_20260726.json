@@ -1,0 +1,413 @@
+{
+  "schema_version": "gcr_normalization_corrections_audit_v1",
+  "status": "complete_with_documented_followups",
+  "created_at": "2026-07-26T20:16:39Z",
+  "scope": {
+    "year": 2024,
+    "energy_tev": 13.6,
+    "region": "high-dM GCR",
+    "selection_authority": "autonomous_allhad/autonomous_allhad/real_subset_worker.py",
+    "legacy_stop_processor_or_ids_used": false,
+    "nominal_outputs_modified": false
+  },
+  "inputs": {
+    "nominal_render_payload": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/nominal_plots_2024_fullselection_v3_20260725/render_payloads/categories_2024.json",
+    "normalization": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/intermediate_2024_fullselection_v3_lowdm_relaxed_20260724/final_nominal_inputs_20260725/normalization.json",
+    "campaign_shards": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/intermediate_2024_fullselection_v3_lowdm_relaxed_20260724/bundles/fullselection_shards.tgz",
+    "photon_strata_audit": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_fake_2024_snapshot_complete_20260726T1917Z/gcr_photon_strata_audit.json",
+    "gcr_fit_study": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_fake_2024_snapshot_complete_20260726T1917Z/gcr_datamc_improvement_study.json"
+  },
+  "headline": {
+    "data_yield": 14495.0,
+    "mc_yield": 10239.67376288432,
+    "data_over_mc": 1.415572442604562,
+    "data_minus_mc": 4255.32623711568,
+    "conclusion": "The 41.6 percent prefit deficit is not caused by a luminosity, signed-sumw, split-dataset, or double-applied normalization error. The four GJ cross sections agree with independent gridpack-pilot cross sections times McM LHE-filter efficiencies to within 2 percent. Missing routine scale factors and identified weighting-scope issues are percent-level and cannot close the deficit."
+  },
+  "process_yields": [
+    {
+      "process": "GJ",
+      "yield": 5532.986107207708,
+      "fraction_of_mc": 0.540348,
+      "sumw2": 912.6796303121215,
+      "entries": 225688,
+      "effective_entries": 33542.915
+    },
+    {
+      "process": "QCD",
+      "yield": 4306.642531380549,
+      "fraction_of_mc": 0.420584,
+      "sumw2": 303628.8064434134,
+      "entries": 11665,
+      "effective_entries": 61.085
+    },
+    {
+      "process": "TT",
+      "yield": 322.4289571993155,
+      "fraction_of_mc": 0.031488,
+      "sumw2": 43.60819713750536,
+      "entries": 4028,
+      "effective_entries": 2383.9654
+    },
+    {
+      "process": "ST",
+      "yield": 52.22174222738101,
+      "fraction_of_mc": 0.0051,
+      "sumw2": 5.7894670296813135,
+      "entries": 730,
+      "effective_entries": 471.0469
+    },
+    {
+      "process": "WtoLNu",
+      "yield": 13.959335845555247,
+      "fraction_of_mc": 0.001363,
+      "sumw2": 9.338486718805042,
+      "entries": 472,
+      "effective_entries": 20.8667
+    },
+    {
+      "process": "VV",
+      "yield": 6.578720248229984,
+      "fraction_of_mc": 0.000642,
+      "sumw2": 1.6929634705689947,
+      "entries": 39,
+      "effective_entries": 25.5644
+    },
+    {
+      "process": "DY",
+      "yield": 4.254966320191272,
+      "fraction_of_mc": 0.000416,
+      "sumw2": 1.1278570241722046,
+      "entries": 2611,
+      "effective_entries": 16.0523
+    },
+    {
+      "process": "Zto2Nu",
+      "yield": 0.6014024553894506,
+      "fraction_of_mc": 0.000059,
+      "sumw2": 0.6002405731779756,
+      "entries": 10,
+      "effective_entries": 0.6026
+    }
+  ],
+  "normalization_audit": {
+    "status": "pass",
+    "luminosity_fb": 109.82,
+    "luminosity_pb": 109820.0,
+    "formula": "genWeight * post_skim_sf_weight * xsec_pb * luminosity_pb / physical_dataset_Runs_genEventSumw",
+    "background_physical_dataset_count": 65,
+    "background_split_factor_count": 3946,
+    "sumw_source": "Runs.genEventSumw",
+    "nonpositive_background_sumw_count": 0,
+    "xsec_conflict_count": 0,
+    "blocked_factor_count": 0,
+    "formula_mismatch_count": 0,
+    "duplicate_gj_input_file_count": 0,
+    "gj_input_file_count": 3341,
+    "negative_weight_policy": "The numerator uses signed genWeight and the denominator uses signed Runs.genEventSumw. No absolute-weight denominator or sign mismatch was found.",
+    "code_evidence": [
+      {
+        "file": "autonomous_allhad/autonomous_allhad/flat_ntuple_worker.py",
+        "lines": "820-832",
+        "finding": "The skim stores raw genWeight and explicitly defers luminosity, cross-section, and scale-factor normalization."
+      },
+      {
+        "file": "autonomous_allhad/workflow/build_flat_boosted_recoil_hists.py",
+        "lines": "435-451, 977-1023",
+        "finding": "One normalization-factor vector is constructed and multiplied once into the genWeight-times-scale-factor bundle."
+      }
+    ]
+  },
+  "gj_cross_section_provenance": {
+    "status": "pass_no_filter_efficiency_double_count_evidence",
+    "registry_source": {
+      "file": "analysis/metadata/json_maker_lxplus.py",
+      "lines": "183-186",
+      "note": "The registry values are hard-coded, so independent provenance was checked."
+    },
+    "method": "For each GJ pT bin, query the authenticated McM LHE request, read its production fragment and LHE-filter efficiency, then read the actual CVMFS gridpack pilot-run integrated cross section. Compare xsec_used with gridpack_pilot_xsec times McM_filter_efficiency.",
+    "bins": [
+      {
+        "dataset": "GJ_Bin-PTG-100to200_TuneCP5_13p6TeV_amcatnlo-pythia8",
+        "mcm_prepid": "GEN-RunIII2024Summer24wmLHEGS-00078",
+        "gridpack_pilot_xsec_pb": 5444.0,
+        "gridpack_pilot_xsec_error_pb": 20.0,
+        "mcm_lhe_filter_efficiency": 0.26,
+        "pilot_times_filter_pb": 1415.44,
+        "xsec_used_pb": 1391.0,
+        "relative_difference_used_vs_rounded_mcm_product": -0.017273
+      },
+      {
+        "dataset": "GJ_Bin-PTG-200to400_TuneCP5_13p6TeV_amcatnlo-pythia8",
+        "mcm_prepid": "GEN-RunIII2024Summer24wmLHEGS-00079",
+        "gridpack_pilot_xsec_pb": 174.1,
+        "gridpack_pilot_xsec_error_pb": 0.4,
+        "mcm_lhe_filter_efficiency": 0.5,
+        "pilot_times_filter_pb": 87.05,
+        "xsec_used_pb": 88.24,
+        "relative_difference_used_vs_rounded_mcm_product": 0.01367
+      },
+      {
+        "dataset": "GJ_Bin-PTG-400to600_TuneCP5_13p6TeV_amcatnlo-pythia8",
+        "mcm_prepid": "GEN-RunIII2024Summer24wmLHEGS-00080",
+        "gridpack_pilot_xsec_pb": 5.601,
+        "gridpack_pilot_xsec_error_pb": 0.015,
+        "mcm_lhe_filter_efficiency": 0.68,
+        "pilot_times_filter_pb": 3.80868,
+        "xsec_used_pb": 3.77,
+        "relative_difference_used_vs_rounded_mcm_product": -0.010156
+      },
+      {
+        "dataset": "GJ_Bin-PTG-600_TuneCP5_13p6TeV_amcatnlo-pythia8",
+        "mcm_prepid": "GEN-RunIII2024Summer24wmLHEGS-00081",
+        "gridpack_pilot_xsec_pb": 0.7158,
+        "gridpack_pilot_xsec_error_pb": 0.0015,
+        "mcm_lhe_filter_efficiency": 0.82,
+        "pilot_times_filter_pb": 0.586956,
+        "xsec_used_pb": 0.576,
+        "relative_difference_used_vs_rounded_mcm_product": -0.018666
+      }
+    ],
+    "interpretation": "The used values are already post-filter effective cross sections. Their agreement with pilot-cross-section times the rounded McM filter efficiency excludes an order-one missing or double-applied filter factor. The residual differences below 2 percent are compatible with rounded McM efficiencies or a more precise production efficiency and cannot explain a factor 1.416 data excess.",
+    "remaining_blockers": [
+      "The McM generator_parameters cross_section field is the placeholder value 1 pb for these LHE requests and is not independently useful.",
+      "A fresh full GenXSecAnalyzer calculation on MiniAOD was not run because the active X509 proxy had expired and the MiniAOD files were not readable through global XRootD. This is not needed to reject an order-one filter-efficiency mistake, but it would provide a final percent-level cross-check.",
+      "The legacy XSDB hostname cms-gen-dev.cern.ch did not resolve from lxplus, so XSDB was not used."
+    ]
+  },
+  "missing_or_failed_input_files": {
+    "normalization_policy": "Retained-file signed sumw is used consistently, so the valid retained sample is rescaled to the full process cross section. Missing files do not create a denominator/numerator mismatch, although rare-event variance remains.",
+    "records": [
+      {
+        "process": "GJ",
+        "dataset_bin": "PTG-100to200",
+        "failed_files": 1,
+        "attempted_files": 2751,
+        "fraction": 0.0003635
+      },
+      {
+        "process": "GJ",
+        "dataset_bin": "PTG-200to400",
+        "failed_files": 1,
+        "attempted_files": 397,
+        "fraction": 0.002519
+      },
+      {
+        "process": "QCD",
+        "dataset_bin": "PT-300to470",
+        "failed_files": 1,
+        "attempted_files": 631,
+        "fraction": 0.001585
+      },
+      {
+        "process": "ST",
+        "dataset_bin": "TBbarQto2Q",
+        "failed_files": 1,
+        "fraction": null
+      },
+      {
+        "process": "Zto2Nu",
+        "dataset_bin": "2J-PTNuNu-100to200",
+        "failed_files": 1,
+        "fraction": null
+      }
+    ],
+    "impact_assessment": "The file fractions are too small to explain 41.6 percent. QCD remains sensitive to rare-event fluctuations because its selected effective sample size is only about 61."
+  },
+  "scale_factor_and_object_correction_audit": {
+    "central_weight_construction": {
+      "file": "autonomous_allhad/autonomous_allhad/real_subset_worker.py",
+      "lines": "377-610",
+      "finding": "genWeight, pileup, top-pT, b-tag, lepton, and photon-ID factors are multiplied once. No scale-factor failure is recorded for the dominant GJ or QCD samples."
+    },
+    "object_corrections": {
+      "status": "applied_once",
+      "evidence": [
+        {
+          "file": "autonomous_allhad/autonomous_allhad/intermediate_2024_worker.py",
+          "lines": "327-352, 382-385",
+          "finding": "The current 2024 wrapper calibrates objects first, then calls real_subset_worker and replaces the old JEC/MET hooks by passthroughs."
+        },
+        {
+          "file": "autonomous_allhad/autonomous_allhad/object_corrections_2024.py",
+          "lines": "17-20, 602-735",
+          "finding": "Summer24Prompt24_V5 JEC, Summer24Prompt24_JRV2 JER, lepton/photon momentum corrections, and MET propagation are applied."
+        }
+      ]
+    },
+    "nominal_total_yield": 10239.67376288432,
+    "variations": [
+      {
+        "name": "pileupUp",
+        "yield": 10016.303162701703,
+        "relative_to_nominal": -0.021814
+      },
+      {
+        "name": "pileupDown",
+        "yield": 10164.42717135578,
+        "relative_to_nominal": -0.007348
+      },
+      {
+        "name": "photon_idUp",
+        "yield": 10724.59223670874,
+        "relative_to_nominal": 0.047357
+      },
+      {
+        "name": "photon_idDown",
+        "yield": 9754.755289059898,
+        "relative_to_nominal": -0.047357
+      },
+      {
+        "name": "btag_heavy_correlatedUp",
+        "yield": 10302.330991673076,
+        "relative_to_nominal": 0.006119
+      },
+      {
+        "name": "btag_light_correlatedUp",
+        "yield": 10356.126015499085,
+        "relative_to_nominal": 0.011373
+      }
+    ],
+    "interpretation": "Even the largest existing single nuisance shift is below 5 percent. Routine SF variations cannot explain the 41.6 percent deficit."
+  },
+  "photon_specific_findings": {
+    "medium_photon_selection": {
+      "file": "autonomous_allhad/autonomous_allhad/real_subset_worker.py",
+      "lines": "1066-1073",
+      "definition": "pt > 220 GeV, ECAL fiducial, Photon_cutBased >= 2, Photon_electronVeto == 1"
+    },
+    "photon_id_sf": {
+      "status": "applied_once",
+      "file": "autonomous_allhad/autonomous_allhad/real_subset_worker.py",
+      "lines": "559-568",
+      "approximate_central_effect_on_total_mc": 0.024699,
+      "up_down_effect_on_total_mc": 0.047357,
+      "conclusion": "Correctly scoped to GCR, not duplicated, and too small to close the deficit. Prompt-photon ID SF should not be applied to a future data-driven fake component."
+    },
+    "photon_trigger_sf": {
+      "status": "missing",
+      "trigger_paths": [
+        "HLT_Photon175",
+        "HLT_Photon200"
+      ],
+      "selection_evidence": {
+        "file": "autonomous_allhad/autonomous_allhad/real_subset_worker.py",
+        "lines": "95, 1482"
+      },
+      "missing_dependency_evidence": {
+        "file": "autonomous_allhad/autonomous_allhad/object_corrections_2024.py",
+        "lines": "180-186"
+      },
+      "required_action": "Measure the Photon175-or-Photon200 efficiency and data/MC ratio versus photon pT, eta, and run era with an orthogonal trigger; then apply it only to prompt-photon MC.",
+      "impact_assessment": "The offline threshold is above 220 GeV, so this is expected to be a plateau-scale correction, not an assumed 42 percent correction. The sign and size must be measured."
+    },
+    "data_prescale": {
+      "status": "not_encoded_or_corrected_in_current_skim",
+      "finding": "Data events receive unit weight and the GCR uses only the OR of raw Photon175 and Photon200 bits. No per-lumisection prescale weight is applied.",
+      "sign_test": "If a selected trigger path were prescaled and no inverse-prescale weight were applied, the observed data yield would decrease, not increase. Prescale omission therefore has the wrong sign to create Data/MC = 1.416.",
+      "required_action": "Verify from the 2024 HLT menu that Photon200 is unprescaled for all certified eras and measure the OR efficiency. The current flat skim does not retain path-specific trigger bits or prescale columns, so this cannot be completed from the skim alone."
+    },
+    "csev_sf": {
+      "status": "missing",
+      "payload": "analysis/data/EGammaSF/2024/photon.json.gz:Photon-CSEV-SF",
+      "medium_sf_ranges": {
+        "EB": [
+          0.9483356475830078,
+          0.9779616594314575
+        ],
+        "EE": [
+          0.8916411399841309,
+          0.9200066924095154
+        ]
+      },
+      "estimated_total_mc_factor_range_from_eb_ee_mix": [
+        0.9342736807739362,
+        0.9635870602471878
+      ],
+      "estimated_data_over_mc_after_application_range": [
+        1.4690654337361344,
+        1.5151582151302023
+      ],
+      "required_action": "Persist Photon_r9 and evaluate the Medium CSEV SF using supercluster eta and R9 for prompt photons.",
+      "impact_assessment": "This is a correctness fix, but it lowers MC and worsens the GCR ratio."
+    }
+  },
+  "gcr_specific_btag_scope": {
+    "status": "bug",
+    "selection_jet_scope": {
+      "file": "autonomous_allhad/autonomous_allhad/real_subset_worker.py",
+      "lines": "1424, 1452-1455, 1482",
+      "finding": "GCR selection and observables use photon-cleaned AK4 jets."
+    },
+    "weight_jet_scope": {
+      "file": "autonomous_allhad/autonomous_allhad/real_subset_worker.py",
+      "lines": "1613-1618",
+      "finding": "The b-tag event weight receives all good_j jets, without the photon-cleaning mask."
+    },
+    "required_action": "Compute a GCR-specific b-tag event weight from good_j AND photon_clean_j, or persist the photon-cleaned jet collection for post-skim weights.",
+    "impact_assessment": "Existing b-tag variations change the total by at most about 1.1 percent, so this cannot explain the main deficit."
+  },
+  "qcd_and_truth_origin": {
+    "qcd_mc_effective_entries": 61.085,
+    "qcd_mc_relative_statistical_uncertainty": 0.12798,
+    "qcd_fraction_of_total_mc": 0.420584,
+    "pre_photon_id_truth_origin_yields": {
+      "GJ": {
+        "all": 5391.21,
+        "prompt": 5385.64,
+        "fake": 3.34,
+        "electron": 2.23
+      },
+      "QCD": {
+        "all": 4214.02,
+        "prompt": 3902.89,
+        "fake": 311.11,
+        "electron": 0.027
+      }
+    },
+    "conclusion": "The selected QCD sample is about 92.6 percent prompt-photon origin, not all fake. Replacing all QCD with a fake estimate is wrong. Its rare selected events carry large weights, making the nominal QCD component statistically fragile."
+  },
+  "diagnostic_fit_results_not_validation": {
+    "gj_only_scale_with_nominal_qcd": 1.771,
+    "prompt_pool_scale_with_data_driven_fake": 1.38951,
+    "warning": "These are diagnostic GCR constraints, not evidence that the prefit cross sections should be changed. They may only be propagated after prompt-sample overlap/stitching is fixed and transfer-factor closure is demonstrated."
+  },
+  "ranked_actions": [
+    {
+      "rank": 1,
+      "action": "Resolve GJ versus QCD prompt-photon overlap/stitching and build mutually exclusive prompt and fake components.",
+      "reason": "GJ plus QCD is 96.1 percent of MC, while QCD is mostly prompt and has only about 61 effective selected events."
+    },
+    {
+      "rank": 2,
+      "action": "Use the data-driven estimate only for the hadron-fake photon component, then fit or constrain the prompt pool in GCR and validate transfer-factor closure.",
+      "reason": "A global QCD replacement is physically wrong; a prompt-pool control-region constraint is the plausible route to a good post-fit Data/MC."
+    },
+    {
+      "rank": 3,
+      "action": "Measure and apply the 2024 Photon175-or-Photon200 trigger efficiency and SF with run-era, pT, and eta dependence.",
+      "reason": "The correction is missing, but it must be measured and is not expected to be order one above 220 GeV."
+    },
+    {
+      "rank": 4,
+      "action": "Fix the GCR b-tag weight to use photon-cleaned jets.",
+      "reason": "This is a real selection-versus-weight scope mismatch with a likely percent-level effect."
+    },
+    {
+      "rank": 5,
+      "action": "Add the prompt-photon CSEV SF and retain Photon_r9; keep it separate from the fake estimate.",
+      "reason": "Required for correctness, but it worsens rather than improves the current ratio."
+    },
+    {
+      "rank": 6,
+      "action": "Inspect the asymmetric pileup up/down response and add a top-pT systematic, while retaining current central corrections unless an independent closure fails.",
+      "reason": "These are subleading completeness issues."
+    }
+  ],
+  "explicitly_rejected_changes": [
+    "Do not alter 109.82 fb^-1 to force agreement.",
+    "Do not multiply the four GJ cross sections by an ad hoc common factor.",
+    "Do not replace all QCD with the fake-photon estimate.",
+    "Do not interpret the disappearance of jobs or a diagnostic fit as validation."
+  ]
+}

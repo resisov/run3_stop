@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "measurement": "photon_trigger_sf_2024",
+  "status": "measurement_definition",
+  "reference": "AN2019_016_v9.pdf section 5.1.4",
+  "year": "2024",
+  "campaign_inputs": {
+    "data_dataset_prefixes": ["JetMET0-Run2024", "JetMET1-Run2024"],
+    "data_process": "JetMET",
+    "mc_datasets": [
+      {
+        "dataset_contains": "GJ_Bin-PTG-100to200_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15",
+        "process": "GJ",
+        "xsec_pb": 1391.0,
+        "xsec_source": "analysis/metadata/json_maker_lxplus.py"
+      },
+      {
+        "dataset_contains": "GJ_Bin-PTG-200to400_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15",
+        "process": "GJ",
+        "xsec_pb": 88.24,
+        "xsec_source": "analysis/metadata/json_maker_lxplus.py"
+      },
+      {
+        "dataset_contains": "GJ_Bin-PTG-400to600_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15",
+        "process": "GJ",
+        "xsec_pb": 3.77,
+        "xsec_source": "analysis/metadata/json_maker_lxplus.py"
+      },
+      {
+        "dataset_contains": "GJ_Bin-PTG-600_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15",
+        "process": "GJ",
+        "xsec_pb": 0.576,
+        "xsec_source": "analysis/metadata/json_maker_lxplus.py"
+      }
+    ],
+    "files_per_condor_shard": 20
+  },
+  "probe_paths": ["HLT_Photon175", "HLT_Photon200"],
+  "reference_paths": [
+    "HLT_PFHT180", "HLT_PFHT250", "HLT_PFHT350", "HLT_PFHT370",
+    "HLT_PFHT430", "HLT_PFHT510", "HLT_PFHT590", "HLT_PFHT680",
+    "HLT_PFHT780", "HLT_PFHT890", "HLT_PFHT1050"
+  ],
+  "data_streams": ["JetMET0", "JetMET1"],
+  "mc_processes": ["GJ"],
+  "pt_edges_gev": [220, 250, 300, 400, 600, 1000],
+  "abseta_edges": [0.0, 0.8, 1.4442, 2.0, 2.5],
+  "eta_policy": "Exclude the 1.4442--1.566 ECAL transition; the adjacent endcap bin is populated only for abs(eta)>1.566.",
+  "selection": "baseline-like photon region without MET threshold; veto-electron veto; loose-muon veto; at least one medium-ID photon",
+  "adoption_gates": [
+    "PFHT reference path presence and per-run prescale audit",
+    "photon-trigger/PFHT overlap and primary-dataset deduplication audit",
+    "per-era and eta closure",
+    "alternate binning and reference-path stability",
+    "plateau validation over the analysis photon pT threshold"
+  ]
+}

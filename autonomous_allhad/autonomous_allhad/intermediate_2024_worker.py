@@ -9,6 +9,10 @@ import numpy as np
 
 from . import flat_ntuple_worker as flat
 from . import real_subset_worker as baseline
+from .dy_ptll_policy import (
+    dy_ptll_exclusive_window,
+    dy_ptll_in_exclusive_window,
+)
 from .object_corrections_2024 import (
     REQUIRED_BRANCHES,
     SHAPE_VARIATIONS,
@@ -21,6 +25,7 @@ from .object_corrections_2024 import (
 
 EXTRA_FLOAT_FIELDS = [
     "rho",
+    "lhe_vpt",
     "puppi_met_nanoaod",
     "puppi_met_nanoaod_phi",
     "puppi_met_corrected",
@@ -229,6 +234,11 @@ def _decorate_rows(
     for row in rows:
         index = int(row["entry"]) - entry_start
         row["rho"] = float(raw["Rho_fixedGridRhoFastjetAll"][index])
+        row["lhe_vpt"] = (
+            float(raw["LHE_Vpt"][index])
+            if "LHE_Vpt" in raw.fields
+            else -99.0
+        )
         row["puppi_met_nanoaod"] = float(raw["PuppiMET_pt"][index])
         row["puppi_met_nanoaod_phi"] = float(raw["PuppiMET_phi"][index])
         row["puppi_met_corrected"] = float(corrected["PuppiMET_pt"][index])
@@ -352,6 +362,34 @@ def extract_chunk_2024(
     )
     if decorate_rows:
         _decorate_rows(rows, arrays, corrected, entry_start)
+    dy_window = dy_ptll_exclusive_window(dataset, process)
+    if dy_window is not None:
+        if "LHE_Vpt" not in arrays.fields:
+            raise RuntimeError(
+                f"LHE_Vpt is required for exclusive DY PTLL stitching: {dataset}"
+            )
+        rows_before_stitching = len(rows)
+        rows = [
+            row
+            for row in rows
+            if dy_ptll_in_exclusive_window(
+                dataset,
+                process,
+                row["lhe_vpt"],
+            )
+        ]
+        lower, upper = dy_window
+        summary["dy_ptll_gen_stitching"] = {
+            "status": "applied",
+            "branch": "LHE_Vpt",
+            "lower_gev_inclusive": lower,
+            "upper_gev_exclusive": upper,
+            "selected_rows_before_stitching": rows_before_stitching,
+            "selected_rows_after_stitching": len(rows),
+            "selected_rows_removed_as_overlap": (
+                rows_before_stitching - len(rows)
+            ),
+        }
     summary["object_corrections_2024"] = calibration
     summary["object_branch_audit"] = audit
     summary["payload_status"] = payload_status
@@ -365,6 +403,8 @@ def extract_chunk_2024(
 
 
 def install_backend() -> None:
+    if "LHE_Vpt" not in flat.CORE_BRANCHES:
+        flat.CORE_BRANCHES.append("LHE_Vpt")
     for names in REQUIRED_BRANCHES.values():
         for name in names:
             if name not in flat.CORE_BRANCHES:

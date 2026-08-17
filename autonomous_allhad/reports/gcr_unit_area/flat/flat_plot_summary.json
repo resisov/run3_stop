@@ -1,0 +1,3068 @@
+{
+  "background_systematic_sources": [
+    "pileup",
+    "electron_id",
+    "electron_hlt",
+    "muon_id",
+    "muon_hlt",
+    "photon_id",
+    "btagSF_bc_correlated",
+    "btagSF_bc_uncorrelated",
+    "btagSF_light_correlated",
+    "btagSF_light_uncorrelated",
+    "jesFlavorQCD",
+    "jesTotal",
+    "metUnclustered"
+  ],
+  "dy_rz_application": {
+    "channels": {
+      "DY2E": {
+        "highdm": {
+          "Nb1": 0.7956219718951804,
+          "Nb2plus": 0.6547029430664236,
+          "effective": 0.7538180297974927
+        },
+        "lowdm": {
+          "Nb1": 0.6242885433272645,
+          "Nb2plus": 0.7996132657524656,
+          "effective": 0.6491810522205995
+        }
+      },
+      "DY2M": {
+        "highdm": {
+          "Nb1": 0.6792547511819805,
+          "Nb2plus": 0.750825639500108,
+          "effective": 0.6964603717441671
+        },
+        "lowdm": {
+          "Nb1": 0.5985045784169216,
+          "Nb2plus": 0.5574163275293518,
+          "effective": 0.5913413126323562
+        }
+      }
+    },
+    "containers": 72,
+    "factor_policy": "channel-specific RZ(Nb); exact for explicit Nb axes and DY-yield-weighted effective factor for inclusive CR distributions",
+    "legend_label": "DY",
+    "records": 72,
+    "source": "dy_rz_nb_run2method_20260731",
+    "status": "complete"
+  },
+  "gcr_only": true,
+  "luminosity_uncertainty_applied": false,
+  "output_dir": "/tmp/gcr_unit/flat",
+  "plot_count": 23,
+  "plots": [
+    {
+      "bins": 6,
+      "labels": [
+        "GCR"
+      ],
+      "name": "highdm_cr_gcr_recoil",
+      "pdf": "/tmp/gcr_unit/flat/highdm_cr_gcr_recoil.pdf",
+      "png": "/tmp/gcr_unit/flat/highdm_cr_gcr_recoil.png",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.00032177730348662817,
+            "raw_fraction": 0.00032177730348662817
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.7890987209172985,
+            "raw_fraction": 0.7890987209172984
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.1626937119343534,
+            "raw_fraction": 0.16269371193435336
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.04529863160513358,
+            "raw_fraction": 0.045298631605133574
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0008268472163514909,
+            "raw_fraction": 0.0008268472163514907
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0016876094321362995,
+            "raw_fraction": 0.0016876094321362997
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 7.270159124026475e-05,
+            "raw_fraction": 7.270159124026476e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 14495.0,
+          "data_over_mc": 1.7533859202218665,
+          "mc": 8266.862322109819,
+          "process_groups": {
+            "DY": 2.660088666303703,
+            "Data": 14495.0,
+            "Others": 0.0,
+            "Photon+jet": 6523.370484376265,
+            "QCD Multijet": 1344.9665172342943,
+            "Top": 374.47755085961177,
+            "VV+VVV": 6.835432098997524,
+            "W -> lv": 13.951234828964722,
+            "Z -> vv": 0.601014045381574
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0000000000000002,
+            "up": 0.9999999999999999
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 0.9999999999999999,
+            "up": 1.0000000000000002
+          },
+          "electron_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999998
+          },
+          "pileup": {
+            "down": 1.0,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      }
+    },
+    {
+      "bins": 12,
+      "labels": [
+        "GCR\\n$N_{t}=0$",
+        "GCR\\n$N_{t}\\geq1$"
+      ],
+      "name": "highdm_cr_gcr_recoil_ntop_split",
+      "pdf": "/tmp/gcr_unit/flat/highdm_cr_gcr_recoil_ntop_split.pdf",
+      "png": "/tmp/gcr_unit/flat/highdm_cr_gcr_recoil_ntop_split.png",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 0.9999999999999999,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.00032177730348662817,
+            "raw_fraction": 0.00032177730348662817
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.7890987209172985,
+            "raw_fraction": 0.7890987209172985
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.16269371193435334,
+            "raw_fraction": 0.16269371193435336
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.045298631605133574,
+            "raw_fraction": 0.04529863160513357
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0008268472163514908,
+            "raw_fraction": 0.0008268472163514908
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0016876094321363,
+            "raw_fraction": 0.0016876094321362997
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 7.270159124026475e-05,
+            "raw_fraction": 7.270159124026475e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 14495.0,
+          "data_over_mc": 1.7533859202218665,
+          "mc": 8266.862322109819,
+          "process_groups": {
+            "DY": 2.660088666303703,
+            "Data": 14495.0,
+            "Others": 0.0,
+            "Photon+jet": 6523.370484376266,
+            "QCD Multijet": 1344.9665172342943,
+            "Top": 374.4775508596117,
+            "VV+VVV": 6.835432098997525,
+            "W -> lv": 13.951234828964722,
+            "Z -> vv": 0.6010140453815739
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 0.9999999999999997,
+            "up": 1.0000000000000002
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999998
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 1.0000000000000002
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 1.0000000000000002,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999999
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      }
+    },
+    {
+      "bins": 34,
+      "labels": [
+        "GCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_gcr_onebin",
+      "pdf": "/tmp/gcr_unit/flat/lowdm_cr_gcr_onebin.pdf",
+      "png": "/tmp/gcr_unit/flat/lowdm_cr_gcr_onebin.png",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 0.9999999999999999
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0008234333768589538,
+            "raw_fraction": 0.0008234333768589538
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8758558699968451,
+            "raw_fraction": 0.8758558699968451
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.11156505053925135,
+            "raw_fraction": 0.11156505053925136
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.007943517635486199,
+            "raw_fraction": 0.007943517635486199
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0004134809244781384,
+            "raw_fraction": 0.00041348092447813844
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.003268652562696907,
+            "raw_fraction": 0.0032686525626969077
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 0.0001299949643832171,
+            "raw_fraction": 0.0001299949643832171
+          }
+        },
+        "raw_integrals": {
+          "data": 15477.0,
+          "data_over_mc": 1.7516361439882706,
+          "mc": 8835.739119176133,
+          "process_groups": {
+            "DY": 7.275642499947961,
+            "Data": 15477.0,
+            "Others": 0.0,
+            "Photon+jet": 7738.833973291169,
+            "QCD Multijet": 985.7596813825255,
+            "Top": 70.1868495157309,
+            "VV+VVV": 3.6534095794445998,
+            "W -> lv": 28.880961315216382,
+            "Z -> vv": 1.1486015920966994
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0000000000000002,
+            "up": 1.0
+          },
+          "electron_hlt": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999998
+          },
+          "electron_id": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999998
+          },
+          "muon_hlt": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999998
+          },
+          "muon_id": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999998
+          },
+          "photon_id": {
+            "down": 1.0000000000000002,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      }
+    },
+    {
+      "bins": 12,
+      "labels": [
+        "GCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_gcr_met",
+      "pdf": "/tmp/gcr_unit/flat/lowdm_cr_gcr_met.pdf",
+      "png": "/tmp/gcr_unit/flat/lowdm_cr_gcr_met.png",
+      "region": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0008219410366317153,
+            "raw_fraction": 0.0008219410366317153
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8748927238998613,
+            "raw_fraction": 0.8748927238998613
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.11247810515702909,
+            "raw_fraction": 0.11247810515702909
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.007931529820287359,
+            "raw_fraction": 0.007931529820287357
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0004129347912950257,
+            "raw_fraction": 0.00041293479129502565
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0033330059254252278,
+            "raw_fraction": 0.0033330059254252278
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 0.00012975936947033227,
+            "raw_fraction": 0.0001297593694703323
+          }
+        },
+        "raw_integrals": {
+          "data": 15484.0,
+          "data_over_mc": 1.7492523871667014,
+          "mc": 8851.781545989335,
+          "process_groups": {
+            "DY": 7.275642499947962,
+            "Data": 15484.0,
+            "Others": 0.0,
+            "Photon+jet": 7744.359268137135,
+            "QCD Multijet": 995.631615556838,
+            "Top": 70.20816929468374,
+            "VV+VVV": 3.655208565282266,
+            "W -> lv": 29.503040343352136,
+            "Z -> vv": 1.1486015920966994
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0000000000000002,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "met"
+    },
+    {
+      "bins": 7,
+      "labels": [
+        "GCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_gcr_ht",
+      "pdf": "/tmp/gcr_unit/flat/lowdm_cr_gcr_ht.pdf",
+      "png": "/tmp/gcr_unit/flat/lowdm_cr_gcr_ht.png",
+      "region": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0000000000000002,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.00082198144278496,
+            "raw_fraction": 0.00082198144278496
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8748961403458911,
+            "raw_fraction": 0.8748961403458911
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.11247409403636366,
+            "raw_fraction": 0.11247409403636364
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.007931919729776119,
+            "raw_fraction": 0.007931919729776119
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.000412955090934189,
+            "raw_fraction": 0.000412955090934189
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0033331436058829725,
+            "raw_fraction": 0.003333143605882972
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 0.00012976574836703425,
+            "raw_fraction": 0.00012976574836703425
+          }
+        },
+        "raw_integrals": {
+          "data": 15484.0,
+          "data_over_mc": 1.7493383794178115,
+          "mc": 8851.346418840449,
+          "process_groups": {
+            "DY": 7.275642499947961,
+            "Data": 15484.0,
+            "Others": 0.0,
+            "Photon+jet": 7744.008818707935,
+            "QCD Multijet": 995.5471694610912,
+            "Top": 70.20816929468374,
+            "VV+VVV": 3.6552085652822655,
+            "W -> lv": 29.502808719413185,
+            "Z -> vv": 1.1486015920966994
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0000000000000002,
+            "up": 0.9999999999999999
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0000000000000002,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 0.9999999999999998
+          },
+          "electron_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 1.0000000000000002
+          },
+          "pileup": {
+            "down": 0.9999999999999997,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "ht"
+    },
+    {
+      "bins": 8,
+      "labels": [
+        "GCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_gcr_njet",
+      "pdf": "/tmp/gcr_unit/flat/lowdm_cr_gcr_njet.pdf",
+      "png": "/tmp/gcr_unit/flat/lowdm_cr_gcr_njet.png",
+      "region": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0008219410366317152,
+            "raw_fraction": 0.0008219410366317152
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8748927238998612,
+            "raw_fraction": 0.8748927238998614
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.11247810515702909,
+            "raw_fraction": 0.11247810515702908
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.007931529820287359,
+            "raw_fraction": 0.007931529820287357
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.00041293479129502565,
+            "raw_fraction": 0.0004129347912950256
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0033330059254252278,
+            "raw_fraction": 0.0033330059254252278
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 0.00012975936947033227,
+            "raw_fraction": 0.0001297593694703323
+          }
+        },
+        "raw_integrals": {
+          "data": 15484.0,
+          "data_over_mc": 1.7492523871667014,
+          "mc": 8851.781545989335,
+          "process_groups": {
+            "DY": 7.275642499947961,
+            "Data": 15484.0,
+            "Others": 0.0,
+            "Photon+jet": 7744.359268137136,
+            "QCD Multijet": 995.6316155568379,
+            "Top": 70.20816929468374,
+            "VV+VVV": 3.6552085652822655,
+            "W -> lv": 29.503040343352136,
+            "Z -> vv": 1.1486015920966994
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0000000000000002,
+            "up": 0.9999999999999999
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 1.0000000000000002
+          },
+          "pileup": {
+            "down": 1.0,
+            "up": 1.0000000000000002
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "njet"
+    },
+    {
+      "bins": 6,
+      "labels": [
+        "GCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_gcr_nb_medium_lowdm",
+      "pdf": "/tmp/gcr_unit/flat/lowdm_cr_gcr_nb_medium_lowdm.pdf",
+      "png": "/tmp/gcr_unit/flat/lowdm_cr_gcr_nb_medium_lowdm.png",
+      "region": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 0.9999999999999998
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0008219410366317153,
+            "raw_fraction": 0.0008219410366317153
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8748927238998611,
+            "raw_fraction": 0.8748927238998612
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.11247810515702907,
+            "raw_fraction": 0.11247810515702907
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.007931529820287357,
+            "raw_fraction": 0.007931529820287359
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.00041293479129502565,
+            "raw_fraction": 0.0004129347912950256
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0033330059254252273,
+            "raw_fraction": 0.0033330059254252278
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 0.0001297593694703323,
+            "raw_fraction": 0.0001297593694703323
+          }
+        },
+        "raw_integrals": {
+          "data": 15484.0,
+          "data_over_mc": 1.7492523871667014,
+          "mc": 8851.781545989335,
+          "process_groups": {
+            "DY": 7.275642499947962,
+            "Data": 15484.0,
+            "Others": 0.0,
+            "Photon+jet": 7744.359268137134,
+            "QCD Multijet": 995.6316155568378,
+            "Top": 70.20816929468376,
+            "VV+VVV": 3.6552085652822655,
+            "W -> lv": 29.503040343352136,
+            "Z -> vv": 1.1486015920966994
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999998
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0000000000000002,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_hlt": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999998
+          },
+          "electron_id": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999998
+          },
+          "muon_hlt": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999998
+          },
+          "muon_id": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999998
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "pileup": {
+            "down": 1.0000000000000002,
+            "up": 0.9999999999999999
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "nb_medium_lowdm"
+    },
+    {
+      "bins": 6,
+      "labels": [
+        "GCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_gcr_nb_loose_lowdm",
+      "pdf": "/tmp/gcr_unit/flat/lowdm_cr_gcr_nb_loose_lowdm.pdf",
+      "png": "/tmp/gcr_unit/flat/lowdm_cr_gcr_nb_loose_lowdm.png",
+      "region": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.000821941036631715,
+            "raw_fraction": 0.000821941036631715
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8748927238998613,
+            "raw_fraction": 0.8748927238998615
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.11247810515702904,
+            "raw_fraction": 0.11247810515702904
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.007931529820287355,
+            "raw_fraction": 0.007931529820287355
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.00041293479129502544,
+            "raw_fraction": 0.00041293479129502554
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.003333005925425227,
+            "raw_fraction": 0.0033330059254252273
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 0.00012975936947033227,
+            "raw_fraction": 0.00012975936947033227
+          }
+        },
+        "raw_integrals": {
+          "data": 15484.0,
+          "data_over_mc": 1.7492523871667012,
+          "mc": 8851.781545989337,
+          "process_groups": {
+            "DY": 7.275642499947961,
+            "Data": 15484.0,
+            "Others": 0.0,
+            "Photon+jet": 7744.359268137138,
+            "QCD Multijet": 995.6316155568378,
+            "Top": 70.20816929468373,
+            "VV+VVV": 3.6552085652822655,
+            "W -> lv": 29.50304034335214,
+            "Z -> vv": 1.1486015920966994
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "btagSF_light_correlated": {
+            "down": 0.9999999999999997,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0000000000000002,
+            "up": 0.9999999999999999
+          },
+          "electron_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "pileup": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "nb_loose_lowdm"
+    },
+    {
+      "bins": 4,
+      "labels": [
+        "GCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_gcr_n_e_veto",
+      "pdf": "/tmp/gcr_unit/flat/lowdm_cr_gcr_n_e_veto.pdf",
+      "png": "/tmp/gcr_unit/flat/lowdm_cr_gcr_n_e_veto.png",
+      "region": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0008219410366317153,
+            "raw_fraction": 0.0008219410366317153
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8748927238998613,
+            "raw_fraction": 0.8748927238998613
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.11247810515702908,
+            "raw_fraction": 0.11247810515702908
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.007931529820287357,
+            "raw_fraction": 0.007931529820287357
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0004129347912950256,
+            "raw_fraction": 0.0004129347912950256
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0033330059254252278,
+            "raw_fraction": 0.0033330059254252278
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 0.0001297593694703323,
+            "raw_fraction": 0.0001297593694703323
+          }
+        },
+        "raw_integrals": {
+          "data": 15484.0,
+          "data_over_mc": 1.7492523871667014,
+          "mc": 8851.781545989335,
+          "process_groups": {
+            "DY": 7.275642499947962,
+            "Data": 15484.0,
+            "Others": 0.0,
+            "Photon+jet": 7744.359268137135,
+            "QCD Multijet": 995.6316155568379,
+            "Top": 70.20816929468374,
+            "VV+VVV": 3.6552085652822655,
+            "W -> lv": 29.503040343352136,
+            "Z -> vv": 1.1486015920966994
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 1.0,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "n_e_veto"
+    },
+    {
+      "bins": 4,
+      "labels": [
+        "GCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_gcr_n_m_loose",
+      "pdf": "/tmp/gcr_unit/flat/lowdm_cr_gcr_n_m_loose.pdf",
+      "png": "/tmp/gcr_unit/flat/lowdm_cr_gcr_n_m_loose.png",
+      "region": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0008219410366317153,
+            "raw_fraction": 0.0008219410366317153
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8748927238998613,
+            "raw_fraction": 0.8748927238998613
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.11247810515702908,
+            "raw_fraction": 0.11247810515702908
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.007931529820287357,
+            "raw_fraction": 0.007931529820287357
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0004129347912950256,
+            "raw_fraction": 0.0004129347912950256
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0033330059254252278,
+            "raw_fraction": 0.0033330059254252278
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 0.0001297593694703323,
+            "raw_fraction": 0.0001297593694703323
+          }
+        },
+        "raw_integrals": {
+          "data": 15484.0,
+          "data_over_mc": 1.7492523871667014,
+          "mc": 8851.781545989335,
+          "process_groups": {
+            "DY": 7.275642499947962,
+            "Data": 15484.0,
+            "Others": 0.0,
+            "Photon+jet": 7744.359268137135,
+            "QCD Multijet": 995.6316155568379,
+            "Top": 70.20816929468374,
+            "VV+VVV": 3.6552085652822655,
+            "W -> lv": 29.503040343352136,
+            "Z -> vv": 1.1486015920966994
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 1.0,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "n_m_loose"
+    },
+    {
+      "bins": 8,
+      "labels": [
+        "GCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_gcr_lowdm_mtb",
+      "pdf": "/tmp/gcr_unit/flat/lowdm_cr_gcr_lowdm_mtb.pdf",
+      "png": "/tmp/gcr_unit/flat/lowdm_cr_gcr_lowdm_mtb.png",
+      "region": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 0.9999999999999999
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0008219410366317151,
+            "raw_fraction": 0.0008219410366317151
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8748927238998611,
+            "raw_fraction": 0.8748927238998612
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.11247810515702904,
+            "raw_fraction": 0.11247810515702905
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.007931529820287355,
+            "raw_fraction": 0.007931529820287355
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0004129347912950255,
+            "raw_fraction": 0.0004129347912950255
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0033330059254252265,
+            "raw_fraction": 0.0033330059254252265
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 0.00012975936947033227,
+            "raw_fraction": 0.00012975936947033227
+          }
+        },
+        "raw_integrals": {
+          "data": 15484.0,
+          "data_over_mc": 1.7492523871667012,
+          "mc": 8851.781545989337,
+          "process_groups": {
+            "DY": 7.275642499947962,
+            "Data": 15484.0,
+            "Others": 0.0,
+            "Photon+jet": 7744.359268137136,
+            "QCD Multijet": 995.6316155568379,
+            "Top": 70.20816929468373,
+            "VV+VVV": 3.655208565282265,
+            "W -> lv": 29.503040343352133,
+            "Z -> vv": 1.1486015920966994
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "electron_hlt": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "electron_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_hlt": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 0.9999999999999998,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "lowdm_mtb"
+    },
+    {
+      "bins": 8,
+      "labels": [
+        "GCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_gcr_lowdm_met_sqrt_ht",
+      "pdf": "/tmp/gcr_unit/flat/lowdm_cr_gcr_lowdm_met_sqrt_ht.pdf",
+      "png": "/tmp/gcr_unit/flat/lowdm_cr_gcr_lowdm_met_sqrt_ht.png",
+      "region": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 0.9999999999999999
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0008219410366317154,
+            "raw_fraction": 0.0008219410366317154
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8748927238998613,
+            "raw_fraction": 0.8748927238998613
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.1124781051570291,
+            "raw_fraction": 0.1124781051570291
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.00793152982028736,
+            "raw_fraction": 0.007931529820287357
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0004129347912950257,
+            "raw_fraction": 0.0004129347912950257
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0033330059254252278,
+            "raw_fraction": 0.0033330059254252273
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 0.00012975936947033233,
+            "raw_fraction": 0.00012975936947033233
+          }
+        },
+        "raw_integrals": {
+          "data": 15484.0,
+          "data_over_mc": 1.7492523871667018,
+          "mc": 8851.781545989334,
+          "process_groups": {
+            "DY": 7.275642499947962,
+            "Data": 15484.0,
+            "Others": 0.0,
+            "Photon+jet": 7744.359268137134,
+            "QCD Multijet": 995.6316155568379,
+            "Top": 70.20816929468373,
+            "VV+VVV": 3.6552085652822655,
+            "W -> lv": 29.50304034335213,
+            "Z -> vv": 1.1486015920966994
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 1.0000000000000002
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0000000000000002
+          },
+          "electron_hlt": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "electron_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_hlt": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 1.0,
+            "up": 0.9999999999999998
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "lowdm_met_sqrt_ht"
+    },
+    {
+      "bins": 10,
+      "labels": [
+        "GCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_gcr_lowdm_isr_pt",
+      "pdf": "/tmp/gcr_unit/flat/lowdm_cr_gcr_lowdm_isr_pt.pdf",
+      "png": "/tmp/gcr_unit/flat/lowdm_cr_gcr_lowdm_isr_pt.png",
+      "region": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 0.9999999999999999,
+          "mc": 0.9999999999999999
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0008221942174748069,
+            "raw_fraction": 0.0008221942174748068
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8748824682277431,
+            "raw_fraction": 0.8748824682277431
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.11248456441537445,
+            "raw_fraction": 0.11248456441537445
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.007933972953453133,
+            "raw_fraction": 0.007933972953453135
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.00041306198676762344,
+            "raw_fraction": 0.0004130619867676234
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0033339388601990256,
+            "raw_fraction": 0.0033339388601990256
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 0.00012979933898772756,
+            "raw_fraction": 0.00012979933898772756
+          }
+        },
+        "raw_integrals": {
+          "data": 15479.0,
+          "data_over_mc": 1.7492261738236263,
+          "mc": 8849.05578914619,
+          "process_groups": {
+            "DY": 7.275642499947961,
+            "Data": 15479.0,
+            "Others": 0.0,
+            "Photon+jet": 7741.883770293218,
+            "QCD Multijet": 995.3821859294569,
+            "Top": 70.20816929468376,
+            "VV+VVV": 3.655208565282265,
+            "W -> lv": 29.50221097150364,
+            "Z -> vv": 1.1486015920966994
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999998
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0000000000000002,
+            "up": 1.0
+          },
+          "electron_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 0.9999999999999998
+          },
+          "pileup": {
+            "down": 1.0,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "lowdm_isr_pt"
+    },
+    {
+      "bins": 6,
+      "labels": [
+        "GCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_gcr_lowdm_isr_dphi",
+      "pdf": "/tmp/gcr_unit/flat/lowdm_cr_gcr_lowdm_isr_dphi.pdf",
+      "png": "/tmp/gcr_unit/flat/lowdm_cr_gcr_lowdm_isr_dphi.png",
+      "region": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0008219410366317152,
+            "raw_fraction": 0.0008219410366317152
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8748927238998613,
+            "raw_fraction": 0.8748927238998613
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.11247810515702907,
+            "raw_fraction": 0.11247810515702908
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.007931529820287359,
+            "raw_fraction": 0.007931529820287359
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0004129347912950256,
+            "raw_fraction": 0.0004129347912950256
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0033330059254252273,
+            "raw_fraction": 0.0033330059254252273
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 0.00012975936947033227,
+            "raw_fraction": 0.00012975936947033227
+          }
+        },
+        "raw_integrals": {
+          "data": 15484.0,
+          "data_over_mc": 1.7492523871667014,
+          "mc": 8851.781545989335,
+          "process_groups": {
+            "DY": 7.275642499947961,
+            "Data": 15484.0,
+            "Others": 0.0,
+            "Photon+jet": 7744.359268137135,
+            "QCD Multijet": 995.6316155568379,
+            "Top": 70.20816929468376,
+            "VV+VVV": 3.6552085652822655,
+            "W -> lv": 29.503040343352133,
+            "Z -> vv": 1.1486015920966992
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0000000000000002,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 1.0,
+            "up": 1.0000000000000002
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "lowdm_isr_dphi"
+    },
+    {
+      "bins": 8,
+      "labels": [
+        "GCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_gcr_lowdm_ptb",
+      "pdf": "/tmp/gcr_unit/flat/lowdm_cr_gcr_lowdm_ptb.pdf",
+      "png": "/tmp/gcr_unit/flat/lowdm_cr_gcr_lowdm_ptb.png",
+      "region": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0000000000000002
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0008224388701701458,
+            "raw_fraction": 0.0008224388701701458
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8750778686101988,
+            "raw_fraction": 0.8750778686101988
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.11231558819544425,
+            "raw_fraction": 0.11231558819544425
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.00793331908947922,
+            "raw_fraction": 0.00793331908947922
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.00041318489778579523,
+            "raw_fraction": 0.0004131848977857952
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0033077623747506707,
+            "raw_fraction": 0.0033077623747506703
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 0.00012983796217123046,
+            "raw_fraction": 0.00012983796217123046
+          }
+        },
+        "raw_integrals": {
+          "data": 15481.0,
+          "data_over_mc": 1.749972754872864,
+          "mc": 8846.423441103629,
+          "process_groups": {
+            "DY": 7.275642499947962,
+            "Data": 15481.0,
+            "Others": 0.0,
+            "Photon+jet": 7741.309369664264,
+            "QCD Multijet": 993.5912522135201,
+            "Top": 70.18149995892387,
+            "VV+VVV": 3.655208565282265,
+            "W -> lv": 29.261866609594936,
+            "Z -> vv": 1.1486015920966994
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0000000000000002
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "electron_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 1.0,
+            "up": 1.0000000000000002
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "lowdm_ptb"
+    },
+    {
+      "bins": 5,
+      "labels": [
+        "GCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_gcr_n_lowdm_isr",
+      "pdf": "/tmp/gcr_unit/flat/lowdm_cr_gcr_n_lowdm_isr.pdf",
+      "png": "/tmp/gcr_unit/flat/lowdm_cr_gcr_n_lowdm_isr.png",
+      "region": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0008219410366317152,
+            "raw_fraction": 0.0008219410366317152
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8748927238998614,
+            "raw_fraction": 0.8748927238998614
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.11247810515702908,
+            "raw_fraction": 0.11247810515702907
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.007931529820287359,
+            "raw_fraction": 0.007931529820287359
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0004129347912950256,
+            "raw_fraction": 0.0004129347912950256
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0033330059254252273,
+            "raw_fraction": 0.0033330059254252273
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 0.0001297593694703323,
+            "raw_fraction": 0.0001297593694703323
+          }
+        },
+        "raw_integrals": {
+          "data": 15484.0,
+          "data_over_mc": 1.7492523871667014,
+          "mc": 8851.781545989335,
+          "process_groups": {
+            "DY": 7.275642499947961,
+            "Data": 15484.0,
+            "Others": 0.0,
+            "Photon+jet": 7744.359268137136,
+            "QCD Multijet": 995.6316155568378,
+            "Top": 70.20816929468376,
+            "VV+VVV": 3.6552085652822655,
+            "W -> lv": 29.503040343352133,
+            "Z -> vv": 1.1486015920966994
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "electron_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "pileup": {
+            "down": 1.0,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "n_lowdm_isr"
+    },
+    {
+      "bins": 10,
+      "labels": [
+        "GCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_gcr_leading_lowdm_fatjet_pt",
+      "pdf": "/tmp/gcr_unit/flat/lowdm_cr_gcr_leading_lowdm_fatjet_pt.pdf",
+      "png": "/tmp/gcr_unit/flat/lowdm_cr_gcr_leading_lowdm_fatjet_pt.png",
+      "region": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 0.9999999999999999,
+          "mc": 0.9999999999999999
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0008221942174748069,
+            "raw_fraction": 0.0008221942174748068
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8748824682277431,
+            "raw_fraction": 0.8748824682277431
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.11248456441537445,
+            "raw_fraction": 0.11248456441537445
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.007933972953453133,
+            "raw_fraction": 0.007933972953453135
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.00041306198676762344,
+            "raw_fraction": 0.0004130619867676234
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0033339388601990256,
+            "raw_fraction": 0.0033339388601990256
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 0.00012979933898772756,
+            "raw_fraction": 0.00012979933898772756
+          }
+        },
+        "raw_integrals": {
+          "data": 15479.0,
+          "data_over_mc": 1.7492261738236263,
+          "mc": 8849.05578914619,
+          "process_groups": {
+            "DY": 7.275642499947961,
+            "Data": 15479.0,
+            "Others": 0.0,
+            "Photon+jet": 7741.883770293218,
+            "QCD Multijet": 995.3821859294569,
+            "Top": 70.20816929468376,
+            "VV+VVV": 3.655208565282265,
+            "W -> lv": 29.50221097150364,
+            "Z -> vv": 1.1486015920966994
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999998
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0000000000000002,
+            "up": 1.0
+          },
+          "electron_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 0.9999999999999998
+          },
+          "pileup": {
+            "down": 1.0,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "leading_lowdm_fatjet_pt"
+    },
+    {
+      "bins": 8,
+      "labels": [
+        "GCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_gcr_leading_lowdm_fatjet_msd",
+      "pdf": "/tmp/gcr_unit/flat/lowdm_cr_gcr_leading_lowdm_fatjet_msd.pdf",
+      "png": "/tmp/gcr_unit/flat/lowdm_cr_gcr_leading_lowdm_fatjet_msd.png",
+      "region": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0008297662358045123,
+            "raw_fraction": 0.0008297662358045123
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8748971694411376,
+            "raw_fraction": 0.8748971694411375
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.11241430215010317,
+            "raw_fraction": 0.11241430215010316
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.007948856235892521,
+            "raw_fraction": 0.00794885623589252
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.00041686609152612577,
+            "raw_fraction": 0.00041686609152612577
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.003362045116270585,
+            "raw_fraction": 0.003362045116270585
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 0.0001309947292654862,
+            "raw_fraction": 0.0001309947292654862
+          }
+        },
+        "raw_integrals": {
+          "data": 15356.0,
+          "data_over_mc": 1.7513079177688058,
+          "mc": 8768.303874034778,
+          "process_groups": {
+            "DY": 7.275642499947961,
+            "Data": 15356.0,
+            "Others": 0.0,
+            "Photon+jet": 7671.364240192788,
+            "QCD Multijet": 985.6827610396657,
+            "Top": 69.69798692732189,
+            "VV+VVV": 3.655208565282265,
+            "W -> lv": 29.479433217675076,
+            "Z -> vv": 1.1486015920966994
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 0.9999999999999998
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          },
+          "electron_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "leading_lowdm_fatjet_msd"
+    },
+    {
+      "bins": 4,
+      "labels": [
+        "GCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_gcr_n_photon_medium",
+      "pdf": "/tmp/gcr_unit/flat/lowdm_cr_gcr_n_photon_medium.pdf",
+      "png": "/tmp/gcr_unit/flat/lowdm_cr_gcr_n_photon_medium.png",
+      "region": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0008219410366317153,
+            "raw_fraction": 0.0008219410366317153
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8748927238998613,
+            "raw_fraction": 0.8748927238998613
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.11247810515702908,
+            "raw_fraction": 0.11247810515702908
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.007931529820287357,
+            "raw_fraction": 0.007931529820287357
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0004129347912950256,
+            "raw_fraction": 0.0004129347912950256
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0033330059254252278,
+            "raw_fraction": 0.0033330059254252278
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 0.0001297593694703323,
+            "raw_fraction": 0.0001297593694703323
+          }
+        },
+        "raw_integrals": {
+          "data": 15484.0,
+          "data_over_mc": 1.7492523871667014,
+          "mc": 8851.781545989335,
+          "process_groups": {
+            "DY": 7.275642499947962,
+            "Data": 15484.0,
+            "Others": 0.0,
+            "Photon+jet": 7744.359268137135,
+            "QCD Multijet": 995.6316155568379,
+            "Top": 70.20816929468374,
+            "VV+VVV": 3.6552085652822655,
+            "W -> lv": 29.503040343352136,
+            "Z -> vv": 1.1486015920966994
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 1.0,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "n_photon_medium"
+    },
+    {
+      "bins": 10,
+      "labels": [
+        "GCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_gcr_recoil_gcr",
+      "pdf": "/tmp/gcr_unit/flat/lowdm_cr_gcr_recoil_gcr.pdf",
+      "png": "/tmp/gcr_unit/flat/lowdm_cr_gcr_recoil_gcr.png",
+      "region": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 0.9999999999999999,
+          "mc": 0.9999999999999999
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0008220985708825621,
+            "raw_fraction": 0.0008220985708825621
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8748688175362912,
+            "raw_fraction": 0.8748688175362912
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.11249966285185498,
+            "raw_fraction": 0.11249966285185498
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.007933045674722531,
+            "raw_fraction": 0.007933045674722531
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0004130139348954739,
+            "raw_fraction": 0.0004130139348954739
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.003333577192039281,
+            "raw_fraction": 0.0033335771920392806
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 0.00012978423931396928,
+            "raw_fraction": 0.0001297842393139693
+          }
+        },
+        "raw_integrals": {
+          "data": 15483.0,
+          "data_over_mc": 1.7494746578141722,
+          "mc": 8850.085327526129,
+          "process_groups": {
+            "DY": 7.275642499947962,
+            "Data": 15483.0,
+            "Others": 0.0,
+            "Photon+jet": 7742.663685588065,
+            "QCD Multijet": 995.631615556838,
+            "Top": 70.20813112845649,
+            "VV+VVV": 3.6552085652822655,
+            "W -> lv": 29.502442595442588,
+            "Z -> vv": 1.1486015920966994
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0000000000000002,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0000000000000002,
+            "up": 0.9999999999999999
+          },
+          "btagSF_light_correlated": {
+            "down": 0.9999999999999997,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_hlt": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999998
+          },
+          "electron_id": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999998
+          },
+          "muon_hlt": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999998
+          },
+          "muon_id": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999998
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 0.9999999999999998
+          },
+          "pileup": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "recoil_gcr"
+    },
+    {
+      "bins": 8,
+      "labels": [
+        "GCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_gcr_njet_photon_clean",
+      "pdf": "/tmp/gcr_unit/flat/lowdm_cr_gcr_njet_photon_clean.pdf",
+      "png": "/tmp/gcr_unit/flat/lowdm_cr_gcr_njet_photon_clean.png",
+      "region": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0008219410366317151,
+            "raw_fraction": 0.000821941036631715
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8748927238998613,
+            "raw_fraction": 0.8748927238998613
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.11247810515702908,
+            "raw_fraction": 0.11247810515702908
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.007931529820287355,
+            "raw_fraction": 0.007931529820287357
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0004129347912950255,
+            "raw_fraction": 0.00041293479129502554
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.003333005925425227,
+            "raw_fraction": 0.003333005925425227
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 0.00012975936947033227,
+            "raw_fraction": 0.00012975936947033227
+          }
+        },
+        "raw_integrals": {
+          "data": 15484.0,
+          "data_over_mc": 1.7492523871667012,
+          "mc": 8851.781545989337,
+          "process_groups": {
+            "DY": 7.275642499947961,
+            "Data": 15484.0,
+            "Others": 0.0,
+            "Photon+jet": 7744.3592681371365,
+            "QCD Multijet": 995.6316155568381,
+            "Top": 70.20816929468376,
+            "VV+VVV": 3.6552085652822655,
+            "W -> lv": 29.503040343352136,
+            "Z -> vv": 1.1486015920966994
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 0.9999999999999999,
+            "up": 1.0000000000000002
+          },
+          "electron_hlt": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999998
+          },
+          "electron_id": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999998
+          },
+          "muon_hlt": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999998
+          },
+          "muon_id": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999998
+          },
+          "photon_id": {
+            "down": 0.9999999999999998,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "njet_photon_clean"
+    },
+    {
+      "bins": 6,
+      "labels": [
+        "GCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_gcr_nb_photon_clean",
+      "pdf": "/tmp/gcr_unit/flat/lowdm_cr_gcr_nb_photon_clean.pdf",
+      "png": "/tmp/gcr_unit/flat/lowdm_cr_gcr_nb_photon_clean.png",
+      "region": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0008219410366317153,
+            "raw_fraction": 0.0008219410366317153
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8748927238998613,
+            "raw_fraction": 0.8748927238998614
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.11247810515702907,
+            "raw_fraction": 0.11247810515702908
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.007931529820287357,
+            "raw_fraction": 0.00793152982028736
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.00041293479129502565,
+            "raw_fraction": 0.0004129347912950257
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0033330059254252273,
+            "raw_fraction": 0.0033330059254252273
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 0.0001297593694703323,
+            "raw_fraction": 0.0001297593694703323
+          }
+        },
+        "raw_integrals": {
+          "data": 15484.0,
+          "data_over_mc": 1.7492523871667014,
+          "mc": 8851.781545989335,
+          "process_groups": {
+            "DY": 7.275642499947962,
+            "Data": 15484.0,
+            "Others": 0.0,
+            "Photon+jet": 7744.359268137136,
+            "QCD Multijet": 995.6316155568379,
+            "Top": 70.20816929468377,
+            "VV+VVV": 3.6552085652822663,
+            "W -> lv": 29.503040343352133,
+            "Z -> vv": 1.1486015920966994
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          },
+          "btagSF_light_correlated": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999997
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 1.0000000000000002
+          },
+          "pileup": {
+            "down": 1.0000000000000004,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "nb_photon_clean"
+    },
+    {
+      "bins": 7,
+      "labels": [
+        "GCR low $\\Delta m$"
+      ],
+      "name": "lowdm_cr_gcr_ht_photon_clean",
+      "pdf": "/tmp/gcr_unit/flat/lowdm_cr_gcr_ht_photon_clean.pdf",
+      "png": "/tmp/gcr_unit/flat/lowdm_cr_gcr_ht_photon_clean.png",
+      "region": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 0.9999999999999999
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0008219474687990205,
+            "raw_fraction": 0.0008219474687990205
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8748917448625643,
+            "raw_fraction": 0.8748917448625642
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.11247898536370853,
+            "raw_fraction": 0.11247898536370854
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.007931591889127478,
+            "raw_fraction": 0.007931591889127478
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0004129380227502584,
+            "raw_fraction": 0.0004129380227502584
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0033330320081377167,
+            "raw_fraction": 0.0033330320081377167
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 0.0001297603849129695,
+            "raw_fraction": 0.0001297603849129695
+          }
+        },
+        "raw_integrals": {
+          "data": 15484.0,
+          "data_over_mc": 1.7492660760853855,
+          "mc": 8851.712276185588,
+          "process_groups": {
+            "DY": 7.275642499947961,
+            "Data": 15484.0,
+            "Others": 0.0,
+            "Photon+jet": 7744.289998333388,
+            "QCD Multijet": 995.6316155568379,
+            "Top": 70.20816929468374,
+            "VV+VVV": 3.655208565282266,
+            "W -> lv": 29.50304034335213,
+            "Z -> vv": 1.1486015920966994
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 0.9999999999999998,
+            "up": 1.0000000000000002
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0000000000000002
+          },
+          "btagSF_light_correlated": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "electron_hlt": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "electron_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_hlt": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "pileup": {
+            "down": 1.0000000000000002,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "ht_photon_clean"
+    }
+  ],
+  "source": "workflow/plot2024/hists.json",
+  "status": "complete",
+  "uncertainty_model": "MC stat plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+}

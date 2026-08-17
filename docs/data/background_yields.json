@@ -1,7 +1,0 @@
-{
-  "files_processed": 0,
-  "normalization": "DATA weight=1; background MC weight=genWeight * xsec_from_metadata * lumi_pb / retained_valid_file_sumw; correction weights currently unavailable in aggregate worker",
-  "source": "full_production",
-  "status": "complete",
-  "yields": {}
-}

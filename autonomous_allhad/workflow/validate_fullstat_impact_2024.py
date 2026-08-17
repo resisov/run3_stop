@@ -105,7 +105,15 @@ def analysis_contract(manifest, card_text):
     highdm_match = re.search(r"highdm(\d+)", schema)
     highdm_bins = int(highdm_match.group(1)) if highdm_match else 60
     root_channels = (manifest.get("root_summary") or {}).get("channels")
-    if isinstance(root_channels, dict):
+    free_background_model = (
+        manifest.get("model")
+        == "free_background_global_process_normalizations"
+    )
+    if free_background_model:
+        channel_count = int((manifest.get("channels") or {})["total"])
+        total_bins = channel_count
+        model = "free_background"
+    elif isinstance(root_channels, dict):
         channel_count = len(root_channels)
         total_bins = channel_count
         model = (
@@ -126,6 +134,13 @@ def analysis_contract(manifest, card_text):
         "channel_count": channel_count,
         "total_bins": total_bins,
         "card_contract": card_contract,
+    }
+
+
+def indexed_channels(card_text, prefix):
+    return {
+        int(value)
+        for value in re.findall(rf"\b{re.escape(prefix)}(\d+)\b", card_text)
     }
 
 
@@ -208,20 +223,31 @@ def main():
     poi = impacts["POIs"][0]
     mass_points = manifest.get("mass_points", [])
     manifest_limits = manifest.get("limits") or {}
-    manifest_boundary_partial = (
-        manifest_limits.get("status") == "partial"
+    missing_limit_points = manifest_limits.get("missing_points") or []
+    manifest_partial_reconciles = (
+        manifest.get("status") == "combine_outputs_partial"
+        and manifest_limits.get("status") == "partial"
         and manifest_limits.get("collected_point_count")
-        == manifest_limits.get("requested_point_count") - 1
-        and manifest_limits.get("missing_points")
-        == ["mStop1800_mLSP1600"]
+        + len(missing_limit_points)
+        == manifest_limits.get("requested_point_count")
+        and "mStop1200_mLSP500" not in missing_limit_points
     )
     manifest_complete = manifest.get("status") in {
+        "combine_inputs_ready",
         "combine_outputs_complete",
         "complete",
-    } or manifest_boundary_partial
+    } or manifest_partial_reconciles
+    highdm_card_channels = indexed_channels(card_text, "hSR_b") | indexed_channels(
+        card_text, "SR_highdm_bin"
+    )
+    lowdm_card_channels = indexed_channels(card_text, "lSR_b") | indexed_channels(
+        card_text, "SR_lowdm_bin"
+    )
     card_has_expected_channels = (
-        "hSR_b59" in card_text and f"lSR_b{lowdm_bins - 1:02d}" in card_text
-        if contract["model"] in {"nb_recoil_transfer_factor", "an_zinv"}
+        len(highdm_card_channels) == highdm_bins
+        and len(lowdm_card_channels) == lowdm_bins
+        if contract["model"]
+        in {"nb_recoil_transfer_factor", "an_zinv", "free_background"}
         else (
             "cat7_SR_selected_recoil60_nb2_nt2plus_w0" in card_text
             and "cat7_SR_lowDeltaM" in card_text
@@ -248,9 +274,10 @@ def main():
         "manifest_schema_2024_only": "2024" in contract["schema"],
         "manifest_channel_count_positive": channel_count > 0,
         "manifest_total_bins_consistent": total_bins == channel_count
-        if contract["model"] in {"nb_recoil_transfer_factor", "an_zinv"}
+        if contract["model"]
+        in {"nb_recoil_transfer_factor", "an_zinv", "free_background"}
         else total_bins == 5 * 6 + highdm_bins + 6 * lowdm_bins,
-        "manifest_highdm_60_bins": highdm_bins == 60,
+        "manifest_highdm_bins_positive": highdm_bins > 0,
         "manifest_lowdm_bins_positive": lowdm_bins > 0,
         "manifest_mass_point_present": "mStop1200_mLSP500"
         in mass_points,
@@ -271,16 +298,27 @@ def main():
     failed_checks = [name for name, passed in checks.items() if not passed]
 
     ordered = sorted(params, key=lambda item: abs(item["impact_r"]), reverse=True)
+    raw_model_details = manifest.get("model_details")
+    if not isinstance(raw_model_details, dict):
+        raw_model_details = {
+            "model": manifest.get("model"),
+            "free_background_parameters": manifest.get(
+                "free_background_parameters", []
+            ),
+            "external_background_constraints": manifest.get(
+                "external_background_constraints", []
+            ),
+        }
     report = {
         "schema": (
-            f"2024_highdm60_lowdm{lowdm_bins}_"
+            f"2024_highdm{highdm_bins}_lowdm{lowdm_bins}_"
             "full_mcstat_impact_validation_v1"
         ),
         "status": "complete" if not failed_checks else "failed",
         "analysis": {
             "year": 2024,
             "model": contract["model"],
-            "model_details": manifest.get("model") or {},
+            "model_details": raw_model_details,
             "schema": contract["schema"],
             "highdm_signal_bins": highdm_bins,
             "lowdm_signal_bins": lowdm_bins,

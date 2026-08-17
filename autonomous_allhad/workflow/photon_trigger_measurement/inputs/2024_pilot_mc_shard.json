@@ -1,0 +1,15 @@
+{
+  "shard_id": "photon_trigger_2024_mc_pilot",
+  "records": [
+    {
+      "dataset": "GJ_Bin-PTG-200to400_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_",
+      "process_group": "GJ",
+      "is_data": false,
+      "is_background": true,
+      "year": "2024",
+      "file_index": 0,
+      "xsec_pb": 88.24,
+      "file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/GJ_Bin-PTG-200to400_TuneCP5_13p6TeV_amcatnlo-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/2810000/9c069314-9dbe-4bb6-b2aa-0f15e8f5a463.root"
+    }
+  ]
+}

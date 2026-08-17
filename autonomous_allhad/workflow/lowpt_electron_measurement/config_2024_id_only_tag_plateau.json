@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "measurement": "veto_electron_id_5to10_sf_2024_ele8_tagplateau",
+  "status": "measurement_definition",
+  "reference": "AN2019_016_v9 section 4.2; Run-3 ID-only tag-and-probe revision with explicit Ele8 tag plateau",
+  "year": "2024",
+  "probe_definition": "veto_id_only",
+  "campaign_inputs": {
+    "data_dataset_query": "dataset=/EGamma*/Run2024*-MINIv6NANOv15*/NANOAOD",
+    "data_dataset_exclude_contains": [
+      "MINIv6NANOv15_v2"
+    ],
+    "mc_datasets": [
+      "/SPS-JpsiJpsiToMuMuEE_TuneCP5_13p6TeV_pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM"
+    ],
+    "files_per_condor_shard": 20,
+    "run2024i_policy": "Use the standard MINIv6NANOv15 production and the audited permanent-skip policy; do not reintroduce duplicated Run2024I MINIv6NANOv15_v2 files.",
+    "mc_campaign_note": "Use the single Summer24 SPS-JpsiJpsiToMuMuEE sample for the nominal electron signal template."
+  },
+  "probe_pt_edges_gev": [
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "probe_abseta_edges": [
+    0.0,
+    0.8,
+    1.4442,
+    2.0,
+    2.5
+  ],
+  "binning_policy": "Count and fit an initial 4x5 grid. Any later merging must be an exact post-reduction sum justified by fit stability; NanoAOD files must not be reread for alternative coarser candidates.",
+  "eta_policy": "Exclude the 1.4442--1.566 ECAL transition; the first endcap interval is populated only for abs(eta)>1.566.",
+  "target_selection": "cutBased >= 1; miniPFRelIso_all is not part of the probe pass/fail definition",
+  "denominator": "reconstructed GSF electron with 5 < pT < 10 GeV passing the ECAL fiducial region, conversion veto, and lostHits <= 1, without a cutBased or mini-isolation requirement",
+  "resonances": {
+    "primary": {
+      "name": "Jpsi",
+      "mass_window_gev": [
+        2.6,
+        3.6
+      ]
+    },
+    "closure": {
+      "name": "Upsilon",
+      "mass_window_gev": [
+        8.5,
+        11.0
+      ]
+    }
+  },
+  "tag_pt_min_gev": 10.0,
+  "tag": "tight high-purity electron with pT > 10 GeV and miniPFRelIso_all < 0.1 matched to an Ele8+PFJet30 reference-trigger object",
+  "reference_paths": [
+    "HLT_Ele8_CaloIdL_TrackIdL_IsoVL_PFJet30",
+    "HLT_Ele8_CaloIdM_TrackIdM_PFJet30"
+  ],
+  "tag_trigger_object_filter_bits": 8192,
+  "trigger_object_bit_source": "CMSSW_15_0_X PhysicsTools/NanoAOD triggerObjects_cff.py electron quality bit 13: HLT_Ele*PFJet*",
+  "reference_trigger_strategy": "The pT>10 GeV trigger-matched tag supplies the Ele8 leg. PFJet30 is the event-side leg. The 5--10 GeV probe is not trigger matched and is not required to be isolated.",
+  "mass_bins": 50,
+  "systematic_variations": [
+    "signal_template",
+    "background_model",
+    "mass_window",
+    "alternate_binning",
+    "pileup"
+  ],
+  "adoption_gates": [
+    "probe pass/fail audit proves mini-isolation is absent from the numerator",
+    "tag pT > 10 GeV and Ele8 trigger-object matching are present in every adopted shard",
+    "5--6 and 6--7 GeV probe bins have statistically usable pass and fail samples",
+    "unbiased-probe audit",
+    "simultaneous pass/fail fit convergence in every adopted bin",
+    "data and MC goodness-of-fit",
+    "bin-by-bin scale-factor stability under fit-model, fit-window, binning, and pileup variations"
+  ]
+}

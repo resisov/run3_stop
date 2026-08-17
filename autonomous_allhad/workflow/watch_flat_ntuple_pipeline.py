@@ -147,7 +147,11 @@ def full_pipeline(state: dict[str, Any]) -> dict[str, Any]:
                   '--repo', str(REPO),
                   '--inputs', str(OUTPUT),
                   '--normalization', str(OUTPUT / 'merged_normalization.json'),
-                  '--output', str(OUTPUT / 'boosted_recoil_hists.json')], 'build_hists', env=env)
+                  '--output', str(OUTPUT / 'boosted_recoil_hists.json'),
+                  '--require-weight-components',
+                  'met_trigger', 'photon_trigger',
+                  'veto_electron_5to10', 'loose_muon_5to10'],
+                 'build_hists', env=env)
         if rc != 0:
             state['build_hists_rc'] = rc
             return state

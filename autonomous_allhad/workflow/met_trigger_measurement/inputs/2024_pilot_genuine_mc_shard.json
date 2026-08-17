@@ -1,0 +1,15 @@
+{
+  "shard_id": "met_genuine_2024_mc_pilot",
+  "records": [
+    {
+      "dataset": "TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_",
+      "process_group": "TT",
+      "is_data": false,
+      "is_background": true,
+      "year": "2024",
+      "file_index": 0,
+      "xsec_pb": 405.75,
+      "file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/2810000/01a94e57-2e13-49f7-8a88-3c43bdb09bf5.root"
+    }
+  ]
+}

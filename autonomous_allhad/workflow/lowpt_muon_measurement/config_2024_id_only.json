@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "measurement": "loose_muon_id_5to10_sf_2024",
+  "status": "measurement_definition",
+  "reference": "AN2019_016_v9.pdf section 4.1; Run-3 ID-only revision",
+  "year": "2024",
+  "probe_definition": "loose_id_only",
+  "campaign_inputs": {
+    "data_dataset_query": "dataset=/ParkingDoubleMuonLowMass*/Run2024*-MINIv6NANOv15*/NANOAOD",
+    "data_dataset_exclude_contains": [
+      "MINIv6NANOv15_v2"
+    ],
+    "mc_datasets": [
+      "/Jpsito2Mu_Bin-PTJpsi-8_TuneCP5_13p6TeV_pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3/NANOAODSIM"
+    ],
+    "files_per_condor_shard": 20,
+    "run2024i_policy": "Use the standard MINIv6NANOv15 production and frozen retained records from the completed 2024 campaign; do not reintroduce audited permanent skips."
+  },
+  "probe_pt_edges_gev": [
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "probe_abseta_edges": [
+    0.0,
+    0.9,
+    1.2,
+    2.1,
+    2.4
+  ],
+  "target_selection": "looseId; miniPFRelIso_all is not part of the probe pass/fail definition",
+  "denominator": "reconstructed tracker muon with 5 < pT < 10 GeV and abs(eta) < 2.4, without a LooseID or mini-isolation requirement",
+  "resonance": {
+    "name": "Jpsi",
+    "mass_window_gev": [
+      2.6,
+      3.6
+    ]
+  },
+  "tag": "tight high-purity muon with miniPFRelIso_all < 0.1 matched to the reference trigger object",
+  "reference_paths": [
+    "HLT_DoubleMu4_3_LowMass",
+    "HLT_DoubleMu2_Jpsi_LowPt",
+    "HLT_DoubleMu4_3_Jpsi"
+  ],
+  "tag_trigger_object_filter_bits": 16,
+  "trigger_object_bit_source": "CMSSW_15_0_X PhysicsTools/NanoAOD trigger-object muon quality bit 4, two-muon filter",
+  "reference_trigger_strategy": "The trigger-matched tight tag selects the event. The tracker-muon probe is not required to pass LooseID, mini-isolation, or trigger-object matching.",
+  "mass_bins": 50,
+  "systematic_variations": [
+    "signal_template",
+    "background_model",
+    "mass_window",
+    "alternate_binning",
+    "pileup"
+  ],
+  "adoption_gates": [
+    "probe denominator audit proves LooseID and mini-isolation are absent",
+    "Muon_isTracker branch presence in data and simulation",
+    "trigger-object matching and unbiased-probe audit",
+    "simultaneous pass/fail fit convergence in every adopted bin",
+    "data and MC goodness-of-fit",
+    "bin-by-bin scale-factor stability under fit-model, fit-window, binning, and pileup variations"
+  ]
+}

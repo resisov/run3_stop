@@ -4,14 +4,17 @@
 from __future__ import annotations
 
 import argparse
+import concurrent.futures
 import gc
 import json
 import os
+import shutil
 from collections import Counter
 from pathlib import Path
 from typing import Any
 
 from run_flat_hists_chunked import (
+    REPAIRABLE_CODE_PATHS,
     compatible_build_options,
     file_sha256,
     merge_dy_ptll_exclusions,
@@ -41,12 +44,32 @@ def update_summary(
     normalization: Path,
     dy_ptll_policy: str,
     expected_build_options: dict[str, Any] | None,
+    allow_hist_builder_repair: bool,
+    allow_zero_entry_roots: bool,
 ) -> dict[str, Any]:
-    if payload.get("status") != "complete":
+    recorded_status = str(payload.get("status") or "")
+    allowed_statuses = {"complete"}
+    if allow_zero_entry_roots:
+        allowed_statuses.add("complete_with_warnings")
+    if recorded_status not in allowed_statuses:
         raise RuntimeError(f"{path}: chunk status is not complete")
     src_summary = payload.get("summary") or {}
-    if summary_has_strict_warnings(src_summary):
+    strict_warning_keys = (
+        "weight_failures",
+        "missing_input_roots",
+        "missing_sidecars",
+        "weight_rejections",
+    )
+    if any(bool(src_summary.get(key)) for key in strict_warning_keys):
         raise RuntimeError(f"{path}: strict chunk warnings are present")
+    if src_summary.get("zero_entry_roots") and not allow_zero_entry_roots:
+        raise RuntimeError(f"{path}: zero-entry ROOT warnings are present")
+    if recorded_status == "complete_with_warnings" and not src_summary.get(
+        "zero_entry_roots"
+    ):
+        raise RuntimeError(
+            f"{path}: warning status is not explained by zero-entry ROOTs"
+        )
     recorded_normalization = payload.get("normalization")
     if not recorded_normalization:
         raise RuntimeError(f"{path}: chunk normalization provenance is missing")
@@ -67,8 +90,19 @@ def update_summary(
     elif not compatible_build_options(
         chunk_build_options,
         expected_build_options,
+        allow_hist_builder_repair,
     ):
         raise RuntimeError(f"{path}: chunk build options do not match")
+
+    for code_path in REPAIRABLE_CODE_PATHS:
+        code_sha = (chunk_build_options or {}).get("code_sha256", {}).get(code_path)
+        if code_sha:
+            variants = summary.setdefault("repair_code_sha256_variants", {}).setdefault(
+                code_path,
+                [],
+            )
+            if code_sha not in variants:
+                variants.append(code_sha)
 
     summary["events_processed"] += int(
         src_summary.get("events_processed") or 0
@@ -143,6 +177,44 @@ def dump_member(
     return False
 
 
+def write_compact_json(path: Path, payload: Any) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    with temporary.open("w") as handle:
+        json.dump(
+            payload,
+            handle,
+            ensure_ascii=False,
+            allow_nan=False,
+            separators=(",", ":"),
+        )
+        handle.write("\n")
+    os.replace(temporary, path)
+
+
+def merge_section_partition(
+    histogram_key: str,
+    chunks: list[str],
+    output: str,
+) -> str:
+    merged_section: dict[str, Any] = {}
+    for path_string in chunks:
+        payload = read_json(Path(path_string))
+        merge_tree(
+            merged_section,
+            payload.get(histogram_key) or {},
+        )
+        del payload
+    output_path = Path(output)
+    write_compact_json(output_path, merged_section)
+    return str(output_path)
+
+
+def split_paths(paths: list[Path], parts: int) -> list[list[Path]]:
+    count = max(1, min(int(parts), len(paths)))
+    return [paths[index::count] for index in range(count)]
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--chunk-dir", type=Path, required=True)
@@ -151,6 +223,17 @@ def main() -> int:
     parser.add_argument("--results", type=Path, required=True)
     parser.add_argument("--dy-ptll-policy", default="all")
     parser.add_argument("--expected-chunks", type=int, required=True)
+    parser.add_argument("--workers", type=int, default=1)
+    parser.add_argument("--work-dir", type=Path)
+    parser.add_argument("--allow-hist-builder-repair", action="store_true")
+    parser.add_argument(
+        "--allow-zero-entry-roots",
+        action="store_true",
+        help=(
+            "Allow complete_with_warnings chunks only when their sole strict "
+            "warning is a recorded zero-entry ROOT."
+        ),
+    )
     parser.add_argument(
         "--sections",
         nargs="+",
@@ -198,6 +281,8 @@ def main() -> int:
             normalization,
             args.dy_ptll_policy,
             expected_build_options,
+            args.allow_hist_builder_repair,
+            args.allow_zero_entry_roots,
         )
         del payload
         if index % 25 == 0 or index == len(chunks):
@@ -229,10 +314,77 @@ def main() -> int:
         and not summary_has_strict_warnings(summary)
         else "complete_with_warnings"
     )
-    if status != "complete":
+    if status != "complete" and not (
+        args.allow_zero_entry_roots
+        and not any(
+            bool(summary.get(key))
+            for key in (
+                "weight_failures",
+                "missing_input_roots",
+                "missing_sidecars",
+                "weight_rejections",
+            )
+        )
+        and bool(summary.get("zero_entry_roots"))
+    ):
         raise RuntimeError(f"strict merged status is {status}")
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
+    workers = max(1, int(args.workers))
+    partials_by_section: dict[str, list[Path]] = {}
+    partial_work_dir: Path | None = None
+    if workers > 1:
+        partial_work_dir = (
+            args.work_dir.resolve()
+            if args.work_dir is not None
+            else (args.results.parent / "merge_parts").resolve()
+        )
+        if partial_work_dir.exists():
+            shutil.rmtree(partial_work_dir)
+        partial_work_dir.mkdir(parents=True)
+        partitions_per_section = max(1, workers // len(args.sections))
+        tasks: list[tuple[str, list[Path], Path]] = []
+        for histogram_key in args.sections:
+            for part_index, partition in enumerate(
+                split_paths(chunks, partitions_per_section)
+            ):
+                tasks.append(
+                    (
+                        histogram_key,
+                        partition,
+                        partial_work_dir
+                        / f"{histogram_key}.part{part_index:03d}.json",
+                    )
+                )
+        with concurrent.futures.ProcessPoolExecutor(
+            max_workers=min(workers, len(tasks))
+        ) as executor:
+            future_to_task = {
+                executor.submit(
+                    merge_section_partition,
+                    histogram_key,
+                    [str(path) for path in partition],
+                    str(partial_path),
+                ): (histogram_key, partial_path)
+                for histogram_key, partition, partial_path in tasks
+            }
+            for future in concurrent.futures.as_completed(future_to_task):
+                histogram_key, partial_path = future_to_task[future]
+                completed_path = Path(future.result())
+                partials_by_section.setdefault(histogram_key, []).append(
+                    completed_path
+                )
+                print(
+                    json.dumps(
+                        {
+                            "stage": "section_partition_merged",
+                            "section": histogram_key,
+                            "output": str(completed_path),
+                        },
+                        sort_keys=True,
+                    ),
+                    flush=True,
+                )
     temporary = args.output.with_suffix(args.output.suffix + ".streaming.tmp")
     with temporary.open("w") as handle:
         handle.write("{")
@@ -241,12 +393,14 @@ def main() -> int:
             first = dump_member(handle, key, value, first)
         for histogram_key in args.sections:
             merged_section: dict[str, Any] = {}
-            for index, path in enumerate(chunks, start=1):
+            section_inputs = (
+                sorted(partials_by_section[histogram_key])
+                if workers > 1
+                else chunks
+            )
+            for index, path in enumerate(section_inputs, start=1):
                 payload = read_json(path)
-                merge_tree(
-                    merged_section,
-                    payload.get(histogram_key) or {},
-                )
+                merge_tree(merged_section, payload if workers > 1 else payload.get(histogram_key) or {})
                 del payload
                 if index % 25 == 0:
                     gc.collect()
@@ -280,6 +434,8 @@ def main() -> int:
         handle.flush()
         os.fsync(handle.fileno())
     os.replace(temporary, args.output)
+    if partial_work_dir is not None:
+        shutil.rmtree(partial_work_dir)
     write_json(
         args.results,
         {
@@ -289,6 +445,7 @@ def main() -> int:
             "output_sha256": file_sha256(args.output),
             "chunks": [str(path) for path in chunks],
             "streaming_merge": True,
+            "merge_workers": workers,
             "sections": list(args.sections),
         },
     )

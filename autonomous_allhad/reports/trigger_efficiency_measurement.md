@@ -8,23 +8,22 @@ Measure the OR of the six `PFMET[NoMu]{120,130,140}_PFMHT[NoMu]{120,130,140}_IDT
 
 The independent reference OR is `Ele{30,32,35,38,40}_WPTight_Gsf`. Before production, verify from run-dependent HLT/prescale information that accepted reference paths are present and unprescaled. Missing requested HLT branches are a hard measurement failure, not a silently skipped path. Deduplicate EGamma0/EGamma1 with `(run, luminosityBlock, event)`.
 
-The frozen configuration is `autonomous_allhad/configs/trigger_efficiency_2024.yaml`.
+The frozen configuration is
+`autonomous_allhad/workflow/met_trigger_measurement/config_2024.json`.
 
-## Required event-stage output
+## Unified executable
 
-The reducer accepts a JSON object with `measurement`, `bin_edges_gev`, and equal-length `data` and `mc` arrays. Each data bin contains integer `total` and `passed`; each MC bin contains `sumw_total`, `sumw2_total`, and `sumw_passed`. Example:
+All MET/photon trigger-measurement operations use exactly one executable:
+`autonomous_allhad/workflow/measure_trigger.py`.  The available subcommands are
+`build-records`, `prepare`, `count`, `recover`, `reduce`, and `export`.
 
-```json
-{"measurement":"met_or_2024","bin_edges_gev":[250,300,400],
- "data":[{"total":100,"passed":98},{"total":80,"passed":80}],
- "mc":[{"sumw_total":95,"sumw2_total":100,"sumw_passed":92},
-       {"sumw_total":78,"sumw2_total":82,"sumw_passed":77}]}
-```
-
-Run:
+Example reduction:
 
 ```bash
-python autonomous_allhad/workflow/measure_trigger_efficiency.py counts.json \
+python autonomous_allhad/workflow/measure_trigger.py reduce \
+  --measurement met_genuine \
+  --input-dir /eos/user/t/taiwoo/.../shard_outputs \
+  --config autonomous_allhad/workflow/met_trigger_measurement/config_2024.json \
   --output autonomous_allhad/outputs/trigger_efficiency/2024/result.json
 ```
 

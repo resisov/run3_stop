@@ -37,6 +37,26 @@ from build_flat_recoil_ntop_split_combine_inputs import (  # noqa: E402
 
 HIGH_SCHEME = "boosted_an17_selected_recoil60_nb2_nt2plus_w0_SR"
 LOW_SCHEME = "cat7_SR_lowDeltaM"
+NPS_NUISANCE_NAMES = {
+    "btagSF_bc_correlated": "CMS_btag_mediumWP_bc_correlated",
+    "btagSF_bc_uncorrelated": "CMS_btag_mediumWP_bc_uncorrelated_2024",
+    "btagSF_light_correlated": "CMS_btag_mediumWP_light_correlated",
+    "btagSF_light_uncorrelated": "CMS_btag_mediumWP_light_uncorrelated_2024",
+    "electron_hlt": "CMS_SUS26090_eff_e_trigger_2024",
+    "electron_id": "CMS_eff_e_id_13p6TeV_2024",
+    "loose_muon_5to10": "CMS_SUS26090_eff_m_loose_5to10_2024",
+    "met_trigger": "CMS_SUS26090_eff_met_trigger_2024",
+    "muon_hlt": "CMS_SUS26090_eff_m_trigger_2024",
+    "muon_id": "CMS_SUS26090_eff_m_id_2024",
+    "photon_id": "CMS_eff_g_id_13p6TeV_2024",
+    "photon_trigger": "CMS_SUS26090_eff_g_trigger_2024",
+    "pileup": "CMS_pileup_2024",
+    "veto_electron_5to10": "CMS_SUS26090_eff_e_veto_5to10_2024",
+}
+
+
+def nps_nuisance_name(name: str) -> str:
+    return NPS_NUISANCE_NAMES.get(name, name)
 DEFAULT_SIGNAL_TOPOLOGY = "T2tt"
 SUPPORTED_SIGNAL_TOPOLOGIES = ("T2tt", "T2tb", "T2bW")
 MIN_BIN = 1.0e-9
@@ -113,7 +133,7 @@ def variation_pairs(
         }
     )
     return {
-        base: {
+        nps_nuisance_name(base): {
             "up": leaf_arrays(by_sample, process, base + "Up", nbin)[0],
             "down": leaf_arrays(by_sample, process, base + "Down", nbin)[0],
         }
@@ -521,15 +541,33 @@ def build_root(
                 signal = np.zeros(1)
                 signal_sumw2 = np.zeros(1)
                 signal_nuisance_factors: dict[str, dict[str, float]] = {}
-                if channel["signal_source"]:
-                    regime, source_bin = channel["signal_source"]
+                signal_sources = channel.get("signal_sources")
+                if signal_sources is None:
+                    signal_sources = (
+                        [channel["signal_source"]]
+                        if channel.get("signal_source")
+                        else []
+                    )
+                if signal_sources:
+                    regimes = {regime for regime, _ in signal_sources}
+                    if len(regimes) != 1:
+                        raise ValueError(
+                            f"mixed signal regimes in {channel['name']}: "
+                            f"{sorted(regimes)}"
+                        )
+                    regime = next(iter(regimes))
                     nominal, sumw2 = signal_leaf(
                         hists, regime, mass_key, "nominal", topology
                     )
-                    if source_bin < len(nominal):
-                        signal[0] = max(float(nominal[source_bin]), MIN_BIN)
+                    source_bins = [source_bin for _, source_bin in signal_sources]
+                    if all(source_bin < len(nominal) for source_bin in source_bins):
+                        signal[0] = max(
+                            float(sum(nominal[source_bin] for source_bin in source_bins)),
+                            MIN_BIN,
+                        )
                         signal_sumw2[0] = max(
-                            float(sumw2[source_bin]), 0.0
+                            float(sum(sumw2[source_bin] for source_bin in source_bins)),
+                            0.0,
                         )
                     for nuisance in signal_variations(
                         hists, regime, mass_key, topology
@@ -548,18 +586,21 @@ def build_root(
                             nuisance + "Down",
                             topology,
                         )[0]
-                        if source_bin >= len(up) or source_bin >= len(down):
+                        if any(
+                            source_bin >= len(up) or source_bin >= len(down)
+                            for source_bin in source_bins
+                        ):
                             continue
                         signal_variation_floor = max(
                             MIN_BIN,
                             signal[0] * MIN_VARIATION_RATIO,
                         )
                         up_value = max(
-                            float(up[source_bin]),
+                            float(sum(up[source_bin] for source_bin in source_bins)),
                             signal_variation_floor,
                         )
                         down_value = max(
-                            float(down[source_bin]),
+                            float(sum(down[source_bin] for source_bin in source_bins)),
                             signal_variation_floor,
                         )
                         if np.isclose(
@@ -574,7 +615,7 @@ def build_root(
                             atol=1.0e-15,
                         ):
                             continue
-                        signal_nuisance_factors[nuisance] = {
+                        signal_nuisance_factors[nps_nuisance_name(nuisance)] = {
                             "down": float(down_value / signal[0]),
                             "up": float(up_value / signal[0]),
                         }

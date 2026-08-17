@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>2024 lost-lepton event-removal closure</title>
+<style>
+body { font-family: Arial, sans-serif; max-width: 1250px; margin: 2rem auto; padding: 0 1rem; color: #202124; }
+h1, h2 { color: #17365d; }
+.warning { background: #fff3cd; border-left: 5px solid #d39e00; padding: 1rem; }
+.ok { background: #e8f5e9; border-left: 5px solid #2e7d32; padding: 1rem; }
+table { border-collapse: collapse; width: 100%; margin: 1rem 0 2rem; }
+th, td { border: 1px solid #ccd2d8; padding: .55rem; text-align: left; }
+th { background: #eef3f8; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 1rem; }
+.grid img { width: 100%; border: 1px solid #ccd2d8; }
+code { background: #f3f4f6; padding: .15rem .3rem; }
+</style>
+</head>
+<body>
+<h1>2024 event-level lepton-removal closure</h1>
+<p class="ok"><b>Component policy:</b> Top = TT + ST. W→ℓν is the only separately moving target component.</p>
+<p class="warning"><b>Prototype scope:</b> the event migration and shape are tested. The residual normalization α is derived from MC because an absolute lepton-loss efficiency payload is not yet available. The current one-lepton flat materialization also requires the original pTmiss to exceed 250 GeV, so migration from below that threshold is absent. Nominal SR data remain blinded.</p>
+<p class="warning"><b>Decision:</b> do not adopt this monolithic four-vector-removal estimator. Only 1 of 5 data validation regions improves over the previous Top/W transfer-factor result, and the MC cross-fit fails the shape test despite its imposed integral normalization.</p>
+<h2>Residual MC normalization after event migration</h2>
+<table><thead><tr><th>Regime</th><th>Component</th><th>α</th></tr></thead>
+<tbody><tr><td>highdm</td><td>Top</td><td>0.3663 ± 0.0010</td></tr><tr><td>highdm</td><td>W</td><td>0.5297 ± 0.0113</td></tr><tr><td>lowdm</td><td>Top</td><td>0.2823 ± 0.0015</td></tr><tr><td>lowdm</td><td>W</td><td>0.3134 ± 0.0021</td></tr></tbody></table>
+<h2>MC shape closure after cross-fit normalization</h2>
+<table><thead><tr><th>Distribution</th><th>Removal χ²/ndf</th><th>Removal max |pull|</th><th>Old TF χ²/ndf</th><th>Old TF max |pull|</th></tr></thead>
+<tbody><tr><td>highdm_ut</td><td>11361.1/7</td><td>57.71</td><td>0.004/7</td><td>0.05</td></tr><tr><td>highdm_search60</td><td>13362.7/60</td><td>51.08</td><td>3.899/58</td><td>1.19</td></tr><tr><td>lowdm_search42</td><td>5674.2/42</td><td>45.32</td><td>0.175/42</td><td>0.21</td></tr></tbody></table>
+<h2>Data validation-region comparison</h2>
+<table><thead><tr><th>Validation region</th><th>Old TF pred./obs.</th><th>Removal pred./obs.</th><th>Removal max |pull|</th></tr></thead>
+<tbody><tr><td>highdm_vr_nb0</td><td>0.654</td><td>0.598</td><td>16.06</td></tr><tr><td>highdm_vr_njet3to4_nb1plus</td><td>0.679</td><td>0.807</td><td>23.42</td></tr><tr><td>lowdm_vr_met250to300</td><td>0.776</td><td>0.367</td><td>30.92</td></tr><tr><td>lowdm_vr_isr200to300</td><td>0.800</td><td>0.542</td><td>23.25</td></tr><tr><td>lowdm_vr_significance7to10</td><td>0.991</td><td>0.273</td><td>2.72</td></tr></tbody></table>
+<h2>Plots</h2>
+<div class="grid"><a href="plots/mc_removal_closure_highdm_ut.png"><img src="plots/mc_removal_closure_highdm_ut.png" loading="lazy"></a><a href="plots/flavor_shapes_top_highdm_ut.png"><img src="plots/flavor_shapes_top_highdm_ut.png" loading="lazy"></a><a href="plots/flavor_shapes_w_highdm_ut.png"><img src="plots/flavor_shapes_w_highdm_ut.png" loading="lazy"></a><a href="plots/mc_removal_closure_highdm_search60.png"><img src="plots/mc_removal_closure_highdm_search60.png" loading="lazy"></a><a href="plots/flavor_shapes_top_highdm_search60.png"><img src="plots/flavor_shapes_top_highdm_search60.png" loading="lazy"></a><a href="plots/flavor_shapes_w_highdm_search60.png"><img src="plots/flavor_shapes_w_highdm_search60.png" loading="lazy"></a><a href="plots/mc_removal_closure_lowdm_search42.png"><img src="plots/mc_removal_closure_lowdm_search42.png" loading="lazy"></a><a href="plots/flavor_shapes_top_lowdm_search42.png"><img src="plots/flavor_shapes_top_lowdm_search42.png" loading="lazy"></a><a href="plots/flavor_shapes_w_lowdm_search42.png"><img src="plots/flavor_shapes_w_lowdm_search42.png" loading="lazy"></a><a href="plots/data_vr_removal_closure_highdm_vr_nb0.png"><img src="plots/data_vr_removal_closure_highdm_vr_nb0.png" loading="lazy"></a><a href="plots/data_vr_removal_closure_highdm_vr_njet3to4_nb1plus.png"><img src="plots/data_vr_removal_closure_highdm_vr_njet3to4_nb1plus.png" loading="lazy"></a><a href="plots/data_vr_removal_closure_lowdm_vr_met250to300.png"><img src="plots/data_vr_removal_closure_lowdm_vr_met250to300.png" loading="lazy"></a><a href="plots/data_vr_removal_closure_lowdm_vr_isr200to300.png"><img src="plots/data_vr_removal_closure_lowdm_vr_isr200to300.png" loading="lazy"></a><a href="plots/data_vr_removal_closure_lowdm_vr_significance7to10.png"><img src="plots/data_vr_removal_closure_lowdm_vr_significance7to10.png" loading="lazy"></a><a href="plots/flavor_shapes_data_highdm_ut.png"><img src="plots/flavor_shapes_data_highdm_ut.png" loading="lazy"></a><a href="plots/flavor_shapes_data_lowdm_search42.png"><img src="plots/flavor_shapes_data_lowdm_search42.png" loading="lazy"></a></div>
+<h2>Reproducibility</h2>
+<ul>
+<li>Machine-readable result: <a href="removal_closure_results.json">removal_closure_results.json</a></li>
+<li>Input ROOT files were read-only; nominal inputs modified: <code>false</code>.</li>
+<li>Nominal high-/low-Δm SR data target histograms were explicitly disabled.</li>
+</ul>
+</body></html>
