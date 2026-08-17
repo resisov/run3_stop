@@ -56,6 +56,13 @@ condor_log/
 
 # Analysis runtime directories
 analysis/hists/
+
+# The canonical b-tag efficiency payload is a required analysis input. Keep
+# other generated histogram products ignored, but allow this one validated
+# payload to be versioned once it is restored from the canonical campaign.
+!analysis/hists/
+analysis/hists/*
+!analysis/hists/btageff2024.merged
 analysis/condor/generated/
 analysis/combine/
 fast_outputs/
