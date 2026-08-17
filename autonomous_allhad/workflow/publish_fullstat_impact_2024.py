@@ -42,6 +42,12 @@ def main() -> int:
         ((analysis.get("model_details") or {}).get("lowdm_sgamma_sharing"))
         or {}
     )
+    model_payload = ((analysis.get("model_details") or {}).get("model")) or {}
+    rz_covariance_status = (
+        model_payload.get("rz_covariance")
+        if isinstance(model_payload, dict)
+        else None
+    )
     stem = (
         f"impacts_2024_highdm{highdm_bins}_lowdm{lowdm_bins}_"
         + (
@@ -106,6 +112,12 @@ def main() -> int:
         if isinstance(object_shapes, list) and object_shapes
         else " Object-shape templates are absent from this card."
     )
+    rz_scope = (
+        " The RZ covariance is explicitly the temporary diagonal statistical-only "
+        "model pending the documented final cross-category covariance."
+        if rz_covariance_status == "temporary_statistical_only"
+        else ""
+    )
     transfer_scope = (
         " The background model uses the published bin-by-bin "
         "N_b×recoil transfer-factor constraints."
@@ -152,7 +164,7 @@ def main() -> int:
         f"The fitted signal strength is r={poi_fit[1]:.2f}"
         f"<sup>+{poi_fit[2] - poi_fit[1]:.2f}</sup>"
         f"<sub>−{poi_fit[1] - poi_fit[0]:.2f}</sub>. "
-        f"{transfer_scope}{object_scope} "
+        f"{transfer_scope}{object_scope}{rz_scope} "
         f"<a href='plots/impacts/{stem}.pdf'>Multipage impact plot</a> · "
         f"<a href='data/{stem}.json'>Combine impact JSON</a> · "
         f"<a href='data/{stem}_validation.json'>validation report</a>.</p>"
@@ -254,7 +266,11 @@ def main() -> int:
     page_summary["records"] = records
     page_summary["generated_at"] = now
     page_summary["impact_update"] = {
-        "status": "complete_current_2024_model",
+        "status": (
+            "complete_fit_temporary_rz_covariance"
+            if rz_covariance_status == "temporary_statistical_only"
+            else "complete_current_2024_model"
+        ),
         "updated_at": now,
         "year": 2024,
         "data_mode": "asimov",
@@ -343,7 +359,11 @@ def main() -> int:
                 "autoMCStats": stat_count,
                 "other": nonstat_count,
             },
-            "status": "complete_current_2024_model_full_statistics",
+            "status": (
+                "complete_fit_temporary_rz_covariance_full_statistics"
+                if rz_covariance_status == "temporary_statistical_only"
+                else "complete_current_2024_model_full_statistics"
+            ),
             "updated_at": now,
         }
     )

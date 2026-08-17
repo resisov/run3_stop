@@ -552,6 +552,14 @@ def main() -> int:
             "Use only for a scoped repair whose affected chunks are rerun."
         ),
     )
+    parser.add_argument(
+        "--allow-zero-entry-roots",
+        action="store_true",
+        help=(
+            "Allow the streaming merger to retain explicitly recorded "
+            "zero-entry ROOTs as zero-contribution inputs."
+        ),
+    )
     args = parser.parse_args()
     if args.only_lowdm_nsv_repair and not args.only_lowdm_sr_nsv_inclusive:
         parser.error("--only-lowdm-nsv-repair requires --only-lowdm-sr-nsv-inclusive")
@@ -752,6 +760,8 @@ def main() -> int:
         ]
         if args.allow_hist_builder_repair:
             merge_command.append("--allow-hist-builder-repair")
+        if args.allow_zero_entry_roots:
+            merge_command.append("--allow-zero-entry-roots")
         print(
             json.dumps(
                 {

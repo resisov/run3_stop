@@ -45,12 +45,31 @@ def update_summary(
     dy_ptll_policy: str,
     expected_build_options: dict[str, Any] | None,
     allow_hist_builder_repair: bool,
+    allow_zero_entry_roots: bool,
 ) -> dict[str, Any]:
-    if payload.get("status") != "complete":
+    recorded_status = str(payload.get("status") or "")
+    allowed_statuses = {"complete"}
+    if allow_zero_entry_roots:
+        allowed_statuses.add("complete_with_warnings")
+    if recorded_status not in allowed_statuses:
         raise RuntimeError(f"{path}: chunk status is not complete")
     src_summary = payload.get("summary") or {}
-    if summary_has_strict_warnings(src_summary):
+    strict_warning_keys = (
+        "weight_failures",
+        "missing_input_roots",
+        "missing_sidecars",
+        "weight_rejections",
+    )
+    if any(bool(src_summary.get(key)) for key in strict_warning_keys):
         raise RuntimeError(f"{path}: strict chunk warnings are present")
+    if src_summary.get("zero_entry_roots") and not allow_zero_entry_roots:
+        raise RuntimeError(f"{path}: zero-entry ROOT warnings are present")
+    if recorded_status == "complete_with_warnings" and not src_summary.get(
+        "zero_entry_roots"
+    ):
+        raise RuntimeError(
+            f"{path}: warning status is not explained by zero-entry ROOTs"
+        )
     recorded_normalization = payload.get("normalization")
     if not recorded_normalization:
         raise RuntimeError(f"{path}: chunk normalization provenance is missing")
@@ -208,6 +227,14 @@ def main() -> int:
     parser.add_argument("--work-dir", type=Path)
     parser.add_argument("--allow-hist-builder-repair", action="store_true")
     parser.add_argument(
+        "--allow-zero-entry-roots",
+        action="store_true",
+        help=(
+            "Allow complete_with_warnings chunks only when their sole strict "
+            "warning is a recorded zero-entry ROOT."
+        ),
+    )
+    parser.add_argument(
         "--sections",
         nargs="+",
         choices=HISTOGRAM_KEYS,
@@ -255,6 +282,7 @@ def main() -> int:
             args.dy_ptll_policy,
             expected_build_options,
             args.allow_hist_builder_repair,
+            args.allow_zero_entry_roots,
         )
         del payload
         if index % 25 == 0 or index == len(chunks):
@@ -286,7 +314,19 @@ def main() -> int:
         and not summary_has_strict_warnings(summary)
         else "complete_with_warnings"
     )
-    if status != "complete":
+    if status != "complete" and not (
+        args.allow_zero_entry_roots
+        and not any(
+            bool(summary.get(key))
+            for key in (
+                "weight_failures",
+                "missing_input_roots",
+                "missing_sidecars",
+                "weight_rejections",
+            )
+        )
+        and bool(summary.get("zero_entry_roots"))
+    ):
         raise RuntimeError(f"strict merged status is {status}")
 
     args.output.parent.mkdir(parents=True, exist_ok=True)

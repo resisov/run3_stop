@@ -233,11 +233,16 @@ def main():
         and "mStop1200_mLSP500" not in missing_limit_points
     )
     manifest_complete = manifest.get("status") in {
+        "combine_inputs_ready",
         "combine_outputs_complete",
         "complete",
     } or manifest_partial_reconciles
-    highdm_card_channels = indexed_channels(card_text, "hSR_b")
-    lowdm_card_channels = indexed_channels(card_text, "lSR_b")
+    highdm_card_channels = indexed_channels(card_text, "hSR_b") | indexed_channels(
+        card_text, "SR_highdm_bin"
+    )
+    lowdm_card_channels = indexed_channels(card_text, "lSR_b") | indexed_channels(
+        card_text, "SR_lowdm_bin"
+    )
     card_has_expected_channels = (
         len(highdm_card_channels) == highdm_bins
         and len(lowdm_card_channels) == lowdm_bins
