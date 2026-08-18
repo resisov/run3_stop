@@ -1770,6 +1770,17 @@ def draw_highdm_distribution_report(
     only_variable: str | None = None,
 ) -> dict:
     payload = load_json(payload_path)
+    # High-dM one-dimensional distribution plots intentionally do not draw
+    # signal overlays.  Drop those records once, before the repeated region /
+    # variable aggregation, so large signal grids do not dominate memory and
+    # I/O while leaving every plotted background and data value unchanged.
+    signal_records_pruned = 0
+    for variable_map in (payload.get("highdm_variable_histograms") or {}).values():
+        for raw in variable_map.values():
+            signal_samples = [sample for sample in raw if is_signal_sample(sample)]
+            for sample in signal_samples:
+                del raw[sample]
+            signal_records_pruned += len(signal_samples)
     dy_rz_application = (
         apply_dy_rz(payload, dy_rz_manifest) if dy_rz_manifest else None
     )
@@ -1825,6 +1836,7 @@ def draw_highdm_distribution_report(
         "output_dir": str(output_dir),
         "plot_count": len(plots),
         "plots": plots,
+        "signal_records_pruned_before_render": signal_records_pruned,
         "dy_rz_application": dy_rz_application,
     }
     (output_dir / "plot_summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")

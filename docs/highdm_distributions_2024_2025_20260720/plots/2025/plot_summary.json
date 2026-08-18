@@ -1,0 +1,5800 @@
+{
+  "background_systematic_sources": [
+    "pileup",
+    "electron_id",
+    "electron_hlt",
+    "muon_id",
+    "muon_hlt",
+    "photon_id",
+    "btagSF_bc_correlated",
+    "btagSF_bc_uncorrelated",
+    "btagSF_light_correlated",
+    "btagSF_light_uncorrelated",
+    "jesFlavorQCD",
+    "jesTotal",
+    "metUnclustered"
+  ],
+  "dy_rz_application": null,
+  "luminosity_fb": 110.84,
+  "luminosity_relative_uncertainty": 0.016,
+  "luminosity_uncertainty_applied": true,
+  "output_dir": "/tmp/web2425/plots/2025",
+  "plot_count": 186,
+  "plots": [
+    {
+      "bins": 11,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "LLCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_llcr_bjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/cr_llcr_bjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_llcr_bjet_pt.png",
+      "region": "LLCR",
+      "region_label": "LLCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "bjet_pt",
+      "xlabel": "Leading b-jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "LLCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_llcr_fatjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/cr_llcr_fatjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_llcr_fatjet_pt.png",
+      "region": "LLCR",
+      "region_label": "LLCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "fatjet_pt",
+      "xlabel": "Leading AK8 jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "LLCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_llcr_ht",
+      "pdf": "/tmp/web2425/plots/2025/cr_llcr_ht.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_llcr_ht.png",
+      "region": "LLCR",
+      "region_label": "LLCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ht",
+      "xlabel": "$H_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 12,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "LLCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_llcr_jet_pt",
+      "pdf": "/tmp/web2425/plots/2025/cr_llcr_jet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_llcr_jet_pt.png",
+      "region": "LLCR",
+      "region_label": "LLCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "jet_pt",
+      "xlabel": "Leading jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 8,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "LLCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_llcr_met",
+      "pdf": "/tmp/web2425/plots/2025/cr_llcr_met.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_llcr_met.png",
+      "region": "LLCR",
+      "region_label": "LLCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "met",
+      "xlabel": "$p_{T}^{miss}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "LLCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_llcr_nb",
+      "pdf": "/tmp/web2425/plots/2025/cr_llcr_nb.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_llcr_nb.png",
+      "region": "LLCR",
+      "region_label": "LLCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb",
+      "xlabel": "$N_{b}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "LLCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_llcr_nfatjet",
+      "pdf": "/tmp/web2425/plots/2025/cr_llcr_nfatjet.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_llcr_nfatjet.png",
+      "region": "LLCR",
+      "region_label": "LLCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nfatjet",
+      "xlabel": "$N_{\\mathrm{AK8}}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "LLCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_llcr_njet",
+      "pdf": "/tmp/web2425/plots/2025/cr_llcr_njet.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_llcr_njet.png",
+      "region": "LLCR",
+      "region_label": "LLCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "njet",
+      "xlabel": "$N_{j}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "LLCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_llcr_ntop",
+      "pdf": "/tmp/web2425/plots/2025/cr_llcr_ntop.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_llcr_ntop.png",
+      "region": "LLCR",
+      "region_label": "LLCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ntop",
+      "xlabel": "$N_{t}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "LLCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_llcr_nw",
+      "pdf": "/tmp/web2425/plots/2025/cr_llcr_nw.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_llcr_nw.png",
+      "region": "LLCR",
+      "region_label": "LLCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nw",
+      "xlabel": "$N_{W}$",
+      "year": "2025"
+    },
+    {
+      "bins": 8,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "LLCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_llcr_ut",
+      "pdf": "/tmp/web2425/plots/2025/cr_llcr_ut.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_llcr_ut.png",
+      "region": "LLCR",
+      "region_label": "LLCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ut",
+      "xlabel": "$U_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 11,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "QCDCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_qcdcr_bjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/cr_qcdcr_bjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_qcdcr_bjet_pt.png",
+      "region": "QCDCR",
+      "region_label": "QCDCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "bjet_pt",
+      "xlabel": "Leading b-jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "QCDCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_qcdcr_fatjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/cr_qcdcr_fatjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_qcdcr_fatjet_pt.png",
+      "region": "QCDCR",
+      "region_label": "QCDCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "fatjet_pt",
+      "xlabel": "Leading AK8 jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "QCDCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_qcdcr_ht",
+      "pdf": "/tmp/web2425/plots/2025/cr_qcdcr_ht.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_qcdcr_ht.png",
+      "region": "QCDCR",
+      "region_label": "QCDCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ht",
+      "xlabel": "$H_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 12,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "QCDCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_qcdcr_jet_pt",
+      "pdf": "/tmp/web2425/plots/2025/cr_qcdcr_jet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_qcdcr_jet_pt.png",
+      "region": "QCDCR",
+      "region_label": "QCDCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "jet_pt",
+      "xlabel": "Leading jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 8,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "QCDCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_qcdcr_met",
+      "pdf": "/tmp/web2425/plots/2025/cr_qcdcr_met.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_qcdcr_met.png",
+      "region": "QCDCR",
+      "region_label": "QCDCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "met",
+      "xlabel": "$p_{T}^{miss}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "QCDCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_qcdcr_nb",
+      "pdf": "/tmp/web2425/plots/2025/cr_qcdcr_nb.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_qcdcr_nb.png",
+      "region": "QCDCR",
+      "region_label": "QCDCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb",
+      "xlabel": "$N_{b}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "QCDCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_qcdcr_nfatjet",
+      "pdf": "/tmp/web2425/plots/2025/cr_qcdcr_nfatjet.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_qcdcr_nfatjet.png",
+      "region": "QCDCR",
+      "region_label": "QCDCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nfatjet",
+      "xlabel": "$N_{\\mathrm{AK8}}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "QCDCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_qcdcr_njet",
+      "pdf": "/tmp/web2425/plots/2025/cr_qcdcr_njet.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_qcdcr_njet.png",
+      "region": "QCDCR",
+      "region_label": "QCDCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "njet",
+      "xlabel": "$N_{j}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "QCDCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_qcdcr_ntop",
+      "pdf": "/tmp/web2425/plots/2025/cr_qcdcr_ntop.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_qcdcr_ntop.png",
+      "region": "QCDCR",
+      "region_label": "QCDCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ntop",
+      "xlabel": "$N_{t}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "QCDCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_qcdcr_nw",
+      "pdf": "/tmp/web2425/plots/2025/cr_qcdcr_nw.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_qcdcr_nw.png",
+      "region": "QCDCR",
+      "region_label": "QCDCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nw",
+      "xlabel": "$N_{W}$",
+      "year": "2025"
+    },
+    {
+      "bins": 8,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "QCDCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_qcdcr_ut",
+      "pdf": "/tmp/web2425/plots/2025/cr_qcdcr_ut.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_qcdcr_ut.png",
+      "region": "QCDCR",
+      "region_label": "QCDCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ut",
+      "xlabel": "$U_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 11,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "GCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_gcr_bjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/cr_gcr_bjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_gcr_bjet_pt.png",
+      "region": "GCR",
+      "region_label": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 0.9999999999999999
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.00025243908109520377,
+            "raw_fraction": 0.0002524390810952037
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.7933513942197865,
+            "raw_fraction": 0.7933513942197866
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.15773696735942466,
+            "raw_fraction": 0.15773696735942463
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.04566921353218342,
+            "raw_fraction": 0.04566921353218343
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0008774492980377033,
+            "raw_fraction": 0.0008774492980377033
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.002039330158903397,
+            "raw_fraction": 0.002039330158903397
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 7.320635056906169e-05,
+            "raw_fraction": 7.320635056906167e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 12121.0,
+          "data_over_mc": 1.5391166544245634,
+          "mc": 7875.296498907508,
+          "process_groups": {
+            "DY": 1.9880326115364864,
+            "Data": 12121.0,
+            "Others": 0.0,
+            "Photon+jet": 6247.877457302476,
+            "QCD Multijet": 1242.2253867939646,
+            "Top": 359.65859743786353,
+            "VV+VVV": 6.910173384805176,
+            "W -> lv": 16.060329660528417,
+            "Z -> vv": 0.576521716334327
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 0.9999999999999999,
+            "up": 1.0000000000000002
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0000000000000002,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 0.9999999999999998,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_hlt": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "pileup": {
+            "down": 1.0000000000000002,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "bjet_pt",
+      "xlabel": "Leading b-jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "GCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_gcr_fatjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/cr_gcr_fatjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_gcr_fatjet_pt.png",
+      "region": "GCR",
+      "region_label": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 0.9999999999999998
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.00030451936772864967,
+            "raw_fraction": 0.00030451936772864967
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.7704240391982453,
+            "raw_fraction": 0.7704240391982453
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.16929391946755554,
+            "raw_fraction": 0.16929391946755554
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.057310567837966314,
+            "raw_fraction": 0.057310567837966314
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0010171762323478723,
+            "raw_fraction": 0.0010171762323478726
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0017207827456418958,
+            "raw_fraction": 0.001720782745641896
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": -7.100484948566538e-05,
+            "raw_fraction": -7.100484948566538e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 6724.0,
+          "data_over_mc": 1.4126237471245628,
+          "mc": 4759.936970964066,
+          "process_groups": {
+            "DY": 1.4494929968262014,
+            "Data": 6724.0,
+            "Others": 0.0,
+            "Photon+jet": 3667.1698674991967,
+            "QCD Multijet": 805.8283862330308,
+            "Top": 272.79469067888,
+            "VV+VVV": 4.841694754338573,
+            "W -> lv": 8.190817409977916,
+            "Z -> vv": -0.3379786081845575
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "btagSF_light_correlated": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999999
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0000000000000002
+          },
+          "electron_id": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999998
+          },
+          "muon_hlt": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999998
+          },
+          "muon_id": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999998
+          },
+          "photon_id": {
+            "down": 1.0000000000000002,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 1.0,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "fatjet_pt",
+      "xlabel": "Leading AK8 jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "GCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_gcr_ht",
+      "pdf": "/tmp/web2425/plots/2025/cr_gcr_ht.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_gcr_ht.png",
+      "region": "GCR",
+      "region_label": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.00025246442428010664,
+            "raw_fraction": 0.00025246442428010664
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.7937093857013289,
+            "raw_fraction": 0.793709385701329
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.1573606555747809,
+            "raw_fraction": 0.15736065557478093
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.04566614105576921,
+            "raw_fraction": 0.04566614105576921
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0008774967638384419,
+            "raw_fraction": 0.000877496763838442
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0020606427800082673,
+            "raw_fraction": 0.0020606427800082677
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 7.321369999400211e-05,
+            "raw_fraction": 7.32136999940021e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 12122.0,
+          "data_over_mc": 1.539398163472876,
+          "mc": 7874.5059515030325,
+          "process_groups": {
+            "DY": 1.9880326115364864,
+            "Data": 12122.0,
+            "Others": 0.0,
+            "Photon+jet": 6250.069281468931,
+            "QCD Multijet": 1239.1374188560312,
+            "Top": 359.59829952583164,
+            "VV+VVV": 6.909853489270462,
+            "W -> lv": 16.22654383509686,
+            "Z -> vv": 0.576521716334327
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 1.0000000000000002
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_hlt": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "pileup": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999998
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "ht",
+      "xlabel": "$H_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 12,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "GCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_gcr_jet_pt",
+      "pdf": "/tmp/web2425/plots/2025/cr_gcr_jet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_gcr_jet_pt.png",
+      "region": "GCR",
+      "region_label": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 0.9999999999999999,
+          "mc": 0.9999999999999999
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0002522245575138601,
+            "raw_fraction": 0.00025222455751386017
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.7933778619312406,
+            "raw_fraction": 0.7933778619312405
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.157739247642843,
+            "raw_fraction": 0.157739247642843
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.045642054113302084,
+            "raw_fraction": 0.04564205411330209
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0008767036386689329,
+            "raw_fraction": 0.0008767036386689328
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0020387639768656343,
+            "raw_fraction": 0.002038763976865634
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 7.314413956578503e-05,
+            "raw_fraction": 7.314413956578501e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 12127.0,
+          "data_over_mc": 1.538569936539718,
+          "mc": 7881.994644503404,
+          "process_groups": {
+            "DY": 1.9880326115364866,
+            "Data": 12127.0,
+            "Others": 0.0,
+            "Photon+jet": 6253.400058809599,
+            "QCD Multijet": 1243.2999051488846,
+            "Top": 359.75042608518163,
+            "VV+VVV": 6.910173384805176,
+            "W -> lv": 16.06952674706139,
+            "Z -> vv": 0.576521716334327
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 0.9999999999999998
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999999
+          },
+          "electron_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_hlt": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "photon_id": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 1.0,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "jet_pt",
+      "xlabel": "Leading jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "GCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_gcr_nb",
+      "pdf": "/tmp/web2425/plots/2025/cr_gcr_nb.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_gcr_nb.png",
+      "region": "GCR",
+      "region_label": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.000252088106194116,
+            "raw_fraction": 0.000252088106194116
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.7933156859968482,
+            "raw_fraction": 0.7933156859968482
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.15782598422217914,
+            "raw_fraction": 0.1578259842221791
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.04561924673297423,
+            "raw_fraction": 0.04561924673297424
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0008762293495287317,
+            "raw_fraction": 0.0008762293495287317
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0020376610230611663,
+            "raw_fraction": 0.002037661023061166
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 7.310456921437405e-05,
+            "raw_fraction": 7.310456921437405e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 12129.0,
+          "data_over_mc": 1.537991189020451,
+          "mc": 7886.261044008308,
+          "process_groups": {
+            "DY": 1.9880326115364864,
+            "Data": 12129.0,
+            "Others": 0.0,
+            "Photon+jet": 6256.294590077671,
+            "QCD Multijet": 1244.656911103641,
+            "Top": 359.765288367258,
+            "VV+VVV": 6.910173384805176,
+            "W -> lv": 16.06952674706139,
+            "Z -> vv": 0.5765217163343271
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "pileup": {
+            "down": 1.0000000000000002,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "nb",
+      "xlabel": "$N_{b}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "GCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_gcr_nfatjet",
+      "pdf": "/tmp/web2425/plots/2025/cr_gcr_nfatjet.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_gcr_nfatjet.png",
+      "region": "GCR",
+      "region_label": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.00025208810619411603,
+            "raw_fraction": 0.00025208810619411603
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.7933156859968482,
+            "raw_fraction": 0.7933156859968483
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.15782598422217917,
+            "raw_fraction": 0.1578259842221792
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.04561924673297424,
+            "raw_fraction": 0.04561924673297423
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0008762293495287317,
+            "raw_fraction": 0.0008762293495287317
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.002037661023061166,
+            "raw_fraction": 0.0020376610230611663
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 7.310456921437405e-05,
+            "raw_fraction": 7.310456921437405e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 12129.0,
+          "data_over_mc": 1.537991189020451,
+          "mc": 7886.261044008307,
+          "process_groups": {
+            "DY": 1.9880326115364864,
+            "Data": 12129.0,
+            "Others": 0.0,
+            "Photon+jet": 6256.294590077671,
+            "QCD Multijet": 1244.6569111036415,
+            "Top": 359.76528836725794,
+            "VV+VVV": 6.910173384805176,
+            "W -> lv": 16.06952674706139,
+            "Z -> vv": 0.576521716334327
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999998
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0000000000000002
+          },
+          "btagSF_light_correlated": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 1.0000000000000002,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "nfatjet",
+      "xlabel": "$N_{\\mathrm{AK8}}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "GCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_gcr_njet",
+      "pdf": "/tmp/web2425/plots/2025/cr_gcr_njet.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_gcr_njet.png",
+      "region": "GCR",
+      "region_label": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0000000000000002
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.00025208810619411603,
+            "raw_fraction": 0.00025208810619411603
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.7933156859968482,
+            "raw_fraction": 0.7933156859968483
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.1578259842221792,
+            "raw_fraction": 0.15782598422217917
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.045619246732974246,
+            "raw_fraction": 0.04561924673297424
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0008762293495287318,
+            "raw_fraction": 0.0008762293495287319
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.002037661023061166,
+            "raw_fraction": 0.002037661023061166
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 7.310456921437405e-05,
+            "raw_fraction": 7.310456921437405e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 12129.0,
+          "data_over_mc": 1.537991189020451,
+          "mc": 7886.261044008307,
+          "process_groups": {
+            "DY": 1.9880326115364864,
+            "Data": 12129.0,
+            "Others": 0.0,
+            "Photon+jet": 6256.294590077671,
+            "QCD Multijet": 1244.6569111036413,
+            "Top": 359.765288367258,
+            "VV+VVV": 6.9101733848051765,
+            "W -> lv": 16.069526747061385,
+            "Z -> vv": 0.576521716334327
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 0.9999999999999998,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "electron_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_hlt": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "pileup": {
+            "down": 1.0,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "njet",
+      "xlabel": "$N_{j}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "GCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_gcr_ntop",
+      "pdf": "/tmp/web2425/plots/2025/cr_gcr_ntop.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_gcr_ntop.png",
+      "region": "GCR",
+      "region_label": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.000252088106194116,
+            "raw_fraction": 0.000252088106194116
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.7933156859968481,
+            "raw_fraction": 0.7933156859968481
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.15782598422217914,
+            "raw_fraction": 0.15782598422217914
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.04561924673297424,
+            "raw_fraction": 0.04561924673297424
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0008762293495287315,
+            "raw_fraction": 0.0008762293495287317
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.002037661023061166,
+            "raw_fraction": 0.0020376610230611655
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 7.310456921437402e-05,
+            "raw_fraction": 7.310456921437402e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 12129.0,
+          "data_over_mc": 1.537991189020451,
+          "mc": 7886.261044008308,
+          "process_groups": {
+            "DY": 1.9880326115364864,
+            "Data": 12129.0,
+            "Others": 0.0,
+            "Photon+jet": 6256.29459007767,
+            "QCD Multijet": 1244.6569111036413,
+            "Top": 359.765288367258,
+            "VV+VVV": 6.910173384805176,
+            "W -> lv": 16.069526747061385,
+            "Z -> vv": 0.5765217163343269
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "ntop",
+      "xlabel": "$N_{t}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "GCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_gcr_nw",
+      "pdf": "/tmp/web2425/plots/2025/cr_gcr_nw.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_gcr_nw.png",
+      "region": "GCR",
+      "region_label": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 0.9999999999999999,
+          "mc": 1.0000000000000002
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.00025208810619411603,
+            "raw_fraction": 0.00025208810619411603
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.7933156859968484,
+            "raw_fraction": 0.7933156859968484
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.15782598422217917,
+            "raw_fraction": 0.1578259842221792
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.04561924673297425,
+            "raw_fraction": 0.045619246732974246
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0008762293495287321,
+            "raw_fraction": 0.0008762293495287319
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0020376610230611663,
+            "raw_fraction": 0.002037661023061166
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 7.310456921437406e-05,
+            "raw_fraction": 7.310456921437406e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 12129.0,
+          "data_over_mc": 1.5379911890204512,
+          "mc": 7886.261044008306,
+          "process_groups": {
+            "DY": 1.9880326115364864,
+            "Data": 12129.0,
+            "Others": 0.0,
+            "Photon+jet": 6256.294590077671,
+            "QCD Multijet": 1244.6569111036413,
+            "Top": 359.765288367258,
+            "VV+VVV": 6.9101733848051765,
+            "W -> lv": 16.069526747061385,
+            "Z -> vv": 0.5765217163343271
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0000000000000002,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          },
+          "muon_hlt": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          },
+          "muon_id": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 1.0,
+            "up": 1.0000000000000002
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "nw",
+      "xlabel": "$N_{W}$",
+      "year": "2025"
+    },
+    {
+      "bins": 8,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "GCR"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_gcr_ut",
+      "pdf": "/tmp/web2425/plots/2025/cr_gcr_ut.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_gcr_ut.png",
+      "region": "GCR",
+      "region_label": "GCR",
+      "signals": [],
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0002521602750784606,
+            "raw_fraction": 0.0002521602750784606
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.7932580374870545,
+            "raw_fraction": 0.7932580374870544
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.15786964842790224,
+            "raw_fraction": 0.15786964842790221
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.04563230373819946,
+            "raw_fraction": 0.04563230373819946
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.000876480200294919,
+            "raw_fraction": 0.000876480200294919
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0020382443735608266,
+            "raw_fraction": 0.0020382443735608266
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 7.312549790982242e-05,
+            "raw_fraction": 7.312549790982242e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 12125.0,
+          "data_over_mc": 1.537924135441287,
+          "mc": 7884.003976906762,
+          "process_groups": {
+            "DY": 1.9880326115364864,
+            "Data": 12125.0,
+            "Others": 0.0,
+            "Photon+jet": 6254.04952226119,
+            "QCD Multijet": 1244.6449360384534,
+            "Top": 359.7652641473818,
+            "VV+VVV": 6.9101733848051765,
+            "W -> lv": 16.06952674706139,
+            "Z -> vv": 0.576521716334327
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0000000000000002,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_hlt": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "ut",
+      "xlabel": "$U_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 11,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "DY2E"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_dy2e_bjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/cr_dy2e_bjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_dy2e_bjet_pt.png",
+      "region": "DY2E",
+      "region_label": "DY2E",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "bjet_pt",
+      "xlabel": "Leading b-jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "DY2E"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_dy2e_fatjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/cr_dy2e_fatjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_dy2e_fatjet_pt.png",
+      "region": "DY2E",
+      "region_label": "DY2E",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "fatjet_pt",
+      "xlabel": "Leading AK8 jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "DY2E"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_dy2e_ht",
+      "pdf": "/tmp/web2425/plots/2025/cr_dy2e_ht.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_dy2e_ht.png",
+      "region": "DY2E",
+      "region_label": "DY2E",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ht",
+      "xlabel": "$H_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 12,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "DY2E"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_dy2e_jet_pt",
+      "pdf": "/tmp/web2425/plots/2025/cr_dy2e_jet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_dy2e_jet_pt.png",
+      "region": "DY2E",
+      "region_label": "DY2E",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "jet_pt",
+      "xlabel": "Leading jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 8,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "DY2E"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_dy2e_met",
+      "pdf": "/tmp/web2425/plots/2025/cr_dy2e_met.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_dy2e_met.png",
+      "region": "DY2E",
+      "region_label": "DY2E",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "met",
+      "xlabel": "$p_{T}^{miss}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "DY2E"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_dy2e_nb",
+      "pdf": "/tmp/web2425/plots/2025/cr_dy2e_nb.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_dy2e_nb.png",
+      "region": "DY2E",
+      "region_label": "DY2E",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb",
+      "xlabel": "$N_{b}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "DY2E"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_dy2e_nfatjet",
+      "pdf": "/tmp/web2425/plots/2025/cr_dy2e_nfatjet.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_dy2e_nfatjet.png",
+      "region": "DY2E",
+      "region_label": "DY2E",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nfatjet",
+      "xlabel": "$N_{\\mathrm{AK8}}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "DY2E"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_dy2e_njet",
+      "pdf": "/tmp/web2425/plots/2025/cr_dy2e_njet.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_dy2e_njet.png",
+      "region": "DY2E",
+      "region_label": "DY2E",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "njet",
+      "xlabel": "$N_{j}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "DY2E"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_dy2e_ntop",
+      "pdf": "/tmp/web2425/plots/2025/cr_dy2e_ntop.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_dy2e_ntop.png",
+      "region": "DY2E",
+      "region_label": "DY2E",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ntop",
+      "xlabel": "$N_{t}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "DY2E"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_dy2e_nw",
+      "pdf": "/tmp/web2425/plots/2025/cr_dy2e_nw.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_dy2e_nw.png",
+      "region": "DY2E",
+      "region_label": "DY2E",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nw",
+      "xlabel": "$N_{W}$",
+      "year": "2025"
+    },
+    {
+      "bins": 12,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "DY2E"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_dy2e_ptll",
+      "pdf": "/tmp/web2425/plots/2025/cr_dy2e_ptll.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_dy2e_ptll.png",
+      "region": "DY2E",
+      "region_label": "DY2E",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ptll",
+      "xlabel": "$p_{T}(\\ell\\ell)$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 8,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "DY2E"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_dy2e_ut",
+      "pdf": "/tmp/web2425/plots/2025/cr_dy2e_ut.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_dy2e_ut.png",
+      "region": "DY2E",
+      "region_label": "DY2E",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ut",
+      "xlabel": "$U_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 11,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "DY2M"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_dy2m_bjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/cr_dy2m_bjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_dy2m_bjet_pt.png",
+      "region": "DY2M",
+      "region_label": "DY2M",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "bjet_pt",
+      "xlabel": "Leading b-jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "DY2M"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_dy2m_fatjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/cr_dy2m_fatjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_dy2m_fatjet_pt.png",
+      "region": "DY2M",
+      "region_label": "DY2M",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "fatjet_pt",
+      "xlabel": "Leading AK8 jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "DY2M"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_dy2m_ht",
+      "pdf": "/tmp/web2425/plots/2025/cr_dy2m_ht.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_dy2m_ht.png",
+      "region": "DY2M",
+      "region_label": "DY2M",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ht",
+      "xlabel": "$H_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 12,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "DY2M"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_dy2m_jet_pt",
+      "pdf": "/tmp/web2425/plots/2025/cr_dy2m_jet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_dy2m_jet_pt.png",
+      "region": "DY2M",
+      "region_label": "DY2M",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "jet_pt",
+      "xlabel": "Leading jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 8,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "DY2M"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_dy2m_met",
+      "pdf": "/tmp/web2425/plots/2025/cr_dy2m_met.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_dy2m_met.png",
+      "region": "DY2M",
+      "region_label": "DY2M",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "met",
+      "xlabel": "$p_{T}^{miss}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "DY2M"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_dy2m_nb",
+      "pdf": "/tmp/web2425/plots/2025/cr_dy2m_nb.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_dy2m_nb.png",
+      "region": "DY2M",
+      "region_label": "DY2M",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb",
+      "xlabel": "$N_{b}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "DY2M"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_dy2m_nfatjet",
+      "pdf": "/tmp/web2425/plots/2025/cr_dy2m_nfatjet.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_dy2m_nfatjet.png",
+      "region": "DY2M",
+      "region_label": "DY2M",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nfatjet",
+      "xlabel": "$N_{\\mathrm{AK8}}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "DY2M"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_dy2m_njet",
+      "pdf": "/tmp/web2425/plots/2025/cr_dy2m_njet.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_dy2m_njet.png",
+      "region": "DY2M",
+      "region_label": "DY2M",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "njet",
+      "xlabel": "$N_{j}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "DY2M"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_dy2m_ntop",
+      "pdf": "/tmp/web2425/plots/2025/cr_dy2m_ntop.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_dy2m_ntop.png",
+      "region": "DY2M",
+      "region_label": "DY2M",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ntop",
+      "xlabel": "$N_{t}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "DY2M"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_dy2m_nw",
+      "pdf": "/tmp/web2425/plots/2025/cr_dy2m_nw.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_dy2m_nw.png",
+      "region": "DY2M",
+      "region_label": "DY2M",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nw",
+      "xlabel": "$N_{W}$",
+      "year": "2025"
+    },
+    {
+      "bins": 12,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "DY2M"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_dy2m_ptll",
+      "pdf": "/tmp/web2425/plots/2025/cr_dy2m_ptll.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_dy2m_ptll.png",
+      "region": "DY2M",
+      "region_label": "DY2M",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ptll",
+      "xlabel": "$p_{T}(\\ell\\ell)$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 8,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "CR",
+      "labels": [
+        "DY2M"
+      ],
+      "legend_yields_displayed": true,
+      "name": "cr_dy2m_ut",
+      "pdf": "/tmp/web2425/plots/2025/cr_dy2m_ut.pdf",
+      "png": "/tmp/web2425/plots/2025/cr_dy2m_ut.png",
+      "region": "DY2M",
+      "region_label": "DY2M",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ut",
+      "xlabel": "$U_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 11,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb1_bjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_bjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_bjet_pt.png",
+      "region": "HighDMVR_Nb1",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "bjet_pt",
+      "xlabel": "Leading b-jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb1_fatjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_fatjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_fatjet_pt.png",
+      "region": "HighDMVR_Nb1",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "fatjet_pt",
+      "xlabel": "Leading AK8 jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb1_ht",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_ht.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_ht.png",
+      "region": "HighDMVR_Nb1",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ht",
+      "xlabel": "$H_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 12,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb1_jet_pt",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_jet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_jet_pt.png",
+      "region": "HighDMVR_Nb1",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "jet_pt",
+      "xlabel": "Leading jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 8,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb1_met",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_met.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_met.png",
+      "region": "HighDMVR_Nb1",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "met",
+      "xlabel": "$p_{T}^{miss}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb1_nb",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_nb.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_nb.png",
+      "region": "HighDMVR_Nb1",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb",
+      "xlabel": "$N_{b}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb1_nfatjet",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_nfatjet.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_nfatjet.png",
+      "region": "HighDMVR_Nb1",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nfatjet",
+      "xlabel": "$N_{\\mathrm{AK8}}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb1_njet",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_njet.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_njet.png",
+      "region": "HighDMVR_Nb1",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "njet",
+      "xlabel": "$N_{j}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb1_ntop",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_ntop.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_ntop.png",
+      "region": "HighDMVR_Nb1",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ntop",
+      "xlabel": "$N_{t}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb1_nw",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_nw.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_nw.png",
+      "region": "HighDMVR_Nb1",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nw",
+      "xlabel": "$N_{W}$",
+      "year": "2025"
+    },
+    {
+      "bins": 11,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}=2$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb2_bjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_bjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_bjet_pt.png",
+      "region": "HighDMVR_Nb2",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}=2$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "bjet_pt",
+      "xlabel": "Leading b-jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}=2$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb2_fatjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_fatjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_fatjet_pt.png",
+      "region": "HighDMVR_Nb2",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}=2$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "fatjet_pt",
+      "xlabel": "Leading AK8 jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}=2$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb2_ht",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_ht.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_ht.png",
+      "region": "HighDMVR_Nb2",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}=2$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ht",
+      "xlabel": "$H_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 12,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}=2$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb2_jet_pt",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_jet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_jet_pt.png",
+      "region": "HighDMVR_Nb2",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}=2$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "jet_pt",
+      "xlabel": "Leading jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 8,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}=2$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb2_met",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_met.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_met.png",
+      "region": "HighDMVR_Nb2",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}=2$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "met",
+      "xlabel": "$p_{T}^{miss}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}=2$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb2_nb",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_nb.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_nb.png",
+      "region": "HighDMVR_Nb2",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}=2$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb",
+      "xlabel": "$N_{b}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}=2$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb2_nfatjet",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_nfatjet.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_nfatjet.png",
+      "region": "HighDMVR_Nb2",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}=2$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nfatjet",
+      "xlabel": "$N_{\\mathrm{AK8}}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}=2$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb2_njet",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_njet.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_njet.png",
+      "region": "HighDMVR_Nb2",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}=2$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "njet",
+      "xlabel": "$N_{j}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}=2$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb2_ntop",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_ntop.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_ntop.png",
+      "region": "HighDMVR_Nb2",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}=2$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ntop",
+      "xlabel": "$N_{t}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}=2$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb2_nw",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_nw.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_nw.png",
+      "region": "HighDMVR_Nb2",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}=2$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nw",
+      "xlabel": "$N_{W}$",
+      "year": "2025"
+    },
+    {
+      "bins": 11,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}\\geq3$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb3plus_bjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_bjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_bjet_pt.png",
+      "region": "HighDMVR_Nb3plus",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}\\geq3$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "bjet_pt",
+      "xlabel": "Leading b-jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}\\geq3$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb3plus_fatjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_fatjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_fatjet_pt.png",
+      "region": "HighDMVR_Nb3plus",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}\\geq3$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "fatjet_pt",
+      "xlabel": "Leading AK8 jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}\\geq3$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb3plus_ht",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_ht.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_ht.png",
+      "region": "HighDMVR_Nb3plus",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}\\geq3$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ht",
+      "xlabel": "$H_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 12,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}\\geq3$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb3plus_jet_pt",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_jet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_jet_pt.png",
+      "region": "HighDMVR_Nb3plus",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}\\geq3$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "jet_pt",
+      "xlabel": "Leading jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 8,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}\\geq3$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb3plus_met",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_met.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_met.png",
+      "region": "HighDMVR_Nb3plus",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}\\geq3$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "met",
+      "xlabel": "$p_{T}^{miss}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}\\geq3$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb3plus_nb",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_nb.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_nb.png",
+      "region": "HighDMVR_Nb3plus",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}\\geq3$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb",
+      "xlabel": "$N_{b}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}\\geq3$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb3plus_nfatjet",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_nfatjet.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_nfatjet.png",
+      "region": "HighDMVR_Nb3plus",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}\\geq3$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nfatjet",
+      "xlabel": "$N_{\\mathrm{AK8}}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}\\geq3$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb3plus_njet",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_njet.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_njet.png",
+      "region": "HighDMVR_Nb3plus",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}\\geq3$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "njet",
+      "xlabel": "$N_{j}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}\\geq3$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb3plus_ntop",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_ntop.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_ntop.png",
+      "region": "HighDMVR_Nb3plus",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}\\geq3$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ntop",
+      "xlabel": "$N_{t}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": false,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "VR",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}\\geq3$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "vr_highdm_vr_nb3plus_nw",
+      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_nw.pdf",
+      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_nw.png",
+      "region": "HighDMVR_Nb3plus",
+      "region_label": "High-$\\Delta m$ VR, $N_{b}\\geq3$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nw",
+      "xlabel": "$N_{W}$",
+      "year": "2025"
+    },
+    {
+      "bins": 11,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1plus_t0_w0_bjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_bjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_bjet_pt.png",
+      "region": "SR_Nb1plus_T0_W0",
+      "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "bjet_pt",
+      "xlabel": "Leading b-jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1plus_t0_w0_fatjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_fatjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_fatjet_pt.png",
+      "region": "SR_Nb1plus_T0_W0",
+      "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "fatjet_pt",
+      "xlabel": "Leading AK8 jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1plus_t0_w0_ht",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_ht.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_ht.png",
+      "region": "SR_Nb1plus_T0_W0",
+      "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ht",
+      "xlabel": "$H_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 12,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1plus_t0_w0_jet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_jet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_jet_pt.png",
+      "region": "SR_Nb1plus_T0_W0",
+      "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "jet_pt",
+      "xlabel": "Leading jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 8,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1plus_t0_w0_met",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_met.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_met.png",
+      "region": "SR_Nb1plus_T0_W0",
+      "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "met",
+      "xlabel": "$p_{T}^{miss}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1plus_t0_w0_nb",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_nb.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_nb.png",
+      "region": "SR_Nb1plus_T0_W0",
+      "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb",
+      "xlabel": "$N_{b}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1plus_t0_w0_nfatjet",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_nfatjet.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_nfatjet.png",
+      "region": "SR_Nb1plus_T0_W0",
+      "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nfatjet",
+      "xlabel": "$N_{\\mathrm{AK8}}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1plus_t0_w0_njet",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_njet.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_njet.png",
+      "region": "SR_Nb1plus_T0_W0",
+      "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "njet",
+      "xlabel": "$N_{j}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1plus_t0_w0_ntop",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_ntop.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_ntop.png",
+      "region": "SR_Nb1plus_T0_W0",
+      "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ntop",
+      "xlabel": "$N_{t}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1plus_t0_w0_nw",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_nw.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_nw.png",
+      "region": "SR_Nb1plus_T0_W0",
+      "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nw",
+      "xlabel": "$N_{W}$",
+      "year": "2025"
+    },
+    {
+      "bins": 11,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1plus_t0_w1plus_bjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_bjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_bjet_pt.png",
+      "region": "SR_Nb1plus_T0_W1plus",
+      "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "bjet_pt",
+      "xlabel": "Leading b-jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1plus_t0_w1plus_fatjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_fatjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_fatjet_pt.png",
+      "region": "SR_Nb1plus_T0_W1plus",
+      "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "fatjet_pt",
+      "xlabel": "Leading AK8 jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1plus_t0_w1plus_ht",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_ht.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_ht.png",
+      "region": "SR_Nb1plus_T0_W1plus",
+      "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ht",
+      "xlabel": "$H_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 12,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1plus_t0_w1plus_jet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_jet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_jet_pt.png",
+      "region": "SR_Nb1plus_T0_W1plus",
+      "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "jet_pt",
+      "xlabel": "Leading jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 8,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1plus_t0_w1plus_met",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_met.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_met.png",
+      "region": "SR_Nb1plus_T0_W1plus",
+      "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "met",
+      "xlabel": "$p_{T}^{miss}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1plus_t0_w1plus_nb",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_nb.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_nb.png",
+      "region": "SR_Nb1plus_T0_W1plus",
+      "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb",
+      "xlabel": "$N_{b}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1plus_t0_w1plus_nfatjet",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_nfatjet.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_nfatjet.png",
+      "region": "SR_Nb1plus_T0_W1plus",
+      "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nfatjet",
+      "xlabel": "$N_{\\mathrm{AK8}}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1plus_t0_w1plus_njet",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_njet.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_njet.png",
+      "region": "SR_Nb1plus_T0_W1plus",
+      "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "njet",
+      "xlabel": "$N_{j}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1plus_t0_w1plus_ntop",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_ntop.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_ntop.png",
+      "region": "SR_Nb1plus_T0_W1plus",
+      "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ntop",
+      "xlabel": "$N_{t}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1plus_t0_w1plus_nw",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_nw.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_nw.png",
+      "region": "SR_Nb1plus_T0_W1plus",
+      "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nw",
+      "xlabel": "$N_{W}$",
+      "year": "2025"
+    },
+    {
+      "bins": 11,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1_t1plus_w0_bjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_bjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_bjet_pt.png",
+      "region": "SR_Nb1_T1plus_W0",
+      "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "bjet_pt",
+      "xlabel": "Leading b-jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1_t1plus_w0_fatjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_fatjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_fatjet_pt.png",
+      "region": "SR_Nb1_T1plus_W0",
+      "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "fatjet_pt",
+      "xlabel": "Leading AK8 jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1_t1plus_w0_ht",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_ht.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_ht.png",
+      "region": "SR_Nb1_T1plus_W0",
+      "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ht",
+      "xlabel": "$H_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 12,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1_t1plus_w0_jet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_jet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_jet_pt.png",
+      "region": "SR_Nb1_T1plus_W0",
+      "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "jet_pt",
+      "xlabel": "Leading jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 8,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1_t1plus_w0_met",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_met.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_met.png",
+      "region": "SR_Nb1_T1plus_W0",
+      "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "met",
+      "xlabel": "$p_{T}^{miss}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1_t1plus_w0_nb",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_nb.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_nb.png",
+      "region": "SR_Nb1_T1plus_W0",
+      "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb",
+      "xlabel": "$N_{b}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1_t1plus_w0_nfatjet",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_nfatjet.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_nfatjet.png",
+      "region": "SR_Nb1_T1plus_W0",
+      "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nfatjet",
+      "xlabel": "$N_{\\mathrm{AK8}}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1_t1plus_w0_njet",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_njet.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_njet.png",
+      "region": "SR_Nb1_T1plus_W0",
+      "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "njet",
+      "xlabel": "$N_{j}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1_t1plus_w0_ntop",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_ntop.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_ntop.png",
+      "region": "SR_Nb1_T1plus_W0",
+      "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ntop",
+      "xlabel": "$N_{t}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1_t1plus_w0_nw",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_nw.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_nw.png",
+      "region": "SR_Nb1_T1plus_W0",
+      "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nw",
+      "xlabel": "$N_{W}$",
+      "year": "2025"
+    },
+    {
+      "bins": 11,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1_t1plus_w1plus_bjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_bjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_bjet_pt.png",
+      "region": "SR_Nb1_T1plus_W1plus",
+      "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "bjet_pt",
+      "xlabel": "Leading b-jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1_t1plus_w1plus_fatjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_fatjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_fatjet_pt.png",
+      "region": "SR_Nb1_T1plus_W1plus",
+      "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "fatjet_pt",
+      "xlabel": "Leading AK8 jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1_t1plus_w1plus_ht",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_ht.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_ht.png",
+      "region": "SR_Nb1_T1plus_W1plus",
+      "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ht",
+      "xlabel": "$H_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 12,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1_t1plus_w1plus_jet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_jet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_jet_pt.png",
+      "region": "SR_Nb1_T1plus_W1plus",
+      "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "jet_pt",
+      "xlabel": "Leading jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 8,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1_t1plus_w1plus_met",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_met.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_met.png",
+      "region": "SR_Nb1_T1plus_W1plus",
+      "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "met",
+      "xlabel": "$p_{T}^{miss}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1_t1plus_w1plus_nb",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_nb.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_nb.png",
+      "region": "SR_Nb1_T1plus_W1plus",
+      "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb",
+      "xlabel": "$N_{b}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1_t1plus_w1plus_nfatjet",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_nfatjet.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_nfatjet.png",
+      "region": "SR_Nb1_T1plus_W1plus",
+      "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nfatjet",
+      "xlabel": "$N_{\\mathrm{AK8}}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1_t1plus_w1plus_njet",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_njet.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_njet.png",
+      "region": "SR_Nb1_T1plus_W1plus",
+      "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "njet",
+      "xlabel": "$N_{j}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1_t1plus_w1plus_ntop",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_ntop.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_ntop.png",
+      "region": "SR_Nb1_T1plus_W1plus",
+      "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ntop",
+      "xlabel": "$N_{t}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb1_t1plus_w1plus_nw",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_nw.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_nw.png",
+      "region": "SR_Nb1_T1plus_W1plus",
+      "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nw",
+      "xlabel": "$N_{W}$",
+      "year": "2025"
+    },
+    {
+      "bins": 11,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_t1_w0_bjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_bjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_bjet_pt.png",
+      "region": "SR_Nb2_T1_W0",
+      "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "bjet_pt",
+      "xlabel": "Leading b-jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_t1_w0_fatjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_fatjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_fatjet_pt.png",
+      "region": "SR_Nb2_T1_W0",
+      "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "fatjet_pt",
+      "xlabel": "Leading AK8 jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_t1_w0_ht",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_ht.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_ht.png",
+      "region": "SR_Nb2_T1_W0",
+      "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ht",
+      "xlabel": "$H_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 12,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_t1_w0_jet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_jet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_jet_pt.png",
+      "region": "SR_Nb2_T1_W0",
+      "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "jet_pt",
+      "xlabel": "Leading jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 8,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_t1_w0_met",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_met.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_met.png",
+      "region": "SR_Nb2_T1_W0",
+      "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "met",
+      "xlabel": "$p_{T}^{miss}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_t1_w0_nb",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_nb.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_nb.png",
+      "region": "SR_Nb2_T1_W0",
+      "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb",
+      "xlabel": "$N_{b}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_t1_w0_nfatjet",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_nfatjet.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_nfatjet.png",
+      "region": "SR_Nb2_T1_W0",
+      "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nfatjet",
+      "xlabel": "$N_{\\mathrm{AK8}}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_t1_w0_njet",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_njet.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_njet.png",
+      "region": "SR_Nb2_T1_W0",
+      "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "njet",
+      "xlabel": "$N_{j}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_t1_w0_ntop",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_ntop.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_ntop.png",
+      "region": "SR_Nb2_T1_W0",
+      "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ntop",
+      "xlabel": "$N_{t}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_t1_w0_nw",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_nw.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_nw.png",
+      "region": "SR_Nb2_T1_W0",
+      "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nw",
+      "xlabel": "$N_{W}$",
+      "year": "2025"
+    },
+    {
+      "bins": 11,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_t1_w1_bjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_bjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_bjet_pt.png",
+      "region": "SR_Nb2_T1_W1",
+      "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "bjet_pt",
+      "xlabel": "Leading b-jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_t1_w1_fatjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_fatjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_fatjet_pt.png",
+      "region": "SR_Nb2_T1_W1",
+      "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "fatjet_pt",
+      "xlabel": "Leading AK8 jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_t1_w1_ht",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_ht.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_ht.png",
+      "region": "SR_Nb2_T1_W1",
+      "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ht",
+      "xlabel": "$H_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 12,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_t1_w1_jet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_jet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_jet_pt.png",
+      "region": "SR_Nb2_T1_W1",
+      "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "jet_pt",
+      "xlabel": "Leading jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 8,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_t1_w1_met",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_met.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_met.png",
+      "region": "SR_Nb2_T1_W1",
+      "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "met",
+      "xlabel": "$p_{T}^{miss}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_t1_w1_nb",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_nb.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_nb.png",
+      "region": "SR_Nb2_T1_W1",
+      "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb",
+      "xlabel": "$N_{b}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_t1_w1_nfatjet",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_nfatjet.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_nfatjet.png",
+      "region": "SR_Nb2_T1_W1",
+      "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nfatjet",
+      "xlabel": "$N_{\\mathrm{AK8}}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_t1_w1_njet",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_njet.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_njet.png",
+      "region": "SR_Nb2_T1_W1",
+      "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "njet",
+      "xlabel": "$N_{j}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_t1_w1_ntop",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_ntop.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_ntop.png",
+      "region": "SR_Nb2_T1_W1",
+      "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ntop",
+      "xlabel": "$N_{t}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_t1_w1_nw",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_nw.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_nw.png",
+      "region": "SR_Nb2_T1_W1",
+      "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nw",
+      "xlabel": "$N_{W}$",
+      "year": "2025"
+    },
+    {
+      "bins": 11,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t1_w0_bjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_bjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_bjet_pt.png",
+      "region": "SR_Nb3plus_T1_W0",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "bjet_pt",
+      "xlabel": "Leading b-jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t1_w0_fatjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_fatjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_fatjet_pt.png",
+      "region": "SR_Nb3plus_T1_W0",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "fatjet_pt",
+      "xlabel": "Leading AK8 jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t1_w0_ht",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_ht.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_ht.png",
+      "region": "SR_Nb3plus_T1_W0",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ht",
+      "xlabel": "$H_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 12,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t1_w0_jet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_jet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_jet_pt.png",
+      "region": "SR_Nb3plus_T1_W0",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "jet_pt",
+      "xlabel": "Leading jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 8,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t1_w0_met",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_met.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_met.png",
+      "region": "SR_Nb3plus_T1_W0",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "met",
+      "xlabel": "$p_{T}^{miss}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t1_w0_nb",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_nb.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_nb.png",
+      "region": "SR_Nb3plus_T1_W0",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb",
+      "xlabel": "$N_{b}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t1_w0_nfatjet",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_nfatjet.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_nfatjet.png",
+      "region": "SR_Nb3plus_T1_W0",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nfatjet",
+      "xlabel": "$N_{\\mathrm{AK8}}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t1_w0_njet",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_njet.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_njet.png",
+      "region": "SR_Nb3plus_T1_W0",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "njet",
+      "xlabel": "$N_{j}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t1_w0_ntop",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_ntop.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_ntop.png",
+      "region": "SR_Nb3plus_T1_W0",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ntop",
+      "xlabel": "$N_{t}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t1_w0_nw",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_nw.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_nw.png",
+      "region": "SR_Nb3plus_T1_W0",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nw",
+      "xlabel": "$N_{W}$",
+      "year": "2025"
+    },
+    {
+      "bins": 11,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t1_w1_bjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_bjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_bjet_pt.png",
+      "region": "SR_Nb3plus_T1_W1",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "bjet_pt",
+      "xlabel": "Leading b-jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t1_w1_fatjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_fatjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_fatjet_pt.png",
+      "region": "SR_Nb3plus_T1_W1",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "fatjet_pt",
+      "xlabel": "Leading AK8 jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t1_w1_ht",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_ht.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_ht.png",
+      "region": "SR_Nb3plus_T1_W1",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ht",
+      "xlabel": "$H_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 12,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t1_w1_jet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_jet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_jet_pt.png",
+      "region": "SR_Nb3plus_T1_W1",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "jet_pt",
+      "xlabel": "Leading jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 8,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t1_w1_met",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_met.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_met.png",
+      "region": "SR_Nb3plus_T1_W1",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "met",
+      "xlabel": "$p_{T}^{miss}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t1_w1_nb",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_nb.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_nb.png",
+      "region": "SR_Nb3plus_T1_W1",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb",
+      "xlabel": "$N_{b}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t1_w1_nfatjet",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_nfatjet.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_nfatjet.png",
+      "region": "SR_Nb3plus_T1_W1",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nfatjet",
+      "xlabel": "$N_{\\mathrm{AK8}}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t1_w1_njet",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_njet.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_njet.png",
+      "region": "SR_Nb3plus_T1_W1",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "njet",
+      "xlabel": "$N_{j}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t1_w1_ntop",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_ntop.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_ntop.png",
+      "region": "SR_Nb3plus_T1_W1",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ntop",
+      "xlabel": "$N_{t}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t1_w1_nw",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_nw.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_nw.png",
+      "region": "SR_Nb3plus_T1_W1",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nw",
+      "xlabel": "$N_{W}$",
+      "year": "2025"
+    },
+    {
+      "bins": 11,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t2_w0_bjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_bjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_bjet_pt.png",
+      "region": "SR_Nb3plus_T2_W0",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "bjet_pt",
+      "xlabel": "Leading b-jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t2_w0_fatjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_fatjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_fatjet_pt.png",
+      "region": "SR_Nb3plus_T2_W0",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "fatjet_pt",
+      "xlabel": "Leading AK8 jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t2_w0_ht",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_ht.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_ht.png",
+      "region": "SR_Nb3plus_T2_W0",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ht",
+      "xlabel": "$H_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 12,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t2_w0_jet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_jet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_jet_pt.png",
+      "region": "SR_Nb3plus_T2_W0",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "jet_pt",
+      "xlabel": "Leading jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 8,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t2_w0_met",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_met.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_met.png",
+      "region": "SR_Nb3plus_T2_W0",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "met",
+      "xlabel": "$p_{T}^{miss}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t2_w0_nb",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_nb.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_nb.png",
+      "region": "SR_Nb3plus_T2_W0",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb",
+      "xlabel": "$N_{b}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t2_w0_nfatjet",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_nfatjet.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_nfatjet.png",
+      "region": "SR_Nb3plus_T2_W0",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nfatjet",
+      "xlabel": "$N_{\\mathrm{AK8}}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t2_w0_njet",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_njet.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_njet.png",
+      "region": "SR_Nb3plus_T2_W0",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "njet",
+      "xlabel": "$N_{j}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t2_w0_ntop",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_ntop.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_ntop.png",
+      "region": "SR_Nb3plus_T2_W0",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ntop",
+      "xlabel": "$N_{t}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb3plus_t2_w0_nw",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_nw.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_nw.png",
+      "region": "SR_Nb3plus_T2_W0",
+      "region_label": "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nw",
+      "xlabel": "$N_{W}$",
+      "year": "2025"
+    },
+    {
+      "bins": 11,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR_Nb2_Nt2plus_W0"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_nt2plus_w0_bjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_bjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_bjet_pt.png",
+      "region": "SR_Nb2_Nt2plus_W0",
+      "region_label": "SR_Nb2_Nt2plus_W0",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "bjet_pt",
+      "xlabel": "Leading b-jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR_Nb2_Nt2plus_W0"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_nt2plus_w0_fatjet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_fatjet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_fatjet_pt.png",
+      "region": "SR_Nb2_Nt2plus_W0",
+      "region_label": "SR_Nb2_Nt2plus_W0",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "fatjet_pt",
+      "xlabel": "Leading AK8 jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 9,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR_Nb2_Nt2plus_W0"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_nt2plus_w0_ht",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_ht.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_ht.png",
+      "region": "SR_Nb2_Nt2plus_W0",
+      "region_label": "SR_Nb2_Nt2plus_W0",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ht",
+      "xlabel": "$H_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 12,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR_Nb2_Nt2plus_W0"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_nt2plus_w0_jet_pt",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_jet_pt.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_jet_pt.png",
+      "region": "SR_Nb2_Nt2plus_W0",
+      "region_label": "SR_Nb2_Nt2plus_W0",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "jet_pt",
+      "xlabel": "Leading jet $p_{T}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 8,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR_Nb2_Nt2plus_W0"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_nt2plus_w0_met",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_met.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_met.png",
+      "region": "SR_Nb2_Nt2plus_W0",
+      "region_label": "SR_Nb2_Nt2plus_W0",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "met",
+      "xlabel": "$p_{T}^{miss}$ (GeV)",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR_Nb2_Nt2plus_W0"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_nt2plus_w0_nb",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_nb.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_nb.png",
+      "region": "SR_Nb2_Nt2plus_W0",
+      "region_label": "SR_Nb2_Nt2plus_W0",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb",
+      "xlabel": "$N_{b}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR_Nb2_Nt2plus_W0"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_nt2plus_w0_nfatjet",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_nfatjet.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_nfatjet.png",
+      "region": "SR_Nb2_Nt2plus_W0",
+      "region_label": "SR_Nb2_Nt2plus_W0",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nfatjet",
+      "xlabel": "$N_{\\mathrm{AK8}}$",
+      "year": "2025"
+    },
+    {
+      "bins": 4,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR_Nb2_Nt2plus_W0"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_nt2plus_w0_njet",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_njet.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_njet.png",
+      "region": "SR_Nb2_Nt2plus_W0",
+      "region_label": "SR_Nb2_Nt2plus_W0",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "njet",
+      "xlabel": "$N_{j}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR_Nb2_Nt2plus_W0"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_nt2plus_w0_ntop",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_ntop.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_ntop.png",
+      "region": "SR_Nb2_Nt2plus_W0",
+      "region_label": "SR_Nb2_Nt2plus_W0",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ntop",
+      "xlabel": "$N_{t}$",
+      "year": "2025"
+    },
+    {
+      "bins": 3,
+      "blind_data": true,
+      "figure_size_inches": [
+        12.0,
+        10.0
+      ],
+      "kind": "SR",
+      "labels": [
+        "SR_Nb2_Nt2plus_W0"
+      ],
+      "legend_yields_displayed": true,
+      "name": "sr_sr_nb2_nt2plus_w0_nw",
+      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_nw.pdf",
+      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_nw.png",
+      "region": "SR_Nb2_Nt2plus_W0",
+      "region_label": "SR_Nb2_Nt2plus_W0",
+      "signals": [],
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nw",
+      "xlabel": "$N_{W}$",
+      "year": "2025"
+    }
+  ],
+  "signal_records_pruned_before_render": 194583,
+  "source": "autonomous_allhad/workflow/plot2025/hists.json",
+  "status": "complete",
+  "uncertainty_model": "MC stat plus luminosity plus per-source max(abs(Up-Nominal), abs(Down-Nominal)) envelopes in quadrature",
+  "year": "2025"
+}

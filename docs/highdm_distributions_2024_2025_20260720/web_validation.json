@@ -1,0 +1,15 @@
+{
+  "cards": 372,
+  "kinds": {
+    "CR": 112,
+    "SR": 200,
+    "VR": 60
+  },
+  "missing_references": [],
+  "referenced_files": 744,
+  "status": "complete",
+  "years": {
+    "2024": 186,
+    "2025": 186
+  }
+}
