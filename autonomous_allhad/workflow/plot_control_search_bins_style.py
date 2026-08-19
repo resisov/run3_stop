@@ -749,6 +749,7 @@ def flat_search_record(payload: dict, scheme: str, label: str, allow_signal: boo
         "data": data,
         "data_unc": np.sqrt(data2),
         "signals": signals,
+        "signal_specs": signal_overlays,
         "label": label,
         "nbin": nbin,
         "unit_area": is_gcr,
@@ -902,7 +903,7 @@ def lowdm_variable_record(payload: dict, scheme: str, variable: str, label: str,
     stat2 = np.zeros(nbin, dtype=float)
     data = np.zeros(nbin, dtype=float)
     data2 = np.zeros(nbin, dtype=float)
-    signals = {sig["key"]: np.zeros(nbin, dtype=float) for sig in SIGNAL_OVERLAYS}
+    signals = {sig["key"]: np.zeros(nbin, dtype=float) for sig in LOWDM_SIGNAL_OVERLAYS}
     for sample, rec in raw.items():
         vals, s2 = flat_values(rec, nbin)
         if sample == "data_obs":
@@ -910,7 +911,7 @@ def lowdm_variable_record(payload: dict, scheme: str, variable: str, label: str,
             data2 += s2
         elif is_signal_sample(sample):
             if allow_signal:
-                for sig in SIGNAL_OVERLAYS:
+                for sig in LOWDM_SIGNAL_OVERLAYS:
                     if sample == "T2tt_" + sig["key"]:
                         signals[sig["key"]] += vals
         else:
@@ -934,6 +935,7 @@ def lowdm_variable_record(payload: dict, scheme: str, variable: str, label: str,
         "data": data,
         "data_unc": np.sqrt(data2),
         "signals": signals,
+        "signal_specs": LOWDM_SIGNAL_OVERLAYS,
         "label": label,
         "nbin": nbin,
         "edges": edges,
@@ -2187,12 +2189,12 @@ def draw_flat_report(
     low_cr_blocks = []
     low_blocks = []
     low_map = [
-        ("cat2_LLCR_lowDeltaM", "LLCR low $\Delta m$", False, "LLCR"),
-        ("cat3_QCDCR_lowDeltaM", "QCDCR low $\Delta m$", False, "QCDCR"),
-        ("cat4_GCR_lowDeltaM", "GCR low $\Delta m$", False, "GCR"),
-        ("cat5_DY2E_lowDeltaM", "DY2E low $\Delta m$", False, "DY2E"),
-        ("cat6_DY2M_lowDeltaM", "DY2M low $\Delta m$", False, "DY2M"),
-        ("cat7_SR_lowDeltaM", "SR low $\Delta m$", True, "SR"),
+        ("cat2_LLCR_lowDeltaM", r"LLCR low $\Delta m$", False, "LLCR"),
+        ("cat3_QCDCR_lowDeltaM", r"QCDCR low $\Delta m$", False, "QCDCR"),
+        ("cat4_GCR_lowDeltaM", r"GCR low $\Delta m$", False, "GCR"),
+        ("cat5_DY2E_lowDeltaM", r"DY2E low $\Delta m$", False, "DY2E"),
+        ("cat6_DY2M_lowDeltaM", r"DY2M low $\Delta m$", False, "DY2M"),
+        ("cat7_SR_lowDeltaM", r"SR low $\Delta m$", True, "SR"),
     ]
     for scheme, label, is_sr, base_region in low_map:
         rec = flat_search_record(payload, scheme, label, allow_signal=False)
