@@ -1,5 +1,5 @@
 {
-  "cards": 598,
+  "cards": 600,
   "default_regime": "highdm",
   "default_year": "2025",
   "dy_rz_policy": {
@@ -7,8 +7,19 @@
     "2025": "not applied; awaiting a dedicated 2025 measurement"
   },
   "highdm_plot_count_per_year": {
-    "2024": 186,
-    "2025": 186
+    "2024": 187,
+    "2025": 187
+  },
+  "highdm_search_bins": {
+    "2024": 55,
+    "2025": 55,
+    "tail_preserve_categories": [
+      1,
+      2,
+      3,
+      5,
+      8
+    ]
   },
   "histogram_sha256": {
     "2024": "2ad64b5236a23c03fbe0c21ec7be7e1a51cb035bf9868e73ef959e7510c178df",
@@ -17,7 +28,7 @@
   "kinds": {
     "CR": 304,
     "Overview": 2,
-    "SR": 232,
+    "SR": 234,
     "VR": 60
   },
   "lowdm_plot_count_per_year": {
@@ -25,9 +36,9 @@
     "2025": 113
   },
   "missing_references": [],
-  "referenced_files": 1196,
+  "referenced_files": 1200,
   "regimes": {
-    "highdm": 372,
+    "highdm": 374,
     "lowdm": 226
   },
   "sr_categories": {
@@ -41,11 +52,12 @@
     "SR_Nb3plus_T1_W0": "SR \u00b7 Nb3+ \u00b7 T1 \u00b7 W0",
     "SR_Nb3plus_T1_W1": "SR \u00b7 Nb3+ \u00b7 T1 \u00b7 W1",
     "SR_Nb3plus_T2_W0": "SR \u00b7 Nb3+ \u00b7 T2 \u00b7 W0",
+    "highdm_sr_55": "High-dM SR (55 bins)",
     "lowdm_sr_all": "Low-dM SR (all categories)"
   },
   "status": "complete",
   "years": {
-    "2024": 299,
-    "2025": 299
+    "2024": 300,
+    "2025": 300
   }
 }
