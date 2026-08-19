@@ -1,5 +1,5 @@
 {
-  "cards": 600,
+  "cards": 601,
   "default_regime": "highdm",
   "default_year": "2025",
   "dy_rz_policy": {
@@ -7,11 +7,12 @@
     "2025": "not applied; awaiting a dedicated 2025 measurement"
   },
   "highdm_plot_count_per_year": {
-    "2024": 187,
+    "2024": 188,
     "2025": 187
   },
   "highdm_search_bins": {
     "2024": 55,
+    "2024_exploratory_trota": 61,
     "2025": 55,
     "tail_preserve_categories": [
       1,
@@ -28,7 +29,7 @@
   "kinds": {
     "CR": 304,
     "Overview": 2,
-    "SR": 234,
+    "SR": 235,
     "VR": 60
   },
   "lowdm_plot_count_per_year": {
@@ -36,9 +37,9 @@
     "2025": 113
   },
   "missing_references": [],
-  "referenced_files": 1200,
+  "referenced_files": 1202,
   "regimes": {
-    "highdm": 374,
+    "highdm": 375,
     "lowdm": 226
   },
   "sr_categories": {
@@ -53,11 +54,12 @@
     "SR_Nb3plus_T1_W1": "SR \u00b7 Nb3+ \u00b7 T1 \u00b7 W1",
     "SR_Nb3plus_T2_W0": "SR \u00b7 Nb3+ \u00b7 T2 \u00b7 W0",
     "highdm_sr_55": "High-dM SR (55 bins)",
+    "highdm_sr_61_trota": "High-dM SR (61 bins, TROTA exploratory)",
     "lowdm_sr_all": "Low-dM SR (all categories)"
   },
   "status": "complete",
   "years": {
-    "2024": 300,
+    "2024": 301,
     "2025": 300
   }
 }

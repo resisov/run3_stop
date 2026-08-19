@@ -1,20 +1,38 @@
 {
-  "cards": 372,
+  "cards": 601,
+  "default_regime": "highdm",
   "default_year": "2025",
+  "highdm_search_bins": {
+    "2024": 55,
+    "2024_exploratory_trota": 61,
+    "2025": 55,
+    "tail_preserve_categories": [
+      1,
+      2,
+      3,
+      5,
+      8
+    ]
+  },
   "histogram_sha256": {
     "2024": "2ad64b5236a23c03fbe0c21ec7be7e1a51cb035bf9868e73ef959e7510c178df",
     "2025": "5581811be43bf80d53c73e393d098829a4105851dbc7e65ec4190007fbde4404"
   },
   "kinds": {
-    "CR": 112,
-    "SR": 200,
+    "CR": 304,
+    "Overview": 2,
+    "SR": 235,
     "VR": 60
   },
   "missing_references": [],
-  "referenced_files": 744,
+  "referenced_files": 1202,
+  "regimes": {
+    "highdm": 375,
+    "lowdm": 226
+  },
   "status": "complete",
   "years": {
-    "2024": 186,
-    "2025": 186
+    "2024": 301,
+    "2025": 300
   }
 }
