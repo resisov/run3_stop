@@ -14,11 +14,44 @@
     "jesTotal",
     "metUnclustered"
   ],
-  "dy_rz_application": null,
+  "dy_rz_application": {
+    "channels": {
+      "DY2E": {
+        "highdm": {
+          "Nb1": 0.7956219718951804,
+          "Nb2plus": 0.6547029430664236,
+          "effective": 0.7538180297974927
+        },
+        "lowdm": {
+          "Nb1": 0.6242885433272645,
+          "Nb2plus": 0.7996132657524656,
+          "effective": 0.6491810522205995
+        }
+      },
+      "DY2M": {
+        "highdm": {
+          "Nb1": 0.6792547511819805,
+          "Nb2plus": 0.750825639500108,
+          "effective": 0.6964603717441671
+        },
+        "lowdm": {
+          "Nb1": 0.5985045784169216,
+          "Nb2plus": 0.5574163275293518,
+          "effective": 0.5913413126323562
+        }
+      }
+    },
+    "containers": 24,
+    "factor_policy": "channel-specific RZ(Nb); exact for explicit Nb/search-bin axes and DY-yield-weighted effective factor for inclusive one-dimensional CR distributions",
+    "legend_label": "DY",
+    "records": 24,
+    "source": "autonomous_allhad/reports/dy_rz_nb_run2method_20260731",
+    "status": "complete"
+  },
   "luminosity_fb": 110.84,
   "luminosity_relative_uncertainty": 0.016,
   "luminosity_uncertainty_applied": true,
-  "output_dir": "/tmp/web2425/plots/2025",
+  "output_dir": "/tmp/web2425/regenerated/plots/2025",
   "plot_count": 186,
   "plots": [
     {
@@ -34,8 +67,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_llcr_bjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/cr_llcr_bjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_llcr_bjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_llcr_bjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_llcr_bjet_pt.png",
       "region": "LLCR",
       "region_label": "LLCR",
       "signals": [],
@@ -59,8 +92,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_llcr_fatjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/cr_llcr_fatjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_llcr_fatjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_llcr_fatjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_llcr_fatjet_pt.png",
       "region": "LLCR",
       "region_label": "LLCR",
       "signals": [],
@@ -84,8 +117,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_llcr_ht",
-      "pdf": "/tmp/web2425/plots/2025/cr_llcr_ht.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_llcr_ht.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_llcr_ht.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_llcr_ht.png",
       "region": "LLCR",
       "region_label": "LLCR",
       "signals": [],
@@ -109,8 +142,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_llcr_jet_pt",
-      "pdf": "/tmp/web2425/plots/2025/cr_llcr_jet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_llcr_jet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_llcr_jet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_llcr_jet_pt.png",
       "region": "LLCR",
       "region_label": "LLCR",
       "signals": [],
@@ -134,8 +167,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_llcr_met",
-      "pdf": "/tmp/web2425/plots/2025/cr_llcr_met.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_llcr_met.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_llcr_met.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_llcr_met.png",
       "region": "LLCR",
       "region_label": "LLCR",
       "signals": [],
@@ -159,8 +192,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_llcr_nb",
-      "pdf": "/tmp/web2425/plots/2025/cr_llcr_nb.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_llcr_nb.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_llcr_nb.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_llcr_nb.png",
       "region": "LLCR",
       "region_label": "LLCR",
       "signals": [],
@@ -184,8 +217,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_llcr_nfatjet",
-      "pdf": "/tmp/web2425/plots/2025/cr_llcr_nfatjet.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_llcr_nfatjet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_llcr_nfatjet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_llcr_nfatjet.png",
       "region": "LLCR",
       "region_label": "LLCR",
       "signals": [],
@@ -209,8 +242,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_llcr_njet",
-      "pdf": "/tmp/web2425/plots/2025/cr_llcr_njet.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_llcr_njet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_llcr_njet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_llcr_njet.png",
       "region": "LLCR",
       "region_label": "LLCR",
       "signals": [],
@@ -234,8 +267,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_llcr_ntop",
-      "pdf": "/tmp/web2425/plots/2025/cr_llcr_ntop.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_llcr_ntop.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_llcr_ntop.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_llcr_ntop.png",
       "region": "LLCR",
       "region_label": "LLCR",
       "signals": [],
@@ -259,8 +292,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_llcr_nw",
-      "pdf": "/tmp/web2425/plots/2025/cr_llcr_nw.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_llcr_nw.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_llcr_nw.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_llcr_nw.png",
       "region": "LLCR",
       "region_label": "LLCR",
       "signals": [],
@@ -284,8 +317,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_llcr_ut",
-      "pdf": "/tmp/web2425/plots/2025/cr_llcr_ut.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_llcr_ut.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_llcr_ut.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_llcr_ut.png",
       "region": "LLCR",
       "region_label": "LLCR",
       "signals": [],
@@ -309,8 +342,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_qcdcr_bjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/cr_qcdcr_bjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_qcdcr_bjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_qcdcr_bjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_qcdcr_bjet_pt.png",
       "region": "QCDCR",
       "region_label": "QCDCR",
       "signals": [],
@@ -334,8 +367,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_qcdcr_fatjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/cr_qcdcr_fatjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_qcdcr_fatjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_qcdcr_fatjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_qcdcr_fatjet_pt.png",
       "region": "QCDCR",
       "region_label": "QCDCR",
       "signals": [],
@@ -359,8 +392,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_qcdcr_ht",
-      "pdf": "/tmp/web2425/plots/2025/cr_qcdcr_ht.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_qcdcr_ht.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_qcdcr_ht.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_qcdcr_ht.png",
       "region": "QCDCR",
       "region_label": "QCDCR",
       "signals": [],
@@ -384,8 +417,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_qcdcr_jet_pt",
-      "pdf": "/tmp/web2425/plots/2025/cr_qcdcr_jet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_qcdcr_jet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_qcdcr_jet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_qcdcr_jet_pt.png",
       "region": "QCDCR",
       "region_label": "QCDCR",
       "signals": [],
@@ -409,8 +442,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_qcdcr_met",
-      "pdf": "/tmp/web2425/plots/2025/cr_qcdcr_met.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_qcdcr_met.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_qcdcr_met.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_qcdcr_met.png",
       "region": "QCDCR",
       "region_label": "QCDCR",
       "signals": [],
@@ -434,8 +467,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_qcdcr_nb",
-      "pdf": "/tmp/web2425/plots/2025/cr_qcdcr_nb.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_qcdcr_nb.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_qcdcr_nb.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_qcdcr_nb.png",
       "region": "QCDCR",
       "region_label": "QCDCR",
       "signals": [],
@@ -459,8 +492,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_qcdcr_nfatjet",
-      "pdf": "/tmp/web2425/plots/2025/cr_qcdcr_nfatjet.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_qcdcr_nfatjet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_qcdcr_nfatjet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_qcdcr_nfatjet.png",
       "region": "QCDCR",
       "region_label": "QCDCR",
       "signals": [],
@@ -484,8 +517,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_qcdcr_njet",
-      "pdf": "/tmp/web2425/plots/2025/cr_qcdcr_njet.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_qcdcr_njet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_qcdcr_njet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_qcdcr_njet.png",
       "region": "QCDCR",
       "region_label": "QCDCR",
       "signals": [],
@@ -509,8 +542,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_qcdcr_ntop",
-      "pdf": "/tmp/web2425/plots/2025/cr_qcdcr_ntop.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_qcdcr_ntop.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_qcdcr_ntop.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_qcdcr_ntop.png",
       "region": "QCDCR",
       "region_label": "QCDCR",
       "signals": [],
@@ -534,8 +567,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_qcdcr_nw",
-      "pdf": "/tmp/web2425/plots/2025/cr_qcdcr_nw.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_qcdcr_nw.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_qcdcr_nw.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_qcdcr_nw.png",
       "region": "QCDCR",
       "region_label": "QCDCR",
       "signals": [],
@@ -559,8 +592,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_qcdcr_ut",
-      "pdf": "/tmp/web2425/plots/2025/cr_qcdcr_ut.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_qcdcr_ut.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_qcdcr_ut.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_qcdcr_ut.png",
       "region": "QCDCR",
       "region_label": "QCDCR",
       "signals": [],
@@ -584,8 +617,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_gcr_bjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/cr_gcr_bjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_gcr_bjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_gcr_bjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_gcr_bjet_pt.png",
       "region": "GCR",
       "region_label": "GCR",
       "signals": [],
@@ -602,13 +635,13 @@
         "normalization": "data and total MC independently normalized over the entire plotted figure",
         "normalized_integrals": {
           "data": 1.0,
-          "mc": 0.9999999999999999
+          "mc": 1.0000000000000002
         },
         "process_fractions": {
           "DY": {
             "matched": true,
-            "normalized_fraction": 0.00025243908109520377,
-            "raw_fraction": 0.0002524390810952037
+            "normalized_fraction": 0.0002523609634548853,
+            "raw_fraction": 0.00025236096345488535
           },
           "Others": {
             "matched": true,
@@ -617,68 +650,68 @@
           },
           "Photon+jet": {
             "matched": true,
-            "normalized_fraction": 0.7933513942197865,
-            "raw_fraction": 0.7933513942197866
+            "normalized_fraction": 0.7933876318526217,
+            "raw_fraction": 0.7933876318526217
           },
           "QCD Multijet": {
             "matched": true,
-            "normalized_fraction": 0.15773696735942466,
-            "raw_fraction": 0.15773696735942463
+            "normalized_fraction": 0.15769039044662367,
+            "raw_fraction": 0.15769039044662367
           },
           "Top": {
             "matched": true,
-            "normalized_fraction": 0.04566921353218342,
-            "raw_fraction": 0.04566921353218343
+            "normalized_fraction": 0.04567897472557582,
+            "raw_fraction": 0.045678974725575826
           },
           "VV+VVV": {
             "matched": true,
-            "normalized_fraction": 0.0008774492980377033,
-            "raw_fraction": 0.0008774492980377033
+            "normalized_fraction": 0.0008778045728340348,
+            "raw_fraction": 0.000877804572834035
           },
           "W -> lv": {
             "matched": true,
-            "normalized_fraction": 0.002039330158903397,
-            "raw_fraction": 0.002039330158903397
+            "normalized_fraction": 0.0020398770956215413,
+            "raw_fraction": 0.0020398770956215413
           },
           "Z -> vv": {
             "matched": true,
-            "normalized_fraction": 7.320635056906169e-05,
-            "raw_fraction": 7.320635056906167e-05
+            "normalized_fraction": 7.296034326833707e-05,
+            "raw_fraction": 7.296034326833709e-05
           }
         },
         "raw_integrals": {
           "data": 12121.0,
-          "data_over_mc": 1.5391166544245634,
-          "mc": 7875.296498907508,
+          "data_over_mc": 1.5401353905022546,
+          "mc": 7870.087314886786,
           "process_groups": {
-            "DY": 1.9880326115364864,
+            "DY": 1.9861028172589008,
             "Data": 12121.0,
             "Others": 0.0,
-            "Photon+jet": 6247.877457302476,
-            "QCD Multijet": 1242.2253867939646,
-            "Top": 359.65859743786353,
-            "VV+VVV": 6.910173384805176,
-            "W -> lv": 16.060329660528417,
-            "Z -> vv": 0.576521716334327
+            "Photon+jet": 6244.029937231386,
+            "QCD Multijet": 1241.0371415335173,
+            "Top": 359.4975195447884,
+            "VV+VVV": 6.908398633610752,
+            "W -> lv": 16.054010854179193,
+            "Z -> vv": 0.5742042720459252
           }
         },
         "scope": "GCR only",
         "status": "complete",
         "systematic_shape_integrals": {
           "btagSF_bc_correlated": {
-            "down": 0.9999999999999999,
+            "down": 0.9999999999999998,
             "up": 0.9999999999999999
           },
           "btagSF_bc_uncorrelated": {
             "down": 0.9999999999999999,
-            "up": 1.0000000000000002
+            "up": 0.9999999999999999
           },
           "btagSF_light_correlated": {
-            "down": 1.0000000000000002,
+            "down": 1.0,
             "up": 1.0
           },
           "btagSF_light_uncorrelated": {
-            "down": 0.9999999999999998,
+            "down": 0.9999999999999999,
             "up": 1.0
           },
           "electron_id": {
@@ -694,11 +727,11 @@
             "up": 0.9999999999999999
           },
           "photon_id": {
-            "down": 1.0,
-            "up": 0.9999999999999999
+            "down": 0.9999999999999999,
+            "up": 1.0
           },
           "pileup": {
-            "down": 1.0000000000000002,
+            "down": 0.9999999999999998,
             "up": 1.0
           }
         },
@@ -721,8 +754,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_gcr_fatjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/cr_gcr_fatjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_gcr_fatjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_gcr_fatjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_gcr_fatjet_pt.png",
       "region": "GCR",
       "region_label": "GCR",
       "signals": [],
@@ -744,8 +777,8 @@
         "process_fractions": {
           "DY": {
             "matched": true,
-            "normalized_fraction": 0.00030451936772864967,
-            "raw_fraction": 0.00030451936772864967
+            "normalized_fraction": 0.0003043435035048428,
+            "raw_fraction": 0.0003043435035048428
           },
           "Others": {
             "matched": true,
@@ -754,69 +787,69 @@
           },
           "Photon+jet": {
             "matched": true,
-            "normalized_fraction": 0.7704240391982453,
-            "raw_fraction": 0.7704240391982453
+            "normalized_fraction": 0.7704220597399366,
+            "raw_fraction": 0.7704220597399367
           },
           "QCD Multijet": {
             "matched": true,
-            "normalized_fraction": 0.16929391946755554,
-            "raw_fraction": 0.16929391946755554
+            "normalized_fraction": 0.16928876389782707,
+            "raw_fraction": 0.16928876389782707
           },
           "Top": {
             "matched": true,
-            "normalized_fraction": 0.057310567837966314,
-            "raw_fraction": 0.057310567837966314
+            "normalized_fraction": 0.057316194942662095,
+            "raw_fraction": 0.05731619494266209
           },
           "VV+VVV": {
             "matched": true,
-            "normalized_fraction": 0.0010171762323478723,
-            "raw_fraction": 0.0010171762323478726
+            "normalized_fraction": 0.0010175228873979315,
+            "raw_fraction": 0.0010175228873979315
           },
           "W -> lv": {
             "matched": true,
-            "normalized_fraction": 0.0017207827456418958,
-            "raw_fraction": 0.001720782745641896
+            "normalized_fraction": 0.0017220359096675108,
+            "raw_fraction": 0.0017220359096675104
           },
           "Z -> vv": {
             "matched": true,
-            "normalized_fraction": -7.100484948566538e-05,
-            "raw_fraction": -7.100484948566538e-05
+            "normalized_fraction": -7.092088099627458e-05,
+            "raw_fraction": -7.092088099627458e-05
           }
         },
         "raw_integrals": {
           "data": 6724.0,
-          "data_over_mc": 1.4126237471245628,
-          "mc": 4759.936970964066,
+          "data_over_mc": 1.4133337797554606,
+          "mc": 4757.545667070525,
           "process_groups": {
-            "DY": 1.4494929968262014,
+            "DY": 1.447928116400528,
             "Data": 6724.0,
             "Others": 0.0,
-            "Photon+jet": 3667.1698674991967,
-            "QCD Multijet": 805.8283862330308,
-            "Top": 272.79469067888,
-            "VV+VVV": 4.841694754338573,
-            "W -> lv": 8.190817409977916,
-            "Z -> vv": -0.3379786081845575
+            "Photon+jet": 3665.3181321312854,
+            "QCD Multijet": 805.3990251658323,
+            "Top": 272.68441490243157,
+            "VV+VVV": 4.840911604085119,
+            "W -> lv": 8.192664480578514,
+            "Z -> vv": -0.3374093300886505
           }
         },
         "scope": "GCR only",
         "status": "complete",
         "systematic_shape_integrals": {
           "btagSF_bc_correlated": {
-            "down": 1.0,
-            "up": 0.9999999999999999
+            "down": 1.0000000000000002,
+            "up": 1.0
           },
           "btagSF_bc_uncorrelated": {
-            "down": 1.0,
-            "up": 0.9999999999999999
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999998
           },
           "btagSF_light_correlated": {
-            "down": 0.9999999999999998,
-            "up": 0.9999999999999999
+            "down": 0.9999999999999999,
+            "up": 1.0
           },
           "btagSF_light_uncorrelated": {
-            "down": 1.0,
-            "up": 1.0000000000000002
+            "down": 1.0000000000000002,
+            "up": 0.9999999999999999
           },
           "electron_id": {
             "down": 0.9999999999999998,
@@ -832,11 +865,11 @@
           },
           "photon_id": {
             "down": 1.0000000000000002,
-            "up": 1.0
+            "up": 0.9999999999999999
           },
           "pileup": {
             "down": 1.0,
-            "up": 1.0
+            "up": 0.9999999999999999
           }
         },
         "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
@@ -858,8 +891,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_gcr_ht",
-      "pdf": "/tmp/web2425/plots/2025/cr_gcr_ht.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_gcr_ht.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_gcr_ht.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_gcr_ht.png",
       "region": "GCR",
       "region_label": "GCR",
       "signals": [],
@@ -876,13 +909,13 @@
         "normalization": "data and total MC independently normalized over the entire plotted figure",
         "normalized_integrals": {
           "data": 1.0,
-          "mc": 1.0
+          "mc": 0.9999999999999998
         },
         "process_fractions": {
           "DY": {
             "matched": true,
-            "normalized_fraction": 0.00025246442428010664,
-            "raw_fraction": 0.00025246442428010664
+            "normalized_fraction": 0.0002523862750328366,
+            "raw_fraction": 0.0002523862750328367
           },
           "Others": {
             "matched": true,
@@ -891,49 +924,49 @@
           },
           "Photon+jet": {
             "matched": true,
-            "normalized_fraction": 0.7937093857013289,
-            "raw_fraction": 0.793709385701329
+            "normalized_fraction": 0.7937456848850197,
+            "raw_fraction": 0.7937456848850197
           },
           "QCD Multijet": {
             "matched": true,
-            "normalized_fraction": 0.1573606555747809,
-            "raw_fraction": 0.15736065557478093
+            "normalized_fraction": 0.15731401498262068,
+            "raw_fraction": 0.15731401498262068
           },
           "Top": {
             "matched": true,
-            "normalized_fraction": 0.04566614105576921,
-            "raw_fraction": 0.04566614105576921
+            "normalized_fraction": 0.0456758934105377,
+            "raw_fraction": 0.04567589341053771
           },
           "VV+VVV": {
             "matched": true,
-            "normalized_fraction": 0.0008774967638384419,
-            "raw_fraction": 0.000877496763838442
+            "normalized_fraction": 0.0008778519987937159,
+            "raw_fraction": 0.0008778519987937159
           },
           "W -> lv": {
             "matched": true,
-            "normalized_fraction": 0.0020606427800082673,
-            "raw_fraction": 0.0020606427800082677
+            "normalized_fraction": 0.0020612007868700956,
+            "raw_fraction": 0.0020612007868700956
           },
           "Z -> vv": {
             "matched": true,
-            "normalized_fraction": 7.321369999400211e-05,
-            "raw_fraction": 7.32136999940021e-05
+            "normalized_fraction": 7.296766112523031e-05,
+            "raw_fraction": 7.29676611252303e-05
           }
         },
         "raw_integrals": {
           "data": 12122.0,
-          "data_over_mc": 1.539398163472876,
-          "mc": 7874.5059515030325,
+          "data_over_mc": 1.5404169408361656,
+          "mc": 7869.298031362836,
           "process_groups": {
-            "DY": 1.9880326115364864,
+            "DY": 1.9861028172589008,
             "Data": 12122.0,
             "Others": 0.0,
-            "Photon+jet": 6250.069281468931,
-            "QCD Multijet": 1239.1374188560312,
-            "Top": 359.59829952583164,
-            "VV+VVV": 6.909853489270462,
-            "W -> lv": 16.22654383509686,
-            "Z -> vv": 0.576521716334327
+            "Photon+jet": 6246.221355468431,
+            "QCD Multijet": 1237.9508684085206,
+            "Top": 359.4372180962831,
+            "VV+VVV": 6.90807900593532,
+            "W -> lv": 16.22020329436037,
+            "Z -> vv": 0.5742042720459253
           }
         },
         "scope": "GCR only",
@@ -941,39 +974,39 @@
         "systematic_shape_integrals": {
           "btagSF_bc_correlated": {
             "down": 1.0,
-            "up": 1.0000000000000002
+            "up": 1.0
           },
           "btagSF_bc_uncorrelated": {
-            "down": 1.0,
+            "down": 0.9999999999999999,
             "up": 1.0
           },
           "btagSF_light_correlated": {
-            "down": 1.0,
+            "down": 0.9999999999999999,
             "up": 1.0
           },
           "btagSF_light_uncorrelated": {
-            "down": 1.0,
+            "down": 1.0000000000000002,
             "up": 1.0
           },
           "electron_id": {
-            "down": 0.9999999999999999,
-            "up": 0.9999999999999999
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999998
           },
           "muon_hlt": {
-            "down": 0.9999999999999999,
-            "up": 0.9999999999999999
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999998
           },
           "muon_id": {
-            "down": 0.9999999999999999,
-            "up": 0.9999999999999999
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999998
           },
           "photon_id": {
-            "down": 1.0,
+            "down": 1.0000000000000002,
             "up": 0.9999999999999999
           },
           "pileup": {
-            "down": 0.9999999999999999,
-            "up": 0.9999999999999998
+            "down": 1.0,
+            "up": 1.0000000000000002
           }
         },
         "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
@@ -995,8 +1028,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_gcr_jet_pt",
-      "pdf": "/tmp/web2425/plots/2025/cr_gcr_jet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_gcr_jet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_gcr_jet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_gcr_jet_pt.png",
       "region": "GCR",
       "region_label": "GCR",
       "signals": [],
@@ -1018,8 +1051,8 @@
         "process_fractions": {
           "DY": {
             "matched": true,
-            "normalized_fraction": 0.0002522245575138601,
-            "raw_fraction": 0.00025222455751386017
+            "normalized_fraction": 0.0002521463769468348,
+            "raw_fraction": 0.0002521463769468348
           },
           "Others": {
             "matched": true,
@@ -1028,49 +1061,49 @@
           },
           "Photon+jet": {
             "matched": true,
-            "normalized_fraction": 0.7933778619312406,
-            "raw_fraction": 0.7933778619312405
+            "normalized_fraction": 0.793414020291867,
+            "raw_fraction": 0.793414020291867
           },
           "QCD Multijet": {
             "matched": true,
-            "normalized_fraction": 0.157739247642843,
-            "raw_fraction": 0.157739247642843
+            "normalized_fraction": 0.15769276630571766,
+            "raw_fraction": 0.15769276630571766
           },
           "Top": {
             "matched": true,
-            "normalized_fraction": 0.045642054113302084,
-            "raw_fraction": 0.04564205411330209
+            "normalized_fraction": 0.04565180136217579,
+            "raw_fraction": 0.04565180136217579
           },
           "VV+VVV": {
             "matched": true,
-            "normalized_fraction": 0.0008767036386689329,
-            "raw_fraction": 0.0008767036386689328
+            "normalized_fraction": 0.0008770581617589761,
+            "raw_fraction": 0.0008770581617589762
           },
           "W -> lv": {
             "matched": true,
-            "normalized_fraction": 0.0020387639768656343,
-            "raw_fraction": 0.002038763976865634
+            "normalized_fraction": 0.0020393091975960376,
+            "raw_fraction": 0.0020393091975960368
           },
           "Z -> vv": {
             "matched": true,
-            "normalized_fraction": 7.314413956578503e-05,
-            "raw_fraction": 7.314413956578501e-05
+            "normalized_fraction": 7.289830393755558e-05,
+            "raw_fraction": 7.289830393755559e-05
           }
         },
         "raw_integrals": {
           "data": 12127.0,
-          "data_over_mc": 1.538569936539718,
-          "mc": 7881.994644503404,
+          "data_over_mc": 1.5395875211810173,
+          "mc": 7876.785069482364,
           "process_groups": {
-            "DY": 1.9880326115364866,
+            "DY": 1.9861028172589006,
             "Data": 12127.0,
             "Others": 0.0,
-            "Photon+jet": 6253.400058809599,
-            "QCD Multijet": 1243.2999051488846,
-            "Top": 359.75042608518163,
-            "VV+VVV": 6.910173384805176,
-            "W -> lv": 16.06952674706139,
-            "Z -> vv": 0.576521716334327
+            "Photon+jet": 6249.551708952956,
+            "QCD Multijet": 1242.1120272022483,
+            "Top": 359.5894273645609,
+            "VV+VVV": 6.9083986336107515,
+            "W -> lv": 16.063200239682523,
+            "Z -> vv": 0.5742042720459253
           }
         },
         "scope": "GCR only",
@@ -1078,39 +1111,39 @@
         "systematic_shape_integrals": {
           "btagSF_bc_correlated": {
             "down": 1.0,
-            "up": 0.9999999999999999
+            "up": 1.0000000000000002
           },
           "btagSF_bc_uncorrelated": {
-            "down": 0.9999999999999999,
-            "up": 0.9999999999999999
+            "down": 1.0,
+            "up": 1.0000000000000002
           },
           "btagSF_light_correlated": {
             "down": 1.0,
             "up": 0.9999999999999998
           },
           "btagSF_light_uncorrelated": {
-            "down": 0.9999999999999998,
+            "down": 1.0,
             "up": 0.9999999999999999
           },
           "electron_id": {
-            "down": 0.9999999999999999,
-            "up": 0.9999999999999999
+            "down": 1.0,
+            "up": 1.0
           },
           "muon_hlt": {
-            "down": 0.9999999999999999,
-            "up": 0.9999999999999999
+            "down": 1.0,
+            "up": 1.0
           },
           "muon_id": {
-            "down": 0.9999999999999999,
-            "up": 0.9999999999999999
+            "down": 1.0,
+            "up": 1.0
           },
           "photon_id": {
-            "down": 0.9999999999999999,
+            "down": 1.0,
             "up": 1.0
           },
           "pileup": {
             "down": 1.0,
-            "up": 1.0
+            "up": 0.9999999999999999
           }
         },
         "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
@@ -1132,8 +1165,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_gcr_nb",
-      "pdf": "/tmp/web2425/plots/2025/cr_gcr_nb.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_gcr_nb.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_gcr_nb.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_gcr_nb.png",
       "region": "GCR",
       "region_label": "GCR",
       "signals": [],
@@ -1150,13 +1183,13 @@
         "normalization": "data and total MC independently normalized over the entire plotted figure",
         "normalized_integrals": {
           "data": 1.0,
-          "mc": 1.0
+          "mc": 0.9999999999999999
         },
         "process_fractions": {
           "DY": {
             "matched": true,
-            "normalized_fraction": 0.000252088106194116,
-            "raw_fraction": 0.000252088106194116
+            "normalized_fraction": 0.000252009907290292,
+            "raw_fraction": 0.000252009907290292
           },
           "Others": {
             "matched": true,
@@ -1165,56 +1198,56 @@
           },
           "Photon+jet": {
             "matched": true,
-            "normalized_fraction": 0.7933156859968482,
-            "raw_fraction": 0.7933156859968482
+            "normalized_fraction": 0.7933517761313021,
+            "raw_fraction": 0.7933517761313021
           },
           "QCD Multijet": {
             "matched": true,
-            "normalized_fraction": 0.15782598422217914,
-            "raw_fraction": 0.1578259842221791
+            "normalized_fraction": 0.15777958556048371,
+            "raw_fraction": 0.15777958556048374
           },
           "Top": {
             "matched": true,
-            "normalized_fraction": 0.04561924673297423,
-            "raw_fraction": 0.04561924673297424
+            "normalized_fraction": 0.04562898062349302,
+            "raw_fraction": 0.04562898062349302
           },
           "VV+VVV": {
             "matched": true,
-            "normalized_fraction": 0.0008762293495287317,
-            "raw_fraction": 0.0008762293495287317
+            "normalized_fraction": 0.0008765834699249997,
+            "raw_fraction": 0.0008765834699249999
           },
           "W -> lv": {
             "matched": true,
-            "normalized_fraction": 0.0020376610230611663,
-            "raw_fraction": 0.002037661023061166
+            "normalized_fraction": 0.0020382054584539154,
+            "raw_fraction": 0.0020382054584539154
           },
           "Z -> vv": {
             "matched": true,
-            "normalized_fraction": 7.310456921437405e-05,
-            "raw_fraction": 7.310456921437405e-05
+            "normalized_fraction": 7.2858849051781e-05,
+            "raw_fraction": 7.2858849051781e-05
           }
         },
         "raw_integrals": {
           "data": 12129.0,
-          "data_over_mc": 1.537991189020451,
-          "mc": 7886.261044008308,
+          "data_over_mc": 1.5390080206132155,
+          "mc": 7881.050545251361,
           "process_groups": {
-            "DY": 1.9880326115364864,
+            "DY": 1.9861028172589006,
             "Data": 12129.0,
             "Others": 0.0,
-            "Photon+jet": 6256.294590077671,
-            "QCD Multijet": 1244.656911103641,
-            "Top": 359.765288367258,
-            "VV+VVV": 6.910173384805176,
-            "W -> lv": 16.06952674706139,
-            "Z -> vv": 0.5765217163343271
+            "Photon+jet": 6252.4454478557345,
+            "QCD Multijet": 1243.468888810984,
+            "Top": 359.60430262204346,
+            "VV+VVV": 6.90839863361075,
+            "W -> lv": 16.06320023968253,
+            "Z -> vv": 0.5742042720459253
           }
         },
         "scope": "GCR only",
         "status": "complete",
         "systematic_shape_integrals": {
           "btagSF_bc_correlated": {
-            "down": 1.0,
+            "down": 0.9999999999999999,
             "up": 1.0
           },
           "btagSF_bc_uncorrelated": {
@@ -1223,30 +1256,30 @@
           },
           "btagSF_light_correlated": {
             "down": 1.0,
-            "up": 0.9999999999999999
+            "up": 1.0
           },
           "btagSF_light_uncorrelated": {
-            "down": 0.9999999999999999,
+            "down": 1.0,
             "up": 1.0
           },
           "electron_id": {
-            "down": 1.0,
-            "up": 1.0
-          },
-          "muon_hlt": {
-            "down": 1.0,
-            "up": 1.0
-          },
-          "muon_id": {
-            "down": 1.0,
-            "up": 1.0
-          },
-          "photon_id": {
             "down": 0.9999999999999999,
             "up": 0.9999999999999999
           },
+          "muon_hlt": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
           "pileup": {
-            "down": 1.0000000000000002,
+            "down": 1.0,
             "up": 1.0
           }
         },
@@ -1269,8 +1302,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_gcr_nfatjet",
-      "pdf": "/tmp/web2425/plots/2025/cr_gcr_nfatjet.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_gcr_nfatjet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_gcr_nfatjet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_gcr_nfatjet.png",
       "region": "GCR",
       "region_label": "GCR",
       "signals": [],
@@ -1287,13 +1320,13 @@
         "normalization": "data and total MC independently normalized over the entire plotted figure",
         "normalized_integrals": {
           "data": 1.0,
-          "mc": 1.0
+          "mc": 1.0000000000000002
         },
         "process_fractions": {
           "DY": {
             "matched": true,
-            "normalized_fraction": 0.00025208810619411603,
-            "raw_fraction": 0.00025208810619411603
+            "normalized_fraction": 0.00025200990729029203,
+            "raw_fraction": 0.00025200990729029203
           },
           "Others": {
             "matched": true,
@@ -1302,49 +1335,49 @@
           },
           "Photon+jet": {
             "matched": true,
-            "normalized_fraction": 0.7933156859968482,
-            "raw_fraction": 0.7933156859968483
+            "normalized_fraction": 0.7933517761313024,
+            "raw_fraction": 0.7933517761313023
           },
           "QCD Multijet": {
             "matched": true,
-            "normalized_fraction": 0.15782598422217917,
-            "raw_fraction": 0.1578259842221792
+            "normalized_fraction": 0.15777958556048374,
+            "raw_fraction": 0.15777958556048374
           },
           "Top": {
             "matched": true,
-            "normalized_fraction": 0.04561924673297424,
-            "raw_fraction": 0.04561924673297423
+            "normalized_fraction": 0.045628980623493035,
+            "raw_fraction": 0.045628980623493035
           },
           "VV+VVV": {
             "matched": true,
-            "normalized_fraction": 0.0008762293495287317,
-            "raw_fraction": 0.0008762293495287317
+            "normalized_fraction": 0.0008765834699250002,
+            "raw_fraction": 0.0008765834699250002
           },
           "W -> lv": {
             "matched": true,
-            "normalized_fraction": 0.002037661023061166,
-            "raw_fraction": 0.0020376610230611663
+            "normalized_fraction": 0.002038205458453915,
+            "raw_fraction": 0.0020382054584539146
           },
           "Z -> vv": {
             "matched": true,
-            "normalized_fraction": 7.310456921437405e-05,
-            "raw_fraction": 7.310456921437405e-05
+            "normalized_fraction": 7.285884905178102e-05,
+            "raw_fraction": 7.285884905178102e-05
           }
         },
         "raw_integrals": {
           "data": 12129.0,
-          "data_over_mc": 1.537991189020451,
-          "mc": 7886.261044008307,
+          "data_over_mc": 1.539008020613216,
+          "mc": 7881.050545251359,
           "process_groups": {
-            "DY": 1.9880326115364864,
+            "DY": 1.9861028172589006,
             "Data": 12129.0,
             "Others": 0.0,
-            "Photon+jet": 6256.294590077671,
-            "QCD Multijet": 1244.6569111036415,
-            "Top": 359.76528836725794,
-            "VV+VVV": 6.910173384805176,
-            "W -> lv": 16.06952674706139,
-            "Z -> vv": 0.576521716334327
+            "Photon+jet": 6252.445447855734,
+            "QCD Multijet": 1243.4688888109838,
+            "Top": 359.60430262204346,
+            "VV+VVV": 6.908398633610751,
+            "W -> lv": 16.06320023968252,
+            "Z -> vv": 0.5742042720459253
           }
         },
         "scope": "GCR only",
@@ -1352,14 +1385,14 @@
         "systematic_shape_integrals": {
           "btagSF_bc_correlated": {
             "down": 0.9999999999999999,
-            "up": 0.9999999999999998
-          },
-          "btagSF_bc_uncorrelated": {
-            "down": 1.0,
             "up": 1.0000000000000002
           },
-          "btagSF_light_correlated": {
+          "btagSF_bc_uncorrelated": {
             "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
             "up": 1.0
           },
           "btagSF_light_uncorrelated": {
@@ -1379,11 +1412,11 @@
             "up": 1.0
           },
           "photon_id": {
-            "down": 0.9999999999999999,
-            "up": 1.0
+            "down": 1.0,
+            "up": 0.9999999999999999
           },
           "pileup": {
-            "down": 1.0000000000000002,
+            "down": 1.0,
             "up": 1.0
           }
         },
@@ -1406,8 +1439,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_gcr_njet",
-      "pdf": "/tmp/web2425/plots/2025/cr_gcr_njet.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_gcr_njet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_gcr_njet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_gcr_njet.png",
       "region": "GCR",
       "region_label": "GCR",
       "signals": [],
@@ -1424,13 +1457,13 @@
         "normalization": "data and total MC independently normalized over the entire plotted figure",
         "normalized_integrals": {
           "data": 1.0,
-          "mc": 1.0000000000000002
+          "mc": 1.0
         },
         "process_fractions": {
           "DY": {
             "matched": true,
-            "normalized_fraction": 0.00025208810619411603,
-            "raw_fraction": 0.00025208810619411603
+            "normalized_fraction": 0.00025200990729029203,
+            "raw_fraction": 0.00025200990729029203
           },
           "Others": {
             "matched": true,
@@ -1439,85 +1472,85 @@
           },
           "Photon+jet": {
             "matched": true,
-            "normalized_fraction": 0.7933156859968482,
-            "raw_fraction": 0.7933156859968483
+            "normalized_fraction": 0.7933517761313023,
+            "raw_fraction": 0.7933517761313024
           },
           "QCD Multijet": {
             "matched": true,
-            "normalized_fraction": 0.1578259842221792,
-            "raw_fraction": 0.15782598422217917
+            "normalized_fraction": 0.15777958556048374,
+            "raw_fraction": 0.15777958556048377
           },
           "Top": {
             "matched": true,
-            "normalized_fraction": 0.045619246732974246,
-            "raw_fraction": 0.04561924673297424
+            "normalized_fraction": 0.04562898062349304,
+            "raw_fraction": 0.04562898062349304
           },
           "VV+VVV": {
             "matched": true,
-            "normalized_fraction": 0.0008762293495287318,
-            "raw_fraction": 0.0008762293495287319
+            "normalized_fraction": 0.0008765834699250002,
+            "raw_fraction": 0.0008765834699250002
           },
           "W -> lv": {
             "matched": true,
-            "normalized_fraction": 0.002037661023061166,
-            "raw_fraction": 0.002037661023061166
+            "normalized_fraction": 0.0020382054584539154,
+            "raw_fraction": 0.002038205458453915
           },
           "Z -> vv": {
             "matched": true,
-            "normalized_fraction": 7.310456921437405e-05,
-            "raw_fraction": 7.310456921437405e-05
+            "normalized_fraction": 7.285884905178104e-05,
+            "raw_fraction": 7.285884905178103e-05
           }
         },
         "raw_integrals": {
           "data": 12129.0,
-          "data_over_mc": 1.537991189020451,
-          "mc": 7886.261044008307,
+          "data_over_mc": 1.539008020613216,
+          "mc": 7881.050545251359,
           "process_groups": {
-            "DY": 1.9880326115364864,
+            "DY": 1.9861028172589006,
             "Data": 12129.0,
             "Others": 0.0,
-            "Photon+jet": 6256.294590077671,
-            "QCD Multijet": 1244.6569111036413,
-            "Top": 359.765288367258,
-            "VV+VVV": 6.9101733848051765,
-            "W -> lv": 16.069526747061385,
-            "Z -> vv": 0.576521716334327
+            "Photon+jet": 6252.4454478557345,
+            "QCD Multijet": 1243.468888810984,
+            "Top": 359.6043026220435,
+            "VV+VVV": 6.908398633610751,
+            "W -> lv": 16.063200239682523,
+            "Z -> vv": 0.5742042720459254
           }
         },
         "scope": "GCR only",
         "status": "complete",
         "systematic_shape_integrals": {
           "btagSF_bc_correlated": {
-            "down": 1.0,
+            "down": 0.9999999999999999,
             "up": 1.0
           },
           "btagSF_bc_uncorrelated": {
             "down": 1.0,
-            "up": 1.0
+            "up": 0.9999999999999999
           },
           "btagSF_light_correlated": {
-            "down": 0.9999999999999998,
+            "down": 1.0000000000000002,
             "up": 1.0
           },
           "btagSF_light_uncorrelated": {
             "down": 0.9999999999999999,
-            "up": 0.9999999999999999
+            "up": 1.0
           },
           "electron_id": {
-            "down": 0.9999999999999999,
-            "up": 0.9999999999999999
+            "down": 1.0,
+            "up": 1.0
           },
           "muon_hlt": {
-            "down": 0.9999999999999999,
-            "up": 0.9999999999999999
+            "down": 1.0,
+            "up": 1.0
           },
           "muon_id": {
-            "down": 0.9999999999999999,
-            "up": 0.9999999999999999
+            "down": 1.0,
+            "up": 1.0
           },
           "photon_id": {
             "down": 1.0,
-            "up": 0.9999999999999999
+            "up": 1.0
           },
           "pileup": {
             "down": 1.0,
@@ -1543,8 +1576,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_gcr_ntop",
-      "pdf": "/tmp/web2425/plots/2025/cr_gcr_ntop.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_gcr_ntop.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_gcr_ntop.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_gcr_ntop.png",
       "region": "GCR",
       "region_label": "GCR",
       "signals": [],
@@ -1566,8 +1599,8 @@
         "process_fractions": {
           "DY": {
             "matched": true,
-            "normalized_fraction": 0.000252088106194116,
-            "raw_fraction": 0.000252088106194116
+            "normalized_fraction": 0.000252009907290292,
+            "raw_fraction": 0.000252009907290292
           },
           "Others": {
             "matched": true,
@@ -1576,61 +1609,61 @@
           },
           "Photon+jet": {
             "matched": true,
-            "normalized_fraction": 0.7933156859968481,
-            "raw_fraction": 0.7933156859968481
+            "normalized_fraction": 0.7933517761313023,
+            "raw_fraction": 0.7933517761313024
           },
           "QCD Multijet": {
             "matched": true,
-            "normalized_fraction": 0.15782598422217914,
-            "raw_fraction": 0.15782598422217914
+            "normalized_fraction": 0.1577795855604837,
+            "raw_fraction": 0.15777958556048371
           },
           "Top": {
             "matched": true,
-            "normalized_fraction": 0.04561924673297424,
-            "raw_fraction": 0.04561924673297424
+            "normalized_fraction": 0.045628980623493035,
+            "raw_fraction": 0.045628980623493035
           },
           "VV+VVV": {
             "matched": true,
-            "normalized_fraction": 0.0008762293495287315,
-            "raw_fraction": 0.0008762293495287317
+            "normalized_fraction": 0.0008765834699249999,
+            "raw_fraction": 0.0008765834699249999
           },
           "W -> lv": {
             "matched": true,
-            "normalized_fraction": 0.002037661023061166,
-            "raw_fraction": 0.0020376610230611655
+            "normalized_fraction": 0.0020382054584539154,
+            "raw_fraction": 0.002038205458453916
           },
           "Z -> vv": {
             "matched": true,
-            "normalized_fraction": 7.310456921437402e-05,
-            "raw_fraction": 7.310456921437402e-05
+            "normalized_fraction": 7.285884905178099e-05,
+            "raw_fraction": 7.285884905178099e-05
           }
         },
         "raw_integrals": {
           "data": 12129.0,
-          "data_over_mc": 1.537991189020451,
-          "mc": 7886.261044008308,
+          "data_over_mc": 1.5390080206132153,
+          "mc": 7881.050545251362,
           "process_groups": {
-            "DY": 1.9880326115364864,
+            "DY": 1.9861028172589006,
             "Data": 12129.0,
             "Others": 0.0,
-            "Photon+jet": 6256.29459007767,
-            "QCD Multijet": 1244.6569111036413,
-            "Top": 359.765288367258,
-            "VV+VVV": 6.910173384805176,
-            "W -> lv": 16.069526747061385,
-            "Z -> vv": 0.5765217163343269
+            "Photon+jet": 6252.445447855736,
+            "QCD Multijet": 1243.468888810984,
+            "Top": 359.6043026220436,
+            "VV+VVV": 6.908398633610751,
+            "W -> lv": 16.063200239682534,
+            "Z -> vv": 0.5742042720459252
           }
         },
         "scope": "GCR only",
         "status": "complete",
         "systematic_shape_integrals": {
           "btagSF_bc_correlated": {
-            "down": 0.9999999999999999,
+            "down": 1.0,
             "up": 1.0
           },
           "btagSF_bc_uncorrelated": {
-            "down": 1.0,
-            "up": 0.9999999999999999
+            "down": 1.0000000000000002,
+            "up": 1.0
           },
           "btagSF_light_correlated": {
             "down": 1.0,
@@ -1653,11 +1686,11 @@
             "up": 1.0
           },
           "photon_id": {
-            "down": 0.9999999999999999,
+            "down": 1.0,
             "up": 1.0
           },
           "pileup": {
-            "down": 0.9999999999999999,
+            "down": 1.0,
             "up": 1.0
           }
         },
@@ -1680,8 +1713,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_gcr_nw",
-      "pdf": "/tmp/web2425/plots/2025/cr_gcr_nw.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_gcr_nw.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_gcr_nw.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_gcr_nw.png",
       "region": "GCR",
       "region_label": "GCR",
       "signals": [],
@@ -1698,13 +1731,13 @@
         "normalization": "data and total MC independently normalized over the entire plotted figure",
         "normalized_integrals": {
           "data": 0.9999999999999999,
-          "mc": 1.0000000000000002
+          "mc": 1.0
         },
         "process_fractions": {
           "DY": {
             "matched": true,
-            "normalized_fraction": 0.00025208810619411603,
-            "raw_fraction": 0.00025208810619411603
+            "normalized_fraction": 0.000252009907290292,
+            "raw_fraction": 0.000252009907290292
           },
           "Others": {
             "matched": true,
@@ -1713,60 +1746,60 @@
           },
           "Photon+jet": {
             "matched": true,
-            "normalized_fraction": 0.7933156859968484,
-            "raw_fraction": 0.7933156859968484
+            "normalized_fraction": 0.7933517761313024,
+            "raw_fraction": 0.7933517761313023
           },
           "QCD Multijet": {
             "matched": true,
-            "normalized_fraction": 0.15782598422217917,
-            "raw_fraction": 0.1578259842221792
+            "normalized_fraction": 0.1577795855604837,
+            "raw_fraction": 0.15777958556048371
           },
           "Top": {
             "matched": true,
-            "normalized_fraction": 0.04561924673297425,
-            "raw_fraction": 0.045619246732974246
+            "normalized_fraction": 0.04562898062349303,
+            "raw_fraction": 0.045628980623493035
           },
           "VV+VVV": {
             "matched": true,
-            "normalized_fraction": 0.0008762293495287321,
-            "raw_fraction": 0.0008762293495287319
+            "normalized_fraction": 0.0008765834699250001,
+            "raw_fraction": 0.0008765834699250001
           },
           "W -> lv": {
             "matched": true,
-            "normalized_fraction": 0.0020376610230611663,
-            "raw_fraction": 0.002037661023061166
+            "normalized_fraction": 0.002038205458453915,
+            "raw_fraction": 0.002038205458453915
           },
           "Z -> vv": {
             "matched": true,
-            "normalized_fraction": 7.310456921437406e-05,
-            "raw_fraction": 7.310456921437406e-05
+            "normalized_fraction": 7.2858849051781e-05,
+            "raw_fraction": 7.2858849051781e-05
           }
         },
         "raw_integrals": {
           "data": 12129.0,
-          "data_over_mc": 1.5379911890204512,
-          "mc": 7886.261044008306,
+          "data_over_mc": 1.5390080206132155,
+          "mc": 7881.050545251361,
           "process_groups": {
-            "DY": 1.9880326115364864,
+            "DY": 1.9861028172589006,
             "Data": 12129.0,
             "Others": 0.0,
-            "Photon+jet": 6256.294590077671,
-            "QCD Multijet": 1244.6569111036413,
-            "Top": 359.765288367258,
-            "VV+VVV": 6.9101733848051765,
-            "W -> lv": 16.069526747061385,
-            "Z -> vv": 0.5765217163343271
+            "Photon+jet": 6252.445447855735,
+            "QCD Multijet": 1243.4688888109838,
+            "Top": 359.6043026220436,
+            "VV+VVV": 6.9083986336107515,
+            "W -> lv": 16.063200239682526,
+            "Z -> vv": 0.5742042720459253
           }
         },
         "scope": "GCR only",
         "status": "complete",
         "systematic_shape_integrals": {
           "btagSF_bc_correlated": {
-            "down": 1.0,
-            "up": 1.0
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
           },
           "btagSF_bc_uncorrelated": {
-            "down": 1.0000000000000002,
+            "down": 0.9999999999999999,
             "up": 1.0
           },
           "btagSF_light_correlated": {
@@ -1778,24 +1811,24 @@
             "up": 1.0
           },
           "electron_id": {
-            "down": 1.0000000000000002,
-            "up": 1.0000000000000002
+            "down": 1.0,
+            "up": 1.0
           },
           "muon_hlt": {
-            "down": 1.0000000000000002,
-            "up": 1.0000000000000002
+            "down": 1.0,
+            "up": 1.0
           },
           "muon_id": {
-            "down": 1.0000000000000002,
-            "up": 1.0000000000000002
+            "down": 1.0,
+            "up": 1.0
           },
           "photon_id": {
-            "down": 1.0,
+            "down": 0.9999999999999999,
             "up": 1.0
           },
           "pileup": {
             "down": 1.0,
-            "up": 1.0000000000000002
+            "up": 1.0
           }
         },
         "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
@@ -1817,8 +1850,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_gcr_ut",
-      "pdf": "/tmp/web2425/plots/2025/cr_gcr_ut.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_gcr_ut.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_gcr_ut.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_gcr_ut.png",
       "region": "GCR",
       "region_label": "GCR",
       "signals": [],
@@ -1840,8 +1873,8 @@
         "process_fractions": {
           "DY": {
             "matched": true,
-            "normalized_fraction": 0.0002521602750784606,
-            "raw_fraction": 0.0002521602750784606
+            "normalized_fraction": 0.0002520820585912304,
+            "raw_fraction": 0.0002520820585912304
           },
           "Others": {
             "matched": true,
@@ -1850,81 +1883,81 @@
           },
           "Photon+jet": {
             "matched": true,
-            "normalized_fraction": 0.7932580374870545,
-            "raw_fraction": 0.7932580374870544
+            "normalized_fraction": 0.7932941354406782,
+            "raw_fraction": 0.7932941354406781
           },
           "QCD Multijet": {
             "matched": true,
-            "normalized_fraction": 0.15786964842790224,
-            "raw_fraction": 0.15786964842790221
+            "normalized_fraction": 0.1578232380638084,
+            "raw_fraction": 0.1578232380638084
           },
           "Top": {
             "matched": true,
-            "normalized_fraction": 0.04563230373819946,
-            "raw_fraction": 0.04563230373819946
+            "normalized_fraction": 0.04564204128568423,
+            "raw_fraction": 0.045642041285684234
           },
           "VV+VVV": {
             "matched": true,
-            "normalized_fraction": 0.000876480200294919,
-            "raw_fraction": 0.000876480200294919
+            "normalized_fraction": 0.000876834438779424,
+            "raw_fraction": 0.000876834438779424
           },
           "W -> lv": {
             "matched": true,
-            "normalized_fraction": 0.0020382443735608266,
-            "raw_fraction": 0.0020382443735608266
+            "normalized_fraction": 0.00203878900366842,
+            "raw_fraction": 0.00203878900366842
           },
           "Z -> vv": {
             "matched": true,
-            "normalized_fraction": 7.312549790982242e-05,
-            "raw_fraction": 7.312549790982242e-05
+            "normalized_fraction": 7.287970879019558e-05,
+            "raw_fraction": 7.287970879019558e-05
           }
         },
         "raw_integrals": {
           "data": 12125.0,
-          "data_over_mc": 1.537924135441287,
-          "mc": 7884.003976906762,
+          "data_over_mc": 1.5389409520283839,
+          "mc": 7878.794819267613,
           "process_groups": {
-            "DY": 1.9880326115364864,
+            "DY": 1.9861028172589008,
             "Data": 12125.0,
             "Others": 0.0,
-            "Photon+jet": 6254.04952226119,
-            "QCD Multijet": 1244.6449360384534,
-            "Top": 359.7652641473818,
-            "VV+VVV": 6.9101733848051765,
-            "W -> lv": 16.06952674706139,
-            "Z -> vv": 0.576521716334327
+            "Photon+jet": 6250.201724465394,
+            "QCD Multijet": 1243.4569104171728,
+            "Top": 359.60427842244746,
+            "VV+VVV": 6.908398633610751,
+            "W -> lv": 16.063200239682523,
+            "Z -> vv": 0.5742042720459253
           }
         },
         "scope": "GCR only",
         "status": "complete",
         "systematic_shape_integrals": {
           "btagSF_bc_correlated": {
-            "down": 0.9999999999999999,
+            "down": 1.0,
             "up": 1.0
           },
           "btagSF_bc_uncorrelated": {
-            "down": 1.0,
-            "up": 0.9999999999999999
+            "down": 0.9999999999999999,
+            "up": 1.0
           },
           "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 1.0000000000000002
+          },
+          "btagSF_light_uncorrelated": {
             "down": 1.0000000000000002,
             "up": 1.0
           },
-          "btagSF_light_uncorrelated": {
+          "electron_id": {
             "down": 1.0,
             "up": 1.0
           },
-          "electron_id": {
-            "down": 0.9999999999999999,
-            "up": 0.9999999999999999
-          },
           "muon_hlt": {
-            "down": 0.9999999999999999,
-            "up": 0.9999999999999999
+            "down": 1.0,
+            "up": 1.0
           },
           "muon_id": {
-            "down": 0.9999999999999999,
-            "up": 0.9999999999999999
+            "down": 1.0,
+            "up": 1.0
           },
           "photon_id": {
             "down": 1.0,
@@ -1932,7 +1965,7 @@
           },
           "pileup": {
             "down": 0.9999999999999999,
-            "up": 1.0
+            "up": 0.9999999999999999
           }
         },
         "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
@@ -1954,8 +1987,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_dy2e_bjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/cr_dy2e_bjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_dy2e_bjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_dy2e_bjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_dy2e_bjet_pt.png",
       "region": "DY2E",
       "region_label": "DY2E",
       "signals": [],
@@ -1979,8 +2012,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_dy2e_fatjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/cr_dy2e_fatjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_dy2e_fatjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_dy2e_fatjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_dy2e_fatjet_pt.png",
       "region": "DY2E",
       "region_label": "DY2E",
       "signals": [],
@@ -2004,8 +2037,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_dy2e_ht",
-      "pdf": "/tmp/web2425/plots/2025/cr_dy2e_ht.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_dy2e_ht.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_dy2e_ht.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_dy2e_ht.png",
       "region": "DY2E",
       "region_label": "DY2E",
       "signals": [],
@@ -2029,8 +2062,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_dy2e_jet_pt",
-      "pdf": "/tmp/web2425/plots/2025/cr_dy2e_jet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_dy2e_jet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_dy2e_jet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_dy2e_jet_pt.png",
       "region": "DY2E",
       "region_label": "DY2E",
       "signals": [],
@@ -2054,8 +2087,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_dy2e_met",
-      "pdf": "/tmp/web2425/plots/2025/cr_dy2e_met.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_dy2e_met.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_dy2e_met.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_dy2e_met.png",
       "region": "DY2E",
       "region_label": "DY2E",
       "signals": [],
@@ -2079,8 +2112,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_dy2e_nb",
-      "pdf": "/tmp/web2425/plots/2025/cr_dy2e_nb.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_dy2e_nb.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_dy2e_nb.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_dy2e_nb.png",
       "region": "DY2E",
       "region_label": "DY2E",
       "signals": [],
@@ -2104,8 +2137,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_dy2e_nfatjet",
-      "pdf": "/tmp/web2425/plots/2025/cr_dy2e_nfatjet.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_dy2e_nfatjet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_dy2e_nfatjet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_dy2e_nfatjet.png",
       "region": "DY2E",
       "region_label": "DY2E",
       "signals": [],
@@ -2129,8 +2162,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_dy2e_njet",
-      "pdf": "/tmp/web2425/plots/2025/cr_dy2e_njet.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_dy2e_njet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_dy2e_njet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_dy2e_njet.png",
       "region": "DY2E",
       "region_label": "DY2E",
       "signals": [],
@@ -2154,8 +2187,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_dy2e_ntop",
-      "pdf": "/tmp/web2425/plots/2025/cr_dy2e_ntop.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_dy2e_ntop.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_dy2e_ntop.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_dy2e_ntop.png",
       "region": "DY2E",
       "region_label": "DY2E",
       "signals": [],
@@ -2179,8 +2212,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_dy2e_nw",
-      "pdf": "/tmp/web2425/plots/2025/cr_dy2e_nw.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_dy2e_nw.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_dy2e_nw.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_dy2e_nw.png",
       "region": "DY2E",
       "region_label": "DY2E",
       "signals": [],
@@ -2204,8 +2237,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_dy2e_ptll",
-      "pdf": "/tmp/web2425/plots/2025/cr_dy2e_ptll.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_dy2e_ptll.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_dy2e_ptll.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_dy2e_ptll.png",
       "region": "DY2E",
       "region_label": "DY2E",
       "signals": [],
@@ -2229,8 +2262,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_dy2e_ut",
-      "pdf": "/tmp/web2425/plots/2025/cr_dy2e_ut.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_dy2e_ut.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_dy2e_ut.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_dy2e_ut.png",
       "region": "DY2E",
       "region_label": "DY2E",
       "signals": [],
@@ -2254,8 +2287,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_dy2m_bjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/cr_dy2m_bjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_dy2m_bjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_dy2m_bjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_dy2m_bjet_pt.png",
       "region": "DY2M",
       "region_label": "DY2M",
       "signals": [],
@@ -2279,8 +2312,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_dy2m_fatjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/cr_dy2m_fatjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_dy2m_fatjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_dy2m_fatjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_dy2m_fatjet_pt.png",
       "region": "DY2M",
       "region_label": "DY2M",
       "signals": [],
@@ -2304,8 +2337,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_dy2m_ht",
-      "pdf": "/tmp/web2425/plots/2025/cr_dy2m_ht.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_dy2m_ht.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_dy2m_ht.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_dy2m_ht.png",
       "region": "DY2M",
       "region_label": "DY2M",
       "signals": [],
@@ -2329,8 +2362,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_dy2m_jet_pt",
-      "pdf": "/tmp/web2425/plots/2025/cr_dy2m_jet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_dy2m_jet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_dy2m_jet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_dy2m_jet_pt.png",
       "region": "DY2M",
       "region_label": "DY2M",
       "signals": [],
@@ -2354,8 +2387,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_dy2m_met",
-      "pdf": "/tmp/web2425/plots/2025/cr_dy2m_met.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_dy2m_met.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_dy2m_met.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_dy2m_met.png",
       "region": "DY2M",
       "region_label": "DY2M",
       "signals": [],
@@ -2379,8 +2412,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_dy2m_nb",
-      "pdf": "/tmp/web2425/plots/2025/cr_dy2m_nb.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_dy2m_nb.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_dy2m_nb.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_dy2m_nb.png",
       "region": "DY2M",
       "region_label": "DY2M",
       "signals": [],
@@ -2404,8 +2437,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_dy2m_nfatjet",
-      "pdf": "/tmp/web2425/plots/2025/cr_dy2m_nfatjet.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_dy2m_nfatjet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_dy2m_nfatjet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_dy2m_nfatjet.png",
       "region": "DY2M",
       "region_label": "DY2M",
       "signals": [],
@@ -2429,8 +2462,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_dy2m_njet",
-      "pdf": "/tmp/web2425/plots/2025/cr_dy2m_njet.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_dy2m_njet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_dy2m_njet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_dy2m_njet.png",
       "region": "DY2M",
       "region_label": "DY2M",
       "signals": [],
@@ -2454,8 +2487,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_dy2m_ntop",
-      "pdf": "/tmp/web2425/plots/2025/cr_dy2m_ntop.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_dy2m_ntop.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_dy2m_ntop.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_dy2m_ntop.png",
       "region": "DY2M",
       "region_label": "DY2M",
       "signals": [],
@@ -2479,8 +2512,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_dy2m_nw",
-      "pdf": "/tmp/web2425/plots/2025/cr_dy2m_nw.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_dy2m_nw.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_dy2m_nw.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_dy2m_nw.png",
       "region": "DY2M",
       "region_label": "DY2M",
       "signals": [],
@@ -2504,8 +2537,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_dy2m_ptll",
-      "pdf": "/tmp/web2425/plots/2025/cr_dy2m_ptll.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_dy2m_ptll.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_dy2m_ptll.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_dy2m_ptll.png",
       "region": "DY2M",
       "region_label": "DY2M",
       "signals": [],
@@ -2529,8 +2562,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "cr_dy2m_ut",
-      "pdf": "/tmp/web2425/plots/2025/cr_dy2m_ut.pdf",
-      "png": "/tmp/web2425/plots/2025/cr_dy2m_ut.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/cr_dy2m_ut.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/cr_dy2m_ut.png",
       "region": "DY2M",
       "region_label": "DY2M",
       "signals": [],
@@ -2554,8 +2587,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb1_bjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_bjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_bjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb1_bjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb1_bjet_pt.png",
       "region": "HighDMVR_Nb1",
       "region_label": "High-$\\Delta m$ VR, $N_{b}=1$",
       "signals": [],
@@ -2579,8 +2612,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb1_fatjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_fatjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_fatjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb1_fatjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb1_fatjet_pt.png",
       "region": "HighDMVR_Nb1",
       "region_label": "High-$\\Delta m$ VR, $N_{b}=1$",
       "signals": [],
@@ -2604,8 +2637,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb1_ht",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_ht.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_ht.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb1_ht.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb1_ht.png",
       "region": "HighDMVR_Nb1",
       "region_label": "High-$\\Delta m$ VR, $N_{b}=1$",
       "signals": [],
@@ -2629,8 +2662,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb1_jet_pt",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_jet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_jet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb1_jet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb1_jet_pt.png",
       "region": "HighDMVR_Nb1",
       "region_label": "High-$\\Delta m$ VR, $N_{b}=1$",
       "signals": [],
@@ -2654,8 +2687,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb1_met",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_met.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_met.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb1_met.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb1_met.png",
       "region": "HighDMVR_Nb1",
       "region_label": "High-$\\Delta m$ VR, $N_{b}=1$",
       "signals": [],
@@ -2679,8 +2712,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb1_nb",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_nb.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_nb.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb1_nb.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb1_nb.png",
       "region": "HighDMVR_Nb1",
       "region_label": "High-$\\Delta m$ VR, $N_{b}=1$",
       "signals": [],
@@ -2704,8 +2737,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb1_nfatjet",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_nfatjet.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_nfatjet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb1_nfatjet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb1_nfatjet.png",
       "region": "HighDMVR_Nb1",
       "region_label": "High-$\\Delta m$ VR, $N_{b}=1$",
       "signals": [],
@@ -2729,8 +2762,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb1_njet",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_njet.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_njet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb1_njet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb1_njet.png",
       "region": "HighDMVR_Nb1",
       "region_label": "High-$\\Delta m$ VR, $N_{b}=1$",
       "signals": [],
@@ -2754,8 +2787,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb1_ntop",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_ntop.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_ntop.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb1_ntop.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb1_ntop.png",
       "region": "HighDMVR_Nb1",
       "region_label": "High-$\\Delta m$ VR, $N_{b}=1$",
       "signals": [],
@@ -2779,8 +2812,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb1_nw",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_nw.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb1_nw.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb1_nw.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb1_nw.png",
       "region": "HighDMVR_Nb1",
       "region_label": "High-$\\Delta m$ VR, $N_{b}=1$",
       "signals": [],
@@ -2804,8 +2837,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb2_bjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_bjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_bjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb2_bjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb2_bjet_pt.png",
       "region": "HighDMVR_Nb2",
       "region_label": "High-$\\Delta m$ VR, $N_{b}=2$",
       "signals": [],
@@ -2829,8 +2862,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb2_fatjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_fatjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_fatjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb2_fatjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb2_fatjet_pt.png",
       "region": "HighDMVR_Nb2",
       "region_label": "High-$\\Delta m$ VR, $N_{b}=2$",
       "signals": [],
@@ -2854,8 +2887,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb2_ht",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_ht.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_ht.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb2_ht.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb2_ht.png",
       "region": "HighDMVR_Nb2",
       "region_label": "High-$\\Delta m$ VR, $N_{b}=2$",
       "signals": [],
@@ -2879,8 +2912,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb2_jet_pt",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_jet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_jet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb2_jet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb2_jet_pt.png",
       "region": "HighDMVR_Nb2",
       "region_label": "High-$\\Delta m$ VR, $N_{b}=2$",
       "signals": [],
@@ -2904,8 +2937,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb2_met",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_met.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_met.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb2_met.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb2_met.png",
       "region": "HighDMVR_Nb2",
       "region_label": "High-$\\Delta m$ VR, $N_{b}=2$",
       "signals": [],
@@ -2929,8 +2962,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb2_nb",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_nb.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_nb.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb2_nb.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb2_nb.png",
       "region": "HighDMVR_Nb2",
       "region_label": "High-$\\Delta m$ VR, $N_{b}=2$",
       "signals": [],
@@ -2954,8 +2987,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb2_nfatjet",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_nfatjet.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_nfatjet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb2_nfatjet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb2_nfatjet.png",
       "region": "HighDMVR_Nb2",
       "region_label": "High-$\\Delta m$ VR, $N_{b}=2$",
       "signals": [],
@@ -2979,8 +3012,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb2_njet",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_njet.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_njet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb2_njet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb2_njet.png",
       "region": "HighDMVR_Nb2",
       "region_label": "High-$\\Delta m$ VR, $N_{b}=2$",
       "signals": [],
@@ -3004,8 +3037,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb2_ntop",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_ntop.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_ntop.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb2_ntop.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb2_ntop.png",
       "region": "HighDMVR_Nb2",
       "region_label": "High-$\\Delta m$ VR, $N_{b}=2$",
       "signals": [],
@@ -3029,8 +3062,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb2_nw",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_nw.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb2_nw.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb2_nw.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb2_nw.png",
       "region": "HighDMVR_Nb2",
       "region_label": "High-$\\Delta m$ VR, $N_{b}=2$",
       "signals": [],
@@ -3054,8 +3087,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb3plus_bjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_bjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_bjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb3plus_bjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb3plus_bjet_pt.png",
       "region": "HighDMVR_Nb3plus",
       "region_label": "High-$\\Delta m$ VR, $N_{b}\\geq3$",
       "signals": [],
@@ -3079,8 +3112,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb3plus_fatjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_fatjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_fatjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb3plus_fatjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb3plus_fatjet_pt.png",
       "region": "HighDMVR_Nb3plus",
       "region_label": "High-$\\Delta m$ VR, $N_{b}\\geq3$",
       "signals": [],
@@ -3104,8 +3137,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb3plus_ht",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_ht.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_ht.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb3plus_ht.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb3plus_ht.png",
       "region": "HighDMVR_Nb3plus",
       "region_label": "High-$\\Delta m$ VR, $N_{b}\\geq3$",
       "signals": [],
@@ -3129,8 +3162,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb3plus_jet_pt",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_jet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_jet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb3plus_jet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb3plus_jet_pt.png",
       "region": "HighDMVR_Nb3plus",
       "region_label": "High-$\\Delta m$ VR, $N_{b}\\geq3$",
       "signals": [],
@@ -3154,8 +3187,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb3plus_met",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_met.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_met.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb3plus_met.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb3plus_met.png",
       "region": "HighDMVR_Nb3plus",
       "region_label": "High-$\\Delta m$ VR, $N_{b}\\geq3$",
       "signals": [],
@@ -3179,8 +3212,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb3plus_nb",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_nb.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_nb.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb3plus_nb.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb3plus_nb.png",
       "region": "HighDMVR_Nb3plus",
       "region_label": "High-$\\Delta m$ VR, $N_{b}\\geq3$",
       "signals": [],
@@ -3204,8 +3237,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb3plus_nfatjet",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_nfatjet.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_nfatjet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb3plus_nfatjet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb3plus_nfatjet.png",
       "region": "HighDMVR_Nb3plus",
       "region_label": "High-$\\Delta m$ VR, $N_{b}\\geq3$",
       "signals": [],
@@ -3229,8 +3262,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb3plus_njet",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_njet.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_njet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb3plus_njet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb3plus_njet.png",
       "region": "HighDMVR_Nb3plus",
       "region_label": "High-$\\Delta m$ VR, $N_{b}\\geq3$",
       "signals": [],
@@ -3254,8 +3287,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb3plus_ntop",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_ntop.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_ntop.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb3plus_ntop.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb3plus_ntop.png",
       "region": "HighDMVR_Nb3plus",
       "region_label": "High-$\\Delta m$ VR, $N_{b}\\geq3$",
       "signals": [],
@@ -3279,8 +3312,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "vr_highdm_vr_nb3plus_nw",
-      "pdf": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_nw.pdf",
-      "png": "/tmp/web2425/plots/2025/vr_highdm_vr_nb3plus_nw.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb3plus_nw.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/vr_highdm_vr_nb3plus_nw.png",
       "region": "HighDMVR_Nb3plus",
       "region_label": "High-$\\Delta m$ VR, $N_{b}\\geq3$",
       "signals": [],
@@ -3304,8 +3337,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w0_bjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_bjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_bjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w0_bjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w0_bjet_pt.png",
       "region": "SR_Nb1plus_T0_W0",
       "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$",
       "signals": [],
@@ -3329,8 +3362,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w0_fatjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_fatjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_fatjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w0_fatjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w0_fatjet_pt.png",
       "region": "SR_Nb1plus_T0_W0",
       "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$",
       "signals": [],
@@ -3354,8 +3387,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w0_ht",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_ht.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_ht.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w0_ht.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w0_ht.png",
       "region": "SR_Nb1plus_T0_W0",
       "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$",
       "signals": [],
@@ -3379,8 +3412,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w0_jet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_jet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_jet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w0_jet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w0_jet_pt.png",
       "region": "SR_Nb1plus_T0_W0",
       "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$",
       "signals": [],
@@ -3404,8 +3437,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w0_met",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_met.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_met.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w0_met.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w0_met.png",
       "region": "SR_Nb1plus_T0_W0",
       "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$",
       "signals": [],
@@ -3429,8 +3462,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w0_nb",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_nb.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_nb.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w0_nb.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w0_nb.png",
       "region": "SR_Nb1plus_T0_W0",
       "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$",
       "signals": [],
@@ -3454,8 +3487,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w0_nfatjet",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_nfatjet.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_nfatjet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w0_nfatjet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w0_nfatjet.png",
       "region": "SR_Nb1plus_T0_W0",
       "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$",
       "signals": [],
@@ -3479,8 +3512,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w0_njet",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_njet.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_njet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w0_njet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w0_njet.png",
       "region": "SR_Nb1plus_T0_W0",
       "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$",
       "signals": [],
@@ -3504,8 +3537,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w0_ntop",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_ntop.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_ntop.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w0_ntop.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w0_ntop.png",
       "region": "SR_Nb1plus_T0_W0",
       "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$",
       "signals": [],
@@ -3529,8 +3562,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w0_nw",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_nw.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w0_nw.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w0_nw.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w0_nw.png",
       "region": "SR_Nb1plus_T0_W0",
       "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}=0$",
       "signals": [],
@@ -3554,8 +3587,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w1plus_bjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_bjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_bjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w1plus_bjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w1plus_bjet_pt.png",
       "region": "SR_Nb1plus_T0_W1plus",
       "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$",
       "signals": [],
@@ -3579,8 +3612,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w1plus_fatjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_fatjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_fatjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w1plus_fatjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w1plus_fatjet_pt.png",
       "region": "SR_Nb1plus_T0_W1plus",
       "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$",
       "signals": [],
@@ -3604,8 +3637,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w1plus_ht",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_ht.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_ht.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w1plus_ht.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w1plus_ht.png",
       "region": "SR_Nb1plus_T0_W1plus",
       "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$",
       "signals": [],
@@ -3629,8 +3662,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w1plus_jet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_jet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_jet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w1plus_jet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w1plus_jet_pt.png",
       "region": "SR_Nb1plus_T0_W1plus",
       "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$",
       "signals": [],
@@ -3654,8 +3687,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w1plus_met",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_met.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_met.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w1plus_met.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w1plus_met.png",
       "region": "SR_Nb1plus_T0_W1plus",
       "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$",
       "signals": [],
@@ -3679,8 +3712,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w1plus_nb",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_nb.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_nb.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w1plus_nb.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w1plus_nb.png",
       "region": "SR_Nb1plus_T0_W1plus",
       "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$",
       "signals": [],
@@ -3704,8 +3737,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w1plus_nfatjet",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_nfatjet.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_nfatjet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w1plus_nfatjet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w1plus_nfatjet.png",
       "region": "SR_Nb1plus_T0_W1plus",
       "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$",
       "signals": [],
@@ -3729,8 +3762,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w1plus_njet",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_njet.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_njet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w1plus_njet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w1plus_njet.png",
       "region": "SR_Nb1plus_T0_W1plus",
       "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$",
       "signals": [],
@@ -3754,8 +3787,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w1plus_ntop",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_ntop.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_ntop.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w1plus_ntop.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w1plus_ntop.png",
       "region": "SR_Nb1plus_T0_W1plus",
       "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$",
       "signals": [],
@@ -3779,8 +3812,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1plus_t0_w1plus_nw",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_nw.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1plus_t0_w1plus_nw.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w1plus_nw.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1plus_t0_w1plus_nw.png",
       "region": "SR_Nb1plus_T0_W1plus",
       "region_label": "SR, $N_{b}\\geq1$, $N_{top}=0$, $N_{W}\\geq1$",
       "signals": [],
@@ -3804,8 +3837,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w0_bjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_bjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_bjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w0_bjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w0_bjet_pt.png",
       "region": "SR_Nb1_T1plus_W0",
       "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$",
       "signals": [],
@@ -3829,8 +3862,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w0_fatjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_fatjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_fatjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w0_fatjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w0_fatjet_pt.png",
       "region": "SR_Nb1_T1plus_W0",
       "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$",
       "signals": [],
@@ -3854,8 +3887,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w0_ht",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_ht.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_ht.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w0_ht.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w0_ht.png",
       "region": "SR_Nb1_T1plus_W0",
       "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$",
       "signals": [],
@@ -3879,8 +3912,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w0_jet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_jet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_jet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w0_jet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w0_jet_pt.png",
       "region": "SR_Nb1_T1plus_W0",
       "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$",
       "signals": [],
@@ -3904,8 +3937,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w0_met",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_met.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_met.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w0_met.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w0_met.png",
       "region": "SR_Nb1_T1plus_W0",
       "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$",
       "signals": [],
@@ -3929,8 +3962,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w0_nb",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_nb.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_nb.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w0_nb.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w0_nb.png",
       "region": "SR_Nb1_T1plus_W0",
       "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$",
       "signals": [],
@@ -3954,8 +3987,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w0_nfatjet",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_nfatjet.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_nfatjet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w0_nfatjet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w0_nfatjet.png",
       "region": "SR_Nb1_T1plus_W0",
       "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$",
       "signals": [],
@@ -3979,8 +4012,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w0_njet",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_njet.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_njet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w0_njet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w0_njet.png",
       "region": "SR_Nb1_T1plus_W0",
       "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$",
       "signals": [],
@@ -4004,8 +4037,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w0_ntop",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_ntop.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_ntop.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w0_ntop.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w0_ntop.png",
       "region": "SR_Nb1_T1plus_W0",
       "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$",
       "signals": [],
@@ -4029,8 +4062,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w0_nw",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_nw.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w0_nw.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w0_nw.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w0_nw.png",
       "region": "SR_Nb1_T1plus_W0",
       "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}=0$",
       "signals": [],
@@ -4054,8 +4087,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w1plus_bjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_bjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_bjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w1plus_bjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w1plus_bjet_pt.png",
       "region": "SR_Nb1_T1plus_W1plus",
       "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$",
       "signals": [],
@@ -4079,8 +4112,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w1plus_fatjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_fatjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_fatjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w1plus_fatjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w1plus_fatjet_pt.png",
       "region": "SR_Nb1_T1plus_W1plus",
       "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$",
       "signals": [],
@@ -4104,8 +4137,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w1plus_ht",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_ht.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_ht.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w1plus_ht.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w1plus_ht.png",
       "region": "SR_Nb1_T1plus_W1plus",
       "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$",
       "signals": [],
@@ -4129,8 +4162,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w1plus_jet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_jet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_jet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w1plus_jet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w1plus_jet_pt.png",
       "region": "SR_Nb1_T1plus_W1plus",
       "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$",
       "signals": [],
@@ -4154,8 +4187,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w1plus_met",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_met.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_met.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w1plus_met.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w1plus_met.png",
       "region": "SR_Nb1_T1plus_W1plus",
       "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$",
       "signals": [],
@@ -4179,8 +4212,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w1plus_nb",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_nb.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_nb.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w1plus_nb.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w1plus_nb.png",
       "region": "SR_Nb1_T1plus_W1plus",
       "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$",
       "signals": [],
@@ -4204,8 +4237,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w1plus_nfatjet",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_nfatjet.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_nfatjet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w1plus_nfatjet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w1plus_nfatjet.png",
       "region": "SR_Nb1_T1plus_W1plus",
       "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$",
       "signals": [],
@@ -4229,8 +4262,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w1plus_njet",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_njet.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_njet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w1plus_njet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w1plus_njet.png",
       "region": "SR_Nb1_T1plus_W1plus",
       "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$",
       "signals": [],
@@ -4254,8 +4287,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w1plus_ntop",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_ntop.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_ntop.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w1plus_ntop.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w1plus_ntop.png",
       "region": "SR_Nb1_T1plus_W1plus",
       "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$",
       "signals": [],
@@ -4279,8 +4312,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb1_t1plus_w1plus_nw",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_nw.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb1_t1plus_w1plus_nw.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w1plus_nw.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb1_t1plus_w1plus_nw.png",
       "region": "SR_Nb1_T1plus_W1plus",
       "region_label": "SR, $N_{b}=1$, $N_{top}\\geq1$, $N_{W}\\geq1$",
       "signals": [],
@@ -4304,8 +4337,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w0_bjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_bjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_bjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w0_bjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w0_bjet_pt.png",
       "region": "SR_Nb2_T1_W0",
       "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$",
       "signals": [],
@@ -4329,8 +4362,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w0_fatjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_fatjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_fatjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w0_fatjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w0_fatjet_pt.png",
       "region": "SR_Nb2_T1_W0",
       "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$",
       "signals": [],
@@ -4354,8 +4387,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w0_ht",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_ht.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_ht.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w0_ht.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w0_ht.png",
       "region": "SR_Nb2_T1_W0",
       "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$",
       "signals": [],
@@ -4379,8 +4412,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w0_jet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_jet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_jet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w0_jet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w0_jet_pt.png",
       "region": "SR_Nb2_T1_W0",
       "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$",
       "signals": [],
@@ -4404,8 +4437,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w0_met",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_met.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_met.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w0_met.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w0_met.png",
       "region": "SR_Nb2_T1_W0",
       "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$",
       "signals": [],
@@ -4429,8 +4462,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w0_nb",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_nb.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_nb.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w0_nb.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w0_nb.png",
       "region": "SR_Nb2_T1_W0",
       "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$",
       "signals": [],
@@ -4454,8 +4487,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w0_nfatjet",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_nfatjet.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_nfatjet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w0_nfatjet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w0_nfatjet.png",
       "region": "SR_Nb2_T1_W0",
       "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$",
       "signals": [],
@@ -4479,8 +4512,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w0_njet",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_njet.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_njet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w0_njet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w0_njet.png",
       "region": "SR_Nb2_T1_W0",
       "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$",
       "signals": [],
@@ -4504,8 +4537,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w0_ntop",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_ntop.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_ntop.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w0_ntop.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w0_ntop.png",
       "region": "SR_Nb2_T1_W0",
       "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$",
       "signals": [],
@@ -4529,8 +4562,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w0_nw",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_nw.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w0_nw.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w0_nw.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w0_nw.png",
       "region": "SR_Nb2_T1_W0",
       "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=0$",
       "signals": [],
@@ -4554,8 +4587,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w1_bjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_bjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_bjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w1_bjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w1_bjet_pt.png",
       "region": "SR_Nb2_T1_W1",
       "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$",
       "signals": [],
@@ -4579,8 +4612,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w1_fatjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_fatjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_fatjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w1_fatjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w1_fatjet_pt.png",
       "region": "SR_Nb2_T1_W1",
       "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$",
       "signals": [],
@@ -4604,8 +4637,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w1_ht",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_ht.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_ht.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w1_ht.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w1_ht.png",
       "region": "SR_Nb2_T1_W1",
       "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$",
       "signals": [],
@@ -4629,8 +4662,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w1_jet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_jet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_jet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w1_jet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w1_jet_pt.png",
       "region": "SR_Nb2_T1_W1",
       "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$",
       "signals": [],
@@ -4654,8 +4687,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w1_met",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_met.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_met.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w1_met.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w1_met.png",
       "region": "SR_Nb2_T1_W1",
       "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$",
       "signals": [],
@@ -4679,8 +4712,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w1_nb",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_nb.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_nb.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w1_nb.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w1_nb.png",
       "region": "SR_Nb2_T1_W1",
       "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$",
       "signals": [],
@@ -4704,8 +4737,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w1_nfatjet",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_nfatjet.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_nfatjet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w1_nfatjet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w1_nfatjet.png",
       "region": "SR_Nb2_T1_W1",
       "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$",
       "signals": [],
@@ -4729,8 +4762,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w1_njet",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_njet.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_njet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w1_njet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w1_njet.png",
       "region": "SR_Nb2_T1_W1",
       "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$",
       "signals": [],
@@ -4754,8 +4787,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w1_ntop",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_ntop.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_ntop.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w1_ntop.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w1_ntop.png",
       "region": "SR_Nb2_T1_W1",
       "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$",
       "signals": [],
@@ -4779,8 +4812,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_t1_w1_nw",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_nw.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_t1_w1_nw.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w1_nw.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_t1_w1_nw.png",
       "region": "SR_Nb2_T1_W1",
       "region_label": "SR, $N_{b}=2$, $N_{top}=1$, $N_{W}=1$",
       "signals": [],
@@ -4804,8 +4837,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w0_bjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_bjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_bjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w0_bjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w0_bjet_pt.png",
       "region": "SR_Nb3plus_T1_W0",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$",
       "signals": [],
@@ -4829,8 +4862,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w0_fatjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_fatjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_fatjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w0_fatjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w0_fatjet_pt.png",
       "region": "SR_Nb3plus_T1_W0",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$",
       "signals": [],
@@ -4854,8 +4887,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w0_ht",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_ht.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_ht.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w0_ht.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w0_ht.png",
       "region": "SR_Nb3plus_T1_W0",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$",
       "signals": [],
@@ -4879,8 +4912,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w0_jet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_jet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_jet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w0_jet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w0_jet_pt.png",
       "region": "SR_Nb3plus_T1_W0",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$",
       "signals": [],
@@ -4904,8 +4937,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w0_met",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_met.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_met.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w0_met.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w0_met.png",
       "region": "SR_Nb3plus_T1_W0",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$",
       "signals": [],
@@ -4929,8 +4962,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w0_nb",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_nb.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_nb.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w0_nb.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w0_nb.png",
       "region": "SR_Nb3plus_T1_W0",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$",
       "signals": [],
@@ -4954,8 +4987,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w0_nfatjet",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_nfatjet.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_nfatjet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w0_nfatjet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w0_nfatjet.png",
       "region": "SR_Nb3plus_T1_W0",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$",
       "signals": [],
@@ -4979,8 +5012,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w0_njet",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_njet.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_njet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w0_njet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w0_njet.png",
       "region": "SR_Nb3plus_T1_W0",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$",
       "signals": [],
@@ -5004,8 +5037,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w0_ntop",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_ntop.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_ntop.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w0_ntop.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w0_ntop.png",
       "region": "SR_Nb3plus_T1_W0",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$",
       "signals": [],
@@ -5029,8 +5062,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w0_nw",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_nw.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w0_nw.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w0_nw.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w0_nw.png",
       "region": "SR_Nb3plus_T1_W0",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=0$",
       "signals": [],
@@ -5054,8 +5087,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w1_bjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_bjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_bjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w1_bjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w1_bjet_pt.png",
       "region": "SR_Nb3plus_T1_W1",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$",
       "signals": [],
@@ -5079,8 +5112,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w1_fatjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_fatjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_fatjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w1_fatjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w1_fatjet_pt.png",
       "region": "SR_Nb3plus_T1_W1",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$",
       "signals": [],
@@ -5104,8 +5137,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w1_ht",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_ht.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_ht.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w1_ht.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w1_ht.png",
       "region": "SR_Nb3plus_T1_W1",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$",
       "signals": [],
@@ -5129,8 +5162,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w1_jet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_jet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_jet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w1_jet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w1_jet_pt.png",
       "region": "SR_Nb3plus_T1_W1",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$",
       "signals": [],
@@ -5154,8 +5187,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w1_met",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_met.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_met.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w1_met.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w1_met.png",
       "region": "SR_Nb3plus_T1_W1",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$",
       "signals": [],
@@ -5179,8 +5212,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w1_nb",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_nb.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_nb.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w1_nb.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w1_nb.png",
       "region": "SR_Nb3plus_T1_W1",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$",
       "signals": [],
@@ -5204,8 +5237,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w1_nfatjet",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_nfatjet.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_nfatjet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w1_nfatjet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w1_nfatjet.png",
       "region": "SR_Nb3plus_T1_W1",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$",
       "signals": [],
@@ -5229,8 +5262,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w1_njet",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_njet.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_njet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w1_njet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w1_njet.png",
       "region": "SR_Nb3plus_T1_W1",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$",
       "signals": [],
@@ -5254,8 +5287,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w1_ntop",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_ntop.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_ntop.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w1_ntop.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w1_ntop.png",
       "region": "SR_Nb3plus_T1_W1",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$",
       "signals": [],
@@ -5279,8 +5312,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t1_w1_nw",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_nw.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t1_w1_nw.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w1_nw.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t1_w1_nw.png",
       "region": "SR_Nb3plus_T1_W1",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=1$, $N_{W}=1$",
       "signals": [],
@@ -5304,8 +5337,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t2_w0_bjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_bjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_bjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t2_w0_bjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t2_w0_bjet_pt.png",
       "region": "SR_Nb3plus_T2_W0",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$",
       "signals": [],
@@ -5329,8 +5362,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t2_w0_fatjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_fatjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_fatjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t2_w0_fatjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t2_w0_fatjet_pt.png",
       "region": "SR_Nb3plus_T2_W0",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$",
       "signals": [],
@@ -5354,8 +5387,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t2_w0_ht",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_ht.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_ht.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t2_w0_ht.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t2_w0_ht.png",
       "region": "SR_Nb3plus_T2_W0",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$",
       "signals": [],
@@ -5379,8 +5412,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t2_w0_jet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_jet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_jet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t2_w0_jet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t2_w0_jet_pt.png",
       "region": "SR_Nb3plus_T2_W0",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$",
       "signals": [],
@@ -5404,8 +5437,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t2_w0_met",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_met.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_met.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t2_w0_met.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t2_w0_met.png",
       "region": "SR_Nb3plus_T2_W0",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$",
       "signals": [],
@@ -5429,8 +5462,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t2_w0_nb",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_nb.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_nb.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t2_w0_nb.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t2_w0_nb.png",
       "region": "SR_Nb3plus_T2_W0",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$",
       "signals": [],
@@ -5454,8 +5487,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t2_w0_nfatjet",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_nfatjet.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_nfatjet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t2_w0_nfatjet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t2_w0_nfatjet.png",
       "region": "SR_Nb3plus_T2_W0",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$",
       "signals": [],
@@ -5479,8 +5512,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t2_w0_njet",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_njet.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_njet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t2_w0_njet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t2_w0_njet.png",
       "region": "SR_Nb3plus_T2_W0",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$",
       "signals": [],
@@ -5504,8 +5537,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t2_w0_ntop",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_ntop.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_ntop.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t2_w0_ntop.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t2_w0_ntop.png",
       "region": "SR_Nb3plus_T2_W0",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$",
       "signals": [],
@@ -5529,8 +5562,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb3plus_t2_w0_nw",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_nw.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb3plus_t2_w0_nw.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t2_w0_nw.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb3plus_t2_w0_nw.png",
       "region": "SR_Nb3plus_T2_W0",
       "region_label": "SR, $N_{b}\\geq3$, $N_{top}=2$, $N_{W}=0$",
       "signals": [],
@@ -5554,8 +5587,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_nt2plus_w0_bjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_bjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_bjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_nt2plus_w0_bjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_nt2plus_w0_bjet_pt.png",
       "region": "SR_Nb2_Nt2plus_W0",
       "region_label": "SR_Nb2_Nt2plus_W0",
       "signals": [],
@@ -5579,8 +5612,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_nt2plus_w0_fatjet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_fatjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_fatjet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_nt2plus_w0_fatjet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_nt2plus_w0_fatjet_pt.png",
       "region": "SR_Nb2_Nt2plus_W0",
       "region_label": "SR_Nb2_Nt2plus_W0",
       "signals": [],
@@ -5604,8 +5637,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_nt2plus_w0_ht",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_ht.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_ht.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_nt2plus_w0_ht.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_nt2plus_w0_ht.png",
       "region": "SR_Nb2_Nt2plus_W0",
       "region_label": "SR_Nb2_Nt2plus_W0",
       "signals": [],
@@ -5629,8 +5662,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_nt2plus_w0_jet_pt",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_jet_pt.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_jet_pt.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_nt2plus_w0_jet_pt.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_nt2plus_w0_jet_pt.png",
       "region": "SR_Nb2_Nt2plus_W0",
       "region_label": "SR_Nb2_Nt2plus_W0",
       "signals": [],
@@ -5654,8 +5687,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_nt2plus_w0_met",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_met.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_met.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_nt2plus_w0_met.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_nt2plus_w0_met.png",
       "region": "SR_Nb2_Nt2plus_W0",
       "region_label": "SR_Nb2_Nt2plus_W0",
       "signals": [],
@@ -5679,8 +5712,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_nt2plus_w0_nb",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_nb.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_nb.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_nt2plus_w0_nb.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_nt2plus_w0_nb.png",
       "region": "SR_Nb2_Nt2plus_W0",
       "region_label": "SR_Nb2_Nt2plus_W0",
       "signals": [],
@@ -5704,8 +5737,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_nt2plus_w0_nfatjet",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_nfatjet.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_nfatjet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_nt2plus_w0_nfatjet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_nt2plus_w0_nfatjet.png",
       "region": "SR_Nb2_Nt2plus_W0",
       "region_label": "SR_Nb2_Nt2plus_W0",
       "signals": [],
@@ -5729,8 +5762,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_nt2plus_w0_njet",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_njet.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_njet.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_nt2plus_w0_njet.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_nt2plus_w0_njet.png",
       "region": "SR_Nb2_Nt2plus_W0",
       "region_label": "SR_Nb2_Nt2plus_W0",
       "signals": [],
@@ -5754,8 +5787,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_nt2plus_w0_ntop",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_ntop.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_ntop.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_nt2plus_w0_ntop.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_nt2plus_w0_ntop.png",
       "region": "SR_Nb2_Nt2plus_W0",
       "region_label": "SR_Nb2_Nt2plus_W0",
       "signals": [],
@@ -5779,8 +5812,8 @@
       ],
       "legend_yields_displayed": true,
       "name": "sr_sr_nb2_nt2plus_w0_nw",
-      "pdf": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_nw.pdf",
-      "png": "/tmp/web2425/plots/2025/sr_sr_nb2_nt2plus_w0_nw.png",
+      "pdf": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_nt2plus_w0_nw.pdf",
+      "png": "/tmp/web2425/regenerated/plots/2025/sr_sr_nb2_nt2plus_w0_nw.png",
       "region": "SR_Nb2_Nt2plus_W0",
       "region_label": "SR_Nb2_Nt2plus_W0",
       "signals": [],
@@ -5792,8 +5825,8 @@
       "year": "2025"
     }
   ],
-  "signal_records_pruned_before_render": 194583,
-  "source": "autonomous_allhad/workflow/plot2025/hists.json",
+  "signal_records_pruned_before_render": 0,
+  "source": "/tmp/web2425/bin/highdm2025.plot.json",
   "status": "complete",
   "uncertainty_model": "MC stat plus luminosity plus per-source max(abs(Up-Nominal), abs(Down-Nominal)) envelopes in quadrature",
   "year": "2025"

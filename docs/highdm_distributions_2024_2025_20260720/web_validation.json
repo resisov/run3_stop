@@ -1,5 +1,10 @@
 {
   "cards": 372,
+  "default_year": "2025",
+  "histogram_sha256": {
+    "2024": "2ad64b5236a23c03fbe0c21ec7be7e1a51cb035bf9868e73ef959e7510c178df",
+    "2025": "5581811be43bf80d53c73e393d098829a4105851dbc7e65ec4190007fbde4404"
+  },
   "kinds": {
     "CR": 112,
     "SR": 200,
