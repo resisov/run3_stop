@@ -34,25 +34,42 @@ def file_sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-EXECUTION_CONTRACT_PATHS = (
+EXECUTION_CONTRACT_COMMON_PATHS = (
     "autonomous_allhad/workflow/build_flat_boosted_recoil_hists.py",
     "autonomous_allhad/workflow/run_flat_hists_chunked.py",
     "autonomous_allhad/autonomous_allhad/analysis_scale_factors.py",
     "autonomous_allhad/autonomous_allhad/real_subset_worker.py",
     "autonomous_allhad/autonomous_allhad/dy_ptll_policy.py",
+    "autonomous_allhad/autonomous_allhad/highdm_resolved_categories.py",
+    "autonomous_allhad/workflow/study_trota_highdm_categories_2024.py",
     "analysis/utils/corrections.py",
     "analysis/data/corrections.coffea",
-    "analysis/data/PUweight/2024/puWeights.json.gz",
-    "analysis/data/BTVSF/2024/btagging.json.gz",
-    "analysis/data/EGammaSF/2024/electron.json.gz",
-    "analysis/data/EGammaSF/2024/electronHlt.json.gz",
-    "analysis/data/EGammaSF/2024/photon.json.gz",
-    "analysis/data/MuonSF/2024/muon_Z.json.gz",
-    "analysis/data/AnalysisSF/2024/met_trigger_sf.json.gz",
-    "analysis/data/AnalysisSF/2024/photon_trigger_sf.json.gz",
-    "analysis/data/AnalysisSF/2024/veto_electron_5to10_sf.json.gz",
-    "analysis/data/AnalysisSF/2024/loose_muon_5to10_sf.json.gz",
 )
+EXECUTION_CONTRACT_YEAR_PATHS = {
+    "2024": (
+        "analysis/data/PUweight/2024/puWeights.json.gz",
+        "analysis/data/BTVSF/2024/btagging.json.gz",
+        "analysis/data/EGammaSF/2024/electron.json.gz",
+        "analysis/data/EGammaSF/2024/electronHlt.json.gz",
+        "analysis/data/EGammaSF/2024/photon.json.gz",
+        "analysis/data/MuonSF/2024/muon_Z.json.gz",
+        "analysis/data/AnalysisSF/2024/met_trigger_sf.json.gz",
+        "analysis/data/AnalysisSF/2024/photon_trigger_sf.json.gz",
+        "analysis/data/AnalysisSF/2024/veto_electron_5to10_sf.json.gz",
+        "analysis/data/AnalysisSF/2024/loose_muon_5to10_sf.json.gz",
+    ),
+    "2025": (
+        "analysis/data/PUweight/2025/puWeights_2025pp_Golden_Summer24_25ns_69200ub.json.gz",
+        "analysis/data/BTVSF/2025/btagging.json.gz",
+        "analysis/data/EGammaSF/2025/electron.json.gz",
+        "analysis/data/EGammaSF/2025/photon.json.gz",
+        "analysis/data/MuonSF/2025/muon_Z.json.gz",
+        "analysis/data/AnalysisSF/2025/met_trigger_sf.json.gz",
+        "analysis/data/AnalysisSF/2025/photon_trigger_sf.json.gz",
+        "analysis/data/AnalysisSF/2025/veto_electron_5to10_sf.json.gz",
+        "analysis/data/AnalysisSF/2025/loose_muon_5to10_sf.json.gz",
+    ),
+}
 REQUIRED_ANALYSIS_SF_COMPONENTS = [
     "met_trigger",
     "photon_trigger",
@@ -62,13 +79,19 @@ REQUIRED_ANALYSIS_SF_COMPONENTS = [
 EXPECTED_BTAG_EFFICIENCY_SHA256_2024 = (
     "03524e9ae28110814f336eafc887e60d54b495a7b8dec7cda59bd792f56feaf4"
 )
-BTAG_EFFICIENCY_RELATIVE_PATH = "analysis/hists/btageff2024.merged"
+BTAG_EFFICIENCY_RELATIVE_PATHS = {
+    "2024": "analysis/hists/btageff2024.merged",
+    "2025": "analysis/hists/btageff2025.merged",
+}
 
 
-def execution_code_sha256(repo: Path) -> dict[str, str]:
+def execution_code_sha256(repo: Path, campaign_year: str) -> dict[str, str]:
     return {
         relative_path: file_sha256(repo / relative_path)
-        for relative_path in EXECUTION_CONTRACT_PATHS
+        for relative_path in (
+            EXECUTION_CONTRACT_COMMON_PATHS
+            + EXECUTION_CONTRACT_YEAR_PATHS[campaign_year]
+        )
     }
 
 
@@ -76,13 +99,15 @@ def btag_efficiency_contract(
     repo: Path,
     expected_sha256: str,
     required: bool,
+    campaign_year: str,
 ) -> dict[str, Any]:
-    path = repo / BTAG_EFFICIENCY_RELATIVE_PATH
+    relative_path = BTAG_EFFICIENCY_RELATIVE_PATHS[campaign_year]
+    path = repo / relative_path
     if not path.exists():
         if required:
             raise RuntimeError(f"required b-tag efficiency payload is missing: {path}")
         return {
-            "path": BTAG_EFFICIENCY_RELATIVE_PATH,
+            "path": relative_path,
             "exists": False,
             "expected_sha256": expected_sha256,
         }
@@ -94,7 +119,7 @@ def btag_efficiency_contract(
             f"expected {expected_sha256}, found {actual_sha256}"
         )
     return {
-        "path": BTAG_EFFICIENCY_RELATIVE_PATH,
+        "path": relative_path,
         "exists": True,
         "sha256": actual_sha256,
         "expected_sha256": expected_sha256,
@@ -213,8 +238,15 @@ STRICT_WARNING_KEYS = (
 )
 
 
-def summary_has_strict_warnings(summary: dict[str, Any]) -> bool:
-    return any(bool(summary.get(key)) for key in STRICT_WARNING_KEYS)
+def summary_has_strict_warnings(
+    summary: dict[str, Any],
+    allow_zero_entry_roots: bool = False,
+) -> bool:
+    return any(
+        bool(summary.get(key))
+        for key in STRICT_WARNING_KEYS
+        if not (allow_zero_entry_roots and key == "zero_entry_roots")
+    )
 
 
 REPAIRABLE_CODE_PATHS = (
@@ -253,6 +285,7 @@ def merge_payloads(
     dy_ptll_policy: str = "all",
     expected_build_options: dict[str, Any] | None = None,
     allow_hist_builder_repair: bool = False,
+    allow_zero_entry_roots: bool = False,
 ) -> dict[str, Any]:
     merged: dict[str, Any] | None = None
     summary: dict[str, Any] = {
@@ -356,6 +389,7 @@ def merge_payloads(
             "histogram_range_exclusions",
             "histogram_folded_flow",
             "lowdm_search_bin_entry_accounting",
+            "trota_lowdm_nres_audit",
             "scale_factor_status_audit",
             "gcr_prefilter",
             "gcr_photon_selection_audit",
@@ -382,7 +416,8 @@ def merge_payloads(
     all_chunks_clean = set(summary.get("chunk_statuses") or {}) <= {"complete"}
     merged["status"] = (
         "complete"
-        if all_chunks_clean and not summary_has_strict_warnings(summary)
+        if all_chunks_clean
+        and not summary_has_strict_warnings(summary, allow_zero_entry_roots)
         else "complete_with_warnings"
     )
     write_json(output, merged)
@@ -409,6 +444,7 @@ def completed_chunk_matches(
     expected_build_options: dict[str, Any] | None = None,
     expected_normalization: Path | None = None,
     allow_hist_builder_repair: bool = False,
+    allow_zero_entry_roots: bool = False,
 ) -> bool:
     if not path.exists():
         return False
@@ -423,7 +459,10 @@ def completed_chunk_matches(
     elif not recorded_status.startswith("complete"):
         return False
     summary = payload.get("summary") or {}
-    if require_clean_status and summary_has_strict_warnings(summary):
+    if require_clean_status and summary_has_strict_warnings(
+        summary,
+        allow_zero_entry_roots,
+    ):
         return False
     if summary.get("dy_ptll_policy", "all") != expected_dy_ptll_policy:
         return False
@@ -450,6 +489,7 @@ def main() -> int:
     parser.add_argument("--normalization", required=True)
     parser.add_argument("--output", required=True)
     parser.add_argument("--work-dir", required=True)
+    parser.add_argument("--campaign-year", choices=sorted(BTAG_EFFICIENCY_RELATIVE_PATHS), default="2024")
     parser.add_argument("--jobs", type=int, default=8, help="Number of chunks for the legacy splitter, and default max parallelism.")
     parser.add_argument("--chunk-size", type=int, default=0, help="If positive, split input ROOT files into chunks of this many files.")
     parser.add_argument("--max-parallel", type=int, default=0, help="Maximum number of chunk builders to run at once. Defaults to --jobs.")
@@ -495,10 +535,14 @@ def main() -> int:
     )
     parser.add_argument(
         "--analysis-sf-components",
-        nargs="+",
+        nargs="*",
         choices=REQUIRED_ANALYSIS_SF_COMPONENTS,
-        default=REQUIRED_ANALYSIS_SF_COMPONENTS,
-        help="Analysis-owned SF components included in nominal and Up/Down weights.",
+        default=None,
+        help=(
+            "Analysis-owned SF components included in nominal and Up/Down weights. "
+            "Omit the option for the campaign defaults; pass the option with no "
+            "values only when the campaign has no analysis-owned payloads."
+        ),
     )
     parser.add_argument(
         "--strict-complete",
@@ -530,6 +574,8 @@ def main() -> int:
     parser.add_argument("--only-signal-mass", nargs=2, type=int, metavar=("MSTOP", "MLSP"))
     parser.add_argument("--only-lowdm-sr-nsv-inclusive", action="store_true")
     parser.add_argument("--only-lowdm-nsv-repair", action="store_true")
+    parser.add_argument("--lowdm-only", action="store_true")
+    parser.add_argument("--require-lowdm-nres-zero", action="store_true")
     parser.add_argument("--gcr-only", action="store_true")
     parser.add_argument(
         "--gcr-photon-policy",
@@ -565,12 +611,21 @@ def main() -> int:
         parser.error("--only-lowdm-nsv-repair requires --only-lowdm-sr-nsv-inclusive")
     if args.gcr_only and args.only_regions:
         parser.error("--gcr-only cannot be combined with --only-regions")
+    if args.lowdm_only and (args.only_regions or args.gcr_only):
+        parser.error("--lowdm-only cannot be combined with --only-regions or --gcr-only")
+    if args.require_lowdm_nres_zero and args.dy_ptll_policy != "all":
+        parser.error("--require-lowdm-nres-zero requires --dy-ptll-policy all")
     if args.gcr_photon_policy != "nominal" and not args.gcr_only:
         parser.error("--gcr-photon-policy requires --gcr-only")
+    analysis_sf_components = (
+        list(REQUIRED_ANALYSIS_SF_COMPONENTS)
+        if args.analysis_sf_components is None
+        else list(args.analysis_sf_components)
+    )
     unavailable_required = (
         set(args.require_weight_components)
         & set(REQUIRED_ANALYSIS_SF_COMPONENTS)
-    ) - set(args.analysis_sf_components)
+    ) - set(analysis_sf_components)
     if unavailable_required:
         parser.error(
             "--require-weight-components contains disabled analysis SFs: "
@@ -614,26 +669,31 @@ def main() -> int:
         "step_size": int(args.step_size),
         "only_regions": list(args.only_regions) if args.only_regions else None,
         "only_variables": list(args.only_variables) if args.only_variables else None,
+        "campaign_year": str(args.campaign_year),
         "require_btag": bool(args.require_btag),
         "require_weight_components": list(args.require_weight_components),
-        "analysis_sf_components": list(args.analysis_sf_components),
+        "analysis_sf_components": analysis_sf_components,
         "require_branches": bool(args.require_branches),
         "require_normalization": bool(args.require_normalization),
+        "allow_zero_entry_roots": bool(args.allow_zero_entry_roots),
         "nominal_only": bool(args.nominal_only),
         "distribution_only": bool(args.distribution_only),
         "only_signal_mass": list(args.only_signal_mass) if args.only_signal_mass else None,
         "only_lowdm_sr_nsv_inclusive": bool(args.only_lowdm_sr_nsv_inclusive),
         "only_lowdm_nsv_repair": bool(args.only_lowdm_nsv_repair),
+        "lowdm_only": bool(args.lowdm_only),
+        "require_lowdm_nres_zero": bool(args.require_lowdm_nres_zero),
         "dy_ptll_policy": str(args.dy_ptll_policy),
         "gcr_only": bool(args.gcr_only),
         "gcr_photon_policy": str(args.gcr_photon_policy),
         "local_analysis_data": str(args.local_analysis_data),
         "normalization_sha256": file_sha256(normalization),
-        "code_sha256": execution_code_sha256(repo),
+        "code_sha256": execution_code_sha256(repo, args.campaign_year),
         "btag_efficiency": btag_efficiency_contract(
             repo,
             str(args.expected_btag_efficiency_sha256),
             btag_payload_required,
+            args.campaign_year,
         ),
     }
     print(json.dumps({"stage": "chunked_hists_start", "roots": len(roots), "chunks": len(chunks), "chunk_size": args.chunk_size or None, "max_parallel": max_parallel, "dy_ptll_policy": args.dy_ptll_policy, "work_dir": str(work_dir)}, sort_keys=True), flush=True)
@@ -654,6 +714,8 @@ def main() -> int:
             str(normalization),
             "--output",
             str(output),
+            "--campaign-year",
+            str(args.campaign_year),
             "--step-size",
             str(args.step_size),
         ]
@@ -673,12 +735,14 @@ def main() -> int:
         )
         if args.require_weight_components:
             cmd.extend(["--require-weight-components", *args.require_weight_components])
-        if args.analysis_sf_components:
+        if args.analysis_sf_components is not None:
             cmd.extend(["--analysis-sf-components", *args.analysis_sf_components])
         if args.require_branches:
             cmd.append("--require-branches")
         if args.require_normalization:
             cmd.append("--require-normalization")
+        if args.allow_zero_entry_roots:
+            cmd.append("--allow-zero-entry-roots")
         if args.nominal_only:
             cmd.append("--nominal-only")
         if args.only_signal_mass:
@@ -687,6 +751,10 @@ def main() -> int:
             cmd.append("--only-lowdm-sr-nsv-inclusive")
         if args.only_lowdm_nsv_repair:
             cmd.append("--only-lowdm-nsv-repair")
+        if args.lowdm_only:
+            cmd.append("--lowdm-only")
+        if args.require_lowdm_nres_zero:
+            cmd.append("--require-lowdm-nres-zero")
         if args.gcr_only:
             cmd.append("--gcr-only")
         cmd.extend(["--gcr-photon-policy", args.gcr_photon_policy])
@@ -708,6 +776,7 @@ def main() -> int:
             expected_build_options,
             normalization,
             args.allow_hist_builder_repair,
+            args.allow_zero_entry_roots,
         ):
             finished.append(output)
         else:
@@ -780,6 +849,7 @@ def main() -> int:
         args.dy_ptll_policy,
         expected_build_options,
         args.allow_hist_builder_repair,
+        args.allow_zero_entry_roots,
     )
     if args.strict_complete and merged["status"] != "complete":
         print(

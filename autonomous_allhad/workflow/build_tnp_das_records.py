@@ -9,9 +9,18 @@ from pathlib import Path
 from typing import Any
 
 
-def _das(query: str) -> list[str]:
+def _das(
+    query: str,
+    *,
+    dasgoclient: Path | str = "dasgoclient",
+    dasmaps: Path | None = None,
+) -> list[str]:
+    command = [str(dasgoclient)]
+    if dasmaps is not None:
+        command.extend(["--dasmaps", str(dasmaps)])
+    command.append(f"--query={query}")
     completed = subprocess.run(
-        ["dasgoclient", f"--query={query}"],
+        command,
         check=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -20,7 +29,12 @@ def _das(query: str) -> list[str]:
     return sorted({line.strip() for line in completed.stdout.splitlines() if line.strip()})
 
 
-def build_records(config: dict[str, Any]) -> dict[str, Any]:
+def build_records(
+    config: dict[str, Any],
+    *,
+    dasgoclient: Path | str = "dasgoclient",
+    dasmaps: Path | None = None,
+) -> dict[str, Any]:
     campaign = config["campaign_inputs"]
     queries = campaign.get("data_dataset_queries")
     if queries is None:
@@ -28,7 +42,7 @@ def build_records(config: dict[str, Any]) -> dict[str, Any]:
     data_datasets = sorted({
         dataset
         for query in queries
-        for dataset in _das(str(query))
+        for dataset in _das(str(query), dasgoclient=dasgoclient, dasmaps=dasmaps)
     })
     excluded = tuple(str(value) for value in campaign.get("data_dataset_exclude_contains", []))
     data_datasets = [dataset for dataset in data_datasets if not any(token in dataset for token in excluded)]
@@ -40,7 +54,11 @@ def build_records(config: dict[str, Any]) -> dict[str, Any]:
     seen_files: set[str] = set()
     for sample, datasets in (("data", data_datasets), ("mc", mc_datasets)):
         for dataset in datasets:
-            files = _das(f"file dataset={dataset}")
+            files = _das(
+                f"file dataset={dataset}",
+                dasgoclient=dasgoclient,
+                dasmaps=dasmaps,
+            )
             if not files:
                 raise RuntimeError(f"DAS returned no files for {dataset}")
             dataset_audit[dataset] = {"sample": sample, "files": len(files)}
@@ -61,6 +79,7 @@ def build_records(config: dict[str, Any]) -> dict[str, Any]:
     return {
         "schema_version": 1,
         "measurement": config["measurement"],
+        "year": str(config["year"]),
         "probe_definition": config.get("probe_definition"),
         "tag_pt_min_gev": config.get("tag_pt_min_gev"),
         "reference_paths": list(config.get("reference_paths") or []),
@@ -76,8 +95,14 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--dasgoclient", type=Path, default=Path("dasgoclient"))
+    parser.add_argument("--dasmaps", type=Path)
     args = parser.parse_args(argv)
-    payload = build_records(json.loads(args.config.read_text()))
+    payload = build_records(
+        json.loads(args.config.read_text()),
+        dasgoclient=args.dasgoclient,
+        dasmaps=args.dasmaps,
+    )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
     print(json.dumps({key: value for key, value in payload.items() if key not in {"records", "dataset_audit"}}, indent=2, sort_keys=True))

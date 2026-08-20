@@ -1,0 +1,216 @@
+{
+  "schema_version": "run3_stop_samples_2025_v1",
+  "year": "2025",
+  "status": "inventory_ready_production_blocked",
+  "conditions": {
+    "correction_set_label": "Run3 25Prompt Summer24 NanoAODv15",
+    "data_era": "25Prompt",
+    "mc_campaign": "Summer24",
+    "nanoaod_version": "v15",
+    "exact_cmssw_global_tag": null,
+    "note": "The correction-set label fixes the data/MC pairing but is not itself an exact CMSSW GlobalTag string. Read the exact GlobalTag from NanoAOD provenance before production."
+  },
+  "data": {
+    "dataset_pattern": "/{primary}/Run2025{era}-PromptReco-v{version}/NANOAOD",
+    "primary_datasets": [
+      "JetMET0",
+      "JetMET1",
+      "EGamma0",
+      "EGamma1",
+      "EGamma2",
+      "EGamma3",
+      "Muon0",
+      "Muon1"
+    ],
+    "eras_and_versions": {
+      "C": [1, 2],
+      "D": [1],
+      "E": [1],
+      "F": [1, 2],
+      "G": [1]
+    },
+    "expanded_dataset_count": 56,
+    "existing_metadata": {
+      "path": "analysis/metadata/KNU_2025_v4.json.gz",
+      "records": 7768,
+      "unique_nanoaod_files": 37933,
+      "files_by_era": {
+        "Run2025C": 7620,
+        "Run2025D": 8610,
+        "Run2025E": 4575,
+        "Run2025F": 9406,
+        "Run2025G": 7722
+      }
+    },
+    "version_overlap_audit": {
+      "scope": "Run2025C and Run2025F, all eight primary datasets",
+      "method": "CMS DBS run-list intersection",
+      "result": "zero overlapping runs between PromptReco-v1 and PromptReco-v2",
+      "conclusion": "retain both versions"
+    }
+  },
+  "mc": {
+    "dataset_suffix": "/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v{version}/NANOAODSIM",
+    "policy": "Start from the validated 2024 sample policy because the official 2025 correction set explicitly targets Summer24 MC. Do not reuse the stale 2025 metadata sample families blindly.",
+    "adopted_ht_families": {
+      "QCD": {
+        "dataset_pattern": "QCD-4Jets_Bin-HT-{ht}_TuneCP5_13p6TeV_madgraphMLM-pythia8",
+        "generator": "madgraphMLM-pythia8",
+        "bins": [
+          {"ht": "40to70", "xsec_pb": 312300000.0},
+          {"ht": "70to100", "xsec_pb": 58470000.0},
+          {"ht": "100to200", "xsec_pb": 25310000.0},
+          {"ht": "200to400", "xsec_pb": 1960000.0},
+          {"ht": "400to600", "xsec_pb": 97400.0},
+          {"ht": "600to800", "xsec_pb": 13560.0},
+          {"ht": "800to1000", "xsec_pb": 3010.0},
+          {"ht": "1000to1200", "xsec_pb": 890.3},
+          {"ht": "1200to1500", "xsec_pb": 384.8},
+          {"ht": "1500to2000", "xsec_pb": 127.3},
+          {"ht": "2000", "xsec_pb": 26.26}
+        ],
+        "exclude_overlapping_families": ["QCD_Bin-PT-*", "QCD0B-*", "QCDB-*"]
+      },
+      "GJ": {
+        "dataset_pattern": "GJ-4Jets_Bin-HT-{ht}-PTG-{ptg}_Par-dRGJ-0p25_TuneCP5_13p6TeV_madgraphMLM-pythia8",
+        "generator": "madgraphMLM-pythia8",
+        "bins": [
+          {"ht": "10to40", "ptg": "10to100", "xsec_pb": 164100.0, "version": 2},
+          {"ht": "40to100", "ptg": "10to100", "xsec_pb": 123400.0, "version": 2},
+          {"ht": "100to200", "ptg": "10to100", "xsec_pb": 32190.0, "version": 2},
+          {"ht": "200to400", "ptg": "10to100", "xsec_pb": 5498.0, "version": 2},
+          {"ht": "400to600", "ptg": "10to100", "xsec_pb": 482.3, "version": 3},
+          {"ht": "600to1000", "ptg": "10to100", "xsec_pb": 117.5, "version": 2},
+          {"ht": "1000", "ptg": "10to100", "xsec_pb": 15.12, "version": 2},
+          {"ht": "40to200", "ptg": "100to200", "xsec_pb": 554.3, "version": 2},
+          {"ht": "200to400", "ptg": "100to200", "xsec_pb": 200.0, "version": 2},
+          {"ht": "400to600", "ptg": "100to200", "xsec_pb": 29.77, "version": 2},
+          {"ht": "600to1000", "ptg": "100to200", "xsec_pb": 9.666, "version": 2},
+          {"ht": "1000", "ptg": "100to200", "xsec_pb": 1.628, "version": 2},
+          {"ht": "40to400", "ptg": "200", "xsec_pb": 43.76, "version": 2},
+          {"ht": "400to600", "ptg": "200", "xsec_pb": 11.75, "version": 2},
+          {"ht": "600to1000", "ptg": "200", "xsec_pb": 4.75, "version": 2},
+          {"ht": "1000", "ptg": "200", "xsec_pb": 1.019, "version": 2}
+        ],
+        "exclude_overlapping_families": ["GJ_Bin-PTG-*"]
+      }
+    },
+    "adopted_non_ht_families": {
+      "DY": [
+        {"primary": "DYto2E-4Jets_Bin-MLL-50_TuneCP5_13p6TeV_madgraphMLM-pythia8", "xsec_pb": 5481.0, "version": 3},
+        {"primary": "DYto2Mu-4Jets_Bin-MLL-50_TuneCP5_13p6TeV_madgraphMLM-pythia8", "xsec_pb": 5447.0, "version": 3},
+        {"primary": "DYto2Tau-4Jets_Bin-MLL-50_TuneCP5_13p6TeV_madgraphMLM-pythia8", "xsec_pb": 5448.0, "version": 5}
+      ],
+      "TT_decay": [
+        "TTto4Q_TuneCP5_13p6TeV_powheg-pythia8",
+        "TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8",
+        "TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8"
+      ],
+      "TT_rare": [
+        "TTTT_TuneCP5_13p6TeV_amcatnlo-pythia8",
+        "TTW-WtoQQ-1Jets_TuneCP5_13p6TeV_amcatnloFXFXold-pythia8",
+        "TTZ-ZtoQQ-1Jets_TuneCP5_13p6TeV_amcatnloFXFXold-pythia8",
+        "TTWW_TuneCP5_13p6TeV_madgraph-pythia8",
+        "TTWZ_TuneCP5_13p6TeV_madgraph-pythia8",
+        "TTZZ_TuneCP5_13p6TeV_madgraph-pythia8"
+      ],
+      "WtoLNu": {
+        "dataset_pattern": "WtoLNu-2Jets_Bin-{jets}J-PTLNu-{pt}_TuneCP5_13p6TeV_amcatnloFXFX-pythia8",
+        "jets": [1, 2],
+        "pt_bins": ["40to100", "100to200", "200to400", "400to600", "600"],
+        "count": 10
+      },
+      "Zto2Nu": {
+        "dataset_pattern": "Zto2Nu-2Jets_Bin-{jets}J-PTNuNu-{pt}_TuneCP5_13p6TeV_amcatnloFXFX-pythia8",
+        "jets": [1, 2],
+        "pt_bins": ["40to100", "100to200", "200to400", "400to600", "600"],
+        "count": 10
+      },
+      "ST": [
+        "TBbarQto2Q-t-channel-4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8",
+        "TBbarQtoLNu-t-channel-4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8",
+        "TbarBQto2Q-t-channel-4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8",
+        "TbarBQtoLNu-t-channel-4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8",
+        "TBbartoLplusNuBbar-s-channel-4FS_TuneCP5_13p6TeV_amcatnlo-pythia8",
+        "TbarBtoLminusNuB-s-channel-4FS_TuneCP5_13p6TeV_amcatnlo-pythia8",
+        "TWminusto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8",
+        "TWminusto4Q_TuneCP5_13p6TeV_powheg-pythia8",
+        "TWminustoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8",
+        "TbarWplusto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8",
+        "TbarWplusto4Q_TuneCP5_13p6TeV_powheg-pythia8",
+        "TbarWplustoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8"
+      ],
+      "VV_VVV": [
+        "WW_TuneCP5_13p6TeV_pythia8",
+        "WZ_TuneCP5_13p6TeV_pythia8",
+        "ZZ_TuneCP5_13p6TeV_pythia8",
+        "WWW-4F_TuneCP5_13p6TeV_amcatnlo-pythia8",
+        "WWZ-4F_TuneCP5_13p6TeV_amcatnlo-pythia8",
+        "WZZ-5F_TuneCP5_13p6TeV_amcatnlo-pythia8",
+        "ZZZ-5F_TuneCP5_13p6TeV_amcatnlo-pythia8"
+      ]
+    },
+    "available_ht_alternatives_not_adopted": {
+      "reason": "The 2024 shape comparison was rolled back to TT decay-mode and W PTLNu samples. Keep these produced HT samples available for a controlled 2025 comparison; do not mix both families.",
+      "TT": [
+        {"ht": "100to400", "xsec_pb": 92.66},
+        {"ht": "400to800", "xsec_pb": 8.046},
+        {"ht": "800to1500", "xsec_pb": 0.7624},
+        {"ht": "1500to2500", "xsec_pb": 0.03632},
+        {"ht": "2500", "xsec_pb": 0.001523}
+      ],
+      "TT_dataset_pattern": "TT-3Jets_Bin-HT-{ht}_TuneCP5_13p6TeV_madgraphMLM-pythia8",
+      "WtoLNu": [
+        {"ht": "40to100", "mlnu": "0to120", "xsec_pb": 4260.0},
+        {"ht": "40to100", "mlnu": "120", "xsec_pb": 20.65},
+        {"ht": "100to400", "mlnu": "0to120", "xsec_pb": 1636.0},
+        {"ht": "100to400", "mlnu": "120", "xsec_pb": 10.18},
+        {"ht": "400to800", "mlnu": "0to120", "xsec_pb": 59.86},
+        {"ht": "400to800", "mlnu": "120", "xsec_pb": 0.526},
+        {"ht": "800to1500", "mlnu": "0to120", "xsec_pb": 6.226},
+        {"ht": "800to1500", "mlnu": "120", "xsec_pb": 0.06245},
+        {"ht": "1500to2500", "mlnu": "0to120", "xsec_pb": 0.4503},
+        {"ht": "1500to2500", "mlnu": "120", "xsec_pb": 0.005052},
+        {"ht": "2500", "mlnu": "0to120", "xsec_pb": 0.03085},
+        {"ht": "2500", "mlnu": "120", "xsec_pb": 0.0003781}
+      ],
+      "WtoLNu_dataset_pattern": "WtoLNu-4Jets_Bin-HT-{ht}-MLNu-{mlnu}_TuneCP5_13p6TeV_madgraphMLM-pythia8"
+    },
+    "signal": {
+      "status": "policy_not_frozen",
+      "note": "Do not infer the 2025 signal grid from the three FullSim anchors in KNU_2025_v4. Freeze T2tt, T2bW and T2tb coverage explicitly before production."
+    },
+    "stale_existing_metadata": {
+      "path": "analysis/metadata/KNU_2025_v4.json.gz",
+      "records": 7768,
+      "unique_mc_files": 39196,
+      "prohibited_for_new_production": true,
+      "obsolete_or_incomplete_families": [
+        "QCD_Bin-PT-* instead of QCD-4Jets HT",
+        "GJ_Bin-PTG-* instead of GJ-4Jets HT x PTG x dRGJ",
+        "DYto2L PTLL instead of flavor-exclusive DYto2E/DYto2Mu/DYto2Tau",
+        "only three FullSim SMS anchor samples",
+        "missing current VVV and part of rare-top coverage"
+      ]
+    }
+  },
+  "production_blockers": [
+    "Regenerate 2025 MC metadata from this frozen sample policy.",
+    "Adopt the official 2025 LUM pileup payload; current get_pu_weight returns unity for 2025.",
+    "Adopt the official 2025 BTV UParTAK4 payload and measure a separate btageff2025.merged; current BTagCorrector returns None for 2025.",
+    "Fix 2025 JER correction names; current code requests Summer24Prompt24 JRV1 while the 2025 JME payload provides Summer23BPixPrompt23_RunD_JRV1.",
+    "Measure or validate 2025 MET, photon and electron trigger scale factors; current electron HLT SF is unity.",
+    "Freeze the 2025 signal grid and normalization policy.",
+    "Record the exact data and MC GlobalTags from NanoAOD provenance."
+  ],
+  "sources": {
+    "data_metadata": "analysis/metadata/KNU_2025_v4.json.gz",
+    "data_dataset_builder": "analysis/metadata/json_maker_lxplus.py",
+    "validated_2024_normalization": "workflow/plot2024/norm.json",
+    "qcd_xsec": "workflow/qcdht/xsec.json",
+    "gj_xsec": "workflow/gj4jets/xsec.json",
+    "tt_w_ht_xsec": "workflow/twht/xsec.json",
+    "official_btv_commit": "19718caf08a12945512eaeb51019c9158641a9a4",
+    "official_lum_commit": "2fcd89bbdd6cc7b4e54eb320324a56a584456d09"
+  }
+}

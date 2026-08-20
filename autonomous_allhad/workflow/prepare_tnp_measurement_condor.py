@@ -52,6 +52,19 @@ def prepare(
             raise FileNotFoundError(f"{name} does not exist: {paths[name]}")
     payload = json.loads(paths["records"].read_text())
     measurement_config = json.loads(paths["config"].read_text())
+    expected_year = str(measurement_config.get("year") or "")
+    if not expected_year:
+        raise ValueError("TnP campaign config must define year")
+    if str(payload.get("year") or "") != expected_year:
+        raise ValueError(
+            f"records/config year mismatch: {payload.get('year')!r} != {expected_year!r}"
+        )
+    expected_mc_datasets = {
+        str(dataset)
+        for dataset in measurement_config.get("campaign_inputs", {}).get("mc_datasets", [])
+    }
+    if not expected_mc_datasets:
+        raise ValueError("TnP campaign config must define at least one exact MC dataset")
     expected_definition = {
         "electron": "veto_id_only",
         "muon": "loose_id_only",
@@ -71,7 +84,19 @@ def prepare(
         expected_apply_reference_to_mc = False
         minimum_tag_pt = 5.0
         expected_data_prefixes = ("/ParkingSingleMuon",)
-        expected_mc_prefix = "/SPS-JpsiJpsiTo"
+        expected_external = {
+            "enabled": True,
+            "pt_min_gev": 12.0,
+            "abseta_max": 1.5,
+            "require_tight_id": True,
+            "miniiso_max": None,
+        }
+        configured_external = measurement_config.get("external_reference_muon")
+        if configured_external is not None and configured_external != expected_external:
+            raise ValueError(
+                "parking-external electron TnP has an inconsistent offline muon topology: "
+                f"{configured_external!r}"
+            )
     elif strategy == "parking_external_muon":
         expected_reference_paths = parking_paths
         expected_filter_bits = None
@@ -79,7 +104,6 @@ def prepare(
         expected_apply_reference_to_mc = False
         minimum_tag_pt = 5.0
         expected_data_prefixes = ("/ParkingSingleMuon",)
-        expected_mc_prefix = "/SPS-JpsiJpsiTo4Mu_"
         expected_external = {
             "enabled": True,
             "pt_min_gev": 12.0,
@@ -103,11 +127,10 @@ def prepare(
         expected_apply_reference_to_mc = True
         minimum_tag_pt = 26.0
         expected_data_prefixes = ("/Muon0/", "/Muon1/")
-        expected_mc_prefix = "/Jpsito2Mu_"
     else:
         raise ValueError(f"unsupported muon campaign_strategy: {strategy!r}")
     expected_probe_pt_edges = {
-        "electron": [5.0, 7.0, 10.0, 15.0],
+        "electron": [5.0, 7.0, 10.0],
         "muon": [5.0, 6.0, 7.0, 8.0, 9.0, 10.0],
     }[kind]
     expected_reference_kind = "muon"
@@ -191,10 +214,10 @@ def prepare(
                 )
         else:
             dataset = str(record.get("dataset") or "")
-            if not dataset.startswith(expected_mc_prefix):
+            if dataset not in expected_mc_datasets:
                 raise ValueError(
-                    f"{kind} {strategy} MC must start with {expected_mc_prefix!r}; "
-                    f"got {dataset!r}"
+                    f"{kind} {strategy} MC is outside the frozen config dataset list: "
+                    f"{dataset!r} not in {sorted(expected_mc_datasets)!r}"
                 )
 
     workdir = paths["workdir"]

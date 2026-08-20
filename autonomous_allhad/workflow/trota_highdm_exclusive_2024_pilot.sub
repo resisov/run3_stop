@@ -1,0 +1,18 @@
+universe = vanilla
+executable = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/hist2024_nres_v8/condor/run_trota_highdm_exclusive_2024_condor.sh
+arguments = $(name).txt $(destination)
+getenv = False
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+transfer_executable = TRUE
+transfer_input_files = /eos/user/t/taiwoo/run3_stop/decaf/condor/py38.tgz, /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/hist2024_nres_v8/bundles/hist2024_nres_code.tgz, /eos/user/t/taiwoo/run3_stop/decaf/analysis/proxy/x509up_u147757, /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/hist2024_nres_v8/normalization.json, /eos/user/t/taiwoo/run3_stop/decaf/analysis/hists/btageff2024.merged, $(chunk_file)
+transfer_output_files = ""
+output = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/hist2024_nres_v8/logs/$(name).out
+error = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/hist2024_nres_v8/logs/$(name).err
+log = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/hist2024_nres_v8/logs/pilot.log
+request_cpus = 1
+request_memory = 8000MB
+request_disk = 8000MB
+requirements = (OpSysAndVer =?= "AlmaLinux9")
++JobFlavour = "workday"
+queue name,chunk_file,destination from /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/hist2024_nres_v8/condor/pilot_arguments.txt

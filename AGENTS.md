@@ -344,6 +344,11 @@ The workflow must be:
 * configuration driven;
 * auditable.
 
+Whenever `ids.py` or `corrections.py` changes, recompile the corresponding
+`.coffea` artifact before running validation or production. Synchronize the
+source and compiled payload used by workers, verify their recorded hashes, and
+do not declare the change complete while the compiled artifact is stale.
+
 Completed valid work must not be repeated unnecessarily.
 
 Queue disappearance is not evidence of success.

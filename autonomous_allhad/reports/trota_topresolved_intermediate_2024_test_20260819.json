@@ -1,0 +1,114 @@
+{
+  "schema_version": "trota_topresolved_intermediate_2024_summary_v1",
+  "date": "2026-08-19",
+  "status": "passed",
+  "conclusion": "The official 2024 TROTA TopResolved model can be evaluated directly from the 2024 intermediate ROOT schema without a NanoAOD-to-NanoAOD production.",
+  "provenance": {
+    "repository": "https://github.com/CMSNAFW/TROTA",
+    "trota_commit": "38fb282d5c3479d2eec96cc57d60fac7fd412d7f",
+    "model": "model_TopResolved_2024_TROTA2D_ptcut.h5",
+    "model_sha256": "ce673e6497860cc67fcdfb30017301fb476e32a0a33a60e8b51a31ba109f7ef3",
+    "model_hash_valid": true,
+    "model_class_order": [
+      "FTScore",
+      "TTScore",
+      "QCDScore"
+    ]
+  },
+  "input_policy": {
+    "jet_selection": "stored jet_id_all and jet_nanoaod_pt > 25 GeV and abs(jet_eta_all) < 2.5",
+    "model_kinematics": "jet_nanoaod_pt and jet_nanoaod_mass",
+    "candidate_order": "the TROTA upstream nested-loop order for all C(Ngood,3) AK4 triplets",
+    "model_input_shape": [
+      null,
+      3,
+      8
+    ],
+    "official_jet_id_recomputed": false
+  },
+  "selected_working_point": {
+    "name": "1pct_qcd_mistag",
+    "discriminant": "TTScore / (TTScore + QCDScore)",
+    "operator": ">=",
+    "threshold": 0.9433798789978027,
+    "source": "TROTA NanoAODTools/python/postprocessing/training_studies/variables_studies_post_training.py",
+    "status": "training-study threshold; 2024 scale factors are not applied"
+  },
+  "runtime": {
+    "host": "lxplus",
+    "lcg_view": "LCG_104/x86_64-el9-gcc13-opt",
+    "tensorflow": "2.12.0",
+    "numpy": "1.23.5",
+    "awkward": "1.10.3",
+    "uproot": "4.3.7",
+    "compatibility_note": "The legacy HDF5 model loaded under TensorFlow 2.12.0. A TensorFlow 2.18.0 trial failed with Unknown layer: SlicingOpLambda."
+  },
+  "samples": [
+    {
+      "kind": "data",
+      "input": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/flat2024/outputs/nominal/data_shard_00006.root",
+      "tree_entries": 3594,
+      "events_tested": 3594,
+      "test_scope": "full file",
+      "events_with_at_least_three_good_jets": 2663,
+      "resolved_candidates": 16290,
+      "wall_time_seconds": 24.002953702001832,
+      "maximum_probability_sum_deviation": 1.9371509552001953e-07,
+      "one_percent_wp": {
+        "candidate_pass_count": 377,
+        "candidate_pass_fraction": 0.023143032535297727,
+        "event_at_least_one_pass_count": 184,
+        "event_at_least_one_pass_fraction_all_events": 0.051196438508625486,
+        "event_at_least_one_pass_fraction_events_with_candidates": 0.06909500563274502
+      }
+    },
+    {
+      "kind": "background_mc",
+      "input": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/flat2024/outputs/nominal/mc_shard_01776.root",
+      "tree_entries": 2381474,
+      "events_tested": 5000,
+      "test_scope": "first 5000 events",
+      "events_with_at_least_three_good_jets": 3187,
+      "resolved_candidates": 13464,
+      "wall_time_seconds": 18.546548840939067,
+      "maximum_probability_sum_deviation": 2.1047890186309814e-07,
+      "one_percent_wp": {
+        "candidate_pass_count": 84,
+        "candidate_pass_fraction": 0.006238859180035651,
+        "event_at_least_one_pass_count": 58,
+        "event_at_least_one_pass_fraction_all_events": 0.0116,
+        "event_at_least_one_pass_fraction_events_with_candidates": 0.018198933165986822
+      }
+    },
+    {
+      "kind": "signal",
+      "input": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/flat2024/outputs/nominal/signal_shard_00001.root",
+      "tree_entries": 1500559,
+      "events_tested": 5000,
+      "test_scope": "first 5000 events",
+      "events_with_at_least_three_good_jets": 4826,
+      "resolved_candidates": 93224,
+      "wall_time_seconds": 27.614043854060583,
+      "maximum_probability_sum_deviation": 2.2351741790771484e-07,
+      "one_percent_wp": {
+        "candidate_pass_count": 6490,
+        "candidate_pass_fraction": 0.06961726594010126,
+        "event_at_least_one_pass_count": 2337,
+        "event_at_least_one_pass_fraction_all_events": 0.4674,
+        "event_at_least_one_pass_fraction_events_with_candidates": 0.484251968503937
+      }
+    }
+  ],
+  "validation": {
+    "all_model_scores_finite": true,
+    "all_probability_sums_within_1e-5": true,
+    "unit_tests": "5 passed",
+    "nano_aod_rewrite_required": false
+  },
+  "limitations": [
+    "The official 2024 JetID was not recomputed because the intermediate ROOT does not retain all NanoAOD jet-composition inputs; stored jet_id_all was used.",
+    "The reported working-point pass fractions are sample observations, not truth-matched tag efficiencies or calibrated mistag measurements.",
+    "No 2024 TROTA scale factor is applied, so the working point must not yet be used as a final calibrated datacard selection.",
+    "Top-tagging scores remain excluded from the primary event categorization."
+  ]
+}

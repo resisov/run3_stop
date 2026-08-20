@@ -12,7 +12,7 @@ import awkward as ak
 import numpy as np
 import uproot
 
-from workflow.reference_trigger_counts import pileup_weight_triplet
+from workflow.reference_trigger_counts import pileup_source, pileup_weight_triplet
 
 
 FILTERS = [
@@ -21,6 +21,12 @@ FILTERS = [
     "Flag_EcalDeadCellTriggerPrimitiveFilter", "Flag_BadPFMuonFilter",
     "Flag_BadPFMuonDzFilter", "Flag_eeBadScFilter", "Flag_ecalBadCalibFilter",
 ]
+
+
+GOLDEN_JSONS = {
+    "2024": Path("analysis/data/lumiMask/Cert_Collisions2024_378981_386951_Golden.json"),
+    "2025": Path("analysis/data/lumiMask/Cert_Collisions2025_391658_398903_Golden.json"),
+}
 
 
 def read_file_list(path: Path) -> list[str]:
@@ -284,11 +290,15 @@ def build_histograms(
     )
     probe_pt_min_gev = float(pt_edges[0])
     probe_pt_max_gev = float(pt_edges[-1])
+    year = str(config.get("year") or "2024")
+    if year not in GOLDEN_JSONS:
+        raise ValueError(f"unsupported golden-JSON year for TnP measurement: {year}")
     if not math.isfinite(tag_pt_min_gev) or tag_pt_min_gev < 5.0:
         raise ValueError(f"invalid tag_pt_min_gev: {tag_pt_min_gev}")
     if tag_trigger_match_required and filter_bits is None:
         raise ValueError("tag trigger-object matching requires tag_trigger_object_filter_bits")
-    golden = _golden_json(repo / "analysis/data/lumiMask/Cert_Collisions2024_378981_386951_Golden.json")
+    golden_json_path = GOLDEN_JSONS[year]
+    golden = _golden_json(repo / golden_json_path)
     samples: dict[str, Any] = {}
     processing: dict[str, Any] = {}
     for sample_name, files in (("data", data_files), ("mc", mc_files)):
@@ -398,7 +408,11 @@ def build_histograms(
                             event_weights = {"nominal": np.ones(int(np.sum(event_mask)), dtype=float)}
                         else:
                             gen_weight = np.asarray(selected_arrays["genWeight"], dtype=float)
-                            pileup = pileup_weight_triplet(repo, np.asarray(selected_arrays["Pileup_nTrueInt"], dtype=float))
+                            pileup = pileup_weight_triplet(
+                                repo,
+                                np.asarray(selected_arrays["Pileup_nTrueInt"], dtype=float),
+                                year=year,
+                            )
                             event_weights = {
                                 variation: gen_weight * pu_weight
                                 for variation, pu_weight in zip(("nominal", "up", "down"), pileup)
@@ -437,6 +451,7 @@ def build_histograms(
     return {
         "schema_version": 1,
         "measurement": config["measurement"],
+        "year": year,
         "status": "candidate_histograms",
         "kind": kind,
         "probe_abseta_edges": eta_edges.tolist(),
@@ -459,7 +474,8 @@ def build_histograms(
         "probe_definition": probe_definition,
         "denominator_selection": config.get("denominator"),
         "target_selection": config.get("target_selection"),
-        "pileup_correction": "analysis/data/PUweight/2024/puWeights.json.gz::Collisions24_BCDEFGHI_goldenJSON",
+        "golden_json": str(golden_json_path),
+        "pileup_correction": pileup_source(year),
         "adoption_blockers": (
             ["tag trigger-object filterBits unresolved"]
             if tag_trigger_match_required and filter_bits is None

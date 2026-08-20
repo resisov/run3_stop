@@ -6,6 +6,7 @@ import gzip
 import hashlib
 import json
 import os
+import shutil
 import tarfile
 import tempfile
 from collections import Counter
@@ -24,11 +25,25 @@ from autonomous_allhad.object_corrections_2024 import (
     validate_payloads,
     validate_shift,
 )
+from autonomous_allhad.trota_resolved_2024 import (
+    SELECTED_TOPRESOLVED_2024_WORKING_POINT,
+    TOPRESOLVED_2024_MODEL_SHA256,
+    TOPRESOLVED_2024_QCD_WORKING_POINTS,
+    TROTA_COMMIT,
+)
 
 
 DEFAULT_REPO = Path("/eos/user/t/taiwoo/run3_stop/decaf")
-DEFAULT_CAMPAIGN = DEFAULT_REPO / "autonomous_allhad/workflow/intermediate_2024_fullselection_v2_20260723"
+DEFAULT_CAMPAIGN = DEFAULT_REPO / "autonomous_allhad/workflow/flat2024_v8"
+DEFAULT_TROTA_MODEL = (
+    DEFAULT_REPO
+    / "autonomous_allhad/workflow/trota_topresolved_2024_inplace_1pct_20260819"
+    / "bundles/model_TopResolved_2024_TROTA2D_ptcut.h5"
+)
+OUTPUT_SCHEMA = "flat_ntuple_shard_v8_float32_fullselection_2024_trota"
 DATA_GROUPS = {"JetMET", "EGamma", "Muon"}
+DEFAULT_REQUEST_MEMORY_MB = 12000
+SIGNAL_REQUEST_MEMORY_MB = 16000
 
 
 def utc_now() -> str:
@@ -368,8 +383,8 @@ def build_worker_bundle(package: Path, destination: Path) -> dict[str, Any]:
     }
 
 
-def wrapper_text(proxy_name: str) -> str:
-    text = f"""#!/usr/bin/env bash
+def wrapper_text(proxy_name: str, trota_model_name: str) -> str:
+    text = """#!/usr/bin/env bash
 set -euo pipefail
 NAME="@D@{{1:?missing name}}"
 SHIFT="@D@{{2:?missing shift}}"
@@ -402,7 +417,7 @@ export MKL_NUM_THREADS=1
 export XRD_NETWORKSTACK=IPv4
 export XRD_REQUESTTIMEOUT=180
 export XRD_REDIRECTLIMIT=10
-export X509_USER_PROXY="@D@WORKDIR/{proxy_name}"
+export X509_USER_PROXY="@D@WORKDIR/__PROXY_NAME__"
 chmod 600 "@D@X509_USER_PROXY"
 tar -xzf py38.tgz
 tar -xzf objectcorr_2024_worker.tgz
@@ -421,13 +436,40 @@ export PYTHONPATH="@D@WORKDIR"
   --shift "@D@SHIFT" --record-workers 4
 test -s out.root
 test -s out.json
+
+# TROTA is part of the main intermediate producer.  It runs on the local
+# scratch ROOT and the combined Events+TROTA file is the only ROOT staged out.
+(
+  set +u
+  source /cvmfs/sft.cern.ch/lcg/views/LCG_104/x86_64-el9-gcc13-opt/setup.sh
+  set -u
+  hash -r
+  export PYTHONPATH="@D@WORKDIR:@D@{{PYTHONPATH:-}}"
+  export PYTHONNOUSERSITE=1
+  export PYTHONDONTWRITEBYTECODE=1
+  export PYTHONUNBUFFERED=1
+  export OMP_NUM_THREADS=2
+  export OPENBLAS_NUM_THREADS=1
+  export TF_NUM_INTRAOP_THREADS=2
+  export TF_NUM_INTEROP_THREADS=1
+  export NUMBA_NUM_THREADS=1
+  python3 -u -m autonomous_allhad.trota_resolved_2024_inplace \
+    --input "@D@WORKDIR/out.root" \
+    --model "@D@WORKDIR/__TROTA_MODEL_NAME__" \
+    --metadata-output "@D@WORKDIR/trota.json" \
+    --target-year 2024 --chunk-events 20000 --batch-size 8192 \
+    --allow-hadd-repair
+)
+test -s trota.json
+ROOT_SHA256="@D@(sha256sum out.root | awk '{{print @D@1}}')"
+export ROOT_SHA256
 ROOT_URL="root://eosuser.cern.ch/@D@DEST"
 META_DEST="@D@{{DEST%.root}}.json"
 META_URL="root://eosuser.cern.ch/@D@META_DEST"
 XRDCOPY="@D@(command -v xrdcp)"
 XRDFS="@D@(command -v xrdfs)"
 export DEST
-"@D@PY" -c 'import json,os,pathlib; p=pathlib.Path("out.json"); d=json.loads(p.read_text()); d["root_file"]=os.environ["DEST"]; p.write_text(json.dumps(d,indent=2,sort_keys=True)+"\\n")'
+"@D@PY" -c 'import json,os,pathlib; p=pathlib.Path("out.json"); t=json.loads(pathlib.Path("trota.json").read_text()); assert t.get("status") == "complete", t; assert t.get("marker", {}).get("status") == "complete", t; d=json.loads(p.read_text()); d["root_file"]=os.environ["DEST"]; d["root_sha256"]=os.environ["ROOT_SHA256"]; d["root_trees"]=["Events","TROTA"]; d["trota_topresolved_2024"]=t; d["integrated_production"]="Events and TROTA completed in one Condor job before stage-out"; p.write_text(json.dumps(d,indent=2,sort_keys=True)+"\\n")'
 staged=0
 for attempt in 1 2 3 4 5; do
   if "@D@XRDCOPY" -f --nopbar --streams 4 out.root "@D@ROOT_URL" &&
@@ -442,7 +484,13 @@ done
 test "@D@staged" -eq 1
 echo "completed @D@NAME @D@SHIFT"
 """
-    return text.replace("@D@", "$")
+    return (
+        text.replace("@D@", "$")
+        .replace("{{", "{")
+        .replace("}}", "}")
+        .replace("__PROXY_NAME__", proxy_name)
+        .replace("__TROTA_MODEL_NAME__", trota_model_name)
+    )
 
 
 def submit_text(
@@ -454,6 +502,7 @@ def submit_text(
     payload_bundle: Path,
     shard_bundle: Path,
     proxy: Path,
+    trota_model: Path,
 ) -> str:
     return f"""universe = vanilla
 executable = {wrapper}
@@ -462,16 +511,17 @@ getenv = False
 should_transfer_files = YES
 when_to_transfer_output = ON_EXIT
 transfer_executable = TRUE
-transfer_input_files = {py38}, {worker_bundle}, {payload_bundle}, {shard_bundle}, {proxy}
+transfer_input_files = {py38}, {worker_bundle}, {payload_bundle}, {shard_bundle}, {proxy}, {trota_model}
 transfer_output_files = ""
 output = {logs}/$(name)_$(shift).out
 error = {logs}/$(name)_$(shift).err
 log = {logs}/campaign.log
 request_cpus = 4
-request_memory = 12000MB
+request_memory = $(memory_mb)MB
 request_disk = 14000MB
+requirements = (OpSysAndVer =?= "AlmaLinux9")
 +JobFlavour = "workday"
-queue name,shift,shard_name,root_out from {arguments}
+queue name,shift,shard_name,root_out,memory_mb from {arguments}
 """
 
 
@@ -481,6 +531,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--campaign", type=Path, default=DEFAULT_CAMPAIGN)
     parser.add_argument("--records-json", type=Path)
     parser.add_argument("--worker-package", type=Path)
+    parser.add_argument("--trota-model", type=Path, default=DEFAULT_TROTA_MODEL)
     parser.add_argument("--data-shard-size", type=int, default=2)
     parser.add_argument("--mc-shard-size", type=int, default=8)
     parser.add_argument("--signal-shard-size", type=int, default=2)
@@ -504,6 +555,16 @@ def main(argv: list[str] | None = None) -> int:
         require_eos(path, label)
         if not path.is_file():
             raise RuntimeError(f"missing {label}: {path}")
+    trota_model_source = args.trota_model.absolute()
+    require_eos(trota_model_source, "TROTA model")
+    if not trota_model_source.is_file():
+        raise RuntimeError(f"missing TROTA model: {trota_model_source}")
+    trota_model_sha256 = sha256(trota_model_source)
+    if trota_model_sha256 != TOPRESOLVED_2024_MODEL_SHA256:
+        raise RuntimeError(
+            f"unexpected TROTA model hash {trota_model_sha256}; "
+            f"expected {TOPRESOLVED_2024_MODEL_SHA256}"
+        )
 
     payload_validation = validate_payloads(repo)
     if payload_validation["status"] != "valid":
@@ -542,6 +603,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     worker_bundle_path = campaign / "bundles/objectcorr_2024_worker.tgz"
     payload_bundle_path = campaign / "bundles/objectcorr_2024_payloads.tgz"
+    trota_model_path = campaign / "bundles/model_TopResolved_2024_TROTA2D_ptcut.h5"
     worker_package = (
         args.worker_package.absolute()
         if args.worker_package
@@ -549,9 +611,13 @@ def main(argv: list[str] | None = None) -> int:
     )
     worker_bundle = build_worker_bundle(worker_package, worker_bundle_path)
     payload_bundle = build_payload_bundle(repo, payload_bundle_path, btag_path)
+    if trota_model_source != trota_model_path:
+        shutil.copy2(trota_model_source, trota_model_path)
+    if sha256(trota_model_path) != TOPRESOLVED_2024_MODEL_SHA256:
+        raise RuntimeError("bundled TROTA model failed SHA256 validation")
 
     wrapper = campaign / "condor/run_intermediate_2024.sh"
-    wrapper.write_text(wrapper_text(proxy.name))
+    wrapper.write_text(wrapper_text(proxy.name, trota_model_path.name))
     wrapper.chmod(0o755)
     rows = []
     for shift in shifts:
@@ -560,7 +626,18 @@ def main(argv: list[str] | None = None) -> int:
         for shard in shards:
             if shift != "nominal" and shard["group"] == "data":
                 continue
-            rows.append(" ".join((shard["name"], shift, shard["basename"], str(output_dir / f"{shard['name']}.root"))))
+            memory_mb = (
+                SIGNAL_REQUEST_MEMORY_MB
+                if shard["group"] == "signal"
+                else DEFAULT_REQUEST_MEMORY_MB
+            )
+            rows.append(" ".join((
+                shard["name"],
+                shift,
+                shard["basename"],
+                str(output_dir / f"{shard['name']}.root"),
+                str(memory_mb),
+            )))
     arguments = campaign / "condor/arguments.txt"
     arguments.write_text("\n".join(rows) + "\n")
     submit = campaign / "condor/submit.sub"
@@ -574,11 +651,13 @@ def main(argv: list[str] | None = None) -> int:
             payload_bundle_path,
             Path(shard_bundle["path"]),
             proxy,
+            trota_model_path,
         )
     )
 
     campaign_manifest = {
-        "schema_version": "intermediate_2024_fullselection_campaign_v7_float32",
+        "schema_version": "intermediate_2024_fullselection_campaign_v8_trota",
+        "output_schema_version": OUTPUT_SCHEMA,
         "status": "prepared_not_submitted",
         "created_at": utc_now(),
         "year": 2024,
@@ -605,6 +684,30 @@ def main(argv: list[str] | None = None) -> int:
         "payload_bundle": payload_bundle,
         "shard_bundle": shard_bundle,
         "python_bundle": {"path": str(py38), "size": py38.stat().st_size, "sha256": sha256(py38)},
+        "trota_topresolved_2024": {
+            "integration": "same Condor job, after Events creation and before EOS stage-out",
+            "tree": "TROTA",
+            "completion_marker": "TROTA_metadata",
+            "trota_commit": TROTA_COMMIT,
+            "model_source": str(trota_model_source),
+            "model_bundle": str(trota_model_path),
+            "model_sha256": trota_model_sha256,
+            "inference_source": {
+                "base": {
+                    "path": str(worker_package / "trota_resolved_2024.py"),
+                    "sha256": sha256(worker_package / "trota_resolved_2024.py"),
+                },
+                "inplace": {
+                    "path": str(worker_package / "trota_resolved_2024_inplace.py"),
+                    "sha256": sha256(worker_package / "trota_resolved_2024_inplace.py"),
+                },
+            },
+            "working_point": SELECTED_TOPRESOLVED_2024_WORKING_POINT,
+            "threshold": TOPRESOLVED_2024_QCD_WORKING_POINTS[
+                SELECTED_TOPRESOLVED_2024_WORKING_POINT
+            ],
+            "separate_campaign_required": False,
+        },
         "correction_manifest": correction_manifest(),
         "dy_recoil_selection": {
             "DY2E": "OS medium electrons, pT(ll)>200, on-Z, electron-cleaned AK4/AK8, opening angle against uT phi, uT>250 GeV",
@@ -630,8 +733,18 @@ def main(argv: list[str] | None = None) -> int:
             "afs_worker_execution": False,
             "literal_tmp_paths": False,
             "input_access": "NanoAOD through XRootD",
-            "stageout": "xrdcp to EOS with xrdfs verification",
+            "stageout": "only the combined Events+TROTA ROOT is xrdcp'ed to EOS after deep TROTA validation",
             "analysis_directory_modified": False,
+        },
+        "resource_requests": {
+            "data_and_background_memory_mb": DEFAULT_REQUEST_MEMORY_MB,
+            "fastsim_signal_memory_mb": SIGNAL_REQUEST_MEMORY_MB,
+            "fastsim_signal_rationale": (
+                "integrated one-file pilot peaked near 10 GB RSS; "
+                "signal shards are restricted to one input file"
+            ),
+            "cpus": 4,
+            "disk_mb": 14000,
         },
         "submission": {
             "submit_file": str(submit),
@@ -674,6 +787,8 @@ def main(argv: list[str] | None = None) -> int:
         "- DY2E/DY2M: OS/on-Z, pT(ll)>200, channel-specific cleaned AK4/AK8 and uT direction\n"
         "- Low-dM: 42 Nsv-inclusive category branches; ISR-subjet b veto and mTb<175 are diagnostic-only; b-jet pT threshold fixed at 30 GeV\n"
         "- FastSim: all 61 recorded Run-3 signal NanoAOD files included; FullSim anchors remain excluded\n"
+        "- TROTA: inferred inside the same main job; only a validated Events+TROTA ROOT is staged out\n"
+        f"- TROTA model SHA256: {trota_model_sha256}\n"
         "- Worker runtime: transferred tgz in Condor scratch; XRootD input and EOS xrdcp stage-out\n"
         "- analysis/ modified: no\n"
         "- Submission performed: no\n"

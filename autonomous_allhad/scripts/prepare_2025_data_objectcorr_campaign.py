@@ -6,7 +6,9 @@ import gzip
 import hashlib
 import json
 import os
+import shutil
 import tarfile
+import tempfile
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
@@ -15,6 +17,7 @@ from typing import Any
 from coffea.util import load as coffea_load
 
 from autonomous_allhad.object_corrections_2025 import (
+    DEFERRED_CENTRAL_SCALE_FACTORS,
     EXTERNAL_FINAL_WEIGHT_DEPENDENCIES,
     PAYLOADS,
     SHAPE_VARIATIONS,
@@ -23,11 +26,26 @@ from autonomous_allhad.object_corrections_2025 import (
     validate_payloads,
     validate_shift,
 )
+from autonomous_allhad.trota_resolved_2024 import (
+    SELECTED_TOPRESOLVED_2024_WORKING_POINT,
+    TOPRESOLVED_2024_MODEL_SHA256,
+    TOPRESOLVED_2024_QCD_WORKING_POINTS,
+    TROTA_COMMIT,
+)
 
 
 DEFAULT_REPO = Path("/eos/user/t/taiwoo/run3_stop/decaf")
-DEFAULT_CAMPAIGN = DEFAULT_REPO / "autonomous_allhad/workflow/intermediate_2025_data_objectcorr_v1_20260721"
+DEFAULT_CAMPAIGN = DEFAULT_REPO / "autonomous_allhad/workflow/flat2025_v8"
+DEFAULT_TROTA_MODEL = (
+    DEFAULT_REPO
+    / "autonomous_allhad/workflow/trota_topresolved_2024_inplace_1pct_20260819"
+    / "bundles/model_TopResolved_2024_TROTA2D_ptcut.h5"
+)
+OUTPUT_SCHEMA = "flat_ntuple_shard_v8_float32_fullselection_2025_trota"
 DATA_GROUPS = {"JetMET", "EGamma", "Muon"}
+DEFAULT_REQUEST_MEMORY_MB = 12000
+SIGNAL_REQUEST_MEMORY_MB = 16000
+EOS_SCHEDD = "bigbird24.cern.ch"
 
 
 def utc_now() -> str:
@@ -161,41 +179,144 @@ def input_records(repo: Path, bad_paths: set[str]) -> tuple[list[dict[str, Any]]
     }
 
 
+def frozen_input_records(path: Path, bad_paths: set[str]) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    payload = json.loads(path.read_text())
+    raw_records = payload.get("records", []) if isinstance(payload, dict) else []
+    if not isinstance(raw_records, list) or not raw_records:
+        raise RuntimeError(f"frozen input manifest has no records: {path}")
+    required = {
+        "sample_name", "dataset", "process_group", "year", "file_path",
+        "is_data", "is_background", "is_signal", "sumw_source",
+    }
+    records = []
+    excluded_bad = []
+    seen = set()
+    for index, item in enumerate(raw_records):
+        if not isinstance(item, dict):
+            raise RuntimeError(f"frozen input record {index} is not an object")
+        missing = sorted(required - set(item))
+        if missing:
+            raise RuntimeError(f"frozen input record {index} missing fields: {missing}")
+        record = dict(item)
+        record["file_path"] = normalize_lfn(str(record["file_path"]))
+        if record["file_path"] in bad_paths:
+            excluded_bad.append({
+                "dataset": str(record["dataset"]),
+                "file_path": record["file_path"],
+            })
+            continue
+        if record["file_path"] in seen:
+            raise RuntimeError(f"duplicate frozen input file: {record['file_path']}")
+        seen.add(record["file_path"])
+        flags = tuple(bool(record[name]) for name in ("is_data", "is_background", "is_signal"))
+        if sum(flags) != 1:
+            raise RuntimeError(f"frozen input record {index} has invalid role flags: {flags}")
+        record.setdefault("file_index", index)
+        record.setdefault("xsec_pb", None)
+        records.append(record)
+    return records, {
+        "source": "frozen_input_manifest",
+        "path": str(path),
+        "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+        "schema_version": payload.get("schema_version"),
+        "records": len(records),
+        "data_records": sum(bool(item["is_data"]) for item in records),
+        "background_records": sum(bool(item["is_background"]) for item in records),
+        "fastsim_signal_records": sum(bool(item["is_signal"]) for item in records),
+        "excluded_bad_files": excluded_bad,
+        "process_groups": dict(sorted(Counter(str(item["process_group"]) for item in records).items())),
+        "datasets": len({str(item["dataset"]) for item in records}),
+    }
+
+
+def combined_2025_records(
+    repo: Path,
+    summer24_path: Path,
+    bad_paths: set[str],
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    data_records, data_summary = input_records(repo, bad_paths)
+    if data_summary["missing_metadata"]:
+        raise RuntimeError(f"configured 2025 data datasets missing metadata: {len(data_summary['missing_metadata'])}")
+    if data_summary["excluded_unclassified_datasets"]:
+        raise RuntimeError(f"unclassified 2025 data datasets: {len(data_summary['excluded_unclassified_datasets'])}")
+    if any(not item["is_data"] for item in data_records):
+        raise RuntimeError("datasets_2025_data.txt unexpectedly contains MC records")
+
+    summer24_records, summer24_summary = frozen_input_records(summer24_path, bad_paths)
+    mc_records = []
+    for item in summer24_records:
+        if item["is_data"]:
+            continue
+        record = dict(item)
+        record["year"] = "2025"
+        mc_records.append(record)
+    records = data_records + mc_records
+    paths = [str(item["file_path"]) for item in records]
+    if len(paths) != len(set(paths)):
+        raise RuntimeError("combined 2025 input manifest contains duplicate files")
+    return records, {
+        "source": "2025_prompt_data_plus_frozen_summer24_mc",
+        "data": data_summary,
+        "summer24": summer24_summary,
+        "records": len(records),
+        "data_records": sum(bool(item["is_data"]) for item in records),
+        "background_records": sum(bool(item["is_background"]) for item in records),
+        "fastsim_signal_records": sum(bool(item["is_signal"]) for item in records),
+        "process_groups": dict(sorted(Counter(str(item["process_group"]) for item in records).items())),
+        "datasets": len({str(item["dataset"]) for item in records}),
+    }
+
+
 def record_digest(records: list[dict[str, Any]]) -> str:
     return hashlib.sha256(json.dumps(records, sort_keys=True).encode()).hexdigest()[:16]
 
 
-def make_shards(campaign: Path, records: list[dict[str, Any]], data_size: int, mc_size: int) -> list[dict[str, Any]]:
+def make_shards(
+    campaign: Path,
+    records: list[dict[str, Any]],
+    data_size: int,
+    mc_size: int,
+    signal_size: int,
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     shards = []
-    shard_dir = campaign / "shards"
-    shard_dir.mkdir(parents=True, exist_ok=True)
+    bundle_path = campaign / "bundles/shards.tgz"
     groups = (
         ("data", [item for item in records if item["is_data"]], data_size),
         ("mc", [item for item in records if item["is_background"]], mc_size),
+        ("signal", [item for item in records if item["is_signal"]], signal_size),
     )
-    for group_name, selected, size in groups:
-        for index, start in enumerate(range(0, len(selected), size)):
-            chunk = selected[start : start + size]
-            name = f"{group_name}_shard_{index:05d}"
-            path = shard_dir / f"{name}.json"
-            digest = record_digest(chunk)
-            atomic_json(path, {
-                "schema_version": "full_production_shard_spec_v3_objectcorr_2025_data",
-                "shard_id": name,
-                "record_digest": digest,
-                "record_group": group_name,
-                "records_per_shard": size,
-                "records": chunk,
-            })
-            shards.append({
-                "name": name,
-                "group": group_name,
-                "path": str(path),
-                "basename": path.name,
-                "records": len(chunk),
-                "record_digest": digest,
-            })
-    return shards
+    with tempfile.TemporaryDirectory(prefix="flat2025_shards_") as temporary:
+        shard_dir = Path(temporary) / "shards"
+        shard_dir.mkdir(parents=True)
+        for group_name, selected, size in groups:
+            for index, start in enumerate(range(0, len(selected), size)):
+                chunk = selected[start : start + size]
+                name = f"{group_name}_shard_{index:05d}"
+                path = shard_dir / f"{name}.json"
+                digest = record_digest(chunk)
+                atomic_json(path, {
+                    "schema_version": "full_production_shard_spec_v7_float32_2025",
+                    "shard_id": name,
+                    "record_digest": digest,
+                    "record_group": group_name,
+                    "records_per_shard": size,
+                    "records": chunk,
+                })
+                shards.append({
+                    "name": name,
+                    "group": group_name,
+                    "basename": path.name,
+                    "records": len(chunk),
+                    "record_digest": digest,
+                })
+        with tarfile.open(bundle_path, "w:gz") as archive:
+            archive.add(shard_dir, arcname="shards", recursive=True)
+    return shards, {
+        "path": str(bundle_path),
+        "size": bundle_path.stat().st_size,
+        "sha256": sha256(bundle_path),
+        "files": len(shards),
+    }
 
 
 def validate_btag_efficiency(path: Path) -> dict[str, Any]:
@@ -245,7 +366,7 @@ def build_payload_bundle(repo: Path, destination: Path) -> dict[str, Any]:
         for payload in PAYLOADS:
             archive.add(payload.source, arcname=str(payload.relative), recursive=False)
             if payload.filename in {"jetid.json.gz", "jetvetomaps.json.gz"}:
-                archive.add(payload.source, arcname=f"analysis/data/JMESF/2024/{payload.filename}", recursive=False)
+                archive.add(payload.source, arcname=f"analysis/data/JMESF/2025/{payload.filename}", recursive=False)
         lumimask = repo / "analysis/data/lumiMask/Cert_Collisions2025_391658_398903_Golden.json"
         archive.add(lumimask, arcname="analysis/data/lumiMask/Cert_Collisions2025_391658_398903_Golden.json", recursive=False)
     return {"path": str(destination), "size": destination.stat().st_size, "sha256": sha256(destination)}
@@ -266,8 +387,8 @@ def build_worker_bundle(repo: Path, destination: Path) -> dict[str, Any]:
     }
 
 
-def wrapper_text(proxy_name: str) -> str:
-    text = f"""#!/usr/bin/env bash
+def wrapper_text(proxy_name: str, trota_model_name: str) -> str:
+    text = """#!/usr/bin/env bash
 set -euo pipefail
 NAME="@D@{{1:?missing name}}"
 SHIFT="@D@{{2:?missing shift}}"
@@ -300,11 +421,12 @@ export MKL_NUM_THREADS=1
 export XRD_NETWORKSTACK=IPv4
 export XRD_REQUESTTIMEOUT=180
 export XRD_REDIRECTLIMIT=10
-export X509_USER_PROXY="@D@WORKDIR/{proxy_name}"
+export X509_USER_PROXY="@D@WORKDIR/__PROXY_NAME__"
 chmod 600 "@D@X509_USER_PROXY"
 tar -xzf py38.tgz
 tar -xzf objectcorr_2025_data_worker.tgz
 tar -xzf objectcorr_2025_data_payloads.tgz
+tar -xzf shards.tgz
 PY="@D@WORKDIR/bin/python3"
 [ -x "@D@PY" ] || PY="@D@WORKDIR/bin/python"
 [ -x "@D@PY" ] || PY="@D@WORKDIR/py38/bin/python"
@@ -313,18 +435,45 @@ export PATH="@D@(dirname "@D@PY"):@D@PATH"
 export LD_LIBRARY_PATH="@D@WORKDIR/lib:@D@WORKDIR/py38/lib:@D@{{LD_LIBRARY_PATH:-}}"
 export PYTHONPATH="@D@WORKDIR"
 "@D@PY" -u -m autonomous_allhad.intermediate_2025_data_worker \
-  --repo "@D@WORKDIR" --shard "@D@WORKDIR/@D@SHARD" \
+  --repo "@D@WORKDIR" --shard "@D@WORKDIR/shards/@D@SHARD" \
   --output "@D@WORKDIR/out.root" --metadata-output "@D@WORKDIR/out.json" \
   --shift "@D@SHIFT" --record-workers 4
 test -s out.root
 test -s out.json
+
+# TROTA is part of the main intermediate producer.  It runs on the local
+# scratch ROOT and the combined Events+TROTA file is the only ROOT staged out.
+(
+  set +u
+  source /cvmfs/sft.cern.ch/lcg/views/LCG_104/x86_64-el9-gcc13-opt/setup.sh
+  set -u
+  hash -r
+  export PYTHONPATH="@D@WORKDIR:@D@{{PYTHONPATH:-}}"
+  export PYTHONNOUSERSITE=1
+  export PYTHONDONTWRITEBYTECODE=1
+  export PYTHONUNBUFFERED=1
+  export OMP_NUM_THREADS=2
+  export OPENBLAS_NUM_THREADS=1
+  export TF_NUM_INTRAOP_THREADS=2
+  export TF_NUM_INTEROP_THREADS=1
+  export NUMBA_NUM_THREADS=1
+  python3 -u -m autonomous_allhad.trota_resolved_2024_inplace \
+    --input "@D@WORKDIR/out.root" \
+    --model "@D@WORKDIR/__TROTA_MODEL_NAME__" \
+    --metadata-output "@D@WORKDIR/trota.json" \
+    --target-year 2025 --chunk-events 20000 --batch-size 8192 \
+    --allow-hadd-repair
+)
+test -s trota.json
+ROOT_SHA256="@D@(sha256sum out.root | awk '{{print @D@1}}')"
+export ROOT_SHA256
 ROOT_URL="root://eosuser.cern.ch/@D@DEST"
 META_DEST="@D@{{DEST%.root}}.json"
 META_URL="root://eosuser.cern.ch/@D@META_DEST"
 XRDCOPY="@D@(command -v xrdcp)"
 XRDFS="@D@(command -v xrdfs)"
 export DEST
-"@D@PY" -c 'import json,os,pathlib; p=pathlib.Path("out.json"); d=json.loads(p.read_text()); d["root_file"]=os.environ["DEST"]; p.write_text(json.dumps(d,indent=2,sort_keys=True)+"\\n")'
+"@D@PY" -c 'import json,os,pathlib; p=pathlib.Path("out.json"); t=json.loads(pathlib.Path("trota.json").read_text()); assert t.get("status") == "complete", t; assert t.get("marker", {}).get("status") == "complete", t; assert t.get("marker", {}).get("application_year") == 2025, t; d=json.loads(p.read_text()); d["root_file"]=os.environ["DEST"]; d["root_sha256"]=os.environ["ROOT_SHA256"]; d["root_trees"]=["Events","TROTA"]; d["trota_topresolved_2025"]=t; d["integrated_production"]="Events and TROTA completed in one Condor job before stage-out"; p.write_text(json.dumps(d,indent=2,sort_keys=True)+"\\n")'
 staged=0
 for attempt in 1 2 3 4 5; do
   if "@D@XRDCOPY" -f --nopbar --streams 4 out.root "@D@ROOT_URL" &&
@@ -339,10 +488,26 @@ done
 test "@D@staged" -eq 1
 echo "completed @D@NAME @D@SHIFT"
 """
-    return text.replace("@D@", "$")
+    return (
+        text.replace("@D@", "$")
+        .replace("{{", "{")
+        .replace("}}", "}")
+        .replace("__PROXY_NAME__", proxy_name)
+        .replace("__TROTA_MODEL_NAME__", trota_model_name)
+    )
 
 
-def submit_text(wrapper: Path, arguments: Path, logs: Path, py38: Path, worker_bundle: Path, payload_bundle: Path, proxy: Path) -> str:
+def submit_text(
+    wrapper: Path,
+    arguments: Path,
+    logs: Path,
+    py38: Path,
+    worker_bundle: Path,
+    payload_bundle: Path,
+    shard_bundle: Path,
+    proxy: Path,
+    trota_model: Path,
+) -> str:
     return f"""universe = vanilla
 executable = {wrapper}
 arguments = $(name) $(shift) $(shard_name) $(root_out)
@@ -350,33 +515,40 @@ getenv = False
 should_transfer_files = YES
 when_to_transfer_output = ON_EXIT
 transfer_executable = TRUE
-transfer_input_files = {py38}, {worker_bundle}, {payload_bundle}, {proxy}, $(shard)
+transfer_input_files = {py38}, {worker_bundle}, {payload_bundle}, {shard_bundle}, {proxy}, {trota_model}
 transfer_output_files = ""
 output = {logs}/$(name)_$(shift).out
 error = {logs}/$(name)_$(shift).err
 log = {logs}/campaign.log
 request_cpus = 4
-request_memory = 12000MB
+request_memory = $(memory_mb)MB
 request_disk = 14000MB
+requirements = (OpSysAndVer =?= "AlmaLinux9")
 +JobFlavour = "workday"
-queue name,shift,shard,shard_name,root_out from {arguments}
+queue name,shift,shard_name,root_out,memory_mb from {arguments}
 """
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Prepare the corrected 2025 data intermediate ROOT campaign.")
+    parser = argparse.ArgumentParser(description="Prepare the corrected 2025 full-selection intermediate ROOT campaign.")
     parser.add_argument("--repo", type=Path, default=DEFAULT_REPO)
     parser.add_argument("--campaign", type=Path, default=DEFAULT_CAMPAIGN)
-    parser.add_argument("--data-shard-size", type=int, default=5)
-    parser.add_argument("--mc-shard-size", type=int, default=25)
+    parser.add_argument("--records-json", type=Path)
+    parser.add_argument("--summer24-records-json", type=Path)
+    parser.add_argument("--trota-model", type=Path, default=DEFAULT_TROTA_MODEL)
+    parser.add_argument("--data-shard-size", type=int, default=10)
+    parser.add_argument("--mc-shard-size", type=int, default=10)
+    parser.add_argument("--signal-shard-size", type=int, default=1)
     parser.add_argument("--shifts", nargs="+", default=["nominal"])
     args = parser.parse_args(argv)
     repo = args.repo.absolute()
     campaign = args.campaign.absolute()
     require_eos(repo, "repo")
     require_eos(campaign, "campaign")
-    if args.data_shard_size < 1 or args.mc_shard_size < 1:
+    if args.data_shard_size < 1 or args.mc_shard_size < 1 or args.signal_shard_size < 1:
         raise RuntimeError("shard sizes must be positive")
+    if args.records_json and args.summer24_records_json:
+        raise RuntimeError("use only one of --records-json or --summer24-records-json")
     shifts = [validate_shift(item) for item in args.shifts]
     if len(shifts) != len(set(shifts)):
         raise RuntimeError("duplicate shifts requested")
@@ -388,28 +560,69 @@ def main(argv: list[str] | None = None) -> int:
         require_eos(path, label)
         if not path.is_file():
             raise RuntimeError(f"missing {label}: {path}")
+    trota_model_source = args.trota_model.absolute()
+    require_eos(trota_model_source, "TROTA model")
+    if not trota_model_source.is_file():
+        raise RuntimeError(f"missing TROTA model: {trota_model_source}")
+    trota_model_sha256 = sha256(trota_model_source)
+    if trota_model_sha256 != TOPRESOLVED_2024_MODEL_SHA256:
+        raise RuntimeError(
+            f"unexpected TROTA model hash {trota_model_sha256}; "
+            f"expected {TOPRESOLVED_2024_MODEL_SHA256}"
+        )
 
     payload_validation = validate_payloads(repo)
     if payload_validation["status"] != "valid":
         raise RuntimeError("official payload validation failed: " + "; ".join(payload_validation["errors"]))
-    records, input_summary = input_records(repo, bad_file_paths(bad_path))
-    if input_summary["missing_metadata"]:
-        raise RuntimeError(f"configured datasets missing metadata: {len(input_summary['missing_metadata'])}")
-    if input_summary["excluded_unclassified_datasets"]:
-        raise RuntimeError(f"unclassified configured datasets: {len(input_summary['excluded_unclassified_datasets'])}")
-    btag_validation = {"status": "not_applicable_data_only", "reason": "2025 campaign prepares data only; 2024 MC b-tag efficiencies are reused downstream with 2024 MC."}
+    bad_paths = bad_file_paths(bad_path)
+    if args.records_json:
+        records_path = args.records_json.absolute()
+        require_eos(records_path, "frozen input manifest")
+        records, input_summary = frozen_input_records(records_path, bad_paths)
+    elif args.summer24_records_json:
+        summer24_path = args.summer24_records_json.absolute()
+        require_eos(summer24_path, "Summer24 frozen input manifest")
+        records, input_summary = combined_2025_records(repo, summer24_path, bad_paths)
+    else:
+        records, input_summary = input_records(repo, bad_paths)
+        if input_summary["missing_metadata"]:
+            raise RuntimeError(f"configured datasets missing metadata: {len(input_summary['missing_metadata'])}")
+        if input_summary["excluded_unclassified_datasets"]:
+            raise RuntimeError(f"unclassified configured datasets: {len(input_summary['excluded_unclassified_datasets'])}")
+    btag_validation = {
+        "status": "deferred_to_histogram_stage",
+        "reason": "The intermediate ROOT preserves jet pT/eta/flavour/tag decisions; btageff2025.merged is measured after the frozen 2025 MC input list is available.",
+        "official_sf_payload": "BTV/btagging.json.gz",
+    }
 
     campaign.mkdir(parents=True, exist_ok=True)
     for name in ("bundles", "condor", "logs", "outputs", "reports"):
         (campaign / name).mkdir(parents=True, exist_ok=True)
-    shards = make_shards(campaign, records, args.data_shard_size, args.mc_shard_size)
+    atomic_json(campaign / "inputs.json", {
+        "schema_version": "flat2025_frozen_inputs_v1",
+        "created_at": utc_now(),
+        "summary": input_summary,
+        "records": records,
+    })
+    shards, shard_bundle = make_shards(
+        campaign,
+        records,
+        args.data_shard_size,
+        args.mc_shard_size,
+        args.signal_shard_size,
+    )
     worker_bundle_path = campaign / "bundles/objectcorr_2025_data_worker.tgz"
     payload_bundle_path = campaign / "bundles/objectcorr_2025_data_payloads.tgz"
+    trota_model_path = campaign / "bundles/model_TopResolved_2024_TROTA2D_ptcut.h5"
     worker_bundle = build_worker_bundle(repo, worker_bundle_path)
     payload_bundle = build_payload_bundle(repo, payload_bundle_path)
+    if trota_model_source != trota_model_path:
+        shutil.copy2(trota_model_source, trota_model_path)
+    if sha256(trota_model_path) != TOPRESOLVED_2024_MODEL_SHA256:
+        raise RuntimeError("bundled TROTA model failed SHA256 validation")
 
     wrapper = campaign / "condor/run_intermediate_2025_data.sh"
-    wrapper.write_text(wrapper_text(proxy.name))
+    wrapper.write_text(wrapper_text(proxy.name, trota_model_path.name))
     wrapper.chmod(0o755)
     rows = []
     for shift in shifts:
@@ -418,14 +631,36 @@ def main(argv: list[str] | None = None) -> int:
         for shard in shards:
             if shift != "nominal" and shard["group"] == "data":
                 continue
-            rows.append(" ".join((shard["name"], shift, shard["path"], shard["basename"], str(output_dir / f"{shard['name']}.root"))))
+            memory_mb = (
+                SIGNAL_REQUEST_MEMORY_MB
+                if shard["group"] == "signal"
+                else DEFAULT_REQUEST_MEMORY_MB
+            )
+            rows.append(" ".join((
+                shard["name"],
+                shift,
+                shard["basename"],
+                str(output_dir / f"{shard['name']}.root"),
+                str(memory_mb),
+            )))
     arguments = campaign / "condor/arguments.txt"
     arguments.write_text("\n".join(rows) + "\n")
     submit = campaign / "condor/submit_2025_data.sub"
-    submit.write_text(submit_text(wrapper, arguments, campaign / "logs", py38, worker_bundle_path, payload_bundle_path, proxy))
+    submit.write_text(submit_text(
+        wrapper,
+        arguments,
+        campaign / "logs",
+        py38,
+        worker_bundle_path,
+        payload_bundle_path,
+        Path(shard_bundle["path"]),
+        proxy,
+        trota_model_path,
+    ))
 
     campaign_manifest = {
-        "schema_version": "intermediate_2025_data_objectcorr_campaign_v1",
+        "schema_version": "intermediate_2025_fullselection_campaign_v8_trota",
+        "output_schema_version": OUTPUT_SCHEMA,
         "status": "prepared_not_submitted",
         "created_at": utc_now(),
         "year": 2025,
@@ -438,8 +673,10 @@ def main(argv: list[str] | None = None) -> int:
             "total": len(shards),
             "data": sum(item["group"] == "data" for item in shards),
             "background": sum(item["group"] == "mc" for item in shards),
+            "fastsim_signal": sum(item["group"] == "signal" for item in shards),
             "data_files_per_shard": args.data_shard_size,
             "mc_files_per_shard": args.mc_shard_size,
+            "signal_files_per_shard": args.signal_shard_size,
         },
         "jobs": len(rows),
         "requested_shifts": shifts,
@@ -448,7 +685,46 @@ def main(argv: list[str] | None = None) -> int:
         "btag_efficiency": btag_validation,
         "worker_bundle": worker_bundle,
         "payload_bundle": payload_bundle,
+        "shard_bundle": shard_bundle,
         "python_bundle": {"path": str(py38), "size": py38.stat().st_size, "sha256": sha256(py38)},
+        "trota_topresolved_2025": {
+            "integration": "same Condor job, after Events creation and before EOS stage-out",
+            "tree": "TROTA",
+            "completion_marker": "TROTA_metadata",
+            "application_year": 2025,
+            "model_release_year": 2024,
+            "trota_commit": TROTA_COMMIT,
+            "model_source": str(trota_model_source),
+            "model_bundle": str(trota_model_path),
+            "model_sha256": trota_model_sha256,
+            "inference_source": {
+                "base": {
+                    "path": str(
+                        repo
+                        / "autonomous_allhad/autonomous_allhad/trota_resolved_2024.py"
+                    ),
+                    "sha256": sha256(
+                        repo
+                        / "autonomous_allhad/autonomous_allhad/trota_resolved_2024.py"
+                    ),
+                },
+                "inplace": {
+                    "path": str(
+                        repo
+                        / "autonomous_allhad/autonomous_allhad/trota_resolved_2024_inplace.py"
+                    ),
+                    "sha256": sha256(
+                        repo
+                        / "autonomous_allhad/autonomous_allhad/trota_resolved_2024_inplace.py"
+                    ),
+                },
+            },
+            "working_point": SELECTED_TOPRESOLVED_2024_WORKING_POINT,
+            "threshold": TOPRESOLVED_2024_QCD_WORKING_POINTS[
+                SELECTED_TOPRESOLVED_2024_WORKING_POINT
+            ],
+            "separate_campaign_required": False,
+        },
         "correction_manifest": correction_manifest(),
         "dy_recoil_selection": {
             "DY2E": "electron-cleaned AK4 jets, opening angle against uT phi, uT>250 GeV",
@@ -460,16 +736,32 @@ def main(argv: list[str] | None = None) -> int:
             "afs_worker_execution": False,
             "literal_tmp_paths": False,
             "input_access": "NanoAOD through XRootD",
-            "stageout": "xrdcp to EOS with xrdfs verification",
+            "stageout": "only the combined Events+TROTA ROOT is xrdcp'ed to EOS after deep TROTA validation",
             "analysis_directory_modified": False,
         },
+        "resource_requests": {
+            "data_and_background_memory_mb": DEFAULT_REQUEST_MEMORY_MB,
+            "fastsim_signal_memory_mb": SIGNAL_REQUEST_MEMORY_MB,
+            "cpus": 4,
+            "disk_mb": 14000,
+            "os": "AlmaLinux9",
+        },
         "submission": {
+            "schedd": EOS_SCHEDD,
             "submit_file": str(submit),
             "arguments": str(arguments),
-            "command": f"condor_submit {submit}",
+            "command": f"condor_submit -name {EOS_SCHEDD} {submit}",
         },
         "intermediate_root_ready": True,
+        "intermediate_storage": {
+            "compression": "uproot default ZLIB(1)",
+            "scalar_float32": "all floating-point event features except gen_weight",
+            "scalar_float64": ["gen_weight"],
+            "vector_float32": "all floating-point object vectors",
+            "selection_policy": "unchanged feature_flat_preselection",
+        },
         "nominal_kinematic_corrections": correction_manifest()["nominal_kinematic_corrections"],
+        "deferred_central_scale_factors": DEFERRED_CENTRAL_SCALE_FACTORS,
         "final_histogram_weight_gate": {
             "ready": False,
             "reason": "Analysis-specific external calibration payloads were not fabricated.",
@@ -479,12 +771,16 @@ def main(argv: list[str] | None = None) -> int:
     atomic_json(campaign / "manifest.json", campaign_manifest)
     atomic_json(campaign / "corrections_2025.json", correction_manifest())
     report = (
-        "# 2025 Intermediate ROOT Campaign\n\n"
+        "# 2025 Full-selection Intermediate ROOT Campaign\n\n"
         f"- Status: {campaign_manifest['status']}\n"
         f"- Input records: {input_summary['records']}\n"
+        f"- FastSim signal records: {input_summary.get('fastsim_signal_records', 0)}\n"
         f"- Shards: {len(shards)}\n"
         f"- Jobs prepared: {len(rows)}\n"
         f"- Requested shifts: {', '.join(shifts)}\n"
+        f"- Output schema: {OUTPUT_SCHEMA}\n"
+        f"- TROTA model SHA256: {trota_model_sha256}\n"
+        "- TROTA: target year 2025, integrated into the main job before EOS stage-out\n"
         f"- JEC/JER: {correction_manifest()['jec_tag']} / {correction_manifest()['jer_tag']}\n"
         "- EGM: data scale and deterministic MC scale/smearing for electrons and photons\n"
         "- Muon: official MuonScaRe scale and MC resolution correction\n"

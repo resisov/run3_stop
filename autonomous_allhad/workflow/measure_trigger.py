@@ -9,12 +9,16 @@ draw the final trigger efficiencies and scale factors.
 from __future__ import annotations
 
 import argparse
+import concurrent.futures
 import gzip
 import hashlib
 import json
 import math
 import os
+import ssl
 import time
+import urllib.parse
+import urllib.request
 from pathlib import Path
 from typing import Any
 
@@ -51,6 +55,7 @@ from workflow.reference_trigger_counts import (
     empty_counts,
     fill_counts,
     json_safe,
+    pileup_source,
     pileup_weight_triplet,
     serialise_counts,
 )
@@ -64,6 +69,8 @@ MEASUREMENTS = {
         "probe_hlt": PHOTON_HLT,
     },
 }
+
+DBS_READER_URL = "https://cmsweb.cern.ch/dbs/prod/global/DBSReader"
 
 
 COMMON_BRANCHES = [
@@ -178,8 +185,8 @@ def _trigger_values(
     )
     if not isinstance(jec_status, dict) or not jec_status.get("applied"):
         raise RuntimeError(f"required AK4 JEC was not applied: {jec_status}")
-    jet_id_mask, _ = ak4_tight_lepton_veto_mask(arrays, jet_pt, jet_eta, repo)
-    veto_j, _ = ak4_jet_veto_mask(jet_pt, jet_eta, jet_phi, repo)
+    jet_id_mask, _ = ak4_tight_lepton_veto_mask(arrays, jet_pt, jet_eta, repo, year)
+    veto_j, _ = ak4_jet_veto_mask(jet_pt, jet_eta, jet_phi, repo, year)
     zero_veto_j = count(veto_j) == 0
     good_j = (jet_pt > 30) & (abs(jet_eta) < 2.4) & jet_id_mask
     no_b_mask = good_j & False
@@ -325,6 +332,9 @@ def count_shard(
 ) -> dict[str, Any]:
     if measurement not in MEASUREMENTS:
         raise ValueError(f"unsupported trigger measurement: {measurement}")
+    measurement_year = str(config.get("year") or "2024")
+    if measurement_year not in {"2024", "2025"}:
+        raise ValueError(f"unsupported trigger measurement year: {measurement_year}")
     records = list(shard.get("records") or [])
     if len(records) > 20:
         raise ValueError(f"trigger measurement shard has {len(records)} files; maximum is 20")
@@ -372,6 +382,22 @@ def count_shard(
                         raise RuntimeError(f"invalid xsec_pb: {record.get('xsec_pb')}")
                 tree = root["Events"]
                 present = set(tree.keys())
+                reference_hlt = (
+                    ELECTRON_REFERENCE_HLT
+                    if measurement == "met_genuine"
+                    else HT_REFERENCE_HLT
+                )
+                probe_hlt = MEASUREMENTS[measurement]["probe_hlt"]
+                reference_hlt_present = [name for name in reference_hlt if name in present]
+                probe_hlt_present = [name for name in probe_hlt if name in present]
+                if not reference_hlt_present:
+                    raise RuntimeError(
+                        f"no configured reference HLT branch is present: {reference_hlt}"
+                    )
+                if not probe_hlt_present:
+                    raise RuntimeError(
+                        f"no configured probe HLT branch is present: {probe_hlt}"
+                    )
                 requested = measurement_branches(measurement)
                 branches = [branch for branch in requested if branch in present]
                 per_file_data = empty_counts(shape)
@@ -413,7 +439,7 @@ def count_shard(
                             np.ones(int(np.sum(keep)), dtype=float),
                         )
                     else:
-                        pu_weights = pileup_weight_triplet(repo, ntrue)
+                        pu_weights = pileup_weight_triplet(repo, ntrue, year=measurement_year)
                         for variation, pu_weight in zip(("nominal", "up", "down"), pu_weights):
                             fill_counts(per_file_mc[variation], coordinates, edges, passed, gen_weight * pu_weight)
                     chunks += 1
@@ -456,6 +482,8 @@ def count_shard(
                     "runs_gen_event_sumw": runs_sumw,
                     "runs_sumw_branch": runs_branch,
                     "xsec_pb": xsec,
+                    "reference_hlt_present": reference_hlt_present,
+                    "probe_hlt_present": probe_hlt_present,
                 })
             except Exception as exc:
                 failure = {
@@ -493,6 +521,8 @@ def count_shard(
         "schema_version": 1,
         "measurement": config["measurement"],
         "measurement_type": measurement,
+        "year": measurement_year,
+        "pileup_correction": pileup_source(measurement_year),
         "status": status,
         "shard_id": shard.get("shard_id"),
         "files_expected": len(records),
@@ -573,6 +603,142 @@ def build_records(metadata_path: Path, config: dict[str, Any], measurement: str)
         "files_per_condor_shard": int(campaign["files_per_condor_shard"]),
         "data_file_counts": matched_data,
         "mc_file_counts": matched_mc,
+        "records": records,
+    }
+
+
+def _dbs_json(
+    endpoint: str,
+    parameters: dict[str, str],
+    proxy: Path,
+    *,
+    attempts: int = 3,
+) -> list[dict[str, Any]]:
+    """Read one authenticated response from the official global DBS reader."""
+
+    query = urllib.parse.urlencode(parameters)
+    request = urllib.request.Request(
+        f"{DBS_READER_URL}/{endpoint}?{query}",
+        headers={"Accept": "application/json", "User-Agent": "run3-stop-trigger-sf/1"},
+    )
+    context = ssl.create_default_context(capath="/etc/grid-security/certificates")
+    context.load_cert_chain(str(proxy), str(proxy))
+    last_error: Exception | None = None
+    for attempt in range(attempts):
+        try:
+            with urllib.request.urlopen(request, context=context, timeout=120) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+            if not isinstance(payload, list):
+                raise TypeError(f"DBS returned {type(payload).__name__}, expected list")
+            return [dict(item) for item in payload]
+        except Exception as exc:
+            last_error = exc
+            if attempt + 1 < attempts:
+                time.sleep(float(attempt + 1))
+    raise RuntimeError(f"DBS {endpoint} query failed after {attempts} attempts: {last_error}")
+
+
+def _configured_data_datasets(campaign: dict[str, Any]) -> list[str]:
+    explicit = [str(value) for value in campaign.get("data_datasets") or []]
+    if explicit:
+        return explicit
+    template = str(campaign["data_dataset_template"])
+    primaries = [str(value) for value in campaign["data_primary_datasets"]]
+    eras = campaign["data_eras_and_versions"]
+    return [
+        template.format(primary=primary, era=era, version=int(version))
+        for primary in primaries
+        for era, versions in eras.items()
+        for version in versions
+    ]
+
+
+def build_records_from_dbs(
+    config: dict[str, Any],
+    measurement: str,
+    proxy: Path,
+) -> dict[str, Any]:
+    """Build the frozen trigger input record from exact official DBS datasets."""
+
+    proxy = proxy.expanduser().resolve()
+    if not proxy.is_file():
+        raise FileNotFoundError(f"proxy does not exist: {proxy}")
+    if "/afs/" in str(proxy).lower():
+        raise ValueError(f"AFS proxy is forbidden: {proxy}")
+    campaign = config["campaign_inputs"]
+    data_process = str(campaign["data_process"])
+    data_datasets = _configured_data_datasets(campaign)
+    mc_specs = [dict(item) for item in campaign["mc_datasets"]]
+    tasks: list[tuple[str, bool, dict[str, Any]]] = [
+        (dataset, True, {}) for dataset in data_datasets
+    ] + [
+        (str(spec["dataset"]), False, spec) for spec in mc_specs
+    ]
+    if len({dataset for dataset, _, _ in tasks}) != len(tasks):
+        raise RuntimeError("duplicate exact dataset in DBS trigger configuration")
+
+    def files_for(dataset: str) -> list[str]:
+        payload = _dbs_json(
+            "files",
+            {"dataset": dataset, "detail": "False", "validFileOnly": "1"},
+            proxy,
+        )
+        files = sorted({str(item["logical_file_name"]) for item in payload})
+        if not files:
+            raise RuntimeError(f"official DBS returned no valid files for {dataset}")
+        if any(not value.startswith("/store/") for value in files):
+            raise RuntimeError(f"DBS returned a non-/store file for {dataset}")
+        return files
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=min(8, len(tasks))) as pool:
+        futures = {pool.submit(files_for, dataset): dataset for dataset, _, _ in tasks}
+        files_by_dataset = {
+            futures[future]: future.result()
+            for future in concurrent.futures.as_completed(futures)
+        }
+
+    records: list[dict[str, Any]] = []
+    file_counts: dict[str, int] = {}
+    seen_files: set[str] = set()
+    for dataset, is_data, spec in tasks:
+        files = files_by_dataset[dataset]
+        file_counts[dataset] = len(files)
+        for file_index, logical_name in enumerate(files):
+            file_path = f"root://cms-xrd-global.cern.ch/{logical_name}"
+            if file_path in seen_files:
+                raise RuntimeError(f"duplicate ROOT file across exact DBS datasets: {file_path}")
+            seen_files.add(file_path)
+            record = {
+                "dataset": dataset,
+                "process_group": data_process if is_data else str(spec["process"]),
+                "is_data": is_data,
+                "is_background": not is_data,
+                "year": str(config["year"]),
+                "file_index": file_index,
+                "xsec_pb": -1.0 if is_data else float(spec["xsec_pb"]),
+                "file_path": file_path,
+            }
+            if not is_data:
+                record["xsec_source"] = str(spec["xsec_source"])
+            validate_record(record, measurement)
+            records.append(record)
+    records.sort(key=lambda item: (bool(not item["is_data"]), item["dataset"], item["file_path"]))
+    return {
+        "schema_version": 1,
+        "measurement": config["measurement"],
+        "measurement_type": measurement,
+        "metadata_source": f"{DBS_READER_URL}/files (exact VALID datasets)",
+        "files_per_condor_shard": int(campaign["files_per_condor_shard"]),
+        "data_file_counts": {
+            dataset: file_counts[dataset] for dataset in data_datasets
+        },
+        "mc_file_counts": {
+            str(spec["dataset"]): file_counts[str(spec["dataset"])] for spec in mc_specs
+        },
+        "dataset_count": len(tasks),
+        "record_sha256": hashlib.sha256(
+            json.dumps(records, sort_keys=True, separators=(",", ":")).encode()
+        ).hexdigest(),
         "records": records,
     }
 
@@ -891,6 +1057,7 @@ def reduce_shards(
         "schema_version": 1,
         "measurement": config["measurement"],
         "measurement_type": measurement,
+        "year": str(config.get("year") or "2024"),
         **axis_payload,
         "status": "validation_pending" if not blockers else "blocked",
         "input_model": "NanoAOD ROOT files grouped 20 per Condor shard; shard outputs contain histograms only",
@@ -898,7 +1065,7 @@ def reduce_shards(
         "mc": mc_json["nominal"],
         "mc_pileup_variations": {"up": mc_json["up"], "down": mc_json["down"]},
         "mc_normalization": normalization,
-        "pileup_correction": "analysis/data/PUweight/2024/puWeights.json.gz::Collisions24_BCDEFGHI_goldenJSON",
+        "pileup_correction": pileup_source(str(config.get("year") or "2024")),
         "bins": bins,
         "files_processed": len(seen_files),
         "files_failed": failed_files,
@@ -995,10 +1162,13 @@ def export_correctionlib(*, result_path: Path, output: Path, measurement: str) -
         raise ValueError(f"measurement mismatch in {result_path}")
     ensure_adopted(result, result_path)
     bins = result["bins"]
+    year = str(result.get("year") or result.get("measurement", "").rsplit("_", 1)[-1])
+    if year not in {"2024", "2025"}:
+        raise ValueError(f"cannot determine payload year from {result_path}")
     if measurement == "met_genuine":
         items = [correction(
             name="met_trigger_sf_genuine",
-            description="2024 analysis MET-trigger data/MC SF for genuine missing momentum",
+            description=f"{year} analysis MET-trigger data/MC SF for genuine missing momentum",
             axes=[("met", result["bin_edges_gev"])],
             nominal=[item["scale_factor"] for item in bins],
             uncertainty=[item["scale_factor_uncertainty"] for item in bins],
@@ -1007,7 +1177,7 @@ def export_correctionlib(*, result_path: Path, output: Path, measurement: str) -
     else:
         items = [correction(
             name="photon_trigger_sf",
-            description="2024 Photon175/Photon200 OR data/MC SF from an independent PFHT reference",
+            description=f"{year} Photon175/Photon200 OR data/MC SF from an independent PFHT reference",
             axes=[("abseta", result["abseta_edges"]), ("pt", result["pt_edges_gev"])],
             nominal=[item["scale_factor"] for item in bins],
             uncertainty=[item["scale_factor_uncertainty"] for item in bins],
@@ -1108,6 +1278,15 @@ def cli(argv: list[str] | None = None) -> int:
     build_parser.add_argument("--config", type=Path, required=True)
     build_parser.add_argument("--output", type=Path, required=True)
 
+    dbs_parser = commands.add_parser(
+        "build-dbs-records",
+        help="build exact VALID ROOT-file records directly from official global DBS",
+    )
+    _add_measurement_argument(dbs_parser)
+    dbs_parser.add_argument("--config", type=Path, required=True)
+    dbs_parser.add_argument("--proxy", type=Path, required=True)
+    dbs_parser.add_argument("--output", type=Path, required=True)
+
     prepare_parser = commands.add_parser("prepare", help="prepare EOS-only Condor shards")
     _add_measurement_argument(prepare_parser)
     prepare_parser.add_argument("--records", type=Path, required=True)
@@ -1169,6 +1348,19 @@ def cli(argv: list[str] | None = None) -> int:
         payload = build_records(args.metadata, json.loads(args.config.read_text()), args.measurement)
         _write_json(args.output, payload)
         print(json.dumps({key: value for key, value in payload.items() if key != "records"}, indent=2, sort_keys=True))
+        return 0
+    if args.command == "build-dbs-records":
+        payload = build_records_from_dbs(
+            json.loads(args.config.read_text()),
+            args.measurement,
+            args.proxy,
+        )
+        _write_json(args.output, payload)
+        print(json.dumps(
+            {key: value for key, value in payload.items() if key != "records"},
+            indent=2,
+            sort_keys=True,
+        ))
         return 0
     if args.command == "prepare":
         payload = prepare_condor(

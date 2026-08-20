@@ -17,7 +17,6 @@ from matplotlib.lines import Line2D
 from matplotlib.ticker import ScalarFormatter
 
 
-LUMI_LABEL = r"2024 (13.6 TeV)"
 CMS_LABEL_FONT_SIZE = 17
 FIGURE_SIZE = (8.0, 8.0)
 COLORBAR_FIGURE_SIZE = (12.0, 10.0)
@@ -59,20 +58,43 @@ def _apply_style() -> None:
     )
 
 
-def _cms_label(ax: plt.Axes) -> None:
+def _cms_rlabel(year: str) -> str:
+    return f"{year} (13.6 TeV)"
+
+
+def _measurement_year(*payloads: dict[str, Any]) -> str:
+    for payload in payloads:
+        if payload.get("year"):
+            return str(payload["year"])
+    for payload in payloads:
+        measurement = str(payload.get("measurement", ""))
+        for year in range(2022, 2030):
+            if str(year) in measurement:
+                return str(year)
+    return "Run-3"
+
+
+def _cms_label(ax: plt.Axes, year: str) -> None:
     hep.cms.label(
         llabel="Work in progress",
-        rlabel=LUMI_LABEL,
+        rlabel=_cms_rlabel(year),
         loc=0,
         ax=ax,
         fontsize=CMS_LABEL_FONT_SIZE,
     )
 
 
-def _figure_header(fig: plt.Figure, *, y: float = 0.90) -> None:
-    header_ax = fig.add_axes((0.08, y, 0.84, 0.001), frameon=False)
+def _figure_header(
+    fig: plt.Figure,
+    year: str,
+    *,
+    y: float = 0.90,
+    left: float = 0.08,
+    right: float = 0.92,
+) -> None:
+    header_ax = fig.add_axes((left, y, right - left, 0.001), frameon=False)
     header_ax.set_axis_off()
-    _cms_label(header_ax)
+    _cms_label(header_ax, year)
 
 
 def _save(fig: plt.Figure, output: Path) -> list[str]:
@@ -89,7 +111,24 @@ def _save(fig: plt.Figure, output: Path) -> list[str]:
 def _plot_interval_errors(bins: list[dict[str, Any]], prefix: str) -> np.ndarray:
     values = np.asarray([item[f"{prefix}_efficiency"] for item in bins], dtype=float)
     intervals = np.asarray([item[f"{prefix}_interval"] for item in bins], dtype=float)
-    return np.vstack((values - intervals[:, 0], intervals[:, 1] - values))
+    # Closed intervals at exactly zero or one can differ from the stored
+    # efficiency by a few ulps after JSON round-tripping.  Matplotlib rejects
+    # even those numerically negative error lengths.
+    return np.maximum(
+        np.vstack((values - intervals[:, 0], intervals[:, 1] - values)),
+        0.0,
+    )
+
+
+def _scale_factor_ylim(values: np.ndarray, uncertainties: np.ndarray) -> tuple[float, float]:
+    """Include every SF error bar while retaining unity as the visual reference."""
+    values = np.asarray(values, dtype=float)
+    uncertainties = np.asarray(uncertainties, dtype=float)
+    lower = min(float(np.nanmin(values - uncertainties)), 1.0)
+    upper = max(float(np.nanmax(values + uncertainties)), 1.0)
+    span = max(upper - lower, 0.02)
+    padding = 0.08 * span
+    return lower - padding, upper + padding
 
 
 def _signal_bin_average(
@@ -253,6 +292,7 @@ def plot_trigger_result(result_path: Path, output_dir: Path, measurement: str) -
     bins = result.get("bins") or []
     if not bins:
         raise ValueError(f"no bins in {result_path}")
+    year = _measurement_year(result)
 
     outputs: list[str] = []
     captions: dict[str, str] = {}
@@ -291,9 +331,9 @@ def plot_trigger_result(result_path: Path, output_dir: Path, measurement: str) -
         )
         ax.grid(axis="y", linestyle=":", color="0.78", linewidth=0.9)
         ax.legend(loc="lower right")
-        _cms_label(ax)
-        outputs += _save(fig, output_dir / "met_trigger_efficiency_2024")
-        captions["met_trigger_efficiency_2024"] = (
+        _figure_header(fig, year, y=0.88, left=0.16, right=0.96)
+        outputs += _save(fig, output_dir / f"met_trigger_efficiency_{year}")
+        captions[f"met_trigger_efficiency_{year}"] = (
             "MET-trigger efficiencies in EGamma data and semileptonic ttbar simulation."
         )
 
@@ -312,14 +352,14 @@ def plot_trigger_result(result_path: Path, output_dir: Path, measurement: str) -
         )
         ax.set(
             xlim=(edges[0], edges[-1]),
-            ylim=(0.94, 1.22),
+            ylim=_scale_factor_ylim(sf, sf_unc),
             xlabel=r"$p_{\mathrm{T}}^{\mathrm{miss}}$ (GeV)",
             ylabel="Trigger scale factor",
         )
         ax.grid(axis="y", linestyle=":", color="0.78", linewidth=0.9)
-        _cms_label(ax)
-        outputs += _save(fig, output_dir / "met_trigger_scale_factor_2024")
-        captions["met_trigger_scale_factor_2024"] = (
+        _figure_header(fig, year, y=0.88, left=0.16, right=0.96)
+        outputs += _save(fig, output_dir / f"met_trigger_scale_factor_{year}")
+        captions[f"met_trigger_scale_factor_{year}"] = (
             "Data-to-simulation MET-trigger scale factors with total uncertainties."
         )
     elif measurement == "photon":
@@ -387,14 +427,19 @@ def plot_trigger_result(result_path: Path, output_dir: Path, measurement: str) -
             ylabel="Trigger efficiency",
         )
         ax.grid(axis="y", linestyle=":", color="0.78", linewidth=0.9)
-        _cms_label(ax)
-        outputs += _save(fig, output_dir / "photon_trigger_efficiency_2024")
-        captions["photon_trigger_efficiency_2024"] = (
+        _figure_header(fig, year, y=0.88, left=0.16, right=0.96)
+        outputs += _save(fig, output_dir / f"photon_trigger_efficiency_{year}")
+        captions[f"photon_trigger_efficiency_{year}"] = (
             "Photon-trigger efficiencies in JetMET data and gamma+jets simulation."
         )
 
         fig, ax = plt.subplots(figsize=FIGURE_SIZE)
         fig.subplots_adjust(left=0.16, right=0.96, bottom=0.14, top=0.88)
+        photon_sf = np.asarray([item["scale_factor"] for item in bins], dtype=float)
+        photon_sf_unc = np.asarray(
+            [item["scale_factor_uncertainty"] for item in bins],
+            dtype=float,
+        )
         for eta_index, color in enumerate(colors):
             group = bins[eta_index * len(centers) : (eta_index + 1) * len(centers)]
             offset = (eta_index - 1.5) * 3.0
@@ -414,15 +459,19 @@ def plot_trigger_result(result_path: Path, output_dir: Path, measurement: str) -
         ax.axhline(1.0, color="#e31a1c", linewidth=1.5, linestyle="--", zorder=1)
         ax.set(
             xlim=(pt_edges[0], pt_edges[-1]),
-            ylim=(0.992, 1.006),
+            ylim=_scale_factor_ylim(photon_sf, photon_sf_unc),
             xlabel=r"Photon $p_{\mathrm{T}}$ (GeV)",
             ylabel="Trigger scale factor",
         )
         ax.grid(axis="y", linestyle=":", color="0.78", linewidth=0.9)
-        ax.legend(loc="lower left")
-        _cms_label(ax)
-        outputs += _save(fig, output_dir / "photon_trigger_scale_factor_2024")
-        captions["photon_trigger_scale_factor_2024"] = (
+        ax.legend(
+            loc="lower center",
+            bbox_to_anchor=(0.34, 0.015),
+            ncol=2,
+        )
+        _figure_header(fig, year, y=0.88, left=0.16, right=0.96)
+        outputs += _save(fig, output_dir / f"photon_trigger_scale_factor_{year}")
+        captions[f"photon_trigger_scale_factor_{year}"] = (
             "Data-to-simulation photon-trigger scale factors with total uncertainties."
         )
     else:
@@ -433,7 +482,7 @@ def plot_trigger_result(result_path: Path, output_dir: Path, measurement: str) -
         "measurement": measurement,
         "style": {
             "cms_llabel": "Work in progress",
-            "cms_rlabel": LUMI_LABEL,
+            "cms_rlabel": _cms_rlabel(year),
             "cms_label_fontsize": CMS_LABEL_FONT_SIZE,
             "standard_figure_inches": list(FIGURE_SIZE),
             "colorbar_figure_inches": list(COLORBAR_FIGURE_SIZE),
@@ -452,6 +501,7 @@ def plot_tnp_result(result_path: Path, histograms_path: Path, output_dir: Path) 
     _apply_style()
     result = json.loads(result_path.read_text())
     histograms = json.loads(histograms_path.read_text())
+    year = _measurement_year(result, histograms)
     measurement_kind = str(histograms.get("kind") or result.get("kind") or "")
     if measurement_kind == "electron":
         mass_axis_label = r"$m_{ee}$ (GeV)"
@@ -519,7 +569,7 @@ def plot_tnp_result(result_path: Path, histograms_path: Path, output_dir: Path) 
     if n_pt > 1:
         ax.legend(loc="best")
     ax.grid(axis="y", linestyle=":", color="0.78", linewidth=0.9)
-    _cms_label(ax)
+    _cms_label(ax, year)
     outputs += _save(fig, output_dir / "scale_factor")
     captions["scale_factor"] = (
         "Data-to-simulation scale factors with total uncertainties; bins without a valid fit are omitted. "
@@ -549,7 +599,7 @@ def plot_tnp_result(result_path: Path, histograms_path: Path, output_dir: Path) 
     fig.colorbar(image, ax=ax, label="Data/MC scale factor")
     ax.set_xlabel(object_pt_axis_label)
     ax.set_ylabel(object_eta_axis_label)
-    _cms_label(ax)
+    _cms_label(ax, year)
     outputs += _save(fig, output_dir / "scale_factor_heatmap")
     captions["scale_factor_heatmap"] = (
         "Two-dimensional scale-factor map; each cell shows the central value and total uncertainty."
@@ -616,7 +666,7 @@ def plot_tnp_result(result_path: Path, histograms_path: Path, output_dir: Path) 
         )
         ax.grid(axis="y", linestyle=":", color="0.78", linewidth=0.9)
         ax.legend(loc="best")
-        _cms_label(ax)
+        _cms_label(ax, year)
         outputs += _save(fig, output_dir / "efficiency")
     else:
         fig, ax = plt.subplots(figsize=FIGURE_SIZE)
@@ -689,7 +739,7 @@ def plot_tnp_result(result_path: Path, histograms_path: Path, output_dir: Path) 
             ylim=efficiency_ylim,
         )
         ax.grid(axis="y", linestyle=":", color="0.78", linewidth=0.9)
-        _cms_label(ax)
+        _cms_label(ax, year)
         outputs += _save(fig, output_dir / "efficiency")
     captions["efficiency"] = (
         "Tag-and-probe efficiencies in data and simulation; error bars are statistical. "
@@ -809,7 +859,7 @@ def plot_tnp_result(result_path: Path, histograms_path: Path, output_dir: Path) 
         fig.supxlabel(mass_axis_label, x=0.47, y=0.035, fontsize=22)
         fig.supylabel(rf"Events / {bin_width_mev:g} MeV", x=0.018, fontsize=22)
         eta_index, pt_index = divmod(flat_index, n_pt)
-        _figure_header(fig, y=0.825)
+        _figure_header(fig, year, y=0.825)
         outputs += _save(fig, output_dir / f"mass_fit_bin_{flat_index:02d}")
         scale_factor_caption = (
             rf"The resulting scale factor is {item['scale_factor']:.4f} +/- {item['scale_factor_uncertainty']:.4f}."
@@ -829,7 +879,7 @@ def plot_tnp_result(result_path: Path, histograms_path: Path, output_dir: Path) 
         "measurement": result["measurement"],
         "style": {
             "cms_llabel": "Work in progress",
-            "cms_rlabel": LUMI_LABEL,
+            "cms_rlabel": _cms_rlabel(year),
             "cms_label_fontsize": CMS_LABEL_FONT_SIZE,
             "standard_figure_inches": list(FIGURE_SIZE),
             "colorbar_figure_inches": list(COLORBAR_FIGURE_SIZE),

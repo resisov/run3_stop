@@ -1,0 +1,38 @@
+Dear all,
+
+This message corrects and supersedes my earlier TROTA High-dM category email,
+which described the obsolete 60-to-66-bin precursor.  The adopted High-dM
+baseline is the 55-bin tail-merged scheme.
+
+I have now produced the requested exploratory 61-bin plot.  The first six
+recoil bins of the Nb>=1, Nt=0, NW=0 category are replaced by two six-bin
+blocks, Nres=0 and Nres>=1.  The remaining 49 adopted bins are unchanged.
+
+Validation summary:
+  * 5,489/5,489 intermediate ROOT files and 230,830,776 events processed
+  * 0 failures; the one known TROTA identity fallback was recovered
+  * full 2024 AnalysisSF bundle applied, with 0 failed weighted events
+  * 11 plotted samples and all 35 MC variations validated
+  * the two Nres blocks recombine to the canonical first six bins
+  * all remaining 49 adopted bins are copied unchanged
+  * canonical hists SHA256:
+    2ad64b5236a23c03fbe0c21ec7be7e1a51cb035bf9868e73ef959e7510c178df
+  * full-weight Nres component SHA256:
+    28e0ecdb01b9906abcbc7c391914271c66ca67c88ad3955475104d382c3b2026
+
+The result remains exploratory because no dedicated TROTA data/MC efficiency
+scale factor or uncertainty is available.  It should not replace the adopted
+55-bin model until the SF, control-region closure, transfer factors, and the
+full nuisance-aware expected-limit comparison are complete.
+
+Public gallery:
+https://resisov.github.io/run3_stop/highdm_distributions_2024_2025_20260720/?v=34e71a87-2
+
+Direct 61-bin PNG:
+https://resisov.github.io/run3_stop/highdm_distributions_2024_2025_20260720/plots/2024/highdm_sr_trota_nres61_from_adopted55_bins.png?v=34e71a87-2
+
+The corrected report, PNG, PDF, and machine-readable validation summary are
+attached.
+
+Best,
+Taiwoo

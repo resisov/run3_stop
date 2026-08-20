@@ -142,8 +142,21 @@ LUMIMASK_RELATIVE_PATHS = {
     "2024": Path("analysis/data/lumiMask/Cert_Collisions2024_378981_386951_Golden.json"),
     "2025": Path("analysis/data/lumiMask/Cert_Collisions2025_391658_398903_Golden.json"),
 }
-JET_VETO_MAP_RELATIVE_PATH = Path("analysis/data/JMESF/2024/jetvetomaps.json.gz")
-JET_VETO_MAP_CORRECTION = "Summer24Prompt24_RunBCDEFGHI_V1"
+JET_ID_RELATIVE_PATHS = {
+    "2024": Path("analysis/data/JMESF/2024/jetid.json.gz"),
+    "2025": Path("analysis/data/JMESF/2025/jetid.json.gz"),
+}
+FATJET_ID_RELATIVE_PATH = Path("analysis/data/JMESF/2024/jetid.json.gz")
+JET_VETO_MAPS = {
+    "2024": (
+        Path("analysis/data/JMESF/2024/jetvetomaps.json.gz"),
+        "Summer24Prompt24_RunBCDEFGHI_V1",
+    ),
+    "2025": (
+        Path("analysis/data/JMESF/2025/jetvetomaps.json.gz"),
+        "Summer24Prompt25_RunCDEFG_V1",
+    ),
+}
 
 _LUMIMASK_CACHE: dict[Path, dict[int, list[tuple[int, int]]]] = {}
 _CORRECTION_CACHE: dict[tuple[str, str], Any] = {}
@@ -227,8 +240,7 @@ def campaign_year(year: str) -> str:
 
 
 def analysis_year(year: str) -> str:
-    year = campaign_year(year)
-    return "2024" if year == "2025" else year
+    return campaign_year(year)
 
 
 def np_filled(values: Any, n: int, fill: float = 1.0) -> np.ndarray:
@@ -455,6 +467,7 @@ def compute_weight_bundle(
     p_phi: Any,
     p_med: Any,
     gcr_mask: np.ndarray,
+    p_r9: Any | None = None,
     photon_id_wp: str = "Medium",
     met_pt: Any | None = None,
     met_trigger_mask: np.ndarray | None = None,
@@ -580,10 +593,43 @@ def compute_weight_bundle(
         record("electron_id", False, "unity_fallback", f"{type(exc).__name__}: {exc}")
 
     try:
+        with analysis_workdir(repo):
+            er_nom, er_up, er_down = corrections["get_ele_reco_sf"](
+                y,
+                e_eta + e_delta_eta_sc,
+                e_pt,
+                e_phi,
+            )
+        ele_nom = one.copy(); ele_up = one.copy(); ele_down = one.copy()
+        mask_one = np.asarray(n_e_veto == 1, dtype=bool)
+        mask_two = np.asarray(n_e_med == 2, dtype=bool)
+        vals = [
+            (ele_nom, jagged_prod(ak.where(e_veto, er_nom, ak.ones_like(e_pt)), n), jagged_prod(ak.where(e_med, er_nom, ak.ones_like(e_pt)), n)),
+            (ele_up, jagged_prod(ak.where(e_veto, er_up, ak.ones_like(e_pt)), n), jagged_prod(ak.where(e_med, er_up, ak.ones_like(e_pt)), n)),
+            (ele_down, jagged_prod(ak.where(e_veto, er_down, ak.ones_like(e_pt)), n), jagged_prod(ak.where(e_med, er_down, ak.ones_like(e_pt)), n)),
+        ]
+        for target, veto_vals, med_vals in vals:
+            target[mask_one] = veto_vals[mask_one]
+            target[mask_two] = med_vals[mask_two]
+        add_triplet(
+            "electron_reco",
+            ele_nom,
+            ele_up,
+            ele_down,
+            "analysis.utils.corrections.get_ele_reco_sf",
+        )
+    except Exception as exc:
+        components["electron_reco"] = one
+        record("electron_reco", False, "unity_fallback", f"{type(exc).__name__}: {exc}")
+
+    try:
+        if "veto_electron_5to10" not in enabled_analysis_sf:
+            raise RuntimeError("disabled by analysis SF configuration")
         low_nom, low_up, low_down = veto_electron_lowpt_triplet(
             repo,
             e_eta,
             e_pt,
+            year=y,
         )
         lowpt_mask = e_veto & (e_pt > 5.0) & (e_pt < 10.0)
         mask_one = np.asarray(n_e_veto == 1, dtype=bool)
@@ -599,7 +645,7 @@ def compute_weight_bundle(
             event_nom,
             event_up,
             event_down,
-            "analysis/data/AnalysisSF/2024/veto_electron_5to10_sf.json.gz:veto_electron_5to10_sf:raw_eta",
+            f"analysis/data/AnalysisSF/{y}/veto_electron_5to10_sf.json.gz:veto_electron_id_5to10_sf:raw_eta",
         )
     except Exception as exc:
         components["veto_electron_5to10"] = one
@@ -647,7 +693,47 @@ def compute_weight_bundle(
         record("muon_id", False, "unity_fallback", f"{type(exc).__name__}: {exc}")
 
     try:
-        low_nom, low_up, low_down = loose_muon_lowpt_triplet(repo, m_eta, m_pt)
+        with analysis_workdir(repo):
+            ml_nom, ml_up, ml_down = corrections["get_mu_loose_miniiso_sf"](y, m_eta, m_pt)
+            mm_nom, mm_up, mm_down = corrections["get_mu_medium_miniiso_sf"](y, m_eta, m_pt)
+        # No official mini-isolation SF is defined below 10 GeV.  The
+        # dedicated 5--10 GeV payload is ID-only, so mini-isolation stays
+        # exactly unity in that interval rather than inheriting the 10 GeV bin.
+        muon_lowpt = m_loose & (m_pt > 5.0) & (m_pt < 10.0)
+        ml_nom = ak.where(muon_lowpt, ak.ones_like(ml_nom), ml_nom)
+        ml_up = ak.where(muon_lowpt, ak.ones_like(ml_up), ml_up)
+        ml_down = ak.where(muon_lowpt, ak.ones_like(ml_down), ml_down)
+        mu_nom = one.copy(); mu_up = one.copy(); mu_down = one.copy()
+        mask_one = np.asarray(n_m_loose == 1, dtype=bool)
+        mask_two = np.asarray(n_m_med == 2, dtype=bool)
+        vals = [
+            (mu_nom, jagged_prod(ak.where(m_loose, ml_nom, ak.ones_like(m_pt)), n), jagged_prod(ak.where(m_med, mm_nom, ak.ones_like(m_pt)), n)),
+            (mu_up, jagged_prod(ak.where(m_loose, ml_up, ak.ones_like(m_pt)), n), jagged_prod(ak.where(m_med, mm_up, ak.ones_like(m_pt)), n)),
+            (mu_down, jagged_prod(ak.where(m_loose, ml_down, ak.ones_like(m_pt)), n), jagged_prod(ak.where(m_med, mm_down, ak.ones_like(m_pt)), n)),
+        ]
+        for target, loose_vals, med_vals in vals:
+            target[mask_one] = loose_vals[mask_one]
+            target[mask_two] = med_vals[mask_two]
+        add_triplet(
+            "muon_iso",
+            mu_nom,
+            mu_up,
+            mu_down,
+            "analysis.utils.corrections muon mini-isolation SF",
+        )
+    except Exception as exc:
+        components["muon_iso"] = one
+        record("muon_iso", False, "unity_fallback", f"{type(exc).__name__}: {exc}")
+
+    try:
+        if "loose_muon_5to10" not in enabled_analysis_sf:
+            raise RuntimeError("disabled by analysis SF configuration")
+        low_nom, low_up, low_down = loose_muon_lowpt_triplet(
+            repo,
+            m_eta,
+            m_pt,
+            year=y,
+        )
         lowpt_mask = m_loose & (m_pt > 5.0) & (m_pt < 10.0)
         mask_one = np.asarray(n_m_loose == 1, dtype=bool)
         low_events = [
@@ -662,7 +748,7 @@ def compute_weight_bundle(
             event_nom,
             event_up,
             event_down,
-            "analysis/data/AnalysisSF/2024/loose_muon_5to10_sf.json.gz:loose_muon_5to10_sf",
+            f"analysis/data/AnalysisSF/{y}/loose_muon_5to10_sf.json.gz:loose_muon_id_5to10_sf",
         )
     except Exception as exc:
         components["loose_muon_5to10"] = one
@@ -709,7 +795,47 @@ def compute_weight_bundle(
         record("photon_id", False, "unity_fallback", f"{type(exc).__name__}: {exc}")
 
     try:
-        ph_nom, ph_up, ph_down = photon_trigger_triplet(repo, p_eta, p_pt)
+        if p_r9 is None:
+            raise RuntimeError("missing Photon_r9 input")
+        # The flat ntuple keeps all NanoAOD photons, including unselected
+        # objects whose R9 sentinel can lie outside the CSEV payload domain.
+        # Evaluate those irrelevant objects at an in-domain neutral point;
+        # only p_med entries are multiplied into the event weight below.
+        csev_eta = ak.where(p_med, p_eta, ak.zeros_like(p_eta))
+        csev_r9 = ak.where(p_med, p_r9, ak.ones_like(p_r9))
+        with analysis_workdir(repo):
+            pc_nom, pc_up, pc_down = corrections["get_photon_csev_sf"](
+                y,
+                photon_id_wp,
+                csev_eta,
+                csev_r9,
+            )
+        nom = one.copy(); up = one.copy(); down = one.copy()
+        mask_g = np.asarray(gcr_mask, dtype=bool)
+        nom_vals = jagged_prod(ak.where(p_med, pc_nom, ak.ones_like(p_pt)), n)
+        up_vals = jagged_prod(ak.where(p_med, pc_up, ak.ones_like(p_pt)), n)
+        down_vals = jagged_prod(ak.where(p_med, pc_down, ak.ones_like(p_pt)), n)
+        nom[mask_g] = nom_vals[mask_g]; up[mask_g] = up_vals[mask_g]; down[mask_g] = down_vals[mask_g]
+        add_triplet(
+            "photon_csev",
+            nom,
+            up,
+            down,
+            f"analysis.utils.corrections.get_photon_csev_sf:{photon_id_wp}",
+        )
+    except Exception as exc:
+        components["photon_csev"] = one
+        record("photon_csev", False, "unity_unavailable", f"{type(exc).__name__}: {exc}")
+
+    try:
+        if "photon_trigger" not in enabled_analysis_sf:
+            raise RuntimeError("disabled by analysis SF configuration")
+        ph_nom, ph_up, ph_down = photon_trigger_triplet(
+            repo,
+            p_eta,
+            p_pt,
+            year=y,
+        )
         mask_g = np.asarray(gcr_mask, dtype=bool)
         event_values = [
             jagged_prod(ak.where(p_med, values, ak.ones_like(p_pt)), n)
@@ -723,7 +849,7 @@ def compute_weight_bundle(
             event_nom,
             event_up,
             event_down,
-            "analysis/data/AnalysisSF/2024/photon_trigger_sf.json.gz",
+            f"analysis/data/AnalysisSF/{y}/photon_trigger_sf.json.gz",
         )
     except Exception as exc:
         components["photon_trigger"] = one
@@ -734,10 +860,13 @@ def compute_weight_bundle(
         record("met_trigger", False, "unity_missing_region_mask")
     else:
         try:
+            if "met_trigger" not in enabled_analysis_sf:
+                raise RuntimeError("disabled by analysis SF configuration")
             mt_nom, mt_up, mt_down = met_trigger_triplet(
                 repo,
                 met_pt,
                 qcd=(process == "QCD" or dataset.startswith("QCD")),
+                year=y,
             )
             mask_met = np.asarray(met_trigger_mask, dtype=bool)
             event_nom = one.copy(); event_up = one.copy(); event_down = one.copy()
@@ -749,7 +878,7 @@ def compute_weight_bundle(
                 event_nom,
                 event_up,
                 event_down,
-                "analysis/data/AnalysisSF/2024/met_trigger_sf.json.gz",
+                f"analysis/data/AnalysisSF/{y}/met_trigger_sf.json.gz",
             )
         except Exception as exc:
             components["met_trigger"] = one
@@ -929,11 +1058,21 @@ def open_root_with_xrd_fallback(file_path: str, timeout: int = 60) -> tuple[Any,
             info["xrdcp_command"] = cmd
             attempt = {"source": source, "command": cmd, "exit_status": None, "stdout_tail": "", "stderr_tail": "", "status": "not_started"}
             try:
+                # The analysis Python runtime carries its own C++ libraries in
+                # LD_LIBRARY_PATH.  Passing those libraries to the system
+                # xrdcp binary can make it fail before main() with unresolved
+                # XRootD symbols.  xrdcp is an independent subprocess and must
+                # resolve against the libraries shipped with its own install.
+                xrdcp_env = os.environ.copy()
+                if os.environ.get("AUTONOMOUS_ALLHAD_XRDCP_KEEP_LD_LIBRARY_PATH", "0") != "1":
+                    xrdcp_env.pop("LD_LIBRARY_PATH", None)
+                    attempt["ld_library_path_policy"] = "unset_for_xrdcp"
                 proc = subprocess.run(
                     cmd,
                     text=True,
                     capture_output=True,
                     timeout=int(os.environ.get("AUTONOMOUS_ALLHAD_XRDCP_TIMEOUT", "600")),
+                    env=xrdcp_env,
                 )
                 attempt["exit_status"] = proc.returncode
                 attempt["stdout_tail"] = proc.stdout[-4000:]
@@ -1150,9 +1289,21 @@ def delta_phi(phi1: Any, phi2: Any) -> Any:
     return np.abs(np.arctan2(np.sin(phi1 - phi2), np.cos(phi1 - phi2)))
 
 
-def ak4_tight_lepton_veto_mask(arrays: dict[str, Any], jet_pt: Any, jet_eta: Any, repo: Path) -> tuple[Any, str]:
+def ak4_tight_lepton_veto_mask(
+    arrays: dict[str, Any],
+    jet_pt: Any,
+    jet_eta: Any,
+    repo: Path,
+    year: str = "2024",
+) -> tuple[Any, str]:
     if all(has_field(arrays, name) for name in JET_ID_INPUTS):
-        evaluator = correctionlib.CorrectionSet.from_file(str(analysis_data_file(repo, Path("analysis/data/JMESF/2024/jetid.json.gz"))))
+        data_year = campaign_year(year)
+        relative_path = JET_ID_RELATIVE_PATHS.get(data_year)
+        if relative_path is None:
+            raise ValueError(f"No AK4 jet-ID payload configured for data year {data_year}")
+        evaluator = correctionlib.CorrectionSet.from_file(
+            str(analysis_data_file(repo, relative_path))
+        )
         corr = evaluator["AK4PUPPI_TightLeptonVeto"]
         counts = ak.num(jet_eta)
         ch_mult = arr(arrays, "Jet_chMultiplicity")
@@ -1221,21 +1372,32 @@ def golden_lumi_mask(arrays: dict[str, Any], process: str, repo: Path, n: int, y
     return out, str(path)
 
 
-def ak4_jet_veto_mask(jet_pt: Any, jet_eta: Any, jet_phi: Any, repo: Path) -> tuple[Any, str]:
-    corr = _correction(repo, JET_VETO_MAP_RELATIVE_PATH, JET_VETO_MAP_CORRECTION)
+def ak4_jet_veto_mask(
+    jet_pt: Any,
+    jet_eta: Any,
+    jet_phi: Any,
+    repo: Path,
+    year: str = "2024",
+) -> tuple[Any, str]:
+    data_year = campaign_year(year)
+    payload = JET_VETO_MAPS.get(data_year)
+    if payload is None:
+        raise ValueError(f"No AK4 jet-veto map configured for data year {data_year}")
+    relative_path, correction_name = payload
+    corr = _correction(repo, relative_path, correction_name)
     counts = ak.num(jet_eta)
     flat_eta = ak.to_numpy(ak.flatten(jet_eta))
     flat_phi = ak.to_numpy(ak.flatten(jet_phi))
     flat_pt = ak.to_numpy(ak.flatten(jet_pt))
     if len(flat_eta) == 0:
-        return ak.unflatten(np.zeros(0, dtype=bool), counts), f"correctionlib_{JET_VETO_MAP_CORRECTION}"
+        return ak.unflatten(np.zeros(0, dtype=bool), counts), f"correctionlib_{correction_name}"
     veto = np.asarray(corr.evaluate("jetvetomap", flat_eta, flat_phi)) != 0
-    return ak.unflatten((flat_pt > 30) & veto, counts), f"correctionlib_{JET_VETO_MAP_CORRECTION}"
+    return ak.unflatten((flat_pt > 30) & veto, counts), f"correctionlib_{correction_name}"
 
 
 def ak8_tight_lepton_veto_mask(arrays: dict[str, Any], fj_pt: Any, fj_eta: Any, repo: Path) -> tuple[Any, str]:
     if all(has_field(arrays, name) for name in FATJET_ID_INPUTS):
-        corr = _correction(repo, Path("analysis/data/JMESF/2024/jetid.json.gz"), "AK8PUPPI_TightLeptonVeto")
+        corr = _correction(repo, FATJET_ID_RELATIVE_PATH, "AK8PUPPI_TightLeptonVeto")
         counts = ak.num(fj_eta)
         ch_mult = arr(arrays, "FatJet_chMultiplicity")
         ne_mult = arr(arrays, "FatJet_neMultiplicity")
@@ -1526,8 +1688,8 @@ def extract_chunk(
     jet_phi = arr(arrays, "Jet_phi", ak.Array([[]] * n))
     jet_mass_raw = arr(arrays, "Jet_mass", ak.zeros_like(jet_pt_raw))
     jet_pt, jet_mass, jec_status = apply_jec(arrays, repo, year, process, "Jet", jet_pt_raw, jet_eta, jet_phi, jet_mass_raw, shift)
-    jet_id_mask, jet_id_source = ak4_tight_lepton_veto_mask(arrays, jet_pt, jet_eta, repo)
-    veto_j, jet_veto_source = ak4_jet_veto_mask(jet_pt, jet_eta, jet_phi, repo)
+    jet_id_mask, jet_id_source = ak4_tight_lepton_veto_mask(arrays, jet_pt, jet_eta, repo, year)
+    veto_j, jet_veto_source = ak4_jet_veto_mask(jet_pt, jet_eta, jet_phi, repo, year)
     zero_veto_j = count(veto_j) == 0
     btag = arr(arrays, "Jet_btagUParTAK4B", ak.zeros_like(jet_pt))
     good_j = (jet_pt > 30) & (abs(jet_eta) < 2.4) & jet_id_mask
@@ -1566,7 +1728,7 @@ def extract_chunk(
     m_med = (m_pt > 10) & (abs(m_eta) < 2.4) & m_medid & (m_iso < 0.2)
     n_m_loose = count(m_loose); n_m_med = count(m_med)
 
-    p_pt = arr(arrays, "Photon_pt", ak.Array([[]] * n)); p_eta = arr(arrays, "Photon_eta", ak.Array([[]] * n)); p_phi = arr(arrays, "Photon_phi", ak.Array([[]] * n)); p_cb = arr(arrays, "Photon_cutBased", ak.zeros_like(p_pt))
+    p_pt = arr(arrays, "Photon_pt", ak.Array([[]] * n)); p_eta = arr(arrays, "Photon_eta", ak.Array([[]] * n)); p_phi = arr(arrays, "Photon_phi", ak.Array([[]] * n)); p_cb = arr(arrays, "Photon_cutBased", ak.zeros_like(p_pt)); p_r9 = arr(arrays, "Photon_r9", ak.zeros_like(p_pt))
     p_electron_veto = arr(arrays, "Photon_electronVeto", ak.zeros_like(p_pt))
     p_med = medium_photon_mask(p_pt, p_eta, p_cb, p_electron_veto)
     n_p_med = count(p_med)
@@ -1877,6 +2039,7 @@ def extract_chunk(
             e_eta, e_delta_eta_sc, e_pt, e_phi, e_veto, e_med, n_e_veto, n_e_med,
             m_eta, m_pt, m_phi, m_loose, m_med, n_m_loose, n_m_med,
             p_eta, p_pt, p_phi, p_med, masks["GCR"] | lowdm_masks["GCR"],
+            p_r9=p_r9,
             met_pt=met_pt,
             met_trigger_mask=(
                 masks["preselection"] | masks["LLCR"] | masks["QCDCR"] | masks["SR"]

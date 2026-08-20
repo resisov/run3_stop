@@ -175,6 +175,22 @@ def plot_rz_nb(
             capsize=4,
             label=labels[channel],
         )
+    combined = [rz["combined"][group] for group in GROUPS]
+    ax.errorbar(
+        x,
+        [record["RZ"] for record in combined],
+        xerr=np.full(len(combined), 0.5, dtype=float),
+        yerr=[record["RZ_stat"] for record in combined],
+        fmt="D",
+        color="#111111",
+        markerfacecolor="white",
+        markeredgewidth=2.0,
+        markersize=10,
+        lw=2.4,
+        capsize=5,
+        zorder=5,
+        label="Combined",
+    )
     ax.axhline(1.0, color="0.55", lw=1.5, ls=":")
     ax.set_xticks(x, [r"$N_b=1$", r"$N_b\geq2$"], fontsize=26)
     ax.set_xlim(-0.5, len(GROUPS) - 0.5)
@@ -390,7 +406,10 @@ def value_cell(record: dict[str, Any], key: str) -> str:
 
 
 def write_html(
-    output_dir: Path, result: dict[str, Any], selection: str
+    output_dir: Path,
+    result: dict[str, Any],
+    selection: str,
+    campaign_year: str = "2024",
 ) -> None:
     suffix = "highdm" if selection == "highdm" else "lowdm"
     key = "rz_high" if selection == "highdm" else "rz_low"
@@ -430,14 +449,14 @@ def write_html(
     document = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>2024 RZ(Nb) measurement</title>
+<title>{campaign_year} RZ(Nb) measurement</title>
 <style>
 body{{font-family:Arial,sans-serif;max-width:1320px;margin:0 auto;padding:24px;color:#161616}}
 h1{{font-size:2rem}} .note{{background:#f2f5f8;border-left:5px solid #4178be;padding:14px 18px;line-height:1.5}}
 table{{border-collapse:collapse;width:100%;margin:22px 0}} th,td{{border:1px solid #bbb;padding:10px;text-align:center}}
 .grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:18px}} figure{{margin:0}} img{{width:100%;height:auto}} figcaption{{font-size:1rem;padding:6px 0 18px}}
 </style></head><body>
-<h1>2024 {"high" if selection == "highdm" else "low"}-&Delta;m R<sub>Z</sub>(N<sub>b</sub>) measurement</h1>
+<h1>{campaign_year} {"high" if selection == "highdm" else "low"}-&Delta;m R<sub>Z</sub>(N<sub>b</sub>) measurement</h1>
 <div class="note">Run-2-style on/off-Z matrix measurement. R<sub>Z</sub> and R<sub>T</sub> are determined independently in ee and &mu;&mu; for N<sub>b</sub>=1 and N<sub>b</sub>&ge;2. The combined R<sub>Z</sub> uses inverse-variance weighting. Both the matrix input and the distribution after applying the fitted channel-specific R<sub>Z</sub>/R<sub>T</sub> factors are provided; the latter is a fit visualization, not a closure test. No U<sub>T</sub>-dependent R<sub>Z</sub> is used.</div>
 <table><thead><tr><th>Category</th><th>R<sub>Z</sub>(ee)</th><th>R<sub>Z</sub>(&mu;&mu;)</th><th>Combined R<sub>Z</sub></th><th>R<sub>T</sub>(ee)</th><th>R<sub>T</sub>(&mu;&mu;)</th></tr></thead><tbody>{''.join(rows)}</tbody></table>
 <div class="grid">{card_html}</div>
@@ -452,7 +471,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--selection", choices=("highdm", "lowdm"), default="highdm")
     parser.add_argument("--low-exact", type=Path)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument(
+        "--campaign-year", choices=("2024", "2025"), default="2024"
+    )
     args = parser.parse_args(argv)
+    CMS_LABEL["rlabel"] = f"{args.campaign_year} (13.6 TeV)"
 
     ee = read_json(args.ee)
     mumu = read_json(args.mumu)
@@ -495,9 +518,10 @@ def main(argv: list[str] | None = None) -> int:
         ),
     }
     payload = {
-        "schema_version": "dy_estimation_report_2024_v1",
+        "schema_version": f"dy_estimation_report_{args.campaign_year}_v1",
         "status": "complete",
         "method": {
+            "campaign_year": args.campaign_year,
             "mass_windows": {
                 "on": "81 < mll < 101 GeV",
                 "off": "50 < mll < 81 GeV or mll > 101 GeV",
@@ -527,7 +551,7 @@ def main(argv: list[str] | None = None) -> int:
         "plots": plots,
     }
     write_json(output_dir / "summary.json", payload)
-    write_html(output_dir, result, args.selection)
+    write_html(output_dir, result, args.selection, args.campaign_year)
     print(
         json.dumps(
             {

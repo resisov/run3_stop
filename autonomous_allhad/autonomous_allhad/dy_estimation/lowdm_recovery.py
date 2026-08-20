@@ -113,6 +113,8 @@ def source_map(
             payload = json.load(handle)
             for record in payload.get("records") or []:
                 add_source(mapping, record, wanted_ids)
+    if wanted_ids.issubset(mapping):
+        return mapping
     for root_name in feature_roots:
         try:
             metadata = read_root_metadata(Path(root_name))
@@ -120,6 +122,8 @@ def source_map(
             continue
         for record in metadata.get("files") or []:
             add_source(mapping, record, wanted_ids)
+        if wanted_ids.issubset(mapping):
+            break
     return mapping
 
 

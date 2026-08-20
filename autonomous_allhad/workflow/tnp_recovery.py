@@ -122,10 +122,17 @@ def recover(
     output_dir: Path,
     scratch_dir: Path,
     step_size: int,
+    worker_index: int = 0,
+    workers: int = 1,
 ) -> dict[str, Any]:
+    if workers < 1 or worker_index < 0 or worker_index >= workers:
+        raise ValueError(
+            f"invalid worker partition: worker_index={worker_index}, workers={workers}"
+        )
     manifest = json.loads(manifest_path.read_text())
     config = json.loads(config_path.read_text())
-    records = list(manifest.get("records") or [])
+    campaign_records = list(manifest.get("records") or [])
+    indexed_records = list(enumerate(campaign_records))[worker_index::workers]
     output_dir.mkdir(parents=True, exist_ok=True)
     scratch_dir.mkdir(parents=True, exist_ok=True)
     successful = 0
@@ -135,7 +142,7 @@ def recover(
     # LD_LIBRARY_PATH.  Let the host xrdcp resolve against the matching host
     # XRootD libraries while retaining the proxy and all other credentials.
     xrdcp_environment.pop("LD_LIBRARY_PATH", None)
-    for index, record in enumerate(records):
+    for index, record in indexed_records:
         logical = str(record["file_path"])
         digest = hashlib.sha256(logical.encode()).hexdigest()[:16]
         local_path = scratch_dir / f"tnp_{kind}_{index:05d}_{digest}.root"
@@ -226,9 +233,11 @@ def recover(
         "schema_version": 1,
         "measurement": manifest["measurement"],
         "kind": kind,
-        "records_requested": len(records),
+        "campaign_unresolved_records": len(campaign_records),
+        "records_requested": len(indexed_records),
         "records_recovered": successful,
         "records_failed": len(failed),
+        "worker_partition": {"worker_index": worker_index, "workers": workers},
         "failures": failed,
         "output_dir": str(output_dir),
         "scratch_dir": str(scratch_dir),
@@ -348,6 +357,8 @@ def main() -> int:
     recover_parser.add_argument("--output-dir", type=Path, required=True)
     recover_parser.add_argument("--scratch-dir", type=Path, required=True)
     recover_parser.add_argument("--step-size", type=int, default=100_000)
+    recover_parser.add_argument("--worker-index", type=int, default=0)
+    recover_parser.add_argument("--workers", type=int, default=1)
     skip_parser = subparsers.add_parser("finalize-skips")
     skip_parser.add_argument("--manifest", type=Path, required=True)
     skip_parser.add_argument("--output-records", type=Path, required=True)
@@ -367,6 +378,8 @@ def main() -> int:
             output_dir=args.output_dir,
             scratch_dir=args.scratch_dir,
             step_size=args.step_size,
+            worker_index=args.worker_index,
+            workers=args.workers,
         )
     else:
         result = finalize_permanent_skips(

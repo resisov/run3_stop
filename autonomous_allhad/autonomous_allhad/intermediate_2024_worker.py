@@ -23,7 +23,20 @@ from .object_corrections_2024 import (
 )
 
 
-INTERMEDIATE_SCHEMA = "flat_ntuple_shard_v7_float32_fullselection_2024"
+INTERMEDIATE_SCHEMA = "flat_ntuple_shard_v8_float32_fullselection_2024_trota"
+
+
+# These are the minimal NanoAOD inputs needed downstream to reproduce the
+# Run-2 resolved-vs-boosted overlap removal.  They are deliberately stored by
+# the intermediate producer rather than inferred by the TROTA applicator.
+BOOSTED_OVERLAP_REQUIRED_BRANCHES = (
+    "FatJet_subJetIdx1",
+    "FatJet_subJetIdx2",
+    baseline.BOOSTED_TOP_SCORE_BRANCH,
+    baseline.BOOSTED_W_SCORE_BRANCH,
+    "SubJet_eta",
+    "SubJet_phi",
+)
 
 
 EXTRA_FLOAT_FIELDS = [
@@ -56,6 +69,10 @@ EXTRA_VECTOR_FLOAT_FIELDS = [
     "fatjet_raw_factor",
     "fatjet_area",
     "fatjet_msoftdrop_all",
+    "fatjet_top_score_all",
+    "fatjet_w_score_all",
+    "subjet_eta_all",
+    "subjet_phi_all",
     "electron_nanoaod_pt",
     "electron_corrected_pt",
     "electron_nanoaod_mass",
@@ -102,7 +119,13 @@ EXTRA_VECTOR_FLOAT_FIELDS = [
 ]
 EXTRA_VECTOR_INT_FIELDS = [
     "jet_id_all",
+    "jet_source_index_all",
     "fatjet_id_all",
+    "fatjet_source_index_all",
+    "fatjet_subjet_index1_all",
+    "fatjet_subjet_index2_all",
+    "fatjet_boosted_top_pass_all",
+    "fatjet_boosted_w_pass_all",
     "jet_hadron_flavour_all",
     "jet_genjet_index_all",
     "fatjet_genjetak8_index_all",
@@ -132,6 +155,59 @@ def _as_list(values: Any, index: int) -> list[Any]:
     return ak.to_list(values[index])
 
 
+def _boosted_overlap_sources(
+    raw: Any,
+    corrected: Any,
+    fatjet_id: Any,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Return the exact per-object inputs used for boosted/resolved cleaning."""
+    fatjet_pt = corrected["FatJet_pt"]
+    fatjet_eta = raw["FatJet_eta"]
+    fatjet_msoftdrop = raw["FatJet_msoftdrop"]
+    top_score = raw[baseline.BOOSTED_TOP_SCORE_BRANCH]
+    w_score = raw[baseline.BOOSTED_W_SCORE_BRANCH]
+
+    boosted_top = (
+        fatjet_id
+        & (fatjet_pt > baseline.BOOSTED_TOP_PT_MIN)
+        & (abs(fatjet_eta) < baseline.BOOSTED_ETA_MAX)
+        & (fatjet_msoftdrop > baseline.BOOSTED_TOP_MSD_MIN)
+        & (top_score > baseline.BOOSTED_TOP_SCORE_WP)
+    )
+    boosted_w = (
+        fatjet_id
+        & (fatjet_pt > baseline.BOOSTED_W_PT_MIN)
+        & (abs(fatjet_eta) < baseline.BOOSTED_ETA_MAX)
+        & (fatjet_msoftdrop > baseline.BOOSTED_W_MSD_MIN)
+        & (fatjet_msoftdrop < baseline.BOOSTED_W_MSD_MAX)
+        & (w_score > baseline.BOOSTED_W_SCORE_WP)
+    )
+
+    vector_sources = {
+        "fatjet_top_score_all": top_score,
+        "fatjet_w_score_all": w_score,
+        "subjet_eta_all": raw["SubJet_eta"],
+        "subjet_phi_all": raw["SubJet_phi"],
+    }
+    integer_sources = {
+        "jet_source_index_all": ak.values_astype(
+            ak.local_index(raw["Jet_pt"], axis=1), np.int32,
+        ),
+        "fatjet_source_index_all": ak.values_astype(
+            ak.local_index(raw["FatJet_pt"], axis=1), np.int32,
+        ),
+        "fatjet_subjet_index1_all": ak.values_astype(
+            raw["FatJet_subJetIdx1"], np.int32,
+        ),
+        "fatjet_subjet_index2_all": ak.values_astype(
+            raw["FatJet_subJetIdx2"], np.int32,
+        ),
+        "fatjet_boosted_top_pass_all": ak.values_astype(boosted_top, np.int32),
+        "fatjet_boosted_w_pass_all": ak.values_astype(boosted_w, np.int32),
+    }
+    return vector_sources, integer_sources
+
+
 def _decorate_rows(
     rows: list[dict[str, Any]], raw: Any, corrected: Any, entry_start: int,
 ) -> None:
@@ -140,6 +216,9 @@ def _decorate_rows(
     )
     fatjet_id, _ = baseline.ak8_tight_lepton_veto_mask(
         corrected, corrected["FatJet_pt"], corrected["FatJet_eta"], Path.cwd(),
+    )
+    boosted_vector_sources, boosted_integer_sources = _boosted_overlap_sources(
+        raw, corrected, fatjet_id,
     )
     vector_sources = {
         "jet_nanoaod_pt": raw["Jet_pt"],
@@ -199,6 +278,7 @@ def _decorate_rows(
         "tau_mass_all": corrected["Tau_mass"],
         "tau_dz_all": raw["Tau_dz"],
     }
+    vector_sources.update(boosted_vector_sources)
     integer_sources = {
         "jet_id_all": ak.values_astype(jet_id, np.int32),
         "fatjet_id_all": ak.values_astype(fatjet_id, np.int32),
@@ -222,6 +302,7 @@ def _decorate_rows(
         "tau_deeptau_vsjet_all": raw["Tau_idDeepTau2018v2p5VSjet"],
         "tau_genpart_flavour_all": raw["Tau_genPartFlav"] if "Tau_genPartFlav" in raw.fields else ak.zeros_like(raw["Tau_pt"], dtype=np.int32),
     }
+    integer_sources.update(boosted_integer_sources)
     if "GenJet_pt" in raw.fields:
         for target, source in (
             ("genjet_pt_all", "GenJet_pt"),
@@ -316,6 +397,15 @@ def extract_chunk_2024(
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     if str(year) != "2024":
         raise RuntimeError(f"intermediate_2024_worker only accepts year 2024, got {year!r}")
+    missing_overlap_branches = [
+        name for name in BOOSTED_OVERLAP_REQUIRED_BRANCHES
+        if name not in arrays.fields
+    ]
+    if missing_overlap_branches:
+        raise RuntimeError(
+            "required boosted/resolved overlap branches missing: "
+            f"{missing_overlap_branches}"
+        )
     is_data = process in flat.DATA_PROCESSES
     audit = (
         validation_context.get("object_branch_audit")
@@ -397,6 +487,18 @@ def extract_chunk_2024(
     summary["object_branch_audit"] = audit
     summary["payload_status"] = payload_status
     summary["intermediate_schema"] = INTERMEDIATE_SCHEMA
+    summary["boosted_resolved_cross_cleaning_inputs"] = {
+        "status": "stored",
+        "ak4_identity": "jet_source_index_all indexes the NanoAOD Jet collection",
+        "ak8_identity": "fatjet_source_index_all indexes the NanoAOD FatJet collection",
+        "subjet_identity": "fatjet_subjet_index{1,2}_all index subjet_eta_all/subjet_phi_all",
+        "boosted_masks": {
+            "top": "fatjet_boosted_top_pass_all",
+            "w": "fatjet_boosted_w_pass_all",
+        },
+        "variation_scope": validate_shift(shift_name),
+        "trota_inference_stage": "main Condor job after Events creation and before EOS stage-out",
+    }
     summary["dy_recoil_selection"] = {
         "DY2E": "OS medium electrons, pT(ll)>200, on-Z, electron-cleaned AK4/AK8 jets, deltaPhi against uT, uT>250 GeV",
         "DY2M": "OS medium muons, pT(ll)>200, on-Z, muon-cleaned AK4/AK8 jets, deltaPhi against uT, uT>250 GeV",
@@ -408,6 +510,9 @@ def extract_chunk_2024(
 def install_backend() -> None:
     if "LHE_Vpt" not in flat.CORE_BRANCHES:
         flat.CORE_BRANCHES.append("LHE_Vpt")
+    for name in BOOSTED_OVERLAP_REQUIRED_BRANCHES:
+        if name not in flat.CORE_BRANCHES:
+            flat.CORE_BRANCHES.append(name)
     for names in REQUIRED_BRANCHES.values():
         for name in names:
             if name not in flat.CORE_BRANCHES:

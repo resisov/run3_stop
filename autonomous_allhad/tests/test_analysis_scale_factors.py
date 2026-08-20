@@ -17,13 +17,12 @@ from autonomous_allhad.analysis_scale_factors import (
     veto_electron_lowpt_triplet,
 )
 from workflow.sf_payload import correction, correction_set, install_adopted_result, write_json_gz
-from workflow.lowpt_muon_measurement.export_correctionlib import combined_values
 
 
 class AnalysisScaleFactorTest(unittest.TestCase):
     @staticmethod
-    def _install_constant_payloads(repo: Path) -> Path:
-        target = repo / "analysis/data/AnalysisSF/2024"
+    def _install_constant_payloads(repo: Path, year: str = "2024") -> Path:
+        target = repo / "analysis/data/AnalysisSF" / year
         target.mkdir(parents=True)
         write_json_gz(
             target / "met_trigger_sf.json.gz",
@@ -41,11 +40,11 @@ class AnalysisScaleFactorTest(unittest.TestCase):
         )
         write_json_gz(
             target / "veto_electron_5to10_sf.json.gz",
-            correction_set("electron", [correction(name="veto_electron_5to10_sf", description="e", axes=[("abseta", [0, 2.5]), ("pt", [5, 10])], nominal=[1.05], uncertainty=[0.03])]),
+            correction_set("electron", [correction(name="veto_electron_id_5to10_sf", description="e ID only", axes=[("abseta", [0, 2.5]), ("pt", [5, 10])], nominal=[1.05], uncertainty=[0.03])]),
         )
         write_json_gz(
             target / "loose_muon_5to10_sf.json.gz",
-            correction_set("muon", [correction(name="loose_muon_5to10_sf", description="m", axes=[("abseta", [0, 2.4]), ("pt", [5, 10])], nominal=[0.97], uncertainty=[0.02])]),
+            correction_set("muon", [correction(name="loose_muon_id_5to10_sf", description="m ID only", axes=[("abseta", [0, 2.4]), ("pt", [5, 10])], nominal=[0.97], uncertainty=[0.02])]),
         )
         return target
 
@@ -98,19 +97,40 @@ class AnalysisScaleFactorTest(unittest.TestCase):
             with self.assertRaises(AnalysisScaleFactorUnavailable):
                 met_trigger_triplet(Path(tmp), [300.0], qcd=False)
 
-    def test_muon_export_multiplies_official_lowpt_loose_id(self):
-        result = {
-            "probe_abseta_edges": [0.0, 2.4],
-            "probe_pt_edges_gev": [5.0, 10.0],
-            "bins": [{"scale_factor": 0.98, "scale_factor_uncertainty": 0.02}],
-        }
-        nominal, uncertainty = combined_values(
-            result,
-            Path("analysis/data/MuonSF/2024/muon_JPsi.json.gz"),
+    def test_2025_helpers_select_2025_payload_directory(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            self._install_constant_payloads(repo, year="2025")
+            self.assertTrue(
+                np.allclose(
+                    met_trigger_triplet(repo, [250], qcd=False, year="2025")[0],
+                    [0.9],
+                )
+            )
+            self.assertAlmostEqual(
+                float(
+                    veto_electron_lowpt_triplet(
+                        repo,
+                        ak.Array([[0.2]]),
+                        ak.Array([[7.0]]),
+                        year="2025",
+                    )[0][0][0]
+                ),
+                1.05,
+            )
+
+    def test_installed_lowpt_payloads_are_id_only(self):
+        repo = Path(__file__).resolve().parents[2]
+        electron = correctionlib.CorrectionSet.from_file(
+            str(repo / "analysis/data/AnalysisSF/2024/veto_electron_5to10_sf.json.gz")
         )
-        self.assertGreater(nominal[0], 0.9)
-        self.assertLess(nominal[0], 1.1)
-        self.assertGreater(uncertainty[0], 0.02)
+        muon = correctionlib.CorrectionSet.from_file(
+            str(repo / "analysis/data/AnalysisSF/2024/loose_muon_5to10_sf.json.gz")
+        )
+        self.assertIn("veto_electron_id_5to10_sf", electron)
+        self.assertIn("loose_muon_id_5to10_sf", muon)
+        self.assertIn("excluding isolation", electron["veto_electron_id_5to10_sf"].description)
+        self.assertIn("excluding isolation", muon["loose_muon_id_5to10_sf"].description)
 
     def test_adopted_lowpt_payloads_reach_histogram_weight_variations(self):
         try:

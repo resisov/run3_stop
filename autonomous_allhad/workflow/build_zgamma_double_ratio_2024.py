@@ -351,13 +351,17 @@ def main() -> int:
     parser.add_argument("--dy-high-stream", type=Path, required=True)
     parser.add_argument("--dy-low-stream", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument(
+        "--campaign-year", choices=("2024", "2025"), default="2024"
+    )
     args = parser.parse_args()
+    CMS_LABEL["rlabel"] = f"{args.campaign_year} (13.6 TeV)"
 
     exact = json.loads(args.gcr_exact.read_text())
     high_stream = read_stream(args.dy_high_stream)
     low_stream = read_stream(args.dy_low_stream)
     payload: dict[str, Any] = {
-        "schema_version": "zgamma_double_ratio_2024_v1",
+        "schema_version": f"zgamma_double_ratio_{args.campaign_year}_v1",
         "status": "complete",
         "definition": {
             "z_ratio_raw": "(DYCR data - non-DY MC) / DY MC",
@@ -382,6 +386,7 @@ def main() -> int:
             "dy_low_stream_sha256": sha256(args.dy_low_stream),
             "dy_channels": ["DY2E", "DY2M"],
             "dy_samples": "DYto2E/Mu/Tau-4Jets current merged DY process; PTLL excluded upstream",
+            "campaign_year": args.campaign_year,
         },
         "plots": [],
     }
