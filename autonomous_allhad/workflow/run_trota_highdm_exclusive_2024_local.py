@@ -120,7 +120,13 @@ def parse_tasks(arguments: Path) -> list[dict[str, Path | str]]:
 
 
 def prioritize(tasks: list[dict[str, Path | str]]) -> list[dict[str, Path | str]]:
-    wanted = set(PRIORITY_ROOTS)
+    available = {
+        Path(line.strip()).name
+        for task in tasks
+        for line in Path(task["input_list"]).read_text().splitlines()
+        if line.strip() and not line.lstrip().startswith("#")
+    }
+    wanted = set(PRIORITY_ROOTS) & available
     priority = []
     regular = []
     covered: set[str] = set()

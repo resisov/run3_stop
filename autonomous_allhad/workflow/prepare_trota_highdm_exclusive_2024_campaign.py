@@ -39,9 +39,17 @@ def main() -> int:
     parser.add_argument("--campaign-dir", required=True, type=Path)
     parser.add_argument("--chunk-size", type=int, default=10)
     parser.add_argument("--expected-roots", type=int, default=EXPECTED_ROOTS)
+    parser.add_argument(
+        "--process-scope",
+        choices=("all", "signal"),
+        default="all",
+        help="Restrict a recovery campaign to signal ROOTs without rebuilding data/MC.",
+    )
     args = parser.parse_args()
 
     roots = sorted(path for path in args.source_dir.glob("*.root") if path.stat().st_size > 0)
+    if args.process_scope == "signal":
+        roots = [path for path in roots if path.name.startswith("signal_")]
     if len(roots) != args.expected_roots:
         raise RuntimeError(f"expected {args.expected_roots} ROOTs, found {len(roots)}")
     missing_sidecars = [path for path in roots if not path.with_suffix(".json").is_file() or path.with_suffix(".json").stat().st_size == 0]
@@ -74,10 +82,12 @@ def main() -> int:
         "mc": [path for path in roots if path.name.startswith("mc_")],
         "signal": [path for path in roots if path.name.startswith("signal_")],
     }
-    if any(not values for values in by_prefix.values()):
+    required_prefixes = ("signal",) if args.process_scope == "signal" else tuple(by_prefix)
+    if any(not by_prefix[label] for label in required_prefixes):
         raise RuntimeError(f"pilot population missing: {by_prefix}")
     pilot_lines = []
-    for label, values in by_prefix.items():
+    for label in required_prefixes:
+        values = by_prefix[label]
         pilot_path = pilot_dir / f"pilot_{label}.txt"
         write_text(pilot_path, f"{values[0]}\n")
         pilot_lines.append(
@@ -95,6 +105,7 @@ def main() -> int:
         "sidecar_count": len(roots),
         "chunk_size": args.chunk_size,
         "chunk_count": len(argument_lines),
+        "process_scope": args.process_scope,
         "process_counts": {key: len(values) for key, values in by_prefix.items()},
         "root_manifest": str(master),
         "root_manifest_sha256": sha256(master),

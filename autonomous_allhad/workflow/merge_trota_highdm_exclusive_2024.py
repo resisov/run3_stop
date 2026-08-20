@@ -63,6 +63,9 @@ def main() -> int:
     campaign = args.campaign_dir
     manifest_path = campaign / "manifest.json"
     manifest = json.loads(manifest_path.read_text())
+    process_scope = str(manifest.get("process_scope") or "all")
+    if process_scope not in {"all", "signal"}:
+        raise RuntimeError(f"unsupported process scope: {process_scope}")
     expected_roots = read_noncomment_lines(Path(manifest["root_manifest"]))
     argument_rows = read_noncomment_lines(Path(manifest["arguments"]))
     expected_chunks = [Path(row.split()[2]) for row in argument_rows]
@@ -150,10 +153,15 @@ def main() -> int:
                 if np.any(np.asarray(record["sumw2"], dtype=float) < 0):
                     raise RuntimeError(f"negative sumw2: {scheme}/{sample}/{variation}")
     conservation = validate_conservation(histograms)
-    required_samples = {
-        "data_obs", "QCD", "Zto2Nu", "WtoLNu", "ST", "TT", "DY", "GJ", "VV",
-        "T2tt_mStop1000_mLSP1", "T2tt_mStop1200_mLSP1",
-    }
+    signal_samples = {"T2tt_mStop1000_mLSP1", "T2tt_mStop1200_mLSP1"}
+    required_samples = (
+        signal_samples
+        if process_scope == "signal"
+        else {
+            "data_obs", "QCD", "Zto2Nu", "WtoLNu", "ST", "TT", "DY", "GJ", "VV",
+            *signal_samples,
+        }
+    )
     missing_samples = sorted(required_samples - set(histograms[BASELINE_SCHEME]))
     if missing_samples:
         raise RuntimeError(f"missing required samples: {missing_samples}")
@@ -179,6 +187,7 @@ def main() -> int:
         "completed_at": now(),
         "campaign_manifest": str(manifest_path),
         "campaign_manifest_sha256": sha256(manifest_path),
+        "process_scope": process_scope,
         "normalization_sha256": sha256(campaign / "normalization.json"),
         "chunk_count": len(expected_chunks),
         "files_expected": len(expected_roots),
@@ -200,6 +209,7 @@ def main() -> int:
     summary = {
         "schema_version": "trota_highdm_exclusive_2024_summary_v1",
         "status": "complete",
+        "process_scope": process_scope,
         "output": str(args.output),
         "output_sha256": output_sha256,
         "chunks": len(expected_chunks),
