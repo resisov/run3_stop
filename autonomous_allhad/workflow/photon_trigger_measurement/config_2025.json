@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "measurement": "photon_trigger_sf_2025",
+  "status": "measurement_definition",
+  "reference": "AN2019_016_v9.pdf section 5.1.4; 2024 production workflow with year-dependent inputs only",
+  "year": "2025",
+  "campaign_inputs": {
+    "data_primary_datasets": ["JetMET0", "JetMET1"],
+    "data_eras_and_versions": {
+      "C": [1, 2],
+      "D": [1],
+      "E": [1],
+      "F": [1, 2],
+      "G": [1]
+    },
+    "data_dataset_template": "/{primary}/Run2025{era}-PromptReco-v{version}/NANOAOD",
+    "data_process": "JetMET",
+    "mc_datasets": [
+      {"dataset": "/GJ-4Jets_Bin-HT-10to40-PTG-10to100_Par-dRGJ-0p25_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM", "process": "GJ", "xsec_pb": 164100.0, "xsec_source": "autonomous_allhad/configs/samples_2025.json"},
+      {"dataset": "/GJ-4Jets_Bin-HT-40to100-PTG-10to100_Par-dRGJ-0p25_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM", "process": "GJ", "xsec_pb": 123400.0, "xsec_source": "autonomous_allhad/configs/samples_2025.json"},
+      {"dataset": "/GJ-4Jets_Bin-HT-100to200-PTG-10to100_Par-dRGJ-0p25_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM", "process": "GJ", "xsec_pb": 32190.0, "xsec_source": "autonomous_allhad/configs/samples_2025.json"},
+      {"dataset": "/GJ-4Jets_Bin-HT-200to400-PTG-10to100_Par-dRGJ-0p25_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM", "process": "GJ", "xsec_pb": 5498.0, "xsec_source": "autonomous_allhad/configs/samples_2025.json"},
+      {"dataset": "/GJ-4Jets_Bin-HT-400to600-PTG-10to100_Par-dRGJ-0p25_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3/NANOAODSIM", "process": "GJ", "xsec_pb": 482.3, "xsec_source": "autonomous_allhad/configs/samples_2025.json"},
+      {"dataset": "/GJ-4Jets_Bin-HT-600to1000-PTG-10to100_Par-dRGJ-0p25_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM", "process": "GJ", "xsec_pb": 117.5, "xsec_source": "autonomous_allhad/configs/samples_2025.json"},
+      {"dataset": "/GJ-4Jets_Bin-HT-1000-PTG-10to100_Par-dRGJ-0p25_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM", "process": "GJ", "xsec_pb": 15.12, "xsec_source": "autonomous_allhad/configs/samples_2025.json"},
+      {"dataset": "/GJ-4Jets_Bin-HT-40to200-PTG-100to200_Par-dRGJ-0p25_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM", "process": "GJ", "xsec_pb": 554.3, "xsec_source": "autonomous_allhad/configs/samples_2025.json"},
+      {"dataset": "/GJ-4Jets_Bin-HT-200to400-PTG-100to200_Par-dRGJ-0p25_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM", "process": "GJ", "xsec_pb": 200.0, "xsec_source": "autonomous_allhad/configs/samples_2025.json"},
+      {"dataset": "/GJ-4Jets_Bin-HT-400to600-PTG-100to200_Par-dRGJ-0p25_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM", "process": "GJ", "xsec_pb": 29.77, "xsec_source": "autonomous_allhad/configs/samples_2025.json"},
+      {"dataset": "/GJ-4Jets_Bin-HT-600to1000-PTG-100to200_Par-dRGJ-0p25_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM", "process": "GJ", "xsec_pb": 9.666, "xsec_source": "autonomous_allhad/configs/samples_2025.json"},
+      {"dataset": "/GJ-4Jets_Bin-HT-1000-PTG-100to200_Par-dRGJ-0p25_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM", "process": "GJ", "xsec_pb": 1.628, "xsec_source": "autonomous_allhad/configs/samples_2025.json"},
+      {"dataset": "/GJ-4Jets_Bin-HT-40to400-PTG-200_Par-dRGJ-0p25_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM", "process": "GJ", "xsec_pb": 43.76, "xsec_source": "autonomous_allhad/configs/samples_2025.json"},
+      {"dataset": "/GJ-4Jets_Bin-HT-400to600-PTG-200_Par-dRGJ-0p25_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM", "process": "GJ", "xsec_pb": 11.75, "xsec_source": "autonomous_allhad/configs/samples_2025.json"},
+      {"dataset": "/GJ-4Jets_Bin-HT-600to1000-PTG-200_Par-dRGJ-0p25_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM", "process": "GJ", "xsec_pb": 4.75, "xsec_source": "autonomous_allhad/configs/samples_2025.json"},
+      {"dataset": "/GJ-4Jets_Bin-HT-1000-PTG-200_Par-dRGJ-0p25_TuneCP5_13p6TeV_madgraphMLM-pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM", "process": "GJ", "xsec_pb": 1.019, "xsec_source": "autonomous_allhad/configs/samples_2025.json"}
+    ],
+    "files_per_condor_shard": 20
+  },
+  "probe_paths": ["HLT_Photon175", "HLT_Photon200"],
+  "reference_paths": [
+    "HLT_PFHT180", "HLT_PFHT250", "HLT_PFHT350", "HLT_PFHT370",
+    "HLT_PFHT430", "HLT_PFHT510", "HLT_PFHT590", "HLT_PFHT680",
+    "HLT_PFHT780", "HLT_PFHT890", "HLT_PFHT1050"
+  ],
+  "data_streams": ["JetMET0", "JetMET1"],
+  "mc_processes": ["GJ"],
+  "pt_edges_gev": [220, 250, 300, 400, 600, 1000],
+  "abseta_edges": [0.0, 0.8, 1.4442, 2.0, 2.5],
+  "eta_policy": "Exclude the 1.4442--1.566 ECAL transition; the adjacent endcap bin is populated only for abs(eta)>1.566.",
+  "selection": "2024 production baseline-like photon region without MET threshold; veto-electron veto; loose-muon veto; at least one medium-ID photon",
+  "adoption_gates": [
+    "PFHT reference path presence in every adopted data shard",
+    "photon-trigger/PFHT overlap and primary-dataset deduplication audit",
+    "per-era and eta closure",
+    "alternate binning and reference-path stability",
+    "plateau validation over the analysis photon pT threshold"
+  ]
+}

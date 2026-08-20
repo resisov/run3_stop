@@ -85,6 +85,7 @@ PAYLOADS = (
     Payload("MUO", "muon_HighPt.json.gz", "f297b629d43c59f1fcd7b87237bf3ea5e69e8cd5dafd2c938e6d0d31bb29f8bf", ("NUM_HighPtID_DEN_GlobalMuonProbes",)),
     Payload("MUO", "muon_scalesmearing.json.gz", "466861f1cbacf5258a52db216a8b954df8efee7f815021fec68e065a846bc4e4", ("m_data", "a_data", "m_mc", "a_mc", "k_data", "k_mc", "RandomSmearing", "cb_params", "poly_params")),
     Payload("BTV", "btagging.json.gz", "7bc84b37b4a41ec242cabf0900be011b95d5342c2c04a378ea65db2962875f61", ("UParTAK4_wp_values", "UParTAK4_comb", "UParTAK4_light")),
+    Payload("TAU", "tau.json.gz", "f2d204a211c5656aa7ad1d63d82f55e4f9e6e802c5d96043ace4915306127301", ("DeepTau2018v2p5VSe", "DeepTau2018v2p5VSmu", "DeepTau2018v2p5VSjet", "tau_energy_scale")),
     Payload("LUM", "puWeights_2025pp_Golden_Summer24_25ns_69200ub.json.gz", "55e2a75f5e91172f380adb7f7e7d7e0cc18e2d7aa125deb0a3216b857b7565a3", ("Collisions25_goldenJSON",)),
 )
 
@@ -164,17 +165,115 @@ REQUIRED_BRANCHES = {
         "Tau_idDeepTau2018v2p5VSe", "Tau_idDeepTau2018v2p5VSmu",
         "Tau_idDeepTau2018v2p5VSjet",
     ),
+    "lowdm": (
+        "FatJet_subJetIdx1", "FatJet_subJetIdx2",
+        "SubJet_btagUParTAK4B",
+        "FatJet_globalParT3_withMassTopvsQCD",
+        "FatJet_globalParT3_withMassWvsQCD",
+        "SV_pt", "SV_eta", "SV_phi", "SV_dxy",
+        "SV_dlenSig", "SV_pAngle", "SV_ntracks",
+    ),
 }
 
 
 EXTERNAL_FINAL_WEIGHT_DEPENDENCIES = {
     "met_trigger": "No analysis-specific 2025 MET trigger efficiency/SF payload has been supplied.",
     "photon_trigger": "No analysis-specific 2025 Photon175/Photon200 OR trigger efficiency/SF payload has been supplied.",
+    "electron_trigger": "The official 2025 EGM correction era does not provide an electron HLT SF payload.",
+    "veto_electron_5to10": "The official Electron-ID-SF payload starts at 10 GeV; the 5--10 GeV veto-electron ID SF must be measured.",
+    "loose_muon_5to10": "The 2025 MUO correction era has no J/psi low-pT payload; the 5--10 GeV loose-muon ID SF must be measured.",
+    "btag_efficiency": "The official BTV payload supplies SFs, not the MC tagging efficiencies required by the fixed-WP event reweighting method; build btageff2025.merged from the frozen MC inputs.",
     "top_tag": "Run-3 data/MC top-tag SF payload and decorrelation prescription have not been supplied.",
     "w_tag": "Run-3 data/MC W-tag SF payload and decorrelation prescription have not been supplied.",
     "soft_sv": "Run-3 soft-SV tagging/veto efficiency and SF payload have not been supplied.",
     "jms_jmr": "No 2025 JMS/JMR payload is published in this correction-era bundle.",
 }
+
+
+# Multiplicative SFs are deliberately evaluated after skimming, exactly as in
+# the 2024 flat-ROOT workflow.  This table is the contract between the 2025
+# intermediate schema and the later histogram step: every centrally provided
+# SF can be recomputed from these persisted branches without reopening NanoAOD.
+DEFERRED_CENTRAL_SCALE_FACTORS = {
+    "pileup": {
+        "payload": "LUM/puWeights_2025pp_Golden_Summer24_25ns_69200ub.json.gz",
+        "correction": "Collisions25_goldenJSON",
+        "variations": ["nominal", "up", "down"],
+        "root_fields": ["pu_ntrueint"],
+    },
+    "btag_fixed_wp": {
+        "payload": "BTV/btagging.json.gz",
+        "corrections": ["UParTAK4_comb", "UParTAK4_light"],
+        "working_point": "M",
+        "root_fields": [
+            "good_jet_pt", "good_jet_eta", "good_jet_hadron_flavour",
+            "good_jet_b_medium", "good_jet_btag_upart",
+        ],
+        "external_input": "btageff2025.merged",
+        "heavy_flavour_valid_pt_gev": [30.0, 600.0],
+        "light_flavour_valid_pt_gev": [20.0, 1000.0],
+    },
+    "electron_id_reco": {
+        "payload": "EGM/electron.json.gz",
+        "correction": "Electron-ID-SF",
+        "working_points": ["Veto", "Medium", "Reco20to75", "RecoAbove75"],
+        "root_fields": [
+            "electron_veto_pt", "electron_veto_eta_sc", "electron_veto_phi",
+            "electron_medium_pt", "electron_medium_eta_sc", "electron_medium_phi",
+        ],
+    },
+    "photon_id_csev_pixel_veto": {
+        "payload": "EGM/photon.json.gz",
+        "corrections": ["Photon-ID-SF", "Photon-CSEV-SF", "Photon-PixVeto-SF"],
+        "working_point": "Medium",
+        "root_fields": [
+            "photon_medium_pt", "photon_medium_eta", "photon_medium_phi",
+            "photon_electron_veto_all", "photon_pixel_seed_all",
+        ],
+    },
+    "muon_id_iso_trigger": {
+        "payload": "MUO/muon_Z.json.gz",
+        "corrections": [
+            "NUM_LooseID_DEN_TrackerMuons",
+            "NUM_MediumID_DEN_TrackerMuons",
+            "NUM_LooseMiniIso_DEN_LooseID",
+            "NUM_LooseMiniIso_DEN_MediumID",
+            "NUM_IsoMu24_or_Mu50_or_CascadeMu100_or_HighPtTkMu100_DEN_CutBasedIdMedium_and_PFIsoMedium",
+        ],
+        "root_fields": [
+            "muon_loose_pt", "muon_loose_eta", "muon_loose_phi",
+            "muon_medium_pt", "muon_medium_eta", "muon_medium_phi",
+        ],
+    },
+    "tau_id": {
+        "payload": "TAU/tau.json.gz",
+        "corrections": ["DeepTau2018v2p5VSe", "DeepTau2018v2p5VSmu", "DeepTau2018v2p5VSjet"],
+        "root_fields": [
+            "tau_pt_all", "tau_eta_all", "tau_decay_mode_all",
+            "tau_genpart_flavour_all", "tau_deeptau_vse_all",
+            "tau_deeptau_vsmu_all", "tau_deeptau_vsjet_all",
+        ],
+    },
+}
+
+
+def deferred_scale_factor_input_audit(fields: set[str]) -> dict[str, Any]:
+    components: dict[str, Any] = {}
+    missing_all: set[str] = set()
+    for name, spec in DEFERRED_CENTRAL_SCALE_FACTORS.items():
+        required = set(spec["root_fields"])
+        missing = sorted(required - fields)
+        components[name] = {
+            "status": "ready" if not missing else "missing_fields",
+            "required_fields": sorted(required),
+            "missing_fields": missing,
+        }
+        missing_all.update(missing)
+    return {
+        "status": "ready" if not missing_all else "incomplete",
+        "components": components,
+        "missing_fields": sorted(missing_all),
+    }
 
 
 def sha256(path: Path) -> str:
@@ -188,6 +287,11 @@ def sha256(path: Path) -> str:
 def payload_path(root: Path, payload: Payload) -> Path:
     bundled = root / payload.relative
     return bundled if bundled.is_file() else payload.source
+
+
+@lru_cache(maxsize=None)
+def _load_correction_set(path: str) -> correctionlib.CorrectionSet:
+    return correctionlib.CorrectionSet.from_file(path)
 
 
 @lru_cache(maxsize=4)
@@ -210,7 +314,7 @@ def validate_payloads(root: Path) -> dict[str, Any]:
             files.append(item)
             continue
         try:
-            cset = correctionlib.CorrectionSet.from_file(str(path))
+            cset = _load_correction_set(str(path))
             missing = [name for name in spec.required_corrections if name not in cset]
             missing_compound = [name for name in spec.required_compounds if name not in cset.compound]
         except Exception as exc:
@@ -317,7 +421,7 @@ def _calibrate_egm_collection(
 ) -> tuple[Any, Any | None, dict[str, Any]]:
     payload_name = "electronSS_EtDependent.json.gz" if prefix == "Electron" else "photonSS_EtDependent.json.gz"
     spec = next(item for item in PAYLOADS if item.filename == payload_name)
-    cset = correctionlib.CorrectionSet.from_file(str(payload_path(root, spec)))
+    cset = _load_correction_set(str(payload_path(root, spec)))
     pt = arrays[f"{prefix}_pt"]
     eta_sc = arrays["Electron_eta"] + arrays["Electron_deltaEtaSC"] if prefix == "Electron" else arrays["Photon_eta"]
     r9 = arrays[f"{prefix}_r9"]
@@ -430,7 +534,7 @@ def _crystal_ball_invcdf(uniform: Any, mean: Any, sigma: Any, alpha: Any, power:
 
 def _calibrate_muons(arrays: Any, is_data: bool, shift: str, root: Path) -> tuple[Any, Any, dict[str, Any]]:
     spec = next(item for item in PAYLOADS if item.filename == "muon_scalesmearing.json.gz")
-    cset = correctionlib.CorrectionSet.from_file(str(payload_path(root, spec)))
+    cset = _load_correction_set(str(payload_path(root, spec)))
     pt = arrays["Muon_pt"]
     eta = arrays["Muon_eta"]
     phi = arrays["Muon_phi"]
@@ -512,7 +616,7 @@ def _calibrate_taus(arrays: Any, is_data: bool, shift: str, root: Path) -> tuple
         status["mode"] = "not_applicable_data"
         return pt, mass, status
     spec = next(item for item in PAYLOADS if item.filename == "tau.json.gz")
-    cset = correctionlib.CorrectionSet.from_file(str(payload_path(root, spec)))
+    cset = _load_correction_set(str(payload_path(root, spec)))
     eta = arrays["Tau_eta"]
     decay_mode = arrays["Tau_decayMode"]
     genmatch = arrays["Tau_genPartFlav"]
@@ -595,7 +699,7 @@ def _calibrate_jet_collection(
 ) -> tuple[Any, Any, dict[str, Any]]:
     payload_name = "fatJet_jerc.json.gz" if prefix == "FatJet" else "jet_jerc.json.gz"
     spec = next(item for item in PAYLOADS if item.filename == payload_name)
-    cset = correctionlib.CorrectionSet.from_file(str(payload_path(root, spec)))
+    cset = _load_correction_set(str(payload_path(root, spec)))
     pt_nano = arrays[f"{prefix}_pt"]
     mass_nano = arrays[f"{prefix}_mass"]
     raw_factor = arrays[f"{prefix}_rawFactor"]
@@ -716,7 +820,7 @@ def calibrate_jets_and_met(arrays: Any, is_data: bool, shift: str, root: Path) -
         "tau": tau_status,
         "met": {
             "base": f"NanoAOD PuppiMET{met_suffix}",
-            "propagation": "AK4 V5/JRV2 type-1 delta plus electron, muon, photon, and tau momentum deltas",
+            "propagation": "AK4 Summer24Prompt25 V3/JRV2 type-1 delta plus electron, muon, photon, and tau momentum deltas",
         },
     }
 
@@ -745,6 +849,13 @@ def manifest() -> dict[str, Any]:
             "muon": "MuonScaRe scale and MC Crystal Ball resolution for 26 <= pt <= 200 GeV",
             "tau": "DeepTau2018v2p5 VSjet Medium tau energy scale in MC",
             "met": "PuppiMET propagation from all corrected object momenta",
+        },
+        "deferred_central_scale_factors": DEFERRED_CENTRAL_SCALE_FACTORS,
+        "intermediate_weight_policy": {
+            "event_weight_in_root": "raw genWeight for MC and unity for data",
+            "multiplicative_scale_factors": "deferred to histogram production",
+            "reason": "match the validated 2024 intermediate-ROOT contract and allow SF payload updates without reprocessing NanoAOD",
+            "readiness_gate": "all root_fields declared in deferred_central_scale_factors must be present",
         },
         "required_branches": {key: list(value) for key, value in REQUIRED_BRANCHES.items()},
         "external_final_weight_dependencies": EXTERNAL_FINAL_WEIGHT_DEPENDENCIES,

@@ -79,7 +79,9 @@ def split_data_and_mc(exact: dict[str, Any]) -> tuple[dict[str, Any], dict[str, 
     return measurement, mc_exact
 
 
-def validate_samples(exact: dict[str, Any]) -> dict[str, Any]:
+def validate_samples(
+    exact: dict[str, Any], campaign_year: str = "2024"
+) -> dict[str, Any]:
     datasets = sorted((exact.get("summary") or {}).get("datasets") or {})
     forbidden = [name for name in datasets if "PTLL" in name.upper()]
     if forbidden:
@@ -92,11 +94,36 @@ def validate_samples(exact: dict[str, Any]) -> dict[str, Any]:
     missing = [name for name, present in required_dy.items() if not present]
     if missing:
         raise ValueError(f"required DY2x samples absent: {missing}")
-    data = [name for name in datasets if "Run2024" in name]
+    data = [name for name in datasets if f"Run{campaign_year}" in name]
     gj = [name for name in datasets if name.startswith("GJ") or "GJets" in name]
     qcd = [name for name in datasets if name.startswith("QCD")]
-    if not data or any(not name.startswith(("EGamma0-", "EGamma1-")) for name in data):
-        raise ValueError("GCR data inputs are not exclusively EGamma0/EGamma1")
+    allowed_data_prefixes = (
+        ("EGamma0-", "EGamma1-")
+        if campaign_year == "2024"
+        else ("EGamma0-", "EGamma1-", "EGamma2-", "EGamma3-")
+    )
+    gcr_data = [name for name in data if name.startswith(allowed_data_prefixes)]
+    regions = set((exact.get("provenance") or {}).get("regions") or [])
+    auxiliary_prefixes: tuple[str, ...] = ()
+    if "LLCR" in regions:
+        auxiliary_prefixes += ("Muon0-", "Muon1-")
+    if "QCDCR" in regions or "SR" in regions:
+        auxiliary_prefixes += (
+            "JetMET0-",
+            "JetMET1-",
+            "JetMET2-",
+            "JetMET3-",
+        )
+    unexpected_data = [
+        name
+        for name in data
+        if not name.startswith(allowed_data_prefixes + auxiliary_prefixes)
+    ]
+    if not gcr_data or unexpected_data:
+        raise ValueError(
+            "data inputs do not match the region-gated streams for "
+            f"{campaign_year}: {unexpected_data[:5]}"
+        )
     if not gj or any(not name.startswith("GJ-4Jets_Bin-HT-") for name in gj):
         raise ValueError("GJ inputs are not exclusively the adopted GJ-4Jets HTxPTG family")
     if not qcd or any(not name.startswith("QCD-4Jets_Bin-HT-") for name in qcd):
@@ -104,7 +131,13 @@ def validate_samples(exact: dict[str, Any]) -> dict[str, Any]:
     return {
         "dataset_count": len(datasets),
         "data_dataset_records": len(data),
-        "data_family": "EGamma0/EGamma1 only",
+        "gcr_data_dataset_records": len(gcr_data),
+        "auxiliary_region_data_dataset_records": len(data) - len(gcr_data),
+        "data_family": "/".join(
+            prefix[:-1] if prefix.endswith("-") else prefix
+            for prefix in allowed_data_prefixes
+        )
+        + " only",
         "gj_physical_datasets": len(gj),
         "gj_family": "GJ-4Jets HTxPTG, dRGJ>0.25",
         "qcd_physical_datasets": len(qcd),
@@ -229,12 +262,16 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--exact", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument(
+        "--campaign-year", choices=("2024", "2025"), default="2024"
+    )
     args = parser.parse_args()
+    zinv.CMS_LABEL["rlabel"] = f"{args.campaign_year} (13.6 TeV)"
 
     exact = json.loads(args.exact.read_text())
     if exact.get("status") != "complete":
         raise ValueError(f"exact input is not complete: {exact.get('status')}")
-    sample_check = validate_samples(exact)
+    sample_check = validate_samples(exact, args.campaign_year)
     measurement, mc_exact = split_data_and_mc(exact)
     factors = zinv.build_q_sgamma(measurement, mc_exact)
     low_shared = zinv.aggregate_low_sgamma(factors["lowdm"])
@@ -253,7 +290,7 @@ def main() -> int:
     plot_paths.extend(zinv.plot_sgamma(factors["highdm"], "highdm", args.output_dir))
     plot_paths.extend(zinv.plot_sgamma(factors["lowdm"], "lowdm", args.output_dir))
     payload = {
-        "schema_version": "sgamma_ut_2024_v1",
+        "schema_version": f"sgamma_ut_{args.campaign_year}_v1",
         "status": "complete",
         "definition": {
             "Q_g": "sum_i(data_i - otherMC_i) / sum_i(gammaJetsMC_i)",
@@ -270,6 +307,7 @@ def main() -> int:
             "exact_provenance": exact.get("provenance"),
             "sample_check": sample_check,
             "nominal_sr_data_recorded": False,
+            "campaign_year": args.campaign_year,
         },
         "highdm": factors["highdm"],
         "lowdm_families": factors["lowdm"],

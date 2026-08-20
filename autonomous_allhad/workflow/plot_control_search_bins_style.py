@@ -1242,10 +1242,13 @@ def selected_an17_recoil_blocks(payload: dict, scheme_name: str) -> list[dict]:
 
 
 def lowdm_nsv_inclusive_blocks(payload: dict, scheme_name: str) -> list[dict]:
+    nres_zero = bool(
+        (((payload.get("lowdm_region_policy") or {}).get("resolved_top_veto") or {}).get("applied"))
+    )
     rec = flat_search_record(
         payload,
         scheme_name,
-        "Low-dM SR",
+        r"Low-dM SR, $N_{res}=0$" if nres_zero else "Low-dM SR",
         allow_signal=True,
         signal_overlays=LOWDM_SIGNAL_OVERLAYS,
     )
@@ -1268,7 +1271,10 @@ def lowdm_nsv_inclusive_blocks(payload: dict, scheme_name: str) -> list[dict]:
             "data_unc": rec["data_unc"][slc],
             "signals": {key: vals[slc] for key, vals in rec.get("signals", {}).items()},
             "signal_specs": LOWDM_SIGNAL_OVERLAYS,
-            "label": LOWDM_NSV_INCLUSIVE_CATEGORY_LABELS.get(category, category),
+            "label": (
+                LOWDM_NSV_INCLUSIVE_CATEGORY_LABELS.get(category, category)
+                + ("\n" + r"$N_{res}=0$" if nres_zero else "")
+            ),
             "nbin": size,
             "xlabels": [],
             "blind_data": True,
@@ -1957,6 +1963,10 @@ def draw_flat_report(
     gcr_only: bool = False,
 ) -> dict:
     payload = load_json(flat_hists)
+    lowdm_nres_zero = bool(
+        (((payload.get("lowdm_region_policy") or {}).get("resolved_top_veto") or {}).get("applied"))
+    )
+    lowdm_nres_suffix = r", $N_{res}=0$" if lowdm_nres_zero else ""
     dy_rz_application = (
         apply_dy_rz(payload, dy_rz_manifest) if dy_rz_manifest else None
     )
@@ -1995,7 +2005,7 @@ def draw_flat_report(
             )
 
         lowdm_scheme = "cat4_GCR_lowDeltaM"
-        lowdm_label = r"GCR low $\Delta m$"
+        lowdm_label = r"GCR low $\Delta m$" + lowdm_nres_suffix
         lowdm = flat_search_record(
             payload,
             lowdm_scheme,
@@ -2189,12 +2199,12 @@ def draw_flat_report(
     low_cr_blocks = []
     low_blocks = []
     low_map = [
-        ("cat2_LLCR_lowDeltaM", r"LLCR low $\Delta m$", False, "LLCR"),
-        ("cat3_QCDCR_lowDeltaM", r"QCDCR low $\Delta m$", False, "QCDCR"),
-        ("cat4_GCR_lowDeltaM", r"GCR low $\Delta m$", False, "GCR"),
-        ("cat5_DY2E_lowDeltaM", r"DY2E low $\Delta m$", False, "DY2E"),
-        ("cat6_DY2M_lowDeltaM", r"DY2M low $\Delta m$", False, "DY2M"),
-        ("cat7_SR_lowDeltaM", r"SR low $\Delta m$", True, "SR"),
+        ("cat2_LLCR_lowDeltaM", r"LLCR low $\Delta m$" + lowdm_nres_suffix, False, "LLCR"),
+        ("cat3_QCDCR_lowDeltaM", r"QCDCR low $\Delta m$" + lowdm_nres_suffix, False, "QCDCR"),
+        ("cat4_GCR_lowDeltaM", r"GCR low $\Delta m$" + lowdm_nres_suffix, False, "GCR"),
+        ("cat5_DY2E_lowDeltaM", r"DY2E low $\Delta m$" + lowdm_nres_suffix, False, "DY2E"),
+        ("cat6_DY2M_lowDeltaM", r"DY2M low $\Delta m$" + lowdm_nres_suffix, False, "DY2M"),
+        ("cat7_SR_lowDeltaM", r"SR low $\Delta m$" + lowdm_nres_suffix, True, "SR"),
     ]
     for scheme, label, is_sr, base_region in low_map:
         rec = flat_search_record(payload, scheme, label, allow_signal=False)
@@ -2238,7 +2248,7 @@ def draw_flat_report(
     highdm_search_bins = len(
         (((payload.get("search_bin_schemes") or {}).get(EXTENDED_AN17_RECOIL_SCHEME) or {}).get("bin_labels") or [])
     )
-    summary = {"status": "complete", "source": str(flat_hists), "output_dir": str(output_dir), "plots": plots, "lowdm_variable_plot_count": len([p for p in plots if str(p.get("name", "")).startswith("lowdm_") and p.get("variable")]), "signal_policy": "Signals are drawn only in SR plots; CR blocks exclude T2tt overlays.", "cr_plot_policy": "High-dM and low-dM CRs are drawn both as combined overview plots and as individual region plots.", "ntop_order": "N_t = 0 blocks are placed left of N_t >= 1 blocks.", "highdm_tail_merged": highdm_tail_merged, "highdm_tail_preserve_categories": sorted(highdm_tail_preserve_categories), "highdm_search_bins": highdm_search_bins, "luminosity_fb": LUMINOSITY_FB, "luminosity_relative_uncertainty": LUMINOSITY_RELATIVE_UNCERTAINTY, "background_systematic_sources": PLOT_SYSTEMATIC_SOURCES, "dy_rz_application": dy_rz_application}
+    summary = {"status": "complete", "source": str(flat_hists), "output_dir": str(output_dir), "plots": plots, "lowdm_variable_plot_count": len([p for p in plots if str(p.get("name", "")).startswith("lowdm_") and p.get("variable")]), "lowdm_resolved_top_veto": {"applied": lowdm_nres_zero, "requirement": "Nres=0" if lowdm_nres_zero else None}, "signal_policy": "Signals are drawn only in SR plots; CR blocks exclude T2tt overlays.", "cr_plot_policy": "High-dM and low-dM CRs are drawn both as combined overview plots and as individual region plots.", "ntop_order": "N_t = 0 blocks are placed left of N_t >= 1 blocks.", "highdm_tail_merged": highdm_tail_merged, "highdm_tail_preserve_categories": sorted(highdm_tail_preserve_categories), "highdm_search_bins": highdm_search_bins, "luminosity_fb": LUMINOSITY_FB, "luminosity_relative_uncertainty": LUMINOSITY_RELATIVE_UNCERTAINTY, "background_systematic_sources": PLOT_SYSTEMATIC_SOURCES, "dy_rz_application": dy_rz_application}
     (output_dir / "flat_plot_summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     return summary
 

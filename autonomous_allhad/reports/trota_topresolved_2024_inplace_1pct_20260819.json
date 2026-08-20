@@ -1,0 +1,54 @@
+{
+  "schema_version": "trota_topresolved_2024_inplace_report_v1",
+  "status": "complete",
+  "completed_at": "2026-08-19T13:22:21.634460Z",
+  "year": 2024,
+  "collection": "TopResolved",
+  "input_files": 5489,
+  "valid_files": 5489,
+  "invalid_files": 0,
+  "events": 230830776,
+  "candidates_evaluated": 1531057643,
+  "selected_candidates": 99051747,
+  "rows_float_scanned": 99051747,
+  "input_bytes_before": 218049322838,
+  "current_bytes": 221882751455,
+  "bytes_added": 3833428617,
+  "in_place": true,
+  "events_tree_preserved": true,
+  "temporary_or_backup_artifacts": 0,
+  "model": {
+    "filename": "model_TopResolved_2024_TROTA2D_ptcut.h5",
+    "sha256": "ce673e6497860cc67fcdfb30017301fb476e32a0a33a60e8b51a31ba109f7ef3",
+    "trota_commit": "38fb282d5c3479d2eec96cc57d60fac7fd412d7f"
+  },
+  "working_point": {
+    "name": "qcd_mistag_1pct",
+    "discriminant": "TTScore/(TTScore+QCDScore)",
+    "operator": ">=",
+    "threshold": 0.9433798789978027,
+    "minimum_persisted_discriminant": 0.9433798789978027
+  },
+  "jet_selection": {
+    "stored_id": "jet_id_all",
+    "pt_min_gev": 25.0,
+    "abs_eta_max": 2.5,
+    "official_2024_jetid_recomputed": false
+  },
+  "storage": {
+    "tree": "TROTA",
+    "marker": "TROTA_metadata",
+    "scores_and_kinematics": "float32",
+    "sparse_pass_only": true
+  },
+  "validation": {
+    "method": "direct XRootD open and full float scan of every persisted row",
+    "minimum_discriminant": 0.9433798789978027,
+    "maximum_probability_sum_deviation": 2.980232238769531e-07,
+    "maximum_discriminant_difference": 0.0,
+    "failures": []
+  },
+  "scale_factor_applied": false,
+  "eos_campaign_directory": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/trota_topresolved_2024_inplace_1pct_20260819/full_campaign",
+  "eos_validation_summary": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/trota_topresolved_2024_inplace_1pct_20260819/full_campaign/xrootd_validation_summary.json"
+}

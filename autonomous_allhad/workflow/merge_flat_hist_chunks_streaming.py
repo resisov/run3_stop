@@ -146,6 +146,7 @@ def update_summary(
         "histogram_range_exclusions",
         "histogram_folded_flow",
         "lowdm_search_bin_entry_accounting",
+        "trota_lowdm_nres_audit",
         "scale_factor_status_audit",
         "gcr_prefilter",
         "gcr_photon_selection_audit",
@@ -311,7 +312,10 @@ def main() -> int:
     status = (
         "complete"
         if set(summary.get("chunk_statuses") or {}) <= {"complete"}
-        and not summary_has_strict_warnings(summary)
+        and not summary_has_strict_warnings(
+            summary,
+            args.allow_zero_entry_roots,
+        )
         else "complete_with_warnings"
     )
     if status != "complete" and not (

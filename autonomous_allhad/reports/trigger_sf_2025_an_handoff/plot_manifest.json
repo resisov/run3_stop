@@ -1,0 +1,28 @@
+{
+  "captions": {
+    "photon_trigger_efficiency_2025": "Photon-trigger efficiencies in JetMET data and gamma+jets simulation.",
+    "photon_trigger_scale_factor_2025": "Data-to-simulation photon-trigger scale factors with total uncertainties."
+  },
+  "files": [
+    "/Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/reports/trigger_sf_2025_an_handoff/photon_trigger_efficiency_2025.png",
+    "/Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/reports/trigger_sf_2025_an_handoff/photon_trigger_efficiency_2025.pdf",
+    "/Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/reports/trigger_sf_2025_an_handoff/photon_trigger_scale_factor_2025.png",
+    "/Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/reports/trigger_sf_2025_an_handoff/photon_trigger_scale_factor_2025.pdf"
+  ],
+  "measurement": "photon",
+  "schema_version": 1,
+  "style": {
+    "cms_label_fontsize": 26,
+    "cms_llabel": "Work in progress",
+    "cms_rlabel": "2025 (13.6 TeV)",
+    "colorbar_figure_inches": [
+      12.0,
+      10.0
+    ],
+    "standard_figure_inches": [
+      8.0,
+      8.0
+    ],
+    "titles": false
+  }
+}

@@ -1,0 +1,3670 @@
+{
+  "abseta_edges": [
+    0.0,
+    0.8,
+    1.4442,
+    2.0,
+    2.5
+  ],
+  "adoption_blockers": [],
+  "adoption_gates": [
+    "PFHT reference path presence and per-run prescale audit",
+    "photon-trigger/PFHT overlap and primary-dataset deduplication audit",
+    "per-era and eta closure",
+    "alternate binning and reference-path stability",
+    "plateau validation over the analysis photon pT threshold"
+  ],
+  "bins": [
+    {
+      "abseta_high": 0.8,
+      "abseta_low": 0.0,
+      "data_efficiency": 0.993139534883721,
+      "data_interval": [
+        0.9921290501006954,
+        0.994027836340774
+      ],
+      "data_passed": 8541,
+      "data_total": 8600,
+      "flat_index": 0,
+      "mc_effective_entries": 690051.7881020674,
+      "mc_efficiency": 0.99467497403239,
+      "mc_interval": [
+        0.9945866428982142,
+        0.9947618714357489
+      ],
+      "mc_sumw2_total": 3.3106656431759524e-06,
+      "mc_sumw_passed": 1.5034178247276138,
+      "mc_sumw_total": 1.5114664226775423,
+      "pileup_variation_scale_factors": {
+        "down": 0.9984531332669405,
+        "up": 0.9984186751897943
+      },
+      "pt_high_gev": 250.0,
+      "pt_low_gev": 220.0,
+      "scale_factor": 0.998456340826145,
+      "scale_factor_pileup_uncertainty": 3.766563635065889e-05,
+      "scale_factor_stat_uncertainty": 0.0010197565167472016,
+      "scale_factor_uncertainty": 0.0010204518869648318,
+      "valid": true
+    },
+    {
+      "abseta_high": 0.8,
+      "abseta_low": 0.0,
+      "data_efficiency": 0.9937276697102024,
+      "data_interval": [
+        0.9929423864315889,
+        0.9944301224761405
+      ],
+      "data_passed": 12516,
+      "data_total": 12595,
+      "flat_index": 1,
+      "mc_effective_entries": 1161424.2320777534,
+      "mc_efficiency": 0.994788319152074,
+      "mc_interval": [
+        0.9947210791381532,
+        0.9948547071295396
+      ],
+      "mc_sumw2_total": 2.918133195860737e-06,
+      "mc_sumw_passed": 1.8313808731276042,
+      "mc_sumw_total": 1.8409754496198902,
+      "pileup_variation_scale_factors": {
+        "down": 0.9989968329710235,
+        "up": 0.9988646263440125
+      },
+      "pt_high_gev": 300.0,
+      "pt_low_gev": 250.0,
+      "scale_factor": 0.998933793831862,
+      "scale_factor_pileup_uncertainty": 6.916748784946414e-05,
+      "scale_factor_stat_uncertainty": 0.0007922797363419178,
+      "scale_factor_uncertainty": 0.0007952932301946399,
+      "valid": true
+    },
+    {
+      "abseta_high": 0.8,
+      "abseta_low": 0.0,
+      "data_efficiency": 0.9949374778514656,
+      "data_interval": [
+        0.9943804829643061,
+        0.9954418445407719
+      ],
+      "data_passed": 19653,
+      "data_total": 19753,
+      "flat_index": 2,
+      "mc_effective_entries": 1288590.6530684058,
+      "mc_efficiency": 0.995152044659179,
+      "mc_interval": [
+        0.9950904711788247,
+        0.9952128496229233
+      ],
+      "mc_sumw2_total": 1.9436953583397153e-06,
+      "mc_sumw_passed": 1.5749291699688206,
+      "mc_sumw_total": 1.5826015516133562,
+      "pileup_variation_scale_factors": {
+        "down": 0.9997660599687495,
+        "up": 0.999847308485635
+      },
+      "pt_high_gev": 400.0,
+      "pt_low_gev": 300.0,
+      "scale_factor": 0.9997843879145253,
+      "scale_factor_pileup_uncertainty": 6.292057110968141e-05,
+      "scale_factor_stat_uncertainty": 0.000563116404023952,
+      "scale_factor_uncertainty": 0.0005666207574291954,
+      "valid": true
+    },
+    {
+      "abseta_high": 0.8,
+      "abseta_low": 0.0,
+      "data_efficiency": 0.9949979876961996,
+      "data_interval": [
+        0.9945904186210754,
+        0.9953760143492103
+      ],
+      "data_passed": 34612,
+      "data_total": 34786,
+      "flat_index": 3,
+      "mc_effective_entries": 1063167.4896944566,
+      "mc_efficiency": 0.995436234068012,
+      "mc_interval": [
+        0.9953703980825079,
+        0.9955011380540473
+      ],
+      "mc_sumw2_total": 3.8306452483946284e-07,
+      "mc_sumw_passed": 0.6352581657109122,
+      "mc_sumw_total": 0.6381706270775642,
+      "pileup_variation_scale_factors": {
+        "down": 0.9995960281024943,
+        "up": 0.9995211240238792
+      },
+      "pt_high_gev": 600.0,
+      "pt_low_gev": 400.0,
+      "scale_factor": 0.9995597444047005,
+      "scale_factor_pileup_uncertainty": 3.8620380821363653e-05,
+      "scale_factor_stat_uncertainty": 0.00041474034337181474,
+      "scale_factor_uncertainty": 0.0004165346158903939,
+      "valid": true
+    },
+    {
+      "abseta_high": 0.8,
+      "abseta_low": 0.0,
+      "data_efficiency": 0.9954560475875743,
+      "data_interval": [
+        0.9947588428101578,
+        0.9960658450487186
+      ],
+      "data_passed": 12049,
+      "data_total": 12104,
+      "flat_index": 4,
+      "mc_effective_entries": 713044.3153629294,
+      "mc_efficiency": 0.9958184757439207,
+      "mc_interval": [
+        0.9957413586696972,
+        0.9958942021113694
+      ],
+      "mc_sumw2_total": 1.996266708195175e-08,
+      "mc_sumw_passed": 0.11880855739813599,
+      "mc_sumw_total": 0.11930744437070293,
+      "pileup_variation_scale_factors": {
+        "down": 0.9996411594140383,
+        "up": 0.9996641020946438
+      },
+      "pt_high_gev": 1000.0,
+      "pt_low_gev": 600.0,
+      "scale_factor": 0.9996360499778079,
+      "scale_factor_pileup_uncertainty": 2.8052116835985963e-05,
+      "scale_factor_stat_uncertainty": 0.0007043991074099478,
+      "scale_factor_uncertainty": 0.0007049574623896898,
+      "valid": true
+    },
+    {
+      "abseta_high": 1.4442,
+      "abseta_low": 0.8,
+      "data_efficiency": 0.9969061070755986,
+      "data_interval": [
+        0.9961186651991116,
+        0.9975458835574464
+      ],
+      "data_passed": 7411,
+      "data_total": 7434,
+      "flat_index": 5,
+      "mc_effective_entries": 557324.375776918,
+      "mc_efficiency": 0.9976244002068616,
+      "mc_interval": [
+        0.997558290980371,
+        0.9976887236743627
+      ],
+      "mc_sumw2_total": 2.548029296269001e-06,
+      "mc_sumw_passed": 1.1888396751455155,
+      "mc_sumw_total": 1.191670607594406,
+      "pileup_variation_scale_factors": {
+        "down": 0.9993451471550212,
+        "up": 0.9991960662719465
+      },
+      "pt_high_gev": 250.0,
+      "pt_low_gev": 220.0,
+      "scale_factor": 0.9992799964284013,
+      "scale_factor_pileup_uncertainty": 8.39301564548034e-05,
+      "scale_factor_stat_uncertainty": 0.000792089792258476,
+      "scale_factor_uncertainty": 0.0007965240173168688,
+      "valid": true
+    },
+    {
+      "abseta_high": 1.4442,
+      "abseta_low": 0.8,
+      "data_efficiency": 0.9969814168474672,
+      "data_interval": [
+        0.996349072314753,
+        0.997511685126713
+      ],
+      "data_passed": 10569,
+      "data_total": 10601,
+      "flat_index": 6,
+      "mc_effective_entries": 915237.224647151,
+      "mc_efficiency": 0.997768264175909,
+      "mc_interval": [
+        0.99771839207548,
+        0.9978170485414719
+      ],
+      "mc_sumw2_total": 2.2388318013030943e-06,
+      "mc_sumw_passed": 1.4282599479342917,
+      "mc_sumw_total": 1.431454576392987,
+      "pileup_variation_scale_factors": {
+        "down": 0.9992024833807028,
+        "up": 0.9992204220898444
+      },
+      "pt_high_gev": 300.0,
+      "pt_low_gev": 250.0,
+      "scale_factor": 0.9992113927084144,
+      "scale_factor_pileup_uncertainty": 9.029381429992434e-06,
+      "scale_factor_stat_uncertainty": 0.0006357238307769535,
+      "scale_factor_uncertainty": 0.000635787951086471,
+      "valid": true
+    },
+    {
+      "abseta_high": 1.4442,
+      "abseta_low": 0.8,
+      "data_efficiency": 0.9973368053500622,
+      "data_interval": [
+        0.9968783933462473,
+        0.9977319482830304
+      ],
+      "data_passed": 16852,
+      "data_total": 16897,
+      "flat_index": 7,
+      "mc_effective_entries": 979455.3570428399,
+      "mc_efficiency": 0.9977003094458116,
+      "mc_interval": [
+        0.9976513989904143,
+        0.997748203622524
+      ],
+      "mc_sumw2_total": 1.4913060367503601e-06,
+      "mc_sumw_passed": 1.2058014945150477,
+      "mc_sumw_total": 1.2085808564947016,
+      "pileup_variation_scale_factors": {
+        "down": 0.999646812234403,
+        "up": 0.9996390369863485
+      },
+      "pt_high_gev": 400.0,
+      "pt_low_gev": 300.0,
+      "scale_factor": 0.9996356580304648,
+      "scale_factor_pileup_uncertainty": 1.1154203938157359e-05,
+      "scale_factor_stat_uncertainty": 0.0004620746187456621,
+      "scale_factor_uncertainty": 0.00046220922703299965,
+      "valid": true
+    },
+    {
+      "abseta_high": 1.4442,
+      "abseta_low": 0.8,
+      "data_efficiency": 0.9973771886297583,
+      "data_interval": [
+        0.9970359820037291,
+        0.9976810819371653
+      ],
+      "data_passed": 28140,
+      "data_total": 28214,
+      "flat_index": 8,
+      "mc_effective_entries": 776436.2179749074,
+      "mc_efficiency": 0.9978548822082995,
+      "mc_interval": [
+        0.9978017314323973,
+        0.9979067505756041
+      ],
+      "mc_sumw2_total": 2.8849534315042195e-07,
+      "mc_sumw_passed": 0.47226926502083577,
+      "mc_sumw_total": 0.47328451605676547,
+      "pileup_variation_scale_factors": {
+        "down": 0.9995119392386784,
+        "up": 0.9995326898196171
+      },
+      "pt_high_gev": 600.0,
+      "pt_low_gev": 400.0,
+      "scale_factor": 0.9995212795096177,
+      "scale_factor_pileup_uncertainty": 1.1410309999404511e-05,
+      "scale_factor_stat_uncertainty": 0.0003460599649111438,
+      "scale_factor_uncertainty": 0.0003462480245266167,
+      "valid": true
+    },
+    {
+      "abseta_high": 1.4442,
+      "abseta_low": 0.8,
+      "data_efficiency": 0.9969303423848879,
+      "data_interval": [
+        0.9962039416105654,
+        0.9975278612896473
+      ],
+      "data_passed": 8444,
+      "data_total": 8470,
+      "flat_index": 9,
+      "mc_effective_entries": 464687.99908797286,
+      "mc_efficiency": 0.9978524375669159,
+      "mc_interval": [
+        0.997783449135538,
+        0.9979192832643868
+      ],
+      "mc_sumw2_total": 1.3291488675895631e-08,
+      "mc_sumw_passed": 0.07842126863579546,
+      "mc_sumw_total": 0.07859004566548101,
+      "pileup_variation_scale_factors": {
+        "down": 0.9991073203900289,
+        "up": 0.9990419030135922
+      },
+      "pt_high_gev": 1000.0,
+      "pt_low_gev": 600.0,
+      "scale_factor": 0.9990759202991212,
+      "scale_factor_pileup_uncertainty": 3.401728552898664e-05,
+      "scale_factor_stat_uncertainty": 0.0007312337833791358,
+      "scale_factor_uncertainty": 0.0007320246045521459,
+      "valid": true
+    },
+    {
+      "abseta_high": 2.0,
+      "abseta_low": 1.4442,
+      "data_efficiency": 0.9978360833107925,
+      "data_interval": [
+        0.9967706877276508,
+        0.9985845641927859
+      ],
+      "data_passed": 3689,
+      "data_total": 3697,
+      "flat_index": 10,
+      "mc_effective_entries": 281344.0794222216,
+      "mc_efficiency": 0.9990847859503396,
+      "mc_interval": [
+        0.9990259755090223,
+        0.9991400485436781
+      ],
+      "mc_sumw2_total": 1.2813356889159204e-06,
+      "mc_sumw_passed": 0.5998638590500217,
+      "mc_sumw_total": 0.600413365798004,
+      "pileup_variation_scale_factors": {
+        "down": 0.9987238617180855,
+        "up": 0.9987385698891961
+      },
+      "pt_high_gev": 250.0,
+      "pt_low_gev": 220.0,
+      "scale_factor": 0.998750153483361,
+      "scale_factor_pileup_uncertainty": 2.629176527557675e-05,
+      "scale_factor_stat_uncertainty": 0.001067990924928567,
+      "scale_factor_uncertainty": 0.001068314500814756,
+      "valid": true
+    },
+    {
+      "abseta_high": 2.0,
+      "abseta_low": 1.4442,
+      "data_efficiency": 0.9988347251893571,
+      "data_interval": [
+        0.9981393850303809,
+        0.9992968432844657
+      ],
+      "data_passed": 5143,
+      "data_total": 5149,
+      "flat_index": 11,
+      "mc_effective_entries": 450872.7654884224,
+      "mc_efficiency": 0.9993568445867544,
+      "mc_interval": [
+        0.9993179643976613,
+        0.999393509713085
+      ],
+      "mc_sumw2_total": 1.0870188389489872e-06,
+      "mc_sumw_passed": 0.6996263021088673,
+      "mc_sumw_total": 0.7000765601382065,
+      "pileup_variation_scale_factors": {
+        "down": 0.9994572815541565,
+        "up": 0.999530351715954
+      },
+      "pt_high_gev": 300.0,
+      "pt_low_gev": 250.0,
+      "scale_factor": 0.9994775445825728,
+      "scale_factor_pileup_uncertainty": 5.2807133381183036e-05,
+      "scale_factor_stat_uncertainty": 0.0006968733745117657,
+      "scale_factor_uncertainty": 0.0006988712996248691,
+      "valid": true
+    },
+    {
+      "abseta_high": 2.0,
+      "abseta_low": 1.4442,
+      "data_efficiency": 0.9992433795712484,
+      "data_interval": [
+        0.9987917432447783,
+        0.9995434572907275
+      ],
+      "data_passed": 7924,
+      "data_total": 7930,
+      "flat_index": 12,
+      "mc_effective_entries": 441838.18376340304,
+      "mc_efficiency": 0.9996233977891382,
+      "mc_interval": [
+        0.9995930555550366,
+        0.999651478461043
+      ],
+      "mc_sumw2_total": 7.043078545482462e-07,
+      "mc_sumw_passed": 0.557634071446475,
+      "mc_sumw_total": 0.5578441567892382,
+      "pileup_variation_scale_factors": {
+        "down": 0.9996150333966559,
+        "up": 0.999637212558307
+      },
+      "pt_high_gev": 400.0,
+      "pt_low_gev": 300.0,
+      "scale_factor": 0.9996198386124912,
+      "scale_factor_pileup_uncertainty": 1.737394581580176e-05,
+      "scale_factor_stat_uncertainty": 0.00045282417999265376,
+      "scale_factor_uncertainty": 0.000453157358959589,
+      "valid": true
+    },
+    {
+      "abseta_high": 2.0,
+      "abseta_low": 1.4442,
+      "data_efficiency": 0.9993582103236454,
+      "data_interval": [
+        0.9990127056772761,
+        0.9995948611023212
+      ],
+      "data_passed": 10900,
+      "data_total": 10907,
+      "flat_index": 13,
+      "mc_effective_entries": 295602.6554841477,
+      "mc_efficiency": 0.9997911776680487,
+      "mc_interval": [
+        0.9997628572777845,
+        0.99981611656307
+      ],
+      "mc_sumw2_total": 1.1845083530236121e-07,
+      "mc_sumw_passed": 0.18708222635242736,
+      "mc_sumw_total": 0.18712130145895578,
+      "pileup_variation_scale_factors": {
+        "down": 0.9995505365933349,
+        "up": 0.9995822343360538
+      },
+      "pt_high_gev": 600.0,
+      "pt_low_gev": 400.0,
+      "scale_factor": 0.9995669422234619,
+      "scale_factor_pileup_uncertainty": 1.6405630126947734e-05,
+      "scale_factor_stat_uncertainty": 0.0003467347931038486,
+      "scale_factor_uncertainty": 0.00034712268933135285,
+      "valid": true
+    },
+    {
+      "abseta_high": 2.0,
+      "abseta_low": 1.4442,
+      "data_efficiency": 1.0,
+      "data_interval": [
+        0.9991900193891008,
+        1.0
+      ],
+      "data_passed": 2272,
+      "data_total": 2272,
+      "flat_index": 14,
+      "mc_effective_entries": 108445.593418495,
+      "mc_efficiency": 0.9998060842777176,
+      "mc_interval": [
+        0.9997589429737561,
+        0.9998440080291817
+      ],
+      "mc_sumw2_total": 3.881215729923446e-09,
+      "mc_sumw_passed": 0.02051188729251462,
+      "mc_sumw_total": 0.020515865641418725,
+      "pileup_variation_scale_factors": {
+        "down": 1.0001775909207804,
+        "up": 1.0002048422624688
+      },
+      "pt_high_gev": 1000.0,
+      "pt_low_gev": 600.0,
+      "scale_factor": 1.0001939533328832,
+      "scale_factor_pileup_uncertainty": 1.6362412102788326e-05,
+      "scale_factor_stat_uncertainty": 0.0008115091713743128,
+      "scale_factor_uncertainty": 0.0008116741117926858,
+      "valid": true
+    },
+    {
+      "abseta_high": 2.5,
+      "abseta_low": 2.0,
+      "data_efficiency": 0.9949658396260338,
+      "data_interval": [
+        0.9932348007917383,
+        0.9962932384696743
+      ],
+      "data_passed": 2767,
+      "data_total": 2781,
+      "flat_index": 15,
+      "mc_effective_entries": 227645.36767049058,
+      "mc_efficiency": 0.9974016312948598,
+      "mc_interval": [
+        0.997292726248749,
+        0.9975061663908931
+      ],
+      "mc_sumw2_total": 1.0153294561236905e-06,
+      "mc_sumw_passed": 0.47951585970796134,
+      "mc_sumw_total": 0.4807650646063592,
+      "pileup_variation_scale_factors": {
+        "down": 0.997518659719273,
+        "up": 0.9977002560246457
+      },
+      "pt_high_gev": 250.0,
+      "pt_low_gev": 220.0,
+      "scale_factor": 0.9975578627581912,
+      "scale_factor_pileup_uncertainty": 0.00014239326645448802,
+      "scale_factor_stat_uncertainty": 0.001738963016971162,
+      "scale_factor_uncertainty": 0.0017447831431799841,
+      "valid": true
+    },
+    {
+      "abseta_high": 2.5,
+      "abseta_low": 2.0,
+      "data_efficiency": 0.9967681120387827,
+      "data_interval": [
+        0.9955427826827149,
+        0.9976871722612779
+      ],
+      "data_passed": 3701,
+      "data_total": 3713,
+      "flat_index": 16,
+      "mc_effective_entries": 343588.3100844548,
+      "mc_efficiency": 0.9978942315977956,
+      "mc_interval": [
+        0.9978145652978303,
+        0.9979709997038024
+      ],
+      "mc_sumw2_total": 8.169358167495716e-07,
+      "mc_sumw_passed": 0.5286858299671354,
+      "mc_sumw_total": 0.5298014691603348,
+      "pileup_variation_scale_factors": {
+        "down": 0.9987982595968108,
+        "up": 0.9989558588593609
+      },
+      "pt_high_gev": 300.0,
+      "pt_low_gev": 250.0,
+      "scale_factor": 0.9988715040899577,
+      "scale_factor_pileup_uncertainty": 8.4354769403161e-05,
+      "scale_factor_stat_uncertainty": 0.0012305017485199552,
+      "scale_factor_uncertainty": 0.0012333897519566667,
+      "valid": true
+    },
+    {
+      "abseta_high": 2.5,
+      "abseta_low": 2.0,
+      "data_efficiency": 0.9988139948606444,
+      "data_interval": [
+        0.9981062962745355,
+        0.9992843323649125
+      ],
+      "data_passed": 5053,
+      "data_total": 5059,
+      "flat_index": 17,
+      "mc_effective_entries": 290360.64857137174,
+      "mc_efficiency": 0.998417854501936,
+      "mc_interval": [
+        0.9983423598834736,
+        0.9984899160371613
+      ],
+      "mc_sumw2_total": 4.831769952598182e-07,
+      "mc_sumw_passed": 0.3739679141924351,
+      "mc_sumw_total": 0.37456052343834556,
+      "pileup_variation_scale_factors": {
+        "down": 1.0004300795373027,
+        "up": 1.0003830929922195
+      },
+      "pt_high_gev": 400.0,
+      "pt_low_gev": 300.0,
+      "scale_factor": 1.0003967681035772,
+      "scale_factor_pileup_uncertainty": 3.331143372542478e-05,
+      "scale_factor_stat_uncertainty": 0.0007128449380188669,
+      "scale_factor_uncertainty": 0.000713622839654089,
+      "valid": true
+    },
+    {
+      "abseta_high": 2.5,
+      "abseta_low": 2.0,
+      "data_efficiency": 0.9994331065759637,
+      "data_interval": [
+        0.9988819814416472,
+        0.9997416143104062
+      ],
+      "data_passed": 5289,
+      "data_total": 5292,
+      "flat_index": 18,
+      "mc_effective_entries": 142124.0030345445,
+      "mc_efficiency": 0.9987700285029564,
+      "mc_interval": [
+        0.9986734824453767,
+        0.9988595558091893
+      ],
+      "mc_sumw2_total": 6.384988164903922e-08,
+      "mc_sumw_passed": 0.0951435310516396,
+      "mc_sumw_total": 0.09526069899619337,
+      "pileup_variation_scale_factors": {
+        "down": 1.0006418868905202,
+        "up": 1.0006974161168944
+      },
+      "pt_high_gev": 600.0,
+      "pt_low_gev": 400.0,
+      "scale_factor": 1.0006638946444972,
+      "scale_factor_pileup_uncertainty": 3.352147239721326e-05,
+      "scale_factor_stat_uncertainty": 0.0005602178139649373,
+      "scale_factor_uncertainty": 0.0005612198216343844,
+      "valid": true
+    },
+    {
+      "abseta_high": 2.5,
+      "abseta_low": 2.0,
+      "data_efficiency": 0.9968454258675079,
+      "data_interval": [
+        0.9926999699917378,
+        0.9988827308256957
+      ],
+      "data_passed": 632,
+      "data_total": 634,
+      "flat_index": 19,
+      "mc_effective_entries": 27354.916922913293,
+      "mc_efficiency": 0.9993402279011413,
+      "mc_interval": [
+        0.9991656563228772,
+        0.9994782925526571
+      ],
+      "mc_sumw2_total": 1.0923645206011465e-09,
+      "mc_sumw_passed": 0.005462794495890386,
+      "mc_sumw_total": 0.005466401074800711,
+      "pileup_variation_scale_factors": {
+        "down": 0.9974962182950292,
+        "up": 0.9975613448547115
+      },
+      "pt_high_gev": 1000.0,
+      "pt_low_gev": 600.0,
+      "scale_factor": 0.9975035508788903,
+      "scale_factor_pileup_uncertainty": 5.779397582117429e-05,
+      "scale_factor_stat_uncertainty": 0.004151850949505349,
+      "scale_factor_uncertainty": 0.004152253177559105,
+      "valid": true
+    }
+  ],
+  "created_unix": 1785768932.322873,
+  "data": {
+    "passed": [
+      8541.0,
+      12516.0,
+      19653.0,
+      34612.0,
+      12049.0,
+      7411.0,
+      10569.0,
+      16852.0,
+      28140.0,
+      8444.0,
+      3689.0,
+      5143.0,
+      7924.0,
+      10900.0,
+      2272.0,
+      2767.0,
+      3701.0,
+      5053.0,
+      5289.0,
+      632.0
+    ],
+    "sumw2_passed": [
+      8541.0,
+      12516.0,
+      19653.0,
+      34612.0,
+      12049.0,
+      7411.0,
+      10569.0,
+      16852.0,
+      28140.0,
+      8444.0,
+      3689.0,
+      5143.0,
+      7924.0,
+      10900.0,
+      2272.0,
+      2767.0,
+      3701.0,
+      5053.0,
+      5289.0,
+      632.0
+    ],
+    "sumw2_total": [
+      8600.0,
+      12595.0,
+      19753.0,
+      34786.0,
+      12104.0,
+      7434.0,
+      10601.0,
+      16897.0,
+      28214.0,
+      8470.0,
+      3697.0,
+      5149.0,
+      7930.0,
+      10907.0,
+      2272.0,
+      2781.0,
+      3713.0,
+      5059.0,
+      5292.0,
+      634.0
+    ],
+    "sumw_passed": [
+      8541.0,
+      12516.0,
+      19653.0,
+      34612.0,
+      12049.0,
+      7411.0,
+      10569.0,
+      16852.0,
+      28140.0,
+      8444.0,
+      3689.0,
+      5143.0,
+      7924.0,
+      10900.0,
+      2272.0,
+      2767.0,
+      3701.0,
+      5053.0,
+      5289.0,
+      632.0
+    ],
+    "sumw_total": [
+      8600.0,
+      12595.0,
+      19753.0,
+      34786.0,
+      12104.0,
+      7434.0,
+      10601.0,
+      16897.0,
+      28214.0,
+      8470.0,
+      3697.0,
+      5149.0,
+      7930.0,
+      10907.0,
+      2272.0,
+      2781.0,
+      3713.0,
+      5059.0,
+      5292.0,
+      634.0
+    ],
+    "total": [
+      8600.0,
+      12595.0,
+      19753.0,
+      34786.0,
+      12104.0,
+      7434.0,
+      10601.0,
+      16897.0,
+      28214.0,
+      8470.0,
+      3697.0,
+      5149.0,
+      7930.0,
+      10907.0,
+      2272.0,
+      2781.0,
+      3713.0,
+      5059.0,
+      5292.0,
+      634.0
+    ]
+  },
+  "files_failed": [],
+  "files_permanently_skipped": [
+    {
+      "alternate_access_attempted": false,
+      "concise_error": "direct ROOT open failed and all xrdcp fallback sources failed",
+      "dataset": "GJ_Bin-PTG-100to200_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____207_",
+      "exception_type": "RootOpenFailure",
+      "failure_stage": "trigger_measurement_count",
+      "file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/GJ_Bin-PTG-100to200_TuneCP5_13p6TeV_amcatnlo-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v3/90000/1367f784-a9a0-43de-b259-af5d3269cae1.root",
+      "process": "GJ",
+      "read_status": "failed"
+    }
+  ],
+  "files_processed": 6716,
+  "incomplete_files": [],
+  "input_model": "NanoAOD ROOT files grouped 20 per Condor shard; shard outputs contain histograms only",
+  "mc": {
+    "passed": [
+      3303559.0,
+      4578609.0,
+      4512258.0,
+      4311627.0,
+      3375540.0,
+      2666475.0,
+      3633757.0,
+      3490527.0,
+      3230431.0,
+      2268372.0,
+      1408663.0,
+      1857055.0,
+      1656047.0,
+      1294377.0,
+      614005.0,
+      1169931.0,
+      1451219.0,
+      1135895.0,
+      662233.0,
+      165861.0
+    ],
+    "sumw2_passed": [
+      3.293566047804412e-06,
+      2.90370584567814e-06,
+      1.9341048102650147e-06,
+      3.813186456154021e-07,
+      1.9881264145918567e-08,
+      2.542110244685483e-06,
+      2.2333815460753244e-06,
+      1.4877513794332725e-06,
+      2.878710983996038e-07,
+      1.3264761782084436e-08,
+      1.2790753978939556e-06,
+      1.0860278404214839e-06,
+      7.040341239618908e-07,
+      1.1842347367119895e-07,
+      3.880226385521535e-09,
+      1.0121757688170158e-06,
+      8.150985286344222e-07,
+      4.824053553573977e-07,
+      6.37837291665421e-08,
+      1.091793012697111e-09
+    ],
+    "sumw2_total": [
+      3.3106656431759524e-06,
+      2.918133195860737e-06,
+      1.9436953583397153e-06,
+      3.8306452483946284e-07,
+      1.996266708195175e-08,
+      2.548029296269001e-06,
+      2.2388318013030943e-06,
+      1.4913060367503601e-06,
+      2.8849534315042195e-07,
+      1.3291488675895631e-08,
+      1.2813356889159204e-06,
+      1.0870188389489872e-06,
+      7.043078545482462e-07,
+      1.1845083530236121e-07,
+      3.881215729923446e-09,
+      1.0153294561236905e-06,
+      8.169358167495716e-07,
+      4.831769952598182e-07,
+      6.384988164903922e-08,
+      1.0923645206011465e-09
+    ],
+    "sumw_passed": [
+      1.5034178247276138,
+      1.8313808731276042,
+      1.5749291699688206,
+      0.6352581657109122,
+      0.11880855739813599,
+      1.1888396751455155,
+      1.4282599479342917,
+      1.2058014945150477,
+      0.47226926502083577,
+      0.07842126863579546,
+      0.5998638590500217,
+      0.6996263021088673,
+      0.557634071446475,
+      0.18708222635242736,
+      0.02051188729251462,
+      0.47951585970796134,
+      0.5286858299671354,
+      0.3739679141924351,
+      0.0951435310516396,
+      0.005462794495890386
+    ],
+    "sumw_total": [
+      1.5114664226775423,
+      1.8409754496198902,
+      1.5826015516133562,
+      0.6381706270775642,
+      0.11930744437070293,
+      1.191670607594406,
+      1.431454576392987,
+      1.2085808564947016,
+      0.47328451605676547,
+      0.07859004566548101,
+      0.600413365798004,
+      0.7000765601382065,
+      0.5578441567892382,
+      0.18712130145895578,
+      0.020515865641418725,
+      0.4807650646063592,
+      0.5298014691603348,
+      0.37456052343834556,
+      0.09526069899619337,
+      0.005466401074800711
+    ],
+    "total": [
+      3321092.0,
+      4602536.0,
+      4534485.0,
+      4331220.0,
+      3389536.0,
+      2672848.0,
+      3642040.0,
+      3498519.0,
+      3237342.0,
+      2273277.0,
+      1409808.0,
+      1858162.0,
+      1656663.0,
+      1294649.0,
+      614125.0,
+      1172621.0,
+      1454031.0,
+      1137613.0,
+      662915.0,
+      165982.0
+    ]
+  },
+  "mc_normalization": {
+    "GJ_Bin-PTG-100to200_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3": {
+      "factor_without_luminosity": 5.142511163295557e-10,
+      "files": 2750,
+      "runs_gen_event_sumw": 2704904191415.665,
+      "xsec_pb": 1391.0
+    },
+    "GJ_Bin-PTG-200to400_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2": {
+      "factor_without_luminosity": 1.974818654991847e-09,
+      "files": 396,
+      "runs_gen_event_sumw": 44682583778.997314,
+      "xsec_pb": 88.24
+    },
+    "GJ_Bin-PTG-400to600_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2": {
+      "factor_without_luminosity": 2.194317588899739e-08,
+      "files": 103,
+      "runs_gen_event_sumw": 171807400.1261745,
+      "xsec_pb": 3.77
+    },
+    "GJ_Bin-PTG-600_TuneCP5_13p6TeV_amcatnlo-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2": {
+      "factor_without_luminosity": 3.750928553734993e-08,
+      "files": 91,
+      "runs_gen_event_sumw": 15356197.585433802,
+      "xsec_pb": 0.576
+    }
+  },
+  "mc_pileup_variations": {
+    "down": {
+      "passed": [
+        3303559.0,
+        4578609.0,
+        4512258.0,
+        4311627.0,
+        3375540.0,
+        2666475.0,
+        3633757.0,
+        3490527.0,
+        3230431.0,
+        2268372.0,
+        1408663.0,
+        1857055.0,
+        1656047.0,
+        1294377.0,
+        614005.0,
+        1169931.0,
+        1451219.0,
+        1135895.0,
+        662233.0,
+        165861.0
+      ],
+      "sumw2_passed": [
+        2.6300934183451664e-06,
+        2.3449209300139245e-06,
+        1.5603355059681733e-06,
+        3.088989380940956e-07,
+        1.5846000534014544e-08,
+        2.0539678153726127e-06,
+        1.8069959945815136e-06,
+        1.2071987230651408e-06,
+        2.3351696420256196e-07,
+        1.07436853325292e-08,
+        1.0410948604907187e-06,
+        8.90106194159132e-07,
+        5.766432156575496e-07,
+        9.663495499815551e-08,
+        3.0944006640746566e-09,
+        8.36314425965546e-07,
+        6.706737715274227e-07,
+        4.001018398676269e-07,
+        5.214054618668875e-08,
+        8.924244549469328e-10
+      ],
+      "sumw2_total": [
+        2.6443073369337612e-06,
+        2.357224818917606e-06,
+        1.5681366919568278e-06,
+        3.1033840060134414e-07,
+        1.591250009222029e-08,
+        2.059686280273615e-06,
+        1.8113254197024162e-06,
+        1.2099766402588194e-06,
+        2.3401607383293802e-07,
+        1.0765917692159033e-08,
+        1.0424262747847692e-06,
+        8.906913397090854e-07,
+        5.768688237322093e-07,
+        9.66577592267701e-08,
+        3.0949037650467058e-09,
+        8.388836425877434e-07,
+        6.72120062786972e-07,
+        4.0076384683974087e-07,
+        5.2199652025990404e-08,
+        8.930409310695808e-10
+      ],
+      "sumw_passed": [
+        1.515235962995479,
+        1.846896634037103,
+        1.587787950034915,
+        0.640825456675016,
+        0.11982442714915828,
+        1.2004606429838018,
+        1.4423794407244392,
+        1.217433966072069,
+        0.4767143563298689,
+        0.07926391437341039,
+        0.6082052669964751,
+        0.7099543898190235,
+        0.565198758410986,
+        0.18921967194901457,
+        0.020802443941370607,
+        0.486651865623914,
+        0.5367767377157656,
+        0.3805675118629627,
+        0.09649779236825817,
+        0.005538839179690242
+      ],
+      "sumw_total": [
+        1.5233429359638964,
+        1.8566896590149022,
+        1.5954937251939065,
+        0.6437868107476974,
+        0.12032819487288302,
+        1.2033977015505268,
+        1.4455927611032184,
+        1.2202537565658829,
+        0.4777346987580472,
+        0.07943700148978755,
+        0.6087463894436107,
+        0.7103968920798608,
+        0.5654089757463955,
+        0.18925608723362614,
+        0.02080613826654464,
+        0.48790048604031344,
+        0.5378700070229578,
+        0.3811832714813905,
+        0.09661450316265294,
+        0.005542455221357147
+      ],
+      "total": [
+        3321092.0,
+        4602536.0,
+        4534485.0,
+        4331220.0,
+        3389536.0,
+        2672848.0,
+        3642040.0,
+        3498519.0,
+        3237342.0,
+        2273277.0,
+        1409808.0,
+        1858162.0,
+        1656663.0,
+        1294649.0,
+        614125.0,
+        1172621.0,
+        1454031.0,
+        1137613.0,
+        662915.0,
+        165982.0
+      ]
+    },
+    "up": {
+      "passed": [
+        3303559.0,
+        4578609.0,
+        4512258.0,
+        4311627.0,
+        3375540.0,
+        2666475.0,
+        3633757.0,
+        3490527.0,
+        3230431.0,
+        2268372.0,
+        1408663.0,
+        1857055.0,
+        1656047.0,
+        1294377.0,
+        614005.0,
+        1169931.0,
+        1451219.0,
+        1135895.0,
+        662233.0,
+        165861.0
+      ],
+      "sumw2_passed": [
+        8.560180645783897e-06,
+        6.7310138530149524e-06,
+        4.38990263794376e-06,
+        8.413972620394993e-07,
+        5.50467708011039e-08,
+        5.817671351259104e-06,
+        5.0993346443047315e-06,
+        3.3264243846367333e-06,
+        6.332462504197147e-07,
+        3.018229095212506e-08,
+        3.0892473965221784e-06,
+        2.424139601766705e-06,
+        1.5923402865805824e-06,
+        2.6586918588443776e-07,
+        8.18258612956552e-09,
+        2.1301206786300786e-06,
+        1.8019325303452734e-06,
+        9.955553688013011e-07,
+        1.3763275858043949e-07,
+        2.4636196367019137e-09
+      ],
+      "sumw2_total": [
+        8.588033676763018e-06,
+        6.75971459297275e-06,
+        4.412167800503066e-06,
+        8.448253591815681e-07,
+        5.5199472961550685e-08,
+        5.825838645246166e-06,
+        5.109399291038628e-06,
+        3.333704081647125e-06,
+        6.346361541287562e-07,
+        3.024407558991154e-08,
+        3.093777254847877e-06,
+        2.4283997286082177e-06,
+        1.592903533454921e-06,
+        2.6592157790138757e-07,
+        8.185550651073553e-09,
+        2.1374163683116126e-06,
+        1.8052395437421983e-06,
+        9.970696469198278e-07,
+        1.3774972390403122e-07,
+        2.464583742370061e-09
+      ],
+      "sumw_passed": [
+        1.4913530850668597,
+        1.8144505949116079,
+        1.559324244281541,
+        0.6292213337790971,
+        0.1176374208524914,
+        1.176373439741013,
+        1.413114437623189,
+        1.1930958342016744,
+        0.4674352105837622,
+        0.07740480043950052,
+        0.5904646548522199,
+        0.689201042186381,
+        0.5499361951579463,
+        0.18496940657234368,
+        0.020118101506826132,
+        0.47284111542046353,
+        0.5200064441698704,
+        0.36657689362200163,
+        0.09361191892365414,
+        0.005404847621797607
+      ],
+      "sumw_total": [
+        1.4992805332304102,
+        1.823830180792486,
+        1.567019218200615,
+        0.6320816952151608,
+        0.11813470516777386,
+        1.1790756472584056,
+        1.4162879878824526,
+        1.1958499519278887,
+        0.4684454173180664,
+        0.07756874863340317,
+        0.5909986969007472,
+        0.6896810280288957,
+        0.5501529421675924,
+        0.18501087077227227,
+        0.020122222544255365,
+        0.4741406017429584,
+        0.5211477752690223,
+        0.3671527717352645,
+        0.09373034049830607,
+        0.005408729299874245
+      ],
+      "total": [
+        3321092.0,
+        4602536.0,
+        4534485.0,
+        4331220.0,
+        3389536.0,
+        2672848.0,
+        3642040.0,
+        3498519.0,
+        3237342.0,
+        2273277.0,
+        1409808.0,
+        1858162.0,
+        1656663.0,
+        1294649.0,
+        614125.0,
+        1172621.0,
+        1454031.0,
+        1137613.0,
+        662915.0,
+        165982.0
+      ]
+    }
+  },
+  "measurement": "photon_trigger_sf_2024",
+  "measurement_type": "photon",
+  "pileup_correction": "analysis/data/PUweight/2024/puWeights.json.gz::Collisions24_BCDEFGHI_goldenJSON",
+  "pt_edges_gev": [
+    220.0,
+    250.0,
+    300.0,
+    400.0,
+    600.0,
+    1000.0
+  ],
+  "schema_version": 1,
+  "shards": [
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00000.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00001.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00002.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00003.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00004.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00005.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00006.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00007.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00008.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00009.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00010.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00011.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00012.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00013.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00014.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00015.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00016.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00017.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00018.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00019.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00020.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00021.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00022.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00023.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00024.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00025.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00026.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00027.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00028.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00029.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00030.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00031.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00032.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00033.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00034.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00035.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00036.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00037.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00038.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00039.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00040.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00041.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00042.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00043.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00044.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00045.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00046.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00047.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00048.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00049.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00050.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00051.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00052.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00053.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00054.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00055.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00056.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00057.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00058.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00059.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00060.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00061.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00062.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00063.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00064.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00065.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00066.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00067.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00068.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00069.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00070.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00071.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00072.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00073.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 10,
+      "files_processed": 10,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00074.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 5,
+      "files_processed": 15,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00075.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00076.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00077.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00078.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00079.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00080.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00081.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00082.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00083.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00084.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00085.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00086.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00087.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00088.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00089.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00090.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00091.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00092.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00093.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00094.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00095.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00096.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00097.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00098.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00099.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00100.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00101.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00102.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00103.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00104.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00105.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00106.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00107.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00108.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00109.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00110.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00111.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00112.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00113.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00114.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00115.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00116.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00117.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00118.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00119.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00120.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00121.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00122.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00123.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00124.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00125.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00126.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00127.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00128.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00129.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00130.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00131.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00132.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00133.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00134.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00135.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00136.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00137.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00138.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00139.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00140.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00141.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00142.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00143.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00144.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00145.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00146.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00147.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00148.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00149.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00150.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00151.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00152.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00153.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00154.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00155.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00156.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00157.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00158.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00159.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00160.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00161.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00162.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00163.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00164.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00165.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00166.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00167.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00168.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00169.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00170.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00171.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00172.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00173.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00174.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00175.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00176.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00177.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00178.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00179.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00180.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00181.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00182.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00183.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00184.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00185.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00186.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00187.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 3,
+      "files_processed": 17,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00188.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00189.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00190.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00191.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00192.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00193.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00194.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00195.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00196.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00197.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00198.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00199.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00200.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00201.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00202.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00203.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00204.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00205.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00206.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00207.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 3,
+      "files_processed": 17,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00208.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00209.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00210.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00211.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00212.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00213.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00214.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00215.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00216.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00217.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00218.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00219.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00220.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00221.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00222.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00223.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00224.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00225.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00226.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00227.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00228.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00229.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00230.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00231.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00232.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00233.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 3,
+      "files_processed": 17,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00234.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00235.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00236.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 3,
+      "files_processed": 17,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00237.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00238.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00239.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00240.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00241.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00242.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00243.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00244.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00245.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00246.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00247.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00248.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00249.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00250.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00251.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00252.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00253.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00254.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00255.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00256.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00257.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00258.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00259.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00260.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00261.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00262.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00263.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00264.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00265.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00266.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00267.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00268.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00269.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00270.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00271.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00272.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00273.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00274.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00275.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00276.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00277.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 3,
+      "files_processed": 17,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00278.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00279.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00280.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00281.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00282.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00283.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00284.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00285.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00286.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00287.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00288.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00289.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00290.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00291.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00292.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00293.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00294.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00295.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00296.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00297.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00298.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00299.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00300.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 3,
+      "files_processed": 17,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00301.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 2,
+      "files_processed": 18,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00302.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00303.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00304.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00305.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00306.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00307.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00308.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00309.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00310.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00311.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00312.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00313.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00314.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00315.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00316.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00317.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00318.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00319.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00320.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00321.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00322.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00323.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00324.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00325.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00326.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00327.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00328.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00329.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00330.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00331.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00332.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00333.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00334.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 17,
+      "files_failed": 0,
+      "files_processed": 17,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/condor_2024_minimal_v3/shard_outputs/shard_00335.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/recovery_outputs/20260803_current93/recovery_00000.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/recovery_outputs/20260803_current93/recovery_00001.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/recovery_outputs/20260803_current93/recovery_00002.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/recovery_outputs/20260803_current93/recovery_00003.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 13,
+      "files_failed": 0,
+      "files_processed": 13,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/recovery_outputs/20260803_current93/recovery_00004.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 15,
+      "files_failed": 0,
+      "files_processed": 15,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/recovery_outputs/20260803_new_after_condor/recovery_00000.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 0,
+      "files_processed": 20,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/recovery_outputs/20260803_residual_round2/recovery_00000.json",
+      "status": "success"
+    },
+    {
+      "files_expected": 20,
+      "files_failed": 1,
+      "files_processed": 19,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/recovery_outputs/20260803_residual_round2/recovery_00001.json",
+      "status": "incomplete"
+    },
+    {
+      "files_expected": 7,
+      "files_failed": 0,
+      "files_processed": 7,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_trigger_measurement/recovery_outputs/20260803_residual_round2/recovery_00002.json",
+      "status": "success"
+    }
+  ],
+  "status": "validation_pending"
+}

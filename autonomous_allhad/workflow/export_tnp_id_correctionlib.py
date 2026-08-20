@@ -20,14 +20,14 @@ DEFINITIONS = {
     "electron": {
         "probe_definition": "veto_id_only",
         "correction": "veto_electron_id_5to10_sf",
-        "description": "2024 data/MC SF for the analysis veto-electron ID, excluding isolation, 5 < pT < 10 GeV",
-        "set_description": "Run-3 all-hadronic stop low-pT veto-electron ID-only scale factor",
+        "description": "{year} data/MC SF for the analysis veto-electron ID, excluding isolation, 5 < pT < 10 GeV",
+        "set_description": "{year} Run-3 all-hadronic stop low-pT veto-electron ID-only scale factor",
     },
     "muon": {
         "probe_definition": "loose_id_only",
         "correction": "loose_muon_id_5to10_sf",
-        "description": "2024 data/MC SF for analysis LooseID relative to tracker muons, excluding isolation, 5 < pT < 10 GeV",
-        "set_description": "Run-3 all-hadronic stop low-pT loose-muon ID-only scale factor",
+        "description": "{year} data/MC SF for analysis LooseID relative to tracker muons, excluding isolation, 5 < pT < 10 GeV",
+        "set_description": "{year} Run-3 all-hadronic stop low-pT loose-muon ID-only scale factor",
     },
 }
 
@@ -92,6 +92,20 @@ def _unity_fallback_uncertainty(entry: dict[str, Any]) -> float:
     return math.hypot(raw_scale_factor - 1.0, raw_statistical_uncertainty)
 
 
+def _unity_policy_uncertainty(entry: dict[str, Any]) -> float:
+    """Cover the measured ratio and its total uncertainty about a unity central value."""
+
+    if entry.get("valid"):
+        raw_scale_factor = float(entry["scale_factor"])
+        raw_uncertainty = float(entry["scale_factor_uncertainty"])
+        if not math.isfinite(raw_scale_factor) or raw_scale_factor <= 0.0:
+            raise ValueError("electron endcap unity policy requires a positive fitted scale factor")
+        if not math.isfinite(raw_uncertainty) or raw_uncertainty < 0.0:
+            raise ValueError("electron endcap unity policy requires a finite total uncertainty")
+        return math.hypot(raw_scale_factor - 1.0, raw_uncertainty)
+    return _unity_fallback_uncertainty(entry)
+
+
 def build_payload(
     result: dict[str, Any],
     kind: str,
@@ -115,8 +129,13 @@ def build_payload(
     forward_start = (n_eta - 1) * n_pt
     nominal: list[float] = []
     uncertainty: list[float] = []
-    fallback_indices: list[int] = []
+    unity_policy_indices: list[int] = []
     for index, entry in enumerate(bins):
+        if electron_endcap_unity_fallback and index >= forward_start:
+            nominal.append(1.0)
+            uncertainty.append(_unity_policy_uncertainty(entry))
+            unity_policy_indices.append(index)
+            continue
         if entry.get("valid"):
             nominal.append(float(entry["scale_factor"]))
             uncertainty.append(float(entry["scale_factor_uncertainty"]))
@@ -125,13 +144,12 @@ def build_payload(
             raise ValueError("all 5--10 GeV ID-only TnP bins must be present and valid before export")
         if index < forward_start:
             raise ValueError("electron endcap unity fallback cannot replace an invalid barrel bin")
-        nominal.append(1.0)
-        uncertainty.append(_unity_fallback_uncertainty(entry))
-        fallback_indices.append(index)
+        raise AssertionError("unreachable endcap unity-policy branch")
 
-    description = definition["description"]
-    set_description = definition["set_description"]
-    if fallback_indices:
+    year = str(result.get("year") or "2024")
+    description = definition["description"].format(year=year)
+    set_description = definition["set_description"].format(year=year)
+    if unity_policy_indices:
         policy = (
             "; highest-|eta| bins use a unity central value with a symmetric "
             "measurement-derived uncertainty from the nominal fitted Data/MC ratio"
@@ -165,7 +183,7 @@ def main() -> int:
         "--electron-endcap-unity-fallback",
         action="store_true",
         help=(
-            "for electron candidates only, set invalid bins in the highest-|eta| interval "
+            "for electron payloads only, set every bin in the highest-|eta| interval "
             "to nominal 1.0 with a measurement-derived symmetric uncertainty"
         ),
     )

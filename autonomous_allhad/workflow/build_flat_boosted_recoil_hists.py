@@ -25,6 +25,14 @@ from autonomous_allhad.analysis_scale_factors import (
 
 from autonomous_allhad.real_subset_worker import assign_lowdm_search_bin, compute_weight_bundle
 from autonomous_allhad.dy_ptll_policy import dataset_id_prefilter_plan, dy_ptll_dataset_allowed
+from autonomous_allhad.highdm_resolved_categories import (
+    boosted_overlap_vetoed_ak4_indices,
+    select_exclusive_resolved_candidates,
+)
+from study_trota_highdm_categories_2024 import (
+    map_candidates_to_events,
+    map_candidates_to_events_rle,
+)
 
 RECOIL_PT_BINS = [250.0, 300.0, 350.0, 400.0, 500.0, 800.0, 1500.0]
 LOWDM_NSV_INCLUSIVE_CATEGORY_SIZES = [
@@ -129,7 +137,9 @@ WEIGHT_BRANCHES = [
     "electron_medium_eta",
     "muon_loose_pt", "muon_loose_eta", "muon_loose_phi",
     "muon_medium_pt", "muon_medium_eta", "muon_medium_phi",
-    "photon_medium_pt", "photon_medium_eta", "photon_medium_phi", "gen_top_pt",
+    "photon_medium_pt", "photon_medium_eta", "photon_medium_phi",
+    "photon_pt_all", "photon_eta_all", "photon_phi_all", "photon_r9_all",
+    "photon_cutbased_all", "photon_electron_veto_all", "gen_top_pt",
 ]
 OPTIONAL_FORWARD_SCHEMA_BRANCHES = {
     "electron_veto_eta",
@@ -167,6 +177,37 @@ LOWDM_READ_BRANCHES = [
     "lowdm_mtb", "lowdm_met_sqrt_ht", "lowdm_isr_pt", "lowdm_isr_dphi", "lowdm_ptb", "n_lowdm_isr",
     "lowdm_fatjet_pt", "lowdm_fatjet_msd",
 ]
+TROTA_LOWDM_LIGHT_BRANCHES = (
+    "run", "luminosityBlock", "event", "file_id", "entry",
+    "feature_lowdm_preselection", "feature_lowdm_LLCR",
+    "feature_lowdm_QCDCR", "feature_lowdm_GCR", "feature_lowdm_DY2E",
+    "feature_lowdm_DY2M", "feature_lowdm_SR", "nb_medium_lowdm",
+    "pass_lowdm_topology_veto", "pass_lowdm_isr",
+    "pass_lowdm_met_sqrt_ht",
+)
+TROTA_LOWDM_OVERLAP_BRANCHES = (
+    "jet_source_index_all", "jet_eta_all", "jet_phi_all",
+    "fatjet_eta_all", "fatjet_phi_all", "fatjet_subjet_index1_all",
+    "fatjet_subjet_index2_all", "fatjet_boosted_top_pass_all",
+    "fatjet_boosted_w_pass_all", "subjet_eta_all", "subjet_phi_all",
+)
+TROTA_PRIMARY_BRANCHES = (
+    "file_id", "entry", "TopResolved1pct_candidateIndex",
+    "TopResolved1pct_sourceJetIdx0", "TopResolved1pct_sourceJetIdx1",
+    "TopResolved1pct_sourceJetIdx2", "TopResolved1pct_eta",
+    "TopResolved1pct_mass", "TopResolved1pct_QCDDiscriminant",
+)
+TROTA_FALLBACK_BRANCHES = (
+    "run", "luminosityBlock", "event", *TROTA_PRIMARY_BRANCHES[2:],
+)
+EXPECTED_TROTA_SCHEMA_BY_YEAR = {
+    "2024": "trota_topresolved_2024_inplace_sparse_v1",
+    "2025": "trota_topresolved_2025_inplace_sparse_v1",
+}
+EXPECTED_TROTA_MODEL_SHA256 = (
+    "ce673e6497860cc67fcdfb30017301fb476e32a0a33a60e8b51a31ba109f7ef3"
+)
+DERIVED_NRES_BRANCH = "nresolved_top_trota"
 LOWDM_VARIABLE_SPECS = {
     "met": {"branch": "met", "bins": [0, 100, 150, 200, 250, 300, 350, 400, 500, 650, 800, 1000, 1500], "xlabel": r"$p_{T}^{miss}$ (GeV)"},
     "ht": {"branch": "ht", "bins": [0, 300, 500, 700, 1000, 1500, 2000, 3000], "xlabel": r"$H_{T}$ (GeV)"},
@@ -313,35 +354,58 @@ def file_sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-EXECUTION_CONTRACT_PATHS = (
+EXECUTION_CONTRACT_COMMON_PATHS = (
     "autonomous_allhad/workflow/build_flat_boosted_recoil_hists.py",
     "autonomous_allhad/workflow/run_flat_hists_chunked.py",
     "autonomous_allhad/autonomous_allhad/analysis_scale_factors.py",
     "autonomous_allhad/autonomous_allhad/real_subset_worker.py",
     "autonomous_allhad/autonomous_allhad/dy_ptll_policy.py",
+    "autonomous_allhad/autonomous_allhad/highdm_resolved_categories.py",
+    "autonomous_allhad/workflow/study_trota_highdm_categories_2024.py",
     "analysis/utils/corrections.py",
     "analysis/data/corrections.coffea",
-    "analysis/data/PUweight/2024/puWeights.json.gz",
-    "analysis/data/BTVSF/2024/btagging.json.gz",
-    "analysis/data/EGammaSF/2024/electron.json.gz",
-    "analysis/data/EGammaSF/2024/electronHlt.json.gz",
-    "analysis/data/EGammaSF/2024/photon.json.gz",
-    "analysis/data/MuonSF/2024/muon_Z.json.gz",
-    "analysis/data/AnalysisSF/2024/met_trigger_sf.json.gz",
-    "analysis/data/AnalysisSF/2024/photon_trigger_sf.json.gz",
-    "analysis/data/AnalysisSF/2024/veto_electron_5to10_sf.json.gz",
-    "analysis/data/AnalysisSF/2024/loose_muon_5to10_sf.json.gz",
 )
+EXECUTION_CONTRACT_YEAR_PATHS = {
+    "2024": (
+        "analysis/data/PUweight/2024/puWeights.json.gz",
+        "analysis/data/BTVSF/2024/btagging.json.gz",
+        "analysis/data/EGammaSF/2024/electron.json.gz",
+        "analysis/data/EGammaSF/2024/electronHlt.json.gz",
+        "analysis/data/EGammaSF/2024/photon.json.gz",
+        "analysis/data/MuonSF/2024/muon_Z.json.gz",
+        "analysis/data/AnalysisSF/2024/met_trigger_sf.json.gz",
+        "analysis/data/AnalysisSF/2024/photon_trigger_sf.json.gz",
+        "analysis/data/AnalysisSF/2024/veto_electron_5to10_sf.json.gz",
+        "analysis/data/AnalysisSF/2024/loose_muon_5to10_sf.json.gz",
+    ),
+    "2025": (
+        "analysis/data/PUweight/2025/puWeights_2025pp_Golden_Summer24_25ns_69200ub.json.gz",
+        "analysis/data/BTVSF/2025/btagging.json.gz",
+        "analysis/data/EGammaSF/2025/electron.json.gz",
+        "analysis/data/EGammaSF/2025/photon.json.gz",
+        "analysis/data/MuonSF/2025/muon_Z.json.gz",
+        "analysis/data/AnalysisSF/2025/met_trigger_sf.json.gz",
+        "analysis/data/AnalysisSF/2025/photon_trigger_sf.json.gz",
+        "analysis/data/AnalysisSF/2025/veto_electron_5to10_sf.json.gz",
+        "analysis/data/AnalysisSF/2025/loose_muon_5to10_sf.json.gz",
+    ),
+}
 EXPECTED_BTAG_EFFICIENCY_SHA256_2024 = (
     "03524e9ae28110814f336eafc887e60d54b495a7b8dec7cda59bd792f56feaf4"
 )
-BTAG_EFFICIENCY_RELATIVE_PATH = "analysis/hists/btageff2024.merged"
+BTAG_EFFICIENCY_RELATIVE_PATHS = {
+    "2024": "analysis/hists/btageff2024.merged",
+    "2025": "analysis/hists/btageff2025.merged",
+}
 
 
-def execution_code_sha256(repo: Path) -> dict[str, str]:
+def execution_code_sha256(repo: Path, campaign_year: str) -> dict[str, str]:
     return {
         relative_path: file_sha256(repo / relative_path)
-        for relative_path in EXECUTION_CONTRACT_PATHS
+        for relative_path in (
+            EXECUTION_CONTRACT_COMMON_PATHS
+            + EXECUTION_CONTRACT_YEAR_PATHS[campaign_year]
+        )
     }
 
 
@@ -349,13 +413,15 @@ def btag_efficiency_contract(
     repo: Path,
     expected_sha256: str,
     required: bool,
+    campaign_year: str,
 ) -> dict[str, Any]:
-    path = repo / BTAG_EFFICIENCY_RELATIVE_PATH
+    relative_path = BTAG_EFFICIENCY_RELATIVE_PATHS[campaign_year]
+    path = repo / relative_path
     if not path.exists():
         if required:
             raise RuntimeError(f"required b-tag efficiency payload is missing: {path}")
         return {
-            "path": BTAG_EFFICIENCY_RELATIVE_PATH,
+            "path": relative_path,
             "exists": False,
             "expected_sha256": expected_sha256,
         }
@@ -367,7 +433,7 @@ def btag_efficiency_contract(
             f"expected {expected_sha256}, found {actual_sha256}"
         )
     return {
-        "path": BTAG_EFFICIENCY_RELATIVE_PATH,
+        "path": relative_path,
         "exists": True,
         "sha256": actual_sha256,
         "expected_sha256": expected_sha256,
@@ -566,10 +632,27 @@ def flat_arrays_for_weights(chunk: dict[str, Any]) -> tuple[dict[str, Any], dict
     m_loose = combine_two(ones_mask(ml_pt), zeros_mask(mm_pt))
     m_med = combine_two(zeros_mask(ml_pt), ones_mask(mm_pt))
 
-    p_pt = chunk["photon_medium_pt"]
-    p_eta = chunk["photon_medium_eta"]
-    p_phi = chunk["photon_medium_phi"]
-    p_med = ones_mask(p_pt)
+    photon_all_fields = {
+        "photon_pt_all", "photon_eta_all", "photon_phi_all", "photon_r9_all",
+        "photon_cutbased_all", "photon_electron_veto_all",
+    }
+    if photon_all_fields <= set(chunk):
+        p_pt = chunk["photon_pt_all"]
+        p_eta = chunk["photon_eta_all"]
+        p_phi = chunk["photon_phi_all"]
+        p_r9 = chunk["photon_r9_all"]
+        p_med = (
+            (p_pt > 220.0)
+            & ((abs(p_eta) < 1.4442) | ((abs(p_eta) > 1.5660) & (abs(p_eta) < 2.5)))
+            & (chunk["photon_cutbased_all"] >= 2)
+            & ak.values_astype(chunk["photon_electron_veto_all"], np.bool_)
+        )
+    else:
+        p_pt = chunk["photon_medium_pt"]
+        p_eta = chunk["photon_medium_eta"]
+        p_phi = chunk["photon_medium_phi"]
+        p_r9 = None
+        p_med = ones_mask(p_pt)
 
     top_pt = chunk["gen_top_pt"]
     top_flags = ak.values_astype(ak.ones_like(top_pt) * ((1 << 8) | (1 << 13)), np.int64)
@@ -606,6 +689,7 @@ def flat_arrays_for_weights(chunk: dict[str, Any]) -> tuple[dict[str, Any], dict
         "p_eta": p_eta,
         "p_pt": p_pt,
         "p_phi": p_phi,
+        "p_r9": p_r9,
         "p_med": p_med,
         "gcr_mask": (
             as_bool(chunk["feature_GCR"], n)
@@ -905,11 +989,19 @@ def int_field(chunk: dict[str, Any], name: str, n: int, fill: int = 0) -> np.nda
     return out
 
 
+def lowdm_nres_zero_mask(chunk: dict[str, Any], n: int) -> np.ndarray:
+    """Apply the TROTA resolved-top veto when the derived branch is present."""
+    if DERIVED_NRES_BRANCH not in chunk:
+        return np.ones(n, dtype=bool)
+    return int_field(chunk, DERIVED_NRES_BRANCH, n, -1) == 0
+
+
 def lowdm_common_mask(chunk: dict[str, Any], n: int) -> np.ndarray:
     return (
         bool_field(chunk, "pass_base_common", n)
         & bool_field(chunk, "pass_zero_tau", n)
         & bool_field(chunk, "pass_lowdm_topology_veto", n)
+        & lowdm_nres_zero_mask(chunk, n)
         & bool_field(chunk, "pass_lowdm_isr", n)
         & bool_field(chunk, "pass_lowdm_isr_bveto", n)
         & bool_field(chunk, "pass_lowdm_met_sqrt_ht", n)
@@ -923,6 +1015,7 @@ def lowdm_region_mask(chunk: dict[str, Any], region: str, n: int) -> np.ndarray:
     return (
         bool_field(chunk, f"feature_lowdm_{region}", n)
         & (int_field(chunk, "nb_medium_lowdm", n, -1) >= 1)
+        & lowdm_nres_zero_mask(chunk, n)
     )
 
 
@@ -942,6 +1035,7 @@ def lowdm_nsv_inclusive_sr_indices(chunk: dict[str, Any], n: int) -> np.ndarray:
     base = (
         bool_field(chunk, "feature_lowdm_preselection", n)
         & bool_field(chunk, "pass_lowdm_topology_veto", n)
+        & lowdm_nres_zero_mask(chunk, n)
         & bool_field(chunk, "pass_lowdm_isr", n)
         & bool_field(chunk, "pass_lowdm_met_sqrt_ht", n)
         & (int_field(chunk, "nb_medium_lowdm", n, -1) >= 1)
@@ -1339,6 +1433,128 @@ def selected_an17_recoil60_indices(chunk: dict[str, Any], n: int, sr_mask: np.nd
     return out
 
 
+def compute_trota_lowdm_nres(
+    event_tree: Any,
+    trota_tree: Any,
+) -> tuple[np.ndarray, dict[str, int]]:
+    """Return the exclusive TROTA Nres count aligned with the Events tree.
+
+    Candidate fiducial cuts and both boosted/resolved overlap vetoes are the
+    same as in the validated 2024 High-dM TROTA study.  Candidate processing is
+    restricted to events that can enter one of the adopted low-dM regions.
+    """
+    required = set(TROTA_LOWDM_LIGHT_BRANCHES) | set(TROTA_LOWDM_OVERLAP_BRANCHES)
+    missing = sorted(required - set(event_tree.keys()))
+    if missing:
+        raise RuntimeError(
+            "TROTA low-dM veto requires missing Events branches: "
+            + ", ".join(missing)
+        )
+    light = event_tree.arrays(sorted(required), library="ak")
+    number_events = int(event_tree.num_entries)
+    nb_ge1 = np.asarray(light["nb_medium_lowdm"], dtype=int) >= 1
+    regular_regions = np.zeros(number_events, dtype=bool)
+    for region in LOWDM_REGION_MAP:
+        regular_regions |= np.asarray(light[f"feature_lowdm_{region}"], dtype=bool)
+    focused_sr = (
+        np.asarray(light["feature_lowdm_preselection"], dtype=bool)
+        & np.asarray(light["pass_lowdm_topology_veto"], dtype=bool)
+        & np.asarray(light["pass_lowdm_isr"], dtype=bool)
+        & np.asarray(light["pass_lowdm_met_sqrt_ht"], dtype=bool)
+        & nb_ge1
+    )
+    eligible = nb_ge1 & (regular_regions | focused_sr)
+    counts = np.zeros(number_events, dtype=np.int16)
+
+    tree_fields = set(trota_tree.keys())
+    identity_fallback = 0
+    if set(TROTA_PRIMARY_BRANCHES) <= tree_fields:
+        arrays_ak = trota_tree.arrays(TROTA_PRIMARY_BRANCHES, library="ak")
+        arrays = {
+            name: np.asarray(ak.to_numpy(arrays_ak[name]))
+            for name in TROTA_PRIMARY_BRANCHES
+        }
+        candidate_event = map_candidates_to_events(
+            np.asarray(light["file_id"]), np.asarray(light["entry"]),
+            arrays["file_id"], arrays["entry"],
+        )
+    elif set(TROTA_FALLBACK_BRANCHES) <= tree_fields:
+        arrays_ak = trota_tree.arrays(TROTA_FALLBACK_BRANCHES, library="ak")
+        arrays = {
+            name: np.asarray(ak.to_numpy(arrays_ak[name]))
+            for name in TROTA_FALLBACK_BRANCHES
+        }
+        candidate_event = map_candidates_to_events_rle(
+            np.asarray(light["run"]), np.asarray(light["luminosityBlock"]),
+            np.asarray(light["event"]), arrays["run"],
+            arrays["luminosityBlock"], arrays["event"],
+        )
+        identity_fallback = 1
+    else:
+        missing_trota = sorted(set(TROTA_PRIMARY_BRANCHES) - tree_fields)
+        raise RuntimeError("missing TROTA branches: " + ", ".join(missing_trota))
+
+    run2_fiducial = (
+        eligible[candidate_event]
+        & np.isfinite(arrays["TopResolved1pct_eta"])
+        & np.isfinite(arrays["TopResolved1pct_mass"])
+        & np.isfinite(arrays["TopResolved1pct_QCDDiscriminant"])
+        & (np.abs(arrays["TopResolved1pct_eta"]) < 2.0)
+        & (arrays["TopResolved1pct_mass"] >= 100.0)
+        & (arrays["TopResolved1pct_mass"] <= 250.0)
+    )
+    selected_rows = np.flatnonzero(run2_fiducial)
+    rejected_boosted = 0
+    rejected_resolved = 0
+    if selected_rows.size:
+        order = np.argsort(candidate_event[selected_rows], kind="stable")
+        selected_rows = selected_rows[order]
+        selected_events = candidate_event[selected_rows]
+        boundaries = np.flatnonzero(np.diff(selected_events)) + 1
+        for rows in np.split(selected_rows, boundaries):
+            event_index = int(candidate_event[rows[0]])
+            vetoed = boosted_overlap_vetoed_ak4_indices(
+                jet_source_indices=ak.to_list(light["jet_source_index_all"][event_index]),
+                jet_eta=ak.to_list(light["jet_eta_all"][event_index]),
+                jet_phi=ak.to_list(light["jet_phi_all"][event_index]),
+                fatjet_eta=ak.to_list(light["fatjet_eta_all"][event_index]),
+                fatjet_phi=ak.to_list(light["fatjet_phi_all"][event_index]),
+                fatjet_subjet_index1=ak.to_list(light["fatjet_subjet_index1_all"][event_index]),
+                fatjet_subjet_index2=ak.to_list(light["fatjet_subjet_index2_all"][event_index]),
+                fatjet_top_pass=ak.to_list(light["fatjet_boosted_top_pass_all"][event_index]),
+                fatjet_w_pass=ak.to_list(light["fatjet_boosted_w_pass_all"][event_index]),
+                subjet_eta=ak.to_list(light["subjet_eta_all"][event_index]),
+                subjet_phi=ak.to_list(light["subjet_phi_all"][event_index]),
+            )
+            result = select_exclusive_resolved_candidates(
+                candidate_indices=arrays["TopResolved1pct_candidateIndex"][rows],
+                candidate_scores=arrays["TopResolved1pct_QCDDiscriminant"][rows],
+                candidate_source_jets=np.stack(
+                    [
+                        arrays["TopResolved1pct_sourceJetIdx0"][rows],
+                        arrays["TopResolved1pct_sourceJetIdx1"][rows],
+                        arrays["TopResolved1pct_sourceJetIdx2"][rows],
+                    ],
+                    axis=1,
+                ),
+                boosted_vetoed_ak4_indices=vetoed,
+            )
+            counts[event_index] = result.nres
+            rejected_boosted += len(result.rejected_by_boosted_overlap)
+            rejected_resolved += len(result.rejected_by_resolved_overlap)
+
+    return counts, {
+        "events": number_events,
+        "eligible_events": int(np.count_nonzero(eligible)),
+        "nres_positive_events": int(np.count_nonzero(eligible & (counts > 0))),
+        "trota_rows": int(trota_tree.num_entries),
+        "run2_fiducial_rows": int(selected_rows.size),
+        "rejected_by_boosted_overlap": int(rejected_boosted),
+        "rejected_by_resolved_overlap": int(rejected_resolved),
+        "identity_fallback_files": int(identity_fallback),
+    }
+
+
 def iterate_tree_with_dy_policy(
     tree: Any,
     branches: list[str],
@@ -1474,7 +1690,7 @@ def iterate_tree_for_gcr_study(
         yield full[selected]
 
 
-def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: dict[str, Any], search_histograms: dict[str, Any], lowdm_variable_histograms: dict[str, Any], highdm_variable_histograms: dict[str, Any], summary: dict[str, Any], step_size: int, only_regions: list[str] | None = None, require_btag: bool = False, require_weight_components: list[str] | None = None, analysis_sf_components: list[str] | None = None, require_branches: bool = False, require_normalization: bool = False, nominal_only: bool = False, distribution_only: bool = False, only_variables: list[str] | None = None, only_signal_mass: tuple[int, int] | None = None, only_lowdm_sr_nsv_inclusive: bool = False, only_lowdm_nsv_repair: bool = False, dy_ptll_policy: str = "all", gcr_only: bool = False, gcr_photon_policy: str = "nominal") -> None:
+def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: dict[str, Any], search_histograms: dict[str, Any], lowdm_variable_histograms: dict[str, Any], highdm_variable_histograms: dict[str, Any], summary: dict[str, Any], step_size: int, campaign_year: str = "2024", only_regions: list[str] | None = None, require_btag: bool = False, require_weight_components: list[str] | None = None, analysis_sf_components: list[str] | None = None, require_branches: bool = False, require_normalization: bool = False, nominal_only: bool = False, distribution_only: bool = False, only_variables: list[str] | None = None, only_signal_mass: tuple[int, int] | None = None, only_lowdm_sr_nsv_inclusive: bool = False, only_lowdm_nsv_repair: bool = False, lowdm_only: bool = False, require_lowdm_nres_zero: bool = False, dy_ptll_policy: str = "all", gcr_only: bool = False, gcr_photon_policy: str = "nominal") -> None:
     try:
         meta = read_root_metadata(root_path, fallback=norm)
     except FileNotFoundError:
@@ -1505,6 +1721,28 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                 + ", ".join(missing_required_branches)
             )
         branches = [b for b in effective_read_branches if b in present]
+        trota_nres = None
+        trota_nres_cursor = 0
+        if require_lowdm_nres_zero:
+            expected_trota_schema = EXPECTED_TROTA_SCHEMA_BY_YEAR[campaign_year]
+            if "TROTA" not in root_file:
+                raise RuntimeError(f"{root_path}: required TROTA tree is missing")
+            trota_meta = meta.get(f"trota_topresolved_{campaign_year}") or {}
+            marker = trota_meta.get("marker") or {}
+            if (
+                trota_meta.get("status") != "complete"
+                or trota_meta.get("schema_version") != expected_trota_schema
+                or marker.get("status") != "complete"
+                or marker.get("model_sha256") != EXPECTED_TROTA_MODEL_SHA256
+            ):
+                raise RuntimeError(f"{root_path}: invalid TROTA provenance: {trota_meta}")
+            trota_nres, trota_stats = compute_trota_lowdm_nres(
+                tree,
+                root_file["TROTA"],
+            )
+            audit = summary.setdefault("trota_lowdm_nres_audit", {})
+            for key, value in trota_stats.items():
+                audit[key] = int(audit.get(key, 0)) + int(value)
         if gcr_only:
             chunk_iterator = iterate_tree_for_gcr_study(
                 tree,
@@ -1527,6 +1765,16 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
             n = len(chunk["dataset_id"])
             if n == 0:
                 continue
+            if trota_nres is not None:
+                stop = trota_nres_cursor + n
+                if stop > len(trota_nres):
+                    raise RuntimeError(f"{root_path}: TROTA Nres/event chunk alignment overflow")
+                chunk = ak.with_field(
+                    chunk,
+                    ak.Array(trota_nres[trota_nres_cursor:stop]),
+                    DERIVED_NRES_BRANCH,
+                )
+                trota_nres_cursor = stop
             dsids = np.asarray(chunk["dataset_id"], dtype=np.int64)
             for dsid in sorted(set(int(x) for x in dsids)):
                 mask_ds = dsids == dsid
@@ -1627,6 +1875,11 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                     )
                     year_vals = np.asarray(sub_group["year"], dtype=int)
                     year = str(int(year_vals[0])) if len(year_vals) else "2024"
+                    if year != campaign_year:
+                        raise RuntimeError(
+                            f"campaign year {campaign_year} does not match ROOT event year {year} "
+                            f"in {root_path}"
+                        )
                     correction_dataset = dataset
                     btag_efficiency_anchor = None
                     if is_signal:
@@ -1651,6 +1904,7 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                             inputs["e_eta"], inputs["e_delta_eta_sc"], inputs["e_pt"], inputs["e_phi"], inputs["e_veto"], inputs["e_med"], inputs["n_e_veto"], inputs["n_e_med"],
                             inputs["m_eta"], inputs["m_pt"], inputs["m_phi"], inputs["m_loose"], inputs["m_med"], inputs["n_m_loose"], inputs["n_m_med"],
                             inputs["p_eta"], inputs["p_pt"], inputs["p_phi"], inputs["p_med"], inputs["gcr_mask"],
+                            p_r9=inputs["p_r9"],
                             photon_id_wp=(
                                 "Tight"
                                 if gcr_only and gcr_photon_policy == "tight_eb"
@@ -1750,6 +2004,8 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                         continue
                     if gcr_only:
                         active_regions = {"GCR": REGION_VARIABLES["GCR"]}
+                    elif lowdm_only:
+                        active_regions = {}
                     else:
                         active_regions = {region: REGION_VARIABLES[region] for region in only_regions} if only_regions else REGION_VARIABLES
                     for region, (flag, var) in active_regions.items():
@@ -1762,19 +2018,20 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                             weights = finite_array(wraw, inputs["n"], 0.0) * normv
                             target = histograms.setdefault(region, {}).setdefault(label, {}).setdefault(vname, empty_hist())
                             add_hist(target, values, weights, rmask)
-                    fill_highdm_distribution_histograms(
-                        sub_group, variations, normv, label, process, is_data,
-                        highdm_variable_histograms, summary,
-                        ["GCR"] if gcr_only else only_regions,
-                        only_variables,
-                    )
+                    if not lowdm_only:
+                        fill_highdm_distribution_histograms(
+                            sub_group, variations, normv, label, process, is_data,
+                            highdm_variable_histograms, summary,
+                            ["GCR"] if gcr_only else only_regions,
+                            only_variables,
+                        )
                     if distribution_only:
                         summary["events_processed"] = int(summary.get("events_processed", 0)) + original_n
                         continue
                     if only_regions:
                         summary["events_processed"] = int(summary.get("events_processed", 0)) + original_n
                         continue
-                    if not gcr_only:
+                    if not gcr_only and not lowdm_only:
                         sr_mask = as_bool(sub_group["feature_SR"], inputs["n"])
                         selected_recoil54_indices = selected_an17_recoil54_indices(sub_group, inputs["n"], sr_mask)
                         selected_recoil60_indices = selected_an17_recoil60_indices(sub_group, inputs["n"], sr_mask)
@@ -1855,6 +2112,11 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                                 vtarget = lowdm_variable_histograms.setdefault(lowdm_channel, {}).setdefault(var_name, {}).setdefault(label, {}).setdefault(vname, empty_binned_hist(spec["bins"]))
                                 add_binned_hist(vtarget, values, weights, lowdm_mask, spec["bins"])
                     summary["events_processed"] = int(summary.get("events_processed", 0)) + inputs["n"]
+        if trota_nres is not None and trota_nres_cursor != len(trota_nres):
+            raise RuntimeError(
+                f"{root_path}: TROTA Nres/event chunk alignment incomplete: "
+                f"{trota_nres_cursor} != {len(trota_nres)}"
+            )
 
 
 def expand_roots(inputs: list[str]) -> list[Path]:
@@ -1881,6 +2143,7 @@ def main() -> int:
     parser.add_argument("--inputs", nargs="+", required=True)
     parser.add_argument("--normalization", required=True)
     parser.add_argument("--output", required=True)
+    parser.add_argument("--campaign-year", choices=sorted(BTAG_EFFICIENCY_RELATIVE_PATHS), default="2024")
     parser.add_argument("--step-size", type=int, default=200000)
     parser.add_argument("--only-regions", nargs="+", choices=sorted(REGION_VARIABLES))
     parser.add_argument("--require-btag", action="store_true")
@@ -1901,10 +2164,14 @@ def main() -> int:
     )
     parser.add_argument(
         "--analysis-sf-components",
-        nargs="+",
+        nargs="*",
         choices=list(REQUIRED_ANALYSIS_SF_COMPONENTS),
-        default=list(REQUIRED_ANALYSIS_SF_COMPONENTS),
-        help="Analysis-owned SF components included in nominal and Up/Down weights.",
+        default=None,
+        help=(
+            "Analysis-owned SF components included in nominal and Up/Down weights. "
+            "Omit the option for the campaign defaults; pass the option with no "
+            "values only when the campaign has no analysis-owned payloads."
+        ),
     )
     parser.add_argument(
         "--require-branches",
@@ -1915,6 +2182,14 @@ def main() -> int:
         "--require-normalization",
         action="store_true",
         help="Fail on a missing, non-finite, or non-positive MC normalization factor.",
+    )
+    parser.add_argument(
+        "--allow-zero-entry-roots",
+        action="store_true",
+        help=(
+            "Treat readable flat ROOT files with an empty Events tree as valid "
+            "zero-contribution inputs."
+        ),
     )
     parser.add_argument(
         "--nominal-only",
@@ -1943,6 +2218,19 @@ def main() -> int:
         help="Build only high- and low-dM GCR histograms using a GCR-specific sparse prefilter.",
     )
     parser.add_argument(
+        "--lowdm-only",
+        action="store_true",
+        help="Build only the six adopted low-dM search-bin and distribution containers.",
+    )
+    parser.add_argument(
+        "--require-lowdm-nres-zero",
+        action="store_true",
+        help=(
+            "Require Nres=0 in every low-dM SR/CR using the validated 2024 TROTA "
+            "candidate, fiducial, and overlap-removal definition."
+        ),
+    )
+    parser.add_argument(
         "--gcr-photon-policy",
         choices=("nominal", "tight_eb"),
         default="nominal",
@@ -1962,12 +2250,21 @@ def main() -> int:
         parser.error("--only-lowdm-nsv-repair requires --only-lowdm-sr-nsv-inclusive")
     if args.gcr_only and args.only_regions:
         parser.error("--gcr-only cannot be combined with --only-regions")
+    if args.lowdm_only and (args.only_regions or args.gcr_only):
+        parser.error("--lowdm-only cannot be combined with --only-regions or --gcr-only")
+    if args.require_lowdm_nres_zero and args.dy_ptll_policy != "all":
+        parser.error("--require-lowdm-nres-zero requires --dy-ptll-policy all")
     if args.gcr_photon_policy != "nominal" and not args.gcr_only:
         parser.error("--gcr-photon-policy requires --gcr-only")
+    analysis_sf_components = (
+        list(REQUIRED_ANALYSIS_SF_COMPONENTS)
+        if args.analysis_sf_components is None
+        else list(args.analysis_sf_components)
+    )
     unavailable_required = (
         set(args.require_weight_components)
         & set(REQUIRED_ANALYSIS_SF_COMPONENTS)
-    ) - set(args.analysis_sf_components)
+    ) - set(analysis_sf_components)
     if unavailable_required:
         parser.error(
             "--require-weight-components contains disabled analysis SFs: "
@@ -1986,16 +2283,20 @@ def main() -> int:
         "step_size": int(args.step_size),
         "only_regions": list(args.only_regions) if args.only_regions else None,
         "only_variables": list(args.only_variables) if args.only_variables else None,
+        "campaign_year": str(args.campaign_year),
         "require_btag": bool(args.require_btag),
         "require_weight_components": list(args.require_weight_components),
-        "analysis_sf_components": list(args.analysis_sf_components),
+        "analysis_sf_components": analysis_sf_components,
         "require_branches": bool(args.require_branches),
         "require_normalization": bool(args.require_normalization),
+        "allow_zero_entry_roots": bool(args.allow_zero_entry_roots),
         "nominal_only": bool(args.nominal_only),
         "distribution_only": bool(args.distribution_only),
         "only_signal_mass": list(args.only_signal_mass) if args.only_signal_mass else None,
         "only_lowdm_sr_nsv_inclusive": bool(args.only_lowdm_sr_nsv_inclusive),
         "only_lowdm_nsv_repair": bool(args.only_lowdm_nsv_repair),
+        "lowdm_only": bool(args.lowdm_only),
+        "require_lowdm_nres_zero": bool(args.require_lowdm_nres_zero),
         "dy_ptll_policy": str(args.dy_ptll_policy),
         "gcr_only": bool(args.gcr_only),
         "gcr_photon_policy": str(args.gcr_photon_policy),
@@ -2004,11 +2305,12 @@ def main() -> int:
             "0",
         ),
         "normalization_sha256": file_sha256(Path(args.normalization)),
-        "code_sha256": execution_code_sha256(repo),
+        "code_sha256": execution_code_sha256(repo, args.campaign_year),
         "btag_efficiency": btag_efficiency_contract(
             repo,
             str(args.expected_btag_efficiency_sha256),
             btag_payload_required,
+            args.campaign_year,
         ),
     }
     summary: dict[str, Any] = {
@@ -2037,10 +2339,11 @@ def main() -> int:
             highdm_variable_histograms,
             summary,
             step_size=args.step_size,
+            campaign_year=args.campaign_year,
             only_regions=args.only_regions,
             require_btag=args.require_btag,
             require_weight_components=args.require_weight_components,
-            analysis_sf_components=args.analysis_sf_components,
+            analysis_sf_components=analysis_sf_components,
             require_branches=args.require_branches,
             require_normalization=args.require_normalization,
             nominal_only=args.nominal_only,
@@ -2051,6 +2354,8 @@ def main() -> int:
             ),
             only_lowdm_sr_nsv_inclusive=args.only_lowdm_sr_nsv_inclusive,
             only_lowdm_nsv_repair=args.only_lowdm_nsv_repair,
+            lowdm_only=args.lowdm_only,
+            require_lowdm_nres_zero=args.require_lowdm_nres_zero,
             dy_ptll_policy=args.dy_ptll_policy,
             gcr_only=args.gcr_only,
             gcr_photon_policy=args.gcr_photon_policy,
@@ -2062,9 +2367,11 @@ def main() -> int:
         for key in (
             "missing_input_roots",
             "missing_sidecars",
-            "zero_entry_roots",
             "weight_rejections",
         )
+    ) or (
+        bool(summary.get("zero_entry_roots"))
+        and not args.allow_zero_entry_roots
     ):
         payload_status = "complete_with_warnings"
     else:
@@ -2119,10 +2426,22 @@ def main() -> int:
                     "bin_labels": LOWDM_34BIN_LABELS,
                     "selection": (
                         "feature_lowdm_preselection && pass_lowdm_topology_veto && "
-                        "pass_lowdm_isr && pass_lowdm_met_sqrt_ht && Nb>=1; ISR-subjet b veto "
-                        "and mTb requirement removed"
+                        + (
+                            "Nres(TROTA)=0 && "
+                            if args.require_lowdm_nres_zero
+                            else ""
+                        )
+                        + "pass_lowdm_isr && pass_lowdm_met_sqrt_ht && Nb>=1; "
+                        "ISR-subjet b veto and mTb requirement removed"
                         if args.only_lowdm_sr_nsv_inclusive and region == "SR"
-                        else f"feature_lowdm_{region} && Nb>=1"
+                        else (
+                            f"feature_lowdm_{region} && Nb>=1"
+                            + (
+                                " && Nres(TROTA)=0"
+                                if args.require_lowdm_nres_zero
+                                else ""
+                            )
+                        )
                     ),
                     "delta_m": "low",
                     "region": region,
@@ -2136,10 +2455,36 @@ def main() -> int:
             },
         },
         "lowdm_region_policy": {
-            "status": "adopted_from_user_2026-07-24",
-            "search_bins": "34 low-dM bins per region with explicit Nb>=1 after removing the two leading Nb=0 categories; Nsv, the ISR-subjet b veto, and the mTb requirement are not applied",
+            "status": (
+                f"physics_proposal_trota_nres0_{args.campaign_year}_2026-08-20"
+                if args.require_lowdm_nres_zero
+                else "adopted_from_user_2026-07-24"
+            ),
+            "search_bins": (
+                "34 low-dM bins per region with explicit Nb>=1 and TROTA Nres=0 "
+                "after removing the two leading Nb=0 categories; Nsv, the ISR-subjet "
+                "b veto, and the mTb requirement are not applied"
+                if args.require_lowdm_nres_zero
+                else "34 low-dM bins per region with explicit Nb>=1 after removing the two leading Nb=0 categories; Nsv, the ISR-subjet b veto, and the mTb requirement are not applied"
+            ),
             "regions": LOWDM_REGION_MAP,
-            "note": "Every Low-dM CR and SR explicitly requires Nb>=1. Low-dM is Nsv-inclusive and does not require the ISR-subjet b veto or mTb<175. GCR and DY use photon/dilepton recoil directions and object-cleaned AK4/AK8 collections; DY also requires OS, on-Z, and pT(ll)>200.",
+            "note": (
+                "Every Low-dM CR and SR explicitly requires Nb>=1 and TROTA Nres=0. "
+                f"This is a {args.campaign_year} physics proposal pending comparison with the previous "
+                "boosted-only topology veto. Low-dM is Nsv-inclusive and does not require "
+                "the ISR-subjet b veto or mTb<175."
+                if args.require_lowdm_nres_zero
+                else "Every Low-dM CR and SR explicitly requires Nb>=1. Low-dM is Nsv-inclusive and does not require the ISR-subjet b veto or mTb<175. GCR and DY use photon/dilepton recoil directions and object-cleaned AK4/AK8 collections; DY also requires OS, on-Z, and pT(ll)>200."
+            ),
+            "resolved_top_veto": {
+                "applied": bool(args.require_lowdm_nres_zero),
+                "branch": DERIVED_NRES_BRANCH if args.require_lowdm_nres_zero else None,
+                "requirement": "Nres == 0" if args.require_lowdm_nres_zero else None,
+                "trota_schema": EXPECTED_TROTA_SCHEMA_BY_YEAR[args.campaign_year] if args.require_lowdm_nres_zero else None,
+                "trota_model_sha256": EXPECTED_TROTA_MODEL_SHA256 if args.require_lowdm_nres_zero else None,
+                "candidate_fiducial": "abs(eta)<2, 100<=mass<=250 GeV",
+                "overlap_policy": "exclusive resolved candidates after boosted-object AK4 veto",
+            },
         },
         "highdm_distribution_variable_specs": HIGHDM_DISTRIBUTION_VARIABLE_SPECS,
         "highdm_distribution_regions": {

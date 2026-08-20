@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "measurement": "loose_muon_id_5to10_sf_2025_parking_external",
+  "status": "measurement_definition",
+  "campaign_strategy": "parking_external_muon",
+  "reference": "2025 repetition of the validated 2024 external-muon ParkingSingleMuon J/psi tag-and-probe strategy",
+  "year": "2025",
+  "probe_definition": "loose_id_only",
+  "campaign_inputs": {
+    "data_dataset_query": "dataset=/ParkingSingleMuon*/Run2025*-PromptReco-v*/NANOAOD",
+    "data_dataset_exclude_contains": [
+      "Run2025C-PromptReco-v1",
+      "Run2025F-PromptReco-v1"
+    ],
+    "mc_datasets": [
+      "/BcToJpsiPi_TuneCP5_13p6TeV_bcvegpy2-pythia8-evtgen/Run3Winter25NanoAOD-142X_mcRun3_2025_realistic_v9-v2/NANOAODSIM"
+    ],
+    "files_per_condor_shard": 20,
+    "prompt_reco_policy": "Use the latest PromptReco production for each 2025 era and ParkingSingleMuon primary dataset; C-v1 and F-v1 are superseded by v2.",
+    "mc_campaign_note": "The 6.74-million-event 2025-conditions Bc-to-J/psi sample provides a resonant dimuon pair; the identical disjoint third-muon requirement used in data is imposed on simulation."
+  },
+  "probe_pt_edges_gev": [5, 6, 7, 8, 9, 10],
+  "probe_abseta_edges": [0.0, 0.9, 1.2, 2.1, 2.4],
+  "binning_policy": "Count the same 4 eta by 5 pT grid as in 2024, then merge exactly to eta [0,0.9,1.2,2.4] and pT [5,10] for the final fit.",
+  "target_selection": "looseId; miniPFRelIso_all is not part of the probe pass/fail definition",
+  "denominator": "reconstructed tracker muon with 5 < pT < 10 GeV and abs(eta) < 2.4, without a LooseID or mini-isolation requirement",
+  "resonance": {
+    "name": "Jpsi",
+    "mass_window_gev": [2.6, 3.6]
+  },
+  "tag_pt_min_gev": 5.0,
+  "tag_miniiso_max": null,
+  "tag": "tight muon with pT > 5 GeV; no mini-isolation or trigger-object requirement is applied to either measured J/psi leg",
+  "external_reference_muon": {
+    "enabled": true,
+    "pt_min_gev": 12.0,
+    "abseta_max": 1.5,
+    "require_tight_id": true,
+    "miniiso_max": null
+  },
+  "reference_paths": [
+    "HLT_Mu9_Barrel_L1HP10_IP6",
+    "HLT_Mu10_Barrel_L1HP11_IP6"
+  ],
+  "reference_trigger_object_kind": "muon",
+  "tag_trigger_match_required": false,
+  "apply_reference_trigger_to_mc": false,
+  "tag_trigger_object_filter_bits": null,
+  "reference_trigger_strategy": "Data must fire a ParkingSingleMuon path and contain a third tight barrel muon above 12 GeV, distinct from both J/psi legs. The identical offline topology is imposed on simulation; the HLT itself remains data-only.",
+  "mass_bins": 50,
+  "nominal_mass_rebin_factor": 2,
+  "nominal_background_model": "exponential",
+  "systematic_variations": [
+    "signal_template",
+    "background_model",
+    "mass_window",
+    "alternate_binning",
+    "tag_selection",
+    "external_reference_selection",
+    "pileup"
+  ],
+  "adoption_gates": [
+    "the 2025 golden JSON is applied to data and the 2025 pileup correction to simulation",
+    "data inputs are exclusively ParkingSingleMuon and no dimuon reference path is configured",
+    "the external reference muon is distinct from both measured J/psi legs in every selected pair",
+    "neither measured leg is trigger matched or required to pass isolation",
+    "every adopted bin has effective MC fail count >= 10, with >= 20 preferred",
+    "simultaneous pass/fail fit convergence in every adopted bin",
+    "data and MC goodness-of-fit",
+    "bin-by-bin stability under fit-model, fit-window, binning, external-reference, and pileup variations"
+  ]
+}

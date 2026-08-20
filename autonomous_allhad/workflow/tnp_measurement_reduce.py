@@ -18,6 +18,85 @@ HISTOGRAM_KEYS = ("pass_sumw", "pass_sumw2", "fail_sumw", "fail_sumw2")
 SAMPLES = ("data", "mc", "mc_pileup_up", "mc_pileup_down")
 
 
+def use_mc_reference(
+    payload: dict[str, Any],
+    reference: dict[str, Any],
+    *,
+    source: Path,
+    reference_year: str | None = None,
+) -> dict[str, Any]:
+    """Replace only the MC histograms with an explicitly audited reference.
+
+    This keeps the target-year data measurement intact while allowing a
+    high-statistics MC reference when an otherwise identical target-year
+    production is unavailable.  The compatibility checks deliberately cover
+    every object and fit definition that affects the pass/fail efficiency.
+    """
+
+    compatibility_keys = (
+        "kind",
+        "probe_definition",
+        "denominator_selection",
+        "target_selection",
+        "tag_pt_min_gev",
+        "tag_miniiso_max",
+        "external_reference_muon",
+        "tag_trigger_match_required",
+        "reference_trigger_object_kind",
+        "probe_abseta_edges",
+        "probe_pt_edges_gev",
+        "mass_edges_gev",
+        "fit_window_gev",
+    )
+    mismatches = [
+        key for key in compatibility_keys
+        if payload.get(key) != reference.get(key)
+    ]
+    if mismatches:
+        raise ValueError(
+            "MC-reference histograms are incompatible with the target "
+            f"measurement: {mismatches}"
+        )
+    resolved_reference_year = str(reference_year or reference.get("year") or "")
+    if not resolved_reference_year:
+        raise ValueError(
+            "MC-reference year is absent; provide --mc-reference-year explicitly"
+        )
+    result = dict(payload)
+    samples = dict(payload["samples"])
+    for name in ("mc", "mc_pileup_up", "mc_pileup_down"):
+        reference_sample = reference.get("samples", {}).get(name)
+        if reference_sample is None:
+            raise ValueError(f"MC-reference payload is missing samples/{name}")
+        for key in HISTOGRAM_KEYS:
+            target_shape = np.asarray(samples[name][key], dtype=float).shape
+            reference_shape = np.asarray(reference_sample[key], dtype=float).shape
+            if target_shape != reference_shape:
+                raise ValueError(
+                    f"MC-reference histogram shape mismatch for {name}/{key}: "
+                    f"{reference_shape} != {target_shape}"
+                )
+        samples[name] = reference_sample
+    result["samples"] = samples
+    result["mc_physical_datasets"] = list(reference.get("mc_physical_datasets") or [])
+    result["pileup_correction"] = reference.get("pileup_correction")
+    result["mc_reference"] = {
+        "source": str(source),
+        "year": resolved_reference_year,
+        "files_expected": reference.get("files_expected"),
+        "files_processed": reference.get("files_processed"),
+        "files_failed": reference.get("files_failed"),
+        "mc_physical_datasets": list(reference.get("mc_physical_datasets") or []),
+        "policy": (
+            "Use the identically selected high-statistics reference MC because "
+            "no equivalent target-year SPS double-J/psi NanoAOD production exists; "
+            "the target-year data histograms are unchanged. Future POG validation "
+            "of this cross-year simulation reference is required."
+        ),
+    }
+    return result
+
+
 def _add_histograms(target: dict[str, Any], source: dict[str, Any]) -> None:
     for key in HISTOGRAM_KEYS:
         left = np.asarray(target[key], dtype=float)
@@ -107,6 +186,11 @@ def merge_tnp_shards(
         payload = json.loads(path.read_text())
         if payload.get("measurement") != expected_measurement or payload.get("kind") != kind:
             raise ValueError(f"TnP measurement mismatch in {path}")
+        if config.get("year") is not None and str(payload.get("year")) != str(config["year"]):
+            raise ValueError(
+                f"TnP campaign-year mismatch in {path}: "
+                f"{payload.get('year')!r} != {config.get('year')!r}"
+            )
         if payload.get("probe_definition") != config.get("probe_definition"):
             raise ValueError(
                 f"TnP probe-definition mismatch in {path}: "
@@ -233,6 +317,7 @@ def merge_tnp_shards(
         "schema_version": 1,
         "measurement": config["measurement"],
         "source_measurement": expected_measurement,
+        "year": str(config.get("year") or first.get("year") or "2024"),
         "status": "candidate_histograms" if not blockers else "blocked",
         "kind": kind,
         "probe_definition": first.get("probe_definition"),
@@ -253,6 +338,10 @@ def merge_tnp_shards(
         "probe_pt_edges_gev": first["probe_pt_edges_gev"],
         "mass_edges_gev": first["mass_edges_gev"],
         "fit_window_gev": first["fit_window_gev"],
+        "nominal_mass_rebin_factor": int(config.get("nominal_mass_rebin_factor", 1)),
+        "nominal_background_model": str(
+            config.get("nominal_background_model", "chebyshev")
+        ),
         "samples": samples,
         "pileup_correction": first.get("pileup_correction"),
         "trigger_object_filter_bits": first.get("trigger_object_filter_bits"),
@@ -269,18 +358,44 @@ def merge_tnp_shards(
 def cli(argv: list[str] | None = None, *, default_kind: str | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input-dir", type=Path, action="append", required=True)
-    parser.add_argument("--glob", default="shard_*.json")
+    parser.add_argument(
+        "--glob",
+        dest="globs",
+        action="append",
+        help=(
+            "input filename pattern; repeat to add patterns "
+            "(default: shard_*.json plus shard_recovery_*.json)"
+        ),
+    )
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--records", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--kind", choices=("electron", "muon"), default=default_kind, required=default_kind is None)
     parser.add_argument("--target-eta-edges", type=float, nargs="+")
     parser.add_argument("--target-pt-edges", type=float, nargs="+")
+    parser.add_argument(
+        "--mc-reference-histograms",
+        type=Path,
+        help=(
+            "replace only MC and MC pileup-variation histograms with a fully "
+            "compatible, explicitly recorded reference payload"
+        ),
+    )
+    parser.add_argument(
+        "--mc-reference-year",
+        help="explicit year of --mc-reference-histograms when absent from that payload",
+    )
     args = parser.parse_args(argv)
-    paths = sorted(path for directory in args.input_dir for path in directory.glob(args.glob))
+    globs = args.globs or ["shard_*.json", "shard_recovery_*.json"]
+    paths = sorted({
+        path
+        for directory in args.input_dir
+        for pattern in globs
+        for path in directory.glob(pattern)
+    })
     if not paths:
         raise FileNotFoundError(
-            f"no TnP shard JSONs match {args.glob!r} in {', '.join(map(str, args.input_dir))}"
+            f"no TnP shard JSONs match {globs!r} in {', '.join(map(str, args.input_dir))}"
         )
     expected_records = None
     if args.records is not None:
@@ -310,6 +425,16 @@ def cli(argv: list[str] | None = None, *, default_kind: str | None = None) -> in
             payload,
             target_eta_edges=target_eta,
             target_pt_edges=target_pt,
+        )
+    if args.mc_reference_year is not None and args.mc_reference_histograms is None:
+        raise ValueError("--mc-reference-year requires --mc-reference-histograms")
+    if args.mc_reference_histograms is not None:
+        reference = json.loads(args.mc_reference_histograms.read_text())
+        payload = use_mc_reference(
+            payload,
+            reference,
+            source=args.mc_reference_histograms,
+            reference_year=args.mc_reference_year,
         )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(payload, indent=2, sort_keys=True, allow_nan=False) + "\n")

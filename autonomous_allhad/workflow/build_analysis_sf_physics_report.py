@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Build the paper-style physics report for the 2024 analysis scale factors."""
+"""Build the paper-style physics report for the analysis scale-factor campaign."""
 
 from __future__ import annotations
 
 import gzip
+import argparse
 import hashlib
 import json
 import math
@@ -35,6 +36,7 @@ from reportlab.platypus.tableofcontents import TableOfContents
 
 
 REPO = Path(__file__).resolve().parents[2]
+REPORT_YEAR = "2024"
 OUTPUT = REPO / "output/pdf/analysis_sf_measurements_2024_physics_report.pdf"
 
 MET_DIR = REPO / "autonomous_allhad/workflow/met_trigger_measurement"
@@ -89,7 +91,7 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-DATA = {name: load_json(path) for name, path in PATHS.items() if path.suffix in {".json", ".gz"}}
+DATA: dict[str, dict[str, Any]] = {}
 
 
 def register_fonts() -> tuple[str, str, str]:
@@ -256,7 +258,7 @@ class PhysicsReportDoc(BaseDocTemplate):
             rightMargin=18 * mm,
             topMargin=20 * mm,
             bottomMargin=17 * mm,
-            title="Measurement and Application of 2024 Trigger and Low-pT Lepton Scale Factors",
+            title=f"Measurement and Application of {REPORT_YEAR} Trigger and Low-pT Lepton Scale Factors",
             author="Run-3 all-hadronic stop analysis",
             subject="Physics methods, datasets, uncertainties, results, and histogram integration",
         )
@@ -275,7 +277,7 @@ class PhysicsReportDoc(BaseDocTemplate):
             canvas.drawString(self.leftMargin, A4[1] - 9.5 * mm, "CMS Run-3 all-hadronic stop analysis")
             canvas.setFont(FONT, 7.2)
             canvas.setFillColor(DARK_GREY)
-            canvas.drawRightString(A4[0] - self.rightMargin, A4[1] - 9.5 * mm, "2024 analysis scale factors")
+            canvas.drawRightString(A4[0] - self.rightMargin, A4[1] - 9.5 * mm, f"{REPORT_YEAR} analysis scale factors")
             canvas.setStrokeColor(MID_GREY)
             canvas.line(self.leftMargin, 10.5 * mm, A4[0] - self.rightMargin, 10.5 * mm)
             canvas.setFont(FONT, 7.2)
@@ -1032,13 +1034,355 @@ def report_story() -> list[Any]:
     return story
 
 
+def paths_for_2025() -> dict[str, Path]:
+    output_name = "2025_full"
+    return {
+        "met_config": MET_DIR / "config_2025.json",
+        "met_result": MET_DIR / f"outputs/{output_name}/met_trigger_result_adopted.json",
+        "photon_config": PHOTON_DIR / "config_2025.json",
+        "photon_result": PHOTON_DIR / f"outputs/{output_name}/photon_trigger_result_adopted.json",
+        "electron_config": ELECTRON_DIR / "config_2025_id_only_parking_singlemuon.json",
+        "electron_result": ELECTRON_DIR / f"outputs/{output_name}/adopted_result.json",
+        "electron_hist": ELECTRON_DIR / f"outputs/{output_name}/histograms.json",
+        "muon_config": MUON_DIR / "config_2025_id_only_parking_external.json",
+        "muon_result": MUON_DIR / f"outputs/{output_name}/adopted_result.json",
+        "muon_hist": MUON_DIR / f"outputs/{output_name}/histograms.json",
+        "integration": REPO / "autonomous_allhad/workflow/analysis_sf_integration_validation/summary_2025.json",
+        "met_payload": REPO / "analysis/data/AnalysisSF/2025/met_trigger_sf.json.gz",
+        "photon_payload": REPO / "analysis/data/AnalysisSF/2025/photon_trigger_sf.json.gz",
+        "electron_payload": REPO / "analysis/data/AnalysisSF/2025/veto_electron_5to10_sf.json.gz",
+        "muon_payload": REPO / "analysis/data/AnalysisSF/2025/loose_muon_5to10_sf.json.gz",
+    }
+
+
+def _join(values: Iterable[Any]) -> str:
+    return ", ".join(str(value) for value in values)
+
+
+def _file_accounting(result: dict[str, Any]) -> str:
+    processed = int(result.get("files_processed", 0))
+    failed = len(result.get("files_failed") or [])
+    skipped = len(result.get("files_permanently_skipped") or [])
+    text = f"{processed:,} processed"
+    if failed:
+        text += f"; {failed:,} unresolved"
+    if skipped:
+        text += f"; {skipped:,} permanently skipped"
+    if not failed and not skipped:
+        text += "; no unresolved file"
+    return text
+
+
+def dataset_rows_2025() -> list[list[Any]]:
+    met_cfg = DATA["met_config"]
+    photon_cfg = DATA["photon_config"]
+    electron_cfg = DATA["electron_config"]
+    muon_cfg = DATA["muon_config"]
+    return [
+        ["Measurement", "Collision data", "Simulation", "Retained coverage"],
+        [
+            "MET trigger",
+            _join(met_cfg["campaign_inputs"]["data_dataset_prefixes"]) + "; single-electron reference",
+            _join(item["dataset_contains"] for item in met_cfg["campaign_inputs"]["mc_datasets"]),
+            _file_accounting(DATA["met_result"]),
+        ],
+        [
+            "Photon trigger",
+            _join(photon_cfg["campaign_inputs"]["data_dataset_prefixes"]) + "; PFHT reference",
+            "Summer24 GJ bins: " + _join(item["dataset_contains"].split("_Tune", 1)[0] for item in photon_cfg["campaign_inputs"]["mc_datasets"]),
+            _file_accounting(DATA["photon_result"]),
+        ],
+        [
+            "Veto electron ID, 5-10 GeV",
+            "ParkingSingleMuon, Run2025C-G; independent external-muon reference",
+            electron_cfg["campaign_inputs"]["mc_datasets"][0],
+            _file_accounting(DATA["electron_hist"]),
+        ],
+        [
+            "Loose muon ID, 5-10 GeV",
+            "ParkingSingleMuon, Run2025C-G; disjoint external-muon reference",
+            muon_cfg["campaign_inputs"]["mc_datasets"][0],
+            _file_accounting(DATA["muon_hist"]),
+        ],
+    ]
+
+
+def tnp_rows_2025(kind: str) -> list[list[Any]]:
+    result = DATA[f"{kind}_result"]
+    payload = DATA[f"{kind}_payload"]
+    payload_nominal = correction_values(payload, "nominal")
+    payload_up = correction_values(payload, "up")
+    payload_down = correction_values(payload, "down")
+    eta_edges = result["probe_abseta_edges"]
+    pt_edges = result["probe_pt_edges_gev"]
+    n_pt = len(pt_edges) - 1
+    rows = [["|eta|", "pT [GeV]", "eff(data)", "eff(MC)", "fit SF", "payload SF", "total unc.", "chi2/ndf"]]
+    for index, (item, central, up, down) in enumerate(
+        zip(result["bins"], payload_nominal, payload_up, payload_down)
+    ):
+        eta_index, pt_index = divmod(index, n_pt)
+        nominal = (item.get("fits") or {}).get("nominal") or {}
+        data_fit = nominal.get("data") or {}
+        mc_fit = nominal.get("mc") or {}
+        rows.append([
+            f"{eta_edges[eta_index]:g}-{eta_edges[eta_index + 1]:g}",
+            f"{pt_edges[pt_index]:g}-{pt_edges[pt_index + 1]:g}",
+            fmt(data_fit.get("efficiency"), 4),
+            fmt(mc_fit.get("efficiency"), 4),
+            fmt(item.get("scale_factor"), 4),
+            fmt(central, 4),
+            fmt(max(up - central, central - down), 4),
+            fmt(data_fit.get("chi2_ndf"), 2),
+        ])
+    return rows
+
+
+def cover_story_2025() -> list[Any]:
+    story: list[Any] = [Spacer(1, 20 * mm)]
+    line = Table([[""]], colWidths=[8 * mm], rowHeights=[113 * mm])
+    line.setStyle(TableStyle([("BACKGROUND", (0, 0), (-1, -1), BLUE)]))
+    title = [
+        P("CMS RUN-3 ALL-HADRONIC STOP ANALYSIS", "small"),
+        Spacer(1, 10 * mm),
+        P("Measurement and Application of 2025 Trigger and Low-pT Lepton Scale Factors", "cover_title"),
+        Spacer(1, 6 * mm),
+        P("MET trigger, photon trigger, veto-electron ID, and loose-muon ID", "cover_sub"),
+        Spacer(1, 17 * mm),
+        P("Physics strategy, data and simulation, reference selections, pass/fail fits, uncertainties, correction payloads, and histogram application", "body"),
+        Spacer(1, 10 * mm),
+        P(f"Analysis note date: {date.today().isoformat()}<br/>Collision energy: sqrt(s) = 13.6 TeV<br/>Data-taking year: 2025", "small"),
+    ]
+    cover = Table([[line, title]], colWidths=[10 * mm, 147 * mm], hAlign="LEFT")
+    cover.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+    ]))
+    story.append(cover)
+    story.append(Spacer(1, 12 * mm))
+    story.append(P(
+        "<b>Abstract.</b> Four data-to-simulation efficiency corrections are measured for the 2025 all-hadronic stop analysis. "
+        "The MET and photon trigger efficiencies are obtained with independent reference triggers. The 5-10 GeV veto-electron and loose-muon identification efficiencies are obtained from J/psi resonance tag-and-probe samples recorded with ParkingSingleMuon paths external to the measured dilepton pair. "
+        "Each correction is stored as a correctionlib v2 json.gz payload with nominal, up, and down evaluations and is propagated to the final histogram weights.",
+        "body",
+    ))
+    story.append(PageBreak())
+    return story
+
+
+def report_story_2025() -> list[Any]:
+    global FIGURE_NUMBER
+    FIGURE_NUMBER = 0
+    met = DATA["met_result"]
+    photon = DATA["photon_result"]
+    electron = DATA["electron_result"]
+    muon = DATA["muon_result"]
+    ecfg = DATA["electron_config"]
+    mcfg = DATA["muon_config"]
+    integration = DATA["integration"]
+    story = cover_story_2025()
+
+    toc = TableOfContents()
+    toc.levelStyles = [S["h2"], S["h3"]]
+    story += [H1("Contents"), toc, PageBreak()]
+
+    story += [H1("1 Physics purpose and analysis role")]
+    story.append(P(
+        "The signal and control-region event weights must describe the probability that an event present in simulation would also satisfy the online and offline requirements used in data. A scale factor is therefore defined as SF = epsilon(data) / epsilon(MC), with the numerator and denominator efficiencies evaluated in the same kinematic bin. The correction multiplies simulated events only; collision data are not reweighted by these factors."
+    ))
+    story.append(P(
+        "This campaign closes four analysis-specific gaps. The MET and photon paths previously lacked measured Run-3 trigger corrections. The veto-electron and loose-muon object definitions extend down to 5 GeV, while the pre-existing official workflow payloads entered at 10 GeV and therefore clipped lower-pT objects to a boundary bin. The dedicated ID-only measurements replace that clipping in 5 < pT < 10 GeV and hand back to the official payload at 10 GeV."
+    ))
+    story.append(draw_measurement_logic())
+    story.append(Spacer(1, 4 * mm))
+    story.append(P(
+        "The low-pT strategy follows the physical idea of CMS-DP-2023/081: a J/psi resonance gives substantially more low-pT dielectron signal than a Z resonance and makes the 5-7 GeV interval accessible. The present implementation is a 2025 analysis measurement, not a direct POG result, and future POG validation is needed."
+    ))
+
+    story += [H1("2 Samples and common event treatment")]
+    story.append(styled_table(dataset_rows_2025(), [1.05 * inch, 1.7 * inch, 2.65 * inch, 1.05 * inch], font_size=6.0, long=True))
+    story.append(H2("2.1 Data quality and simulation weighting"))
+    story.append(P(
+        "Collision data are restricted to the certified 2025 golden luminosity sections. The trigger measurements use EGamma0-3 or JetMET0-1 primary datasets according to the independent reference trigger. The low-pT measurements use ParkingSingleMuon0-15 in Run2025C-G. Duplicate run-luminosity-event triplets are removed across primary-dataset fragments before data histograms are summed."
+    ))
+    story.append(P(
+        "Simulation is weighted by the signed generator weight and the 2025 pileup correction Collisions25_goldenJSON. The trigger samples use semileptonic ttbar or pT-binned gamma+jet simulation. The low-pT samples use Summer24 SPS double-J/psi simulation because these samples contain the measured dilepton resonance together with an independent muon side and match the official 2025 Prompt/Summer24 correction pairing."
+    ))
+
+    story += [H1("3 Trigger-efficiency measurements")]
+    story.append(H2("3.1 MET trigger"))
+    story.append(P(
+        "The MET denominator is selected with single-electron paths HLT_Ele30/32/35/38/40_WPTight_Gsf in EGamma data and with the corresponding offline semileptonic topology in TTtoLNu2Q simulation. The probe is the logical OR of the PFMET and PFMETNoMu 120, 130, and 140 GeV tight paths. Because the reference is based on the electron leg rather than MET, it does not condition the denominator on the trigger efficiency being measured. The scale factor is tabulated versus missing transverse momentum from 100 to 800 GeV."
+    ))
+    met_plot = MET_DIR / "plots/2025_full"
+    story += paired_figures(
+        met_plot / "met_trigger_efficiency_2025.png",
+        met_plot / "met_trigger_scale_factor_2025.png",
+        "MET-trigger efficiency in data and simulation, and their ratio. Only llabel and rlabel carry plot-level annotation; the measurement definition is recorded in this caption.",
+    )
+    story.append(styled_table(trigger_bin_rows(met), [0.8 * inch, 0.75 * inch, 0.72 * inch, 0.72 * inch, 0.65 * inch, 0.62 * inch, 0.62 * inch, 0.62 * inch], font_size=5.9, long=True))
+
+    story.append(H2("3.2 Photon trigger"))
+    story.append(P(
+        "The photon denominator is selected with the logical OR of PFHT180 through PFHT1050 in JetMET data. A medium-ID photon is reconstructed without imposing the photon HLT decision. The numerator additionally requires HLT_Photon175 or HLT_Photon200. Gamma+jet simulation supplies the corresponding efficiency. The use of PFHT as the reference makes the online photon decision the quantity under test rather than a precondition. Results are measured in five photon-pT intervals and four absolute-eta intervals, excluding the ECAL transition region."
+    ))
+    photon_plot = PHOTON_DIR / "plots/2025_full"
+    story += paired_figures(
+        photon_plot / "photon_trigger_efficiency_2025.png",
+        photon_plot / "photon_trigger_scale_factor_2025.png",
+        "Photon-trigger efficiencies and data-to-simulation scale factors measured with the independent PFHT reference.",
+    )
+    story.append(styled_table(trigger_bin_rows(photon, photon=True), [0.58 * inch, 0.58 * inch, 0.6 * inch, 0.66 * inch, 0.66 * inch, 0.58 * inch, 0.55 * inch, 0.55 * inch, 0.55 * inch], font_size=5.2, long=True))
+
+    story += [H1("4 Low-pT tag-and-probe measurements")]
+    story.append(H2("4.1 Why J/psi and why an external parking trigger"))
+    story.append(P(
+        "A low invariant mass does not by itself imply a low-pT probe. The analysis explicitly requires the probe to lie in 5 < pT < 10 GeV; the J/psi mass window supplies a narrow resonance with adequate signal yield in that kinematic interval. ParkingSingleMuon records the event through a muon that is distinct from the measured electron or muon pair. In data the event must fire HLT_Mu9_Barrel_L1HP10_IP6 or HLT_Mu10_Barrel_L1HP11_IP6 and contain a tight barrel reference muon with pT > 12 GeV. The identical offline external-muon topology is imposed on simulation, while the parking HLT decision itself is data-only because it is an acquisition condition rather than the efficiency under measurement."
+    ))
+    story.append(H2("4.2 Electron ID-only definition"))
+    story.append(P(
+        "The electron denominator is a reconstructed GSF electron in the ECAL fiducial region with conversion veto and at most one lost hit, without a cutBased or mini-isolation requirement. The passing definition is cutBased >= 1 only. Mini-isolation is deliberately absent from both the numerator and the exported correction. The measured bins are 5-7 and 7-10 GeV in |eta| intervals 0-0.8, 0.8-1.44, and 1.44-2.5; probes in the ECAL transition are removed. The endcap payload central value is fixed to unity by analysis policy and its uncertainty is derived from the measured fitted ratio."
+    ))
+    eplot = ELECTRON_DIR / "plots/2025_full"
+    story += paired_figures(
+        eplot / "efficiency.png",
+        eplot / "scale_factor.png",
+        "Electron ID-only efficiencies and scale factors. The probe pT and eta bins are defined in the text, not in a plot title.",
+    )
+    story.append(styled_table(tnp_rows_2025("electron"), [0.65 * inch, 0.68 * inch, 0.7 * inch, 0.7 * inch, 0.65 * inch, 0.72 * inch, 0.7 * inch, 0.62 * inch], font_size=5.8, long=True))
+
+    story.append(H2("4.3 Muon ID-only definition"))
+    story.append(P(
+        "The muon denominator is a reconstructed tracker muon with 5 < pT < 10 GeV and |eta| < 2.4, without LooseID or mini-isolation. The numerator requires LooseID only. The measured J/psi tag is a distinct tight muon with pT > 5 GeV and no isolation condition; neither measured leg is trigger matched. The raw 20 MeV mass histogram is summed in adjacent pairs for the nominal 40 MeV fit binning. The final pT and eta binning is obtained only by exact summation of the measured pass/fail histograms, never by averaging fitted scale factors."
+    ))
+    mplot = MUON_DIR / "plots/2025_full"
+    story += paired_figures(
+        mplot / "efficiency.png",
+        mplot / "scale_factor.png",
+        "Muon LooseID-only efficiencies and scale factors from the disjoint external-reference topology.",
+    )
+    story.append(styled_table(tnp_rows_2025("muon"), [0.65 * inch, 0.68 * inch, 0.7 * inch, 0.7 * inch, 0.65 * inch, 0.72 * inch, 0.7 * inch, 0.62 * inch], font_size=5.8, long=True))
+
+    story.append(H2("4.4 Simultaneous pass/fail resonance fit"))
+    story.append(P(
+        "For each probe bin, the passing and failing mass spectra are fitted simultaneously. The nominal resonance is a double-sided Crystal Ball line shape and the pass/fail samples share the core response unless that constraint is explicitly varied. Independent smooth backgrounds describe the two categories. A single signal efficiency parameter partitions the fitted resonance yield between pass and fail. The same construction is applied to data and simulation, and the fitted scale factor is the ratio of the two efficiencies."
+    ))
+    story.append(P(
+        "The fit systematic envelope includes an alternate signal form, alternate background form, an independent pass/fail response, restricted mass windows, alternate mass binning, and a simulation-template variation. The nominal fit and every required variation must be finite. The fit plots show data, signal-plus-background fit, and background only; a shared legend is placed outside four square panels."
+    ))
+    efit = next((eplot / f"mass_fit_bin_{index:02d}.png" for index, item in enumerate(electron["bins"]) if item.get("fits")), None)
+    mfit = next((mplot / f"mass_fit_bin_{index:02d}.png" for index, item in enumerate(muon["bins"]) if item.get("fits")), None)
+    if efit is not None and mfit is not None:
+        story += paired_figures(efit, mfit, "Representative simultaneous pass/fail fits for the electron and muon measurements. The ordinate is Events / 40 MeV.")
+
+    story += [H1("5 Uncertainties and correction representation")]
+    story.append(H2("5.1 Trigger uncertainties"))
+    story.append(P(
+        "Data efficiencies use the binomial count and a Wilson interval. Weighted simulation uses the effective number of entries derived from sumw and sumw2. The statistical uncertainty of epsilon(data)/epsilon(MC) is propagated from the two efficiencies. The pileup uncertainty is the larger absolute shift under the 2025 pileup up/down weights. Statistical and pileup terms are added in quadrature."
+    ))
+    story.append(H2("5.2 Low-pT fit and pileup uncertainties"))
+    story.append(P(
+        "For each low-pT bin, the statistical uncertainty is propagated from the fitted data and simulation efficiencies. The fit-model uncertainty is the largest displacement among the required alternate fits. The pileup term is the larger scale-factor shift from the simulation pileup up/down histograms. These terms are combined in quadrature. The electron endcap unity policy retains a symmetric measurement-derived uncertainty that covers both the raw fitted ratio's displacement from one and its statistical precision."
+    ))
+    payload_rows = [["Component", "Correction name", "Nominal range", "Payload SHA256"]]
+    for component, correction_name in (
+        ("met", "met_trigger_sf_genuine"),
+        ("photon", "photon_trigger_sf"),
+        ("electron", "veto_electron_id_5to10_sf"),
+        ("muon", "loose_muon_id_5to10_sf"),
+    ):
+        payload = DATA[f"{component}_payload"]
+        low, high = payload_range(payload)
+        payload_rows.append([
+            component,
+            correction_name,
+            f"{low:.4f}-{high:.4f}",
+            sha256(PATHS[f"{component}_payload"]),
+        ])
+    story.append(styled_table(payload_rows, [0.8 * inch, 2.0 * inch, 1.0 * inch, 2.65 * inch], font_size=5.8))
+
+    story += [H1("6 Application to analysis histograms")]
+    story.append(P(
+        "All four payloads are evaluated during the flat-intermediate histogram stage. The central value multiplies the nominal simulated event weight. Each payload also supplies a one-at-a-time Up and Down event-weight variation: met_trigger, photon_trigger, veto_electron_5to10, and loose_muon_5to10. The histogram execution contract hashes the 2025 payload files, so replacing a payload invalidates stale histogram products."
+    ))
+    story.append(P(
+        "The low-pT handoff is open at both sides: the dedicated analysis payload is used only for selected objects with 5 < pT < 10 GeV. In that interval the previously clipped official electron or muon ID contribution is replaced by unity before the dedicated ID-only factor is multiplied. At pT >= 10 GeV the official correction is used and the dedicated factor is unity. This removes boundary clipping and prevents double counting."
+    ))
+    variation_rows = [["Nominal component", "Up variation", "Down variation"]]
+    for component in integration["nominal_components"]:
+        variation_rows.append([component, f"{component}Up", f"{component}Down"])
+    story.append(styled_table(variation_rows, [2.15 * inch, 2.15 * inch, 2.15 * inch], font_size=7.0))
+    story.append(P(
+        "The integration validation requires every non-data dataset to record all four components as applied and requires all eight shifted histogram leaves. The campaign year is passed explicitly to the payload resolver, so 2025 histograms cannot silently load the 2024 AnalysisSF directory."
+    ))
+
+    story += [H1("7 Interpretation and validation statement")]
+    story.append(P(
+        "The scale factors quantify residual data-simulation efficiency differences in the measured phase space; they are not corrections to collision data and do not change the object definitions. The resulting uncertainty variations propagate these differences into the signal and control-region predictions. Their impact is expected to be largest in samples selected by the corresponding trigger and in the lost-lepton control region when a reconstructed lepton lies between 5 and 10 GeV."
+    ))
+    story.append(P(
+        "The measurements use the full retained 2025 campaign after local recovery of transient storage failures, the declared fit variations, and explicit correctionlib domain checks. The methodology and numerical results are suitable for analysis-level use. Future POG validation is needed before interpreting these payloads as centrally endorsed CMS recommendations."
+    ))
+
+    story += [PageBreak(), H1("Appendix A: machine-readable provenance")]
+    source_rows = [["Role", "Repository path", "SHA256"]]
+    for role, key in (
+        ("MET definition", "met_config"),
+        ("MET result", "met_result"),
+        ("Photon definition", "photon_config"),
+        ("Photon result", "photon_result"),
+        ("Electron definition", "electron_config"),
+        ("Electron result", "electron_result"),
+        ("Muon definition", "muon_config"),
+        ("Muon result", "muon_result"),
+        ("Histogram integration", "integration"),
+        ("MET payload", "met_payload"),
+        ("Photon payload", "photon_payload"),
+        ("Electron payload", "electron_payload"),
+        ("Muon payload", "muon_payload"),
+    ):
+        path = PATHS[key]
+        source_rows.append([role, str(path.relative_to(REPO)), sha256(path)])
+    story.append(styled_table(source_rows, [1.1 * inch, 3.35 * inch, 2.0 * inch], font_size=5.6, long=True))
+    story.append(H2("A.1 Primary physics and implementation references"))
+    references = [
+        "CMS Collaboration, AN2019-016 v9, Run-2 all-hadronic stop-search strategy baseline.",
+        "CMS Collaboration, CMS-DP-2023/081, Low-pT Electron ID scale factors at 13 TeV using J/psi events.",
+        "The 2025 measurement configuration, adopted result, and correctionlib files listed above.",
+        "The 2025 golden luminosity JSON and Collisions25_goldenJSON pileup correction used by the histogram builders.",
+    ]
+    for index, reference in enumerate(references, 1):
+        story.append(P(f"[{index}] {reference}", "small"))
+    story.append(Spacer(1, 5 * mm))
+    story.append(P("End of report.", "small"))
+    return story
+
+
 def main() -> int:
+    global REPORT_YEAR, OUTPUT, PATHS, DATA
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--year", choices=("2024", "2025"), default="2024")
+    parser.add_argument("--output", type=Path)
+    args = parser.parse_args()
+    REPORT_YEAR = args.year
+    if REPORT_YEAR == "2025":
+        PATHS = paths_for_2025()
+    OUTPUT = (
+        args.output.resolve()
+        if args.output is not None
+        else REPO / f"output/pdf/analysis_sf_measurements_{REPORT_YEAR}_physics_report.pdf"
+    )
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     missing = [str(path) for path in PATHS.values() if not path.exists()]
     if missing:
         raise FileNotFoundError("Missing report inputs:\n" + "\n".join(missing))
+    DATA = {
+        name: load_json(path)
+        for name, path in PATHS.items()
+        if path.suffix in {".json", ".gz"}
+    }
     document = PhysicsReportDoc(str(OUTPUT))
-    document.multiBuild(report_story())
+    document.multiBuild(report_story_2025() if REPORT_YEAR == "2025" else report_story())
     print(OUTPUT)
     return 0
 

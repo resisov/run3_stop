@@ -83,14 +83,43 @@ def mc_normalization_factors(input_dir: Path) -> tuple[dict[int, float], dict[st
     return factors, {"sidecars_scanned": len(sidecars), "physical_datasets": groups}
 
 
+PILEUP_SOURCES = {
+    "2024": (
+        Path("analysis/data/PUweight/2024/puWeights.json.gz"),
+        "Collisions24_BCDEFGHI_goldenJSON",
+    ),
+    "2025": (
+        Path("analysis/data/PUweight/2025/puWeights_2025pp_Golden_Summer24_25ns_69200ub.json.gz"),
+        "Collisions25_goldenJSON",
+    ),
+}
+
+
+def pileup_source(year: str) -> str:
+    normalized = str(year)
+    if normalized not in PILEUP_SOURCES:
+        raise ValueError(f"unsupported pileup year for SF measurement: {year}")
+    path, correction = PILEUP_SOURCES[normalized]
+    return f"{path}::{correction}"
+
+
 @lru_cache(maxsize=None)
-def _pileup_correction(repo: str) -> Any:
-    path = Path(repo) / "analysis/data/PUweight/2024/puWeights.json.gz"
-    return correctionlib.CorrectionSet.from_file(str(path))["Collisions24_BCDEFGHI_goldenJSON"]
+def _pileup_correction(repo: str, year: str) -> Any:
+    normalized = str(year)
+    if normalized not in PILEUP_SOURCES:
+        raise ValueError(f"unsupported pileup year for SF measurement: {year}")
+    relative_path, correction_name = PILEUP_SOURCES[normalized]
+    path = Path(repo) / relative_path
+    return correctionlib.CorrectionSet.from_file(str(path))[correction_name]
 
 
-def pileup_weight_triplet(repo: Path, ntrue: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    correction = _pileup_correction(str(repo.resolve()))
+def pileup_weight_triplet(
+    repo: Path,
+    ntrue: np.ndarray,
+    *,
+    year: str = "2024",
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    correction = _pileup_correction(str(repo.resolve()), str(year))
     values = np.asarray(ntrue, dtype=float)
     return tuple(
         np.asarray(correction.evaluate(values, variation), dtype=float)

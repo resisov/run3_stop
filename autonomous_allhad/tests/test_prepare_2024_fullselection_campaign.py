@@ -58,3 +58,44 @@ def test_normalize_lfn_collapses_alternate_xrootd_endpoints() -> None:
     assert MODULE.normalize_lfn("root://xrootd-cms.infn.it//store/mc/a.root") == (
         "root://cms-xrd-global.cern.ch//store/mc/a.root"
     )
+
+
+def test_main_wrapper_integrates_trota_before_stageout() -> None:
+    wrapper = MODULE.wrapper_text(
+        "x509up_u147757",
+        "model_TopResolved_2024_TROTA2D_ptcut.h5",
+    )
+    inference = wrapper.index("autonomous_allhad.trota_resolved_2024_inplace")
+    stageout = wrapper.index('"$XRDCOPY" -f')
+    assert inference < stageout
+    assert "LCG_104/x86_64-el9-gcc13-opt/setup.sh" in wrapper
+    assert '--input "$WORKDIR/out.root"' in wrapper
+    assert "--allow-hadd-repair" in wrapper
+    assert 'd["root_trees"]=["Events","TROTA"]' in wrapper
+    assert 't.get("status") == "complete"' in wrapper
+    assert "trota.json" in wrapper
+
+
+def test_submit_transfers_model_and_requires_almalinux9(tmp_path: Path) -> None:
+    paths = {
+        name: tmp_path / name
+        for name in (
+            "wrapper", "arguments", "logs", "py38", "worker", "payload",
+            "shards", "proxy", "model",
+        )
+    }
+    submit = MODULE.submit_text(
+        paths["wrapper"],
+        paths["arguments"],
+        paths["logs"],
+        paths["py38"],
+        paths["worker"],
+        paths["payload"],
+        paths["shards"],
+        paths["proxy"],
+        paths["model"],
+    )
+    assert str(paths["model"]) in submit
+    assert 'requirements = (OpSysAndVer =?= "AlmaLinux9")' in submit
+    assert "request_memory = $(memory_mb)MB" in submit
+    assert "queue name,shift,shard_name,root_out,memory_mb" in submit

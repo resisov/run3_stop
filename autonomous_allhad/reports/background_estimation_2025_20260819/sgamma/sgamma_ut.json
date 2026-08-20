@@ -1,0 +1,1488 @@
+{
+  "closure_checks": {
+    "highdm": {
+      "Nb1": {
+        "Q_times_summed_gamma": 8014.158876869938,
+        "relative_residual": 2.269719669266518e-16,
+        "summed_numerator": 8014.158876869939
+      },
+      "Nb2": {
+        "Q_times_summed_gamma": 2147.7342469412933,
+        "relative_residual": -2.1173352873340586e-16,
+        "summed_numerator": 2147.734246941293
+      },
+      "Nb3plus": {
+        "Q_times_summed_gamma": 334.5137813865496,
+        "relative_residual": -1.6992848134744627e-16,
+        "summed_numerator": 334.51378138654957
+      }
+    },
+    "lowdm": {
+      "Nb1": {
+        "Q_times_summed_gamma": 11107.228458552478,
+        "relative_residual": -1.6376627259748576e-16,
+        "summed_numerator": 11107.228458552476
+      },
+      "Nb2plus": {
+        "Q_times_summed_gamma": 1791.5415645823534,
+        "relative_residual": -1.2691509922977295e-16,
+        "summed_numerator": 1791.5415645823532
+      }
+    }
+  },
+  "definition": {
+    "Q_g": "sum_i(data_i - otherMC_i) / sum_i(gammaJetsMC_i)",
+    "Sgamma_g_i": "(data_i - otherMC_i) / (Q_g * gammaJetsMC_i)",
+    "gcr_data_stream": "EGamma",
+    "lowdm_plot_mode": "all 34 adopted category bins; no pTb/Nj family aggregation",
+    "lowdm_plot_overflow_cap_gev": 1500.0,
+    "other_mc": "all normalized GCR MC except GJ",
+    "uncertainty": "diagonal statistical propagation used by the AN-style implementation"
+  },
+  "highdm": {
+    "Nb1": {
+      "Q": {
+        "denominator": 4948.864122951188,
+        "denominator_variance": 313.0645140655749,
+        "numerator": 8014.158876869939,
+        "numerator_variance": 15356.20620801147,
+        "stat": 0.025700768940807518,
+        "status": "complete",
+        "value": 1.6193935977556815
+      },
+      "bins": [
+        {
+          "Sgamma": {
+            "denominator": 2949.030148563195,
+            "denominator_variance": 2516.67695323514,
+            "numerator": 3040.7246689057724,
+            "numerator_variance": 5468.939399593641,
+            "stat": 0.030602322621630138,
+            "status": "complete",
+            "value": 1.0310931105222008
+          },
+          "data": 3503.0,
+          "data_variance": 3503.0,
+          "gamma_mc": 1821.0706480810209,
+          "gamma_mc_variance": 124.37445886459497,
+          "index": 0,
+          "other_mc": 462.27533109422757,
+          "other_mc_variance": 1965.9393995936402
+        },
+        {
+          "Sgamma": {
+            "denominator": 1916.6544500633713,
+            "denominator_variance": 1122.9105208498352,
+            "numerator": 1909.4267328138098,
+            "numerator_variance": 5662.754598800028,
+            "stat": 0.04295183438148247,
+            "status": "complete",
+            "value": 0.9962289930512396
+          },
+          "data": 2263.0,
+          "data_variance": 2263.0,
+          "gamma_mc": 1183.5630650384587,
+          "gamma_mc_variance": 75.35992155159295,
+          "index": 1,
+          "other_mc": 353.57326718619015,
+          "other_mc_variance": 3399.7545988000284
+        },
+        {
+          "Sgamma": {
+            "denominator": 1140.7064354111171,
+            "denominator_variance": 442.1046737108472,
+            "numerator": 1120.725812064506,
+            "numerator_variance": 1908.5022624621529,
+            "stat": 0.04236363732144735,
+            "status": "complete",
+            "value": 0.9824839917384968
+          },
+          "data": 1294.0,
+          "data_variance": 1294.0,
+          "gamma_mc": 704.4034489157069,
+          "gamma_mc_variance": 43.6084480706193,
+          "index": 2,
+          "other_mc": 173.27418793549396,
+          "other_mc_variance": 614.5022624621529
+        },
+        {
+          "Sgamma": {
+            "denominator": 1115.0989437240853,
+            "denominator_variance": 421.78861854120316,
+            "numerator": 1115.8581141986715,
+            "numerator_variance": 1379.5577602224969,
+            "stat": 0.0380675086996861,
+            "status": "complete",
+            "value": 1.0006808099665585
+          },
+          "data": 1240.0,
+          "data_variance": 1240.0,
+          "gamma_mc": 688.5904361172611,
+          "gamma_mc_variance": 41.40961917566122,
+          "index": 3,
+          "other_mc": 124.14188580132839,
+          "other_mc_variance": 139.55776022249688
+        },
+        {
+          "Sgamma": {
+            "denominator": 771.7759687238789,
+            "denominator_variance": 216.65635703688298,
+            "numerator": 721.5014345632339,
+            "numerator_variance": 823.2551423647927,
+            "stat": 0.04123145187312789,
+            "status": "complete",
+            "value": 0.9348586426657295
+          },
+          "data": 789.0,
+          "data_variance": 789.0,
+          "gamma_mc": 476.58331476268876,
+          "gamma_mc_variance": 25.40737008685244,
+          "index": 4,
+          "other_mc": 67.498565436766,
+          "other_mc_variance": 34.25514236479274
+        },
+        {
+          "Sgamma": {
+            "denominator": 120.89293038429052,
+            "denominator_variance": 11.298577357262626,
+            "numerator": 105.92211432394545,
+            "numerator_variance": 113.19704456835935,
+            "stat": 0.09131634105137461,
+            "status": "complete",
+            "value": 0.8761646689119345
+          },
+          "data": 112.0,
+          "data_variance": 112.0,
+          "gamma_mc": 74.6532100360506,
+          "gamma_mc_variance": 2.904696316254024,
+          "index": 5,
+          "other_mc": 6.077885676054549,
+          "other_mc_variance": 1.1970445683593467
+        }
+      ]
+    },
+    "Nb2": {
+      "Q": {
+        "denominator": 1183.5919590094895,
+        "denominator_variance": 67.21340186040932,
+        "numerator": 2147.7342469412933,
+        "numerator_variance": 3050.102347517217,
+        "stat": 0.048324352225391914,
+        "status": "complete",
+        "value": 1.8145900963526855
+      },
+      "bins": [
+        {
+          "Sgamma": {
+            "denominator": 792.1168649643938,
+            "denominator_variance": 529.5139334739471,
+            "numerator": 808.6816071675194,
+            "numerator_variance": 1124.4427964448666,
+            "stat": 0.051688163806220905,
+            "status": "complete",
+            "value": 1.0209119928331158
+          },
+          "data": 951.0,
+          "data_variance": 951.0,
+          "gamma_mc": 436.52661091700196,
+          "gamma_mc_variance": 25.66878827874601,
+          "index": 0,
+          "other_mc": 142.3183928324807,
+          "other_mc_variance": 173.44279644486664
+        },
+        {
+          "Sgamma": {
+            "denominator": 500.32355138972264,
+            "denominator_variance": 229.50722285138457,
+            "numerator": 519.1500865138316,
+            "numerator_variance": 819.1595303131221,
+            "stat": 0.06526515815411883,
+            "status": "complete",
+            "value": 1.0376287205985317
+          },
+          "data": 628.0,
+          "data_variance": 628.0,
+          "gamma_mc": 275.72262870571694,
+          "gamma_mc_variance": 15.784775470870374,
+          "index": 1,
+          "other_mc": 108.84991348616842,
+          "other_mc_variance": 191.15953031312213
+        },
+        {
+          "Sgamma": {
+            "denominator": 304.6526614591472,
+            "denominator_variance": 97.23625345591918,
+            "numerator": 312.7068234394678,
+            "numerator_variance": 486.12878277265037,
+            "stat": 0.07963347592298177,
+            "status": "complete",
+            "value": 1.0264371955319374
+          },
+          "data": 369.0,
+          "data_variance": 369.0,
+          "gamma_mc": 167.89062283074128,
+          "gamma_mc_variance": 9.539828532865908,
+          "index": 2,
+          "other_mc": 56.2931765605322,
+          "other_mc_variance": 117.12878277265038
+        },
+        {
+          "Sgamma": {
+            "denominator": 306.9228685371208,
+            "denominator_variance": 98.8201074219394,
+            "numerator": 285.4115981845958,
+            "numerator_variance": 355.8134527685249,
+            "stat": 0.06844180791554512,
+            "status": "complete",
+            "value": 0.9299131066542755
+          },
+          "data": 336.0,
+          "data_variance": 336.0,
+          "gamma_mc": 169.14170817642716,
+          "gamma_mc_variance": 9.721800006804814,
+          "index": 3,
+          "other_mc": 50.58840181540421,
+          "other_mc_variance": 19.813452768524883
+        },
+        {
+          "Sgamma": {
+            "denominator": 212.0855522373343,
+            "denominator_variance": 51.273657619237866,
+            "numerator": 200.03279424612316,
+            "numerator_variance": 240.31221868563063,
+            "stat": 0.07972857861879,
+            "status": "complete",
+            "value": 0.9431703014935996
+          },
+          "data": 230.0,
+          "data_variance": 230.0,
+          "gamma_mc": 116.87793990699326,
+          "gamma_mc_variance": 5.883609662038457,
+          "index": 4,
+          "other_mc": 29.967205753876826,
+          "other_mc_variance": 10.312218685630615
+        },
+        {
+          "Sgamma": {
+            "denominator": 31.632748353574552,
+            "denominator_variance": 2.7333736020059964,
+            "numerator": 21.751337389755253,
+            "numerator_variance": 24.245566532422377,
+            "stat": 0.159755652517843,
+            "status": "complete",
+            "value": 0.6876208524984936
+          },
+          "data": 24.0,
+          "data_variance": 24.0,
+          "gamma_mc": 17.43244847260887,
+          "gamma_mc_variance": 0.614599909083765,
+          "index": 5,
+          "other_mc": 2.2486626102447467,
+          "other_mc_variance": 0.24556653242237791
+        }
+      ]
+    },
+    "Nb3plus": {
+      "Q": {
+        "denominator": 117.74564250471735,
+        "denominator_variance": 6.3452588395389276,
+        "numerator": 334.5137813865496,
+        "numerator_variance": 515.0865257606035,
+        "stat": 0.20210571425797125,
+        "status": "complete",
+        "value": 2.840986505068735
+      },
+      "bins": [
+        {
+          "Sgamma": {
+            "denominator": 120.74231061699645,
+            "denominator_variance": 92.96090411070251,
+            "numerator": 97.63182564508945,
+            "numerator_variance": 244.2600192262894,
+            "stat": 0.14465027905029934,
+            "status": "complete",
+            "value": 0.8085966315054615
+          },
+          "data": 123.0,
+          "data_variance": 123.0,
+          "gamma_mc": 42.50013521766982,
+          "gamma_mc_variance": 2.3764789429514575,
+          "index": 0,
+          "other_mc": 25.36817435491055,
+          "other_mc_variance": 121.2600192262894
+        },
+        {
+          "Sgamma": {
+            "denominator": 78.8079805379427,
+            "denominator_variance": 43.9952838366393,
+            "numerator": 112.22223081475073,
+            "numerator_variance": 127.78231534016551,
+            "stat": 0.18691925011262228,
+            "status": "complete",
+            "value": 1.4239957685595115
+          },
+          "data": 123.0,
+          "data_variance": 123.0,
+          "gamma_mc": 27.739653249791136,
+          "gamma_mc_variance": 1.5566708332241381,
+          "index": 1,
+          "other_mc": 10.777769185249273,
+          "other_mc_variance": 4.782315340165516
+        },
+        {
+          "Sgamma": {
+            "denominator": 48.90945483250058,
+            "denominator_variance": 19.538310016465847,
+            "numerator": 45.72635366912376,
+            "numerator_variance": 51.74016859984864,
+            "stat": 0.16961272103169944,
+            "status": "complete",
+            "value": 0.9349184902126197
+          },
+          "data": 51.0,
+          "data_variance": 51.0,
+          "gamma_mc": 17.215658978048282,
+          "gamma_mc_variance": 0.9208295667237536,
+          "index": 2,
+          "other_mc": 5.27364633087624,
+          "other_mc_variance": 0.7401685998486356
+        },
+        {
+          "Sgamma": {
+            "denominator": 45.962633618042304,
+            "denominator_variance": 17.05409411536462,
+            "numerator": 49.9510518894466,
+            "numerator_variance": 58.91835305871063,
+            "stat": 0.19345286844102627,
+            "status": "complete",
+            "value": 1.0867752336506382
+          },
+          "data": 57.0,
+          "data_variance": 57.0,
+          "gamma_mc": 16.178406175473995,
+          "gamma_mc_variance": 0.7883383548537566,
+          "index": 3,
+          "other_mc": 7.048948110553397,
+          "other_mc_variance": 1.9183530587106286
+        },
+        {
+          "Sgamma": {
+            "denominator": 33.85985687009432,
+            "denominator_variance": 10.847802840496229,
+            "numerator": 25.05611045912066,
+            "numerator_variance": 28.384359986206928,
+            "stat": 0.17302831563504778,
+            "status": "complete",
+            "value": 0.7399945769189208
+          },
+          "data": 28.0,
+          "data_variance": 28.0,
+          "gamma_mc": 11.91834484594819,
+          "gamma_mc_variance": 0.6251422877878119,
+          "index": 4,
+          "other_mc": 2.943889540879338,
+          "other_mc_variance": 0.3843599862069276
+        },
+        {
+          "Sgamma": {
+            "denominator": 6.231544910973277,
+            "denominator_variance": 0.8244520517480408,
+            "numerator": 3.926208909018386,
+            "numerator_variance": 4.001309549382475,
+            "stat": 0.33387009643584514,
+            "status": "complete",
+            "value": 0.6300538574478747
+          },
+          "data": 4.0,
+          "data_variance": 4.0,
+          "gamma_mc": 2.1934440377859206,
+          "gamma_mc_variance": 0.0777988539980108,
+          "index": 5,
+          "other_mc": 0.07379109098161418,
+          "other_mc_variance": 0.0013095493824746979
+        }
+      ]
+    }
+  },
+  "lowdm_Q_groups": {
+    "Nb1": {
+      "denominator": 6292.518611009109,
+      "denominator_variance": 414.78067154987076,
+      "numerator": 11107.228458552476,
+      "numerator_variance": 16677.65555984425,
+      "stat": 0.021303434448908982,
+      "status": "complete",
+      "value": 1.7651482888139203
+    },
+    "Nb2plus": {
+      "denominator": 1053.8978478654576,
+      "denominator_variance": 63.41190877685865,
+      "numerator": 1791.5415645823534,
+      "numerator_variance": 3249.636813424626,
+      "stat": 0.05559436658209974,
+      "status": "complete",
+      "value": 1.699919558817682
+    }
+  },
+  "lowdm_aggregated_diagnostic": {
+    "Nb1_PISR300to500": {
+      "bins": [
+        {
+          "denominator": 6889.110587999113,
+          "denominator_variance": 7717.463027865972,
+          "numerator": 6939.477403079169,
+          "numerator_variance": 11950.422785396742,
+          "stat": 0.020415618831643216,
+          "status": "complete",
+          "value": 1.0073110765804507
+        },
+        {
+          "denominator": 2395.295746253232,
+          "denominator_variance": 1128.9941522092004,
+          "numerator": 2542.6587950610365,
+          "numerator_variance": 2839.897769538413,
+          "stat": 0.026771436380463958,
+          "status": "complete",
+          "value": 1.061521859686142
+        },
+        {
+          "denominator": 382.8154324758476,
+          "denominator_variance": 67.4833349731036,
+          "numerator": 375.358683390692,
+          "numerator_variance": 442.55271512054424,
+          "stat": 0.05884367374965988,
+          "status": "complete",
+          "value": 0.9805212944605465
+        },
+        {
+          "denominator": 37.13777711812492,
+          "denominator_variance": 4.218939687747283,
+          "numerator": 27.4486622704009,
+          "numerator_variance": 28.152249696087452,
+          "stat": 0.14860289750840866,
+          "status": "complete",
+          "value": 0.7391035328553551
+        }
+      ],
+      "color": "#D62728",
+      "group": "Nb1",
+      "isr_group": "PISR300to500",
+      "label": "$N_b=1,\\ 300\\leq p_T^{ISR}<500$",
+      "marker": "o",
+      "source_family_count": 2
+    },
+    "Nb1_PISR500plus": {
+      "bins": [
+        {
+          "denominator": 546.9410844611514,
+          "denominator_variance": 102.64804281878652,
+          "numerator": 475.79150828921763,
+          "numerator_variance": 623.5437339911334,
+          "stat": 0.04841583308302007,
+          "status": "complete",
+          "value": 0.8699136375135713
+        },
+        {
+          "denominator": 452.48731434959177,
+          "denominator_variance": 77.29714713334872,
+          "numerator": 408.9798390086944,
+          "numerator_variance": 440.36727034938065,
+          "stat": 0.049590626152288715,
+          "status": "complete",
+          "value": 0.903848187648232
+        },
+        {
+          "denominator": 213.71583365256762,
+          "denominator_variance": 28.12862878630195,
+          "numerator": 182.19500623197106,
+          "numerator_variance": 190.9619831647408,
+          "stat": 0.06803322820365884,
+          "status": "complete",
+          "value": 0.8525105656334329
+        },
+        {
+          "denominator": 189.72468224284827,
+          "denominator_variance": 21.612906968844957,
+          "numerator": 155.3185612212947,
+          "numerator_variance": 161.75705258721018,
+          "stat": 0.06997302986097301,
+          "status": "complete",
+          "value": 0.818652372401849
+        }
+      ],
+      "color": "#FF8C00",
+      "group": "Nb1",
+      "isr_group": "PISR500plus",
+      "label": "$N_b=1,\\ p_T^{ISR}\\geq500$",
+      "marker": "s",
+      "source_family_count": 2
+    },
+    "Nb2plus_PISR300to500": {
+      "bins": [
+        {
+          "denominator": 1058.3785207284225,
+          "denominator_variance": 1307.86580352625,
+          "numerator": 1056.5510789114073,
+          "numerator_variance": 2382.506098155942,
+          "stat": 0.05736253859192855,
+          "status": "complete",
+          "value": 0.9982733570445502
+        },
+        {
+          "denominator": 397.9657067467124,
+          "denominator_variance": 211.99136265664492,
+          "numerator": 421.7788634330619,
+          "numerator_variance": 513.4650294438401,
+          "stat": 0.06888798922620235,
+          "status": "complete",
+          "value": 1.059837207786111
+        },
+        {
+          "denominator": 91.58019149190768,
+          "denominator_variance": 18.510214365118134,
+          "numerator": 103.75375870845673,
+          "numerator_variance": 114.72714298065135,
+          "stat": 0.12849924395257978,
+          "status": "complete",
+          "value": 1.1329279511020103
+        }
+      ],
+      "color": "#1F77B4",
+      "group": "Nb2plus",
+      "isr_group": "PISR300to500",
+      "label": "$N_b\\geq2,\\ 300\\leq p_T^{ISR}<500$",
+      "marker": "^",
+      "source_family_count": 3
+    },
+    "Nb2plus_PISR500plus": {
+      "bins": [
+        {
+          "denominator": 93.64297240791393,
+          "denominator_variance": 17.72751512912424,
+          "numerator": 86.00281002492441,
+          "numerator_variance": 105.47140062115716,
+          "stat": 0.11718761362662923,
+          "status": "complete",
+          "value": 0.9184117912264836
+        },
+        {
+          "denominator": 76.55619328897217,
+          "denominator_variance": 13.29181672278936,
+          "numerator": 64.28606857091897,
+          "numerator_variance": 68.59069035510342,
+          "stat": 0.11533592138793736,
+          "status": "complete",
+          "value": 0.8397239440610915
+        },
+        {
+          "denominator": 73.41797991842473,
+          "denominator_variance": 11.715469700217545,
+          "numerator": 59.16898493358396,
+          "numerator_variance": 64.8764518679319,
+          "stat": 0.11596416572151497,
+          "status": "complete",
+          "value": 0.8059195444947825
+        }
+      ],
+      "color": "#7B2CBF",
+      "group": "Nb2plus",
+      "isr_group": "PISR500plus",
+      "label": "$N_b\\geq2,\\ p_T^{ISR}\\geq500$",
+      "marker": "D",
+      "source_family_count": 3
+    }
+  },
+  "lowdm_families": {
+    "Nb1_PISR300to500_PTb20to40": {
+      "Q": {
+        "denominator": 6292.518611009109,
+        "denominator_variance": 414.78067154987076,
+        "numerator": 11107.228458552476,
+        "numerator_variance": 16677.65555984425,
+        "stat": 0.021303434448908982,
+        "status": "complete",
+        "value": 1.7651482888139203
+      },
+      "bins": [
+        {
+          "Sgamma": {
+            "denominator": 2786.6728981033752,
+            "denominator_variance": 1447.3071853889555,
+            "numerator": 2688.121068080681,
+            "numerator_variance": 3886.096031766813,
+            "stat": 0.02595869803948837,
+            "status": "complete",
+            "value": 0.964634589840175
+          },
+          "data": 2862.0,
+          "data_variance": 2862.0,
+          "gamma_mc": 1578.7188621845826,
+          "gamma_mc_variance": 101.4801944834877,
+          "index": 0,
+          "label": "Nb1_PISR300to500_PTb20to40_recoil_1",
+          "other_mc": 173.8789319193188,
+          "other_mc_variance": 1024.0960317668132
+        },
+        {
+          "Sgamma": {
+            "denominator": 969.9095651654939,
+            "denominator_variance": 256.9238418341838,
+            "numerator": 929.5451582949229,
+            "numerator_variance": 1072.8494860634287,
+            "stat": 0.03730018520246457,
+            "status": "complete",
+            "value": 0.958383329415167
+          },
+          "data": 974.0,
+          "data_variance": 974.0,
+          "gamma_mc": 549.4776678605389,
+          "gamma_mc_variance": 38.48160105241054,
+          "index": 1,
+          "label": "Nb1_PISR300to500_PTb20to40_recoil_2",
+          "other_mc": 44.454841705077115,
+          "other_mc_variance": 98.84948606342876
+        },
+        {
+          "Sgamma": {
+            "denominator": 146.66770907698154,
+            "denominator_variance": 21.423928697632498,
+            "numerator": 126.68433362890084,
+            "numerator_variance": 155.6125944944182,
+            "stat": 0.08931396689167796,
+            "status": "complete",
+            "value": 0.8637506812246449
+          },
+          "data": 137.0,
+          "data_variance": 137.0,
+          "gamma_mc": 83.09087117861012,
+          "gamma_mc_variance": 5.870371343643377,
+          "index": 2,
+          "label": "Nb1_PISR300to500_PTb20to40_recoil_3",
+          "other_mc": 10.315666371099155,
+          "other_mc_variance": 18.612594494418207
+        },
+        {
+          "Sgamma": {
+            "denominator": 13.366273775761137,
+            "denominator_variance": 1.4506367660233364,
+            "numerator": 10.999367408417962,
+            "numerator_variance": 11.000045728450894,
+            "stat": 0.2589773423019072,
+            "status": "complete",
+            "value": 0.8229195056863637
+          },
+          "data": 11.0,
+          "data_variance": 11.0,
+          "gamma_mc": 7.57232344753455,
+          "gamma_mc_variance": 0.4572300243545576,
+          "index": 3,
+          "label": "Nb1_PISR300to500_PTb20to40_recoil_4",
+          "other_mc": 0.000632591582037989,
+          "other_mc_variance": 4.572845089356736e-05
+        }
+      ],
+      "group": "Nb1",
+      "indices": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    "Nb1_PISR300to500_PTb40to70": {
+      "Q": {
+        "denominator": 6292.518611009109,
+        "denominator_variance": 414.78067154987076,
+        "numerator": 11107.228458552476,
+        "numerator_variance": 16677.65555984425,
+        "stat": 0.021303434448908982,
+        "status": "complete",
+        "value": 1.7651482888139203
+      },
+      "bins": [
+        {
+          "Sgamma": {
+            "denominator": 4102.437689895738,
+            "denominator_variance": 2939.767794108875,
+            "numerator": 4251.356334998487,
+            "numerator_variance": 8064.326753629928,
+            "stat": 0.02582149859375865,
+            "status": "complete",
+            "value": 1.0363000382600653
+          },
+          "data": 4643.0,
+          "data_variance": 4643.0,
+          "gamma_mc": 2324.132038024037,
+          "gamma_mc_variance": 156.72965754347587,
+          "index": 4,
+          "label": "Nb1_PISR300to500_PTb40to70_recoil_1",
+          "other_mc": 391.64366500151255,
+          "other_mc_variance": 3421.3267536299286
+        },
+        {
+          "Sgamma": {
+            "denominator": 1425.3861810877381,
+            "denominator_variance": 469.3248643647005,
+            "numerator": 1613.1136367661136,
+            "numerator_variance": 1767.0482834749841,
+            "stat": 0.034140576106867784,
+            "status": "complete",
+            "value": 1.1317028733470091
+          },
+          "data": 1669.0,
+          "data_variance": 1669.0,
+          "gamma_mc": 807.5163940166846,
+          "gamma_mc_variance": 55.64827869124699,
+          "index": 5,
+          "label": "Nb1_PISR300to500_PTb40to70_recoil_2",
+          "other_mc": 55.886363233886414,
+          "other_mc_variance": 98.04828347498409
+        },
+        {
+          "Sgamma": {
+            "denominator": 236.14772339886608,
+            "denominator_variance": 35.96954666536157,
+            "numerator": 248.6743497617912,
+            "numerator_variance": 286.94012062612603,
+            "stat": 0.07655528218258235,
+            "status": "complete",
+            "value": 1.053045721477344
+          },
+          "data": 261.0,
+          "data_variance": 261.0,
+          "gamma_mc": 133.7835041369493,
+          "gamma_mc_variance": 8.937426302932371,
+          "index": 6,
+          "label": "Nb1_PISR300to500_PTb40to70_recoil_3",
+          "other_mc": 12.325650238208794,
+          "other_mc_variance": 25.940120626126003
+        },
+        {
+          "Sgamma": {
+            "denominator": 23.771503342363793,
+            "denominator_variance": 2.675740682499522,
+            "numerator": 16.449294861982935,
+            "numerator_variance": 17.15220396763656,
+            "stat": 0.18061192155846947,
+            "status": "complete",
+            "value": 0.6919753717329368
+          },
+          "data": 17.0,
+          "data_variance": 17.0,
+          "gamma_mc": 13.467142388550764,
+          "gamma_mc_variance": 0.832362163415645,
+          "index": 7,
+          "label": "Nb1_PISR300to500_PTb40to70_recoil_4",
+          "other_mc": 0.5507051380170633,
+          "other_mc_variance": 0.15220396763655852
+        }
+      ],
+      "group": "Nb1",
+      "indices": [
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "Nb1_PISR500plus_PTb20to40": {
+      "Q": {
+        "denominator": 6292.518611009109,
+        "denominator_variance": 414.78067154987076,
+        "numerator": 11107.228458552476,
+        "numerator_variance": 16677.65555984425,
+        "stat": 0.021303434448908982,
+        "status": "complete",
+        "value": 1.7651482888139203
+      },
+      "bins": [
+        {
+          "Sgamma": {
+            "denominator": 216.4984664844575,
+            "denominator_variance": 30.417209694146273,
+            "numerator": 192.03044714060402,
+            "numerator_variance": 281.53837214121654,
+            "stat": 0.08072881604158319,
+            "status": "complete",
+            "value": 0.886982943846348
+          },
+          "data": 216.0,
+          "data_variance": 216.0,
+          "gamma_mc": 122.6517159246333,
+          "gamma_mc_variance": 7.571198010017265,
+          "index": 8,
+          "label": "Nb1_PISR500plus_PTb20to40_recoil_1",
+          "other_mc": 23.969552859395975,
+          "other_mc_variance": 65.53837214121653
+        },
+        {
+          "Sgamma": {
+            "denominator": 176.8711605743957,
+            "denominator_variance": 23.246872107496593,
+            "numerator": 164.51899188002372,
+            "numerator_variance": 179.1975657083476,
+            "stat": 0.07981939340950221,
+            "status": "complete",
+            "value": 0.9301629013217426
+          },
+          "data": 172.0,
+          "data_variance": 172.0,
+          "gamma_mc": 100.20187068432823,
+          "gamma_mc_variance": 5.998612301653841,
+          "index": 9,
+          "label": "Nb1_PISR500plus_PTb20to40_recoil_2",
+          "other_mc": 7.481008119976281,
+          "other_mc_variance": 7.1975657083476055
+        },
+        {
+          "Sgamma": {
+            "denominator": 85.88342318510912,
+            "denominator_variance": 9.843572666653635,
+            "numerator": 65.18154902682936,
+            "numerator_variance": 67.28644341115954,
+            "stat": 0.09945405483831764,
+            "status": "complete",
+            "value": 0.7589537842051323
+          },
+          "data": 67.0,
+          "data_variance": 67.0,
+          "gamma_mc": 48.65507545704158,
+          "gamma_mc_variance": 2.814475742095199,
+          "index": 10,
+          "label": "Nb1_PISR500plus_PTb20to40_recoil_3",
+          "other_mc": 1.8184509731706413,
+          "other_mc_variance": 0.28644341115954264
+        },
+        {
+          "Sgamma": {
+            "denominator": 73.02074092213404,
+            "denominator_variance": 7.177460142971547,
+            "numerator": 58.0306098839287,
+            "numerator_variance": 60.26239954618913,
+            "stat": 0.11023667136392767,
+            "status": "complete",
+            "value": 0.7947140654983201
+          },
+          "data": 60.0,
+          "data_variance": 60.0,
+          "gamma_mc": 41.36804901031847,
+          "gamma_mc_variance": 2.054338809061314,
+          "index": 11,
+          "label": "Nb1_PISR500plus_PTb20to40_recoil_4",
+          "other_mc": 1.9693901160713025,
+          "other_mc_variance": 0.26239954618912664
+        }
+      ],
+      "group": "Nb1",
+      "indices": [
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "Nb1_PISR500plus_PTb40to70": {
+      "Q": {
+        "denominator": 6292.518611009109,
+        "denominator_variance": 414.78067154987076,
+        "numerator": 11107.228458552476,
+        "numerator_variance": 16677.65555984425,
+        "stat": 0.021303434448908982,
+        "status": "complete",
+        "value": 1.7651482888139203
+      },
+      "bins": [
+        {
+          "Sgamma": {
+            "denominator": 330.4426179766939,
+            "denominator_variance": 51.389872611599124,
+            "numerator": 283.7610611486136,
+            "numerator_variance": 342.0053618499169,
+            "stat": 0.05898468360904104,
+            "status": "complete",
+            "value": 0.858730217325137
+          },
+          "data": 314.0,
+          "data_variance": 314.0,
+          "gamma_mc": 187.2038854020206,
+          "gamma_mc_variance": 11.388931186777265,
+          "index": 12,
+          "label": "Nb1_PISR500plus_PTb40to70_recoil_1",
+          "other_mc": 30.238938851386422,
+          "other_mc_variance": 28.00536184991691
+        },
+        {
+          "Sgamma": {
+            "denominator": 275.6161537751961,
+            "denominator_variance": 39.84896052458157,
+            "numerator": 244.46084712867065,
+            "numerator_variance": 261.16970464103304,
+            "stat": 0.062054358728384135,
+            "status": "complete",
+            "value": 0.8869612458494106
+          },
+          "data": 255.0,
+          "data_variance": 255.0,
+          "gamma_mc": 156.14334247260015,
+          "gamma_mc_variance": 9.238259714871687,
+          "index": 13,
+          "label": "Nb1_PISR500plus_PTb40to70_recoil_2",
+          "other_mc": 10.53915287132935,
+          "other_mc_variance": 6.169704641033013
+        },
+        {
+          "Sgamma": {
+            "denominator": 127.83241046745853,
+            "denominator_variance": 15.086771005693654,
+            "numerator": 117.0134572051417,
+            "numerator_variance": 123.67553975358125,
+            "stat": 0.09133421672149004,
+            "status": "complete",
+            "value": 0.9153661170687935
+          },
+          "data": 122.0,
+          "data_variance": 122.0,
+          "gamma_mc": 72.4202104024669,
+          "gamma_mc_variance": 4.078166672925402,
+          "index": 14,
+          "label": "Nb1_PISR500plus_PTb40to70_recoil_3",
+          "other_mc": 4.986542794858295,
+          "other_mc_variance": 1.6755397535812513
+        },
+        {
+          "Sgamma": {
+            "denominator": 116.70394132071424,
+            "denominator_variance": 11.952893359614903,
+            "numerator": 97.28795133736598,
+            "numerator_variance": 101.49465304102105,
+            "stat": 0.0897879393364773,
+            "status": "complete",
+            "value": 0.8336303833133523
+          },
+          "data": 101.0,
+          "data_variance": 101.0,
+          "gamma_mc": 66.11565841821294,
+          "gamma_mc_variance": 3.1995675075017376,
+          "index": 15,
+          "label": "Nb1_PISR500plus_PTb40to70_recoil_4",
+          "other_mc": 3.712048662634018,
+          "other_mc_variance": 0.49465304102105145
+        }
+      ],
+      "group": "Nb1",
+      "indices": [
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    "Nb2plus_PISR300to500_PTb140plus_Nj7plus": {
+      "Q": {
+        "denominator": 1053.8978478654576,
+        "denominator_variance": 63.41190877685865,
+        "numerator": 1791.5415645823534,
+        "numerator_variance": 3249.636813424626,
+        "stat": 0.05559436658209974,
+        "status": "complete",
+        "value": 1.699919558817682
+      },
+      "bins": [
+        {
+          "Sgamma": {
+            "denominator": 4.445355254394729,
+            "denominator_variance": 0.3839940892075173,
+            "numerator": 5.658236284814272,
+            "numerator_variance": 8.51022525176456,
+            "stat": 0.6798054987339182,
+            "status": "complete",
+            "value": 1.2728423176573966
+          },
+          "data": 8.0,
+          "data_variance": 8.0,
+          "gamma_mc": 2.6150385948182957,
+          "gamma_mc_variance": 0.12556839991027227,
+          "index": 22,
+          "label": "Nb2plus_PISR300to500_PTb140plus_Nj7plus_recoil_1",
+          "other_mc": 2.3417637151857273,
+          "other_mc_variance": 0.5102252517645601
+        },
+        {
+          "Sgamma": {
+            "denominator": 0.8770972712437048,
+            "denominator_variance": 0.055460643842083,
+            "numerator": 2.17532142290505,
+            "numerator_variance": 3.1314269742278844,
+            "stat": 2.124602719461621,
+            "status": "complete",
+            "value": 2.480137031803202
+          },
+          "data": 3.0,
+          "data_variance": 3.0,
+          "gamma_mc": 0.5159639858804486,
+          "gamma_mc_variance": 0.0189076136526507,
+          "index": 23,
+          "label": "Nb2plus_PISR300to500_PTb140plus_Nj7plus_recoil_2",
+          "other_mc": 0.8246785770949501,
+          "other_mc_variance": 0.13142697422788438
+        },
+        {
+          "Sgamma": {
+            "denominator": 0.6159802109511961,
+            "denominator_variance": 0.05347799898041475,
+            "numerator": 2.919179648476401,
+            "numerator_variance": 3.0064930503751888,
+            "stat": 3.330027621958835,
+            "status": "complete",
+            "value": 4.739080244101683
+          },
+          "data": 3.0,
+          "data_variance": 3.0,
+          "gamma_mc": 0.3623584467606332,
+          "gamma_mc_variance": 0.018365812224230865,
+          "index": 24,
+          "label": "Nb2plus_PISR300to500_PTb140plus_Nj7plus_recoil_3",
+          "other_mc": 0.08082035152359868,
+          "other_mc_variance": 0.0064930503751889634
+        }
+      ],
+      "group": "Nb2plus",
+      "indices": [
+        22,
+        23,
+        24
+      ]
+    },
+    "Nb2plus_PISR300to500_PTb40to80_Nj2plus": {
+      "Q": {
+        "denominator": 1053.8978478654576,
+        "denominator_variance": 63.41190877685865,
+        "numerator": 1791.5415645823534,
+        "numerator_variance": 3249.636813424626,
+        "stat": 0.05559436658209974,
+        "status": "complete",
+        "value": 1.699919558817682
+      },
+      "bins": [
+        {
+          "Sgamma": {
+            "denominator": 645.6871675887942,
+            "denominator_variance": 514.0007066993453,
+            "numerator": 635.7448018164646,
+            "numerator_variance": 1806.4204508052092,
+            "stat": 0.07435091892791394,
+            "status": "complete",
+            "value": 0.9846018842073978
+          },
+          "data": 757.0,
+          "data_variance": 757.0,
+          "gamma_mc": 379.83395404773074,
+          "gamma_mc_variance": 23.56234232142073,
+          "index": 16,
+          "label": "Nb2plus_PISR300to500_PTb40to80_Nj2plus_recoil_1",
+          "other_mc": 121.25519818353547,
+          "other_mc_variance": 1049.4204508052092
+        },
+        {
+          "Sgamma": {
+            "denominator": 238.29876491561447,
+            "denominator_variance": 86.53798003752497,
+            "numerator": 236.6026559623221,
+            "numerator_variance": 297.89748226368994,
+            "stat": 0.08214771211972915,
+            "status": "complete",
+            "value": 0.9928824265879306
+          },
+          "data": 258.0,
+          "data_variance": 258.0,
+          "gamma_mc": 140.18237726575404,
+          "gamma_mc_variance": 8.928757939792046,
+          "index": 17,
+          "label": "Nb2plus_PISR300to500_PTb40to80_Nj2plus_recoil_2",
+          "other_mc": 21.397344037677897,
+          "other_mc_variance": 39.89748226368994
+        },
+        {
+          "Sgamma": {
+            "denominator": 49.229121271773806,
+            "denominator_variance": 7.73995551491232,
+            "numerator": 49.16591894590406,
+            "numerator_variance": 54.6198487066512,
+            "stat": 0.16038402838157823,
+            "status": "complete",
+            "value": 0.9987161597802887
+          },
+          "data": 52.0,
+          "data_variance": 52.0,
+          "gamma_mc": 28.959676954369154,
+          "gamma_mc_variance": 1.7814391555806912,
+          "index": 18,
+          "label": "Nb2plus_PISR300to500_PTb40to80_Nj2plus_recoil_3",
+          "other_mc": 2.8340810540959396,
+          "other_mc_variance": 2.6198487066512
+        }
+      ],
+      "group": "Nb2plus",
+      "indices": [
+        16,
+        17,
+        18
+      ]
+    },
+    "Nb2plus_PISR300to500_PTb80to140_Nj2plus": {
+      "Q": {
+        "denominator": 1053.8978478654576,
+        "denominator_variance": 63.41190877685865,
+        "numerator": 1791.5415645823534,
+        "numerator_variance": 3249.636813424626,
+        "stat": 0.05559436658209974,
+        "status": "complete",
+        "value": 1.699919558817682
+      },
+      "bins": [
+        {
+          "Sgamma": {
+            "denominator": 408.2459978852335,
+            "denominator_variance": 219.58919541223878,
+            "numerator": 415.1480408101284,
+            "numerator_variance": 567.575422098968,
+            "stat": 0.06905047337047986,
+            "status": "complete",
+            "value": 1.016906578290169
+          },
+          "data": 459.0,
+          "data_variance": 459.0,
+          "gamma_mc": 240.15606842548146,
+          "gamma_mc_variance": 14.302851596222846,
+          "index": 19,
+          "label": "Nb2plus_PISR300to500_PTb80to140_Nj2plus_recoil_1",
+          "other_mc": 43.85195918987159,
+          "other_mc_variance": 108.57542209896803
+        },
+        {
+          "Sgamma": {
+            "denominator": 158.7898445598542,
+            "denominator_variance": 43.70988995776392,
+            "numerator": 183.0008860478347,
+            "numerator_variance": 212.43612020592226,
+            "stat": 0.10357474966133355,
+            "status": "complete",
+            "value": 1.1524722286559983
+          },
+          "data": 197.0,
+          "data_variance": 197.0,
+          "gamma_mc": 93.41021093391899,
+          "gamma_mc_variance": 5.793556711851709,
+          "index": 20,
+          "label": "Nb2plus_PISR300to500_PTb80to140_Nj2plus_recoil_2",
+          "other_mc": 13.999113952165288,
+          "other_mc_variance": 15.436120205922256
+        },
+        {
+          "Sgamma": {
+            "denominator": 41.73509000918267,
+            "denominator_variance": 6.2019276542677,
+            "numerator": 51.66866011407627,
+            "numerator_variance": 57.10080122362496,
+            "stat": 0.19554942717123944,
+            "status": "complete",
+            "value": 1.2380148240415436
+          },
+          "data": 55.0,
+          "data_variance": 55.0,
+          "gamma_mc": 24.55121466936354,
+          "gamma_mc_variance": 1.5015090330892045,
+          "index": 21,
+          "label": "Nb2plus_PISR300to500_PTb80to140_Nj2plus_recoil_3",
+          "other_mc": 3.3313398859237324,
+          "other_mc_variance": 2.1008012236249654
+        }
+      ],
+      "group": "Nb2plus",
+      "indices": [
+        19,
+        20,
+        21
+      ]
+    },
+    "Nb2plus_PISR500plus_PTb140plus_Nj7plus": {
+      "Q": {
+        "denominator": 1053.8978478654576,
+        "denominator_variance": 63.41190877685865,
+        "numerator": 1791.5415645823534,
+        "numerator_variance": 3249.636813424626,
+        "stat": 0.05559436658209974,
+        "status": "complete",
+        "value": 1.699919558817682
+      },
+      "bins": [
+        {
+          "Sgamma": {
+            "denominator": 0.5351362781184894,
+            "denominator_variance": 0.036900732497894995,
+            "numerator": 0.23676914813943495,
+            "numerator_variance": 1.4593641622606608,
+            "stat": 2.2630265091471,
+            "status": "complete",
+            "value": 0.4424464530266994
+          },
+          "data": 1.0,
+          "data_variance": 1.0,
+          "gamma_mc": 0.3148009418108491,
+          "gamma_mc_variance": 0.012663635071097606,
+          "index": 31,
+          "label": "Nb2plus_PISR500plus_PTb140plus_Nj7plus_recoil_1",
+          "other_mc": 0.763230851860565,
+          "other_mc_variance": 0.4593641622606607
+        },
+        {
+          "Sgamma": {
+            "denominator": 0.2791506171293372,
+            "numerator": -0.12341022616243075,
+            "stat": null,
+            "status": "unavailable",
+            "value": null
+          },
+          "data": 0.0,
+          "data_variance": 0.0,
+          "gamma_mc": 0.16421401570524335,
+          "gamma_mc_variance": 0.008783200323244707,
+          "index": 32,
+          "label": "Nb2plus_PISR500plus_PTb140plus_Nj7plus_recoil_2",
+          "other_mc": 0.12341022616243075,
+          "other_mc_variance": 0.01334059470267885
+        },
+        {
+          "Sgamma": {
+            "denominator": 0.7662482745914077,
+            "denominator_variance": 0.055598430844184546,
+            "numerator": 1.7461630984910201,
+            "numerator_variance": 2.0378681825628098,
+            "stat": 1.9906332694266975,
+            "status": "complete",
+            "value": 2.278847674302614
+          },
+          "data": 2.0,
+          "data_variance": 2.0,
+          "gamma_mc": 0.4507556081796859,
+          "gamma_mc_variance": 0.019022718433210288,
+          "index": 33,
+          "label": "Nb2plus_PISR500plus_PTb140plus_Nj7plus_recoil_3",
+          "other_mc": 0.2538369015089799,
+          "other_mc_variance": 0.03786818256280974
+        }
+      ],
+      "group": "Nb2plus",
+      "indices": [
+        31,
+        32,
+        33
+      ]
+    },
+    "Nb2plus_PISR500plus_PTb40to80_Nj2plus": {
+      "Q": {
+        "denominator": 1053.8978478654576,
+        "denominator_variance": 63.41190877685865,
+        "numerator": 1791.5415645823534,
+        "numerator_variance": 3249.636813424626,
+        "stat": 0.05559436658209974,
+        "status": "complete",
+        "value": 1.699919558817682
+      },
+      "bins": [
+        {
+          "Sgamma": {
+            "denominator": 57.74881782675092,
+            "denominator_variance": 8.836250418794913,
+            "numerator": 52.882944227298104,
+            "numerator_variance": 61.993136346633115,
+            "stat": 0.14426008240797547,
+            "status": "complete",
+            "value": 0.9157407236620728
+          },
+          "data": 59.0,
+          "data_variance": 59.0,
+          "gamma_mc": 33.97150031435372,
+          "gamma_mc_variance": 1.8234769400117832,
+          "index": 25,
+          "label": "Nb2plus_PISR500plus_PTb40to80_Nj2plus_recoil_1",
+          "other_mc": 6.117055772701896,
+          "other_mc_variance": 2.993136346633114
+        },
+        {
+          "Sgamma": {
+            "denominator": 47.89972597593202,
+            "denominator_variance": 6.873141451033293,
+            "numerator": 39.128360932548055,
+            "numerator_variance": 41.293433962843295,
+            "stat": 0.1414092829882527,
+            "status": "complete",
+            "value": 0.8168806842905265
+          },
+          "data": 41.0,
+          "data_variance": 41.0,
+          "gamma_mc": 28.17764271695712,
+          "gamma_mc_variance": 1.529266584412698,
+          "index": 26,
+          "label": "Nb2plus_PISR500plus_PTb40to80_Nj2plus_recoil_2",
+          "other_mc": 1.8716390674519445,
+          "other_mc_variance": 0.2934339628432936
+        },
+        {
+          "Sgamma": {
+            "denominator": 42.85856302599867,
+            "denominator_variance": 5.407051063431315,
+            "numerator": 35.859527573518946,
+            "numerator_variance": 38.38670285362173,
+            "stat": 0.15152149344366067,
+            "status": "complete",
+            "value": 0.8366945842716659
+          },
+          "data": 38.0,
+          "data_variance": 38.0,
+          "gamma_mc": 25.2121124224298,
+          "gamma_mc_variance": 1.1912630318671438,
+          "index": 27,
+          "label": "Nb2plus_PISR500plus_PTb40to80_Nj2plus_recoil_3",
+          "other_mc": 2.1404724264810575,
+          "other_mc_variance": 0.3867028536217241
+        }
+      ],
+      "group": "Nb2plus",
+      "indices": [
+        25,
+        26,
+        27
+      ]
+    },
+    "Nb2plus_PISR500plus_PTb80to140_Nj2plus": {
+      "Q": {
+        "denominator": 1053.8978478654576,
+        "denominator_variance": 63.41190877685865,
+        "numerator": 1791.5415645823534,
+        "numerator_variance": 3249.636813424626,
+        "stat": 0.05559436658209974,
+        "status": "complete",
+        "value": 1.699919558817682
+      },
+      "bins": [
+        {
+          "Sgamma": {
+            "denominator": 35.35901830304452,
+            "denominator_variance": 4.379826903979668,
+            "numerator": 32.88309664948687,
+            "numerator_variance": 42.01890011226338,
+            "stat": 0.19141013148661157,
+            "status": "complete",
+            "value": 0.9299776472203567
+          },
+          "data": 39.0,
+          "data_variance": 39.0,
+          "gamma_mc": 20.800406771975265,
+          "gamma_mc_variance": 1.0529022775467338,
+          "index": 28,
+          "label": "Nb2plus_PISR500plus_PTb80to140_Nj2plus_recoil_1",
+          "other_mc": 6.116903350513127,
+          "other_mc_variance": 3.0189001122633803
+        },
+        {
+          "Sgamma": {
+            "denominator": 28.377316695910807,
+            "denominator_variance": 3.440032814556169,
+            "numerator": 25.28111786453335,
+            "numerator_variance": 27.28391579755745,
+            "stat": 0.19305998551464298,
+            "status": "complete",
+            "value": 0.89089176878293
+          },
+          "data": 27.0,
+          "data_variance": 27.0,
+          "gamma_mc": 16.693329133554784,
+          "gamma_mc_variance": 0.8923843192973416,
+          "index": 29,
+          "label": "Nb2plus_PISR500plus_PTb80to140_Nj2plus_recoil_2",
+          "other_mc": 1.7188821354666501,
+          "other_mc_variance": 0.28391579755745056
+        },
+        {
+          "Sgamma": {
+            "denominator": 29.79316861783466,
+            "denominator_variance": 3.4023130188578388,
+            "numerator": 21.563294261573997,
+            "numerator_variance": 24.45188083174737,
+            "stat": 0.1719161708916257,
+            "status": "complete",
+            "value": 0.7237663955174566
+          },
+          "data": 24.0,
+          "data_variance": 24.0,
+          "gamma_mc": 17.52622261641382,
+          "gamma_mc_variance": 0.8488474861510181,
+          "index": 30,
+          "label": "Nb2plus_PISR500plus_PTb80to140_Nj2plus_recoil_3",
+          "other_mc": 2.436705738426003,
+          "other_mc_variance": 0.45188083174737204
+        }
+      ],
+      "group": "Nb2plus",
+      "indices": [
+        28,
+        29,
+        30
+      ]
+    }
+  },
+  "plots": [
+    "/Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/reports/background_estimation_2025_20260819/sgamma/photon_q_normalization.png",
+    "/Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/reports/background_estimation_2025_20260819/sgamma/photon_q_normalization.pdf",
+    "/Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/reports/background_estimation_2025_20260819/sgamma/sgamma_highdm.png",
+    "/Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/reports/background_estimation_2025_20260819/sgamma/sgamma_highdm.pdf",
+    "/Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/reports/background_estimation_2025_20260819/sgamma/sgamma_lowdm_nb_isr_shared.png",
+    "/Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/reports/background_estimation_2025_20260819/sgamma/sgamma_lowdm_nb_isr_shared.pdf"
+  ],
+  "provenance": {
+    "campaign_year": "2025",
+    "exact_input": "/Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/reports/background_estimation_2025_20260819/inputs/exact_2025.json",
+    "exact_provenance": {
+      "analysis_sf_components": [
+        "met_trigger",
+        "photon_trigger"
+      ],
+      "dy_ptll_policy": "all",
+      "excluded_roots": [],
+      "include_data": true,
+      "jobs": 12,
+      "lowdm_llcr_nb1_only": false,
+      "nominal_only": true,
+      "normalization_sha256": "2cbc91e426e2552a0765674006eafba13246d472c9006a4b3d3341ff82ed7e95",
+      "regions": [
+        "LLCR",
+        "QCDCR",
+        "GCR",
+        "SR"
+      ],
+      "step_size": 100000
+    },
+    "exact_sha256": "423a00ca89201043aaa2d7e883e2962735a178c2c1312d810c51d0bc581e77be",
+    "nominal_sr_data_recorded": false,
+    "sample_check": {
+      "auxiliary_region_data_dataset_records": 1,
+      "data_dataset_records": 1969,
+      "data_family": "EGamma0/EGamma1/EGamma2/EGamma3 only",
+      "dataset_count": 4413,
+      "forbidden_ptll_count": 0,
+      "gcr_data_dataset_records": 1968,
+      "gj_family": "GJ-4Jets HTxPTG, dRGJ>0.25",
+      "gj_physical_datasets": 16,
+      "qcd_family": "QCD-4Jets HT",
+      "qcd_physical_datasets": 11,
+      "required_dy2x_present": {
+        "DYto2E-4Jets": true,
+        "DYto2Mu-4Jets": true,
+        "DYto2Tau-4Jets": true
+      }
+    }
+  },
+  "schema_version": "sgamma_ut_2025_v1",
+  "status": "complete"
+}

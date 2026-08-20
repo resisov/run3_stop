@@ -1,0 +1,40 @@
+{
+  "captions": {
+    "efficiency": "Tag-and-probe efficiencies in data and simulation; error bars are statistical. The horizontal axis is probe |eta| for 5 < pT < 10 GeV.",
+    "mass_fit_bin_00": "Probe bin 0 < |eta| < 0.9, 5 < pT < 10 GeV. Panels are data pass, data fail, simulation pass, and simulation fail in reading order. The nominal data fit has chi2/ndf=2.338; The resulting scale factor is 0.9956 +/- 0.0015.",
+    "mass_fit_bin_01": "Probe bin 0.9 < |eta| < 1.2, 5 < pT < 10 GeV. Panels are data pass, data fail, simulation pass, and simulation fail in reading order. The nominal data fit has chi2/ndf=1.677; The resulting scale factor is 0.9969 +/- 0.0040.",
+    "mass_fit_bin_02": "Probe bin 1.2 < |eta| < 2.4, 5 < pT < 10 GeV. Panels are data pass, data fail, simulation pass, and simulation fail in reading order. The nominal data fit has chi2/ndf=1.947; The resulting scale factor is 0.9963 +/- 0.0018.",
+    "scale_factor": "Data-to-simulation scale factors with total uncertainties; bins without a valid fit are omitted. The horizontal axis is probe |eta| for the single 5-10 GeV pT bin.",
+    "scale_factor_heatmap": "Two-dimensional scale-factor map; each cell shows the central value and total uncertainty."
+  },
+  "files": [
+    "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2025_full/plots/scale_factor.png",
+    "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2025_full/plots/scale_factor.pdf",
+    "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2025_full/plots/scale_factor_heatmap.png",
+    "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2025_full/plots/scale_factor_heatmap.pdf",
+    "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2025_full/plots/efficiency.png",
+    "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2025_full/plots/efficiency.pdf",
+    "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2025_full/plots/mass_fit_bin_00.png",
+    "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2025_full/plots/mass_fit_bin_00.pdf",
+    "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2025_full/plots/mass_fit_bin_01.png",
+    "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2025_full/plots/mass_fit_bin_01.pdf",
+    "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2025_full/plots/mass_fit_bin_02.png",
+    "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2025_full/plots/mass_fit_bin_02.pdf"
+  ],
+  "measurement": "loose_muon_id_5to10_sf_2025_parking_external",
+  "schema_version": 1,
+  "style": {
+    "cms_label_fontsize": 17,
+    "cms_llabel": "Work in progress",
+    "cms_rlabel": "2025 (13.6 TeV)",
+    "colorbar_figure_inches": [
+      12.0,
+      10.0
+    ],
+    "standard_figure_inches": [
+      8.0,
+      8.0
+    ],
+    "titles": false
+  }
+}

@@ -503,12 +503,19 @@ def main() -> int:
     parser.add_argument("--input", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument(
+        "--campaign-year",
+        choices=("2024", "2025"),
+        default="2024",
+        help="Campaign year used in labels and output metadata.",
+    )
+    parser.add_argument(
         "--regime",
         choices=("all", "highdm", "lowdm"),
         default="all",
         help="Limit plot regeneration while retaining both regimes in the JSON.",
     )
     args = parser.parse_args()
+    CMS_LABEL["rlabel"] = f"{args.campaign_year} (13.6 TeV)"
 
     source = json.loads(args.input.read_text())
     sample_check = validate_input(source)
@@ -540,7 +547,7 @@ def main() -> int:
             )
 
     output = {
-        "schema_version": "recoil_transfer_factors_2024_v2",
+        "schema_version": f"recoil_transfer_factors_{args.campaign_year}_v2",
         "status": "complete",
         "definition": (
             "nominal simulated SR target-process yield divided by nominal "
@@ -561,13 +568,17 @@ def main() -> int:
             "lowdm_mode": "all 34 adopted search bins; no category aggregation",
             "lowdm_plot_overflow_cap_gev": 1500.0,
             "plot_regime": args.regime,
+            "campaign_year": args.campaign_year,
         },
         "mechanical_checks": {
             "max_relative_residual": max_residual,
         },
         "plots": plot_paths,
     }
-    output_path = args.output_dir / "transfer_factors_2024_nb_recoil.json"
+    output_path = (
+        args.output_dir
+        / f"transfer_factors_{args.campaign_year}_nb_recoil.json"
+    )
     output_path.write_text(json.dumps(output, indent=2, sort_keys=True) + "\n")
     print(
         json.dumps(

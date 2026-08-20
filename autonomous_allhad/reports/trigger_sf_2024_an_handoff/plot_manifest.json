@@ -1,0 +1,28 @@
+{
+  "captions": {
+    "photon_trigger_efficiency_2024": "Photon-trigger efficiencies in JetMET data and gamma+jets simulation.",
+    "photon_trigger_scale_factor_2024": "Data-to-simulation photon-trigger scale factors with total uncertainties."
+  },
+  "files": [
+    "autonomous_allhad/reports/trigger_sf_2024_an_handoff/photon_trigger_efficiency_2024.png",
+    "autonomous_allhad/reports/trigger_sf_2024_an_handoff/photon_trigger_efficiency_2024.pdf",
+    "autonomous_allhad/reports/trigger_sf_2024_an_handoff/photon_trigger_scale_factor_2024.png",
+    "autonomous_allhad/reports/trigger_sf_2024_an_handoff/photon_trigger_scale_factor_2024.pdf"
+  ],
+  "measurement": "photon",
+  "schema_version": 1,
+  "style": {
+    "cms_label_fontsize": 17,
+    "cms_llabel": "Work in progress",
+    "cms_rlabel": "2024 (13.6 TeV)",
+    "colorbar_figure_inches": [
+      12.0,
+      10.0
+    ],
+    "standard_figure_inches": [
+      8.0,
+      8.0
+    ],
+    "titles": false
+  }
+}

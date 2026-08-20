@@ -40,6 +40,7 @@ from .real_subset_worker import (
 )
 
 SCHEMA_VERSION = "flat_ntuple_shard_v5_fullselection_2024"
+CORRECTION_YEAR = "2024"
 TREE_NAME = "Events"
 LUMI_FB = 109.82
 LUMI_PB = LUMI_FB * 1000.0
@@ -895,7 +896,7 @@ def main(argv: list[str] | None = None) -> int:
         "deferred_weight_variations": list(DEFERRED_WEIGHT_VARIATIONS),
         "normalization_policy": {
             "root_event_weight_status": "raw_gen_weight_only_no_luminosity_xsec_or_scale_factor_normalization",
-            "x_axis_corrections_in_skim": "Nominal 2024 electron, muon, photon, tau, AK4, AK8, and propagated PuppiMET kinematic corrections are required before selection by default. Non-nominal object/JES/JER/MET variations are produced only when --shift is not nominal.",
+            "x_axis_corrections_in_skim": f"Nominal {CORRECTION_YEAR} electron, muon, photon, tau, AK4, AK8, and propagated PuppiMET kinematic corrections are required before selection by default. Non-nominal object/JES/JER/MET variations are produced only when --shift is not nominal.",
             "y_axis_scale_factor_status": "pileup, btag, lepton/photon ID/HLT, and top-pT scale factors are intentionally deferred to post-skim processing",
             "background_formula_after_campaign_sidecar_merge": "normalized_weight = gen_weight * post_skim_sf_weight * xsec_pb * lumi_pb / physical_dataset_sumw",
             "signal_formula_after_campaign_sidecar_merge": "select mStop/mLSP events, then normalized_weight = gen_weight * post_skim_sf_weight * xsec_pb(mStop) * lumi_pb / sumw_mass_point, with sumw_mass_point from Runs.genEventSumw_T2tt_<mStop>_<mLSP>",

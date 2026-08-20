@@ -1,0 +1,164 @@
+{
+  "schema_version": "run3_stop_samples_2026_v1",
+  "year": "2026",
+  "status": "blocked_awaiting_valid_2026_jec_policy",
+  "conditions": {
+    "correction_era": "Run3-26Prompt-Summer24-NanoAODv15",
+    "data_global_tag": "160X_dataRun3_Prompt_v1",
+    "global_tag_source": {
+      "dataset": "/JetMET0/Run2026D-PromptReco-v1/NANOAOD",
+      "file": "/store/data/Run2026D/JetMET0/NANOAOD/PromptReco-v1/000/403/449/00000/45642fc0-4b9f-466e-a220-032145b2aca7.root",
+      "process": "RECO",
+      "process_parameter_set_id": "96560363b667c6999e6e413d077ebb10",
+      "cmssw": "CMSSW_16_0_6",
+      "method": "edmProvDump -i on the NanoAOD process parameter set"
+    }
+  },
+  "analysis_policy": {
+    "data_year": "2026",
+    "selected_run_eras": ["Run2026B", "Run2026D"],
+    "excluded_run_eras": {
+      "Run2026A": "not selected by analysis policy",
+      "Run2026C": "low-pileup data; excluded from the standard analysis campaign"
+    },
+    "certified_luminosity_fb": 25.31,
+    "selection_year": "2025",
+    "correction_year": "2025",
+    "scale_factor_year": "2025",
+    "lumimask_year": "2026",
+    "decision": "Treat 2026 as an extension of the 2025 analysis correction and scale-factor era while retaining the real 2026 data identity and golden JSON.",
+    "campaign_scope": "data_only",
+    "mc_scale_factors_applied_to_data": false
+  },
+  "data": {
+    "dataset_pattern": "/{primary}/Run2026{era}-PromptReco-v1/NANOAOD",
+    "primary_datasets": [
+      "JetMET0",
+      "JetMET1",
+      "EGamma0",
+      "EGamma1",
+      "EGamma2",
+      "EGamma3",
+      "Muon0",
+      "Muon1"
+    ],
+    "eras": ["A", "B", "C", "D"],
+    "expanded_dataset_count": 32,
+    "summary": {
+      "files": 14295,
+      "events_as_reported_by_dbs": 9318982316,
+      "bytes": 11559182048514,
+      "terabytes_decimal": 11.559182048514,
+      "note": "Event counts are processing volume across split primary datasets, not a unique collision-event count."
+    },
+    "selected_summary": {
+      "eras": ["Run2026B", "Run2026D"],
+      "files": 7018,
+      "datasets": 16,
+      "certified_luminosity_fb": 25.31
+    },
+    "files_by_stream": {
+      "JetMET0": 2482,
+      "JetMET1": 2479,
+      "EGamma0": 1535,
+      "EGamma1": 1529,
+      "EGamma2": 1529,
+      "EGamma3": 1511,
+      "Muon0": 1638,
+      "Muon1": 1592
+    },
+    "files_by_era": {
+      "Run2026A": 512,
+      "Run2026B": 4255,
+      "Run2026C": 6765,
+      "Run2026D": 2763
+    },
+    "frozen_input_list": {
+      "path": "workflow/flat2026/inputs.txt",
+      "format": "dataset<TAB>LFN",
+      "unique_nonempty_lines": 14295,
+      "duplicate_lfns": 0,
+      "sha256": "2f171733ba3b4684139fd870db212124f90a4ff569fe161475b38cefa005fdae"
+    }
+  },
+  "schema_validation": {
+    "representative_dataset": "/JetMET0/Run2026A-PromptReco-v1/NANOAOD",
+    "representative_file": "/store/data/Run2026A/JetMET0/NANOAOD/PromptReco-v1/000/401/614/00000/9c5fccbc-a5ae-4576-84ab-fd615bfffd55.root",
+    "events_checked": 15,
+    "event_branches": 2034,
+    "missing_current_fullselection_data_branches": [],
+    "met_hlt_present": true,
+    "met_filters_present": true,
+    "status": "compatible_with_current_data_feature_schema"
+  },
+  "available_corrections": {
+    "golden_json": {
+      "file": "Cert_Collisions2026_401624_403937_golden.json",
+      "sha256": "5c16911a0a03735d21c99f470afa737da0e20c6f213e3beebc79f29e02dcbd6f"
+    },
+    "jme": {
+      "jec_tag": "Summer24Prompt26_V1",
+      "jer_tags": {
+        "Run2026A": null,
+        "Run2026B": "Summer24Prompt26_RunBD_JRV1",
+        "Run2026C": "Summer24Prompt26_RunC_JRV1",
+        "Run2026D": "Summer24Prompt26_RunBD_JRV1"
+      },
+      "data_jec_compounds": [
+        "Summer24Prompt26_V1_DATA_L1L2L3Res_AK4PFPuppi",
+        "Summer24Prompt26_V1_DATA_L1L2L3Res_AK8PFPuppi"
+      ],
+      "jet_veto_map": "Summer24Prompt26_RunBCD_V1",
+      "jet_id": ["AK4PUPPI_TightLeptonVeto", "AK8PUPPI_TightLeptonVeto"],
+      "files": {
+        "jet_jerc.json.gz": "77a5a738d1762dd3c9900e47863f27c42acba515792a1bc4ddab1f5924264ebc",
+        "fatJet_jerc.json.gz": "3e0b6f0c11026e00100efc82a00399c6a5251c54d85f40d991ca8401654c041e",
+        "jetid.json.gz": "2ae07e7b7c67332fa4ccc374c7b3cfe667c653ce65c3f421f956460e46b1eb35",
+        "jetvetomaps.json.gz": "ca4bd21d9db5ee1271c20f2b63d6fbd06489c086b426b568b1f485347ead9fa1"
+      }
+    },
+    "egm": {
+      "electron_scale_smearing": {
+        "file": "electronSS_EtDependent.json.gz",
+        "sha256": "f60b935137947f972b4af65a7e38b2c0910dbdae71d821320dc8adf056f574a6",
+        "corrections": ["Scale", "SmearAndSyst"]
+      },
+      "photon_scale_smearing": {
+        "file": "photonSS_EtDependent.json.gz",
+        "sha256": "8e875e99e62fa2b6fb912892f23a81bc6660989c63af9661206c8761913c3ef0",
+        "corrections": ["Scale", "SmearAndSyst"]
+      }
+    }
+  },
+  "unavailable_or_incomplete": {
+    "Run2026A_jer": "The current 2026 JME bundle contains RunBD and RunC JER tags but no RunA-specific JER tag. This does not block data skimming.",
+    "muon_momentum_scale": "The 2026 MUO directory contains no muon scale/smearing payload.",
+    "electron_id_reco_sf": "No 2026 electron.json.gz is published.",
+    "photon_id_veto_sf": "No 2026 photon.json.gz is published.",
+    "btag_sf": "No 2026 BTV correction era is published.",
+    "pileup": "No 2026 LUM pileup payload is published.",
+    "tau": "The 2026 TAU directory contains no tau payload.",
+    "met_xy": "No 2026 MET XY correction payload is present in the correction era.",
+    "analysis_trigger_sf": "MET, photon and lepton trigger SFs for this analysis are not yet available.",
+    "low_pt_lepton_sf": "The analysis-specific 5--10 GeV electron and muon SFs are not yet measured.",
+    "btag_efficiency": "A separate 2026 MC efficiency payload must be measured after the 2026-compatible MC input policy is frozen."
+  },
+  "skim_readiness": {
+    "inputs": "ready",
+    "global_tag": "ready",
+    "branch_schema": "ready",
+    "golden_json": "ready",
+    "jet_corrections": "blocked_2025_payload_run_domain_does_not_cover_2026",
+    "electron_photon_scale": "ready_via_explicit_2025_alias",
+    "muon_scale": "ready_via_explicit_2025_alias",
+    "condor_submission": "blocked_not_submitted",
+    "decision": "Do not substitute a 2025 proxy run for JEC evaluation. Await a valid 2026 JEC policy before rebuilding Condor artifacts."
+  },
+  "sources": {
+    "datasets": "CMS DAS/DBS",
+    "replicas": "CMS Rucio",
+    "corrections": "/cvmfs/cms-griddata.cern.ch/cat/metadata",
+    "correction_documentation": "https://cms-analysis-corrections.docs.cern.ch/",
+    "data_quality": "https://twiki.cern.ch/twiki/bin/view/CMSPublic/DataQuality"
+  }
+}

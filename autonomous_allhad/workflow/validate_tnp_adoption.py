@@ -21,12 +21,25 @@ FIT_VARIATIONS = (
 
 def _trigger_audit_blockers(config: dict[str, Any], audit: dict[str, Any], label: str) -> list[str]:
     blockers = []
-    bit_mask = int(config["tag_trigger_object_filter_bits"])
-    if bit_mask <= 0 or bit_mask & (bit_mask - 1):
-        return [f"{label}: trigger-object filter mask is not one bit: {bit_mask}"]
-    bit_index = int(math.log2(bit_mask))
     if not audit.get("files_processed") or audit.get("file_failures"):
         blockers.append(f"{label}: trigger audit has no clean processed file")
+    present_by_file = audit.get("paths_present_by_file") or {}
+    for path in config["reference_paths"]:
+        if not any(path in paths for paths in present_by_file.values()):
+            blockers.append(f"{label}: {path} is absent from audited files")
+        apply_to_sample = label == "data" or bool(config.get("apply_reference_trigger_to_mc", True))
+        fired = int((audit.get("event_counts") or {}).get(path, 0))
+        if apply_to_sample and fired <= 0:
+            blockers.append(f"{label}: {path} has no fired event in the audit")
+
+    if not bool(config.get("tag_trigger_match_required", True)):
+        return blockers
+
+    bit_mask = int(config["tag_trigger_object_filter_bits"])
+    if bit_mask <= 0 or bit_mask & (bit_mask - 1):
+        blockers.append(f"{label}: trigger-object filter mask is not one bit: {bit_mask}")
+        return blockers
+    bit_index = int(math.log2(bit_mask))
     for path in config["reference_paths"]:
         matched = int((audit.get("matched_trigger_objects") or {}).get(path, 0))
         bit_matches = int(
@@ -77,7 +90,16 @@ def validate(
         )
     if histograms.get("files_failed"):
         blockers.append(f"{len(histograms['files_failed'])} unresolved ROOT failures")
-    expected_bins = (len(config["probe_abseta_edges"]) - 1) * (len(config["probe_pt_edges_gev"]) - 1)
+    for edge_key in ("probe_abseta_edges", "probe_pt_edges_gev"):
+        if result.get(edge_key) != histograms.get(edge_key):
+            blockers.append(
+                f"fit-result {edge_key} does not match reduced histograms: "
+                f"{result.get(edge_key)!r} != {histograms.get(edge_key)!r}"
+            )
+    expected_bins = (
+        (len(histograms.get("probe_abseta_edges") or []) - 1)
+        * (len(histograms.get("probe_pt_edges_gev") or []) - 1)
+    )
     if len(result.get("bins") or []) != expected_bins:
         blockers.append(f"fit result has {len(result.get('bins') or [])}/{expected_bins} bins")
     fit_diagnostics = []
@@ -125,7 +147,7 @@ def validate(
         "expected_bins": expected_bins,
         "max_chi2_ndf": max_chi2_ndf,
         "fit_diagnostics": fit_diagnostics,
-        "trigger_filter_mask": config["tag_trigger_object_filter_bits"],
+        "trigger_filter_mask": config.get("tag_trigger_object_filter_bits"),
         "data_trigger_audit": data_trigger_audit.get("created_unix"),
         "mc_trigger_audit": mc_trigger_audit.get("created_unix"),
         "pileup_uncertainty_source": result.get("pileup_uncertainty_source"),

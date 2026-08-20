@@ -1,4 +1,4 @@
-# Analysis-owned SF measurement and integration status — 2026-08-04
+# Analysis-owned SF measurement and integration status — 2026-08-18
 
 ## Physics definitions frozen from AN2019-016
 
@@ -6,11 +6,10 @@
   reference measurement, applied to every MET-triggered MC process.
 - Photon trigger: `Photon175 || Photon200` measured against an independent
   JetMET/PFHT denominator.  This is not a lepton tag-and-probe measurement.
-- Low-pT veto electron: resonance tag-and-probe for the full analysis target
-  `cutBased >= Veto && miniPFRelIso_all < 0.1` in `5 < pT < 10 GeV`.
-- Low-pT loose muon: J/psi tag-and-probe for mini-isolation conditional on
-  LooseID, multiplied by the official 2024 J/psi LooseID SF.  The installed
-  payload is the combined analysis loose-muon SF.
+- Low-pT veto electron: J/psi tag-and-probe for `cutBased >= Veto` only in
+  `5 < pT < 10 GeV`; mini-isolation is excluded from pass/fail.
+- Low-pT loose muon: J/psi tag-and-probe for LooseID relative to tracker
+  muons in `5 < pT < 10 GeV`; mini-isolation is excluded from pass/fail.
 
 ## Workflow layout
 
@@ -23,10 +22,10 @@ Each directory contains its own frozen 2024 config, measurement or fit entry
 points, adoption gates, and correctionlib exporter.  Shared deterministic
 counting, pass/fail fit, and payload code is under `workflow/`.
 
-## Adopted measurements
+## Installed measurements
 
-All four final results are now explicitly adopted.  Their correctionlib v2
-payloads are installed at:
+The trigger results and the latest ID-only low-pT lepton results are installed
+as correctionlib v2 payloads at:
 
 - `analysis/data/AnalysisSF/2024/met_trigger_sf.json.gz`
 - `analysis/data/AnalysisSF/2024/photon_trigger_sf.json.gz`
@@ -64,13 +63,14 @@ new low-pT SF is multiplied.  Therefore the official edge value and the new
 measurement are never double counted.  At exactly 10 GeV the analysis-owned
 low-pT component is unity and the official payload takes over.
 
-Correctionlib exporters install only results whose status is exactly
-`adopted`; preliminary and validation-pending results are rejected.
+The installed low-pT payload correction keys are
+`veto_electron_id_5to10_sf` and `loose_muon_id_5to10_sf`.  The older combined
+ID-plus-mini-isolation correction contents have been replaced.
 
 ## Remaining production work
 
 The four measurements and code integration are complete.  Existing nominal
-histogram campaigns produced before this integration must not be reused:
+histogram campaigns produced before the ID-only payload replacement must not be reused:
 the chunk execution contract now hashes `analysis_scale_factors.py` and all
 four payloads, forcing regeneration when any of them changes.
 
@@ -80,16 +80,15 @@ four payloads, forcing regeneration when any of them changes.
 - refusal to install non-adopted results;
 - MET/photon one- and two-dimensional count flattening;
 - analysis payload evaluation for nominal/Up/Down;
-- exact low-pT electron and muon target selections on synthetic probes;
+- exact low-pT electron and muon ID-only selections on synthetic probes;
 - simultaneous pass/fail fit recovery on a synthetic J/psi spectrum;
-- official J/psi LooseID multiplication and uncertainty propagation.
+- installed correction-name and description checks proving isolation is excluded;
 - explicit 5.001, 9.999, and 10.000 GeV boundary tests proving removal of the
   old edge contribution and the exact official-payload handoff;
 - production histogram-leaf filling for all eight new Up/Down variations;
-- seven analysis-SF tests and seven shape-histogram tests in the EOS Python 3.8
-  runtime, all passing;
-- a 59,458-event real flat-shard histogram build with all four components
-  applied, no weight failures, and all eight variation leaves present.
+- eight analysis-SF tests and seven ID-only payload tests, all passing;
+- the earlier 59,458-event representative histogram predates the ID-only
+  replacement and is marked stale; the changed execution hash forces it to be rebuilt.
 
 The complete machine-readable integration audit is
 `workflow/analysis_sf_integration_validation/summary.json`.

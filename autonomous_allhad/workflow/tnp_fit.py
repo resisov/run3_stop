@@ -696,6 +696,7 @@ def _fit_histogram_payload_nominal(payload: dict[str, Any]) -> dict[str, Any]:
     return {
         "schema_version": 1,
         "measurement": payload["measurement"],
+        "year": str(payload.get("year") or "2024"),
         "probe_definition": payload.get("probe_definition"),
         "denominator_selection": payload.get("denominator_selection"),
         "target_selection": payload.get("target_selection"),
@@ -706,6 +707,7 @@ def _fit_histogram_payload_nominal(payload: dict[str, Any]) -> dict[str, Any]:
         "tag_trigger_match_required": payload.get("tag_trigger_match_required", True),
         "reference_trigger_object_kind": payload.get("reference_trigger_object_kind", payload.get("kind")),
         "reference_trigger_application": payload.get("reference_trigger_application"),
+        "mc_reference": payload.get("mc_reference"),
         "status": "validation_pending",
         "probe_abseta_edges": payload["probe_abseta_edges"],
         "probe_pt_edges_gev": payload["probe_pt_edges_gev"],

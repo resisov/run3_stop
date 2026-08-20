@@ -33,13 +33,14 @@ def get_pu_weight(year, trueint):
         '2023pre' : 'Collisions2023_366403_369802_eraBC_GoldenJson',
         '2023post': 'Collisions2023_369803_370790_eraD_GoldenJson',
         '2024': 'Collisions24_BCDEFGHI_goldenJSON',
-        '2025': None, # Not available yet
+        '2025': 'Collisions25_goldenJSON',
     }
-    if correction[year] is None:
-        ones_array = ak.ones_like(trueint)
-        return ones_array, ones_array, ones_array
-
-    evaluator = correctionlib.CorrectionSet.from_file('data/PUweight/'+year+'/puWeights.json.gz')
+    filename = (
+        'puWeights_2025pp_Golden_Summer24_25ns_69200ub.json.gz'
+        if year == '2025'
+        else 'puWeights.json.gz'
+    )
+    evaluator = correctionlib.CorrectionSet.from_file('data/PUweight/'+year+'/'+filename)
     weight = evaluator[correction[year]].evaluate(trueint, 'nominal')
     systup = evaluator[correction[year]].evaluate(trueint, 'up')
     systdown = evaluator[correction[year]].evaluate(trueint, 'down')
@@ -147,10 +148,10 @@ def get_jec_correction(year, pt, eta, phi, rho, area, run, isData):
         ## DATA Correction
         if isData:
             jec_names = {
-                'L1FastJet' : "Winter25Prompt25_V3_DATA_L1FastJet_AK4PFPuppi",
-                'L2Relative' : "Winter25Prompt25_V3_DATA_L2Relative_AK4PFPuppi",
-                'L3Absolute' : "Winter25Prompt25_V3_DATA_L3Absolute_AK4PFPuppi",
-                'L2L3Residual' : "Winter25Prompt25_V3_DATA_L2L3Residual_AK4PFPuppi"
+                'L1FastJet' : "Summer24Prompt25_V3_DATA_L1FastJet_AK4PFPuppi",
+                'L2Relative' : "Summer24Prompt25_V3_DATA_L2Relative_AK4PFPuppi",
+                'L3Absolute' : "Summer24Prompt25_V3_DATA_L3Absolute_AK4PFPuppi",
+                'L2L3Residual' : "Summer24Prompt25_V3_DATA_L2L3Residual_AK4PFPuppi"
             }
             # L1FastJet Correction
             corr_L1 = evaluator[jec_names['L1FastJet']].evaluate(area, eta, pt, rho)
@@ -164,9 +165,9 @@ def get_jec_correction(year, pt, eta, phi, rho, area, run, isData):
         ## MC Correction
         else:
             jec_names = {
-                'L1FastJet' : "Winter25Prompt25_V3_MC_L1FastJet_AK4PFPuppi",
-                'L2Relative' : "Winter25Prompt25_V3_MC_L2Relative_AK4PFPuppi",
-                'L3Absolute' : "Winter25Prompt25_V3_MC_L3Absolute_AK4PFPuppi"
+                'L1FastJet' : "Summer24Prompt25_V3_MC_L1FastJet_AK4PFPuppi",
+                'L2Relative' : "Summer24Prompt25_V3_MC_L2Relative_AK4PFPuppi",
+                'L3Absolute' : "Summer24Prompt25_V3_MC_L3Absolute_AK4PFPuppi"
             }
             # L1FastJet Correction
             corr_L1 = evaluator[jec_names['L1FastJet']].evaluate(area, eta, pt, rho)
@@ -194,7 +195,7 @@ def get_jec_uncertainty(year, pt, eta):
     elif year == '2024':
         unc_name = "Summer24Prompt24_V3_MC_Total_AK4PFPuppi"
     elif year == '2025':
-        unc_name = "Winter25Prompt25_V3_MC_Total_AK4PFPuppi"
+        unc_name = "Summer24Prompt25_V3_MC_Total_AK4PFPuppi"
     unc = evaluator[unc_name].evaluate(eta, pt)
 
     return ak.unflatten(unc, counts)
@@ -283,10 +284,10 @@ def get_fjec_correction(year, pt, eta, phi, rho, area, run, isData):
         ## DATA Correction
         if isData:
             jec_names = {
-                'L1FastJet' : "Winter25Prompt25_V3_DATA_L1FastJet_AK8PFPuppi",
-                'L2Relative' : "Winter25Prompt25_V3_DATA_L2Relative_AK8PFPuppi",
-                'L3Absolute' : "Winter25Prompt25_V3_DATA_L3Absolute_AK8PFPuppi",
-                'L2L3Residual' : "Winter25Prompt25_V3_DATA_L2L3Residual_AK8PFPuppi"
+                'L1FastJet' : "Summer24Prompt25_V3_DATA_L1FastJet_AK8PFPuppi",
+                'L2Relative' : "Summer24Prompt25_V3_DATA_L2Relative_AK8PFPuppi",
+                'L3Absolute' : "Summer24Prompt25_V3_DATA_L3Absolute_AK8PFPuppi",
+                'L2L3Residual' : "Summer24Prompt25_V3_DATA_L2L3Residual_AK8PFPuppi"
             }
             # L1FastJet Correction
             corr_L1 = evaluator[jec_names['L1FastJet']].evaluate(area, eta, pt, rho)
@@ -300,9 +301,9 @@ def get_fjec_correction(year, pt, eta, phi, rho, area, run, isData):
         ## MC Correction
         else:
             jec_names = {
-                'L1FastJet' : "Winter25Prompt25_V3_MC_L1FastJet_AK8PFPuppi",
-                'L2Relative' : "Winter25Prompt25_V3_MC_L2Relative_AK8PFPuppi",
-                'L3Absolute' : "Winter25Prompt25_V3_MC_L3Absolute_AK8PFPuppi"
+                'L1FastJet' : "Summer24Prompt25_V3_MC_L1FastJet_AK8PFPuppi",
+                'L2Relative' : "Summer24Prompt25_V3_MC_L2Relative_AK8PFPuppi",
+                'L3Absolute' : "Summer24Prompt25_V3_MC_L3Absolute_AK8PFPuppi"
             }
             # L1FastJet Correction
             corr_L1 = evaluator[jec_names['L1FastJet']].evaluate(area, eta, pt, rho)
@@ -424,9 +425,9 @@ def get_mu_loose_id_sf (year, eta, pt):
     pt  = ak.where((pt<10.),ak.full_like(pt,10.),pt)
     flatpt = ak.flatten(pt)
     
-    sf_nominal = evaluator["NUM_LooseMiniIso_DEN_LooseID"].evaluate(flateta, flatpt, 'nominal')
-    sf_up = evaluator["NUM_LooseMiniIso_DEN_LooseID"].evaluate(flateta, flatpt, 'systup')
-    sf_down = evaluator["NUM_LooseMiniIso_DEN_LooseID"].evaluate(flateta, flatpt, 'systdown')
+    sf_nominal = evaluator["NUM_LooseID_DEN_TrackerMuons"].evaluate(flateta, flatpt, 'nominal')
+    sf_up = evaluator["NUM_LooseID_DEN_TrackerMuons"].evaluate(flateta, flatpt, 'systup')
+    sf_down = evaluator["NUM_LooseID_DEN_TrackerMuons"].evaluate(flateta, flatpt, 'systdown')
 
     return ak.unflatten(sf_nominal, counts=counts), ak.unflatten(sf_up, counts=counts), ak.unflatten(sf_down, counts=counts)
 
@@ -440,10 +441,42 @@ def get_mu_medium_id_sf (year, eta, pt):
     pt  = ak.where((pt<10.),ak.full_like(pt,10.),pt)
     flatpt = ak.flatten(pt)
     
-    sf_nominal = evaluator["NUM_LooseMiniIso_DEN_MediumID"].evaluate(flateta, flatpt, "nominal")
-    sf_up = evaluator["NUM_LooseMiniIso_DEN_MediumID"].evaluate(flateta, flatpt, "systup")
-    sf_down = evaluator["NUM_LooseMiniIso_DEN_MediumID"].evaluate(flateta, flatpt, "systdown")
+    sf_nominal = evaluator["NUM_MediumID_DEN_TrackerMuons"].evaluate(flateta, flatpt, "nominal")
+    sf_up = evaluator["NUM_MediumID_DEN_TrackerMuons"].evaluate(flateta, flatpt, "systup")
+    sf_down = evaluator["NUM_MediumID_DEN_TrackerMuons"].evaluate(flateta, flatpt, "systdown")
 
+    return ak.unflatten(sf_nominal, counts=counts), ak.unflatten(sf_up, counts=counts), ak.unflatten(sf_down, counts=counts)
+
+def get_mu_loose_miniiso_sf (year, eta, pt):
+    evaluator = correctionlib.CorrectionSet.from_file('data/MuonSF/'+year+'/muon_Z.json.gz')
+
+    eta = ak.where((eta>2.399), ak.full_like(eta,2.399), eta)
+    eta = ak.where((eta<-2.399), ak.full_like(eta,-2.399), eta)
+    flateta, counts = ak.flatten(eta), ak.num(eta)
+
+    pt = ak.where((pt<10.), ak.full_like(pt,10.), pt)
+    flatpt = ak.flatten(pt)
+
+    evaluator = evaluator["NUM_LooseMiniIso_DEN_LooseID"]
+    sf_nominal = evaluator.evaluate(flateta, flatpt, "nominal")
+    sf_up = evaluator.evaluate(flateta, flatpt, "systup")
+    sf_down = evaluator.evaluate(flateta, flatpt, "systdown")
+    return ak.unflatten(sf_nominal, counts=counts), ak.unflatten(sf_up, counts=counts), ak.unflatten(sf_down, counts=counts)
+
+def get_mu_medium_miniiso_sf (year, eta, pt):
+    evaluator = correctionlib.CorrectionSet.from_file('data/MuonSF/'+year+'/muon_Z.json.gz')
+
+    eta = ak.where((eta>2.399), ak.full_like(eta,2.399), eta)
+    eta = ak.where((eta<-2.399), ak.full_like(eta,-2.399), eta)
+    flateta, counts = ak.flatten(eta), ak.num(eta)
+
+    pt = ak.where((pt<10.), ak.full_like(pt,10.), pt)
+    flatpt = ak.flatten(pt)
+
+    evaluator = evaluator["NUM_LooseMiniIso_DEN_MediumID"]
+    sf_nominal = evaluator.evaluate(flateta, flatpt, "nominal")
+    sf_up = evaluator.evaluate(flateta, flatpt, "systup")
+    sf_down = evaluator.evaluate(flateta, flatpt, "systdown")
     return ak.unflatten(sf_nominal, counts=counts), ak.unflatten(sf_up, counts=counts), ak.unflatten(sf_down, counts=counts)
     
 def get_mu_tight_id_sf (year, eta, pt):
@@ -516,6 +549,30 @@ def get_photon_id_sf(year, wp, eta, pt, phi):
         sf_up = evaluator["Photon-ID-SF"].evaluate(yr[year], "sfup", wp, flateta, flatpt)
         sf_down = evaluator["Photon-ID-SF"].evaluate(yr[year], "sfdown", wp, flateta, flatpt)
     return ak.unflatten(sf_nominal, counts=counts), ak.unflatten(sf_up, counts=counts), ak.unflatten(sf_down, counts=counts)
+
+def _get_photon_veto_sf(year, correction, wp, eta, r9):
+    evaluator = correctionlib.CorrectionSet.from_file('data/EGammaSF/'+year+'/photon.json.gz')
+    yr = {
+        '2024': '2024Prompt',
+        '2025': '2025Prompt',
+    }
+    if year not in yr:
+        raise RuntimeError(f"{correction} is only configured for 2024 and 2025")
+    if year == '2025':
+        raise RuntimeError(f"2025 {correction} has no published working-point content")
+    flateta, counts = ak.flatten(eta), ak.num(eta)
+    flatr9 = ak.flatten(r9)
+    corr = evaluator[correction]
+    nominal = corr.evaluate(yr[year], "sf", wp, flateta, flatr9)
+    up = corr.evaluate(yr[year], "sfup", wp, flateta, flatr9)
+    down = corr.evaluate(yr[year], "sfdown", wp, flateta, flatr9)
+    return ak.unflatten(nominal, counts=counts), ak.unflatten(up, counts=counts), ak.unflatten(down, counts=counts)
+
+def get_photon_csev_sf(year, wp, eta, r9):
+    return _get_photon_veto_sf(year, "Photon-CSEV-SF", wp, eta, r9)
+
+def get_photon_pixel_veto_sf(year, wp, eta, r9):
+    return _get_photon_veto_sf(year, "Photon-PixVeto-SF", wp, eta, r9)
 
 ####
 # Electron ID scale factor
@@ -648,13 +705,39 @@ def get_ele_tight_id_sf (year, eta, pt, phi):
         sf_down = evaluator["Electron-ID-SF"].evaluate(yr[year], "sfdown", "Tight", flateta, flatpt)
     return ak.unflatten(sf_nominal, counts=counts), ak.unflatten(sf_up, counts=counts), ak.unflatten(sf_down, counts=counts)
 
+def get_ele_reco_sf(year, eta, pt, phi):
+    evaluator = correctionlib.CorrectionSet.from_file('data/EGammaSF/'+year+'/electron.json.gz')["Electron-ID-SF"]
+    yr = {
+        '2024': '2024Prompt',
+        '2025': '2025Prompt',
+    }
+    if year not in yr:
+        raise RuntimeError("electron reco SF is only configured for 2024 and 2025")
+
+    counts = ak.num(pt)
+    flateta = np.asarray(ak.flatten(eta), dtype=float)
+    flatpt = np.asarray(ak.flatten(pt), dtype=float)
+    nominal = np.ones(len(flatpt), dtype=float)
+    up = np.ones(len(flatpt), dtype=float)
+    down = np.ones(len(flatpt), dtype=float)
+    working_points = []
+    if year == '2024':
+        working_points.append(("RecoBelow20", (flatpt >= 10.0) & (flatpt < 20.0)))
+    working_points.extend([
+        ("Reco20to75", (flatpt >= 20.0) & (flatpt < 75.0)),
+        ("RecoAbove75", flatpt >= 75.0),
+    ])
+    for working_point, mask in working_points:
+        if not np.any(mask):
+            continue
+        nominal[mask] = evaluator.evaluate(yr[year], "sf", working_point, flateta[mask], flatpt[mask])
+        up[mask] = evaluator.evaluate(yr[year], "sfup", working_point, flateta[mask], flatpt[mask])
+        down[mask] = evaluator.evaluate(yr[year], "sfdown", working_point, flateta[mask], flatpt[mask])
+    return ak.unflatten(nominal, counts=counts), ak.unflatten(up, counts=counts), ak.unflatten(down, counts=counts)
+
 def get_ele_hlt_sf (year, eta, pt, phi):
     if year == '2025':
-        ## No SF for 2025 yet, will update when available
-        sf_nominal = ak.full_like(eta, 1.)
-        sf_up = ak.full_like(eta, 1.)
-        sf_down = ak.full_like(eta, 1.)
-        return sf_nominal, sf_up, sf_down
+        raise RuntimeError("2025 electron HLT SF is not available")
 
     evaluator = correctionlib.CorrectionSet.from_file('data/EGammaSF/'+year+'/electronHlt.json.gz')
     pt = ak.where((pt<25.), ak.full_like(pt,25.), pt)
@@ -707,22 +790,11 @@ class BTagCorrector:
         self._wp = wp[workingpoint]
         self._mc = caller
 
-        if year == '2025':
-            self.sf = None
-            self.eff = None
-            return
-
         btvjson = {}
-        if year == '2024':
+        if year in {'2024', '2025'}:
             btvjson['UParTAK4'] = {
                 'comb': correctionlib.CorrectionSet.from_file('data/BTVSF/'+year+'/btagging.json.gz')["UParTAK4_comb"],
                 'ligh': correctionlib.CorrectionSet.from_file('data/BTVSF/'+year+'/btagging.json.gz')["UParTAK4_light"],
-            }
-        elif year == '2025':
-            ## No SF for 2025 yet, will update when available
-            btvjson['UParTAK4'] = {
-                'comb': None,
-                'ligh': None,
             }
         else:
             btvjson['UParTAK4'] = {
@@ -737,7 +809,7 @@ class BTagCorrector:
             '2023pre' : 'btageff2023pre.merged',
             '2023post': 'btageff2023post.merged',
             '2024': 'btageff2024.merged',
-            '2025': None
+            '2025': 'btageff2025.merged'
         }
         filename = 'hists/'+files[year]
         btag_file = load(filename)
@@ -757,19 +829,6 @@ class BTagCorrector:
         self.eff = convert.from_histogram(nom).to_evaluator()
 
     def btag_weight(self, pt, eta, flavor, istag):
-
-        ## No SF for 2025, return 1 with no uncertainty, will update when available
-        if self._year == '2025':
-            ones = ak.prod(ak.ones_like(pt), axis=1)
-            return ones, \
-                ones, \
-                ones, \
-                ones, \
-                ones, \
-                ones, \
-                ones, \
-                ones, \
-                ones
 
         abseta = abs(eta)
         flateta, counts = ak.fill_none(ak.flatten(abseta), 0.), ak.num(abseta)
@@ -954,14 +1013,19 @@ corrections = {
 
     'get_mu_loose_id_sf':       get_mu_loose_id_sf,
     'get_mu_medium_id_sf':      get_mu_medium_id_sf,
+    'get_mu_loose_miniiso_sf':  get_mu_loose_miniiso_sf,
+    'get_mu_medium_miniiso_sf': get_mu_medium_miniiso_sf,
     'get_mu_tight_id_sf':       get_mu_tight_id_sf,
     'get_mu_tight_iso_sf':      get_mu_tight_iso_sf,
 
     'get_photon_id_sf':         get_photon_id_sf,
+    'get_photon_csev_sf':       get_photon_csev_sf,
+    'get_photon_pixel_veto_sf': get_photon_pixel_veto_sf,
     'get_ele_veto_id_sf':       get_ele_veto_id_sf,
     'get_ele_loose_id_sf':      get_ele_loose_id_sf,
     'get_ele_medium_id_sf':     get_ele_medium_id_sf,
     'get_ele_tight_id_sf':      get_ele_tight_id_sf,
+    'get_ele_reco_sf':          get_ele_reco_sf,
     'get_ele_hlt_sf':           get_ele_hlt_sf,
     'get_top_pt_reweight':       get_top_pt_reweight,
     'get_btag_weight':          BTagCorrector,
@@ -970,10 +1034,6 @@ corrections = {
 #    'get_ele_loose_id_sf':      get_ele_loose_id_sf,
 #    'get_ele_tight_id_sf':      get_ele_tight_id_sf,
 #    'get_ele_trig_weight':      get_ele_trig_weight,
-#    'get_ele_reco_sf_below20':  get_ele_reco_sf_below20,
-#    #'get_ele_reco_err_below20': get_ele_reco_err_below20,
-#    'get_ele_reco_sf_above20':  get_ele_reco_sf_above20,
-#    #'get_ele_reco_err_above20': get_ele_reco_err_above20,
 #    'get_pho_tight_id_sf':      get_pho_tight_id_sf,
 #    'get_pho_trig_weight':      get_pho_trig_weight,
 #    'get_met_xy_correction':    XY_MET_Correction,
