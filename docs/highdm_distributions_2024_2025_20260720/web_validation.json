@@ -34,6 +34,7 @@
     "chunks": 596,
     "data_policy": "signal-region data blinded",
     "legacy_61_bin_card_replaced": true,
+    "navigation": "Nres options always visible; selection switches to 2024 High-dM SR",
     "physics_status": "exploratory category proposal; not adopted for datacards",
     "plot_summary": "trota_highdm_exclusive_plot_summary_2024.json",
     "schemes": {
