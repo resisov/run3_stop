@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import glob
+import hashlib
 import json
 import math
 import re
@@ -24,6 +25,9 @@ FLAT_SCHEMAS = {
     "flat_ntuple_shard_v5_fullselection_2024",
     "flat_ntuple_shard_v6_signal_cutflow_2024",
     "flat_ntuple_shard_v7_float32_fullselection_2024",
+    "flat_ntuple_shard_v8_float32_fullselection_2024_trota",
+    "flat_ntuple_shard_v7_float32_fullselection_2025",
+    "flat_ntuple_shard_v8_float32_fullselection_2025_trota",
     "flat_ntuple_merged_data_balanced20_v1",
     "flat_ntuple_merged_mc_balanced20_v1",
 }
@@ -138,30 +142,55 @@ def expand_inputs(items: list[str]) -> list[Path]:
     return out
 
 
-def load_signal_xsec(path: Path | None) -> dict[str, dict[str, Any]]:
-    if path is None or not path.exists():
-        return {}
+SIGNAL_XSEC_SCHEMA = "stop_pair_xsec_13p6tev_v1"
+
+
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def load_signal_xsec(path: Path) -> dict[str, dict[str, Any]]:
+    if not path.is_file():
+        raise RuntimeError(f"authoritative signal xsec JSON does not exist: {path}")
     payload = read_json(path)
+    if payload.get("schema_version") != SIGNAL_XSEC_SCHEMA:
+        raise RuntimeError(
+            "refusing non-authoritative signal xsec input: expected schema "
+            f"{SIGNAL_XSEC_SCHEMA!r}, got {payload.get('schema_version')!r} from {path}"
+        )
+    if "mass_points" in payload:
+        raise RuntimeError(
+            f"refusing yield-shaped JSON as a signal xsec source: {path}"
+        )
+    if (
+        payload.get("source_file") != "signal_xsec.txt"
+        or payload.get("xsec_table_status") != "parsed"
+        or payload.get("parsed") is not True
+    ):
+        raise RuntimeError(f"signal xsec provenance is incomplete or invalid: {path}")
+    records = payload.get("records")
+    if not isinstance(records, list) or not records:
+        raise RuntimeError(f"signal xsec records are missing: {path}")
+    if int(payload.get("records_parsed") or -1) != len(records):
+        raise RuntimeError(f"signal xsec record count is inconsistent: {path}")
     out: dict[str, dict[str, Any]] = {}
-    for rec in payload.get("records") or []:
+    for rec in records:
         mstop = rec.get("mStop")
         xsec = positive(rec.get("xsec_pb"))
-        if mstop is None or xsec is None:
-            continue
-        out[f"mStop{int(mstop)}"] = {
+        if mstop is None or xsec is None or rec.get("parsing_status") != "parsed":
+            raise RuntimeError(f"invalid signal xsec record in {path}: {rec!r}")
+        key = f"mStop{int(mstop)}"
+        if key in out:
+            raise RuntimeError(f"duplicate signal xsec record {key} in {path}")
+        out[key] = {
             "xsec_pb": xsec,
             "xsec_uncertainty_relative": rec.get(
                 "uncertainty_relative"
             ),
-        }
-    for key, rec in (payload.get("mass_points") or {}).items():
-        xsec = positive(rec.get("xsec_pb"))
-        if xsec is None:
-            continue
-        out[str(key)] = {
-            "xsec_pb": xsec,
-            "xsec_uncertainty_relative": rec.get("xsec_uncertainty_relative"),
-            "xsec_uncertainty_percent": rec.get("xsec_uncertainty_percent"),
         }
     return out
 
@@ -376,7 +405,23 @@ def main() -> int:
         help="Text file containing one sidecar JSON path per line",
     )
     parser.add_argument("--output", required=True)
-    parser.add_argument("--signal-yields", default="autonomous_allhad/outputs/signal_yields_by_mass.json")
+    parser.add_argument(
+        "--luminosity-fb",
+        type=float,
+        help=(
+            "Explicit campaign luminosity in fb^-1. When supplied, it overrides "
+            "sidecar/default luminosity for every normalization factor."
+        ),
+    )
+    parser.add_argument(
+        "--signal-xsec",
+        type=Path,
+        required=True,
+        help=(
+            "Authoritative stop-pair cross-section JSON. The file must use "
+            f"schema {SIGNAL_XSEC_SCHEMA!r}; yield products are rejected."
+        ),
+    )
     parser.add_argument(
         "--background-xsec-overrides",
         type=Path,
@@ -397,13 +442,20 @@ def main() -> int:
     datasets: dict[str, Any] = {}
     source_records = []
     signal_cutflow_histograms: dict[str, Any] = {}
-    lumi_pb = LUMI_PB_DEFAULT
+    if args.luminosity_fb is not None and args.luminosity_fb <= 0.0:
+        parser.error("--luminosity-fb must be positive")
+    lumi_pb = (
+        float(args.luminosity_fb) * 1000.0
+        if args.luminosity_fb is not None
+        else LUMI_PB_DEFAULT
+    )
     for path in paths:
         payload = read_json(path)
         if payload.get("schema_version") not in FLAT_SCHEMAS:
             continue
         policy = payload.get("normalization_policy") or {}
-        lumi_pb = finite(policy.get("luminosity_pb"), lumi_pb)
+        if args.luminosity_fb is None:
+            lumi_pb = finite(policy.get("luminosity_pb"), lumi_pb)
         source_records.append({
             "path": str(path),
             "status": payload.get("status"),
@@ -441,21 +493,32 @@ def main() -> int:
         datasets,
         args.background_xsec_overrides,
     )
-    signal_xsec = load_signal_xsec(Path(args.signal_yields) if args.signal_yields else None)
+    signal_xsec = load_signal_xsec(args.signal_xsec)
     physical, split_counts, factors = build_physical(datasets, lumi_pb)
     signal_points = build_signal_mass_points(datasets, signal_xsec, lumi_pb)
     output = {
         "schema_version": "flat_ntuple_campaign_normalization_v1",
-        "status": "complete" if source_records else "empty",
+        "status": "pending_validation" if source_records else "empty",
         "source_sidecars": source_records,
         "source_sidecar_count": len(source_records),
         "luminosity_pb": lumi_pb,
         "luminosity_fb": lumi_pb / 1000.0,
+        "luminosity_source": (
+            "explicit_cli_override"
+            if args.luminosity_fb is not None
+            else "sidecar_or_legacy_default"
+        ),
         "normalization_policy": {
             "flat_root_event_weight_status": "raw gen_weight only; no xsec/lumi or scale factor applied in ROOT ntuples",
             "background_formula": "gen_weight * post_skim_sf_weight * xsec_pb * lumi_pb / physical_dataset_sumw",
-            "signal_formula": "gen_weight * post_skim_sf_weight * xsec_pb(mStop) * lumi_pb / Runs.genEventSumw_T2tt_<mStop>_<mLSP>",
+            "signal_formula": "gen_weight * post_skim_sf_weight * stop_pair_xsec_pb(mStop) * lumi_pb / topology-specific Runs mass-point sumw",
             "data_formula": "1",
+        },
+        "signal_xsec_source": {
+            "path": str(args.signal_xsec),
+            "sha256": sha256(args.signal_xsec),
+            "schema_version": SIGNAL_XSEC_SCHEMA,
+            "source_file": "signal_xsec.txt",
         },
         "background_xsec_overrides": {
             "path": (
@@ -474,6 +537,13 @@ def main() -> int:
         "blocked_dataset_factors": {k: v for k, v in factors.items() if v.get("normalization_factor") is None and not v.get("is_signal")},
         "blocked_signal_mass_points": {k: v for k, v in signal_points.items() if v.get("normalization_factor") is None},
     }
+    output["status"] = (
+        "complete"
+        if source_records
+        and not output["blocked_dataset_factors"]
+        and not output["blocked_signal_mass_points"]
+        else ("incomplete" if source_records else "empty")
+    )
     write_json(Path(args.output), output)
     print(json.dumps({
         "status": output["status"],
@@ -485,7 +555,7 @@ def main() -> int:
         "blocked_signal_mass_points": len(output["blocked_signal_mass_points"]),
         "output": args.output,
     }, sort_keys=True))
-    return 0
+    return 0 if output["status"] == "complete" else 2
 
 
 if __name__ == "__main__":

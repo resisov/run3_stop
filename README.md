@@ -1,14 +1,11 @@
 # Run-3 All-Hadronic Stop Analysis
 
 CMS Run-3 all-hadronic stop search code and 2024 analysis products. The
-repository has two supported command surfaces:
+repository uses the deterministic classic command surface:
 
 - `python -m automation.cli`: deterministic compilation, Coffea execution,
   HTCondor submission, reduction, plotting, templates, datacards, and expected
-  limits around the classic analysis code;
-- `autonomous_allhad/analysisctl`: resumable high-level workflow for input
-  validation, production state, search-bin studies, statistical inputs, and
-  publication.
+  limits around the classic analysis code.
 
 The current public 2024 results are at
 [resisov.github.io/run3_stop](https://resisov.github.io/run3_stop/nominal_plots_2024_fullselection_v5_dyexclusive_t2models_freebkg_20260728/).
@@ -352,44 +349,7 @@ parameters, or nuisance correlations. For the adopted AN control-region model,
 use the validated builders in `autonomous_allhad/workflow/` and
 `autonomous_allhad/reports/datacard_control_region_strategy_20260813.md`.
 
-## 11. Use the resumable high-level workflow
-
-Make the package importable and inspect the command list:
-
-```bash
-export PYTHONPATH="$PWD/autonomous_allhad${PYTHONPATH:+:$PYTHONPATH}"
-./autonomous_allhad/analysisctl --help
-./autonomous_allhad/analysisctl monitor \
-  --config autonomous_allhad/configs/run3_2024.yaml \
-  --json
-```
-
-Start or resume the configured workflow:
-
-```bash
-./autonomous_allhad/analysisctl all \
-  --config autonomous_allhad/configs/run3_2024.yaml
-
-./autonomous_allhad/analysisctl resume \
-  --config autonomous_allhad/configs/run3_2024.yaml
-```
-
-The default high-level config has `allow_condor_submit: false` and
-`allow_github_publish: false`. This prevents `all` from silently launching a
-large campaign or publishing a site. Enable Condor only for a reviewed
-submission:
-
-```bash
-AUTONOMOUS_ALLHAD_ALLOW_CONDOR=1 \
-  ./autonomous_allhad/analysisctl run-production \
-  --config autonomous_allhad/configs/run3_2024.yaml
-```
-
-Select a production shape shift with `AUTONOMOUS_ALLHAD_PRODUCTION_SHIFT` and a
-configured shift name. Run `monitor` after submission and use `resume`; do not
-restart completed valid stages.
-
-## 12. Output locations
+## 11. Output locations
 
 | Stage | Default output |
 | --- | --- |
@@ -400,15 +360,13 @@ restart completed valid stages.
 | classic ROOT template | `analysis/templates/templates_metpt.root` |
 | classic datacard | `analysis/datacards/stop_2024_shapes.txt` |
 | classic expected limit | `analysis/limits/` |
-| high-level state | `autonomous_allhad/workflow/state.json` |
-| high-level history | `autonomous_allhad/workflow/history.jsonl` |
 | public site source | `docs/nominal_plots_2024_fullselection_v5_dyexclusive_t2models_freebkg_20260728/` |
 
 Large outputs remain on EOS and are ignored by Git. Compact manifests,
 checksums, validation summaries, final plots, and public reports form the
 reproducibility record.
 
-## 13. Physics and production safeguards
+## 12. Physics and production safeguards
 
 - Do not modify selections, categories, bins, normalization, transfer factors,
   or nuisance correlations without labeling and validating a physics change.

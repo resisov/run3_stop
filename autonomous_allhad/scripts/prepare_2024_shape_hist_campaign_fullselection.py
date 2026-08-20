@@ -549,7 +549,8 @@ def main(argv: list[str] | None = None) -> int:
             "nominal_normalization_command": (
                 f"{repo}/autonomous_allhad/workflow/merge_flat_ntuple_metadata.py "
                 f"--inputs {nominal_campaign}/outputs/nominal "
-                f"--output {nominal_campaign}/normalization.json"
+                f"--output {nominal_campaign}/normalization.json "
+                f"--signal-xsec {repo}/autonomous_allhad/signals/stop_xsec_13p6TeV.json"
             ),
             "shape_merge_module": "autonomous_allhad.merge_shape_histogram_2024",
             "plotting_and_combine_policy": "attach variation leaves to the existing flat histogram payload; no new plotting code",

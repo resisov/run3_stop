@@ -16,14 +16,11 @@ import uproot
 VALID_STATUSES = {"complete", "complete_with_bad_files"}
 WORKER_FILES = (
     "__init__.py",
-    "cli.py",
     "flat_ntuple_worker.py",
     "full_production_worker.py",
     "intermediate_2024_worker.py",
     "object_corrections_2024.py",
-    "pipeline.py",
     "real_subset_worker.py",
-    "report_pages.py",
     "toptag_eff_worker.py",
 )
 

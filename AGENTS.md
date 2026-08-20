@@ -356,48 +356,8 @@ A job is successful only when:
 * required metadata exists;
 * campaign state records the output as valid.
 
-Maintain:
-
-* `autonomous_allhad/workflow/state.json`
-* `autonomous_allhad/workflow/history.jsonl`
-* `autonomous_allhad/workflow/job_manifest.json`
-* `autonomous_allhad/workflow/latest_summary.md`
-
-## Single-command interface
-
-The final system must support a top-level command similar to:
-
-```bash
-./autonomous_allhad/analysisctl all \
-    --config autonomous_allhad/configs/run3_2024.yaml
-```
-
-It must also support:
-
-```bash
-./autonomous_allhad/analysisctl resume \
-    --config autonomous_allhad/configs/run3_2024.yaml
-```
-
-The top-level workflow must cover:
-
-* validation;
-* input checking;
-* benchmarking;
-* candidate architecture evaluation;
-* production;
-* monitoring;
-* retry;
-* reduction;
-* merge;
-* scale;
-* yields;
-* plots;
-* search bins;
-* datacards;
-* expected limits;
-* website generation;
-* website publication.
+Maintain machine-readable state, history, manifests, and summaries inside each
+active campaign directory. Do not use a shared monolithic workflow state.
 
 ## GitHub Pages report
 

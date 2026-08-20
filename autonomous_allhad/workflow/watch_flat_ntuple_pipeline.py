@@ -18,6 +18,7 @@ OUTPUT = REPO / 'autonomous_allhad/workflow/flat_ntuple_20260630_nominal_outputs
 ARGS_ALL = CAMPAIGN / 'flat_ntuple_args_all.txt'
 LOG_PATH = REPO / 'autonomous_allhad/workflow/flat_ntuple_pipeline_watch_20260630.log'
 STATE_PATH = REPO / 'autonomous_allhad/workflow/flat_ntuple_pipeline_watch_20260630_state.json'
+SIGNAL_XSEC = REPO / 'autonomous_allhad/signals/stop_xsec_13p6TeV.json'
 
 
 def now() -> str:
@@ -135,7 +136,8 @@ def full_pipeline(state: dict[str, Any]) -> dict[str, Any]:
     if not state.get('merged_normalization'):
         rc = run([str(PY38), 'autonomous_allhad/workflow/merge_flat_ntuple_metadata.py',
                   '--inputs', str(OUTPUT),
-                  '--output', str(OUTPUT / 'merged_normalization.json')], 'merge_normalization')
+                  '--output', str(OUTPUT / 'merged_normalization.json'),
+                  '--signal-xsec', str(SIGNAL_XSEC)], 'merge_normalization')
         if rc != 0:
             state['merge_normalization_rc'] = rc
             return state

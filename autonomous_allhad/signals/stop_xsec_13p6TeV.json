@@ -1,4 +1,5 @@
 {
+  "schema_version": "stop_pair_xsec_13p6tev_v1",
   "bad_line_count": 0,
   "bad_lines_preview": [],
   "message": "Parsed signal_xsec.txt as the authoritative stop-pair cross-section source for this autonomous analysis.",
