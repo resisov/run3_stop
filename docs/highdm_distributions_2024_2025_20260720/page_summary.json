@@ -1,5 +1,5 @@
 {
-  "cards": 601,
+  "cards": 603,
   "default_regime": "highdm",
   "default_year": "2025",
   "dy_rz_policy": {
@@ -7,12 +7,16 @@
     "2025": "not applied; awaiting a dedicated 2025 measurement"
   },
   "highdm_plot_count_per_year": {
-    "2024": 188,
+    "2024": 190,
     "2025": 187
   },
   "highdm_search_bins": {
     "2024": 55,
-    "2024_exploratory_trota": 61,
+    "2024_nres": {
+      "baseline_inclusive": 55,
+      "exclusive_full": 85,
+      "exclusive_tailmerged": 80
+    },
     "2025": 55,
     "tail_preserve_categories": [
       1,
@@ -24,12 +28,13 @@
   },
   "histogram_sha256": {
     "2024": "2ad64b5236a23c03fbe0c21ec7be7e1a51cb035bf9868e73ef959e7510c178df",
+    "2024_nres": "f218ae68dab90f0c94ee4998ca43f64a182534ca2f877fb15aae86d5e34d195a",
     "2025": "5581811be43bf80d53c73e393d098829a4105851dbc7e65ec4190007fbde4404"
   },
   "kinds": {
     "CR": 304,
     "Overview": 2,
-    "SR": 235,
+    "SR": 237,
     "VR": 60
   },
   "lowdm_plot_count_per_year": {
@@ -37,9 +42,24 @@
     "2025": 113
   },
   "missing_references": [],
-  "referenced_files": 1202,
+  "nres_study_2024": {
+    "chunks": 596,
+    "data_policy": "signal-region data blinded",
+    "legacy_61_bin_card_replaced": true,
+    "physics_status": "exploratory category proposal; not adopted for datacards",
+    "plot_summary": "trota_highdm_exclusive_plot_summary_2024.json",
+    "schemes": {
+      "baseline_inclusive": 55,
+      "exclusive_full": 85,
+      "exclusive_tailmerged": 80
+    },
+    "source_sha256": "f218ae68dab90f0c94ee4998ca43f64a182534ca2f877fb15aae86d5e34d195a",
+    "status": "complete",
+    "unique_input_roots": 5954
+  },
+  "referenced_files": 1206,
   "regimes": {
-    "highdm": 375,
+    "highdm": 377,
     "lowdm": 226
   },
   "sr_categories": {
@@ -54,12 +74,14 @@
     "SR_Nb3plus_T1_W1": "SR \u00b7 Nb3+ \u00b7 T1 \u00b7 W1",
     "SR_Nb3plus_T2_W0": "SR \u00b7 Nb3+ \u00b7 T2 \u00b7 W0",
     "highdm_sr_55": "High-dM SR (55 bins)",
-    "highdm_sr_61_trota": "High-dM SR (61 bins, TROTA exploratory)",
+    "highdm_sr_55_nres_baseline": "High-dM SR (55 bins, TROTA baseline)",
+    "highdm_sr_80_nres": "High-dM SR (80 bins, TROTA Nres)",
+    "highdm_sr_85_nres": "High-dM SR (85 bins, TROTA Nres)",
     "lowdm_sr_all": "Low-dM SR (all categories)"
   },
   "status": "complete",
   "years": {
-    "2024": 301,
+    "2024": 303,
     "2025": 300
   }
 }
