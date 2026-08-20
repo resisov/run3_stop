@@ -25,6 +25,7 @@ from run_flat_hists_chunked import (
     merge_tree,
     read_json,
     summary_has_strict_warnings,
+    validate_search_bin_payload,
     write_json,
 )
 
@@ -93,6 +94,11 @@ def update_summary(
         allow_hist_builder_repair,
     ):
         raise RuntimeError(f"{path}: chunk build options do not match")
+    validate_search_bin_payload(
+        payload,
+        (chunk_build_options or {}).get("search_bins"),
+        require_histogram=False,
+    )
 
     for code_path in REPAIRABLE_CODE_PATHS:
         code_sha = (chunk_build_options or {}).get("code_sha256", {}).get(code_path)
@@ -146,7 +152,8 @@ def update_summary(
         "histogram_range_exclusions",
         "histogram_folded_flow",
         "lowdm_search_bin_entry_accounting",
-        "trota_lowdm_nres_audit",
+        "highdm_search_bin_entry_accounting",
+        "trota_resolved_top_audit",
         "scale_factor_status_audit",
         "gcr_prefilter",
         "gcr_photon_selection_audit",
@@ -408,6 +415,18 @@ def main() -> int:
                 del payload
                 if index % 25 == 0:
                     gc.collect()
+            if histogram_key == "search_bin_histograms":
+                validate_search_bin_payload(
+                    {
+                        "search_bin_schemes": metadata.get(
+                            "search_bin_schemes", {}
+                        ),
+                        "search_bin_histograms": merged_section,
+                        "summary": summary,
+                    },
+                    (expected_build_options or {}).get("search_bins"),
+                    require_histogram=True,
+                )
             first = dump_member(
                 handle,
                 histogram_key,

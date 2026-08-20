@@ -27,11 +27,16 @@ from autonomous_allhad.real_subset_worker import assign_lowdm_search_bin, comput
 from autonomous_allhad.dy_ptll_policy import dataset_id_prefilter_plan, dy_ptll_dataset_allowed
 from autonomous_allhad.highdm_resolved_categories import (
     boosted_overlap_vetoed_ak4_indices,
-    select_exclusive_resolved_candidates,
-)
-from study_trota_highdm_categories_2024 import (
     map_candidates_to_events,
     map_candidates_to_events_rle,
+    select_exclusive_resolved_candidates,
+)
+from autonomous_allhad.search_bin_categorization import (
+    configured_exclusive_labels,
+    configured_exclusive_mapping,
+    exclusive_category_source_indices,
+    map60_indices_to_adopted55,
+    map_category_sources_to_configured,
 )
 
 RECOIL_PT_BINS = [250.0, 300.0, 350.0, 400.0, 500.0, 800.0, 1500.0]
@@ -177,13 +182,19 @@ LOWDM_READ_BRANCHES = [
     "lowdm_mtb", "lowdm_met_sqrt_ht", "lowdm_isr_pt", "lowdm_isr_dphi", "lowdm_ptb", "n_lowdm_isr",
     "lowdm_fatjet_pt", "lowdm_fatjet_msd",
 ]
-TROTA_LOWDM_LIGHT_BRANCHES = (
+TROTA_IDENTITY_BRANCHES = (
     "run", "luminosityBlock", "event", "file_id", "entry",
+)
+TROTA_LOWDM_SELECTION_BRANCHES = (
     "feature_lowdm_preselection", "feature_lowdm_LLCR",
     "feature_lowdm_QCDCR", "feature_lowdm_GCR", "feature_lowdm_DY2E",
     "feature_lowdm_DY2M", "feature_lowdm_SR", "nb_medium_lowdm",
     "pass_lowdm_topology_veto", "pass_lowdm_isr",
     "pass_lowdm_met_sqrt_ht",
+)
+TROTA_HIGHDM_SELECTION_BRANCHES = (
+    "feature_SR", "nb_medium", "nboosted_top", "nboosted_w",
+    "nboosted_total", "met", "lowdm_mtb",
 )
 TROTA_LOWDM_OVERLAP_BRANCHES = (
     "jet_source_index_all", "jet_eta_all", "jet_phi_all",
@@ -354,6 +365,42 @@ def file_sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def load_search_bin_configuration(
+    path: Path,
+    campaign_year: str,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    configuration = read_json(path)
+    if configuration.get("schema_version") != "search_bin_scheme_v1":
+        raise ValueError(f"unsupported search-bin configuration: {path}")
+    if str(configuration.get("campaign_year")) != str(campaign_year):
+        raise ValueError(
+            f"search-bin configuration year {configuration.get('campaign_year')} "
+            f"does not match campaign year {campaign_year}"
+        )
+    scheme_name = str(configuration.get("scheme_name") or "").strip()
+    if not scheme_name:
+        raise ValueError("search-bin configuration has no scheme_name")
+    mtb_min = float(configuration.get("mtb_min"))
+    if not math.isfinite(mtb_min):
+        raise ValueError("search-bin mtb_min must be finite")
+    labels = configured_exclusive_labels(
+        selected_an17_recoil60_labels(), configuration
+    )
+    bin_count = len(configured_exclusive_mapping(configuration))
+    if len(labels) != bin_count:
+        raise AssertionError("configured search-bin label count mismatch")
+    contract = {
+        "schema_version": str(configuration["schema_version"]),
+        "scheme_name": scheme_name,
+        "campaign_year": str(campaign_year),
+        "mtb_min": mtb_min,
+        "bin_count": bin_count,
+        "omitted_topologies": list(configuration.get("omitted_topologies") or []),
+        "sha256": file_sha256(path),
+    }
+    return configuration, contract
+
+
 EXECUTION_CONTRACT_COMMON_PATHS = (
     "autonomous_allhad/workflow/build_flat_boosted_recoil_hists.py",
     "autonomous_allhad/workflow/run_flat_hists_chunked.py",
@@ -361,7 +408,7 @@ EXECUTION_CONTRACT_COMMON_PATHS = (
     "autonomous_allhad/autonomous_allhad/real_subset_worker.py",
     "autonomous_allhad/autonomous_allhad/dy_ptll_policy.py",
     "autonomous_allhad/autonomous_allhad/highdm_resolved_categories.py",
-    "autonomous_allhad/workflow/study_trota_highdm_categories_2024.py",
+    "autonomous_allhad/autonomous_allhad/search_bin_categorization.py",
     "analysis/utils/corrections.py",
     "analysis/data/corrections.coffea",
 )
@@ -1433,37 +1480,106 @@ def selected_an17_recoil60_indices(chunk: dict[str, Any], n: int, sr_mask: np.nd
     return out
 
 
-def compute_trota_lowdm_nres(
+def configured_highdm_search_indices(
+    chunk: dict[str, Any],
+    n: int,
+    configuration: dict[str, Any],
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Assign the adopted High-dM search bins and account for omitted topology."""
+    if DERIVED_NRES_BRANCH not in chunk:
+        raise RuntimeError(
+            f"configured High-dM search bins require {DERIVED_NRES_BRANCH}"
+        )
+    sr = as_bool(chunk["feature_SR"], n)
+    source60 = selected_an17_recoil60_indices(chunk, n, sr)
+    baseline55 = map60_indices_to_adopted55(source60)
+    mtb = float_field(chunk, "lowdm_mtb", n, float("nan"))
+    population = (
+        sr
+        & np.isfinite(mtb)
+        & (mtb >= float(configuration["mtb_min"]))
+        & (baseline55 >= 0)
+    )
+    baseline_for_scheme = np.where(population, baseline55, -1)
+    recoil = finite_array(chunk["met"], n, 0.0)
+    recoil_index = (
+        np.searchsorted(np.asarray(RECOIL_PT_BINS, dtype=float), recoil, side="right")
+        - 1
+    )
+    exclusive = exclusive_category_source_indices(
+        baseline_for_scheme,
+        recoil_index,
+        int_field(chunk, "nboosted_top", n, 0),
+        int_field(chunk, "nboosted_w", n, 0),
+        int_field(chunk, DERIVED_NRES_BRANCH, n, -1),
+    )
+    configured = map_category_sources_to_configured(exclusive, configuration)
+    omitted = population & (exclusive >= 0) & (configured < 0)
+    unassigned = population & (exclusive < 0)
+    if np.any(unassigned):
+        raise RuntimeError(
+            "configured High-dM search bins left selected events unassigned"
+        )
+    return configured, population, omitted
+
+
+def compute_trota_nres(
     event_tree: Any,
     trota_tree: Any,
+    *,
+    include_lowdm: bool,
+    highdm_configuration: dict[str, Any] | None,
 ) -> tuple[np.ndarray, dict[str, int]]:
     """Return the exclusive TROTA Nres count aligned with the Events tree.
 
     Candidate fiducial cuts and both boosted/resolved overlap vetoes are the
-    same as in the validated 2024 High-dM TROTA study.  Candidate processing is
-    restricted to events that can enter one of the adopted low-dM regions.
+    same for Low-dM and High-dM.  The sparse candidates are joined and resolved
+    exactly once, for the union of events needed by the requested schemes.
     """
-    required = set(TROTA_LOWDM_LIGHT_BRANCHES) | set(TROTA_LOWDM_OVERLAP_BRANCHES)
+    required = set(TROTA_IDENTITY_BRANCHES) | set(TROTA_LOWDM_OVERLAP_BRANCHES)
+    if include_lowdm:
+        required |= set(TROTA_LOWDM_SELECTION_BRANCHES)
+    if highdm_configuration is not None:
+        required |= set(TROTA_HIGHDM_SELECTION_BRANCHES)
     missing = sorted(required - set(event_tree.keys()))
     if missing:
         raise RuntimeError(
-            "TROTA low-dM veto requires missing Events branches: "
+            "TROTA Nres evaluation requires missing Events branches: "
             + ", ".join(missing)
         )
     light = event_tree.arrays(sorted(required), library="ak")
     number_events = int(event_tree.num_entries)
-    nb_ge1 = np.asarray(light["nb_medium_lowdm"], dtype=int) >= 1
-    regular_regions = np.zeros(number_events, dtype=bool)
-    for region in LOWDM_REGION_MAP:
-        regular_regions |= np.asarray(light[f"feature_lowdm_{region}"], dtype=bool)
-    focused_sr = (
-        np.asarray(light["feature_lowdm_preselection"], dtype=bool)
-        & np.asarray(light["pass_lowdm_topology_veto"], dtype=bool)
-        & np.asarray(light["pass_lowdm_isr"], dtype=bool)
-        & np.asarray(light["pass_lowdm_met_sqrt_ht"], dtype=bool)
-        & nb_ge1
-    )
-    eligible = nb_ge1 & (regular_regions | focused_sr)
+    lowdm_eligible = np.zeros(number_events, dtype=bool)
+    if include_lowdm:
+        nb_ge1 = np.asarray(light["nb_medium_lowdm"], dtype=int) >= 1
+        regular_regions = np.zeros(number_events, dtype=bool)
+        for region in LOWDM_REGION_MAP:
+            regular_regions |= np.asarray(
+                light[f"feature_lowdm_{region}"], dtype=bool
+            )
+        focused_sr = (
+            np.asarray(light["feature_lowdm_preselection"], dtype=bool)
+            & np.asarray(light["pass_lowdm_topology_veto"], dtype=bool)
+            & np.asarray(light["pass_lowdm_isr"], dtype=bool)
+            & np.asarray(light["pass_lowdm_met_sqrt_ht"], dtype=bool)
+            & nb_ge1
+        )
+        lowdm_eligible = nb_ge1 & (regular_regions | focused_sr)
+
+    highdm_eligible = np.zeros(number_events, dtype=bool)
+    if highdm_configuration is not None:
+        sr = np.asarray(light["feature_SR"], dtype=bool)
+        source60 = selected_an17_recoil60_indices(light, number_events, sr)
+        baseline55 = map60_indices_to_adopted55(source60)
+        mtb = np.asarray(light["lowdm_mtb"], dtype=float)
+        highdm_eligible = (
+            sr
+            & np.isfinite(mtb)
+            & (mtb >= float(highdm_configuration["mtb_min"]))
+            & (baseline55 >= 0)
+        )
+
+    eligible = lowdm_eligible | highdm_eligible
     counts = np.zeros(number_events, dtype=np.int16)
 
     tree_fields = set(trota_tree.keys())
@@ -1546,6 +1662,8 @@ def compute_trota_lowdm_nres(
     return counts, {
         "events": number_events,
         "eligible_events": int(np.count_nonzero(eligible)),
+        "eligible_lowdm_events": int(np.count_nonzero(lowdm_eligible)),
+        "eligible_highdm_events": int(np.count_nonzero(highdm_eligible)),
         "nres_positive_events": int(np.count_nonzero(eligible & (counts > 0))),
         "trota_rows": int(trota_tree.num_entries),
         "run2_fiducial_rows": int(selected_rows.size),
@@ -1690,7 +1808,7 @@ def iterate_tree_for_gcr_study(
         yield full[selected]
 
 
-def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: dict[str, Any], search_histograms: dict[str, Any], lowdm_variable_histograms: dict[str, Any], highdm_variable_histograms: dict[str, Any], summary: dict[str, Any], step_size: int, campaign_year: str = "2024", only_regions: list[str] | None = None, require_btag: bool = False, require_weight_components: list[str] | None = None, analysis_sf_components: list[str] | None = None, require_branches: bool = False, require_normalization: bool = False, nominal_only: bool = False, distribution_only: bool = False, only_variables: list[str] | None = None, only_signal_mass: tuple[int, int] | None = None, only_lowdm_sr_nsv_inclusive: bool = False, only_lowdm_nsv_repair: bool = False, lowdm_only: bool = False, require_lowdm_nres_zero: bool = False, dy_ptll_policy: str = "all", gcr_only: bool = False, gcr_photon_policy: str = "nominal") -> None:
+def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: dict[str, Any], search_histograms: dict[str, Any], lowdm_variable_histograms: dict[str, Any], highdm_variable_histograms: dict[str, Any], summary: dict[str, Any], step_size: int, campaign_year: str = "2024", only_regions: list[str] | None = None, require_btag: bool = False, require_weight_components: list[str] | None = None, analysis_sf_components: list[str] | None = None, require_branches: bool = False, require_normalization: bool = False, nominal_only: bool = False, distribution_only: bool = False, only_variables: list[str] | None = None, only_signal_mass: tuple[int, int] | None = None, only_lowdm_sr_nsv_inclusive: bool = False, only_lowdm_nsv_repair: bool = False, lowdm_only: bool = False, require_lowdm_nres_zero: bool = False, search_bin_configuration: dict[str, Any] | None = None, dy_ptll_policy: str = "all", gcr_only: bool = False, gcr_photon_policy: str = "nominal") -> None:
     try:
         meta = read_root_metadata(root_path, fallback=norm)
     except FileNotFoundError:
@@ -1723,7 +1841,7 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
         branches = [b for b in effective_read_branches if b in present]
         trota_nres = None
         trota_nres_cursor = 0
-        if require_lowdm_nres_zero:
+        if require_lowdm_nres_zero or search_bin_configuration is not None:
             expected_trota_schema = EXPECTED_TROTA_SCHEMA_BY_YEAR[campaign_year]
             if "TROTA" not in root_file:
                 raise RuntimeError(f"{root_path}: required TROTA tree is missing")
@@ -1736,11 +1854,13 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                 or marker.get("model_sha256") != EXPECTED_TROTA_MODEL_SHA256
             ):
                 raise RuntimeError(f"{root_path}: invalid TROTA provenance: {trota_meta}")
-            trota_nres, trota_stats = compute_trota_lowdm_nres(
+            trota_nres, trota_stats = compute_trota_nres(
                 tree,
                 root_file["TROTA"],
+                include_lowdm=require_lowdm_nres_zero,
+                highdm_configuration=search_bin_configuration,
             )
-            audit = summary.setdefault("trota_lowdm_nres_audit", {})
+            audit = summary.setdefault("trota_resolved_top_audit", {})
             for key, value in trota_stats.items():
                 audit[key] = int(audit.get(key, 0)) + int(value)
         if gcr_only:
@@ -2031,20 +2151,71 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                     if only_regions:
                         summary["events_processed"] = int(summary.get("events_processed", 0)) + original_n
                         continue
-                    if not gcr_only and not lowdm_only:
-                        sr_mask = as_bool(sub_group["feature_SR"], inputs["n"])
-                        selected_recoil54_indices = selected_an17_recoil54_indices(sub_group, inputs["n"], sr_mask)
-                        selected_recoil60_indices = selected_an17_recoil60_indices(sub_group, inputs["n"], sr_mask)
+                    if (
+                        not gcr_only
+                        and not lowdm_only
+                        and search_bin_configuration is not None
+                    ):
+                        scheme_name = str(search_bin_configuration["scheme_name"])
+                        highdm_indices, highdm_population, highdm_omitted = (
+                            configured_highdm_search_indices(
+                                sub_group,
+                                inputs["n"],
+                                search_bin_configuration,
+                            )
+                        )
+                        selected_entries = int(np.count_nonzero(highdm_population))
+                        assigned_entries = int(np.count_nonzero(highdm_indices >= 0))
+                        omitted_entries = int(np.count_nonzero(highdm_omitted))
+                        unassigned_entries = (
+                            selected_entries - assigned_entries - omitted_entries
+                        )
+                        if unassigned_entries != 0:
+                            raise RuntimeError(
+                                f"{scheme_name}: selected={selected_entries}, "
+                                f"assigned={assigned_entries}, omitted={omitted_entries}"
+                            )
+                        accounting = (
+                            summary
+                            .setdefault("highdm_search_bin_entry_accounting", {})
+                            .setdefault(label, {
+                                "selected_entries": 0,
+                                "assigned_entries": 0,
+                                "omitted_entries": 0,
+                                "unassigned_entries": 0,
+                            })
+                        )
+                        accounting["selected_entries"] += selected_entries
+                        accounting["assigned_entries"] += assigned_entries
+                        accounting["omitted_entries"] += omitted_entries
+                        accounting["unassigned_entries"] += unassigned_entries
                         if is_data and not data_process_allowed(process, "SR"):
-                            note_data_exclusion(summary, SELECTED_RECOIL54_SCHEME, process, int(np.count_nonzero(selected_recoil54_indices >= 0)))
-                            note_data_exclusion(summary, EXTENDED_RECOIL60_SCHEME, process, int(np.count_nonzero(selected_recoil60_indices >= 0)))
+                            note_data_exclusion(
+                                summary,
+                                scheme_name,
+                                process,
+                                selected_entries,
+                            )
                         else:
+                            configured_bin_count = len(
+                                configured_exclusive_mapping(
+                                    search_bin_configuration
+                                )
+                            )
                             for vname, wraw in variations.items():
-                                weights = finite_array(wraw, inputs["n"], 0.0) * normv
-                                target = search_histograms.setdefault(SELECTED_RECOIL54_SCHEME, {}).setdefault(label, {}).setdefault(vname, empty_index_hist(len(selected_an17_recoil54_labels())))
-                                add_index_hist(target, selected_recoil54_indices, weights)
-                                target60 = search_histograms.setdefault(EXTENDED_RECOIL60_SCHEME, {}).setdefault(label, {}).setdefault(vname, empty_index_hist(len(selected_an17_recoil60_labels())))
-                                add_index_hist(target60, selected_recoil60_indices, weights)
+                                weights = (
+                                    finite_array(wraw, inputs["n"], 0.0) * normv
+                                )
+                                target = (
+                                    search_histograms
+                                    .setdefault(scheme_name, {})
+                                    .setdefault(label, {})
+                                    .setdefault(
+                                        vname,
+                                        empty_index_hist(configured_bin_count),
+                                    )
+                                )
+                                add_index_hist(target, highdm_indices, weights)
 
                     lowdm_regions = (
                         {"GCR": LOWDM_REGION_MAP["GCR"]}
@@ -2231,6 +2402,15 @@ def main() -> int:
         ),
     )
     parser.add_argument(
+        "--search-bin-config",
+        type=Path,
+        default=None,
+        help=(
+            "Main search-bin definition. Full histogram production defaults to "
+            "autonomous_allhad/configs/search_bins_<year>.json."
+        ),
+    )
+    parser.add_argument(
         "--gcr-photon-policy",
         choices=("nominal", "tight_eb"),
         default="nominal",
@@ -2271,6 +2451,39 @@ def main() -> int:
             + ", ".join(sorted(unavailable_required))
         )
     repo = Path(args.repo).resolve()
+    full_search_bin_build = not any((
+        args.gcr_only,
+        args.lowdm_only,
+        args.distribution_only,
+        bool(args.only_regions),
+        bool(args.only_variables),
+        args.only_lowdm_sr_nsv_inclusive,
+    ))
+    require_lowdm_nres_zero = bool(
+        args.require_lowdm_nres_zero or full_search_bin_build
+    )
+    if require_lowdm_nres_zero and args.dy_ptll_policy != "all":
+        parser.error("resolved-top categorization requires --dy-ptll-policy all")
+    if args.search_bin_config is not None and not full_search_bin_build:
+        parser.error(
+            "--search-bin-config is incompatible with a restricted histogram mode"
+        )
+    search_bin_configuration = None
+    search_bin_contract = None
+    if full_search_bin_build:
+        search_bin_path = (
+            args.search_bin_config.resolve()
+            if args.search_bin_config is not None
+            else repo
+            / "autonomous_allhad"
+            / "configs"
+            / f"search_bins_{args.campaign_year}.json"
+        )
+        if not search_bin_path.is_file():
+            parser.error(f"search-bin configuration does not exist: {search_bin_path}")
+        search_bin_configuration, search_bin_contract = (
+            load_search_bin_configuration(search_bin_path, args.campaign_year)
+        )
     norm = read_json(Path(args.normalization))
     histograms: dict[str, Any] = {}
     search_histograms: dict[str, Any] = {}
@@ -2296,7 +2509,8 @@ def main() -> int:
         "only_lowdm_sr_nsv_inclusive": bool(args.only_lowdm_sr_nsv_inclusive),
         "only_lowdm_nsv_repair": bool(args.only_lowdm_nsv_repair),
         "lowdm_only": bool(args.lowdm_only),
-        "require_lowdm_nres_zero": bool(args.require_lowdm_nres_zero),
+        "require_lowdm_nres_zero": require_lowdm_nres_zero,
+        "search_bins": search_bin_contract,
         "dy_ptll_policy": str(args.dy_ptll_policy),
         "gcr_only": bool(args.gcr_only),
         "gcr_photon_policy": str(args.gcr_photon_policy),
@@ -2355,7 +2569,8 @@ def main() -> int:
             only_lowdm_sr_nsv_inclusive=args.only_lowdm_sr_nsv_inclusive,
             only_lowdm_nsv_repair=args.only_lowdm_nsv_repair,
             lowdm_only=args.lowdm_only,
-            require_lowdm_nres_zero=args.require_lowdm_nres_zero,
+            require_lowdm_nres_zero=require_lowdm_nres_zero,
+            search_bin_configuration=search_bin_configuration,
             dy_ptll_policy=args.dy_ptll_policy,
             gcr_only=args.gcr_only,
             gcr_photon_policy=args.gcr_photon_policy,
@@ -2407,20 +2622,25 @@ def main() -> int:
             "note": "SR_Nt1 is the feature-side SR nTop>=1 branch. Other *_Nt1 regions are built as base region AND nboosted_top>=1; *_Nt0 regions are base region AND nboosted_top==0.",
         },
         "search_bin_schemes": {
-            SELECTED_RECOIL54_SCHEME: {
-                "bin_labels": selected_an17_recoil54_labels(),
-                "selection": "feature_SR, categories Nb>=1,Nt=0,NW=0 and Nb>=1,Nt=0,NW>=1, followed by selected AN17 bins 4,5,8,9,14,15,16, all split into six recoil/MET bins",
-                "selected_an17_bins_1based": SELECTED_AN17_RECOIL_BINS_1BASED,
-                "recoil_pt_bins": RECOIL_PT_BINS,
-            },
-            EXTENDED_RECOIL60_SCHEME: {
-                "bin_labels": selected_an17_recoil60_labels(),
-                "selection": "the adopted feature_SR categorization with Nb=2,Nt>=2,NW=0 inserted as bins 37--42, all classes split into six recoil/MET bins",
-                "base_scheme": SELECTED_RECOIL54_SCHEME,
-                "extra_category": EXTENDED_RECOIL60_CATEGORY_KEY,
-                "selected_an17_bins_1based": SELECTED_AN17_RECOIL_BINS_1BASED,
-                "recoil_pt_bins": RECOIL_PT_BINS,
-            },
+            **({
+                str(search_bin_configuration["scheme_name"]): {
+                    "bin_labels": configured_exclusive_labels(
+                        selected_an17_recoil60_labels(),
+                        search_bin_configuration,
+                    ),
+                    "selection": (
+                        "feature_SR && mTb>=configured threshold; adopted 55-bin "
+                        "baseline with Nres=0 plus configured resolved-top categories"
+                    ),
+                    "recoil_pt_bins": RECOIL_PT_BINS,
+                    "baseline_bin_count": 55,
+                    "category_layout": search_bin_configuration["layout"],
+                    "omitted_topologies": search_bin_configuration[
+                        "omitted_topologies"
+                    ],
+                    "configuration": search_bin_contract,
+                }
+            } if search_bin_configuration is not None else {}),
             **{
                 channel: {
                     "bin_labels": LOWDM_34BIN_LABELS,
@@ -2428,7 +2648,7 @@ def main() -> int:
                         "feature_lowdm_preselection && pass_lowdm_topology_veto && "
                         + (
                             "Nres(TROTA)=0 && "
-                            if args.require_lowdm_nres_zero
+                            if require_lowdm_nres_zero
                             else ""
                         )
                         + "pass_lowdm_isr && pass_lowdm_met_sqrt_ht && Nb>=1; "
@@ -2438,7 +2658,7 @@ def main() -> int:
                             f"feature_lowdm_{region} && Nb>=1"
                             + (
                                 " && Nres(TROTA)=0"
-                                if args.require_lowdm_nres_zero
+                                if require_lowdm_nres_zero
                                 else ""
                             )
                         )
@@ -2456,32 +2676,31 @@ def main() -> int:
         },
         "lowdm_region_policy": {
             "status": (
-                f"physics_proposal_trota_nres0_{args.campaign_year}_2026-08-20"
-                if args.require_lowdm_nres_zero
-                else "adopted_from_user_2026-07-24"
+                "adopted_resolved_top_veto"
+                if require_lowdm_nres_zero
+                else "resolved_top_veto_not_requested"
             ),
             "search_bins": (
                 "34 low-dM bins per region with explicit Nb>=1 and TROTA Nres=0 "
                 "after removing the two leading Nb=0 categories; Nsv, the ISR-subjet "
                 "b veto, and the mTb requirement are not applied"
-                if args.require_lowdm_nres_zero
+                if require_lowdm_nres_zero
                 else "34 low-dM bins per region with explicit Nb>=1 after removing the two leading Nb=0 categories; Nsv, the ISR-subjet b veto, and the mTb requirement are not applied"
             ),
             "regions": LOWDM_REGION_MAP,
             "note": (
                 "Every Low-dM CR and SR explicitly requires Nb>=1 and TROTA Nres=0. "
-                f"This is a {args.campaign_year} physics proposal pending comparison with the previous "
-                "boosted-only topology veto. Low-dM is Nsv-inclusive and does not require "
+                "Low-dM is Nsv-inclusive and does not require "
                 "the ISR-subjet b veto or mTb<175."
-                if args.require_lowdm_nres_zero
+                if require_lowdm_nres_zero
                 else "Every Low-dM CR and SR explicitly requires Nb>=1. Low-dM is Nsv-inclusive and does not require the ISR-subjet b veto or mTb<175. GCR and DY use photon/dilepton recoil directions and object-cleaned AK4/AK8 collections; DY also requires OS, on-Z, and pT(ll)>200."
             ),
             "resolved_top_veto": {
-                "applied": bool(args.require_lowdm_nres_zero),
-                "branch": DERIVED_NRES_BRANCH if args.require_lowdm_nres_zero else None,
-                "requirement": "Nres == 0" if args.require_lowdm_nres_zero else None,
-                "trota_schema": EXPECTED_TROTA_SCHEMA_BY_YEAR[args.campaign_year] if args.require_lowdm_nres_zero else None,
-                "trota_model_sha256": EXPECTED_TROTA_MODEL_SHA256 if args.require_lowdm_nres_zero else None,
+                "applied": require_lowdm_nres_zero,
+                "branch": DERIVED_NRES_BRANCH if require_lowdm_nres_zero else None,
+                "requirement": "Nres == 0" if require_lowdm_nres_zero else None,
+                "trota_schema": EXPECTED_TROTA_SCHEMA_BY_YEAR[args.campaign_year] if require_lowdm_nres_zero else None,
+                "trota_model_sha256": EXPECTED_TROTA_MODEL_SHA256 if require_lowdm_nres_zero else None,
                 "candidate_fiducial": "abs(eta)<2, 100<=mass<=250 GeV",
                 "overlap_policy": "exclusive resolved candidates after boosted-object AK4 veto",
             },

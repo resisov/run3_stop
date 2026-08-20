@@ -1,0 +1,24 @@
+{
+  "schema_version": "search_bin_scheme_v1",
+  "scheme_name": "highdm_search_bins",
+  "campaign_year": "2024",
+  "mtb_min": 175.0,
+  "baseline_category_sizes": [6, 6, 6, 5, 6, 5, 5, 6, 5, 5],
+  "layout": [
+    {"kind": "baseline", "index": 0},
+    {"kind": "topology", "name": "resolved1_only"},
+    {"kind": "topology", "name": "resolved2plus_only"},
+    {"kind": "baseline", "index": 1},
+    {"kind": "topology", "name": "w_resolved"},
+    {"kind": "topology", "name": "top_resolved"},
+    {"kind": "baseline", "index": 2},
+    {"kind": "baseline", "index": 3},
+    {"kind": "baseline", "index": 4},
+    {"kind": "baseline", "index": 5},
+    {"kind": "baseline", "index": 6},
+    {"kind": "baseline", "index": 7},
+    {"kind": "baseline", "index": 8},
+    {"kind": "baseline", "index": 9}
+  ],
+  "omitted_topologies": ["top_w_resolved"]
+}

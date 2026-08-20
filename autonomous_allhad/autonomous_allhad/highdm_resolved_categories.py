@@ -4,6 +4,8 @@ from dataclasses import dataclass
 import math
 from typing import Iterable, Sequence
 
+import numpy as np
+
 
 SUBJET_MATCH_DR = 0.4
 FATJET_FALLBACK_DR = 0.8
@@ -19,6 +21,68 @@ COARSE_NRES_TOPOLOGIES = (
     "w_resolved",
     "top_w_resolved",
 )
+
+
+def _combined_event_key(file_id: np.ndarray, entry: np.ndarray) -> np.ndarray:
+    file_values = np.asarray(file_id, dtype=np.uint64)
+    entry_values = np.asarray(entry, dtype=np.uint64)
+    if np.any(file_values >= (1 << 31)) or np.any(entry_values >= (1 << 32)):
+        raise RuntimeError("file_id/entry exceeds the validated 31/32-bit join key")
+    return (file_values << np.uint64(32)) | entry_values
+
+
+def map_candidates_to_events(
+    event_file_id: np.ndarray,
+    event_entry: np.ndarray,
+    candidate_file_id: np.ndarray,
+    candidate_entry: np.ndarray,
+) -> np.ndarray:
+    """Map sparse candidates to Events using the primary file/entry identity."""
+    event_keys = _combined_event_key(event_file_id, event_entry)
+    candidate_keys = _combined_event_key(candidate_file_id, candidate_entry)
+    if np.unique(event_keys).size != event_keys.size:
+        raise RuntimeError("(file_id, entry) is not unique in Events")
+    order = np.argsort(event_keys, kind="stable")
+    sorted_keys = event_keys[order]
+    positions = np.searchsorted(sorted_keys, candidate_keys)
+    if np.any(positions >= sorted_keys.size):
+        raise RuntimeError("TROTA candidate does not map to an Events entry")
+    mapped = order[positions]
+    if not np.array_equal(event_keys[mapped], candidate_keys):
+        raise RuntimeError("TROTA candidate identity differs from Events identity")
+    return np.asarray(mapped, dtype=np.int64)
+
+
+def map_candidates_to_events_rle(
+    event_run: np.ndarray,
+    event_lumi: np.ndarray,
+    event_number: np.ndarray,
+    candidate_run: np.ndarray,
+    candidate_lumi: np.ndarray,
+    candidate_number: np.ndarray,
+) -> np.ndarray:
+    """Fallback sparse-candidate join using an exact run/lumi/event tuple."""
+    event_keys = list(
+        zip(
+            np.asarray(event_run).tolist(),
+            np.asarray(event_lumi).tolist(),
+            np.asarray(event_number).tolist(),
+        )
+    )
+    lookup = {key: index for index, key in enumerate(event_keys)}
+    if len(lookup) != len(event_keys):
+        raise RuntimeError("(run, luminosityBlock, event) is not unique in Events")
+    candidate_keys = zip(
+        np.asarray(candidate_run).tolist(),
+        np.asarray(candidate_lumi).tolist(),
+        np.asarray(candidate_number).tolist(),
+    )
+    mapped: list[int] = []
+    for key in candidate_keys:
+        if key not in lookup:
+            raise RuntimeError("TROTA run/lumi/event identity does not map to Events")
+        mapped.append(lookup[key])
+    return np.asarray(mapped, dtype=np.int64)
 
 
 def delta_phi(phi1: float, phi2: float) -> float:

@@ -13,50 +13,27 @@ assert SPEC.loader is not None
 SPEC.loader.exec_module(HISTS)
 
 
-def test_selected_recoil54_labels_match_adopted_order():
-    labels = HISTS.selected_an17_recoil54_labels()
-    assert len(labels) == 54
-    assert labels[:2] == [
-        "NT0_Nb1plus_T0_W0_recoil_250-300",
-        "NT0_Nb1plus_T0_W0_recoil_300-350",
-    ]
-    assert labels[6] == "NT0_Nb1plus_T0_W1plus_recoil_250-300"
-    assert labels[12] == "AN17_4_Nb1_T1plus_W0_recoil_250-300"
-    assert labels[-1] == "AN17_16_Nb3plus_T2_W0_recoil_800-1500"
-
-
-def test_selected_recoil54_indices_cover_nt0_and_selected_an17_blocks():
+def test_configured_highdm_search_bins_assign_and_omit_exclusively():
+    configuration = json.loads(
+        (Path(__file__).parents[1] / "configs" / "search_bins_2024.json")
+        .read_text()
+    )
     chunk = {
-        "met": np.asarray([275.0, 325.0, 375.0, 450.0, 900.0, 275.0]),
-        "nb_medium": np.asarray([1, 3, 1, 2, 3, 1]),
-        "nboosted_top": np.asarray([0, 0, 1, 1, 2, 0]),
-        "nboosted_w": np.asarray([0, 2, 0, 1, 0, 0]),
-        "nboosted_total": np.asarray([0, 2, 1, 2, 2, 0]),
+        "feature_SR": np.ones(6, dtype=bool),
+        "lowdm_mtb": np.asarray([200.0, 200.0, 200.0, 200.0, 200.0, 100.0]),
+        "met": np.full(6, 275.0),
+        "nb_medium": np.ones(6, dtype=int),
+        "nboosted_top": np.asarray([0, 0, 0, 1, 1, 0]),
+        "nboosted_w": np.asarray([0, 0, 0, 0, 1, 0]),
+        "nboosted_total": np.asarray([0, 0, 0, 1, 2, 0]),
+        HISTS.DERIVED_NRES_BRANCH: np.asarray([0, 1, 2, 1, 1, 1]),
     }
-    sr_mask = np.asarray([True, True, True, True, True, False])
-    indices = HISTS.selected_an17_recoil54_indices(chunk, len(sr_mask), sr_mask)
-    assert indices.tolist() == [0, 7, 14, 33, 53, -1]
-
-
-def test_selected_recoil60_adds_exact_nb2_nt2plus_w0_block():
-    labels = HISTS.selected_an17_recoil60_labels()
-    assert len(labels) == 60
-    assert labels[:36] == HISTS.selected_an17_recoil54_labels()[:36]
-    assert labels[36] == "Nb2_Nt2plus_W0_recoil_250-300"
-    assert labels[41] == "Nb2_Nt2plus_W0_recoil_800-1500"
-    assert labels[42:] == HISTS.selected_an17_recoil54_labels()[36:]
-
-    chunk = {
-        "met": np.asarray([275.0, 325.0, 375.0, 450.0, 550.0, 900.0, 275.0, 275.0]),
-        "nb_medium": np.asarray([2, 2, 2, 2, 2, 2, 2, 3]),
-        "nboosted_top": np.asarray([2, 3, 2, 4, 2, 3, 1, 1]),
-        "nboosted_w": np.asarray([0, 0, 0, 0, 0, 0, 0, 0]),
-        "nboosted_total": np.asarray([2, 3, 2, 4, 2, 3, 1, 1]),
-    }
-    sr_mask = np.asarray([True, True, True, True, True, True, True, True])
-    assert HISTS.selected_an17_recoil60_indices(
-        chunk, len(sr_mask), sr_mask
-    ).tolist() == [36, 37, 38, 39, 40, 41, 24, 42]
+    indices, population, omitted = HISTS.configured_highdm_search_indices(
+        chunk, 6, configuration
+    )
+    assert indices.tolist() == [0, 6, 12, 30, -1, -1]
+    assert population.tolist() == [True, True, True, True, True, False]
+    assert omitted.tolist() == [False, False, False, False, True, False]
 
 
 def test_nominal_only_keeps_nominal_after_full_bundle_is_available():

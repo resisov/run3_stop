@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import os
 import subprocess
 import sys
@@ -41,7 +42,7 @@ EXECUTION_CONTRACT_COMMON_PATHS = (
     "autonomous_allhad/autonomous_allhad/real_subset_worker.py",
     "autonomous_allhad/autonomous_allhad/dy_ptll_policy.py",
     "autonomous_allhad/autonomous_allhad/highdm_resolved_categories.py",
-    "autonomous_allhad/workflow/study_trota_highdm_categories_2024.py",
+    "autonomous_allhad/autonomous_allhad/search_bin_categorization.py",
     "analysis/utils/corrections.py",
     "analysis/data/corrections.coffea",
 )
@@ -83,6 +84,7 @@ BTAG_EFFICIENCY_RELATIVE_PATHS = {
     "2024": "analysis/hists/btageff2024.merged",
     "2025": "analysis/hists/btageff2025.merged",
 }
+BTAG_EFFICIENCY_RELATIVE_PATH = BTAG_EFFICIENCY_RELATIVE_PATHS["2024"]
 
 
 def execution_code_sha256(repo: Path, campaign_year: str) -> dict[str, str]:
@@ -99,7 +101,7 @@ def btag_efficiency_contract(
     repo: Path,
     expected_sha256: str,
     required: bool,
-    campaign_year: str,
+    campaign_year: str = "2024",
 ) -> dict[str, Any]:
     relative_path = BTAG_EFFICIENCY_RELATIVE_PATHS[campaign_year]
     path = repo / relative_path
@@ -125,6 +127,101 @@ def btag_efficiency_contract(
         "expected_sha256": expected_sha256,
         "matches_expected": matches,
     }
+
+
+def load_search_bin_contract(
+    path: Path,
+    campaign_year: str,
+    repo: Path,
+) -> dict[str, Any]:
+    package_root = str(repo / "autonomous_allhad")
+    if package_root not in sys.path:
+        sys.path.insert(0, package_root)
+    from autonomous_allhad.search_bin_categorization import (  # noqa: PLC0415
+        configured_exclusive_mapping,
+    )
+
+    configuration = read_json(path)
+    if configuration.get("schema_version") != "search_bin_scheme_v1":
+        raise RuntimeError(f"unsupported search-bin configuration: {path}")
+    if str(configuration.get("campaign_year")) != str(campaign_year):
+        raise RuntimeError(
+            f"search-bin configuration year mismatch: {path}"
+        )
+    scheme_name = str(configuration.get("scheme_name") or "").strip()
+    mtb_min = float(configuration.get("mtb_min"))
+    if not scheme_name or not math.isfinite(mtb_min):
+        raise RuntimeError(f"invalid search-bin configuration: {path}")
+    return {
+        "schema_version": str(configuration["schema_version"]),
+        "scheme_name": scheme_name,
+        "campaign_year": str(campaign_year),
+        "mtb_min": mtb_min,
+        "bin_count": len(configured_exclusive_mapping(configuration)),
+        "omitted_topologies": list(
+            configuration.get("omitted_topologies") or []
+        ),
+        "sha256": file_sha256(path),
+    }
+
+
+def validate_search_bin_payload(
+    payload: dict[str, Any],
+    contract: dict[str, Any] | None,
+    *,
+    require_histogram: bool,
+) -> None:
+    if contract is None:
+        return
+    scheme = str(contract["scheme_name"])
+    bin_count = int(contract["bin_count"])
+    metadata = (payload.get("search_bin_schemes") or {}).get(scheme)
+    if not isinstance(metadata, dict):
+        raise RuntimeError(f"missing configured search-bin metadata for {scheme}")
+    if len(metadata.get("bin_labels") or []) != bin_count:
+        raise RuntimeError(f"{scheme}: configured bin-label count mismatch")
+    if metadata.get("configuration") != contract:
+        raise RuntimeError(f"{scheme}: configuration provenance mismatch")
+
+    scheme_histograms = (payload.get("search_bin_histograms") or {}).get(scheme)
+    if require_histogram and not scheme_histograms:
+        raise RuntimeError(f"{scheme}: merged histogram is missing")
+
+    def check_tree(node: Any, path: str) -> None:
+        if hist_leaf(node):
+            for key in ("sumw", "sumw2", "entries"):
+                values = node.get(key) or []
+                if len(values) != bin_count:
+                    raise RuntimeError(
+                        f"{scheme}:{path}:{key} has {len(values)} bins, "
+                        f"expected {bin_count}"
+                    )
+                if key != "entries" and any(
+                    not math.isfinite(float(value)) for value in values
+                ):
+                    raise RuntimeError(
+                        f"{scheme}:{path}:{key} contains non-finite values"
+                    )
+            return
+        if isinstance(node, dict):
+            for key, value in node.items():
+                check_tree(value, f"{path}/{key}")
+
+    if scheme_histograms:
+        check_tree(scheme_histograms, scheme)
+    for label, record in (
+        (payload.get("summary") or {})
+        .get("highdm_search_bin_entry_accounting", {})
+        .items()
+    ):
+        selected = int(record.get("selected_entries", 0))
+        assigned = int(record.get("assigned_entries", 0))
+        omitted = int(record.get("omitted_entries", 0))
+        unassigned = int(record.get("unassigned_entries", 0))
+        if unassigned != 0 or selected != assigned + omitted:
+            raise RuntimeError(
+                f"{scheme}:{label}: invalid entry conservation"
+            )
 
 
 def hist_leaf(obj: Any) -> bool:
@@ -355,6 +452,13 @@ def merge_payloads(
                     )
                     if code_sha not in variants:
                         variants.append(code_sha)
+        validate_search_bin_payload(
+            payload,
+            (expected_build_options or chunk_build_options or {}).get(
+                "search_bins"
+            ),
+            require_histogram=False,
+        )
         chunk_status = str(payload.get("status") or "missing")
         status_counts = summary.setdefault("chunk_statuses", {})
         status_counts[chunk_status] = int(status_counts.get(chunk_status, 0)) + 1
@@ -389,7 +493,8 @@ def merge_payloads(
             "histogram_range_exclusions",
             "histogram_folded_flow",
             "lowdm_search_bin_entry_accounting",
-            "trota_lowdm_nres_audit",
+            "highdm_search_bin_entry_accounting",
+            "trota_resolved_top_audit",
             "scale_factor_status_audit",
             "gcr_prefilter",
             "gcr_photon_selection_audit",
@@ -419,6 +524,13 @@ def merge_payloads(
         if all_chunks_clean
         and not summary_has_strict_warnings(summary, allow_zero_entry_roots)
         else "complete_with_warnings"
+    )
+    validate_search_bin_payload(
+        merged,
+        (expected_build_options or summary.get("build_options") or {}).get(
+            "search_bins"
+        ),
+        require_histogram=True,
     )
     write_json(output, merged)
     return merged
@@ -576,6 +688,7 @@ def main() -> int:
     parser.add_argument("--only-lowdm-nsv-repair", action="store_true")
     parser.add_argument("--lowdm-only", action="store_true")
     parser.add_argument("--require-lowdm-nres-zero", action="store_true")
+    parser.add_argument("--search-bin-config", type=Path)
     parser.add_argument("--gcr-only", action="store_true")
     parser.add_argument(
         "--gcr-photon-policy",
@@ -633,6 +746,41 @@ def main() -> int:
         )
 
     repo = Path(args.repo).resolve()
+    full_search_bin_build = not any((
+        args.gcr_only,
+        args.lowdm_only,
+        args.distribution_only,
+        bool(args.only_regions),
+        bool(args.only_variables),
+        args.only_lowdm_sr_nsv_inclusive,
+    ))
+    require_lowdm_nres_zero = bool(
+        args.require_lowdm_nres_zero or full_search_bin_build
+    )
+    if require_lowdm_nres_zero and args.dy_ptll_policy != "all":
+        parser.error("resolved-top categorization requires --dy-ptll-policy all")
+    if args.search_bin_config is not None and not full_search_bin_build:
+        parser.error(
+            "--search-bin-config is incompatible with a restricted histogram mode"
+        )
+    search_bin_path = None
+    search_bin_contract = None
+    if full_search_bin_build:
+        search_bin_path = (
+            args.search_bin_config.resolve()
+            if args.search_bin_config is not None
+            else repo
+            / "autonomous_allhad"
+            / "configs"
+            / f"search_bins_{args.campaign_year}.json"
+        )
+        if not search_bin_path.is_file():
+            parser.error(f"search-bin configuration does not exist: {search_bin_path}")
+        search_bin_contract = load_search_bin_contract(
+            search_bin_path,
+            args.campaign_year,
+            repo,
+        )
     input_list = Path(args.input_list).resolve()
     normalization = Path(args.normalization).resolve()
     output_path = Path(args.output).resolve()
@@ -682,7 +830,8 @@ def main() -> int:
         "only_lowdm_sr_nsv_inclusive": bool(args.only_lowdm_sr_nsv_inclusive),
         "only_lowdm_nsv_repair": bool(args.only_lowdm_nsv_repair),
         "lowdm_only": bool(args.lowdm_only),
-        "require_lowdm_nres_zero": bool(args.require_lowdm_nres_zero),
+        "require_lowdm_nres_zero": require_lowdm_nres_zero,
+        "search_bins": search_bin_contract,
         "dy_ptll_policy": str(args.dy_ptll_policy),
         "gcr_only": bool(args.gcr_only),
         "gcr_photon_policy": str(args.gcr_photon_policy),
@@ -735,8 +884,7 @@ def main() -> int:
         )
         if args.require_weight_components:
             cmd.extend(["--require-weight-components", *args.require_weight_components])
-        if args.analysis_sf_components is not None:
-            cmd.extend(["--analysis-sf-components", *args.analysis_sf_components])
+        cmd.extend(["--analysis-sf-components", *analysis_sf_components])
         if args.require_branches:
             cmd.append("--require-branches")
         if args.require_normalization:
@@ -753,8 +901,10 @@ def main() -> int:
             cmd.append("--only-lowdm-nsv-repair")
         if args.lowdm_only:
             cmd.append("--lowdm-only")
-        if args.require_lowdm_nres_zero:
+        if require_lowdm_nres_zero:
             cmd.append("--require-lowdm-nres-zero")
+        if search_bin_path is not None:
+            cmd.extend(["--search-bin-config", str(search_bin_path)])
         if args.gcr_only:
             cmd.append("--gcr-only")
         cmd.extend(["--gcr-photon-policy", args.gcr_photon_policy])
@@ -842,14 +992,18 @@ def main() -> int:
             flush=True,
         )
         return subprocess.run(merge_command, cwd=str(repo), env=env).returncode
-    merged = merge_payloads(
+    merge_arguments = (
         sorted(finished),
         output_path,
         normalization,
         args.dy_ptll_policy,
         expected_build_options,
         args.allow_hist_builder_repair,
-        args.allow_zero_entry_roots,
+    )
+    merged = (
+        merge_payloads(*merge_arguments, True)
+        if args.allow_zero_entry_roots
+        else merge_payloads(*merge_arguments)
     )
     if args.strict_complete and merged["status"] != "complete":
         print(

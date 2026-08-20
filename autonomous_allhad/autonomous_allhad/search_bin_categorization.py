@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Sequence
+from typing import Any, Sequence
 
 import numpy as np
 
@@ -77,7 +77,7 @@ def topology_positions(nt: np.ndarray, nw: np.ndarray, nres: np.ndarray) -> np.n
     return output
 
 
-def exclusive85_indices(
+def exclusive_category_source_indices(
     baseline55: np.ndarray,
     recoil_index: np.ndarray,
     nt: np.ndarray,
@@ -110,31 +110,7 @@ def exclusive85_indices(
     return output
 
 
-def extended85_to_tailmerged80() -> tuple[tuple[int, ...], ...]:
-    """Keep the 55-bin baseline and merge the last two recoil bins per new block."""
-    mapping: list[tuple[int, ...]] = [(index,) for index in range(55)]
-    for topology in range(len(COARSE_NRES_TOPOLOGIES)):
-        start = 55 + topology * len(RECOIL_LABELS)
-        mapping.extend((start + recoil,) for recoil in range(4))
-        mapping.append((start + 4, start + 5))
-    flat = sorted(sum((list(group) for group in mapping), []))
-    if len(mapping) != 80 or flat != list(range(85)):
-        raise AssertionError("invalid 85-to-80 tail-merge map")
-    return tuple(mapping)
-
-
-def map85_indices_to_tailmerged80(indices: Sequence[int] | np.ndarray) -> np.ndarray:
-    source = np.asarray(indices, dtype=int)
-    lookup = np.full(85, -1, dtype=np.int16)
-    for target, sources in enumerate(extended85_to_tailmerged80()):
-        lookup[list(sources)] = target
-    output = np.full(source.shape, -1, dtype=np.int16)
-    valid = (source >= 0) & (source < 85)
-    output[valid] = lookup[source[valid]]
-    return output
-
-
-def exclusive85_labels(source60_labels: Sequence[str]) -> list[str]:
+def exclusive_category_source_labels(source60_labels: Sequence[str]) -> list[str]:
     labels = [f"{label}__Nres0" for label in adopted55_labels(source60_labels)]
     labels.extend(
         f"{topology}__recoil_{recoil}"
@@ -146,13 +122,103 @@ def exclusive85_labels(source60_labels: Sequence[str]) -> list[str]:
     return labels
 
 
-def tailmerged80_labels(source60_labels: Sequence[str]) -> list[str]:
-    source = exclusive85_labels(source60_labels)
-    result = []
-    for group in extended85_to_tailmerged80():
-        if len(group) == 1:
-            result.append(source[group[0]])
+def configured_exclusive_mapping(
+    configuration: dict[str, Any],
+) -> tuple[int, ...]:
+    """Return the exclusive category-source order requested by a scheme config.
+
+    The configuration controls the visible block order and which Nres>0
+    topology blocks are retained.  The resulting bin count is derived from
+    that layout; callers must not assume a fixed 79-bin result.
+    """
+    category_sizes = tuple(
+        int(value) for value in configuration.get("baseline_category_sizes", ())
+    )
+    if not category_sizes or any(value <= 0 for value in category_sizes):
+        raise ValueError("baseline_category_sizes must contain positive integers")
+    if sum(category_sizes) != 55:
+        raise ValueError(
+            "baseline_category_sizes do not cover the adopted 55-bin baseline"
+        )
+
+    baseline_blocks: list[tuple[int, ...]] = []
+    offset = 0
+    for size in category_sizes:
+        baseline_blocks.append(tuple(range(offset, offset + size)))
+        offset += size
+    topology_blocks = {
+        topology: tuple(
+            range(
+                55 + position * len(RECOIL_LABELS),
+                55 + (position + 1) * len(RECOIL_LABELS),
+            )
+        )
+        for position, topology in enumerate(COARSE_NRES_TOPOLOGIES)
+    }
+
+    mapping: list[int] = []
+    seen_baseline: set[int] = set()
+    seen_topologies: set[str] = set()
+    for block in configuration.get("layout", ()):
+        if not isinstance(block, dict):
+            raise ValueError("every configured layout block must be an object")
+        kind = str(block.get("kind") or "")
+        if kind == "baseline":
+            index = int(block.get("index", -1))
+            if index < 0 or index >= len(baseline_blocks):
+                raise ValueError(f"invalid baseline block index {index}")
+            if index in seen_baseline:
+                raise ValueError(f"duplicate baseline block index {index}")
+            seen_baseline.add(index)
+            mapping.extend(baseline_blocks[index])
+        elif kind == "topology":
+            topology = str(block.get("name") or "")
+            if topology not in topology_blocks:
+                raise ValueError(f"unknown Nres topology {topology!r}")
+            if topology in seen_topologies:
+                raise ValueError(f"duplicate Nres topology {topology!r}")
+            seen_topologies.add(topology)
+            mapping.extend(topology_blocks[topology])
         else:
-            topology = source[group[0]].split("__recoil_", 1)[0]
-            result.append(f"{topology}__recoil_500to1500")
-    return result
+            raise ValueError(f"unknown configured layout block kind {kind!r}")
+
+    expected_baseline = set(range(len(baseline_blocks)))
+    if seen_baseline != expected_baseline:
+        missing = sorted(expected_baseline - seen_baseline)
+        raise ValueError(f"configured layout omits baseline blocks {missing}")
+    omitted = set(str(value) for value in configuration.get("omitted_topologies", ()))
+    if seen_topologies & omitted:
+        raise ValueError("a topology cannot be both retained and omitted")
+    if seen_topologies | omitted != set(COARSE_NRES_TOPOLOGIES):
+        missing = sorted(set(COARSE_NRES_TOPOLOGIES) - seen_topologies - omitted)
+        raise ValueError(
+            "every Nres topology must be retained or explicitly omitted; "
+            f"unaccounted={missing}"
+        )
+    if len(mapping) != len(set(mapping)):
+        raise AssertionError("configured exclusive layout reuses a source bin")
+    return tuple(mapping)
+
+
+def map_category_sources_to_configured(
+    indices: Sequence[int] | np.ndarray,
+    configuration: dict[str, Any],
+) -> np.ndarray:
+    """Map exclusive category sources into the configured retained-bin ordering."""
+    source = np.asarray(indices, dtype=int)
+    mapping = configured_exclusive_mapping(configuration)
+    lookup = np.full(85, -1, dtype=np.int16)
+    lookup[list(mapping)] = np.arange(len(mapping), dtype=np.int16)
+    output = np.full(source.shape, -1, dtype=np.int16)
+    valid = (source >= 0) & (source < 85)
+    output[valid] = lookup[source[valid]]
+    return output
+
+
+def configured_exclusive_labels(
+    source60_labels: Sequence[str],
+    configuration: dict[str, Any],
+) -> list[str]:
+    """Return labels in the exact order defined by the scheme config."""
+    source_labels = exclusive_category_source_labels(source60_labels)
+    return [source_labels[index] for index in configured_exclusive_mapping(configuration)]
