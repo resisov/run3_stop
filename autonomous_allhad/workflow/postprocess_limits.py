@@ -122,12 +122,28 @@ def parse_limit_file(path: Path) -> dict[str, float] | None:
         0.84: "expected_p1",
         0.975: "expected_p2",
     }
+    if len(rows) != len(labels):
+        return None
     output = {}
-    for quantile, value in rows:
-        best = min(labels, key=lambda candidate: abs(candidate - quantile))
-        if abs(best - quantile) < 0.02:
-            output[labels[best]] = value
-    return output or None
+    for expected_quantile, label in labels.items():
+        matches = [
+            value
+            for quantile, value in rows
+            if math.isclose(
+                quantile,
+                expected_quantile,
+                rel_tol=0.0,
+                abs_tol=1.0e-5,
+            )
+        ]
+        if (
+            len(matches) != 1
+            or not math.isfinite(matches[0])
+            or matches[0] < 0.0
+        ):
+            return None
+        output[label] = matches[0]
+    return output
 
 
 def collect_limits(
