@@ -1,88 +1,63 @@
 {
-  "cards": 603,
-  "default_regime": "highdm",
-  "default_year": "2025",
-  "dy_rz_policy": {
-    "2024": "applied from the existing adopted manifest",
-    "2025": "not applied; awaiting a dedicated 2025 measurement"
+  "impact": {
+    "asimov_expect_signal": 1,
+    "benchmark": "mStop1200_mLSP500",
+    "json": "impacts/impacts_mStop1200_mLSP500.json",
+    "pdf": "impacts/impacts_mStop1200_mLSP500.pdf",
+    "png": "impacts/impacts_mStop1200_mLSP500.png",
+    "status": "complete"
   },
-  "highdm_plot_count_per_year": {
-    "2024": 190,
-    "2025": 187
-  },
-  "highdm_search_bins": {
-    "2024": 55,
-    "2024_nres": {
-      "baseline_inclusive": 55,
-      "exclusive_full": 85,
-      "exclusive_tailmerged": 80
+  "page": "/tmp/web2425/index.html",
+  "plot_count": 321,
+  "results": [
+    {
+      "json": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/results/2024/T2tt/expected_limits.json",
+      "kind": "Limit",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/results/2024/T2tt/expected_limit_t2tt_2024_highdm79_lowdm34.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/results/2024/T2tt/expected_limit_t2tt_2024_highdm79_lowdm34.png",
+      "published": {
+        "json": "results/2024/expected-limit-t2tt/expected_limits.json",
+        "pdf": "results/2024/expected-limit-t2tt/expected_limit_t2tt_2024_highdm79_lowdm34.pdf",
+        "png": "results/2024/expected-limit-t2tt/expected_limit_t2tt_2024_highdm79_lowdm34.png"
+      },
+      "slug": "expected-limit-t2tt",
+      "title": "2024 expected limit \u00b7 T2tt \u00b7 High-dM 79 + Low-dM 34",
+      "topology": "T2tt",
+      "year": "2024"
     },
-    "2025": 55,
-    "tail_preserve_categories": [
-      1,
-      2,
-      3,
-      5,
-      8
-    ]
-  },
-  "histogram_sha256": {
-    "2024": "2ad64b5236a23c03fbe0c21ec7be7e1a51cb035bf9868e73ef959e7510c178df",
-    "2024_nres": "f218ae68dab90f0c94ee4998ca43f64a182534ca2f877fb15aae86d5e34d195a",
-    "2025": "5581811be43bf80d53c73e393d098829a4105851dbc7e65ec4190007fbde4404"
-  },
-  "kinds": {
-    "CR": 304,
-    "Overview": 2,
-    "SR": 237,
-    "VR": 60
-  },
-  "lowdm_plot_count_per_year": {
-    "2024": 113,
-    "2025": 113
-  },
-  "missing_references": [],
-  "nres_study_2024": {
-    "chunks": 596,
-    "data_policy": "signal-region data blinded",
-    "legacy_61_bin_card_replaced": true,
-    "navigation": "Nres options always visible; selection switches to 2024 High-dM SR",
-    "physics_status": "exploratory category proposal; not adopted for datacards",
-    "plot_summary": "trota_highdm_exclusive_plot_summary_2024.json",
-    "schemes": {
-      "baseline_inclusive": 55,
-      "exclusive_full": 85,
-      "exclusive_tailmerged": 80
+    {
+      "json": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/results/2024/T2bW/expected_limits.json",
+      "kind": "Limit",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/results/2024/T2bW/expected_limit_t2bw_2024_highdm79_lowdm34.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/results/2024/T2bW/expected_limit_t2bw_2024_highdm79_lowdm34.png",
+      "published": {
+        "json": "results/2024/expected-limit-t2bw/expected_limits.json",
+        "pdf": "results/2024/expected-limit-t2bw/expected_limit_t2bw_2024_highdm79_lowdm34.pdf",
+        "png": "results/2024/expected-limit-t2bw/expected_limit_t2bw_2024_highdm79_lowdm34.png"
+      },
+      "slug": "expected-limit-t2bw",
+      "title": "2024 expected limit \u00b7 T2bW \u00b7 High-dM 79 + Low-dM 34",
+      "topology": "T2bW",
+      "year": "2024"
     },
-    "source_sha256": "f218ae68dab90f0c94ee4998ca43f64a182534ca2f877fb15aae86d5e34d195a",
-    "status": "complete",
-    "unique_input_roots": 5954
-  },
-  "referenced_files": 1206,
-  "regimes": {
-    "highdm": 377,
-    "lowdm": 226
-  },
-  "sr_categories": {
-    "SR_Nb1_T1plus_W0": "SR \u00b7 Nb1 \u00b7 T1+ \u00b7 W0",
-    "SR_Nb1_T1plus_W1plus": "SR \u00b7 Nb1 \u00b7 T1+ \u00b7 W1+",
-    "SR_Nb1plus_T0_W0": "SR \u00b7 Nb1+ \u00b7 T0 \u00b7 W0",
-    "SR_Nb1plus_T0_W1plus": "SR \u00b7 Nb1+ \u00b7 T0 \u00b7 W1+",
-    "SR_Nb2_Nt2plus_W0": "SR \u00b7 Nb2 \u00b7 Nt2+ \u00b7 W0",
-    "SR_Nb2_T1_W0": "SR \u00b7 Nb2 \u00b7 T1 \u00b7 W0",
-    "SR_Nb2_T1_W1": "SR \u00b7 Nb2 \u00b7 T1 \u00b7 W1",
-    "SR_Nb3plus_T1_W0": "SR \u00b7 Nb3+ \u00b7 T1 \u00b7 W0",
-    "SR_Nb3plus_T1_W1": "SR \u00b7 Nb3+ \u00b7 T1 \u00b7 W1",
-    "SR_Nb3plus_T2_W0": "SR \u00b7 Nb3+ \u00b7 T2 \u00b7 W0",
-    "highdm_sr_55": "High-dM SR (55 bins)",
-    "highdm_sr_55_nres_baseline": "High-dM SR (55 bins, TROTA baseline)",
-    "highdm_sr_80_nres": "High-dM SR (80 bins, TROTA Nres)",
-    "highdm_sr_85_nres": "High-dM SR (85 bins, TROTA Nres)",
-    "lowdm_sr_all": "Low-dM SR (all categories)"
-  },
+    {
+      "json": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/results/2024/T2tb/expected_limits.json",
+      "kind": "Limit",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/results/2024/T2tb/expected_limit_t2tb_2024_highdm79_lowdm34.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/results/2024/T2tb/expected_limit_t2tb_2024_highdm79_lowdm34.png",
+      "published": {
+        "json": "results/2024/expected-limit-t2tb/expected_limits.json",
+        "pdf": "results/2024/expected-limit-t2tb/expected_limit_t2tb_2024_highdm79_lowdm34.pdf",
+        "png": "results/2024/expected-limit-t2tb/expected_limit_t2tb_2024_highdm79_lowdm34.png"
+      },
+      "slug": "expected-limit-t2tb",
+      "title": "2024 expected limit \u00b7 T2tb \u00b7 High-dM 79 + Low-dM 34",
+      "topology": "T2tb",
+      "year": "2024"
+    }
+  ],
   "status": "complete",
-  "years": {
-    "2024": 303,
-    "2025": 300
-  }
+  "years": [
+    "2024"
+  ]
 }
