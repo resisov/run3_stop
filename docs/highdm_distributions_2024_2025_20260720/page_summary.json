@@ -1,11 +1,55 @@
 {
-  "impact": null,
-  "page": "/tmp/web2425/index.html",
-  "plot_count": 634,
-  "results": [],
+  "impact": {
+    "json": "impacts/impacts_NPS26012_2024_2025_mStop1200_mLSP500.json",
+    "mass_point": {
+      "mLSP": 500,
+      "mStop": 1200
+    },
+    "model": "T2tt",
+    "parameter_count": 1128,
+    "pdf": "impacts/impacts_NPS26012_2024_2025_mStop1200_mLSP500.pdf",
+    "png": "impacts/impacts_NPS26012_2024_2025_mStop1200_mLSP500.png",
+    "status": "complete"
+  },
+  "luminosity_fb": 220.66,
+  "page": "../index.html",
+  "plot_count": 636,
+  "results": [
+    {
+      "json": "results/2024_2025/expected-limit-t2tt/expected_limits.json",
+      "missing_point_count": 0,
+      "model": "T2tt",
+      "pdf": "results/2024_2025/expected-limit-t2tt/expected_limit_t2tt_2024_2025_highdm79_lowdm34.pdf",
+      "png": "results/2024_2025/expected-limit-t2tt/expected_limit_t2tt_2024_2025_highdm79_lowdm34.png",
+      "point_count": 205,
+      "status": "complete"
+    },
+    {
+      "json": "results/2024_2025/expected-limit-t2bw/expected_limits.json",
+      "missing_point_count": 0,
+      "model": "T2bW",
+      "pdf": "results/2024_2025/expected-limit-t2bw/expected_limit_t2bw_2024_2025_highdm79_lowdm34.pdf",
+      "png": "results/2024_2025/expected-limit-t2bw/expected_limit_t2bw_2024_2025_highdm79_lowdm34.png",
+      "point_count": 354,
+      "status": "complete"
+    },
+    {
+      "json": "results/2024_2025/expected-limit-t2tb/expected_limits.json",
+      "missing_point_count": 0,
+      "model": "T2tb",
+      "pdf": "results/2024_2025/expected-limit-t2tb/expected_limit_t2tb_2024_2025_highdm79_lowdm34.pdf",
+      "png": "results/2024_2025/expected-limit-t2tb/expected_limit_t2tb_2024_2025_highdm79_lowdm34.png",
+      "point_count": 365,
+      "status": "complete"
+    }
+  ],
   "status": "complete",
   "years": [
     "2024",
     "2025"
-  ]
+  ],
+  "zinv_model": {
+    "normalization": "measured_Rz",
+    "shape": "Sgamma_only"
+  }
 }

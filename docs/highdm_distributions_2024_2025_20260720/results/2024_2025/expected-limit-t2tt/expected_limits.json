@@ -1,0 +1,1853 @@
+{
+  "collected_point_count": 205,
+  "missing_points": [],
+  "points": {
+    "mStop1000_mLSP1": {
+      "expected": 0.07080078125,
+      "expected_m1": 0.04694700241088867,
+      "expected_m2": 0.032634735107421875,
+      "expected_p1": 0.10833536833524704,
+      "expected_p2": 0.15721918642520905,
+      "mLSP": 1,
+      "mStop": 1000
+    },
+    "mStop1000_mLSP100": {
+      "expected": 0.07177734375,
+      "expected_m1": 0.04729226231575012,
+      "expected_m2": 0.033084869384765625,
+      "expected_p1": 0.10982964932918549,
+      "expected_p2": 0.1593877226114273,
+      "mLSP": 100,
+      "mStop": 1000
+    },
+    "mStop1000_mLSP200": {
+      "expected": 0.0810546875,
+      "expected_m1": 0.05394411087036133,
+      "expected_m2": 0.037677764892578125,
+      "expected_p1": 0.12305605411529541,
+      "expected_p2": 0.17705205082893372,
+      "mLSP": 200,
+      "mStop": 1000
+    },
+    "mStop1000_mLSP300": {
+      "expected": 0.09326171875,
+      "expected_m1": 0.06252360343933105,
+      "expected_m2": 0.04408073425292969,
+      "expected_p1": 0.1404733657836914,
+      "expected_p2": 0.20141199231147766,
+      "mLSP": 300,
+      "mStop": 1000
+    },
+    "mStop1000_mLSP400": {
+      "expected": 0.126953125,
+      "expected_m1": 0.08655190467834473,
+      "expected_m2": 0.061492919921875,
+      "expected_p1": 0.1876779943704605,
+      "expected_p2": 0.26439058780670166,
+      "mLSP": 400,
+      "mStop": 1000
+    },
+    "mStop1000_mLSP500": {
+      "expected": 0.18603515625,
+      "expected_m1": 0.1295228898525238,
+      "expected_m2": 0.09447097778320312,
+      "expected_p1": 0.2698296308517456,
+      "expected_p2": 0.3750043511390686,
+      "mLSP": 500,
+      "mStop": 1000
+    },
+    "mStop1000_mLSP600": {
+      "expected": 0.3310546875,
+      "expected_m1": 0.23288396000862122,
+      "expected_m2": 0.17199325561523438,
+      "expected_p1": 0.47621047496795654,
+      "expected_p2": 0.658562421798706,
+      "mLSP": 600,
+      "mStop": 1000
+    },
+    "mStop1000_mLSP700": {
+      "expected": 0.8203125,
+      "expected_m1": 0.55755615234375,
+      "expected_m2": 0.41015625,
+      "expected_p1": 1.1963396072387695,
+      "expected_p2": 1.6425652503967285,
+      "mLSP": 700,
+      "mStop": 1000
+    },
+    "mStop1000_mLSP800": {
+      "expected": 2.65625,
+      "expected_m1": 1.849355697631836,
+      "expected_m2": 1.348876953125,
+      "expected_p1": 3.87386155128479,
+      "expected_p2": 5.433719635009766,
+      "mLSP": 800,
+      "mStop": 1000
+    },
+    "mStop1050_mLSP1": {
+      "expected": 0.0859375,
+      "expected_m1": 0.05662202835083008,
+      "expected_m2": 0.03961181640625,
+      "expected_p1": 0.13183927536010742,
+      "expected_p2": 0.19202914834022522,
+      "mLSP": 1,
+      "mStop": 1050
+    },
+    "mStop1050_mLSP100": {
+      "expected": 0.08935546875,
+      "expected_m1": 0.05865316092967987,
+      "expected_m2": 0.04083824157714844,
+      "expected_p1": 0.13672670722007751,
+      "expected_p2": 0.19947606325149536,
+      "mLSP": 100,
+      "mStop": 1050
+    },
+    "mStop1050_mLSP200": {
+      "expected": 0.09716796875,
+      "expected_m1": 0.06402149796485901,
+      "expected_m2": 0.044788360595703125,
+      "expected_p1": 0.1479063183069229,
+      "expected_p2": 0.2141963094472885,
+      "mLSP": 200,
+      "mStop": 1050
+    },
+    "mStop1050_mLSP300": {
+      "expected": 0.1142578125,
+      "expected_m1": 0.07584643363952637,
+      "expected_m2": 0.053558349609375,
+      "expected_p1": 0.1734645664691925,
+      "expected_p2": 0.2502589821815491,
+      "mLSP": 300,
+      "mStop": 1050
+    },
+    "mStop1050_mLSP400": {
+      "expected": 0.1416015625,
+      "expected_m1": 0.0952768325805664,
+      "expected_m2": 0.06748199462890625,
+      "expected_p1": 0.2121552973985672,
+      "expected_p2": 0.30260077118873596,
+      "mLSP": 400,
+      "mStop": 1050
+    },
+    "mStop1050_mLSP500": {
+      "expected": 0.2060546875,
+      "expected_m1": 0.1414739489555359,
+      "expected_m2": 0.10141754150390625,
+      "expected_p1": 0.3037944734096527,
+      "expected_p2": 0.4261007606983185,
+      "mLSP": 500,
+      "mStop": 1050
+    },
+    "mStop1050_mLSP600": {
+      "expected": 0.3173828125,
+      "expected_m1": 0.22173598408699036,
+      "expected_m2": 0.16241073608398438,
+      "expected_p1": 0.4603392779827118,
+      "expected_p2": 0.6397711634635925,
+      "mLSP": 600,
+      "mStop": 1050
+    },
+    "mStop1050_mLSP700": {
+      "expected": 0.681640625,
+      "expected_m1": 0.47694873809814453,
+      "expected_m2": 0.35413360595703125,
+      "expected_p1": 0.9941012263298035,
+      "expected_p2": 1.3691070079803467,
+      "mLSP": 700,
+      "mStop": 1050
+    },
+    "mStop1050_mLSP800": {
+      "expected": 2.1328125,
+      "expected_m1": 1.441314697265625,
+      "expected_m2": 1.06640625,
+      "expected_p1": 3.1189844608306885,
+      "expected_p2": 4.315701007843018,
+      "mLSP": 800,
+      "mStop": 1050
+    },
+    "mStop1050_mLSP900": {
+      "expected": 6.71875,
+      "expected_m1": 4.61298942565918,
+      "expected_m2": 3.306884765625,
+      "expected_p1": 9.852153778076172,
+      "expected_p2": 13.860445022583008,
+      "mLSP": 900,
+      "mStop": 1050
+    },
+    "mStop1100_mLSP1": {
+      "expected": 0.1044921875,
+      "expected_m1": 0.0680723488330841,
+      "expected_m2": 0.046939849853515625,
+      "expected_p1": 0.16238711774349213,
+      "expected_p2": 0.23885256052017212,
+      "mLSP": 1,
+      "mStop": 1100
+    },
+    "mStop1100_mLSP100": {
+      "expected": 0.11083984375,
+      "expected_m1": 0.07248157262802124,
+      "expected_m2": 0.05022430419921875,
+      "expected_p1": 0.17180995643138885,
+      "expected_p2": 0.2512015700340271,
+      "mLSP": 100,
+      "mStop": 1100
+    },
+    "mStop1100_mLSP200": {
+      "expected": 0.12060546875,
+      "expected_m1": 0.0791657418012619,
+      "expected_m2": 0.05512046813964844,
+      "expected_p1": 0.18550518155097961,
+      "expected_p2": 0.27116864919662476,
+      "mLSP": 200,
+      "mStop": 1100
+    },
+    "mStop1100_mLSP300": {
+      "expected": 0.12499999999999999,
+      "expected_m1": 0.08205032348632812,
+      "expected_m2": 0.05712890625,
+      "expected_p1": 0.19176621735095978,
+      "expected_p2": 0.27931514382362366,
+      "mLSP": 300,
+      "mStop": 1100
+    },
+    "mStop1100_mLSP400": {
+      "expected": 0.16650390625,
+      "expected_m1": 0.11162590980529785,
+      "expected_m2": 0.07869911193847656,
+      "expected_p1": 0.2507927417755127,
+      "expected_p2": 0.3575926721096039,
+      "mLSP": 400,
+      "mStop": 1100
+    },
+    "mStop1100_mLSP500": {
+      "expected": 0.2197265625,
+      "expected_m1": 0.14891624450683594,
+      "expected_m2": 0.1064300537109375,
+      "expected_p1": 0.3265789747238159,
+      "expected_p2": 0.4613419473171234,
+      "mLSP": 500,
+      "mStop": 1100
+    },
+    "mStop1100_mLSP600": {
+      "expected": 0.341796875,
+      "expected_m1": 0.23632049560546875,
+      "expected_m2": 0.1708984375,
+      "expected_p1": 0.4984748363494873,
+      "expected_p2": 0.6949662566184998,
+      "mLSP": 600,
+      "mStop": 1100
+    },
+    "mStop1100_mLSP700": {
+      "expected": 0.619140625,
+      "expected_m1": 0.4355410933494568,
+      "expected_m2": 0.32166290283203125,
+      "expected_p1": 0.8906119465827942,
+      "expected_p2": 1.2277723550796509,
+      "mLSP": 700,
+      "mStop": 1100
+    },
+    "mStop1100_mLSP800": {
+      "expected": 1.48828125,
+      "expected_m1": 1.0357743501663208,
+      "expected_m2": 0.7732086181640625,
+      "expected_p1": 2.1823666095733643,
+      "expected_p2": 2.978715419769287,
+      "mLSP": 800,
+      "mStop": 1100
+    },
+    "mStop1100_mLSP900": {
+      "expected": 4.6875,
+      "expected_m1": 3.1768798828125,
+      "expected_m2": 2.2705078125,
+      "expected_p1": 6.910964488983154,
+      "expected_p2": 9.72197151184082,
+      "mLSP": 900,
+      "mStop": 1100
+    },
+    "mStop1150_mLSP1": {
+      "expected": 0.13623046875,
+      "expected_m1": 0.08908528089523315,
+      "expected_m2": 0.06172943115234375,
+      "expected_p1": 0.21062427759170532,
+      "expected_p2": 0.31005430221557617,
+      "mLSP": 1,
+      "mStop": 1150
+    },
+    "mStop1150_mLSP100": {
+      "expected": 0.13134765625,
+      "expected_m1": 0.08556757867336273,
+      "expected_m2": 0.05900382995605469,
+      "expected_p1": 0.2041221261024475,
+      "expected_p2": 0.30100274085998535,
+      "mLSP": 100,
+      "mStop": 1150
+    },
+    "mStop1150_mLSP1000": {
+      "expected": 9.8125,
+      "expected_m1": 6.902708053588867,
+      "expected_m2": 5.097900390625,
+      "expected_p1": 14.154047966003418,
+      "expected_p2": 19.60680389404297,
+      "mLSP": 1000,
+      "mStop": 1150
+    },
+    "mStop1150_mLSP200": {
+      "expected": 0.14208984375,
+      "expected_m1": 0.09291690587997437,
+      "expected_m2": 0.06438446044921875,
+      "expected_p1": 0.21968337893486023,
+      "expected_p2": 0.32256031036376953,
+      "mLSP": 200,
+      "mStop": 1150
+    },
+    "mStop1150_mLSP300": {
+      "expected": 0.162109375,
+      "expected_m1": 0.10640901327133179,
+      "expected_m2": 0.07408905029296875,
+      "expected_p1": 0.24934299290180206,
+      "expected_p2": 0.36448580026626587,
+      "mLSP": 300,
+      "mStop": 1150
+    },
+    "mStop1150_mLSP400": {
+      "expected": 0.1962890625,
+      "expected_m1": 0.13030028343200684,
+      "expected_m2": 0.092010498046875,
+      "expected_p1": 0.29878562688827515,
+      "expected_p2": 0.43036916851997375,
+      "mLSP": 400,
+      "mStop": 1150
+    },
+    "mStop1150_mLSP500": {
+      "expected": 0.2314453125,
+      "expected_m1": 0.15403318405151367,
+      "expected_m2": 0.10758590698242188,
+      "expected_p1": 0.3522994816303253,
+      "expected_p2": 0.5074502229690552,
+      "mLSP": 500,
+      "mStop": 1150
+    },
+    "mStop1150_mLSP600": {
+      "expected": 0.3662109375,
+      "expected_m1": 0.24908781051635742,
+      "expected_m2": 0.17881393432617188,
+      "expected_p1": 0.5413788557052612,
+      "expected_p2": 0.7626651525497437,
+      "mLSP": 600,
+      "mStop": 1150
+    },
+    "mStop1150_mLSP700": {
+      "expected": 0.587890625,
+      "expected_m1": 0.4093059301376343,
+      "expected_m2": 0.2985382080078125,
+      "expected_p1": 0.8526899814605713,
+      "expected_p2": 1.1850531101226807,
+      "mLSP": 700,
+      "mStop": 1150
+    },
+    "mStop1150_mLSP800": {
+      "expected": 1.1796875,
+      "expected_m1": 0.8298637866973877,
+      "expected_m2": 0.612884521484375,
+      "expected_p1": 1.7204502820968628,
+      "expected_p2": 2.369457483291626,
+      "mLSP": 800,
+      "mStop": 1150
+    },
+    "mStop1150_mLSP900": {
+      "expected": 3.203125,
+      "expected_m1": 2.1851396560668945,
+      "expected_m2": 1.61407470703125,
+      "expected_p1": 4.696956634521484,
+      "expected_p2": 6.529085159301758,
+      "mLSP": 900,
+      "mStop": 1150
+    },
+    "mStop1200_mLSP1": {
+      "expected": 0.16796875,
+      "expected_m1": 0.10828161239624023,
+      "expected_m2": 0.074798583984375,
+      "expected_p1": 0.26237258315086365,
+      "expected_p2": 0.3885110914707184,
+      "mLSP": 1,
+      "mStop": 1200
+    },
+    "mStop1200_mLSP100": {
+      "expected": 0.1708984375,
+      "expected_m1": 0.11017024517059326,
+      "expected_m2": 0.07610321044921875,
+      "expected_p1": 0.2662676274776459,
+      "expected_p2": 0.3939622938632965,
+      "mLSP": 100,
+      "mStop": 1200
+    },
+    "mStop1200_mLSP1000": {
+      "expected": 5.78125,
+      "expected_m1": 3.946380615234375,
+      "expected_m2": 2.845458984375,
+      "expected_p1": 8.661788940429688,
+      "expected_p2": 12.458969116210938,
+      "mLSP": 1000,
+      "mStop": 1200
+    },
+    "mStop1200_mLSP200": {
+      "expected": 0.1796875,
+      "expected_m1": 0.11750316619873047,
+      "expected_m2": 0.0814208984375,
+      "expected_p1": 0.2785288989543915,
+      "expected_p2": 0.40932703018188477,
+      "mLSP": 200,
+      "mStop": 1200
+    },
+    "mStop1200_mLSP300": {
+      "expected": 0.1982421875,
+      "expected_m1": 0.12963664531707764,
+      "expected_m2": 0.0898284912109375,
+      "expected_p1": 0.3064998388290405,
+      "expected_p2": 0.4488750696182251,
+      "mLSP": 300,
+      "mStop": 1200
+    },
+    "mStop1200_mLSP400": {
+      "expected": 0.22265625,
+      "expected_m1": 0.14560174942016602,
+      "expected_m2": 0.10089111328125,
+      "expected_p1": 0.34424611926078796,
+      "expected_p2": 0.5015550851821899,
+      "mLSP": 400,
+      "mStop": 1200
+    },
+    "mStop1200_mLSP500": {
+      "expected": 0.2802734375,
+      "expected_m1": 0.1860506534576416,
+      "expected_m2": 0.131378173828125,
+      "expected_p1": 0.42438989877700806,
+      "expected_p2": 0.6099162697792053,
+      "mLSP": 500,
+      "mStop": 1200
+    },
+    "mStop1200_mLSP600": {
+      "expected": 0.380859375,
+      "expected_m1": 0.25626182556152344,
+      "expected_m2": 0.1815032958984375,
+      "expected_p1": 0.570624589920044,
+      "expected_p2": 0.8115967512130737,
+      "mLSP": 600,
+      "mStop": 1200
+    },
+    "mStop1200_mLSP700": {
+      "expected": 0.591796875,
+      "expected_m1": 0.4068603515625,
+      "expected_m2": 0.2958984375,
+      "expected_p1": 0.8654325008392334,
+      "expected_p2": 1.2120842933654785,
+      "mLSP": 700,
+      "mStop": 1200
+    },
+    "mStop1200_mLSP800": {
+      "expected": 1.0625,
+      "expected_m1": 0.7448654174804688,
+      "expected_m2": 0.5478515625,
+      "expected_p1": 1.5368391275405884,
+      "expected_p2": 2.1324100494384766,
+      "mLSP": 800,
+      "mStop": 1200
+    },
+    "mStop1200_mLSP900": {
+      "expected": 2.484375,
+      "expected_m1": 1.7201385498046875,
+      "expected_m2": 1.2615966796875,
+      "expected_p1": 3.6925196647644043,
+      "expected_p2": 5.125721454620361,
+      "mLSP": 900,
+      "mStop": 1200
+    },
+    "mStop1250_mLSP1": {
+      "expected": 0.2197265625,
+      "expected_m1": 0.14205649495124817,
+      "expected_m2": 0.09698867797851562,
+      "expected_p1": 0.34321993589401245,
+      "expected_p2": 0.508226752281189,
+      "mLSP": 1,
+      "mStop": 1250
+    },
+    "mStop1250_mLSP100": {
+      "expected": 0.2294921875,
+      "expected_m1": 0.14950469136238098,
+      "expected_m2": 0.10309219360351562,
+      "expected_p1": 0.3548150956630707,
+      "expected_p2": 0.5223137140274048,
+      "mLSP": 100,
+      "mStop": 1250
+    },
+    "mStop1250_mLSP1000": {
+      "expected": 5.53125,
+      "expected_m1": 3.8110055923461914,
+      "expected_m2": 2.7440185546875,
+      "expected_p1": 8.24312973022461,
+      "expected_p2": 11.559859275817871,
+      "mLSP": 1000,
+      "mStop": 1250
+    },
+    "mStop1250_mLSP1100": {
+      "expected": 17.0,
+      "expected_m1": 11.99981689453125,
+      "expected_m2": 8.8984375,
+      "expected_p1": 24.386137008666992,
+      "expected_p2": 33.666717529296875,
+      "mLSP": 1100,
+      "mStop": 1250
+    },
+    "mStop1250_mLSP200": {
+      "expected": 0.2275390625,
+      "expected_m1": 0.14766985177993774,
+      "expected_m2": 0.10132598876953125,
+      "expected_p1": 0.3536093533039093,
+      "expected_p2": 0.5214397311210632,
+      "mLSP": 200,
+      "mStop": 1250
+    },
+    "mStop1250_mLSP300": {
+      "expected": 0.2412109375,
+      "expected_m1": 0.15713897347450256,
+      "expected_m2": 0.10835647583007812,
+      "expected_p1": 0.37485626339912415,
+      "expected_p2": 0.5527708530426025,
+      "mLSP": 300,
+      "mStop": 1250
+    },
+    "mStop1250_mLSP400": {
+      "expected": 0.255859375,
+      "expected_m1": 0.16604936122894287,
+      "expected_m2": 0.1139373779296875,
+      "expected_p1": 0.3976207971572876,
+      "expected_p2": 0.5863398909568787,
+      "mLSP": 400,
+      "mStop": 1250
+    },
+    "mStop1250_mLSP500": {
+      "expected": 0.326171875,
+      "expected_m1": 0.2162799835205078,
+      "expected_m2": 0.1503448486328125,
+      "expected_p1": 0.4977897107601166,
+      "expected_p2": 0.7197268009185791,
+      "mLSP": 500,
+      "mStop": 1250
+    },
+    "mStop1250_mLSP600": {
+      "expected": 0.431640625,
+      "expected_m1": 0.28832244873046875,
+      "expected_m2": 0.20233154296875,
+      "expected_p1": 0.6501489281654358,
+      "expected_p2": 0.9373645186424255,
+      "mLSP": 600,
+      "mStop": 1250
+    },
+    "mStop1250_mLSP700": {
+      "expected": 0.623046875,
+      "expected_m1": 0.4222602844238281,
+      "expected_m2": 0.301788330078125,
+      "expected_p1": 0.9235493540763855,
+      "expected_p2": 1.306657075881958,
+      "mLSP": 700,
+      "mStop": 1250
+    },
+    "mStop1250_mLSP800": {
+      "expected": 1.0234375,
+      "expected_m1": 0.7125458717346191,
+      "expected_m2": 0.51971435546875,
+      "expected_p1": 1.4844170808792114,
+      "expected_p2": 2.063015937805176,
+      "mLSP": 800,
+      "mStop": 1250
+    },
+    "mStop1250_mLSP900": {
+      "expected": 2.21875,
+      "expected_m1": 1.5638504028320312,
+      "expected_m2": 1.14404296875,
+      "expected_p1": 3.2269697189331055,
+      "expected_p2": 4.450693607330322,
+      "mLSP": 900,
+      "mStop": 1250
+    },
+    "mStop1300_mLSP1": {
+      "expected": 0.2744140625,
+      "expected_m1": 0.1780911087989807,
+      "expected_m2": 0.12220001220703125,
+      "expected_p1": 0.4286435544490814,
+      "expected_p2": 0.6347187161445618,
+      "mLSP": 1,
+      "mStop": 1300
+    },
+    "mStop1300_mLSP100": {
+      "expected": 0.2724609375,
+      "expected_m1": 0.17682355642318726,
+      "expected_m2": 0.12133026123046875,
+      "expected_p1": 0.42776480317115784,
+      "expected_p2": 0.6344010829925537,
+      "mLSP": 100,
+      "mStop": 1300
+    },
+    "mStop1300_mLSP1000": {
+      "expected": 4.3125,
+      "expected_m1": 2.947998046875,
+      "expected_m2": 2.15625,
+      "expected_p1": 6.375277042388916,
+      "expected_p2": 8.92850112915039,
+      "mLSP": 1000,
+      "mStop": 1300
+    },
+    "mStop1300_mLSP1100": {
+      "expected": 12.25,
+      "expected_m1": 8.4697265625,
+      "expected_m2": 6.125,
+      "expected_p1": 17.962995529174805,
+      "expected_p2": 25.271137237548828,
+      "mLSP": 1100,
+      "mStop": 1300
+    },
+    "mStop1300_mLSP200": {
+      "expected": 0.287109375,
+      "expected_m1": 0.18508601188659668,
+      "expected_m2": 0.1278533935546875,
+      "expected_p1": 0.4473296105861664,
+      "expected_p2": 0.6618566513061523,
+      "mLSP": 200,
+      "mStop": 1300
+    },
+    "mStop1300_mLSP300": {
+      "expected": 0.3017578125,
+      "expected_m1": 0.19658276438713074,
+      "expected_m2": 0.13555526733398438,
+      "expected_p1": 0.4701525568962097,
+      "expected_p2": 0.695624828338623,
+      "mLSP": 300,
+      "mStop": 1300
+    },
+    "mStop1300_mLSP400": {
+      "expected": 0.322265625,
+      "expected_m1": 0.2091461420059204,
+      "expected_m2": 0.1435089111328125,
+      "expected_p1": 0.502104640007019,
+      "expected_p2": 0.741033673286438,
+      "mLSP": 400,
+      "mStop": 1300
+    },
+    "mStop1300_mLSP500": {
+      "expected": 0.3828125,
+      "expected_m1": 0.2503328323364258,
+      "expected_m2": 0.1734619140625,
+      "expected_p1": 0.5888099670410156,
+      "expected_p2": 0.8607134819030762,
+      "mLSP": 500,
+      "mStop": 1300
+    },
+    "mStop1300_mLSP600": {
+      "expected": 0.466796875,
+      "expected_m1": 0.3064066767692566,
+      "expected_m2": 0.21334075927734375,
+      "expected_p1": 0.714266300201416,
+      "expected_p2": 1.039317011833191,
+      "mLSP": 600,
+      "mStop": 1300
+    },
+    "mStop1300_mLSP700": {
+      "expected": 0.677734375,
+      "expected_m1": 0.45601463317871094,
+      "expected_m2": 0.3229827880859375,
+      "expected_p1": 1.0127177238464355,
+      "expected_p2": 1.4426326751708984,
+      "mLSP": 700,
+      "mStop": 1300
+    },
+    "mStop1300_mLSP800": {
+      "expected": 1.01953125,
+      "expected_m1": 0.6979719400405884,
+      "expected_m2": 0.501800537109375,
+      "expected_p1": 1.495007038116455,
+      "expected_p2": 2.1032419204711914,
+      "mLSP": 800,
+      "mStop": 1300
+    },
+    "mStop1300_mLSP900": {
+      "expected": 1.8203125,
+      "expected_m1": 1.2761297225952148,
+      "expected_m2": 0.9385986328125,
+      "expected_p1": 2.62571120262146,
+      "expected_p2": 3.6486151218414307,
+      "mLSP": 900,
+      "mStop": 1300
+    },
+    "mStop1350_mLSP1": {
+      "expected": 0.349609375,
+      "expected_m1": 0.22602766752243042,
+      "expected_m2": 0.15431976318359375,
+      "expected_p1": 0.5488881468772888,
+      "expected_p2": 0.8180516958236694,
+      "mLSP": 1,
+      "mStop": 1350
+    },
+    "mStop1350_mLSP100": {
+      "expected": 0.365234375,
+      "expected_m1": 0.23612946271896362,
+      "expected_m2": 0.16121673583984375,
+      "expected_p1": 0.5719636082649231,
+      "expected_p2": 0.8497105836868286,
+      "mLSP": 100,
+      "mStop": 1350
+    },
+    "mStop1350_mLSP1000": {
+      "expected": 3.734375,
+      "expected_m1": 2.603851318359375,
+      "expected_m2": 1.925537109375,
+      "expected_p1": 5.431308269500732,
+      "expected_p2": 7.4909563064575195,
+      "mLSP": 1000,
+      "mStop": 1350
+    },
+    "mStop1350_mLSP1100": {
+      "expected": 8.96875,
+      "expected_m1": 6.2010498046875,
+      "expected_m2": 4.484375,
+      "expected_p1": 13.008480072021484,
+      "expected_p2": 18.85902214050293,
+      "mLSP": 1100,
+      "mStop": 1350
+    },
+    "mStop1350_mLSP1200": {
+      "expected": 30.0,
+      "expected_m1": 21.031494140625,
+      "expected_m2": 15.46875,
+      "expected_p1": 43.5126838684082,
+      "expected_p2": 60.84589767456055,
+      "mLSP": 1200,
+      "mStop": 1350
+    },
+    "mStop1350_mLSP200": {
+      "expected": 0.3837890625,
+      "expected_m1": 0.2490740418434143,
+      "expected_m2": 0.17090606689453125,
+      "expected_p1": 0.5994908213615417,
+      "expected_p2": 0.8877027034759521,
+      "mLSP": 200,
+      "mStop": 1350
+    },
+    "mStop1350_mLSP300": {
+      "expected": 0.392578125,
+      "expected_m1": 0.25477802753448486,
+      "expected_m2": 0.1748199462890625,
+      "expected_p1": 0.6132196187973022,
+      "expected_p2": 0.9080317616462708,
+      "mLSP": 300,
+      "mStop": 1350
+    },
+    "mStop1350_mLSP400": {
+      "expected": 0.3984375,
+      "expected_m1": 0.2568540573120117,
+      "expected_m2": 0.17742919921875,
+      "expected_p1": 0.6207839250564575,
+      "expected_p2": 0.9184949398040771,
+      "mLSP": 400,
+      "mStop": 1350
+    },
+    "mStop1350_mLSP500": {
+      "expected": 0.462890625,
+      "expected_m1": 0.30269837379455566,
+      "expected_m2": 0.209747314453125,
+      "expected_p1": 0.71751469373703,
+      "expected_p2": 1.05446195602417,
+      "mLSP": 500,
+      "mStop": 1350
+    },
+    "mStop1350_mLSP600": {
+      "expected": 0.55859375,
+      "expected_m1": 0.3666623830795288,
+      "expected_m2": 0.2552947998046875,
+      "expected_p1": 0.8569552898406982,
+      "expected_p2": 1.2481894493103027,
+      "mLSP": 600,
+      "mStop": 1350
+    },
+    "mStop1350_mLSP700": {
+      "expected": 0.69140625,
+      "expected_m1": 0.4584617614746094,
+      "expected_m2": 0.318695068359375,
+      "expected_p1": 1.0551949739456177,
+      "expected_p2": 1.5256484746932983,
+      "mLSP": 700,
+      "mStop": 1350
+    },
+    "mStop1350_mLSP800": {
+      "expected": 1.03515625,
+      "expected_m1": 0.6990337371826172,
+      "expected_m2": 0.4973602294921875,
+      "expected_p1": 1.5426760911941528,
+      "expected_p2": 2.1884710788726807,
+      "mLSP": 800,
+      "mStop": 1350
+    },
+    "mStop1350_mLSP900": {
+      "expected": 1.7421875,
+      "expected_m1": 1.2129597663879395,
+      "expected_m2": 0.88470458984375,
+      "expected_p1": 2.5269086360931396,
+      "expected_p2": 3.5118517875671387,
+      "mLSP": 900,
+      "mStop": 1350
+    },
+    "mStop1400_mLSP1": {
+      "expected": 0.4453125,
+      "expected_m1": 0.28595781326293945,
+      "expected_m2": 0.196563720703125,
+      "expected_p1": 0.6991424560546875,
+      "expected_p2": 1.041987657546997,
+      "mLSP": 1,
+      "mStop": 1400
+    },
+    "mStop1400_mLSP100": {
+      "expected": 0.458984375,
+      "expected_m1": 0.2978748083114624,
+      "expected_m2": 0.2043914794921875,
+      "expected_p1": 0.7187778353691101,
+      "expected_p2": 1.0625296831130981,
+      "mLSP": 100,
+      "mStop": 1400
+    },
+    "mStop1400_mLSP1000": {
+      "expected": 3.234375,
+      "expected_m1": 2.2752556800842285,
+      "expected_m2": 1.68035888671875,
+      "expected_p1": 4.639641761779785,
+      "expected_p2": 6.405340671539307,
+      "mLSP": 1000,
+      "mStop": 1400
+    },
+    "mStop1400_mLSP1100": {
+      "expected": 7.1875,
+      "expected_m1": 5.038795471191406,
+      "expected_m2": 3.7060546875,
+      "expected_p1": 10.711410522460938,
+      "expected_p2": 14.847148895263672,
+      "mLSP": 1100,
+      "mStop": 1400
+    },
+    "mStop1400_mLSP1200": {
+      "expected": 18.25,
+      "expected_m1": 12.706161499023438,
+      "expected_m2": 9.267578125,
+      "expected_p1": 26.615707397460938,
+      "expected_p2": 37.44565963745117,
+      "mLSP": 1200,
+      "mStop": 1400
+    },
+    "mStop1400_mLSP200": {
+      "expected": 0.443359375,
+      "expected_m1": 0.28663843870162964,
+      "expected_m2": 0.19570159912109375,
+      "expected_p1": 0.6960760354995728,
+      "expected_p2": 1.0374175310134888,
+      "mLSP": 200,
+      "mStop": 1400
+    },
+    "mStop1400_mLSP300": {
+      "expected": 0.47265625,
+      "expected_m1": 0.3023338317871094,
+      "expected_m2": 0.206787109375,
+      "expected_p1": 0.7439562678337097,
+      "expected_p2": 1.1068671941757202,
+      "mLSP": 300,
+      "mStop": 1400
+    },
+    "mStop1400_mLSP400": {
+      "expected": 0.517578125,
+      "expected_m1": 0.33462196588516235,
+      "expected_m2": 0.22846221923828125,
+      "expected_p1": 0.8084735870361328,
+      "expected_p2": 1.197156310081482,
+      "mLSP": 400,
+      "mStop": 1400
+    },
+    "mStop1400_mLSP500": {
+      "expected": 0.5625,
+      "expected_m1": 0.3650550842285156,
+      "expected_m2": 0.25048828125,
+      "expected_p1": 0.876400887966156,
+      "expected_p2": 1.2966986894607544,
+      "mLSP": 500,
+      "mStop": 1400
+    },
+    "mStop1400_mLSP600": {
+      "expected": 0.65625,
+      "expected_m1": 0.4291419982910156,
+      "expected_m2": 0.29736328125,
+      "expected_p1": 1.0172359943389893,
+      "expected_p2": 1.4949334859848022,
+      "mLSP": 600,
+      "mStop": 1400
+    },
+    "mStop1400_mLSP700": {
+      "expected": 0.79296875,
+      "expected_m1": 0.520506739616394,
+      "expected_m2": 0.3624114990234375,
+      "expected_p1": 1.2165169715881348,
+      "expected_p2": 1.7719054222106934,
+      "mLSP": 700,
+      "mStop": 1400
+    },
+    "mStop1400_mLSP800": {
+      "expected": 1.1015625,
+      "expected_m1": 0.735809326171875,
+      "expected_m2": 0.516357421875,
+      "expected_p1": 1.6592036485671997,
+      "expected_p2": 2.378981351852417,
+      "mLSP": 800,
+      "mStop": 1400
+    },
+    "mStop1400_mLSP900": {
+      "expected": 1.796875,
+      "expected_m1": 1.2353515625,
+      "expected_m2": 0.8984375,
+      "expected_p1": 2.634878158569336,
+      "expected_p2": 3.684760332107544,
+      "mLSP": 900,
+      "mStop": 1400
+    },
+    "mStop1450_mLSP1": {
+      "expected": 0.60546875,
+      "expected_m1": 0.3872871398925781,
+      "expected_m2": 0.264892578125,
+      "expected_p1": 0.9554153084754944,
+      "expected_p2": 1.4328774213790894,
+      "mLSP": 1,
+      "mStop": 1450
+    },
+    "mStop1450_mLSP100": {
+      "expected": 0.5859375,
+      "expected_m1": 0.37479400634765625,
+      "expected_m2": 0.25634765625,
+      "expected_p1": 0.9222598671913147,
+      "expected_p2": 1.3721494674682617,
+      "mLSP": 100,
+      "mStop": 1450
+    },
+    "mStop1450_mLSP1000": {
+      "expected": 2.921875,
+      "expected_m1": 2.0016555786132812,
+      "expected_m2": 1.44952392578125,
+      "expected_p1": 4.284541130065918,
+      "expected_p2": 5.991740703582764,
+      "mLSP": 1000,
+      "mStop": 1450
+    },
+    "mStop1450_mLSP1100": {
+      "expected": 6.96875,
+      "expected_m1": 4.944988250732422,
+      "expected_m2": 3.647705078125,
+      "expected_p1": 10.052078247070312,
+      "expected_p2": 13.837554931640625,
+      "mLSP": 1100,
+      "mStop": 1450
+    },
+    "mStop1450_mLSP1200": {
+      "expected": 15.0,
+      "expected_m1": 10.44342041015625,
+      "expected_m2": 7.6171875,
+      "expected_p1": 21.7563419342041,
+      "expected_p2": 30.05019187927246,
+      "mLSP": 1200,
+      "mStop": 1450
+    },
+    "mStop1450_mLSP1300": {
+      "expected": 37.125,
+      "expected_m1": 25.61407470703125,
+      "expected_m2": 18.70751953125,
+      "expected_p1": 54.586856842041016,
+      "expected_p2": 78.04544830322266,
+      "mLSP": 1300,
+      "mStop": 1450
+    },
+    "mStop1450_mLSP200": {
+      "expected": 0.623046875,
+      "expected_m1": 0.4028090834617615,
+      "expected_m2": 0.27501678466796875,
+      "expected_p1": 0.9757026433944702,
+      "expected_p2": 1.4423273801803589,
+      "mLSP": 200,
+      "mStop": 1450
+    },
+    "mStop1450_mLSP300": {
+      "expected": 0.611328125,
+      "expected_m1": 0.39256489276885986,
+      "expected_m2": 0.26984405517578125,
+      "expected_p1": 0.9597876667976379,
+      "expected_p2": 1.4304479360580444,
+      "mLSP": 300,
+      "mStop": 1450
+    },
+    "mStop1450_mLSP400": {
+      "expected": 0.650390625,
+      "expected_m1": 0.4204872250556946,
+      "expected_m2": 0.28708648681640625,
+      "expected_p1": 1.021116018295288,
+      "expected_p2": 1.521850347518921,
+      "mLSP": 400,
+      "mStop": 1450
+    },
+    "mStop1450_mLSP500": {
+      "expected": 0.6796875,
+      "expected_m1": 0.44110822677612305,
+      "expected_m2": 0.30267333984375,
+      "expected_p1": 1.058984398841858,
+      "expected_p2": 1.5668443441390991,
+      "mLSP": 500,
+      "mStop": 1450
+    },
+    "mStop1450_mLSP600": {
+      "expected": 0.7890625,
+      "expected_m1": 0.5120911598205566,
+      "expected_m2": 0.35137939453125,
+      "expected_p1": 1.226250410079956,
+      "expected_p2": 1.808254361152649,
+      "mLSP": 600,
+      "mStop": 1450
+    },
+    "mStop1450_mLSP700": {
+      "expected": 0.85546875,
+      "expected_m1": 0.5573025941848755,
+      "expected_m2": 0.3842926025390625,
+      "expected_p1": 1.3294497728347778,
+      "expected_p2": 1.9504975080490112,
+      "mLSP": 700,
+      "mStop": 1450
+    },
+    "mStop1450_mLSP800": {
+      "expected": 1.18359375,
+      "expected_m1": 0.7848243713378906,
+      "expected_m2": 0.545562744140625,
+      "expected_p1": 1.8016327619552612,
+      "expected_p2": 2.609104871749878,
+      "mLSP": 800,
+      "mStop": 1450
+    },
+    "mStop1450_mLSP900": {
+      "expected": 1.703125,
+      "expected_m1": 1.1459503173828125,
+      "expected_m2": 0.8116455078125,
+      "expected_p1": 2.558504819869995,
+      "expected_p2": 3.653770923614502,
+      "mLSP": 900,
+      "mStop": 1450
+    },
+    "mStop1500_mLSP1": {
+      "expected": 0.7578125,
+      "expected_m1": 0.48473358154296875,
+      "expected_m2": 0.33154296875,
+      "expected_p1": 1.201851487159729,
+      "expected_p2": 1.7961925268173218,
+      "mLSP": 1,
+      "mStop": 1500
+    },
+    "mStop1500_mLSP100": {
+      "expected": 0.767578125,
+      "expected_m1": 0.4943532943725586,
+      "expected_m2": 0.3358154296875,
+      "expected_p1": 1.2051007747650146,
+      "expected_p2": 1.7960575819015503,
+      "mLSP": 100,
+      "mStop": 1500
+    },
+    "mStop1500_mLSP1000": {
+      "expected": 2.96875,
+      "expected_m1": 2.045454978942871,
+      "expected_m2": 1.4727783203125,
+      "expected_p1": 4.365110397338867,
+      "expected_p2": 6.113519668579102,
+      "mLSP": 1000,
+      "mStop": 1500
+    },
+    "mStop1500_mLSP1100": {
+      "expected": 5.78125,
+      "expected_m1": 4.052944183349609,
+      "expected_m2": 2.98095703125,
+      "expected_p1": 8.362213134765625,
+      "expected_p2": 11.566812515258789,
+      "mLSP": 1100,
+      "mStop": 1500
+    },
+    "mStop1500_mLSP1200": {
+      "expected": 12.5,
+      "expected_m1": 8.642578125,
+      "expected_m2": 6.25,
+      "expected_p1": 18.728191375732422,
+      "expected_p2": 26.185089111328125,
+      "mLSP": 1200,
+      "mStop": 1500
+    },
+    "mStop1500_mLSP1300": {
+      "expected": 33.375,
+      "expected_m1": 21.967529296875,
+      "expected_m2": 15.123046875,
+      "expected_p1": 50.536407470703125,
+      "expected_p2": 72.62891387939453,
+      "mLSP": 1300,
+      "mStop": 1500
+    },
+    "mStop1500_mLSP200": {
+      "expected": 0.75390625,
+      "expected_m1": 0.4822349548339844,
+      "expected_m2": 0.329833984375,
+      "expected_p1": 1.1896461248397827,
+      "expected_p2": 1.7669310569763184,
+      "mLSP": 200,
+      "mStop": 1500
+    },
+    "mStop1500_mLSP300": {
+      "expected": 0.8046875,
+      "expected_m1": 0.516730785369873,
+      "expected_m2": 0.355194091796875,
+      "expected_p1": 1.2633626461029053,
+      "expected_p2": 1.8828898668289185,
+      "mLSP": 300,
+      "mStop": 1500
+    },
+    "mStop1500_mLSP400": {
+      "expected": 0.79296875,
+      "expected_m1": 0.5052368640899658,
+      "expected_m2": 0.3438262939453125,
+      "expected_p1": 1.2512857913970947,
+      "expected_p2": 1.876607060432434,
+      "mLSP": 400,
+      "mStop": 1500
+    },
+    "mStop1500_mLSP500": {
+      "expected": 0.81640625,
+      "expected_m1": 0.5222129821777344,
+      "expected_m2": 0.357177734375,
+      "expected_p1": 1.291523814201355,
+      "expected_p2": 1.9335733652114868,
+      "mLSP": 500,
+      "mStop": 1500
+    },
+    "mStop1500_mLSP600": {
+      "expected": 0.91796875,
+      "expected_m1": 0.5894744396209717,
+      "expected_m2": 0.4051971435546875,
+      "expected_p1": 1.433896541595459,
+      "expected_p2": 2.123258352279663,
+      "mLSP": 600,
+      "mStop": 1500
+    },
+    "mStop1500_mLSP700": {
+      "expected": 1.08984375,
+      "expected_m1": 0.7126822471618652,
+      "expected_m2": 0.49383544921875,
+      "expected_p1": 1.6893383264541626,
+      "expected_p2": 2.4826574325561523,
+      "mLSP": 700,
+      "mStop": 1500
+    },
+    "mStop1500_mLSP800": {
+      "expected": 1.2890625,
+      "expected_m1": 0.839771032333374,
+      "expected_m2": 0.579071044921875,
+      "expected_p1": 1.9930038452148438,
+      "expected_p2": 2.9187936782836914,
+      "mLSP": 800,
+      "mStop": 1500
+    },
+    "mStop1500_mLSP900": {
+      "expected": 1.8203125,
+      "expected_m1": 1.199357509613037,
+      "expected_m2": 0.83905029296875,
+      "expected_p1": 2.7635722160339355,
+      "expected_p2": 3.987032175064087,
+      "mLSP": 900,
+      "mStop": 1500
+    },
+    "mStop1600_mLSP1": {
+      "expected": 1.3828125,
+      "expected_m1": 0.8879742622375488,
+      "expected_m2": 0.610382080078125,
+      "expected_p1": 2.1710212230682373,
+      "expected_p2": 3.2356457710266113,
+      "mLSP": 1,
+      "mStop": 1600
+    },
+    "mStop1600_mLSP100": {
+      "expected": 1.32421875,
+      "expected_m1": 0.8437206745147705,
+      "expected_m2": 0.5741729736328125,
+      "expected_p1": 2.100142478942871,
+      "expected_p2": 3.138707399368286,
+      "mLSP": 100,
+      "mStop": 1600
+    },
+    "mStop1600_mLSP1000": {
+      "expected": 3.09375,
+      "expected_m1": 2.0665283203125,
+      "expected_m2": 1.4501953125,
+      "expected_p1": 4.684554576873779,
+      "expected_p2": 6.769354820251465,
+      "mLSP": 1000,
+      "mStop": 1600
+    },
+    "mStop1600_mLSP1100": {
+      "expected": 4.875,
+      "expected_m1": 3.31585693359375,
+      "expected_m2": 2.38037109375,
+      "expected_p1": 7.187403202056885,
+      "expected_p2": 10.140681266784668,
+      "mLSP": 1100,
+      "mStop": 1600
+    },
+    "mStop1600_mLSP1200": {
+      "expected": 8.78125,
+      "expected_m1": 6.113752365112305,
+      "expected_m2": 4.459228515625,
+      "expected_p1": 12.736525535583496,
+      "expected_p2": 17.75554656982422,
+      "mLSP": 1200,
+      "mStop": 1600
+    },
+    "mStop1600_mLSP1300": {
+      "expected": 19.6875,
+      "expected_m1": 13.706989288330078,
+      "expected_m2": 9.99755859375,
+      "expected_p1": 28.86910057067871,
+      "expected_p2": 40.37215805053711,
+      "mLSP": 1300,
+      "mStop": 1600
+    },
+    "mStop1600_mLSP1400": {
+      "expected": 47.5,
+      "expected_m1": 32.65625,
+      "expected_m2": 23.75,
+      "expected_p1": 69.65243530273438,
+      "expected_p2": 98.57440948486328,
+      "mLSP": 1400,
+      "mStop": 1600
+    },
+    "mStop1600_mLSP200": {
+      "expected": 1.296875,
+      "expected_m1": 0.8230533599853516,
+      "expected_m2": 0.5572509765625,
+      "expected_p1": 2.0722849369049072,
+      "expected_p2": 3.1102840900421143,
+      "mLSP": 200,
+      "mStop": 1600
+    },
+    "mStop1600_mLSP300": {
+      "expected": 1.3359375,
+      "expected_m1": 0.8545303344726562,
+      "expected_m2": 0.58447265625,
+      "expected_p1": 2.102752447128296,
+      "expected_p2": 3.1285006999969482,
+      "mLSP": 300,
+      "mStop": 1600
+    },
+    "mStop1600_mLSP400": {
+      "expected": 1.33203125,
+      "expected_m1": 0.8520317077636719,
+      "expected_m2": 0.582763671875,
+      "expected_p1": 2.1019136905670166,
+      "expected_p2": 3.152330160140991,
+      "mLSP": 400,
+      "mStop": 1600
+    },
+    "mStop1600_mLSP500": {
+      "expected": 1.44140625,
+      "expected_m1": 0.9283275604248047,
+      "expected_m2": 0.630615234375,
+      "expected_p1": 2.2630138397216797,
+      "expected_p2": 3.3727495670318604,
+      "mLSP": 500,
+      "mStop": 1600
+    },
+    "mStop1600_mLSP600": {
+      "expected": 1.41015625,
+      "expected_m1": 0.9082012176513672,
+      "expected_m2": 0.616943359375,
+      "expected_p1": 2.219572067260742,
+      "expected_p2": 3.3023061752319336,
+      "mLSP": 600,
+      "mStop": 1600
+    },
+    "mStop1600_mLSP700": {
+      "expected": 1.44140625,
+      "expected_m1": 0.9256002902984619,
+      "expected_m2": 0.6362457275390625,
+      "expected_p1": 2.2630138397216797,
+      "expected_p2": 3.3727495670318604,
+      "mLSP": 700,
+      "mStop": 1600
+    },
+    "mStop1600_mLSP800": {
+      "expected": 1.828125,
+      "expected_m1": 1.1909480094909668,
+      "expected_m2": 0.82122802734375,
+      "expected_p1": 2.833728790283203,
+      "expected_p2": 4.164457321166992,
+      "mLSP": 800,
+      "mStop": 1600
+    },
+    "mStop1600_mLSP900": {
+      "expected": 2.1484375,
+      "expected_m1": 1.4049291610717773,
+      "expected_m2": 0.9735107421875,
+      "expected_p1": 3.3045456409454346,
+      "expected_p2": 4.830534934997559,
+      "mLSP": 900,
+      "mStop": 1600
+    },
+    "mStop1700_mLSP1": {
+      "expected": 2.2265625,
+      "expected_m1": 1.4186453819274902,
+      "expected_m2": 0.965423583984375,
+      "expected_p1": 3.5223379135131836,
+      "expected_p2": 5.27338171005249,
+      "mLSP": 1,
+      "mStop": 1700
+    },
+    "mStop1700_mLSP100": {
+      "expected": 2.171875,
+      "expected_m1": 1.378366470336914,
+      "expected_m2": 0.9332275390625,
+      "expected_p1": 3.453138589859009,
+      "expected_p2": 5.20107889175415,
+      "mLSP": 100,
+      "mStop": 1700
+    },
+    "mStop1700_mLSP1000": {
+      "expected": 3.5625,
+      "expected_m1": 2.3384342193603516,
+      "expected_m2": 1.628173828125,
+      "expected_p1": 5.46533727645874,
+      "expected_p2": 7.981449127197266,
+      "mLSP": 1000,
+      "mStop": 1700
+    },
+    "mStop1700_mLSP1100": {
+      "expected": 5.046875,
+      "expected_m1": 3.37115478515625,
+      "expected_m2": 2.36572265625,
+      "expected_p1": 7.621858596801758,
+      "expected_p2": 10.971348762512207,
+      "mLSP": 1100,
+      "mStop": 1700
+    },
+    "mStop1700_mLSP1200": {
+      "expected": 8.03125,
+      "expected_m1": 5.44305419921875,
+      "expected_m2": 3.89013671875,
+      "expected_p1": 11.936824798583984,
+      "expected_p2": 16.862560272216797,
+      "mLSP": 1200,
+      "mStop": 1700
+    },
+    "mStop1700_mLSP1300": {
+      "expected": 14.6875,
+      "expected_m1": 10.09765625,
+      "expected_m2": 7.34375,
+      "expected_p1": 21.361631393432617,
+      "expected_p2": 29.826416015625,
+      "mLSP": 1300,
+      "mStop": 1700
+    },
+    "mStop1700_mLSP1400": {
+      "expected": 31.25,
+      "expected_m1": 21.83246612548828,
+      "expected_m2": 15.9912109375,
+      "expected_p1": 45.5748405456543,
+      "expected_p2": 63.926109313964844,
+      "mLSP": 1400,
+      "mStop": 1700
+    },
+    "mStop1700_mLSP1500": {
+      "expected": 96.75,
+      "expected_m1": 66.7518310546875,
+      "expected_m2": 48.7529296875,
+      "expected_p1": 141.4853515625,
+      "expected_p2": 199.3508758544922,
+      "mLSP": 1500,
+      "mStop": 1700
+    },
+    "mStop1700_mLSP200": {
+      "expected": 2.3359375,
+      "expected_m1": 1.4883332252502441,
+      "expected_m2": 1.012847900390625,
+      "expected_p1": 3.6953649520874023,
+      "expected_p2": 5.5324249267578125,
+      "mLSP": 200,
+      "mStop": 1700
+    },
+    "mStop1700_mLSP300": {
+      "expected": 2.265625,
+      "expected_m1": 1.4492034912109375,
+      "expected_m2": 0.9912109375,
+      "expected_p1": 3.5841331481933594,
+      "expected_p2": 5.365897178649902,
+      "mLSP": 300,
+      "mStop": 1700
+    },
+    "mStop1700_mLSP400": {
+      "expected": 2.2578125,
+      "expected_m1": 1.4541282653808594,
+      "expected_m2": 0.98779296875,
+      "expected_p1": 3.562774419784546,
+      "expected_p2": 5.343245983123779,
+      "mLSP": 400,
+      "mStop": 1700
+    },
+    "mStop1700_mLSP500": {
+      "expected": 2.3125,
+      "expected_m1": 1.489349365234375,
+      "expected_m2": 1.01171875,
+      "expected_p1": 3.639852285385132,
+      "expected_p2": 5.415416240692139,
+      "mLSP": 500,
+      "mStop": 1700
+    },
+    "mStop1700_mLSP600": {
+      "expected": 2.3359375,
+      "expected_m1": 1.5044441223144531,
+      "expected_m2": 1.02197265625,
+      "expected_p1": 3.6767425537109375,
+      "expected_p2": 5.470302104949951,
+      "mLSP": 600,
+      "mStop": 1700
+    },
+    "mStop1700_mLSP700": {
+      "expected": 2.421875,
+      "expected_m1": 1.5491485595703125,
+      "expected_m2": 1.0595703125,
+      "expected_p1": 3.812007427215576,
+      "expected_p2": 5.671550750732422,
+      "mLSP": 700,
+      "mStop": 1700
+    },
+    "mStop1700_mLSP800": {
+      "expected": 2.59375,
+      "expected_m1": 1.6720695495605469,
+      "expected_m2": 1.155029296875,
+      "expected_p1": 4.061859607696533,
+      "expected_p2": 6.004422664642334,
+      "mLSP": 800,
+      "mStop": 1700
+    },
+    "mStop1700_mLSP900": {
+      "expected": 2.8046875,
+      "expected_m1": 1.8202052116394043,
+      "expected_m2": 1.24896240234375,
+      "expected_p1": 4.3698320388793945,
+      "expected_p2": 6.465483665466309,
+      "mLSP": 900,
+      "mStop": 1700
+    },
+    "mStop1800_mLSP1": {
+      "expected": 3.953125,
+      "expected_m1": 2.5286102294921875,
+      "expected_m2": 1.7294921875,
+      "expected_p1": 6.269452095031738,
+      "expected_p2": 9.369829177856445,
+      "mLSP": 1,
+      "mStop": 1800
+    },
+    "mStop1800_mLSP100": {
+      "expected": 3.859375,
+      "expected_m1": 2.4493274688720703,
+      "expected_m2": 1.6583251953125,
+      "expected_p1": 6.120769023895264,
+      "expected_p2": 9.191486358642578,
+      "mLSP": 100,
+      "mStop": 1800
+    },
+    "mStop1800_mLSP1000": {
+      "expected": 4.8125,
+      "expected_m1": 3.123249053955078,
+      "expected_m2": 2.14306640625,
+      "expected_p1": 7.53646183013916,
+      "expected_p2": 11.140735626220703,
+      "mLSP": 1000,
+      "mStop": 1800
+    },
+    "mStop1800_mLSP1100": {
+      "expected": 5.5625,
+      "expected_m1": 3.623739242553711,
+      "expected_m2": 2.498779296875,
+      "expected_p1": 8.644458770751953,
+      "expected_p2": 12.682686805725098,
+      "mLSP": 1100,
+      "mStop": 1800
+    },
+    "mStop1800_mLSP1200": {
+      "expected": 7.84375,
+      "expected_m1": 5.226214408874512,
+      "expected_m2": 3.7073974609375,
+      "expected_p1": 11.877002716064453,
+      "expected_p2": 17.162708282470703,
+      "mLSP": 1200,
+      "mStop": 1800
+    },
+    "mStop1800_mLSP1300": {
+      "expected": 13.6875,
+      "expected_m1": 9.34332275390625,
+      "expected_m2": 6.73681640625,
+      "expected_p1": 20.180015563964844,
+      "expected_p2": 28.388154983520508,
+      "mLSP": 1300,
+      "mStop": 1800
+    },
+    "mStop1800_mLSP1400": {
+      "expected": 24.125,
+      "expected_m1": 16.79650115966797,
+      "expected_m2": 12.2509765625,
+      "expected_p1": 34.991451263427734,
+      "expected_p2": 48.48060607910156,
+      "mLSP": 1400,
+      "mStop": 1800
+    },
+    "mStop1800_mLSP1500": {
+      "expected": 57.25,
+      "expected_m1": 39.359375,
+      "expected_m2": 28.625,
+      "expected_p1": 83.94950866699219,
+      "expected_p2": 118.80809783935547,
+      "mLSP": 1500,
+      "mStop": 1800
+    },
+    "mStop1800_mLSP1600": {
+      "expected": 114.0,
+      "expected_m1": 75.591796875,
+      "expected_m2": 52.546875,
+      "expected_p1": 173.07315063476562,
+      "expected_p2": 250.3723602294922,
+      "mLSP": 1600,
+      "mStop": 1800
+    },
+    "mStop1800_mLSP200": {
+      "expected": 3.84375,
+      "expected_m1": 2.439411163330078,
+      "expected_m2": 1.651611328125,
+      "expected_p1": 6.141952991485596,
+      "expected_p2": 9.218432426452637,
+      "mLSP": 200,
+      "mStop": 1800
+    },
+    "mStop1800_mLSP300": {
+      "expected": 3.796875,
+      "expected_m1": 2.419163703918457,
+      "expected_m2": 1.64630126953125,
+      "expected_p1": 6.0065131187438965,
+      "expected_p2": 8.992504119873047,
+      "mLSP": 300,
+      "mStop": 1800
+    },
+    "mStop1800_mLSP400": {
+      "expected": 3.875,
+      "expected_m1": 2.4689407348632812,
+      "expected_m2": 1.68017578125,
+      "expected_p1": 6.145549774169922,
+      "expected_p2": 9.228699684143066,
+      "mLSP": 400,
+      "mStop": 1800
+    },
+    "mStop1800_mLSP500": {
+      "expected": 3.734375,
+      "expected_m1": 2.3793420791625977,
+      "expected_m2": 1.61920166015625,
+      "expected_p1": 5.922525882720947,
+      "expected_p2": 8.851340293884277,
+      "mLSP": 500,
+      "mStop": 1800
+    },
+    "mStop1800_mLSP600": {
+      "expected": 3.796875,
+      "expected_m1": 2.4286651611328125,
+      "expected_m2": 1.6611328125,
+      "expected_p1": 5.991378307342529,
+      "expected_p2": 8.985527992248535,
+      "mLSP": 600,
+      "mStop": 1800
+    },
+    "mStop1800_mLSP700": {
+      "expected": 3.859375,
+      "expected_m1": 2.4686431884765625,
+      "expected_m2": 1.6884765625,
+      "expected_p1": 6.090002059936523,
+      "expected_p2": 9.133438110351562,
+      "mLSP": 700,
+      "mStop": 1800
+    },
+    "mStop1800_mLSP800": {
+      "expected": 4.125,
+      "expected_m1": 2.65667724609375,
+      "expected_m2": 1.8046875,
+      "expected_p1": 6.509151935577393,
+      "expected_p2": 9.667767524719238,
+      "mLSP": 800,
+      "mStop": 1800
+    },
+    "mStop1800_mLSP900": {
+      "expected": 4.078125,
+      "expected_m1": 2.6264877319335938,
+      "expected_m2": 1.7841796875,
+      "expected_p1": 6.418928623199463,
+      "expected_p2": 9.550159454345703,
+      "mLSP": 900,
+      "mStop": 1800
+    },
+    "mStop600_mLSP1": {
+      "expected": 0.01611328125,
+      "expected_m1": 0.011723041534423828,
+      "expected_m2": 0.00830841064453125,
+      "expected_p1": 0.023563755676150322,
+      "expected_p2": 0.03270423412322998,
+      "mLSP": 1,
+      "mStop": 600
+    },
+    "mStop600_mLSP100": {
+      "expected": 0.01708984375,
+      "expected_m1": 0.012174844741821289,
+      "expected_m2": 0.00881195068359375,
+      "expected_p1": 0.02499186247587204,
+      "expected_p2": 0.03384331613779068,
+      "mLSP": 100,
+      "mStop": 600
+    },
+    "mStop600_mLSP200": {
+      "expected": 0.02783203125,
+      "expected_m1": 0.01869964599609375,
+      "expected_m2": 0.013916015625,
+      "expected_p1": 0.03981351479887962,
+      "expected_p2": 0.054870110005140305,
+      "mLSP": 200,
+      "mStop": 600
+    },
+    "mStop600_mLSP300": {
+      "expected": 0.07275390625,
+      "expected_m1": 0.04872167110443115,
+      "expected_m2": 0.03524017333984375,
+      "expected_p1": 0.10378392785787582,
+      "expected_p2": 0.14002828299999237,
+      "mLSP": 300,
+      "mStop": 600
+    },
+    "mStop600_mLSP400": {
+      "expected": 0.37109375,
+      "expected_m1": 0.2605628967285156,
+      "expected_m2": 0.194244384765625,
+      "expected_p1": 0.5367636680603027,
+      "expected_p2": 0.737841784954071,
+      "mLSP": 400,
+      "mStop": 600
+    },
+    "mStop700_mLSP1": {
+      "expected": 0.02294921875,
+      "expected_m1": 0.01541900634765625,
+      "expected_m2": 0.011474609375,
+      "expected_p1": 0.032828688621520996,
+      "expected_p2": 0.045243773609399796,
+      "mLSP": 1,
+      "mStop": 700
+    },
+    "mStop700_mLSP100": {
+      "expected": 0.02392578125,
+      "expected_m1": 0.016320466995239258,
+      "expected_m2": 0.01233673095703125,
+      "expected_p1": 0.03422565385699272,
+      "expected_p2": 0.0471690408885479,
+      "mLSP": 100,
+      "mStop": 700
+    },
+    "mStop700_mLSP200": {
+      "expected": 0.03173828125,
+      "expected_m1": 0.02213001251220703,
+      "expected_m2": 0.01636505126953125,
+      "expected_p1": 0.04514835774898529,
+      "expected_p2": 0.062403157353401184,
+      "mLSP": 200,
+      "mStop": 700
+    },
+    "mStop700_mLSP300": {
+      "expected": 0.05126953125,
+      "expected_m1": 0.035617053508758545,
+      "expected_m2": 0.026836395263671875,
+      "expected_p1": 0.07456686347723007,
+      "expected_p2": 0.10220849514007568,
+      "mLSP": 300,
+      "mStop": 700
+    },
+    "mStop700_mLSP400": {
+      "expected": 0.14453125,
+      "expected_m1": 0.0954749584197998,
+      "expected_m2": 0.068878173828125,
+      "expected_p1": 0.2073269933462143,
+      "expected_p2": 0.28078749775886536,
+      "mLSP": 400,
+      "mStop": 700
+    },
+    "mStop700_mLSP500": {
+      "expected": 0.591796875,
+      "expected_m1": 0.4163058400154114,
+      "expected_m2": 0.30745697021484375,
+      "expected_p1": 0.8536378741264343,
+      "expected_p2": 1.1788012981414795,
+      "mLSP": 500,
+      "mStop": 700
+    },
+    "mStop900_mLSP1": {
+      "expected": 0.04638671875,
+      "expected_m1": 0.031211376190185547,
+      "expected_m2": 0.022106170654296875,
+      "expected_p1": 0.06968405097723007,
+      "expected_p2": 0.09951497614383698,
+      "mLSP": 1,
+      "mStop": 900
+    },
+    "mStop900_mLSP100": {
+      "expected": 0.05029296875,
+      "expected_m1": 0.03383970260620117,
+      "expected_m2": 0.023967742919921875,
+      "expected_p1": 0.0751512423157692,
+      "expected_p2": 0.10705415159463882,
+      "mLSP": 100,
+      "mStop": 900
+    },
+    "mStop900_mLSP200": {
+      "expected": 0.05419921875,
+      "expected_m1": 0.0364680290222168,
+      "expected_m2": 0.025829315185546875,
+      "expected_p1": 0.08098822832107544,
+      "expected_p2": 0.1153690367937088,
+      "mLSP": 200,
+      "mStop": 900
+    },
+    "mStop900_mLSP300": {
+      "expected": 0.06884765625,
+      "expected_m1": 0.046660423278808594,
+      "expected_m2": 0.03334808349609375,
+      "expected_p1": 0.10150478780269623,
+      "expected_p2": 0.14321275055408478,
+      "mLSP": 300,
+      "mStop": 900
+    },
+    "mStop900_mLSP400": {
+      "expected": 0.10009765625,
+      "expected_m1": 0.06969079375267029,
+      "expected_m2": 0.050830841064453125,
+      "expected_p1": 0.14518392086029053,
+      "expected_p2": 0.2017739862203598,
+      "mLSP": 400,
+      "mStop": 900
+    },
+    "mStop900_mLSP500": {
+      "expected": 0.1796875,
+      "expected_m1": 0.12683629989624023,
+      "expected_m2": 0.09405517578125,
+      "expected_p1": 0.2599066197872162,
+      "expected_p2": 0.3572707772254944,
+      "mLSP": 500,
+      "mStop": 900
+    },
+    "mStop900_mLSP600": {
+      "expected": 0.498046875,
+      "expected_m1": 0.3378930687904358,
+      "expected_m2": 0.24805068969726562,
+      "expected_p1": 0.7184081077575684,
+      "expected_p2": 0.97651207447052,
+      "mLSP": 600,
+      "mStop": 900
+    },
+    "mStop900_mLSP700": {
+      "expected": 1.4453125,
+      "expected_m1": 0.9853601455688477,
+      "expected_m2": 0.7000732421875,
+      "expected_p1": 2.1539249420166016,
+      "expected_p2": 3.055601119995117,
+      "mLSP": 700,
+      "mStop": 900
+    },
+    "mStop950_mLSP1": {
+      "expected": 0.05810546875,
+      "expected_m1": 0.03803950548171997,
+      "expected_m2": 0.026782989501953125,
+      "expected_p1": 0.08821488171815872,
+      "expected_p2": 0.1269228458404541,
+      "mLSP": 1,
+      "mStop": 950
+    },
+    "mStop950_mLSP100": {
+      "expected": 0.06103515625,
+      "expected_m1": 0.04076957702636719,
+      "expected_m2": 0.0286102294921875,
+      "expected_p1": 0.09266269207000732,
+      "expected_p2": 0.13259625434875488,
+      "mLSP": 100,
+      "mStop": 950
+    },
+    "mStop950_mLSP200": {
+      "expected": 0.06787109375,
+      "expected_m1": 0.045667171478271484,
+      "expected_m2": 0.032344818115234375,
+      "expected_p1": 0.10168822854757309,
+      "expected_p2": 0.14544865489006042,
+      "mLSP": 200,
+      "mStop": 950
+    },
+    "mStop950_mLSP300": {
+      "expected": 0.08154296875,
+      "expected_m1": 0.05446815490722656,
+      "expected_m2": 0.0382232666015625,
+      "expected_p1": 0.12217219173908234,
+      "expected_p2": 0.17376495897769928,
+      "mLSP": 300,
+      "mStop": 950
+    },
+    "mStop950_mLSP400": {
+      "expected": 0.10888671875,
+      "expected_m1": 0.07459378242492676,
+      "expected_m2": 0.05401802062988281,
+      "expected_p1": 0.15966789424419403,
+      "expected_p2": 0.22462785243988037,
+      "mLSP": 400,
+      "mStop": 950
+    },
+    "mStop950_mLSP500": {
+      "expected": 0.1767578125,
+      "expected_m1": 0.1243421733379364,
+      "expected_m2": 0.09183120727539062,
+      "expected_p1": 0.2535552978515625,
+      "expected_p2": 0.3511594533920288,
+      "mLSP": 500,
+      "mStop": 950
+    },
+    "mStop950_mLSP600": {
+      "expected": 0.37109375,
+      "expected_m1": 0.2605628967285156,
+      "expected_m2": 0.194244384765625,
+      "expected_p1": 0.5382428765296936,
+      "expected_p2": 0.738818347454071,
+      "mLSP": 600,
+      "mStop": 950
+    },
+    "mStop950_mLSP700": {
+      "expected": 1.0625,
+      "expected_m1": 0.7301445007324219,
+      "expected_m2": 0.543701171875,
+      "expected_p1": 1.5495445728302002,
+      "expected_p2": 2.1340808868408203,
+      "mLSP": 700,
+      "mStop": 950
+    },
+    "mStop950_mLSP800": {
+      "expected": 3.484375,
+      "expected_m1": 2.4007182121276855,
+      "expected_m2": 1.72857666015625,
+      "expected_p1": 5.095483779907227,
+      "expected_p2": 7.136496067047119,
+      "mLSP": 800,
+      "mStop": 950
+    }
+  },
+  "requested_point_count": 205,
+  "status": "complete"
+}
