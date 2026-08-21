@@ -1,0 +1,21 @@
+{
+  "dy_rz": {
+    "status": "complete",
+    "source": "card_inputs/2024/rz_high.json and rz_low.json",
+    "source_sha256": {
+      "rz_high.json": "685d1d1735940a5d165dc08cd145da880d1f0a51447581ebc6432d4afec8bf74",
+      "rz_low.json": "418d9b416f0df9e1924f158373af9892304ff2478bb754676e9b7cd11078ec0e"
+    },
+    "factor_policy": "channel-specific RZ(Nb); exact for explicit Nb axes and DY-yield-weighted effective factor for inclusive CR distributions",
+    "channels": {
+      "DY2E": {
+        "highdm": {"Nb1": 0.7956219718951804, "Nb2plus": 0.6547029430664236, "effective": 0.7538180297974927},
+        "lowdm": {"Nb1": 0.6242885433272645, "Nb2plus": 0.7996132657524656, "effective": 0.6491810522205995}
+      },
+      "DY2M": {
+        "highdm": {"Nb1": 0.6792547511819805, "Nb2plus": 0.750825639500108, "effective": 0.6964603717441671},
+        "lowdm": {"Nb1": 0.5985045784169216, "Nb2plus": 0.5574163275293518, "effective": 0.5913413126323562}
+      }
+    }
+  }
+}

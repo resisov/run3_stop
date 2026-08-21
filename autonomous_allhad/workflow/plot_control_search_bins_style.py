@@ -1213,6 +1213,9 @@ def selected_an17_recoil_blocks(payload: dict, scheme_name: str) -> list[dict]:
             elif category.startswith("AN17_"):
                 category = category.split("_", 2)[2]
         label = SELECTED_AN17_CATEGORY_LABELS.get(category, category) if category else f"category {pos + 1}"
+        raw_block_labels = [str(value) for value in raw_labels[slc]]
+        if raw_block_labels and all("__Nres0" in value for value in raw_block_labels):
+            label = label + "\n" + r"$N_{res}=0$"
         block = {
             "groups": {group: vals[slc] for group, vals in rec["groups"].items()},
             "background": rec["background"][slc],
