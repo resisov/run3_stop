@@ -4,10 +4,16 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import subprocess
 from pathlib import Path
 
-from build_flat_recoil_ntop_split_combine_inputs import write_parallel_runner
+from build_combine_inputs import stable_path, write_parallel_runner
+
+
+DEFAULT_CMSSW = Path(
+    "/eos/user/t/taiwoo/decaf/analysis/CombinedArea/CMSSW_14_1_0_pre4"
+)
 
 
 def cards_by_mass(directory: Path) -> dict[str, Path]:
@@ -30,18 +36,159 @@ def write_json(path: Path, payload: dict) -> None:
         temporary.unlink(missing_ok=True)
 
 
+def read_source_manifest(card_dir: Path) -> dict:
+    path = card_dir.parent / "manifest.json"
+    if not path.is_file():
+        raise FileNotFoundError(f"source card manifest is missing: {path}")
+    payload = json.loads(path.read_text())
+    if payload.get("status") != "combine_inputs_ready":
+        raise ValueError(f"source card manifest is not ready: {path}")
+    model = payload.get("model") or {}
+    if model.get("zinv_free_normalization_rate_parameter") is not False:
+        raise ValueError(
+            f"source card manifest lacks the RZ-normalization gate: {path}"
+        )
+    if model.get("sgamma_role") != "shape only, shared between matched GCR and Z SR":
+        raise ValueError(f"source card manifest has the wrong Sgamma role: {path}")
+    return payload
+
+
+def write_condor_limit_submission(
+    cards: dict[str, str],
+    output_dir: Path,
+    cmssw: Path,
+    point_timeout: int,
+    batch_name: str,
+) -> tuple[Path, Path]:
+    wrapper = output_dir / "run_condor_limit_point.sh"
+    wrapper.write_text(
+        "\n".join(
+            [
+                "#!/usr/bin/env bash",
+                "set -euo pipefail",
+                "MASS=$1",
+                "CARD=$2",
+                "OUTDIR=$3",
+                f"CMSSW={cmssw.absolute()}",
+                f"POINT_TIMEOUT={int(point_timeout)}",
+                "WORKSPACE_TIMEOUT=900",
+                "export PYTHONNOUSERSITE=1",
+                'SCRATCH_BASE="${_CONDOR_SCRATCH_DIR:-/tmp/NPS26012_${MASS}_$$}"',
+                'export HOME="$SCRATCH_BASE/home"',
+                'export TMPDIR="$SCRATCH_BASE/tmp"',
+                'export XDG_CACHE_HOME="$SCRATCH_BASE/cache"',
+                'WORKDIR="$SCRATCH_BASE/work"',
+                'mkdir -p "$HOME" "$TMPDIR" "$XDG_CACHE_HOME" "$WORKDIR"',
+                "source /cvmfs/cms.cern.ch/cmsset_default.sh",
+                'cd "$CMSSW/src"',
+                'eval "$(scramv1 runtime -sh)"',
+                'mkdir -p "$OUTDIR"',
+                'cd "$WORKDIR"',
+                'WORKSPACE="workspace_${MASS}.root"',
+                'timeout "$WORKSPACE_TIMEOUT" text2workspace.py "$CARD" -m 120 -o "$WORKSPACE"',
+                'timeout "$POINT_TIMEOUT" combine -M AsymptoticLimits --run blind -m 120 -n "_${MASS}" "$WORKSPACE"',
+                'shopt -s nullglob',
+                'RESULTS=("higgsCombine_${MASS}.AsymptoticLimits.mH"*.root)',
+                '[[ ${#RESULTS[@]} -eq 1 ]]',
+                'mv -f "${RESULTS[0]}" "$OUTDIR/"',
+            ]
+        )
+        + "\n"
+    )
+    wrapper.chmod(0o755)
+    logs = output_dir / "condor_logs"
+    logs.mkdir(parents=True, exist_ok=True)
+    submit = output_dir / "limits_eossubmit.sub"
+    rows = "\n".join(
+        f"{mass} {stable_path(Path(card))}" for mass, card in sorted(cards.items())
+    )
+    stable_output = stable_path(output_dir)
+    stable_logs = stable_path(logs)
+    submit.write_text(
+        f"""universe = vanilla
+executable = {stable_path(wrapper)}
+initialdir = {stable_output}
+arguments = $(mass) $(card) {stable_output}/limits
+output = {stable_logs}/$(mass).out
+error = {stable_logs}/$(mass).err
+log = {stable_logs}/cluster.log
+should_transfer_files = NO
+request_cpus = 1
+request_memory = 6000MB
+request_disk = 2000MB
++MaxRuntime = {int(point_timeout) + 600}
++JobBatchName = \"{batch_name}\"
+queue mass,card from (
+{rows}
+)
+"""
+    )
+    return wrapper, submit
+
+
+def write_condor_impact_submission(
+    card: str,
+    output_dir: Path,
+    impact_runner: Path,
+    mass_key: str,
+    batch_name: str,
+) -> Path:
+    match = re.fullmatch(r"mStop([0-9]+)_mLSP([0-9]+)", mass_key)
+    if not match or int(match.group(2)) != 500:
+        raise ValueError(
+            "the existing impact runner supports the requested mLSP500 "
+            f"benchmark only, got {mass_key}"
+        )
+    if not impact_runner.is_file():
+        raise FileNotFoundError(f"impact runner is missing: {impact_runner}")
+    impact_dir = output_dir / f"impact_{mass_key}"
+    logs = impact_dir / "condor_logs"
+    logs.mkdir(parents=True, exist_ok=True)
+    submit = output_dir / "impact_eossubmit.sub"
+    stable_impact_dir = stable_path(impact_dir)
+    stable_logs = stable_path(logs)
+    submit.write_text(
+        f"""universe = vanilla
+executable = {stable_path(impact_runner)}
+initialdir = {stable_impact_dir}
+arguments = {stable_path(Path(card))} {stable_impact_dir} {match.group(1)}
+output = {stable_logs}/impact.out
+error = {stable_logs}/impact.err
+log = {stable_logs}/cluster.log
+should_transfer_files = NO
+request_cpus = 4
+request_memory = 16000MB
+request_disk = 5000MB
++MaxRuntime = 43200
++JobBatchName = \"{batch_name}\"
+queue 1
+"""
+    )
+    return submit
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Combine two years of matching mass-point datacards.")
     parser.add_argument("--left-dir", required=True, type=Path)
     parser.add_argument("--left-label", default="y2024")
-    parser.add_argument("--left-lumi-name", default="Lumi_2024")
+    parser.add_argument("--left-lumi-name", default="lumi_13p6TeV_2024")
     parser.add_argument("--right-dir", required=True, type=Path)
     parser.add_argument("--right-label", default="y2025")
-    parser.add_argument("--right-lumi-name", default="Lumi_2025")
+    parser.add_argument("--right-lumi-name", default="lumi_13p6TeV_2025")
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--combine-cards", default="combineCards.py")
     parser.add_argument("--runner-jobs", type=int, default=12)
     parser.add_argument("--point-timeout", type=int, default=600)
+    parser.add_argument("--cmssw", type=Path, default=DEFAULT_CMSSW)
+    parser.add_argument(
+        "--condor-batch-name", default="NPS26012_2024_2025_combined_limits"
+    )
+    parser.add_argument("--impact-mass-key")
+    parser.add_argument(
+        "--impact-runner",
+        type=Path,
+        default=Path(__file__).with_name("run_asimov_impacts_eos.sh"),
+    )
     args = parser.parse_args()
 
     left = cards_by_mass(args.left_dir)
@@ -54,6 +201,22 @@ def main() -> int:
         raise SystemExit(
             f"mass grids differ: left_only={len(left_only)}, right_only={len(right_only)}"
         )
+
+    left_manifest = read_source_manifest(args.left_dir)
+    right_manifest = read_source_manifest(args.right_dir)
+    left_model = left_manifest["model"]
+    right_model = right_manifest["model"]
+    bin_signature = (
+        int(left_model["highdm_bins"]),
+        int(left_model["lowdm_bins"]),
+    )
+    if bin_signature != (
+        int(right_model["highdm_bins"]),
+        int(right_model["lowdm_bins"]),
+    ):
+        raise SystemExit("source years use different search-bin accounting")
+    if left_model["signal_topology"] != right_model["signal_topology"]:
+        raise SystemExit("source years use different signal topologies")
 
     output_dir = args.output_dir.absolute()
     datacard_dir = output_dir / "datacards"
@@ -90,6 +253,33 @@ def main() -> int:
                 )
             if result.stderr.strip():
                 warnings.append({"mass_point": mass, "stderr": result.stderr.strip()[:1000]})
+            forbidden = [
+                token
+                for token in ("CMS_SUS26090", "zg_norm_")
+                if token in text
+            ]
+            if forbidden:
+                raise RuntimeError(
+                    f"combined card {mass} contains retired names: {forbidden}"
+                )
+            for required_token in (
+                "CMS_NPS26012_",
+                "sgamma_shape_",
+            ):
+                if required_token not in text:
+                    raise RuntimeError(
+                        f"combined card {mass} is missing {required_token!r}"
+                    )
+            for year in ("2024", "2025"):
+                if not re.search(
+                    rf"^[A-Za-z0-9_]+_{year}\s+rateParam\s+",
+                    text,
+                    flags=re.MULTILINE,
+                ):
+                    raise RuntimeError(
+                        f"combined card {mass} is missing year-specific "
+                        f"{year} rate parameters"
+                    )
             os.replace(temporary, output)
         finally:
             temporary.unlink(missing_ok=True)
@@ -103,11 +293,40 @@ def main() -> int:
         args.runner_jobs,
         args.point_timeout,
     )
+    condor_wrapper, condor_submit = write_condor_limit_submission(
+        combined_cards,
+        output_dir,
+        args.cmssw,
+        args.point_timeout,
+        args.condor_batch_name,
+    )
+    impact_submit = None
+    if args.impact_mass_key:
+        impact_card = combined_cards.get(args.impact_mass_key)
+        if impact_card is None:
+            raise SystemExit(
+                f"impact benchmark is absent from the common grid: {args.impact_mass_key}"
+            )
+        impact_submit = write_condor_impact_submission(
+            impact_card,
+            output_dir,
+            args.impact_runner,
+            args.impact_mass_key,
+            "NPS26012_2024_2025_T2tt_impact",
+        )
     manifest = {
         "status": "combine_inputs_ready",
         "method": "combineCards.py with year-labelled channels",
         "mass_point_count": len(combined_cards),
         "mass_points": sorted(combined_cards),
+        "model": {
+            "highdm_bins": bin_signature[0],
+            "lowdm_bins": bin_signature[1],
+            "zinv_normalization": "external RZ only",
+            "sgamma_role": "shape only, shared between matched GCR and Z SR",
+            "zinv_free_normalization_rate_parameter": False,
+            "signal_topology": left_model["signal_topology"],
+        },
         "left": {
             "label": args.left_label,
             "datacard_dir": str(args.left_dir.absolute()),
@@ -125,9 +344,15 @@ def main() -> int:
         "datacard_dir": str(datacard_dir),
         "limit_dir": str(limit_dir),
         "runner": str(runner),
+        "condor_wrapper": str(condor_wrapper),
+        "condor_submit": str(condor_submit),
+        "condor_backend": "EOS schedd via module load lxbatch/eossubmit",
+        "impact_submit": str(impact_submit) if impact_submit else None,
+        "impact_mass_key": args.impact_mass_key,
         "combine_cards_warnings": warnings,
     }
     write_json(output_dir / "combine_input_manifest.json", manifest)
+    write_json(output_dir / "manifest.json", manifest)
     print(
         json.dumps(
             {

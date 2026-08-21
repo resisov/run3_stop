@@ -30,8 +30,7 @@ case "$OUTDIR" in
     /tmp/*|/afs/*) echo "system /tmp and AFS outputs are forbidden" >&2; exit 2 ;;
 esac
 
-mkdir -p "$OUTDIR"/{home,tmp,cache,work}
-export HOME="$OUTDIR/home"
+mkdir -p "$OUTDIR"/{tmp,cache,work}
 export TMPDIR="$OUTDIR/tmp"
 export XDG_CACHE_HOME="$OUTDIR/cache"
 export PYTHONNOUSERSITE=1
