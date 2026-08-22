@@ -19,8 +19,10 @@
       "json": "results/2024_2025/expected-limit-t2tt/expected_limits.json",
       "missing_point_count": 0,
       "model": "T2tt",
-      "pdf": "results/2024_2025/expected-limit-t2tt/expected_limit_t2tt_2024_2025_highdm79_lowdm34.pdf",
-      "png": "results/2024_2025/expected-limit-t2tt/expected_limit_t2tt_2024_2025_highdm79_lowdm34.png",
+      "highdm_bins": 73,
+      "highdm_source_bins": 79,
+      "pdf": "results/2024_2025/expected-limit-t2tt/expected_limit_t2tt_2024_2025_highdm73_lowdm34.pdf",
+      "png": "results/2024_2025/expected-limit-t2tt/expected_limit_t2tt_2024_2025_highdm73_lowdm34.png",
       "point_count": 205,
       "status": "complete"
     },
@@ -28,8 +30,10 @@
       "json": "results/2024_2025/expected-limit-t2bw/expected_limits.json",
       "missing_point_count": 0,
       "model": "T2bW",
-      "pdf": "results/2024_2025/expected-limit-t2bw/expected_limit_t2bw_2024_2025_highdm79_lowdm34.pdf",
-      "png": "results/2024_2025/expected-limit-t2bw/expected_limit_t2bw_2024_2025_highdm79_lowdm34.png",
+      "highdm_bins": 73,
+      "highdm_source_bins": 79,
+      "pdf": "results/2024_2025/expected-limit-t2bw/expected_limit_t2bw_2024_2025_highdm73_lowdm34.pdf",
+      "png": "results/2024_2025/expected-limit-t2bw/expected_limit_t2bw_2024_2025_highdm73_lowdm34.png",
       "point_count": 354,
       "status": "complete"
     },
@@ -37,8 +41,10 @@
       "json": "results/2024_2025/expected-limit-t2tb/expected_limits.json",
       "missing_point_count": 0,
       "model": "T2tb",
-      "pdf": "results/2024_2025/expected-limit-t2tb/expected_limit_t2tb_2024_2025_highdm79_lowdm34.pdf",
-      "png": "results/2024_2025/expected-limit-t2tb/expected_limit_t2tb_2024_2025_highdm79_lowdm34.png",
+      "highdm_bins": 73,
+      "highdm_source_bins": 79,
+      "pdf": "results/2024_2025/expected-limit-t2tb/expected_limit_t2tb_2024_2025_highdm73_lowdm34.pdf",
+      "png": "results/2024_2025/expected-limit-t2tb/expected_limit_t2tb_2024_2025_highdm73_lowdm34.png",
       "point_count": 365,
       "status": "complete"
     }

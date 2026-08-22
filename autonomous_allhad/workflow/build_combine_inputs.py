@@ -14,11 +14,22 @@ import json
 import math
 import mmap
 import re
+import sys
 from array import array
 from pathlib import Path
 from typing import Any
 
 import numpy as np
+
+THIS_DIR = Path(__file__).resolve().parent
+PACKAGE_ROOT = THIS_DIR.parent
+if str(PACKAGE_ROOT) not in sys.path:
+    sys.path.insert(0, str(PACKAGE_ROOT))
+
+from autonomous_allhad.search_bin_categorization import (
+    configured_bin_position_groups,
+    configured_exclusive_mapping,
+)
 
 from background_process_groups import (
     BACKGROUND_PROCESS_ORDER,
@@ -104,6 +115,7 @@ def enforce_downstream_input_boundary(args: argparse.Namespace) -> None:
         "rz_high": args.rz_high,
         "rz_low": args.rz_low,
         "zgamma_double_ratio": args.zgamma_double_ratio,
+        "search_bin_config": args.search_bin_config,
         "output_dir": args.output_dir,
     }
     for label, path in inspected.items():
@@ -116,6 +128,72 @@ def enforce_downstream_input_boundary(args: argparse.Namespace) -> None:
         path = inspected[label]
         if path.suffix != ".json":
             raise SystemExit(f"{label} must be a machine-derived JSON: {path}")
+
+
+def apply_configured_highdm_bin_merges(
+    hists: dict[str, Any],
+    exact: dict[str, Any],
+    configuration: dict[str, Any],
+) -> dict[str, Any]:
+    """Project bounded canonical High-dM records into configured final bins.
+
+    This runs only after the streaming canonical-histogram extraction.  Every
+    signal and background component remains separated by its physical group
+    and native recoil bin; only the visible search-bin axis is added.  Hence
+    TF, RZ, and Sgamma parameter scopes are unchanged by the projection.
+    """
+    high = exact["highdm"]
+    raw_labels = [str(value) for value in high["search_bin_labels"]]
+    source_count = len(raw_labels)
+    configured_source_count = len(configured_exclusive_mapping(configuration))
+    if source_count != configured_source_count:
+        raise ValueError(
+            "High-dM configuration/source mismatch: "
+            f"{configured_source_count} configured bins but "
+            f"{source_count} canonical labels"
+        )
+    position_groups = configured_bin_position_groups(configuration)
+
+    def rebin_leaf(leaf: dict[str, Any]) -> dict[str, Any]:
+        output = dict(leaf)
+        for field in ("entries", "sumw", "sumw2"):
+            if field not in leaf:
+                continue
+            values = leaf.get(field) or []
+            if len(values) != source_count:
+                raise ValueError(
+                    f"High-dM {field} has {len(values)} bins; "
+                    f"expected {source_count}"
+                )
+            output[field] = [
+                sum(values[position] for position in positions)
+                for positions in position_groups
+            ]
+        return output
+
+    def rebin_tree(value: Any) -> Any:
+        if not isinstance(value, dict):
+            return value
+        if "sumw" in value:
+            return rebin_leaf(value)
+        return {key: rebin_tree(child) for key, child in value.items()}
+
+    hists["search_bin_histograms"][HIGH_SCHEME] = rebin_tree(
+        hists["search_bin_histograms"][HIGH_SCHEME]
+    )
+    high["sr_components"] = rebin_tree(high["sr_components"])
+    high["source_search_bin_labels"] = raw_labels
+    high["search_bin_labels"] = [
+        "__plus__".join(raw_labels[position] for position in positions)
+        for positions in position_groups
+    ]
+    high["bin_projection"] = {
+        "source_bin_count": source_count,
+        "final_bin_count": len(position_groups),
+        "position_groups_zero_based": [list(group) for group in position_groups],
+        "bin_merges_1based": list(configuration.get("bin_merges_1based") or []),
+    }
+    return high["bin_projection"]
 
 
 def read_json(path: Path) -> Any:
@@ -2045,6 +2123,12 @@ def main() -> int:
     parser.add_argument("--rz-high", type=Path, required=True)
     parser.add_argument("--rz-low", type=Path, required=True)
     parser.add_argument("--zgamma-double-ratio", type=Path, required=True)
+    parser.add_argument(
+        "--search-bin-config",
+        type=Path,
+        required=True,
+        help="Adopted year-specific High-dM search-bin configuration",
+    )
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--only", nargs="*")
     parser.add_argument("--max-mstop", type=int, default=1800)
@@ -2064,11 +2148,13 @@ def main() -> int:
         "rz_high": args.rz_high,
         "rz_low": args.rz_low,
         "zgamma_double_ratio": args.zgamma_double_ratio,
+        "search_bin_config": args.search_bin_config,
     }
     sgamma = read_json(args.sgamma)
     rz_high = read_json(args.rz_high)
     rz_low = read_json(args.rz_low)
     double_ratio = read_json(args.zgamma_double_ratio)
+    search_bin_configuration = read_json(args.search_bin_config)
     for label, payload in (
         ("Sgamma", sgamma),
         ("RZ high", rz_high),
@@ -2078,11 +2164,24 @@ def main() -> int:
             raise SystemExit(f"{label} input incomplete: {payload.get('status')}")
     if rz_low.get("status") not in {"complete", "feature_stage_complete"}:
         raise SystemExit(f"RZ low input incomplete: {rz_low.get('status')}")
+    if search_bin_configuration.get("schema_version") != "search_bin_scheme_v1":
+        raise SystemExit("unsupported High-dM search-bin configuration")
+    if search_bin_configuration.get("scheme_name") != HIGH_SCHEME:
+        raise SystemExit(f"search-bin configuration must name {HIGH_SCHEME}")
+    if str(search_bin_configuration.get("campaign_year")) != CAMPAIGN_YEAR:
+        raise SystemExit(
+            "search-bin configuration year does not match --campaign-year"
+        )
 
     output_dir = args.output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
     hists, exact, extracted_signals = extract_current_histogram_input(
         args.hists, args.topology
+    )
+    highdm_bin_projection = apply_configured_highdm_bin_merges(
+        hists,
+        exact,
+        search_bin_configuration,
     )
     rz_covariance = build_rz_covariance(rz_high, rz_low)
     write_json(output_dir / "rz_covariance.json", rz_covariance)
@@ -2181,6 +2280,8 @@ def main() -> int:
             "rz_covariance": rz_covariance["status"],
             "zgamma_nonclosure": "central abs(D-1), Z SR only",
             "highdm_bins": len(exact["highdm"]["search_bin_labels"]),
+            "highdm_source_bins": highdm_bin_projection["source_bin_count"],
+            "highdm_bin_projection": highdm_bin_projection,
             "lowdm_bins": 34,
             "signal_topology": args.topology,
             "histogram_access": (

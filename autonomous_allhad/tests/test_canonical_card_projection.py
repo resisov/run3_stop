@@ -77,6 +77,65 @@ def test_card_projection_keeps_only_requested_topology_and_backgrounds(
     assert set(search["Nb1"]["recoil0"]) == {"data_obs", "TT"}
 
 
+def test_configured_highdm_projection_merges_every_bounded_component() -> None:
+    configuration = json.loads(
+        (PROJECT / "configs" / "search_bins_2024.json").read_text()
+    )
+    values = list(range(1, 80))
+    source_leaf = {
+        "sumw": values,
+        "sumw2": [value * value for value in values],
+        "entries": [1] * 79,
+    }
+    hists = {
+        "search_bin_histograms": {
+            MODULE.HIGH_SCHEME: {
+                "T2tt_mStop1200_mLSP500": {
+                    "nominal": source_leaf,
+                    "pileupUp": source_leaf,
+                }
+            }
+        }
+    }
+    exact = {
+        "highdm": {
+            "search_bin_labels": [f"bin{index}" for index in range(1, 80)],
+            "sr_components": {
+                "Nb3plus": {
+                    "recoil0": {"TT": {"nominal": source_leaf}}
+                }
+            },
+        }
+    }
+
+    summary = MODULE.apply_configured_highdm_bin_merges(
+        hists, exact, configuration
+    )
+
+    assert summary["source_bin_count"] == 79
+    assert summary["final_bin_count"] == 73
+    assert summary["position_groups_zero_based"][16] == [16, 17]
+    assert summary["position_groups_zero_based"][-5:] == [
+        [69, 74],
+        [70, 75],
+        [71, 76],
+        [72, 77],
+        [73, 78],
+    ]
+    signal = hists["search_bin_histograms"][MODULE.HIGH_SCHEME][
+        "T2tt_mStop1200_mLSP500"
+    ]
+    assert len(signal["nominal"]["sumw"]) == 73
+    assert signal["nominal"]["sumw"][16] == 17 + 18
+    assert signal["pileupUp"]["sumw2"][-1] == 74 * 74 + 79 * 79
+    component = exact["highdm"]["sr_components"]["Nb3plus"]["recoil0"][
+        "TT"
+    ]["nominal"]
+    assert component["entries"][16] == 2
+    assert sum(component["sumw"]) == sum(values)
+    assert "bin17__plus__bin18" in exact["highdm"]["search_bin_labels"]
+
+
 def complete(value: float) -> dict:
     return {"status": "complete", "value": value}
 
