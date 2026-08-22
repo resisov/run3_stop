@@ -1,16 +1,50 @@
 {
-  "impact": {
-    "json": "impacts/impacts_NPS26012_2024_2025_mStop1200_mLSP500.json",
-    "mass_point": {
-      "mLSP": 500,
-      "mStop": 1200
+  "impacts": [
+    {
+      "asimov_expect_signal": 1,
+      "json": "impacts/impacts_NPS26012_2024_2025_T2tt_mStop1200_mLSP500_highdm73_lowdm34_r1.json",
+      "mass_point": {
+        "mLSP": 500,
+        "mStop": 1200
+      },
+      "model": "T2tt",
+      "parameter_count": 1090,
+      "pdf": "impacts/impacts_NPS26012_2024_2025_T2tt_mStop1200_mLSP500_highdm73_lowdm34_r1.pdf",
+      "png": "impacts/impacts_NPS26012_2024_2025_T2tt_mStop1200_mLSP500_highdm73_lowdm34_r1.png",
+      "poi_fit": [
+        0.7881944179534912,
+        1.0,
+        1.2289848327636719
+      ],
+      "signal_strength_range": [
+        0,
+        20
+      ],
+      "status": "complete"
     },
-    "model": "T2tt",
-    "parameter_count": 1128,
-    "pdf": "impacts/impacts_NPS26012_2024_2025_mStop1200_mLSP500.pdf",
-    "png": "impacts/impacts_NPS26012_2024_2025_mStop1200_mLSP500.png",
-    "status": "complete"
-  },
+    {
+      "asimov_expect_signal": 0,
+      "json": "impacts/impacts_NPS26012_2024_2025_T2tt_mStop1200_mLSP500_highdm73_lowdm34_r0.json",
+      "mass_point": {
+        "mLSP": 500,
+        "mStop": 1200
+      },
+      "model": "T2tt",
+      "parameter_count": 1090,
+      "pdf": "impacts/impacts_NPS26012_2024_2025_T2tt_mStop1200_mLSP500_highdm73_lowdm34_r0.pdf",
+      "png": "impacts/impacts_NPS26012_2024_2025_T2tt_mStop1200_mLSP500_highdm73_lowdm34_r0.png",
+      "poi_fit": [
+        -0.0248574148863554,
+        0.0,
+        0.12160484492778778
+      ],
+      "signal_strength_range": [
+        -5,
+        5
+      ],
+      "status": "complete"
+    }
+  ],
   "luminosity_fb": 220.66,
   "page": "../index.html",
   "plot_count": 636,
