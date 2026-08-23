@@ -1600,6 +1600,7 @@ def selected_an17_recoil_blocks(payload: dict, scheme_name: str) -> list[dict]:
             "category_label_y": 0.72,
             "main_panel_ymax_factor": 600.0,
             "significance_panel": True,
+            "significance_ylim": [0.0, 5.0],
             "figure_width": 22.0,
             "category_key": category,
         }
@@ -1646,6 +1647,7 @@ def lowdm_nsv_inclusive_blocks(payload: dict, scheme_name: str) -> list[dict]:
             "category_label_y": 0.72,
             "main_panel_ymax_factor": 600.0,
             "significance_panel": True,
+            "significance_ylim": [0.0, 1.0],
             "figure_width": 16.4,
         })
         offset += size
@@ -1743,6 +1745,13 @@ def draw_flat_blocks(
     if len(significance_flags) != 1:
         raise RuntimeError("cannot mix significance and Data/MC lower panels")
     significance_panel = significance_flags.pop()
+    significance_ylims = {
+        tuple(float(value) for value in block.get("significance_ylim", [0.0, 5.0]))
+        for block in blocks
+    }
+    if significance_panel and len(significance_ylims) != 1:
+        raise RuntimeError("cannot mix significance y-axis ranges")
+    lower_panel_ylim = significance_ylims.pop() if significance_panel else (0.0, 2.0)
 
     unit_area = bool(blocks) and all(
         bool(block.get("unit_area")) and block.get("physics_scope") == "GCR"
@@ -2100,7 +2109,7 @@ def draw_flat_blocks(
     )
     rax.set_ylabel("Significance" if significance_panel else "Data/MC", fontsize=30 if reference_style else 26)
     if significance_panel:
-        rax.set_ylim(0.0, 5.0)
+        rax.set_ylim(*lower_panel_ylim)
     else:
         rax.set_ylim(0, 2)
     rax.set_xlabel(xlabel, fontsize=32 if reference_style else 30, loc="right")
@@ -2170,7 +2179,7 @@ def draw_flat_blocks(
         "signals": list(signals),
         "legend_yields_displayed": show_yields,
         "lower_panel": "signal_significance" if significance_panel else "data_over_mc",
-        "lower_panel_ylim": [0.0, 5.0] if significance_panel else [0.0, 2.0],
+        "lower_panel_ylim": list(lower_panel_ylim),
         "significance_definition": (
             "S/sqrt(B+sigma_B^2), with sigma_B equal to the plotted background uncertainty"
             if significance_panel

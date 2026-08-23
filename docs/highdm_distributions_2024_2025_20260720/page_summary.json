@@ -49,10 +49,16 @@
     "highdm_search_bins": 73,
     "lowdm_search_bins": 34,
     "lower_panel": "signal_significance",
-    "lower_panel_ylim": [
-      0.0,
-      5.0
-    ],
+    "lower_panel_ylim": {
+      "highdm": [
+        0.0,
+        5.0
+      ],
+      "lowdm": [
+        0.0,
+        1.0
+      ]
+    },
     "significance_definition": "S/sqrt(B+sigma_B^2), with sigma_B equal to the plotted background uncertainty",
     "years": [
       "2024",
