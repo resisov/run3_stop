@@ -21,10 +21,17 @@ import build_combine_inputs as model
 
 
 VR_REGIONS = ("HighDMVR_Nb1", "HighDMVR_Nb2", "HighDMVR_Nb3plus")
-REGION_GROUP = {
-    "HighDMVR_Nb1": "Nb1",
-    "HighDMVR_Nb2": "Nb2plus",
-    "HighDMVR_Nb3plus": "Nb2plus",
+VR_GROUPINGS = {
+    "nb1-nb2plus": {
+        "HighDMVR_Nb1": "Nb1",
+        "HighDMVR_Nb2": "Nb2plus",
+        "HighDMVR_Nb3plus": "Nb2plus",
+    },
+    "exact": {
+        "HighDMVR_Nb1": "Nb1",
+        "HighDMVR_Nb2": "Nb2",
+        "HighDMVR_Nb3plus": "Nb3plus",
+    },
 }
 PROCESSES = tuple(model.BACKGROUND_PROCESS_ORDER)
 CONTROL_REGION = {
@@ -148,6 +155,7 @@ def build_year_components(
     sgamma: dict[str, Any],
     rz_covariance: dict[str, Any],
     double_ratio: dict[str, Any],
+    region_group: dict[str, str],
 ) -> dict[str, Any]:
     model.CAMPAIGN_YEAR = year
     model.NPS_LUMI_NAME = f"lumi_13p6TeV_{year}"
@@ -161,7 +169,7 @@ def build_year_components(
 
     for region in VR_REGIONS:
         by_sample = vr[region]
-        group = REGION_GROUP[region]
+        group = region_group[region]
         data, data_sumw2 = data_arrays(by_sample, nbin)
         region_output = {
             "data": data.tolist(),
@@ -208,13 +216,15 @@ def build_year_components(
                     )
                 elif process == "Zto2Nu":
                     static_scale = model.rz_value(
-                        rz_covariance, f"highdm_{group}"
+                        rz_covariance,
+                        f"highdm_{model.highdm_rz_group(group)}",
                     )
                     rate_parameter = model.rate_parameter(
                         "sgamma_shape", "highdm", group, recoil_bin
                     )
                     for item in model.rz_nuisances(
-                        rz_covariance, f"highdm_{group}"
+                        rz_covariance,
+                        f"highdm_{model.highdm_rz_group(group)}",
                     ):
                         add_factor(factors, item)
                     closure_name, delta, _ = model.closure_record(
@@ -240,6 +250,8 @@ def build_year_components(
                     )
 
                 transfer_factor = None
+                transfer_denominator = None
+                transfer_denominator_sumw2 = None
                 if process in CONTROL_REGION:
                     if process == "Zto2Nu":
                         scales = {
@@ -273,6 +285,10 @@ def build_year_components(
                     )
                     if denominator > 0.0:
                         transfer_factor = numerator / denominator
+                        transfer_denominator = denominator
+                        transfer_denominator_sumw2 = max(
+                            float(denominator_record["sumw2"][0]), 0.0
+                        )
 
                 region_output["components"].append(
                     {
@@ -288,6 +304,8 @@ def build_year_components(
                             for name, pair in sorted(factors.items())
                         },
                         "cr_to_vr_transfer_factor": transfer_factor,
+                        "cr_transfer_denominator": transfer_denominator,
+                        "cr_transfer_denominator_sumw2": transfer_denominator_sumw2,
                     }
                 )
         output["regions"][region] = region_output
@@ -353,6 +371,15 @@ def prediction(
         }
         scale = nominal / max(float(component["base"]), model.MIN_BIN)
         mc_variance = float(component["sumw2"]) * scale * scale
+        denominator = component.get("cr_transfer_denominator")
+        denominator_sumw2 = component.get("cr_transfer_denominator_sumw2")
+        if denominator is not None and denominator_sumw2 is not None:
+            mc_variance += (
+                nominal
+                * nominal
+                * float(denominator_sumw2)
+                / (float(denominator) * float(denominator))
+            )
         return nominal, gradient, mc_variance
 
     evaluated = {}
@@ -493,9 +520,17 @@ def main() -> int:
         parser.add_argument(f"--rz-covariance-{year}", required=True, type=Path)
         parser.add_argument(f"--zgamma-double-ratio-{year}", required=True, type=Path)
     parser.add_argument("--fit-covariance", required=True, type=Path)
+    parser.add_argument(
+        "--highdm-control-grouping",
+        choices=tuple(VR_GROUPINGS),
+        default="exact",
+        help="CR grouping used by the supplied CR-only fit",
+    )
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
 
+    model.configure_highdm_control_grouping(args.highdm_control_grouping)
+    region_group = VR_GROUPINGS[args.highdm_control_grouping]
     years = {}
     for year in ("2024", "2025"):
         years[year] = build_year_components(
@@ -504,6 +539,7 @@ def main() -> int:
             read_json(getattr(args, f"sgamma_{year}")),
             read_json(getattr(args, f"rz_covariance_{year}")),
             read_json(getattr(args, f"zgamma_double_ratio_{year}")),
+            region_group,
         )
     result = prediction(years, read_json(args.fit_covariance))
     result["edges"] = years["2024"]["edges"]
@@ -517,6 +553,15 @@ def main() -> int:
         for year in ("2024", "2025")
     }
     result["components"] = years
+    result["highdm_control_grouping"] = args.highdm_control_grouping
+    result["cr_to_vr_transfer_factor_definition"] = (
+        "N_MC(VR exact Nb and MET bin) / "
+        "N_MC(matched CR exact Nb and recoil bin)"
+    )
+    result["transfer_factor_mc_statistics"] = (
+        "independent numerator and denominator sumw2 propagated analytically; "
+        "CR card autoMCStats disabled to avoid a free-rate/MC-stat degeneracy"
+    )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
     print(

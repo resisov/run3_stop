@@ -11,6 +11,8 @@ CARD_2025=$2
 OUTPUT_DIR=$3
 CMSSW=/eos/user/t/taiwoo/decaf/analysis/CombinedArea/CMSSW_14_1_0_pre4
 FIT_STRATEGY=${FIT_STRATEGY:-0}
+INITIAL_PARAMETERS=${INITIAL_PARAMETERS:-}
+FALLBACK_ALGO=${FALLBACK_ALGO:-}
 
 case "$FIT_STRATEGY" in
     0|1) ;;
@@ -54,18 +56,27 @@ fi
 text2workspace.py --channel-masks "$CR_CARD" -m 120 -o "$WORKSPACE" \
     > text2workspace.log 2>&1
 
-combine -M FitDiagnostics "$WORKSPACE" -m 120 \
-    --robustFit 1 \
-    --cminDefaultMinimizerStrategy "$FIT_STRATEGY" \
-    --skipSBFit \
-    --saveWorkspace \
-    --saveShapes \
-    --saveWithUncertainties \
-    --saveNormalizations \
-    --setParameters mask_y2024_SR_highdm_bin0=1,mask_y2025_SR_highdm_bin0=1,r=0 \
-    --freezeParameters mask_y2024_SR_highdm_bin0,mask_y2025_SR_highdm_bin0,r \
-    -n _cronly_2024_2025 \
-    > fitdiagnostics.log 2>&1
+SET_PARAMETERS=mask_y2024_SR_highdm_bin0=1,mask_y2025_SR_highdm_bin0=1,r=0
+if [[ -n "$INITIAL_PARAMETERS" ]]; then
+    SET_PARAMETERS="$SET_PARAMETERS,$INITIAL_PARAMETERS"
+fi
+COMBINE_ARGS=(
+    -M FitDiagnostics "$WORKSPACE" -m 120
+    --robustFit 1
+    --cminDefaultMinimizerStrategy "$FIT_STRATEGY"
+    --skipSBFit
+    --saveWorkspace
+    --saveShapes
+    --saveWithUncertainties
+    --saveNormalizations
+    --setParameters "$SET_PARAMETERS"
+    --freezeParameters mask_y2024_SR_highdm_bin0,mask_y2025_SR_highdm_bin0,r
+    -n _cronly_2024_2025
+)
+if [[ -n "$FALLBACK_ALGO" ]]; then
+    COMBINE_ARGS+=(--cminFallbackAlgo "$FALLBACK_ALGO")
+fi
+combine "${COMBINE_ARGS[@]}" > fitdiagnostics.log 2>&1
 
 python3 - "$CR_CARD" "$WORKSPACE" "$OUTPUT_DIR/fitDiagnostics_cronly_2024_2025.root" \
     "$OUTPUT_DIR/fit_status.json" <<'PY'
@@ -108,7 +119,8 @@ if roo_workspace is None:
     raise SystemExit("input RooWorkspace w is absent")
 mask_validation = {}
 fit_log = output.with_name("fitdiagnostics.log").read_text()
-if ">>> 2 out of 276 channels masked" not in fit_log:
+expected_mask_line = f">>> 2 out of {len(channels)} channels masked"
+if expected_mask_line not in fit_log:
     raise SystemExit("Combine did not report exactly two masked channels")
 for channel in masked_auxiliary_channels:
     variable = roo_workspace.var(f"mask_{channel}")
@@ -123,7 +135,7 @@ for channel in masked_auxiliary_channels:
         "runtime_frozen": True,
         "runtime_evidence": [
             expected,
-            ">>> 2 out of 276 channels masked",
+            expected_mask_line,
             "--freezeParameters mask_y2024_SR_highdm_bin0,mask_y2025_SR_highdm_bin0,r",
         ],
     }

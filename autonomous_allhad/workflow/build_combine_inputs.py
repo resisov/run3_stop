@@ -39,10 +39,19 @@ from background_process_groups import (
 
 HIGH_CONTROL_REGIONS = ("LLCR", "QCDCR", "GCR")
 LOW_CONTROL_REGIONS = HIGH_CONTROL_REGIONS
-HIGH_PHYSICAL_GROUPS = {
-    "Nb1": ("Nb1",),
-    "Nb2plus": ("Nb2", "Nb3plus"),
+HIGH_CONTROL_GROUPINGS = {
+    "nb1-nb2plus": {
+        "Nb1": ("Nb1",),
+        "Nb2plus": ("Nb2", "Nb3plus"),
+    },
+    "exact": {
+        "Nb1": ("Nb1",),
+        "Nb2": ("Nb2",),
+        "Nb3plus": ("Nb3plus",),
+    },
 }
+HIGH_CONTROL_GROUPING = "nb1-nb2plus"
+HIGH_PHYSICAL_GROUPS = HIGH_CONTROL_GROUPINGS[HIGH_CONTROL_GROUPING]
 RARE_PROCESSES = ("VV_VVV", "DY", "PhotonJet")
 CONTROLLED_PROCESSES = ("Top", "WtoLNu", "QCD", "Zto2Nu")
 HIGH_SCHEME = "highdm_search_bins"
@@ -60,6 +69,24 @@ LUMI_LNN = 1.016
 MIN_BIN = 1.0e-9
 MIN_VARIATION_RATIO = 1.0e-3
 MAX_TOP_W_COMPOSITION_LOG_SIGMA = 1.0
+
+
+def configure_highdm_control_grouping(grouping: str) -> None:
+    """Select the High-dM control-channel grouping before model construction."""
+    if grouping not in HIGH_CONTROL_GROUPINGS:
+        raise ValueError(f"unsupported High-dM control grouping: {grouping}")
+    global HIGH_CONTROL_GROUPING, HIGH_PHYSICAL_GROUPS
+    HIGH_CONTROL_GROUPING = grouping
+    HIGH_PHYSICAL_GROUPS = HIGH_CONTROL_GROUPINGS[grouping]
+
+
+def highdm_rz_group(group: str) -> str:
+    """Map exact Nb closure categories onto the measured RZ categories."""
+    if group == "Nb1":
+        return "Nb1"
+    if group in {"Nb2", "Nb3plus", "Nb2plus"}:
+        return "Nb2plus"
+    raise ValueError(f"unknown High-dM Nb group for RZ: {group}")
 TOP_W_COMPOSITION_DIAGNOSTICS: dict[str, dict[str, Any]] = {}
 RAW_COMPONENTS = {
     "VV_VVV": ("VV",),
@@ -1190,7 +1217,9 @@ def build_channels(
 
     high_components = high["sr_components"]
     rz_scale = {
-        group: rz_value(rz_covariance, f"highdm_{group}")
+        group: rz_value(
+            rz_covariance, f"highdm_{highdm_rz_group(group)}"
+        )
         for group in HIGH_PHYSICAL_GROUPS
     }
     high_closure = []
@@ -1297,7 +1326,10 @@ def build_channels(
                     add_extra(
                         channel,
                         component,
-                        rz_nuisances(rz_covariance, f"highdm_{group}"),
+                        rz_nuisances(
+                            rz_covariance,
+                            f"highdm_{highdm_rz_group(group)}",
+                        ),
                     )
                     name, delta, source = high_closure[recoil_bin]
                     if delta > 0.0:
@@ -2135,8 +2167,18 @@ def main() -> int:
     parser.add_argument("--auto-mc-stats", type=int, default=10)
     parser.add_argument("--runner-jobs", type=int, default=4)
     parser.add_argument("--point-timeout", type=int, default=1800)
+    parser.add_argument(
+        "--highdm-control-grouping",
+        choices=tuple(HIGH_CONTROL_GROUPINGS),
+        default="nb1-nb2plus",
+        help=(
+            "Use exact Nb=1/2/>=3 High-dM CR channels for closure fits, or "
+            "the nominal Nb=1/Nb>=2 grouping for SR inference"
+        ),
+    )
     args = parser.parse_args()
 
+    configure_highdm_control_grouping(args.highdm_control_grouping)
     enforce_downstream_input_boundary(args)
 
     CAMPAIGN_YEAR = str(args.campaign_year)
@@ -2247,6 +2289,11 @@ def main() -> int:
         "status": "combine_inputs_ready",
         "model": {
             "simultaneous_control_regions": list(HIGH_CONTROL_REGIONS),
+            "highdm_control_grouping": HIGH_CONTROL_GROUPING,
+            "highdm_control_groups": {
+                group: list(physical)
+                for group, physical in HIGH_PHYSICAL_GROUPS.items()
+            },
             "dilepton_poisson_channels": False,
             "lost_lepton": "one free ll_norm shared by Top and W per matched bin",
             "top_w_composition": (

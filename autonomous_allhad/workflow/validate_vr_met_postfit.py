@@ -71,8 +71,10 @@ def main() -> int:
         raise SystemExit("CR-only fit did not complete successfully")
     if int(fit.get("covariance_quality", -1)) < 2:
         raise SystemExit("CR-only fit covariance quality is below 2")
-    if int(fit.get("likelihood_channel_count", -1)) != 274:
-        raise SystemExit("CR-only likelihood does not contain exactly 274 channels")
+    if int(fit.get("likelihood_channel_count", -1)) != 310:
+        raise SystemExit(
+            "exact-Nb CR-only likelihood does not contain exactly 310 channels"
+        )
     if fit.get("vr_observation_in_likelihood") is not False:
         raise SystemExit("VR observation entered the fit")
     if fit.get("sr_observation_in_likelihood") is not False:
@@ -94,6 +96,10 @@ def main() -> int:
         raise SystemExit("VR observation entered the postfit likelihood")
     if summary.get("sr_observation_in_likelihood") is not False:
         raise SystemExit("SR observation entered the postfit likelihood")
+    if summary.get("highdm_control_grouping") != "exact":
+        raise SystemExit("VR prediction did not use exact Nb CR-to-VR transfer factors")
+    if "denominator sumw2" not in summary.get("transfer_factor_mc_statistics", ""):
+        raise SystemExit("CR-to-VR transfer-factor MC-statistics audit is absent")
     edges = np.asarray(summary["edges"], dtype=float)
     if not np.array_equal(edges, EDGES):
         raise SystemExit(f"unexpected MET template edges: {edges.tolist()}")
@@ -127,7 +133,16 @@ def main() -> int:
         "status": "complete",
         "fit_status": int(fit["fit_status"]),
         "covariance_quality": int(fit["covariance_quality"]),
+        "edm": float(fit["edm"]),
         "likelihood_channel_count": int(fit["likelihood_channel_count"]),
+        "fit_parameter_count": int(summary["fit_parameter_count"]),
+        "highdm_control_grouping": summary["highdm_control_grouping"],
+        "cr_to_vr_transfer_factor_definition": summary[
+            "cr_to_vr_transfer_factor_definition"
+        ],
+        "transfer_factor_mc_statistics": summary[
+            "transfer_factor_mc_statistics"
+        ],
         "template_observable": "met",
         "plot_count": len(pairs),
         "png_pdf_pairs": pairs,
