@@ -1660,6 +1660,9 @@ def draw_flat_blocks(
     xlabel: str = "Bin",
     reference_style: bool = False,
     show_yields: bool = False,
+    ratio_ylabel: str | None = None,
+    uncertainty_label_override: str | None = None,
+    luminosity_fb: float | None = None,
 ) -> dict:
     import matplotlib
 
@@ -1758,7 +1761,9 @@ def draw_flat_blocks(
         for block in blocks
     )
     unit_area_audit = None
-    uncertainty_label = "Stat. syst. unc" if reference_style else "MC stat+syst unc."
+    uncertainty_label = uncertainty_label_override or (
+        "Stat. syst. unc" if reference_style else "MC stat+syst unc."
+    )
     raw_legend_yields = {
         group: float(np.sum(values)) for group, values in groups.items()
     }
@@ -2107,15 +2112,32 @@ def draw_flat_blocks(
         "Normalized events" if unit_area else ("Events" if reference_style else "Events / bin"),
         fontsize=32 if reference_style else 30,
     )
-    rax.set_ylabel("Significance" if significance_panel else "Data/MC", fontsize=30 if reference_style else 26)
+    rax.set_ylabel(
+        "Significance" if significance_panel else (ratio_ylabel or "Data/MC"),
+        fontsize=30 if reference_style else 26,
+    )
     if significance_panel:
         rax.set_ylim(*lower_panel_ylim)
     else:
         rax.set_ylim(0, 2)
     rax.set_xlabel(xlabel, fontsize=32 if reference_style else 30, loc="right")
     annotations = [str(block.get("annotation") or "") for block in blocks if block.get("annotation")]
-    if len(annotations) == 1 and not reference_style:
-        ax.text(0.035, 0.72, annotations[0], transform=ax.transAxes, ha="left", va="top", fontsize=20)
+    show_reference_annotation = any(
+        bool(block.get("show_annotation")) for block in blocks
+    )
+    if len(annotations) == 1 and (not reference_style or show_reference_annotation):
+        annotation_block = next(
+            block for block in blocks if block.get("annotation")
+        )
+        ax.text(
+            float(annotation_block.get("annotation_x", 0.035)),
+            float(annotation_block.get("annotation_y", 0.72)),
+            annotations[0],
+            transform=ax.transAxes,
+            ha="left",
+            va="top",
+            fontsize=20,
+        )
     if physical_edges is not None and len(blocks) == 1:
         xlabels = blocks[0].get("xlabels") or []
         if len(xlabels) == nbin:
@@ -2133,7 +2155,8 @@ def draw_flat_blocks(
         rax.set_xticks(centers)
         label_fontsize = 12 if any("\n" in lab for lab in xlabels) else (13 if nbin > 24 else 16)
         rax.set_xticklabels(xlabels, fontsize=label_fontsize)
-    hep.cms.label(llabel="Work in progress", rlabel=rf"{LUMINOSITY_FB:.2f} fb$^{{-1}}$ (13.6 TeV)", ax=ax)
+    shown_luminosity = LUMINOSITY_FB if luminosity_fb is None else luminosity_fb
+    hep.cms.label(llabel="Work in progress", rlabel=rf"{shown_luminosity:.2f} fb$^{{-1}}$ (13.6 TeV)", ax=ax)
     if reference_style:
         handles, legend_labels = ax.get_legend_handles_labels()
         desired_groups = [
