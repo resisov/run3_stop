@@ -1596,6 +1596,10 @@ def selected_an17_recoil_blocks(payload: dict, scheme_name: str) -> list[dict]:
             "label_box": True,
             "label_fontsize": 12.0,
             "label_box_pad": 0.18,
+            "category_labels_on_main": True,
+            "category_label_y": 0.72,
+            "main_panel_ymax_factor": 600.0,
+            "significance_panel": True,
             "figure_width": 22.0,
             "category_key": category,
         }
@@ -1638,6 +1642,10 @@ def lowdm_nsv_inclusive_blocks(payload: dict, scheme_name: str) -> list[dict]:
             "label_box": True,
             "label_fontsize": 10.2,
             "label_box_pad": 0.42,
+            "category_labels_on_main": True,
+            "category_label_y": 0.72,
+            "main_panel_ymax_factor": 600.0,
+            "significance_panel": True,
             "figure_width": 16.4,
         })
         offset += size
@@ -1731,6 +1739,10 @@ def draw_flat_blocks(
             signals[key][slc] = vals
         offset += n
     signals = {key: vals for key, vals in signals.items() if np.any(vals > 0)}
+    significance_flags = {bool(block.get("significance_panel")) for block in blocks}
+    if len(significance_flags) != 1:
+        raise RuntimeError("cannot mix significance and Data/MC lower panels")
+    significance_panel = significance_flags.pop()
 
     unit_area = bool(blocks) and all(
         bool(block.get("unit_area")) and block.get("physics_scope") == "GCR"
@@ -1982,24 +1994,46 @@ def draw_flat_blocks(
         label=data_legend_label,
         zorder=10,
     )
-    ratio = np.divide(data, bkg, out=np.full_like(data, np.nan), where=(bkg > 0) & data_mask)
-    ratio_err = np.divide(data_unc, bkg, out=np.full_like(data, np.nan), where=(bkg > 0) & data_mask)
-    rmask = np.isfinite(ratio)
-    rax.errorbar(
-        centers[rmask],
-        ratio[rmask],
-        xerr=xerr[rmask],
-        yerr=ratio_err[rmask],
-        fmt="o",
-        color="black",
-        markersize=7.0 if reference_style else 4.5,
-        capsize=4.5,
-        capthick=1.4,
-        elinewidth=1.4,
-    )
-    rel = np.divide(unc, bkg, out=np.zeros_like(unc), where=bkg > 0)
-    rax.fill_between(edges, np.r_[1.0 - rel, 1.0 - rel[-1]], np.r_[1.0 + rel, 1.0 + rel[-1]], step="post", facecolor="0.82", edgecolor="0.15", hatch="////", linewidth=0.0, alpha=0.65)
-    rax.axhline(1.0, color="0.45", linewidth=1)
+    significance_by_signal = {}
+    if significance_panel:
+        significance_denominator = np.sqrt(np.maximum(bkg, 0.0) + unc**2)
+        for spec in signal_specs:
+            vals = signals.get(spec["key"])
+            if vals is None:
+                continue
+            significance = np.divide(
+                vals,
+                significance_denominator,
+                out=np.zeros_like(vals),
+                where=significance_denominator > 0.0,
+            )
+            significance_by_signal[spec["key"]] = significance
+            rax.stairs(
+                significance,
+                edges,
+                color=spec["color"],
+                linewidth=2.6,
+            )
+        rax.axhline(0.0, color="0.45", linewidth=1)
+    else:
+        ratio = np.divide(data, bkg, out=np.full_like(data, np.nan), where=(bkg > 0) & data_mask)
+        ratio_err = np.divide(data_unc, bkg, out=np.full_like(data, np.nan), where=(bkg > 0) & data_mask)
+        rmask = np.isfinite(ratio)
+        rax.errorbar(
+            centers[rmask],
+            ratio[rmask],
+            xerr=xerr[rmask],
+            yerr=ratio_err[rmask],
+            fmt="o",
+            color="black",
+            markersize=7.0 if reference_style else 4.5,
+            capsize=4.5,
+            capthick=1.4,
+            elinewidth=1.4,
+        )
+        rel = np.divide(unc, bkg, out=np.zeros_like(unc), where=bkg > 0)
+        rax.fill_between(edges, np.r_[1.0 - rel, 1.0 - rel[-1]], np.r_[1.0 + rel, 1.0 + rel[-1]], step="post", facecolor="0.82", edgecolor="0.15", hatch="////", linewidth=0.0, alpha=0.65)
+        rax.axhline(1.0, color="0.45", linewidth=1)
     for axis in (ax, rax):
         axis.set_xmargin(0)
         if physical_edges is None:
@@ -2019,11 +2053,12 @@ def draw_flat_blocks(
     for start, end, label, block in zip(boundaries[:-1], boundaries[1:], labels, blocks):
         center = 0.5 * (start + end) + 0.5 if physical_edges is None else 0.5 * (float(edges[0]) + float(edges[-1]))
         if block.get("label_box"):
-            rax.text(
+            label_axis = ax if block.get("category_labels_on_main") else rax
+            label_axis.text(
                 center,
-                0.5,
+                float(block.get("category_label_y", 0.5)),
                 label,
-                transform=rax.get_xaxis_transform(),
+                transform=label_axis.get_xaxis_transform(),
                 ha="center",
                 va="center",
                 fontsize=float(block.get("label_fontsize", 15)),
@@ -2040,21 +2075,37 @@ def draw_flat_blocks(
         arr = np.asarray(arr, dtype=float)
         positive.extend(arr[arr > 0].tolist())
     ax.set_yscale("log")
+    main_panel_ymax_factor = max(
+        (float(block.get("main_panel_ymax_factor", 60.0)) for block in blocks),
+        default=60.0,
+    )
     if positive:
         if reference_style and not unit_area:
-            ymax = 10.0 ** np.ceil(np.log10(max(max(positive) * 60.0, 1.0)))
+            ymax = 10.0 ** np.ceil(
+                np.log10(max(max(positive) * main_panel_ymax_factor, 1.0))
+            )
             ax.set_ylim(1.0e-1, ymax)
         else:
             floor = 1.0e-5 if unit_area else 0.03
-            ax.set_ylim(max(floor, min(positive) * 0.1), max(max(positive) * 60, 1.0))
+            ax.set_ylim(
+                max(floor, min(positive) * 0.1),
+                max(max(positive) * main_panel_ymax_factor, 1.0),
+            )
     else:
         ax.set_ylim(0.03, 1.0)
     ax.set_ylabel(
         "Normalized events" if unit_area else ("Events" if reference_style else "Events / bin"),
         fontsize=32 if reference_style else 30,
     )
-    rax.set_ylabel("Data/MC", fontsize=30 if reference_style else 26)
-    rax.set_ylim(0, 2)
+    rax.set_ylabel("Significance" if significance_panel else "Data/MC", fontsize=30 if reference_style else 26)
+    if significance_panel:
+        max_significance = max(
+            (float(np.max(values)) for values in significance_by_signal.values()),
+            default=0.0,
+        )
+        rax.set_ylim(0.0, max(0.05, 1.18 * max_significance))
+    else:
+        rax.set_ylim(0, 2)
     rax.set_xlabel(xlabel, fontsize=32 if reference_style else 30, loc="right")
     annotations = [str(block.get("annotation") or "") for block in blocks if block.get("annotation")]
     if len(annotations) == 1 and not reference_style:
@@ -2121,6 +2172,12 @@ def draw_flat_blocks(
         "labels": labels,
         "signals": list(signals),
         "legend_yields_displayed": show_yields,
+        "lower_panel": "signal_significance" if significance_panel else "data_over_mc",
+        "significance_definition": (
+            "S/sqrt(B+sigma_B^2), with sigma_B equal to the plotted background uncertainty"
+            if significance_panel
+            else None
+        ),
         "unit_area": unit_area,
         "unit_area_audit": unit_area_audit,
     }

@@ -45,6 +45,16 @@
       "status": "complete"
     }
   ],
+  "category_plots": {
+    "highdm_search_bins": 73,
+    "lowdm_search_bins": 34,
+    "lower_panel": "signal_significance",
+    "significance_definition": "S/sqrt(B+sigma_B^2), with sigma_B equal to the plotted background uncertainty",
+    "years": [
+      "2024",
+      "2025"
+    ]
+  },
   "luminosity_fb": 220.66,
   "page": "../index.html",
   "plot_count": 636,
