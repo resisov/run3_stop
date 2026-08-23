@@ -2013,6 +2013,7 @@ def draw_flat_blocks(
                 edges,
                 color=spec["color"],
                 linewidth=2.6,
+                linestyle="--",
             )
         rax.axhline(0.0, color="0.45", linewidth=1)
     else:
@@ -2099,7 +2100,7 @@ def draw_flat_blocks(
     )
     rax.set_ylabel("Significance" if significance_panel else "Data/MC", fontsize=30 if reference_style else 26)
     if significance_panel:
-        rax.set_ylim(0.0, 8.0)
+        rax.set_ylim(0.0, 5.0)
     else:
         rax.set_ylim(0, 2)
     rax.set_xlabel(xlabel, fontsize=32 if reference_style else 30, loc="right")
@@ -2169,7 +2170,7 @@ def draw_flat_blocks(
         "signals": list(signals),
         "legend_yields_displayed": show_yields,
         "lower_panel": "signal_significance" if significance_panel else "data_over_mc",
-        "lower_panel_ylim": [0.0, 8.0] if significance_panel else [0.0, 2.0],
+        "lower_panel_ylim": [0.0, 5.0] if significance_panel else [0.0, 2.0],
         "significance_definition": (
             "S/sqrt(B+sigma_B^2), with sigma_B equal to the plotted background uncertainty"
             if significance_panel
