@@ -495,9 +495,20 @@ def main() -> int:
     parser.add_argument("--max-mlsp", type=float, default=1200.0)
     args = parser.parse_args()
 
-    build_manifest = json.loads(
-        (args.input_dir / "manifest.json").read_text()
+    manifest_candidates = (
+        args.input_dir / "manifest.json",
+        args.input_dir / "combine_input_manifest.json",
     )
+    manifest_path = next(
+        (path for path in manifest_candidates if path.is_file()),
+        None,
+    )
+    if manifest_path is None:
+        raise FileNotFoundError(
+            "missing limit-build manifest; expected one of: "
+            + ", ".join(str(path) for path in manifest_candidates)
+        )
+    build_manifest = json.loads(manifest_path.read_text())
     excluded_points = load_excluded_points(args.input_dir)
     original_mass_keys = list(build_manifest["mass_points"])
     mass_keys = [

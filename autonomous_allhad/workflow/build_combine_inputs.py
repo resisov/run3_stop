@@ -14,11 +14,22 @@ import json
 import math
 import mmap
 import re
+import sys
 from array import array
 from pathlib import Path
 from typing import Any
 
 import numpy as np
+
+THIS_DIR = Path(__file__).resolve().parent
+PACKAGE_ROOT = THIS_DIR.parent
+if str(PACKAGE_ROOT) not in sys.path:
+    sys.path.insert(0, str(PACKAGE_ROOT))
+
+from autonomous_allhad.search_bin_categorization import (
+    configured_bin_position_groups,
+    configured_exclusive_mapping,
+)
 
 from background_process_groups import (
     BACKGROUND_PROCESS_ORDER,
@@ -104,6 +115,7 @@ def enforce_downstream_input_boundary(args: argparse.Namespace) -> None:
         "rz_high": args.rz_high,
         "rz_low": args.rz_low,
         "zgamma_double_ratio": args.zgamma_double_ratio,
+        "search_bin_config": args.search_bin_config,
         "output_dir": args.output_dir,
     }
     for label, path in inspected.items():
@@ -116,6 +128,117 @@ def enforce_downstream_input_boundary(args: argparse.Namespace) -> None:
         path = inspected[label]
         if path.suffix != ".json":
             raise SystemExit(f"{label} must be a machine-derived JSON: {path}")
+
+
+def apply_configured_highdm_bin_merges(
+    hists: dict[str, Any],
+    exact: dict[str, Any],
+    configuration: dict[str, Any],
+) -> dict[str, Any]:
+    """Project bounded canonical High-dM records into configured final bins.
+
+    This runs only after the streaming canonical-histogram extraction.  Every
+    signal and background component remains separated by its physical group
+    and native recoil bin; only the visible search-bin axis is added.  Hence
+    TF, RZ, and Sgamma parameter scopes are unchanged by the projection.
+    """
+    high = exact["highdm"]
+    raw_labels = [str(value) for value in high["search_bin_labels"]]
+    input_count = len(raw_labels)
+    configured_source_count = len(configured_exclusive_mapping(configuration))
+    position_groups = configured_bin_position_groups(configuration)
+    final_count = len(position_groups)
+    if input_count not in {configured_source_count, final_count}:
+        raise ValueError(
+            "High-dM configuration/source mismatch: "
+            f"expected {configured_source_count} source bins or "
+            f"{final_count} already-projected bins, but found "
+            f"{input_count} canonical labels"
+        )
+
+    def validate_leaf(leaf: dict[str, Any], expected: int) -> None:
+        for field in ("entries", "sumw", "sumw2"):
+            if field not in leaf:
+                continue
+            values = leaf.get(field) or []
+            if len(values) != expected:
+                raise ValueError(
+                    f"High-dM {field} has {len(values)} bins; "
+                    f"expected {expected}"
+                )
+
+    def validate_tree(value: Any, expected: int) -> None:
+        if not isinstance(value, dict):
+            return
+        if "sumw" in value:
+            validate_leaf(value, expected)
+            return
+        for child in value.values():
+            validate_tree(child, expected)
+
+    input_trees = (
+        hists["search_bin_histograms"][HIGH_SCHEME],
+        high["sr_components"],
+    )
+    if input_count == final_count:
+        for tree in input_trees:
+            validate_tree(tree, final_count)
+        high["bin_projection"] = {
+            "source_bin_count": configured_source_count,
+            "input_bin_count": input_count,
+            "final_bin_count": final_count,
+            "already_projected": True,
+            "position_groups_zero_based": [
+                list(group) for group in position_groups
+            ],
+            "bin_merges_1based": list(
+                configuration.get("bin_merges_1based") or []
+            ),
+        }
+        return high["bin_projection"]
+
+    def rebin_leaf(leaf: dict[str, Any]) -> dict[str, Any]:
+        output = dict(leaf)
+        for field in ("entries", "sumw", "sumw2"):
+            if field not in leaf:
+                continue
+            values = leaf.get(field) or []
+            if len(values) != configured_source_count:
+                raise ValueError(
+                    f"High-dM {field} has {len(values)} bins; "
+                    f"expected {configured_source_count}"
+                )
+            output[field] = [
+                sum(values[position] for position in positions)
+                for positions in position_groups
+            ]
+        return output
+
+    def rebin_tree(value: Any) -> Any:
+        if not isinstance(value, dict):
+            return value
+        if "sumw" in value:
+            return rebin_leaf(value)
+        return {key: rebin_tree(child) for key, child in value.items()}
+
+    hists["search_bin_histograms"][HIGH_SCHEME] = rebin_tree(
+        hists["search_bin_histograms"][HIGH_SCHEME]
+    )
+    high["sr_components"] = rebin_tree(high["sr_components"])
+    high["source_search_bin_labels"] = raw_labels
+    high["search_bin_labels"] = [
+        "__plus__".join(raw_labels[position] for position in positions)
+        for positions in position_groups
+    ]
+    high["bin_projection"] = {
+        "source_bin_count": configured_source_count,
+        "input_bin_count": input_count,
+        "final_bin_count": final_count,
+        "already_projected": False,
+        "position_groups_zero_based": [list(group) for group in position_groups],
+        "bin_merges_1based": list(configuration.get("bin_merges_1based") or []),
+    }
+    return high["bin_projection"]
 
 
 def read_json(path: Path) -> Any:
@@ -132,7 +255,9 @@ def sha256(path: Path) -> str:
 
 def write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
+    path.write_text(
+        json.dumps(payload, indent=2, sort_keys=True, allow_nan=False) + "\n"
+    )
 
 
 def sanitize(name: str) -> str:
@@ -598,6 +723,8 @@ def extract_current_histogram_input(
         "status": "complete",
         "highdm": {
             "recoil_edges": [250.0, 300.0, 350.0, 400.0, 500.0, 800.0, 1500.0],
+            "recoil_last_bin_open_ended": True,
+            "recoil_display_cap_gev": 1500.0,
             "recoil": control_components,
             "sr_components": search_components,
             "search_bin_labels": high_labels,
@@ -783,12 +910,33 @@ def high_sgamma(
     sgamma: dict[str, Any], physical_group: str, recoil_bin: int
 ) -> tuple[float, float]:
     payload = sgamma["highdm"][physical_group]
+    factor_bins = payload["bins"]
+    if not factor_bins:
+        raise ValueError(f"Sgamma/highdm/{physical_group} has no bins")
+    # The adopted measurement merges the two native High-dM tail bins into
+    # one 500-inf shape measurement.  Both native GCR/SR bins must therefore
+    # use the same final Sgamma entry rather than inventing a second shape
+    # parameter.
+    factor_bin = min(recoil_bin, len(factor_bins) - 1)
     q = require_positive(payload["Q"], f"Qgamma/highdm/{physical_group}")
     shape = require_positive(
-        payload["bins"][recoil_bin]["Sgamma"],
-        f"Sgamma/highdm/{physical_group}/bin{recoil_bin}",
+        factor_bins[factor_bin]["Sgamma"],
+        f"Sgamma/highdm/{physical_group}/bin{factor_bin}",
     )
     return q, shape
+
+
+def high_sgamma_parameter_bin(sgamma: dict[str, Any], recoil_bin: int) -> int:
+    counts = {
+        len((sgamma["highdm"][physical] or {}).get("bins") or [])
+        for physical in ("Nb1", "Nb2", "Nb3plus")
+    }
+    if len(counts) != 1 or not counts:
+        raise ValueError(f"inconsistent High-dM Sgamma bin counts: {counts}")
+    count = next(iter(counts))
+    if count <= 0:
+        raise ValueError("High-dM Sgamma has no measurement bins")
+    return min(recoil_bin, count - 1)
 
 
 def high_effective_sgamma(
@@ -825,6 +973,38 @@ def high_effective_sgamma(
         raise ValueError(
             "invalid effective Sgamma for "
             f"highdm/{logical_group}/bin{recoil_bin}: {value}"
+        )
+    return float(value)
+
+
+def high_effective_sgamma_grouped(
+    sgamma: dict[str, Any],
+    gcr_sources: dict[str, dict[str, Any]],
+    logical_group: str,
+    recoil_bins: list[int],
+    nbin: int,
+) -> float | None:
+    """Photon-weighted Sgamma for native bins sharing one measurement bin."""
+    numerator = 0.0
+    denominator = 0.0
+    for physical_group in HIGH_PHYSICAL_GROUPS[logical_group]:
+        for recoil_bin in recoil_bins:
+            qgamma, shape = high_sgamma(sgamma, physical_group, recoil_bin)
+            record = one_bin_background(
+                gcr_sources[physical_group], "PhotonJet", recoil_bin, nbin
+            )
+            if record is None:
+                continue
+            weight = qgamma * float(record["nominal"][0])
+            numerator += weight * shape
+            denominator += weight
+    if denominator <= 0.0:
+        return None
+    value = numerator / denominator
+    if not np.isfinite(value) or value <= 0.0:
+        raise ValueError(
+            "invalid grouped effective Sgamma for "
+            f"highdm/{logical_group}/{recoil_bins}: {value}"
         )
     return float(value)
 
@@ -934,6 +1114,84 @@ def low_geometry(label: str) -> tuple[float, float]:
     return low, high
 
 
+def low_control_groups(
+    labels: list[str],
+) -> tuple[list[dict[str, Any]], dict[int, dict[str, Any]]]:
+    """Aggregate Low-dM CRs like the High-dM Nb x recoil model.
+
+    The 34 Low-dM SR bins retain their full pTISR/pTb/Nj categorization.  A
+    control observation, however, is not split once per SR bin.  Bins with
+    the same Nb requirement and the same physical recoil interval share one
+    LLCR, QCDCR, and GCR channel and therefore one normalization parameter.
+    This is the Low-dM analogue of the High-dM model, where many exclusive SR
+    categories share an Nb x recoil control constraint.
+    """
+    grouped: dict[tuple[str, float, float], list[int]] = {}
+    for source_bin, label in enumerate(labels):
+        group = "Nb1" if str(label).startswith("Nb1_") else "Nb2plus"
+        low, high = low_geometry(str(label))
+        grouped.setdefault((group, low, high), []).append(source_bin)
+
+    groups: list[dict[str, Any]] = []
+    by_source: dict[int, dict[str, Any]] = {}
+    for (group, low, high), source_bins in grouped.items():
+        high_label = "Inf" if not np.isfinite(high) else str(int(high))
+        key = f"u{int(low)}to{high_label}"
+        record = {
+            "nb_group": group,
+            "recoil_low": float(low),
+            "recoil_high": float(high),
+            "key": key,
+            "source_bins_zero_based": list(source_bins),
+        }
+        groups.append(record)
+        for source_bin in source_bins:
+            by_source[source_bin] = record
+    if set(by_source) != set(range(len(labels))):
+        raise ValueError("Low-dM control grouping does not cover every SR bin")
+    return groups, by_source
+
+
+def summed_low_background(
+    by_sample: dict[str, Any],
+    process: str,
+    source_bins: list[int],
+    nbin: int,
+    scale: float | None = None,
+) -> dict[str, Any] | None:
+    records = [
+        one_bin_background(by_sample, process, source_bin, nbin)
+        for source_bin in source_bins
+    ]
+    if scale is not None:
+        records = [scaled_record(record, scale) for record in records]
+    return sum_one_bin_backgrounds(records)
+
+
+def low_gcr_shape_initial(
+    observation: float,
+    backgrounds: dict[str, Any],
+    context: str,
+) -> float:
+    photon = backgrounds.get("PhotonJet")
+    if photon is None:
+        raise ValueError(f"{context} has no Qgamma-scaled PhotonJet template")
+    denominator = float(photon["nominal"][0])
+    numerator = observation - sum(
+        float(record["nominal"][0])
+        for process, record in backgrounds.items()
+        if process != "PhotonJet"
+    )
+    if not np.isfinite(numerator) or not np.isfinite(denominator):
+        raise ValueError(f"nonfinite Low-dM GCR ingredients for {context}")
+    if numerator <= 0.0 or denominator <= 0.0:
+        raise ValueError(
+            f"unidentifiable Low-dM GCR shape for {context}: "
+            f"numerator={numerator}, denominator={denominator}"
+        )
+    return float(numerator / denominator)
+
+
 def rate_parameter(
     kind: str, regime: str, group: str, bin_index: int | str
 ) -> str:
@@ -1008,7 +1266,7 @@ def top_w_composition(
     return result
 
 
-def composition_name(regime: str, group: str, bin_index: int) -> str:
+def composition_name(regime: str, group: str, bin_index: int | str) -> str:
     return (
         f"{ANALYSIS_NUISANCE_PREFIX}_topWComposition_{regime}_{group}_"
         f"bin{bin_index}_{CAMPAIGN_YEAR}"
@@ -1025,14 +1283,28 @@ def build_channels(
     bin_map: dict[str, Any] = {"highdm": [], "lowdm": []}
     high = exact["highdm"]
     high_nbin = len(high["recoil_edges"]) - 1
-    high_shape_initial = {
-        (group, recoil_bin): high_effective_sgamma(
+    high_shape_bin = {
+        recoil_bin: high_sgamma_parameter_bin(sgamma, recoil_bin)
+        for recoil_bin in range(high_nbin)
+    }
+    native_bins_by_shape: dict[int, list[int]] = {}
+    for recoil_bin, shape_bin in high_shape_bin.items():
+        native_bins_by_shape.setdefault(shape_bin, []).append(recoil_bin)
+    grouped_high_shape_initial = {
+        (group, shape_bin): high_effective_sgamma_grouped(
             sgamma,
             high["recoil"]["GCR"],
             group,
-            recoil_bin,
+            native_bins,
             high_nbin,
         )
+        for group in HIGH_PHYSICAL_GROUPS
+        for shape_bin, native_bins in native_bins_by_shape.items()
+    }
+    high_shape_initial = {
+        (group, recoil_bin): grouped_high_shape_initial[
+            (group, high_shape_bin[recoil_bin])
+        ]
         for group in HIGH_PHYSICAL_GROUPS
         for recoil_bin in range(high_nbin)
     }
@@ -1072,7 +1344,10 @@ def build_channels(
                             f"highdm/{group}/bin{recoil_bin}"
                         )
                     rate_params["PhotonJet"] = rate_parameter(
-                        "sgamma_shape", "highdm", group, recoil_bin
+                        "sgamma_shape",
+                        "highdm",
+                        group,
+                        high_shape_bin[recoil_bin],
                     )
                 observation = sum(
                     float(
@@ -1212,7 +1487,10 @@ def build_channels(
                     component = f"Zto2Nu_{group}_u{recoil_bin}"
                     channel["backgrounds"][component] = z_record
                     parameter = rate_parameter(
-                        "sgamma_shape", "highdm", group, recoil_bin
+                        "sgamma_shape",
+                        "highdm",
+                        group,
+                        high_shape_bin[recoil_bin],
                     )
                     channel["rate_params"][component] = parameter
                     channel["rate_initial"][component] = shape_initial
@@ -1283,45 +1561,86 @@ def build_channels(
     low = exact["lowdm"]
     labels = low["search_bin_labels"]
     low_nbin = len(labels)
-    low_shape_models = low_sgamma_models(sgamma, labels)
+    low_groups, low_group_by_source = low_control_groups(labels)
+    low_qgamma = {
+        group: require_positive(
+            sgamma["lowdm_families"][group]["Q"],
+            f"Qgamma/lowdm/{group}",
+        )
+        for group in ("Nb1", "Nb2plus")
+    }
+    low_sr_qcd_groups = {
+        (str(control_group["nb_group"]), str(control_group["key"]))
+        for control_group in low_groups
+        if summed_low_background(
+            low["search_components"]["SR"][
+                str(control_group["nb_group"])
+            ],
+            "QCD",
+            list(control_group["source_bins_zero_based"]),
+            low_nbin,
+        )
+        is not None
+    }
+    low_shape_initial: dict[tuple[str, str], float] = {}
     for region in LOW_CONTROL_REGIONS:
         source_payload = low["search_components"]
-        for source_bin, label in enumerate(labels):
-            group = "Nb1" if source_bin < 16 else "Nb2plus"
+        for control_group in low_groups:
+            group = str(control_group["nb_group"])
+            key = str(control_group["key"])
+            source_bins = list(control_group["source_bins_zero_based"])
             by_sample = source_payload[region][group]
-            shape_model = low_shape_models[source_bin]
-            q = float(shape_model["qgamma"])
-            shape = float(shape_model["sgamma"])
-            backgrounds = {}
+            q = low_qgamma[group]
+            backgrounds: dict[str, Any] = {}
             for process in BACKGROUND_PROCESS_ORDER:
-                record = one_bin_background(by_sample, process, source_bin, low_nbin)
-                if region == "GCR" and process == "PhotonJet":
-                    record = scaled_record(record, q)
+                record = summed_low_background(
+                    by_sample,
+                    process,
+                    source_bins,
+                    low_nbin,
+                    q if region == "GCR" and process == "PhotonJet" else None,
+                )
                 if record is not None:
                     backgrounds[process] = record
             rate_params: dict[str, str] = {}
             if region == "LLCR":
-                parameter = rate_parameter("ll_norm", "lowdm", group, source_bin)
+                parameter = rate_parameter("ll_norm", "lowdm", group, key)
                 for process in ("Top", "WtoLNu"):
                     if process in backgrounds:
                         rate_params[process] = parameter
-            elif region == "QCDCR" and "QCD" in backgrounds:
+            elif (
+                region == "QCDCR"
+                and "QCD" in backgrounds
+                and (group, key) in low_sr_qcd_groups
+            ):
                 rate_params["QCD"] = rate_parameter(
-                    "qcd_norm", "lowdm", group, source_bin
+                    "qcd_norm", "lowdm", group, key
                 )
             elif region == "GCR" and "PhotonJet" in backgrounds:
-                rate_params["PhotonJet"] = str(shape_model["parameter"])
+                rate_params["PhotonJet"] = rate_parameter(
+                    "sgamma_shape", "lowdm", group, key
+                )
+            data_values = by_sample["data_obs"]["nominal"]["sumw"]
             observation = float(
-                by_sample["data_obs"]["nominal"]["sumw"][source_bin]
+                sum(float(data_values[index]) for index in source_bins)
             )
+            if region == "GCR" and "PhotonJet" in backgrounds:
+                low_shape_initial[(group, key)] = low_gcr_shape_initial(
+                    observation,
+                    backgrounds,
+                    f"lowdm/{group}/{key}",
+                )
+            shape = low_shape_initial.get((group, key), 1.0)
             channel = {
-                    "name": f"{region}_lowdm_bin{source_bin}",
+                    "name": f"{region}_lowdm_{group}_{key}",
                     "kind": "lowdm_control",
                     "regime": "lowdm",
                     "region": region,
                     "nb_group": group,
-                    "source_bin": source_bin,
-                    "bin_label": label,
+                    "control_group": key,
+                    "source_bins_zero_based": source_bins,
+                    "recoil_low": control_group["recoil_low"],
+                    "recoil_high": control_group["recoil_high"],
                     "backgrounds": backgrounds,
                     "rate_params": rate_params,
                     "rate_initial": {
@@ -1340,19 +1659,34 @@ def build_channels(
                 for process, records in top_w_composition(
                     backgrounds.get("Top"),
                     backgrounds.get("WtoLNu"),
-                    composition_name("lowdm", group, source_bin),
+                    composition_name("lowdm", group, key),
                 ).items():
                     add_extra(channel, process, records)
             channels.append(channel)
 
+    missing_shape_groups = [
+        f"{record['nb_group']}/{record['key']}"
+        for record in low_groups
+        if (str(record["nb_group"]), str(record["key"]))
+        not in low_shape_initial
+    ]
+    if missing_shape_groups:
+        raise ValueError(
+            "Low-dM GCR does not constrain every control group: "
+            + ", ".join(missing_shape_groups)
+        )
+
     for source_bin, label in enumerate(labels):
-        group = "Nb1" if source_bin < 16 else "Nb2plus"
+        control_group = low_group_by_source[source_bin]
+        group = str(control_group["nb_group"])
+        key = str(control_group["key"])
+        source_bins = list(control_group["source_bins_zero_based"])
         by_sample = low["search_components"]["SR"][group]
-        shape_model = low_shape_models[source_bin]
-        q = float(shape_model["qgamma"])
-        shape = float(shape_model["sgamma"])
-        family = str(shape_model["family"])
-        local_bin = int(shape_model["family_recoil_bin_zero_based"])
+        shape = low_shape_initial[(group, key)]
+        q = low_qgamma[group]
+        sgamma_parameter = rate_parameter(
+            "sgamma_shape", "lowdm", group, key
+        )
         backgrounds = {}
         rate_params = {}
         rate_initial = {}
@@ -1362,6 +1696,7 @@ def build_channels(
             "regime": "lowdm",
             "region": "SR",
             "nb_group": group,
+            "control_group": key,
             "source_bin": source_bin,
             "bin_label": label,
             "backgrounds": backgrounds,
@@ -1378,9 +1713,9 @@ def build_channels(
             if record is None:
                 continue
             if process in ("Top", "WtoLNu"):
-                parameter = rate_parameter("ll_norm", "lowdm", group, source_bin)
+                parameter = rate_parameter("ll_norm", "lowdm", group, key)
             elif process == "QCD":
-                parameter = rate_parameter("qcd_norm", "lowdm", group, source_bin)
+                parameter = rate_parameter("qcd_norm", "lowdm", group, key)
             else:
                 parameter = None
             backgrounds[process] = record
@@ -1388,20 +1723,15 @@ def build_channels(
                 rate_params[process] = parameter
                 rate_initial[process] = 1.0
                 if process in ("Top", "WtoLNu"):
+                    llcr = low["search_components"]["LLCR"][group]
                     composition = top_w_composition(
-                        one_bin_background(
-                            low["search_components"]["LLCR"][group],
-                            "Top",
-                            source_bin,
-                            low_nbin,
+                        summed_low_background(
+                            llcr, "Top", source_bins, low_nbin
                         ),
-                        one_bin_background(
-                            low["search_components"]["LLCR"][group],
-                            "WtoLNu",
-                            source_bin,
-                            low_nbin,
+                        summed_low_background(
+                            llcr, "WtoLNu", source_bins, low_nbin
                         ),
-                        composition_name("lowdm", group, source_bin),
+                        composition_name("lowdm", group, key),
                     )
                     add_extra(channel, process, composition.get(process, []))
         z_record = one_bin_background(
@@ -1413,8 +1743,7 @@ def build_channels(
                 rz_value(rz_covariance, f"lowdm_{group}"),
             )
             backgrounds["Zto2Nu"] = z_record
-            parameter = str(shape_model["parameter"])
-            rate_params["Zto2Nu"] = parameter
+            rate_params["Zto2Nu"] = sgamma_parameter
             rate_initial["Zto2Nu"] = shape
             add_extra(
                 channel,
@@ -1435,19 +1764,23 @@ def build_channels(
         bin_map["lowdm"].append(
             {
                 "channel": channel["name"],
+                "nb_group": group,
                 "source_bin_zero_based": source_bin,
                 "label": label,
-                "family": family,
-                "family_recoil_bin_zero_based": local_bin,
+                "control_group": key,
+                "control_group_source_bins_zero_based": source_bins,
+                "control_recoil_low": control_group["recoil_low"],
+                "control_recoil_high": (
+                    float(control_group["recoil_high"])
+                    if np.isfinite(control_group["recoil_high"])
+                    else None
+                ),
+                "control_last_bin_open_ended": not np.isfinite(
+                    control_group["recoil_high"]
+                ),
                 "sgamma": shape,
                 "qgamma": q,
-                "sgamma_parameter": shape_model["parameter"],
-                "sgamma_pool_local_bins_zero_based": shape_model[
-                    "pool_local_bins_zero_based"
-                ],
-                "sgamma_pool_source_bins_zero_based": shape_model[
-                    "pool_source_bins_zero_based"
-                ],
+                "sgamma_parameter": sgamma_parameter,
             }
         )
 
@@ -1656,14 +1989,27 @@ def build_root(
                 "kind": channel["kind"],
                 "regime": channel["regime"],
                 "region": channel["region"],
-                "source_bin": channel["source_bin"],
+                "source_bin": channel.get("source_bin"),
                 "background_yield": float(background_total[0]),
                 "backgrounds": background_summary,
                 "rate_params": channel["rate_params"],
             }
-            for field in ("nb_group", "bin_label"):
+            for field in (
+                "nb_group",
+                "bin_label",
+                "control_group",
+                "source_bins_zero_based",
+                "recoil_low",
+                "recoil_high",
+            ):
                 if channel.get(field) is not None:
-                    summary["channels"][channel["name"]][field] = channel[field]
+                    value = channel[field]
+                    if field == "recoil_high" and not np.isfinite(value):
+                        summary["channels"][channel["name"]][
+                            "last_bin_open_ended"
+                        ] = True
+                        value = None
+                    summary["channels"][channel["name"]][field] = value
 
             for mass_key in masses:
                 process = signal_process_name(mass_key)
@@ -2004,8 +2350,8 @@ def datacard_text(
         lines.append(f"* autoMCStats {auto_mc_stats}")
     lines.extend(
         [
-            "# Top=TT+ST. One ll_norm is shared by Top and W in each matched LLCR/SR bin.",
-            "# A shared MC-derived anti-correlated Top/W composition nuisance accompanies each ll_norm in its matched LLCR/SR bin.",
+            "# Top=TT+ST. One ll_norm is shared by Top and W in each Nb x recoil CR group and all matched exclusive SR categories.",
+            "# A shared MC-derived anti-correlated Top/W composition nuisance accompanies each grouped ll_norm constraint.",
             "# GCR PhotonJet is pre-scaled only by Qgamma; the shared Sgamma rateParam is shape-only and starts at its measured value.",
             "# Zto2Nu SR is pre-scaled only by RZ; no extra Z-normalization rateParam is present.",
             "# GCR statistics enter only through its Poisson channel; no Sgamma statistical Gaussian is duplicated.",
@@ -2045,6 +2391,12 @@ def main() -> int:
     parser.add_argument("--rz-high", type=Path, required=True)
     parser.add_argument("--rz-low", type=Path, required=True)
     parser.add_argument("--zgamma-double-ratio", type=Path, required=True)
+    parser.add_argument(
+        "--search-bin-config",
+        type=Path,
+        required=True,
+        help="Adopted year-specific High-dM search-bin configuration",
+    )
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--only", nargs="*")
     parser.add_argument("--max-mstop", type=int, default=1800)
@@ -2064,11 +2416,13 @@ def main() -> int:
         "rz_high": args.rz_high,
         "rz_low": args.rz_low,
         "zgamma_double_ratio": args.zgamma_double_ratio,
+        "search_bin_config": args.search_bin_config,
     }
     sgamma = read_json(args.sgamma)
     rz_high = read_json(args.rz_high)
     rz_low = read_json(args.rz_low)
     double_ratio = read_json(args.zgamma_double_ratio)
+    search_bin_configuration = read_json(args.search_bin_config)
     for label, payload in (
         ("Sgamma", sgamma),
         ("RZ high", rz_high),
@@ -2078,11 +2432,24 @@ def main() -> int:
             raise SystemExit(f"{label} input incomplete: {payload.get('status')}")
     if rz_low.get("status") not in {"complete", "feature_stage_complete"}:
         raise SystemExit(f"RZ low input incomplete: {rz_low.get('status')}")
+    if search_bin_configuration.get("schema_version") != "search_bin_scheme_v1":
+        raise SystemExit("unsupported High-dM search-bin configuration")
+    if search_bin_configuration.get("scheme_name") != HIGH_SCHEME:
+        raise SystemExit(f"search-bin configuration must name {HIGH_SCHEME}")
+    if str(search_bin_configuration.get("campaign_year")) != CAMPAIGN_YEAR:
+        raise SystemExit(
+            "search-bin configuration year does not match --campaign-year"
+        )
 
     output_dir = args.output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
     hists, exact, extracted_signals = extract_current_histogram_input(
         args.hists, args.topology
+    )
+    highdm_bin_projection = apply_configured_highdm_bin_merges(
+        hists,
+        exact,
+        search_bin_configuration,
     )
     rz_covariance = build_rz_covariance(rz_high, rz_low)
     write_json(output_dir / "rz_covariance.json", rz_covariance)
@@ -2093,6 +2460,27 @@ def main() -> int:
         dropped_empty_control_channels,
     ) = build_channels(exact, sgamma, rz_covariance, double_ratio)
     write_json(output_dir / "bin_map.json", bin_map)
+    low_control_group_summary: list[dict[str, Any]] = []
+    seen_low_control_groups: set[tuple[str, str]] = set()
+    for record in bin_map["lowdm"]:
+        group_key = (
+            str(record["nb_group"]),
+            str(record["control_group"]),
+        )
+        if group_key in seen_low_control_groups:
+            continue
+        seen_low_control_groups.add(group_key)
+        low_control_group_summary.append(
+            {
+                "nb_group": group_key[0],
+                "key": group_key[1],
+                "recoil_low": record["control_recoil_low"],
+                "recoil_high": record["control_recoil_high"],
+                "source_bins_zero_based": record[
+                    "control_group_source_bins_zero_based"
+                ],
+            }
+        )
     masses = mass_points(
         hists,
         args.only,
@@ -2149,7 +2537,10 @@ def main() -> int:
         "model": {
             "simultaneous_control_regions": list(HIGH_CONTROL_REGIONS),
             "dilepton_poisson_channels": False,
-            "lost_lepton": "one free ll_norm shared by Top and W per matched bin",
+            "lost_lepton": (
+                "one free ll_norm shared by Top and W per Nb x recoil "
+                "control group; multiple exclusive SR categories share it"
+            ),
             "top_w_composition": (
                 "MC-derived log-ratio nuisance, anti-correlated at fixed total "
                 "to first order when sigma<1; sparse bins use autoMCStats only"
@@ -2170,7 +2561,10 @@ def main() -> int:
                 },
                 "records": TOP_W_COMPOSITION_DIAGNOSTICS,
             },
-            "qcd": "one free qcd_norm per matched QCDCR/SR bin",
+            "qcd": (
+                "one free qcd_norm per Nb x recoil control group; multiple "
+                "exclusive SR categories share it"
+            ),
             "zinv": (
                 "RZ-only nominal Z normalization; Qgamma-only nominal GCR "
                 "normalization; one shared GCR-constrained Sgamma shape "
@@ -2181,7 +2575,15 @@ def main() -> int:
             "rz_covariance": rz_covariance["status"],
             "zgamma_nonclosure": "central abs(D-1), Z SR only",
             "highdm_bins": len(exact["highdm"]["search_bin_labels"]),
+            "highdm_source_bins": highdm_bin_projection["source_bin_count"],
+            "highdm_bin_projection": highdm_bin_projection,
             "lowdm_bins": 34,
+            "lowdm_control_connectivity": {
+                "model": "Nb x physical recoil interval shared across categories",
+                "control_group_count": len(low_control_group_summary),
+                "per_sr_bin_control_parameters": False,
+                "groups": low_control_group_summary,
+            },
             "signal_topology": args.topology,
             "histogram_access": (
                 "bounded mmap extraction from canonical hists.json only; "

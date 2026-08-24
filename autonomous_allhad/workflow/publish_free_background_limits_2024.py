@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Add the three validated 2024 free-background limits to a plot page."""
+"""Publish validated expected limits and optional impacts to a plot page."""
 
 from __future__ import annotations
 
@@ -47,10 +47,14 @@ def main() -> int:
     parser.add_argument("--results-dir", type=Path, required=True)
     parser.add_argument(
         "--layout",
-        choices=("free_background", "tailmerged"),
+        choices=("free_background", "tailmerged", "canonical_combined"),
         default="free_background",
     )
     parser.add_argument("--highdm-bins", type=int, default=60)
+    parser.add_argument("--lowdm-bins", type=int, default=34)
+    parser.add_argument("--campaign-label", default="2024")
+    parser.add_argument("--impact-r1-dir", type=Path)
+    parser.add_argument("--impact-r0-dir", type=Path)
     parser.add_argument("--an-category-plot", type=Path)
     parser.add_argument("--an-category-summary", type=Path)
     parser.add_argument(
@@ -123,8 +127,18 @@ def main() -> int:
                 "name": stem,
                 "pdf": f"plots/limits/{pdf.name}",
                 "png": f"plots/limits/{png.name}",
-                "region": f"2024 High-dM {args.highdm_bins} + Low-dM 34",
-                "variable": f"{topology} free-background expected limit",
+                "region": (
+                    f"{args.campaign_label} High-dM {args.highdm_bins} + "
+                    f"Low-dM {args.lowdm_bins}"
+                ),
+                "variable": (
+                    f"{topology} "
+                    + (
+                        "combined expected limit"
+                        if args.layout == "canonical_combined"
+                        else "free-background expected limit"
+                    )
+                ),
             }
         )
         manifests[topology] = manifest
@@ -149,14 +163,19 @@ def main() -> int:
         )
         cards.append(
             "<a class='plot' data-family='limits' data-kind='Overview' "
-            f"data-search='2024 expected limit free background {topology.lower()} "
-            f"high-dm {args.highdm_bins} low-dm 34' "
+            f"data-search='{args.campaign_label} expected limit "
+            f"{topology.lower()} high-dm {args.highdm_bins} "
+            f"low-dm {args.lowdm_bins}' "
             f"href='{html.escape(record['pdf'])}'>"
             f"<img src='{html.escape(record['png'])}' loading='lazy' "
-            f"alt='2024 {topology} expected limit with free background "
-            "normalizations'>"
-            f"<span>2024 expected limit · {topology} · High-dM {args.highdm_bins} + "
-            "Low-dM 34 · free background normalizations</span></a>"
+            f"alt='{args.campaign_label} {topology} expected limit'>"
+            f"<span>{args.campaign_label} expected limit · {topology} · "
+            f"High-dM {args.highdm_bins} + Low-dM {args.lowdm_bins}"
+            + (
+                "</span></a>"
+                if args.layout == "canonical_combined"
+                else " · free background normalizations</span></a>"
+            )
         )
     category_record = None
     if args.an_category_plot:
@@ -198,54 +217,157 @@ def main() -> int:
             f"categories · High-dM {args.highdm_bins} bins · background "
             "stack + signal overlays</span></a>"
         )
+    impact_records = []
+    impact_links = []
+    for fit_label, impact_dir, expected_signal in (
+        ("r1", args.impact_r1_dir, 1),
+        ("r0", args.impact_r0_dir, 0),
+    ):
+        if impact_dir is None:
+            continue
+        source_dir = impact_dir / "work"
+        status = json.loads((source_dir / "impact_status.json").read_text())
+        if status.get("status") != "complete":
+            raise RuntimeError(f"{fit_label} impact is incomplete")
+        if int(status.get("asimov_expect_signal", -1)) != expected_signal:
+            raise RuntimeError(f"{fit_label} impact expectation mismatch")
+        source_stem = "impacts_mStop1200_mLSP500"
+        stem = (
+            f"impacts_t2tt_2024_2025_highdm{args.highdm_bins}_"
+            f"lowdm{args.lowdm_bins}_mStop1200_mLSP500_{fit_label}"
+        )
+        copy(source_dir / f"{source_stem}.png", page_dir / "plots/impacts" / f"{stem}.png")
+        copy(source_dir / f"{source_stem}.pdf", page_dir / "plots/impacts" / f"{stem}.pdf")
+        copy(source_dir / f"{source_stem}.json", data_dir / f"{stem}.json")
+        public_status = public_value(status)
+        (data_dir / f"{stem}_status.json").write_text(
+            json.dumps(public_status, indent=2, sort_keys=True) + "\n"
+        )
+        record = {
+            "family": "impacts",
+            "family_label": "Nuisance impacts",
+            "kind": "Overview",
+            "name": stem,
+            "pdf": f"plots/impacts/{stem}.pdf",
+            "png": f"plots/impacts/{stem}.png",
+            "region": (
+                f"2024+2025 High-dM {args.highdm_bins} + "
+                f"Low-dM {args.lowdm_bins}"
+            ),
+            "variable": f"T2tt mStop1200 mLSP500 Asimov {fit_label}",
+        }
+        impact_records.append(record)
+        impact_links.append(
+            f"<a href='{html.escape(record['pdf'])}'>Impact {fit_label} PDF</a>"
+        )
+        cards.append(
+            "<a class='plot' data-family='impacts' data-kind='Overview' "
+            f"data-search='2024 2025 combined t2tt impact {fit_label} "
+            f"high-dm {args.highdm_bins} low-dm {args.lowdm_bins} "
+            "mstop1200 mlsp500' "
+            f"href='{html.escape(record['pdf'])}'>"
+            f"<img src='{html.escape(record['png'])}' loading='lazy' "
+            f"alt='Combined 2024+2025 T2tt nuisance impacts ({fit_label})'>"
+            f"<span>2024+2025 impact · T2tt (1200, 500) GeV · "
+            f"Asimov {fit_label}</span></a>"
+        )
+
+    if args.layout == "canonical_combined":
+        notice_body = (
+            "<strong>2024+2025 combined statistical results</strong>"
+            f"<p>High-dM {args.highdm_bins} + Low-dM {args.lowdm_bins}. "
+            "Lost-lepton and QCD are constrained by shared control-region "
+            "transfer factors. Z→νν uses the measured RZ normalization and "
+            "the Qγ-normalized photon control sample for Sγ shape only. "
+            "Signal-region observations remain blinded. Coverage: "
+            + "; ".join(coverage_notes)
+            + ". "
+            + " · ".join(links + impact_links)
+            + ".</p>"
+        )
+    else:
+        notice_body = (
+            "<strong>2024 expected limits with provisional free-background "
+            "model</strong><p>The corrected exclusive Drell–Yan stitching is used. "
+            + ", ".join(topologies)
+            + " "
+            + ("are independent signal hypotheses. " if len(topologies) > 1 else "is shown. ")
+            + "The previous transfer-factor and RZ/Sγ background-estimation "
+            "constraints are absent. Seven canonical background normalizations "
+            "are unconstrained global rate parameters, while shape/weight "
+            "nuisances and autoMCStats remain. The evaluated grid has "
+            "mStop≤1800 GeV. "
+            + (
+                "The High-dM signal model has 55 bins: categories 1, 2, 3, "
+                "5, and 8 retain six bins, while the final two bins are merged "
+                "in the other five categories. "
+                if args.layout == "tailmerged" and args.highdm_bins == 55
+                else ""
+            )
+            + "Official topology-matched CMS-SUS-19-010 observed and expected "
+            "Run-2 contours are overlaid for every displayed signal model. "
+            "Coverage: "
+            + "; ".join(coverage_notes)
+            + ". "
+            + " · ".join(links)
+            + ".</p>"
+        )
     notice = (
         NOTICE_START
         + "<section class='update' style='max-width:1500px;margin:14px auto 0;"
         "padding:12px 18px;background:#fff;border:1px solid #d6dcdf;"
-        "border-radius:6px'><strong>2024 expected limits with provisional "
-        "free-background model</strong><p>The corrected exclusive Drell–Yan "
-        "stitching is used. "
-        + ", ".join(topologies)
-        + " "
-        + ("are independent signal hypotheses. " if len(topologies) > 1 else "is shown. ")
-        + "The previous transfer-factor and "
-        "RZ/Sγ background-estimation constraints are absent. Seven canonical "
-        "background normalizations are unconstrained global rate parameters, "
-        "while shape/weight nuisances and autoMCStats remain. The evaluated "
-        "grid has mStop≤1800 GeV. "
-        + (
-            "The High-dM signal model has 55 bins: categories 1, 2, 3, "
-            "5, and 8 retain six bins, while the final two bins are merged "
-            "in the other five categories. "
-            if args.layout == "tailmerged" and args.highdm_bins == 55
-            else ""
-        )
-        + "Official topology-matched CMS-SUS-19-010 observed and expected "
-        "Run-2 contours are overlaid for every displayed signal model. "
-        + "Coverage: "
-        + "; ".join(coverage_notes)
-        + ". "
-        + " · ".join(links)
-        + ".</p></section>"
+        "border-radius:6px'>"
+        + notice_body
+        + "</section>"
         + NOTICE_END
     )
     card_html = CARDS_START + "".join(cards) + CARDS_END
 
     index_path = page_dir / "index.html"
     page = index_path.read_text()
-    page = re.sub(
-        r"<a class='plot'[^>]*href='plots/categories/"
-        r"highdm_sr_selected_recoil[^']*'[^>]*>.*?</a>",
-        "",
-        page,
-        flags=re.DOTALL,
-    )
+    if not args.an_category_plot:
+        preserved_search_cards = re.findall(
+            r"<a class='plot'[^>]*href='plots/categories/"
+            r"highdm_sr_selected_recoil[^']*'[^>]*>.*?</a>",
+            page,
+            flags=re.DOTALL,
+        )
+        if preserved_search_cards:
+            card_html = (
+                CARDS_START
+                + "".join(preserved_search_cards)
+                + "".join(cards)
+                + CARDS_END
+            )
+    if args.an_category_plot:
+        page = re.sub(
+            r"<a class='plot'[^>]*href='plots/categories/"
+            r"highdm_sr_selected_recoil[^']*'[^>]*>.*?</a>",
+            "",
+            page,
+            flags=re.DOTALL,
+        )
     page = re.sub(
         re.escape(NOTICE_START) + r".*?" + re.escape(NOTICE_END),
         "",
         page,
         flags=re.DOTALL,
     )
+    if impact_records:
+        page = re.sub(
+            r"<!-- full-stat-impact-update:start -->.*?"
+            r"<!-- full-stat-impact-update:end -->",
+            "",
+            page,
+            flags=re.DOTALL,
+        )
+        page = re.sub(
+            r"<!-- nominal-stat-addendum:start -->.*?"
+            r"<!-- nominal-stat-addendum:end -->",
+            "",
+            page,
+            flags=re.DOTALL,
+        )
     page = page.replace("</header>", "</header>" + notice, 1)
     pattern = re.escape(CARDS_START) + r".*?" + re.escape(CARDS_END)
     if re.search(pattern, page, flags=re.DOTALL):
@@ -258,7 +380,9 @@ def main() -> int:
 
     summary_path = page_dir / "page_summary.json"
     summary = json.loads(summary_path.read_text())
-    replaced_names = {record["name"] for record in records}
+    replaced_names = {
+        record["name"] for record in records + impact_records
+    }
     if category_record:
         replaced_names.add(category_record["name"])
     current = [
@@ -270,6 +394,7 @@ def main() -> int:
                 record.get("family") == "limits"
                 and str(record.get("name", "")).startswith("expected_limit_t2")
             )
+            or (impact_records and record.get("family") == "impacts")
             or (
                 category_record
                 and record.get("family") == "categories"
@@ -279,7 +404,12 @@ def main() -> int:
             )
         )
     ]
-    summary["records"] = current + ([category_record] if category_record else []) + records
+    summary["records"] = (
+        current
+        + ([category_record] if category_record else [])
+        + records
+        + impact_records
+    )
     summary["generated_at"] = datetime.now(timezone.utc).replace(
         microsecond=0
     ).isoformat()
@@ -304,18 +434,46 @@ def main() -> int:
             for topology, record in zip(topologies, records)
         }
     )
-    summary["statistical_results"] = {
-        "status": "complete_free_background_2024",
-        "model": "free_background_global_process_normalizations",
-        "background_rate_parameters": 7,
-        "external_background_constraints": [],
-        "autoMCStats": 10,
-        "max_mstop_GeV": 1800,
-        "signals": prior_signals,
-    }
+    if args.layout == "canonical_combined":
+        summary["statistical_results"] = {
+            "status": "complete_2024_2025_combined",
+            "model": "shared_control_region_transfer_factors_and_rz_sgamma",
+            "campaign": "2024+2025",
+            "highdm_signal_bins": args.highdm_bins,
+            "lowdm_signal_bins": args.lowdm_bins,
+            "signal_regions_blinded": True,
+            "max_mstop_GeV": 1800,
+            "signals": prior_signals,
+            "impacts": {
+                record["variable"].rsplit(" ", 1)[-1]: {
+                    "plot": record["png"],
+                    "json": f"data/{record['name']}.json",
+                    "status": f"data/{record['name']}_status.json",
+                }
+                for record in impact_records
+            },
+        }
+        if impact_records:
+            summary["impact_update"] = {
+                "status": "complete_2024_2025_combined_r1_r0",
+                "benchmark": {"mStop_GeV": 1200, "mLSP_GeV": 500},
+                "analysis": "NPS26012",
+                "fits": [record["variable"] for record in impact_records],
+            }
+    else:
+        summary["statistical_results"] = {
+            "status": "complete_free_background_2024",
+            "model": "free_background_global_process_normalizations",
+            "background_rate_parameters": 7,
+            "external_background_constraints": [],
+            "autoMCStats": 10,
+            "max_mstop_GeV": 1800,
+            "signals": prior_signals,
+        }
     summary["plot_counts"] = {
         **(summary.get("plot_counts") or {}),
         "limits": len(records),
+        "impacts": len(impact_records),
         "total": len(summary["records"]),
     }
     if category_record:
