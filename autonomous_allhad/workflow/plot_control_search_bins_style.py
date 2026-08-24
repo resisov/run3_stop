@@ -2475,6 +2475,7 @@ bind('years',value=>year=value);bind('kinds',value=>kind=value);document.getElem
 def draw_flat_report(
     flat_hists: Path,
     output_dir: Path,
+    year: str | None = None,
     selected_highdm_sr_only: bool = False,
     selected_sr_search_bins_only: bool = False,
     dy_rz_manifest: Path | None = None,
@@ -2579,6 +2580,7 @@ def draw_flat_report(
             raise RuntimeError("a GCR-only plot was rendered without unit-area normalization")
         summary = {
             "status": "complete",
+            "year": year,
             "source": str(flat_hists),
             "output_dir": str(output_dir),
             "gcr_only": True,
@@ -2606,13 +2608,17 @@ def draw_flat_report(
             raise RuntimeError("High-dM selected SR blocks are empty")
         bin_count = sum(int(block["nbin"]) for block in blocks)
         name = f"highdm{bin_count}_search_bins"
-        plots.append(
-            draw_flat_blocks(
-                blocks,
-                output_dir / name,
-                xlabel="Search bin",
-            )
+        highdm_plot = draw_flat_blocks(
+            blocks,
+            output_dir / name,
+            xlabel="Search bin",
         )
+        highdm_plot.update({
+            "kind": "SR",
+            "region": "High-dM SR",
+            "variable": "search_bins",
+        })
+        plots.append(highdm_plot)
         lowdm_search_bins = None
         if selected_sr_search_bins_only:
             low_sr_blocks = lowdm_nsv_inclusive_blocks(
@@ -2621,15 +2627,20 @@ def draw_flat_report(
             if not low_sr_blocks:
                 raise RuntimeError("Low-dM selected SR blocks are empty")
             lowdm_search_bins = sum(int(block["nbin"]) for block in low_sr_blocks)
-            plots.append(
-                draw_flat_blocks(
-                    low_sr_blocks,
-                    output_dir / "lowdm_sr_onebin",
-                    xlabel="Search bin",
-                )
+            lowdm_plot = draw_flat_blocks(
+                low_sr_blocks,
+                output_dir / "lowdm_sr_onebin",
+                xlabel="Search bin",
             )
+            lowdm_plot.update({
+                "kind": "SR",
+                "region": "Low-dM SR",
+                "variable": "search_bins",
+            })
+            plots.append(lowdm_plot)
         summary = {
             "status": "complete",
+            "year": year,
             "source": str(flat_hists),
             "output_dir": str(output_dir),
             "plots": plots,
@@ -2772,7 +2783,7 @@ def draw_flat_report(
     highdm_search_bins = len(
         (((payload.get("search_bin_schemes") or {}).get(EXTENDED_AN17_RECOIL_SCHEME) or {}).get("bin_labels") or [])
     )
-    summary = {"status": "complete", "source": str(flat_hists), "output_dir": str(output_dir), "plots": plots, "lowdm_variable_plot_count": len([p for p in plots if str(p.get("name", "")).startswith("lowdm_") and p.get("variable")]), "lowdm_resolved_top_veto": {"applied": lowdm_nres_zero, "requirement": "Nres=0" if lowdm_nres_zero else None}, "signal_policy": "Signals are drawn only in SR plots; CR blocks exclude T2tt overlays.", "cr_plot_policy": "High-dM and low-dM CRs are drawn both as combined overview plots and as individual region plots.", "ntop_order": "N_t = 0 blocks are placed left of N_t >= 1 blocks.", "highdm_search_bins": highdm_search_bins, "luminosity_fb": LUMINOSITY_FB, "luminosity_relative_uncertainty": LUMINOSITY_RELATIVE_UNCERTAINTY, "background_systematic_sources": PLOT_SYSTEMATIC_SOURCES, "dy_rz_application": dy_rz_application}
+    summary = {"status": "complete", "year": year, "source": str(flat_hists), "output_dir": str(output_dir), "plots": plots, "lowdm_variable_plot_count": len([p for p in plots if str(p.get("name", "")).startswith("lowdm_") and p.get("variable")]), "lowdm_resolved_top_veto": {"applied": lowdm_nres_zero, "requirement": "Nres=0" if lowdm_nres_zero else None}, "signal_policy": "Signals are drawn only in SR plots; CR blocks exclude T2tt overlays.", "cr_plot_policy": "High-dM and low-dM CRs are drawn both as combined overview plots and as individual region plots.", "ntop_order": "N_t = 0 blocks are placed left of N_t >= 1 blocks.", "highdm_search_bins": highdm_search_bins, "luminosity_fb": LUMINOSITY_FB, "luminosity_relative_uncertainty": LUMINOSITY_RELATIVE_UNCERTAINTY, "background_systematic_sources": PLOT_SYSTEMATIC_SOURCES, "dy_rz_application": dy_rz_application}
     (output_dir / "flat_plot_summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     return summary
 
@@ -2877,6 +2888,7 @@ def main() -> int:
         print(json.dumps(draw_flat_report(
             args.flat_hists,
             outdir,
+            year=args.year,
             selected_highdm_sr_only=args.selected_highdm_sr_only,
             selected_sr_search_bins_only=args.selected_sr_search_bins_only,
             dy_rz_manifest=args.dy_rz_manifest,

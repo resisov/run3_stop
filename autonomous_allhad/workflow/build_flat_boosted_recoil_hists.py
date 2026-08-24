@@ -76,8 +76,11 @@ EXTENDED_RECOIL60_CATEGORY_KEY = "Nb2_Nt2plus_W0"
 EXTENDED_RECOIL60_INSERTION_BIN = 36
 NT0_RECOIL_CATEGORY_KEYS = ["NT0_Nb1plus_T0_W0", "NT0_Nb1plus_T0_W1plus"]
 RECOIL_BIN_LABELS = [
-    f"{int(RECOIL_PT_BINS[i])}-{int(RECOIL_PT_BINS[i + 1])}"
-    for i in range(len(RECOIL_PT_BINS) - 1)
+    *[
+        f"{int(RECOIL_PT_BINS[i])}-{int(RECOIL_PT_BINS[i + 1])}"
+        for i in range(len(RECOIL_PT_BINS) - 2)
+    ],
+    f"{int(RECOIL_PT_BINS[-2])}plus",
 ]
 LOWDM_REGION_MAP = {
     "LLCR": "cat2_LLCR_lowDeltaM",
@@ -220,7 +223,7 @@ EXPECTED_TROTA_MODEL_SHA256 = (
 )
 DERIVED_NRES_BRANCH = "nresolved_top_trota"
 LOWDM_VARIABLE_SPECS = {
-    "met": {"branch": "met", "bins": [0, 100, 150, 200, 250, 300, 350, 400, 500, 650, 800, 1000, 1500], "xlabel": r"$p_{T}^{miss}$ (GeV)"},
+    "met": {"branch": "met", "bins": [0, 100, 150, 200, 250, 300, 350, 400, 500, 650, 800, 1000, 1500], "overflow_policy": "fold", "xlabel": r"$p_{T}^{miss}$ (GeV)"},
     "ht": {"branch": "ht", "bins": [0, 300, 500, 700, 1000, 1500, 2000, 3000], "xlabel": r"$H_{T}$ (GeV)"},
     "njet": {"branch": "njet", "bins": [-0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 8.5, 12.5], "xlabel": r"$N_{j}$"},
     "nb_medium_lowdm": {"branch": "nb_medium_lowdm", "bins": [-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 6.5], "xlabel": r"$N_{b}$ medium"},
@@ -233,9 +236,9 @@ LOWDM_VARIABLE_SPECS = {
     "lowdm_isr_dphi": {"branch": "lowdm_isr_dphi", "bins": [0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.1416], "xlabel": r"$\Delta\phi$(ISR, $p_{T}^{miss}$)"},
     "lowdm_ptb": {"branch": "lowdm_ptb", "bins": [0, 30, 60, 100, 150, 200, 300, 500, 800], "xlabel": r"low-$\Delta m$ $p_{T}^{b}$ (GeV)"},
     "n_lowdm_isr": {"branch": "n_lowdm_isr", "bins": [-0.5, 0.5, 1.5, 2.5, 3.5, 5.5], "xlabel": r"$N_{ISR}$"},
-    "recoil_gcr": {"branch": "recoil_gcr", "bins": [0, 200, 250, 300, 350, 400, 500, 650, 800, 1000, 1500], "xlabel": r"Photon recoil $p_{T}$ (GeV)"},
-    "recoil_dy2e": {"branch": "recoil_dy2e", "bins": [0, 200, 250, 300, 350, 400, 500, 650, 800, 1000, 1500], "xlabel": r"Dielectron recoil $p_{T}$ (GeV)"},
-    "recoil_dy2m": {"branch": "recoil_dy2m", "bins": [0, 200, 250, 300, 350, 400, 500, 650, 800, 1000, 1500], "xlabel": r"Dimuon recoil $p_{T}$ (GeV)"},
+    "recoil_gcr": {"branch": "recoil_gcr", "bins": [0, 200, 250, 300, 350, 400, 500, 650, 800, 1000, 1500], "overflow_policy": "fold", "xlabel": r"Photon recoil $p_{T}$ (GeV)"},
+    "recoil_dy2e": {"branch": "recoil_dy2e", "bins": [0, 200, 250, 300, 350, 400, 500, 650, 800, 1000, 1500], "overflow_policy": "fold", "xlabel": r"Dielectron recoil $p_{T}$ (GeV)"},
+    "recoil_dy2m": {"branch": "recoil_dy2m", "bins": [0, 200, 250, 300, 350, 400, 500, 650, 800, 1000, 1500], "overflow_policy": "fold", "xlabel": r"Dimuon recoil $p_{T}$ (GeV)"},
     "mee": {"branch": "mee", "bins": [50, 70, 81, 86, 91, 96, 101, 120, 150], "xlabel": r"$m_{ee}$ (GeV)"},
     "mmm": {"branch": "mmm", "bins": [50, 70, 81, 86, 91, 96, 101, 120, 150], "xlabel": r"$m_{\mu\mu}$ (GeV)"},
     "n_photon_medium": {"branch": "n_photon_medium", "bins": [-0.5, 0.5, 1.5, 2.5, 3.5], "xlabel": r"$N_{\gamma}$ medium"},
@@ -295,7 +298,7 @@ HIGHDM_DISTRIBUTION_VARIABLE_SPECS = {
         "branch_by_region": {"GCR": "recoil_gcr", "DY2E": "recoil_dy2e", "DY2M": "recoil_dy2m"},
         "regions": ["LLCR", "QCDCR", "GCR", "DY2E", "DY2M"],
         "bins": [250, 300, 350, 400, 500, 650, 800, 1000, 1500],
-        "overflow_policy": "exclude",
+        "overflow_policy": "fold",
         "xlabel": r"$U_{T}$ (GeV)",
     },
     "ptll": {
@@ -306,7 +309,7 @@ HIGHDM_DISTRIBUTION_VARIABLE_SPECS = {
         "overflow_policy": "exclude",
         "xlabel": r"$p_{T}(\ell\ell)$ (GeV)",
     },
-    "met": {"branch": "met", "bins": [250, 300, 350, 400, 500, 650, 800, 1000, 1500], "xlabel": r"$p_{T}^{miss}$ (GeV)"},
+    "met": {"branch": "met", "bins": [250, 300, 350, 400, 500, 650, 800, 1000, 1500], "overflow_policy": "fold", "xlabel": r"$p_{T}^{miss}$ (GeV)"},
     "jet_pt": {
         "branch": "j1pt",
         "bins": [20, 30, 40, 50, 70, 100, 150, 200, 300, 500, 800, 1200, 1600],
@@ -530,6 +533,17 @@ def finite_array(values: Any, n: int, fill: float = 0.0) -> np.ndarray:
     if len(out) != n:
         return np.full(n, fill, dtype=float)
     return np.where(np.isfinite(out), out, fill)
+
+
+def open_ended_bin_indices(values: Any, edges: list[float]) -> np.ndarray:
+    """Assign finite values above the last visible edge to the last bin."""
+    vals = np.asarray(values, dtype=float)
+    bins = np.asarray(edges, dtype=float)
+    if bins.ndim != 1 or len(bins) < 2 or np.any(np.diff(bins) <= 0):
+        raise ValueError("open-ended bin edges must be strictly increasing")
+    raw = np.searchsorted(bins, vals, side="right") - 1
+    valid = np.isfinite(vals) & (vals >= bins[0])
+    return np.where(valid, np.minimum(raw, len(bins) - 2), -1).astype(int)
 
 
 def as_bool(values: Any, n: int) -> np.ndarray:
@@ -965,9 +979,10 @@ def add_hist(target: dict[str, Any], values: np.ndarray, weights: np.ndarray, ma
     if not np.any(good):
         return
     bins = np.asarray(RECOIL_PT_BINS, dtype=float)
-    h, _ = np.histogram(vals[good], bins=bins, weights=w[good])
-    h2, _ = np.histogram(vals[good], bins=bins, weights=finite_weight_square(w[good]))
-    e, _ = np.histogram(vals[good], bins=bins)
+    folded = np.minimum(vals[good], np.nextafter(bins[-1], bins[0]))
+    h, _ = np.histogram(folded, bins=bins, weights=w[good])
+    h2, _ = np.histogram(folded, bins=bins, weights=finite_weight_square(w[good]))
+    e, _ = np.histogram(folded, bins=bins)
     target["sumw"] = (np.asarray(target["sumw"], dtype=float) + h).tolist()
     target["sumw2"] = (np.asarray(target["sumw2"], dtype=float) + h2).tolist()
     target["entries"] = (np.asarray(target["entries"], dtype=int) + e).astype(int).tolist()
@@ -1434,7 +1449,7 @@ def selected_an17_recoil6_indices(chunk: dict[str, Any], n: int, sr_mask: np.nda
     selected_zero_based = [idx - 1 for idx in SELECTED_AN17_RECOIL_BINS_1BASED]
     selected_map = {search_idx: pos for pos, search_idx in enumerate(selected_zero_based)}
     recoil = finite_array(chunk["met"], n, 0.0)
-    recoil_idx = np.searchsorted(np.asarray(RECOIL_PT_BINS, dtype=float), recoil, side="right") - 1
+    recoil_idx = open_ended_bin_indices(recoil, RECOIL_PT_BINS)
     out = np.full(n, -1, dtype=int)
     for search_idx, category_pos in selected_map.items():
         mask = (search_indices == search_idx) & (recoil_idx >= 0) & (recoil_idx < len(RECOIL_PT_BINS) - 1)
@@ -1444,7 +1459,7 @@ def selected_an17_recoil6_indices(chunk: dict[str, Any], n: int, sr_mask: np.nda
 
 def selected_an17_recoil54_indices(chunk: dict[str, Any], n: int, sr_mask: np.ndarray) -> np.ndarray:
     recoil = finite_array(chunk["met"], n, 0.0)
-    recoil_idx = np.searchsorted(np.asarray(RECOIL_PT_BINS, dtype=float), recoil, side="right") - 1
+    recoil_idx = open_ended_bin_indices(recoil, RECOIL_PT_BINS)
     valid_recoil = (recoil_idx >= 0) & (recoil_idx < len(RECOIL_PT_BINS) - 1)
     nb = np.asarray(chunk["nb_medium"], dtype=int)
     nt = np.asarray(chunk["nboosted_top"], dtype=int)
@@ -1471,7 +1486,7 @@ def selected_an17_recoil60_indices(chunk: dict[str, Any], n: int, sr_mask: np.nd
     shift = out >= EXTENDED_RECOIL60_INSERTION_BIN
     out[shift] += len(RECOIL_BIN_LABELS)
     recoil = finite_array(chunk["met"], n, 0.0)
-    recoil_idx = np.searchsorted(np.asarray(RECOIL_PT_BINS, dtype=float), recoil, side="right") - 1
+    recoil_idx = open_ended_bin_indices(recoil, RECOIL_PT_BINS)
     valid_recoil = (recoil_idx >= 0) & (recoil_idx < len(RECOIL_PT_BINS) - 1)
     nb = np.asarray(chunk["nb_medium"], dtype=int)
     nt = np.asarray(chunk["nboosted_top"], dtype=int)
@@ -1479,6 +1494,23 @@ def selected_an17_recoil60_indices(chunk: dict[str, Any], n: int, sr_mask: np.nd
     extra = sr_mask & valid_recoil & (nb == 2) & (nt >= 2) & (nw == 0)
     out[extra] = EXTENDED_RECOIL60_INSERTION_BIN + recoil_idx[extra]
     return out
+
+
+def selected_an17_recoil60_category_mask(
+    chunk: dict[str, Any], n: int, sr_mask: np.ndarray
+) -> np.ndarray:
+    """Return the 60-bin source population without applying the MET binning."""
+    nb = np.asarray(chunk["nb_medium"], dtype=int)
+    nt = np.asarray(chunk["nboosted_top"], dtype=int)
+    nw = np.asarray(chunk["nboosted_w"], dtype=int)
+    base = boosted_an17_indices(chunk, n, sr_mask)
+    selected = np.isin(
+        base,
+        np.asarray([value - 1 for value in SELECTED_AN17_RECOIL_BINS_1BASED]),
+    )
+    nt0 = (nb >= 1) & (nt == 0)
+    extra = (nb == 2) & (nt >= 2) & (nw == 0)
+    return np.asarray(sr_mask, dtype=bool) & (nt0 | selected | extra)
 
 
 def configured_highdm_search_indices(
@@ -1496,17 +1528,17 @@ def configured_highdm_search_indices(
     baseline55 = map60_indices_to_adopted55(source60)
     mtb = float_field(chunk, "lowdm_mtb", n, float("nan"))
     population = (
-        sr
+        selected_an17_recoil60_category_mask(chunk, n, sr)
         & np.isfinite(mtb)
         & (mtb >= float(configuration["mtb_min"]))
-        & (baseline55 >= 0)
     )
+    if np.any(population & (baseline55 < 0)):
+        raise RuntimeError(
+            "eligible High-dM source events were lost before configured binning"
+        )
     baseline_for_scheme = np.where(population, baseline55, -1)
     recoil = finite_array(chunk["met"], n, 0.0)
-    recoil_index = (
-        np.searchsorted(np.asarray(RECOIL_PT_BINS, dtype=float), recoil, side="right")
-        - 1
-    )
+    recoil_index = open_ended_bin_indices(recoil, RECOIL_PT_BINS)
     exclusive = exclusive_category_source_indices(
         baseline_for_scheme,
         recoil_index,
@@ -2234,13 +2266,9 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                                 recoil_values = finite_array(
                                     sub_group["met"], inputs["n"], 0.0
                                 )
-                                recoil_indices = (
-                                    np.searchsorted(
-                                        np.asarray(RECOIL_PT_BINS, dtype=float),
-                                        recoil_values,
-                                        side="right",
-                                    )
-                                    - 1
+                                recoil_indices = open_ended_bin_indices(
+                                    recoil_values,
+                                    RECOIL_PT_BINS,
                                 )
                                 assigned_mask = highdm_indices >= 0
                                 for component_group, nb_mask in (
@@ -2367,7 +2395,16 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                             for var_name, values in lowdm_values.items():
                                 spec = LOWDM_VARIABLE_SPECS[var_name]
                                 vtarget = lowdm_variable_histograms.setdefault(lowdm_channel, {}).setdefault(var_name, {}).setdefault(label, {}).setdefault(vname, empty_binned_hist(spec["bins"]))
-                                add_binned_hist(vtarget, values, weights, lowdm_mask, spec["bins"])
+                                add_binned_hist(
+                                    vtarget,
+                                    values,
+                                    weights,
+                                    lowdm_mask,
+                                    spec["bins"],
+                                    overflow_policy=str(
+                                        spec.get("overflow_policy", "exclude")
+                                    ),
+                                )
                     summary["events_processed"] = int(summary.get("events_processed", 0)) + inputs["n"]
         if trota_nres is not None and trota_nres_cursor != len(trota_nres):
             raise RuntimeError(

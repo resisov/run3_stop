@@ -1,0 +1,103 @@
+{
+  "year": "2024",
+  "background_systematic_sources": [
+    "pileup",
+    "electron_id",
+    "electron_hlt",
+    "muon_id",
+    "muon_hlt",
+    "photon_id",
+    "btagSF_bc_correlated",
+    "btagSF_bc_uncorrelated",
+    "btagSF_light_correlated",
+    "btagSF_light_uncorrelated",
+    "jesFlavorQCD",
+    "jesTotal",
+    "metUnclustered"
+  ],
+  "highdm_search_bins": 73,
+  "lowdm_search_bins": 34,
+  "luminosity_fb": 109.82,
+  "luminosity_relative_uncertainty": 0.016,
+  "output_dir": "/tmp/web_overflow_20260824/plots/2024",
+  "plots": [
+    {
+      "bins": 73,
+      "kind": "SR",
+      "labels": [
+        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}=0$\n$N_{res}=0$",
+        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}=0$\n$N_{res}=1$",
+        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}=0$\n$N_{res}\\geq2$",
+        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}\\geq1$\n$N_{res}=0$",
+        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}\\geq1$\n$N_{res}\\geq1$",
+        "$N_{b}\\geq1$\n$N_{t}\\geq1$, $N_{W}=0$\n$N_{res}\\geq1$",
+        "$N_{b}=1$\n$N_{t}\\geq1$, $N_{W}=0$\n$N_{res}=0$",
+        "$N_{b}=1$\n$N_{t}\\geq1$, $N_{W}\\geq1$\n$N_{res}=0$",
+        "$N_{b}=2$\n$N_{t}=1$, $N_{W}=0$\n$N_{res}=0$",
+        "$N_{b}=2$\n$N_{t}=1$, $N_{W}=1$\n$N_{res}=0$",
+        "$N_{b}=2$\n$N_{t}\\geq2$, $N_{W}=0$\n$N_{res}=0$",
+        "$N_{b}\\geq3$\n$N_{t}=1$, $N_{W}=0$\n$N_{res}=0$",
+        "$N_{b}\\geq3$\n$N_{t}=1,2$\n$N_{W}=1,0$; $N_{res}=0$"
+      ],
+      "legend_yields_displayed": false,
+      "lower_panel": "signal_significance",
+      "lower_panel_ylim": [
+        0.0,
+        5.0
+      ],
+      "name": "highdm73_search_bins",
+      "pdf": "/tmp/web_overflow_20260824/plots/2024/highdm73_search_bins.pdf",
+      "png": "/tmp/web_overflow_20260824/plots/2024/highdm73_search_bins.png",
+      "region": "High-dM SR",
+      "signals": [
+        "mStop1000_mLSP1",
+        "mStop1200_mLSP1"
+      ],
+      "significance_definition": "S/sqrt(B+sigma_B^2), with sigma_B equal to the plotted background uncertainty",
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "search_bins"
+    },
+    {
+      "bins": 34,
+      "kind": "SR",
+      "labels": [
+        "$N_{b}=1$\n$300\\leq p_{T}^{ISR}<500$\n$20<p_{T}^{b}<40$",
+        "$N_{b}=1$\n$300\\leq p_{T}^{ISR}<500$\n$40<p_{T}^{b}<70$",
+        "$N_{b}=1$\n$p_{T}^{ISR}\\geq500$\n$20<p_{T}^{b}<40$",
+        "$N_{b}=1$\n$p_{T}^{ISR}\\geq500$\n$40<p_{T}^{b}<70$",
+        "$N_{b}\\geq2$\n$300\\leq p_{T}^{ISR}<500$\n$40<p_{T}^{b}<80$",
+        "$N_{b}\\geq2$\n$300\\leq p_{T}^{ISR}<500$\n$80<p_{T}^{b}<140$",
+        "$N_{b}\\geq2$, $N_{j}\\geq7$\n$300\\leq p_{T}^{ISR}<500$\n$p_{T}^{b}>140$",
+        "$N_{b}\\geq2$\n$p_{T}^{ISR}\\geq500$\n$40<p_{T}^{b}<80$",
+        "$N_{b}\\geq2$\n$p_{T}^{ISR}\\geq500$\n$80<p_{T}^{b}<140$",
+        "$N_{b}\\geq2$, $N_{j}\\geq7$\n$p_{T}^{ISR}\\geq500$\n$p_{T}^{b}>140$"
+      ],
+      "legend_yields_displayed": false,
+      "lower_panel": "signal_significance",
+      "lower_panel_ylim": [
+        0.0,
+        1.0
+      ],
+      "name": "lowdm_sr_onebin",
+      "pdf": "/tmp/web_overflow_20260824/plots/2024/lowdm_sr_onebin.pdf",
+      "png": "/tmp/web_overflow_20260824/plots/2024/lowdm_sr_onebin.png",
+      "region": "Low-dM SR",
+      "signals": [
+        "mStop600_mLSP400",
+        "mStop900_mLSP700"
+      ],
+      "significance_definition": "S/sqrt(B+sigma_B^2), with sigma_B equal to the plotted background uncertainty",
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "search_bins"
+    }
+  ],
+  "search_bin_configuration": null,
+  "search_bin_merges": null,
+  "signal_policy": "Signals are overlaid on the full background stack in the blinded SR.",
+  "source": "autonomous_allhad/workflow/plot2024/hists.json",
+  "status": "complete"
+}

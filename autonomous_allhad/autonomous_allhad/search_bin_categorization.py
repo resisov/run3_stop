@@ -8,7 +8,7 @@ from .highdm_resolved_categories import COARSE_NRES_TOPOLOGIES
 
 
 HIGH_MERGE_PAIRS = ((22, 23), (34, 35), (40, 41), (52, 53), (58, 59))
-RECOIL_LABELS = ("250to300", "300to350", "350to400", "400to500", "500to800", "800to1500")
+RECOIL_LABELS = ("250to300", "300to350", "350to400", "400to500", "500to800", "800plus")
 
 
 def adopted55_mapping() -> tuple[tuple[int, ...], ...]:
