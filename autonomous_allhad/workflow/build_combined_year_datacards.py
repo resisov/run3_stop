@@ -132,6 +132,7 @@ def write_condor_impact_submission(
     impact_runner: Path,
     mass_key: str,
     batch_name: str,
+    expect_signal: int,
 ) -> Path:
     match = re.fullmatch(r"mStop([0-9]+)_mLSP([0-9]+)", mass_key)
     if not match or int(match.group(2)) != 500:
@@ -141,10 +142,13 @@ def write_condor_impact_submission(
         )
     if not impact_runner.is_file():
         raise FileNotFoundError(f"impact runner is missing: {impact_runner}")
-    impact_dir = output_dir / f"impact_{mass_key}"
+    if expect_signal not in {0, 1}:
+        raise ValueError(f"expect_signal must be 0 or 1, got {expect_signal}")
+    fit_label = f"r{expect_signal}"
+    impact_dir = output_dir / f"impact_{mass_key}_{fit_label}"
     logs = impact_dir / "condor_logs"
     logs.mkdir(parents=True, exist_ok=True)
-    submit = output_dir / "impact_eossubmit.sub"
+    submit = output_dir / f"impact_{fit_label}_eossubmit.sub"
     stable_impact_dir = stable_path(impact_dir)
     stable_logs = stable_path(logs)
     submit.write_text(
@@ -156,6 +160,7 @@ output = {stable_logs}/impact.out
 error = {stable_logs}/impact.err
 log = {stable_logs}/cluster.log
 should_transfer_files = NO
+environment = "IMPACT_EXPECT_SIGNAL={expect_signal} IMPACT_R_MIN={'-20' if expect_signal == 0 else '0'} IMPACT_R_MAX=20"
 request_cpus = 4
 request_memory = 16000MB
 request_disk = 5000MB
@@ -300,20 +305,25 @@ def main() -> int:
         args.point_timeout,
         args.condor_batch_name,
     )
-    impact_submit = None
+    impact_submits: dict[str, str] = {}
     if args.impact_mass_key:
         impact_card = combined_cards.get(args.impact_mass_key)
         if impact_card is None:
             raise SystemExit(
                 f"impact benchmark is absent from the common grid: {args.impact_mass_key}"
             )
-        impact_submit = write_condor_impact_submission(
-            impact_card,
-            output_dir,
-            args.impact_runner,
-            args.impact_mass_key,
-            "NPS26012_2024_2025_T2tt_impact",
-        )
+        for expect_signal in (1, 0):
+            fit_label = f"r{expect_signal}"
+            impact_submits[fit_label] = str(
+                write_condor_impact_submission(
+                    impact_card,
+                    output_dir,
+                    args.impact_runner,
+                    args.impact_mass_key,
+                    f"NPS26012_2024_2025_T2tt_impact_{fit_label}",
+                    expect_signal,
+                )
+            )
     manifest = {
         "status": "combine_inputs_ready",
         "method": "combineCards.py with year-labelled channels",
@@ -347,7 +357,8 @@ def main() -> int:
         "condor_wrapper": str(condor_wrapper),
         "condor_submit": str(condor_submit),
         "condor_backend": "EOS schedd via module load lxbatch/eossubmit",
-        "impact_submit": str(impact_submit) if impact_submit else None,
+        "impact_submit": impact_submits.get("r1"),
+        "impact_submits": impact_submits,
         "impact_mass_key": args.impact_mass_key,
         "combine_cards_warnings": warnings,
     }

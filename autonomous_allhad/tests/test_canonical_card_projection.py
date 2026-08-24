@@ -136,6 +136,43 @@ def test_configured_highdm_projection_merges_every_bounded_component() -> None:
     assert "bin17__plus__bin18" in exact["highdm"]["search_bin_labels"]
 
 
+def test_configured_highdm_projection_accepts_valid_already_projected_input() -> None:
+    configuration = json.loads(
+        (PROJECT / "configs" / "search_bins_2024.json").read_text()
+    )
+    values = list(range(1, 74))
+    leaf = {
+        "sumw": values,
+        "sumw2": [value * value for value in values],
+        "entries": [1] * 73,
+    }
+    hists = {
+        "search_bin_histograms": {
+            MODULE.HIGH_SCHEME: {
+                "T2tt_mStop1200_mLSP500": {"nominal": leaf}
+            }
+        }
+    }
+    exact = {
+        "highdm": {
+            "search_bin_labels": [f"final{index}" for index in range(1, 74)],
+            "sr_components": {"Nb1": {"recoil0": {"TT": {"nominal": leaf}}}},
+        }
+    }
+
+    summary = MODULE.apply_configured_highdm_bin_merges(
+        hists, exact, configuration
+    )
+
+    assert summary["source_bin_count"] == 79
+    assert summary["input_bin_count"] == 73
+    assert summary["final_bin_count"] == 73
+    assert summary["already_projected"] is True
+    assert hists["search_bin_histograms"][MODULE.HIGH_SCHEME][
+        "T2tt_mStop1200_mLSP500"
+    ]["nominal"]["sumw"] == values
+
+
 def complete(value: float) -> dict:
     return {"status": "complete", "value": value}
 
@@ -185,6 +222,25 @@ def test_incomplete_sgamma_is_a_hard_failure() -> None:
     }
     with pytest.raises(ValueError, match="Sgamma/highdm/Nb1/bin0 is not complete"):
         MODULE.high_sgamma(sgamma, "Nb1", 0)
+
+
+def test_highdm_merged_sgamma_tail_is_shared_by_two_native_bins() -> None:
+    sgamma = {
+        "highdm": {
+            group: {
+                "Q": complete(1.0),
+                "bins": [
+                    {"Sgamma": complete(float(index + 1))}
+                    for index in range(5)
+                ],
+            }
+            for group in ("Nb1", "Nb2", "Nb3plus")
+        }
+    }
+    assert MODULE.high_sgamma(sgamma, "Nb1", 4)[1] == pytest.approx(5.0)
+    assert MODULE.high_sgamma(sgamma, "Nb1", 5)[1] == pytest.approx(5.0)
+    assert MODULE.high_sgamma_parameter_bin(sgamma, 4) == 4
+    assert MODULE.high_sgamma_parameter_bin(sgamma, 5) == 4
 
 
 def test_analysis_specific_nuisances_use_nps26012_prefix() -> None:
@@ -255,3 +311,47 @@ def test_unavailable_lowdm_sgamma_is_pooled_with_adjacent_bin() -> None:
     assert models[0]["pool_source_bins_zero_based"] == [0, 1]
     assert models[2]["sgamma"] == pytest.approx(1.0)
     assert models[2]["parameter"] != models[0]["parameter"]
+
+
+def test_lowdm_control_groups_share_crs_across_exclusive_categories() -> None:
+    labels = [
+        "Nb1_PISR300to500_PTb20to40_recoil_1",
+        "Nb1_PISR300to500_PTb40to70_recoil_1",
+        "Nb1_PISR300to500_PTb20to40_recoil_2",
+        "Nb2plus_PISR500plus_PTb40to80_Nj2plus_recoil_1",
+        "Nb2plus_PISR500plus_PTb80to140_Nj2plus_recoil_1",
+    ]
+    groups, by_source = MODULE.low_control_groups(labels)
+
+    assert len(groups) == 3
+    assert by_source[0] is by_source[1]
+    assert by_source[0]["key"] == "u300to400"
+    assert by_source[0]["source_bins_zero_based"] == [0, 1]
+    assert by_source[2]["key"] == "u400to500"
+    assert by_source[3] is by_source[4]
+    assert by_source[3]["key"] == "u450to550"
+
+
+def test_lowdm_gcr_initial_is_data_minus_other_over_qgamma_photon() -> None:
+    result = MODULE.low_gcr_shape_initial(
+        120.0,
+        {
+            "PhotonJet": background(100.0),
+            "Top": background(15.0),
+            "QCD": background(5.0),
+        },
+        "unit-test",
+    )
+    assert result == pytest.approx(1.0)
+
+
+def test_lowdm_gcr_initial_rejects_unidentifiable_group() -> None:
+    with pytest.raises(ValueError, match="unidentifiable Low-dM GCR shape"):
+        MODULE.low_gcr_shape_initial(
+            10.0,
+            {
+                "PhotonJet": background(100.0),
+                "Top": background(20.0),
+            },
+            "unit-test",
+        )
