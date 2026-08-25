@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Draw the CR fit-template bins plus boosted AN17 SR search bins."""
+"""Draw canonical Run-3 control, signal, and search-bin distributions."""
 
 from __future__ import annotations
 
 import argparse
 import json
+import mmap
 import shutil
 import sys
 from pathlib import Path
@@ -14,11 +15,18 @@ import numpy as np
 THIS_DIR = Path(__file__).resolve().parent
 if str(THIS_DIR) not in sys.path:
     sys.path.insert(0, str(THIS_DIR))
+PACKAGE_ROOT = THIS_DIR.parent
+if str(PACKAGE_ROOT) not in sys.path:
+    sys.path.insert(0, str(PACKAGE_ROOT))
 
 from background_process_groups import (
     BACKGROUND_DISPLAY_LABELS,
     BACKGROUND_PROCESS_ORDER,
     background_process_for_sample,
+)
+from autonomous_allhad.search_bin_categorization import (
+    configured_bin_position_groups,
+    configured_exclusive_mapping,
 )
 
 
@@ -64,7 +72,7 @@ LOWDM_SIGNAL_OVERLAYS = [
     {
         "key": "mStop600_mLSP400",
         "label": '$m_{\\tilde{t}}=600$ GeV, $m_{\\tilde{\\chi}^{0}_{1}}=400$ GeV',
-        "color": "#FF007F",
+        "color": "#54FAFD",
     },
     {
         "key": "mStop900_mLSP700",
@@ -101,10 +109,7 @@ LOWDM_NSV_INCLUSIVE_CATEGORY_LABELS = {
     "Nb2plus_PISR500plus_PTb140plus_Nj7plus": '$N_{b}\\geq2$, $N_{j}\\geq7$\n$p_{T}^{ISR}\\geq500$\n$p_{T}^{b}>140$',
 }
 PARTIAL_AN17_SPLIT_BINS = [4, 5, 8, 9, 14, 15, 16]
-SELECTED_AN17_RECOIL_SCHEME = "boosted_an17_selected_recoil6_SR"
-LATEST_AN17_RECOIL_SCHEME = "boosted_an17_selected_recoil6_with_nt0_wsplit_SR"
-EXTENDED_AN17_RECOIL_SCHEME = "boosted_an17_selected_recoil60_nb2_nt2plus_w0_SR"
-RECOIL6_LABELS = ["250-300", "300-350", "350-400", "400-500", "500-800", "800-1500"]
+EXTENDED_AN17_RECOIL_SCHEME = "highdm_search_bins"
 LUMINOSITY_FB = 109.82
 LUMINOSITY_RELATIVE_UNCERTAINTY = 0.016
 PLOT_SYSTEMATIC_SOURCES = [
@@ -123,16 +128,25 @@ PLOT_SYSTEMATIC_SOURCES = [
     "metUnclustered",
 ]
 SELECTED_AN17_CATEGORY_LABELS = {
-    'Nb1plus_T0_W0': '$N_{b}\\geq1$, $N_{t}=0$\n$N_{W}=0$',
-    'Nb1plus_T0_W1plus': '$N_{b}\\geq1$, $N_{t}=0$\n$N_{W}\\geq1$',
-    'Nb1_T1plus_W0': '$N_{b}=1$, $N_{t}\\geq1$\n$N_{W}=0$',
-    'Nb1_T1plus_W1plus': '$N_{b}=1$, $N_{t}\\geq1$\n$N_{W}\\geq1$',
-    'Nb2_T1_W0': '$N_{b}=2$, $N_{t}=1$\n$N_{W}=0$',
-    'Nb2_T1_W1': '$N_{b}=2$, $N_{t}=1$\n$N_{W}=1$',
-    'Nb3plus_T1_W0': '$N_{b}\\geq3$, $N_{t}=1$\n$N_{W}=0$',
-    'Nb3plus_T1_W1': '$N_{b}\\geq3$, $N_{t}=1$\n$N_{W}=1$',
-    'Nb3plus_T2_W0': '$N_{b}\\geq3$, $N_{t}=2$\n$N_{W}=0$',
-    'Nb2_Nt2plus_W0': '$N_{b}=2$, $N_{t}\\geq2$\n$N_{W}=0$',
+    'Nb1plus_T0_W0': '$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}=0$\n$N_{res}=0$',
+    'Nb1plus_T0_W1plus': '$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}\\geq1$\n$N_{res}=0$',
+    'Nb1_T1plus_W0': '$N_{b}=1$\n$N_{t}\\geq1$, $N_{W}=0$\n$N_{res}=0$',
+    'Nb1_T1plus_W1plus': '$N_{b}=1$\n$N_{t}\\geq1$, $N_{W}\\geq1$\n$N_{res}=0$',
+    'Nb2_T1_W0': '$N_{b}=2$\n$N_{t}=1$, $N_{W}=0$\n$N_{res}=0$',
+    'Nb2_T1_W1': '$N_{b}=2$\n$N_{t}=1$, $N_{W}=1$\n$N_{res}=0$',
+    'Nb3plus_T1_W0': '$N_{b}\\geq3$\n$N_{t}=1$, $N_{W}=0$\n$N_{res}=0$',
+    'Nb3plus_T1_W1': '$N_{b}\\geq3$\n$N_{t}=1$, $N_{W}=1$\n$N_{res}=0$',
+    'Nb3plus_T2_W0': '$N_{b}\\geq3$\n$N_{t}=2$, $N_{W}=0$\n$N_{res}=0$',
+    'Nb2_Nt2plus_W0': '$N_{b}=2$\n$N_{t}\\geq2$, $N_{W}=0$\n$N_{res}=0$',
+    'merged_high_nt': '$N_{b}\\geq3$\n$N_{t}=1,2$\n$N_{W}=1,0$; $N_{res}=0$',
+}
+RESOLVED_CATEGORY_LABELS = {
+    "resolved1_only": "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}=0$\n$N_{res}=1$",
+    "resolved2plus_only": "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}=0$\n$N_{res}\\geq2$",
+    "w_resolved": "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}\\geq1$\n$N_{res}\\geq1$",
+    "top_resolved": "$N_{b}\\geq1$\n$N_{t}\\geq1$, $N_{W}=0$\n$N_{res}\\geq1$",
+    "top_w_resolved": "$N_{b}\\geq1$\n$N_{t}\\geq1$, $N_{W}\\geq1$\n$N_{res}\\geq1$",
+    "nb2_nt0_nw2_nres0": "$N_{b}=2$\n$N_{t}=0$, $N_{W}=2$\n$N_{res}=0$",
 }
 SELECTED_AN17_CATEGORY_ORDER = [
     "Nb1plus_T0_W0",
@@ -151,6 +165,356 @@ SELECTED_AN17_CATEGORY_ORDER = [
 
 def load_json(path: Path) -> dict:
     return json.loads(path.read_text())
+
+
+def _json_value_end(buffer: mmap.mmap, start: int, limit: int) -> int:
+    opening = buffer[start]
+    if opening in (ord("{"), ord("[")):
+        closing = ord("}") if opening == ord("{") else ord("]")
+        depth = 0
+        in_string = False
+        escaped = False
+        for index in range(start, limit):
+            value = buffer[index]
+            if in_string:
+                if escaped:
+                    escaped = False
+                elif value == ord("\\"):
+                    escaped = True
+                elif value == ord('"'):
+                    in_string = False
+                continue
+            if value == ord('"'):
+                in_string = True
+            elif value == opening:
+                depth += 1
+            elif value == closing:
+                depth -= 1
+                if depth == 0:
+                    return index + 1
+        raise ValueError(f"unterminated JSON value at byte {start}")
+    if opening == ord('"'):
+        escaped = False
+        for index in range(start + 1, limit):
+            value = buffer[index]
+            if escaped:
+                escaped = False
+            elif value == ord("\\"):
+                escaped = True
+            elif value == ord('"'):
+                return index + 1
+        raise ValueError(f"unterminated JSON string at byte {start}")
+    index = start
+    while index < limit and buffer[index] not in b",}]\r\n":
+        index += 1
+    return index
+
+
+def _decode_slice(
+    buffer: mmap.mmap, bounds: tuple[int, int]
+) -> object:
+    return json.loads(buffer[bounds[0] : bounds[1]])
+
+
+def _value_start(
+    buffer: mmap.mmap,
+    name: str,
+    start: int,
+    end: int,
+) -> int | None:
+    marker = json.dumps(name).encode() + b":"
+    member = buffer.find(marker, start, end)
+    if member < 0:
+        return None
+    value_start = member + len(marker)
+    while value_start < end and buffer[value_start] in b" \t\r\n":
+        value_start += 1
+    return value_start
+
+
+def _section_bounds(
+    buffer: mmap.mmap,
+    name: str,
+) -> tuple[int, int] | None:
+    start = _value_start(buffer, name, 0, len(buffer))
+    if start is None:
+        return None
+    boundary_keys = {
+        "histograms": (
+            "highdm_control_components",
+            "search_bin_histograms",
+        ),
+        "search_bin_histograms": (
+            "highdm_search_bin_components",
+            "lowdm_variable_histograms",
+        ),
+        "lowdm_variable_histograms": ("highdm_variable_histograms",),
+        "highdm_variable_histograms": (
+            "normalization",
+            "summary",
+            "status",
+        ),
+    }.get(name, ("normalization", "summary", "status"))
+    boundaries = []
+    for key in boundary_keys:
+        marker = b"," + json.dumps(key).encode() + b":"
+        position = buffer.find(marker, start, len(buffer))
+        if position >= 0:
+            boundaries.append(position)
+    end = min(boundaries) if boundaries else len(buffer) - 1
+    return start, end
+
+
+def _child_bounds_by_names(
+    buffer: mmap.mmap,
+    parent: tuple[int, int],
+    names: list[str] | tuple[str, ...],
+) -> dict[str, tuple[int, int]]:
+    located = []
+    for name in names:
+        marker = json.dumps(name).encode() + b":"
+        position = buffer.find(marker, parent[0], parent[1])
+        if position < 0:
+            continue
+        start = position + len(marker)
+        while start < parent[1] and buffer[start] in b" \t\r\n":
+            start += 1
+        located.append((position, name, start))
+    located.sort()
+    output = {}
+    for index, (_position, name, start) in enumerate(located):
+        end = located[index + 1][0] if index + 1 < len(located) else parent[1]
+        while end > start and buffer[end - 1] in b" \t\r\n,":
+            end -= 1
+        output[name] = (start, end)
+    return output
+
+
+def _kept_variations(variations: dict, *, signal: bool) -> dict:
+    if signal:
+        return {"nominal": variations.get("nominal") or {}}
+    allowed = {"nominal"}
+    for source in PLOT_SYSTEMATIC_SOURCES:
+        allowed.update((source + "Up", source + "Down"))
+    return {
+        name: record
+        for name, record in variations.items()
+        if name in allowed
+    }
+
+
+def _sample_object(
+    buffer: mmap.mmap,
+    bounds: tuple[int, int],
+    *,
+    allow_signals: bool,
+) -> dict:
+    selected_signals = {
+        "T2tt_" + spec["key"]
+        for spec in (*SIGNAL_OVERLAYS, *LOWDM_SIGNAL_OVERLAYS)
+    }
+    selected_samples = (
+        "data_obs",
+        "VV",
+        "ST",
+        "TT",
+        "DY",
+        "GJ",
+        "WtoLNu",
+        "Zto2Nu",
+        "QCD",
+        *sorted(selected_signals),
+    )
+    output = {}
+    for sample in selected_samples:
+        signal = sample.startswith(("T2tt_", "T2bW_", "T2tb_"))
+        if signal and (not allow_signals or sample not in selected_signals):
+            continue
+        sample_start = _value_start(buffer, sample, bounds[0], bounds[1])
+        if sample_start is None:
+            continue
+        sample_bounds = (
+            sample_start,
+            _json_value_end(buffer, sample_start, bounds[1]),
+        )
+        variations = _decode_slice(buffer, sample_bounds)
+        if not isinstance(variations, dict):
+            raise ValueError(f"invalid sample histogram payload for {sample}")
+        output[sample] = _kept_variations(variations, signal=signal)
+    return output
+
+
+def load_canonical_plot_payload(path: Path) -> dict:
+    """Build a bounded-memory plotting projection from canonical hists.json."""
+    payload: dict = {}
+    with path.open("rb") as stream:
+        with mmap.mmap(stream.fileno(), 0, access=mmap.ACCESS_READ) as buffer:
+            for name in (
+                "recoil_pt_bins",
+                "lowdm_region_policy",
+                "lowdm_region_variables",
+                "lowdm_variable_specs",
+                "highdm_distribution_regions",
+                "highdm_distribution_variable_specs",
+                "search_bin_schemes",
+            ):
+                start = _value_start(buffer, name, 0, len(buffer))
+                if start is not None:
+                    payload[name] = _decode_slice(
+                        buffer,
+                        (start, _json_value_end(buffer, start, len(buffer))),
+                    )
+
+            histogram_regions = (
+                "LLCR",
+                "QCDCR",
+                "GCR",
+                "DY2E",
+                "DY2M",
+                "LLCR_Nt0",
+                "LLCR_Nt1",
+                "QCDCR_Nt0",
+                "QCDCR_Nt1",
+                "GCR_Nt0",
+                "GCR_Nt1",
+                "DY2E_Nt0",
+                "DY2E_Nt1",
+                "DY2M_Nt0",
+                "DY2M_Nt1",
+                "HighDMVR_Nb1",
+                "HighDMVR_Nb2",
+                "HighDMVR_Nb3plus",
+                "SR",
+                "SR_Nt0",
+                "SR_Nt1",
+            )
+            payload["histograms"] = {}
+            histogram_bounds = _section_bounds(buffer, "histograms")
+            if histogram_bounds is not None:
+                histogram_members = _child_bounds_by_names(
+                    buffer, histogram_bounds, histogram_regions
+                )
+                for region in histogram_regions:
+                    bounds = histogram_members.get(region)
+                    if bounds is not None:
+                        payload["histograms"][region] = _sample_object(
+                            buffer,
+                            bounds,
+                            allow_signals=region.startswith("SR"),
+                        )
+
+            schemes = (
+                EXTENDED_AN17_RECOIL_SCHEME,
+                "cat2_LLCR_lowDeltaM",
+                "cat3_QCDCR_lowDeltaM",
+                "cat4_GCR_lowDeltaM",
+                "cat5_DY2E_lowDeltaM",
+                "cat6_DY2M_lowDeltaM",
+                "cat7_SR_lowDeltaM",
+            )
+            payload["search_bin_histograms"] = {}
+            search_bounds = _section_bounds(buffer, "search_bin_histograms")
+            if search_bounds is not None:
+                search_members = _child_bounds_by_names(
+                    buffer,
+                    search_bounds,
+                    list((payload.get("search_bin_schemes") or {}).keys()),
+                )
+                for scheme in schemes:
+                    bounds = search_members.get(scheme)
+                    if bounds is not None:
+                        payload["search_bin_histograms"][
+                            scheme
+                        ] = _sample_object(
+                            buffer,
+                            bounds,
+                            allow_signals=scheme
+                            in {
+                                EXTENDED_AN17_RECOIL_SCHEME,
+                                "cat7_SR_lowDeltaM",
+                            },
+                        )
+
+            payload["lowdm_variable_histograms"] = {}
+            lowdm_variables = payload.get("lowdm_region_variables") or {}
+            lowdm_scheme_by_region = {
+                "LLCR": "cat2_LLCR_lowDeltaM",
+                "QCDCR": "cat3_QCDCR_lowDeltaM",
+                "GCR": "cat4_GCR_lowDeltaM",
+                "DY2E": "cat5_DY2E_lowDeltaM",
+                "DY2M": "cat6_DY2M_lowDeltaM",
+                "SR": "cat7_SR_lowDeltaM",
+            }
+            lowdm_bounds = _section_bounds(
+                buffer, "lowdm_variable_histograms"
+            )
+            if lowdm_bounds is not None:
+                lowdm_scheme_members = _child_bounds_by_names(
+                    buffer,
+                    lowdm_bounds,
+                    list(lowdm_scheme_by_region.values()),
+                )
+                for region, scheme in lowdm_scheme_by_region.items():
+                    scheme_bounds = lowdm_scheme_members.get(scheme)
+                    if scheme_bounds is None:
+                        continue
+                    variable_members = _child_bounds_by_names(
+                        buffer,
+                        scheme_bounds,
+                        list(lowdm_variables.get(region) or []),
+                    )
+                    for variable in lowdm_variables.get(region) or []:
+                        bounds = variable_members.get(variable)
+                        if bounds is None:
+                            continue
+                        payload["lowdm_variable_histograms"].setdefault(
+                            scheme, {}
+                        )[variable] = _sample_object(
+                            buffer,
+                            bounds,
+                            allow_signals=region == "SR",
+                        )
+
+            payload["highdm_variable_histograms"] = {}
+            highdm_regions = payload.get("highdm_distribution_regions") or {}
+            all_highdm_regions = {
+                region for regions in highdm_regions.values() for region in regions
+            }
+            highdm_variables = list(
+                (
+                    payload.get("highdm_distribution_variable_specs") or {}
+                ).keys()
+            )
+            highdm_bounds = _section_bounds(
+                buffer, "highdm_variable_histograms"
+            )
+            if highdm_bounds is not None:
+                highdm_region_members = _child_bounds_by_names(
+                    buffer, highdm_bounds, sorted(all_highdm_regions)
+                )
+                for region in sorted(all_highdm_regions):
+                    region_bounds = highdm_region_members.get(region)
+                    if region_bounds is None:
+                        continue
+                    variable_members = _child_bounds_by_names(
+                        buffer, region_bounds, highdm_variables
+                    )
+                    for variable in highdm_variables:
+                        bounds = variable_members.get(variable)
+                        if bounds is None:
+                            continue
+                        payload["highdm_variable_histograms"].setdefault(
+                            region, {}
+                        )[variable] = _sample_object(
+                            buffer, bounds, allow_signals=False
+                        )
+    return payload
+
+
+def load_plot_payload(path: Path) -> dict:
+    if path.name == "hists.json":
+        return load_canonical_plot_payload(path)
+    return load_json(path)
 
 
 def as_array(values: list[float] | None, nbin: int) -> np.ndarray:
@@ -759,85 +1123,6 @@ def flat_search_record(payload: dict, scheme: str, label: str, allow_signal: boo
     return result
 
 
-def apply_highdm_tail_merge(
-    payload: dict,
-    preserve_categories: set[int] | None = None,
-) -> None:
-    """Merge the last two recoil bins in every adopted High-dM category.
-
-    The merge is performed on every nominal and shifted histogram before the
-    standard plotting uncertainty is evaluated.  This preserves the existing
-    process grouping and systematic-correlation treatment of the main plotter.
-    """
-    scheme_name = EXTENDED_AN17_RECOIL_SCHEME
-    schemes = payload.get("search_bin_schemes") or {}
-    histograms = payload.get("search_bin_histograms") or {}
-    scheme = schemes.get(scheme_name)
-    raw = histograms.get(scheme_name)
-    if not scheme or not raw:
-        raise RuntimeError(f"missing High-dM search-bin scheme: {scheme_name}")
-
-    bin_labels = list(scheme.get("bin_labels") or [])
-    if len(bin_labels) != 60:
-        raise RuntimeError(f"expected 60 High-dM bin labels, found {len(bin_labels)}")
-
-    preserve_categories = set(preserve_categories or set())
-    invalid_categories = preserve_categories - set(range(1, 11))
-    if invalid_categories:
-        raise RuntimeError(
-            "invalid one-based High-dM category indices: "
-            + ", ".join(str(value) for value in sorted(invalid_categories))
-        )
-    category_sizes = [
-        6 if category in preserve_categories else 5
-        for category in range(1, 11)
-    ]
-
-    def merge_values(values: list[float] | None) -> list[float]:
-        if values is None:
-            return []
-        if len(values) != 60:
-            raise RuntimeError(f"expected 60 High-dM values, found {len(values)}")
-        merged = []
-        for category, start in enumerate(range(0, 60, 6), start=1):
-            if category in preserve_categories:
-                merged.extend(values[start : start + 6])
-            else:
-                merged.extend(values[start : start + 4])
-                merged.append(values[start + 4] + values[start + 5])
-        return merged
-
-    for variations in raw.values():
-        for record in variations.values():
-            for field in ("sumw", "sumw2", "entries"):
-                if field in record:
-                    record[field] = merge_values(record[field])
-
-    merged_labels = []
-    for category, start in enumerate(range(0, 60, 6), start=1):
-        keep = 6 if category in preserve_categories else 5
-        merged_labels.extend(bin_labels[start : start + keep])
-    scheme["bin_labels"] = merged_labels
-    scheme["category_sizes"] = category_sizes
-    recoil_edges = list(scheme.get("recoil_pt_bins") or [])
-    if len(recoil_edges) != 7:
-        raise RuntimeError(
-            f"expected seven High-dM recoil edges, found {len(recoil_edges)}"
-        )
-    if not preserve_categories:
-        scheme["recoil_pt_bins"] = recoil_edges[:5] + recoil_edges[-1:]
-    scheme["selection"] = (
-        str(scheme.get("selection") or "")
-        + "; final two recoil bins merged except in categories "
-        + (
-            ",".join(str(value) for value in sorted(preserve_categories))
-            if preserve_categories
-            else "none"
-        )
-    )
-
-
-
 VARIABLE_XLABELS = {
     "met": r"$p_{T}^{miss}$ (GeV)",
     "ht": r"$H_{T}$ (GeV)",
@@ -1176,28 +1461,127 @@ def partial_an17_search_record(payload: dict, label: str, split_bins: list[int],
     }
 
 
+def apply_configured_search_bin_merges(
+    payload: dict,
+    scheme_name: str,
+    configuration: dict,
+) -> dict:
+    """Apply configured final-bin merges to the bounded plotting projection.
+
+    This operates only on the canonical histogram projection already loaded in
+    memory.  It preserves the correlation of each systematic variation by
+    adding the source bins before plot uncertainties are evaluated.
+    """
+    scheme = (payload.get("search_bin_schemes") or {}).get(scheme_name) or {}
+    raw_labels = [str(value) for value in (scheme.get("bin_labels") or [])]
+    source_count = len(configured_exclusive_mapping(configuration))
+    position_groups = configured_bin_position_groups(configuration)
+    final_count = len(position_groups)
+    if len(raw_labels) not in {source_count, final_count}:
+        raise RuntimeError(
+            f"{scheme_name} configuration/source mismatch: "
+            f"expected {source_count} source bins or {final_count} final bins, "
+            f"but found {len(raw_labels)} labels"
+        )
+    if len(raw_labels) == final_count:
+        summary = {
+            "source_bin_count": source_count,
+            "final_bin_count": final_count,
+            "bin_merges_1based": list(
+                configuration.get("bin_merges_1based") or []
+            ),
+            "already_projected": True,
+        }
+        scheme["plot_bin_merges"] = summary
+        payload.setdefault("search_bin_schemes", {})[scheme_name] = scheme
+        return summary
+    if len(position_groups) == source_count:
+        return {
+            "source_bin_count": source_count,
+            "final_bin_count": source_count,
+            "bin_merges_1based": [],
+            "already_projected": True,
+        }
+
+    def rebin_leaf(leaf: dict) -> dict:
+        rebinned = dict(leaf)
+        for field in ("entries", "sumw", "sumw2"):
+            if field not in leaf:
+                continue
+            values = leaf.get(field) or []
+            if len(values) != source_count:
+                raise RuntimeError(
+                    f"{scheme_name} {field} has {len(values)} bins; "
+                    f"expected {source_count}"
+                )
+            rebinned[field] = [
+                float(sum(float(values[position]) for position in positions))
+                for positions in position_groups
+            ]
+        return rebinned
+
+    raw_histograms = (payload.get("search_bin_histograms") or {}).get(scheme_name) or {}
+    rebinned_histograms = {}
+    for sample, record in raw_histograms.items():
+        if isinstance(record, dict) and "sumw" in record:
+            rebinned_histograms[sample] = rebin_leaf(record)
+            continue
+        rebinned_histograms[sample] = {
+            name: rebin_leaf(leaf)
+            if isinstance(leaf, dict) and "sumw" in leaf
+            else leaf
+            for name, leaf in record.items()
+        }
+    payload.setdefault("search_bin_histograms", {})[scheme_name] = rebinned_histograms
+
+    rebinned_scheme = dict(scheme)
+    rebinned_scheme["bin_labels"] = [
+        "__plus__".join(raw_labels[position] for position in positions)
+        for positions in position_groups
+    ]
+    rebinned_scheme["plot_bin_merges"] = {
+        "source_bin_count": source_count,
+        "final_bin_count": len(position_groups),
+        "bin_merges_1based": list(configuration.get("bin_merges_1based") or []),
+        "already_projected": False,
+    }
+    payload.setdefault("search_bin_schemes", {})[scheme_name] = rebinned_scheme
+    return rebinned_scheme["plot_bin_merges"]
+
+
 def selected_an17_recoil_blocks(payload: dict, scheme_name: str) -> list[dict]:
     rec = flat_search_record(payload, scheme_name, "selected AN17 recoil", allow_signal=True)
     if not rec:
         return []
     scheme = (payload.get("search_bin_schemes") or {}).get(scheme_name) or {}
     raw_labels = scheme.get("bin_labels") or []
-    category_sizes = [int(value) for value in (scheme.get("category_sizes") or [])]
-    if (
-        scheme_name == EXTENDED_AN17_RECOIL_SCHEME
-        and len(category_sizes) == len(SELECTED_AN17_CATEGORY_ORDER)
-        and sum(category_sizes) == int(rec["nbin"])
-    ):
-        category_layout = list(zip(SELECTED_AN17_CATEGORY_ORDER, category_sizes))
-    else:
-        recoil_edges = list(scheme.get("recoil_pt_bins") or [])
-        n_recoil = (
-            len(recoil_edges) - 1
-            if len(recoil_edges) >= 2
-            else len(RECOIL6_LABELS)
+    if len(raw_labels) != int(rec["nbin"]):
+        raise RuntimeError(
+            f"{scheme_name} label/bin mismatch: "
+            f"{len(raw_labels)} != {int(rec['nbin'])}"
         )
-        category_count = int(rec["nbin"]) // n_recoil
-        category_layout = [("", n_recoil) for _ in range(category_count)]
+
+    def category_key(raw_label: str) -> str:
+        if "Nb3plus_T1_W1" in raw_label and "Nb3plus_T2_W0" in raw_label:
+            return "merged_high_nt"
+        if "__recoil_" in raw_label:
+            return raw_label.split("__recoil_", 1)[0]
+        first = raw_label.split("__plus__", 1)[0]
+        category = first.split("_recoil_", 1)[0]
+        if category.startswith("NT0_"):
+            category = category[len("NT0_") :]
+        elif category.startswith("AN17_"):
+            category = category.split("_", 2)[2]
+        return category
+
+    category_layout: list[tuple[str, int]] = []
+    for raw_label in raw_labels:
+        category = category_key(str(raw_label))
+        if category_layout and category_layout[-1][0] == category:
+            previous, size = category_layout[-1]
+            category_layout[-1] = (previous, size + 1)
+        else:
+            category_layout.append((category, 1))
 
     blocks = []
     offset = 0
@@ -1205,14 +1589,17 @@ def selected_an17_recoil_blocks(payload: dict, scheme_name: str) -> list[dict]:
         slc = slice(offset, offset + n_recoil)
         if slc.stop > int(rec["nbin"]):
             break
-        if not category and raw_labels and offset < len(raw_labels):
-            raw = raw_labels[offset]
-            category = raw.split("_recoil_")[0]
-            if category.startswith("NT0_"):
-                category = category[len("NT0_"):]
-            elif category.startswith("AN17_"):
-                category = category.split("_", 2)[2]
-        label = SELECTED_AN17_CATEGORY_LABELS.get(category, category) if category else f"category {pos + 1}"
+        label = RESOLVED_CATEGORY_LABELS.get(
+            category,
+            SELECTED_AN17_CATEGORY_LABELS.get(category, category),
+        )
+        raw_block_labels = [str(value) for value in raw_labels[slc]]
+        if (
+            raw_block_labels
+            and all("__Nres0" in value for value in raw_block_labels)
+            and label.count("\n") < 2
+        ):
+            label = label + "\n" + r"$N_{res}=0$"
         block = {
             "groups": {group: vals[slc] for group, vals in rec["groups"].items()},
             "background": rec["background"][slc],
@@ -1225,30 +1612,26 @@ def selected_an17_recoil_blocks(payload: dict, scheme_name: str) -> list[dict]:
             "xlabels": [],
             "blind_data": True,
             "label_box": True,
-            "label_fontsize": 11.2,
+            "label_fontsize": 12.0,
             "label_box_pad": 0.18,
+            "figure_width": 22.0,
             "category_key": category,
+            "category_labels_on_main": True,
+            "category_label_y": 0.72,
+            "main_panel_ymax_factor": 600.0,
+            "significance_panel": True,
+            "significance_ylim": [0.0, 5.0],
         }
         blocks.append(block)
         offset += n_recoil
-    if scheme_name == EXTENDED_AN17_RECOIL_SCHEME:
-        keyed = {
-            str(block.get("category_key") or ""): block
-            for block in blocks
-        }
-        if set(keyed) == set(SELECTED_AN17_CATEGORY_ORDER):
-            blocks = [keyed[category] for category in SELECTED_AN17_CATEGORY_ORDER]
     return blocks
 
 
 def lowdm_nsv_inclusive_blocks(payload: dict, scheme_name: str) -> list[dict]:
-    nres_zero = bool(
-        (((payload.get("lowdm_region_policy") or {}).get("resolved_top_veto") or {}).get("applied"))
-    )
     rec = flat_search_record(
         payload,
         scheme_name,
-        r"Low-dM SR, $N_{res}=0$" if nres_zero else "Low-dM SR",
+        "Low-dM SR",
         allow_signal=True,
         signal_overlays=LOWDM_SIGNAL_OVERLAYS,
     )
@@ -1271,10 +1654,7 @@ def lowdm_nsv_inclusive_blocks(payload: dict, scheme_name: str) -> list[dict]:
             "data_unc": rec["data_unc"][slc],
             "signals": {key: vals[slc] for key, vals in rec.get("signals", {}).items()},
             "signal_specs": LOWDM_SIGNAL_OVERLAYS,
-            "label": (
-                LOWDM_NSV_INCLUSIVE_CATEGORY_LABELS.get(category, category)
-                + ("\n" + r"$N_{res}=0$" if nres_zero else "")
-            ),
+            "label": LOWDM_NSV_INCLUSIVE_CATEGORY_LABELS.get(category, category),
             "nbin": size,
             "xlabels": [],
             "blind_data": True,
@@ -1282,6 +1662,11 @@ def lowdm_nsv_inclusive_blocks(payload: dict, scheme_name: str) -> list[dict]:
             "label_fontsize": 10.2,
             "label_box_pad": 0.42,
             "figure_width": 16.4,
+            "category_labels_on_main": True,
+            "category_label_y": 0.72,
+            "main_panel_ymax_factor": 600.0,
+            "significance_panel": True,
+            "significance_ylim": [0.0, 1.0],
         })
         offset += size
     return blocks
@@ -1293,6 +1678,9 @@ def draw_flat_blocks(
     xlabel: str = "Bin",
     reference_style: bool = False,
     show_yields: bool = False,
+    ratio_ylabel: str | None = None,
+    uncertainty_label_override: str | None = None,
+    luminosity_fb: float | None = None,
 ) -> dict:
     import matplotlib
 
@@ -1374,13 +1762,26 @@ def draw_flat_blocks(
             signals[key][slc] = vals
         offset += n
     signals = {key: vals for key, vals in signals.items() if np.any(vals > 0)}
+    significance_flags = {bool(block.get("significance_panel")) for block in blocks}
+    if len(significance_flags) != 1:
+        raise RuntimeError("cannot mix significance and Data/MC lower panels")
+    significance_panel = significance_flags.pop()
+    significance_ylims = {
+        tuple(float(value) for value in block.get("significance_ylim", [0.0, 5.0]))
+        for block in blocks
+    }
+    if significance_panel and len(significance_ylims) != 1:
+        raise RuntimeError("cannot mix significance y-axis ranges")
+    lower_panel_ylim = significance_ylims.pop() if significance_panel else (0.0, 2.0)
 
     unit_area = bool(blocks) and all(
         bool(block.get("unit_area")) and block.get("physics_scope") == "GCR"
         for block in blocks
     )
     unit_area_audit = None
-    uncertainty_label = "Stat. syst. unc" if reference_style else "MC stat+syst unc."
+    uncertainty_label = uncertainty_label_override or (
+        "Stat. syst. unc" if reference_style else "MC stat+syst unc."
+    )
     raw_legend_yields = {
         group: float(np.sum(values)) for group, values in groups.items()
     }
@@ -1625,24 +2026,45 @@ def draw_flat_blocks(
         label=data_legend_label,
         zorder=10,
     )
-    ratio = np.divide(data, bkg, out=np.full_like(data, np.nan), where=(bkg > 0) & data_mask)
-    ratio_err = np.divide(data_unc, bkg, out=np.full_like(data, np.nan), where=(bkg > 0) & data_mask)
-    rmask = np.isfinite(ratio)
-    rax.errorbar(
-        centers[rmask],
-        ratio[rmask],
-        xerr=xerr[rmask],
-        yerr=ratio_err[rmask],
-        fmt="o",
-        color="black",
-        markersize=7.0 if reference_style else 4.5,
-        capsize=4.5,
-        capthick=1.4,
-        elinewidth=1.4,
-    )
-    rel = np.divide(unc, bkg, out=np.zeros_like(unc), where=bkg > 0)
-    rax.fill_between(edges, np.r_[1.0 - rel, 1.0 - rel[-1]], np.r_[1.0 + rel, 1.0 + rel[-1]], step="post", facecolor="0.82", edgecolor="0.15", hatch="////", linewidth=0.0, alpha=0.65)
-    rax.axhline(1.0, color="0.45", linewidth=1)
+    if significance_panel:
+        significance_denominator = np.sqrt(np.maximum(bkg, 0.0) + unc**2)
+        for spec in signal_specs:
+            vals = signals.get(spec["key"])
+            if vals is None:
+                continue
+            significance = np.divide(
+                vals,
+                significance_denominator,
+                out=np.zeros_like(vals),
+                where=significance_denominator > 0.0,
+            )
+            rax.stairs(
+                significance,
+                edges,
+                color=spec["color"],
+                linewidth=2.6,
+                linestyle="--",
+            )
+        rax.axhline(0.0, color="0.45", linewidth=1)
+    else:
+        ratio = np.divide(data, bkg, out=np.full_like(data, np.nan), where=(bkg > 0) & data_mask)
+        ratio_err = np.divide(data_unc, bkg, out=np.full_like(data, np.nan), where=(bkg > 0) & data_mask)
+        rmask = np.isfinite(ratio)
+        rax.errorbar(
+            centers[rmask],
+            ratio[rmask],
+            xerr=xerr[rmask],
+            yerr=ratio_err[rmask],
+            fmt="o",
+            color="black",
+            markersize=7.0 if reference_style else 4.5,
+            capsize=4.5,
+            capthick=1.4,
+            elinewidth=1.4,
+        )
+        rel = np.divide(unc, bkg, out=np.zeros_like(unc), where=bkg > 0)
+        rax.fill_between(edges, np.r_[1.0 - rel, 1.0 - rel[-1]], np.r_[1.0 + rel, 1.0 + rel[-1]], step="post", facecolor="0.82", edgecolor="0.15", hatch="////", linewidth=0.0, alpha=0.65)
+        rax.axhline(1.0, color="0.45", linewidth=1)
     for axis in (ax, rax):
         axis.set_xmargin(0)
         if physical_edges is None:
@@ -1662,11 +2084,12 @@ def draw_flat_blocks(
     for start, end, label, block in zip(boundaries[:-1], boundaries[1:], labels, blocks):
         center = 0.5 * (start + end) + 0.5 if physical_edges is None else 0.5 * (float(edges[0]) + float(edges[-1]))
         if block.get("label_box"):
-            rax.text(
+            label_axis = ax if block.get("category_labels_on_main") else rax
+            label_axis.text(
                 center,
-                0.5,
+                float(block.get("category_label_y", 0.5)),
                 label,
-                transform=rax.get_xaxis_transform(),
+                transform=label_axis.get_xaxis_transform(),
                 ha="center",
                 va="center",
                 fontsize=float(block.get("label_fontsize", 15)),
@@ -1683,25 +2106,49 @@ def draw_flat_blocks(
         arr = np.asarray(arr, dtype=float)
         positive.extend(arr[arr > 0].tolist())
     ax.set_yscale("log")
+    main_panel_ymax_factor = max(
+        (float(block.get("main_panel_ymax_factor", 60.0)) for block in blocks),
+        default=60.0,
+    )
     if positive:
         if reference_style and not unit_area:
-            ymax = 10.0 ** np.ceil(np.log10(max(max(positive) * 60.0, 1.0)))
+            ymax = 10.0 ** np.ceil(np.log10(max(max(positive) * main_panel_ymax_factor, 1.0)))
             ax.set_ylim(1.0e-1, ymax)
         else:
             floor = 1.0e-5 if unit_area else 0.03
-            ax.set_ylim(max(floor, min(positive) * 0.1), max(max(positive) * 60, 1.0))
+            ax.set_ylim(
+                max(floor, min(positive) * 0.1),
+                max(max(positive) * main_panel_ymax_factor, 1.0),
+            )
     else:
         ax.set_ylim(0.03, 1.0)
     ax.set_ylabel(
         "Normalized events" if unit_area else ("Events" if reference_style else "Events / bin"),
         fontsize=32 if reference_style else 30,
     )
-    rax.set_ylabel("Data/MC", fontsize=30 if reference_style else 26)
-    rax.set_ylim(0, 2)
+    rax.set_ylabel(
+        "Significance" if significance_panel else (ratio_ylabel or "Data/MC"),
+        fontsize=30 if reference_style else 26,
+    )
+    rax.set_ylim(*lower_panel_ylim)
     rax.set_xlabel(xlabel, fontsize=32 if reference_style else 30, loc="right")
     annotations = [str(block.get("annotation") or "") for block in blocks if block.get("annotation")]
-    if len(annotations) == 1 and not reference_style:
-        ax.text(0.035, 0.72, annotations[0], transform=ax.transAxes, ha="left", va="top", fontsize=20)
+    show_reference_annotation = any(
+        bool(block.get("show_annotation")) for block in blocks
+    )
+    if len(annotations) == 1 and (not reference_style or show_reference_annotation):
+        annotation_block = next(
+            block for block in blocks if block.get("annotation")
+        )
+        ax.text(
+            float(annotation_block.get("annotation_x", 0.035)),
+            float(annotation_block.get("annotation_y", 0.72)),
+            annotations[0],
+            transform=ax.transAxes,
+            ha="left",
+            va="top",
+            fontsize=20,
+        )
     if physical_edges is not None and len(blocks) == 1:
         xlabels = blocks[0].get("xlabels") or []
         if len(xlabels) == nbin:
@@ -1719,7 +2166,8 @@ def draw_flat_blocks(
         rax.set_xticks(centers)
         label_fontsize = 12 if any("\n" in lab for lab in xlabels) else (13 if nbin > 24 else 16)
         rax.set_xticklabels(xlabels, fontsize=label_fontsize)
-    hep.cms.label(llabel="Work in progress", rlabel=rf"{LUMINOSITY_FB:.2f} fb$^{{-1}}$ (13.6 TeV)", ax=ax)
+    shown_luminosity = LUMINOSITY_FB if luminosity_fb is None else luminosity_fb
+    hep.cms.label(llabel="Work in progress", rlabel=rf"{shown_luminosity:.2f} fb$^{{-1}}$ (13.6 TeV)", ax=ax)
     if reference_style:
         handles, legend_labels = ax.get_legend_handles_labels()
         desired_groups = [
@@ -1766,6 +2214,13 @@ def draw_flat_blocks(
         "legend_yields_displayed": show_yields,
         "unit_area": unit_area,
         "unit_area_audit": unit_area_audit,
+        "lower_panel": "signal_significance" if significance_panel else "data_over_mc",
+        "lower_panel_ylim": list(lower_panel_ylim),
+        "significance_definition": (
+            "S/sqrt(B+sigma_B^2), with sigma_B equal to the plotted background uncertainty"
+            if significance_panel
+            else None
+        ),
     }
 
 
@@ -1777,7 +2232,7 @@ def draw_highdm_distribution_report(
     only_region: str | None = None,
     only_variable: str | None = None,
 ) -> dict:
-    payload = load_json(payload_path)
+    payload = load_plot_payload(payload_path)
     # High-dM one-dimensional distribution plots intentionally do not draw
     # signal overlays.  Drop those records once, before the repeated region /
     # variable aggregation, so large signal grids do not dominate memory and
@@ -1853,20 +2308,41 @@ def draw_highdm_distribution_report(
 
 def write_highdm_distribution_webpage(
     summary_2024: Path,
-    summary_2025: Path,
+    summary_2025: Path | None,
     docs_dir: Path,
+    flat_summary_2024: Path | None = None,
+    flat_summary_2025: Path | None = None,
     impact_png: Path | None = None,
     impact_pdf: Path | None = None,
     impact_json: Path | None = None,
+    result_manifest: Path | None = None,
 ) -> dict:
     import html
 
-    summaries = [load_json(summary_2024), load_json(summary_2025)]
+    summary_paths = [summary_2024]
+    if summary_2025 is not None:
+        summary_paths.append(summary_2025)
+    summaries = [load_json(path) for path in summary_paths]
+    flat_paths = [flat_summary_2024]
+    if summary_2025 is not None:
+        flat_paths.append(flat_summary_2025)
+    for summary, flat_path in zip(
+        summaries,
+        flat_paths,
+    ):
+        if flat_path is None:
+            continue
+        flat = load_json(flat_path)
+        if flat.get("status") != "complete":
+            raise ValueError(f"flat plot summary is incomplete: {flat_path}")
+        summary.setdefault("plots", []).extend(flat.get("plots") or [])
     docs_dir.mkdir(parents=True, exist_ok=True)
     variable_names = {
         "nb": "Nb", "njet": "Nj", "nfatjet": "Nfj", "ntop": "Ntop", "nw": "NW",
         "ht": "HT", "ut": "UT", "met": "pTmiss", "jet_pt": "Jet pT",
         "fatjet_pt": "FatJet pT", "bjet_pt": "b-jet pT",
+        "search_bins": "Search bins", "recoil": "Recoil",
+        "limit": "Expected limits", "impact": "Nuisance impacts",
     }
     options = ["<option value='all'>All variables</option>"]
     variables = []
@@ -1874,12 +2350,18 @@ def write_highdm_distribution_webpage(
     for summary in summaries:
         year = str(summary["year"])
         for plot in summary.get("plots") or []:
-            variable = str(plot["variable"])
+            name = str(plot["name"])
+            variable = str(
+                plot.get("variable")
+                or ("search_bins" if "search_bins" in name else "recoil")
+            )
             if variable not in variables:
                 variables.append(variable)
-            name = str(plot["name"])
-            kind = str(plot["kind"])
-            region = str(plot["region"])
+            kind = str(
+                plot.get("kind")
+                or ("VR" if "_vr_" in name else "SR" if "_sr_" in name else "CR")
+            )
+            region = str(plot.get("region") or name)
             title = f"{year} · {kind} · {region} · {variable_names.get(variable, variable)}"
             cards.append(
                 f"<a class='plot' data-year='{html.escape(year)}' data-kind='{html.escape(kind)}' "
@@ -1897,7 +2379,7 @@ def write_highdm_distribution_webpage(
             if not source.exists():
                 raise FileNotFoundError(source)
             shutil.copy2(source, impact_dir / source.name)
-        title = "2024+2025 · Asimov r=1 impacts · mStop 1250 GeV, mLSP 500 GeV"
+        title = "T2tt · Asimov r=1 impacts · mStop 1200 GeV, mLSP 500 GeV"
         cards.append(
             f"<a class='plot' data-year='Combined' data-kind='Impact' data-variable='impact' "
             f"href='impacts/{html.escape(impact_pdf.name)}'>"
@@ -1906,17 +2388,64 @@ def write_highdm_distribution_webpage(
         )
         impact_record = {
             "status": "complete",
-            "benchmark": "mStop1250_mLSP500",
+            "benchmark": "mStop1200_mLSP500",
             "asimov_expect_signal": 1,
             "png": f"impacts/{impact_png.name}",
             "pdf": f"impacts/{impact_pdf.name}",
             "json": f"impacts/{impact_json.name}",
         }
+        if "impact" not in variables:
+            variables.append("impact")
+    published_results = []
+    if result_manifest is not None:
+        manifest = load_json(result_manifest)
+        if manifest.get("status") != "complete":
+            raise ValueError(f"result manifest is incomplete: {result_manifest}")
+        for record in manifest.get("results") or []:
+            year = str(record["year"])
+            kind = str(record["kind"])
+            title = str(record["title"])
+            slug = str(record["slug"])
+            destination = docs_dir / "results" / year / slug
+            destination.mkdir(parents=True, exist_ok=True)
+            copied = {}
+            for extension in ("png", "pdf", "json"):
+                source_value = record.get(extension)
+                if not source_value:
+                    continue
+                source = Path(source_value)
+                if not source.exists():
+                    raise FileNotFoundError(source)
+                target = destination / source.name
+                shutil.copy2(source, target)
+                copied[extension] = str(target.relative_to(docs_dir))
+            if "png" not in copied or "pdf" not in copied:
+                raise ValueError(f"result is missing PNG/PDF pair: {record}")
+            variable = "limit" if kind == "Limit" else "impact"
+            if variable not in variables:
+                variables.append(variable)
+            cards.append(
+                f"<a class='plot' data-year='{html.escape(year)}' data-kind='{html.escape(kind)}' "
+                f"data-variable='{variable}' href='{html.escape(copied['pdf'])}'>"
+                f"<img src='{html.escape(copied['png'])}' loading='lazy' alt='{html.escape(title)}'>"
+                f"<span>{html.escape(title)}</span></a>"
+            )
+            published_results.append(
+                {**record, "published": copied}
+            )
     for variable in variables:
         options.append(f"<option value='{html.escape(variable)}'>{html.escape(variable_names.get(variable, variable))}</option>")
+    years = [str(summary["year"]) for summary in summaries]
+    year_buttons = "".join(
+        f"<button data-value='{html.escape(year)}'"
+        + (" class='active'" if index == 0 else "")
+        + f">{html.escape(year)}</button>"
+        for index, year in enumerate(years)
+    )
+    initial_year = years[0]
     page = """<!doctype html>
 <html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
-<title>Run-3 CR, SR and VR distributions</title>
+<title>Run-3 all-hadronic stop analysis results</title>
 <style>
 :root{--ink:#171b1d;--muted:#5f686d;--line:#d6dcdf;--bg:#f3f5f6;--panel:#fff;--accent:#087f5b}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,Segoe UI,sans-serif}
@@ -1929,14 +2458,14 @@ main{padding:18px}.plots{display:grid;grid-template-columns:repeat(auto-fit,minm
 .plot[hidden]{display:none}.plot img{display:block;width:100%;height:auto}.plot span{display:block;padding:8px 10px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
 @media(max-width:540px){header{padding:18px}h1{font-size:22px}.plots{grid-template-columns:1fr}.toolbar{padding:9px}.toolbar-inner{gap:7px}button{padding:6px 9px}}
 </style></head><body>
-<header><div><h1>Run-3 CR, SR and VR distributions</h1></div></header>
+<header><div><h1>Run-3 all-hadronic stop analysis results</h1></div></header>
 <div class='toolbar'><div class='toolbar-inner'>
-<div class='segments' id='years'><button data-value='2024' class='active'>2024</button><button data-value='2025'>2025</button>""" + ("<button data-value='Combined'>Combined</button>" if impact_record else "") + """</div>
-<div class='segments' id='kinds'><button data-value='all' class='active'>All</button><button data-value='CR'>CR</button><button data-value='SR'>SR</button><button data-value='VR'>VR</button>""" + ("<button data-value='Impact'>Impact</button>" if impact_record else "") + """</div>
+<div class='segments' id='years'>""" + year_buttons + ("<button data-value='Combined'>Combined</button>" if impact_record else "") + """</div>
+<div class='segments' id='kinds'><button data-value='all' class='active'>All</button><button data-value='CR'>CR</button><button data-value='SR'>SR</button><button data-value='VR'>VR</button>""" + ("<button data-value='Limit'>Limit</button>" if any(item.get("kind") == "Limit" for item in published_results) else "") + ("<button data-value='Impact'>Impact</button>" if impact_record or any(item.get("kind") == "Impact" for item in published_results) else "") + """</div>
 <select id='variables'>""" + "".join(options) + """</select>
 </div></div><main><div class='plots'>""" + "".join(cards) + """</div></main>
 <script>
-let year='2024',kind='all',variable='all';
+let year='""" + initial_year + """',kind='all',variable='all';
 function apply(){document.querySelectorAll('.plot').forEach(card=>{card.hidden=!(card.dataset.year===year&&(kind==='all'||card.dataset.kind===kind)&&(variable==='all'||card.dataset.variable===variable));});}
 function bind(id,setter){document.querySelectorAll('#'+id+' button').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('#'+id+' button').forEach(x=>x.classList.remove('active'));button.classList.add('active');setter(button.dataset.value);apply();}));}
 bind('years',value=>year=value);bind('kinds',value=>kind=value);document.getElementById('variables').addEventListener('change',event=>{variable=event.target.value;apply();});apply();
@@ -1946,8 +2475,9 @@ bind('years',value=>year=value);bind('kinds',value=>kind=value);document.getElem
         "status": "complete",
         "page": str(docs_dir / "index.html"),
         "plot_count": len(cards),
-        "years": [str(summary["year"]) for summary in summaries],
+        "years": years,
         "impact": impact_record,
+        "results": published_results,
     }
     (docs_dir / "page_summary.json").write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
     return result
@@ -1956,13 +2486,31 @@ bind('years',value=>year=value);bind('kinds',value=>kind=value);document.getElem
 def draw_flat_report(
     flat_hists: Path,
     output_dir: Path,
-    highdm_tail_merged: bool = False,
-    highdm_tail_preserve_categories: set[int] | None = None,
     selected_highdm_sr_only: bool = False,
+    selected_sr_search_bins_only: bool = False,
     dy_rz_manifest: Path | None = None,
     gcr_only: bool = False,
+    search_bin_config: Path | None = None,
 ) -> dict:
-    payload = load_json(flat_hists)
+    payload = load_plot_payload(flat_hists)
+    search_bin_merge_summary = None
+    if search_bin_config is not None:
+        search_bin_configuration = load_json(search_bin_config)
+        if search_bin_configuration.get("schema_version") != "search_bin_scheme_v1":
+            raise RuntimeError(
+                f"unsupported search-bin configuration: {search_bin_config}"
+            )
+        configured_scheme = str(search_bin_configuration.get("scheme_name") or "")
+        if configured_scheme != EXTENDED_AN17_RECOIL_SCHEME:
+            raise RuntimeError(
+                f"search-bin configuration names {configured_scheme!r}; "
+                f"expected {EXTENDED_AN17_RECOIL_SCHEME!r}"
+            )
+        search_bin_merge_summary = apply_configured_search_bin_merges(
+            payload,
+            configured_scheme,
+            search_bin_configuration,
+        )
     lowdm_nres_zero = bool(
         (((payload.get("lowdm_region_policy") or {}).get("resolved_top_veto") or {}).get("applied"))
     )
@@ -1970,14 +2518,6 @@ def draw_flat_report(
     dy_rz_application = (
         apply_dy_rz(payload, dy_rz_manifest) if dy_rz_manifest else None
     )
-    highdm_tail_preserve_categories = set(
-        highdm_tail_preserve_categories or set()
-    )
-    if highdm_tail_merged:
-        apply_highdm_tail_merge(
-            payload,
-            preserve_categories=highdm_tail_preserve_categories,
-        )
     plots = []
     output_dir.mkdir(parents=True, exist_ok=True)
     if gcr_only:
@@ -2064,7 +2604,7 @@ def draw_flat_report(
             json.dumps(summary, indent=2, sort_keys=True) + "\n"
         )
         return summary
-    if selected_highdm_sr_only:
+    if selected_highdm_sr_only or selected_sr_search_bins_only:
         available_schemes = payload.get("search_bin_schemes") or {}
         if EXTENDED_AN17_RECOIL_SCHEME not in available_schemes:
             raise RuntimeError(
@@ -2076,14 +2616,7 @@ def draw_flat_report(
         if not blocks:
             raise RuntimeError("High-dM selected SR blocks are empty")
         bin_count = sum(int(block["nbin"]) for block in blocks)
-        preserved = "_".join(
-            str(value)
-            for value in sorted(highdm_tail_preserve_categories)
-        )
-        name = (
-            f"highdm_sr_selected_recoil{bin_count}"
-            f"_tailmerged_except_cats{preserved}_nb2_nt2plus_w0_bins"
-        )
+        name = f"highdm{bin_count}_search_bins"
         plots.append(
             draw_flat_blocks(
                 blocks,
@@ -2091,17 +2624,33 @@ def draw_flat_report(
                 xlabel="Search bin",
             )
         )
+        lowdm_search_bins = None
+        if selected_sr_search_bins_only:
+            low_sr_blocks = lowdm_nsv_inclusive_blocks(
+                payload, "cat7_SR_lowDeltaM"
+            )
+            if not low_sr_blocks:
+                raise RuntimeError("Low-dM selected SR blocks are empty")
+            lowdm_search_bins = sum(int(block["nbin"]) for block in low_sr_blocks)
+            plots.append(
+                draw_flat_blocks(
+                    low_sr_blocks,
+                    output_dir / "lowdm_sr_onebin",
+                    xlabel="Search bin",
+                )
+            )
         summary = {
             "status": "complete",
             "source": str(flat_hists),
             "output_dir": str(output_dir),
             "plots": plots,
             "signal_policy": "Signals are overlaid on the full background stack in the blinded SR.",
-            "highdm_tail_merged": highdm_tail_merged,
-            "highdm_tail_preserve_categories": sorted(
-                highdm_tail_preserve_categories
-            ),
             "highdm_search_bins": bin_count,
+            "lowdm_search_bins": lowdm_search_bins,
+            "search_bin_merges": search_bin_merge_summary,
+            "search_bin_configuration": (
+                str(search_bin_config) if search_bin_config is not None else None
+            ),
             "luminosity_fb": LUMINOSITY_FB,
             "luminosity_relative_uncertainty": LUMINOSITY_RELATIVE_UNCERTAINTY,
             "background_systematic_sources": PLOT_SYSTEMATIC_SOURCES,
@@ -2169,32 +2718,18 @@ def draw_flat_report(
         an17_nt1["blind_data"] = True
         plots.append(draw_flat_blocks([an17_nt1], output_dir / "highdm_sr_nt1_an17_search_bins", xlabel="Search bin"))
     available_schemes = payload.get("search_bin_schemes") or {}
-    if EXTENDED_AN17_RECOIL_SCHEME in available_schemes:
-        selected_scheme = EXTENDED_AN17_RECOIL_SCHEME
-    elif LATEST_AN17_RECOIL_SCHEME in available_schemes:
-        selected_scheme = LATEST_AN17_RECOIL_SCHEME
-    else:
-        selected_scheme = SELECTED_AN17_RECOIL_SCHEME
+    if EXTENDED_AN17_RECOIL_SCHEME not in available_schemes:
+        raise RuntimeError(
+            "canonical High-dM search-bin scheme is missing: "
+            + EXTENDED_AN17_RECOIL_SCHEME
+        )
+    selected_scheme = EXTENDED_AN17_RECOIL_SCHEME
     selected_recoil_blocks = selected_an17_recoil_blocks(payload, selected_scheme)
     if selected_recoil_blocks:
-        if selected_scheme == EXTENDED_AN17_RECOIL_SCHEME:
-            if highdm_tail_merged and highdm_tail_preserve_categories:
-                preserved = "_".join(
-                    str(value)
-                    for value in sorted(highdm_tail_preserve_categories)
-                )
-                selected_name = (
-                    f"highdm_sr_selected_recoil{sum(len(block['background']) for block in selected_recoil_blocks)}"
-                    f"_tailmerged_except_cats{preserved}_nb2_nt2plus_w0_bins"
-                )
-            elif highdm_tail_merged:
-                selected_name = "highdm_sr_selected_recoil50_tailmerged_nb2_nt2plus_w0_bins"
-            else:
-                selected_name = "highdm_sr_selected_recoil60_nb2_nt2plus_w0_bins"
-        elif selected_scheme == LATEST_AN17_RECOIL_SCHEME:
-            selected_name = "highdm_sr_selected_recoil54_nt0_wsplit_bins"
-        else:
-            selected_name = "highdm_sr_selected_recoil6_bins"
+        selected_bin_count = sum(
+            len(block["background"]) for block in selected_recoil_blocks
+        )
+        selected_name = f"highdm{selected_bin_count}_search_bins"
         plots.append(draw_flat_blocks(selected_recoil_blocks, output_dir / selected_name, xlabel="Search bin"))
     low_cr_blocks = []
     low_blocks = []
@@ -2248,7 +2783,7 @@ def draw_flat_report(
     highdm_search_bins = len(
         (((payload.get("search_bin_schemes") or {}).get(EXTENDED_AN17_RECOIL_SCHEME) or {}).get("bin_labels") or [])
     )
-    summary = {"status": "complete", "source": str(flat_hists), "output_dir": str(output_dir), "plots": plots, "lowdm_variable_plot_count": len([p for p in plots if str(p.get("name", "")).startswith("lowdm_") and p.get("variable")]), "lowdm_resolved_top_veto": {"applied": lowdm_nres_zero, "requirement": "Nres=0" if lowdm_nres_zero else None}, "signal_policy": "Signals are drawn only in SR plots; CR blocks exclude T2tt overlays.", "cr_plot_policy": "High-dM and low-dM CRs are drawn both as combined overview plots and as individual region plots.", "ntop_order": "N_t = 0 blocks are placed left of N_t >= 1 blocks.", "highdm_tail_merged": highdm_tail_merged, "highdm_tail_preserve_categories": sorted(highdm_tail_preserve_categories), "highdm_search_bins": highdm_search_bins, "luminosity_fb": LUMINOSITY_FB, "luminosity_relative_uncertainty": LUMINOSITY_RELATIVE_UNCERTAINTY, "background_systematic_sources": PLOT_SYSTEMATIC_SOURCES, "dy_rz_application": dy_rz_application}
+    summary = {"status": "complete", "source": str(flat_hists), "output_dir": str(output_dir), "plots": plots, "lowdm_variable_plot_count": len([p for p in plots if str(p.get("name", "")).startswith("lowdm_") and p.get("variable")]), "lowdm_resolved_top_veto": {"applied": lowdm_nres_zero, "requirement": "Nres=0" if lowdm_nres_zero else None}, "signal_policy": "Signals are drawn only in SR plots; CR blocks exclude T2tt overlays.", "cr_plot_policy": "High-dM and low-dM CRs are drawn both as combined overview plots and as individual region plots.", "ntop_order": "N_t = 0 blocks are placed left of N_t >= 1 blocks.", "highdm_search_bins": highdm_search_bins, "luminosity_fb": LUMINOSITY_FB, "luminosity_relative_uncertainty": LUMINOSITY_RELATIVE_UNCERTAINTY, "background_systematic_sources": PLOT_SYSTEMATIC_SOURCES, "dy_rz_application": dy_rz_application}
     (output_dir / "flat_plot_summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     return summary
 
@@ -2277,10 +2812,13 @@ def main() -> int:
     parser.add_argument("--year", choices=["2024", "2025"])
     parser.add_argument("--summary-2024", type=Path)
     parser.add_argument("--summary-2025", type=Path)
+    parser.add_argument("--flat-summary-2024", type=Path)
+    parser.add_argument("--flat-summary-2025", type=Path)
     parser.add_argument("--web-dir", type=Path)
     parser.add_argument("--impact-png", type=Path)
     parser.add_argument("--impact-pdf", type=Path)
     parser.add_argument("--impact-json", type=Path)
+    parser.add_argument("--result-manifest", type=Path)
     parser.add_argument("--flat-hists", type=Path)
     parser.add_argument("--flat-output-dir", type=Path)
     parser.add_argument("--dy-rz-manifest", type=Path)
@@ -2292,17 +2830,14 @@ def main() -> int:
         help="Draw only GCR plots with the adopted unit-area shape comparison",
     )
     parser.add_argument(
-        "--highdm-tail-merged",
+        "--selected-sr-search-bins-only",
         action="store_true",
-        help="Merge the final two recoil bins in each High-dM SR category",
+        help="Draw only the adopted High-dM and Low-dM SR search-bin plots",
     )
     parser.add_argument(
-        "--highdm-tail-preserve-categories",
-        default="",
-        help=(
-            "Comma-separated one-based High-dM categories that retain all six "
-            "recoil bins when --highdm-tail-merged is used"
-        ),
+        "--search-bin-config",
+        type=Path,
+        help="Apply the configured final High-dM bin merges before plotting",
     )
     parser.add_argument(
         "--selected-highdm-sr-only",
@@ -2318,16 +2853,19 @@ def main() -> int:
     LUMINOSITY_FB = args.luminosity_fb
     LUMINOSITY_RELATIVE_UNCERTAINTY = args.luminosity_relative_uncertainty
 
-    if args.summary_2024 and args.summary_2025:
+    if args.summary_2024:
         if not args.web_dir:
             parser.error("--web-dir is required with year summaries")
         print(json.dumps(write_highdm_distribution_webpage(
             args.summary_2024,
             args.summary_2025,
             args.web_dir,
+            flat_summary_2024=args.flat_summary_2024,
+            flat_summary_2025=args.flat_summary_2025,
             impact_png=args.impact_png,
             impact_pdf=args.impact_pdf,
             impact_json=args.impact_json,
+            result_manifest=args.result_manifest,
         ), sort_keys=True))
         return 0
 
@@ -2347,19 +2885,14 @@ def main() -> int:
 
     if args.flat_hists:
         outdir = args.flat_output_dir or Path(args.docs_dir or ".") / "plots"
-        preserve_categories = {
-            int(value.strip())
-            for value in args.highdm_tail_preserve_categories.split(",")
-            if value.strip()
-        }
         print(json.dumps(draw_flat_report(
             args.flat_hists,
             outdir,
-            highdm_tail_merged=args.highdm_tail_merged,
-            highdm_tail_preserve_categories=preserve_categories,
             selected_highdm_sr_only=args.selected_highdm_sr_only,
+            selected_sr_search_bins_only=args.selected_sr_search_bins_only,
             dy_rz_manifest=args.dy_rz_manifest,
             gcr_only=args.gcr_only,
+            search_bin_config=args.search_bin_config,
         ), sort_keys=True))
         return 0
 

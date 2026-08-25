@@ -32,8 +32,8 @@ from autonomous_allhad.highdm_resolved_categories import (
     select_exclusive_resolved_candidates,
 )
 from autonomous_allhad.search_bin_categorization import (
+    configured_exclusive_bin_count,
     configured_exclusive_labels,
-    configured_exclusive_mapping,
     exclusive_category_source_indices,
     map60_indices_to_adopted55,
     map_category_sources_to_configured,
@@ -76,8 +76,11 @@ EXTENDED_RECOIL60_CATEGORY_KEY = "Nb2_Nt2plus_W0"
 EXTENDED_RECOIL60_INSERTION_BIN = 36
 NT0_RECOIL_CATEGORY_KEYS = ["NT0_Nb1plus_T0_W0", "NT0_Nb1plus_T0_W1plus"]
 RECOIL_BIN_LABELS = [
-    f"{int(RECOIL_PT_BINS[i])}-{int(RECOIL_PT_BINS[i + 1])}"
-    for i in range(len(RECOIL_PT_BINS) - 1)
+    *[
+        f"{int(RECOIL_PT_BINS[i])}-{int(RECOIL_PT_BINS[i + 1])}"
+        for i in range(len(RECOIL_PT_BINS) - 2)
+    ],
+    f"{int(RECOIL_PT_BINS[-2])}plus",
 ]
 LOWDM_REGION_MAP = {
     "LLCR": "cat2_LLCR_lowDeltaM",
@@ -220,7 +223,7 @@ EXPECTED_TROTA_MODEL_SHA256 = (
 )
 DERIVED_NRES_BRANCH = "nresolved_top_trota"
 LOWDM_VARIABLE_SPECS = {
-    "met": {"branch": "met", "bins": [0, 100, 150, 200, 250, 300, 350, 400, 500, 650, 800, 1000, 1500], "xlabel": r"$p_{T}^{miss}$ (GeV)"},
+    "met": {"branch": "met", "bins": [0, 100, 150, 200, 250, 300, 350, 400, 500, 650, 800, 1000, 1500], "overflow_policy": "fold", "xlabel": r"$p_{T}^{miss}$ (GeV)"},
     "ht": {"branch": "ht", "bins": [0, 300, 500, 700, 1000, 1500, 2000, 3000], "xlabel": r"$H_{T}$ (GeV)"},
     "njet": {"branch": "njet", "bins": [-0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 8.5, 12.5], "xlabel": r"$N_{j}$"},
     "nb_medium_lowdm": {"branch": "nb_medium_lowdm", "bins": [-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 6.5], "xlabel": r"$N_{b}$ medium"},
@@ -233,9 +236,9 @@ LOWDM_VARIABLE_SPECS = {
     "lowdm_isr_dphi": {"branch": "lowdm_isr_dphi", "bins": [0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.1416], "xlabel": r"$\Delta\phi$(ISR, $p_{T}^{miss}$)"},
     "lowdm_ptb": {"branch": "lowdm_ptb", "bins": [0, 30, 60, 100, 150, 200, 300, 500, 800], "xlabel": r"low-$\Delta m$ $p_{T}^{b}$ (GeV)"},
     "n_lowdm_isr": {"branch": "n_lowdm_isr", "bins": [-0.5, 0.5, 1.5, 2.5, 3.5, 5.5], "xlabel": r"$N_{ISR}$"},
-    "recoil_gcr": {"branch": "recoil_gcr", "bins": [0, 200, 250, 300, 350, 400, 500, 650, 800, 1000, 1500], "xlabel": r"Photon recoil $p_{T}$ (GeV)"},
-    "recoil_dy2e": {"branch": "recoil_dy2e", "bins": [0, 200, 250, 300, 350, 400, 500, 650, 800, 1000, 1500], "xlabel": r"Dielectron recoil $p_{T}$ (GeV)"},
-    "recoil_dy2m": {"branch": "recoil_dy2m", "bins": [0, 200, 250, 300, 350, 400, 500, 650, 800, 1000, 1500], "xlabel": r"Dimuon recoil $p_{T}$ (GeV)"},
+    "recoil_gcr": {"branch": "recoil_gcr", "bins": [0, 200, 250, 300, 350, 400, 500, 650, 800, 1000, 1500], "overflow_policy": "fold", "xlabel": r"Photon recoil $p_{T}$ (GeV)"},
+    "recoil_dy2e": {"branch": "recoil_dy2e", "bins": [0, 200, 250, 300, 350, 400, 500, 650, 800, 1000, 1500], "overflow_policy": "fold", "xlabel": r"Dielectron recoil $p_{T}$ (GeV)"},
+    "recoil_dy2m": {"branch": "recoil_dy2m", "bins": [0, 200, 250, 300, 350, 400, 500, 650, 800, 1000, 1500], "overflow_policy": "fold", "xlabel": r"Dimuon recoil $p_{T}$ (GeV)"},
     "mee": {"branch": "mee", "bins": [50, 70, 81, 86, 91, 96, 101, 120, 150], "xlabel": r"$m_{ee}$ (GeV)"},
     "mmm": {"branch": "mmm", "bins": [50, 70, 81, 86, 91, 96, 101, 120, 150], "xlabel": r"$m_{\mu\mu}$ (GeV)"},
     "n_photon_medium": {"branch": "n_photon_medium", "bins": [-0.5, 0.5, 1.5, 2.5, 3.5], "xlabel": r"$N_{\gamma}$ medium"},
@@ -295,7 +298,7 @@ HIGHDM_DISTRIBUTION_VARIABLE_SPECS = {
         "branch_by_region": {"GCR": "recoil_gcr", "DY2E": "recoil_dy2e", "DY2M": "recoil_dy2m"},
         "regions": ["LLCR", "QCDCR", "GCR", "DY2E", "DY2M"],
         "bins": [250, 300, 350, 400, 500, 650, 800, 1000, 1500],
-        "overflow_policy": "exclude",
+        "overflow_policy": "fold",
         "xlabel": r"$U_{T}$ (GeV)",
     },
     "ptll": {
@@ -306,7 +309,7 @@ HIGHDM_DISTRIBUTION_VARIABLE_SPECS = {
         "overflow_policy": "exclude",
         "xlabel": r"$p_{T}(\ell\ell)$ (GeV)",
     },
-    "met": {"branch": "met", "bins": [250, 300, 350, 400, 500, 650, 800, 1000, 1500], "xlabel": r"$p_{T}^{miss}$ (GeV)"},
+    "met": {"branch": "met", "bins": [250, 300, 350, 400, 500, 650, 800, 1000, 1500], "overflow_policy": "fold", "xlabel": r"$p_{T}^{miss}$ (GeV)"},
     "jet_pt": {
         "branch": "j1pt",
         "bins": [20, 30, 40, 50, 70, 100, 150, 200, 300, 500, 800, 1200, 1600],
@@ -386,7 +389,7 @@ def load_search_bin_configuration(
     labels = configured_exclusive_labels(
         selected_an17_recoil60_labels(), configuration
     )
-    bin_count = len(configured_exclusive_mapping(configuration))
+    bin_count = configured_exclusive_bin_count(configuration)
     if len(labels) != bin_count:
         raise AssertionError("configured search-bin label count mismatch")
     contract = {
@@ -395,7 +398,9 @@ def load_search_bin_configuration(
         "campaign_year": str(campaign_year),
         "mtb_min": mtb_min,
         "bin_count": bin_count,
+        "bin_merges_1based": list(configuration.get("bin_merges_1based") or []),
         "omitted_topologies": list(configuration.get("omitted_topologies") or []),
+        "omitted_categories": list(configuration.get("omitted_categories") or []),
         "sha256": file_sha256(path),
     }
     return configuration, contract
@@ -529,6 +534,17 @@ def finite_array(values: Any, n: int, fill: float = 0.0) -> np.ndarray:
     if len(out) != n:
         return np.full(n, fill, dtype=float)
     return np.where(np.isfinite(out), out, fill)
+
+
+def open_ended_bin_indices(values: Any, edges: list[float]) -> np.ndarray:
+    """Assign finite values above the last visible edge to the last bin."""
+    vals = np.asarray(values, dtype=float)
+    bins = np.asarray(edges, dtype=float)
+    if bins.ndim != 1 or len(bins) < 2 or np.any(np.diff(bins) <= 0):
+        raise ValueError("open-ended bin edges must be strictly increasing")
+    raw = np.searchsorted(bins, vals, side="right") - 1
+    valid = np.isfinite(vals) & (vals >= bins[0])
+    return np.where(valid, np.minimum(raw, len(bins) - 2), -1).astype(int)
 
 
 def as_bool(values: Any, n: int) -> np.ndarray:
@@ -964,9 +980,10 @@ def add_hist(target: dict[str, Any], values: np.ndarray, weights: np.ndarray, ma
     if not np.any(good):
         return
     bins = np.asarray(RECOIL_PT_BINS, dtype=float)
-    h, _ = np.histogram(vals[good], bins=bins, weights=w[good])
-    h2, _ = np.histogram(vals[good], bins=bins, weights=finite_weight_square(w[good]))
-    e, _ = np.histogram(vals[good], bins=bins)
+    folded = np.minimum(vals[good], np.nextafter(bins[-1], bins[0]))
+    h, _ = np.histogram(folded, bins=bins, weights=w[good])
+    h2, _ = np.histogram(folded, bins=bins, weights=finite_weight_square(w[good]))
+    e, _ = np.histogram(folded, bins=bins)
     target["sumw"] = (np.asarray(target["sumw"], dtype=float) + h).tolist()
     target["sumw2"] = (np.asarray(target["sumw2"], dtype=float) + h2).tolist()
     target["entries"] = (np.asarray(target["entries"], dtype=int) + e).astype(int).tolist()
@@ -1433,7 +1450,7 @@ def selected_an17_recoil6_indices(chunk: dict[str, Any], n: int, sr_mask: np.nda
     selected_zero_based = [idx - 1 for idx in SELECTED_AN17_RECOIL_BINS_1BASED]
     selected_map = {search_idx: pos for pos, search_idx in enumerate(selected_zero_based)}
     recoil = finite_array(chunk["met"], n, 0.0)
-    recoil_idx = np.searchsorted(np.asarray(RECOIL_PT_BINS, dtype=float), recoil, side="right") - 1
+    recoil_idx = open_ended_bin_indices(recoil, RECOIL_PT_BINS)
     out = np.full(n, -1, dtype=int)
     for search_idx, category_pos in selected_map.items():
         mask = (search_indices == search_idx) & (recoil_idx >= 0) & (recoil_idx < len(RECOIL_PT_BINS) - 1)
@@ -1443,7 +1460,7 @@ def selected_an17_recoil6_indices(chunk: dict[str, Any], n: int, sr_mask: np.nda
 
 def selected_an17_recoil54_indices(chunk: dict[str, Any], n: int, sr_mask: np.ndarray) -> np.ndarray:
     recoil = finite_array(chunk["met"], n, 0.0)
-    recoil_idx = np.searchsorted(np.asarray(RECOIL_PT_BINS, dtype=float), recoil, side="right") - 1
+    recoil_idx = open_ended_bin_indices(recoil, RECOIL_PT_BINS)
     valid_recoil = (recoil_idx >= 0) & (recoil_idx < len(RECOIL_PT_BINS) - 1)
     nb = np.asarray(chunk["nb_medium"], dtype=int)
     nt = np.asarray(chunk["nboosted_top"], dtype=int)
@@ -1470,7 +1487,7 @@ def selected_an17_recoil60_indices(chunk: dict[str, Any], n: int, sr_mask: np.nd
     shift = out >= EXTENDED_RECOIL60_INSERTION_BIN
     out[shift] += len(RECOIL_BIN_LABELS)
     recoil = finite_array(chunk["met"], n, 0.0)
-    recoil_idx = np.searchsorted(np.asarray(RECOIL_PT_BINS, dtype=float), recoil, side="right") - 1
+    recoil_idx = open_ended_bin_indices(recoil, RECOIL_PT_BINS)
     valid_recoil = (recoil_idx >= 0) & (recoil_idx < len(RECOIL_PT_BINS) - 1)
     nb = np.asarray(chunk["nb_medium"], dtype=int)
     nt = np.asarray(chunk["nboosted_top"], dtype=int)
@@ -1478,6 +1495,23 @@ def selected_an17_recoil60_indices(chunk: dict[str, Any], n: int, sr_mask: np.nd
     extra = sr_mask & valid_recoil & (nb == 2) & (nt >= 2) & (nw == 0)
     out[extra] = EXTENDED_RECOIL60_INSERTION_BIN + recoil_idx[extra]
     return out
+
+
+def selected_an17_recoil60_category_mask(
+    chunk: dict[str, Any], n: int, sr_mask: np.ndarray
+) -> np.ndarray:
+    """Return the 60-bin source population without applying the MET binning."""
+    nb = np.asarray(chunk["nb_medium"], dtype=int)
+    nt = np.asarray(chunk["nboosted_top"], dtype=int)
+    nw = np.asarray(chunk["nboosted_w"], dtype=int)
+    base = boosted_an17_indices(chunk, n, sr_mask)
+    selected = np.isin(
+        base,
+        np.asarray([value - 1 for value in SELECTED_AN17_RECOIL_BINS_1BASED]),
+    )
+    nt0 = (nb >= 1) & (nt == 0)
+    extra = (nb == 2) & (nt >= 2) & (nw == 0)
+    return np.asarray(sr_mask, dtype=bool) & (nt0 | selected | extra)
 
 
 def configured_highdm_search_indices(
@@ -1494,24 +1528,39 @@ def configured_highdm_search_indices(
     source60 = selected_an17_recoil60_indices(chunk, n, sr)
     baseline55 = map60_indices_to_adopted55(source60)
     mtb = float_field(chunk, "lowdm_mtb", n, float("nan"))
-    population = (
+    nb = int_field(chunk, "nb_medium", n, -1)
+    nt = int_field(chunk, "nboosted_top", n, 0)
+    nw = int_field(chunk, "nboosted_w", n, 0)
+    nres = int_field(chunk, DERIVED_NRES_BRANCH, n, -1)
+    high_mtb = np.isfinite(mtb) & (mtb >= float(configuration["mtb_min"]))
+    baseline_population = (
+        selected_an17_recoil60_category_mask(chunk, n, sr)
+        & high_mtb
+    )
+    top_w_resolved_population = (
         sr
-        & np.isfinite(mtb)
-        & (mtb >= float(configuration["mtb_min"]))
-        & (baseline55 >= 0)
+        & high_mtb
+        & (nb >= 1)
+        & (nt >= 1)
+        & (nw >= 1)
+        & (nres >= 1)
     )
-    baseline_for_scheme = np.where(population, baseline55, -1)
+    population = baseline_population | top_w_resolved_population
+    if np.any(baseline_population & (baseline55 < 0)):
+        raise RuntimeError(
+            "eligible High-dM source events were lost before configured binning"
+        )
+    baseline_for_scheme = np.where(baseline_population, baseline55, -1)
     recoil = finite_array(chunk["met"], n, 0.0)
-    recoil_index = (
-        np.searchsorted(np.asarray(RECOIL_PT_BINS, dtype=float), recoil, side="right")
-        - 1
-    )
+    recoil_index = open_ended_bin_indices(recoil, RECOIL_PT_BINS)
     exclusive = exclusive_category_source_indices(
         baseline_for_scheme,
         recoil_index,
-        int_field(chunk, "nboosted_top", n, 0),
-        int_field(chunk, "nboosted_w", n, 0),
-        int_field(chunk, DERIVED_NRES_BRANCH, n, -1),
+        nb,
+        nt,
+        nw,
+        nres,
+        population_mask=population,
     )
     configured = map_category_sources_to_configured(exclusive, configuration)
     omitted = population & (exclusive >= 0) & (configured < 0)
@@ -1808,7 +1857,7 @@ def iterate_tree_for_gcr_study(
         yield full[selected]
 
 
-def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: dict[str, Any], search_histograms: dict[str, Any], lowdm_variable_histograms: dict[str, Any], highdm_variable_histograms: dict[str, Any], summary: dict[str, Any], step_size: int, campaign_year: str = "2024", only_regions: list[str] | None = None, require_btag: bool = False, require_weight_components: list[str] | None = None, analysis_sf_components: list[str] | None = None, require_branches: bool = False, require_normalization: bool = False, nominal_only: bool = False, distribution_only: bool = False, only_variables: list[str] | None = None, only_signal_mass: tuple[int, int] | None = None, only_lowdm_sr_nsv_inclusive: bool = False, only_lowdm_nsv_repair: bool = False, lowdm_only: bool = False, require_lowdm_nres_zero: bool = False, search_bin_configuration: dict[str, Any] | None = None, dy_ptll_policy: str = "all", gcr_only: bool = False, gcr_photon_policy: str = "nominal") -> None:
+def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: dict[str, Any], highdm_control_components: dict[str, Any], search_histograms: dict[str, Any], highdm_search_bin_components: dict[str, Any], lowdm_variable_histograms: dict[str, Any], highdm_variable_histograms: dict[str, Any], summary: dict[str, Any], step_size: int, campaign_year: str = "2024", only_regions: list[str] | None = None, require_btag: bool = False, require_weight_components: list[str] | None = None, analysis_sf_components: list[str] | None = None, require_branches: bool = False, require_normalization: bool = False, nominal_only: bool = False, distribution_only: bool = False, only_variables: list[str] | None = None, only_signal_mass: tuple[int, int] | None = None, only_lowdm_sr_nsv_inclusive: bool = False, only_lowdm_nsv_repair: bool = False, lowdm_only: bool = False, require_lowdm_nres_zero: bool = False, search_bin_configuration: dict[str, Any] | None = None, dy_ptll_policy: str = "all", gcr_only: bool = False, gcr_photon_policy: str = "nominal") -> None:
     try:
         meta = read_root_metadata(root_path, fallback=norm)
     except FileNotFoundError:
@@ -2138,6 +2187,31 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                             weights = finite_array(wraw, inputs["n"], 0.0) * normv
                             target = histograms.setdefault(region, {}).setdefault(label, {}).setdefault(vname, empty_hist())
                             add_hist(target, values, weights, rmask)
+                            if region in HIGHDM_CR_REGIONS:
+                                nb_values = int_field(
+                                    sub_group, "nb_medium", inputs["n"], -1
+                                )
+                                for component_group, nb_mask in (
+                                    ("Nb1", nb_values == 1),
+                                    ("Nb2", nb_values == 2),
+                                    ("Nb3plus", nb_values >= 3),
+                                ):
+                                    component_mask = rmask & nb_mask
+                                    if not np.any(component_mask):
+                                        continue
+                                    component_target = (
+                                        highdm_control_components
+                                        .setdefault(region, {})
+                                        .setdefault(component_group, {})
+                                        .setdefault(label, {})
+                                        .setdefault(vname, empty_hist())
+                                    )
+                                    add_hist(
+                                        component_target,
+                                        values,
+                                        weights,
+                                        component_mask,
+                                    )
                     if not lowdm_only:
                         fill_highdm_distribution_histograms(
                             sub_group, variations, normv, label, process, is_data,
@@ -2197,11 +2271,42 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                                 selected_entries,
                             )
                         else:
-                            configured_bin_count = len(
-                                configured_exclusive_mapping(
-                                    search_bin_configuration
-                                )
+                            configured_bin_count = configured_exclusive_bin_count(
+                                search_bin_configuration
                             )
+                            component_masks: dict[tuple[str, str], np.ndarray] = {}
+                            if not is_data and not is_signal:
+                                nb_values = int_field(
+                                    sub_group, "nb_medium", inputs["n"], -1
+                                )
+                                recoil_values = finite_array(
+                                    sub_group["met"], inputs["n"], 0.0
+                                )
+                                recoil_indices = open_ended_bin_indices(
+                                    recoil_values,
+                                    RECOIL_PT_BINS,
+                                )
+                                assigned_mask = highdm_indices >= 0
+                                for component_group, nb_mask in (
+                                    ("Nb1", nb_values == 1),
+                                    ("Nb2", nb_values == 2),
+                                    ("Nb3plus", nb_values >= 3),
+                                ):
+                                    for recoil_index in range(
+                                        len(RECOIL_PT_BINS) - 1
+                                    ):
+                                        component_mask = (
+                                            assigned_mask
+                                            & nb_mask
+                                            & (recoil_indices == recoil_index)
+                                        )
+                                        if np.any(component_mask):
+                                            component_masks[
+                                                (
+                                                    component_group,
+                                                    f"recoil{recoil_index}",
+                                                )
+                                            ] = component_mask
                             for vname, wraw in variations.items():
                                 weights = (
                                     finite_array(wraw, inputs["n"], 0.0) * normv
@@ -2216,6 +2321,31 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                                     )
                                 )
                                 add_index_hist(target, highdm_indices, weights)
+                                for (
+                                    component_group,
+                                    recoil_group,
+                                ), component_mask in component_masks.items():
+                                    component_indices = np.where(
+                                        component_mask, highdm_indices, -1
+                                    )
+                                    component_target = (
+                                        highdm_search_bin_components
+                                        .setdefault(scheme_name, {})
+                                        .setdefault(component_group, {})
+                                        .setdefault(recoil_group, {})
+                                        .setdefault(label, {})
+                                        .setdefault(
+                                            vname,
+                                            empty_index_hist(
+                                                configured_bin_count
+                                            ),
+                                        )
+                                    )
+                                    add_index_hist(
+                                        component_target,
+                                        component_indices,
+                                        weights,
+                                    )
 
                     lowdm_regions = (
                         {"GCR": LOWDM_REGION_MAP["GCR"]}
@@ -2281,7 +2411,16 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                             for var_name, values in lowdm_values.items():
                                 spec = LOWDM_VARIABLE_SPECS[var_name]
                                 vtarget = lowdm_variable_histograms.setdefault(lowdm_channel, {}).setdefault(var_name, {}).setdefault(label, {}).setdefault(vname, empty_binned_hist(spec["bins"]))
-                                add_binned_hist(vtarget, values, weights, lowdm_mask, spec["bins"])
+                                add_binned_hist(
+                                    vtarget,
+                                    values,
+                                    weights,
+                                    lowdm_mask,
+                                    spec["bins"],
+                                    overflow_policy=str(
+                                        spec.get("overflow_policy", "exclude")
+                                    ),
+                                )
                     summary["events_processed"] = int(summary.get("events_processed", 0)) + inputs["n"]
         if trota_nres is not None and trota_nres_cursor != len(trota_nres):
             raise RuntimeError(
@@ -2486,7 +2625,9 @@ def main() -> int:
         )
     norm = read_json(Path(args.normalization))
     histograms: dict[str, Any] = {}
+    highdm_control_components: dict[str, Any] = {}
     search_histograms: dict[str, Any] = {}
+    highdm_search_bin_components: dict[str, Any] = {}
     lowdm_variable_histograms: dict[str, Any] = {}
     highdm_variable_histograms: dict[str, Any] = {}
     btag_payload_required = bool(
@@ -2548,7 +2689,9 @@ def main() -> int:
             root_path,
             norm,
             histograms,
+            highdm_control_components,
             search_histograms,
+            highdm_search_bin_components,
             lowdm_variable_histograms,
             highdm_variable_histograms,
             summary,
@@ -2638,7 +2781,28 @@ def main() -> int:
                     "omitted_topologies": search_bin_configuration[
                         "omitted_topologies"
                     ],
+                    "omitted_categories": search_bin_configuration.get(
+                        "omitted_categories", []
+                    ),
                     "configuration": search_bin_contract,
+                    "card_component_axes": {
+                        "nb": {
+                            "Nb1": "nb_medium == 1",
+                            "Nb2": "nb_medium == 2",
+                            "Nb3plus": "nb_medium >= 3",
+                        },
+                        "native_recoil": {
+                            f"recoil{index}": [
+                                RECOIL_PT_BINS[index],
+                                RECOIL_PT_BINS[index + 1],
+                            ]
+                            for index in range(len(RECOIL_PT_BINS) - 1)
+                        },
+                        "fill_policy": (
+                            "background-only components filled in the same event "
+                            "pass as the canonical High-dM search histogram"
+                        ),
+                    },
                 }
             } if search_bin_configuration is not None else {}),
             **{
@@ -2717,7 +2881,9 @@ def main() -> int:
         "data_region_process_policy": DATA_PROCESS_BY_REGION,
         "summary": summary,
         "histograms": histograms,
+        "highdm_control_components": highdm_control_components,
         "search_bin_histograms": search_histograms,
+        "highdm_search_bin_components": highdm_search_bin_components,
         "lowdm_variable_histograms": lowdm_variable_histograms,
         "highdm_variable_histograms": highdm_variable_histograms,
     }

@@ -3,10 +3,157 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="refresh" content="0; url=nominal_plots_2024_fullselection_v5_dyexclusive_t2models_freebkg_20260728/">
-  <title>Run-3 all-hadronic stop analysis</title>
+  <title>Run-3 all-hadronic stop search</title>
+  <style>
+    :root {
+      --ink: #14212b;
+      --muted: #60717d;
+      --line: #dce5e9;
+      --panel: #ffffff;
+      --wash: #f4f8f9;
+      --blue: #176b87;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--wash);
+      font: 15px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    header {
+      color: #fff;
+      background: linear-gradient(120deg, #102c3a 0%, #176b87 70%, #17999c 100%);
+      padding: 42px 24px 36px;
+    }
+    .wrap { width: min(1480px, calc(100% - 36px)); margin: 0 auto; }
+    .eyebrow { margin: 0 0 7px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; opacity: .72; }
+    h1 { margin: 0; font-size: clamp(30px, 4vw, 48px); line-height: 1.08; letter-spacing: -.035em; }
+    header p { max-width: 760px; margin: 13px 0 0; color: #d8edf1; font-size: 17px; }
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,.94);
+      backdrop-filter: blur(12px);
+    }
+    nav .wrap { display: flex; gap: 7px; padding: 10px 0; overflow-x: auto; }
+    nav a {
+      flex: 0 0 auto;
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 700;
+      padding: 8px 13px;
+      border-radius: 999px;
+    }
+    nav a:hover { color: #fff; background: var(--blue); }
+    main { padding: 30px 0 52px; }
+    section { scroll-margin-top: 72px; margin-bottom: 42px; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
+    h2 { margin: 0; font-size: 25px; letter-spacing: -.025em; }
+    .section-head p { margin: 0; color: var(--muted); }
+    .year { margin: 25px 0 11px; color: var(--blue); font-size: 15px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .card {
+      display: block;
+      overflow: hidden;
+      color: inherit;
+      text-decoration: none;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 8px 24px rgba(28, 55, 67, .055);
+      transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+    }
+    .card:hover { transform: translateY(-2px); border-color: #abc8d2; box-shadow: 0 12px 30px rgba(28, 55, 67, .11); }
+    .card img { display: block; width: 100%; aspect-ratio: 16/9; object-fit: contain; background: #fff; }
+    .card.search img { aspect-ratio: 2.18/1; }
+    .card.impact img { aspect-ratio: 16/10; }
+    .caption { display: flex; justify-content: space-between; gap: 14px; align-items: center; min-height: 62px; padding: 13px 15px; border-top: 1px solid var(--line); }
+    .caption strong { font-size: 16px; }
+    .caption span { color: var(--muted); white-space: nowrap; }
+    .badge { display: inline-block; margin-right: 8px; padding: 3px 8px; color: #0b6670; background: #def8f6; border-radius: 999px; font-size: 12px; font-weight: 800; }
+    footer { color: var(--muted); padding: 0 0 34px; text-align: center; }
+    @media (max-width: 900px) {
+      .grid, .grid.three { grid-template-columns: 1fr; }
+      .wrap { width: min(100% - 22px, 1480px); }
+      header { padding: 32px 18px 29px; }
+      .section-head { align-items: start; flex-direction: column; }
+    }
+  </style>
 </head>
 <body>
-  <p><a href="nominal_plots_2024_fullselection_v5_dyexclusive_t2models_freebkg_20260728/">Open the current 2024 analysis page.</a></p>
+  <header>
+    <div class="wrap">
+      <p class="eyebrow">CMS · NPS-26-012</p>
+      <h1>Run-3 all-hadronic stop search</h1>
+      <p>Search-bin distributions and combined 2024+2025 statistical results.</p>
+    </div>
+  </header>
+  <nav><div class="wrap">
+    <a href="#search-bins">Search bins</a>
+    <a href="#limits">Expected limits</a>
+    <a href="#impacts">Impacts</a>
+  </div></nav>
+  <main class="wrap">
+    <section id="search-bins">
+      <div class="section-head"><h2>Signal regions</h2><p>Blinded data · click any plot for PDF</p></div>
+      <h3 class="year">2024</h3>
+      <div class="grid">
+        <a class="card search" href="plots/search_bins/2024/highdm85_search_bins.pdf">
+          <img src="plots/search_bins/2024/highdm85_search_bins.png" alt="2024 High-dM 85 search bins">
+          <div class="caption"><strong><span class="badge">2024</span>High-Δm</strong><span>85 bins</span></div>
+        </a>
+        <a class="card search" href="plots/search_bins/2024/lowdm34_search_bins.pdf">
+          <img src="plots/search_bins/2024/lowdm34_search_bins.png" alt="2024 Low-dM 34 search bins">
+          <div class="caption"><strong><span class="badge">2024</span>Low-Δm</strong><span>34 bins</span></div>
+        </a>
+      </div>
+      <h3 class="year">2025</h3>
+      <div class="grid">
+        <a class="card search" href="plots/search_bins/2025/highdm85_search_bins.pdf">
+          <img src="plots/search_bins/2025/highdm85_search_bins.png" alt="2025 High-dM 85 search bins">
+          <div class="caption"><strong><span class="badge">2025</span>High-Δm</strong><span>85 bins</span></div>
+        </a>
+        <a class="card search" href="plots/search_bins/2025/lowdm34_search_bins.pdf">
+          <img src="plots/search_bins/2025/lowdm34_search_bins.png" alt="2025 Low-dM 34 search bins">
+          <div class="caption"><strong><span class="badge">2025</span>Low-Δm</strong><span>34 bins</span></div>
+        </a>
+      </div>
+    </section>
+    <section id="limits">
+      <div class="section-head"><h2>Expected limits</h2><p>2024+2025 combined</p></div>
+      <div class="grid three">
+        <a class="card" href="plots/limits/expected_limit_t2tt_2024_2025_highdm73_lowdm34.pdf">
+          <img src="plots/limits/expected_limit_t2tt_2024_2025_highdm73_lowdm34.png" alt="T2tt combined expected limit">
+          <div class="caption"><strong>T2tt</strong><span>95% CL</span></div>
+        </a>
+        <a class="card" href="plots/limits/expected_limit_t2bw_2024_2025_highdm85_lowdm34.pdf">
+          <img src="plots/limits/expected_limit_t2bw_2024_2025_highdm85_lowdm34.png" alt="T2bW combined expected limit">
+          <div class="caption"><strong>T2bW</strong><span>95% CL</span></div>
+        </a>
+        <a class="card" href="plots/limits/expected_limit_t2tb_2024_2025_highdm73_lowdm34.pdf">
+          <img src="plots/limits/expected_limit_t2tb_2024_2025_highdm73_lowdm34.png" alt="T2tb combined expected limit">
+          <div class="caption"><strong>T2tb</strong><span>95% CL</span></div>
+        </a>
+      </div>
+    </section>
+    <section id="impacts">
+      <div class="section-head"><h2>T2tt nuisance impacts</h2><p>(m<sub>stop</sub>, m<sub>χ̃⁰₁</sub>) = (1200, 500) GeV</p></div>
+      <div class="grid">
+        <a class="card impact" href="plots/impacts/t2tt_mStop1200_mLSP500_r1.pdf">
+          <img src="plots/impacts/t2tt_mStop1200_mLSP500_r1.png" alt="T2tt nuisance impacts for r equals 1">
+          <div class="caption"><strong>Asimov r = 1</strong><span>2024+2025</span></div>
+        </a>
+        <a class="card impact" href="plots/impacts/t2tt_mStop1200_mLSP500_r0.pdf">
+          <img src="plots/impacts/t2tt_mStop1200_mLSP500_r0.png" alt="T2tt nuisance impacts for r equals 0">
+          <div class="caption"><strong>Asimov r = 0</strong><span>2024+2025</span></div>
+        </a>
+      </div>
+    </section>
+  </main>
+  <footer>CMS Work in progress</footer>
 </body>
 </html>
