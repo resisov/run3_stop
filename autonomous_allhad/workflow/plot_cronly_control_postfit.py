@@ -25,6 +25,7 @@ REGIONS = ("LLCR", "QCDCR", "GCR")
 NB_CATEGORIES = ("Nb1", "Nb2", "Nb3plus")
 YEARS = ("2024", "2025")
 RECOIL_LABELS = ("250–300", "300–350", "350–400", "400–500", "500–800", "≥800")
+RECOIL_DISPLAY_EDGES = (250.0, 300.0, 350.0, 400.0, 500.0, 800.0, 1500.0)
 LUMINOSITY = {"2024": 109.82, "2025": 110.84, "combined": 220.66}
 REGION_LABELS = {
     "LLCR": "Lost-lepton control region",
@@ -85,7 +86,11 @@ def make_block(records: list[dict], annotation: str, labels: list[str]) -> dict:
         "label": annotation,
         "annotation": annotation,
         "nbin": len(records),
-        "xlabels": labels,
+        # Preserve the physical CR histogram geometry.  The final displayed
+        # interval is only a plotting width; its content is the >=800 GeV bin
+        # with the full overflow already folded into it.
+        "edges": list(RECOIL_DISPLAY_EDGES),
+        "xlabels": [],
         "blind_data": False,
         "reference_style": True,
         "label_box": False,
@@ -160,6 +165,7 @@ def main() -> int:
     for region in REGIONS:
         for nb in NB_CATEGORIES:
             annotation = f"{REGION_LABELS[region]}\n{NB_LABELS[nb]} · CR-only postfit"
+            axis_label = r"$U_{T}$ (GeV)" if region == "GCR" else r"$p_{T}^{miss}$ (GeV)"
             for year in YEARS:
                 records = [extracted[(year, region, nb, index)] for index in range(6)]
                 block = make_block(records, annotation, list(RECOIL_LABELS))
@@ -167,7 +173,7 @@ def main() -> int:
                 record = draw_flat_blocks(
                     [block],
                     outbase,
-                    xlabel=r"$p_{T}^{miss}$/recoil bin (GeV)",
+                    xlabel=axis_label,
                     reference_style=True,
                     show_yields=True,
                     ratio_ylabel="Data/Pred.",
@@ -190,7 +196,7 @@ def main() -> int:
             record = draw_flat_blocks(
                 [combined_block],
                 outbase,
-                xlabel=r"$p_{T}^{miss}$/recoil bin (GeV)",
+                xlabel=axis_label,
                 reference_style=True,
                 show_yields=True,
                 ratio_ylabel="Data/Pred.",
@@ -202,7 +208,7 @@ def main() -> int:
                     "scope": "combined",
                     "region": region,
                     "nb": nb,
-                    "combination": "2024 and 2025 yields summed bin-by-bin in the original six-bin histogram shape",
+                    "combination": "2024 and 2025 yields summed bin-by-bin on the original CR physical-bin axis",
                     "combined_uncertainty": "quadrature sum of the two per-year postfit uncertainty bands",
                 }
             )
@@ -228,6 +234,7 @@ def main() -> int:
         "plot_count": len(plots),
         "plots": plots,
         "recoil_bin_labels_gev": list(RECOIL_LABELS),
+        "recoil_display_edges_gev": list(RECOIL_DISPLAY_EDGES),
         "overflow_policy": "last bin includes all pTmiss/recoil >= 800 GeV",
         "ignored_non_highdm_cr_shape_directories": sorted(ignored),
         "channels": channel_summary,
