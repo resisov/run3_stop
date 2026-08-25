@@ -1,0 +1,232 @@
+{
+  "non_template_variables_excluded": [
+    "njet",
+    "nb",
+    "ntop",
+    "nw"
+  ],
+  "plot_count": 9,
+  "plots": [
+    {
+      "bins": 8,
+      "fit": "2024+2025 CR-only background-only",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}=1$\nCR-only postfit"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "name": "HighDMVR_Nb1_met_postfit",
+      "pdf": "plots/2024/HighDMVR_Nb1_met_postfit.pdf",
+      "png": "plots/2024/HighDMVR_Nb1_met_postfit.png",
+      "region": "HighDMVR_Nb1",
+      "scope": "2024",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "template_observable": "met",
+      "unit_area": false,
+      "unit_area_audit": null
+    },
+    {
+      "bins": 8,
+      "fit": "2024+2025 CR-only background-only",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}=2$\nCR-only postfit"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "name": "HighDMVR_Nb2_met_postfit",
+      "pdf": "plots/2024/HighDMVR_Nb2_met_postfit.pdf",
+      "png": "plots/2024/HighDMVR_Nb2_met_postfit.png",
+      "region": "HighDMVR_Nb2",
+      "scope": "2024",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "template_observable": "met",
+      "unit_area": false,
+      "unit_area_audit": null
+    },
+    {
+      "bins": 8,
+      "fit": "2024+2025 CR-only background-only",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}\\geq3$\nCR-only postfit"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "name": "HighDMVR_Nb3plus_met_postfit",
+      "pdf": "plots/2024/HighDMVR_Nb3plus_met_postfit.pdf",
+      "png": "plots/2024/HighDMVR_Nb3plus_met_postfit.png",
+      "region": "HighDMVR_Nb3plus",
+      "scope": "2024",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "template_observable": "met",
+      "unit_area": false,
+      "unit_area_audit": null
+    },
+    {
+      "bins": 8,
+      "fit": "2024+2025 CR-only background-only",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}=1$\nCR-only postfit"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "name": "HighDMVR_Nb1_met_postfit",
+      "pdf": "plots/2025/HighDMVR_Nb1_met_postfit.pdf",
+      "png": "plots/2025/HighDMVR_Nb1_met_postfit.png",
+      "region": "HighDMVR_Nb1",
+      "scope": "2025",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "template_observable": "met",
+      "unit_area": false,
+      "unit_area_audit": null
+    },
+    {
+      "bins": 8,
+      "fit": "2024+2025 CR-only background-only",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}=2$\nCR-only postfit"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "name": "HighDMVR_Nb2_met_postfit",
+      "pdf": "plots/2025/HighDMVR_Nb2_met_postfit.pdf",
+      "png": "plots/2025/HighDMVR_Nb2_met_postfit.png",
+      "region": "HighDMVR_Nb2",
+      "scope": "2025",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "template_observable": "met",
+      "unit_area": false,
+      "unit_area_audit": null
+    },
+    {
+      "bins": 8,
+      "fit": "2024+2025 CR-only background-only",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}\\geq3$\nCR-only postfit"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "name": "HighDMVR_Nb3plus_met_postfit",
+      "pdf": "plots/2025/HighDMVR_Nb3plus_met_postfit.pdf",
+      "png": "plots/2025/HighDMVR_Nb3plus_met_postfit.png",
+      "region": "HighDMVR_Nb3plus",
+      "scope": "2025",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "template_observable": "met",
+      "unit_area": false,
+      "unit_area_audit": null
+    },
+    {
+      "bins": 8,
+      "fit": "2024+2025 CR-only background-only",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}=1$\nCR-only postfit"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "name": "HighDMVR_Nb1_met_postfit",
+      "pdf": "plots/combined/HighDMVR_Nb1_met_postfit.pdf",
+      "png": "plots/combined/HighDMVR_Nb1_met_postfit.png",
+      "region": "HighDMVR_Nb1",
+      "scope": "combined",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "template_observable": "met",
+      "unit_area": false,
+      "unit_area_audit": null
+    },
+    {
+      "bins": 8,
+      "fit": "2024+2025 CR-only background-only",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}=2$\nCR-only postfit"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "name": "HighDMVR_Nb2_met_postfit",
+      "pdf": "plots/combined/HighDMVR_Nb2_met_postfit.pdf",
+      "png": "plots/combined/HighDMVR_Nb2_met_postfit.png",
+      "region": "HighDMVR_Nb2",
+      "scope": "combined",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "template_observable": "met",
+      "unit_area": false,
+      "unit_area_audit": null
+    },
+    {
+      "bins": 8,
+      "fit": "2024+2025 CR-only background-only",
+      "labels": [
+        "High-$\\Delta m$ VR, $N_{b}\\geq3$\nCR-only postfit"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "name": "HighDMVR_Nb3plus_met_postfit",
+      "pdf": "plots/combined/HighDMVR_Nb3plus_met_postfit.pdf",
+      "png": "plots/combined/HighDMVR_Nb3plus_met_postfit.png",
+      "region": "HighDMVR_Nb3plus",
+      "scope": "combined",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "template_observable": "met",
+      "unit_area": false,
+      "unit_area_audit": null
+    }
+  ],
+  "source": "vr_met_postfit_summary.json",
+  "sr_observation_in_likelihood": false,
+  "status": "complete",
+  "template_observable": "met",
+  "vr_observation_in_likelihood": false
+}

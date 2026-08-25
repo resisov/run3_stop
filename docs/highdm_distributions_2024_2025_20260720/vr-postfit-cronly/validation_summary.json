@@ -2,105 +2,119 @@
   "checked_predictions": {
     "2024": {
       "HighDMVR_Nb1": {
-        "data": 15569.0,
-        "minimum_covariance_eigenvalue": 5.578368804332435,
-        "yield": 14509.305466720549
+        "data": 15570.0,
+        "minimum_covariance_eigenvalue": 6.8823594168343325,
+        "yield": 14763.330378436118
       },
       "HighDMVR_Nb2": {
-        "data": 11853.0,
-        "minimum_covariance_eigenvalue": 0.43461708602910676,
-        "yield": 11686.720270527168
+        "data": 11854.0,
+        "minimum_covariance_eigenvalue": 0.3201143347466586,
+        "yield": 12674.969703410146
       },
       "HighDMVR_Nb3plus": {
         "data": 3003.0,
-        "minimum_covariance_eigenvalue": 0.1579761090683406,
-        "yield": 3231.097471683067
+        "minimum_covariance_eigenvalue": 0.259724383748513,
+        "yield": 2335.7010604445486
       }
     },
     "2025": {
       "HighDMVR_Nb1": {
-        "data": 15671.0,
-        "minimum_covariance_eigenvalue": 4.00962833638831,
-        "yield": 13713.262672572282
+        "data": 15672.0,
+        "minimum_covariance_eigenvalue": 4.654048464284217,
+        "yield": 13861.611213592922
       },
       "HighDMVR_Nb2": {
         "data": 11000.0,
-        "minimum_covariance_eigenvalue": 0.21904777335565817,
-        "yield": 10068.10538751301
+        "minimum_covariance_eigenvalue": 0.2922050828389615,
+        "yield": 10628.831703868265
       },
       "HighDMVR_Nb3plus": {
         "data": 2482.0,
-        "minimum_covariance_eigenvalue": 0.33713485823868744,
-        "yield": 2381.1559455016472
+        "minimum_covariance_eigenvalue": 0.18406519381500516,
+        "yield": 1880.9752361805056
       }
     },
     "combined": {
       "HighDMVR_Nb1": {
-        "data": 31240.0,
-        "minimum_covariance_eigenvalue": 9.6575346430073,
-        "yield": 28222.56813929283
+        "data": 31242.0,
+        "minimum_covariance_eigenvalue": 11.673523533564666,
+        "yield": 28624.941592029038
       },
       "HighDMVR_Nb2": {
-        "data": 22853.0,
-        "minimum_covariance_eigenvalue": 0.6560916039770177,
-        "yield": 21754.825658040176
+        "data": 22854.0,
+        "minimum_covariance_eigenvalue": 0.6147261650946778,
+        "yield": 23303.801407278414
       },
       "HighDMVR_Nb3plus": {
         "data": 5485.0,
-        "minimum_covariance_eigenvalue": 0.5705211668592717,
-        "yield": 5612.253417184715
+        "minimum_covariance_eigenvalue": 0.48530291581504614,
+        "yield": 4216.676296625054
       }
     }
   },
   "covariance_quality": 3,
-  "cr_to_vr_transfer_factor_definition": "N_MC(VR exact Nb and MET bin) / N_MC(matched CR exact Nb and recoil bin)",
-  "edm": 0.000219287655013406,
-  "fit_parameter_count": 406,
+  "cr_to_vr_transfer_factor_definition": "N_MC(VR displayed Nb and MET bin) / N_MC(matched CR Nb1 or Nb2plus recoil group)",
+  "edm": 0.0017743406126547517,
+  "fit_parameter_count": 227,
   "fit_status": 0,
-  "highdm_control_grouping": "exact",
-  "likelihood_channel_count": 310,
+  "global_covariance_validation": {
+    "2024": {
+      "dimension": 24,
+      "minimum_eigenvalue": 0.19967355343409393
+    },
+    "2025": {
+      "dimension": 24,
+      "minimum_eigenvalue": 0.1075557971195337
+    },
+    "combined": {
+      "dimension": 24,
+      "minimum_eigenvalue": 0.32743338067400524
+    }
+  },
+  "highdm_control_grouping": "nb1-nb2plus",
+  "likelihood_channel_count": 156,
   "plot_count": 9,
   "png_pdf_pairs": [
     {
-      "pdf": "/private/tmp/vrpostfit-cronly-exact/plots/2024/HighDMVR_Nb1_met_postfit.pdf",
-      "png": "/private/tmp/vrpostfit-cronly-exact/plots/2024/HighDMVR_Nb1_met_postfit.png"
+      "pdf": "plots/2024/HighDMVR_Nb1_met_postfit.pdf",
+      "png": "plots/2024/HighDMVR_Nb1_met_postfit.png"
     },
     {
-      "pdf": "/private/tmp/vrpostfit-cronly-exact/plots/2024/HighDMVR_Nb2_met_postfit.pdf",
-      "png": "/private/tmp/vrpostfit-cronly-exact/plots/2024/HighDMVR_Nb2_met_postfit.png"
+      "pdf": "plots/2024/HighDMVR_Nb2_met_postfit.pdf",
+      "png": "plots/2024/HighDMVR_Nb2_met_postfit.png"
     },
     {
-      "pdf": "/private/tmp/vrpostfit-cronly-exact/plots/2024/HighDMVR_Nb3plus_met_postfit.pdf",
-      "png": "/private/tmp/vrpostfit-cronly-exact/plots/2024/HighDMVR_Nb3plus_met_postfit.png"
+      "pdf": "plots/2024/HighDMVR_Nb3plus_met_postfit.pdf",
+      "png": "plots/2024/HighDMVR_Nb3plus_met_postfit.png"
     },
     {
-      "pdf": "/private/tmp/vrpostfit-cronly-exact/plots/2025/HighDMVR_Nb1_met_postfit.pdf",
-      "png": "/private/tmp/vrpostfit-cronly-exact/plots/2025/HighDMVR_Nb1_met_postfit.png"
+      "pdf": "plots/2025/HighDMVR_Nb1_met_postfit.pdf",
+      "png": "plots/2025/HighDMVR_Nb1_met_postfit.png"
     },
     {
-      "pdf": "/private/tmp/vrpostfit-cronly-exact/plots/2025/HighDMVR_Nb2_met_postfit.pdf",
-      "png": "/private/tmp/vrpostfit-cronly-exact/plots/2025/HighDMVR_Nb2_met_postfit.png"
+      "pdf": "plots/2025/HighDMVR_Nb2_met_postfit.pdf",
+      "png": "plots/2025/HighDMVR_Nb2_met_postfit.png"
     },
     {
-      "pdf": "/private/tmp/vrpostfit-cronly-exact/plots/2025/HighDMVR_Nb3plus_met_postfit.pdf",
-      "png": "/private/tmp/vrpostfit-cronly-exact/plots/2025/HighDMVR_Nb3plus_met_postfit.png"
+      "pdf": "plots/2025/HighDMVR_Nb3plus_met_postfit.pdf",
+      "png": "plots/2025/HighDMVR_Nb3plus_met_postfit.png"
     },
     {
-      "pdf": "/private/tmp/vrpostfit-cronly-exact/plots/combined/HighDMVR_Nb1_met_postfit.pdf",
-      "png": "/private/tmp/vrpostfit-cronly-exact/plots/combined/HighDMVR_Nb1_met_postfit.png"
+      "pdf": "plots/combined/HighDMVR_Nb1_met_postfit.pdf",
+      "png": "plots/combined/HighDMVR_Nb1_met_postfit.png"
     },
     {
-      "pdf": "/private/tmp/vrpostfit-cronly-exact/plots/combined/HighDMVR_Nb2_met_postfit.pdf",
-      "png": "/private/tmp/vrpostfit-cronly-exact/plots/combined/HighDMVR_Nb2_met_postfit.png"
+      "pdf": "plots/combined/HighDMVR_Nb2_met_postfit.pdf",
+      "png": "plots/combined/HighDMVR_Nb2_met_postfit.png"
     },
     {
-      "pdf": "/private/tmp/vrpostfit-cronly-exact/plots/combined/HighDMVR_Nb3plus_met_postfit.pdf",
-      "png": "/private/tmp/vrpostfit-cronly-exact/plots/combined/HighDMVR_Nb3plus_met_postfit.png"
+      "pdf": "plots/combined/HighDMVR_Nb3plus_met_postfit.pdf",
+      "png": "plots/combined/HighDMVR_Nb3plus_met_postfit.png"
     }
   ],
   "sr_observation_in_likelihood": false,
   "status": "complete",
   "template_observable": "met",
-  "transfer_factor_mc_statistics": "independent numerator and denominator sumw2 propagated analytically; CR card autoMCStats disabled to avoid a free-rate/MC-stat degeneracy",
+  "transfer_factor_mc_statistics": "independent numerator sumw2 and shared denominator sumw2 propagated analytically, including cross-bin and cross-VR covariance; CR card autoMCStats disabled to avoid a free-rate/MC-stat degeneracy",
   "vr_observation_in_likelihood": false
 }

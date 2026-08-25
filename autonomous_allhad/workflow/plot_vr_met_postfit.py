@@ -95,6 +95,9 @@ def main() -> int:
                 uncertainty_label_override="Total postfit unc.",
                 luminosity_fb=LUMINOSITY[scope],
             )
+            page_root = args.output_dir.parent
+            for key in ("png", "pdf"):
+                plot[key] = str(Path(plot[key]).relative_to(page_root))
             plot.update(
                 {
                     "scope": scope,
@@ -110,7 +113,7 @@ def main() -> int:
 
     result = {
         "status": "complete",
-        "source": str(args.summary),
+        "source": args.summary.name,
         "plot_count": len(plots),
         "plots": plots,
         "template_observable": "met",

@@ -16,22 +16,20 @@ import uproot
 from background_process_groups import BACKGROUND_DISPLAY_LABELS, BACKGROUND_PROCESS_ORDER
 from plot_control_search_bins_style import (
     GROUP_ORDER,
-    LOWDM_NSV_INCLUSIVE_CATEGORY_LABELS,
-    LOWDM_NSV_INCLUSIVE_CATEGORY_SIZES,
     draw_flat_blocks,
 )
 
 
 HIGHDM_CHANNEL = re.compile(
     r"^y(?P<year>2024|2025)_(?P<region>LLCR|QCDCR|GCR)_highdm_"
-    r"(?P<nb>Nb1|Nb2|Nb3plus)_bin(?P<bin>[0-5])$"
+    r"(?P<nb>Nb1|Nb2plus)_bin(?P<bin>[0-5])$"
 )
 LOWDM_CHANNEL = re.compile(
     r"^y(?P<year>2024|2025)_(?P<region>LLCR|QCDCR|GCR)_lowdm_"
-    r"bin(?P<bin>[0-9]|[12][0-9]|3[0-3])$"
+    r"(?P<nb>Nb1|Nb2plus)_(?P<recoil>u[0-9]+to(?:[0-9]+|Inf))$"
 )
 REGIONS = ("LLCR", "QCDCR", "GCR")
-NB_CATEGORIES = ("Nb1", "Nb2", "Nb3plus")
+NB_CATEGORIES = ("Nb1", "Nb2plus")
 YEARS = ("2024", "2025")
 RECOIL_LABELS = ("250–300", "300–350", "350–400", "400–500", "500–800", "≥800")
 RECOIL_DISPLAY_EDGES = (250.0, 300.0, 350.0, 400.0, 500.0, 800.0, 1500.0)
@@ -41,13 +39,37 @@ REGION_LABELS = {
     "QCDCR": "Multijet control region",
     "GCR": "Photon control region",
 }
-NB_LABELS = {"Nb1": "$N_b=1$", "Nb2": "$N_b=2$", "Nb3plus": "$N_b\\geq3$"}
-LOWDM_CATEGORY_SIZES = tuple(LOWDM_NSV_INCLUSIVE_CATEGORY_SIZES[2:])
-LOWDM_BIN_COUNT = sum(size for _category, size in LOWDM_CATEGORY_SIZES)
-EXPECTED_OMITTED_LOWDM_CHANNELS = {
-    ("2024", "QCDCR", 24),
-    ("2025", "QCDCR", 24),
+NB_LABELS = {"Nb1": "$N_b=1$", "Nb2plus": "$N_b\\geq2$"}
+LOWDM_FAMILIES = {
+    ("Nb1", "pisr300to500"): {
+        "groups": ("u300to400", "u400to500", "u500to600", "u600toInf"),
+        "edges": (300.0, 400.0, 500.0, 600.0, 900.0),
+        "label": "$N_b=1$ · $300\\leq p_T^{ISR}<500$ GeV",
+    },
+    ("Nb1", "pisr500plus"): {
+        "groups": ("u450to550", "u550to650", "u650to750", "u750toInf"),
+        "edges": (450.0, 550.0, 650.0, 750.0, 1050.0),
+        "label": "$N_b=1$ · $p_T^{ISR}\\geq500$ GeV",
+    },
+    ("Nb2plus", "pisr300to500"): {
+        "groups": ("u300to400", "u400to500", "u500toInf"),
+        "edges": (300.0, 400.0, 500.0, 800.0),
+        "label": "$N_b\\geq2$ · $300\\leq p_T^{ISR}<500$ GeV",
+    },
+    ("Nb2plus", "pisr500plus"): {
+        "groups": ("u450to550", "u550to650", "u650toInf"),
+        "edges": (450.0, 550.0, 650.0, 950.0),
+        "label": "$N_b\\geq2$ · $p_T^{ISR}\\geq500$ GeV",
+    },
 }
+
+
+def publishable_plot_paths(record: dict, output_dir: Path) -> dict:
+    """Store page-relative artifact paths instead of private build paths."""
+    page_root = output_dir.parent
+    for key in ("png", "pdf"):
+        record[key] = str(Path(record[key]).relative_to(page_root))
+    return record
 
 
 def graph_record(graph: object) -> tuple[float, float]:
@@ -122,7 +144,7 @@ def make_block(records: list[dict], annotation: str, labels: list[str]) -> dict:
         "reference_style": True,
         "label_box": False,
         "show_annotation": True,
-        "annotation_x": 0.68,
+        "annotation_x": 0.58,
         "annotation_y": 0.68,
         "group_labels": {},
         "significance_panel": False,
@@ -150,35 +172,18 @@ def sum_year_records(left: dict, right: dict) -> dict:
     }
 
 
-def make_lowdm_blocks(records: list[dict], annotation: str) -> list[dict]:
-    if len(records) != LOWDM_BIN_COUNT:
-        raise RuntimeError(f"expected {LOWDM_BIN_COUNT} Low-dM bins, got {len(records)}")
-    blocks = []
-    offset = 0
-    for category_index, (category, size) in enumerate(LOWDM_CATEGORY_SIZES):
-        selected = records[offset : offset + size]
-        block = make_block(selected, "", [])
-        block.update(
-            {
-                "label": LOWDM_NSV_INCLUSIVE_CATEGORY_LABELS[category],
-                "annotation": annotation if category_index == 0 else "",
-                "edges": [],
-                "label_box": True,
-                "show_annotation": category_index == 0,
-                "annotation_x": 0.78,
-                "annotation_y": 0.84,
-                "annotation_fontsize": 16.0,
-                "category_labels_on_main": True,
-                "category_label_y": 0.61,
-                "label_fontsize": 9.0,
-                "label_box_pad": 0.16,
-                "main_panel_ymax_factor": 600.0,
-                "figure_width": 22.0,
-            }
-        )
-        blocks.append(block)
-        offset += size
-    return blocks
+def make_lowdm_block(records: list[dict], annotation: str, family: dict) -> dict:
+    block = make_block(records, annotation, [])
+    block.update(
+        {
+            "edges": list(family["edges"]),
+            "label_box": False,
+            "show_annotation": True,
+            "annotation_x": 0.58,
+            "annotation_y": 0.68,
+        }
+    )
+    return block
 
 
 def main() -> int:
@@ -202,7 +207,7 @@ def main() -> int:
     source = uproot.open(args.fit_diagnostics)
     shapes = source["shapes_fit_b"]
     extracted: dict[tuple[str, str, str, int], dict] = {}
-    lowdm_extracted: dict[tuple[str, str, int], dict] = {}
+    lowdm_extracted: dict[tuple[str, str, str, str], dict] = {}
     ignored = []
     for channel_name in shapes.keys(recursive=False, cycle=False):
         high_match = HIGHDM_CHANNEL.fullmatch(channel_name)
@@ -220,7 +225,8 @@ def main() -> int:
             key = (
                 low_match.group("year"),
                 low_match.group("region"),
-                int(low_match.group("bin")),
+                low_match.group("nb"),
+                low_match.group("recoil"),
             )
             lowdm_extracted[key] = extract_channel(shapes[channel_name])
             continue
@@ -230,20 +236,24 @@ def main() -> int:
     if len(extracted) != expected:
         raise SystemExit(f"expected {expected} High-dM CR channels, found {len(extracted)}")
     expected_lowdm_keys = {
-        (year, region, index)
+        (year, region, nb, recoil)
         for year in YEARS
         for region in REGIONS
-        for index in range(LOWDM_BIN_COUNT)
+        for nb, _family in LOWDM_FAMILIES
+        for recoil in LOWDM_FAMILIES[(nb, _family)]["groups"]
     }
     missing_lowdm = expected_lowdm_keys - set(lowdm_extracted)
-    if missing_lowdm != EXPECTED_OMITTED_LOWDM_CHANNELS:
+    if missing_lowdm:
         raise SystemExit(f"unexpected missing Low-dM CR channels: {sorted(missing_lowdm)}")
 
     plots = []
     channel_summary = {}
     for region in REGIONS:
         for nb in NB_CATEGORIES:
-            annotation = f"{REGION_LABELS[region]}\n{NB_LABELS[nb]} · CR-only postfit"
+            annotation = (
+                f"High-$\\Delta m$ {region} postfit\n"
+                f"{NB_LABELS[nb]}"
+            )
             axis_label = r"$U_{T}$ (GeV)" if region == "GCR" else r"$p_{T}^{miss}$ (GeV)"
             for year in YEARS:
                 records = [extracted[(year, region, nb, index)] for index in range(6)]
@@ -259,6 +269,7 @@ def main() -> int:
                     uncertainty_label_override="Total postfit unc.",
                     luminosity_fb=LUMINOSITY[year],
                 )
+                publishable_plot_paths(record, args.output_dir)
                 record.update({"scope": year, "region": region, "nb": nb})
                 plots.append(record)
                 channel_summary[f"{year}/{region}/{nb}"] = records
@@ -282,6 +293,7 @@ def main() -> int:
                 uncertainty_label_override="Total postfit unc.",
                 luminosity_fb=LUMINOSITY["combined"],
             )
+            publishable_plot_paths(record, args.output_dir)
             record.update(
                 {
                     "scope": "combined",
@@ -295,60 +307,65 @@ def main() -> int:
 
     lowdm_channel_summary = {}
     for region in REGIONS:
-        annotation = f"Low-$\\Delta m$ {REGION_LABELS[region]}\nCR-only postfit"
-        for year in YEARS:
-            records = [
-                lowdm_extracted.get((year, region, index), empty_channel())
-                for index in range(LOWDM_BIN_COUNT)
+        axis_label = r"$U_{T}$ (GeV)" if region == "GCR" else r"$p_{T}^{miss}$ (GeV)"
+        for (nb, family_name), family in LOWDM_FAMILIES.items():
+            annotation = (
+                f"Low-$\\Delta m$ {region} postfit\n"
+                f"{family['label']}"
+            )
+            for year in YEARS:
+                records = [
+                    lowdm_extracted[(year, region, nb, recoil)]
+                    for recoil in family["groups"]
+                ]
+                block = make_lowdm_block(records, annotation, family)
+                outbase = (
+                    args.output_dir / "lowdm" / year
+                    / f"{region}_{nb}_{family_name}_met_postfit"
+                )
+                record = draw_flat_blocks(
+                    [block], outbase, xlabel=axis_label, reference_style=True,
+                    show_yields=True, ratio_ylabel="Data/Pred.",
+                    uncertainty_label_override="Total postfit unc.",
+                    luminosity_fb=LUMINOSITY[year],
+                )
+                publishable_plot_paths(record, args.output_dir)
+                record.update({
+                    "scope": year, "region": region, "phase_space": "lowdm",
+                    "nb": nb, "family": family_name,
+                })
+                plots.append(record)
+                lowdm_channel_summary[f"{year}/{region}/{nb}/{family_name}"] = records
+
+            combined_records = [
+                sum_year_records(
+                    lowdm_extracted[("2024", region, nb, recoil)],
+                    lowdm_extracted[("2025", region, nb, recoil)],
+                )
+                for recoil in family["groups"]
             ]
-            blocks = make_lowdm_blocks(records, annotation)
-            outbase = args.output_dir / "lowdm" / year / f"{region}_lowdm_postfit"
+            combined_block = make_lowdm_block(combined_records, annotation, family)
+            outbase = (
+                args.output_dir / "lowdm" / "combined"
+                / f"{region}_{nb}_{family_name}_met_postfit"
+            )
             record = draw_flat_blocks(
-                blocks,
-                outbase,
-                xlabel=r"Low-$\Delta m$ control bin",
-                reference_style=True,
-                show_yields=True,
-                ratio_ylabel="Data/Pred.",
+                [combined_block], outbase, xlabel=axis_label, reference_style=True,
+                show_yields=True, ratio_ylabel="Data/Pred.",
                 uncertainty_label_override="Total postfit unc.",
-                luminosity_fb=LUMINOSITY[year],
+                luminosity_fb=LUMINOSITY["combined"],
             )
-            record.update({"scope": year, "region": region, "phase_space": "lowdm"})
-            plots.append(record)
-            lowdm_channel_summary[f"{year}/{region}"] = records
-
-        combined_records = [
-            sum_year_records(
-                lowdm_extracted.get(("2024", region, index), empty_channel()),
-                lowdm_extracted.get(("2025", region, index), empty_channel()),
-            )
-            for index in range(LOWDM_BIN_COUNT)
-        ]
-        combined_blocks = make_lowdm_blocks(combined_records, annotation)
-        outbase = args.output_dir / "lowdm" / "combined" / f"{region}_lowdm_postfit"
-        record = draw_flat_blocks(
-            combined_blocks,
-            outbase,
-            xlabel=r"Low-$\Delta m$ control bin",
-            reference_style=True,
-            show_yields=True,
-            ratio_ylabel="Data/Pred.",
-            uncertainty_label_override="Total postfit unc.",
-            luminosity_fb=LUMINOSITY["combined"],
-        )
-        record.update(
-            {
-                "scope": "combined",
-                "region": region,
-                "phase_space": "lowdm",
-                "combination": "2024 and 2025 yields summed bin-by-bin in the canonical 34-bin Low-dM CR ordering",
+            publishable_plot_paths(record, args.output_dir)
+            record.update({
+                "scope": "combined", "region": region, "phase_space": "lowdm",
+                "nb": nb, "family": family_name,
+                "combination": "2024 and 2025 yields summed on the physical grouped-CR recoil axis",
                 "combined_uncertainty": "quadrature sum of the two per-year postfit uncertainty bands",
-            }
-        )
-        plots.append(record)
+            })
+            plots.append(record)
 
-    if len(plots) != 36:
-        raise SystemExit(f"expected 36 plots, produced {len(plots)}")
+    if len(plots) != 54:
+        raise SystemExit(f"expected 54 plots, produced {len(plots)}")
 
     digest = hashlib.sha256()
     with args.fit_diagnostics.open("rb") as fit_source:
@@ -370,12 +387,12 @@ def main() -> int:
         "recoil_bin_labels_gev": list(RECOIL_LABELS),
         "recoil_display_edges_gev": list(RECOIL_DISPLAY_EDGES),
         "overflow_policy": "last bin includes all pTmiss/recoil >= 800 GeV",
-        "lowdm_bin_count": LOWDM_BIN_COUNT,
-        "lowdm_category_sizes": list(LOWDM_CATEGORY_SIZES),
-        "lowdm_omitted_likelihood_channels": [
-            f"y{year}_{region}_lowdm_bin{index}"
-            for year, region, index in sorted(EXPECTED_OMITTED_LOWDM_CHANNELS)
-        ],
+        "lowdm_control_group_count_per_year_region": 14,
+        "lowdm_control_families": {
+            f"{nb}/{family_name}": family
+            for (nb, family_name), family in LOWDM_FAMILIES.items()
+        },
+        "lowdm_omitted_likelihood_channels": [],
         "ignored_non_highdm_cr_shape_directories": sorted(ignored),
         "channels": channel_summary,
         "lowdm_channels": lowdm_channel_summary,

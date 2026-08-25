@@ -1,0 +1,14 @@
+{
+  "status": "complete",
+  "replacement": "atomic validated grouped-CR postfit publication",
+  "previous_public_commit": "426e1a39c203ea9a6310e6769740e4a2f3e08333",
+  "previous_artifacts_recoverable_from_git": true,
+  "previous_png_pdf_pairs": 46,
+  "replacement_png_pdf_pairs": 64,
+  "replacement_zero_byte_files": 0,
+  "replacement_png_pdf_pairs_matched": true,
+  "private_filesystem_paths_present": false,
+  "stale_exact_nb_highdm_cr_plots_removed": true,
+  "stale_signal_bin_ordered_lowdm_cr_plots_removed": true,
+  "limits_and_impacts_modified": false
+}

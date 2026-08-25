@@ -27,11 +27,6 @@ VR_GROUPINGS = {
         "HighDMVR_Nb2": "Nb2plus",
         "HighDMVR_Nb3plus": "Nb2plus",
     },
-    "exact": {
-        "HighDMVR_Nb1": "Nb1",
-        "HighDMVR_Nb2": "Nb2",
-        "HighDMVR_Nb3plus": "Nb3plus",
-    },
 }
 PROCESSES = tuple(model.BACKGROUND_PROCESS_ORDER)
 CONTROL_REGION = {
@@ -217,14 +212,17 @@ def build_year_components(
                 elif process == "Zto2Nu":
                     static_scale = model.rz_value(
                         rz_covariance,
-                        f"highdm_{model.highdm_rz_group(group)}",
+                        f"highdm_{group}",
                     )
                     rate_parameter = model.rate_parameter(
-                        "sgamma_shape", "highdm", group, recoil_bin
+                        "sgamma_shape",
+                        "highdm",
+                        group,
+                        model.high_sgamma_parameter_bin(sgamma, recoil_bin),
                     )
                     for item in model.rz_nuisances(
                         rz_covariance,
-                        f"highdm_{model.highdm_rz_group(group)}",
+                        f"highdm_{group}",
                     ):
                         add_factor(factors, item)
                     closure_name, delta, _ = model.closure_record(
@@ -252,6 +250,7 @@ def build_year_components(
                 transfer_factor = None
                 transfer_denominator = None
                 transfer_denominator_sumw2 = None
+                transfer_denominator_key = None
                 if process in CONTROL_REGION:
                     if process == "Zto2Nu":
                         scales = {
@@ -269,6 +268,7 @@ def build_year_components(
                             scales,
                         )
                         numerator = base * static_scale
+                        denominator_process = "PhotonJet"
                     else:
                         denominator_record = model.logical_records(
                             control[CONTROL_REGION[process]],
@@ -278,6 +278,7 @@ def build_year_components(
                             len(RECOIL_EDGES) - 1,
                         )
                         numerator = base
+                        denominator_process = process
                     denominator = (
                         float(denominator_record["nominal"][0])
                         if denominator_record is not None
@@ -288,6 +289,10 @@ def build_year_components(
                         transfer_denominator = denominator
                         transfer_denominator_sumw2 = max(
                             float(denominator_record["sumw2"][0]), 0.0
+                        )
+                        transfer_denominator_key = (
+                            f"{year}/{CONTROL_REGION[process]}/{group}/"
+                            f"bin{recoil_bin}/{denominator_process}"
                         )
 
                 region_output["components"].append(
@@ -306,6 +311,10 @@ def build_year_components(
                         "cr_to_vr_transfer_factor": transfer_factor,
                         "cr_transfer_denominator": transfer_denominator,
                         "cr_transfer_denominator_sumw2": transfer_denominator_sumw2,
+                        "mc_numerator_key": (
+                            f"{year}/{region}/bin{plot_bin}/{process}"
+                        ),
+                        "mc_denominator_key": transfer_denominator_key,
                     }
                 )
         output["regions"][region] = region_output
@@ -347,6 +356,10 @@ def prediction(
         parameter_value[name] = 0.0
         parameter_initial[name] = 0.0
 
+    prefit_parameter_covariance = np.zeros_like(augmented)
+    for nuisance in needed_nuisances:
+        prefit_parameter_covariance[index[nuisance], index[nuisance]] = 1.0
+
     def evaluate_component(component: dict[str, Any], values: dict[str, float]):
         nominal = float(component["base"]) * float(component["static_scale"])
         log_slopes: dict[str, float] = {}
@@ -370,17 +383,25 @@ def prediction(
             name: nominal * slope for name, slope in log_slopes.items()
         }
         scale = nominal / max(float(component["base"]), model.MIN_BIN)
-        mc_variance = float(component["sumw2"]) * scale * scale
+        mc_effects = {}
+        numerator_effect = math.sqrt(float(component["sumw2"])) * scale
+        if numerator_effect > 0.0:
+            mc_effects[str(component["mc_numerator_key"])] = numerator_effect
         denominator = component.get("cr_transfer_denominator")
         denominator_sumw2 = component.get("cr_transfer_denominator_sumw2")
-        if denominator is not None and denominator_sumw2 is not None:
-            mc_variance += (
-                nominal
-                * nominal
-                * float(denominator_sumw2)
-                / (float(denominator) * float(denominator))
+        denominator_key = component.get("mc_denominator_key")
+        if (
+            denominator is not None
+            and denominator_sumw2 is not None
+            and denominator_key is not None
+            and float(denominator_sumw2) > 0.0
+        ):
+            mc_effects[str(denominator_key)] = (
+                -nominal
+                * math.sqrt(float(denominator_sumw2))
+                / float(denominator)
             )
-        return nominal, gradient, mc_variance
+        return nominal, gradient, mc_effects
 
     evaluated = {}
     for year, year_data in years.items():
@@ -391,21 +412,23 @@ def prediction(
             process_prefit = {process: np.zeros(nbin) for process in PROCESSES}
             gradients = np.zeros((nbin, len(order)))
             prefit_gradients = np.zeros((nbin, len(order)))
-            mc_variance = np.zeros(nbin)
-            prefit_mc_variance = np.zeros(nbin)
+            mc_effects: dict[str, np.ndarray] = {}
+            prefit_mc_effects: dict[str, np.ndarray] = {}
             for component in region["components"]:
                 plot_bin = int(component["plot_bin"])
                 process = component["process"]
-                value, gradient, variance = evaluate_component(
+                value, gradient, component_mc_effects = evaluate_component(
                     component, parameter_value
                 )
-                prefit_value, prefit_gradient, prefit_variance = evaluate_component(
+                prefit_value, prefit_gradient, component_prefit_mc_effects = evaluate_component(
                     component, parameter_initial
                 )
                 process_values[process][plot_bin] += value
                 process_prefit[process][plot_bin] += prefit_value
-                mc_variance[plot_bin] += variance
-                prefit_mc_variance[plot_bin] += prefit_variance
+                for name, effect in component_mc_effects.items():
+                    mc_effects.setdefault(name, np.zeros(nbin))[plot_bin] += effect
+                for name, effect in component_prefit_mc_effects.items():
+                    prefit_mc_effects.setdefault(name, np.zeros(nbin))[plot_bin] += effect
                 for name, derivative in gradient.items():
                     gradients[plot_bin, index[name]] += derivative
                 for name, derivative in prefit_gradient.items():
@@ -413,13 +436,20 @@ def prediction(
             total = sum(process_values.values(), np.zeros(nbin))
             prefit_total = sum(process_prefit.values(), np.zeros(nbin))
             postfit_covariance = gradients @ augmented @ gradients.T
-            postfit_covariance += np.diag(mc_variance)
-            prefit_parameter_covariance = np.zeros_like(augmented)
-            for nuisance in needed_nuisances:
-                prefit_parameter_covariance[index[nuisance], index[nuisance]] = 1.0
+            mc_covariance = sum(
+                (np.outer(effect, effect) for effect in mc_effects.values()),
+                np.zeros((nbin, nbin)),
+            )
+            postfit_covariance += mc_covariance
             prefit_covariance = (
                 prefit_gradients @ prefit_parameter_covariance @ prefit_gradients.T
-                + np.diag(prefit_mc_variance)
+                + sum(
+                    (
+                        np.outer(effect, effect)
+                        for effect in prefit_mc_effects.values()
+                    ),
+                    np.zeros((nbin, nbin)),
+                )
             )
             evaluated[year][region_name] = {
                 "processes": {key: value.tolist() for key, value in process_values.items()},
@@ -432,8 +462,24 @@ def prediction(
                 "prefit_covariance": prefit_covariance.tolist(),
                 "gradient": gradients.tolist(),
                 "prefit_gradient": prefit_gradients.tolist(),
-                "mc_stat_variance": mc_variance.tolist(),
-                "prefit_mc_stat_variance": prefit_mc_variance.tolist(),
+                "mc_stat_covariance": mc_covariance.tolist(),
+                "mc_stat_variance": np.diag(mc_covariance).tolist(),
+                "mc_stat_effects": {
+                    name: effect.tolist() for name, effect in sorted(mc_effects.items())
+                },
+                "prefit_mc_stat_effects": {
+                    name: effect.tolist()
+                    for name, effect in sorted(prefit_mc_effects.items())
+                },
+                "prefit_mc_stat_variance": np.diag(
+                    sum(
+                        (
+                            np.outer(effect, effect)
+                            for effect in prefit_mc_effects.values()
+                        ),
+                        np.zeros((nbin, nbin)),
+                    )
+                ).tolist(),
                 "data": region["data"],
                 "data_sumw2": region["data_sumw2"],
             }
@@ -449,9 +495,8 @@ def prediction(
         data_sumw2 = np.zeros(nbin)
         gradient = np.zeros((nbin, len(order)))
         prefit_gradient = np.zeros((nbin, len(order)))
-        mc_stat_variance = np.zeros(nbin)
-        prefit_mc_stat_variance = np.zeros(nbin)
-        covariance_mc = np.zeros((nbin, nbin))
+        mc_stat_effects: dict[str, np.ndarray] = {}
+        prefit_mc_stat_effects: dict[str, np.ndarray] = {}
         for year in years:
             record = evaluated[year][region_name]
             for process in PROCESSES:
@@ -465,21 +510,27 @@ def prediction(
             data_sumw2 += np.asarray(record["data_sumw2"])
             gradient += np.asarray(record["gradient"])
             prefit_gradient += np.asarray(record["prefit_gradient"])
-            year_mc_stat = np.asarray(record["mc_stat_variance"])
-            mc_stat_variance += year_mc_stat
-            covariance_mc += np.diag(year_mc_stat)
-            prefit_mc_stat_variance += np.asarray(
-                record["prefit_mc_stat_variance"]
-            )
+            for name, effect in record["mc_stat_effects"].items():
+                mc_stat_effects.setdefault(name, np.zeros(nbin))[:] += np.asarray(effect)
+            for name, effect in record["prefit_mc_stat_effects"].items():
+                prefit_mc_stat_effects.setdefault(name, np.zeros(nbin))[:] += np.asarray(effect)
+        covariance_mc = sum(
+            (np.outer(effect, effect) for effect in mc_stat_effects.values()),
+            np.zeros((nbin, nbin)),
+        )
+        prefit_covariance_mc = sum(
+            (
+                np.outer(effect, effect)
+                for effect in prefit_mc_stat_effects.values()
+            ),
+            np.zeros((nbin, nbin)),
+        )
         postfit_covariance = gradient @ augmented @ gradient.T + covariance_mc
-        prefit_parameter_covariance = np.zeros_like(augmented)
-        for nuisance in needed_nuisances:
-            prefit_parameter_covariance[index[nuisance], index[nuisance]] = 1.0
         prefit_covariance = (
             prefit_gradient
             @ prefit_parameter_covariance
             @ prefit_gradient.T
-            + np.diag(prefit_mc_stat_variance)
+            + prefit_covariance_mc
         )
         combined[region_name] = {
             "processes": {key: value.tolist() for key, value in processes.items()},
@@ -494,10 +545,72 @@ def prediction(
             ).tolist(),
             "covariance": postfit_covariance.tolist(),
             "prefit_covariance": prefit_covariance.tolist(),
-            "mc_stat_variance": mc_stat_variance.tolist(),
+            "gradient": gradient.tolist(),
+            "prefit_gradient": prefit_gradient.tolist(),
+            "mc_stat_covariance": covariance_mc.tolist(),
+            "mc_stat_variance": np.diag(covariance_mc).tolist(),
+            "mc_stat_effects": {
+                name: effect.tolist()
+                for name, effect in sorted(mc_stat_effects.items())
+            },
+            "prefit_mc_stat_effects": {
+                name: effect.tolist()
+                for name, effect in sorted(prefit_mc_stat_effects.items())
+            },
             "data": data.tolist(),
             "data_sumw2": data_sumw2.tolist(),
         }
+
+    def build_global_covariance(records: dict[str, Any]) -> dict[str, Any]:
+        nbin = len(next(iter(years.values()))["edges"]) - 1
+        size = len(VR_REGIONS) * nbin
+        global_gradient = np.zeros((size, len(order)))
+        global_prefit_gradient = np.zeros((size, len(order)))
+        global_mc_effects: dict[str, np.ndarray] = {}
+        global_prefit_mc_effects: dict[str, np.ndarray] = {}
+        labels = []
+        for region_index, region_name in enumerate(VR_REGIONS):
+            start = region_index * nbin
+            stop = start + nbin
+            record = records[region_name]
+            global_gradient[start:stop] = np.asarray(record["gradient"])
+            global_prefit_gradient[start:stop] = np.asarray(
+                record["prefit_gradient"]
+            )
+            labels.extend(f"{region_name}/bin{index}" for index in range(nbin))
+            for name, effect in record["mc_stat_effects"].items():
+                global_mc_effects.setdefault(name, np.zeros(size))[start:stop] += np.asarray(effect)
+            for name, effect in record["prefit_mc_stat_effects"].items():
+                global_prefit_mc_effects.setdefault(name, np.zeros(size))[start:stop] += np.asarray(effect)
+        mc_covariance = sum(
+            (np.outer(effect, effect) for effect in global_mc_effects.values()),
+            np.zeros((size, size)),
+        )
+        prefit_mc_covariance = sum(
+            (
+                np.outer(effect, effect)
+                for effect in global_prefit_mc_effects.values()
+            ),
+            np.zeros((size, size)),
+        )
+        return {
+            "order": labels,
+            "covariance": (
+                global_gradient @ augmented @ global_gradient.T + mc_covariance
+            ).tolist(),
+            "prefit_covariance": (
+                global_prefit_gradient
+                @ prefit_parameter_covariance
+                @ global_prefit_gradient.T
+                + prefit_mc_covariance
+            ).tolist(),
+            "mc_stat_covariance": mc_covariance.tolist(),
+        }
+
+    global_covariance = {
+        year: build_global_covariance(evaluated[year]) for year in years
+    }
+    global_covariance["combined"] = build_global_covariance(combined)
     return {
         "status": "complete",
         "fit": "2024+2025 observed CR-only background-only fit",
@@ -509,6 +622,7 @@ def prediction(
         "prediction_only_prior_parameters": missing,
         "years": evaluated,
         "combined": combined,
+        "global_covariance": global_covariance,
     }
 
 
@@ -523,13 +637,12 @@ def main() -> int:
     parser.add_argument(
         "--highdm-control-grouping",
         choices=tuple(VR_GROUPINGS),
-        default="exact",
+        default="nb1-nb2plus",
         help="CR grouping used by the supplied CR-only fit",
     )
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
 
-    model.configure_highdm_control_grouping(args.highdm_control_grouping)
     region_group = VR_GROUPINGS[args.highdm_control_grouping]
     years = {}
     for year in ("2024", "2025"):
@@ -545,21 +658,21 @@ def main() -> int:
     result["edges"] = years["2024"]["edges"]
     result["inputs"] = {
         year: {
-            "hists": str(getattr(args, f"hists_{year}")),
-            "sgamma": str(getattr(args, f"sgamma_{year}")),
-            "rz_covariance": str(getattr(args, f"rz_covariance_{year}")),
-            "zgamma_double_ratio": str(getattr(args, f"zgamma_double_ratio_{year}")),
+            "canonical_histogram": f"workflow/plot{year}/hists.json",
+            "factor_products": f"background_estimation_unified_20260824/{year}",
+            "card_model": f"highdm73_lowdm34/cards/{year}/T2tt",
         }
         for year in ("2024", "2025")
     }
     result["components"] = years
     result["highdm_control_grouping"] = args.highdm_control_grouping
     result["cr_to_vr_transfer_factor_definition"] = (
-        "N_MC(VR exact Nb and MET bin) / "
-        "N_MC(matched CR exact Nb and recoil bin)"
+        "N_MC(VR displayed Nb and MET bin) / "
+        "N_MC(matched CR Nb1 or Nb2plus recoil group)"
     )
     result["transfer_factor_mc_statistics"] = (
-        "independent numerator and denominator sumw2 propagated analytically; "
+        "independent numerator sumw2 and shared denominator sumw2 propagated "
+        "analytically, including cross-bin and cross-VR covariance; "
         "CR card autoMCStats disabled to avoid a free-rate/MC-stat degeneracy"
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)

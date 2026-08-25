@@ -71,9 +71,9 @@ def main() -> int:
         raise SystemExit("CR-only fit did not complete successfully")
     if int(fit.get("covariance_quality", -1)) < 2:
         raise SystemExit("CR-only fit covariance quality is below 2")
-    if int(fit.get("likelihood_channel_count", -1)) != 310:
+    if int(fit.get("likelihood_channel_count", -1)) != 156:
         raise SystemExit(
-            "exact-Nb CR-only likelihood does not contain exactly 310 channels"
+            "grouped CR-only likelihood does not contain exactly 156 channels"
         )
     if fit.get("vr_observation_in_likelihood") is not False:
         raise SystemExit("VR observation entered the fit")
@@ -96,8 +96,8 @@ def main() -> int:
         raise SystemExit("VR observation entered the postfit likelihood")
     if summary.get("sr_observation_in_likelihood") is not False:
         raise SystemExit("SR observation entered the postfit likelihood")
-    if summary.get("highdm_control_grouping") != "exact":
-        raise SystemExit("VR prediction did not use exact Nb CR-to-VR transfer factors")
+    if summary.get("highdm_control_grouping") != "nb1-nb2plus":
+        raise SystemExit("VR prediction does not match the grouped CR-only likelihood")
     if "denominator sumw2" not in summary.get("transfer_factor_mc_statistics", ""):
         raise SystemExit("CR-to-VR transfer-factor MC-statistics audit is absent")
     edges = np.asarray(summary["edges"], dtype=float)
@@ -114,6 +114,27 @@ def main() -> int:
             for region in REGIONS
         }
 
+    global_checked = {}
+    for scope in ("2024", "2025", "combined"):
+        record = summary["global_covariance"][scope]
+        order = list(record["order"])
+        covariance = np.asarray(record["covariance"], dtype=float)
+        expected_size = len(REGIONS) * (len(edges) - 1)
+        if len(order) != expected_size or covariance.shape != (expected_size, expected_size):
+            raise SystemExit(f"{scope}: malformed global VR covariance")
+        if not np.all(np.isfinite(covariance)):
+            raise SystemExit(f"{scope}: nonfinite global VR covariance")
+        if not np.allclose(covariance, covariance.T, rtol=0.0, atol=1.0e-9):
+            raise SystemExit(f"{scope}: global VR covariance is not symmetric")
+        eigenvalues = np.linalg.eigvalsh((covariance + covariance.T) / 2.0)
+        tolerance = max(float(np.max(np.diag(covariance))), 1.0) * 1.0e-9
+        if float(eigenvalues[0]) < -tolerance:
+            raise SystemExit(f"{scope}: global VR covariance is not positive semidefinite")
+        global_checked[scope] = {
+            "dimension": expected_size,
+            "minimum_eigenvalue": float(eigenvalues[0]),
+        }
+
     page = load(args.page_summary)
     if page.get("status") != "complete" or int(page.get("plot_count", -1)) != 9:
         raise SystemExit("plot summary does not contain exactly nine plots")
@@ -121,13 +142,15 @@ def main() -> int:
         raise SystemExit("non-template variable exclusion audit is absent")
     pairs = []
     for plot in page["plots"]:
-        png = Path(plot["png"])
-        pdf = Path(plot["pdf"])
+        png_record = Path(plot["png"])
+        pdf_record = Path(plot["pdf"])
+        png = png_record if png_record.is_absolute() else args.page_summary.parent / png_record
+        pdf = pdf_record if pdf_record.is_absolute() else args.page_summary.parent / pdf_record
         if not png.is_file() or not pdf.is_file() or png.stat().st_size == 0 or pdf.stat().st_size == 0:
             raise SystemExit(f"missing/nonempty PNG/PDF pair for {plot.get('name')}")
         if "_met_postfit" not in png.stem or "_met_postfit" not in pdf.stem:
             raise SystemExit(f"non-template plot survived: {plot.get('name')}")
-        pairs.append({"png": str(png), "pdf": str(pdf)})
+        pairs.append({"png": str(png_record), "pdf": str(pdf_record)})
 
     result = {
         "status": "complete",
@@ -149,6 +172,7 @@ def main() -> int:
         "vr_observation_in_likelihood": False,
         "sr_observation_in_likelihood": False,
         "checked_predictions": checked,
+        "global_covariance_validation": global_checked,
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")

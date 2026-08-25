@@ -139,8 +139,8 @@ def main() -> int:
         "pull_definition": "Gaussian nuisance postfit value in nominal prefit-sigma units",
         "points": constrained,
         "excluded_bounded_rate_parameters": sorted(rate_parameters),
-        "png": str(args.output.with_suffix(".png")),
-        "pdf": str(args.output.with_suffix(".pdf")),
+        "png": str(args.output.with_suffix(".png").relative_to(args.summary.parent)),
+        "pdf": str(args.output.with_suffix(".pdf").relative_to(args.summary.parent)),
     }
     args.summary.parent.mkdir(parents=True, exist_ok=True)
     args.summary.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")

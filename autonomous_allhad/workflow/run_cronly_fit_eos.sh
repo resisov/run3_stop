@@ -43,6 +43,33 @@ combineCards.py --ic='^(LLCR|QCDCR|GCR)_' \
     --ic='^SR_highdm_bin0$' \
     "y2024=$CARD_2024" "y2025=$CARD_2025" > "$CR_CARD"
 
+# The control observations already provide the Poisson statistical constraint.
+# In a CR-only projection, per-process autoMCStats terms are degenerate with the
+# free CR normalization parameters.  Keep them in the full SR+CR cards used by
+# limits/impacts, but remove them from this CR-only diagnostic card.  The
+# independent CR-to-VR transfer-factor numerator/denominator MC statistics are
+# propagated explicitly by build_vr_met_postfit.py.
+python3 - "$CR_CARD" "$OUTPUT_DIR/cronly_card_policy.json" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+card, audit = map(Path, sys.argv[1:])
+lines = card.read_text().splitlines()
+removed = [line for line in lines if "autoMCStats" in line]
+if not removed:
+    raise SystemExit("CR-only input card contains no autoMCStats lines to remove")
+card.write_text("\n".join(line for line in lines if "autoMCStats" not in line) + "\n")
+audit.write_text(json.dumps({
+    "status": "complete",
+    "scope": "CR-only diagnostic fit only",
+    "full_limit_and_impact_cards_modified": False,
+    "removed_line_count": len(removed),
+    "removed_line_examples": [removed[0], removed[-1]],
+    "reason": "avoid degeneracy with free CR normalization parameters; CR Poisson data retained; CR-to-VR TF MC statistics propagated separately",
+}, indent=2, sort_keys=True) + "\n")
+PY
+
 # The fit workspace must contain control regions only.  Validate channel names
 # from every shapes directive before constructing the RooWorkspace.  One SR
 # bin per year is retained solely to define the signal POI and is hard-masked.
