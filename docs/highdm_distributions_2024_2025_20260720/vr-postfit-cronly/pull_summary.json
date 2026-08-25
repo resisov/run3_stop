@@ -1,0 +1,942 @@
+{
+  "constrained_nuisance_count": 129,
+  "covariance_quality": 3,
+  "excluded_bounded_rate_parameter_count": 277,
+  "excluded_bounded_rate_parameters": [
+    "ll_norm_highdm_Nb1_bin0_2024",
+    "ll_norm_highdm_Nb1_bin0_2025",
+    "ll_norm_highdm_Nb1_bin1_2024",
+    "ll_norm_highdm_Nb1_bin1_2025",
+    "ll_norm_highdm_Nb1_bin2_2024",
+    "ll_norm_highdm_Nb1_bin2_2025",
+    "ll_norm_highdm_Nb1_bin3_2024",
+    "ll_norm_highdm_Nb1_bin3_2025",
+    "ll_norm_highdm_Nb1_bin4_2024",
+    "ll_norm_highdm_Nb1_bin4_2025",
+    "ll_norm_highdm_Nb1_bin5_2024",
+    "ll_norm_highdm_Nb1_bin5_2025",
+    "ll_norm_highdm_Nb2_bin0_2024",
+    "ll_norm_highdm_Nb2_bin0_2025",
+    "ll_norm_highdm_Nb2_bin1_2024",
+    "ll_norm_highdm_Nb2_bin1_2025",
+    "ll_norm_highdm_Nb2_bin2_2024",
+    "ll_norm_highdm_Nb2_bin2_2025",
+    "ll_norm_highdm_Nb2_bin3_2024",
+    "ll_norm_highdm_Nb2_bin3_2025",
+    "ll_norm_highdm_Nb2_bin4_2024",
+    "ll_norm_highdm_Nb2_bin4_2025",
+    "ll_norm_highdm_Nb2_bin5_2024",
+    "ll_norm_highdm_Nb2_bin5_2025",
+    "ll_norm_highdm_Nb3plus_bin0_2024",
+    "ll_norm_highdm_Nb3plus_bin0_2025",
+    "ll_norm_highdm_Nb3plus_bin1_2024",
+    "ll_norm_highdm_Nb3plus_bin1_2025",
+    "ll_norm_highdm_Nb3plus_bin2_2024",
+    "ll_norm_highdm_Nb3plus_bin2_2025",
+    "ll_norm_highdm_Nb3plus_bin3_2024",
+    "ll_norm_highdm_Nb3plus_bin3_2025",
+    "ll_norm_highdm_Nb3plus_bin4_2024",
+    "ll_norm_highdm_Nb3plus_bin4_2025",
+    "ll_norm_highdm_Nb3plus_bin5_2024",
+    "ll_norm_highdm_Nb3plus_bin5_2025",
+    "ll_norm_lowdm_Nb1_bin0_2024",
+    "ll_norm_lowdm_Nb1_bin0_2025",
+    "ll_norm_lowdm_Nb1_bin10_2024",
+    "ll_norm_lowdm_Nb1_bin10_2025",
+    "ll_norm_lowdm_Nb1_bin11_2024",
+    "ll_norm_lowdm_Nb1_bin11_2025",
+    "ll_norm_lowdm_Nb1_bin12_2024",
+    "ll_norm_lowdm_Nb1_bin12_2025",
+    "ll_norm_lowdm_Nb1_bin13_2024",
+    "ll_norm_lowdm_Nb1_bin13_2025",
+    "ll_norm_lowdm_Nb1_bin14_2024",
+    "ll_norm_lowdm_Nb1_bin14_2025",
+    "ll_norm_lowdm_Nb1_bin15_2024",
+    "ll_norm_lowdm_Nb1_bin15_2025",
+    "ll_norm_lowdm_Nb1_bin1_2024",
+    "ll_norm_lowdm_Nb1_bin1_2025",
+    "ll_norm_lowdm_Nb1_bin2_2024",
+    "ll_norm_lowdm_Nb1_bin2_2025",
+    "ll_norm_lowdm_Nb1_bin3_2024",
+    "ll_norm_lowdm_Nb1_bin3_2025",
+    "ll_norm_lowdm_Nb1_bin4_2024",
+    "ll_norm_lowdm_Nb1_bin4_2025",
+    "ll_norm_lowdm_Nb1_bin5_2024",
+    "ll_norm_lowdm_Nb1_bin5_2025",
+    "ll_norm_lowdm_Nb1_bin6_2024",
+    "ll_norm_lowdm_Nb1_bin6_2025",
+    "ll_norm_lowdm_Nb1_bin7_2024",
+    "ll_norm_lowdm_Nb1_bin7_2025",
+    "ll_norm_lowdm_Nb1_bin8_2024",
+    "ll_norm_lowdm_Nb1_bin8_2025",
+    "ll_norm_lowdm_Nb1_bin9_2024",
+    "ll_norm_lowdm_Nb1_bin9_2025",
+    "ll_norm_lowdm_Nb2plus_bin16_2024",
+    "ll_norm_lowdm_Nb2plus_bin16_2025",
+    "ll_norm_lowdm_Nb2plus_bin17_2024",
+    "ll_norm_lowdm_Nb2plus_bin17_2025",
+    "ll_norm_lowdm_Nb2plus_bin18_2024",
+    "ll_norm_lowdm_Nb2plus_bin18_2025",
+    "ll_norm_lowdm_Nb2plus_bin19_2024",
+    "ll_norm_lowdm_Nb2plus_bin19_2025",
+    "ll_norm_lowdm_Nb2plus_bin20_2024",
+    "ll_norm_lowdm_Nb2plus_bin20_2025",
+    "ll_norm_lowdm_Nb2plus_bin21_2024",
+    "ll_norm_lowdm_Nb2plus_bin21_2025",
+    "ll_norm_lowdm_Nb2plus_bin22_2024",
+    "ll_norm_lowdm_Nb2plus_bin22_2025",
+    "ll_norm_lowdm_Nb2plus_bin23_2024",
+    "ll_norm_lowdm_Nb2plus_bin23_2025",
+    "ll_norm_lowdm_Nb2plus_bin24_2024",
+    "ll_norm_lowdm_Nb2plus_bin24_2025",
+    "ll_norm_lowdm_Nb2plus_bin25_2024",
+    "ll_norm_lowdm_Nb2plus_bin25_2025",
+    "ll_norm_lowdm_Nb2plus_bin26_2024",
+    "ll_norm_lowdm_Nb2plus_bin26_2025",
+    "ll_norm_lowdm_Nb2plus_bin27_2024",
+    "ll_norm_lowdm_Nb2plus_bin27_2025",
+    "ll_norm_lowdm_Nb2plus_bin28_2024",
+    "ll_norm_lowdm_Nb2plus_bin28_2025",
+    "ll_norm_lowdm_Nb2plus_bin29_2024",
+    "ll_norm_lowdm_Nb2plus_bin29_2025",
+    "ll_norm_lowdm_Nb2plus_bin30_2024",
+    "ll_norm_lowdm_Nb2plus_bin30_2025",
+    "ll_norm_lowdm_Nb2plus_bin31_2024",
+    "ll_norm_lowdm_Nb2plus_bin31_2025",
+    "ll_norm_lowdm_Nb2plus_bin32_2024",
+    "ll_norm_lowdm_Nb2plus_bin32_2025",
+    "ll_norm_lowdm_Nb2plus_bin33_2024",
+    "ll_norm_lowdm_Nb2plus_bin33_2025",
+    "qcd_norm_highdm_Nb1_bin0_2024",
+    "qcd_norm_highdm_Nb1_bin0_2025",
+    "qcd_norm_highdm_Nb1_bin1_2024",
+    "qcd_norm_highdm_Nb1_bin1_2025",
+    "qcd_norm_highdm_Nb1_bin2_2024",
+    "qcd_norm_highdm_Nb1_bin2_2025",
+    "qcd_norm_highdm_Nb1_bin3_2024",
+    "qcd_norm_highdm_Nb1_bin3_2025",
+    "qcd_norm_highdm_Nb1_bin4_2024",
+    "qcd_norm_highdm_Nb1_bin4_2025",
+    "qcd_norm_highdm_Nb1_bin5_2024",
+    "qcd_norm_highdm_Nb1_bin5_2025",
+    "qcd_norm_highdm_Nb2_bin0_2024",
+    "qcd_norm_highdm_Nb2_bin0_2025",
+    "qcd_norm_highdm_Nb2_bin1_2024",
+    "qcd_norm_highdm_Nb2_bin1_2025",
+    "qcd_norm_highdm_Nb2_bin2_2024",
+    "qcd_norm_highdm_Nb2_bin2_2025",
+    "qcd_norm_highdm_Nb2_bin3_2024",
+    "qcd_norm_highdm_Nb2_bin3_2025",
+    "qcd_norm_highdm_Nb2_bin4_2024",
+    "qcd_norm_highdm_Nb2_bin4_2025",
+    "qcd_norm_highdm_Nb2_bin5_2024",
+    "qcd_norm_highdm_Nb2_bin5_2025",
+    "qcd_norm_highdm_Nb3plus_bin0_2024",
+    "qcd_norm_highdm_Nb3plus_bin0_2025",
+    "qcd_norm_highdm_Nb3plus_bin1_2024",
+    "qcd_norm_highdm_Nb3plus_bin1_2025",
+    "qcd_norm_highdm_Nb3plus_bin2_2024",
+    "qcd_norm_highdm_Nb3plus_bin2_2025",
+    "qcd_norm_highdm_Nb3plus_bin3_2024",
+    "qcd_norm_highdm_Nb3plus_bin3_2025",
+    "qcd_norm_highdm_Nb3plus_bin4_2024",
+    "qcd_norm_highdm_Nb3plus_bin4_2025",
+    "qcd_norm_highdm_Nb3plus_bin5_2024",
+    "qcd_norm_highdm_Nb3plus_bin5_2025",
+    "qcd_norm_lowdm_Nb1_bin0_2024",
+    "qcd_norm_lowdm_Nb1_bin0_2025",
+    "qcd_norm_lowdm_Nb1_bin10_2025",
+    "qcd_norm_lowdm_Nb1_bin12_2024",
+    "qcd_norm_lowdm_Nb1_bin12_2025",
+    "qcd_norm_lowdm_Nb1_bin13_2024",
+    "qcd_norm_lowdm_Nb1_bin13_2025",
+    "qcd_norm_lowdm_Nb1_bin14_2024",
+    "qcd_norm_lowdm_Nb1_bin14_2025",
+    "qcd_norm_lowdm_Nb1_bin4_2024",
+    "qcd_norm_lowdm_Nb1_bin4_2025",
+    "qcd_norm_lowdm_Nb1_bin5_2024",
+    "qcd_norm_lowdm_Nb1_bin5_2025",
+    "qcd_norm_lowdm_Nb1_bin8_2024",
+    "qcd_norm_lowdm_Nb1_bin8_2025",
+    "qcd_norm_lowdm_Nb1_bin9_2024",
+    "qcd_norm_lowdm_Nb1_bin9_2025",
+    "qcd_norm_lowdm_Nb2plus_bin16_2024",
+    "qcd_norm_lowdm_Nb2plus_bin16_2025",
+    "qcd_norm_lowdm_Nb2plus_bin17_2024",
+    "qcd_norm_lowdm_Nb2plus_bin17_2025",
+    "qcd_norm_lowdm_Nb2plus_bin19_2024",
+    "qcd_norm_lowdm_Nb2plus_bin19_2025",
+    "qcd_norm_lowdm_Nb2plus_bin20_2024",
+    "qcd_norm_lowdm_Nb2plus_bin20_2025",
+    "qcd_norm_lowdm_Nb2plus_bin22_2024",
+    "qcd_norm_lowdm_Nb2plus_bin22_2025",
+    "qcd_norm_lowdm_Nb2plus_bin25_2024",
+    "qcd_norm_lowdm_Nb2plus_bin25_2025",
+    "qcd_norm_lowdm_Nb2plus_bin26_2024",
+    "qcd_norm_lowdm_Nb2plus_bin26_2025",
+    "qcd_norm_lowdm_Nb2plus_bin28_2024",
+    "qcd_norm_lowdm_Nb2plus_bin28_2025",
+    "qcd_norm_lowdm_Nb2plus_bin29_2024",
+    "qcd_norm_lowdm_Nb2plus_bin29_2025",
+    "sgamma_shape_highdm_Nb1_bin0_2024",
+    "sgamma_shape_highdm_Nb1_bin0_2025",
+    "sgamma_shape_highdm_Nb1_bin1_2024",
+    "sgamma_shape_highdm_Nb1_bin1_2025",
+    "sgamma_shape_highdm_Nb1_bin2_2024",
+    "sgamma_shape_highdm_Nb1_bin2_2025",
+    "sgamma_shape_highdm_Nb1_bin3_2024",
+    "sgamma_shape_highdm_Nb1_bin3_2025",
+    "sgamma_shape_highdm_Nb1_bin4_2024",
+    "sgamma_shape_highdm_Nb1_bin4_2025",
+    "sgamma_shape_highdm_Nb1_bin5_2024",
+    "sgamma_shape_highdm_Nb1_bin5_2025",
+    "sgamma_shape_highdm_Nb2_bin0_2024",
+    "sgamma_shape_highdm_Nb2_bin0_2025",
+    "sgamma_shape_highdm_Nb2_bin1_2024",
+    "sgamma_shape_highdm_Nb2_bin1_2025",
+    "sgamma_shape_highdm_Nb2_bin2_2024",
+    "sgamma_shape_highdm_Nb2_bin2_2025",
+    "sgamma_shape_highdm_Nb2_bin3_2024",
+    "sgamma_shape_highdm_Nb2_bin3_2025",
+    "sgamma_shape_highdm_Nb2_bin4_2024",
+    "sgamma_shape_highdm_Nb2_bin4_2025",
+    "sgamma_shape_highdm_Nb2_bin5_2024",
+    "sgamma_shape_highdm_Nb2_bin5_2025",
+    "sgamma_shape_highdm_Nb3plus_bin0_2024",
+    "sgamma_shape_highdm_Nb3plus_bin0_2025",
+    "sgamma_shape_highdm_Nb3plus_bin1_2024",
+    "sgamma_shape_highdm_Nb3plus_bin1_2025",
+    "sgamma_shape_highdm_Nb3plus_bin2_2024",
+    "sgamma_shape_highdm_Nb3plus_bin2_2025",
+    "sgamma_shape_highdm_Nb3plus_bin3_2024",
+    "sgamma_shape_highdm_Nb3plus_bin3_2025",
+    "sgamma_shape_highdm_Nb3plus_bin4_2024",
+    "sgamma_shape_highdm_Nb3plus_bin4_2025",
+    "sgamma_shape_highdm_Nb3plus_bin5_2024",
+    "sgamma_shape_highdm_Nb3plus_bin5_2025",
+    "sgamma_shape_lowdm_Nb1_bin0_2024",
+    "sgamma_shape_lowdm_Nb1_bin0_2025",
+    "sgamma_shape_lowdm_Nb1_bin10_2024",
+    "sgamma_shape_lowdm_Nb1_bin10_2025",
+    "sgamma_shape_lowdm_Nb1_bin11_2024",
+    "sgamma_shape_lowdm_Nb1_bin11_2025",
+    "sgamma_shape_lowdm_Nb1_bin12_2024",
+    "sgamma_shape_lowdm_Nb1_bin12_2025",
+    "sgamma_shape_lowdm_Nb1_bin13_2024",
+    "sgamma_shape_lowdm_Nb1_bin13_2025",
+    "sgamma_shape_lowdm_Nb1_bin14_2024",
+    "sgamma_shape_lowdm_Nb1_bin14_2025",
+    "sgamma_shape_lowdm_Nb1_bin15_2024",
+    "sgamma_shape_lowdm_Nb1_bin15_2025",
+    "sgamma_shape_lowdm_Nb1_bin1_2024",
+    "sgamma_shape_lowdm_Nb1_bin1_2025",
+    "sgamma_shape_lowdm_Nb1_bin2_2024",
+    "sgamma_shape_lowdm_Nb1_bin2_2025",
+    "sgamma_shape_lowdm_Nb1_bin3_2024",
+    "sgamma_shape_lowdm_Nb1_bin3_2025",
+    "sgamma_shape_lowdm_Nb1_bin4_2024",
+    "sgamma_shape_lowdm_Nb1_bin4_2025",
+    "sgamma_shape_lowdm_Nb1_bin5_2024",
+    "sgamma_shape_lowdm_Nb1_bin5_2025",
+    "sgamma_shape_lowdm_Nb1_bin6_2024",
+    "sgamma_shape_lowdm_Nb1_bin6_2025",
+    "sgamma_shape_lowdm_Nb1_bin7_2024",
+    "sgamma_shape_lowdm_Nb1_bin7_2025",
+    "sgamma_shape_lowdm_Nb1_bin8_2024",
+    "sgamma_shape_lowdm_Nb1_bin8_2025",
+    "sgamma_shape_lowdm_Nb1_bin9_2024",
+    "sgamma_shape_lowdm_Nb1_bin9_2025",
+    "sgamma_shape_lowdm_Nb2plus_bin16_2024",
+    "sgamma_shape_lowdm_Nb2plus_bin16_2025",
+    "sgamma_shape_lowdm_Nb2plus_bin17_2024",
+    "sgamma_shape_lowdm_Nb2plus_bin17_2025",
+    "sgamma_shape_lowdm_Nb2plus_bin18_2024",
+    "sgamma_shape_lowdm_Nb2plus_bin18_2025",
+    "sgamma_shape_lowdm_Nb2plus_bin19_2024",
+    "sgamma_shape_lowdm_Nb2plus_bin19_2025",
+    "sgamma_shape_lowdm_Nb2plus_bin20_2024",
+    "sgamma_shape_lowdm_Nb2plus_bin20_2025",
+    "sgamma_shape_lowdm_Nb2plus_bin21_2024",
+    "sgamma_shape_lowdm_Nb2plus_bin21_2025",
+    "sgamma_shape_lowdm_Nb2plus_bin22_2024",
+    "sgamma_shape_lowdm_Nb2plus_bin22_2025",
+    "sgamma_shape_lowdm_Nb2plus_bin23_2024",
+    "sgamma_shape_lowdm_Nb2plus_bin23_2025",
+    "sgamma_shape_lowdm_Nb2plus_bin24_2024",
+    "sgamma_shape_lowdm_Nb2plus_bin24_2025",
+    "sgamma_shape_lowdm_Nb2plus_bin25_2024",
+    "sgamma_shape_lowdm_Nb2plus_bin25_2025",
+    "sgamma_shape_lowdm_Nb2plus_bin26_2024",
+    "sgamma_shape_lowdm_Nb2plus_bin26_2025",
+    "sgamma_shape_lowdm_Nb2plus_bin27_2024",
+    "sgamma_shape_lowdm_Nb2plus_bin27_2025",
+    "sgamma_shape_lowdm_Nb2plus_bin28_2024",
+    "sgamma_shape_lowdm_Nb2plus_bin28_2025",
+    "sgamma_shape_lowdm_Nb2plus_bin29_2024",
+    "sgamma_shape_lowdm_Nb2plus_bin29_2025",
+    "sgamma_shape_lowdm_Nb2plus_bin30_2024",
+    "sgamma_shape_lowdm_Nb2plus_bin30_2025",
+    "sgamma_shape_lowdm_Nb2plus_bin31_2025",
+    "sgamma_shape_lowdm_Nb2plus_bin31to32_2024",
+    "sgamma_shape_lowdm_Nb2plus_bin32to33_2025",
+    "sgamma_shape_lowdm_Nb2plus_bin33_2024"
+  ],
+  "fit": "background-only observed CR data",
+  "fit_parameters_sha256": "4db97607fd4dc9432327739efdd49e30264eb912f78b01abc28b0fd5a688d137",
+  "fit_status": 0,
+  "likelihood_channel_count": 310,
+  "ordering": "descending absolute postfit shift, then name",
+  "pdf": "docs/highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/pulls/cronly_nuisance_pulls.pdf",
+  "png": "docs/highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/pulls/cronly_nuisance_pulls.png",
+  "points": [
+    {
+      "error": 0.9896274399527837,
+      "name": "CMS_btag_mediumWP_bc_correlated",
+      "value": -0.17712404667387582
+    },
+    {
+      "error": 0.6015577036623122,
+      "name": "CMS_pileup_2025",
+      "value": -0.1491892198573363
+    },
+    {
+      "error": 0.6728769030189796,
+      "name": "CMS_pileup_2024",
+      "value": 0.056955088154553205
+    },
+    {
+      "error": 0.8378080506898414,
+      "name": "CMS_btag_mediumWP_light_correlated",
+      "value": 0.05038487161408975
+    },
+    {
+      "error": 0.9993518492101782,
+      "name": "CMS_btag_mediumWP_bc_uncorrelated_2024",
+      "value": -0.04646967762682399
+    },
+    {
+      "error": 1.0021760040726804,
+      "name": "CMS_eff_g_id_13p6TeV_2025",
+      "value": -0.024556849196480525
+    },
+    {
+      "error": 0.9911681497899115,
+      "name": "CMS_btag_mediumWP_bc_uncorrelated_2025",
+      "value": -0.02238835879554528
+    },
+    {
+      "error": 0.9998164685578996,
+      "name": "CMS_NPS26012_eff_met_trigger_2025",
+      "value": 0.017085830689022752
+    },
+    {
+      "error": 1.0040584319592232,
+      "name": "CMS_eff_g_id_13p6TeV_2024",
+      "value": -0.01507679511483017
+    },
+    {
+      "error": 0.9998695540917985,
+      "name": "lumi_13p6TeV_2024",
+      "value": -0.0108791601009391
+    },
+    {
+      "error": 0.9999472529509899,
+      "name": "CMS_NPS26012_eff_met_trigger_2024",
+      "value": -0.010014943164411792
+    },
+    {
+      "error": 0.999914561290872,
+      "name": "lumi_13p6TeV_2025",
+      "value": 0.007988543632282966
+    },
+    {
+      "error": 0.9994345824846925,
+      "name": "CMS_eff_e_id_13p6TeV_2024",
+      "value": 0.0054252453456982725
+    },
+    {
+      "error": 1.0010564641806834,
+      "name": "CMS_btag_mediumWP_light_uncorrelated_2025",
+      "value": 0.004196878130190642
+    },
+    {
+      "error": 1.0000625608887805,
+      "name": "CMS_btag_mediumWP_light_uncorrelated_2024",
+      "value": -0.0038512373391484823
+    },
+    {
+      "error": 0.9999112327565943,
+      "name": "CMS_NPS26012_eff_e_veto_5to10_2024",
+      "value": -0.0027205366765114835
+    },
+    {
+      "error": 0.999730951494853,
+      "name": "electron_reco",
+      "value": 0.00160547453334085
+    },
+    {
+      "error": 1.0001210795086866,
+      "name": "CMS_eff_e_id_13p6TeV_2025",
+      "value": -0.0014489630888674184
+    },
+    {
+      "error": 0.9999397621359513,
+      "name": "CMS_NPS26012_eff_e_veto_5to10_2025",
+      "value": 0.0007121374687493621
+    },
+    {
+      "error": 0.9999712476570967,
+      "name": "CMS_NPS26012_eff_g_trigger_2024",
+      "value": 0.0003005897697470225
+    },
+    {
+      "error": 1.0001069751350673,
+      "name": "photon_csev",
+      "value": 0.0001304872734243616
+    },
+    {
+      "error": 1.0000090973885196,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb3plus_bin2_2024",
+      "value": 0.0001155566305137623
+    },
+    {
+      "error": 0.9999519974353633,
+      "name": "CMS_NPS26012_eff_g_trigger_2025",
+      "value": -0.00010108029275433556
+    },
+    {
+      "error": 1.0000365660347856,
+      "name": "CMS_NPS26012_eff_m_id_2025",
+      "value": 4.377780516672946e-05
+    },
+    {
+      "error": 1.0000061532460325,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb3plus_bin0_2025",
+      "value": 3.1787190270817716e-05
+    },
+    {
+      "error": 1.000007015325634,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin0_2024",
+      "value": -2.6604990685049686e-05
+    },
+    {
+      "error": 0.9999834136918131,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin4_2024",
+      "value": -2.625490031326339e-05
+    },
+    {
+      "error": 0.9999992872437456,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb3plus_bin0_2024",
+      "value": 1.8641467412831984e-05
+    },
+    {
+      "error": 1.0000027146882455,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb3plus_bin2_2025",
+      "value": -1.845779690397644e-05
+    },
+    {
+      "error": 1.0000062074832714,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin4_2025",
+      "value": -1.6319146323914113e-05
+    },
+    {
+      "error": 0.9999941762426597,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin2_2024",
+      "value": 1.626238194749431e-05
+    },
+    {
+      "error": 1.0000005065544062,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin19_2024",
+      "value": 1.5886164377547076e-05
+    },
+    {
+      "error": 1.000004064645934,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin16_2024",
+      "value": -1.5861002319515317e-05
+    },
+    {
+      "error": 0.9999986631993131,
+      "name": "CMS_NPS26012_eff_m_loose_5to10_2025",
+      "value": 1.3542089293071337e-05
+    },
+    {
+      "error": 1.000001733937317,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin5_2025",
+      "value": 1.1953917070692005e-05
+    },
+    {
+      "error": 1.000000568649616,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin13_2024",
+      "value": 1.1252607972444829e-05
+    },
+    {
+      "error": 1.0000012892511878,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin6_2025",
+      "value": 1.0469975370328542e-05
+    },
+    {
+      "error": 1.0000069373217095,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin0_2025",
+      "value": -1.0191151307034848e-05
+    },
+    {
+      "error": 0.9999979507866769,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin14_2024",
+      "value": 9.87442939852045e-06
+    },
+    {
+      "error": 0.9998794707888848,
+      "name": "muon_iso",
+      "value": 8.938687699196662e-06
+    },
+    {
+      "error": 0.999999744295032,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin8_2024",
+      "value": -8.901729487154905e-06
+    },
+    {
+      "error": 0.9999990200213034,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin10_2025",
+      "value": 8.600582236399643e-06
+    },
+    {
+      "error": 0.999997105096602,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin6_2024",
+      "value": -7.076582647560668e-06
+    },
+    {
+      "error": 1.0000000691071929,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin1_2024",
+      "value": -6.707084373994542e-06
+    },
+    {
+      "error": 1.0000021891506212,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin18_2025",
+      "value": -6.6102297458572275e-06
+    },
+    {
+      "error": 0.9999998468022098,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin5_2024",
+      "value": 6.529161777669158e-06
+    },
+    {
+      "error": 0.9999574871020241,
+      "name": "CMS_NPS26012_eff_m_id_2024",
+      "value": 6.52493921677466e-06
+    },
+    {
+      "error": 1.000004743342824,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin20_2024",
+      "value": 5.92906610760574e-06
+    },
+    {
+      "error": 1.00000069880224,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin16_2025",
+      "value": 5.194409291320889e-06
+    },
+    {
+      "error": 1.000000355205923,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin12_2025",
+      "value": 4.9292594798107965e-06
+    },
+    {
+      "error": 1.0000004913430958,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin14_2025",
+      "value": 4.671702975302196e-06
+    },
+    {
+      "error": 0.9999980545962626,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin29_2025",
+      "value": -4.367993240305653e-06
+    },
+    {
+      "error": 1.000000990466039,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb1_bin4_2024",
+      "value": -4.125565264228941e-06
+    },
+    {
+      "error": 0.9999995938693145,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin11_2024",
+      "value": -4.057876305618893e-06
+    },
+    {
+      "error": 1.0000009877079892,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin10_2024",
+      "value": -4.046814507976751e-06
+    },
+    {
+      "error": 0.9999920647630303,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin18_2024",
+      "value": -3.6890974925086037e-06
+    },
+    {
+      "error": 1.0000021615125139,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb3plus_bin1_2025",
+      "value": -3.2977552861049226e-06
+    },
+    {
+      "error": 0.999999888284936,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin8_2025",
+      "value": -3.239866330257663e-06
+    },
+    {
+      "error": 1.0000114174349064,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb3plus_bin1_2024",
+      "value": -3.1467525956200944e-06
+    },
+    {
+      "error": 1.000001674364358,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin17_2024",
+      "value": -3.115776792221961e-06
+    },
+    {
+      "error": 0.999997890896508,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb1_bin3_2024",
+      "value": -2.9633141307426957e-06
+    },
+    {
+      "error": 0.9999998863352232,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin19_2025",
+      "value": -2.7811274277181154e-06
+    },
+    {
+      "error": 1.0000089166884831,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb2_bin1_2025",
+      "value": 2.6258833192728753e-06
+    },
+    {
+      "error": 1.0000032396515852,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin9_2024",
+      "value": -2.5933922621848536e-06
+    },
+    {
+      "error": 1.0000424163930306,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb2_bin0_2025",
+      "value": 2.28627392397336e-06
+    },
+    {
+      "error": 1.0000016621781729,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb3plus_bin3_2025",
+      "value": -2.152417336623045e-06
+    },
+    {
+      "error": 1.000009124178204,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb2_bin1_2024",
+      "value": 2.0613569768385568e-06
+    },
+    {
+      "error": 1.0000014762420764,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin12_2024",
+      "value": -1.9706229058924837e-06
+    },
+    {
+      "error": 0.9999974970058831,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin23_2024",
+      "value": 1.965340098034509e-06
+    },
+    {
+      "error": 1.00000012009497,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin13_2025",
+      "value": 1.8715523302439392e-06
+    },
+    {
+      "error": 0.9999992502657635,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin9_2025",
+      "value": -1.8206826661371145e-06
+    },
+    {
+      "error": 1.0000006748846642,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb1_bin3_2025",
+      "value": 1.773830451523663e-06
+    },
+    {
+      "error": 0.9999805086733555,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb1_bin0_2025",
+      "value": 1.7511740040175365e-06
+    },
+    {
+      "error": 1.0000056007083273,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb3plus_bin3_2024",
+      "value": -1.6041920567171928e-06
+    },
+    {
+      "error": 1.0000006519133948,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin11_2025",
+      "value": -1.546312958073739e-06
+    },
+    {
+      "error": 1.0000039553850855,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb2_bin2_2025",
+      "value": 1.3825135604841384e-06
+    },
+    {
+      "error": 1.000000503438623,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb3plus_bin4_2025",
+      "value": 1.364134773713599e-06
+    },
+    {
+      "error": 1.0000001806470056,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin25_2024",
+      "value": -1.3252080787337843e-06
+    },
+    {
+      "error": 1.0000001393202866,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb1_bin4_2025",
+      "value": -1.2815127893236967e-06
+    },
+    {
+      "error": 1.0000005775558052,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin20_2025",
+      "value": -1.2701538059616439e-06
+    },
+    {
+      "error": 1.0000018530835868,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin15_2024",
+      "value": -1.2397589972702554e-06
+    },
+    {
+      "error": 1.000016053211188,
+      "name": "CMS_NPS26012_eff_m_loose_5to10_2024",
+      "value": -1.213901580165183e-06
+    },
+    {
+      "error": 1.0000004556439495,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin30_2024",
+      "value": -1.1848057527114458e-06
+    },
+    {
+      "error": 0.9999923394198982,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb1_bin1_2025",
+      "value": 1.1772157393383227e-06
+    },
+    {
+      "error": 1.0000030250781968,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb2_bin3_2024",
+      "value": -1.091855312778124e-06
+    },
+    {
+      "error": 1.000000250156893,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin27_2024",
+      "value": -1.0706490739031093e-06
+    },
+    {
+      "error": 1.0000026908924893,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin3_2025",
+      "value": 1.0577025562997798e-06
+    },
+    {
+      "error": 1.0000006494147873,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin2_2025",
+      "value": -9.311153057006669e-07
+    },
+    {
+      "error": 1.0000007789742564,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin28_2025",
+      "value": -8.76016313736252e-07
+    },
+    {
+      "error": 1.0000015299458713,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb1_bin2_2025",
+      "value": -8.382544222113222e-07
+    },
+    {
+      "error": 1.0000001743554388,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin31_2025",
+      "value": -7.796321999800268e-07
+    },
+    {
+      "error": 1.000001971540635,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb2_bin4_2024",
+      "value": -7.602678647656799e-07
+    },
+    {
+      "error": 1.000000385587006,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin15_2025",
+      "value": -6.661732622240521e-07
+    },
+    {
+      "error": 1.0000012262446705,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin25_2025",
+      "value": -6.42484710754585e-07
+    },
+    {
+      "error": 1.0000006963528023,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb3plus_bin4_2024",
+      "value": 5.874313107236702e-07
+    },
+    {
+      "error": 1.0000023301437586,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb2_bin3_2025",
+      "value": -5.704550245512687e-07
+    },
+    {
+      "error": 1.0000017480114456,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin21_2025",
+      "value": 5.703118565328603e-07
+    },
+    {
+      "error": 1.0000010636843868,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin17_2025",
+      "value": 5.602143192508411e-07
+    },
+    {
+      "error": 1.0000003249089338,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin1_2025",
+      "value": 5.228779465882554e-07
+    },
+    {
+      "error": 1.0000004727119653,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb2_bin4_2025",
+      "value": 4.808077173469206e-07
+    },
+    {
+      "error": 1.000000289816505,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin28_2024",
+      "value": -4.440190538635436e-07
+    },
+    {
+      "error": 1.0000035212028997,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb1_bin2_2024",
+      "value": 4.2862247429886494e-07
+    },
+    {
+      "error": 0.9999995684845885,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin31_2024",
+      "value": -4.1931883778168847e-07
+    },
+    {
+      "error": 1.000000207950606,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb3plus_bin5_2025",
+      "value": 3.4763534175574317e-07
+    },
+    {
+      "error": 0.9999999998846307,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin33_2024",
+      "value": 2.8659313643902556e-07
+    },
+    {
+      "error": 1.0000018833616684,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin26_2024",
+      "value": -2.568049712042844e-07
+    },
+    {
+      "error": 0.9999985579786653,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb2_bin2_2024",
+      "value": 2.0813441522153975e-07
+    },
+    {
+      "error": 0.9999998046270865,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb1_bin5_2024",
+      "value": -1.928361979266049e-07
+    },
+    {
+      "error": 0.9999599317892308,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb1_bin0_2024",
+      "value": -1.856159674730487e-07
+    },
+    {
+      "error": 1.0000084707362387,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb1_bin1_2024",
+      "value": -1.597557297799582e-07
+    },
+    {
+      "error": 0.9999988577710338,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin21_2024",
+      "value": -1.2775564368443036e-07
+    },
+    {
+      "error": 1.000001689900759,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin29_2024",
+      "value": -1.175965238570817e-07
+    },
+    {
+      "error": 1.0000003157251591,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb2_bin5_2025",
+      "value": 1.0190557491665893e-07
+    },
+    {
+      "error": 1.0000003329260834,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin27_2025",
+      "value": -8.961737346014863e-08
+    },
+    {
+      "error": 1.0000002516134538,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin30_2025",
+      "value": 7.743233490257776e-08
+    },
+    {
+      "error": 1.0000000327519551,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin26_2025",
+      "value": -6.97883857472592e-08
+    },
+    {
+      "error": 1.0000006198062574,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb3plus_bin5_2024",
+      "value": -6.828101638417451e-08
+    },
+    {
+      "error": 0.9999999990768409,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin24_2025",
+      "value": 5.885506029995129e-08
+    },
+    {
+      "error": 1.000000134820332,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb2plus_bin23_2025",
+      "value": 5.647309753699198e-08
+    },
+    {
+      "error": 0.9999846819668856,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb2_bin0_2024",
+      "value": 5.34140672558173e-08
+    },
+    {
+      "error": 1.0000002497865572,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb1_bin5_2025",
+      "value": 4.599133008034548e-08
+    },
+    {
+      "error": 1.0000002333126463,
+      "name": "CMS_NPS26012_topWComposition_highdm_Nb2_bin5_2024",
+      "value": -2.5777834311542775e-08
+    },
+    {
+      "error": 1.000001089027719,
+      "name": "CMS_NPS26012_topWComposition_lowdm_Nb1_bin3_2024",
+      "value": 3.4627060278676767e-09
+    },
+    {
+      "error": 1.0,
+      "name": "CMS_NPS26012_RZstat_highdm_Nb1_2024",
+      "value": 0.0
+    },
+    {
+      "error": 1.0,
+      "name": "CMS_NPS26012_RZstat_highdm_Nb1_2025",
+      "value": 0.0
+    },
+    {
+      "error": 1.0,
+      "name": "CMS_NPS26012_RZstat_highdm_Nb2plus_2024",
+      "value": 0.0
+    },
+    {
+      "error": 1.0,
+      "name": "CMS_NPS26012_RZstat_highdm_Nb2plus_2025",
+      "value": 0.0
+    },
+    {
+      "error": 1.0,
+      "name": "CMS_NPS26012_zgammaNonclosure_highdm_u250to300_2024",
+      "value": 0.0
+    },
+    {
+      "error": 1.0,
+      "name": "CMS_NPS26012_zgammaNonclosure_highdm_u250to300_2025",
+      "value": 0.0
+    }
+  ],
+  "pull_definition": "Gaussian nuisance postfit value in nominal prefit-sigma units",
+  "sr_observation_in_likelihood": false,
+  "status": "complete",
+  "vr_observation_in_likelihood": false
+}
