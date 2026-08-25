@@ -9,6 +9,16 @@ from .highdm_resolved_categories import COARSE_NRES_TOPOLOGIES
 
 HIGH_MERGE_PAIRS = ((22, 23), (34, 35), (40, 41), (52, 53), (58, 59))
 RECOIL_LABELS = ("250to300", "300to350", "350to400", "400to500", "500to800", "800plus")
+ADDITIONAL_HIGHDM_CATEGORIES = ("nb2_nt0_nw2_nres0",)
+BASELINE_SOURCE_BIN_COUNT = 55
+NRES_SOURCE_OFFSET = BASELINE_SOURCE_BIN_COUNT
+ADDITIONAL_CATEGORY_SOURCE_OFFSET = (
+    NRES_SOURCE_OFFSET + len(COARSE_NRES_TOPOLOGIES) * len(RECOIL_LABELS)
+)
+EXCLUSIVE_SOURCE_BIN_COUNT = (
+    ADDITIONAL_CATEGORY_SOURCE_OFFSET
+    + len(ADDITIONAL_HIGHDM_CATEGORIES) * len(RECOIL_LABELS)
+)
 
 
 def adopted55_mapping() -> tuple[tuple[int, ...], ...]:
@@ -80,33 +90,70 @@ def topology_positions(nt: np.ndarray, nw: np.ndarray, nres: np.ndarray) -> np.n
 def exclusive_category_source_indices(
     baseline55: np.ndarray,
     recoil_index: np.ndarray,
+    nb: np.ndarray,
     nt: np.ndarray,
     nw: np.ndarray,
     nres: np.ndarray,
+    population_mask: np.ndarray | None = None,
 ) -> np.ndarray:
-    """Split the adopted 55 bins into Nres=0 plus five 6-bin blocks.
+    """Assign the exclusive High-dM category-source bins.
 
     The input population is defined by ``baseline55 >= 0``.  Every such event
     maps to exactly one output bin: Nres=0 stays in its original 55-bin slot,
-    while Nres>0 moves to a coarse Run-2-inspired topology crossed with the
-    six recoil bins.
+    except for the explicit Nb=2, Nt=0, NW=2 category, while Nres>0 moves to a
+    coarse Run-2-inspired topology.  Every added category is crossed with the
+    same six open-ended recoil bins.
     """
     baseline = np.asarray(baseline55, dtype=int)
     recoil = np.asarray(recoil_index, dtype=int)
+    bottom = np.asarray(nb, dtype=int)
+    top = np.asarray(nt, dtype=int)
+    w = np.asarray(nw, dtype=int)
     resolved = np.asarray(nres, dtype=int)
-    if not (baseline.shape == recoil.shape == np.asarray(nt).shape == np.asarray(nw).shape == resolved.shape):
+    if not (
+        baseline.shape
+        == recoil.shape
+        == bottom.shape
+        == top.shape
+        == w.shape
+        == resolved.shape
+    ):
         raise ValueError("exclusive binning arrays have different shapes")
     output = np.full(baseline.shape, -1, dtype=np.int16)
-    population = baseline >= 0
+    population = (
+        baseline >= 0
+        if population_mask is None
+        else np.asarray(population_mask, dtype=bool)
+    )
+    if population.shape != baseline.shape:
+        raise ValueError("High-dM population mask has a different shape")
+    if np.any(population & (resolved == 0) & (baseline < 0)):
+        raise ValueError("Nres=0 High-dM event has no baseline source bin")
     invalid_recoil = population & ((recoil < 0) | (recoil >= len(RECOIL_LABELS)))
     if np.any(invalid_recoil):
         raise ValueError("baseline event has an invalid recoil index")
     output[population & (resolved == 0)] = baseline[population & (resolved == 0)]
-    positions = topology_positions(np.asarray(nt), np.asarray(nw), resolved)
+    positions = topology_positions(top, w, resolved)
     moved = population & (resolved > 0)
-    output[moved] = 55 + positions[moved] * len(RECOIL_LABELS) + recoil[moved]
-    if np.any(population & ((output < 0) | (output >= 85))):
-        raise AssertionError("baseline event was not assigned to exactly one 85-bin slot")
+    output[moved] = (
+        NRES_SOURCE_OFFSET
+        + positions[moved] * len(RECOIL_LABELS)
+        + recoil[moved]
+    )
+    nb2_w2 = (
+        population
+        & (bottom == 2)
+        & (top == 0)
+        & (w == 2)
+        & (resolved == 0)
+    )
+    output[nb2_w2] = ADDITIONAL_CATEGORY_SOURCE_OFFSET + recoil[nb2_w2]
+    if np.any(
+        population & ((output < 0) | (output >= EXCLUSIVE_SOURCE_BIN_COUNT))
+    ):
+        raise AssertionError(
+            "High-dM event was not assigned to exactly one category-source bin"
+        )
     return output
 
 
@@ -117,8 +164,13 @@ def exclusive_category_source_labels(source60_labels: Sequence[str]) -> list[str
         for topology in COARSE_NRES_TOPOLOGIES
         for recoil in RECOIL_LABELS
     )
-    if len(labels) != 85:
-        raise AssertionError("wrong exclusive 85-bin label count")
+    labels.extend(
+        f"{category}__recoil_{recoil}"
+        for category in ADDITIONAL_HIGHDM_CATEGORIES
+        for recoil in RECOIL_LABELS
+    )
+    if len(labels) != EXCLUSIVE_SOURCE_BIN_COUNT:
+        raise AssertionError("wrong exclusive High-dM source-label count")
     return labels
 
 
@@ -129,7 +181,7 @@ def configured_exclusive_mapping(
 
     The configuration controls the visible block order and which Nres>0
     topology blocks are retained.  The resulting bin count is derived from
-    that layout; callers must not assume a fixed 79-bin result.
+    that layout; callers must not assume a fixed bin count.
     """
     category_sizes = tuple(
         int(value) for value in configuration.get("baseline_category_sizes", ())
@@ -149,16 +201,28 @@ def configured_exclusive_mapping(
     topology_blocks = {
         topology: tuple(
             range(
-                55 + position * len(RECOIL_LABELS),
-                55 + (position + 1) * len(RECOIL_LABELS),
+                NRES_SOURCE_OFFSET + position * len(RECOIL_LABELS),
+                NRES_SOURCE_OFFSET + (position + 1) * len(RECOIL_LABELS),
             )
         )
         for position, topology in enumerate(COARSE_NRES_TOPOLOGIES)
+    }
+    category_blocks = {
+        category: tuple(
+            range(
+                ADDITIONAL_CATEGORY_SOURCE_OFFSET
+                + position * len(RECOIL_LABELS),
+                ADDITIONAL_CATEGORY_SOURCE_OFFSET
+                + (position + 1) * len(RECOIL_LABELS),
+            )
+        )
+        for position, category in enumerate(ADDITIONAL_HIGHDM_CATEGORIES)
     }
 
     mapping: list[int] = []
     seen_baseline: set[int] = set()
     seen_topologies: set[str] = set()
+    seen_categories: set[str] = set()
     for block in configuration.get("layout", ()):
         if not isinstance(block, dict):
             raise ValueError("every configured layout block must be an object")
@@ -179,6 +243,14 @@ def configured_exclusive_mapping(
                 raise ValueError(f"duplicate Nres topology {topology!r}")
             seen_topologies.add(topology)
             mapping.extend(topology_blocks[topology])
+        elif kind == "category":
+            category = str(block.get("name") or "")
+            if category not in category_blocks:
+                raise ValueError(f"unknown High-dM category {category!r}")
+            if category in seen_categories:
+                raise ValueError(f"duplicate High-dM category {category!r}")
+            seen_categories.add(category)
+            mapping.extend(category_blocks[category])
         else:
             raise ValueError(f"unknown configured layout block kind {kind!r}")
 
@@ -194,6 +266,21 @@ def configured_exclusive_mapping(
         raise ValueError(
             "every Nres topology must be retained or explicitly omitted; "
             f"unaccounted={missing}"
+        )
+    omitted_categories = set(
+        str(value) for value in configuration.get("omitted_categories", ())
+    )
+    if seen_categories & omitted_categories:
+        raise ValueError("a category cannot be both retained and omitted")
+    if seen_categories | omitted_categories != set(ADDITIONAL_HIGHDM_CATEGORIES):
+        missing = sorted(
+            set(ADDITIONAL_HIGHDM_CATEGORIES)
+            - seen_categories
+            - omitted_categories
+        )
+        raise ValueError(
+            "every additional High-dM category must be retained or explicitly "
+            f"omitted; unaccounted={missing}"
         )
     if len(mapping) != len(set(mapping)):
         raise AssertionError("configured exclusive layout reuses a source bin")
@@ -267,11 +354,11 @@ def map_category_sources_to_configured(
 ) -> np.ndarray:
     """Map exclusive category sources into the configured retained-bin ordering."""
     source = np.asarray(indices, dtype=int)
-    lookup = np.full(85, -1, dtype=np.int16)
+    lookup = np.full(EXCLUSIVE_SOURCE_BIN_COUNT, -1, dtype=np.int16)
     for target, sources in enumerate(configured_exclusive_groups(configuration)):
         lookup[list(sources)] = target
     output = np.full(source.shape, -1, dtype=np.int16)
-    valid = (source >= 0) & (source < 85)
+    valid = (source >= 0) & (source < EXCLUSIVE_SOURCE_BIN_COUNT)
     output[valid] = lookup[source[valid]]
     return output
 

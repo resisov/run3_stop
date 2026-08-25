@@ -400,6 +400,7 @@ def load_search_bin_configuration(
         "bin_count": bin_count,
         "bin_merges_1based": list(configuration.get("bin_merges_1based") or []),
         "omitted_topologies": list(configuration.get("omitted_topologies") or []),
+        "omitted_categories": list(configuration.get("omitted_categories") or []),
         "sha256": file_sha256(path),
     }
     return configuration, contract
@@ -1527,24 +1528,39 @@ def configured_highdm_search_indices(
     source60 = selected_an17_recoil60_indices(chunk, n, sr)
     baseline55 = map60_indices_to_adopted55(source60)
     mtb = float_field(chunk, "lowdm_mtb", n, float("nan"))
-    population = (
+    nb = int_field(chunk, "nb_medium", n, -1)
+    nt = int_field(chunk, "nboosted_top", n, 0)
+    nw = int_field(chunk, "nboosted_w", n, 0)
+    nres = int_field(chunk, DERIVED_NRES_BRANCH, n, -1)
+    high_mtb = np.isfinite(mtb) & (mtb >= float(configuration["mtb_min"]))
+    baseline_population = (
         selected_an17_recoil60_category_mask(chunk, n, sr)
-        & np.isfinite(mtb)
-        & (mtb >= float(configuration["mtb_min"]))
+        & high_mtb
     )
-    if np.any(population & (baseline55 < 0)):
+    top_w_resolved_population = (
+        sr
+        & high_mtb
+        & (nb >= 1)
+        & (nt >= 1)
+        & (nw >= 1)
+        & (nres >= 1)
+    )
+    population = baseline_population | top_w_resolved_population
+    if np.any(baseline_population & (baseline55 < 0)):
         raise RuntimeError(
             "eligible High-dM source events were lost before configured binning"
         )
-    baseline_for_scheme = np.where(population, baseline55, -1)
+    baseline_for_scheme = np.where(baseline_population, baseline55, -1)
     recoil = finite_array(chunk["met"], n, 0.0)
     recoil_index = open_ended_bin_indices(recoil, RECOIL_PT_BINS)
     exclusive = exclusive_category_source_indices(
         baseline_for_scheme,
         recoil_index,
-        int_field(chunk, "nboosted_top", n, 0),
-        int_field(chunk, "nboosted_w", n, 0),
-        int_field(chunk, DERIVED_NRES_BRANCH, n, -1),
+        nb,
+        nt,
+        nw,
+        nres,
+        population_mask=population,
     )
     configured = map_category_sources_to_configured(exclusive, configuration)
     omitted = population & (exclusive >= 0) & (configured < 0)
@@ -2765,6 +2781,9 @@ def main() -> int:
                     "omitted_topologies": search_bin_configuration[
                         "omitted_topologies"
                     ],
+                    "omitted_categories": search_bin_configuration.get(
+                        "omitted_categories", []
+                    ),
                     "configuration": search_bin_contract,
                     "card_component_axes": {
                         "nb": {

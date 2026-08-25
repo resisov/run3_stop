@@ -11,8 +11,10 @@
     {"kind": "baseline", "index": 1},
     {"kind": "topology", "name": "w_resolved"},
     {"kind": "topology", "name": "top_resolved"},
+    {"kind": "topology", "name": "top_w_resolved"},
     {"kind": "baseline", "index": 2},
     {"kind": "baseline", "index": 3},
+    {"kind": "category", "name": "nb2_nt0_nw2_nres0"},
     {"kind": "baseline", "index": 4},
     {"kind": "baseline", "index": 5},
     {"kind": "baseline", "index": 6},
@@ -20,13 +22,14 @@
     {"kind": "baseline", "index": 8},
     {"kind": "baseline", "index": 9}
   ],
-  "omitted_topologies": ["top_w_resolved"],
+  "omitted_topologies": [],
+  "omitted_categories": [],
   "bin_merges_1based": [
     [17, 18],
-    [70, 75],
-    [71, 76],
-    [72, 77],
-    [73, 78],
-    [74, 79]
+    [82, 87],
+    [83, 88],
+    [84, 89],
+    [85, 90],
+    [86, 91]
   ]
 }

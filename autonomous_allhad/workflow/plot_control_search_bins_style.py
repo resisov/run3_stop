@@ -145,6 +145,8 @@ RESOLVED_CATEGORY_LABELS = {
     "resolved2plus_only": "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}=0$\n$N_{res}\\geq2$",
     "w_resolved": "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}\\geq1$\n$N_{res}\\geq1$",
     "top_resolved": "$N_{b}\\geq1$\n$N_{t}\\geq1$, $N_{W}=0$\n$N_{res}\\geq1$",
+    "top_w_resolved": "$N_{b}\\geq1$\n$N_{t}\\geq1$, $N_{W}\\geq1$\n$N_{res}\\geq1$",
+    "nb2_nt0_nw2_nres0": "$N_{b}=2$\n$N_{t}=0$, $N_{W}=2$\n$N_{res}=0$",
 }
 SELECTED_AN17_CATEGORY_ORDER = [
     "Nb1plus_T0_W0",
@@ -1473,17 +1475,32 @@ def apply_configured_search_bin_merges(
     scheme = (payload.get("search_bin_schemes") or {}).get(scheme_name) or {}
     raw_labels = [str(value) for value in (scheme.get("bin_labels") or [])]
     source_count = len(configured_exclusive_mapping(configuration))
-    if len(raw_labels) != source_count:
+    position_groups = configured_bin_position_groups(configuration)
+    final_count = len(position_groups)
+    if len(raw_labels) not in {source_count, final_count}:
         raise RuntimeError(
             f"{scheme_name} configuration/source mismatch: "
-            f"{source_count} configured source bins but {len(raw_labels)} labels"
+            f"expected {source_count} source bins or {final_count} final bins, "
+            f"but found {len(raw_labels)} labels"
         )
-    position_groups = configured_bin_position_groups(configuration)
+    if len(raw_labels) == final_count:
+        summary = {
+            "source_bin_count": source_count,
+            "final_bin_count": final_count,
+            "bin_merges_1based": list(
+                configuration.get("bin_merges_1based") or []
+            ),
+            "already_projected": True,
+        }
+        scheme["plot_bin_merges"] = summary
+        payload.setdefault("search_bin_schemes", {})[scheme_name] = scheme
+        return summary
     if len(position_groups) == source_count:
         return {
             "source_bin_count": source_count,
             "final_bin_count": source_count,
             "bin_merges_1based": [],
+            "already_projected": True,
         }
 
     def rebin_leaf(leaf: dict) -> dict:
@@ -1526,6 +1543,7 @@ def apply_configured_search_bin_merges(
         "source_bin_count": source_count,
         "final_bin_count": len(position_groups),
         "bin_merges_1based": list(configuration.get("bin_merges_1based") or []),
+        "already_projected": False,
     }
     payload.setdefault("search_bin_schemes", {})[scheme_name] = rebinned_scheme
     return rebinned_scheme["plot_bin_merges"]
