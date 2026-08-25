@@ -49,6 +49,12 @@ def main() -> int:
         raise SystemExit("PNG/PDF plot pairs do not match")
 
     cr_count = int(cr["plot_count"])
+    if int(cr.get("highdm_cr_channel_count", -1)) != 108:
+        raise SystemExit("unexpected High-dM CR channel count")
+    if int(cr.get("lowdm_cr_channel_count", -1)) != 202:
+        raise SystemExit("unexpected Low-dM CR channel count")
+    if int(cr.get("lowdm_bin_count", -1)) != 34:
+        raise SystemExit("unexpected Low-dM bin count")
     vr_count = int(vr["plot_count"])
     pull_count = 1
     expected_pairs = cr_count + vr_count + pull_count
@@ -69,7 +75,10 @@ def main() -> int:
             pulls["excluded_bounded_rate_parameter_count"]
         ),
         "highdm_cr_channel_count": int(cr["highdm_cr_channel_count"]),
+        "lowdm_cr_channel_count": int(cr["lowdm_cr_channel_count"]),
         "cr_met_postfit_plot_count": cr_count,
+        "highdm_cr_postfit_plot_count": 27,
+        "lowdm_cr_postfit_plot_count": 9,
         "vr_met_postfit_plot_count": vr_count,
         "nuisance_pull_plot_count": pull_count,
         "total_png_pdf_plot_pairs": len(png_stems),

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render High-dM CR MET/recoil postfit distributions from FitDiagnostics."""
+"""Render High- and Low-dM CR postfit distributions from FitDiagnostics."""
 
 from __future__ import annotations
 
@@ -14,12 +14,21 @@ import numpy as np
 import uproot
 
 from background_process_groups import BACKGROUND_DISPLAY_LABELS, BACKGROUND_PROCESS_ORDER
-from plot_control_search_bins_style import GROUP_ORDER, draw_flat_blocks
+from plot_control_search_bins_style import (
+    GROUP_ORDER,
+    LOWDM_NSV_INCLUSIVE_CATEGORY_LABELS,
+    LOWDM_NSV_INCLUSIVE_CATEGORY_SIZES,
+    draw_flat_blocks,
+)
 
 
-CHANNEL = re.compile(
+HIGHDM_CHANNEL = re.compile(
     r"^y(?P<year>2024|2025)_(?P<region>LLCR|QCDCR|GCR)_highdm_"
     r"(?P<nb>Nb1|Nb2|Nb3plus)_bin(?P<bin>[0-5])$"
+)
+LOWDM_CHANNEL = re.compile(
+    r"^y(?P<year>2024|2025)_(?P<region>LLCR|QCDCR|GCR)_lowdm_"
+    r"bin(?P<bin>[0-9]|[12][0-9]|3[0-3])$"
 )
 REGIONS = ("LLCR", "QCDCR", "GCR")
 NB_CATEGORIES = ("Nb1", "Nb2", "Nb3plus")
@@ -33,6 +42,12 @@ REGION_LABELS = {
     "GCR": "Photon control region",
 }
 NB_LABELS = {"Nb1": "$N_b=1$", "Nb2": "$N_b=2$", "Nb3plus": "$N_b\\geq3$"}
+LOWDM_CATEGORY_SIZES = tuple(LOWDM_NSV_INCLUSIVE_CATEGORY_SIZES[2:])
+LOWDM_BIN_COUNT = sum(size for _category, size in LOWDM_CATEGORY_SIZES)
+EXPECTED_OMITTED_LOWDM_CHANNELS = {
+    ("2024", "QCDCR", 24),
+    ("2025", "QCDCR", 24),
+}
 
 
 def graph_record(graph: object) -> tuple[float, float]:
@@ -66,6 +81,18 @@ def extract_channel(directory: object) -> dict:
         "uncertainty": math.sqrt(max(variance, 0.0)),
         "data": data,
         "data_uncertainty": data_unc,
+    }
+
+
+def empty_channel() -> dict:
+    """Represent a CR bin that is absent from the likelihood, without inventing a fit."""
+    return {
+        "groups": {group: 0.0 for group in GROUP_ORDER},
+        "processes": {process: 0.0 for process in BACKGROUND_PROCESS_ORDER},
+        "total": 0.0,
+        "uncertainty": 0.0,
+        "data": 0.0,
+        "data_uncertainty": 0.0,
     }
 
 
@@ -121,6 +148,39 @@ def sum_year_records(left: dict, right: dict) -> dict:
             math.hypot(left["data_uncertainty"], right["data_uncertainty"])
         ),
     }
+
+
+def make_lowdm_blocks(records: list[dict], annotation: str) -> list[dict]:
+    if len(records) != LOWDM_BIN_COUNT:
+        raise RuntimeError(f"expected {LOWDM_BIN_COUNT} Low-dM bins, got {len(records)}")
+    blocks = []
+    offset = 0
+    for category_index, (category, size) in enumerate(LOWDM_CATEGORY_SIZES):
+        selected = records[offset : offset + size]
+        block = make_block(selected, "", [])
+        block.update(
+            {
+                "label": LOWDM_NSV_INCLUSIVE_CATEGORY_LABELS[category],
+                "annotation": annotation if category_index == 0 else "",
+                "edges": [],
+                "label_box": True,
+                "show_annotation": category_index == 0,
+                "annotation_x": 0.78,
+                "annotation_y": 0.84,
+                "annotation_fontsize": 16.0,
+                "category_labels_on_main": True,
+                "category_label_y": 0.61,
+                "label_fontsize": 9.0,
+                "label_box_pad": 0.16,
+                "main_panel_ymax_factor": 600.0,
+                "figure_width": 22.0,
+            }
+        )
+        blocks.append(block)
+        offset += size
+    return blocks
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--fit-diagnostics", required=True, type=Path)
@@ -142,23 +202,42 @@ def main() -> int:
     source = uproot.open(args.fit_diagnostics)
     shapes = source["shapes_fit_b"]
     extracted: dict[tuple[str, str, str, int], dict] = {}
+    lowdm_extracted: dict[tuple[str, str, int], dict] = {}
     ignored = []
     for channel_name in shapes.keys(recursive=False, cycle=False):
-        match = CHANNEL.fullmatch(channel_name)
-        if not match:
-            ignored.append(channel_name)
+        high_match = HIGHDM_CHANNEL.fullmatch(channel_name)
+        if high_match:
+            key = (
+                high_match.group("year"),
+                high_match.group("region"),
+                high_match.group("nb"),
+                int(high_match.group("bin")),
+            )
+            extracted[key] = extract_channel(shapes[channel_name])
             continue
-        key = (
-            match.group("year"),
-            match.group("region"),
-            match.group("nb"),
-            int(match.group("bin")),
-        )
-        extracted[key] = extract_channel(shapes[channel_name])
+        low_match = LOWDM_CHANNEL.fullmatch(channel_name)
+        if low_match:
+            key = (
+                low_match.group("year"),
+                low_match.group("region"),
+                int(low_match.group("bin")),
+            )
+            lowdm_extracted[key] = extract_channel(shapes[channel_name])
+            continue
+        ignored.append(channel_name)
 
     expected = len(YEARS) * len(REGIONS) * len(NB_CATEGORIES) * len(RECOIL_LABELS)
     if len(extracted) != expected:
         raise SystemExit(f"expected {expected} High-dM CR channels, found {len(extracted)}")
+    expected_lowdm_keys = {
+        (year, region, index)
+        for year in YEARS
+        for region in REGIONS
+        for index in range(LOWDM_BIN_COUNT)
+    }
+    missing_lowdm = expected_lowdm_keys - set(lowdm_extracted)
+    if missing_lowdm != EXPECTED_OMITTED_LOWDM_CHANNELS:
+        raise SystemExit(f"unexpected missing Low-dM CR channels: {sorted(missing_lowdm)}")
 
     plots = []
     channel_summary = {}
@@ -214,8 +293,62 @@ def main() -> int:
             )
             plots.append(record)
 
-    if len(plots) != 27:
-        raise SystemExit(f"expected 27 plots, produced {len(plots)}")
+    lowdm_channel_summary = {}
+    for region in REGIONS:
+        annotation = f"Low-$\\Delta m$ {REGION_LABELS[region]}\nCR-only postfit"
+        for year in YEARS:
+            records = [
+                lowdm_extracted.get((year, region, index), empty_channel())
+                for index in range(LOWDM_BIN_COUNT)
+            ]
+            blocks = make_lowdm_blocks(records, annotation)
+            outbase = args.output_dir / "lowdm" / year / f"{region}_lowdm_postfit"
+            record = draw_flat_blocks(
+                blocks,
+                outbase,
+                xlabel=r"Low-$\Delta m$ control bin",
+                reference_style=True,
+                show_yields=True,
+                ratio_ylabel="Data/Pred.",
+                uncertainty_label_override="Total postfit unc.",
+                luminosity_fb=LUMINOSITY[year],
+            )
+            record.update({"scope": year, "region": region, "phase_space": "lowdm"})
+            plots.append(record)
+            lowdm_channel_summary[f"{year}/{region}"] = records
+
+        combined_records = [
+            sum_year_records(
+                lowdm_extracted.get(("2024", region, index), empty_channel()),
+                lowdm_extracted.get(("2025", region, index), empty_channel()),
+            )
+            for index in range(LOWDM_BIN_COUNT)
+        ]
+        combined_blocks = make_lowdm_blocks(combined_records, annotation)
+        outbase = args.output_dir / "lowdm" / "combined" / f"{region}_lowdm_postfit"
+        record = draw_flat_blocks(
+            combined_blocks,
+            outbase,
+            xlabel=r"Low-$\Delta m$ control bin",
+            reference_style=True,
+            show_yields=True,
+            ratio_ylabel="Data/Pred.",
+            uncertainty_label_override="Total postfit unc.",
+            luminosity_fb=LUMINOSITY["combined"],
+        )
+        record.update(
+            {
+                "scope": "combined",
+                "region": region,
+                "phase_space": "lowdm",
+                "combination": "2024 and 2025 yields summed bin-by-bin in the canonical 34-bin Low-dM CR ordering",
+                "combined_uncertainty": "quadrature sum of the two per-year postfit uncertainty bands",
+            }
+        )
+        plots.append(record)
+
+    if len(plots) != 36:
+        raise SystemExit(f"expected 36 plots, produced {len(plots)}")
 
     digest = hashlib.sha256()
     with args.fit_diagnostics.open("rb") as fit_source:
@@ -230,18 +363,36 @@ def main() -> int:
         "vr_observation_in_likelihood": False,
         "sr_observation_in_likelihood": False,
         "highdm_cr_channel_count": len(extracted),
+        "lowdm_cr_channel_count": len(lowdm_extracted),
         "fit_diagnostics_sha256": digest.hexdigest(),
         "plot_count": len(plots),
         "plots": plots,
         "recoil_bin_labels_gev": list(RECOIL_LABELS),
         "recoil_display_edges_gev": list(RECOIL_DISPLAY_EDGES),
         "overflow_policy": "last bin includes all pTmiss/recoil >= 800 GeV",
+        "lowdm_bin_count": LOWDM_BIN_COUNT,
+        "lowdm_category_sizes": list(LOWDM_CATEGORY_SIZES),
+        "lowdm_omitted_likelihood_channels": [
+            f"y{year}_{region}_lowdm_bin{index}"
+            for year, region, index in sorted(EXPECTED_OMITTED_LOWDM_CHANNELS)
+        ],
         "ignored_non_highdm_cr_shape_directories": sorted(ignored),
         "channels": channel_summary,
+        "lowdm_channels": lowdm_channel_summary,
     }
     args.summary.parent.mkdir(parents=True, exist_ok=True)
     args.summary.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
-    print(json.dumps({"status": "complete", "channels": len(extracted), "plots": len(plots)}, sort_keys=True))
+    print(
+        json.dumps(
+            {
+                "status": "complete",
+                "highdm_channels": len(extracted),
+                "lowdm_channels": len(lowdm_extracted),
+                "plots": len(plots),
+            },
+            sort_keys=True,
+        )
+    )
     return 0
 
 

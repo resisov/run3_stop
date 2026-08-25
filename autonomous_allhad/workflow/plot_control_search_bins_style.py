@@ -1910,7 +1910,11 @@ def draw_flat_blocks(
         }
 
     requested_width = max((float(block.get("figure_width", 0.0)) for block in blocks), default=0.0)
-    figure_size = (12.0, 10.0) if reference_style else (max(12.0, nbin * 0.26, requested_width), 8.4)
+    figure_size = (
+        (max(12.0, requested_width), 10.0)
+        if reference_style
+        else (max(12.0, nbin * 0.26, requested_width), 8.4)
+    )
     fig, (ax, rax) = plt.subplots(2, 1, figsize=figure_size, gridspec_kw={"height_ratios": [3.2, 1.05 if reference_style else 1.1], "hspace": 0.04}, sharex=True)
     stack_inputs = []
     stack_weights = []
@@ -2136,7 +2140,7 @@ def draw_flat_blocks(
             transform=ax.transAxes,
             ha="left",
             va="top",
-            fontsize=20,
+            fontsize=float(annotation_block.get("annotation_fontsize", 20)),
         )
     if physical_edges is not None and len(blocks) == 1:
         xlabels = blocks[0].get("xlabels") or []

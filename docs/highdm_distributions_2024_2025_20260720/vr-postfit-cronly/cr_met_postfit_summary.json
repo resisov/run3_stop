@@ -2851,214 +2851,5378 @@
   "fit_status": 0,
   "highdm_cr_channel_count": 108,
   "ignored_non_highdm_cr_shape_directories": [
-    "y2024_GCR_lowdm_bin0",
-    "y2024_GCR_lowdm_bin1",
-    "y2024_GCR_lowdm_bin10",
-    "y2024_GCR_lowdm_bin11",
-    "y2024_GCR_lowdm_bin12",
-    "y2024_GCR_lowdm_bin13",
-    "y2024_GCR_lowdm_bin14",
-    "y2024_GCR_lowdm_bin15",
-    "y2024_GCR_lowdm_bin16",
-    "y2024_GCR_lowdm_bin17",
-    "y2024_GCR_lowdm_bin18",
-    "y2024_GCR_lowdm_bin19",
-    "y2024_GCR_lowdm_bin2",
-    "y2024_GCR_lowdm_bin20",
-    "y2024_GCR_lowdm_bin21",
-    "y2024_GCR_lowdm_bin22",
-    "y2024_GCR_lowdm_bin23",
-    "y2024_GCR_lowdm_bin24",
-    "y2024_GCR_lowdm_bin25",
-    "y2024_GCR_lowdm_bin26",
-    "y2024_GCR_lowdm_bin27",
-    "y2024_GCR_lowdm_bin28",
-    "y2024_GCR_lowdm_bin29",
-    "y2024_GCR_lowdm_bin3",
-    "y2024_GCR_lowdm_bin30",
-    "y2024_GCR_lowdm_bin31",
-    "y2024_GCR_lowdm_bin32",
-    "y2024_GCR_lowdm_bin33",
-    "y2024_GCR_lowdm_bin4",
-    "y2024_GCR_lowdm_bin5",
-    "y2024_GCR_lowdm_bin6",
-    "y2024_GCR_lowdm_bin7",
-    "y2024_GCR_lowdm_bin8",
-    "y2024_GCR_lowdm_bin9",
-    "y2024_LLCR_lowdm_bin0",
-    "y2024_LLCR_lowdm_bin1",
-    "y2024_LLCR_lowdm_bin10",
-    "y2024_LLCR_lowdm_bin11",
-    "y2024_LLCR_lowdm_bin12",
-    "y2024_LLCR_lowdm_bin13",
-    "y2024_LLCR_lowdm_bin14",
-    "y2024_LLCR_lowdm_bin15",
-    "y2024_LLCR_lowdm_bin16",
-    "y2024_LLCR_lowdm_bin17",
-    "y2024_LLCR_lowdm_bin18",
-    "y2024_LLCR_lowdm_bin19",
-    "y2024_LLCR_lowdm_bin2",
-    "y2024_LLCR_lowdm_bin20",
-    "y2024_LLCR_lowdm_bin21",
-    "y2024_LLCR_lowdm_bin22",
-    "y2024_LLCR_lowdm_bin23",
-    "y2024_LLCR_lowdm_bin24",
-    "y2024_LLCR_lowdm_bin25",
-    "y2024_LLCR_lowdm_bin26",
-    "y2024_LLCR_lowdm_bin27",
-    "y2024_LLCR_lowdm_bin28",
-    "y2024_LLCR_lowdm_bin29",
-    "y2024_LLCR_lowdm_bin3",
-    "y2024_LLCR_lowdm_bin30",
-    "y2024_LLCR_lowdm_bin31",
-    "y2024_LLCR_lowdm_bin32",
-    "y2024_LLCR_lowdm_bin33",
-    "y2024_LLCR_lowdm_bin4",
-    "y2024_LLCR_lowdm_bin5",
-    "y2024_LLCR_lowdm_bin6",
-    "y2024_LLCR_lowdm_bin7",
-    "y2024_LLCR_lowdm_bin8",
-    "y2024_LLCR_lowdm_bin9",
-    "y2024_QCDCR_lowdm_bin0",
-    "y2024_QCDCR_lowdm_bin1",
-    "y2024_QCDCR_lowdm_bin10",
-    "y2024_QCDCR_lowdm_bin11",
-    "y2024_QCDCR_lowdm_bin12",
-    "y2024_QCDCR_lowdm_bin13",
-    "y2024_QCDCR_lowdm_bin14",
-    "y2024_QCDCR_lowdm_bin15",
-    "y2024_QCDCR_lowdm_bin16",
-    "y2024_QCDCR_lowdm_bin17",
-    "y2024_QCDCR_lowdm_bin18",
-    "y2024_QCDCR_lowdm_bin19",
-    "y2024_QCDCR_lowdm_bin2",
-    "y2024_QCDCR_lowdm_bin20",
-    "y2024_QCDCR_lowdm_bin21",
-    "y2024_QCDCR_lowdm_bin22",
-    "y2024_QCDCR_lowdm_bin23",
-    "y2024_QCDCR_lowdm_bin25",
-    "y2024_QCDCR_lowdm_bin26",
-    "y2024_QCDCR_lowdm_bin27",
-    "y2024_QCDCR_lowdm_bin28",
-    "y2024_QCDCR_lowdm_bin29",
-    "y2024_QCDCR_lowdm_bin3",
-    "y2024_QCDCR_lowdm_bin30",
-    "y2024_QCDCR_lowdm_bin31",
-    "y2024_QCDCR_lowdm_bin32",
-    "y2024_QCDCR_lowdm_bin33",
-    "y2024_QCDCR_lowdm_bin4",
-    "y2024_QCDCR_lowdm_bin5",
-    "y2024_QCDCR_lowdm_bin6",
-    "y2024_QCDCR_lowdm_bin7",
-    "y2024_QCDCR_lowdm_bin8",
-    "y2024_QCDCR_lowdm_bin9",
     "y2024_SR_highdm_bin0",
-    "y2025_GCR_lowdm_bin0",
-    "y2025_GCR_lowdm_bin1",
-    "y2025_GCR_lowdm_bin10",
-    "y2025_GCR_lowdm_bin11",
-    "y2025_GCR_lowdm_bin12",
-    "y2025_GCR_lowdm_bin13",
-    "y2025_GCR_lowdm_bin14",
-    "y2025_GCR_lowdm_bin15",
-    "y2025_GCR_lowdm_bin16",
-    "y2025_GCR_lowdm_bin17",
-    "y2025_GCR_lowdm_bin18",
-    "y2025_GCR_lowdm_bin19",
-    "y2025_GCR_lowdm_bin2",
-    "y2025_GCR_lowdm_bin20",
-    "y2025_GCR_lowdm_bin21",
-    "y2025_GCR_lowdm_bin22",
-    "y2025_GCR_lowdm_bin23",
-    "y2025_GCR_lowdm_bin24",
-    "y2025_GCR_lowdm_bin25",
-    "y2025_GCR_lowdm_bin26",
-    "y2025_GCR_lowdm_bin27",
-    "y2025_GCR_lowdm_bin28",
-    "y2025_GCR_lowdm_bin29",
-    "y2025_GCR_lowdm_bin3",
-    "y2025_GCR_lowdm_bin30",
-    "y2025_GCR_lowdm_bin31",
-    "y2025_GCR_lowdm_bin32",
-    "y2025_GCR_lowdm_bin33",
-    "y2025_GCR_lowdm_bin4",
-    "y2025_GCR_lowdm_bin5",
-    "y2025_GCR_lowdm_bin6",
-    "y2025_GCR_lowdm_bin7",
-    "y2025_GCR_lowdm_bin8",
-    "y2025_GCR_lowdm_bin9",
-    "y2025_LLCR_lowdm_bin0",
-    "y2025_LLCR_lowdm_bin1",
-    "y2025_LLCR_lowdm_bin10",
-    "y2025_LLCR_lowdm_bin11",
-    "y2025_LLCR_lowdm_bin12",
-    "y2025_LLCR_lowdm_bin13",
-    "y2025_LLCR_lowdm_bin14",
-    "y2025_LLCR_lowdm_bin15",
-    "y2025_LLCR_lowdm_bin16",
-    "y2025_LLCR_lowdm_bin17",
-    "y2025_LLCR_lowdm_bin18",
-    "y2025_LLCR_lowdm_bin19",
-    "y2025_LLCR_lowdm_bin2",
-    "y2025_LLCR_lowdm_bin20",
-    "y2025_LLCR_lowdm_bin21",
-    "y2025_LLCR_lowdm_bin22",
-    "y2025_LLCR_lowdm_bin23",
-    "y2025_LLCR_lowdm_bin24",
-    "y2025_LLCR_lowdm_bin25",
-    "y2025_LLCR_lowdm_bin26",
-    "y2025_LLCR_lowdm_bin27",
-    "y2025_LLCR_lowdm_bin28",
-    "y2025_LLCR_lowdm_bin29",
-    "y2025_LLCR_lowdm_bin3",
-    "y2025_LLCR_lowdm_bin30",
-    "y2025_LLCR_lowdm_bin31",
-    "y2025_LLCR_lowdm_bin32",
-    "y2025_LLCR_lowdm_bin33",
-    "y2025_LLCR_lowdm_bin4",
-    "y2025_LLCR_lowdm_bin5",
-    "y2025_LLCR_lowdm_bin6",
-    "y2025_LLCR_lowdm_bin7",
-    "y2025_LLCR_lowdm_bin8",
-    "y2025_LLCR_lowdm_bin9",
-    "y2025_QCDCR_lowdm_bin0",
-    "y2025_QCDCR_lowdm_bin1",
-    "y2025_QCDCR_lowdm_bin10",
-    "y2025_QCDCR_lowdm_bin11",
-    "y2025_QCDCR_lowdm_bin12",
-    "y2025_QCDCR_lowdm_bin13",
-    "y2025_QCDCR_lowdm_bin14",
-    "y2025_QCDCR_lowdm_bin15",
-    "y2025_QCDCR_lowdm_bin16",
-    "y2025_QCDCR_lowdm_bin17",
-    "y2025_QCDCR_lowdm_bin18",
-    "y2025_QCDCR_lowdm_bin19",
-    "y2025_QCDCR_lowdm_bin2",
-    "y2025_QCDCR_lowdm_bin20",
-    "y2025_QCDCR_lowdm_bin21",
-    "y2025_QCDCR_lowdm_bin22",
-    "y2025_QCDCR_lowdm_bin23",
-    "y2025_QCDCR_lowdm_bin25",
-    "y2025_QCDCR_lowdm_bin26",
-    "y2025_QCDCR_lowdm_bin27",
-    "y2025_QCDCR_lowdm_bin28",
-    "y2025_QCDCR_lowdm_bin29",
-    "y2025_QCDCR_lowdm_bin3",
-    "y2025_QCDCR_lowdm_bin30",
-    "y2025_QCDCR_lowdm_bin31",
-    "y2025_QCDCR_lowdm_bin32",
-    "y2025_QCDCR_lowdm_bin33",
-    "y2025_QCDCR_lowdm_bin4",
-    "y2025_QCDCR_lowdm_bin5",
-    "y2025_QCDCR_lowdm_bin6",
-    "y2025_QCDCR_lowdm_bin7",
-    "y2025_QCDCR_lowdm_bin8",
-    "y2025_QCDCR_lowdm_bin9",
     "y2025_SR_highdm_bin0"
   ],
   "likelihood_channel_count": 310,
+  "lowdm_bin_count": 34,
+  "lowdm_category_sizes": [
+    [
+      "Nb1_PISR300to500_PTb20to40",
+      4
+    ],
+    [
+      "Nb1_PISR300to500_PTb40to70",
+      4
+    ],
+    [
+      "Nb1_PISR500plus_PTb20to40",
+      4
+    ],
+    [
+      "Nb1_PISR500plus_PTb40to70",
+      4
+    ],
+    [
+      "Nb2plus_PISR300to500_PTb40to80_Nj2plus",
+      3
+    ],
+    [
+      "Nb2plus_PISR300to500_PTb80to140_Nj2plus",
+      3
+    ],
+    [
+      "Nb2plus_PISR300to500_PTb140plus_Nj7plus",
+      3
+    ],
+    [
+      "Nb2plus_PISR500plus_PTb40to80_Nj2plus",
+      3
+    ],
+    [
+      "Nb2plus_PISR500plus_PTb80to140_Nj2plus",
+      3
+    ],
+    [
+      "Nb2plus_PISR500plus_PTb140plus_Nj7plus",
+      3
+    ]
+  ],
+  "lowdm_channels": {
+    "2024/GCR": [
+      {
+        "data": 3062.0,
+        "data_uncertainty": 55.83684713409775,
+        "groups": {
+          "DY": 3.3670153617858887,
+          "Others": 0.0,
+          "Photon+jet": 2844.0439453125,
+          "QCD Multijet": 207.18162536621094,
+          "Top": 2.6602365970611572,
+          "VV+VVV": 0.2897089719772339,
+          "W -> lv": 4.463392734527588,
+          "Z -> vv": 9.999999717180685e-10
+        },
+        "processes": {
+          "DY": 3.3670153617858887,
+          "Other": 0.0,
+          "PhotonJet": 2844.0439453125,
+          "QCD": 207.18162536621094,
+          "Top": 2.6602365970611572,
+          "VV_VVV": 0.2897089719772339,
+          "WtoLNu": 4.463392734527588,
+          "Zto2Nu": 9.999999717180685e-10
+        },
+        "total": 3062.005859375,
+        "uncertainty": 56.41462022383914
+      },
+      {
+        "data": 1070.0,
+        "data_uncertainty": 33.21340131093632,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 1024.049560546875,
+          "QCD Multijet": 41.51886749267578,
+          "Top": 0.5993383526802063,
+          "VV+VVV": 0.9798175096511841,
+          "W -> lv": 2.699052095413208,
+          "Z -> vv": 0.15976685285568237
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 1024.049560546875,
+          "QCD": 41.51886749267578,
+          "Top": 0.5993383526802063,
+          "VV_VVV": 0.9798175096511841,
+          "WtoLNu": 2.699052095413208,
+          "Zto2Nu": 0.15976685285568237
+        },
+        "total": 1070.006591796875,
+        "uncertainty": 32.20522085004231
+      },
+      {
+        "data": 174.0,
+        "data_uncertainty": 13.697212374695553,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 165.5478057861328,
+          "QCD Multijet": 7.503329753875732,
+          "Top": 0.14151602983474731,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.6986792087554932,
+          "Z -> vv": 0.11385912448167801
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 165.5478057861328,
+          "QCD": 7.503329753875732,
+          "Top": 0.14151602983474731,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.6986792087554932,
+          "Zto2Nu": 0.11385912448167801
+        },
+        "total": 174.00518798828125,
+        "uncertainty": 12.107206257406165
+      },
+      {
+        "data": 10.0,
+        "data_uncertainty": 3.687822099277468,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 9.995004653930664,
+          "QCD Multijet": 0.0,
+          "Top": 0.0,
+          "VV+VVV": 0.001097830361686647,
+          "W -> lv": 0.0028605833649635315,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 9.995004653930664,
+          "QCD": 0.0,
+          "Top": 0.0,
+          "VV_VVV": 0.001097830361686647,
+          "WtoLNu": 0.0028605833649635315,
+          "Zto2Nu": 0.0
+        },
+        "total": 9.998963356018066,
+        "uncertainty": 3.1585142327054863
+      },
+      {
+        "data": 4779.0,
+        "data_uncertainty": 69.63151708774512,
+        "groups": {
+          "DY": 2.9888572692871094,
+          "Others": 0.0,
+          "Photon+jet": 4499.2607421875,
+          "QCD Multijet": 260.2599792480469,
+          "Top": 6.294464588165283,
+          "VV+VVV": 0.9648295640945435,
+          "W -> lv": 9.250791549682617,
+          "Z -> vv": 9.999999717180685e-10
+        },
+        "processes": {
+          "DY": 2.9888572692871094,
+          "Other": 0.0,
+          "PhotonJet": 4499.2607421875,
+          "QCD": 260.2599792480469,
+          "Top": 6.294464588165283,
+          "VV_VVV": 0.9648295640945435,
+          "WtoLNu": 9.250791549682617,
+          "Zto2Nu": 9.999999717180685e-10
+        },
+        "total": 4779.01953125,
+        "uncertainty": 69.82331720134758
+      },
+      {
+        "data": 1638.0,
+        "data_uncertainty": 40.974271323347125,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 1591.0968017578125,
+          "QCD Multijet": 40.95707702636719,
+          "Top": 2.538512945175171,
+          "VV+VVV": 0.00422563124448061,
+          "W -> lv": 3.4126548767089844,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 1591.0968017578125,
+          "QCD": 40.95707702636719,
+          "Top": 2.538512945175171,
+          "VV_VVV": 0.00422563124448061,
+          "WtoLNu": 3.4126548767089844,
+          "Zto2Nu": 0.0
+        },
+        "total": 1638.0091552734375,
+        "uncertainty": 40.273923402742874
+      },
+      {
+        "data": 272.0,
+        "data_uncertainty": 16.99746967183256,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 259.5686340332031,
+          "QCD Multijet": 12.113509178161621,
+          "Top": 0.07992389798164368,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.23207178711891174,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 259.5686340332031,
+          "QCD": 12.113509178161621,
+          "Top": 0.07992389798164368,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.23207178711891174,
+          "Zto2Nu": 0.0
+        },
+        "total": 271.994140625,
+        "uncertainty": 18.50036633927826
+      },
+      {
+        "data": 21.0,
+        "data_uncertainty": 5.100494483946333,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 20.453025817871094,
+          "QCD Multijet": 0.2622237205505371,
+          "Top": 0.0,
+          "VV+VVV": 0.20982347428798676,
+          "W -> lv": 0.07385551929473877,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 20.453025817871094,
+          "QCD": 0.2622237205505371,
+          "Top": 0.0,
+          "VV_VVV": 0.20982347428798676,
+          "WtoLNu": 0.07385551929473877,
+          "Zto2Nu": 0.0
+        },
+        "total": 20.998929977416992,
+        "uncertainty": 4.353982439782859
+      },
+      {
+        "data": 182.0,
+        "data_uncertainty": 13.996904296685429,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 162.263671875,
+          "QCD Multijet": 18.762754440307617,
+          "Top": 0.32857415080070496,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.4307289719581604,
+          "Z -> vv": 0.21614252030849457
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 162.263671875,
+          "QCD": 18.762754440307617,
+          "Top": 0.32857415080070496,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.4307289719581604,
+          "Zto2Nu": 0.21614252030849457
+        },
+        "total": 182.00186157226562,
+        "uncertainty": 12.795648598131905
+      },
+      {
+        "data": 180.0,
+        "data_uncertainty": 13.92260864750996,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 172.8229217529297,
+          "QCD Multijet": 6.794455528259277,
+          "Top": 0.16687653958797455,
+          "VV+VVV": 0.0041636209934949875,
+          "W -> lv": 0.20385918021202087,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 172.8229217529297,
+          "QCD": 6.794455528259277,
+          "Top": 0.16687653958797455,
+          "VV_VVV": 0.0041636209934949875,
+          "WtoLNu": 0.20385918021202087,
+          "Zto2Nu": 0.0
+        },
+        "total": 179.9922637939453,
+        "uncertainty": 15.03045735955829
+      },
+      {
+        "data": 66.0,
+        "data_uncertainty": 8.63424847164562,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 64.20259094238281,
+          "QCD Multijet": 1.5576694011688232,
+          "Top": 0.04010128974914551,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.07445885986089706,
+          "Z -> vv": 0.12311700731515884
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 64.20259094238281,
+          "QCD": 1.5576694011688232,
+          "Top": 0.04010128974914551,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.07445885986089706,
+          "Zto2Nu": 0.12311700731515884
+        },
+        "total": 65.99793243408203,
+        "uncertainty": 8.248656969281424
+      },
+      {
+        "data": 68.0,
+        "data_uncertainty": 8.756271433591195,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 65.97222900390625,
+          "QCD Multijet": 1.969024896621704,
+          "Top": 0.0,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.05599382892251015,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 65.97222900390625,
+          "QCD": 1.969024896621704,
+          "Top": 0.0,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.05599382892251015,
+          "Zto2Nu": 0.0
+        },
+        "total": 67.99724578857422,
+        "uncertainty": 8.846916394286769
+      },
+      {
+        "data": 340.0,
+        "data_uncertainty": 18.943604252950138,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 315.75701904296875,
+          "QCD Multijet": 22.369003295898438,
+          "Top": 0.7165862321853638,
+          "VV+VVV": 0.13336171209812164,
+          "W -> lv": 1.0185245275497437,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 315.75701904296875,
+          "QCD": 22.369003295898438,
+          "Top": 0.7165862321853638,
+          "VV_VVV": 0.13336171209812164,
+          "WtoLNu": 1.0185245275497437,
+          "Zto2Nu": 0.0
+        },
+        "total": 339.9945068359375,
+        "uncertainty": 17.982575659336177
+      },
+      {
+        "data": 301.0,
+        "data_uncertainty": 17.854149968346803,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 293.8154296875,
+          "QCD Multijet": 6.131351947784424,
+          "Top": 0.3551546037197113,
+          "VV+VVV": 0.000950115267187357,
+          "W -> lv": 0.5730722546577454,
+          "Z -> vv": 0.10975044220685959
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 293.8154296875,
+          "QCD": 6.131351947784424,
+          "Top": 0.3551546037197113,
+          "VV_VVV": 0.000950115267187357,
+          "WtoLNu": 0.5730722546577454,
+          "Zto2Nu": 0.10975044220685959
+        },
+        "total": 300.9856872558594,
+        "uncertainty": 24.109481731779304
+      },
+      {
+        "data": 138.0,
+        "data_uncertainty": 12.254418247234575,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 133.034912109375,
+          "QCD Multijet": 4.731131076812744,
+          "Top": 0.00017674246919341385,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.22642746567726135,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 133.034912109375,
+          "QCD": 4.731131076812744,
+          "Top": 0.00017674246919341385,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.22642746567726135,
+          "Zto2Nu": 0.0
+        },
+        "total": 137.99264526367188,
+        "uncertainty": 13.579240820090053
+      },
+      {
+        "data": 100.0,
+        "data_uncertainty": 10.508307879182325,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 96.56777954101562,
+          "QCD Multijet": 3.295292377471924,
+          "Top": 0.0,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.13298407196998596,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 96.56777954101562,
+          "QCD": 3.295292377471924,
+          "Top": 0.0,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.13298407196998596,
+          "Zto2Nu": 0.0
+        },
+        "total": 99.99605560302734,
+        "uncertainty": 11.727010005618439
+      },
+      {
+        "data": 655.0,
+        "data_uncertainty": 26.096222371133308,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 557.3417358398438,
+          "QCD Multijet": 88.72083282470703,
+          "Top": 7.225925445556641,
+          "VV+VVV": 0.09218257665634155,
+          "W -> lv": 1.6201738119125366,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 557.3417358398438,
+          "QCD": 88.72083282470703,
+          "Top": 7.225925445556641,
+          "VV_VVV": 0.09218257665634155,
+          "WtoLNu": 1.6201738119125366,
+          "Zto2Nu": 0.0
+        },
+        "total": 655.0008544921875,
+        "uncertainty": 25.834885874046357
+      },
+      {
+        "data": 260.0,
+        "data_uncertainty": 16.62967755781864,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 243.44886779785156,
+          "QCD Multijet": 14.597023010253906,
+          "Top": 1.4397319555282593,
+          "VV+VVV": 0.07580381631851196,
+          "W -> lv": 0.33119794726371765,
+          "Z -> vv": 0.10570985823869705
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 243.44886779785156,
+          "QCD": 14.597023010253906,
+          "Top": 1.4397319555282593,
+          "VV_VVV": 0.07580381631851196,
+          "WtoLNu": 0.33119794726371765,
+          "Zto2Nu": 0.10570985823869705
+        },
+        "total": 259.99835205078125,
+        "uncertainty": 16.647838518671126
+      },
+      {
+        "data": 41.0,
+        "data_uncertainty": 6.916041389251578,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 37.5721549987793,
+          "QCD Multijet": 2.9692788124084473,
+          "Top": 0.16774865984916687,
+          "VV+VVV": 0.11282330006361008,
+          "W -> lv": 0.17669595777988434,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 37.5721549987793,
+          "QCD": 2.9692788124084473,
+          "Top": 0.16774865984916687,
+          "VV_VVV": 0.11282330006361008,
+          "WtoLNu": 0.17669595777988434,
+          "Zto2Nu": 0.0
+        },
+        "total": 40.99870300292969,
+        "uncertainty": 6.353975172148633
+      },
+      {
+        "data": 472.0,
+        "data_uncertainty": 22.229394235678626,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 446.7669677734375,
+          "QCD Multijet": 19.43336296081543,
+          "Top": 5.550647735595703,
+          "VV+VVV": 0.23687894642353058,
+          "W -> lv": 9.999999717180685e-10,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 446.7669677734375,
+          "QCD": 19.43336296081543,
+          "Top": 5.550647735595703,
+          "VV_VVV": 0.23687894642353058,
+          "WtoLNu": 9.999999717180685e-10,
+          "Zto2Nu": 0.0
+        },
+        "total": 471.98785400390625,
+        "uncertainty": 21.16307589293201
+      },
+      {
+        "data": 165.0,
+        "data_uncertainty": 13.351708082785137,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 155.42478942871094,
+          "QCD Multijet": 7.241921901702881,
+          "Top": 1.579270839691162,
+          "VV+VVV": 8.374682511202991e-05,
+          "W -> lv": 0.7210100293159485,
+          "Z -> vv": 0.03033965639770031
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 155.42478942871094,
+          "QCD": 7.241921901702881,
+          "Top": 1.579270839691162,
+          "VV_VVV": 8.374682511202991e-05,
+          "WtoLNu": 0.7210100293159485,
+          "Zto2Nu": 0.03033965639770031
+        },
+        "total": 164.99740600585938,
+        "uncertainty": 13.879977288571116
+      },
+      {
+        "data": 41.0,
+        "data_uncertainty": 6.916041389251578,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 38.7504997253418,
+          "QCD Multijet": 2.0980074405670166,
+          "Top": 0.15013353526592255,
+          "VV+VVV": 0.0,
+          "W -> lv": 9.999999717180685e-10,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 38.7504997253418,
+          "QCD": 2.0980074405670166,
+          "Top": 0.15013353526592255,
+          "VV_VVV": 0.0,
+          "WtoLNu": 9.999999717180685e-10,
+          "Zto2Nu": 0.0
+        },
+        "total": 40.99864196777344,
+        "uncertainty": 7.036485203810032
+      },
+      {
+        "data": 5.0,
+        "data_uncertainty": 2.7710818976262304,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 4.6821064949035645,
+          "QCD Multijet": 0.0,
+          "Top": 0.3160226047039032,
+          "VV+VVV": 0.0016631765756756067,
+          "W -> lv": 0.0,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 4.6821064949035645,
+          "QCD": 0.0,
+          "Top": 0.3160226047039032,
+          "VV_VVV": 0.0016631765756756067,
+          "WtoLNu": 0.0,
+          "Zto2Nu": 0.0
+        },
+        "total": 4.999792098999023,
+        "uncertainty": 2.1531096215660894
+      },
+      {
+        "data": 2.0,
+        "data_uncertainty": 1.9648370913906352,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 1.950913906097412,
+          "QCD Multijet": 0.0,
+          "Top": 0.04901126027107239,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.0,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 1.950913906097412,
+          "QCD": 0.0,
+          "Top": 0.04901126027107239,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.0,
+          "Zto2Nu": 0.0
+        },
+        "total": 1.999925136566162,
+        "uncertainty": 1.3438759252406474
+      },
+      {
+        "data": 1.0,
+        "data_uncertainty": 1.5633863897239886,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.9998787045478821,
+          "QCD Multijet": 0.0,
+          "Top": 0.0,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.0,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.9998787045478821,
+          "QCD": 0.0,
+          "Top": 0.0,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.0,
+          "Zto2Nu": 0.0
+        },
+        "total": 0.9998787045478821,
+        "uncertainty": 0.7711558833882907
+      },
+      {
+        "data": 53.0,
+        "data_uncertainty": 7.791490452278694,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 48.50687789916992,
+          "QCD Multijet": 3.558328151702881,
+          "Top": 0.4242839813232422,
+          "VV+VVV": 0.0009780068648979068,
+          "W -> lv": 0.507252037525177,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 48.50687789916992,
+          "QCD": 3.558328151702881,
+          "Top": 0.4242839813232422,
+          "VV_VVV": 0.0009780068648979068,
+          "WtoLNu": 0.507252037525177,
+          "Zto2Nu": 0.0
+        },
+        "total": 52.99771499633789,
+        "uncertainty": 7.374906977697244
+      },
+      {
+        "data": 48.0,
+        "data_uncertainty": 7.440154576960268,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 46.68537139892578,
+          "QCD Multijet": 1.1118910312652588,
+          "Top": 0.15592071413993835,
+          "VV+VVV": 0.0262595284730196,
+          "W -> lv": 0.01672159694135189,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 46.68537139892578,
+          "QCD": 1.1118910312652588,
+          "Top": 0.15592071413993835,
+          "VV_VVV": 0.0262595284730196,
+          "WtoLNu": 0.01672159694135189,
+          "Zto2Nu": 0.0
+        },
+        "total": 47.99616622924805,
+        "uncertainty": 7.325922510168941
+      },
+      {
+        "data": 50.0,
+        "data_uncertainty": 7.582780714156254,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 48.33761978149414,
+          "QCD Multijet": 1.545754313468933,
+          "Top": 0.11193779855966568,
+          "VV+VVV": 0.0012760782847180963,
+          "W -> lv": 9.999999717180685e-10,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 48.33761978149414,
+          "QCD": 1.545754313468933,
+          "Top": 0.11193779855966568,
+          "VV_VVV": 0.0012760782847180963,
+          "WtoLNu": 9.999999717180685e-10,
+          "Zto2Nu": 0.0
+        },
+        "total": 49.99658966064453,
+        "uncertainty": 7.220617318008551
+      },
+      {
+        "data": 39.0,
+        "data_uncertainty": 6.758237080089653,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 34.974395751953125,
+          "QCD Multijet": 3.3699567317962646,
+          "Top": 0.6544212698936462,
+          "VV+VVV": 0.0,
+          "W -> lv": 9.999999717180685e-10,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 34.974395751953125,
+          "QCD": 3.3699567317962646,
+          "Top": 0.6544212698936462,
+          "VV_VVV": 0.0,
+          "WtoLNu": 9.999999717180685e-10,
+          "Zto2Nu": 0.0
+        },
+        "total": 38.998775482177734,
+        "uncertainty": 6.048512778852129
+      },
+      {
+        "data": 35.0,
+        "data_uncertainty": 6.430042212762041,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 34.039493560791016,
+          "QCD Multijet": 0.8149163126945496,
+          "Top": 0.12365058809518814,
+          "VV+VVV": 0.0009760416578501463,
+          "W -> lv": 0.018809596076607704,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 34.039493560791016,
+          "QCD": 0.8149163126945496,
+          "Top": 0.12365058809518814,
+          "VV_VVV": 0.0009760416578501463,
+          "WtoLNu": 0.018809596076607704,
+          "Zto2Nu": 0.0
+        },
+        "total": 34.99784469604492,
+        "uncertainty": 6.163254858369784
+      },
+      {
+        "data": 25.0,
+        "data_uncertainty": 5.516461918741058,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 24.063396453857422,
+          "QCD Multijet": 0.7368015646934509,
+          "Top": 0.19021578133106232,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.008696022443473339,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 24.063396453857422,
+          "QCD": 0.7368015646934509,
+          "Top": 0.19021578133106232,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.008696022443473339,
+          "Zto2Nu": 0.0
+        },
+        "total": 24.999109268188477,
+        "uncertainty": 5.455565132776691
+      },
+      {
+        "data": 9.999999717180685e-10,
+        "data_uncertainty": 0.9205108217886193,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 8.720831345954139e-08,
+          "QCD Multijet": 0.08156850934028625,
+          "Top": 1.055210941558471e-05,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.0,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 8.720831345954139e-08,
+          "QCD": 0.08156850934028625,
+          "Top": 1.055210941558471e-05,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.0,
+          "Zto2Nu": 0.0
+        },
+        "total": 0.08157914876937866,
+        "uncertainty": 0.025271309964988654
+      },
+      {
+        "data": 9.999999717180685e-10,
+        "data_uncertainty": 0.9205108217886193,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 4.194038538685163e-08,
+          "QCD Multijet": 0.015838246792554855,
+          "Top": 0.0,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.0,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 4.194038538685163e-08,
+          "QCD": 0.015838246792554855,
+          "Top": 0.0,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.0,
+          "Zto2Nu": 0.0
+        },
+        "total": 0.015838289633393288,
+        "uncertainty": 0.004170958241672793
+      },
+      {
+        "data": 9.999999717180685e-10,
+        "data_uncertainty": 0.9205108217886193,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 4.307959822202889e-10,
+          "QCD Multijet": 0.0,
+          "Top": 0.0,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.0,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 4.307959822202889e-10,
+          "QCD": 0.0,
+          "Top": 0.0,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.0,
+          "Zto2Nu": 0.0
+        },
+        "total": 4.307959822202889e-10,
+        "uncertainty": 1.9425202198734787e-05
+      }
+    ],
+    "2024/LLCR": [
+      {
+        "data": 2665.0,
+        "data_uncertainty": 52.1252520462499,
+        "groups": {
+          "DY": 43.1115837097168,
+          "Others": 0.0,
+          "Photon+jet": 1.0644017457962036,
+          "QCD Multijet": 0.0,
+          "Top": 491.72119140625,
+          "VV+VVV": 23.043781280517578,
+          "W -> lv": 2068.9228515625,
+          "Z -> vv": 37.09192657470703
+        },
+        "processes": {
+          "DY": 43.1115837097168,
+          "Other": 0.0,
+          "PhotonJet": 1.0644017457962036,
+          "QCD": 0.0,
+          "Top": 491.72119140625,
+          "VV_VVV": 23.043781280517578,
+          "WtoLNu": 2068.9228515625,
+          "Zto2Nu": 37.09192657470703
+        },
+        "total": 2664.955810546875,
+        "uncertainty": 50.423574595619456
+      },
+      {
+        "data": 480.0,
+        "data_uncertainty": 22.412703516279777,
+        "groups": {
+          "DY": 6.054804801940918,
+          "Others": 0.0,
+          "Photon+jet": 0.12652508914470673,
+          "QCD Multijet": 0.0,
+          "Top": 58.32450866699219,
+          "VV+VVV": 4.832547664642334,
+          "W -> lv": 399.1475830078125,
+          "Z -> vv": 11.509821891784668
+        },
+        "processes": {
+          "DY": 6.054804801940918,
+          "Other": 0.0,
+          "PhotonJet": 0.12652508914470673,
+          "QCD": 0.0,
+          "Top": 58.32450866699219,
+          "VV_VVV": 4.832547664642334,
+          "WtoLNu": 399.1475830078125,
+          "Zto2Nu": 11.509821891784668
+        },
+        "total": 479.99578857421875,
+        "uncertainty": 20.673707637963734
+      },
+      {
+        "data": 50.0,
+        "data_uncertainty": 7.582780714156254,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.02920975349843502,
+          "QCD Multijet": 0.0,
+          "Top": 4.549097537994385,
+          "VV+VVV": 1.1230982542037964,
+          "W -> lv": 43.10315704345703,
+          "Z -> vv": 1.1984426975250244
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.02920975349843502,
+          "QCD": 0.0,
+          "Top": 4.549097537994385,
+          "VV_VVV": 1.1230982542037964,
+          "WtoLNu": 43.10315704345703,
+          "Zto2Nu": 1.1984426975250244
+        },
+        "total": 50.00300598144531,
+        "uncertainty": 6.968476732310298
+      },
+      {
+        "data": 3.0,
+        "data_uncertainty": 2.275445258983817,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.2475489377975464,
+          "Top": 0.4090743362903595,
+          "VV+VVV": 0.001390097546391189,
+          "W -> lv": 2.323856830596924,
+          "Z -> vv": 0.01807497628033161
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.2475489377975464,
+          "Top": 0.4090743362903595,
+          "VV_VVV": 0.001390097546391189,
+          "WtoLNu": 2.323856830596924,
+          "Zto2Nu": 0.01807497628033161
+        },
+        "total": 2.9999451637268066,
+        "uncertainty": 1.634880568315695
+      },
+      {
+        "data": 3182.0,
+        "data_uncertainty": 56.910696248264,
+        "groups": {
+          "DY": 43.34996032714844,
+          "Others": 0.0,
+          "Photon+jet": 1.4207627773284912,
+          "QCD Multijet": 3.389638900756836,
+          "Top": 1257.3472900390625,
+          "VV+VVV": 23.67943000793457,
+          "W -> lv": 1802.25927734375,
+          "Z -> vv": 50.551761627197266
+        },
+        "processes": {
+          "DY": 43.34996032714844,
+          "Other": 0.0,
+          "PhotonJet": 1.4207627773284912,
+          "QCD": 3.389638900756836,
+          "Top": 1257.3472900390625,
+          "VV_VVV": 23.67943000793457,
+          "WtoLNu": 1802.25927734375,
+          "Zto2Nu": 50.551761627197266
+        },
+        "total": 3181.998046875,
+        "uncertainty": 56.28153838071593
+      },
+      {
+        "data": 562.0,
+        "data_uncertainty": 24.210052481257208,
+        "groups": {
+          "DY": 2.0670573711395264,
+          "Others": 0.0,
+          "Photon+jet": 0.31814929842948914,
+          "QCD Multijet": 0.0,
+          "Top": 157.7936248779297,
+          "VV+VVV": 5.817318439483643,
+          "W -> lv": 381.4080810546875,
+          "Z -> vv": 14.589326858520508
+        },
+        "processes": {
+          "DY": 2.0670573711395264,
+          "Other": 0.0,
+          "PhotonJet": 0.31814929842948914,
+          "QCD": 0.0,
+          "Top": 157.7936248779297,
+          "VV_VVV": 5.817318439483643,
+          "WtoLNu": 381.4080810546875,
+          "Zto2Nu": 14.589326858520508
+        },
+        "total": 561.9935913085938,
+        "uncertainty": 26.430907866076033
+      },
+      {
+        "data": 50.0,
+        "data_uncertainty": 7.582780714156254,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 10.583993911743164,
+          "VV+VVV": 0.5786636471748352,
+          "W -> lv": 36.95532989501953,
+          "Z -> vv": 1.884292483329773
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 10.583993911743164,
+          "VV_VVV": 0.5786636471748352,
+          "WtoLNu": 36.95532989501953,
+          "Zto2Nu": 1.884292483329773
+        },
+        "total": 50.002281188964844,
+        "uncertainty": 6.801067672386079
+      },
+      {
+        "data": 3.0,
+        "data_uncertainty": 2.275445258983817,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 5.211088864598423e-05,
+          "VV+VVV": 0.0009347632876597345,
+          "W -> lv": 2.8961286544799805,
+          "Z -> vv": 0.10265839844942093
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 5.211088864598423e-05,
+          "VV_VVV": 0.0009347632876597345,
+          "WtoLNu": 2.8961286544799805,
+          "Zto2Nu": 0.10265839844942093
+        },
+        "total": 2.9997739791870117,
+        "uncertainty": 602.0016279047757
+      },
+      {
+        "data": 190.0,
+        "data_uncertainty": 14.290084690970303,
+        "groups": {
+          "DY": 4.53550386428833,
+          "Others": 0.0,
+          "Photon+jet": 0.2155708223581314,
+          "QCD Multijet": 2.296156406402588,
+          "Top": 25.32917594909668,
+          "VV+VVV": 2.2278530597686768,
+          "W -> lv": 153.29417419433594,
+          "Z -> vv": 2.1017045974731445
+        },
+        "processes": {
+          "DY": 4.53550386428833,
+          "Other": 0.0,
+          "PhotonJet": 0.2155708223581314,
+          "QCD": 2.296156406402588,
+          "Top": 25.32917594909668,
+          "VV_VVV": 2.2278530597686768,
+          "WtoLNu": 153.29417419433594,
+          "Zto2Nu": 2.1017045974731445
+        },
+        "total": 190.00013732910156,
+        "uncertainty": 13.911291221072903
+      },
+      {
+        "data": 93.0,
+        "data_uncertainty": 10.152263635107929,
+        "groups": {
+          "DY": 1.0765305757522583,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 7.388046741485596,
+          "VV+VVV": 1.0690151453018188,
+          "W -> lv": 82.21723175048828,
+          "Z -> vv": 1.2448782920837402
+        },
+        "processes": {
+          "DY": 1.0765305757522583,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 7.388046741485596,
+          "VV_VVV": 1.0690151453018188,
+          "WtoLNu": 82.21723175048828,
+          "Zto2Nu": 1.2448782920837402
+        },
+        "total": 92.9957046508789,
+        "uncertainty": 9.158120542720543
+      },
+      {
+        "data": 39.0,
+        "data_uncertainty": 6.758237080089653,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.015028313733637333,
+          "QCD Multijet": 0.2518385946750641,
+          "Top": 2.748112678527832,
+          "VV+VVV": 0.7141106128692627,
+          "W -> lv": 34.75778579711914,
+          "Z -> vv": 0.5124049782752991
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.015028313733637333,
+          "QCD": 0.2518385946750641,
+          "Top": 2.748112678527832,
+          "VV_VVV": 0.7141106128692627,
+          "WtoLNu": 34.75778579711914,
+          "Zto2Nu": 0.5124049782752991
+        },
+        "total": 38.99928283691406,
+        "uncertainty": 6.566046660662716
+      },
+      {
+        "data": 25.0,
+        "data_uncertainty": 5.516461918741058,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.013960455544292927,
+          "QCD Multijet": 0.07076645642518997,
+          "Top": 1.665249228477478,
+          "VV+VVV": 0.45807576179504395,
+          "W -> lv": 22.299842834472656,
+          "Z -> vv": 0.49229225516319275
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.013960455544292927,
+          "QCD": 0.07076645642518997,
+          "Top": 1.665249228477478,
+          "VV_VVV": 0.45807576179504395,
+          "WtoLNu": 22.299842834472656,
+          "Zto2Nu": 0.49229225516319275
+        },
+        "total": 25.000186920166016,
+        "uncertainty": 4.785305673687419
+      },
+      {
+        "data": 219.0,
+        "data_uncertainty": 15.304271899079978,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.11325957626104355,
+          "QCD Multijet": 0.431219220161438,
+          "Top": 72.97270965576172,
+          "VV+VVV": 1.8977450132369995,
+          "W -> lv": 141.21270751953125,
+          "Z -> vv": 2.3695483207702637
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.11325957626104355,
+          "QCD": 0.431219220161438,
+          "Top": 72.97270965576172,
+          "VV_VVV": 1.8977450132369995,
+          "WtoLNu": 141.21270751953125,
+          "Zto2Nu": 2.3695483207702637
+        },
+        "total": 218.9971923828125,
+        "uncertainty": 15.490359275005535
+      },
+      {
+        "data": 120.0,
+        "data_uncertainty": 11.462039058399206,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0778733491897583,
+          "QCD Multijet": 0.2302590310573578,
+          "Top": 31.943601608276367,
+          "VV+VVV": 1.446102499961853,
+          "W -> lv": 84.16909790039062,
+          "Z -> vv": 2.1318764686584473
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0778733491897583,
+          "QCD": 0.2302590310573578,
+          "Top": 31.943601608276367,
+          "VV_VVV": 1.446102499961853,
+          "WtoLNu": 84.16909790039062,
+          "Zto2Nu": 2.1318764686584473
+        },
+        "total": 119.99880981445312,
+        "uncertainty": 10.747955837623264
+      },
+      {
+        "data": 51.0,
+        "data_uncertainty": 7.6530273378565425,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.04998111352324486,
+          "Top": 10.526578903198242,
+          "VV+VVV": 0.3065234422683716,
+          "W -> lv": 39.14825439453125,
+          "Z -> vv": 0.9701027870178223
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.04998111352324486,
+          "Top": 10.526578903198242,
+          "VV_VVV": 0.3065234422683716,
+          "WtoLNu": 39.14825439453125,
+          "Zto2Nu": 0.9701027870178223
+        },
+        "total": 51.001441955566406,
+        "uncertainty": 7.016164024393066
+      },
+      {
+        "data": 27.0,
+        "data_uncertainty": 5.712007541074852,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.15455010533332825,
+          "Top": 3.41029691696167,
+          "VV+VVV": 0.37812328338623047,
+          "W -> lv": 22.38581085205078,
+          "Z -> vv": 0.6704913973808289
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.15455010533332825,
+          "Top": 3.41029691696167,
+          "VV_VVV": 0.37812328338623047,
+          "WtoLNu": 22.38581085205078,
+          "Zto2Nu": 0.6704913973808289
+        },
+        "total": 26.9992733001709,
+        "uncertainty": 5.088163155488924
+      },
+      {
+        "data": 1013.0,
+        "data_uncertainty": 32.3302784006741,
+        "groups": {
+          "DY": 3.2664568424224854,
+          "Others": 0.0,
+          "Photon+jet": 0.45115628838539124,
+          "QCD Multijet": 0.22923052310943604,
+          "Top": 856.4585571289062,
+          "VV+VVV": 7.05276346206665,
+          "W -> lv": 134.481201171875,
+          "Z -> vv": 11.051461219787598
+        },
+        "processes": {
+          "DY": 3.2664568424224854,
+          "Other": 0.0,
+          "PhotonJet": 0.45115628838539124,
+          "QCD": 0.22923052310943604,
+          "Top": 856.4585571289062,
+          "VV_VVV": 7.05276346206665,
+          "WtoLNu": 134.481201171875,
+          "Zto2Nu": 11.051461219787598
+        },
+        "total": 1012.9907836914062,
+        "uncertainty": 30.52431919797721
+      },
+      {
+        "data": 148.0,
+        "data_uncertainty": 12.672360902500458,
+        "groups": {
+          "DY": 1.309603214263916,
+          "Others": 0.0,
+          "Photon+jet": 0.11244421452283859,
+          "QCD Multijet": 0.0,
+          "Top": 103.96527862548828,
+          "VV+VVV": 1.5612484216690063,
+          "W -> lv": 37.058319091796875,
+          "Z -> vv": 3.991426467895508
+        },
+        "processes": {
+          "DY": 1.309603214263916,
+          "Other": 0.0,
+          "PhotonJet": 0.11244421452283859,
+          "QCD": 0.0,
+          "Top": 103.96527862548828,
+          "VV_VVV": 1.5612484216690063,
+          "WtoLNu": 37.058319091796875,
+          "Zto2Nu": 3.991426467895508
+        },
+        "total": 147.99832153320312,
+        "uncertainty": 12.788283135232618
+      },
+      {
+        "data": 11.0,
+        "data_uncertainty": 3.841049961107458,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 6.003026008605957,
+          "VV+VVV": 0.20686748623847961,
+          "W -> lv": 4.54179048538208,
+          "Z -> vv": 0.24917209148406982
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 6.003026008605957,
+          "VV_VVV": 0.20686748623847961,
+          "WtoLNu": 4.54179048538208,
+          "Zto2Nu": 0.24917209148406982
+        },
+        "total": 11.000856399536133,
+        "uncertainty": 3.452517621922805
+      },
+      {
+        "data": 750.0,
+        "data_uncertainty": 27.889169539817203,
+        "groups": {
+          "DY": 3.9715676307678223,
+          "Others": 0.0,
+          "Photon+jet": 0.02943124808371067,
+          "QCD Multijet": 1.673195481300354,
+          "Top": 663.3722534179688,
+          "VV+VVV": 4.078221797943115,
+          "W -> lv": 68.64965057373047,
+          "Z -> vv": 8.210114479064941
+        },
+        "processes": {
+          "DY": 3.9715676307678223,
+          "Other": 0.0,
+          "PhotonJet": 0.02943124808371067,
+          "QCD": 1.673195481300354,
+          "Top": 663.3722534179688,
+          "VV_VVV": 4.078221797943115,
+          "WtoLNu": 68.64965057373047,
+          "Zto2Nu": 8.210114479064941
+        },
+        "total": 749.9844970703125,
+        "uncertainty": 25.13995046484778
+      },
+      {
+        "data": 113.0,
+        "data_uncertainty": 11.137963973322798,
+        "groups": {
+          "DY": 2.7315025329589844,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 81.33779907226562,
+          "VV+VVV": 0.9971656203269958,
+          "W -> lv": 26.198814392089844,
+          "Z -> vv": 1.7296985387802124
+        },
+        "processes": {
+          "DY": 2.7315025329589844,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 81.33779907226562,
+          "VV_VVV": 0.9971656203269958,
+          "WtoLNu": 26.198814392089844,
+          "Zto2Nu": 1.7296985387802124
+        },
+        "total": 112.99497985839844,
+        "uncertainty": 10.770095679124674
+      },
+      {
+        "data": 9.0,
+        "data_uncertainty": 3.5268325865964734,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 5.259278297424316,
+          "VV+VVV": 0.00814683735370636,
+          "W -> lv": 3.3173818588256836,
+          "Z -> vv": 0.41541722416877747
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 5.259278297424316,
+          "VV_VVV": 0.00814683735370636,
+          "WtoLNu": 3.3173818588256836,
+          "Zto2Nu": 0.41541722416877747
+        },
+        "total": 9.000224113464355,
+        "uncertainty": 3.0208052373873033
+      },
+      {
+        "data": 7.0,
+        "data_uncertainty": 3.1758755874861118,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.053155794739723206,
+          "QCD Multijet": 0.0,
+          "Top": 6.941412448883057,
+          "VV+VVV": 0.0002095897652907297,
+          "W -> lv": 0.005158039275556803,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.053155794739723206,
+          "QCD": 0.0,
+          "Top": 6.941412448883057,
+          "VV_VVV": 0.0002095897652907297,
+          "WtoLNu": 0.005158039275556803,
+          "Zto2Nu": 0.0
+        },
+        "total": 6.999936103820801,
+        "uncertainty": 2.569442054357935
+      },
+      {
+        "data": 1.0,
+        "data_uncertainty": 1.5633863897239886,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 0.9053585529327393,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.09477314352989197,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 0.9053585529327393,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.09477314352989197,
+          "Zto2Nu": 0.0
+        },
+        "total": 1.0001317262649536,
+        "uncertainty": 0.8381266512701622
+      },
+      {
+        "data": 9.999999717180685e-10,
+        "data_uncertainty": 0.9205108217886193,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 5.017596649281586e-08,
+          "VV+VVV": 0.0,
+          "W -> lv": 8.23755674783655e-10,
+          "Z -> vv": 0.018263215199112892
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 5.017596649281586e-08,
+          "VV_VVV": 0.0,
+          "WtoLNu": 8.23755674783655e-10,
+          "Zto2Nu": 0.018263215199112892
+        },
+        "total": 0.01826326549053192,
+        "uncertainty": 0.0015675597855965943
+      },
+      {
+        "data": 68.0,
+        "data_uncertainty": 8.756271433591195,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.1293613463640213,
+          "QCD Multijet": 0.5761858820915222,
+          "Top": 53.96031188964844,
+          "VV+VVV": 0.238030806183815,
+          "W -> lv": 12.553802490234375,
+          "Z -> vv": 0.5421438217163086
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.1293613463640213,
+          "QCD": 0.5761858820915222,
+          "Top": 53.96031188964844,
+          "VV_VVV": 0.238030806183815,
+          "WtoLNu": 12.553802490234375,
+          "Zto2Nu": 0.5421438217163086
+        },
+        "total": 67.99983215332031,
+        "uncertainty": 8.704031034526473
+      },
+      {
+        "data": 24.0,
+        "data_uncertainty": 5.415772134083779,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.4143771231174469,
+          "Top": 16.579442977905273,
+          "VV+VVV": 0.8608671426773071,
+          "W -> lv": 5.823200702667236,
+          "Z -> vv": 0.3207247257232666
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.4143771231174469,
+          "Top": 16.579442977905273,
+          "VV_VVV": 0.8608671426773071,
+          "WtoLNu": 5.823200702667236,
+          "Zto2Nu": 0.3207247257232666
+        },
+        "total": 23.998611450195312,
+        "uncertainty": 4.843334659612115
+      },
+      {
+        "data": 17.0,
+        "data_uncertainty": 4.642951643435346,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 9.697816848754883,
+          "VV+VVV": 0.35922718048095703,
+          "W -> lv": 6.672497272491455,
+          "Z -> vv": 0.2703176736831665
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 9.697816848754883,
+          "VV_VVV": 0.35922718048095703,
+          "WtoLNu": 6.672497272491455,
+          "Zto2Nu": 0.2703176736831665
+        },
+        "total": 16.999858856201172,
+        "uncertainty": 4.26169289921124
+      },
+      {
+        "data": 54.0,
+        "data_uncertainty": 7.859745142159074,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.02254517190158367,
+          "QCD Multijet": 0.0,
+          "Top": 46.72390365600586,
+          "VV+VVV": 0.12365249544382095,
+          "W -> lv": 6.777896881103516,
+          "Z -> vv": 0.35172131657600403
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.02254517190158367,
+          "QCD": 0.0,
+          "Top": 46.72390365600586,
+          "VV_VVV": 0.12365249544382095,
+          "WtoLNu": 6.777896881103516,
+          "Zto2Nu": 0.35172131657600403
+        },
+        "total": 53.99972152709961,
+        "uncertainty": 7.240166081162261
+      },
+      {
+        "data": 18.0,
+        "data_uncertainty": 4.76194726596087,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.06140460819005966,
+          "Top": 13.907252311706543,
+          "VV+VVV": 0.060366880148649216,
+          "W -> lv": 3.706801652908325,
+          "Z -> vv": 0.26321718096733093
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.06140460819005966,
+          "Top": 13.907252311706543,
+          "VV_VVV": 0.060366880148649216,
+          "WtoLNu": 3.706801652908325,
+          "Zto2Nu": 0.26321718096733093
+        },
+        "total": 17.999042510986328,
+        "uncertainty": 4.577914084305346
+      },
+      {
+        "data": 6.0,
+        "data_uncertainty": 2.9817864619305667,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 4.004566669464111,
+          "VV+VVV": 0.059376731514930725,
+          "W -> lv": 1.7764734029769897,
+          "Z -> vv": 0.15939345955848694
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 4.004566669464111,
+          "VV_VVV": 0.059376731514930725,
+          "WtoLNu": 1.7764734029769897,
+          "Zto2Nu": 0.15939345955848694
+        },
+        "total": 5.999810218811035,
+        "uncertainty": 2.192845032358078
+      },
+      {
+        "data": 1.0,
+        "data_uncertainty": 1.5633863897239886,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 0.9837481379508972,
+          "VV+VVV": 0.000506125099491328,
+          "W -> lv": 0.015896879136562347,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 0.9837481379508972,
+          "VV_VVV": 0.000506125099491328,
+          "WtoLNu": 0.015896879136562347,
+          "Zto2Nu": 0.0
+        },
+        "total": 1.0001511573791504,
+        "uncertainty": 0.8779632093502872
+      },
+      {
+        "data": 9.999999717180685e-10,
+        "data_uncertainty": 0.9205108217886193,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 5.268206493269645e-08,
+          "VV+VVV": 0.0,
+          "W -> lv": 1.0145112305792736e-08,
+          "Z -> vv": 0.001549406093545258
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 5.268206493269645e-08,
+          "VV_VVV": 0.0,
+          "WtoLNu": 1.0145112305792736e-08,
+          "Zto2Nu": 0.001549406093545258
+        },
+        "total": 0.0015494689578190446,
+        "uncertainty": 0.0004403190227942357
+      },
+      {
+        "data": 9.999999717180685e-10,
+        "data_uncertainty": 0.9205108217886193,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 2.6874604763804655e-09,
+          "VV+VVV": 0.0,
+          "W -> lv": 4.3541698024895936e-10,
+          "Z -> vv": 0.005653513129800558
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 2.6874604763804655e-09,
+          "VV_VVV": 0.0,
+          "WtoLNu": 4.3541698024895936e-10,
+          "Zto2Nu": 0.005653513129800558
+        },
+        "total": 0.005653516389429569,
+        "uncertainty": 0.0006593729603403786
+      }
+    ],
+    "2024/QCDCR": [
+      {
+        "data": 283.0,
+        "data_uncertainty": 17.32755216447964,
+        "groups": {
+          "DY": 7.8283281326293945,
+          "Others": 0.0,
+          "Photon+jet": 2.2062132358551025,
+          "QCD Multijet": 92.05809783935547,
+          "Top": 23.40360450744629,
+          "VV+VVV": 1.7996711730957031,
+          "W -> lv": 119.52462768554688,
+          "Z -> vv": 36.17527389526367
+        },
+        "processes": {
+          "DY": 7.8283281326293945,
+          "Other": 0.0,
+          "PhotonJet": 2.2062132358551025,
+          "QCD": 92.05809783935547,
+          "Top": 23.40360450744629,
+          "VV_VVV": 1.7996711730957031,
+          "WtoLNu": 119.52462768554688,
+          "Zto2Nu": 36.17527389526367
+        },
+        "total": 282.9958190917969,
+        "uncertainty": 17.12205323643312
+      },
+      {
+        "data": 33.0,
+        "data_uncertainty": 6.258934221513767,
+        "groups": {
+          "DY": 2.6390318870544434,
+          "Others": 0.0,
+          "Photon+jet": 0.4411492347717285,
+          "QCD Multijet": 0.0,
+          "Top": 2.4744529724121094,
+          "VV+VVV": 0.16422714293003082,
+          "W -> lv": 24.42331886291504,
+          "Z -> vv": 6.078756332397461
+        },
+        "processes": {
+          "DY": 2.6390318870544434,
+          "Other": 0.0,
+          "PhotonJet": 0.4411492347717285,
+          "QCD": 0.0,
+          "Top": 2.4744529724121094,
+          "VV_VVV": 0.16422714293003082,
+          "WtoLNu": 24.42331886291504,
+          "Zto2Nu": 6.078756332397461
+        },
+        "total": 36.2209358215332,
+        "uncertainty": 2.1869484516726585
+      },
+      {
+        "data": 1.0,
+        "data_uncertainty": 1.5633863897239886,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 0.016513139009475708,
+          "VV+VVV": 0.001119554741308093,
+          "W -> lv": 1.1893360614776611,
+          "Z -> vv": 0.6048969030380249
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 0.016513139009475708,
+          "VV_VVV": 0.001119554741308093,
+          "WtoLNu": 1.1893360614776611,
+          "Zto2Nu": 0.6048969030380249
+        },
+        "total": 1.8118656873703003,
+        "uncertainty": 0.1750067845800495
+      },
+      {
+        "data": 9.999999717180685e-10,
+        "data_uncertainty": 0.9205108217886193,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 0.0,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.12587937712669373,
+          "Z -> vv": 0.02040346898138523
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 0.0,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.12587937712669373,
+          "Zto2Nu": 0.02040346898138523
+        },
+        "total": 0.1462828516960144,
+        "uncertainty": 0.03161797478074822
+      },
+      {
+        "data": 513.0,
+        "data_uncertainty": 23.15318037819219,
+        "groups": {
+          "DY": 22.363882064819336,
+          "Others": 0.0,
+          "Photon+jet": 3.948185920715332,
+          "QCD Multijet": 224.49452209472656,
+          "Top": 51.88493728637695,
+          "VV+VVV": 2.0169191360473633,
+          "W -> lv": 144.72280883789062,
+          "Z -> vv": 63.57210922241211
+        },
+        "processes": {
+          "DY": 22.363882064819336,
+          "Other": 0.0,
+          "PhotonJet": 3.948185920715332,
+          "QCD": 224.49452209472656,
+          "Top": 51.88493728637695,
+          "VV_VVV": 2.0169191360473633,
+          "WtoLNu": 144.72280883789062,
+          "Zto2Nu": 63.57210922241211
+        },
+        "total": 513.0033569335938,
+        "uncertainty": 21.49669215106129
+      },
+      {
+        "data": 55.0,
+        "data_uncertainty": 7.927372586053579,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.725256621837616,
+          "QCD Multijet": 9.077963829040527,
+          "Top": 6.106085777282715,
+          "VV+VVV": 0.5092335343360901,
+          "W -> lv": 32.43505096435547,
+          "Z -> vv": 6.147110462188721
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.725256621837616,
+          "QCD": 9.077963829040527,
+          "Top": 6.106085777282715,
+          "VV_VVV": 0.5092335343360901,
+          "WtoLNu": 32.43505096435547,
+          "Zto2Nu": 6.147110462188721
+        },
+        "total": 55.000701904296875,
+        "uncertainty": 7.385403149964124
+      },
+      {
+        "data": 1.0,
+        "data_uncertainty": 1.5633863897239886,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 0.09401503205299377,
+          "VV+VVV": 0.000317026482662186,
+          "W -> lv": 2.208500385284424,
+          "Z -> vv": 0.5559043288230896
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 0.09401503205299377,
+          "VV_VVV": 0.000317026482662186,
+          "WtoLNu": 2.208500385284424,
+          "Zto2Nu": 0.5559043288230896
+        },
+        "total": 2.858736753463745,
+        "uncertainty": 0.21810683385190016
+      },
+      {
+        "data": 9.999999717180685e-10,
+        "data_uncertainty": 0.9205108217886193,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 0.0,
+          "VV+VVV": 0.08741958439350128,
+          "W -> lv": 0.09277373552322388,
+          "Z -> vv": 0.055876944214105606
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 0.0,
+          "VV_VVV": 0.08741958439350128,
+          "WtoLNu": 0.09277373552322388,
+          "Zto2Nu": 0.055876944214105606
+        },
+        "total": 0.23607026040554047,
+        "uncertainty": 0.021145266742976725
+      },
+      {
+        "data": 19.0,
+        "data_uncertainty": 4.877707766824672,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.24347727000713348,
+          "QCD Multijet": 2.6940691471099854,
+          "Top": 1.3114078044891357,
+          "VV+VVV": 0.38271304965019226,
+          "W -> lv": 10.41063117980957,
+          "Z -> vv": 3.95684814453125
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.24347727000713348,
+          "QCD": 2.6940691471099854,
+          "Top": 1.3114078044891357,
+          "VV_VVV": 0.38271304965019226,
+          "WtoLNu": 10.41063117980957,
+          "Zto2Nu": 3.95684814453125
+        },
+        "total": 18.9991455078125,
+        "uncertainty": 3.245858238297693
+      },
+      {
+        "data": 15.0,
+        "data_uncertainty": 4.394059264540685,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.027852855622768402,
+          "QCD Multijet": 2.2168374061584473,
+          "Top": 0.8869414329528809,
+          "VV+VVV": 0.005901577416807413,
+          "W -> lv": 6.390764236450195,
+          "Z -> vv": 1.8200434446334839
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.027852855622768402,
+          "QCD": 2.2168374061584473,
+          "Top": 0.8869414329528809,
+          "VV_VVV": 0.005901577416807413,
+          "WtoLNu": 6.390764236450195,
+          "Zto2Nu": 1.8200434446334839
+        },
+        "total": 11.34834098815918,
+        "uncertainty": 0.5431655549073798
+      },
+      {
+        "data": 2.0,
+        "data_uncertainty": 1.9648370913906352,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 0.24389027059078217,
+          "VV+VVV": 0.0011585820466279984,
+          "W -> lv": 3.0621533393859863,
+          "Z -> vv": 0.6655624508857727
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 0.24389027059078217,
+          "VV_VVV": 0.0011585820466279984,
+          "WtoLNu": 3.0621533393859863,
+          "Zto2Nu": 0.6655624508857727
+        },
+        "total": 3.972764492034912,
+        "uncertainty": 0.2550702174130826
+      },
+      {
+        "data": 6.0,
+        "data_uncertainty": 2.9817864619305667,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 0.1832764744758606,
+          "VV+VVV": 0.00515041034668684,
+          "W -> lv": 1.7604097127914429,
+          "Z -> vv": 0.7112439274787903
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 0.1832764744758606,
+          "VV_VVV": 0.00515041034668684,
+          "WtoLNu": 1.7604097127914429,
+          "Zto2Nu": 0.7112439274787903
+        },
+        "total": 2.6600804328918457,
+        "uncertainty": 0.13615250520282082
+      },
+      {
+        "data": 43.0,
+        "data_uncertainty": 7.070056138419634,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.33818867802619934,
+          "QCD Multijet": 11.864811897277832,
+          "Top": 4.084788799285889,
+          "VV+VVV": 0.015166230499744415,
+          "W -> lv": 19.587934494018555,
+          "Z -> vv": 7.108128070831299
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.33818867802619934,
+          "QCD": 11.864811897277832,
+          "Top": 4.084788799285889,
+          "VV_VVV": 0.015166230499744415,
+          "WtoLNu": 19.587934494018555,
+          "Zto2Nu": 7.108128070831299
+        },
+        "total": 42.999019622802734,
+        "uncertainty": 6.379577094623906
+      },
+      {
+        "data": 14.0,
+        "data_uncertainty": 4.263440536185832,
+        "groups": {
+          "DY": 1.6606992483139038,
+          "Others": 0.0,
+          "Photon+jet": 0.07825514674186707,
+          "QCD Multijet": 1.997048002522206e-07,
+          "Top": 1.383791208267212,
+          "VV+VVV": 1.0382965803146362,
+          "W -> lv": 8.130860328674316,
+          "Z -> vv": 3.0058419704437256
+        },
+        "processes": {
+          "DY": 1.6606992483139038,
+          "Other": 0.0,
+          "PhotonJet": 0.07825514674186707,
+          "QCD": 1.997048002522206e-07,
+          "Top": 1.383791208267212,
+          "VV_VVV": 1.0382965803146362,
+          "WtoLNu": 8.130860328674316,
+          "Zto2Nu": 3.0058419704437256
+        },
+        "total": 15.297744750976562,
+        "uncertainty": 0.7140064309308737
+      },
+      {
+        "data": 5.0,
+        "data_uncertainty": 2.7710818976262304,
+        "groups": {
+          "DY": 0.49561944603919983,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 8.673274010106979e-07,
+          "Top": 0.5428863167762756,
+          "VV+VVV": 0.0015622987411916256,
+          "W -> lv": 3.100935220718384,
+          "Z -> vv": 0.9302277565002441
+        },
+        "processes": {
+          "DY": 0.49561944603919983,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 8.673274010106979e-07,
+          "Top": 0.5428863167762756,
+          "VV_VVV": 0.0015622987411916256,
+          "WtoLNu": 3.100935220718384,
+          "Zto2Nu": 0.9302277565002441
+        },
+        "total": 5.071231842041016,
+        "uncertainty": 0.26587721575058976
+      },
+      {
+        "data": 3.0,
+        "data_uncertainty": 2.275445258983817,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.06401874870061874,
+          "QCD Multijet": 0.022001611068844795,
+          "Top": 0.06831585615873337,
+          "VV+VVV": 0.25028660893440247,
+          "W -> lv": 2.598428726196289,
+          "Z -> vv": 0.9310281276702881
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.06401874870061874,
+          "QCD": 0.022001611068844795,
+          "Top": 0.06831585615873337,
+          "VV_VVV": 0.25028660893440247,
+          "WtoLNu": 2.598428726196289,
+          "Zto2Nu": 0.9310281276702881
+        },
+        "total": 3.934079647064209,
+        "uncertainty": 0.1540788795786176
+      },
+      {
+        "data": 177.0,
+        "data_uncertainty": 13.810387626036302,
+        "groups": {
+          "DY": 0.4213981628417969,
+          "Others": 0.0,
+          "Photon+jet": 1.6222350597381592,
+          "QCD Multijet": 106.8687744140625,
+          "Top": 47.268306732177734,
+          "VV+VVV": 0.5198791027069092,
+          "W -> lv": 7.085516452789307,
+          "Z -> vv": 13.217283248901367
+        },
+        "processes": {
+          "DY": 0.4213981628417969,
+          "Other": 0.0,
+          "PhotonJet": 1.6222350597381592,
+          "QCD": 106.8687744140625,
+          "Top": 47.268306732177734,
+          "VV_VVV": 0.5198791027069092,
+          "WtoLNu": 7.085516452789307,
+          "Zto2Nu": 13.217283248901367
+        },
+        "total": 177.00338745117188,
+        "uncertainty": 16.60932414150257
+      },
+      {
+        "data": 11.0,
+        "data_uncertainty": 3.841049961107458,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.1279144436120987,
+          "QCD Multijet": 1.421353816986084,
+          "Top": 5.29721212387085,
+          "VV+VVV": 0.002952584531158209,
+          "W -> lv": 1.907779335975647,
+          "Z -> vv": 2.242443084716797
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.1279144436120987,
+          "QCD": 1.421353816986084,
+          "Top": 5.29721212387085,
+          "VV_VVV": 0.002952584531158209,
+          "WtoLNu": 1.907779335975647,
+          "Zto2Nu": 2.242443084716797
+        },
+        "total": 10.999655723571777,
+        "uncertainty": 2.630041661385804
+      },
+      {
+        "data": 1.0,
+        "data_uncertainty": 1.5633863897239886,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.26829463243484497,
+          "Top": 0.3523256480693817,
+          "VV+VVV": 0.0003645119722932577,
+          "W -> lv": 9.999999717180685e-10,
+          "Z -> vv": 0.06973423808813095
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.26829463243484497,
+          "Top": 0.3523256480693817,
+          "VV_VVV": 0.0003645119722932577,
+          "WtoLNu": 9.999999717180685e-10,
+          "Zto2Nu": 0.06973423808813095
+        },
+        "total": 0.690718948841095,
+        "uncertainty": 0.03609863520668297
+      },
+      {
+        "data": 203.0,
+        "data_uncertainty": 14.753646923656902,
+        "groups": {
+          "DY": 1.2809253931045532,
+          "Others": 0.0,
+          "Photon+jet": 1.0605098009109497,
+          "QCD Multijet": 137.4392547607422,
+          "Top": 47.12398147583008,
+          "VV+VVV": 0.4652080535888672,
+          "W -> lv": 6.241560935974121,
+          "Z -> vv": 9.366923332214355
+        },
+        "processes": {
+          "DY": 1.2809253931045532,
+          "Other": 0.0,
+          "PhotonJet": 1.0605098009109497,
+          "QCD": 137.4392547607422,
+          "Top": 47.12398147583008,
+          "VV_VVV": 0.4652080535888672,
+          "WtoLNu": 6.241560935974121,
+          "Zto2Nu": 9.366923332214355
+        },
+        "total": 202.97836303710938,
+        "uncertainty": 15.671934508860097
+      },
+      {
+        "data": 13.0,
+        "data_uncertainty": 4.128117850491153,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.12887492775917053,
+          "QCD Multijet": 7.236874103546143,
+          "Top": 3.929795265197754,
+          "VV+VVV": 0.3207998275756836,
+          "W -> lv": 0.5196816325187683,
+          "Z -> vv": 0.8610277771949768
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.12887492775917053,
+          "QCD": 7.236874103546143,
+          "Top": 3.929795265197754,
+          "VV_VVV": 0.3207998275756836,
+          "WtoLNu": 0.5196816325187683,
+          "Zto2Nu": 0.8610277771949768
+        },
+        "total": 12.997053146362305,
+        "uncertainty": 3.5123418697723956
+      },
+      {
+        "data": 9.999999717180685e-10,
+        "data_uncertainty": 0.9205108217886193,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 0.2770420014858246,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.14290159940719604,
+          "Z -> vv": 0.15910039842128754
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 0.2770420014858246,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.14290159940719604,
+          "Zto2Nu": 0.15910039842128754
+        },
+        "total": 0.579043984413147,
+        "uncertainty": 0.07287807851344734
+      },
+      {
+        "data": 3.0,
+        "data_uncertainty": 2.275445258983817,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 2.4478020668029785,
+          "Top": 0.5516708493232727,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.0,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 2.4478020668029785,
+          "Top": 0.5516708493232727,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.0,
+          "Zto2Nu": 0.0
+        },
+        "total": 2.9994728565216064,
+        "uncertainty": 1.5415630958752395
+      },
+      {
+        "data": 9.999999717180685e-10,
+        "data_uncertainty": 0.9205108217886193,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 0.05397658050060272,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.021833449602127075,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 0.05397658050060272,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.021833449602127075,
+          "Zto2Nu": 0.0
+        },
+        "total": 0.0758100301027298,
+        "uncertainty": 0.0109309525988076
+      },
+      {
+        "data": 0.0,
+        "data_uncertainty": 0.0,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 0.0,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.0,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 0.0,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.0,
+          "Zto2Nu": 0.0
+        },
+        "total": 0.0,
+        "uncertainty": 0.0
+      },
+      {
+        "data": 11.0,
+        "data_uncertainty": 3.841049961107458,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.13183967769145966,
+          "QCD Multijet": 3.8012855052948,
+          "Top": 5.019694805145264,
+          "VV+VVV": 0.011373141780495644,
+          "W -> lv": 0.6890665888786316,
+          "Z -> vv": 1.3467321395874023
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.13183967769145966,
+          "QCD": 3.8012855052948,
+          "Top": 5.019694805145264,
+          "VV_VVV": 0.011373141780495644,
+          "WtoLNu": 0.6890665888786316,
+          "Zto2Nu": 1.3467321395874023
+        },
+        "total": 10.999992370605469,
+        "uncertainty": 3.010721199093645
+      },
+      {
+        "data": 8.0,
+        "data_uncertainty": 3.3567637873510074,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.08658427000045776,
+          "QCD Multijet": 5.274914741516113,
+          "Top": 0.5746053457260132,
+          "VV+VVV": 0.0015142901102080941,
+          "W -> lv": 0.3467637300491333,
+          "Z -> vv": 0.6566984057426453
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.08658427000045776,
+          "QCD": 5.274914741516113,
+          "Top": 0.5746053457260132,
+          "VV_VVV": 0.0015142901102080941,
+          "WtoLNu": 0.3467637300491333,
+          "Zto2Nu": 0.6566984057426453
+        },
+        "total": 6.941080570220947,
+        "uncertainty": 1.261952135922506
+      },
+      {
+        "data": 1.0,
+        "data_uncertainty": 1.5633863897239886,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.18810854852199554,
+          "Top": 1.0024878978729248,
+          "VV+VVV": 0.0019260109402239323,
+          "W -> lv": 0.6300071477890015,
+          "Z -> vv": 0.31999465823173523
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.18810854852199554,
+          "Top": 1.0024878978729248,
+          "VV_VVV": 0.0019260109402239323,
+          "WtoLNu": 0.6300071477890015,
+          "Zto2Nu": 0.31999465823173523
+        },
+        "total": 2.142524242401123,
+        "uncertainty": 0.08292813774454076
+      },
+      {
+        "data": 13.0,
+        "data_uncertainty": 4.128117850491153,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.06098107248544693,
+          "QCD Multijet": 5.742383003234863,
+          "Top": 4.962268352508545,
+          "VV+VVV": 7.789712763717205e-10,
+          "W -> lv": 1.0903593301773071,
+          "Z -> vv": 1.1431937217712402
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.06098107248544693,
+          "QCD": 5.742383003234863,
+          "Top": 4.962268352508545,
+          "VV_VVV": 7.789712763717205e-10,
+          "WtoLNu": 1.0903593301773071,
+          "Zto2Nu": 1.1431937217712402
+        },
+        "total": 12.999185562133789,
+        "uncertainty": 3.4403342364083063
+      },
+      {
+        "data": 5.0,
+        "data_uncertainty": 2.7710818976262304,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.03345251455903053,
+          "QCD Multijet": 1.6286771297454834,
+          "Top": 2.077179193496704,
+          "VV+VVV": 7.443483052149702e-10,
+          "W -> lv": 0.8417295813560486,
+          "Z -> vv": 0.4187096953392029
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.03345251455903053,
+          "QCD": 1.6286771297454834,
+          "Top": 2.077179193496704,
+          "VV_VVV": 7.443483052149702e-10,
+          "WtoLNu": 0.8417295813560486,
+          "Zto2Nu": 0.4187096953392029
+        },
+        "total": 4.999748229980469,
+        "uncertainty": 1.5291747935786826
+      },
+      {
+        "data": 9.999999717180685e-10,
+        "data_uncertainty": 0.9205108217886193,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0064953905530273914,
+          "QCD Multijet": 0.10671833157539368,
+          "Top": 1.0326650142669678,
+          "VV+VVV": 0.0015955574344843626,
+          "W -> lv": 0.15070003271102905,
+          "Z -> vv": 0.3498178720474243
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0064953905530273914,
+          "QCD": 0.10671833157539368,
+          "Top": 1.0326650142669678,
+          "VV_VVV": 0.0015955574344843626,
+          "WtoLNu": 0.15070003271102905,
+          "Zto2Nu": 0.3498178720474243
+        },
+        "total": 1.6479922533035278,
+        "uncertainty": 0.10171842490054915
+      },
+      {
+        "data": 9.999999717180685e-10,
+        "data_uncertainty": 0.9205108217886193,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 0.23915940523147583,
+          "VV+VVV": 0.0,
+          "W -> lv": 9.999999717180685e-10,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 0.23915940523147583,
+          "VV_VVV": 0.0,
+          "WtoLNu": 9.999999717180685e-10,
+          "Zto2Nu": 0.0
+        },
+        "total": 0.23915940523147583,
+        "uncertainty": 0.03255630224227009
+      },
+      {
+        "data": 9.999999717180685e-10,
+        "data_uncertainty": 0.9205108217886193,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 0.0917215645313263,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.005794697441160679,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 0.0917215645313263,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.005794697441160679,
+          "Zto2Nu": 0.0
+        },
+        "total": 0.0975162610411644,
+        "uncertainty": 0.02730341797853005
+      },
+      {
+        "data": 9.999999717180685e-10,
+        "data_uncertainty": 0.9205108217886193,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 3.5667180782184005e-05,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.01990549825131893,
+          "Z -> vv": 9.999999717180685e-10
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 3.5667180782184005e-05,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.01990549825131893,
+          "Zto2Nu": 9.999999717180685e-10
+        },
+        "total": 0.019941167905926704,
+        "uncertainty": 0.010751525981293883
+      }
+    ],
+    "2025/GCR": [
+      {
+        "data": 2693.0,
+        "data_uncertainty": 52.39572861996385,
+        "groups": {
+          "DY": 3.7326273918151855,
+          "Others": 0.0,
+          "Photon+jet": 2536.5234375,
+          "QCD Multijet": 145.12213134765625,
+          "Top": 2.322707414627075,
+          "VV+VVV": 1.0310922861099243,
+          "W -> lv": 4.276640892028809,
+          "Z -> vv": 9.999999717180685e-10
+        },
+        "processes": {
+          "DY": 3.7326273918151855,
+          "Other": 0.0,
+          "PhotonJet": 2536.5234375,
+          "QCD": 145.12213134765625,
+          "Top": 2.322707414627075,
+          "VV_VVV": 1.0310922861099243,
+          "WtoLNu": 4.276640892028809,
+          "Zto2Nu": 9.999999717180685e-10
+        },
+        "total": 2693.008544921875,
+        "uncertainty": 53.985151314968086
+      },
+      {
+        "data": 906.0,
+        "data_uncertainty": 30.602601515991466,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 862.5687255859375,
+          "QCD Multijet": 38.198551177978516,
+          "Top": 0.8675788044929504,
+          "VV+VVV": 1.1002715826034546,
+          "W -> lv": 3.1896140575408936,
+          "Z -> vv": 0.07526745647192001
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 862.5687255859375,
+          "QCD": 38.198551177978516,
+          "Top": 0.8675788044929504,
+          "VV_VVV": 1.1002715826034546,
+          "WtoLNu": 3.1896140575408936,
+          "Zto2Nu": 0.07526745647192001
+        },
+        "total": 906.0,
+        "uncertainty": 30.179116330668133
+      },
+      {
+        "data": 119.0,
+        "data_uncertainty": 11.416331674278624,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 110.13704681396484,
+          "QCD Multijet": 8.123733520507812,
+          "Top": 0.1758270561695099,
+          "VV+VVV": 0.0021567230578511953,
+          "W -> lv": 0.4213896691799164,
+          "Z -> vv": 0.13703127205371857
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 110.13704681396484,
+          "QCD": 8.123733520507812,
+          "Top": 0.1758270561695099,
+          "VV_VVV": 0.0021567230578511953,
+          "WtoLNu": 0.4213896691799164,
+          "Zto2Nu": 0.13703127205371857
+        },
+        "total": 118.99718475341797,
+        "uncertainty": 11.127964843694466
+      },
+      {
+        "data": 11.0,
+        "data_uncertainty": 3.841049961107458,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 10.998617172241211,
+          "QCD Multijet": 0.0,
+          "Top": 0.0,
+          "VV+VVV": 0.001162785105407238,
+          "W -> lv": 9.999999717180685e-10,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 10.998617172241211,
+          "QCD": 0.0,
+          "Top": 0.0,
+          "VV_VVV": 0.001162785105407238,
+          "WtoLNu": 9.999999717180685e-10,
+          "Zto2Nu": 0.0
+        },
+        "total": 10.99977970123291,
+        "uncertainty": 3.3888150411039697
+      },
+      {
+        "data": 4309.0,
+        "data_uncertainty": 66.14424311519815,
+        "groups": {
+          "DY": 1.8344694375991821,
+          "Others": 0.0,
+          "Photon+jet": 4001.649169921875,
+          "QCD Multijet": 287.99786376953125,
+          "Top": 6.477659702301025,
+          "VV+VVV": 0.9365434050559998,
+          "W -> lv": 10.113691329956055,
+          "Z -> vv": 9.999999717180685e-10
+        },
+        "processes": {
+          "DY": 1.8344694375991821,
+          "Other": 0.0,
+          "PhotonJet": 4001.649169921875,
+          "QCD": 287.99786376953125,
+          "Top": 6.477659702301025,
+          "VV_VVV": 0.9365434050559998,
+          "WtoLNu": 10.113691329956055,
+          "Zto2Nu": 9.999999717180685e-10
+        },
+        "total": 4309.00927734375,
+        "uncertainty": 65.47348700046454
+      },
+      {
+        "data": 1542.0,
+        "data_uncertainty": 39.77042955653678,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 1490.0225830078125,
+          "QCD Multijet": 46.11170196533203,
+          "Top": 2.7094485759735107,
+          "VV+VVV": 0.002756686881184578,
+          "W -> lv": 3.1530394554138184,
+          "Z -> vv": 9.999999717180685e-10
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 1490.0225830078125,
+          "QCD": 46.11170196533203,
+          "Top": 2.7094485759735107,
+          "VV_VVV": 0.002756686881184578,
+          "WtoLNu": 3.1530394554138184,
+          "Zto2Nu": 9.999999717180685e-10
+        },
+        "total": 1541.9996337890625,
+        "uncertainty": 40.51495865726633
+      },
+      {
+        "data": 235.0,
+        "data_uncertainty": 15.835138738705865,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 223.45806884765625,
+          "QCD Multijet": 11.044465065002441,
+          "Top": 0.06664859503507614,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.428326815366745,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 223.45806884765625,
+          "QCD": 11.044465065002441,
+          "Top": 0.06664859503507614,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.428326815366745,
+          "Zto2Nu": 0.0
+        },
+        "total": 234.9975128173828,
+        "uncertainty": 14.854389607957643
+      },
+      {
+        "data": 13.0,
+        "data_uncertainty": 4.128117850491153,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 12.458991050720215,
+          "QCD Multijet": 0.27518853545188904,
+          "Top": 0.0,
+          "VV+VVV": 0.26545825600624084,
+          "W -> lv": 9.999999717180685e-10,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 12.458991050720215,
+          "QCD": 0.27518853545188904,
+          "Top": 0.0,
+          "VV_VVV": 0.26545825600624084,
+          "WtoLNu": 9.999999717180685e-10,
+          "Zto2Nu": 0.0
+        },
+        "total": 12.999637603759766,
+        "uncertainty": 3.74495249495279
+      },
+      {
+        "data": 206.0,
+        "data_uncertainty": 14.85849761576516,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 187.07240295410156,
+          "QCD Multijet": 17.825565338134766,
+          "Top": 0.3562563955783844,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.5140048265457153,
+          "Z -> vv": 0.22910051047801971
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 187.07240295410156,
+          "QCD": 17.825565338134766,
+          "Top": 0.3562563955783844,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.5140048265457153,
+          "Zto2Nu": 0.22910051047801971
+        },
+        "total": 205.99732971191406,
+        "uncertainty": 12.592549182825335
+      },
+      {
+        "data": 162.0,
+        "data_uncertainty": 13.234457024022262,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 155.28427124023438,
+          "QCD Multijet": 6.1182050704956055,
+          "Top": 0.19107075035572052,
+          "VV+VVV": 0.0024248904082924128,
+          "W -> lv": 0.40013593435287476,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 155.28427124023438,
+          "QCD": 6.1182050704956055,
+          "Top": 0.19107075035572052,
+          "VV_VVV": 0.0024248904082924128,
+          "WtoLNu": 0.40013593435287476,
+          "Zto2Nu": 0.0
+        },
+        "total": 161.99610900878906,
+        "uncertainty": 15.261854383355582
+      },
+      {
+        "data": 65.0,
+        "data_uncertainty": 8.572545314003964,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 63.158103942871094,
+          "QCD Multijet": 1.6971219778060913,
+          "Top": 0.0,
+          "VV+VVV": 0.0,
+          "W -> lv": 9.637362019532247e-09,
+          "Z -> vv": 0.14313249289989471
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 63.158103942871094,
+          "QCD": 1.6971219778060913,
+          "Top": 0.0,
+          "VV_VVV": 0.0,
+          "WtoLNu": 9.637362019532247e-09,
+          "Zto2Nu": 0.14313249289989471
+        },
+        "total": 64.99835968017578,
+        "uncertainty": 1116509919673252.1
+      },
+      {
+        "data": 59.0,
+        "data_uncertainty": 8.191938529073095,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 57.10060119628906,
+          "QCD Multijet": 1.7838129997253418,
+          "Top": 0.03303903341293335,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.08088374137878418,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 57.10060119628906,
+          "QCD": 1.7838129997253418,
+          "Top": 0.03303903341293335,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.08088374137878418,
+          "Zto2Nu": 0.0
+        },
+        "total": 58.99833679199219,
+        "uncertainty": 9.199828038474415
+      },
+      {
+        "data": 288.0,
+        "data_uncertainty": 17.47546802128241,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 260.7817077636719,
+          "QCD Multijet": 25.065570831298828,
+          "Top": 1.263007640838623,
+          "VV+VVV": 0.1215868592262268,
+          "W -> lv": 0.765832245349884,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 260.7817077636719,
+          "QCD": 25.065570831298828,
+          "Top": 1.263007640838623,
+          "VV_VVV": 0.1215868592262268,
+          "WtoLNu": 0.765832245349884,
+          "Zto2Nu": 0.0
+        },
+        "total": 287.9977111816406,
+        "uncertainty": 16.55878201193403
+      },
+      {
+        "data": 241.0,
+        "data_uncertainty": 16.029535884665947,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 231.6895294189453,
+          "QCD Multijet": 8.108074188232422,
+          "Top": 0.29227450489997864,
+          "VV+VVV": 0.0007435439620167017,
+          "W -> lv": 0.7482496500015259,
+          "Z -> vv": 0.15590646862983704
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 231.6895294189453,
+          "QCD": 8.108074188232422,
+          "Top": 0.29227450489997864,
+          "VV_VVV": 0.0007435439620167017,
+          "WtoLNu": 0.7482496500015259,
+          "Zto2Nu": 0.15590646862983704
+        },
+        "total": 240.99478149414062,
+        "uncertainty": 20.222615550108745
+      },
+      {
+        "data": 113.0,
+        "data_uncertainty": 11.137963973322798,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 108.06185913085938,
+          "QCD Multijet": 4.584153175354004,
+          "Top": 0.00021806078439112753,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.3511907458305359,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 108.06185913085938,
+          "QCD": 4.584153175354004,
+          "Top": 0.00021806078439112753,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.3511907458305359,
+          "Zto2Nu": 0.0
+        },
+        "total": 112.99742126464844,
+        "uncertainty": 11.596351207518897
+      },
+      {
+        "data": 93.0,
+        "data_uncertainty": 10.152263635107929,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 89.74005126953125,
+          "QCD Multijet": 3.136983871459961,
+          "Top": 0.0,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.1207118108868599,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 89.74005126953125,
+          "QCD": 3.136983871459961,
+          "Top": 0.0,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.1207118108868599,
+          "Zto2Nu": 0.0
+        },
+        "total": 92.99774932861328,
+        "uncertainty": 11.825734979801465
+      },
+      {
+        "data": 622.0,
+        "data_uncertainty": 25.443267551504334,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 519.52685546875,
+          "QCD Multijet": 93.1915283203125,
+          "Top": 7.48480749130249,
+          "VV+VVV": 0.054110556840896606,
+          "W -> lv": 1.7402889728546143,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 519.52685546875,
+          "QCD": 93.1915283203125,
+          "Top": 7.48480749130249,
+          "VV_VVV": 0.054110556840896606,
+          "WtoLNu": 1.7402889728546143,
+          "Zto2Nu": 0.0
+        },
+        "total": 621.9976196289062,
+        "uncertainty": 23.392204564234643
+      },
+      {
+        "data": 212.0,
+        "data_uncertainty": 15.065934910886185,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 198.26702880859375,
+          "QCD Multijet": 11.853043556213379,
+          "Top": 1.5409972667694092,
+          "VV+VVV": 0.08659769594669342,
+          "W -> lv": 0.12484140694141388,
+          "Z -> vv": 0.12602823972702026
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 198.26702880859375,
+          "QCD": 11.853043556213379,
+          "Top": 1.5409972667694092,
+          "VV_VVV": 0.08659769594669342,
+          "WtoLNu": 0.12484140694141388,
+          "Zto2Nu": 0.12602823972702026
+        },
+        "total": 211.99853515625,
+        "uncertainty": 14.27368987530029
+      },
+      {
+        "data": 44.0,
+        "data_uncertainty": 7.145725032616539,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 41.36057662963867,
+          "QCD Multijet": 2.364409923553467,
+          "Top": 0.007706610485911369,
+          "VV+VVV": 0.12644903361797333,
+          "W -> lv": 0.13979464769363403,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 41.36057662963867,
+          "QCD": 2.364409923553467,
+          "Top": 0.007706610485911369,
+          "VV_VVV": 0.12644903361797333,
+          "WtoLNu": 0.13979464769363403,
+          "Zto2Nu": 0.0
+        },
+        "total": 43.99893569946289,
+        "uncertainty": 6.407260209983476
+      },
+      {
+        "data": 381.0,
+        "data_uncertainty": 20.023487181048296,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 356.5027770996094,
+          "QCD Multijet": 18.38617706298828,
+          "Top": 5.841141223907471,
+          "VV+VVV": 0.26977843046188354,
+          "W -> lv": 9.999999717180685e-10,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 356.5027770996094,
+          "QCD": 18.38617706298828,
+          "Top": 5.841141223907471,
+          "VV_VVV": 0.26977843046188354,
+          "WtoLNu": 9.999999717180685e-10,
+          "Zto2Nu": 0.0
+        },
+        "total": 380.9998779296875,
+        "uncertainty": 18.197243953412286
+      },
+      {
+        "data": 168.0,
+        "data_uncertainty": 13.467899036318073,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 158.15524291992188,
+          "QCD Multijet": 7.744607448577881,
+          "Top": 1.3291473388671875,
+          "VV+VVV": 6.600484630325809e-05,
+          "W -> lv": 0.7584285140037537,
+          "Z -> vv": 0.01140922587364912
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 158.15524291992188,
+          "QCD": 7.744607448577881,
+          "Top": 1.3291473388671875,
+          "VV_VVV": 6.600484630325809e-05,
+          "WtoLNu": 0.7584285140037537,
+          "Zto2Nu": 0.01140922587364912
+        },
+        "total": 167.9989013671875,
+        "uncertainty": 12.573348471941554
+      },
+      {
+        "data": 46.0,
+        "data_uncertainty": 7.294534952524465,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 44.142486572265625,
+          "QCD Multijet": 1.6824243068695068,
+          "Top": 0.17383158206939697,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.0,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 44.142486572265625,
+          "QCD": 1.6824243068695068,
+          "Top": 0.17383158206939697,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.0,
+          "Zto2Nu": 0.0
+        },
+        "total": 45.998741149902344,
+        "uncertainty": 7.182437415429563
+      },
+      {
+        "data": 2.0,
+        "data_uncertainty": 1.9648370913906352,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 1.6458475589752197,
+          "QCD Multijet": 0.0,
+          "Top": 0.3540528118610382,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.0,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 1.6458475589752197,
+          "QCD": 0.0,
+          "Top": 0.3540528118610382,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.0,
+          "Zto2Nu": 0.0
+        },
+        "total": 1.9999003410339355,
+        "uncertainty": 1.3247728260994351
+      },
+      {
+        "data": 1.0,
+        "data_uncertainty": 1.5633863897239886,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.9747200608253479,
+          "QCD Multijet": 0.0,
+          "Top": 0.025344576686620712,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.0,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.9747200608253479,
+          "QCD": 0.0,
+          "Top": 0.025344576686620712,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.0,
+          "Zto2Nu": 0.0
+        },
+        "total": 1.0000646114349365,
+        "uncertainty": 0.8404868086778777
+      },
+      {
+        "data": 1.0,
+        "data_uncertainty": 1.5633863897239886,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.9172340035438538,
+          "QCD Multijet": 0.08336471766233444,
+          "Top": 0.0,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.0,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.9172340035438538,
+          "QCD": 0.08336471766233444,
+          "Top": 0.0,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.0,
+          "Zto2Nu": 0.0
+        },
+        "total": 1.000598669052124,
+        "uncertainty": 0.5722734574442666
+      },
+      {
+        "data": 54.0,
+        "data_uncertainty": 7.859745142159074,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 49.369285583496094,
+          "QCD Multijet": 3.3581788539886475,
+          "Top": 0.6596278548240662,
+          "VV+VVV": 0.0011783103691413999,
+          "W -> lv": 0.61137855052948,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 49.369285583496094,
+          "QCD": 3.3581788539886475,
+          "Top": 0.6596278548240662,
+          "VV_VVV": 0.0011783103691413999,
+          "WtoLNu": 0.61137855052948,
+          "Zto2Nu": 0.0
+        },
+        "total": 53.9996452331543,
+        "uncertainty": 7.513375118018699
+      },
+      {
+        "data": 35.0,
+        "data_uncertainty": 6.430042212762041,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 33.576148986816406,
+          "QCD Multijet": 1.275375485420227,
+          "Top": 0.11249561607837677,
+          "VV+VVV": 0.010235270485281944,
+          "W -> lv": 0.02506290003657341,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 33.576148986816406,
+          "QCD": 1.275375485420227,
+          "Top": 0.11249561607837677,
+          "VV_VVV": 0.010235270485281944,
+          "WtoLNu": 0.02506290003657341,
+          "Zto2Nu": 0.0
+        },
+        "total": 34.99931716918945,
+        "uncertainty": 6.039783066649621
+      },
+      {
+        "data": 32.0,
+        "data_uncertainty": 6.171444357021825,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 30.175764083862305,
+          "QCD Multijet": 1.7341498136520386,
+          "Top": 0.08782993257045746,
+          "VV+VVV": 0.0015642347279936075,
+          "W -> lv": 9.999999717180685e-10,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 30.175764083862305,
+          "QCD": 1.7341498136520386,
+          "Top": 0.08782993257045746,
+          "VV_VVV": 0.0015642347279936075,
+          "WtoLNu": 9.999999717180685e-10,
+          "Zto2Nu": 0.0
+        },
+        "total": 31.99930763244629,
+        "uncertainty": 5.904515080838032
+      },
+      {
+        "data": 33.0,
+        "data_uncertainty": 6.258934221513767,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 28.4238224029541,
+          "QCD Multijet": 3.530071496963501,
+          "Top": 1.045706868171692,
+          "VV+VVV": 0.0,
+          "W -> lv": 9.999999717180685e-10,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 28.4238224029541,
+          "QCD": 3.530071496963501,
+          "Top": 1.045706868171692,
+          "VV_VVV": 0.0,
+          "WtoLNu": 9.999999717180685e-10,
+          "Zto2Nu": 0.0
+        },
+        "total": 32.99959945678711,
+        "uncertainty": 5.727966020025128
+      },
+      {
+        "data": 25.0,
+        "data_uncertainty": 5.516461918741058,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 23.769859313964844,
+          "QCD Multijet": 1.0948816537857056,
+          "Top": 0.12735627591609955,
+          "VV+VVV": 0.0006505621131509542,
+          "W -> lv": 0.006774443201720715,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 23.769859313964844,
+          "QCD": 1.0948816537857056,
+          "Top": 0.12735627591609955,
+          "VV_VVV": 0.0006505621131509542,
+          "WtoLNu": 0.006774443201720715,
+          "Zto2Nu": 0.0
+        },
+        "total": 24.999521255493164,
+        "uncertainty": 5.197161090291266
+      },
+      {
+        "data": 19.0,
+        "data_uncertainty": 4.877707766824672,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 17.670257568359375,
+          "QCD Multijet": 0.6833392381668091,
+          "Top": 0.6079105138778687,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.03792647644877434,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 17.670257568359375,
+          "QCD": 0.6833392381668091,
+          "Top": 0.6079105138778687,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.03792647644877434,
+          "Zto2Nu": 0.0
+        },
+        "total": 18.999433517456055,
+        "uncertainty": 4.684750756276955
+      },
+      {
+        "data": 1.0,
+        "data_uncertainty": 1.5633863897239886,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.9141830801963806,
+          "QCD Multijet": 0.08610672503709793,
+          "Top": 9.308552762377076e-06,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.0,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.9141830801963806,
+          "QCD": 0.08610672503709793,
+          "Top": 9.308552762377076e-06,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.0,
+          "Zto2Nu": 0.0
+        },
+        "total": 1.000299096107483,
+        "uncertainty": 0.7758062045567878
+      },
+      {
+        "data": 9.999999717180685e-10,
+        "data_uncertainty": 0.9205108217886193,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.14385701715946198,
+          "QCD Multijet": 0.10242835432291031,
+          "Top": 0.0,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.0,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.14385701715946198,
+          "QCD": 0.10242835432291031,
+          "Top": 0.0,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.0,
+          "Zto2Nu": 0.0
+        },
+        "total": 0.24628537893295288,
+        "uncertainty": 0.1708271405407906
+      },
+      {
+        "data": 1.0,
+        "data_uncertainty": 1.5633863897239886,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.8560811877250671,
+          "QCD Multijet": 0.0,
+          "Top": 0.0,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.0,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.8560811877250671,
+          "QCD": 0.0,
+          "Top": 0.0,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.0,
+          "Zto2Nu": 0.0
+        },
+        "total": 0.8560811877250671,
+        "uncertainty": 0.7804520827643494
+      }
+    ],
+    "2025/LLCR": [
+      {
+        "data": 2362.0,
+        "data_uncertainty": 49.10212595047642,
+        "groups": {
+          "DY": 42.75641632080078,
+          "Others": 0.0,
+          "Photon+jet": 0.959754228591919,
+          "QCD Multijet": 0.0,
+          "Top": 436.3958435058594,
+          "VV+VVV": 22.61614418029785,
+          "W -> lv": 1823.283447265625,
+          "Z -> vv": 35.99480056762695
+        },
+        "processes": {
+          "DY": 42.75641632080078,
+          "Other": 0.0,
+          "PhotonJet": 0.959754228591919,
+          "QCD": 0.0,
+          "Top": 436.3958435058594,
+          "VV_VVV": 22.61614418029785,
+          "WtoLNu": 1823.283447265625,
+          "Zto2Nu": 35.99480056762695
+        },
+        "total": 2362.006591796875,
+        "uncertainty": 46.68190896910708
+      },
+      {
+        "data": 455.0,
+        "data_uncertainty": 21.834633120561335,
+        "groups": {
+          "DY": 5.557648181915283,
+          "Others": 0.0,
+          "Photon+jet": 0.06917423754930496,
+          "QCD Multijet": 0.0,
+          "Top": 54.78252029418945,
+          "VV+VVV": 4.325005531311035,
+          "W -> lv": 377.5535583496094,
+          "Z -> vv": 12.708571434020996
+        },
+        "processes": {
+          "DY": 5.557648181915283,
+          "Other": 0.0,
+          "PhotonJet": 0.06917423754930496,
+          "QCD": 0.0,
+          "Top": 54.78252029418945,
+          "VV_VVV": 4.325005531311035,
+          "WtoLNu": 377.5535583496094,
+          "Zto2Nu": 12.708571434020996
+        },
+        "total": 454.9964599609375,
+        "uncertainty": 22.225814629333613
+      },
+      {
+        "data": 36.0,
+        "data_uncertainty": 6.513770535520955,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.016944268718361855,
+          "QCD Multijet": 0.0,
+          "Top": 2.061941385269165,
+          "VV+VVV": 1.1180368661880493,
+          "W -> lv": 31.517751693725586,
+          "Z -> vv": 1.284873366355896
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.016944268718361855,
+          "QCD": 0.0,
+          "Top": 2.061941385269165,
+          "VV_VVV": 1.1180368661880493,
+          "WtoLNu": 31.517751693725586,
+          "Zto2Nu": 1.284873366355896
+        },
+        "total": 35.999549865722656,
+        "uncertainty": 6.277563633750059
+      },
+      {
+        "data": 4.0,
+        "data_uncertainty": 2.538546178656218,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.2662881016731262,
+          "Top": 0.6591783761978149,
+          "VV+VVV": 0.0007014081929810345,
+          "W -> lv": 3.0704259872436523,
+          "Z -> vv": 0.003308479906991124
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.2662881016731262,
+          "Top": 0.6591783761978149,
+          "VV_VVV": 0.0007014081929810345,
+          "WtoLNu": 3.0704259872436523,
+          "Zto2Nu": 0.003308479906991124
+        },
+        "total": 3.9999024868011475,
+        "uncertainty": 1.8728108965661416
+      },
+      {
+        "data": 2892.0,
+        "data_uncertainty": 54.27886806171796,
+        "groups": {
+          "DY": 42.53818130493164,
+          "Others": 0.0,
+          "Photon+jet": 1.1399576663970947,
+          "QCD Multijet": 6.093644142150879,
+          "Top": 1139.2630615234375,
+          "VV+VVV": 22.737533569335938,
+          "W -> lv": 1628.8455810546875,
+          "Z -> vv": 51.37233352661133
+        },
+        "processes": {
+          "DY": 42.53818130493164,
+          "Other": 0.0,
+          "PhotonJet": 1.1399576663970947,
+          "QCD": 6.093644142150879,
+          "Top": 1139.2630615234375,
+          "VV_VVV": 22.737533569335938,
+          "WtoLNu": 1628.8455810546875,
+          "Zto2Nu": 51.37233352661133
+        },
+        "total": 2891.990234375,
+        "uncertainty": 51.091991177678715
+      },
+      {
+        "data": 541.0,
+        "data_uncertainty": 23.7629874618666,
+        "groups": {
+          "DY": 0.5289660096168518,
+          "Others": 0.0,
+          "Photon+jet": 0.3791244626045227,
+          "QCD Multijet": 0.0,
+          "Top": 153.03750610351562,
+          "VV+VVV": 5.660286903381348,
+          "W -> lv": 366.4038391113281,
+          "Z -> vv": 14.988992691040039
+        },
+        "processes": {
+          "DY": 0.5289660096168518,
+          "Other": 0.0,
+          "PhotonJet": 0.3791244626045227,
+          "QCD": 0.0,
+          "Top": 153.03750610351562,
+          "VV_VVV": 5.660286903381348,
+          "WtoLNu": 366.4038391113281,
+          "Zto2Nu": 14.988992691040039
+        },
+        "total": 540.998779296875,
+        "uncertainty": 22.805176906790265
+      },
+      {
+        "data": 22.0,
+        "data_uncertainty": 5.207934398442227,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 4.666712760925293,
+          "VV+VVV": 0.2667185664176941,
+          "W -> lv": 15.255901336669922,
+          "Z -> vv": 1.80983304977417
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 4.666712760925293,
+          "VV_VVV": 0.2667185664176941,
+          "WtoLNu": 15.255901336669922,
+          "Zto2Nu": 1.80983304977417
+        },
+        "total": 21.99916648864746,
+        "uncertainty": 4.817604587846926
+      },
+      {
+        "data": 2.0,
+        "data_uncertainty": 1.9648370913906352,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 8.153618336059765e-10,
+          "VV+VVV": 0.0008936406229622662,
+          "W -> lv": 1.8735734224319458,
+          "Z -> vv": 0.1255323886871338
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 8.153618336059765e-10,
+          "VV_VVV": 0.0008936406229622662,
+          "WtoLNu": 1.8735734224319458,
+          "Zto2Nu": 0.1255323886871338
+        },
+        "total": 1.9999994039535522,
+        "uncertainty": 1.2466091092400353
+      },
+      {
+        "data": 181.0,
+        "data_uncertainty": 13.959807734752943,
+        "groups": {
+          "DY": 2.931661605834961,
+          "Others": 0.0,
+          "Photon+jet": 0.11734695732593536,
+          "QCD Multijet": 2.592203378677368,
+          "Top": 24.801931381225586,
+          "VV+VVV": 2.4872806072235107,
+          "W -> lv": 146.12010192871094,
+          "Z -> vv": 1.9494329690933228
+        },
+        "processes": {
+          "DY": 2.931661605834961,
+          "Other": 0.0,
+          "PhotonJet": 0.11734695732593536,
+          "QCD": 2.592203378677368,
+          "Top": 24.801931381225586,
+          "VV_VVV": 2.4872806072235107,
+          "WtoLNu": 146.12010192871094,
+          "Zto2Nu": 1.9494329690933228
+        },
+        "total": 180.9999542236328,
+        "uncertainty": 13.115527832020334
+      },
+      {
+        "data": 76.0,
+        "data_uncertainty": 9.227318412852313,
+        "groups": {
+          "DY": 0.446466863155365,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 6.044277667999268,
+          "VV+VVV": 0.6586382389068604,
+          "W -> lv": 67.43617248535156,
+          "Z -> vv": 1.414982557296753
+        },
+        "processes": {
+          "DY": 0.446466863155365,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 6.044277667999268,
+          "VV_VVV": 0.6586382389068604,
+          "WtoLNu": 67.43617248535156,
+          "Zto2Nu": 1.414982557296753
+        },
+        "total": 76.00054168701172,
+        "uncertainty": 8.549234420676948
+      },
+      {
+        "data": 24.0,
+        "data_uncertainty": 5.415772134083779,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.015067477710545063,
+          "QCD Multijet": 0.3045479953289032,
+          "Top": 1.5740487575531006,
+          "VV+VVV": 0.5828154683113098,
+          "W -> lv": 20.918766021728516,
+          "Z -> vv": 0.6053678393363953
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.015067477710545063,
+          "QCD": 0.3045479953289032,
+          "Top": 1.5740487575531006,
+          "VV_VVV": 0.5828154683113098,
+          "WtoLNu": 20.918766021728516,
+          "Zto2Nu": 0.6053678393363953
+        },
+        "total": 24.000614166259766,
+        "uncertainty": 5.161903387514266
+      },
+      {
+        "data": 19.0,
+        "data_uncertainty": 4.877707766824672,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.006822966039180756,
+          "QCD Multijet": 0.07326087355613708,
+          "Top": 1.4920092821121216,
+          "VV+VVV": 0.4031590521335602,
+          "W -> lv": 16.479806900024414,
+          "Z -> vv": 0.5447136759757996
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.006822966039180756,
+          "QCD": 0.07326087355613708,
+          "Top": 1.4920092821121216,
+          "VV_VVV": 0.4031590521335602,
+          "WtoLNu": 16.479806900024414,
+          "Zto2Nu": 0.5447136759757996
+        },
+        "total": 18.999773025512695,
+        "uncertainty": 4.208474320168251
+      },
+      {
+        "data": 230.0,
+        "data_uncertainty": 15.671238448706163,
+        "groups": {
+          "DY": 0.5479555726051331,
+          "Others": 0.0,
+          "Photon+jet": 0.11221447587013245,
+          "QCD Multijet": 0.6600027084350586,
+          "Top": 75.69105529785156,
+          "VV+VVV": 1.844740867614746,
+          "W -> lv": 149.0907745361328,
+          "Z -> vv": 2.053802013397217
+        },
+        "processes": {
+          "DY": 0.5479555726051331,
+          "Other": 0.0,
+          "PhotonJet": 0.11221447587013245,
+          "QCD": 0.6600027084350586,
+          "Top": 75.69105529785156,
+          "VV_VVV": 1.844740867614746,
+          "WtoLNu": 149.0907745361328,
+          "Zto2Nu": 2.053802013397217
+        },
+        "total": 230.00054931640625,
+        "uncertainty": 15.127703787257339
+      },
+      {
+        "data": 98.0,
+        "data_uncertainty": 10.407886634965891,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.08708537369966507,
+          "QCD Multijet": 0.2609398663043976,
+          "Top": 26.700809478759766,
+          "VV+VVV": 1.0650264024734497,
+          "W -> lv": 67.64043426513672,
+          "Z -> vv": 2.2460131645202637
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.08708537369966507,
+          "QCD": 0.2609398663043976,
+          "Top": 26.700809478759766,
+          "VV_VVV": 1.0650264024734497,
+          "WtoLNu": 67.64043426513672,
+          "Zto2Nu": 2.2460131645202637
+        },
+        "total": 98.00030517578125,
+        "uncertainty": 10.022449410573246
+      },
+      {
+        "data": 53.0,
+        "data_uncertainty": 7.791490452278694,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0491933710873127,
+          "Top": 10.56652545928955,
+          "VV+VVV": 0.31621024012565613,
+          "W -> lv": 41.060325622558594,
+          "Z -> vv": 1.0074328184127808
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0491933710873127,
+          "Top": 10.56652545928955,
+          "VV_VVV": 0.31621024012565613,
+          "WtoLNu": 41.060325622558594,
+          "Zto2Nu": 1.0074328184127808
+        },
+        "total": 52.99968719482422,
+        "uncertainty": 7.2407730212534975
+      },
+      {
+        "data": 28.0,
+        "data_uncertainty": 5.807078453464005,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.13747048377990723,
+          "Top": 3.7358741760253906,
+          "VV+VVV": 0.40502169728279114,
+          "W -> lv": 23.110557556152344,
+          "Z -> vv": 0.6109640598297119
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.13747048377990723,
+          "Top": 3.7358741760253906,
+          "VV_VVV": 0.40502169728279114,
+          "WtoLNu": 23.110557556152344,
+          "Zto2Nu": 0.6109640598297119
+        },
+        "total": 27.999887466430664,
+        "uncertainty": 5.317896386039902
+      },
+      {
+        "data": 849.0,
+        "data_uncertainty": 29.640463531370585,
+        "groups": {
+          "DY": 2.266291856765747,
+          "Others": 0.0,
+          "Photon+jet": 0.11849647015333176,
+          "QCD Multijet": 0.21361388266086578,
+          "Top": 718.3273315429688,
+          "VV+VVV": 6.24798059463501,
+          "W -> lv": 110.68389129638672,
+          "Z -> vv": 11.134077072143555
+        },
+        "processes": {
+          "DY": 2.266291856765747,
+          "Other": 0.0,
+          "PhotonJet": 0.11849647015333176,
+          "QCD": 0.21361388266086578,
+          "Top": 718.3273315429688,
+          "VV_VVV": 6.24798059463501,
+          "WtoLNu": 110.68389129638672,
+          "Zto2Nu": 11.134077072143555
+        },
+        "total": 848.99169921875,
+        "uncertainty": 27.646561155955723
+      },
+      {
+        "data": 120.0,
+        "data_uncertainty": 11.462039058399206,
+        "groups": {
+          "DY": 2.9921514987945557,
+          "Others": 0.0,
+          "Photon+jet": 0.12076513469219208,
+          "QCD Multijet": 0.0,
+          "Top": 84.60335540771484,
+          "VV+VVV": 1.0565677881240845,
+          "W -> lv": 27.379127502441406,
+          "Z -> vv": 3.8469789028167725
+        },
+        "processes": {
+          "DY": 2.9921514987945557,
+          "Other": 0.0,
+          "PhotonJet": 0.12076513469219208,
+          "QCD": 0.0,
+          "Top": 84.60335540771484,
+          "VV_VVV": 1.0565677881240845,
+          "WtoLNu": 27.379127502441406,
+          "Zto2Nu": 3.8469789028167725
+        },
+        "total": 119.99893951416016,
+        "uncertainty": 10.513747046278267
+      },
+      {
+        "data": 8.0,
+        "data_uncertainty": 3.3567637873510074,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 3.915950059890747,
+          "VV+VVV": 0.23211531341075897,
+          "W -> lv": 3.622377872467041,
+          "Z -> vv": 0.2293478548526764
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 3.915950059890747,
+          "VV_VVV": 0.23211531341075897,
+          "WtoLNu": 3.622377872467041,
+          "Zto2Nu": 0.2293478548526764
+        },
+        "total": 7.999791145324707,
+        "uncertainty": 2.876436673986258
+      },
+      {
+        "data": 677.0,
+        "data_uncertainty": 26.522424979837865,
+        "groups": {
+          "DY": 3.6633057594299316,
+          "Others": 0.0,
+          "Photon+jet": 0.03577612340450287,
+          "QCD Multijet": 1.8500645160675049,
+          "Top": 591.3903198242188,
+          "VV+VVV": 3.866581678390503,
+          "W -> lv": 67.80506896972656,
+          "Z -> vv": 8.383431434631348
+        },
+        "processes": {
+          "DY": 3.6633057594299316,
+          "Other": 0.0,
+          "PhotonJet": 0.03577612340450287,
+          "QCD": 1.8500645160675049,
+          "Top": 591.3903198242188,
+          "VV_VVV": 3.866581678390503,
+          "WtoLNu": 67.80506896972656,
+          "Zto2Nu": 8.383431434631348
+        },
+        "total": 676.9945068359375,
+        "uncertainty": 28.23584545838853
+      },
+      {
+        "data": 91.0,
+        "data_uncertainty": 10.048098387390084,
+        "groups": {
+          "DY": 2.337531328201294,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 65.57968139648438,
+          "VV+VVV": 0.7712813019752502,
+          "W -> lv": 20.551443099975586,
+          "Z -> vv": 1.7593693733215332
+        },
+        "processes": {
+          "DY": 2.337531328201294,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 65.57968139648438,
+          "VV_VVV": 0.7712813019752502,
+          "WtoLNu": 20.551443099975586,
+          "Zto2Nu": 1.7593693733215332
+        },
+        "total": 90.99930572509766,
+        "uncertainty": 9.66225086596674
+      },
+      {
+        "data": 12.0,
+        "data_uncertainty": 3.9875425248532093,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 7.232794761657715,
+          "VV+VVV": 0.0065066576935350895,
+          "W -> lv": 4.420522212982178,
+          "Z -> vv": 0.33988678455352783
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 7.232794761657715,
+          "VV_VVV": 0.0065066576935350895,
+          "WtoLNu": 4.420522212982178,
+          "Zto2Nu": 0.33988678455352783
+        },
+        "total": 11.999710083007812,
+        "uncertainty": 3.5050380522965616
+      },
+      {
+        "data": 9.0,
+        "data_uncertainty": 3.5268325865964734,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.055611658841371536,
+          "QCD Multijet": 0.0,
+          "Top": 8.94394302368164,
+          "VV+VVV": 0.00042551272781565785,
+          "W -> lv": 1.338631872016549e-09,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.055611658841371536,
+          "QCD": 0.0,
+          "Top": 8.94394302368164,
+          "VV_VVV": 0.00042551272781565785,
+          "WtoLNu": 1.338631872016549e-09,
+          "Zto2Nu": 0.0
+        },
+        "total": 8.999979972839355,
+        "uncertainty": 3.0499189522402683
+      },
+      {
+        "data": 2.0,
+        "data_uncertainty": 1.9648370913906352,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 1.8113127946853638,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.18868012726306915,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 1.8113127946853638,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.18868012726306915,
+          "Zto2Nu": 0.0
+        },
+        "total": 1.9999929666519165,
+        "uncertainty": 1.4255920251145882
+      },
+      {
+        "data": 9.999999717180685e-10,
+        "data_uncertainty": 0.9205108217886193,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 3.6682948234556534e-08,
+          "VV+VVV": 0.0,
+          "W -> lv": 2.695778489325562e-09,
+          "Z -> vv": 0.020935410633683205
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 3.6682948234556534e-08,
+          "VV_VVV": 0.0,
+          "WtoLNu": 2.695778489325562e-09,
+          "Zto2Nu": 0.020935410633683205
+        },
+        "total": 0.02093544974923134,
+        "uncertainty": 0.0016237533931762339
+      },
+      {
+        "data": 77.0,
+        "data_uncertainty": 9.284423387939647,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.1393953412771225,
+          "QCD Multijet": 0.50066739320755,
+          "Top": 59.96162796020508,
+          "VV+VVV": 0.32189321517944336,
+          "W -> lv": 15.533099174499512,
+          "Z -> vv": 0.5420832633972168
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.1393953412771225,
+          "QCD": 0.50066739320755,
+          "Top": 59.96162796020508,
+          "VV_VVV": 0.32189321517944336,
+          "WtoLNu": 15.533099174499512,
+          "Zto2Nu": 0.5420832633972168
+        },
+        "total": 76.99876403808594,
+        "uncertainty": 9.215942369068939
+      },
+      {
+        "data": 24.0,
+        "data_uncertainty": 5.415772134083779,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.4948674440383911,
+          "Top": 16.37555694580078,
+          "VV+VVV": 0.7808173298835754,
+          "W -> lv": 6.062990665435791,
+          "Z -> vv": 0.2857341170310974
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.4948674440383911,
+          "Top": 16.37555694580078,
+          "VV_VVV": 0.7808173298835754,
+          "WtoLNu": 6.062990665435791,
+          "Zto2Nu": 0.2857341170310974
+        },
+        "total": 23.99996566772461,
+        "uncertainty": 4.527377386091616
+      },
+      {
+        "data": 13.0,
+        "data_uncertainty": 4.128117850491153,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 7.6021270751953125,
+          "VV+VVV": 0.38300859928131104,
+          "W -> lv": 4.747706413269043,
+          "Z -> vv": 0.2669931948184967
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 7.6021270751953125,
+          "VV_VVV": 0.38300859928131104,
+          "WtoLNu": 4.747706413269043,
+          "Zto2Nu": 0.2669931948184967
+        },
+        "total": 12.999835014343262,
+        "uncertainty": 3.4742762848001885
+      },
+      {
+        "data": 46.0,
+        "data_uncertainty": 7.294534952524465,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.02956618368625641,
+          "QCD Multijet": 0.0,
+          "Top": 39.43555450439453,
+          "VV+VVV": 0.1358002871274948,
+          "W -> lv": 6.046071529388428,
+          "Z -> vv": 0.35247424244880676
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.02956618368625641,
+          "QCD": 0.0,
+          "Top": 39.43555450439453,
+          "VV_VVV": 0.1358002871274948,
+          "WtoLNu": 6.046071529388428,
+          "Zto2Nu": 0.35247424244880676
+        },
+        "total": 45.99946594238281,
+        "uncertainty": 6.914751907719647
+      },
+      {
+        "data": 11.0,
+        "data_uncertainty": 3.841049961107458,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.06309644132852554,
+          "Top": 8.479724884033203,
+          "VV+VVV": 0.0328202024102211,
+          "W -> lv": 2.218409299850464,
+          "Z -> vv": 0.20695607364177704
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.06309644132852554,
+          "Top": 8.479724884033203,
+          "VV_VVV": 0.0328202024102211,
+          "WtoLNu": 2.218409299850464,
+          "Zto2Nu": 0.20695607364177704
+        },
+        "total": 11.001006126403809,
+        "uncertainty": 3.3473048057938533
+      },
+      {
+        "data": 9.0,
+        "data_uncertainty": 3.5268325865964734,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 5.882626533508301,
+          "VV+VVV": 0.02980930171906948,
+          "W -> lv": 2.952846050262451,
+          "Z -> vv": 0.13464048504829407
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 5.882626533508301,
+          "VV_VVV": 0.02980930171906948,
+          "WtoLNu": 2.952846050262451,
+          "Zto2Nu": 0.13464048504829407
+        },
+        "total": 8.999922752380371,
+        "uncertainty": 2.9618252915418877
+      },
+      {
+        "data": 1.0,
+        "data_uncertainty": 1.5633863897239886,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 0.9808981418609619,
+          "VV+VVV": 0.00026885420083999634,
+          "W -> lv": 0.018778853118419647,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 0.9808981418609619,
+          "VV_VVV": 0.00026885420083999634,
+          "WtoLNu": 0.018778853118419647,
+          "Zto2Nu": 0.0
+        },
+        "total": 0.999945878982544,
+        "uncertainty": 0.8752302030467157
+      },
+      {
+        "data": 1.0,
+        "data_uncertainty": 1.5633863897239886,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 0.8990710377693176,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.09995152056217194,
+          "Z -> vv": 0.0007461720379069448
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 0.8990710377693176,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.09995152056217194,
+          "Zto2Nu": 0.0007461720379069448
+        },
+        "total": 0.9997687339782715,
+        "uncertainty": 0.8128949423239509
+      },
+      {
+        "data": 9.999999717180685e-10,
+        "data_uncertainty": 0.9205108217886193,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 3.811691851041132e-09,
+          "VV+VVV": 0.0,
+          "W -> lv": 3.779911494916632e-09,
+          "Z -> vv": 0.005604752339422703
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 3.811691851041132e-09,
+          "VV_VVV": 0.0,
+          "WtoLNu": 3.779911494916632e-09,
+          "Zto2Nu": 0.005604752339422703
+        },
+        "total": 0.0056047597900033,
+        "uncertainty": 0.0005500616045615964
+      }
+    ],
+    "2025/QCDCR": [
+      {
+        "data": 249.0,
+        "data_uncertainty": 16.285008414723478,
+        "groups": {
+          "DY": 10.318772315979004,
+          "Others": 0.0,
+          "Photon+jet": 2.9553163051605225,
+          "QCD Multijet": 53.849788665771484,
+          "Top": 23.75604248046875,
+          "VV+VVV": 1.6813143491744995,
+          "W -> lv": 120.38057708740234,
+          "Z -> vv": 36.06071472167969
+        },
+        "processes": {
+          "DY": 10.318772315979004,
+          "Other": 0.0,
+          "PhotonJet": 2.9553163051605225,
+          "QCD": 53.849788665771484,
+          "Top": 23.75604248046875,
+          "VV_VVV": 1.6813143491744995,
+          "WtoLNu": 120.38057708740234,
+          "Zto2Nu": 36.06071472167969
+        },
+        "total": 249.0025177001953,
+        "uncertainty": 15.74786691904653
+      },
+      {
+        "data": 36.0,
+        "data_uncertainty": 6.513770535520955,
+        "groups": {
+          "DY": 1.852461338043213,
+          "Others": 0.0,
+          "Photon+jet": 0.4360828697681427,
+          "QCD Multijet": 0.0,
+          "Top": 2.230280637741089,
+          "VV+VVV": 0.09422687441110611,
+          "W -> lv": 21.454343795776367,
+          "Z -> vv": 6.067997455596924
+        },
+        "processes": {
+          "DY": 1.852461338043213,
+          "Other": 0.0,
+          "PhotonJet": 0.4360828697681427,
+          "QCD": 0.0,
+          "Top": 2.230280637741089,
+          "VV_VVV": 0.09422687441110611,
+          "WtoLNu": 21.454343795776367,
+          "Zto2Nu": 6.067997455596924
+        },
+        "total": 32.13539123535156,
+        "uncertainty": 1.4840966021824102
+      },
+      {
+        "data": 3.0,
+        "data_uncertainty": 2.275445258983817,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 0.17071841657161713,
+          "VV+VVV": 0.000868111674208194,
+          "W -> lv": 0.717187762260437,
+          "Z -> vv": 0.5773594975471497
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 0.17071841657161713,
+          "VV_VVV": 0.000868111674208194,
+          "WtoLNu": 0.717187762260437,
+          "Zto2Nu": 0.5773594975471497
+        },
+        "total": 1.4661338329315186,
+        "uncertainty": 0.2094783812409682
+      },
+      {
+        "data": 9.999999717180685e-10,
+        "data_uncertainty": 0.9205108217886193,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 0.0,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.09909982979297638,
+          "Z -> vv": 0.04044380038976669
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 0.0,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.09909982979297638,
+          "Zto2Nu": 0.04044380038976669
+        },
+        "total": 0.13954362273216248,
+        "uncertainty": 0.024111560528401098
+      },
+      {
+        "data": 514.0,
+        "data_uncertainty": 23.175241595455788,
+        "groups": {
+          "DY": 17.799612045288086,
+          "Others": 0.0,
+          "Photon+jet": 4.688069820404053,
+          "QCD Multijet": 236.602294921875,
+          "Top": 51.96701431274414,
+          "VV+VVV": 2.333156108856201,
+          "W -> lv": 137.56349182128906,
+          "Z -> vv": 63.043033599853516
+        },
+        "processes": {
+          "DY": 17.799612045288086,
+          "Other": 0.0,
+          "PhotonJet": 4.688069820404053,
+          "QCD": 236.602294921875,
+          "Top": 51.96701431274414,
+          "VV_VVV": 2.333156108856201,
+          "WtoLNu": 137.56349182128906,
+          "Zto2Nu": 63.043033599853516
+        },
+        "total": 513.9966430664062,
+        "uncertainty": 23.117820676103968
+      },
+      {
+        "data": 56.0,
+        "data_uncertainty": 7.994389766332478,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.497860312461853,
+          "QCD Multijet": 14.872910499572754,
+          "Top": 4.910962104797363,
+          "VV+VVV": 0.2667461931705475,
+          "W -> lv": 30.12572479248047,
+          "Z -> vv": 5.327949047088623
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.497860312461853,
+          "QCD": 14.872910499572754,
+          "Top": 4.910962104797363,
+          "VV_VVV": 0.2667461931705475,
+          "WtoLNu": 30.12572479248047,
+          "Zto2Nu": 5.327949047088623
+        },
+        "total": 56.00215148925781,
+        "uncertainty": 6.819738127303716
+      },
+      {
+        "data": 4.0,
+        "data_uncertainty": 2.538546178656218,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 0.14664238691329956,
+          "VV+VVV": 0.0,
+          "W -> lv": 1.8302242755889893,
+          "Z -> vv": 0.645463764667511
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 0.14664238691329956,
+          "VV_VVV": 0.0,
+          "WtoLNu": 1.8302242755889893,
+          "Zto2Nu": 0.645463764667511
+        },
+        "total": 2.6223304271698,
+        "uncertainty": 0.20071648766687225
+      },
+      {
+        "data": 9.999999717180685e-10,
+        "data_uncertainty": 0.9205108217886193,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 0.0,
+          "VV+VVV": 0.05868881568312645,
+          "W -> lv": 0.09931757301092148,
+          "Z -> vv": 0.062031809240579605
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 0.0,
+          "VV_VVV": 0.05868881568312645,
+          "WtoLNu": 0.09931757301092148,
+          "Zto2Nu": 0.062031809240579605
+        },
+        "total": 0.22003819048404694,
+        "uncertainty": 0.023055367602274168
+      },
+      {
+        "data": 18.0,
+        "data_uncertainty": 4.76194726596087,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.2944851815700531,
+          "QCD Multijet": 1.3405109643936157,
+          "Top": 1.496735692024231,
+          "VV+VVV": 0.3182393014431,
+          "W -> lv": 10.838621139526367,
+          "Z -> vv": 3.7128331661224365
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.2944851815700531,
+          "QCD": 1.3405109643936157,
+          "Top": 1.496735692024231,
+          "VV_VVV": 0.3182393014431,
+          "WtoLNu": 10.838621139526367,
+          "Zto2Nu": 3.7128331661224365
+        },
+        "total": 18.00142478942871,
+        "uncertainty": 3.030220911011481
+      },
+      {
+        "data": 6.0,
+        "data_uncertainty": 2.9817864619305667,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.03347994014620781,
+          "QCD Multijet": 7.599042106676279e-08,
+          "Top": 1.1381864547729492,
+          "VV+VVV": 0.005796540062874556,
+          "W -> lv": 5.957399368286133,
+          "Z -> vv": 1.9598233699798584
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.03347994014620781,
+          "QCD": 7.599042106676279e-08,
+          "Top": 1.1381864547729492,
+          "VV_VVV": 0.005796540062874556,
+          "WtoLNu": 5.957399368286133,
+          "Zto2Nu": 1.9598233699798584
+        },
+        "total": 9.094685554504395,
+        "uncertainty": 0.457063613137009
+      },
+      {
+        "data": 2.0,
+        "data_uncertainty": 1.9648370913906352,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 4.535774866809561e-09,
+          "Top": 0.29360297322273254,
+          "VV+VVV": 0.001332808518782258,
+          "W -> lv": 2.75567889213562,
+          "Z -> vv": 0.6483889818191528
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 4.535774866809561e-09,
+          "Top": 0.29360297322273254,
+          "VV_VVV": 0.001332808518782258,
+          "WtoLNu": 2.75567889213562,
+          "Zto2Nu": 0.6483889818191528
+        },
+        "total": 3.6990036964416504,
+        "uncertainty": 0.175665048126109
+      },
+      {
+        "data": 4.0,
+        "data_uncertainty": 2.538546178656218,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.2714267373085022,
+          "Top": 0.1864948272705078,
+          "VV+VVV": 0.26293644309043884,
+          "W -> lv": 1.6551839113235474,
+          "Z -> vv": 0.6393091082572937
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.2714267373085022,
+          "Top": 0.1864948272705078,
+          "VV_VVV": 0.26293644309043884,
+          "WtoLNu": 1.6551839113235474,
+          "Zto2Nu": 0.6393091082572937
+        },
+        "total": 3.0153510570526123,
+        "uncertainty": 0.16865384223241361
+      },
+      {
+        "data": 41.0,
+        "data_uncertainty": 6.916041389251578,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.37016841769218445,
+          "QCD Multijet": 12.454869270324707,
+          "Top": 3.8380844593048096,
+          "VV+VVV": 0.08484772592782974,
+          "W -> lv": 17.686981201171875,
+          "Z -> vv": 6.566072940826416
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.37016841769218445,
+          "QCD": 12.454869270324707,
+          "Top": 3.8380844593048096,
+          "VV_VVV": 0.08484772592782974,
+          "WtoLNu": 17.686981201171875,
+          "Zto2Nu": 6.566072940826416
+        },
+        "total": 41.00102615356445,
+        "uncertainty": 6.346101011398653
+      },
+      {
+        "data": 15.0,
+        "data_uncertainty": 4.394059264540685,
+        "groups": {
+          "DY": 1.7781777381896973,
+          "Others": 0.0,
+          "Photon+jet": 0.19044585525989532,
+          "QCD Multijet": 0.09483442455530167,
+          "Top": 1.34031081199646,
+          "VV+VVV": 0.7797654867172241,
+          "W -> lv": 7.46437406539917,
+          "Z -> vv": 3.349278450012207
+        },
+        "processes": {
+          "DY": 1.7781777381896973,
+          "Other": 0.0,
+          "PhotonJet": 0.19044585525989532,
+          "QCD": 0.09483442455530167,
+          "Top": 1.34031081199646,
+          "VV_VVV": 0.7797654867172241,
+          "WtoLNu": 7.46437406539917,
+          "Zto2Nu": 3.349278450012207
+        },
+        "total": 14.997186660766602,
+        "uncertainty": 3.0731446662414768
+      },
+      {
+        "data": 4.0,
+        "data_uncertainty": 2.538546178656218,
+        "groups": {
+          "DY": 0.18587464094161987,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 1.3157247735762212e-07,
+          "Top": 0.6374495625495911,
+          "VV+VVV": 0.0017557512037456036,
+          "W -> lv": 2.8477141857147217,
+          "Z -> vv": 0.9673757553100586
+        },
+        "processes": {
+          "DY": 0.18587464094161987,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 1.3157247735762212e-07,
+          "Top": 0.6374495625495911,
+          "VV_VVV": 0.0017557512037456036,
+          "WtoLNu": 2.8477141857147217,
+          "Zto2Nu": 0.9673757553100586
+        },
+        "total": 4.640170097351074,
+        "uncertainty": 0.1877110818992628
+      },
+      {
+        "data": 7.0,
+        "data_uncertainty": 3.1758755874861118,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.058218132704496384,
+          "QCD Multijet": 0.03506910428404808,
+          "Top": 0.05347350612282753,
+          "VV+VVV": 0.26915642619132996,
+          "W -> lv": 2.398240566253662,
+          "Z -> vv": 0.8427135348320007
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.058218132704496384,
+          "QCD": 0.03506910428404808,
+          "Top": 0.05347350612282753,
+          "VV_VVV": 0.26915642619132996,
+          "WtoLNu": 2.398240566253662,
+          "Zto2Nu": 0.8427135348320007
+        },
+        "total": 3.6568713188171387,
+        "uncertainty": 0.15700493587340125
+      },
+      {
+        "data": 169.0,
+        "data_uncertainty": 13.506398693285036,
+        "groups": {
+          "DY": 0.14401358366012573,
+          "Others": 0.0,
+          "Photon+jet": 1.4565678834915161,
+          "QCD Multijet": 104.87551879882812,
+          "Top": 43.516143798828125,
+          "VV+VVV": 0.5114639401435852,
+          "W -> lv": 4.992918491363525,
+          "Z -> vv": 13.505460739135742
+        },
+        "processes": {
+          "DY": 0.14401358366012573,
+          "Other": 0.0,
+          "PhotonJet": 1.4565678834915161,
+          "QCD": 104.87551879882812,
+          "Top": 43.516143798828125,
+          "VV_VVV": 0.5114639401435852,
+          "WtoLNu": 4.992918491363525,
+          "Zto2Nu": 13.505460739135742
+        },
+        "total": 169.00209045410156,
+        "uncertainty": 17.976867188313154
+      },
+      {
+        "data": 14.0,
+        "data_uncertainty": 4.263440536185832,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.11400341242551804,
+          "QCD Multijet": 3.4708797931671143,
+          "Top": 5.670024394989014,
+          "VV+VVV": 0.09840628504753113,
+          "W -> lv": 1.7417386770248413,
+          "Z -> vv": 2.9038236141204834
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.11400341242551804,
+          "QCD": 3.4708797931671143,
+          "Top": 5.670024394989014,
+          "VV_VVV": 0.09840628504753113,
+          "WtoLNu": 1.7417386770248413,
+          "Zto2Nu": 2.9038236141204834
+        },
+        "total": 13.998875617980957,
+        "uncertainty": 3.138732619395078
+      },
+      {
+        "data": 9.999999717180685e-10,
+        "data_uncertainty": 0.9205108217886193,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 0.22145713865756989,
+          "VV+VVV": 0.00043052772525697947,
+          "W -> lv": 5.520422452498508e-10,
+          "Z -> vv": 0.0641406923532486
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 0.22145713865756989,
+          "VV_VVV": 0.00043052772525697947,
+          "WtoLNu": 5.520422452498508e-10,
+          "Zto2Nu": 0.0641406923532486
+        },
+        "total": 0.28602835536003113,
+        "uncertainty": 4060.311239301736
+      },
+      {
+        "data": 206.0,
+        "data_uncertainty": 14.85849761576516,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 1.2061915397644043,
+          "QCD Multijet": 144.2884979248047,
+          "Top": 45.994083404541016,
+          "VV+VVV": 0.46068939566612244,
+          "W -> lv": 5.589540958404541,
+          "Z -> vv": 8.468426704406738
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 1.2061915397644043,
+          "QCD": 144.2884979248047,
+          "Top": 45.994083404541016,
+          "VV_VVV": 0.46068939566612244,
+          "WtoLNu": 5.589540958404541,
+          "Zto2Nu": 8.468426704406738
+        },
+        "total": 206.00743103027344,
+        "uncertainty": 15.069309923234707
+      },
+      {
+        "data": 11.0,
+        "data_uncertainty": 3.841049961107458,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.07132522761821747,
+          "QCD Multijet": 5.538020610809326,
+          "Top": 3.8946375846862793,
+          "VV+VVV": 0.357798308134079,
+          "W -> lv": 0.2021913230419159,
+          "Z -> vv": 0.9348275661468506
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.07132522761821747,
+          "QCD": 5.538020610809326,
+          "Top": 3.8946375846862793,
+          "VV_VVV": 0.357798308134079,
+          "WtoLNu": 0.2021913230419159,
+          "Zto2Nu": 0.9348275661468506
+        },
+        "total": 10.998801231384277,
+        "uncertainty": 3.240268633973501
+      },
+      {
+        "data": 1.0,
+        "data_uncertainty": 1.5633863897239886,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0064841159619390965,
+          "QCD Multijet": 0.0,
+          "Top": 0.17586101591587067,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.15447701513767242,
+          "Z -> vv": 0.1557900756597519
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0064841159619390965,
+          "QCD": 0.0,
+          "Top": 0.17586101591587067,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.15447701513767242,
+          "Zto2Nu": 0.1557900756597519
+        },
+        "total": 0.49261224269866943,
+        "uncertainty": 0.06032046408770698
+      },
+      {
+        "data": 3.0,
+        "data_uncertainty": 2.275445258983817,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 2.5535125732421875,
+          "Top": 0.44655632972717285,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.0,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 2.5535125732421875,
+          "Top": 0.44655632972717285,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.0,
+          "Zto2Nu": 0.0
+        },
+        "total": 3.0000689029693604,
+        "uncertainty": 1.5686866291514425
+      },
+      {
+        "data": 9.999999717180685e-10,
+        "data_uncertainty": 0.9205108217886193,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 0.02348572388291359,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.009360709227621555,
+          "Z -> vv": 9.999999717180685e-10
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 0.02348572388291359,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.009360709227621555,
+          "Zto2Nu": 9.999999717180685e-10
+        },
+        "total": 0.03284643217921257,
+        "uncertainty": 0.008180467786981057
+      },
+      {
+        "data": 0.0,
+        "data_uncertainty": 0.0,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 0.0,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.0,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 0.0,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.0,
+          "Zto2Nu": 0.0
+        },
+        "total": 0.0,
+        "uncertainty": 0.0
+      },
+      {
+        "data": 18.0,
+        "data_uncertainty": 4.76194726596087,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.195636585354805,
+          "QCD Multijet": 10.88538932800293,
+          "Top": 5.176529884338379,
+          "VV+VVV": 0.004616189282387495,
+          "W -> lv": 0.46818575263023376,
+          "Z -> vv": 1.2690210342407227
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.195636585354805,
+          "QCD": 10.88538932800293,
+          "Top": 5.176529884338379,
+          "VV_VVV": 0.004616189282387495,
+          "WtoLNu": 0.46818575263023376,
+          "Zto2Nu": 1.2690210342407227
+        },
+        "total": 17.999378204345703,
+        "uncertainty": 4.185534170098543
+      },
+      {
+        "data": 9.999999717180685e-10,
+        "data_uncertainty": 0.9205108217886193,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0889115035533905,
+          "QCD Multijet": 2.1285043771968049e-07,
+          "Top": 0.6446064114570618,
+          "VV+VVV": 0.00148492690641433,
+          "W -> lv": 0.5504388213157654,
+          "Z -> vv": 0.7104021906852722
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0889115035533905,
+          "QCD": 2.1285043771968049e-07,
+          "Top": 0.6446064114570618,
+          "VV_VVV": 0.00148492690641433,
+          "WtoLNu": 0.5504388213157654,
+          "Zto2Nu": 0.7104021906852722
+        },
+        "total": 1.9958441257476807,
+        "uncertainty": 0.10506114609825733
+      },
+      {
+        "data": 5.0,
+        "data_uncertainty": 2.7710818976262304,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.21077218651771545,
+          "Top": 0.807181715965271,
+          "VV+VVV": 0.004164660349488258,
+          "W -> lv": 0.6658542156219482,
+          "Z -> vv": 0.2547173798084259
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.21077218651771545,
+          "Top": 0.807181715965271,
+          "VV_VVV": 0.004164660349488258,
+          "WtoLNu": 0.6658542156219482,
+          "Zto2Nu": 0.2547173798084259
+        },
+        "total": 1.942690134048462,
+        "uncertainty": 0.0528953299972347
+      },
+      {
+        "data": 7.0,
+        "data_uncertainty": 3.1758755874861118,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.06357292830944061,
+          "QCD Multijet": 3.61375320778734e-08,
+          "Top": 5.011358737945557,
+          "VV+VVV": 2.647035923786234e-09,
+          "W -> lv": 1.0238245725631714,
+          "Z -> vv": 1.0773591995239258
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.06357292830944061,
+          "QCD": 3.61375320778734e-08,
+          "Top": 5.011358737945557,
+          "VV_VVV": 2.647035923786234e-09,
+          "WtoLNu": 1.0238245725631714,
+          "Zto2Nu": 1.0773591995239258
+        },
+        "total": 7.1761155128479,
+        "uncertainty": 1.2979361951572268
+      },
+      {
+        "data": 4.0,
+        "data_uncertainty": 2.538546178656218,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.03743645176291466,
+          "QCD Multijet": 1.1864465475082397,
+          "Top": 1.7588566541671753,
+          "VV+VVV": 4.489385752037833e-09,
+          "W -> lv": 0.6629828810691833,
+          "Z -> vv": 0.35430842638015747
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.03743645176291466,
+          "QCD": 1.1864465475082397,
+          "Top": 1.7588566541671753,
+          "VV_VVV": 4.489385752037833e-09,
+          "WtoLNu": 0.6629828810691833,
+          "Zto2Nu": 0.35430842638015747
+        },
+        "total": 4.000030994415283,
+        "uncertainty": 11.691348380453173
+      },
+      {
+        "data": 2.0,
+        "data_uncertainty": 1.9648370913906352,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0036334909964352846,
+          "QCD Multijet": 0.4886447489261627,
+          "Top": 1.2704718112945557,
+          "VV+VVV": 0.00178122881334275,
+          "W -> lv": 0.26796719431877136,
+          "Z -> vv": 0.376371830701828
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0036334909964352846,
+          "QCD": 0.4886447489261627,
+          "Top": 1.2704718112945557,
+          "VV_VVV": 0.00178122881334275,
+          "WtoLNu": 0.26796719431877136,
+          "Zto2Nu": 0.376371830701828
+        },
+        "total": 2.408870220184326,
+        "uncertainty": 0.08022280393253362
+      },
+      {
+        "data": 9.999999717180685e-10,
+        "data_uncertainty": 0.9205108217886193,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 0.023959381505846977,
+          "VV+VVV": 0.00036812989856116474,
+          "W -> lv": 9.999999717180685e-10,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 0.023959381505846977,
+          "VV_VVV": 0.00036812989856116474,
+          "WtoLNu": 9.999999717180685e-10,
+          "Zto2Nu": 0.0
+        },
+        "total": 0.024327512830495834,
+        "uncertainty": 0.00806196990183355
+      },
+      {
+        "data": 9.999999717180685e-10,
+        "data_uncertainty": 0.9205108217886193,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 0.10531292110681534,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.0,
+          "Z -> vv": 0.0
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 0.10531292110681534,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.0,
+          "Zto2Nu": 0.0
+        },
+        "total": 0.10531292110681534,
+        "uncertainty": 0.027019067621051798
+      },
+      {
+        "data": 9.999999717180685e-10,
+        "data_uncertainty": 0.9205108217886193,
+        "groups": {
+          "DY": 0.0,
+          "Others": 0.0,
+          "Photon+jet": 0.0,
+          "QCD Multijet": 0.0,
+          "Top": 0.0,
+          "VV+VVV": 0.0,
+          "W -> lv": 0.030070560052990913,
+          "Z -> vv": 9.999999717180685e-10
+        },
+        "processes": {
+          "DY": 0.0,
+          "Other": 0.0,
+          "PhotonJet": 0.0,
+          "QCD": 0.0,
+          "Top": 0.0,
+          "VV_VVV": 0.0,
+          "WtoLNu": 0.030070560052990913,
+          "Zto2Nu": 9.999999717180685e-10
+        },
+        "total": 0.030070561915636063,
+        "uncertainty": 0.008335230811230113
+      }
+    ]
+  },
+  "lowdm_cr_channel_count": 202,
+  "lowdm_omitted_likelihood_channels": [
+    "y2024_QCDCR_lowdm_bin24",
+    "y2025_QCDCR_lowdm_bin24"
+  ],
   "overflow_policy": "last bin includes all pTmiss/recoil >= 800 GeV",
-  "plot_count": 27,
+  "plot_count": 36,
   "plots": [
     {
       "bins": 6,
@@ -3691,6 +8855,300 @@
       "nb": "Nb3plus",
       "pdf": "docs/highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/combined/GCR_Nb3plus_met_postfit.pdf",
       "png": "docs/highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/combined/GCR_Nb3plus_met_postfit.png",
+      "region": "GCR",
+      "scope": "combined",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null
+    },
+    {
+      "bins": 34,
+      "labels": [
+        "$N_{b}=1$\n$300\\leq p_{T}^{ISR}<500$\n$20<p_{T}^{b}<40$",
+        "$N_{b}=1$\n$300\\leq p_{T}^{ISR}<500$\n$40<p_{T}^{b}<70$",
+        "$N_{b}=1$\n$p_{T}^{ISR}\\geq500$\n$20<p_{T}^{b}<40$",
+        "$N_{b}=1$\n$p_{T}^{ISR}\\geq500$\n$40<p_{T}^{b}<70$",
+        "$N_{b}\\geq2$\n$300\\leq p_{T}^{ISR}<500$\n$40<p_{T}^{b}<80$",
+        "$N_{b}\\geq2$\n$300\\leq p_{T}^{ISR}<500$\n$80<p_{T}^{b}<140$",
+        "$N_{b}\\geq2$, $N_{j}\\geq7$\n$300\\leq p_{T}^{ISR}<500$\n$p_{T}^{b}>140$",
+        "$N_{b}\\geq2$\n$p_{T}^{ISR}\\geq500$\n$40<p_{T}^{b}<80$",
+        "$N_{b}\\geq2$\n$p_{T}^{ISR}\\geq500$\n$80<p_{T}^{b}<140$",
+        "$N_{b}\\geq2$, $N_{j}\\geq7$\n$p_{T}^{ISR}\\geq500$\n$p_{T}^{b}>140$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "name": "LLCR_lowdm_postfit",
+      "pdf": "docs/highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/lowdm/2024/LLCR_lowdm_postfit.pdf",
+      "phase_space": "lowdm",
+      "png": "docs/highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/lowdm/2024/LLCR_lowdm_postfit.png",
+      "region": "LLCR",
+      "scope": "2024",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null
+    },
+    {
+      "bins": 34,
+      "labels": [
+        "$N_{b}=1$\n$300\\leq p_{T}^{ISR}<500$\n$20<p_{T}^{b}<40$",
+        "$N_{b}=1$\n$300\\leq p_{T}^{ISR}<500$\n$40<p_{T}^{b}<70$",
+        "$N_{b}=1$\n$p_{T}^{ISR}\\geq500$\n$20<p_{T}^{b}<40$",
+        "$N_{b}=1$\n$p_{T}^{ISR}\\geq500$\n$40<p_{T}^{b}<70$",
+        "$N_{b}\\geq2$\n$300\\leq p_{T}^{ISR}<500$\n$40<p_{T}^{b}<80$",
+        "$N_{b}\\geq2$\n$300\\leq p_{T}^{ISR}<500$\n$80<p_{T}^{b}<140$",
+        "$N_{b}\\geq2$, $N_{j}\\geq7$\n$300\\leq p_{T}^{ISR}<500$\n$p_{T}^{b}>140$",
+        "$N_{b}\\geq2$\n$p_{T}^{ISR}\\geq500$\n$40<p_{T}^{b}<80$",
+        "$N_{b}\\geq2$\n$p_{T}^{ISR}\\geq500$\n$80<p_{T}^{b}<140$",
+        "$N_{b}\\geq2$, $N_{j}\\geq7$\n$p_{T}^{ISR}\\geq500$\n$p_{T}^{b}>140$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "name": "LLCR_lowdm_postfit",
+      "pdf": "docs/highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/lowdm/2025/LLCR_lowdm_postfit.pdf",
+      "phase_space": "lowdm",
+      "png": "docs/highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/lowdm/2025/LLCR_lowdm_postfit.png",
+      "region": "LLCR",
+      "scope": "2025",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null
+    },
+    {
+      "bins": 34,
+      "combination": "2024 and 2025 yields summed bin-by-bin in the canonical 34-bin Low-dM CR ordering",
+      "combined_uncertainty": "quadrature sum of the two per-year postfit uncertainty bands",
+      "labels": [
+        "$N_{b}=1$\n$300\\leq p_{T}^{ISR}<500$\n$20<p_{T}^{b}<40$",
+        "$N_{b}=1$\n$300\\leq p_{T}^{ISR}<500$\n$40<p_{T}^{b}<70$",
+        "$N_{b}=1$\n$p_{T}^{ISR}\\geq500$\n$20<p_{T}^{b}<40$",
+        "$N_{b}=1$\n$p_{T}^{ISR}\\geq500$\n$40<p_{T}^{b}<70$",
+        "$N_{b}\\geq2$\n$300\\leq p_{T}^{ISR}<500$\n$40<p_{T}^{b}<80$",
+        "$N_{b}\\geq2$\n$300\\leq p_{T}^{ISR}<500$\n$80<p_{T}^{b}<140$",
+        "$N_{b}\\geq2$, $N_{j}\\geq7$\n$300\\leq p_{T}^{ISR}<500$\n$p_{T}^{b}>140$",
+        "$N_{b}\\geq2$\n$p_{T}^{ISR}\\geq500$\n$40<p_{T}^{b}<80$",
+        "$N_{b}\\geq2$\n$p_{T}^{ISR}\\geq500$\n$80<p_{T}^{b}<140$",
+        "$N_{b}\\geq2$, $N_{j}\\geq7$\n$p_{T}^{ISR}\\geq500$\n$p_{T}^{b}>140$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "name": "LLCR_lowdm_postfit",
+      "pdf": "docs/highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/lowdm/combined/LLCR_lowdm_postfit.pdf",
+      "phase_space": "lowdm",
+      "png": "docs/highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/lowdm/combined/LLCR_lowdm_postfit.png",
+      "region": "LLCR",
+      "scope": "combined",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null
+    },
+    {
+      "bins": 34,
+      "labels": [
+        "$N_{b}=1$\n$300\\leq p_{T}^{ISR}<500$\n$20<p_{T}^{b}<40$",
+        "$N_{b}=1$\n$300\\leq p_{T}^{ISR}<500$\n$40<p_{T}^{b}<70$",
+        "$N_{b}=1$\n$p_{T}^{ISR}\\geq500$\n$20<p_{T}^{b}<40$",
+        "$N_{b}=1$\n$p_{T}^{ISR}\\geq500$\n$40<p_{T}^{b}<70$",
+        "$N_{b}\\geq2$\n$300\\leq p_{T}^{ISR}<500$\n$40<p_{T}^{b}<80$",
+        "$N_{b}\\geq2$\n$300\\leq p_{T}^{ISR}<500$\n$80<p_{T}^{b}<140$",
+        "$N_{b}\\geq2$, $N_{j}\\geq7$\n$300\\leq p_{T}^{ISR}<500$\n$p_{T}^{b}>140$",
+        "$N_{b}\\geq2$\n$p_{T}^{ISR}\\geq500$\n$40<p_{T}^{b}<80$",
+        "$N_{b}\\geq2$\n$p_{T}^{ISR}\\geq500$\n$80<p_{T}^{b}<140$",
+        "$N_{b}\\geq2$, $N_{j}\\geq7$\n$p_{T}^{ISR}\\geq500$\n$p_{T}^{b}>140$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "name": "QCDCR_lowdm_postfit",
+      "pdf": "docs/highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/lowdm/2024/QCDCR_lowdm_postfit.pdf",
+      "phase_space": "lowdm",
+      "png": "docs/highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/lowdm/2024/QCDCR_lowdm_postfit.png",
+      "region": "QCDCR",
+      "scope": "2024",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null
+    },
+    {
+      "bins": 34,
+      "labels": [
+        "$N_{b}=1$\n$300\\leq p_{T}^{ISR}<500$\n$20<p_{T}^{b}<40$",
+        "$N_{b}=1$\n$300\\leq p_{T}^{ISR}<500$\n$40<p_{T}^{b}<70$",
+        "$N_{b}=1$\n$p_{T}^{ISR}\\geq500$\n$20<p_{T}^{b}<40$",
+        "$N_{b}=1$\n$p_{T}^{ISR}\\geq500$\n$40<p_{T}^{b}<70$",
+        "$N_{b}\\geq2$\n$300\\leq p_{T}^{ISR}<500$\n$40<p_{T}^{b}<80$",
+        "$N_{b}\\geq2$\n$300\\leq p_{T}^{ISR}<500$\n$80<p_{T}^{b}<140$",
+        "$N_{b}\\geq2$, $N_{j}\\geq7$\n$300\\leq p_{T}^{ISR}<500$\n$p_{T}^{b}>140$",
+        "$N_{b}\\geq2$\n$p_{T}^{ISR}\\geq500$\n$40<p_{T}^{b}<80$",
+        "$N_{b}\\geq2$\n$p_{T}^{ISR}\\geq500$\n$80<p_{T}^{b}<140$",
+        "$N_{b}\\geq2$, $N_{j}\\geq7$\n$p_{T}^{ISR}\\geq500$\n$p_{T}^{b}>140$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "name": "QCDCR_lowdm_postfit",
+      "pdf": "docs/highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/lowdm/2025/QCDCR_lowdm_postfit.pdf",
+      "phase_space": "lowdm",
+      "png": "docs/highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/lowdm/2025/QCDCR_lowdm_postfit.png",
+      "region": "QCDCR",
+      "scope": "2025",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null
+    },
+    {
+      "bins": 34,
+      "combination": "2024 and 2025 yields summed bin-by-bin in the canonical 34-bin Low-dM CR ordering",
+      "combined_uncertainty": "quadrature sum of the two per-year postfit uncertainty bands",
+      "labels": [
+        "$N_{b}=1$\n$300\\leq p_{T}^{ISR}<500$\n$20<p_{T}^{b}<40$",
+        "$N_{b}=1$\n$300\\leq p_{T}^{ISR}<500$\n$40<p_{T}^{b}<70$",
+        "$N_{b}=1$\n$p_{T}^{ISR}\\geq500$\n$20<p_{T}^{b}<40$",
+        "$N_{b}=1$\n$p_{T}^{ISR}\\geq500$\n$40<p_{T}^{b}<70$",
+        "$N_{b}\\geq2$\n$300\\leq p_{T}^{ISR}<500$\n$40<p_{T}^{b}<80$",
+        "$N_{b}\\geq2$\n$300\\leq p_{T}^{ISR}<500$\n$80<p_{T}^{b}<140$",
+        "$N_{b}\\geq2$, $N_{j}\\geq7$\n$300\\leq p_{T}^{ISR}<500$\n$p_{T}^{b}>140$",
+        "$N_{b}\\geq2$\n$p_{T}^{ISR}\\geq500$\n$40<p_{T}^{b}<80$",
+        "$N_{b}\\geq2$\n$p_{T}^{ISR}\\geq500$\n$80<p_{T}^{b}<140$",
+        "$N_{b}\\geq2$, $N_{j}\\geq7$\n$p_{T}^{ISR}\\geq500$\n$p_{T}^{b}>140$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "name": "QCDCR_lowdm_postfit",
+      "pdf": "docs/highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/lowdm/combined/QCDCR_lowdm_postfit.pdf",
+      "phase_space": "lowdm",
+      "png": "docs/highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/lowdm/combined/QCDCR_lowdm_postfit.png",
+      "region": "QCDCR",
+      "scope": "combined",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null
+    },
+    {
+      "bins": 34,
+      "labels": [
+        "$N_{b}=1$\n$300\\leq p_{T}^{ISR}<500$\n$20<p_{T}^{b}<40$",
+        "$N_{b}=1$\n$300\\leq p_{T}^{ISR}<500$\n$40<p_{T}^{b}<70$",
+        "$N_{b}=1$\n$p_{T}^{ISR}\\geq500$\n$20<p_{T}^{b}<40$",
+        "$N_{b}=1$\n$p_{T}^{ISR}\\geq500$\n$40<p_{T}^{b}<70$",
+        "$N_{b}\\geq2$\n$300\\leq p_{T}^{ISR}<500$\n$40<p_{T}^{b}<80$",
+        "$N_{b}\\geq2$\n$300\\leq p_{T}^{ISR}<500$\n$80<p_{T}^{b}<140$",
+        "$N_{b}\\geq2$, $N_{j}\\geq7$\n$300\\leq p_{T}^{ISR}<500$\n$p_{T}^{b}>140$",
+        "$N_{b}\\geq2$\n$p_{T}^{ISR}\\geq500$\n$40<p_{T}^{b}<80$",
+        "$N_{b}\\geq2$\n$p_{T}^{ISR}\\geq500$\n$80<p_{T}^{b}<140$",
+        "$N_{b}\\geq2$, $N_{j}\\geq7$\n$p_{T}^{ISR}\\geq500$\n$p_{T}^{b}>140$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "name": "GCR_lowdm_postfit",
+      "pdf": "docs/highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/lowdm/2024/GCR_lowdm_postfit.pdf",
+      "phase_space": "lowdm",
+      "png": "docs/highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/lowdm/2024/GCR_lowdm_postfit.png",
+      "region": "GCR",
+      "scope": "2024",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null
+    },
+    {
+      "bins": 34,
+      "labels": [
+        "$N_{b}=1$\n$300\\leq p_{T}^{ISR}<500$\n$20<p_{T}^{b}<40$",
+        "$N_{b}=1$\n$300\\leq p_{T}^{ISR}<500$\n$40<p_{T}^{b}<70$",
+        "$N_{b}=1$\n$p_{T}^{ISR}\\geq500$\n$20<p_{T}^{b}<40$",
+        "$N_{b}=1$\n$p_{T}^{ISR}\\geq500$\n$40<p_{T}^{b}<70$",
+        "$N_{b}\\geq2$\n$300\\leq p_{T}^{ISR}<500$\n$40<p_{T}^{b}<80$",
+        "$N_{b}\\geq2$\n$300\\leq p_{T}^{ISR}<500$\n$80<p_{T}^{b}<140$",
+        "$N_{b}\\geq2$, $N_{j}\\geq7$\n$300\\leq p_{T}^{ISR}<500$\n$p_{T}^{b}>140$",
+        "$N_{b}\\geq2$\n$p_{T}^{ISR}\\geq500$\n$40<p_{T}^{b}<80$",
+        "$N_{b}\\geq2$\n$p_{T}^{ISR}\\geq500$\n$80<p_{T}^{b}<140$",
+        "$N_{b}\\geq2$, $N_{j}\\geq7$\n$p_{T}^{ISR}\\geq500$\n$p_{T}^{b}>140$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "name": "GCR_lowdm_postfit",
+      "pdf": "docs/highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/lowdm/2025/GCR_lowdm_postfit.pdf",
+      "phase_space": "lowdm",
+      "png": "docs/highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/lowdm/2025/GCR_lowdm_postfit.png",
+      "region": "GCR",
+      "scope": "2025",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null
+    },
+    {
+      "bins": 34,
+      "combination": "2024 and 2025 yields summed bin-by-bin in the canonical 34-bin Low-dM CR ordering",
+      "combined_uncertainty": "quadrature sum of the two per-year postfit uncertainty bands",
+      "labels": [
+        "$N_{b}=1$\n$300\\leq p_{T}^{ISR}<500$\n$20<p_{T}^{b}<40$",
+        "$N_{b}=1$\n$300\\leq p_{T}^{ISR}<500$\n$40<p_{T}^{b}<70$",
+        "$N_{b}=1$\n$p_{T}^{ISR}\\geq500$\n$20<p_{T}^{b}<40$",
+        "$N_{b}=1$\n$p_{T}^{ISR}\\geq500$\n$40<p_{T}^{b}<70$",
+        "$N_{b}\\geq2$\n$300\\leq p_{T}^{ISR}<500$\n$40<p_{T}^{b}<80$",
+        "$N_{b}\\geq2$\n$300\\leq p_{T}^{ISR}<500$\n$80<p_{T}^{b}<140$",
+        "$N_{b}\\geq2$, $N_{j}\\geq7$\n$300\\leq p_{T}^{ISR}<500$\n$p_{T}^{b}>140$",
+        "$N_{b}\\geq2$\n$p_{T}^{ISR}\\geq500$\n$40<p_{T}^{b}<80$",
+        "$N_{b}\\geq2$\n$p_{T}^{ISR}\\geq500$\n$80<p_{T}^{b}<140$",
+        "$N_{b}\\geq2$, $N_{j}\\geq7$\n$p_{T}^{ISR}\\geq500$\n$p_{T}^{b}>140$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "name": "GCR_lowdm_postfit",
+      "pdf": "docs/highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/lowdm/combined/GCR_lowdm_postfit.pdf",
+      "phase_space": "lowdm",
+      "png": "docs/highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/lowdm/combined/GCR_lowdm_postfit.png",
       "region": "GCR",
       "scope": "combined",
       "signals": [],
