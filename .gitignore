@@ -10,3 +10,5 @@ outputs/
 shards/
 records/
 golden.json
+x509up*
+condor_campaign/

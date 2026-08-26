@@ -1,8 +1,11 @@
+import json
+
 import correctionlib
 import numpy as np
 import pytest
 from scipy.special import voigt_profile
 
+from cms_tnp.condor import finalize_campaign
 from cms_tnp.fit import fit_payload
 from cms_tnp.payload import build_payload, write_payload
 from cms_tnp.plot import plot_result
@@ -66,6 +69,51 @@ def test_fit_export_and_plot(tmp_path):
     )
     manifest = plot_result(result, tmp_path / "plots")
     assert len(manifest["outputs"]) == 6
+
+
+def test_condor_finalize_requires_and_combines_all_outputs(tmp_path):
+    source = _payload()
+    campaign = tmp_path / "campaign"
+    (campaign / "outputs").mkdir(parents=True)
+    jobs = []
+    for index, sample in enumerate(("data", "mc")):
+        result_name = f"{sample}_shard_00000.json"
+        shard = {
+            key: value
+            for key, value in source.items()
+            if key not in {"samples", "adoption_blockers"}
+        }
+        shard.update(
+            {
+                "sample": sample,
+                "samples": {sample: source["samples"][sample]},
+                "processing": {
+                    "files_expected": 1,
+                    "files_processed": 1,
+                    "files_failed": [],
+                    "events_read": 1,
+                    "pairs_selected": 1,
+                },
+                "adoption_blockers": [],
+                "status": "complete",
+            }
+        )
+        (campaign / "outputs" / result_name).write_text(json.dumps(shard))
+        jobs.append(
+            {
+                "job_id": index,
+                "sample": sample,
+                "shard": f"shards/{sample}.json",
+                "result": result_name,
+                "files_expected": 1,
+            }
+        )
+    (campaign / "campaign.json").write_text(json.dumps({"jobs": jobs}))
+    output = tmp_path / "final"
+    summary = finalize_campaign(campaign, output)
+    assert summary["status"] == "complete"
+    assert (output / "scale_factors.json.gz").exists()
+    assert (output / "plots" / "plots.json").exists()
 
 
 def test_highpt_z_fit():

@@ -138,6 +138,31 @@ def parser() -> argparse.ArgumentParser:
     command.add_argument("--mc-files", type=Path, required=True)
     command.add_argument("--step-size", type=int, default=100_000)
     command.add_argument("--output-dir", type=Path, required=True)
+
+    command = commands.add_parser("condor-prepare")
+    command.add_argument("--config", type=Path, required=True)
+    command.add_argument("--data-shards", type=Path, required=True)
+    command.add_argument("--mc-shards", type=Path, required=True)
+    command.add_argument("--environment", type=Path, required=True)
+    command.add_argument("--proxy", type=Path)
+    command.add_argument("--campaign-dir", type=Path, required=True)
+    command.add_argument("--request-cpus", type=int, default=1)
+    command.add_argument("--request-memory-mb", type=int, default=4000)
+    command.add_argument("--request-disk-mb", type=int, default=4000)
+    command.add_argument("--job-flavour")
+
+    command = commands.add_parser("condor-submit")
+    command.add_argument("--campaign-dir", type=Path, required=True)
+    command.add_argument("--submit-command", default="condor_submit")
+    command.add_argument("--resubmit", action="store_true")
+
+    command = commands.add_parser("condor-status")
+    command.add_argument("--campaign-dir", type=Path, required=True)
+    command.add_argument("--query-command", default="condor_q")
+
+    command = commands.add_parser("condor-finalize")
+    command.add_argument("--campaign-dir", type=Path, required=True)
+    command.add_argument("--output-dir", type=Path, required=True)
     return root
 
 
@@ -291,5 +316,46 @@ def main(argv: list[str] | None = None) -> int:
             return 2
         write_payload(args.output_dir / "scale_factors.json.gz", build_payload(result))
         plot_result(result, args.output_dir / "plots")
+        return 0
+    if args.command == "condor-prepare":
+        from .condor import prepare_campaign
+
+        output = prepare_campaign(
+            config_path=args.config,
+            data_shards=args.data_shards,
+            mc_shards=args.mc_shards,
+            environment_path=args.environment,
+            proxy_path=args.proxy,
+            campaign_dir=args.campaign_dir,
+            request_cpus=args.request_cpus,
+            request_memory_mb=args.request_memory_mb,
+            request_disk_mb=args.request_disk_mb,
+            job_flavour=args.job_flavour,
+        )
+        print(json.dumps(output, indent=2, sort_keys=True))
+        return 0
+    if args.command == "condor-submit":
+        from .condor import submit_campaign
+
+        output = submit_campaign(
+            args.campaign_dir,
+            submit_command=args.submit_command,
+            resubmit=args.resubmit,
+        )
+        print(json.dumps(output, indent=2, sort_keys=True))
+        return 0
+    if args.command == "condor-status":
+        from .condor import campaign_status
+
+        output = campaign_status(
+            args.campaign_dir, query_command=args.query_command
+        )
+        print(json.dumps(output, indent=2, sort_keys=True))
+        return 0 if output["status"] == "complete" else 2
+    if args.command == "condor-finalize":
+        from .condor import finalize_campaign
+
+        output = finalize_campaign(args.campaign_dir, args.output_dir)
+        print(json.dumps(output, indent=2, sort_keys=True))
         return 0
     raise AssertionError(args.command)

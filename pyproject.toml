@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cms-tnp"
-version = "0.1.0"
+version = "0.2.0"
 description = "Configuration-driven CMS NanoAOD tag-and-probe measurements"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -15,6 +15,7 @@ io = ["awkward>=2.4", "uproot>=5.0"]
 fit = ["scipy>=1.9"]
 payload = ["correctionlib>=2.3"]
 plot = ["matplotlib>=3.5", "mplhep>=0.3"]
+batch = ["venv-pack>=0.2"]
 all = [
   "awkward>=2.4",
   "uproot>=5.0",

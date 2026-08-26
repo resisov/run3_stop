@@ -220,45 +220,68 @@ cms-tnp doctor --config photon_id.json
      --output-dir photon_smoke_test
    ```
 
-3. For a full campaign, split the records into independent 20-file shards instead:
+3. For a full campaign, split the records into independent 20-file shards:
 
    ```bash
    cms-tnp make-shards --records data_records.json --output-dir data_shards
    cms-tnp make-shards --records mc_records.json --output-dir mc_shards
    ```
 
-4. Count every shard. These commands may run locally or as independent HTCondor/Slurm jobs:
+4. On the Linux submit host, build the worker environment archive. Install the package non-editably so that its source is included in the archive:
 
    ```bash
-   for shard in data_shards/shard_*.json; do
-     cms-tnp count --config photon_id.json --sample data \
-       --shard "$shard" --output "outputs/data_${shard##*/}"
-   done
-
-   for shard in mc_shards/shard_*.json; do
-     cms-tnp count --config photon_id.json --sample mc \
-       --shard "$shard" --output "outputs/mc_${shard##*/}"
-   done
+   python3 -m venv worker-env
+   worker-env/bin/python -m pip install --upgrade pip
+   worker-env/bin/python -m pip install '.[all,batch]'
+   worker-env/bin/venv-pack -o cms-tnp-worker.tar.gz
    ```
 
-5. Merge all Data and MC pass/fail mass histograms:
+5. Package every shard, the resolved configuration, golden JSON, worker environment, and proxy into one Condor campaign. Place the campaign and proxy on EOS at CERN; AFS paths are rejected:
 
    ```bash
-   cms-tnp reduce outputs/data_shard_*.json outputs/mc_shard_*.json \
-     --output photon_histograms.json
+   cms-tnp condor-prepare \
+     --config photon_id.json \
+     --data-shards data_shards \
+     --mc-shards mc_shards \
+     --environment cms-tnp-worker.tar.gz \
+     --proxy /eos/user/USER/analysis/proxy/x509up \
+     --campaign-dir /eos/user/USER/analysis/photon_id_campaign \
+     --job-flavour workday
    ```
 
-6. Fit Data and MC, calculate the SF and uncertainty, write correctionlib, and make plots:
+6. At CERN, select the EOS schedd and submit the generated JDL:
 
    ```bash
-   cms-tnp reproduce --histograms photon_histograms.json \
+   unset LD_LIBRARY_PATH PYTHONPATH
+   module purge
+   module load lxbatch/eossubmit
+   cms-tnp condor-submit \
+     --campaign-dir /eos/user/USER/analysis/photon_id_campaign
+   ```
+
+7. Monitor both the queue and the expected JSON outputs:
+
+   ```bash
+   cms-tnp condor-status \
+     --campaign-dir /eos/user/USER/analysis/photon_id_campaign
+   ```
+
+   The command remains incomplete until every expected shard output exists, parses correctly, contains no failed ROOT files, and has full file coverage. An empty Condor queue alone is not success.
+
+8. After `condor-status` reports `complete`, merge the shards, fit Data and MC, calculate the SF and uncertainty, write correctionlib, and make the plots:
+
+   ```bash
+   cms-tnp condor-finalize \
+     --campaign-dir /eos/user/USER/analysis/photon_id_campaign \
      --output-dir photon_results
    ```
 
-7. The final products are:
+9. The final products are:
 
    ```text
    photon_results/
+   ├── summary.json
+   ├── histograms.json
    ├── fit_result.json
    ├── scale_factors.json.gz
    └── plots/
@@ -285,4 +308,4 @@ python -m pip install -e '.[all,test]'
 MPLBACKEND=Agg python -m pytest -q
 ```
 
-The tests cover compact configuration overrides, separate electron-photon collections, low-pT electron and muon J/psi counting, high-pT muon Z counting, correctionlib event weights, ROOT-to-payload execution, simultaneous pass/fail fitting, correctionlib export, and plotting.
+The tests cover compact configuration overrides, separate electron-photon collections, low-pT electron and muon J/psi counting, high-pT muon Z counting, correctionlib event weights, ROOT-to-payload execution, simultaneous pass/fail fitting, HTCondor campaign generation and output gating, correctionlib export, and plotting.
