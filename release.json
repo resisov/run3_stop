@@ -22,9 +22,9 @@
       "sha256": "df6e8ea93381105570a9ddf5e82da038a24de90016490e62ca3bca08823fc01c"
     },
     {
-      "bytes": 37515,
+      "bytes": 37418,
       "path": "src/lowpt_tnp/cli.py",
-      "sha256": "26ec7b9a2f2099c11920dca1adf970734e70e149f4592e88f63b8cec46e76dba"
+      "sha256": "b9fd240490bf0265cff5c6390bacf934d54d328258a96ba51a2f2a3a14e444da"
     },
     {
       "bytes": 8610,
@@ -32,9 +32,9 @@
       "sha256": "9e093853a162fed74fd93648c233b6275d9cfa109d294f674fac1897bf3ed380"
     },
     {
-      "bytes": 39715,
+      "bytes": 39891,
       "path": "src/lowpt_tnp/plot_measurement.py",
-      "sha256": "8449dd7f3a91c80695a78356d21316fc185471e6636e3dfc67764bf8578075de"
+      "sha256": "289c58e70693454ab708d2664dbff9d4777bb08b640b40ec74ec92f2ec6959c7"
     },
     {
       "bytes": 15869,
@@ -142,24 +142,24 @@
       "sha256": "55e2a75f5e91172f380adb7f7e7d7e0cc18e2d7aa125deb0a3216b857b7565a3"
     },
     {
-      "bytes": 978391,
-      "path": "reference/results/electron/fit_result.json",
-      "sha256": "6f5220fc09317e2c931ec7c106a4e2d628de33a00aa20ed1eeadaa81e7945c35"
+      "bytes": 276148,
+      "path": "reference/results/electron/fit_result.json.gz",
+      "sha256": "80d0a75e9437f5dee7613df0c8924ef5022d0b61c4f70bf9165d867538910a5c"
     },
     {
-      "bytes": 541100,
-      "path": "reference/results/electron/histograms.json",
-      "sha256": "2ce28da03feb90c23c3e3a1db3631c71c796a44992f2f6090ba87bba998b37f3"
+      "bytes": 79767,
+      "path": "reference/results/electron/histograms.json.gz",
+      "sha256": "8ca5d3b58a32a592a258bf5b3a895982092945825f3f870bd4d9e67a5c9c8030"
     },
     {
-      "bytes": 281889,
-      "path": "reference/results/muon/fit_result.json",
-      "sha256": "b2ecafa77ac4852c81ca49d26bf8fc05ca0c2485dc972ae6d755f6f2f6c12b87"
+      "bytes": 76762,
+      "path": "reference/results/muon/fit_result.json.gz",
+      "sha256": "b4c6c2fdcf27a95fbfc6519a69d887be88f9606a8e4344c91dca959d8f45d172"
     },
     {
-      "bytes": 356584,
-      "path": "reference/results/muon/histograms.json",
-      "sha256": "a0b5d1acbca530752d6a54c0b10e80b0f935151912bd8358f9d46d68999df1c9"
+      "bytes": 28880,
+      "path": "reference/results/muon/histograms.json.gz",
+      "sha256": "c8ce4db9498e3ba6d67e58490c0bf127f634023cd74c864f1ac7701ba3c708c1"
     },
     {
       "bytes": 551,
@@ -172,169 +172,9 @@
       "sha256": "a24770bced4a6223a51121a27de3a619a2fc62497e48aba338ccacc5b1d26b2f"
     },
     {
-      "bytes": 109267,
-      "path": "reference/plots/electron/efficiency.png",
-      "sha256": "66ab1506113106521c211ad3365561ce4f3f2fe6c2a0725bbed83dc3ccac2436"
-    },
-    {
-      "bytes": 177163,
-      "path": "reference/plots/electron/mass_fit_bin_00.png",
-      "sha256": "88c37bf34ce4b6f61445a7f9ca417716736197b96349613e553063827f9ffac3"
-    },
-    {
-      "bytes": 168971,
-      "path": "reference/plots/electron/mass_fit_bin_01.png",
-      "sha256": "f12169ff7112956d801c47f9782c7d4ae1b23a889ce23b62206c9523fd351e3e"
-    },
-    {
-      "bytes": 190995,
-      "path": "reference/plots/electron/mass_fit_bin_02.png",
-      "sha256": "07d8b4774ed34da070fdc384b364f78148773bcf27af1b339ccaa412fddfd9a7"
-    },
-    {
-      "bytes": 176054,
-      "path": "reference/plots/electron/mass_fit_bin_03.png",
-      "sha256": "12000fe123872f770ee2db21fbe932acb83a77e919bc9f6d909c4091dc1b5c99"
-    },
-    {
-      "bytes": 182688,
-      "path": "reference/plots/electron/mass_fit_bin_04.png",
-      "sha256": "6c75b4ea734721d76375e2e7b2b76db6be4366cb9491a06cd4095ed5163a5c4a"
-    },
-    {
-      "bytes": 185883,
-      "path": "reference/plots/electron/mass_fit_bin_05.png",
-      "sha256": "90ae3bd0bb9432cffcae51c094bf1142bea30300ebba5eacae030061db6c26b8"
-    },
-    {
-      "bytes": 100674,
-      "path": "reference/plots/electron/scale_factor.png",
-      "sha256": "055dfe2647e30e376f4fc8d9a790ac95f88a10e47c38783560c2992a28d6a13c"
-    },
-    {
-      "bytes": 144298,
-      "path": "reference/plots/electron/scale_factor_heatmap.png",
-      "sha256": "842e93f4d4dfdce70f4418f5cb061295083057a59f52a52d990e5650b5f62578"
-    },
-    {
-      "bytes": 91553,
-      "path": "reference/plots/muon/efficiency.png",
-      "sha256": "e04e2fe400c04cbebd49880fbbbaf0360365f54e4c1968d4f8b38ddfd0e46a74"
-    },
-    {
-      "bytes": 156571,
-      "path": "reference/plots/muon/mass_fit_bin_00.png",
-      "sha256": "3b3a60120eaa83aeef91d1114cb641b456ece8a4bab37e3cd62cb7b66fd3beb9"
-    },
-    {
-      "bytes": 169560,
-      "path": "reference/plots/muon/mass_fit_bin_01.png",
-      "sha256": "c0cd6d975631a97ab75dd8c217ca5ae5a81f32e09038be621adb2a54b198fd85"
-    },
-    {
-      "bytes": 167562,
-      "path": "reference/plots/muon/mass_fit_bin_02.png",
-      "sha256": "f36aefc24b50c501c788f35523e85ab826155844d00c3f0d5f03c896a1050114"
-    },
-    {
-      "bytes": 96774,
-      "path": "reference/plots/muon/scale_factor.png",
-      "sha256": "ebd66f435da9a6a68d554bb34d9e1f5490d6771161c334aeb48c360d2f56de47"
-    },
-    {
-      "bytes": 137583,
-      "path": "reference/plots/muon/scale_factor_heatmap.png",
-      "sha256": "e9b1cc2fc02b9d9c4369879f0ac808302cf2838ac16c4970f8492361b4230f56"
-    },
-    {
-      "bytes": 23293,
-      "path": "reference/plots/electron/efficiency.pdf",
-      "sha256": "125f10eff04c39ca7ed8ea52a3376489c29c80629599f4787e2651406ff157dd"
-    },
-    {
-      "bytes": 34686,
-      "path": "reference/plots/electron/mass_fit_bin_00.pdf",
-      "sha256": "078402acb6b4ad74a55b843f2b707861fa480fc02ab1ab72d47b8c9865bd58f8"
-    },
-    {
-      "bytes": 33859,
-      "path": "reference/plots/electron/mass_fit_bin_01.pdf",
-      "sha256": "25f7b37641345a819f6dff3a356a66362df520cbaa70f75b78f0c250e2875173"
-    },
-    {
-      "bytes": 35113,
-      "path": "reference/plots/electron/mass_fit_bin_02.pdf",
-      "sha256": "925d12b8de4d1bbe885003c384ebd1564d2279dd477d5a9ca3405c691a7e7165"
-    },
-    {
-      "bytes": 33827,
-      "path": "reference/plots/electron/mass_fit_bin_03.pdf",
-      "sha256": "6718e3150b578c76ae45505e6d3be76fa9d6a5de34a0db9fe4294de7e6f33579"
-    },
-    {
-      "bytes": 33682,
-      "path": "reference/plots/electron/mass_fit_bin_04.pdf",
-      "sha256": "5ad0408cc4f12467399eefc8a27839647b7749a2b4905d81390cdec947b9e094"
-    },
-    {
-      "bytes": 33708,
-      "path": "reference/plots/electron/mass_fit_bin_05.pdf",
-      "sha256": "1ee045cd2809c861dc4df7520197bd602831d3b1ab1bcbf5374eecfb9dff4dcc"
-    },
-    {
-      "bytes": 21679,
-      "path": "reference/plots/electron/scale_factor.pdf",
-      "sha256": "b9d6f067505455549b6308ec23724e6e97f3e51bd27af31ec65a87bad166546b"
-    },
-    {
-      "bytes": 22684,
-      "path": "reference/plots/electron/scale_factor_heatmap.pdf",
-      "sha256": "8042e78690bbf371d62da3b8b88e24ea00b656c51a1e12195042e8b264d3530b"
-    },
-    {
-      "bytes": 20683,
-      "path": "reference/plots/muon/efficiency.pdf",
-      "sha256": "6e9118c63bbb29174b969345f148d156d3a96b6d8128ffefadaab23d1e605364"
-    },
-    {
-      "bytes": 30820,
-      "path": "reference/plots/muon/mass_fit_bin_00.pdf",
-      "sha256": "ee09d4af6157933c2e07a5705b3112bd548929609f674df9ac44c24e81bfc0f8"
-    },
-    {
-      "bytes": 31685,
-      "path": "reference/plots/muon/mass_fit_bin_01.pdf",
-      "sha256": "35b659386b37204985a8f0de6d56920ec0d81e45dfbfeed206f6060f49a9e823"
-    },
-    {
-      "bytes": 31755,
-      "path": "reference/plots/muon/mass_fit_bin_02.pdf",
-      "sha256": "8d06cfdbe26477d1081112f58d5afb77ec192e7b69ec7e4042f5077353db05b8"
-    },
-    {
-      "bytes": 19514,
-      "path": "reference/plots/muon/scale_factor.pdf",
-      "sha256": "0f21087cee3e5ffb3b9bfc691a191466653ccde4f89e1d6322ba64dea0ed8c6b"
-    },
-    {
-      "bytes": 22404,
-      "path": "reference/plots/muon/scale_factor_heatmap.pdf",
-      "sha256": "b62612adff6199036ae1101c125909ab2e14763e4fb4078e1c614d3bd6a5b045"
-    },
-    {
-      "bytes": 3555,
-      "path": "reference/plots/electron/plot_manifest.json",
-      "sha256": "edb39e9836418e83c5d7fe922222fb49425e359361cfb61377e14bcc09ddcc88"
-    },
-    {
-      "bytes": 2221,
-      "path": "reference/plots/muon/plot_manifest.json",
-      "sha256": "72aad164c8699863a2c242ced3b2427e099c2521168bdb13c1306f9d6a19e97e"
-    },
-    {
-      "bytes": 19190,
+      "bytes": 19648,
       "path": "tests/test_release.py",
-      "sha256": "4af4d0958b2ca99115f3b6deda5bbba3bdee3614e63275a5c7c8c9eafc88bbc3"
+      "sha256": "d90d88da8ed70cb1191788c146cb13da49bdd3232a8f94a18715722f9ed50d61"
     },
     {
       "bytes": 1152,
@@ -342,9 +182,9 @@
       "sha256": "49447e5f82b4e01827609f23cfd5ef8caf168ef07584a067cf3147267e1a5e1d"
     },
     {
-      "bytes": 9985,
+      "bytes": 10022,
       "path": "README.md",
-      "sha256": "e4d6a7e21dcf58e3c48abe5fa9c9b096e14a54d3a35bbb0a177dd08ef428080a"
+      "sha256": "fa1a5fd6c05972d01a411690058560166d5064ba02dbb203e7e0f5d4eb9ba7d5"
     },
     {
       "bytes": 620,

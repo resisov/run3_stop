@@ -28,7 +28,11 @@ from lowpt_tnp.validate_tnp_adoption import FIT_VARIATIONS, validate
 
 class LowPtTnpReleaseTest(unittest.TestCase):
     def _json(self, relative: str) -> dict:
-        return json.loads((REPO / relative).read_text())
+        path = REPO / relative
+        if path.suffix == ".gz":
+            with gzip.open(path, "rt") as source:
+                return json.load(source)
+        return json.loads(path.read_text())
 
     def _gz_json(self, relative: str) -> dict:
         with gzip.open(REPO / relative, "rt") as source:
@@ -206,7 +210,10 @@ class LowPtTnpReleaseTest(unittest.TestCase):
             extracted.mkdir()
             import tarfile
             with tarfile.open(archive, "r:gz") as source:
-                source.extractall(extracted)
+                if sys.version_info >= (3, 12):
+                    source.extractall(extracted, filter="data")
+                else:
+                    source.extractall(extracted)
             nanoaod = extracted / "fixture.root"
             self._write_synthetic_electron_nanoaod(nanoaod)
             shard = extracted / "shard.json"
@@ -289,10 +296,10 @@ class LowPtTnpReleaseTest(unittest.TestCase):
         )
         for kind, fallback in (("electron", True), ("muon", False)):
             result = self._json(
-                f"reference/results/{kind}/fit_result.json"
+                f"reference/results/{kind}/fit_result.json.gz"
             )
             histograms = self._json(
-                f"reference/results/{kind}/histograms.json"
+                f"reference/results/{kind}/histograms.json.gz"
             )
             config_name = (
                 "config_2025_id_only_parking_singlemuon.json"
@@ -338,8 +345,8 @@ class LowPtTnpReleaseTest(unittest.TestCase):
                 inputs = REPO / "reference/results" / kind
                 output = root / kind
                 manifest = render(
-                    inputs / "fit_result.json",
-                    inputs / "histograms.json",
+                    inputs / "fit_result.json.gz",
+                    inputs / "histograms.json.gz",
                     output,
                     kind=kind,
                     electron_endcap_unity_fallback=fallback,
@@ -374,10 +381,10 @@ class LowPtTnpReleaseTest(unittest.TestCase):
     def test_fit_numerical_reproduction(self):
         for kind in ("electron", "muon"):
             source = self._json(
-                f"reference/results/{kind}/histograms.json"
+                f"reference/results/{kind}/histograms.json.gz"
             )
             reference = self._json(
-                f"reference/results/{kind}/fit_result.json"
+                f"reference/results/{kind}/fit_result.json.gz"
             )
             reproduced = fit_histogram_payload(source)
             self.assertEqual(reproduced["probe_definition"], reference["probe_definition"])
@@ -422,8 +429,6 @@ class LowPtTnpReleaseTest(unittest.TestCase):
         paths = [
             *REPO.glob("src/lowpt_tnp/*.py"),
             *REPO.glob("configs/*.json"),
-            *REPO.glob("reference/results/*/*.json"),
-            *REPO.glob("reference/plots/*/*.json"),
             REPO / "README.md",
             REPO / "pyproject.toml",
             REPO / "environment.yml",
@@ -433,6 +438,11 @@ class LowPtTnpReleaseTest(unittest.TestCase):
             for token in forbidden:
                 self.assertNotIn(token, text, f"{token!r} leaked into {path}")
         for path in REPO.glob("records/*.json.gz"):
+            with gzip.open(path, "rt") as source:
+                text = source.read()
+            for token in forbidden:
+                self.assertNotIn(token, text, f"{token!r} leaked into {path}")
+        for path in REPO.glob("reference/results/*/*.json.gz"):
             with gzip.open(path, "rt") as source:
                 text = source.read()
             for token in forbidden:

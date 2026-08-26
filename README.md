@@ -34,12 +34,12 @@ files, and redraw every figure:
 lowpt-tnp reproduce \
   --kind electron \
   --electron-endcap-unity-fallback \
-  --histograms reference/results/electron/histograms.json \
+  --histograms reference/results/electron/histograms.json.gz \
   --output-dir outputs/electron
 
 lowpt-tnp reproduce \
   --kind muon \
-  --histograms reference/results/muon/histograms.json \
+  --histograms reference/results/muon/histograms.json.gz \
   --output-dir outputs/muon
 ```
 
@@ -117,9 +117,8 @@ configs/                 exact physics and dataset definitions
 data/lumimasks/          2024 and 2025 Golden JSONs
 data/pileup/             2024 and 2025 correctionlib pileup payloads
 records/                 frozen ROOT-file manifests
-reference/results/       frozen histograms and fit results
+reference/results/       compressed frozen histograms and fit results
 reference/payloads/      candidate electron and muon correctionlib JSON.GZ
-reference/plots/         PNG/PDF publication figures
 src/lowpt_tnp/           complete implementation
 tests/                   numerical, physics, packaging, and privacy tests
 release.json             SHA-256 manifest for every released file
@@ -237,7 +236,7 @@ lowpt-tnp verify-release --manifest release.json
 ```
 
 `release-manifest` hashes the source, tests, CI definition, configurations,
-Golden JSONs, pileup payloads, input manifests, frozen results, correctionlib
-payloads, and all PNG/PDF figures. `release.json` itself is intentionally not
+Golden JSONs, pileup payloads, input manifests, compressed frozen results, and
+correctionlib payloads. Generated PNG/PDF figures are deliberately not tracked;
+`reproduce` recreates them. `release.json` itself is intentionally not
 self-hashed.
-

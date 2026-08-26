@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import gzip
 import json
 from pathlib import Path
 from typing import Any
@@ -17,6 +18,13 @@ from matplotlib.lines import Line2D
 from matplotlib.ticker import ScalarFormatter
 
 from .export_tnp_id_correctionlib import electron_unity_policy_uncertainty
+
+
+def _read_json(path: Path) -> dict[str, Any]:
+    if path.suffix == ".gz":
+        with gzip.open(path, "rt") as source:
+            return json.load(source)
+    return json.loads(path.read_text())
 
 
 CMS_LABEL_FONT_SIZE = 17
@@ -288,7 +296,7 @@ def _continuous_fit_curves(
 def plot_trigger_result(result_path: Path, output_dir: Path, measurement: str) -> dict[str, Any]:
     """Draw MET or photon trigger efficiency and scale-factor plots."""
     _apply_style()
-    result = json.loads(result_path.read_text())
+    result = _read_json(result_path)
     if result.get("measurement_type") != measurement:
         raise ValueError(f"measurement mismatch in {result_path}")
     bins = result.get("bins") or []
@@ -507,8 +515,8 @@ def plot_tnp_result(
 ) -> dict[str, Any]:
     """Draw low-pT electron or muon tag-and-probe plots."""
     _apply_style()
-    result = json.loads(result_path.read_text())
-    histograms = json.loads(histograms_path.read_text())
+    result = _read_json(result_path)
+    histograms = _read_json(histograms_path)
     year = _measurement_year(result, histograms)
     measurement_kind = str(histograms.get("kind") or result.get("kind") or "")
     if measurement_kind == "electron":

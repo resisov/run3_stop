@@ -62,11 +62,8 @@ RELEASE_GLOBS = (
     "records/*.json.gz",
     "data/lumimasks/*.json",
     "data/pileup/*.json.gz",
-    "reference/results/*/*.json",
+    "reference/results/*/*.json.gz",
     "reference/payloads/*.json.gz",
-    "reference/plots/*/*.png",
-    "reference/plots/*/*.pdf",
-    "reference/plots/*/plot_manifest.json",
     "tests/*.py",
     ".github/workflows/*.yml",
     "README.md",
@@ -256,8 +253,8 @@ def build_release_manifest(repo: Path) -> dict[str, Any]:
     results: dict[str, Any] = {}
     for kind in KINDS:
         base = repo / "reference/results" / kind
-        histograms = _read_json(base / "histograms.json")
-        fitted = _read_json(base / "fit_result.json")
+        histograms = _read_json(base / "histograms.json.gz")
+        fitted = _read_json(base / "fit_result.json.gz")
         results[kind] = {
             "measurement": fitted["measurement"],
             "year": fitted["year"],
