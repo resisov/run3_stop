@@ -27,6 +27,7 @@ from background_process_groups import (
 from autonomous_allhad.search_bin_categorization import (
     configured_bin_position_groups,
     configured_exclusive_mapping,
+    configured_projection_groups,
 )
 
 
@@ -1477,13 +1478,16 @@ def apply_configured_search_bin_merges(
     source_count = len(configured_exclusive_mapping(configuration))
     position_groups = configured_bin_position_groups(configuration)
     final_count = len(position_groups)
-    if len(raw_labels) not in {source_count, final_count}:
-        raise RuntimeError(
-            f"{scheme_name} configuration/source mismatch: "
-            f"expected {source_count} source bins or {final_count} final bins, "
-            f"but found {len(raw_labels)} labels"
+    input_configuration = scheme.get("configuration") or {}
+    try:
+        projection_groups = configured_projection_groups(
+            configuration,
+            len(raw_labels),
+            input_configuration.get("bin_merges_1based"),
         )
-    if len(raw_labels) == final_count:
+    except ValueError as exc:
+        raise RuntimeError(f"{scheme_name} configuration/source mismatch: {exc}") from exc
+    if all(group == (index,) for index, group in enumerate(projection_groups)):
         summary = {
             "source_bin_count": source_count,
             "final_bin_count": final_count,
@@ -1491,32 +1495,27 @@ def apply_configured_search_bin_merges(
                 configuration.get("bin_merges_1based") or []
             ),
             "already_projected": True,
+            "input_bin_merges_1based": list(
+                input_configuration.get("bin_merges_1based") or []
+            ),
         }
         scheme["plot_bin_merges"] = summary
         payload.setdefault("search_bin_schemes", {})[scheme_name] = scheme
         return summary
-    if len(position_groups) == source_count:
-        return {
-            "source_bin_count": source_count,
-            "final_bin_count": source_count,
-            "bin_merges_1based": [],
-            "already_projected": True,
-        }
-
     def rebin_leaf(leaf: dict) -> dict:
         rebinned = dict(leaf)
         for field in ("entries", "sumw", "sumw2"):
             if field not in leaf:
                 continue
             values = leaf.get(field) or []
-            if len(values) != source_count:
+            if len(values) != len(raw_labels):
                 raise RuntimeError(
                     f"{scheme_name} {field} has {len(values)} bins; "
-                    f"expected {source_count}"
+                    f"expected {len(raw_labels)}"
                 )
             rebinned[field] = [
-                float(sum(float(values[position]) for position in positions))
-                for positions in position_groups
+                float(sum(float(values[input_bin]) for input_bin in input_bins))
+                for input_bins in projection_groups
             ]
         return rebinned
 
@@ -1536,14 +1535,26 @@ def apply_configured_search_bin_merges(
 
     rebinned_scheme = dict(scheme)
     rebinned_scheme["bin_labels"] = [
-        "__plus__".join(raw_labels[position] for position in positions)
-        for positions in position_groups
+        "__plus__".join(raw_labels[input_bin] for input_bin in input_bins)
+        for input_bins in projection_groups
     ]
+    rebinned_configuration = dict(input_configuration)
+    rebinned_configuration["bin_count"] = final_count
+    rebinned_configuration["bin_merges_1based"] = list(
+        configuration.get("bin_merges_1based") or []
+    )
+    rebinned_scheme["configuration"] = rebinned_configuration
     rebinned_scheme["plot_bin_merges"] = {
         "source_bin_count": source_count,
         "final_bin_count": len(position_groups),
         "bin_merges_1based": list(configuration.get("bin_merges_1based") or []),
         "already_projected": False,
+        "input_projection_groups_zero_based": [
+            list(group) for group in projection_groups
+        ],
+        "input_bin_merges_1based": list(
+            input_configuration.get("bin_merges_1based") or []
+        ),
     }
     payload.setdefault("search_bin_schemes", {})[scheme_name] = rebinned_scheme
     return rebinned_scheme["plot_bin_merges"]

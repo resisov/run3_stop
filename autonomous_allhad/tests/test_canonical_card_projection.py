@@ -81,11 +81,11 @@ def test_configured_highdm_projection_merges_every_bounded_component() -> None:
     configuration = json.loads(
         (PROJECT / "configs" / "search_bins_2024.json").read_text()
     )
-    values = list(range(1, 80))
+    values = list(range(1, 92))
     source_leaf = {
         "sumw": values,
         "sumw2": [value * value for value in values],
-        "entries": [1] * 79,
+        "entries": [1] * 91,
     }
     hists = {
         "search_bin_histograms": {
@@ -99,7 +99,7 @@ def test_configured_highdm_projection_merges_every_bounded_component() -> None:
     }
     exact = {
         "highdm": {
-            "search_bin_labels": [f"bin{index}" for index in range(1, 80)],
+            "search_bin_labels": [f"bin{index}" for index in range(1, 92)],
             "sr_components": {
                 "Nb3plus": {
                     "recoil0": {"TT": {"nominal": source_leaf}}
@@ -112,22 +112,23 @@ def test_configured_highdm_projection_merges_every_bounded_component() -> None:
         hists, exact, configuration
     )
 
-    assert summary["source_bin_count"] == 79
-    assert summary["final_bin_count"] == 73
+    assert summary["source_bin_count"] == 91
+    assert summary["final_bin_count"] == 79
     assert summary["position_groups_zero_based"][16] == [16, 17]
     assert summary["position_groups_zero_based"][-5:] == [
-        [69, 74],
-        [70, 75],
-        [71, 76],
-        [72, 77],
-        [73, 78],
+        [81, 86],
+        [82, 87],
+        [83, 88],
+        [84, 89],
+        [85, 90],
     ]
     signal = hists["search_bin_histograms"][MODULE.HIGH_SCHEME][
         "T2tt_mStop1200_mLSP500"
     ]
-    assert len(signal["nominal"]["sumw"]) == 73
+    assert len(signal["nominal"]["sumw"]) == 79
     assert signal["nominal"]["sumw"][16] == 17 + 18
-    assert signal["pileupUp"]["sumw2"][-1] == 74 * 74 + 79 * 79
+    assert signal["nominal"]["sumw"][17] == 19 + 54
+    assert signal["pileupUp"]["sumw2"][-1] == 86 * 86 + 91 * 91
     component = exact["highdm"]["sr_components"]["Nb3plus"]["recoil0"][
         "TT"
     ]["nominal"]
@@ -140,11 +141,11 @@ def test_configured_highdm_projection_accepts_valid_already_projected_input() ->
     configuration = json.loads(
         (PROJECT / "configs" / "search_bins_2024.json").read_text()
     )
-    values = list(range(1, 74))
+    values = list(range(1, 80))
     leaf = {
         "sumw": values,
         "sumw2": [value * value for value in values],
-        "entries": [1] * 73,
+        "entries": [1] * 79,
     }
     hists = {
         "search_bin_histograms": {
@@ -155,7 +156,7 @@ def test_configured_highdm_projection_accepts_valid_already_projected_input() ->
     }
     exact = {
         "highdm": {
-            "search_bin_labels": [f"final{index}" for index in range(1, 74)],
+            "search_bin_labels": [f"final{index}" for index in range(1, 80)],
             "sr_components": {"Nb1": {"recoil0": {"TT": {"nominal": leaf}}}},
         }
     }
@@ -164,13 +165,71 @@ def test_configured_highdm_projection_accepts_valid_already_projected_input() ->
         hists, exact, configuration
     )
 
-    assert summary["source_bin_count"] == 79
-    assert summary["input_bin_count"] == 73
-    assert summary["final_bin_count"] == 73
+    assert summary["source_bin_count"] == 91
+    assert summary["input_bin_count"] == 79
+    assert summary["final_bin_count"] == 79
     assert summary["already_projected"] is True
     assert hists["search_bin_histograms"][MODULE.HIGH_SCHEME][
         "T2tt_mStop1200_mLSP500"
     ]["nominal"]["sumw"] == values
+
+
+def test_configured_highdm_projection_coarsens_existing_85_bins() -> None:
+    configuration = json.loads(
+        (PROJECT / "configs" / "search_bins_2024.json").read_text()
+    )
+    values = list(range(1, 86))
+    leaf = {
+        "sumw": values,
+        "sumw2": [value * value for value in values],
+        "entries": [1] * 85,
+    }
+    hists = {
+        "search_bin_histograms": {
+            MODULE.HIGH_SCHEME: {
+                "T2bW_mStop1200_mLSP500": {"nominal": leaf}
+            }
+        }
+    }
+    exact = {
+        "highdm": {
+            "search_bin_labels": [f"old{index}" for index in range(1, 86)],
+            "input_configuration": {
+                "bin_merges_1based": [
+                    [17, 18],
+                    [82, 87],
+                    [83, 88],
+                    [84, 89],
+                    [85, 90],
+                    [86, 91],
+                ]
+            },
+            "sr_components": {
+                "Nb2plus": {"recoil0": {"Top": {"nominal": leaf}}}
+            },
+        }
+    }
+
+    summary = MODULE.apply_configured_highdm_bin_merges(
+        hists, exact, configuration
+    )
+
+    assert summary["input_bin_count"] == 85
+    assert summary["final_bin_count"] == 79
+    assert summary["input_projection_groups_zero_based"][17:23] == [
+        [17, 52],
+        [18, 53],
+        [19, 54],
+        [20, 55],
+        [21, 56],
+        [22, 57],
+    ]
+    output = hists["search_bin_histograms"][MODULE.HIGH_SCHEME][
+        "T2bW_mStop1200_mLSP500"
+    ]["nominal"]["sumw"]
+    assert len(output) == 79
+    assert output[17:23] == [18 + 53, 19 + 54, 20 + 55, 21 + 56, 22 + 57, 23 + 58]
+    assert sum(output) == sum(values)
 
 
 def complete(value: float) -> dict:

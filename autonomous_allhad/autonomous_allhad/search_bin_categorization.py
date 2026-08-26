@@ -348,6 +348,60 @@ def configured_exclusive_bin_count(configuration: dict[str, Any]) -> int:
     return len(configured_bin_position_groups(configuration))
 
 
+def configured_projection_groups(
+    configuration: dict[str, Any],
+    input_bin_count: int,
+    input_bin_merges_1based: Sequence[Sequence[int]] | None = None,
+) -> tuple[tuple[int, ...], ...]:
+    """Map a compatible finer configured binning into the requested bins."""
+    target_groups = configured_bin_position_groups(configuration)
+    if input_bin_count == len(target_groups):
+        return tuple((index,) for index in range(input_bin_count))
+
+    source_count = len(configured_exclusive_mapping(configuration))
+    if input_bin_count == source_count:
+        input_groups = tuple((index,) for index in range(source_count))
+    else:
+        if input_bin_merges_1based is None:
+            raise ValueError(
+                "input binning is neither source nor final and has no merge metadata"
+            )
+        input_configuration = dict(configuration)
+        input_configuration["bin_merges_1based"] = [
+            list(group) for group in input_bin_merges_1based
+        ]
+        input_groups = configured_bin_position_groups(input_configuration)
+        if len(input_groups) != input_bin_count:
+            raise ValueError(
+                "input merge metadata produces "
+                f"{len(input_groups)} bins, expected {input_bin_count}"
+            )
+
+    projection: list[tuple[int, ...]] = []
+    used: set[int] = set()
+    for target_group in target_groups:
+        target = set(target_group)
+        contributors = tuple(
+            index
+            for index, input_group in enumerate(input_groups)
+            if set(input_group).issubset(target)
+        )
+        covered = {
+            position
+            for index in contributors
+            for position in input_groups[index]
+        }
+        if not contributors or covered != target:
+            raise ValueError(
+                "requested bins are not a coarsening of the canonical binning"
+            )
+        projection.append(contributors)
+        used.update(contributors)
+    if used != set(range(input_bin_count)):
+        raise ValueError("canonical input bins are not consumed exactly once")
+    return tuple(projection)
+
+
 def map_category_sources_to_configured(
     indices: Sequence[int] | np.ndarray,
     configuration: dict[str, Any],

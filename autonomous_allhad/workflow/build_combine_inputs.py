@@ -29,6 +29,7 @@ if str(PACKAGE_ROOT) not in sys.path:
 from autonomous_allhad.search_bin_categorization import (
     configured_bin_position_groups,
     configured_exclusive_mapping,
+    configured_projection_groups,
 )
 
 from background_process_groups import (
@@ -148,13 +149,12 @@ def apply_configured_highdm_bin_merges(
     configured_source_count = len(configured_exclusive_mapping(configuration))
     position_groups = configured_bin_position_groups(configuration)
     final_count = len(position_groups)
-    if input_count not in {configured_source_count, final_count}:
-        raise ValueError(
-            "High-dM configuration/source mismatch: "
-            f"expected {configured_source_count} source bins or "
-            f"{final_count} already-projected bins, but found "
-            f"{input_count} canonical labels"
-        )
+    input_configuration = high.get("input_configuration") or {}
+    projection_groups = configured_projection_groups(
+        configuration,
+        input_count,
+        input_configuration.get("bin_merges_1based"),
+    )
 
     def validate_leaf(leaf: dict[str, Any], expected: int) -> None:
         for field in ("entries", "sumw", "sumw2"):
@@ -180,7 +180,7 @@ def apply_configured_highdm_bin_merges(
         hists["search_bin_histograms"][HIGH_SCHEME],
         high["sr_components"],
     )
-    if input_count == final_count:
+    if all(group == (index,) for index, group in enumerate(projection_groups)):
         for tree in input_trees:
             validate_tree(tree, final_count)
         high["bin_projection"] = {
@@ -194,6 +194,9 @@ def apply_configured_highdm_bin_merges(
             "bin_merges_1based": list(
                 configuration.get("bin_merges_1based") or []
             ),
+            "input_bin_merges_1based": list(
+                input_configuration.get("bin_merges_1based") or []
+            ),
         }
         return high["bin_projection"]
 
@@ -203,14 +206,14 @@ def apply_configured_highdm_bin_merges(
             if field not in leaf:
                 continue
             values = leaf.get(field) or []
-            if len(values) != configured_source_count:
+            if len(values) != input_count:
                 raise ValueError(
                     f"High-dM {field} has {len(values)} bins; "
-                    f"expected {configured_source_count}"
+                    f"expected {input_count}"
                 )
             output[field] = [
-                sum(values[position] for position in positions)
-                for positions in position_groups
+                sum(values[input_bin] for input_bin in input_bins)
+                for input_bins in projection_groups
             ]
         return output
 
@@ -225,10 +228,10 @@ def apply_configured_highdm_bin_merges(
         hists["search_bin_histograms"][HIGH_SCHEME]
     )
     high["sr_components"] = rebin_tree(high["sr_components"])
-    high["source_search_bin_labels"] = raw_labels
+    high["input_search_bin_labels"] = raw_labels
     high["search_bin_labels"] = [
-        "__plus__".join(raw_labels[position] for position in positions)
-        for positions in position_groups
+        "__plus__".join(raw_labels[input_bin] for input_bin in input_bins)
+        for input_bins in projection_groups
     ]
     high["bin_projection"] = {
         "source_bin_count": configured_source_count,
@@ -236,7 +239,13 @@ def apply_configured_highdm_bin_merges(
         "final_bin_count": final_count,
         "already_projected": False,
         "position_groups_zero_based": [list(group) for group in position_groups],
+        "input_projection_groups_zero_based": [
+            list(group) for group in projection_groups
+        ],
         "bin_merges_1based": list(configuration.get("bin_merges_1based") or []),
+        "input_bin_merges_1based": list(
+            input_configuration.get("bin_merges_1based") or []
+        ),
     }
     return high["bin_projection"]
 
@@ -728,6 +737,7 @@ def extract_current_histogram_input(
             "recoil": control_components,
             "sr_components": search_components,
             "search_bin_labels": high_labels,
+            "input_configuration": dict(high_metadata.get("configuration") or {}),
         },
         "lowdm": {
             "search_bin_labels": low_labels,
