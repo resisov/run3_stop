@@ -245,7 +245,7 @@ def prepare(
         shard_paths.append(str(shard))
 
     wrapper = workdir / "run_tnp_measurement.sh"
-    counter_relative = f"autonomous_allhad/workflow/lowpt_{kind}_measurement/count_shard.py"
+    counter_relative = "autonomous_allhad/workflow/measure_lowpt_lepton.py"
     wrapper_text = f"""#!/bin/bash
 set -euo pipefail
 SHARD_NAME="$1"
@@ -278,10 +278,10 @@ export PATH="$(dirname "$PY"):$PATH"
 export LD_LIBRARY_PATH="$WORKDIR/lib:$WORKDIR/py38/lib:${{LD_LIBRARY_PATH:-}}"
 export PYTHONPATH="$WORKDIR/autonomous_allhad"
 "$PY" -c 'import numpy, awkward, uproot, correctionlib; print(numpy.__file__); print(awkward.__file__); print(uproot.__file__)'
-"$PY" "$WORKDIR/{counter_relative}" --repo "$WORKDIR" --shard "$WORKDIR/$SHARD_NAME" --config "$WORKDIR/{paths['config'].name}" --output "$WORKDIR/result.json"
+"$PY" "$WORKDIR/{counter_relative}" count --kind {kind} --repo "$WORKDIR" --shard "$WORKDIR/$SHARD_NAME" --config "$WORKDIR/{paths['config'].name}" --output "$WORKDIR/result.json"
 test -s "$WORKDIR/result.json"
 "$PY" -c 'import json; p=json.load(open("result.json")); assert p["status"] in ("success", "incomplete"); assert p["files_processed"] > 0'
-case "$RESULT_DEST" in /eos/user/t/taiwoo/*) ;; *) echo "refusing non-EOS result destination: $RESULT_DEST" >&2; exit 64;; esac
+case "$RESULT_DEST" in /eos/user/*) ;; *) echo "refusing non-EOS result destination: $RESULT_DEST" >&2; exit 64;; esac
 xrdcp -f --nopbar "$WORKDIR/result.json" "root://eosuser.cern.ch/$RESULT_DEST"
 xrdfs eosuser.cern.ch stat "$RESULT_DEST" >/dev/null
 """

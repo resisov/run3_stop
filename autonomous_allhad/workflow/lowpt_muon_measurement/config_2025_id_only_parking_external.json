@@ -51,12 +51,11 @@
   "nominal_mass_rebin_factor": 2,
   "nominal_background_model": "exponential",
   "systematic_variations": [
-    "signal_template",
-    "background_model",
-    "mass_window",
+    "alternate_signal",
+    "alternate_background",
+    "pass_fail_shape_independent",
+    "mass_window_narrow",
     "alternate_binning",
-    "tag_selection",
-    "external_reference_selection",
     "pileup"
   ],
   "adoption_gates": [
@@ -67,6 +66,6 @@
     "every adopted bin has effective MC fail count >= 10, with >= 20 preferred",
     "simultaneous pass/fail fit convergence in every adopted bin",
     "data and MC goodness-of-fit",
-    "bin-by-bin stability under fit-model, fit-window, binning, external-reference, and pileup variations"
+    "bin-by-bin stability under signal, background, pass/fail-shape, fit-window, binning, and pileup variations"
   ]
 }

@@ -1,0 +1,9 @@
+# Last dependency releases used by this package that support CPython 3.8.
+numpy==1.24.4
+scipy==1.10.1
+awkward==2.6.6
+uproot==5.3.10
+correctionlib==2.6.1
+matplotlib==3.7.5
+mplhep==0.3.50
+pytest==8.3.5

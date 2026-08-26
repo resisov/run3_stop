@@ -1,0 +1,9 @@
+# CI/runtime lock for CPython 3.12.
+numpy==2.1.1
+scipy==1.14.1
+awkward==2.6.6
+uproot==5.3.10
+correctionlib==2.6.1
+matplotlib==3.9.1
+mplhep==0.3.50
+pytest==8.3.5

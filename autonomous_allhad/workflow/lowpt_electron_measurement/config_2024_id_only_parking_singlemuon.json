@@ -56,11 +56,11 @@
   "reference_trigger_strategy": "The ParkingSingleMuon displaced-muon path records the event independently of the J/psi-to-electron pair. Electron tag and probe objects have no HLT matching requirement.",
   "mass_bins": 100,
   "systematic_variations": [
-    "signal_template",
-    "background_model",
-    "mass_window",
+    "alternate_signal",
+    "alternate_background",
+    "pass_fail_shape_independent",
+    "mass_window_narrow",
     "alternate_binning",
-    "tag_selection",
     "pileup"
   ],
   "adoption_gates": [
@@ -70,6 +70,6 @@
     "the 5--7 and 7--10 GeV bins have statistically usable passing and failing J/psi peaks",
     "simultaneous pass/fail fit convergence in every adopted bin",
     "data and MC goodness-of-fit",
-    "bin-by-bin scale-factor stability under fit-model, fit-window, binning, tag-selection, and pileup variations"
+    "bin-by-bin scale-factor stability under signal, background, pass/fail-shape, fit-window, binning, and pileup variations"
   ]
 }

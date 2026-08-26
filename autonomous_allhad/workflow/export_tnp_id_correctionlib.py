@@ -92,7 +92,7 @@ def _unity_fallback_uncertainty(entry: dict[str, Any]) -> float:
     return math.hypot(raw_scale_factor - 1.0, raw_statistical_uncertainty)
 
 
-def _unity_policy_uncertainty(entry: dict[str, Any]) -> float:
+def electron_unity_policy_uncertainty(entry: dict[str, Any]) -> float:
     """Cover the measured ratio and its total uncertainty about a unity central value."""
 
     if entry.get("valid"):
@@ -133,7 +133,7 @@ def build_payload(
     for index, entry in enumerate(bins):
         if electron_endcap_unity_fallback and index >= forward_start:
             nominal.append(1.0)
-            uncertainty.append(_unity_policy_uncertainty(entry))
+            uncertainty.append(electron_unity_policy_uncertainty(entry))
             unity_policy_indices.append(index)
             continue
         if entry.get("valid"):
@@ -169,7 +169,7 @@ def build_payload(
     return correction_set(set_description, [item])
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("result", type=Path)
     parser.add_argument("--kind", choices=tuple(DEFINITIONS), required=True)
@@ -187,7 +187,7 @@ def main() -> int:
             "to nominal 1.0 with a measurement-derived symmetric uncertainty"
         ),
     )
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     result = json.loads(args.result.read_text())
     if args.candidate:
         try:

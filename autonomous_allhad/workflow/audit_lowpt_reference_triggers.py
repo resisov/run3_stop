@@ -25,7 +25,9 @@ def _delta_phi(left: Any, right: Any) -> Any:
     return (left - right + np.pi) % (2.0 * np.pi) - np.pi
 
 
-def _branches(kind: str, paths: list[str]) -> list[str]:
+def _branches(kind: str, paths: list[str], *, include_trigger_objects: bool) -> list[str]:
+    if not include_trigger_objects:
+        return list(paths)
     prefix = "Electron" if kind == "electron" else "Muon"
     fields = ["pt", "eta", "phi", "miniPFRelIso_all"]
     fields += ["cutBased"] if kind == "electron" else ["tightId", "looseId"]
@@ -40,28 +42,42 @@ def _branches(kind: str, paths: list[str]) -> list[str]:
     ]
 
 
-def _tag_mask(arrays: Any, kind: str, tag_pt_min_gev: float) -> Any:
+def _tag_mask(
+    arrays: Any,
+    kind: str,
+    tag_pt_min_gev: float,
+    tag_miniiso_max: float | None,
+) -> Any:
     if kind == "electron":
         eta = arrays["Electron_eta"]
         fiducial = (abs(eta) < 1.4442) | ((abs(eta) > 1.5660) & (abs(eta) < 2.5))
-        return (
+        result = (
             (arrays["Electron_pt"] > tag_pt_min_gev)
             & fiducial
             & (arrays["Electron_cutBased"] >= 4)
-            & (arrays["Electron_miniPFRelIso_all"] < 0.1)
         )
-    return (
+        if tag_miniiso_max is not None:
+            result = result & (arrays["Electron_miniPFRelIso_all"] < tag_miniiso_max)
+        return result
+    result = (
         (arrays["Muon_pt"] > tag_pt_min_gev)
         & (abs(arrays["Muon_eta"]) < 2.4)
         & arrays["Muon_tightId"]
-        & (arrays["Muon_miniPFRelIso_all"] < 0.1)
     )
+    if tag_miniiso_max is not None:
+        result = result & (arrays["Muon_miniPFRelIso_all"] < tag_miniiso_max)
+    return result
 
 
-def _matched_filter_bits(arrays: Any, kind: str, tag_pt_min_gev: float) -> Any:
+def _matched_filter_bits(
+    arrays: Any,
+    kind: str,
+    tag_pt_min_gev: float,
+    tag_miniiso_max: float | None,
+) -> Any:
     prefix = "Electron" if kind == "electron" else "Muon"
     object_id = 11 if kind == "electron" else 13
-    tag = _tag_mask(arrays, kind, tag_pt_min_gev)
+    tag = _tag_mask(arrays, kind, tag_pt_min_gev, tag_miniiso_max)
     deta = arrays[f"{prefix}_eta"][:, :, None] - arrays["TrigObj_eta"][:, None, :]
     dphi = _delta_phi(
         arrays[f"{prefix}_phi"][:, :, None], arrays["TrigObj_phi"][:, None, :]
@@ -93,6 +109,9 @@ def audit(
     step_size: int,
     max_events: int | None,
     tag_pt_min_gev: float = 5.0,
+    tag_miniiso_max: float | None = 0.1,
+    tag_trigger_match_required: bool = True,
+    require_reference_paths: bool = True,
 ) -> dict[str, Any]:
     event_counts: Counter[str] = Counter()
     exact_by_path = {path: Counter() for path in paths}
@@ -111,9 +130,20 @@ def audit(
             present = set(tree.keys())
             available = [path for path in paths if path in present]
             present_by_file[file_path] = available
-            if not available:
+            if not available and require_reference_paths:
                 raise RuntimeError("none of the requested HLT paths is present")
-            requested = _branches(kind, available)
+            if not available:
+                remaining = tree.num_entries if max_events is None else max(0, max_events - events_read)
+                counted = min(int(tree.num_entries), int(remaining))
+                events_read += counted
+                event_counts["all"] += counted
+                files_processed += 1
+                continue
+            requested = _branches(
+                kind,
+                available,
+                include_trigger_objects=tag_trigger_match_required,
+            )
             missing = sorted(set(requested) - present)
             if missing:
                 raise RuntimeError(f"required branches missing: {', '.join(missing)}")
@@ -131,8 +161,13 @@ def audit(
                     fired = np.asarray(arrays[path], dtype=bool)
                     event_counts[path] += int(np.count_nonzero(fired))
                     fired_or |= fired
-                    if np.any(fired):
-                        matched = _matched_filter_bits(arrays[fired], kind, tag_pt_min_gev)
+                    if tag_trigger_match_required and np.any(fired):
+                        matched = _matched_filter_bits(
+                            arrays[fired],
+                            kind,
+                            tag_pt_min_gev,
+                            tag_miniiso_max,
+                        )
                         matched_by_path[path] += _accumulate_bits(
                             matched, exact_by_path[path], bits_by_path[path]
                         )
@@ -164,30 +199,47 @@ def audit(
         "matching": {
             "delta_r_max": 0.1,
             "tag_pt_min_gev": tag_pt_min_gev,
-            "electron_tag": f"pt>{tag_pt_min_gev:g}, fiducial, cutBased>=4, miniPFRelIso_all<0.1",
-            "muon_tag": f"pt>{tag_pt_min_gev:g}, abs(eta)<2.4, tightId, miniPFRelIso_all<0.1",
+            "tag_miniiso_max": tag_miniiso_max,
+            "tag_trigger_match_required": tag_trigger_match_required,
+            "require_reference_paths": require_reference_paths,
         },
         "created_unix": time.time(),
     }
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--kind", choices=("electron", "muon"), required=True)
     parser.add_argument("--file", action="append", dest="files", required=True)
-    parser.add_argument("--path", action="append", dest="paths", required=True)
+    parser.add_argument("--path", action="append", dest="paths")
+    parser.add_argument("--config", type=Path)
+    parser.add_argument("--sample", choices=("data", "mc"), default="data")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--step-size", type=int, default=100_000)
     parser.add_argument("--max-events", type=int)
     parser.add_argument("--tag-pt-min-gev", type=float, default=5.0)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
+    config = json.loads(args.config.read_text()) if args.config else {}
+    paths = args.paths or list(config.get("reference_paths") or [])
+    if not paths:
+        parser.error("provide --path or a --config containing reference_paths")
+    tag_pt_min_gev = float(config.get("tag_pt_min_gev", args.tag_pt_min_gev))
+    tag_miniiso_value = config.get("tag_miniiso_max", 0.1)
+    tag_miniiso_max = None if tag_miniiso_value is None else float(tag_miniiso_value)
+    tag_trigger_match_required = bool(config.get("tag_trigger_match_required", True))
+    require_reference_paths = bool(
+        args.sample == "data" or config.get("apply_reference_trigger_to_mc", True)
+    )
     result = audit(
         kind=args.kind,
         files=args.files,
-        paths=args.paths,
+        paths=paths,
         step_size=args.step_size,
         max_events=args.max_events,
-        tag_pt_min_gev=args.tag_pt_min_gev,
+        tag_pt_min_gev=tag_pt_min_gev,
+        tag_miniiso_max=tag_miniiso_max,
+        tag_trigger_match_required=tag_trigger_match_required,
+        require_reference_paths=require_reference_paths,
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")

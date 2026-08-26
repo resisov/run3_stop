@@ -16,6 +16,8 @@ import numpy as np
 from matplotlib.lines import Line2D
 from matplotlib.ticker import ScalarFormatter
 
+from workflow.export_tnp_id_correctionlib import electron_unity_policy_uncertainty
+
 
 CMS_LABEL_FONT_SIZE = 17
 FIGURE_SIZE = (8.0, 8.0)
@@ -496,7 +498,13 @@ def plot_trigger_result(result_path: Path, output_dir: Path, measurement: str) -
     return manifest
 
 
-def plot_tnp_result(result_path: Path, histograms_path: Path, output_dir: Path) -> dict[str, Any]:
+def plot_tnp_result(
+    result_path: Path,
+    histograms_path: Path,
+    output_dir: Path,
+    *,
+    electron_endcap_unity_fallback: bool = False,
+) -> dict[str, Any]:
     """Draw low-pT electron or muon tag-and-probe plots."""
     _apply_style()
     result = json.loads(result_path.read_text())
@@ -525,6 +533,18 @@ def plot_tnp_result(result_path: Path, histograms_path: Path, output_dir: Path) 
     uncertainty = np.asarray(
         [item.get("scale_factor_uncertainty", np.nan) for item in bins], dtype=float
     ).reshape(n_eta, n_pt)
+    unity_policy_indices: set[int] = set()
+    if electron_endcap_unity_fallback:
+        if measurement_kind != "electron":
+            raise ValueError("the endcap unity plot policy is defined only for electrons")
+        forward_start = (n_eta - 1) * n_pt
+        for flat_index in range(forward_start, n_eta * n_pt):
+            eta_index, pt_index = divmod(flat_index, n_pt)
+            sf[eta_index, pt_index] = 1.0
+            uncertainty[eta_index, pt_index] = electron_unity_policy_uncertainty(
+                bins[flat_index]
+            )
+            unity_policy_indices.add(flat_index)
     pt_centers = 0.5 * (pt_edges[:-1] + pt_edges[1:])
     pt_errors = 0.5 * (pt_edges[1:] - pt_edges[:-1])
     outputs: list[str] = []
@@ -572,7 +592,12 @@ def plot_tnp_result(result_path: Path, histograms_path: Path, output_dir: Path) 
     _cms_label(ax, year)
     outputs += _save(fig, output_dir / "scale_factor")
     captions["scale_factor"] = (
-        "Data-to-simulation scale factors with total uncertainties; bins without a valid fit are omitted. "
+        "Data-to-simulation scale factors with total uncertainties. "
+        + (
+            "The highest-|eta| electron bins use the released unity-central policy. "
+            if unity_policy_indices
+            else "Bins without a valid fit are omitted. "
+        )
         + (
             rf"The horizontal axis is probe |eta| for the single {pt_edges[0]:g}-{pt_edges[-1]:g} GeV pT bin."
             if n_pt == 1
@@ -861,11 +886,21 @@ def plot_tnp_result(result_path: Path, histograms_path: Path, output_dir: Path) 
         eta_index, pt_index = divmod(flat_index, n_pt)
         _figure_header(fig, year, y=0.825)
         outputs += _save(fig, output_dir / f"mass_fit_bin_{flat_index:02d}")
-        scale_factor_caption = (
-            rf"The resulting scale factor is {item['scale_factor']:.4f} +/- {item['scale_factor_uncertainty']:.4f}."
-            if item.get("valid")
-            else "The scale-factor extraction in this bin is invalid and is not exported."
-        )
+        if flat_index in unity_policy_indices:
+            released_uncertainty = electron_unity_policy_uncertainty(item)
+            scale_factor_caption = (
+                "The direct extraction fails the validity threshold; the released "
+                rf"unity-central policy gives 1.0000 +/- {released_uncertainty:.4f}."
+            )
+        elif item.get("valid"):
+            scale_factor_caption = (
+                rf"The resulting scale factor is {item['scale_factor']:.4f} +/- "
+                rf"{item['scale_factor_uncertainty']:.4f}."
+            )
+        else:
+            scale_factor_caption = (
+                "The scale-factor extraction in this bin is invalid and is not exported."
+            )
         captions[f"mass_fit_bin_{flat_index:02d}"] = (
             rf"Probe bin {eta_edges[eta_index]:g} < |eta| < {eta_edges[eta_index + 1]:g}, "
             rf"{pt_edges[pt_index]:g} < pT < {pt_edges[pt_index + 1]:g} GeV. "
@@ -884,6 +919,7 @@ def plot_tnp_result(result_path: Path, histograms_path: Path, output_dir: Path) 
             "standard_figure_inches": list(FIGURE_SIZE),
             "colorbar_figure_inches": list(COLORBAR_FIGURE_SIZE),
             "titles": False,
+            "electron_endcap_unity_fallback": electron_endcap_unity_fallback,
         },
         "files": outputs,
         "captions": captions,
@@ -892,7 +928,7 @@ def plot_tnp_result(result_path: Path, histograms_path: Path, output_dir: Path) 
     return manifest
 
 
-def cli() -> int:
+def cli(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
     trigger = commands.add_parser("trigger", help="plot a MET or photon trigger result")
@@ -903,11 +939,17 @@ def cli() -> int:
     tnp.add_argument("result", type=Path)
     tnp.add_argument("histograms", type=Path)
     tnp.add_argument("--output-dir", type=Path, required=True)
-    args = parser.parse_args()
+    tnp.add_argument("--electron-endcap-unity-fallback", action="store_true")
+    args = parser.parse_args(argv)
     if args.command == "trigger":
         payload = plot_trigger_result(args.result, args.output_dir, args.measurement)
     else:
-        payload = plot_tnp_result(args.result, args.histograms, args.output_dir)
+        payload = plot_tnp_result(
+            args.result,
+            args.histograms,
+            args.output_dir,
+            electron_endcap_unity_fallback=args.electron_endcap_unity_fallback,
+        )
     print(json.dumps(payload, indent=2, sort_keys=True))
     return 0
 
