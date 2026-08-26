@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "profile": "electron_jpsi_lowpt",
+  "measurement": "private_electron_id_sf",
+  "year": "2025",
+  "id": {
+    "fields": [],
+    "denominator": "(pt > 5) & (pt < 10) & ((abs(eta + deltaEtaSC) < 1.4442) | ((abs(eta + deltaEtaSC) > 1.566) & (abs(eta + deltaEtaSC) < 2.5))) & convVeto & (lostHits <= 1)",
+    "pass": "cutBased >= 1"
+  },
+  "pt_edges_gev": [5, 7, 10],
+  "abseta_edges": [0.0, 0.8, 1.4442, 2.5],
+  "samples": {
+    "data": [],
+    "mc": []
+  },
+  "lumimask": "golden.json",
+  "correction": {
+    "name": "private_electron_id_sf",
+    "description": "Private electron identification data/MC scale factor",
+    "flow": "clamp"
+  }
+}

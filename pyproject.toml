@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cms-tnp"
+version = "0.1.0"
+description = "Configuration-driven CMS NanoAOD tag-and-probe measurements"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = ["numpy>=1.23"]
+
+[project.optional-dependencies]
+io = ["awkward>=2.4", "uproot>=5.0"]
+fit = ["scipy>=1.9"]
+payload = ["correctionlib>=2.3"]
+plot = ["matplotlib>=3.5", "mplhep>=0.3"]
+all = [
+  "awkward>=2.4",
+  "uproot>=5.0",
+  "scipy>=1.9",
+  "correctionlib>=2.3",
+  "matplotlib>=3.5",
+  "mplhep>=0.3",
+]
+test = ["pytest>=7"]
+
+[project.scripts]
+cms-tnp = "cms_tnp.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = [
+  "ignore:'mode' parameter is deprecated:DeprecationWarning:matplotlib.backends.backend_pdf",
+  "ignore:Starting in version 5.7.0, Uproot will default to writing RNTuples:FutureWarning",
+]

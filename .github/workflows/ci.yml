@@ -1,0 +1,21 @@
+name: reproduce
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        python: ["3.8", "3.12"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -e '.[all,test]'
+      - run: cms-tnp doctor --config configs/measurement.json
+      - run: MPLBACKEND=Agg python -m pytest -q
