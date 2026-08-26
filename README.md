@@ -199,7 +199,72 @@ cms-tnp resolve --config photon_id.json --output photon_id.resolved.json
 cms-tnp doctor --config photon_id.json
 ```
 
-Then use the standard `discover`, `make-shards`, `count`, `reduce`, `fit`, `export`, and `plot` commands shown above. The exported correction name is `private_photon_mvaid_wp90_sf`, with `nominal`, `up`, and `down` variations.
+### Photon end-to-end execution
+
+1. Query DAS and save deterministic Data and MC file lists:
+
+   ```bash
+   cms-tnp discover --config photon_id.json --sample data --output data_records.json
+   cms-tnp discover --config photon_id.json --sample mc --output mc_records.json
+   ```
+
+2. Optionally take two files from each record list and run the complete chain as a smoke test:
+
+   ```bash
+   jq -r '.records[:2][].file_path' data_records.json > data_test_files.txt
+   jq -r '.records[:2][].file_path' mc_records.json > mc_test_files.txt
+
+   cms-tnp run-local --config photon_id.json \
+     --data-files data_test_files.txt \
+     --mc-files mc_test_files.txt \
+     --output-dir photon_smoke_test
+   ```
+
+3. For a full campaign, split the records into independent 20-file shards instead:
+
+   ```bash
+   cms-tnp make-shards --records data_records.json --output-dir data_shards
+   cms-tnp make-shards --records mc_records.json --output-dir mc_shards
+   ```
+
+4. Count every shard. These commands may run locally or as independent HTCondor/Slurm jobs:
+
+   ```bash
+   for shard in data_shards/shard_*.json; do
+     cms-tnp count --config photon_id.json --sample data \
+       --shard "$shard" --output "outputs/data_${shard##*/}"
+   done
+
+   for shard in mc_shards/shard_*.json; do
+     cms-tnp count --config photon_id.json --sample mc \
+       --shard "$shard" --output "outputs/mc_${shard##*/}"
+   done
+   ```
+
+5. Merge all Data and MC pass/fail mass histograms:
+
+   ```bash
+   cms-tnp reduce outputs/data_shard_*.json outputs/mc_shard_*.json \
+     --output photon_histograms.json
+   ```
+
+6. Fit Data and MC, calculate the SF and uncertainty, write correctionlib, and make plots:
+
+   ```bash
+   cms-tnp reproduce --histograms photon_histograms.json \
+     --output-dir photon_results
+   ```
+
+7. The final products are:
+
+   ```text
+   photon_results/
+   ├── fit_result.json
+   ├── scale_factors.json.gz
+   └── plots/
+   ```
+
+The exported correction name is `private_photon_mvaid_wp90_sf`, with `nominal`, `up`, and `down` variations.
 
 The `photon_z` profile uses an `HLT_Ele32_WPTight_Gsf`-matched electron tag and a photon probe in the Z mass window. The Data dataset must contain this reference trigger, and the DY simulation must contain the same HLT and trigger-object branches. This electron-as-photon method measures the photon-ID part represented by the probe variables. Measure pixel-seed or electron-veto efficiency separately when the proxy does not represent that requirement.
 
