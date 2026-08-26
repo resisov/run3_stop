@@ -146,9 +146,62 @@ corrections = correctionlib.CorrectionSet.from_file("scale_factors.json.gz")
 weight = corrections["private_electron_id_sf"].evaluate("nominal", abs_eta, pt)
 ```
 
-## Photon IDs
+## Photon ID SF example
 
-`photon_z` measures a photon-ID numerator with an electron tag. Keep pixel-seed or electron-veto efficiency separate when the electron-as-photon proxy does not represent that requirement.
+Start from the Z profile:
+
+```bash
+cms-tnp init --profile photon_z --output photon_id.json
+```
+
+For example, the following configuration measures the NanoAOD photon MVA WP90 ID. Replace only the ID expression, pT bins, datasets, year, and golden JSON for a different campaign.
+
+```json
+{
+  "schema_version": 1,
+  "profile": "photon_z",
+  "measurement": "private_photon_mvaid_wp90_sf",
+  "year": "2024",
+  "id": {
+    "fields": ["mvaID_WP90"],
+    "denominator": "(pt > 20) & ((abs(eta + deltaEtaSC) < 1.4442) | ((abs(eta + deltaEtaSC) > 1.566) & (abs(eta + deltaEtaSC) < 2.5)))",
+    "pass": "mvaID_WP90"
+  },
+  "pt_edges_gev": [20, 35, 50, 100, 200, 500],
+  "abseta_edges": [0.0, 1.4442, 2.5],
+  "samples": {
+    "data": ["dataset=/EGamma*/Run2024*-*/NANOAOD"],
+    "mc": ["dataset=/DYto2L-2Jets_MLL-50*/Run3Summer24NanoAOD-*/NANOAODSIM"]
+  },
+  "lumimask": "golden.json",
+  "correction": {
+    "name": "private_photon_mvaid_wp90_sf",
+    "description": "Data/MC scale factor for the private photon MVA WP90 ID",
+    "flow": "clamp"
+  }
+}
+```
+
+`id.denominator` defines the photon probes before the ID under test. `id.pass` defines the numerator. Every additional NanoAOD photon field used by either expression must appear in `id.fields`, without the `Photon_` prefix. A custom boolean branch called `Photon_privateID`, for example, is configured as:
+
+```json
+"id": {
+  "fields": ["privateID"],
+  "denominator": "(pt > 20) & (abs(eta + deltaEtaSC) < 2.5)",
+  "pass": "privateID"
+}
+```
+
+Validate the resolved configuration before processing files:
+
+```bash
+cms-tnp resolve --config photon_id.json --output photon_id.resolved.json
+cms-tnp doctor --config photon_id.json
+```
+
+Then use the standard `discover`, `make-shards`, `count`, `reduce`, `fit`, `export`, and `plot` commands shown above. The exported correction name is `private_photon_mvaid_wp90_sf`, with `nominal`, `up`, and `down` variations.
+
+The `photon_z` profile uses an `HLT_Ele32_WPTight_Gsf`-matched electron tag and a photon probe in the Z mass window. The Data dataset must contain this reference trigger, and the DY simulation must contain the same HLT and trigger-object branches. This electron-as-photon method measures the photon-ID part represented by the probe variables. Measure pixel-seed or electron-veto efficiency separately when the proxy does not represent that requirement.
 
 ## Expressions
 
