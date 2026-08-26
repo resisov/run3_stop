@@ -1,0 +1,43 @@
+name: Standalone low-pT TnP
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  reproduce:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - python: "3.8"
+            requirements: requirements-py38.txt
+          - python: "3.12"
+            requirements: requirements-modern.txt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+          cache-dependency-path: ${{ matrix.requirements }}
+      - name: Install locked environment and standalone package
+        run: |
+          python -m pip install -r "${{ matrix.requirements }}"
+          python -m pip install --no-deps -e .
+      - name: Audit environment and release hashes
+        env:
+          MPLCONFIGDIR: /tmp/lowpt-tnp-mpl
+        run: |
+          lowpt-tnp doctor
+          lowpt-tnp verify-release --manifest release.json
+      - name: Refit, export correctionlib, and render all plots
+        env:
+          MPLCONFIGDIR: /tmp/lowpt-tnp-mpl
+        run: python -m pytest -q
+

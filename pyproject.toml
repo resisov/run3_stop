@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lowpt-tnp"
+version = "1.0.0"
+description = "Reproducible Run-3 low-pT electron and muon ID tag-and-probe measurements"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+  "awkward>=2.6",
+  "correctionlib>=2.6",
+  "matplotlib>=3.7",
+  "mplhep>=0.3.50",
+  "numpy>=1.24",
+  "scipy>=1.10",
+  "uproot>=5.3",
+]
+
+[project.scripts]
+lowpt-tnp = "lowpt_tnp.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+

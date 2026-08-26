@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "measurement": "veto_electron_id_5to10_sf_2024_parking_singlemuon",
+  "source_measurement": "veto_electron_id_5to15_sf_2024_parking_singlemuon",
+  "status": "measurement_definition",
+  "reference": "CMS-DP-2023/081 motivates the J/psi parking-data method; the analysis payload is restricted to the requested 5--10 GeV range",
+  "year": "2024",
+  "probe_definition": "veto_id_only",
+  "campaign_inputs": {
+    "data_dataset_query": "dataset=/ParkingSingleMuon*/Run2024*-MINIv6NANOv15*/NANOAOD",
+    "data_dataset_exclude_contains": [
+      "MINIv6NANOv15_v2"
+    ],
+    "mc_datasets": [
+      "/SPS-JpsiJpsiToMuMuEE_TuneCP5_13p6TeV_pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM"
+    ],
+    "files_per_condor_shard": 20,
+    "run2024i_policy": "Use one MINIv6NANOv15 production per primary dataset and exclude duplicated MINIv6NANOv15_v2 processing.",
+    "mc_campaign_note": "SPS-JpsiJpsiToMuMuEE supplies a muon-trigger side and a J/psi-to-electron probe side in one event."
+  },
+  "probe_pt_edges_gev": [
+    5,
+    7,
+    10
+  ],
+  "probe_abseta_edges": [
+    0.0,
+    0.8,
+    1.44,
+    2.5
+  ],
+  "binning_policy": "Use 5--7 and 7--10 GeV bins. The already-produced 10--15 GeV source histogram is excluded exactly before fitting and is not part of the result or payload. The 1.44--2.5 histogram interval contains only abs(eta)>1.566 probes because the ECAL transition is removed before filling.",
+  "eta_policy": "Barrel bins are 0--0.8 and 0.8--1.44; the combined endcap measurement is 1.566--2.5. The 1.44--1.566 ECAL transition is excluded.",
+  "target_selection": "cutBased >= 1; miniPFRelIso_all is not an additional probe pass/fail requirement",
+  "denominator": "reconstructed GSF electron with 5 < pT < 10 GeV passing the ECAL fiducial region, conversion veto, and lostHits <= 1, without a cutBased or mini-isolation requirement",
+  "resonances": {
+    "primary": {
+      "name": "Jpsi",
+      "mass_window_gev": [
+        2.0,
+        4.0
+      ]
+    }
+  },
+  "tag_pt_min_gev": 5.0,
+  "tag": "tight electron with pT > 5 GeV and miniPFRelIso_all < 0.1; no electron trigger-object match is applied",
+  "reference_paths": [
+    "HLT_Mu9_Barrel_L1HP10_IP6",
+    "HLT_Mu10_Barrel_L1HP11_IP6"
+  ],
+  "reference_trigger_object_kind": "muon",
+  "tag_trigger_match_required": false,
+  "apply_reference_trigger_to_mc": false,
+  "tag_trigger_object_filter_bits": null,
+  "trigger_object_bit_source": "not applicable: the reference trigger is an external displaced-muon parking trigger and no electron is trigger matched",
+  "reference_trigger_strategy": "The ParkingSingleMuon displaced-muon path records the event independently of the J/psi-to-electron pair. Electron tag and probe objects have no HLT matching requirement.",
+  "mass_bins": 100,
+  "systematic_variations": [
+    "alternate_signal",
+    "alternate_background",
+    "pass_fail_shape_independent",
+    "mass_window_narrow",
+    "alternate_binning",
+    "pileup"
+  ],
+  "adoption_gates": [
+    "the parking reference path is present and fired in adopted data; it is not applied to MC",
+    "no electron trigger-object matching or electron HLT requirement enters tag or probe selection",
+    "probe pass/fail audit proves mini-isolation is absent as an additional numerator requirement",
+    "the 5--7 and 7--10 GeV bins have statistically usable passing and failing J/psi peaks",
+    "simultaneous pass/fail fit convergence in every adopted bin",
+    "data and MC goodness-of-fit",
+    "bin-by-bin scale-factor stability under signal, background, pass/fail-shape, fit-window, binning, and pileup variations"
+  ]
+}

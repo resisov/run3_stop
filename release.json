@@ -1,0 +1,686 @@
+{
+  "entrypoint": "lowpt-tnp",
+  "files": [
+    {
+      "bytes": 93,
+      "path": "src/lowpt_tnp/__init__.py",
+      "sha256": "27e0ed5e5881d58a9ea4563d806eac98e7ec87e3f4a136b2db7d21d21f72df57"
+    },
+    {
+      "bytes": 81,
+      "path": "src/lowpt_tnp/__main__.py",
+      "sha256": "2cdd23d4f5cd6c3b3e4cb690ad16d560637767b9ca5b2a3cf129fcc0a5ebc82b"
+    },
+    {
+      "bytes": 9868,
+      "path": "src/lowpt_tnp/audit_lowpt_reference_triggers.py",
+      "sha256": "b3a1c4e57cd860a0e40e5b2b647f6b6333e09b4efea5b1b766d71aaf12c05718"
+    },
+    {
+      "bytes": 5227,
+      "path": "src/lowpt_tnp/build_tnp_das_records.py",
+      "sha256": "df6e8ea93381105570a9ddf5e82da038a24de90016490e62ca3bca08823fc01c"
+    },
+    {
+      "bytes": 37515,
+      "path": "src/lowpt_tnp/cli.py",
+      "sha256": "26ec7b9a2f2099c11920dca1adf970734e70e149f4592e88f63b8cec46e76dba"
+    },
+    {
+      "bytes": 8610,
+      "path": "src/lowpt_tnp/export_tnp_id_correctionlib.py",
+      "sha256": "9e093853a162fed74fd93648c233b6275d9cfa109d294f674fac1897bf3ed380"
+    },
+    {
+      "bytes": 39715,
+      "path": "src/lowpt_tnp/plot_measurement.py",
+      "sha256": "8449dd7f3a91c80695a78356d21316fc185471e6636e3dfc67764bf8578075de"
+    },
+    {
+      "bytes": 15869,
+      "path": "src/lowpt_tnp/prepare_tnp_measurement_condor.py",
+      "sha256": "ab1d2abd193c164cedc69979fd3fe95e2aa9e82ad6a53bf09cdf2df70ea62671"
+    },
+    {
+      "bytes": 11278,
+      "path": "src/lowpt_tnp/reference_trigger_counts.py",
+      "sha256": "040927bd9fa077799de6c3f9a60a69e7d802c21c94017942aa1406120c5055c7"
+    },
+    {
+      "bytes": 5727,
+      "path": "src/lowpt_tnp/sf_payload.py",
+      "sha256": "20e40df5d42049a4ab290d07e83a7030f9453098da3195fc4b628a900930277e"
+    },
+    {
+      "bytes": 35914,
+      "path": "src/lowpt_tnp/tnp_fit.py",
+      "sha256": "736cb847ee26e523d9527807ec0fa0ae804529ef8e809b26b9aace72901cce22"
+    },
+    {
+      "bytes": 22080,
+      "path": "src/lowpt_tnp/tnp_histograms.py",
+      "sha256": "49a6d0989b6666877ef68e308795d87e73898c7039080441b4f6218bf2457cac"
+    },
+    {
+      "bytes": 19885,
+      "path": "src/lowpt_tnp/tnp_measurement_reduce.py",
+      "sha256": "f75d9be1000876999f13771ff24a30a50a7c363fc05256eda7b18d8423007606"
+    },
+    {
+      "bytes": 3249,
+      "path": "src/lowpt_tnp/tnp_measurement_shard.py",
+      "sha256": "bb565eea748bbc2860d9bbdefd3c3c49c6fdf15eb20f7d6e3a40411f663ec4da"
+    },
+    {
+      "bytes": 17516,
+      "path": "src/lowpt_tnp/tnp_recovery.py",
+      "sha256": "e05278b2e17d7d592f0dc5656194e0505e37040b8e251bc0ef1ec99b6bf665d0"
+    },
+    {
+      "bytes": 11116,
+      "path": "src/lowpt_tnp/validate_tnp_adoption.py",
+      "sha256": "5586c3bdf66f7561725d0035ce422ade4ca941536ee417acabe0070472bc42d3"
+    },
+    {
+      "bytes": 3710,
+      "path": "configs/config_2024_id_only_parking_external.json",
+      "sha256": "d37ab847e1ebd2592a0f92c263b3cfdef67bc38ac00a4d15ea7557edb0cd4f2f"
+    },
+    {
+      "bytes": 3642,
+      "path": "configs/config_2024_id_only_parking_singlemuon.json",
+      "sha256": "a677db26bda44ea8fd6977d5a5c776552e8969e5ab8da0ffeb46e79fb8f9264f"
+    },
+    {
+      "bytes": 3490,
+      "path": "configs/config_2025_id_only_parking_external.json",
+      "sha256": "d47ebdb3fc89c6c8acfa177c553e239bb3b1e40e796a30518ce33d19a12b8da8"
+    },
+    {
+      "bytes": 3358,
+      "path": "configs/config_2025_id_only_parking_singlemuon.json",
+      "sha256": "a483097984af74f5704a23041140ac65e234d40c9698c1850a6db7abab934d82"
+    },
+    {
+      "bytes": 2265,
+      "path": "records/electron_2024_mc.json.gz",
+      "sha256": "1752f5737068ffcdd108c82a5322a43addbcfd2db5029bd6b32a7cebe26d9987"
+    },
+    {
+      "bytes": 1091223,
+      "path": "records/electron_2025_data.json.gz",
+      "sha256": "520ad5e8005c34dfbe043b83f625ecaf2b2cbb87e0a53ae247e4b24a8545eddd"
+    },
+    {
+      "bytes": 19215,
+      "path": "records/muon_2024_mc.json.gz",
+      "sha256": "da9b7c2ab01781594c096d722ad56d15fd67622ab0ba9e29ecb2996d42a067f5"
+    },
+    {
+      "bytes": 1091218,
+      "path": "records/muon_2025_data.json.gz",
+      "sha256": "34066ace2da8bdab0cda7a5e2a2c39645bdeacc4bc032a6bd56df3bfa79440fc"
+    },
+    {
+      "bytes": 46348,
+      "path": "data/lumimasks/Cert_Collisions2024_378981_386951_Golden.json",
+      "sha256": "dd913c624559eebeb991272ef26916b4990df047701e28ef8618ee663f91fd78"
+    },
+    {
+      "bytes": 49687,
+      "path": "data/lumimasks/Cert_Collisions2025_391658_398903_Golden.json",
+      "sha256": "af6d00b38a6475883290f3ec9bb870799dc65650a8a27cb1c841b86222cdb624"
+    },
+    {
+      "bytes": 2750,
+      "path": "data/pileup/puWeights_2024.json.gz",
+      "sha256": "8e196122cf6ea4f873678ef0f5b814d4d1fd8ed168f824f0857d8ece0337cead"
+    },
+    {
+      "bytes": 2775,
+      "path": "data/pileup/puWeights_2025.json.gz",
+      "sha256": "55e2a75f5e91172f380adb7f7e7d7e0cc18e2d7aa125deb0a3216b857b7565a3"
+    },
+    {
+      "bytes": 978391,
+      "path": "reference/results/electron/fit_result.json",
+      "sha256": "6f5220fc09317e2c931ec7c106a4e2d628de33a00aa20ed1eeadaa81e7945c35"
+    },
+    {
+      "bytes": 541100,
+      "path": "reference/results/electron/histograms.json",
+      "sha256": "2ce28da03feb90c23c3e3a1db3631c71c796a44992f2f6090ba87bba998b37f3"
+    },
+    {
+      "bytes": 281889,
+      "path": "reference/results/muon/fit_result.json",
+      "sha256": "b2ecafa77ac4852c81ca49d26bf8fc05ca0c2485dc972ae6d755f6f2f6c12b87"
+    },
+    {
+      "bytes": 356584,
+      "path": "reference/results/muon/histograms.json",
+      "sha256": "a0b5d1acbca530752d6a54c0b10e80b0f935151912bd8358f9d46d68999df1c9"
+    },
+    {
+      "bytes": 551,
+      "path": "reference/payloads/loose_muon_5to10_sf.json.gz",
+      "sha256": "0d93548946919a763469e881158e4c022b4f03f1c83b8cda0c7f3b99969d1541"
+    },
+    {
+      "bytes": 709,
+      "path": "reference/payloads/veto_electron_5to10_sf.json.gz",
+      "sha256": "a24770bced4a6223a51121a27de3a619a2fc62497e48aba338ccacc5b1d26b2f"
+    },
+    {
+      "bytes": 109267,
+      "path": "reference/plots/electron/efficiency.png",
+      "sha256": "66ab1506113106521c211ad3365561ce4f3f2fe6c2a0725bbed83dc3ccac2436"
+    },
+    {
+      "bytes": 177163,
+      "path": "reference/plots/electron/mass_fit_bin_00.png",
+      "sha256": "88c37bf34ce4b6f61445a7f9ca417716736197b96349613e553063827f9ffac3"
+    },
+    {
+      "bytes": 168971,
+      "path": "reference/plots/electron/mass_fit_bin_01.png",
+      "sha256": "f12169ff7112956d801c47f9782c7d4ae1b23a889ce23b62206c9523fd351e3e"
+    },
+    {
+      "bytes": 190995,
+      "path": "reference/plots/electron/mass_fit_bin_02.png",
+      "sha256": "07d8b4774ed34da070fdc384b364f78148773bcf27af1b339ccaa412fddfd9a7"
+    },
+    {
+      "bytes": 176054,
+      "path": "reference/plots/electron/mass_fit_bin_03.png",
+      "sha256": "12000fe123872f770ee2db21fbe932acb83a77e919bc9f6d909c4091dc1b5c99"
+    },
+    {
+      "bytes": 182688,
+      "path": "reference/plots/electron/mass_fit_bin_04.png",
+      "sha256": "6c75b4ea734721d76375e2e7b2b76db6be4366cb9491a06cd4095ed5163a5c4a"
+    },
+    {
+      "bytes": 185883,
+      "path": "reference/plots/electron/mass_fit_bin_05.png",
+      "sha256": "90ae3bd0bb9432cffcae51c094bf1142bea30300ebba5eacae030061db6c26b8"
+    },
+    {
+      "bytes": 100674,
+      "path": "reference/plots/electron/scale_factor.png",
+      "sha256": "055dfe2647e30e376f4fc8d9a790ac95f88a10e47c38783560c2992a28d6a13c"
+    },
+    {
+      "bytes": 144298,
+      "path": "reference/plots/electron/scale_factor_heatmap.png",
+      "sha256": "842e93f4d4dfdce70f4418f5cb061295083057a59f52a52d990e5650b5f62578"
+    },
+    {
+      "bytes": 91553,
+      "path": "reference/plots/muon/efficiency.png",
+      "sha256": "e04e2fe400c04cbebd49880fbbbaf0360365f54e4c1968d4f8b38ddfd0e46a74"
+    },
+    {
+      "bytes": 156571,
+      "path": "reference/plots/muon/mass_fit_bin_00.png",
+      "sha256": "3b3a60120eaa83aeef91d1114cb641b456ece8a4bab37e3cd62cb7b66fd3beb9"
+    },
+    {
+      "bytes": 169560,
+      "path": "reference/plots/muon/mass_fit_bin_01.png",
+      "sha256": "c0cd6d975631a97ab75dd8c217ca5ae5a81f32e09038be621adb2a54b198fd85"
+    },
+    {
+      "bytes": 167562,
+      "path": "reference/plots/muon/mass_fit_bin_02.png",
+      "sha256": "f36aefc24b50c501c788f35523e85ab826155844d00c3f0d5f03c896a1050114"
+    },
+    {
+      "bytes": 96774,
+      "path": "reference/plots/muon/scale_factor.png",
+      "sha256": "ebd66f435da9a6a68d554bb34d9e1f5490d6771161c334aeb48c360d2f56de47"
+    },
+    {
+      "bytes": 137583,
+      "path": "reference/plots/muon/scale_factor_heatmap.png",
+      "sha256": "e9b1cc2fc02b9d9c4369879f0ac808302cf2838ac16c4970f8492361b4230f56"
+    },
+    {
+      "bytes": 23293,
+      "path": "reference/plots/electron/efficiency.pdf",
+      "sha256": "125f10eff04c39ca7ed8ea52a3376489c29c80629599f4787e2651406ff157dd"
+    },
+    {
+      "bytes": 34686,
+      "path": "reference/plots/electron/mass_fit_bin_00.pdf",
+      "sha256": "078402acb6b4ad74a55b843f2b707861fa480fc02ab1ab72d47b8c9865bd58f8"
+    },
+    {
+      "bytes": 33859,
+      "path": "reference/plots/electron/mass_fit_bin_01.pdf",
+      "sha256": "25f7b37641345a819f6dff3a356a66362df520cbaa70f75b78f0c250e2875173"
+    },
+    {
+      "bytes": 35113,
+      "path": "reference/plots/electron/mass_fit_bin_02.pdf",
+      "sha256": "925d12b8de4d1bbe885003c384ebd1564d2279dd477d5a9ca3405c691a7e7165"
+    },
+    {
+      "bytes": 33827,
+      "path": "reference/plots/electron/mass_fit_bin_03.pdf",
+      "sha256": "6718e3150b578c76ae45505e6d3be76fa9d6a5de34a0db9fe4294de7e6f33579"
+    },
+    {
+      "bytes": 33682,
+      "path": "reference/plots/electron/mass_fit_bin_04.pdf",
+      "sha256": "5ad0408cc4f12467399eefc8a27839647b7749a2b4905d81390cdec947b9e094"
+    },
+    {
+      "bytes": 33708,
+      "path": "reference/plots/electron/mass_fit_bin_05.pdf",
+      "sha256": "1ee045cd2809c861dc4df7520197bd602831d3b1ab1bcbf5374eecfb9dff4dcc"
+    },
+    {
+      "bytes": 21679,
+      "path": "reference/plots/electron/scale_factor.pdf",
+      "sha256": "b9d6f067505455549b6308ec23724e6e97f3e51bd27af31ec65a87bad166546b"
+    },
+    {
+      "bytes": 22684,
+      "path": "reference/plots/electron/scale_factor_heatmap.pdf",
+      "sha256": "8042e78690bbf371d62da3b8b88e24ea00b656c51a1e12195042e8b264d3530b"
+    },
+    {
+      "bytes": 20683,
+      "path": "reference/plots/muon/efficiency.pdf",
+      "sha256": "6e9118c63bbb29174b969345f148d156d3a96b6d8128ffefadaab23d1e605364"
+    },
+    {
+      "bytes": 30820,
+      "path": "reference/plots/muon/mass_fit_bin_00.pdf",
+      "sha256": "ee09d4af6157933c2e07a5705b3112bd548929609f674df9ac44c24e81bfc0f8"
+    },
+    {
+      "bytes": 31685,
+      "path": "reference/plots/muon/mass_fit_bin_01.pdf",
+      "sha256": "35b659386b37204985a8f0de6d56920ec0d81e45dfbfeed206f6060f49a9e823"
+    },
+    {
+      "bytes": 31755,
+      "path": "reference/plots/muon/mass_fit_bin_02.pdf",
+      "sha256": "8d06cfdbe26477d1081112f58d5afb77ec192e7b69ec7e4042f5077353db05b8"
+    },
+    {
+      "bytes": 19514,
+      "path": "reference/plots/muon/scale_factor.pdf",
+      "sha256": "0f21087cee3e5ffb3b9bfc691a191466653ccde4f89e1d6322ba64dea0ed8c6b"
+    },
+    {
+      "bytes": 22404,
+      "path": "reference/plots/muon/scale_factor_heatmap.pdf",
+      "sha256": "b62612adff6199036ae1101c125909ab2e14763e4fb4078e1c614d3bd6a5b045"
+    },
+    {
+      "bytes": 3555,
+      "path": "reference/plots/electron/plot_manifest.json",
+      "sha256": "edb39e9836418e83c5d7fe922222fb49425e359361cfb61377e14bcc09ddcc88"
+    },
+    {
+      "bytes": 2221,
+      "path": "reference/plots/muon/plot_manifest.json",
+      "sha256": "72aad164c8699863a2c242ced3b2427e099c2521168bdb13c1306f9d6a19e97e"
+    },
+    {
+      "bytes": 19190,
+      "path": "tests/test_release.py",
+      "sha256": "4af4d0958b2ca99115f3b6deda5bbba3bdee3614e63275a5c7c8c9eafc88bbc3"
+    },
+    {
+      "bytes": 1152,
+      "path": ".github/workflows/ci.yml",
+      "sha256": "49447e5f82b4e01827609f23cfd5ef8caf168ef07584a067cf3147267e1a5e1d"
+    },
+    {
+      "bytes": 9985,
+      "path": "README.md",
+      "sha256": "e4d6a7e21dcf58e3c48abe5fa9c9b096e14a54d3a35bbb0a177dd08ef428080a"
+    },
+    {
+      "bytes": 620,
+      "path": "pyproject.toml",
+      "sha256": "686c0bf0d711468f40fec6470cd7753ba4df77d673e49f04fc770bc05c598c31"
+    },
+    {
+      "bytes": 204,
+      "path": "environment.yml",
+      "sha256": "5e3177703d78afc3905ac535b930df11dfeef56cd1356ed849c94aa8afa266bc"
+    },
+    {
+      "bytes": 161,
+      "path": "requirements-modern.txt",
+      "sha256": "0da0e3b6088a38fcd738be32db7fa6d8622e42aa88728d86506ac68aef5c2141"
+    },
+    {
+      "bytes": 200,
+      "path": "requirements-py38.txt",
+      "sha256": "4ffa0f7f6ba521967300aac027ee6464cd9fbbc9bfa2e63222fadb7ce05086c2"
+    }
+  ],
+  "payloads": {
+    "loose_muon_5to10_sf.json.gz": {
+      "corrections": [
+        "loose_muon_id_5to10_sf"
+      ],
+      "sha256": "0d93548946919a763469e881158e4c022b4f03f1c83b8cda0c7f3b99969d1541"
+    },
+    "veto_electron_5to10_sf.json.gz": {
+      "corrections": [
+        "veto_electron_id_5to10_sf"
+      ],
+      "sha256": "a24770bced4a6223a51121a27de3a619a2fc62497e48aba338ccacc5b1d26b2f"
+    }
+  },
+  "python_reference": "3.8.20",
+  "records": {
+    "electron_2024_mc.json.gz": {
+      "data_files": 0,
+      "datasets": [
+        "/SPS-JpsiJpsiToMuMuEE_TuneCP5_13p6TeV_pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM"
+      ],
+      "mc_files": 52,
+      "measurement": "veto_electron_id_5to10_sf_2024_parking_singlemuon",
+      "records": 52,
+      "selected_samples": [
+        "mc"
+      ],
+      "year": "2024"
+    },
+    "electron_2025_data.json.gz": {
+      "data_files": 37320,
+      "datasets": [
+        "/ParkingSingleMuon0/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon0/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon0/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon0/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon0/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon0/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon1/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon1/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon1/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon1/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon1/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon1/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon10/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon10/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon10/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon10/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon10/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon10/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon11/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon11/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon11/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon11/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon11/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon11/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon12/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon12/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon12/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon12/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon12/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon12/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon13/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon13/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon13/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon13/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon13/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon13/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon14/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon14/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon14/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon14/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon14/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon14/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon15/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon15/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon15/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon15/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon15/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon15/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon2/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon2/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon2/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon2/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon2/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon2/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon3/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon3/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon3/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon3/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon3/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon3/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon4/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon4/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon4/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon4/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon4/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon4/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon5/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon5/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon5/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon5/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon5/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon5/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon6/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon6/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon6/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon6/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon6/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon6/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon7/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon7/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon7/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon7/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon7/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon7/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon8/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon8/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon8/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon8/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon8/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon8/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon9/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon9/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon9/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon9/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon9/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon9/Run2025G-PromptReco-v1/NANOAOD"
+      ],
+      "mc_files": 0,
+      "measurement": "veto_electron_id_5to10_sf_2025_parking_singlemuon",
+      "records": 37320,
+      "selected_samples": [
+        "data"
+      ],
+      "year": "2025"
+    },
+    "muon_2024_mc.json.gz": {
+      "data_files": 0,
+      "datasets": [
+        "/SPS-JpsiJpsiTo4Mu_Fil-4Mu_TuneCP5_13p6TeV_pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v4/NANOAODSIM"
+      ],
+      "mc_files": 671,
+      "measurement": "loose_muon_id_5to10_sf_2024_parking_external",
+      "records": 671,
+      "selected_samples": [
+        "mc"
+      ],
+      "year": "2024"
+    },
+    "muon_2025_data.json.gz": {
+      "data_files": 37320,
+      "datasets": [
+        "/ParkingSingleMuon0/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon0/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon0/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon0/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon0/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon0/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon1/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon1/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon1/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon1/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon1/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon1/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon10/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon10/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon10/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon10/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon10/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon10/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon11/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon11/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon11/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon11/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon11/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon11/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon12/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon12/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon12/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon12/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon12/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon12/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon13/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon13/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon13/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon13/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon13/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon13/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon14/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon14/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon14/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon14/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon14/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon14/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon15/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon15/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon15/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon15/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon15/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon15/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon2/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon2/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon2/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon2/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon2/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon2/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon3/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon3/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon3/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon3/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon3/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon3/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon4/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon4/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon4/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon4/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon4/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon4/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon5/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon5/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon5/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon5/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon5/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon5/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon6/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon6/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon6/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon6/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon6/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon6/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon7/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon7/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon7/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon7/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon7/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon7/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon8/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon8/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon8/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon8/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon8/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon8/Run2025G-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon9/Run2025B-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon9/Run2025C-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon9/Run2025D-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon9/Run2025E-PromptReco-v1/NANOAOD",
+        "/ParkingSingleMuon9/Run2025F-PromptReco-v2/NANOAOD",
+        "/ParkingSingleMuon9/Run2025G-PromptReco-v1/NANOAOD"
+      ],
+      "mc_files": 0,
+      "measurement": "loose_muon_id_5to10_sf_2025_parking_external",
+      "records": 37320,
+      "selected_samples": [
+        "data"
+      ],
+      "year": "2025"
+    }
+  },
+  "release": "lowpt-tnp-2025-v1",
+  "results": {
+    "electron": {
+      "bins": 6,
+      "files_expected": 37325,
+      "files_failed": 0,
+      "files_processed": 37325,
+      "mc_reference_datasets": [
+        "/SPS-JpsiJpsiToMuMuEE_TuneCP5_13p6TeV_pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2/NANOAODSIM"
+      ],
+      "mc_reference_year": "2024",
+      "measurement": "veto_electron_id_5to10_sf_2025_parking_singlemuon",
+      "probe_abseta_edges": [
+        0.0,
+        0.8,
+        1.44,
+        2.5
+      ],
+      "probe_definition": "veto_id_only",
+      "probe_pt_edges_gev": [
+        5.0,
+        7.0,
+        10.0
+      ],
+      "status": "validation_pending",
+      "valid_bins": 4,
+      "year": "2025"
+    },
+    "muon": {
+      "bins": 3,
+      "files_expected": 37354,
+      "files_failed": 0,
+      "files_processed": 37354,
+      "mc_reference_datasets": [
+        "/SPS-JpsiJpsiTo4Mu_Fil-4Mu_TuneCP5_13p6TeV_pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v4/NANOAODSIM"
+      ],
+      "mc_reference_year": "2024",
+      "measurement": "loose_muon_id_5to10_sf_2025_parking_external",
+      "probe_abseta_edges": [
+        0.0,
+        0.9,
+        1.2,
+        2.4
+      ],
+      "probe_definition": "loose_id_only",
+      "probe_pt_edges_gev": [
+        5.0,
+        10.0
+      ],
+      "status": "validation_pending",
+      "valid_bins": 3,
+      "year": "2025"
+    }
+  },
+  "schema_version": 1,
+  "scope": "2025 electron veto-ID and muon LooseID scale factors for 5 < pT < 10 GeV",
+  "source_tree": "the git commit containing this manifest"
+}

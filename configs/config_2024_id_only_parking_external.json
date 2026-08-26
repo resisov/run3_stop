@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "measurement": "loose_muon_id_5to10_sf_2024_parking_external",
+  "status": "measurement_definition",
+  "campaign_strategy": "parking_external_muon",
+  "reference": "Run-3 low-pT J/psi tag-and-probe with a ParkingSingleMuon event trigger external to the measured dimuon pair",
+  "year": "2024",
+  "probe_definition": "loose_id_only",
+  "campaign_inputs": {
+    "data_dataset_query": "dataset=/ParkingSingleMuon*/Run2024*-MINIv6NANOv15*/NANOAOD",
+    "data_dataset_exclude_contains": [
+      "MINIv6NANOv15_v2"
+    ],
+    "mc_datasets": [
+      "/SPS-JpsiJpsiTo4Mu_Fil-4Mu_TuneCP5_13p6TeV_pythia8/RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v4/NANOAODSIM"
+    ],
+    "files_per_condor_shard": 20,
+    "run2024i_policy": "Use one MINIv6NANOv15 production per primary dataset and exclude duplicated MINIv6NANOv15_v2 processing.",
+    "mc_campaign_note": "The independent 90,099,004-event SPS double-J/psi to four-muon production supplies an external reference muon and a disjoint J/psi measurement pair."
+  },
+  "probe_pt_edges_gev": [
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "probe_abseta_edges": [
+    0.0,
+    0.9,
+    1.2,
+    2.1,
+    2.4
+  ],
+  "binning_policy": "Count the initial 4x5 grid and merge only by exact post-reduction summation when the effective MC fail count or fit stability does not support a bin.",
+  "target_selection": "looseId; miniPFRelIso_all is not part of the probe pass/fail definition",
+  "denominator": "reconstructed tracker muon with 5 < pT < 10 GeV and abs(eta) < 2.4, without a LooseID or mini-isolation requirement",
+  "resonance": {
+    "name": "Jpsi",
+    "mass_window_gev": [
+      2.6,
+      3.6
+    ]
+  },
+  "tag_pt_min_gev": 5.0,
+  "tag_miniiso_max": null,
+  "tag": "tight muon with pT > 5 GeV; no mini-isolation or trigger-object requirement is applied to either measured J/psi leg",
+  "external_reference_muon": {
+    "enabled": true,
+    "pt_min_gev": 12.0,
+    "abseta_max": 1.5,
+    "require_tight_id": true,
+    "miniiso_max": null
+  },
+  "reference_paths": [
+    "HLT_Mu9_Barrel_L1HP10_IP6",
+    "HLT_Mu10_Barrel_L1HP11_IP6"
+  ],
+  "reference_trigger_object_kind": "muon",
+  "tag_trigger_match_required": false,
+  "apply_reference_trigger_to_mc": false,
+  "tag_trigger_object_filter_bits": null,
+  "trigger_object_bit_source": "The parking paths have no path-specific NanoAOD TrigObj quality bit in CMSSW_15_0_X; the HLT is therefore made external to the measured pair through a third offline barrel muon.",
+  "reference_trigger_strategy": "Data must fire a ParkingSingleMuon path and contain an additional tight barrel muon with pT > 12 GeV distinct from both measured J/psi legs. The identical disjoint offline topology is imposed on double-J/psi MC, while the parking HLT itself is data-only.",
+  "mass_bins": 50,
+  "systematic_variations": [
+    "alternate_signal",
+    "alternate_background",
+    "pass_fail_shape_independent",
+    "mass_window_narrow",
+    "alternate_binning",
+    "pileup"
+  ],
+  "adoption_gates": [
+    "data inputs are exclusively ParkingSingleMuon and no double-muon reference path is configured",
+    "the external reference muon is distinct from both measured J/psi legs in every selected pair",
+    "neither measured leg is trigger matched or required to pass isolation",
+    "probe pass/fail audit proves LooseID and mini-isolation are absent from the denominator",
+    "every adopted bin has effective MC fail count >= 10, with >= 20 preferred",
+    "simultaneous pass/fail fit convergence in every adopted bin",
+    "data and MC goodness-of-fit",
+    "bin-by-bin scale-factor stability under signal, background, pass/fail-shape, fit-window, binning, and pileup variations"
+  ]
+}
