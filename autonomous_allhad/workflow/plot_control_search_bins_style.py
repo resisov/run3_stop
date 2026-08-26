@@ -1575,10 +1575,11 @@ def selected_an17_recoil_blocks(payload: dict, scheme_name: str) -> list[dict]:
     def category_key(raw_label: str) -> str:
         if "Nb3plus_T1_W1" in raw_label and "Nb3plus_T2_W0" in raw_label:
             return "merged_high_nt"
-        if "__recoil_" in raw_label:
-            return raw_label.split("__recoil_", 1)[0]
         first = raw_label.split("__plus__", 1)[0]
-        category = first.split("_recoil_", 1)[0]
+        if "__recoil_" in first:
+            category = first.split("__recoil_", 1)[0]
+        else:
+            category = first.split("_recoil_", 1)[0]
         if category.startswith("NT0_"):
             category = category[len("NT0_") :]
         elif category.startswith("AN17_"):
