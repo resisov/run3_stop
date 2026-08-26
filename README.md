@@ -291,6 +291,56 @@ The exported correction name is `private_photon_mvaid_wp90_sf`, with `nominal`, 
 
 The `photon_z` profile uses an `HLT_Ele32_WPTight_Gsf`-matched electron tag and a photon probe in the Z mass window. The Data dataset must contain this reference trigger, and the DY simulation must contain the same HLT and trigger-object branches. This electron-as-photon method measures the photon-ID part represented by the probe variables. Measure pixel-seed or electron-veto efficiency separately when the proxy does not represent that requirement.
 
+## Changing the fit functions
+
+Add a `fit` block to the measurement configuration. Profile defaults remain active for keys that are not overridden. This example changes the nominal photon fit from Voigt plus exponential to Crystal Ball plus second-order Chebyshev:
+
+```json
+"fit": {
+  "signal_model": "crystal_ball",
+  "background_model": "chebyshev2",
+  "alternate_signal_model": "voigt",
+  "alternate_background_model": "exponential",
+  "crystal_ball_alpha": 1.5,
+  "crystal_ball_n": 3.0,
+  "natural_width_gev": 1.2476,
+  "peak_bounds_gev": [86.0, 96.0],
+  "rebin_factors": [1, 2],
+  "window_shrink_fraction": 0.05
+}
+```
+
+Supported models are:
+
+| component | model names |
+|---|---|
+| signal | `gaussian`, `double_gaussian`, `crystal_ball`, `voigt` |
+| background | `exponential`, `linear`, `chebyshev2` |
+
+The first signal, background, and rebin entries define the nominal fit. The alternate signal, alternate background, second rebin factor, and narrowed fit window are refitted independently. The largest SF displacement from the nominal result is used as the fit-model systematic uncertainty and is combined in quadrature with the statistical uncertainty. Every configured variation must fit successfully for the output bin to remain valid.
+
+Changing only these fit models or fit-variation settings does not require new Condor counting. Refit an existing merged histogram with the modified configuration:
+
+```bash
+cms-tnp reproduce \
+  --histograms photon_results/histograms.json \
+  --config photon_fit.json \
+  --output-dir photon_results_crystal_ball
+```
+
+The same override can be applied during the first Condor finalization:
+
+```bash
+cms-tnp condor-finalize \
+  --campaign-dir /eos/user/USER/analysis/photon_id_campaign \
+  --config photon_fit.json \
+  --output-dir photon_results_crystal_ball
+```
+
+Changing `pair.mass_window_gev`, `fit.mass_bins`, the ID selections, or the pT/eta axes changes the counted histograms and therefore requires new shard counting. The refit command detects these changes and stops instead of silently reusing incompatible histograms.
+
+To add a new analytic function that is not in the table, implement it in `_signal` or `_background` in `src/cms_tnp/fit.py`, add its name to the corresponding allowed-model set in `src/cms_tnp/config.py`, and add a fit test.
+
 ## Expressions
 
 Selections accept names, numbers, comparisons, `&`, `|`, `~`, arithmetic, and:

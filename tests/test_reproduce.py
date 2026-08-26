@@ -6,7 +6,7 @@ import pytest
 from scipy.special import voigt_profile
 
 from cms_tnp.condor import finalize_campaign
-from cms_tnp.fit import fit_payload
+from cms_tnp.fit import apply_fit_config, fit_payload
 from cms_tnp.payload import build_payload, write_payload
 from cms_tnp.plot import plot_result
 
@@ -159,3 +159,32 @@ def test_highpt_z_fit():
     result = fit_payload(payload)
     assert result["bins"][0]["valid"]
     assert result["bins"][0]["scale_factor"] == pytest.approx(0.90 / 0.92, rel=0.03)
+
+
+def test_fit_model_can_change_without_recounting():
+    payload = _payload()
+    config = {
+        "measurement": payload["measurement"],
+        "probe": {
+            "collection": payload["probe_collection"],
+            "selection": payload["probe_selection"],
+            "pass": payload["pass_selection"],
+        },
+        "axes": {
+            "pt_edges_gev": payload["probe_pt_edges_gev"],
+            "abseta_edges": payload["probe_abseta_edges"],
+        },
+        "pair": {"mass_window_gev": [2.6, 3.6]},
+        "fit": {
+            **payload["fit"],
+            "mass_bins": 50,
+            "signal_model": "crystal_ball",
+            "background_model": "chebyshev2",
+        },
+    }
+    updated = apply_fit_config(payload, config)
+    assert updated["fit"]["signal_model"] == "crystal_ball"
+    assert payload["fit"]["signal_model"] == "gaussian"
+    config["fit"]["mass_bins"] = 40
+    with pytest.raises(ValueError, match="recount"):
+        apply_fit_config(payload, config)

@@ -412,15 +412,20 @@ def campaign_status(
     }
 
 
-def finalize_campaign(campaign_dir: Path, output_dir: Path) -> dict[str, Any]:
-    from .fit import fit_payload
+def finalize_campaign(
+    campaign_dir: Path, output_dir: Path, *, config_path: Path | None = None
+) -> dict[str, Any]:
+    from .fit import apply_fit_config, fit_payload
     from .payload import build_payload, write_payload
     from .plot import plot_result
     from .reduce import merge
 
     campaign_dir = campaign_dir.resolve()
     output_dir = output_dir.resolve()
-    _reject_afs([campaign_dir, output_dir])
+    checked_paths = [campaign_dir, output_dir]
+    if config_path:
+        checked_paths.append(config_path)
+    _reject_afs(checked_paths)
     status = campaign_status(campaign_dir)
     if status["status"] != "complete":
         raise RuntimeError(
@@ -433,6 +438,8 @@ def finalize_campaign(campaign_dir: Path, output_dir: Path) -> dict[str, Any]:
     ]
     output_dir.mkdir(parents=True, exist_ok=True)
     histograms = merge(shards)
+    if config_path:
+        histograms = apply_fit_config(histograms, load_config(config_path))
     _write(output_dir / "histograms.json", histograms)
     result = fit_payload(histograms)
     _write(output_dir / "fit_result.json", result)

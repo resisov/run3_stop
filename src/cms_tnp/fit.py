@@ -2,10 +2,46 @@
 
 from __future__ import annotations
 
+import copy
 import math
 from typing import Any, Mapping
 
 import numpy as np
+
+
+def apply_fit_config(
+    payload: Mapping[str, Any], config: Mapping[str, Any]
+) -> dict[str, Any]:
+    """Apply fit-only changes while rejecting selections that require recounting."""
+
+    checks = {
+        "measurement": (payload["measurement"], config["measurement"]),
+        "probe collection": (
+            payload["probe_collection"],
+            config["probe"]["collection"],
+        ),
+        "probe selection": (payload["probe_selection"], config["probe"]["selection"]),
+        "pass selection": (payload["pass_selection"], config["probe"]["pass"]),
+        "pT edges": (payload["probe_pt_edges_gev"], config["axes"]["pt_edges_gev"]),
+        "eta edges": (payload["probe_abseta_edges"], config["axes"]["abseta_edges"]),
+    }
+    mismatches = [name for name, values in checks.items() if values[0] != values[1]]
+    if mismatches:
+        raise ValueError(
+            f"refit configuration changes counted quantities: {mismatches}; recount first"
+        )
+    low, high = map(float, config["pair"]["mass_window_gev"])
+    expected_edges = np.linspace(low, high, int(config["fit"]["mass_bins"]) + 1)
+    actual_edges = np.asarray(payload["mass_edges_gev"], dtype=float)
+    if actual_edges.shape != expected_edges.shape or not np.allclose(
+        actual_edges, expected_edges, rtol=0.0, atol=1.0e-12
+    ):
+        raise ValueError(
+            "refit configuration changes the counted mass window or mass bins; recount first"
+        )
+    output = copy.deepcopy(dict(payload))
+    output["fit"] = copy.deepcopy(dict(config["fit"]))
+    return output
 
 
 def _normalise(values: np.ndarray) -> np.ndarray:

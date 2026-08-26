@@ -118,6 +118,7 @@ def parser() -> argparse.ArgumentParser:
 
     command = commands.add_parser("fit")
     command.add_argument("--histograms", type=Path, required=True)
+    command.add_argument("--config", type=Path)
     command.add_argument("--output", type=Path, required=True)
 
     command = commands.add_parser("export")
@@ -130,6 +131,7 @@ def parser() -> argparse.ArgumentParser:
 
     command = commands.add_parser("reproduce")
     command.add_argument("--histograms", type=Path, required=True)
+    command.add_argument("--config", type=Path)
     command.add_argument("--output-dir", type=Path, required=True)
 
     command = commands.add_parser("run-local")
@@ -162,6 +164,7 @@ def parser() -> argparse.ArgumentParser:
 
     command = commands.add_parser("condor-finalize")
     command.add_argument("--campaign-dir", type=Path, required=True)
+    command.add_argument("--config", type=Path)
     command.add_argument("--output-dir", type=Path, required=True)
     return root
 
@@ -252,9 +255,12 @@ def main(argv: list[str] | None = None) -> int:
         _write(args.output, output)
         return 0 if output["status"] == "complete" else 2
     if args.command == "fit":
-        from .fit import fit_payload
+        from .fit import apply_fit_config, fit_payload
 
-        output = fit_payload(_read(args.histograms))
+        histograms = _read(args.histograms)
+        if args.config:
+            histograms = apply_fit_config(histograms, load_config(args.config))
+        output = fit_payload(histograms)
         _write(args.output, output)
         return 0 if all(item.get("valid") for item in output["bins"]) else 2
     if args.command == "export":
@@ -270,12 +276,15 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(plot_result(_read(args.result), args.output_dir), indent=2))
         return 0
     if args.command == "reproduce":
-        from .fit import fit_payload
+        from .fit import apply_fit_config, fit_payload
         from .payload import build_payload, write_payload
         from .plot import plot_result
 
         args.output_dir.mkdir(parents=True, exist_ok=True)
-        result = fit_payload(_read(args.histograms))
+        histograms = _read(args.histograms)
+        if args.config:
+            histograms = apply_fit_config(histograms, load_config(args.config))
+        result = fit_payload(histograms)
         if not all(item.get("valid") for item in result["bins"]):
             _write(args.output_dir / "fit_result.json", result)
             return 2
@@ -355,7 +364,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "condor-finalize":
         from .condor import finalize_campaign
 
-        output = finalize_campaign(args.campaign_dir, args.output_dir)
+        output = finalize_campaign(
+            args.campaign_dir, args.output_dir, config_path=args.config
+        )
         print(json.dumps(output, indent=2, sort_keys=True))
         return 0
     raise AssertionError(args.command)
