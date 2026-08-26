@@ -341,7 +341,7 @@ def finalize_permanent_skips(
     }
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest="command", required=True)
     manifest_parser = subparsers.add_parser("manifest")
@@ -364,7 +364,7 @@ def main() -> int:
     skip_parser.add_argument("--output-records", type=Path, required=True)
     skip_parser.add_argument("--output-skips", type=Path, required=True)
     skip_parser.add_argument("--dataset-incomplete-threshold", type=float, default=0.01)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     if args.command == "manifest":
         result = build_residual_manifest(args.records, args.workdir, args.recovery_dir)
         args.output.parent.mkdir(parents=True, exist_ok=True)

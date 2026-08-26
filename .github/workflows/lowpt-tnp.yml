@@ -1,0 +1,59 @@
+name: Low-pT lepton TnP release
+
+on:
+  push:
+    paths:
+      - "autonomous_allhad/lowpt_tnp/**"
+      - "autonomous_allhad/workflow/*tnp*"
+      - "autonomous_allhad/workflow/plot_measurement.py"
+      - "autonomous_allhad/workflow/sf_payload.py"
+      - "autonomous_allhad/workflow/audit_lowpt_reference_triggers.py"
+      - "autonomous_allhad/workflow/prepare_tnp_measurement_condor.py"
+      - "autonomous_allhad/tests/test_lowpt_tnp_release.py"
+      - ".github/workflows/lowpt-tnp.yml"
+  pull_request:
+    paths:
+      - "autonomous_allhad/lowpt_tnp/**"
+      - "autonomous_allhad/workflow/*tnp*"
+      - "autonomous_allhad/workflow/plot_measurement.py"
+      - "autonomous_allhad/workflow/sf_payload.py"
+      - "autonomous_allhad/workflow/audit_lowpt_reference_triggers.py"
+      - "autonomous_allhad/workflow/prepare_tnp_measurement_condor.py"
+      - "autonomous_allhad/tests/test_lowpt_tnp_release.py"
+      - ".github/workflows/lowpt-tnp.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - python: "3.8"
+            requirements: autonomous_allhad/lowpt_tnp/requirements-py38.txt
+          - python: "3.12"
+            requirements: autonomous_allhad/lowpt_tnp/requirements-modern.txt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+          cache-dependency-path: ${{ matrix.requirements }}
+      - name: Install locked dependencies
+        run: python -m pip install -r "${{ matrix.requirements }}"
+      - name: Environment and release audit
+        env:
+          MPLCONFIGDIR: /tmp/lowpt-tnp-mpl
+        run: |
+          python autonomous_allhad/workflow/measure_lowpt_lepton.py doctor --repo .
+          python autonomous_allhad/workflow/measure_lowpt_lepton.py verify-release \
+            --repo . --manifest autonomous_allhad/lowpt_tnp/release.json
+      - name: Reproduce payloads and plots
+        env:
+          MPLCONFIGDIR: /tmp/lowpt-tnp-mpl
+        run: python -m pytest -q autonomous_allhad/tests/test_lowpt_tnp_release.py

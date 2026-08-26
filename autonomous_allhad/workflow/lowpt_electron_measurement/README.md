@@ -1,22 +1,16 @@
-# Low-pT veto-electron measurement
+# Low-pT veto-electron ID-only measurement
 
-The target is the exact analysis veto-electron definition in the uncovered
-`5 < pT < 10 GeV` interval: fiducial electron, `cutBased >= Veto`, and
-`miniPFRelIso_all < 0.1`.  Following the Run-2 AN object-correction philosophy,
-the efficiency is measured with resonance tag-and-probe in data and MC and all
-statistical and fit-model variations are propagated.
+The probe denominator is a fiducial reconstructed GSF electron with
+`5 < pT < 10 GeV`, conversion veto, and at most one lost hit.  It has no
+cut-based ID or isolation requirement.  The numerator is `cutBased >= Veto`;
+mini-isolation is deliberately excluded from the measured efficiency.
 
-The measurement uses `J/psi -> ee` with a tight electron tag matched to an
-unrestricted single-electron `Ele8/Ele12 + PFJet30` reference path.  PFJet30 is
-only the event-recording leg and is never a probe pass/fail requirement.  Data
-pass/fail spectra are fit simultaneously with morphed pass/fail signal
-templates from the single Summer24 `SPS-JpsiJpsiToMuMuEE` sample and independent
-backgrounds.  The pure resonant MC efficiency is obtained by weighted
-pass/fail counting; this is not generator-truth efficiency.
+ParkingSingleMuon records the event independently of the dielectron pair via
+the Mu9/Mu10 displaced-muon OR.  Neither electron leg is trigger matched.  The
+tag is a tight electron above 5 GeV with mini-isolation below 0.1.  The 2025
+result combines 2025 data with the compatible high-statistics 2024
+`SPS-JpsiJpsiToMuMuEE` reference simulation and records that provenance.
 
-Counting starts on a 4 eta x 5 pT grid.  The reduced histograms are merged
-exactly, without re-reading NanoAOD, to three eta bins spanning 5--10 GeV.  The
-coarser adopted grid was selected because subdivided endcap bins produced
-boundary efficiencies or model uncertainties up to O(50%).  Statistical,
-signal-template, background, fit-window, alternate-binning, and pileup
-variations are propagated to the correctionlib uncertainty.
+Use the unified CLI and full reproducibility guide in
+`autonomous_allhad/lowpt_tnp/README.md`.  This directory contains only the
+electron-specific configuration and compatibility entry-point wrappers.
