@@ -34,21 +34,36 @@ def build_records(
     *,
     dasgoclient: Path | str = "dasgoclient",
     dasmaps: Path | None = None,
+    samples: set[str] | None = None,
 ) -> dict[str, Any]:
+    selected_samples = set(samples or {"data", "mc"})
+    if not selected_samples or not selected_samples <= {"data", "mc"}:
+        raise ValueError(f"samples must be a non-empty subset of data/mc: {selected_samples}")
     campaign = config["campaign_inputs"]
-    queries = campaign.get("data_dataset_queries")
-    if queries is None:
-        queries = [campaign["data_dataset_query"]]
-    data_datasets = sorted({
-        dataset
-        for query in queries
-        for dataset in _das(str(query), dasgoclient=dasgoclient, dasmaps=dasmaps)
-    })
-    excluded = tuple(str(value) for value in campaign.get("data_dataset_exclude_contains", []))
-    data_datasets = [dataset for dataset in data_datasets if not any(token in dataset for token in excluded)]
-    mc_datasets = [str(value) for value in campaign["mc_datasets"]]
-    if not data_datasets or not mc_datasets:
-        raise RuntimeError("TnP data or MC dataset selection is empty")
+    data_datasets: list[str] = []
+    if "data" in selected_samples:
+        queries = campaign.get("data_dataset_queries")
+        if queries is None:
+            queries = [campaign["data_dataset_query"]]
+        data_datasets = sorted({
+            dataset
+            for query in queries
+            for dataset in _das(str(query), dasgoclient=dasgoclient, dasmaps=dasmaps)
+        })
+        excluded = tuple(str(value) for value in campaign.get("data_dataset_exclude_contains", []))
+        data_datasets = [
+            dataset for dataset in data_datasets
+            if not any(token in dataset for token in excluded)
+        ]
+        if not data_datasets:
+            raise RuntimeError("TnP data dataset selection is empty")
+    mc_datasets = (
+        [str(value) for value in campaign["mc_datasets"]]
+        if "mc" in selected_samples
+        else []
+    )
+    if "mc" in selected_samples and not mc_datasets:
+        raise RuntimeError("TnP MC dataset selection is empty")
     records = []
     dataset_audit = {}
     seen_files: set[str] = set()
@@ -87,6 +102,7 @@ def build_records(
         "dataset_audit": dataset_audit,
         "data_files": sum(item["sample"] == "data" for item in records),
         "mc_files": sum(item["sample"] == "mc" for item in records),
+        "selected_samples": sorted(selected_samples),
         "records": records,
     }
 
@@ -97,11 +113,18 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--dasgoclient", type=Path, default=Path("dasgoclient"))
     parser.add_argument("--dasmaps", type=Path)
+    parser.add_argument(
+        "--sample",
+        choices=("data", "mc"),
+        action="append",
+        help="sample to freeze; repeat for both (default: data and mc)",
+    )
     args = parser.parse_args(argv)
     payload = build_records(
         json.loads(args.config.read_text()),
         dasgoclient=args.dasgoclient,
         dasmaps=args.dasmaps,
+        samples=set(args.sample) if args.sample else None,
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")

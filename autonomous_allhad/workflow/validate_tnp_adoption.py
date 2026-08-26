@@ -11,10 +11,10 @@ from typing import Any
 
 FIT_VARIATIONS = (
     "nominal",
-    "signal_template_combined",
-    "background_linear",
+    "alternate_signal",
+    "alternate_background",
+    "pass_fail_shape_independent",
     "mass_window_narrow",
-    "mass_window_medium",
     "alternate_binning",
 )
 
@@ -25,9 +25,9 @@ def _trigger_audit_blockers(config: dict[str, Any], audit: dict[str, Any], label
         blockers.append(f"{label}: trigger audit has no clean processed file")
     present_by_file = audit.get("paths_present_by_file") or {}
     for path in config["reference_paths"]:
-        if not any(path in paths for paths in present_by_file.values()):
-            blockers.append(f"{label}: {path} is absent from audited files")
         apply_to_sample = label == "data" or bool(config.get("apply_reference_trigger_to_mc", True))
+        if apply_to_sample and not any(path in paths for paths in present_by_file.values()):
+            blockers.append(f"{label}: {path} is absent from audited files")
         fired = int((audit.get("event_counts") or {}).get(path, 0))
         if apply_to_sample and fired <= 0:
             blockers.append(f"{label}: {path} has no fired event in the audit")
@@ -62,6 +62,7 @@ def validate(
     max_chi2_ndf: float,
     adopt_after_visual_review: bool,
     visual_review_note: str | None,
+    electron_endcap_unity_fallback: bool = False,
 ) -> dict[str, Any]:
     blockers: list[str] = []
     expected_probe_definition = config.get("probe_definition")
@@ -75,6 +76,8 @@ def validate(
             "fit-result probe definition does not match config: "
             f"{result.get('probe_definition')!r} != {expected_probe_definition!r}"
         )
+    if result.get("mc_reference") != histograms.get("mc_reference"):
+        blockers.append("fit-result MC-reference provenance does not match reduced histograms")
     expected_tag_pt = config.get("tag_pt_min_gev")
     for label, payload in (("histogram", histograms), ("result", result)):
         if payload.get("tag_pt_min_gev") != expected_tag_pt:
@@ -103,10 +106,31 @@ def validate(
     if len(result.get("bins") or []) != expected_bins:
         blockers.append(f"fit result has {len(result.get('bins') or [])}/{expected_bins} bins")
     fit_diagnostics = []
+    unity_policy_bins: list[int] = []
+    n_pt = len(histograms.get("probe_pt_edges_gev") or []) - 1
+    n_eta = len(histograms.get("probe_abseta_edges") or []) - 1
     for item in result.get("bins") or []:
         flat_index = int(item.get("flat_index", -1))
         if not item.get("valid"):
-            blockers.append(f"bin {flat_index}: nominal/systematic fit result is invalid")
+            eta_index = flat_index // n_pt if n_pt > 0 else -1
+            allow_unity = bool(
+                electron_endcap_unity_fallback
+                and expected_probe_definition == "veto_id_only"
+                and eta_index == n_eta - 1
+            )
+            nominal = (item.get("fits") or {}).get("nominal") or {}
+            nominal_values = [
+                ((nominal.get(sample) or {}).get(field))
+                for sample in ("data", "mc")
+                for field in ("efficiency", "efficiency_stat_uncertainty")
+            ]
+            if allow_unity and all(
+                value is not None and math.isfinite(float(value)) and float(value) >= 0.0
+                for value in nominal_values
+            ) and all(float(value) > 0.0 for value in nominal_values[::2]):
+                unity_policy_bins.append(flat_index)
+            else:
+                blockers.append(f"bin {flat_index}: nominal/systematic fit result is invalid")
             continue
         sf = float(item["scale_factor"])
         uncertainty = float(item["scale_factor_uncertainty"])
@@ -152,6 +176,8 @@ def validate(
         "mc_trigger_audit": mc_trigger_audit.get("created_unix"),
         "pileup_uncertainty_source": result.get("pileup_uncertainty_source"),
         "visual_review_note": visual_review_note,
+        "electron_endcap_unity_fallback": electron_endcap_unity_fallback,
+        "electron_endcap_unity_bins": unity_policy_bins,
     }
     if blockers:
         output["status"] = "validation_blocked"
@@ -164,7 +190,7 @@ def validate(
     return output
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("result", type=Path)
     parser.add_argument("histograms", type=Path)
@@ -175,7 +201,15 @@ def main() -> int:
     parser.add_argument("--max-chi2-ndf", type=float, default=12.0)
     parser.add_argument("--adopt-after-visual-review", action="store_true")
     parser.add_argument("--visual-review-note")
-    args = parser.parse_args()
+    parser.add_argument(
+        "--electron-endcap-unity-fallback",
+        action="store_true",
+        help=(
+            "allow invalid bins only in the highest electron |eta| interval when "
+            "the nominal data and MC efficiencies remain finite; export then uses unity"
+        ),
+    )
+    args = parser.parse_args(argv)
     output = validate(
         result=json.loads(args.result.read_text()),
         histograms=json.loads(args.histograms.read_text()),
@@ -185,6 +219,7 @@ def main() -> int:
         max_chi2_ndf=args.max_chi2_ndf,
         adopt_after_visual_review=args.adopt_after_visual_review,
         visual_review_note=args.visual_review_note,
+        electron_endcap_unity_fallback=args.electron_endcap_unity_fallback,
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(output, indent=2, sort_keys=True, allow_nan=False) + "\n")

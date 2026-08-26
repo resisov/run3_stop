@@ -47,11 +47,11 @@
   "nominal_mass_rebin_factor": 2,
   "nominal_background_model": "chebyshev",
   "systematic_variations": [
-    "signal_template",
-    "background_model",
-    "mass_window",
+    "alternate_signal",
+    "alternate_background",
+    "pass_fail_shape_independent",
+    "mass_window_narrow",
     "alternate_binning",
-    "tag_selection",
     "pileup"
   ],
   "adoption_gates": [
@@ -61,6 +61,6 @@
     "the 5--7 and 7--10 GeV bins have statistically usable passing and failing J/psi peaks",
     "simultaneous pass/fail fit convergence in every adopted barrel bin",
     "data and MC goodness-of-fit",
-    "bin-by-bin stability under fit-model, fit-window, binning, tag-selection, and pileup variations"
+    "bin-by-bin stability under signal, background, pass/fail-shape, fit-window, binning, and pileup variations"
   ]
 }

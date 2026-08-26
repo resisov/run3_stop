@@ -4,22 +4,22 @@
     "mass_fit_bin_00": "Probe bin 0 < |eta| < 0.9, 5 < pT < 10 GeV. Panels are data pass, data fail, simulation pass, and simulation fail in reading order. The nominal data fit has chi2/ndf=2.338; The resulting scale factor is 0.9956 +/- 0.0015.",
     "mass_fit_bin_01": "Probe bin 0.9 < |eta| < 1.2, 5 < pT < 10 GeV. Panels are data pass, data fail, simulation pass, and simulation fail in reading order. The nominal data fit has chi2/ndf=1.677; The resulting scale factor is 0.9969 +/- 0.0040.",
     "mass_fit_bin_02": "Probe bin 1.2 < |eta| < 2.4, 5 < pT < 10 GeV. Panels are data pass, data fail, simulation pass, and simulation fail in reading order. The nominal data fit has chi2/ndf=1.947; The resulting scale factor is 0.9963 +/- 0.0018.",
-    "scale_factor": "Data-to-simulation scale factors with total uncertainties; bins without a valid fit are omitted. The horizontal axis is probe |eta| for the single 5-10 GeV pT bin.",
+    "scale_factor": "Data-to-simulation scale factors with total uncertainties. Bins without a valid fit are omitted. The horizontal axis is probe |eta| for the single 5-10 GeV pT bin.",
     "scale_factor_heatmap": "Two-dimensional scale-factor map; each cell shows the central value and total uncertainty."
   },
   "files": [
-    "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2025_full/plots/scale_factor.png",
-    "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2025_full/plots/scale_factor.pdf",
-    "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2025_full/plots/scale_factor_heatmap.png",
-    "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2025_full/plots/scale_factor_heatmap.pdf",
-    "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2025_full/plots/efficiency.png",
-    "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2025_full/plots/efficiency.pdf",
-    "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2025_full/plots/mass_fit_bin_00.png",
-    "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2025_full/plots/mass_fit_bin_00.pdf",
-    "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2025_full/plots/mass_fit_bin_01.png",
-    "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2025_full/plots/mass_fit_bin_01.pdf",
-    "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2025_full/plots/mass_fit_bin_02.png",
-    "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowpt_muon_measurement/outputs/2025_full/plots/mass_fit_bin_02.pdf"
+    "autonomous_allhad/reports/lowpt_id_sf_2025_an_handoff/muon/scale_factor.png",
+    "autonomous_allhad/reports/lowpt_id_sf_2025_an_handoff/muon/scale_factor.pdf",
+    "autonomous_allhad/reports/lowpt_id_sf_2025_an_handoff/muon/scale_factor_heatmap.png",
+    "autonomous_allhad/reports/lowpt_id_sf_2025_an_handoff/muon/scale_factor_heatmap.pdf",
+    "autonomous_allhad/reports/lowpt_id_sf_2025_an_handoff/muon/efficiency.png",
+    "autonomous_allhad/reports/lowpt_id_sf_2025_an_handoff/muon/efficiency.pdf",
+    "autonomous_allhad/reports/lowpt_id_sf_2025_an_handoff/muon/mass_fit_bin_00.png",
+    "autonomous_allhad/reports/lowpt_id_sf_2025_an_handoff/muon/mass_fit_bin_00.pdf",
+    "autonomous_allhad/reports/lowpt_id_sf_2025_an_handoff/muon/mass_fit_bin_01.png",
+    "autonomous_allhad/reports/lowpt_id_sf_2025_an_handoff/muon/mass_fit_bin_01.pdf",
+    "autonomous_allhad/reports/lowpt_id_sf_2025_an_handoff/muon/mass_fit_bin_02.png",
+    "autonomous_allhad/reports/lowpt_id_sf_2025_an_handoff/muon/mass_fit_bin_02.pdf"
   ],
   "measurement": "loose_muon_id_5to10_sf_2025_parking_external",
   "schema_version": 1,
@@ -31,6 +31,7 @@
       12.0,
       10.0
     ],
+    "electron_endcap_unity_fallback": false,
     "standard_figure_inches": [
       8.0,
       8.0

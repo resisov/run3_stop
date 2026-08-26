@@ -1,18 +1,17 @@
-# Low-pT loose-muon measurement
+# Low-pT loose-muon ID-only measurement
 
-The target is the exact analysis loose-muon definition in the uncovered
-`5 < pT < 10 GeV` interval: `looseId` and `miniPFRelIso_all < 0.2` within
-`abs(eta) < 2.4`.
+The probe denominator is a reconstructed tracker muon with
+`5 < pT < 10 GeV` and `abs(eta) < 2.4`.  It has no LooseID or isolation
+requirement.  The numerator is `looseId`; mini-isolation is deliberately
+excluded from the measured efficiency.
 
-The official 2024 `muon_JPsi.json.gz` already covers the LooseID component down
-to low pT.  This workflow measures the missing low-pT mini-isolation component
-with J/psi tag-and-probe and combines it with the official LooseID term.  The
-combined correction and its propagated uncertainty are exported so that the
-analysis applies one unambiguous low-pT loose-muon factor.
+ParkingSingleMuon records the event through the Mu9/Mu10 displaced-muon OR.
+The measured tag and probe are not trigger matched.  A third tight barrel muon
+above 12 GeV, distinct from both J/psi legs, makes the trigger external to the
+measured pair.  The same offline topology is imposed on simulation, while the
+HLT itself remains data-only.  The 2025 result uses the compatible
+high-statistics 2024 `SPS-JpsiJpsiTo4Mu_Fil-4Mu` reference simulation.
 
-Data pass/fail spectra are fit simultaneously with morphed J/psi MC signal
-templates and independent backgrounds.  The pure resonant MC isolation
-efficiency is evaluated with weighted pass/fail counting.  Statistical,
-signal-template, background, fit-window, alternate-binning, and pileup
-variations are combined with the official LooseID uncertainty in the final
-correctionlib payload.
+Use the unified CLI and full reproducibility guide in
+`autonomous_allhad/lowpt_tnp/README.md`.  This directory contains only the
+muon-specific configuration and compatibility entry-point wrappers.

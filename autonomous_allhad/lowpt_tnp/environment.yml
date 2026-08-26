@@ -1,0 +1,10 @@
+name: lowpt-tnp
+channels:
+  - conda-forge
+dependencies:
+  - python=3.8.20
+  - pip=24.3.1
+  - xrootd=5.7.*
+  - conda-pack=0.8.1
+  - pip:
+      - -r autonomous_allhad/lowpt_tnp/requirements-py38.txt
