@@ -65,6 +65,63 @@ cms-tnp init --profile photon_z --output photon_id.json
 
 The profile supplies tag selection, trigger matching, resonance window, fit models, and default eta bins. Any resolved field can still be overridden in the user JSON.
 
+## Object definitions
+
+Each profile resolves into four physics roles:
+
+- `tag`: the well-identified reference object. When trigger-object matching is enabled, only the tag is matched.
+- `probe`: the denominator object. `probe.selection` defines all probes and `probe.pass` splits them into passing and failing spectra.
+- `spectator`: an optional object independent of the tag-probe pair. The low-pT muon profile requires a third muon as its trigger-reference candidate; the current profile applies only event-level HLT and does not `TrigObj`-match this spectator.
+- `pair`: the tag-probe charge, angular, and invariant-mass requirements.
+
+The built-in definitions are:
+
+| profile | tag | probe denominator and numerator | pair | reference trigger |
+|---|---|---|---|---|
+| `electron_jpsi_lowpt` | Electron: pT > 5 GeV, ECAL fiducial, `cutBased >= 4`, `miniPFRelIso_all < 0.1` | Electron: 5 < pT < 10 GeV, ECAL fiducial, `convVeto`, `lostHits <= 1`; pass `cutBased >= 1` | opposite charge, 2 < m(ee) < 4 GeV | `HLT_Mu9_Barrel_L1HP10_IP6` OR `HLT_Mu10_Barrel_L1HP11_IP6`; event-level Data selection |
+| `muon_jpsi_lowpt` | Muon: pT > 5 GeV, abs(eta) < 2.4, `tightId` | Muon: 5 < pT < 10 GeV, abs(eta) < 2.4, `isTracker`; pass `looseId` | opposite charge, 2.6 < m(mumu) < 3.6 GeV; distinct spectator muon with pT > 12 GeV, abs(eta) < 1.5, `tightId` | `HLT_Mu9_Barrel_L1HP10_IP6` OR `HLT_Mu10_Barrel_L1HP11_IP6`; event-level Data selection |
+| `electron_z` | Electron: pT > 35 GeV, ECAL fiducial, `cutBased >= 4` | Electron: pT > 10 GeV, ECAL fiducial, `convVeto`, `lostHits <= 1`; pass `cutBased >= 4` | opposite charge, 60 < m(ee) < 120 GeV | `HLT_Ele32_WPTight_Gsf`, matched to the electron tag |
+| `muon_z` | Muon: pT > 26 GeV, abs(eta) < 2.4, `tightId`, `miniPFRelIso_all < 0.1` | Muon: pT > 10 GeV, abs(eta) < 2.4, `isTracker`; pass `tightId` | opposite charge, 60 < m(mumu) < 120 GeV | `HLT_IsoMu24`, matched to the muon tag |
+| `photon_z` | Electron: pT > 35 GeV, ECAL fiducial, `cutBased >= 4` | Photon: pT > 20 GeV, ECAL fiducial; pass `cutBased >= 3` | deltaR(e,gamma) > 0.2, 60 < m(egamma) < 120 GeV | `HLT_Ele32_WPTight_Gsf`, matched to the electron tag |
+
+Here ECAL fiducial means barrel `abs(etaSC) < 1.4442` or endcap `1.566 < abs(etaSC) < 2.5`, with `etaSC = eta + deltaEtaSC`.
+
+NanoAOD fields are written without their collection prefix in expressions. For example, `mvaID_WP90` in a photon expression reads `Photon_mvaID_WP90`. `id.fields` adds private probe fields, `id.denominator` overrides `probe.selection`, and `id.pass` overrides `probe.pass`.
+
+Inspect the complete configuration after all profile defaults and user overrides have been applied:
+
+```bash
+cms-tnp resolve --config photon_id.json --output photon_id.resolved.json
+```
+
+The resolved JSON is the authoritative record of the tag, probe, spectator, pair, axes, trigger, and fit definitions used by counting jobs.
+
+## Reference triggers
+
+The reference trigger selects the event independently of the probe requirement under study. For photon ID, `photon_z` therefore uses an electron trigger matched to the electron tag rather than a photon trigger applied to the photon probe.
+
+```json
+"reference_trigger": {
+  "paths": ["HLT_Ele32_WPTight_Gsf"],
+  "apply_to_data": true,
+  "apply_to_mc": true,
+  "match_tag": true,
+  "object_id": 11,
+  "filter_bits": 2,
+  "max_delta_r": 0.1
+}
+```
+
+- `paths` lists NanoAOD HLT branches. Available paths are combined with a logical OR.
+- `apply_to_data` and `apply_to_mc` control the event-level HLT requirement independently.
+- `match_tag` additionally requires a compatible `TrigObj` within `max_delta_r` of the tag.
+- `object_id` is the absolute trigger-object PDG identifier: electron `11`, muon `13`, photon `22`.
+- `filter_bits` is applied as a bitmask: `(TrigObj_filterBits & filter_bits) != 0`.
+
+If trigger application is enabled but none of the configured HLT branches exists in a ROOT file, that file is recorded as failed. `TrigObj_filterBits` definitions depend on the NanoAOD era and trigger path and must be checked for the selected campaign. A group of OR-ed paths shares one tag-object ID, filter-bit mask, and matching radius in the current configuration.
+
+`reference_trigger` is a tag-side reference selection, not a probe-trigger numerator. Measuring a trigger efficiency itself requires the trigger under study to be represented by a separate probe-side `TrigObj` matching requirement.
+
 ## Inputs
 
 Use an exact DAS dataset beginning with `/`, or a DAS dataset query beginning with `dataset=`.
