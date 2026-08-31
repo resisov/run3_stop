@@ -103,6 +103,18 @@ autonomous_allhad/workflow/mc_bad_file_local_recovery_*/
 autonomous_allhad/workflow/partial_merge_preview_*/
 autonomous_allhad/workflow/current_available_pipeline_*/hist_chunks/
 autonomous_allhad/workflow/current_available_pipeline_*/hists_*/hist_chunks/
+autonomous_allhad/workflow/results/
+
+# Preliminary local classifier study.  Its multi-GB inputs, trained models,
+# site-specific Condor requests, and private EOS manifests stay outside the
+# public source history until the study is promoted through the normal review.
+autonomous_allhad/gnn_lowdm/
+
+# Local fit/estimation report bundles contain site-specific provenance paths.
+# Publish reviewed, path-sanitized artifacts through docs/ instead.
+autonomous_allhad/reports/background_estimation_2025_20260819/dy/unified/
+autonomous_allhad/reports/background_estimation_unified_20260824/
+autonomous_allhad/reports/cronly_fit_2024_2025_20260825/
 
 # Report build inputs are reproducible; retain only final summaries and plots.
 autonomous_allhad/reports/**/inputs/

@@ -464,64 +464,73 @@ table{{border-collapse:collapse;width:100%;margin:22px 0}} th,td{{border:1px sol
     (output_dir / "index.html").write_text(document)
 
 
-def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--ee", type=Path, required=True)
-    parser.add_argument("--mumu", type=Path, required=True)
-    parser.add_argument("--selection", choices=("highdm", "lowdm"), default="highdm")
-    parser.add_argument("--low-exact", type=Path)
-    parser.add_argument("--output-dir", type=Path, required=True)
-    parser.add_argument(
-        "--campaign-year", choices=("2024", "2025"), default="2024"
-    )
-    args = parser.parse_args(argv)
-    CMS_LABEL["rlabel"] = f"{args.campaign_year} (13.6 TeV)"
+def measurement_provenance(
+    path: Path, payload: dict[str, Any]
+) -> dict[str, Any]:
+    return {
+        "file": path.name,
+        "sha256": sha256_file(path),
+        "schema_version": payload.get("schema_version"),
+        "summary": payload.get("summary") or {},
+        "provenance": payload.get("provenance") or {},
+    }
 
-    ee = read_json(args.ee)
-    mumu = read_json(args.mumu)
-    validate_channel(ee, "DY2E", args.ee)
-    validate_channel(mumu, "DY2M", args.mumu)
-    if args.selection == "highdm":
-        result = combine_highdm(ee, mumu)
-        rz_key = "rz_high"
-        mll_key = "mll_high"
-    else:
-        if args.low_exact is None:
-            raise SystemExit("--low-exact is required for lowdm")
-        low = read_json(args.low_exact)
-        if low.get("status") != "complete":
-            raise SystemExit(f"{args.low_exact}: exact Low-dM input is incomplete")
-        result = {
-            "rz_low": finalize_rz(low["rz_low_raw"]),
-            "mll_low": low["mll_low"],
-        }
-        rz_key = "rz_low"
-        mll_key = "mll_low"
-    output_dir = args.output_dir
+
+def validate_measurement(payload: dict[str, Any], path: Path) -> None:
+    if payload.get("status") != "complete":
+        raise RuntimeError(f"{path}: incomplete status {payload.get('status')}")
+    required = ("rz_high", "mll_high", "rz_low", "mll_low")
+    missing = [key for key in required if not payload.get(key)]
+    if missing:
+        raise RuntimeError(
+            f"{path}: unified measurement is missing {','.join(missing)}"
+        )
+    summary = payload.get("summary") or {}
+    if summary.get("failures"):
+        raise RuntimeError(f"{path}: exact-refinement failures are non-empty")
+    if int(summary.get("expected_partitions", -1)) != int(
+        summary.get("completed_partitions", -2)
+    ):
+        raise RuntimeError(f"{path}: exact-refinement accounting does not close")
+    if int(summary.get("candidate_events", -1)) != int(
+        summary.get("matched_events", -2)
+    ):
+        raise RuntimeError(f"{path}: exact-refinement event matching does not close")
+
+
+def build_selection_report(
+    result: dict[str, Any],
+    selection: str,
+    output_dir: Path,
+    campaign_year: str,
+    inputs: dict[str, Any],
+) -> dict[str, Any]:
+    rz_key = "rz_high" if selection == "highdm" else "rz_low"
+    mll_key = "mll_high" if selection == "highdm" else "mll_low"
     output_dir.mkdir(parents=True, exist_ok=True)
     plots = {
-        "rz": plot_rz_nb(result[rz_key], args.selection, output_dir),
-        "rt": plot_rt(result[rz_key], args.selection, output_dir),
+        "rz": plot_rz_nb(result[rz_key], selection, output_dir),
+        "rt": plot_rt(result[rz_key], selection, output_dir),
         "mll_input": plot_mll(
             result[mll_key],
             result[rz_key],
-            args.selection,
+            selection,
             output_dir,
             corrected=False,
         ),
         "mll_post": plot_mll(
             result[mll_key],
             result[rz_key],
-            args.selection,
+            selection,
             output_dir,
             corrected=True,
         ),
     }
     payload = {
-        "schema_version": f"dy_estimation_report_{args.campaign_year}_v1",
+        "schema_version": f"dy_estimation_report_{campaign_year}_v1",
         "status": "complete",
         "method": {
-            "campaign_year": args.campaign_year,
+            "campaign_year": campaign_year,
             "mass_windows": {
                 "on": "81 < mll < 101 GeV",
                 "off": "50 < mll < 81 GeV or mll > 101 GeV",
@@ -532,32 +541,161 @@ def main(argv: list[str] | None = None) -> int:
             "ut_dependent_rz": False,
             "post_mll_scaling": "zll *= channel RZ(Nb); other *= channel RT(Nb)",
         },
-        "inputs": {
-            "ee": feature_provenance(args.ee, ee),
-            "mumu": feature_provenance(args.mumu, mumu),
-            **(
-                {
-                    "low_exact": {
-                        "file": args.low_exact.name,
-                        "sha256": sha256_file(args.low_exact),
-                        "summary": low.get("summary") or {},
-                    }
-                }
-                if args.selection == "lowdm" and args.low_exact is not None
-                else {}
-            ),
-        },
+        "inputs": inputs,
         rz_key: result[rz_key],
         "plots": plots,
     }
     write_json(output_dir / "summary.json", payload)
-    write_html(output_dir, result, args.selection, args.campaign_year)
+    write_html(output_dir, result, selection, campaign_year)
+    return payload
+
+
+def write_combined_index(
+    output_dir: Path, campaign_year: str, payloads: dict[str, Any]
+) -> None:
+    links = []
+    for selection, label in (
+        ("highdm", "High-&Delta;m"),
+        ("lowdm", "Low-&Delta;m"),
+    ):
+        if selection in payloads:
+            links.append(
+                f'<li><a href="{selection}/">{label} R<sub>Z</sub>/R<sub>T</sub></a></li>'
+            )
+    document = f"""<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{campaign_year} unified DY normalization</title>
+<style>body{{font-family:Arial,sans-serif;max-width:960px;margin:0 auto;padding:28px}}
+li{{font-size:1.25rem;margin:14px 0}}</style></head><body>
+<h1>{campaign_year} unified DY normalization measurement</h1>
+<p>High- and Low-&Delta;m are produced from one audited measurement artifact.
+The sparse NanoAOD stage is only an exact refinement of topology-ambiguous
+Low-&Delta;m events, not an independent normalization workflow.</p>
+<ul>{''.join(links)}</ul>
+</body></html>"""
+    (output_dir / "index.html").write_text(document)
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--measurement", type=Path)
+    parser.add_argument("--ee", type=Path)
+    parser.add_argument("--mumu", type=Path)
+    parser.add_argument(
+        "--selection",
+        choices=("highdm", "lowdm", "both"),
+        default="both",
+    )
+    parser.add_argument("--low-exact", type=Path)
+    parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument(
+        "--campaign-year", choices=("2024", "2025"), default="2024"
+    )
+    args = parser.parse_args(argv)
+    CMS_LABEL["rlabel"] = f"{args.campaign_year} (13.6 TeV)"
+
+    if args.measurement is not None:
+        result = read_json(args.measurement)
+        validate_measurement(result, args.measurement)
+        inputs = {
+            "measurement": measurement_provenance(
+                args.measurement, result
+            )
+        }
+        selections = (
+            ("highdm", "lowdm")
+            if args.selection == "both"
+            else (args.selection,)
+        )
+    else:
+        if args.ee is None or args.mumu is None:
+            raise SystemExit(
+                "use --measurement for the unified workflow, or provide both --ee and --mumu for a legacy single-selection report"
+            )
+        if args.selection == "both":
+            raise SystemExit(
+                "--selection both requires the unified --measurement artifact"
+            )
+        ee = read_json(args.ee)
+        mumu = read_json(args.mumu)
+        validate_channel(ee, "DY2E", args.ee)
+        validate_channel(mumu, "DY2M", args.mumu)
+        inputs = {
+            "ee": feature_provenance(args.ee, ee),
+            "mumu": feature_provenance(args.mumu, mumu),
+        }
+        if args.selection == "highdm":
+            result = combine_highdm(ee, mumu)
+        else:
+            if args.low_exact is None:
+                raise SystemExit("--low-exact is required for lowdm")
+            low = read_json(args.low_exact)
+            if low.get("status") != "complete":
+                raise SystemExit(
+                    f"{args.low_exact}: exact Low-dM input is incomplete"
+                )
+            result = {
+                "rz_low": finalize_rz(low["rz_low_raw"]),
+                "mll_low": low["mll_low"],
+            }
+            inputs["low_exact"] = {
+                "file": args.low_exact.name,
+                "sha256": sha256_file(args.low_exact),
+                "summary": low.get("summary") or {},
+            }
+        selections = (args.selection,)
+
+    payloads: dict[str, Any] = {}
+    for selection in selections:
+        target = (
+            args.output_dir / selection
+            if len(selections) > 1
+            else args.output_dir
+        )
+        payloads[selection] = build_selection_report(
+            result,
+            selection,
+            target,
+            args.campaign_year,
+            inputs,
+        )
+    if len(selections) > 1:
+        args.output_dir.mkdir(parents=True, exist_ok=True)
+        combined = {
+            selection: payloads[selection][
+                "rz_high" if selection == "highdm" else "rz_low"
+            ]["combined"]
+            for selection in selections
+        }
+        write_json(
+            args.output_dir / "summary.json",
+            {
+                "schema_version": f"dy_estimation_combined_report_{args.campaign_year}_v1",
+                "status": "complete",
+                "inputs": inputs,
+                "reports": {
+                    selection: f"{selection}/summary.json"
+                    for selection in selections
+                },
+                "combined": combined,
+            },
+        )
+        write_combined_index(
+            args.output_dir, args.campaign_year, payloads
+        )
+    else:
+        selection = selections[0]
+        combined = payloads[selection][
+            "rz_high" if selection == "highdm" else "rz_low"
+        ]["combined"]
     print(
         json.dumps(
             {
                 "status": "complete",
-                "output_dir": str(output_dir),
-                "combined": result[rz_key]["combined"],
+                "output_dir": str(args.output_dir),
+                "selections": list(selections),
+                "combined": combined,
             }
         )
     )

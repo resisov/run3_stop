@@ -16,11 +16,21 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.write_text(json.dumps(payload, sort_keys=True, separators=(",", ":")))
 
 
+def lexical_absolute(path: Path) -> Path:
+    """Make paths absolute without rewriting the /eos/user namespace."""
+    return path if path.is_absolute() else Path.cwd() / path
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repo", type=Path, required=True)
-    parser.add_argument("--ee", type=Path, required=True)
-    parser.add_argument("--mumu", type=Path, required=True)
+    parser.add_argument(
+        "--combined",
+        type=Path,
+        help="Single feature-stage artifact containing both DY2E and DY2M.",
+    )
+    parser.add_argument("--ee", type=Path)
+    parser.add_argument("--mumu", type=Path)
     parser.add_argument("--shard-bundle", type=Path, required=True)
     parser.add_argument("--source-list-dir", type=Path, nargs="+", required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
@@ -35,16 +45,32 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--memory-mb", type=int, default=6000)
     args = parser.parse_args(argv)
 
-    features = {"DY2E": read_json(args.ee), "DY2M": read_json(args.mumu)}
+    if args.combined:
+        if args.ee or args.mumu:
+            parser.error("--combined cannot be used with --ee/--mumu")
+        feature_inputs = [("combined", read_json(args.combined))]
+    else:
+        if not args.ee or not args.mumu:
+            parser.error("provide --combined or both --ee and --mumu")
+        feature_inputs = [
+            ("DY2E", read_json(args.ee)),
+            ("DY2M", read_json(args.mumu)),
+        ]
     candidates: dict[str, list[dict[str, Any]]] = {}
-    for channel, feature in features.items():
+    for expected_channel, feature in feature_inputs:
         if feature.get("status") != "feature_stage_complete":
-            raise SystemExit(f"{channel}: incomplete feature input")
+            raise SystemExit(f"{expected_channel}: incomplete feature input")
         for file_id, records in (feature.get("sparse_low_candidates") or {}).items():
             target = candidates.setdefault(str(file_id), [])
             for record in records:
                 copied = dict(record)
-                if copied.get("channel") != channel:
+                record_channel = copied.get("channel")
+                if record_channel not in ("DY2E", "DY2M"):
+                    raise RuntimeError(f"{file_id}: channel mismatch")
+                if (
+                    expected_channel != "combined"
+                    and record_channel != expected_channel
+                ):
                     raise RuntimeError(f"{file_id}: channel mismatch")
                 target.append(copied)
 
@@ -112,7 +138,8 @@ def main(argv: list[str] | None = None) -> int:
         )
 
     (output_dir / "queue.tsv").write_text("\n".join(queue_lines) + "\n")
-    run_directory = args.repo.resolve() / "autonomous_allhad"
+    repo = lexical_absolute(args.repo)
+    run_directory = repo / "autonomous_allhad"
     submit_path = output_dir / "submit.sub"
     submit_path.write_text(
         "\n".join(
@@ -122,8 +149,8 @@ def main(argv: list[str] | None = None) -> int:
                 (
                     "arguments = -m autonomous_allhad.dy_estimation "
                     "run-lowdm-partition "
-                    f"--repo {args.repo.resolve()} "
-                    "--manifest $(manifest) --output $(output) --jobs 1"
+                    f"--repo {repo} "
+                    "--manifest $(manifest_path) --output $(output_path) --jobs 1"
                 ),
                 f"initialdir = {run_directory}",
                 f'environment = "PYTHONPATH={run_directory};PYTHONUNBUFFERED=1"',
@@ -136,7 +163,10 @@ def main(argv: list[str] | None = None) -> int:
                 f"error = {logs_dir}/$(stem).err",
                 f"log = {logs_dir}/$(stem).log",
                 "on_exit_remove = (ExitBySignal == False) && (ExitCode == 0)",
-                f"queue manifest, output, stem from {output_dir / 'queue.tsv'}",
+                (
+                    "queue manifest_path, output_path, stem from "
+                    f"{output_dir / 'queue.tsv'}"
+                ),
                 "",
             ]
         )
@@ -144,7 +174,11 @@ def main(argv: list[str] | None = None) -> int:
     expected = {
         "schema_version": "dy_estimation_lowdm_expected_2024_v1",
         "status": "prepared",
-        "inputs": {"ee": str(args.ee), "mumu": str(args.mumu)},
+        "inputs": (
+            {"combined": str(args.combined)}
+            if args.combined
+            else {"ee": str(args.ee), "mumu": str(args.mumu)}
+        ),
         "candidate_files": len(tasks),
         "candidate_events": sum(len(task["candidates"]) for task in tasks),
         "partitions": len(manifests),

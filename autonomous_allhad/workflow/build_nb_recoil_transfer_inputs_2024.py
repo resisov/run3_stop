@@ -82,10 +82,11 @@ def fill_leaf(
         & np.isfinite(values)
         & bh.finite_hist_weight_mask(weights)
         & (values >= edges[0])
-        & (values <= edges[-1])
     )
     if not np.any(valid):
         return
+    # The final analysis bin is open-ended.  ``edges[-1]`` is only the
+    # plotting coordinate used to draw that bin; it is never an event cut.
     index = np.searchsorted(edges, values[valid], side="right") - 1
     index = np.minimum(index, len(edges) - 2)
     selected_weights = weights[valid]
@@ -360,15 +361,26 @@ def process_root(
                         )
                     continue
 
-                high_sr_index = (
-                    bh.selected_an17_recoil60_indices(
-                        sub,
+                if "SR" in regions:
+                    # The category helper historically interpreted the final
+                    # display edge as a hard cut.  Clip only the temporary
+                    # category-coordinate copy so U_T > 1500 GeV remains in
+                    # the open-ended final analysis bin.  The stored physical
+                    # value below is left unchanged and fill_leaf folds it.
+                    high_sr_chunk = dict(sub)
+                    high_sr_chunk["met"] = np.minimum(
+                        bh.finite_array(sub["met"], inputs["n"], 0.0),
+                        np.nextafter(HIGH_EDGES[-1], HIGH_EDGES[0]),
+                    )
+                    high_sr_index = bh.selected_an17_recoil60_indices(
+                        high_sr_chunk,
                         inputs["n"],
                         bh.as_bool(sub["feature_SR"], inputs["n"]),
                     )
-                    if "SR" in regions
-                    else np.full(inputs["n"], -1, dtype=np.int64)
-                )
+                else:
+                    high_sr_index = np.full(
+                        inputs["n"], -1, dtype=np.int64
+                    )
                 low_indices = {
                     region: bh.lowdm_nbge1_indices(
                         np.where(

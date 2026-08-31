@@ -17,18 +17,18 @@ from .lowdm_recovery import (
 )
 
 
-def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--repo", type=Path, required=True)
-    parser.add_argument("--manifest", type=Path, required=True)
-    parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--jobs", type=int, default=2)
-    parser.add_argument("--max-tasks", type=int)
-    args = parser.parse_args(argv)
+def run_partition(
+    repo: Path,
+    manifest_path: Path,
+    output_path: Path,
+    jobs: int,
+    max_tasks: int | None,
+) -> dict[str, Any]:
+    """Run or reuse one partition and return a machine-readable result."""
 
-    manifest = read_json(args.manifest)
-    if args.output.is_file():
-        existing = read_json(args.output)
+    manifest = read_json(manifest_path)
+    if output_path.is_file():
+        existing = read_json(output_path)
         existing_summary = existing.get("summary") or {}
         manifest_summary = manifest.get("summary") or {}
         if (
@@ -41,15 +41,14 @@ def main(argv: list[str] | None = None) -> int:
             and int(existing_summary.get("matched_events", -1))
             == int(manifest_summary.get("candidate_events", -2))
         ):
-            print(json.dumps({"status": "complete", "reused": str(args.output)}))
-            return 0
+            return {"status": "complete", "reused": str(output_path)}
     tasks = []
     for record in manifest.get("tasks") or []:
         task = dict(record)
-        task["repo"] = str(args.repo)
+        task["repo"] = str(repo)
         tasks.append(task)
-    if args.max_tasks is not None:
-        tasks = tasks[: max(0, args.max_tasks)]
+    if max_tasks is not None:
+        tasks = tasks[: max(0, max_tasks)]
     merged: dict[str, Any] = {
         "schema_version": "dy_estimation_lowdm_partition_2024_v1",
         "status": "running",
@@ -75,7 +74,7 @@ def main(argv: list[str] | None = None) -> int:
         merge_tree(merged["raw"], result["raw"])
         merge_tree(merged["mll"], result["mll"])
 
-    if args.jobs <= 1:
+    if jobs <= 1:
         # XRootD's native client is not reliably fork-safe on every worker
         # node.  The single-process path is the production default; Condor
         # provides file-level concurrency across partitions.
@@ -91,7 +90,7 @@ def main(argv: list[str] | None = None) -> int:
                     }
                 )
     else:
-        with concurrent.futures.ProcessPoolExecutor(max_workers=args.jobs) as executor:
+        with concurrent.futures.ProcessPoolExecutor(max_workers=jobs) as executor:
             futures = {
                 executor.submit(process_source, task): task
                 for task in tasks
@@ -115,12 +114,110 @@ def main(argv: list[str] | None = None) -> int:
         and merged["summary"]["matched_events"] == merged["summary"]["candidate_events"]
     )
     merged["status"] = "complete" if complete else "incomplete"
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    temporary = args.output.with_suffix(args.output.suffix + f".tmp.{os.getpid()}")
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = output_path.with_suffix(output_path.suffix + f".tmp.{os.getpid()}")
     temporary.write_text(json.dumps(merged, sort_keys=True, separators=(",", ":")))
-    os.replace(temporary, args.output)
-    print(json.dumps({"status": merged["status"], "output": str(args.output), "summary": merged["summary"]}))
-    return 0 if complete else 2
+    os.replace(temporary, output_path)
+    return {
+        "status": merged["status"],
+        "output": str(output_path),
+        "summary": merged["summary"],
+    }
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--repo", type=Path, required=True)
+    parser.add_argument("--manifest", type=Path)
+    parser.add_argument("--output", type=Path)
+    parser.add_argument(
+        "--expected",
+        type=Path,
+        help="Run every partition listed by one expected.json locally.",
+    )
+    parser.add_argument("--jobs", type=int, default=2)
+    parser.add_argument(
+        "--partition-workers",
+        type=int,
+        default=12,
+        help="Concurrent single-process partitions used with --expected.",
+    )
+    parser.add_argument("--max-tasks", type=int)
+    args = parser.parse_args(argv)
+
+    if args.expected:
+        if args.manifest or args.output or args.max_tasks is not None:
+            parser.error(
+                "--expected cannot be combined with --manifest, --output, or --max-tasks"
+            )
+        expected = read_json(args.expected)
+        records = list(expected.get("manifests") or [])
+        results: list[dict[str, Any]] = []
+        with concurrent.futures.ProcessPoolExecutor(
+            max_workers=max(1, args.partition_workers)
+        ) as executor:
+            futures = {
+                executor.submit(
+                    run_partition,
+                    args.repo,
+                    Path(record["manifest"]),
+                    Path(record["output"]),
+                    1,
+                    None,
+                ): str(record["stem"])
+                for record in records
+            }
+            for future in concurrent.futures.as_completed(futures):
+                stem = futures[future]
+                try:
+                    result = future.result()
+                except Exception as exc:
+                    result = {
+                        "status": "incomplete",
+                        "stem": stem,
+                        "error": f"{type(exc).__name__}: {exc}",
+                    }
+                result.setdefault("stem", stem)
+                results.append(result)
+                if len(results) % 25 == 0:
+                    print(
+                        json.dumps(
+                            {
+                                "completed_partitions": len(results),
+                                "expected_partitions": len(records),
+                                "failures": sum(
+                                    item.get("status") != "complete"
+                                    for item in results
+                                ),
+                            }
+                        ),
+                        flush=True,
+                    )
+        failures = [item for item in results if item.get("status") != "complete"]
+        summary = {
+            "schema_version": "dy_estimation_local_refinement_run_v1",
+            "status": "complete" if not failures else "incomplete",
+            "expected": str(args.expected),
+            "expected_partitions": len(records),
+            "completed_partitions": len(results) - len(failures),
+            "failures": failures,
+        }
+        summary_path = args.expected.parent / "local_run_summary.json"
+        summary_path.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
+        print(json.dumps({**summary, "output": str(summary_path)}))
+        return 0 if not failures else 2
+
+    if not args.manifest or not args.output:
+        parser.error("provide --expected or both --manifest and --output")
+    result = run_partition(
+        args.repo,
+        args.manifest,
+        args.output,
+        args.jobs,
+        args.max_tasks,
+    )
+    print(json.dumps(result))
+    return 0 if result.get("status") == "complete" else 2
 
 
 if __name__ == "__main__":

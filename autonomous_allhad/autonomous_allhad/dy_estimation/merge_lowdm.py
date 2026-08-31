@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Merge exact Low-dM sparse partitions with the lossless feature baseline."""
+"""Build one DY measurement from the feature baseline and exact refinements.
+
+High- and Low-dM are two views of the same on/off-Z measurement.  The feature
+stage already fills both views.  Only the topology-ambiguous Low-dM subset
+needs a sparse NanoAOD refinement, so this merger adds that refinement and
+writes a single artifact containing both regimes.
+"""
 
 from __future__ import annotations
 
@@ -20,17 +26,31 @@ def read_json(path: Path) -> dict[str, Any]:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--ee", type=Path, required=True)
-    parser.add_argument("--mumu", type=Path, required=True)
+    parser.add_argument(
+        "--combined",
+        type=Path,
+        help="Single feature-stage artifact containing both DY2E and DY2M.",
+    )
+    parser.add_argument("--ee", type=Path)
+    parser.add_argument("--mumu", type=Path)
     parser.add_argument("--expected", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args(argv)
 
     expected = read_json(args.expected)
-    bases = [read_json(args.ee), read_json(args.mumu)]
+    if args.combined:
+        if args.ee or args.mumu:
+            parser.error("--combined cannot be used with --ee/--mumu")
+        bases = [read_json(args.combined)]
+    else:
+        if not args.ee or not args.mumu:
+            parser.error("provide --combined or both --ee and --mumu")
+        bases = [read_json(args.ee), read_json(args.mumu)]
     merged: dict[str, Any] = {
-        "schema_version": "dy_estimation_lowdm_merged_2024_v1",
+        "schema_version": "dy_estimation_measurement_v2",
         "status": "running",
+        "rz_high_raw": {},
+        "mll_high": {},
         "rz_low_raw": {},
         "mll_low": {},
         "summary": {
@@ -44,15 +64,22 @@ def main(argv: list[str] | None = None) -> int:
             "failures": [],
         },
         "provenance": {
-            "ee": str(args.ee),
-            "mumu": str(args.mumu),
+            "combined": str(args.combined) if args.combined else None,
+            "ee": str(args.ee) if args.ee else None,
+            "mumu": str(args.mumu) if args.mumu else None,
             "expected": str(args.expected),
-            "method": "exact canonical sparse NanoAOD recovery added once to the exact feature baseline",
+            "method": (
+                "single High/Low-dM measurement: common feature baseline plus "
+                "one exact canonical sparse NanoAOD refinement for only the "
+                "topology-ambiguous Low-dM subset"
+            ),
         },
     }
     for base in bases:
         if base.get("status") != "feature_stage_complete":
             raise SystemExit("feature baseline is incomplete")
+        merge_tree(merged["rz_high_raw"], base.get("rz_high_raw") or {})
+        merge_tree(merged["mll_high"], base.get("mll_high") or {})
         merge_tree(merged["rz_low_raw"], base.get("rz_low_feature_raw") or {})
         merge_tree(merged["mll_low"], base.get("mll_low_feature") or {})
 
@@ -85,11 +112,23 @@ def main(argv: list[str] | None = None) -> int:
         and summary["candidate_events"] == expected["candidate_events"]
         and summary["matched_events"] == expected["candidate_events"]
     )
+    merged["rz_high"] = finalize_rz(merged["rz_high_raw"])
     merged["rz_low"] = finalize_rz(merged["rz_low_raw"])
     merged["status"] = "complete" if complete else "incomplete"
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(merged, sort_keys=True, separators=(",", ":")))
-    print(json.dumps({"status": merged["status"], "summary": summary, "combined": merged["rz_low"]["combined"]}))
+    print(
+        json.dumps(
+            {
+                "status": merged["status"],
+                "summary": summary,
+                "combined": {
+                    "highdm": merged["rz_high"]["combined"],
+                    "lowdm": merged["rz_low"]["combined"],
+                },
+            }
+        )
+    )
     return 0 if complete else 2
 
 

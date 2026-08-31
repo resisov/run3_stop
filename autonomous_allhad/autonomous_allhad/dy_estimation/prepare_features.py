@@ -52,6 +52,16 @@ def resolve_root(raw: str, run_directory: Path) -> Path:
     return path if path.is_absolute() else run_directory / path
 
 
+def lexical_absolute(path: Path) -> Path:
+    """Make a path absolute without resolving EOS namespace symlinks.
+
+    ``Path.resolve()`` rewrites ``/eos/user/t/...`` to ``/eos/home-t/...`` on
+    lxplus.  The latter alias is not mounted on all batch workers.
+    """
+
+    return path if path.is_absolute() else Path.cwd() / path
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repo", type=Path, required=True)
@@ -63,15 +73,30 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--cpus", type=int, default=4)
     parser.add_argument("--memory-mb", type=int, default=8000)
     parser.add_argument(
+        "--prevalidated-inputs",
+        action="store_true",
+        help=(
+            "Partition a previously validated data/background ROOT list "
+            "without repeating per-ROOT sidecar discovery. Dataset-level "
+            "stream and DY-family filtering still runs in feature_stage."
+        ),
+    )
+    parser.add_argument(
+        "--input-validation",
+        type=Path,
+        help="Complete histogram_validation.json that certifies the input campaign.",
+    )
+    parser.add_argument(
         "--python",
         type=Path,
         default=Path("/eos/user/t/taiwoo/miniconda3/envs/py38/bin/python"),
     )
     args = parser.parse_args(argv)
 
-    repo = args.repo.resolve()
+    repo = lexical_absolute(args.repo)
     run_directory = repo / "autonomous_allhad"
-    output_dir = args.output_dir.resolve()
+    output_dir = lexical_absolute(args.output_dir)
+    normalization = lexical_absolute(args.normalization)
     partitions_dir = output_dir / "partitions"
     outputs_dir = output_dir / "outputs"
     logs_dir = output_dir / "logs"
@@ -92,40 +117,68 @@ def main(argv: list[str] | None = None) -> int:
     }
     dataset_counts: dict[str, int] = {}
 
-    for raw in raw_roots:
-        root = resolve_root(raw, run_directory)
-        try:
-            metadata = read_root_metadata(root)
-        except FileNotFoundError:
-            exclusions["incomplete_sidecar"] += 1
-            continue
-        if not str(metadata.get("status") or "").startswith("complete"):
-            exclusions["incomplete_sidecar"] += 1
-            continue
-        records = list((metadata.get("datasets") or {}).values())
-        if any(bool(record.get("is_signal")) for record in records):
-            exclusions["signal"] += 1
-            continue
-        is_data = any(bool(record.get("is_data")) for record in records)
-        if is_data:
-            processes = {str(record.get("process") or "") for record in records}
-            if processes != {stream}:
-                exclusions["wrong_data_stream"] += 1
+    prevalidation: dict[str, Any] | None = None
+    if args.prevalidated_inputs:
+        if args.input_validation is None:
+            parser.error("--prevalidated-inputs requires --input-validation")
+        prevalidation = json.loads(args.input_validation.read_text())
+        if prevalidation.get("status") != "complete":
+            raise RuntimeError(
+                f"input validation is not complete: {prevalidation.get('status')}"
+            )
+        if len(raw_roots) != len(set(raw_roots)):
+            raise RuntimeError("duplicate ROOT paths in prevalidated input list")
+        for raw in raw_roots:
+            root = resolve_root(raw, run_directory)
+            stem = root.name
+            if stem.startswith("data_shard_"):
+                category = "data"
+            elif stem.startswith("mc_shard_"):
+                # A feature ROOT can contain several background datasets.
+                # feature_stage performs the authoritative dataset-level
+                # Z-like/other split and channel routing.
+                category = "mixed"
+            else:
+                raise RuntimeError(
+                    "prevalidated RZ input must contain only data_shard_ or "
+                    f"mc_shard_ ROOTs, found {root}"
+                )
+            selected[category].append(str(root))
+    else:
+        for raw in raw_roots:
+            root = resolve_root(raw, run_directory)
+            try:
+                metadata = read_root_metadata(root)
+            except FileNotFoundError:
+                exclusions["incomplete_sidecar"] += 1
                 continue
-            category = "data"
-        else:
-            components = {
-                "zll" if zll_sample(
-                    str(record.get("dataset") or ""),
-                    str(record.get("process") or ""),
-                ) else "other"
-                for record in records
-            }
-            category = next(iter(components)) if len(components) == 1 else "mixed"
-        selected[category].append(str(root))
-        for record in records:
-            dataset = str(record.get("dataset") or "unknown")
-            dataset_counts[dataset] = dataset_counts.get(dataset, 0) + 1
+            if not str(metadata.get("status") or "").startswith("complete"):
+                exclusions["incomplete_sidecar"] += 1
+                continue
+            records = list((metadata.get("datasets") or {}).values())
+            if any(bool(record.get("is_signal")) for record in records):
+                exclusions["signal"] += 1
+                continue
+            is_data = any(bool(record.get("is_data")) for record in records)
+            if is_data:
+                processes = {str(record.get("process") or "") for record in records}
+                if processes != {stream}:
+                    exclusions["wrong_data_stream"] += 1
+                    continue
+                category = "data"
+            else:
+                components = {
+                    "zll" if zll_sample(
+                        str(record.get("dataset") or ""),
+                        str(record.get("process") or ""),
+                    ) else "other"
+                    for record in records
+                }
+                category = next(iter(components)) if len(components) == 1 else "mixed"
+            selected[category].append(str(root))
+            for record in records:
+                dataset = str(record.get("dataset") or "unknown")
+                dataset_counts[dataset] = dataset_counts.get(dataset, 0) + 1
 
     all_selected = [root for category in selected.values() for root in category]
     if len(all_selected) != len(set(all_selected)):
@@ -150,25 +203,35 @@ def main(argv: list[str] | None = None) -> int:
     queue_path.write_text(
         "\n".join("\t".join(row) for row in queue_rows) + "\n"
     )
+    wrapper_path = output_dir / "run_feature.sh"
+    wrapper_path.write_text(
+        "\n".join(
+            [
+                "#!/usr/bin/env bash",
+                "set -euo pipefail",
+                f"export PYTHONPATH={run_directory}",
+                "export PYTHONUNBUFFERED=1",
+                f"cd {run_directory}",
+                f"exec {args.python} -m autonomous_allhad.dy_estimation build-features \"$@\"",
+                "",
+            ]
+        )
+    )
+    wrapper_path.chmod(0o755)
     submit_path = output_dir / "submit.sub"
     submit_path.write_text(
         "\n".join(
             [
                 "universe = vanilla",
-                f"executable = {args.python}",
+                f"executable = {wrapper_path}",
                 (
-                    "arguments = -m autonomous_allhad.dy_estimation build-features "
-                    f"--repo {repo} --input-list $(input_list) "
-                    f"--normalization {args.normalization.resolve()} "
+                    f"arguments = --repo {repo} --input-list $(input_list) "
+                    f"--normalization {normalization} "
                     "--output $(output_json) "
                     f"--jobs {args.cpus} --step-size 100000 "
                     f"--channels {args.channel}"
                 ),
                 f"initialdir = {run_directory}",
-                (
-                    "environment = \"PYTHONPATH="
-                    f"{run_directory};PYTHONUNBUFFERED=1\""
-                ),
                 "should_transfer_files = NO",
                 f"request_cpus = {args.cpus}",
                 f"request_memory = {args.memory_mb}",
@@ -197,7 +260,7 @@ def main(argv: list[str] | None = None) -> int:
                 "RZ and RT in Nb=1 and Nb>=2, with Poisson data and "
                 "Gaussian MC-stat constraints"
             ),
-            "normalization": str(args.normalization.resolve()),
+            "normalization": str(normalization),
             "entrypoint": "python -m autonomous_allhad.dy_estimation build-features",
             "code_sha256": {
                 path.name: sha256_file(path)
@@ -205,9 +268,21 @@ def main(argv: list[str] | None = None) -> int:
             },
         },
         "input": {
-            "source": [str(path.resolve()) for path in args.input_roots],
+            "source": [str(lexical_absolute(path)) for path in args.input_roots],
             "roots": len(raw_roots),
             "sha256": sha256_lines(raw_roots),
+            "prevalidated": bool(args.prevalidated_inputs),
+            "validation": (
+                {
+                    "path": str(lexical_absolute(args.input_validation)),
+                    "sha256": sha256_file(args.input_validation),
+                    "status": prevalidation.get("status"),
+                    "validated_roots": prevalidation.get("unique_input_root_count"),
+                    "strict_warning_counts": prevalidation.get("strict_warning_counts"),
+                }
+                if prevalidation is not None
+                else None
+            ),
         },
         "selected": {
             "roots": len(all_selected),
@@ -221,6 +296,7 @@ def main(argv: list[str] | None = None) -> int:
             "total": len(queue_rows),
             "queue": str(queue_path),
             "submit": str(submit_path),
+            "wrapper": str(wrapper_path),
         },
         "dataset_sidecar_counts": dict(sorted(dataset_counts.items())),
     }

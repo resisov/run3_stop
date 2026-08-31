@@ -1,8 +1,10 @@
-# 2024 DY normalization
+# Unified DY normalization measurement
 
 This directory is the single implementation of the adopted DY normalization measurement. It replaces the scattered an_zinv and RZ_UT scripts that previously lived under workflow/.
 
 The adopted result is \(R_Z(N_b)\), not \(R_Z(U_T)\). The categories are \(N_b=1\) and \(N_b\geq2\), measured separately in dielectron and dimuon data for High- and Low-\(\Delta m\). The fit also returns the non-DY sideband normalization \(R_T(N_b)\). Channel-specific \(R_Z\) values are combined with inverse-variance weights.
+
+High- and Low-\(\Delta m\) are not independent workflows. One feature scan fills both regimes. Events whose Low-\(\Delta m\) AK8 topology is ambiguous after lepton removal receive one conditional sparse NanoAOD refinement. The merger then writes one audited measurement JSON containing `rz_high`, `mll_high`, `rz_low`, and `mll_low`; one report command renders both regimes with the same plotting implementation.
 
 ## Physics definition
 
@@ -32,11 +34,11 @@ Post-scaling \(m_{\ell\ell}\) plots visualize fitted inputs. They are not closur
 | prepare_features.py | Split feature inputs and write the HTCondor submit file |
 | feature_stage.py | Select events, evaluate weights, and write feature inputs |
 | merge_features.py | Losslessly merge disjoint feature partitions |
-| prepare_lowdm.py | Resolve NanoAOD sources and prepare exact-recovery jobs |
-| run_lowdm_partition.py | Run one resumable Low-dM partition |
+| prepare_lowdm.py | Resolve only topology-ambiguous NanoAOD sources and prepare exact-refinement jobs |
+| run_lowdm_partition.py | Run one resumable exact-refinement partition |
 | lowdm_recovery.py | Canonical sparse NanoAOD topology reconstruction |
 | sparse.py | Stable file IDs and bounded sparse-read windows |
-| merge_lowdm.py | Enforce complete accounting and build exact Low-dM input |
+| merge_lowdm.py | Enforce complete accounting and build one High/Low-dM measurement artifact |
 | model.py | Yield containers and the on/off-Z profile-likelihood fit |
 | report.py | Produce \(R_Z\), \(R_T\), and pre/post \(m_{\ell\ell}\) plots |
 | validate.py | Check accounting and reproduce the frozen 2024 factors |
@@ -112,7 +114,7 @@ $DY_PYTHON -m autonomous_allhad.dy_estimation merge-features \
   --output "$DY_WORK/features_mumu.json"
 ~~~
 
-### 4. Prepare and submit exact Low-dM recovery
+### 4. Prepare and submit the conditional exact refinement
 
 DY_SHARD_BUNDLE is the current source-record tarball. DY_SOURCE_LIST_DIRS contains feature ROOT source lists used to resolve stable file IDs.
 
@@ -120,7 +122,7 @@ DY_SHARD_BUNDLE is the current source-record tarball. DY_SOURCE_LIST_DIRS contai
 DY_SHARD_BUNDLE=<shard-records.tar.gz>
 DY_SOURCE_LIST_DIRS="<source-list-dir-1> <source-list-dir-2>"
 
-$DY_PYTHON -m autonomous_allhad.dy_estimation prepare-lowdm \
+$DY_PYTHON -m autonomous_allhad.dy_estimation prepare-exact-refinement \
   --repo "$DY_REPO" \
   --ee "$DY_WORK/features_ee.json" \
   --mumu "$DY_WORK/features_mumu.json" \
@@ -132,19 +134,19 @@ $DY_PYTHON -m autonomous_allhad.dy_estimation prepare-lowdm \
 condor_submit -name bigbird24 "$DY_WORK/lowdm_exact/submit.sub"
 ~~~
 
-A partition is idempotent: a complete output with the same stem and closed event accounting is reused.
+A partition is idempotent: a complete output with the same stem and closed event accounting is reused. The queue columns are named `manifest_path` and `output_path`; do not use the HTCondor `output` keyword as an item-data variable.
 
-### 5. Merge Low-dM and enforce accounting
+### 5. Merge one High/Low-dM measurement and enforce accounting
 
 ~~~bash
-$DY_PYTHON -m autonomous_allhad.dy_estimation merge-lowdm \
+$DY_PYTHON -m autonomous_allhad.dy_estimation merge-measurement \
   --ee "$DY_WORK/features_ee.json" \
   --mumu "$DY_WORK/features_mumu.json" \
   --expected "$DY_WORK/lowdm_exact/expected.json" \
-  --output "$DY_WORK/lowdm_exact.json"
+  --output "$DY_WORK/dy_measurement.json"
 ~~~
 
-This fails unless all expected partitions exist, all candidate files are represented, every candidate event is matched, and the failure list is empty.
+This fails unless all expected partitions exist, all candidate files are represented, every candidate event is matched, and the failure list is empty. The output contains both the direct High-\(\Delta m\) measurement and the exact-refined Low-\(\Delta m\) measurement.
 
 ### 6. Run the frozen-result regression
 
@@ -152,27 +154,19 @@ This fails unless all expected partitions exist, all candidate files are represe
 $DY_PYTHON -m autonomous_allhad.dy_estimation validate \
   --ee "$DY_WORK/features_ee.json" \
   --mumu "$DY_WORK/features_mumu.json" \
-  --low-exact "$DY_WORK/lowdm_exact.json" \
+  --low-exact "$DY_WORK/dy_measurement.json" \
   --output "$DY_WORK/validation.json"
 ~~~
 
 Use --verify-hashes only with the frozen July 2026 intermediate JSON files. A new production changes hashes; accounting must still close and physics differences must be reviewed against reference_2024.json.
 
-### 7. Build High- and Low-dM reports
+### 7. Build both reports from the single measurement
 
 ~~~bash
 $DY_PYTHON -m autonomous_allhad.dy_estimation report \
-  --ee "$DY_WORK/features_ee.json" \
-  --mumu "$DY_WORK/features_mumu.json" \
-  --selection highdm \
-  --output-dir "$DY_WORK/report/highdm"
-
-$DY_PYTHON -m autonomous_allhad.dy_estimation report \
-  --ee "$DY_WORK/features_ee.json" \
-  --mumu "$DY_WORK/features_mumu.json" \
-  --selection lowdm \
-  --low-exact "$DY_WORK/lowdm_exact.json" \
-  --output-dir "$DY_WORK/report/lowdm"
+  --measurement "$DY_WORK/dy_measurement.json" \
+  --selection both \
+  --output-dir "$DY_WORK/report"
 ~~~
 
 ### 8. Publish only validated assets

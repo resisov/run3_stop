@@ -36,6 +36,17 @@ def test_ptll100_200_keeps_exactly_two_requested_production_bins() -> None:
     assert not allowed("DYto2L-2Jets_Bin-MLL-50-PTLL-600_TuneCP5", "DY", "ptll100_200")
 
 
+def test_dy2x_keeps_only_flavour_exclusive_four_jet_samples() -> None:
+    allowed = MODULE.dy_ptll_dataset_allowed
+    for flavour in ("E", "Mu", "Tau"):
+        assert allowed(f"DYto2{flavour}-4Jets_MLL-50_TuneCP5", "DY", "dy2x")
+    assert not allowed(
+        "DYto2L-2Jets_Bin-MLL-50-PTLL-200_TuneCP5", "DY", "dy2x"
+    )
+    assert not allowed("DYto2E-2Jets_MLL-50_TuneCP5", "DY", "dy2x")
+    assert allowed("TTtoLNu2Q_TuneCP5", "TT", "dy2x")
+
+
 def test_ptll_policy_does_not_remove_non_dy_samples() -> None:
     allowed = MODULE.dy_ptll_dataset_allowed
     assert allowed("TTto2L2Nu", "TT", "ptll200_only")

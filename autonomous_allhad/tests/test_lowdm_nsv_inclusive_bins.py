@@ -1,4 +1,5 @@
 import importlib.util
+import json
 from pathlib import Path
 
 import numpy as np
@@ -52,13 +53,13 @@ def test_lowdm_sr_rebuilder_uses_broad_preselection_and_quality_flags():
         "pass_lowdm_met_sqrt_ht": np.asarray([True, False, True]),
         "pass_lowdm_mtb": np.asarray([False, True, True]),
         "njet": np.asarray([2, 2, 2]),
-        "nb_medium_lowdm": np.asarray([0, 0, 0]),
+        "nb_medium_lowdm": np.asarray([1, 1, 1]),
         "lowdm_isr_pt": np.asarray([550.0, 550.0, 550.0]),
-        "lowdm_ptb": np.asarray([0.0, 0.0, 0.0]),
+        "lowdm_ptb": np.asarray([35.0, 35.0, 35.0]),
         "met": np.asarray([500.0, 500.0, 500.0]),
         "lowdm_mtb": np.asarray([0.0, 0.0, 0.0]),
     }
-    assert HISTS.lowdm_nsv_inclusive_sr_indices(chunk, 3).tolist() == [0, -1, -1]
+    assert HISTS.lowdm_nsv_inclusive_sr_indices(chunk, 3).tolist() == [8, -1, -1]
 
 
 def test_lowdm_plot_uses_requested_mass_points_and_vivid_colors():
@@ -66,6 +67,7 @@ def test_lowdm_plot_uses_requested_mass_points_and_vivid_colors():
     ones = [1.0] * 42
     leaf = lambda values: {"nominal": {"sumw": values, "sumw2": values, "entries": [1] * 42}}
     payload = {
+        "lowdm_region_policy": {"resolved_top_veto": {"applied": True}},
         "search_bin_schemes": {
             "cat7_SR_lowDeltaM": {
                 "bin_labels": HISTS.LOWDM_42BIN_LABELS,
@@ -88,4 +90,50 @@ def test_lowdm_plot_uses_requested_mass_points_and_vivid_colors():
         "mStop600_mLSP400",
         "mStop900_mLSP700",
     ]
-    assert [spec["color"] for spec in blocks[0]["signal_specs"]] == ["#0066FF", "#FF7A00"]
+    assert [spec["color"] for spec in blocks[0]["signal_specs"]] == ["#54FAFD", "#FFD500"]
+    assert all("N_{res}" not in block["label"] for block in blocks)
+
+
+def test_highdm_plot_applies_configured_merges_and_three_line_labels():
+    configuration = json.loads(
+        (PROJECT / "configs" / "search_bins_2024.json").read_text()
+    )
+    labels = HISTS.configured_exclusive_labels(
+        HISTS.selected_an17_recoil60_labels(),
+        {**configuration, "bin_merges_1based": []},
+    )
+    values = [1.0] * len(labels)
+    payload = {
+        "search_bin_schemes": {
+            "highdm_search_bins": {"bin_labels": labels},
+        },
+        "search_bin_histograms": {
+            "highdm_search_bins": {
+                "TT": {
+                    "nominal": {
+                        "sumw": values,
+                        "sumw2": values,
+                        "entries": values,
+                    }
+                }
+            }
+        },
+    }
+    summary = PLOTS.apply_configured_search_bin_merges(
+        payload, "highdm_search_bins", configuration
+    )
+    assert summary["source_bin_count"] == 91
+    assert summary["final_bin_count"] == 85
+    rebinned = payload["search_bin_histograms"]["highdm_search_bins"]["TT"]["nominal"]
+    assert rebinned["sumw"][16] == 2.0
+    assert rebinned["sumw"][-5:] == [2.0] * 5
+    blocks = PLOTS.selected_an17_recoil_blocks(payload, "highdm_search_bins")
+    assert len(blocks) == 15
+    assert sum(block["nbin"] for block in blocks) == 85
+    assert all(block["label"].count("\n") == 2 for block in blocks)
+    assert all(block["label_fontsize"] == 12.0 for block in blocks)
+    assert all(block["figure_width"] == 22.0 for block in blocks)
+    assert "N_{b}\\geq3" in blocks[-1]["label"]
+    assert "$N_{t}=1,2$" in blocks[-1]["label"]
+    assert "$N_{W}=1,0$" in blocks[-1]["label"]
+    assert blocks[-1]["category_key"] == "merged_high_nt"

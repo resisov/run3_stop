@@ -420,6 +420,74 @@ def build_q_sgamma(
             )
         output["highdm"][group] = {"Q": q, "bins": bins}
 
+    low_measurement = measurement["gcr_data"]["lowdm"]
+    if "yields_by_group" in low_measurement:
+        low_nbin = len(exact["lowdm"]["recoil_edges"]) - 1
+        for group in LOW_GROUPS:
+            by_sample = exact["lowdm"]["recoil"]["GCR"][group]
+            total_mc, total_mc2 = sum_samples(by_sample, low_nbin)
+            gamma, gamma2 = sum_samples(by_sample, low_nbin, {"GJ"})
+            other = total_mc - gamma
+            other2 = np.maximum(total_mc2 - gamma2, 0.0)
+            low_data = low_measurement["yields_by_group"][group]
+            data = np.asarray(
+                [
+                    data_leaf((low_data.get(str(index)) or {}))[0]
+                    for index in range(low_nbin)
+                ],
+                dtype=float,
+            )
+            data2 = np.asarray(
+                [
+                    data_leaf((low_data.get(str(index)) or {}))[1]
+                    for index in range(low_nbin)
+                ],
+                dtype=float,
+            )
+            q = factor(
+                float(np.sum(data - other)),
+                float(np.sum(data2 + other2)),
+                float(np.sum(gamma)),
+                float(np.sum(gamma2)),
+            )
+            bins = []
+            for index in range(low_nbin):
+                denominator = (
+                    float(q["value"]) * float(gamma[index])
+                    if q["status"] == "complete"
+                    else 0.0
+                )
+                denominator_variance = 0.0
+                if q["status"] == "complete":
+                    denominator_variance = (
+                        gamma[index] ** 2 * q["stat"] ** 2
+                        + q["value"] ** 2 * gamma2[index]
+                    )
+                bins.append(
+                    {
+                        "index": index,
+                        "data": float(data[index]),
+                        "data_variance": float(data2[index]),
+                        "gamma_mc": float(gamma[index]),
+                        "gamma_mc_variance": float(gamma2[index]),
+                        "other_mc": float(other[index]),
+                        "other_mc_variance": float(other2[index]),
+                        "Sgamma": factor(
+                            float(data[index] - other[index]),
+                            float(data2[index] + other2[index]),
+                            denominator,
+                            denominator_variance,
+                        ),
+                    }
+                )
+            output["lowdm_Q_groups"][group] = q
+            output["lowdm"][group] = {
+                "group": group,
+                "Q": q,
+                "bins": bins,
+            }
+        return output
+
     labels = exact["lowdm"]["search_bin_labels"]
     low_nbin = len(labels)
     low_data = measurement["gcr_data"]["lowdm"]["yields"]
@@ -728,20 +796,45 @@ def plot_q(factors: dict[str, Any], output_dir: Path) -> list[str]:
 
 
 def plot_sgamma(
-    factors: dict[str, Any], regime: str, output_dir: Path
+    factors: dict[str, Any],
+    regime: str,
+    output_dir: Path,
+    recoil_edges: list[float] | np.ndarray | None = None,
 ) -> list[str]:
     paths: list[str] = []
-    if regime == "highdm":
-        edges = np.asarray([250, 300, 350, 400, 500, 800, 1500], dtype=float)
+    nb_recoil_mode = regime == "highdm" or set(factors) == set(LOW_GROUPS)
+    if nb_recoil_mode:
+        default_edges = (
+            [250, 300, 350, 400, 500, 800, 1500]
+            if regime == "highdm"
+            else [250, 300, 350, 400, 500, 650, 800, 1000, 1500]
+        )
+        edges = np.asarray(
+            default_edges if recoil_edges is None else recoil_edges,
+            dtype=float,
+        )
+        expected_bins = len(next(iter(factors.values()))["bins"])
+        if len(edges) != expected_bins + 1:
+            raise ValueError(
+                f"{regime} Sgamma has {expected_bins} bins but "
+                f"{len(edges) - 1} plotting bins"
+            )
         centers = 0.5 * (edges[:-1] + edges[1:])
         widths = 0.5 * (edges[1:] - edges[:-1])
         fig, ax = plt.subplots(figsize=(10.2, 10.2))
-        styles = {
-            "Nb1": ("o", r"$N_b=1$"),
-            "Nb2": ("s", r"$N_b=2$"),
-            "Nb3plus": ("^", r"$N_b\geq3$"),
-        }
-        for group in HIGH_GROUPS:
+        styles = (
+            {
+                "Nb1": ("o", r"$N_b=1$"),
+                "Nb2": ("s", r"$N_b=2$"),
+                "Nb3plus": ("^", r"$N_b\geq3$"),
+            }
+            if regime == "highdm"
+            else {
+                "Nb1": ("o", r"$N_b=1$"),
+                "Nb2plus": ("s", r"$N_b\geq2$"),
+            }
+        )
+        for group in styles:
             records = factors[group]["bins"]
             values = np.asarray(
                 [
@@ -782,7 +875,7 @@ def plot_sgamma(
         ax.text(
             0.04,
             0.08,
-            r"High-$\Delta m$",
+            (r"High-$\Delta m$" if regime == "highdm" else r"Low-$\Delta m$"),
             transform=ax.transAxes,
             fontsize=22,
         )
@@ -795,7 +888,7 @@ def plot_sgamma(
         )
         ax.grid(alpha=0.16)
         hep.cms.label(**CMS_LABEL, ax=ax)
-        paths.extend(save_square_figure(fig, output_dir / "sgamma_highdm"))
+        paths.extend(save_square_figure(fig, output_dir / f"sgamma_{regime}"))
     else:
         # Keep every adopted Low-dM search-bin family separate.  In
         # particular, do not sum the pTb/Nj categories that happen to share

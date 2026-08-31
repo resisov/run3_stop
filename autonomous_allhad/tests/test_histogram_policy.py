@@ -31,9 +31,55 @@ def test_configured_highdm_search_bins_assign_and_omit_exclusively():
     indices, population, omitted = HISTS.configured_highdm_search_indices(
         chunk, 6, configuration
     )
-    assert indices.tolist() == [0, 6, 12, 30, -1, -1]
+    assert indices.tolist() == [0, 6, 12, 29, 35, -1]
     assert population.tolist() == [True, True, True, True, True, False]
-    assert omitted.tolist() == [False, False, False, False, True, False]
+    assert omitted.tolist() == [False, False, False, False, False, False]
+
+
+def test_nb2_w2_nres0_is_a_dedicated_six_bin_category():
+    configuration = json.loads(
+        (Path(__file__).parents[1] / "configs" / "search_bins_2024.json")
+        .read_text()
+    )
+    chunk = {
+        "feature_SR": np.ones(6, dtype=bool),
+        "lowdm_mtb": np.full(6, 200.0),
+        "met": np.asarray([275.0, 325.0, 375.0, 450.0, 650.0, 1200.0]),
+        "nb_medium": np.full(6, 2, dtype=int),
+        "nboosted_top": np.zeros(6, dtype=int),
+        "nboosted_w": np.full(6, 2, dtype=int),
+        "nboosted_total": np.full(6, 2, dtype=int),
+        HISTS.DERIVED_NRES_BRANCH: np.zeros(6, dtype=int),
+    }
+    indices, population, omitted = HISTS.configured_highdm_search_indices(
+        chunk, 6, configuration
+    )
+    assert indices.tolist() == [52, 53, 54, 55, 56, 57]
+    assert np.all(population)
+    assert not np.any(omitted)
+
+
+def test_top_w_resolved_category_includes_all_nb_and_object_multiplicities():
+    configuration = json.loads(
+        (Path(__file__).parents[1] / "configs" / "search_bins_2024.json")
+        .read_text()
+    )
+    chunk = {
+        "feature_SR": np.ones(3, dtype=bool),
+        "lowdm_mtb": np.full(3, 200.0),
+        "met": np.asarray([275.0, 325.0, 1200.0]),
+        "nb_medium": np.asarray([1, 2, 3]),
+        "nboosted_top": np.asarray([1, 2, 2]),
+        "nboosted_w": np.asarray([1, 1, 2]),
+        "nboosted_total": np.asarray([2, 3, 4]),
+        HISTS.DERIVED_NRES_BRANCH: np.asarray([1, 1, 2]),
+    }
+    indices, population, omitted = HISTS.configured_highdm_search_indices(
+        chunk, 3, configuration
+    )
+    assert indices.tolist() == [35, 36, 40]
+    assert np.all(population)
+    assert not np.any(omitted)
 
 
 def test_nominal_only_keeps_nominal_after_full_bundle_is_available():

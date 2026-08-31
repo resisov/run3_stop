@@ -81,11 +81,11 @@ def test_configured_highdm_projection_merges_every_bounded_component() -> None:
     configuration = json.loads(
         (PROJECT / "configs" / "search_bins_2024.json").read_text()
     )
-    values = list(range(1, 80))
+    values = list(range(1, 92))
     source_leaf = {
         "sumw": values,
         "sumw2": [value * value for value in values],
-        "entries": [1] * 79,
+        "entries": [1] * 91,
     }
     hists = {
         "search_bin_histograms": {
@@ -99,7 +99,7 @@ def test_configured_highdm_projection_merges_every_bounded_component() -> None:
     }
     exact = {
         "highdm": {
-            "search_bin_labels": [f"bin{index}" for index in range(1, 80)],
+            "search_bin_labels": [f"bin{index}" for index in range(1, 92)],
             "sr_components": {
                 "Nb3plus": {
                     "recoil0": {"TT": {"nominal": source_leaf}}
@@ -112,22 +112,22 @@ def test_configured_highdm_projection_merges_every_bounded_component() -> None:
         hists, exact, configuration
     )
 
-    assert summary["source_bin_count"] == 79
-    assert summary["final_bin_count"] == 73
+    assert summary["source_bin_count"] == 91
+    assert summary["final_bin_count"] == 85
     assert summary["position_groups_zero_based"][16] == [16, 17]
     assert summary["position_groups_zero_based"][-5:] == [
-        [69, 74],
-        [70, 75],
-        [71, 76],
-        [72, 77],
-        [73, 78],
+        [81, 86],
+        [82, 87],
+        [83, 88],
+        [84, 89],
+        [85, 90],
     ]
     signal = hists["search_bin_histograms"][MODULE.HIGH_SCHEME][
         "T2tt_mStop1200_mLSP500"
     ]
-    assert len(signal["nominal"]["sumw"]) == 73
+    assert len(signal["nominal"]["sumw"]) == 85
     assert signal["nominal"]["sumw"][16] == 17 + 18
-    assert signal["pileupUp"]["sumw2"][-1] == 74 * 74 + 79 * 79
+    assert signal["pileupUp"]["sumw2"][-1] == 86 * 86 + 91 * 91
     component = exact["highdm"]["sr_components"]["Nb3plus"]["recoil0"][
         "TT"
     ]["nominal"]
@@ -140,11 +140,11 @@ def test_configured_highdm_projection_accepts_valid_already_projected_input() ->
     configuration = json.loads(
         (PROJECT / "configs" / "search_bins_2024.json").read_text()
     )
-    values = list(range(1, 74))
+    values = list(range(1, 86))
     leaf = {
         "sumw": values,
         "sumw2": [value * value for value in values],
-        "entries": [1] * 73,
+        "entries": [1] * 85,
     }
     hists = {
         "search_bin_histograms": {
@@ -155,7 +155,7 @@ def test_configured_highdm_projection_accepts_valid_already_projected_input() ->
     }
     exact = {
         "highdm": {
-            "search_bin_labels": [f"final{index}" for index in range(1, 74)],
+            "search_bin_labels": [f"final{index}" for index in range(1, 86)],
             "sr_components": {"Nb1": {"recoil0": {"TT": {"nominal": leaf}}}},
         }
     }
@@ -164,9 +164,9 @@ def test_configured_highdm_projection_accepts_valid_already_projected_input() ->
         hists, exact, configuration
     )
 
-    assert summary["source_bin_count"] == 79
-    assert summary["input_bin_count"] == 73
-    assert summary["final_bin_count"] == 73
+    assert summary["source_bin_count"] == 91
+    assert summary["input_bin_count"] == 85
+    assert summary["final_bin_count"] == 85
     assert summary["already_projected"] is True
     assert hists["search_bin_histograms"][MODULE.HIGH_SCHEME][
         "T2tt_mStop1200_mLSP500"
@@ -257,13 +257,32 @@ def test_analysis_specific_nuisances_use_nps26012_prefix() -> None:
     )
 
 
+def test_scale_factor_nuisances_keep_year_scope_even_when_payload_is_absent() -> None:
+    for nuisance in ("electron_reco", "muon_iso", "photon_csev"):
+        MODULE.CAMPAIGN_YEAR = "2024"
+        name_2024 = MODULE.nps_nuisance_name(nuisance)
+        MODULE.CAMPAIGN_YEAR = "2025"
+        name_2025 = MODULE.nps_nuisance_name(nuisance)
+        assert name_2024.endswith("_2024")
+        assert name_2025.endswith("_2025")
+        assert name_2024 != name_2025
+
+
+def test_explicit_btag_correlated_components_remain_shared_across_years() -> None:
+    MODULE.CAMPAIGN_YEAR = "2024"
+    name_2024 = MODULE.nps_nuisance_name("btagSF_bc_correlated")
+    MODULE.CAMPAIGN_YEAR = "2025"
+    name_2025 = MODULE.nps_nuisance_name("btagSF_bc_correlated")
+    assert name_2024 == name_2025 == "CMS_btag_fixedWP_bc_correlated"
+
+
 def test_control_rate_parameters_are_year_specific() -> None:
     MODULE.CAMPAIGN_YEAR = "2024"
     left = MODULE.rate_parameter("sgamma_shape", "highdm", "Nb1", 0)
     MODULE.CAMPAIGN_YEAR = "2025"
     right = MODULE.rate_parameter("sgamma_shape", "highdm", "Nb1", 0)
-    assert left == "sgamma_shape_highdm_Nb1_bin0_2024"
-    assert right == "sgamma_shape_highdm_Nb1_bin0_2025"
+    assert left == "CMS_NPS26012_sgamma_shape_highdm_Nb1_bin0_2024"
+    assert right == "CMS_NPS26012_sgamma_shape_highdm_Nb1_bin0_2025"
     assert left != right
 
 
@@ -313,23 +332,16 @@ def test_unavailable_lowdm_sgamma_is_pooled_with_adjacent_bin() -> None:
     assert models[2]["parameter"] != models[0]["parameter"]
 
 
-def test_lowdm_control_groups_share_crs_across_exclusive_categories() -> None:
-    labels = [
-        "Nb1_PISR300to500_PTb20to40_recoil_1",
-        "Nb1_PISR300to500_PTb40to70_recoil_1",
-        "Nb1_PISR300to500_PTb20to40_recoil_2",
-        "Nb2plus_PISR500plus_PTb40to80_Nj2plus_recoil_1",
-        "Nb2plus_PISR500plus_PTb80to140_Nj2plus_recoil_1",
-    ]
-    groups, by_source = MODULE.low_control_groups(labels)
+def test_lowdm_control_groups_use_only_nb_and_six_physical_met_bins() -> None:
+    groups = MODULE.low_control_groups()
 
-    assert len(groups) == 3
-    assert by_source[0] is by_source[1]
-    assert by_source[0]["key"] == "u300to400"
-    assert by_source[0]["source_bins_zero_based"] == [0, 1]
-    assert by_source[2]["key"] == "u400to500"
-    assert by_source[3] is by_source[4]
-    assert by_source[3]["key"] == "u450to550"
+    assert len(groups) == 12
+    assert [group["nb_group"] for group in groups[:6]] == ["Nb1"] * 6
+    assert [group["nb_group"] for group in groups[6:]] == ["Nb2plus"] * 6
+    assert [group["key"] for group in groups[:6]] == [f"u{index}" for index in range(6)]
+    assert groups[0]["parameter_key"] == "met300to350"
+    assert groups[-1]["parameter_key"] == "met800toInf"
+    assert groups[-1]["recoil_high"] == float("inf")
 
 
 def test_lowdm_gcr_initial_is_data_minus_other_over_qgamma_photon() -> None:

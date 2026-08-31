@@ -14,6 +14,12 @@ from build_combine_inputs import stable_path, write_parallel_runner
 DEFAULT_CMSSW = Path(
     "/eos/user/t/taiwoo/decaf/analysis/CombinedArea/CMSSW_14_1_0_pre4"
 )
+DEFAULT_RUNTIME_MANIFEST = Path(
+    "/eos/user/t/taiwoo/run3_stop/runtime/runtime_manifest.json"
+)
+DEFAULT_X509_PROXY = Path(
+    "/eos/user/t/taiwoo/decaf/analysis/proxy/x509up_u147757"
+)
 
 
 def cards_by_mass(directory: Path) -> dict[str, Path]:
@@ -53,10 +59,25 @@ def read_source_manifest(card_dir: Path) -> dict:
     return payload
 
 
+def read_combine_runtime(path: Path) -> tuple[Path, str]:
+    payload = json.loads(path.read_text())
+    if payload.get("status") != "ready":
+        raise ValueError(f"runtime is not ready: {path}")
+    combine = payload.get("combine") or {}
+    archive = Path(str(combine.get("path", "")))
+    checksum = str(combine.get("sha256", ""))
+    if not archive.is_file() or archive.name != "combine_cmssw_14_1_0_pre4.tgz":
+        raise ValueError(f"invalid Combine runtime archive: {archive}")
+    if not re.fullmatch(r"[0-9a-f]{64}", checksum):
+        raise ValueError(f"invalid Combine runtime checksum in {path}")
+    return archive, checksum
+
+
 def write_condor_limit_submission(
     cards: dict[str, str],
     output_dir: Path,
-    cmssw: Path,
+    runtime_archive: Path,
+    runtime_checksum: str,
     point_timeout: int,
     batch_name: str,
 ) -> tuple[Path, Path]:
@@ -69,19 +90,29 @@ def write_condor_limit_submission(
                 "MASS=$1",
                 "CARD=$2",
                 "OUTDIR=$3",
-                f"CMSSW={cmssw.absolute()}",
                 f"POINT_TIMEOUT={int(point_timeout)}",
                 "WORKSPACE_TIMEOUT=900",
                 "export PYTHONNOUSERSITE=1",
-                'SCRATCH_BASE="${_CONDOR_SCRATCH_DIR:-/tmp/NPS26012_${MASS}_$$}"',
+                "unset PYTHONPATH PYTHONHOME",
+                ': "${_CONDOR_SCRATCH_DIR:?Condor scratch directory is required}"',
+                'SCRATCH_BASE="$_CONDOR_SCRATCH_DIR"',
+                f'RUNTIME_ARCHIVE="$SCRATCH_BASE/{runtime_archive.name}"',
                 'export HOME="$SCRATCH_BASE/home"',
-                'export TMPDIR="$SCRATCH_BASE/tmp"',
+                'export TMPDIR="$SCRATCH_BASE"',
                 'export XDG_CACHE_HOME="$SCRATCH_BASE/cache"',
                 'WORKDIR="$SCRATCH_BASE/work"',
-                'mkdir -p "$HOME" "$TMPDIR" "$XDG_CACHE_HOME" "$WORKDIR"',
+                'mkdir -p "$HOME" "$XDG_CACHE_HOME" "$WORKDIR"',
+                f'echo "{runtime_checksum}  $RUNTIME_ARCHIVE" | sha256sum -c -',
+                'tar -xzf "$RUNTIME_ARCHIVE" -C "$SCRATCH_BASE"',
+                'rm -f "$RUNTIME_ARCHIVE"',
+                'CMSSW="$SCRATCH_BASE/CMSSW_14_1_0_pre4"',
                 "source /cvmfs/cms.cern.ch/cmsset_default.sh",
                 'cd "$CMSSW/src"',
+                'scramv1 b ProjectRename >/dev/null',
                 'eval "$(scramv1 runtime -sh)"',
+                'command -v text2workspace.py >/dev/null',
+                'command -v combine >/dev/null',
+                'case "$(command -v combine)" in "$CMSSW"/*) ;; *) exit 70 ;; esac',
                 'mkdir -p "$OUTDIR"',
                 'cd "$WORKDIR"',
                 'WORKSPACE="workspace_${MASS}.root"',
@@ -100,7 +131,18 @@ def write_condor_limit_submission(
     logs.mkdir(parents=True, exist_ok=True)
     submit = output_dir / "limits_eossubmit.sub"
     rows = "\n".join(
-        f"{mass} {stable_path(Path(card))}" for mass, card in sorted(cards.items())
+        f"{mass} {stable_path(Path(card))}"
+        for mass, card in sorted(cards.items())
+        if not (
+            output_dir
+            / "limits"
+            / f"higgsCombine_{mass}.AsymptoticLimits.mH120.root"
+        ).is_file()
+        or (
+            output_dir
+            / "limits"
+            / f"higgsCombine_{mass}.AsymptoticLimits.mH120.root"
+        ).stat().st_size == 0
     )
     stable_output = stable_path(output_dir)
     stable_logs = stable_path(logs)
@@ -112,10 +154,15 @@ arguments = $(mass) $(card) {stable_output}/limits
 output = {stable_logs}/$(mass).out
 error = {stable_logs}/$(mass).err
 log = {stable_logs}/cluster.log
-should_transfer_files = NO
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+transfer_input_files = {stable_path(runtime_archive)}
+transfer_output_files = ""
+use_x509userproxy = true
+x509userproxy = {stable_path(DEFAULT_X509_PROXY)}
 request_cpus = 1
 request_memory = 6000MB
-request_disk = 2000MB
+request_disk = 4000MB
 +MaxRuntime = {int(point_timeout) + 600}
 +JobBatchName = \"{batch_name}\"
 queue mass,card from (
@@ -133,6 +180,8 @@ def write_condor_impact_submission(
     mass_key: str,
     batch_name: str,
     expect_signal: int,
+    runtime_archive: Path,
+    runtime_checksum: str,
 ) -> Path:
     match = re.fullmatch(r"mStop([0-9]+)_mLSP([0-9]+)", mass_key)
     if not match or int(match.group(2)) != 500:
@@ -159,11 +208,16 @@ arguments = {stable_path(Path(card))} {stable_impact_dir} {match.group(1)}
 output = {stable_logs}/impact.out
 error = {stable_logs}/impact.err
 log = {stable_logs}/cluster.log
-should_transfer_files = NO
-environment = "IMPACT_EXPECT_SIGNAL={expect_signal} IMPACT_R_MIN={'-20' if expect_signal == 0 else '0'} IMPACT_R_MAX=20"
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+transfer_input_files = {stable_path(runtime_archive)}
+transfer_output_files = ""
+use_x509userproxy = true
+x509userproxy = {stable_path(DEFAULT_X509_PROXY)}
+environment = "IMPACT_EXPECT_SIGNAL={expect_signal} IMPACT_R_MIN={'-20' if expect_signal == 0 else '0'} IMPACT_R_MAX=20 COMBINE_RUNTIME_SHA256={runtime_checksum} COMBINE_RUNTIME_ARCHIVE={runtime_archive.name}"
 request_cpus = 4
 request_memory = 16000MB
-request_disk = 5000MB
+request_disk = 8000MB
 +MaxRuntime = 43200
 +JobBatchName = \"{batch_name}\"
 queue 1
@@ -183,8 +237,12 @@ def main() -> int:
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--combine-cards", default="combineCards.py")
     parser.add_argument("--runner-jobs", type=int, default=12)
-    parser.add_argument("--point-timeout", type=int, default=600)
+    parser.add_argument("--point-timeout", type=int, default=7200)
+    parser.add_argument("--submission-only", action="store_true")
     parser.add_argument("--cmssw", type=Path, default=DEFAULT_CMSSW)
+    parser.add_argument(
+        "--runtime-manifest", type=Path, default=DEFAULT_RUNTIME_MANIFEST
+    )
     parser.add_argument(
         "--condor-batch-name", default="NPS26012_2024_2025_combined_limits"
     )
@@ -195,6 +253,9 @@ def main() -> int:
         default=Path(__file__).with_name("run_asimov_impacts_eos.sh"),
     )
     args = parser.parse_args()
+    runtime_archive, runtime_checksum = read_combine_runtime(
+        args.runtime_manifest
+    )
 
     left = cards_by_mass(args.left_dir)
     right = cards_by_mass(args.right_dir)
@@ -229,66 +290,74 @@ def main() -> int:
     datacard_dir.mkdir(parents=True, exist_ok=True)
     combined_cards: dict[str, str] = {}
     warnings: list[dict[str, str]] = []
-    for mass in sorted(left):
-        output = datacard_dir / f"datacard_{mass}.txt"
-        temporary = output.with_name(f"{output.name}.tmp.{os.getpid()}")
-        try:
-            with temporary.open("w") as handle:
-                result = subprocess.run(
-                    [
-                        args.combine_cards,
-                        f"{args.left_label}={left[mass]}",
-                        f"{args.right_label}={right[mass]}",
-                    ],
-                    stdout=handle,
-                    stderr=subprocess.PIPE,
-                    text=True,
-                    check=False,
-                )
-            if result.returncode != 0:
-                raise RuntimeError(
-                    f"combineCards.py failed for {mass}: {result.stderr.strip()[:1000]}"
-                )
-            text = temporary.read_text()
-            required = (args.left_lumi_name, args.right_lumi_name)
-            missing_lumi = [name for name in required if name not in text]
-            if missing_lumi:
-                raise RuntimeError(
-                    f"combined card {mass} is missing luminosity nuisances: {missing_lumi}"
-                )
-            if result.stderr.strip():
-                warnings.append({"mass_point": mass, "stderr": result.stderr.strip()[:1000]})
-            forbidden = [
-                token
-                for token in ("CMS_SUS26090", "zg_norm_")
-                if token in text
-            ]
-            if forbidden:
-                raise RuntimeError(
-                    f"combined card {mass} contains retired names: {forbidden}"
-                )
-            for required_token in (
-                "CMS_NPS26012_",
-                "sgamma_shape_",
-            ):
-                if required_token not in text:
-                    raise RuntimeError(
-                        f"combined card {mass} is missing {required_token!r}"
+    if args.submission_only:
+        existing = cards_by_mass(datacard_dir)
+        if set(existing) != set(left):
+            raise SystemExit(
+                "existing combined-card grid does not match the source grids"
+            )
+        combined_cards = {mass: str(path) for mass, path in existing.items()}
+    else:
+        for mass in sorted(left):
+            output = datacard_dir / f"datacard_{mass}.txt"
+            temporary = output.with_name(f"{output.name}.tmp.{os.getpid()}")
+            try:
+                with temporary.open("w") as handle:
+                    result = subprocess.run(
+                        [
+                            args.combine_cards,
+                            f"{args.left_label}={left[mass]}",
+                            f"{args.right_label}={right[mass]}",
+                        ],
+                        stdout=handle,
+                        stderr=subprocess.PIPE,
+                        text=True,
+                        check=False,
                     )
-            for year in ("2024", "2025"):
-                if not re.search(
-                    rf"^[A-Za-z0-9_]+_{year}\s+rateParam\s+",
-                    text,
-                    flags=re.MULTILINE,
+                if result.returncode != 0:
+                    raise RuntimeError(
+                        f"combineCards.py failed for {mass}: {result.stderr.strip()[:1000]}"
+                    )
+                text = temporary.read_text()
+                required = (args.left_lumi_name, args.right_lumi_name)
+                missing_lumi = [name for name in required if name not in text]
+                if missing_lumi:
+                    raise RuntimeError(
+                        f"combined card {mass} is missing luminosity nuisances: {missing_lumi}"
+                    )
+                if result.stderr.strip():
+                    warnings.append({"mass_point": mass, "stderr": result.stderr.strip()[:1000]})
+                forbidden = [
+                    token
+                    for token in ("CMS_SUS26090", "zg_norm_")
+                    if token in text
+                ]
+                if forbidden:
+                    raise RuntimeError(
+                        f"combined card {mass} contains retired names: {forbidden}"
+                    )
+                for required_token in (
+                    "CMS_NPS26012_",
+                    "sgamma_shape_",
                 ):
-                    raise RuntimeError(
-                        f"combined card {mass} is missing year-specific "
-                        f"{year} rate parameters"
-                    )
-            os.replace(temporary, output)
-        finally:
-            temporary.unlink(missing_ok=True)
-        combined_cards[mass] = str(output)
+                    if required_token not in text:
+                        raise RuntimeError(
+                            f"combined card {mass} is missing {required_token!r}"
+                        )
+                for year in ("2024", "2025"):
+                    if not re.search(
+                        rf"^[A-Za-z0-9_]+_{year}\s+rateParam\s+",
+                        text,
+                        flags=re.MULTILINE,
+                    ):
+                        raise RuntimeError(
+                            f"combined card {mass} is missing year-specific "
+                            f"{year} rate parameters"
+                        )
+                os.replace(temporary, output)
+            finally:
+                temporary.unlink(missing_ok=True)
+            combined_cards[mass] = str(output)
 
     runner = output_dir / "run_combine_expected.sh"
     write_parallel_runner(
@@ -301,7 +370,8 @@ def main() -> int:
     condor_wrapper, condor_submit = write_condor_limit_submission(
         combined_cards,
         output_dir,
-        args.cmssw,
+        runtime_archive,
+        runtime_checksum,
         args.point_timeout,
         args.condor_batch_name,
     )
@@ -322,6 +392,8 @@ def main() -> int:
                     args.impact_mass_key,
                     f"NPS26012_2024_2025_T2tt_impact_{fit_label}",
                     expect_signal,
+                    runtime_archive,
+                    runtime_checksum,
                 )
             )
     manifest = {
@@ -357,6 +429,11 @@ def main() -> int:
         "condor_wrapper": str(condor_wrapper),
         "condor_submit": str(condor_submit),
         "condor_backend": "EOS schedd via module load lxbatch/eossubmit",
+        "runtime": {
+            "manifest": str(args.runtime_manifest),
+            "combine_archive": str(runtime_archive),
+            "sha256": runtime_checksum,
+        },
         "impact_submit": impact_submits.get("r1"),
         "impact_submits": impact_submits,
         "impact_mass_key": args.impact_mass_key,

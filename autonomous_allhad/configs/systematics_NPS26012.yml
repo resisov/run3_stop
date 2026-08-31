@@ -1,0 +1,109 @@
+"lumi_13p6TeV_(2024|2025)":
+  class: luminosity
+
+"CMS_pileup_(2024|2025)":
+  class: pileup
+
+CMS_btag_fixedWP_bc_correlated:
+  class: btag
+"CMS_btag_fixedWP_bc_uncorrelated_(2024|2025)":
+  class: btag
+CMS_btag_fixedWP_light_correlated:
+  class: btag
+"CMS_btag_fixedWP_light_uncorrelated_(2024|2025)":
+  class: btag
+
+CMS_eff_e_reco_13p6TeV:
+  class: electron_efficiency
+CMS_res_e_13p6TeV:
+  class: electron_resolution
+CMS_scale_e_13p6TeV:
+  class: electron_energy_scale
+
+CMS_eff_m_iso_syst:
+  class: muon_efficiency
+CMS_scale_m_13p6TeV:
+  class: muon_energy_scale
+
+CMS_eff_g_CSEV_13p6TeV:
+  class: photon_efficiency
+CMS_res_g_13p6TeV:
+  class: photon_resolution
+CMS_scale_g_13p6TeV:
+  class: photon_energy_scale
+
+CMS_res_j_13p6TeV:
+  class: jet_energy_resolution
+CMS_scale_j_Absolute:
+  class: jet_energy_scale
+"CMS_scale_j_Absolute_(2024|2025)":
+  class: jet_energy_scale
+CMS_scale_j_BBEC1:
+  class: jet_energy_scale
+"CMS_scale_j_BBEC1_(2024|2025)":
+  class: jet_energy_scale
+CMS_scale_j_EC2:
+  class: jet_energy_scale
+"CMS_scale_j_EC2_(2024|2025)":
+  class: jet_energy_scale
+CMS_scale_j_FlavorQCD:
+  class: jet_energy_scale
+CMS_scale_j_HF:
+  class: jet_energy_scale
+"CMS_scale_j_HF_(2024|2025)":
+  class: jet_energy_scale
+CMS_scale_j_RelativeBal:
+  class: jet_energy_scale
+"CMS_scale_j_RelativeSample_(2024|2025)":
+  class: jet_energy_scale
+
+CMS_scale_t_13p6TeV:
+  class: tau_energy_scale
+
+"CMS_NPS26012_eff_e_veto_5to10_(2024|2025)":
+  class: custom
+  description: Uncertainty in the measured 5--10 GeV veto-electron identification efficiency correction for the specified year.
+"CMS_NPS26012_eff_e_id_(2024|2025)":
+  class: custom
+  description: Year-specific uncertainty in the electron identification efficiency correction used by NPS-26-012.
+"CMS_NPS26012_eff_m_loose_5to10_(2024|2025)":
+  class: custom
+  description: Uncertainty in the measured 5--10 GeV loose-muon identification efficiency correction for the specified year.
+"CMS_NPS26012_eff_m_id_(2024|2025)":
+  class: custom
+  description: Year-specific uncertainty in the muon identification efficiency correction used by NPS-26-012.
+"CMS_NPS26012_eff_g_id_(2024|2025)":
+  class: custom
+  description: Year-specific uncertainty in the photon identification efficiency correction used by NPS-26-012.
+"CMS_NPS26012_trigger_e_(2024|2025)":
+  class: custom
+  description: Uncertainty in the electron-trigger efficiency correction used by NPS-26-012 for the specified year.
+"CMS_NPS26012_trigger_g_(2024|2025)":
+  class: custom
+  description: Uncertainty in the photon-trigger efficiency correction used by NPS-26-012 for the specified year.
+"CMS_NPS26012_trigger_m_(2024|2025)":
+  class: custom
+  description: Uncertainty in the muon-trigger efficiency correction used by NPS-26-012 for the specified year.
+"CMS_NPS26012_trigger_met_(2024|2025)":
+  class: custom
+  description: Uncertainty in the missing-transverse-momentum trigger efficiency correction used by NPS-26-012 for the specified year.
+CMS_NPS26012_res_m_13p6TeV:
+  class: custom
+  description: Muon momentum-resolution uncertainty propagated to the NPS-26-012 event selections at 13.6 TeV.
+CMS_NPS26012_scale_met_unclustered_energy_13p6TeV:
+  class: custom
+  description: Unclustered-energy component of the missing-transverse-momentum scale uncertainty propagated at 13.6 TeV.
+
+"CMS_NPS26012_RZstat_(highdm|lowdm)_(Nb1|Nb2plus)_(2024|2025)":
+  class: custom
+  description: Statistical uncertainty in the measured RZ normalization for the specified Delta-m regime, b-jet category, and year.
+"CMS_NPS26012_zgammaNonclosure_(highdm|lowdm)_u(250to300|300to350|350to400|400to500|500to800|800to1500|500toInf|800toInf)_(2024|2025)":
+  class: custom
+  description: Z-to-gamma closure uncertainty assigned to the specified recoil interval and year.
+
+"CMS_NPS26012_(ll_norm|qcd_norm)_(highdm|lowdm)_(Nb1|Nb2plus)_(bin[0-5]|met(300to350|350to400|400to500|500to650|650to800|800toInf))_(2024|2025)":
+  class: custom
+  description: Control-region normalization parameter shared with the matched signal-region components for the specified process class, category, and year.
+"CMS_NPS26012_sgamma_shape_(highdm|lowdm)_(Nb1|Nb2plus)_bin[0-4]_(2024|2025)":
+  class: custom
+  description: Photon-control-region parameter constraining the Sgamma shape in the matched Z-to-neutrino background category and year.

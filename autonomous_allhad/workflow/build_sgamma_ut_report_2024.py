@@ -16,6 +16,12 @@ import numpy as np
 import build_an_zinv_factors_2024 as zinv
 
 
+TAIL_MERGED_EDGES = {
+    "highdm": np.asarray([250.0, 300.0, 350.0, 400.0, 500.0, 1500.0]),
+    "lowdm": np.asarray([250.0, 300.0, 350.0, 400.0, 500.0, 1500.0]),
+}
+
+
 def file_sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as source:
@@ -39,6 +45,52 @@ def data_leaf(value: float, variance: float) -> dict[str, float]:
     return {"sumw": float(value), "sumw2": float(variance)}
 
 
+def rebin_aligned(
+    values: np.ndarray,
+    source_edges: np.ndarray,
+    target_edges: np.ndarray,
+) -> np.ndarray:
+    """Sum exactly aligned source bins, preserving the final overflow bin."""
+    if not set(target_edges).issubset(set(source_edges)):
+        raise ValueError(
+            f"target edges {target_edges.tolist()} are not aligned with "
+            f"{source_edges.tolist()}"
+        )
+    output = np.zeros(len(target_edges) - 1, dtype=float)
+    for index, (low, high) in enumerate(zip(target_edges[:-1], target_edges[1:])):
+        mask = (source_edges[:-1] >= low) & (source_edges[1:] <= high)
+        output[index] = float(np.sum(values[mask]))
+    return output
+
+
+def merge_recoil_tail(exact: dict[str, Any]) -> dict[str, Any]:
+    """Merge every recoil leaf above 500 GeV into one 500--1500 GeV bin."""
+    merged = copy.deepcopy(exact)
+    for regime, target_edges in TAIL_MERGED_EDGES.items():
+        source_edges = np.asarray(merged[regime]["recoil_edges"], dtype=float)
+        if source_edges[-1] != 1500.0:
+            raise ValueError(
+                f"{regime} recoil endpoint is {source_edges[-1]}, expected 1500"
+            )
+        source_nbin = len(source_edges) - 1
+        for by_group in merged[regime]["recoil"].values():
+            for by_sample in by_group.values():
+                for leaf in by_sample.values():
+                    nominal = (leaf or {}).get("nominal") or {}
+                    for quantity in ("sumw", "sumw2"):
+                        values = np.asarray(nominal.get(quantity) or [], dtype=float)
+                        if len(values) != source_nbin:
+                            raise ValueError(
+                                f"{regime} {quantity} has {len(values)} bins, "
+                                f"expected {source_nbin}"
+                            )
+                        nominal[quantity] = rebin_aligned(
+                            values, source_edges, target_edges
+                        ).tolist()
+        merged[regime]["recoil_edges"] = target_edges.tolist()
+    return merged
+
+
 def split_data_and_mc(exact: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
     """Extract GCR data_obs and return an MC-only copy for the factor code."""
     mc_exact = copy.deepcopy(exact)
@@ -54,25 +106,31 @@ def split_data_and_mc(exact: dict[str, Any]) -> tuple[dict[str, Any], dict[str, 
             for index in range(high_nbin)
         }
 
-    low_nbin = len(exact["lowdm"]["search_bin_labels"])
-    low_values = np.zeros(low_nbin, dtype=float)
-    low_variances = np.zeros(low_nbin, dtype=float)
+    low_nbin = len(exact["lowdm"]["recoil_edges"]) - 1
+    low_yields: dict[str, dict[str, dict[str, float]]] = {}
     for group in zinv.LOW_GROUPS:
-        source = mc_exact["lowdm"]["search_components"]["GCR"][group]
+        source = mc_exact["lowdm"]["recoil"]["GCR"][group]
         if "data_obs" not in source:
             raise ValueError(f"missing EGamma data_obs in Low-dM GCR/{group}")
         values, variances = nominal_arrays(source.pop("data_obs"), low_nbin)
-        low_values += values
-        low_variances += variances
+        low_yields[group] = {
+            str(index): data_leaf(values[index], variances[index])
+            for index in range(low_nbin)
+        }
+        # Keep the MC-only invariant true for the legacy search-bin branch as
+        # well, even though the Nb-only measurement no longer consumes it.
+        search_source = (
+            ((mc_exact["lowdm"].get("search_components") or {}).get("GCR") or {})
+            .get(group)
+            or {}
+        )
+        search_source.pop("data_obs", None)
 
     measurement = {
         "gcr_data": {
             "highdm": {"yields": high_yields},
             "lowdm": {
-                "yields": {
-                    str(index): data_leaf(low_values[index], low_variances[index])
-                    for index in range(low_nbin)
-                }
+                "yields_by_group": low_yields,
             },
         }
     }
@@ -189,7 +247,12 @@ def closure_checks(factors: dict[str, Any]) -> dict[str, Any]:
     return checks
 
 
-def write_csv(path: Path, factors: dict[str, Any], high_edges: list[float]) -> None:
+def write_csv(
+    path: Path,
+    factors: dict[str, Any],
+    high_edges: list[float],
+    low_edges: list[float],
+) -> None:
     fields = [
         "regime",
         "category",
@@ -230,14 +293,21 @@ def write_csv(path: Path, factors: dict[str, Any], high_edges: list[float]) -> N
                 )
         for family, payload in factors["lowdm"].items():
             q = payload["Q"]
-            isr_group = (
-                "PISR300to500"
-                if "PISR300to500" in family
-                else "PISR500plus"
-            )
-            centers, widths = zinv.low_ut_geometry(
-                isr_group, len(payload["bins"])
-            )
+            nb_recoil = family in zinv.LOW_GROUPS
+            if nb_recoil:
+                centers = 0.5 * (
+                    np.asarray(low_edges[:-1]) + np.asarray(low_edges[1:])
+                )
+                widths = 0.5 * np.diff(np.asarray(low_edges))
+            else:
+                isr_group = (
+                    "PISR300to500"
+                    if "PISR300to500" in family
+                    else "PISR500plus"
+                )
+                centers, widths = zinv.low_ut_geometry(
+                    isr_group, len(payload["bins"])
+                )
             for index, item in enumerate(payload["bins"]):
                 factor = item["Sgamma"]
                 writer.writerow(
@@ -268,13 +338,14 @@ def main() -> int:
     args = parser.parse_args()
     zinv.CMS_LABEL["rlabel"] = f"{args.campaign_year} (13.6 TeV)"
 
-    exact = json.loads(args.exact.read_text())
-    if exact.get("status") != "complete":
-        raise ValueError(f"exact input is not complete: {exact.get('status')}")
-    sample_check = validate_samples(exact, args.campaign_year)
+    source_exact = json.loads(args.exact.read_text())
+    if source_exact.get("status") != "complete":
+        raise ValueError(f"exact input is not complete: {source_exact.get('status')}")
+    sample_check = validate_samples(source_exact, args.campaign_year)
+    exact = merge_recoil_tail(source_exact)
     measurement, mc_exact = split_data_and_mc(exact)
     factors = zinv.build_q_sgamma(measurement, mc_exact)
-    low_shared = zinv.aggregate_low_sgamma(factors["lowdm"])
+    low_shared: dict[str, Any] = {}
     checks = closure_checks(factors)
     max_residual = max(
         abs(item["relative_residual"])
@@ -287,8 +358,22 @@ def main() -> int:
     args.output_dir.mkdir(parents=True, exist_ok=True)
     plot_paths = []
     plot_paths.extend(zinv.plot_q(factors, args.output_dir))
-    plot_paths.extend(zinv.plot_sgamma(factors["highdm"], "highdm", args.output_dir))
-    plot_paths.extend(zinv.plot_sgamma(factors["lowdm"], "lowdm", args.output_dir))
+    plot_paths.extend(
+        zinv.plot_sgamma(
+            factors["highdm"],
+            "highdm",
+            args.output_dir,
+            exact["highdm"]["recoil_edges"],
+        )
+    )
+    plot_paths.extend(
+        zinv.plot_sgamma(
+            factors["lowdm"],
+            "lowdm",
+            args.output_dir,
+            exact["lowdm"]["recoil_edges"],
+        )
+    )
     payload = {
         "schema_version": f"sgamma_ut_{args.campaign_year}_v1",
         "status": "complete",
@@ -298,8 +383,15 @@ def main() -> int:
             "gcr_data_stream": "EGamma",
             "other_mc": "all normalized GCR MC except GJ",
             "uncertainty": "diagonal statistical propagation used by the AN-style implementation",
+            "ut_tail_policy": (
+                "sum source yields and variances before measuring one "
+                "500-1500 GeV bin in both regimes"
+            ),
             "lowdm_plot_overflow_cap_gev": 1500.0,
-            "lowdm_plot_mode": "all 34 adopted category bins; no pTb/Nj family aggregation",
+            "lowdm_plot_mode": (
+                "Nb=1 and Nb>=2 with one merged 500-1500 GeV U_T bin; "
+                "no pTISR/pTb/Nj subdivision"
+            ),
         },
         "provenance": {
             "exact_input": str(args.exact),
@@ -311,6 +403,7 @@ def main() -> int:
         },
         "highdm": factors["highdm"],
         "lowdm_families": factors["lowdm"],
+        "lowdm_category_model": "nb_recoil",
         "lowdm_Q_groups": factors["lowdm_Q_groups"],
         "lowdm_aggregated_diagnostic": low_shared,
         "closure_checks": checks,
@@ -321,6 +414,7 @@ def main() -> int:
         args.output_dir / "sgamma_ut.csv",
         factors,
         list(exact["highdm"]["recoil_edges"]),
+        list(exact["lowdm"]["recoil_edges"]),
     )
     print(
         json.dumps(

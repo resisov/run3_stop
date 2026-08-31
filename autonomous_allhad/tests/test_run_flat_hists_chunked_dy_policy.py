@@ -165,6 +165,15 @@ def test_resume_requires_matching_build_options_and_normalization(
     )
 
 
+def test_zero_entry_acceptance_is_not_a_histogram_build_difference() -> None:
+    recorded = {**BUILD_OPTIONS, "allow_zero_entry_roots": False}
+    expected = {**BUILD_OPTIONS, "allow_zero_entry_roots": True}
+    assert MODULE.compatible_build_options(recorded, expected)
+
+    changed_physics = {**expected, "require_branches": False}
+    assert not MODULE.compatible_build_options(recorded, changed_physics)
+
+
 def test_merge_preserves_policy_and_sums_exclusions(tmp_path: Path) -> None:
     first = tmp_path / "first.json"
     second = tmp_path / "second.json"
@@ -269,6 +278,28 @@ def test_merge_marks_zero_entry_chunk_as_warning(tmp_path: Path) -> None:
     )
 
     assert merged["status"] == "complete_with_warnings"
+
+
+def test_merge_accepts_valid_empty_intermediate_root_when_explicit(
+    tmp_path: Path,
+) -> None:
+    chunk = tmp_path / "chunk.json"
+    output = tmp_path / "merged.json"
+    normalization = tmp_path / "normalization.json"
+    payload = chunk_payload("/tmp/a.root", 0)
+    payload["summary"]["zero_entry_roots"] = ["/tmp/a.root"]
+    write_json(chunk, payload)
+    write_json(normalization, {})
+
+    merged = MODULE.merge_payloads(
+        [chunk],
+        output,
+        normalization,
+        "ptll200_only",
+        allow_zero_entry_roots=True,
+    )
+
+    assert merged["status"] == "complete"
 
 
 def test_merge_rejects_mixed_execution_contracts(tmp_path: Path) -> None:

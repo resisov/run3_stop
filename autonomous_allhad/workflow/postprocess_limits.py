@@ -70,6 +70,25 @@ def read_json(path: Path) -> Any:
     return json.loads(path.read_text())
 
 
+def load_stop_pair_xsecs(path: Path) -> dict[int, float]:
+    payload = read_json(path)
+    if (
+        payload.get("schema_version") != "stop_pair_xsec_13p6tev_v1"
+        or payload.get("parsed") is not True
+    ):
+        raise RuntimeError(f"invalid stop-pair cross-section table: {path}")
+    xsecs: dict[int, float] = {}
+    for record in payload.get("records", []):
+        mass = int(record["mStop"])
+        value = float(record["xsec_pb"])
+        if not math.isfinite(value) or value <= 0.0:
+            raise RuntimeError(f"invalid stop-pair cross section at {mass} GeV")
+        xsecs[mass] = value
+    if not xsecs:
+        raise RuntimeError(f"empty stop-pair cross-section table: {path}")
+    return xsecs
+
+
 def write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
@@ -197,6 +216,8 @@ def plot_contour(
     y_min: float,
     y_max: float,
     decay_label: str | None,
+    color_field: str = "ratio",
+    stop_pair_xsecs: dict[int, float] | None = None,
 ) -> bool:
     records = list((limit_payload.get("points") or {}).values())
     points = [
@@ -217,7 +238,7 @@ def plot_contour(
     import mplhep as hep
     from matplotlib.colors import LinearSegmentedColormap
     from matplotlib.lines import Line2D
-    from matplotlib.ticker import FormatStrFormatter, MultipleLocator
+    from matplotlib.ticker import FormatStrFormatter, FuncFormatter, MultipleLocator
     from scipy.interpolate import griddata
 
     xmin, xmax = 600.0, float(x_max)
@@ -228,17 +249,28 @@ def plot_contour(
     xx, yy = np.meshgrid(xi, yi)
     offshell_mask = yy > (xx - top_mass)
 
-    def interpolated_log_grid(quantity: str) -> np.ma.MaskedArray | None:
+    def interpolated_log_grid(
+        quantity: str,
+        scale_by_stop_xsec: bool = False,
+    ) -> np.ma.MaskedArray | None:
         values = []
         for record in records:
             value = record.get(quantity)
             if value is None or float(value) <= 0:
                 continue
+            value = float(value)
+            if scale_by_stop_xsec:
+                mstop = int(record["mStop"])
+                if stop_pair_xsecs is None or mstop not in stop_pair_xsecs:
+                    raise RuntimeError(
+                        f"missing stop-pair cross section at {mstop} GeV"
+                    )
+                value *= stop_pair_xsecs[mstop]
             values.append(
                 (
                     float(record["mStop"]),
                     float(record["mLSP"]),
-                    math.log10(float(value)),
+                    math.log10(value),
                 )
             )
         if not values:
@@ -249,16 +281,25 @@ def plot_contour(
         linear = griddata((xs, ys), zs, (xx, yy), method="linear")
         return np.ma.array(linear, mask=np.isnan(linear) | offshell_mask)
 
-    expected_grid = interpolated_log_grid("expected")
-    if expected_grid is None or expected_grid.count() == 0:
+    expected_ratio_grid = interpolated_log_grid("expected")
+    if expected_ratio_grid is None or expected_ratio_grid.count() == 0:
         return False
     minus1_grid = interpolated_log_grid("expected_m1")
     plus1_grid = interpolated_log_grid("expected_p1")
+    color_grid = (
+        interpolated_log_grid("expected", scale_by_stop_xsec=True)
+        if color_field == "xsec"
+        else expected_ratio_grid
+    )
+    if color_grid is None or color_grid.count() == 0:
+        return False
 
     hep.style.use("CMS")
     figure, axes = plt.subplots(figsize=(12.0, 10.0))
     figure.subplots_adjust(left=0.13, right=0.84, bottom=0.11, top=0.90)
-    color_min, color_max = -1.5, 1.5
+    color_min, color_max = (
+        (-4.0, -1.0) if color_field == "xsec" else (-1.5, 1.5)
+    )
     limit_cmap = LinearSegmentedColormap.from_list(
         "cms_limit_reference",
         [
@@ -273,7 +314,7 @@ def plot_contour(
         ],
         N=256,
     )
-    plot_grid = np.ma.clip(expected_grid, color_min, color_max)
+    plot_grid = np.ma.clip(color_grid, color_min, color_max)
     filled = axes.contourf(
         xx,
         yy,
@@ -284,15 +325,28 @@ def plot_contour(
     colorbar = figure.colorbar(
         filled, ax=axes, pad=0.04, fraction=0.048, aspect=34
     )
-    colorbar.set_label(
-        r"$\log_{10}$ (expected 95% CL limit on $\sigma/\sigma_{\mathrm{theory}}$)",
-        fontsize=27,
-        rotation=90,
-        labelpad=22,
-    )
-    colorbar.set_ticks(np.arange(color_min, color_max + 0.001, 0.5))
-    colorbar.ax.yaxis.set_major_formatter(FormatStrFormatter("%.1f"))
-    colorbar.ax.yaxis.set_minor_locator(MultipleLocator(0.1))
+    if color_field == "xsec":
+        colorbar.set_label(
+            "Expected 95% CL limit on cross section (pb)",
+            fontsize=27,
+            rotation=90,
+            labelpad=22,
+        )
+        colorbar.set_ticks(np.arange(-4.0, -0.99, 1.0))
+        colorbar.ax.yaxis.set_major_formatter(
+            FuncFormatter(lambda value, _: rf"$10^{{{int(value)}}}$")
+        )
+        colorbar.ax.yaxis.set_minor_locator(MultipleLocator(0.25))
+    else:
+        colorbar.set_label(
+            r"$\log_{10}$ (expected 95% CL limit on $\sigma/\sigma_{\mathrm{theory}}$)",
+            fontsize=27,
+            rotation=90,
+            labelpad=22,
+        )
+        colorbar.set_ticks(np.arange(color_min, color_max + 0.001, 0.5))
+        colorbar.ax.yaxis.set_major_formatter(FormatStrFormatter("%.1f"))
+        colorbar.ax.yaxis.set_minor_locator(MultipleLocator(0.1))
     colorbar.ax.tick_params(
         which="major", labelsize=23, direction="in", length=12, width=1.4
     )
@@ -315,7 +369,7 @@ def plot_contour(
     axes.contour(
         xx,
         yy,
-        expected_grid,
+        expected_ratio_grid,
         levels=[0.0],
         colors="red",
         linewidths=3.0,
@@ -493,7 +547,21 @@ def main() -> int:
     parser.add_argument("--max-mstop", type=float, default=1800.0)
     parser.add_argument("--min-mlsp", type=float, default=1.0)
     parser.add_argument("--max-mlsp", type=float, default=1200.0)
+    parser.add_argument(
+        "--color-field",
+        choices=("ratio", "xsec"),
+        default="ratio",
+    )
+    parser.add_argument("--signal-xsec", type=Path)
     args = parser.parse_args()
+
+    if args.color_field == "xsec" and args.signal_xsec is None:
+        parser.error("--signal-xsec is required with --color-field xsec")
+    stop_pair_xsecs = (
+        load_stop_pair_xsecs(args.signal_xsec)
+        if args.color_field == "xsec"
+        else None
+    )
 
     manifest_candidates = (
         args.input_dir / "manifest.json",
@@ -527,9 +595,11 @@ def main() -> int:
         if args.baseline_limits
         else {"points": {}}
     )
+    color_suffix = "_xsec" if args.color_field == "xsec" else ""
     output_png = args.input_dir / (
         f"expected_limit_{args.topology.lower()}_"
-        f"{args.campaign_year}_highdm{highdm_bins}_lowdm{lowdm_bins}.png"
+        f"{args.campaign_year}_highdm{highdm_bins}_lowdm{lowdm_bins}"
+        f"{color_suffix}.png"
     )
     contour_complete = False
     if limits["status"] in {"complete", "partial"}:
@@ -543,6 +613,8 @@ def main() -> int:
             y_min=args.min_mlsp,
             y_max=args.max_mlsp,
             decay_label=DECAY_LABELS[args.topology],
+            color_field=args.color_field,
+            stop_pair_xsecs=stop_pair_xsecs,
         )
 
     result = {
@@ -559,6 +631,7 @@ def main() -> int:
         ),
         "campaign_year": args.campaign_year,
         "topology": args.topology,
+        "color_field": args.color_field,
         "highdm_bins": highdm_bins,
         "lowdm_bins": lowdm_bins,
         "original_mass_point_count": len(original_mass_keys),
@@ -581,7 +654,12 @@ def main() -> int:
         "run2_overlay": True,
         "data_mode": "asimov",
     }
-    write_json(args.input_dir / "limit_manifest.json", result)
+    manifest_name = (
+        "limit_manifest_xsec.json"
+        if args.color_field == "xsec"
+        else "limit_manifest.json"
+    )
+    write_json(args.input_dir / manifest_name, result)
     print(
         json.dumps(
             {

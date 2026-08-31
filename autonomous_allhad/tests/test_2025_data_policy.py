@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import json
+import os
 import sys
 import unittest
 from pathlib import Path
+from unittest import mock
 
 import numpy as np
 
@@ -23,16 +25,18 @@ from autonomous_allhad.real_subset_worker import (  # noqa: E402
 
 
 class Data2025PolicyTest(unittest.TestCase):
-    def test_2025_keeps_data_year_but_reuses_2024_corrections(self) -> None:
+    def test_2025_uses_its_own_validated_corrections(self) -> None:
         self.assertEqual(campaign_year("2025"), "2025")
-        self.assertEqual(analysis_year("2025"), "2024")
+        self.assertEqual(analysis_year("2025"), "2025")
         self.assertEqual(analysis_year("2024"), "2024")
 
+    @mock.patch.dict(os.environ, {"AUTONOMOUS_ALLHAD_LOCAL_ANALYSIS_DATA": "0"})
     def test_2025_lumimask_is_the_2025_golden_json(self) -> None:
         path = lumimask_path(REPO, "2025")
         self.assertEqual(path.name, "Cert_Collisions2025_391658_398903_Golden.json")
         self.assertTrue(path.is_file())
 
+    @mock.patch.dict(os.environ, {"AUTONOMOUS_ALLHAD_LOCAL_ANALYSIS_DATA": "0"})
     def test_2025_data_events_are_filtered_by_2025_good_runs(self) -> None:
         path = lumimask_path(REPO, "2025")
         payload = json.loads(path.read_text())

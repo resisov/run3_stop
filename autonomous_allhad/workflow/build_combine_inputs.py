@@ -39,6 +39,10 @@ from background_process_groups import (
 
 HIGH_CONTROL_REGIONS = ("LLCR", "QCDCR", "GCR")
 LOW_CONTROL_REGIONS = HIGH_CONTROL_REGIONS
+LOW_CONTROL_EDGES = np.asarray(
+    [300.0, 350.0, 400.0, 500.0, 650.0, 800.0, 1500.0],
+    dtype=float,
+)
 HIGH_PHYSICAL_GROUPS = {
     "Nb1": ("Nb1",),
     "Nb2plus": ("Nb2", "Nb3plus"),
@@ -59,8 +63,6 @@ CAMPAIGN_YEAR = "2024"
 LUMI_LNN = 1.016
 MIN_BIN = 1.0e-9
 MIN_VARIATION_RATIO = 1.0e-3
-MAX_TOP_W_COMPOSITION_LOG_SIGMA = 1.0
-TOP_W_COMPOSITION_DIAGNOSTICS: dict[str, dict[str, Any]] = {}
 RAW_COMPONENTS = {
     "VV_VVV": ("VV",),
     "Top": ("ST", "TT"),
@@ -77,29 +79,64 @@ CANONICAL_BACKGROUND_SAMPLES = frozenset(
 
 
 def nps_nuisance_name(name: str) -> str:
-    fixed = {
-        "btagSF_bc_correlated": "CMS_btag_mediumWP_bc_correlated",
-        "btagSF_light_correlated": "CMS_btag_mediumWP_light_correlated",
+    # A name is shared between years only when the producing POG explicitly
+    # prescribes an across-year correlation.  The BTV fixed-WP payload does so
+    # for its ``*_correlated`` variations.  EGM, MUO and PU correctionlib
+    # payloads used here are year-specific and do not publish an across-year
+    # correlation prescription, so their nuisance names retain the year.
+    common = {
+        "btagSF_bc_correlated": "CMS_btag_fixedWP_bc_correlated",
+        "btagSF_light_correlated": "CMS_btag_fixedWP_light_correlated",
+        "electronScale": "CMS_scale_e_13p6TeV",
+        "electronSmear": "CMS_res_e_13p6TeV",
+        "jer": "CMS_res_j_13p6TeV",
+        "jesAbsolute": "CMS_scale_j_Absolute",
+        "jesBBEC1": "CMS_scale_j_BBEC1",
+        "jesEC2": "CMS_scale_j_EC2",
+        "jesFlavorQCD": "CMS_scale_j_FlavorQCD",
+        "jesHF": "CMS_scale_j_HF",
+        "jesRelativeBal": "CMS_scale_j_RelativeBal",
+        "metUnclustered": (
+            f"{ANALYSIS_NUISANCE_PREFIX}_scale_met_unclustered_energy_13p6TeV"
+        ),
+        "muonResolution": f"{ANALYSIS_NUISANCE_PREFIX}_res_m_13p6TeV",
+        "muonScale": "CMS_scale_m_13p6TeV",
+        "photonScale": "CMS_scale_g_13p6TeV",
+        "photonSmear": "CMS_res_g_13p6TeV",
+        "tauEnergyScale": "CMS_scale_t_13p6TeV",
     }
     yearly = {
-        "btagSF_bc_uncorrelated": "CMS_btag_mediumWP_bc_uncorrelated",
-        "btagSF_light_uncorrelated": "CMS_btag_mediumWP_light_uncorrelated",
-        "electron_hlt": f"{ANALYSIS_NUISANCE_PREFIX}_eff_e_trigger",
-        "electron_id": "CMS_eff_e_id_13p6TeV",
+        "btagSF_bc_uncorrelated": "CMS_btag_fixedWP_bc_uncorrelated",
+        "btagSF_light_uncorrelated": "CMS_btag_fixedWP_light_uncorrelated",
+        "electron_reco": "CMS_eff_e_reco_13p6TeV",
+        "electron_hlt": f"{ANALYSIS_NUISANCE_PREFIX}_trigger_e",
+        "electron_id": f"{ANALYSIS_NUISANCE_PREFIX}_eff_e_id",
         "loose_muon_5to10": f"{ANALYSIS_NUISANCE_PREFIX}_eff_m_loose_5to10",
-        "met_trigger": f"{ANALYSIS_NUISANCE_PREFIX}_eff_met_trigger",
-        "muon_hlt": f"{ANALYSIS_NUISANCE_PREFIX}_eff_m_trigger",
+        "met_trigger": f"{ANALYSIS_NUISANCE_PREFIX}_trigger_met",
+        "muon_hlt": f"{ANALYSIS_NUISANCE_PREFIX}_trigger_m",
         "muon_id": f"{ANALYSIS_NUISANCE_PREFIX}_eff_m_id",
-        "photon_id": "CMS_eff_g_id_13p6TeV",
-        "photon_trigger": f"{ANALYSIS_NUISANCE_PREFIX}_eff_g_trigger",
+        "muon_iso": "CMS_eff_m_iso_syst",
+        "photon_csev": "CMS_eff_g_CSEV_13p6TeV",
+        "photon_id": f"{ANALYSIS_NUISANCE_PREFIX}_eff_g_id",
+        "photon_trigger": f"{ANALYSIS_NUISANCE_PREFIX}_trigger_g",
         "pileup": "CMS_pileup",
         "veto_electron_5to10": f"{ANALYSIS_NUISANCE_PREFIX}_eff_e_veto_5to10",
     }
-    if name in fixed:
-        return fixed[name]
+    yearly_jes = {
+        "jesAbsolute": "CMS_scale_j_Absolute",
+        "jesBBEC1": "CMS_scale_j_BBEC1",
+        "jesEC2": "CMS_scale_j_EC2",
+        "jesHF": "CMS_scale_j_HF",
+        "jesRelativeSample": "CMS_scale_j_RelativeSample",
+    }
+    if name in common:
+        return common[name]
     if name in yearly:
         return f"{yearly[name]}_{CAMPAIGN_YEAR}"
-    return name
+    for source, cms_name in yearly_jes.items():
+        if name == f"{source}{CAMPAIGN_YEAR}":
+            return f"{cms_name}_{CAMPAIGN_YEAR}"
+    raise ValueError(f"no CMS nuisance-name mapping for canonical variation {name!r}")
 
 
 def enforce_downstream_input_boundary(args: argparse.Namespace) -> None:
@@ -116,6 +153,7 @@ def enforce_downstream_input_boundary(args: argparse.Namespace) -> None:
         "rz_low": args.rz_low,
         "zgamma_double_ratio": args.zgamma_double_ratio,
         "search_bin_config": args.search_bin_config,
+        "exact_input": args.exact_input,
         "output_dir": args.output_dir,
     }
     for label, path in inspected.items():
@@ -124,7 +162,13 @@ def enforce_downstream_input_boundary(args: argparse.Namespace) -> None:
             raise SystemExit(
                 f"forbidden event-level path in downstream {label}: {path}"
             )
-    for label in ("sgamma", "rz_high", "rz_low", "zgamma_double_ratio"):
+    for label in (
+        "sgamma",
+        "rz_high",
+        "rz_low",
+        "zgamma_double_ratio",
+        "exact_input",
+    ):
         path = inspected[label]
         if path.suffix != ".json":
             raise SystemExit(f"{label} must be a machine-derived JSON: {path}")
@@ -1114,42 +1158,210 @@ def low_geometry(label: str) -> tuple[float, float]:
     return low, high
 
 
-def low_control_groups(
-    labels: list[str],
-) -> tuple[list[dict[str, Any]], dict[int, dict[str, Any]]]:
-    """Aggregate Low-dM CRs like the High-dM Nb x recoil model.
+def low_control_groups() -> list[dict[str, Any]]:
+    """The adopted Low-dM CR basis: two Nb groups and six recoil bins.
 
-    The 34 Low-dM SR bins retain their full pTISR/pTb/Nj categorization.  A
-    control observation, however, is not split once per SR bin.  Bins with
-    the same Nb requirement and the same physical recoil interval share one
-    LLCR, QCDCR, and GCR channel and therefore one normalization parameter.
-    This is the Low-dM analogue of the High-dM model, where many exclusive SR
-    categories share an Nb x recoil control constraint.
+    Search-bin category variables (ISR, b-jet pT and Nj) are deliberately not
+    part of this basis.  The first native 250--300 GeV bin is outside the
+    Low-dM recoil selection and the two native bins above 800 GeV are combined
+    into the open-ended final bin.
     """
-    grouped: dict[tuple[str, float, float], list[int]] = {}
-    for source_bin, label in enumerate(labels):
-        group = "Nb1" if str(label).startswith("Nb1_") else "Nb2plus"
-        low, high = low_geometry(str(label))
-        grouped.setdefault((group, low, high), []).append(source_bin)
-
-    groups: list[dict[str, Any]] = []
-    by_source: dict[int, dict[str, Any]] = {}
-    for (group, low, high), source_bins in grouped.items():
-        high_label = "Inf" if not np.isfinite(high) else str(int(high))
-        key = f"u{int(low)}to{high_label}"
-        record = {
+    groups = []
+    for group in ("Nb1", "Nb2plus"):
+        for recoil_bin in range(len(LOW_CONTROL_EDGES) - 1):
+            low = float(LOW_CONTROL_EDGES[recoil_bin])
+            high = float(LOW_CONTROL_EDGES[recoil_bin + 1])
+            high_label = "Inf" if recoil_bin + 1 == len(LOW_CONTROL_EDGES) - 1 else str(int(high))
+            groups.append({
             "nb_group": group,
-            "recoil_low": float(low),
-            "recoil_high": float(high),
-            "key": key,
-            "source_bins_zero_based": list(source_bins),
+            "recoil_bin": recoil_bin,
+            "recoil_low": low,
+            "recoil_high": (
+                high
+                if recoil_bin + 1 < len(LOW_CONTROL_EDGES) - 1
+                else float("inf")
+            ),
+            "key": f"u{recoil_bin}",
+            "parameter_key": f"met{int(low)}to{high_label}",
+            })
+    return groups
+
+
+def low_native_indices(
+    native_edges: list[float], recoil_bin: int
+) -> list[int]:
+    edges = np.asarray(native_edges, dtype=float)
+    low = LOW_CONTROL_EDGES[recoil_bin]
+    high = LOW_CONTROL_EDGES[recoil_bin + 1]
+    selected = np.flatnonzero(
+        (edges[:-1] >= low - 1.0e-9) & (edges[1:] <= high + 1.0e-9)
+    ).tolist()
+    if not selected:
+        raise ValueError(
+            f"no native Low-dM recoil bins cover {low:g}--{high:g} GeV"
+        )
+    return selected
+
+
+def with_reference_variations(
+    record: dict[str, Any] | None,
+    reference: dict[str, Any] | None,
+) -> dict[str, Any] | None:
+    """Apply canonical Nb-integrated nuisance ratios coherently in recoil.
+
+    The machine-derived physical-recoil product is nominal-only.  The
+    canonical histogram remains the sole source of systematic variations;
+    its Nb-integrated ratios are propagated coherently to each of the six
+    physical-recoil CR bins.  No search-category variable enters this step.
+    """
+    if record is None or reference is None:
+        return record
+    reference_nominal = float(reference["nominal"][0])
+    if reference_nominal <= 0.0:
+        return record
+    nominal = float(record["nominal"][0])
+    floor = max(MIN_BIN, nominal * MIN_VARIATION_RATIO)
+    variations = dict(record["variations"])
+    for nuisance, pair in reference["variations"].items():
+        variations[nuisance] = {
+            "up": np.asarray(
+                [max(floor, nominal * float(pair["up"][0]) / reference_nominal)]
+            ),
+            "down": np.asarray(
+                [max(floor, nominal * float(pair["down"][0]) / reference_nominal)]
+            ),
         }
-        groups.append(record)
-        for source_bin in source_bins:
-            by_source[source_bin] = record
-    if set(by_source) != set(range(len(labels))):
-        raise ValueError("Low-dM control grouping does not cover every SR bin")
-    return groups, by_source
+    return {
+        "nominal": record["nominal"],
+        "sumw2": record["sumw2"],
+        "variations": variations,
+    }
+
+
+def low_recoil_background(
+    physical_low: dict[str, Any],
+    canonical_low: dict[str, Any],
+    region: str,
+    group: str,
+    process: str,
+    recoil_bin: int,
+    scale: float | None = None,
+) -> dict[str, Any] | None:
+    native_edges = list(physical_low["recoil_edges"])
+    native_nbin = len(native_edges) - 1
+    by_sample = physical_low["recoil"][region][group]
+    record = sum_one_bin_backgrounds(
+        [
+            one_bin_background(by_sample, process, index, native_nbin)
+            for index in low_native_indices(native_edges, recoil_bin)
+        ]
+    )
+    if scale is not None:
+        record = scaled_record(record, scale)
+    labels = canonical_low["search_bin_labels"]
+    group_bins = [
+        index
+        for index, label in enumerate(labels)
+        if str(label).startswith(group + "_")
+    ]
+    reference = summed_low_background(
+        canonical_low["search_components"][region][group],
+        process,
+        group_bins,
+        len(labels),
+        scale,
+    )
+    return with_reference_variations(record, reference)
+
+
+def low_recoil_observation(
+    physical_low: dict[str, Any], region: str, group: str, recoil_bin: int
+) -> float:
+    native_edges = list(physical_low["recoil_edges"])
+    values = (
+        physical_low["recoil"][region][group]["data_obs"]["nominal"]["sumw"]
+    )
+    return float(
+        sum(values[index] for index in low_native_indices(native_edges, recoil_bin))
+    )
+
+
+def low_sgamma_shape_bin(recoil_bin: int) -> int:
+    """Map six CR bins onto the four measured Low-dM Sgamma shape bins."""
+    # Sgamma bins are [250,300], [300,350], [350,400], [400,500],
+    # [500,inf].  The first is outside the selected Low-dM CR.
+    return (1, 2, 3, 4, 4, 4)[recoil_bin]
+
+
+def low_sgamma_value(
+    sgamma: dict[str, Any], group: str, shape_bin: int
+) -> float:
+    return require_positive(
+        sgamma["lowdm_families"][group]["bins"][shape_bin]["Sgamma"],
+        f"Sgamma/lowdm/{group}/bin{shape_bin}",
+    )
+
+
+def low_search_recoil_components(
+    physical_low: dict[str, Any], group: str, process: str, label: str
+) -> list[tuple[int, float]]:
+    """Split one canonical Low-dM SR yield over six physical MET bins.
+
+    The conditional support is fixed by the SR bin's recoil interval.  Within
+    that interval, fractions use the machine-derived process recoil spectrum
+    in the same Nb group.  This preserves the canonical 34-bin total exactly
+    while connecting every component to its matching Nb x MET CR parameter.
+    """
+    low, high = low_geometry(label)
+    native_edges = np.asarray(physical_low["recoil_edges"], dtype=float)
+    native_nbin = len(native_edges) - 1
+    values = leaf_arrays(
+        physical_low["recoil"]["SR"][group], process, "nominal", native_nbin
+    )[0]
+    weights: dict[int, float] = {}
+    for index, value in enumerate(values):
+        native_low = float(native_edges[index])
+        native_high = float(native_edges[index + 1])
+        for control_bin in range(len(LOW_CONTROL_EDGES) - 1):
+            control_low = float(LOW_CONTROL_EDGES[control_bin])
+            control_high = float(LOW_CONTROL_EDGES[control_bin + 1])
+            overlap_low = max(low, native_low, control_low)
+            overlap_high = min(high, native_high, control_high)
+            if overlap_high <= overlap_low:
+                continue
+            fraction = (overlap_high - overlap_low) / (native_high - native_low)
+            weights[control_bin] = (
+                weights.get(control_bin, 0.0) + max(float(value), 0.0) * fraction
+            )
+    total = sum(weights.values())
+    if total <= 0.0:
+        supported = [
+            control_bin
+            for control_bin in range(len(LOW_CONTROL_EDGES) - 1)
+            if LOW_CONTROL_EDGES[control_bin + 1] > low
+            and LOW_CONTROL_EDGES[control_bin] < high
+        ]
+        if not supported:
+            supported = [len(LOW_CONTROL_EDGES) - 2]
+        return [
+            (control_bin, 1.0 / len(supported)) for control_bin in supported
+        ]
+    return sorted(
+        (control_bin, weight / total)
+        for control_bin, weight in weights.items()
+    )
+
+
+def low_search_sgamma_components(
+    physical_low: dict[str, Any], group: str, label: str
+) -> list[tuple[int, float]]:
+    weights: dict[int, float] = {}
+    for recoil_bin, fraction in low_search_recoil_components(
+        physical_low, group, "Zto2Nu", label
+    ):
+        shape_bin = low_sgamma_shape_bin(recoil_bin)
+        weights[shape_bin] = weights.get(shape_bin, 0.0) + fraction
+    return sorted(weights.items())
 
 
 def summed_low_background(
@@ -1195,7 +1407,11 @@ def low_gcr_shape_initial(
 def rate_parameter(
     kind: str, regime: str, group: str, bin_index: int | str
 ) -> str:
-    return f"{kind}_{regime}_{group}_bin{bin_index}_{CAMPAIGN_YEAR}"
+    suffix = f"bin{bin_index}" if isinstance(bin_index, int) else str(bin_index)
+    return (
+        f"{ANALYSIS_NUISANCE_PREFIX}_{kind}_{regime}_{group}_"
+        f"{suffix}_{CAMPAIGN_YEAR}"
+    )
 
 
 def add_extra(
@@ -1205,76 +1421,9 @@ def add_extra(
         channel.setdefault("extra_lnN", {}).setdefault(process, []).extend(records)
 
 
-def top_w_composition(
-    top: dict[str, Any] | None,
-    wjets: dict[str, Any] | None,
-    name: str,
-) -> dict[str, list[dict[str, float | str]]]:
-    """MC-statistical log-ratio prior with no first-order total-yield change.
-
-    The delta-method Gaussian approximation is not valid once its log-ratio
-    sigma reaches unity.  Those sparse control bins are already handled by
-    ``autoMCStats``; adding an unbounded log-normal composition prior would
-    both double count that uncertainty and overflow numerically.
-    """
-
-    if top is None or wjets is None:
-        TOP_W_COMPOSITION_DIAGNOSTICS[name] = {"status": "missing_process"}
-        return {}
-    top_yield = float(top["nominal"][0])
-    w_yield = float(wjets["nominal"][0])
-    if top_yield <= 0.0 or w_yield <= 0.0:
-        TOP_W_COMPOSITION_DIAGNOSTICS[name] = {
-            "status": "nonpositive_yield",
-            "top_yield": top_yield,
-            "w_yield": w_yield,
-        }
-        return {}
-    sigma = math.sqrt(
-        max(float(top["sumw2"][0]), 0.0) / (top_yield * top_yield)
-        + max(float(wjets["sumw2"][0]), 0.0) / (w_yield * w_yield)
-    )
-    if not np.isfinite(sigma) or sigma <= 0.0:
-        TOP_W_COMPOSITION_DIAGNOSTICS[name] = {
-            "status": "invalid_sigma",
-            "sigma": float(sigma) if np.isfinite(sigma) else None,
-            "top_yield": top_yield,
-            "w_yield": w_yield,
-        }
-        return {}
-    if sigma >= MAX_TOP_W_COMPOSITION_LOG_SIGMA:
-        TOP_W_COMPOSITION_DIAGNOSTICS[name] = {
-            "status": "autoMCStats_only_low_effective_count",
-            "sigma": float(sigma),
-            "top_yield": top_yield,
-            "w_yield": w_yield,
-        }
-        return {}
-    top_fraction = top_yield / (top_yield + w_yield)
-    top_shift = (1.0 - top_fraction) * sigma
-    w_shift = top_fraction * sigma
-    result = {
-        "Top": [{"name": name, "down": math.exp(-top_shift), "up": math.exp(top_shift)}],
-        "WtoLNu": [{"name": name, "down": math.exp(w_shift), "up": math.exp(-w_shift)}],
-    }
-    TOP_W_COMPOSITION_DIAGNOSTICS[name] = {
-        "status": "applied",
-        "sigma": float(sigma),
-        "top_yield": top_yield,
-        "w_yield": w_yield,
-    }
-    return result
-
-
-def composition_name(regime: str, group: str, bin_index: int | str) -> str:
-    return (
-        f"{ANALYSIS_NUISANCE_PREFIX}_topWComposition_{regime}_{group}_"
-        f"bin{bin_index}_{CAMPAIGN_YEAR}"
-    )
-
-
 def build_channels(
     exact: dict[str, Any],
+    physical_exact: dict[str, Any],
     sgamma: dict[str, Any],
     rz_covariance: dict[str, Any],
     double_ratio: dict[str, Any],
@@ -1376,13 +1525,6 @@ def build_channels(
                         "observation": observation,
                         "extra_lnN": {},
                     }
-                if region == "LLCR":
-                    for process, records in top_w_composition(
-                        backgrounds.get("Top"),
-                        backgrounds.get("WtoLNu"),
-                        composition_name("highdm", group, recoil_bin),
-                    ).items():
-                        add_extra(channel, process, records)
                 channels.append(channel)
 
     high_components = high["sr_components"]
@@ -1441,25 +1583,6 @@ def build_channels(
                     parameter = rate_parameter(kind, "highdm", group, recoil_bin)
                     channel["rate_params"][component] = parameter
                     channel["rate_initial"][component] = 1.0
-                    if process in ("Top", "WtoLNu"):
-                        composition = top_w_composition(
-                            logical_records(
-                                high["recoil"]["LLCR"],
-                                group,
-                                "Top",
-                                recoil_bin,
-                                high_nbin,
-                            ),
-                            logical_records(
-                                high["recoil"]["LLCR"],
-                                group,
-                                "WtoLNu",
-                                recoil_bin,
-                                high_nbin,
-                            ),
-                            composition_name("highdm", group, recoil_bin),
-                        )
-                        add_extra(channel, component, composition.get(process, []))
                 z_record = sum_one_bin_backgrounds(
                     [
                         scaled_record(
@@ -1559,9 +1682,14 @@ def build_channels(
         )
 
     low = exact["lowdm"]
+    physical_low = physical_exact["lowdm"]
     labels = low["search_bin_labels"]
     low_nbin = len(labels)
-    low_groups, low_group_by_source = low_control_groups(labels)
+    if list(physical_low.get("nb_groups") or []) != ["Nb1", "Nb2plus"]:
+        raise ValueError("physical Low-dM input must use Nb1 and Nb2plus")
+    if len(physical_low.get("recoil_edges") or []) != 9:
+        raise ValueError("physical Low-dM input must contain eight native recoil bins")
+    low_groups = low_control_groups()
     low_qgamma = {
         group: require_positive(
             sgamma["lowdm_families"][group]["Q"],
@@ -1569,134 +1697,109 @@ def build_channels(
         )
         for group in ("Nb1", "Nb2plus")
     }
+    group_source_bins = {
+        group: [
+            index
+            for index, label in enumerate(labels)
+            if str(label).startswith(group + "_")
+        ]
+        for group in ("Nb1", "Nb2plus")
+    }
     low_sr_qcd_groups = {
-        (str(control_group["nb_group"]), str(control_group["key"]))
-        for control_group in low_groups
+        group
+        for group in ("Nb1", "Nb2plus")
         if summed_low_background(
-            low["search_components"]["SR"][
-                str(control_group["nb_group"])
-            ],
+            low["search_components"]["SR"][group],
             "QCD",
-            list(control_group["source_bins_zero_based"]),
+            group_source_bins[group],
             low_nbin,
         )
         is not None
     }
-    low_shape_initial: dict[tuple[str, str], float] = {}
     for region in LOW_CONTROL_REGIONS:
-        source_payload = low["search_components"]
         for control_group in low_groups:
             group = str(control_group["nb_group"])
+            recoil_bin = int(control_group["recoil_bin"])
             key = str(control_group["key"])
-            source_bins = list(control_group["source_bins_zero_based"])
-            by_sample = source_payload[region][group]
+            parameter_key = str(control_group["parameter_key"])
             q = low_qgamma[group]
             backgrounds: dict[str, Any] = {}
             for process in BACKGROUND_PROCESS_ORDER:
-                record = summed_low_background(
-                    by_sample,
+                record = low_recoil_background(
+                    physical_low,
+                    low,
+                    region,
+                    group,
                     process,
-                    source_bins,
-                    low_nbin,
+                    recoil_bin,
                     q if region == "GCR" and process == "PhotonJet" else None,
                 )
                 if record is not None:
                     backgrounds[process] = record
             rate_params: dict[str, str] = {}
+            rate_initial: dict[str, float] = {}
             if region == "LLCR":
-                parameter = rate_parameter("ll_norm", "lowdm", group, key)
+                parameter = rate_parameter(
+                    "ll_norm", "lowdm", group, parameter_key
+                )
                 for process in ("Top", "WtoLNu"):
                     if process in backgrounds:
                         rate_params[process] = parameter
-            elif (
-                region == "QCDCR"
-                and "QCD" in backgrounds
-                and (group, key) in low_sr_qcd_groups
-            ):
+                        rate_initial[process] = 1.0
+            elif region == "QCDCR" and "QCD" in backgrounds and group in low_sr_qcd_groups:
                 rate_params["QCD"] = rate_parameter(
-                    "qcd_norm", "lowdm", group, key
+                    "qcd_norm", "lowdm", group, parameter_key
                 )
+                rate_initial["QCD"] = 1.0
             elif region == "GCR" and "PhotonJet" in backgrounds:
+                shape_bin = low_sgamma_shape_bin(recoil_bin)
                 rate_params["PhotonJet"] = rate_parameter(
-                    "sgamma_shape", "lowdm", group, key
+                    "sgamma_shape", "lowdm", group, shape_bin
                 )
-            data_values = by_sample["data_obs"]["nominal"]["sumw"]
-            observation = float(
-                sum(float(data_values[index]) for index in source_bins)
+                rate_initial["PhotonJet"] = low_sgamma_value(
+                    sgamma, group, shape_bin
+                )
+            observation = low_recoil_observation(
+                physical_low, region, group, recoil_bin
             )
-            if region == "GCR" and "PhotonJet" in backgrounds:
-                low_shape_initial[(group, key)] = low_gcr_shape_initial(
-                    observation,
-                    backgrounds,
-                    f"lowdm/{group}/{key}",
-                )
-            shape = low_shape_initial.get((group, key), 1.0)
             channel = {
-                    "name": f"{region}_lowdm_{group}_{key}",
-                    "kind": "lowdm_control",
-                    "regime": "lowdm",
-                    "region": region,
-                    "nb_group": group,
-                    "control_group": key,
-                    "source_bins_zero_based": source_bins,
-                    "recoil_low": control_group["recoil_low"],
-                    "recoil_high": control_group["recoil_high"],
-                    "backgrounds": backgrounds,
-                    "rate_params": rate_params,
-                    "rate_initial": {
-                        process: (
-                            shape
-                            if region == "GCR" and process == "PhotonJet"
-                            else 1.0
-                        )
-                        for process in rate_params
-                    },
-                    "signal_source": None,
-                    "observation": observation,
-                    "extra_lnN": {},
-                }
-            if region == "LLCR":
-                for process, records in top_w_composition(
-                    backgrounds.get("Top"),
-                    backgrounds.get("WtoLNu"),
-                    composition_name("lowdm", group, key),
-                ).items():
-                    add_extra(channel, process, records)
+                "name": f"{region}_lowdm_{group}_{key}",
+                "kind": "lowdm_control",
+                "regime": "lowdm",
+                "region": region,
+                "nb_group": group,
+                "control_group": key,
+                "source_bin": recoil_bin,
+                "recoil_low": control_group["recoil_low"],
+                "recoil_high": control_group["recoil_high"],
+                "backgrounds": backgrounds,
+                "rate_params": rate_params,
+                "rate_initial": rate_initial,
+                "signal_source": None,
+                "observation": observation,
+                "extra_lnN": {},
+            }
             channels.append(channel)
 
-    missing_shape_groups = [
-        f"{record['nb_group']}/{record['key']}"
-        for record in low_groups
-        if (str(record["nb_group"]), str(record["key"]))
-        not in low_shape_initial
-    ]
-    if missing_shape_groups:
-        raise ValueError(
-            "Low-dM GCR does not constrain every control group: "
-            + ", ".join(missing_shape_groups)
-        )
-
+    shape_intervals = {
+        1: (300.0, 350.0),
+        2: (350.0, 400.0),
+        3: (400.0, 500.0),
+        4: (500.0, float("inf")),
+    }
     for source_bin, label in enumerate(labels):
-        control_group = low_group_by_source[source_bin]
-        group = str(control_group["nb_group"])
-        key = str(control_group["key"])
-        source_bins = list(control_group["source_bins_zero_based"])
+        group = "Nb1" if str(label).startswith("Nb1_") else "Nb2plus"
         by_sample = low["search_components"]["SR"][group]
-        shape = low_shape_initial[(group, key)]
-        q = low_qgamma[group]
-        sgamma_parameter = rate_parameter(
-            "sgamma_shape", "lowdm", group, key
-        )
-        backgrounds = {}
-        rate_params = {}
-        rate_initial = {}
+        backgrounds: dict[str, Any] = {}
+        rate_params: dict[str, str] = {}
+        rate_initial: dict[str, float] = {}
         channel = {
             "name": f"SR_lowdm_bin{source_bin}",
             "kind": "lowdm_signal_searchbin",
             "regime": "lowdm",
             "region": "SR",
             "nb_group": group,
-            "control_group": key,
+            "control_group": f"{group}_met6",
             "source_bin": source_bin,
             "bin_label": label,
             "backgrounds": backgrounds,
@@ -1706,59 +1809,86 @@ def build_channels(
             "observation": None,
             "extra_lnN": {},
         }
-        for process in BACKGROUND_PROCESS_ORDER:
-            if process == "Zto2Nu":
-                continue
+        transfer_components: dict[str, list[dict[str, Any]]] = {}
+        for process in ("Top", "WtoLNu", "QCD"):
             record = one_bin_background(by_sample, process, source_bin, low_nbin)
             if record is None:
                 continue
-            if process in ("Top", "WtoLNu"):
-                parameter = rate_parameter("ll_norm", "lowdm", group, key)
-            elif process == "QCD":
-                parameter = rate_parameter("qcd_norm", "lowdm", group, key)
-            else:
-                parameter = None
-            backgrounds[process] = record
-            if parameter:
-                rate_params[process] = parameter
-                rate_initial[process] = 1.0
-                if process in ("Top", "WtoLNu"):
-                    llcr = low["search_components"]["LLCR"][group]
-                    composition = top_w_composition(
-                        summed_low_background(
-                            llcr, "Top", source_bins, low_nbin
-                        ),
-                        summed_low_background(
-                            llcr, "WtoLNu", source_bins, low_nbin
-                        ),
-                        composition_name("lowdm", group, key),
-                    )
-                    add_extra(channel, process, composition.get(process, []))
-        z_record = one_bin_background(
-            by_sample, "Zto2Nu", source_bin, low_nbin
-        )
+            transfer_components[process] = []
+            for recoil_bin, fraction in low_search_recoil_components(
+                physical_low, group, process, label
+            ):
+                control_group = next(
+                    item
+                    for item in low_groups
+                    if item["nb_group"] == group
+                    and int(item["recoil_bin"]) == recoil_bin
+                )
+                component = f"{process}_{group}_u{recoil_bin}"
+                backgrounds[component] = scaled_record(record, fraction)
+                kind = "ll_norm" if process in ("Top", "WtoLNu") else "qcd_norm"
+                parameter = rate_parameter(
+                    kind,
+                    "lowdm",
+                    group,
+                    str(control_group["parameter_key"]),
+                )
+                rate_params[component] = parameter
+                rate_initial[component] = 1.0
+                transfer_components[process].append(
+                    {
+                        "recoil_bin": recoil_bin,
+                        "fraction": fraction,
+                        "parameter": parameter,
+                    }
+                )
+        for process in RARE_PROCESSES:
+            record = one_bin_background(by_sample, process, source_bin, low_nbin)
+            if record is not None:
+                backgrounds[process] = record
+        z_record = one_bin_background(by_sample, "Zto2Nu", source_bin, low_nbin)
+        sgamma_components = []
         if z_record is not None:
-            z_record = scaled_record(
-                z_record,
-                rz_value(rz_covariance, f"lowdm_{group}"),
-            )
-            backgrounds["Zto2Nu"] = z_record
-            rate_params["Zto2Nu"] = sgamma_parameter
-            rate_initial["Zto2Nu"] = shape
-            add_extra(
-                channel,
-                "Zto2Nu",
-                rz_nuisances(rz_covariance, f"lowdm_{group}"),
-            )
-            low_edge, high_edge = low_geometry(label)
-            name, delta, source = closure_record(
-                double_ratio, "lowdm", low_edge, high_edge
-            )
-            if delta > 0.0:
+            for shape_bin, fraction in low_search_sgamma_components(
+                physical_low, group, label
+            ):
+                component = f"Zto2Nu_{group}_sg{shape_bin}"
+                backgrounds[component] = scaled_record(
+                    z_record,
+                    rz_value(rz_covariance, f"lowdm_{group}") * fraction,
+                )
+                parameter = rate_parameter(
+                    "sgamma_shape", "lowdm", group, shape_bin
+                )
+                rate_params[component] = parameter
+                rate_initial[component] = low_sgamma_value(
+                    sgamma, group, shape_bin
+                )
                 add_extra(
                     channel,
-                    "Zto2Nu",
-                    [{"name": name, "down": 1.0 / (1.0 + delta), "up": 1.0 + delta}],
+                    component,
+                    rz_nuisances(rz_covariance, f"lowdm_{group}"),
+                )
+                closure_low, closure_high = shape_intervals[shape_bin]
+                name, delta, source = closure_record(
+                    double_ratio, "lowdm", closure_low, closure_high
+                )
+                if delta > 0.0:
+                    add_extra(
+                        channel,
+                        component,
+                        [{
+                            "name": name,
+                            "down": 1.0 / (1.0 + delta),
+                            "up": 1.0 + delta,
+                        }],
+                    )
+                sgamma_components.append(
+                    {
+                        "shape_bin": shape_bin,
+                        "fraction": fraction,
+                        "parameter": parameter,
+                    }
                 )
         channels.append(channel)
         bin_map["lowdm"].append(
@@ -1767,20 +1897,10 @@ def build_channels(
                 "nb_group": group,
                 "source_bin_zero_based": source_bin,
                 "label": label,
-                "control_group": key,
-                "control_group_source_bins_zero_based": source_bins,
-                "control_recoil_low": control_group["recoil_low"],
-                "control_recoil_high": (
-                    float(control_group["recoil_high"])
-                    if np.isfinite(control_group["recoil_high"])
-                    else None
-                ),
-                "control_last_bin_open_ended": not np.isfinite(
-                    control_group["recoil_high"]
-                ),
-                "sgamma": shape,
-                "qgamma": q,
-                "sgamma_parameter": sgamma_parameter,
+                "normalization_control_group": f"{group}_met6",
+                "transfer_components": transfer_components,
+                "sgamma_components": sgamma_components,
+                "qgamma": low_qgamma[group],
             }
         )
 
@@ -1857,7 +1977,14 @@ def overwrite_observations(
                 f"{CAMPAIGN_YEAR} data"
             )
     finally:
-        root_file.Close()
+        # The file contains O(channels * masses * variations) objects.  ROOT's
+        # default Close() recursively deletes every in-memory object and becomes
+        # pathologically slow for the full signal grid.  The process owns no
+        # downstream use of those C++ objects, so close the file without the
+        # recursive teardown; the OS reclaims the intentionally leaked objects
+        # when this short-lived builder exits.
+        root_file.Close("nodelete")
+        ROOT.SetOwnership(root_file, False)
 
 
 def signal_histogram(
@@ -1961,6 +2088,22 @@ def build_root(
                     record["sumw2"],
                     np.asarray([0.0, 1.0]),
                 )
+                for nuisance, pair in record["variations"].items():
+                    for direction, suffix in (("up", "Up"), ("down", "Down")):
+                        varied = pair[direction]
+                        ratio = np.divide(
+                            varied,
+                            record["nominal"],
+                            out=np.ones_like(varied),
+                            where=record["nominal"] > 0.0,
+                        )
+                        write_hist(
+                            directory,
+                            f"{process}_{nuisance}{suffix}",
+                            varied,
+                            record["sumw2"] * ratio * ratio,
+                            np.asarray([0.0, 1.0]),
+                        )
                 background_total += record["nominal"]
                 background_sumw2 += record["sumw2"]
                 background_summary[process] = {
@@ -2016,6 +2159,7 @@ def build_root(
                 signal = np.zeros(1)
                 signal_sumw2 = np.zeros(1)
                 signal_factors: dict[str, dict[str, float]] = {}
+                signal_shapes: dict[str, dict[str, np.ndarray]] = {}
                 sources = channel.get("signal_sources")
                 if sources is None:
                     sources = (
@@ -2079,6 +2223,10 @@ def build_root(
                             "down": float(down_value / signal[0]),
                             "up": float(up_value / signal[0]),
                         }
+                        signal_shapes[nps_nuisance_name(nuisance)] = {
+                            "down": np.asarray([down_value]),
+                            "up": np.asarray([up_value]),
+                        }
                 write_hist(
                     directory,
                     process,
@@ -2086,6 +2234,22 @@ def build_root(
                     signal_sumw2,
                     np.asarray([0.0, 1.0]),
                 )
+                for nuisance, pair in signal_shapes.items():
+                    for direction, suffix in (("up", "Up"), ("down", "Down")):
+                        varied = pair[direction]
+                        ratio = np.divide(
+                            varied,
+                            signal,
+                            out=np.ones_like(varied),
+                            where=signal > 0.0,
+                        )
+                        write_hist(
+                            directory,
+                            f"{process}_{nuisance}{suffix}",
+                            varied,
+                            signal_sumw2 * ratio * ratio,
+                            np.asarray([0.0, 1.0]),
+                        )
                 signal_summary = summary["signals"].setdefault(
                     mass_key,
                     {
@@ -2105,7 +2269,9 @@ def build_root(
                         nuisance, []
                     ).append(channel["name"])
     finally:
-        root_file.Close()
+        # See build_root(): avoid ROOT's quadratic recursive object teardown.
+        root_file.Close("nodelete")
+        ROOT.SetOwnership(root_file, False)
     return summary
 
 
@@ -2265,14 +2431,14 @@ def datacard_text(
         | set(summary["signals"][mass_key]["weight_nuisances"])
     )
     lines = [
-        f"# {CAMPAIGN_YEAR} adopted likelihood: simultaneous LLCR/QCDCR/GCR; external RZ; canonical High-dM + Low-dM34.",
-        "# Z(inv): RZ is the external normalization; Qgamma-normalized GCR data constrain the shared Sgamma shape parameter.",
-        "# RZ covariance is explicitly temporary diagonal statistical-only pending the final cross-category matrix.",
         "imax * number of channels",
         "jmax * number of backgrounds",
         "kmax * number of nuisance parameters",
         "------------",
-        f"shapes * * {stable_path(template_root)} $CHANNEL/$PROCESS",
+        (
+            f"shapes * * {stable_path(template_root)} "
+            "$CHANNEL/$PROCESS $CHANNEL/$PROCESS_$SYSTEMATIC"
+        ),
         "------------",
         "bin " + " ".join(channel_names),
         "observation " + " ".join(["-1"] * len(channel_names)),
@@ -2297,8 +2463,8 @@ def datacard_text(
                     ).get("nuisance_factors")
                     or {}
                 ).get(nuisance)
-            mask.append("-" if not pair else f"{pair['down']:.8g}/{pair['up']:.8g}")
-        lines.append(nuisance + " lnN " + " ".join(mask))
+            mask.append("-" if not pair else "1")
+        lines.append(nuisance + " shape " + " ".join(mask))
     lines.append(
         NPS_LUMI_NAME
         + " lnN "
@@ -2348,16 +2514,6 @@ def datacard_text(
     lines.extend(rate_lines)
     if auto_mc_stats >= 0:
         lines.append(f"* autoMCStats {auto_mc_stats}")
-    lines.extend(
-        [
-            "# Top=TT+ST. One ll_norm is shared by Top and W in each Nb x recoil CR group and all matched exclusive SR categories.",
-            "# A shared MC-derived anti-correlated Top/W composition nuisance accompanies each grouped ll_norm constraint.",
-            "# GCR PhotonJet is pre-scaled only by Qgamma; the shared Sgamma rateParam is shape-only and starts at its measured value.",
-            "# Zto2Nu SR is pre-scaled only by RZ; no extra Z-normalization rateParam is present.",
-            "# GCR statistics enter only through its Poisson channel; no Sgamma statistical Gaussian is duplicated.",
-            "# DY2E/DY2M are excluded as Poisson channels and enter only through external RZ and Z/gamma closure.",
-        ]
-    )
     return "\n".join(lines) + "\n"
 
 
@@ -2392,6 +2548,15 @@ def main() -> int:
     parser.add_argument("--rz-low", type=Path, required=True)
     parser.add_argument("--zgamma-double-ratio", type=Path, required=True)
     parser.add_argument(
+        "--exact-input",
+        type=Path,
+        required=True,
+        help=(
+            "Machine-derived Nb x recoil input product; used only for "
+            "Low-dM physical CR yields after canonical histogram promotion"
+        ),
+    )
+    parser.add_argument(
         "--search-bin-config",
         type=Path,
         required=True,
@@ -2416,17 +2581,20 @@ def main() -> int:
         "rz_high": args.rz_high,
         "rz_low": args.rz_low,
         "zgamma_double_ratio": args.zgamma_double_ratio,
+        "exact_input": args.exact_input,
         "search_bin_config": args.search_bin_config,
     }
     sgamma = read_json(args.sgamma)
     rz_high = read_json(args.rz_high)
     rz_low = read_json(args.rz_low)
     double_ratio = read_json(args.zgamma_double_ratio)
+    physical_exact = read_json(args.exact_input)
     search_bin_configuration = read_json(args.search_bin_config)
     for label, payload in (
         ("Sgamma", sgamma),
         ("RZ high", rz_high),
         ("Z/gamma double ratio", double_ratio),
+        ("physical Nb-recoil input", physical_exact),
     ):
         if payload.get("status") != "complete":
             raise SystemExit(f"{label} input incomplete: {payload.get('status')}")
@@ -2458,29 +2626,26 @@ def main() -> int:
         unmatched_rate_parameters,
         bin_map,
         dropped_empty_control_channels,
-    ) = build_channels(exact, sgamma, rz_covariance, double_ratio)
+    ) = build_channels(
+        exact, physical_exact, sgamma, rz_covariance, double_ratio
+    )
     write_json(output_dir / "bin_map.json", bin_map)
-    low_control_group_summary: list[dict[str, Any]] = []
-    seen_low_control_groups: set[tuple[str, str]] = set()
-    for record in bin_map["lowdm"]:
-        group_key = (
-            str(record["nb_group"]),
-            str(record["control_group"]),
-        )
-        if group_key in seen_low_control_groups:
-            continue
-        seen_low_control_groups.add(group_key)
-        low_control_group_summary.append(
-            {
-                "nb_group": group_key[0],
-                "key": group_key[1],
-                "recoil_low": record["control_recoil_low"],
-                "recoil_high": record["control_recoil_high"],
-                "source_bins_zero_based": record[
-                    "control_group_source_bins_zero_based"
-                ],
-            }
-        )
+    low_control_group_summary = [
+        {
+            "nb_group": str(record["nb_group"]),
+            "key": str(record["key"]),
+            "parameter_key": str(record["parameter_key"]),
+            "recoil_bin_zero_based": int(record["recoil_bin"]),
+            "recoil_low": float(record["recoil_low"]),
+            "recoil_high": (
+                float(record["recoil_high"])
+                if np.isfinite(record["recoil_high"])
+                else None
+            ),
+            "last_bin_open_ended": not np.isfinite(record["recoil_high"]),
+        }
+        for record in low_control_groups()
+    ]
     masses = mass_points(
         hists,
         args.only,
@@ -2535,61 +2700,18 @@ def main() -> int:
         "schema_version": f"canonical_tf_rz_sgamma_model_{CAMPAIGN_YEAR}_v2",
         "status": "combine_inputs_ready",
         "model": {
-            "simultaneous_control_regions": list(HIGH_CONTROL_REGIONS),
+            "control_regions": list(HIGH_CONTROL_REGIONS),
             "dilepton_poisson_channels": False,
-            "lost_lepton": (
-                "one free ll_norm shared by Top and W per Nb x recoil "
-                "control group; multiple exclusive SR categories share it"
-            ),
-            "top_w_composition": (
-                "MC-derived log-ratio nuisance, anti-correlated at fixed total "
-                "to first order when sigma<1; sparse bins use autoMCStats only"
-            ),
-            "top_w_composition_max_log_sigma": MAX_TOP_W_COMPOSITION_LOG_SIGMA,
-            "top_w_composition_diagnostics": {
-                "counts": {
-                    status: sum(
-                        record.get("status") == status
-                        for record in TOP_W_COMPOSITION_DIAGNOSTICS.values()
-                    )
-                    for status in sorted(
-                        {
-                            str(record.get("status"))
-                            for record in TOP_W_COMPOSITION_DIAGNOSTICS.values()
-                        }
-                    )
-                },
-                "records": TOP_W_COMPOSITION_DIAGNOSTICS,
-            },
-            "qcd": (
-                "one free qcd_norm per Nb x recoil control group; multiple "
-                "exclusive SR categories share it"
-            ),
-            "zinv": (
-                "RZ-only nominal Z normalization; Qgamma-only nominal GCR "
-                "normalization; one shared GCR-constrained Sgamma shape "
-                "rate parameter initialized at the measured Sgamma value"
-            ),
             "zinv_free_normalization_rate_parameter": False,
             "sgamma_role": "shape only, shared between matched GCR and Z SR",
             "rz_covariance": rz_covariance["status"],
-            "zgamma_nonclosure": "central abs(D-1), Z SR only",
             "highdm_bins": len(exact["highdm"]["search_bin_labels"]),
             "highdm_source_bins": highdm_bin_projection["source_bin_count"],
             "highdm_bin_projection": highdm_bin_projection,
             "lowdm_bins": 34,
-            "lowdm_control_connectivity": {
-                "model": "Nb x physical recoil interval shared across categories",
-                "control_group_count": len(low_control_group_summary),
-                "per_sr_bin_control_parameters": False,
-                "groups": low_control_group_summary,
-            },
+            "lowdm_control_recoil_edges_gev": LOW_CONTROL_EDGES.tolist(),
+            "lowdm_control_groups": low_control_group_summary,
             "signal_topology": args.topology,
-            "histogram_access": (
-                "bounded mmap extraction from canonical hists.json only; "
-                "no intermediate ROOT or NanoAOD access"
-            ),
-            "input_boundary_enforced": True,
             "dropped_empty_control_channels": dropped_empty_control_channels,
         },
         "inputs": {

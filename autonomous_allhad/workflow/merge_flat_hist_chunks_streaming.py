@@ -25,6 +25,8 @@ from run_flat_hists_chunked import (
     merge_tree,
     read_json,
     summary_has_strict_warnings,
+    validate_highdm_control_components,
+    validate_highdm_search_bin_components,
     validate_search_bin_payload,
     write_json,
 )
@@ -32,7 +34,9 @@ from run_flat_hists_chunked import (
 
 HISTOGRAM_KEYS = (
     "histograms",
+    "highdm_control_components",
     "search_bin_histograms",
+    "highdm_search_bin_components",
     "lowdm_variable_histograms",
     "highdm_variable_histograms",
 )
@@ -99,6 +103,12 @@ def update_summary(
         (chunk_build_options or {}).get("search_bins"),
         require_histogram=False,
     )
+    validate_highdm_search_bin_components(
+        payload,
+        (chunk_build_options or {}).get("search_bins"),
+        require_components=False,
+    )
+    validate_highdm_control_components(payload, require_components=False)
 
     for code_path in REPAIRABLE_CODE_PATHS:
         code_sha = (chunk_build_options or {}).get("code_sha256", {}).get(code_path)
@@ -188,6 +198,8 @@ def dump_member(
 def write_compact_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix + ".tmp")
+    control_component_reference: dict[str, Any] | None = None
+    search_component_reference: dict[str, Any] | None = None
     with temporary.open("w") as handle:
         json.dump(
             payload,
@@ -316,28 +328,19 @@ def main() -> int:
             + ", ".join(duplicate_roots)
         )
     summary["input_roots"] = sorted(summary["input_roots"])
+    allowed_chunk_statuses = {"complete"}
+    if args.allow_zero_entry_roots:
+        allowed_chunk_statuses.add("complete_with_warnings")
     status = (
         "complete"
-        if set(summary.get("chunk_statuses") or {}) <= {"complete"}
+        if set(summary.get("chunk_statuses") or {}) <= allowed_chunk_statuses
         and not summary_has_strict_warnings(
             summary,
             args.allow_zero_entry_roots,
         )
         else "complete_with_warnings"
     )
-    if status != "complete" and not (
-        args.allow_zero_entry_roots
-        and not any(
-            bool(summary.get(key))
-            for key in (
-                "weight_failures",
-                "missing_input_roots",
-                "missing_sidecars",
-                "weight_rejections",
-            )
-        )
-        and bool(summary.get("zero_entry_roots"))
-    ):
+    if status != "complete":
         raise RuntimeError(f"strict merged status is {status}")
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
@@ -415,6 +418,11 @@ def main() -> int:
                 del payload
                 if index % 25 == 0:
                     gc.collect()
+            if histogram_key == "histograms":
+                control_component_reference = {
+                    region: merged_section.get(region) or {}
+                    for region in ("LLCR", "QCDCR", "GCR", "DY2E", "DY2M")
+                }
             if histogram_key == "search_bin_histograms":
                 validate_search_bin_payload(
                     {
@@ -426,6 +434,39 @@ def main() -> int:
                     },
                     (expected_build_options or {}).get("search_bins"),
                     require_histogram=True,
+                )
+                scheme = str(
+                    ((expected_build_options or {}).get("search_bins") or {}).get(
+                        "scheme_name", ""
+                    )
+                )
+                if scheme:
+                    search_component_reference = merged_section.get(scheme)
+            if histogram_key == "highdm_control_components":
+                control_contract = (expected_build_options or {}).get(
+                    "search_bins"
+                )
+                validate_highdm_control_components(
+                    {
+                        "histograms": control_component_reference or {},
+                        "highdm_control_components": merged_section,
+                    },
+                    require_components=bool(control_contract),
+                )
+            if histogram_key == "highdm_search_bin_components":
+                contract = (expected_build_options or {}).get("search_bins")
+                scheme = str((contract or {}).get("scheme_name", ""))
+                validate_highdm_search_bin_components(
+                    {
+                        "search_bin_histograms": {
+                            scheme: search_component_reference or {}
+                        },
+                        "highdm_search_bin_components": {
+                            scheme: merged_section.get(scheme) or {}
+                        },
+                    },
+                    contract,
+                    require_components=True,
                 )
             first = dump_member(
                 handle,
@@ -470,6 +511,31 @@ def main() -> int:
             "streaming_merge": True,
             "merge_workers": workers,
             "sections": list(args.sections),
+            "validated_chunk_count": len(chunks),
+            "unique_input_root_count": len(summary["input_roots"]),
+            "chunk_statuses": summary.get("chunk_statuses") or {},
+            "zero_entry_root_count": len(summary.get("zero_entry_roots") or []),
+            "strict_warning_counts": {
+                key: len(summary.get(key) or [])
+                if isinstance(summary.get(key), list)
+                else int(bool(summary.get(key)))
+                for key in (
+                    "weight_failures",
+                    "missing_input_roots",
+                    "missing_sidecars",
+                    "weight_rejections",
+                )
+            },
+            "search_bin_contract": (
+                expected_build_options or {}
+            ).get("search_bins"),
+            "component_validations": {
+                "highdm_control_components": True,
+                "highdm_search_bin_components": True,
+                "search_bin_histograms": True,
+                "finite_histogram_content": True,
+            },
+            "build_options": expected_build_options,
         },
     )
     print(

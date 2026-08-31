@@ -138,7 +138,7 @@ def load_search_bin_contract(
     if package_root not in sys.path:
         sys.path.insert(0, package_root)
     from autonomous_allhad.search_bin_categorization import (  # noqa: PLC0415
-        configured_exclusive_mapping,
+        configured_exclusive_bin_count,
     )
 
     configuration = read_json(path)
@@ -157,9 +157,13 @@ def load_search_bin_contract(
         "scheme_name": scheme_name,
         "campaign_year": str(campaign_year),
         "mtb_min": mtb_min,
-        "bin_count": len(configured_exclusive_mapping(configuration)),
+        "bin_count": configured_exclusive_bin_count(configuration),
+        "bin_merges_1based": list(configuration.get("bin_merges_1based") or []),
         "omitted_topologies": list(
             configuration.get("omitted_topologies") or []
+        ),
+        "omitted_categories": list(
+            configuration.get("omitted_categories") or []
         ),
         "sha256": file_sha256(path),
     }
@@ -222,6 +226,199 @@ def validate_search_bin_payload(
             raise RuntimeError(
                 f"{scheme}:{label}: invalid entry conservation"
             )
+
+
+def validate_highdm_search_bin_components(
+    payload: dict[str, Any],
+    contract: dict[str, Any] | None,
+    *,
+    require_components: bool,
+) -> None:
+    """Validate the in-pass background decomposition used by datacards.
+
+    The sum over the physical Nb and native-recoil axes must reproduce each
+    background sample/variation in the canonical High-dM search histogram.
+    This invariant prevents downstream card production from reopening ROOTs.
+    """
+    if contract is None:
+        return
+    scheme = str(contract["scheme_name"])
+    bin_count = int(contract["bin_count"])
+    aggregate = (payload.get("search_bin_histograms") or {}).get(scheme) or {}
+    components = (payload.get("highdm_search_bin_components") or {}).get(
+        scheme
+    )
+    background_samples = {
+        str(sample)
+        for sample, variation_tree in aggregate.items()
+        if str(sample) != "data_obs"
+        and not str(sample).startswith(("T2tt_", "T2bW_", "T2tb_"))
+        and any(
+            sum(int(value) for value in (leaf.get("entries") or [])) > 0
+            for leaf in (variation_tree or {}).values()
+            if hist_leaf(leaf)
+        )
+    }
+    if require_components and background_samples and not components:
+        raise RuntimeError(f"{scheme}: High-dM card components are missing")
+    if not components:
+        return
+    expected_nb_groups = {"Nb1", "Nb2", "Nb3plus"}
+    expected_recoil_groups = {
+        f"recoil{index}" for index in range(6)
+    }
+    accumulated: dict[tuple[str, str], dict[str, list[float] | list[int]]] = {}
+    for nb_group, recoil_tree in components.items():
+        if nb_group not in expected_nb_groups:
+            raise RuntimeError(f"{scheme}: unexpected Nb component {nb_group}")
+        if not isinstance(recoil_tree, dict):
+            raise RuntimeError(f"{scheme}:{nb_group}: invalid component tree")
+        for recoil_group, sample_tree in recoil_tree.items():
+            if recoil_group not in expected_recoil_groups:
+                raise RuntimeError(
+                    f"{scheme}:{nb_group}: unexpected recoil component "
+                    f"{recoil_group}"
+                )
+            for sample, variation_tree in (sample_tree or {}).items():
+                for variation, leaf in (variation_tree or {}).items():
+                    if not hist_leaf(leaf):
+                        raise RuntimeError(
+                            f"{scheme}:{nb_group}:{recoil_group}:{sample}:"
+                            f"{variation}: invalid histogram leaf"
+                        )
+                    key = (str(sample), str(variation))
+                    target = accumulated.setdefault(
+                        key,
+                        {
+                            "sumw": [0.0] * bin_count,
+                            "sumw2": [0.0] * bin_count,
+                            "entries": [0] * bin_count,
+                        },
+                    )
+                    for field in ("sumw", "sumw2", "entries"):
+                        values = leaf.get(field) or []
+                        if len(values) != bin_count:
+                            raise RuntimeError(
+                                f"{scheme}:{nb_group}:{recoil_group}:{sample}:"
+                                f"{variation}:{field} has {len(values)} bins; "
+                                f"expected {bin_count}"
+                            )
+                        for index, value in enumerate(values):
+                            if field != "entries" and not math.isfinite(float(value)):
+                                raise RuntimeError(
+                                    f"{scheme}:{sample}:{variation}:{field} "
+                                    "contains non-finite values"
+                                )
+                            target[field][index] += value
+
+    for (sample, variation), component_sum in accumulated.items():
+        aggregate_leaf = ((aggregate.get(sample) or {}).get(variation) or {})
+        if not hist_leaf(aggregate_leaf):
+            raise RuntimeError(
+                f"{scheme}:{sample}:{variation}: aggregate histogram is missing"
+            )
+        for field in ("sumw", "sumw2", "entries"):
+            aggregate_values = aggregate_leaf.get(field) or []
+            for index, (component_value, aggregate_value) in enumerate(
+                zip(component_sum[field], aggregate_values)
+            ):
+                if field == "entries":
+                    matches = int(component_value) == int(aggregate_value)
+                else:
+                    matches = math.isclose(
+                        float(component_value),
+                        float(aggregate_value),
+                        rel_tol=1.0e-10,
+                        abs_tol=1.0e-8,
+                    )
+                if not matches:
+                    raise RuntimeError(
+                        f"{scheme}:{sample}:{variation}:{field}[{index}] "
+                        "does not equal the sum of in-pass card components"
+                    )
+
+
+def validate_highdm_control_components(
+    payload: dict[str, Any], *, require_components: bool
+) -> None:
+    components = payload.get("highdm_control_components") or {}
+    required_regions = {"LLCR", "QCDCR", "GCR", "DY2E", "DY2M"}
+    if require_components and not required_regions.issubset(components):
+        missing = sorted(required_regions - set(components))
+        raise RuntimeError(
+            "High-dM control components are missing regions: "
+            + ", ".join(missing)
+        )
+    aggregate = payload.get("histograms") or {}
+    for region, nb_tree in components.items():
+        if region not in required_regions:
+            raise RuntimeError(
+                f"unexpected High-dM control-component region {region}"
+            )
+        accumulated: dict[tuple[str, str], dict[str, list[float] | list[int]]] = {}
+        for nb_group, sample_tree in (nb_tree or {}).items():
+            if nb_group not in {"Nb1", "Nb2", "Nb3plus"}:
+                raise RuntimeError(
+                    f"{region}: unexpected High-dM Nb component {nb_group}"
+                )
+            for sample, variation_tree in (sample_tree or {}).items():
+                for variation, leaf in (variation_tree or {}).items():
+                    if not hist_leaf(leaf):
+                        raise RuntimeError(
+                            f"{region}:{nb_group}:{sample}:{variation}: "
+                            "invalid histogram leaf"
+                        )
+                    key = (str(sample), str(variation))
+                    target = accumulated.setdefault(
+                        key,
+                        {
+                            "sumw": [0.0] * 6,
+                            "sumw2": [0.0] * 6,
+                            "entries": [0] * 6,
+                        },
+                    )
+                    for field in ("sumw", "sumw2", "entries"):
+                        values = leaf.get(field) or []
+                        if len(values) != 6:
+                            raise RuntimeError(
+                                f"{region}:{nb_group}:{sample}:{variation}:"
+                                f"{field} has {len(values)} bins; expected 6"
+                            )
+                        for index, value in enumerate(values):
+                            if field != "entries" and not math.isfinite(float(value)):
+                                raise RuntimeError(
+                                    f"{region}:{sample}:{variation}:{field} "
+                                    "contains non-finite values"
+                                )
+                            target[field][index] += value
+        for (sample, variation), component_sum in accumulated.items():
+            aggregate_leaf = (
+                (((aggregate.get(region) or {}).get(sample) or {}).get(variation))
+                or {}
+            )
+            if not hist_leaf(aggregate_leaf):
+                raise RuntimeError(
+                    f"{region}:{sample}:{variation}: aggregate histogram missing"
+                )
+            for field in ("sumw", "sumw2", "entries"):
+                for index, (component_value, aggregate_value) in enumerate(
+                    zip(component_sum[field], aggregate_leaf.get(field) or [])
+                ):
+                    matches = (
+                        int(component_value) == int(aggregate_value)
+                        if field == "entries"
+                        else math.isclose(
+                            float(component_value),
+                            float(aggregate_value),
+                            rel_tol=1.0e-10,
+                            abs_tol=1.0e-8,
+                        )
+                    )
+                    if not matches:
+                        raise RuntimeError(
+                            f"{region}:{sample}:{variation}:{field}[{index}] "
+                            "does not equal the sum of in-pass Nb components"
+                        )
 
 
 def hist_leaf(obj: Any) -> bool:
@@ -359,6 +556,16 @@ def compatible_build_options(
 ) -> bool:
     if recorded == expected:
         return True
+    if recorded is not None and expected is not None:
+        recorded_contract = json.loads(json.dumps(recorded))
+        expected_contract = json.loads(json.dumps(expected))
+        # This flag changes only validation of a structurally valid empty
+        # intermediate ROOT.  It does not change any histogram selection,
+        # weight, binning, variation, or event content.
+        recorded_contract.pop("allow_zero_entry_roots", None)
+        expected_contract.pop("allow_zero_entry_roots", None)
+        if recorded_contract == expected_contract:
+            return True
     if not allow_hist_builder_repair or recorded is None or expected is None:
         return False
     recorded_copy = json.loads(json.dumps(recorded))
@@ -407,14 +614,18 @@ def merge_payloads(
             merged = {
                 key: value
                 for key, value in payload.items()
-                if key not in {"histograms", "search_bin_histograms", "lowdm_variable_histograms", "highdm_variable_histograms", "summary", "status", "normalization"}
+                if key not in {"histograms", "highdm_control_components", "search_bin_histograms", "highdm_search_bin_components", "lowdm_variable_histograms", "highdm_variable_histograms", "summary", "status", "normalization"}
             }
             merged["histograms"] = {}
+            merged["highdm_control_components"] = {}
             merged["search_bin_histograms"] = {}
+            merged["highdm_search_bin_components"] = {}
             merged["lowdm_variable_histograms"] = {}
             merged["highdm_variable_histograms"] = {}
         merge_tree(merged["histograms"], payload.get("histograms") or {})
+        merge_tree(merged["highdm_control_components"], payload.get("highdm_control_components") or {})
         merge_tree(merged["search_bin_histograms"], payload.get("search_bin_histograms") or {})
+        merge_tree(merged["highdm_search_bin_components"], payload.get("highdm_search_bin_components") or {})
         merge_tree(merged["lowdm_variable_histograms"], payload.get("lowdm_variable_histograms") or {})
         merge_tree(merged["highdm_variable_histograms"], payload.get("highdm_variable_histograms") or {})
         src_summary = payload.get("summary") or {}
@@ -458,6 +669,17 @@ def merge_payloads(
                 "search_bins"
             ),
             require_histogram=False,
+        )
+        validate_highdm_search_bin_components(
+            payload,
+            (expected_build_options or chunk_build_options or {}).get(
+                "search_bins"
+            ),
+            require_components=False,
+        )
+        validate_highdm_control_components(
+            payload,
+            require_components=False,
         )
         chunk_status = str(payload.get("status") or "missing")
         status_counts = summary.setdefault("chunk_statuses", {})
@@ -518,7 +740,10 @@ def merge_payloads(
     summary["input_roots"] = sorted(summary["input_roots"])
     merged["normalization"] = str(normalization)
     merged["summary"] = summary
-    all_chunks_clean = set(summary.get("chunk_statuses") or {}) <= {"complete"}
+    allowed_chunk_statuses = {"complete"}
+    if allow_zero_entry_roots:
+        allowed_chunk_statuses.add("complete_with_warnings")
+    all_chunks_clean = set(summary.get("chunk_statuses") or {}) <= allowed_chunk_statuses
     merged["status"] = (
         "complete"
         if all_chunks_clean
@@ -531,6 +756,21 @@ def merge_payloads(
             "search_bins"
         ),
         require_histogram=True,
+    )
+    validate_highdm_search_bin_components(
+        merged,
+        (expected_build_options or summary.get("build_options") or {}).get(
+            "search_bins"
+        ),
+        require_components=True,
+    )
+    validate_highdm_control_components(
+        merged,
+        require_components=bool(
+            (expected_build_options or summary.get("build_options") or {}).get(
+                "search_bins"
+            )
+        ),
     )
     write_json(output, merged)
     return merged

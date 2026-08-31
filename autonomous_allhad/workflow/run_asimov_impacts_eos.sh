@@ -9,7 +9,8 @@ fi
 CARD=$1
 OUTDIR=$2
 MASS=$3
-CMSSW=/eos/user/t/taiwoo/decaf/analysis/CombinedArea/CMSSW_14_1_0_pre4
+: "${COMBINE_RUNTIME_SHA256:?Combine runtime checksum is required}"
+: "${COMBINE_RUNTIME_ARCHIVE:?Combine runtime archive name is required}"
 IMPACT_PARALLEL=${IMPACT_PARALLEL:-4}
 IMPACT_MINIMIZER_STRATEGY=${IMPACT_MINIMIZER_STRATEGY:-0}
 IMPACT_EXPECT_SIGNAL=${IMPACT_EXPECT_SIGNAL:-1}
@@ -44,16 +45,31 @@ case "$OUTDIR" in
     /tmp/*|/afs/*) echo "system /tmp and AFS outputs are forbidden" >&2; exit 2 ;;
 esac
 
-mkdir -p "$OUTDIR"/{tmp,cache,work}
-export TMPDIR="$OUTDIR/tmp"
-export XDG_CACHE_HOME="$OUTDIR/cache"
+: "${_CONDOR_SCRATCH_DIR:?Condor scratch directory is required}"
+SCRATCH_BASE="$_CONDOR_SCRATCH_DIR"
+RUNTIME_ARCHIVE="$SCRATCH_BASE/$COMBINE_RUNTIME_ARCHIVE"
+WORKDIR="$SCRATCH_BASE/work"
+CMSSW="$SCRATCH_BASE/CMSSW_14_1_0_pre4"
+RESULTDIR="$OUTDIR/work"
+mkdir -p "$WORKDIR" "$SCRATCH_BASE/cache" "$RESULTDIR"
+export HOME="$SCRATCH_BASE"
+export TMPDIR="$SCRATCH_BASE"
+export XDG_CACHE_HOME="$SCRATCH_BASE/cache"
 export PYTHONNOUSERSITE=1
+unset PYTHONPATH PYTHONHOME
 export CVS_RSH="${CVS_RSH:-ssh}"
 
+echo "$COMBINE_RUNTIME_SHA256  $RUNTIME_ARCHIVE" | sha256sum -c -
+tar -xzf "$RUNTIME_ARCHIVE" -C "$SCRATCH_BASE"
+rm -f "$RUNTIME_ARCHIVE"
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 cd "$CMSSW/src"
+scramv1 b ProjectRename >/dev/null
 eval "$(scramv1 runtime -sh)"
-cd "$OUTDIR/work"
+command -v text2workspace.py >/dev/null
+command -v combineTool.py >/dev/null
+case "$(command -v combineTool.py)" in "$CMSSW"/*) ;; *) exit 70 ;; esac
+cd "$WORKDIR"
 
 WORKSPACE="workspace_mStop${MASS}_mLSP500.root"
 IMPACT_BASE="impacts_mStop${MASS}_mLSP500"
@@ -103,4 +119,5 @@ fi
 printf '{\n  "status": "complete",\n  "benchmark": "mStop%s_mLSP500",\n  "asimov_expect_signal": %s,\n  "signal_strength_range": [%s, %s],\n  "workspace": "%s",\n  "json": "%s.json",\n  "pdf": "%s.pdf",\n  "png": "%s.png"\n}\n' \
     "$MASS" "$IMPACT_EXPECT_SIGNAL" "$IMPACT_R_MIN" "$IMPACT_R_MAX" "$WORKSPACE" "$IMPACT_BASE" "$IMPACT_BASE" "$IMPACT_BASE" > impact_status.json
 
-echo "impact complete: $OUTDIR/work/$IMPACT_BASE.pdf"
+cp -a "$WORKDIR/." "$RESULTDIR/"
+echo "impact complete: $RESULTDIR/$IMPACT_BASE.pdf"

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Pure policy helpers for selecting 2024 DY pT(ll) sample families."""
+"""Pure policy helpers for selecting mutually exclusive DY sample families."""
 
 from __future__ import annotations
 
@@ -63,6 +63,11 @@ def dy_ptll_dataset_allowed(dataset: str, process: str, policy: str) -> bool:
         return "PTLL-100_" in dataset
     if policy == "ptll100_200":
         return "PTLL-100_" in dataset or "PTLL-200_" in dataset
+    if policy == "dy2x":
+        # Adopt the Run-3 flavour-exclusive DY production and reject every
+        # legacy pT(ll)-binned DY artifact.  The token boundary avoids
+        # accidentally accepting a similarly named private sample.
+        return re.search(r"DYto2(?:E|Mu|Tau)-4Jets(?:_|$)", dataset) is not None
     raise ValueError(f"unknown DY pT(ll) dataset policy: {policy}")
 
 

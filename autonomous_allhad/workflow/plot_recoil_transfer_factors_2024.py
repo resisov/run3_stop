@@ -242,6 +242,7 @@ def plot_highdm(
     path: dict[str, Any],
     edges: np.ndarray,
     records: dict[str, Any],
+    regime: str = "highdm",
 ) -> list[str]:
     centers = 0.5 * (edges[:-1] + edges[1:])
     widths = 0.5 * np.diff(edges)
@@ -281,7 +282,10 @@ def plot_highdm(
     axis.text(
         0.04,
         0.73 if path["key"] == "qcd_qcdcr" else 0.07,
-        "High-" + r"$\Delta m$" + "\n" + path["ratio_label"],
+        ("High-" if regime == "highdm" else "Low-")
+        + r"$\Delta m$"
+        + "\n"
+        + path["ratio_label"],
         transform=axis.transAxes,
         fontsize=22,
     )
@@ -295,7 +299,7 @@ def plot_highdm(
     hep.cms.label(**CMS_LABEL, ax=axis)
     return save_figure(
         fig,
-        output_dir / f"transfer_factor_{path['key']}_highdm",
+        output_dir / f"transfer_factor_{path['key']}_{regime}",
     )
 
 
@@ -396,41 +400,77 @@ def build_factors(source: dict[str, Any]) -> dict[str, Any]:
             )
         high_records[path["key"]] = by_group
 
-    labels = list(source["lowdm"]["search_bin_labels"])
-    low_source = source["lowdm"]["search_components"]
-    low_nbin = len(labels)
-    family_indices: dict[str, list[int]] = {}
-    for index, label in enumerate(labels):
-        family_indices.setdefault(low_family(label), []).append(index)
+    low_payload = source["lowdm"]
     low_records: dict[str, Any] = {}
-    for path in PATHS:
-        by_family = {}
-        for family, indices in family_indices.items():
-            group = "Nb1" if family.startswith("Nb1_") else "Nb2plus"
-            full = calculate_ratio(
-                nominal_leaf(
-                    low_source,
-                    "SR",
-                    group,
-                    path["numerator_process"],
-                    low_nbin,
-                ),
-                nominal_leaf(
-                    low_source,
-                    path["denominator_region"],
-                    group,
-                    path["denominator_process"],
-                    low_nbin,
-                ),
-            )
-            by_family[family] = {
-                key: [values[index] for index in indices]
-                for key, values in full.items()
+    low_kind = "search_bins"
+    if "recoil" in low_payload:
+        low_kind = "nb_recoil"
+        low_source = low_payload["recoil"]
+        low_edges = np.asarray(low_payload["recoil_edges"], dtype=float)
+        low_nbin = len(low_edges) - 1
+        for path in PATHS:
+            low_records[path["key"]] = {
+                group: calculate_ratio(
+                    nominal_leaf(
+                        low_source,
+                        "SR",
+                        group,
+                        path["numerator_process"],
+                        low_nbin,
+                    ),
+                    nominal_leaf(
+                        low_source,
+                        path["denominator_region"],
+                        group,
+                        path["denominator_process"],
+                        low_nbin,
+                    ),
+                )
+                for group in low_payload["nb_groups"]
             }
-        low_records[path["key"]] = by_family
+    else:
+        labels = list(low_payload["search_bin_labels"])
+        low_source = low_payload["search_components"]
+        low_nbin = len(labels)
+        family_indices: dict[str, list[int]] = {}
+        for index, label in enumerate(labels):
+            family_indices.setdefault(low_family(label), []).append(index)
+        for path in PATHS:
+            by_family = {}
+            for family, indices in family_indices.items():
+                group = "Nb1" if family.startswith("Nb1_") else "Nb2plus"
+                full = calculate_ratio(
+                    nominal_leaf(
+                        low_source,
+                        "SR",
+                        group,
+                        path["numerator_process"],
+                        low_nbin,
+                    ),
+                    nominal_leaf(
+                        low_source,
+                        path["denominator_region"],
+                        group,
+                        path["denominator_process"],
+                        low_nbin,
+                    ),
+                )
+                by_family[family] = {
+                    key: [values[index] for index in indices]
+                    for key, values in full.items()
+                }
+            low_records[path["key"]] = by_family
     return {
         "highdm": {"edges": high_edges.tolist(), "records": high_records},
-        "lowdm": {"search_bin_labels": labels, "records": low_records},
+        "lowdm": {
+            "kind": low_kind,
+            **(
+                {"edges": low_edges.tolist()}
+                if low_kind == "nb_recoil"
+                else {"search_bin_labels": labels}
+            ),
+            "records": low_records,
+        },
     }
 
 
@@ -538,13 +578,24 @@ def main() -> int:
                 )
             )
         if args.regime in {"all", "lowdm"}:
-            plot_paths.extend(
-                plot_lowdm(
-                    args.output_dir,
-                    path,
-                    factors["lowdm"]["records"][path["key"]],
+            if factors["lowdm"].get("kind") == "nb_recoil":
+                plot_paths.extend(
+                    plot_highdm(
+                        args.output_dir,
+                        path,
+                        np.asarray(factors["lowdm"]["edges"], dtype=float),
+                        factors["lowdm"]["records"][path["key"]],
+                        regime="lowdm",
+                    )
                 )
-            )
+            else:
+                plot_paths.extend(
+                    plot_lowdm(
+                        args.output_dir,
+                        path,
+                        factors["lowdm"]["records"][path["key"]],
+                    )
+                )
 
     output = {
         "schema_version": f"recoil_transfer_factors_{args.campaign_year}_v2",
