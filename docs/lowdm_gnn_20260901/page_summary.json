@@ -2,20 +2,20 @@
   "artifacts": {
     "2024": {
       "DYCR": {
-        "pdf": "8b26ba46f01957b88d28d2e28d6e35f7a7eef11c40844b6f0ed3cdf51abedc5c",
-        "png": "c72eec567be6e0b9b9280a72c47fcd4c2d6ec293104349e316717694b96798ce"
+        "pdf": "3d0f76d09ad7871fc4de761f7a1ef50d9bc7c31d0dc07259dcdbb56f219a87a4",
+        "png": "cea220dc225e366e697c34a90f948adef0e19451e91edf77fd1c63b9cef4afcb"
       },
       "GCR": {
-        "pdf": "b3aa8e73c4f4e33801cfa7043b806a061e56e8082782ead60a7e99dc5d49afb0",
-        "png": "659e279b47ad8688766eff02ec2f228d657e170729c81e2f8c58e3121b01fa55"
+        "pdf": "118d2bbf1794bbd065bac9a6b19b9b10cb77dc6882ada960496c3b70ba1042d0",
+        "png": "ac7d943839bdc9d1a1a8bf019eda127f9b94ef8e95c6db99339d885e17c28fd0"
       },
       "LLCR": {
-        "pdf": "955ba8ab87db133ccd8a70f9243a70f439f5b0605fc36f57f2d2afc2c4f40882",
-        "png": "2a87161c95500889bc3ec3660d34d32cae8a47f4df2d242ad8f9138086581f80"
+        "pdf": "4ac05ef88bf742946501fcc5fad5e4344cc63413d90823bb7b867ac3f78fc6c1",
+        "png": "5a3edbfe8ea54ddffc4ed7a10932ab54515009b1a8849efc7c7406b727b1f700"
       },
       "QCDCR": {
-        "pdf": "295f2858814d4afc49cc9a28d6fe835e1d1f418f818a30ed0d49a6d62c3a2e28",
-        "png": "9e018a591999183c8941f4da984a3ffa8a5375fbfafd2875d0f2f12d339ff4c3"
+        "pdf": "2e5496c73dee1582c6904933ccfe0a7360d78b9c19ca4bb66e6066e0b123728e",
+        "png": "db1d018bc64c190a4f7aeb746fded0da77583fd395125a6391c2d9b2a35b65e2"
       },
       "SR": {
         "pdf": "e3d907d3c42074ff0b9abeb811601672559f2c0d9853e2e18e68f2c2c6a1a013",
@@ -24,20 +24,20 @@
     },
     "2025": {
       "DYCR": {
-        "pdf": "d45b9b9e2ddd3e78eaf4207a31d20a166fd0fdb613f12a71ff4fda31b73e2e73",
-        "png": "ede2921175e792b514cedf991034e73572df6e5b6079c12d5b447a49a8307f51"
+        "pdf": "f9863165306907f7fbe3d0f4ce0671071d37d3a5b571a965de8db1dbb5861317",
+        "png": "228e55f7a029c4452385dc755cb4e3a2ccc25aa2f2eed960de76e243cb194c28"
       },
       "GCR": {
-        "pdf": "62729914df3850d9171713cf7c6636aa514e9286c06640b967e00d9d7e5cc519",
-        "png": "af26ea17d39a152b7d4f75aa995306eccbd3cbc9871db78782f911f052f7c2d4"
+        "pdf": "ea4d8b542af811428a3f9a217eb5b849288a892951ed11ae04e65c72897d9af9",
+        "png": "ec02ea3aeaf9e5f03a91c7cc45a82bcbb7854c3ea431ff8b40ec74aed04aae02"
       },
       "LLCR": {
-        "pdf": "18c8cc722cf17eb8394c7674df93a8d7790c1b8664cc05bab2453a18762f03cd",
-        "png": "0bf09afa8019301f3c4cd27b075a2c6faf1b976ce6373f50e7efd7a15fed348c"
+        "pdf": "645ed15b3107c2882f8f41aba7a9b593800e519dfa6dc73696c76b2a1f5714ac",
+        "png": "7ae8171da2f8a2aa111bd729e7ae42e00bcbbeda9e25156c9a1fc10083e73287"
       },
       "QCDCR": {
-        "pdf": "d2943348db19e3651ccb6c3add2a937de1b46335083d6515dfc5dcf55e99a616",
-        "png": "0ddd576ee78e1c7d7422530cbfea8d231a1a7c389f414729e180079446ae5548"
+        "pdf": "4523fb432125864b8bea35d8041969fe24c40c6f1cb40b21e5dc11a2dadfcca9",
+        "png": "028a73d4bc329fd5012dabc0f574a10a5fcdf0fb2e8d04a6244fead4bdc7a6e1"
       },
       "SR": {
         "pdf": "4675715c56fb08abb5c683bd459615f3f4e123abd3f202fdfcba087ffa2f7c31",
@@ -62,12 +62,37 @@
   "binning": {
     "cr_bins_per_category": 5,
     "cr_categories_per_region": 4,
+    "cr_display_bins_per_region": 5,
+    "cr_display_categories": 1,
+    "cr_display_policy": "inclusive_sum_of_four_bookkeeping_categories",
     "cr_regions": 5,
     "cr_total_bins": 100,
     "matches_2024_edges": true,
     "sr_bins_per_category": 5,
     "sr_categories": 6,
     "sr_total_bins": 30
+  },
+  "lowdm_selection_contract": {
+    "applied": [
+      "region core",
+      "Nb>=1",
+      "Nt=0",
+      "Nw=0",
+      "Nres(TROTA)=0"
+    ],
+    "explicitly_not_applied": [
+      "MET/sqrt(HT)>=10",
+      "deltaPhi(ISR,recoil)>2",
+      "NISR==1",
+      "!feature_SR"
+    ],
+    "normalization": {
+      "DYCR": "RZ applied to DY",
+      "GCR": "unit area for data and total MC",
+      "LLCR": "absolute expected yield",
+      "QCDCR": "absolute expected yield"
+    },
+    "other_samples": []
   },
   "schema_version": "lowdm_gnn_web_page_v1",
   "status": "complete_with_known_2025_calibration_gaps",
