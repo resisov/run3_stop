@@ -1,107 +1,11 @@
 {
-  "category_plots": {
-    "highdm_search_bins": 79,
-    "lowdm_search_bins": 34,
-    "lower_panel": "signal_significance",
-    "lower_panel_ylim": {
-      "highdm": [
-        0.0,
-        5.0
-      ],
-      "lowdm": [
-        0.0,
-        1.0
-      ]
-    },
-    "significance_definition": "S/sqrt(B+sigma_B^2), with sigma_B equal to the plotted background uncertainty",
-    "years": [
-      "2024",
-      "2025"
-    ]
-  },
-  "impacts": [
-    {
-      "asimov_expect_signal": 1,
-      "json": "impacts/impacts_NPS26012_2024_2025_T2tt_mStop1200_mLSP500_highdm79_lowdm34_r1.json",
-      "mass_point": {
-        "mLSP": 500,
-        "mStop": 1200
-      },
-      "model": "T2tt",
-      "parameter_count": 739,
-      "pdf": "impacts/impacts_NPS26012_2024_2025_T2tt_mStop1200_mLSP500_highdm79_lowdm34_r1.pdf",
-      "png": "impacts/impacts_NPS26012_2024_2025_T2tt_mStop1200_mLSP500_highdm79_lowdm34_r1.png",
-      "poi_fit": [
-        0.7875605225563049,
-        1.0,
-        1.229548692703247
-      ],
-      "status": "complete"
-    },
-    {
-      "asimov_expect_signal": 0,
-      "json": "impacts/impacts_NPS26012_2024_2025_T2tt_mStop1200_mLSP500_highdm79_lowdm34_r0.json",
-      "mass_point": {
-        "mLSP": 500,
-        "mStop": 1200
-      },
-      "model": "T2tt",
-      "parameter_count": 739,
-      "pdf": "impacts/impacts_NPS26012_2024_2025_T2tt_mStop1200_mLSP500_highdm79_lowdm34_r0.pdf",
-      "png": "impacts/impacts_NPS26012_2024_2025_T2tt_mStop1200_mLSP500_highdm79_lowdm34_r0.png",
-      "poi_fit": [
-        -0.02775469422340393,
-        7.669517287922645e-08,
-        0.12194827944040298
-      ],
-      "status": "complete"
-    }
-  ],
-  "luminosity_fb": 220.66,
-  "page": "../index.html",
-  "plot_count": 12,
-  "results": [
-    {
-      "json": "results/2024_2025/expected-limit-t2tt/expected_limits.json",
-      "missing_point_count": 0,
-      "model": "T2tt",
-      "pdf": "results/2024_2025/expected-limit-t2tt/expected_limit_t2tt_2024_2025_highdm79_lowdm34.pdf",
-      "png": "results/2024_2025/expected-limit-t2tt/expected_limit_t2tt_2024_2025_highdm79_lowdm34.png",
-      "point_count": 205,
-      "status": "complete"
-    },
-    {
-      "json": "results/2024_2025/expected-limit-t2bw/expected_limits.json",
-      "missing_point_count": 0,
-      "model": "T2bW",
-      "pdf": "results/2024_2025/expected-limit-t2bw/expected_limit_t2bw_2024_2025_highdm79_lowdm34.pdf",
-      "png": "results/2024_2025/expected-limit-t2bw/expected_limit_t2bw_2024_2025_highdm79_lowdm34.png",
-      "point_count": 353,
-      "status": "complete"
-    },
-    {
-      "json": "results/2024_2025/expected-limit-t2tb/expected_limits.json",
-      "missing_point_count": 0,
-      "model": "T2tb",
-      "pdf": "results/2024_2025/expected-limit-t2tb/expected_limit_t2tb_2024_2025_highdm79_lowdm34.pdf",
-      "png": "results/2024_2025/expected-limit-t2tb/expected_limit_t2tb_2024_2025_highdm79_lowdm34.png",
-      "point_count": 365,
-      "status": "complete"
-    }
-  ],
-  "search_bins": {
-    "highdm": 79,
-    "lowdm": 34,
-    "plot_count": 4,
-    "sr_blinded": true
-  },
+  "impact": null,
+  "page": "docs/highdm_distributions_2024_2025_20260720/index.html",
+  "plot_count": 408,
+  "results": [],
   "status": "complete",
   "years": [
     "2024",
     "2025"
-  ],
-  "zinv_model": {
-    "normalization": "measured_Rz",
-    "shape": "Sgamma_only"
-  }
+  ]
 }
