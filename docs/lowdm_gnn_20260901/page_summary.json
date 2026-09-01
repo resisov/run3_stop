@@ -1,0 +1,112 @@
+{
+  "artifacts": {
+    "2024": {
+      "DYCR": {
+        "pdf": "8b26ba46f01957b88d28d2e28d6e35f7a7eef11c40844b6f0ed3cdf51abedc5c",
+        "png": "c72eec567be6e0b9b9280a72c47fcd4c2d6ec293104349e316717694b96798ce"
+      },
+      "GCR": {
+        "pdf": "b3aa8e73c4f4e33801cfa7043b806a061e56e8082782ead60a7e99dc5d49afb0",
+        "png": "659e279b47ad8688766eff02ec2f228d657e170729c81e2f8c58e3121b01fa55"
+      },
+      "LLCR": {
+        "pdf": "955ba8ab87db133ccd8a70f9243a70f439f5b0605fc36f57f2d2afc2c4f40882",
+        "png": "2a87161c95500889bc3ec3660d34d32cae8a47f4df2d242ad8f9138086581f80"
+      },
+      "QCDCR": {
+        "pdf": "295f2858814d4afc49cc9a28d6fe835e1d1f418f818a30ed0d49a6d62c3a2e28",
+        "png": "9e018a591999183c8941f4da984a3ffa8a5375fbfafd2875d0f2f12d339ff4c3"
+      },
+      "SR": {
+        "pdf": "e3d907d3c42074ff0b9abeb811601672559f2c0d9853e2e18e68f2c2c6a1a013",
+        "png": "2eff3b19e20a82f14ac348daa5e2fb761122cb180cb802cb3fb7897231f20293"
+      }
+    },
+    "2025": {
+      "DYCR": {
+        "pdf": "d45b9b9e2ddd3e78eaf4207a31d20a166fd0fdb613f12a71ff4fda31b73e2e73",
+        "png": "ede2921175e792b514cedf991034e73572df6e5b6079c12d5b447a49a8307f51"
+      },
+      "GCR": {
+        "pdf": "62729914df3850d9171713cf7c6636aa514e9286c06640b967e00d9d7e5cc519",
+        "png": "af26ea17d39a152b7d4f75aa995306eccbd3cbc9871db78782f911f052f7c2d4"
+      },
+      "LLCR": {
+        "pdf": "18c8cc722cf17eb8394c7674df93a8d7790c1b8664cc05bab2453a18762f03cd",
+        "png": "0bf09afa8019301f3c4cd27b075a2c6faf1b976ce6373f50e7efd7a15fed348c"
+      },
+      "QCDCR": {
+        "pdf": "d2943348db19e3651ccb6c3add2a937de1b46335083d6515dfc5dcf55e99a616",
+        "png": "0ddd576ee78e1c7d7422530cbfea8d231a1a7c389f414729e180079446ae5548"
+      },
+      "SR": {
+        "pdf": "4675715c56fb08abb5c683bd459615f3f4e123abd3f202fdfcba087ffa2f7c31",
+        "png": "a8467eddfd3a84194596fd26246a53aa0edbaa8ce9913fc45734172c7a94e7d9"
+      }
+    },
+    "root_cards": {
+      "2024_highdm73": {
+        "pdf": "3bdf112b0866ac9e24d29a0d71ebf4c9acaf8208f5c7b0852f86ef59192dabb1",
+        "png": "30e00288b331dedd85dd9992a3cab7f211efaefab529cd99310d573df32dcfcc"
+      },
+      "2024_lowdm30": {
+        "pdf": "e3d907d3c42074ff0b9abeb811601672559f2c0d9853e2e18e68f2c2c6a1a013",
+        "png": "2eff3b19e20a82f14ac348daa5e2fb761122cb180cb802cb3fb7897231f20293"
+      },
+      "2025_lowdm30": {
+        "pdf": "4675715c56fb08abb5c683bd459615f3f4e123abd3f202fdfcba087ffa2f7c31",
+        "png": "a8467eddfd3a84194596fd26246a53aa0edbaa8ce9913fc45734172c7a94e7d9"
+      }
+    }
+  },
+  "binning": {
+    "cr_bins_per_category": 5,
+    "cr_categories_per_region": 4,
+    "cr_regions": 5,
+    "cr_total_bins": 100,
+    "matches_2024_edges": true,
+    "sr_bins_per_category": 5,
+    "sr_categories": 6,
+    "sr_total_bins": 30
+  },
+  "schema_version": "lowdm_gnn_web_page_v1",
+  "status": "complete_with_known_2025_calibration_gaps",
+  "years": {
+    "2024": {
+      "input_files": 5437,
+      "luminosity_fb": 109.82,
+      "regions": [
+        "LLCR",
+        "QCDCR",
+        "GCR",
+        "DYCR"
+      ]
+    },
+    "2025": {
+      "correction_audit": {
+        "btag_sf_applied_to_all_weight_groups": true,
+        "known_unavailable_unity_components": [
+          "electron_hlt",
+          "photon_csev"
+        ]
+      },
+      "input_audit": {
+        "data_luminosity_coverage_complete": false,
+        "exact_manifest_match": true,
+        "intermediate_roots_evaluated": 8390,
+        "intermediate_roots_expected": 8390,
+        "upstream_data_bad_files": 1,
+        "upstream_source_bad_files": 11
+      },
+      "input_files": 8390,
+      "luminosity_fb": 110.84,
+      "regions": [
+        "LLCR",
+        "QCDCR",
+        "GCR",
+        "DYCR"
+      ],
+      "validation_status": "complete_with_known_2025_calibration_gaps"
+    }
+  }
+}

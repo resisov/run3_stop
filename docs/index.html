@@ -1,58 +1,173 @@
 <!doctype html>
-<html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
-<title>Run-3 all-hadronic stop results</title>
-<style>
-:root{--ink:#172033;--muted:#667085;--line:#e4e9f0;--bg:#f6f8fb;--panel:#fff;--accent:#2563eb;--accent2:#0ea5e9;--shadow:0 14px 40px rgba(30,50,80,.09)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-header{color:#fff;background:radial-gradient(circle at 78% 0,rgba(56,189,248,.35),transparent 35%),linear-gradient(125deg,#111827 0%,#172554 56%,#0c4a6e 100%);padding:48px 24px 44px}
-.hero,main,.toolbar-inner{max-width:1580px;margin:0 auto}.eyebrow{display:inline-flex;padding:6px 10px;border:1px solid rgba(255,255,255,.24);border-radius:999px;background:rgba(255,255,255,.1);font-size:12px;font-weight:750;letter-spacing:.08em;text-transform:uppercase}
-h1{font-size:clamp(32px,4vw,52px);line-height:1.05;margin:17px 0 12px;letter-spacing:-.035em}.hero p{max-width:760px;margin:0;color:#dbeafe;font-size:17px}
-.toolbar{position:sticky;top:0;z-index:10;padding:13px 20px;border-bottom:1px solid rgba(212,220,231,.9);background:rgba(255,255,255,.92);backdrop-filter:blur(16px)}
-.toolbar-inner{display:flex;gap:12px 18px;align-items:end;flex-wrap:wrap}.filter-group{display:grid;gap:5px}.filter-label{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#7a8597}
-.segments{display:flex;padding:3px;border:1px solid var(--line);border-radius:10px;background:#f3f6fa;box-shadow:inset 0 1px 2px rgba(23,32,51,.04)}
-button,select{font:inherit;min-height:39px}button{padding:7px 14px;border:0;border-radius:7px;background:transparent;color:#536075;font-weight:700;cursor:pointer;transition:.18s ease}button:hover{color:var(--ink);background:#fff}button.active{color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 5px 14px rgba(37,99,235,.24)}
-select{min-width:190px;padding:7px 36px 7px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);font-weight:650}
-main{padding:30px 24px 70px}.results-heading{display:flex;justify-content:space-between;gap:20px;align-items:end;margin:0 0 18px}.section-kicker{color:var(--accent);font-size:12px;font-weight:850;letter-spacing:.09em;text-transform:uppercase}.results-heading h2{margin:3px 0 0;font-size:24px;letter-spacing:-.02em}.count{flex:none;padding:7px 11px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--muted);font-size:13px;font-weight:700}
-.plots{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:20px}.plot{display:block;overflow:hidden;border:1px solid var(--line);border-radius:15px;background:var(--panel);color:var(--ink);text-decoration:none;box-shadow:0 2px 10px rgba(30,50,80,.04);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
-.plot:hover{transform:translateY(-3px);border-color:#c6d3e6;box-shadow:var(--shadow)}.plot[hidden]{display:none}.plot img{display:block;width:100%;height:auto;background:#fff}.plot>span{display:block;padding:13px 15px;border-top:1px solid var(--line);color:#4c596d;font-size:13px;font-weight:700}
-.overview{max-width:1580px;margin:0 auto;padding:34px 24px 8px}.overview-head{display:flex;justify-content:space-between;gap:18px;align-items:end;margin-bottom:16px}.overview-head h2{margin:3px 0 0;font-size:25px;letter-spacing:-.025em}.overview-head p{max-width:700px;margin:0;color:var(--muted)}.overview-head a{color:var(--accent);font-weight:800}.overview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}.overview-grid.results,.overview-grid.diagnostics{grid-template-columns:repeat(3,minmax(0,1fr))}.overview-grid.vr{grid-template-columns:repeat(3,minmax(0,1fr))}.overview-group{margin-bottom:38px}.result-card img{aspect-ratio:1.28;object-fit:contain}.pull-card{grid-column:1/-1}.pull-card img{max-height:760px;object-fit:contain}.card-meta{display:flex!important;justify-content:space-between;gap:10px;align-items:center}.badge{flex:none;padding:3px 8px;border-radius:999px;background:#eaf2ff;color:#2455a4;font-size:11px;font-weight:800}
-.empty{display:none;padding:52px 24px;border:1px dashed #c7d0dd;border-radius:15px;background:#fff;text-align:center;color:var(--muted)}.empty.visible{display:block}
-@media(max-width:1100px){.overview-grid.results,.overview-grid.diagnostics{grid-template-columns:repeat(2,minmax(0,1fr))}.pull-card{grid-column:1/-1}}@media(max-width:720px){header{padding:34px 20px}.hero p{font-size:15px}.overview{padding:26px 12px 4px}.overview-head{display:block}.overview-head p{margin-top:6px}.overview-grid,.overview-grid.results,.overview-grid.diagnostics,.overview-grid.vr{grid-template-columns:1fr;gap:14px}.pull-card{grid-column:auto}.toolbar{position:static;padding:12px}.toolbar-inner{align-items:stretch}.filter-group{width:100%}.segments{display:grid;grid-auto-flow:column;grid-auto-columns:1fr}button{padding:7px 8px}select{width:100%}main{padding:22px 12px 48px}.results-heading{align-items:center}.plots{grid-template-columns:1fr;gap:14px}.plot{border-radius:12px}}
-
-.year-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:34px 0 14px}.year-title h2{margin:0;font-size:25px;letter-spacing:-.025em}.year-title span{color:var(--muted);font-size:13px;font-weight:700}.plots{align-items:start}
-</style></head><body>
-<header><div class='hero'><span class='eyebrow'>CMS Run 3 · Work in progress</span><h1>All-hadronic stop results</h1><p>Canonical 2024 and 2025 signal-region search bins together with the combined 220.66 fb<sup>−1</sup> expected limits and nuisance impacts. Click any card for the vector PDF.</p></div></header>
-<section class='overview'>
-<div class='overview-group'><div class='overview-head'><div><span class='section-kicker'>Signal regions</span><h2>Canonical search-bin distributions</h2></div><p>High-Δm uses 79 exclusive bins; Low-Δm uses the adopted 34-bin scheme. The signal regions remain blinded.</p></div><div class='overview-grid'>
-<a class='plot' href='plots/search_bins/2024/highdm79_search_bins.pdf'><img src='plots/search_bins/2024/highdm79_search_bins.png' loading='eager' alt='2024 High-dM 79-bin signal-region search bins'><span class='card-meta'><span>High-Δm SR · 79 search bins</span><b class='badge'>2024 · 109.82 fb⁻¹</b></span></a>
-<a class='plot' href='plots/search_bins/2025/highdm79_search_bins.pdf'><img src='plots/search_bins/2025/highdm79_search_bins.png' loading='eager' alt='2025 High-dM 79-bin signal-region search bins'><span class='card-meta'><span>High-Δm SR · 79 search bins</span><b class='badge'>2025 · 110.84 fb⁻¹</b></span></a>
-<a class='plot' href='plots/search_bins/2024/lowdm34_search_bins.pdf'><img src='plots/search_bins/2024/lowdm34_search_bins.png' loading='lazy' alt='2024 Low-dM 34-bin signal-region search bins'><span class='card-meta'><span>Low-Δm SR · 34 search bins</span><b class='badge'>2024 · 109.82 fb⁻¹</b></span></a>
-<a class='plot' href='plots/search_bins/2025/lowdm34_search_bins.pdf'><img src='plots/search_bins/2025/lowdm34_search_bins.png' loading='lazy' alt='2025 Low-dM 34-bin signal-region search bins'><span class='card-meta'><span>Low-Δm SR · 34 search bins</span><b class='badge'>2025 · 110.84 fb⁻¹</b></span></a>
-</div></div>
-<div class='overview-group'><div class='overview-head'><div><span class='section-kicker'>Statistical interpretation</span><h2>Combined limits and impacts</h2></div><p>The 2024+2025 likelihood uses shared recoil control regions for Low-Δm, transfer-factor constraints for lost-lepton and QCD, measured R<sub>Z</sub> normalization, and S<sub>γ</sub> shape constraints.</p></div><div class='overview-grid results'>
-<a class='plot result-card' href='highdm_distributions_2024_2025_20260720/results/2024_2025/expected-limit-t2tt/expected_limit_t2tt_2024_2025_highdm79_lowdm34.pdf'><img src='highdm_distributions_2024_2025_20260720/results/2024_2025/expected-limit-t2tt/expected_limit_t2tt_2024_2025_highdm79_lowdm34.png' loading='lazy' alt='2024 plus 2025 T2tt expected limit with 79 High-dM bins'><span class='card-meta'><span>T2tt expected limit · 79-bin</span><b class='badge'>2024+2025</b></span></a>
-<a class='plot result-card' href='highdm_distributions_2024_2025_20260720/results/2024_2025/expected-limit-t2tt/expected_limit_t2tt_2024_2025_highdm79_lowdm34_xsec.pdf'><img src='highdm_distributions_2024_2025_20260720/results/2024_2025/expected-limit-t2tt/expected_limit_t2tt_2024_2025_highdm79_lowdm34_xsec.png' loading='lazy' alt='2024 plus 2025 T2tt expected cross-section limit with 79 High-dM bins'><span class='card-meta'><span>T2tt cross-section limit · 79-bin</span><b class='badge'>2024+2025</b></span></a>
-<a class='plot result-card' href='highdm_distributions_2024_2025_20260720/results/2024_2025/expected-limit-t2bw/expected_limit_t2bw_2024_2025_highdm79_lowdm34.pdf'><img src='highdm_distributions_2024_2025_20260720/results/2024_2025/expected-limit-t2bw/expected_limit_t2bw_2024_2025_highdm79_lowdm34.png' loading='lazy' alt='2024 plus 2025 T2bW expected limit with 79 High-dM bins'><span class='card-meta'><span>T2bW expected limit · 79-bin</span><b class='badge'>2024+2025</b></span></a>
-<a class='plot result-card' href='highdm_distributions_2024_2025_20260720/results/2024_2025/expected-limit-t2bw/expected_limit_t2bw_2024_2025_highdm79_lowdm34_xsec.pdf'><img src='highdm_distributions_2024_2025_20260720/results/2024_2025/expected-limit-t2bw/expected_limit_t2bw_2024_2025_highdm79_lowdm34_xsec.png' loading='lazy' alt='2024 plus 2025 T2bW expected cross-section limit with 79 High-dM bins'><span class='card-meta'><span>T2bW cross-section limit · 79-bin</span><b class='badge'>2024+2025</b></span></a>
-<a class='plot result-card' href='highdm_distributions_2024_2025_20260720/results/2024_2025/expected-limit-t2tb/expected_limit_t2tb_2024_2025_highdm79_lowdm34.pdf'><img src='highdm_distributions_2024_2025_20260720/results/2024_2025/expected-limit-t2tb/expected_limit_t2tb_2024_2025_highdm79_lowdm34.png' loading='lazy' alt='2024 plus 2025 T2tb expected limit with 79 High-dM bins'><span class='card-meta'><span>T2tb expected limit · 79-bin</span><b class='badge'>2024+2025</b></span></a>
-<a class='plot result-card' href='highdm_distributions_2024_2025_20260720/results/2024_2025/expected-limit-t2tb/expected_limit_t2tb_2024_2025_highdm79_lowdm34_xsec.pdf'><img src='highdm_distributions_2024_2025_20260720/results/2024_2025/expected-limit-t2tb/expected_limit_t2tb_2024_2025_highdm79_lowdm34_xsec.png' loading='lazy' alt='2024 plus 2025 T2tb expected cross-section limit with 79 High-dM bins'><span class='card-meta'><span>T2tb cross-section limit · 79-bin</span><b class='badge'>2024+2025</b></span></a>
-<a class='plot result-card' href='highdm_distributions_2024_2025_20260720/impacts/impacts_NPS26012_2024_2025_T2tt_mStop1200_mLSP500_highdm79_lowdm34_r1.pdf'><img src='highdm_distributions_2024_2025_20260720/impacts/impacts_NPS26012_2024_2025_T2tt_mStop1200_mLSP500_highdm79_lowdm34_r1.png' loading='lazy' alt='2024 plus 2025 T2tt nuisance impacts for signal plus background Asimov data with 79 High-dM bins'><span class='card-meta'><span>T2tt impact · (1200, 500) · 79-bin</span><b class='badge'>Asimov r=1</b></span></a>
-<a class='plot result-card' href='highdm_distributions_2024_2025_20260720/impacts/impacts_NPS26012_2024_2025_T2tt_mStop1200_mLSP500_highdm79_lowdm34_r0.pdf'><img src='highdm_distributions_2024_2025_20260720/impacts/impacts_NPS26012_2024_2025_T2tt_mStop1200_mLSP500_highdm79_lowdm34_r0.png' loading='lazy' alt='2024 plus 2025 T2tt nuisance impacts for background-only Asimov data with 79 High-dM bins'><span class='card-meta'><span>T2tt impact · (1200, 500) · 79-bin</span><b class='badge'>Asimov r=0</b></span></a>
-</div></div>
-<div class='overview-group'><div class='overview-head'><div><span class='section-kicker'>CR-only fit diagnostics</span><h2>Postfit controls, pulls and validation</h2></div><p>The observed 2024+2025 background-only fit contains 72 High-Δm and 84 grouped Low-Δm LLCR/QCDCR/GCR channels. SR and VR observations are excluded. <a href='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/'>Open all CR/VR postfit plots →</a></p></div><div class='overview-grid diagnostics'>
-<a class='plot pull-card' href='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/pulls/cronly_nuisance_pulls.pdf'><img src='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/pulls/cronly_nuisance_pulls.png' loading='lazy' alt='CR-only nuisance pulls and constraints'><span class='card-meta'><span>Full nuisance pull and constraint plot</span><b class='badge'>85 constrained nuisances</b></span></a>
-<a class='plot' href='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/lowdm/combined/LLCR_Nb1_pisr300to500_met_postfit.pdf'><img src='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/lowdm/combined/LLCR_Nb1_pisr300to500_met_postfit.png' loading='lazy' alt='Combined grouped Low-dM LLCR postfit'><span class='card-meta'><span>Low-Δm LLCR postfit</span><b class='badge'>N<sub>b</sub>=1 · ISR 300–500</b></span></a>
-<a class='plot' href='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/lowdm/combined/QCDCR_Nb1_pisr500plus_met_postfit.pdf'><img src='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/lowdm/combined/QCDCR_Nb1_pisr500plus_met_postfit.png' loading='lazy' alt='Combined grouped Low-dM QCDCR postfit'><span class='card-meta'><span>Low-Δm QCDCR postfit</span><b class='badge'>N<sub>b</sub>=1 · ISR ≥500</b></span></a>
-<a class='plot' href='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/lowdm/combined/GCR_Nb2plus_pisr300to500_met_postfit.pdf'><img src='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/lowdm/combined/GCR_Nb2plus_pisr300to500_met_postfit.png' loading='lazy' alt='Combined grouped Low-dM GCR postfit'><span class='card-meta'><span>Low-Δm GCR postfit</span><b class='badge'>N<sub>b</sub>≥2 · ISR 300–500</b></span></a>
-<a class='plot' href='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/combined/LLCR_Nb1_met_postfit.pdf'><img src='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/combined/LLCR_Nb1_met_postfit.png' loading='lazy' alt='Combined fit lost-lepton control-region MET postfit'><span class='card-meta'><span>LLCR MET/recoil postfit</span><b class='badge'>N<sub>b</sub>=1</b></span></a>
-<a class='plot' href='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/combined/LLCR_Nb2plus_met_postfit.pdf'><img src='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/combined/LLCR_Nb2plus_met_postfit.png' loading='lazy' alt='Combined fit lost-lepton control-region MET postfit Nb2plus'><span class='card-meta'><span>LLCR MET/recoil postfit</span><b class='badge'>N<sub>b</sub>≥2</b></span></a>
-<a class='plot' href='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/combined/QCDCR_Nb1_met_postfit.pdf'><img src='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/combined/QCDCR_Nb1_met_postfit.png' loading='lazy' alt='Combined fit multijet control-region MET postfit'><span class='card-meta'><span>QCDCR MET postfit</span><b class='badge'>N<sub>b</sub>=1</b></span></a>
-<a class='plot' href='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/combined/QCDCR_Nb2plus_met_postfit.pdf'><img src='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/combined/QCDCR_Nb2plus_met_postfit.png' loading='lazy' alt='Combined fit multijet control-region MET postfit Nb2plus'><span class='card-meta'><span>QCDCR MET postfit</span><b class='badge'>N<sub>b</sub>≥2</b></span></a>
-<a class='plot' href='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/combined/GCR_Nb1_met_postfit.pdf'><img src='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/combined/GCR_Nb1_met_postfit.png' loading='lazy' alt='Combined fit photon control-region recoil postfit'><span class='card-meta'><span>GCR recoil postfit</span><b class='badge'>N<sub>b</sub>=1</b></span></a>
-<a class='plot' href='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/combined/GCR_Nb2plus_met_postfit.pdf'><img src='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/cr/combined/GCR_Nb2plus_met_postfit.png' loading='lazy' alt='Combined fit photon control-region recoil postfit Nb2plus'><span class='card-meta'><span>GCR recoil postfit</span><b class='badge'>N<sub>b</sub>≥2</b></span></a>
-<a class='plot' href='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/combined/HighDMVR_Nb1_met_postfit.pdf'><img src='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/combined/HighDMVR_Nb1_met_postfit.png' loading='lazy' alt='Combined high-dM validation-region MET postfit Nb1'><span class='card-meta'><span>High-Δm VR MET postfit</span><b class='badge'>N<sub>b</sub>=1</b></span></a>
-<a class='plot' href='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/combined/HighDMVR_Nb2_met_postfit.pdf'><img src='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/combined/HighDMVR_Nb2_met_postfit.png' loading='lazy' alt='Combined high-dM validation-region MET postfit Nb2'><span class='card-meta'><span>High-Δm VR MET postfit</span><b class='badge'>N<sub>b</sub>=2</b></span></a>
-<a class='plot' href='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/combined/HighDMVR_Nb3plus_met_postfit.pdf'><img src='highdm_distributions_2024_2025_20260720/vr-postfit-cronly/plots/combined/HighDMVR_Nb3plus_met_postfit.png' loading='lazy' alt='Combined high-dM validation-region MET postfit Nb3plus'><span class='card-meta'><span>High-Δm VR MET postfit</span><b class='badge'>N<sub>b</sub>≥3</b></span></a>
-</div></div>
-</section>
-</body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Run-3 all-hadronic stop search</title>
+  <style>
+    :root {
+      --ink: #14212b;
+      --muted: #60717d;
+      --line: #dce5e9;
+      --panel: #ffffff;
+      --wash: #f4f8f9;
+      --blue: #176b87;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--wash);
+      font: 15px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    header {
+      color: #fff;
+      background: linear-gradient(120deg, #102c3a 0%, #176b87 70%, #17999c 100%);
+      padding: 42px 24px 36px;
+    }
+    .wrap { width: min(1480px, calc(100% - 36px)); margin: 0 auto; }
+    .eyebrow { margin: 0 0 7px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; opacity: .72; }
+    h1 { margin: 0; font-size: clamp(30px, 4vw, 48px); line-height: 1.08; letter-spacing: -.035em; }
+    header p { max-width: 760px; margin: 13px 0 0; color: #d8edf1; font-size: 17px; }
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,.94);
+      backdrop-filter: blur(12px);
+    }
+    nav .wrap { display: flex; gap: 7px; padding: 10px 0; overflow-x: auto; }
+    nav a {
+      flex: 0 0 auto;
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 700;
+      padding: 8px 13px;
+      border-radius: 999px;
+    }
+    nav a:hover { color: #fff; background: var(--blue); }
+    main { padding: 30px 0 52px; }
+    section { scroll-margin-top: 72px; margin-bottom: 42px; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
+    h2 { margin: 0; font-size: 25px; letter-spacing: -.025em; }
+    .section-head p { margin: 0; color: var(--muted); }
+    .year { margin: 25px 0 11px; color: var(--blue); font-size: 15px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .card {
+      display: block;
+      overflow: hidden;
+      color: inherit;
+      text-decoration: none;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 8px 24px rgba(28, 55, 67, .055);
+      transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+    }
+    .card:hover { transform: translateY(-2px); border-color: #abc8d2; box-shadow: 0 12px 30px rgba(28, 55, 67, .11); }
+    .card img { display: block; width: 100%; aspect-ratio: 16/9; object-fit: contain; background: #fff; }
+    .card.search img { aspect-ratio: 2.18/1; }
+    .card.impact img { aspect-ratio: 16/10; }
+    .caption { display: flex; justify-content: space-between; gap: 14px; align-items: center; min-height: 62px; padding: 13px 15px; border-top: 1px solid var(--line); }
+    .caption strong { font-size: 16px; }
+    .caption span { color: var(--muted); white-space: nowrap; }
+    .badge { display: inline-block; margin-right: 8px; padding: 3px 8px; color: #0b6670; background: #def8f6; border-radius: 999px; font-size: 12px; font-weight: 800; }
+    footer { color: var(--muted); padding: 0 0 34px; text-align: center; }
+    @media (max-width: 900px) {
+      .grid, .grid.three { grid-template-columns: 1fr; }
+      .wrap { width: min(100% - 22px, 1480px); }
+      header { padding: 32px 18px 29px; }
+      .section-head { align-items: start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <p class="eyebrow">CMS · NPS-26-012</p>
+      <h1>Run-3 all-hadronic stop search</h1>
+      <p>Search-bin distributions and combined 2024+2025 statistical results.</p>
+    </div>
+  </header>
+  <nav><div class="wrap">
+    <a href="#search-bins">Search bins</a>
+    <a href="#lowdm-gnn">Low-Δm GNN</a>
+    <a href="#limits">Expected limits</a>
+    <a href="#impacts">Impacts</a>
+  </div></nav>
+  <main class="wrap">
+    <section id="search-bins">
+      <div class="section-head"><h2>Signal regions</h2><p>Blinded data · click any plot for PDF</p></div>
+      <h3 class="year">2024</h3>
+      <div class="grid">
+        <a class="card search" href="plots/search_bins/2024/highdm73_search_bins.pdf">
+          <img src="plots/search_bins/2024/highdm73_search_bins.png" alt="2024 High-dM 73 search bins">
+          <div class="caption"><strong><span class="badge">2024</span>High-Δm</strong><span>73 bins</span></div>
+        </a>
+        <a class="card search" href="plots/search_bins/2024/lowdm30_gnn_search_bins.pdf">
+          <img src="plots/search_bins/2024/lowdm30_gnn_search_bins.png" alt="2024 Low-dM 30 GNN search bins">
+          <div class="caption"><strong><span class="badge">2024</span>Low-Δm GNN</strong><span>30 bins</span></div>
+        </a>
+      </div>
+      <h3 class="year">2025</h3>
+      <div class="grid">
+        <a class="card search" href="plots/search_bins/2025/highdm85_search_bins.pdf">
+          <img src="plots/search_bins/2025/highdm85_search_bins.png" alt="2025 High-dM 85 search bins">
+          <div class="caption"><strong><span class="badge">2025</span>High-Δm</strong><span>85 bins</span></div>
+        </a>
+        <a class="card search" href="plots/search_bins/2025/lowdm30_gnn_search_bins.pdf">
+          <img src="plots/search_bins/2025/lowdm30_gnn_search_bins.png" alt="2025 Low-dM 30 GNN search bins">
+          <div class="caption"><strong><span class="badge">2025</span>Low-Δm GNN</strong><span>30 bins</span></div>
+        </a>
+      </div>
+    </section>
+    <section id="lowdm-gnn">
+      <div class="section-head"><h2>Low-Δm GNN templates</h2><p>SR and observed-data control regions · frozen 2024 binning</p></div>
+      <div class="grid">
+        <a class="card search" href="lowdm_gnn_20260901/#y2024">
+          <img src="lowdm_gnn_20260901/plots/2024/lowdm_sr_gnn_out_30bin.png" alt="2024 Low-dM GNN SR and control-region report">
+          <div class="caption"><strong><span class="badge">2024</span>SR + CR report</strong><span>109.82 fb⁻¹</span></div>
+        </a>
+        <a class="card search" href="lowdm_gnn_20260901/#y2025">
+          <img src="lowdm_gnn_20260901/plots/2025/lowdm_sr_gnn_out_30bin.png" alt="2025 Low-dM GNN SR and control-region report">
+          <div class="caption"><strong><span class="badge">2025</span>SR + CR report</strong><span>110.84 fb⁻¹ · preliminary SFs</span></div>
+        </a>
+      </div>
+    </section>
+    <section id="limits">
+      <div class="section-head"><h2>Expected limits</h2><p>2024+2025 combined</p></div>
+      <div class="grid three">
+        <a class="card" href="plots/limits/expected_limit_t2tt_2024_2025_highdm73_lowdm34.pdf">
+          <img src="plots/limits/expected_limit_t2tt_2024_2025_highdm73_lowdm34.png" alt="T2tt combined expected limit">
+          <div class="caption"><strong>T2tt</strong><span>95% CL</span></div>
+        </a>
+        <a class="card" href="plots/limits/expected_limit_t2bw_2024_2025_highdm85_lowdm34.pdf">
+          <img src="plots/limits/expected_limit_t2bw_2024_2025_highdm85_lowdm34.png" alt="T2bW combined expected limit">
+          <div class="caption"><strong>T2bW</strong><span>95% CL</span></div>
+        </a>
+        <a class="card" href="plots/limits/expected_limit_t2tb_2024_2025_highdm73_lowdm34.pdf">
+          <img src="plots/limits/expected_limit_t2tb_2024_2025_highdm73_lowdm34.png" alt="T2tb combined expected limit">
+          <div class="caption"><strong>T2tb</strong><span>95% CL</span></div>
+        </a>
+      </div>
+    </section>
+    <section id="impacts">
+      <div class="section-head"><h2>T2tt nuisance impacts</h2><p>(m<sub>stop</sub>, m<sub>χ̃⁰₁</sub>) = (1200, 500) GeV</p></div>
+      <div class="grid">
+        <a class="card impact" href="plots/impacts/t2tt_mStop1200_mLSP500_r1.pdf">
+          <img src="plots/impacts/t2tt_mStop1200_mLSP500_r1.png" alt="T2tt nuisance impacts for r equals 1">
+          <div class="caption"><strong>Asimov r = 1</strong><span>2024+2025</span></div>
+        </a>
+        <a class="card impact" href="plots/impacts/t2tt_mStop1200_mLSP500_r0.pdf">
+          <img src="plots/impacts/t2tt_mStop1200_mLSP500_r0.png" alt="T2tt nuisance impacts for r equals 0">
+          <div class="caption"><strong>Asimov r = 0</strong><span>2024+2025</span></div>
+        </a>
+      </div>
+    </section>
+  </main>
+  <footer>CMS Work in progress</footer>
+</body>
+</html>

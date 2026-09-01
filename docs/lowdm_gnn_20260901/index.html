@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Low-dM GNN SR and control regions</title>
+<style>
+:root{--ink:#14212b;--muted:#60717d;--line:#dce5e9;--wash:#f4f8f9;--blue:#176b87}
+*{box-sizing:border-box}body{margin:0;color:var(--ink);background:var(--wash);font:15px/1.5 Inter,system-ui,sans-serif}
+header{color:#fff;background:linear-gradient(120deg,#102c3a,#176b87 70%,#17999c);padding:38px 24px}
+.wrap{width:min(1500px,calc(100% - 36px));margin:auto}h1{margin:0;font-size:clamp(30px,4vw,48px)}header p{color:#d8edf1;max-width:920px}
+nav{position:sticky;top:0;z-index:5;background:#fffffff0;border-bottom:1px solid var(--line)}nav .wrap{display:flex;gap:8px;padding:10px 0}nav a{color:var(--ink);font-weight:750;text-decoration:none;padding:7px 12px;border-radius:999px}nav a:hover{color:#fff;background:var(--blue)}
+main{padding:28px 0 48px}section{margin-bottom:42px;scroll-margin-top:70px}h2{font-size:27px;margin:0 0 6px}.lead{color:var(--muted);margin:0 0 16px}
+.notice{background:#fff;border:1px solid var(--line);border-left:5px solid #d9992b;border-radius:10px;padding:13px 16px;margin:18px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{display:block;color:inherit;text-decoration:none;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 8px 24px #1c37430e}
+.card:hover{transform:translateY(-2px)}.card img{display:block;width:100%;aspect-ratio:1.71/1;object-fit:contain;background:#fff}.card.wide{grid-column:1/-1}.card.wide img{aspect-ratio:1.95/1}
+.caption{display:flex;justify-content:space-between;gap:14px;padding:13px 15px;border-top:1px solid var(--line)}.caption strong{font-size:16px}.caption span{color:var(--muted)}
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0}.fact{background:#fff;border:1px solid var(--line);border-radius:10px;padding:13px}.fact b{display:block;font-size:21px;color:var(--blue)}
+footer{text-align:center;color:var(--muted);padding:0 0 30px}@media(max-width:850px){.grid,.facts{grid-template-columns:1fr}.card.wide{grid-column:auto}.caption{align-items:start;flex-direction:column}}
+</style></head><body>
+<header><div class="wrap"><h1>Low-Δm GNN signal and control regions</h1><p>Frozen diagonal-v3 GNN evaluated independently on the full 2024 and 2025 intermediate ROOT campaigns. Both years use the adopted 2024 score boundaries.</p></div></header>
+<nav><div class="wrap"><a href="../">Overview</a><a href="#y2024">2024</a><a href="#y2025">2025</a><a href="page_summary.json">Machine summary</a></div></nav>
+<main class="wrap">
+<div class="facts"><div class="fact"><b>30</b>SR bins (6×5)</div><div class="fact"><b>20</b>bins per CR plot (4×5)</div><div class="fact"><b>8,390</b>2025 intermediate ROOTs</div><div class="fact"><b>1,347</b>2025 signal mass points</div></div>
+<section id="y2024"><h2>2024 · 109.82 fb<sup>−1</sup></h2><p class="lead">Reference evaluation used to freeze the SR and CR score boundaries.</p><div class="grid"><a class="card wide" href="plots/2024/lowdm_sr_gnn_out_30bin.pdf">
+          <img src="plots/2024/lowdm_sr_gnn_out_30bin.png" loading="lazy" alt="Signal region">
+          <div class="caption"><strong>Signal region</strong><span>30 bins · blinded Asimov background</span></div>
+        </a>
+<a class="card " href="plots/2024/lowdm_llcr_gnn_out_4cat.pdf">
+          <img src="plots/2024/lowdm_llcr_gnn_out_4cat.png" loading="lazy" alt="Lost-lepton control region">
+          <div class="caption"><strong>Lost-lepton control region</strong><span>4 categories × 5 GNN bins</span></div>
+        </a>
+<a class="card " href="plots/2024/lowdm_qcdcr_gnn_out_4cat.pdf">
+          <img src="plots/2024/lowdm_qcdcr_gnn_out_4cat.png" loading="lazy" alt="QCD control region">
+          <div class="caption"><strong>QCD control region</strong><span>4 categories × 5 GNN bins</span></div>
+        </a>
+<a class="card " href="plots/2024/lowdm_gcr_gnn_out_4cat.pdf">
+          <img src="plots/2024/lowdm_gcr_gnn_out_4cat.png" loading="lazy" alt="Photon control region · unit area">
+          <div class="caption"><strong>Photon control region · unit area</strong><span>4 categories × 5 GNN bins</span></div>
+        </a>
+<a class="card " href="plots/2024/lowdm_dycr_gnn_out_4cat.pdf">
+          <img src="plots/2024/lowdm_dycr_gnn_out_4cat.png" loading="lazy" alt="Dilepton control region · RZ applied">
+          <div class="caption"><strong>Dilepton control region · RZ applied</strong><span>4 categories × 5 GNN bins</span></div>
+        </a></div></section>
+<section id="y2025"><h2>2025 · 110.84 fb<sup>−1</sup></h2><p class="lead">The same model, selection contract, categories, and bin edges are applied without retraining.</p>
+<div class="notice"><strong>Preliminary calibration status.</strong> The published Prompt-2025 EGM payload does not yet provide the electron-HLT and photon-CSEV working-point scale factors, so their central factors are explicitly recorded as unity. The 2025 b-tag, trigger, lepton/photon ID, pileup, and low-pT analysis scale factors are applied. One upstream JetMET source file remains permanently skipped, so complete 2025 luminosity coverage is not claimed.</div>
+<div class="grid"><a class="card wide" href="plots/2025/lowdm_sr_gnn_out_30bin.pdf">
+          <img src="plots/2025/lowdm_sr_gnn_out_30bin.png" loading="lazy" alt="Signal region">
+          <div class="caption"><strong>Signal region</strong><span>30 bins · blinded Asimov background</span></div>
+        </a>
+<a class="card " href="plots/2025/lowdm_llcr_gnn_out_4cat.pdf">
+          <img src="plots/2025/lowdm_llcr_gnn_out_4cat.png" loading="lazy" alt="Lost-lepton control region">
+          <div class="caption"><strong>Lost-lepton control region</strong><span>4 categories × 5 GNN bins</span></div>
+        </a>
+<a class="card " href="plots/2025/lowdm_qcdcr_gnn_out_4cat.pdf">
+          <img src="plots/2025/lowdm_qcdcr_gnn_out_4cat.png" loading="lazy" alt="QCD control region">
+          <div class="caption"><strong>QCD control region</strong><span>4 categories × 5 GNN bins</span></div>
+        </a>
+<a class="card " href="plots/2025/lowdm_gcr_gnn_out_4cat.pdf">
+          <img src="plots/2025/lowdm_gcr_gnn_out_4cat.png" loading="lazy" alt="Photon control region · unit area">
+          <div class="caption"><strong>Photon control region · unit area</strong><span>4 categories × 5 GNN bins</span></div>
+        </a>
+<a class="card " href="plots/2025/lowdm_dycr_gnn_out_4cat.pdf">
+          <img src="plots/2025/lowdm_dycr_gnn_out_4cat.png" loading="lazy" alt="Dilepton control region · RZ applied">
+          <div class="caption"><strong>Dilepton control region · RZ applied</strong><span>4 categories × 5 GNN bins</span></div>
+        </a></div></section>
+</main><footer>CMS Work in progress · generated from machine-readable outputs</footer></body></html>
