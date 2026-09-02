@@ -16,12 +16,16 @@ main{padding:28px 0 48px}section{margin-bottom:42px;scroll-margin-top:70px}h2{fo
 footer{text-align:center;color:var(--muted);padding:0 0 30px}@media(max-width:850px){.grid,.facts{grid-template-columns:1fr}.card.wide{grid-column:auto}.caption{align-items:start;flex-direction:column}}
 </style></head><body>
 <header><div class="wrap"><h1>Low-Δm GNN signal and control regions</h1><p>Frozen diagonal-v3 GNN evaluated independently on the full 2024 and 2025 intermediate ROOT campaigns. Both years use the adopted 2024 score boundaries.</p></div></header>
-<nav><div class="wrap"><a href="../">Overview</a><a href="#y2024">2024</a><a href="#y2025">2025</a><a href="page_summary.json">Machine summary</a></div></nav>
+<nav><div class="wrap"><a href="../">Overview</a><a href="#y2024">2024</a><a href="#y2025">2025</a><a href="#physical">Physical distributions</a><a href="page_summary.json">Machine summary</a></div></nav>
 <main class="wrap">
 <div class="facts"><div class="fact"><b>30</b>SR bins (6×5)</div><div class="fact"><b>5</b>inclusive GNN bins per CR</div><div class="fact"><b>8,390</b>2025 intermediate ROOTs</div><div class="fact"><b>1,347</b>2025 signal mass points</div></div>
 <section id="y2024"><h2>2024 · 109.82 fb<sup>−1</sup></h2><p class="lead">Reference evaluation used to freeze the SR and CR score boundaries.</p><div class="grid"><a class="card wide" href="plots/2024/lowdm_sr_gnn_out_30bin.pdf">
           <img src="plots/2024/lowdm_sr_gnn_out_30bin.png" loading="lazy" alt="Signal region">
           <div class="caption"><strong>Signal region</strong><span>30 bins · blinded Asimov background</span></div>
+        </a>
+<a class="card wide" href="plots/2024/lowdm34_search_bins_legacy.pdf">
+          <img src="plots/2024/lowdm34_search_bins_legacy.png" loading="lazy" alt="Legacy 2024 Low-dM 34-bin signal-region categories">
+          <div class="caption"><strong>Legacy 2024 Low-Δm SR categories</strong><span>34-bin reference · pre-GNN categorization</span></div>
         </a>
 <a class="card " href="plots/2024/lowdm_llcr_gnn_out_inclusive.pdf">
           <img src="plots/2024/lowdm_llcr_gnn_out_inclusive.png" loading="lazy" alt="Lost-lepton control region">
@@ -60,5 +64,14 @@ footer{text-align:center;color:var(--muted);padding:0 0 30px}@media(max-width:85
 <a class="card " href="plots/2025/lowdm_dycr_gnn_out_inclusive.pdf">
           <img src="plots/2025/lowdm_dycr_gnn_out_inclusive.png" loading="lazy" alt="Dilepton control region · RZ applied">
           <div class="caption"><strong>Dilepton control region · RZ applied</strong><span>Inclusive · 5 GNN bins</span></div>
+        </a></div></section>
+<section id="physical"><h2>Low-Δm physical distributions</h2><p class="lead">Current broad Low-Δm selection: 90 CR and 15 SR distributions per year. Use the year, region type, and variable controls on the distribution page.</p><div class="grid">
+<a class="card" href="physical/">
+          <img src="physical/plots/2024/lowdm_cr_llcr_met.png" loading="lazy" alt="2024 Low-dM physical distributions">
+          <div class="caption"><strong>2024 physical distributions</strong><span>LLCR · QCDCR · GCR · DYCR · SR</span></div>
+        </a>
+<a class="card" href="physical/">
+          <img src="physical/plots/2025/lowdm_cr_gcr_recoil_gcr.png" loading="lazy" alt="2025 Low-dM physical distributions">
+          <div class="caption"><strong>2025 physical distributions</strong><span>LLCR · QCDCR · GCR · DYCR · SR</span></div>
         </a></div></section>
 </main><footer>CMS Work in progress · generated from machine-readable outputs</footer></body></html>
