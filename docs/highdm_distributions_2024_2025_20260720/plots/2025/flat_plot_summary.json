@@ -15,7 +15,49 @@
     "metUnclustered"
   ],
   "cr_plot_policy": "High-dM and low-dM CRs are drawn both as combined overview plots and as individual region plots.",
-  "dy_rz_application": null,
+  "dy_channel_combination": {
+    "channels": [
+      "DY2E",
+      "DY2M"
+    ],
+    "policy": "sum nominal, sumw2, and correlated systematic variations before uncertainty construction",
+    "region": "DYCR",
+    "status": "complete"
+  },
+  "dy_rz_application": {
+    "channels": {
+      "DY2E": {
+        "highdm": {
+          "Nb1": 0.7223166655093031,
+          "Nb2plus": 0.7328472757511647,
+          "effective": 0.7253469055502089
+        },
+        "lowdm": {
+          "Nb1": 0.6257737846018179,
+          "Nb2plus": 0.661164354409985,
+          "effective": 0.6309268418023677
+        }
+      },
+      "DY2M": {
+        "highdm": {
+          "Nb1": 0.627670849620086,
+          "Nb2plus": 0.7764109459693213,
+          "effective": 0.6643185228795404
+        },
+        "lowdm": {
+          "Nb1": 0.5771486437402533,
+          "Nb2plus": 0.5984510756503938,
+          "effective": 0.5808214088886935
+        }
+      }
+    },
+    "containers": 72,
+    "factor_policy": "channel-specific RZ(Nb); exact for explicit Nb axes and DY-yield-weighted effective factor for inclusive CR distributions",
+    "legend_label": "DY",
+    "records": 72,
+    "source": "card_inputs/2025/rz_high.json and rz_low.json",
+    "status": "complete"
+  },
   "highdm_search_bins": 79,
   "lowdm_resolved_top_veto": {
     "applied": true,
@@ -26,6 +68,7 @@
   "luminosity_relative_uncertainty": 0.016,
   "ntop_order": "N_t = 0 blocks are placed left of N_t >= 1 blocks.",
   "output_dir": "/tmp/web2425/plots/2025",
+  "plot_count": 129,
   "plots": [
     {
       "bins": 6,
@@ -180,34 +223,6 @@
         },
         "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
       }
-    },
-    {
-      "bins": 6,
-      "labels": [
-        "DY2E"
-      ],
-      "legend_yields_displayed": false,
-      "name": "highdm_cr_dy2e_recoil",
-      "pdf": "/tmp/web2425/plots/2025/highdm_cr_dy2e_recoil.pdf",
-      "png": "/tmp/web2425/plots/2025/highdm_cr_dy2e_recoil.png",
-      "signals": [],
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null
-    },
-    {
-      "bins": 6,
-      "labels": [
-        "DY2M"
-      ],
-      "legend_yields_displayed": false,
-      "name": "highdm_cr_dy2m_recoil",
-      "pdf": "/tmp/web2425/plots/2025/highdm_cr_dy2m_recoil.pdf",
-      "png": "/tmp/web2425/plots/2025/highdm_cr_dy2m_recoil.png",
-      "signals": [],
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null
     },
     {
       "bins": 30,
@@ -383,36 +398,6 @@
         },
         "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
       }
-    },
-    {
-      "bins": 12,
-      "labels": [
-        "DY2E\\n$N_{t}=0$",
-        "DY2E\\n$N_{t}\\geq1$"
-      ],
-      "legend_yields_displayed": false,
-      "name": "highdm_cr_dy2e_recoil_ntop_split",
-      "pdf": "/tmp/web2425/plots/2025/highdm_cr_dy2e_recoil_ntop_split.pdf",
-      "png": "/tmp/web2425/plots/2025/highdm_cr_dy2e_recoil_ntop_split.png",
-      "signals": [],
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null
-    },
-    {
-      "bins": 12,
-      "labels": [
-        "DY2M\\n$N_{t}=0$",
-        "DY2M\\n$N_{t}\\geq1$"
-      ],
-      "legend_yields_displayed": false,
-      "name": "highdm_cr_dy2m_recoil_ntop_split",
-      "pdf": "/tmp/web2425/plots/2025/highdm_cr_dy2m_recoil_ntop_split.pdf",
-      "png": "/tmp/web2425/plots/2025/highdm_cr_dy2m_recoil_ntop_split.png",
-      "signals": [],
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null
     },
     {
       "bins": 60,
@@ -4753,6 +4738,63 @@
       "status": "complete",
       "unit_area": false,
       "unit_area_audit": null
+    },
+    {
+      "bins": 6,
+      "dropped_input_bins_1based": [],
+      "kind": "CR",
+      "labels": [
+        "DYCR ($ee+\\mu\\mu$)"
+      ],
+      "legend_yields_displayed": false,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        1.1,
+        16198.353100632561
+      ],
+      "name": "highdm_cr_dycr_recoil",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2025/highdm_cr_dycr_recoil.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2025/highdm_cr_dycr_recoil.png",
+      "region": "DYCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "recoil"
+    },
+    {
+      "bins": 12,
+      "dropped_input_bins_1based": [],
+      "kind": "CR",
+      "labels": [
+        "DYCR ($ee+\\mu\\mu$)\\n$N_{t}=0$",
+        "DYCR ($ee+\\mu\\mu$)\\n$N_{t}\\geq1$"
+      ],
+      "legend_yields_displayed": false,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.141125699200766,
+        15771.097614462951
+      ],
+      "name": "highdm_cr_dycr_recoil_ntop_split",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2025/highdm_cr_dycr_recoil_ntop_split.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2025/highdm_cr_dycr_recoil_ntop_split.png",
+      "region": "DYCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "recoil"
     }
   ],
   "signal_policy": "Signals are drawn only in SR plots; CR blocks exclude T2tt overlays.",

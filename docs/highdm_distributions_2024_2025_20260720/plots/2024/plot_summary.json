@@ -14,12 +14,54 @@
     "jesTotal",
     "metUnclustered"
   ],
-  "dy_rz_application": null,
+  "dy_channel_combination": {
+    "channels": [
+      "DY2E",
+      "DY2M"
+    ],
+    "policy": "sum nominal, sumw2, and correlated systematic variations before uncertainty construction",
+    "region": "DYCR",
+    "status": "complete"
+  },
+  "dy_rz_application": {
+    "channels": {
+      "DY2E": {
+        "highdm": {
+          "Nb1": 0.7956219718951804,
+          "Nb2plus": 0.6547029430664236,
+          "effective": 0.7538180297974927
+        },
+        "lowdm": {
+          "Nb1": 0.6242885433272645,
+          "Nb2plus": 0.7996132657524656,
+          "effective": 0.6491810522205995
+        }
+      },
+      "DY2M": {
+        "highdm": {
+          "Nb1": 0.6792547511819805,
+          "Nb2plus": 0.750825639500108,
+          "effective": 0.6964603717441671
+        },
+        "lowdm": {
+          "Nb1": 0.5985045784169216,
+          "Nb2plus": 0.5574163275293518,
+          "effective": 0.5913413126323562
+        }
+      }
+    },
+    "containers": 72,
+    "factor_policy": "channel-specific RZ(Nb); exact for explicit Nb axes and DY-yield-weighted effective factor for inclusive CR distributions",
+    "legend_label": "DY",
+    "records": 72,
+    "source": "card_inputs/2024/rz_high.json and rz_low.json",
+    "status": "complete"
+  },
   "luminosity_fb": 109.82,
   "luminosity_relative_uncertainty": 0.016,
   "luminosity_uncertainty_applied": true,
   "output_dir": "/tmp/web2425/plots/2024",
-  "plot_count": 186,
+  "plot_count": 174,
   "plots": [
     {
       "bins": 11,
@@ -1984,21 +2026,32 @@
     {
       "bins": 11,
       "blind_data": false,
+      "dropped_input_bins_1based": [],
       "figure_size_inches": [
         12.0,
         10.0
       ],
       "kind": "CR",
       "labels": [
-        "DY2E"
+        "DYCR ($ee+\\mu\\mu$)"
       ],
       "legend_yields_displayed": true,
-      "name": "cr_dy2e_bjet_pt",
-      "pdf": "/tmp/web2425/plots/2024/cr_dy2e_bjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2024/cr_dy2e_bjet_pt.png",
-      "region": "DY2E",
-      "region_label": "DY2E",
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000.0
+      ],
+      "name": "cr_dycr_bjet_pt",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2024/cr_dycr_bjet_pt.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2024/cr_dycr_bjet_pt.png",
+      "region": "DYCR",
+      "region_label": "DYCR ($ee+\\mu\\mu$)",
       "signals": [],
+      "significance_definition": null,
       "status": "complete",
       "unit_area": false,
       "unit_area_audit": null,
@@ -2009,21 +2062,32 @@
     {
       "bins": 9,
       "blind_data": false,
+      "dropped_input_bins_1based": [],
       "figure_size_inches": [
         12.0,
         10.0
       ],
       "kind": "CR",
       "labels": [
-        "DY2E"
+        "DYCR ($ee+\\mu\\mu$)"
       ],
       "legend_yields_displayed": true,
-      "name": "cr_dy2e_fatjet_pt",
-      "pdf": "/tmp/web2425/plots/2024/cr_dy2e_fatjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2024/cr_dy2e_fatjet_pt.png",
-      "region": "DY2E",
-      "region_label": "DY2E",
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000.0
+      ],
+      "name": "cr_dycr_fatjet_pt",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2024/cr_dycr_fatjet_pt.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2024/cr_dycr_fatjet_pt.png",
+      "region": "DYCR",
+      "region_label": "DYCR ($ee+\\mu\\mu$)",
       "signals": [],
+      "significance_definition": null,
       "status": "complete",
       "unit_area": false,
       "unit_area_audit": null,
@@ -2034,21 +2098,32 @@
     {
       "bins": 9,
       "blind_data": false,
+      "dropped_input_bins_1based": [],
       "figure_size_inches": [
         12.0,
         10.0
       ],
       "kind": "CR",
       "labels": [
-        "DY2E"
+        "DYCR ($ee+\\mu\\mu$)"
       ],
       "legend_yields_displayed": true,
-      "name": "cr_dy2e_ht",
-      "pdf": "/tmp/web2425/plots/2024/cr_dy2e_ht.pdf",
-      "png": "/tmp/web2425/plots/2024/cr_dy2e_ht.png",
-      "region": "DY2E",
-      "region_label": "DY2E",
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "cr_dycr_ht",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2024/cr_dycr_ht.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2024/cr_dycr_ht.png",
+      "region": "DYCR",
+      "region_label": "DYCR ($ee+\\mu\\mu$)",
       "signals": [],
+      "significance_definition": null,
       "status": "complete",
       "unit_area": false,
       "unit_area_audit": null,
@@ -2059,21 +2134,32 @@
     {
       "bins": 12,
       "blind_data": false,
+      "dropped_input_bins_1based": [],
       "figure_size_inches": [
         12.0,
         10.0
       ],
       "kind": "CR",
       "labels": [
-        "DY2E"
+        "DYCR ($ee+\\mu\\mu$)"
       ],
       "legend_yields_displayed": true,
-      "name": "cr_dy2e_jet_pt",
-      "pdf": "/tmp/web2425/plots/2024/cr_dy2e_jet_pt.pdf",
-      "png": "/tmp/web2425/plots/2024/cr_dy2e_jet_pt.png",
-      "region": "DY2E",
-      "region_label": "DY2E",
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "cr_dycr_jet_pt",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2024/cr_dycr_jet_pt.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2024/cr_dycr_jet_pt.png",
+      "region": "DYCR",
+      "region_label": "DYCR ($ee+\\mu\\mu$)",
       "signals": [],
+      "significance_definition": null,
       "status": "complete",
       "unit_area": false,
       "unit_area_audit": null,
@@ -2084,21 +2170,32 @@
     {
       "bins": 8,
       "blind_data": false,
+      "dropped_input_bins_1based": [],
       "figure_size_inches": [
         12.0,
         10.0
       ],
       "kind": "CR",
       "labels": [
-        "DY2E"
+        "DYCR ($ee+\\mu\\mu$)"
       ],
       "legend_yields_displayed": true,
-      "name": "cr_dy2e_met",
-      "pdf": "/tmp/web2425/plots/2024/cr_dy2e_met.pdf",
-      "png": "/tmp/web2425/plots/2024/cr_dy2e_met.png",
-      "region": "DY2E",
-      "region_label": "DY2E",
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        1000.0
+      ],
+      "name": "cr_dycr_met",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2024/cr_dycr_met.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2024/cr_dycr_met.png",
+      "region": "DYCR",
+      "region_label": "DYCR ($ee+\\mu\\mu$)",
       "signals": [],
+      "significance_definition": null,
       "status": "complete",
       "unit_area": false,
       "unit_area_audit": null,
@@ -2109,21 +2206,32 @@
     {
       "bins": 3,
       "blind_data": false,
+      "dropped_input_bins_1based": [],
       "figure_size_inches": [
         12.0,
         10.0
       ],
       "kind": "CR",
       "labels": [
-        "DY2E"
+        "DYCR ($ee+\\mu\\mu$)"
       ],
       "legend_yields_displayed": true,
-      "name": "cr_dy2e_nb",
-      "pdf": "/tmp/web2425/plots/2024/cr_dy2e_nb.pdf",
-      "png": "/tmp/web2425/plots/2024/cr_dy2e_nb.png",
-      "region": "DY2E",
-      "region_label": "DY2E",
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "cr_dycr_nb",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2024/cr_dycr_nb.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2024/cr_dycr_nb.png",
+      "region": "DYCR",
+      "region_label": "DYCR ($ee+\\mu\\mu$)",
       "signals": [],
+      "significance_definition": null,
       "status": "complete",
       "unit_area": false,
       "unit_area_audit": null,
@@ -2134,21 +2242,32 @@
     {
       "bins": 4,
       "blind_data": false,
+      "dropped_input_bins_1based": [],
       "figure_size_inches": [
         12.0,
         10.0
       ],
       "kind": "CR",
       "labels": [
-        "DY2E"
+        "DYCR ($ee+\\mu\\mu$)"
       ],
       "legend_yields_displayed": true,
-      "name": "cr_dy2e_nfatjet",
-      "pdf": "/tmp/web2425/plots/2024/cr_dy2e_nfatjet.pdf",
-      "png": "/tmp/web2425/plots/2024/cr_dy2e_nfatjet.png",
-      "region": "DY2E",
-      "region_label": "DY2E",
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "cr_dycr_nfatjet",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2024/cr_dycr_nfatjet.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2024/cr_dycr_nfatjet.png",
+      "region": "DYCR",
+      "region_label": "DYCR ($ee+\\mu\\mu$)",
       "signals": [],
+      "significance_definition": null,
       "status": "complete",
       "unit_area": false,
       "unit_area_audit": null,
@@ -2159,21 +2278,32 @@
     {
       "bins": 4,
       "blind_data": false,
+      "dropped_input_bins_1based": [],
       "figure_size_inches": [
         12.0,
         10.0
       ],
       "kind": "CR",
       "labels": [
-        "DY2E"
+        "DYCR ($ee+\\mu\\mu$)"
       ],
       "legend_yields_displayed": true,
-      "name": "cr_dy2e_njet",
-      "pdf": "/tmp/web2425/plots/2024/cr_dy2e_njet.pdf",
-      "png": "/tmp/web2425/plots/2024/cr_dy2e_njet.png",
-      "region": "DY2E",
-      "region_label": "DY2E",
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "cr_dycr_njet",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2024/cr_dycr_njet.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2024/cr_dycr_njet.png",
+      "region": "DYCR",
+      "region_label": "DYCR ($ee+\\mu\\mu$)",
       "signals": [],
+      "significance_definition": null,
       "status": "complete",
       "unit_area": false,
       "unit_area_audit": null,
@@ -2184,21 +2314,32 @@
     {
       "bins": 3,
       "blind_data": false,
+      "dropped_input_bins_1based": [],
       "figure_size_inches": [
         12.0,
         10.0
       ],
       "kind": "CR",
       "labels": [
-        "DY2E"
+        "DYCR ($ee+\\mu\\mu$)"
       ],
       "legend_yields_displayed": true,
-      "name": "cr_dy2e_ntop",
-      "pdf": "/tmp/web2425/plots/2024/cr_dy2e_ntop.pdf",
-      "png": "/tmp/web2425/plots/2024/cr_dy2e_ntop.png",
-      "region": "DY2E",
-      "region_label": "DY2E",
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "cr_dycr_ntop",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2024/cr_dycr_ntop.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2024/cr_dycr_ntop.png",
+      "region": "DYCR",
+      "region_label": "DYCR ($ee+\\mu\\mu$)",
       "signals": [],
+      "significance_definition": null,
       "status": "complete",
       "unit_area": false,
       "unit_area_audit": null,
@@ -2209,21 +2350,32 @@
     {
       "bins": 3,
       "blind_data": false,
+      "dropped_input_bins_1based": [],
       "figure_size_inches": [
         12.0,
         10.0
       ],
       "kind": "CR",
       "labels": [
-        "DY2E"
+        "DYCR ($ee+\\mu\\mu$)"
       ],
       "legend_yields_displayed": true,
-      "name": "cr_dy2e_nw",
-      "pdf": "/tmp/web2425/plots/2024/cr_dy2e_nw.pdf",
-      "png": "/tmp/web2425/plots/2024/cr_dy2e_nw.png",
-      "region": "DY2E",
-      "region_label": "DY2E",
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "cr_dycr_nw",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2024/cr_dycr_nw.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2024/cr_dycr_nw.png",
+      "region": "DYCR",
+      "region_label": "DYCR ($ee+\\mu\\mu$)",
       "signals": [],
+      "significance_definition": null,
       "status": "complete",
       "unit_area": false,
       "unit_area_audit": null,
@@ -2234,21 +2386,32 @@
     {
       "bins": 12,
       "blind_data": false,
+      "dropped_input_bins_1based": [],
       "figure_size_inches": [
         12.0,
         10.0
       ],
       "kind": "CR",
       "labels": [
-        "DY2E"
+        "DYCR ($ee+\\mu\\mu$)"
       ],
       "legend_yields_displayed": true,
-      "name": "cr_dy2e_ptll",
-      "pdf": "/tmp/web2425/plots/2024/cr_dy2e_ptll.pdf",
-      "png": "/tmp/web2425/plots/2024/cr_dy2e_ptll.png",
-      "region": "DY2E",
-      "region_label": "DY2E",
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000.0
+      ],
+      "name": "cr_dycr_ptll",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2024/cr_dycr_ptll.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2024/cr_dycr_ptll.png",
+      "region": "DYCR",
+      "region_label": "DYCR ($ee+\\mu\\mu$)",
       "signals": [],
+      "significance_definition": null,
       "status": "complete",
       "unit_area": false,
       "unit_area_audit": null,
@@ -2259,321 +2422,32 @@
     {
       "bins": 8,
       "blind_data": false,
+      "dropped_input_bins_1based": [],
       "figure_size_inches": [
         12.0,
         10.0
       ],
       "kind": "CR",
       "labels": [
-        "DY2E"
+        "DYCR ($ee+\\mu\\mu$)"
       ],
       "legend_yields_displayed": true,
-      "name": "cr_dy2e_ut",
-      "pdf": "/tmp/web2425/plots/2024/cr_dy2e_ut.pdf",
-      "png": "/tmp/web2425/plots/2024/cr_dy2e_ut.png",
-      "region": "DY2E",
-      "region_label": "DY2E",
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "cr_dycr_ut",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2024/cr_dycr_ut.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/highdm/2024/cr_dycr_ut.png",
+      "region": "DYCR",
+      "region_label": "DYCR ($ee+\\mu\\mu$)",
       "signals": [],
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "ut",
-      "xlabel": "$U_{T}$ (GeV)",
-      "year": "2024"
-    },
-    {
-      "bins": 11,
-      "blind_data": false,
-      "figure_size_inches": [
-        12.0,
-        10.0
-      ],
-      "kind": "CR",
-      "labels": [
-        "DY2M"
-      ],
-      "legend_yields_displayed": true,
-      "name": "cr_dy2m_bjet_pt",
-      "pdf": "/tmp/web2425/plots/2024/cr_dy2m_bjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2024/cr_dy2m_bjet_pt.png",
-      "region": "DY2M",
-      "region_label": "DY2M",
-      "signals": [],
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "bjet_pt",
-      "xlabel": "Leading b-jet $p_{T}$ (GeV)",
-      "year": "2024"
-    },
-    {
-      "bins": 9,
-      "blind_data": false,
-      "figure_size_inches": [
-        12.0,
-        10.0
-      ],
-      "kind": "CR",
-      "labels": [
-        "DY2M"
-      ],
-      "legend_yields_displayed": true,
-      "name": "cr_dy2m_fatjet_pt",
-      "pdf": "/tmp/web2425/plots/2024/cr_dy2m_fatjet_pt.pdf",
-      "png": "/tmp/web2425/plots/2024/cr_dy2m_fatjet_pt.png",
-      "region": "DY2M",
-      "region_label": "DY2M",
-      "signals": [],
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "fatjet_pt",
-      "xlabel": "Leading AK8 jet $p_{T}$ (GeV)",
-      "year": "2024"
-    },
-    {
-      "bins": 9,
-      "blind_data": false,
-      "figure_size_inches": [
-        12.0,
-        10.0
-      ],
-      "kind": "CR",
-      "labels": [
-        "DY2M"
-      ],
-      "legend_yields_displayed": true,
-      "name": "cr_dy2m_ht",
-      "pdf": "/tmp/web2425/plots/2024/cr_dy2m_ht.pdf",
-      "png": "/tmp/web2425/plots/2024/cr_dy2m_ht.png",
-      "region": "DY2M",
-      "region_label": "DY2M",
-      "signals": [],
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "ht",
-      "xlabel": "$H_{T}$ (GeV)",
-      "year": "2024"
-    },
-    {
-      "bins": 12,
-      "blind_data": false,
-      "figure_size_inches": [
-        12.0,
-        10.0
-      ],
-      "kind": "CR",
-      "labels": [
-        "DY2M"
-      ],
-      "legend_yields_displayed": true,
-      "name": "cr_dy2m_jet_pt",
-      "pdf": "/tmp/web2425/plots/2024/cr_dy2m_jet_pt.pdf",
-      "png": "/tmp/web2425/plots/2024/cr_dy2m_jet_pt.png",
-      "region": "DY2M",
-      "region_label": "DY2M",
-      "signals": [],
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "jet_pt",
-      "xlabel": "Leading jet $p_{T}$ (GeV)",
-      "year": "2024"
-    },
-    {
-      "bins": 8,
-      "blind_data": false,
-      "figure_size_inches": [
-        12.0,
-        10.0
-      ],
-      "kind": "CR",
-      "labels": [
-        "DY2M"
-      ],
-      "legend_yields_displayed": true,
-      "name": "cr_dy2m_met",
-      "pdf": "/tmp/web2425/plots/2024/cr_dy2m_met.pdf",
-      "png": "/tmp/web2425/plots/2024/cr_dy2m_met.png",
-      "region": "DY2M",
-      "region_label": "DY2M",
-      "signals": [],
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "met",
-      "xlabel": "$p_{T}^{miss}$ (GeV)",
-      "year": "2024"
-    },
-    {
-      "bins": 3,
-      "blind_data": false,
-      "figure_size_inches": [
-        12.0,
-        10.0
-      ],
-      "kind": "CR",
-      "labels": [
-        "DY2M"
-      ],
-      "legend_yields_displayed": true,
-      "name": "cr_dy2m_nb",
-      "pdf": "/tmp/web2425/plots/2024/cr_dy2m_nb.pdf",
-      "png": "/tmp/web2425/plots/2024/cr_dy2m_nb.png",
-      "region": "DY2M",
-      "region_label": "DY2M",
-      "signals": [],
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "nb",
-      "xlabel": "$N_{b}$",
-      "year": "2024"
-    },
-    {
-      "bins": 4,
-      "blind_data": false,
-      "figure_size_inches": [
-        12.0,
-        10.0
-      ],
-      "kind": "CR",
-      "labels": [
-        "DY2M"
-      ],
-      "legend_yields_displayed": true,
-      "name": "cr_dy2m_nfatjet",
-      "pdf": "/tmp/web2425/plots/2024/cr_dy2m_nfatjet.pdf",
-      "png": "/tmp/web2425/plots/2024/cr_dy2m_nfatjet.png",
-      "region": "DY2M",
-      "region_label": "DY2M",
-      "signals": [],
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "nfatjet",
-      "xlabel": "$N_{\\mathrm{AK8}}$",
-      "year": "2024"
-    },
-    {
-      "bins": 4,
-      "blind_data": false,
-      "figure_size_inches": [
-        12.0,
-        10.0
-      ],
-      "kind": "CR",
-      "labels": [
-        "DY2M"
-      ],
-      "legend_yields_displayed": true,
-      "name": "cr_dy2m_njet",
-      "pdf": "/tmp/web2425/plots/2024/cr_dy2m_njet.pdf",
-      "png": "/tmp/web2425/plots/2024/cr_dy2m_njet.png",
-      "region": "DY2M",
-      "region_label": "DY2M",
-      "signals": [],
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "njet",
-      "xlabel": "$N_{j}$",
-      "year": "2024"
-    },
-    {
-      "bins": 3,
-      "blind_data": false,
-      "figure_size_inches": [
-        12.0,
-        10.0
-      ],
-      "kind": "CR",
-      "labels": [
-        "DY2M"
-      ],
-      "legend_yields_displayed": true,
-      "name": "cr_dy2m_ntop",
-      "pdf": "/tmp/web2425/plots/2024/cr_dy2m_ntop.pdf",
-      "png": "/tmp/web2425/plots/2024/cr_dy2m_ntop.png",
-      "region": "DY2M",
-      "region_label": "DY2M",
-      "signals": [],
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "ntop",
-      "xlabel": "$N_{t}$",
-      "year": "2024"
-    },
-    {
-      "bins": 3,
-      "blind_data": false,
-      "figure_size_inches": [
-        12.0,
-        10.0
-      ],
-      "kind": "CR",
-      "labels": [
-        "DY2M"
-      ],
-      "legend_yields_displayed": true,
-      "name": "cr_dy2m_nw",
-      "pdf": "/tmp/web2425/plots/2024/cr_dy2m_nw.pdf",
-      "png": "/tmp/web2425/plots/2024/cr_dy2m_nw.png",
-      "region": "DY2M",
-      "region_label": "DY2M",
-      "signals": [],
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "nw",
-      "xlabel": "$N_{W}$",
-      "year": "2024"
-    },
-    {
-      "bins": 12,
-      "blind_data": false,
-      "figure_size_inches": [
-        12.0,
-        10.0
-      ],
-      "kind": "CR",
-      "labels": [
-        "DY2M"
-      ],
-      "legend_yields_displayed": true,
-      "name": "cr_dy2m_ptll",
-      "pdf": "/tmp/web2425/plots/2024/cr_dy2m_ptll.pdf",
-      "png": "/tmp/web2425/plots/2024/cr_dy2m_ptll.png",
-      "region": "DY2M",
-      "region_label": "DY2M",
-      "signals": [],
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "ptll",
-      "xlabel": "$p_{T}(\\ell\\ell)$ (GeV)",
-      "year": "2024"
-    },
-    {
-      "bins": 8,
-      "blind_data": false,
-      "figure_size_inches": [
-        12.0,
-        10.0
-      ],
-      "kind": "CR",
-      "labels": [
-        "DY2M"
-      ],
-      "legend_yields_displayed": true,
-      "name": "cr_dy2m_ut",
-      "pdf": "/tmp/web2425/plots/2024/cr_dy2m_ut.pdf",
-      "png": "/tmp/web2425/plots/2024/cr_dy2m_ut.png",
-      "region": "DY2M",
-      "region_label": "DY2M",
-      "signals": [],
+      "significance_definition": null,
       "status": "complete",
       "unit_area": false,
       "unit_area_audit": null,

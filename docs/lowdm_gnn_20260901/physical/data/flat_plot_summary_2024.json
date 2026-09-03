@@ -18,6 +18,25 @@
     "pileup",
     "veto_electron_5to10"
   ],
+  "dy_channel_combination": {
+    "channels": [
+      "DY2E",
+      "DY2M"
+    ],
+    "policy": "sum nominal, sumw2, and correlated systematic variations before uncertainty construction",
+    "region": "DYCR",
+    "status": "complete",
+    "variable_aliases": {
+      "mll": [
+        "mee",
+        "mmm"
+      ],
+      "recoil_dy": [
+        "recoil_dy2e",
+        "recoil_dy2m"
+      ]
+    }
+  },
   "dy_rz_application": {
     "channels": {
       "DY2E": {
@@ -66,7 +85,7 @@
     "metUnclustered"
   ],
   "output_dir": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical",
-  "plot_count": 105,
+  "plot_count": 85,
   "plots": [
     {
       "bins": 12,
@@ -4302,7 +4321,7 @@
       "bins": 12,
       "dropped_input_bins_1based": [],
       "labels": [
-        "DY2E low $\\Delta m$, $N_{res}=0$"
+        "DYCR ($ee+\\mu\\mu$), $N_{res}=0$"
       ],
       "legend_yields_displayed": true,
       "lower_panel": "data_over_mc",
@@ -4314,10 +4333,10 @@
         0.1,
         1000000.0
       ],
-      "name": "lowdm_cr_dy2e_met",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_met.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_met.png",
-      "region": "DY2E",
+      "name": "lowdm_cr_dycr_met",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_met.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_met.png",
+      "region": "DYCR",
       "signals": [],
       "significance_definition": null,
       "status": "complete",
@@ -4329,7 +4348,7 @@
       "bins": 7,
       "dropped_input_bins_1based": [],
       "labels": [
-        "DY2E low $\\Delta m$, $N_{res}=0$"
+        "DYCR ($ee+\\mu\\mu$), $N_{res}=0$"
       ],
       "legend_yields_displayed": true,
       "lower_panel": "data_over_mc",
@@ -4341,10 +4360,10 @@
         0.1,
         1000000.0
       ],
-      "name": "lowdm_cr_dy2e_ht",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_ht.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_ht.png",
-      "region": "DY2E",
+      "name": "lowdm_cr_dycr_ht",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_ht.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_ht.png",
+      "region": "DYCR",
       "signals": [],
       "significance_definition": null,
       "status": "complete",
@@ -4356,7 +4375,7 @@
       "bins": 8,
       "dropped_input_bins_1based": [],
       "labels": [
-        "DY2E low $\\Delta m$, $N_{res}=0$"
+        "DYCR ($ee+\\mu\\mu$), $N_{res}=0$"
       ],
       "legend_yields_displayed": true,
       "lower_panel": "data_over_mc",
@@ -4366,12 +4385,12 @@
       ],
       "main_panel_ylim": [
         0.1,
-        100000.0
+        1000000.0
       ],
-      "name": "lowdm_cr_dy2e_njet",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_njet.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_njet.png",
-      "region": "DY2E",
+      "name": "lowdm_cr_dycr_njet",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_njet.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_njet.png",
+      "region": "DYCR",
       "signals": [],
       "significance_definition": null,
       "status": "complete",
@@ -4383,7 +4402,7 @@
       "bins": 6,
       "dropped_input_bins_1based": [],
       "labels": [
-        "DY2E low $\\Delta m$, $N_{res}=0$"
+        "DYCR ($ee+\\mu\\mu$), $N_{res}=0$"
       ],
       "legend_yields_displayed": true,
       "lower_panel": "data_over_mc",
@@ -4395,10 +4414,10 @@
         0.1,
         1000000.0
       ],
-      "name": "lowdm_cr_dy2e_nb_medium_lowdm",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_nb_medium_lowdm.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_nb_medium_lowdm.png",
-      "region": "DY2E",
+      "name": "lowdm_cr_dycr_nb_medium_lowdm",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_nb_medium_lowdm.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_nb_medium_lowdm.png",
+      "region": "DYCR",
       "signals": [],
       "significance_definition": null,
       "status": "complete",
@@ -4410,7 +4429,7 @@
       "bins": 6,
       "dropped_input_bins_1based": [],
       "labels": [
-        "DY2E low $\\Delta m$, $N_{res}=0$"
+        "DYCR ($ee+\\mu\\mu$), $N_{res}=0$"
       ],
       "legend_yields_displayed": true,
       "lower_panel": "data_over_mc",
@@ -4422,10 +4441,10 @@
         0.1,
         1000000.0
       ],
-      "name": "lowdm_cr_dy2e_nb_loose_lowdm",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_nb_loose_lowdm.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_nb_loose_lowdm.png",
-      "region": "DY2E",
+      "name": "lowdm_cr_dycr_nb_loose_lowdm",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_nb_loose_lowdm.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_nb_loose_lowdm.png",
+      "region": "DYCR",
       "signals": [],
       "significance_definition": null,
       "status": "complete",
@@ -4437,7 +4456,7 @@
       "bins": 4,
       "dropped_input_bins_1based": [],
       "labels": [
-        "DY2E low $\\Delta m$, $N_{res}=0$"
+        "DYCR ($ee+\\mu\\mu$), $N_{res}=0$"
       ],
       "legend_yields_displayed": true,
       "lower_panel": "data_over_mc",
@@ -4449,10 +4468,10 @@
         0.1,
         1000000.0
       ],
-      "name": "lowdm_cr_dy2e_n_e_veto",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_n_e_veto.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_n_e_veto.png",
-      "region": "DY2E",
+      "name": "lowdm_cr_dycr_n_e_veto",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_n_e_veto.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_n_e_veto.png",
+      "region": "DYCR",
       "signals": [],
       "significance_definition": null,
       "status": "complete",
@@ -4464,7 +4483,7 @@
       "bins": 4,
       "dropped_input_bins_1based": [],
       "labels": [
-        "DY2E low $\\Delta m$, $N_{res}=0$"
+        "DYCR ($ee+\\mu\\mu$), $N_{res}=0$"
       ],
       "legend_yields_displayed": true,
       "lower_panel": "data_over_mc",
@@ -4476,10 +4495,10 @@
         0.1,
         1000000.0
       ],
-      "name": "lowdm_cr_dy2e_n_m_loose",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_n_m_loose.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_n_m_loose.png",
-      "region": "DY2E",
+      "name": "lowdm_cr_dycr_n_m_loose",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_n_m_loose.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_n_m_loose.png",
+      "region": "DYCR",
       "signals": [],
       "significance_definition": null,
       "status": "complete",
@@ -4491,7 +4510,7 @@
       "bins": 8,
       "dropped_input_bins_1based": [],
       "labels": [
-        "DY2E low $\\Delta m$, $N_{res}=0$"
+        "DYCR ($ee+\\mu\\mu$), $N_{res}=0$"
       ],
       "legend_yields_displayed": true,
       "lower_panel": "data_over_mc",
@@ -4501,12 +4520,12 @@
       ],
       "main_panel_ylim": [
         0.1,
-        100000.0
+        1000000.0
       ],
-      "name": "lowdm_cr_dy2e_lowdm_mtb",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_lowdm_mtb.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_lowdm_mtb.png",
-      "region": "DY2E",
+      "name": "lowdm_cr_dycr_lowdm_mtb",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_lowdm_mtb.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_lowdm_mtb.png",
+      "region": "DYCR",
       "signals": [],
       "significance_definition": null,
       "status": "complete",
@@ -4518,7 +4537,7 @@
       "bins": 8,
       "dropped_input_bins_1based": [],
       "labels": [
-        "DY2E low $\\Delta m$, $N_{res}=0$"
+        "DYCR ($ee+\\mu\\mu$), $N_{res}=0$"
       ],
       "legend_yields_displayed": true,
       "lower_panel": "data_over_mc",
@@ -4528,12 +4547,12 @@
       ],
       "main_panel_ylim": [
         0.1,
-        100000.0
+        1000000.0
       ],
-      "name": "lowdm_cr_dy2e_lowdm_met_sqrt_ht",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_lowdm_met_sqrt_ht.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_lowdm_met_sqrt_ht.png",
-      "region": "DY2E",
+      "name": "lowdm_cr_dycr_lowdm_met_sqrt_ht",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_lowdm_met_sqrt_ht.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_lowdm_met_sqrt_ht.png",
+      "region": "DYCR",
       "signals": [],
       "significance_definition": null,
       "status": "complete",
@@ -4545,7 +4564,7 @@
       "bins": 10,
       "dropped_input_bins_1based": [],
       "labels": [
-        "DY2E low $\\Delta m$, $N_{res}=0$"
+        "DYCR ($ee+\\mu\\mu$), $N_{res}=0$"
       ],
       "legend_yields_displayed": true,
       "lower_panel": "data_over_mc",
@@ -4557,10 +4576,10 @@
         0.1,
         100000.0
       ],
-      "name": "lowdm_cr_dy2e_lowdm_isr_pt",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_lowdm_isr_pt.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_lowdm_isr_pt.png",
-      "region": "DY2E",
+      "name": "lowdm_cr_dycr_lowdm_isr_pt",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_lowdm_isr_pt.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_lowdm_isr_pt.png",
+      "region": "DYCR",
       "signals": [],
       "significance_definition": null,
       "status": "complete",
@@ -4572,7 +4591,7 @@
       "bins": 6,
       "dropped_input_bins_1based": [],
       "labels": [
-        "DY2E low $\\Delta m$, $N_{res}=0$"
+        "DYCR ($ee+\\mu\\mu$), $N_{res}=0$"
       ],
       "legend_yields_displayed": true,
       "lower_panel": "data_over_mc",
@@ -4582,12 +4601,12 @@
       ],
       "main_panel_ylim": [
         0.1,
-        100000.0
+        1000000.0
       ],
-      "name": "lowdm_cr_dy2e_lowdm_isr_dphi",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_lowdm_isr_dphi.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_lowdm_isr_dphi.png",
-      "region": "DY2E",
+      "name": "lowdm_cr_dycr_lowdm_isr_dphi",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_lowdm_isr_dphi.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_lowdm_isr_dphi.png",
+      "region": "DYCR",
       "signals": [],
       "significance_definition": null,
       "status": "complete",
@@ -4599,7 +4618,7 @@
       "bins": 8,
       "dropped_input_bins_1based": [],
       "labels": [
-        "DY2E low $\\Delta m$, $N_{res}=0$"
+        "DYCR ($ee+\\mu\\mu$), $N_{res}=0$"
       ],
       "legend_yields_displayed": true,
       "lower_panel": "data_over_mc",
@@ -4611,10 +4630,10 @@
         0.1,
         100000.0
       ],
-      "name": "lowdm_cr_dy2e_lowdm_ptb",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_lowdm_ptb.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_lowdm_ptb.png",
-      "region": "DY2E",
+      "name": "lowdm_cr_dycr_lowdm_ptb",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_lowdm_ptb.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_lowdm_ptb.png",
+      "region": "DYCR",
       "signals": [],
       "significance_definition": null,
       "status": "complete",
@@ -4626,7 +4645,7 @@
       "bins": 5,
       "dropped_input_bins_1based": [],
       "labels": [
-        "DY2E low $\\Delta m$, $N_{res}=0$"
+        "DYCR ($ee+\\mu\\mu$), $N_{res}=0$"
       ],
       "legend_yields_displayed": true,
       "lower_panel": "data_over_mc",
@@ -4638,10 +4657,10 @@
         0.1,
         1000000.0
       ],
-      "name": "lowdm_cr_dy2e_n_lowdm_isr",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_n_lowdm_isr.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_n_lowdm_isr.png",
-      "region": "DY2E",
+      "name": "lowdm_cr_dycr_n_lowdm_isr",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_n_lowdm_isr.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_n_lowdm_isr.png",
+      "region": "DYCR",
       "signals": [],
       "significance_definition": null,
       "status": "complete",
@@ -4653,7 +4672,7 @@
       "bins": 10,
       "dropped_input_bins_1based": [],
       "labels": [
-        "DY2E low $\\Delta m$, $N_{res}=0$"
+        "DYCR ($ee+\\mu\\mu$), $N_{res}=0$"
       ],
       "legend_yields_displayed": true,
       "lower_panel": "data_over_mc",
@@ -4665,10 +4684,10 @@
         0.1,
         100000.0
       ],
-      "name": "lowdm_cr_dy2e_leading_lowdm_fatjet_pt",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_leading_lowdm_fatjet_pt.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_leading_lowdm_fatjet_pt.png",
-      "region": "DY2E",
+      "name": "lowdm_cr_dycr_leading_lowdm_fatjet_pt",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_leading_lowdm_fatjet_pt.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_leading_lowdm_fatjet_pt.png",
+      "region": "DYCR",
       "signals": [],
       "significance_definition": null,
       "status": "complete",
@@ -4680,7 +4699,7 @@
       "bins": 8,
       "dropped_input_bins_1based": [],
       "labels": [
-        "DY2E low $\\Delta m$, $N_{res}=0$"
+        "DYCR ($ee+\\mu\\mu$), $N_{res}=0$"
       ],
       "legend_yields_displayed": true,
       "lower_panel": "data_over_mc",
@@ -4690,12 +4709,12 @@
       ],
       "main_panel_ylim": [
         0.1,
-        100000.0
+        1000000.0
       ],
-      "name": "lowdm_cr_dy2e_leading_lowdm_fatjet_msd",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_leading_lowdm_fatjet_msd.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_leading_lowdm_fatjet_msd.png",
-      "region": "DY2E",
+      "name": "lowdm_cr_dycr_leading_lowdm_fatjet_msd",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_leading_lowdm_fatjet_msd.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_leading_lowdm_fatjet_msd.png",
+      "region": "DYCR",
       "signals": [],
       "significance_definition": null,
       "status": "complete",
@@ -4707,7 +4726,7 @@
       "bins": 10,
       "dropped_input_bins_1based": [],
       "labels": [
-        "DY2E low $\\Delta m$, $N_{res}=0$"
+        "DYCR ($ee+\\mu\\mu$), $N_{res}=0$"
       ],
       "legend_yields_displayed": true,
       "lower_panel": "data_over_mc",
@@ -4717,24 +4736,24 @@
       ],
       "main_panel_ylim": [
         0.1,
-        100000.0
+        1000000.0
       ],
-      "name": "lowdm_cr_dy2e_recoil_dy2e",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_recoil_dy2e.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_recoil_dy2e.png",
-      "region": "DY2E",
+      "name": "lowdm_cr_dycr_recoil_dy",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_recoil_dy.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_recoil_dy.png",
+      "region": "DYCR",
       "signals": [],
       "significance_definition": null,
       "status": "complete",
       "unit_area": false,
       "unit_area_audit": null,
-      "variable": "recoil_dy2e"
+      "variable": "recoil_dy"
     },
     {
       "bins": 8,
       "dropped_input_bins_1based": [],
       "labels": [
-        "DY2E low $\\Delta m$, $N_{res}=0$"
+        "DYCR ($ee+\\mu\\mu$), $N_{res}=0$"
       ],
       "legend_yields_displayed": true,
       "lower_panel": "data_over_mc",
@@ -4744,24 +4763,24 @@
       ],
       "main_panel_ylim": [
         0.1,
-        100000.0
+        1000000.0
       ],
-      "name": "lowdm_cr_dy2e_mee",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_mee.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_mee.png",
-      "region": "DY2E",
+      "name": "lowdm_cr_dycr_mll",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_mll.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_mll.png",
+      "region": "DYCR",
       "signals": [],
       "significance_definition": null,
       "status": "complete",
       "unit_area": false,
       "unit_area_audit": null,
-      "variable": "mee"
+      "variable": "mll"
     },
     {
       "bins": 8,
       "dropped_input_bins_1based": [],
       "labels": [
-        "DY2E low $\\Delta m$, $N_{res}=0$"
+        "DYCR ($ee+\\mu\\mu$), $N_{res}=0$"
       ],
       "legend_yields_displayed": true,
       "lower_panel": "data_over_mc",
@@ -4771,12 +4790,12 @@
       ],
       "main_panel_ylim": [
         0.1,
-        100000.0
+        1000000.0
       ],
-      "name": "lowdm_cr_dy2e_njet_lepton_clean",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_njet_lepton_clean.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_njet_lepton_clean.png",
-      "region": "DY2E",
+      "name": "lowdm_cr_dycr_njet_lepton_clean",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_njet_lepton_clean.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_njet_lepton_clean.png",
+      "region": "DYCR",
       "signals": [],
       "significance_definition": null,
       "status": "complete",
@@ -4788,7 +4807,7 @@
       "bins": 6,
       "dropped_input_bins_1based": [],
       "labels": [
-        "DY2E low $\\Delta m$, $N_{res}=0$"
+        "DYCR ($ee+\\mu\\mu$), $N_{res}=0$"
       ],
       "legend_yields_displayed": true,
       "lower_panel": "data_over_mc",
@@ -4800,10 +4819,10 @@
         0.1,
         1000000.0
       ],
-      "name": "lowdm_cr_dy2e_nb_lepton_clean",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_nb_lepton_clean.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_nb_lepton_clean.png",
-      "region": "DY2E",
+      "name": "lowdm_cr_dycr_nb_lepton_clean",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_nb_lepton_clean.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_nb_lepton_clean.png",
+      "region": "DYCR",
       "signals": [],
       "significance_definition": null,
       "status": "complete",
@@ -4815,7 +4834,7 @@
       "bins": 7,
       "dropped_input_bins_1based": [],
       "labels": [
-        "DY2E low $\\Delta m$, $N_{res}=0$"
+        "DYCR ($ee+\\mu\\mu$), $N_{res}=0$"
       ],
       "legend_yields_displayed": true,
       "lower_panel": "data_over_mc",
@@ -4827,550 +4846,10 @@
         0.1,
         1000000.0
       ],
-      "name": "lowdm_cr_dy2e_ht_lepton_clean",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_ht_lepton_clean.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2e_ht_lepton_clean.png",
-      "region": "DY2E",
-      "signals": [],
-      "significance_definition": null,
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "ht_lepton_clean"
-    },
-    {
-      "bins": 12,
-      "dropped_input_bins_1based": [],
-      "labels": [
-        "DY2M low $\\Delta m$, $N_{res}=0$"
-      ],
-      "legend_yields_displayed": true,
-      "lower_panel": "data_over_mc",
-      "lower_panel_ylim": [
-        0.0,
-        2.0
-      ],
-      "main_panel_ylim": [
-        0.1,
-        1000000.0
-      ],
-      "name": "lowdm_cr_dy2m_met",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_met.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_met.png",
-      "region": "DY2M",
-      "signals": [],
-      "significance_definition": null,
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "met"
-    },
-    {
-      "bins": 7,
-      "dropped_input_bins_1based": [],
-      "labels": [
-        "DY2M low $\\Delta m$, $N_{res}=0$"
-      ],
-      "legend_yields_displayed": true,
-      "lower_panel": "data_over_mc",
-      "lower_panel_ylim": [
-        0.0,
-        2.0
-      ],
-      "main_panel_ylim": [
-        0.1,
-        1000000.0
-      ],
-      "name": "lowdm_cr_dy2m_ht",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_ht.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_ht.png",
-      "region": "DY2M",
-      "signals": [],
-      "significance_definition": null,
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "ht"
-    },
-    {
-      "bins": 8,
-      "dropped_input_bins_1based": [],
-      "labels": [
-        "DY2M low $\\Delta m$, $N_{res}=0$"
-      ],
-      "legend_yields_displayed": true,
-      "lower_panel": "data_over_mc",
-      "lower_panel_ylim": [
-        0.0,
-        2.0
-      ],
-      "main_panel_ylim": [
-        0.1,
-        100000.0
-      ],
-      "name": "lowdm_cr_dy2m_njet",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_njet.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_njet.png",
-      "region": "DY2M",
-      "signals": [],
-      "significance_definition": null,
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "njet"
-    },
-    {
-      "bins": 6,
-      "dropped_input_bins_1based": [],
-      "labels": [
-        "DY2M low $\\Delta m$, $N_{res}=0$"
-      ],
-      "legend_yields_displayed": true,
-      "lower_panel": "data_over_mc",
-      "lower_panel_ylim": [
-        0.0,
-        2.0
-      ],
-      "main_panel_ylim": [
-        0.1,
-        1000000.0
-      ],
-      "name": "lowdm_cr_dy2m_nb_medium_lowdm",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_nb_medium_lowdm.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_nb_medium_lowdm.png",
-      "region": "DY2M",
-      "signals": [],
-      "significance_definition": null,
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "nb_medium_lowdm"
-    },
-    {
-      "bins": 6,
-      "dropped_input_bins_1based": [],
-      "labels": [
-        "DY2M low $\\Delta m$, $N_{res}=0$"
-      ],
-      "legend_yields_displayed": true,
-      "lower_panel": "data_over_mc",
-      "lower_panel_ylim": [
-        0.0,
-        2.0
-      ],
-      "main_panel_ylim": [
-        0.1,
-        1000000.0
-      ],
-      "name": "lowdm_cr_dy2m_nb_loose_lowdm",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_nb_loose_lowdm.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_nb_loose_lowdm.png",
-      "region": "DY2M",
-      "signals": [],
-      "significance_definition": null,
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "nb_loose_lowdm"
-    },
-    {
-      "bins": 4,
-      "dropped_input_bins_1based": [],
-      "labels": [
-        "DY2M low $\\Delta m$, $N_{res}=0$"
-      ],
-      "legend_yields_displayed": true,
-      "lower_panel": "data_over_mc",
-      "lower_panel_ylim": [
-        0.0,
-        2.0
-      ],
-      "main_panel_ylim": [
-        0.1,
-        1000000.0
-      ],
-      "name": "lowdm_cr_dy2m_n_e_veto",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_n_e_veto.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_n_e_veto.png",
-      "region": "DY2M",
-      "signals": [],
-      "significance_definition": null,
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "n_e_veto"
-    },
-    {
-      "bins": 4,
-      "dropped_input_bins_1based": [],
-      "labels": [
-        "DY2M low $\\Delta m$, $N_{res}=0$"
-      ],
-      "legend_yields_displayed": true,
-      "lower_panel": "data_over_mc",
-      "lower_panel_ylim": [
-        0.0,
-        2.0
-      ],
-      "main_panel_ylim": [
-        0.1,
-        1000000.0
-      ],
-      "name": "lowdm_cr_dy2m_n_m_loose",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_n_m_loose.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_n_m_loose.png",
-      "region": "DY2M",
-      "signals": [],
-      "significance_definition": null,
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "n_m_loose"
-    },
-    {
-      "bins": 8,
-      "dropped_input_bins_1based": [],
-      "labels": [
-        "DY2M low $\\Delta m$, $N_{res}=0$"
-      ],
-      "legend_yields_displayed": true,
-      "lower_panel": "data_over_mc",
-      "lower_panel_ylim": [
-        0.0,
-        2.0
-      ],
-      "main_panel_ylim": [
-        0.1,
-        100000.0
-      ],
-      "name": "lowdm_cr_dy2m_lowdm_mtb",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_lowdm_mtb.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_lowdm_mtb.png",
-      "region": "DY2M",
-      "signals": [],
-      "significance_definition": null,
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "lowdm_mtb"
-    },
-    {
-      "bins": 8,
-      "dropped_input_bins_1based": [],
-      "labels": [
-        "DY2M low $\\Delta m$, $N_{res}=0$"
-      ],
-      "legend_yields_displayed": true,
-      "lower_panel": "data_over_mc",
-      "lower_panel_ylim": [
-        0.0,
-        2.0
-      ],
-      "main_panel_ylim": [
-        0.1,
-        100000.0
-      ],
-      "name": "lowdm_cr_dy2m_lowdm_met_sqrt_ht",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_lowdm_met_sqrt_ht.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_lowdm_met_sqrt_ht.png",
-      "region": "DY2M",
-      "signals": [],
-      "significance_definition": null,
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "lowdm_met_sqrt_ht"
-    },
-    {
-      "bins": 10,
-      "dropped_input_bins_1based": [],
-      "labels": [
-        "DY2M low $\\Delta m$, $N_{res}=0$"
-      ],
-      "legend_yields_displayed": true,
-      "lower_panel": "data_over_mc",
-      "lower_panel_ylim": [
-        0.0,
-        2.0
-      ],
-      "main_panel_ylim": [
-        0.1,
-        100000.0
-      ],
-      "name": "lowdm_cr_dy2m_lowdm_isr_pt",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_lowdm_isr_pt.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_lowdm_isr_pt.png",
-      "region": "DY2M",
-      "signals": [],
-      "significance_definition": null,
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "lowdm_isr_pt"
-    },
-    {
-      "bins": 6,
-      "dropped_input_bins_1based": [],
-      "labels": [
-        "DY2M low $\\Delta m$, $N_{res}=0$"
-      ],
-      "legend_yields_displayed": true,
-      "lower_panel": "data_over_mc",
-      "lower_panel_ylim": [
-        0.0,
-        2.0
-      ],
-      "main_panel_ylim": [
-        0.1,
-        100000.0
-      ],
-      "name": "lowdm_cr_dy2m_lowdm_isr_dphi",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_lowdm_isr_dphi.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_lowdm_isr_dphi.png",
-      "region": "DY2M",
-      "signals": [],
-      "significance_definition": null,
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "lowdm_isr_dphi"
-    },
-    {
-      "bins": 8,
-      "dropped_input_bins_1based": [],
-      "labels": [
-        "DY2M low $\\Delta m$, $N_{res}=0$"
-      ],
-      "legend_yields_displayed": true,
-      "lower_panel": "data_over_mc",
-      "lower_panel_ylim": [
-        0.0,
-        2.0
-      ],
-      "main_panel_ylim": [
-        0.1,
-        100000.0
-      ],
-      "name": "lowdm_cr_dy2m_lowdm_ptb",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_lowdm_ptb.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_lowdm_ptb.png",
-      "region": "DY2M",
-      "signals": [],
-      "significance_definition": null,
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "lowdm_ptb"
-    },
-    {
-      "bins": 5,
-      "dropped_input_bins_1based": [],
-      "labels": [
-        "DY2M low $\\Delta m$, $N_{res}=0$"
-      ],
-      "legend_yields_displayed": true,
-      "lower_panel": "data_over_mc",
-      "lower_panel_ylim": [
-        0.0,
-        2.0
-      ],
-      "main_panel_ylim": [
-        0.1,
-        1000000.0
-      ],
-      "name": "lowdm_cr_dy2m_n_lowdm_isr",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_n_lowdm_isr.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_n_lowdm_isr.png",
-      "region": "DY2M",
-      "signals": [],
-      "significance_definition": null,
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "n_lowdm_isr"
-    },
-    {
-      "bins": 10,
-      "dropped_input_bins_1based": [],
-      "labels": [
-        "DY2M low $\\Delta m$, $N_{res}=0$"
-      ],
-      "legend_yields_displayed": true,
-      "lower_panel": "data_over_mc",
-      "lower_panel_ylim": [
-        0.0,
-        2.0
-      ],
-      "main_panel_ylim": [
-        0.1,
-        100000.0
-      ],
-      "name": "lowdm_cr_dy2m_leading_lowdm_fatjet_pt",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_leading_lowdm_fatjet_pt.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_leading_lowdm_fatjet_pt.png",
-      "region": "DY2M",
-      "signals": [],
-      "significance_definition": null,
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "leading_lowdm_fatjet_pt"
-    },
-    {
-      "bins": 8,
-      "dropped_input_bins_1based": [],
-      "labels": [
-        "DY2M low $\\Delta m$, $N_{res}=0$"
-      ],
-      "legend_yields_displayed": true,
-      "lower_panel": "data_over_mc",
-      "lower_panel_ylim": [
-        0.0,
-        2.0
-      ],
-      "main_panel_ylim": [
-        0.1,
-        1000000.0
-      ],
-      "name": "lowdm_cr_dy2m_leading_lowdm_fatjet_msd",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_leading_lowdm_fatjet_msd.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_leading_lowdm_fatjet_msd.png",
-      "region": "DY2M",
-      "signals": [],
-      "significance_definition": null,
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "leading_lowdm_fatjet_msd"
-    },
-    {
-      "bins": 10,
-      "dropped_input_bins_1based": [],
-      "labels": [
-        "DY2M low $\\Delta m$, $N_{res}=0$"
-      ],
-      "legend_yields_displayed": true,
-      "lower_panel": "data_over_mc",
-      "lower_panel_ylim": [
-        0.0,
-        2.0
-      ],
-      "main_panel_ylim": [
-        0.1,
-        100000.0
-      ],
-      "name": "lowdm_cr_dy2m_recoil_dy2m",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_recoil_dy2m.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_recoil_dy2m.png",
-      "region": "DY2M",
-      "signals": [],
-      "significance_definition": null,
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "recoil_dy2m"
-    },
-    {
-      "bins": 8,
-      "dropped_input_bins_1based": [],
-      "labels": [
-        "DY2M low $\\Delta m$, $N_{res}=0$"
-      ],
-      "legend_yields_displayed": true,
-      "lower_panel": "data_over_mc",
-      "lower_panel_ylim": [
-        0.0,
-        2.0
-      ],
-      "main_panel_ylim": [
-        0.1,
-        100000.0
-      ],
-      "name": "lowdm_cr_dy2m_mmm",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_mmm.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_mmm.png",
-      "region": "DY2M",
-      "signals": [],
-      "significance_definition": null,
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "mmm"
-    },
-    {
-      "bins": 8,
-      "dropped_input_bins_1based": [],
-      "labels": [
-        "DY2M low $\\Delta m$, $N_{res}=0$"
-      ],
-      "legend_yields_displayed": true,
-      "lower_panel": "data_over_mc",
-      "lower_panel_ylim": [
-        0.0,
-        2.0
-      ],
-      "main_panel_ylim": [
-        0.1,
-        100000.0
-      ],
-      "name": "lowdm_cr_dy2m_njet_lepton_clean",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_njet_lepton_clean.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_njet_lepton_clean.png",
-      "region": "DY2M",
-      "signals": [],
-      "significance_definition": null,
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "njet_lepton_clean"
-    },
-    {
-      "bins": 6,
-      "dropped_input_bins_1based": [],
-      "labels": [
-        "DY2M low $\\Delta m$, $N_{res}=0$"
-      ],
-      "legend_yields_displayed": true,
-      "lower_panel": "data_over_mc",
-      "lower_panel_ylim": [
-        0.0,
-        2.0
-      ],
-      "main_panel_ylim": [
-        0.1,
-        1000000.0
-      ],
-      "name": "lowdm_cr_dy2m_nb_lepton_clean",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_nb_lepton_clean.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_nb_lepton_clean.png",
-      "region": "DY2M",
-      "signals": [],
-      "significance_definition": null,
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null,
-      "variable": "nb_lepton_clean"
-    },
-    {
-      "bins": 7,
-      "dropped_input_bins_1based": [],
-      "labels": [
-        "DY2M low $\\Delta m$, $N_{res}=0$"
-      ],
-      "legend_yields_displayed": true,
-      "lower_panel": "data_over_mc",
-      "lower_panel_ylim": [
-        0.0,
-        2.0
-      ],
-      "main_panel_ylim": [
-        0.1,
-        1000000.0
-      ],
-      "name": "lowdm_cr_dy2m_ht_lepton_clean",
-      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_ht_lepton_clean.pdf",
-      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2024_20260901/plots/lowdm_physical/lowdm_cr_dy2m_ht_lepton_clean.png",
-      "region": "DY2M",
+      "name": "lowdm_cr_dycr_ht_lepton_clean",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_ht_lepton_clean.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/dycr_combined_20260903/plots/lowdm/2024/lowdm_cr_dycr_ht_lepton_clean.png",
+      "region": "DYCR",
       "signals": [],
       "significance_definition": null,
       "status": "complete",
