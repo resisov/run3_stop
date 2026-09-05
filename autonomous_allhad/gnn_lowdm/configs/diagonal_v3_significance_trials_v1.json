@@ -1,0 +1,97 @@
+{
+  "schema_version": "gnn_lowdm_diagonal_v3_significance_trials_v1",
+  "objective": "validation p10 then median mass-point gain in combined binned S/sqrt(B)",
+  "epochs": 20,
+  "minimum_epochs": 15,
+  "patience": 4,
+  "trials": [
+    {
+      "name": "h48_l2_bce_control",
+      "hidden": 48,
+      "message_layers": 2,
+      "dropout": 0.25,
+      "learning_rate": 0.0004,
+      "weight_decay": 0.001,
+      "batch_size": 2048,
+      "significance_weight": 0.0,
+      "significance_temperature": 0.35
+    },
+    {
+      "name": "h48_l2_sig005",
+      "hidden": 48,
+      "message_layers": 2,
+      "dropout": 0.25,
+      "learning_rate": 0.0004,
+      "weight_decay": 0.001,
+      "batch_size": 2048,
+      "significance_weight": 0.05,
+      "significance_temperature": 0.35
+    },
+    {
+      "name": "h48_l2_sig010",
+      "hidden": 48,
+      "message_layers": 2,
+      "dropout": 0.25,
+      "learning_rate": 0.0004,
+      "weight_decay": 0.001,
+      "batch_size": 2048,
+      "significance_weight": 0.1,
+      "significance_temperature": 0.35
+    },
+    {
+      "name": "h64_l2_sig010",
+      "hidden": 64,
+      "message_layers": 2,
+      "dropout": 0.2,
+      "learning_rate": 0.0003,
+      "weight_decay": 0.001,
+      "batch_size": 1536,
+      "significance_weight": 0.1,
+      "significance_temperature": 0.35
+    },
+    {
+      "name": "h48_l3_sig010",
+      "hidden": 48,
+      "message_layers": 3,
+      "dropout": 0.2,
+      "learning_rate": 0.0003,
+      "weight_decay": 0.001,
+      "batch_size": 1536,
+      "significance_weight": 0.1,
+      "significance_temperature": 0.35
+    },
+    {
+      "name": "h32_l2_fast_sig010",
+      "hidden": 32,
+      "message_layers": 2,
+      "dropout": 0.15,
+      "learning_rate": 0.0006,
+      "weight_decay": 0.0005,
+      "batch_size": 3072,
+      "significance_weight": 0.1,
+      "significance_temperature": 0.35
+    },
+    {
+      "name": "h48_l2_sig020_t050",
+      "hidden": 48,
+      "message_layers": 2,
+      "dropout": 0.25,
+      "learning_rate": 0.0004,
+      "weight_decay": 0.001,
+      "batch_size": 2048,
+      "significance_weight": 0.2,
+      "significance_temperature": 0.5
+    },
+    {
+      "name": "h48_l2_lr6e4_d015_sig010",
+      "hidden": 48,
+      "message_layers": 2,
+      "dropout": 0.15,
+      "learning_rate": 0.0006,
+      "weight_decay": 0.0005,
+      "batch_size": 2048,
+      "significance_weight": 0.1,
+      "significance_temperature": 0.35
+    }
+  ]
+}

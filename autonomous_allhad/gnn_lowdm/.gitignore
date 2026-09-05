@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+tests/__pycache__/
+.DS_Store
+
+# Full feature caches, trained checkpoints, and generated plots/tables are
+# reproducible local artifacts.  Keep the study code and frozen configuration
+# in Git, but do not make the repository carry multi-gigabyte campaigns.
+inputs/*
+!inputs/run2_sus19010_*_contours.json
+full_campaign_manifest_*.json
+models/*
+!models/diagonal_v3_h48_l3_sig010/
+!models/diagonal_v3_h48_l3_sig010/**
+results/

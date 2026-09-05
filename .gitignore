@@ -105,10 +105,8 @@ autonomous_allhad/workflow/current_available_pipeline_*/hist_chunks/
 autonomous_allhad/workflow/current_available_pipeline_*/hists_*/hist_chunks/
 autonomous_allhad/workflow/results/
 
-# Preliminary local classifier study.  Its multi-GB inputs, trained models,
-# site-specific Condor requests, and private EOS manifests stay outside the
-# public source history until the study is promoted through the normal review.
-autonomous_allhad/gnn_lowdm/
+# The promoted Low-dM GNN source and frozen model are versioned.  Its local
+# multi-GB caches and generated outputs are filtered by gnn_lowdm/.gitignore.
 
 # Local fit/estimation report bundles contain site-specific provenance paths.
 # Publish reviewed, path-sanitized artifacts through docs/ instead.

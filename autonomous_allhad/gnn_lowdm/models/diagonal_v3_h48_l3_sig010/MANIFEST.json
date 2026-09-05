@@ -1,0 +1,26 @@
+{
+  "model_id": "diagonal_v3_h48_l3_sig010",
+  "selected_epoch": 17,
+  "status": "frozen",
+  "selection_status": "test_evaluated",
+  "files": {
+    "best_model.pt": "f041b62d4742a73f2ca3a43f1d8d1a1da55a3092d8d8aebc99e09330e7f307eb",
+    "diagonal_v3_numpy.json": "74a9207b5378cd19b0a10a19de25b2131b8499a0cd0a0e5438f52431343f76f2",
+    "diagonal_v3_numpy.npz": "bf03bb172201c1cb701b865dc23acf13e13e35470ad2c4df2a62567c3b7b267c",
+    "reference_baseline_best_model.pt": "646533701bdc885b1d23e2862f0c925ae97fd8fbe33b19535b0d907002639177",
+    "selection.json": "78bf4448440035fdf332d2c76a4e67ebac8e7cdf82071769f90aa6ca3d8934f9",
+    "summary.json": "dd4ea6411daaf9e6c67b09a0c46a51c301503b64c3c89792d2a54699b43e177f",
+    "training_history.json": "73de061907539d73b724cd23558124dd005f819a0be83d479603bb7efd3fded8"
+  },
+  "environment": {
+    "python": "3.12.4",
+    "awkward": "2.13.0",
+    "matplotlib": "3.9.1",
+    "mplhep": "0.3.50",
+    "mt2": "1.3.1",
+    "numpy": "2.0.2",
+    "torch": "2.13.0",
+    "uproot": "5.7.6",
+    "xxhash": "4.0.1"
+  }
+}
