@@ -1,13 +1,13 @@
 {
   "status": "verified",
-  "source_and_products_commit": "b754e59aefdaccde9f60297f93450b75eee5b933",
+  "source_and_products_commit": "64dc932bf78c05a563969f859c9d0ccdbcb6cb23",
   "branch": "codex/package-lowpt-tnp",
   "remote_push": "succeeded",
-  "local_eos_git_verified_files": 251,
+  "local_eos_git_verified_files": 277,
   "checksum_mismatches": [],
-  "campaign_state_sha256": "a42dbaf5bba2b4fa4cea0e86d237c3fd08a673aa18530a0816dd03d44caa17cc",
+  "campaign_state_sha256": "31648345b7038ae7499dc535e86ad985fa284d7587fdb883956248488dea4874",
   "eos_report": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/reports/background_estimation_histonly_20260907",
-  "regression_result": "14 passed in 15.93 seconds",
+  "regression_result": "18 passed in 4.23 seconds",
   "regression_files": [
     "test_background_estimation_histogram_only.py",
     "test_gnn_background_histograms.py",
@@ -15,16 +15,30 @@
     "test_highdm_orthogonality_projection.py"
   ],
   "visual_checks": [
-    "2024/dy_report/highdm/rz_highdm.png",
-    "2025/sgamma/sgamma_lowdm.png",
-    "2025/tf/gnn/transfer_factor_top_llcr_lowdm_gnn_Nb1_NISR0.png",
-    "2024/zgamma_250_proposal/zgamma_double_ratio_lowdm.png"
+    "2025/zgamma/zgamma_double_ratio_lowdm.png"
   ],
   "physics_adoption": {
-    "lowdm_double_ratio_default_min_gev": 300,
-    "proposal_250_applied": false,
+    "lowdm_double_ratio_default_min_gev": 250,
+    "proposal_250_applied": true,
+    "protected_products_unchanged": 228,
+    "RZ_TF_Sgamma_nominal_unchanged": true,
+    "Highdm_physics_unchanged": true,
+    "previous_300_checksums_preserved": true,
+    "GNN_response_basis_only": true,
+    "new_nuisance_correlations": false,
     "datacards_modified": false,
     "web_publication": false
+  },
+  "downstream_10gev_veto_use": {
+    "status": "blocked",
+    "reason": "The recorded histogram hashes still correspond to a 5-GeV lepton veto. These products must not be used as 10-GeV-veto results.",
+    "nominal_or_SF_reprocessed": false
+  },
+  "canonical_product_sha256": {
+    "2024/zgamma/zgamma_double_ratio.json": "cd9b7f0f8e6e867172e81753c9c214f8140872c6b419faf7f2169e2a2cc2e6c2",
+    "2024/lowdm_gnn_double_ratio.json": "ad0a0170b0603635178143ec619e62558054388ef0a159e1143d4af6ea177544",
+    "2025/zgamma/zgamma_double_ratio.json": "c89c330b913a37309dcfad50f868a6cc34cca686417f4e97bdd0de40f999050f",
+    "2025/lowdm_gnn_double_ratio.json": "1edb19f0da897fff53ac1e6970467143911ec12c5fe35856cb55ff0b54fecec5"
   },
   "excluded_private_coordination_files": "lowdm_double_ratio_domain_approval.eml and corresponding approval JSON remain outside Git and this result synchronization"
 }
