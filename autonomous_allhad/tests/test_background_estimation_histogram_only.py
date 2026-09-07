@@ -5,6 +5,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
 
 REPO = Path(__file__).resolve().parents[2]
 WORKFLOW = REPO / "autonomous_allhad" / "workflow"
@@ -26,7 +28,7 @@ def leaf(values: list[float]) -> dict[str, object]:
         "nominal": {
             "sumw": values,
             "sumw2": [abs(value) for value in values],
-            "entries": [int(value > 0.0) for value in values],
+            "entries": [30 if value > 0.0 else 0 for value in values],
         }
     }
 
@@ -70,7 +72,7 @@ def compact_input() -> dict[str, object]:
             recoil[region] = {}
             for group in GROUPS:
                 recoil[region][group] = {
-                    sample: leaf([0.0] * 8) for sample in SAMPLES
+                    sample: leaf([0.0 if sample == "data_obs" else 1.0] * 8) for sample in SAMPLES
                 }
                 if region == "GCR":
                     recoil[region][group]["data_obs"] = leaf([20.0] * 8)
@@ -123,11 +125,11 @@ def test_active_estimators_reject_event_level_inputs() -> None:
         assert "--hist-input" in path.read_text()
 
 
-def test_histogram_boundary_drives_tf_and_rz(tmp_path: Path) -> None:
+def test_tf_builder_rejects_missing_gnn_inputs(tmp_path: Path) -> None:
     hist_input = tmp_path / "nominal_background_estimation.json"
     hist_input.write_text(json.dumps(compact_input()))
     tf_output = tmp_path / "tf.json"
-    subprocess.run(
+    result = subprocess.run(
         [
             sys.executable,
             str(WORKFLOW / "build_histogram_tf_inputs_2024.py"),
@@ -138,14 +140,21 @@ def test_histogram_boundary_drives_tf_and_rz(tmp_path: Path) -> None:
             "--output",
             str(tf_output),
         ],
-        check=True,
+        capture_output=True, text=True,
         cwd=WORKFLOW,
     )
-    tf = json.loads(tf_output.read_text())
-    assert tf["status"] == "complete"
-    assert tf["provenance"]["intermediate_root_reread"] is False
-    assert tf["highdm"]["nb_groups"] == list(GROUPS)
-    assert tf["lowdm"]["nb_groups"] == list(GROUPS)
+    assert result.returncode != 0
+    assert "--gnn-input" in result.stderr
+    assert not tf_output.exists()
+
+
+@pytest.mark.parametrize("year", ["2024", "2025"])
+def test_histogram_boundary_drives_tf_and_rz(tmp_path: Path, year: str) -> None:
+    hist_input = tmp_path / "nominal_background_estimation.json"
+    compact = compact_input()
+    compact["summary"]["datasets"] = {name.replace("2024", year): value for name, value in compact["summary"]["datasets"].items()}
+    hist_input.write_text(json.dumps(compact))
+    tf_output = tmp_path / "tf.json"
 
     sgamma_dir = tmp_path / "sgamma"
     subprocess.run(
@@ -155,7 +164,7 @@ def test_histogram_boundary_drives_tf_and_rz(tmp_path: Path) -> None:
             "--hist-input",
             str(hist_input),
             "--campaign-year",
-            "2024",
+            year,
             "--output-dir",
             str(sgamma_dir),
         ],
@@ -176,7 +185,7 @@ def test_histogram_boundary_drives_tf_and_rz(tmp_path: Path) -> None:
             "--hist-input",
             str(hist_input),
             "--campaign-year",
-            "2024",
+            year,
             "--output-dir",
             str(double_ratio_dir),
         ],
@@ -203,7 +212,7 @@ def test_histogram_boundary_drives_tf_and_rz(tmp_path: Path) -> None:
             "--hist-input",
             str(hist_input),
             "--campaign-year",
-            "2024",
+            year,
             "--output",
             str(measurement),
         ],
@@ -216,3 +225,66 @@ def test_histogram_boundary_drives_tf_and_rz(tmp_path: Path) -> None:
     assert dy["provenance"]["mass_windows"]["on"] == [71.0, 111.0]
     assert set(dy["rz_high"]["combined"]) == set(GROUPS)
     assert set(dy["rz_low"]["combined"]) == set(GROUPS)
+
+    config_path = PACKAGE_ROOT / "gnn_lowdm/config.json"
+    config = json.loads(config_path.read_text())
+    histograms = {}
+    for region in REGIONS:
+        labels = config["sr_binning" if region == "SR" else "cr_binning"]["category_labels"]
+        histograms[region] = {}
+        for category in labels:
+            group = category.split("_")[0]
+            multiplicity = sum(label.startswith(group + "_") for label in labels)
+            histograms[region][category] = {}
+            for sample, values in compact["lowdm"]["recoil"][region][group].items():
+                if region == "SR" and sample == "data_obs":
+                    continue
+                joint = {field: [[value / multiplicity / 5 for value in array] for _ in range(5)]
+                         for field, array in values["nominal"].items()}
+                histograms[region][category][sample] = {
+                    "gnn_score_ut": joint,
+                    "gnn_score": {field: [sum(row) for row in matrix] for field, matrix in joint.items()},
+                }
+    gnn_input = tmp_path / "gnn.json"
+    gnn_input.write_text(json.dumps({"histograms": {"nominal": histograms}}, indent=2))
+    tf_command = [
+        sys.executable, str(WORKFLOW / "build_histogram_tf_inputs_2024.py"),
+        "--hist-input", str(hist_input), "--campaign-year", year, "--output", str(tf_output),
+        "--gnn-input", str(gnn_input), "--gnn-config", str(config_path),
+        "--sgamma-input", str(sgamma_dir / "sgamma_ut.json"), "--dy-measurement", str(measurement),
+    ]
+    subprocess.run(tf_command, check=True, capture_output=True, text=True)
+    tf = json.loads(tf_output.read_text())
+    assert tf["status"] == "complete"
+    assert tf["provenance"]["intermediate_root_reread"] is False
+    assert tf["highdm"]["nb_groups"] == list(GROUPS)
+    assert tf["lowdm"]["kind"] == "gnn" and "recoil" not in tf["lowdm"]
+    assert tf["diagnostics"]["lowdm_ut"]["template_eligible"] is False
+    assert tf["lowdm_gnn"]["template_contract"]["ut_fallback_allowed"] is False
+    assert set(tf["lowdm_gnn"]["transfer_factors"]["nominal"]) == {"top_llcr", "w_llcr", "qcd_qcdcr", "zinv_gcr"}
+    for samples in tf["lowdm_gnn"]["histograms"]["nominal"]["SR"].values():
+        assert set(samples) == set(SAMPLES) - {"data_obs"}
+
+    plots = tmp_path / "tf_plots"
+    subprocess.run([
+        sys.executable, str(WORKFLOW / "plot_recoil_transfer_factors_2024.py"),
+        "--input", str(tf_output), "--campaign-year", year,
+        "--regime", "lowdm", "--output-dir", str(plots),
+    ], check=True, capture_output=True, text=True)
+    plotted = json.loads((plots / f"transfer_factors_{year}_nb_recoil.json").read_text())
+    assert plotted["factors"]["lowdm"]["kind"] == "gnn"
+    assert plotted["factors"]["lowdm"]["records"] == tf["lowdm_gnn"]["transfer_factors"]["nominal"]
+    assert len(plotted["plots"]) == 4 * 6 * 2
+    assert all(Path(path).parent == plots / "gnn" for path in plotted["plots"])
+    for groups in plotted["factors"]["highdm"]["records"].values():
+        for record in groups.values():
+            assert record["transfer_factor"] == [1.0] * 8
+
+    # A factor derived from a different selection/hash must never replace the
+    # successfully built template (e.g. mixing 5-GeV and 10-GeV veto products).
+    original = tf_output.read_bytes()
+    sgamma["provenance"]["hist_input_sha256"] = "wrong-selection-hash"
+    (sgamma_dir / "sgamma_ut.json").write_text(json.dumps(sgamma))
+    rejected = subprocess.run(tf_command, capture_output=True, text=True)
+    assert rejected.returncode != 0 and "different histogram inputs" in rejected.stderr
+    assert tf_output.read_bytes() == original

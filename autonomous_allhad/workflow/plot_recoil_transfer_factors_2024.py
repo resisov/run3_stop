@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Calculate and plot 2024 Top, W, and QCD CR-to-SR transfer factors."""
+"""Plot High-dM recoil and Low-dM GNN transfer factors from histograms."""
 
 from __future__ import annotations
 
@@ -7,7 +7,6 @@ import argparse
 import hashlib
 import json
 import math
-import re
 from pathlib import Path
 from typing import Any
 
@@ -17,6 +16,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import mplhep as hep
 import numpy as np
+
+from gnn_background_histograms import require_gnn_mapping
 
 
 hep.style.use("CMS")
@@ -63,55 +64,10 @@ HIGH_STYLES = {
     "Nb2": ("s", "#0057FF", r"$N_b=2$"),
     "Nb3plus": ("^", "#168B38", r"$N_b\geq3$"),
 }
-LOW_PANEL_SPECS = (
-    (
-        r"$N_b=1$" "\n" r"$300\leq p_T^{ISR}<500$",
-        "PISR300to500",
-        (
-            ("Nb1_PISR300to500_PTb20to40", r"$20<p_T^b<40$", "o", "#E41A1C"),
-            ("Nb1_PISR300to500_PTb40to70", r"$40<p_T^b<70$", "s", "#0057FF"),
-        ),
-    ),
-    (
-        r"$N_b=1$" "\n" r"$p_T^{ISR}\geq500$",
-        "PISR500plus",
-        (
-            ("Nb1_PISR500plus_PTb20to40", r"$20<p_T^b<40$", "o", "#E41A1C"),
-            ("Nb1_PISR500plus_PTb40to70", r"$40<p_T^b<70$", "s", "#0057FF"),
-        ),
-    ),
-    (
-        r"$N_b\geq2$" "\n" r"$300\leq p_T^{ISR}<500$",
-        "PISR300to500",
-        (
-            ("Nb2plus_PISR300to500_PTb40to80_Nj2plus", r"$40<p_T^b<80,\ N_j\geq2$", "o", "#E41A1C"),
-            ("Nb2plus_PISR300to500_PTb80to140_Nj2plus", r"$80<p_T^b<140,\ N_j\geq2$", "s", "#0057FF"),
-        ),
-    ),
-    (
-        r"$N_b\geq2$" "\n" r"$p_T^{ISR}\geq500$",
-        "PISR500plus",
-        (
-            ("Nb2plus_PISR500plus_PTb40to80_Nj2plus", r"$40<p_T^b<80,\ N_j\geq2$", "o", "#E41A1C"),
-            ("Nb2plus_PISR500plus_PTb80to140_Nj2plus", r"$80<p_T^b<140,\ N_j\geq2$", "s", "#0057FF"),
-        ),
-    ),
-    (
-        r"$N_b\geq2$" "\n" r"$300\leq p_T^{ISR}<500$",
-        "PISR300to500",
-        (
-            ("Nb2plus_PISR300to500_PTb140plus_Nj7plus", r"$p_T^b>140,\ N_j\geq7$", "^", "#168B38"),
-        ),
-    ),
-    (
-        r"$N_b\geq2$" "\n" r"$p_T^{ISR}\geq500$",
-        "PISR500plus",
-        (
-            ("Nb2plus_PISR500plus_PTb140plus_Nj7plus", r"$p_T^b>140,\ N_j\geq7$", "^", "#168B38"),
-        ),
-    ),
-)
-
+GNN_PATHS = PATHS + ({
+    "key": "zinv_gcr",
+    "ratio_label": r"Raw $Z\!\to\!\nu\nu$: SR / $\gamma$ CR",
+},)
 
 def file_sha256(path: Path) -> str:
     digest = hashlib.sha256()
@@ -186,21 +142,6 @@ def calculate_ratio(
     }
 
 
-def low_family(label: str) -> str:
-    return re.sub(r"_recoil_[0-9]+$", "", label)
-
-
-def low_geometry(
-    isr_group: str,
-    nbin: int,
-    overflow_cap: float = 1500.0,
-) -> tuple[np.ndarray, np.ndarray]:
-    lower = 300.0 if isr_group == "PISR300to500" else 450.0
-    edges = lower + 100.0 * np.arange(nbin + 1, dtype=float)
-    if overflow_cap <= edges[-2]:
-        raise ValueError("overflow cap must exceed the final finite Low-dM edge")
-    edges[-1] = overflow_cap
-    return 0.5 * (edges[:-1] + edges[1:]), 0.5 * np.diff(edges)
 
 
 def finite_arrays(record: dict[str, Any]) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
@@ -308,78 +249,10 @@ def plot_highdm(
     )
 
 
-def plot_lowdm(
-    output_dir: Path,
-    path: dict[str, Any],
-    families: dict[str, Any],
-) -> list[str]:
-    fig, axes = plt.subplots(3, 2, figsize=(12.0, 12.0))
-    for panel_index, (axis, (annotation, isr_group, series)) in enumerate(
-        zip(axes.flat, LOW_PANEL_SPECS)
-    ):
-        panel_records: list[dict[str, Any]] = []
-        for family, label, marker, color in series:
-            record = families[family]
-            values, errors, valid = finite_arrays(record)
-            centers, widths = low_geometry(isr_group, len(values))
-            axis.errorbar(
-                centers[valid],
-                values[valid],
-                xerr=widths[valid],
-                yerr=errors[valid],
-                fmt=marker,
-                ls="none",
-                color=color,
-                lw=2.0,
-                ms=7.8,
-                mew=1.3,
-                capsize=2.5,
-                label=label,
-            )
-            panel_records.append(record)
-        set_tf_ylim(axis, panel_records)
-        axis.set_xlim(300.0 if isr_group == "PISR300to500" else 450.0, 1500.0)
-        axis.set_xmargin(0)
-        axis.tick_params(labelsize=14)
-        axis.grid(alpha=0.16)
-        axis.text(
-            0.04,
-            0.06,
-            annotation,
-            transform=axis.transAxes,
-            fontsize=14,
-            bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.82, "pad": 1.0},
-        )
-        if panel_index == 0:
-            axis.text(
-                0.04,
-                0.88,
-                "Low-" + r"$\Delta m$" + "\n" + path["ratio_label"],
-                transform=axis.transAxes,
-                fontsize=13,
-                va="top",
-            )
-        axis.legend(frameon=False, fontsize=12.5, loc="upper right")
-    fig.supxlabel(r"$U_T$ (GeV)", fontsize=25, x=0.57, y=0.045)
-    fig.supylabel(
-        r"Transfer factor $N_{\mathrm{SR}}/N_{\mathrm{CR}}$",
-        fontsize=24,
-        x=0.035,
-        y=0.52,
-    )
-    label_axis = fig.add_subplot(111, frameon=False)
-    label_axis.set_xticks([])
-    label_axis.set_yticks([])
-    label_axis.patch.set_visible(False)
-    label_axis.set_zorder(-1)
-    hep.cms.label(**CMS_LABEL, ax=label_axis)
-    return save_figure(
-        fig,
-        output_dir / f"transfer_factor_{path['key']}_lowdm",
-    )
 
 
 def build_factors(source: dict[str, Any]) -> dict[str, Any]:
+    mapping = require_gnn_mapping(source)
     high_source = source["highdm"]["recoil"]
     high_edges = np.asarray(source["highdm"]["recoil_edges"], dtype=float)
     high_nbin = len(high_edges) - 1
@@ -405,76 +278,13 @@ def build_factors(source: dict[str, Any]) -> dict[str, Any]:
             )
         high_records[path["key"]] = by_group
 
-    low_payload = source["lowdm"]
-    low_records: dict[str, Any] = {}
-    low_kind = "search_bins"
-    if "recoil" in low_payload:
-        low_kind = "nb_recoil"
-        low_source = low_payload["recoil"]
-        low_edges = np.asarray(low_payload["recoil_edges"], dtype=float)
-        low_nbin = len(low_edges) - 1
-        for path in PATHS:
-            low_records[path["key"]] = {
-                group: calculate_ratio(
-                    nominal_leaf(
-                        low_source,
-                        "SR",
-                        group,
-                        path["numerator_process"],
-                        low_nbin,
-                    ),
-                    nominal_leaf(
-                        low_source,
-                        path["denominator_region"],
-                        group,
-                        path["denominator_process"],
-                        low_nbin,
-                    ),
-                )
-                for group in low_payload["nb_groups"]
-            }
-    else:
-        labels = list(low_payload["search_bin_labels"])
-        low_source = low_payload["search_components"]
-        low_nbin = len(labels)
-        family_indices: dict[str, list[int]] = {}
-        for index, label in enumerate(labels):
-            family_indices.setdefault(low_family(label), []).append(index)
-        for path in PATHS:
-            by_family = {}
-            for family, indices in family_indices.items():
-                group = "Nb1" if family.startswith("Nb1_") else "Nb2plus"
-                full = calculate_ratio(
-                    nominal_leaf(
-                        low_source,
-                        "SR",
-                        group,
-                        path["numerator_process"],
-                        low_nbin,
-                    ),
-                    nominal_leaf(
-                        low_source,
-                        path["denominator_region"],
-                        group,
-                        path["denominator_process"],
-                        low_nbin,
-                    ),
-                )
-                by_family[family] = {
-                    key: [values[index] for index in indices]
-                    for key, values in full.items()
-                }
-            low_records[path["key"]] = by_family
     return {
         "highdm": {"edges": high_edges.tolist(), "records": high_records},
         "lowdm": {
-            "kind": low_kind,
-            **(
-                {"edges": low_edges.tolist()}
-                if low_kind == "nb_recoil"
-                else {"search_bin_labels": labels}
-            ),
-            "records": low_records,
+            "kind": "gnn", "axis": "GNN output",
+            "sr_binning": mapping["sr_binning"], "cr_binning": mapping["cr_binning"],
+            "records": mapping["transfer_factors"]["nominal"],
+            "ut_fallback_allowed": False,
         },
     }
 
@@ -582,32 +392,15 @@ def main() -> int:
                     factors["highdm"]["records"][path["key"]],
                 )
             )
-        if args.regime in {"all", "lowdm"}:
-            if factors["lowdm"].get("kind") == "nb_recoil":
-                plot_paths.extend(
-                    plot_highdm(
-                        args.output_dir,
-                        path,
-                        np.asarray(factors["lowdm"]["edges"], dtype=float),
-                        factors["lowdm"]["records"][path["key"]],
-                        regime="lowdm",
-                    )
-                )
-            else:
-                plot_paths.extend(
-                    plot_lowdm(
-                        args.output_dir,
-                        path,
-                        factors["lowdm"]["records"][path["key"]],
-                    )
-                )
+
 
     output = {
-        "schema_version": f"recoil_transfer_factors_{args.campaign_year}_v2",
+        "schema_version": f"template_transfer_factors_{args.campaign_year}_v3",
         "status": "complete",
         "definition": (
-            "nominal simulated SR target-process yield divided by nominal "
-            "simulated CR target-process yield in the same category and U_T bin"
+            "High-dM: SR/CR in the same category and U_T bin. "
+            "Low-dM: SR GNN score bin / mapped GNN CR parent integral. "
+            "The raw Zinv/GJ coefficient does not yet contain RZ or Sgamma."
         ),
         "ratio_orientation": "SR_over_CR",
         "uncertainty": (
@@ -621,8 +414,7 @@ def main() -> int:
             "input_sha256": file_sha256(args.input),
             "input_provenance": source.get("provenance"),
             "sample_check": sample_check,
-            "lowdm_mode": "Nb-only U_T diagnostic; final template is frozen GNN30" if "lowdm_gnn" in source else factors["lowdm"]["kind"],
-            "lowdm_plot_overflow_cap_gev": 1500.0,
+            "lowdm_mode": "GNN30 final templates only; no UT or legacy-search-bin fallback",
             "plot_regime": args.regime,
             "campaign_year": args.campaign_year,
         },
@@ -631,14 +423,12 @@ def main() -> int:
         },
         "plots": plot_paths,
     }
-    if "lowdm_gnn" in source:
-        mapping = source["lowdm_gnn"]
+    mapping = require_gnn_mapping(source)
+    gnn_plots = []
+    if args.regime in {"all", "lowdm"}:
         (args.output_dir / "gnn").mkdir(parents=True, exist_ok=True)
-        gnn_plots = []
-        for path in PATHS:
-            for category, record in mapping["transfer_factors"]["nominal"][path["key"]].items():
-                if record["status"] not in {"complete", "signed_mc_bins"}:
-                    continue
+        for path in GNN_PATHS:
+            for category, record in factors["lowdm"]["records"][path["key"]].items():
                 gnn_plots.extend(plot_highdm(
                     args.output_dir / "gnn", path,
                     np.asarray(record["score_edges"]), {record["nb_group"]: record},
@@ -647,12 +437,13 @@ def main() -> int:
                     output_suffix=f"lowdm_gnn_{category}",
                     ylabel=r"Transfer factor $N_{\mathrm{SR,bin}}/N_{\mathrm{CR,parent}}$",
                 ))
-        output["lowdm_gnn"] = {
-            key: mapping[key] for key in ("schema_version", "axis", "sr_binning", "cr_binning", "definition", "mechanical_checks", "provenance")
-        }
-        output["lowdm_gnn"]["transfer_factors"] = mapping["transfer_factors"]["nominal"]
-        output["lowdm_gnn"]["plots"] = gnn_plots
-        plot_paths.extend(gnn_plots)
+    output["lowdm_gnn"] = {
+        key: mapping[key] for key in ("schema_version", "axis", "sr_binning", "cr_binning", "definition", "mechanical_checks", "provenance")
+    }
+    output["lowdm_gnn"]["transfer_factors"] = mapping["transfer_factors"]["nominal"]
+    output["lowdm_gnn"]["plots"] = gnn_plots
+    plot_paths.extend(gnn_plots)
+
     output_path = (
         args.output_dir
         / f"transfer_factors_{args.campaign_year}_nb_recoil.json"

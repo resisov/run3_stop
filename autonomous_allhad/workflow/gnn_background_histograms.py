@@ -76,6 +76,59 @@ def parent(category: str) -> str:
     return nb_group(category) + ("_NISR0" if category.endswith("_NISR0") else "_NISR1plus")
 
 
+def require_gnn_mapping(source: dict[str, Any]) -> dict[str, Any]:
+    """Reject missing/legacy Low-dM templates before any final output is made."""
+    mapping = source.get("lowdm_gnn") or {}
+    if mapping.get("status") != "complete" or mapping.get("axis") != "GNN output":
+        raise ValueError("Low-dM requires complete GNN templates; UT/search-bin fallback is forbidden")
+    sr, cr = mapping["sr_binning"], mapping["cr_binning"]
+    categories = sr["category_labels"]
+    if sr["total_bins"] != 30 or sr["bins_per_category"] != 5 or len(categories) != 6:
+        raise ValueError("Low-dM must preserve the frozen GNN30 layout")
+    if cr["bins_per_category"] != 5 or len(cr["category_labels"]) != 4:
+        raise ValueError("Low-dM must preserve the four GNN CR parents")
+    nominal = mapping["transfer_factors"]["nominal"]
+    for route in ("top_llcr", "w_llcr", "qcd_qcdcr", "zinv_gcr"):
+        if set(nominal.get(route, {})) != set(categories):
+            raise ValueError(f"missing GNN transfer templates for {route}")
+        for category, record in nominal[route].items():
+            if record.get("status") not in {"complete", "signed_mc_bins"}:
+                raise ValueError(f"invalid GNN transfer template: {route}/{category}")
+            if record["score_edges"] != sr["edges_by_category"][category] or record["cr_score_edges"] != cr["score_edges"]:
+                raise ValueError("GNN template edges disagree with frozen SR/CR configuration")
+            if record["parent"] != parent(category) or record["parent"] not in cr["category_labels"]:
+                raise ValueError("GNN template parent mapping changed")
+            for field in ("numerator", "numerator_sumw2", "transfer_factor", "mcstat", "cr_score_fraction"):
+                values = np.asarray(record[field])
+                if values.shape != (5,) or not np.isfinite(values).all():
+                    raise ValueError(f"invalid GNN template array: {route}/{category}/{field}")
+    if set(mapping["zinv_projection"]) != set(categories):
+        raise ValueError("missing RZ/Sgamma-corrected GNN Zinv templates")
+    for category, record in mapping["zinv_projection"].items():
+        for field in ("rz_sgamma", "rz_sgamma_mc_sumw2"):
+            values = np.asarray(record[field])
+            if values.shape != (5,) or not np.isfinite(values).all():
+                raise ValueError(f"invalid GNN Zinv template: {category}/{field}")
+    return mapping
+
+
+def template_contract(source: dict[str, Any]) -> dict[str, Any]:
+    """Describe the sole final template source, without changing fit parameters."""
+    mapping = require_gnn_mapping(source)
+    return {
+        "axis": "GNN output", "bins": 30,
+        "controlled_backgrounds": {"Top": "top_llcr", "WtoLNu": "w_llcr", "QCD": "qcd_qcdcr", "Zto2Nu": "zinv_gcr"},
+        "all_process_templates": "lowdm_gnn.histograms[variation][region][category][sample].gnn_score",
+        "zinv_nominal": "lowdm_gnn.zinv_projection[category].rz_sgamma",
+        "minor_backgrounds": ["DY", "GJ", "VV"],
+        "top_components": ["TT", "ST"],
+        "factor_axes": "RZ measured in Nb; Sgamma/double ratio measured in UT and projected via actual GNN x UT components",
+        "sr_to_cr_parent": {category: parent(category) for category in mapping["sr_binning"]["category_labels"]},
+        "ut_fallback_allowed": False, "legacy_search_bin_fallback_allowed": False,
+        "rate_parameters_changed": False,
+    }
+
+
 def summed(samples: dict[str, Any], names: tuple[str, ...], variable: str, field: str) -> np.ndarray:
     available = [np.asarray(samples[name][variable][field], dtype=float) for name in names if name in samples]
     if not available:
@@ -90,6 +143,12 @@ def validate(histograms: dict[str, Any], config: dict[str, Any], compact: dict[s
     for region in ("LLCR", "QCDCR", "GCR", "DY2E", "DY2M"):
         if set(nominal[region]) != set(config["cr_binning"]["category_labels"]):
             raise ValueError(f"GNN {region} categories differ from frozen config")
+    for region, categories in nominal.items():
+        required = SAMPLES - {"data_obs"} if region == "SR" else SAMPLES
+        for category, samples in categories.items():
+            missing = required - set(samples)
+            if missing:
+                raise ValueError(f"missing GNN process templates: {region}/{category}/{sorted(missing)}")
     checked = 0
     for variation, regions in histograms.items():
         for region, categories in regions.items():

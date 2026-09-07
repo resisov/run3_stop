@@ -83,11 +83,6 @@ recalculation sequence and must not be used to build the new factor products.
 For each year, after the canonical nominal histogram merge finishes:
 
 ```bash
-python workflow/build_histogram_tf_inputs_2024.py \
-  --hist-input <hists-stem>_background_estimation.json \
-  --campaign-year <YEAR> \
-  --output <work>/tf_inputs.json
-
 python workflow/build_sgamma_ut_report_2024.py \
   --hist-input <hists-stem>_background_estimation.json \
   --campaign-year <YEAR> \
@@ -108,6 +103,18 @@ python -m autonomous_allhad.dy_estimation report \
   --campaign-year <YEAR> \
   --selection both \
   --output-dir <work>/dy_report
+
+python workflow/build_histogram_tf_inputs_2024.py \
+  --hist-input <hists-stem>_background_estimation.json \
+  --campaign-year <YEAR> \
+  --gnn-input <gnn-hists.json> --gnn-config gnn_lowdm/config.json \
+  --sgamma-input <work>/sgamma/sgamma_ut.json \
+  --dy-measurement <work>/dy_measurement.json \
+  --output <work>/tf_inputs.json
+
+python workflow/plot_recoil_transfer_factors_2024.py \
+  --input <work>/tf_inputs.json --campaign-year <YEAR> \
+  --output-dir <work>/tf
 ```
 
 The existing plotting implementations are reused. No plot was regenerated as
@@ -123,6 +130,13 @@ default for both years. Previous 300-start products and checksums are preserved
 in that report's `YEAR/zgamma_300_previous/` and `low250_adoption_baseline.json`.
 Only central abs(D−1) is transmitted through the existing GNN×UT mapping;
 RZ, TF, Sgamma and nominal GNN predictions are unchanged by this adoption.
+
+The 2026-09-08 GNN-only enforcement is described in
+`reports/lowdm_gnn_template_policy_20260908.md`: GNN inputs are mandatory,
+all Low-dM final background templates use the frozen GNN30 layout, and
+UT-only or legacy search-bin fallbacks are rejected. RZ/Sgamma measurement
+axes remain distinct from that final template axis. Production waits for
+the newly requested 10-GeV-veto canonical histogram inputs.
 
 ## Regression checks
 

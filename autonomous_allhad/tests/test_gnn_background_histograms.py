@@ -110,3 +110,32 @@ def test_double_ratio_response_rejects_unapproved_or_inconsistent_inputs(corrupt
         factors["lowdm"]["bins"][0]["downstream_central_abs_deviation"] = 0.9
     with pytest.raises(ValueError):
         gnn.project_double_ratio_uncertainty(mapping, factors)
+
+
+@pytest.mark.parametrize("corruption", ["absent", "ut_axis", "missing_route", "wrong_edges", "wrong_parent"])
+def test_final_template_consumer_rejects_ut_or_incomplete_gnn(corruption):
+    mapping, _ = uncertainty_inputs()
+    config, hist = toy()
+    mapping.update(status="complete", axis="GNN output", cr_binning=config["cr_binning"],
+                   transfer_factors=gnn.transfer_records(hist, config))
+    source = {"lowdm": {"recoil": {}}, "lowdm_gnn": mapping}
+    assert gnn.require_gnn_mapping(source) is mapping
+    if corruption == "absent":
+        del source["lowdm_gnn"]
+    elif corruption == "ut_axis":
+        mapping["axis"] = "U_T"
+    elif corruption == "missing_route":
+        del mapping["transfer_factors"]["nominal"]["zinv_gcr"]
+    elif corruption == "wrong_edges":
+        mapping["transfer_factors"]["nominal"]["top_llcr"]["Nb1_NISR0"]["score_edges"] = [0, 1]
+    else:
+        mapping["transfer_factors"]["nominal"]["top_llcr"]["Nb1_NISR0"]["parent"] = "Nb1_NISR1plus"
+    with pytest.raises(ValueError):
+        gnn.require_gnn_mapping(source)
+
+
+def test_missing_minor_gnn_background_is_not_silently_zero():
+    config, hist = toy()
+    del hist["nominal"]["SR"]["Nb1_NISR0"]["VV"]
+    with pytest.raises(ValueError, match="missing GNN process templates"):
+        gnn.validate(hist, config, {})
