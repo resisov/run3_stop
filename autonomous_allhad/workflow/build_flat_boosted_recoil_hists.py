@@ -224,9 +224,13 @@ VETO_PT_REBUILD_BRANCHES = (
     "met", "met_phi", "feature_SR", "feature_LLCR", "feature_QCDCR", "feature_GCR",
     "pass_base_common", "pass_zero_tau", "pass_signal_trigger", "pass_photon_trigger",
     "njet", "nb_medium", "pass_met_250", "pass_ht_300", "pass_open_high",
-    "pass_gcr_open_high", "pass_qcd_open", "pass_dphi123_0p1",
+    "pass_qcd_open", "pass_dphi123_0p1",
     "n_photon_medium", "njet_photon_clean", "nb_photon_clean", "recoil_gcr",
     "pass_ht_photon_300", "nboosted_top",
+)
+GCR_OPEN_HIGH_REBUILD_BRANCHES = (
+    "good_jet_eta", "good_jet_phi", "photon_medium_eta",
+    "photon_medium_phi", "recoil_gcr_phi",
 )
 TROTA_LOWDM_SELECTION_BRANCHES = (
     *BROAD_LOWDM_SELECTION_BRANCHES,
@@ -2251,7 +2255,12 @@ def compute_trota_nres(
         required |= set(TROTA_LOWDM_SELECTION_BRANCHES)
     if highdm_configuration is not None:
         required |= set(TROTA_HIGHDM_SELECTION_BRANCHES)
-    missing = sorted(required - set(event_tree.keys()))
+    available = set(event_tree.keys())
+    if "pass_gcr_open_high" in available:
+        required.add("pass_gcr_open_high")
+    else:
+        required |= set(GCR_OPEN_HIGH_REBUILD_BRANCHES)
+    missing = sorted(required - available)
     if missing:
         raise RuntimeError(
             "TROTA Nres evaluation requires missing Events branches: "

@@ -6,6 +6,7 @@ from pathlib import Path
 
 import awkward as ak
 import numpy as np
+import pytest
 
 
 PROJECT = Path(__file__).resolve().parents[1]
@@ -79,10 +80,13 @@ def test_nominal_threshold_is_a_strict_noop() -> None:
     assert set(chunk) == {"dataset_id"}
 
 
-def test_trota_light_input_rebuilds_veto_before_candidate_eligibility(monkeypatch) -> None:
+@pytest.mark.parametrize("stored_gcr_flag", [True, False])
+def test_trota_light_input_rebuilds_veto_before_candidate_eligibility(monkeypatch, stored_gcr_flag) -> None:
     chunk = study_chunk()
     for key in MODULE.TROTA_LOWDM_SELECTION_BRANCHES:
         chunk.setdefault(key, np.zeros(6))
+    if not stored_gcr_flag:
+        del chunk["pass_gcr_open_high"]
     chunk.update({"run": np.ones(6, dtype=int), "luminosityBlock": np.ones(6, dtype=int),
                   "event": np.arange(6), "file_id": np.zeros(6, dtype=int),
                   "entry": np.arange(6), "nboosted_w": np.zeros(6, dtype=int),
