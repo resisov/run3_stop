@@ -218,6 +218,16 @@ LOWDM_READ_BRANCHES = [
 TROTA_IDENTITY_BRANCHES = (
     "run", "luminosityBlock", "event", "file_id", "entry",
 )
+VETO_PT_REBUILD_BRANCHES = (
+    "dataset_id", "electron_veto_pt", "electron_veto_phi",
+    "muon_loose_pt", "muon_loose_phi", "n_e_veto", "n_m_loose",
+    "met", "met_phi", "feature_SR", "feature_LLCR", "feature_QCDCR", "feature_GCR",
+    "pass_base_common", "pass_zero_tau", "pass_signal_trigger", "pass_photon_trigger",
+    "njet", "nb_medium", "pass_met_250", "pass_ht_300", "pass_open_high",
+    "pass_gcr_open_high", "pass_qcd_open", "pass_dphi123_0p1",
+    "n_photon_medium", "njet_photon_clean", "nb_photon_clean", "recoil_gcr",
+    "pass_ht_photon_300", "nboosted_top",
+)
 TROTA_LOWDM_SELECTION_BRANCHES = (
     *BROAD_LOWDM_SELECTION_BRANCHES,
 )
@@ -2226,6 +2236,8 @@ def compute_trota_nres(
     *,
     include_lowdm: bool,
     highdm_configuration: dict[str, Any] | None,
+    electron_veto_pt_min: float = 10.0,
+    muon_veto_pt_min: float = 10.0,
 ) -> tuple[np.ndarray, dict[str, int]]:
     """Return the exclusive TROTA Nres count aligned with the Events tree.
 
@@ -2233,7 +2245,8 @@ def compute_trota_nres(
     same for Low-dM and High-dM.  The sparse candidates are joined and resolved
     exactly once, for the union of events needed by the requested schemes.
     """
-    required = set(TROTA_IDENTITY_BRANCHES) | set(TROTA_LOWDM_OVERLAP_BRANCHES)
+    required = (set(TROTA_IDENTITY_BRANCHES) | set(TROTA_LOWDM_OVERLAP_BRANCHES)
+                | set(VETO_PT_REBUILD_BRANCHES))
     if include_lowdm:
         required |= set(TROTA_LOWDM_SELECTION_BRANCHES)
     if highdm_configuration is not None:
@@ -2245,6 +2258,11 @@ def compute_trota_nres(
             + ", ".join(missing)
         )
     light = event_tree.arrays(sorted(required), library="ak")
+    light_chunk = {name: light[name] for name in ak.fields(light)}
+    apply_highdm_veto_pt_thresholds(
+        light_chunk, electron_veto_pt_min, muon_veto_pt_min
+    )
+    light = ak.zip(light_chunk, depth_limit=1)
     number_events = int(event_tree.num_entries)
     lowdm_eligible = np.zeros(number_events, dtype=bool)
     lowdm_object_audit: dict[str, int] = {}
@@ -2565,6 +2583,8 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                 root_file["TROTA"],
                 include_lowdm=require_lowdm_nres_zero,
                 highdm_configuration=search_bin_configuration,
+                electron_veto_pt_min=electron_veto_pt_min,
+                muon_veto_pt_min=muon_veto_pt_min,
             )
             audit = summary.setdefault("trota_resolved_top_audit", {})
             for key, value in trota_stats.items():

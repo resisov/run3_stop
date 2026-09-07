@@ -79,6 +79,50 @@ def test_nominal_threshold_is_a_strict_noop() -> None:
     assert set(chunk) == {"dataset_id"}
 
 
+def test_trota_light_input_rebuilds_veto_before_candidate_eligibility(monkeypatch) -> None:
+    chunk = study_chunk()
+    for key in MODULE.TROTA_LOWDM_SELECTION_BRANCHES:
+        chunk.setdefault(key, np.zeros(6))
+    chunk.update({"run": np.ones(6, dtype=int), "luminosityBlock": np.ones(6, dtype=int),
+                  "event": np.arange(6), "file_id": np.zeros(6, dtype=int),
+                  "entry": np.arange(6), "nboosted_w": np.zeros(6, dtype=int),
+                  "nboosted_total": np.zeros(6, dtype=int), "lowdm_mtb": np.full(6, 300.0)})
+    for key in MODULE.TROTA_LOWDM_OVERLAP_BRANCHES:
+        chunk[key] = jagged([[]] * 6)
+    candidates = {key: np.asarray([0]) for key in MODULE.TROTA_PRIMARY_BRANCHES}
+    candidates.update({"TopResolved1pct_sourceJetIdx1": np.asarray([1]),
+                       "TopResolved1pct_sourceJetIdx2": np.asarray([2]),
+                       "TopResolved1pct_mass": np.asarray([170.0]),
+                       "TopResolved1pct_QCDDiscriminant": np.asarray([0.9])})
+
+    class Tree:
+        def __init__(self, values, count):
+            self.values, self.num_entries = values, count
+
+        def keys(self):
+            return self.values.keys()
+
+        def arrays(self, names, library):
+            return ak.Array({name: self.values[name] for name in names})
+
+    def lowdm_blocks(arrays):
+        assert ak.to_list(arrays.electron_veto_pt)[0] == []
+        assert bool(arrays.pass_no_veto_leptons[0])
+        return {}, {}
+
+    monkeypatch.setattr(MODULE, "broad_lowdm_blocks", lowdm_blocks)
+    monkeypatch.setattr(MODULE, "selected_an17_recoil60_indices",
+                        lambda arrays, n, sr: np.where(sr, 0, -1))
+    monkeypatch.setattr(MODULE, "map60_indices_to_adopted55", lambda values: values)
+    for include_lowdm in (False, True):
+        counts, audit = MODULE.compute_trota_nres(
+            Tree(chunk, 6), Tree(candidates, 1), include_lowdm=include_lowdm,
+            highdm_configuration={"mtb_min": 175.0},
+        )
+        assert counts.tolist() == [1, 0, 0, 0, 0, 0]
+        assert audit["nres_positive_events"] == 1
+
+
 def test_ten_gev_threshold_reassigns_only_low_pt_veto_leptons() -> None:
     chunk = study_chunk()
     audit = MODULE.apply_highdm_veto_pt_thresholds(chunk, 10.0, 10.0)
