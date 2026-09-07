@@ -21,6 +21,7 @@ from autonomous_allhad.sidecar_store import read_root_metadata
 from autonomous_allhad.analysis_scale_factors import (
     REQUIRED_ANALYSIS_SF_COMPONENTS,
     REQUIRED_ANALYSIS_SF_VARIATIONS,
+    DEFAULT_ANALYSIS_SF_COMPONENTS,
 )
 
 from autonomous_allhad.real_subset_worker import assign_lowdm_search_bin, compute_weight_bundle
@@ -42,6 +43,7 @@ from gnn_lowdm._implementation.region_io import (
     SELECTION_BRANCHES as BROAD_LOWDM_SELECTION_BRANCHES,
     build_region_blocks as build_broad_lowdm_region_blocks,
     dycr_lepton_mask,
+    update_veto_leptons,
 )
 
 RECOIL_PT_BINS = [250.0, 300.0, 350.0, 400.0, 500.0, 800.0, 1500.0]
@@ -442,6 +444,8 @@ EXECUTION_CONTRACT_COMMON_PATHS = (
     "autonomous_allhad/autonomous_allhad/search_bin_categorization.py",
     "analysis/utils/corrections.py",
     "analysis/data/corrections.coffea",
+    "analysis/utils/ids.py",
+    "analysis/data/ids.coffea",
 )
 EXECUTION_CONTRACT_YEAR_PATHS = {
     "2024": (
@@ -453,8 +457,6 @@ EXECUTION_CONTRACT_YEAR_PATHS = {
         "analysis/data/MuonSF/2024/muon_Z.json.gz",
         "analysis/data/AnalysisSF/2024/met_trigger_sf.json.gz",
         "analysis/data/AnalysisSF/2024/photon_trigger_sf.json.gz",
-        "analysis/data/AnalysisSF/2024/veto_electron_5to10_sf.json.gz",
-        "analysis/data/AnalysisSF/2024/loose_muon_5to10_sf.json.gz",
     ),
     "2025": (
         "analysis/data/PUweight/2025/puWeights_2025pp_Golden_Summer24_25ns_69200ub.json.gz",
@@ -464,8 +466,6 @@ EXECUTION_CONTRACT_YEAR_PATHS = {
         "analysis/data/MuonSF/2025/muon_Z.json.gz",
         "analysis/data/AnalysisSF/2025/met_trigger_sf.json.gz",
         "analysis/data/AnalysisSF/2025/photon_trigger_sf.json.gz",
-        "analysis/data/AnalysisSF/2025/veto_electron_5to10_sf.json.gz",
-        "analysis/data/AnalysisSF/2025/loose_muon_5to10_sf.json.gz",
     ),
 }
 EXPECTED_BTAG_EFFICIENCY_SHA256_2024 = (
@@ -747,7 +747,7 @@ def apply_highdm_veto_pt_thresholds(
     electron_pt_min: float,
     muon_pt_min: float,
 ) -> dict[str, int]:
-    """Recompute only High-dM likelihood regions for a veto-pT study."""
+    """Update shared veto objects/flags and rebuild High-dM region masks."""
     n = len(chunk["dataset_id"])
     if electron_pt_min == 5.0 and muon_pt_min == 5.0:
         return {"events": n, "recomputed": 0}
@@ -758,18 +758,9 @@ def apply_highdm_veto_pt_thresholds(
         region: as_bool(chunk[f"feature_{region}"], n)
         for region in ("SR", "LLCR", "QCDCR", "GCR")
     }
-    electron_keep = chunk["electron_veto_pt"] > float(electron_pt_min)
-    muon_keep = chunk["muon_loose_pt"] > float(muon_pt_min)
     old_electron_count = np.asarray(chunk["n_e_veto"], dtype=int)
     old_muon_count = np.asarray(chunk["n_m_loose"], dtype=int)
-    for name in (
-        "electron_veto_pt", "electron_veto_eta", "electron_veto_eta_sc",
-        "electron_veto_phi",
-    ):
-        if name in chunk:
-            chunk[name] = chunk[name][electron_keep]
-    for name in ("muon_loose_pt", "muon_loose_eta", "muon_loose_phi"):
-        chunk[name] = chunk[name][muon_keep]
+    update_veto_leptons(chunk, electron_pt_min, muon_pt_min)
 
     n_electron = np.asarray(ak.num(chunk["electron_veto_pt"], axis=1), dtype=int)
     n_muon = np.asarray(ak.num(chunk["muon_loose_pt"], axis=1), dtype=int)
@@ -2513,7 +2504,7 @@ def iterate_tree_for_gcr_study(
         yield full[selected]
 
 
-def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: dict[str, Any], highdm_control_components: dict[str, Any], search_histograms: dict[str, Any], highdm_search_bin_components: dict[str, Any], lowdm_variable_histograms: dict[str, Any], highdm_variable_histograms: dict[str, Any], background_estimation_inputs: dict[str, Any], summary: dict[str, Any], step_size: int, campaign_year: str = "2024", only_regions: list[str] | None = None, require_btag: bool = False, require_weight_components: list[str] | None = None, analysis_sf_components: list[str] | None = None, require_branches: bool = False, require_normalization: bool = False, nominal_only: bool = False, distribution_only: bool = False, only_variables: list[str] | None = None, only_signal_mass: tuple[int, int] | None = None, only_lowdm_sr_nsv_inclusive: bool = False, only_lowdm_nsv_repair: bool = False, lowdm_only: bool = False, highdm_only: bool = False, electron_veto_pt_min: float = 5.0, muon_veto_pt_min: float = 5.0, require_lowdm_nres_zero: bool = False, search_bin_configuration: dict[str, Any] | None = None, dy_ptll_policy: str = "all", gcr_only: bool = False, gcr_photon_policy: str = "nominal") -> None:
+def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: dict[str, Any], highdm_control_components: dict[str, Any], search_histograms: dict[str, Any], highdm_search_bin_components: dict[str, Any], lowdm_variable_histograms: dict[str, Any], highdm_variable_histograms: dict[str, Any], background_estimation_inputs: dict[str, Any], summary: dict[str, Any], step_size: int, campaign_year: str = "2024", only_regions: list[str] | None = None, require_btag: bool = False, require_weight_components: list[str] | None = None, analysis_sf_components: list[str] | None = None, require_branches: bool = False, require_normalization: bool = False, nominal_only: bool = False, distribution_only: bool = False, only_variables: list[str] | None = None, only_signal_mass: tuple[int, int] | None = None, only_lowdm_sr_nsv_inclusive: bool = False, only_lowdm_nsv_repair: bool = False, lowdm_only: bool = False, highdm_only: bool = False, electron_veto_pt_min: float = 10.0, muon_veto_pt_min: float = 10.0, require_lowdm_nres_zero: bool = False, search_bin_configuration: dict[str, Any] | None = None, dy_ptll_policy: str = "all", gcr_only: bool = False, gcr_photon_policy: str = "nominal") -> None:
     try:
         meta = read_root_metadata(root_path, fallback=norm)
     except FileNotFoundError:
@@ -3210,7 +3201,7 @@ def main() -> int:
     parser.add_argument(
         "--require-weight-components",
         nargs="+",
-        default=list(REQUIRED_ANALYSIS_SF_COMPONENTS),
+        default=list(DEFAULT_ANALYSIS_SF_COMPONENTS),
         help=(
             "Fail a non-data dataset immediately unless every named component "
             "is recorded as applied by real_subset_worker.compute_weight_bundle. "
@@ -3285,14 +3276,14 @@ def main() -> int:
     parser.add_argument(
         "--electron-veto-pt-min",
         type=float,
-        default=5.0,
-        help="Electron veto pT threshold in GeV; values above 5 are for High-dM studies.",
+        default=10.0,
+        help="Electron veto pT threshold in GeV; canonical production uses 10.",
     )
     parser.add_argument(
         "--muon-veto-pt-min",
         type=float,
-        default=5.0,
-        help="Muon veto pT threshold in GeV; values above 5 are for High-dM studies.",
+        default=10.0,
+        help="Muon veto pT threshold in GeV; canonical production uses 10.",
     )
     parser.add_argument(
         "--require-lowdm-nres-zero",
@@ -3335,13 +3326,10 @@ def main() -> int:
         parser.error("--lowdm-only cannot be combined with --only-regions or --gcr-only")
     if args.lowdm_only and args.highdm_only:
         parser.error("--lowdm-only and --highdm-only are mutually exclusive")
-    veto_pt_study = (
-        args.electron_veto_pt_min != 5.0 or args.muon_veto_pt_min != 5.0
-    )
-    if veto_pt_study and not args.highdm_only:
-        parser.error("non-default veto pT thresholds require --highdm-only")
-    if veto_pt_study and (args.gcr_only or args.only_regions):
-        parser.error("veto pT studies require the full High-dM histogram pass")
+    if not args.highdm_only and (
+        args.electron_veto_pt_min != 10.0 or args.muon_veto_pt_min != 10.0
+    ):
+        parser.error("joint High/Low-dM production requires the canonical 10-GeV veto")
     if args.electron_veto_pt_min < 5.0 or args.muon_veto_pt_min < 5.0:
         parser.error("veto pT thresholds cannot be below 5 GeV")
     if args.require_lowdm_nres_zero and args.dy_ptll_policy != "all":
@@ -3349,10 +3337,18 @@ def main() -> int:
     if args.gcr_photon_policy != "nominal" and not args.gcr_only:
         parser.error("--gcr-photon-policy requires --gcr-only")
     analysis_sf_components = (
-        list(REQUIRED_ANALYSIS_SF_COMPONENTS)
+        list(DEFAULT_ANALYSIS_SF_COMPONENTS)
         if args.analysis_sf_components is None
         else list(args.analysis_sf_components)
     )
+    forbidden_sf = {
+        component for component, threshold in (
+            ("veto_electron_5to10", args.electron_veto_pt_min),
+            ("loose_muon_5to10", args.muon_veto_pt_min),
+        ) if threshold >= 10.0 and component in analysis_sf_components
+    }
+    if forbidden_sf:
+        parser.error("low-pT SFs are not used with the 10-GeV veto: " + ", ".join(sorted(forbidden_sf)))
     unavailable_required = (
         set(args.require_weight_components)
         & set(REQUIRED_ANALYSIS_SF_COMPONENTS)

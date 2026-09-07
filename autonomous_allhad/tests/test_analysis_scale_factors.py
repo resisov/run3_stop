@@ -188,6 +188,7 @@ class AnalysisScaleFactorTest(unittest.TestCase):
                 np.asarray([False, False]),
                 met_pt=np.asarray([300.0, 300.0]),
                 met_trigger_mask=np.asarray([False, False]),
+                analysis_sf_components=("met_trigger", "photon_trigger", "veto_electron_5to10", "loose_muon_5to10"),
             )
         electron = status["components"]["veto_electron_5to10"]
         muon = status["components"]["loose_muon_5to10"]
@@ -283,6 +284,7 @@ class AnalysisScaleFactorTest(unittest.TestCase):
                     np.asarray([False, False, False, False, False, False, True, False]),
                     met_pt=np.asarray([250.0] * n),
                     met_trigger_mask=np.asarray([False, False, False, False, False, False, False, True]),
+                    analysis_sf_components=("met_trigger", "photon_trigger", "veto_electron_5to10", "loose_muon_5to10"),
                 )
 
         # The adopted low-pT measurement is parameterized in reconstructed
@@ -407,7 +409,7 @@ class AnalysisScaleFactorTest(unittest.TestCase):
                     np.asarray([False, False, True, False]),
                     met_pt=np.asarray([250.0] * n),
                     met_trigger_mask=np.asarray([False, False, False, True]),
-                    analysis_sf_components=("met_trigger", "photon_trigger"),
+                    # Canonical 10-GeV production defaults must exclude low-pT SFs.
                 )
 
         np.testing.assert_allclose(

@@ -46,6 +46,8 @@ EXECUTION_CONTRACT_COMMON_PATHS = (
     "autonomous_allhad/autonomous_allhad/search_bin_categorization.py",
     "analysis/utils/corrections.py",
     "analysis/data/corrections.coffea",
+    "analysis/utils/ids.py",
+    "analysis/data/ids.coffea",
 )
 EXECUTION_CONTRACT_YEAR_PATHS = {
     "2024": (
@@ -57,8 +59,6 @@ EXECUTION_CONTRACT_YEAR_PATHS = {
         "analysis/data/MuonSF/2024/muon_Z.json.gz",
         "analysis/data/AnalysisSF/2024/met_trigger_sf.json.gz",
         "analysis/data/AnalysisSF/2024/photon_trigger_sf.json.gz",
-        "analysis/data/AnalysisSF/2024/veto_electron_5to10_sf.json.gz",
-        "analysis/data/AnalysisSF/2024/loose_muon_5to10_sf.json.gz",
     ),
     "2025": (
         "analysis/data/PUweight/2025/puWeights_2025pp_Golden_Summer24_25ns_69200ub.json.gz",
@@ -68,15 +68,11 @@ EXECUTION_CONTRACT_YEAR_PATHS = {
         "analysis/data/MuonSF/2025/muon_Z.json.gz",
         "analysis/data/AnalysisSF/2025/met_trigger_sf.json.gz",
         "analysis/data/AnalysisSF/2025/photon_trigger_sf.json.gz",
-        "analysis/data/AnalysisSF/2025/veto_electron_5to10_sf.json.gz",
-        "analysis/data/AnalysisSF/2025/loose_muon_5to10_sf.json.gz",
     ),
 }
 REQUIRED_ANALYSIS_SF_COMPONENTS = [
     "met_trigger",
     "photon_trigger",
-    "veto_electron_5to10",
-    "loose_muon_5to10",
 ]
 EXPECTED_BTAG_EFFICIENCY_SHA256_2024 = (
     "03524e9ae28110814f336eafc887e60d54b495a7b8dec7cda59bd792f56feaf4"
@@ -932,8 +928,8 @@ def main() -> int:
     parser.add_argument("--only-lowdm-nsv-repair", action="store_true")
     parser.add_argument("--lowdm-only", action="store_true")
     parser.add_argument("--highdm-only", action="store_true")
-    parser.add_argument("--electron-veto-pt-min", type=float, default=5.0)
-    parser.add_argument("--muon-veto-pt-min", type=float, default=5.0)
+    parser.add_argument("--electron-veto-pt-min", type=float, default=10.0)
+    parser.add_argument("--muon-veto-pt-min", type=float, default=10.0)
     parser.add_argument("--require-lowdm-nres-zero", action="store_true")
     parser.add_argument("--search-bin-config", type=Path)
     parser.add_argument("--gcr-only", action="store_true")
@@ -975,13 +971,10 @@ def main() -> int:
         parser.error("--lowdm-only cannot be combined with --only-regions or --gcr-only")
     if args.lowdm_only and args.highdm_only:
         parser.error("--lowdm-only and --highdm-only are mutually exclusive")
-    veto_pt_study = (
-        args.electron_veto_pt_min != 5.0 or args.muon_veto_pt_min != 5.0
-    )
-    if veto_pt_study and not args.highdm_only:
-        parser.error("non-default veto pT thresholds require --highdm-only")
-    if veto_pt_study and (args.gcr_only or args.only_regions):
-        parser.error("veto pT studies require the full High-dM histogram pass")
+    if not args.highdm_only and (
+        args.electron_veto_pt_min != 10.0 or args.muon_veto_pt_min != 10.0
+    ):
+        parser.error("joint High/Low-dM production requires the canonical 10-GeV veto")
     if args.electron_veto_pt_min < 5.0 or args.muon_veto_pt_min < 5.0:
         parser.error("veto pT thresholds cannot be below 5 GeV")
     if args.require_lowdm_nres_zero and args.dy_ptll_policy != "all":

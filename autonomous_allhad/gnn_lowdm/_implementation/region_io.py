@@ -372,20 +372,61 @@ def jet_kinematics(
     }
 
 
+LEPTON_VETO_PT_MIN = 10.0
+
+
+def update_veto_leptons(
+    arrays: Any,
+    electron_pt_min: float = LEPTON_VETO_PT_MIN,
+    muon_pt_min: float = LEPTON_VETO_PT_MIN,
+) -> dict[str, int]:
+    """Rebuild veto collections, counts and lepton flags from stored objects."""
+    if min(electron_pt_min, muon_pt_min) < 5.0:
+        raise ValueError("stored veto collections only support thresholds >=5 GeV")
+    fields = set(arrays) if isinstance(arrays, dict) else set(ak.fields(arrays))
+    old_e = np.asarray(arrays["n_e_veto"], dtype=int)
+    old_m = np.asarray(arrays["n_m_loose"], dtype=int)
+    for prefix, threshold in (("electron_veto", electron_pt_min), ("muon_loose", muon_pt_min)):
+        keep = arrays[f"{prefix}_pt"] > threshold
+        for suffix in ("pt", "eta", "eta_sc", "phi"):
+            key = f"{prefix}_{suffix}"
+            if key in fields:
+                arrays[key] = arrays[key][keep]
+    ne = np.asarray(ak.num(arrays["electron_veto_pt"], axis=1), dtype=int)
+    nm = np.asarray(ak.num(arrays["muon_loose_pt"], axis=1), dtype=int)
+    mt_pass = np.ones(len(ne), dtype=bool)
+    met = np.asarray(arrays["met"], dtype=float)
+    met_phi = np.asarray(arrays["met_phi"], dtype=float)
+    for prefix in ("electron_veto", "muon_loose"):
+        mt2 = 2 * arrays[f"{prefix}_pt"] * met[:, None] * (
+            1 - np.cos(arrays[f"{prefix}_phi"] - met_phi[:, None])
+        )
+        mt_pass &= np.asarray(ak.all(mt2 < 100.0**2, axis=1), dtype=bool)
+    arrays["n_e_veto"] = ak.Array(ne)
+    arrays["n_m_loose"] = ak.Array(nm)
+    arrays["pass_no_veto_leptons"] = ak.Array((ne == 0) & (nm == 0))
+    arrays["pass_one_veto_lepton"] = ak.Array(((ne == 1) & (nm == 0)) | ((ne == 0) & (nm == 1)))
+    arrays["pass_mt_100"] = ak.Array(mt_pass)
+    return {
+        "events_with_removed_electrons": int(np.count_nonzero(old_e != ne)),
+        "events_with_removed_muons": int(np.count_nonzero(old_m != nm)),
+    }
+
+
 def object_masks(arrays: ak.Array) -> dict[str, ak.Array]:
     e_pt = arrays["electron_pt_all"]
     e_eta = arrays["electron_eta_all"]
     e_cb = arrays["electron_cutbased_all"]
     e_iso = arrays["electron_mini_iso_all"]
     e_fid = (abs(e_eta) < 1.4442) | ((abs(e_eta) > 1.5660) & (abs(e_eta) < 2.5))
-    e_veto = (e_pt > 5.0) & e_fid & (e_cb >= 1) & (e_iso < 0.1)
+    e_veto = (e_pt > LEPTON_VETO_PT_MIN) & e_fid & (e_cb >= 1) & (e_iso < 0.1)
     e_medium = (e_pt > 10.0) & e_fid & (e_cb >= 3) & (e_iso < 0.1)
 
     m_pt = arrays["muon_pt_all"]
     m_eta = arrays["muon_eta_all"]
     m_iso = arrays["muon_mini_iso_all"]
     m_loose = (
-        (m_pt > 5.0)
+        (m_pt > LEPTON_VETO_PT_MIN)
         & (abs(m_eta) < 2.4)
         & as_ak_bool(arrays["muon_loose_id_all"])
         & (m_iso < 0.2)
@@ -495,8 +536,10 @@ def build_region_blocks(
     dy_mass_window: tuple[float, float] | None = (71.0, 111.0),
 ) -> tuple[dict[str, RegionBlock], dict[str, int]]:
     n = len(arrays)
+    veto_audit = update_veto_leptons(arrays)
     masks = object_masks(arrays)
     audit = {
+        **veto_audit,
         "electron_veto_count_mismatches": int(
             np.count_nonzero(
                 np.asarray(ak.sum(masks["electron_veto"], axis=1), dtype=int)
@@ -1067,6 +1110,7 @@ def normalized_weight_variations(
         p_r9=inputs["p_r9"],
         met_pt=inputs["met_pt"],
         met_trigger_mask=inputs["met_trigger_mask"],
+        analysis_sf_components=("met_trigger", "photon_trigger"),
     )
     required_components = {
         "pileup",
@@ -1081,8 +1125,6 @@ def normalized_weight_variations(
         "photon_csev",
         "met_trigger",
         "photon_trigger",
-        "veto_electron_5to10",
-        "loose_muon_5to10",
     }
     known_unavailable_unity: dict[str, str] = {}
     if year == "2025":

@@ -67,12 +67,12 @@ def isVetoElectron(electron, year):
     cutBased = electron.cutBased
     miniIso = electron.miniPFRelIso_all
     mask = (
-            (pt > 5)
+            (pt > 10)
             & (abs(eta) < 1.4442)
             & (cutBased >= 1)
             & (miniIso < 0.1)
         ) | (
-            (pt > 5)
+            (pt > 10)
             & (abs(eta) > 1.5660)
             & (abs(eta) < 2.5)
             & (cutBased >= 1)
@@ -106,7 +106,7 @@ def isLooseMuon(muon, year):
     miniIso = muon.miniPFRelIso_all
     looseId = muon.looseId
     mask = (
-            (pt > 5)
+            (pt > 10)
             & (abs(eta) < 2.4)
             & (looseId)
             & (miniIso < 0.2)

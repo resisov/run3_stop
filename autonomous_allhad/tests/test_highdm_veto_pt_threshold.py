@@ -95,6 +95,29 @@ def test_ten_gev_threshold_reassigns_only_low_pt_veto_leptons() -> None:
     assert audit["LLCR_lost"] == 2
     assert audit["QCDCR_gained"] == 1
     assert audit["GCR_gained"] == 1
+    assert np.asarray(chunk["pass_no_veto_leptons"]).tolist() == [True, False, True, True, True, True]
+    assert np.asarray(chunk["pass_one_veto_lepton"]).tolist() == [False, True, False, False, False, False]
+    assert np.asarray(chunk["pass_mt_100"]).all()
+
+
+def test_shared_veto_threshold_is_strict_and_updates_awkward_in_place() -> None:
+    from gnn_lowdm._implementation.region_io import update_veto_leptons
+
+    arrays = ak.Array({
+        "electron_veto_pt": [[10.0], [10.1], [7.0, 20.0]],
+        "electron_veto_phi": [[0.0], [np.pi], [np.pi, 0.0]],
+        "muon_loose_pt": [[], [], [8.0]],
+        "muon_loose_phi": [[], [], [np.pi]],
+        "n_e_veto": [1, 1, 2], "n_m_loose": [0, 0, 1],
+        "met": [300.0] * 3, "met_phi": [0.0] * 3,
+    })
+    audit = update_veto_leptons(arrays)
+    assert ak.to_list(arrays.electron_veto_pt) == [[], [10.1], [20.0]]
+    assert ak.to_list(arrays.pass_no_veto_leptons) == [True, False, False]
+    assert ak.to_list(arrays.pass_one_veto_lepton) == [False, True, True]
+    assert ak.to_list(arrays.pass_mt_100) == [True, False, True]
+    assert audit == {"events_with_removed_electrons": 2, "events_with_removed_muons": 1}
+    assert update_veto_leptons(arrays) == {"events_with_removed_electrons": 0, "events_with_removed_muons": 0}
 
 
 def test_electron_and_muon_thresholds_can_be_varied_independently() -> None:

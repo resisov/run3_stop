@@ -37,6 +37,7 @@ PAYLOADS = {
 # payload is absent.  Keep this contract next to the payload registry so every
 # entry point uses the same list.
 REQUIRED_ANALYSIS_SF_COMPONENTS = tuple(PAYLOADS)
+DEFAULT_ANALYSIS_SF_COMPONENTS = ("met_trigger", "photon_trigger")
 REQUIRED_ANALYSIS_SF_VARIATIONS = tuple(
     f"{component}{direction}"
     for component in REQUIRED_ANALYSIS_SF_COMPONENTS

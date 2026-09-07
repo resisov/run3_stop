@@ -24,6 +24,7 @@ import numpy as np
 
 from .analysis_scale_factors import (
     REQUIRED_ANALYSIS_SF_COMPONENTS,
+    DEFAULT_ANALYSIS_SF_COMPONENTS,
     loose_muon_lowpt_triplet,
     met_trigger_triplet,
     photon_trigger_triplet,
@@ -485,7 +486,7 @@ def compute_weight_bundle(
     alternates: dict[str, tuple[str, np.ndarray]] = {}
     status: dict[str, Any] = {"applied": True, "available_variations": ["nominal"], "components": {}}
     enabled_analysis_sf = set(
-        REQUIRED_ANALYSIS_SF_COMPONENTS
+        DEFAULT_ANALYSIS_SF_COMPONENTS
         if analysis_sf_components is None
         else analysis_sf_components
     )
@@ -1718,13 +1719,13 @@ def extract_chunk(
     e_delta_eta_sc = arr(arrays, "Electron_deltaEtaSC", ak.zeros_like(e_pt))
     e_charge = arr(arrays, "Electron_charge", ak.zeros_like(e_pt)); e_cb = arr(arrays, "Electron_cutBased", ak.zeros_like(e_pt)); e_iso = arr(arrays, "Electron_miniPFRelIso_all", ak.ones_like(e_pt) * 99)
     e_fid = ((abs(e_eta) < 1.4442) | ((abs(e_eta) > 1.5660) & (abs(e_eta) < 2.5)))
-    e_veto = (e_pt > 5) & e_fid & (e_cb >= 1) & (e_iso < 0.1)
+    e_veto = (e_pt > 10) & e_fid & (e_cb >= 1) & (e_iso < 0.1)
     e_med = (e_pt > 10) & e_fid & (e_cb >= 3) & (e_iso < 0.1)
     n_e_veto = count(e_veto); n_e_med = count(e_med)
 
     m_pt = arr(arrays, "Muon_pt", ak.Array([[]] * n)); m_eta = arr(arrays, "Muon_eta", ak.Array([[]] * n)); m_phi = arr(arrays, "Muon_phi", ak.Array([[]] * n)); m_mass = arr(arrays, "Muon_mass", ak.zeros_like(m_pt))
     m_charge = arr(arrays, "Muon_charge", ak.zeros_like(m_pt)); m_looseid = arr(arrays, "Muon_looseId", ak.zeros_like(m_pt)); m_medid = arr(arrays, "Muon_mediumId", ak.zeros_like(m_pt)); m_iso = arr(arrays, "Muon_miniPFRelIso_all", ak.ones_like(m_pt) * 99)
-    m_loose = (m_pt > 5) & (abs(m_eta) < 2.4) & m_looseid & (m_iso < 0.2)
+    m_loose = (m_pt > 10) & (abs(m_eta) < 2.4) & m_looseid & (m_iso < 0.2)
     m_med = (m_pt > 10) & (abs(m_eta) < 2.4) & m_medid & (m_iso < 0.2)
     n_m_loose = count(m_loose); n_m_med = count(m_med)
 
