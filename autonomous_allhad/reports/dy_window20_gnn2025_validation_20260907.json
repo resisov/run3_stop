@@ -1,0 +1,47 @@
+{
+  "year": 2025,
+  "status": "passed",
+  "input_roots": 8390,
+  "partials": 337,
+  "finite_histogram_records": 237387,
+  "joint_projection": true,
+  "SR_blinded": true,
+  "frozen_GNN30": true,
+  "model_config_hashes_match": true,
+  "raw_DY": true,
+  "no_unexpected_weight_fallbacks": true,
+  "manifest_audit": {
+    "data_luminosity_coverage_complete": false,
+    "data_source_bad_file_count": 1,
+    "exact_input_set_match": true,
+    "expected_by_kind": {
+      "data": {
+        "events_written": 43858561,
+        "root_bytes": 52332860518,
+        "shards": 3794
+      },
+      "mc": {
+        "events_written": 174912761,
+        "root_bytes": 173661364751,
+        "shards": 4079
+      },
+      "signal": {
+        "events_written": 17116815,
+        "root_bytes": 18561795168,
+        "shards": 517
+      }
+    },
+    "expected_input_files": 8390,
+    "manifest": "/eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/dy_window20_20260907/2025/gnn/full_manifest.json",
+    "manifest_status": "complete_with_permanent_skips",
+    "missing_expected_input_files": [],
+    "source_bad_file_count": 11,
+    "unexpected_requested_input_files": []
+  },
+  "hists_sha256": "2f943761ede8281a9f857b9eec1f6f7eb25867d78ac8f090a8cd1f44f009a959",
+  "bytes": 1927546600,
+  "exit_code": 0,
+  "condor_job": "1110774.0",
+  "validated_at_utc": "2026-09-07T18:32:37Z",
+  "report": "autonomous_allhad/reports/dy_window20_gnn2025_validation_20260907.json"
+}

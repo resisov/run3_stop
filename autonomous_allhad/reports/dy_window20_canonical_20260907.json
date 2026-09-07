@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "status": "canonical",
+  "promoted_at_utc": "2026-09-07T21:38:09Z",
+  "dy_mass_window_gev": [
+    71,
+    111
+  ],
+  "dy_mass_window_boundary": "strict",
+  "highdm": {
+    "source_bins": 79,
+    "excluded_bins_1based": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "retained_bins": 73
+  },
+  "lowdm": {
+    "source": "frozen GNN",
+    "sr_bins": 30,
+    "sr_categories": 6,
+    "score_bins_per_category": 5,
+    "legacy_lowdm34_in_main_histogram": "not a final SR template; must not be used in the combined model",
+    "joint_axes": [
+      "GNN score",
+      "U_T"
+    ],
+    "joint_dimensions": [
+      5,
+      8
+    ],
+    "ut_edges_gev": [
+      250,
+      300,
+      350,
+      400,
+      500,
+      650,
+      800,
+      1000,
+      1500
+    ],
+    "ut_last_bin": "1000 to infinity; overflow folded; 1500 is display edge only",
+    "raw_DY": true,
+    "sr_binning": {
+      "status": "adopted",
+      "total_bins": 30,
+      "bins_per_category": 5,
+      "category_labels": [
+        "Nb1_NISR0",
+        "Nb1_NISR1",
+        "Nb1_NISR2plus",
+        "Nb2plus_NISR0",
+        "Nb2plus_NISR1",
+        "Nb2plus_NISR2plus"
+      ],
+      "edges_by_category": {
+        "Nb1_NISR0": [
+          0,
+          0.5725103585725855,
+          0.8620847087987249,
+          0.9360990208521849,
+          0.9851454291100825,
+          1
+        ],
+        "Nb1_NISR1": [
+          0,
+          0.4337835196146913,
+          0.7192719000531151,
+          0.8272557967497884,
+          0.9250179337760895,
+          1
+        ],
+        "Nb1_NISR2plus": [
+          0,
+          0.3255093377477263,
+          0.7888373113816193,
+          0.8877326655690037,
+          0.9555760529187631,
+          1
+        ],
+        "Nb2plus_NISR0": [
+          0,
+          0.309950268336004,
+          0.7035191792183281,
+          0.8914239639925238,
+          0.9609786467235909,
+          1
+        ],
+        "Nb2plus_NISR1": [
+          0,
+          0.6463224331017129,
+          0.9131184463900763,
+          0.9538017779111643,
+          0.9805978490720786,
+          1
+        ],
+        "Nb2plus_NISR2plus": [
+          0,
+          0.7036410177458037,
+          0.8336335596549056,
+          0.9625404014158108,
+          0.9876508846987722,
+          1
+        ]
+      }
+    },
+    "cr_binning": {
+      "regions": [
+        "LLCR",
+        "QCDCR",
+        "GCR",
+        "DY2E",
+        "DY2M"
+      ],
+      "category_labels": [
+        "Nb1_NISR0",
+        "Nb1_NISR1plus",
+        "Nb2plus_NISR0",
+        "Nb2plus_NISR1plus"
+      ],
+      "bins_per_category": 5,
+      "score_edges": [
+        0,
+        0.7087745055357697,
+        0.8666955795676624,
+        0.9283805475420253,
+        0.9610429653306511,
+        1
+      ]
+    },
+    "configuration": "autonomous_allhad/gnn_lowdm/config.json",
+    "configuration_sha256": "5a3a51852766a43b663d05b926528224a0d5467f58478e33140f86321087aa70"
+  },
+  "input_stage": "permanently_closed_for_2024_and_2025",
+  "sr_data": "blinded; do not use or disclose SR observations",
+  "years": {
+    "2024": {
+      "input_roots": 5954,
+      "source_bad_file_count": 0,
+      "data_source_bad_file_count": 0,
+      "data_luminosity_coverage_complete": true,
+      "main": {
+        "path": "autonomous_allhad/workflow/histograms/dy_window20_20260907/2024/hists.json",
+        "canonical_alias": "autonomous_allhad/workflow/plot2024/hists.json",
+        "sha256": "fdd3a75d11b4e2bbea581727691fc3ad986a505a7fa3813a865bb94e52a087e9",
+        "bytes": 3193268002
+      },
+      "background_estimation": {
+        "path": "autonomous_allhad/workflow/histograms/dy_window20_20260907/2024/hists_background_estimation.json",
+        "canonical_alias": "autonomous_allhad/workflow/plot2024/hists_background_estimation.json",
+        "sha256": "0f1eb4995cf7376624e0220f874cd5ae848278b87f9ad0da8abac84c38d0ca83",
+        "bytes": 2568324
+      },
+      "gnn": {
+        "path": "autonomous_allhad/workflow/histograms/dy_window20_20260907/2024/gnn/hists.json",
+        "canonical_alias": "autonomous_allhad/workflow/plot2024/hists_lowdm_gnn30.json",
+        "sha256": "82d96c008756e53ebfa504383b336e9bbe0084d8531c8907f1e71d86f0e2935f",
+        "bytes": 2178323852
+      },
+      "normalization_sha256": "9060c4ed526f95b5e2b352c07a4692de9a67469fbff5f91f210eceb9122b606c",
+      "search_bin_config_sha256": "d1a396538eaa994a54d85bb277d71a5d90473be9e1a86ee4f47ad625f2cee929"
+    },
+    "2025": {
+      "input_roots": 8390,
+      "source_bad_file_count": 11,
+      "data_source_bad_file_count": 1,
+      "data_luminosity_coverage_complete": false,
+      "main": {
+        "path": "autonomous_allhad/workflow/histograms/dy_window20_20260907/2025/hists.json",
+        "canonical_alias": "autonomous_allhad/workflow/plot2025/hists.json",
+        "sha256": "16584a244e30d1f9863748a231b7a2d60dc65798c4eeaa9d3cf95a60fea56dc7",
+        "bytes": 2830367088
+      },
+      "background_estimation": {
+        "path": "autonomous_allhad/workflow/histograms/dy_window20_20260907/2025/hists_background_estimation.json",
+        "canonical_alias": "autonomous_allhad/workflow/plot2025/hists_background_estimation.json",
+        "sha256": "2d76688c33d6bb1b5d95cde4c168814545e9ed7f403f43395e6bcbaabea6a1c4",
+        "bytes": 2434015
+      },
+      "gnn": {
+        "path": "autonomous_allhad/workflow/histograms/dy_window20_20260907/2025/gnn/hists.json",
+        "canonical_alias": "autonomous_allhad/workflow/plot2025/hists_lowdm_gnn30.json",
+        "sha256": "2f943761ede8281a9f857b9eec1f6f7eb25867d78ac8f090a8cd1f44f009a959",
+        "bytes": 1927546600
+      },
+      "normalization_sha256": "7322c219f181b7406d863827cfd4146c027f42dc32d5b0e29b97cc3bc7259e2e",
+      "search_bin_config_sha256": "b3b0c07ad698468d77031dbe2cc69d592dd9a27b7a04963b134d39cda5dd325e"
+    }
+  },
+  "retired_histograms": [
+    {
+      "source": "autonomous_allhad/workflow/plot2024/hists.json",
+      "backup": "autonomous_allhad/workflow/histograms/dy_window20_20260907/superseded/2024/hists.json",
+      "sha256": "27e297076f6ee0f3b567be331c211f7c76f09017aadf2868f411dc70b7e854e4",
+      "bytes": 2980005801
+    },
+    {
+      "source": "autonomous_allhad/workflow/plot2025/hists.json",
+      "backup": "autonomous_allhad/workflow/histograms/dy_window20_20260907/superseded/2025/hists.json",
+      "sha256": "bd94353f7d1a8ae189b718cf12d6d614299496c2773bf44fe0298a2540c9ffe9",
+      "bytes": 2640585730
+    }
+  ],
+  "validation_reports": [
+    "autonomous_allhad/reports/dy_window20_main2024_validation_20260907.json",
+    "autonomous_allhad/reports/dy_window20_gnn2024_validation_20260907.json",
+    "autonomous_allhad/reports/dy_window20_main2025_validation_20260907.json",
+    "autonomous_allhad/reports/dy_window20_gnn2025_validation_20260907.json"
+  ],
+  "production": {
+    "frozen_main_code": "autonomous_allhad/workflow/histograms/dy_window20_20260907/code",
+    "frozen_gnn_code": "autonomous_allhad/workflow/histograms/dy_window20_20260907/gnn_code",
+    "corrections_payload_sha256": "01fc943b55c38ed1e99eb73c64e8bcc143af87ec8025d14d7548509fc80053eb",
+    "corrections_backup": "autonomous_allhad/reports/canonical_sync_20260907/activation_before/analysis/data/corrections.coffea",
+    "postproduction_canonical_payload_activation": "2026-09-07T21:40:47Z",
+    "completed_histograms_not_reweighted": true
+  }
+}

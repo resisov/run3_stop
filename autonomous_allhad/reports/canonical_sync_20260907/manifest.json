@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "code_synced_payload_activation_pending",
+  "status": "synchronized",
   "date": "2026-09-07",
   "branch": "codex/package-lowpt-tnp",
   "base_commit": "8e258f37",
@@ -24,7 +24,7 @@
     {
       "path": "analysis/data/corrections.coffea",
       "sha256": "ec0e178d156194b4345d0fc53f84798e0163b7a8518272b591703dbb38ae3b4f",
-      "eos_sha256": "01fc943b55c38ed1e99eb73c64e8bcc143af87ec8025d14d7548509fc80053eb"
+      "eos_sha256": "ec0e178d156194b4345d0fc53f84798e0163b7a8518272b591703dbb38ae3b4f"
     },
     {
       "path": "analysis/data/ids.coffea",
@@ -44,7 +44,7 @@
     {
       "path": "analysis/utils/corrections.py",
       "sha256": "c8ecd046246c68704fac78753fcc1f055e0264f3f5f015b5a05af138cef15ce0",
-      "eos_sha256": "6772b6556641f9d420ed75d3d45c7701b91801152e6a7722614e4d3ee75d3173"
+      "eos_sha256": "c8ecd046246c68704fac78753fcc1f055e0264f3f5f015b5a05af138cef15ce0"
     },
     {
       "path": "analysis/utils/ids.py",
@@ -684,12 +684,12 @@
     {
       "path": "analysis/data/JMESF/2025/jet_jerc.json.gz",
       "sha256": "a4beaeefc5fba02fdb037025460824f411f59aa1eed1905d75327a5a87edfead",
-      "eos_sha256": "d2a47f6a6ced9b8afd73e1dc79c09d69f0d1249aa971903b3788648a6004177b"
+      "eos_sha256": "a4beaeefc5fba02fdb037025460824f411f59aa1eed1905d75327a5a87edfead"
     },
     {
       "path": "analysis/data/JMESF/2025/fatJet_jerc.json.gz",
       "sha256": "c5250701e2601ba7e42dc71c929b58fbc81175e33011a178e0b282b3d13908af",
-      "eos_sha256": "a7cdb9133f9ccabaafc4ff8a8e51cd3ae9434c3db8762f6faaaa0c422264f479"
+      "eos_sha256": "c5250701e2601ba7e42dc71c929b58fbc81175e33011a178e0b282b3d13908af"
     }
   ],
   "eos_code_files_updated": [
@@ -769,15 +769,19 @@
       }
     }
   },
-  "pending": {
-    "reason": "Both active code/analysis/data and gnn_code/analysis/data are symlinks to EOS base analysis/data.",
+  "pending": null,
+  "activated_at_utc": "2026-09-07T21:40:47Z",
+  "activation": {
+    "at_utc": "2026-09-07T21:40:47Z",
     "files": [
       "analysis/utils/corrections.py",
       "analysis/data/corrections.coffea",
       "analysis/data/JMESF/2025/jet_jerc.json.gz",
       "analysis/data/JMESF/2025/fatJet_jerc.json.gz"
     ],
-    "staged_base": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/reports/canonical_sync_20260907/approved",
-    "activation": "After both years' main and GNN histogram production is validated, their intermediate-input stages are closed, and no active job can still read the shared payloads: back up the exact four active EOS files, copy the approved set, verify all SHA256 values, and update this manifest and Git receipt. Do not change frozen snapshots or rerun valid production."
+    "backup_base": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/reports/canonical_sync_20260907/activation_before",
+    "local_eos_git_files_verified": 136,
+    "readers_checked_zero": true,
+    "completed_production_repeated": false
   }
 }

@@ -1,0 +1,52 @@
+{
+  "year": 2025,
+  "status": "passed",
+  "exit_code": 0,
+  "condor_job": "1110501.0",
+  "input_roots": 8390,
+  "chunks": 839,
+  "exact_input_set_match": true,
+  "events_processed": 235888137,
+  "zero_entry_roots": 140,
+  "strict_warning_counts": {
+    "missing_input_roots": 0,
+    "missing_sidecars": 0,
+    "weight_failures": 0,
+    "weight_rejections": 0
+  },
+  "full_output_validation": {
+    "background_estimation_inputs": true,
+    "finite_histogram_content": true,
+    "highdm_control_components": true,
+    "highdm_search_bin_components": true,
+    "search_bin_histograms": true
+  },
+  "validation_basis": "Existing strict streaming merger validations, anchored by byte-identical output SHA256; local input-set, normalization, search-bin contract/accounting and BG boundary checks.",
+  "highdm_source_bins": 79,
+  "highdm_retained_bins": 73,
+  "highdm_excluded_bins_1based": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "sr_observations": "not reported or used for fitting; no fit inputs or observations changed",
+  "background_histogram_leaves": 5358,
+  "dy_mass_window_gev": [
+    71,
+    111
+  ],
+  "hists_sha256": "16584a244e30d1f9863748a231b7a2d60dc65798c4eeaa9d3cf95a60fea56dc7",
+  "hists_bytes": 2830367088,
+  "background_estimation_sha256": "2d76688c33d6bb1b5d95cde4c168814545e9ed7f403f43395e6bcbaabea6a1c4",
+  "background_estimation_bytes": 2434015,
+  "normalization_sha256": "7322c219f181b7406d863827cfd4146c027f42dc32d5b0e29b97cc3bc7259e2e",
+  "search_bin_config_sha256": "b3b0c07ad698468d77031dbe2cc69d592dd9a27b7a04963b134d39cda5dd325e",
+  "source_bad_file_count": 11,
+  "data_source_bad_file_count": 1,
+  "data_luminosity_coverage_complete": false,
+  "validated_at_utc": "2026-09-07T21:34:39Z",
+  "report": "autonomous_allhad/reports/dy_window20_main2025_validation_20260907.json"
+}
