@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "code_commit": "e75d7bc85f30b65626c4fd3a2ba81fe9f1d1500b",
+  "status": "source_and_payload_verified",
+  "files": [
+    {
+      "path": "analysis/utils/ids.py",
+      "sha256": "a40d327efedb8dad42afb59da944deff995500b09fc157a53853159d36901da1"
+    },
+    {
+      "path": "analysis/utils/corrections.py",
+      "sha256": "c8ecd046246c68704fac78753fcc1f055e0264f3f5f015b5a05af138cef15ce0"
+    },
+    {
+      "path": "autonomous_allhad/autonomous_allhad/analysis_scale_factors.py",
+      "sha256": "5f90157900829e1b126e663231be3814cb19d473f340ab40544c3fd48eaf0eeb"
+    },
+    {
+      "path": "autonomous_allhad/autonomous_allhad/real_subset_worker.py",
+      "sha256": "11299eaad7cc2ab02afd163bff3033d46047500b1ba4f9c131c6feff198d459f"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/region_io.py",
+      "sha256": "b099a1b030f1884d127018e94f9e4bf201c5aad2b0dbdc127f82ef4b1577a201"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/build_diagonal_v3_cr_nnout_partial.py",
+      "sha256": "baa3bfd5e28e3de2620e2cbecea0ddf27cfc93448cbe2859819b674f395d1356"
+    },
+    {
+      "path": "autonomous_allhad/workflow/build_flat_boosted_recoil_hists.py",
+      "sha256": "3987ea2a28dd28a63ae3ba4f7caca003376d7836f314ce907a564a7fca11d678"
+    },
+    {
+      "path": "autonomous_allhad/workflow/run_flat_hists_chunked.py",
+      "sha256": "145990b692f7079d89d10e76926cc677c5b9e33f398d03639a7f3f12f2ed2d15"
+    },
+    {
+      "path": "analysis/data/ids.coffea",
+      "sha256": "f34995ac34dee52f9ba782e409fb24a11a60a18525f24532a51ec6e74d1e4b48"
+    },
+    {
+      "path": "analysis/data/corrections.coffea",
+      "sha256": "ec0e178d156194b4345d0fc53f84798e0163b7a8518272b591703dbb38ae3b4f"
+    },
+    {
+      "path": "autonomous_allhad/workflow/studies/object_definition_veto_pt_20260905/batch/run_flat_hist_merge_batch.sh",
+      "sha256": "829234dcb3ccf0a57210103efcc10884ff5e6f3b407d97165ddf0d21f513dd23"
+    },
+    {
+      "path": "autonomous_allhad/tests/test_highdm_veto_pt_threshold.py",
+      "sha256": "3080ab5d8d7803f485fd873e58b94ef2fa285b4e56037cce70295cc39d9f6b1a"
+    },
+    {
+      "path": "autonomous_allhad/tests/test_analysis_scale_factors.py",
+      "sha256": "531b5ce9f8ac9080fb8c45090e79906f01ca50ebc77044b5f04958813438261c"
+    }
+  ],
+  "local_eos_snapshot_comparisons_equal": 10,
+  "compiled_ids_changed_functions": [
+    "isVetoElectron",
+    "isLooseMuon"
+  ],
+  "compiled_ids_years_tested": [
+    2024,
+    2025
+  ],
+  "tests_passed": 21,
+  "tests_runtime_seconds": 24.22,
+  "git_diff_check": "passed",
+  "existing_corrections_payload_changed": false
+}

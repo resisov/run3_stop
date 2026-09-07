@@ -1,0 +1,19 @@
+{
+  "approved_by": "User: 로컬에 필요없는 산출물, 기록들을 정리하라",
+  "performed_on_utc_date": "2026-09-07",
+  "reason": "Local filesystem ENOSPC while preparing new campaign configurations",
+  "removed_local_cached_copies": [
+    {"path": "autonomous_allhad/workflow/histograms/dy_window20_20260907/2024/hists.json", "sha256": "fdd3a75d11b4e2bbea581727691fc3ad986a505a7fa3813a865bb94e52a087e9"},
+    {"path": "autonomous_allhad/workflow/histograms/dy_window20_20260907/2025/hists.json", "sha256": "16584a244e30d1f9863748a231b7a2d60dc65798c4eeaa9d3cf95a60fea56dc7"},
+    {"path": "autonomous_allhad/workflow/histograms/dy_window20_20260907/2024/gnn/hists.json", "sha256": "82d96c008756e53ebfa504383b336e9bbe0084d8531c8907f1e71d86f0e2935f"},
+    {"path": "autonomous_allhad/workflow/histograms/dy_window20_20260907/2025/gnn/hists.json", "sha256": "2f943761ede8281a9f857b9eec1f6f7eb25867d78ac8f090a8cd1f44f009a959"}
+  ],
+  "eos_restore_prefix": "/eos/user/t/taiwoo/run3_stop/decaf/",
+  "local_and_eos_checksums_reverified_before_removal": true,
+  "eos_files_removed": false,
+  "limits_or_impacts_removed": false,
+  "canonical_source_removed": false,
+  "local_histogram_aliases_require_cache_restore": true,
+  "permission_email_mta_exit": 0,
+  "permission_email_delivery_confirmed": false
+}
