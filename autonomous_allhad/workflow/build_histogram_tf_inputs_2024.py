@@ -86,6 +86,10 @@ def main() -> int:
     )
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--campaign-year", choices=("2024", "2025"), default="2024")
+    parser.add_argument("--gnn-input", type=Path, help="Frozen process-separated GNN histogram JSON.")
+    parser.add_argument("--gnn-config", type=Path)
+    parser.add_argument("--sgamma-input", type=Path)
+    parser.add_argument("--dy-measurement", type=Path)
     args = parser.parse_args()
 
     source = json.loads(args.hist_input.read_text())
@@ -125,6 +129,38 @@ def main() -> int:
             },
         },
     }
+    if args.gnn_input:
+        import gnn_background_histograms as gnn
+        if not all((args.gnn_config, args.sgamma_input, args.dy_measurement)):
+            parser.error("--gnn-input requires --gnn-config, --sgamma-input and --dy-measurement")
+        config = json.loads(args.gnn_config.read_text())
+        histograms = gnn.read_backgrounds(args.gnn_input)
+        checks = gnn.validate(histograms, config, source)
+        sgamma = json.loads(args.sgamma_input.read_text())
+        rz = json.loads(args.dy_measurement.read_text())
+        output["lowdm_gnn"] = {
+            "schema_version": "gnn_background_mapping_v1", "status": "complete",
+            "axis": "GNN output", "sr_binning": config["sr_binning"],
+            "cr_binning": config["cr_binning"],
+            "ut_edges": source["lowdm"]["recoil_edges"],
+            "ut_last_bin_open_ended": True,
+            "histograms": histograms,
+            "transfer_factors": gnn.transfer_records(histograms, config),
+            "zinv_projection": gnn.project_zinv(histograms, sgamma, rz),
+            "mechanical_checks": checks,
+            "definition": {
+                "TF": "SR category GNN bin / mapped CR parent target-process integral; CR score fractions retained",
+                "GNN_to_GNN_same_index_ratio": False,
+                "zinv": "RZ(Nb) * sum_ut(H_Zinv(GNN,ut) * Sgamma(Nb,ut)); Q is not transferred",
+                "shape_only": "Sgamma is normalized in GCR; no additional Z-integral renormalization introduced",
+                "rate_parameters_changed": False,
+                "double_ratio_nuisances": "not inserted here; pass separate measured downstream_central_abs_deviation to main agent",
+                "shared_CR_denominator_covariance": "TF bins with the same process and CR parent share denominator variance; exported parent totals define cross-category covariance",
+            },
+            "provenance": {name: {"path": str(path), "sha256": file_sha256(path)} for name, path in
+                           (("gnn_input", args.gnn_input), ("gnn_config", args.gnn_config),
+                            ("sgamma_input", args.sgamma_input), ("dy_measurement", args.dy_measurement))},
+        }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(output, indent=2, sort_keys=True) + "\n")
     print(json.dumps({"status": "complete", "output": str(args.output)}))

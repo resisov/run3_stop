@@ -37,7 +37,11 @@ Nb1      : Nb = 1
 Nb2plus  : Nb >= 2
 ```
 
-U_T remains the measurement axis. It is not an additional event category.
+U_T remains a factor-measurement axis. It is not an additional event category.
+The final Low-dM SR template is **frozen GNN30**, not U_T or legacy Low-dM34.
+The process-separated GNN-score × U_T histogram product supplies the actual
+component mapping. Its six SR categories and four existing CR parents remain
+unchanged; the Nb-only policy does not replace this frozen final layout.
 The former Low-dM Njet, b-jet-pT, ISR, and search-bin-family subdivisions are
 not present in the compact estimator input.
 
@@ -108,6 +112,14 @@ python -m autonomous_allhad.dy_estimation report \
 
 The existing plotting implementations are reused. No plot was regenerated as
 part of this code transition.
+
+For the completed 2024/2025 histogram-only recalculation and GNN propagation,
+use `reports/background_estimation_histonly_20260907/RUN.md`. That sequence adds
+the frozen GNN histogram and configuration to the existing TF builder, retains
+parent-normalization semantics despite different SR/CR score edges, and
+exports RZ × Sgamma Zinv projections without transferring Q. The Low-dM
+double-ratio 250-GeV domain is isolated as a comparison proposal; the default
+300-GeV domain is unchanged pending adoption.
 
 ## Regression checks
 

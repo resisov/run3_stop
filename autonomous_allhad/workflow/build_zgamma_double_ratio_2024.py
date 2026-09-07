@@ -22,8 +22,8 @@ hep.style.use("CMS")
 CMS_LABEL = {"llabel": "Work in progress", "rlabel": "2024 (13.6 TeV)"}
 BACKGROUND_SAMPLES = {"DY", "GJ", "QCD", "ST", "TT", "VV", "WtoLNu", "Zto2Nu"}
 HIGH_EDGES = np.asarray([250.0, 300.0, 350.0, 400.0, 500.0, 1500.0])
-# The Low-dM DY/GCR comparison starts at the analysis threshold of 300 GeV.
-# Do not manufacture an unavailable 250--300 GeV point from an empty category.
+# Preserve the adopted 300-GeV normalization domain by default. The current
+# histogram boundary also permits an explicit 250-GeV comparison proposal.
 LOW_EDGES = np.asarray([300.0, 350.0, 400.0, 500.0, 1500.0])
 
 
@@ -252,6 +252,7 @@ def records(dy: dict[str, np.ndarray], photon: dict[str, np.ndarray]) -> list[di
                 "double_ratio": float(value[index]),
                 "double_ratio_stat": float(stat[index]),
                 "systematic": float(systematic[index]),
+                "downstream_central_abs_deviation": float(abs(value[index] - 1.0)),
                 "status": "complete" if np.isfinite(value[index]) else "unavailable",
             }
         )
@@ -320,6 +321,7 @@ def plot(regime: str, rows: list[dict[str, Any]], output_dir: Path) -> list[str]
 
 
 def main() -> int:
+    global LOW_EDGES
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--hist-input",
@@ -331,7 +333,10 @@ def main() -> int:
     parser.add_argument(
         "--campaign-year", choices=("2024", "2025"), default="2024"
     )
+    parser.add_argument("--low-ut-min", type=int, choices=(250, 300), default=300,
+                        help="250 is a comparison proposal, not an adopted factor.")
     args = parser.parse_args()
+    LOW_EDGES = HIGH_EDGES[HIGH_EDGES >= args.low_ut_min].copy()
     CMS_LABEL["rlabel"] = f"{args.campaign_year} (13.6 TeV)"
 
     hist_input = json.loads(args.hist_input.read_text())
@@ -347,6 +352,7 @@ def main() -> int:
     payload: dict[str, Any] = {
         "schema_version": f"zgamma_double_ratio_{args.campaign_year}_v1",
         "status": "complete",
+        "adoption_status": "proposal" if args.low_ut_min == 250 else "existing_definition",
         "definition": {
             "z_ratio_raw": "(DYCR data - non-DY MC) / DY MC",
             "photon_ratio_raw": "(GCR data - non-GJ MC) / GJ MC = Q * Sgamma",
@@ -354,6 +360,7 @@ def main() -> int:
             "photon_shape": "photon_ratio_raw / inclusive photon_ratio_raw",
             "double_ratio": "z_shape / photon_shape",
             "systematic": "max(abs(double_ratio - 1), double_ratio_stat)",
+            "downstream_central_abs_deviation": "abs(double_ratio - 1); preserves current card semantics; statistical error is separate",
             "category_policy": "inclusive within High-dM and Low-dM, following Run-2 AN Sec. 7.5",
             "ut_tail_policy": (
                 "merge raw yields and variances into one open-ended "
@@ -371,6 +378,7 @@ def main() -> int:
             "dy_channels": ["DY2E", "DY2M"],
             "dy_samples": "DYto2E/Mu/Tau-4Jets current merged DY process; PTLL excluded upstream",
             "campaign_year": args.campaign_year,
+            "low_ut_min_gev": args.low_ut_min,
         },
         "plots": [],
     }

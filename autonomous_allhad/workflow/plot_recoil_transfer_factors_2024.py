@@ -243,6 +243,11 @@ def plot_highdm(
     edges: np.ndarray,
     records: dict[str, Any],
     regime: str = "highdm",
+    *,
+    xlabel: str = r"$U_T$ (GeV)",
+    annotation: str | None = None,
+    output_suffix: str | None = None,
+    ylabel: str = r"Transfer factor $N_{\mathrm{SR}}/N_{\mathrm{CR}}$",
 ) -> list[str]:
     centers = 0.5 * (edges[:-1] + edges[1:])
     widths = 0.5 * np.diff(edges)
@@ -275,14 +280,14 @@ def plot_highdm(
     set_tf_ylim(axis, used)
     axis.set_xlim(float(edges[0]), float(edges[-1]))
     axis.set_xmargin(0)
-    axis.set_xlabel(r"$U_T$ (GeV)", fontsize=30)
-    axis.set_ylabel(r"Transfer factor $N_{\mathrm{SR}}/N_{\mathrm{CR}}$", fontsize=29)
+    axis.set_xlabel(xlabel, fontsize=30)
+    axis.set_ylabel(ylabel, fontsize=29)
     axis.tick_params(labelsize=24)
     axis.grid(alpha=0.16)
     axis.text(
         0.04,
         0.73 if path["key"] == "qcd_qcdcr" else 0.07,
-        ("High-" if regime == "highdm" else "Low-")
+        annotation if annotation is not None else ("High-" if regime == "highdm" else "Low-")
         + r"$\Delta m$"
         + "\n"
         + path["ratio_label"],
@@ -299,7 +304,7 @@ def plot_highdm(
     hep.cms.label(**CMS_LABEL, ax=axis)
     return save_figure(
         fig,
-        output_dir / f"transfer_factor_{path['key']}_{regime}",
+        output_dir / f"transfer_factor_{path['key']}_{output_suffix or regime}",
     )
 
 
@@ -616,7 +621,7 @@ def main() -> int:
             "input_sha256": file_sha256(args.input),
             "input_provenance": source.get("provenance"),
             "sample_check": sample_check,
-            "lowdm_mode": "all 34 adopted search bins; no category aggregation",
+            "lowdm_mode": "Nb-only U_T diagnostic; final template is frozen GNN30" if "lowdm_gnn" in source else factors["lowdm"]["kind"],
             "lowdm_plot_overflow_cap_gev": 1500.0,
             "plot_regime": args.regime,
             "campaign_year": args.campaign_year,
@@ -626,6 +631,28 @@ def main() -> int:
         },
         "plots": plot_paths,
     }
+    if "lowdm_gnn" in source:
+        mapping = source["lowdm_gnn"]
+        (args.output_dir / "gnn").mkdir(parents=True, exist_ok=True)
+        gnn_plots = []
+        for path in PATHS:
+            for category, record in mapping["transfer_factors"]["nominal"][path["key"]].items():
+                if record["status"] not in {"complete", "signed_mc_bins"}:
+                    continue
+                gnn_plots.extend(plot_highdm(
+                    args.output_dir / "gnn", path,
+                    np.asarray(record["score_edges"]), {record["nb_group"]: record},
+                    regime="lowdm", xlabel="GNN output",
+                    annotation="Low-" + r"$\Delta m$" + "\n" + category.replace("_", " ") + "\n" + path["ratio_label"],
+                    output_suffix=f"lowdm_gnn_{category}",
+                    ylabel=r"Transfer factor $N_{\mathrm{SR,bin}}/N_{\mathrm{CR,parent}}$",
+                ))
+        output["lowdm_gnn"] = {
+            key: mapping[key] for key in ("schema_version", "axis", "sr_binning", "cr_binning", "definition", "mechanical_checks", "provenance")
+        }
+        output["lowdm_gnn"]["transfer_factors"] = mapping["transfer_factors"]["nominal"]
+        output["lowdm_gnn"]["plots"] = gnn_plots
+        plot_paths.extend(gnn_plots)
     output_path = (
         args.output_dir
         / f"transfer_factors_{args.campaign_year}_nb_recoil.json"
