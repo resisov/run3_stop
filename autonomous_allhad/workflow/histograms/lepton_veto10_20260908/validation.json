@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "code_commit": "e75d7bc85f30b65626c4fd3a2ba81fe9f1d1500b",
+  "code_commit": "a3008a1c6f6e8d7a7128c27eb586a0587c1b1188",
   "status": "source_and_payload_verified",
   "files": [
     {
@@ -29,7 +29,7 @@
     },
     {
       "path": "autonomous_allhad/workflow/build_flat_boosted_recoil_hists.py",
-      "sha256": "3987ea2a28dd28a63ae3ba4f7caca003376d7836f314ce907a564a7fca11d678"
+      "sha256": "6bf420ebf6c795dd74b54cb15dffca5aab0ecbd84adc9fe73a4071586702556d"
     },
     {
       "path": "autonomous_allhad/workflow/run_flat_hists_chunked.py",
@@ -49,7 +49,7 @@
     },
     {
       "path": "autonomous_allhad/tests/test_highdm_veto_pt_threshold.py",
-      "sha256": "3080ab5d8d7803f485fd873e58b94ef2fa285b4e56037cce70295cc39d9f6b1a"
+      "sha256": "8b5894d5bf2c84009df0070dd1da3ed5b172b91e26c160576aaf666648d74c2d"
     },
     {
       "path": "autonomous_allhad/tests/test_analysis_scale_factors.py",
@@ -68,5 +68,23 @@
   "tests_passed": 21,
   "tests_runtime_seconds": 24.22,
   "git_diff_check": "passed",
-  "existing_corrections_payload_changed": false
+  "existing_corrections_payload_changed": false,
+  "main_pilot_recovery": {
+    "cause": "missing veto collections in TROTA light input",
+    "fixed_before_full_production": true,
+    "new_sr_trota_eligibility_test": "passed",
+    "focused_veto_tests_passed": 7
+  },
+  "gnn_pilot": {
+    "2024": {
+      "exit_code": 0,
+      "inputs": 6,
+      "status": "validated"
+    },
+    "2025": {
+      "exit_code": 0,
+      "inputs": 8,
+      "status": "validated"
+    }
+  }
 }
