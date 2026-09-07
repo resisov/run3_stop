@@ -64,19 +64,16 @@ GROUP_COLORS = {
     "QCD Multijet": "#C995A2",
     "Others": "#6a625f",
 }
+
 SIGNAL_OVERLAYS = [
     {"key": "mStop1000_mLSP1", "label": '$m_{\\tilde{t}}=1000$ GeV, $m_{\\tilde{\\chi}^{0}_{1}}=1$ GeV', "color": "#ff0000"},
     {"key": "mStop1200_mLSP1", "label": '$m_{\\tilde{t}}=1200$ GeV, $m_{\\tilde{\\chi}^{0}_{1}}=1$ GeV', "color": "#00ff00"},
 ]
 LOWDM_SIGNAL_OVERLAYS = [
     {
-        "key": "mStop600_mLSP400",
-        "label": '$m_{\\tilde{t}}=600$ GeV, $m_{\\tilde{\\chi}^{0}_{1}}=400$ GeV',
-        "color": "#54FAFD",
-    },
-    {
-        "key": "mStop900_mLSP700",
-        "label": '$m_{\\tilde{t}}=900$ GeV, $m_{\\tilde{\\chi}^{0}_{1}}=700$ GeV',
+        "topology": "T2bW",
+        "key": "mStop1000_mLSP800",
+        "label": '$m_{\\tilde{t}}=1000$ GeV, $m_{\\tilde{\\chi}^{0}_{1}}=800$ GeV',
         "color": "#FFD500",
     },
 ]
@@ -110,15 +107,23 @@ LOWDM_NSV_INCLUSIVE_CATEGORY_LABELS = {
 }
 PARTIAL_AN17_SPLIT_BINS = [4, 5, 8, 9, 14, 15, 16]
 EXTENDED_AN17_RECOIL_SCHEME = "highdm_search_bins"
+HIGHDM_PLOT_DROPPED_LEADING_BINS = 6
 LUMINOSITY_FB = 109.82
 LUMINOSITY_RELATIVE_UNCERTAINTY = 0.016
 PLOT_SYSTEMATIC_SOURCES = [
     "pileup",
     "electron_id",
+    "electron_reco",
     "electron_hlt",
+    "veto_electron_5to10",
     "muon_id",
+    "muon_iso",
     "muon_hlt",
+    "loose_muon_5to10",
     "photon_id",
+    "photon_csev",
+    "photon_trigger",
+    "met_trigger",
     "btagSF_bc_correlated",
     "btagSF_bc_uncorrelated",
     "btagSF_light_correlated",
@@ -310,7 +315,7 @@ def _sample_object(
     allow_signals: bool,
 ) -> dict:
     selected_signals = {
-        "T2tt_" + spec["key"]
+        spec.get("topology", "T2tt") + "_" + spec["key"]
         for spec in (*SIGNAL_OVERLAYS, *LOWDM_SIGNAL_OVERLAYS)
     }
     selected_samples = (
@@ -381,9 +386,6 @@ def load_canonical_plot_payload(path: Path) -> dict:
                 "DY2E_Nt1",
                 "DY2M_Nt0",
                 "DY2M_Nt1",
-                "HighDMVR_Nb1",
-                "HighDMVR_Nb2",
-                "HighDMVR_Nb3plus",
                 "SR",
                 "SR_Nt0",
                 "SR_Nt1",
@@ -929,9 +931,7 @@ FLAT_REGION_LABELS = {
     "GCR": "GCR",
     "DY2E": "DY2E",
     "DY2M": "DY2M",
-    "HighDMVR_Nb1": "High-dM VR\n" + r"$N_{b}=1$",
-    "HighDMVR_Nb2": "High-dM VR\n" + r"$N_{b}=2$",
-    "HighDMVR_Nb3plus": "High-dM VR\n" + r"$N_{b}\geq3$",
+    "DYCR": r"DYCR ($ee+\mu\mu$)",
     "SR": "SR",
     "LLCR_Nt0": r"LLCR\n$N_{t}=0$",
     "QCDCR_Nt0": r"QCDCR\n$N_{t}=0$",
@@ -955,6 +955,72 @@ def is_signal_sample(sample: str) -> bool:
 def flat_values(rec: dict, nbin: int) -> tuple[np.ndarray, np.ndarray]:
     nominal = rec.get("nominal") or rec
     return as_array(nominal.get("sumw"), nbin), as_array(nominal.get("sumw2"), nbin)
+
+
+def combine_histogram_containers(*containers: dict) -> dict:
+    """Sum same-binned histogram containers before grouping or uncertainty building.
+
+    A systematic shape that is absent from one channel is represented by that
+    channel's nominal histogram. This preserves the intended correlation when
+    the electron and muon DY control regions are combined.
+    """
+    sources = [container for container in containers if container]
+    if not sources:
+        return {}
+
+    def variation_map(record: dict) -> dict[str, dict]:
+        if "sumw" in record:
+            return {"nominal": record}
+        return {
+            str(name): leaf
+            for name, leaf in record.items()
+            if isinstance(leaf, dict) and "sumw" in leaf
+        }
+
+    nominal_lengths = {
+        len((record.get("nominal") or record).get("sumw") or [])
+        for container in sources
+        for record in container.values()
+        if len((record.get("nominal") or record).get("sumw") or []) > 0
+    }
+    if len(nominal_lengths) != 1:
+        raise ValueError(
+            f"cannot combine histogram containers with bin counts {sorted(nominal_lengths)}"
+        )
+
+    def sum_leaves(leaves: list[dict]) -> dict:
+        nbin = max((len(leaf.get("sumw") or []) for leaf in leaves), default=0)
+        result = {}
+        for key in ("entries", "sumw", "sumw2"):
+            if any(key in leaf for leaf in leaves):
+                total = np.zeros(nbin, dtype=float)
+                for leaf in leaves:
+                    total += as_array(leaf.get(key), nbin)
+                result[key] = total.tolist()
+        return result
+
+    combined = {}
+    samples = sorted({sample for container in sources for sample in container})
+    for sample in samples:
+        records = [container[sample] for container in sources if sample in container]
+        mapped = [variation_map(record) for record in records]
+        if not mapped:
+            continue
+        variations = {"nominal"}
+        for record in mapped:
+            variations.update(record)
+        merged_variations = {}
+        for variation in sorted(variations, key=lambda name: (name != "nominal", name)):
+            leaves = []
+            for record in mapped:
+                leaf = record.get(variation) or record.get("nominal")
+                if leaf:
+                    leaves.append(leaf)
+            if leaves:
+                merged_variations[variation] = sum_leaves(leaves)
+        if merged_variations:
+            combined[sample] = merged_variations
+    return combined
 
 
 def background_systematic_variance(raw: dict, nbin: int) -> np.ndarray:
@@ -1010,8 +1076,18 @@ def background_systematic_totals(raw: dict, nbin: int) -> dict[str, dict[str, np
     return totals
 
 
-def flat_hist_record(payload: dict, region: str, allow_signal: bool) -> dict | None:
-    raw = (payload.get("histograms") or {}).get(region) or {}
+def flat_hist_record(
+    payload: dict,
+    region: str,
+    allow_signal: bool,
+    *,
+    raw_override: dict | None = None,
+) -> dict | None:
+    raw = (
+        raw_override
+        if raw_override is not None
+        else ((payload.get("histograms") or {}).get(region) or {})
+    )
     if not raw:
         return None
     nbin = 0
@@ -1092,7 +1168,7 @@ def flat_search_record(payload: dict, scheme: str, label: str, allow_signal: boo
         elif is_signal_sample(sample):
             if allow_signal:
                 for spec in signal_overlays:
-                    if sample == "T2tt_" + spec["key"]:
+                    if sample == spec.get("topology", "T2tt") + "_" + spec["key"]:
                         signals[spec["key"]] += vals
         else:
             groups[process_to_group(sample)] += vals
@@ -1135,6 +1211,7 @@ VARIABLE_XLABELS = {
     "recoil_gcr": r"$U_{T}$ (GeV)",
     "recoil_dy2e": r"$U_{T}$ (GeV)",
     "recoil_dy2m": r"$U_{T}$ (GeV)",
+    "recoil_dy": r"$U_{T}$ (GeV)",
     "lowdm_met_sqrt_ht": r"$p_{T}^{miss}/\sqrt{H_{T}}$",
     "lowdm_isr_pt": r"$p_{T}^{\mathrm{ISR}}$ (GeV)",
     "lowdm_isr_dphi": r"$\Delta\phi(\mathrm{ISR},p_{T}^{miss})$",
@@ -1142,6 +1219,7 @@ VARIABLE_XLABELS = {
     "n_lowdm_isr": r"$N_{\mathrm{ISR}}$",
     "mee": r"$m_{ee}$ (GeV)",
     "mmm": r"$m_{\mu\mu}$ (GeV)",
+    "mll": r"$m_{\ell\ell}$ (GeV)",
     "n_photon_medium": r"$N_{\gamma}$",
     "njet_photon_clean": r"$N_{j}$",
     "nb_photon_clean": r"$N_{b}$",
@@ -1170,11 +1248,27 @@ HIGHDM_VARIABLE_XLABELS = {
 }
 
 
-def lowdm_variable_record(payload: dict, scheme: str, variable: str, label: str, allow_signal: bool) -> dict | None:
-    raw = (((payload.get("lowdm_variable_histograms") or {}).get(scheme) or {}).get(variable) or {})
+def lowdm_variable_record(
+    payload: dict,
+    scheme: str,
+    variable: str,
+    label: str,
+    allow_signal: bool,
+    *,
+    raw_override: dict | None = None,
+    spec_variable: str | None = None,
+    display_variable: str | None = None,
+) -> dict | None:
+    raw = (
+        raw_override
+        if raw_override is not None
+        else (((payload.get("lowdm_variable_histograms") or {}).get(scheme) or {}).get(variable) or {})
+    )
     if not raw:
         return None
-    spec = ((payload.get("lowdm_variable_specs") or {}).get(variable) or {})
+    spec_key = spec_variable or variable
+    output_variable = display_variable or variable
+    spec = ((payload.get("lowdm_variable_specs") or {}).get(spec_key) or {})
     edges = spec.get("bins") or []
     nbin = max(0, len(edges) - 1)
     if nbin <= 0:
@@ -1197,7 +1291,7 @@ def lowdm_variable_record(payload: dict, scheme: str, variable: str, label: str,
         elif is_signal_sample(sample):
             if allow_signal:
                 for sig in LOWDM_SIGNAL_OVERLAYS:
-                    if sample == "T2tt_" + sig["key"]:
+                    if sample == sig.get("topology", "T2tt") + "_" + sig["key"]:
                         signals[sig["key"]] += vals
         else:
             groups[process_to_group(sample)] += vals
@@ -1224,8 +1318,8 @@ def lowdm_variable_record(payload: dict, scheme: str, variable: str, label: str,
         "label": label,
         "nbin": nbin,
         "edges": edges,
-        "xlabel": VARIABLE_XLABELS.get(variable, spec.get("xlabel") or variable),
-        "variable": variable,
+        "xlabel": VARIABLE_XLABELS.get(output_variable, spec.get("xlabel") or output_variable),
+        "variable": output_variable,
         "reference_style": True,
         "xlim_left": xlim_left,
         "unit_area": scheme == "cat4_GCR_lowDeltaM",
@@ -1241,9 +1335,7 @@ HIGHDM_DISTRIBUTION_REGION_LABELS = {
     "GCR": "GCR",
     "DY2E": "DY2E",
     "DY2M": "DY2M",
-    "HighDMVR_Nb1": r"High-$\Delta m$ VR, $N_{b}=1$",
-    "HighDMVR_Nb2": r"High-$\Delta m$ VR, $N_{b}=2$",
-    "HighDMVR_Nb3plus": r"High-$\Delta m$ VR, $N_{b}\geq3$",
+    "DYCR": r"DYCR ($ee+\mu\mu$)",
     "SR_Nb1plus_T0_W0": r"SR, $N_{b}\geq1$, $N_{top}=0$, $N_{W}=0$",
     "SR_Nb1plus_T0_W1plus": r"SR, $N_{b}\geq1$, $N_{top}=0$, $N_{W}\geq1$",
     "SR_Nb1_T1plus_W0": r"SR, $N_{b}=1$, $N_{top}\geq1$, $N_{W}=0$",
@@ -1332,8 +1424,18 @@ def rebin_highdm_multiplicity(
     return rebinned, list(config["edges"]), list(config["labels"])
 
 
-def highdm_variable_record(payload: dict, region: str, variable: str) -> dict | None:
-    raw = ((((payload.get("highdm_variable_histograms") or {}).get(region) or {}).get(variable)) or {})
+def highdm_variable_record(
+    payload: dict,
+    region: str,
+    variable: str,
+    *,
+    raw_override: dict | None = None,
+) -> dict | None:
+    raw = (
+        raw_override
+        if raw_override is not None
+        else ((((payload.get("highdm_variable_histograms") or {}).get(region) or {}).get(variable)) or {})
+    )
     spec = ((payload.get("highdm_distribution_variable_specs") or {}).get(variable) or {})
     source_edges = spec.get("bins") or []
     raw, edges, xlabels = rebin_highdm_multiplicity(raw, variable, source_edges)
@@ -1621,9 +1723,31 @@ def selected_an17_recoil_blocks(payload: dict, scheme_name: str) -> list[dict]:
             "main_panel_ymax_factor": 600.0,
             "significance_panel": True,
             "significance_ylim": [0.0, 5.0],
+            "significance_mode": "s_over_sqrt_b",
+            "significance_ylabel": r"$S/\sqrt{B}$",
+            "main_ylabel": "Events",
         }
         blocks.append(block)
         offset += n_recoil
+
+    # The leading six bins are the N_t=N_W=N_res=0 category superseded by
+    # the orthogonal Low-dM selection.  Drop that complete category only at
+    # plotting time; the underlying 85-bin histogram payload stays intact.
+    if (
+        blocks
+        and int(blocks[0]["nbin"]) == HIGHDM_PLOT_DROPPED_LEADING_BINS
+        and blocks[0].get("category_key") == "Nb1plus_T0_W0"
+    ):
+        blocks = blocks[1:]
+        for block in blocks:
+            block["dropped_input_bins_1based"] = list(
+                range(1, HIGHDM_PLOT_DROPPED_LEADING_BINS + 1)
+            )
+    else:
+        raise RuntimeError(
+            "High-dM plotting projection does not begin with the expected "
+            "six-bin Nb1plus_T0_W0 category"
+        )
     return blocks
 
 
@@ -1773,6 +1897,31 @@ def draw_flat_blocks(
     if significance_panel and len(significance_ylims) != 1:
         raise RuntimeError("cannot mix significance y-axis ranges")
     lower_panel_ylim = significance_ylims.pop() if significance_panel else (0.0, 2.0)
+    significance_modes = {
+        str(block.get("significance_mode", "s_over_sqrt_b_plus_unc2"))
+        for block in blocks
+    }
+    if significance_panel and len(significance_modes) != 1:
+        raise RuntimeError("cannot mix significance definitions")
+    significance_mode = (
+        significance_modes.pop() if significance_panel else None
+    )
+    main_ylabels = {
+        str(block["main_ylabel"])
+        for block in blocks
+        if block.get("main_ylabel")
+    }
+    if len(main_ylabels) > 1:
+        raise RuntimeError("cannot mix main-panel y-axis labels")
+    main_ylabel = next(iter(main_ylabels), None)
+    significance_ylabels = {
+        str(block["significance_ylabel"])
+        for block in blocks
+        if block.get("significance_ylabel")
+    }
+    if significance_panel and len(significance_ylabels) > 1:
+        raise RuntimeError("cannot mix significance y-axis labels")
+    significance_ylabel = next(iter(significance_ylabels), "Significance")
 
     unit_area = bool(blocks) and all(
         bool(block.get("unit_area")) and block.get("physics_scope") == "GCR"
@@ -1842,8 +1991,8 @@ def draw_flat_blocks(
         unc = np.sqrt(stat_unc * stat_unc + shape_syst2)
         uncertainty_label = (
             "MC stat.+shape syst. unc."
-            if reference_style
-            else "MC stat.+shape syst. unc."
+            if available_systematic_sources
+            else "MC stat. unc."
         )
 
         normalized_data_sum = float(np.sum(data))
@@ -2027,7 +2176,14 @@ def draw_flat_blocks(
         zorder=10,
     )
     if significance_panel:
-        significance_denominator = np.sqrt(np.maximum(bkg, 0.0) + unc**2)
+        if significance_mode == "s_over_sqrt_b":
+            significance_denominator = np.sqrt(np.maximum(bkg, 0.0))
+        elif significance_mode == "s_over_sqrt_b_plus_unc2":
+            significance_denominator = np.sqrt(np.maximum(bkg, 0.0) + unc**2)
+        else:
+            raise RuntimeError(
+                f"unsupported significance definition: {significance_mode}"
+            )
         for spec in signal_specs:
             vals = signals.get(spec["key"])
             if vals is None:
@@ -2123,11 +2279,13 @@ def draw_flat_blocks(
     else:
         ax.set_ylim(0.03, 1.0)
     ax.set_ylabel(
-        "Normalized events" if unit_area else ("Events" if reference_style else "Events / bin"),
+        "Normalized events"
+        if unit_area
+        else (main_ylabel or ("Events" if reference_style else "Events / bin")),
         fontsize=32 if reference_style else 30,
     )
     rax.set_ylabel(
-        "Significance" if significance_panel else (ratio_ylabel or "Data/MC"),
+        significance_ylabel if significance_panel else (ratio_ylabel or "Data/MC"),
         fontsize=30 if reference_style else 26,
     )
     rax.set_ylim(*lower_panel_ylim)
@@ -2216,10 +2374,17 @@ def draw_flat_blocks(
         "unit_area_audit": unit_area_audit,
         "lower_panel": "signal_significance" if significance_panel else "data_over_mc",
         "lower_panel_ylim": list(lower_panel_ylim),
+        "main_panel_ylim": [float(value) for value in ax.get_ylim()],
         "significance_definition": (
-            "S/sqrt(B+sigma_B^2), with sigma_B equal to the plotted background uncertainty"
-            if significance_panel
-            else None
+            (
+                "S/sqrt(B)"
+                if significance_mode == "s_over_sqrt_b"
+                else "S/sqrt(B+sigma_B^2), with sigma_B equal to the plotted background uncertainty"
+            )
+            if significance_panel else None
+        ),
+        "dropped_input_bins_1based": list(
+            blocks[0].get("dropped_input_bins_1based") or []
         ),
     }
 
@@ -2231,6 +2396,7 @@ def draw_highdm_distribution_report(
     dy_rz_manifest: Path | None = None,
     only_region: str | None = None,
     only_variable: str | None = None,
+    exclude_variables: list[str] | None = None,
 ) -> dict:
     payload = load_plot_payload(payload_path)
     # High-dM one-dimensional distribution plots intentionally do not draw
@@ -2251,14 +2417,37 @@ def draw_highdm_distribution_report(
     variable_specs = payload.get("highdm_distribution_variable_specs") or {}
     plots = []
     output_dir.mkdir(parents=True, exist_ok=True)
-    for kind, metadata_key in [("CR", "control"), ("VR", "validation"), ("SR", "signal_categories")]:
-        for region in region_groups.get(metadata_key) or []:
+    excluded = set(exclude_variables or [])
+    for kind, metadata_key in [("CR", "control"), ("SR", "signal_categories")]:
+        regions = list(region_groups.get(metadata_key) or [])
+        if metadata_key == "control" and {"DY2E", "DY2M"}.issubset(regions):
+            first_dy = min(regions.index("DY2E"), regions.index("DY2M"))
+            regions = [region for region in regions if region not in {"DY2E", "DY2M"}]
+            regions.insert(first_dy, "DYCR")
+        for region in regions:
             if only_region and region != only_region:
                 continue
             for variable in variable_specs:
                 if only_variable and variable != only_variable:
                     continue
-                record = highdm_variable_record(payload, region, variable)
+                if variable in excluded:
+                    continue
+                raw_override = None
+                if region == "DYCR":
+                    electron = (
+                        ((payload.get("highdm_variable_histograms") or {}).get("DY2E") or {}).get(variable)
+                        or {}
+                    )
+                    muon = (
+                        ((payload.get("highdm_variable_histograms") or {}).get("DY2M") or {}).get(variable)
+                        or {}
+                    )
+                    if not electron or not muon:
+                        continue
+                    raw_override = combine_histogram_containers(electron, muon)
+                record = highdm_variable_record(
+                    payload, region, variable, raw_override=raw_override
+                )
                 if not record:
                     continue
                 slug = region.lower().replace("highdm", "highdm_").replace("__", "_")
@@ -2301,6 +2490,12 @@ def draw_highdm_distribution_report(
         "plots": plots,
         "signal_records_pruned_before_render": signal_records_pruned,
         "dy_rz_application": dy_rz_application,
+        "dy_channel_combination": {
+            "status": "complete",
+            "region": "DYCR",
+            "channels": ["DY2E", "DY2M"],
+            "policy": "sum nominal, sumw2, and correlated systematic variations before uncertainty construction",
+        },
     }
     (output_dir / "plot_summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     return summary
@@ -2341,6 +2536,7 @@ def write_highdm_distribution_webpage(
         "nb": "Nb", "njet": "Nj", "nfatjet": "Nfj", "ntop": "Ntop", "nw": "NW",
         "ht": "HT", "ut": "UT", "met": "pTmiss", "jet_pt": "Jet pT",
         "fatjet_pt": "FatJet pT", "bjet_pt": "b-jet pT",
+        "mll": "mll", "recoil_dy": "UT",
         "search_bins": "Search bins", "recoil": "Recoil",
         "limit": "Expected limits", "impact": "Nuisance impacts",
     }
@@ -2359,7 +2555,7 @@ def write_highdm_distribution_webpage(
                 variables.append(variable)
             kind = str(
                 plot.get("kind")
-                or ("VR" if "_vr_" in name else "SR" if "_sr_" in name else "CR")
+                or ("SR" if "_sr_" in name else "CR")
             )
             region = str(plot.get("region") or name)
             title = f"{year} · {kind} · {region} · {variable_names.get(variable, variable)}"
@@ -2461,7 +2657,7 @@ main{padding:18px}.plots{display:grid;grid-template-columns:repeat(auto-fit,minm
 <header><div><h1>Run-3 all-hadronic stop analysis results</h1></div></header>
 <div class='toolbar'><div class='toolbar-inner'>
 <div class='segments' id='years'>""" + year_buttons + ("<button data-value='Combined'>Combined</button>" if impact_record else "") + """</div>
-<div class='segments' id='kinds'><button data-value='all' class='active'>All</button><button data-value='CR'>CR</button><button data-value='SR'>SR</button><button data-value='VR'>VR</button>""" + ("<button data-value='Limit'>Limit</button>" if any(item.get("kind") == "Limit" for item in published_results) else "") + ("<button data-value='Impact'>Impact</button>" if impact_record or any(item.get("kind") == "Impact" for item in published_results) else "") + """</div>
+<div class='segments' id='kinds'><button data-value='all' class='active'>All</button><button data-value='CR'>CR</button><button data-value='SR'>SR</button>""" + ("<button data-value='Limit'>Limit</button>" if any(item.get("kind") == "Limit" for item in published_results) else "") + ("<button data-value='Impact'>Impact</button>" if impact_record or any(item.get("kind") == "Impact" for item in published_results) else "") + """</div>
 <select id='variables'>""" + "".join(options) + """</select>
 </div></div><main><div class='plots'>""" + "".join(cards) + """</div></main>
 <script>
@@ -2491,6 +2687,10 @@ def draw_flat_report(
     dy_rz_manifest: Path | None = None,
     gcr_only: bool = False,
     search_bin_config: Path | None = None,
+    lowdm_variable_hists_only: bool = False,
+    only_region: str | None = None,
+    only_variable: str | None = None,
+    exclude_variables: list[str] | None = None,
 ) -> dict:
     payload = load_plot_payload(flat_hists)
     search_bin_merge_summary = None
@@ -2520,6 +2720,193 @@ def draw_flat_report(
     )
     plots = []
     output_dir.mkdir(parents=True, exist_ok=True)
+    if lowdm_variable_hists_only:
+        low_map = [
+            ("cat2_LLCR_lowDeltaM", r"LLCR low $\Delta m$" + lowdm_nres_suffix, False, "LLCR"),
+            ("cat3_QCDCR_lowDeltaM", r"QCDCR low $\Delta m$" + lowdm_nres_suffix, False, "QCDCR"),
+            ("cat4_GCR_lowDeltaM", r"GCR low $\Delta m$" + lowdm_nres_suffix, False, "GCR"),
+            ("DYCR", r"DYCR ($ee+\mu\mu$)" + lowdm_nres_suffix, False, "DYCR"),
+            ("cat7_SR_lowDeltaM", r"SR low $\Delta m$" + lowdm_nres_suffix, True, "SR"),
+        ]
+        lowdm_region_variables = payload.get("lowdm_region_variables") or {}
+        available_sources: set[str] = set()
+        for scheme, label, is_sr, base_region in low_map:
+            if only_region and base_region != only_region:
+                continue
+            if base_region == "DYCR":
+                electron_available = (
+                    (payload.get("lowdm_variable_histograms") or {}).get("cat5_DY2E_lowDeltaM") or {}
+                )
+                muon_available = (
+                    (payload.get("lowdm_variable_histograms") or {}).get("cat6_DY2M_lowDeltaM") or {}
+                )
+                variable_pairs = []
+                for electron_variable in lowdm_region_variables.get("DY2E") or sorted(electron_available):
+                    output_variable = {
+                        "recoil_dy2e": "recoil_dy",
+                        "mee": "mll",
+                    }.get(electron_variable, electron_variable)
+                    muon_variable = {
+                        "recoil_dy2e": "recoil_dy2m",
+                        "mee": "mmm",
+                    }.get(electron_variable, electron_variable)
+                    if electron_variable in electron_available and muon_variable in muon_available:
+                        variable_pairs.append((output_variable, electron_variable, muon_variable))
+                short = "dycr"
+            else:
+                available = (
+                    (payload.get("lowdm_variable_histograms") or {}).get(scheme) or {}
+                )
+                variables = lowdm_region_variables.get(base_region) or sorted(available)
+                variable_pairs = [(variable, variable, variable) for variable in variables]
+                short = scheme.replace("_lowDeltaM", "").split("_", 1)[1].lower()
+            kind = "sr" if is_sr else "cr"
+            for variable, electron_variable, muon_variable in variable_pairs:
+                if only_variable and variable != only_variable:
+                    continue
+                if variable in set(exclude_variables or []):
+                    continue
+                if base_region == "DYCR":
+                    raw = combine_histogram_containers(
+                        electron_available[electron_variable],
+                        muon_available[muon_variable],
+                    )
+                    rec = lowdm_variable_record(
+                        payload,
+                        scheme,
+                        electron_variable,
+                        label,
+                        allow_signal=False,
+                        raw_override=raw,
+                        spec_variable=electron_variable,
+                        display_variable=variable,
+                    )
+                else:
+                    raw = available.get(variable) or {}
+                    rec = lowdm_variable_record(
+                        payload, scheme, variable, label, allow_signal=is_sr
+                    )
+                if not rec:
+                    continue
+                rec["blind_data"] = is_sr
+                for source in PLOT_SYSTEMATIC_SOURCES:
+                    if any(
+                        (sample_record.get(source + "Up") is not None)
+                        or (sample_record.get(source + "Down") is not None)
+                        for sample, sample_record in raw.items()
+                        if sample != "data_obs" and not is_signal_sample(sample)
+                    ):
+                        available_sources.add(source)
+                plot = draw_flat_blocks(
+                    [rec],
+                    output_dir / f"lowdm_{kind}_{short}_{variable}",
+                    xlabel=rec.get("xlabel", variable),
+                    show_yields=True,
+                )
+                plot["variable"] = variable
+                plot["region"] = base_region
+                plots.append(plot)
+        if not plots:
+            raise RuntimeError("no Low-dM variable histograms matched the request")
+        summary = {
+            "status": "complete",
+            "source": str(flat_hists),
+            "output_dir": str(output_dir),
+            "lowdm_variable_hists_only": True,
+            "plots": plots,
+            "plot_count": len(plots),
+            "lowdm_resolved_top_veto": {
+                "applied": lowdm_nres_zero,
+                "requirement": "Nres=0" if lowdm_nres_zero else None,
+            },
+            "selection_policy": payload.get("lowdm_region_policy"),
+            "excluded_variables": sorted(set(exclude_variables or [])),
+            "luminosity_fb": LUMINOSITY_FB,
+            "luminosity_relative_uncertainty": LUMINOSITY_RELATIVE_UNCERTAINTY,
+            "available_background_systematic_sources": sorted(available_sources),
+            "missing_background_systematic_sources": sorted(
+                set(PLOT_SYSTEMATIC_SOURCES) - available_sources
+            ),
+            "dy_rz_application": dy_rz_application,
+            "dy_channel_combination": {
+                "status": "complete",
+                "region": "DYCR",
+                "channels": ["DY2E", "DY2M"],
+                "variable_aliases": {
+                    "recoil_dy": ["recoil_dy2e", "recoil_dy2m"],
+                    "mll": ["mee", "mmm"],
+                },
+                "policy": "sum nominal, sumw2, and correlated systematic variations before uncertainty construction",
+            },
+        }
+        (output_dir / "flat_plot_summary.json").write_text(
+            json.dumps(summary, indent=2, sort_keys=True) + "\n"
+        )
+        return summary
+    if only_region == "DYCR":
+        histograms = payload.get("histograms") or {}
+        inclusive_raw = combine_histogram_containers(
+            histograms.get("DY2E") or {},
+            histograms.get("DY2M") or {},
+        )
+        inclusive = flat_hist_record(
+            payload, "DYCR", allow_signal=False, raw_override=inclusive_raw
+        )
+        if inclusive:
+            plots.append(
+                draw_flat_blocks(
+                    [inclusive],
+                    output_dir / "highdm_cr_dycr_recoil",
+                    xlabel=r"$U_{T}$ (GeV)",
+                )
+            )
+            plots[-1].update({"kind": "CR", "region": "DYCR", "variable": "recoil"})
+        split_blocks = []
+        for suffix in ("Nt0", "Nt1"):
+            split_raw = combine_histogram_containers(
+                histograms.get(f"DY2E_{suffix}") or {},
+                histograms.get(f"DY2M_{suffix}") or {},
+            )
+            record = flat_hist_record(
+                payload, f"DYCR_{suffix}", allow_signal=False, raw_override=split_raw
+            )
+            if record:
+                record["label"] = FLAT_REGION_LABELS.get(f"DY2E_{suffix}", suffix).replace(
+                    "DY2E", r"DYCR ($ee+\mu\mu$)"
+                )
+                split_blocks.append(record)
+        if split_blocks:
+            plots.append(
+                draw_flat_blocks(
+                    split_blocks,
+                    output_dir / "highdm_cr_dycr_recoil_ntop_split",
+                    xlabel=r"$U_{T}$ bin",
+                )
+            )
+            plots[-1].update({"kind": "CR", "region": "DYCR", "variable": "recoil"})
+        if not plots:
+            raise RuntimeError("no High-dM DY2E/DY2M recoil histograms were available")
+        summary = {
+            "status": "complete",
+            "source": str(flat_hists),
+            "output_dir": str(output_dir),
+            "plots": plots,
+            "plot_count": len(plots),
+            "luminosity_fb": LUMINOSITY_FB,
+            "luminosity_relative_uncertainty": LUMINOSITY_RELATIVE_UNCERTAINTY,
+            "background_systematic_sources": PLOT_SYSTEMATIC_SOURCES,
+            "dy_rz_application": dy_rz_application,
+            "dy_channel_combination": {
+                "status": "complete",
+                "region": "DYCR",
+                "channels": ["DY2E", "DY2M"],
+                "policy": "sum nominal, sumw2, and correlated systematic variations before uncertainty construction",
+            },
+        }
+        (output_dir / "flat_plot_summary.json").write_text(
+            json.dumps(summary, indent=2, sort_keys=True) + "\n"
+        )
+        return summary
     if gcr_only:
         highdm = flat_hist_record(payload, "GCR", allow_signal=False)
         if highdm:
@@ -2682,21 +3069,6 @@ def draw_flat_report(
             plots.append(draw_flat_blocks(split_blocks, output_dir / f"highdm_cr_{base.lower()}_recoil_ntop_split", xlabel=r"$U_{T}$ bin"))
     if cr_split:
         plots.append(draw_flat_blocks(cr_split, output_dir / "highdm_cr_recoil_ntop_split"))
-    for region, slug in [
-        ("HighDMVR_Nb1", "nb1"),
-        ("HighDMVR_Nb2", "nb2"),
-        ("HighDMVR_Nb3plus", "nb3plus"),
-    ]:
-        highdm_vr = flat_hist_record(payload, region, allow_signal=False)
-        if highdm_vr:
-            highdm_vr["annotation"] = highdm_vr["label"]
-            plots.append(
-                draw_flat_blocks(
-                    [highdm_vr],
-                    output_dir / f"highdm_vr_{slug}_met",
-                    xlabel=r"$p_{T}^{miss}$ (GeV)",
-                )
-            )
     sr_inc = flat_hist_record(payload, "SR", allow_signal=True)
     if sr_inc:
         sr_inc["blind_data"] = True
@@ -2824,10 +3196,19 @@ def main() -> int:
     parser.add_argument("--dy-rz-manifest", type=Path)
     parser.add_argument("--only-region")
     parser.add_argument("--only-variable")
+    parser.add_argument("--exclude-variables", nargs="+", default=[])
     parser.add_argument(
         "--gcr-only",
         action="store_true",
         help="Draw only GCR plots with the adopted unit-area shape comparison",
+    )
+    parser.add_argument(
+        "--lowdm-variable-hists-only",
+        action="store_true",
+        help=(
+            "Draw only Low-dM physical-variable histograms from a "
+            "distribution-only merged payload."
+        ),
     )
     parser.add_argument(
         "--selected-sr-search-bins-only",
@@ -2880,6 +3261,7 @@ def main() -> int:
             dy_rz_manifest=args.dy_rz_manifest,
             only_region=args.only_region,
             only_variable=args.only_variable,
+            exclude_variables=args.exclude_variables,
         ), sort_keys=True))
         return 0
 
@@ -2893,6 +3275,10 @@ def main() -> int:
             dy_rz_manifest=args.dy_rz_manifest,
             gcr_only=args.gcr_only,
             search_bin_config=args.search_bin_config,
+            lowdm_variable_hists_only=args.lowdm_variable_hists_only,
+            only_region=args.only_region,
+            only_variable=args.only_variable,
+            exclude_variables=args.exclude_variables,
         ), sort_keys=True))
         return 0
 

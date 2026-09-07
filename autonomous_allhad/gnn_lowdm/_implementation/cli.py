@@ -5,10 +5,10 @@ from __future__ import annotations
 import importlib
 import sys
 from collections.abc import Mapping
-from typing import TypeAlias
+from typing import Tuple, Union
 
 
-Command: TypeAlias = str | tuple[str, str]
+Command = Union[str, Tuple[str, str]]
 
 
 def dispatch(commands: Mapping[str, Command], description: str) -> int:
@@ -29,6 +29,10 @@ def dispatch(commands: Mapping[str, Command], description: str) -> int:
     target = commands[command]
     target = target[0] if isinstance(target, tuple) else target
     module_name, separator, function_name = target.partition(":")
+    canonical_prefix = "autonomous_allhad.gnn_lowdm."
+    if module_name.startswith(canonical_prefix):
+        package = __package__.rsplit("._implementation", 1)[0]
+        module_name = package + "." + module_name[len(canonical_prefix):]
     module = importlib.import_module(module_name)
     sys.argv = [f"{sys.argv[0]} {command}", *sys.argv[2:]]
     result = getattr(module, function_name if separator else "main")()

@@ -10,15 +10,16 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from .build_diagonal_v3_cr_nnout_partial import merge as merge_histograms
+    from .build_diagonal_v3_cr_nnout_partial import merge as merge_histograms, validate_score_ut
 except ImportError:
-    from build_diagonal_v3_cr_nnout_partial import merge as merge_histograms
+    from build_diagonal_v3_cr_nnout_partial import merge as merge_histograms, validate_score_ut
 
 
 PARTIAL_SCHEMAS = {
     "gnn_lowdm_diagonal_v3_cr_nnout_partial_v1",
     "gnn_lowdm_diagonal_v3_year_nnout_partial_v1",
     "gnn_lowdm_diagonal_v3_srcr_nnout_partial_v2",
+    "gnn_lowdm_diagonal_v3_srcr_nnout_partial_v3",
 }
 MERGED_SCHEMA = "gnn_lowdm_diagonal_v3_cr_nnout_merged_v1"
 YEAR_MERGED_SCHEMA = "gnn_lowdm_diagonal_v3_year_nnout_merged_v1"
@@ -175,6 +176,9 @@ def main() -> int:
                         summary["errors"].add(str(component_status["error"]))
         merge_histograms(histograms, payload.get("histograms", {}), 5)
 
+    if partial_schema == "gnn_lowdm_diagonal_v3_srcr_nnout_partial_v3":
+        validate_score_ut(histograms)
+
     serial_weight_component_audit = {
         component: {
             **{
@@ -193,7 +197,7 @@ def main() -> int:
     exact_manifest_match = True
     if args.manifest:
         manifest = json.loads(args.manifest.read_text())
-        if int(manifest.get("year", -1)) != int(year):
+        if manifest.get("year") is not None and int(manifest["year"]) != int(year):
             raise RuntimeError("manifest year does not match partial year")
         expected = {str(record["root"]) for record in manifest.get("shards", [])}
         missing_expected = sorted(expected - valid)

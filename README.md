@@ -1,14 +1,20 @@
 # Run-3 All-Hadronic Stop Analysis
 
-CMS Run-3 all-hadronic stop search code and 2024 analysis products. The
-repository uses the deterministic classic command surface:
+CMS Run-3 all-hadronic stop search, 2024+2025.
+
+Current analysis: High-dM 79−6 bins + Low-dM GNN 30 bins.
+
+- [High-dM canonical code](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/reports/highdm_canonical_dependencies.md>)
+- [Low-dM canonical dependencies](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/reports/lowdm_canonical_dependencies.md>)
+
+The remaining sections below document the **legacy classic workflow**, not
+the entrypoints for the current High-dM + GNN analysis:
 
 - `python -m automation.cli`: deterministic compilation, Coffea execution,
   HTCondor submission, reduction, plotting, templates, datacards, and expected
   limits around the classic analysis code.
 
-The current public 2024 results are at
-[resisov.github.io/run3_stop](https://resisov.github.io/run3_stop/nominal_plots_2024_fullselection_v5_dyexclusive_t2models_freebkg_20260728/).
+Analysis website: [resisov.github.io/run3_stop](https://resisov.github.io/run3_stop/).
 
 ## 1. Prerequisites
 

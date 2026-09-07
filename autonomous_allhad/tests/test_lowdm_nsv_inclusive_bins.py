@@ -128,8 +128,11 @@ def test_highdm_plot_applies_configured_merges_and_three_line_labels():
     assert rebinned["sumw"][16] == 2.0
     assert rebinned["sumw"][-5:] == [2.0] * 5
     blocks = PLOTS.selected_an17_recoil_blocks(payload, "highdm_search_bins")
-    assert len(blocks) == 15
-    assert sum(block["nbin"] for block in blocks) == 85
+    assert len(blocks) == 14
+    assert sum(block["nbin"] for block in blocks) == 79
+    assert blocks[0]["dropped_input_bins_1based"] == [1, 2, 3, 4, 5, 6]
+    assert all(block["main_ylabel"] == "Events" for block in blocks)
+    assert all(block["significance_mode"] == "s_over_sqrt_b" for block in blocks)
     assert all(block["label"].count("\n") == 2 for block in blocks)
     assert all(block["label_fontsize"] == 12.0 for block in blocks)
     assert all(block["figure_width"] == 22.0 for block in blocks)

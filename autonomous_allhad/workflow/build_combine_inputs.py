@@ -29,6 +29,7 @@ if str(PACKAGE_ROOT) not in sys.path:
 from autonomous_allhad.search_bin_categorization import (
     configured_bin_position_groups,
     configured_exclusive_mapping,
+    configured_projection_groups,
 )
 
 from background_process_groups import (
@@ -156,6 +157,12 @@ def enforce_downstream_input_boundary(args: argparse.Namespace) -> None:
         "exact_input": args.exact_input,
         "output_dir": args.output_dir,
     }
+    inspected.update(
+        {
+            f"signal_hists_{index}": path
+            for index, path in enumerate(args.signal_hists)
+        }
+    )
     for label, path in inspected.items():
         lowered = str(path).lower()
         if any(token in lowered for token in forbidden):
@@ -192,13 +199,12 @@ def apply_configured_highdm_bin_merges(
     configured_source_count = len(configured_exclusive_mapping(configuration))
     position_groups = configured_bin_position_groups(configuration)
     final_count = len(position_groups)
-    if input_count not in {configured_source_count, final_count}:
-        raise ValueError(
-            "High-dM configuration/source mismatch: "
-            f"expected {configured_source_count} source bins or "
-            f"{final_count} already-projected bins, but found "
-            f"{input_count} canonical labels"
-        )
+    input_configuration = high.get("input_configuration") or {}
+    projection_groups = configured_projection_groups(
+        configuration,
+        input_count,
+        input_configuration.get("bin_merges_1based"),
+    )
 
     def validate_leaf(leaf: dict[str, Any], expected: int) -> None:
         for field in ("entries", "sumw", "sumw2"):
@@ -224,7 +230,7 @@ def apply_configured_highdm_bin_merges(
         hists["search_bin_histograms"][HIGH_SCHEME],
         high["sr_components"],
     )
-    if input_count == final_count:
+    if all(group == (index,) for index, group in enumerate(projection_groups)):
         for tree in input_trees:
             validate_tree(tree, final_count)
         high["bin_projection"] = {
@@ -238,6 +244,9 @@ def apply_configured_highdm_bin_merges(
             "bin_merges_1based": list(
                 configuration.get("bin_merges_1based") or []
             ),
+            "input_bin_merges_1based": list(
+                input_configuration.get("bin_merges_1based") or []
+            ),
         }
         return high["bin_projection"]
 
@@ -247,14 +256,14 @@ def apply_configured_highdm_bin_merges(
             if field not in leaf:
                 continue
             values = leaf.get(field) or []
-            if len(values) != configured_source_count:
+            if len(values) != input_count:
                 raise ValueError(
                     f"High-dM {field} has {len(values)} bins; "
-                    f"expected {configured_source_count}"
+                    f"expected {input_count}"
                 )
             output[field] = [
-                sum(values[position] for position in positions)
-                for positions in position_groups
+                sum(values[input_bin] for input_bin in input_bins)
+                for input_bins in projection_groups
             ]
         return output
 
@@ -269,10 +278,10 @@ def apply_configured_highdm_bin_merges(
         hists["search_bin_histograms"][HIGH_SCHEME]
     )
     high["sr_components"] = rebin_tree(high["sr_components"])
-    high["source_search_bin_labels"] = raw_labels
+    high["input_search_bin_labels"] = raw_labels
     high["search_bin_labels"] = [
-        "__plus__".join(raw_labels[position] for position in positions)
-        for positions in position_groups
+        "__plus__".join(raw_labels[input_bin] for input_bin in input_bins)
+        for input_bins in projection_groups
     ]
     high["bin_projection"] = {
         "source_bin_count": configured_source_count,
@@ -280,9 +289,81 @@ def apply_configured_highdm_bin_merges(
         "final_bin_count": final_count,
         "already_projected": False,
         "position_groups_zero_based": [list(group) for group in position_groups],
+        "input_projection_groups_zero_based": [
+            list(group) for group in projection_groups
+        ],
         "bin_merges_1based": list(configuration.get("bin_merges_1based") or []),
+        "input_bin_merges_1based": list(
+            input_configuration.get("bin_merges_1based") or []
+        ),
     }
     return high["bin_projection"]
+
+
+def drop_highdm_leading_bins(
+    hists: dict[str, Any],
+    exact: dict[str, Any],
+    count: int,
+) -> dict[str, Any]:
+    """Remove the leading orthogonality category from the final High-dM axis."""
+    if count < 0:
+        raise ValueError("High-dM leading-bin drop must be nonnegative")
+    high = exact["highdm"]
+    labels = [str(value) for value in high["search_bin_labels"]]
+    if count == 0:
+        return high["bin_projection"]
+    if count >= len(labels):
+        raise ValueError(
+            f"cannot drop {count} leading High-dM bins from {len(labels)} bins"
+        )
+    expected_prefix = "NT0_Nb1plus_T0_W0_recoil_"
+    dropped_labels = labels[:count]
+    if count != 6 or not all(
+        label.startswith(expected_prefix) and "__Nres0" in label
+        for label in dropped_labels
+    ):
+        raise ValueError(
+            "High-dM leading-bin drop is allowed only for the six-bin "
+            "Nb>=1, Nt=0, Nw=0, Nres=0 category"
+        )
+
+    input_count = len(labels)
+
+    def slice_leaf(leaf: dict[str, Any]) -> dict[str, Any]:
+        output = dict(leaf)
+        for field in ("entries", "sumw", "sumw2"):
+            if field not in leaf:
+                continue
+            values = leaf.get(field) or []
+            if len(values) != input_count:
+                raise ValueError(
+                    f"High-dM {field} has {len(values)} bins; "
+                    f"expected {input_count} before the leading-bin drop"
+                )
+            output[field] = values[count:]
+        return output
+
+    def slice_tree(value: Any) -> Any:
+        if not isinstance(value, dict):
+            return value
+        if "sumw" in value:
+            return slice_leaf(value)
+        return {key: slice_tree(child) for key, child in value.items()}
+
+    hists["search_bin_histograms"][HIGH_SCHEME] = slice_tree(
+        hists["search_bin_histograms"][HIGH_SCHEME]
+    )
+    high["sr_components"] = slice_tree(high["sr_components"])
+    high["search_bin_labels"] = labels[count:]
+    projection = high["bin_projection"]
+    projection["configured_final_bin_count"] = int(
+        projection["final_bin_count"]
+    )
+    projection["final_bin_count"] = len(high["search_bin_labels"])
+    projection["dropped_final_bins_1based"] = list(range(1, count + 1))
+    projection["dropped_final_bin_labels"] = dropped_labels
+    projection["orthogonality_projection"] = "drop_leading_lowdm_overlap_category"
+    return projection
 
 
 def read_json(path: Path) -> Any:
@@ -684,7 +765,10 @@ def split_lowdm_group(
 
 
 def extract_current_histogram_input(
-    path: Path, topology: str
+    path: Path,
+    topology: str,
+    signal_paths: list[Path] | None = None,
+    include_lowdm: bool = True,
 ) -> tuple[dict[str, Any], dict[str, Any], list[str]]:
     """Materialize only bounded canonical sections needed by Combine.
 
@@ -694,12 +778,20 @@ def extract_current_histogram_input(
     schemes = extract_top_level_object(path, "search_bin_schemes")
     high_metadata = schemes[HIGH_SCHEME]
     high_labels = list(high_metadata.get("bin_labels") or [])
-    low_labels = list(schemes[LOW_SCHEME].get("bin_labels") or [])
-    if not high_labels or not low_labels:
+    low_labels = (
+        list(schemes[LOW_SCHEME].get("bin_labels") or [])
+        if include_lowdm
+        else []
+    )
+    if not high_labels or (include_lowdm and not low_labels):
         raise ValueError("canonical search-bin labels are missing")
 
     high_scheme = extract_search_scheme(path, HIGH_SCHEME, topology)
-    low_scheme = extract_search_scheme(path, LOW_SCHEME, topology)
+    low_scheme = (
+        extract_search_scheme(path, LOW_SCHEME, topology)
+        if include_lowdm
+        else {}
+    )
     signal_prefix = f"{topology}_"
     high_signals = {
         sample: variations
@@ -711,19 +803,77 @@ def extract_current_histogram_input(
         for sample, variations in low_scheme.items()
         if sample.startswith(signal_prefix)
     }
-    common_signals = sorted(set(high_signals) & set(low_signals))
+    projected_high_signals: dict[str, Any] = {}
+    projected_high_labels: list[str] | None = None
+    for signal_path in signal_paths or []:
+        signal_schemes = extract_top_level_object(
+            signal_path, "search_bin_schemes"
+        )
+        signal_high_labels = list(
+            signal_schemes[HIGH_SCHEME].get("bin_labels") or []
+        )
+        if include_lowdm and list(
+            signal_schemes[LOW_SCHEME].get("bin_labels") or []
+        ) != low_labels:
+            raise ValueError(
+                f"Low-dM signal-bin labels differ in {signal_path}"
+            )
+        signal_high = {
+            sample: variations
+            for sample, variations in extract_search_scheme(
+                signal_path, HIGH_SCHEME, topology
+            ).items()
+            if sample.startswith(signal_prefix)
+        }
+        if signal_high_labels == high_labels:
+            high_signals.update(signal_high)
+        else:
+            if (
+                projected_high_labels is not None
+                and signal_high_labels != projected_high_labels
+            ):
+                raise ValueError(
+                    "supplemental High-dM signal files use different "
+                    "projected bin labels"
+                )
+            projected_high_labels = signal_high_labels
+            projected_high_signals.update(signal_high)
+        if include_lowdm:
+            low_signals.update(
+                {
+                    sample: variations
+                    for sample, variations in extract_search_scheme(
+                        signal_path, LOW_SCHEME, topology
+                    ).items()
+                    if sample.startswith(signal_prefix)
+                }
+            )
+    available_high_signals = set(high_signals) | set(projected_high_signals)
+    common_signals = sorted(
+        available_high_signals & set(low_signals)
+        if include_lowdm
+        else available_high_signals
+    )
     if not common_signals:
         raise ValueError(f"no {topology} signals in canonical histogram")
     hists = {
         "search_bin_histograms": {
             HIGH_SCHEME: {
-                sample: high_signals[sample] for sample in common_signals
+                sample: high_signals[sample]
+                for sample in common_signals
+                if sample in high_signals
             },
             LOW_SCHEME: {
                 sample: low_signals[sample] for sample in common_signals
+                if sample in low_signals
             },
         }
     }
+    if projected_high_signals:
+        hists["supplemental_projected_highdm_signals"] = {
+            "bin_labels": projected_high_labels,
+            "samples": projected_high_signals,
+        }
 
     control_components = extract_component_tree(
         path,
@@ -740,16 +890,16 @@ def extract_current_histogram_input(
         sample: variations
         for sample, variations in low_scheme.items()
         if sample == "data_obs" or not sample.startswith(("T2tt_", "T2bW_", "T2tb_"))
-    }
+    } if include_lowdm else {}
     low_components: dict[str, Any] = {}
-    for region, scheme in (
+    for region, scheme in ((
         ("LLCR", "cat2_LLCR_lowDeltaM"),
         ("QCDCR", "cat3_QCDCR_lowDeltaM"),
         ("GCR", "cat4_GCR_lowDeltaM"),
         ("DY2E", "cat5_DY2E_lowDeltaM"),
         ("DY2M", "cat6_DY2M_lowDeltaM"),
         ("SR", LOW_SCHEME),
-    ):
+    ) if include_lowdm else ()):
         region_tree = low_backgrounds if scheme == LOW_SCHEME else {
             sample: variations
             for sample, variations in extract_search_scheme(path, scheme).items()
@@ -772,6 +922,7 @@ def extract_current_histogram_input(
             "recoil": control_components,
             "sr_components": search_components,
             "search_bin_labels": high_labels,
+            "input_configuration": dict(high_metadata.get("configuration") or {}),
         },
         "lowdm": {
             "search_bin_labels": low_labels,
@@ -1421,12 +1572,65 @@ def add_extra(
         channel.setdefault("extra_lnN", {}).setdefault(process, []).extend(records)
 
 
+def finalize_channels(
+    channels: list[dict[str, Any]],
+    bin_map: dict[str, Any],
+) -> tuple[list[dict[str, Any]], list[str], dict[str, Any], list[str]]:
+    dropped_empty_control_channels: list[str] = []
+    retained_channels: list[dict[str, Any]] = []
+    for channel in channels:
+        if channel["backgrounds"] or channel["region"] == "SR":
+            retained_channels.append(channel)
+            continue
+        observation = float(channel.get("observation") or 0.0)
+        if observation != 0.0:
+            raise ValueError(
+                "control channel has data but no contributing process: "
+                f"{channel['name']} observation={observation}"
+            )
+        dropped_empty_control_channels.append(str(channel["name"]))
+    channels = retained_channels
+
+    scopes: dict[str, set[str]] = {}
+    for channel in channels:
+        scope = "sr" if channel["region"] == "SR" else "cr"
+        for parameter in channel["rate_params"].values():
+            scopes.setdefault(parameter, set()).add(scope)
+    invalid = sorted(
+        parameter for parameter, scope in scopes.items() if scope != {"cr", "sr"}
+    )
+    invalid_set = set(invalid)
+    for channel in channels:
+        channel["rate_params"] = {
+            process: parameter
+            for process, parameter in channel["rate_params"].items()
+            if parameter not in invalid_set
+        }
+        channel["rate_initial"] = {
+            process: value
+            for process, value in channel["rate_initial"].items()
+            if process in channel["rate_params"]
+        }
+    parameter_initials: dict[str, float] = {}
+    for channel in channels:
+        for process, parameter in channel["rate_params"].items():
+            initial = float(channel["rate_initial"][process])
+            previous = parameter_initials.setdefault(parameter, initial)
+            if not math.isclose(previous, initial, rel_tol=1.0e-12, abs_tol=1.0e-15):
+                raise ValueError(
+                    f"rate parameter {parameter} has inconsistent initial values: "
+                    f"{previous} versus {initial} in {channel['name']}/{process}"
+                )
+    return channels, invalid, bin_map, dropped_empty_control_channels
+
+
 def build_channels(
     exact: dict[str, Any],
     physical_exact: dict[str, Any],
     sgamma: dict[str, Any],
     rz_covariance: dict[str, Any],
     double_ratio: dict[str, Any],
+    include_lowdm: bool = True,
 ) -> tuple[list[dict[str, Any]], list[str], dict[str, Any], list[str]]:
     channels: list[dict[str, Any]] = []
     bin_map: dict[str, Any] = {"highdm": [], "lowdm": []}
@@ -1681,6 +1885,9 @@ def build_channels(
             }
         )
 
+    if not include_lowdm:
+        return finalize_channels(channels, bin_map)
+
     low = exact["lowdm"]
     physical_low = physical_exact["lowdm"]
     labels = low["search_bin_labels"]
@@ -1904,52 +2111,7 @@ def build_channels(
             }
         )
 
-    dropped_empty_control_channels: list[str] = []
-    retained_channels: list[dict[str, Any]] = []
-    for channel in channels:
-        if channel["backgrounds"] or channel["region"] == "SR":
-            retained_channels.append(channel)
-            continue
-        observation = float(channel.get("observation") or 0.0)
-        if observation != 0.0:
-            raise ValueError(
-                "control channel has data but no contributing process: "
-                f"{channel['name']} observation={observation}"
-            )
-        dropped_empty_control_channels.append(str(channel["name"]))
-    channels = retained_channels
-
-    scopes: dict[str, set[str]] = {}
-    for channel in channels:
-        scope = "sr" if channel["region"] == "SR" else "cr"
-        for parameter in channel["rate_params"].values():
-            scopes.setdefault(parameter, set()).add(scope)
-    invalid = sorted(
-        parameter for parameter, scope in scopes.items() if scope != {"cr", "sr"}
-    )
-    invalid_set = set(invalid)
-    for channel in channels:
-        channel["rate_params"] = {
-            process: parameter
-            for process, parameter in channel["rate_params"].items()
-            if parameter not in invalid_set
-        }
-        channel["rate_initial"] = {
-            process: value
-            for process, value in channel["rate_initial"].items()
-            if process in channel["rate_params"]
-        }
-    parameter_initials: dict[str, float] = {}
-    for channel in channels:
-        for process, parameter in channel["rate_params"].items():
-            initial = float(channel["rate_initial"][process])
-            previous = parameter_initials.setdefault(parameter, initial)
-            if not math.isclose(previous, initial, rel_tol=1.0e-12, abs_tol=1.0e-15):
-                raise ValueError(
-                    f"rate parameter {parameter} has inconsistent initial values: "
-                    f"{previous} versus {initial} in {channel['name']}/{process}"
-                )
-    return channels, invalid, bin_map, dropped_empty_control_channels
+    return finalize_channels(channels, bin_map)
 
 
 def overwrite_observations(
@@ -2540,6 +2702,17 @@ def main() -> int:
     global CAMPAIGN_YEAR, NPS_LUMI_NAME
     parser = argparse.ArgumentParser()
     parser.add_argument("--hists", type=Path, required=True)
+    parser.add_argument(
+        "--signal-hists",
+        type=Path,
+        action="append",
+        default=[],
+        help=(
+            "Canonical signal-only hists.json to overlay on --hists. "
+            "Matching topology/mass samples replace the older signal; "
+            "background and data always come from --hists."
+        ),
+    )
     parser.add_argument("--hists-sha256")
     parser.add_argument("--campaign-year", choices=("2024", "2025"), required=True)
     parser.add_argument("--topology", choices=("T2tt", "T2bW", "T2tb"), required=True)
@@ -2568,6 +2741,20 @@ def main() -> int:
     parser.add_argument("--auto-mc-stats", type=int, default=10)
     parser.add_argument("--runner-jobs", type=int, default=4)
     parser.add_argument("--point-timeout", type=int, default=1800)
+    parser.add_argument(
+        "--highdm-only",
+        action="store_true",
+        help="Build a High-dM-only likelihood and ignore all Low-dM histogram sections.",
+    )
+    parser.add_argument(
+        "--drop-highdm-leading-bins",
+        type=int,
+        default=0,
+        help=(
+            "After configured High-dM merging, remove the leading six-bin "
+            "Nb>=1, Nt=0, Nw=0, Nres=0 category used by Low-dM."
+        ),
+    )
     args = parser.parse_args()
 
     enforce_downstream_input_boundary(args)
@@ -2584,6 +2771,12 @@ def main() -> int:
         "exact_input": args.exact_input,
         "search_bin_config": args.search_bin_config,
     }
+    input_paths.update(
+        {
+            f"signal_hists_{index}": path
+            for index, path in enumerate(args.signal_hists)
+        }
+    )
     sgamma = read_json(args.sgamma)
     rz_high = read_json(args.rz_high)
     rz_low = read_json(args.rz_low)
@@ -2612,12 +2805,39 @@ def main() -> int:
     output_dir = args.output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
     hists, exact, extracted_signals = extract_current_histogram_input(
-        args.hists, args.topology
+        args.hists,
+        args.topology,
+        args.signal_hists,
+        include_lowdm=not args.highdm_only,
     )
     highdm_bin_projection = apply_configured_highdm_bin_merges(
         hists,
         exact,
         search_bin_configuration,
+    )
+    projected_high_signals = hists.pop(
+        "supplemental_projected_highdm_signals", None
+    )
+    if projected_high_signals:
+        projected_labels = list(
+            projected_high_signals.get("bin_labels") or []
+        )
+        if projected_labels != exact["highdm"]["search_bin_labels"]:
+            raise ValueError(
+                "supplemental High-dM signal labels do not match the "
+                "configured final bin projection"
+            )
+        hists["search_bin_histograms"][HIGH_SCHEME].update(
+            projected_high_signals["samples"]
+        )
+    if args.drop_highdm_leading_bins and not args.highdm_only:
+        raise SystemExit(
+            "--drop-highdm-leading-bins requires --highdm-only"
+        )
+    highdm_bin_projection = drop_highdm_leading_bins(
+        hists,
+        exact,
+        args.drop_highdm_leading_bins,
     )
     rz_covariance = build_rz_covariance(rz_high, rz_low)
     write_json(output_dir / "rz_covariance.json", rz_covariance)
@@ -2627,7 +2847,12 @@ def main() -> int:
         bin_map,
         dropped_empty_control_channels,
     ) = build_channels(
-        exact, physical_exact, sgamma, rz_covariance, double_ratio
+        exact,
+        physical_exact,
+        sgamma,
+        rz_covariance,
+        double_ratio,
+        include_lowdm=not args.highdm_only,
     )
     write_json(output_dir / "bin_map.json", bin_map)
     low_control_group_summary = [
@@ -2645,7 +2870,7 @@ def main() -> int:
             "last_bin_open_ended": not np.isfinite(record["recoil_high"]),
         }
         for record in low_control_groups()
-    ]
+    ] if not args.highdm_only else []
     masses = mass_points(
         hists,
         args.only,
@@ -2654,7 +2879,7 @@ def main() -> int:
     )
     if not masses:
         raise SystemExit("no signal mass points selected")
-    template_root = output_dir / "templates.root"
+    template_root = output_dir / f"highdm_{CAMPAIGN_YEAR}.root"
     card_dir = output_dir / "cards"
     limit_dir = output_dir / "limits"
     runner = output_dir / "run_limits.sh"
@@ -2708,7 +2933,7 @@ def main() -> int:
             "highdm_bins": len(exact["highdm"]["search_bin_labels"]),
             "highdm_source_bins": highdm_bin_projection["source_bin_count"],
             "highdm_bin_projection": highdm_bin_projection,
-            "lowdm_bins": 34,
+            "lowdm_bins": 0 if args.highdm_only else 34,
             "lowdm_control_recoil_edges_gev": LOW_CONTROL_EDGES.tolist(),
             "lowdm_control_groups": low_control_group_summary,
             "signal_topology": args.topology,

@@ -1781,8 +1781,8 @@ def extract_chunk(
     m1pt = first_or(-99, m_pt[m_med]); m2pt = nth_or(-99, m_pt[m_med], 1); m1eta = first_or(0, m_eta[m_med]); m2eta = nth_or(0, m_eta[m_med], 1); m1phi = first_or(0, m_phi[m_med]); m2phi = nth_or(0, m_phi[m_med], 1); m1m = first_or(0, m_mass[m_med]); m2m = nth_or(0, m_mass[m_med], 1); m1q = first_or(0, m_charge[m_med]); m2q = nth_or(0, m_charge[m_med], 1)
     mmm = invariant_mass(m1pt, m1eta, m1phi, m1m, m2pt, m2eta, m2phi, m2m); pmm = np.sqrt(np.maximum(0, m1pt**2 + m2pt**2 + 2*m1pt*m2pt*np.cos(m1phi-m2phi)))
     if dy_mass_window == "on_z":
-        dy2e_mass_mask = (mee > 81) & (mee < 101)
-        dy2m_mass_mask = (mmm > 81) & (mmm < 101)
+        dy2e_mass_mask = (mee > 71) & (mee < 111)
+        dy2m_mass_mask = (mmm > 71) & (mmm < 111)
     elif dy_mass_window == "measurement":
         dy2e_mass_mask = mee > 50
         dy2m_mass_mask = mmm > 50
@@ -1891,23 +1891,6 @@ def extract_chunk(
         "DY2M": base_common & mu_hlt & zero_tau & (jet_muon_recoil["njet"] >= 5) & (jet_muon_recoil["nb"] >= 1) & zero_e & (n_m_med == 2) & (m1pt > 50) & (m2pt > 20) & (pmm > 200) & (m1q != m2q) & (recoil_dy2m > 250) & dy2m_mass_mask & jet_muon_recoil["open_high"] & (jet_muon_recoil["ht"] > 300),
         "SR": base_common & sig_hlt & no_veto_leptons & zero_tau & (njet >= 5) & (nb >= 1) & met_250 & jet_nominal["open_high"] & ht_300,
     }
-    # Additive materialization mask for the fake-photon measurement.  This is
-    # exactly the trusted high-dM GCR selection before the recoil-delta-phi
-    # requirement, so it contains the nominal GCR and an orthogonal adjacent
-    # delta-phi validation region without changing any nominal region mask.
-    gcr_fake_validation = (
-        base_common
-        & pho_hlt
-        & (n_p_med == 1)
-        & no_veto_leptons
-        & zero_tau
-        & (jet_photon_recoil["njet"] >= 5)
-        & (jet_photon_recoil["nb"] >= 1)
-        & (met_pt < 250)
-        & (recoil_g > 250)
-        & ht_photon_300
-    )
-
     sv_required = ["SV_pt", "SV_eta", "SV_phi", "SV_dxy", "SV_dlenSig", "SV_pAngle", "SV_ntracks"]
     sv_available = all(has_field(arrays, name) for name in sv_required)
     if sv_available:
@@ -2223,7 +2206,6 @@ def extract_chunk(
         "feature_flat_preselection": flat_preselection,
         "feature_lowdm_preselection": feature_lowdm_preselection,
         "feature_lowdm_sr_base": feature_lowdm_sr_base,
-        "feature_GCR_fake_validation": gcr_fake_validation,
         "feature_met_trigger_genuine_measurement": met_trigger_genuine_measurement,
         "feature_met_trigger_qcd_measurement": met_trigger_qcd_measurement,
         "feature_photon_trigger_measurement": photon_trigger_measurement,
@@ -2335,7 +2317,6 @@ def extract_chunk(
             "feature_flat_preselection": bool(flat_preselection[i]),
             "feature_lowdm_preselection": bool(feature_lowdm_preselection[i]),
             "feature_lowdm_sr_base": bool(feature_lowdm_sr_base[i]),
-            "feature_GCR_fake_validation": bool(gcr_fake_validation[i]),
             "feature_met_trigger_genuine_measurement": bool(met_trigger_genuine_measurement[i]),
             "feature_met_trigger_qcd_measurement": bool(met_trigger_qcd_measurement[i]),
             "feature_photon_trigger_measurement": bool(photon_trigger_measurement[i]),

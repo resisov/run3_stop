@@ -791,7 +791,6 @@ def main(argv: list[str] | None = None) -> int:
         "highdm_distribution_variable_specs": builder.HIGHDM_DISTRIBUTION_VARIABLE_SPECS,
         "highdm_distribution_regions": {
             "control": builder.HIGHDM_CR_REGIONS,
-            "validation": builder.HIGHDM_VR_REGIONS,
             "signal_categories": builder.HIGHDM_SR_CATEGORY_KEYS,
         },
         "lowdm_variable_specs": builder.LOWDM_VARIABLE_SPECS,

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import time
@@ -27,9 +28,13 @@ except ImportError:  # EOS worker payload execution.
     from rank005_numpy import Rank005Numpy  # type: ignore[no-redef]
 
 
-SCHEMA = "gnn_lowdm_diagonal_v3_srcr_nnout_partial_v2"
+SCHEMA = "gnn_lowdm_diagonal_v3_srcr_nnout_partial_v3"
 CR_REGIONS = ("LLCR", "QCDCR", "GCR", "DY2E", "DY2M")
-ALL_REGIONS = CR_REGIONS
+ALL_REGIONS = ("SR", *CR_REGIONS)
+SR_CATEGORIES = (
+    "Nb1_NISR0", "Nb1_NISR1", "Nb1_NISR2plus",
+    "Nb2plus_NISR0", "Nb2plus_NISR1", "Nb2plus_NISR2plus",
+)
 TEST_FRACTION = 0.70
 EXTRA_BRANCHES = (
     "jet_corrected_mass",
@@ -45,11 +50,48 @@ EXTRA_BRANCHES = (
 PHYSICS_VARIABLES = ("recoil", "njet", "nb", "ht")
 
 
+def category_masks(block: base.RegionBlock, region: str) -> dict[str, np.ndarray]:
+    if region != "SR":
+        return base.category_masks(block)
+    return {
+        "Nb1_NISR0": (block.nb == 1) & (block.nisr == 0),
+        "Nb1_NISR1": (block.nb == 1) & (block.nisr == 1),
+        "Nb1_NISR2plus": (block.nb == 1) & (block.nisr >= 2),
+        "Nb2plus_NISR0": (block.nb >= 2) & (block.nisr == 0),
+        "Nb2plus_NISR1": (block.nb >= 2) & (block.nisr == 1),
+        "Nb2plus_NISR2plus": (block.nb >= 2) & (block.nisr >= 2),
+    }
+
+
+def sr_score_edges(configuration: dict[str, Any]) -> dict[str, np.ndarray]:
+    definition = configuration["sr_binning"]
+    if definition["category_labels"] != list(SR_CATEGORIES) or definition["total_bins"] != 30:
+        raise RuntimeError("SR configuration is not the adopted GNN30")
+    output = {
+        label: np.asarray(definition["edges_by_category"][label], dtype=float)
+        for label in SR_CATEGORIES
+    }
+    for label, edges in output.items():
+        if (len(edges) != 6 or edges[0] != 0.0 or edges[-1] != 1.0
+                or not np.all(np.isfinite(edges)) or not np.all(np.diff(edges) > 0)):
+            raise RuntimeError(label + ": invalid frozen five-bin score edges")
+    return output
+
+
 def write_json(path: Path, payload: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_name(path.name + ".tmp.%d" % os.getpid())
     temporary.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
     os.replace(temporary, path)
+
+
+def campaign_year(manifest: dict[str, Any], audits: list[dict[str, Any]]) -> int:
+    years = {int(item["trota_provenance"]["application_year"]) for item in audits}
+    if manifest.get("year") is not None:
+        years.add(int(manifest["year"]))
+    if len(years) != 1 or not years <= {2024, 2025}:
+        raise RuntimeError("missing or inconsistent campaign year: " + str(sorted(years)))
+    return years.pop()
 
 
 def counter(nbin: int) -> dict[str, list[float]]:
@@ -122,6 +164,53 @@ def fill_physics_variable(
     )
 
 
+def fill_score_ut(
+    payload: dict[str, Any], variation: str, region: str, category: str,
+    sample: str, score: np.ndarray, recoil: np.ndarray, weight: np.ndarray,
+    selected: np.ndarray, score_edges: np.ndarray, ut_edges: np.ndarray,
+) -> None:
+    values = np.asarray(recoil[selected], dtype=float)
+    selected_scores = np.asarray(score[selected], dtype=float)
+    selected_weights = np.asarray(weight[selected], dtype=float)
+    if (not np.all(np.isfinite(values)) or not np.all(np.isfinite(selected_scores))
+            or not np.all(np.isfinite(selected_weights))):
+        raise RuntimeError("non-finite GNN-score x U_T input")
+    if np.any(values < ut_edges[0]):
+        raise RuntimeError("selected event is below the U_T histogram domain")
+    shape = (len(score_edges) - 1, len(ut_edges) - 1)
+    target = (payload.setdefault(variation, {}).setdefault(region, {})
+              .setdefault(category, {}).setdefault(sample, {})
+              .setdefault("gnn_score_ut", {
+                  name: np.zeros(shape).tolist() for name in ("sumw", "sumw2", "entries")
+              }))
+    selected_scores = np.clip(selected_scores, score_edges[0] + 1.0e-8,
+                              score_edges[-1] - 1.0e-8)
+    values = np.minimum(values, np.nextafter(ut_edges[-1], -np.inf))
+    for name, weights in (("sumw", selected_weights),
+                          ("sumw2", np.square(selected_weights)), ("entries", None)):
+        counts = np.histogram2d(selected_scores, values, (score_edges, ut_edges),
+                                weights=weights)[0]
+        target[name] = (np.asarray(target[name]) + counts).tolist()
+
+
+def validate_score_ut(payload: dict[str, Any]) -> None:
+    for by_region in payload.values():
+        for by_category in by_region.values():
+            for by_sample in by_category.values():
+                for record in by_sample.values():
+                    joint = record.get("gnn_score_ut")
+                    if joint is None:
+                        raise RuntimeError("GNN-score x U_T histogram is missing")
+                    for field in ("sumw", "sumw2", "entries"):
+                        values = np.asarray(joint[field], dtype=float)
+                        score = np.asarray(record["gnn_score"][field], dtype=float)
+                        if (values.ndim != 2 or values.shape[0] != len(score)
+                                or not np.all(np.isfinite(values))
+                                or not np.allclose(values.sum(axis=1), score,
+                                                   rtol=1e-10, atol=1e-8)):
+                            raise RuntimeError("GNN-score x U_T projection differs from GNN template")
+
+
 def diagonal_region_masks(
     blocks: dict[str, base.RegionBlock], nres: np.ndarray
 ) -> dict[str, np.ndarray]:
@@ -156,13 +245,19 @@ def process_source(
     edges: np.ndarray,
     regions: tuple[str, ...],
     sr_test_only: bool,
+    sr_edges: dict[str, np.ndarray] | None = None,
+    raw_dy: bool = False,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
+    if "SR" in regions and sr_edges is None:
+        raise RuntimeError("SR evaluation requires the frozen GNN30 configuration")
     root_path = str(record["root"])
     sidecar_path = str(record["sidecar"])
     sidecar = json.loads(Path(sidecar_path).read_text())
     trota_provenance = base.validate_trota_provenance(sidecar)
     with uproot.open(root_path) as root_file:
-        from build_flat_boosted_recoil_hists import WEIGHT_BRANCHES
+        from build_flat_boosted_recoil_hists import WEIGHT_BRANCHES, BACKGROUND_ESTIMATION_UT_BINS
+
+        ut_edges = np.asarray(BACKGROUND_ESTIMATION_UT_BINS, dtype=float)
 
         tree = root_file["Events"]
         read_branches = tuple(
@@ -300,10 +395,11 @@ def process_source(
                 if np.any(~np.isfinite(local_score[local_region])):
                     raise RuntimeError(region + ": selected events have no score")
                 physics_values = base.histogram_values(local_block)
-                for category, category_mask in base.category_masks(local_block).items():
+                for category, category_mask in category_masks(local_block, region).items():
                     selected_category = local_region & category_mask
                     if not np.any(selected_category):
                         continue
+                    local_edges = sr_edges[category] if region == "SR" else edges
                     for variation, weights in weight_variations.items():
                         template_weights = (
                             weights / TEST_FRACTION
@@ -319,8 +415,11 @@ def process_source(
                             local_score,
                             template_weights,
                             selected_category,
-                            edges,
+                            local_edges,
                         )
+                        fill_score_ut(histograms, variation, region, category, sample,
+                                      local_score, local_block.recoil, template_weights,
+                                      selected_category, local_edges, ut_edges)
                         for variable in PHYSICS_VARIABLES:
                             fill_physics_variable(
                                 histograms,
@@ -333,7 +432,7 @@ def process_source(
                                 template_weights,
                                 selected_category,
                             )
-                    if region in base.RZ_FACTORS and sample == "DY":
+                    if not raw_dy and region in base.RZ_FACTORS and sample == "DY":
                         nb_key = "Nb1" if category.startswith("Nb1_") else "Nb2plus"
                         for variation, weights in weight_variations.items():
                             rz_variation = f"{variation}_rz"
@@ -347,8 +446,11 @@ def process_source(
                                 local_score,
                                 rz_weights,
                                 selected_category,
-                                edges,
+                                local_edges,
                             )
+                            fill_score_ut(histograms, rz_variation, region, category,
+                                          sample, local_score, local_block.recoil,
+                                          rz_weights, selected_category, local_edges, ut_edges)
                             for variable in PHYSICS_VARIABLES:
                                 fill_physics_variable(
                                     histograms,
@@ -361,6 +463,7 @@ def process_source(
                                     rz_weights,
                                     selected_category,
                                 )
+    validate_score_ut(histograms)
     return histograms, audit
 
 
@@ -378,9 +481,14 @@ def merge(target: dict[str, Any], source: dict[str, Any], nbin: int) -> None:
                             .setdefault(region, {})
                             .setdefault(category, {})
                             .setdefault(sample, {})
-                            .setdefault(variable, counter(variable_nbin))
+                            .setdefault(variable, {
+                                name: np.zeros_like(np.asarray(incoming[name], dtype=float)).tolist()
+                                for name in ("sumw", "sumw2", "entries")
+                            })
                         )
                         for name in ("sumw", "sumw2", "entries"):
+                            if np.shape(current[name]) != np.shape(incoming[name]):
+                                raise RuntimeError("inconsistent histogram shape: " + variable)
                             current[name] = (
                                 np.asarray(current[name], dtype=float)
                                 + np.asarray(incoming[name], dtype=float)
@@ -393,6 +501,10 @@ def main() -> int:
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--model", required=True, type=Path)
     parser.add_argument("--selection", required=True, type=Path)
+    parser.add_argument("--configuration", type=Path,
+                        help="Frozen config.json; required when evaluating SR.")
+    parser.add_argument("--raw-dy", action="store_true",
+                        help="Do not write legacy RZ-scaled DY plotting variations.")
     parser.add_argument(
         "--regions",
         nargs="+",
@@ -403,10 +515,25 @@ def main() -> int:
     regions = tuple(dict.fromkeys(opts.regions))
     request = json.loads(opts.request.read_text())
     selection = json.loads(opts.selection.read_text())
-    edges = np.asarray(selection["score_edges"], dtype=np.float64)
+    configuration = json.loads(opts.configuration.read_text()) if opts.configuration else None
+    edge_values = selection.get("score_edges")
+    if edge_values is None and configuration is not None:
+        edge_values = configuration["cr_binning"]["score_edges"]
+    if edge_values is None:
+        parser.error("score edges require --configuration or selection.score_edges")
+    edges = np.asarray(edge_values, dtype=np.float64)
     if len(edges) != 6 or not np.all(np.diff(edges) > 0.0):
         raise RuntimeError("frozen diagonal-v3 score edges are invalid")
+    sr_edges = None
+    if configuration is not None:
+        sr_edges = sr_score_edges(configuration)
+        if configuration["cr_binning"]["score_edges"] != edges.tolist():
+            raise RuntimeError("selection/CR configuration edges differ")
+    if "SR" in regions and sr_edges is None:
+        parser.error("--regions SR requires --configuration")
     manifest = json.loads(Path(request["manifest"]).read_text())
+    from build_flat_boosted_recoil_hists import BACKGROUND_ESTIMATION_UT_BINS
+
     xsec_payload = json.loads(Path(request["stop_xsec"]).read_text())
     signal_norm = base.signal_normalization_map(manifest)
     stop_xsec = base.stop_xsec_map(xsec_payload)
@@ -431,6 +558,8 @@ def main() -> int:
                 edges,
                 regions,
                 False,
+                sr_edges,
+                opts.raw_dy,
             )
             merge(histograms, local, len(edges) - 1)
             audits.append(audit)
@@ -448,7 +577,7 @@ def main() -> int:
     payload = {
         "schema_version": SCHEMA,
         "status": "complete" if not bad else "complete_with_bad_files",
-        "year": int(manifest["year"]),
+        "year": campaign_year(manifest, audits),
         "kind": request["kind"],
         "batch": int(request["batch"]),
         "selection_contract": {
@@ -461,16 +590,25 @@ def main() -> int:
                 "NISR==1",
                 "!feature_SR",
             ],
-            "categories": list(base.CATEGORIES),
+            "categories": {"SR": list(SR_CATEGORIES), "CR": list(base.CATEGORIES)}
+                          if "SR" in regions else list(base.CATEGORIES),
             "data_streams": base.DATA_STREAM,
-            "rz": base.RZ_FACTORS,
+            "rz": {} if opts.raw_dy else base.RZ_FACTORS,
+            "dy_mass_window_gev": [71.0, 111.0],
+            "sr_data": "blinded",
         },
         "regions": list(regions),
-        "partition": "all control-region events",
-        "score_edges": edges.tolist(),
+        "partition": "all selected events; SR data blinded",
+        "score_edges": {"CR": edges.tolist(),
+                        "SR": {key: value.tolist() for key, value in sr_edges.items()}}
+                       if "SR" in regions else edges.tolist(),
         "checkpoint": {
             "trial": selection["best_trial"],
             "epoch": int(selection["best_epoch"]),
+            "model_sha256": hashlib.sha256(opts.model.read_bytes()).hexdigest(),
+            "selection_sha256": hashlib.sha256(opts.selection.read_bytes()).hexdigest(),
+            "configuration_sha256": hashlib.sha256(opts.configuration.read_bytes()).hexdigest()
+                                    if opts.configuration else None,
         },
         "input_files_requested": len(request["inputs"]),
         "input_files_valid": len(valid),
@@ -484,6 +622,14 @@ def main() -> int:
         "bad_files": bad,
         "runtime_seconds": time.time() - started,
     }
+    payload["histogram_specs"]["gnn_score_ut"] = {
+        "axes": ["gnn_score", "U_T"],
+        "score_edges": payload["score_edges"],
+        "ut_edges": list(BACKGROUND_ESTIMATION_UT_BINS),
+        "ut_last_bin_open_ended": True,
+        "process_separated": True,
+    }
+    validate_score_ut(histograms)
     write_json(opts.output, payload)
     print(
         json.dumps(

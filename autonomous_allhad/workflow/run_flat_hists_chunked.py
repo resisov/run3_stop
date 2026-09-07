@@ -858,7 +858,7 @@ def main() -> int:
     parser.add_argument("--step-size", type=int, default=50000)
     parser.add_argument("--python", default=sys.executable)
     parser.add_argument("--local-analysis-data", choices=["0", "1"], default="0")
-    parser.add_argument("--only-regions", nargs="+", choices=["GCR"])
+    parser.add_argument("--only-regions", nargs="+", choices=["GCR", "HighDMVR_Nb1", "HighDMVR_Nb2", "HighDMVR_Nb3plus"])
     parser.add_argument(
         "--only-variables",
         nargs="+",

@@ -88,7 +88,7 @@ def write_condor_limit_submission(
                 "#!/usr/bin/env bash",
                 "set -euo pipefail",
                 "MASS=$1",
-                "CARD=$2",
+                "CARD_NAME=$2",
                 "OUTDIR=$3",
                 f"POINT_TIMEOUT={int(point_timeout)}",
                 "WORKSPACE_TIMEOUT=900",
@@ -96,6 +96,8 @@ def write_condor_limit_submission(
                 "unset PYTHONPATH PYTHONHOME",
                 ': "${_CONDOR_SCRATCH_DIR:?Condor scratch directory is required}"',
                 'SCRATCH_BASE="$_CONDOR_SCRATCH_DIR"',
+                'CARD="$SCRATCH_BASE/$CARD_NAME"',
+                'test -s "$CARD"',
                 f'RUNTIME_ARCHIVE="$SCRATCH_BASE/{runtime_archive.name}"',
                 'export HOME="$SCRATCH_BASE/home"',
                 'export TMPDIR="$SCRATCH_BASE"',
@@ -150,13 +152,13 @@ def write_condor_limit_submission(
         f"""universe = vanilla
 executable = {stable_path(wrapper)}
 initialdir = {stable_output}
-arguments = $(mass) $(card) {stable_output}/limits
+arguments = $(mass) datacard_$(mass).txt {stable_output}/limits
 output = {stable_logs}/$(mass).out
 error = {stable_logs}/$(mass).err
 log = {stable_logs}/cluster.log
 should_transfer_files = YES
 when_to_transfer_output = ON_EXIT
-transfer_input_files = {stable_path(runtime_archive)}
+transfer_input_files = {stable_path(runtime_archive)}, $(card)
 transfer_output_files = ""
 use_x509userproxy = true
 x509userproxy = {stable_path(DEFAULT_X509_PROXY)}

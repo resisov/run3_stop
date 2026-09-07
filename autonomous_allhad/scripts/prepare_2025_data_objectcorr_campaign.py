@@ -401,7 +401,6 @@ case "@D@DEST" in
   *) echo "refusing non-EOS destination: @D@DEST" >&2; exit 64 ;;
 esac
 mkdir -p runtime_home runtime_tmp runtime_cache runtime_mplconfig runtime_xrd fragments
-export HOME="@D@WORKDIR/runtime_home"
 export TMPDIR="@D@WORKDIR/runtime_tmp"
 export TMP="@D@TMPDIR"
 export TEMP="@D@TMPDIR"

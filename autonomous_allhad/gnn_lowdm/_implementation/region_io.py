@@ -1525,7 +1525,7 @@ def selection_contract() -> dict[str, Any]:
             "retained in test histograms; overlapping High-dM first category is "
             "removed only in a later combined-category proposal"
         ),
-        "dy": "opposite-sign same-flavor, 81<mll<101 GeV, pTll>200 GeV",
+        "dy": "opposite-sign same-flavor, 71<mll<111 GeV, pTll>200 GeV",
         "data_streams": DATA_STREAM,
         "weights": (
             "compute_weight_bundle nominal correction product times physical-dataset "
@@ -1538,7 +1538,15 @@ def selection_contract() -> dict[str, Any]:
 def make_requests(opts: argparse.Namespace) -> int:
     manifest = json.loads(opts.manifest.read_text())
     if manifest.get("status") != "complete":
-        raise RuntimeError("full campaign manifest is not complete")
+        audit = manifest.get("audit") or {}
+        accepted_skips = (
+            getattr(opts, "allow_permanent_skips", False)
+            and manifest.get("status") == "complete_with_permanent_skips"
+            and bool(audit.get("source_bad_files"))
+            and not any(audit.get(key) for key in ("invalid", "missing_roots", "missing_sidecars"))
+        )
+        if not accepted_skips:
+            raise RuntimeError("full campaign manifest is not complete")
     opts.output.mkdir(parents=True, exist_ok=True)
     request_dir = opts.output / "requests"
     partial_dir = opts.output / "partials"
@@ -1575,8 +1583,9 @@ def make_requests(opts: argparse.Namespace) -> int:
     payload = {
         "schema_version": SCHEMA,
         "status": "requests_ready",
-        "selection_contract": selection_contract(),
         "manifest": str(opts.manifest),
+        "manifest_status": manifest["status"],
+        "source_bad_file_count": int((manifest.get("audit") or {}).get("source_bad_file_count", 0)),
         "stop_xsec": str(opts.stop_xsec),
         "repository": str(opts.repository),
         "output": str(opts.output),
@@ -1764,7 +1773,12 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--output", type=Path)
     result.add_argument("--input", type=Path)
     result.add_argument("--files-per-batch", type=int, default=5)
+    result.add_argument("--allow-permanent-skips", action="store_true")
     return result
+
+
+def prepare_histograms_main() -> int:
+    return make_requests(parser().parse_args(["--make-requests", *sys.argv[1:]]))
 
 
 def main() -> int:

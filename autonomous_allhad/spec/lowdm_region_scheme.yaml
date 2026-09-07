@@ -32,21 +32,21 @@ diagnostic_only:
   - mTb < 175 GeV pass/fail when Nb >= 1
 region_specific_requirements:
   GCR:
-    - exactly one medium photon with pT > 220 GeV
-    - explicit Photon_electronVeto
+    - exactly one medium photon with pT > 220 GeV and Photon_cutBased >= 2
+    - Photon_electronVeto == 1
     - intrinsic PuppiMET < 250 GeV
     - AK4 dR < 0.2 and AK8 dR < 0.4 photon cleaning
   DY2E:
     - exactly two opposite-sign medium electrons
     - leading/subleading pT > 40/20 GeV
     - pT(ee) > 200 GeV
-    - 81 < mee < 101 GeV
+    - 71 < mee < 111 GeV
     - AK4 dR < 0.2 and AK8 dR < 0.4 electron cleaning
   DY2M:
     - exactly two opposite-sign medium muons
     - leading/subleading pT > 50/20 GeV
     - pT(mumu) > 200 GeV
-    - 81 < mmumu < 101 GeV
+    - 71 < mmumu < 111 GeV
     - AK4 dR < 0.2 and AK8 dR < 0.4 muon cleaning
 known_limitation:
   resolved_top_veto: >-

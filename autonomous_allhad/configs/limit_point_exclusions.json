@@ -1,0 +1,13 @@
+{
+  "schema_version": "limit_point_exclusions_v1",
+  "exclusions": [
+    {
+      "model": "T2bW",
+      "mStop_GeV": 1300,
+      "mLSP_GeV": 300,
+      "status": "excluded_by_user_policy",
+      "reason": "User-identified isolated expected-limit fluctuation that creates a nonphysical closed contour loop.",
+      "requested_at": "2026-09-02"
+    }
+  ]
+}

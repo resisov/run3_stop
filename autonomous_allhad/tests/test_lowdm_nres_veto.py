@@ -3,6 +3,7 @@ from __future__ import annotations
 import numpy as np
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 WORKFLOW = Path(__file__).resolve().parents[1] / "workflow"
 if str(WORKFLOW) not in sys.path:
@@ -46,3 +47,53 @@ def test_focused_lowdm_sr_indices_apply_trota_veto() -> None:
     indices = hist.lowdm_nsv_inclusive_sr_indices(chunk, n)
     assert indices[0] >= 0
     assert indices[1] == -1
+
+
+def test_broad_lowdm_mask_uses_exact_topology_and_trota_contract() -> None:
+    block = SimpleNamespace(
+        core=np.asarray([True, True, True, True, True, False]),
+        nb=np.asarray([1, 0, 1, 1, 1, 2]),
+        nt=np.asarray([0, 0, 1, 0, 0, 0]),
+        nw=np.asarray([0, 0, 0, 1, 0, 0]),
+    )
+    chunk = {
+        hist.DERIVED_NRES_BRANCH: np.asarray([0, 0, 0, 0, 1, 0]),
+        # These retired requirements must not affect the broad selection.
+        "pass_lowdm_isr": np.zeros(6, dtype=bool),
+        "pass_lowdm_met_sqrt_ht": np.zeros(6, dtype=bool),
+        "pass_lowdm_topology_veto": np.zeros(6, dtype=bool),
+        "feature_lowdm_SR": np.zeros(6, dtype=bool),
+        "feature_SR": np.ones(6, dtype=bool),
+    }
+    assert hist.broad_lowdm_region_mask(block, chunk, 6).tolist() == [
+        True,
+        False,
+        False,
+        False,
+        False,
+        False,
+    ]
+
+
+def test_2025_known_unavailable_weight_components_are_exactly_scoped() -> None:
+    status = {
+        "components": {
+            "electron_hlt": {
+                "applied": False,
+                "error": "2025 electron HLT SF is not available in the payload",
+            },
+            "photon_csev": {
+                "applied": False,
+                "error": "requested correction has no published working-point content",
+            },
+            "muon_hlt": {"applied": False, "error": "unrelated failure"},
+        }
+    }
+    required = ["electron_hlt", "photon_csev", "muon_hlt"]
+    accepted = hist.accepted_known_unavailable_weight_components(
+        "2025", required, status
+    )
+    assert set(accepted) == {"electron_hlt", "photon_csev"}
+    assert hist.accepted_known_unavailable_weight_components(
+        "2024", required, status
+    ) == {}

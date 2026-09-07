@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 import mplhep as hep
 import numpy as np
 from matplotlib.lines import Line2D
-from matplotlib.ticker import ScalarFormatter
+from matplotlib.ticker import FormatStrFormatter, ScalarFormatter
 
 from workflow.export_tnp_id_correctionlib import electron_unity_policy_uncertainty
 
@@ -23,6 +23,7 @@ CMS_LABEL_FONT_SIZE = 17
 FIGURE_SIZE = (8.0, 8.0)
 COLORBAR_FIGURE_SIZE = (12.0, 10.0)
 PNG_DPI = 180
+HEATMAP_ANNOTATION_FONT_SIZE = 22
 DATA_STYLE = {
     "fmt": "o",
     "color": "black",
@@ -131,6 +132,93 @@ def _scale_factor_ylim(values: np.ndarray, uncertainties: np.ndarray) -> tuple[f
     span = max(upper - lower, 0.02)
     padding = 0.08 * span
     return lower - padding, upper + padding
+
+
+def plot_scale_factor_heatmap(
+    *,
+    pt_edges: np.ndarray,
+    eta_edges: np.ndarray,
+    scale_factors: np.ndarray,
+    uncertainties: np.ndarray,
+    object_pt_axis_label: str,
+    object_eta_axis_label: str,
+    year: str,
+    output: Path,
+) -> list[str]:
+    """Draw the canonical scale-factor heatmap with presentation-size values."""
+    pt_edges = np.asarray(pt_edges, dtype=float)
+    eta_edges = np.asarray(eta_edges, dtype=float)
+    scale_factors = np.asarray(scale_factors, dtype=float)
+    uncertainties = np.asarray(uncertainties, dtype=float)
+    expected_shape = (len(eta_edges) - 1, len(pt_edges) - 1)
+    if scale_factors.shape != expected_shape or uncertainties.shape != expected_shape:
+        raise ValueError(
+            "scale-factor heatmap shape mismatch: "
+            f"expected {expected_shape}, found "
+            f"{scale_factors.shape}/{uncertainties.shape}"
+        )
+
+    pt_centers = 0.5 * (pt_edges[:-1] + pt_edges[1:])
+    fig, ax = plt.subplots(figsize=COLORBAR_FIGURE_SIZE)
+    fig.subplots_adjust(left=0.13, right=0.88, bottom=0.13, top=0.88)
+    finite = scale_factors[np.isfinite(scale_factors)]
+    colorbar_ticks = None
+    colorbar_formatter = None
+    color_limits: dict[str, float] = {}
+    if finite.size and float(np.ptp(finite)) < 0.01:
+        # Near-unity muon scale factors otherwise inherit awkward extrema such
+        # as 0.99825.  Pad to human-readable 0.001 boundaries so the colorbar
+        # remains presentation-friendly without changing any cell value.
+        colorbar_step = 0.001
+        colorbar_min = np.floor(float(np.min(finite)) / colorbar_step) * colorbar_step
+        colorbar_max = np.ceil(float(np.max(finite)) / colorbar_step) * colorbar_step
+        if np.isclose(colorbar_min, colorbar_max):
+            colorbar_min -= colorbar_step
+            colorbar_max += colorbar_step
+        color_limits = {"vmin": colorbar_min, "vmax": colorbar_max}
+        colorbar_ticks = np.arange(
+            colorbar_min,
+            colorbar_max + 0.5 * colorbar_step,
+            colorbar_step,
+        )
+        colorbar_formatter = FormatStrFormatter("%.3f")
+    image = ax.pcolormesh(
+        pt_edges,
+        eta_edges,
+        scale_factors,
+        shading="flat",
+        cmap="viridis",
+        **color_limits,
+    )
+    median = float(np.nanmedian(finite)) if finite.size else 0.0
+    for eta_index in range(expected_shape[0]):
+        for pt_index in range(expected_shape[1]):
+            value = scale_factors[eta_index, pt_index]
+            if not np.isfinite(value):
+                continue
+            ax.text(
+                pt_centers[pt_index],
+                0.5 * (eta_edges[eta_index] + eta_edges[eta_index + 1]),
+                f"{value:.3f}\n$\\pm${uncertainties[eta_index, pt_index]:.3f}",
+                ha="center",
+                va="center",
+                color="white" if value < median else "black",
+                fontsize=HEATMAP_ANNOTATION_FONT_SIZE,
+                fontweight="bold",
+            )
+    colorbar = fig.colorbar(
+        image,
+        ax=ax,
+        label="Data/MC scale factor",
+        ticks=colorbar_ticks,
+    )
+    if colorbar_formatter is not None:
+        colorbar.ax.yaxis.set_major_formatter(colorbar_formatter)
+        colorbar.update_ticks()
+    ax.set_xlabel(object_pt_axis_label)
+    ax.set_ylabel(object_eta_axis_label)
+    _cms_label(ax, year)
+    return _save(fig, output)
 
 
 def _signal_bin_average(
@@ -605,29 +693,25 @@ def plot_tnp_result(
         )
     )
 
-    fig, ax = plt.subplots(figsize=COLORBAR_FIGURE_SIZE)
-    fig.subplots_adjust(left=0.13, right=0.88, bottom=0.13, top=0.88)
-    image = ax.pcolormesh(pt_edges, eta_edges, sf, shading="flat", cmap="viridis")
-    for eta_index in range(n_eta):
-        for pt_index in range(n_pt):
-            if not np.isfinite(sf[eta_index, pt_index]):
-                continue
-            ax.text(
-                pt_centers[pt_index],
-                0.5 * (eta_edges[eta_index] + eta_edges[eta_index + 1]),
-                f"{sf[eta_index, pt_index]:.3f}\n$\\pm${uncertainty[eta_index, pt_index]:.3f}",
-                ha="center",
-                va="center",
-                color="white" if sf[eta_index, pt_index] < np.nanmedian(sf) else "black",
-                fontsize=11,
-            )
-    fig.colorbar(image, ax=ax, label="Data/MC scale factor")
-    ax.set_xlabel(object_pt_axis_label)
-    ax.set_ylabel(object_eta_axis_label)
-    _cms_label(ax, year)
-    outputs += _save(fig, output_dir / "scale_factor_heatmap")
+    heatmap_sf = sf.copy()
+    heatmap_uncertainty = uncertainty.copy()
+    for flat_index in unity_policy_indices:
+        eta_index, pt_index = divmod(flat_index, n_pt)
+        heatmap_sf[eta_index, pt_index] = np.nan
+        heatmap_uncertainty[eta_index, pt_index] = np.nan
+    outputs += plot_scale_factor_heatmap(
+        pt_edges=pt_edges,
+        eta_edges=eta_edges,
+        scale_factors=heatmap_sf,
+        uncertainties=heatmap_uncertainty,
+        object_pt_axis_label=object_pt_axis_label,
+        object_eta_axis_label=object_eta_axis_label,
+        year=year,
+        output=output_dir / "scale_factor_heatmap",
+    )
     captions["scale_factor_heatmap"] = (
-        "Two-dimensional scale-factor map; each cell shows the central value and total uncertainty."
+        "Two-dimensional scale-factor map; each measured cell shows the central value and total uncertainty. "
+        "Cells outside the measured acceptance are left blank."
     )
 
     data_eff_all = np.asarray(
@@ -918,6 +1002,7 @@ def plot_tnp_result(
             "cms_label_fontsize": CMS_LABEL_FONT_SIZE,
             "standard_figure_inches": list(FIGURE_SIZE),
             "colorbar_figure_inches": list(COLORBAR_FIGURE_SIZE),
+            "heatmap_annotation_fontsize": HEATMAP_ANNOTATION_FONT_SIZE,
             "titles": False,
             "electron_endcap_unity_fallback": electron_endcap_unity_fallback,
         },

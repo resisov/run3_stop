@@ -1,0 +1,783 @@
+{
+  "schema_version": 1,
+  "status": "code_synced_payload_activation_pending",
+  "date": "2026-09-07",
+  "branch": "codex/package-lowpt-tnp",
+  "base_commit": "8e258f37",
+  "local_base": "/Users/taiwoomac/Documents/All Hadronic Stop Analysis",
+  "eos_base": "/eos/user/t/taiwoo/run3_stop/decaf",
+  "approved_correction_baseline": "local/Git Summer24Prompt25_V3",
+  "correction_approval": "User final correction: local and Git are correct.",
+  "active_campaign_payloads_preserved": true,
+  "monitor_interval_minutes": 30,
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "780d46a662868388fb8b8b4c85587d4bfd17f070c1a9f9b96951663799238c7a",
+      "eos_sha256": "780d46a662868388fb8b8b4c85587d4bfd17f070c1a9f9b96951663799238c7a"
+    },
+    {
+      "path": "README.md",
+      "sha256": "dc7d8609f8cdc1f9b0a266f93dabed1ba4c8bf58de2d60eec3ec90fa0ec3b568",
+      "eos_sha256": "dc7d8609f8cdc1f9b0a266f93dabed1ba4c8bf58de2d60eec3ec90fa0ec3b568"
+    },
+    {
+      "path": "analysis/data/corrections.coffea",
+      "sha256": "ec0e178d156194b4345d0fc53f84798e0163b7a8518272b591703dbb38ae3b4f",
+      "eos_sha256": "01fc943b55c38ed1e99eb73c64e8bcc143af87ec8025d14d7548509fc80053eb"
+    },
+    {
+      "path": "analysis/data/ids.coffea",
+      "sha256": "8bd966ab536ec7834dbf9a8a3935dc82df9f4bcd434002b6d4e88b0faea7d5be",
+      "eos_sha256": "8bd966ab536ec7834dbf9a8a3935dc82df9f4bcd434002b6d4e88b0faea7d5be"
+    },
+    {
+      "path": "analysis/data/lumiMask/Cert_Collisions2024_378981_386951_Golden.json",
+      "sha256": "dd913c624559eebeb991272ef26916b4990df047701e28ef8618ee663f91fd78",
+      "eos_sha256": "dd913c624559eebeb991272ef26916b4990df047701e28ef8618ee663f91fd78"
+    },
+    {
+      "path": "analysis/data/lumiMask/Cert_Collisions2025_391658_398903_Golden.json",
+      "sha256": "af6d00b38a6475883290f3ec9bb870799dc65650a8a27cb1c841b86222cdb624",
+      "eos_sha256": "af6d00b38a6475883290f3ec9bb870799dc65650a8a27cb1c841b86222cdb624"
+    },
+    {
+      "path": "analysis/utils/corrections.py",
+      "sha256": "c8ecd046246c68704fac78753fcc1f055e0264f3f5f015b5a05af138cef15ce0",
+      "eos_sha256": "6772b6556641f9d420ed75d3d45c7701b91801152e6a7722614e4d3ee75d3173"
+    },
+    {
+      "path": "analysis/utils/ids.py",
+      "sha256": "868e14682bec718599c106ff0f0db6c72b92a4fd1305564724c3555b28ee55fc",
+      "eos_sha256": "868e14682bec718599c106ff0f0db6c72b92a4fd1305564724c3555b28ee55fc"
+    },
+    {
+      "path": "autonomous_allhad/autonomous_allhad/analysis_scale_factors.py",
+      "sha256": "78b0e034c083fade6d1b225e37b12ecae94966297d2e33d5c5823531281aa0b8",
+      "eos_sha256": "78b0e034c083fade6d1b225e37b12ecae94966297d2e33d5c5823531281aa0b8"
+    },
+    {
+      "path": "autonomous_allhad/autonomous_allhad/dy_estimation/__init__.py",
+      "sha256": "7b128e3c0e602ad282b37e0e08274b0056b5a07c92b69d58e0befbd830420013",
+      "eos_sha256": "7b128e3c0e602ad282b37e0e08274b0056b5a07c92b69d58e0befbd830420013"
+    },
+    {
+      "path": "autonomous_allhad/autonomous_allhad/dy_estimation/__main__.py",
+      "sha256": "c8d74bb107db27f0fe61aa15ac276e179a384127009716d352fe86667e03ec10",
+      "eos_sha256": "c8d74bb107db27f0fe61aa15ac276e179a384127009716d352fe86667e03ec10"
+    },
+    {
+      "path": "autonomous_allhad/autonomous_allhad/dy_estimation/build_measurement.py",
+      "sha256": "05b4e1094e74ad19b88f7f669a18b33f5271a56b8883a6f735e272e9edb487aa",
+      "eos_sha256": "05b4e1094e74ad19b88f7f669a18b33f5271a56b8883a6f735e272e9edb487aa"
+    },
+    {
+      "path": "autonomous_allhad/autonomous_allhad/dy_estimation/model.py",
+      "sha256": "6cf75e103e08740e71a39c09c07ff01b751e1113987a212483499109459fa427",
+      "eos_sha256": "6cf75e103e08740e71a39c09c07ff01b751e1113987a212483499109459fa427"
+    },
+    {
+      "path": "autonomous_allhad/autonomous_allhad/dy_estimation/publish.py",
+      "sha256": "c2f512dd361075c2e88271bc96ae592dff5454eab76bdfc43b8975a6aaa82609",
+      "eos_sha256": "c2f512dd361075c2e88271bc96ae592dff5454eab76bdfc43b8975a6aaa82609"
+    },
+    {
+      "path": "autonomous_allhad/autonomous_allhad/dy_estimation/report.py",
+      "sha256": "bc16c19630ae445aa0f68c90825463034931def0474974e8d07873a5bd50e7c7",
+      "eos_sha256": "bc16c19630ae445aa0f68c90825463034931def0474974e8d07873a5bd50e7c7"
+    },
+    {
+      "path": "autonomous_allhad/autonomous_allhad/dy_ptll_policy.py",
+      "sha256": "9095f026760fa976404a5735dc3adcb515bb42d9043da91293dd706f5a9e9ee7",
+      "eos_sha256": "9095f026760fa976404a5735dc3adcb515bb42d9043da91293dd706f5a9e9ee7"
+    },
+    {
+      "path": "autonomous_allhad/autonomous_allhad/flat_ntuple_worker.py",
+      "sha256": "87f2c6c42ccc4521e94ed32c0424fc35759329297e746d2ccd43b6cb4feb6f35",
+      "eos_sha256": "87f2c6c42ccc4521e94ed32c0424fc35759329297e746d2ccd43b6cb4feb6f35"
+    },
+    {
+      "path": "autonomous_allhad/autonomous_allhad/highdm_resolved_categories.py",
+      "sha256": "10d46148be4589ebb525113433d6d8c63ffe7864d7f66dd043cb83674ee22ae1",
+      "eos_sha256": "10d46148be4589ebb525113433d6d8c63ffe7864d7f66dd043cb83674ee22ae1"
+    },
+    {
+      "path": "autonomous_allhad/autonomous_allhad/real_subset_worker.py",
+      "sha256": "af1339bfe895c01f98ddcd1d207a36fafd5fd68805e9a268b5db062bcb4a6085",
+      "eos_sha256": "af1339bfe895c01f98ddcd1d207a36fafd5fd68805e9a268b5db062bcb4a6085"
+    },
+    {
+      "path": "autonomous_allhad/autonomous_allhad/search_bin_categorization.py",
+      "sha256": "319cc061f56895ec26727e39bb6785047f1cdb135bcb4c50b7537f66af1b98ff",
+      "eos_sha256": "319cc061f56895ec26727e39bb6785047f1cdb135bcb4c50b7537f66af1b98ff"
+    },
+    {
+      "path": "autonomous_allhad/autonomous_allhad/shape_histogram_2024_worker.py",
+      "sha256": "764216c6f8a942da3f9dead0abb11b95b65686661f07a1bfdd9759cdacd4c6d5",
+      "eos_sha256": "764216c6f8a942da3f9dead0abb11b95b65686661f07a1bfdd9759cdacd4c6d5"
+    },
+    {
+      "path": "autonomous_allhad/autonomous_allhad/sidecar_store.py",
+      "sha256": "de4750a92635a1c256af59dbcaabbf340ae62c2ce175263e507dcad616279595",
+      "eos_sha256": "de4750a92635a1c256af59dbcaabbf340ae62c2ce175263e507dcad616279595"
+    },
+    {
+      "path": "autonomous_allhad/autonomous_allhad/signal_models.py",
+      "sha256": "ad15ac4b4eb19e4f3ea8cd9c9154beea40550cc4946851df53e27884657e0d09",
+      "eos_sha256": "ad15ac4b4eb19e4f3ea8cd9c9154beea40550cc4946851df53e27884657e0d09"
+    },
+    {
+      "path": "autonomous_allhad/autonomous_allhad/trota_resolved_2024.py",
+      "sha256": "828dfc4a8e446ce75a04a4c5939e3230e97e7c0f8bd63641ff4721fa304c9bee",
+      "eos_sha256": "828dfc4a8e446ce75a04a4c5939e3230e97e7c0f8bd63641ff4721fa304c9bee"
+    },
+    {
+      "path": "autonomous_allhad/autonomous_allhad/trota_resolved_2024_inplace.py",
+      "sha256": "a3f92d9987be391d18a408f111b2d4587e28eb6639264e10899e4aae03d2ef1d",
+      "eos_sha256": "a3f92d9987be391d18a408f111b2d4587e28eb6639264e10899e4aae03d2ef1d"
+    },
+    {
+      "path": "autonomous_allhad/cards/README.md",
+      "sha256": "88cbf90aeb47a61703cebcde1ff437c601c66fc903c292ddd9bafe6bce005135",
+      "eos_sha256": "88cbf90aeb47a61703cebcde1ff437c601c66fc903c292ddd9bafe6bce005135"
+    },
+    {
+      "path": "autonomous_allhad/configs/dy_rz_plotting_2024.json",
+      "sha256": "ff30527b14d71ee875459a3a45388be9092813e57ad7644f37aa2b0eab3de012",
+      "eos_sha256": "ff30527b14d71ee875459a3a45388be9092813e57ad7644f37aa2b0eab3de012"
+    },
+    {
+      "path": "autonomous_allhad/configs/dy_rz_plotting_2025.json",
+      "sha256": "ff57796a891391bb4f71a496d9a39c13e72f0dcb890f9765c0ef7d9605b4acaf",
+      "eos_sha256": "ff57796a891391bb4f71a496d9a39c13e72f0dcb890f9765c0ef7d9605b4acaf"
+    },
+    {
+      "path": "autonomous_allhad/configs/limit_point_exclusions.json",
+      "sha256": "a89d90535b3256366c7d2b7fdb938e8eca7b456ee27c250d100fa6b37c0d6148",
+      "eos_sha256": "a89d90535b3256366c7d2b7fdb938e8eca7b456ee27c250d100fa6b37c0d6148"
+    },
+    {
+      "path": "autonomous_allhad/configs/search_bins_2024.json",
+      "sha256": "d1a396538eaa994a54d85bb277d71a5d90473be9e1a86ee4f47ad625f2cee929",
+      "eos_sha256": "d1a396538eaa994a54d85bb277d71a5d90473be9e1a86ee4f47ad625f2cee929"
+    },
+    {
+      "path": "autonomous_allhad/configs/search_bins_2025.json",
+      "sha256": "b3b0c07ad698468d77031dbe2cc69d592dd9a27b7a04963b134d39cda5dd325e",
+      "eos_sha256": "b3b0c07ad698468d77031dbe2cc69d592dd9a27b7a04963b134d39cda5dd325e"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/__init__.py",
+      "sha256": "14479d385249cd4d2fed945ec4328ba86f6532029f50563523ba9bcf8b8d0a32",
+      "eos_sha256": "14479d385249cd4d2fed945ec4328ba86f6532029f50563523ba9bcf8b8d0a32"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/__init__.py",
+      "sha256": "8c8c1e384b950193ebfd94834a219618cc2872111955dca10cc9cfeecfcfa57a",
+      "eos_sha256": "8c8c1e384b950193ebfd94834a219618cc2872111955dca10cc9cfeecfcfa57a"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/analyze_diagonal_v3_global_shap.py",
+      "sha256": "3170a0aa16526f6c17d3ca31eab0b64f5cbec65b308c992a21fcee70c079f27a",
+      "eos_sha256": "3170a0aa16526f6c17d3ca31eab0b64f5cbec65b308c992a21fcee70c079f27a"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/build_diagonal_v3_cr_nnout_partial.py",
+      "sha256": "2526fc76213e11a3d4c88eeb194113921884a8a019bfbcc054e66690fd617c45",
+      "eos_sha256": "2526fc76213e11a3d4c88eeb194113921884a8a019bfbcc054e66690fd617c45"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/build_expanded_feature_cache.py",
+      "sha256": "4a11efbbd0dd10cfcc4743ff0089eb93e97d63d780e0172320c2f6e3a5b9a436",
+      "eos_sha256": "4a11efbbd0dd10cfcc4743ff0089eb93e97d63d780e0172320c2f6e3a5b9a436"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/build_full_campaign_manifest.py",
+      "sha256": "a7325b19b5c04b4687e26f0d23930000bb0afb5a4a75e8ab0d0aceb0e04de800",
+      "eos_sha256": "a7325b19b5c04b4687e26f0d23930000bb0afb5a4a75e8ab0d0aceb0e04de800"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/cli.py",
+      "sha256": "6bcbe06638ebf2143dda47529d03e2d2860c537b89eba4df8079e9fa3b927358",
+      "eos_sha256": "6bcbe06638ebf2143dda47529d03e2d2860c537b89eba4df8079e9fa3b927358"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/collect_plot_diagonal_v3_limits.py",
+      "sha256": "ec0730cd31354773f2cdbd679d15f09b25867d175f09ad4e9835cd3f35b200d5",
+      "eos_sha256": "ec0730cd31354773f2cdbd679d15f09b25867d175f09ad4e9835cd3f35b200d5"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/collect_plot_highdm79minus6_lowdm30.py",
+      "sha256": "5c8a18ebc3c4ff343c9b647d36a83704aa66c8f146f99151c378a9fc5cdb04bb",
+      "eos_sha256": "5c8a18ebc3c4ff343c9b647d36a83704aa66c8f146f99151c378a9fc5cdb04bb"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/compare_oof.py",
+      "sha256": "f807c44ec7903df02734efc5b3e9d6689ef4bec062b719807dd5f2b04863ffa0",
+      "eos_sha256": "f807c44ec7903df02734efc5b3e9d6689ef4bec062b719807dd5f2b04863ffa0"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/diagonal_v3_region_features.py",
+      "sha256": "93fb8ae4b7788ecfcf9c74f5b31939fcf87efbc9dc5b079a2b415e51ad271904",
+      "eos_sha256": "93fb8ae4b7788ecfcf9c74f5b31939fcf87efbc9dc5b079a2b415e51ad271904"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/evaluate_all_signal_template_partial.py",
+      "sha256": "b28f5558aa4b73e2dbc251e4b28a5a9407399de9d66c2cb7cc196ff0ce748841",
+      "eos_sha256": "b28f5558aa4b73e2dbc251e4b28a5a9407399de9d66c2cb7cc196ff0ce748841"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/evaluate_diagonal_v3_test.py",
+      "sha256": "fe6e4bcc8d242aa97fae9fe31066f3f50fbeaa26b042f0036b6745aecaca00a4",
+      "eos_sha256": "fe6e4bcc8d242aa97fae9fe31066f3f50fbeaa26b042f0036b6745aecaca00a4"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/finalize_diagonal_v3_cache.py",
+      "sha256": "90a24cf3c00ddc62f20ee2ca08add687c5b30e10684479f1708b785cab9d47a7",
+      "eos_sha256": "90a24cf3c00ddc62f20ee2ca08add687c5b30e10684479f1708b785cab9d47a7"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/merge_all_signal_templates.py",
+      "sha256": "194f076d3200285ee2b2e8f863a1059b1538a69119ed0090da7920e0efbf9b84",
+      "eos_sha256": "194f076d3200285ee2b2e8f863a1059b1538a69119ed0090da7920e0efbf9b84"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/merge_diagonal_v3_cr_nnout_partials.py",
+      "sha256": "fbed6cb5cbecd2748aa66b30f31bb2d41ae0e17adbdb70723f5997d26d80e019",
+      "eos_sha256": "fbed6cb5cbecd2748aa66b30f31bb2d41ae0e17adbdb70723f5997d26d80e019"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/physics_informed_v2.py",
+      "sha256": "123db98825a55905bb6c748d237ed098d25c5c3c4107cc1752b98c3389400d0a",
+      "eos_sha256": "123db98825a55905bb6c748d237ed098d25c5c3c4107cc1752b98c3389400d0a"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/plot_control_regions.py",
+      "sha256": "99251a1f9cbb5c770a474151785e9ad4da88b96cf4e5220814c55918c35eaab4",
+      "eos_sha256": "99251a1f9cbb5c770a474151785e9ad4da88b96cf4e5220814c55918c35eaab4"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/plot_diagonal_v3_model_schematic.py",
+      "sha256": "4ffe615f8aabbab1192c0d374d750369d4d8088a1770320711d18729d326774e",
+      "eos_sha256": "4ffe615f8aabbab1192c0d374d750369d4d8088a1770320711d18729d326774e"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/plot_full_gnn_results.py",
+      "sha256": "43965a4232b9ffcd0e6e5a3989d06220e0f4c55398090874583ee768b37c777a",
+      "eos_sha256": "43965a4232b9ffcd0e6e5a3989d06220e0f4c55398090874583ee768b37c777a"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/plot_hyperparameter_losses.py",
+      "sha256": "70413cd8600a442f6327cf45c0871edb0c0d2b3895e07e753ad2f2f4e276ef02",
+      "eos_sha256": "70413cd8600a442f6327cf45c0871edb0c0d2b3895e07e753ad2f2f4e276ef02"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/plot_lowdm_category_nn_out.py",
+      "sha256": "d316f6b8e9940a5aa25e03deb3a0724b6e50d9d6308d0db9153898ef898a9412",
+      "eos_sha256": "d316f6b8e9940a5aa25e03deb3a0724b6e50d9d6308d0db9153898ef898a9412"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/prepare_all_signal_template_condor.py",
+      "sha256": "2ba656eeab477ef864280f1df655d2a4204f0dcd179071ef955379efc398f7a8",
+      "eos_sha256": "2ba656eeab477ef864280f1df655d2a4204f0dcd179071ef955379efc398f7a8"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/prepare_diagonal_v3_cache_condor.py",
+      "sha256": "2b4d2ebb82bffcab14a31cc7dc1a12f2e09958ef757f9e08781145b3506b9dc4",
+      "eos_sha256": "2b4d2ebb82bffcab14a31cc7dc1a12f2e09958ef757f9e08781145b3506b9dc4"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/prepare_highdm79minus6_lowdm30_condor.py",
+      "sha256": "e9bd3a097a2d466f9db2d08b1500edce2609e14887da47d7b90b60a21b25a50c",
+      "eos_sha256": "e9bd3a097a2d466f9db2d08b1500edce2609e14887da47d7b90b60a21b25a50c"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/publish_lowdm_gnn_web.py",
+      "sha256": "d4e0c724a280604829ce81e834ba3996edfc1c42d0a8adf5ebfd1d17daffe287",
+      "eos_sha256": "d4e0c724a280604829ce81e834ba3996edfc1c42d0a8adf5ebfd1d17daffe287"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/rank005_numpy.py",
+      "sha256": "d4d8fa8aa9191c2bd412c7b06d05fa2f0e42b7454c61590e5e6dcc2eb2fab870",
+      "eos_sha256": "d4d8fa8aa9191c2bd412c7b06d05fa2f0e42b7454c61590e5e6dcc2eb2fab870"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/region_io.py",
+      "sha256": "1a07b0128d47fc8c7a135c6a834c962be54b937478fc06a2fbca7aaa4c282fc9",
+      "eos_sha256": "1a07b0128d47fc8c7a135c6a834c962be54b937478fc06a2fbca7aaa4c282fc9"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/run_highdm79minus6_lowdm30_bundle.sh",
+      "sha256": "6338467f81cb49afd368bca38db5327337e7694bdaa756f79bb766541acc37c8",
+      "eos_sha256": "6338467f81cb49afd368bca38db5327337e7694bdaa756f79bb766541acc37c8"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/significance.py",
+      "sha256": "8bf78637d8b000022fc930da7851c7285f4f4e28d6f6f80bd17b15c5b629f139",
+      "eos_sha256": "8bf78637d8b000022fc930da7851c7285f4f4e28d6f6f80bd17b15c5b629f139"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/supplementary_plots.py",
+      "sha256": "8de78930409a233c97e3089503b61f68235a0cc8db3032d391b3b5c6504780ea",
+      "eos_sha256": "8de78930409a233c97e3089503b61f68235a0cc8db3032d391b3b5c6504780ea"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/train_diagonal_v3_significance.py",
+      "sha256": "2c4413117158d5d6e089fafe8399dfbc28901995dff425200ef6a8d87c7e15ab",
+      "eos_sha256": "2c4413117158d5d6e089fafe8399dfbc28901995dff425200ef6a8d87c7e15ab"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/train_oof.py",
+      "sha256": "d1e98bedbb128236573ecaaeb8b9838e7358d3a3a66c1b9c92d3342a9615d0bc",
+      "eos_sha256": "d1e98bedbb128236573ecaaeb8b9838e7358d3a3a66c1b9c92d3342a9615d0bc"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/tune_full_gnn.py",
+      "sha256": "2757e33ee2cae026af75f635535a8faec931b85d1d8f2ab1751d1c8870d33161",
+      "eos_sha256": "2757e33ee2cae026af75f635535a8faec931b85d1d8f2ab1751d1c8870d33161"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/validate_diagonal_v3_numpy_inference.py",
+      "sha256": "a09e5872b29b059bd3d1d5d03ed63ab4139ad96e3a37a87b46fe1810a1550cf0",
+      "eos_sha256": "a09e5872b29b059bd3d1d5d03ed63ab4139ad96e3a37a87b46fe1810a1550cf0"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/validate_diagonal_v3_region_feature_parity.py",
+      "sha256": "3132eed5e1855d454606ace324e1c703b45f4153c220d2ea73bda2b54b080b2e",
+      "eos_sha256": "3132eed5e1855d454606ace324e1c703b45f4153c220d2ea73bda2b54b080b2e"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/validate_diagonal_v3_srcr_inputs.py",
+      "sha256": "433b83c0db040dc9a5139a4627d25d97bf8dbfb0604d197f487e3e12447fbb01",
+      "eos_sha256": "433b83c0db040dc9a5139a4627d25d97bf8dbfb0604d197f487e3e12447fbb01"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/build_datacard.py",
+      "sha256": "be7d93ce774b2d435cb3287101524fa4accb9e308e992a02418dca6a5b1f09d6",
+      "eos_sha256": "be7d93ce774b2d435cb3287101524fa4accb9e308e992a02418dca6a5b1f09d6"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/config.json",
+      "sha256": "5a3a51852766a43b663d05b926528224a0d5467f58478e33140f86321087aa70",
+      "eos_sha256": "5a3a51852766a43b663d05b926528224a0d5467f58478e33140f86321087aa70"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/configs/diagonal_v3_significance_trials_v1.json",
+      "sha256": "65a83b1133f4e9a8660d45baa5bd816a5e4594366ea96cc34ea61c105e211e7a",
+      "eos_sha256": "65a83b1133f4e9a8660d45baa5bd816a5e4594366ea96cc34ea61c105e211e7a"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/data.py",
+      "sha256": "0c25d4edecb62816e2cc3defc680f715602f4159ba8b7c008a446de362a4e360",
+      "eos_sha256": "0c25d4edecb62816e2cc3defc680f715602f4159ba8b7c008a446de362a4e360"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/eval.py",
+      "sha256": "98b5b1bb3ea0719e89aee32e316ae194b2378b27ad268f13cc6c79854b832519",
+      "eos_sha256": "98b5b1bb3ea0719e89aee32e316ae194b2378b27ad268f13cc6c79854b832519"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/inputs/run2_sus19010_t2bw_contours.json",
+      "sha256": "99abfe94f262df1a0f4cf8cb4399b6a7ffc7b238630a26cf95cbd19916ec1dcb",
+      "eos_sha256": "99abfe94f262df1a0f4cf8cb4399b6a7ffc7b238630a26cf95cbd19916ec1dcb"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/inputs/run2_sus19010_t2bwc_contours.json",
+      "sha256": "9ea46bd591c6c3e15eac68c83187da1c9503cd2766fc7e75cce94b611f3d5e78",
+      "eos_sha256": "9ea46bd591c6c3e15eac68c83187da1c9503cd2766fc7e75cce94b611f3d5e78"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/inputs/run2_sus19010_t2tb_contours.json",
+      "sha256": "cdf283d4c9469aadc1a0b0f011c2805d0ec5fc83662f78a098c0f493af411ae0",
+      "eos_sha256": "cdf283d4c9469aadc1a0b0f011c2805d0ec5fc83662f78a098c0f493af411ae0"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/inputs/run2_sus19010_t2tt_contours.json",
+      "sha256": "6a75071d33212831b07fe71c09ec4aeba8750f432806929fca644764930421c4",
+      "eos_sha256": "6a75071d33212831b07fe71c09ec4aeba8750f432806929fca644764930421c4"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/inputs/run2_sus19010_t2ttc_contours.json",
+      "sha256": "62bc78f21e820260973fc4bf2abe71ceddbac304e6964120b490bbc1ea921c54",
+      "eos_sha256": "62bc78f21e820260973fc4bf2abe71ceddbac304e6964120b490bbc1ea921c54"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/merge_datacard.py",
+      "sha256": "79b48225e3befb85b379ea6e56c0b002b3a0ebb923ab97b6d5bf393f2807c7d1",
+      "eos_sha256": "79b48225e3befb85b379ea6e56c0b002b3a0ebb923ab97b6d5bf393f2807c7d1"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/model.py",
+      "sha256": "c0f63495319e3213c842c98e244dc7fd1c1433c684e181613bbec19b3d75bded",
+      "eos_sha256": "c0f63495319e3213c842c98e244dc7fd1c1433c684e181613bbec19b3d75bded"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/models/diagonal_v3_h48_l3_sig010/MANIFEST.json",
+      "sha256": "9f0f2f6f2bc65ff21590bccb65017c7e79e4fce0607222dd23f6ab45096ee0b9",
+      "eos_sha256": "9f0f2f6f2bc65ff21590bccb65017c7e79e4fce0607222dd23f6ab45096ee0b9"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/models/diagonal_v3_h48_l3_sig010/best_model.pt",
+      "sha256": "f041b62d4742a73f2ca3a43f1d8d1a1da55a3092d8d8aebc99e09330e7f307eb",
+      "eos_sha256": "f041b62d4742a73f2ca3a43f1d8d1a1da55a3092d8d8aebc99e09330e7f307eb"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/models/diagonal_v3_h48_l3_sig010/diagonal_v3_numpy.json",
+      "sha256": "74a9207b5378cd19b0a10a19de25b2131b8499a0cd0a0e5438f52431343f76f2",
+      "eos_sha256": "74a9207b5378cd19b0a10a19de25b2131b8499a0cd0a0e5438f52431343f76f2"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/models/diagonal_v3_h48_l3_sig010/diagonal_v3_numpy.npz",
+      "sha256": "bf03bb172201c1cb701b865dc23acf13e13e35470ad2c4df2a62567c3b7b267c",
+      "eos_sha256": "bf03bb172201c1cb701b865dc23acf13e13e35470ad2c4df2a62567c3b7b267c"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/models/diagonal_v3_h48_l3_sig010/reference_baseline_best_model.pt",
+      "sha256": "646533701bdc885b1d23e2862f0c925ae97fd8fbe33b19535b0d907002639177",
+      "eos_sha256": "646533701bdc885b1d23e2862f0c925ae97fd8fbe33b19535b0d907002639177"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/models/diagonal_v3_h48_l3_sig010/selection.json",
+      "sha256": "78bf4448440035fdf332d2c76a4e67ebac8e7cdf82071769f90aa6ca3d8934f9",
+      "eos_sha256": "78bf4448440035fdf332d2c76a4e67ebac8e7cdf82071769f90aa6ca3d8934f9"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/models/diagonal_v3_h48_l3_sig010/summary.json",
+      "sha256": "dd4ea6411daaf9e6c67b09a0c46a51c301503b64c3c89792d2a54699b43e177f",
+      "eos_sha256": "dd4ea6411daaf9e6c67b09a0c46a51c301503b64c3c89792d2a54699b43e177f"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/models/diagonal_v3_h48_l3_sig010/training_history.json",
+      "sha256": "73de061907539d73b724cd23558124dd005f819a0be83d479603bb7efd3fded8",
+      "eos_sha256": "73de061907539d73b724cd23558124dd005f819a0be83d479603bb7efd3fded8"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/plotting.py",
+      "sha256": "1967c96fc2367aca53966485a8d64e8d8708fe77b1dc0efcc7c8cd7aa3de5516",
+      "eos_sha256": "1967c96fc2367aca53966485a8d64e8d8708fe77b1dc0efcc7c8cd7aa3de5516"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/requirements.txt",
+      "sha256": "70495c798fce18b08d2bd82e31f005138ec7cd1d5ac890f464f07a542921e036",
+      "eos_sha256": "70495c798fce18b08d2bd82e31f005138ec7cd1d5ac890f464f07a542921e036"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/tests/test_physics_informed_v2.py",
+      "sha256": "57074e4613781a997c4a2e3f66885f7cd2da53f2bba47b7e8714b8574f80dde1",
+      "eos_sha256": "57074e4613781a997c4a2e3f66885f7cd2da53f2bba47b7e8714b8574f80dde1"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/tests/test_score_ut_histograms.py",
+      "sha256": "71211548409a8002022c19b211bf0fae4c02bc637dc9180486d960c3d8971958",
+      "eos_sha256": "71211548409a8002022c19b211bf0fae4c02bc637dc9180486d960c3d8971958"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/tests/test_trota_provenance.py",
+      "sha256": "8c5bb4245173dd82f5bb845be230ff47004747194bc83e53de6c25ac941d47d8",
+      "eos_sha256": "8c5bb4245173dd82f5bb845be230ff47004747194bc83e53de6c25ac941d47d8"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/train.py",
+      "sha256": "d2b8cec670b0df2b1b826ab1a01ca571a5b31616668e6de9e1e3b70c4e60173c",
+      "eos_sha256": "d2b8cec670b0df2b1b826ab1a01ca571a5b31616668e6de9e1e3b70c4e60173c"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/valid.py",
+      "sha256": "c145f5e6710de69d21c60ff69a757f37127d0dba646879a41cfd0df56650fefc",
+      "eos_sha256": "c145f5e6710de69d21c60ff69a757f37127d0dba646879a41cfd0df56650fefc"
+    },
+    {
+      "path": "autonomous_allhad/reports/highdm_canonical_dependencies.md",
+      "sha256": "743b1d8e422509e0c70491fa1e8862118d1c100cef0a12cbf7b48fbf4a87862c",
+      "eos_sha256": "743b1d8e422509e0c70491fa1e8862118d1c100cef0a12cbf7b48fbf4a87862c"
+    },
+    {
+      "path": "autonomous_allhad/reports/highdm_cleanup_20260907.json",
+      "sha256": "bea750a1fa5accb632f8023352d4c73674cb003e50593aec7a883d876d4ae538",
+      "eos_sha256": "bea750a1fa5accb632f8023352d4c73674cb003e50593aec7a883d876d4ae538"
+    },
+    {
+      "path": "autonomous_allhad/reports/lowdm_canonical_dependencies.md",
+      "sha256": "5d03bc791f6e9414c70eddd02cc1e022a011694322310c7dba17b7790c5ecc29",
+      "eos_sha256": "5d03bc791f6e9414c70eddd02cc1e022a011694322310c7dba17b7790c5ecc29"
+    },
+    {
+      "path": "autonomous_allhad/scripts/prepare_2024_fullselection_campaign.py",
+      "sha256": "b48413d421ed2e17c4ace31e991b449833fe23ee1e0eeecbcb06e6e05e1b1136",
+      "eos_sha256": "b48413d421ed2e17c4ace31e991b449833fe23ee1e0eeecbcb06e6e05e1b1136"
+    },
+    {
+      "path": "autonomous_allhad/scripts/prepare_2025_data_objectcorr_campaign.py",
+      "sha256": "67a7fd519f85d3a9abb3d76ebba9a4299cfa4c496891d6c16f2ae448dbae5d51",
+      "eos_sha256": "67a7fd519f85d3a9abb3d76ebba9a4299cfa4c496891d6c16f2ae448dbae5d51"
+    },
+    {
+      "path": "autonomous_allhad/signals/stop_xsec_13p6TeV.json",
+      "sha256": "7741bc0b13a9881faac7aa3c4e5e88ceffacf3d0c73dbd70d14e638d5e320d8a",
+      "eos_sha256": "7741bc0b13a9881faac7aa3c4e5e88ceffacf3d0c73dbd70d14e638d5e320d8a"
+    },
+    {
+      "path": "autonomous_allhad/spec/lowdm_region_scheme.yaml",
+      "sha256": "f8c8b4cee0b4758c39e57519271aefa4444dcafe35210895f19f179b15dfa62e",
+      "eos_sha256": "f8c8b4cee0b4758c39e57519271aefa4444dcafe35210895f19f179b15dfa62e"
+    },
+    {
+      "path": "autonomous_allhad/spec/object_definitions.yaml",
+      "sha256": "1a2abb3ae6bd9e9770520641a491c969b0ca84b40b4087b10e68baa2f1bacde9",
+      "eos_sha256": "1a2abb3ae6bd9e9770520641a491c969b0ca84b40b4087b10e68baa2f1bacde9"
+    },
+    {
+      "path": "autonomous_allhad/spec/region_definitions.yaml",
+      "sha256": "9c4296854d0ef38da928e7d2b1ff65ab5e19bc4bc3d8f30efedd40f5a3c63d06",
+      "eos_sha256": "9c4296854d0ef38da928e7d2b1ff65ab5e19bc4bc3d8f30efedd40f5a3c63d06"
+    },
+    {
+      "path": "autonomous_allhad/tests/test_combined_dycr_plotting.py",
+      "sha256": "9e145d788eb28733a8f01bfac4b6c5b802a22ede17e4024a43459b7f5e478a0e",
+      "eos_sha256": "9e145d788eb28733a8f01bfac4b6c5b802a22ede17e4024a43459b7f5e478a0e"
+    },
+    {
+      "path": "autonomous_allhad/tests/test_lowdm_nres_veto.py",
+      "sha256": "c141c9831eac1b2b4e1dcac6f3cdfc4f1916a6efc9ea8025d0a67406df226fdd",
+      "eos_sha256": "c141c9831eac1b2b4e1dcac6f3cdfc4f1916a6efc9ea8025d0a67406df226fdd"
+    },
+    {
+      "path": "autonomous_allhad/tests/test_lowdm_nsv_inclusive_bins.py",
+      "sha256": "8bcc8c5db84816c3671f7093c5761b058b6dd78feea030f3e40a32cffc6e2d21",
+      "eos_sha256": "8bcc8c5db84816c3671f7093c5761b058b6dd78feea030f3e40a32cffc6e2d21"
+    },
+    {
+      "path": "autonomous_allhad/tests/test_prepare_2024_fullselection_campaign.py",
+      "sha256": "11e9d360e645dcf8f9030ca3b973e964bf2a79f2771fc0cba61672f348fe76eb",
+      "eos_sha256": "11e9d360e645dcf8f9030ca3b973e964bf2a79f2771fc0cba61672f348fe76eb"
+    },
+    {
+      "path": "autonomous_allhad/tests/test_prepare_2025_fullselection_campaign.py",
+      "sha256": "cbf7bbae654a4eaaa68d7bb3b3c263dc33250550198f9e76178422835fa483ff",
+      "eos_sha256": "cbf7bbae654a4eaaa68d7bb3b3c263dc33250550198f9e76178422835fa483ff"
+    },
+    {
+      "path": "autonomous_allhad/workflow/apply_flat_external_shape_systematics.py",
+      "sha256": "ac01020aa64619791f1f5a62aac21a333885171a20bca487f123c00df9ddb3ce",
+      "eos_sha256": "ac01020aa64619791f1f5a62aac21a333885171a20bca487f123c00df9ddb3ce"
+    },
+    {
+      "path": "autonomous_allhad/workflow/background_process_groups.py",
+      "sha256": "afe5af0d1dc478f3294fc236b7083346e5cf3fdc0762bcbaf7eb0e2f04d8e419",
+      "eos_sha256": "afe5af0d1dc478f3294fc236b7083346e5cf3fdc0762bcbaf7eb0e2f04d8e419"
+    },
+    {
+      "path": "autonomous_allhad/workflow/build_an_zinv_factors_2024.py",
+      "sha256": "ed56f80041d06513c1bc18a000f916c014dba67bfe003b1499a84671cddb9208",
+      "eos_sha256": "ed56f80041d06513c1bc18a000f916c014dba67bfe003b1499a84671cddb9208"
+    },
+    {
+      "path": "autonomous_allhad/workflow/build_combine_inputs.py",
+      "sha256": "7845a9152b68057ea15fe427b999245e4bbd3ba3a36b5d3e4390adebb4e04a05",
+      "eos_sha256": "7845a9152b68057ea15fe427b999245e4bbd3ba3a36b5d3e4390adebb4e04a05"
+    },
+    {
+      "path": "autonomous_allhad/workflow/build_combined_year_datacards.py",
+      "sha256": "8acadcb4f1b3e1238dd9cf4412f2ef2f9afe8bb4778ea6e83a634041c723b0f9",
+      "eos_sha256": "8acadcb4f1b3e1238dd9cf4412f2ef2f9afe8bb4778ea6e83a634041c723b0f9"
+    },
+    {
+      "path": "autonomous_allhad/workflow/build_flat_boosted_recoil_hists.py",
+      "sha256": "ce644ff26387d319996d62e78e6c73b882ac8ec9c33ca93b48872d7ffe401b86",
+      "eos_sha256": "ce644ff26387d319996d62e78e6c73b882ac8ec9c33ca93b48872d7ffe401b86"
+    },
+    {
+      "path": "autonomous_allhad/workflow/build_histogram_tf_inputs_2024.py",
+      "sha256": "6d887ab74c7cdf65ad096e14122638de8d92c3b214f798011f7a9b2748a55012",
+      "eos_sha256": "6d887ab74c7cdf65ad096e14122638de8d92c3b214f798011f7a9b2748a55012"
+    },
+    {
+      "path": "autonomous_allhad/workflow/build_sgamma_ut_report_2024.py",
+      "sha256": "aacb6ee13c25073e7a134b418be3f0e60954f643aa6c8e002840433bb831f8d6",
+      "eos_sha256": "aacb6ee13c25073e7a134b418be3f0e60954f643aa6c8e002840433bb831f8d6"
+    },
+    {
+      "path": "autonomous_allhad/workflow/build_standard_condor_runtime.sh",
+      "sha256": "593078ca0b519995ffe0b117918703c30076fa8722241155594a7d0a9af30b82",
+      "eos_sha256": "593078ca0b519995ffe0b117918703c30076fa8722241155594a7d0a9af30b82"
+    },
+    {
+      "path": "autonomous_allhad/workflow/build_zgamma_double_ratio_2024.py",
+      "sha256": "f22c7f3ccaffe74404b902df58e4ca7cda3fd225aa30799659cd76efceb2bf3b",
+      "eos_sha256": "f22c7f3ccaffe74404b902df58e4ca7cda3fd225aa30799659cd76efceb2bf3b"
+    },
+    {
+      "path": "autonomous_allhad/workflow/export_tnp_id_correctionlib.py",
+      "sha256": "77e3620ce5c062955521c568ecffba5ef8209089881cba36abb23335ed1cb712",
+      "eos_sha256": "77e3620ce5c062955521c568ecffba5ef8209089881cba36abb23335ed1cb712"
+    },
+    {
+      "path": "autonomous_allhad/workflow/extract_cronly_fit_covariance.py",
+      "sha256": "61c4b2ae0f89f9473dc66489c0388b4d9bf503e2f1f6ebf43e8a1679ae76b062",
+      "eos_sha256": "61c4b2ae0f89f9473dc66489c0388b4d9bf503e2f1f6ebf43e8a1679ae76b062"
+    },
+    {
+      "path": "autonomous_allhad/workflow/finalize_cronly_fit_status.py",
+      "sha256": "3ca6efdfc3c31fbbbe72b33fab43d949105e50427919d17d8cf382f59d046e23",
+      "eos_sha256": "3ca6efdfc3c31fbbbe72b33fab43d949105e50427919d17d8cf382f59d046e23"
+    },
+    {
+      "path": "autonomous_allhad/workflow/merge_flat_hist_chunks_streaming.py",
+      "sha256": "99ef16a684472ef502e1d1a143f437e2f203fb844230c9fc31a537d832c0f435",
+      "eos_sha256": "99ef16a684472ef502e1d1a143f437e2f203fb844230c9fc31a537d832c0f435"
+    },
+    {
+      "path": "autonomous_allhad/workflow/plot_control_search_bins_style.py",
+      "sha256": "bf3e2b388916d0431b510876f4216ca72aabf86103c1453c05ec1fccc4dd0324",
+      "eos_sha256": "bf3e2b388916d0431b510876f4216ca72aabf86103c1453c05ec1fccc4dd0324"
+    },
+    {
+      "path": "autonomous_allhad/workflow/plot_cronly_nuisance_pulls.py",
+      "sha256": "ce18f4a568cf1a1e197ad41e2a3d5bb256f76d34fc2af0280a33e3d595f0a8c4",
+      "eos_sha256": "ce18f4a568cf1a1e197ad41e2a3d5bb256f76d34fc2af0280a33e3d595f0a8c4"
+    },
+    {
+      "path": "autonomous_allhad/workflow/plot_highdm73_from_limit_templates.py",
+      "sha256": "a40810a5203915d7b4ce7f96584c855eab0c8f8095982ea994c59b1448dd149c",
+      "eos_sha256": "a40810a5203915d7b4ce7f96584c855eab0c8f8095982ea994c59b1448dd149c"
+    },
+    {
+      "path": "autonomous_allhad/workflow/plot_measurement.py",
+      "sha256": "ecb2d3c9b2bf3457f1a183e2b02c5e476ea20a2bbd5514960801503ab8a086dc",
+      "eos_sha256": "ecb2d3c9b2bf3457f1a183e2b02c5e476ea20a2bbd5514960801503ab8a086dc"
+    },
+    {
+      "path": "autonomous_allhad/workflow/postprocess_limits.py",
+      "sha256": "77f0ebdf12794b50efa5d76dbc56e570268451cd7b004299b62fad2e46256221",
+      "eos_sha256": "77f0ebdf12794b50efa5d76dbc56e570268451cd7b004299b62fad2e46256221"
+    },
+    {
+      "path": "autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+      "sha256": "222aff7778ae9781273baf22ccd4ea74181a0a11822805dcdc8ea33f2c5aee86",
+      "eos_sha256": "222aff7778ae9781273baf22ccd4ea74181a0a11822805dcdc8ea33f2c5aee86"
+    },
+    {
+      "path": "autonomous_allhad/workflow/run_cronly_fit_eos.sh",
+      "sha256": "3ebf34319949e28e1c776c0e400e3be820fece160261b3b9115e557c912887cc",
+      "eos_sha256": "3ebf34319949e28e1c776c0e400e3be820fece160261b3b9115e557c912887cc"
+    },
+    {
+      "path": "autonomous_allhad/workflow/run_flat_hists_chunked.py",
+      "sha256": "1cd207814364102f2c691d0ad9332d1ca4d024bfc2ef041dcdd50159759e50b8",
+      "eos_sha256": "1cd207814364102f2c691d0ad9332d1ca4d024bfc2ef041dcdd50159759e50b8"
+    },
+    {
+      "path": "autonomous_allhad/workflow/validate_flat_ntuple_outputs.py",
+      "sha256": "60db7e3e282a2560f4f8dba4a64034977e22fc31ca2fafb7d105405187ad1517",
+      "eos_sha256": "60db7e3e282a2560f4f8dba4a64034977e22fc31ca2fafb7d105405187ad1517"
+    },
+    {
+      "path": "autonomous_allhad/workflow/validate_histogram_root_inputs.py",
+      "sha256": "197f182287d37634d1a60e8d3e43356c37417f32e218d39d33d40c774f7bfcac",
+      "eos_sha256": "197f182287d37634d1a60e8d3e43356c37417f32e218d39d33d40c774f7bfcac"
+    },
+    {
+      "path": "autonomous_allhad/workflow/validate_standard_condor_runtime.sh",
+      "sha256": "c5ddc15e088b9ea7232429d17bd6d657177b3b6ce23c1710ea19f4d396d8cc3b",
+      "eos_sha256": "c5ddc15e088b9ea7232429d17bd6d657177b3b6ce23c1710ea19f4d396d8cc3b"
+    },
+    {
+      "path": "analysis/data/JMESF/2025/jet_jerc.json.gz",
+      "sha256": "a4beaeefc5fba02fdb037025460824f411f59aa1eed1905d75327a5a87edfead",
+      "eos_sha256": "d2a47f6a6ced9b8afd73e1dc79c09d69f0d1249aa971903b3788648a6004177b"
+    },
+    {
+      "path": "analysis/data/JMESF/2025/fatJet_jerc.json.gz",
+      "sha256": "c5250701e2601ba7e42dc71c929b58fbc81175e33011a178e0b282b3d13908af",
+      "eos_sha256": "a7cdb9133f9ccabaafc4ff8a8e51cd3ae9434c3db8762f6faaaa0c422264f479"
+    }
+  ],
+  "eos_code_files_updated": [
+    "AGENTS.md",
+    "autonomous_allhad/autonomous_allhad/dy_estimation/__main__.py",
+    "autonomous_allhad/autonomous_allhad/dy_estimation/build_measurement.py",
+    "autonomous_allhad/autonomous_allhad/dy_estimation/report.py",
+    "autonomous_allhad/autonomous_allhad/real_subset_worker.py",
+    "autonomous_allhad/autonomous_allhad/shape_histogram_2024_worker.py",
+    "autonomous_allhad/gnn_lowdm/_implementation/build_diagonal_v3_cr_nnout_partial.py",
+    "autonomous_allhad/gnn_lowdm/_implementation/cli.py",
+    "autonomous_allhad/gnn_lowdm/_implementation/merge_diagonal_v3_cr_nnout_partials.py",
+    "autonomous_allhad/gnn_lowdm/_implementation/region_io.py",
+    "autonomous_allhad/gnn_lowdm/eval.py",
+    "autonomous_allhad/gnn_lowdm/tests/test_score_ut_histograms.py",
+    "autonomous_allhad/reports/highdm_canonical_dependencies.md",
+    "autonomous_allhad/spec/lowdm_region_scheme.yaml",
+    "autonomous_allhad/spec/object_definitions.yaml",
+    "autonomous_allhad/spec/region_definitions.yaml",
+    "autonomous_allhad/tests/test_combined_dycr_plotting.py",
+    "autonomous_allhad/tests/test_lowdm_nres_veto.py",
+    "autonomous_allhad/tests/test_lowdm_nsv_inclusive_bins.py",
+    "autonomous_allhad/tests/test_prepare_2024_fullselection_campaign.py",
+    "autonomous_allhad/tests/test_prepare_2025_fullselection_campaign.py",
+    "autonomous_allhad/workflow/apply_flat_external_shape_systematics.py",
+    "autonomous_allhad/workflow/build_an_zinv_factors_2024.py",
+    "autonomous_allhad/workflow/build_combine_inputs.py",
+    "autonomous_allhad/workflow/build_combined_year_datacards.py",
+    "autonomous_allhad/workflow/build_histogram_tf_inputs_2024.py",
+    "autonomous_allhad/workflow/build_sgamma_ut_report_2024.py",
+    "autonomous_allhad/workflow/build_zgamma_double_ratio_2024.py",
+    "autonomous_allhad/workflow/export_tnp_id_correctionlib.py",
+    "autonomous_allhad/workflow/plot_control_search_bins_style.py",
+    "autonomous_allhad/workflow/plot_cronly_nuisance_pulls.py",
+    "autonomous_allhad/workflow/plot_measurement.py",
+    "autonomous_allhad/workflow/postprocess_limits.py",
+    "autonomous_allhad/workflow/validate_histogram_root_inputs.py"
+  ],
+  "previously_retired_paths": [
+    "autonomous_allhad/workflow/build_boosted_an17_combine_inputs.py",
+    "autonomous_allhad/workflow/build_flat_boosted_an17_combine_inputs.py",
+    "autonomous_allhad/workflow/build_flat_recoil_sr_combine_inputs.py",
+    "autonomous_allhad/workflow/build_flat_recoil_ntop_split_combine_inputs.py",
+    "autonomous_allhad/workflow/build_flat_recoil_ntop_split_lowdm_combine_inputs.py",
+    "autonomous_allhad/workflow/build_flat_selected_recoil6_lowdm_combine_inputs.py",
+    "autonomous_allhad/workflow/build_highdm54_lowdm42_combine_inputs.py",
+    "autonomous_allhad/workflow/build_lowdm42_combine_inputs.py",
+    "autonomous_allhad/workflow/build_nb_recoil_tf_combine_inputs_2024.py",
+    "autonomous_allhad/workflow/build_free_background_combine_inputs_2024.py",
+    "autonomous_allhad/workflow/build_signal_tail_bin_merge_diagnostic.py",
+    "autonomous_allhad/workflow/run_signal_tail_bin_merge_diagnostics.sh",
+    "autonomous_allhad/workflow/build_highdm_signal_shape_regularization_diagnostic.py",
+    "autonomous_allhad/workflow/compare_recoil_sr_limits.py",
+    "autonomous_allhad/workflow/watch_flat_ntuple_pipeline.py",
+    "autonomous_allhad/workflow/submit_2024_2025_limits_impacts.sh"
+  ],
+  "validation": {
+    "python_syntax_files": 94,
+    "shell_syntax_files": 5,
+    "json_files": 21,
+    "gnn_score_ut_tests_passed": 21,
+    "git_diff_check": "passed",
+    "corrections": {
+      "status": "validated",
+      "payload_keys": 28,
+      "changed_vs_active_eos": [
+        "get_jec_correction",
+        "get_jec_uncertainty",
+        "get_fjec_correction"
+      ],
+      "unchanged_other_payload_keys": 25,
+      "files": {
+        "analysis/utils/corrections.py": "c8ecd046246c68704fac78753fcc1f055e0264f3f5f015b5a05af138cef15ce0",
+        "analysis/data/corrections.coffea": "ec0e178d156194b4345d0fc53f84798e0163b7a8518272b591703dbb38ae3b4f",
+        "analysis/data/JMESF/2025/jet_jerc.json.gz": "a4beaeefc5fba02fdb037025460824f411f59aa1eed1905d75327a5a87edfead",
+        "analysis/data/JMESF/2025/fatJet_jerc.json.gz": "c5250701e2601ba7e42dc71c929b58fbc81175e33011a178e0b282b3d13908af"
+      }
+    }
+  },
+  "pending": {
+    "reason": "Both active code/analysis/data and gnn_code/analysis/data are symlinks to EOS base analysis/data.",
+    "files": [
+      "analysis/utils/corrections.py",
+      "analysis/data/corrections.coffea",
+      "analysis/data/JMESF/2025/jet_jerc.json.gz",
+      "analysis/data/JMESF/2025/fatJet_jerc.json.gz"
+    ],
+    "staged_base": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/reports/canonical_sync_20260907/approved",
+    "activation": "After both years' main and GNN histogram production is validated, their intermediate-input stages are closed, and no active job can still read the shared payloads: back up the exact four active EOS files, copy the approved set, verify all SHA256 values, and update this manifest and Git receipt. Do not change frozen snapshots or rerun valid production."
+  }
+}

@@ -6,6 +6,7 @@ from ._implementation.cli import dispatch
 
 
 COMMANDS = {
+    "prepare-hists": ("autonomous_allhad.gnn_lowdm._implementation.region_io:prepare_histograms_main", "prepare histogram requests from a validated flat manifest"),
     "test": ("autonomous_allhad.gnn_lowdm._implementation.evaluate_diagonal_v3_test", "evaluate the frozen 70% test partition"),
     "cr-partial": ("autonomous_allhad.gnn_lowdm._implementation.build_diagonal_v3_cr_nnout_partial", "evaluate one control-region ROOT group"),
     "cr-merge": ("autonomous_allhad.gnn_lowdm._implementation.merge_diagonal_v3_cr_nnout_partials", "merge and audit control-region partials"),

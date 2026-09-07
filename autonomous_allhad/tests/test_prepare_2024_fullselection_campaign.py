@@ -74,6 +74,7 @@ def test_main_wrapper_integrates_trota_before_stageout() -> None:
     assert 'd["root_trees"]=["Events","TROTA"]' in wrapper
     assert 't.get("status") == "complete"' in wrapper
     assert "trota.json" in wrapper
+    assert "export HOME=" not in wrapper
 
 
 def test_submit_transfers_model_and_requires_almalinux9(tmp_path: Path) -> None:

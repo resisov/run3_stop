@@ -336,6 +336,26 @@ A dataset must be marked incomplete when the skipped fraction exceeds configurab
 
 ## Workflow behavior
 
+Keep canonical source, configuration, and dependency manifests synchronized
+between local, EOS, and the tracked Git branch, with verified file hashes.
+Do not overwrite divergent physics payloads or active frozen campaign snapshots
+as part of synchronization; report conflicts before choosing a baseline.
+
+When additional permission or scope approval is required, email the exact
+request, affected targets, and risks to `taiwoo.kim@cern.ch` through an
+already-authorized mail mechanism. Do not include credentials. Wait for the
+user's approval before the affected action; an email sent is not approval.
+If email delivery is unavailable, report the precise blocker in the task.
+
+The 2024/2025 intermediate ROOT production must complete Events and TROTA
+in the same main batch job before stage-out. Require the TROTA completion
+marker, model/year provenance, and validation before recording success.
+Preserve already-valid integrated ROOT files rather than repeating production.
+
+For VOMS proxy creation or renewal, request `--valid 200:00`.
+After issuance, verify the actual proxy and VOMS lifetimes before batch
+submission; the requested duration is not a substitute for that check.
+
 The workflow must be:
 
 * resumable;

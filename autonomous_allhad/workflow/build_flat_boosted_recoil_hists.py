@@ -120,6 +120,9 @@ BASE_REGION_VARIABLES = {
     "GCR": ("feature_GCR", "recoil_gcr"),
     "DY2E": ("feature_DY2E", "recoil_dy2e"),
     "DY2M": ("feature_DY2M", "recoil_dy2m"),
+    "HighDMVR_Nb1": ("pass_base_common", "met"),
+    "HighDMVR_Nb2": ("pass_base_common", "met"),
+    "HighDMVR_Nb3plus": ("pass_base_common", "met"),
     "SR": ("feature_SR", "met"),
     "SR_Nt1": ("feature_SR_Nt1", "met"),
 }
@@ -136,6 +139,9 @@ DATA_PROCESS_BY_REGION = {
     "GCR": "EGamma",
     "DY2E": "EGamma",
     "DY2M": "Muon",
+    "HighDMVR_Nb1": "JetMET",
+    "HighDMVR_Nb2": "JetMET",
+    "HighDMVR_Nb3plus": "JetMET",
     "SR": "JetMET",
     "SR_Nt1": "JetMET",
 }
@@ -346,6 +352,7 @@ HIGHDM_DISTRIBUTION_VARIABLE_SPECS = {
 }
 
 HIGHDM_CR_REGIONS = ["LLCR", "QCDCR", "GCR", "DY2E", "DY2M"]
+HIGHDM_VR_REGIONS = ["HighDMVR_Nb1", "HighDMVR_Nb2", "HighDMVR_Nb3plus"]
 HIGHDM_SR_CATEGORY_KEYS = [
     "SR_Nb1plus_T0_W0", "SR_Nb1plus_T0_W1plus",
     "SR_Nb1_T1plus_W0", "SR_Nb1_T1plus_W1plus",
@@ -952,6 +959,9 @@ def flat_arrays_for_weights(chunk: dict[str, Any]) -> tuple[dict[str, Any], dict
             | as_bool(chunk["feature_lowdm_LLCR"], n)
             | as_bool(chunk["feature_lowdm_QCDCR"], n)
             | as_bool(chunk["feature_lowdm_SR"], n)
+            | region_mask(chunk, "HighDMVR_Nb1", "pass_base_common", n)
+            | region_mask(chunk, "HighDMVR_Nb2", "pass_base_common", n)
+            | region_mask(chunk, "HighDMVR_Nb3plus", "pass_base_common", n)
         ),
         "electron_eta_source": (
             "raw_eta_with_delta_eta_sc"
@@ -1174,6 +1184,34 @@ def add_hist(target: dict[str, Any], values: np.ndarray, weights: np.ndarray, ma
 
 
 def region_mask(chunk: dict[str, Any], region: str, flag: str, n: int) -> np.ndarray:
+    if region.startswith("HighDMVR_"):
+        j1 = float_field(chunk, "j1_met_dphi", n, 999.0)
+        j2 = float_field(chunk, "j2_met_dphi", n, 999.0)
+        j3 = float_field(chunk, "j3_met_dphi", n, 999.0)
+        j4 = float_field(chunk, "j4_met_dphi", n, 999.0)
+        medium_dphi = (
+            (j1 > 0.5)
+            & (j2 > 0.15)
+            & (j3 > 0.15)
+            & ((j2 < 0.5) | (j3 < 0.5) | (j4 < 0.5))
+        )
+        nb = int_field(chunk, "nb_medium", n)
+        nb_mask = {
+            "HighDMVR_Nb1": nb == 1,
+            "HighDMVR_Nb2": nb == 2,
+            "HighDMVR_Nb3plus": nb >= 3,
+        }[region]
+        return (
+            bool_field(chunk, "pass_base_common", n)
+            & bool_field(chunk, "pass_signal_trigger", n)
+            & bool_field(chunk, "pass_zero_tau", n)
+            & bool_field(chunk, "pass_no_veto_leptons", n)
+            & (int_field(chunk, "njet", n) >= 5)
+            & nb_mask
+            & bool_field(chunk, "pass_met_250", n)
+            & bool_field(chunk, "pass_ht_300", n)
+            & medium_dphi
+        )
     channel = region.rsplit("_Nt", 1)[0]
     if channel in {"DY2E", "DY2M"}:
         base = dycr_lepton_mask(chunk, channel)
@@ -1817,7 +1855,7 @@ def highdm_base_region(region: str) -> str:
 
 def highdm_distribution_masks(chunk: dict[str, Any], n: int) -> dict[str, np.ndarray]:
     masks: dict[str, np.ndarray] = {}
-    for region in HIGHDM_CR_REGIONS:
+    for region in HIGHDM_CR_REGIONS + HIGHDM_VR_REGIONS:
         flag, _variable = REGION_VARIABLES[region]
         masks[region] = region_mask(chunk, region, flag, n)
 
@@ -3623,6 +3661,7 @@ def main() -> int:
         "highdm_distribution_variable_specs": HIGHDM_DISTRIBUTION_VARIABLE_SPECS,
         "highdm_distribution_regions": {
             "control": HIGHDM_CR_REGIONS,
+            "validation": HIGHDM_VR_REGIONS,
             "signal_categories": HIGHDM_SR_CATEGORY_KEYS,
         },
         "lowdm_variable_specs": LOWDM_VARIABLE_SPECS,
