@@ -446,7 +446,54 @@ def fatjet_kinematics(
     return nisr, nt, nw
 
 
-def build_region_blocks(arrays: ak.Array) -> tuple[dict[str, RegionBlock], dict[str, int]]:
+def dycr_lepton_mask(
+    arrays: Any,
+    channel: str,
+    masks: dict[str, Any] | None = None,
+    mass_window: tuple[float, float] | None = (71.0, 111.0),
+) -> np.ndarray:
+    """Rebuild the DY lepton selection from stored objects.
+
+    ``mass_window=None`` deliberately leaves the dilepton mass unconstrained.
+    Histogram production uses that mode once to persist the disjoint on-Z and
+    off-Z counting matrices needed by the RZ measurement.  The default keeps
+    the nominal 91 +/- 20 GeV DY control-region selection unchanged.
+    """
+    if channel not in {"DY2E", "DY2M"}:
+        raise ValueError(f"unknown dilepton channel: {channel}")
+    masks = object_masks(arrays) if masks is None else masks
+    electron = channel == "DY2E"
+    flavor = "electron" if electron else "muon"
+    selected = masks[f"{flavor}_medium"]
+    pt = arrays[f"{flavor}_pt_all"][selected]
+    charge = arrays[f"{flavor}_charge_all"][selected]
+    count_name = "n_e_medium" if electron else "n_m_medium"
+    rebuilt_count = np.asarray(ak.sum(selected, axis=1), dtype=int)
+    if np.any(rebuilt_count != as_int(arrays, count_name)):
+        raise RuntimeError(f"{channel}: rebuilt/stored medium-lepton counts differ")
+    mass = as_float(arrays, "mee" if electron else "mmm")
+    selected = (
+        as_bool(arrays, "pass_base_common")
+        & as_bool(arrays, "pass_zero_tau")
+        & as_bool(arrays, f"pass_{flavor}_trigger")
+        & (as_int(arrays, "n_m_loose" if electron else "n_e_veto") == 0)
+        & (rebuilt_count == 2)
+        & (first(pt, -99.0) > (40.0 if electron else 50.0))
+        & (nth(pt, 1, -99.0) > 20.0)
+        & (as_float(arrays, "pee" if electron else "pmm") > 200.0)
+        & (first(charge, 0.0) != nth(charge, 1, 0.0))
+    )
+    if mass_window is not None:
+        low, high = mass_window
+        selected &= (mass > float(low)) & (mass < float(high))
+    return selected
+
+
+def build_region_blocks(
+    arrays: ak.Array,
+    *,
+    dy_mass_window: tuple[float, float] | None = (71.0, 111.0),
+) -> tuple[dict[str, RegionBlock], dict[str, int]]:
     n = len(arrays)
     masks = object_masks(arrays)
     audit = {
@@ -618,21 +665,11 @@ def build_region_blocks(arrays: ak.Array) -> tuple[dict[str, RegionBlock], dict[
     )
     blocks["GCR"] = RegionBlock(core=gcr_core, **block_fields(photon))
 
-    e_medium = masks["electron_medium"]
-    e_pt = arrays["electron_pt_all"][e_medium]
-    e_charge = arrays["electron_charge_all"][e_medium]
     electron = cleaned["DY2E"]
     dy2e_core = (
-        base
-        & as_bool(arrays, "pass_electron_trigger")
-        & (as_int(arrays, "n_m_loose") == 0)
-        & (as_int(arrays, "n_e_medium") == 2)
-        & (first(e_pt, -99.0) > 40.0)
-        & (nth(e_pt, 1, -99.0) > 20.0)
-        & (as_float(arrays, "pee") > 200.0)
-        & (first(e_charge, 0.0) != nth(e_charge, 1, 0.0))
-        & (as_float(arrays, "mee") > 81.0)
-        & (as_float(arrays, "mee") < 101.0)
+        dycr_lepton_mask(
+            arrays, "DY2E", masks, mass_window=dy_mass_window
+        )
         & (electron["recoil"] > 250.0)
         & (electron["njet"] >= 2)
         & (electron["ht"] > 300.0)
@@ -640,21 +677,11 @@ def build_region_blocks(arrays: ak.Array) -> tuple[dict[str, RegionBlock], dict[
     )
     blocks["DY2E"] = RegionBlock(core=dy2e_core, **block_fields(electron))
 
-    m_medium = masks["muon_medium"]
-    m_pt = arrays["muon_pt_all"][m_medium]
-    m_charge = arrays["muon_charge_all"][m_medium]
     muon = cleaned["DY2M"]
     dy2m_core = (
-        base
-        & as_bool(arrays, "pass_muon_trigger")
-        & (as_int(arrays, "n_e_veto") == 0)
-        & (as_int(arrays, "n_m_medium") == 2)
-        & (first(m_pt, -99.0) > 50.0)
-        & (nth(m_pt, 1, -99.0) > 20.0)
-        & (as_float(arrays, "pmm") > 200.0)
-        & (first(m_charge, 0.0) != nth(m_charge, 1, 0.0))
-        & (as_float(arrays, "mmm") > 81.0)
-        & (as_float(arrays, "mmm") < 101.0)
+        dycr_lepton_mask(
+            arrays, "DY2M", masks, mass_window=dy_mass_window
+        )
         & (muon["recoil"] > 250.0)
         & (muon["njet"] >= 2)
         & (muon["ht"] > 300.0)

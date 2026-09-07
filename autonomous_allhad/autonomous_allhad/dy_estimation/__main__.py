@@ -8,18 +8,9 @@ from collections.abc import Sequence
 
 
 COMMANDS = {
-    "prepare-features": "prepare_features",
-    "build-features": "feature_stage",
-    "merge-features": "merge_features",
-    "prepare-lowdm": "prepare_lowdm",
-    "prepare-exact-refinement": "prepare_lowdm",
-    "run-lowdm-partition": "run_lowdm_partition",
-    "run-exact-refinement": "run_lowdm_partition",
-    "merge-lowdm": "merge_lowdm",
-    "merge-measurement": "merge_lowdm",
+    "build-measurement": "build_measurement",
     "report": "report",
     "publish": "publish",
-    "validate": "validate",
 }
 
 

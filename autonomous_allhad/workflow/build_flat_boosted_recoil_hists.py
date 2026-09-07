@@ -38,8 +38,32 @@ from autonomous_allhad.search_bin_categorization import (
     map60_indices_to_adopted55,
     map_category_sources_to_configured,
 )
+from gnn_lowdm._implementation.region_io import (
+    SELECTION_BRANCHES as BROAD_LOWDM_SELECTION_BRANCHES,
+    build_region_blocks as build_broad_lowdm_region_blocks,
+    dycr_lepton_mask,
+)
 
 RECOIL_PT_BINS = [250.0, 300.0, 350.0, 400.0, 500.0, 800.0, 1500.0]
+# Background-estimation products are persisted while the nominal histogram
+# pass already has the event arrays and normalized weights in memory.  No
+# downstream background-estimation command is allowed to reopen feature ROOTs.
+BACKGROUND_ESTIMATION_UT_BINS = [
+    250.0, 300.0, 350.0, 400.0, 500.0, 650.0, 800.0, 1000.0, 1500.0
+]
+DY_RZ_MLL_BINS = [50.0, 71.0, 81.0, 91.0, 101.0, 111.0, 160.0, 250.0, 500.0]
+BACKGROUND_ESTIMATION_REGIONS = ("SR", "LLCR", "QCDCR", "GCR", "DY2E", "DY2M")
+BACKGROUND_ESTIMATION_REQUIRED_SAMPLES = (
+    "data_obs",
+    "DY",
+    "GJ",
+    "QCD",
+    "ST",
+    "TT",
+    "VV",
+    "WtoLNu",
+    "Zto2Nu",
+)
 LOWDM_NSV_INCLUSIVE_CATEGORY_SIZES = [
     ("Nb0_Nj2to5_PISR500plus", 4),
     ("Nb0_Nj6plus_PISR500plus", 4),
@@ -96,9 +120,6 @@ BASE_REGION_VARIABLES = {
     "GCR": ("feature_GCR", "recoil_gcr"),
     "DY2E": ("feature_DY2E", "recoil_dy2e"),
     "DY2M": ("feature_DY2M", "recoil_dy2m"),
-    "HighDMVR_Nb1": ("pass_base_common", "met"),
-    "HighDMVR_Nb2": ("pass_base_common", "met"),
-    "HighDMVR_Nb3plus": ("pass_base_common", "met"),
     "SR": ("feature_SR", "met"),
     "SR_Nt1": ("feature_SR_Nt1", "met"),
 }
@@ -115,9 +136,6 @@ DATA_PROCESS_BY_REGION = {
     "GCR": "EGamma",
     "DY2E": "EGamma",
     "DY2M": "Muon",
-    "HighDMVR_Nb1": "JetMET",
-    "HighDMVR_Nb2": "JetMET",
-    "HighDMVR_Nb3plus": "JetMET",
     "SR": "JetMET",
     "SR_Nt1": "JetMET",
 }
@@ -138,7 +156,7 @@ WEIGHT_BRANCHES = [
     "run", "luminosityBlock", "event", "entry", "dataset_id", "year", "mStop", "mLSP",
     "is_data", "is_signal", "is_background", "gen_weight", "pu_ntrueint",
     "n_e_veto", "n_e_medium", "n_m_loose", "n_m_medium",
-    "good_jet_pt", "good_jet_eta", "good_jet_hadron_flavour", "good_jet_b_medium",
+    "good_jet_pt", "good_jet_eta", "good_jet_phi", "good_jet_hadron_flavour", "good_jet_b_medium",
     "electron_veto_pt", "electron_veto_eta_sc", "electron_veto_phi",
     "electron_veto_eta",
     "electron_medium_pt", "electron_medium_eta_sc", "electron_medium_phi",
@@ -152,6 +170,9 @@ WEIGHT_BRANCHES = [
 OPTIONAL_FORWARD_SCHEMA_BRANCHES = {
     "electron_veto_eta",
     "electron_medium_eta",
+    "pass_gcr_open_high",
+    "pass_dy2e_open_high",
+    "pass_dy2m_open_high",
 }
 GCR_PHOTON_POLICY_BRANCHES = [
     "photon_pt_all",
@@ -174,14 +195,15 @@ LOWDM_READ_BRANCHES = [
     "pass_base_common", "pass_signal_trigger", "pass_photon_trigger", "pass_electron_trigger", "pass_muon_trigger",
     "pass_zero_tau", "pass_no_veto_leptons", "pass_one_veto_lepton", "pass_mt_100",
     "pass_met_250", "pass_ht_300", "pass_ht_photon_300", "pass_ht_lepton_300",
-    "pass_open_pre", "pass_qcd_open", "pass_dphi123_0p1",
+    "pass_open_pre", "pass_open_high", "pass_gcr_open_high", "pass_qcd_open", "pass_dphi123_0p1",
+    "pass_dy2e_open_high", "pass_dy2m_open_high",
     "pass_lowdm_topology_veto", "pass_lowdm_isr", "pass_lowdm_isr_bveto",
     "pass_lowdm_met_sqrt_ht", "pass_lowdm_mtb",
     "j1_met_dphi", "j2_met_dphi", "j3_met_dphi", "j4_met_dphi",
-    "met", "ht", "njet", "nb_medium_lowdm", "nb_loose_lowdm", "n_sv_softb", "n_photon_medium",
+    "met", "met_phi", "ht", "njet", "nb_medium_lowdm", "nb_loose_lowdm", "n_sv_softb", "n_photon_medium",
     "njet_photon_clean", "nb_photon_clean", "ht_photon_clean",
     "njet_lepton_clean", "nb_lepton_clean", "ht_lepton_clean",
-    "mee", "pee", "mmm", "pmm", "recoil_gcr", "recoil_dy2e", "recoil_dy2m",
+    "mee", "pee", "mmm", "pmm", "recoil_gcr", "recoil_gcr_phi", "recoil_dy2e", "recoil_dy2m",
     "lowdm_mtb", "lowdm_met_sqrt_ht", "lowdm_isr_pt", "lowdm_isr_dphi", "lowdm_ptb", "n_lowdm_isr",
     "lowdm_fatjet_pt", "lowdm_fatjet_msd",
 ]
@@ -189,11 +211,7 @@ TROTA_IDENTITY_BRANCHES = (
     "run", "luminosityBlock", "event", "file_id", "entry",
 )
 TROTA_LOWDM_SELECTION_BRANCHES = (
-    "feature_lowdm_preselection", "feature_lowdm_LLCR",
-    "feature_lowdm_QCDCR", "feature_lowdm_GCR", "feature_lowdm_DY2E",
-    "feature_lowdm_DY2M", "feature_lowdm_SR", "nb_medium_lowdm",
-    "pass_lowdm_topology_veto", "pass_lowdm_isr",
-    "pass_lowdm_met_sqrt_ht",
+    *BROAD_LOWDM_SELECTION_BRANCHES,
 )
 TROTA_HIGHDM_SELECTION_BRANCHES = (
     "feature_SR", "nb_medium", "nboosted_top", "nboosted_w",
@@ -328,7 +346,6 @@ HIGHDM_DISTRIBUTION_VARIABLE_SPECS = {
 }
 
 HIGHDM_CR_REGIONS = ["LLCR", "QCDCR", "GCR", "DY2E", "DY2M"]
-HIGHDM_VR_REGIONS = ["HighDMVR_Nb1", "HighDMVR_Nb2", "HighDMVR_Nb3plus"]
 HIGHDM_SR_CATEGORY_KEYS = [
     "SR_Nb1plus_T0_W0", "SR_Nb1plus_T0_W1plus",
     "SR_Nb1_T1plus_W0", "SR_Nb1_T1plus_W1plus",
@@ -339,6 +356,7 @@ HIGHDM_SR_CATEGORY_KEYS = [
 
 READ_BRANCHES = sorted(set(
     WEIGHT_BRANCHES + SEARCH_BIN_BRANCHES + LOWDM_READ_BRANCHES
+    + list(BROAD_LOWDM_SELECTION_BRANCHES)
     + [spec["branch"] for spec in LOWDM_VARIABLE_SPECS.values()]
     + [spec["branch"] for spec in HIGHDM_DISTRIBUTION_VARIABLE_SPECS.values()]
     + [spec["mask_branch"] for spec in HIGHDM_DISTRIBUTION_VARIABLE_SPECS.values() if spec.get("mask_branch")]
@@ -409,6 +427,7 @@ def load_search_bin_configuration(
 EXECUTION_CONTRACT_COMMON_PATHS = (
     "autonomous_allhad/workflow/build_flat_boosted_recoil_hists.py",
     "autonomous_allhad/workflow/run_flat_hists_chunked.py",
+    "autonomous_allhad/gnn_lowdm/_implementation/region_io.py",
     "autonomous_allhad/autonomous_allhad/analysis_scale_factors.py",
     "autonomous_allhad/autonomous_allhad/real_subset_worker.py",
     "autonomous_allhad/autonomous_allhad/dy_ptll_policy.py",
@@ -495,14 +514,18 @@ def btag_efficiency_contract(
 
 MAX_ABS_HIST_WEIGHT = 1.0e12
 SIGNAL_BTAG_FASTSIM_MASSES = (
-    600, 700, 800, 900, 950,
+    100, 200, 300, 400, 500, 600, 700, 800, 900, 950,
     1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500,
     1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500,
 )
 SIGNAL_BTAG_EFFICIENCY_DATASETS = {
     mstop: (
         f"SMS-2Stop_Par-mStop-{mstop}_TuneCP5_13p6TeV_madgraphMLM-pythia8-"
-        "RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1"
+        + (
+            "RunIII2024Summer24NanoAODv15-FSMiniv6_FSNanov15_150X_mcRun3_2024_realistic_v2-v1"
+            if mstop <= 500
+            else "RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v1"
+        )
     )
     for mstop in SIGNAL_BTAG_FASTSIM_MASSES
 }
@@ -661,6 +684,169 @@ def combine_two(a: Any, b: Any) -> Any:
     return ak.concatenate([a, b], axis=1)
 
 
+def _jagged_mt_below(
+    pt: Any,
+    phi: Any,
+    met: np.ndarray,
+    met_phi: np.ndarray,
+    threshold: float = 100.0,
+) -> np.ndarray:
+    mt = np.sqrt(
+        np.maximum(
+            0.0,
+            2.0
+            * pt
+            * met[:, None]
+            * (1.0 - np.cos(phi - met_phi[:, None])),
+        )
+    )
+    return np.asarray(ak.all(mt < threshold, axis=1), dtype=bool)
+
+
+def _gcr_open_high_from_flat(chunk: dict[str, Any]) -> np.ndarray:
+    """Reconstruct the photon-cleaned four-jet dphi cut from retained vectors."""
+    jet_eta = chunk["good_jet_eta"]
+    jet_phi = chunk["good_jet_phi"]
+    photon_eta = chunk["photon_medium_eta"]
+    photon_phi = chunk["photon_medium_phi"]
+    deta = jet_eta[:, :, None] - photon_eta[:, None, :]
+    dphi_clean = np.arctan2(
+        np.sin(jet_phi[:, :, None] - photon_phi[:, None, :]),
+        np.cos(jet_phi[:, :, None] - photon_phi[:, None, :]),
+    )
+    photon_clean = ak.all(
+        deta * deta + dphi_clean * dphi_clean > 0.2 * 0.2,
+        axis=2,
+    )
+    recoil_phi = ak.Array(
+        finite_array(chunk["recoil_gcr_phi"], len(chunk["dataset_id"]), 0.0)
+    )
+    selected_phi = jet_phi[photon_clean]
+    recoil_dphi = np.abs(
+        np.arctan2(
+            np.sin(selected_phi - recoil_phi[:, None]),
+            np.cos(selected_phi - recoil_phi[:, None]),
+        )
+    )
+    leading_four = ak.fill_none(
+        ak.pad_none(recoil_dphi, 4, axis=1, clip=True),
+        999.0,
+    )
+    return np.asarray(ak.all(leading_four > 0.5, axis=1), dtype=bool)
+
+
+def apply_highdm_veto_pt_thresholds(
+    chunk: dict[str, Any],
+    electron_pt_min: float,
+    muon_pt_min: float,
+) -> dict[str, int]:
+    """Recompute only High-dM likelihood regions for a veto-pT study."""
+    n = len(chunk["dataset_id"])
+    if electron_pt_min == 5.0 and muon_pt_min == 5.0:
+        return {"events": n, "recomputed": 0}
+    if electron_pt_min < 5.0 or muon_pt_min < 5.0:
+        raise ValueError("veto-pT study thresholds cannot be below 5 GeV")
+
+    old_regions = {
+        region: as_bool(chunk[f"feature_{region}"], n)
+        for region in ("SR", "LLCR", "QCDCR", "GCR")
+    }
+    electron_keep = chunk["electron_veto_pt"] > float(electron_pt_min)
+    muon_keep = chunk["muon_loose_pt"] > float(muon_pt_min)
+    old_electron_count = np.asarray(chunk["n_e_veto"], dtype=int)
+    old_muon_count = np.asarray(chunk["n_m_loose"], dtype=int)
+    for name in (
+        "electron_veto_pt", "electron_veto_eta", "electron_veto_eta_sc",
+        "electron_veto_phi",
+    ):
+        if name in chunk:
+            chunk[name] = chunk[name][electron_keep]
+    for name in ("muon_loose_pt", "muon_loose_eta", "muon_loose_phi"):
+        chunk[name] = chunk[name][muon_keep]
+
+    n_electron = np.asarray(ak.num(chunk["electron_veto_pt"], axis=1), dtype=int)
+    n_muon = np.asarray(ak.num(chunk["muon_loose_pt"], axis=1), dtype=int)
+    no_veto = (n_electron == 0) & (n_muon == 0)
+    one_veto = ((n_electron == 1) & (n_muon == 0)) | (
+        (n_electron == 0) & (n_muon == 1)
+    )
+    met = finite_array(chunk["met"], n, 0.0)
+    met_phi = finite_array(chunk["met_phi"], n, 0.0)
+    mt_below_100 = _jagged_mt_below(
+        chunk["electron_veto_pt"], chunk["electron_veto_phi"], met, met_phi
+    ) & _jagged_mt_below(
+        chunk["muon_loose_pt"], chunk["muon_loose_phi"], met, met_phi
+    )
+
+    base = bool_field(chunk, "pass_base_common", n) & bool_field(
+        chunk, "pass_zero_tau", n
+    )
+    signal_trigger = bool_field(chunk, "pass_signal_trigger", n)
+    common_highdm = (
+        base
+        & signal_trigger
+        & (int_field(chunk, "njet", n) >= 5)
+        & (int_field(chunk, "nb_medium", n) >= 1)
+        & bool_field(chunk, "pass_met_250", n)
+        & bool_field(chunk, "pass_ht_300", n)
+    )
+    open_high = bool_field(chunk, "pass_open_high", n)
+    gcr_open_high = (
+        as_bool(chunk["pass_gcr_open_high"], n)
+        if "pass_gcr_open_high" in chunk
+        else _gcr_open_high_from_flat(chunk)
+    )
+    new_regions = {
+        "SR": common_highdm & no_veto & open_high,
+        "LLCR": common_highdm & one_veto & mt_below_100 & open_high,
+        "QCDCR": (
+            common_highdm
+            & no_veto
+            & bool_field(chunk, "pass_qcd_open", n)
+            & bool_field(chunk, "pass_dphi123_0p1", n)
+        ),
+        "GCR": (
+            base
+            & bool_field(chunk, "pass_photon_trigger", n)
+            & (int_field(chunk, "n_photon_medium", n) == 1)
+            & no_veto
+            & (int_field(chunk, "njet_photon_clean", n) >= 5)
+            & (int_field(chunk, "nb_photon_clean", n) >= 1)
+            & (met < 250.0)
+            & (finite_array(chunk["recoil_gcr"], n, 0.0) > 250.0)
+            & gcr_open_high
+            & bool_field(chunk, "pass_ht_photon_300", n)
+        ),
+    }
+    chunk["n_e_veto"] = ak.Array(n_electron)
+    chunk["n_m_loose"] = ak.Array(n_muon)
+    for region, selected in new_regions.items():
+        chunk[f"feature_{region}"] = ak.Array(selected)
+    chunk["feature_SR_Nt1"] = ak.Array(
+        new_regions["SR"] & (int_field(chunk, "nboosted_top", n) >= 1)
+    )
+    audit = {
+        "events": n,
+        "recomputed": n,
+        "events_with_removed_electrons": int(
+            np.count_nonzero(old_electron_count != n_electron)
+        ),
+        "events_with_removed_muons": int(
+            np.count_nonzero(old_muon_count != n_muon)
+        ),
+    }
+    for region, selected in new_regions.items():
+        audit[f"{region}_before"] = int(np.count_nonzero(old_regions[region]))
+        audit[f"{region}_after"] = int(np.count_nonzero(selected))
+        audit[f"{region}_gained"] = int(
+            np.count_nonzero(selected & ~old_regions[region])
+        )
+        audit[f"{region}_lost"] = int(
+            np.count_nonzero(old_regions[region] & ~selected)
+        )
+    return audit
+
+
 def flat_arrays_for_weights(chunk: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
     n = len(chunk["gen_weight"])
     jet_pt = chunk["good_jet_pt"]
@@ -766,9 +952,6 @@ def flat_arrays_for_weights(chunk: dict[str, Any]) -> tuple[dict[str, Any], dict
             | as_bool(chunk["feature_lowdm_LLCR"], n)
             | as_bool(chunk["feature_lowdm_QCDCR"], n)
             | as_bool(chunk["feature_lowdm_SR"], n)
-            | region_mask(chunk, "HighDMVR_Nb1", "pass_base_common", n)
-            | region_mask(chunk, "HighDMVR_Nb2", "pass_base_common", n)
-            | region_mask(chunk, "HighDMVR_Nb3plus", "pass_base_common", n)
         ),
         "electron_eta_source": (
             "raw_eta_with_delta_eta_sc"
@@ -991,35 +1174,23 @@ def add_hist(target: dict[str, Any], values: np.ndarray, weights: np.ndarray, ma
 
 
 def region_mask(chunk: dict[str, Any], region: str, flag: str, n: int) -> np.ndarray:
-    if region.startswith("HighDMVR_"):
-        j1 = float_field(chunk, "j1_met_dphi", n, 999.0)
-        j2 = float_field(chunk, "j2_met_dphi", n, 999.0)
-        j3 = float_field(chunk, "j3_met_dphi", n, 999.0)
-        j4 = float_field(chunk, "j4_met_dphi", n, 999.0)
-        medium_dphi = (
-            (j1 > 0.5)
-            & (j2 > 0.15)
-            & (j3 > 0.15)
-            & ((j2 < 0.5) | (j3 < 0.5) | (j4 < 0.5))
+    channel = region.rsplit("_Nt", 1)[0]
+    if channel in {"DY2E", "DY2M"}:
+        base = dycr_lepton_mask(chunk, channel)
+        if not np.any(base):
+            return base
+        open_name = f"pass_{channel.lower()}_open_high"
+        if open_name not in chunk:
+            raise RuntimeError(f"DYCR re-selection requires {open_name}")
+        base &= (
+            as_bool(chunk[open_name], n)
+            & (np.asarray(chunk["njet_lepton_clean"], dtype=int) >= 5)
+            & (np.asarray(chunk["nb_lepton_clean"], dtype=int) >= 1)
+            & (np.asarray(chunk["ht_lepton_clean"], dtype=float) > 300.0)
+            & (np.asarray(chunk[f"recoil_{channel.lower()}"], dtype=float) > 250.0)
         )
-        nb = int_field(chunk, "nb_medium", n)
-        nb_mask = {
-            "HighDMVR_Nb1": nb == 1,
-            "HighDMVR_Nb2": nb == 2,
-            "HighDMVR_Nb3plus": nb >= 3,
-        }[region]
-        return (
-            bool_field(chunk, "pass_base_common", n)
-            & bool_field(chunk, "pass_signal_trigger", n)
-            & bool_field(chunk, "pass_zero_tau", n)
-            & bool_field(chunk, "pass_no_veto_leptons", n)
-            & (int_field(chunk, "njet", n) >= 5)
-            & nb_mask
-            & bool_field(chunk, "pass_met_250", n)
-            & bool_field(chunk, "pass_ht_300", n)
-            & medium_dphi
-        )
-    base = as_bool(chunk[flag], n)
+    else:
+        base = as_bool(chunk[flag], n)
     if region.endswith("_Nt0"):
         return base & (np.asarray(chunk["nboosted_top"], dtype=int) == 0)
     if region.endswith("_Nt1") and region != "SR_Nt1":
@@ -1192,13 +1363,461 @@ def lowdm_variable_values(chunk: dict[str, Any], spec: dict[str, Any], n: int) -
     return finite_array(chunk[branch], n, fill)
 
 
+def broad_lowdm_variable_values(
+    chunk: dict[str, Any],
+    block: Any,
+    variable: str,
+    spec: dict[str, Any],
+    n: int,
+) -> np.ndarray:
+    """Return values consistent with the object-cleaned broad region."""
+    block_fields = {
+        "ht": "ht",
+        "njet": "njet",
+        "nb_medium_lowdm": "nb",
+        "lowdm_mtb": "mtb",
+        "lowdm_met_sqrt_ht": "met_sqrt_ht",
+        "lowdm_ptb": "ptb",
+        "n_lowdm_isr": "nisr",
+        "njet_photon_clean": "njet",
+        "nb_photon_clean": "nb",
+        "ht_photon_clean": "ht",
+        "njet_lepton_clean": "njet",
+        "nb_lepton_clean": "nb",
+        "ht_lepton_clean": "ht",
+    }
+    attribute = block_fields.get(variable)
+    if attribute is not None:
+        return finite_array(
+            getattr(block, attribute), n, float(spec.get("fill", -99.0))
+        )
+    return lowdm_variable_values(chunk, spec, n)
+
+
+def broad_lowdm_blocks(
+    chunk: dict[str, Any] | ak.Array,
+    *,
+    dy_mass_window: tuple[float, float] | None = (71.0, 111.0),
+) -> tuple[dict[str, Any], dict[str, int]]:
+    arrays = ak.zip(chunk, depth_limit=1) if isinstance(chunk, dict) else chunk
+    return build_broad_lowdm_region_blocks(
+        arrays, dy_mass_window=dy_mass_window
+    )
+
+
+def broad_lowdm_region_mask(
+    block: Any, chunk: dict[str, Any], n: int
+) -> np.ndarray:
+    """Adopt the broad topology without retired ISR/significance requirements."""
+    return (
+        np.asarray(block.core, dtype=bool)
+        & (np.asarray(block.nb, dtype=int) >= 1)
+        & (np.asarray(block.nt, dtype=int) == 0)
+        & (np.asarray(block.nw, dtype=int) == 0)
+        & lowdm_nres_zero_mask(chunk, n)
+    )
+
+
+def fill_broad_lowdm_distribution_histograms(
+    chunk: dict[str, Any],
+    variations: dict[str, Any],
+    normv: np.ndarray,
+    label: str,
+    process: str,
+    is_data: bool,
+    lowdm_variable_histograms: dict[str, Any],
+    summary: dict[str, Any],
+    blocks: dict[str, Any] | None = None,
+    object_audit: dict[str, int] | None = None,
+) -> None:
+    """Fill physical distributions for the broad Low-dM SR and CRs."""
+    n = len(chunk["dataset_id"])
+    if blocks is None or object_audit is None:
+        blocks, object_audit = broad_lowdm_blocks(chunk)
+    audit = summary.setdefault("broad_lowdm_selection_audit", {})
+    object_counts = audit.setdefault("object_count_mismatches", {})
+    for key, value in object_audit.items():
+        object_counts[key] = int(object_counts.get(key, 0)) + int(value)
+
+    for region, channel in LOWDM_REGION_MAP.items():
+        block = blocks[region]
+        core = np.asarray(block.core, dtype=bool)
+        nb = np.asarray(block.nb, dtype=int)
+        nt = np.asarray(block.nt, dtype=int)
+        nw = np.asarray(block.nw, dtype=int)
+        nres0 = lowdm_nres_zero_mask(chunk, n)
+        selected = broad_lowdm_region_mask(block, chunk, n)
+        counters = audit.setdefault("regions", {}).setdefault(
+            region,
+            {
+                "core": 0,
+                "core_nb_ge1": 0,
+                "core_nb_ge1_nt0_nw0": 0,
+                "selected_nres0": 0,
+                "rejected_nres": 0,
+            },
+        )
+        counters["core"] += int(np.count_nonzero(core))
+        counters["core_nb_ge1"] += int(np.count_nonzero(core & (nb >= 1)))
+        topology = core & (nb >= 1) & (nt == 0) & (nw == 0)
+        counters["core_nb_ge1_nt0_nw0"] += int(np.count_nonzero(topology))
+        counters["selected_nres0"] += int(np.count_nonzero(selected))
+        counters["rejected_nres"] += int(np.count_nonzero(topology & ~nres0))
+
+        if is_data and not data_process_allowed(process, channel):
+            note_data_exclusion(
+                summary, channel, process, int(np.count_nonzero(selected))
+            )
+            continue
+        if not np.any(selected):
+            continue
+        values_by_variable = {
+            variable: broad_lowdm_variable_values(
+                chunk,
+                block,
+                variable,
+                LOWDM_VARIABLE_SPECS[variable],
+                n,
+            )
+            for variable in LOWDM_REGION_VARIABLES.get(region, [])
+        }
+        for variation_name, raw_weight in variations.items():
+            weights = finite_array(raw_weight, n, 0.0) * normv
+            for variable, values in values_by_variable.items():
+                spec = LOWDM_VARIABLE_SPECS[variable]
+                target = (
+                    lowdm_variable_histograms
+                    .setdefault(channel, {})
+                    .setdefault(variable, {})
+                    .setdefault(label, {})
+                    .setdefault(
+                        variation_name,
+                        empty_binned_hist(spec["bins"]),
+                    )
+                )
+                add_binned_hist(
+                    target,
+                    values,
+                    weights,
+                    selected,
+                    spec["bins"],
+                    overflow_policy=str(spec.get("overflow_policy", "exclude")),
+                )
+
+
+def empty_background_estimation_inputs() -> dict[str, Any]:
+    """Return the compact histogram-only boundary for all estimators."""
+    output = {
+        "schema_version": "background_estimation_histograms_v1",
+        "status": "complete",
+        "category_policy": {
+            "highdm": ["Nb1", "Nb2plus"],
+            "lowdm": ["Nb1", "Nb2plus"],
+            "lowdm_removed_axes": ["Njet", "pTb", "ISR"],
+        },
+        "highdm": {
+            "recoil_edges": list(BACKGROUND_ESTIMATION_UT_BINS),
+            "nb_groups": ["Nb1", "Nb2plus"],
+            "recoil": {},
+        },
+        "lowdm": {
+            "recoil_edges": list(BACKGROUND_ESTIMATION_UT_BINS),
+            "nb_groups": ["Nb1", "Nb2plus"],
+            "recoil": {},
+        },
+        "dy_rz": {
+            "mass_windows": {
+                "on": [71.0, 111.0],
+                "off": [[50.0, 71.0], [111.0, None]],
+            },
+            "mll_edges": list(DY_RZ_MLL_BINS),
+            "highdm": {"yields": {}, "mll": {}},
+            "lowdm": {"yields": {}, "mll": {}},
+        },
+        "summary": {"datasets": {}},
+        "provenance": {
+            "source_kind": "merged normalized histograms",
+            "intermediate_root_reread": False,
+            "regions": list(BACKGROUND_ESTIMATION_REGIONS),
+        },
+    }
+    for regime in ("highdm", "lowdm"):
+        for region in BACKGROUND_ESTIMATION_REGIONS:
+            for group in ("Nb1", "Nb2plus"):
+                for sample in BACKGROUND_ESTIMATION_REQUIRED_SAMPLES:
+                    _background_recoil_leaf(
+                        output,
+                        regime,
+                        region,
+                        group,
+                        sample,
+                        "nominal",
+                    )
+        for channel in ("DY2E", "DY2M"):
+            for group in ("Nb1", "Nb2plus"):
+                for component in ("data", "zll", "other"):
+                    _dy_rz_leaf(
+                        output,
+                        regime,
+                        "mll",
+                        channel,
+                        group,
+                        component,
+                    )
+                    for window in ("on", "off"):
+                        _dy_rz_leaf(
+                            output,
+                            regime,
+                            "yields",
+                            channel,
+                            group,
+                            window,
+                            component,
+                        )
+    return output
+
+
+def _background_recoil_leaf(
+    output: dict[str, Any],
+    regime: str,
+    region: str,
+    group: str,
+    sample: str,
+    variation: str,
+) -> dict[str, Any]:
+    return (
+        output[regime]["recoil"]
+        .setdefault(region, {})
+        .setdefault(group, {})
+        .setdefault(sample, {})
+        .setdefault(
+            variation,
+            empty_binned_hist(BACKGROUND_ESTIMATION_UT_BINS),
+        )
+    )
+
+
+def _dy_rz_component(
+    dataset: str,
+    process: str,
+    is_data: bool,
+) -> str:
+    if is_data:
+        return "data"
+    if process == "DY":
+        return "zll"
+    z_tokens = ("TTZ", "WZ", "ZZ", "WWZ", "WZZ", "ZZZ", "WZG")
+    return "zll" if any(token in dataset for token in z_tokens) else "other"
+
+
+def _dy_rz_leaf(
+    output: dict[str, Any],
+    regime: str,
+    collection: str,
+    channel: str,
+    group: str,
+    key: str,
+    component: str | None = None,
+) -> dict[str, Any]:
+    target = (
+        output["dy_rz"][regime][collection]
+        .setdefault(channel, {})
+        .setdefault(group, {})
+        .setdefault(key, {})
+    )
+    if component is not None:
+        target = target.setdefault(component, {})
+    edges = [0.0, 1.0] if collection == "yields" else DY_RZ_MLL_BINS
+    return target.setdefault("nominal", empty_binned_hist(edges))
+
+
+def fill_background_estimation_histograms(
+    chunk: dict[str, Any],
+    variations: dict[str, Any],
+    normv: np.ndarray,
+    dataset: str,
+    process: str,
+    label: str,
+    is_data: bool,
+    is_signal: bool,
+    output: dict[str, Any],
+    lowdm_blocks: dict[str, Any],
+    rz_blocks: dict[str, Any],
+) -> None:
+    """Persist every TF, Sgamma, double-ratio, and RZ counting input.
+
+    This function is called only inside the nominal histogram pass.  It keeps
+    the two regimes on the same Nb-only category policy and stores sufficiently
+    fine U_T bins so plotting/measurement code may merge tails without reading
+    event records again.
+    """
+    if is_signal:
+        return
+    n = len(normv)
+    datasets = output["summary"]["datasets"]
+    datasets[dataset] = int(datasets.get(dataset, 0)) + n
+    for regime in ("highdm", "lowdm"):
+        for region in BACKGROUND_ESTIMATION_REGIONS:
+            if is_data and region == "SR":
+                continue
+            data_region = LOWDM_REGION_MAP[region] if regime == "lowdm" else region
+            if is_data and not data_process_allowed(process, data_region):
+                continue
+            if regime == "highdm":
+                flag, value_branch = BASE_REGION_VARIABLES[region]
+                selected = region_mask(chunk, region, flag, n)
+                values = finite_array(chunk[value_branch], n, 0.0)
+                nb_branch = (
+                    "nb_photon_clean"
+                    if region == "GCR"
+                    else "nb_lepton_clean"
+                    if region in {"DY2E", "DY2M"}
+                    else "nb_medium"
+                )
+                nb = int_field(chunk, nb_branch, n, -1)
+            else:
+                block = lowdm_blocks[region]
+                selected = broad_lowdm_region_mask(block, chunk, n)
+                values = np.asarray(block.recoil, dtype=float)
+                nb = np.asarray(block.nb, dtype=int)
+            for group, group_mask in (
+                ("Nb1", nb == 1),
+                ("Nb2plus", nb >= 2),
+            ):
+                mask = selected & group_mask
+                if not np.any(mask):
+                    continue
+                for variation_name, raw_weight in variations.items():
+                    weights = finite_array(raw_weight, n, 0.0) * normv
+                    add_binned_hist(
+                        _background_recoil_leaf(
+                            output,
+                            regime,
+                            region,
+                            group,
+                            label,
+                            variation_name,
+                        ),
+                        values,
+                        weights,
+                        mask,
+                        BACKGROUND_ESTIMATION_UT_BINS,
+                        overflow_policy="fold",
+                    )
+
+    component = _dy_rz_component(dataset, process, is_data)
+    nominal_weight = finite_array(variations["nominal"], n, 0.0) * normv
+    unit_coordinate = np.full(n, 0.5, dtype=float)
+    for channel in ("DY2E", "DY2M"):
+        if is_data and not data_process_allowed(process, channel):
+            continue
+        block = rz_blocks[channel]
+        mass = finite_array(
+            chunk["mee" if channel == "DY2E" else "mmm"], n, -99.0
+        )
+        open_branch = f"pass_{channel.lower()}_open_high"
+        if open_branch not in chunk:
+            raise RuntimeError(
+                f"histogram-only RZ input requires {open_branch}"
+            )
+        high_selected = (
+            np.asarray(block.core, dtype=bool)
+            & (np.asarray(block.njet, dtype=int) >= 5)
+            & (np.asarray(block.nb, dtype=int) >= 1)
+            & as_bool(chunk[open_branch], n)
+        )
+        low_selected = broad_lowdm_region_mask(block, chunk, n)
+        nb = np.asarray(block.nb, dtype=int)
+        windows = {
+            "on": (mass > 71.0) & (mass < 111.0),
+            "off": ((mass > 50.0) & (mass < 71.0)) | (mass > 111.0),
+        }
+        for regime, regime_mask in (
+            ("highdm", high_selected),
+            ("lowdm", low_selected),
+        ):
+            for group, group_mask in (
+                ("Nb1", nb == 1),
+                ("Nb2plus", nb >= 2),
+            ):
+                category_mask = regime_mask & group_mask
+                if not np.any(category_mask):
+                    continue
+                mll_target = (
+                    output["dy_rz"][regime]["mll"]
+                    .setdefault(channel, {})
+                    .setdefault(group, {})
+                    .setdefault(component, {})
+                    .setdefault(
+                        "nominal", empty_binned_hist(DY_RZ_MLL_BINS)
+                    )
+                )
+                add_binned_hist(
+                    mll_target,
+                    mass,
+                    nominal_weight,
+                    category_mask & (mass > 50.0),
+                    DY_RZ_MLL_BINS,
+                    overflow_policy="fold",
+                )
+                for window, window_mask in windows.items():
+                    add_binned_hist(
+                        _dy_rz_leaf(
+                            output,
+                            regime,
+                            "yields",
+                            channel,
+                            group,
+                            window,
+                            component,
+                        ),
+                        unit_coordinate,
+                        nominal_weight,
+                        category_mask & window_mask,
+                        [0.0, 1.0],
+                    )
+
+
+def accepted_known_unavailable_weight_components(
+    campaign_year: str,
+    required_components: list[str],
+    status: dict[str, Any],
+) -> dict[str, str]:
+    """Accept only explicitly documented 2025 correction-payload gaps.
+
+    The requested components remain in the build contract.  This helper merely
+    prevents the two known Prompt-2025 payload absences from being confused
+    with an arbitrary correction failure, and records their exact errors in
+    every affected sample audit.
+    """
+    if str(campaign_year) != "2025":
+        return {}
+    expected_errors = {
+        "electron_hlt": "2025 electron HLT SF is not available",
+        "photon_csev": "has no published working-point content",
+    }
+    accepted: dict[str, str] = {}
+    component_statuses = status.get("components") or {}
+    for component in required_components:
+        expected_error = expected_errors.get(component)
+        if expected_error is None:
+            continue
+        component_status = component_statuses.get(component) or {}
+        if component_status.get("applied"):
+            continue
+        error = str(component_status.get("error") or "")
+        if expected_error in error:
+            accepted[component] = error
+    return accepted
+
+
 def highdm_base_region(region: str) -> str:
     return "SR" if region.startswith("SR_") else region
 
 
 def highdm_distribution_masks(chunk: dict[str, Any], n: int) -> dict[str, np.ndarray]:
     masks: dict[str, np.ndarray] = {}
-    for region in HIGHDM_CR_REGIONS + HIGHDM_VR_REGIONS:
+    for region in HIGHDM_CR_REGIONS:
         flag, _variable = REGION_VARIABLES[region]
         masks[region] = region_mask(chunk, region, flag, n)
 
@@ -1599,21 +2218,16 @@ def compute_trota_nres(
     light = event_tree.arrays(sorted(required), library="ak")
     number_events = int(event_tree.num_entries)
     lowdm_eligible = np.zeros(number_events, dtype=bool)
+    lowdm_object_audit: dict[str, int] = {}
     if include_lowdm:
-        nb_ge1 = np.asarray(light["nb_medium_lowdm"], dtype=int) >= 1
-        regular_regions = np.zeros(number_events, dtype=bool)
-        for region in LOWDM_REGION_MAP:
-            regular_regions |= np.asarray(
-                light[f"feature_lowdm_{region}"], dtype=bool
+        lowdm_blocks, lowdm_object_audit = broad_lowdm_blocks(light)
+        for block in lowdm_blocks.values():
+            lowdm_eligible |= (
+                np.asarray(block.core, dtype=bool)
+                & (np.asarray(block.nb, dtype=int) >= 1)
+                & (np.asarray(block.nt, dtype=int) == 0)
+                & (np.asarray(block.nw, dtype=int) == 0)
             )
-        focused_sr = (
-            np.asarray(light["feature_lowdm_preselection"], dtype=bool)
-            & np.asarray(light["pass_lowdm_topology_veto"], dtype=bool)
-            & np.asarray(light["pass_lowdm_isr"], dtype=bool)
-            & np.asarray(light["pass_lowdm_met_sqrt_ht"], dtype=bool)
-            & nb_ge1
-        )
-        lowdm_eligible = nb_ge1 & (regular_regions | focused_sr)
 
     highdm_eligible = np.zeros(number_events, dtype=bool)
     if highdm_configuration is not None:
@@ -1719,6 +2333,10 @@ def compute_trota_nres(
         "rejected_by_boosted_overlap": int(rejected_boosted),
         "rejected_by_resolved_overlap": int(rejected_resolved),
         "identity_fallback_files": int(identity_fallback),
+        **{
+            f"lowdm_{key}": int(value)
+            for key, value in lowdm_object_audit.items()
+        },
     }
 
 
@@ -1857,7 +2475,7 @@ def iterate_tree_for_gcr_study(
         yield full[selected]
 
 
-def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: dict[str, Any], highdm_control_components: dict[str, Any], search_histograms: dict[str, Any], highdm_search_bin_components: dict[str, Any], lowdm_variable_histograms: dict[str, Any], highdm_variable_histograms: dict[str, Any], summary: dict[str, Any], step_size: int, campaign_year: str = "2024", only_regions: list[str] | None = None, require_btag: bool = False, require_weight_components: list[str] | None = None, analysis_sf_components: list[str] | None = None, require_branches: bool = False, require_normalization: bool = False, nominal_only: bool = False, distribution_only: bool = False, only_variables: list[str] | None = None, only_signal_mass: tuple[int, int] | None = None, only_lowdm_sr_nsv_inclusive: bool = False, only_lowdm_nsv_repair: bool = False, lowdm_only: bool = False, require_lowdm_nres_zero: bool = False, search_bin_configuration: dict[str, Any] | None = None, dy_ptll_policy: str = "all", gcr_only: bool = False, gcr_photon_policy: str = "nominal") -> None:
+def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: dict[str, Any], highdm_control_components: dict[str, Any], search_histograms: dict[str, Any], highdm_search_bin_components: dict[str, Any], lowdm_variable_histograms: dict[str, Any], highdm_variable_histograms: dict[str, Any], background_estimation_inputs: dict[str, Any], summary: dict[str, Any], step_size: int, campaign_year: str = "2024", only_regions: list[str] | None = None, require_btag: bool = False, require_weight_components: list[str] | None = None, analysis_sf_components: list[str] | None = None, require_branches: bool = False, require_normalization: bool = False, nominal_only: bool = False, distribution_only: bool = False, only_variables: list[str] | None = None, only_signal_mass: tuple[int, int] | None = None, only_lowdm_sr_nsv_inclusive: bool = False, only_lowdm_nsv_repair: bool = False, lowdm_only: bool = False, highdm_only: bool = False, electron_veto_pt_min: float = 5.0, muon_veto_pt_min: float = 5.0, require_lowdm_nres_zero: bool = False, search_bin_configuration: dict[str, Any] | None = None, dy_ptll_policy: str = "all", gcr_only: bool = False, gcr_photon_policy: str = "nominal") -> None:
     try:
         meta = read_root_metadata(root_path, fallback=norm)
     except FileNotFoundError:
@@ -1877,10 +2495,20 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
             effective_read_branches = sorted(
                 set(effective_read_branches + GCR_PHOTON_POLICY_BRANCHES)
             )
+        dataset_records = list((meta.get("datasets") or {}).values())
+        signal_only_file = bool(dataset_records) and all(
+            bool(record.get("is_signal")) for record in dataset_records
+        )
+        optional_branches = set(OPTIONAL_FORWARD_SCHEMA_BRANCHES)
+        # Signal intermediates intentionally do not store the GCR-only open
+        # selection.  They never contribute to GCR, so requiring that branch
+        # would reject valid signal files without adding any validation power.
+        if signal_only_file:
+            optional_branches.add("pass_gcr_open_high")
         missing_required_branches = [
             branch
             for branch in effective_read_branches
-            if branch not in present and branch not in OPTIONAL_FORWARD_SCHEMA_BRANCHES
+            if branch not in present and branch not in optional_branches
         ]
         if require_branches and missing_required_branches:
             raise RuntimeError(
@@ -1974,6 +2602,24 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                         continue
                     sub_group = {name: arr[mask_group] for name, arr in sub.items()}
                     original_n = len(sub_group["dataset_id"])
+                    veto_audit = apply_highdm_veto_pt_thresholds(
+                        sub_group,
+                        electron_veto_pt_min,
+                        muon_veto_pt_min,
+                    )
+                    if veto_audit.get("recomputed"):
+                        mass_suffix = ""
+                        if is_signal:
+                            mass_suffix = "_mStop%d_mLSP%d" % (
+                                int(np.asarray(sub_group["mStop"], dtype=int)[0]),
+                                int(np.asarray(sub_group["mLSP"], dtype=int)[0]),
+                            )
+                        audit_key = f"{process}{mass_suffix}"
+                        target = summary.setdefault(
+                            "highdm_veto_pt_threshold_audit", {}
+                        ).setdefault(audit_key, {})
+                        for key, value in veto_audit.items():
+                            target[key] = int(target.get(key, 0)) + int(value)
                     if gcr_only:
                         policy_mask = gcr_photon_policy_mask(
                             sub_group,
@@ -2031,7 +2677,38 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                             summary["events_processed"] = int(summary.get("events_processed", 0)) + original_n
                             continue
                         sub_group = {name: arr[selected] for name, arr in sub_group.items()}
+                    broad_blocks = None
+                    broad_object_audit = None
+                    if not highdm_only and not gcr_only and not only_regions:
+                        broad_blocks, broad_object_audit = broad_lowdm_blocks(sub_group)
+                    rz_blocks = None
+                    if search_bin_configuration is not None:
+                        # Build the mass-unconstrained DY blocks in the same
+                        # in-memory event pass.  The on/off-Z split is stored
+                        # below as compact histograms, never reconstructed by
+                        # reopening the intermediate ROOTs.
+                        rz_blocks, _rz_object_audit = broad_lowdm_blocks(
+                            sub_group,
+                            dy_mass_window=None,
+                        )
                     arrays, inputs = flat_arrays_for_weights(sub_group)
+                    if broad_blocks is not None:
+                        broad_masks = {
+                            region: broad_lowdm_region_mask(
+                                block, sub_group, inputs["n"]
+                            )
+                            for region, block in broad_blocks.items()
+                        }
+                        inputs["gcr_mask"] = (
+                            np.asarray(inputs["gcr_mask"], dtype=bool)
+                            | broad_masks["GCR"]
+                        )
+                        inputs["met_trigger_mask"] = (
+                            np.asarray(inputs["met_trigger_mask"], dtype=bool)
+                            | broad_masks["SR"]
+                            | broad_masks["LLCR"]
+                            | broad_masks["QCDCR"]
+                        )
                     if gcr_only:
                         inputs["gcr_mask"] = (
                             as_bool(sub_group["feature_GCR"], inputs["n"])
@@ -2098,7 +2775,20 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                     if require_btag and not is_data and not btag_status.get("applied"):
                         raise RuntimeError(f"Required btagSF is unavailable for {dataset}: {btag_status}")
                     if not is_data:
+                        known_unavailable_unity = (
+                            accepted_known_unavailable_weight_components(
+                                year,
+                                list(require_weight_components or []),
+                                status,
+                            )
+                        )
+                        if known_unavailable_unity:
+                            status["known_unavailable_unity_components"] = (
+                                known_unavailable_unity
+                            )
                         for component_name in require_weight_components or []:
+                            if component_name in known_unavailable_unity:
+                                continue
                             component_status = (
                                 (status.get("components") or {}).get(component_name) or {}
                             )
@@ -2113,6 +2803,7 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                             if any(
                                 variation == f"{component}{direction}"
                                 for component in (require_weight_components or [])
+                                if component not in known_unavailable_unity
                                 for direction in ("Up", "Down")
                             )
                         }
@@ -2159,6 +2850,24 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                                 int(rejection.get("excessive_magnitude", 0)) + excessive
                             )
                     summary.setdefault("scale_factor_status", {}).setdefault(label, status)
+                    if search_bin_configuration is not None:
+                        if broad_blocks is None or rz_blocks is None:
+                            raise RuntimeError(
+                                "full histogram build lacks background-estimation blocks"
+                            )
+                        fill_background_estimation_histograms(
+                            sub_group,
+                            variations,
+                            normv,
+                            dataset,
+                            process,
+                            label,
+                            is_data,
+                            is_signal,
+                            background_estimation_inputs,
+                            broad_blocks,
+                            rz_blocks,
+                        )
                     if only_lowdm_sr_nsv_inclusive:
                         for vname, wraw in variations.items():
                             weights = finite_array(wraw, inputs["n"], 0.0) * normv
@@ -2218,6 +2927,19 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                             highdm_variable_histograms, summary,
                             ["GCR"] if gcr_only else only_regions,
                             only_variables,
+                        )
+                    if not highdm_only and not gcr_only and not only_regions:
+                        fill_broad_lowdm_distribution_histograms(
+                            sub_group,
+                            variations,
+                            normv,
+                            label,
+                            process,
+                            is_data,
+                            lowdm_variable_histograms,
+                            summary,
+                            blocks=broad_blocks,
+                            object_audit=broad_object_audit,
                         )
                     if distribution_only:
                         summary["events_processed"] = int(summary.get("events_processed", 0)) + original_n
@@ -2348,7 +3070,9 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                                     )
 
                     lowdm_regions = (
-                        {"GCR": LOWDM_REGION_MAP["GCR"]}
+                        {}
+                        if highdm_only
+                        else {"GCR": LOWDM_REGION_MAP["GCR"]}
                         if gcr_only
                         else LOWDM_REGION_MAP
                     )
@@ -2400,27 +3124,10 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                             + selected_lowdm
                             - assigned_lowdm
                         )
-                        lowdm_values = {
-                            var_name: lowdm_variable_values(sub_group, LOWDM_VARIABLE_SPECS[var_name], inputs["n"])
-                            for var_name in LOWDM_REGION_VARIABLES.get(lowdm_region, [])
-                        }
                         for vname, wraw in variations.items():
                             weights = finite_array(wraw, inputs["n"], 0.0) * normv
                             target = search_histograms.setdefault(lowdm_channel, {}).setdefault(label, {}).setdefault(vname, empty_index_hist(len(LOWDM_34BIN_LABELS)))
                             add_index_hist(target, lowdm_indices, weights)
-                            for var_name, values in lowdm_values.items():
-                                spec = LOWDM_VARIABLE_SPECS[var_name]
-                                vtarget = lowdm_variable_histograms.setdefault(lowdm_channel, {}).setdefault(var_name, {}).setdefault(label, {}).setdefault(vname, empty_binned_hist(spec["bins"]))
-                                add_binned_hist(
-                                    vtarget,
-                                    values,
-                                    weights,
-                                    lowdm_mask,
-                                    spec["bins"],
-                                    overflow_policy=str(
-                                        spec.get("overflow_policy", "exclude")
-                                    ),
-                                )
                     summary["events_processed"] = int(summary.get("events_processed", 0)) + inputs["n"]
         if trota_nres is not None and trota_nres_cursor != len(trota_nres):
             raise RuntimeError(
@@ -2533,6 +3240,23 @@ def main() -> int:
         help="Build only the six adopted low-dM search-bin and distribution containers.",
     )
     parser.add_argument(
+        "--highdm-only",
+        action="store_true",
+        help="Build only the configured High-dM likelihood histograms.",
+    )
+    parser.add_argument(
+        "--electron-veto-pt-min",
+        type=float,
+        default=5.0,
+        help="Electron veto pT threshold in GeV; values above 5 are for High-dM studies.",
+    )
+    parser.add_argument(
+        "--muon-veto-pt-min",
+        type=float,
+        default=5.0,
+        help="Muon veto pT threshold in GeV; values above 5 are for High-dM studies.",
+    )
+    parser.add_argument(
         "--require-lowdm-nres-zero",
         action="store_true",
         help=(
@@ -2571,6 +3295,17 @@ def main() -> int:
         parser.error("--gcr-only cannot be combined with --only-regions")
     if args.lowdm_only and (args.only_regions or args.gcr_only):
         parser.error("--lowdm-only cannot be combined with --only-regions or --gcr-only")
+    if args.lowdm_only and args.highdm_only:
+        parser.error("--lowdm-only and --highdm-only are mutually exclusive")
+    veto_pt_study = (
+        args.electron_veto_pt_min != 5.0 or args.muon_veto_pt_min != 5.0
+    )
+    if veto_pt_study and not args.highdm_only:
+        parser.error("non-default veto pT thresholds require --highdm-only")
+    if veto_pt_study and (args.gcr_only or args.only_regions):
+        parser.error("veto pT studies require the full High-dM histogram pass")
+    if args.electron_veto_pt_min < 5.0 or args.muon_veto_pt_min < 5.0:
+        parser.error("veto pT thresholds cannot be below 5 GeV")
     if args.require_lowdm_nres_zero and args.dy_ptll_policy != "all":
         parser.error("--require-lowdm-nres-zero requires --dy-ptll-policy all")
     if args.gcr_photon_policy != "nominal" and not args.gcr_only:
@@ -2599,7 +3334,8 @@ def main() -> int:
         args.only_lowdm_sr_nsv_inclusive,
     ))
     require_lowdm_nres_zero = bool(
-        args.require_lowdm_nres_zero or full_search_bin_build
+        args.require_lowdm_nres_zero
+        or (full_search_bin_build and not args.highdm_only)
     )
     if require_lowdm_nres_zero and args.dy_ptll_policy != "all":
         parser.error("resolved-top categorization requires --dy-ptll-policy all")
@@ -2630,6 +3366,7 @@ def main() -> int:
     highdm_search_bin_components: dict[str, Any] = {}
     lowdm_variable_histograms: dict[str, Any] = {}
     highdm_variable_histograms: dict[str, Any] = {}
+    background_estimation_inputs = empty_background_estimation_inputs()
     btag_payload_required = bool(
         args.require_btag or "btagSF" in args.require_weight_components
     )
@@ -2650,6 +3387,9 @@ def main() -> int:
         "only_lowdm_sr_nsv_inclusive": bool(args.only_lowdm_sr_nsv_inclusive),
         "only_lowdm_nsv_repair": bool(args.only_lowdm_nsv_repair),
         "lowdm_only": bool(args.lowdm_only),
+        "highdm_only": bool(args.highdm_only),
+        "electron_veto_pt_min": float(args.electron_veto_pt_min),
+        "muon_veto_pt_min": float(args.muon_veto_pt_min),
         "require_lowdm_nres_zero": require_lowdm_nres_zero,
         "search_bins": search_bin_contract,
         "dy_ptll_policy": str(args.dy_ptll_policy),
@@ -2694,6 +3434,7 @@ def main() -> int:
             highdm_search_bin_components,
             lowdm_variable_histograms,
             highdm_variable_histograms,
+            background_estimation_inputs,
             summary,
             step_size=args.step_size,
             campaign_year=args.campaign_year,
@@ -2712,6 +3453,9 @@ def main() -> int:
             only_lowdm_sr_nsv_inclusive=args.only_lowdm_sr_nsv_inclusive,
             only_lowdm_nsv_repair=args.only_lowdm_nsv_repair,
             lowdm_only=args.lowdm_only,
+            highdm_only=args.highdm_only,
+            electron_veto_pt_min=args.electron_veto_pt_min,
+            muon_veto_pt_min=args.muon_veto_pt_min,
             require_lowdm_nres_zero=require_lowdm_nres_zero,
             search_bin_configuration=search_bin_configuration,
             dy_ptll_policy=args.dy_ptll_policy,
@@ -2852,6 +3596,13 @@ def main() -> int:
                 else "34 low-dM bins per region with explicit Nb>=1 after removing the two leading Nb=0 categories; Nsv, the ISR-subjet b veto, and the mTb requirement are not applied"
             ),
             "regions": LOWDM_REGION_MAP,
+            "distribution_selection": (
+                "region core && object-cleaned Nb>=1 && object-cleaned Nt=0 && "
+                "object-cleaned Nw=0 && TROTA Nres=0; no NISR requirement, no "
+                "ISR-recoil delta-phi requirement, no MET/sqrt(HT) requirement, "
+                "no old low-dM search-bin assignability requirement, and no "
+                "High-dM feature veto"
+            ),
             "note": (
                 "Every Low-dM CR and SR explicitly requires Nb>=1 and TROTA Nres=0. "
                 "Low-dM is Nsv-inclusive and does not require "
@@ -2872,7 +3623,6 @@ def main() -> int:
         "highdm_distribution_variable_specs": HIGHDM_DISTRIBUTION_VARIABLE_SPECS,
         "highdm_distribution_regions": {
             "control": HIGHDM_CR_REGIONS,
-            "validation": HIGHDM_VR_REGIONS,
             "signal_categories": HIGHDM_SR_CATEGORY_KEYS,
         },
         "lowdm_variable_specs": LOWDM_VARIABLE_SPECS,
@@ -2886,6 +3636,7 @@ def main() -> int:
         "highdm_search_bin_components": highdm_search_bin_components,
         "lowdm_variable_histograms": lowdm_variable_histograms,
         "highdm_variable_histograms": highdm_variable_histograms,
+        "background_estimation_inputs": background_estimation_inputs,
     }
     write_json(Path(args.output), payload)
     print(json.dumps({"status": payload["status"], "input_roots": len(summary["input_roots"]), "events_processed": summary["events_processed"], "regions": len(histograms), "search_bin_schemes": len(search_histograms), "lowdm_variable_regions": len(lowdm_variable_histograms), "highdm_variable_regions": len(highdm_variable_histograms), "output": args.output}, sort_keys=True))

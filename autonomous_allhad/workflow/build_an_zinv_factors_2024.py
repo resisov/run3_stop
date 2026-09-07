@@ -3,7 +3,6 @@
 
 from __future__ import annotations
 
-import argparse
 import json
 import math
 import re
@@ -24,8 +23,8 @@ CMS_LABEL = {
     "llabel": "Work in progress",
     "rlabel": "2024 (13.6 TeV)",
 }
-HIGH_GROUPS = ("Nb1", "Nb2", "Nb3plus")
-HIGH_RZ_GROUP = {"Nb1": "Nb1", "Nb2": "Nb2plus", "Nb3plus": "Nb2plus"}
+HIGH_GROUPS = ("Nb1", "Nb2plus")
+HIGH_RZ_GROUP = {"Nb1": "Nb1", "Nb2plus": "Nb2plus"}
 LOW_GROUPS = ("Nb1", "Nb2plus")
 LOW_SHARED_GROUPS = (
     (
@@ -488,101 +487,9 @@ def build_q_sgamma(
             }
         return output
 
-    labels = exact["lowdm"]["search_bin_labels"]
-    low_nbin = len(labels)
-    low_data = measurement["gcr_data"]["lowdm"]["yields"]
-    low_q_by_group: dict[str, dict[str, Any]] = {}
-    for group, group_indices in {
-        "Nb1": list(range(0, 16)),
-        "Nb2plus": list(range(16, low_nbin)),
-    }.items():
-        by_sample = exact["lowdm"]["search_components"]["GCR"][group]
-        total_mc, total_mc2 = sum_samples(by_sample, low_nbin)
-        gamma, gamma2 = sum_samples(by_sample, low_nbin, {"GJ"})
-        other = total_mc - gamma
-        other2 = np.maximum(total_mc2 - gamma2, 0.0)
-        data = np.asarray(
-            [
-                data_leaf(low_data.get(str(index), {}))[0]
-                for index in group_indices
-            ],
-            dtype=float,
-        )
-        data2 = np.asarray(
-            [
-                data_leaf(low_data.get(str(index), {}))[1]
-                for index in group_indices
-            ],
-            dtype=float,
-        )
-        low_q_by_group[group] = factor(
-            float(np.sum(data - other[group_indices])),
-            float(np.sum(data2 + other2[group_indices])),
-            float(np.sum(gamma[group_indices])),
-            float(np.sum(gamma2[group_indices])),
-        )
-    output["lowdm_Q_groups"] = low_q_by_group
-    families: dict[str, list[int]] = {}
-    for index, label in enumerate(labels):
-        families.setdefault(low_family(label), []).append(index)
-    for family, indices in families.items():
-        group = "Nb1" if indices[0] < 16 else "Nb2plus"
-        by_sample = exact["lowdm"]["search_components"]["GCR"][group]
-        total_mc_all, total_mc2_all = sum_samples(by_sample, low_nbin)
-        gamma_all, gamma2_all = sum_samples(by_sample, low_nbin, {"GJ"})
-        other_all = total_mc_all - gamma_all
-        other2_all = np.maximum(total_mc2_all - gamma2_all, 0.0)
-        data = np.asarray(
-            [data_leaf(low_data.get(str(index), {}))[0] for index in indices],
-            dtype=float,
-        )
-        data2 = np.asarray(
-            [data_leaf(low_data.get(str(index), {}))[1] for index in indices],
-            dtype=float,
-        )
-        gamma = gamma_all[indices]
-        gamma2 = gamma2_all[indices]
-        other = other_all[indices]
-        other2 = other2_all[indices]
-        q = low_q_by_group[group]
-        bins = []
-        for offset, index in enumerate(indices):
-            denominator = (
-                float(q["value"]) * float(gamma[offset])
-                if q["status"] == "complete"
-                else 0.0
-            )
-            denominator_variance = 0.0
-            if q["status"] == "complete":
-                denominator_variance = (
-                    gamma[offset] ** 2 * q["stat"] ** 2
-                    + q["value"] ** 2 * gamma2[offset]
-                )
-            bins.append(
-                {
-                    "index": index,
-                    "label": labels[index],
-                    "data": float(data[offset]),
-                    "data_variance": float(data2[offset]),
-                    "gamma_mc": float(gamma[offset]),
-                    "gamma_mc_variance": float(gamma2[offset]),
-                    "other_mc": float(other[offset]),
-                    "other_mc_variance": float(other2[offset]),
-                    "Sgamma": factor(
-                        float(data[offset] - other[offset]),
-                        float(data2[offset] + other2[offset]),
-                        denominator,
-                        denominator_variance,
-                    ),
-                }
-            )
-        output["lowdm"][family] = {
-            "group": group,
-            "indices": indices,
-            "Q": q,
-            "bins": bins,
-        }
-    return output
+    raise ValueError(
+        "retired Low-dM search-bin input: expected Nb1/Nb2plus recoil histograms"
+    )
 
 
 def build_double_ratios(exact: dict[str, Any]) -> dict[str, Any]:
@@ -732,8 +639,7 @@ def plot_rz(
 def plot_q(factors: dict[str, Any], output_dir: Path) -> list[str]:
     categories = [
         ("highdm", "Nb1", r"$N_b=1$"),
-        ("highdm", "Nb2", r"$N_b=2$"),
-        ("highdm", "Nb3plus", r"$N_b\geq3$"),
+        ("highdm", "Nb2plus", r"$N_b\geq2$"),
         ("lowdm_Q_groups", "Nb1", r"$N_b=1$"),
         ("lowdm_Q_groups", "Nb2plus", r"$N_b\geq2$"),
     ]
@@ -752,8 +658,8 @@ def plot_q(factors: dict[str, Any], output_dir: Path) -> list[str]:
             values.append(float("nan"))
             errors.append(float("nan"))
     x = np.arange(len(labels), dtype=float)
-    colors = ["#FF0000"] * 3 + ["#0000FF"] * 2
-    markers = ["o"] * 3 + ["s"] * 2
+    colors = ["#FF0000"] * 2 + ["#0000FF"] * 2
+    markers = ["o"] * 2 + ["s"] * 2
     fig, ax = plt.subplots(figsize=(10.2, 10.2))
     for index in range(len(labels)):
         ax.errorbar(
@@ -771,12 +677,12 @@ def plot_q(factors: dict[str, Any], output_dir: Path) -> list[str]:
                 r"High-$\Delta m$"
                 if index == 0
                 else r"Low-$\Delta m$"
-                if index == 3
+                if index == 2
                 else None
             ),
         )
     ax.axhline(1.0, color="0.45", lw=1.5, ls=":")
-    ax.axvline(2.5, color="0.75", lw=1.2)
+    ax.axvline(1.5, color="0.75", lw=1.2)
     ax.set_xticks(x, labels, fontsize=24)
     ax.set_xlim(-0.5, len(labels) - 0.5)
     ax.set_xmargin(0)
@@ -822,18 +728,10 @@ def plot_sgamma(
         centers = 0.5 * (edges[:-1] + edges[1:])
         widths = 0.5 * (edges[1:] - edges[:-1])
         fig, ax = plt.subplots(figsize=(10.2, 10.2))
-        styles = (
-            {
-                "Nb1": ("o", r"$N_b=1$"),
-                "Nb2": ("s", r"$N_b=2$"),
-                "Nb3plus": ("^", r"$N_b\geq3$"),
-            }
-            if regime == "highdm"
-            else {
-                "Nb1": ("o", r"$N_b=1$"),
-                "Nb2plus": ("s", r"$N_b\geq2$"),
-            }
-        )
+        styles = {
+            "Nb1": ("o", r"$N_b=1$"),
+            "Nb2plus": ("s", r"$N_b\geq2$"),
+        }
         for group in styles:
             records = factors[group]["bins"]
             values = np.asarray(
@@ -1028,8 +926,7 @@ def plot_double_ratios(
         widths = 0.5 * (edges[1:] - edges[:-1])
         styles = {
             "Nb1": ("o", r"$N_b=1$"),
-            "Nb2": ("s", r"$N_b=2$"),
-            "Nb3plus": ("^", r"$N_b\geq3$"),
+            "Nb2plus": ("s", r"$N_b\geq2$"),
         }
         fig, ax = plt.subplots(figsize=(10.2, 10.2))
         for group in HIGH_GROUPS:
@@ -1298,105 +1195,3 @@ def plot_mll(
                 )
             )
     return paths
-
-
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--measurement", type=Path, required=True)
-    parser.add_argument("--exact-inputs", type=Path, required=True)
-    parser.add_argument("--low-sparse", type=Path)
-    parser.add_argument("--output-json", type=Path, required=True)
-    parser.add_argument("--plot-dir", type=Path, required=True)
-    args = parser.parse_args()
-
-    measurement = read_json(args.measurement)
-    exact = read_json(args.exact_inputs)
-    if not str(measurement.get("status", "")).startswith(
-        "feature_stage_complete"
-    ):
-        raise SystemExit(f"measurement is incomplete: {measurement.get('status')}")
-    if exact.get("status") != "complete":
-        raise SystemExit(f"exact inputs are incomplete: {exact.get('status')}")
-    low_rz = measurement["rz_low_feature"]
-    low_mll_key = "mll_low_feature"
-    if args.low_sparse and args.low_sparse.exists():
-        sparse = read_json(args.low_sparse)
-        if sparse.get("status") != "complete":
-            raise SystemExit(f"sparse finalizer incomplete: {sparse.get('status')}")
-        low_rz = sparse["rz_low"]
-        if sparse.get("mll_low"):
-            measurement["mll_low_final"] = sparse["mll_low"]
-            low_mll_key = "mll_low_final"
-
-    factors = build_q_sgamma(measurement, exact)
-    double_ratios = build_double_ratios(exact)
-    factors["lowdm_nb_isr_shared"] = aggregate_low_sgamma(
-        factors["lowdm"]
-    )
-    double_ratios["lowdm_nb_isr_shared"] = (
-        aggregate_low_double_ratios(double_ratios["lowdm"])
-    )
-    plot_dir = args.plot_dir
-    plots = {
-        "rz_high": plot_rz(measurement["rz_high"], "highdm", plot_dir),
-        "rz_low": plot_rz(low_rz, "lowdm", plot_dir),
-        "photon_q": plot_q(factors, plot_dir),
-        "sgamma_high": plot_sgamma(factors["highdm"], "highdm", plot_dir),
-        "sgamma_low": plot_sgamma(factors["lowdm"], "lowdm", plot_dir),
-        "zgamma_double_ratio_high": plot_double_ratios(
-            double_ratios["highdm"], "highdm", plot_dir
-        ),
-        "zgamma_double_ratio_low": plot_double_ratios(
-            double_ratios["lowdm"], "lowdm", plot_dir
-        ),
-        "mll_high": plot_mll(
-            measurement, "mll_high", "highdm", plot_dir
-        ),
-        "mll_low": plot_mll(
-            measurement, low_mll_key, "lowdm", plot_dir
-        ),
-    }
-    payload = {
-        "schema_version": "an_zinv_factors_2024_v1",
-        "status": "complete",
-        "definition": {
-            "prediction": "N_Zinv_pred = RZ * Sgamma_i * N_Zinv_MC_i",
-            "Q": "(N_data_GCR - N_other_GCR) / N_gamma_MC within the adopted photon-CR category",
-            "Sgamma_i": "(N_data_GCR_i - N_other_GCR_i) / (Q * N_gamma_MC_i)",
-            "RZ": "on/off-Z 2x2 matrix solution, combined ee+mumu",
-            "high_Q_categories": ["Nb1", "Nb2", "Nb3plus"],
-            "low_Q_categories": ["Nb1", "Nb2plus"],
-            "low_Sgamma_shared_categories": [
-                "Nb1_PISR300to500",
-                "Nb1_PISR500plus",
-                "Nb2plus_PISR300to500",
-                "Nb2plus_PISR500plus",
-            ],
-        },
-        "RZ": {"highdm": measurement["rz_high"], "lowdm": low_rz},
-        "photon": factors,
-        "z_gamma_double_ratio": double_ratios,
-        "plots": plots,
-        "inputs": {
-            "measurement": str(args.measurement),
-            "exact_inputs": str(args.exact_inputs),
-            "low_sparse": str(args.low_sparse) if args.low_sparse else None,
-        },
-    }
-    write_json(args.output_json, payload)
-    print(
-        json.dumps(
-            {
-                "status": payload["status"],
-                "high_Q": len(factors["highdm"]),
-                "low_Q": len(factors["lowdm"]),
-                "plot_files": sum(len(items) for items in plots.values()),
-                "output": str(args.output_json),
-            }
-        )
-    )
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())

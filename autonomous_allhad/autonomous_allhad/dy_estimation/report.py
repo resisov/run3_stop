@@ -22,9 +22,6 @@ import matplotlib.pyplot as plt
 import mplhep as hep
 import numpy as np
 
-from .model import finalize_rz, merge_tree
-
-
 hep.style.use("CMS")
 
 CMS_LABEL = {
@@ -52,17 +49,6 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def feature_provenance(path: Path, payload: dict[str, Any]) -> dict[str, Any]:
-    summary = payload.get("summary") or {}
-    return {
-        "file": path.name,
-        "sha256": sha256_file(path),
-        "input_roots": int(summary.get("input_roots", 0)),
-        "completed_roots": int(summary.get("completed_roots", 0)),
-        "candidate_events": int(summary.get("candidate_events", 0)),
-    }
-
-
 def save_figure(fig: plt.Figure, base: Path) -> list[str]:
     base.parent.mkdir(parents=True, exist_ok=True)
     paths: list[str] = []
@@ -72,42 +58,6 @@ def save_figure(fig: plt.Figure, base: Path) -> list[str]:
         paths.append(path.name)
     plt.close(fig)
     return paths
-
-
-def validate_channel(payload: dict[str, Any], channel: str, path: Path) -> None:
-    if payload.get("status") != "feature_stage_complete":
-        raise RuntimeError(f"{path}: incomplete status {payload.get('status')}")
-    summary = payload.get("summary") or {}
-    if summary.get("missing_roots"):
-        raise RuntimeError(f"{path}: missing ROOT inputs")
-    if int(summary.get("input_roots", -1)) != int(
-        summary.get("completed_roots", -2)
-    ):
-        raise RuntimeError(f"{path}: ROOT accounting does not close")
-    available = set((payload.get("rz_high_raw") or {}).keys())
-    if channel not in available:
-        raise RuntimeError(f"{path}: channel {channel} is absent")
-
-
-def combine_highdm(
-    ee: dict[str, Any], mumu: dict[str, Any]
-) -> dict[str, Any]:
-    raw: dict[str, Any] = {}
-    mll: dict[str, Any] = {}
-    for payload, channel in ((ee, "DY2E"), (mumu, "DY2M")):
-        merge_tree(
-            raw,
-            {channel: (payload.get("rz_high_raw") or {}).get(channel, {})},
-        )
-        merge_tree(
-            mll,
-            {channel: (payload.get("mll_high") or {}).get(channel, {})},
-        )
-    return {
-        "rz_high_raw": raw,
-        "rz_high": finalize_rz(raw),
-        "mll_high": mll,
-    }
 
 
 def plot_rt(
@@ -485,17 +435,13 @@ def validate_measurement(payload: dict[str, Any], path: Path) -> None:
         raise RuntimeError(
             f"{path}: unified measurement is missing {','.join(missing)}"
         )
-    summary = payload.get("summary") or {}
-    if summary.get("failures"):
-        raise RuntimeError(f"{path}: exact-refinement failures are non-empty")
-    if int(summary.get("expected_partitions", -1)) != int(
-        summary.get("completed_partitions", -2)
-    ):
-        raise RuntimeError(f"{path}: exact-refinement accounting does not close")
-    if int(summary.get("candidate_events", -1)) != int(
-        summary.get("matched_events", -2)
-    ):
-        raise RuntimeError(f"{path}: exact-refinement event matching does not close")
+    if not str(payload.get("schema_version") or "").endswith("_v3"):
+        raise RuntimeError(
+            f"{path}: only the histogram-only DY measurement v3 is supported"
+        )
+    provenance = payload.get("provenance") or {}
+    if provenance.get("intermediate_root_reread") is not False:
+        raise RuntimeError(f"{path}: histogram-only provenance is absent")
 
 
 def build_selection_report(
@@ -532,8 +478,8 @@ def build_selection_report(
         "method": {
             "campaign_year": campaign_year,
             "mass_windows": {
-                "on": "81 < mll < 101 GeV",
-                "off": "50 < mll < 81 GeV or mll > 101 GeV",
+                "on": "71 < mll < 111 GeV",
+                "off": "50 < mll < 71 GeV or mll > 111 GeV",
             },
             "categories": ["Nb1", "Nb2plus"],
             "channels": list(CHANNELS),
@@ -569,9 +515,9 @@ def write_combined_index(
 <style>body{{font-family:Arial,sans-serif;max-width:960px;margin:0 auto;padding:28px}}
 li{{font-size:1.25rem;margin:14px 0}}</style></head><body>
 <h1>{campaign_year} unified DY normalization measurement</h1>
-<p>High- and Low-&Delta;m are produced from one audited measurement artifact.
-The sparse NanoAOD stage is only an exact refinement of topology-ambiguous
-Low-&Delta;m events, not an independent normalization workflow.</p>
+<p>High- and Low-&Delta;m are produced from one histogram-only measurement
+artifact. Both regimes use only N<sub>b</sub>=1 and N<sub>b</sub>&ge;2; no
+feature-ROOT or sparse NanoAOD reread is part of the estimator.</p>
 <ul>{''.join(links)}</ul>
 </body></html>"""
     (output_dir / "index.html").write_text(document)
@@ -579,15 +525,12 @@ Low-&Delta;m events, not an independent normalization workflow.</p>
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--measurement", type=Path)
-    parser.add_argument("--ee", type=Path)
-    parser.add_argument("--mumu", type=Path)
+    parser.add_argument("--measurement", type=Path, required=True)
     parser.add_argument(
         "--selection",
         choices=("highdm", "lowdm", "both"),
         default="both",
     )
-    parser.add_argument("--low-exact", type=Path)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument(
         "--campaign-year", choices=("2024", "2025"), default="2024"
@@ -595,56 +538,18 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     CMS_LABEL["rlabel"] = f"{args.campaign_year} (13.6 TeV)"
 
-    if args.measurement is not None:
-        result = read_json(args.measurement)
-        validate_measurement(result, args.measurement)
-        inputs = {
-            "measurement": measurement_provenance(
-                args.measurement, result
-            )
-        }
-        selections = (
-            ("highdm", "lowdm")
-            if args.selection == "both"
-            else (args.selection,)
+    result = read_json(args.measurement)
+    validate_measurement(result, args.measurement)
+    inputs = {
+        "measurement": measurement_provenance(
+            args.measurement, result
         )
-    else:
-        if args.ee is None or args.mumu is None:
-            raise SystemExit(
-                "use --measurement for the unified workflow, or provide both --ee and --mumu for a legacy single-selection report"
-            )
-        if args.selection == "both":
-            raise SystemExit(
-                "--selection both requires the unified --measurement artifact"
-            )
-        ee = read_json(args.ee)
-        mumu = read_json(args.mumu)
-        validate_channel(ee, "DY2E", args.ee)
-        validate_channel(mumu, "DY2M", args.mumu)
-        inputs = {
-            "ee": feature_provenance(args.ee, ee),
-            "mumu": feature_provenance(args.mumu, mumu),
-        }
-        if args.selection == "highdm":
-            result = combine_highdm(ee, mumu)
-        else:
-            if args.low_exact is None:
-                raise SystemExit("--low-exact is required for lowdm")
-            low = read_json(args.low_exact)
-            if low.get("status") != "complete":
-                raise SystemExit(
-                    f"{args.low_exact}: exact Low-dM input is incomplete"
-                )
-            result = {
-                "rz_low": finalize_rz(low["rz_low_raw"]),
-                "mll_low": low["mll_low"],
-            }
-            inputs["low_exact"] = {
-                "file": args.low_exact.name,
-                "sha256": sha256_file(args.low_exact),
-                "summary": low.get("summary") or {},
-            }
-        selections = (args.selection,)
+    }
+    selections = (
+        ("highdm", "lowdm")
+        if args.selection == "both"
+        else (args.selection,)
+    )
 
     payloads: dict[str, Any] = {}
     for selection in selections:

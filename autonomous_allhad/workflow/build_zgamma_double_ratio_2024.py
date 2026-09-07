@@ -22,9 +22,6 @@ hep.style.use("CMS")
 CMS_LABEL = {"llabel": "Work in progress", "rlabel": "2024 (13.6 TeV)"}
 BACKGROUND_SAMPLES = {"DY", "GJ", "QCD", "ST", "TT", "VV", "WtoLNu", "Zto2Nu"}
 HIGH_EDGES = np.asarray([250.0, 300.0, 350.0, 400.0, 500.0, 1500.0])
-LOW_FULL_EDGES = np.asarray(
-    [0.0, 200.0, 250.0, 300.0, 350.0, 400.0, 500.0, 650.0, 800.0, 1000.0, 1500.0]
-)
 # The Low-dM DY/GCR comparison starts at the analysis threshold of 300 GeV.
 # Do not manufacture an unavailable 250--300 GeV point from an empty category.
 LOW_EDGES = np.asarray([300.0, 350.0, 400.0, 500.0, 1500.0])
@@ -38,31 +35,7 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def read_stream(path: Path) -> dict[str, Any]:
-    tree: dict[str, Any] = {}
-    for line_number, line in enumerate(path.read_text().splitlines(), start=1):
-        if not line.strip():
-            continue
-        try:
-            keys, value = json.loads(line)
-        except Exception as error:
-            raise ValueError(f"invalid stream record {path}:{line_number}") from error
-        node = tree
-        for key in keys[:-1]:
-            node = node.setdefault(str(key), {})
-        node[str(keys[-1])] = float(value)
-    return tree
-
-
-def indexed_array(node: dict[str, Any], quantity: str, nbin: int) -> np.ndarray:
-    values = (node or {}).get(quantity) or {}
-    result = np.zeros(nbin, dtype=float)
-    for index, value in values.items():
-        result[int(index)] = float(value)
-    return result
-
-
-def exact_leaf(node: dict[str, Any], nbin: int) -> tuple[np.ndarray, np.ndarray]:
+def histogram_leaf(node: dict[str, Any], nbin: int) -> tuple[np.ndarray, np.ndarray]:
     nominal = (node or {}).get("nominal") or {}
     values = np.asarray(nominal.get("sumw") or [0.0] * nbin, dtype=float)
     variances = np.asarray(nominal.get("sumw2") or [0.0] * nbin, dtype=float)
@@ -167,19 +140,19 @@ def normalized_shape(result: dict[str, np.ndarray]) -> dict[str, np.ndarray | fl
     }
 
 
-def photon_ratio(exact: dict[str, Any], regime: str) -> dict[str, np.ndarray]:
-    source_edges = np.asarray(exact[regime]["recoil_edges"], dtype=float)
+def photon_ratio(histograms: dict[str, Any], regime: str) -> dict[str, np.ndarray]:
+    source_edges = np.asarray(histograms[regime]["recoil_edges"], dtype=float)
     edges = HIGH_EDGES if regime == "highdm" else LOW_EDGES
     nbin = len(source_edges) - 1
-    source = exact[regime]["recoil"]["GCR"]
+    source = histograms[regime]["recoil"]["GCR"]
     totals = {
         name: np.zeros(nbin, dtype=float)
         for name in ("data", "data_variance", "target", "target_variance", "other", "other_variance")
     }
-    for group in exact[regime]["nb_groups"]:
+    for group in histograms[regime]["nb_groups"]:
         by_sample = source[group]
         for sample, leaf in by_sample.items():
-            values, variances = exact_leaf(leaf, nbin)
+            values, variances = histogram_leaf(leaf, nbin)
             if sample == "data_obs":
                 totals["data"] += values
                 totals["data_variance"] += variances
@@ -202,57 +175,11 @@ def photon_ratio(exact: dict[str, Any], regime: str) -> dict[str, np.ndarray]:
             "residual_variance": residual_variance, "edges": edges}
 
 
-def dy_ratio(stream: dict[str, Any], regime: str) -> dict[str, np.ndarray]:
-    if regime == "highdm":
-        channels = (("DY2E", None), ("DY2M", None))
-        source_edges = HIGH_EDGES
-        edges = HIGH_EDGES
-    else:
-        channels = (
-            ("cat5_DY2E_lowDeltaM", "recoil_dy2e"),
-            ("cat6_DY2M_lowDeltaM", "recoil_dy2m"),
-        )
-        source_edges = LOW_FULL_EDGES
-        edges = LOW_EDGES
-    nbin = len(source_edges) - 1
-    totals = {
-        name: np.zeros(nbin, dtype=float)
-        for name in ("data", "data_variance", "target", "target_variance", "other", "other_variance")
-    }
-    top_key = "histograms" if regime == "highdm" else "lowdm_variable_histograms"
-    for channel, variable in channels:
-        by_sample = stream[top_key][channel]
-        if variable is not None:
-            by_sample = by_sample[variable]
-        for sample, leaf in by_sample.items():
-            nominal = leaf.get("nominal") or {}
-            values = indexed_array(nominal, "sumw", nbin)
-            variances = indexed_array(nominal, "sumw2", nbin)
-            if sample == "data_obs":
-                totals["data"] += values
-                totals["data_variance"] += variances
-            elif sample == "DY":
-                totals["target"] += values
-                totals["target_variance"] += variances
-            elif sample in BACKGROUND_SAMPLES:
-                totals["other"] += values
-                totals["other_variance"] += variances
-    if not np.array_equal(source_edges, edges):
-        totals = {
-            name: rebin(values, source_edges, edges)
-            for name, values in totals.items()
-        }
-    value, stat, residual, residual_variance = ratio(
-        totals["data"], totals["data_variance"], totals["other"],
-        totals["other_variance"], totals["target"], totals["target_variance"]
-    )
-    return {**totals, "value": value, "stat": stat, "residual": residual,
-            "residual_variance": residual_variance, "edges": edges}
-
-
-def dy_ratio_exact(exact: dict[str, Any], regime: str) -> dict[str, np.ndarray]:
-    """Build the dilepton ratio from the same exact input as the GCR ratio."""
-    source_edges = np.asarray(exact[regime]["recoil_edges"], dtype=float)
+def dy_ratio_histograms(
+    histograms: dict[str, Any], regime: str
+) -> dict[str, np.ndarray]:
+    """Build the dilepton ratio from the common histogram boundary."""
+    source_edges = np.asarray(histograms[regime]["recoil_edges"], dtype=float)
     edges = HIGH_EDGES if regime == "highdm" else LOW_EDGES
     nbin = len(source_edges) - 1
     totals = {
@@ -263,10 +190,10 @@ def dy_ratio_exact(exact: dict[str, Any], regime: str) -> dict[str, np.ndarray]:
         )
     }
     for channel in ("DY2E", "DY2M"):
-        source = exact[regime]["recoil"][channel]
-        for group in exact[regime]["nb_groups"]:
+        source = histograms[regime]["recoil"][channel]
+        for group in histograms[regime]["nb_groups"]:
             for sample, leaf in source[group].items():
-                values, variances = exact_leaf(leaf, nbin)
+                values, variances = histogram_leaf(leaf, nbin)
                 if sample == "data_obs":
                     totals["data"] += values
                     totals["data_variance"] += variances
@@ -394,13 +321,12 @@ def plot(regime: str, rows: list[dict[str, Any]], output_dir: Path) -> list[str]
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--gcr-exact", type=Path, required=True)
     parser.add_argument(
-        "--dy-exact", type=Path,
-        help="Use DY2E/DY2M leaves from the same exact input as the GCR.",
+        "--hist-input",
+        type=Path,
+        required=True,
+        help="Compact *_background_estimation.json from histogram merging.",
     )
-    parser.add_argument("--dy-high-stream", type=Path)
-    parser.add_argument("--dy-low-stream", type=Path)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument(
         "--campaign-year", choices=("2024", "2025"), default="2024"
@@ -408,20 +334,16 @@ def main() -> int:
     args = parser.parse_args()
     CMS_LABEL["rlabel"] = f"{args.campaign_year} (13.6 TeV)"
 
-    exact = json.loads(args.gcr_exact.read_text())
-    if args.dy_exact:
-        dy_exact = json.loads(args.dy_exact.read_text())
-        if dy_exact.get("status") != "complete":
-            raise ValueError(f"DY exact input is not complete: {dy_exact.get('status')}")
-        high_stream = low_stream = None
-    else:
-        if not args.dy_high_stream or not args.dy_low_stream:
-            parser.error(
-                "provide --dy-exact or both --dy-high-stream and --dy-low-stream"
-            )
-        dy_exact = None
-        high_stream = read_stream(args.dy_high_stream)
-        low_stream = read_stream(args.dy_low_stream)
+    hist_input = json.loads(args.hist_input.read_text())
+    if hist_input.get("status") != "complete":
+        raise ValueError(
+            f"histogram input is not complete: {hist_input.get('status')}"
+        )
+    if hist_input.get("schema_version") != "background_estimation_histograms_v1":
+        raise ValueError(
+            "unsupported histogram boundary: "
+            f"{hist_input.get('schema_version')!r}"
+        )
     payload: dict[str, Any] = {
         "schema_version": f"zgamma_double_ratio_{args.campaign_year}_v1",
         "status": "complete",
@@ -443,27 +365,18 @@ def main() -> int:
             ),
         },
         "provenance": {
-            "gcr_exact": str(args.gcr_exact),
-            "gcr_exact_sha256": sha256(args.gcr_exact),
-            "dy_exact": str(args.dy_exact) if args.dy_exact else None,
-            "dy_exact_sha256": sha256(args.dy_exact) if args.dy_exact else None,
-            "dy_high_stream": str(args.dy_high_stream) if args.dy_high_stream else None,
-            "dy_high_stream_sha256": sha256(args.dy_high_stream) if args.dy_high_stream else None,
-            "dy_low_stream": str(args.dy_low_stream) if args.dy_low_stream else None,
-            "dy_low_stream_sha256": sha256(args.dy_low_stream) if args.dy_low_stream else None,
+            "hist_input": str(args.hist_input),
+            "hist_input_sha256": sha256(args.hist_input),
+            "intermediate_root_reread": False,
             "dy_channels": ["DY2E", "DY2M"],
             "dy_samples": "DYto2E/Mu/Tau-4Jets current merged DY process; PTLL excluded upstream",
             "campaign_year": args.campaign_year,
         },
         "plots": [],
     }
-    for regime, stream in (("highdm", high_stream), ("lowdm", low_stream)):
-        photon = photon_ratio(exact, regime)
-        dy = (
-            dy_ratio_exact(dy_exact, regime)
-            if dy_exact is not None
-            else dy_ratio(stream, regime)
-        )
+    for regime in ("highdm", "lowdm"):
+        photon = photon_ratio(hist_input, regime)
+        dy = dy_ratio_histograms(hist_input, regime)
         current = records(dy, photon)
         payload[regime] = {"edges": dy["edges"].tolist(), "bins": current}
         payload["plots"].extend(plot(regime, current, args.output_dir))

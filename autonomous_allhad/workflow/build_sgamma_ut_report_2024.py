@@ -330,7 +330,12 @@ def write_csv(
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--exact", type=Path, required=True)
+    parser.add_argument(
+        "--hist-input",
+        type=Path,
+        required=True,
+        help="Compact *_background_estimation.json from histogram merging.",
+    )
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument(
         "--campaign-year", choices=("2024", "2025"), default="2024"
@@ -338,11 +343,19 @@ def main() -> int:
     args = parser.parse_args()
     zinv.CMS_LABEL["rlabel"] = f"{args.campaign_year} (13.6 TeV)"
 
-    source_exact = json.loads(args.exact.read_text())
-    if source_exact.get("status") != "complete":
-        raise ValueError(f"exact input is not complete: {source_exact.get('status')}")
-    sample_check = validate_samples(source_exact, args.campaign_year)
-    exact = merge_recoil_tail(source_exact)
+    source_histograms = json.loads(args.hist_input.read_text())
+    if source_histograms.get("status") != "complete":
+        raise ValueError(
+            "histogram input is not complete: "
+            f"{source_histograms.get('status')}"
+        )
+    if source_histograms.get("schema_version") != "background_estimation_histograms_v1":
+        raise ValueError(
+            "unsupported histogram boundary: "
+            f"{source_histograms.get('schema_version')!r}"
+        )
+    sample_check = validate_samples(source_histograms, args.campaign_year)
+    exact = merge_recoil_tail(source_histograms)
     measurement, mc_exact = split_data_and_mc(exact)
     factors = zinv.build_q_sgamma(measurement, mc_exact)
     low_shared: dict[str, Any] = {}
@@ -394,9 +407,10 @@ def main() -> int:
             ),
         },
         "provenance": {
-            "exact_input": str(args.exact),
-            "exact_sha256": file_sha256(args.exact),
-            "exact_provenance": exact.get("provenance"),
+            "hist_input": str(args.hist_input),
+            "hist_input_sha256": file_sha256(args.hist_input),
+            "histogram_provenance": exact.get("provenance"),
+            "intermediate_root_reread": False,
             "sample_check": sample_check,
             "nominal_sr_data_recorded": False,
             "campaign_year": args.campaign_year,

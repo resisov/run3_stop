@@ -39,6 +39,7 @@ HISTOGRAM_KEYS = (
     "highdm_search_bin_components",
     "lowdm_variable_histograms",
     "highdm_variable_histograms",
+    "background_estimation_inputs",
 )
 
 
@@ -78,9 +79,20 @@ def update_summary(
     recorded_normalization = payload.get("normalization")
     if not recorded_normalization:
         raise RuntimeError(f"{path}: chunk normalization provenance is missing")
-    if Path(recorded_normalization).resolve() != normalization.resolve():
+    chunk_build_options = src_summary.get("build_options") or {}
+    recorded_normalization_path = Path(recorded_normalization)
+    if (
+        recorded_normalization_path.is_absolute()
+        and recorded_normalization_path.resolve() != normalization.resolve()
+    ):
         raise RuntimeError(
             f"{path}: chunk normalization does not match requested normalization"
+        )
+    recorded_normalization_sha256 = chunk_build_options.get("normalization_sha256")
+    requested_normalization_sha256 = file_sha256(normalization)
+    if recorded_normalization_sha256 != requested_normalization_sha256:
+        raise RuntimeError(
+            f"{path}: chunk normalization hash does not match requested normalization"
         )
     chunk_policy = str(src_summary.get("dy_ptll_policy", "all"))
     if chunk_policy != dy_ptll_policy:
@@ -88,7 +100,6 @@ def update_summary(
             f"{path}: DY policy {chunk_policy!r} does not match "
             f"{dy_ptll_policy!r}"
         )
-    chunk_build_options = src_summary.get("build_options")
     if expected_build_options is None:
         expected_build_options = chunk_build_options
         summary["build_options"] = chunk_build_options
@@ -164,6 +175,7 @@ def update_summary(
         "lowdm_search_bin_entry_accounting",
         "highdm_search_bin_entry_accounting",
         "trota_resolved_top_audit",
+        "broad_lowdm_selection_audit",
         "scale_factor_status_audit",
         "gcr_prefilter",
         "gcr_photon_selection_audit",
@@ -241,6 +253,13 @@ def main() -> int:
     parser.add_argument("--normalization", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--results", type=Path, required=True)
+    parser.add_argument(
+        "--background-estimation-output",
+        type=Path,
+        help=(
+            "Compact histogram-only estimator input. Defaults beside --output."
+        ),
+    )
     parser.add_argument("--dy-ptll-policy", default="all")
     parser.add_argument("--expected-chunks", type=int, required=True)
     parser.add_argument("--workers", type=int, default=1)
@@ -261,6 +280,13 @@ def main() -> int:
         default=list(HISTOGRAM_KEYS),
     )
     args = parser.parse_args()
+    background_estimation_output = (
+        args.background_estimation_output.resolve()
+        if args.background_estimation_output is not None
+        else args.output.with_name(
+            args.output.stem + "_background_estimation.json"
+        ).resolve()
+    )
 
     chunks = sorted(args.chunk_dir.glob("chunk_*.json"))
     if len(chunks) != args.expected_chunks:
@@ -468,6 +494,15 @@ def main() -> int:
                     contract,
                     require_components=True,
                 )
+            if histogram_key == "background_estimation_inputs":
+                if merged_section.get("status") != "complete":
+                    raise RuntimeError(
+                        "background-estimation histogram boundary is incomplete"
+                    )
+                write_compact_json(
+                    background_estimation_output,
+                    merged_section,
+                )
             first = dump_member(
                 handle,
                 histogram_key,
@@ -534,7 +569,18 @@ def main() -> int:
                 "highdm_search_bin_components": True,
                 "search_bin_histograms": True,
                 "finite_histogram_content": True,
+                "background_estimation_inputs": True,
             },
+            "background_estimation_output": (
+                str(background_estimation_output)
+                if background_estimation_output.exists()
+                else None
+            ),
+            "background_estimation_sha256": (
+                file_sha256(background_estimation_output)
+                if background_estimation_output.exists()
+                else None
+            ),
             "build_options": expected_build_options,
         },
     )

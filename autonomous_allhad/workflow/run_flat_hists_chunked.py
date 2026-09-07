@@ -38,6 +38,7 @@ def file_sha256(path: Path) -> str:
 EXECUTION_CONTRACT_COMMON_PATHS = (
     "autonomous_allhad/workflow/build_flat_boosted_recoil_hists.py",
     "autonomous_allhad/workflow/run_flat_hists_chunked.py",
+    "autonomous_allhad/gnn_lowdm/_implementation/region_io.py",
     "autonomous_allhad/autonomous_allhad/analysis_scale_factors.py",
     "autonomous_allhad/autonomous_allhad/real_subset_worker.py",
     "autonomous_allhad/autonomous_allhad/dy_ptll_policy.py",
@@ -614,7 +615,7 @@ def merge_payloads(
             merged = {
                 key: value
                 for key, value in payload.items()
-                if key not in {"histograms", "highdm_control_components", "search_bin_histograms", "highdm_search_bin_components", "lowdm_variable_histograms", "highdm_variable_histograms", "summary", "status", "normalization"}
+                if key not in {"histograms", "highdm_control_components", "search_bin_histograms", "highdm_search_bin_components", "lowdm_variable_histograms", "highdm_variable_histograms", "background_estimation_inputs", "summary", "status", "normalization"}
             }
             merged["histograms"] = {}
             merged["highdm_control_components"] = {}
@@ -622,12 +623,14 @@ def merge_payloads(
             merged["highdm_search_bin_components"] = {}
             merged["lowdm_variable_histograms"] = {}
             merged["highdm_variable_histograms"] = {}
+            merged["background_estimation_inputs"] = {}
         merge_tree(merged["histograms"], payload.get("histograms") or {})
         merge_tree(merged["highdm_control_components"], payload.get("highdm_control_components") or {})
         merge_tree(merged["search_bin_histograms"], payload.get("search_bin_histograms") or {})
         merge_tree(merged["highdm_search_bin_components"], payload.get("highdm_search_bin_components") or {})
         merge_tree(merged["lowdm_variable_histograms"], payload.get("lowdm_variable_histograms") or {})
         merge_tree(merged["highdm_variable_histograms"], payload.get("highdm_variable_histograms") or {})
+        merge_tree(merged["background_estimation_inputs"], payload.get("background_estimation_inputs") or {})
         src_summary = payload.get("summary") or {}
         chunk_policy = str(src_summary.get("dy_ptll_policy", "all"))
         if chunk_policy != dy_ptll_policy:
@@ -720,6 +723,7 @@ def merge_payloads(
             "scale_factor_status_audit",
             "gcr_prefilter",
             "gcr_photon_selection_audit",
+            "highdm_veto_pt_threshold_audit",
         ):
             merge_nested_numeric_counts(
                 summary.setdefault(key, {}),
@@ -854,7 +858,7 @@ def main() -> int:
     parser.add_argument("--step-size", type=int, default=50000)
     parser.add_argument("--python", default=sys.executable)
     parser.add_argument("--local-analysis-data", choices=["0", "1"], default="0")
-    parser.add_argument("--only-regions", nargs="+", choices=["GCR", "HighDMVR_Nb1", "HighDMVR_Nb2", "HighDMVR_Nb3plus"])
+    parser.add_argument("--only-regions", nargs="+", choices=["GCR"])
     parser.add_argument(
         "--only-variables",
         nargs="+",
@@ -927,6 +931,9 @@ def main() -> int:
     parser.add_argument("--only-lowdm-sr-nsv-inclusive", action="store_true")
     parser.add_argument("--only-lowdm-nsv-repair", action="store_true")
     parser.add_argument("--lowdm-only", action="store_true")
+    parser.add_argument("--highdm-only", action="store_true")
+    parser.add_argument("--electron-veto-pt-min", type=float, default=5.0)
+    parser.add_argument("--muon-veto-pt-min", type=float, default=5.0)
     parser.add_argument("--require-lowdm-nres-zero", action="store_true")
     parser.add_argument("--search-bin-config", type=Path)
     parser.add_argument("--gcr-only", action="store_true")
@@ -966,6 +973,17 @@ def main() -> int:
         parser.error("--gcr-only cannot be combined with --only-regions")
     if args.lowdm_only and (args.only_regions or args.gcr_only):
         parser.error("--lowdm-only cannot be combined with --only-regions or --gcr-only")
+    if args.lowdm_only and args.highdm_only:
+        parser.error("--lowdm-only and --highdm-only are mutually exclusive")
+    veto_pt_study = (
+        args.electron_veto_pt_min != 5.0 or args.muon_veto_pt_min != 5.0
+    )
+    if veto_pt_study and not args.highdm_only:
+        parser.error("non-default veto pT thresholds require --highdm-only")
+    if veto_pt_study and (args.gcr_only or args.only_regions):
+        parser.error("veto pT studies require the full High-dM histogram pass")
+    if args.electron_veto_pt_min < 5.0 or args.muon_veto_pt_min < 5.0:
+        parser.error("veto pT thresholds cannot be below 5 GeV")
     if args.require_lowdm_nres_zero and args.dy_ptll_policy != "all":
         parser.error("--require-lowdm-nres-zero requires --dy-ptll-policy all")
     if args.gcr_photon_policy != "nominal" and not args.gcr_only:
@@ -995,7 +1013,8 @@ def main() -> int:
         args.only_lowdm_sr_nsv_inclusive,
     ))
     require_lowdm_nres_zero = bool(
-        args.require_lowdm_nres_zero or full_search_bin_build
+        args.require_lowdm_nres_zero
+        or (full_search_bin_build and not args.highdm_only)
     )
     if require_lowdm_nres_zero and args.dy_ptll_policy != "all":
         parser.error("resolved-top categorization requires --dy-ptll-policy all")
@@ -1024,6 +1043,9 @@ def main() -> int:
     input_list = Path(args.input_list).resolve()
     normalization = Path(args.normalization).resolve()
     output_path = Path(args.output).resolve()
+    background_estimation_output = output_path.with_name(
+        output_path.stem + "_background_estimation.json"
+    )
     roots = [
         str(Path(line.strip()).resolve())
         for line in input_list.read_text().splitlines()
@@ -1070,6 +1092,9 @@ def main() -> int:
         "only_lowdm_sr_nsv_inclusive": bool(args.only_lowdm_sr_nsv_inclusive),
         "only_lowdm_nsv_repair": bool(args.only_lowdm_nsv_repair),
         "lowdm_only": bool(args.lowdm_only),
+        "highdm_only": bool(args.highdm_only),
+        "electron_veto_pt_min": float(args.electron_veto_pt_min),
+        "muon_veto_pt_min": float(args.muon_veto_pt_min),
         "require_lowdm_nres_zero": require_lowdm_nres_zero,
         "search_bins": search_bin_contract,
         "dy_ptll_policy": str(args.dy_ptll_policy),
@@ -1141,6 +1166,16 @@ def main() -> int:
             cmd.append("--only-lowdm-nsv-repair")
         if args.lowdm_only:
             cmd.append("--lowdm-only")
+        if args.highdm_only:
+            cmd.append("--highdm-only")
+        cmd.extend(
+            [
+                "--electron-veto-pt-min",
+                str(args.electron_veto_pt_min),
+                "--muon-veto-pt-min",
+                str(args.muon_veto_pt_min),
+            ]
+        )
         if require_lowdm_nres_zero:
             cmd.append("--require-lowdm-nres-zero")
         if search_bin_path is not None:
@@ -1216,6 +1251,8 @@ def main() -> int:
             str(args.merge_workers),
             "--work-dir",
             str(work_dir / "merge"),
+            "--background-estimation-output",
+            str(background_estimation_output),
         ]
         if args.allow_hist_builder_repair:
             merge_command.append("--allow-hist-builder-repair")
@@ -1270,6 +1307,10 @@ def main() -> int:
         )
         return 3
     write_json(
+        background_estimation_output,
+        merged.get("background_estimation_inputs") or {},
+    )
+    write_json(
         work_dir / "chunked_hist_results.json",
         {
             "status": merged["status"],
@@ -1277,6 +1318,10 @@ def main() -> int:
             "output": str(output_path),
             "output_sha256": file_sha256(output_path),
             "chunks": [str(p) for p in sorted(finished)],
+            "background_estimation_output": str(background_estimation_output),
+            "background_estimation_sha256": file_sha256(
+                background_estimation_output
+            ),
         },
     )
     print(json.dumps({"stage": "chunked_hists_done", "status": merged["status"], "events_processed": merged["summary"]["events_processed"], "input_roots": len(merged["summary"]["input_roots"]), "output": str(output_path)}, sort_keys=True), flush=True)

@@ -1,6 +1,10 @@
 # Flat Ntuple Analysis Pipeline
 
-Canonical pipeline after the flat preselection ntuple step.
+Historical flat-ntuple workflow outline. For the current High-dM 79−6 +
+Low-dM GNN30 entrypoints, use the
+[canonical code map](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/reports/highdm_canonical_dependencies.md>).
+The boosted-only study and observed-limit options below are not instructions
+to change the current selections or unblind SR data.
 
 1. Produce intermediate flat ROOT ntuples
    - Apply x-axis / event-selection-changing corrections before the skim.
@@ -25,6 +29,13 @@ Canonical pipeline after the flat preselection ntuple step.
 
 5. Plotting
    - Build histograms from flat ntuples after region selection and weight application.
+   - During this single ROOT-to-histogram pass, also persist the compact
+     `*_background_estimation.json` boundary needed by TF, Sgamma, Z/gamma,
+     and RZ measurements.
+   - Background-estimation programs read that JSON only. They must not reopen
+     the intermediate flat ROOT files or NanoAOD.
+   - High- and Low-dM background measurements both use only `Nb1` and
+     `Nb2plus`; legacy Low-dM Njet, b-jet-pT, and ISR subdivisions are retired.
    - Produce validation/control plots before datacard production.
 
 6. Datacard and template preparation
