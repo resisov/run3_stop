@@ -118,8 +118,11 @@ use `reports/background_estimation_histonly_20260907/RUN.md`. That sequence adds
 the frozen GNN histogram and configuration to the existing TF builder, retains
 parent-normalization semantics despite different SR/CR score edges, and
 exports RZ × Sgamma Zinv projections without transferring Q. The Low-dM
-double-ratio 250-GeV domain is isolated as a comparison proposal; the default
-300-GeV domain is unchanged pending adoption.
+double-ratio 250-GeV domain was approved on 2026-09-07T22:29:50Z and is now the
+default for both years. Previous 300-start products and checksums are preserved
+in that report's `YEAR/zgamma_300_previous/` and `low250_adoption_baseline.json`.
+Only central abs(D−1) is transmitted through the existing GNN×UT mapping;
+RZ, TF, Sgamma and nominal GNN predictions are unchanged by this adoption.
 
 ## Regression checks
 

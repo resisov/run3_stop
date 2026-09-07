@@ -189,7 +189,9 @@ def test_histogram_boundary_drives_tf_and_rz(tmp_path: Path) -> None:
     assert double_ratio["status"] == "complete"
     assert double_ratio["provenance"]["intermediate_root_reread"] is False
     assert len(double_ratio["highdm"]["bins"]) == 5
-    assert len(double_ratio["lowdm"]["bins"]) == 4
+    assert len(double_ratio["lowdm"]["bins"]) == 5
+    assert double_ratio["lowdm"]["edges"] == [250, 300, 350, 400, 500, 1500]
+    assert double_ratio["adoption_status"] == "adopted"
 
     measurement = tmp_path / "dy_measurement.json"
     subprocess.run(

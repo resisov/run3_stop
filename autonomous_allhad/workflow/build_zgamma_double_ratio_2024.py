@@ -22,9 +22,9 @@ hep.style.use("CMS")
 CMS_LABEL = {"llabel": "Work in progress", "rlabel": "2024 (13.6 TeV)"}
 BACKGROUND_SAMPLES = {"DY", "GJ", "QCD", "ST", "TT", "VV", "WtoLNu", "Zto2Nu"}
 HIGH_EDGES = np.asarray([250.0, 300.0, 350.0, 400.0, 500.0, 1500.0])
-# Preserve the adopted 300-GeV normalization domain by default. The current
-# histogram boundary also permits an explicit 250-GeV comparison proposal.
-LOW_EDGES = np.asarray([300.0, 350.0, 400.0, 500.0, 1500.0])
+# User-approved domain: both regimes start at 250 GeV. The 300-GeV option
+# remains available only to reproduce the preserved historical comparison.
+LOW_EDGES = HIGH_EDGES.copy()
 
 
 def sha256(path: Path) -> str:
@@ -333,8 +333,8 @@ def main() -> int:
     parser.add_argument(
         "--campaign-year", choices=("2024", "2025"), default="2024"
     )
-    parser.add_argument("--low-ut-min", type=int, choices=(250, 300), default=300,
-                        help="250 is a comparison proposal, not an adopted factor.")
+    parser.add_argument("--low-ut-min", type=int, choices=(250, 300), default=250,
+                        help="Adopted domain is 250; 300 reproduces the historical comparison.")
     args = parser.parse_args()
     LOW_EDGES = HIGH_EDGES[HIGH_EDGES >= args.low_ut_min].copy()
     CMS_LABEL["rlabel"] = f"{args.campaign_year} (13.6 TeV)"
@@ -352,7 +352,7 @@ def main() -> int:
     payload: dict[str, Any] = {
         "schema_version": f"zgamma_double_ratio_{args.campaign_year}_v1",
         "status": "complete",
-        "adoption_status": "proposal" if args.low_ut_min == 250 else "existing_definition",
+        "adoption_status": "adopted" if args.low_ut_min == 250 else "historical_comparison",
         "definition": {
             "z_ratio_raw": "(DYCR data - non-DY MC) / DY MC",
             "photon_ratio_raw": "(GCR data - non-GJ MC) / GJ MC = Q * Sgamma",

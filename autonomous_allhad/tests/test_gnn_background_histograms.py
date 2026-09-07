@@ -66,3 +66,47 @@ def test_reader_rejects_unrecognized_serialization(tmp_path):
     path.write_text(json.dumps({"histograms": hist}))
     with pytest.raises(ValueError, match="indent=2"):
         gnn.read_backgrounds(path)
+
+
+def uncertainty_inputs():
+    config, hist = toy()
+    shape = {"lowdm_families": {g: {"bins": [{"Sgamma": {"value": s}} for s in (1, 2, 3, 4, 5)]} for g in ("Nb1", "Nb2plus")}}
+    rz = {"rz_low": {"combined": {g: {"RZ": 0.5} for g in ("Nb1", "Nb2plus")}}}
+    mapping = {"sr_binning": config["sr_binning"], "zinv_projection": gnn.project_zinv(hist, shape, rz)}
+    edges = [250, 300, 350, 400, 500, 1500]
+    factors = {"adoption_status": "adopted", "lowdm": {"edges": edges, "bins": [
+        {"low": low, "high": high, "double_ratio": 1.1, "downstream_central_abs_deviation": 0.1,
+         "systematic": 0.9, "status": "complete"} for low, high in zip(edges, edges[1:])]}}
+    return mapping, factors
+
+
+def test_double_ratio_response_preserves_nominal_and_uses_central_deviation():
+    mapping, factors = uncertainty_inputs()
+    result = gnn.project_double_ratio_uncertainty(mapping, factors)
+    assert result["axis"] == "GNN output"
+    assert result["nominal_changed"] is False
+    assert result["statistical_error_used_as_nuisance"] is False
+    assert sum(len(node["responses"]) for node in result["categories"].values()) == 30
+    for category, node in result["categories"].items():
+        original = mapping["zinv_projection"][category]
+        assert node["nominal"] == original["rz_sgamma"]
+        assert node["score_edges"] == mapping["sr_binning"]["edges_by_category"][category]
+        first, tail = node["responses"][0], node["responses"][-1]
+        assert first["delta"] == 0.1 and first["reporting_band_not_used"] == 0.9
+        np.testing.assert_allclose(first["up"], np.asarray(node["nominal"]) + 0.05)
+        np.testing.assert_allclose(first["down"], np.asarray(node["nominal"]) + 0.5 * (1 / 1.1 - 1))
+        np.testing.assert_allclose(tail["up"], np.asarray(node["nominal"]) + 1.0)
+        assert tail["open_ended"] is True
+
+
+@pytest.mark.parametrize("corruption", ["domain", "unapproved", "deviation"])
+def test_double_ratio_response_rejects_unapproved_or_inconsistent_inputs(corruption):
+    mapping, factors = uncertainty_inputs()
+    if corruption == "domain":
+        factors["lowdm"]["edges"][0] = 300
+    elif corruption == "unapproved":
+        factors["adoption_status"] = "proposal_only"
+    else:
+        factors["lowdm"]["bins"][0]["downstream_central_abs_deviation"] = 0.9
+    with pytest.raises(ValueError):
+        gnn.project_double_ratio_uncertainty(mapping, factors)

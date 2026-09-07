@@ -1,59 +1,26 @@
 {
   "SR_blinded": true,
-  "adoption_invariance": {
-    "RZ_TF_Sgamma_nominal_unchanged": true,
-    "cards_limits_web_untouched": true,
-    "protected_products_unchanged": 228,
-    "rollback_checksums_match": true
-  },
   "code_sha256": {
     "autonomous_allhad/autonomous_allhad/dy_estimation/__main__.py": "c8d74bb107db27f0fe61aa15ac276e179a384127009716d352fe86667e03ec10",
     "autonomous_allhad/autonomous_allhad/dy_estimation/build_measurement.py": "05b4e1094e74ad19b88f7f669a18b33f5271a56b8883a6f735e272e9edb487aa",
     "autonomous_allhad/autonomous_allhad/dy_estimation/model.py": "6cf75e103e08740e71a39c09c07ff01b751e1113987a212483499109459fa427",
     "autonomous_allhad/autonomous_allhad/dy_estimation/report.py": "bc16c19630ae445aa0f68c90825463034931def0474974e8d07873a5bd50e7c7",
-    "autonomous_allhad/workflow/audit_background_histogram_products.py": "fcaf39cbd2e0ab52d067ff2ad00eac20782a1d94e8976e61b10ad371d3ec0890",
+    "autonomous_allhad/workflow/audit_background_histogram_products.py": "42430c93dbaf034b79d54af5a7ffd8989e95aa99cb8cffc48319454325fe0633",
     "autonomous_allhad/workflow/build_an_zinv_factors_2024.py": "ed56f80041d06513c1bc18a000f916c014dba67bfe003b1499a84671cddb9208",
     "autonomous_allhad/workflow/build_histogram_tf_inputs_2024.py": "1687092bb4a9541b3dad63c3627582dc6ecfa08bc9ba9a168d9ec04dbee48ed0",
     "autonomous_allhad/workflow/build_sgamma_ut_report_2024.py": "aacb6ee13c25073e7a134b418be3f0e60954f643aa6c8e002840433bb831f8d6",
-    "autonomous_allhad/workflow/build_zgamma_double_ratio_2024.py": "df3c96e1183fbb2b4c26ef7dc331ec792fbb34e7a53f73c093aee005dc468b98",
-    "autonomous_allhad/workflow/gnn_background_histograms.py": "07ea58ccc19afeb9292a07e1834993070fc00a9e3c647ccb10598a87c9825a9d",
+    "autonomous_allhad/workflow/build_zgamma_double_ratio_2024.py": "c4307e8d4ee851e2700e0cf52063b4488d46aa7a763517cdf6a9802969a6c7ab",
+    "autonomous_allhad/workflow/gnn_background_histograms.py": "343149b5afb1aa0289bc6d4828b7ea73725e65681c775257be095455db932e63",
     "autonomous_allhad/workflow/plot_recoil_transfer_factors_2024.py": "e5b7108c0efdc03158b8dd50122e9af32f56c393f517d1e4ffdb6dc668673fe3"
-  },
-  "downstream_10gev_veto_use": {
-    "evidence_source": "Main-agent audit of dy_window20_20260907 production.argv, frozen builder defaults and GNN object masks",
-    "nominal_or_SF_reprocessed": false,
-    "reason": "Recorded canonical histograms still use the 5-GeV lepton veto and low-pT SF inputs; these are not 10-GeV-veto results.",
-    "status": "blocked",
-    "valid_only_for_recorded_input_hashes": true
   },
   "input_manifest": "autonomous_allhad/reports/dy_window20_canonical_20260907.json",
   "input_manifest_sha256": "87d44fddf895c62cb5843c4c6b7b698c990824971935d2e89ce9ab8c857b6074",
   "intermediate_root_reread": false,
-  "lowdm_double_ratio_adoption": {
-    "approval": {
-      "approved_at_utc": "2026-09-07T22:29:50Z",
-      "scope": "Adopt Low-dM double ratio from 250 GeV in both years; no card, limit, event-selection or nominal-factor changes",
-      "source_thread": "019f8407-f810-7f13-b2e9-4af7f0d99f07",
-      "user_text": "\uc2b9\uc778\ud55c\ub2e4"
-    },
-    "baseline_path": "autonomous_allhad/reports/background_estimation_histonly_20260907/low250_adoption_baseline.json",
-    "baseline_sha256": "5b84deacec040af24b32b7ea08d0189f97b27d88d03f0582f4c406161a32d1b2",
-    "min_ut_gev": 250,
-    "status": "adopted"
-  },
-  "status": "complete",
+  "status": "products_complete_with_open_domain_decision",
   "years": {
     "2024": {
-      "adoption_checks": {
-        "GNN_nominal_unchanged": true,
-        "Highdm_physics_unchanged": true,
-        "historical_comparison_values_unchanged": true,
-        "new_250_300_max_fractional_up_response": 0.004754392631725292,
-        "response_count": 30,
-        "validated_250_values_unchanged": true
-      },
       "artifact_hashes": {
-        "double_ratio_domain_comparison.json": "3fc3486c8e658bc666fc08a3c6f1422b17234eb12863f888692a503bfdebda92",
+        "double_ratio_domain_comparison.json": "eab00ba3bf267c553d6dab4b2295984d0d66f2b58cb3317e48bd100a91251dd4",
         "dy_measurement.json": "19e8ace4235197714545ffc7930be784f0ba01fda1d9093019215d56668bd37a",
         "dy_report/highdm/index.html": "03aade8638b7c9568f064454c2efc66c61134f7a646d9120002510c6d157204e",
         "dy_report/highdm/mll_highdm_dy2e_nb1.pdf": "3eebaa40c512624997615f9ca509934d7ae4d40cc06dca5e89c581918153d695",
@@ -102,7 +69,6 @@
         "dy_report/lowdm/summary.json": "98d619590f729f01c19f5142f1b277ffd77644c65072a6e332dc96bd4eb37b68",
         "dy_report/summary.json": "2a155ae226567797d2f8651cbb560832cf82037b7410c91d5ee446e0d46f9e5b",
         "lowdm_gnn_backgrounds.json": "2c642049ae7fb724779f8bb9e6ec7bc2338138044f5bd78c08eefd6dcaa0631a",
-        "lowdm_gnn_double_ratio.json": "ad0a0170b0603635178143ec619e62558054388ef0a159e1143d4af6ea177544",
         "rz_covariance.json": "f300aca03536ecda31cb36c8f01fec7dc5ac3521e91124ee3e64d57535cd02fd",
         "rz_high.json": "1155736ea35dcb92f1b75975a7b567b519c5e0bac5409b14d00f48e1c25db40b",
         "rz_low.json": "a9a125b68365457f06095b350ce3868c7039865c5f1a63997e84d26a3c111de3",
@@ -164,30 +130,24 @@
         "tf/transfer_factor_w_llcr_lowdm.png": "6467ba652d3fb9c9463183460ad8d1960605a80bfcb4b9840e65ca4bb5634b31",
         "tf/transfer_factors_2024_nb_recoil.json": "835b72bdf39880fe0cf0113a3d5b1dd7633ef8ddede53749b8e20ee2237834d7",
         "tf_inputs.json": "6c786f109e2df4bac10aee28b8eb76025a699d914306522813b62e6ea5eb427e",
-        "zgamma/zgamma_double_ratio.json": "cd9b7f0f8e6e867172e81753c9c214f8140872c6b419faf7f2169e2a2cc2e6c2",
-        "zgamma/zgamma_double_ratio_highdm.pdf": "14b6f60089c30c72eb428fc776c38f79aecbe116a040952f0d8ac4bb97f71036",
+        "zgamma/zgamma_double_ratio.json": "e0510688f660ce54b6c6f3e156b451505a156fb9a789043c0555bcded9dc0e35",
+        "zgamma/zgamma_double_ratio_highdm.pdf": "9118fda8cbc30ecb5210566eb8bb3f6a971f8d31182f8c485db662a086ef3a69",
         "zgamma/zgamma_double_ratio_highdm.png": "a197481ebbdbde9e97f9316296501332ef017123cab17a22ebf03001e8709cf5",
-        "zgamma/zgamma_double_ratio_lowdm.pdf": "4b177abe7d497ff20341bf5d7f096bb49f35c17095c4c71ff54974b2c9a4a418",
-        "zgamma/zgamma_double_ratio_lowdm.png": "956578f44cd0e8fbddfb1754f758036722e19906269827cf5f8b93ac65c4568c",
+        "zgamma/zgamma_double_ratio_lowdm.pdf": "665d6961759846b6f365a1dfc9cd5e7fe31e089efdaa10e5b742beea89f3bccf",
+        "zgamma/zgamma_double_ratio_lowdm.png": "6da5b841ace6600c06170ca3512beb002c7fbcf906f6d1c09ed8d64d3f16cfd4",
         "zgamma_250_proposal/zgamma_double_ratio.json": "ec62911091af8a0e8c9f960c227117e23f3d54501a3946f4cf86d5ce7a782b91",
         "zgamma_250_proposal/zgamma_double_ratio_highdm.pdf": "595131620fadc0433137ef7280772c589d4045b8d82752fc039e10f880925aa7",
         "zgamma_250_proposal/zgamma_double_ratio_highdm.png": "a197481ebbdbde9e97f9316296501332ef017123cab17a22ebf03001e8709cf5",
         "zgamma_250_proposal/zgamma_double_ratio_lowdm.pdf": "76b31256ee2e71afff7630616d9fd029a4483f5ff7d1e93bffc0f7003bf47f95",
-        "zgamma_250_proposal/zgamma_double_ratio_lowdm.png": "956578f44cd0e8fbddfb1754f758036722e19906269827cf5f8b93ac65c4568c",
-        "zgamma_300_previous/domain_comparison_before_adoption.json": "eab00ba3bf267c553d6dab4b2295984d0d66f2b58cb3317e48bd100a91251dd4",
-        "zgamma_300_previous/zgamma_double_ratio.json": "e0510688f660ce54b6c6f3e156b451505a156fb9a789043c0555bcded9dc0e35",
-        "zgamma_300_previous/zgamma_double_ratio_highdm.pdf": "9118fda8cbc30ecb5210566eb8bb3f6a971f8d31182f8c485db662a086ef3a69",
-        "zgamma_300_previous/zgamma_double_ratio_highdm.png": "a197481ebbdbde9e97f9316296501332ef017123cab17a22ebf03001e8709cf5",
-        "zgamma_300_previous/zgamma_double_ratio_lowdm.pdf": "665d6961759846b6f365a1dfc9cd5e7fe31e089efdaa10e5b742beea89f3bccf",
-        "zgamma_300_previous/zgamma_double_ratio_lowdm.png": "6da5b841ace6600c06170ca3512beb002c7fbcf906f6d1c09ed8d64d3f16cfd4"
+        "zgamma_250_proposal/zgamma_double_ratio_lowdm.png": "956578f44cd0e8fbddfb1754f758036722e19906269827cf5f8b93ac65c4568c"
       },
       "data_luminosity_coverage_complete": true,
       "data_source_bad_file_count": 0,
       "double_ratio_domain_comparison": {
         "max_common_D_absolute_shift": 0.004034061469340822,
         "max_common_GNN_relative_response_shift": 0.0019090614124800745,
-        "proposal_applied": true,
-        "status": "comparison_complete_adopted"
+        "proposal_applied": false,
+        "status": "comparison_complete_pending_adoption"
       },
       "gnn_checks": {
         "SR_blinded": true,
@@ -219,16 +179,8 @@
       "source_bad_file_count": 0
     },
     "2025": {
-      "adoption_checks": {
-        "GNN_nominal_unchanged": true,
-        "Highdm_physics_unchanged": true,
-        "historical_comparison_values_unchanged": true,
-        "new_250_300_max_fractional_up_response": 0.013755837400289178,
-        "response_count": 30,
-        "validated_250_values_unchanged": true
-      },
       "artifact_hashes": {
-        "double_ratio_domain_comparison.json": "28ed8079356738f6dc6bcc0cb178978574cfbc93b04a7eb13d043656d9d32242",
+        "double_ratio_domain_comparison.json": "5287955f3f9a553a7ce34ebfcc09fc1fbede6cdf909d420642febd0bdcbc6374",
         "dy_measurement.json": "3ea7fd0fa9e04a328888df3c82fdb1b00053cf366c1e33c4596b940a6d4b2fd6",
         "dy_report/highdm/index.html": "efd40b8f8dd9dba5fbc0f517d2d6c8335f4c1b8b5699032c605ab31d86234532",
         "dy_report/highdm/mll_highdm_dy2e_nb1.pdf": "9610a83ce5fda95cd43ea45a5f0229e67e5787577a42237aad1830c7d761ad3e",
@@ -277,7 +229,6 @@
         "dy_report/lowdm/summary.json": "29de5c42ac07d0ec140722b7775b0d4a435541280b283509d95df94c5afe19d4",
         "dy_report/summary.json": "ef90fd3976a722f27c08a0ea64d7e93bf6e9834e19ed4467ef501c71515856d2",
         "lowdm_gnn_backgrounds.json": "665567cc97379f46b44d35b6fb2449a0522e61e9dae53e797d9b734c24067176",
-        "lowdm_gnn_double_ratio.json": "1edb19f0da897fff53ac1e6970467143911ec12c5fe35856cb55ff0b54fecec5",
         "rz_covariance.json": "9367d8f039e7deeae2424a07254958ac7edfbf4bf4b6f348d05e35b4f646adca",
         "rz_high.json": "b1fede75d7e18b8ccf3b2978667a4eda51de6ad8a2e39f96426bbbec0f8a1d09",
         "rz_low.json": "f406489cb0ea84f0f90600c47cbd6624a16af314d93f071809dda244b44c021e",
@@ -339,30 +290,24 @@
         "tf/transfer_factor_w_llcr_lowdm.png": "d999927088664f75652557a1d4a4fd5658c72d6310968cd91f53f624bf02ba12",
         "tf/transfer_factors_2025_nb_recoil.json": "f635557cf676a880398c1361a8359e000422c300f7fefb60f41413bd707504ff",
         "tf_inputs.json": "d099158d752f0e97bd207ac26d1d909155cf60edfa913e7f6964e9027f3f62f5",
-        "zgamma/zgamma_double_ratio.json": "c89c330b913a37309dcfad50f868a6cc34cca686417f4e97bdd0de40f999050f",
-        "zgamma/zgamma_double_ratio_highdm.pdf": "58478d716f5314dcdfd983a8935ae0b16bf602d5fe4f9b2b129a6f901d36b08d",
+        "zgamma/zgamma_double_ratio.json": "91be4a50281c59d090db21f894ff982ba453da9b9c34ee4c0f3bdb8b9ba9168f",
+        "zgamma/zgamma_double_ratio_highdm.pdf": "7c0aec075fb27a7558375ede283eb41fffb53db9fa22b2c5d8ec30929f1c9a77",
         "zgamma/zgamma_double_ratio_highdm.png": "e7eeded08a87207e43075e5a60c16eb5c9ff57eea881b9d3227e02810ea58443",
-        "zgamma/zgamma_double_ratio_lowdm.pdf": "69894f63b17703c572775f553d64bbcf9948780245aa73caac35bc26a76b11e5",
-        "zgamma/zgamma_double_ratio_lowdm.png": "0acb68d793c4a86644c9cff9d3737632a8a1b4b015af6864919b55d94ca174ee",
+        "zgamma/zgamma_double_ratio_lowdm.pdf": "abd778c5d69094d7cb9aecb1ba41d67310abf7032b765c9d4e39374e3dccbc24",
+        "zgamma/zgamma_double_ratio_lowdm.png": "03eb54a52aa8ae8599a450ac7fc48c5a167ac0817f1f6af3083e1cae2d68993c",
         "zgamma_250_proposal/zgamma_double_ratio.json": "b33de57d92162b2fd1f736926bd529ad71ad99ca9b5098406f1a9694d050fd86",
         "zgamma_250_proposal/zgamma_double_ratio_highdm.pdf": "1e5f4f22672411f19489eb6d25c3234e6ea37ddecb2075b0c42cd5a23d63f759",
         "zgamma_250_proposal/zgamma_double_ratio_highdm.png": "e7eeded08a87207e43075e5a60c16eb5c9ff57eea881b9d3227e02810ea58443",
         "zgamma_250_proposal/zgamma_double_ratio_lowdm.pdf": "6486997b51ea208e4f828926266822a7e34c9ce8545accff9eb65caead0838b0",
-        "zgamma_250_proposal/zgamma_double_ratio_lowdm.png": "0acb68d793c4a86644c9cff9d3737632a8a1b4b015af6864919b55d94ca174ee",
-        "zgamma_300_previous/domain_comparison_before_adoption.json": "5287955f3f9a553a7ce34ebfcc09fc1fbede6cdf909d420642febd0bdcbc6374",
-        "zgamma_300_previous/zgamma_double_ratio.json": "91be4a50281c59d090db21f894ff982ba453da9b9c34ee4c0f3bdb8b9ba9168f",
-        "zgamma_300_previous/zgamma_double_ratio_highdm.pdf": "7c0aec075fb27a7558375ede283eb41fffb53db9fa22b2c5d8ec30929f1c9a77",
-        "zgamma_300_previous/zgamma_double_ratio_highdm.png": "e7eeded08a87207e43075e5a60c16eb5c9ff57eea881b9d3227e02810ea58443",
-        "zgamma_300_previous/zgamma_double_ratio_lowdm.pdf": "abd778c5d69094d7cb9aecb1ba41d67310abf7032b765c9d4e39374e3dccbc24",
-        "zgamma_300_previous/zgamma_double_ratio_lowdm.png": "03eb54a52aa8ae8599a450ac7fc48c5a167ac0817f1f6af3083e1cae2d68993c"
+        "zgamma_250_proposal/zgamma_double_ratio_lowdm.png": "0acb68d793c4a86644c9cff9d3737632a8a1b4b015af6864919b55d94ca174ee"
       },
       "data_luminosity_coverage_complete": false,
       "data_source_bad_file_count": 1,
       "double_ratio_domain_comparison": {
         "max_common_D_absolute_shift": 0.012977360918748682,
         "max_common_GNN_relative_response_shift": 0.005817391028262106,
-        "proposal_applied": true,
-        "status": "comparison_complete_adopted"
+        "proposal_applied": false,
+        "status": "comparison_complete_pending_adoption"
       },
       "gnn_checks": {
         "SR_blinded": true,

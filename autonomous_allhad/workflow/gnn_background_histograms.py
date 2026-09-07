@@ -193,3 +193,66 @@ def project_zinv(histograms: dict[str, Any], sgamma: dict[str, Any], rz: dict[st
             "Sgamma": shape.tolist(),
         }
     return output
+
+
+def project_double_ratio_uncertainty(mapping: dict[str, Any], factors: dict[str, Any]) -> dict[str, Any]:
+    """Export the existing central-nonclosure response basis in GNN bins.
+
+    This product does not define nuisance names, their correlations, or a
+    likelihood. The main card writer retains ownership of those definitions.
+    """
+    rows = factors["lowdm"]["bins"]
+    expected = [250.0, 300.0, 350.0, 400.0, 500.0, 1500.0]
+    if factors.get("adoption_status") != "adopted" or factors["lowdm"]["edges"] != expected:
+        raise ValueError("GNN uncertainty propagation requires the adopted full 250-GeV domain")
+    deltas = np.asarray([row["downstream_central_abs_deviation"] for row in rows])
+    if len(rows) != 5 or not np.isfinite(deltas).all() or np.any(deltas < 0):
+        raise ValueError("invalid central double-ratio deviation")
+    for row, delta in zip(rows, deltas):
+        if row["status"] != "complete" or not np.isclose(delta, abs(row["double_ratio"] - 1), rtol=1e-12, atol=1e-15):
+            raise ValueError("downstream deviation is not abs(D-1)")
+    result = {}
+    for category, node in mapping["zinv_projection"].items():
+        components = np.asarray(node["shape_components"], dtype=float)
+        component_var = np.asarray(node["shape_components_sumw2"], dtype=float)
+        shape = np.asarray(node["Sgamma"], dtype=float)
+        nominal = np.asarray(node["rz_sgamma"], dtype=float)
+        rz_value = float(node["RZ"])
+        if components.shape != (5, 5) or component_var.shape != (5, 5):
+            raise ValueError("GNN x shape components must have 5 x 5 dimensions")
+        weighted = rz_value * components * shape
+        if not np.allclose(weighted.sum(axis=1), nominal, rtol=1e-12, atol=1e-10):
+            raise ValueError("stored nominal prediction disagrees with its UT components")
+        responses = []
+        for index, (row, delta) in enumerate(zip(rows, deltas)):
+            up_weights, down_weights = shape.copy(), shape.copy()
+            up_weights[index] *= 1 + delta
+            down_weights[index] /= 1 + delta
+            up = nominal + weighted[:, index] * delta
+            down = nominal + weighted[:, index] * (1 / (1 + delta) - 1)
+            if not np.allclose(up, rz_value * (components @ up_weights), rtol=1e-12, atol=1e-10):
+                raise ValueError("GNN up response failed component reconstruction")
+            if not np.allclose(down, rz_value * (components @ down_weights), rtol=1e-12, atol=1e-10):
+                raise ValueError("GNN down response failed component reconstruction")
+            responses.append({
+                "ut_bin": index, "ut_low": row["low"], "ut_high_display": row["high"],
+                "open_ended": index == 4, "delta": float(delta),
+                "reporting_band_not_used": row["systematic"],
+                "up_multiplier": float(1 + delta), "down_multiplier": float(1 / (1 + delta)),
+                "up": up.tolist(), "down": down.tolist(),
+                "up_mc_sumw2": (rz_value**2 * (component_var @ up_weights**2)).tolist(),
+                "down_mc_sumw2": (rz_value**2 * (component_var @ down_weights**2)).tolist(),
+                "fractional_up_response": np.divide(up - nominal, nominal, out=np.zeros(5), where=nominal != 0).tolist(),
+            })
+        result[category] = {
+            "nb_group": node["nb_group"], "parent": node["parent"],
+            "score_edges": mapping["sr_binning"]["edges_by_category"][category],
+            "nominal": nominal.tolist(), "nominal_sumw2": node["rz_sgamma_mc_sumw2"],
+            "responses": responses,
+        }
+    return {"status": "complete", "schema_version": "gnn_zgamma_uncertainty_v1",
+            "adoption_status": "adopted", "ut_edges": expected, "axis": "GNN output",
+            "definition": "Central abs(D-1) response in each UT component; up=1+delta, down=1/(1+delta)",
+            "correlation_policy": "Response basis only. No new nuisance names, parameters, or correlations; downstream card structure unchanged.",
+            "nominal_changed": False, "statistical_error_used_as_nuisance": False,
+            "categories": result}

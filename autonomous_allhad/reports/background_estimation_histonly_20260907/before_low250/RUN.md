@@ -9,11 +9,6 @@ The authoritative input list is
 `campaign_state.json` records the checked source and product SHA256 values.
 Do not reuse these products with a different histogram hash.
 
-The main agent confirmed these inputs still use a 5-GeV lepton veto. These
-commands reproduce that recorded input set, not the newly requested 10-GeV
-veto. Downstream 10-GeV-veto card use is blocked pending valid canonical
-inputs; do not attempt to fix event acceptance by removing SF variations.
-
 For each `YEAR` in `2024 2025`, use this order. Existing valid products may be
 kept; the measurement stages need not repeat for a plotting-only update.
 
@@ -37,8 +32,13 @@ python3 autonomous_allhad/workflow/build_sgamma_ut_report_2024.py \
   --hist-input "$HIST" --campaign-year "$YEAR" --output-dir "$RESULT/sgamma"
 
 python3 autonomous_allhad/workflow/build_zgamma_double_ratio_2024.py \
-  --hist-input "$HIST" --campaign-year "$YEAR" --low-ut-min 250 \
+  --hist-input "$HIST" --campaign-year "$YEAR" --low-ut-min 300 \
   --output-dir "$RESULT/zgamma"
+
+# Comparison only: no automatic adoption of the 250-GeV normalization domain.
+python3 autonomous_allhad/workflow/build_zgamma_double_ratio_2024.py \
+  --hist-input "$HIST" --campaign-year "$YEAR" --low-ut-min 250 \
+  --output-dir "$RESULT/zgamma_250_proposal"
 
 python3 autonomous_allhad/workflow/build_histogram_tf_inputs_2024.py \
   --hist-input "$HIST" --campaign-year "$YEAR" \
@@ -72,24 +72,6 @@ The full `tf_inputs.json` also retains process-separated GNN joint histograms
 and available weight variations. Neither legacy Low-dM34 nor SR observations
 are used as final templates. Only the main agent owns card integration.
 
-The user approved the 250-GeV Low-dM double-ratio domain on
-2026-09-07T22:29:50Z. It is canonical in `YEAR/zgamma/` and is the builder's
-default. This adoption reran only the double-ratio builder and the audit,
-not RZ, TF, Sgamma, or the nominal GNN projection.
-
-Before replacement, the audit's `--prepare-low250` mode preserved exact
-300-start products in `YEAR/zgamma_300_previous/` and prior global records in
-`before_low250/`. Their hashes and unchanged protected products are recorded
-in `low250_adoption_baseline.json`. Keep these records when reproducing the
-audit. For recovery, restore the saved directory's original five Z/gamma files
-to `YEAR/zgamma/`; `domain_comparison_before_adoption.json` is the previous
-comparison, not a canonical Z/gamma output. Do not restore during normal runs.
-The original `zgamma_250_proposal/` is preserved only as historical evidence.
-
-The audit also exports `YEAR/lowdm_gnn_double_ratio.json`: five UT-source
-up/down responses per frozen GNN category, using the existing GNN×UT mapping.
-The final Low-dM template axis remains GNN output, with unchanged score edges
-and CR parents. No additional nuisance names, parameters, or correlations are
-defined. Use the explicit
+The 250-GeV double-ratio proposal remains separate. Use the explicit
 `downstream_central_abs_deviation` field for existing card semantics, not the
 historical plot's `systematic=max(abs(D-1),stat)` reporting band.

@@ -25,9 +25,9 @@ Errors above use the existing on/off-Z profile fit (Poisson data, weighted-MC te
 - The shared CR denominator induces covariance across GNN bins and SR children of the same parent. Within-category covariance and the shared denominator total/variance are exported; parent coefficients are not independent measurements.
 - U_T TF plots remain Nb-only diagnostics, not Low-dM final templates. GNN TF plots are in each year's `tf/gnn/` directory.
 
-## Double-ratio domain: 250 GeV adopted
+## Double-ratio domain decision (not yet adopted)
 
-The user-approved 250-start definition is now canonical in `zgamma/`. Exact previous 300-start products are preserved in `zgamma_300_previous/`, with checksums in `low250_adoption_baseline.json`. `zgamma_250_proposal/` preserves the original proposal as historical provenance. `double_ratio_domain_comparison.json` records CR support, normalization changes, every common bin, and per-UT-bin GNN response changes.
+The adopted 300-start definition and proposed 250-start definition are both recomputed from the same new inputs. Proposal plots and JSON are isolated in `zgamma_250_proposal/`. `double_ratio_domain_comparison.json` records CR support, normalization changes, every common bin, and per-UT-bin GNN response changes.
 
 | Year | Max common-bin absolute ΔD | Max GNN fractional-response change |
 |---|---|---|
@@ -42,16 +42,8 @@ Downstream field: `downstream_central_abs_deviation = abs(D−1)`. The historica
 - Zero QCD GNN numerator bins remain zero and are listed in `campaign_state.json`; no smoothing, floors, or invented events were introduced.
 - RZ mll post plots use the fitted data and are not independent closure. Q/Sgamma normalization identities and TF reconstruction checks are mechanical identities, not physics closure.
 - High-dM source histograms contain 79 original bins; the main agent must continue its established 1–6 exclusion for the final 73. Legacy Low-dM34 is not a final template here.
-- The 250-GeV domain was approved on 2026-09-07T22:29:50Z and adopted in both years. Background products are not automatically injected into cards or published to the web.
+- The double-ratio domain change remains a proposal until adopted. Background products are not automatically injected into cards or published to the web.
 
 ## Existing plotting entrypoints
 
 `python -m autonomous_allhad.dy_estimation report`, `build_sgamma_ut_report_2024.py`, `build_zgamma_double_ratio_2024.py`, and `plot_recoil_transfer_factors_2024.py` were reused for both years. No independent replacement plotting implementation was created.
-
-## GNN uncertainty product
-
-`YEAR/lowdm_gnn_double_ratio.json` exports 5 UT-source responses for each of the 6 frozen GNN categories. The nominal is unchanged. Only central abs(D−1) is propagated, with existing up=1+delta and down=1/(1+delta) conventions. No nuisance names, correlations, or rate parameters are introduced. New 250–300 responses (max 0.4754% / 1.3756% for 2024 / 2025) are distinct from common >=300 response changes (max 0.1909% / 0.5817%). These are individual template responses, not total uncertainty, nominal-yield changes, or limit changes.
-
-## Input-selection blocker
-
-The main agent confirmed that these recorded histogram inputs still use a 5-GeV lepton veto and the associated low-pT SF inputs. They are not valid as results for the newly requested 10-GeV veto. Merely removing 5–10 GeV SF variations does not update event acceptance. Card/limit submission is on hold in the main task while it checks canonical inputs. The complete status here means the approved factor adoption is valid for the recorded input hashes only; no nominal/SF reprocessing was performed. See HANDOFF.md.

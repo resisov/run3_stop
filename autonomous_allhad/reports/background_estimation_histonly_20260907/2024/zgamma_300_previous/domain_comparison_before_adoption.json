@@ -669,8 +669,8 @@
       "relative_change": 0.008883591236696242
     }
   },
-  "proposal_applied": true,
+  "proposal_applied": false,
   "response_definition": "Per-UT-bin +delta linear template response divided by RZ*Sgamma nominal; no nuisance correlations or card changes assumed.",
-  "status": "comparison_complete_adopted",
+  "status": "comparison_complete_pending_adoption",
   "threshold_evidence": "Frozen region core has recoil>250; populated 250-300 joint projections match compact CR histograms. No event input read."
 }
