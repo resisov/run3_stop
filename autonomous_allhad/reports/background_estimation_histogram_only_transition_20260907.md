@@ -75,8 +75,15 @@ The following event-level background-estimation programs were removed:
 The remaining ROOT readers under `workflow/` are upstream production,
 integrity validation, object/selection studies, or Combine-output readers.
 They are not accepted inputs to the active background-estimation entrypoints.
-Standalone historical closure/diagnostic scripts are likewise outside the
-recalculation sequence and must not be used to build the new factor products.
+The unused standalone lost-lepton closure/removal readers, their fit/plot/PDF
+helpers (nine scripts), and the July closure plan were deleted on 2026-09-08.
+The old July/August closure, TF, Sgamma, double-ratio, and unified-estimation
+report copies were also removed locally: seven directories superseded by
+`background_estimation_histonly_20260907`. The separately referenced DY
+presentation-plot bundle was retained. Git-tracked files remain recoverable
+from history; ignored generated copies and temporary synthetic test plots
+were discarded without creating another archive. No EOS production outputs,
+current estimate products, rollback evidence, limits, or impacts were removed.
 
 ## Recalculation order
 

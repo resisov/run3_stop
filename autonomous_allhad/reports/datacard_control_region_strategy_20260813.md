@@ -1,5 +1,13 @@
 # Datacard control-region strategy for the 2024 analysis
 
+Historical design record, not an executable input specification. The July/
+August artifact paths and legacy Low-dM binning below have been superseded;
+obsolete local report copies were removed on 2026-09-08. This text is retained
+because the preapproval audit cites it. Use the current
+[histogram-only workflow](background_estimation_histogram_only_transition_20260907.md)
+and [handoff](background_estimation_histonly_20260907/HANDOFF.md) instead, including
+the hold on remeasurement until validated 10-GeV-veto inputs are available.
+
 ## Adopted decision
 
 The statistical model must reproduce the Run-2 control-region logic, with the
