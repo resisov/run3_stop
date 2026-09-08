@@ -143,12 +143,17 @@ def validate(histograms: dict[str, Any], config: dict[str, Any], compact: dict[s
     for region in ("LLCR", "QCDCR", "GCR", "DY2E", "DY2M"):
         if set(nominal[region]) != set(config["cr_binning"]["category_labels"]):
             raise ValueError(f"GNN {region} categories differ from frozen config")
+    sparse_records = []
     for region, categories in nominal.items():
         required = SAMPLES - {"data_obs"} if region == "SR" else SAMPLES
         for category, samples in categories.items():
             missing = required - set(samples)
             if missing:
-                raise ValueError(f"missing GNN process templates: {region}/{category}/{sorted(missing)}")
+                independent = compact.get("lowdm", {}).get("recoil", {}).get(region, {}).get(nb_group(category), {})
+                if compact.get("status") != "complete" or not missing <= set(independent):
+                    raise ValueError(f"missing GNN process templates without independent accounting: {region}/{category}/{sorted(missing)}")
+                sparse_records.extend({"region": region, "category": category, "sample": sample}
+                                      for sample in sorted(missing))
     checked = 0
     for variation, regions in histograms.items():
         for region, categories in regions.items():
@@ -175,10 +180,19 @@ def validate(histograms: dict[str, Any], config: dict[str, Any], compact: dict[s
                 for field in FIELDS:
                     expected = np.asarray(source["nominal"][field], dtype=float)
                     observed = np.sum([np.asarray(r["gnn_score_ut"][field]).sum(axis=0) for r in selected], axis=0) if selected else np.zeros(8)
-                    if not np.allclose(observed, expected, rtol=1e-7, atol=1e-6):
+                    if expected.shape != (8,) or not np.isfinite(expected).all():
+                        raise ValueError(f"invalid compact projection: {region}/{group}/{sample}/{field}")
+                    if field != "sumw" and np.any(expected < 0):
+                        raise ValueError(f"negative compact entries or variance: {region}/{group}/{sample}/{field}")
+                    # The producer omits empty categories. Exact event accounting
+                    # proves their absence is zero, rather than a lost template.
+                    agrees = (np.array_equal(observed, expected) if field == "entries"
+                              else np.allclose(observed, expected, rtol=1e-7, atol=1e-6))
+                    if not agrees:
                         raise ValueError(f"GNN/compact mismatch {region}/{group}/{sample}/{field}: max={np.max(np.abs(observed-expected))}")
                 comparisons.append(f"{region}/{group}/{sample}")
-    return {"joint_projection_records": checked, "compact_projection_comparisons": len(comparisons), "frozen_GNN30": True, "SR_blinded": True}
+    return {"joint_projection_records": checked, "compact_projection_comparisons": len(comparisons),
+            "verified_sparse_zero_records": sparse_records, "frozen_GNN30": True, "SR_blinded": True}
 
 
 def transfer_records(histograms: dict[str, Any], config: dict[str, Any]) -> dict[str, Any]:

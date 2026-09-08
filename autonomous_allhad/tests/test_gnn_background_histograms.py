@@ -139,3 +139,64 @@ def test_missing_minor_gnn_background_is_not_silently_zero():
     del hist["nominal"]["SR"]["Nb1_NISR0"]["VV"]
     with pytest.raises(ValueError, match="missing GNN process templates"):
         gnn.validate(hist, config, {})
+
+
+def compact_histograms(hist):
+    recoil = {}
+    for region, categories in hist["nominal"].items():
+        required = gnn.SAMPLES - {"data_obs"} if region == "SR" else gnn.SAMPLES
+        recoil[region] = {}
+        for group in ("Nb1", "Nb2plus"):
+            recoil[region][group] = {}
+            for sample in required:
+                selected = [samples[sample] for category, samples in categories.items()
+                            if gnn.nb_group(category) == group and sample in samples]
+                recoil[region][group][sample] = {"nominal": {
+                    field: np.sum([np.asarray(item["gnn_score_ut"][field]).sum(axis=0)
+                                   for item in selected], axis=0).tolist()
+                    for field in gnn.FIELDS}}
+    return {"status": "complete", "lowdm": {"recoil": recoil}}
+
+
+def test_sparse_zero_template_requires_independent_complete_projection():
+    config, hist = toy()
+    hist["nominal"]["DY2E"]["Nb1_NISR0"]["GJ"] = record(0)
+    compact = compact_histograms(hist)
+    del hist["nominal"]["DY2E"]["Nb1_NISR0"]["GJ"]
+    checks = gnn.validate(hist, config, compact)
+    assert checks["verified_sparse_zero_records"] == [
+        {"region": "DY2E", "category": "Nb1_NISR0", "sample": "GJ"}]
+    assert "GJ" not in hist["nominal"]["DY2E"]["Nb1_NISR0"]
+
+
+def test_missing_nonzero_template_rejected_by_independent_projection():
+    config, hist = toy()
+    compact = compact_histograms(hist)
+    del hist["nominal"]["DY2E"]["Nb1_NISR0"]["GJ"]
+    with pytest.raises(ValueError, match="GNN/compact mismatch"):
+        gnn.validate(hist, config, compact)
+
+
+@pytest.mark.parametrize("damage", ["missing_process", "incomplete"])
+def test_sparse_template_cannot_bypass_independent_accounting(damage):
+    config, hist = toy()
+    hist["nominal"]["DY2E"]["Nb1_NISR0"]["GJ"] = record(0)
+    compact = compact_histograms(hist)
+    del hist["nominal"]["DY2E"]["Nb1_NISR0"]["GJ"]
+    if damage == "missing_process":
+        del compact["lowdm"]["recoil"]["DY2E"]["Nb1"]["GJ"]
+    else:
+        compact["status"] = "incomplete"
+    with pytest.raises(ValueError, match="without independent accounting"):
+        gnn.validate(hist, config, compact)
+
+
+def test_sparse_template_event_counts_must_match_exactly():
+    config, hist = toy()
+    hist["nominal"]["DY2E"]["Nb1_NISR0"]["GJ"] = record(0)
+    hist["nominal"]["DY2E"]["Nb1_NISR1plus"]["GJ"] = record(100000000)
+    compact = compact_histograms(hist)
+    del hist["nominal"]["DY2E"]["Nb1_NISR0"]["GJ"]
+    compact["lowdm"]["recoil"]["DY2E"]["Nb1"]["GJ"]["nominal"]["entries"][0] += 1
+    with pytest.raises(ValueError, match="GNN/compact mismatch .*entries"):
+        gnn.validate(hist, config, compact)
