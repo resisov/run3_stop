@@ -1,7 +1,16 @@
 {
   "schema_version": 1,
-  "status": "superseded",
-  "promoted_at_utc": "2026-09-07T21:38:09Z",
+  "status": "canonical",
+  "campaign": "lepton_veto10_20260908",
+  "promoted_at_utc": "2026-09-08T07:43:30Z",
+  "supersedes": "autonomous_allhad/reports/dy_window20_canonical_20260907.json",
+  "electron_veto_pt_min_gev": 10,
+  "muon_veto_pt_min_gev": 10,
+  "lepton_threshold_operator": ">",
+  "excluded_sf_components": [
+    "veto_electron_5to10",
+    "loose_muon_5to10"
+  ],
   "dy_mass_window_gev": [
     71,
     111
@@ -136,8 +145,9 @@
     "configuration": "autonomous_allhad/gnn_lowdm/config.json",
     "configuration_sha256": "5a3a51852766a43b663d05b926528224a0d5467f58478e33140f86321087aa70"
   },
+  "lowdm_double_ratio_min_gev": 250,
   "input_stage": "permanently_closed_for_2024_and_2025",
-  "sr_data": "blinded; do not use or disclose SR observations",
+  "sr_data": "blinded",
   "years": {
     "2024": {
       "input_roots": 5954,
@@ -145,25 +155,27 @@
       "data_source_bad_file_count": 0,
       "data_luminosity_coverage_complete": true,
       "main": {
-        "path": "autonomous_allhad/workflow/histograms/dy_window20_20260907/2024/hists.json",
+        "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/hists.json",
         "canonical_alias": "autonomous_allhad/workflow/plot2024/hists.json",
-        "sha256": "fdd3a75d11b4e2bbea581727691fc3ad986a505a7fa3813a865bb94e52a087e9",
-        "bytes": 3193268002
+        "sha256": "5e8d056adbe0a5404f4a60425d2b84b3203cf240d02b982d0b320ef3b6523e83",
+        "bytes": 2820473081
       },
       "background_estimation": {
-        "path": "autonomous_allhad/workflow/histograms/dy_window20_20260907/2024/hists_background_estimation.json",
+        "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/hists_background_estimation.json",
         "canonical_alias": "autonomous_allhad/workflow/plot2024/hists_background_estimation.json",
-        "sha256": "0f1eb4995cf7376624e0220f874cd5ae848278b87f9ad0da8abac84c38d0ca83",
-        "bytes": 2568324
+        "sha256": "9b2279529275cadefd0cd8f42aed8f644bd3fa9ee17c69d8b7fc0622801d6aca",
+        "bytes": 2336908
       },
       "gnn": {
-        "path": "autonomous_allhad/workflow/histograms/dy_window20_20260907/2024/gnn/hists.json",
+        "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/gnn/hists.json",
         "canonical_alias": "autonomous_allhad/workflow/plot2024/hists_lowdm_gnn30.json",
-        "sha256": "82d96c008756e53ebfa504383b336e9bbe0084d8531c8907f1e71d86f0e2935f",
-        "bytes": 2178323852
+        "sha256": "2906493ee21d84756f89c55b2560043ef48ed77e6e8dc08612e6521f7207639b",
+        "bytes": 1936076424
       },
       "normalization_sha256": "9060c4ed526f95b5e2b352c07a4692de9a67469fbff5f91f210eceb9122b606c",
-      "search_bin_config_sha256": "d1a396538eaa994a54d85bb277d71a5d90473be9e1a86ee4f47ad625f2cee929"
+      "search_bin_config_sha256": "d1a396538eaa994a54d85bb277d71a5d90473be9e1a86ee4f47ad625f2cee929",
+      "validation_report": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/histogram_validation.json",
+      "validation_report_sha256": "ed3a2fd4f4464ab11cba3fc77f69e89f82eaebe76749fc3ec40464e66b9087b9"
     },
     "2025": {
       "input_roots": 8390,
@@ -171,55 +183,53 @@
       "data_source_bad_file_count": 1,
       "data_luminosity_coverage_complete": false,
       "main": {
-        "path": "autonomous_allhad/workflow/histograms/dy_window20_20260907/2025/hists.json",
+        "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2025/hists.json",
         "canonical_alias": "autonomous_allhad/workflow/plot2025/hists.json",
-        "sha256": "16584a244e30d1f9863748a231b7a2d60dc65798c4eeaa9d3cf95a60fea56dc7",
-        "bytes": 2830367088
+        "sha256": "e395cd14e026ffdac9a127a6b665347d0db7c20f1391c7d3ab2a34dfb28f5ba6",
+        "bytes": 2458889388
       },
       "background_estimation": {
-        "path": "autonomous_allhad/workflow/histograms/dy_window20_20260907/2025/hists_background_estimation.json",
+        "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2025/hists_background_estimation.json",
         "canonical_alias": "autonomous_allhad/workflow/plot2025/hists_background_estimation.json",
-        "sha256": "2d76688c33d6bb1b5d95cde4c168814545e9ed7f403f43395e6bcbaabea6a1c4",
-        "bytes": 2434015
+        "sha256": "4c1e9b5734a2356f995925e3252e76721ee655156c481c7babddb1b0144b6be3",
+        "bytes": 2192998
       },
       "gnn": {
-        "path": "autonomous_allhad/workflow/histograms/dy_window20_20260907/2025/gnn/hists.json",
+        "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2025/gnn/hists.json",
         "canonical_alias": "autonomous_allhad/workflow/plot2025/hists_lowdm_gnn30.json",
-        "sha256": "2f943761ede8281a9f857b9eec1f6f7eb25867d78ac8f090a8cd1f44f009a959",
-        "bytes": 1927546600
+        "sha256": "6195bd21d72c9474b2793f0b15c51e21538692904f7b0020b47056cd4dc34d9c",
+        "bytes": 1684605720
       },
       "normalization_sha256": "7322c219f181b7406d863827cfd4146c027f42dc32d5b0e29b97cc3bc7259e2e",
-      "search_bin_config_sha256": "b3b0c07ad698468d77031dbe2cc69d592dd9a27b7a04963b134d39cda5dd325e"
+      "search_bin_config_sha256": "b3b0c07ad698468d77031dbe2cc69d592dd9a27b7a04963b134d39cda5dd325e",
+      "validation_report": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2025/histogram_validation.json",
+      "validation_report_sha256": "b76b80e14363d38aa5d157588128d773b9e5c75a67c1ca2b91673997e6b8b524"
     }
   },
-  "retired_histograms": [
-    {
-      "source": "autonomous_allhad/workflow/plot2024/hists.json",
-      "backup": "autonomous_allhad/workflow/histograms/dy_window20_20260907/superseded/2024/hists.json",
-      "sha256": "27e297076f6ee0f3b567be331c211f7c76f09017aadf2868f411dc70b7e854e4",
-      "bytes": 2980005801
+  "validation": {
+    "cluster": 1111093,
+    "exit_codes": {
+      "2024": 0,
+      "2025": 0
     },
-    {
-      "source": "autonomous_allhad/workflow/plot2025/hists.json",
-      "backup": "autonomous_allhad/workflow/histograms/dy_window20_20260907/superseded/2025/hists.json",
-      "sha256": "bd94353f7d1a8ae189b718cf12d6d614299496c2773bf44fe0298a2540c9ffe9",
-      "bytes": 2640585730
-    }
-  ],
-  "validation_reports": [
-    "autonomous_allhad/reports/dy_window20_main2024_validation_20260907.json",
-    "autonomous_allhad/reports/dy_window20_gnn2024_validation_20260907.json",
-    "autonomous_allhad/reports/dy_window20_main2025_validation_20260907.json",
-    "autonomous_allhad/reports/dy_window20_gnn2025_validation_20260907.json"
-  ],
-  "production": {
-    "frozen_main_code": "autonomous_allhad/workflow/histograms/dy_window20_20260907/code",
-    "frozen_gnn_code": "autonomous_allhad/workflow/histograms/dy_window20_20260907/gnn_code",
-    "corrections_payload_sha256": "01fc943b55c38ed1e99eb73c64e8bcc143af87ec8025d14d7548509fc80053eb",
-    "corrections_backup": "autonomous_allhad/reports/canonical_sync_20260907/activation_before/analysis/data/corrections.coffea",
-    "postproduction_canonical_payload_activation": "2026-09-07T21:40:47Z",
-    "completed_histograms_not_reweighted": true
+    "validator_sha256": "4c1d59cd6a4cbebe364f16d521b1fa0d7e0587b6308eb7162c15795c39a49930"
   },
-  "superseded_by": "autonomous_allhad/reports/lepton_veto10_canonical_20260908.json",
-  "superseded_at_utc": "2026-09-08T07:43:30Z"
+  "production": {
+    "frozen_main_code": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/code_main_v2",
+    "frozen_gnn_code": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/gnn_code",
+    "main_builder_sha256": "b1cb425ca92222bf52ddfe85911c8cb73870d7d2c3a7873f269a67d0910bc06b",
+    "ids_source_sha256": "a40d327efedb8dad42afb59da944deff995500b09fc157a53853159d36901da1",
+    "ids_coffea_sha256": "f34995ac34dee52f9ba782e409fb24a11a60a18525f24532a51ec6e74d1e4b48",
+    "corrections_source_sha256": "c8ecd046246c68704fac78753fcc1f055e0264f3f5f015b5a05af138cef15ce0",
+    "corrections_coffea_sha256": "ec0e178d156194b4345d0fc53f84798e0163b7a8518272b591703dbb38ae3b4f"
+  },
+  "storage": {
+    "authoritative": "EOS",
+    "local_cached_products": [
+      "background_estimation",
+      "histogram_validation"
+    ],
+    "local_main_and_gnn_cache": "not downloaded; local aliases identify the new campaign but require explicit EOS retrieval before local use",
+    "old_eos_histograms": "preserved; superseded"
+  }
 }

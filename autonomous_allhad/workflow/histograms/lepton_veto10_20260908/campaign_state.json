@@ -1,5 +1,5 @@
 {
-  "status": "both_years_merged_cross_validation_v2_submitted",
+  "status": "canonical_histograms_promoted_background_handoff_delivered",
   "code_commit": "40434055",
   "main_builder_sha256": "b1cb425ca92222bf52ddfe85911c8cb73870d7d2c3a7873f269a67d0910bc06b",
   "main_recovery": {
@@ -10,7 +10,10 @@
     "snapshot": "code_main_v2",
     "pilot_cluster": 1110786,
     "pilot_status": "both ExitCode 0; 2024 6/6 and 2025 8/8 inputs validated; finite, veto10, zero low-pT templates",
-    "pilot_output_sha256": {"2024": "dbc9783cfb793632f9ac05d108f317a1cd834178d13c0f80690f8ab9635f0199", "2025": "eec4d5d9748fb832fcd0ffad48c6bc9e487537ae8e397863345013e09bc7f198"},
+    "pilot_output_sha256": {
+      "2024": "dbc9783cfb793632f9ac05d108f317a1cd834178d13c0f80690f8ab9635f0199",
+      "2025": "eec4d5d9748fb832fcd0ffad48c6bc9e487537ae8e397863345013e09bc7f198"
+    },
     "lowpt_metadata": "disabled component status and applied_events=0 audit entries only; not histogram templates",
     "source_payload_hash_checks": 23,
     "full_resubmission_status": "submitted",
@@ -21,78 +24,259 @@
     "voms_seconds_before_recovery": 645217
   },
   "code_remote_branch": "origin/codex/package-lowpt-tnp",
-  "validation": {"targeted_tests_passed": 21, "compiled_ids_boundary_test": "passed for 2024 and 2025", "source_and_compiled_payload_eos_snapshots": "sha256 equal"},
-  "pilot_clusters": {"main": 1110782, "gnn": 1110783},
+  "validation": {
+    "targeted_tests_passed": 21,
+    "compiled_ids_boundary_test": "passed for 2024 and 2025",
+    "source_and_compiled_payload_eos_snapshots": "sha256 equal"
+  },
+  "pilot_clusters": {
+    "main": 1110782,
+    "gnn": 1110783
+  },
   "full_production_submitted": true,
-  "full_production_clusters": {"main": 1110787, "gnn": 1110785},
-  "gnn_merge_clusters": {"2024": 1110789, "2025": 1110788},
-  "histogram_cross_validation_clusters": {"2024": 1111093, "2025": 1111093},
-  "histogram_cross_validation_status": {"2024": "v2 submitted: proc 0", "2025": "v2 submitted: proc 1; failed validation 1111090 preserved"},
-  "histogram_sparse_audit": {"2025": {"cluster": 1111092, "exit_code": 0, "status": "complete", "independent_projection_comparisons": 318, "projection_failures": [], "failed_validation_cluster": 1111090, "failed_validation_exit_code": 1, "missing_at_first_error": ["GJ", "QCD", "WtoLNu", "Zto2Nu"], "cause": "producer omits categories with no selected events; validator required every process in every category", "recovery_commit": "684bdf8f", "validator_sha256": "4c1d59cd6a4cbebe364f16d521b1fa0d7e0587b6308eb7162c15795c39a49930", "focused_tests_passed": 19, "histograms_changed": false, "method": "permit sparse records only with independent complete histograms and exact entry accounting plus matching yields and variances; no template filling"}},
+  "full_production_clusters": {
+    "main": 1110787,
+    "gnn": 1110785
+  },
+  "gnn_merge_clusters": {
+    "2024": 1110789,
+    "2025": 1110788
+  },
+  "histogram_cross_validation_clusters": {
+    "2024": 1111093,
+    "2025": 1111093
+  },
+  "histogram_cross_validation_status": {
+    "2024": "complete; ExitCode 0",
+    "2025": "complete; ExitCode 0"
+  },
+  "histogram_sparse_audit": {
+    "2025": {
+      "cluster": 1111092,
+      "exit_code": 0,
+      "status": "complete",
+      "independent_projection_comparisons": 318,
+      "projection_failures": [],
+      "failed_validation_cluster": 1111090,
+      "failed_validation_exit_code": 1,
+      "missing_at_first_error": [
+        "GJ",
+        "QCD",
+        "WtoLNu",
+        "Zto2Nu"
+      ],
+      "cause": "producer omits categories with no selected events; validator required every process in every category",
+      "recovery_commit": "684bdf8f",
+      "validator_sha256": "4c1d59cd6a4cbebe364f16d521b1fa0d7e0587b6308eb7162c15795c39a49930",
+      "focused_tests_passed": 19,
+      "histograms_changed": false,
+      "method": "permit sparse records only with independent complete histograms and exact entry accounting plus matching yields and variances; no template filling"
+    }
+  },
   "main_merge_results": {
-    "2024": {"cluster": 1110787, "proc_id": 0, "exit_code": 0, "status": "complete", "validated_chunks": 596, "unique_input_roots": 5954, "zero_entry_roots": 123, "all_component_validations": true, "strict_warnings": 0, "output_bytes": 2820473081, "output_sha256": "5e8d056adbe0a5404f4a60425d2b84b3203cf240d02b982d0b320ef3b6523e83", "background_estimation_sha256": "9b2279529275cadefd0cd8f42aed8f644bd3fa9ee17c69d8b7fc0622801d6aca", "canonical_promotion": "pending cross-validation"},
-    "2025": {"cluster": 1110787, "proc_id": 1, "exit_code": 0, "status": "complete", "validated_chunks": 839, "unique_input_roots": 8390, "zero_entry_roots": 140, "all_component_validations": true, "strict_warnings": 0, "output_bytes": 2458889388, "output_sha256": "e395cd14e026ffdac9a127a6b665347d0db7c20f1391c7d3ab2a34dfb28f5ba6", "background_estimation_sha256": "4c1e9b5734a2356f995925e3252e76721ee655156c481c7babddb1b0144b6be3", "canonical_promotion": "pending cross-validation"}
+    "2024": {
+      "cluster": 1110787,
+      "proc_id": 0,
+      "exit_code": 0,
+      "status": "complete",
+      "validated_chunks": 596,
+      "unique_input_roots": 5954,
+      "zero_entry_roots": 123,
+      "all_component_validations": true,
+      "strict_warnings": 0,
+      "output_bytes": 2820473081,
+      "output_sha256": "5e8d056adbe0a5404f4a60425d2b84b3203cf240d02b982d0b320ef3b6523e83",
+      "background_estimation_sha256": "9b2279529275cadefd0cd8f42aed8f644bd3fa9ee17c69d8b7fc0622801d6aca",
+      "canonical_promotion": "2026-09-08T07:43:30Z"
+    },
+    "2025": {
+      "cluster": 1110787,
+      "proc_id": 1,
+      "exit_code": 0,
+      "status": "complete",
+      "validated_chunks": 839,
+      "unique_input_roots": 8390,
+      "zero_entry_roots": 140,
+      "all_component_validations": true,
+      "strict_warnings": 0,
+      "output_bytes": 2458889388,
+      "output_sha256": "e395cd14e026ffdac9a127a6b665347d0db7c20f1391c7d3ab2a34dfb28f5ba6",
+      "background_estimation_sha256": "4c1e9b5734a2356f995925e3252e76721ee655156c481c7babddb1b0144b6be3",
+      "canonical_promotion": "2026-09-08T07:43:30Z"
+    }
   },
   "gnn_merge_results": {
-    "2024": {"cluster": 1110789, "exit_code": 0, "status": "complete", "partials": 240, "input_files_requested": 5954, "input_files_valid": 5954, "bad_files": [], "output_bytes": 1936076424, "exact_input_set_match": true, "veto10_blinding_gnn30_contract": "verified", "data_luminosity_coverage_complete": true, "canonical_promotion": "pending full histogram cross-validation"},
-    "2025": {"cluster": 1110788, "exit_code": 0, "status": "complete", "partials": 337, "input_files_requested": 8390, "input_files_valid": 8390, "bad_files": [], "output_bytes": 1684605720, "exact_input_set_match": true, "veto10_blinding_contract": "verified", "data_luminosity_coverage_complete": false, "source_bad_file_count": 11, "data_source_bad_file_count": 1, "canonical_promotion": "pending full histogram cross-validation"}
+    "2024": {
+      "cluster": 1110789,
+      "exit_code": 0,
+      "status": "complete",
+      "partials": 240,
+      "input_files_requested": 5954,
+      "input_files_valid": 5954,
+      "bad_files": [],
+      "output_bytes": 1936076424,
+      "exact_input_set_match": true,
+      "veto10_blinding_gnn30_contract": "verified",
+      "data_luminosity_coverage_complete": true,
+      "canonical_promotion": "2026-09-08T07:43:30Z",
+      "output_sha256": "2906493ee21d84756f89c55b2560043ef48ed77e6e8dc08612e6521f7207639b"
+    },
+    "2025": {
+      "cluster": 1110788,
+      "exit_code": 0,
+      "status": "complete",
+      "partials": 337,
+      "input_files_requested": 8390,
+      "input_files_valid": 8390,
+      "bad_files": [],
+      "output_bytes": 1684605720,
+      "exact_input_set_match": true,
+      "veto10_blinding_contract": "verified",
+      "data_luminosity_coverage_complete": false,
+      "source_bad_file_count": 11,
+      "data_source_bad_file_count": 1,
+      "canonical_promotion": "2026-09-08T07:43:30Z",
+      "output_sha256": "6195bd21d72c9474b2793f0b15c51e21538692904f7b0020b47056cd4dc34d9c"
+    }
   },
-  "gnn_2024_premerge_validation": {"normal_exit_processes": 240, "expected_processes": 240, "partial_files": 240, "strict_merge_validation": "pending"},
-  "gnn_2025_premerge_validation": {"normal_exit_processes": 337, "expected_processes": 337, "partial_files": 337, "strict_merge_validation": "pending"},
+  "gnn_2024_premerge_validation": {
+    "normal_exit_processes": 240,
+    "expected_processes": 240,
+    "partial_files": 240,
+    "strict_merge_validation": "passed"
+  },
+  "gnn_2025_premerge_validation": {
+    "normal_exit_processes": 337,
+    "expected_processes": 337,
+    "partial_files": 337,
+    "strict_merge_validation": "passed"
+  },
   "git_operational_state_publication": "User explicitly approved publishing campaign_state.json and validation.json to origin/codex/package-lowpt-tnp after the emailed path and metadata disclosure request.",
   "full_production_job_count": 579,
   "full_submission_approval": "User: 한번에 전부 다 던져라. Full production submitted after correcting the main pilot exception and validating GNN pilots; no wait for a second main pilot.",
   "pilot_results": {
-    "gnn": {"2024": "passed: 6 inputs, finite, veto10, no low-pT variations", "2025": "passed: 8 inputs, finite, veto10, no low-pT variations"},
-    "main": {"status": "failed pilot superseded by corrected full production", "cause": "TROTA light input omitted electron_veto_pt", "fix": "include veto rebuild branches and update region masks before TROTA candidate eligibility", "focused_tests_passed": 7, "failed_logs_preserved": true}
+    "gnn": {
+      "2024": "passed: 6 inputs, finite, veto10, no low-pT variations",
+      "2025": "passed: 8 inputs, finite, veto10, no low-pT variations"
+    },
+    "main": {
+      "status": "failed pilot superseded by corrected full production",
+      "cause": "TROTA light input omitted electron_veto_pt",
+      "fix": "include veto rebuild branches and update region masks before TROTA candidate eligibility",
+      "focused_tests_passed": 7,
+      "failed_logs_preserved": true
+    }
   },
   "proxy_lifetime_at_full_submission_seconds": 675741,
   "voms_lifetime_at_full_submission_seconds": 646941,
-  "full_gnn_jobs": {"2024": 240, "2025": 337},
+  "full_gnn_jobs": {
+    "2024": 240,
+    "2025": 337
+  },
   "full_gnn_input_duplicates": 0,
   "proxy_lifetime_at_pilot_submission_seconds": 676502,
   "voms_lifetime_at_pilot_submission_seconds": 647702,
   "ids_source_sha256": "a40d327efedb8dad42afb59da944deff995500b09fc157a53853159d36901da1",
   "ids_coffea_sha256": "f34995ac34dee52f9ba782e409fb24a11a60a18525f24532a51ec6e74d1e4b48",
   "local_cache_cleanup": "local_cleanup.json; four old EOS-backed histogram caches removed after hash verification; 9.6 GiB free afterwards",
-  "bg_task_message_permissions": "Prior app auto-review rejection remains in force. An exact histogram-only handoff approval request was sent to taiwoo.kim@cern.ch; local sendmail accepted it with ExitCode 0. Await explicit user approval before cross-task path delivery; Git publication approval is separate.",
+  "bg_task_message_permissions": "User explicitly approved the emailed request to deliver the validated new histogram paths and checksums to the existing Background estimation task, with histogram-only input restrictions.",
   "campaign": "lepton_veto10_20260908",
   "approval": "User: Lepton veto를 10 GeV로 변경해서 전과정을 다시 실시하라.",
   "input_policy": "New histogram campaign authorized from the existing completed intermediate ROOTs only; original NanoAOD is forbidden. Previous campaign snapshots remain unchanged.",
-  "years": [2024, 2025],
+  "years": [
+    2024,
+    2025
+  ],
   "electron_veto_pt_min_gev": 10,
   "muon_veto_pt_min_gev": 10,
   "lepton_threshold_operator": ">",
-  "analysis_sf_components": ["met_trigger", "photon_trigger"],
-  "excluded_components": ["veto_electron_5to10", "loose_muon_5to10"],
+  "analysis_sf_components": [
+    "met_trigger",
+    "photon_trigger"
+  ],
+  "excluded_components": [
+    "veto_electron_5to10",
+    "loose_muon_5to10"
+  ],
   "dy_mass_window_gev": 20,
   "lowdm_double_ratio_min_gev": 250,
   "highdm_source_bins": 79,
-  "highdm_excluded_bins_1based": [1, 2, 3, 4, 5, 6],
+  "highdm_excluded_bins_1based": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
   "highdm_retained_bins": 73,
   "lowdm_gnn_bins": 30,
   "gnn_model_and_binning": "frozen; no retraining or optimization",
-  "intermediate_input_stage": {"2024": "authorized_new_campaign", "2025": "authorized_new_campaign"},
-  "expected_input_counts": {"2024": 5954, "2025": 8390},
+  "intermediate_input_stage": {
+    "2024": "permanently_closed",
+    "2025": "permanently_closed"
+  },
+  "expected_input_counts": {
+    "2024": 5954,
+    "2025": 8390
+  },
   "schedd": "bigbird24.cern.ch",
   "monitor_interval_minutes": 30,
   "realtime_monitor_request": "Superseded by latest user instruction: 정상진행중이니 30분단위모니터링해라. Active full production uses a 30-minute heartbeat; unchanged/non-actionable state remains quiet.",
   "last_pilot_poll_utc": "2026-09-07T23:58:48Z",
-  "last_full_run_poll_utc": "2026-09-08T07:26:47Z",
-  "main_chunk_counts_at_last_poll": {"2024": 596, "2025": 839},
-  "main_stages_at_last_poll": {"2024": "merge complete, ExitCode 0; cross-validation v2 submitted", "2025": "merge complete, ExitCode 0; sparse-output diagnosis passed; cross-validation v2 submitted"},
-  "main_traceback_log_counts_at_last_poll": {"2024": 0, "2025": 0},
+  "last_full_run_poll_utc": "2026-09-08T07:43:30Z",
+  "main_chunk_counts_at_last_poll": {
+    "2024": 596,
+    "2025": 839
+  },
+  "main_stages_at_last_poll": {
+    "2024": "complete; validated and promoted",
+    "2025": "complete; validated and promoted"
+  },
+  "main_traceback_log_counts_at_last_poll": {
+    "2024": 0,
+    "2025": 0
+  },
   "pilot_monitor_interval_minutes": 5,
   "full_run_monitor_interval_minutes": 30,
-  "last_identified_gnn_failures": {"cluster": 1110785, "processes": [528, 540], "cause": "OSError Errno 5 while importing EOS Python source", "recovery": "both released once with unchanged settings after source hash verification; output validation pending", "previous_released_processes": [35, 50, 91]},
+  "last_identified_gnn_failures": {
+    "cluster": 1110785,
+    "processes": [
+      528,
+      540
+    ],
+    "cause": "OSError Errno 5 while importing EOS Python source",
+    "recovery": "both released once with unchanged settings after source hash verification; output validation pending",
+    "previous_released_processes": [
+      35,
+      50,
+      91
+    ]
+  },
   "monitor_cadence_policy": "Latest user instruction restores 30-minute monitoring for healthy full production, superseding the 1-minute recovery cadence; do not restart healthy jobs.",
-  "topologies": ["T2tt", "T2bW", "T2tb"],
-  "impacts": {"topology": "T2tt", "mStop": 1200, "mLSP": 500, "expected_signal": [1, 0]},
+  "topologies": [
+    "T2tt",
+    "T2bW",
+    "T2tb"
+  ],
+  "impacts": {
+    "topology": "T2tt",
+    "mStop": 1200,
+    "mLSP": 500,
+    "expected_signal": [
+      1,
+      0
+    ]
+  },
   "sr_observations": "blinded",
-  "background_estimation": "wait_for_validated_new_histograms_then_handoff",
+  "background_estimation": "handoff_delivered_to_existing_task",
+  "background_estimation_task_id": "019f9dbc-5790-7b13-b102-027c7703175c",
+  "background_estimation_handoff_utc": "2026-09-08T07:47:00Z",
   "cards": "pending",
   "limits": "pending",
   "impacts_status": "pending",
   "old_campaign": "dy_window20_20260907",
-  "existing_outputs_preserved": true
+  "existing_outputs_preserved": true,
+  "canonical_manifest": "autonomous_allhad/reports/lepton_veto10_canonical_20260908.json",
+  "canonical_promoted_at_utc": "2026-09-08T07:43:30Z"
 }

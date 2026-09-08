@@ -107,5 +107,18 @@
       "inputs": 8,
       "status": "validated"
     }
+  },
+  "final_histogram_validation": {
+    "status": "complete",
+    "cluster": 1111093,
+    "exit_codes": {
+      "2024": 0,
+      "2025": 0
+    },
+    "reports": {
+      "2024": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/histogram_validation.json",
+      "2025": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2025/histogram_validation.json"
+    },
+    "canonical_manifest": "autonomous_allhad/reports/lepton_veto10_canonical_20260908.json"
   }
 }
