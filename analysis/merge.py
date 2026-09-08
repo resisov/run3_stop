@@ -2,11 +2,17 @@ import cloudpickle
 import pickle
 import gzip
 import os
+import json
 import numpy as np
 from coffea.util import load, save
 from helpers.futures_patch import patch_mp_connection_bpo_17560
 
-def merge(folder,variable=None, exclude=None):
+def merge(folder,variable=None, exclude=None, dataset_map=None):
+
+     aliases = None
+     if dataset_map is not None:
+          with open(dataset_map) as stream:
+               aliases = json.load(stream)
 
      lists = {}
      for filename in os.listdir(folder):
@@ -25,7 +31,10 @@ def merge(folder,variable=None, exclude=None):
                print('Opening:',filename)
                hin = load(filename)
                if var not in tmp: tmp[var]={}
-               if filename.split('--')[1] not in tmp[var]: tmp[var][filename.split('--')[1].replace('.reduced','')]=hin[var]
+               dataset = filename.split('--')[1].replace('.reduced','')
+               if aliases is not None:
+                    dataset = aliases[dataset]
+               if dataset not in tmp[var]: tmp[var][dataset]=hin[var]
                del hin
           print(tmp)
           save(tmp, folder+'/'+var+'.merged')
@@ -57,8 +66,9 @@ if __name__ == '__main__':
     parser.add_option('-f', '--folder', help='folder', dest='folder')
     parser.add_option('-v', '--variable', help='variable', dest='variable', default=None)
     parser.add_option('-e', '--exclude', help='exclude', dest='exclude', default=None)
+    parser.add_option('--dataset-map', help='Optional mapping from filename keys to original dataset names', dest='dataset_map')
     (options, args) = parser.parse_args()
 
     patch_mp_connection_bpo_17560()    
-    merge(options.folder,options.variable,options.exclude)
+    merge(options.folder,options.variable,options.exclude,options.dataset_map)
     postprocess(options.folder)
