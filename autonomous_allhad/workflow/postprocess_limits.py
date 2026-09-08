@@ -1495,10 +1495,10 @@ def plot_contour(
         fancybox=False,
         borderpad=0.55 if thermal_relic_handle else 0.8,
         labelspacing=(
-            0.95
-            if multiline_decay_label
-            else 0.32
+            0.32
             if thermal_relic_handle
+            else 0.95
+            if multiline_decay_label
             else 0.6
         ),
         fontsize=17 if thermal_relic_handle else 19,
