@@ -1,0 +1,1091 @@
+{
+  "automation_id": "dy-20-gev",
+  "trigger_utc": "2026-09-08T23:41:49.024Z",
+  "observed_at_utc": "2026-09-08T23:56:52Z",
+  "queue": [
+    {
+      "ClusterId": 1112615,
+      "HoldReason": null,
+      "JobStatus": 2,
+      "MaxRuntime": 43200,
+      "NumJobStarts": 1,
+      "RemoteUserCpu": 10040
+    },
+    {
+      "ClusterId": 1112616,
+      "ExitCode": 1,
+      "HoldReason": "The job attribute OnExitHold expression '(ExitBySignal == true) || (ExitCode != 0)' evaluated to TRUE",
+      "JobStatus": 5,
+      "MaxRuntime": 43200,
+      "NumJobStarts": 1,
+      "RemoteUserCpu": 7749
+    },
+    {
+      "ClusterId": 1112623,
+      "ExitCode": 1,
+      "HoldReason": "The job attribute OnExitHold expression '(ExitBySignal == true) || (ExitCode != 0)' evaluated to TRUE",
+      "JobStatus": 5,
+      "MaxRuntime": 43200,
+      "NumJobStarts": 1,
+      "RemoteUserCpu": 505
+    },
+    {
+      "ClusterId": 1112624,
+      "HoldReason": null,
+      "JobStatus": 1,
+      "MaxRuntime": 43200,
+      "NumJobStarts": 0,
+      "RemoteUserCpu": 0
+    },
+    {
+      "ClusterId": 1112625,
+      "HoldReason": null,
+      "JobStatus": 1,
+      "MaxRuntime": 43200,
+      "NumJobStarts": 0,
+      "RemoteUserCpu": 0
+    },
+    {
+      "ClusterId": 1112626,
+      "HoldReason": null,
+      "JobStatus": 1,
+      "MaxRuntime": 43200,
+      "NumJobStarts": 0,
+      "RemoteUserCpu": 0
+    },
+    {
+      "ClusterId": 1112627,
+      "HoldReason": null,
+      "JobStatus": 1,
+      "MaxRuntime": 43200,
+      "NumJobStarts": 0,
+      "RemoteUserCpu": 0
+    }
+  ],
+  "endpoint_audit": {
+    "at_utc": "2026-09-08T23:56:52Z",
+    "validation_scope": "finite nondegenerate ordered nuisance endpoints; full convergence review pending",
+    "r1_preserved": {
+      "job": 1112620,
+      "checked": 723,
+      "finite_three_entries": 723,
+      "nondegenerate_ordered_endpoints": 709,
+      "flags": [
+        {
+          "name": "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0",
+          "issues": [
+            "identical_parameter_endpoints"
+          ],
+          "rows": [
+            {
+              "r": 1,
+              "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": 0.000005777426849817857,
+              "deltaNLL": 0,
+              "quantileExpected": -1
+            },
+            {
+              "r": 1,
+              "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": 0.000005777426849817857,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            },
+            {
+              "r": 1,
+              "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": 0.000005777426849817857,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            }
+          ]
+        },
+        {
+          "name": "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0",
+          "issues": [
+            "identical_parameter_endpoints"
+          ],
+          "rows": [
+            {
+              "r": 1,
+              "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0": 0.000001051844719768269,
+              "deltaNLL": 0,
+              "quantileExpected": -1
+            },
+            {
+              "r": 1,
+              "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0": 0.000001051844719768269,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            },
+            {
+              "r": 1,
+              "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0": 0.000001051844719768269,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            }
+          ]
+        },
+        {
+          "name": "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin4_bin0",
+          "issues": [
+            "identical_parameter_endpoints"
+          ],
+          "rows": [
+            {
+              "r": 1,
+              "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin4_bin0": 0.0000018504720173950773,
+              "deltaNLL": 0,
+              "quantileExpected": -1
+            },
+            {
+              "r": 1,
+              "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin4_bin0": 0.0000018504720173950773,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            },
+            {
+              "r": 1,
+              "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin4_bin0": 0.0000018504720173950773,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            }
+          ]
+        },
+        {
+          "name": "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin1_bin0",
+          "issues": [
+            "identical_parameter_endpoints"
+          ],
+          "rows": [
+            {
+              "r": 1,
+              "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin1_bin0": 3.409395787912217e-7,
+              "deltaNLL": 0,
+              "quantileExpected": -1
+            },
+            {
+              "r": 1,
+              "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin1_bin0": 3.409395787912217e-7,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            },
+            {
+              "r": 1,
+              "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin1_bin0": 3.409395787912217e-7,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            }
+          ]
+        },
+        {
+          "name": "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0",
+          "issues": [
+            "identical_parameter_endpoints"
+          ],
+          "rows": [
+            {
+              "r": 1,
+              "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0": 3.6407976722330204e-7,
+              "deltaNLL": 0,
+              "quantileExpected": -1
+            },
+            {
+              "r": 1,
+              "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0": 3.6407976722330204e-7,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            },
+            {
+              "r": 1,
+              "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0": 3.6407976722330204e-7,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            }
+          ]
+        },
+        {
+          "name": "prop_biny2024_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0",
+          "issues": [
+            "identical_parameter_endpoints"
+          ],
+          "rows": [
+            {
+              "r": 1,
+              "prop_biny2024_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": -0.000016404617781518027,
+              "deltaNLL": 0,
+              "quantileExpected": -1
+            },
+            {
+              "r": 1,
+              "prop_biny2024_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": -0.000016404617781518027,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            },
+            {
+              "r": 1,
+              "prop_biny2024_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": -0.000016404617781518027,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            }
+          ]
+        },
+        {
+          "name": "prop_biny2024_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0",
+          "issues": [
+            "identical_parameter_endpoints"
+          ],
+          "rows": [
+            {
+              "r": 1,
+              "prop_biny2024_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -0.000009729117664392106,
+              "deltaNLL": 0,
+              "quantileExpected": -1
+            },
+            {
+              "r": 1,
+              "prop_biny2024_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -0.000009729117664392106,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            },
+            {
+              "r": 1,
+              "prop_biny2024_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -0.000009729117664392106,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            }
+          ]
+        },
+        {
+          "name": "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0",
+          "issues": [
+            "identical_parameter_endpoints"
+          ],
+          "rows": [
+            {
+              "r": 1,
+              "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": 0.000008789825187704992,
+              "deltaNLL": 0,
+              "quantileExpected": -1
+            },
+            {
+              "r": 1,
+              "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": 0.000008789825187704992,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            },
+            {
+              "r": 1,
+              "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": 0.000008789825187704992,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            }
+          ]
+        },
+        {
+          "name": "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0",
+          "issues": [
+            "identical_parameter_endpoints"
+          ],
+          "rows": [
+            {
+              "r": 1,
+              "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0": 0.000001181561742669146,
+              "deltaNLL": 0,
+              "quantileExpected": -1
+            },
+            {
+              "r": 1,
+              "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0": 0.000001181561742669146,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            },
+            {
+              "r": 1,
+              "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0": 0.000001181561742669146,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            }
+          ]
+        },
+        {
+          "name": "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR0_bin0_bin0",
+          "issues": [
+            "identical_parameter_endpoints"
+          ],
+          "rows": [
+            {
+              "r": 1,
+              "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR0_bin0_bin0": -7.235133807625971e-7,
+              "deltaNLL": 0,
+              "quantileExpected": -1
+            },
+            {
+              "r": 1,
+              "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR0_bin0_bin0": -7.235133807625971e-7,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            },
+            {
+              "r": 1,
+              "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR0_bin0_bin0": -7.235133807625971e-7,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            }
+          ]
+        },
+        {
+          "name": "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0",
+          "issues": [
+            "identical_parameter_endpoints"
+          ],
+          "rows": [
+            {
+              "r": 1,
+              "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -0.000005201452040637378,
+              "deltaNLL": 0,
+              "quantileExpected": -1
+            },
+            {
+              "r": 1,
+              "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -0.000005201452040637378,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            },
+            {
+              "r": 1,
+              "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -0.000005201452040637378,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            }
+          ]
+        },
+        {
+          "name": "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0",
+          "issues": [
+            "identical_parameter_endpoints"
+          ],
+          "rows": [
+            {
+              "r": 1,
+              "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0": -0.0000015382710216726991,
+              "deltaNLL": 0,
+              "quantileExpected": -1
+            },
+            {
+              "r": 1,
+              "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0": -0.0000015382710216726991,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            },
+            {
+              "r": 1,
+              "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0": -0.0000015382710216726991,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            }
+          ]
+        },
+        {
+          "name": "prop_biny2025_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0",
+          "issues": [
+            "identical_parameter_endpoints"
+          ],
+          "rows": [
+            {
+              "r": 1,
+              "prop_biny2025_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": -0.000014159477359498851,
+              "deltaNLL": 0,
+              "quantileExpected": -1
+            },
+            {
+              "r": 1,
+              "prop_biny2025_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": -0.000014159477359498851,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            },
+            {
+              "r": 1,
+              "prop_biny2025_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": -0.000014159477359498851,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            }
+          ]
+        },
+        {
+          "name": "prop_biny2025_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0",
+          "issues": [
+            "identical_parameter_endpoints"
+          ],
+          "rows": [
+            {
+              "r": 1,
+              "prop_biny2025_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -0.000008451041139778681,
+              "deltaNLL": 0,
+              "quantileExpected": -1
+            },
+            {
+              "r": 1,
+              "prop_biny2025_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -0.000008451041139778681,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            },
+            {
+              "r": 1,
+              "prop_biny2025_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -0.000008451041139778681,
+              "deltaNLL": 0,
+              "quantileExpected": 0.3199999928474426
+            }
+          ]
+        }
+      ]
+    },
+    "r0_preserved": {
+      "job": 1112615,
+      "checked": 733,
+      "finite_three_entries": 733,
+      "nondegenerate_ordered_endpoints": 733,
+      "flags": []
+    },
+    "r1_recovered11": {
+      "valid": true,
+      "checked": 11,
+      "results": [
+        {
+          "name": "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR0_bin1_bin0",
+          "entries": 3,
+          "parameter_values": [
+            2.7341087616150617e-7,
+            -0.9424516558647156,
+            0.944353461265564
+          ],
+          "valid": true,
+          "sha256": "77709524b37c55aeb6d1288d53287a36de734b47448fd6ba595a720d79dfa6e6",
+          "path": "combined/T2tt/impact_recovery_r1_mcstat_part1/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_prop_biny2025_GCR_lowdm_gnn_Nb1_NISR0_bin1_bin0.MultiDimFit.mH1200.root"
+        },
+        {
+          "name": "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin2_bin0",
+          "entries": 3,
+          "parameter_values": [
+            0.00000117576439606637,
+            -0.7550134658813477,
+            0.7555961012840271
+          ],
+          "valid": true,
+          "sha256": "e802d11af97d76870f82f62ce10def2eb81322b948667b414572923dde8fa52d",
+          "path": "combined/T2tt/impact_recovery_r1_mcstat_part1/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin2_bin0.MultiDimFit.mH1200.root"
+        },
+        {
+          "name": "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin3_bin0",
+          "entries": 3,
+          "parameter_values": [
+            -7.598968920774496e-8,
+            -0.7832885980606079,
+            0.7868486642837524
+          ],
+          "valid": true,
+          "sha256": "059b8da87c665c51d9a7278050e94ba799e1e53dbeb3820011b5b612bf4947b3",
+          "path": "combined/T2tt/impact_recovery_r1_mcstat_part1/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin3_bin0.MultiDimFit.mH1200.root"
+        },
+        {
+          "name": "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin4_bin0",
+          "entries": 3,
+          "parameter_values": [
+            -2.3712381391760573e-7,
+            -0.880662739276886,
+            0.8808696866035461
+          ],
+          "valid": true,
+          "sha256": "27641dcbe53198a343555a8991c71e9ee6455265b036e72022ee88753319b7b8",
+          "path": "combined/T2tt/impact_recovery_r1_mcstat_part1/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin4_bin0.MultiDimFit.mH1200.root"
+        },
+        {
+          "name": "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR0_bin1_bin0",
+          "entries": 3,
+          "parameter_values": [
+            -2.3687152861384675e-7,
+            -0.9389863610267639,
+            0.943063497543335
+          ],
+          "valid": true,
+          "sha256": "ec9897af02eaa0ced835915d042a16ec10615fec0b02740f45d436848c2a9aae",
+          "path": "combined/T2tt/impact_recovery_r1_mcstat_part2/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR0_bin1_bin0.MultiDimFit.mH1200.root"
+        },
+        {
+          "name": "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR0_bin4_bin0",
+          "entries": 3,
+          "parameter_values": [
+            -2.3555824668619607e-7,
+            -0.9063954949378967,
+            0.9178949594497681
+          ],
+          "valid": true,
+          "sha256": "d815d3e67e251a325a4e1fcb4906c48fa0cc8aa45375c1a4b46ed3c949cc92a0",
+          "path": "combined/T2tt/impact_recovery_r1_mcstat_part2/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR0_bin4_bin0.MultiDimFit.mH1200.root"
+        },
+        {
+          "name": "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin1_bin0",
+          "entries": 3,
+          "parameter_values": [
+            -0.0000024456694518448785,
+            -0.9627963304519653,
+            0.9645624756813049
+          ],
+          "valid": true,
+          "sha256": "8a899104cf0e938545e049100270c395731fd55bd88854ee3350420bd24eca4b",
+          "path": "combined/T2tt/impact_recovery_r1_mcstat_part2/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin1_bin0.MultiDimFit.mH1200.root"
+        },
+        {
+          "name": "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin2_bin0",
+          "entries": 3,
+          "parameter_values": [
+            -0.000001999356527448981,
+            -0.6715450882911682,
+            0.6776750087738037
+          ],
+          "valid": true,
+          "sha256": "aafa7339faf727b28305e7c8964c7b6e8fc06aebc0a609c46b7d6104ec1ccf18",
+          "path": "combined/T2tt/impact_recovery_r1_mcstat_part2/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin2_bin0.MultiDimFit.mH1200.root"
+        },
+        {
+          "name": "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin4_bin0",
+          "entries": 3,
+          "parameter_values": [
+            -0.0000025488261599093676,
+            -0.8084027171134949,
+            0.809654712677002
+          ],
+          "valid": true,
+          "sha256": "ee4bb83a2d232b9dec7d4438812ea511a1291795d926c36334536d5dea692311",
+          "path": "combined/T2tt/impact_recovery_r1_mcstat_part3/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin4_bin0.MultiDimFit.mH1200.root"
+        },
+        {
+          "name": "prop_biny2025_LLCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0",
+          "entries": 3,
+          "parameter_values": [
+            0.0000016194175032069325,
+            -0.9807881116867065,
+            0.980095624923706
+          ],
+          "valid": true,
+          "sha256": "736edea4accb91fda8935b9a9a9c992c35bb1adc6d4b266c1f683e812ee87af4",
+          "path": "combined/T2tt/impact_recovery_r1_mcstat_part3/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_prop_biny2025_LLCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0.MultiDimFit.mH1200.root"
+        },
+        {
+          "name": "prop_biny2025_LLCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0",
+          "entries": 3,
+          "parameter_values": [
+            0.0000012607450798896025,
+            -0.7986648678779602,
+            0.7998002767562866
+          ],
+          "valid": true,
+          "sha256": "7556c8dd201c7832d2d8405c4c8d111a36568f05cb22817ee3769d89dfcacfb8",
+          "path": "combined/T2tt/impact_recovery_r1_mcstat_part3/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_prop_biny2025_LLCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0.MultiDimFit.mH1200.root"
+        }
+      ]
+    },
+    "r1_endpoint_pass_count": 720,
+    "r0_endpoint_pass_count": 733,
+    "expected_per_run": 735,
+    "r1_unresolved": 15,
+    "r0_unresolved": 2,
+    "EOS_recovered11_hash_match": true
+  },
+  "r1_completed_mcstat_jobs": [
+    {
+      "job_status": 4,
+      "status": "subset_fits_complete",
+      "expect_signal": 1,
+      "signal_strength_range": [
+        0,
+        20
+      ],
+      "robust_fit": 1,
+      "minimizer_strategy": 1,
+      "subset_only": true,
+      "full_collection_pending": true,
+      "resume_source": "combined/T2tt/impact_mStop1200_mLSP500_r1/work",
+      "retained_nuisance_roots": 723,
+      "runner_snapshot": "impact_code_subset/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+      "runner_sha256": "d26e654b265c82092c89bccd8213da477e59b28b8697e640226dc3fe0896e714",
+      "source_commit": "8e2984ba",
+      "card_sha256": "e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1",
+      "workspace_sha256": "e58f366eff035c02fb244bb43f1a56efcdd12233acc4c5d0401d4c21cb0f8235",
+      "initial_fit_sha256": "14634181a407fa97b3e9d399edab07b177c59bb57b1bd65a2eafd22107ef2693",
+      "proxy_seconds_before_submission": 589745,
+      "voms_seconds_before_submission": 560945,
+      "max_runtime_seconds": 43200,
+      "submitted_held_then_verified_and_released": true,
+      "server_injected_home_removed_before_release": true,
+      "focused_tests_passed": 34,
+      "real_ROOT_subset_validator_smoke_passed": true,
+      "physics_changed": false,
+      "last_queue_check_utc": "2026-09-08T23:56:52Z",
+      "cluster": 1112620,
+      "named_nuisances": [
+        "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR0_bin1_bin0",
+        "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin2_bin0",
+        "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin3_bin0",
+        "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin4_bin0"
+      ],
+      "fit_parallel": 4,
+      "verbosity": 0,
+      "submission_file": "combined/T2tt/impact_recovery_r1_mcstat_part1/impact_r1_eossubmit.sub",
+      "submission_sha256": "0e1e1d733bc6576f9da15d19dd22393f32b7735717b356f4725a8d946e523028",
+      "output_work": "combined/T2tt/impact_recovery_r1_mcstat_part1/impact_mStop1200_mLSP500_r1/work",
+      "exit_code": 0,
+      "endpoint_check_passed": true
+    },
+    {
+      "job_status": 4,
+      "status": "subset_fits_complete",
+      "expect_signal": 1,
+      "signal_strength_range": [
+        0,
+        20
+      ],
+      "robust_fit": 1,
+      "minimizer_strategy": 1,
+      "subset_only": true,
+      "full_collection_pending": true,
+      "resume_source": "combined/T2tt/impact_mStop1200_mLSP500_r1/work",
+      "retained_nuisance_roots": 723,
+      "runner_snapshot": "impact_code_subset/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+      "runner_sha256": "d26e654b265c82092c89bccd8213da477e59b28b8697e640226dc3fe0896e714",
+      "source_commit": "8e2984ba",
+      "card_sha256": "e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1",
+      "workspace_sha256": "e58f366eff035c02fb244bb43f1a56efcdd12233acc4c5d0401d4c21cb0f8235",
+      "initial_fit_sha256": "14634181a407fa97b3e9d399edab07b177c59bb57b1bd65a2eafd22107ef2693",
+      "proxy_seconds_before_submission": 589745,
+      "voms_seconds_before_submission": 560945,
+      "max_runtime_seconds": 43200,
+      "submitted_held_then_verified_and_released": true,
+      "server_injected_home_removed_before_release": true,
+      "focused_tests_passed": 34,
+      "real_ROOT_subset_validator_smoke_passed": true,
+      "physics_changed": false,
+      "last_queue_check_utc": "2026-09-08T23:56:52Z",
+      "cluster": 1112621,
+      "named_nuisances": [
+        "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR0_bin1_bin0",
+        "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR0_bin4_bin0",
+        "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin1_bin0",
+        "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin2_bin0"
+      ],
+      "fit_parallel": 4,
+      "verbosity": 0,
+      "submission_file": "combined/T2tt/impact_recovery_r1_mcstat_part2/impact_r1_eossubmit.sub",
+      "submission_sha256": "78f0655d0da987f78e2b26580211fbfaf47f8dedf54715edcfa054f78a96eb96",
+      "output_work": "combined/T2tt/impact_recovery_r1_mcstat_part2/impact_mStop1200_mLSP500_r1/work",
+      "exit_code": 0,
+      "endpoint_check_passed": true
+    },
+    {
+      "job_status": 4,
+      "status": "subset_fits_complete",
+      "expect_signal": 1,
+      "signal_strength_range": [
+        0,
+        20
+      ],
+      "robust_fit": 1,
+      "minimizer_strategy": 1,
+      "subset_only": true,
+      "full_collection_pending": true,
+      "resume_source": "combined/T2tt/impact_mStop1200_mLSP500_r1/work",
+      "retained_nuisance_roots": 723,
+      "runner_snapshot": "impact_code_subset/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+      "runner_sha256": "d26e654b265c82092c89bccd8213da477e59b28b8697e640226dc3fe0896e714",
+      "source_commit": "8e2984ba",
+      "card_sha256": "e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1",
+      "workspace_sha256": "e58f366eff035c02fb244bb43f1a56efcdd12233acc4c5d0401d4c21cb0f8235",
+      "initial_fit_sha256": "14634181a407fa97b3e9d399edab07b177c59bb57b1bd65a2eafd22107ef2693",
+      "proxy_seconds_before_submission": 589745,
+      "voms_seconds_before_submission": 560945,
+      "max_runtime_seconds": 43200,
+      "submitted_held_then_verified_and_released": true,
+      "server_injected_home_removed_before_release": true,
+      "focused_tests_passed": 34,
+      "real_ROOT_subset_validator_smoke_passed": true,
+      "physics_changed": false,
+      "last_queue_check_utc": "2026-09-08T23:56:52Z",
+      "cluster": 1112622,
+      "named_nuisances": [
+        "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin4_bin0",
+        "prop_biny2025_LLCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0",
+        "prop_biny2025_LLCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0"
+      ],
+      "fit_parallel": 4,
+      "verbosity": 0,
+      "submission_file": "combined/T2tt/impact_recovery_r1_mcstat_part3/impact_r1_eossubmit.sub",
+      "submission_sha256": "b22bf81d17c420cfea6697310be5fc40ec25be6c2a2bd6013edf44d21d9ceeca",
+      "output_work": "combined/T2tt/impact_recovery_r1_mcstat_part3/impact_mStop1200_mLSP500_r1/work",
+      "exit_code": 0,
+      "endpoint_check_passed": true
+    }
+  ],
+  "r1_sgamma_failure": {
+    "job_status": 5,
+    "status": "failed",
+    "expect_signal": 1,
+    "signal_strength_range": [
+      0,
+      20
+    ],
+    "robust_fit": 1,
+    "minimizer_strategy": 1,
+    "subset_only": true,
+    "full_collection_pending": true,
+    "resume_source": "combined/T2tt/impact_mStop1200_mLSP500_r1/work",
+    "retained_nuisance_roots": 723,
+    "runner_snapshot": "impact_code_subset/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+    "runner_sha256": "d26e654b265c82092c89bccd8213da477e59b28b8697e640226dc3fe0896e714",
+    "source_commit": "8e2984ba",
+    "card_sha256": "e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1",
+    "workspace_sha256": "e58f366eff035c02fb244bb43f1a56efcdd12233acc4c5d0401d4c21cb0f8235",
+    "initial_fit_sha256": "14634181a407fa97b3e9d399edab07b177c59bb57b1bd65a2eafd22107ef2693",
+    "proxy_seconds_before_submission": 589745,
+    "voms_seconds_before_submission": 560945,
+    "max_runtime_seconds": 43200,
+    "submitted_held_then_verified_and_released": true,
+    "server_injected_home_removed_before_release": true,
+    "focused_tests_passed": 34,
+    "real_ROOT_subset_validator_smoke_passed": true,
+    "physics_changed": false,
+    "last_queue_check_utc": "2026-09-08T23:56:52Z",
+    "cluster": 1112623,
+    "diagnostic_only": true,
+    "named_nuisances": [
+      "CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin2_2024"
+    ],
+    "fit_parallel": 1,
+    "verbosity": 3,
+    "submission_file": "combined/T2tt/impact_diagnostic_r1_sgamma/impact_r1_eossubmit.sub",
+    "submission_sha256": "d6b033dea5e01582ecea8e84735f15df73687d9198c7cdb056939981e600b10f",
+    "output_work": "combined/T2tt/impact_diagnostic_r1_sgamma/impact_mStop1200_mLSP500_r1/work",
+    "exit_code": 1,
+    "failed_at_utc": "2026-09-08T23:39:07Z",
+    "entries": 2,
+    "failure": "lower profile crossing not found before zero boundary; subsequent endpoint minimization failed",
+    "minuit_status": 3,
+    "endpoint_fit_edm": 292794,
+    "lower_boundary": 0,
+    "deltaNLL_at_lower_boundary_approx": 0.426,
+    "one_sigma_deltaNLL_target": 0.5,
+    "fit_log_sha256": "cddcd4b7bb2265338c2153ae84c6a6b43bc19e37aaa2beb68168c24671b02337"
+  },
+  "r0_precision_jobs": [
+    {
+      "cluster": 1112615,
+      "job_status": 2,
+      "status": "running",
+      "diagnostic_only": true,
+      "minimizer_precision": "1e-8",
+      "minimizer_strategy": 2,
+      "minimizer_tolerance": "unchanged default 0.1",
+      "robust_fit": 1,
+      "expect_signal": 0,
+      "signal_strength_range": [
+        -20,
+        20
+      ],
+      "named_nuisances": [
+        "CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin2_2024",
+        "CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin1_2024"
+      ],
+      "resume_source": "combined/T2tt/impact_mStop1200_mLSP500_r0/work",
+      "retained_nuisance_roots": 733,
+      "runner_snapshot": "impact_code_precision/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+      "runner_sha256": "ce600466ccd3425982b4376315b881b11008fce28d37ed474cecfbfac906ad15",
+      "source_commit": "1e719974",
+      "submission_file": "combined/T2tt/impact_precision_r0_1e8/impact_r0_eossubmit.sub",
+      "submission_sha256": "a2dbcf6568c13ef6dacac769e10526636c0243967641d49d3e6cb50d9589241d",
+      "output_work": "combined/T2tt/impact_precision_r0_1e8/impact_mStop1200_mLSP500_r0/work",
+      "card_sha256": "e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1",
+      "workspace_sha256": "fec2790a46d714e92d3a09dfa2f768cba48dd0daf4925ea580cc7dc945d4dceb",
+      "initial_fit_sha256": "7b898069a83365946cd1f0850139131ead856a37113ce3c2e6236c8ede554f6e",
+      "proxy_seconds_before_submission": 593516,
+      "voms_seconds_before_submission": 564716,
+      "request_cpus": 6,
+      "fit_parallel": 2,
+      "request_memory_mb": 18000,
+      "max_runtime_seconds": 43200,
+      "submitted_held_then_verified_and_released": true,
+      "server_injected_home_removed_before_release": true,
+      "focused_tests_passed": 26,
+      "physics_changed": false,
+      "acceptance": "not automatically promoted; require complete valid endpoints and precision stability comparison",
+      "worker_confirmed_named_fits": 2,
+      "worker_confirmed_precision": "1e-8",
+      "last_worker_check_utc": "2026-09-08T22:44:39Z",
+      "final_collection_status": "not run yet; existing collection log is copied checkpoint metadata",
+      "current_fit_warnings": [
+        "status 1 covariance matrix forced positive definite",
+        "intermediate nonconvergent minimizations"
+      ],
+      "final_convergence_validated": false,
+      "last_queue_check_utc": "2026-09-08T23:56:52Z",
+      "remote_user_cpu_seconds": 10040
+    },
+    {
+      "cluster": 1112616,
+      "job_status": 5,
+      "status": "failed",
+      "diagnostic_only": true,
+      "minimizer_precision": "1e-10",
+      "minimizer_strategy": 2,
+      "minimizer_tolerance": "unchanged default 0.1",
+      "robust_fit": 1,
+      "expect_signal": 0,
+      "signal_strength_range": [
+        -20,
+        20
+      ],
+      "named_nuisances": [
+        "CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin2_2024",
+        "CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin1_2024"
+      ],
+      "resume_source": "combined/T2tt/impact_mStop1200_mLSP500_r0/work",
+      "retained_nuisance_roots": 733,
+      "runner_snapshot": "impact_code_precision/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+      "runner_sha256": "ce600466ccd3425982b4376315b881b11008fce28d37ed474cecfbfac906ad15",
+      "source_commit": "1e719974",
+      "submission_file": "combined/T2tt/impact_precision_r0_1e10/impact_r0_eossubmit.sub",
+      "submission_sha256": "9edf9aeeb7ec384e717f0c06ac852f2632b5d821cff44541b11b9157c7ca27e3",
+      "output_work": "combined/T2tt/impact_precision_r0_1e10/impact_mStop1200_mLSP500_r0/work",
+      "card_sha256": "e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1",
+      "workspace_sha256": "fec2790a46d714e92d3a09dfa2f768cba48dd0daf4925ea580cc7dc945d4dceb",
+      "initial_fit_sha256": "7b898069a83365946cd1f0850139131ead856a37113ce3c2e6236c8ede554f6e",
+      "proxy_seconds_before_submission": 593516,
+      "voms_seconds_before_submission": 564716,
+      "request_cpus": 6,
+      "fit_parallel": 2,
+      "request_memory_mb": 18000,
+      "max_runtime_seconds": 43200,
+      "submitted_held_then_verified_and_released": true,
+      "server_injected_home_removed_before_release": true,
+      "focused_tests_passed": 26,
+      "physics_changed": false,
+      "acceptance": "not automatically promoted; require complete valid endpoints and precision stability comparison",
+      "worker_confirmed_named_fits": 2,
+      "worker_confirmed_precision": "1e-10",
+      "last_worker_check_utc": "2026-09-08T22:44:39Z",
+      "final_collection_status": "not run yet; existing collection log is copied checkpoint metadata",
+      "current_fit_warnings": [
+        "status 1 covariance matrix forced positive definite",
+        "intermediate nonconvergent minimizations",
+        "intermediate Minuit status 4"
+      ],
+      "final_convergence_validated": false,
+      "last_queue_check_utc": "2026-09-08T23:56:52Z",
+      "remote_user_cpu_seconds": 7749,
+      "exit_code": 1,
+      "failed_at_utc": "2026-09-08T23:37:54Z",
+      "failure": "closed profile ranges and endpoint minimization failure",
+      "endpoint_entry_counts": [
+        3,
+        2
+      ],
+      "degenerate_three_entry_result": true,
+      "fit_log_sha256": "c454d08d357f064f24dc50a942d7661f8a37dd3a3faecb8859253812573a9709",
+      "endpoint_fit_edm": 0.00783809,
+      "endpoint_fit_minuit_status": 3
+    }
+  ],
+  "r1_endpoint_recovery_jobs": [
+    {
+      "job_status": 1,
+      "status": "idle",
+      "expect_signal": 1,
+      "signal_strength_range": [
+        0,
+        20
+      ],
+      "robust_fit": 1,
+      "minimizer_strategy": 1,
+      "subset_only": true,
+      "full_collection_pending": true,
+      "resume_source": "combined/T2tt/impact_seed_r1",
+      "retained_nuisance_roots": 0,
+      "runner_snapshot": "impact_code_endpoint/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+      "runner_sha256": "221c3c9e81b650e1fd90e603d693588e1183f6ca87faa014f521641701e5a3ea",
+      "source_commit": "2e6ac46f",
+      "card_sha256": "e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1",
+      "workspace_sha256": "e58f366eff035c02fb244bb43f1a56efcdd12233acc4c5d0401d4c21cb0f8235",
+      "initial_fit_sha256": "14634181a407fa97b3e9d399edab07b177c59bb57b1bd65a2eafd22107ef2693",
+      "proxy_seconds_before_submission": 587706,
+      "voms_seconds_before_submission": 558906,
+      "max_runtime_seconds": 43200,
+      "submitted_held_then_verified_and_released": true,
+      "server_injected_home_removed_before_release": true,
+      "focused_tests_passed": 46,
+      "physics_changed": false,
+      "last_queue_check_utc": "2026-09-08T23:56:52Z",
+      "fit_parallel": 4,
+      "verbosity": 0,
+      "retained_workspace_and_initial_fit": true,
+      "cluster": 1112624,
+      "named_nuisances": [
+        "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0",
+        "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0",
+        "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin4_bin0",
+        "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin1_bin0"
+      ],
+      "submission_file": "combined/T2tt/impact_recovery_r1_endpoints_part1/impact_r1_eossubmit.sub",
+      "submission_sha256": "4bb05fbbc46bd4a54bb8f70cf67ed9c550f745635dc8062e545c4dabb5a02d90",
+      "output_work": "combined/T2tt/impact_recovery_r1_endpoints_part1/impact_mStop1200_mLSP500_r1/work"
+    },
+    {
+      "job_status": 1,
+      "status": "idle",
+      "expect_signal": 1,
+      "signal_strength_range": [
+        0,
+        20
+      ],
+      "robust_fit": 1,
+      "minimizer_strategy": 1,
+      "subset_only": true,
+      "full_collection_pending": true,
+      "resume_source": "combined/T2tt/impact_seed_r1",
+      "retained_nuisance_roots": 0,
+      "runner_snapshot": "impact_code_endpoint/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+      "runner_sha256": "221c3c9e81b650e1fd90e603d693588e1183f6ca87faa014f521641701e5a3ea",
+      "source_commit": "2e6ac46f",
+      "card_sha256": "e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1",
+      "workspace_sha256": "e58f366eff035c02fb244bb43f1a56efcdd12233acc4c5d0401d4c21cb0f8235",
+      "initial_fit_sha256": "14634181a407fa97b3e9d399edab07b177c59bb57b1bd65a2eafd22107ef2693",
+      "proxy_seconds_before_submission": 587706,
+      "voms_seconds_before_submission": 558906,
+      "max_runtime_seconds": 43200,
+      "submitted_held_then_verified_and_released": true,
+      "server_injected_home_removed_before_release": true,
+      "focused_tests_passed": 46,
+      "physics_changed": false,
+      "last_queue_check_utc": "2026-09-08T23:56:52Z",
+      "fit_parallel": 4,
+      "verbosity": 0,
+      "retained_workspace_and_initial_fit": true,
+      "cluster": 1112625,
+      "named_nuisances": [
+        "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0",
+        "prop_biny2024_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0",
+        "prop_biny2024_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0",
+        "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0"
+      ],
+      "submission_file": "combined/T2tt/impact_recovery_r1_endpoints_part2/impact_r1_eossubmit.sub",
+      "submission_sha256": "2135f1c1a16282b4a98b1ad3dfebb7410e32b192dedb6f9470ea2747dcf420cc",
+      "output_work": "combined/T2tt/impact_recovery_r1_endpoints_part2/impact_mStop1200_mLSP500_r1/work"
+    },
+    {
+      "job_status": 1,
+      "status": "idle",
+      "expect_signal": 1,
+      "signal_strength_range": [
+        0,
+        20
+      ],
+      "robust_fit": 1,
+      "minimizer_strategy": 1,
+      "subset_only": true,
+      "full_collection_pending": true,
+      "resume_source": "combined/T2tt/impact_seed_r1",
+      "retained_nuisance_roots": 0,
+      "runner_snapshot": "impact_code_endpoint/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+      "runner_sha256": "221c3c9e81b650e1fd90e603d693588e1183f6ca87faa014f521641701e5a3ea",
+      "source_commit": "2e6ac46f",
+      "card_sha256": "e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1",
+      "workspace_sha256": "e58f366eff035c02fb244bb43f1a56efcdd12233acc4c5d0401d4c21cb0f8235",
+      "initial_fit_sha256": "14634181a407fa97b3e9d399edab07b177c59bb57b1bd65a2eafd22107ef2693",
+      "proxy_seconds_before_submission": 587706,
+      "voms_seconds_before_submission": 558906,
+      "max_runtime_seconds": 43200,
+      "submitted_held_then_verified_and_released": true,
+      "server_injected_home_removed_before_release": true,
+      "focused_tests_passed": 46,
+      "physics_changed": false,
+      "last_queue_check_utc": "2026-09-08T23:56:52Z",
+      "fit_parallel": 4,
+      "verbosity": 0,
+      "retained_workspace_and_initial_fit": true,
+      "cluster": 1112626,
+      "named_nuisances": [
+        "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0",
+        "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR0_bin0_bin0",
+        "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0",
+        "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0"
+      ],
+      "submission_file": "combined/T2tt/impact_recovery_r1_endpoints_part3/impact_r1_eossubmit.sub",
+      "submission_sha256": "ca26a5e08677ec08be1013638588d2b0c2ec92c2c8490c63f0c98179e89e9439",
+      "output_work": "combined/T2tt/impact_recovery_r1_endpoints_part3/impact_mStop1200_mLSP500_r1/work"
+    },
+    {
+      "job_status": 1,
+      "status": "idle",
+      "expect_signal": 1,
+      "signal_strength_range": [
+        0,
+        20
+      ],
+      "robust_fit": 1,
+      "minimizer_strategy": 1,
+      "subset_only": true,
+      "full_collection_pending": true,
+      "resume_source": "combined/T2tt/impact_seed_r1",
+      "retained_nuisance_roots": 0,
+      "runner_snapshot": "impact_code_endpoint/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+      "runner_sha256": "221c3c9e81b650e1fd90e603d693588e1183f6ca87faa014f521641701e5a3ea",
+      "source_commit": "2e6ac46f",
+      "card_sha256": "e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1",
+      "workspace_sha256": "e58f366eff035c02fb244bb43f1a56efcdd12233acc4c5d0401d4c21cb0f8235",
+      "initial_fit_sha256": "14634181a407fa97b3e9d399edab07b177c59bb57b1bd65a2eafd22107ef2693",
+      "proxy_seconds_before_submission": 587706,
+      "voms_seconds_before_submission": 558906,
+      "max_runtime_seconds": 43200,
+      "submitted_held_then_verified_and_released": true,
+      "server_injected_home_removed_before_release": true,
+      "focused_tests_passed": 46,
+      "physics_changed": false,
+      "last_queue_check_utc": "2026-09-08T23:56:52Z",
+      "fit_parallel": 4,
+      "verbosity": 0,
+      "retained_workspace_and_initial_fit": true,
+      "cluster": 1112627,
+      "named_nuisances": [
+        "prop_biny2025_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0",
+        "prop_biny2025_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0"
+      ],
+      "submission_file": "combined/T2tt/impact_recovery_r1_endpoints_part4/impact_r1_eossubmit.sub",
+      "submission_sha256": "8e50de903d4f391845956278a662ce17038c757c30a86adb9406ac30bcdc7bfa",
+      "output_work": "combined/T2tt/impact_recovery_r1_endpoints_part4/impact_mStop1200_mLSP500_r1/work"
+    }
+  ],
+  "endpoint_validation_source": {
+    "sha256": "221c3c9e81b650e1fd90e603d693588e1183f6ca87faa014f521641701e5a3ea",
+    "tests_sha256": "8759f487cb7e37b4db04d14bd1c01c490b56e32b521bb534d4c815a17035b097",
+    "source_commit": "2e6ac46f",
+    "tests_passed": 46,
+    "scope": "reject identical/nonfinite/nonbracketing endpoints for subset and full collection",
+    "active_frozen_snapshots_changed": false
+  },
+  "submission_preflight_errors": [
+    {
+      "type": "unsupported_condor_submit_option",
+      "option": "-hold",
+      "jobs_submitted": 0,
+      "resolved_with": "-append hold = True"
+    },
+    {
+      "type": "empty_condor_q_json_output",
+      "jobs_submitted": 0,
+      "resolved_with": "explicit empty-output handling"
+    }
+  ],
+  "limits_validated": 924,
+  "final_impact_json_counts": {
+    "r1": 0,
+    "r0": 0
+  },
+  "healthy_restarts": 0,
+  "physics_changed": false,
+  "intermediate_ROOT_access": false,
+  "NanoAOD_access": false
+}
