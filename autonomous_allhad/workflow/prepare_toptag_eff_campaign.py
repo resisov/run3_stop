@@ -197,9 +197,10 @@ log = {campaign}/logs/campaign.log
 request_cpus = 1
 request_memory = 3000MB
 request_disk = 8000MB
++JobFlavour = "workday"
 queue name,shard from {arguments}
 '''
-    if '/tmp' in submit or '/afs' in submit or 'JobFlavour' in submit or 'MaxRuntime' in submit:
+    if '/tmp' in submit or '/afs' in submit or '+JobFlavour = "workday"' not in submit or 'MaxRuntime' in submit:
         raise ValueError('Invalid submit policy')
     (campaign / 'topwtageff.sub').write_text(submit)
     summary = dict(schema_version='topw_btag_entry_campaign_v1', created_at=now(), status='prepared',
