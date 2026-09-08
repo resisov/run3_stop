@@ -1,0 +1,25 @@
+{
+  "status": "complete",
+  "source": "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2024/tf/transfer_factors_2024_nb_recoil.json",
+  "source_sha256": "d6c69bf26fef1a0941ac5266d75383c5d6732d6db3f51c8fc1afc583615ab084",
+  "plotter_sha256": "ab0719f81c29d2171a545800dd0f02cd852e003aece93d5e13d0882bf456af75",
+  "campaign_year": "2024",
+  "lowdm_plot_layout": "categories_overlaid",
+  "factor_values_changed": false,
+  "plots": [
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/transfer_factor_top_llcr_highdm.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/transfer_factor_top_llcr_highdm.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/transfer_factor_w_llcr_highdm.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/transfer_factor_w_llcr_highdm.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/transfer_factor_qcd_qcdcr_highdm.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/transfer_factor_qcd_qcdcr_highdm.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/gnn/transfer_factor_top_llcr_lowdm_gnn.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/gnn/transfer_factor_top_llcr_lowdm_gnn.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/gnn/transfer_factor_w_llcr_lowdm_gnn.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/gnn/transfer_factor_w_llcr_lowdm_gnn.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/gnn/transfer_factor_qcd_qcdcr_lowdm_gnn.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/gnn/transfer_factor_qcd_qcdcr_lowdm_gnn.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/gnn/transfer_factor_zinv_gcr_lowdm_gnn.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/gnn/transfer_factor_zinv_gcr_lowdm_gnn.pdf"
+  ]
+}

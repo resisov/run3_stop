@@ -277,7 +277,8 @@ def main():
                 signed_bins.extend(f"{route}/{category}/{i}" for i, value in enumerate(num) if value < 0)
         all_plots = recorded_plots(base / "sgamma", sg, base / "sgamma/sgamma_ut.json", 6)
         all_plots += recorded_plots(base / "zgamma", new, base / "zgamma/zgamma_double_ratio.json", 4)
-        all_plots += recorded_plots(base / "tf", plots, base / "tf" / f"transfer_factors_{year}_nb_recoil.json", 54)
+        tf_plot_minimum = 14 if plots["provenance"].get("lowdm_plot_layout") == "categories_overlaid" else 54
+        all_plots += recorded_plots(base / "tf", plots, base / "tf" / f"transfer_factors_{year}_nb_recoil.json", tf_plot_minimum)
         for regime in ("highdm", "lowdm"):
             report_dir = base / "dy_report" / regime
             report = read(report_dir / "summary.json")

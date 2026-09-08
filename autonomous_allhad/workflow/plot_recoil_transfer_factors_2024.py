@@ -64,6 +64,14 @@ HIGH_STYLES = {
     "Nb2": ("s", "#0057FF", r"$N_b=2$"),
     "Nb3plus": ("^", "#168B38", r"$N_b\geq3$"),
 }
+GNN_STYLES = {
+    f"{nb}_{isr}": (marker, color, nb_label + ", " + isr_label)
+    for nb, color, nb_label in (("Nb1", "#FF0000", r"$N_b=1$"),
+                                ("Nb2plus", "#0000FF", r"$N_b\geq2$"))
+    for isr, marker, isr_label in (("NISR0", "o", r"$N_{\mathrm{ISR}}=0$"),
+                                   ("NISR1", "s", r"$N_{\mathrm{ISR}}=1$"),
+                                   ("NISR2plus", "^", r"$N_{\mathrm{ISR}}\geq2$"))
+}
 GNN_PATHS = PATHS + ({
     "key": "zinv_gcr",
     "ratio_label": r"Raw $Z\!\to\!\nu\nu$: SR / $\gamma$ CR",
@@ -181,7 +189,7 @@ def save_figure(fig: plt.Figure, stem: Path) -> list[str]:
 def plot_highdm(
     output_dir: Path,
     path: dict[str, Any],
-    edges: np.ndarray,
+    edges: np.ndarray | dict[str, np.ndarray],
     records: dict[str, Any],
     regime: str = "highdm",
     *,
@@ -189,20 +197,23 @@ def plot_highdm(
     annotation: str | None = None,
     output_suffix: str | None = None,
     ylabel: str = r"Transfer factor $N_{\mathrm{SR}}/N_{\mathrm{CR}}$",
+    styles: dict[str, tuple[str, str, str]] | None = None,
 ) -> list[str]:
-    centers = 0.5 * (edges[:-1] + edges[1:])
-    widths = 0.5 * np.diff(edges)
     fig, axis = plt.subplots(figsize=(10.2, 10.2))
     used: list[dict[str, Any]] = []
-    group_order = [
-        group
-        for group in ("inclusive", "Nb1", "Nb2plus", "Nb2", "Nb3plus")
-        if group in records
-    ]
+    styles = HIGH_STYLES if styles is None else styles
+    group_order = [group for group in styles if group in records]
+    if set(group_order) != set(records):
+        raise ValueError("missing style for a plotted TF category")
+    bounds = []
     for group in group_order:
         record = records[group]
+        current_edges = np.asarray(edges[group] if isinstance(edges, dict) else edges)
+        centers = 0.5 * (current_edges[:-1] + current_edges[1:])
+        widths = 0.5 * np.diff(current_edges)
+        bounds.extend((float(current_edges[0]), float(current_edges[-1])))
         values, errors, valid = finite_arrays(record)
-        marker, color, label = HIGH_STYLES[group]
+        marker, color, label = styles[group]
         axis.errorbar(
             centers[valid],
             values[valid],
@@ -219,7 +230,9 @@ def plot_highdm(
         )
         used.append(record)
     set_tf_ylim(axis, used)
-    axis.set_xlim(float(edges[0]), float(edges[-1]))
+    if len(group_order) > 3:
+        axis.set_ylim(0.0, axis.get_ylim()[1] * 1.25)
+    axis.set_xlim(min(bounds), max(bounds))
     axis.set_xmargin(0)
     axis.set_xlabel(xlabel, fontsize=30)
     axis.set_ylabel(ylabel, fontsize=29)
@@ -227,7 +240,7 @@ def plot_highdm(
     axis.grid(alpha=0.16)
     axis.text(
         0.04,
-        0.73 if path["key"] == "qcd_qcdcr" else 0.07,
+        0.70 if len(group_order) > 3 else (0.73 if path["key"] == "qcd_qcdcr" and regime == "highdm" else 0.07),
         annotation if annotation is not None else ("High-" if regime == "highdm" else "Low-")
         + r"$\Delta m$"
         + "\n"
@@ -237,7 +250,9 @@ def plot_highdm(
     )
     axis.legend(
         frameon=False,
-        fontsize=24,
+        fontsize=20 if len(group_order) > 3 else 24,
+        ncol=2 if len(group_order) > 3 else 1,
+        loc="upper right" if len(group_order) > 3 else "best",
         markerscale=1.25,
         handlelength=1.8,
         labelspacing=0.7,
@@ -247,6 +262,29 @@ def plot_highdm(
         fig,
         output_dir / f"transfer_factor_{path['key']}_{output_suffix or regime}",
     )
+
+
+def render_factors(output_dir: Path, factors: dict[str, Any], regime: str) -> tuple[list[str], list[str]]:
+    """Use the existing renderer once per background, overlaying categories."""
+    high_plots, gnn_plots = [], []
+    if regime in {"all", "highdm"}:
+        for path in PATHS:
+            high_plots.extend(plot_highdm(
+                output_dir, path, np.asarray(factors["highdm"]["edges"]),
+                factors["highdm"]["records"][path["key"]],
+            ))
+    if regime in {"all", "lowdm"}:
+        (output_dir / "gnn").mkdir(parents=True, exist_ok=True)
+        for path in GNN_PATHS:
+            records = factors["lowdm"]["records"][path["key"]]
+            gnn_plots.extend(plot_highdm(
+                output_dir / "gnn", path,
+                {category: np.asarray(record["score_edges"]) for category, record in records.items()},
+                records, regime="lowdm", xlabel="GNN output",
+                output_suffix="lowdm_gnn", styles=GNN_STYLES,
+                ylabel=r"Transfer factor $N_{\mathrm{SR,bin}}/N_{\mathrm{CR,parent}}$",
+            ))
+    return high_plots, gnn_plots
 
 
 
@@ -357,6 +395,8 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--plot-only", action="store_true",
+                        help="Render an existing transfer_factors_YEAR_nb_recoil.json without recalculating or changing its numbers.")
     parser.add_argument(
         "--campaign-year",
         choices=("2024", "2025"),
@@ -373,6 +413,18 @@ def main() -> int:
     CMS_LABEL["rlabel"] = f"{args.campaign_year} (13.6 TeV)"
 
     source = json.loads(args.input.read_text())
+    if args.plot_only:
+        if source.get("status") != "complete" or source["provenance"]["campaign_year"] != args.campaign_year:
+            raise ValueError("TF plot-only source is incomplete or from another year")
+        args.output_dir.mkdir(parents=True, exist_ok=True)
+        high_plots, gnn_plots = render_factors(args.output_dir, source["factors"], args.regime)
+        receipt = {"status": "complete", "source": str(args.input), "source_sha256": file_sha256(args.input),
+                   "plotter_sha256": file_sha256(Path(__file__)), "campaign_year": args.campaign_year,
+                   "lowdm_plot_layout": "categories_overlaid", "factor_values_changed": False,
+                   "plots": high_plots + gnn_plots}
+        (args.output_dir / "plot_manifest.json").write_text(json.dumps(receipt, indent=2) + "\n")
+        print(json.dumps(receipt))
+        return 0
     sample_check = validate_input(source)
     factors = build_factors(source)
     max_residual = max_mechanical_residual(factors)
@@ -380,20 +432,7 @@ def main() -> int:
         raise ValueError(f"TF mechanical residual too large: {max_residual}")
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    plot_paths: list[str] = []
-    high_edges = np.asarray(factors["highdm"]["edges"], dtype=float)
-    for path in PATHS:
-        if args.regime in {"all", "highdm"}:
-            plot_paths.extend(
-                plot_highdm(
-                    args.output_dir,
-                    path,
-                    high_edges,
-                    factors["highdm"]["records"][path["key"]],
-                )
-            )
-
-
+    plot_paths, gnn_plots = render_factors(args.output_dir, factors, args.regime)
     output = {
         "schema_version": f"template_transfer_factors_{args.campaign_year}_v3",
         "status": "complete",
@@ -416,6 +455,7 @@ def main() -> int:
             "sample_check": sample_check,
             "lowdm_mode": "GNN30 final templates only; no UT or legacy-search-bin fallback",
             "plot_regime": args.regime,
+            "lowdm_plot_layout": "categories_overlaid",
             "campaign_year": args.campaign_year,
         },
         "mechanical_checks": {
@@ -424,19 +464,6 @@ def main() -> int:
         "plots": plot_paths,
     }
     mapping = require_gnn_mapping(source)
-    gnn_plots = []
-    if args.regime in {"all", "lowdm"}:
-        (args.output_dir / "gnn").mkdir(parents=True, exist_ok=True)
-        for path in GNN_PATHS:
-            for category, record in factors["lowdm"]["records"][path["key"]].items():
-                gnn_plots.extend(plot_highdm(
-                    args.output_dir / "gnn", path,
-                    np.asarray(record["score_edges"]), {record["nb_group"]: record},
-                    regime="lowdm", xlabel="GNN output",
-                    annotation="Low-" + r"$\Delta m$" + "\n" + category.replace("_", " ") + "\n" + path["ratio_label"],
-                    output_suffix=f"lowdm_gnn_{category}",
-                    ylabel=r"Transfer factor $N_{\mathrm{SR,bin}}/N_{\mathrm{CR,parent}}$",
-                ))
     output["lowdm_gnn"] = {
         key: mapping[key] for key in ("schema_version", "axis", "sr_binning", "cr_binning", "definition", "mechanical_checks", "provenance")
     }

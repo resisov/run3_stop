@@ -23,6 +23,41 @@ REGIONS = ("SR", "LLCR", "QCDCR", "GCR", "DY2E", "DY2M")
 SAMPLES = ("data_obs", "DY", "GJ", "QCD", "ST", "TT", "VV", "WtoLNu", "Zto2Nu")
 
 
+def test_tf_overlay_keeps_each_category_edges_values_and_errors(monkeypatch, tmp_path):
+    import importlib
+    import numpy as np
+
+    monkeypatch.syspath_prepend(str(WORKFLOW))
+    plotter = importlib.import_module("plot_recoil_transfer_factors_2024")
+    config = json.loads((PACKAGE_ROOT / "gnn_lowdm/config.json").read_text())
+    edges = {c: np.asarray(e) for c, e in config["sr_binning"]["edges_by_category"].items()}
+    records = {c: {"transfer_factor": [1, 2, 3, 4, 5], "mcstat": [0.1] * 5} for c in edges}
+    captured = []
+    original = plotter.plt.Axes.errorbar
+
+    def capture(axis, x, y, **kwargs):
+        captured.append((np.asarray(x), np.asarray(y), kwargs))
+        return original(axis, x, y, **kwargs)
+
+    def close(fig, stem):
+        assert fig.axes[0].get_xlim() == (0, 1)
+        plotter.plt.close(fig)
+        return []
+
+    monkeypatch.setattr(plotter.plt.Axes, "errorbar", capture)
+    monkeypatch.setattr(plotter, "save_figure", close)
+    plotter.plot_highdm(tmp_path, plotter.GNN_PATHS[0], edges, records,
+                       regime="lowdm", styles=plotter.GNN_STYLES)
+    assert len(captured) == 6
+    for category, (x, y, kw) in zip(plotter.GNN_STYLES, captured):
+        np.testing.assert_allclose(x, (edges[category][1:] + edges[category][:-1]) / 2)
+        np.testing.assert_allclose(kw["xerr"], np.diff(edges[category]) / 2)
+        np.testing.assert_array_equal(y, [1, 2, 3, 4, 5])
+        np.testing.assert_allclose(kw["yerr"], [0.1] * 5)
+        marker, color, label = plotter.GNN_STYLES[category]
+        assert (kw["fmt"], kw["color"], kw["label"]) == (marker, color, label)
+
+
 def test_mll_plot_keeps_large_z_peak_visible(monkeypatch, tmp_path):
     from autonomous_allhad.dy_estimation import report
 
@@ -333,8 +368,20 @@ def test_histogram_boundary_drives_tf_and_rz(tmp_path: Path, year: str) -> None:
     plotted = json.loads((plots / f"transfer_factors_{year}_nb_recoil.json").read_text())
     assert plotted["factors"]["lowdm"]["kind"] == "gnn"
     assert plotted["factors"]["lowdm"]["records"] == tf["lowdm_gnn"]["transfer_factors"]["nominal"]
-    assert len(plotted["plots"]) == 4 * 6 * 2
+    assert len(plotted["plots"]) == 4 * 2
+    assert plotted["provenance"]["lowdm_plot_layout"] == "categories_overlaid"
     assert all(Path(path).parent == plots / "gnn" for path in plotted["plots"])
+    stored_factors = plots / f"transfer_factors_{year}_nb_recoil.json"
+    stored_bytes = stored_factors.read_bytes()
+    subprocess.run([
+        sys.executable, str(WORKFLOW / "plot_recoil_transfer_factors_2024.py"),
+        "--input", str(stored_factors), "--campaign-year", year, "--plot-only",
+        "--regime", "lowdm", "--output-dir", str(plots / "replot"),
+    ], check=True, capture_output=True, text=True)
+    assert stored_factors.read_bytes() == stored_bytes
+    receipt = json.loads((plots / "replot/plot_manifest.json").read_text())
+    assert receipt["factor_values_changed"] is False
+    assert len(receipt["plots"]) == 8
     for groups in plotted["factors"]["highdm"]["records"].values():
         for record in groups.values():
             assert record["transfer_factor"] == [1.0] * 8
