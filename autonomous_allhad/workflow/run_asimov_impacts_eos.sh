@@ -16,6 +16,7 @@ IMPACT_MINIMIZER_STRATEGY=${IMPACT_MINIMIZER_STRATEGY:-0}
 IMPACT_EXPECT_SIGNAL=${IMPACT_EXPECT_SIGNAL:-1}
 IMPACT_R_MIN=${IMPACT_R_MIN:-0}
 IMPACT_R_MAX=${IMPACT_R_MAX:-20}
+IMPACT_PLOT=${IMPACT_PLOT:-1}
 
 if ! [[ "$IMPACT_PARALLEL" =~ ^[1-9][0-9]*$ ]]; then
     echo "IMPACT_PARALLEL must be a positive integer" >&2
@@ -27,6 +28,10 @@ if ! [[ "$IMPACT_MINIMIZER_STRATEGY" =~ ^[01]$ ]]; then
 fi
 if ! [[ "$IMPACT_EXPECT_SIGNAL" =~ ^[01]$ ]]; then
     echo "IMPACT_EXPECT_SIGNAL must be 0 or 1" >&2
+    exit 2
+fi
+if ! [[ "$IMPACT_PLOT" =~ ^[01]$ ]]; then
+    echo "IMPACT_PLOT must be 0 or 1" >&2
     exit 2
 fi
 if ! [[ "$IMPACT_R_MIN" =~ ^-?[0-9]+([.][0-9]+)?$ ]] || \
@@ -52,7 +57,6 @@ WORKDIR="$SCRATCH_BASE/work"
 CMSSW="$SCRATCH_BASE/CMSSW_14_1_0_pre4"
 RESULTDIR="$OUTDIR/work"
 mkdir -p "$WORKDIR" "$SCRATCH_BASE/cache" "$RESULTDIR"
-export HOME="$SCRATCH_BASE"
 export TMPDIR="$SCRATCH_BASE"
 export XDG_CACHE_HOME="$SCRATCH_BASE/cache"
 export PYTHONNOUSERSITE=1
@@ -109,15 +113,17 @@ if grep -q '^Missing inputs:' impacts_collect.log; then
     echo "impact collection is incomplete; see $OUTDIR/work/impacts_collect.log" >&2
     exit 1
 fi
-plotImpacts.py -i "$IMPACT_BASE.json" -o "$IMPACT_BASE" > impacts_plot.log 2>&1
-if command -v pdftoppm >/dev/null 2>&1; then
-    pdftoppm -f 1 -singlefile -png -r 160 "$IMPACT_BASE.pdf" "$IMPACT_BASE" > pdftoppm.log 2>&1
+if [[ "$IMPACT_PLOT" = 1 ]]; then
+    plotImpacts.py -i "$IMPACT_BASE.json" -o "$IMPACT_BASE" > impacts_plot.log 2>&1
+    if command -v pdftoppm >/dev/null 2>&1; then
+        pdftoppm -f 1 -singlefile -png -r 160 "$IMPACT_BASE.pdf" "$IMPACT_BASE" > pdftoppm.log 2>&1
+    fi
+    printf '{\n  "status": "complete",\n  "benchmark": "mStop%s_mLSP500",\n  "asimov_expect_signal": %s,\n  "signal_strength_range": [%s, %s],\n  "workspace": "%s",\n  "json": "%s.json",\n  "pdf": "%s.pdf"\n}\n' \
+        "$MASS" "$IMPACT_EXPECT_SIGNAL" "$IMPACT_R_MIN" "$IMPACT_R_MAX" "$WORKSPACE" "$IMPACT_BASE" "$IMPACT_BASE" > impact_status.json
 else
-    printf 'pdftoppm unavailable on worker; recover PNG from the validated PDF on LXPLUS\n' > pdftoppm.log
+    printf '{\n  "status": "fits_complete",\n  "plots_status": "pending_local",\n  "benchmark": "mStop%s_mLSP500",\n  "asimov_expect_signal": %s,\n  "signal_strength_range": [%s, %s],\n  "workspace": "%s",\n  "json": "%s.json"\n}\n' \
+        "$MASS" "$IMPACT_EXPECT_SIGNAL" "$IMPACT_R_MIN" "$IMPACT_R_MAX" "$WORKSPACE" "$IMPACT_BASE" > impact_status.json
 fi
 
-printf '{\n  "status": "complete",\n  "benchmark": "mStop%s_mLSP500",\n  "asimov_expect_signal": %s,\n  "signal_strength_range": [%s, %s],\n  "workspace": "%s",\n  "json": "%s.json",\n  "pdf": "%s.pdf",\n  "png": "%s.png"\n}\n' \
-    "$MASS" "$IMPACT_EXPECT_SIGNAL" "$IMPACT_R_MIN" "$IMPACT_R_MAX" "$WORKSPACE" "$IMPACT_BASE" "$IMPACT_BASE" "$IMPACT_BASE" > impact_status.json
-
 cp -a "$WORKDIR/." "$RESULTDIR/"
-echo "impact complete: $RESULTDIR/$IMPACT_BASE.pdf"
+echo "impact fits complete: $RESULTDIR/$IMPACT_BASE.json"
