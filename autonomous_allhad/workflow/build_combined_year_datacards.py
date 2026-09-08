@@ -5,6 +5,7 @@ import argparse
 import json
 import os
 import re
+import shlex
 import subprocess
 from pathlib import Path
 
@@ -80,7 +81,19 @@ def write_condor_limit_submission(
     runtime_checksum: str,
     point_timeout: int,
     batch_name: str,
+    r_abs_accuracy: float | None = None,
+    verbosity: int = 0,
 ) -> tuple[Path, Path]:
+    combine_options: list[str] = []
+    if r_abs_accuracy is not None:
+        if not 0 < r_abs_accuracy < float("inf"):
+            raise ValueError("r_abs_accuracy must be finite and positive")
+        combine_options += ["--rAbsAcc", format(r_abs_accuracy, ".12g")]
+    if verbosity:
+        if not isinstance(verbosity, int) or not 0 <= verbosity <= 3:
+            raise ValueError("verbosity must be an integer between 0 and 3")
+        combine_options += ["-v", str(verbosity)]
+    combine_suffix = (" " + shlex.join(combine_options)) if combine_options else ""
     wrapper = output_dir / "run_condor_limit_point.sh"
     wrapper.write_text(
         "\n".join(
@@ -99,11 +112,10 @@ def write_condor_limit_submission(
                 'CARD="$SCRATCH_BASE/$CARD_NAME"',
                 'test -s "$CARD"',
                 f'RUNTIME_ARCHIVE="$SCRATCH_BASE/{runtime_archive.name}"',
-                'export HOME="$SCRATCH_BASE/home"',
                 'export TMPDIR="$SCRATCH_BASE"',
                 'export XDG_CACHE_HOME="$SCRATCH_BASE/cache"',
                 'WORKDIR="$SCRATCH_BASE/work"',
-                'mkdir -p "$HOME" "$XDG_CACHE_HOME" "$WORKDIR"',
+                'mkdir -p "$XDG_CACHE_HOME" "$WORKDIR"',
                 f'echo "{runtime_checksum}  $RUNTIME_ARCHIVE" | sha256sum -c -',
                 'tar -xzf "$RUNTIME_ARCHIVE" -C "$SCRATCH_BASE"',
                 'rm -f "$RUNTIME_ARCHIVE"',
@@ -119,7 +131,7 @@ def write_condor_limit_submission(
                 'cd "$WORKDIR"',
                 'WORKSPACE="workspace_${MASS}.root"',
                 'timeout "$WORKSPACE_TIMEOUT" text2workspace.py "$CARD" -m 120 -o "$WORKSPACE"',
-                'timeout "$POINT_TIMEOUT" combine -M AsymptoticLimits --run blind -m 120 -n "_${MASS}" "$WORKSPACE"',
+                'timeout "$POINT_TIMEOUT" combine -M AsymptoticLimits --run blind -m 120 -n "_${MASS}" "$WORKSPACE"' + combine_suffix,
                 'shopt -s nullglob',
                 'RESULTS=("higgsCombine_${MASS}.AsymptoticLimits.mH"*.root)',
                 '[[ ${#RESULTS[@]} -eq 1 ]]',
