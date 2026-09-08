@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "code_commit": "a3008a1c6f6e8d7a7128c27eb586a0587c1b1188",
+  "code_commit": "404340552b901d6bba9fa0dfee1cb02e3f7dd4b0",
   "status": "source_and_payload_verified",
   "files": [
     {
@@ -29,7 +29,7 @@
     },
     {
       "path": "autonomous_allhad/workflow/build_flat_boosted_recoil_hists.py",
-      "sha256": "6bf420ebf6c795dd74b54cb15dffca5aab0ecbd84adc9fe73a4071586702556d"
+      "sha256": "b1cb425ca92222bf52ddfe85911c8cb73870d7d2c3a7873f269a67d0910bc06b"
     },
     {
       "path": "autonomous_allhad/workflow/run_flat_hists_chunked.py",
@@ -49,7 +49,7 @@
     },
     {
       "path": "autonomous_allhad/tests/test_highdm_veto_pt_threshold.py",
-      "sha256": "8b5894d5bf2c84009df0070dd1da3ed5b172b91e26c160576aaf666648d74c2d"
+      "sha256": "2798602d317d628b650a1d727d2b3774806485b4e02de3f812a791dee42ce777"
     },
     {
       "path": "autonomous_allhad/tests/test_analysis_scale_factors.py",
@@ -69,6 +69,14 @@
   "tests_runtime_seconds": 24.22,
   "git_diff_check": "passed",
   "existing_corrections_payload_changed": false,
+  "main_gcr_flag_recovery": {
+    "focused_tests_passed": 8,
+    "runtime_seconds": 1.61,
+    "stored_and_reconstructed_gcr_flag_tested": true,
+    "actual_input_pilot_cluster": 1110786,
+    "actual_input_validation": "both ExitCode 0; exact 6/8 inputs; complete and finite; output SHA256 matches; low-pT templates absent and applied_events=0",
+    "frozen_gnn_snapshot_modified": false
+  },
   "main_pilot_recovery": {
     "cause": "missing veto collections in TROTA light input",
     "fixed_before_full_production": true,
