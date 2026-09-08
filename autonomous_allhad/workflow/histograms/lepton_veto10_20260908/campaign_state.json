@@ -1,5 +1,5 @@
 {
-  "status": "main_2024_running_2025_merging_both_gnn_merged",
+  "status": "main_2024_merging_2025_cross_validation_submitted",
   "code_commit": "40434055",
   "main_builder_sha256": "b1cb425ca92222bf52ddfe85911c8cb73870d7d2c3a7873f269a67d0910bc06b",
   "main_recovery": {
@@ -26,6 +26,11 @@
   "full_production_submitted": true,
   "full_production_clusters": {"main": 1110787, "gnn": 1110785},
   "gnn_merge_clusters": {"2024": 1110789, "2025": 1110788},
+  "histogram_cross_validation_clusters": {"2025": 1111090},
+  "histogram_cross_validation_status": {"2024": "pending main merge", "2025": "submitted"},
+  "main_merge_results": {
+    "2025": {"cluster": 1110787, "proc_id": 1, "exit_code": 0, "status": "complete", "validated_chunks": 839, "unique_input_roots": 8390, "zero_entry_roots": 140, "all_component_validations": true, "strict_warnings": 0, "output_bytes": 2458889388, "output_sha256": "e395cd14e026ffdac9a127a6b665347d0db7c20f1391c7d3ab2a34dfb28f5ba6", "background_estimation_sha256": "4c1e9b5734a2356f995925e3252e76721ee655156c481c7babddb1b0144b6be3", "canonical_promotion": "pending cross-validation"}
+  },
   "gnn_merge_results": {
     "2024": {"cluster": 1110789, "exit_code": 0, "status": "complete", "partials": 240, "input_files_requested": 5954, "input_files_valid": 5954, "bad_files": [], "output_bytes": 1936076424, "exact_input_set_match": true, "veto10_blinding_gnn30_contract": "verified", "data_luminosity_coverage_complete": true, "canonical_promotion": "pending full histogram cross-validation"},
     "2025": {"cluster": 1110788, "exit_code": 0, "status": "complete", "partials": 337, "input_files_requested": 8390, "input_files_valid": 8390, "bad_files": [], "output_bytes": 1684605720, "exact_input_set_match": true, "veto10_blinding_contract": "verified", "data_luminosity_coverage_complete": false, "source_bad_file_count": 11, "data_source_bad_file_count": 1, "canonical_promotion": "pending full histogram cross-validation"}
@@ -71,9 +76,9 @@
   "monitor_interval_minutes": 30,
   "realtime_monitor_request": "Superseded by latest user instruction: 정상진행중이니 30분단위모니터링해라. Active full production uses a 30-minute heartbeat; unchanged/non-actionable state remains quiet.",
   "last_pilot_poll_utc": "2026-09-07T23:58:48Z",
-  "last_full_run_poll_utc": "2026-09-08T05:54:42Z",
-  "main_chunk_counts_at_last_poll": {"2024": 573, "2025": 839},
-  "main_stages_at_last_poll": {"2024": "processing: 23 chunks remain", "2025": "all 839 chunks produced; summary_validation reached 839/839; section partitions merging; final output not yet present"},
+  "last_full_run_poll_utc": "2026-09-08T06:31:36Z",
+  "main_chunk_counts_at_last_poll": {"2024": 596, "2025": 839},
+  "main_stages_at_last_poll": {"2024": "all 596 chunks produced; main merge summary validation running", "2025": "main merge complete and ExitCode 0; histogram-only cross-validation submitted as 1111090"},
   "main_traceback_log_counts_at_last_poll": {"2024": 0, "2025": 0},
   "pilot_monitor_interval_minutes": 5,
   "full_run_monitor_interval_minutes": 30,
