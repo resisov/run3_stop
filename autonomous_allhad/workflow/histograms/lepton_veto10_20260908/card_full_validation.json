@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "campaign": "lepton_veto10_20260908",
+  "cards": 1848,
+  "root_histograms": 2326515,
+  "shape_references_checked": 36368760,
+  "eos_template_hashes_matched": 6,
+  "sr_observations": "blinded",
+  "source_code_commit": "1fa7d724",
+  "records": [
+    {
+      "year": "2024",
+      "topology": "T2tt",
+      "status": "passed",
+      "cards": 205,
+      "root_histograms": 299941,
+      "shape_references_checked": 4124568,
+      "sr_blinded": 103,
+      "template_sha256": "5fa3d854611dda5a454f7291749b8457643bd1f04440fc7bae43f5b69a0111bd",
+      "manifest_sha256": "b96b669386c928012a7de1567bded649e6e71c3decba1f5487cc231a05caf3f5",
+      "card_tree_sha256": "8b1caccea3b0d5a58292dbbbec1fe425424efded4ada4622fccaa05b57b6c4e9"
+    },
+    {
+      "year": "2024",
+      "topology": "T2bW",
+      "status": "passed",
+      "cards": 354,
+      "root_histograms": 416776,
+      "shape_references_checked": 7036196,
+      "sr_blinded": 103,
+      "template_sha256": "41d93728b867fba94988cd3b555dc4e42e72973d481612b5045187f0e36d5488",
+      "manifest_sha256": "04cdc140894a24b4eb84dd6897b164c68fb6b1081b600c3240639f92f7bc446e",
+      "card_tree_sha256": "5364b1806ea83deeaef1ef08864f04e989b8dae830a09278e75ca721685fde08"
+    },
+    {
+      "year": "2025",
+      "topology": "T2tt",
+      "status": "passed",
+      "cards": 205,
+      "root_histograms": 299434,
+      "shape_references_checked": 4013900,
+      "sr_blinded": 103,
+      "template_sha256": "fdab33147ce4fcb3a827dc8390f0c53ddb8cbcc0cdc103d62a687d30f2b44746",
+      "manifest_sha256": "b50a860ef7b9f8088f254bb2bcbd64a4c862cfdc5ece1a6428809a6083e47189",
+      "card_tree_sha256": "5b8dd0c9943228909469deafb7065072c92285391339de15bf15d2adec97b284"
+    },
+    {
+      "year": "2024",
+      "topology": "T2tb",
+      "status": "passed",
+      "cards": 365,
+      "root_histograms": 447641,
+      "shape_references_checked": 7273388,
+      "sr_blinded": 103,
+      "template_sha256": "83d9453cdf5d9eed4cea733e8718d2cb93394d00cc308496e8e2572b77cd10a1",
+      "manifest_sha256": "837602b2fad04d1cedde220b9c6abb02dab7b930f3b93602cd4a12510089c843",
+      "card_tree_sha256": "7bcfe4d03f71a1e24400a279d7c5609a4d5cacfc1ae40ca70636944a36819ae0"
+    },
+    {
+      "year": "2025",
+      "topology": "T2bW",
+      "status": "passed",
+      "cards": 354,
+      "root_histograms": 416021,
+      "shape_references_checked": 6844820,
+      "sr_blinded": 103,
+      "template_sha256": "513bdf1158a549213223f1c1ff0688d281247f41e4705cb7a30855690ce1203f",
+      "manifest_sha256": "b07d9382ca4ca9132d235062eb033578dfd3728d069523d8bd8f6d661b5017e7",
+      "card_tree_sha256": "9b585f3d028ae019d5c86cde276b6c3118884d286e06aaa8ffba70539a9f71f7"
+    },
+    {
+      "year": "2025",
+      "topology": "T2tb",
+      "status": "passed",
+      "cards": 365,
+      "root_histograms": 446702,
+      "shape_references_checked": 7075888,
+      "sr_blinded": 103,
+      "template_sha256": "27e4f532e6e637b6dbc8196d44e8eaf4aa98629cb77d2ef942f47dc495f54105",
+      "manifest_sha256": "de88ace50b7eac3ffa5be87b1e82536c7c1b9aaa081cf23fb1c0f1487e0c184a",
+      "card_tree_sha256": "c5789c55e2caa2b4a58aebe093e00670f42d4b39e836a02d435332be4883e964"
+    }
+  ]
+}

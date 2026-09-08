@@ -1,5 +1,5 @@
 {
-  "status": "full_cards_submitted",
+  "status": "full_cards_validated_combining_impacts_submitted",
   "code_commit": "40434055",
   "main_builder_sha256": "b1cb425ca92222bf52ddfe85911c8cb73870d7d2c3a7873f269a67d0910bc06b",
   "main_recovery": {
@@ -278,7 +278,14 @@
   "background_estimation_verified_sources": 11,
   "background_estimation_task_id": "019f9dbc-5790-7b13-b102-027c7703175c",
   "background_estimation_handoff_utc": "2026-09-08T07:47:00Z",
-  "cards": "full_production_submitted",
+  "cards": "full_production_validated",
+  "card_full_validation": "card_full_validation.json",
+  "combined_cards": {
+    "status": "running",
+    "clusters": {"T2tt": 1111219, "T2bW": 1111220, "T2tb": 1111221},
+    "expected_mass_points": {"T2tt": 205, "T2bW": 354, "T2tb": 365},
+    "mass_grids_identical_between_years": true
+  },
   "cards_full": {
     "clusters": {"T2tt": 1111212, "T2bW": 1111213, "T2tb": 1111214},
     "process_years": {"0": 2024, "1": 2025},
@@ -314,8 +321,21 @@
     "voms_seconds_before_submit": 610600,
     "runtime_sha256": "2909cf59caf57cfa47e65e6d43a7bcca8c864c72984679127d8eebabb551614a"
   },
-  "limits": "pending",
-  "impacts_status": "pending",
+  "limits": "pilot_running_full_pending",
+  "limit_pilot_cluster": 1111222,
+  "impacts_status": "submitted",
+  "impact_jobs": {
+    "r1_cluster": 1111237,
+    "r0_cluster": 1111238,
+    "input": "combined/T2tt/datacards/datacard_mStop1200_mLSP500.txt",
+    "card_matches_validated_pilot_except_source_paths": true,
+    "runtime_archive_sha256": "2909cf59caf57cfa47e65e6d43a7bcca8c864c72984679127d8eebabb551614a",
+    "runner_sha256": "d905874ce4264f6c286e10f2083615dfde41dcefce71b24564a5dec2d23239e8",
+    "runner_commit": "dc35db64",
+    "runner_snapshot": "impact_code/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+    "plots": "local_only",
+    "sr_observations": "blinded"
+  },
   "old_campaign": "dy_window20_20260907",
   "existing_outputs_preserved": true,
   "canonical_manifest": "autonomous_allhad/reports/lepton_veto10_canonical_20260908.json",
