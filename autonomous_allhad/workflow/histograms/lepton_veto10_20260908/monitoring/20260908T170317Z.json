@@ -1,0 +1,33 @@
+{
+  "time_utc": "2026-09-08T17:03:17Z",
+  "limits_validated": 924,
+  "expected_limits": 924,
+  "impact_jobs": [
+    {
+      "job": "1111237.0",
+      "expected_signal": 1,
+      "status": 2,
+      "remote_user_cpu_seconds": 82788,
+      "remote_system_cpu_seconds": 612,
+      "job_start_unix": 1788864271,
+      "max_runtime_seconds": 43200,
+      "final_json_count": 0,
+      "final_root_count": 0
+    },
+    {
+      "job": "1111238.0",
+      "expected_signal": 0,
+      "status": 2,
+      "remote_user_cpu_seconds": 85235,
+      "remote_system_cpu_seconds": 573,
+      "job_start_unix": 1788864271,
+      "max_runtime_seconds": 43200,
+      "final_json_count": 0,
+      "final_root_count": 0
+    }
+  ],
+  "state": "unchanged_running",
+  "new_submissions": 0,
+  "restarts": 0,
+  "intermediate_root_access": false
+}
