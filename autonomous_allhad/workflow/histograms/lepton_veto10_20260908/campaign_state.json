@@ -1,5 +1,5 @@
 {
-  "status": "cards_pilot_submitted",
+  "status": "full_cards_submitted",
   "code_commit": "40434055",
   "main_builder_sha256": "b1cb425ca92222bf52ddfe85911c8cb73870d7d2c3a7873f269a67d0910bc06b",
   "main_recovery": {
@@ -278,9 +278,21 @@
   "background_estimation_verified_sources": 11,
   "background_estimation_task_id": "019f9dbc-5790-7b13-b102-027c7703175c",
   "background_estimation_handoff_utc": "2026-09-08T07:47:00Z",
-  "cards": "pilot_submitted",
+  "cards": "full_production_submitted",
+  "cards_full": {
+    "clusters": {"T2tt": 1111212, "T2bW": 1111213, "T2tb": 1111214},
+    "process_years": {"0": 2024, "1": 2025},
+    "job_count": 6,
+    "code_snapshot": "card_code_v2",
+    "pilot_validation": "card_pilot_validation.json",
+    "combine_pilot_cluster": 1111215,
+    "proxy_seconds_before_submit": 638657,
+    "voms_seconds_before_submit": 609857
+  },
   "cards_pilot": {
     "cluster": 1111109,
+    "status": "validated",
+    "exit_codes": {"2024": 0, "2025": 0},
     "previous_cluster": 1111105,
     "previous_exit_codes": {"2024": 1, "2025": 1},
     "previous_failure": "High-dM Sgamma reader expected Nb2/Nb3plus instead of the supplied Nb2plus measurement",

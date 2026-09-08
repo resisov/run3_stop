@@ -1,0 +1,54 @@
+{
+  "2024": {
+    "status": "passed",
+    "channels": {
+      "highdm_control": 36,
+      "highdm_signal": 73,
+      "lowdm_control": 60,
+      "lowdm_signal": 30,
+      "total": 199
+    },
+    "rate_parameters": 51,
+    "shape_nuisances": 13,
+    "histograms": 21969,
+    "blinded_sr_channels": 103,
+    "negative_cr_cells": 8
+  },
+  "2025": {
+    "status": "passed",
+    "channels": {
+      "highdm_control": 36,
+      "highdm_signal": 73,
+      "lowdm_control": 60,
+      "lowdm_signal": 30,
+      "total": 199
+    },
+    "rate_parameters": 51,
+    "shape_nuisances": 12,
+    "histograms": 21430,
+    "blinded_sr_channels": 103,
+    "negative_cr_cells": 9
+  },
+  "schema_version": 1,
+  "cluster": 1111109,
+  "exit_codes": {
+    "2024": 0,
+    "2025": 0
+  },
+  "template_sha256": {
+    "2024": "f0200b22b6557563628988376470c987ee41b903f1293c8b4b8cb04c245b725e",
+    "2025": "6a0de34df7b063a095a6fad08686f80c5b51c791208f97ce7011a821b2e457e8"
+  },
+  "manifest_sha256": {
+    "2024": "3fe642d69ba942e05a9b871ad7982eb28aec191725d5d3d613bf1ae959568df5",
+    "2025": "b70b47882c66b33f0fe8c155f9e4ba14f1c9f80f19fb2a8ccdd02f4d37ddfae7"
+  },
+  "unmatched_parameter_policy": {
+    "source": "existing_finalize_channels",
+    "parameters": [
+      "CMS_NPS26012_qcd_norm_highdm_Nb1_bin5_2024",
+      "CMS_NPS26012_qcd_norm_highdm_Nb1_bin5_2025"
+    ],
+    "reason": "no corresponding QCD SR component; no replacement yield added"
+  }
+}
