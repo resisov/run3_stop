@@ -14,6 +14,7 @@ MASS=$3
 IMPACT_PARALLEL=${IMPACT_PARALLEL:-4}
 IMPACT_MINIMIZER_STRATEGY=${IMPACT_MINIMIZER_STRATEGY:-0}
 IMPACT_VERBOSITY=${IMPACT_VERBOSITY:-0}
+IMPACT_MINIMIZER_PRECISION=${IMPACT_MINIMIZER_PRECISION:-}
 IMPACT_EXPECT_SIGNAL=${IMPACT_EXPECT_SIGNAL:-1}
 IMPACT_R_MIN=${IMPACT_R_MIN:-0}
 IMPACT_R_MAX=${IMPACT_R_MAX:-20}
@@ -31,6 +32,13 @@ if ! [[ "$IMPACT_MINIMIZER_STRATEGY" =~ ^[012]$ ]]; then
 fi
 if ! [[ "$IMPACT_VERBOSITY" =~ ^[0-3]$ ]]; then
     echo "IMPACT_VERBOSITY must be 0, 1, 2 or 3" >&2
+    exit 2
+fi
+if [[ -n "$IMPACT_MINIMIZER_PRECISION" ]] && {
+    ! [[ "$IMPACT_MINIMIZER_PRECISION" =~ ^[0-9]+([.][0-9]+)?([eE][-+]?[0-9]+)?$ ]] ||
+    ! awk -v p="$IMPACT_MINIMIZER_PRECISION" 'BEGIN { exit !(p > 0 && p < 1) }';
+}; then
+    echo "IMPACT_MINIMIZER_PRECISION must be between 0 and 1" >&2
     exit 2
 fi
 if ! [[ "$IMPACT_EXPECT_SIGNAL" =~ ^[01]$ ]]; then
@@ -106,6 +114,9 @@ cd "$WORKDIR"
 WORKSPACE="workspace_mStop${MASS}_mLSP500.root"
 IMPACT_BASE="impacts_mStop${MASS}_mLSP500"
 INITIAL_FIT="higgsCombine_initialFit_Test.MultiDimFit.mH${MASS}.root"
+if [[ -n "${IMPACT_MINIMIZER_PRECISION:-}" ]]; then
+    RANGE_ARGS+=(--cminDefaultMinimizerPrecision "$IMPACT_MINIMIZER_PRECISION")
+fi
 
 preserve_results() {
     local result=$?

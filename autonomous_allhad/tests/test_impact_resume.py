@@ -12,7 +12,8 @@ RUNNER = Path(__file__).parents[1] / "workflow/run_asimov_impacts_eos.sh"
 
 @pytest.mark.parametrize("mode", ["recover", "complete", "fail", "bad_checksum", "existing_target"])
 @pytest.mark.parametrize("verbosity", [0, 3])
-def test_resume_only_missing_and_preserve_on_exit(tmp_path, mode, verbosity):
+@pytest.mark.parametrize("precision", ["", "1e-8"])
+def test_resume_only_missing_and_preserve_on_exit(tmp_path, mode, verbosity, precision):
     source, work, result = [tmp_path / x for x in ("source", "work", "result")]
     for path in (source, work, result):
         path.mkdir()
@@ -27,6 +28,7 @@ def test_resume_only_missing_and_preserve_on_exit(tmp_path, mode, verbosity):
                IMPACT_R_MIN="-20", IMPACT_R_MAX="20", IMPACT_PLOT="0",
                IMPACT_PARALLEL="2", IMPACT_MINIMIZER_STRATEGY="2", MODE=mode)
     env["IMPACT_VERBOSITY"] = str(verbosity)
+    env["IMPACT_MINIMIZER_PRECISION"] = precision
     env["IMPACT_RESUME_NUISANCES"] = "" if mode == "complete" else "nuisance_a,nuisance_b"
     env["IMPACT_RESUME_WORKSPACE_SHA256"] = hashlib.sha256((source / workspace).read_bytes()).hexdigest()
     env["IMPACT_RESUME_INITIAL_SHA256"] = hashlib.sha256((source / initial).read_bytes()).hexdigest()
@@ -73,6 +75,10 @@ combineTool.py() {
         if mode == "recover":
             assert "--doFits" in calls.splitlines()[0]
             assert f"-v {verbosity}" in calls.splitlines()[0]
+            assert ("--cminDefaultMinimizerPrecision" in calls) == bool(precision)
+            if precision:
+                assert f"--cminDefaultMinimizerPrecision {precision}" in calls
+            assert "--cminDefaultMinimizerTolerance" not in calls
     if mode == "existing_target":
         assert not (result / "calls.log").exists()
     if mode == "fail":
@@ -95,3 +101,14 @@ def test_existing_submission_writer_records_resume_options(tmp_path, monkeypatch
     assert "IMPACT_RESUME_DIR=/eos/example/work" in text
     assert "IMPACT_MINIMIZER_STRATEGY=2" in text
     assert "request_cpus = 2" in text
+
+
+@pytest.mark.parametrize("precision", ["-1", "0", "1", "NaN", "abc"])
+def test_invalid_minimizer_precision_rejected_before_io(precision):
+    env = dict(os.environ, COMBINE_RUNTIME_SHA256="a" * 64,
+               COMBINE_RUNTIME_ARCHIVE="unused.tgz",
+               IMPACT_MINIMIZER_PRECISION=precision)
+    run = subprocess.run(["bash", str(RUNNER), "unused_card", "/eos/unused", "1200"],
+                         env=env, text=True, capture_output=True)
+    assert run.returncode == 2
+    assert "IMPACT_MINIMIZER_PRECISION" in run.stderr
