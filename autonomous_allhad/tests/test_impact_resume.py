@@ -121,3 +121,36 @@ def test_invalid_minimizer_precision_rejected_before_io(precision):
                          env=env, text=True, capture_output=True)
     assert run.returncode == 2
     assert "IMPACT_MINIMIZER_PRECISION" in run.stderr
+
+
+@pytest.mark.parametrize("full_collection", [False, True])
+@pytest.mark.parametrize("values,passed", [
+    ([0.0, -1.0, 1.0], True),
+    ([0.0, 0.0, 1.0], True),
+    ([0.991382, 0.991382, 0.991382], False),
+    ([0.0, 1.0, 2.0], False),
+    ([0.0, -1.0], False),
+    ([0.0, float("nan"), 1.0], False),
+])
+def test_real_endpoint_validator(tmp_path, monkeypatch, capsys, full_collection, values, passed):
+    import sys
+    from types import SimpleNamespace
+
+    class Tree(list):
+        def GetEntries(self):
+            return len(self)
+
+    tree = Tree(SimpleNamespace(r=1.0, nuisance_a=value, deltaNLL=0.0) for value in values)
+    source = SimpleNamespace(IsZombie=lambda: False, Get=lambda name: tree, Close=lambda: None)
+    root = SimpleNamespace(gROOT=SimpleNamespace(SetBatch=lambda value: None),
+                           TFile=SimpleNamespace(Open=lambda path: source))
+    monkeypatch.setitem(sys.modules, "ROOT", root)
+    manifest = tmp_path / "impacts.json"
+    manifest.write_text(json.dumps({"params": [{"name": "nuisance_a"}]}))
+    monkeypatch.setattr(sys, "argv", ["-", "" if full_collection else "nuisance_a", "1200", str(manifest)])
+    code = RUNNER.read_text().split('validate_fit_roots() {', 1)[1].split("<<'PY'\n", 1)[1].split("\nPY\n", 1)[0]
+    with pytest.raises(SystemExit) as result:
+        exec(compile(code, str(RUNNER), "exec"), {})
+    assert result.value.code == (0 if passed else 1)
+    report = json.loads(capsys.readouterr().out)
+    assert report["valid"] is passed

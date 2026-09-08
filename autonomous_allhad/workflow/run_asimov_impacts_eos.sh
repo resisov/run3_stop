@@ -180,16 +180,19 @@ else
         -t -1 --expectSignal "$IMPACT_EXPECT_SIGNAL" "${RANGE_ARGS[@]}" --parallel "$IMPACT_PARALLEL" \
         > impacts_fits.log 2>&1 || true
 fi
-if [[ "${IMPACT_SUBSET_ONLY:-0}" = 1 ]]; then
-    if ! python3 - "$IMPACT_RESUME_NUISANCES" "$MASS" > subset_fit_validation.json <<'PY'
+validate_fit_roots() {
+    python3 - "$1" "$MASS" "$IMPACT_BASE.json" <<'PY'
 import json
 import math
 import sys
 import ROOT
 
 ROOT.gROOT.SetBatch(True)
+names = sys.argv[1].split(",") if sys.argv[1] else [
+    item["name"] for item in json.load(open(sys.argv[3]))["params"]
+]
 results = []
-for name in sys.argv[1].split(","):
+for name in names:
     path = "higgsCombine_paramFit_Test_{}.MultiDimFit.mH{}.root".format(name, sys.argv[2])
     source = None
     item = {"name": name, "file": path, "valid": False}
@@ -201,18 +204,31 @@ for name in sys.argv[1].split(","):
         if not tree:
             raise ValueError("missing limit tree")
         item["entries"] = int(tree.GetEntries())
-        values = [[float(event.r), float(getattr(event, name))] for event in tree]
-        item["valid"] = len(values) == 3 and all(math.isfinite(v) for pair in values for v in pair)
+        values = [[float(event.r), float(getattr(event, name)), float(event.deltaNLL)] for event in tree]
+        if len(values) != 3 or not all(math.isfinite(v) for row in values for v in row):
+            raise ValueError("expected three finite entries")
+        nominal, lower, upper = [row[1] for row in values]
+        item["parameter_values"] = [nominal, lower, upper]
+        tolerance = 1e-6 * max(1.0, abs(nominal), abs(lower), abs(upper))
+        if nominal == lower == upper:
+            raise ValueError("identical parameter endpoints")
+        if not lower <= nominal + tolerance or not nominal <= upper + tolerance:
+            raise ValueError("parameter endpoints do not bracket nominal")
+        item["valid"] = True
     except Exception as error:
         item["error"] = str(error)
     finally:
         if source:
             source.Close()
     results.append(item)
-valid = all(item["valid"] for item in results)
-print(json.dumps({"valid": valid, "scope": "three entries and finite values; full convergence validation pending", "results": results}))
+valid = bool(results) and all(item["valid"] for item in results)
+print(json.dumps({"valid": valid, "scope": "finite nondegenerate bracketed endpoints; convergence review pending", "results": results}))
 sys.exit(0 if valid else 1)
 PY
+}
+
+if [[ "${IMPACT_SUBSET_ONLY:-0}" = 1 ]]; then
+    if ! validate_fit_roots "$IMPACT_RESUME_NUISANCES" > subset_fit_validation.json
     then
         echo "named impact subset is incomplete; see subset_fit_validation.json" >&2
         exit 1
@@ -243,6 +259,10 @@ if grep -q '^Missing inputs:' impacts_collect.log; then
     exit 1
 fi
 test -s "$IMPACT_BASE.json"
+if ! validate_fit_roots "" > fit_endpoint_validation.json; then
+    echo "impact endpoints failed validation; see $RESULTDIR/fit_endpoint_validation.json" >&2
+    exit 1
+fi
 if [[ "$IMPACT_PLOT" = 1 ]]; then
     plotImpacts.py -i "$IMPACT_BASE.json" -o "$IMPACT_BASE" > impacts_plot.log 2>&1
     if command -v pdftoppm >/dev/null 2>&1; then
