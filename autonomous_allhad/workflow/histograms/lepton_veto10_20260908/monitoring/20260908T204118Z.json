@@ -1,0 +1,355 @@
+{
+  "time_utc": "2026-09-08T21:08:55Z",
+  "limits_validated": 924,
+  "impact_jobs": {
+    "r1": {
+      "cluster": 1111237,
+      "job_status": 2,
+      "files": 735,
+      "valid_3_entry_finite": 707,
+      "entry_counts": {
+        "1": 23,
+        "2": 1,
+        "3": 707
+      },
+      "invalid": [
+        [
+          "CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin2_2024",
+          2,
+          [
+            [
+              1,
+              0.9913822412490845
+            ],
+            [
+              1,
+              0.9913822412490845
+            ]
+          ]
+        ],
+        [
+          "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin3_bin0",
+          1,
+          [
+            [
+              1,
+              7.506351380470733e-7
+            ]
+          ]
+        ],
+        [
+          "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR0_bin0_bin0",
+          1,
+          [
+            [
+              1,
+              1.1817028244820449e-8
+            ]
+          ]
+        ],
+        [
+          "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR0_bin1_bin0",
+          1,
+          [
+            [
+              1,
+              5.856064433373831e-8
+            ]
+          ]
+        ],
+        [
+          "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR0_bin4_bin0",
+          1,
+          [
+            [
+              1,
+              5.986049700368312e-8
+            ]
+          ]
+        ],
+        [
+          "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0",
+          1,
+          [
+            [
+              1,
+              3.775759012114577e-7
+            ]
+          ]
+        ],
+        [
+          "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin2_bin0",
+          1,
+          [
+            [
+              1,
+              4.821023225076715e-8
+            ]
+          ]
+        ],
+        [
+          "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin4_bin0",
+          1,
+          [
+            [
+              1,
+              3.4434668805261026e-7
+            ]
+          ]
+        ],
+        [
+          "prop_biny2024_LLCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0",
+          1,
+          [
+            [
+              1,
+              -0.000006500578820123337
+            ]
+          ]
+        ],
+        [
+          "prop_biny2024_LLCR_lowdm_gnn_Nb1_NISR1plus_bin2_bin0",
+          1,
+          [
+            [
+              1,
+              -8.80973857420031e-7
+            ]
+          ]
+        ],
+        [
+          "prop_biny2024_LLCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0",
+          1,
+          [
+            [
+              1,
+              -0.0000022507174435304478
+            ]
+          ]
+        ],
+        [
+          "prop_biny2024_LLCR_lowdm_gnn_Nb2plus_NISR1plus_bin1_bin0",
+          1,
+          [
+            [
+              1,
+              -6.879100169498997e-7
+            ]
+          ]
+        ],
+        [
+          "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR0_bin0_bin0",
+          1,
+          [
+            [
+              1,
+              0.000001854316224125796
+            ]
+          ]
+        ],
+        [
+          "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR0_bin1_bin0",
+          1,
+          [
+            [
+              1,
+              4.3765311374954763e-7
+            ]
+          ]
+        ],
+        [
+          "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin2_bin0",
+          1,
+          [
+            [
+              1,
+              0.000001600357677489228
+            ]
+          ]
+        ],
+        [
+          "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin3_bin0",
+          1,
+          [
+            [
+              1,
+              4.6172493739504716e-7
+            ]
+          ]
+        ],
+        [
+          "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin4_bin0",
+          1,
+          [
+            [
+              1,
+              0.0000010390924671810353
+            ]
+          ]
+        ],
+        [
+          "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR0_bin1_bin0",
+          1,
+          [
+            [
+              1,
+              -1.3522536335131008e-7
+            ]
+          ]
+        ],
+        [
+          "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR0_bin4_bin0",
+          1,
+          [
+            [
+              1,
+              -1.9706322973433998e-7
+            ]
+          ]
+        ],
+        [
+          "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin1_bin0",
+          1,
+          [
+            [
+              1,
+              -0.000002057625579254818
+            ]
+          ]
+        ],
+        [
+          "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin2_bin0",
+          1,
+          [
+            [
+              1,
+              -0.0000018482716086509754
+            ]
+          ]
+        ],
+        [
+          "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin4_bin0",
+          1,
+          [
+            [
+              1,
+              -0.0000020127222342125606
+            ]
+          ]
+        ],
+        [
+          "prop_biny2025_LLCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0",
+          1,
+          [
+            [
+              1,
+              -0.0000018749441323961946
+            ]
+          ]
+        ],
+        [
+          "prop_biny2025_LLCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0",
+          1,
+          [
+            [
+              1,
+              0.000001278678951166512
+            ]
+          ]
+        ]
+      ],
+      "active_files": 4,
+      "active_fits": 4,
+      "completed_groups": {
+        "other": 153,
+        "autoMCStats": 554
+      }
+    },
+    "r0": {
+      "cluster": 1112612,
+      "job_status": 1,
+      "resume_source_nuisance_roots": 733,
+      "expected_missing_nuisances": 2
+    }
+  },
+  "r0_strategy1_failure": {
+    "cluster": 1111238,
+    "job_status": 5,
+    "exit_code": 1,
+    "exit_by_signal": false,
+    "held_at_utc": "2026-09-08T20:26:06Z",
+    "reason": "impact collection is incomplete",
+    "timeout": false,
+    "first_pass_retry_candidates": [
+      "CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin2_2024",
+      "CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin1_2024"
+    ],
+    "post_retry_missing_count": null,
+    "post_retry_detail": "worker collection log was not staged out; EOS collection log is the earlier checkpoint",
+    "preserved_nuisance_roots": 733
+  },
+  "r0_recovery": {
+    "cluster": 1112612,
+    "job_status": 1,
+    "mode": "reuse_workspace_initial_fit_and_completed_roots; collect_then_fit_only_missing",
+    "expected_missing_nuisances": 2,
+    "minimizer_strategy": 2,
+    "robust_fit": 1,
+    "signal_strength_range": [
+      -20,
+      20
+    ],
+    "expect_signal": 0,
+    "runner_snapshot": "impact_code_recovery_strategy2/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+    "runner_sha256": "9946958caa780c070dda79d6ed886a0f0c6bde7fee551a4fa62f32d6b537d707",
+    "canonical_code_commit": "af97e4d4",
+    "submission_file": "combined/T2tt/impact_recovery_r0_strategy2/impact_r0_eossubmit.sub",
+    "submission_sha256": "0622b9cbc592c9fbfb61c49e5cb512f07266907a823821c8da44aad1cb1722a1",
+    "resume_source": "combined/T2tt/impact_mStop1200_mLSP500_r0/work",
+    "card_sha256": "e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1",
+    "workspace_sha256": "fec2790a46d714e92d3a09dfa2f768cba48dd0daf4925ea580cc7dc945d4dceb",
+    "initial_fit_sha256": "7b898069a83365946cd1f0850139131ead856a37113ce3c2e6236c8ede554f6e",
+    "proxy_seconds_before_submission": 598208,
+    "voms_seconds_before_submission": 569408,
+    "submitted_request_cpus": 2,
+    "effective_request_cpus": 6,
+    "submitted_memory_mb": 16000,
+    "effective_memory_mb": 18000,
+    "fit_parallel": 2,
+    "max_runtime_seconds": 43200,
+    "submitted_held_then_verified_and_released": true,
+    "server_injected_home_removed_before_release": true,
+    "on_exit_hold": "(ExitBySignal == True) || (ExitCode != 0)",
+    "physics_changed": false,
+    "focused_tests_passed": 5
+  },
+  "additional_checkpoint_r1": {
+    "new_nuisance_roots": 7,
+    "sha256": {
+      "higgsCombine_paramFit_Test_CMS_NPS26012_eff_e_id_2024.MultiDimFit.mH1200.root": "0faef065f39559c16911ca97db90d6f7cb0bd06e6d01b2f09e3b7da2538a9999",
+      "higgsCombine_paramFit_Test_CMS_NPS26012_eff_e_id_2025.MultiDimFit.mH1200.root": "32e91e96b9d04983295288725530963232e75b3c6b4cdfd29fa9c97a25805272",
+      "higgsCombine_paramFit_Test_CMS_NPS26012_eff_g_id_2025.MultiDimFit.mH1200.root": "2d7c275f9287caf7153057141565e1ee9fe4e3c415423296b95d5bb8f341820b",
+      "higgsCombine_paramFit_Test_CMS_eff_e_reco_13p6TeV_2024.MultiDimFit.mH1200.root": "3b94ee958a25423753ec51a52a5d99933362781a9d4bdbf23eb7631ea56eda54",
+      "higgsCombine_paramFit_Test_CMS_eff_e_reco_13p6TeV_2025.MultiDimFit.mH1200.root": "ddc81b39c91e9b0971ebf4d90525e972545c2635bfb27006638e301cf017883f",
+      "higgsCombine_paramFit_Test_prop_biny2024_GCR_lowdm_gnn_Nb1_NISR0_bin0_bin0.MultiDimFit.mH1200.root": "f8e583b06e7a672fe6b769dcdcf560c3ed931fd3bd00357006cd439e82de79c3",
+      "higgsCombine_paramFit_Test_prop_biny2024_GCR_lowdm_gnn_Nb1_NISR0_bin1_bin0.MultiDimFit.mH1200.root": "8d4111a4b96bf71a8ee84ee2482a1d06e57c3115a3a1a8c778176e8fdc8f465f"
+    },
+    "hash_mismatches": []
+  },
+  "final_outputs_present": false,
+  "phase": "r1_strategy1_retry_r0_strategy2_recovery",
+  "root_check_scope": "Structural 3-entry and finite-value check only; no final fit-quality approval",
+  "healthy_job_restarts": 0,
+  "new_submissions": 1,
+  "intermediate_root_access": false,
+  "selected_template_sums_2024": {
+    "Nb1_u2": {
+      "PhotonJet_GCR": 15566.175170931752,
+      "Zto2Nu_SR": 3216.1387607128213
+    },
+    "Nb2plus_u1": {
+      "PhotonJet_GCR": 3506.1210140893986,
+      "Zto2Nu_SR": 1088.9387798097111
+    }
+  }
+}
