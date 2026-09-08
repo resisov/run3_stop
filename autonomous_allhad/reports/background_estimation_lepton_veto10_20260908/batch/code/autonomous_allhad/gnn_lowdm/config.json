@@ -1,0 +1,95 @@
+{
+  "schema_version": "gnn_lowdm_canonical_v1",
+  "status": "frozen",
+  "model": {
+    "id": "diagonal_v3_h48_l3_sig010",
+    "checkpoint": "models/diagonal_v3_h48_l3_sig010/best_model.pt",
+    "portable_numpy": "models/diagonal_v3_h48_l3_sig010/diagonal_v3_numpy.npz",
+    "selected_epoch": 17,
+    "max_jets": 10,
+    "jet_features": 6,
+    "global_features": 40,
+    "hidden_dimension": 48,
+    "message_passing_layers": 3,
+    "dropout": 0.2,
+    "optimizer": "AdamW",
+    "learning_rate": 0.0003,
+    "weight_decay": 0.001,
+    "batch_size": 1536,
+    "significance_loss_weight": 0.1,
+    "significance_temperature": 0.35
+  },
+  "training": {
+    "selection": "feature_lowdm_preselection && Nb>=1 && Nt=0 && NW=0 && Nres=0",
+    "explicitly_not_selected": [
+      "MET/sqrt(HT)>=10",
+      "NISR requirement",
+      "deltaPhi(ISR,MET)>2",
+      "!feature_SR"
+    ],
+    "signal_topologies": ["T2tt", "T2bW", "T2tb"],
+    "delta_m_gev": [150, 300],
+    "mstop_gev": [600, 1800],
+    "split": {"train": 0.2, "validation": 0.1, "test": 0.7},
+    "split_key": ["physical_dataset_id", "run", "luminosityBlock", "event"],
+    "seed": 8312026,
+    "epochs": 20,
+    "minimum_epochs": 15,
+    "patience": 4
+  },
+  "sr_binning": {
+    "status": "adopted",
+    "total_bins": 30,
+    "bins_per_category": 5,
+    "category_labels": [
+      "Nb1_NISR0",
+      "Nb1_NISR1",
+      "Nb1_NISR2plus",
+      "Nb2plus_NISR0",
+      "Nb2plus_NISR1",
+      "Nb2plus_NISR2plus"
+    ],
+    "edges_by_category": {
+      "Nb1_NISR0": [0.0, 0.5725103585725855, 0.8620847087987249, 0.9360990208521849, 0.9851454291100825, 1.0],
+      "Nb1_NISR1": [0.0, 0.4337835196146913, 0.7192719000531151, 0.8272557967497884, 0.9250179337760895, 1.0],
+      "Nb1_NISR2plus": [0.0, 0.3255093377477263, 0.7888373113816193, 0.8877326655690037, 0.9555760529187631, 1.0],
+      "Nb2plus_NISR0": [0.0, 0.309950268336004, 0.7035191792183281, 0.8914239639925238, 0.9609786467235909, 1.0],
+      "Nb2plus_NISR1": [0.0, 0.6463224331017129, 0.9131184463900763, 0.9538017779111643, 0.9805978490720786, 1.0],
+      "Nb2plus_NISR2plus": [0.0, 0.7036410177458037, 0.8336335596549056, 0.9625404014158108, 0.9876508846987722, 1.0]
+    },
+    "validation_metrics": {
+      "p20_gain": 1.0618717318577036,
+      "median_gain": 1.1500168062841887,
+      "minimum_background_neff": 13.923269241846054,
+      "maximum_relative_mc_stat": 0.26799666479872875
+    },
+    "test_metrics": {
+      "p20_gain": 1.0821925773624874,
+      "median_gain": 1.1255531135006027,
+      "minimum_background_neff": 41.000502169838576,
+      "maximum_relative_mc_stat": 0.15617280548577211
+    }
+  },
+  "cr_binning": {
+    "regions": ["LLCR", "QCDCR", "GCR", "DY2E", "DY2M"],
+    "category_labels": [
+      "Nb1_NISR0",
+      "Nb1_NISR1plus",
+      "Nb2plus_NISR0",
+      "Nb2plus_NISR1plus"
+    ],
+    "bins_per_category": 5,
+    "score_edges": [0.0, 0.7087745055357697, 0.8666955795676624, 0.9283805475420253, 0.9610429653306511, 1.0]
+  },
+  "orthogonality": {
+    "source_highdm_bins": 79,
+    "removed_highdm_bins": [1, 2, 3, 4, 5, 6],
+    "retained_highdm_bins": 73,
+    "lowdm_bins": 30,
+    "combined_sr_bins": 103
+  },
+  "years": {
+    "2024": {"luminosity_fb": 109.82},
+    "2025": {"luminosity_fb": 110.84}
+  }
+}

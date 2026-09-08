@@ -1,0 +1,11 @@
+{
+  "plots": [
+    "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/sgamma/photon_q_normalization.png",
+    "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/sgamma/photon_q_normalization.pdf",
+    "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/sgamma/sgamma_highdm.png",
+    "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/sgamma/sgamma_highdm.pdf",
+    "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/sgamma/sgamma_lowdm.png",
+    "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/sgamma/sgamma_lowdm.pdf"
+  ],
+  "source_sha256": "425e77cb009e0facde065ec2b679038dc795713599fecb1ab8b70bcf784e7e37"
+}

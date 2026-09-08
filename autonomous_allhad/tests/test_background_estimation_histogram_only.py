@@ -23,6 +23,28 @@ REGIONS = ("SR", "LLCR", "QCDCR", "GCR", "DY2E", "DY2M")
 SAMPLES = ("data_obs", "DY", "GJ", "QCD", "ST", "TT", "VV", "WtoLNu", "Zto2Nu")
 
 
+def test_mll_plot_keeps_large_z_peak_visible(monkeypatch, tmp_path):
+    from autonomous_allhad.dy_estimation import report
+
+    source = {"DY2E": {"Nb1": {
+        "data": {"edges": [50, 71, 111, 160], "sumw": [100, 20000, 100], "sumw2": [100, 20000, 100]},
+        "zll": {"sumw": [20, 18000, 20], "sumw2": [20, 18000, 20]},
+        "other": {"sumw": [80, 2000, 80], "sumw2": [80, 2000, 80]},
+    }}}
+    limits = []
+
+    def capture(fig, path):
+        limits.append(fig.axes[0].get_ylim())
+        report.plt.close(fig)
+        return []
+
+    monkeypatch.setattr(report, "save_figure", capture)
+    report.plot_mll(source, {}, "lowdm", tmp_path, corrected=False)
+    assert len(limits) == 1
+    assert limits[0][0] == 0.1
+    assert limits[0][1] > 60000
+
+
 def leaf(values: list[float]) -> dict[str, object]:
     return {
         "nominal": {
@@ -125,6 +147,27 @@ def test_active_estimators_reject_event_level_inputs() -> None:
         assert "--hist-input" in path.read_text()
 
 
+@pytest.mark.parametrize("corruption", [None, "threshold", "operator", "domain", "sf", "status"])
+def test_audit_uses_canonical_selection_policy(monkeypatch, corruption):
+    monkeypatch.syspath_prepend(str(WORKFLOW))
+    from audit_background_histogram_products import input_policy
+    manifest = {"status": "canonical", "electron_veto_pt_min_gev": 10,
+                "muon_veto_pt_min_gev": 10, "lepton_threshold_operator": ">",
+                "lowdm_double_ratio_min_gev": 250,
+                "excluded_sf_components": ["veto_electron_5to10", "loose_muon_5to10"]}
+    if corruption is None:
+        assert input_policy(manifest)["status"] == "validated_10gev_inputs"
+        assert input_policy({}, historical=True)["status"] == "blocked"
+        return
+    updates = {"threshold": ("muon_veto_pt_min_gev", 5), "operator": ("lepton_threshold_operator", ">="),
+               "domain": ("lowdm_double_ratio_min_gev", 300), "sf": ("excluded_sf_components", []),
+               "status": ("status", "incomplete")}
+    key, value = updates[corruption]
+    manifest[key] = value
+    with pytest.raises(ValueError):
+        input_policy(manifest)
+
+
 def test_tf_builder_rejects_missing_gnn_inputs(tmp_path: Path) -> None:
     hist_input = tmp_path / "nominal_background_estimation.json"
     hist_input.write_text(json.dumps(compact_input()))
@@ -167,6 +210,7 @@ def test_histogram_boundary_drives_tf_and_rz(tmp_path: Path, year: str) -> None:
             year,
             "--output-dir",
             str(sgamma_dir),
+            "--no-plots",
         ],
         check=True,
         cwd=WORKFLOW,
@@ -176,6 +220,13 @@ def test_histogram_boundary_drives_tf_and_rz(tmp_path: Path, year: str) -> None:
     assert set(sgamma["highdm"]) == set(GROUPS)
     assert set(sgamma["lowdm_families"]) == set(GROUPS)
     assert sgamma["provenance"]["intermediate_root_reread"] is False
+    assert not sgamma["plots"]
+    original_sgamma = (sgamma_dir / "sgamma_ut.json").read_bytes()
+    subprocess.run([sys.executable, str(WORKFLOW / "build_sgamma_ut_report_2024.py"),
+                    "--hist-input", str(hist_input), "--campaign-year", year,
+                    "--output-dir", str(sgamma_dir), "--plot-only"], check=True, cwd=WORKFLOW)
+    assert (sgamma_dir / "sgamma_ut.json").read_bytes() == original_sgamma
+    assert len(json.loads((sgamma_dir / "plot_manifest.json").read_text())["plots"]) == 6
 
     double_ratio_dir = tmp_path / "double_ratio"
     subprocess.run(
@@ -188,6 +239,7 @@ def test_histogram_boundary_drives_tf_and_rz(tmp_path: Path, year: str) -> None:
             year,
             "--output-dir",
             str(double_ratio_dir),
+            "--no-plots",
         ],
         check=True,
         cwd=WORKFLOW,
@@ -201,6 +253,13 @@ def test_histogram_boundary_drives_tf_and_rz(tmp_path: Path, year: str) -> None:
     assert len(double_ratio["lowdm"]["bins"]) == 5
     assert double_ratio["lowdm"]["edges"] == [250, 300, 350, 400, 500, 1500]
     assert double_ratio["adoption_status"] == "adopted"
+    assert not double_ratio["plots"]
+    original_double_ratio = (double_ratio_dir / "zgamma_double_ratio.json").read_bytes()
+    subprocess.run([sys.executable, str(WORKFLOW / "build_zgamma_double_ratio_2024.py"),
+                    "--hist-input", str(hist_input), "--campaign-year", year,
+                    "--output-dir", str(double_ratio_dir), "--plot-only"], check=True, cwd=WORKFLOW)
+    assert (double_ratio_dir / "zgamma_double_ratio.json").read_bytes() == original_double_ratio
+    assert len(json.loads((double_ratio_dir / "plot_manifest.json").read_text())["plots"]) == 4
 
     measurement = tmp_path / "dy_measurement.json"
     subprocess.run(

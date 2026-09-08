@@ -1,0 +1,16 @@
+{
+  "files": {
+    "autonomous_allhad/workflow/build_histogram_tf_inputs_2024.py": "37ea026a45bf6116b63f6924f6fde4d1acb6874f6cf748e0c3c2348a57c11474",
+    "autonomous_allhad/workflow/gnn_background_histograms.py": "4c1d59cd6a4cbebe364f16d521b1fa0d7e0587b6308eb7162c15795c39a49930",
+    "autonomous_allhad/workflow/build_sgamma_ut_report_2024.py": "8861619056fbc9b1bee5dd06be6ac219c483aeb16254a96f1dce9e6d93b57683",
+    "autonomous_allhad/workflow/build_an_zinv_factors_2024.py": "ed56f80041d06513c1bc18a000f916c014dba67bfe003b1499a84671cddb9208",
+    "autonomous_allhad/workflow/build_zgamma_double_ratio_2024.py": "0a9791effbc9349ff9b3c9bf77acb17a4d3fcce731c43e696dea35b67425656e",
+    "autonomous_allhad/gnn_lowdm/config.json": "5a3a51852766a43b663d05b926528224a0d5467f58478e33140f86321087aa70",
+    "autonomous_allhad/autonomous_allhad/__init__.py": "99693a16b4638267dbd640e68f222a1471d5cfcecc8527af4bd6c0d2a74c551b",
+    "autonomous_allhad/autonomous_allhad/dy_estimation/__init__.py": "7b128e3c0e602ad282b37e0e08274b0056b5a07c92b69d58e0befbd830420013",
+    "autonomous_allhad/autonomous_allhad/dy_estimation/__main__.py": "c8d74bb107db27f0fe61aa15ac276e179a384127009716d352fe86667e03ec10",
+    "autonomous_allhad/autonomous_allhad/dy_estimation/model.py": "6cf75e103e08740e71a39c09c07ff01b751e1113987a212483499109459fa427",
+    "autonomous_allhad/autonomous_allhad/dy_estimation/build_measurement.py": "05b4e1094e74ad19b88f7f669a18b33f5271a56b8883a6f735e272e9edb487aa"
+  },
+  "base_commit": "f4c4090ee941e10247b0d7d98ed8ae2b8d69e041"
+}

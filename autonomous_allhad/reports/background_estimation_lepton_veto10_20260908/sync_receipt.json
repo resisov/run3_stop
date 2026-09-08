@@ -1,0 +1,66 @@
+{
+  "status": "verified_local_eos",
+  "result_root": "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908",
+  "files": 273,
+  "tree_sha256": "7edfae0e9139ef65d6c658d459a0b4305b119b1462cec63e1afe0a5cf17e2017",
+  "campaign_state_sha256": "1896e05821ba60874bd75a87820fce9754e8081f8c0c7f5eaf6260d085cc28a2",
+  "canonical_source_hashes": {
+    "autonomous_allhad/autonomous_allhad/dy_estimation/__main__.py": "c8d74bb107db27f0fe61aa15ac276e179a384127009716d352fe86667e03ec10",
+    "autonomous_allhad/autonomous_allhad/dy_estimation/build_measurement.py": "05b4e1094e74ad19b88f7f669a18b33f5271a56b8883a6f735e272e9edb487aa",
+    "autonomous_allhad/autonomous_allhad/dy_estimation/model.py": "6cf75e103e08740e71a39c09c07ff01b751e1113987a212483499109459fa427",
+    "autonomous_allhad/autonomous_allhad/dy_estimation/report.py": "56fe170df42ecc6a1abff6ab62e8551d49b30a2cb560f621b24eec0dad26eb68",
+    "autonomous_allhad/workflow/audit_background_histogram_products.py": "d926845ace69289a4afa133e5a203d7f030aff389aa840108ab2353a6a3aa262",
+    "autonomous_allhad/workflow/build_an_zinv_factors_2024.py": "ed56f80041d06513c1bc18a000f916c014dba67bfe003b1499a84671cddb9208",
+    "autonomous_allhad/workflow/build_histogram_tf_inputs_2024.py": "37ea026a45bf6116b63f6924f6fde4d1acb6874f6cf748e0c3c2348a57c11474",
+    "autonomous_allhad/workflow/build_sgamma_ut_report_2024.py": "8861619056fbc9b1bee5dd06be6ac219c483aeb16254a96f1dce9e6d93b57683",
+    "autonomous_allhad/workflow/build_zgamma_double_ratio_2024.py": "0a9791effbc9349ff9b3c9bf77acb17a4d3fcce731c43e696dea35b67425656e",
+    "autonomous_allhad/workflow/gnn_background_histograms.py": "4c1d59cd6a4cbebe364f16d521b1fa0d7e0587b6308eb7162c15795c39a49930",
+    "autonomous_allhad/workflow/plot_recoil_transfer_factors_2024.py": "c681d6a7dd8fed4b92c5baf5939925d05103c552cfa50f84bce122bb77d1ec55"
+  },
+  "tree_definition": "Sorted relative UTF-8 path + NUL + binary SHA256 per file; excludes __pycache__, batch/logs, and sync_receipt.json itself.",
+  "per_year_artifacts_verified": 248,
+  "calculation_jobs": {
+    "1111095.0": {
+      "year": 2024,
+      "exit_code": 0,
+      "normal_termination": true,
+      "execution_seconds": 156,
+      "allocated_cpus": 2
+    },
+    "1111095.1": {
+      "year": 2025,
+      "exit_code": 0,
+      "normal_termination": true,
+      "execution_seconds": 115,
+      "allocated_cpus": 2
+    }
+  },
+  "audit_job": {
+    "id": "1111099.0",
+    "exit_code": 0,
+    "normal_termination": true,
+    "execution_seconds": 95,
+    "allocated_cpus": 1,
+    "allocated_memory_mb": 3000,
+    "initial_hold": "User-initiated orchestration hold before execution to finish plot y-axis rendering; released, not a failed calculation."
+  },
+  "tests": {
+    "passed": 38,
+    "seconds": 25.52,
+    "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=autonomous_allhad python3 -m pytest -q autonomous_allhad/tests/test_background_estimation_histogram_only.py autonomous_allhad/tests/test_gnn_background_histograms.py autonomous_allhad/tests/test_dycr_mass_window.py autonomous_allhad/tests/test_highdm_orthogonality_projection.py",
+    "test_source_sha256": "fea1e4fdfb595364575434340e137895e95cdf920eaff85e4ae76cb90614ed51"
+  },
+  "plots": {
+    "figures_per_year": 52,
+    "png_files": 104,
+    "pdf_files": 104,
+    "measured_json_hashes_unchanged": true
+  },
+  "previous_campaign": {
+    "path": "autonomous_allhad/reports/background_estimation_histonly_20260907",
+    "verified_recorded_artifacts": 254,
+    "tracked_diff_empty": true
+  },
+  "intermediate_root_reread": false,
+  "web_published": false
+}

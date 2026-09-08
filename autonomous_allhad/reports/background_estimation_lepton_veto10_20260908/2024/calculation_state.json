@@ -1,0 +1,85 @@
+{
+  "year": "2024",
+  "status": "complete",
+  "inputs": {
+    "main": "5e8d056adbe0a5404f4a60425d2b84b3203cf240d02b982d0b320ef3b6523e83",
+    "background_estimation": "9b2279529275cadefd0cd8f42aed8f644bd3fa9ee17c69d8b7fc0622801d6aca",
+    "gnn": "2906493ee21d84756f89c55b2560043ef48ed77e6e8dc08612e6521f7207639b"
+  },
+  "input_manifest_sha256": "92f800ec26da259e96b9e72ba14e4aeff35e6453f741b237e8678784245945cc",
+  "code_manifest_sha256": "11fbf855b83639db61237cf220e67b68ef116bb74e8202926edaffefee413ede",
+  "intermediate_root_reread": false,
+  "started_unix": 1788854435.9369457,
+  "steps": [
+    {
+      "command": [
+        "-m",
+        "autonomous_allhad.dy_estimation",
+        "build-measurement",
+        "--hist-input",
+        "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/hists_background_estimation.json",
+        "--campaign-year",
+        "2024",
+        "--output",
+        "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2024/dy_measurement.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/batch/code/autonomous_allhad/workflow/build_sgamma_ut_report_2024.py",
+        "--hist-input",
+        "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/hists_background_estimation.json",
+        "--campaign-year",
+        "2024",
+        "--output-dir",
+        "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2024/sgamma",
+        "--no-plots"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/batch/code/autonomous_allhad/workflow/build_zgamma_double_ratio_2024.py",
+        "--hist-input",
+        "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/hists_background_estimation.json",
+        "--campaign-year",
+        "2024",
+        "--low-ut-min",
+        "250",
+        "--output-dir",
+        "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2024/zgamma",
+        "--no-plots"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/batch/code/autonomous_allhad/workflow/build_histogram_tf_inputs_2024.py",
+        "--hist-input",
+        "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/hists_background_estimation.json",
+        "--campaign-year",
+        "2024",
+        "--gnn-input",
+        "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/gnn/hists.json",
+        "--gnn-config",
+        "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/batch/code/autonomous_allhad/gnn_lowdm/config.json",
+        "--sgamma-input",
+        "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2024/sgamma/sgamma_ut.json",
+        "--dy-measurement",
+        "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2024/dy_measurement.json",
+        "--output",
+        "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2024/tf_inputs.json"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "products": {
+    "dy_measurement.json": "a201437d8dcbfef480371a46282f695b787ed5905a9e0bc5769948051403fd2c",
+    "sgamma/sgamma_ut.json": "d559c44e654631153f4268267e280aaf970515406056e06282bd3353a714e7c4",
+    "sgamma/sgamma_ut.csv": "11a2cdff34e21b002e9792c0f630c3dcd6e07d150a52b72e294db5a43aa58b92",
+    "zgamma/zgamma_double_ratio.json": "bb400ec42095cee4b12ed2d2ebf9aa6ad7cfd7bd8dc3235296818250edcb7fe0",
+    "tf_inputs.json": "62f0ffa755c750a79b18d9a8d76d5a526a566306577ebf9163a76309a054e33b"
+  },
+  "finished_unix": 1788854526.7020378
+}

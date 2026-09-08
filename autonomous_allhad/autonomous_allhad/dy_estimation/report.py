@@ -301,7 +301,8 @@ def plot_mll(
             rax.set_ylabel("Data/MC", fontsize=28)
             rax.set_xlabel(r"$m_{\ell\ell}$ (GeV)", fontsize=30, loc="right")
             ax.set_yscale("log")
-            ax.set_ylim(1.0e-1, 1.0e3)
+            peak = max(float(np.max(data + data_error)), float(np.max(total + total_error)))
+            ax.set_ylim(1.0e-1, max(1.0e3, 3.0 * peak))
             rax.set_ylim(0.0, 2.0)
             for axis in (ax, rax):
                 axis.set_xlim(float(edges[0]), float(edges[-1]))

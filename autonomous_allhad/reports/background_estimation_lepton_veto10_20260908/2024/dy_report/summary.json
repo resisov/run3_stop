@@ -1,0 +1,102 @@
+{
+  "combined": {
+    "highdm": {
+      "Nb1": {
+        "RZ": 0.7541151708363543,
+        "RZ_stat": 0.046828605013005814,
+        "channels": [
+          "DY2E",
+          "DY2M"
+        ],
+        "status": "complete"
+      },
+      "Nb2plus": {
+        "RZ": 0.7729391348596487,
+        "RZ_stat": 0.0805154146372795,
+        "channels": [
+          "DY2E",
+          "DY2M"
+        ],
+        "status": "complete"
+      }
+    },
+    "lowdm": {
+      "Nb1": {
+        "RZ": 0.6018244970181761,
+        "RZ_stat": 0.011240585093150296,
+        "channels": [
+          "DY2E",
+          "DY2M"
+        ],
+        "status": "complete"
+      },
+      "Nb2plus": {
+        "RZ": 0.6568294492121936,
+        "RZ_stat": 0.03018640401971755,
+        "channels": [
+          "DY2E",
+          "DY2M"
+        ],
+        "status": "complete"
+      }
+    }
+  },
+  "inputs": {
+    "measurement": {
+      "file": "dy_measurement.json",
+      "provenance": {
+        "campaign_year": "2024",
+        "category_policy": {
+          "highdm": [
+            "Nb1",
+            "Nb2plus"
+          ],
+          "lowdm": [
+            "Nb1",
+            "Nb2plus"
+          ],
+          "removed_lowdm_axes": [
+            "Njet",
+            "pTb",
+            "ISR"
+          ]
+        },
+        "hist_input": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/hists_background_estimation.json",
+        "hist_input_sha256": "9b2279529275cadefd0cd8f42aed8f644bd3fa9ee17c69d8b7fc0622801d6aca",
+        "intermediate_root_reread": false,
+        "mass_windows": {
+          "off": [
+            [
+              50.0,
+              71.0
+            ],
+            [
+              111.0,
+              null
+            ]
+          ],
+          "on": [
+            71.0,
+            111.0
+          ]
+        }
+      },
+      "schema_version": "dy_estimation_measurement_2024_v3",
+      "sha256": "a201437d8dcbfef480371a46282f695b787ed5905a9e0bc5769948051403fd2c",
+      "summary": {
+        "candidate_events": 0,
+        "completed_partitions": 0,
+        "expected_partitions": 0,
+        "failures": [],
+        "matched_events": 0,
+        "source_kind": "merged normalized histograms"
+      }
+    }
+  },
+  "reports": {
+    "highdm": "highdm/summary.json",
+    "lowdm": "lowdm/summary.json"
+  },
+  "schema_version": "dy_estimation_combined_report_2024_v1",
+  "status": "complete"
+}
