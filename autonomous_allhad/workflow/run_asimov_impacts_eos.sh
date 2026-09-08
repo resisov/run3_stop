@@ -15,6 +15,7 @@ IMPACT_PARALLEL=${IMPACT_PARALLEL:-4}
 IMPACT_MINIMIZER_STRATEGY=${IMPACT_MINIMIZER_STRATEGY:-0}
 IMPACT_VERBOSITY=${IMPACT_VERBOSITY:-0}
 IMPACT_MINIMIZER_PRECISION=${IMPACT_MINIMIZER_PRECISION:-}
+IMPACT_SUBSET_ONLY=${IMPACT_SUBSET_ONLY:-0}
 IMPACT_EXPECT_SIGNAL=${IMPACT_EXPECT_SIGNAL:-1}
 IMPACT_R_MIN=${IMPACT_R_MIN:-0}
 IMPACT_R_MAX=${IMPACT_R_MAX:-20}
@@ -76,6 +77,11 @@ if [[ -n "$IMPACT_RESUME_NUISANCES" ]]; then
         echo "resume nuisance names require a resume directory and a comma-separated list" >&2
         exit 2
     fi
+fi
+if ! [[ "$IMPACT_SUBSET_ONLY" =~ ^[01]$ ]] || \
+    [[ "$IMPACT_SUBSET_ONLY" = 1 && -z "$IMPACT_RESUME_NUISANCES" ]]; then
+    echo "IMPACT_SUBSET_ONLY requires an explicitly named resume subset" >&2
+    exit 2
 fi
 
 case "$OUTDIR" in
@@ -173,6 +179,47 @@ else
         --robustFit 1 --cminDefaultMinimizerStrategy "$IMPACT_MINIMIZER_STRATEGY" \
         -t -1 --expectSignal "$IMPACT_EXPECT_SIGNAL" "${RANGE_ARGS[@]}" --parallel "$IMPACT_PARALLEL" \
         > impacts_fits.log 2>&1 || true
+fi
+if [[ "${IMPACT_SUBSET_ONLY:-0}" = 1 ]]; then
+    if ! python3 - "$IMPACT_RESUME_NUISANCES" "$MASS" > subset_fit_validation.json <<'PY'
+import json
+import math
+import sys
+import ROOT
+
+ROOT.gROOT.SetBatch(True)
+results = []
+for name in sys.argv[1].split(","):
+    path = "higgsCombine_paramFit_Test_{}.MultiDimFit.mH{}.root".format(name, sys.argv[2])
+    source = None
+    item = {"name": name, "file": path, "valid": False}
+    try:
+        source = ROOT.TFile.Open(path)
+        if not source or source.IsZombie():
+            raise ValueError("unreadable ROOT")
+        tree = source.Get("limit")
+        if not tree:
+            raise ValueError("missing limit tree")
+        item["entries"] = int(tree.GetEntries())
+        values = [[float(event.r), float(getattr(event, name))] for event in tree]
+        item["valid"] = len(values) == 3 and all(math.isfinite(v) for pair in values for v in pair)
+    except Exception as error:
+        item["error"] = str(error)
+    finally:
+        if source:
+            source.Close()
+    results.append(item)
+valid = all(item["valid"] for item in results)
+print(json.dumps({"valid": valid, "scope": "three entries and finite values; full convergence validation pending", "results": results}))
+sys.exit(0 if valid else 1)
+PY
+    then
+        echo "named impact subset is incomplete; see subset_fit_validation.json" >&2
+        exit 1
+    fi
+    printf '{"status":"subset_fits_complete","full_collection_pending":true,"asimov_expect_signal":%s,"subset_validation":"subset_fit_validation.json"}\n' \
+        "$IMPACT_EXPECT_SIGNAL" > impact_status.json
+    exit 0
 fi
 combineTool.py -M Impacts -d "$WORKSPACE" -m "$MASS" \
     -o "$IMPACT_BASE.json" > impacts_collect.log 2>&1 || true
