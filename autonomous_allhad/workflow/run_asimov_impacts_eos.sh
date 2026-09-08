@@ -18,6 +18,7 @@ IMPACT_R_MIN=${IMPACT_R_MIN:-0}
 IMPACT_R_MAX=${IMPACT_R_MAX:-20}
 IMPACT_PLOT=${IMPACT_PLOT:-1}
 IMPACT_RESUME_DIR=${IMPACT_RESUME_DIR:-}
+IMPACT_RESUME_NUISANCES=${IMPACT_RESUME_NUISANCES:-}
 
 if ! [[ "$IMPACT_PARALLEL" =~ ^[1-9][0-9]*$ ]]; then
     echo "IMPACT_PARALLEL must be a positive integer" >&2
@@ -55,6 +56,13 @@ if [[ -n "$IMPACT_RESUME_DIR" ]]; then
         fi
     done
     printf '%s  %s\n' "$IMPACT_RESUME_CARD_SHA256" "$CARD" | sha256sum -c -
+fi
+if [[ -n "$IMPACT_RESUME_NUISANCES" ]]; then
+    if [[ -z "$IMPACT_RESUME_DIR" ]] || \
+        ! [[ "$IMPACT_RESUME_NUISANCES" =~ ^[A-Za-z0-9_]+(,[A-Za-z0-9_]+)*$ ]]; then
+        echo "resume nuisance names require a resume directory and a comma-separated list" >&2
+        exit 2
+    fi
 fi
 
 case "$OUTDIR" in
@@ -119,6 +127,22 @@ if [[ -n "$IMPACT_RESUME_DIR" ]]; then
     printf '%s  %s\n' "$IMPACT_RESUME_WORKSPACE_SHA256" "$WORKSPACE" \
         "$IMPACT_RESUME_INITIAL_SHA256" "$INITIAL_FIT" | sha256sum -c -
     echo "resuming existing workspace and initial fit; only missing nuisance fits will run"
+    if [[ -n "$IMPACT_RESUME_NUISANCES" ]]; then
+        IFS=, read -r -a RESUME_NAMES <<< "$IMPACT_RESUME_NUISANCES"
+        for nuisance in "${RESUME_NAMES[@]}"; do
+            if [[ -e "higgsCombine_paramFit_Test_${nuisance}.MultiDimFit.mH${MASS}.root" ]]; then
+                echo "resume target already has a ROOT file: $nuisance; use a validated-only checkpoint" >&2
+                exit 2
+            fi
+        done
+        printf 'Resuming named nuisance fits with strategy %s: %s\n' \
+            "$IMPACT_MINIMIZER_STRATEGY" "$IMPACT_RESUME_NUISANCES" >> impacts_fits.log
+        combineTool.py -M Impacts -d "$WORKSPACE" -m "$MASS" --doFits \
+            --named "$IMPACT_RESUME_NUISANCES" --robustFit 1 \
+            --cminDefaultMinimizerStrategy "$IMPACT_MINIMIZER_STRATEGY" \
+            -t -1 --expectSignal "$IMPACT_EXPECT_SIGNAL" "${RANGE_ARGS[@]}" \
+            --parallel "$IMPACT_PARALLEL" >> impacts_fits.log 2>&1 || true
+    fi
 else
     text2workspace.py "$CARD" -m "$MASS" -o "$WORKSPACE" > text2workspace.log 2>&1
     if ! combineTool.py -M Impacts -d "$WORKSPACE" -m "$MASS" --doInitialFit \
@@ -138,7 +162,7 @@ combineTool.py -M Impacts -d "$WORKSPACE" -m "$MASS" \
 
 MISSING=$(sed -n "s/^Missing inputs: //p" impacts_collect.log \
     | tr -d "' \"[]" | tail -n 1)
-if [[ -n "$MISSING" ]]; then
+if [[ -n "$MISSING" && -z "$IMPACT_RESUME_DIR" ]]; then
     RETRY_STRATEGY=1
     [[ -z "$IMPACT_RESUME_DIR" ]] || RETRY_STRATEGY=$IMPACT_MINIMIZER_STRATEGY
     printf 'Retrying missing nuisance fits with strategy %s: %s\n' "$RETRY_STRATEGY" "$MISSING" \
