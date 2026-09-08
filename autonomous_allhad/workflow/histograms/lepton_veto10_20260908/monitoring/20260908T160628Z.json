@@ -1,0 +1,113 @@
+{
+  "time_utc": "2026-09-08T16:06:28Z",
+  "limit_validated_counts": {
+    "T2tt": 205,
+    "T2bW": 354,
+    "T2tb": 365,
+    "total": 924
+  },
+  "limit_validation": "924 ROOT files reread locally; all five finite positive ordered expected quantiles; all 923 previous hashes unchanged; final point EOS hash and Condor ExitCode 0 verified",
+  "new_completion": {
+    "topology": "T2tt",
+    "mass": "mStop1700_mLSP1500",
+    "job": "1112108.0",
+    "exit_code": 0,
+    "exit_by_signal": false,
+    "valid_root": true,
+    "entries": 5,
+    "expected_r": [
+      50.642578125,
+      68.29307556152344,
+      96.75,
+      138.7858123779297,
+      190.9961395263672
+    ],
+    "sha256": "e54f7e7a95b0e3bd34d0ceb1838481c3e42ff6a89cde8fe28b27178072cc52d0",
+    "eos_sha256_matched": true,
+    "status": "complete_validated_promoted",
+    "validated_at_utc": "2026-09-08T16:06:28Z",
+    "completion_unix": 1788881172,
+    "output": "combined/T2tt/limits/higgsCombine_mStop1700_mLSP1500.AsymptoticLimits.mH120.root",
+    "source": "combined/T2tt/recovery_timeout_1/limits/higgsCombine_mStop1700_mLSP1500.AsymptoticLimits.mH120.root"
+  },
+  "impact_jobs": {
+    "r1": {
+      "id": "1111237.0",
+      "status": "running",
+      "remote_user_cpu": 69244,
+      "final_json_count": 0
+    },
+    "r0": {
+      "id": "1111238.0",
+      "status": "running",
+      "remote_user_cpu": 71100,
+      "final_json_count": 0
+    }
+  },
+  "limit_plot_update": {
+    "status": "complete_local_pdf_checked",
+    "web_status": "pending_combined_publication",
+    "full_input_points": 205,
+    "plotted_points": 205,
+    "plot_range_gev": {
+      "mStop": [
+        600,
+        1800
+      ],
+      "mLSP": [
+        1,
+        1800
+      ]
+    },
+    "missing_points": [],
+    "excluded_points": [],
+    "color_fields": [
+      "ratio",
+      "xsec"
+    ],
+    "xsec_color_range_pb": [
+      0.0001,
+      0.1
+    ],
+    "interpolation_mode": "topology-aware",
+    "source": "autonomous_allhad/workflow/postprocess_limits.py",
+    "source_sha256": "e9885888a8226692456d73f6592a2ef2b1b68bc0f1eaa35f236ae258159a14c9",
+    "runtime": "local_display_only_versions_recorded_in_plot_manifests",
+    "artifacts": [
+      {
+        "path": "combined/T2tt/expected_limits.json",
+        "sha256": "14a204df409514d64fecc511cabe2c52d809d167224b74b32334453c7d84d9e9"
+      },
+      {
+        "path": "combined/T2tt/limit_manifest_topology_thermal_relic.json",
+        "sha256": "2c844614712d7dd2df4f659827de33c6af07143eacfc8fe8ad746ef269c2b16c"
+      },
+      {
+        "path": "combined/T2tt/limit_manifest_xsec_topology_thermal_relic.json",
+        "sha256": "fda238df5a2d8dc7b18bf80db18987934977d44085728d0c8975c89850649682"
+      },
+      {
+        "path": "combined/T2tt/expected_limit_t2tt_2024_2025_highdm73_lowdm30_topology_thermal_relic.pdf",
+        "sha256": "aa558727c1151eabfb5f5f023f7b75240f9d4d41d77b2c4c5ea4d7e75517fea2"
+      },
+      {
+        "path": "combined/T2tt/expected_limit_t2tt_2024_2025_highdm73_lowdm30_topology_thermal_relic.png",
+        "sha256": "194b58fc1f78fa5979ea24827acbc9ff59a1c5b30771b9d15ff6f4cfcd9e4c31"
+      },
+      {
+        "path": "combined/T2tt/expected_limit_t2tt_2024_2025_highdm73_lowdm30_xsec_topology_thermal_relic.pdf",
+        "sha256": "7d14d84d30a178a6f66309a754a12859db4dc140a7144ef4309d8f5754d6ca95"
+      },
+      {
+        "path": "combined/T2tt/expected_limit_t2tt_2024_2025_highdm73_lowdm30_xsec_topology_thermal_relic.png",
+        "sha256": "b6fd43d1c945faff577e8208a3ddb455def980e3b40754203ecfca1c3b8a7b04"
+      }
+    ],
+    "thermal_relic_sha256": "b23a3e51e81e26cb00cadaf79e3cdecba4eb071c58b65b7a233f278e5363ed61",
+    "validated_at_utc": "2026-09-08T16:06:28Z",
+    "previous_plot_version": "combined/T2tt/plot_versions/203_points"
+  },
+  "intermediate_root_access": false,
+  "new_submissions": 0,
+  "healthy_work_restarted": false
+}
