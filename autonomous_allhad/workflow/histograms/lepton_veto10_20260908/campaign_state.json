@@ -1,5 +1,5 @@
 {
-  "status": "full_cards_validated_combining_impacts_submitted",
+  "status": "combined_limits_and_impacts_submitted",
   "code_commit": "40434055",
   "main_builder_sha256": "b1cb425ca92222bf52ddfe85911c8cb73870d7d2c3a7873f269a67d0910bc06b",
   "main_recovery": {
@@ -222,7 +222,9 @@
   },
   "schedd": "bigbird24.cern.ch",
   "monitor_interval_minutes": 30,
-  "monitoring_status": "paused_by_user",
+  "monitoring_status": "active_30_minutes",
+  "monitoring_automation_id": "dy-20-gev",
+  "monitoring_resumed_by_user": "계속 모니터링 진행해줘",
   "realtime_monitor_request": "Superseded by latest user instruction: 정상진행중이니 30분단위모니터링해라. Active full production uses a 30-minute heartbeat; unchanged/non-actionable state remains quiet.",
   "last_pilot_poll_utc": "2026-09-07T23:58:48Z",
   "last_full_run_poll_utc": "2026-09-08T07:43:30Z",
@@ -281,8 +283,15 @@
   "cards": "full_production_validated",
   "card_full_validation": "card_full_validation.json",
   "combined_cards": {
-    "status": "running",
+    "status": "complete_validated",
     "clusters": {"T2tt": 1111219, "T2bW": 1111220, "T2tb": 1111221},
+    "exit_codes": {"T2tt": 0, "T2bW": 0, "T2tb": 0},
+    "combine_cards_warnings": 0,
+    "manifest_sha256": {
+      "T2tt": "5556647fec00337abf0f8baae79db4c9e98b316e840792ea9db0bdce8d24a404",
+      "T2bW": "028322156bdd4eb7369b8e53b90ed5831fbadcd1fad43741510d04a3c9b84b2d",
+      "T2tb": "364e6436e14bf5113b3c293fa9f37c3707e63053b110518c20b2318f11227ee5"
+    },
     "expected_mass_points": {"T2tt": 205, "T2bW": 354, "T2tb": 365},
     "mass_grids_identical_between_years": true
   },
@@ -321,8 +330,38 @@
     "voms_seconds_before_submit": 610600,
     "runtime_sha256": "2909cf59caf57cfa47e65e6d43a7bcca8c864c72984679127d8eebabb551614a"
   },
-  "limits": "pilot_running_full_pending",
+  "limits": "full_grid_submitted",
+  "last_statistical_poll_utc": "2026-09-08T11:00:31Z",
+  "statistical_queue_at_last_poll": {"full_limits_idle": 923, "pilot_limit_running": 1, "impacts_running": 2, "current_statistical_jobs_held": 0},
   "limit_pilot_cluster": 1111222,
+  "limits_full": {
+    "submitted_at_utc": "2026-09-08T10:59:22Z",
+    "clusters": {"T2tt": 1111240, "T2bW": 1111241, "T2tb": 1111242},
+    "submitted_jobs": {"T2tt": 204, "T2bW": 354, "T2tb": 365},
+    "total_new_jobs": 923,
+    "total_mass_points_including_running_pilot": 924,
+    "pilot_mass_key": "mStop1200_mLSP500",
+    "pilot_reuse": "Excluded from full T2tt submission because 1111222.0 is already running; validate ExitCode and expected quantiles before copying the result from combined_pilot/T2tt/limits to combined/T2tt/limits. Not yet validated or counted as completed.",
+    "proxy_seconds_before_submit": 634199,
+    "voms_seconds_before_submit": 605399,
+    "max_runtime_seconds": 10800,
+    "point_timeout_seconds": 7200,
+    "workspace_timeout_seconds": 900,
+    "failed_jobs_hold": true,
+    "submission_sha256": {
+      "T2tt": "fa56a3ddb70bae3feafdd3f06c1c5d89a384a1f9ce0c13d316326b71c216aa79",
+      "T2bW": "32579c47c098a62670c549a7da8e077a758a8f73acf29fb9d5d77690d78a580b",
+      "T2tb": "4809008d2e43f1dda1f7c5442e3404e56c9ad32507dcd910a14bf8ecd98dbdc6"
+    }
+  },
+  "signal_grid_scope": {
+    "current_grid_approved": true,
+    "T2tt_mstop_gev": [600, 1800],
+    "T2bW_mstop_gev": [100, 1800],
+    "T2tb_mstop_gev": [100, 1800],
+    "known_absent_columns_gev": {"T2tt": [100, 200, 300, 400, 500, 800], "T2bW": [900]},
+    "future_T2tt_requirement": "Include existing physical signal mass points with mStop <= 600 GeV starting from the next production; 600 GeV is already present. User explicitly deferred the 100-500 GeV addition; do not regenerate this campaign."
+  },
   "impacts_status": "submitted",
   "impact_jobs": {
     "r1_cluster": 1111237,
