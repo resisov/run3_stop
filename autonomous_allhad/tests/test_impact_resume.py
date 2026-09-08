@@ -11,7 +11,8 @@ RUNNER = Path(__file__).parents[1] / "workflow/run_asimov_impacts_eos.sh"
 
 
 @pytest.mark.parametrize("mode", ["recover", "complete", "fail", "bad_checksum", "existing_target"])
-def test_resume_only_missing_and_preserve_on_exit(tmp_path, mode):
+@pytest.mark.parametrize("verbosity", [0, 3])
+def test_resume_only_missing_and_preserve_on_exit(tmp_path, mode, verbosity):
     source, work, result = [tmp_path / x for x in ("source", "work", "result")]
     for path in (source, work, result):
         path.mkdir()
@@ -25,6 +26,7 @@ def test_resume_only_missing_and_preserve_on_exit(tmp_path, mode):
                IMPACT_RESUME_DIR=str(source), MASS="1200", IMPACT_EXPECT_SIGNAL="0",
                IMPACT_R_MIN="-20", IMPACT_R_MAX="20", IMPACT_PLOT="0",
                IMPACT_PARALLEL="2", IMPACT_MINIMIZER_STRATEGY="2", MODE=mode)
+    env["IMPACT_VERBOSITY"] = str(verbosity)
     env["IMPACT_RESUME_NUISANCES"] = "" if mode == "complete" else "nuisance_a,nuisance_b"
     env["IMPACT_RESUME_WORKSPACE_SHA256"] = hashlib.sha256((source / workspace).read_bytes()).hexdigest()
     env["IMPACT_RESUME_INITIAL_SHA256"] = hashlib.sha256((source / initial).read_bytes()).hexdigest()
@@ -70,6 +72,7 @@ combineTool.py() {
         assert calls.count("--doFits") == (0 if mode == "complete" else 1)
         if mode == "recover":
             assert "--doFits" in calls.splitlines()[0]
+            assert f"-v {verbosity}" in calls.splitlines()[0]
     if mode == "existing_target":
         assert not (result / "calls.log").exists()
     if mode == "fail":

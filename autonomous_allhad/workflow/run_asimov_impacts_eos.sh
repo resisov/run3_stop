@@ -13,6 +13,7 @@ MASS=$3
 : "${COMBINE_RUNTIME_ARCHIVE:?Combine runtime archive name is required}"
 IMPACT_PARALLEL=${IMPACT_PARALLEL:-4}
 IMPACT_MINIMIZER_STRATEGY=${IMPACT_MINIMIZER_STRATEGY:-0}
+IMPACT_VERBOSITY=${IMPACT_VERBOSITY:-0}
 IMPACT_EXPECT_SIGNAL=${IMPACT_EXPECT_SIGNAL:-1}
 IMPACT_R_MIN=${IMPACT_R_MIN:-0}
 IMPACT_R_MAX=${IMPACT_R_MAX:-20}
@@ -26,6 +27,10 @@ if ! [[ "$IMPACT_PARALLEL" =~ ^[1-9][0-9]*$ ]]; then
 fi
 if ! [[ "$IMPACT_MINIMIZER_STRATEGY" =~ ^[012]$ ]]; then
     echo "IMPACT_MINIMIZER_STRATEGY must be 0, 1 or 2" >&2
+    exit 2
+fi
+if ! [[ "$IMPACT_VERBOSITY" =~ ^[0-3]$ ]]; then
+    echo "IMPACT_VERBOSITY must be 0, 1, 2 or 3" >&2
     exit 2
 fi
 if ! [[ "$IMPACT_EXPECT_SIGNAL" =~ ^[01]$ ]]; then
@@ -138,6 +143,7 @@ if [[ -n "$IMPACT_RESUME_DIR" ]]; then
         printf 'Resuming named nuisance fits with strategy %s: %s\n' \
             "$IMPACT_MINIMIZER_STRATEGY" "$IMPACT_RESUME_NUISANCES" >> impacts_fits.log
         combineTool.py -M Impacts -d "$WORKSPACE" -m "$MASS" --doFits \
+            -v "${IMPACT_VERBOSITY:-0}" \
             --named "$IMPACT_RESUME_NUISANCES" --robustFit 1 \
             --cminDefaultMinimizerStrategy "$IMPACT_MINIMIZER_STRATEGY" \
             -t -1 --expectSignal "$IMPACT_EXPECT_SIGNAL" "${RANGE_ARGS[@]}" \
