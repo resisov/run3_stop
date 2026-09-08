@@ -331,8 +331,91 @@
     "runtime_sha256": "2909cf59caf57cfa47e65e6d43a7bcca8c864c72984679127d8eebabb551614a"
   },
   "limits": "full_grid_submitted",
-  "last_statistical_poll_utc": "2026-09-08T11:00:31Z",
-  "statistical_queue_at_last_poll": {"full_limits_idle": 923, "pilot_limit_running": 1, "impacts_running": 2, "current_statistical_jobs_held": 0},
+  "last_statistical_poll_utc": "2026-09-08T11:22:06Z",
+  "statistical_queue_at_last_poll": {"limits_running": 918, "limits_idle": 0, "limits_validated_complete": 4, "limits_failed_output_validation": 2, "impacts_running": 2, "current_statistical_jobs_held": 0},
+  "ssh_connection": {"status": "restored_by_user_after_os_update", "verified_at_utc": "2026-09-08T11:20:01Z", "master_pid": 3627, "proxy_seconds": 632960, "voms_seconds": 604160, "renewal_required": false},
+  "latest_limit_output_validation": {
+  "time_utc": "2026-09-08T11:22:06Z",
+  "topology": "T2bW",
+  "records": [
+    {
+      "topology": "T2bW",
+      "mass": "mStop100_mLSP1",
+      "sha256": "38665da320c84d50f0e76fca596cf808faba20c2d244059f428ca68dfa2e45a2",
+      "expected_r": [],
+      "root_entries": 0,
+      "root_validation": "failed_empty_limit_tree",
+      "exit_code": 0,
+      "eos_sha256_matched": true,
+      "status": "recovery_pending"
+    },
+    {
+      "topology": "T2bW",
+      "mass": "mStop1150_mLSP950",
+      "sha256": "754b08c3ef6722cd4ee6f39043b01d278a1b88dd3db3c2c967bf9bf250269c25",
+      "expected_r": [
+        2.2491455078125,
+        3.0330419540405273,
+        4.296875,
+        6.198030471801758,
+        8.585782051086426
+      ],
+      "root_entries": 5,
+      "root_validation": "passed",
+      "exit_code": 0,
+      "eos_sha256_matched": true,
+      "status": "complete_validated"
+    },
+    {
+      "topology": "T2bW",
+      "mass": "mStop1200_mLSP950",
+      "sha256": "a3bcd962806d055a456d53b05aea5e8b69e4f027316f16128a214279f4ce7563",
+      "expected_r": [
+        2.28515625,
+        3.11572265625,
+        4.5,
+        6.652462959289551,
+        9.37162971496582
+      ],
+      "root_entries": 5,
+      "root_validation": "passed",
+      "exit_code": 0,
+      "eos_sha256_matched": true,
+      "status": "complete_validated"
+    },
+    {
+      "topology": "T2bW",
+      "mass": "mStop1300_mLSP400",
+      "sha256": "68a28a035d094b78762fccbcc91145491483a3fd61737e7f98a07b177df3c4cd",
+      "expected_r": [
+        0.4375,
+        0.6015625,
+        0.875,
+        1.2900466918945312,
+        1.820122241973877
+      ],
+      "root_entries": 5,
+      "root_validation": "passed",
+      "exit_code": 0,
+      "eos_sha256_matched": true,
+      "status": "complete_validated"
+    },
+    {
+      "topology": "T2bW",
+      "mass": "mStop200_mLSP100",
+      "sha256": "bcd278c003f979e4281a26eddc7afb9bf9f2d364c6a4cee7bbfb074b7e82aae1",
+      "expected_r": [],
+      "root_entries": 0,
+      "root_validation": "failed_empty_limit_tree",
+      "exit_code": 0,
+      "eos_sha256_matched": true,
+      "status": "recovery_pending"
+    }
+  ],
+  "combined_validated_total_including_pilot": 4,
+  "failures_counted_as_complete": false,
+  "recovery_status": "pending; empty trees at T2bW(100,1) and (200,100) despite ExitCode 0; keep original outputs and logs, do not change physics or restart healthy jobs"
+},
   "limit_pilot_cluster": 1111222,
   "limits_full": {
     "submitted_at_utc": "2026-09-08T10:59:22Z",
