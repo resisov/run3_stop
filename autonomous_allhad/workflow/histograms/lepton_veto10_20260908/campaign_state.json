@@ -341,7 +341,27 @@
     "total_new_jobs": 923,
     "total_mass_points_including_running_pilot": 924,
     "pilot_mass_key": "mStop1200_mLSP500",
-    "pilot_reuse": "Excluded from full T2tt submission because 1111222.0 is already running; validate ExitCode and expected quantiles before copying the result from combined_pilot/T2tt/limits to combined/T2tt/limits. Not yet validated or counted as completed.",
+    "pilot_reuse": "1111222.0 exited 0; all five expected quantiles validated locally and the ROOT was copied without overwriting to combined/T2tt/limits with matching SHA256. Count as one completed T2tt point; do not resubmit.",
+    "pilot_validation": {
+      "status": "complete_validated",
+      "exit_code": 0,
+      "validated_at_utc": "2026-09-08T11:04:34Z",
+      "output": "combined/T2tt/limits/higgsCombine_mStop1200_mLSP500.AsymptoticLimits.mH120.root",
+      "sha256": "f249777681e5d6acaa2c8bd20b0c39cfbaefbb5248f62a7720d13ad1fe47d712",
+      "quantiles": [0.025, 0.16, 0.5, 0.84, 0.975],
+      "expected_r": [0.14569091796875, 0.20384979248046875, 0.30078125, 0.45064711570739746, 0.644578218460083],
+      "finite_positive_ordered": true,
+      "observed_entry": false
+    },
+    "submission_coverage_audit": {
+      "verified_at_utc": "2026-09-08T11:04:34Z",
+      "T2tt": {"expected": 205, "active_queue": 204, "validated_complete": 1},
+      "T2bW": {"expected": 354, "active_queue": 354},
+      "T2tb": {"expected": 365, "active_queue": 365},
+      "missing_mass_points": [],
+      "duplicate_mass_points": [],
+      "held_jobs": 0
+    },
     "proxy_seconds_before_submit": 634199,
     "voms_seconds_before_submit": 605399,
     "max_runtime_seconds": 10800,
