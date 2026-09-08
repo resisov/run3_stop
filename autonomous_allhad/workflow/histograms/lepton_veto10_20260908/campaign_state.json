@@ -1,5 +1,5 @@
 {
-  "status": "canonical_histograms_promoted_background_handoff_delivered",
+  "status": "background_estimation_validated_cards_pending",
   "code_commit": "40434055",
   "main_builder_sha256": "b1cb425ca92222bf52ddfe85911c8cb73870d7d2c3a7873f269a67d0910bc06b",
   "main_recovery": {
@@ -222,6 +222,7 @@
   },
   "schedd": "bigbird24.cern.ch",
   "monitor_interval_minutes": 30,
+  "monitoring_status": "paused_by_user",
   "realtime_monitor_request": "Superseded by latest user instruction: 정상진행중이니 30분단위모니터링해라. Active full production uses a 30-minute heartbeat; unchanged/non-actionable state remains quiet.",
   "last_pilot_poll_utc": "2026-09-07T23:58:48Z",
   "last_full_run_poll_utc": "2026-09-08T07:43:30Z",
@@ -269,7 +270,12 @@
     ]
   },
   "sr_observations": "blinded",
-  "background_estimation": "handoff_delivered_to_existing_task",
+  "background_estimation": "complete_and_handoff_verified",
+  "background_estimation_products": "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908",
+  "background_estimation_state_sha256": "1896e05821ba60874bd75a87820fce9754e8081f8c0c7f5eaf6260d085cc28a2",
+  "background_estimation_commit": "4ec95f46d781905fe624f1621facb89188941ffd",
+  "background_estimation_verified_artifacts": 248,
+  "background_estimation_verified_sources": 11,
   "background_estimation_task_id": "019f9dbc-5790-7b13-b102-027c7703175c",
   "background_estimation_handoff_utc": "2026-09-08T07:47:00Z",
   "cards": "pending",
