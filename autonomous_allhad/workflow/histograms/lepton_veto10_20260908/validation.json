@@ -83,6 +83,19 @@
     "new_sr_trota_eligibility_test": "passed",
     "focused_veto_tests_passed": 7
   },
+  "gnn_sparse_template_validation": {
+    "commit": "684bdf8f",
+    "validator_sha256": "4c1d59cd6a4cbebe364f16d521b1fa0d7e0587b6308eb7162c15795c39a49930",
+    "test_sha256": "9d97c01508b70cbe5d9da2705f661a2254c38b18bddb268b8dc823a95cf0d7ab",
+    "tests_passed": 19,
+    "runtime_seconds": 0.31,
+    "independent_projection_comparisons_2025": 318,
+    "projection_failures_2025": 0,
+    "local_eos_hashes_match": true,
+    "histograms_modified": false,
+    "frozen_production_sources_modified": false,
+    "cross_validation_cluster": 1111093
+  },
   "gnn_pilot": {
     "2024": {
       "exit_code": 0,

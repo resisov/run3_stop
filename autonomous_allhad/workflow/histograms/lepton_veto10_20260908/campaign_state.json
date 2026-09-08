@@ -1,5 +1,5 @@
 {
-  "status": "main_2024_merging_2025_sparse_template_validation_failed",
+  "status": "both_years_merged_cross_validation_v2_submitted",
   "code_commit": "40434055",
   "main_builder_sha256": "b1cb425ca92222bf52ddfe85911c8cb73870d7d2c3a7873f269a67d0910bc06b",
   "main_recovery": {
@@ -26,10 +26,11 @@
   "full_production_submitted": true,
   "full_production_clusters": {"main": 1110787, "gnn": 1110785},
   "gnn_merge_clusters": {"2024": 1110789, "2025": 1110788},
-  "histogram_cross_validation_clusters": {"2025": 1111090},
-  "histogram_cross_validation_status": {"2024": "pending main merge", "2025": "failed: missing GNN process templates in DY2E/Nb1_NISR0; sparse-output diagnosis running"},
-  "histogram_sparse_audit": {"2025": {"cluster": 1111092, "status": "submitted", "failed_validation_cluster": 1111090, "failed_validation_exit_code": 1, "missing_at_first_error": ["GJ", "QCD", "WtoLNu", "Zto2Nu"], "method": "compare actual GNN score x UT projections with independent merged compact histograms; do not create missing templates"}},
+  "histogram_cross_validation_clusters": {"2024": 1111093, "2025": 1111093},
+  "histogram_cross_validation_status": {"2024": "v2 submitted: proc 0", "2025": "v2 submitted: proc 1; failed validation 1111090 preserved"},
+  "histogram_sparse_audit": {"2025": {"cluster": 1111092, "exit_code": 0, "status": "complete", "independent_projection_comparisons": 318, "projection_failures": [], "failed_validation_cluster": 1111090, "failed_validation_exit_code": 1, "missing_at_first_error": ["GJ", "QCD", "WtoLNu", "Zto2Nu"], "cause": "producer omits categories with no selected events; validator required every process in every category", "recovery_commit": "684bdf8f", "validator_sha256": "4c1d59cd6a4cbebe364f16d521b1fa0d7e0587b6308eb7162c15795c39a49930", "focused_tests_passed": 19, "histograms_changed": false, "method": "permit sparse records only with independent complete histograms and exact entry accounting plus matching yields and variances; no template filling"}},
   "main_merge_results": {
+    "2024": {"cluster": 1110787, "proc_id": 0, "exit_code": 0, "status": "complete", "validated_chunks": 596, "unique_input_roots": 5954, "zero_entry_roots": 123, "all_component_validations": true, "strict_warnings": 0, "output_bytes": 2820473081, "output_sha256": "5e8d056adbe0a5404f4a60425d2b84b3203cf240d02b982d0b320ef3b6523e83", "background_estimation_sha256": "9b2279529275cadefd0cd8f42aed8f644bd3fa9ee17c69d8b7fc0622801d6aca", "canonical_promotion": "pending cross-validation"},
     "2025": {"cluster": 1110787, "proc_id": 1, "exit_code": 0, "status": "complete", "validated_chunks": 839, "unique_input_roots": 8390, "zero_entry_roots": 140, "all_component_validations": true, "strict_warnings": 0, "output_bytes": 2458889388, "output_sha256": "e395cd14e026ffdac9a127a6b665347d0db7c20f1391c7d3ab2a34dfb28f5ba6", "background_estimation_sha256": "4c1e9b5734a2356f995925e3252e76721ee655156c481c7babddb1b0144b6be3", "canonical_promotion": "pending cross-validation"}
   },
   "gnn_merge_results": {
@@ -54,7 +55,7 @@
   "ids_source_sha256": "a40d327efedb8dad42afb59da944deff995500b09fc157a53853159d36901da1",
   "ids_coffea_sha256": "f34995ac34dee52f9ba782e409fb24a11a60a18525f24532a51ec6e74d1e4b48",
   "local_cache_cleanup": "local_cleanup.json; four old EOS-backed histogram caches removed after hash verification; 9.6 GiB free afterwards",
-  "bg_task_message_permissions": "App auto-review rejected a preservation-path coordination message. Do not bypass this restriction; resolve authorization before further such messages.",
+  "bg_task_message_permissions": "Prior app auto-review rejection remains in force. An exact histogram-only handoff approval request was sent to taiwoo.kim@cern.ch; local sendmail accepted it with ExitCode 0. Await explicit user approval before cross-task path delivery; Git publication approval is separate.",
   "campaign": "lepton_veto10_20260908",
   "approval": "User: Lepton veto를 10 GeV로 변경해서 전과정을 다시 실시하라.",
   "input_policy": "New histogram campaign authorized from the existing completed intermediate ROOTs only; original NanoAOD is forbidden. Previous campaign snapshots remain unchanged.",
@@ -77,9 +78,9 @@
   "monitor_interval_minutes": 30,
   "realtime_monitor_request": "Superseded by latest user instruction: 정상진행중이니 30분단위모니터링해라. Active full production uses a 30-minute heartbeat; unchanged/non-actionable state remains quiet.",
   "last_pilot_poll_utc": "2026-09-07T23:58:48Z",
-  "last_full_run_poll_utc": "2026-09-08T06:56:47Z",
+  "last_full_run_poll_utc": "2026-09-08T07:26:47Z",
   "main_chunk_counts_at_last_poll": {"2024": 596, "2025": 839},
-  "main_stages_at_last_poll": {"2024": "all 596 chunks produced; section merging in progress", "2025": "main merge complete and ExitCode 0; cross-validation 1111090 held after missing-template check; diagnosis 1111092 submitted"},
+  "main_stages_at_last_poll": {"2024": "merge complete, ExitCode 0; cross-validation v2 submitted", "2025": "merge complete, ExitCode 0; sparse-output diagnosis passed; cross-validation v2 submitted"},
   "main_traceback_log_counts_at_last_poll": {"2024": 0, "2025": 0},
   "pilot_monitor_interval_minutes": 5,
   "full_run_monitor_interval_minutes": 30,
