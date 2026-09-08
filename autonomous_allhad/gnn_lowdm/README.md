@@ -64,7 +64,13 @@ python -m autonomous_allhad.gnn_lowdm.plotting --help
 python -m autonomous_allhad.gnn_lowdm.plotting training-curves
 python -m autonomous_allhad.gnn_lowdm.plotting roc
 python -m autonomous_allhad.gnn_lowdm.plotting shap
+python -m autonomous_allhad.gnn_lowdm.plotting sr --help
 ```
+
+`plotting sr` uses the original 30-bin SR renderer, including the T2bW
+`(800,650)` and `(1000,850)` benchmarks. It reads category template histograms,
+not event ROOT files. The current campaign's plot manifest records the input
+projection from canonical datacards and the rendering commands.
 
 The supplementary plotting commands read machine-readable frozen artifacts.
 New test-score files include event weights and topology IDs so ROC curves can

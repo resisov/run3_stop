@@ -49,14 +49,14 @@
         1
       ]
     ],
-    "lowdm_T2tt": [
+    "lowdm_T2bW": [
       [
-        600,
-        400
+        800,
+        650
       ],
       [
         1000,
-        800
+        850
       ]
     ]
   },
@@ -70,51 +70,43 @@
     "highdm_retained_labels_match_card": true,
     "yearly_bin_maps_identical": true,
     "dycr_combination_checks_passed": 2,
-    "rz_hashes_verified": true
+    "rz_hashes_verified": true,
+    "lowdm_original_renderer_pdf_visual_review": true
   },
   "caveats": [
     "2025 upstream campaign excludes 11 files including one data file; complete data luminosity coverage is not certified.",
-    "Previous low-dM T2tt (800,650) and (1000,850) benchmarks are absent from the current card grid; available (600,400) and (1000,800) are displayed.",
     "GNN CR plots show four five-bin parent categories side by side, not category-summed distributions.",
     "No postfit covariance is claimed and no new fit/background measurement was performed."
   ],
   "renderers": {
     "physical_cr": "plot_control_search_bins_style.draw_highdm_distribution_report / draw_flat_report",
     "gnn_cr": "gnn_lowdm/_implementation/plot_control_regions.draw",
-    "sr": "plot_control_search_bins_style.draw_flat_blocks with current template arrays",
     "physical_cr_source_sha256": "bf3e2b388916d0431b510876f4216ca72aabf86103c1453c05ec1fccc4dd0324",
-    "sr_display_patch": "Parse the first merged-label component before choosing its recoil separator; omit empty SR data legend. No yields or selections changed."
+    "sr_display_patch": "Parse the first merged-label component before choosing its recoil separator; omit empty SR data legend. No yields or selections changed.",
+    "highdm_sr": "plot_control_search_bins_style.draw_flat_blocks with current template arrays",
+    "lowdm_sr": "gnn_lowdm.plotting sr -> _implementation/plot_lowdm30_sr_categories.py",
+    "lowdm_sr_source_sha256": "421cd35f0545b5669c989562d905d6c62d409f13bd45f645b70786067ce20e11"
   },
   "sources": [
     {
-      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/hists.json",
-      "bytes": 2820473081,
-      "sha256": "5e8d056adbe0a5404f4a60425d2b84b3203cf240d02b982d0b320ef3b6523e83"
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/plot_control_regions.py",
+      "bytes": 12704,
+      "sha256": "99251a1f9cbb5c770a474151785e9ad4da88b96cf4e5220814c55918c35eaab4"
     },
     {
-      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/plot_payload.json",
-      "bytes": 24500774,
-      "sha256": "08fdbbcfef936389f471bee2e63c6602f97908c2ea5e97523d8e2a6bf86d5994"
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/plot_lowdm30_sr_categories.py",
+      "bytes": 12848,
+      "sha256": "421cd35f0545b5669c989562d905d6c62d409f13bd45f645b70786067ce20e11"
     },
     {
-      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/cards/2024/T2tt/templates.root",
-      "bytes": 166760450,
-      "sha256": "5fa3d854611dda5a454f7291749b8457643bd1f04440fc7bae43f5b69a0111bd"
+      "path": "autonomous_allhad/gnn_lowdm/config.json",
+      "bytes": 3247,
+      "sha256": "5a3a51852766a43b663d05b926528224a0d5467f58478e33140f86321087aa70"
     },
     {
-      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/cards/2024/T2tt/bin_map.json",
-      "bytes": 26573,
-      "sha256": "8b79fdfdbb36d951afe8767b8062f7f6dd383aa390e4a1f488ca2cb234483045"
-    },
-    {
-      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/cards/2024/T2tt/cards/datacard_mStop1200_mLSP500.txt",
-      "bytes": 254324,
-      "sha256": "d0c03c7de2cc963d9cdba8bd429462bb52f091ac15d927bf581fdab6a90ddf34"
-    },
-    {
-      "path": "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2024/tf_inputs.json",
-      "bytes": 34224187,
-      "sha256": "62f0ffa755c750a79b18d9a8d76d5a526a566306577ebf9163a76309a054e33b"
+      "path": "autonomous_allhad/gnn_lowdm/plotting.py",
+      "bytes": 1540,
+      "sha256": "4e951bf5f89f16e115c4a5f55f69521143040241dff22ba200296a95a4ae1404"
     },
     {
       "path": "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2024/rz_high.json",
@@ -127,34 +119,9 @@
       "sha256": "662193bbf086c1c77a7ce34c414e824b4e54471f22c4af93ce3878a5a90f9f59"
     },
     {
-      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2025/hists.json",
-      "bytes": 2458889388,
-      "sha256": "e395cd14e026ffdac9a127a6b665347d0db7c20f1391c7d3ab2a34dfb28f5ba6"
-    },
-    {
-      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2025/plot_payload.json",
-      "bytes": 21456142,
-      "sha256": "fd0eb16c7027e9c3a43877be925ca2a1005cea022178f5e06b32ea762be2aedf"
-    },
-    {
-      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/cards/2025/T2tt/templates.root",
-      "bytes": 166505170,
-      "sha256": "fdab33147ce4fcb3a827dc8390f0c53ddb8cbcc0cdc103d62a687d30f2b44746"
-    },
-    {
-      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/cards/2025/T2tt/bin_map.json",
-      "bytes": 26573,
-      "sha256": "8b79fdfdbb36d951afe8767b8062f7f6dd383aa390e4a1f488ca2cb234483045"
-    },
-    {
-      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/cards/2025/T2tt/cards/datacard_mStop1200_mLSP500.txt",
-      "bytes": 252115,
-      "sha256": "64ad0bda3ded4b11bda4fc200235a02413570edcc0bb875e79e2635a7da8d6d8"
-    },
-    {
-      "path": "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/tf_inputs.json",
-      "bytes": 29703833,
-      "sha256": "0717f63499d46cc0909a5f9a8b156741843edf3b44a4830ab5734e5dc9ad17b6"
+      "path": "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2024/tf_inputs.json",
+      "bytes": 34224187,
+      "sha256": "62f0ffa755c750a79b18d9a8d76d5a526a566306577ebf9163a76309a054e33b"
     },
     {
       "path": "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/rz_high.json",
@@ -167,14 +134,94 @@
       "sha256": "1967623b5c2b5fa9f8ea1d8439ed356a0d257dfe5ac0f14e963e31ab8f2ceca8"
     },
     {
+      "path": "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/tf_inputs.json",
+      "bytes": 29703833,
+      "sha256": "0717f63499d46cc0909a5f9a8b156741843edf3b44a4830ab5734e5dc9ad17b6"
+    },
+    {
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/hists.json",
+      "bytes": 2820473081,
+      "sha256": "5e8d056adbe0a5404f4a60425d2b84b3203cf240d02b982d0b320ef3b6523e83"
+    },
+    {
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/plot_payload.json",
+      "bytes": 24500774,
+      "sha256": "08fdbbcfef936389f471bee2e63c6602f97908c2ea5e97523d8e2a6bf86d5994"
+    },
+    {
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2025/hists.json",
+      "bytes": 2458889388,
+      "sha256": "e395cd14e026ffdac9a127a6b665347d0db7c20f1391c7d3ab2a34dfb28f5ba6"
+    },
+    {
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2025/plot_payload.json",
+      "bytes": 21456142,
+      "sha256": "fd0eb16c7027e9c3a43877be925ca2a1005cea022178f5e06b32ea762be2aedf"
+    },
+    {
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/cards/2024/T2bW/bin_map.json",
+      "bytes": 26573,
+      "sha256": "8b79fdfdbb36d951afe8767b8062f7f6dd383aa390e4a1f488ca2cb234483045"
+    },
+    {
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/cards/2024/T2bW/cards/datacard_mStop1200_mLSP500.txt",
+      "bytes": 254324,
+      "sha256": "5994b32080f8c225a98dc037bb051038e0703addc022eb8f0559b3bdbf9669e3"
+    },
+    {
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/cards/2024/T2bW/templates.root",
+      "bytes": 229652567,
+      "sha256": "41d93728b867fba94988cd3b555dc4e42e72973d481612b5045187f0e36d5488"
+    },
+    {
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/cards/2024/T2tt/bin_map.json",
+      "bytes": 26573,
+      "sha256": "8b79fdfdbb36d951afe8767b8062f7f6dd383aa390e4a1f488ca2cb234483045"
+    },
+    {
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/cards/2024/T2tt/cards/datacard_mStop1200_mLSP500.txt",
+      "bytes": 254324,
+      "sha256": "d0c03c7de2cc963d9cdba8bd429462bb52f091ac15d927bf581fdab6a90ddf34"
+    },
+    {
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/cards/2024/T2tt/templates.root",
+      "bytes": 166760450,
+      "sha256": "5fa3d854611dda5a454f7291749b8457643bd1f04440fc7bae43f5b69a0111bd"
+    },
+    {
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/cards/2025/T2bW/bin_map.json",
+      "bytes": 26573,
+      "sha256": "8b79fdfdbb36d951afe8767b8062f7f6dd383aa390e4a1f488ca2cb234483045"
+    },
+    {
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/cards/2025/T2bW/cards/datacard_mStop1200_mLSP500.txt",
+      "bytes": 252115,
+      "sha256": "277b8c7267a7a7d1ff957fa1476906d6ecdcff266d1da577567ebbbfa719c240"
+    },
+    {
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/cards/2025/T2bW/templates.root",
+      "bytes": 229251334,
+      "sha256": "513bdf1158a549213223f1c1ff0688d281247f41e4705cb7a30855690ce1203f"
+    },
+    {
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/cards/2025/T2tt/bin_map.json",
+      "bytes": 26573,
+      "sha256": "8b79fdfdbb36d951afe8767b8062f7f6dd383aa390e4a1f488ca2cb234483045"
+    },
+    {
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/cards/2025/T2tt/cards/datacard_mStop1200_mLSP500.txt",
+      "bytes": 252115,
+      "sha256": "64ad0bda3ded4b11bda4fc200235a02413570edcc0bb875e79e2635a7da8d6d8"
+    },
+    {
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/cards/2025/T2tt/templates.root",
+      "bytes": 166505170,
+      "sha256": "fdab33147ce4fcb3a827dc8390f0c53ddb8cbcc0cdc103d62a687d30f2b44746"
+    },
+    {
       "path": "autonomous_allhad/workflow/plot_control_search_bins_style.py",
       "bytes": 138355,
       "sha256": "ea9d22c5697a2433302ed4be5bf5d8291413108bea841cb10a16ac8cc5241823"
-    },
-    {
-      "path": "autonomous_allhad/gnn_lowdm/_implementation/plot_control_regions.py",
-      "bytes": 12704,
-      "sha256": "99251a1f9cbb5c770a474151785e9ad4da88b96cf4e5220814c55918c35eaab4"
     },
     {
       "path": "autonomous_allhad/workflow/plot_highdm73_from_limit_templates.py",
@@ -513,6 +560,36 @@
     }
   ],
   "files": [
+    {
+      "path": "2024_2025/sr/highdm73_sr_2024_2025.json",
+      "bytes": 49316,
+      "sha256": "c8deb46ec9134720b820cfc39340f6a0818322a26f2022f623f675133cebb210"
+    },
+    {
+      "path": "2024_2025/sr/highdm73_sr_2024_2025.pdf",
+      "bytes": 52877,
+      "sha256": "450e56dcfe785a6fbe89ead83a86aac8969178f34811a66e8ef569f5e4a412fc"
+    },
+    {
+      "path": "2024_2025/sr/highdm73_sr_2024_2025.png",
+      "bytes": 247079,
+      "sha256": "06eb4a32d94c1cfa256a4d65ba386cb3eca335eb11b7682f2654e1419eda981a"
+    },
+    {
+      "path": "2024_2025/sr/lowdm30_sr_2024_2025.json",
+      "bytes": 1644,
+      "sha256": "c275e4fc704d5f54727542b3829004c5a0fc71348272408a50228174fa9f804d"
+    },
+    {
+      "path": "2024_2025/sr/lowdm30_sr_2024_2025.pdf",
+      "bytes": 42895,
+      "sha256": "b36eb1a51578fe53ecc371f2acd50e73e772d5d4468a61d2aedad548852b9d51"
+    },
+    {
+      "path": "2024_2025/sr/lowdm30_sr_2024_2025.png",
+      "bytes": 264885,
+      "sha256": "82a24063927e4091591108eea0938067fce5e2855b0ef5fa471427dbba8f12b0"
+    },
     {
       "path": "2024/dy_rz_plotting.json",
       "bytes": 1698,
@@ -1029,22 +1106,22 @@
       "sha256": "e7484aaaddd8a3a3313aac0dafdce87de20646531912748aea2eae8714b8e4a5"
     },
     {
-      "path": "2024/lowdm/DYCR/lowdm_cr_dycr_ht.pdf",
-      "bytes": 28871,
-      "sha256": "ace27220d5099473b9fb8a1583a66168a9148551424128d621050bf1e880e04c"
-    },
-    {
-      "path": "2024/lowdm/DYCR/lowdm_cr_dycr_ht.png",
-      "bytes": 174927,
-      "sha256": "0cdd21609e02a8bd552cd307e5c925d79cd7e546b04be862f7ae4b389dfb40a3"
-    },
-    {
       "path": "2024/lowdm/DYCR/lowdm_cr_dycr_ht_lepton_clean.pdf",
       "bytes": 28871,
       "sha256": "85e9fed57748e2bfc989ce673da1cb5cb44efc09a6507f68bbf7d9f370582db3"
     },
     {
       "path": "2024/lowdm/DYCR/lowdm_cr_dycr_ht_lepton_clean.png",
+      "bytes": 174927,
+      "sha256": "0cdd21609e02a8bd552cd307e5c925d79cd7e546b04be862f7ae4b389dfb40a3"
+    },
+    {
+      "path": "2024/lowdm/DYCR/lowdm_cr_dycr_ht.pdf",
+      "bytes": 28871,
+      "sha256": "ace27220d5099473b9fb8a1583a66168a9148551424128d621050bf1e880e04c"
+    },
+    {
+      "path": "2024/lowdm/DYCR/lowdm_cr_dycr_ht.png",
       "bytes": 174927,
       "sha256": "0cdd21609e02a8bd552cd307e5c925d79cd7e546b04be862f7ae4b389dfb40a3"
     },
@@ -1199,22 +1276,22 @@
       "sha256": "e4c3cec6fa054f3d77f9e016305b36eac097e633044a18a6b721731a86af9b5f"
     },
     {
-      "path": "2024/lowdm/DYCR/lowdm_cr_dycr_njet.pdf",
-      "bytes": 30136,
-      "sha256": "3988d4dd96144524ba098f52b867e32020d6b7440efd1d4b471fd74b6bc9312c"
-    },
-    {
-      "path": "2024/lowdm/DYCR/lowdm_cr_dycr_njet.png",
-      "bytes": 165563,
-      "sha256": "5233ac550d5c133075caee37c682b4eff202d6c7e6cb6c65d52f16eff7c6f195"
-    },
-    {
       "path": "2024/lowdm/DYCR/lowdm_cr_dycr_njet_lepton_clean.pdf",
       "bytes": 30136,
       "sha256": "af7596961e90a0bb66d47476454b6868a50b51ac065d60dd72187c3c8d1d3de5"
     },
     {
       "path": "2024/lowdm/DYCR/lowdm_cr_dycr_njet_lepton_clean.png",
+      "bytes": 165563,
+      "sha256": "5233ac550d5c133075caee37c682b4eff202d6c7e6cb6c65d52f16eff7c6f195"
+    },
+    {
+      "path": "2024/lowdm/DYCR/lowdm_cr_dycr_njet.pdf",
+      "bytes": 30136,
+      "sha256": "3988d4dd96144524ba098f52b867e32020d6b7440efd1d4b471fd74b6bc9312c"
+    },
+    {
+      "path": "2024/lowdm/DYCR/lowdm_cr_dycr_njet.png",
       "bytes": 165563,
       "sha256": "5233ac550d5c133075caee37c682b4eff202d6c7e6cb6c65d52f16eff7c6f195"
     },
@@ -1234,22 +1311,22 @@
       "sha256": "a830ddd7a7a603d06e07229bbd932ef5c2ad3314a22ac88f550824563cdf0e5b"
     },
     {
-      "path": "2024/lowdm/GCR/lowdm_cr_gcr_ht.pdf",
-      "bytes": 29907,
-      "sha256": "83dc0d561a4763a3e2d2b68151a18dbe3f8c78863cbf055c8b14fe37cb52d102"
-    },
-    {
-      "path": "2024/lowdm/GCR/lowdm_cr_gcr_ht.png",
-      "bytes": 182093,
-      "sha256": "05d64de7ead0869a439be52bafcdd623068197ad0ef9e5ec9c2a4caef485b563"
-    },
-    {
       "path": "2024/lowdm/GCR/lowdm_cr_gcr_ht_photon_clean.pdf",
       "bytes": 29907,
       "sha256": "d7a719627a9e0d8fcd41b73e9549f278c2430e6e219ea7f6c11c9570cd488e00"
     },
     {
       "path": "2024/lowdm/GCR/lowdm_cr_gcr_ht_photon_clean.png",
+      "bytes": 182093,
+      "sha256": "05d64de7ead0869a439be52bafcdd623068197ad0ef9e5ec9c2a4caef485b563"
+    },
+    {
+      "path": "2024/lowdm/GCR/lowdm_cr_gcr_ht.pdf",
+      "bytes": 29907,
+      "sha256": "83dc0d561a4763a3e2d2b68151a18dbe3f8c78863cbf055c8b14fe37cb52d102"
+    },
+    {
+      "path": "2024/lowdm/GCR/lowdm_cr_gcr_ht.png",
       "bytes": 182093,
       "sha256": "05d64de7ead0869a439be52bafcdd623068197ad0ef9e5ec9c2a4caef485b563"
     },
@@ -1404,22 +1481,22 @@
       "sha256": "38ba1b38a349889fa57b299a1fbc144a9af906724603a9a8f666412fc15dfe18"
     },
     {
-      "path": "2024/lowdm/GCR/lowdm_cr_gcr_njet.pdf",
-      "bytes": 31220,
-      "sha256": "bc5eea4b16eb853e44a81c510634c74640fcb84a495864218e4ebd056ab47bdf"
-    },
-    {
-      "path": "2024/lowdm/GCR/lowdm_cr_gcr_njet.png",
-      "bytes": 177679,
-      "sha256": "ad079b0dc2d26f6826e377f0c1b31400ad1f2d0f625aca244b8a84eae4b9924e"
-    },
-    {
       "path": "2024/lowdm/GCR/lowdm_cr_gcr_njet_photon_clean.pdf",
       "bytes": 31220,
       "sha256": "aaa46054ca2e0144a5da99a8999e57ec21072ffbe88f037b86b71a47090aaedb"
     },
     {
       "path": "2024/lowdm/GCR/lowdm_cr_gcr_njet_photon_clean.png",
+      "bytes": 177679,
+      "sha256": "ad079b0dc2d26f6826e377f0c1b31400ad1f2d0f625aca244b8a84eae4b9924e"
+    },
+    {
+      "path": "2024/lowdm/GCR/lowdm_cr_gcr_njet.pdf",
+      "bytes": 31220,
+      "sha256": "bc5eea4b16eb853e44a81c510634c74640fcb84a495864218e4ebd056ab47bdf"
+    },
+    {
+      "path": "2024/lowdm/GCR/lowdm_cr_gcr_njet.png",
       "bytes": 177679,
       "sha256": "ad079b0dc2d26f6826e377f0c1b31400ad1f2d0f625aca244b8a84eae4b9924e"
     },
@@ -1760,48 +1837,18 @@
     },
     {
       "path": "2024/sr/lowdm30_sr_2024.json",
-      "bytes": 22229,
-      "sha256": "5fbe23aa67f00e1251fdebb5d4ddf3669c6fc6e6b916123eb1db4b750715a53b"
+      "bytes": 1476,
+      "sha256": "9dc66d90e31a08885d1dd2cc1b614b4082ecf78e9f3521a8c820ebfe344c0ca2"
     },
     {
       "path": "2024/sr/lowdm30_sr_2024.pdf",
-      "bytes": 37473,
-      "sha256": "54fa001f5cad5a2e4db1c8eb84bf75a8f841ce477eca29f0dadf9c1754526959"
+      "bytes": 42912,
+      "sha256": "460f92f2f4ad3f2568c11f4029f88c1d26cd9a56ae7d0c19643bb3f400448bd1"
     },
     {
       "path": "2024/sr/lowdm30_sr_2024.png",
-      "bytes": 215485,
-      "sha256": "be18436a2890051c54918af27fab70bb49d10da0f21ad54bbb6cc472f59a964f"
-    },
-    {
-      "path": "2024_2025/sr/highdm73_sr_2024_2025.json",
-      "bytes": 49316,
-      "sha256": "c8deb46ec9134720b820cfc39340f6a0818322a26f2022f623f675133cebb210"
-    },
-    {
-      "path": "2024_2025/sr/highdm73_sr_2024_2025.pdf",
-      "bytes": 52877,
-      "sha256": "450e56dcfe785a6fbe89ead83a86aac8969178f34811a66e8ef569f5e4a412fc"
-    },
-    {
-      "path": "2024_2025/sr/highdm73_sr_2024_2025.png",
-      "bytes": 247079,
-      "sha256": "06eb4a32d94c1cfa256a4d65ba386cb3eca335eb11b7682f2654e1419eda981a"
-    },
-    {
-      "path": "2024_2025/sr/lowdm30_sr_2024_2025.json",
-      "bytes": 22242,
-      "sha256": "6e9ec2e7fe63944d504ab592f5f67ffe962371af10beeead47d0eacf1cb89103"
-    },
-    {
-      "path": "2024_2025/sr/lowdm30_sr_2024_2025.pdf",
-      "bytes": 37485,
-      "sha256": "c1ce0565430bcb3b8d06f006732ab57f57bfae51ce80e4f06900a91fb0766f37"
-    },
-    {
-      "path": "2024_2025/sr/lowdm30_sr_2024_2025.png",
-      "bytes": 213435,
-      "sha256": "05e9bc75b4fc5ea5ad6cc99c389b7fe4e14e2da04520de4c1bbaff34b0da4494"
+      "bytes": 265047,
+      "sha256": "2532650e8190d506e35a25befcc7dbe8802d649fa397c43f56dbaa3de54882f6"
     },
     {
       "path": "2025/dy_rz_plotting.json",
@@ -2319,22 +2366,22 @@
       "sha256": "0461e6f3eec2676bfaf91af0bb80993212b4c95bd233b13d5c544004da286031"
     },
     {
-      "path": "2025/lowdm/DYCR/lowdm_cr_dycr_ht.pdf",
-      "bytes": 28582,
-      "sha256": "477b40f97b4e42753751894f661cfde89bc810c67b6406f965742aa00a7ab1cd"
-    },
-    {
-      "path": "2025/lowdm/DYCR/lowdm_cr_dycr_ht.png",
-      "bytes": 171864,
-      "sha256": "7b89151b6c02778c19b1e12f032f6af3507fc07c36075381367b83ce27093695"
-    },
-    {
       "path": "2025/lowdm/DYCR/lowdm_cr_dycr_ht_lepton_clean.pdf",
       "bytes": 28582,
       "sha256": "2db9bc2aff9b09a9334a0875529d98b7e95293fc6fb42bb7f52bb6059547205b"
     },
     {
       "path": "2025/lowdm/DYCR/lowdm_cr_dycr_ht_lepton_clean.png",
+      "bytes": 171864,
+      "sha256": "7b89151b6c02778c19b1e12f032f6af3507fc07c36075381367b83ce27093695"
+    },
+    {
+      "path": "2025/lowdm/DYCR/lowdm_cr_dycr_ht.pdf",
+      "bytes": 28582,
+      "sha256": "477b40f97b4e42753751894f661cfde89bc810c67b6406f965742aa00a7ab1cd"
+    },
+    {
+      "path": "2025/lowdm/DYCR/lowdm_cr_dycr_ht.png",
       "bytes": 171864,
       "sha256": "7b89151b6c02778c19b1e12f032f6af3507fc07c36075381367b83ce27093695"
     },
@@ -2489,22 +2536,22 @@
       "sha256": "a164e841f7d878e692913c87cc87f4942ebc0d23af40ee1919a8e5607218168b"
     },
     {
-      "path": "2025/lowdm/DYCR/lowdm_cr_dycr_njet.pdf",
-      "bytes": 29938,
-      "sha256": "fee8040aca9700dfc6659eddf0a0afd6628adb3b9ca047fe8f34470d4b69f262"
-    },
-    {
-      "path": "2025/lowdm/DYCR/lowdm_cr_dycr_njet.png",
-      "bytes": 168541,
-      "sha256": "d71a7787c91127ec3a4f86fe1a6547f98ec4a083128b84d3e1f307533d483eb4"
-    },
-    {
       "path": "2025/lowdm/DYCR/lowdm_cr_dycr_njet_lepton_clean.pdf",
       "bytes": 29938,
       "sha256": "41cd9cabff53a14ea22f34643b6325ec9d9eb9dd41957cd4f6ec2d633acb82f5"
     },
     {
       "path": "2025/lowdm/DYCR/lowdm_cr_dycr_njet_lepton_clean.png",
+      "bytes": 168541,
+      "sha256": "d71a7787c91127ec3a4f86fe1a6547f98ec4a083128b84d3e1f307533d483eb4"
+    },
+    {
+      "path": "2025/lowdm/DYCR/lowdm_cr_dycr_njet.pdf",
+      "bytes": 29938,
+      "sha256": "fee8040aca9700dfc6659eddf0a0afd6628adb3b9ca047fe8f34470d4b69f262"
+    },
+    {
+      "path": "2025/lowdm/DYCR/lowdm_cr_dycr_njet.png",
       "bytes": 168541,
       "sha256": "d71a7787c91127ec3a4f86fe1a6547f98ec4a083128b84d3e1f307533d483eb4"
     },
@@ -2524,22 +2571,22 @@
       "sha256": "4bf7e2bff9f88776aa4cb3ca50c0c01698d72fc3a73764f5e09e4530ed80ad12"
     },
     {
-      "path": "2025/lowdm/GCR/lowdm_cr_gcr_ht.pdf",
-      "bytes": 29897,
-      "sha256": "7e8946d45a8b0d6e2618ceb298aefc01c5548850ba3e3273f1e469a18865785c"
-    },
-    {
-      "path": "2025/lowdm/GCR/lowdm_cr_gcr_ht.png",
-      "bytes": 179331,
-      "sha256": "32a33cc8391395316e711dd060acbec4dc9e68fdc81c69e7757b9cb74cccec80"
-    },
-    {
       "path": "2025/lowdm/GCR/lowdm_cr_gcr_ht_photon_clean.pdf",
       "bytes": 29897,
       "sha256": "d32e31f7fe98490500d4500d23b285c9740afcb99db6a8fbd4d7dcb54e233940"
     },
     {
       "path": "2025/lowdm/GCR/lowdm_cr_gcr_ht_photon_clean.png",
+      "bytes": 179331,
+      "sha256": "32a33cc8391395316e711dd060acbec4dc9e68fdc81c69e7757b9cb74cccec80"
+    },
+    {
+      "path": "2025/lowdm/GCR/lowdm_cr_gcr_ht.pdf",
+      "bytes": 29897,
+      "sha256": "7e8946d45a8b0d6e2618ceb298aefc01c5548850ba3e3273f1e469a18865785c"
+    },
+    {
+      "path": "2025/lowdm/GCR/lowdm_cr_gcr_ht.png",
       "bytes": 179331,
       "sha256": "32a33cc8391395316e711dd060acbec4dc9e68fdc81c69e7757b9cb74cccec80"
     },
@@ -2694,22 +2741,22 @@
       "sha256": "9a6407f42cf2768164fb1c008e58d33c13038542cc5084502d31df6a0ea8a356"
     },
     {
-      "path": "2025/lowdm/GCR/lowdm_cr_gcr_njet.pdf",
-      "bytes": 31229,
-      "sha256": "814170d6256ea8ce2d00ec7e6773edcc95876adf5a3a49be27a18e28bbccf3ef"
-    },
-    {
-      "path": "2025/lowdm/GCR/lowdm_cr_gcr_njet.png",
-      "bytes": 174629,
-      "sha256": "0c5a8629eab013079ba604e98be77f64fa49aa135a17bdc6579a16e03dd39f9c"
-    },
-    {
       "path": "2025/lowdm/GCR/lowdm_cr_gcr_njet_photon_clean.pdf",
       "bytes": 31229,
       "sha256": "078658c1e347c103b1a15a7916e17cee510ea3fe639b1a7a532f0a67323754ad"
     },
     {
       "path": "2025/lowdm/GCR/lowdm_cr_gcr_njet_photon_clean.png",
+      "bytes": 174629,
+      "sha256": "0c5a8629eab013079ba604e98be77f64fa49aa135a17bdc6579a16e03dd39f9c"
+    },
+    {
+      "path": "2025/lowdm/GCR/lowdm_cr_gcr_njet.pdf",
+      "bytes": 31229,
+      "sha256": "814170d6256ea8ce2d00ec7e6773edcc95876adf5a3a49be27a18e28bbccf3ef"
+    },
+    {
+      "path": "2025/lowdm/GCR/lowdm_cr_gcr_njet.png",
       "bytes": 174629,
       "sha256": "0c5a8629eab013079ba604e98be77f64fa49aa135a17bdc6579a16e03dd39f9c"
     },
@@ -3050,18 +3097,65 @@
     },
     {
       "path": "2025/sr/lowdm30_sr_2025.json",
-      "bytes": 22210,
-      "sha256": "a50c9c781a94788b395ba6831a8510c6dfd6f92c4866874b49cbc0f3f6f83d5f"
+      "bytes": 1476,
+      "sha256": "ff5d049f5ff5f2904c460d938d969ab4ec9abd8ddd7fd925f6be55754269e15e"
     },
     {
       "path": "2025/sr/lowdm30_sr_2025.pdf",
-      "bytes": 37460,
-      "sha256": "26103a4bc2eb31e1c495a1623bd525153f109d5b3f8762c5b6e52a98ddee7702"
+      "bytes": 42883,
+      "sha256": "932030fbeb742b1520cc2c412fc7031410a21dc0d0659b46cde37603a09f34f3"
     },
     {
       "path": "2025/sr/lowdm30_sr_2025.png",
-      "bytes": 214213,
-      "sha256": "f8480afec651930c46981617609bb87b5729d1915c24571b51253aa0899153d5"
+      "bytes": 263520,
+      "sha256": "a54917377b3662c5de27bfa6a3988af0f97f12aa0f7b883121be36767c1713a1"
+    },
+    {
+      "path": "render_inputs.json",
+      "bytes": 7347,
+      "sha256": "136eea760fc04d8f960a52966a090f1ac616732395b6aeb7bb4d96a7cf353f93"
+    },
+    {
+      "path": "sr_inputs/2024.root",
+      "bytes": 40236,
+      "sha256": "5336064b641da2561ee3bb04470833b316aabc890f39e1e6506b7616c8d66611"
+    },
+    {
+      "path": "sr_inputs/2025.root",
+      "bytes": 40206,
+      "sha256": "a98eabdea0a1c51775792549b2ef0b91c8e68dd30afe83d76e71ed76fb83ba13"
+    },
+    {
+      "path": "sr_inputs/binning.json",
+      "bytes": 1365,
+      "sha256": "dc1648599845e3dc4ce1ba10122836dbc7cdaf3b21038627c35a93644b8d07a5"
+    },
+    {
+      "path": "sr_inputs/summary.json",
+      "bytes": 48753,
+      "sha256": "ce0c26a9f747f8ce8ac89b2bdc3c036810e74b94adf960092afabedae4e5ade9"
+    },
+    {
+      "path": "sr_summary.json",
+      "bytes": 11820,
+      "sha256": "050c023511a0a9951a619c7c97870a13488a247277fbcf8816a7ad6a06f104d6"
     }
-  ]
+  ],
+  "lowdm_sr_replacement": {
+    "supersedes": "generic low-dM SR renderer and incorrect T2tt benchmark statement in 798fc047",
+    "source_archive": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/reports/cleanup_backups/lowdm_eos_code_20260907.tar.gz",
+    "source_archive_sha256": "1ae1deaf638aade7b27c5a9ce38c33935f4524a6596befea5617d8a68f287ca2",
+    "source_bytes_unchanged": true,
+    "current_background_unchanged_rtol": 1e-12,
+    "canonical_bin_edges_verified": true,
+    "signal_topology": "T2bW",
+    "signal_scale": 1,
+    "significance_ylim": [
+      0,
+      5
+    ],
+    "sr_observations_read": false,
+    "input_projection": "sr_inputs/summary.json",
+    "data_legend_proxy_only": true
+  }
 }

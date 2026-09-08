@@ -1,14 +1,15 @@
 {
   "pdf": "cr_sr_plots_2024_2025.pdf",
   "pdf_pages": 242,
-  "pdf_sha256": "861c3734ea6b96cb044cd8c9d4eedb0d3b74f0f664b0f9a5244ca76abe65fd0e",
+  "pdf_sha256": "7432a3ad92c6c73d1e816756dd12acbd84d3dd5f1a8a2fc1914760ef9e4aa4fb",
   "zip": "cr_sr_plots_2024_2025.zip",
-  "zip_files": 513,
-  "zip_sha256": "c0b86a9a9c8de71d65a2b06e0d6e0ed7d6ab477f7c965fb592fc9a15a0475ae4",
+  "zip_files": 517,
+  "zip_sha256": "53ea2cee8235b6f0d45a73c0ac028e5fccc8179d6ebd10161e9882ccb281c211",
   "validation": {
     "zip_crc_passed": true,
-    "pdf_all_242_rendered_pages_pixel_identical_to_individual_pdf": true,
-    "pdf_all_page_text_matches": true
+    "all_pdf_page_text_matches": true,
+    "replaced_lowdm_pdf_pages_pixel_identical_to_individual_pdf": true,
+    "unchanged_pages_retain_previous_visual_validation": true
   },
   "source_manifest": "manifest.json"
 }

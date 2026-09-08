@@ -49,6 +49,16 @@
 
 `--help` 23개 중 22개가 통과했다. 이는 CLI import 확인이며 생산 실행의 성공 증거는 아니다.
 
+2026-09-08 SR 플로터 복구: `plotting sr` →
+`gnn_lowdm/_implementation/plot_lowdm30_sr_categories.py` (`main`).
+9월 4일 사용된 소스를 EOS 코드 백업에서 수정 없이 복구했다.
+소스 SHA-256: `421cd35f0545b5669c989562d905d6c62d409f13bd45f645b70786067ce20e11`.
+입력은 category별 5-bin template ROOT와 동결 score-edge JSON이다.
+현 캠페인에서는 canonical datacard templates와 초기 rateParam을
+`plots/sr_inputs/`의 machine-derived 입력으로 사영하여 사용한다.
+SR observation, intermediate ROOT, NanoAOD는 읽지 않는다.
+기존 8개 공개 모듈은 유지하며, 새 최상위 실행 코드는 추가하지 않았다.
+
 ## 2. 발견된 의존성·재현성 제한
 
 1. **signal-merge import가 끊어져 있다.** [autonomous_allhad/gnn_lowdm/_implementation/merge_all_signal_templates.py](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/gnn_lowdm/_implementation/merge_all_signal_templates.py:18>)는 `._implementation/build_datacard.py`에 해당하는 `.build_datacard`를 찾지만 실제 파일은 상위 [autonomous_allhad/gnn_lowdm/build_datacard.py](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/gnn_lowdm/build_datacard.py>)다. fallback `from build_datacard`도 repository-root의 공개 명령 실행에서 실패했다.

@@ -6,6 +6,7 @@ from ._implementation.cli import dispatch
 
 
 COMMANDS = {
+    "sr": ("autonomous_allhad.gnn_lowdm._implementation.plot_lowdm30_sr_categories", "plot the adopted 30-bin SR categories"),
     "training-curves": ("autonomous_allhad.gnn_lowdm._implementation.supplementary_plots:main_training_curves", "plot train/validation loss, accuracy, and AUC"),
     "roc": ("autonomous_allhad.gnn_lowdm._implementation.supplementary_plots:main_roc", "plot independent-test ROC curves and AUC"),
     "shap": ("autonomous_allhad.gnn_lowdm._implementation.supplementary_plots:main_shap", "plot global-feature SHAP importance and beeswarm"),
