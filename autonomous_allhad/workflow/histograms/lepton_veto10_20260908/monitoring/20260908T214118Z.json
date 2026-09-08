@@ -1,0 +1,135 @@
+{
+  "time_utc": "2026-09-08T21:49:45Z",
+  "heartbeat_time_utc": "2026-09-08T21:41:18Z",
+  "limits_validated": 924,
+  "impact_jobs": {
+    "r1": 1111237,
+    "r0_diagnostic": 1112614
+  },
+  "queue": {
+    "running": [
+      1111237
+    ],
+    "idle": [
+      1112614
+    ],
+    "held": [
+      1111238,
+      1112612,
+      1112613
+    ]
+  },
+  "r1": {
+    "root_files": 735,
+    "finite_three_entry_roots": 711,
+    "incomplete_finished_roots": 20,
+    "one_entry_roots": 19,
+    "two_entry_roots": 1,
+    "active_fit_files": 4,
+    "not_yet_generated": 0,
+    "three_entry_autoMCStats": 555,
+    "three_entry_other": 156
+  },
+  "r1_checkpoint": {
+    "nuisance_root_count": 711,
+    "sha256sum_sorted_lines_sha256": "a2be865013048fbd34e49a816db98261d2f7a9614f69c5117de39de20a04165e",
+    "observed_at_utc": "2026-09-08T21:49:45Z"
+  },
+  "r0_failed_strategy2": {
+    "cluster": 1112613,
+    "job_status": 5,
+    "mode": "explicit_missing_nuisance_fits_before_collection",
+    "expected_missing_nuisances": 2,
+    "minimizer_strategy": 2,
+    "robust_fit": 1,
+    "signal_strength_range": [
+      -20,
+      20
+    ],
+    "expect_signal": 0,
+    "runner_snapshot": "impact_code_recovery_strategy2_v2/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+    "runner_sha256": "620b3e86f7b99e893f62f515c70f57b5b6cb57ba20c8c088941750de7dff64a6",
+    "canonical_code_commit": "d68d5791",
+    "submission_file": "combined/T2tt/impact_recovery_r0_strategy2_v2/impact_r0_eossubmit.sub",
+    "submission_sha256": "f9b71c12386783042e1932b86225725eca1ecb336014124b6736ffd9d3c0c3c5",
+    "resume_source": "combined/T2tt/impact_mStop1200_mLSP500_r0/work",
+    "card_sha256": "e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1",
+    "workspace_sha256": "fec2790a46d714e92d3a09dfa2f768cba48dd0daf4925ea580cc7dc945d4dceb",
+    "initial_fit_sha256": "7b898069a83365946cd1f0850139131ead856a37113ce3c2e6236c8ede554f6e",
+    "proxy_seconds_before_submission": 596948,
+    "voms_seconds_before_submission": 568148,
+    "submitted_request_cpus": 2,
+    "effective_request_cpus": 6,
+    "submitted_memory_mb": 16000,
+    "effective_memory_mb": 18000,
+    "fit_parallel": 2,
+    "max_runtime_seconds": 43200,
+    "submitted_held_then_verified_and_released": true,
+    "server_injected_home_removed_before_release": true,
+    "on_exit_hold": "(ExitBySignal == True) || (ExitCode != 0)",
+    "physics_changed": false,
+    "focused_tests_passed": 6,
+    "exit_code": 1,
+    "failed_at_utc": "2026-09-08T21:31:01Z",
+    "failure_stage": "per_nuisance_initial_minimization",
+    "failure": "MultiDimFit failed for both named parameters; zero-entry limit trees",
+    "runtime_and_resume_checksums_passed": true,
+    "failed_nuisance_root_entries": {
+      "CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin2_2024": 0,
+      "CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin1_2024": 0
+    },
+    "completed_roots_preserved": 733,
+    "underlying_minimizer_failure_reason": "not identified; verbose diagnostic queued"
+  },
+  "r0_diagnostic": {
+    "cluster": 1112614,
+    "job_status": 1,
+    "mode": "same_two_missing_fits_same_strategy_and_model_with_verbose_minimizer_log",
+    "expected_missing_nuisances": 2,
+    "minimizer_strategy": 2,
+    "robust_fit": 1,
+    "signal_strength_range": [
+      -20,
+      20
+    ],
+    "expect_signal": 0,
+    "runner_snapshot": "impact_code_diagnostic/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+    "runner_sha256": "0b3ede3ca87b3f9eee42b7997a9806f5f132dee4eb25ab306b1306fe0b0f528a",
+    "canonical_code_commit": "4a129908",
+    "submission_file": "combined/T2tt/impact_diagnostic_r0_strategy2/impact_r0_eossubmit.sub",
+    "submission_sha256": "bcb4ef37509dfa8aa7c0657741e93e134e5a59508268a524d2b3d3ad7ddb9dfe",
+    "resume_source": "combined/T2tt/impact_mStop1200_mLSP500_r0/work",
+    "card_sha256": "e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1",
+    "workspace_sha256": "fec2790a46d714e92d3a09dfa2f768cba48dd0daf4925ea580cc7dc945d4dceb",
+    "initial_fit_sha256": "7b898069a83365946cd1f0850139131ead856a37113ce3c2e6236c8ede554f6e",
+    "proxy_seconds_before_submission": 595373,
+    "voms_seconds_before_submission": 566573,
+    "submitted_request_cpus": 2,
+    "effective_request_cpus": 6,
+    "submitted_memory_mb": 16000,
+    "effective_memory_mb": 18000,
+    "fit_parallel": 2,
+    "max_runtime_seconds": 43200,
+    "submitted_held_then_verified_and_released": true,
+    "server_injected_home_removed_before_release": true,
+    "on_exit_hold": "(ExitBySignal == True) || (ExitCode != 0)",
+    "physics_changed": false,
+    "focused_tests_passed": 11,
+    "exit_code": null,
+    "failed_at_utc": null,
+    "failure_stage": null,
+    "failure": null,
+    "runtime_and_resume_checksums_passed": true,
+    "completed_roots_preserved": 733,
+    "underlying_minimizer_failure_reason": "not identified; verbose diagnostic queued",
+    "status": "queued",
+    "verbosity": 3
+  },
+  "source_commit": "4a129908",
+  "focused_tests_passed": 11,
+  "healthy_job_restarts": 0,
+  "new_submissions": 1,
+  "root_check_scope": "3 entries and finite r/parameter values; not a full convergence/coverage certification",
+  "physics_changed": false,
+  "intermediate_root_access": false
+}
