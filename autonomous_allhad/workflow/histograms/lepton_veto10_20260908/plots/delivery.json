@@ -1,0 +1,14 @@
+{
+  "pdf": "cr_sr_plots_2024_2025.pdf",
+  "pdf_pages": 242,
+  "pdf_sha256": "861c3734ea6b96cb044cd8c9d4eedb0d3b74f0f664b0f9a5244ca76abe65fd0e",
+  "zip": "cr_sr_plots_2024_2025.zip",
+  "zip_files": 513,
+  "zip_sha256": "c0b86a9a9c8de71d65a2b06e0d6e0ed7d6ab477f7c965fb592fc9a15a0475ae4",
+  "validation": {
+    "zip_crc_passed": true,
+    "pdf_all_242_rendered_pages_pixel_identical_to_individual_pdf": true,
+    "pdf_all_page_text_matches": true
+  },
+  "source_manifest": "manifest.json"
+}

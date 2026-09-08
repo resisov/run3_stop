@@ -1,0 +1,285 @@
+{
+  "status": "complete",
+  "plots": [
+    {
+      "status": "complete",
+      "name": "highdm73_sr_2024",
+      "png": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/2024/sr/highdm73_sr_2024.png",
+      "pdf": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/2024/sr/highdm73_sr_2024.pdf",
+      "bins": 73,
+      "labels": [
+        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}=0$\n$N_{res}=1$",
+        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}=0$\n$N_{res}\\geq2$",
+        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}\\geq1$\n$N_{res}=0$",
+        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}\\geq1$\n$N_{res}\\geq1$",
+        "$N_{b}\\geq1$\n$N_{t}\\geq1$, $N_{W}=0$\n$N_{res}\\geq1$",
+        "$N_{b}\\geq1$\n$N_{t}\\geq1$, $N_{W}\\geq1$\n$N_{res}\\geq1$",
+        "$N_{b}=1$\n$N_{t}\\geq1$, $N_{W}=0$\n$N_{res}=0$",
+        "$N_{b}=1$\n$N_{t}\\geq1$, $N_{W}\\geq1$\n$N_{res}=0$",
+        "$N_{b}=2$\n$N_{t}=1$, $N_{W}=0$\n$N_{res}=0$",
+        "$N_{b}=2$\n$N_{t}=1$, $N_{W}=1$\n$N_{res}=0$",
+        "$N_{b}=2$\n$N_{t}\\geq2$, $N_{W}=0$\n$N_{res}=0$",
+        "$N_{b}\\geq3$\n$N_{t}=1$, $N_{W}=0$\n$N_{res}=0$",
+        "$N_{b}\\geq3$\n$N_{t}=1,2$\n$N_{W}=1,0$; $N_{res}=0$"
+      ],
+      "signals": [
+        "mStop1000_mLSP1",
+        "mStop1200_mLSP1"
+      ],
+      "legend_yields_displayed": false,
+      "unit_area": false,
+      "unit_area_audit": null,
+      "lower_panel": "signal_significance",
+      "lower_panel_ylim": [
+        0.0,
+        5.0
+      ],
+      "main_panel_ylim": [
+        0.03,
+        2122723.220775129
+      ],
+      "significance_definition": "S/sqrt(B)",
+      "dropped_input_bins_1based": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "years": [
+        "2024"
+      ],
+      "source": "current datacard templates and rateParam initial values",
+      "sr_data_blinded": true,
+      "postfit": false
+    },
+    {
+      "status": "complete",
+      "name": "lowdm30_sr_2024",
+      "png": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/2024/sr/lowdm30_sr_2024.png",
+      "pdf": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/2024/sr/lowdm30_sr_2024.pdf",
+      "bins": 30,
+      "labels": [
+        "$N_b=1$\n$N_{ISR}=0$",
+        "$N_b=1$\n$N_{ISR}=1$",
+        "$N_b=1$\n$N_{ISR}\\geq2$",
+        "$N_b\\geq2$\n$N_{ISR}=0$",
+        "$N_b\\geq2$\n$N_{ISR}=1$",
+        "$N_b\\geq2$\n$N_{ISR}\\geq2$"
+      ],
+      "signals": [
+        "mStop600_mLSP400",
+        "mStop1000_mLSP800"
+      ],
+      "legend_yields_displayed": false,
+      "unit_area": false,
+      "unit_area_audit": null,
+      "lower_panel": "signal_significance",
+      "lower_panel_ylim": [
+        0.0,
+        1.0
+      ],
+      "main_panel_ylim": [
+        0.03,
+        34303129.77741041
+      ],
+      "significance_definition": "S/sqrt(B)",
+      "dropped_input_bins_1based": [],
+      "years": [
+        "2024"
+      ],
+      "source": "current datacard templates and rateParam initial values",
+      "sr_data_blinded": true,
+      "postfit": false
+    },
+    {
+      "status": "complete",
+      "name": "highdm73_sr_2025",
+      "png": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/2025/sr/highdm73_sr_2025.png",
+      "pdf": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/2025/sr/highdm73_sr_2025.pdf",
+      "bins": 73,
+      "labels": [
+        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}=0$\n$N_{res}=1$",
+        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}=0$\n$N_{res}\\geq2$",
+        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}\\geq1$\n$N_{res}=0$",
+        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}\\geq1$\n$N_{res}\\geq1$",
+        "$N_{b}\\geq1$\n$N_{t}\\geq1$, $N_{W}=0$\n$N_{res}\\geq1$",
+        "$N_{b}\\geq1$\n$N_{t}\\geq1$, $N_{W}\\geq1$\n$N_{res}\\geq1$",
+        "$N_{b}=1$\n$N_{t}\\geq1$, $N_{W}=0$\n$N_{res}=0$",
+        "$N_{b}=1$\n$N_{t}\\geq1$, $N_{W}\\geq1$\n$N_{res}=0$",
+        "$N_{b}=2$\n$N_{t}=1$, $N_{W}=0$\n$N_{res}=0$",
+        "$N_{b}=2$\n$N_{t}=1$, $N_{W}=1$\n$N_{res}=0$",
+        "$N_{b}=2$\n$N_{t}\\geq2$, $N_{W}=0$\n$N_{res}=0$",
+        "$N_{b}\\geq3$\n$N_{t}=1$, $N_{W}=0$\n$N_{res}=0$",
+        "$N_{b}\\geq3$\n$N_{t}=1,2$\n$N_{W}=1,0$; $N_{res}=0$"
+      ],
+      "signals": [
+        "mStop1000_mLSP1",
+        "mStop1200_mLSP1"
+      ],
+      "legend_yields_displayed": false,
+      "unit_area": false,
+      "unit_area_audit": null,
+      "lower_panel": "signal_significance",
+      "lower_panel_ylim": [
+        0.0,
+        5.0
+      ],
+      "main_panel_ylim": [
+        0.03,
+        2047520.0070029204
+      ],
+      "significance_definition": "S/sqrt(B)",
+      "dropped_input_bins_1based": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "years": [
+        "2025"
+      ],
+      "source": "current datacard templates and rateParam initial values",
+      "sr_data_blinded": true,
+      "postfit": false
+    },
+    {
+      "status": "complete",
+      "name": "lowdm30_sr_2025",
+      "png": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/2025/sr/lowdm30_sr_2025.png",
+      "pdf": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/2025/sr/lowdm30_sr_2025.pdf",
+      "bins": 30,
+      "labels": [
+        "$N_b=1$\n$N_{ISR}=0$",
+        "$N_b=1$\n$N_{ISR}=1$",
+        "$N_b=1$\n$N_{ISR}\\geq2$",
+        "$N_b\\geq2$\n$N_{ISR}=0$",
+        "$N_b\\geq2$\n$N_{ISR}=1$",
+        "$N_b\\geq2$\n$N_{ISR}\\geq2$"
+      ],
+      "signals": [
+        "mStop600_mLSP400",
+        "mStop1000_mLSP800"
+      ],
+      "legend_yields_displayed": false,
+      "unit_area": false,
+      "unit_area_audit": null,
+      "lower_panel": "signal_significance",
+      "lower_panel_ylim": [
+        0.0,
+        1.0
+      ],
+      "main_panel_ylim": [
+        0.03,
+        33518083.455282748
+      ],
+      "significance_definition": "S/sqrt(B)",
+      "dropped_input_bins_1based": [],
+      "years": [
+        "2025"
+      ],
+      "source": "current datacard templates and rateParam initial values",
+      "sr_data_blinded": true,
+      "postfit": false
+    },
+    {
+      "status": "complete",
+      "name": "highdm73_sr_2024_2025",
+      "png": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/2024_2025/sr/highdm73_sr_2024_2025.png",
+      "pdf": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/2024_2025/sr/highdm73_sr_2024_2025.pdf",
+      "bins": 73,
+      "labels": [
+        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}=0$\n$N_{res}=1$",
+        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}=0$\n$N_{res}\\geq2$",
+        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}\\geq1$\n$N_{res}=0$",
+        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}\\geq1$\n$N_{res}\\geq1$",
+        "$N_{b}\\geq1$\n$N_{t}\\geq1$, $N_{W}=0$\n$N_{res}\\geq1$",
+        "$N_{b}\\geq1$\n$N_{t}\\geq1$, $N_{W}\\geq1$\n$N_{res}\\geq1$",
+        "$N_{b}=1$\n$N_{t}\\geq1$, $N_{W}=0$\n$N_{res}=0$",
+        "$N_{b}=1$\n$N_{t}\\geq1$, $N_{W}\\geq1$\n$N_{res}=0$",
+        "$N_{b}=2$\n$N_{t}=1$, $N_{W}=0$\n$N_{res}=0$",
+        "$N_{b}=2$\n$N_{t}=1$, $N_{W}=1$\n$N_{res}=0$",
+        "$N_{b}=2$\n$N_{t}\\geq2$, $N_{W}=0$\n$N_{res}=0$",
+        "$N_{b}\\geq3$\n$N_{t}=1$, $N_{W}=0$\n$N_{res}=0$",
+        "$N_{b}\\geq3$\n$N_{t}=1,2$\n$N_{W}=1,0$; $N_{res}=0$"
+      ],
+      "signals": [
+        "mStop1000_mLSP1",
+        "mStop1200_mLSP1"
+      ],
+      "legend_yields_displayed": false,
+      "unit_area": false,
+      "unit_area_audit": null,
+      "lower_panel": "signal_significance",
+      "lower_panel_ylim": [
+        0.0,
+        5.0
+      ],
+      "main_panel_ylim": [
+        0.03,
+        4160677.5732929683
+      ],
+      "significance_definition": "S/sqrt(B)",
+      "dropped_input_bins_1based": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "years": [
+        "2024",
+        "2025"
+      ],
+      "source": "current datacard templates and rateParam initial values",
+      "sr_data_blinded": true,
+      "postfit": false
+    },
+    {
+      "status": "complete",
+      "name": "lowdm30_sr_2024_2025",
+      "png": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/2024_2025/sr/lowdm30_sr_2024_2025.png",
+      "pdf": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/2024_2025/sr/lowdm30_sr_2024_2025.pdf",
+      "bins": 30,
+      "labels": [
+        "$N_b=1$\n$N_{ISR}=0$",
+        "$N_b=1$\n$N_{ISR}=1$",
+        "$N_b=1$\n$N_{ISR}\\geq2$",
+        "$N_b\\geq2$\n$N_{ISR}=0$",
+        "$N_b\\geq2$\n$N_{ISR}=1$",
+        "$N_b\\geq2$\n$N_{ISR}\\geq2$"
+      ],
+      "signals": [
+        "mStop600_mLSP400",
+        "mStop1000_mLSP800"
+      ],
+      "legend_yields_displayed": false,
+      "unit_area": false,
+      "unit_area_audit": null,
+      "lower_panel": "signal_significance",
+      "lower_panel_ylim": [
+        0.0,
+        1.0
+      ],
+      "main_panel_ylim": [
+        0.03,
+        67155709.29930523
+      ],
+      "significance_definition": "S/sqrt(B)",
+      "dropped_input_bins_1based": [],
+      "years": [
+        "2024",
+        "2025"
+      ],
+      "source": "current datacard templates and rateParam initial values",
+      "sr_data_blinded": true,
+      "postfit": false
+    }
+  ],
+  "uncertainty": "MC statistical only, rateParam initial values applied to yields and variances",
+  "missing_previous_benchmark": "Previous T2tt 800,650 and 1000,850 absent from current grid; display available 600,400 and 1000,800"
+}

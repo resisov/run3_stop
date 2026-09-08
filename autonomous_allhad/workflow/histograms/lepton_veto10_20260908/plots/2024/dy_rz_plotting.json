@@ -1,0 +1,53 @@
+{
+  "dy_rz": {
+    "status": "complete",
+    "source": "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2024",
+    "source_sha256": {
+      "rz_high.json": "f7e1b68b067b82ec0e244b774036d65b9e034267b065351c8151767de5c9ff8f",
+      "rz_low.json": "662193bbf086c1c77a7ce34c414e824b4e54471f22c4af93ce3878a5a90f9f59"
+    },
+    "factor_policy": "channel-specific measured RZ(Nb); exact on explicit Nb axes, DY-yield-weighted effective RZ for inclusive physical distributions",
+    "channels": {
+      "DY2E": {
+        "highdm": {
+          "Nb1": 0.8331329151620448,
+          "Nb2plus": 0.7029683081154766,
+          "effective": 0.7951680943699765,
+          "dy_yields_for_effective": {
+            "Nb1": 308.31234684460765,
+            "Nb2plus": 126.95282138320829
+          }
+        },
+        "lowdm": {
+          "Nb1": 0.606480829265619,
+          "Nb2plus": 0.6675302706757165,
+          "effective": 0.6143447697663387,
+          "dy_yields_for_effective": {
+            "Nb1": 4166.591447135131,
+            "Nb2plus": 616.0669105459392
+          }
+        }
+      },
+      "DY2M": {
+        "highdm": {
+          "Nb1": 0.7086530953617859,
+          "Nb2plus": 0.8522209777267429,
+          "effective": 0.7424299077060601,
+          "dy_yields_for_effective": {
+            "Nb1": 451.1317385960541,
+            "Nb2plus": 138.7889932599672
+          }
+        },
+        "lowdm": {
+          "Nb1": 0.598269341820992,
+          "Nb2plus": 0.6488158845219634,
+          "effective": 0.6052266709199328,
+          "dy_yields_for_effective": {
+            "Nb1": 5301.416936590999,
+            "Nb2plus": 846.1658119210447
+          }
+        }
+      }
+    }
+  }
+}
