@@ -196,6 +196,8 @@ def write_condor_impact_submission(
     expect_signal: int,
     runtime_archive: Path,
     runtime_checksum: str,
+    extra_environment: dict[str, str] | None = None,
+    cpus: int = 4,
 ) -> Path:
     match = re.fullmatch(r"mStop([0-9]+)_mLSP([0-9]+)", mass_key)
     if not match or int(match.group(2)) != 500:
@@ -207,6 +209,22 @@ def write_condor_impact_submission(
         raise FileNotFoundError(f"impact runner is missing: {impact_runner}")
     if expect_signal not in {0, 1}:
         raise ValueError(f"expect_signal must be 0 or 1, got {expect_signal}")
+    if not isinstance(cpus, int) or cpus < 1:
+        raise ValueError("cpus must be a positive integer")
+    environment = {
+        "IMPACT_EXPECT_SIGNAL": str(expect_signal),
+        "IMPACT_R_MIN": "-20" if expect_signal == 0 else "0",
+        "IMPACT_R_MAX": "20",
+        "COMBINE_RUNTIME_SHA256": runtime_checksum,
+        "COMBINE_RUNTIME_ARCHIVE": runtime_archive.name,
+    }
+    for name, value in (extra_environment or {}).items():
+        if name in environment or not re.fullmatch(r"[A-Z][A-Z0-9_]*", name):
+            raise ValueError(f"invalid or reserved impact environment key: {name}")
+        if not isinstance(value, str) or not value or re.search(r'[\s"\x27]', value):
+            raise ValueError(f"invalid impact environment value for {name}")
+        environment[name] = value
+    environment_text = " ".join(f"{name}={value}" for name, value in environment.items())
     fit_label = f"r{expect_signal}"
     impact_dir = output_dir / f"impact_{mass_key}_{fit_label}"
     logs = impact_dir / "condor_logs"
@@ -228,8 +246,8 @@ transfer_input_files = {stable_path(runtime_archive)}
 transfer_output_files = ""
 use_x509userproxy = true
 x509userproxy = {stable_path(DEFAULT_X509_PROXY)}
-environment = "IMPACT_EXPECT_SIGNAL={expect_signal} IMPACT_R_MIN={'-20' if expect_signal == 0 else '0'} IMPACT_R_MAX=20 COMBINE_RUNTIME_SHA256={runtime_checksum} COMBINE_RUNTIME_ARCHIVE={runtime_archive.name}"
-request_cpus = 4
+environment = "{environment_text}"
+request_cpus = {cpus}
 request_memory = 16000MB
 request_disk = 8000MB
 +MaxRuntime = 43200

@@ -63,3 +63,21 @@ combineTool.py() {
         assert calls.count("--doFits") == (0 if mode == "complete" else 1)
     if mode == "fail":
         assert "Missing inputs:" in (result / "impacts_collect.log").read_text()
+
+
+def test_existing_submission_writer_records_resume_options(tmp_path, monkeypatch):
+    monkeypatch.syspath_prepend(str(RUNNER.parent))
+    from build_combined_year_datacards import write_condor_impact_submission
+
+    submit = write_condor_impact_submission(
+        str(tmp_path / "card.txt"), tmp_path / "output", RUNNER,
+        "mStop1200_mLSP500", "NPS26012_impact_recovery", 0,
+        tmp_path / "combine_cmssw_14_1_0_pre4.tgz", "a" * 64,
+        extra_environment={"IMPACT_RESUME_DIR": "/eos/example/work", "IMPACT_MINIMIZER_STRATEGY": "2"},
+        cpus=2,
+    )
+    text = submit.read_text()
+    assert "IMPACT_R_MIN=-20 IMPACT_R_MAX=20" in text
+    assert "IMPACT_RESUME_DIR=/eos/example/work" in text
+    assert "IMPACT_MINIMIZER_STRATEGY=2" in text
+    assert "request_cpus = 2" in text
