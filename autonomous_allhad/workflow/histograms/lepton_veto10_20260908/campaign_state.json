@@ -1,5 +1,5 @@
 {
-  "status": "main_recovery_running_both_gnn_merged",
+  "status": "main_2024_running_2025_merging_both_gnn_merged",
   "code_commit": "40434055",
   "main_builder_sha256": "b1cb425ca92222bf52ddfe85911c8cb73870d7d2c3a7873f269a67d0910bc06b",
   "main_recovery": {
@@ -71,8 +71,9 @@
   "monitor_interval_minutes": 30,
   "realtime_monitor_request": "Superseded by latest user instruction: 정상진행중이니 30분단위모니터링해라. Active full production uses a 30-minute heartbeat; unchanged/non-actionable state remains quiet.",
   "last_pilot_poll_utc": "2026-09-07T23:58:48Z",
-  "last_full_run_poll_utc": "2026-09-08T00:53:24Z",
-  "main_chunk_counts_at_last_poll": {"2024": 86, "2025": 209},
+  "last_full_run_poll_utc": "2026-09-08T05:54:42Z",
+  "main_chunk_counts_at_last_poll": {"2024": 573, "2025": 839},
+  "main_stages_at_last_poll": {"2024": "processing: 23 chunks remain", "2025": "all 839 chunks produced; summary_validation reached 839/839; section partitions merging; final output not yet present"},
   "main_traceback_log_counts_at_last_poll": {"2024": 0, "2025": 0},
   "pilot_monitor_interval_minutes": 5,
   "full_run_monitor_interval_minutes": 30,
