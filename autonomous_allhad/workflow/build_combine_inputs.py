@@ -52,6 +52,7 @@ RARE_PROCESSES = ("VV_VVV", "DY", "PhotonJet")
 CONTROLLED_PROCESSES = ("Top", "WtoLNu", "QCD", "Zto2Nu")
 HIGH_SCHEME = "highdm_search_bins"
 LOW_SCHEME = "cat7_SR_lowDeltaM"
+GNN_SCHEME = "lowdm_gnn30"
 RZ_CATEGORIES = (
     "highdm_Nb1",
     "highdm_Nb2plus",
@@ -163,6 +164,9 @@ def enforce_downstream_input_boundary(args: argparse.Namespace) -> None:
             for index, path in enumerate(args.signal_hists)
         }
     )
+    for label in ("gnn_hists", "gnn_config", "canonical_manifest"):
+        if getattr(args, label, None) is not None:
+            inspected[label] = getattr(args, label)
     for label, path in inspected.items():
         lowered = str(path).lower()
         if any(token in lowered for token in forbidden):
@@ -2114,6 +2118,217 @@ def build_channels(
     return finalize_channels(channels, bin_map)
 
 
+def gnn_signal_histograms(
+    path: Path, topology: str, config: dict[str, Any], only: list[str] | None,
+) -> dict[str, Any]:
+    """Extract SR signal score templates from the canonical indented JSON."""
+    labels = config["sr_binning"]["category_labels"]
+    offsets = {label: index * 5 for index, label in enumerate(labels)}
+    headers = re.compile(rb'^( {2}| {4}| {6}| {8}| {10})"([^"\\\n]+)": \{', re.M)
+    sample_pattern = re.compile(rf"{re.escape(topology)}_(mStop\d+_mLSP\d+)")
+    output: dict[str, Any] = {}
+    context: dict[int, str] = {}
+    seen: set[tuple[str, str, str]] = set()
+    with path.open("rb") as stream, mmap.mmap(stream.fileno(), 0, access=mmap.ACCESS_READ) as data:
+        if data[:2] != b"{\n":
+            raise ValueError("GNN histogram JSON must use canonical indent=2")
+        for match in headers.finditer(data):
+            depth = len(match[1]) // 2
+            context[depth] = match[2].decode()
+            for level in list(context):
+                if level > depth:
+                    del context[level]
+            if depth != 5 or context.get(1) != "histograms" or context.get(3) != "SR":
+                continue
+            variation, category, sample = (context[level] for level in (2, 4, 5))
+            mass = sample_pattern.fullmatch(sample)
+            if not mass or (only and mass.group(1) not in only):
+                continue
+            if category not in offsets:
+                raise ValueError(f"unknown GNN signal category: {category}")
+            if (variation, category, sample) in seen:
+                raise ValueError(f"duplicate GNN signal: {variation}/{category}/{sample}")
+            seen.add((variation, category, sample))
+            start = match.end() - 1
+            end = data.find(b"\n          }", start)
+            if end < 0:
+                raise ValueError("unclosed GNN signal object")
+            record = json.loads(data[start:end + len(b"\n          }")])["gnn_score"]
+            target = output.setdefault(sample, {}).setdefault(
+                variation, {field: [0.0] * 30 for field in ("sumw", "sumw2", "entries")}
+            )
+            offset = offsets[category]
+            for field in target:
+                values = np.asarray(record[field], dtype=float)
+                if values.shape != (5,) or not np.isfinite(values).all():
+                    raise ValueError(f"invalid GNN signal {sample}/{variation}/{field}")
+                if field != "sumw" and np.any(values < 0):
+                    raise ValueError(f"negative GNN signal {field}")
+                target[field][offset:offset + 5] = values.tolist()
+    if not output or any("nominal" not in variations for variations in output.values()):
+        raise ValueError("missing nominal GNN signal templates")
+    return output
+
+
+def validate_gnn_card_inputs(
+    args: argparse.Namespace, exact: dict[str, Any], config: dict[str, Any],
+    factors: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
+    from gnn_background_histograms import require_gnn_mapping
+
+    manifest = read_json(args.canonical_manifest)
+    if manifest.get("status") != "canonical" or manifest.get("input_stage") != "permanently_closed_for_2024_and_2025":
+        raise ValueError("GNN cards require promoted, closed-stage canonical inputs")
+    if manifest.get("electron_veto_pt_min_gev") != 10 or manifest.get("muon_veto_pt_min_gev") != 10:
+        raise ValueError("GNN cards require the adopted 10 GeV veto")
+    if args.drop_highdm_leading_bins != 6 or manifest["highdm"]["retained_bins"] != 73:
+        raise ValueError("combined GNN cards require High-dM 79 minus six overlap bins")
+    year = manifest["years"][CAMPAIGN_YEAR]
+    mapping = require_gnn_mapping(exact)
+    if config["sr_binning"] != mapping["sr_binning"] or config["cr_binning"] != mapping["cr_binning"]:
+        raise ValueError("GNN SR/CR binning differs from measured factors")
+    expected = {"hists": year["main"]["sha256"], "gnn_hists": year["gnn"]["sha256"],
+                "gnn_config": manifest["lowdm"]["configuration_sha256"]}
+    for key, value in expected.items():
+        if sha256(getattr(args, key)) != value:
+            raise ValueError(f"canonical checksum mismatch: {key}")
+    for key, payload in factors.items():
+        provenance = payload.get("provenance") or {}
+        if provenance.get("hist_input_sha256") != year["background_estimation"]["sha256"]:
+            raise ValueError(f"factor does not originate from canonical compact histogram: {key}")
+        if str(provenance.get("campaign_year")) != CAMPAIGN_YEAR:
+            raise ValueError(f"factor year mismatch: {key}")
+    if mapping["provenance"]["sgamma_input"]["sha256"] != sha256(args.sgamma):
+        raise ValueError("TF and Sgamma measurement inputs differ")
+    if mapping["provenance"]["gnn_input"]["sha256"] != expected["gnn_hists"]:
+        raise ValueError("GNN signal and background histogram inputs differ")
+    forbidden = ("veto_electron_5to10", "loose_muon_5to10")
+    if any(any(source in name for source in forbidden) for name in mapping["histograms"]):
+        raise ValueError("excluded low-pT lepton templates in GNN input")
+    return manifest
+
+
+def build_gnn_channels(
+    source: dict[str, Any], sgamma: dict[str, Any],
+    rz_covariance: dict[str, Any], double_ratio: dict[str, Any],
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Apply the existing CR/RZ/Sgamma model to frozen GNN score templates."""
+    from gnn_background_histograms import nb_group, parent, require_gnn_mapping
+
+    mapping = require_gnn_mapping(source)
+    histograms = mapping["histograms"]
+    sr = mapping["sr_binning"]
+    cr = mapping["cr_binning"]
+    ut_edges = np.asarray(mapping["ut_edges"], dtype=float)
+    if not np.array_equal(ut_edges, [250, 300, 350, 400, 500, 650, 800, 1000, 1500]):
+        raise ValueError("unsupported canonical GNN x UT axis")
+    ut_groups = [[0], [1], [2], [3], [4, 5, 6, 7]]
+    closure_edges = [250., 300., 350., 400., 500., float("inf")]
+    channels: list[dict[str, Any]] = []
+    bin_map: list[dict[str, Any]] = []
+    cache: dict[tuple[str, str, int | None], dict[str, Any]] = {}
+
+    def records(region: str, category: str, shape_bin: int | None = None) -> dict[str, Any]:
+        key = (region, category, shape_bin)
+        if key in cache:
+            return cache[key]
+        result: dict[str, Any] = {}
+        nominal_samples = histograms["nominal"][region][category]
+        for variation, regions in histograms.items():
+            samples = regions.get(region, {}).get(category, {})
+            for sample, nominal in nominal_samples.items():
+                if sample == "data_obs" and region == "SR":
+                    raise ValueError("SR observations are forbidden in GNN card input")
+                record = samples.get(sample, nominal)
+                leaf = {}
+                for field in ("sumw", "sumw2", "entries"):
+                    axis = "gnn_score" if shape_bin is None else "gnn_score_ut"
+                    values = np.asarray(record[axis][field], dtype=float)
+                    expected_shape = (5,) if shape_bin is None else (5, 8)
+                    if values.shape != expected_shape or not np.isfinite(values).all():
+                        raise ValueError(f"invalid GNN template {region}/{category}/{sample}/{variation}")
+                    if shape_bin is not None:
+                        values = values[:, ut_groups[shape_bin]].sum(axis=1)
+                    leaf[field] = values.tolist()
+                result.setdefault(sample, {})[variation] = leaf
+        cache[key] = result
+        return result
+
+    for region in (*HIGH_CONTROL_REGIONS, "SR"):
+        labels = sr["category_labels"] if region == "SR" else cr["category_labels"]
+        for category_index, category in enumerate(labels):
+            group, control_parent = nb_group(category), parent(category)
+            shape_values = [low_sgamma_value(sgamma, group, index) for index in range(5)]
+            qgamma = require_positive(sgamma["lowdm_families"][group]["Q"], f"Qgamma/{group}")
+            for score_bin in range(5):
+                source_bin = category_index * 5 + score_bin
+                channel = {
+                    "name": f"{region}_lowdm_gnn_{category}_bin{score_bin}",
+                    "kind": "lowdm_signal_searchbin" if region == "SR" else "lowdm_control",
+                    "regime": "lowdm", "region": region, "nb_group": group,
+                    "control_group": control_parent, "source_bin": source_bin,
+                    "backgrounds": {}, "rate_params": {}, "rate_initial": {},
+                    "signal_source": ("lowdm_gnn", source_bin) if region == "SR" else None,
+                    "observation": None if region == "SR" else float(records(region, category)["data_obs"]["nominal"]["sumw"][score_bin]),
+                    "extra_lnN": {},
+                }
+                for process in BACKGROUND_PROCESS_ORDER:
+                    split_shape = (region == "SR" and process == "Zto2Nu") or (region == "GCR" and process == "PhotonJet")
+                    for shape_bin in range(5) if split_shape else (None,):
+                        by_sample = records(region, category, shape_bin)
+                        nominal, _ = leaf_arrays(by_sample, process, "nominal", 5)
+                        if nominal[score_bin] < 0:
+                            controlled = (region == "SR" or split_shape
+                                          or (region == "LLCR" and process in ("Top", "WtoLNu"))
+                                          or (region == "QCDCR" and process == "QCD"))
+                            if controlled:
+                                raise ValueError(f"signed GNN controlled component: {region}/{category}/{process}/{score_bin}/{shape_bin}")
+                            channel.setdefault("negative_mc_treatment", []).append({
+                                "process": process, "input_sumw": float(nominal[score_bin]),
+                                "card_sumw": MIN_BIN, "policy": "existing_one_bin_background",
+                            })
+                        record = one_bin_background(by_sample, process, score_bin, 5)
+                        if record is None:
+                            continue
+                        component = process if shape_bin is None else f"{process}_{group}_u{shape_bin}"
+                        parameter, initial = None, 1.0
+                        if split_shape:
+                            scale = rz_value(rz_covariance, f"lowdm_{group}") if region == "SR" else qgamma
+                            record = scaled_record(record, scale)
+                            parameter = rate_parameter("sgamma_shape", "lowdm", group, shape_bin)
+                            initial = shape_values[shape_bin]
+                            if region == "SR":
+                                add_extra(channel, component, rz_nuisances(rz_covariance, f"lowdm_{group}"))
+                                name, delta, _ = closure_record(double_ratio, "lowdm", *closure_edges[shape_bin:shape_bin + 2])
+                                if delta > 0:
+                                    add_extra(channel, component, [{"name": name, "up": 1 + delta, "down": 1 / (1 + delta)}])
+                        elif process in ("Top", "WtoLNu") and region in ("SR", "LLCR"):
+                            parameter = rate_parameter("ll_norm", "lowdm", control_parent, "inclusive")
+                        elif process == "QCD" and region in ("SR", "QCDCR"):
+                            parameter = rate_parameter("qcd_norm", "lowdm", control_parent, "inclusive")
+                        channel["backgrounds"][component] = record
+                        if parameter is not None:
+                            channel["rate_params"][component] = parameter
+                            channel["rate_initial"][component] = initial
+                channels.append(channel)
+                if region == "SR":
+                    predicted = sum(float(record["nominal"][0]) * channel["rate_initial"][name]
+                                    for name, record in channel["backgrounds"].items() if name.startswith("Zto2Nu_"))
+                    target = mapping["zinv_projection"][category]["rz_sgamma"][score_bin]
+                    if not math.isclose(predicted, target, rel_tol=1e-9, abs_tol=1e-8):
+                        raise ValueError(f"GNN Z projection mismatch: {category}/{score_bin}")
+                    bin_map.append({"channel": channel["name"], "category": category,
+                                    "score_bin": score_bin, "score_edges": sr["edges_by_category"][category][score_bin:score_bin + 2],
+                                    "parent": control_parent, "source_bin_zero_based": source_bin})
+    scopes: dict[str, set[str]] = {}
+    for channel in channels:
+        for parameter in channel["rate_params"].values():
+            scopes.setdefault(parameter, set()).add("sr" if channel["region"] == "SR" else "cr")
+    if any(scope != {"sr", "cr"} for scope in scopes.values()):
+        raise ValueError("unmatched GNN CR/SR parameter; refusing to fix it silently")
+    return channels, bin_map
+
+
 def overwrite_observations(
     output_root: Path,
     channels: list[dict[str, Any]],
@@ -2155,7 +2370,8 @@ def signal_histogram(
     mass_key: str,
     topology: str,
 ) -> dict[str, Any]:
-    scheme = HIGH_SCHEME if regime == "highdm" else LOW_SCHEME
+    scheme = {"highdm": HIGH_SCHEME, "lowdm": LOW_SCHEME,
+              "lowdm_gnn": GNN_SCHEME}[regime]
     return (
         ((hists.get("search_bin_histograms") or {}).get(scheme) or {}).get(
             f"{topology}_{mass_key}"
@@ -2202,7 +2418,7 @@ def mass_points(
     topology: str,
 ) -> list[str]:
     selected: set[str] = set()
-    for scheme in (HIGH_SCHEME, LOW_SCHEME):
+    for scheme in (HIGH_SCHEME, LOW_SCHEME, GNN_SCHEME):
         samples = (hists.get("search_bin_histograms") or {}).get(scheme) or {}
         for sample, variations in samples.items():
             match = re.fullmatch(
@@ -2306,6 +2522,7 @@ def build_root(
                 "source_bins_zero_based",
                 "recoil_low",
                 "recoil_high",
+                "negative_mc_treatment",
             ):
                 if channel.get(field) is not None:
                     value = channel[field]
@@ -2714,6 +2931,9 @@ def main() -> int:
         ),
     )
     parser.add_argument("--hists-sha256")
+    parser.add_argument("--gnn-hists", type=Path)
+    parser.add_argument("--gnn-config", type=Path)
+    parser.add_argument("--canonical-manifest", type=Path)
     parser.add_argument("--campaign-year", choices=("2024", "2025"), required=True)
     parser.add_argument("--topology", choices=("T2tt", "T2bW", "T2tb"), required=True)
     parser.add_argument("--sgamma", type=Path, required=True)
@@ -2758,6 +2978,9 @@ def main() -> int:
     args = parser.parse_args()
 
     enforce_downstream_input_boundary(args)
+    if args.gnn_hists and (args.highdm_only or not args.gnn_config or not args.canonical_manifest):
+        raise SystemExit("--gnn-hists requires --gnn-config and --canonical-manifest, and excludes --highdm-only")
+    include_legacy_lowdm = not args.highdm_only and not args.gnn_hists
 
     CAMPAIGN_YEAR = str(args.campaign_year)
     NPS_LUMI_NAME = f"lumi_13p6TeV_{CAMPAIGN_YEAR}"
@@ -2777,12 +3000,16 @@ def main() -> int:
             for index, path in enumerate(args.signal_hists)
         }
     )
+    for label in ("gnn_hists", "gnn_config", "canonical_manifest"):
+        if getattr(args, label) is not None:
+            input_paths[label] = getattr(args, label)
     sgamma = read_json(args.sgamma)
     rz_high = read_json(args.rz_high)
     rz_low = read_json(args.rz_low)
     double_ratio = read_json(args.zgamma_double_ratio)
     physical_exact = read_json(args.exact_input)
     search_bin_configuration = read_json(args.search_bin_config)
+    gnn_config = read_json(args.gnn_config) if args.gnn_hists else None
     for label, payload in (
         ("Sgamma", sgamma),
         ("RZ high", rz_high),
@@ -2801,6 +3028,11 @@ def main() -> int:
         raise SystemExit(
             "search-bin configuration year does not match --campaign-year"
         )
+    if args.gnn_hists:
+        validate_gnn_card_inputs(args, physical_exact, gnn_config, {
+            "Sgamma": sgamma, "RZ high": rz_high, "RZ low": rz_low,
+            "double ratio": double_ratio, "TF": physical_exact,
+        })
 
     output_dir = args.output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -2808,7 +3040,7 @@ def main() -> int:
         args.hists,
         args.topology,
         args.signal_hists,
-        include_lowdm=not args.highdm_only,
+        include_lowdm=include_legacy_lowdm,
     )
     highdm_bin_projection = apply_configured_highdm_bin_merges(
         hists,
@@ -2830,9 +3062,9 @@ def main() -> int:
         hists["search_bin_histograms"][HIGH_SCHEME].update(
             projected_high_signals["samples"]
         )
-    if args.drop_highdm_leading_bins and not args.highdm_only:
+    if args.drop_highdm_leading_bins and include_legacy_lowdm:
         raise SystemExit(
-            "--drop-highdm-leading-bins requires --highdm-only"
+            "--drop-highdm-leading-bins requires --highdm-only or --gnn-hists"
         )
     highdm_bin_projection = drop_highdm_leading_bins(
         hists,
@@ -2852,8 +3084,20 @@ def main() -> int:
         sgamma,
         rz_covariance,
         double_ratio,
-        include_lowdm=not args.highdm_only,
+        include_lowdm=include_legacy_lowdm,
     )
+    if args.gnn_hists:
+        gnn_channels, gnn_bin_map = build_gnn_channels(
+            physical_exact, sgamma, rz_covariance, double_ratio
+        )
+        channels.extend(gnn_channels)
+        bin_map["lowdm"] = gnn_bin_map
+        channels, unmatched_gnn, bin_map, dropped_gnn = finalize_channels(channels, bin_map)
+        unmatched_rate_parameters.extend(unmatched_gnn)
+        dropped_empty_control_channels.extend(dropped_gnn)
+        hists["search_bin_histograms"][GNN_SCHEME] = gnn_signal_histograms(
+            args.gnn_hists, args.topology, gnn_config, args.only
+        )
     write_json(output_dir / "bin_map.json", bin_map)
     low_control_group_summary = [
         {
@@ -2870,7 +3114,7 @@ def main() -> int:
             "last_bin_open_ended": not np.isfinite(record["recoil_high"]),
         }
         for record in low_control_groups()
-    ] if not args.highdm_only else []
+    ] if include_legacy_lowdm else []
     masses = mass_points(
         hists,
         args.only,
@@ -2879,7 +3123,7 @@ def main() -> int:
     )
     if not masses:
         raise SystemExit("no signal mass points selected")
-    template_root = output_dir / f"highdm_{CAMPAIGN_YEAR}.root"
+    template_root = output_dir / ("templates.root" if args.gnn_hists else f"highdm_{CAMPAIGN_YEAR}.root")
     card_dir = output_dir / "cards"
     limit_dir = output_dir / "limits"
     runner = output_dir / "run_limits.sh"
@@ -2933,8 +3177,10 @@ def main() -> int:
             "highdm_bins": len(exact["highdm"]["search_bin_labels"]),
             "highdm_source_bins": highdm_bin_projection["source_bin_count"],
             "highdm_bin_projection": highdm_bin_projection,
-            "lowdm_bins": 0 if args.highdm_only else 34,
-            "lowdm_control_recoil_edges_gev": LOW_CONTROL_EDGES.tolist(),
+            "lowdm_bins": 30 if args.gnn_hists else 0 if args.highdm_only else 34,
+            "lowdm_control_recoil_edges_gev": LOW_CONTROL_EDGES.tolist() if include_legacy_lowdm else [],
+            "lowdm_gnn_sr_binning": gnn_config["sr_binning"] if gnn_config else None,
+            "lowdm_gnn_cr_binning": gnn_config["cr_binning"] if gnn_config else None,
             "lowdm_control_groups": low_control_group_summary,
             "signal_topology": args.topology,
             "dropped_empty_control_channels": dropped_empty_control_channels,
