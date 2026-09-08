@@ -183,6 +183,7 @@ def prepare_topw(args) -> int:
     arguments.write_text('\n'.join(rows) + '\n')
     submit = f'''universe = vanilla
 initialdir = {campaign}
+input = $(shard)
 executable = {wrapper}
 arguments = --topw {processor} $(name).json.gz
 getenv = False
