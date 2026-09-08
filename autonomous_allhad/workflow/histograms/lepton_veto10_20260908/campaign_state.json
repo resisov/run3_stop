@@ -1,5 +1,5 @@
 {
-  "status": "main_recovery_running_both_gnn_merges_submitted",
+  "status": "main_recovery_running_both_gnn_merged",
   "code_commit": "40434055",
   "main_builder_sha256": "b1cb425ca92222bf52ddfe85911c8cb73870d7d2c3a7873f269a67d0910bc06b",
   "main_recovery": {
@@ -26,6 +26,10 @@
   "full_production_submitted": true,
   "full_production_clusters": {"main": 1110787, "gnn": 1110785},
   "gnn_merge_clusters": {"2024": 1110789, "2025": 1110788},
+  "gnn_merge_results": {
+    "2024": {"cluster": 1110789, "exit_code": 0, "status": "complete", "partials": 240, "input_files_requested": 5954, "input_files_valid": 5954, "bad_files": [], "output_bytes": 1936076424, "exact_input_set_match": true, "veto10_blinding_gnn30_contract": "verified", "data_luminosity_coverage_complete": true, "canonical_promotion": "pending full histogram cross-validation"},
+    "2025": {"cluster": 1110788, "exit_code": 0, "status": "complete", "partials": 337, "input_files_requested": 8390, "input_files_valid": 8390, "bad_files": [], "output_bytes": 1684605720, "exact_input_set_match": true, "veto10_blinding_contract": "verified", "data_luminosity_coverage_complete": false, "source_bad_file_count": 11, "data_source_bad_file_count": 1, "canonical_promotion": "pending full histogram cross-validation"}
+  },
   "gnn_2024_premerge_validation": {"normal_exit_processes": 240, "expected_processes": 240, "partial_files": 240, "strict_merge_validation": "pending"},
   "gnn_2025_premerge_validation": {"normal_exit_processes": 337, "expected_processes": 337, "partial_files": 337, "strict_merge_validation": "pending"},
   "git_operational_state_publication": "User explicitly approved publishing campaign_state.json and validation.json to origin/codex/package-lowpt-tnp after the emailed path and metadata disclosure request.",
@@ -67,8 +71,9 @@
   "monitor_interval_minutes": 1,
   "realtime_monitor_request": "User: 재실행하고 리얼타임 모니터링해. Current active follow-up uses a 1-minute heartbeat; unchanged/non-actionable state remains quiet.",
   "last_pilot_poll_utc": "2026-09-07T23:58:48Z",
-  "last_full_run_poll_utc": "2026-09-08T00:24:13Z",
-  "main_chunk_counts_at_last_poll": {"2024": 8, "2025": 24},
+  "last_full_run_poll_utc": "2026-09-08T00:38:26Z",
+  "main_chunk_counts_at_last_poll": {"2024": 48, "2025": 115},
+  "main_traceback_log_counts_at_last_poll": {"2024": 0, "2025": 0},
   "pilot_monitor_interval_minutes": 5,
   "full_run_monitor_interval_minutes": 30,
   "last_identified_gnn_failures": {"cluster": 1110785, "processes": [528, 540], "cause": "OSError Errno 5 while importing EOS Python source", "recovery": "both released once with unchanged settings after source hash verification; output validation pending", "previous_released_processes": [35, 50, 91]},
