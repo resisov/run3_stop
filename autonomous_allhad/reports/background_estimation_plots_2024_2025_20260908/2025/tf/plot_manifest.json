@@ -2,8 +2,10 @@
   "status": "complete",
   "source": "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/tf/transfer_factors_2025_nb_recoil.json",
   "source_sha256": "86ee464c35a955531f12d674a4d8679fec0490692302fa204a240b78006be268",
-  "plotter_sha256": "ab0719f81c29d2171a545800dd0f02cd852e003aece93d5e13d0882bf456af75",
+  "plotter_sha256": "c46b7a046fcaff225adf5d395edcc2c23ab7a8ddce119a6bb473957b8d8ae357",
   "campaign_year": "2025",
+  "style_reference": "plot_measurement.py: photon trigger scale factor",
+  "style_source_sha256": "ecb2d3c9b2bf3457f1a183e2b02c5e476ea20a2bbd5514960801503ab8a086dc",
   "lowdm_plot_layout": "categories_overlaid",
   "factor_values_changed": false,
   "plots": [

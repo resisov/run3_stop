@@ -18,6 +18,10 @@ import mplhep as hep
 import numpy as np
 
 from gnn_background_histograms import require_gnn_mapping
+from plot_measurement import (
+    CMS_LABEL_FONT_SIZE, FIGURE_SIZE,
+    _apply_style as apply_photon_hlt_style,
+)
 
 
 hep.style.use("CMS")
@@ -58,16 +62,16 @@ PATHS = (
     },
 )
 HIGH_STYLES = {
-    "inclusive": ("o", "#E41A1C", "Inclusive"),
-    "Nb1": ("o", "#E41A1C", r"$N_b=1$"),
-    "Nb2plus": ("s", "#0057FF", r"$N_b\geq2$"),
-    "Nb2": ("s", "#0057FF", r"$N_b=2$"),
+    "inclusive": ("o", "#e31a1c", "Inclusive"),
+    "Nb1": ("o", "#e31a1c", r"$N_b=1$"),
+    "Nb2plus": ("s", "#1f78b4", r"$N_b\geq2$"),
+    "Nb2": ("s", "#1f78b4", r"$N_b=2$"),
     "Nb3plus": ("^", "#168B38", r"$N_b\geq3$"),
 }
 GNN_STYLES = {
     f"{nb}_{isr}": (marker, color, nb_label + ", " + isr_label)
-    for nb, color, nb_label in (("Nb1", "#FF0000", r"$N_b=1$"),
-                                ("Nb2plus", "#0000FF", r"$N_b\geq2$"))
+    for nb, color, nb_label in (("Nb1", "#e31a1c", r"$N_b=1$"),
+                                ("Nb2plus", "#1f78b4", r"$N_b\geq2$"))
     for isr, marker, isr_label in (("NISR0", "o", r"$N_{\mathrm{ISR}}=0$"),
                                    ("NISR1", "s", r"$N_{\mathrm{ISR}}=1$"),
                                    ("NISR2plus", "^", r"$N_{\mathrm{ISR}}\geq2$"))
@@ -180,7 +184,7 @@ def save_figure(fig: plt.Figure, stem: Path) -> list[str]:
         (".pdf", {}),
     ):
         path = stem.with_suffix(suffix)
-        fig.savefig(path, bbox_inches="tight", **kwargs)
+        fig.savefig(path, **kwargs)
         paths.append(str(path))
     plt.close(fig)
     return paths
@@ -199,7 +203,9 @@ def plot_highdm(
     ylabel: str = r"Transfer factor $N_{\mathrm{SR}}/N_{\mathrm{CR}}$",
     styles: dict[str, tuple[str, str, str]] | None = None,
 ) -> list[str]:
-    fig, axis = plt.subplots(figsize=(10.2, 10.2))
+    apply_photon_hlt_style()
+    fig, axis = plt.subplots(figsize=FIGURE_SIZE)
+    fig.subplots_adjust(left=0.16, right=0.96, bottom=0.14, top=0.88)
     used: list[dict[str, Any]] = []
     styles = HIGH_STYLES if styles is None else styles
     group_order = [group for group in styles if group in records]
@@ -222,11 +228,11 @@ def plot_highdm(
             fmt=marker,
             ls="none",
             color=color,
-            lw=2.5,
-            ms=9.5,
-            mew=1.5,
-            capsize=3.2,
+            lw=1.1,
+            ms=5.5,
+            capsize=2,
             label=label,
+            zorder=3,
         )
         used.append(record)
     set_tf_ylim(axis, used)
@@ -234,10 +240,9 @@ def plot_highdm(
         axis.set_ylim(0.0, axis.get_ylim()[1] * 1.25)
     axis.set_xlim(min(bounds), max(bounds))
     axis.set_xmargin(0)
-    axis.set_xlabel(xlabel, fontsize=30)
-    axis.set_ylabel(ylabel, fontsize=29)
-    axis.tick_params(labelsize=24)
-    axis.grid(alpha=0.16)
+    axis.set_xlabel(xlabel)
+    axis.set_ylabel(ylabel)
+    axis.grid(axis="y", linestyle=":", color="0.78", linewidth=0.9)
     axis.text(
         0.04,
         0.70 if len(group_order) > 3 else (0.73 if path["key"] == "qcd_qcdcr" and regime == "highdm" else 0.07),
@@ -246,18 +251,15 @@ def plot_highdm(
         + "\n"
         + path["ratio_label"],
         transform=axis.transAxes,
-        fontsize=22,
+        fontsize=14,
     )
     axis.legend(
         frameon=False,
-        fontsize=20 if len(group_order) > 3 else 24,
         ncol=2 if len(group_order) > 3 else 1,
         loc="upper right" if len(group_order) > 3 else "best",
-        markerscale=1.25,
-        handlelength=1.8,
-        labelspacing=0.7,
     )
-    hep.cms.label(**CMS_LABEL, ax=axis)
+    with plt.rc_context({"font.size": CMS_LABEL_FONT_SIZE}):
+        hep.cms.label(**CMS_LABEL, loc=0, ax=axis)
     return save_figure(
         fig,
         output_dir / f"transfer_factor_{path['key']}_{output_suffix or regime}",
@@ -420,6 +422,8 @@ def main() -> int:
         high_plots, gnn_plots = render_factors(args.output_dir, source["factors"], args.regime)
         receipt = {"status": "complete", "source": str(args.input), "source_sha256": file_sha256(args.input),
                    "plotter_sha256": file_sha256(Path(__file__)), "campaign_year": args.campaign_year,
+                   "style_reference": "plot_measurement.py: photon trigger scale factor",
+                   "style_source_sha256": file_sha256(Path(__file__).with_name("plot_measurement.py")),
                    "lowdm_plot_layout": "categories_overlaid", "factor_values_changed": False,
                    "plots": high_plots + gnn_plots}
         (args.output_dir / "plot_manifest.json").write_text(json.dumps(receipt, indent=2) + "\n")
@@ -456,6 +460,8 @@ def main() -> int:
             "lowdm_mode": "GNN30 final templates only; no UT or legacy-search-bin fallback",
             "plot_regime": args.regime,
             "lowdm_plot_layout": "categories_overlaid",
+            "style_reference": "plot_measurement.py: photon trigger scale factor",
+            "style_source_sha256": file_sha256(Path(__file__).with_name("plot_measurement.py")),
             "campaign_year": args.campaign_year,
         },
         "mechanical_checks": {

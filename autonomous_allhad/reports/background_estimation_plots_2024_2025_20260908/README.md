@@ -7,12 +7,13 @@ TF는 연도별 High-dM 3장, Low-dM 4장입니다. Low-dM은 배경별 한 그�
 
 ## TF 표시 변경
 
+- Photon HLT scale-factor 플롯의 기존 `plot_measurement.py` 스타일을 재사용합니다: 8×8 정사각형, 작은 마커(5.5), 얇은 오차막대(1.1), 가로 점선 격자, 같은 글씨 크기와 여백입니다.
 - 빨강: Nb = 1. 파랑: Nb ≥ 2.
 - 원: NISR = 0, 사각형: NISR = 1, 삼각형: NISR ≥ 2.
 - 카테고리별 원래 GNN 빈 경계와 xerr를 유지합니다. 공통 빈으로 합산하거나 가로 위치를 임의 이동하지 않았습니다.
 - 기존 plot_recoil_transfer_factors_2024.py의 렌더링을 확장했습니다. 저장된 TF JSON을 직접 읽는 --plot-only를 사용하므로 TF를 재계산하지 않습니다.
 - 모음 폴더의 카테고리별 낱장 복사본 96개를 통합 그림으로 교체했습니다. 원본 검증 캠페인의 파일과 해시는 변경하지 않았습니다.
-- 각 연도 tf/plot_manifest.json이 수치 원본 해시와 플롯 코드 해시를 기록합니다.
+- 각 연도 tf/plot_manifest.json이 수치 원본·플롯 코드·공유 스타일 코드의 해시를 기록합니다.
 
 2025 데이터 luminosity coverage 불완전 표시는 원본과 동일합니다. RZ 보정 후 그림은 독립 closure가 아닙니다.
 

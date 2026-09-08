@@ -41,6 +41,10 @@ def test_tf_overlay_keeps_each_category_edges_values_and_errors(monkeypatch, tmp
 
     def close(fig, stem):
         assert fig.axes[0].get_xlim() == (0, 1)
+        np.testing.assert_array_equal(fig.get_size_inches(), [8, 8])
+        assert fig.axes[0].xaxis.label.get_fontsize() == 22
+        assert all(not line.get_visible() for line in fig.axes[0].get_xgridlines())
+        assert any(line.get_visible() for line in fig.axes[0].get_ygridlines())
         plotter.plt.close(fig)
         return []
 
@@ -56,6 +60,7 @@ def test_tf_overlay_keeps_each_category_edges_values_and_errors(monkeypatch, tmp
         np.testing.assert_allclose(kw["yerr"], [0.1] * 5)
         marker, color, label = plotter.GNN_STYLES[category]
         assert (kw["fmt"], kw["color"], kw["label"]) == (marker, color, label)
+        assert (kw["ms"], kw["lw"], kw["capsize"]) == (5.5, 1.1, 2)
 
 
 def test_mll_plot_keeps_large_z_peak_visible(monkeypatch, tmp_path):
