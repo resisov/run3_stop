@@ -1108,7 +1108,10 @@ def low_sgamma_models(
 def high_sgamma(
     sgamma: dict[str, Any], physical_group: str, recoil_bin: int
 ) -> tuple[float, float]:
-    payload = sgamma["highdm"][physical_group]
+    groups = high_sgamma_groups(sgamma)
+    if "Nb2plus" in groups and physical_group in {"Nb2", "Nb3plus"}:
+        physical_group = "Nb2plus"
+    payload = groups[physical_group]
     factor_bins = payload["bins"]
     if not factor_bins:
         raise ValueError(f"Sgamma/highdm/{physical_group} has no bins")
@@ -1125,10 +1128,17 @@ def high_sgamma(
     return q, shape
 
 
+def high_sgamma_groups(sgamma: dict[str, Any]) -> dict[str, Any]:
+    groups = sgamma["highdm"]
+    if set(groups) not in ({"Nb1", "Nb2plus"}, {"Nb1", "Nb2", "Nb3plus"}):
+        raise ValueError(f"unsupported High-dM Sgamma groups: {sorted(groups)}")
+    return groups
+
+
 def high_sgamma_parameter_bin(sgamma: dict[str, Any], recoil_bin: int) -> int:
     counts = {
-        len((sgamma["highdm"][physical] or {}).get("bins") or [])
-        for physical in ("Nb1", "Nb2", "Nb3plus")
+        len((payload or {}).get("bins") or [])
+        for payload in high_sgamma_groups(sgamma).values()
     }
     if len(counts) != 1 or not counts:
         raise ValueError(f"inconsistent High-dM Sgamma bin counts: {counts}")

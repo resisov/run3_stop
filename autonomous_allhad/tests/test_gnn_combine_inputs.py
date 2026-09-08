@@ -14,6 +14,26 @@ import build_combine_inputs as card
 import gnn_background_histograms as gnn
 
 
+@pytest.mark.parametrize("merged", [False, True])
+def test_high_sgamma_group_mapping(merged):
+    def measured(value):
+        return {"Q": {"status": "complete", "value": value},
+                "bins": [{"Sgamma": {"status": "complete", "value": value + i / 10}}
+                         for i in range(5)]}
+    groups = {"Nb1": measured(1.0)}
+    groups.update({"Nb2plus": measured(2.0)} if merged else
+                  {"Nb2": measured(2.0), "Nb3plus": measured(3.0)})
+    data = {"highdm": groups}
+    assert card.high_sgamma(data, "Nb2", 5) == (2.0, 2.4)
+    assert card.high_sgamma(data, "Nb3plus", 5) == ((2.0, 2.4) if merged else (3.0, 3.4))
+    assert card.high_sgamma_parameter_bin(data, 4) == card.high_sgamma_parameter_bin(data, 5) == 4
+
+
+def test_high_sgamma_rejects_mixed_group_definitions():
+    with pytest.raises(ValueError, match="unsupported High-dM Sgamma groups"):
+        card.high_sgamma_groups({"highdm": {"Nb1": {}, "Nb2": {}, "Nb2plus": {}}})
+
+
 @pytest.fixture
 def inputs(monkeypatch):
     config = json.loads((PROJECT / "gnn_lowdm/config.json").read_text())
