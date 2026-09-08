@@ -1,0 +1,143 @@
+{
+  "time_utc": "2026-09-08T22:44:39Z",
+  "heartbeat_time_utc": "2026-09-08T22:41:18Z",
+  "limits_validated": 924,
+  "queue": {
+    "running": [
+      1111237,
+      1112615,
+      1112616
+    ],
+    "idle": []
+  },
+  "r1": {
+    "root_files": 735,
+    "finite_three_entry_roots": 723,
+    "incomplete_finished_roots": 8,
+    "one_entry_roots": 7,
+    "two_entry_roots": 1,
+    "active_fit_files": 4,
+    "not_yet_generated": 0,
+    "three_entry_autoMCStats": 567,
+    "three_entry_other": 156
+  },
+  "r1_checkpoint": {
+    "nuisance_root_count": 723,
+    "sha256sum_sorted_lines_sha256": "9ee5a2ec145b97c87f62c31b2521555659e6312611b3117f19589e9f5bc00409",
+    "observed_at_utc": "2026-09-08T22:44:39Z"
+  },
+  "r0_precision_jobs": [
+    {
+      "cluster": 1112615,
+      "job_status": 2,
+      "status": "running",
+      "diagnostic_only": true,
+      "minimizer_precision": "1e-8",
+      "minimizer_strategy": 2,
+      "minimizer_tolerance": "unchanged default 0.1",
+      "robust_fit": 1,
+      "expect_signal": 0,
+      "signal_strength_range": [
+        -20,
+        20
+      ],
+      "named_nuisances": [
+        "CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin2_2024",
+        "CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin1_2024"
+      ],
+      "resume_source": "combined/T2tt/impact_mStop1200_mLSP500_r0/work",
+      "retained_nuisance_roots": 733,
+      "runner_snapshot": "impact_code_precision/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+      "runner_sha256": "ce600466ccd3425982b4376315b881b11008fce28d37ed474cecfbfac906ad15",
+      "source_commit": "1e719974",
+      "submission_file": "combined/T2tt/impact_precision_r0_1e8/impact_r0_eossubmit.sub",
+      "submission_sha256": "a2dbcf6568c13ef6dacac769e10526636c0243967641d49d3e6cb50d9589241d",
+      "output_work": "combined/T2tt/impact_precision_r0_1e8/impact_mStop1200_mLSP500_r0/work",
+      "card_sha256": "e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1",
+      "workspace_sha256": "fec2790a46d714e92d3a09dfa2f768cba48dd0daf4925ea580cc7dc945d4dceb",
+      "initial_fit_sha256": "7b898069a83365946cd1f0850139131ead856a37113ce3c2e6236c8ede554f6e",
+      "proxy_seconds_before_submission": 593516,
+      "voms_seconds_before_submission": 564716,
+      "request_cpus": 6,
+      "fit_parallel": 2,
+      "request_memory_mb": 18000,
+      "max_runtime_seconds": 43200,
+      "submitted_held_then_verified_and_released": true,
+      "server_injected_home_removed_before_release": true,
+      "focused_tests_passed": 26,
+      "physics_changed": false,
+      "acceptance": "not automatically promoted; require complete valid endpoints and precision stability comparison",
+      "worker_confirmed_named_fits": 2,
+      "worker_confirmed_precision": "1e-8",
+      "last_worker_check_utc": "2026-09-08T22:44:39Z",
+      "final_collection_status": "not run yet; existing collection log is copied checkpoint metadata",
+      "current_fit_warnings": [
+        "status 1 covariance matrix forced positive definite",
+        "intermediate nonconvergent minimizations"
+      ],
+      "final_convergence_validated": false
+    },
+    {
+      "cluster": 1112616,
+      "job_status": 2,
+      "status": "running",
+      "diagnostic_only": true,
+      "minimizer_precision": "1e-10",
+      "minimizer_strategy": 2,
+      "minimizer_tolerance": "unchanged default 0.1",
+      "robust_fit": 1,
+      "expect_signal": 0,
+      "signal_strength_range": [
+        -20,
+        20
+      ],
+      "named_nuisances": [
+        "CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin2_2024",
+        "CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin1_2024"
+      ],
+      "resume_source": "combined/T2tt/impact_mStop1200_mLSP500_r0/work",
+      "retained_nuisance_roots": 733,
+      "runner_snapshot": "impact_code_precision/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+      "runner_sha256": "ce600466ccd3425982b4376315b881b11008fce28d37ed474cecfbfac906ad15",
+      "source_commit": "1e719974",
+      "submission_file": "combined/T2tt/impact_precision_r0_1e10/impact_r0_eossubmit.sub",
+      "submission_sha256": "9edf9aeeb7ec384e717f0c06ac852f2632b5d821cff44541b11b9157c7ca27e3",
+      "output_work": "combined/T2tt/impact_precision_r0_1e10/impact_mStop1200_mLSP500_r0/work",
+      "card_sha256": "e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1",
+      "workspace_sha256": "fec2790a46d714e92d3a09dfa2f768cba48dd0daf4925ea580cc7dc945d4dceb",
+      "initial_fit_sha256": "7b898069a83365946cd1f0850139131ead856a37113ce3c2e6236c8ede554f6e",
+      "proxy_seconds_before_submission": 593516,
+      "voms_seconds_before_submission": 564716,
+      "request_cpus": 6,
+      "fit_parallel": 2,
+      "request_memory_mb": 18000,
+      "max_runtime_seconds": 43200,
+      "submitted_held_then_verified_and_released": true,
+      "server_injected_home_removed_before_release": true,
+      "focused_tests_passed": 26,
+      "physics_changed": false,
+      "acceptance": "not automatically promoted; require complete valid endpoints and precision stability comparison",
+      "worker_confirmed_named_fits": 2,
+      "worker_confirmed_precision": "1e-10",
+      "last_worker_check_utc": "2026-09-08T22:44:39Z",
+      "final_collection_status": "not run yet; existing collection log is copied checkpoint metadata",
+      "current_fit_warnings": [
+        "status 1 covariance matrix forced positive definite",
+        "intermediate nonconvergent minimizations",
+        "intermediate Minuit status 4"
+      ],
+      "final_convergence_validated": false
+    }
+  ],
+  "intermediate_warnings_not_final_failure": true,
+  "final_json_counts": {
+    "r1": 0,
+    "r0": 0
+  },
+  "root_check_scope": "3 entries and finite r/parameter values; not a full convergence/coverage certification",
+  "healthy_job_restarts": 0,
+  "new_submissions": 0,
+  "source_changed": false,
+  "physics_changed": false,
+  "intermediate_root_access": false
+}
