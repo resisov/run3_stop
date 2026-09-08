@@ -1,0 +1,68 @@
+{
+  "observed_at_utc": "2026-09-08T15:06:20Z",
+  "schedd": "bigbird24.cern.ch",
+  "limits": {
+    "valid": 923,
+    "expected": 924,
+    "counts": {
+      "T2tt": 204,
+      "T2bW": 354,
+      "T2tb": 365
+    },
+    "promoted": [
+      {
+        "topology": "T2tt",
+        "mass": "mStop1800_mLSP1600",
+        "job": "1112108.1",
+        "exit_code": 0,
+        "valid_root": true,
+        "entries": 5,
+        "expected_r": [
+          70.92578125,
+          95.64559936523438,
+          135.5,
+          194.91197204589844,
+          269.5482482910156
+        ],
+        "sha256": "cc2b9aeb4bdc699fae3100d26e02f77f6ffada6819260fd2717768fe3559cedd",
+        "eos_sha256_matched": true,
+        "status": "complete_validated_promoted",
+        "validated_at_utc": "2026-09-08T15:06:20Z",
+        "output": "combined/T2tt/limits/higgsCombine_mStop1800_mLSP1600.AsymptoticLimits.mH120.root",
+        "source": "combined/T2tt/recovery_timeout_1/limits/higgsCombine_mStop1800_mLSP1600.AsymptoticLimits.mH120.root"
+      }
+    ],
+    "running": [
+      {
+        "job": "1112108.0",
+        "mass": "mStop1700_mLSP1500",
+        "cpu_seconds": 5878
+      }
+    ],
+    "original_held_jobs_preserved": [
+      "1111240.150",
+      "1111240.167"
+    ]
+  },
+  "impacts": {
+    "r1": {
+      "job": "1111237.0",
+      "status": "running",
+      "cpu_seconds": 56082,
+      "final_outputs": 0
+    },
+    "r0": {
+      "job": "1111238.0",
+      "status": "running",
+      "cpu_seconds": 56985,
+      "final_outputs": 0
+    }
+  },
+  "plots": {
+    "latest_source_commit": "99e60eff",
+    "lowdm_original_renderer_restored": true,
+    "limit_plots_still_use_922_points": true,
+    "refresh_after_remaining_recovery": true
+  },
+  "action": "validated and promoted only new recovery; no job restarted; intermediate stages remain closed"
+}
