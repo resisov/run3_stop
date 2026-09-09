@@ -1,0 +1,20 @@
+universe = vanilla
+executable = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/impact_code_endpoint/autonomous_allhad/workflow/run_asimov_impacts_eos.sh
+initialdir = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r1_llnorm_part1/impact_mStop1200_mLSP500_r1
+arguments = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/datacards/datacard_mStop1200_mLSP500.txt /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r1_llnorm_part1/impact_mStop1200_mLSP500_r1 1200
+output = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r1_llnorm_part1/impact_mStop1200_mLSP500_r1/condor_logs/impact.out
+error = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r1_llnorm_part1/impact_mStop1200_mLSP500_r1/condor_logs/impact.err
+log = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r1_llnorm_part1/impact_mStop1200_mLSP500_r1/condor_logs/cluster.log
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+transfer_input_files = /eos/user/t/taiwoo/run3_stop/runtime/combine_cmssw_14_1_0_pre4.tgz
+transfer_output_files = ""
+use_x509userproxy = true
+x509userproxy = /eos/user/t/taiwoo/decaf/analysis/proxy/x509up_u147757
+environment = "IMPACT_EXPECT_SIGNAL=1 IMPACT_R_MIN=0 IMPACT_R_MAX=20 COMBINE_RUNTIME_SHA256=2909cf59caf57cfa47e65e6d43a7bcca8c864c72984679127d8eebabb551614a COMBINE_RUNTIME_ARCHIVE=combine_cmssw_14_1_0_pre4.tgz IMPACT_MINIMIZER_STRATEGY=1 IMPACT_PARALLEL=3 IMPACT_PLOT=0 IMPACT_SUBSET_ONLY=1 IMPACT_RESUME_DIR=/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_seed_r1 IMPACT_RESUME_CARD_SHA256=e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1 IMPACT_RESUME_WORKSPACE_SHA256=e58f366eff035c02fb244bb43f1a56efcdd12233acc4c5d0401d4c21cb0f8235 IMPACT_RESUME_INITIAL_SHA256=14634181a407fa97b3e9d399edab07b177c59bb57b1bd65a2eafd22107ef2693 IMPACT_RESUME_NUISANCES=CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025,CMS_NPS26012_ll_norm_highdm_Nb2plus_bin0_2025,CMS_NPS26012_ll_norm_lowdm_Nb1_NISR0_inclusive_2025"
+request_cpus = 3
+request_memory = 16000MB
+request_disk = 8000MB
++MaxRuntime = 43200
++JobBatchName = "NPS26012_LeptonVeto10_T2tt_r1_llnorm_1"
+queue 1

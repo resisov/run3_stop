@@ -1,0 +1,1533 @@
+{
+  "automation_id": "dy-20-gev",
+  "trigger_utc": "2026-09-09T00:41:49.245Z",
+  "observed_at_utc": "2026-09-09T00:55:42Z",
+  "queue": [
+    {
+      "ClusterId": 1112615,
+      "HoldReason": null,
+      "JobStatus": 2,
+      "NumJobStarts": 1,
+      "ProcId": 0,
+      "RemoteUserCpu": 13900
+    },
+    {
+      "ClusterId": 1112634,
+      "HoldReason": null,
+      "JobStatus": 1,
+      "NumJobStarts": 0,
+      "ProcId": 0,
+      "RemoteUserCpu": 0
+    },
+    {
+      "ClusterId": 1112635,
+      "HoldReason": null,
+      "JobStatus": 1,
+      "NumJobStarts": 0,
+      "ProcId": 0,
+      "RemoteUserCpu": 0
+    },
+    {
+      "ClusterId": 1112636,
+      "HoldReason": null,
+      "JobStatus": 1,
+      "NumJobStarts": 0,
+      "ProcId": 0,
+      "RemoteUserCpu": 0
+    },
+    {
+      "ClusterId": 1112637,
+      "HoldReason": null,
+      "JobStatus": 1,
+      "NumJobStarts": 0,
+      "ProcId": 0,
+      "RemoteUserCpu": 0
+    }
+  ],
+  "completed_MCstat_recovery": {
+    "previous_missing": 11,
+    "new_endpoint_recovery": 14,
+    "all25_recovered": true,
+    "new_jobs": [
+      {
+        "cluster": 1112624,
+        "history": {
+          "ClusterId": 1112624,
+          "CompletionDate": 1788913655,
+          "ExitBySignal": false,
+          "ExitCode": 0,
+          "JobStatus": 4,
+          "ProcId": 0,
+          "RemoteWallClockTime": 1654
+        },
+        "root_endpoint_checks_passed": true,
+        "results": [
+          {
+            "name": "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0",
+            "file": "combined/T2tt/impact_recovery_r1_endpoints_part1/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0.MultiDimFit.mH1200.root",
+            "entries": 3,
+            "values": {
+              "r": [
+                1,
+                0.9997020959854126,
+                1.0002647638320923
+              ],
+              "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": [
+                7.245642450470768e-7,
+                -0.9920403957366943,
+                0.9918146729469299
+              ],
+              "deltaNLL": [
+                0,
+                0,
+                0
+              ],
+              "quantileExpected": [
+                -1,
+                0.3199999928474426,
+                0.3199999928474426
+              ]
+            },
+            "two_sided_endpoints_valid": true,
+            "sha256": "a6a1e97e1c3f04d382848c8d884f0d84e34a5ec8b68a594e29cd5c7ebe769e04"
+          },
+          {
+            "name": "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0",
+            "file": "combined/T2tt/impact_recovery_r1_endpoints_part1/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0.MultiDimFit.mH1200.root",
+            "entries": 3,
+            "values": {
+              "r": [
+                1,
+                1.0010756254196167,
+                0.9986972808837891
+              ],
+              "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0": [
+                2.5148239046757226e-7,
+                -0.7695207595825195,
+                0.770011305809021
+              ],
+              "deltaNLL": [
+                0,
+                0,
+                0
+              ],
+              "quantileExpected": [
+                -1,
+                0.3199999928474426,
+                0.3199999928474426
+              ]
+            },
+            "two_sided_endpoints_valid": true,
+            "sha256": "4cfca65d6ead70839d1b50dfcdc0d21fc992980cc8d76f62a4dd607148a03f99"
+          },
+          {
+            "name": "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin4_bin0",
+            "file": "combined/T2tt/impact_recovery_r1_endpoints_part1/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin4_bin0.MultiDimFit.mH1200.root",
+            "entries": 3,
+            "values": {
+              "r": [
+                1,
+                1.0035814046859741,
+                0.9974119067192078
+              ],
+              "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin4_bin0": [
+                5.564631919696694e-7,
+                -0.8922872543334961,
+                0.8904234170913696
+              ],
+              "deltaNLL": [
+                0,
+                0,
+                0
+              ],
+              "quantileExpected": [
+                -1,
+                0.3199999928474426,
+                0.3199999928474426
+              ]
+            },
+            "two_sided_endpoints_valid": true,
+            "sha256": "33897065a16f1ddfd9234189720d8c57508fac7f48a4396a8f7ff72fabbc8a46"
+          },
+          {
+            "name": "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin1_bin0",
+            "file": "combined/T2tt/impact_recovery_r1_endpoints_part1/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin1_bin0.MultiDimFit.mH1200.root",
+            "entries": 3,
+            "values": {
+              "r": [
+                1,
+                1.0001447200775146,
+                0.9996833205223083
+              ],
+              "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin1_bin0": [
+                -6.303172739308138e-8,
+                -0.9702942967414856,
+                0.9707446098327637
+              ],
+              "deltaNLL": [
+                0,
+                0,
+                0
+              ],
+              "quantileExpected": [
+                -1,
+                0.3199999928474426,
+                0.3199999928474426
+              ]
+            },
+            "two_sided_endpoints_valid": true,
+            "sha256": "f04b6e82cdb42ea830adeff42c4828c355f3a0ac82486faf560eb93044ee324e"
+          }
+        ],
+        "fit_log_sha256": "71d97385a587a9f1b47870351086f6c930315e00c406ae7deda9b37b770a2a4a",
+        "warning_line_count": 0,
+        "local_EOS_hash_match": true
+      },
+      {
+        "cluster": 1112625,
+        "history": {
+          "ClusterId": 1112625,
+          "ExitBySignal": false,
+          "ExitCode": 0,
+          "JobStatus": 4,
+          "RemoteWallClockTime": 1044
+        },
+        "root_endpoint_checks_passed": true,
+        "results": [
+          {
+            "name": "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0",
+            "file": "combined/T2tt/impact_recovery_r1_endpoints_part2/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0.MultiDimFit.mH1200.root",
+            "entries": 3,
+            "values": {
+              "r": [
+                1,
+                0.9995483756065369,
+                1.0003571510314941
+              ],
+              "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0": [
+                1.3415404964689515e-7,
+                -0.9162113070487976,
+                0.917547345161438
+              ],
+              "deltaNLL": [
+                0,
+                0,
+                0
+              ],
+              "quantileExpected": [
+                -1,
+                0.3199999928474426,
+                0.3199999928474426
+              ]
+            },
+            "two_sided_endpoints_valid": true,
+            "sha256": "487208797495ef4cc0e56b183a6eeb770e9a1a2baae39fc8f6fd59e5452c1437"
+          },
+          {
+            "name": "prop_biny2024_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0",
+            "file": "combined/T2tt/impact_recovery_r1_endpoints_part2/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_prop_biny2024_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0.MultiDimFit.mH1200.root",
+            "entries": 3,
+            "values": {
+              "r": [
+                1,
+                1.002187967300415,
+                0.9977892637252808
+              ],
+              "prop_biny2024_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": [
+                -0.0000028219749310665065,
+                -0.921021044254303,
+                0.9210426211357117
+              ],
+              "deltaNLL": [
+                0,
+                0,
+                0
+              ],
+              "quantileExpected": [
+                -1,
+                0.3199999928474426,
+                0.3199999928474426
+              ]
+            },
+            "two_sided_endpoints_valid": true,
+            "sha256": "5e11cfd664017016e5cd5c8fcbc27e834012746a9b6941ba3eb07c14c281aec6"
+          },
+          {
+            "name": "prop_biny2024_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0",
+            "file": "combined/T2tt/impact_recovery_r1_endpoints_part2/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_prop_biny2024_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0.MultiDimFit.mH1200.root",
+            "entries": 3,
+            "values": {
+              "r": [
+                1,
+                1.0007671117782593,
+                0.9994691014289856
+              ],
+              "prop_biny2024_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": [
+                -0.0000016974516938716988,
+                -0.9459127187728882,
+                0.9485390782356262
+              ],
+              "deltaNLL": [
+                0,
+                0,
+                0
+              ],
+              "quantileExpected": [
+                -1,
+                0.3199999928474426,
+                0.3199999928474426
+              ]
+            },
+            "two_sided_endpoints_valid": true,
+            "sha256": "7145bd4a47cb1a822b4ebfd55e2840393974110500c48f47de4934f160f1af8d"
+          },
+          {
+            "name": "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0",
+            "file": "combined/T2tt/impact_recovery_r1_endpoints_part2/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0.MultiDimFit.mH1200.root",
+            "entries": 3,
+            "values": {
+              "r": [
+                1,
+                0.9992642998695374,
+                1.0007431507110596
+              ],
+              "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": [
+                0.0000038714465517841745,
+                -0.9916897416114807,
+                0.9916560649871826
+              ],
+              "deltaNLL": [
+                0,
+                0,
+                0
+              ],
+              "quantileExpected": [
+                -1,
+                0.3199999928474426,
+                0.3199999928474426
+              ]
+            },
+            "two_sided_endpoints_valid": true,
+            "sha256": "6356f997c7ee57386561358433e68ced0174bba29ccc6048f4adeb34d28da958"
+          }
+        ],
+        "fit_log_sha256": "83e28dd814b45c526180cb872daeedcf1ca2d1b014f39a6ff357544a8625d530",
+        "warning_line_count": 0,
+        "local_EOS_hash_match": true
+      },
+      {
+        "cluster": 1112626,
+        "history": {
+          "ClusterId": 1112626,
+          "ExitBySignal": false,
+          "ExitCode": 0,
+          "JobStatus": 4,
+          "RemoteWallClockTime": 1093
+        },
+        "root_endpoint_checks_passed": true,
+        "results": [
+          {
+            "name": "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0",
+            "file": "combined/T2tt/impact_recovery_r1_endpoints_part3/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0.MultiDimFit.mH1200.root",
+            "entries": 3,
+            "values": {
+              "r": [
+                1,
+                1.001436710357666,
+                0.9982847571372986
+              ],
+              "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0": [
+                5.736828825320117e-7,
+                -0.8135942816734314,
+                0.8138436079025269
+              ],
+              "deltaNLL": [
+                0,
+                0,
+                0
+              ],
+              "quantileExpected": [
+                -1,
+                0.3199999928474426,
+                0.3199999928474426
+              ]
+            },
+            "two_sided_endpoints_valid": true,
+            "sha256": "0e9badb9c943ddbd2ca5333bf512dd0d41a64a0d5b5c32d794a06f176d1512ca"
+          },
+          {
+            "name": "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR0_bin0_bin0",
+            "file": "combined/T2tt/impact_recovery_r1_endpoints_part3/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR0_bin0_bin0.MultiDimFit.mH1200.root",
+            "entries": 3,
+            "values": {
+              "r": [
+                1,
+                1.0014129877090454,
+                0.9988840222358704
+              ],
+              "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR0_bin0_bin0": [
+                -0.0000012892938912045793,
+                -0.9167959094047546,
+                0.9119341373443604
+              ],
+              "deltaNLL": [
+                0,
+                0,
+                0
+              ],
+              "quantileExpected": [
+                -1,
+                0.3199999928474426,
+                0.3199999928474426
+              ]
+            },
+            "two_sided_endpoints_valid": true,
+            "sha256": "53d51c3c49c5f6679085cfa25406cf512b55131830923662191f8edf866660d5"
+          },
+          {
+            "name": "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0",
+            "file": "combined/T2tt/impact_recovery_r1_endpoints_part3/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0.MultiDimFit.mH1200.root",
+            "entries": 3,
+            "values": {
+              "r": [
+                1,
+                0.9999032616615295,
+                1.0001217126846313
+              ],
+              "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": [
+                -0.000006612670858885394,
+                -0.9782527685165405,
+                0.9774042367935181
+              ],
+              "deltaNLL": [
+                0,
+                0,
+                0
+              ],
+              "quantileExpected": [
+                -1,
+                0.3199999928474426,
+                0.3199999928474426
+              ]
+            },
+            "two_sided_endpoints_valid": true,
+            "sha256": "06c59c57caa864bc510814d36b9bea32e646a09f4ceb40ff69950f7b83203258"
+          },
+          {
+            "name": "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0",
+            "file": "combined/T2tt/impact_recovery_r1_endpoints_part3/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0.MultiDimFit.mH1200.root",
+            "entries": 3,
+            "values": {
+              "r": [
+                1,
+                0.9995507001876831,
+                1.0004857778549194
+              ],
+              "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0": [
+                -0.0000016390907831009827,
+                -0.8954192996025085,
+                0.8978826999664307
+              ],
+              "deltaNLL": [
+                0,
+                0,
+                0
+              ],
+              "quantileExpected": [
+                -1,
+                0.3199999928474426,
+                0.3199999928474426
+              ]
+            },
+            "two_sided_endpoints_valid": true,
+            "sha256": "3689b4521674c78d87f6b9cadb0954554c4f62dda4b8bb86f463149691f84c8b"
+          }
+        ],
+        "fit_log_sha256": "0ebe2f329f6f73a0205572b63434489b45beb44eb489a41ff746b6eb59365438",
+        "warning_line_count": 0,
+        "local_EOS_hash_match": true
+      },
+      {
+        "cluster": 1112627,
+        "history": {
+          "ClusterId": 1112627,
+          "ExitBySignal": false,
+          "ExitCode": 0,
+          "JobStatus": 4,
+          "RemoteWallClockTime": 1124
+        },
+        "root_endpoint_checks_passed": true,
+        "results": [
+          {
+            "name": "prop_biny2025_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0",
+            "file": "combined/T2tt/impact_recovery_r1_endpoints_part4/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_prop_biny2025_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0.MultiDimFit.mH1200.root",
+            "entries": 3,
+            "values": {
+              "r": [
+                1,
+                1.0007672309875488,
+                0.9993980526924133
+              ],
+              "prop_biny2025_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": [
+                -4.83372502912971e-7,
+                -0.9197046160697937,
+                0.9200073480606079
+              ],
+              "deltaNLL": [
+                0,
+                0,
+                0
+              ],
+              "quantileExpected": [
+                -1,
+                0.3199999928474426,
+                0.3199999928474426
+              ]
+            },
+            "two_sided_endpoints_valid": true,
+            "sha256": "10307377bbb8a83efda8b09f813299a3d0730f31175f94b0e1e78032c63a3ed0"
+          },
+          {
+            "name": "prop_biny2025_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0",
+            "file": "combined/T2tt/impact_recovery_r1_endpoints_part4/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_prop_biny2025_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0.MultiDimFit.mH1200.root",
+            "entries": 3,
+            "values": {
+              "r": [
+                1,
+                0.999902606010437,
+                1.0000070333480835
+              ],
+              "prop_biny2025_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": [
+                -9.278170978177513e-7,
+                -0.9368533492088318,
+                0.9387007355690002
+              ],
+              "deltaNLL": [
+                0,
+                0,
+                0
+              ],
+              "quantileExpected": [
+                -1,
+                0.3199999928474426,
+                0.3199999928474426
+              ]
+            },
+            "two_sided_endpoints_valid": true,
+            "sha256": "57ca7d64faff3d29579ba9d860dcabc916f3846adb361e6ea10dd94b3dc1d66a"
+          }
+        ],
+        "fit_log_sha256": "38233a47a7c1ac6a4c5c741d5774c4867347e8854dc70e7085785de2f9853ce0",
+        "warning_line_count": 0,
+        "local_EOS_hash_match": true
+      }
+    ]
+  },
+  "all_endpoint_audit": {
+    "r1": {
+      "original_files": 723,
+      "effective_files": 734,
+      "expected": 735,
+      "finite_three_entries": 734,
+      "strict_two_sided_endpoints": 714,
+      "flagged": 20,
+      "flags": [
+        {
+          "name": "CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_upper_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            1,
+            0.9862608909606934,
+            1
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "f377cf9e8383bf1ad7a8fd6a5cb7447f8a4253e195e77d4a42b66b02b63daa35"
+        },
+        {
+          "name": "CMS_NPS26012_ll_norm_highdm_Nb2plus_bin0_2025",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_highdm_Nb2plus_bin0_2025.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_upper_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            1,
+            0.9840251803398132,
+            1
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "db1244d3eaf66a8f95b063ec6c206ff12f5f12642d1b90416b683180b8161d54"
+        },
+        {
+          "name": "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR0_inclusive_2025",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_lowdm_Nb1_NISR0_inclusive_2025.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_upper_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            1,
+            0.9786279797554016,
+            1
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "fcee0ba794b40c99e2b8ce77eda2ebd59867f0279f170535b2da5d257b5d2172"
+        },
+        {
+          "name": "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2024",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2024.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_upper_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            1,
+            0.9878023862838745,
+            1
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "10a26e6e0c2f8a7602b75d76cff96ef155cfd75aee3e9f9f40f634ec742bdd14"
+        },
+        {
+          "name": "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_upper_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            1,
+            0.9878164529800415,
+            1
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "8ff27f6ac61c226cc96c599a5995cefea542d8997fb8e05f7e62fadb548bf7cf"
+        },
+        {
+          "name": "CMS_NPS26012_ll_norm_lowdm_Nb2plus_NISR1plus_inclusive_2025",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_lowdm_Nb2plus_NISR1plus_inclusive_2025.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_upper_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            1,
+            0.9845451712608337,
+            1
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "1530043736c21919543f4408e5a5ffa0543b9b6f5dda036d56d5c443b6c41e3a"
+        },
+        {
+          "name": "CMS_NPS26012_sgamma_shape_highdm_Nb1_bin0_2024",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_highdm_Nb1_bin0_2024.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_upper_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            0.998688817024231,
+            0.9648791551589966,
+            0.998688817024231
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "edcf0c35ff72f52f8f4dc4acfbf3e22e6e0e224f1b324a0735970287d54357eb"
+        },
+        {
+          "name": "CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin1_2024",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin1_2024.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_lower_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            1.030848741531372,
+            1.030848741531372,
+            2.1159420013427734
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "1f4f73593f0b3aae94d4d215256716d76231db8e4e9db918ff17b039653648a4"
+        },
+        {
+          "name": "CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin1_2025",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin1_2025.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_lower_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            1.024633526802063,
+            1.024633526802063,
+            2.1635682582855225
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "795f9c8d6e0acb065d20eeb5e0936bf8ec94631d1ab8a6dba8e90e82bb236bbf"
+        },
+        {
+          "name": "CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin2_2025",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin2_2025.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_lower_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            0.9892032742500305,
+            0.9892032742500305,
+            3.2126595973968506
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "bd4f2df2ff01b0a791ee72229636acd109be1cf60c0044e64ae41f4591d74223"
+        },
+        {
+          "name": "CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin3_2024",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin3_2024.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_lower_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            0.957468569278717,
+            0.957468569278717,
+            2.6483054161071777
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "95cbc63ca604174ced849bf61be95e1fb75b80f5454deda6ecba335011894729"
+        },
+        {
+          "name": "CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin3_2025",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin3_2025.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_lower_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            0.9678671956062317,
+            0.9678671956062317,
+            2.7567524909973145
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "37283f31eefd04e4890718a205236a644c6ab4cc26f7a139d53a9011ddb1275a"
+        },
+        {
+          "name": "CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin1_2024",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin1_2024.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_lower_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            0.9796140789985657,
+            0.9796140789985657,
+            2.3352324962615967
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "6cafbf27992bac5fcf3150ca52c6cab52ccbf911892d99ee1440cf5b4c680bd4"
+        },
+        {
+          "name": "CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin1_2025",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin1_2025.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_lower_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            0.9737746119499207,
+            0.9737746119499207,
+            2.4174718856811523
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "944e9697ab4f59ecdd6152595bb6d3f258a3c9b5c097de87680dfacc8b4ed46c"
+        },
+        {
+          "name": "CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin2_2024",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin2_2024.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_lower_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            0.997528612613678,
+            0.997528612613678,
+            3.2162139415740967
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "39e900327f2209c0ed538fa09c01df096427259094aca88d76a4b616acbf3d5a"
+        },
+        {
+          "name": "CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin2_2025",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin2_2025.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_lower_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            1.0459479093551636,
+            1.0459479093551636,
+            3.1387908458709717
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "3e5f250fbbff02f5bd89b623629d3862dd0e1e8fb73eb7323f0b2df0c0ad5b82"
+        },
+        {
+          "name": "CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin3_2024",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin3_2024.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_lower_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            1.0120209455490112,
+            1.0120209455490112,
+            2.9747438430786133
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "70cf7d84822a1b9e13519d44095f28354b06b6b9a0db478d0cf5f2a543ff2bcd"
+        },
+        {
+          "name": "CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin3_2025",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin3_2025.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_lower_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            1.0033334493637085,
+            1.0033334493637085,
+            2.944084405899048
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "44b5cd5a44561be5971a26569bcc12f548996e70003e06d8d890f201c3dc3440"
+        },
+        {
+          "name": "CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin4_2024",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin4_2024.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_lower_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            0.9011974334716797,
+            0.9011974334716797,
+            1.9491297006607056
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "33ad83e63f065331534420d1f30c9425c7ed66022aa01cc98018f679b1205e4c"
+        },
+        {
+          "name": "CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin4_2025",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin4_2025.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_lower_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            0.8565930128097534,
+            0.8565930128097534,
+            1.9441900253295898
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "644e1b752fdf0e1efd1b43821a83b1115d5444cf17959b5fcd79206243f7cb96"
+        }
+      ],
+      "inventory_sha256": "393d8de473ae6c5206401ca654bed0b6d3e03c31c4d59680c5faa2701908fc8c",
+      "inventory_format": "sorted filename order; relative_path:sha256 newline",
+      "source_selection": "original preserved ROOTs overlaid by validated MC-stat recovery results; no Sgamma diagnostic promotion"
+    },
+    "r0": {
+      "original_files": 733,
+      "effective_files": 733,
+      "expected": 735,
+      "finite_three_entries": 733,
+      "strict_two_sided_endpoints": 715,
+      "flagged": 18,
+      "flags": [
+        {
+          "name": "CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_upper_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            1,
+            0.9860249161720276,
+            1
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "4759a7b6496b2deb23fe63b1c08062221f4aa4311aa8064232f3481103ce0ead"
+        },
+        {
+          "name": "CMS_NPS26012_ll_norm_highdm_Nb1_bin2_2025",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_highdm_Nb1_bin2_2025.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_upper_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            1,
+            0.973930835723877,
+            1
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "ae82ee304f8ef9cb408928cba745ad1fe151fcf1f6cae149ad92a3a3fb2c898a"
+        },
+        {
+          "name": "CMS_NPS26012_ll_norm_highdm_Nb1_bin3_2025",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_highdm_Nb1_bin3_2025.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_upper_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            1,
+            0.96884685754776,
+            1
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "3bccd1d162704ec78024feadd4907f404c34a82ac38708d72757f4c8ca5d09c6"
+        },
+        {
+          "name": "CMS_NPS26012_ll_norm_highdm_Nb2plus_bin0_2025",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_highdm_Nb2plus_bin0_2025.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_upper_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            1,
+            0.9843356013298035,
+            1
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "785548d367964eb20872783992dad553548c5429516a941a475ff016e8bbd485"
+        },
+        {
+          "name": "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2024",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2024.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_upper_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            1,
+            0.9881976842880249,
+            1
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "3527b10517d9a3f85fc23f7e469035e74ce7e27d9e2f92ec71910a242368e8ce"
+        },
+        {
+          "name": "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_upper_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            1,
+            0.9882431626319885,
+            1
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "cca303c6e1eb5800bbf1c420d1ebb416715bc026047ec3ecbd4fdbd042e8eb2d"
+        },
+        {
+          "name": "CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin1_2024",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin1_2024.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_lower_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            1.030848741531372,
+            1.030848741531372,
+            2.1152639389038086
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "3ca77d703ce7edda77ac909ec9ecfafc9ff7553e0e954ff05efbba633325392f"
+        },
+        {
+          "name": "CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin1_2025",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin1_2025.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_lower_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            1.024633526802063,
+            1.024633526802063,
+            2.1626694202423096
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "615d57a5464605780bdff8d40b2ac47043839d6bbfe6e50d190ba1e43291711e"
+        },
+        {
+          "name": "CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin2_2025",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin2_2025.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_lower_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            0.9892032742500305,
+            0.9892032742500305,
+            3.2123379707336426
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "ca9fbe3e5c57a07a8a45cd498328bc91bc06426165f0f083f1b4dcc472829947"
+        },
+        {
+          "name": "CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin3_2024",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin3_2024.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_lower_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            0.957468569278717,
+            0.957468569278717,
+            2.6469380855560303
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "a96f8e12e214864b8bbdcacd3919cbaaf21f2f66820072d1a6a6c77f6cdc6952"
+        },
+        {
+          "name": "CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin3_2025",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin3_2025.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_lower_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            0.9678671956062317,
+            0.9678671956062317,
+            2.7544615268707275
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "fba79f583f699f93ae7ad59169c7048d56a7727b869d72fa476c6916ceb8006d"
+        },
+        {
+          "name": "CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin1_2025",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin1_2025.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_lower_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            0.9737746119499207,
+            0.9737746119499207,
+            2.416804313659668
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "f1517000d88c60f44d4decb8c285785642a0c7c86f06359b90c025c5850b5173"
+        },
+        {
+          "name": "CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin2_2024",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin2_2024.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_lower_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            0.997528612613678,
+            0.997528612613678,
+            3.21610951423645
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "53b95807f18307d5c95eb01fc2a2e9016c8fd3982b2b0e035fb188e99fa954f4"
+        },
+        {
+          "name": "CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin2_2025",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin2_2025.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_lower_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            1.0459479093551636,
+            1.0459479093551636,
+            3.138636827468872
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "e3ff15c0f4d6204e513494efb2759a8a477295603d44136f939d3913a4f1b55e"
+        },
+        {
+          "name": "CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin3_2024",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin3_2024.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_lower_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            1.0120209455490112,
+            1.0120209455490112,
+            2.9746172428131104
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "f360ed1774dcc95fedbb19e65f06be55e9e50dbcda992f8b1025bdb944074e66"
+        },
+        {
+          "name": "CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin3_2025",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin3_2025.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_lower_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            1.0033334493637085,
+            1.0033334493637085,
+            2.944277286529541
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "6f7173da68689ac2c0720c94da28e3a0f55cb6956fc090eab52979f2d48ca7e3"
+        },
+        {
+          "name": "CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin4_2024",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin4_2024.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_lower_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            0.9011974334716797,
+            0.9011974334716797,
+            1.946713924407959
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "ae61b1fe7cede26c0e284ff3ced848012c77ac3d994e033b33dd442516829a00"
+        },
+        {
+          "name": "CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin4_2025",
+          "file": "combined/T2tt/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin4_2025.MultiDimFit.mH1200.root",
+          "issues": [
+            "zero_width_lower_interior_or_unknown_bound"
+          ],
+          "parameter_values": [
+            0.8565930724143982,
+            0.8565930724143982,
+            1.9397265911102295
+          ],
+          "bounds": [
+            0,
+            10
+          ],
+          "sha256": "5a6ab80a7b69ded9e83b9feff07f0f345c468db0d0e7989b787c23a863f70d6c"
+        }
+      ],
+      "inventory_sha256": "82b62cba3955484813236eea1c75299aa9c9ceeff9889186b7364ee7239f56ab",
+      "inventory_format": "sorted filename order; relative_path:sha256 newline",
+      "source_selection": "original preserved ROOTs overlaid by validated MC-stat recovery results; no Sgamma diagnostic promotion"
+    }
+  },
+  "r0_precision_finished_parameter": {
+    "file": "higgsCombine_paramFit_Test_CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin2_2024.MultiDimFit.mH1200.root",
+    "entries": 3,
+    "mtime": 1788911682.0428374,
+    "rows": [
+      {
+        "r": 8.761717396055246e-8,
+        "CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin2_2024": 0.991382360458374,
+        "deltaNLL": 0,
+        "quantileExpected": -1
+      },
+      {
+        "r": -1.4173588169796858e-7,
+        "CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin2_2024": 0.991382360458374,
+        "deltaNLL": 0,
+        "quantileExpected": 0.3199999928474426
+      },
+      {
+        "r": -1.4173588169796858e-7,
+        "CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin2_2024": 0.991382360458374,
+        "deltaNLL": 0,
+        "quantileExpected": 0.3199999928474426
+      }
+    ],
+    "accepted": false,
+    "reason": "both nuisance endpoints equal nominal; precision1e8 did not resolve this parameter"
+  },
+  "new_llnorm_recovery_jobs": [
+    {
+      "cluster": 1112634,
+      "expect_signal": 1,
+      "job_status": 1,
+      "status": "idle",
+      "named_nuisances": [
+        "CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025",
+        "CMS_NPS26012_ll_norm_highdm_Nb2plus_bin0_2025",
+        "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR0_inclusive_2025"
+      ],
+      "subset_only": true,
+      "full_collection_pending": true,
+      "output_work": "combined/T2tt/impact_recovery_r1_llnorm_part1/impact_mStop1200_mLSP500_r1/work",
+      "submission_file": "combined/T2tt/impact_recovery_r1_llnorm_part1/impact_r1_eossubmit.sub",
+      "submission_sha256": "d7cdc0a89efd59e3319ebb9eb66fb0c3423f3ff9e201f492265f2d1d3be3257b",
+      "runner_snapshot": "impact_code_endpoint/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+      "runner_sha256": "221c3c9e81b650e1fd90e603d693588e1183f6ca87faa014f521641701e5a3ea",
+      "runner_source_commit": "2e6ac46f",
+      "submission_helper_sha256": "6978ad0a7708e0f7752f65daa77bba1e30abf3a3d3b6825f3b81a3c5fcd74469",
+      "card_sha256": "e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1",
+      "workspace_sha256": "e58f366eff035c02fb244bb43f1a56efcdd12233acc4c5d0401d4c21cb0f8235",
+      "initial_fit_sha256": "14634181a407fa97b3e9d399edab07b177c59bb57b1bd65a2eafd22107ef2693",
+      "resume_source": "combined/T2tt/impact_seed_r1",
+      "minimizer_strategy": 1,
+      "robust_fit": 1,
+      "signal_strength_range": [
+        0,
+        20
+      ],
+      "fit_parallel": 3,
+      "request_cpus": 6,
+      "request_memory_mb": 18000,
+      "max_runtime_seconds": 43200,
+      "proxy_seconds_before_submission": 584398,
+      "voms_seconds_before_submission": 555598,
+      "proxy_checked_utc": "2026-09-09T00:49:23Z",
+      "submitted_held_then_verified_and_released": true,
+      "server_injected_home_removed_before_release": true,
+      "EOS_log_redirection_verified": true,
+      "local_EOS_submission_hash_match": true,
+      "physics_changed": false,
+      "acceptance": "must pass strict two-sided endpoint and fit-log checks; do not rely on subset_fits_complete alone",
+      "last_queue_check_utc": "2026-09-09T00:55:42Z"
+    },
+    {
+      "cluster": 1112635,
+      "expect_signal": 1,
+      "job_status": 1,
+      "status": "idle",
+      "named_nuisances": [
+        "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2024",
+        "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025",
+        "CMS_NPS26012_ll_norm_lowdm_Nb2plus_NISR1plus_inclusive_2025"
+      ],
+      "subset_only": true,
+      "full_collection_pending": true,
+      "output_work": "combined/T2tt/impact_recovery_r1_llnorm_part2/impact_mStop1200_mLSP500_r1/work",
+      "submission_file": "combined/T2tt/impact_recovery_r1_llnorm_part2/impact_r1_eossubmit.sub",
+      "submission_sha256": "9948369d2cf9cff6d22c2650e7ea27298bdfc0b83f94a43f4efc47cdb14d98d3",
+      "runner_snapshot": "impact_code_endpoint/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+      "runner_sha256": "221c3c9e81b650e1fd90e603d693588e1183f6ca87faa014f521641701e5a3ea",
+      "runner_source_commit": "2e6ac46f",
+      "submission_helper_sha256": "6978ad0a7708e0f7752f65daa77bba1e30abf3a3d3b6825f3b81a3c5fcd74469",
+      "card_sha256": "e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1",
+      "workspace_sha256": "e58f366eff035c02fb244bb43f1a56efcdd12233acc4c5d0401d4c21cb0f8235",
+      "initial_fit_sha256": "14634181a407fa97b3e9d399edab07b177c59bb57b1bd65a2eafd22107ef2693",
+      "resume_source": "combined/T2tt/impact_seed_r1",
+      "minimizer_strategy": 1,
+      "robust_fit": 1,
+      "signal_strength_range": [
+        0,
+        20
+      ],
+      "fit_parallel": 3,
+      "request_cpus": 6,
+      "request_memory_mb": 18000,
+      "max_runtime_seconds": 43200,
+      "proxy_seconds_before_submission": 584398,
+      "voms_seconds_before_submission": 555598,
+      "proxy_checked_utc": "2026-09-09T00:49:23Z",
+      "submitted_held_then_verified_and_released": true,
+      "server_injected_home_removed_before_release": true,
+      "EOS_log_redirection_verified": true,
+      "local_EOS_submission_hash_match": true,
+      "physics_changed": false,
+      "acceptance": "must pass strict two-sided endpoint and fit-log checks; do not rely on subset_fits_complete alone",
+      "last_queue_check_utc": "2026-09-09T00:55:42Z"
+    },
+    {
+      "cluster": 1112636,
+      "expect_signal": 0,
+      "job_status": 1,
+      "status": "idle",
+      "named_nuisances": [
+        "CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025",
+        "CMS_NPS26012_ll_norm_highdm_Nb1_bin2_2025",
+        "CMS_NPS26012_ll_norm_highdm_Nb1_bin3_2025"
+      ],
+      "subset_only": true,
+      "full_collection_pending": true,
+      "output_work": "combined/T2tt/impact_recovery_r0_llnorm_part1/impact_mStop1200_mLSP500_r0/work",
+      "submission_file": "combined/T2tt/impact_recovery_r0_llnorm_part1/impact_r0_eossubmit.sub",
+      "submission_sha256": "8c72613b68d41050066cbb8d33b1ef934c3c6a4087446109ef3fa98cab2ed3bb",
+      "runner_snapshot": "impact_code_endpoint/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+      "runner_sha256": "221c3c9e81b650e1fd90e603d693588e1183f6ca87faa014f521641701e5a3ea",
+      "runner_source_commit": "2e6ac46f",
+      "submission_helper_sha256": "6978ad0a7708e0f7752f65daa77bba1e30abf3a3d3b6825f3b81a3c5fcd74469",
+      "card_sha256": "e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1",
+      "workspace_sha256": "fec2790a46d714e92d3a09dfa2f768cba48dd0daf4925ea580cc7dc945d4dceb",
+      "initial_fit_sha256": "7b898069a83365946cd1f0850139131ead856a37113ce3c2e6236c8ede554f6e",
+      "resume_source": "combined/T2tt/impact_seed_r0",
+      "minimizer_strategy": 1,
+      "robust_fit": 1,
+      "signal_strength_range": [
+        -20,
+        20
+      ],
+      "fit_parallel": 3,
+      "request_cpus": 6,
+      "request_memory_mb": 18000,
+      "max_runtime_seconds": 43200,
+      "proxy_seconds_before_submission": 584398,
+      "voms_seconds_before_submission": 555598,
+      "proxy_checked_utc": "2026-09-09T00:49:23Z",
+      "submitted_held_then_verified_and_released": true,
+      "server_injected_home_removed_before_release": true,
+      "EOS_log_redirection_verified": true,
+      "local_EOS_submission_hash_match": true,
+      "physics_changed": false,
+      "acceptance": "must pass strict two-sided endpoint and fit-log checks; do not rely on subset_fits_complete alone",
+      "last_queue_check_utc": "2026-09-09T00:55:42Z"
+    },
+    {
+      "cluster": 1112637,
+      "expect_signal": 0,
+      "job_status": 1,
+      "status": "idle",
+      "named_nuisances": [
+        "CMS_NPS26012_ll_norm_highdm_Nb2plus_bin0_2025",
+        "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2024",
+        "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025"
+      ],
+      "subset_only": true,
+      "full_collection_pending": true,
+      "output_work": "combined/T2tt/impact_recovery_r0_llnorm_part2/impact_mStop1200_mLSP500_r0/work",
+      "submission_file": "combined/T2tt/impact_recovery_r0_llnorm_part2/impact_r0_eossubmit.sub",
+      "submission_sha256": "2084c9342bd734a25fbe427b2f0796a04c57de049186a8f684303377c0224c6e",
+      "runner_snapshot": "impact_code_endpoint/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+      "runner_sha256": "221c3c9e81b650e1fd90e603d693588e1183f6ca87faa014f521641701e5a3ea",
+      "runner_source_commit": "2e6ac46f",
+      "submission_helper_sha256": "6978ad0a7708e0f7752f65daa77bba1e30abf3a3d3b6825f3b81a3c5fcd74469",
+      "card_sha256": "e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1",
+      "workspace_sha256": "fec2790a46d714e92d3a09dfa2f768cba48dd0daf4925ea580cc7dc945d4dceb",
+      "initial_fit_sha256": "7b898069a83365946cd1f0850139131ead856a37113ce3c2e6236c8ede554f6e",
+      "resume_source": "combined/T2tt/impact_seed_r0",
+      "minimizer_strategy": 1,
+      "robust_fit": 1,
+      "signal_strength_range": [
+        -20,
+        20
+      ],
+      "fit_parallel": 3,
+      "request_cpus": 6,
+      "request_memory_mb": 18000,
+      "max_runtime_seconds": 43200,
+      "proxy_seconds_before_submission": 584398,
+      "voms_seconds_before_submission": 555598,
+      "proxy_checked_utc": "2026-09-09T00:49:23Z",
+      "submitted_held_then_verified_and_released": true,
+      "server_injected_home_removed_before_release": true,
+      "EOS_log_redirection_verified": true,
+      "local_EOS_submission_hash_match": true,
+      "physics_changed": false,
+      "acceptance": "must pass strict two-sided endpoint and fit-log checks; do not rely on subset_fits_complete alone",
+      "last_queue_check_utc": "2026-09-09T00:55:42Z"
+    }
+  ],
+  "submission_preflight": {
+    "all_four_verified_before_release": true,
+    "verified_job_ads": [
+      {
+        "Args": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/datacards/datacard_mStop1200_mLSP500.txt /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r1_llnorm_part1/impact_mStop1200_mLSP500_r1 1200",
+        "ClusterId": 1112634,
+        "Cmd": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/impact_code_endpoint/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+        "Environment": "COMBINE_RUNTIME_ARCHIVE=combine_cmssw_14_1_0_pre4.tgz COMBINE_RUNTIME_SHA256=2909cf59caf57cfa47e65e6d43a7bcca8c864c72984679127d8eebabb551614a IMPACT_EXPECT_SIGNAL=1 IMPACT_MINIMIZER_STRATEGY=1 IMPACT_PARALLEL=3 IMPACT_PLOT=0 IMPACT_RESUME_CARD_SHA256=e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1 IMPACT_RESUME_DIR=/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_seed_r1 IMPACT_RESUME_INITIAL_SHA256=14634181a407fa97b3e9d399edab07b177c59bb57b1bd65a2eafd22107ef2693 IMPACT_RESUME_NUISANCES=CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025,CMS_NPS26012_ll_norm_highdm_Nb2plus_bin0_2025,CMS_NPS26012_ll_norm_lowdm_Nb1_NISR0_inclusive_2025 IMPACT_RESUME_WORKSPACE_SHA256=e58f366eff035c02fb244bb43f1a56efcdd12233acc4c5d0401d4c21cb0f8235 IMPACT_R_MAX=20 IMPACT_R_MIN=0 IMPACT_SUBSET_ONLY=1",
+        "Err": "/Expr(ifThenElse(JobStatus == 4,\"/dev/null\",SubmittedErr))/",
+        "Iwd": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r1_llnorm_part1/impact_mStop1200_mLSP500_r1",
+        "JobBatchName": "NPS26012_LeptonVeto10_T2tt_r1_llnorm_1",
+        "JobStatus": 5,
+        "MaxRuntime": 43200,
+        "NumJobStarts": 0,
+        "Out": "/Expr(ifThenElse(JobStatus == 4,\"/dev/null\",SubmittedOut))/",
+        "ProcId": 0,
+        "RequestCpus": 6,
+        "RequestMemory": 18000,
+        "SubmittedErr": "root://eosuser.cern.ch//eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r1_llnorm_part1/impact_mStop1200_mLSP500_r1/condor_logs/impact.err",
+        "SubmittedOut": "root://eosuser.cern.ch//eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r1_llnorm_part1/impact_mStop1200_mLSP500_r1/condor_logs/impact.out",
+        "TransferInput": "/eos/user/t/taiwoo/run3_stop/runtime/combine_cmssw_14_1_0_pre4.tgz",
+        "UserLog": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r1_llnorm_part1/impact_mStop1200_mLSP500_r1/condor_logs/cluster.log",
+        "X509UserProxy": "/eos/user/t/taiwoo/decaf/analysis/proxy/x509up_u147757"
+      },
+      {
+        "Args": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/datacards/datacard_mStop1200_mLSP500.txt /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r1_llnorm_part2/impact_mStop1200_mLSP500_r1 1200",
+        "ClusterId": 1112635,
+        "Cmd": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/impact_code_endpoint/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+        "Environment": "COMBINE_RUNTIME_ARCHIVE=combine_cmssw_14_1_0_pre4.tgz COMBINE_RUNTIME_SHA256=2909cf59caf57cfa47e65e6d43a7bcca8c864c72984679127d8eebabb551614a IMPACT_EXPECT_SIGNAL=1 IMPACT_MINIMIZER_STRATEGY=1 IMPACT_PARALLEL=3 IMPACT_PLOT=0 IMPACT_RESUME_CARD_SHA256=e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1 IMPACT_RESUME_DIR=/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_seed_r1 IMPACT_RESUME_INITIAL_SHA256=14634181a407fa97b3e9d399edab07b177c59bb57b1bd65a2eafd22107ef2693 IMPACT_RESUME_NUISANCES=CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2024,CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025,CMS_NPS26012_ll_norm_lowdm_Nb2plus_NISR1plus_inclusive_2025 IMPACT_RESUME_WORKSPACE_SHA256=e58f366eff035c02fb244bb43f1a56efcdd12233acc4c5d0401d4c21cb0f8235 IMPACT_R_MAX=20 IMPACT_R_MIN=0 IMPACT_SUBSET_ONLY=1",
+        "Err": "/Expr(ifThenElse(JobStatus == 4,\"/dev/null\",SubmittedErr))/",
+        "Iwd": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r1_llnorm_part2/impact_mStop1200_mLSP500_r1",
+        "JobBatchName": "NPS26012_LeptonVeto10_T2tt_r1_llnorm_2",
+        "JobStatus": 5,
+        "MaxRuntime": 43200,
+        "NumJobStarts": 0,
+        "Out": "/Expr(ifThenElse(JobStatus == 4,\"/dev/null\",SubmittedOut))/",
+        "ProcId": 0,
+        "RequestCpus": 6,
+        "RequestMemory": 18000,
+        "SubmittedErr": "root://eosuser.cern.ch//eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r1_llnorm_part2/impact_mStop1200_mLSP500_r1/condor_logs/impact.err",
+        "SubmittedOut": "root://eosuser.cern.ch//eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r1_llnorm_part2/impact_mStop1200_mLSP500_r1/condor_logs/impact.out",
+        "TransferInput": "/eos/user/t/taiwoo/run3_stop/runtime/combine_cmssw_14_1_0_pre4.tgz",
+        "UserLog": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r1_llnorm_part2/impact_mStop1200_mLSP500_r1/condor_logs/cluster.log",
+        "X509UserProxy": "/eos/user/t/taiwoo/decaf/analysis/proxy/x509up_u147757"
+      },
+      {
+        "Args": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/datacards/datacard_mStop1200_mLSP500.txt /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r0_llnorm_part1/impact_mStop1200_mLSP500_r0 1200",
+        "ClusterId": 1112636,
+        "Cmd": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/impact_code_endpoint/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+        "Environment": "COMBINE_RUNTIME_ARCHIVE=combine_cmssw_14_1_0_pre4.tgz COMBINE_RUNTIME_SHA256=2909cf59caf57cfa47e65e6d43a7bcca8c864c72984679127d8eebabb551614a IMPACT_EXPECT_SIGNAL=0 IMPACT_MINIMIZER_STRATEGY=1 IMPACT_PARALLEL=3 IMPACT_PLOT=0 IMPACT_RESUME_CARD_SHA256=e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1 IMPACT_RESUME_DIR=/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_seed_r0 IMPACT_RESUME_INITIAL_SHA256=7b898069a83365946cd1f0850139131ead856a37113ce3c2e6236c8ede554f6e IMPACT_RESUME_NUISANCES=CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025,CMS_NPS26012_ll_norm_highdm_Nb1_bin2_2025,CMS_NPS26012_ll_norm_highdm_Nb1_bin3_2025 IMPACT_RESUME_WORKSPACE_SHA256=fec2790a46d714e92d3a09dfa2f768cba48dd0daf4925ea580cc7dc945d4dceb IMPACT_R_MAX=20 IMPACT_R_MIN=-20 IMPACT_SUBSET_ONLY=1",
+        "Err": "/Expr(ifThenElse(JobStatus == 4,\"/dev/null\",SubmittedErr))/",
+        "Iwd": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r0_llnorm_part1/impact_mStop1200_mLSP500_r0",
+        "JobBatchName": "NPS26012_LeptonVeto10_T2tt_r0_llnorm_1",
+        "JobStatus": 5,
+        "MaxRuntime": 43200,
+        "NumJobStarts": 0,
+        "Out": "/Expr(ifThenElse(JobStatus == 4,\"/dev/null\",SubmittedOut))/",
+        "ProcId": 0,
+        "RequestCpus": 6,
+        "RequestMemory": 18000,
+        "SubmittedErr": "root://eosuser.cern.ch//eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r0_llnorm_part1/impact_mStop1200_mLSP500_r0/condor_logs/impact.err",
+        "SubmittedOut": "root://eosuser.cern.ch//eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r0_llnorm_part1/impact_mStop1200_mLSP500_r0/condor_logs/impact.out",
+        "TransferInput": "/eos/user/t/taiwoo/run3_stop/runtime/combine_cmssw_14_1_0_pre4.tgz",
+        "UserLog": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r0_llnorm_part1/impact_mStop1200_mLSP500_r0/condor_logs/cluster.log",
+        "X509UserProxy": "/eos/user/t/taiwoo/decaf/analysis/proxy/x509up_u147757"
+      },
+      {
+        "Args": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/datacards/datacard_mStop1200_mLSP500.txt /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r0_llnorm_part2/impact_mStop1200_mLSP500_r0 1200",
+        "ClusterId": 1112637,
+        "Cmd": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/impact_code_endpoint/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+        "Environment": "COMBINE_RUNTIME_ARCHIVE=combine_cmssw_14_1_0_pre4.tgz COMBINE_RUNTIME_SHA256=2909cf59caf57cfa47e65e6d43a7bcca8c864c72984679127d8eebabb551614a IMPACT_EXPECT_SIGNAL=0 IMPACT_MINIMIZER_STRATEGY=1 IMPACT_PARALLEL=3 IMPACT_PLOT=0 IMPACT_RESUME_CARD_SHA256=e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1 IMPACT_RESUME_DIR=/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_seed_r0 IMPACT_RESUME_INITIAL_SHA256=7b898069a83365946cd1f0850139131ead856a37113ce3c2e6236c8ede554f6e IMPACT_RESUME_NUISANCES=CMS_NPS26012_ll_norm_highdm_Nb2plus_bin0_2025,CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2024,CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025 IMPACT_RESUME_WORKSPACE_SHA256=fec2790a46d714e92d3a09dfa2f768cba48dd0daf4925ea580cc7dc945d4dceb IMPACT_R_MAX=20 IMPACT_R_MIN=-20 IMPACT_SUBSET_ONLY=1",
+        "Err": "/Expr(ifThenElse(JobStatus == 4,\"/dev/null\",SubmittedErr))/",
+        "Iwd": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r0_llnorm_part2/impact_mStop1200_mLSP500_r0",
+        "JobBatchName": "NPS26012_LeptonVeto10_T2tt_r0_llnorm_2",
+        "JobStatus": 5,
+        "MaxRuntime": 43200,
+        "NumJobStarts": 0,
+        "Out": "/Expr(ifThenElse(JobStatus == 4,\"/dev/null\",SubmittedOut))/",
+        "ProcId": 0,
+        "RequestCpus": 6,
+        "RequestMemory": 18000,
+        "SubmittedErr": "root://eosuser.cern.ch//eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r0_llnorm_part2/impact_mStop1200_mLSP500_r0/condor_logs/impact.err",
+        "SubmittedOut": "root://eosuser.cern.ch//eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r0_llnorm_part2/impact_mStop1200_mLSP500_r0/condor_logs/impact.out",
+        "TransferInput": "/eos/user/t/taiwoo/run3_stop/runtime/combine_cmssw_14_1_0_pre4.tgz",
+        "UserLog": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r0_llnorm_part2/impact_mStop1200_mLSP500_r0/condor_logs/cluster.log",
+        "X509UserProxy": "/eos/user/t/taiwoo/decaf/analysis/proxy/x509up_u147757"
+      }
+    ],
+    "first_guard_rejected_EOS_schedd_log_expression": true,
+    "resolution": "verified exact standard Expr redirection and SubmittedOut/SubmittedErr EOS URLs; no worker ran before validation",
+    "healthy_jobs_restarted": 0
+  },
+  "statistical_treatment_approval": {
+    "status": "awaiting_user_reply",
+    "affected_stage": "Sgamma boundary-limited interval adoption and final impact publication",
+    "request": "allow explicitly marked boundary-truncated profile intervals only where the profile confirms a genuine physical-boundary limitation",
+    "recipient": "taiwoo.kim@cern.ch",
+    "request_file": "requests/sgamma_boundary_treatment_20260909.eml",
+    "request_sha256": "b4bdd0673e7a86a2f1678f5460724a024e16f1ad19fed3d622c2a03c389faf84",
+    "sendmail_exit_code": 0,
+    "mail_status": "accepted_by_existing_CERN_sendmail; recipient_delivery_not_confirmed",
+    "approved": false,
+    "independent_work_continues": [
+      "LL normalization numerical recovery with unchanged model and bounds",
+      "already-running r0 numerical precision diagnostic"
+    ],
+    "must_not_change": [
+      "likelihood",
+      "RZ/Sgamma connections",
+      "parameter ranges",
+      "nuisance correlations",
+      "SR blinding"
+    ]
+  },
+  "final_impact_json_counts": {
+    "r1": 0,
+    "r0": 0
+  },
+  "limits_validated": 924,
+  "source_code_changed": false,
+  "physics_changed": false,
+  "intermediate_ROOT_access": false,
+  "NanoAOD_access": false,
+  "slow_history_query": {
+    "query_pid": 1151274,
+    "terminated_read_only_query": true,
+    "replaced_with_exact_job_query": true
+  }
+}
