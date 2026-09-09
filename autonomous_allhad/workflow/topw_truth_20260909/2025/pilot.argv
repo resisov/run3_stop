@@ -1,0 +1,13 @@
+/eos/user/t/taiwoo/miniconda3/envs/py38/bin/python
+-m
+autonomous_allhad.flat_ntuple_worker
+--repo
+/eos/user/t/taiwoo/run3_stop/decaf
+--append-topw-truth
+/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/flat2025_v8/outputs/nominal/mc_shard_00000.root
+--output
+/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topw_truth_20260909/2025/mc_shard_00000.root
+--metadata-output
+/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topw_truth_20260909/2025/pilot.json
+--truth-year
+2025

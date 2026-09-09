@@ -12,6 +12,7 @@ import numpy as np
 from autonomous_allhad.analysis_scale_factors import (
     AnalysisScaleFactorUnavailable,
     apply_topw_highpt_extrapolation,
+    topw_pass_fail_triplet,
     loose_muon_lowpt_triplet,
     met_trigger_triplet,
     photon_trigger_triplet,
@@ -78,6 +79,39 @@ class TopWExtrapolationTest(unittest.TestCase):
             apply_topw_highpt_extrapolation([1300], [1], [1], [1], tagger="top", year="2023")
         with self.assertRaises(ValueError):
             apply_topw_highpt_extrapolation([1300], [1], [1], [1], tagger="resolved", year="2024")
+
+
+class TopWPassFailTest(unittest.TestCase):
+    def test_pass_fail_sum_and_anticorrelated_variations(self):
+        result = topw_pass_fail_triplet([True, False], [0.4, 0.4],
+                                       [1.1, 1.1], [1.3, 1.3], [0.8, 0.8])
+        for weights in result:
+            self.assertAlmostEqual(0.4 * weights[0] + 0.6 * weights[1], 1.0)
+        self.assertGreater(result[1][0], result[0][0])
+        self.assertLess(result[1][1], result[0][1])
+        self.assertLess(result[2][0], result[0][0])
+        self.assertGreater(result[2][1], result[0][1])
+
+    def test_highpt_extrapolation_is_unity_for_pass_and_fail(self):
+        scales = apply_topw_highpt_extrapolation([1200, 1500], [np.nan] * 2,
+                   [np.nan] * 2, [np.nan] * 2, tagger="top", year="2025")
+        for weights in topw_pass_fail_triplet([True, False], [0.8, 0.4], *scales):
+            np.testing.assert_array_equal(weights, [1, 1])
+
+    def test_unsupported_efficiencies_are_not_clipped(self):
+        for tagged, eff, sf in ((True, 0, 1), (False, 1, 1), (True, 1, 0.9),
+                               (False, 0.9, 1.2), (True, np.nan, 1), (False, -0.1, 1)):
+            with self.subTest(tagged=tagged, eff=eff, sf=sf), self.assertRaises(AnalysisScaleFactorUnavailable):
+                topw_pass_fail_triplet([tagged], [eff], [sf], [sf], [sf])
+
+    def test_supported_boundary_efficiencies(self):
+        for weights in topw_pass_fail_triplet([True, False], [1, 0], [1, 1], [1, 1], [1, 1]):
+            np.testing.assert_array_equal(weights, [1, 1])
+
+    def test_variations_must_be_valid_and_bracketed(self):
+        for nominal, up, down in ((1, np.nan, 0.8), (1, 0.9, 0.8), (1, 1.2, -0.1)):
+            with self.assertRaises(AnalysisScaleFactorUnavailable):
+                topw_pass_fail_triplet([True], [0.4], [nominal], [up], [down])
 
 
 class AnalysisScaleFactorTest(unittest.TestCase):

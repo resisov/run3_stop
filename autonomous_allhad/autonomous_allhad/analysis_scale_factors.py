@@ -79,6 +79,43 @@ def apply_topw_highpt_extrapolation(
     return nominal, up, down
 
 
+def topw_pass_fail_triplet(
+    tagged: Any,
+    efficiency: Any,
+    nominal: Any,
+    up: Any,
+    down: Any,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Weight eligible, truth-matched jets without changing pass+fail yield."""
+    tagged = np.asarray(tagged)
+    efficiency = np.asarray(efficiency, dtype=float)
+    if tagged.ndim != 1 or tagged.dtype != np.bool_ or efficiency.shape != tagged.shape:
+        raise ValueError("Top/W tag decisions and efficiencies must be aligned flat arrays")
+    if (not np.all(np.isfinite(efficiency))
+        or np.any((efficiency < 0) | (efficiency > 1))):
+        raise AnalysisScaleFactorUnavailable("invalid Top/W MC efficiency")
+    if np.any(tagged & (efficiency == 0)) or np.any(~tagged & (efficiency == 1)):
+        raise AnalysisScaleFactorUnavailable("tag decision has no MC efficiency support")
+    variations = [np.asarray(value, dtype=float) for value in (nominal, up, down)]
+    for scale in variations:
+        if scale.shape != tagged.shape:
+            raise ValueError("Top/W SF and efficiency array shapes differ")
+        if not np.all(np.isfinite(scale)) or np.any(scale < 0):
+            raise AnalysisScaleFactorUnavailable("invalid Top/W SF variation")
+        if np.any(scale * efficiency > 1):
+            raise AnalysisScaleFactorUnavailable("Top/W SF times MC efficiency exceeds one")
+        if np.any((efficiency == 1) & (scale != 1)):
+            raise AnalysisScaleFactorUnavailable("no failing MC support for non-unity Top/W SF")
+    if np.any(variations[2] > variations[0]) or np.any(variations[0] > variations[1]):
+        raise AnalysisScaleFactorUnavailable("Top/W SF variations do not bracket nominal")
+    result = []
+    for scale in variations:
+        fail = np.ones_like(efficiency)
+        np.divide(1 - scale * efficiency, 1 - efficiency, out=fail, where=efficiency < 1)
+        result.append(np.where(tagged, scale, fail))
+    return tuple(result)
+
+
 @lru_cache(maxsize=None)
 def _load(path: str) -> correctionlib.CorrectionSet:
     return correctionlib.CorrectionSet.from_file(path)

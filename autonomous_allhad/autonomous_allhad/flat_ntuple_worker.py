@@ -926,9 +926,6 @@ def topw_truth_payload(stored: Any, nano: Any, classifier: Any) -> dict[str, Any
     payload = {name: np.asarray(stored[name]) for name in TOPW_ID_FIELDS}
     payload["fatjet_source_index_all"] = ak.values_astype(indices, np.int32)
     payload["fatjet_decay_flavor_all"] = ak.unflatten(flavor.astype(np.int8), counts)
-    for name in TOPW_GEN_FIELDS:
-        dtype = np.int32 if name in ("pdgId", "genPartIdxMother") else np.float32
-        payload["GenPart_" + name] = ak.values_astype(nano["GenPart_" + name], dtype)
     return payload
 
 
@@ -1025,8 +1022,6 @@ def append_topw_truth(input_path: Path, output: Path, repo: Path, work_dir: Path
     types = {name: np.int64 for name in TOPW_ID_FIELDS}
     types["file_id"] = np.int32
     types.update({"fatjet_source_index_all": "var * int32", "fatjet_decay_flavor_all": "var * int8"})
-    types.update({"GenPart_" + name: "var * " + ("int32" if name in ("pdgId", "genPartIdxMother") else "float32")
-                  for name in TOPW_GEN_FIELDS})
     counts = np.zeros(5, dtype=np.int64)
     processed = 0
     with uproot.open(input_path) as root:
@@ -1082,10 +1077,14 @@ def append_topw_truth(input_path: Path, output: Path, repo: Path, work_dir: Path
     with uproot.update(local) as destination:
         destination[TOPW_TRUTH_MARKER] = json.dumps(marker, sort_keys=True, allow_nan=False)
     output_hash = _sha256(local)
-    shutil.copyfile(local, staged)
-    if _sha256(staged) != output_hash or _sha256(input_path) != original_hash:
-        raise RuntimeError("truth stage-out checksum mismatch or original input changed")
-    os.replace(staged, output)
+    try:
+        shutil.copyfile(local, staged)
+        if _sha256(staged) != output_hash or _sha256(input_path) != original_hash:
+            raise RuntimeError("truth stage-out checksum mismatch or original input changed")
+        os.replace(staged, output)
+    finally:
+        if staged.exists():
+            staged.unlink()
     local.unlink()
     return {"status": "complete", "root": str(output), "sha256": output_hash,
             "bytes": output.stat().st_size, "marker": marker}
