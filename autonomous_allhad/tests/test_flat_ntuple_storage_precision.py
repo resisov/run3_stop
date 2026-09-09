@@ -118,7 +118,8 @@ def _check_topw_append(tmp_path, year, in_place=False):
                                              "events_entries": 2, "model_sha256": "test_model"})
     original.with_suffix(".json").write_text(json.dumps({
         "status": "complete", "files": [{"file_path": source, "file_id": file_id,
-        "events_written": 2, "read_status": "success", "processed_entry_ranges": [[0, 2]],
+        "events_written": 2, "read_status": "success",
+        "processed_entry_ranges": [{"entry_start": 0, "entry_stop": 2}],
         "number_of_entries": 2}],
     }))
     original_hash = flat._sha256(original)

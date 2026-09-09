@@ -1045,7 +1045,11 @@ def append_topw_truth(input_path: Path, output: Path, repo: Path, work_dir: Path
                     rows = stored[indices]
                     entries = np.asarray(rows["entry"], dtype=np.int64)
                     allowed = np.zeros(len(entries), dtype=bool)
-                    for start, stop in record["processed_entry_ranges"]:
+                    for entry_range in record["processed_entry_ranges"]:
+                        start = int(entry_range["entry_start"])
+                        stop = int(entry_range["entry_stop"])
+                        if not 0 <= start < stop <= int(record["number_of_entries"]):
+                            raise ValueError("invalid original processed entry range")
                         allowed |= (entries >= start) & (entries < stop)
                     if not np.all(allowed):
                         raise ValueError("retained entries outside original processed ranges")
