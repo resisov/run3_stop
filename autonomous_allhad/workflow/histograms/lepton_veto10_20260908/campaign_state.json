@@ -371,7 +371,7 @@
     "runtime_sha256": "2909cf59caf57cfa47e65e6d43a7bcca8c864c72984679127d8eebabb551614a"
   },
   "limits": "924_of_924_complete_validated",
-  "last_statistical_poll_utc": "2026-09-09T01:50:07Z",
+  "last_statistical_poll_utc": "2026-09-09T02:12:09Z",
   "statistical_queue_at_last_poll": {
     "primary_limits_running": 0,
     "precision_recovery_running": 0,
@@ -379,11 +379,11 @@
     "limits_idle": 0,
     "limits_validated_complete": 924,
     "limits_failed_output_validation": 0,
-    "impacts_running": 4,
-    "impact_state_last_verified_utc": "2026-09-09T01:50:07Z",
+    "impacts_running": 3,
+    "impact_state_last_verified_utc": "2026-09-09T02:12:09Z",
     "current_statistical_jobs_held": 6,
     "held_jobs_are_archived_original_timeouts": false,
-    "impacts_idle": 1,
+    "impacts_idle": 0,
     "held_jobs_breakdown": {
       "superseded_r0_original_failure": 1,
       "superseded_r0_resume_bug": 1,
@@ -1106,17 +1106,15 @@
     },
     "future_T2tt_requirement": "Include existing physical signal mass points with mStop <= 600 GeV starting from the next production; 600 GeV is already present. User explicitly deferred the 100-500 GeV addition; do not regenerate this campaign."
   },
-  "impacts_status": "llnorm_step_recovery_submitted_sgamma_highdm_diagnostic_active_boundary_approval_pending",
+  "impacts_status": "llnorm_remaining3_sgamma_diagnostics_running_boundary_approval_pending",
   "impact_jobs": {
     "r1_cluster": 1112644,
     "r0_cluster": 1112615,
-    "last_cpu_poll_utc": "2026-09-09T01:50:07Z",
+    "last_cpu_poll_utc": "2026-09-09T02:12:09Z",
     "remote_user_cpu_seconds": {
-      "1112615": 16579,
-      "1112644": 0,
-      "1112645": 0,
-      "1112646": 0,
-      "1112647": 0
+      "1112615": 18365,
+      "1112644": 1700,
+      "1112647": 587
     },
     "input": "combined/T2tt/datacards/datacard_mStop1200_mLSP500.txt",
     "card_matches_validated_pilot_except_source_paths": true,
@@ -1131,7 +1129,7 @@
       "r0": 0
     },
     "progress_audit": {
-      "audited_at_utc": "2026-09-09T01:50:07Z",
+      "audited_at_utc": "2026-09-09T02:12:09Z",
       "method": "local inspection of all retained nuisance ROOTs overlaid with completed MC-stat recovery results; rateParam endpoints compared with exact card bounds",
       "nuisances_per_run": 735,
       "request_cpus": 6,
@@ -1149,25 +1147,25 @@
         }
       },
       "r1": {
-        "measurement_scope": "734 effective ROOTs; 715 strict two-sided endpoints after one LL recovery. Five LL and fourteen Sgamma interior one-sided failures plus one missing Sgamma remain. Full convergence review pending.",
+        "measurement_scope": "734 effective ROOTs; 717 strict two-sided endpoints after two further LL recoveries. Three LL and fourteen Sgamma interior one-sided failures plus one missing Sgamma remain. Full convergence review pending.",
         "original_preserved_roots": 723,
         "original_degenerate_endpoint_roots": 14,
         "new_recovered_roots": 11,
         "finite_three_entry_roots": 734,
-        "nondegenerate_ordered_endpoints": 715,
-        "unresolved_parameters": 20,
+        "nondegenerate_ordered_endpoints": 717,
+        "unresolved_parameters": 18,
         "mcstat_recovery_nuisances": 0,
         "sgamma_unresolved_nuisances": 15,
         "new_endpoint_recovered_roots": 14,
         "zero_width_sgamma_side_flags": 14,
-        "known_unresolved_parameters": 20,
+        "known_unresolved_parameters": 18,
         "full_convergence_validated": false,
-        "strict_two_sided_endpoints": 715,
-        "llnorm_recovery_nuisances": 5,
-        "llnorm_endpoints_recovered": 1
+        "strict_two_sided_endpoints": 717,
+        "llnorm_recovery_nuisances": 3,
+        "llnorm_endpoints_recovered": 3
       },
       "r0": {
-        "measurement_scope": "733 effective ROOTs; 719 strict two-sided endpoints including the small-step LL recovery. Two LL and twelve Sgamma interior one-sided failures plus two missing Sgamma remain. Full convergence review pending.",
+        "measurement_scope": "733 effective ROOTs; 721 strict two-sided endpoints after two further LL recoveries. Twelve Sgamma interior one-sided failures and two missing Sgamma remain. All six initially flagged LL endpoints restored; full convergence review pending.",
         "root_files": 733,
         "finite_three_entry_roots": 733,
         "incomplete_finished_roots": 0,
@@ -1175,15 +1173,15 @@
         "missing_from_preserved_checkpoint": 2,
         "three_entry_autoMCStats": 578,
         "three_entry_other": 155,
-        "nondegenerate_ordered_endpoints": 719,
+        "nondegenerate_ordered_endpoints": 721,
         "zero_width_sgamma_side_flags": 12,
-        "known_unresolved_parameters": 16,
+        "known_unresolved_parameters": 14,
         "full_convergence_validated": false,
-        "strict_two_sided_endpoints": 719,
-        "llnorm_recovery_nuisances": 2,
-        "unresolved_parameters": 16,
+        "strict_two_sided_endpoints": 721,
+        "llnorm_recovery_nuisances": 0,
+        "unresolved_parameters": 14,
         "sgamma_unresolved_nuisances": 14,
-        "llnorm_endpoints_recovered": 4
+        "llnorm_endpoints_recovered": 6
       },
       "shared_incomplete_parameters": [
         "CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin2_2024",
@@ -1200,7 +1198,7 @@
       "stageout": "original checkpoint preserved; recovery runner stages work on exit, including failures",
       "restarts": 0,
       "physics_changes": false,
-      "retry_status": "llnorm_step_recovery_submitted_sgamma_highdm_diagnostic_active_boundary_approval_pending",
+      "retry_status": "llnorm_remaining3_sgamma_diagnostics_running_boundary_approval_pending",
       "retry_requested_nuisances": {
         "r1": 35,
         "r0": 2
@@ -1541,8 +1539,8 @@
           "intermediate nonconvergent minimizations"
         ],
         "final_convergence_validated": false,
-        "last_queue_check_utc": "2026-09-09T01:50:07Z",
-        "remote_user_cpu_seconds": 16579,
+        "last_queue_check_utc": "2026-09-09T02:12:09Z",
+        "remote_user_cpu_seconds": 18365,
         "finished_first_parameter": {
           "name": "CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin2_2024",
           "entries": 3,
@@ -1555,7 +1553,8 @@
           "issue": "both nuisance endpoints equal interior nominal",
           "promoted": false
         },
-        "remaining_active_parameter": "CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin1_2024"
+        "remaining_active_parameter": "CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin1_2024",
+        "num_job_starts": 1
       },
       {
         "cluster": 1112616,
@@ -1642,7 +1641,6 @@
     "r1_original_cluster": 1111237,
     "r1_clusters": [
       1112644,
-      1112645,
       1112647
     ],
     "r1_original_removal": {
@@ -3251,28 +3249,27 @@
       ]
     },
     "r0_clusters": [
-      1112615,
-      1112646
+      1112615
     ],
     "all_endpoint_audit": {
-      "at_utc": "2026-09-09T01:50:07Z",
-      "record": "monitoring/20260909T014149Z.json",
-      "base_record": "monitoring/20260909T011149Z.json",
+      "at_utc": "2026-09-09T02:12:09Z",
+      "record": "monitoring/20260909T021149Z.json",
+      "base_record": "monitoring/20260909T014149Z.json",
       "field": "effective_endpoint_counts",
       "r1": {
         "checked": 734,
-        "strict_two_sided": 715,
-        "interior_one_sided": 19,
+        "strict_two_sided": 717,
+        "interior_one_sided": 17,
         "missing": 1,
-        "llnorm": 5,
+        "llnorm": 3,
         "sgamma": 14
       },
       "r0": {
         "checked": 733,
-        "strict_two_sided": 719,
-        "interior_one_sided": 14,
+        "strict_two_sided": 721,
+        "interior_one_sided": 12,
         "missing": 2,
-        "llnorm": 2,
+        "llnorm": 0,
         "sgamma": 12
       },
       "model_changed": false
@@ -3688,13 +3685,38 @@
       "complete_impact_convergence_validation": false
     },
     "accepted_nuisance_overrides": {
-      "r1": {},
+      "r1": {
+        "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025": {
+          "root": "combined/T2tt/impact_recovery_r1_llnorm_step001_part2/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025.MultiDimFit.mH1200.root",
+          "sha256": "36f16ea5cf5074043c616e1fa4857cb619b3af058ec80097f952c5c566e9ce83",
+          "cluster": 1112645,
+          "scope": "finite strict two-sided endpoints; log warnings retained; full impact convergence validation pending"
+        },
+        "CMS_NPS26012_ll_norm_lowdm_Nb2plus_NISR1plus_inclusive_2025": {
+          "root": "combined/T2tt/impact_recovery_r1_llnorm_step001_part2/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_lowdm_Nb2plus_NISR1plus_inclusive_2025.MultiDimFit.mH1200.root",
+          "sha256": "a8f6d1ac481d22c3c6247d080c4ce003b41d4a0f903ebe5fa3ce7b68d5ef54a3",
+          "cluster": 1112645,
+          "scope": "finite strict two-sided endpoints; log warnings retained; full impact convergence validation pending"
+        }
+      },
       "r0": {
         "CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025": {
           "root": "combined/T2tt/impact_diagnostic_r0_llnorm_step001_strategy0/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025.MultiDimFit.mH1200.root",
           "sha256": "75606a8621f98d5b11c46bc69ac4dfe7a5953e08e1280a235efd21a1b3a97b47",
           "cluster": 1112642,
           "scope": "strict endpoint check, matching duplicate diagnostic, final impact endpoint refits status0; full model convergence validation still pending"
+        },
+        "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2024": {
+          "root": "combined/T2tt/impact_recovery_r0_llnorm_step001_part1/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2024.MultiDimFit.mH1200.root",
+          "sha256": "bb76884a9943e8f7137eefd6fbdbe2cc85e77a4de85d912f9e163374420839eb",
+          "cluster": 1112646,
+          "scope": "finite strict two-sided endpoints; log warnings retained; full impact convergence validation pending"
+        },
+        "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025": {
+          "root": "combined/T2tt/impact_recovery_r0_llnorm_step001_part1/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025.MultiDimFit.mH1200.root",
+          "sha256": "73902a7d11313a25d74251c37679cdfa62e0d1e9840d2cd7b592db7bdaa301bd",
+          "cluster": 1112646,
+          "scope": "finite strict two-sided endpoints; log warnings retained; full impact convergence validation pending"
         }
       }
     },
@@ -3707,9 +3729,9 @@
           "CMS_NPS26012_ll_norm_highdm_Nb2plus_bin0_2025",
           "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR0_inclusive_2025"
         ],
-        "status": "running_startup_not_yet_worker_verified",
+        "status": "running",
         "job_status": 2,
-        "num_job_starts": 0,
+        "num_job_starts": 1,
         "diagnostic_only": false,
         "output_work": "combined/T2tt/impact_recovery_r1_llnorm_step001_part1/impact_mStop1200_mLSP500_r1/work",
         "submission_file": "combined/T2tt/impact_recovery_r1_llnorm_step001_part1/impact_r1_eossubmit.sub",
@@ -3743,7 +3765,8 @@
         "physics_changed": false,
         "parameter_bounds_changed": false,
         "tolerance_changed": false,
-        "last_queue_check_utc": "2026-09-09T01:50:07Z"
+        "last_queue_check_utc": "2026-09-09T02:12:09Z",
+        "remote_user_cpu_seconds": 1700
       },
       {
         "cluster": 1112645,
@@ -3752,8 +3775,8 @@
           "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025",
           "CMS_NPS26012_ll_norm_lowdm_Nb2plus_NISR1plus_inclusive_2025"
         ],
-        "status": "running_startup_not_yet_worker_verified",
-        "job_status": 2,
+        "status": "two_sided_endpoints_restored",
+        "job_status": 4,
         "num_job_starts": 0,
         "diagnostic_only": false,
         "output_work": "combined/T2tt/impact_recovery_r1_llnorm_step001_part2/impact_mStop1200_mLSP500_r1/work",
@@ -3788,7 +3811,25 @@
         "physics_changed": false,
         "parameter_bounds_changed": false,
         "tolerance_changed": false,
-        "last_queue_check_utc": "2026-09-09T01:50:07Z"
+        "last_queue_check_utc": "2026-09-09T02:12:09Z",
+        "exit_code": 0,
+        "history": {
+          "ClusterId": 1112645,
+          "CompletionDate": 1788919739,
+          "ExitBySignal": false,
+          "ExitCode": 0,
+          "JobStatus": 4,
+          "ProcId": 0,
+          "RemoteUserCpu": 2078,
+          "RemoteWallClockTime": 1135
+        },
+        "strict_two_sided_passed": 2,
+        "strict_two_sided_failed": 0,
+        "fit_log_sha256": "ff6e2a42e1bc6f3c1936359fd7918adcbefe46ebc5f29073a720ff904f3d4469",
+        "local_EOS_root_hash_match": true,
+        "validation_record": "monitoring/20260909T021149Z.json",
+        "profile_intermediate_covariance_warning_lines": 50,
+        "full_collection_pending": true
       },
       {
         "cluster": 1112646,
@@ -3797,8 +3838,8 @@
           "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2024",
           "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025"
         ],
-        "status": "running_startup_not_yet_worker_verified",
-        "job_status": 2,
+        "status": "two_sided_endpoints_restored",
+        "job_status": 4,
         "num_job_starts": 0,
         "diagnostic_only": false,
         "output_work": "combined/T2tt/impact_recovery_r0_llnorm_step001_part1/impact_mStop1200_mLSP500_r0/work",
@@ -3833,7 +3874,25 @@
         "physics_changed": false,
         "parameter_bounds_changed": false,
         "tolerance_changed": false,
-        "last_queue_check_utc": "2026-09-09T01:50:07Z"
+        "last_queue_check_utc": "2026-09-09T02:12:09Z",
+        "exit_code": 0,
+        "history": {
+          "ClusterId": 1112646,
+          "CompletionDate": 1788919687,
+          "ExitBySignal": false,
+          "ExitCode": 0,
+          "JobStatus": 4,
+          "ProcId": 0,
+          "RemoteUserCpu": 1985,
+          "RemoteWallClockTime": 1082
+        },
+        "strict_two_sided_passed": 2,
+        "strict_two_sided_failed": 0,
+        "fit_log_sha256": "697226fbab223bfba43b55b40ebc120147eae894d65f22c6631142b6db80dd5b",
+        "local_EOS_root_hash_match": true,
+        "validation_record": "monitoring/20260909T021149Z.json",
+        "profile_intermediate_covariance_warning_lines": 48,
+        "full_collection_pending": true
       }
     ],
     "sgamma_highdm_step_diagnostic": {
@@ -3842,9 +3901,9 @@
       "named_nuisances": [
         "CMS_NPS26012_sgamma_shape_highdm_Nb1_bin0_2024"
       ],
-      "status": "idle",
-      "job_status": 1,
-      "num_job_starts": 0,
+      "status": "running",
+      "job_status": 2,
+      "num_job_starts": 1,
       "diagnostic_only": true,
       "output_work": "combined/T2tt/impact_diagnostic_r1_sgamma_highdm_step001/impact_mStop1200_mLSP500_r1/work",
       "submission_file": "combined/T2tt/impact_diagnostic_r1_sgamma_highdm_step001/impact_r1_eossubmit.sub",
@@ -3878,15 +3937,16 @@
       "physics_changed": false,
       "parameter_bounds_changed": false,
       "tolerance_changed": false,
-      "last_queue_check_utc": "2026-09-09T01:50:07Z"
+      "last_queue_check_utc": "2026-09-09T02:12:09Z",
+      "remote_user_cpu_seconds": 587
     },
     "llnorm_recovery_totals": {
       "initial_failed_endpoints": 12,
-      "now_restored_endpoints": 5,
-      "remaining": 7,
-      "r1_remaining": 5,
-      "r0_remaining": 2,
-      "record": "monitoring/20260909T014149Z.json"
+      "now_restored_endpoints": 9,
+      "remaining": 3,
+      "r1_remaining": 3,
+      "r0_remaining": 0,
+      "record": "monitoring/20260909T021149Z.json"
     }
   },
   "old_campaign": "dy_window20_20260907",

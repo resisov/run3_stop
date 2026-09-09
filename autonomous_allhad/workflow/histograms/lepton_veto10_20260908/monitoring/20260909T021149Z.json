@@ -1,0 +1,341 @@
+{
+  "automation_id": "dy-20-gev",
+  "triggered_at_utc": "2026-09-09T02:11:49.651Z",
+  "queue_observed_at_utc": "2026-09-09T02:12:09Z",
+  "baseline_state_sha256": "6ed2fc23003187817c9d21f5902141e06af601ec291fb7dd73343be5c27c14dd",
+  "limits_validated": 924,
+  "final_impact_json_counts": {
+    "r1": 0,
+    "r0": 0
+  },
+  "queue": [
+    {
+      "ClusterId": 1112615,
+      "HoldReason": null,
+      "JobStatus": 2,
+      "NumJobStarts": 1,
+      "ProcId": 0,
+      "RemoteHost": "slot1_4@b9p16p9750.cern.ch",
+      "RemoteSysCpu": 13,
+      "RemoteUserCpu": 18365,
+      "TransferInFinished": 1788906275
+    },
+    {
+      "ClusterId": 1112644,
+      "HoldReason": null,
+      "JobStatus": 2,
+      "NumJobStarts": 1,
+      "ProcId": 0,
+      "RemoteHost": "slot1_8@b9p14p2771.cern.ch",
+      "RemoteSysCpu": 9,
+      "RemoteUserCpu": 1700,
+      "TransferInFinished": 1788918607
+    },
+    {
+      "ClusterId": 1112647,
+      "HoldReason": null,
+      "JobStatus": 2,
+      "NumJobStarts": 1,
+      "ProcId": 0,
+      "RemoteHost": "slot1_19@b9p14p9969.cern.ch",
+      "RemoteSysCpu": 7,
+      "RemoteUserCpu": 587,
+      "TransferInFinished": 1788918899
+    }
+  ],
+  "completed_job_histories": [
+    {
+      "ClusterId": 1112645,
+      "CompletionDate": 1788919739,
+      "ExitBySignal": false,
+      "ExitCode": 0,
+      "JobStatus": 4,
+      "ProcId": 0,
+      "RemoteUserCpu": 2078,
+      "RemoteWallClockTime": 1135
+    },
+    {
+      "ClusterId": 1112646,
+      "CompletionDate": 1788919687,
+      "ExitBySignal": false,
+      "ExitCode": 0,
+      "JobStatus": 4,
+      "ProcId": 0,
+      "RemoteUserCpu": 1985,
+      "RemoteWallClockTime": 1082
+    }
+  ],
+  "new_endpoint_audit": [
+    {
+      "cluster": 1112645,
+      "expect_signal": 1,
+      "metadata": {
+        "status": "subset_fits_complete",
+        "full_collection_pending": true,
+        "asimov_expect_signal": 1,
+        "subset_validation": "subset_fit_validation.json"
+      },
+      "subset_validation": {
+        "valid": true,
+        "scope": "finite bracketed endpoints; zero-width sides require a verified parameter boundary; convergence review pending",
+        "results": [
+          {
+            "name": "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025",
+            "file": "higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025.MultiDimFit.mH1200.root",
+            "valid": true,
+            "entries": 3,
+            "parameter_values": [
+              0.9999999403953552,
+              0.9878436326980591,
+              1.0120189189910889
+            ]
+          },
+          {
+            "name": "CMS_NPS26012_ll_norm_lowdm_Nb2plus_NISR1plus_inclusive_2025",
+            "file": "higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_lowdm_Nb2plus_NISR1plus_inclusive_2025.MultiDimFit.mH1200.root",
+            "valid": true,
+            "entries": 3,
+            "parameter_values": [
+              1,
+              0.9840596318244934,
+              1.0157630443572998
+            ]
+          }
+        ]
+      },
+      "results": [
+        {
+          "name": "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025",
+          "path": "combined/T2tt/impact_recovery_r1_llnorm_step001_part2/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025.MultiDimFit.mH1200.root",
+          "sha256": "36f16ea5cf5074043c616e1fa4857cb619b3af058ec80097f952c5c566e9ce83",
+          "columns": {
+            "r": [
+              1,
+              1.0027432441711426,
+              0.9966709017753601
+            ],
+            "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025": [
+              0.9999999403953552,
+              0.9878436326980591,
+              1.0120189189910889
+            ],
+            "deltaNLL": [
+              0,
+              0,
+              0
+            ],
+            "quantileExpected": [
+              -1,
+              0.3199999928474426,
+              0.3199999928474426
+            ]
+          },
+          "strict_two_sided": true
+        },
+        {
+          "name": "CMS_NPS26012_ll_norm_lowdm_Nb2plus_NISR1plus_inclusive_2025",
+          "path": "combined/T2tt/impact_recovery_r1_llnorm_step001_part2/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_lowdm_Nb2plus_NISR1plus_inclusive_2025.MultiDimFit.mH1200.root",
+          "sha256": "a8f6d1ac481d22c3c6247d080c4ce003b41d4a0f903ebe5fa3ce7b68d5ef54a3",
+          "columns": {
+            "r": [
+              1,
+              0.9910534024238586,
+              1.007620096206665
+            ],
+            "CMS_NPS26012_ll_norm_lowdm_Nb2plus_NISR1plus_inclusive_2025": [
+              1,
+              0.9840596318244934,
+              1.0157630443572998
+            ],
+            "deltaNLL": [
+              0,
+              0,
+              0
+            ],
+            "quantileExpected": [
+              -1,
+              0.3199999928474426,
+              0.3199999928474426
+            ]
+          },
+          "strict_two_sided": true
+        }
+      ],
+      "log_sha256": "ff6e2a42e1bc6f3c1936359fd7918adcbefe46ebc5f29073a720ff904f3d4469",
+      "log_warning_counts": {
+        "Maximum failed steps": 0,
+        "Closed range without finding crossing": 0,
+        "Minimization failed": 0,
+        "covariance matrix forced positive definite": 50
+      },
+      "final_minimization_lines": [
+        "Minimization finished with status=0",
+        "Minimization finished with status=0",
+        "Minimization finished with status=1",
+        "Minimization finished with status=1",
+        "Minimization finished with status=0",
+        "Minimization finished with status=0"
+      ],
+      "strict_passed": 2,
+      "strict_failed": 0,
+      "local_EOS_root_and_log_hash_match": true
+    },
+    {
+      "cluster": 1112646,
+      "expect_signal": 0,
+      "metadata": {
+        "status": "subset_fits_complete",
+        "full_collection_pending": true,
+        "asimov_expect_signal": 0,
+        "subset_validation": "subset_fit_validation.json"
+      },
+      "subset_validation": {
+        "valid": true,
+        "scope": "finite bracketed endpoints; zero-width sides require a verified parameter boundary; convergence review pending",
+        "results": [
+          {
+            "name": "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2024",
+            "file": "higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2024.MultiDimFit.mH1200.root",
+            "valid": true,
+            "entries": 3,
+            "parameter_values": [
+              1,
+              0.9884749054908752,
+              1.0123265981674194
+            ]
+          },
+          {
+            "name": "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025",
+            "file": "higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025.MultiDimFit.mH1200.root",
+            "valid": true,
+            "entries": 3,
+            "parameter_values": [
+              0.9999999403953552,
+              0.9877260327339172,
+              1.0126731395721436
+            ]
+          }
+        ]
+      },
+      "results": [
+        {
+          "name": "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2024",
+          "path": "combined/T2tt/impact_recovery_r0_llnorm_step001_part1/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2024.MultiDimFit.mH1200.root",
+          "sha256": "bb76884a9943e8f7137eefd6fbdbe2cc85e77a4de85d912f9e163374420839eb",
+          "columns": {
+            "r": [
+              5.841621373292583e-7,
+              0.0007305179024115205,
+              -0.0007005422376096249
+            ],
+            "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2024": [
+              1,
+              0.9884749054908752,
+              1.0123265981674194
+            ],
+            "deltaNLL": [
+              0,
+              0,
+              0
+            ],
+            "quantileExpected": [
+              -1,
+              0.3199999928474426,
+              0.3199999928474426
+            ]
+          },
+          "strict_two_sided": true
+        },
+        {
+          "name": "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025",
+          "path": "combined/T2tt/impact_recovery_r0_llnorm_step001_part1/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025.MultiDimFit.mH1200.root",
+          "sha256": "73902a7d11313a25d74251c37679cdfa62e0d1e9840d2cd7b592db7bdaa301bd",
+          "columns": {
+            "r": [
+              5.841621373292583e-7,
+              0.0014982173452153802,
+              -0.0016623515402898192
+            ],
+            "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025": [
+              0.9999999403953552,
+              0.9877260327339172,
+              1.0126731395721436
+            ],
+            "deltaNLL": [
+              0,
+              0,
+              0
+            ],
+            "quantileExpected": [
+              -1,
+              0.3199999928474426,
+              0.3199999928474426
+            ]
+          },
+          "strict_two_sided": true
+        }
+      ],
+      "log_sha256": "697226fbab223bfba43b55b40ebc120147eae894d65f22c6631142b6db80dd5b",
+      "log_warning_counts": {
+        "Maximum failed steps": 0,
+        "Closed range without finding crossing": 0,
+        "Minimization failed": 0,
+        "covariance matrix forced positive definite": 48
+      },
+      "final_minimization_lines": [
+        "Minimization finished with status=0",
+        "Minimization finished with status=0",
+        "Minimization finished with status=1",
+        "Minimization finished with status=1",
+        "Minimization finished with status=0",
+        "Minimization finished with status=0"
+      ],
+      "strict_passed": 2,
+      "strict_failed": 0,
+      "local_EOS_root_and_log_hash_match": true
+    }
+  ],
+  "effective_endpoint_counts": {
+    "at_utc": "2026-09-09T02:12:09Z",
+    "record": "monitoring/20260909T021149Z.json",
+    "base_record": "monitoring/20260909T014149Z.json",
+    "field": "effective_endpoint_counts",
+    "r1": {
+      "checked": 734,
+      "strict_two_sided": 717,
+      "interior_one_sided": 17,
+      "missing": 1,
+      "llnorm": 3,
+      "sgamma": 14
+    },
+    "r0": {
+      "checked": 733,
+      "strict_two_sided": 721,
+      "interior_one_sided": 12,
+      "missing": 2,
+      "llnorm": 0,
+      "sgamma": 12
+    },
+    "model_changed": false
+  },
+  "llnorm_recovery_totals": {
+    "initial_failed_endpoints": 12,
+    "now_restored_endpoints": 9,
+    "remaining": 3,
+    "r1_remaining": 3,
+    "r0_remaining": 0,
+    "record": "monitoring/20260909T021149Z.json"
+  },
+  "sgamma_treatment_approval_status": "awaiting_user_reply",
+  "sgamma_boundary_algorithm_adopted": false,
+  "full_impact_convergence_validation": false,
+  "physics_changed": false,
+  "parameter_bounds_changed": false,
+  "minimizer_tolerance_changed": false,
+  "submissions": 0,
+  "NanoAOD_accessed": false,
+  "intermediate_ROOT_accessed": false,
+  "healthy_work_restarted": false,
+  "unrelated_condor_jobs_touched": false,
+  "original_outputs_preserved": true
+}
