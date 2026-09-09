@@ -12,7 +12,7 @@ use_x509userproxy = true
 x509userproxy = /eos/user/t/taiwoo/decaf/analysis/proxy/x509up_u147757
 request_cpus = 1
 request_memory = 6000MB
-request_disk = 6000MB
+request_disk = 12000MB
 +JobFlavour = "workday"
 +JobBatchName = "NPS26012_TopWTruth"
 on_exit_hold = (ExitBySignal == True) || (ExitCode != 0)
@@ -20,6 +20,6 @@ arguments = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topw_t
 output = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topw_truth_20260909/logs/$(year)_$(shard).$(ClusterId).out
 error = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topw_truth_20260909/logs/$(year)_$(shard).$(ClusterId).err
 log = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topw_truth_20260909/logs/production.$(ClusterId).log
-max_materialize = 200
-max_idle = 100
+max_materialize = 64
+max_idle = 64
 queue year, shard from /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topw_truth_20260909/production.queue

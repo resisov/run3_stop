@@ -12,7 +12,7 @@ use_x509userproxy = true
 x509userproxy = /eos/user/t/taiwoo/decaf/analysis/proxy/x509up_u147757
 request_cpus = 1
 request_memory = 6000MB
-request_disk = 6000MB
+request_disk = 12000MB
 +JobFlavour = "workday"
 +JobBatchName = "NPS26012_TopWTruth"
 on_exit_hold = (ExitBySignal == True) || (ExitCode != 0)
