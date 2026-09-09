@@ -117,7 +117,9 @@ def _check_topw_append(tmp_path, year, in_place=False):
         root["TROTA_metadata"] = json.dumps({"status": "complete", "application_year": year,
                                              "events_entries": 2, "model_sha256": "test_model"})
     original.with_suffix(".json").write_text(json.dumps({
-        "status": "complete", "files": [{"file_path": source, "file_id": file_id,
+        "status": "complete", "root_sha256": flat._sha256(original),
+        "events_written": 2, "root_trees": ["Events", "TROTA"],
+        "files": [{"file_path": source, "file_id": file_id,
         "events_written": 2, "read_status": "success",
         "processed_entry_ranges": [{"entry_start": 0, "entry_stop": 2}],
         "number_of_entries": 2}],
@@ -135,6 +137,23 @@ def _check_topw_append(tmp_path, year, in_place=False):
         raise AssertionError("already-complete truth must not reread NanoAOD")
     with patch.object(flat, "_read_topw_nano_rows", forbidden):
         assert flat.append_topw_truth(original, output, repo, tmp_path / "scratch", year)["status"] == "already_complete"
+        if not in_place:
+            promoted = flat.append_topw_truth(original, original, repo, tmp_path / "scratch", year,
+                                              validated_output=output)
+            assert promoted["sha256"] == flat._sha256(output)
+    from autonomous_allhad.sidecar_store import read_root_metadata
+    metadata = read_root_metadata(original)
+    assert metadata["root_sha256"] == flat._sha256(original)
+    assert metadata["topw_truth"]["input_sha256"] == original_hash
+    assert metadata["root_trees"] == ["Events", "TROTA", "TopWTruth"]
+    assert metadata["files"][0]["file_id"] == file_id
+    assert original_contents == flat._root_content_digests(original, exclude_truth=True)
+    report_path = original.with_suffix(".topw.json")
+    report = json.loads(report_path.read_text())
+    report["marker"]["input_sha256"] = "incorrect"
+    report_path.write_text(json.dumps(report))
+    with np.testing.assert_raises_regex(RuntimeError, "augmentation metadata"):
+        read_root_metadata(original)
 
 
 def _check_topw_read_reorders_selected_rows(tmp_path):

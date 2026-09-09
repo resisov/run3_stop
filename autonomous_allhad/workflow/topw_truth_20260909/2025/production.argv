@@ -1,0 +1,7 @@
+python
+-m
+autonomous_allhad.flat_ntuple_worker
+--repo
+/eos/user/t/taiwoo/run3_stop/decaf
+--truth-year
+2025

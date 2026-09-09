@@ -2,6 +2,7 @@
 set -euo pipefail
 
 ARGV_FILE="${1:?missing saved argv file}"
+shift
 case "$ARGV_FILE" in
   /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/studies/object_definition_veto_pt_20260905/recovery/*.argv) ;;
   /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/dy_window20_20260907/*/*.argv) ;;
@@ -71,4 +72,4 @@ for ((index=1; index<${#ARGS[@]}; index++)); do
     ARGS[$((index+1))]="$PY"
   fi
 done
-exec "${ARGS[@]}"
+exec "${ARGS[@]}" "$@"

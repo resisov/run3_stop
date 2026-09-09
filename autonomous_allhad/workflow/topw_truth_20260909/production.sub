@@ -1,0 +1,25 @@
+universe = vanilla
+initialdir = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topw_truth_20260909
+executable = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/studies/object_definition_veto_pt_20260905/batch/run_flat_hist_merge_batch.sh
+getenv = False
+environment = "PYTHONPATH=/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad:/eos/user/t/taiwoo/run3_stop/decaf"
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+transfer_executable = TRUE
+transfer_input_files = /eos/user/t/taiwoo/run3_stop/runtime/py38.tgz
+transfer_output_files = ""
+use_x509userproxy = true
+x509userproxy = /eos/user/t/taiwoo/decaf/analysis/proxy/x509up_u147757
+request_cpus = 1
+request_memory = 6000MB
+request_disk = 6000MB
++JobFlavour = "workday"
++JobBatchName = "NPS26012_TopWTruth"
+on_exit_hold = (ExitBySignal == True) || (ExitCode != 0)
+arguments = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topw_truth_20260909/$(year)/production.argv --append-topw-truth /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/flat$(year)_v8/outputs/nominal/$(shard).root --output /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/flat$(year)_v8/outputs/nominal/$(shard).root --metadata-output /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topw_truth_20260909/$(year)/results/$(shard).json
+output = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topw_truth_20260909/logs/$(year)_$(shard).$(ClusterId).out
+error = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topw_truth_20260909/logs/$(year)_$(shard).$(ClusterId).err
+log = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topw_truth_20260909/logs/production.$(ClusterId).log
+max_materialize = 200
+max_idle = 100
+queue year, shard from /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topw_truth_20260909/production.queue

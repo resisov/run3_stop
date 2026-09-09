@@ -961,8 +961,30 @@ def _read_topw_nano_rows(source: str, entries: np.ndarray, expected_entries: int
     raise RuntimeError("NanoAOD truth access failed: " + "; ".join(errors))
 
 
+def _publish_topw_truth(input_path: Path, output: Path, local: Path,
+                       marker: dict[str, Any]) -> dict[str, Any]:
+    output_hash = _sha256(local)
+    staged = output.with_name(output.name + f".topw.partial.{os.getpid()}")
+    if staged.exists():
+        raise FileExistsError(staged)
+    try:
+        shutil.copyfile(local, staged)
+        if _sha256(staged) != output_hash or _sha256(input_path) != marker["input_sha256"]:
+            raise RuntimeError("truth stage-out checksum mismatch or original input changed")
+        os.replace(staged, output)
+    finally:
+        if staged.exists():
+            staged.unlink()
+    report = {"status": "complete", "root": str(output), "sha256": output_hash,
+              "bytes": output.stat().st_size, "marker": marker}
+    if input_path.resolve() == output.resolve():
+        write_json(output.with_suffix(".topw.json"), report)
+    local.unlink()
+    return report
+
+
 def append_topw_truth(input_path: Path, output: Path, repo: Path, work_dir: Path,
-                     year: int) -> dict[str, Any]:
+                     year: int, validated_output: Path | None = None) -> dict[str, Any]:
     """Augment a worker-local copy, validate original contents, then atomically publish."""
     from .sidecar_store import read_root_metadata
     sys.path.insert(0, str(repo))
@@ -990,11 +1012,15 @@ def append_topw_truth(input_path: Path, output: Path, repo: Path, work_dir: Path
                     raise RuntimeError("original ROOT contents changed after truth augmentation")
                 if _root_content_digests(output)[TOPW_TRUTH_TREE] != marker["truth_content"]:
                     raise RuntimeError("Top/W truth content checksum mismatch")
-                return {"status": "already_complete", "root": str(output), "marker": marker}
+                report = {"status": "already_complete", "root": str(output), "marker": marker,
+                          "sha256": _sha256(output), "bytes": output.stat().st_size}
+                if input_path.resolve() == output.resolve():
+                    write_json(output.with_suffix(".topw.json"), report)
+                return report
             if TOPW_TRUTH_TREE in root or input_path.resolve() != output.resolve():
                 raise RuntimeError("refusing to overwrite an existing or partial truth output")
     metadata = read_root_metadata(input_path)
-    if metadata.get("status") != "complete":
+    if metadata.get("status") not in ("complete", "complete_with_bad_files"):
         raise RuntimeError("intermediate ROOT production is not complete")
     source_map = {}
     for record in metadata.get("files", []):
@@ -1015,6 +1041,19 @@ def append_topw_truth(input_path: Path, output: Path, repo: Path, work_dir: Path
         raise FileExistsError("truth staging path already exists")
     original_hash = _sha256(input_path)
     original_size = input_path.stat().st_size
+    if metadata.get("root_sha256") != original_hash:
+        raise RuntimeError("intermediate ROOT/metadata checksum mismatch")
+    if validated_output is not None:
+        if not validated_output.is_absolute() or any(part in ("tmp", "afs") for part in validated_output.parts):
+            raise ValueError("disallowed validated truth path")
+        verified = append_topw_truth(input_path, validated_output, repo, work_dir, year)
+        marker = verified["marker"]
+        if marker["input_sha256"] != original_hash or marker["input_bytes"] != original_size:
+            raise RuntimeError("validated truth belongs to a different original ROOT")
+        shutil.copyfile(validated_output, local)
+        if _sha256(local) != verified["sha256"]:
+            raise RuntimeError("validated truth copy checksum mismatch")
+        return _publish_topw_truth(input_path, output, local, marker)
     shutil.copyfile(input_path, local)
     if _sha256(local) != original_hash:
         raise RuntimeError("intermediate ROOT copy checksum mismatch")
@@ -1080,18 +1119,7 @@ def append_topw_truth(input_path: Path, output: Path, repo: Path, work_dir: Path
     }
     with uproot.update(local) as destination:
         destination[TOPW_TRUTH_MARKER] = json.dumps(marker, sort_keys=True, allow_nan=False)
-    output_hash = _sha256(local)
-    try:
-        shutil.copyfile(local, staged)
-        if _sha256(staged) != output_hash or _sha256(input_path) != original_hash:
-            raise RuntimeError("truth stage-out checksum mismatch or original input changed")
-        os.replace(staged, output)
-    finally:
-        if staged.exists():
-            staged.unlink()
-    local.unlink()
-    return {"status": "complete", "root": str(output), "sha256": output_hash,
-            "bytes": output.stat().st_size, "marker": marker}
+    return _publish_topw_truth(input_path, output, local, marker)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -1103,6 +1131,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--append-topw-truth", metavar="EXISTING_ROOT")
     parser.add_argument("--truth-work-dir", default=os.environ.get("_CONDOR_SCRATCH_DIR"))
     parser.add_argument("--truth-year", type=int, choices=(2024, 2025))
+    parser.add_argument("--truth-validated-output", type=Path)
     parser.add_argument("--chunk-size", type=int, default=int(os.environ.get("AUTONOMOUS_ALLHAD_FLAT_CHUNK", "50000")))
     parser.add_argument("--shift", default=os.environ.get("AUTONOMOUS_ALLHAD_PRODUCTION_SHIFT", "nominal"))
     parser.add_argument("--skim-flag", default="feature_flat_preselection")
@@ -1125,7 +1154,7 @@ def main(argv: list[str] | None = None) -> int:
         report_path.parent.mkdir(parents=True, exist_ok=True)
         try:
             report = append_topw_truth(Path(args.append_topw_truth), Path(args.output), repo,
-                                       Path(args.truth_work_dir), args.truth_year)
+                                       Path(args.truth_work_dir), args.truth_year, args.truth_validated_output)
         except Exception as exc:
             report = {"status": "failed", "input": args.append_topw_truth,
                       "exception_type": type(exc).__name__, "error": str(exc)}
