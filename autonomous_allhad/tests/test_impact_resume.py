@@ -13,7 +13,8 @@ RUNNER = Path(__file__).parents[1] / "workflow/run_asimov_impacts_eos.sh"
 @pytest.mark.parametrize("mode", ["recover", "complete", "fail", "bad_checksum", "existing_target", "subset", "subset_fail"])
 @pytest.mark.parametrize("verbosity", [0, 3])
 @pytest.mark.parametrize("precision", ["", "1e-8"])
-def test_resume_only_missing_and_preserve_on_exit(tmp_path, mode, verbosity, precision):
+@pytest.mark.parametrize("step_size,robust_strategy", [("", ""), ("0.001", "1")])
+def test_resume_only_missing_and_preserve_on_exit(tmp_path, mode, verbosity, precision, step_size, robust_strategy):
     source, work, result = [tmp_path / x for x in ("source", "work", "result")]
     for path in (source, work, result):
         path.mkdir()
@@ -29,6 +30,8 @@ def test_resume_only_missing_and_preserve_on_exit(tmp_path, mode, verbosity, pre
                IMPACT_PARALLEL="2", IMPACT_MINIMIZER_STRATEGY="2", MODE=mode)
     env["IMPACT_VERBOSITY"] = str(verbosity)
     env["IMPACT_MINIMIZER_PRECISION"] = precision
+    env["IMPACT_STEP_SIZE"] = step_size
+    env["IMPACT_ROBUST_STRATEGY"] = robust_strategy
     env["IMPACT_SUBSET_ONLY"] = "1" if mode.startswith("subset") else "0"
     env["IMPACT_RESUME_NUISANCES"] = "" if mode == "complete" else "nuisance_a,nuisance_b"
     env["IMPACT_RESUME_WORKSPACE_SHA256"] = hashlib.sha256((source / workspace).read_bytes()).hexdigest()
@@ -88,6 +91,13 @@ combineTool.py() {
             if precision:
                 assert f"--cminDefaultMinimizerPrecision {precision}" in calls
             assert "--cminDefaultMinimizerTolerance" not in calls
+            assert ("--stepSize" in calls) == bool(step_size)
+            assert ("--setRobustFitStrategy" in calls) == bool(robust_strategy)
+            if step_size:
+                assert f"--stepSize {step_size}" in calls
+                assert f"--setRobustFitStrategy {robust_strategy}" in calls
+            assert "--setCrossingTolerance" not in calls
+            assert "--setRobustFitTolerance" not in calls
     if mode == "existing_target":
         assert not (result / "calls.log").exists()
     if mode == "fail":
@@ -124,15 +134,19 @@ def test_invalid_minimizer_precision_rejected_before_io(precision):
 
 
 @pytest.mark.parametrize("full_collection", [False, True])
-@pytest.mark.parametrize("values,passed", [
-    ([0.0, -1.0, 1.0], True),
-    ([0.0, 0.0, 1.0], True),
-    ([0.991382, 0.991382, 0.991382], False),
-    ([0.0, 1.0, 2.0], False),
-    ([0.0, -1.0], False),
-    ([0.0, float("nan"), 1.0], False),
+@pytest.mark.parametrize("values,bounds,passed", [
+    ([0.0, -1.0, 1.0], [-5.0, 5.0], True),
+    ([0.0, 0.0, 1.0], [0.0, 10.0], True),
+    ([0.0, 0.0, 1.0], [-5.0, 5.0], False),
+    ([1.0, 0.98, 1.0], [0.0, 10.0], False),
+    ([1.0, 1.0, 2.0], [0.0, 10.0], False),
+    ([10.0, 9.0, 10.0], [0.0, 10.0], True),
+    ([0.991382, 0.991382, 0.991382], [0.0, 10.0], False),
+    ([0.0, 1.0, 2.0], [-5.0, 5.0], False),
+    ([0.0, -1.0], [-5.0, 5.0], False),
+    ([0.0, float("nan"), 1.0], [-5.0, 5.0], False),
 ])
-def test_real_endpoint_validator(tmp_path, monkeypatch, capsys, full_collection, values, passed):
+def test_real_endpoint_validator(tmp_path, monkeypatch, capsys, full_collection, values, bounds, passed):
     import sys
     from types import SimpleNamespace
 
@@ -142,8 +156,11 @@ def test_real_endpoint_validator(tmp_path, monkeypatch, capsys, full_collection,
 
     tree = Tree(SimpleNamespace(r=1.0, nuisance_a=value, deltaNLL=0.0) for value in values)
     source = SimpleNamespace(IsZombie=lambda: False, Get=lambda name: tree, Close=lambda: None)
+    parameter = SimpleNamespace(getMin=lambda: bounds[0], getMax=lambda: bounds[1])
+    workspace = SimpleNamespace(var=lambda name: parameter)
+    workspace_source = SimpleNamespace(IsZombie=lambda: False, Get=lambda name: workspace, Close=lambda: None)
     root = SimpleNamespace(gROOT=SimpleNamespace(SetBatch=lambda value: None),
-                           TFile=SimpleNamespace(Open=lambda path: source))
+                           TFile=SimpleNamespace(Open=lambda path: workspace_source if path.startswith("workspace_") else source))
     monkeypatch.setitem(sys.modules, "ROOT", root)
     manifest = tmp_path / "impacts.json"
     manifest.write_text(json.dumps({"params": [{"name": "nuisance_a"}]}))
@@ -154,3 +171,18 @@ def test_real_endpoint_validator(tmp_path, monkeypatch, capsys, full_collection,
     assert result.value.code == (0 if passed else 1)
     report = json.loads(capsys.readouterr().out)
     assert report["valid"] is passed
+
+
+@pytest.mark.parametrize("key,value", [
+    ("IMPACT_STEP_SIZE", "0"), ("IMPACT_STEP_SIZE", "1"),
+    ("IMPACT_STEP_SIZE", "-1"), ("IMPACT_STEP_SIZE", "NaN"),
+    ("IMPACT_ROBUST_STRATEGY", "3"), ("IMPACT_ROBUST_STRATEGY", "bad"),
+])
+def test_invalid_crossing_options_rejected_before_io(key, value):
+    env = dict(os.environ, COMBINE_RUNTIME_SHA256="a" * 64,
+               COMBINE_RUNTIME_ARCHIVE="unused.tgz")
+    env[key] = value
+    run = subprocess.run(["bash", str(RUNNER), "unused_card", "/eos/unused", "1200"],
+                         env=env, text=True, capture_output=True)
+    assert run.returncode == 2
+    assert key in run.stderr

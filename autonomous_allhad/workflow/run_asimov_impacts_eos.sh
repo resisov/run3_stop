@@ -15,6 +15,8 @@ IMPACT_PARALLEL=${IMPACT_PARALLEL:-4}
 IMPACT_MINIMIZER_STRATEGY=${IMPACT_MINIMIZER_STRATEGY:-0}
 IMPACT_VERBOSITY=${IMPACT_VERBOSITY:-0}
 IMPACT_MINIMIZER_PRECISION=${IMPACT_MINIMIZER_PRECISION:-}
+IMPACT_STEP_SIZE=${IMPACT_STEP_SIZE:-}
+IMPACT_ROBUST_STRATEGY=${IMPACT_ROBUST_STRATEGY:-}
 IMPACT_SUBSET_ONLY=${IMPACT_SUBSET_ONLY:-0}
 IMPACT_EXPECT_SIGNAL=${IMPACT_EXPECT_SIGNAL:-1}
 IMPACT_R_MIN=${IMPACT_R_MIN:-0}
@@ -40,6 +42,17 @@ if [[ -n "$IMPACT_MINIMIZER_PRECISION" ]] && {
     ! awk -v p="$IMPACT_MINIMIZER_PRECISION" 'BEGIN { exit !(p > 0 && p < 1) }';
 }; then
     echo "IMPACT_MINIMIZER_PRECISION must be between 0 and 1" >&2
+    exit 2
+fi
+if [[ -n "$IMPACT_STEP_SIZE" ]] && {
+    ! [[ "$IMPACT_STEP_SIZE" =~ ^[0-9]+([.][0-9]+)?([eE][-+]?[0-9]+)?$ ]] ||
+    ! awk -v p="$IMPACT_STEP_SIZE" 'BEGIN { exit !(p > 0 && p < 1) }';
+}; then
+    echo "IMPACT_STEP_SIZE must be between 0 and 1" >&2
+    exit 2
+fi
+if [[ -n "$IMPACT_ROBUST_STRATEGY" ]] && ! [[ "$IMPACT_ROBUST_STRATEGY" =~ ^[012]$ ]]; then
+    echo "IMPACT_ROBUST_STRATEGY must be 0, 1 or 2" >&2
     exit 2
 fi
 if ! [[ "$IMPACT_EXPECT_SIGNAL" =~ ^[01]$ ]]; then
@@ -123,6 +136,12 @@ INITIAL_FIT="higgsCombine_initialFit_Test.MultiDimFit.mH${MASS}.root"
 if [[ -n "${IMPACT_MINIMIZER_PRECISION:-}" ]]; then
     RANGE_ARGS+=(--cminDefaultMinimizerPrecision "$IMPACT_MINIMIZER_PRECISION")
 fi
+if [[ -n "${IMPACT_STEP_SIZE:-}" ]]; then
+    RANGE_ARGS+=(--stepSize "$IMPACT_STEP_SIZE")
+fi
+if [[ -n "${IMPACT_ROBUST_STRATEGY:-}" ]]; then
+    RANGE_ARGS+=(--setRobustFitStrategy "$IMPACT_ROBUST_STRATEGY")
+fi
 
 preserve_results() {
     local result=$?
@@ -192,6 +211,7 @@ names = sys.argv[1].split(",") if sys.argv[1] else [
     item["name"] for item in json.load(open(sys.argv[3]))["params"]
 ]
 results = []
+workspace_source = None
 for name in names:
     path = "higgsCombine_paramFit_Test_{}.MultiDimFit.mH{}.root".format(name, sys.argv[2])
     source = None
@@ -214,6 +234,22 @@ for name in names:
             raise ValueError("identical parameter endpoints")
         if not lower <= nominal + tolerance or not nominal <= upper + tolerance:
             raise ValueError("parameter endpoints do not bracket nominal")
+        if lower == nominal or upper == nominal:
+            if workspace_source is None:
+                workspace_source = ROOT.TFile.Open("workspace_mStop{}_mLSP500.root".format(sys.argv[2]))
+            if not workspace_source or workspace_source.IsZombie():
+                raise ValueError("cannot verify parameter bounds: unreadable workspace")
+            workspace = workspace_source.Get("w")
+            parameter = workspace.var(name) if workspace else None
+            if not parameter:
+                raise ValueError("cannot verify parameter bounds: missing workspace parameter")
+            bounds = [float(parameter.getMin()), float(parameter.getMax())]
+            item["parameter_bounds"] = bounds
+            if lower == nominal and not math.isclose(nominal, bounds[0], rel_tol=1e-7, abs_tol=1e-8):
+                raise ValueError("zero-width lower endpoint away from lower bound")
+            if upper == nominal and not math.isclose(nominal, bounds[1], rel_tol=1e-7, abs_tol=1e-8):
+                raise ValueError("zero-width upper endpoint away from upper bound")
+            item["nominal_at_boundary"] = True
         item["valid"] = True
     except Exception as error:
         item["error"] = str(error)
@@ -221,8 +257,10 @@ for name in names:
         if source:
             source.Close()
     results.append(item)
+if workspace_source:
+    workspace_source.Close()
 valid = bool(results) and all(item["valid"] for item in results)
-print(json.dumps({"valid": valid, "scope": "finite nondegenerate bracketed endpoints; convergence review pending", "results": results}))
+print(json.dumps({"valid": valid, "scope": "finite bracketed endpoints; zero-width sides require a verified parameter boundary; convergence review pending", "results": results}))
 sys.exit(0 if valid else 1)
 PY
 }
