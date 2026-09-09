@@ -1,0 +1,660 @@
+{
+  "automation_id": "dy-20-gev",
+  "triggered_at_utc": "2026-09-09T01:41:49.521Z",
+  "last_observed_at_utc": "2026-09-09T01:50:07Z",
+  "baseline_state_sha256": "8f0669e9beb19a6085771c2b91e087f489b3525f52d6c13ce75a88453e8e25e1",
+  "limits_validated": 924,
+  "final_impact_json_counts": {
+    "r1": 0,
+    "r0": 0
+  },
+  "queue": [
+    {
+      "ClusterId": 1112615,
+      "JobStatus": 2,
+      "NumJobStarts": 1,
+      "RemoteUserCpu": 16579,
+      "RemoteSysCpu": 13,
+      "TransferInFinished": 1788906275,
+      "ProcId": 0,
+      "HoldReason": null
+    },
+    {
+      "ClusterId": 1112644,
+      "JobStatus": 2,
+      "NumJobStarts": 0,
+      "RemoteUserCpu": 0,
+      "RemoteSysCpu": 0,
+      "ProcId": 0,
+      "HoldReason": null
+    },
+    {
+      "ClusterId": 1112645,
+      "JobStatus": 2,
+      "NumJobStarts": 0,
+      "RemoteUserCpu": 0,
+      "RemoteSysCpu": 0,
+      "ProcId": 0,
+      "HoldReason": null
+    },
+    {
+      "ClusterId": 1112646,
+      "JobStatus": 2,
+      "NumJobStarts": 0,
+      "RemoteUserCpu": 0,
+      "RemoteSysCpu": 0,
+      "ProcId": 0,
+      "HoldReason": null
+    },
+    {
+      "ClusterId": 1112647,
+      "JobStatus": 1,
+      "NumJobStarts": 0,
+      "RemoteUserCpu": 0,
+      "RemoteSysCpu": 0,
+      "ProcId": 0,
+      "HoldReason": null
+    }
+  ],
+  "step_diagnostic_results": [
+    {
+      "directory": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_diagnostic_r0_llnorm_step001_strategy0/impact_mStop1200_mLSP500_r0/work",
+      "sha256": "75606a8621f98d5b11c46bc69ac4dfe7a5953e08e1280a235efd21a1b3a97b47",
+      "columns": {
+        "r": [
+          5.841621373292583e-7,
+          0.0014077797532081604,
+          -0.0013812761753797531
+        ],
+        "CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025": [
+          1,
+          0.9857368469238281,
+          1.0143380165100098
+        ],
+        "deltaNLL": [
+          0,
+          0,
+          0
+        ],
+        "quantileExpected": [
+          -1,
+          0.3199999928474426,
+          0.3199999928474426
+        ]
+      },
+      "strict": true,
+      "log_sha256": "c667d64eaa80cd04ab89a1e2abe691ad16a680086969428e20c9cb72b2391af0",
+      "log_bytes": 2109788,
+      "summary": {
+        "Maximum failed steps": [],
+        "Closed range": [],
+        "Minimization failed": [],
+        "Minimization success! status=0": [
+          "Minimization success! status=0",
+          "Minimization success! status=0",
+          "Minimization success! status=0",
+          "Minimization success! status=0",
+          "Minimization success! status=0",
+          "Minimization success! status=0",
+          "Minimization success! status=0",
+          "Minimization success! status=0",
+          "Minimization success! status=0",
+          "Minimization success! status=0",
+          "Minimization success! status=0",
+          "Minimization success! status=0"
+        ],
+        "Found crossing": [],
+        "Crossing": [
+          "Searching for crossing at nll = 247.01, in the interval 1 < CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025 < 10",
+          "Searching for crossing at nll = 247.01, in the interval 1 < CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025 < 0"
+        ],
+        "status =": [
+          "Minuit2Minimizer : Valid minimum - status = 0",
+          "Minuit2Minimizer : Valid minimum - status = 0",
+          "Minuit2Minimizer : Valid minimum - status = 0",
+          "Minuit2Minimizer : Valid minimum - status = 0",
+          "Minuit2Minimizer : Valid minimum - status = 0",
+          "Minuit2Minimizer : Valid minimum - status = 0",
+          "Minuit2Minimizer : Valid minimum - status = 0",
+          "Minuit2Minimizer : Valid minimum - status = 0",
+          "Minuit2Minimizer : Valid minimum - status = 0",
+          "Minuit2Minimizer : Valid minimum - status = 0",
+          "Minuit2Minimizer : Valid minimum - status = 0",
+          "Minuit2Minimizer : Valid minimum - status = 0"
+        ]
+      }
+    },
+    {
+      "directory": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_diagnostic_r0_llnorm_step001_strategy1/impact_mStop1200_mLSP500_r0/work",
+      "sha256": "fc161189bb219e8c63f6f35477a5ea2ddffb5c83f773159094368e6b4e90dd47",
+      "columns": {
+        "r": [
+          5.841621373292583e-7,
+          0.0014077797532081604,
+          -0.0013812761753797531
+        ],
+        "CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025": [
+          1,
+          0.9857368469238281,
+          1.0143380165100098
+        ],
+        "deltaNLL": [
+          0,
+          0,
+          0
+        ],
+        "quantileExpected": [
+          -1,
+          0.3199999928474426,
+          0.3199999928474426
+        ]
+      },
+      "strict": true,
+      "log_sha256": "0206cd7bd59e302a7007ffef3a36af0ef521a0e3a497f45b1675b98a0a7c9663",
+      "log_bytes": 2109813,
+      "summary": {
+        "Maximum failed steps": [],
+        "Closed range": [],
+        "Minimization failed": [],
+        "Minimization success! status=0": [
+          "Minimization success! status=0",
+          "Minimization success! status=0",
+          "Minimization success! status=0",
+          "Minimization success! status=0",
+          "Minimization success! status=0",
+          "Minimization success! status=0",
+          "Minimization success! status=0",
+          "Minimization success! status=0",
+          "Minimization success! status=0",
+          "Minimization success! status=0",
+          "Minimization success! status=0",
+          "Minimization success! status=0"
+        ],
+        "Found crossing": [],
+        "Crossing": [
+          "Searching for crossing at nll = 247.01, in the interval 1 < CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025 < 10",
+          "Searching for crossing at nll = 247.01, in the interval 1 < CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025 < 0"
+        ],
+        "status =": [
+          "Minuit2Minimizer : Valid minimum - status = 0",
+          "Minuit2Minimizer : Valid minimum - status = 0",
+          "Minuit2Minimizer : Valid minimum - status = 0",
+          "Minuit2Minimizer : Valid minimum - status = 0",
+          "Minuit2Minimizer : Valid minimum - status = 0",
+          "Minuit2Minimizer : Valid minimum - status = 0",
+          "Minuit2Minimizer : Valid minimum - status = 0",
+          "Minuit2Minimizer : Valid minimum - status = 0",
+          "Minuit2Minimizer : Valid minimum - status = 0",
+          "Minuit2Minimizer : Valid minimum - status = 0",
+          "Minuit2Minimizer : Valid minimum - status = 0",
+          "Minuit2Minimizer : Valid minimum - status = 0"
+        ]
+      }
+    }
+  ],
+  "step_diagnostic_logs": [
+    {
+      "strategy": 0,
+      "covariance_warning_lines": 18,
+      "failed_step_lines": 0,
+      "profile_progress_lines": [
+        " 1.009000    +0.29381  +0.49447    0.009000",
+        " 1.018000    -0.29846  +0.29381    0.009000",
+        " 1.011700    +0.15642  -0.29846    0.002700",
+        " 1.014400    -0.01607  +0.15642    0.002700",
+        " 1.012510    +0.10897  -0.01607    0.000810",
+        " 1.013320    +0.06106  +0.10897    0.000810",
+        " 1.014130    +0.00710  +0.06106    0.000810",
+        " 1.014940    -0.05017  +0.00710    0.000810",
+        " 1.014373    -0.00976  -0.05017    0.000243",
+        " 1.014203    +0.00208  -0.00976    0.000073",
+        " 1.014276    -0.00297  +0.00208    0.000073",
+        " 1.014225    +0.00057  -0.00297    0.000022",
+        " 1.014247    -0.00094  +0.00057    0.000022",
+        " 1.014231    +0.00012  -0.00094    0.000007",
+        " 0.999000    +0.49176  +0.49447    -0.001000",
+        " 0.998000    +0.48431  +0.49176    -0.001000",
+        " 0.997000    +0.47179  +0.48431    -0.001000",
+        " 0.996000    +0.45425  +0.47179    -0.001000",
+        " 0.995000    +0.43159  +0.45425    -0.001000",
+        " 0.994000    +0.40399  +0.43159    -0.001000",
+        " 0.993000    +0.37123  +0.40399    -0.001000",
+        " 0.992000    +0.33347  +0.37123    -0.001000",
+        " 0.991000    +0.29071  +0.33347    -0.001000",
+        " 0.990000    +0.24282  +0.29071    -0.001000",
+        " 0.989000    +0.18973  +0.24282    -0.001000",
+        " 0.988000    +0.13147  +0.18973    -0.001000",
+        " 0.987000    +0.06818  +0.13147    -0.001000",
+        " 0.986000    -0.00026  +0.06818    -0.001000"
+      ],
+      "last_minimization_lines": [
+        "Minimization finished with status=0",
+        "Minimization finished with status=0",
+        "Minimization finished with status=0"
+      ]
+    },
+    {
+      "strategy": 1,
+      "covariance_warning_lines": 18,
+      "failed_step_lines": 0,
+      "profile_progress_lines": [
+        " 1.009000    +0.29381  +0.49447    0.009000",
+        " 1.018000    -0.29846  +0.29381    0.009000",
+        " 1.011700    +0.15642  -0.29846    0.002700",
+        " 1.014400    -0.01607  +0.15642    0.002700",
+        " 1.012510    +0.10897  -0.01607    0.000810",
+        " 1.013320    +0.06106  +0.10897    0.000810",
+        " 1.014130    +0.00710  +0.06106    0.000810",
+        " 1.014940    -0.05017  +0.00710    0.000810",
+        " 1.014373    -0.00976  -0.05017    0.000243",
+        " 1.014203    +0.00208  -0.00976    0.000073",
+        " 1.014276    -0.00297  +0.00208    0.000073",
+        " 1.014225    +0.00057  -0.00297    0.000022",
+        " 1.014247    -0.00094  +0.00057    0.000022",
+        " 1.014231    +0.00012  -0.00094    0.000007",
+        " 0.999000    +0.49176  +0.49447    -0.001000",
+        " 0.998000    +0.48431  +0.49176    -0.001000",
+        " 0.997000    +0.47179  +0.48431    -0.001000",
+        " 0.996000    +0.45425  +0.47179    -0.001000",
+        " 0.995000    +0.43159  +0.45425    -0.001000",
+        " 0.994000    +0.40399  +0.43159    -0.001000",
+        " 0.993000    +0.37123  +0.40399    -0.001000",
+        " 0.992000    +0.33347  +0.37123    -0.001000",
+        " 0.991000    +0.29071  +0.33347    -0.001000",
+        " 0.990000    +0.24282  +0.29071    -0.001000",
+        " 0.989000    +0.18973  +0.24282    -0.001000",
+        " 0.988000    +0.13147  +0.18973    -0.001000",
+        " 0.987000    +0.06818  +0.13147    -0.001000",
+        " 0.986000    -0.00026  +0.06818    -0.001000"
+      ],
+      "last_minimization_lines": [
+        "Minimization finished with status=0",
+        "Minimization finished with status=0",
+        "Minimization finished with status=0"
+      ]
+    }
+  ],
+  "step_diagnostic_histories": [
+    {
+      "ClusterId": 1112642,
+      "CompletionDate": 1788917749,
+      "ExitBySignal": false,
+      "ExitCode": 0,
+      "JobStatus": 4,
+      "ProcId": 0,
+      "RemoteUserCpu": 619,
+      "RemoteWallClockTime": 657
+    },
+    {
+      "ClusterId": 1112643,
+      "CompletionDate": 1788917551,
+      "ExitBySignal": false,
+      "ExitCode": 0,
+      "JobStatus": 4,
+      "ProcId": 0,
+      "RemoteUserCpu": 433,
+      "RemoteWallClockTime": 455
+    }
+  ],
+  "comparison": {
+    "record": "monitoring/20260909T014149Z.json",
+    "parameter": "CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025",
+    "r": 0,
+    "step_size": 0.001,
+    "compared_robust_profile_strategies": [
+      0,
+      1
+    ],
+    "parameters_and_r_triplets_identical": true,
+    "selected_cluster": 1112642,
+    "selection": "only step size changed from previous failed fit; robust profile strategy remains its default",
+    "intermediate_covariance_warnings_retained": true,
+    "complete_impact_convergence_validation": false
+  },
+  "effective_endpoint_counts": {
+    "at_utc": "2026-09-09T01:50:07Z",
+    "record": "monitoring/20260909T014149Z.json",
+    "base_record": "monitoring/20260909T011149Z.json",
+    "field": "effective_endpoint_counts",
+    "r1": {
+      "checked": 734,
+      "strict_two_sided": 715,
+      "interior_one_sided": 19,
+      "missing": 1,
+      "llnorm": 5,
+      "sgamma": 14
+    },
+    "r0": {
+      "checked": 733,
+      "strict_two_sided": 719,
+      "interior_one_sided": 14,
+      "missing": 2,
+      "llnorm": 2,
+      "sgamma": 12
+    },
+    "model_changed": false
+  },
+  "llnorm_recovery_totals": {
+    "initial_failed_endpoints": 12,
+    "now_restored_endpoints": 5,
+    "remaining": 7,
+    "r1_remaining": 5,
+    "r0_remaining": 2,
+    "record": "monitoring/20260909T014149Z.json"
+  },
+  "new_jobs": [
+    {
+      "cluster": 1112644,
+      "expect_signal": 1,
+      "named_nuisances": [
+        "CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025",
+        "CMS_NPS26012_ll_norm_highdm_Nb2plus_bin0_2025",
+        "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR0_inclusive_2025"
+      ],
+      "status": "running_startup_not_yet_worker_verified",
+      "job_status": 2,
+      "num_job_starts": 0,
+      "diagnostic_only": false,
+      "output_work": "combined/T2tt/impact_recovery_r1_llnorm_step001_part1/impact_mStop1200_mLSP500_r1/work",
+      "submission_file": "combined/T2tt/impact_recovery_r1_llnorm_step001_part1/impact_r1_eossubmit.sub",
+      "submission_sha256": "4fd65b47e3a2e180a6a4310efb7ed9d967b45dc22f0066407c989cdb66948ec8",
+      "runner_snapshot": "impact_code_step/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+      "runner_sha256": "a76dba6fbc0e547fc6f62551ed14781e499060d65668fcaacb59fc2c71891e59",
+      "source_commit": "a8e67856",
+      "card_sha256": "e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1",
+      "workspace_sha256": "e58f366eff035c02fb244bb43f1a56efcdd12233acc4c5d0401d4c21cb0f8235",
+      "initial_fit_sha256": "14634181a407fa97b3e9d399edab07b177c59bb57b1bd65a2eafd22107ef2693",
+      "resume_source": "combined/T2tt/impact_seed_r1",
+      "step_size": 0.001,
+      "robust_profile_strategy": 0,
+      "minimizer_strategy": 1,
+      "robust_fit": 1,
+      "signal_strength_range": [
+        0,
+        20
+      ],
+      "fit_parallel": 3,
+      "request_cpus": 6,
+      "request_memory_mb": 18000,
+      "max_runtime_seconds": 43200,
+      "proxy_seconds_before_submission": 581087,
+      "voms_seconds_before_submission": 552287,
+      "proxy_checked_utc": "2026-09-09T01:44:34Z",
+      "submitted_held_then_verified_and_released": true,
+      "server_injected_home_removed_before_release": true,
+      "EOS_log_redirection_verified": true,
+      "local_EOS_submission_hash_match": true,
+      "physics_changed": false,
+      "parameter_bounds_changed": false,
+      "tolerance_changed": false,
+      "last_queue_check_utc": "2026-09-09T01:50:07Z"
+    },
+    {
+      "cluster": 1112645,
+      "expect_signal": 1,
+      "named_nuisances": [
+        "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025",
+        "CMS_NPS26012_ll_norm_lowdm_Nb2plus_NISR1plus_inclusive_2025"
+      ],
+      "status": "running_startup_not_yet_worker_verified",
+      "job_status": 2,
+      "num_job_starts": 0,
+      "diagnostic_only": false,
+      "output_work": "combined/T2tt/impact_recovery_r1_llnorm_step001_part2/impact_mStop1200_mLSP500_r1/work",
+      "submission_file": "combined/T2tt/impact_recovery_r1_llnorm_step001_part2/impact_r1_eossubmit.sub",
+      "submission_sha256": "f2045f4b7ab1e2abec50d619eecf19eec75e5b0e6df7083ca0fb8f5e1fc15005",
+      "runner_snapshot": "impact_code_step/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+      "runner_sha256": "a76dba6fbc0e547fc6f62551ed14781e499060d65668fcaacb59fc2c71891e59",
+      "source_commit": "a8e67856",
+      "card_sha256": "e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1",
+      "workspace_sha256": "e58f366eff035c02fb244bb43f1a56efcdd12233acc4c5d0401d4c21cb0f8235",
+      "initial_fit_sha256": "14634181a407fa97b3e9d399edab07b177c59bb57b1bd65a2eafd22107ef2693",
+      "resume_source": "combined/T2tt/impact_seed_r1",
+      "step_size": 0.001,
+      "robust_profile_strategy": 0,
+      "minimizer_strategy": 1,
+      "robust_fit": 1,
+      "signal_strength_range": [
+        0,
+        20
+      ],
+      "fit_parallel": 2,
+      "request_cpus": 6,
+      "request_memory_mb": 18000,
+      "max_runtime_seconds": 43200,
+      "proxy_seconds_before_submission": 581087,
+      "voms_seconds_before_submission": 552287,
+      "proxy_checked_utc": "2026-09-09T01:44:34Z",
+      "submitted_held_then_verified_and_released": true,
+      "server_injected_home_removed_before_release": true,
+      "EOS_log_redirection_verified": true,
+      "local_EOS_submission_hash_match": true,
+      "physics_changed": false,
+      "parameter_bounds_changed": false,
+      "tolerance_changed": false,
+      "last_queue_check_utc": "2026-09-09T01:50:07Z"
+    },
+    {
+      "cluster": 1112646,
+      "expect_signal": 0,
+      "named_nuisances": [
+        "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2024",
+        "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025"
+      ],
+      "status": "running_startup_not_yet_worker_verified",
+      "job_status": 2,
+      "num_job_starts": 0,
+      "diagnostic_only": false,
+      "output_work": "combined/T2tt/impact_recovery_r0_llnorm_step001_part1/impact_mStop1200_mLSP500_r0/work",
+      "submission_file": "combined/T2tt/impact_recovery_r0_llnorm_step001_part1/impact_r0_eossubmit.sub",
+      "submission_sha256": "de19589e5ec66d0e29fdb7b2e0b5fb84fe7d7be91678189408ebd304b8f9b8b3",
+      "runner_snapshot": "impact_code_step/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+      "runner_sha256": "a76dba6fbc0e547fc6f62551ed14781e499060d65668fcaacb59fc2c71891e59",
+      "source_commit": "a8e67856",
+      "card_sha256": "e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1",
+      "workspace_sha256": "fec2790a46d714e92d3a09dfa2f768cba48dd0daf4925ea580cc7dc945d4dceb",
+      "initial_fit_sha256": "7b898069a83365946cd1f0850139131ead856a37113ce3c2e6236c8ede554f6e",
+      "resume_source": "combined/T2tt/impact_seed_r0",
+      "step_size": 0.001,
+      "robust_profile_strategy": 0,
+      "minimizer_strategy": 1,
+      "robust_fit": 1,
+      "signal_strength_range": [
+        -20,
+        20
+      ],
+      "fit_parallel": 2,
+      "request_cpus": 6,
+      "request_memory_mb": 18000,
+      "max_runtime_seconds": 43200,
+      "proxy_seconds_before_submission": 581087,
+      "voms_seconds_before_submission": 552287,
+      "proxy_checked_utc": "2026-09-09T01:44:34Z",
+      "submitted_held_then_verified_and_released": true,
+      "server_injected_home_removed_before_release": true,
+      "EOS_log_redirection_verified": true,
+      "local_EOS_submission_hash_match": true,
+      "physics_changed": false,
+      "parameter_bounds_changed": false,
+      "tolerance_changed": false,
+      "last_queue_check_utc": "2026-09-09T01:50:07Z"
+    },
+    {
+      "cluster": 1112647,
+      "expect_signal": 1,
+      "named_nuisances": [
+        "CMS_NPS26012_sgamma_shape_highdm_Nb1_bin0_2024"
+      ],
+      "status": "idle",
+      "job_status": 1,
+      "num_job_starts": 0,
+      "diagnostic_only": true,
+      "output_work": "combined/T2tt/impact_diagnostic_r1_sgamma_highdm_step001/impact_mStop1200_mLSP500_r1/work",
+      "submission_file": "combined/T2tt/impact_diagnostic_r1_sgamma_highdm_step001/impact_r1_eossubmit.sub",
+      "submission_sha256": "0339b9844618e3be7acb9b988404083bf9cb893ac096511a0feee7583afb7492",
+      "runner_snapshot": "impact_code_step/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+      "runner_sha256": "a76dba6fbc0e547fc6f62551ed14781e499060d65668fcaacb59fc2c71891e59",
+      "source_commit": "a8e67856",
+      "card_sha256": "e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1",
+      "workspace_sha256": "e58f366eff035c02fb244bb43f1a56efcdd12233acc4c5d0401d4c21cb0f8235",
+      "initial_fit_sha256": "14634181a407fa97b3e9d399edab07b177c59bb57b1bd65a2eafd22107ef2693",
+      "resume_source": "combined/T2tt/impact_seed_r1",
+      "step_size": 0.001,
+      "robust_profile_strategy": 0,
+      "minimizer_strategy": 1,
+      "robust_fit": 1,
+      "signal_strength_range": [
+        0,
+        20
+      ],
+      "fit_parallel": 1,
+      "request_cpus": 6,
+      "request_memory_mb": 18000,
+      "max_runtime_seconds": 43200,
+      "proxy_seconds_before_submission": 581087,
+      "voms_seconds_before_submission": 552287,
+      "proxy_checked_utc": "2026-09-09T01:44:34Z",
+      "submitted_held_then_verified_and_released": true,
+      "server_injected_home_removed_before_release": true,
+      "EOS_log_redirection_verified": true,
+      "local_EOS_submission_hash_match": true,
+      "physics_changed": false,
+      "parameter_bounds_changed": false,
+      "tolerance_changed": false,
+      "last_queue_check_utc": "2026-09-09T01:50:07Z"
+    }
+  ],
+  "submission_preflight": [
+    {
+      "phase": "verified_held",
+      "cluster": 1112644,
+      "ad": {
+        "Args": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/datacards/datacard_mStop1200_mLSP500.txt /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r1_llnorm_step001_part1/impact_mStop1200_mLSP500_r1 1200",
+        "ClusterId": 1112644,
+        "Cmd": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/impact_code_step/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+        "Environment": "COMBINE_RUNTIME_ARCHIVE=combine_cmssw_14_1_0_pre4.tgz COMBINE_RUNTIME_SHA256=2909cf59caf57cfa47e65e6d43a7bcca8c864c72984679127d8eebabb551614a IMPACT_EXPECT_SIGNAL=1 IMPACT_MINIMIZER_STRATEGY=1 IMPACT_PARALLEL=3 IMPACT_PLOT=0 IMPACT_RESUME_CARD_SHA256=e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1 IMPACT_RESUME_DIR=/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_seed_r1 IMPACT_RESUME_INITIAL_SHA256=14634181a407fa97b3e9d399edab07b177c59bb57b1bd65a2eafd22107ef2693 IMPACT_RESUME_NUISANCES=CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025,CMS_NPS26012_ll_norm_highdm_Nb2plus_bin0_2025,CMS_NPS26012_ll_norm_lowdm_Nb1_NISR0_inclusive_2025 IMPACT_RESUME_WORKSPACE_SHA256=e58f366eff035c02fb244bb43f1a56efcdd12233acc4c5d0401d4c21cb0f8235 IMPACT_R_MAX=20 IMPACT_R_MIN=0 IMPACT_STEP_SIZE=0.001 IMPACT_SUBSET_ONLY=1 IMPACT_VERBOSITY=3",
+        "Err": "/Expr(ifThenElse(JobStatus == 4,\"/dev/null\",SubmittedErr))/",
+        "Iwd": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r1_llnorm_step001_part1/impact_mStop1200_mLSP500_r1",
+        "JobBatchName": "NPS26012_LeptonVeto10_r1_LLstep001_part1",
+        "JobStatus": 5,
+        "MaxRuntime": 43200,
+        "NumJobStarts": 0,
+        "Out": "/Expr(ifThenElse(JobStatus == 4,\"/dev/null\",SubmittedOut))/",
+        "ProcId": 0,
+        "RequestCpus": 6,
+        "RequestMemory": 18000,
+        "SubmittedErr": "root://eosuser.cern.ch//eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r1_llnorm_step001_part1/impact_mStop1200_mLSP500_r1/condor_logs/impact.err",
+        "SubmittedOut": "root://eosuser.cern.ch//eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r1_llnorm_step001_part1/impact_mStop1200_mLSP500_r1/condor_logs/impact.out",
+        "TransferInput": "/eos/user/t/taiwoo/run3_stop/runtime/combine_cmssw_14_1_0_pre4.tgz",
+        "UserLog": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r1_llnorm_step001_part1/impact_mStop1200_mLSP500_r1/condor_logs/cluster.log",
+        "X509UserProxy": "/eos/user/t/taiwoo/decaf/analysis/proxy/x509up_u147757"
+      }
+    },
+    {
+      "phase": "verified_held",
+      "cluster": 1112645,
+      "ad": {
+        "Args": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/datacards/datacard_mStop1200_mLSP500.txt /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r1_llnorm_step001_part2/impact_mStop1200_mLSP500_r1 1200",
+        "ClusterId": 1112645,
+        "Cmd": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/impact_code_step/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+        "Environment": "COMBINE_RUNTIME_ARCHIVE=combine_cmssw_14_1_0_pre4.tgz COMBINE_RUNTIME_SHA256=2909cf59caf57cfa47e65e6d43a7bcca8c864c72984679127d8eebabb551614a IMPACT_EXPECT_SIGNAL=1 IMPACT_MINIMIZER_STRATEGY=1 IMPACT_PARALLEL=2 IMPACT_PLOT=0 IMPACT_RESUME_CARD_SHA256=e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1 IMPACT_RESUME_DIR=/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_seed_r1 IMPACT_RESUME_INITIAL_SHA256=14634181a407fa97b3e9d399edab07b177c59bb57b1bd65a2eafd22107ef2693 IMPACT_RESUME_NUISANCES=CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025,CMS_NPS26012_ll_norm_lowdm_Nb2plus_NISR1plus_inclusive_2025 IMPACT_RESUME_WORKSPACE_SHA256=e58f366eff035c02fb244bb43f1a56efcdd12233acc4c5d0401d4c21cb0f8235 IMPACT_R_MAX=20 IMPACT_R_MIN=0 IMPACT_STEP_SIZE=0.001 IMPACT_SUBSET_ONLY=1 IMPACT_VERBOSITY=3",
+        "Err": "/Expr(ifThenElse(JobStatus == 4,\"/dev/null\",SubmittedErr))/",
+        "Iwd": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r1_llnorm_step001_part2/impact_mStop1200_mLSP500_r1",
+        "JobBatchName": "NPS26012_LeptonVeto10_r1_LLstep001_part2",
+        "JobStatus": 5,
+        "MaxRuntime": 43200,
+        "NumJobStarts": 0,
+        "Out": "/Expr(ifThenElse(JobStatus == 4,\"/dev/null\",SubmittedOut))/",
+        "ProcId": 0,
+        "RequestCpus": 6,
+        "RequestMemory": 18000,
+        "SubmittedErr": "root://eosuser.cern.ch//eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r1_llnorm_step001_part2/impact_mStop1200_mLSP500_r1/condor_logs/impact.err",
+        "SubmittedOut": "root://eosuser.cern.ch//eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r1_llnorm_step001_part2/impact_mStop1200_mLSP500_r1/condor_logs/impact.out",
+        "TransferInput": "/eos/user/t/taiwoo/run3_stop/runtime/combine_cmssw_14_1_0_pre4.tgz",
+        "UserLog": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r1_llnorm_step001_part2/impact_mStop1200_mLSP500_r1/condor_logs/cluster.log",
+        "X509UserProxy": "/eos/user/t/taiwoo/decaf/analysis/proxy/x509up_u147757"
+      }
+    },
+    {
+      "phase": "verified_held",
+      "cluster": 1112646,
+      "ad": {
+        "Args": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/datacards/datacard_mStop1200_mLSP500.txt /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r0_llnorm_step001_part1/impact_mStop1200_mLSP500_r0 1200",
+        "ClusterId": 1112646,
+        "Cmd": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/impact_code_step/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+        "Environment": "COMBINE_RUNTIME_ARCHIVE=combine_cmssw_14_1_0_pre4.tgz COMBINE_RUNTIME_SHA256=2909cf59caf57cfa47e65e6d43a7bcca8c864c72984679127d8eebabb551614a IMPACT_EXPECT_SIGNAL=0 IMPACT_MINIMIZER_STRATEGY=1 IMPACT_PARALLEL=2 IMPACT_PLOT=0 IMPACT_RESUME_CARD_SHA256=e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1 IMPACT_RESUME_DIR=/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_seed_r0 IMPACT_RESUME_INITIAL_SHA256=7b898069a83365946cd1f0850139131ead856a37113ce3c2e6236c8ede554f6e IMPACT_RESUME_NUISANCES=CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2024,CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025 IMPACT_RESUME_WORKSPACE_SHA256=fec2790a46d714e92d3a09dfa2f768cba48dd0daf4925ea580cc7dc945d4dceb IMPACT_R_MAX=20 IMPACT_R_MIN=-20 IMPACT_STEP_SIZE=0.001 IMPACT_SUBSET_ONLY=1 IMPACT_VERBOSITY=3",
+        "Err": "/Expr(ifThenElse(JobStatus == 4,\"/dev/null\",SubmittedErr))/",
+        "Iwd": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r0_llnorm_step001_part1/impact_mStop1200_mLSP500_r0",
+        "JobBatchName": "NPS26012_LeptonVeto10_r0_LLstep001_part1",
+        "JobStatus": 5,
+        "MaxRuntime": 43200,
+        "NumJobStarts": 0,
+        "Out": "/Expr(ifThenElse(JobStatus == 4,\"/dev/null\",SubmittedOut))/",
+        "ProcId": 0,
+        "RequestCpus": 6,
+        "RequestMemory": 18000,
+        "SubmittedErr": "root://eosuser.cern.ch//eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r0_llnorm_step001_part1/impact_mStop1200_mLSP500_r0/condor_logs/impact.err",
+        "SubmittedOut": "root://eosuser.cern.ch//eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r0_llnorm_step001_part1/impact_mStop1200_mLSP500_r0/condor_logs/impact.out",
+        "TransferInput": "/eos/user/t/taiwoo/run3_stop/runtime/combine_cmssw_14_1_0_pre4.tgz",
+        "UserLog": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_recovery_r0_llnorm_step001_part1/impact_mStop1200_mLSP500_r0/condor_logs/cluster.log",
+        "X509UserProxy": "/eos/user/t/taiwoo/decaf/analysis/proxy/x509up_u147757"
+      }
+    },
+    {
+      "phase": "released",
+      "cluster": 1112644
+    },
+    {
+      "phase": "released",
+      "cluster": 1112645
+    },
+    {
+      "phase": "released",
+      "cluster": 1112646
+    },
+    {
+      "phase": "verified_held",
+      "cluster": 1112647,
+      "ad": {
+        "Args": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/datacards/datacard_mStop1200_mLSP500.txt /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_diagnostic_r1_sgamma_highdm_step001/impact_mStop1200_mLSP500_r1 1200",
+        "ClusterId": 1112647,
+        "Cmd": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/impact_code_step/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+        "Environment": "COMBINE_RUNTIME_ARCHIVE=combine_cmssw_14_1_0_pre4.tgz COMBINE_RUNTIME_SHA256=2909cf59caf57cfa47e65e6d43a7bcca8c864c72984679127d8eebabb551614a IMPACT_EXPECT_SIGNAL=1 IMPACT_MINIMIZER_STRATEGY=1 IMPACT_PARALLEL=1 IMPACT_PLOT=0 IMPACT_RESUME_CARD_SHA256=e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1 IMPACT_RESUME_DIR=/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_seed_r1 IMPACT_RESUME_INITIAL_SHA256=14634181a407fa97b3e9d399edab07b177c59bb57b1bd65a2eafd22107ef2693 IMPACT_RESUME_NUISANCES=CMS_NPS26012_sgamma_shape_highdm_Nb1_bin0_2024 IMPACT_RESUME_WORKSPACE_SHA256=e58f366eff035c02fb244bb43f1a56efcdd12233acc4c5d0401d4c21cb0f8235 IMPACT_R_MAX=20 IMPACT_R_MIN=0 IMPACT_STEP_SIZE=0.001 IMPACT_SUBSET_ONLY=1 IMPACT_VERBOSITY=3",
+        "Err": "/Expr(ifThenElse(JobStatus == 4,\"/dev/null\",SubmittedErr))/",
+        "Iwd": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_diagnostic_r1_sgamma_highdm_step001/impact_mStop1200_mLSP500_r1",
+        "JobBatchName": "NPS26012_LeptonVeto10_r1_SGhighdm_step001",
+        "JobStatus": 5,
+        "MaxRuntime": 43200,
+        "NumJobStarts": 0,
+        "Out": "/Expr(ifThenElse(JobStatus == 4,\"/dev/null\",SubmittedOut))/",
+        "ProcId": 0,
+        "RequestCpus": 6,
+        "RequestMemory": 18000,
+        "SubmittedErr": "root://eosuser.cern.ch//eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_diagnostic_r1_sgamma_highdm_step001/impact_mStop1200_mLSP500_r1/condor_logs/impact.err",
+        "SubmittedOut": "root://eosuser.cern.ch//eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_diagnostic_r1_sgamma_highdm_step001/impact_mStop1200_mLSP500_r1/condor_logs/impact.out",
+        "TransferInput": "/eos/user/t/taiwoo/run3_stop/runtime/combine_cmssw_14_1_0_pre4.tgz",
+        "UserLog": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_diagnostic_r1_sgamma_highdm_step001/impact_mStop1200_mLSP500_r1/condor_logs/cluster.log",
+        "X509UserProxy": "/eos/user/t/taiwoo/decaf/analysis/proxy/x509up_u147757"
+      }
+    },
+    {
+      "phase": "released",
+      "cluster": 1112647
+    }
+  ],
+  "submission_environment_failure": {
+    "jobs_submitted": 0,
+    "error": "ModuleNotFoundError: No module named numpy in miniconda base Python",
+    "resolution": "canonical helper rerun with existing py38, without installing or changing any environment"
+  },
+  "sgamma_treatment_approval_status": "awaiting_user_reply",
+  "sgamma_boundary_algorithm_adopted": false,
+  "physics_changed": false,
+  "parameter_bounds_changed": false,
+  "minimizer_tolerance_changed": false,
+  "NanoAOD_accessed": false,
+  "intermediate_ROOT_accessed": false,
+  "healthy_work_restarted": false,
+  "unrelated_condor_jobs_touched": false,
+  "original_outputs_preserved": true
+}
