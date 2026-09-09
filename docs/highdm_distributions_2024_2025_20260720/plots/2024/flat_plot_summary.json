@@ -448,48 +448,6 @@
     {
       "bins": 6,
       "labels": [
-        "High-dM VR\n$N_{b}=1$"
-      ],
-      "legend_yields_displayed": false,
-      "name": "highdm_vr_nb1_met",
-      "pdf": "/tmp/web2425/plots/2024/highdm_vr_nb1_met.pdf",
-      "png": "/tmp/web2425/plots/2024/highdm_vr_nb1_met.png",
-      "signals": [],
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null
-    },
-    {
-      "bins": 6,
-      "labels": [
-        "High-dM VR\n$N_{b}=2$"
-      ],
-      "legend_yields_displayed": false,
-      "name": "highdm_vr_nb2_met",
-      "pdf": "/tmp/web2425/plots/2024/highdm_vr_nb2_met.pdf",
-      "png": "/tmp/web2425/plots/2024/highdm_vr_nb2_met.png",
-      "signals": [],
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null
-    },
-    {
-      "bins": 6,
-      "labels": [
-        "High-dM VR\n$N_{b}\\geq3$"
-      ],
-      "legend_yields_displayed": false,
-      "name": "highdm_vr_nb3plus_met",
-      "pdf": "/tmp/web2425/plots/2024/highdm_vr_nb3plus_met.pdf",
-      "png": "/tmp/web2425/plots/2024/highdm_vr_nb3plus_met.png",
-      "signals": [],
-      "status": "complete",
-      "unit_area": false,
-      "unit_area_audit": null
-    },
-    {
-      "bins": 6,
-      "labels": [
         "SR"
       ],
       "legend_yields_displayed": false,

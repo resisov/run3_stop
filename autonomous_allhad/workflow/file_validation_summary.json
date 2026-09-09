@@ -40,5 +40,24 @@
   },
   "updated_at": "2026-08-03T21:29:42Z",
   "valid_roots": 7587,
-  "zero_entry_roots": 1354
+  "zero_entry_roots": 1354,
+  "topw_efficiency_common_2024_2025": {
+    "files_expected": 41307,
+    "files_processed": 41304,
+    "files_skipped": 3,
+    "files_unaccounted": 0,
+    "successful_duplicates": 0,
+    "retained_events": 9815992932,
+    "lost_events": null,
+    "generator_sumw_lost": null,
+    "datasets": 179,
+    "futures_verified": 2498,
+    "merged_histograms": 716,
+    "merged_sha256": "1d19be3a7fc6e59f1ee9798cb85b7154feca16ad2c1390ce8382453fcaaa1c68",
+    "status": "complete_with_user_authorized_skips",
+    "campaign": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topwtageff_20260908_workday/2024",
+    "file_loss_fraction": 0.00007262691553489724,
+    "normalization": "Raw unweighted and signed genWeight pass/fail histograms include only complete retained ROOT files; no external dataset normalization is applied. MC efficiency is formed from matching retained pass/(pass+fail). Missing-file event and generator sumw loss cannot be quantified from available reports.",
+    "validation_record": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topwtageff_20260908_workday/2024/summary.json"
+  }
 }

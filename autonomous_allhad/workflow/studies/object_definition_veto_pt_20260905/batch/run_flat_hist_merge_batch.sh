@@ -6,8 +6,9 @@ case "$ARGV_FILE" in
   /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/studies/object_definition_veto_pt_20260905/recovery/*.argv) ;;
   /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/dy_window20_20260907/*/*.argv) ;;
   /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/*/*.argv) ;;
+  /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topw_truth_20260909/*/*.argv) ;;
   *)
-    echo "refusing argv file outside the approved histogram campaigns: $ARGV_FILE" >&2
+    echo "refusing argv file outside the approved campaigns: $ARGV_FILE" >&2
     exit 64
     ;;
 esac

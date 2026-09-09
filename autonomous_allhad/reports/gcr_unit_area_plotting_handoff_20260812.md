@@ -66,7 +66,7 @@ The page manifest records:
 - current nominal uncertainty model: MC statistical, luminosity, and stored systematic envelopes.
 
 Use the current canonical render payload associated with this page. Do not fall back to an
-older photon-fake snapshot, old PT-binned DY payload, or legacy processor output.
+older sidecar snapshot, old PT-binned DY payload, or legacy processor output.
 
 ## 3. Physics definition of the plotted GCR
 
@@ -82,7 +82,7 @@ The high-dM GCR requires, in summary:
 - exactly one medium photon;
 - photon pT > 220 GeV;
 - photon in ECAL barrel or endcap fiducial acceptance, excluding the transition gap;
-- photon `cutBased >= 2` and electron veto;
+- photon `cutBased >= 2` (Medium) and `electronVeto == 1`;
 - no veto electron or muon and zero selected tau;
 - photon-cleaned AK4 jets with DeltaR(photon, AK4 jet) >= 0.2;
 - photon-cleaned AK8 jets with DeltaR(photon, AK8 jet) >= 0.4;
@@ -250,7 +250,6 @@ Do not modify:
 - LLCR, QCDCR, DYCR, VR, or SR plots;
 - SR blinding;
 - DY RZ factors;
-- photon-fake estimates;
 - nominal histogram files;
 - process grouping or stack order;
 - Combine inputs or datacards;

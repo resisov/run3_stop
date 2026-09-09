@@ -336,6 +336,11 @@ A dataset must be marked incomplete when the skipped fraction exceeds configurab
 
 ## Workflow behavior
 
+Do not download or retain ROOT caches in the local laptop workspace. Keep ROOT
+inputs, templates, fit outputs, and truth-augmentation products on EOS or in
+batch-worker scratch. Local plotting must use compact exported data where
+possible. Keep generated large histogram JSON and fit scratch out of Git.
+
 Keep canonical source, configuration, and dependency manifests synchronized
 between local, EOS, and the tracked Git branch, with verified file hashes.
 Do not overwrite divergent physics payloads or active frozen campaign snapshots

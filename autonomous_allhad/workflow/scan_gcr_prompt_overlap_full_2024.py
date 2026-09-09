@@ -98,7 +98,7 @@ def collect_manifest_recovery_candidates(
                         file_path,
                         {
                             "file_path": file_path,
-                            "fake_sidecar_dataset": dataset,
+                            "snapshot_dataset": dataset,
                             "process": process,
                             "sidecar_selected_events": 0,
                             "sidecar_events_read": 0,
@@ -1661,7 +1661,7 @@ def main() -> int:
                 "selection": (
                     "All exact high-dM feature_GCR rows associated with "
                     "complete GJets/QCD source-file records in the frozen "
-                    "photon-fake snapshot; no GCR selection is rerun."
+                    "campaign snapshot; no GCR selection is rerun."
                 ),
                 "nominal_and_sidecar_untouched": True,
             },

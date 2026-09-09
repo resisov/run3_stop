@@ -13,9 +13,7 @@
   "inputs": {
     "nominal_render_payload": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/nominal_plots_2024_fullselection_v3_20260725/render_payloads/categories_2024.json",
     "normalization": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/intermediate_2024_fullselection_v3_lowdm_relaxed_20260724/final_nominal_inputs_20260725/normalization.json",
-    "campaign_shards": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/intermediate_2024_fullselection_v3_lowdm_relaxed_20260724/bundles/fullselection_shards.tgz",
-    "photon_strata_audit": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_fake_2024_snapshot_complete_20260726T1917Z/gcr_photon_strata_audit.json",
-    "gcr_fit_study": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/photon_fake_2024_snapshot_complete_20260726T1917Z/gcr_datamc_improvement_study.json"
+    "campaign_shards": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/intermediate_2024_fullselection_v3_lowdm_relaxed_20260724/bundles/fullselection_shards.tgz"
   },
   "headline": {
     "data_yield": 14495.0,
@@ -84,7 +82,7 @@
     {
       "process": "Zto2Nu",
       "yield": 0.6014024553894506,
-      "fraction_of_mc": 0.000059,
+      "fraction_of_mc": 5.9e-05,
       "sumw2": 0.6002405731779756,
       "entries": 10,
       "effective_entries": 0.6026
@@ -282,7 +280,7 @@
       "lines": "559-568",
       "approximate_central_effect_on_total_mc": 0.024699,
       "up_down_effect_on_total_mc": 0.047357,
-      "conclusion": "Correctly scoped to GCR, not duplicated, and too small to close the deficit. Prompt-photon ID SF should not be applied to a future data-driven fake component."
+      "conclusion": "Correctly scoped to GCR, not duplicated, and too small to close the deficit. The photon ID SF applies to prompt-photon MC."
     },
     "photon_trigger_sf": {
       "status": "missing",
@@ -347,59 +345,29 @@
     "required_action": "Compute a GCR-specific b-tag event weight from good_j AND photon_clean_j, or persist the photon-cleaned jet collection for post-skim weights.",
     "impact_assessment": "Existing b-tag variations change the total by at most about 1.1 percent, so this cannot explain the main deficit."
   },
-  "qcd_and_truth_origin": {
-    "qcd_mc_effective_entries": 61.085,
-    "qcd_mc_relative_statistical_uncertainty": 0.12798,
-    "qcd_fraction_of_total_mc": 0.420584,
-    "pre_photon_id_truth_origin_yields": {
-      "GJ": {
-        "all": 5391.21,
-        "prompt": 5385.64,
-        "fake": 3.34,
-        "electron": 2.23
-      },
-      "QCD": {
-        "all": 4214.02,
-        "prompt": 3902.89,
-        "fake": 311.11,
-        "electron": 0.027
-      }
-    },
-    "conclusion": "The selected QCD sample is about 92.6 percent prompt-photon origin, not all fake. Replacing all QCD with a fake estimate is wrong. Its rare selected events carry large weights, making the nominal QCD component statistically fragile."
-  },
-  "diagnostic_fit_results_not_validation": {
-    "gj_only_scale_with_nominal_qcd": 1.771,
-    "prompt_pool_scale_with_data_driven_fake": 1.38951,
-    "warning": "These are diagnostic GCR constraints, not evidence that the prefit cross sections should be changed. They may only be propagated after prompt-sample overlap/stitching is fixed and transfer-factor closure is demonstrated."
-  },
   "ranked_actions": [
     {
       "rank": 1,
-      "action": "Resolve GJ versus QCD prompt-photon overlap/stitching and build mutually exclusive prompt and fake components.",
+      "action": "Resolve GJ versus QCD prompt-photon overlap/stitching and build mutually exclusive prompt-photon samples.",
       "reason": "GJ plus QCD is 96.1 percent of MC, while QCD is mostly prompt and has only about 61 effective selected events."
     },
     {
       "rank": 2,
-      "action": "Use the data-driven estimate only for the hadron-fake photon component, then fit or constrain the prompt pool in GCR and validate transfer-factor closure.",
-      "reason": "A global QCD replacement is physically wrong; a prompt-pool control-region constraint is the plausible route to a good post-fit Data/MC."
-    },
-    {
-      "rank": 3,
       "action": "Measure and apply the 2024 Photon175-or-Photon200 trigger efficiency and SF with run-era, pT, and eta dependence.",
       "reason": "The correction is missing, but it must be measured and is not expected to be order one above 220 GeV."
     },
     {
-      "rank": 4,
+      "rank": 3,
       "action": "Fix the GCR b-tag weight to use photon-cleaned jets.",
       "reason": "This is a real selection-versus-weight scope mismatch with a likely percent-level effect."
     },
     {
-      "rank": 5,
-      "action": "Add the prompt-photon CSEV SF and retain Photon_r9; keep it separate from the fake estimate.",
+      "rank": 4,
+      "action": "Add the prompt-photon CSEV SF and retain Photon_r9.",
       "reason": "Required for correctness, but it worsens rather than improves the current ratio."
     },
     {
-      "rank": 6,
+      "rank": 5,
       "action": "Inspect the asymmetric pileup up/down response and add a top-pT systematic, while retaining current central corrections unless an independent closure fails.",
       "reason": "These are subleading completeness issues."
     }
@@ -407,7 +375,6 @@
   "explicitly_rejected_changes": [
     "Do not alter 109.82 fb^-1 to force agreement.",
     "Do not multiply the four GJ cross sections by an ad hoc common factor.",
-    "Do not replace all QCD with the fake-photon estimate.",
     "Do not interpret the disappearance of jobs or a diagnostic fit as validation."
   ]
 }

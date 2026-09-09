@@ -8,7 +8,7 @@
     "status": "complete"
   },
   "page": "/tmp/web2425/index.html",
-  "plot_count": 321,
+  "plot_count": 288,
   "results": [
     {
       "json": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/results/2024/T2tt/expected_limits.json",
@@ -21,7 +21,7 @@
         "png": "results/2024/expected-limit-t2tt/expected_limit_t2tt_2024_highdm79_lowdm34.png"
       },
       "slug": "expected-limit-t2tt",
-      "title": "2024 expected limit \u00b7 T2tt \u00b7 High-dM 79 + Low-dM 34",
+      "title": "2024 expected limit · T2tt · High-dM 79 + Low-dM 34",
       "topology": "T2tt",
       "year": "2024"
     },
@@ -36,7 +36,7 @@
         "png": "results/2024/expected-limit-t2bw/expected_limit_t2bw_2024_highdm79_lowdm34.png"
       },
       "slug": "expected-limit-t2bw",
-      "title": "2024 expected limit \u00b7 T2bW \u00b7 High-dM 79 + Low-dM 34",
+      "title": "2024 expected limit · T2bW · High-dM 79 + Low-dM 34",
       "topology": "T2bW",
       "year": "2024"
     },
@@ -51,7 +51,7 @@
         "png": "results/2024/expected-limit-t2tb/expected_limit_t2tb_2024_highdm79_lowdm34.png"
       },
       "slug": "expected-limit-t2tb",
-      "title": "2024 expected limit \u00b7 T2tb \u00b7 High-dM 79 + Low-dM 34",
+      "title": "2024 expected limit · T2tb · High-dM 79 + Low-dM 34",
       "topology": "T2tb",
       "year": "2024"
     }

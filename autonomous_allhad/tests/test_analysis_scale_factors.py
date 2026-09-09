@@ -11,12 +11,73 @@ import numpy as np
 
 from autonomous_allhad.analysis_scale_factors import (
     AnalysisScaleFactorUnavailable,
+    apply_topw_highpt_extrapolation,
     loose_muon_lowpt_triplet,
     met_trigger_triplet,
     photon_trigger_triplet,
     veto_electron_lowpt_triplet,
 )
 from workflow.sf_payload import correction, correction_set, install_adopted_result, write_json_gz
+
+
+class TopWExtrapolationTest(unittest.TestCase):
+    def test_both_years_and_exact_upper_edges(self):
+        for year in ("2024", "2025"):
+            for tagger, edge in (("top", 1200.0), ("w", 800.0)):
+                with self.subTest(year=year, tagger=tagger):
+                    pt = [np.nextafter(edge, 0.0), edge, edge + 1000.0]
+                    result = apply_topw_highpt_extrapolation(
+                        pt, [1.1, np.nan, np.nan], [1.3, np.nan, np.nan],
+                        [0.8, np.nan, np.nan], tagger=tagger, year=year,
+                    )
+                    for actual, expected in zip(result, ([1.1, 1, 1], [1.3, 1, 1], [0.8, 1, 1])):
+                        np.testing.assert_array_equal(actual, expected)
+
+    def test_zero_uncertainty_overrides_extrapolated_variations(self):
+        result = apply_topw_highpt_extrapolation(
+            [1500], [1.3], [1.5], [0.9], tagger="top", year="2024",
+        )
+        for values in result:
+            np.testing.assert_array_equal(values, [1.0])
+
+    def test_in_range_missing_values_do_not_fall_back_to_unity(self):
+        with self.assertRaises(AnalysisScaleFactorUnavailable):
+            apply_topw_highpt_extrapolation(
+                [500], [np.nan], [1.2], [0.8], tagger="top", year="2024",
+            )
+
+    def test_rejects_invalid_inputs(self):
+        for pt, nominal, up, down in (
+            ([np.inf], [1], [1], [1]),
+            ([np.nan], [1], [1], [1]),
+            ([-1], [1], [1], [1]),
+            ([[500]], [[1]], [[1]], [[1]]),
+            ([500, 600], [1], [1], [1]),
+        ):
+            with self.subTest(pt=pt), self.assertRaises(ValueError):
+                apply_topw_highpt_extrapolation(
+                    pt, nominal, up, down, tagger="top", year="2024",
+                )
+
+    def test_rejects_invalid_in_range_variations(self):
+        for nominal, up, down in ((1, 0.9, 0.8), (1, 1.2, 1.1), (1, 1.2, -0.1)):
+            with self.subTest(nominal=nominal, up=up, down=down), self.assertRaises(AnalysisScaleFactorUnavailable):
+                apply_topw_highpt_extrapolation(
+                    [500], [nominal], [up], [down], tagger="top", year="2024",
+                )
+
+    def test_does_not_mutate_input(self):
+        values = np.asarray([1.2])
+        apply_topw_highpt_extrapolation(
+            [1300], values, values, values, tagger="top", year="2024",
+        )
+        np.testing.assert_array_equal(values, [1.2])
+
+    def test_unknown_year_or_tagger_is_not_accepted(self):
+        with self.assertRaises(AnalysisScaleFactorUnavailable):
+            apply_topw_highpt_extrapolation([1300], [1], [1], [1], tagger="top", year="2023")
+        with self.assertRaises(ValueError):
+            apply_topw_highpt_extrapolation([1300], [1], [1], [1], tagger="resolved", year="2024")
 
 
 class AnalysisScaleFactorTest(unittest.TestCase):

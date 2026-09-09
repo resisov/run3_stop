@@ -23,6 +23,16 @@ x509up*
 
 # Large binary/runtime artifacts
 *.root
+# Generated histogram payloads and fit scratch are EOS-owned, not source snapshots.
+autonomous_allhad/workflow/histograms/**/hists.json
+autonomous_allhad/workflow/histograms/**/plot_payload.json
+autonomous_allhad/workflow/histograms/**/hist_chunks/
+autonomous_allhad/workflow/histograms/**/card_unit_tests/
+autonomous_allhad/workflow/histograms/**/impact_step_unit_tests/
+autonomous_allhad/workflow/histograms/**/plot_cache/
+autonomous_allhad/workflow/histograms/**/plots/.cache/
+autonomous_allhad/workflow/histograms/**/plots/.mplconfig/
+autonomous_allhad/workflow/topw_truth_*/tests/
 *.npy
 *.parquet
 *.sqlite

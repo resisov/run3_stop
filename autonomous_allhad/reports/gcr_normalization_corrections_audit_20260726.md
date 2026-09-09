@@ -60,7 +60,7 @@ The `HLT_Photon175 || HLT_Photon200` requirement is present (`real_subset_worker
 
 Data receive unit event weight and only the raw trigger-bit OR is retained. If a trigger were prescaled without inverse-prescale weighting, it would lower the data yield, so prescale omission has the wrong sign to produce the observed data excess. The 2024 menu still needs a run-by-run check that Photon200 is unprescaled. The current flat skim lacks path-specific bits and prescale columns, so that check cannot be done from the skim alone.
 
-The photon CSEV SF exists in the 2024 payload but is not applied. For Medium photons it spans 0.948–0.978 in EB and 0.892–0.920 in EE depending on \(R_9\). With the observed EB/EE mixture it would lower total MC by about 3.6–6.6% and worsen Data/MC to approximately 1.47–1.52. It is a required correctness fix, not an agreement fix. `Photon_r9` must be retained, and the SF should be applied to prompt photons rather than the data-driven fake component.
+The photon CSEV SF exists in the 2024 payload but is not applied. For Medium photons it spans 0.948–0.978 in EB and 0.892–0.920 in EE depending on \(R_9\). With the observed EB/EE mixture it would lower total MC by about 3.6–6.6% and worsen Data/MC to approximately 1.47–1.52. It is a required correctness fix, not an agreement fix. `Photon_r9` must be retained, and the SF should be applied to prompt-photon MC.
 
 ## Other corrections
 
@@ -78,13 +78,12 @@ There is one GCR-specific bug: the selection uses photon-cleaned jets (`real_sub
 
 ## What should be done
 
-1. Make the GJ and QCD prompt-photon samples mutually exclusive and validate their stitching. QCD is about 92.6% prompt-photon origin after the GCR selection, so treating all QCD as fake is wrong.
-2. Replace only the hadron-fake component with the data-driven fake estimate. Then constrain the mutually exclusive prompt pool in GCR and demonstrate transfer-factor closure before propagating it.
-3. Measure and apply the Photon175-or-Photon200 trigger efficiency/SF.
-4. Fix the photon-cleaned b-tag weight scope.
-5. Add the prompt-photon CSEV SF with \(R_9\), knowing it worsens the raw ratio.
-6. Inspect the pileup variation asymmetry and add a top-\(p_T\) systematic.
+1. Make the GJ and QCD prompt-photon samples mutually exclusive and validate their stitching.
+2. Measure and apply the Photon175-or-Photon200 trigger efficiency/SF.
+3. Fix the photon-cleaned b-tag weight scope.
+4. Add the prompt-photon CSEV SF with \(R_9\), knowing it worsens the raw ratio.
+5. Inspect the pileup variation asymmetry and add a top-\(p_T\) systematic.
 
-The prompt-pool diagnostic fit gives a scale near 1.3895 when the data-driven fake component is used; keeping nominal QCD and scaling GJ alone gives about 1.771. These are control-region diagnostics, not permission to alter generator cross sections. No luminosity or global cross-section fudge should be made.
+These diagnostics are not permission to alter generator cross sections. No luminosity or global cross-section fudge should be made.
 
 Machine-readable details are in `autonomous_allhad/validation/gcr_normalization_corrections_audit_20260726.json`.

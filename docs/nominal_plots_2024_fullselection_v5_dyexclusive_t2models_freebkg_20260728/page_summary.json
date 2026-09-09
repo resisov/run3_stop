@@ -82,7 +82,7 @@
     "updated_at": "2026-08-13T11:42:49+00:00",
     "validation": "data/gcr_unit_area_validation.json"
   },
-  "generated_at": "2026-08-14T13:40:51+00:00",
+  "generated_at": "2026-08-24T14:50:35+00:00",
   "gj_4jets_update": {
     "btag_efficiency": "complete: 3,930 validated Coffea shards, 16 merged datasets, and 3,930 source files represented exactly once",
     "btag_efficiency_sha256": "5a96f6b7dcd806a10c64dab7ecefd18a13767fa4645bc003bef5716798246563",
@@ -106,7 +106,7 @@
     "containers_scaled": 72,
     "dy2e_effective": 0.7538180297974927,
     "dy2m_effective": 0.6964603717441671,
-    "plot_count": 186,
+    "plot_count": 156,
     "status": "complete",
     "validated_at": "2026-08-14T11:26:25+00:00"
   },
@@ -165,13 +165,14 @@
     "updated_at": "2026-08-14T11:26:25+00:00"
   },
   "plot_counts": {
-    "categories": 26,
-    "highdm": 186,
+    "categories": 23,
+    "highdm": 156,
+    "impacts": 1,
     "limits": 3,
     "lowdm": 105,
     "lowdm_cr": 90,
     "lowdm_sr": 15,
-    "total": 317
+    "total": 288
   },
   "qcd_ht_update": {
     "btag_efficiency": "complete: 223 validated Coffea shards, 11 merged datasets, 2,178 source files exactly once",
@@ -762,306 +763,6 @@
       "png": "plots/highdm/cr_dy2m_ut.png",
       "region": "DY2M",
       "variable": "ut"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb1_bjet_pt",
-      "pdf": "plots/highdm/vr_highdm_vr_nb1_bjet_pt.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb1_bjet_pt.png",
-      "region": "HighDMVR_Nb1",
-      "variable": "bjet_pt"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb1_fatjet_pt",
-      "pdf": "plots/highdm/vr_highdm_vr_nb1_fatjet_pt.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb1_fatjet_pt.png",
-      "region": "HighDMVR_Nb1",
-      "variable": "fatjet_pt"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb1_ht",
-      "pdf": "plots/highdm/vr_highdm_vr_nb1_ht.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb1_ht.png",
-      "region": "HighDMVR_Nb1",
-      "variable": "ht"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb1_jet_pt",
-      "pdf": "plots/highdm/vr_highdm_vr_nb1_jet_pt.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb1_jet_pt.png",
-      "region": "HighDMVR_Nb1",
-      "variable": "jet_pt"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb1_met",
-      "pdf": "plots/highdm/vr_highdm_vr_nb1_met.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb1_met.png",
-      "region": "HighDMVR_Nb1",
-      "variable": "met"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb1_nb",
-      "pdf": "plots/highdm/vr_highdm_vr_nb1_nb.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb1_nb.png",
-      "region": "HighDMVR_Nb1",
-      "variable": "nb"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb1_nfatjet",
-      "pdf": "plots/highdm/vr_highdm_vr_nb1_nfatjet.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb1_nfatjet.png",
-      "region": "HighDMVR_Nb1",
-      "variable": "nfatjet"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb1_njet",
-      "pdf": "plots/highdm/vr_highdm_vr_nb1_njet.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb1_njet.png",
-      "region": "HighDMVR_Nb1",
-      "variable": "njet"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb1_ntop",
-      "pdf": "plots/highdm/vr_highdm_vr_nb1_ntop.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb1_ntop.png",
-      "region": "HighDMVR_Nb1",
-      "variable": "ntop"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb1_nw",
-      "pdf": "plots/highdm/vr_highdm_vr_nb1_nw.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb1_nw.png",
-      "region": "HighDMVR_Nb1",
-      "variable": "nw"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb2_bjet_pt",
-      "pdf": "plots/highdm/vr_highdm_vr_nb2_bjet_pt.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb2_bjet_pt.png",
-      "region": "HighDMVR_Nb2",
-      "variable": "bjet_pt"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb2_fatjet_pt",
-      "pdf": "plots/highdm/vr_highdm_vr_nb2_fatjet_pt.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb2_fatjet_pt.png",
-      "region": "HighDMVR_Nb2",
-      "variable": "fatjet_pt"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb2_ht",
-      "pdf": "plots/highdm/vr_highdm_vr_nb2_ht.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb2_ht.png",
-      "region": "HighDMVR_Nb2",
-      "variable": "ht"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb2_jet_pt",
-      "pdf": "plots/highdm/vr_highdm_vr_nb2_jet_pt.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb2_jet_pt.png",
-      "region": "HighDMVR_Nb2",
-      "variable": "jet_pt"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb2_met",
-      "pdf": "plots/highdm/vr_highdm_vr_nb2_met.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb2_met.png",
-      "region": "HighDMVR_Nb2",
-      "variable": "met"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb2_nb",
-      "pdf": "plots/highdm/vr_highdm_vr_nb2_nb.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb2_nb.png",
-      "region": "HighDMVR_Nb2",
-      "variable": "nb"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb2_nfatjet",
-      "pdf": "plots/highdm/vr_highdm_vr_nb2_nfatjet.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb2_nfatjet.png",
-      "region": "HighDMVR_Nb2",
-      "variable": "nfatjet"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb2_njet",
-      "pdf": "plots/highdm/vr_highdm_vr_nb2_njet.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb2_njet.png",
-      "region": "HighDMVR_Nb2",
-      "variable": "njet"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb2_ntop",
-      "pdf": "plots/highdm/vr_highdm_vr_nb2_ntop.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb2_ntop.png",
-      "region": "HighDMVR_Nb2",
-      "variable": "ntop"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb2_nw",
-      "pdf": "plots/highdm/vr_highdm_vr_nb2_nw.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb2_nw.png",
-      "region": "HighDMVR_Nb2",
-      "variable": "nw"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb3plus_bjet_pt",
-      "pdf": "plots/highdm/vr_highdm_vr_nb3plus_bjet_pt.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb3plus_bjet_pt.png",
-      "region": "HighDMVR_Nb3plus",
-      "variable": "bjet_pt"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb3plus_fatjet_pt",
-      "pdf": "plots/highdm/vr_highdm_vr_nb3plus_fatjet_pt.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb3plus_fatjet_pt.png",
-      "region": "HighDMVR_Nb3plus",
-      "variable": "fatjet_pt"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb3plus_ht",
-      "pdf": "plots/highdm/vr_highdm_vr_nb3plus_ht.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb3plus_ht.png",
-      "region": "HighDMVR_Nb3plus",
-      "variable": "ht"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb3plus_jet_pt",
-      "pdf": "plots/highdm/vr_highdm_vr_nb3plus_jet_pt.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb3plus_jet_pt.png",
-      "region": "HighDMVR_Nb3plus",
-      "variable": "jet_pt"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb3plus_met",
-      "pdf": "plots/highdm/vr_highdm_vr_nb3plus_met.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb3plus_met.png",
-      "region": "HighDMVR_Nb3plus",
-      "variable": "met"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb3plus_nb",
-      "pdf": "plots/highdm/vr_highdm_vr_nb3plus_nb.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb3plus_nb.png",
-      "region": "HighDMVR_Nb3plus",
-      "variable": "nb"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb3plus_nfatjet",
-      "pdf": "plots/highdm/vr_highdm_vr_nb3plus_nfatjet.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb3plus_nfatjet.png",
-      "region": "HighDMVR_Nb3plus",
-      "variable": "nfatjet"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb3plus_njet",
-      "pdf": "plots/highdm/vr_highdm_vr_nb3plus_njet.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb3plus_njet.png",
-      "region": "HighDMVR_Nb3plus",
-      "variable": "njet"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb3plus_ntop",
-      "pdf": "plots/highdm/vr_highdm_vr_nb3plus_ntop.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb3plus_ntop.png",
-      "region": "HighDMVR_Nb3plus",
-      "variable": "ntop"
-    },
-    {
-      "family": "highdm",
-      "family_label": "High-dM distributions",
-      "kind": "VR",
-      "name": "vr_highdm_vr_nb3plus_nw",
-      "pdf": "plots/highdm/vr_highdm_vr_nb3plus_nw.pdf",
-      "png": "plots/highdm/vr_highdm_vr_nb3plus_nw.png",
-      "region": "HighDMVR_Nb3plus",
-      "variable": "nw"
     },
     {
       "family": "highdm",
@@ -3236,36 +2937,6 @@
     {
       "family": "categories",
       "family_label": "Category/search-bin plots",
-      "kind": "VR",
-      "name": "highdm_vr_nb1_met",
-      "pdf": "plots/categories/highdm_vr_nb1_met.pdf",
-      "png": "plots/categories/highdm_vr_nb1_met.png",
-      "region": null,
-      "variable": null
-    },
-    {
-      "family": "categories",
-      "family_label": "Category/search-bin plots",
-      "kind": "VR",
-      "name": "highdm_vr_nb2_met",
-      "pdf": "plots/categories/highdm_vr_nb2_met.pdf",
-      "png": "plots/categories/highdm_vr_nb2_met.png",
-      "region": null,
-      "variable": null
-    },
-    {
-      "family": "categories",
-      "family_label": "Category/search-bin plots",
-      "kind": "VR",
-      "name": "highdm_vr_nb3plus_met",
-      "pdf": "plots/categories/highdm_vr_nb3plus_met.pdf",
-      "png": "plots/categories/highdm_vr_nb3plus_met.png",
-      "region": null,
-      "variable": null
-    },
-    {
-      "family": "categories",
-      "family_label": "Category/search-bin plots",
       "kind": "SR",
       "name": "highdm_sr_recoil_inclusive",
       "pdf": "plots/categories/highdm_sr_recoil_inclusive.pdf",
@@ -3374,36 +3045,6 @@
       "variable": null
     },
     {
-      "family": "limits",
-      "family_label": "Expected limits",
-      "kind": "Overview",
-      "name": "expected_limit_t2tt_highdm55_tailmerged_lowdm34_free_background_x1800",
-      "pdf": "plots/limits/expected_limit_t2tt_highdm55_tailmerged_lowdm34_free_background_x1800.pdf",
-      "png": "plots/limits/expected_limit_t2tt_highdm55_tailmerged_lowdm34_free_background_x1800.png",
-      "region": "2024 High-dM 55 + Low-dM 34",
-      "variable": "T2tt free-background expected limit"
-    },
-    {
-      "family": "limits",
-      "family_label": "Expected limits",
-      "kind": "Overview",
-      "name": "expected_limit_t2tb_highdm55_tailmerged_lowdm34_free_background_x1800",
-      "pdf": "plots/limits/expected_limit_t2tb_highdm55_tailmerged_lowdm34_free_background_x1800.pdf",
-      "png": "plots/limits/expected_limit_t2tb_highdm55_tailmerged_lowdm34_free_background_x1800.png",
-      "region": "2024 High-dM 55 + Low-dM 34",
-      "variable": "T2tb free-background expected limit"
-    },
-    {
-      "family": "limits",
-      "family_label": "Expected limits",
-      "kind": "Overview",
-      "name": "expected_limit_t2bw_highdm55_tailmerged_lowdm34_free_background_x1800",
-      "pdf": "plots/limits/expected_limit_t2bw_highdm55_tailmerged_lowdm34_free_background_x1800.pdf",
-      "png": "plots/limits/expected_limit_t2bw_highdm55_tailmerged_lowdm34_free_background_x1800.png",
-      "region": "2024 High-dM 55 + Low-dM 34",
-      "variable": "T2bW free-background expected limit"
-    },
-    {
       "family": "impacts",
       "family_label": "Nuisance impacts",
       "kind": "Overview",
@@ -3412,6 +3053,36 @@
       "png": "plots/impacts/impacts_2024_highdm55_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat.png",
       "region": "2024 High-dM 55 + Low-dM 34",
       "variable": "mStop1200 mLSP500 full statistics"
+    },
+    {
+      "family": "limits",
+      "family_label": "Expected limits",
+      "kind": "Overview",
+      "name": "expected_limit_t2tt_2024_2025_highdm73_lowdm34",
+      "pdf": "plots/limits/expected_limit_t2tt_2024_2025_highdm73_lowdm34.pdf",
+      "png": "plots/limits/expected_limit_t2tt_2024_2025_highdm73_lowdm34.png",
+      "region": "2024+2025 High-dM 73 + Low-dM 34",
+      "variable": "T2tt combined expected limit"
+    },
+    {
+      "family": "limits",
+      "family_label": "Expected limits",
+      "kind": "Overview",
+      "name": "expected_limit_t2tb_2024_2025_highdm73_lowdm34",
+      "pdf": "plots/limits/expected_limit_t2tb_2024_2025_highdm73_lowdm34.pdf",
+      "png": "plots/limits/expected_limit_t2tb_2024_2025_highdm73_lowdm34.png",
+      "region": "2024+2025 High-dM 73 + Low-dM 34",
+      "variable": "T2tb combined expected limit"
+    },
+    {
+      "family": "limits",
+      "family_label": "Expected limits",
+      "kind": "Overview",
+      "name": "expected_limit_t2bw_2024_2025_highdm73_lowdm34",
+      "pdf": "plots/limits/expected_limit_t2bw_2024_2025_highdm73_lowdm34.pdf",
+      "png": "plots/limits/expected_limit_t2bw_2024_2025_highdm73_lowdm34.png",
+      "region": "2024+2025 High-dM 73 + Low-dM 34",
+      "variable": "T2bW combined expected limit"
     }
   ],
   "snapshot_input_count": 3231,
@@ -3419,54 +3090,43 @@
   "source_hist_payload": "hists.json",
   "source_hist_payload_sha256": "10645b41b31074bcfaa941595dcddea9da043ebb7657a2f6727d6c0684ce4962",
   "statistical_results": {
-    "autoMCStats": 10,
-    "background_rate_parameters": 7,
-    "combined": "plots/limits/expected_limit_highdm55_lowdm34_an_zinv_x1800.png",
-    "external_background_constraints": [],
-    "impact": "plots/impacts/impacts_2024_highdm55_lowdm34_an_zinv_mStop1200_mLSP500_full_mcstat.png",
-    "impact_benchmark": {
-      "mLSP_GeV": 500,
-      "mStop_GeV": 1200
-    },
-    "impact_parameters": {
-      "autoMCStats": 284,
-      "other": 195,
-      "total": 479
-    },
-    "impact_scope": "2024 luminosity plus 194 rate/weight or object-shape nuisances and individual MC-statistical nuisances. Object-shape templates are absent from this card.",
+    "campaign": "2024+2025",
+    "highdm_signal_bins": 73,
+    "impacts": {},
+    "lowdm_signal_bins": 34,
     "max_mstop_GeV": 1800,
-    "model": "free_background_global_process_normalizations",
+    "model": "shared_control_region_transfer_factors_and_rz_sgamma",
+    "signal_regions_blinded": true,
     "signals": {
       "T2bW": {
         "collected_mass_point_count": 354,
-        "limits": "data/expected_limit_t2bw_highdm55_tailmerged_lowdm34_free_background_x1800.json",
-        "manifest": "data/expected_limit_t2bw_highdm55_tailmerged_lowdm34_free_background_x1800_manifest.json",
+        "limits": "data/expected_limit_t2bw_2024_2025_highdm73_lowdm34.json",
+        "manifest": "data/expected_limit_t2bw_2024_2025_highdm73_lowdm34_manifest.json",
         "mass_point_count": 354,
         "missing_mass_points": [],
-        "plot": "plots/limits/expected_limit_t2bw_highdm55_tailmerged_lowdm34_free_background_x1800.png",
+        "plot": "plots/limits/expected_limit_t2bw_2024_2025_highdm73_lowdm34.png",
         "run2_overlay": true
       },
       "T2tb": {
         "collected_mass_point_count": 365,
-        "limits": "data/expected_limit_t2tb_highdm55_tailmerged_lowdm34_free_background_x1800.json",
-        "manifest": "data/expected_limit_t2tb_highdm55_tailmerged_lowdm34_free_background_x1800_manifest.json",
+        "limits": "data/expected_limit_t2tb_2024_2025_highdm73_lowdm34.json",
+        "manifest": "data/expected_limit_t2tb_2024_2025_highdm73_lowdm34_manifest.json",
         "mass_point_count": 365,
         "missing_mass_points": [],
-        "plot": "plots/limits/expected_limit_t2tb_highdm55_tailmerged_lowdm34_free_background_x1800.png",
+        "plot": "plots/limits/expected_limit_t2tb_2024_2025_highdm73_lowdm34.png",
         "run2_overlay": true
       },
       "T2tt": {
         "collected_mass_point_count": 205,
-        "limits": "data/expected_limit_t2tt_highdm55_tailmerged_lowdm34_free_background_x1800.json",
-        "manifest": "data/expected_limit_t2tt_highdm55_tailmerged_lowdm34_free_background_x1800_manifest.json",
+        "limits": "data/expected_limit_t2tt_2024_2025_highdm73_lowdm34.json",
+        "manifest": "data/expected_limit_t2tt_2024_2025_highdm73_lowdm34_manifest.json",
         "mass_point_count": 205,
         "missing_mass_points": [],
-        "plot": "plots/limits/expected_limit_t2tt_highdm55_tailmerged_lowdm34_free_background_x1800.png",
+        "plot": "plots/limits/expected_limit_t2tt_2024_2025_highdm73_lowdm34.png",
         "run2_overlay": true
       }
     },
-    "status": "complete_fit_temporary_rz_covariance_full_statistics",
-    "updated_at": "2026-08-14T13:40:51+00:00"
+    "status": "complete_2024_2025_combined"
   },
   "status": "complete",
   "superseded_dy2e_rz_application": {

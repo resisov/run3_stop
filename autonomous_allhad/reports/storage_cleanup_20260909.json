@@ -1,0 +1,36 @@
+{
+  "status": "in_progress",
+  "authorization": "user_requested_obsolete_local_and_eos_output_cleanup",
+  "protected": ["canonical_sources", "active_campaign_inputs", "integrated_Events_TROTA_ROOTs", "current_canonical_EOS_histograms", "runtime_environments", "current_limits_and_impacts", "efficiency_and_SF_payloads", "GNN_models", "git_history"],
+  "deleted": [
+    {"host": "local", "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/hists.json", "bytes": 2820473081, "recoverable_from": "EOS identical canonical copy"},
+    {"host": "local", "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2025/hists.json", "bytes": 2458889388, "recoverable_from": "EOS identical canonical copy"}
+  ],
+  "eos_cleanup_targets": [
+    {"path": "autonomous_allhad/workflow/plot2024/histogram_build/hist_chunks", "bytes": 11187402447},
+    {"path": "autonomous_allhad/workflow/plot2025/histogram_build/hist_chunks", "bytes": 9914939162},
+    {"path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/work_v2/hist_chunks", "bytes": 10708888564},
+    {"path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2025/work_v2/hist_chunks", "bytes": 9416243616},
+    {"path": "autonomous_allhad/workflow/histograms/dy_window20_20260907/2024/work", "bytes": 12073662117},
+    {"path": "autonomous_allhad/workflow/histograms/dy_window20_20260907/2025/work", "bytes": 10779390266},
+    {"path": "autonomous_allhad/workflow/studies/object_definition_veto_pt_20260905/histograms", "bytes": 42701466927}
+  ],
+  "eos_cleanup_status": "bulk_request_rejected_by_safety_review; narrowed_validated_chunk_JSON_removal_started",
+  "local_root_cache_cleanup": {"files_removed": 6629, "bytes": 3145366603, "remaining_in_main_checkout": 0, "note": "EOS source outputs preserved; synthetic test ROOTs regenerable"},
+  "eos_recovery": "no new backup; current merged canonical histograms and final study results are preserved",
+  "git_inventory": {"garbage_files": 52, "garbage_gib": 9.06, "normal_pack_gib": 4.84},
+  "verified_local_duplicate_targets": [
+    {
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/hists.json",
+      "bytes": 2820473081,
+      "sha256": "5e8d056adbe0a5404f4a60425d2b84b3203cf240d02b982d0b320ef3b6523e83",
+      "recovery": "identical canonical copy under /eos/user/t/taiwoo/run3_stop/decaf/"
+    },
+    {
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2025/hists.json",
+      "bytes": 2458889388,
+      "sha256": "e395cd14e026ffdac9a127a6b665347d0db7c20f1391c7d3ab2a34dfb28f5ba6",
+      "recovery": "identical canonical copy under /eos/user/t/taiwoo/run3_stop/decaf/"
+    }
+  ]
+}

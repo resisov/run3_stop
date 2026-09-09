@@ -1,0 +1,166 @@
+{
+  "physical_distributions": {
+    "page": "physical/index.html",
+    "plots_per_year": 105,
+    "cr_plots_per_year": 90,
+    "sr_plots_per_year": 15,
+    "years": [
+      "2024",
+      "2025"
+    ],
+    "systematic_audit": {
+      "2024_missing_shape_sources": [
+        "jesFlavorQCD",
+        "jesTotal",
+        "metUnclustered"
+      ],
+      "2025_missing_sources": [
+        "electron_hlt",
+        "jesFlavorQCD",
+        "jesTotal",
+        "metUnclustered",
+        "photon_csev"
+      ]
+    }
+  },
+  "legacy_sr_category_reference": {
+    "2024_lowdm34_pdf": "plots/2024/lowdm34_search_bins_legacy.pdf",
+    "2024_lowdm34_png": "plots/2024/lowdm34_search_bins_legacy.png",
+    "label": "Legacy 2024 Low-dM 34-bin pre-GNN categories"
+  },
+  "artifacts": {
+    "2024": {
+      "DYCR": {
+        "pdf": "3d0f76d09ad7871fc4de761f7a1ef50d9bc7c31d0dc07259dcdbb56f219a87a4",
+        "png": "cea220dc225e366e697c34a90f948adef0e19451e91edf77fd1c63b9cef4afcb"
+      },
+      "GCR": {
+        "pdf": "118d2bbf1794bbd065bac9a6b19b9b10cb77dc6882ada960496c3b70ba1042d0",
+        "png": "ac7d943839bdc9d1a1a8bf019eda127f9b94ef8e95c6db99339d885e17c28fd0"
+      },
+      "LLCR": {
+        "pdf": "4ac05ef88bf742946501fcc5fad5e4344cc63413d90823bb7b867ac3f78fc6c1",
+        "png": "5a3edbfe8ea54ddffc4ed7a10932ab54515009b1a8849efc7c7406b727b1f700"
+      },
+      "QCDCR": {
+        "pdf": "2e5496c73dee1582c6904933ccfe0a7360d78b9c19ca4bb66e6066e0b123728e",
+        "png": "db1d018bc64c190a4f7aeb746fded0da77583fd395125a6391c2d9b2a35b65e2"
+      },
+      "SR": {
+        "pdf": "e3d907d3c42074ff0b9abeb811601672559f2c0d9853e2e18e68f2c2c6a1a013",
+        "png": "2eff3b19e20a82f14ac348daa5e2fb761122cb180cb802cb3fb7897231f20293"
+      }
+    },
+    "2025": {
+      "DYCR": {
+        "pdf": "f9863165306907f7fbe3d0f4ce0671071d37d3a5b571a965de8db1dbb5861317",
+        "png": "228e55f7a029c4452385dc755cb4e3a2ccc25aa2f2eed960de76e243cb194c28"
+      },
+      "GCR": {
+        "pdf": "ea4d8b542af811428a3f9a217eb5b849288a892951ed11ae04e65c72897d9af9",
+        "png": "ec02ea3aeaf9e5f03a91c7cc45a82bcbb7854c3ea431ff8b40ec74aed04aae02"
+      },
+      "LLCR": {
+        "pdf": "645ed15b3107c2882f8f41aba7a9b593800e519dfa6dc73696c76b2a1f5714ac",
+        "png": "7ae8171da2f8a2aa111bd729e7ae42e00bcbbeda9e25156c9a1fc10083e73287"
+      },
+      "QCDCR": {
+        "pdf": "4523fb432125864b8bea35d8041969fe24c40c6f1cb40b21e5dc11a2dadfcca9",
+        "png": "028a73d4bc329fd5012dabc0f574a10a5fcdf0fb2e8d04a6244fead4bdc7a6e1"
+      },
+      "SR": {
+        "pdf": "4675715c56fb08abb5c683bd459615f3f4e123abd3f202fdfcba087ffa2f7c31",
+        "png": "a8467eddfd3a84194596fd26246a53aa0edbaa8ce9913fc45734172c7a94e7d9"
+      }
+    },
+    "root_cards": {
+      "2024_highdm73": {
+        "pdf": "3bdf112b0866ac9e24d29a0d71ebf4c9acaf8208f5c7b0852f86ef59192dabb1",
+        "png": "30e00288b331dedd85dd9992a3cab7f211efaefab529cd99310d573df32dcfcc"
+      },
+      "2024_lowdm30": {
+        "pdf": "e3d907d3c42074ff0b9abeb811601672559f2c0d9853e2e18e68f2c2c6a1a013",
+        "png": "2eff3b19e20a82f14ac348daa5e2fb761122cb180cb802cb3fb7897231f20293"
+      },
+      "2025_lowdm30": {
+        "pdf": "4675715c56fb08abb5c683bd459615f3f4e123abd3f202fdfcba087ffa2f7c31",
+        "png": "a8467eddfd3a84194596fd26246a53aa0edbaa8ce9913fc45734172c7a94e7d9"
+      }
+    }
+  },
+  "binning": {
+    "cr_bins_per_category": 5,
+    "cr_categories_per_region": 4,
+    "cr_display_bins_per_region": 5,
+    "cr_display_categories": 1,
+    "cr_display_policy": "inclusive_sum_of_four_bookkeeping_categories",
+    "cr_regions": 5,
+    "cr_total_bins": 100,
+    "matches_2024_edges": true,
+    "sr_bins_per_category": 5,
+    "sr_categories": 6,
+    "sr_total_bins": 30
+  },
+  "lowdm_selection_contract": {
+    "applied": [
+      "region core",
+      "Nb>=1",
+      "Nt=0",
+      "Nw=0",
+      "Nres(TROTA)=0"
+    ],
+    "explicitly_not_applied": [
+      "MET/sqrt(HT)>=10",
+      "deltaPhi(ISR,recoil)>2",
+      "NISR==1",
+      "!feature_SR"
+    ],
+    "normalization": {
+      "DYCR": "RZ applied to DY",
+      "GCR": "unit area for data and total MC",
+      "LLCR": "absolute expected yield",
+      "QCDCR": "absolute expected yield"
+    },
+    "other_samples": []
+  },
+  "schema_version": "lowdm_gnn_web_page_v1",
+  "status": "complete_with_known_2025_calibration_gaps",
+  "years": {
+    "2024": {
+      "input_files": 5437,
+      "luminosity_fb": 109.82,
+      "regions": [
+        "LLCR",
+        "QCDCR",
+        "GCR",
+        "DYCR"
+      ]
+    },
+    "2025": {
+      "correction_audit": {
+        "btag_sf_applied_to_all_weight_groups": true,
+        "known_unavailable_unity_components": [
+          "electron_hlt",
+          "photon_csev"
+        ]
+      },
+      "input_audit": {
+        "data_luminosity_coverage_complete": false,
+        "exact_manifest_match": true,
+        "intermediate_roots_evaluated": 8390,
+        "intermediate_roots_expected": 8390,
+        "upstream_data_bad_files": 1,
+        "upstream_source_bad_files": 11
+      },
+      "input_files": 8390,
+      "luminosity_fb": 110.84,
+      "regions": [
+        "LLCR",
+        "QCDCR",
+        "GCR",
+        "DYCR"
+      ],
+      "validation_status": "complete_with_known_2025_calibration_gaps"
+    }
+  }
+}

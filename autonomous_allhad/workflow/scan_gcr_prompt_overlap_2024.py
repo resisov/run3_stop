@@ -5,7 +5,7 @@ Physics guardrail: this program MUST NOT reconstruct or approximate the GCR
 selection.  It reads exact ``feature_GCR`` rows from the already-produced
 nominal flat ntuples, joins them to the original NanoAOD by stable ``file_id``
 and ``entry``, and retrieves only the generator information omitted from the
-flat output.  It never writes to nominal or photon-fake sidecar inputs and its
+flat output.  It never writes to nominal or campaign-snapshot inputs and its
 result is explicitly a representative diagnostic, not a full-campaign yield.
 """
 
@@ -110,7 +110,7 @@ def collect_candidate_files(snapshot: Path, candidates_per_bin: int) -> dict[str
                     file_path,
                     {
                         "file_path": file_path,
-                        "fake_sidecar_dataset": str(record.get("dataset") or ""),
+                        "snapshot_dataset": str(record.get("dataset") or ""),
                         "process": process,
                         "sidecar_selected_events": 0,
                         "sidecar_events_read": 0,

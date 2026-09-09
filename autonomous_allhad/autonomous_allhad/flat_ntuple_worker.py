@@ -9,6 +9,7 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 import time
 from pathlib import Path
 from typing import Any
@@ -837,12 +838,268 @@ def process_record_fragment(record_index: int, record: dict[str, Any], fragment_
     return None, summary, bad
 
 
+TOPW_TRUTH_SCHEMA = "topw_truth_v1"
+TOPW_TRUTH_TREE = "TopWTruth"
+TOPW_TRUTH_MARKER = "TopWTruth_metadata"
+TOPW_GEN_FIELDS = ("pdgId", "genPartIdxMother", "eta", "phi")
+TOPW_ID_FIELDS = ("run", "luminosityBlock", "event", "entry", "file_id")
+TOPW_STORED_FIELDS = TOPW_ID_FIELDS + (
+    "year", "is_data", "fatjet_source_index_all", "fatjet_eta_all", "fatjet_phi_all",
+)
+TOPW_NANO_FIELDS = ("run", "luminosityBlock", "event", "FatJet_eta", "FatJet_phi") + tuple(
+    "GenPart_" + name for name in TOPW_GEN_FIELDS
+)
+
+
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def _root_content_digests(path: Path, *, exclude_truth: bool = False) -> dict[str, Any]:
+    """Hash original tree values and metadata without changing ROOT serialization."""
+    result = {}
+    with uproot.open(path) as root:
+        for name in root.keys(cycle=False):
+            if exclude_truth and name in (TOPW_TRUTH_TREE, TOPW_TRUTH_MARKER):
+                continue
+            obj = root[name]
+            digest = hashlib.sha256()
+            if hasattr(obj, "iterate"):
+                digest.update(json.dumps(obj.typenames(), sort_keys=True).encode())
+                for arrays in obj.iterate(step_size=1000, library="ak"):
+                    form, length, buffers = ak.to_buffers(arrays)
+                    digest.update(str(length).encode())
+                    digest.update(str(form).encode())
+                    for key, values in sorted(buffers.items()):
+                        digest.update(key.encode())
+                        digest.update(np.asarray(values).tobytes())
+                result[name] = {"entries": int(obj.num_entries), "sha256": digest.hexdigest()}
+            elif obj.classname == "TObjString":
+                result[name] = {"sha256": hashlib.sha256(str(obj).encode()).hexdigest()}
+            else:
+                raise RuntimeError(f"unsupported original ROOT object: {name}: {obj.classname}")
+    return result
+
+
+def topw_truth_payload(stored: Any, nano: Any, classifier: Any) -> dict[str, Any]:
+    """Match the retained rows/jets, then reuse the efficiency truth classifier."""
+    if len(stored) != len(nano):
+        raise ValueError("NanoAOD and retained event counts differ")
+    for name in ("run", "luminosityBlock", "event"):
+        if not np.array_equal(np.asarray(stored[name]), np.asarray(nano[name])):
+            raise ValueError(f"NanoAOD event identity mismatch: {name}")
+    indices = stored["fatjet_source_index_all"]
+    counts = ak.num(indices)
+    if bool(ak.any((indices < 0) | (indices >= ak.num(nano["FatJet_eta"])))):
+        raise ValueError("invalid stored FatJet source index")
+    for axis in ("eta", "phi"):
+        original = nano["FatJet_" + axis][indices]
+        retained = stored["fatjet_" + axis + "_all"]
+        if not np.array_equal(np.asarray(ak.num(retained)), np.asarray(counts)):
+            raise ValueError("misaligned stored FatJet vectors")
+        if not bool(ak.all(np.isfinite(original))) or not bool(ak.all(np.isfinite(retained))):
+            raise ValueError("non-finite FatJet direction")
+        if not np.allclose(np.asarray(ak.flatten(original)), np.asarray(ak.flatten(retained)),
+                           rtol=0, atol=1e-6):
+            raise ValueError(f"FatJet source identity mismatch: {axis}")
+    gen_counts = ak.num(nano["GenPart_pdgId"])
+    for name in TOPW_GEN_FIELDS:
+        if not np.array_equal(np.asarray(ak.num(nano["GenPart_" + name])), np.asarray(gen_counts)):
+            raise ValueError("misaligned GenPart vectors")
+    mother = nano["GenPart_genPartIdxMother"]
+    if bool(ak.any((mother < -1) | (mother >= gen_counts))):
+        raise ValueError("invalid GenPart mother index")
+    for name in ("eta", "phi"):
+        if not bool(ak.all(np.isfinite(nano["GenPart_" + name]))):
+            raise ValueError("non-finite GenPart direction")
+    flat = lambda value: np.asarray(ak.to_numpy(ak.flatten(value)))
+    flavor = classifier(
+        np.asarray(counts), flat(stored["fatjet_eta_all"]), flat(stored["fatjet_phi_all"]),
+        np.asarray(gen_counts), *(flat(nano["GenPart_" + name]) for name in TOPW_GEN_FIELDS),
+    )
+    if len(flavor) != int(ak.sum(counts)) or np.any((flavor < 0) | (flavor > 4)):
+        raise ValueError("invalid Top/W truth classifier output")
+    payload = {name: np.asarray(stored[name]) for name in TOPW_ID_FIELDS}
+    payload["fatjet_source_index_all"] = ak.values_astype(indices, np.int32)
+    payload["fatjet_decay_flavor_all"] = ak.unflatten(flavor.astype(np.int8), counts)
+    for name in TOPW_GEN_FIELDS:
+        dtype = np.int32 if name in ("pdgId", "genPartIdxMother") else np.float32
+        payload["GenPart_" + name] = ak.values_astype(nano["GenPart_" + name], dtype)
+    return payload
+
+
+def _read_topw_nano_rows(source: str, entries: np.ndarray, expected_entries: int) -> Any:
+    """Read only mapped identity/truth columns; never discover or stage NanoAOD."""
+    if not len(entries) or np.any(entries < 0) or np.any(entries >= expected_entries):
+        raise ValueError("invalid mapped NanoAOD entry range")
+    endpoints = [source]
+    if source.startswith("root://") and "/store/" in source:
+        logical = source[source.index("/store/"):]
+        endpoints.append("root://xrootd-cms.infn.it/" + logical)
+    errors = []
+    for endpoint in dict.fromkeys(endpoints):
+        try:
+            with uproot.open(endpoint, timeout=45, object_cache=None, array_cache=None) as root:
+                tree = root["Events"]
+                if int(tree.num_entries) != expected_entries:
+                    raise ValueError("NanoAOD entry count differs from production metadata")
+                missing = set(TOPW_NANO_FIELDS) - set(tree.keys())
+                if missing:
+                    raise ValueError(f"missing NanoAOD truth branches: {sorted(missing)}")
+                parts, positions = [], []
+                for block in np.unique(entries // 10000):
+                    indices = np.flatnonzero(entries // 10000 == block)
+                    start, stop = int(entries[indices].min()), int(entries[indices].max()) + 1
+                    arrays = tree.arrays(list(TOPW_NANO_FIELDS), entry_start=start,
+                                         entry_stop=stop, library="ak")
+                    parts.append(arrays[entries[indices] - start])
+                    positions.append(indices)
+                return ak.concatenate(parts)[np.argsort(np.concatenate(positions))]
+        except (OSError, TimeoutError) as exc:
+            errors.append(f"{endpoint}: {type(exc).__name__}: {exc}")
+    raise RuntimeError("NanoAOD truth access failed: " + "; ".join(errors))
+
+
+def append_topw_truth(input_path: Path, output: Path, repo: Path, work_dir: Path,
+                     year: int) -> dict[str, Any]:
+    """Augment a worker-local copy, validate original contents, then atomically publish."""
+    from .sidecar_store import read_root_metadata
+    sys.path.insert(0, str(repo))
+    from analysis.processors.btageff import decay_flavor
+
+    if year not in (2024, 2025):
+        raise ValueError("Top/W truth requires an explicit 2024/2025 application year")
+    for path in (input_path, output, work_dir):
+        if not path.is_absolute() or any(part in ("tmp", "afs") for part in path.parts):
+            raise ValueError(f"disallowed truth workflow path: {path}")
+    classifier_path = repo / "analysis/processors/btageff.py"
+    classifier_hash = _sha256(classifier_path)
+    if output.exists():
+        with uproot.open(output) as root:
+            if TOPW_TRUTH_MARKER in root:
+                marker = json.loads(str(root[TOPW_TRUTH_MARKER]))
+                if (marker.get("schema_version") != TOPW_TRUTH_SCHEMA
+                    or marker.get("classifier_sha256") != classifier_hash
+                    or marker.get("application_year") != year
+                    or marker.get("status") != "complete"
+                    or TOPW_TRUTH_TREE not in root
+                    or root[TOPW_TRUTH_TREE].num_entries != root["Events"].num_entries):
+                    raise RuntimeError("incompatible existing Top/W truth output")
+                if _root_content_digests(output, exclude_truth=True) != marker["original_contents"]:
+                    raise RuntimeError("original ROOT contents changed after truth augmentation")
+                if _root_content_digests(output)[TOPW_TRUTH_TREE] != marker["truth_content"]:
+                    raise RuntimeError("Top/W truth content checksum mismatch")
+                return {"status": "already_complete", "root": str(output), "marker": marker}
+            if TOPW_TRUTH_TREE in root or input_path.resolve() != output.resolve():
+                raise RuntimeError("refusing to overwrite an existing or partial truth output")
+    metadata = read_root_metadata(input_path)
+    if metadata.get("status") != "complete":
+        raise RuntimeError("intermediate ROOT production is not complete")
+    source_map = {}
+    for record in metadata.get("files", []):
+        if int(record.get("events_written", 0)) == 0:
+            continue
+        source = str(record["file_path"])
+        file_id = int(record["file_id"])
+        if record.get("read_status") != "success" or stable_id(source) != file_id:
+            raise RuntimeError("invalid original NanoAOD source mapping")
+        if file_id in source_map and source_map[file_id]["file_path"] != source:
+            raise RuntimeError("ambiguous original NanoAOD file identity")
+        source_map[file_id] = record
+    work_dir.mkdir(parents=True, exist_ok=True)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    local = work_dir / f"{output.stem}.{os.getpid()}.topw.root"
+    staged = output.with_name(output.name + f".topw.partial.{os.getpid()}")
+    if local.exists() or staged.exists():
+        raise FileExistsError("truth staging path already exists")
+    original_hash = _sha256(input_path)
+    original_size = input_path.stat().st_size
+    shutil.copyfile(input_path, local)
+    if _sha256(local) != original_hash:
+        raise RuntimeError("intermediate ROOT copy checksum mismatch")
+    original_contents = _root_content_digests(local)
+    types = {name: np.int64 for name in TOPW_ID_FIELDS}
+    types["file_id"] = np.int32
+    types.update({"fatjet_source_index_all": "var * int32", "fatjet_decay_flavor_all": "var * int8"})
+    types.update({"GenPart_" + name: "var * " + ("int32" if name in ("pdgId", "genPartIdxMother") else "float32")
+                  for name in TOPW_GEN_FIELDS})
+    counts = np.zeros(5, dtype=np.int64)
+    processed = 0
+    with uproot.open(input_path) as root:
+        tree = root["Events"]
+        trota = json.loads(str(root["TROTA_metadata"]))
+        if ("TROTA" not in root or trota.get("status") != "complete"
+            or trota.get("application_year") != year
+            or trota.get("events_entries") != tree.num_entries
+            or not trota.get("model_sha256")):
+            raise RuntimeError("missing or incompatible integrated TROTA completion")
+        with uproot.update(local) as destination:
+            truth = destination.mktree(TOPW_TRUTH_TREE, types)
+            for stored in tree.iterate(list(TOPW_STORED_FIELDS), step_size=1000, library="ak"):
+                if bool(ak.any(stored["is_data"])) or not bool(ak.all(stored["year"] == year)):
+                    raise ValueError("truth augmentation received data or a different application year")
+                file_ids = np.asarray(stored["file_id"])
+                pieces, positions = [], []
+                for file_id in np.unique(file_ids):
+                    record = source_map[int(file_id)]
+                    indices = np.flatnonzero(file_ids == file_id)
+                    rows = stored[indices]
+                    entries = np.asarray(rows["entry"], dtype=np.int64)
+                    allowed = np.zeros(len(entries), dtype=bool)
+                    for start, stop in record["processed_entry_ranges"]:
+                        allowed |= (entries >= start) & (entries < stop)
+                    if not np.all(allowed):
+                        raise ValueError("retained entries outside original processed ranges")
+                    nano = _read_topw_nano_rows(record["file_path"], entries, int(record["number_of_entries"]))
+                    pieces.append(ak.Array(topw_truth_payload(rows, nano, decay_flavor)))
+                    positions.append(indices)
+                payload = ak.concatenate(pieces)[np.argsort(np.concatenate(positions))]
+                for name in TOPW_ID_FIELDS:
+                    if not np.array_equal(np.asarray(payload[name]), np.asarray(stored[name])):
+                        raise ValueError("truth output row ordering mismatch")
+                truth.extend({name: payload[name] for name in types})
+                counts += np.bincount(np.asarray(ak.flatten(payload["fatjet_decay_flavor_all"])), minlength=5)
+                processed += len(stored)
+                print(json.dumps({"stage": "topw_truth", "events": processed, "total": int(tree.num_entries)}), flush=True)
+    if processed != original_contents["Events"]["entries"]:
+        raise RuntimeError("incomplete Top/W truth event coverage")
+    if _root_content_digests(local, exclude_truth=True) != original_contents:
+        raise RuntimeError("original Events/TROTA content changed during truth augmentation")
+    marker = {
+        "schema_version": TOPW_TRUTH_SCHEMA, "status": "complete", "application_year": year,
+        "events_entries": processed, "flavor_counts": counts.tolist(),
+        "classifier_sha256": classifier_hash, "worker_sha256": _sha256(Path(__file__)),
+        "input_sha256": original_hash, "input_bytes": original_size,
+        "original_contents": original_contents,
+        "truth_content": _root_content_digests(local)[TOPW_TRUTH_TREE],
+        "source_mapping_sha256": hashlib.sha256(json.dumps(source_map, sort_keys=True).encode()).hexdigest(),
+        "nano_branches": list(TOPW_NANO_FIELDS),
+    }
+    with uproot.update(local) as destination:
+        destination[TOPW_TRUTH_MARKER] = json.dumps(marker, sort_keys=True, allow_nan=False)
+    output_hash = _sha256(local)
+    shutil.copyfile(local, staged)
+    if _sha256(staged) != output_hash or _sha256(input_path) != original_hash:
+        raise RuntimeError("truth stage-out checksum mismatch or original input changed")
+    os.replace(staged, output)
+    local.unlink()
+    return {"status": "complete", "root": str(output), "sha256": output_hash,
+            "bytes": output.stat().st_size, "marker": marker}
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Build a preselection-level flat ROOT ntuple from production shard records.")
     parser.add_argument("--repo", required=True)
-    parser.add_argument("--shard", required=True)
+    parser.add_argument("--shard")
     parser.add_argument("--output", required=True)
     parser.add_argument("--metadata-output", default=None)
+    parser.add_argument("--append-topw-truth", metavar="EXISTING_ROOT")
+    parser.add_argument("--truth-work-dir", default=os.environ.get("_CONDOR_SCRATCH_DIR"))
+    parser.add_argument("--truth-year", type=int, choices=(2024, 2025))
     parser.add_argument("--chunk-size", type=int, default=int(os.environ.get("AUTONOMOUS_ALLHAD_FLAT_CHUNK", "50000")))
     parser.add_argument("--shift", default=os.environ.get("AUTONOMOUS_ALLHAD_PRODUCTION_SHIFT", "nominal"))
     parser.add_argument("--skim-flag", default="feature_flat_preselection")
@@ -858,6 +1115,24 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     repo = Path(args.repo)
+    if args.append_topw_truth:
+        if not args.truth_work_dir or not args.truth_year or not args.metadata_output or args.shard:
+            parser.error("truth mode requires --truth-work-dir, --truth-year, --metadata-output and no --shard")
+        report_path = Path(args.metadata_output)
+        report_path.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            report = append_topw_truth(Path(args.append_topw_truth), Path(args.output), repo,
+                                       Path(args.truth_work_dir), args.truth_year)
+        except Exception as exc:
+            report = {"status": "failed", "input": args.append_topw_truth,
+                      "exception_type": type(exc).__name__, "error": str(exc)}
+            report_path.write_text(json.dumps(report, indent=2) + "\n")
+            raise
+        report_path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
+        print(json.dumps({key: value for key, value in report.items() if key != "marker"}), flush=True)
+        return 0
+    if not args.shard:
+        parser.error("normal production requires --shard")
     shard_path = Path(args.shard)
     output = Path(args.output)
     metadata_output = Path(args.metadata_output) if args.metadata_output else output.with_suffix(output.suffix + ".json")

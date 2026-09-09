@@ -99,7 +99,9 @@
       "checked_at": "2026-08-03T21:12:00Z",
       "data_lumi_coverage_complete": false,
       "dataset_file_count": 98,
-      "datasets": ["/ParkingDoubleMuonLowMass6/Run2024D-MINIv6NANOv15-v1/NANOAOD"],
+      "datasets": [
+        "/ParkingDoubleMuonLowMass6/Run2024D-MINIv6NANOv15-v1/NANOAOD"
+      ],
       "error": "file absent from CERN EOS; global, INFN, and FNAL XRootD routes expired; no Rucio replica site record",
       "exception_type": "RootReplicaUnavailable",
       "failure_stage": "lowpt_muon_tag_and_probe_count",
@@ -121,7 +123,9 @@
       "checked_at": "2026-08-03T21:12:00Z",
       "data_lumi_coverage_complete": false,
       "dataset_file_count": 98,
-      "datasets": ["/ParkingDoubleMuonLowMass6/Run2024D-MINIv6NANOv15-v1/NANOAOD"],
+      "datasets": [
+        "/ParkingDoubleMuonLowMass6/Run2024D-MINIv6NANOv15-v1/NANOAOD"
+      ],
       "error": "file absent from CERN EOS; global, INFN, and FNAL XRootD routes expired",
       "exception_type": "RootReplicaUnavailable",
       "failure_stage": "lowpt_muon_tag_and_probe_count",
@@ -143,7 +147,9 @@
       "checked_at": "2026-08-03T21:12:00Z",
       "data_lumi_coverage_complete": false,
       "dataset_file_count": 98,
-      "datasets": ["/ParkingDoubleMuonLowMass6/Run2024D-MINIv6NANOv15-v1/NANOAOD"],
+      "datasets": [
+        "/ParkingDoubleMuonLowMass6/Run2024D-MINIv6NANOv15-v1/NANOAOD"
+      ],
       "error": "file absent from CERN EOS; global, INFN, and FNAL XRootD routes expired",
       "exception_type": "RootReplicaUnavailable",
       "failure_stage": "lowpt_muon_tag_and_probe_count",
@@ -165,7 +171,9 @@
       "checked_at": "2026-08-03T21:12:00Z",
       "data_lumi_coverage_complete": false,
       "dataset_file_count": 98,
-      "datasets": ["/ParkingDoubleMuonLowMass6/Run2024D-MINIv6NANOv15-v1/NANOAOD"],
+      "datasets": [
+        "/ParkingDoubleMuonLowMass6/Run2024D-MINIv6NANOv15-v1/NANOAOD"
+      ],
       "error": "file absent from CERN EOS; global, INFN, and FNAL XRootD routes expired",
       "exception_type": "RootReplicaUnavailable",
       "failure_stage": "lowpt_muon_tag_and_probe_count",
@@ -187,7 +195,9 @@
       "checked_at": "2026-08-03T21:12:00Z",
       "data_lumi_coverage_complete": false,
       "dataset_file_count": 98,
-      "datasets": ["/ParkingDoubleMuonLowMass6/Run2024D-MINIv6NANOv15-v1/NANOAOD"],
+      "datasets": [
+        "/ParkingDoubleMuonLowMass6/Run2024D-MINIv6NANOv15-v1/NANOAOD"
+      ],
       "error": "file absent from CERN EOS; global, INFN, and FNAL XRootD routes expired",
       "exception_type": "RootReplicaUnavailable",
       "failure_stage": "lowpt_muon_tag_and_probe_count",
@@ -209,7 +219,9 @@
       "checked_at": "2026-08-03T21:12:00Z",
       "data_lumi_coverage_complete": false,
       "dataset_file_count": 98,
-      "datasets": ["/ParkingDoubleMuonLowMass6/Run2024D-MINIv6NANOv15-v1/NANOAOD"],
+      "datasets": [
+        "/ParkingDoubleMuonLowMass6/Run2024D-MINIv6NANOv15-v1/NANOAOD"
+      ],
       "error": "file absent from CERN EOS; global, INFN, and FNAL XRootD routes expired",
       "exception_type": "RootReplicaUnavailable",
       "failure_stage": "lowpt_muon_tag_and_probe_count",
@@ -231,7 +243,9 @@
       "checked_at": "2026-08-03T21:12:00Z",
       "data_lumi_coverage_complete": false,
       "dataset_file_count": 268,
-      "datasets": ["/ParkingDoubleMuonLowMass6/Run2024G-MINIv6NANOv15-v3/NANOAOD"],
+      "datasets": [
+        "/ParkingDoubleMuonLowMass6/Run2024G-MINIv6NANOv15-v3/NANOAOD"
+      ],
       "error": "file absent from CERN EOS; global, INFN, and FNAL XRootD routes expired",
       "exception_type": "RootReplicaUnavailable",
       "failure_stage": "lowpt_muon_tag_and_probe_count",
@@ -253,7 +267,9 @@
       "checked_at": "2026-08-03T21:29:42Z",
       "data_lumi_coverage_complete": false,
       "dataset_file_count": 850,
-      "datasets": ["/EGamma0/Run2024G-MINIv6NANOv15-v2/NANOAOD"],
+      "datasets": [
+        "/EGamma0/Run2024G-MINIv6NANOv15-v2/NANOAOD"
+      ],
       "error": "file absent from CERN EOS; global, INFN, and FNAL XRootD routes expired or reached redirect limit",
       "exception_type": "RootReplicaUnavailable",
       "failure_stage": "lowpt_electron_tag_and_probe_count",
@@ -275,7 +291,9 @@
       "checked_at": "2026-08-03T21:29:42Z",
       "data_lumi_coverage_complete": false,
       "dataset_file_count": 850,
-      "datasets": ["/EGamma0/Run2024G-MINIv6NANOv15-v2/NANOAOD"],
+      "datasets": [
+        "/EGamma0/Run2024G-MINIv6NANOv15-v2/NANOAOD"
+      ],
       "error": "file absent from CERN EOS; global, INFN, and FNAL XRootD routes expired or reached redirect limit",
       "exception_type": "RootReplicaUnavailable",
       "failure_stage": "lowpt_electron_tag_and_probe_count",
@@ -297,7 +315,9 @@
       "checked_at": "2026-08-03T21:29:42Z",
       "data_lumi_coverage_complete": false,
       "dataset_file_count": 850,
-      "datasets": ["/EGamma0/Run2024G-MINIv6NANOv15-v2/NANOAOD"],
+      "datasets": [
+        "/EGamma0/Run2024G-MINIv6NANOv15-v2/NANOAOD"
+      ],
       "error": "file absent from CERN EOS; global, INFN, and FNAL XRootD routes expired or reached redirect limit",
       "exception_type": "RootReplicaUnavailable",
       "failure_stage": "lowpt_electron_tag_and_probe_count",
@@ -319,7 +339,9 @@
       "checked_at": "2026-08-03T21:29:42Z",
       "data_lumi_coverage_complete": false,
       "dataset_file_count": 850,
-      "datasets": ["/EGamma0/Run2024G-MINIv6NANOv15-v2/NANOAOD"],
+      "datasets": [
+        "/EGamma0/Run2024G-MINIv6NANOv15-v2/NANOAOD"
+      ],
       "error": "file absent from CERN EOS; global, INFN, and FNAL XRootD routes expired or reached redirect limit",
       "exception_type": "RootReplicaUnavailable",
       "failure_stage": "lowpt_electron_tag_and_probe_count",
@@ -341,7 +363,9 @@
       "checked_at": "2026-08-03T21:29:42Z",
       "data_lumi_coverage_complete": false,
       "dataset_file_count": 850,
-      "datasets": ["/EGamma0/Run2024G-MINIv6NANOv15-v2/NANOAOD"],
+      "datasets": [
+        "/EGamma0/Run2024G-MINIv6NANOv15-v2/NANOAOD"
+      ],
       "error": "file absent from CERN EOS; global, INFN, and FNAL XRootD routes expired or reached redirect limit",
       "exception_type": "RootReplicaUnavailable",
       "failure_stage": "lowpt_electron_tag_and_probe_count",
@@ -363,7 +387,9 @@
       "checked_at": "2026-08-03T21:29:42Z",
       "data_lumi_coverage_complete": false,
       "dataset_file_count": 850,
-      "datasets": ["/EGamma0/Run2024G-MINIv6NANOv15-v2/NANOAOD"],
+      "datasets": [
+        "/EGamma0/Run2024G-MINIv6NANOv15-v2/NANOAOD"
+      ],
       "error": "file absent from CERN EOS; global, INFN, and FNAL XRootD routes expired or reached redirect limit",
       "exception_type": "RootReplicaUnavailable",
       "failure_stage": "lowpt_electron_tag_and_probe_count",
@@ -378,6 +404,81 @@
       "resolution_status": "permanently_skipped_no_replica",
       "status": "bad",
       "total_campaign_files": 5440
+    },
+    {
+      "alternate_access_attempted": true,
+      "campaign": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topwtageff_20260908_workday/2024",
+      "campaign_file_loss_fraction": 0.00007262691553489724,
+      "dataset_file_loss_fraction": 0.0019305019305019305,
+      "datasets": [
+        "WW_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2"
+      ],
+      "error": "[3005] I/O limit exceeded and wait time hit (source); xrdcp exit 54",
+      "events_lost": null,
+      "exception_type": "XRootDTransferError",
+      "failure_stage": "local_recovery_xrdcp",
+      "first_failure_time": "2026-09-08T18:16:35.672030+00:00",
+      "generator_sumw_lost": null,
+      "last_failure_time": "2026-09-08T20:45:29.285594Z",
+      "measurement": "topw_tagging_mc_efficiency",
+      "original_report": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topwtageff_20260908_workday/2024/reports/WW_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____1_.json",
+      "path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/WW_TuneCP5_13p6TeV_pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/120000/0ef26c1c-0ae4-4094-8439-99fd0ed4b2fc.root",
+      "permanently_skipped": true,
+      "recovery_attempt_number": 1,
+      "recovery_attempted": true,
+      "recovery_report": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topwtageff_20260908_workday/2024/reports/WW_TuneCP5_13p6TeV_pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____recovery1_76a05e90e30d8e44_.json",
+      "resolution_status": "permanently_skipped_after_single_local_attempt",
+      "status": "bad"
+    },
+    {
+      "alternate_access_attempted": true,
+      "campaign": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topwtageff_20260908_workday/2024",
+      "campaign_file_loss_fraction": 0.00007262691553489724,
+      "dataset_file_loss_fraction": 0.000591016548463357,
+      "datasets": [
+        "WtoLNu-2Jets_Bin-1J-PTLNu-40to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3"
+      ],
+      "error": "[3005] I/O limit exceeded and wait time hit (source); xrdcp exit 54",
+      "events_lost": null,
+      "exception_type": "XRootDTransferError",
+      "failure_stage": "local_recovery_xrdcp",
+      "first_failure_time": "2026-09-08T18:23:49.052054+00:00",
+      "generator_sumw_lost": null,
+      "last_failure_time": "2026-09-08T20:44:07.631952Z",
+      "measurement": "topw_tagging_mc_efficiency",
+      "original_report": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topwtageff_20260908_workday/2024/reports/WtoLNu-2Jets_Bin-1J-PTLNu-40to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____42_.json",
+      "path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/WtoLNu-2Jets_Bin-1J-PTLNu-40to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v3/2520000/2c13b36c-d8cc-44ec-a644-e49f87678df3.root",
+      "permanently_skipped": true,
+      "recovery_attempt_number": 1,
+      "recovery_attempted": true,
+      "recovery_report": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topwtageff_20260908_workday/2024/reports/WtoLNu-2Jets_Bin-1J-PTLNu-40to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____recovery1_14e2c04c77dc2f29_.json",
+      "resolution_status": "permanently_skipped_after_single_local_attempt",
+      "status": "bad"
+    },
+    {
+      "alternate_access_attempted": true,
+      "campaign": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topwtageff_20260908_workday/2024",
+      "campaign_file_loss_fraction": 0.00007262691553489724,
+      "dataset_file_loss_fraction": 0.000591016548463357,
+      "datasets": [
+        "WtoLNu-2Jets_Bin-1J-PTLNu-40to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3"
+      ],
+      "error": "[3005] I/O limit exceeded and wait time hit (source); xrdcp exit 54",
+      "events_lost": null,
+      "exception_type": "XRootDTransferError",
+      "failure_stage": "local_recovery_xrdcp",
+      "first_failure_time": "2026-09-08T18:33:00.355765+00:00",
+      "generator_sumw_lost": null,
+      "last_failure_time": "2026-09-08T20:41:50.826949Z",
+      "measurement": "topw_tagging_mc_efficiency",
+      "original_report": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topwtageff_20260908_workday/2024/reports/WtoLNu-2Jets_Bin-1J-PTLNu-40to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____160_.json",
+      "path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/WtoLNu-2Jets_Bin-1J-PTLNu-40to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v3/90000/57eaa86f-279d-4e08-a92d-d22d533256d9.root",
+      "permanently_skipped": true,
+      "recovery_attempt_number": 1,
+      "recovery_attempted": true,
+      "recovery_report": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topwtageff_20260908_workday/2024/reports/WtoLNu-2Jets_Bin-1J-PTLNu-40to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____recovery1_d899127726bbd1ab_.json",
+      "resolution_status": "permanently_skipped_after_single_local_attempt",
+      "status": "bad"
     }
   ],
   "lost_selected_events": 0,

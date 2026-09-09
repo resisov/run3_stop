@@ -1,0 +1,5682 @@
+{
+  "available_background_systematic_sources": [
+    "btagSF_bc_correlated",
+    "btagSF_bc_uncorrelated",
+    "btagSF_light_correlated",
+    "btagSF_light_uncorrelated",
+    "electron_id",
+    "electron_reco",
+    "loose_muon_5to10",
+    "met_trigger",
+    "muon_hlt",
+    "muon_id",
+    "muon_iso",
+    "photon_id",
+    "photon_trigger",
+    "pileup",
+    "veto_electron_5to10"
+  ],
+  "dy_rz_application": {
+    "channels": {
+      "DY2E": {
+        "highdm": {
+          "Nb1": 0.7223166655093031,
+          "Nb2plus": 0.7328472757511647,
+          "effective": 0.7253469055502089
+        },
+        "lowdm": {
+          "Nb1": 0.6257737846018179,
+          "Nb2plus": 0.661164354409985,
+          "effective": 0.6309268418023677
+        }
+      },
+      "DY2M": {
+        "highdm": {
+          "Nb1": 0.627670849620086,
+          "Nb2plus": 0.7764109459693213,
+          "effective": 0.6643185228795404
+        },
+        "lowdm": {
+          "Nb1": 0.5771486437402533,
+          "Nb2plus": 0.5984510756503938,
+          "effective": 0.5808214088886935
+        }
+      }
+    },
+    "containers": 40,
+    "factor_policy": "channel-specific RZ(Nb); exact for explicit Nb axes and DY-yield-weighted effective factor for inclusive CR distributions",
+    "legend_label": "DY",
+    "records": 40,
+    "source": "card_inputs/2025/rz_high.json and rz_low.json",
+    "status": "complete"
+  },
+  "excluded_variables": [],
+  "lowdm_resolved_top_veto": {
+    "applied": true,
+    "requirement": "Nres=0"
+  },
+  "lowdm_variable_hists_only": true,
+  "luminosity_fb": 110.84,
+  "luminosity_relative_uncertainty": 0.016,
+  "missing_background_systematic_sources": [
+    "electron_hlt",
+    "jesFlavorQCD",
+    "jesTotal",
+    "metUnclustered",
+    "photon_csev"
+  ],
+  "output_dir": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical",
+  "plot_count": 105,
+  "plots": [
+    {
+      "bins": 12,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "LLCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_llcr_met",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_met.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_met.png",
+      "region": "LLCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "met"
+    },
+    {
+      "bins": 7,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "LLCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_llcr_ht",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_ht.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_ht.png",
+      "region": "LLCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ht"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "LLCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_llcr_njet",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_njet.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_njet.png",
+      "region": "LLCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "njet"
+    },
+    {
+      "bins": 6,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "LLCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_llcr_nb_medium_lowdm",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_nb_medium_lowdm.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_nb_medium_lowdm.png",
+      "region": "LLCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb_medium_lowdm"
+    },
+    {
+      "bins": 6,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "LLCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_llcr_nb_loose_lowdm",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_nb_loose_lowdm.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_nb_loose_lowdm.png",
+      "region": "LLCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb_loose_lowdm"
+    },
+    {
+      "bins": 4,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "LLCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_llcr_n_e_veto",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_n_e_veto.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_n_e_veto.png",
+      "region": "LLCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "n_e_veto"
+    },
+    {
+      "bins": 4,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "LLCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_llcr_n_m_loose",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_n_m_loose.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_n_m_loose.png",
+      "region": "LLCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "n_m_loose"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "LLCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        1000000.0
+      ],
+      "name": "lowdm_cr_llcr_lowdm_mtb",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_lowdm_mtb.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_lowdm_mtb.png",
+      "region": "LLCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "lowdm_mtb"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "LLCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_llcr_lowdm_met_sqrt_ht",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_lowdm_met_sqrt_ht.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_lowdm_met_sqrt_ht.png",
+      "region": "LLCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "lowdm_met_sqrt_ht"
+    },
+    {
+      "bins": 10,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "LLCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        1000000.0
+      ],
+      "name": "lowdm_cr_llcr_lowdm_isr_pt",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_lowdm_isr_pt.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_lowdm_isr_pt.png",
+      "region": "LLCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "lowdm_isr_pt"
+    },
+    {
+      "bins": 6,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "LLCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_llcr_lowdm_isr_dphi",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_lowdm_isr_dphi.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_lowdm_isr_dphi.png",
+      "region": "LLCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "lowdm_isr_dphi"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "LLCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_llcr_lowdm_ptb",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_lowdm_ptb.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_lowdm_ptb.png",
+      "region": "LLCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "lowdm_ptb"
+    },
+    {
+      "bins": 5,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "LLCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_llcr_n_lowdm_isr",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_n_lowdm_isr.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_n_lowdm_isr.png",
+      "region": "LLCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "n_lowdm_isr"
+    },
+    {
+      "bins": 10,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "LLCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        1000000.0
+      ],
+      "name": "lowdm_cr_llcr_leading_lowdm_fatjet_pt",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_leading_lowdm_fatjet_pt.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_leading_lowdm_fatjet_pt.png",
+      "region": "LLCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "leading_lowdm_fatjet_pt"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "LLCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_llcr_leading_lowdm_fatjet_msd",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_leading_lowdm_fatjet_msd.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_llcr_leading_lowdm_fatjet_msd.png",
+      "region": "LLCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "leading_lowdm_fatjet_msd"
+    },
+    {
+      "bins": 12,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "QCDCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_qcdcr_met",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_met.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_met.png",
+      "region": "QCDCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "met"
+    },
+    {
+      "bins": 7,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "QCDCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_qcdcr_ht",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_ht.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_ht.png",
+      "region": "QCDCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ht"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "QCDCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_qcdcr_njet",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_njet.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_njet.png",
+      "region": "QCDCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "njet"
+    },
+    {
+      "bins": 6,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "QCDCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_qcdcr_nb_medium_lowdm",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_nb_medium_lowdm.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_nb_medium_lowdm.png",
+      "region": "QCDCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb_medium_lowdm"
+    },
+    {
+      "bins": 6,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "QCDCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_qcdcr_nb_loose_lowdm",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_nb_loose_lowdm.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_nb_loose_lowdm.png",
+      "region": "QCDCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb_loose_lowdm"
+    },
+    {
+      "bins": 4,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "QCDCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_qcdcr_n_e_veto",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_n_e_veto.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_n_e_veto.png",
+      "region": "QCDCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "n_e_veto"
+    },
+    {
+      "bins": 4,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "QCDCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_qcdcr_n_m_loose",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_n_m_loose.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_n_m_loose.png",
+      "region": "QCDCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "n_m_loose"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "QCDCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_qcdcr_lowdm_mtb",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_lowdm_mtb.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_lowdm_mtb.png",
+      "region": "QCDCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "lowdm_mtb"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "QCDCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_qcdcr_lowdm_met_sqrt_ht",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_lowdm_met_sqrt_ht.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_lowdm_met_sqrt_ht.png",
+      "region": "QCDCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "lowdm_met_sqrt_ht"
+    },
+    {
+      "bins": 10,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "QCDCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_qcdcr_lowdm_isr_pt",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_lowdm_isr_pt.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_lowdm_isr_pt.png",
+      "region": "QCDCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "lowdm_isr_pt"
+    },
+    {
+      "bins": 6,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "QCDCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_qcdcr_lowdm_isr_dphi",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_lowdm_isr_dphi.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_lowdm_isr_dphi.png",
+      "region": "QCDCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "lowdm_isr_dphi"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "QCDCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_qcdcr_lowdm_ptb",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_lowdm_ptb.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_lowdm_ptb.png",
+      "region": "QCDCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "lowdm_ptb"
+    },
+    {
+      "bins": 5,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "QCDCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_qcdcr_n_lowdm_isr",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_n_lowdm_isr.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_n_lowdm_isr.png",
+      "region": "QCDCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "n_lowdm_isr"
+    },
+    {
+      "bins": 10,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "QCDCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_qcdcr_leading_lowdm_fatjet_pt",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_leading_lowdm_fatjet_pt.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_leading_lowdm_fatjet_pt.png",
+      "region": "QCDCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "leading_lowdm_fatjet_pt"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "QCDCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_cr_qcdcr_leading_lowdm_fatjet_msd",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_leading_lowdm_fatjet_msd.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_qcdcr_leading_lowdm_fatjet_msd.png",
+      "region": "QCDCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "leading_lowdm_fatjet_msd"
+    },
+    {
+      "bins": 12,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "GCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.00016895991636017401,
+        57.19850739703568
+      ],
+      "name": "lowdm_cr_gcr_met",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_met.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_met.png",
+      "region": "GCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 0.9999999999999999,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0006993285361638939,
+            "raw_fraction": 0.0006993285361638939
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8713105096017165,
+            "raw_fraction": 0.8713105096017165
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.12030776557534308,
+            "raw_fraction": 0.12030776557534306
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.004425492604050451,
+            "raw_fraction": 0.004425492604050451
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0003047530057903138,
+            "raw_fraction": 0.00030475300579031387
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.002853931795437966,
+            "raw_fraction": 0.0028539317954379665
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 9.82188814977147e-05,
+            "raw_fraction": 9.82188814977147e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 107126.0,
+          "data_over_mc": 1.6022627679384007,
+          "mc": 66859.19572220783,
+          "process_groups": {
+            "DY": 46.75654347350688,
+            "Data": 107126.0,
+            "Others": 0.0,
+            "Photon+jet": 58255.119896277814,
+            "QCD Multijet": 8043.68044550336,
+            "Top": 295.8848761813923,
+            "VV+VVV": 20.375540861065733,
+            "W -> lv": 190.811584489019,
+            "Z -> vv": 6.566835421672044
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0000000000000002,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_reco": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "loose_muon_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "met_trigger": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_iso": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "photon_trigger": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 1.0000000000000002,
+            "up": 1.0
+          },
+          "veto_electron_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "met"
+    },
+    {
+      "bins": 7,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "GCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.00020540399230668685,
+        37.649991597109405
+      ],
+      "name": "lowdm_cr_gcr_ht",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_ht.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_ht.png",
+      "region": "GCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0000000000000002
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0006996079251224531,
+            "raw_fraction": 0.0006996079251224532
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8714049590456425,
+            "raw_fraction": 0.8714049590456425
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.1202095583435201,
+            "raw_fraction": 0.12020955834352011
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.004425796814233034,
+            "raw_fraction": 0.0044257968142330335
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0003048699752384412,
+            "raw_fraction": 0.0003048699752384412
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0028571275459724223,
+            "raw_fraction": 0.0028571275459724223
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 9.808035027103681e-05,
+            "raw_fraction": 9.808035027103682e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 107106.0,
+          "data_over_mc": 1.6026036328075333,
+          "mc": 66832.4954513959,
+          "process_groups": {
+            "DY": 46.75654347350687,
+            "Data": 107106.0,
+            "Others": 0.0,
+            "Photon+jet": 58238.16796174173,
+            "QCD Multijet": 8033.904761207617,
+            "Top": 295.78704545603165,
+            "VV+VVV": 20.3752212333903,
+            "W -> lv": 190.94896372025983,
+            "Z -> vv": 6.5549545633603845
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0000000000000002,
+            "up": 0.9999999999999999
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 0.9999999999999998,
+            "up": 1.0000000000000002
+          },
+          "electron_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "electron_reco": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "loose_muon_5to10": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "met_trigger": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_hlt": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_iso": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_trigger": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          },
+          "pileup": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "veto_electron_5to10": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "ht"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "GCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        2.9871366428318053e-05,
+        22.067471948919962
+      ],
+      "name": "lowdm_cr_gcr_njet",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_njet.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_njet.png",
+      "region": "GCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 0.9999999999999999,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0006993285361638942,
+            "raw_fraction": 0.0006993285361638941
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8713105096017166,
+            "raw_fraction": 0.8713105096017166
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.12030776557534312,
+            "raw_fraction": 0.1203077655753431
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.004425492604050453,
+            "raw_fraction": 0.004425492604050453
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.00030475300579031403,
+            "raw_fraction": 0.00030475300579031403
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0028539317954379665,
+            "raw_fraction": 0.002853931795437966
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 9.821888149771473e-05,
+            "raw_fraction": 9.821888149771473e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 107126.0,
+          "data_over_mc": 1.6022627679384014,
+          "mc": 66859.1957222078,
+          "process_groups": {
+            "DY": 46.75654347350688,
+            "Data": 107126.0,
+            "Others": 0.0,
+            "Photon+jet": 58255.11989627779,
+            "QCD Multijet": 8043.680445503359,
+            "Top": 295.88487618139237,
+            "VV+VVV": 20.375540861065733,
+            "W -> lv": 190.8115844890189,
+            "Z -> vv": 6.566835421672044
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 0.9999999999999998,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_reco": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "loose_muon_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "met_trigger": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_iso": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_trigger": {
+            "down": 0.9999999999999998,
+            "up": 1.0000000000000002
+          },
+          "pileup": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999999
+          },
+          "veto_electron_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "njet"
+    },
+    {
+      "bins": 6,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "GCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        1e-05,
+        53.30022590220861
+      ],
+      "name": "lowdm_cr_gcr_nb_medium_lowdm",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_nb_medium_lowdm.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_nb_medium_lowdm.png",
+      "region": "GCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 0.9999999999999999,
+          "mc": 1.0000000000000002
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0006993285361638938,
+            "raw_fraction": 0.0006993285361638939
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8713105096017165,
+            "raw_fraction": 0.8713105096017166
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.12030776557534306,
+            "raw_fraction": 0.12030776557534306
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.004425492604050452,
+            "raw_fraction": 0.004425492604050452
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0003047530057903139,
+            "raw_fraction": 0.00030475300579031387
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0028539317954379643,
+            "raw_fraction": 0.0028539317954379643
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 9.82188814977147e-05,
+            "raw_fraction": 9.82188814977147e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 107126.0,
+          "data_over_mc": 1.6022627679384007,
+          "mc": 66859.19572220783,
+          "process_groups": {
+            "DY": 46.75654347350688,
+            "Data": 107126.0,
+            "Others": 0.0,
+            "Photon+jet": 58255.11989627782,
+            "QCD Multijet": 8043.68044550336,
+            "Top": 295.88487618139237,
+            "VV+VVV": 20.375540861065733,
+            "W -> lv": 190.81158448901886,
+            "Z -> vv": 6.566835421672044
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 1.0000000000000002
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0000000000000002,
+            "up": 0.9999999999999999
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "electron_id": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          },
+          "electron_reco": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          },
+          "loose_muon_5to10": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          },
+          "met_trigger": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          },
+          "muon_hlt": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          },
+          "muon_id": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          },
+          "muon_iso": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          },
+          "photon_id": {
+            "down": 0.9999999999999999,
+            "up": 1.0000000000000002
+          },
+          "photon_trigger": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 0.9999999999999999,
+            "up": 1.0000000000000002
+          },
+          "veto_electron_5to10": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "nb_medium_lowdm"
+    },
+    {
+      "bins": 6,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "GCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        3.099299181899292e-05,
+        41.314929701595865
+      ],
+      "name": "lowdm_cr_gcr_nb_loose_lowdm",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_nb_loose_lowdm.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_nb_loose_lowdm.png",
+      "region": "GCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 0.9999999999999999,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0006993288667344031,
+            "raw_fraction": 0.0006993288667344031
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8713104487705791,
+            "raw_fraction": 0.8713104487705792
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.12030782244446434,
+            "raw_fraction": 0.12030782244446434
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.004425494695967582,
+            "raw_fraction": 0.00442549469596758
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.000304753149846149,
+            "raw_fraction": 0.00030475314984614905
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0028539331444829967,
+            "raw_fraction": 0.0028539331444829967
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 9.821892792548646e-05,
+            "raw_fraction": 9.821892792548646e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 107126.0,
+          "data_over_mc": 1.6022635253232231,
+          "mc": 66859.16411808075,
+          "process_groups": {
+            "DY": 46.75654347350688,
+            "Data": 107126.0,
+            "Others": 0.0,
+            "Photon+jet": 58255.088292150744,
+            "QCD Multijet": 8043.68044550336,
+            "Top": 295.8848761813923,
+            "VV+VVV": 20.375540861065733,
+            "W -> lv": 190.81158448901894,
+            "Z -> vv": 6.566835421672044
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_reco": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "loose_muon_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "met_trigger": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_iso": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 0.9999999999999999,
+            "up": 1.0000000000000002
+          },
+          "photon_trigger": {
+            "down": 0.9999999999999999,
+            "up": 1.0000000000000002
+          },
+          "pileup": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "veto_electron_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "nb_loose_lowdm"
+    },
+    {
+      "bins": 4,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "GCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        60.257662320555205
+      ],
+      "name": "lowdm_cr_gcr_n_e_veto",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_n_e_veto.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_n_e_veto.png",
+      "region": "GCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0006993285361638936,
+            "raw_fraction": 0.0006993285361638936
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8713105096017166,
+            "raw_fraction": 0.8713105096017166
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.120307765575343,
+            "raw_fraction": 0.120307765575343
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.004425492604050449,
+            "raw_fraction": 0.004425492604050449
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.00030475300579031376,
+            "raw_fraction": 0.00030475300579031376
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0028539317954379643,
+            "raw_fraction": 0.0028539317954379643
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 9.821888149771464e-05,
+            "raw_fraction": 9.821888149771464e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 107126.0,
+          "data_over_mc": 1.6022627679383998,
+          "mc": 66859.19572220786,
+          "process_groups": {
+            "DY": 46.75654347350688,
+            "Data": 107126.0,
+            "Others": 0.0,
+            "Photon+jet": 58255.11989627784,
+            "QCD Multijet": 8043.68044550336,
+            "Top": 295.8848761813923,
+            "VV+VVV": 20.375540861065733,
+            "W -> lv": 190.81158448901894,
+            "Z -> vv": 6.566835421672043
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_reco": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "loose_muon_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "met_trigger": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_iso": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_trigger": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "veto_electron_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "n_e_veto"
+    },
+    {
+      "bins": 4,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "GCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        60.257662320555205
+      ],
+      "name": "lowdm_cr_gcr_n_m_loose",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_n_m_loose.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_n_m_loose.png",
+      "region": "GCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0006993285361638936,
+            "raw_fraction": 0.0006993285361638936
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8713105096017166,
+            "raw_fraction": 0.8713105096017166
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.120307765575343,
+            "raw_fraction": 0.120307765575343
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.004425492604050449,
+            "raw_fraction": 0.004425492604050449
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.00030475300579031376,
+            "raw_fraction": 0.00030475300579031376
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0028539317954379643,
+            "raw_fraction": 0.0028539317954379643
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 9.821888149771464e-05,
+            "raw_fraction": 9.821888149771464e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 107126.0,
+          "data_over_mc": 1.6022627679383998,
+          "mc": 66859.19572220786,
+          "process_groups": {
+            "DY": 46.75654347350688,
+            "Data": 107126.0,
+            "Others": 0.0,
+            "Photon+jet": 58255.11989627784,
+            "QCD Multijet": 8043.68044550336,
+            "Top": 295.8848761813923,
+            "VV+VVV": 20.375540861065733,
+            "W -> lv": 190.81158448901894,
+            "Z -> vv": 6.566835421672043
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_reco": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "loose_muon_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "met_trigger": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_iso": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_trigger": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "veto_electron_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "n_m_loose"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "GCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.0027964765528375457,
+        16.595036589931674
+      ],
+      "name": "lowdm_cr_gcr_lowdm_mtb",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_lowdm_mtb.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_lowdm_mtb.png",
+      "region": "GCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0006991791785527971,
+            "raw_fraction": 0.000699179178552797
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8705789935574739,
+            "raw_fraction": 0.870578993557474
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.12099131557054807,
+            "raw_fraction": 0.12099131557054807
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.0044556203440444305,
+            "raw_fraction": 0.004455620344044431
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.00030171954237707586,
+            "raw_fraction": 0.00030171954237707586
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.002869634462287456,
+            "raw_fraction": 0.002869634462287456
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 0.00010353734471623912,
+            "raw_fraction": 0.00010353734471623911
+          }
+        },
+        "raw_integrals": {
+          "data": 105919.0,
+          "data_over_mc": 1.6076618944565177,
+          "mc": 65883.8779255925,
+          "process_groups": {
+            "DY": 46.06463564788852,
+            "Data": 105919.0,
+            "Others": 0.0,
+            "Photon+jet": 57357.1201361258,
+            "QCD Multijet": 7971.377065106829,
+            "Top": 293.55354682980976,
+            "VV+VVV": 19.8784534977369,
+            "W -> lv": 189.06264660442002,
+            "Z -> vv": 6.821441780024688
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 0.9999999999999998
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 1.0000000000000002
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_reco": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "loose_muon_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "met_trigger": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_iso": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "photon_trigger": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          },
+          "pileup": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "veto_electron_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "lowdm_mtb"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "GCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        1e-05,
+        26.94920000746784
+      ],
+      "name": "lowdm_cr_gcr_lowdm_met_sqrt_ht",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_lowdm_met_sqrt_ht.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_lowdm_met_sqrt_ht.png",
+      "region": "GCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 0.9999999999999999,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.000699328536163894,
+            "raw_fraction": 0.000699328536163894
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8713105096017166,
+            "raw_fraction": 0.8713105096017166
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.12030776557534312,
+            "raw_fraction": 0.12030776557534312
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.0044254926040504525,
+            "raw_fraction": 0.0044254926040504525
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.00030475300579031403,
+            "raw_fraction": 0.00030475300579031403
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0028539317954379665,
+            "raw_fraction": 0.0028539317954379665
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 9.821888149771473e-05,
+            "raw_fraction": 9.821888149771473e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 107126.0,
+          "data_over_mc": 1.6022627679384014,
+          "mc": 66859.1957222078,
+          "process_groups": {
+            "DY": 46.75654347350687,
+            "Data": 107126.0,
+            "Others": 0.0,
+            "Photon+jet": 58255.11989627779,
+            "QCD Multijet": 8043.68044550336,
+            "Top": 295.8848761813923,
+            "VV+VVV": 20.375540861065733,
+            "W -> lv": 190.81158448901894,
+            "Z -> vv": 6.566835421672044
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 0.9999999999999998,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_reco": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "loose_muon_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "met_trigger": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_iso": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_trigger": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999998
+          },
+          "pileup": {
+            "down": 0.9999999999999999,
+            "up": 1.0000000000000002
+          },
+          "veto_electron_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "lowdm_met_sqrt_ht"
+    },
+    {
+      "bins": 10,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "GCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.0005697633522584536,
+        12.370326204626931
+      ],
+      "name": "lowdm_cr_gcr_lowdm_isr_pt",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_lowdm_isr_pt.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_lowdm_isr_pt.png",
+      "region": "GCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 0.9999999999999999
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0006924391975694356,
+            "raw_fraction": 0.0006924391975694356
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8690633962383338,
+            "raw_fraction": 0.8690633962383336
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.12258410350675125,
+            "raw_fraction": 0.12258410350675125
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.004430981291882865,
+            "raw_fraction": 0.004430981291882865
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.00031815386180970504,
+            "raw_fraction": 0.0003181538618097051
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.002807151087409346,
+            "raw_fraction": 0.002807151087409346
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 0.00010377481624350792,
+            "raw_fraction": 0.0001037748162435079
+          }
+        },
+        "raw_integrals": {
+          "data": 99515.0,
+          "data_over_mc": 1.5754725282456414,
+          "mc": 63165.176298449565,
+          "process_groups": {
+            "DY": 43.73804399043035,
+            "Data": 99515.0,
+            "Others": 0.0,
+            "Photon+jet": 54894.542637923674,
+            "QCD Multijet": 7743.046509391333,
+            "Top": 279.883714476913,
+            "VV+VVV": 20.09624477124258,
+            "W -> lv": 177.31419333259575,
+            "Z -> vv": 6.554954563360384
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0000000000000002,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "electron_reco": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "loose_muon_5to10": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "met_trigger": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_hlt": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_iso": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "photon_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "photon_trigger": {
+            "down": 1.0,
+            "up": 1.0000000000000002
+          },
+          "pileup": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "veto_electron_5to10": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "lowdm_isr_pt"
+    },
+    {
+      "bins": 6,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "GCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.010160806816971646,
+        21.429007823111952
+      ],
+      "name": "lowdm_cr_gcr_lowdm_isr_dphi",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_lowdm_isr_dphi.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_lowdm_isr_dphi.png",
+      "region": "GCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 0.9999999999999999
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0006918168664919787,
+            "raw_fraction": 0.0006918168664919787
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8690036631012166,
+            "raw_fraction": 0.8690036631012166
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.12264554791802551,
+            "raw_fraction": 0.12264554791802551
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.004435142118552306,
+            "raw_fraction": 0.004435142118552306
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.00031787297604702323,
+            "raw_fraction": 0.0003178729760470232
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.002802087548384659,
+            "raw_fraction": 0.002802087548384659
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 0.00010386947128188174,
+            "raw_fraction": 0.00010386947128188172
+          }
+        },
+        "raw_integrals": {
+          "data": 99560.0,
+          "data_over_mc": 1.5747683468197933,
+          "mc": 63221.99719156092,
+          "process_groups": {
+            "DY": 43.738043990430356,
+            "Data": 99560.0,
+            "Others": 0.0,
+            "Photon+jet": 54940.147148041266,
+            "QCD Multijet": 7753.896486030859,
+            "Top": 280.3985425632875,
+            "VV+VVV": 20.096564398918012,
+            "W -> lv": 177.15357111448273,
+            "Z -> vv": 6.566835421672043
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_reco": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "loose_muon_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "met_trigger": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_iso": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_trigger": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 1.0000000000000002,
+            "up": 1.0
+          },
+          "veto_electron_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "lowdm_isr_dphi"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "GCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.003562644336381217,
+        15.043652954319295
+      ],
+      "name": "lowdm_cr_gcr_lowdm_ptb",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_lowdm_ptb.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_lowdm_ptb.png",
+      "region": "GCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0006950718144931657,
+            "raw_fraction": 0.0006950718144931657
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8713535879930321,
+            "raw_fraction": 0.8713535879930322
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.12025302998069543,
+            "raw_fraction": 0.12025302998069543
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.004441916615737179,
+            "raw_fraction": 0.00444191661573718
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.00030269748021002695,
+            "raw_fraction": 0.00030269748021002695
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.002862891357565919,
+            "raw_fraction": 0.002862891357565919
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 9.080475826608307e-05,
+            "raw_fraction": 9.080475826608307e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 106522.0,
+          "data_over_mc": 1.6073163020195258,
+          "mc": 66273.20326818035,
+          "process_groups": {
+            "DY": 46.06463564788852,
+            "Data": 106522.0,
+            "Others": 0.0,
+            "Photon+jet": 57747.3934555205,
+            "QCD Multijet": 7969.553499525214,
+            "Top": 294.38004277505786,
+            "VV+VVV": 20.060731634725116,
+            "W -> lv": 189.73298087468294,
+            "Z -> vv": 6.017922202286103
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_reco": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "loose_muon_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "met_trigger": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_iso": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 0.9999999999999998
+          },
+          "photon_trigger": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "veto_electron_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "lowdm_ptb"
+    },
+    {
+      "bins": 5,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "GCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        9.428238039673279e-05,
+        46.19537922987165
+      ],
+      "name": "lowdm_cr_gcr_n_lowdm_isr",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_n_lowdm_isr.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_n_lowdm_isr.png",
+      "region": "GCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0006993315222170167,
+            "raw_fraction": 0.0006993315222170168
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8713129477653135,
+            "raw_fraction": 0.8713129477653132
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.12030529162273694,
+            "raw_fraction": 0.12030529162273694
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.004425511500399344,
+            "raw_fraction": 0.004425511500399344
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0003047543070509055,
+            "raw_fraction": 0.00030475430705090544
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0028539439814013706,
+            "raw_fraction": 0.0028539439814013706
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 9.82193008811413e-05,
+            "raw_fraction": 9.82193008811413e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 107125.0,
+          "data_over_mc": 1.602254652548186,
+          "mc": 66858.91024228331,
+          "process_groups": {
+            "DY": 46.75654347350688,
+            "Data": 107125.0,
+            "Others": 0.0,
+            "Photon+jet": 58255.034167580365,
+            "QCD Multijet": 8043.480694276287,
+            "Top": 295.8848761813923,
+            "VV+VVV": 20.375540861065733,
+            "W -> lv": 190.8115844890189,
+            "Z -> vv": 6.566835421672044
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0000000000000002,
+            "up": 0.9999999999999999
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999997
+          },
+          "btagSF_light_correlated": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_reco": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "loose_muon_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "met_trigger": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_iso": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 1.0000000000000002
+          },
+          "photon_trigger": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "veto_electron_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "n_lowdm_isr"
+    },
+    {
+      "bins": 10,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "GCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.0005697633522584536,
+        12.370326204626931
+      ],
+      "name": "lowdm_cr_gcr_leading_lowdm_fatjet_pt",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_leading_lowdm_fatjet_pt.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_leading_lowdm_fatjet_pt.png",
+      "region": "GCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 0.9999999999999999
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0006924391975694356,
+            "raw_fraction": 0.0006924391975694356
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8690633962383338,
+            "raw_fraction": 0.8690633962383336
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.12258410350675125,
+            "raw_fraction": 0.12258410350675125
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.004430981291882865,
+            "raw_fraction": 0.004430981291882865
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.00031815386180970504,
+            "raw_fraction": 0.0003181538618097051
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.002807151087409346,
+            "raw_fraction": 0.002807151087409346
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 0.00010377481624350792,
+            "raw_fraction": 0.0001037748162435079
+          }
+        },
+        "raw_integrals": {
+          "data": 99515.0,
+          "data_over_mc": 1.5754725282456414,
+          "mc": 63165.176298449565,
+          "process_groups": {
+            "DY": 43.73804399043035,
+            "Data": 99515.0,
+            "Others": 0.0,
+            "Photon+jet": 54894.542637923674,
+            "QCD Multijet": 7743.046509391333,
+            "Top": 279.883714476913,
+            "VV+VVV": 20.09624477124258,
+            "W -> lv": 177.31419333259575,
+            "Z -> vv": 6.554954563360384
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0000000000000002,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "electron_reco": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "loose_muon_5to10": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "met_trigger": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_hlt": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_iso": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "photon_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "photon_trigger": {
+            "down": 1.0,
+            "up": 1.0000000000000002
+          },
+          "pileup": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "veto_electron_5to10": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "leading_lowdm_fatjet_pt"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "GCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.0014033697132288681,
+        32.631546856898964
+      ],
+      "name": "lowdm_cr_gcr_leading_lowdm_fatjet_msd",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_leading_lowdm_fatjet_msd.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_leading_lowdm_fatjet_msd.png",
+      "region": "GCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0006848332838743389,
+            "raw_fraction": 0.0006848332838743389
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8719161329362266,
+            "raw_fraction": 0.8719161329362267
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.11976342378192112,
+            "raw_fraction": 0.11976342378192109
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.004395224378581274,
+            "raw_fraction": 0.0043952243785812745
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.00031465576050228105,
+            "raw_fraction": 0.00031465576050228105
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.002815472257737919,
+            "raw_fraction": 0.002815472257737919
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 0.00011025760115641794,
+            "raw_fraction": 0.00011025760115641795
+          }
+        },
+        "raw_integrals": {
+          "data": 98406.0,
+          "data_over_mc": 1.5790774313924567,
+          "mc": 62318.666611062865,
+          "process_groups": {
+            "DY": 42.6778971019243,
+            "Data": 98406.0,
+            "Others": 0.0,
+            "Photon+jet": 54336.65080125988,
+            "QCD Multijet": 7463.4968788649785,
+            "Top": 273.9045227296224,
+            "VV+VVV": 19.608927435992097,
+            "W -> lv": 175.45647698266583,
+            "Z -> vv": 6.8711066878023495
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 0.9999999999999998
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_reco": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "loose_muon_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "met_trigger": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_iso": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_trigger": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 0.9999999999999999,
+            "up": 1.0000000000000002
+          },
+          "veto_electron_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "leading_lowdm_fatjet_msd"
+    },
+    {
+      "bins": 4,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "GCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        60.257662320555205
+      ],
+      "name": "lowdm_cr_gcr_n_photon_medium",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_n_photon_medium.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_n_photon_medium.png",
+      "region": "GCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0006993285361638936,
+            "raw_fraction": 0.0006993285361638936
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8713105096017166,
+            "raw_fraction": 0.8713105096017166
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.120307765575343,
+            "raw_fraction": 0.120307765575343
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.004425492604050449,
+            "raw_fraction": 0.004425492604050449
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.00030475300579031376,
+            "raw_fraction": 0.00030475300579031376
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0028539317954379643,
+            "raw_fraction": 0.0028539317954379643
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 9.821888149771464e-05,
+            "raw_fraction": 9.821888149771464e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 107126.0,
+          "data_over_mc": 1.6022627679383998,
+          "mc": 66859.19572220786,
+          "process_groups": {
+            "DY": 46.75654347350688,
+            "Data": 107126.0,
+            "Others": 0.0,
+            "Photon+jet": 58255.11989627784,
+            "QCD Multijet": 8043.68044550336,
+            "Top": 295.8848761813923,
+            "VV+VVV": 20.375540861065733,
+            "W -> lv": 190.81158448901894,
+            "Z -> vv": 6.566835421672043
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_reco": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "loose_muon_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "met_trigger": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_iso": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_trigger": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "veto_electron_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "n_photon_medium"
+    },
+    {
+      "bins": 10,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "GCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.00022870264921681012,
+        22.439930549073054
+      ],
+      "name": "lowdm_cr_gcr_recoil_gcr",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_recoil_gcr.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_recoil_gcr.png",
+      "region": "GCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0006993285361638938,
+            "raw_fraction": 0.0006993285361638939
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8713105096017165,
+            "raw_fraction": 0.8713105096017166
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.12030776557534308,
+            "raw_fraction": 0.12030776557534306
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.004425492604050452,
+            "raw_fraction": 0.004425492604050452
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.00030475300579031387,
+            "raw_fraction": 0.0003047530057903138
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.002853931795437966,
+            "raw_fraction": 0.002853931795437966
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 9.821888149771468e-05,
+            "raw_fraction": 9.82188814977147e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 107126.0,
+          "data_over_mc": 1.6022627679384007,
+          "mc": 66859.19572220783,
+          "process_groups": {
+            "DY": 46.75654347350688,
+            "Data": 107126.0,
+            "Others": 0.0,
+            "Photon+jet": 58255.11989627782,
+            "QCD Multijet": 8043.68044550336,
+            "Top": 295.88487618139237,
+            "VV+VVV": 20.37554086106573,
+            "W -> lv": 190.81158448901897,
+            "Z -> vv": 6.566835421672044
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0000000000000002,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0000000000000002,
+            "up": 1.0
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_reco": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "loose_muon_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "met_trigger": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_iso": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_trigger": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "veto_electron_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "recoil_gcr"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "GCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        2.9871366428318053e-05,
+        22.067471948919962
+      ],
+      "name": "lowdm_cr_gcr_njet_photon_clean",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_njet_photon_clean.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_njet_photon_clean.png",
+      "region": "GCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 0.9999999999999999,
+          "mc": 1.0
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0006993285361638942,
+            "raw_fraction": 0.0006993285361638941
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8713105096017166,
+            "raw_fraction": 0.8713105096017166
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.12030776557534312,
+            "raw_fraction": 0.1203077655753431
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.004425492604050453,
+            "raw_fraction": 0.004425492604050453
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.00030475300579031403,
+            "raw_fraction": 0.00030475300579031403
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0028539317954379665,
+            "raw_fraction": 0.002853931795437966
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 9.821888149771473e-05,
+            "raw_fraction": 9.821888149771473e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 107126.0,
+          "data_over_mc": 1.6022627679384014,
+          "mc": 66859.1957222078,
+          "process_groups": {
+            "DY": 46.75654347350688,
+            "Data": 107126.0,
+            "Others": 0.0,
+            "Photon+jet": 58255.11989627779,
+            "QCD Multijet": 8043.680445503359,
+            "Top": 295.88487618139237,
+            "VV+VVV": 20.375540861065733,
+            "W -> lv": 190.8115844890189,
+            "Z -> vv": 6.566835421672044
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 0.9999999999999998,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "electron_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "electron_reco": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "loose_muon_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "met_trigger": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_hlt": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "muon_iso": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_trigger": {
+            "down": 0.9999999999999998,
+            "up": 1.0000000000000002
+          },
+          "pileup": {
+            "down": 0.9999999999999998,
+            "up": 0.9999999999999999
+          },
+          "veto_electron_5to10": {
+            "down": 1.0,
+            "up": 1.0
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "njet_photon_clean"
+    },
+    {
+      "bins": 6,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "GCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        1e-05,
+        53.30022590220861
+      ],
+      "name": "lowdm_cr_gcr_nb_photon_clean",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_nb_photon_clean.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_nb_photon_clean.png",
+      "region": "GCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 0.9999999999999999,
+          "mc": 1.0000000000000002
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0006993285361638938,
+            "raw_fraction": 0.0006993285361638939
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8713105096017165,
+            "raw_fraction": 0.8713105096017166
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.12030776557534306,
+            "raw_fraction": 0.12030776557534306
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.004425492604050452,
+            "raw_fraction": 0.004425492604050452
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0003047530057903139,
+            "raw_fraction": 0.00030475300579031387
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0028539317954379643,
+            "raw_fraction": 0.0028539317954379643
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 9.82188814977147e-05,
+            "raw_fraction": 9.82188814977147e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 107126.0,
+          "data_over_mc": 1.6022627679384007,
+          "mc": 66859.19572220783,
+          "process_groups": {
+            "DY": 46.75654347350688,
+            "Data": 107126.0,
+            "Others": 0.0,
+            "Photon+jet": 58255.11989627782,
+            "QCD Multijet": 8043.68044550336,
+            "Top": 295.88487618139237,
+            "VV+VVV": 20.375540861065733,
+            "W -> lv": 190.81158448901886,
+            "Z -> vv": 6.566835421672044
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 1.0000000000000002
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0000000000000002,
+            "up": 0.9999999999999999
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 1.0,
+            "up": 0.9999999999999999
+          },
+          "electron_id": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          },
+          "electron_reco": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          },
+          "loose_muon_5to10": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          },
+          "met_trigger": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          },
+          "muon_hlt": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          },
+          "muon_id": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          },
+          "muon_iso": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          },
+          "photon_id": {
+            "down": 0.9999999999999999,
+            "up": 1.0000000000000002
+          },
+          "photon_trigger": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "pileup": {
+            "down": 0.9999999999999999,
+            "up": 1.0000000000000002
+          },
+          "veto_electron_5to10": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "nb_photon_clean"
+    },
+    {
+      "bins": 7,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "GCR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.00020540399230668685,
+        37.649991597109405
+      ],
+      "name": "lowdm_cr_gcr_ht_photon_clean",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_ht_photon_clean.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_gcr_ht_photon_clean.png",
+      "region": "GCR",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": true,
+      "unit_area_audit": {
+        "checks": {
+          "luminosity_uncertainty_omitted": true,
+          "process_fractions_preserved": true,
+          "process_group_sum_matches_total_mc": true,
+          "ratio_global_factor_relation": true
+        },
+        "data_source": "EGamma",
+        "normalization": "data and total MC independently normalized over the entire plotted figure",
+        "normalized_integrals": {
+          "data": 1.0,
+          "mc": 1.0000000000000002
+        },
+        "process_fractions": {
+          "DY": {
+            "matched": true,
+            "normalized_fraction": 0.0006996079251224531,
+            "raw_fraction": 0.0006996079251224532
+          },
+          "Others": {
+            "matched": true,
+            "normalized_fraction": 0.0,
+            "raw_fraction": 0.0
+          },
+          "Photon+jet": {
+            "matched": true,
+            "normalized_fraction": 0.8714049590456425,
+            "raw_fraction": 0.8714049590456425
+          },
+          "QCD Multijet": {
+            "matched": true,
+            "normalized_fraction": 0.1202095583435201,
+            "raw_fraction": 0.12020955834352011
+          },
+          "Top": {
+            "matched": true,
+            "normalized_fraction": 0.004425796814233034,
+            "raw_fraction": 0.0044257968142330335
+          },
+          "VV+VVV": {
+            "matched": true,
+            "normalized_fraction": 0.0003048699752384412,
+            "raw_fraction": 0.0003048699752384412
+          },
+          "W -> lv": {
+            "matched": true,
+            "normalized_fraction": 0.0028571275459724223,
+            "raw_fraction": 0.0028571275459724223
+          },
+          "Z -> vv": {
+            "matched": true,
+            "normalized_fraction": 9.808035027103681e-05,
+            "raw_fraction": 9.808035027103682e-05
+          }
+        },
+        "raw_integrals": {
+          "data": 107106.0,
+          "data_over_mc": 1.6026036328075333,
+          "mc": 66832.4954513959,
+          "process_groups": {
+            "DY": 46.75654347350687,
+            "Data": 107106.0,
+            "Others": 0.0,
+            "Photon+jet": 58238.16796174173,
+            "QCD Multijet": 8033.904761207617,
+            "Top": 295.78704545603165,
+            "VV+VVV": 20.3752212333903,
+            "W -> lv": 190.94896372025983,
+            "Z -> vv": 6.5549545633603845
+          }
+        },
+        "scope": "GCR only",
+        "status": "complete",
+        "systematic_shape_integrals": {
+          "btagSF_bc_correlated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_bc_uncorrelated": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "btagSF_light_correlated": {
+            "down": 1.0000000000000002,
+            "up": 0.9999999999999999
+          },
+          "btagSF_light_uncorrelated": {
+            "down": 0.9999999999999998,
+            "up": 1.0000000000000002
+          },
+          "electron_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "electron_reco": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "loose_muon_5to10": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "met_trigger": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_hlt": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_id": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "muon_iso": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          },
+          "photon_id": {
+            "down": 1.0,
+            "up": 1.0
+          },
+          "photon_trigger": {
+            "down": 1.0000000000000002,
+            "up": 1.0000000000000002
+          },
+          "pileup": {
+            "down": 0.9999999999999999,
+            "up": 1.0
+          },
+          "veto_electron_5to10": {
+            "down": 0.9999999999999999,
+            "up": 0.9999999999999999
+          }
+        },
+        "uncertainty_model": "MC statistical uncertainty plus unit-area-normalized Up/Down shape envelopes in quadrature; luminosity omitted"
+      },
+      "variable": "ht_photon_clean"
+    },
+    {
+      "bins": 12,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2E low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        1000000.0
+      ],
+      "name": "lowdm_cr_dy2e_met",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_met.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_met.png",
+      "region": "DY2E",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "met"
+    },
+    {
+      "bins": 7,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2E low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "lowdm_cr_dy2e_ht",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_ht.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_ht.png",
+      "region": "DY2E",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ht"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2E low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "lowdm_cr_dy2e_njet",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_njet.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_njet.png",
+      "region": "DY2E",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "njet"
+    },
+    {
+      "bins": 6,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2E low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        1000000.0
+      ],
+      "name": "lowdm_cr_dy2e_nb_medium_lowdm",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_nb_medium_lowdm.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_nb_medium_lowdm.png",
+      "region": "DY2E",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb_medium_lowdm"
+    },
+    {
+      "bins": 6,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2E low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        1000000.0
+      ],
+      "name": "lowdm_cr_dy2e_nb_loose_lowdm",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_nb_loose_lowdm.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_nb_loose_lowdm.png",
+      "region": "DY2E",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb_loose_lowdm"
+    },
+    {
+      "bins": 4,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2E low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        1000000.0
+      ],
+      "name": "lowdm_cr_dy2e_n_e_veto",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_n_e_veto.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_n_e_veto.png",
+      "region": "DY2E",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "n_e_veto"
+    },
+    {
+      "bins": 4,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2E low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        1000000.0
+      ],
+      "name": "lowdm_cr_dy2e_n_m_loose",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_n_m_loose.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_n_m_loose.png",
+      "region": "DY2E",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "n_m_loose"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2E low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "lowdm_cr_dy2e_lowdm_mtb",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_lowdm_mtb.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_lowdm_mtb.png",
+      "region": "DY2E",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "lowdm_mtb"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2E low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "lowdm_cr_dy2e_lowdm_met_sqrt_ht",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_lowdm_met_sqrt_ht.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_lowdm_met_sqrt_ht.png",
+      "region": "DY2E",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "lowdm_met_sqrt_ht"
+    },
+    {
+      "bins": 10,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2E low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "lowdm_cr_dy2e_lowdm_isr_pt",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_lowdm_isr_pt.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_lowdm_isr_pt.png",
+      "region": "DY2E",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "lowdm_isr_pt"
+    },
+    {
+      "bins": 6,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2E low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "lowdm_cr_dy2e_lowdm_isr_dphi",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_lowdm_isr_dphi.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_lowdm_isr_dphi.png",
+      "region": "DY2E",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "lowdm_isr_dphi"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2E low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "lowdm_cr_dy2e_lowdm_ptb",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_lowdm_ptb.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_lowdm_ptb.png",
+      "region": "DY2E",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "lowdm_ptb"
+    },
+    {
+      "bins": 5,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2E low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        1000000.0
+      ],
+      "name": "lowdm_cr_dy2e_n_lowdm_isr",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_n_lowdm_isr.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_n_lowdm_isr.png",
+      "region": "DY2E",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "n_lowdm_isr"
+    },
+    {
+      "bins": 10,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2E low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "lowdm_cr_dy2e_leading_lowdm_fatjet_pt",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_leading_lowdm_fatjet_pt.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_leading_lowdm_fatjet_pt.png",
+      "region": "DY2E",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "leading_lowdm_fatjet_pt"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2E low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "lowdm_cr_dy2e_leading_lowdm_fatjet_msd",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_leading_lowdm_fatjet_msd.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_leading_lowdm_fatjet_msd.png",
+      "region": "DY2E",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "leading_lowdm_fatjet_msd"
+    },
+    {
+      "bins": 10,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2E low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "lowdm_cr_dy2e_recoil_dy2e",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_recoil_dy2e.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_recoil_dy2e.png",
+      "region": "DY2E",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "recoil_dy2e"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2E low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "lowdm_cr_dy2e_mee",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_mee.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_mee.png",
+      "region": "DY2E",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "mee"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2E low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "lowdm_cr_dy2e_njet_lepton_clean",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_njet_lepton_clean.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_njet_lepton_clean.png",
+      "region": "DY2E",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "njet_lepton_clean"
+    },
+    {
+      "bins": 6,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2E low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        1000000.0
+      ],
+      "name": "lowdm_cr_dy2e_nb_lepton_clean",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_nb_lepton_clean.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_nb_lepton_clean.png",
+      "region": "DY2E",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb_lepton_clean"
+    },
+    {
+      "bins": 7,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2E low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "lowdm_cr_dy2e_ht_lepton_clean",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_ht_lepton_clean.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2e_ht_lepton_clean.png",
+      "region": "DY2E",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ht_lepton_clean"
+    },
+    {
+      "bins": 12,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2M low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        1000000.0
+      ],
+      "name": "lowdm_cr_dy2m_met",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_met.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_met.png",
+      "region": "DY2M",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "met"
+    },
+    {
+      "bins": 7,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2M low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        1000000.0
+      ],
+      "name": "lowdm_cr_dy2m_ht",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_ht.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_ht.png",
+      "region": "DY2M",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ht"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2M low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "lowdm_cr_dy2m_njet",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_njet.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_njet.png",
+      "region": "DY2M",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "njet"
+    },
+    {
+      "bins": 6,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2M low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        1000000.0
+      ],
+      "name": "lowdm_cr_dy2m_nb_medium_lowdm",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_nb_medium_lowdm.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_nb_medium_lowdm.png",
+      "region": "DY2M",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb_medium_lowdm"
+    },
+    {
+      "bins": 6,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2M low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        1000000.0
+      ],
+      "name": "lowdm_cr_dy2m_nb_loose_lowdm",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_nb_loose_lowdm.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_nb_loose_lowdm.png",
+      "region": "DY2M",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb_loose_lowdm"
+    },
+    {
+      "bins": 4,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2M low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        1000000.0
+      ],
+      "name": "lowdm_cr_dy2m_n_e_veto",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_n_e_veto.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_n_e_veto.png",
+      "region": "DY2M",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "n_e_veto"
+    },
+    {
+      "bins": 4,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2M low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        1000000.0
+      ],
+      "name": "lowdm_cr_dy2m_n_m_loose",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_n_m_loose.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_n_m_loose.png",
+      "region": "DY2M",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "n_m_loose"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2M low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "lowdm_cr_dy2m_lowdm_mtb",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_lowdm_mtb.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_lowdm_mtb.png",
+      "region": "DY2M",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "lowdm_mtb"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2M low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "lowdm_cr_dy2m_lowdm_met_sqrt_ht",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_lowdm_met_sqrt_ht.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_lowdm_met_sqrt_ht.png",
+      "region": "DY2M",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "lowdm_met_sqrt_ht"
+    },
+    {
+      "bins": 10,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2M low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "lowdm_cr_dy2m_lowdm_isr_pt",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_lowdm_isr_pt.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_lowdm_isr_pt.png",
+      "region": "DY2M",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "lowdm_isr_pt"
+    },
+    {
+      "bins": 6,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2M low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "lowdm_cr_dy2m_lowdm_isr_dphi",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_lowdm_isr_dphi.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_lowdm_isr_dphi.png",
+      "region": "DY2M",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "lowdm_isr_dphi"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2M low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "lowdm_cr_dy2m_lowdm_ptb",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_lowdm_ptb.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_lowdm_ptb.png",
+      "region": "DY2M",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "lowdm_ptb"
+    },
+    {
+      "bins": 5,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2M low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        1000000.0
+      ],
+      "name": "lowdm_cr_dy2m_n_lowdm_isr",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_n_lowdm_isr.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_n_lowdm_isr.png",
+      "region": "DY2M",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "n_lowdm_isr"
+    },
+    {
+      "bins": 10,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2M low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "lowdm_cr_dy2m_leading_lowdm_fatjet_pt",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_leading_lowdm_fatjet_pt.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_leading_lowdm_fatjet_pt.png",
+      "region": "DY2M",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "leading_lowdm_fatjet_pt"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2M low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "lowdm_cr_dy2m_leading_lowdm_fatjet_msd",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_leading_lowdm_fatjet_msd.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_leading_lowdm_fatjet_msd.png",
+      "region": "DY2M",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "leading_lowdm_fatjet_msd"
+    },
+    {
+      "bins": 10,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2M low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "lowdm_cr_dy2m_recoil_dy2m",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_recoil_dy2m.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_recoil_dy2m.png",
+      "region": "DY2M",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "recoil_dy2m"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2M low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "lowdm_cr_dy2m_mmm",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_mmm.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_mmm.png",
+      "region": "DY2M",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "mmm"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2M low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        100000.0
+      ],
+      "name": "lowdm_cr_dy2m_njet_lepton_clean",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_njet_lepton_clean.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_njet_lepton_clean.png",
+      "region": "DY2M",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "njet_lepton_clean"
+    },
+    {
+      "bins": 6,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2M low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        1000000.0
+      ],
+      "name": "lowdm_cr_dy2m_nb_lepton_clean",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_nb_lepton_clean.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_nb_lepton_clean.png",
+      "region": "DY2M",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb_lepton_clean"
+    },
+    {
+      "bins": 7,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "DY2M low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        1000000.0
+      ],
+      "name": "lowdm_cr_dy2m_ht_lepton_clean",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_ht_lepton_clean.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_cr_dy2m_ht_lepton_clean.png",
+      "region": "DY2M",
+      "signals": [],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ht_lepton_clean"
+    },
+    {
+      "bins": 12,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "SR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_sr_sr_met",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_met.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_met.png",
+      "region": "SR",
+      "signals": [
+        "mStop1000_mLSP800"
+      ],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "met"
+    },
+    {
+      "bins": 7,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "SR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_sr_sr_ht",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_ht.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_ht.png",
+      "region": "SR",
+      "signals": [
+        "mStop1000_mLSP800"
+      ],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "ht"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "SR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_sr_sr_njet",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_njet.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_njet.png",
+      "region": "SR",
+      "signals": [
+        "mStop1000_mLSP800"
+      ],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "njet"
+    },
+    {
+      "bins": 6,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "SR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_sr_sr_nb_medium_lowdm",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_nb_medium_lowdm.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_nb_medium_lowdm.png",
+      "region": "SR",
+      "signals": [
+        "mStop1000_mLSP800"
+      ],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb_medium_lowdm"
+    },
+    {
+      "bins": 6,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "SR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_sr_sr_nb_loose_lowdm",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_nb_loose_lowdm.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_nb_loose_lowdm.png",
+      "region": "SR",
+      "signals": [
+        "mStop1000_mLSP800"
+      ],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "nb_loose_lowdm"
+    },
+    {
+      "bins": 4,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "SR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_sr_sr_n_e_veto",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_n_e_veto.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_n_e_veto.png",
+      "region": "SR",
+      "signals": [
+        "mStop1000_mLSP800"
+      ],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "n_e_veto"
+    },
+    {
+      "bins": 4,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "SR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_sr_sr_n_m_loose",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_n_m_loose.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_n_m_loose.png",
+      "region": "SR",
+      "signals": [
+        "mStop1000_mLSP800"
+      ],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "n_m_loose"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "SR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_sr_sr_lowdm_mtb",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_lowdm_mtb.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_lowdm_mtb.png",
+      "region": "SR",
+      "signals": [
+        "mStop1000_mLSP800"
+      ],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "lowdm_mtb"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "SR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_sr_sr_lowdm_met_sqrt_ht",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_lowdm_met_sqrt_ht.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_lowdm_met_sqrt_ht.png",
+      "region": "SR",
+      "signals": [
+        "mStop1000_mLSP800"
+      ],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "lowdm_met_sqrt_ht"
+    },
+    {
+      "bins": 10,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "SR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_sr_sr_lowdm_isr_pt",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_lowdm_isr_pt.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_lowdm_isr_pt.png",
+      "region": "SR",
+      "signals": [
+        "mStop1000_mLSP800"
+      ],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "lowdm_isr_pt"
+    },
+    {
+      "bins": 6,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "SR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_sr_sr_lowdm_isr_dphi",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_lowdm_isr_dphi.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_lowdm_isr_dphi.png",
+      "region": "SR",
+      "signals": [
+        "mStop1000_mLSP800"
+      ],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "lowdm_isr_dphi"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "SR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_sr_sr_lowdm_ptb",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_lowdm_ptb.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_lowdm_ptb.png",
+      "region": "SR",
+      "signals": [
+        "mStop1000_mLSP800"
+      ],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "lowdm_ptb"
+    },
+    {
+      "bins": 5,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "SR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_sr_sr_n_lowdm_isr",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_n_lowdm_isr.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_n_lowdm_isr.png",
+      "region": "SR",
+      "signals": [
+        "mStop1000_mLSP800"
+      ],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "n_lowdm_isr"
+    },
+    {
+      "bins": 10,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "SR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_sr_sr_leading_lowdm_fatjet_pt",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_leading_lowdm_fatjet_pt.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_leading_lowdm_fatjet_pt.png",
+      "region": "SR",
+      "signals": [
+        "mStop1000_mLSP800"
+      ],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "leading_lowdm_fatjet_pt"
+    },
+    {
+      "bins": 8,
+      "dropped_input_bins_1based": [],
+      "labels": [
+        "SR low $\\Delta m$, $N_{res}=0$"
+      ],
+      "legend_yields_displayed": true,
+      "lower_panel": "data_over_mc",
+      "lower_panel_ylim": [
+        0.0,
+        2.0
+      ],
+      "main_panel_ylim": [
+        0.1,
+        10000000.0
+      ],
+      "name": "lowdm_sr_sr_leading_lowdm_fatjet_msd",
+      "pdf": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_leading_lowdm_fatjet_msd.pdf",
+      "png": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/plots/lowdm_physical/lowdm_sr_sr_leading_lowdm_fatjet_msd.png",
+      "region": "SR",
+      "signals": [
+        "mStop1000_mLSP800"
+      ],
+      "significance_definition": null,
+      "status": "complete",
+      "unit_area": false,
+      "unit_area_audit": null,
+      "variable": "leading_lowdm_fatjet_msd"
+    }
+  ],
+  "selection_policy": {
+    "distribution_selection": "region core && object-cleaned Nb>=1 && object-cleaned Nt=0 && object-cleaned Nw=0 && TROTA Nres=0; no NISR requirement, no ISR-recoil delta-phi requirement, no MET/sqrt(HT) requirement, no old low-dM search-bin assignability requirement, and no High-dM feature veto",
+    "note": "Every Low-dM CR and SR explicitly requires Nb>=1 and TROTA Nres=0. Low-dM is Nsv-inclusive and does not require the ISR-subjet b veto or mTb<175.",
+    "regions": {
+      "DY2E": "cat5_DY2E_lowDeltaM",
+      "DY2M": "cat6_DY2M_lowDeltaM",
+      "GCR": "cat4_GCR_lowDeltaM",
+      "LLCR": "cat2_LLCR_lowDeltaM",
+      "QCDCR": "cat3_QCDCR_lowDeltaM",
+      "SR": "cat7_SR_lowDeltaM"
+    },
+    "resolved_top_veto": {
+      "applied": true,
+      "branch": "nresolved_top_trota",
+      "candidate_fiducial": "abs(eta)<2, 100<=mass<=250 GeV",
+      "overlap_policy": "exclusive resolved candidates after boosted-object AK4 veto",
+      "requirement": "Nres == 0",
+      "trota_model_sha256": "ce673e6497860cc67fcdfb30017301fb476e32a0a33a60e8b51a31ba109f7ef3",
+      "trota_schema": "trota_topresolved_2025_inplace_sparse_v1"
+    },
+    "search_bins": "34 low-dM bins per region with explicit Nb>=1 and TROTA Nres=0 after removing the two leading Nb=0 categories; Nsv, the ISR-subjet b veto, and the mTb requirement are not applied",
+    "status": "adopted_resolved_top_veto"
+  },
+  "source": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/lowdm_systematics_2025_20260901/merged/lowdm_physical_systematics_2025.json",
+  "status": "complete"
+}

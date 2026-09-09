@@ -45,6 +45,40 @@ REQUIRED_ANALYSIS_SF_VARIATIONS = tuple(
 )
 
 
+def apply_topw_highpt_extrapolation(
+    pt: Any,
+    nominal: Any,
+    up: Any,
+    down: Any,
+    *,
+    tagger: str,
+    year: str,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Apply the adopted high-pT SF=1, uncertainty=0 prescription."""
+    if str(year) not in {"2024", "2025"}:
+        raise AnalysisScaleFactorUnavailable(f"unsupported Top/W SF year: {year}")
+    limits = {"top": 1200.0, "w": 800.0}
+    if tagger not in limits:
+        raise ValueError(f"unsupported Top/W tagger: {tagger}")
+    pt = np.asarray(pt, dtype=float)
+    if pt.ndim != 1 or not np.all(np.isfinite(pt)) or np.any(pt < 0):
+        raise ValueError("Top/W SF pT must be a finite nonnegative flat array")
+    highpt = pt >= limits[tagger]
+    result = []
+    for values in (nominal, up, down):
+        values = np.asarray(values, dtype=float)
+        if values.shape != pt.shape:
+            raise ValueError("Top/W SF and pT array shapes differ")
+        values = np.where(highpt, 1.0, values)
+        if not np.all(np.isfinite(values)) or np.any(values < 0):
+            raise AnalysisScaleFactorUnavailable("invalid in-range Top/W SF")
+        result.append(values)
+    nominal, up, down = result
+    if np.any(down > nominal) or np.any(nominal > up):
+        raise AnalysisScaleFactorUnavailable("Top/W SF variations do not bracket nominal")
+    return nominal, up, down
+
+
 @lru_cache(maxsize=None)
 def _load(path: str) -> correctionlib.CorrectionSet:
     return correctionlib.CorrectionSet.from_file(path)
