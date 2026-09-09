@@ -6,6 +6,7 @@ Current analysis: High-dM 79−6 bins + Low-dM GNN 30 bins.
 
 - [High-dM canonical code](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/reports/highdm_canonical_dependencies.md>)
 - [Low-dM canonical dependencies](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/reports/lowdm_canonical_dependencies.md>)
+- [Workflow code and output inventory](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/reports/workflow_inventory.md>)
 
 The remaining sections below document the **legacy classic workflow**, not
 the entrypoints for the current High-dM + GNN analysis:

@@ -1,6 +1,6 @@
 universe = vanilla
 initialdir = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topw_truth_20260909
-executable = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/studies/object_definition_veto_pt_20260905/batch/run_flat_hist_merge_batch.sh
+executable = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/run_batch.sh
 arguments = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/topw_truth_20260909/$(year)/pilot.argv
 getenv = False
 environment = "PYTHONPATH=/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad:/eos/user/t/taiwoo/run3_stop/decaf"
