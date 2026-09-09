@@ -104,10 +104,11 @@ def draw_topw(efficiency, pt_edges, eta_edges, output):
                  if pt_edges[0] <= value <= pt_edges[-1]]
         ax.set_yticks(ticks, labels=[str(value) for value in ticks])
         ax.yaxis.set_minor_formatter(NullFormatter())
+        ax.tick_params(axis="x", which="major", pad=7)
         ax.set_box_aspect(1)
         ax.set_xlabel(r"Jet $|\eta|$")
         ax.set_ylabel(r"Jet $p_{\mathrm{T}}$ (GeV)")
-        ax.yaxis.set_label_coords(-0.20, 1)
+        ax.yaxis.set_label_coords(-0.15, 1)
         hep.cms.label(llabel="Simulation", rlabel="(13.6 TeV)", loc=0, ax=ax, fontsize=39)
         annotate(ax, mesh, efficiency, pt_edges, eta_edges, fontsize=21)
         for suffix in (".pdf", ".png"):
