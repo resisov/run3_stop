@@ -1,0 +1,537 @@
+{
+  "automation_id": "dy-20-gev",
+  "triggered_at_utc": "2026-09-09T01:11:49.419Z",
+  "last_observed_at_utc": "2026-09-09T01:31:35Z",
+  "status": "llnorm_endpoint_failures_step_diagnostics_running_sgamma_approval_pending",
+  "limits_validated": 924,
+  "final_impact_json_counts": {
+    "r1": 0,
+    "r0": 0
+  },
+  "queue": [
+    {
+      "ClusterId": 1112615,
+      "HoldReason": null,
+      "JobStatus": 2,
+      "NumJobStarts": 1,
+      "ProcId": 0,
+      "RemoteSysCpu": 13,
+      "RemoteUserCpu": 15687,
+      "RemoteWallClockTime": 0,
+      "TransferInFinished": 1788906275
+    },
+    {
+      "ClusterId": 1112642,
+      "HoldReason": null,
+      "JobStatus": 2,
+      "NumJobStarts": 0,
+      "ProcId": 0,
+      "RemoteSysCpu": 0,
+      "RemoteUserCpu": 0,
+      "RemoteWallClockTime": 0,
+      "TransferInFinished": 1788917096
+    },
+    {
+      "ClusterId": 1112643,
+      "HoldReason": null,
+      "JobStatus": 2,
+      "NumJobStarts": 0,
+      "ProcId": 0,
+      "RemoteSysCpu": 0,
+      "RemoteUserCpu": 0,
+      "RemoteWallClockTime": 0,
+      "TransferInFinished": 1788917099
+    }
+  ],
+  "llnorm_recovery_audit": [
+    {
+      "cluster": 1112634,
+      "results": [
+        {
+          "name": "CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025",
+          "file": "combined/T2tt/impact_recovery_r1_llnorm_part1/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025.MultiDimFit.mH1200.root",
+          "parameter_values": [
+            1,
+            0.9856501221656799,
+            1
+          ],
+          "r_values": [
+            1,
+            1.003717064857483,
+            1
+          ],
+          "strict_two_sided_endpoints": false,
+          "sha256": "981a0a968b85cc9de139f86a3012484c6a01c98362452813aee40b62627441f0"
+        },
+        {
+          "name": "CMS_NPS26012_ll_norm_highdm_Nb2plus_bin0_2025",
+          "file": "combined/T2tt/impact_recovery_r1_llnorm_part1/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_highdm_Nb2plus_bin0_2025.MultiDimFit.mH1200.root",
+          "parameter_values": [
+            1,
+            0.9843063950538635,
+            1
+          ],
+          "r_values": [
+            1,
+            0.9951746463775635,
+            1
+          ],
+          "strict_two_sided_endpoints": false,
+          "sha256": "1fc010dc133e96c92e12ce0a6cc53f9e360e04d7c56f227682fb926007fb83c7"
+        },
+        {
+          "name": "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR0_inclusive_2025",
+          "file": "combined/T2tt/impact_recovery_r1_llnorm_part1/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_lowdm_Nb1_NISR0_inclusive_2025.MultiDimFit.mH1200.root",
+          "parameter_values": [
+            1,
+            0.9783004522323608,
+            1
+          ],
+          "r_values": [
+            1,
+            1.000836730003357,
+            1
+          ],
+          "strict_two_sided_endpoints": false,
+          "sha256": "a2db3cb4c7ee6eb93fd87edc2138821132f50cc4471437029b73fe09be690378"
+        }
+      ],
+      "strict_passed": 0,
+      "strict_failed": 3,
+      "log_sha256": "e908a4c95ce65764c5fe2d4e4e37b0db7f2efff8be13cb639a889b3b16faba9d",
+      "terminal_failures": [
+        "Maximum failed steps (max=5) reached and minimization failed at CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025 = 1.05625 ",
+        "Maximum failed steps (max=5) reached and minimization failed at CMS_NPS26012_ll_norm_highdm_Nb2plus_bin0_2025 = 1.05625 ",
+        "Maximum failed steps (max=5) reached and minimization failed at CMS_NPS26012_ll_norm_lowdm_Nb1_NISR0_inclusive_2025 = 1.05625 "
+      ],
+      "local_EOS_root_hash_match": true
+    },
+    {
+      "cluster": 1112635,
+      "results": [
+        {
+          "name": "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2024",
+          "file": "combined/T2tt/impact_recovery_r1_llnorm_part2/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2024.MultiDimFit.mH1200.root",
+          "parameter_values": [
+            1,
+            0.9878455996513367,
+            1.0122361183166504
+          ],
+          "r_values": [
+            1,
+            1.001798152923584,
+            0.997963547706604
+          ],
+          "strict_two_sided_endpoints": true,
+          "sha256": "271712dbe6c5abed42abdb8e105821ef7a8169a9d7b78962fb7558aa72568c62"
+        },
+        {
+          "name": "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025",
+          "file": "combined/T2tt/impact_recovery_r1_llnorm_part2/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025.MultiDimFit.mH1200.root",
+          "parameter_values": [
+            0.9999999403953552,
+            0.9876236319541931,
+            0.9999999403953552
+          ],
+          "r_values": [
+            1,
+            1.00278639793396,
+            1
+          ],
+          "strict_two_sided_endpoints": false,
+          "sha256": "428c7d155656aabd8c219e8bce2fcfa68e185aef1ee18a2c1f51e697741dcb01"
+        },
+        {
+          "name": "CMS_NPS26012_ll_norm_lowdm_Nb2plus_NISR1plus_inclusive_2025",
+          "file": "combined/T2tt/impact_recovery_r1_llnorm_part2/impact_mStop1200_mLSP500_r1/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_lowdm_Nb2plus_NISR1plus_inclusive_2025.MultiDimFit.mH1200.root",
+          "parameter_values": [
+            1,
+            0.9840038418769836,
+            1
+          ],
+          "r_values": [
+            1,
+            0.9910613298416138,
+            1
+          ],
+          "strict_two_sided_endpoints": false,
+          "sha256": "4743431ffdfcc48a3de34ce7c682d1ee648b111db3ded749ec82008a57ee4df7"
+        }
+      ],
+      "strict_passed": 1,
+      "strict_failed": 2,
+      "log_sha256": "df4f2c8bdf255dbeafdea6f20f35e48dd3f1fdbd7988e9bef02d988e6edb36c0",
+      "local_EOS_root_hash_match": true
+    },
+    {
+      "cluster": 1112636,
+      "results": [
+        {
+          "name": "CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025",
+          "file": "combined/T2tt/impact_recovery_r0_llnorm_part1/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025.MultiDimFit.mH1200.root",
+          "parameter_values": [
+            1,
+            0.9859534502029419,
+            1
+          ],
+          "r_values": [
+            5.841621373292583e-7,
+            0.0013864815700799227,
+            4.5219482558422897e-7
+          ],
+          "strict_two_sided_endpoints": false,
+          "sha256": "cdb7b26ef6d9311ce82d1cdb594aaf5631d6e334e094cfacbd8e86680e778401"
+        },
+        {
+          "name": "CMS_NPS26012_ll_norm_highdm_Nb1_bin2_2025",
+          "file": "combined/T2tt/impact_recovery_r0_llnorm_part1/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_highdm_Nb1_bin2_2025.MultiDimFit.mH1200.root",
+          "parameter_values": [
+            1,
+            0.9740108847618103,
+            1.0266530513763428
+          ],
+          "r_values": [
+            5.841621373292583e-7,
+            0.0014060752000659704,
+            -0.0014101490378379822
+          ],
+          "strict_two_sided_endpoints": true,
+          "sha256": "b67c7d1d33ae3554768957273504b2be3f1f11a028229ed41f85efe29825ed4c"
+        },
+        {
+          "name": "CMS_NPS26012_ll_norm_highdm_Nb1_bin3_2025",
+          "file": "combined/T2tt/impact_recovery_r0_llnorm_part1/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_highdm_Nb1_bin3_2025.MultiDimFit.mH1200.root",
+          "parameter_values": [
+            1,
+            0.9688493609428406,
+            1.0317742824554443
+          ],
+          "r_values": [
+            5.841621373292583e-7,
+            0.0013633049093186855,
+            -0.0013318483252078295
+          ],
+          "strict_two_sided_endpoints": true,
+          "sha256": "3c9ba0e0cf7aca45161ea02426a2a3e38b2a712ce8121680a2c2a4b13dd4c848"
+        }
+      ],
+      "strict_passed": 2,
+      "strict_failed": 1,
+      "log_sha256": "c7f552c7f6d4ca90b1e00943659398aab309586a1b42c94979ebc1855e336b06",
+      "local_EOS_root_hash_match": true
+    },
+    {
+      "cluster": 1112637,
+      "results": [
+        {
+          "name": "CMS_NPS26012_ll_norm_highdm_Nb2plus_bin0_2025",
+          "file": "combined/T2tt/impact_recovery_r0_llnorm_part2/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_highdm_Nb2plus_bin0_2025.MultiDimFit.mH1200.root",
+          "parameter_values": [
+            1,
+            0.9839653968811035,
+            1.0160784721374512
+          ],
+          "r_values": [
+            5.841621373292583e-7,
+            -0.0017667290521785617,
+            0.0016328516649082303
+          ],
+          "strict_two_sided_endpoints": true,
+          "sha256": "efe0d1fe1c9dbff6a465c87b57bedc2113529d2286ae09563d9b204bb41511b3"
+        },
+        {
+          "name": "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2024",
+          "file": "combined/T2tt/impact_recovery_r0_llnorm_part2/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2024.MultiDimFit.mH1200.root",
+          "parameter_values": [
+            1,
+            0.988228976726532,
+            1
+          ],
+          "r_values": [
+            5.841621373292583e-7,
+            0.0007570662419311702,
+            4.5982775986885827e-7
+          ],
+          "strict_two_sided_endpoints": false,
+          "sha256": "c7a07d347adb4dcdcc57c685a4d4a216009b6731737574c973ee97405ce2eebb"
+        },
+        {
+          "name": "CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025",
+          "file": "combined/T2tt/impact_recovery_r0_llnorm_part2/impact_mStop1200_mLSP500_r0/work/higgsCombine_paramFit_Test_CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025.MultiDimFit.mH1200.root",
+          "parameter_values": [
+            0.9999999403953552,
+            0.9876997470855713,
+            0.9999999403953552
+          ],
+          "r_values": [
+            5.841621373292583e-7,
+            0.0015012966468930244,
+            4.1697430219755915e-7
+          ],
+          "strict_two_sided_endpoints": false,
+          "sha256": "a7408e423e7d98050ae576472ce67f56d70e449090d747bb9600d50b5d74e0ae"
+        }
+      ],
+      "strict_passed": 1,
+      "strict_failed": 2,
+      "log_sha256": "c65cadbe6a2452659a9400a609893fb417b00a06e5903cca1e1dcc5f7df145d0",
+      "local_EOS_root_hash_match": true
+    }
+  ],
+  "llnorm_job_histories": [
+    {
+      "ClusterId": 1112634,
+      "CompletionDate": 1788916621,
+      "ExitBySignal": false,
+      "ExitCode": 0,
+      "JobStatus": 4,
+      "ProcId": 0,
+      "RemoteWallClockTime": 1037
+    },
+    {
+      "ClusterId": 1112635,
+      "CompletionDate": 1788916168,
+      "ExitBySignal": false,
+      "ExitCode": 0,
+      "JobStatus": 4,
+      "ProcId": 0,
+      "RemoteWallClockTime": 583
+    },
+    {
+      "ClusterId": 1112636,
+      "CompletionDate": 1788916289,
+      "ExitBySignal": false,
+      "ExitCode": 0,
+      "JobStatus": 4,
+      "ProcId": 0,
+      "RemoteWallClockTime": 705
+    },
+    {
+      "ClusterId": 1112637,
+      "CompletionDate": 1788916229,
+      "ExitBySignal": false,
+      "ExitCode": 0,
+      "JobStatus": 4,
+      "ProcId": 0,
+      "RemoteWallClockTime": 644
+    }
+  ],
+  "effective_endpoint_counts": {
+    "at_utc": "2026-09-09T01:31:35Z",
+    "record": "monitoring/20260909T011149Z.json",
+    "base_record": "monitoring/20260909T004149Z.json",
+    "field": "effective_endpoint_counts",
+    "r1": {
+      "checked": 734,
+      "strict_two_sided": 715,
+      "interior_one_sided": 19,
+      "missing": 1,
+      "llnorm": 5,
+      "sgamma": 14
+    },
+    "r0": {
+      "checked": 733,
+      "strict_two_sided": 718,
+      "interior_one_sided": 15,
+      "missing": 2,
+      "llnorm": 3,
+      "sgamma": 12
+    },
+    "model_changed": false
+  },
+  "endpoint_scope": "finite ROOT triplets and strict ordering only; full convergence and coverage validation pending",
+  "step_source_audit": {
+    "source": "packaged Combine v10.5.1 FitterAlgoBase.cc",
+    "default_step_size": 0.1,
+    "max_failed_steps": 5,
+    "initial_parameter": 1,
+    "upper_bound": 10,
+    "trial_increments": [
+      0.9,
+      0.45,
+      0.225,
+      0.1125,
+      0.05625
+    ],
+    "observed_terminal_parameter": 1.05625,
+    "default_robust_profile_strategy": 0,
+    "global_strategy_is_separate": true,
+    "numerical_cause": "trial PDF evaluations become NaN and max-failed-step limit aborts upper crossing; smaller-step improvement not yet demonstrated",
+    "physics_changed": false
+  },
+  "step_diagnostics": [
+    {
+      "cluster": 1112642,
+      "expect_signal": 0,
+      "named_nuisances": [
+        "CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025"
+      ],
+      "diagnostic_only": true,
+      "status": "running_startup_not_yet_worker_verified",
+      "job_status": 2,
+      "num_job_starts": 0,
+      "output_work": "combined/T2tt/impact_diagnostic_r0_llnorm_step001_strategy0/impact_mStop1200_mLSP500_r0/work",
+      "submission_file": "combined/T2tt/impact_diagnostic_r0_llnorm_step001_strategy0/impact_r0_eossubmit.sub",
+      "submission_sha256": "90ef2bc8ba64851675ae89ebd6271aaece1662181e2ab689247bc32d1d0bc1fb",
+      "runner_snapshot": "impact_code_step/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+      "runner_sha256": "a76dba6fbc0e547fc6f62551ed14781e499060d65668fcaacb59fc2c71891e59",
+      "source_commit": "a8e67856",
+      "submission_helper_sha256": "6978ad0a7708e0f7752f65daa77bba1e30abf3a3d3b6825f3b81a3c5fcd74469",
+      "card_sha256": "e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1",
+      "workspace_sha256": "fec2790a46d714e92d3a09dfa2f768cba48dd0daf4925ea580cc7dc945d4dceb",
+      "initial_fit_sha256": "7b898069a83365946cd1f0850139131ead856a37113ce3c2e6236c8ede554f6e",
+      "resume_source": "combined/T2tt/impact_seed_r0",
+      "step_size": 0.001,
+      "robust_profile_strategy": 0,
+      "minimizer_strategy": 1,
+      "robust_fit": 1,
+      "signal_strength_range": [
+        -20,
+        20
+      ],
+      "fit_parallel": 1,
+      "request_cpus": 6,
+      "request_memory_mb": 18000,
+      "max_runtime_seconds": 43200,
+      "proxy_seconds_before_submission": 582449,
+      "voms_seconds_before_submission": 553649,
+      "submitted_held_then_verified_and_released": true,
+      "server_injected_home_removed_before_release": true,
+      "local_EOS_submission_hash_match": true,
+      "physics_changed": false,
+      "parameter_bounds_changed": false,
+      "tolerance_changed": false,
+      "focused_tests_passed": 88,
+      "last_queue_check_utc": "2026-09-09T01:31:35Z",
+      "acceptance": "diagnostic only; require complete strict two-sided endpoints and convergence validation before recovery expansion"
+    },
+    {
+      "cluster": 1112643,
+      "expect_signal": 0,
+      "named_nuisances": [
+        "CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025"
+      ],
+      "diagnostic_only": true,
+      "status": "running_startup_not_yet_worker_verified",
+      "job_status": 2,
+      "num_job_starts": 0,
+      "output_work": "combined/T2tt/impact_diagnostic_r0_llnorm_step001_strategy1/impact_mStop1200_mLSP500_r0/work",
+      "submission_file": "combined/T2tt/impact_diagnostic_r0_llnorm_step001_strategy1/impact_r0_eossubmit.sub",
+      "submission_sha256": "34bd83ecf9051cbc38069b3da51f6c140b106984e4dbc26c42f48441fc5ced61",
+      "runner_snapshot": "impact_code_step/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+      "runner_sha256": "a76dba6fbc0e547fc6f62551ed14781e499060d65668fcaacb59fc2c71891e59",
+      "source_commit": "a8e67856",
+      "submission_helper_sha256": "6978ad0a7708e0f7752f65daa77bba1e30abf3a3d3b6825f3b81a3c5fcd74469",
+      "card_sha256": "e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1",
+      "workspace_sha256": "fec2790a46d714e92d3a09dfa2f768cba48dd0daf4925ea580cc7dc945d4dceb",
+      "initial_fit_sha256": "7b898069a83365946cd1f0850139131ead856a37113ce3c2e6236c8ede554f6e",
+      "resume_source": "combined/T2tt/impact_seed_r0",
+      "step_size": 0.001,
+      "robust_profile_strategy": 1,
+      "minimizer_strategy": 1,
+      "robust_fit": 1,
+      "signal_strength_range": [
+        -20,
+        20
+      ],
+      "fit_parallel": 1,
+      "request_cpus": 6,
+      "request_memory_mb": 18000,
+      "max_runtime_seconds": 43200,
+      "proxy_seconds_before_submission": 582449,
+      "voms_seconds_before_submission": 553649,
+      "submitted_held_then_verified_and_released": true,
+      "server_injected_home_removed_before_release": true,
+      "local_EOS_submission_hash_match": true,
+      "physics_changed": false,
+      "parameter_bounds_changed": false,
+      "tolerance_changed": false,
+      "focused_tests_passed": 88,
+      "last_queue_check_utc": "2026-09-09T01:31:35Z",
+      "acceptance": "diagnostic only; require complete strict two-sided endpoints and convergence validation before recovery expansion"
+    }
+  ],
+  "submission_preflight": [
+    {
+      "phase": "verified_held",
+      "cluster": 1112642,
+      "ad": {
+        "Args": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/datacards/datacard_mStop1200_mLSP500.txt /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_diagnostic_r0_llnorm_step001_strategy0/impact_mStop1200_mLSP500_r0 1200",
+        "ClusterId": 1112642,
+        "Cmd": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/impact_code_step/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+        "Environment": "COMBINE_RUNTIME_ARCHIVE=combine_cmssw_14_1_0_pre4.tgz COMBINE_RUNTIME_SHA256=2909cf59caf57cfa47e65e6d43a7bcca8c864c72984679127d8eebabb551614a IMPACT_EXPECT_SIGNAL=0 IMPACT_MINIMIZER_STRATEGY=1 IMPACT_PARALLEL=1 IMPACT_PLOT=0 IMPACT_RESUME_CARD_SHA256=e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1 IMPACT_RESUME_DIR=/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_seed_r0 IMPACT_RESUME_INITIAL_SHA256=7b898069a83365946cd1f0850139131ead856a37113ce3c2e6236c8ede554f6e IMPACT_RESUME_NUISANCES=CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025 IMPACT_RESUME_WORKSPACE_SHA256=fec2790a46d714e92d3a09dfa2f768cba48dd0daf4925ea580cc7dc945d4dceb IMPACT_R_MAX=20 IMPACT_R_MIN=-20 IMPACT_STEP_SIZE=0.001 IMPACT_SUBSET_ONLY=1 IMPACT_VERBOSITY=3",
+        "Err": "/Expr(ifThenElse(JobStatus == 4,\"/dev/null\",SubmittedErr))/",
+        "Iwd": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_diagnostic_r0_llnorm_step001_strategy0/impact_mStop1200_mLSP500_r0",
+        "JobBatchName": "NPS26012_LeptonVeto10_r0_LL_step001_strategy0",
+        "JobStatus": 5,
+        "MaxRuntime": 43200,
+        "NumJobStarts": 0,
+        "Out": "/Expr(ifThenElse(JobStatus == 4,\"/dev/null\",SubmittedOut))/",
+        "ProcId": 0,
+        "RequestCpus": 6,
+        "RequestMemory": 18000,
+        "SubmittedErr": "root://eosuser.cern.ch//eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_diagnostic_r0_llnorm_step001_strategy0/impact_mStop1200_mLSP500_r0/condor_logs/impact.err",
+        "SubmittedOut": "root://eosuser.cern.ch//eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_diagnostic_r0_llnorm_step001_strategy0/impact_mStop1200_mLSP500_r0/condor_logs/impact.out",
+        "TransferInput": "/eos/user/t/taiwoo/run3_stop/runtime/combine_cmssw_14_1_0_pre4.tgz",
+        "UserLog": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_diagnostic_r0_llnorm_step001_strategy0/impact_mStop1200_mLSP500_r0/condor_logs/cluster.log",
+        "X509UserProxy": "/eos/user/t/taiwoo/decaf/analysis/proxy/x509up_u147757"
+      }
+    },
+    {
+      "phase": "verified_held",
+      "cluster": 1112643,
+      "ad": {
+        "Args": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/datacards/datacard_mStop1200_mLSP500.txt /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_diagnostic_r0_llnorm_step001_strategy1/impact_mStop1200_mLSP500_r0 1200",
+        "ClusterId": 1112643,
+        "Cmd": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/impact_code_step/autonomous_allhad/workflow/run_asimov_impacts_eos.sh",
+        "Environment": "COMBINE_RUNTIME_ARCHIVE=combine_cmssw_14_1_0_pre4.tgz COMBINE_RUNTIME_SHA256=2909cf59caf57cfa47e65e6d43a7bcca8c864c72984679127d8eebabb551614a IMPACT_EXPECT_SIGNAL=0 IMPACT_MINIMIZER_STRATEGY=1 IMPACT_PARALLEL=1 IMPACT_PLOT=0 IMPACT_RESUME_CARD_SHA256=e84b3c1679391fbd2d97c75038c7f2d8a6dfcdf79d7f3de754ad00a918a2cff1 IMPACT_RESUME_DIR=/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_seed_r0 IMPACT_RESUME_INITIAL_SHA256=7b898069a83365946cd1f0850139131ead856a37113ce3c2e6236c8ede554f6e IMPACT_RESUME_NUISANCES=CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025 IMPACT_RESUME_WORKSPACE_SHA256=fec2790a46d714e92d3a09dfa2f768cba48dd0daf4925ea580cc7dc945d4dceb IMPACT_ROBUST_STRATEGY=1 IMPACT_R_MAX=20 IMPACT_R_MIN=-20 IMPACT_STEP_SIZE=0.001 IMPACT_SUBSET_ONLY=1 IMPACT_VERBOSITY=3",
+        "Err": "/Expr(ifThenElse(JobStatus == 4,\"/dev/null\",SubmittedErr))/",
+        "Iwd": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_diagnostic_r0_llnorm_step001_strategy1/impact_mStop1200_mLSP500_r0",
+        "JobBatchName": "NPS26012_LeptonVeto10_r0_LL_step001_strategy1",
+        "JobStatus": 5,
+        "MaxRuntime": 43200,
+        "NumJobStarts": 0,
+        "Out": "/Expr(ifThenElse(JobStatus == 4,\"/dev/null\",SubmittedOut))/",
+        "ProcId": 0,
+        "RequestCpus": 6,
+        "RequestMemory": 18000,
+        "SubmittedErr": "root://eosuser.cern.ch//eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_diagnostic_r0_llnorm_step001_strategy1/impact_mStop1200_mLSP500_r0/condor_logs/impact.err",
+        "SubmittedOut": "root://eosuser.cern.ch//eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_diagnostic_r0_llnorm_step001_strategy1/impact_mStop1200_mLSP500_r0/condor_logs/impact.out",
+        "TransferInput": "/eos/user/t/taiwoo/run3_stop/runtime/combine_cmssw_14_1_0_pre4.tgz",
+        "UserLog": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined/T2tt/impact_diagnostic_r0_llnorm_step001_strategy1/impact_mStop1200_mLSP500_r0/condor_logs/cluster.log",
+        "X509UserProxy": "/eos/user/t/taiwoo/decaf/analysis/proxy/x509up_u147757"
+      }
+    },
+    {
+      "phase": "released",
+      "cluster": 1112642
+    },
+    {
+      "phase": "released",
+      "cluster": 1112643
+    }
+  ],
+  "validator_source": {
+    "sha256": "a76dba6fbc0e547fc6f62551ed14781e499060d65668fcaacb59fc2c71891e59",
+    "tests_sha256": "3e5e3af2b477f9f559a141fbc161bd7a21de52e17468869352876bc406250408",
+    "source_commit": "a8e67856",
+    "tests_passed": 88,
+    "scope": "also rejects any zero-width nuisance endpoint away from the matching workspace bound; optional stepSize and robust-profile strategy controls, defaults unchanged",
+    "active_frozen_snapshots_changed": false
+  },
+  "sync_review": {
+    "status": "resolved",
+    "initial_hold": "potential divergent EOS source overwrite",
+    "evidence": "EOS runner equals Git parent before intentional canonical patch",
+    "parent_runner_sha256": "221c3c9e81b650e1fd90e603d693588e1183f6ca87faa014f521641701e5a3ea",
+    "new_runner_sha256": "a76dba6fbc0e547fc6f62551ed14781e499060d65668fcaacb59fc2c71891e59"
+  },
+  "sgamma_treatment_approval_status": "awaiting_user_reply",
+  "sgamma_boundary_algorithm_adopted": false,
+  "physics_changed": false,
+  "intermediate_ROOT_accessed": false,
+  "NanoAOD_accessed": false,
+  "healthy_jobs_restarted": false,
+  "unrelated_jobs_touched": false,
+  "original_outputs_preserved": true
+}
