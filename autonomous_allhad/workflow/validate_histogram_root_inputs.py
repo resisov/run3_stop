@@ -12,6 +12,7 @@ from typing import Any
 import uproot
 
 from build_flat_boosted_recoil_hists import READ_BRANCHES
+from autonomous_allhad.analysis_scale_factors import topw_file_input_policy
 
 
 def read_json(path: Path) -> Any:
@@ -53,6 +54,8 @@ def validate_root(path: Path, step_size: int) -> dict[str, Any]:
                 result["status"] = "zero_entries"
                 return result
             present = set(tree.keys())
+            if any(not record.get("is_data") for record in (metadata.get("datasets") or {}).values()):
+                result["topw_correction_inputs"] = topw_file_input_policy(root_file)
             branches = [branch for branch in READ_BRANCHES if branch in present]
             entries_read = 0
             for chunk in tree.iterate(branches, step_size=step_size, library="ak"):
@@ -104,6 +107,11 @@ def main() -> int:
         "valid_entries": sum(int(result.get("entries_read") or 0) for result in valid),
         "bad_tree_entries": sum(int(result.get("tree_entries") or 0) for result in bad),
         "zero_entry_roots": [result["path"] for result in zero],
+        "topw_missing_correction_inputs": {
+            result["path"]: result["topw_correction_inputs"]
+            for result in valid
+            if result.get("topw_correction_inputs", {}).get("mode") == "unity_missing_branches"
+        },
         "bad_files": bad,
     }
     write_json(args.output, payload)

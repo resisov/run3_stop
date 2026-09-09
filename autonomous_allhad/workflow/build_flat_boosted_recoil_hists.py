@@ -22,6 +22,8 @@ from autonomous_allhad.analysis_scale_factors import (
     REQUIRED_ANALYSIS_SF_COMPONENTS,
     REQUIRED_ANALYSIS_SF_VARIATIONS,
     DEFAULT_ANALYSIS_SF_COMPONENTS,
+    topw_file_input_policy,
+    apply_topw_missing_input_fallback,
 )
 
 from autonomous_allhad.real_subset_worker import assign_lowdm_search_bin, compute_weight_bundle
@@ -2552,6 +2554,13 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                 set(effective_read_branches + GCR_PHOTON_POLICY_BRANCHES)
             )
         dataset_records = list((meta.get("datasets") or {}).values())
+        topw_policy = None
+        if any(not record.get("is_data") for record in dataset_records):
+            topw_policy = topw_file_input_policy(root_file)
+            if topw_policy["mode"] == "unity_missing_branches":
+                summary.setdefault("topw_missing_correction_inputs", {})[
+                    str(root_path)
+                ] = dict(topw_policy, events=int(tree.num_entries))
         signal_only_file = bool(dataset_records) and all(
             bool(record.get("is_signal")) for record in dataset_records
         )
@@ -2874,6 +2883,10 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                                 "Required analysis SF weight variations are unavailable "
                                 f"for {dataset}: {missing_variations}"
                             )
+                    if not is_data:
+                        variations = apply_topw_missing_input_fallback(
+                            variations, status, topw_policy, inputs["n"]
+                        )
                     variations = histogram_variations(variations, nominal_only)
                     label = sample_label(process, is_data, is_signal, sub_group, dataset)
                     record_scale_factor_audit(

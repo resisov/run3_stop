@@ -11,6 +11,10 @@ import numpy as np
 
 from autonomous_allhad.analysis_scale_factors import (
     AnalysisScaleFactorUnavailable,
+    TOPW_CORRECTION_BRANCHES,
+    topw_file_input_policy,
+    topw_file_sf_triplet,
+    apply_topw_missing_input_fallback,
     apply_topw_highpt_extrapolation,
     topw_pass_fail_triplet,
     loose_muon_lowpt_triplet,
@@ -19,6 +23,102 @@ from autonomous_allhad.analysis_scale_factors import (
     veto_electron_lowpt_triplet,
 )
 from workflow.sf_payload import correction, correction_set, install_adopted_result, write_json_gz
+
+
+class TopWMissingInputTest(unittest.TestCase):
+    class Tree:
+        num_entries = 3
+
+        def __init__(self, branches=()):
+            self.branches = list(branches)
+
+        def keys(self):
+            return self.branches
+
+    def root(self):
+        return {
+            "Events": self.Tree(),
+            "TopWTruth": self.Tree(TOPW_CORRECTION_BRANCHES),
+            "TopWTruth_metadata": json.dumps({
+                "status": "complete", "schema_version": "topw_truth_v1",
+                "events_entries": 3,
+            }),
+        }
+
+    def test_missing_tree_or_each_correction_branch_is_unity(self):
+        for missing in ("TopWTruth", *TOPW_CORRECTION_BRANCHES):
+            with self.subTest(missing=missing):
+                root = self.root()
+                if missing == "TopWTruth":
+                    del root[missing]
+                else:
+                    root["TopWTruth"].branches.remove(missing)
+                policy = topw_file_input_policy(root)
+                self.assertEqual(policy["sf"], 1.0)
+                self.assertEqual(policy["uncertainty"], 0.0)
+                evaluator = mock.Mock(side_effect=AssertionError("must not evaluate"))
+                for weights in topw_file_sf_triplet(3, policy, evaluator):
+                    np.testing.assert_array_equal(weights, np.ones(3))
+                evaluator.assert_not_called()
+                self.assertEqual(root["Events"].num_entries, 3)
+
+    def test_complete_inputs_keep_measured_triplet(self):
+        policy = topw_file_input_policy(self.root())
+        expected = ([0.9, 1.1, 1], [1, 1.2, 1], [0.8, 1, 1])
+        evaluator = mock.Mock(return_value=expected)
+        actual = topw_file_sf_triplet(3, policy, evaluator)
+        evaluator.assert_called_once_with()
+        for result, reference in zip(actual, expected):
+            np.testing.assert_array_equal(result, reference)
+
+    def test_fallback_keeps_all_events_and_other_weight_variations(self):
+        policy = topw_file_input_policy({"Events": self.Tree()})
+        variations = {"nominal": np.asarray([2., -3., 4.]),
+                      "pileupUp": np.asarray([2.2, -3.3, 4.4])}
+        status = {"components": {"pileup": {"applied": True}}}
+        result = apply_topw_missing_input_fallback(variations, status, policy, 3)
+        self.assertEqual(set(result), set(variations))
+        for key in variations:
+            np.testing.assert_array_equal(result[key], variations[key])
+        self.assertTrue(status["components"]["pileup"]["applied"])
+        self.assertEqual(status["topw_correction"]["uncertainty"], 0.0)
+
+    def test_complete_file_does_not_change_weight_bundle(self):
+        variations = {"nominal": np.asarray([2., 3., 4.])}
+        status = {}
+        self.assertIs(apply_topw_missing_input_fallback(
+            variations, status, topw_file_input_policy(self.root()), 3,
+        ), variations)
+        self.assertEqual(status, {})
+
+    def test_corruption_and_invalid_measurements_are_not_missing_branches(self):
+        root = self.root()
+        root["TopWTruth"].num_entries = 2
+        with self.assertRaisesRegex(RuntimeError, "entry mismatch"):
+            topw_file_input_policy(root)
+        with self.assertRaises(KeyError):
+            topw_file_input_policy({})
+        with self.assertRaisesRegex(RuntimeError, "broken payload"):
+            topw_file_sf_triplet(3, {"mode": "available"},
+                                mock.Mock(side_effect=RuntimeError("broken payload")))
+        with self.assertRaises(AnalysisScaleFactorUnavailable):
+            topw_file_sf_triplet(3, {"mode": "available"},
+                                lambda: ([np.nan] * 3, [1] * 3, [1] * 3))
+
+    def test_histogram_validator_retains_file_without_truth(self):
+        from workflow import validate_histogram_root_inputs as validator
+
+        tree = self.Tree(["dataset_id"])
+        tree.iterate = lambda *args, **kwargs: iter([{"dataset_id": np.zeros(3)}])
+        root = {"Events": tree}
+        metadata = {"events_written": 3, "datasets": {"test": {"is_data": False}}}
+        with mock.patch.object(validator.uproot, "open", return_value=nullcontext(root)), \
+             mock.patch.object(validator, "read_json", return_value=metadata), \
+             mock.patch.object(Path, "exists", return_value=True):
+            result = validator.validate_root(Path("/eos/test.root"), step_size=10)
+        self.assertEqual(result["status"], "valid")
+        self.assertEqual(result["entries_read"], 3)
+        self.assertEqual(result["topw_correction_inputs"]["sf"], 1.0)
 
 
 class TopWExtrapolationTest(unittest.TestCase):

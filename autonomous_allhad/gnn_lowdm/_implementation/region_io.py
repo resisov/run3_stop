@@ -1014,6 +1014,7 @@ def normalized_weight_variations(
     stop_xsec: dict[int, float],
     repo: Path,
     new_region_masks: dict[str, np.ndarray],
+    topw_input_policy: dict[str, Any] | None = None,
 ) -> tuple[dict[str, np.ndarray], dict[str, Any]]:
     n = len(sub_group)
     is_data = bool(sidecar_record.get("is_data"))
@@ -1046,7 +1047,9 @@ def normalized_weight_variations(
                 f"decoded={sorted(str(value) for value in decoded_topologies)}"
             )
 
-    from build_flat_boosted_recoil_hists import flat_arrays_for_weights  # noqa: PLC0415
+    from build_flat_boosted_recoil_hists import (  # noqa: PLC0415
+        flat_arrays_for_weights, apply_topw_missing_input_fallback,
+    )
     try:
         from autonomous_allhad.autonomous_allhad.real_subset_worker import (  # noqa: PLC0415
             compute_weight_bundle,
@@ -1111,6 +1114,9 @@ def normalized_weight_variations(
         met_pt=inputs["met_pt"],
         met_trigger_mask=inputs["met_trigger_mask"],
         analysis_sf_components=("met_trigger", "photon_trigger"),
+    )
+    variations = apply_topw_missing_input_fallback(
+        variations, status, topw_input_policy, n
     )
     required_components = {
         "pileup",
@@ -1223,6 +1229,7 @@ def normalized_weights(
     stop_xsec: dict[int, float],
     repo: Path,
     new_region_masks: dict[str, np.ndarray],
+    topw_input_policy: dict[str, Any] | None = None,
 ) -> tuple[np.ndarray, dict[str, Any]]:
     """Return the nominal member of the audited normalized weight bundle.
 
@@ -1240,6 +1247,7 @@ def normalized_weights(
         stop_xsec,
         repo,
         new_region_masks,
+        topw_input_policy=topw_input_policy,
     )
     return variations["nominal"], status
 
@@ -1323,7 +1331,13 @@ def process_source(
         if "Events" not in root_file or "TROTA" not in root_file:
             raise RuntimeError("required Events/TROTA trees are missing")
         tree = root_file["Events"]
-        from build_flat_boosted_recoil_hists import WEIGHT_BRANCHES  # noqa: PLC0415
+        from build_flat_boosted_recoil_hists import (  # noqa: PLC0415
+            WEIGHT_BRANCHES, topw_file_input_policy,
+        )
+
+        topw_policy = topw_file_input_policy(root_file) if any(
+            not item.get("is_data") for item in (sidecar.get("datasets") or {}).values()
+        ) else None
 
         read_branches = tuple(dict.fromkeys((*SELECTION_BRANCHES, *WEIGHT_BRANCHES)))
         missing = sorted(set(read_branches) - set(tree.keys()))
@@ -1361,6 +1375,7 @@ def process_source(
         "reconstruction": reconstruction_audit,
         "trota": nres_audit,
         "trota_provenance": trota_provenance,
+        "topw_correction_inputs": topw_policy,
         "weight_status": {},
         "data_stream_exclusions": {},
     }
@@ -1392,6 +1407,7 @@ def process_source(
                 stop_xsec,
                 repo,
                 local_region_masks,
+                topw_input_policy=topw_policy,
             )
             sample = sample_name(sub_group, sidecar_dataset, process)
             source_audit["weight_status"].setdefault(sample, status)

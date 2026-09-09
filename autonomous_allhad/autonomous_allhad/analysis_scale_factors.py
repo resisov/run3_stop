@@ -6,6 +6,7 @@ can label the missing correction instead of extrapolating a 10 GeV edge bin.
 """
 from __future__ import annotations
 
+import json
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
@@ -43,6 +44,67 @@ REQUIRED_ANALYSIS_SF_VARIATIONS = tuple(
     for component in REQUIRED_ANALYSIS_SF_COMPONENTS
     for direction in ("Up", "Down")
 )
+
+
+TOPW_CORRECTION_BRANCHES = (
+    "run", "luminosityBlock", "event", "entry", "file_id",
+    "fatjet_source_index_all", "fatjet_decay_flavor_all",
+)
+
+
+def topw_file_input_policy(root_file: Any) -> dict[str, Any]:
+    """Missing correction inputs do not remove an otherwise valid event file."""
+    events = root_file["Events"]
+    if "TopWTruth" not in root_file:
+        missing = ["TopWTruth"]
+    else:
+        truth = root_file["TopWTruth"]
+        missing = [
+            "TopWTruth/" + name for name in TOPW_CORRECTION_BRANCHES
+            if name not in truth.keys()
+        ]
+    if missing:
+        return {
+            "mode": "unity_missing_branches", "missing": missing,
+            "sf": 1.0, "uncertainty": 0.0,
+        }
+    if truth.num_entries != events.num_entries:
+        raise RuntimeError("TopWTruth/Events entry mismatch")
+    marker = json.loads(str(root_file["TopWTruth_metadata"]))
+    if (marker.get("status") != "complete"
+        or marker.get("schema_version") != "topw_truth_v1"
+        or marker.get("events_entries") != events.num_entries):
+        raise RuntimeError("invalid TopWTruth completion metadata")
+    return {"mode": "available"}
+
+
+def topw_file_sf_triplet(
+    n: int, policy: dict[str, Any], evaluate: Any,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    if policy.get("mode") == "unity_missing_branches" and policy.get("missing"):
+        return tuple(np.ones(n, dtype=float) for _ in range(3))
+    if policy.get("mode") != "available":
+        raise ValueError("unknown Top/W correction input policy")
+    values = tuple(np.asarray(value, dtype=float) for value in evaluate())
+    if len(values) != 3 or any(value.shape != (n,) for value in values):
+        raise ValueError("Top/W event SF triplet has an invalid shape")
+    if any(not np.all(np.isfinite(value)) or np.any(value < 0) for value in values):
+        raise AnalysisScaleFactorUnavailable("invalid Top/W event SF")
+    return values
+
+
+def apply_topw_missing_input_fallback(
+    variations: dict[str, Any], status: dict[str, Any],
+    policy: dict[str, Any] | None, n: int,
+) -> dict[str, Any]:
+    if not policy or policy.get("mode") != "unity_missing_branches":
+        return variations
+    nominal, _up, _down = topw_file_sf_triplet(n, policy, None)
+    status["topw_correction"] = dict(policy)
+    return {
+        name: np.asarray(weight, dtype=float) * nominal
+        for name, weight in variations.items()
+    }
 
 
 def apply_topw_highpt_extrapolation(

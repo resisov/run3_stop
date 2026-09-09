@@ -698,6 +698,9 @@ def merge_payloads(
             if src_summary.get(key):
                 summary.setdefault(key, []).extend(src_summary.get(key) or [])
         merge_status(summary["scale_factor_status"], src_summary.get("scale_factor_status") or {})
+        summary.setdefault("topw_missing_correction_inputs", {}).update(
+            src_summary.get("topw_missing_correction_inputs") or {}
+        )
         merge_exclusions(summary.setdefault("data_stream_exclusions", {}), src_summary.get("data_stream_exclusions") or {})
         merge_dy_ptll_exclusions(
             summary.setdefault("dy_ptll_dataset_exclusions", {}),

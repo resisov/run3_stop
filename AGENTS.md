@@ -357,6 +357,14 @@ in the same main batch job before stage-out. Require the TROTA completion
 marker, model/year provenance, and validation before recording success.
 Preserve already-valid integrated ROOT files rather than repeating production.
 
+Histogramming must retain an otherwise valid file when its Top/W correction
+branches are absent. For that file only, use Top/W SF nominal/Up/Down = 1.0
+(uncertainty = 0.0), through the shared `topw_file_sf_triplet` input guard.
+Keep all other corrections and selections unchanged. Record the missing inputs
+in the existing histogram audit, not a new sidecar. Complete correction inputs
+must use the measured SF; corrupt Events/TROTA or invalid normalization are
+not covered by this fallback.
+
 For VOMS proxy creation or renewal, request `--valid 200:00`.
 After issuance, verify the actual proxy and VOMS lifetimes before batch
 submission; the requested duration is not a substitute for that check.

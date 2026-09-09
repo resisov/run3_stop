@@ -255,7 +255,13 @@ def process_source(
     sidecar = json.loads(Path(sidecar_path).read_text())
     trota_provenance = base.validate_trota_provenance(sidecar)
     with uproot.open(root_path) as root_file:
-        from build_flat_boosted_recoil_hists import WEIGHT_BRANCHES, BACKGROUND_ESTIMATION_UT_BINS
+        from build_flat_boosted_recoil_hists import (
+            WEIGHT_BRANCHES, BACKGROUND_ESTIMATION_UT_BINS, topw_file_input_policy,
+        )
+
+        topw_policy = topw_file_input_policy(root_file) if any(
+            not item.get("is_data") for item in (sidecar.get("datasets") or {}).values()
+        ) else None
 
         ut_edges = np.asarray(BACKGROUND_ESTIMATION_UT_BINS, dtype=float)
 
@@ -316,6 +322,7 @@ def process_source(
         },
         "trota": nres_audit,
         "trota_provenance": trota_provenance,
+        "topw_correction_inputs": topw_policy,
         "reconstruction": reconstruction_audit,
         "feature_reconstruction": {},
         "data_stream_exclusions": {},
@@ -367,6 +374,7 @@ def process_source(
                 stop_xsec,
                 repository,
                 local_all_masks,
+                topw_input_policy=topw_policy,
             )
             sample = base.sample_name(sub_group, sidecar_dataset, process)
             audit["weight_status"].setdefault(sample, status)

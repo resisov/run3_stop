@@ -154,6 +154,9 @@ def update_summary(
         summary["scale_factor_status"],
         src_summary.get("scale_factor_status") or {},
     )
+    summary.setdefault("topw_missing_correction_inputs", {}).update(
+        src_summary.get("topw_missing_correction_inputs") or {}
+    )
     merge_exclusions(
         summary.setdefault("data_stream_exclusions", {}),
         src_summary.get("data_stream_exclusions") or {},
