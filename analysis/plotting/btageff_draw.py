@@ -89,14 +89,14 @@ def rebin_pt(values, source_edges, display_edges):
 
 
 def draw_topw(efficiency, pt_edges, eta_edges, output):
-    with plt.rc_context({"axes.labelsize": 32, "xtick.labelsize": 26,
-                         "ytick.labelsize": 26, "savefig.bbox": None}):
+    with plt.rc_context({"axes.labelsize": 39, "xtick.labelsize": 32.5,
+                         "ytick.labelsize": 32.5, "savefig.bbox": None}):
         fig, ax = plt.subplots(figsize=(12, 10))
         fig.subplots_adjust(left=0.15, right=0.88, bottom=0.13, top=0.90)
         mesh = ax.pcolormesh(eta_edges, pt_edges, np.ma.masked_invalid(efficiency),
                              cmap="viridis", shading="flat", vmin=0, vmax=1)
         colorbar = fig.colorbar(mesh, ax=ax, fraction=0.045, pad=0.045)
-        colorbar.set_label("Efficiency", fontsize=32)
+        colorbar.set_label("Efficiency", fontsize=39)
         ax.set_xlim(eta_edges[0], eta_edges[-1])
         ax.set_ylim(pt_edges[0], pt_edges[-1])
         ax.set_yscale("log")
@@ -107,8 +107,8 @@ def draw_topw(efficiency, pt_edges, eta_edges, output):
         ax.set_box_aspect(1)
         ax.set_xlabel(r"Jet $|\eta|$")
         ax.set_ylabel(r"Jet $p_{\mathrm{T}}$ (GeV)")
-        ax.yaxis.set_label_coords(-0.18, 1)
-        hep.cms.label(llabel="Simulation", rlabel="(13.6 TeV)", loc=0, ax=ax, fontsize=28)
+        ax.yaxis.set_label_coords(-0.20, 1)
+        hep.cms.label(llabel="Simulation", rlabel="(13.6 TeV)", loc=0, ax=ax, fontsize=39)
         annotate(ax, mesh, efficiency, pt_edges, eta_edges, fontsize=21)
         for suffix in (".pdf", ".png"):
             fig.savefig(output.with_suffix(suffix), dpi=200)
