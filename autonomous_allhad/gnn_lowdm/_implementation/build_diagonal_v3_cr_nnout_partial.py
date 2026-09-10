@@ -274,9 +274,11 @@ def process_source(
         hard_missing = [name for name in missing if name not in optional]
         if hard_missing:
             raise RuntimeError("missing flat branches: " + ", ".join(hard_missing))
-        arrays = tree.arrays(
-            [name for name in read_branches if name in tree.keys()], library="ak"
-        )
+        branches = [name for name in read_branches if name in tree.keys()]
+        if topw_policy and "topw_tagging" in manifest.get("analysis_sf_components", []):
+            from autonomous_allhad.analysis_scale_factors import TopWEvents
+            tree = TopWEvents(root_file, topw_policy)
+        arrays = tree.arrays(branches, library="ak")
         blocks, reconstruction_audit = base.build_region_blocks(arrays)
         eligible = np.zeros(len(arrays), dtype=bool)
         for region in regions:
@@ -403,12 +405,16 @@ def process_source(
                 if np.any(~np.isfinite(local_score[local_region])):
                     raise RuntimeError(region + ": selected events have no score")
                 physics_values = base.histogram_values(local_block)
+                region_weight_variations = base.topw_region_weight_variations(
+                    weight_variations, status, sub_group, region, sidecar_dataset,
+                    manifest, repository, topw_policy,
+                )
                 for category, category_mask in category_masks(local_block, region).items():
                     selected_category = local_region & category_mask
                     if not np.any(selected_category):
                         continue
                     local_edges = sr_edges[category] if region == "SR" else edges
-                    for variation, weights in weight_variations.items():
+                    for variation, weights in region_weight_variations.items():
                         template_weights = (
                             weights / TEST_FRACTION
                             if region == "SR" and sr_test_only

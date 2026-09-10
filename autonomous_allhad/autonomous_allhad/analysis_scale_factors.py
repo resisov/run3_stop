@@ -25,6 +25,7 @@ PAYLOAD_FILENAMES = {
     "photon_trigger": "photon_trigger_sf.json.gz",
     "veto_electron_5to10": "veto_electron_5to10_sf.json.gz",
     "loose_muon_5to10": "loose_muon_5to10_sf.json.gz",
+    "topw_tagging": "topw_tagging_sf.json.gz",
 }
 
 # Backward-compatible registry for callers that only need the component list.
@@ -37,7 +38,7 @@ PAYLOADS = {
 # Production histogramming must fail closed if any adopted analysis-owned
 # payload is absent.  Keep this contract next to the payload registry so every
 # entry point uses the same list.
-REQUIRED_ANALYSIS_SF_COMPONENTS = tuple(PAYLOADS)
+REQUIRED_ANALYSIS_SF_COMPONENTS = tuple(key for key in PAYLOADS if key != "topw_tagging")
 DEFAULT_ANALYSIS_SF_COMPONENTS = ("met_trigger", "photon_trigger")
 REQUIRED_ANALYSIS_SF_VARIATIONS = tuple(
     f"{component}{direction}"
@@ -50,6 +51,13 @@ TOPW_CORRECTION_BRANCHES = (
     "run", "luminosityBlock", "event", "entry", "file_id",
     "fatjet_source_index_all", "fatjet_decay_flavor_all",
 )
+TOPW_EVENT_BRANCHES = (
+    "run", "luminosityBlock", "event", "entry", "file_id",
+    "fatjet_source_index_all", "fatjet_corrected_pt", "fatjet_eta_all",
+    "fatjet_phi_all", "fatjet_msoftdrop_all", "fatjet_id_all",
+    "fatjet_boosted_top_pass_all", "fatjet_boosted_w_pass_all",
+)
+TOPW_PT_EDGES = {"top": (300, 400, 480, 600, 1200), "w": (200, 300, 400, 800)}
 
 
 def topw_fit_categories(flavor: Any, *, top_like: bool) -> np.ndarray:
@@ -76,6 +84,7 @@ def topw_file_input_policy(root_file: Any) -> dict[str, Any]:
             "TopWTruth/" + name for name in TOPW_CORRECTION_BRANCHES
             if name not in truth.keys()
         ]
+    missing.extend("Events/" + name for name in TOPW_EVENT_BRANCHES if name not in events.keys())
     if missing:
         return {
             "mode": "unity_missing_branches", "missing": missing,
@@ -89,6 +98,178 @@ def topw_file_input_policy(root_file: Any) -> dict[str, Any]:
         or marker.get("events_entries") != events.num_entries):
         raise RuntimeError("invalid TopWTruth completion metadata")
     return {"mode": "available"}
+
+
+class TopWEvents:
+    """Read aligned correction columns from the same integrated ROOT file."""
+
+    def __init__(self, root_file: Any, policy: dict[str, Any]):
+        self.root_file = root_file
+        self.events = root_file["Events"]
+        self.policy = policy
+        self.num_entries = self.events.num_entries
+
+    def arrays(self, branches: Any, *, entry_start: int = 0,
+               entry_stop: int | None = None, library: str = "ak") -> Any:
+        if library != "ak":
+            raise ValueError("Top/W input reader requires awkward arrays")
+        available = self.policy.get("mode") == "available"
+        requested = list(dict.fromkeys([*branches, *(TOPW_EVENT_BRANCHES if available else ())]))
+        result = self.events.arrays(requested, entry_start=entry_start,
+                                    entry_stop=entry_stop, library="ak")
+        if not available:
+            return result
+        truth = self.root_file["TopWTruth"].arrays(
+            TOPW_CORRECTION_BRANCHES, entry_start=entry_start, entry_stop=entry_stop, library="ak",
+        )
+        counts = np.asarray(ak.num(result["fatjet_source_index_all"], axis=1))
+        if (not np.array_equal(counts, np.asarray(ak.num(truth["fatjet_source_index_all"], axis=1)))
+            or not np.array_equal(counts, np.asarray(ak.num(truth["fatjet_decay_flavor_all"], axis=1)))):
+            raise RuntimeError("TopWTruth fatjet count mismatch")
+        for name in TOPW_CORRECTION_BRANCHES[:-1]:
+            if not np.array_equal(np.asarray(ak.flatten(result[name], axis=None)),
+                                  np.asarray(ak.flatten(truth[name], axis=None))):
+                raise RuntimeError("TopWTruth/Events identity mismatch: " + name)
+        return ak.with_field(result, truth["fatjet_decay_flavor_all"], "fatjet_decay_flavor_all")
+
+    def iterate(self, branches: Any, *, step_size: int, library: str = "ak") -> Any:
+        if not isinstance(step_size, int) or step_size <= 0:
+            raise ValueError("Top/W chunk size must be a positive entry count")
+        for start in range(0, self.num_entries, step_size):
+            yield self.arrays(branches, entry_start=start,
+                              entry_stop=min(start + step_size, self.num_entries), library=library)
+
+
+def _topw_dataset_primary(dataset: str) -> str:
+    return dataset.lstrip("/").split("/", 1)[0].split("_Tune", 1)[0]
+
+
+@lru_cache(maxsize=2)
+def _topw_efficiencies(path: str) -> Any:
+    from coffea.util import load
+    return load(path)
+
+
+def topw_fit_variations(payload: Any) -> dict[str, tuple[str, str, int, int, tuple[float, ...]]]:
+    result = {}
+    for tag, edges in TOPW_PT_EDGES.items():
+        for cat in ("tp1", "tp2", "tp3", "other"):
+            for lo, hi in zip(edges[:-1], edges[1:]):
+                if tag == "top" and hi <= 400:
+                    continue
+                scales = tuple(float(payload[f"topw_{tag}_{cat}_sf"].evaluate(v, (lo + hi) / 2.))
+                               for v in ("nominal", "up", "down"))
+                if scales[1] != scales[0] or scales[2] != scales[0]:
+                    result[f"topw_{tag}_{cat}_pt{lo}to{hi}"] = (tag, cat, lo, hi, scales)
+    return result
+
+
+def topw_event_variations(
+    repo: Path, year: str, dataset: str, process: str, arrays: Any,
+    policy: dict[str, Any], *, cleaned: Any = None,
+) -> tuple[dict[str, np.ndarray], dict[str, Any]]:
+    """Evaluate analysis-eligible AK8 jets; keep fit-bin variations separate."""
+    n = len(arrays["gen_weight"])
+    payload = _payload(repo, "topw_tagging", str(year))
+    sources = topw_fit_variations(payload)
+    if policy.get("mode") == "unity_missing_branches":
+        unity = topw_file_sf_triplet(n, policy, None)[0]
+        return {"nominal": unity, **{name + direction: unity for name in sources
+                                     for direction in ("Up", "Down")}}, dict(policy)
+    if policy.get("mode") != "available":
+        raise ValueError("Top/W correction input policy is required")
+    efficiency_path = repo / "analysis/hists" / f"topwtageff{year}.merged"
+    histograms = _topw_efficiencies(str(efficiency_path))
+    primary = _topw_dataset_primary(dataset)
+    keys = list(histograms["GlobalParT3_Top"])
+    matches = [key for key in keys if key == dataset]
+    if not matches:
+        matches = [key for key in keys if _topw_dataset_primary(key) == primary]
+    if len(matches) != 1:
+        raise AnalysisScaleFactorUnavailable(f"Top/W efficiency dataset match is not unique: {dataset} ({len(matches)})")
+    key = matches[0]
+    top_like = process in {"TT", "ST", "TTV", "TTW", "TTZ"} or primary.startswith(("TT", "TW", "Tbar", "TB", "SMS-"))
+    counts = ak.num(arrays["fatjet_corrected_pt"], axis=1)
+    flat = lambda value: np.asarray(ak.to_numpy(ak.flatten(value, axis=1)))
+    pt = flat(arrays["fatjet_corrected_pt"])
+    eta = np.abs(flat(arrays["fatjet_eta_all"]))
+    mass = flat(arrays["fatjet_msoftdrop_all"])
+    category = topw_fit_categories(flat(arrays["fatjet_decay_flavor_all"]), top_like=top_like)
+    base = flat(arrays["fatjet_id_all"]).astype(bool) & (eta < 2.)
+    if cleaned is not None:
+        if not np.array_equal(np.asarray(ak.num(cleaned, axis=1)), np.asarray(counts)):
+            raise ValueError("Top/W cleaned-jet mask is not aligned")
+        base &= flat(cleaned).astype(bool)
+    if not np.all(np.isfinite(pt)) or not np.all(np.isfinite(eta)) or not np.all(np.isfinite(mass)):
+        raise AnalysisScaleFactorUnavailable("non-finite Top/W jet kinematics")
+    nominal = np.ones(len(pt), dtype=float)
+    alternatives: list[tuple[str, np.ndarray, np.ndarray]] = []
+    audit = {"mode": "measured", "efficiency_dataset": key, "eligible_jets": 0,
+             "zero_denominator_jets": 0, "saturated_nominal_jets": 0,
+             "highpt_unity_jets": 0}
+    groups = {"tp1": [0, 1, 2], "tp2": [3], "tp3": [4]} if top_like else {"other": [0, 1, 2, 3, 4]}
+    for tag, variable in (("top", "GlobalParT3_Top"), ("w", "GlobalParT3_W")):
+        eligible = base & ((pt > 400.) & (mass > 105.) if tag == "top" else (pt > 200.) & (mass > 60.) & (mass < 105.))
+        audit["eligible_jets"] += int(eligible.sum())
+        audit["highpt_unity_jets"] += int((eligible & (pt >= TOPW_PT_EDGES[tag][-1])).sum())
+        h = histograms[variable][key]
+        values = h.values()[0]
+        pt_index = np.clip(np.searchsorted(h.axes["pt"].edges, pt, side="right") - 1, 0, h.axes["pt"].size - 1)
+        eta_index = np.clip(np.searchsorted(h.axes["abseta"].edges, eta, side="right") - 1, 0, h.axes["abseta"].size - 1)
+        for cat, flavors in groups.items():
+            selected = eligible & (category == cat)
+            correction = payload[f"topw_{tag}_{cat}_sf"]
+            for lo, hi in zip(TOPW_PT_EDGES[tag][:-1], TOPW_PT_EDGES[tag][1:]):
+                if tag == "top" and hi <= 400:
+                    continue
+                active = selected & (pt >= lo) & (pt < hi)
+                scales = tuple(float(correction.evaluate(v, (lo + hi) / 2.)) for v in ("nominal", "up", "down"))
+                if not np.any(active):
+                    continue
+                passed = values[0, flavors, :, :].sum(axis=0)[pt_index[active], eta_index[active]]
+                failed = values[1, flavors, :, :].sum(axis=0)[pt_index[active], eta_index[active]]
+                denominator = passed + failed
+                efficiency = np.divide(passed, denominator, out=np.full_like(denominator, np.nan), where=denominator > 0)
+                zero = (denominator == 0) | (passed == 0) | (failed == 0)
+                audit["zero_denominator_jets"] += int(zero.sum())
+                audit["saturated_nominal_jets"] += int(((efficiency * scales[0] > 1) & ~zero).sum())
+                weights = topw_pass_fail_triplet(
+                    flat(arrays[f"fatjet_boosted_{tag}_pass_all"])[active].astype(bool), efficiency,
+                    *(np.full(efficiency.shape, value) for value in scales), denominator=denominator,
+                )
+                nominal[active] = weights[0]
+                if scales[1] != scales[0] or scales[2] != scales[0]:
+                    name = f"topw_{tag}_{cat}_pt{lo}to{hi}"
+                    for direction, varied in zip(("Up", "Down"), weights[1:]):
+                        alternatives.append((name + direction, active, varied))
+    product = lambda values: np.asarray(ak.prod(ak.unflatten(values, counts), axis=1), dtype=float)
+    event_nominal = product(nominal)
+    result = {"nominal": event_nominal, **{name + direction: event_nominal for name in sources
+                                          for direction in ("Up", "Down")}}
+    for name, active, changed in alternatives:
+        varied = nominal.copy()
+        varied[active] = changed
+        result[name] = product(varied)
+    return result, audit
+
+
+def apply_topw_event_weights(
+    variations: dict[str, Any], status: dict[str, Any], repo: Path, year: str,
+    dataset: str, process: str, arrays: Any, policy: dict[str, Any], *, cleaned: Any = None,
+) -> dict[str, np.ndarray]:
+    topw, audit = topw_event_variations(repo, year, dataset, process, arrays, policy, cleaned=cleaned)
+    output = {name: np.asarray(value) * topw["nominal"] for name, value in variations.items()}
+    for name, weight in topw.items():
+        if name != "nominal":
+            if name in output:
+                raise ValueError("duplicate Top/W variation: " + name)
+            output[name] = np.asarray(variations["nominal"]) * weight
+    status["topw_correction"] = audit
+    status.setdefault("components", {})["topw_tagging"] = {
+        "applied": True, "source": "integrated_TopWTruth", "reason": audit["mode"],
+    }
+    status["available_variations"] = sorted(output)
+    return output
 
 
 def topw_file_sf_triplet(

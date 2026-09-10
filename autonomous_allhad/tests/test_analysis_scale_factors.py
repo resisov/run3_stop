@@ -12,6 +12,11 @@ import numpy as np
 from autonomous_allhad.analysis_scale_factors import (
     AnalysisScaleFactorUnavailable,
     TOPW_CORRECTION_BRANCHES,
+    TOPW_EVENT_BRANCHES,
+    TOPW_PT_EDGES,
+    TopWEvents,
+    topw_event_variations,
+    apply_topw_event_weights,
     topw_fit_categories,
     topw_file_input_policy,
     topw_file_sf_triplet,
@@ -23,7 +28,114 @@ from autonomous_allhad.analysis_scale_factors import (
     photon_trigger_triplet,
     veto_electron_lowpt_triplet,
 )
-from workflow.sf_payload import correction, correction_set, install_adopted_result, write_json_gz
+from workflow.sf_payload import correction, correction_set, install_adopted_result, write_json_gz, topw_measurement_payload
+
+
+class TopWIntegrationTest(unittest.TestCase):
+    def payload(self):
+        records = []
+        for tag, edges in TOPW_PT_EDGES.items():
+            for cat in ("tp1", "tp2", "tp3", "other"):
+                values = (1.25, 1.5, 1.) if (tag, cat) == ("top", "tp3") else (1., 1., 1.)
+                records.append(correction(
+                    name=f"topw_{tag}_{cat}_sf", description="test", axes=[("pt", edges)],
+                    **{key: [value] * (len(edges) - 1)
+                       for key, value in zip(("nominal", "up", "down"), values)},
+                ))
+        return correctionlib.CorrectionSet.from_string(json.dumps(correction_set("test", records)))
+
+    def arrays(self):
+        return ak.Array({
+            "gen_weight": [2., 3., 4.], "year": [2024] * 3,
+            "fatjet_corrected_pt": [[450., 450.], [450.], []],
+            "fatjet_eta_all": [[0., 0.], [0.], []],
+            "fatjet_phi_all": [[0., 1.], [0.], []],
+            "fatjet_msoftdrop_all": [[150., 150.], [150.], []],
+            "fatjet_id_all": [[True, True], [True], []],
+            "fatjet_decay_flavor_all": [[4, 4], [4], []],
+            "fatjet_boosted_top_pass_all": [[True, False], [True], []],
+            "fatjet_boosted_w_pass_all": [[False, False], [False], []],
+        })
+
+    def histograms(self, empty=False):
+        import hist
+        h = hist.Hist(hist.axis.StrCategory(["analysis", "score_only"]),
+                      hist.axis.StrCategory(["pass", "fail"]),
+                      hist.axis.IntCategory([0, 1, 2, 3, 4]),
+                      hist.axis.Variable([200, 3000], name="pt"),
+                      hist.axis.Variable([0, 2], name="abseta"))
+        h.view()[0, 0] = 0 if empty else 80
+        h.view()[0, 1] = 0 if empty else 20
+        return {key: {"TT_Tune_test": h} for key in ("GlobalParT3_Top", "GlobalParT3_W")}
+
+    def evaluate(self, *, empty=False, policy=None, cleaned=None):
+        with mock.patch("autonomous_allhad.analysis_scale_factors._payload", return_value=self.payload()), \
+             mock.patch("autonomous_allhad.analysis_scale_factors._topw_efficiencies", return_value=self.histograms(empty)):
+            return topw_event_variations(Path("/eos/test"), "2024", "TT_Tune_test", "TT",
+                                         self.arrays(), policy or {"mode": "available"}, cleaned=cleaned)
+
+    def test_product_preserves_nonzero_variation_at_zero_nominal(self):
+        values, audit = self.evaluate()
+        np.testing.assert_array_equal(values["nominal"], [0, 1.25, 1])
+        np.testing.assert_array_equal(values["topw_top_tp3_pt400to480Down"], [1, 1, 1])
+        np.testing.assert_array_equal(values["topw_top_tp3_pt480to600Down"], values["nominal"])
+        self.assertEqual(audit["eligible_jets"], 3)
+        self.assertTrue(all(np.all(np.isfinite(v) & (v >= 0)) for v in values.values()))
+
+    def test_empty_efficiency_and_missing_truth_keep_all_variations_at_unity(self):
+        for kwargs in ({"empty": True}, {"policy": {"mode": "unity_missing_branches", "missing": ["TopWTruth"]}}):
+            values, _ = self.evaluate(**kwargs)
+            self.assertGreater(len(values), 1)
+            for value in values.values():
+                np.testing.assert_array_equal(value, np.ones(3))
+
+    def test_region_cleaning_removes_only_overlapping_jets(self):
+        values, audit = self.evaluate(cleaned=ak.Array([[True, False], [True], []]))
+        np.testing.assert_array_equal(values["nominal"], [1.25, 1.25, 1])
+        self.assertEqual(audit["eligible_jets"], 2)
+
+    def test_all_existing_variations_receive_nominal_topw(self):
+        with mock.patch("autonomous_allhad.analysis_scale_factors.topw_event_variations", return_value=self.evaluate()):
+            result = apply_topw_event_weights(
+                {"nominal": [2, 3, 4], "pileupUp": [4, 6, 8]}, {}, Path("/eos/test"),
+                "2024", "TT", "TT", self.arrays(), {"mode": "available"},
+            )
+        np.testing.assert_array_equal(result["pileupUp"], [0, 7.5, 8])
+        np.testing.assert_array_equal(result["topw_top_tp3_pt400to480Down"], [2, 3, 4])
+
+    def test_measurement_parser_requires_explicit_failure(self):
+        pages = {}
+        for tag, edges in TOPW_PT_EDGES.items():
+            pages[tag] = "".join(
+                f'<h2 id="fit-mistag1pct-pt{lo}to{hi}">bin</h2>\n'
+                + "Warning - No valid low-error found for : SF_other\n"
+                + "\n".join(f"SF_{cat} : +1.1 -0.1/+0.2 (68%)" for cat in ("tp1", "tp2", "tp3", "other"))
+                for lo, hi in zip(edges[:-1], edges[1:])
+            )
+        payload, audit = topw_measurement_payload("2024", pages)
+        evaluator = correctionlib.CorrectionSet.from_string(json.dumps(payload))
+        self.assertEqual(evaluator["topw_top_other_sf"].evaluate("nominal", 450.), 1.)
+        self.assertEqual(evaluator["topw_top_tp3_sf"].evaluate("nominal", 450.), 1.1)
+        self.assertEqual(len(audit["top"]["failed_fit_unity_bins"]), 4)
+        with self.assertRaises(ValueError):
+            topw_measurement_payload("2024", {**pages, "w": pages["w"].replace("SF_tp3 :", "lost :")})
+
+    def test_reader_checks_every_event_and_jet_identity(self):
+        class Tree:
+            def __init__(self, array):
+                self.array, self.num_entries = array, len(array)
+            def arrays(self, branches, *, entry_start=0, entry_stop=None, library="ak"):
+                return self.array[list(branches)][entry_start:entry_stop]
+        events = self.arrays()
+        for name in TOPW_CORRECTION_BRANCHES[:-2]:
+            events = ak.with_field(events, [1, 2, 3], name)
+        events = ak.with_field(events, [[0, 1], [0], []], "fatjet_source_index_all")
+        root = {"Events": Tree(events), "TopWTruth": Tree(events[list(TOPW_CORRECTION_BRANCHES)])}
+        reader = TopWEvents(root, {"mode": "available"})
+        self.assertEqual(sum(len(c) for c in reader.iterate(["gen_weight"], step_size=2)), 3)
+        root["TopWTruth"] = Tree(ak.with_field(root["TopWTruth"].array, [1, 9, 3], "event"))
+        with self.assertRaisesRegex(RuntimeError, "identity mismatch"):
+            reader.arrays(["gen_weight"])
 
 
 class TopWFitCategoryTest(unittest.TestCase):
@@ -86,7 +198,7 @@ class TopWMissingInputTest(unittest.TestCase):
 
     def root(self):
         return {
-            "Events": self.Tree(),
+            "Events": self.Tree(TOPW_EVENT_BRANCHES),
             "TopWTruth": self.Tree(TOPW_CORRECTION_BRANCHES),
             "TopWTruth_metadata": json.dumps({
                 "status": "complete", "schema_version": "topw_truth_v1",

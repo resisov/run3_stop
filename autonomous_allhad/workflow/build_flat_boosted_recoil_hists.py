@@ -24,6 +24,8 @@ from autonomous_allhad.analysis_scale_factors import (
     DEFAULT_ANALYSIS_SF_COMPONENTS,
     topw_file_input_policy,
     apply_topw_missing_input_fallback,
+    TopWEvents,
+    apply_topw_event_weights,
 )
 
 from autonomous_allhad.real_subset_worker import assign_lowdm_search_bin, compute_weight_bundle
@@ -1145,6 +1147,13 @@ def record_scale_factor_audit(
     )
     dataset_record["events"] = int(dataset_record.get("events", 0)) + int(events)
     dataset_record["groups"] = int(dataset_record.get("groups", 0)) + 1
+    topw = status.get("topw_correction") or {}
+    if topw:
+        recorded_topw = dataset_record.setdefault("topw_correction", {})
+        modes = recorded_topw.setdefault("events_by_mode", {})
+        modes[topw["mode"]] = int(modes.get(topw["mode"], 0)) + int(events)
+        for key in ("eligible_jets", "zero_denominator_jets", "saturated_nominal_jets", "highpt_unity_jets"):
+            recorded_topw[key] = int(recorded_topw.get(key, 0)) + int(topw.get(key, 0))
     for component, component_status in sorted(
         (status.get("components") or {}).items()
     ):
@@ -2607,6 +2616,8 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
             audit = summary.setdefault("trota_resolved_top_audit", {})
             for key, value in trota_stats.items():
                 audit[key] = int(audit.get(key, 0)) + int(value)
+        if topw_policy and "topw_tagging" in (analysis_sf_components or []):
+            tree = TopWEvents(root_file, topw_policy)
         if gcr_only:
             chunk_iterator = iterate_tree_for_gcr_study(
                 tree,
@@ -2825,7 +2836,8 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                             ),
                             met_pt=inputs["met_pt"],
                             met_trigger_mask=inputs["met_trigger_mask"],
-                            analysis_sf_components=analysis_sf_components,
+                            analysis_sf_components=(None if analysis_sf_components is None else
+                                                    [key for key in analysis_sf_components if key != "topw_tagging"]),
                         )
                         if is_signal:
                             btag_status = (status.get("components") or {}).get("btagSF") or {}
@@ -2884,9 +2896,15 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                                 f"for {dataset}: {missing_variations}"
                             )
                     if not is_data:
-                        variations = apply_topw_missing_input_fallback(
-                            variations, status, topw_policy, inputs["n"]
-                        )
+                        if "topw_tagging" in (analysis_sf_components or []):
+                            variations = apply_topw_event_weights(
+                                variations, status, repo, year, dataset, process,
+                                sub_group, topw_policy,
+                            )
+                        else:
+                            variations = apply_topw_missing_input_fallback(
+                                variations, status, topw_policy, inputs["n"]
+                            )
                     variations = histogram_variations(variations, nominal_only)
                     label = sample_label(process, is_data, is_signal, sub_group, dataset)
                     record_scale_factor_audit(
@@ -3253,7 +3271,7 @@ def main() -> int:
     parser.add_argument(
         "--analysis-sf-components",
         nargs="*",
-        choices=list(REQUIRED_ANALYSIS_SF_COMPONENTS),
+        choices=[*REQUIRED_ANALYSIS_SF_COMPONENTS, "topw_tagging"],
         default=None,
         help=(
             "Analysis-owned SF components included in nominal and Up/Down weights. "

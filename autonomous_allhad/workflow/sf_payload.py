@@ -11,6 +11,8 @@ import gzip
 import hashlib
 import json
 import math
+import html
+import re
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -166,3 +168,48 @@ def install_adopted_result(
         "sha256": digest,
         "corrections": [item["name"] for item in payload["corrections"]],
     }
+
+
+def topw_measurement_payload(year: str, pages: dict[str, str]) -> tuple[dict[str, Any], dict[str, Any]]:
+    from autonomous_allhad.analysis_scale_factors import TOPW_PT_EDGES
+
+    if year not in {"2024", "2025"} or set(pages) != {"top", "w"}:
+        raise ValueError("Top/W measurement requires both taggers and an explicit year")
+    corrections = []
+    audit = {}
+    categories = ("tp1", "tp2", "tp3", "other")
+    number = r"[+-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?"
+    for tag, page in pages.items():
+        sections = list(re.finditer(r'<h2 id="fit-mistag1pct-pt(\d+)to(\d+)">', page))
+        expected = list(zip(TOPW_PT_EDGES[tag][:-1], TOPW_PT_EDGES[tag][1:]))
+        if [(int(m[1]), int(m[2])) for m in sections] != expected:
+            raise ValueError(f"unexpected {tag} measurement bins")
+        values = {cat: {v: [] for v in VARIATIONS} for cat in categories}
+        failed = []
+        for match, (lo, hi) in zip(sections, expected):
+            section = page[match.end():].split('<h2 ', 1)[0]
+            section = html.unescape(re.sub(r"<[^>]*>", "", section))
+            failures = set(re.findall(r"No valid (?:high|low)-error[^\n]*for\s*:\s*SF_(tp[123]|other)", section))
+            failures.update(re.findall(r"minimization failed at SF_(tp[123]|other)\b", section))
+            for cat in categories:
+                rows = re.findall(rf"SF_{cat}\s*:\s*({number})\s+({number})/({number})\s*\(68%\)", section)
+                if len(rows) != 1:
+                    raise ValueError(f"missing or ambiguous {tag}/{cat}/{lo}-{hi} fit result")
+                central, low_error, high_error = map(float, rows[0])
+                if cat in failures:
+                    nominal = up = down = 1.
+                    failed.append({"category": cat, "pt": [lo, hi]})
+                else:
+                    if low_error > 0 or high_error < 0:
+                        raise ValueError("invalid signed Top/W uncertainty endpoints")
+                    nominal, up, down = central, central + high_error, central + low_error
+                for variation, value in zip(VARIATIONS, (nominal, up, down)):
+                    values[cat][variation].append(value)
+        for cat in categories:
+            corrections.append(correction(
+                name=f"topw_{tag}_{cat}_sf", description=f"GlobalParT3 1% WP, {year}, {tag}, {cat}",
+                axes=[("pt", TOPW_PT_EDGES[tag])], **values[cat],
+            ))
+        audit[tag] = {"source_sha256": hashlib.sha256(page.encode()).hexdigest(),
+                      "failed_fit_unity_bins": failed, "pt_edges": list(TOPW_PT_EDGES[tag])}
+    return correction_set(f"GlobalParT3 Top/W SF {year}", corrections), audit

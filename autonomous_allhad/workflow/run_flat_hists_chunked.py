@@ -84,14 +84,21 @@ BTAG_EFFICIENCY_RELATIVE_PATHS = {
 BTAG_EFFICIENCY_RELATIVE_PATH = BTAG_EFFICIENCY_RELATIVE_PATHS["2024"]
 
 
-def execution_code_sha256(repo: Path, campaign_year: str) -> dict[str, str]:
-    return {
+def execution_code_sha256(repo: Path, campaign_year: str, analysis_sf_components: list[str] | None = None) -> dict[str, str]:
+    result = {
         relative_path: file_sha256(repo / relative_path)
         for relative_path in (
             EXECUTION_CONTRACT_COMMON_PATHS
             + EXECUTION_CONTRACT_YEAR_PATHS[campaign_year]
         )
     }
+    if "topw_tagging" in (analysis_sf_components or []):
+        for relative_path in (
+            f"analysis/data/AnalysisSF/{campaign_year}/topw_tagging_sf.json.gz",
+            f"analysis/hists/topwtageff{campaign_year}.merged",
+        ):
+            result[relative_path] = file_sha256(repo / relative_path)
+    return result
 
 
 def btag_efficiency_contract(
@@ -891,7 +898,7 @@ def main() -> int:
     parser.add_argument(
         "--analysis-sf-components",
         nargs="*",
-        choices=REQUIRED_ANALYSIS_SF_COMPONENTS,
+        choices=[*REQUIRED_ANALYSIS_SF_COMPONENTS, "topw_tagging"],
         default=None,
         help=(
             "Analysis-owned SF components included in nominal and Up/Down weights. "
@@ -1098,7 +1105,7 @@ def main() -> int:
         "gcr_photon_policy": str(args.gcr_photon_policy),
         "local_analysis_data": str(args.local_analysis_data),
         "normalization_sha256": file_sha256(normalization),
-        "code_sha256": execution_code_sha256(repo, args.campaign_year),
+        "code_sha256": execution_code_sha256(repo, args.campaign_year, analysis_sf_components),
         "btag_efficiency": btag_efficiency_contract(
             repo,
             str(args.expected_btag_efficiency_sha256),

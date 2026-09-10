@@ -487,6 +487,37 @@ def fatjet_kinematics(
     return nisr, nt, nw
 
 
+def topw_region_weight_variations(
+    variations: dict[str, np.ndarray], status: dict[str, Any], arrays: ak.Array,
+    region: str, dataset_record: dict[str, Any], manifest: dict[str, Any],
+    repo: Path, policy: dict[str, Any] | None,
+) -> dict[str, np.ndarray]:
+    if dataset_record.get("is_data") or "topw_tagging" not in manifest.get("analysis_sf_components", []):
+        return variations
+    from autonomous_allhad.analysis_scale_factors import apply_topw_event_weights
+
+    cleaned = None
+    if policy.get("mode") == "available" and region in {"GCR", "DY2E", "DY2M"}:
+        obj = {"GCR": "photon", "DY2E": "electron", "DY2M": "muon"}[region]
+        selected = object_masks(arrays)[obj + "_medium"]
+        cleaned = clean_by_delta_r(
+            arrays["fatjet_eta_all"], arrays["fatjet_phi_all"],
+            arrays[obj + "_eta_all"][selected], arrays[obj + "_phi_all"][selected], .4,
+        )
+    years = np.unique(np.asarray(arrays["year"], dtype=int))
+    if len(years) != 1:
+        raise RuntimeError("Top/W correction requires one year per event group")
+    dataset = str(dataset_record["dataset"])
+    process = canonical_process(str(dataset_record["process"]), dataset)
+    region_status: dict[str, Any] = {}
+    result = apply_topw_event_weights(
+        variations, region_status, repo, str(years[0]), dataset, process,
+        arrays, policy, cleaned=cleaned,
+    )
+    status.setdefault("topw_by_region", {})[region] = region_status["topw_correction"]
+    return result
+
+
 def dycr_lepton_mask(
     arrays: Any,
     channel: str,
@@ -1345,7 +1376,11 @@ def process_source(
         hard_missing = [name for name in missing if name not in optional]
         if hard_missing:
             raise RuntimeError("missing flat branches: " + ", ".join(hard_missing))
-        arrays = tree.arrays([name for name in read_branches if name in tree.keys()], library="ak")
+        branches = [name for name in read_branches if name in tree.keys()]
+        if topw_policy and "topw_tagging" in manifest.get("analysis_sf_components", []):
+            from autonomous_allhad.analysis_scale_factors import TopWEvents
+            tree = TopWEvents(root_file, topw_policy)
+        arrays = tree.arrays(branches, library="ak")
         blocks, reconstruction_audit = build_region_blocks(arrays)
         eligible = np.zeros(len(arrays), dtype=bool)
         for block in blocks.values():
@@ -1430,6 +1465,10 @@ def process_source(
                 )
                 categories = category_masks(local_block)
                 values = histogram_values(local_block)
+                region_weights = topw_region_weight_variations(
+                    {"nominal": weights}, status, sub_group, region, sidecar_dataset,
+                    manifest, repo, topw_policy,
+                )["nominal"]
                 for category, category_mask in categories.items():
                     selected = local_region & category_mask
                     if not np.any(selected):
@@ -1445,7 +1484,7 @@ def process_source(
                                 variable,
                             ),
                             variable_values,
-                            weights,
+                            region_weights,
                             selected,
                             HISTOGRAMS[variable],
                         )
@@ -1461,7 +1500,7 @@ def process_source(
                                     variable,
                                 ),
                                 variable_values,
-                                weights * RZ_FACTORS[region][nb_key],
+                                region_weights * RZ_FACTORS[region][nb_key],
                                 selected,
                                 HISTOGRAMS[variable],
                             )
