@@ -8,6 +8,8 @@ from typing import Any, Mapping
 
 import numpy as np
 
+from .config import histogram_eta_axis
+
 SQUARE = (8, 8)
 COLORBAR = (12, 10)
 
@@ -43,7 +45,9 @@ def plot_result(result: Mapping[str, Any], output_dir: Path | str) -> dict[str, 
     hep.style.use("CMS")
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
-    eta_edges = np.asarray(result["probe_abseta_edges"], dtype=float)
+    eta_name, eta_values = histogram_eta_axis(result)
+    eta_edges = np.asarray(eta_values, dtype=float)
+    eta_label = r"\eta" if eta_name == "eta" else r"|\eta|"
     pt_edges = np.asarray(result["probe_pt_edges_gev"], dtype=float)
     n_eta = len(eta_edges) - 1
     n_pt = len(pt_edges) - 1
@@ -68,7 +72,7 @@ def plot_result(result: Mapping[str, Any], output_dir: Path | str) -> dict[str, 
             marker="o",
             linestyle="none",
             capsize=2,
-            label=rf"${eta_edges[index]:g}<|\eta|<{eta_edges[index + 1]:g}$",
+            label=rf"${eta_edges[index]:g}<{eta_label}<{eta_edges[index + 1]:g}$",
         )
     ax.axhline(1.0, color="red", linestyle="--", linewidth=1.2)
     ax.set_xlabel(rf"{collection} $p_{{\mathrm{{T}}}}$ (GeV)")
@@ -93,7 +97,7 @@ def plot_result(result: Mapping[str, Any], output_dir: Path | str) -> dict[str, 
             )
     fig.colorbar(image, ax=ax, label="Data/MC scale factor")
     ax.set_xlabel(rf"{collection} $p_{{\mathrm{{T}}}}$ (GeV)")
-    ax.set_ylabel(rf"{collection} $|\eta|$")
+    ax.set_ylabel(rf"{collection} ${eta_label}$")
     _label(ax, str(result["year"]))
     outputs += _save(fig, output_dir / "scale_factor_heatmap")
     plt.close(fig)

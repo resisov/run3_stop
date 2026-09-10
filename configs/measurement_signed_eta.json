@@ -1,0 +1,35 @@
+{
+  "correction": {
+    "description": "Data/MC scale factor for private_electron_jpsi_lowpt",
+    "flow": "clamp",
+    "name": "private_electron_jpsi_lowpt_signed_eta_sf"
+  },
+  "eta_edges": [
+    -2.5,
+    -1.4442,
+    -0.8,
+    0.0,
+    0.8,
+    1.4442,
+    2.5
+  ],
+  "id": {
+    "denominator": "(pt > 5) & (pt < 10) & ((abs(eta + deltaEtaSC) < 1.4442) | ((abs(eta + deltaEtaSC) > 1.566) & (abs(eta + deltaEtaSC) < 2.5))) & convVeto & (lostHits <= 1)",
+    "fields": [],
+    "pass": "cutBased >= 1"
+  },
+  "lumimask": "golden.json",
+  "measurement": "private_electron_jpsi_lowpt_signed_eta_sf",
+  "profile": "electron_jpsi_lowpt",
+  "pt_edges_gev": [
+    5,
+    7,
+    10
+  ],
+  "samples": {
+    "data": [],
+    "mc": []
+  },
+  "schema_version": 1,
+  "year": "2025"
+}

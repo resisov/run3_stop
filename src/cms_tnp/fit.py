@@ -8,6 +8,8 @@ from typing import Any, Mapping
 
 import numpy as np
 
+from .config import eta_axis, eta_metadata, histogram_eta_axis
+
 
 def apply_fit_config(
     payload: Mapping[str, Any], config: Mapping[str, Any]
@@ -23,8 +25,14 @@ def apply_fit_config(
         "probe selection": (payload["probe_selection"], config["probe"]["selection"]),
         "pass selection": (payload["pass_selection"], config["probe"]["pass"]),
         "pT edges": (payload["probe_pt_edges_gev"], config["axes"]["pt_edges_gev"]),
-        "eta edges": (payload["probe_abseta_edges"], config["axes"]["abseta_edges"]),
+        "eta axis (signed/absolute and edges)": (
+            histogram_eta_axis(payload), eta_axis(config)
+        ),
     }
+    if "probe_eta_expression" in payload:
+        checks["eta expression"] = (
+            payload["probe_eta_expression"], config["probe"].get("eta")
+        )
     mismatches = [name for name, values in checks.items() if values[0] != values[1]]
     if mismatches:
         raise ValueError(
@@ -424,7 +432,7 @@ def fit_payload(payload: Mapping[str, Any]) -> dict[str, Any]:
         "probe_collection": payload["probe_collection"],
         "probe_selection": payload["probe_selection"],
         "pass_selection": payload["pass_selection"],
-        "probe_abseta_edges": payload["probe_abseta_edges"],
+        **eta_metadata(payload),
         "probe_pt_edges_gev": payload["probe_pt_edges_gev"],
         "mass_edges_gev": payload["mass_edges_gev"],
         "fit": fit,

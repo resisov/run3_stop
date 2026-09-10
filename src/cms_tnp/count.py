@@ -8,7 +8,7 @@ from typing import Any, Iterable, Mapping
 
 import numpy as np
 
-from .config import Expression
+from .config import Expression, eta_axis
 from .weights import WeightSet, required_fields
 
 
@@ -201,13 +201,16 @@ def _fill(
     masses: Any,
     weights: Any,
     edges: list[np.ndarray],
+    *,
+    absolute_eta: bool = True,
 ) -> int:
     import awkward as ak
 
     _, broadcast = ak.broadcast_arrays(masses, weights)
+    eta = ak.to_numpy(ak.flatten(pairs.probe.bin_eta, axis=1))
     values = np.column_stack(
         [
-            np.abs(ak.to_numpy(ak.flatten(pairs.probe.bin_eta, axis=1))),
+            np.abs(eta) if absolute_eta else eta,
             ak.to_numpy(ak.flatten(pairs.probe.bin_pt, axis=1)),
             ak.to_numpy(ak.flatten(masses, axis=1)),
         ]
@@ -251,7 +254,8 @@ def count_files(
 
     if sample not in {"data", "mc"}:
         raise ValueError("sample must be data or mc")
-    eta_edges = np.asarray(config["axes"]["abseta_edges"], dtype=float)
+    eta_name, eta_values = eta_axis(config)
+    eta_edges = np.asarray(eta_values, dtype=float)
     pt_edges = np.asarray(config["axes"]["pt_edges_gev"], dtype=float)
     low, high = map(float, config["pair"]["mass_window_gev"])
     mass_edges = np.linspace(low, high, int(config["fit"]["mass_bins"]) + 1)
@@ -349,7 +353,8 @@ def count_files(
                             len(selected["event"]), float(weight), dtype=float
                         )
                     selected_pairs = _fill(
-                        file_variations[name], pairs, masses, ak.Array(weight), edges
+                        file_variations[name], pairs, masses, ak.Array(weight), edges,
+                        absolute_eta=eta_name == "abseta",
                     )
                     if name == "nominal":
                         file_pairs += selected_pairs
@@ -383,7 +388,8 @@ def count_files(
         "probe_collection": config["probe"]["collection"],
         "probe_selection": config["probe"]["selection"],
         "pass_selection": config["probe"]["pass"],
-        "probe_abseta_edges": eta_edges.tolist(),
+        f"probe_{eta_name}_edges": eta_edges.tolist(),
+        "probe_eta_expression": str(config["probe"]["eta"]),
         "probe_pt_edges_gev": pt_edges.tolist(),
         "mass_edges_gev": mass_edges.tolist(),
         "fit": config["fit"],

@@ -7,13 +7,14 @@ from typing import Any, Iterable, Mapping
 
 import numpy as np
 
+from .config import eta_metadata
+
 IDENTITY = (
     "measurement",
     "year",
     "probe_collection",
     "probe_selection",
     "pass_selection",
-    "probe_abseta_edges",
     "probe_pt_edges_gev",
     "mass_edges_gev",
     "fit",
@@ -26,8 +27,11 @@ def merge(shards: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
     if not items:
         raise ValueError("no shards were supplied")
     first = items[0]
+    first_eta = eta_metadata(first)
     for item in items[1:]:
         mismatches = [key for key in IDENTITY if item.get(key) != first.get(key)]
+        if eta_metadata(item) != first_eta:
+            mismatches.append("eta axis or expression (recount with the same config)")
         if mismatches:
             raise ValueError(f"incompatible shards: {mismatches}")
     merged: dict[str, dict[str, np.ndarray]] = {}
@@ -59,6 +63,7 @@ def merge(shards: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
         ),
     }
     output = {key: copy.deepcopy(first[key]) for key in ("schema_version", *IDENTITY)}
+    output.update(copy.deepcopy(first_eta))
     output["samples"] = {
         sample: {key: value.tolist() for key, value in values.items()}
         for sample, values in merged.items()

@@ -89,6 +89,7 @@ def test_condor_campaign_is_self_contained_and_output_gated(tmp_path):
         _write(
             campaign / "outputs" / job["result"],
             {
+                **manifest["eta_definition"],
                 "sample": job["sample"],
                 "status": "complete",
                 "processing": {
@@ -101,6 +102,13 @@ def test_condor_campaign_is_self_contained_and_output_gated(tmp_path):
     final = campaign_status(campaign)
     assert final["status"] == "complete"
     assert final["outputs_valid"] == 2
+    output = campaign / "outputs" / manifest["jobs"][0]["result"]
+    mismatched = json.loads(output.read_text())
+    mismatched["probe_eta_edges"] = mismatched.pop("probe_abseta_edges")
+    _write(output, mismatched)
+    checked = campaign_status(campaign)
+    assert checked["status"] == "incomplete"
+    assert "eta definition mismatch" in next(iter(checked["outputs_invalid"].values()))
 
 
 def test_condor_submission_records_cluster_and_blocks_duplicates(tmp_path):

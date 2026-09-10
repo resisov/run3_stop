@@ -10,7 +10,8 @@ import sys
 from pathlib import Path
 from typing import Any, Mapping
 
-from .config import load_config, validate_config
+from . import __version__
+from .config import eta_axis, load_config, validate_config
 from .profiles import PROFILES
 
 
@@ -35,12 +36,16 @@ def _write(path: Path | str, payload: Mapping[str, Any]) -> None:
         path.write_text(encoded)
 
 
-def _template(profile: str) -> dict[str, Any]:
+def _template(profile: str, signed_eta: bool = False) -> dict[str, Any]:
     resolved = PROFILES[profile]
+    name = f"private_{profile}{'_signed_eta' if signed_eta else ''}_sf"
+    eta_edges = list(resolved["axes"]["abseta_edges"])
+    if signed_eta:
+        eta_edges = sorted(set(eta_edges + [-value for value in eta_edges]))
     return {
         "schema_version": 1,
         "profile": profile,
-        "measurement": f"private_{profile}_sf",
+        "measurement": name,
         "year": "2025",
         "id": {
             "fields": [],
@@ -48,11 +53,11 @@ def _template(profile: str) -> dict[str, Any]:
             "pass": resolved["probe"]["pass"],
         },
         "pt_edges_gev": resolved["axes"]["pt_edges_gev"],
-        "abseta_edges": resolved["axes"]["abseta_edges"],
+        "eta_edges" if signed_eta else "abseta_edges": eta_edges,
         "samples": {"data": [], "mc": []},
         "lumimask": "golden.json",
         "correction": {
-            "name": f"private_{profile}_sf",
+            "name": name,
             "description": f"Data/MC scale factor for private_{profile}",
             "flow": "clamp",
         },
@@ -76,6 +81,7 @@ def _dependencies() -> dict[str, bool]:
 
 def parser() -> argparse.ArgumentParser:
     root = argparse.ArgumentParser(description=__doc__)
+    root.add_argument("--version", action="version", version=f"cms-tnp {__version__}")
     commands = root.add_subparsers(dest="command", required=True)
 
     commands.add_parser("profiles")
@@ -84,6 +90,10 @@ def parser() -> argparse.ArgumentParser:
         "--profile", choices=sorted(PROFILES), default="electron_jpsi_lowpt"
     )
     command.add_argument("--output", type=Path, default=Path("measurement.json"))
+    command.add_argument(
+        "--signed-eta", action="store_true",
+        help="separate negative and positive eta bins (default: absolute eta)",
+    )
 
     command = commands.add_parser("resolve")
     command.add_argument("--config", type=Path, required=True)
@@ -177,7 +187,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "init":
         if args.output.exists():
             raise FileExistsError(args.output)
-        _write(args.output, _template(args.profile))
+        _write(args.output, _template(args.profile, args.signed_eta))
         print(args.output)
         return 0
     if args.command == "resolve":
@@ -190,10 +200,17 @@ def main(argv: list[str] | None = None) -> int:
             try:
                 config = load_config(args.config)
                 validate_config(config)
+                eta_name, eta_edges = eta_axis(config)
                 config_status = {
                     "valid": True,
                     "measurement": config["measurement"],
                     "profile": config.get("profile"),
+                    "eta_axis": {
+                        "mode": "signed" if eta_name == "eta" else "absolute",
+                        "expression": config["probe"]["eta"],
+                        "edges": eta_edges,
+                        "correction_input": eta_name,
+                    },
                 }
             except (OSError, ValueError, KeyError, TypeError) as error:
                 config_status = {
@@ -202,6 +219,7 @@ def main(argv: list[str] | None = None) -> int:
                 }
         dependencies = _dependencies()
         output = {
+            "version": __version__,
             "python": sys.version,
             "profiles": sorted(PROFILES),
             "dependencies": dependencies,

@@ -294,8 +294,24 @@ def _merge(target: dict[str, Any], update: Mapping[str, Any]) -> dict[str, Any]:
 def resolve_profile(user: Mapping[str, Any]) -> dict[str, Any]:
     """Expand one compact user config into the complete immutable run config."""
 
+    eta_overrides = [
+        (key, source[key])
+        for source in (user, user.get("axes", {}))
+        for key in ("eta_edges", "abseta_edges")
+        if key in source
+    ]
+    if len(eta_overrides) > 1:
+        raise ValueError(
+            "specify eta_edges (signed) or abseta_edges (absolute) only once, "
+            "either at the top level or inside axes"
+        )
     if "profile" not in user:
-        return copy.deepcopy(dict(user))
+        resolved = copy.deepcopy(dict(user))
+        if eta_overrides:
+            key, edges = eta_overrides[0]
+            resolved.setdefault("axes", {})[key] = copy.deepcopy(edges)
+            resolved.pop(key, None)
+        return resolved
     name = str(user["profile"])
     if name not in PROFILES:
         raise ValueError(f"unknown profile {name!r}; choose from {sorted(PROFILES)}")
@@ -303,7 +319,7 @@ def resolve_profile(user: Mapping[str, Any]) -> dict[str, Any]:
     direct = {
         key: value
         for key, value in user.items()
-        if key not in {"profile", "id", "pt_edges_gev", "abseta_edges"}
+        if key not in {"profile", "id", "pt_edges_gev", "abseta_edges", "eta_edges"}
     }
     _merge(resolved, direct)
     identity = user.get("id", {})
@@ -321,8 +337,11 @@ def resolve_profile(user: Mapping[str, Any]) -> dict[str, Any]:
             resolved["probe"]["pass"] = str(identity["pass"])
     if "pt_edges_gev" in user:
         resolved["axes"]["pt_edges_gev"] = user["pt_edges_gev"]
-    if "abseta_edges" in user:
-        resolved["axes"]["abseta_edges"] = user["abseta_edges"]
+    if eta_overrides:
+        key, edges = eta_overrides[0]
+        resolved["axes"].pop("eta_edges", None)
+        resolved["axes"].pop("abseta_edges", None)
+        resolved["axes"][key] = copy.deepcopy(edges)
     resolved["profile"] = name
     resolved.setdefault("correction", {})
     resolved["correction"].setdefault(

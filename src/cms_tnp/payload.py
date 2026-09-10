@@ -8,6 +8,8 @@ import json
 from pathlib import Path
 from typing import Any, Mapping
 
+from .config import histogram_eta_axis
+
 
 def build_payload(result: Mapping[str, Any]) -> dict[str, Any]:
     blockers = list(result.get("adoption_blockers", []))
@@ -28,7 +30,8 @@ def build_payload(result: Mapping[str, Any]) -> dict[str, Any]:
         ],
     }
     correction = result["correction"]
-    axes = [result["probe_abseta_edges"], result["probe_pt_edges_gev"]]
+    eta_name, eta_edges = histogram_eta_axis(result)
+    axes = [eta_edges, result["probe_pt_edges_gev"]]
     return {
         "schema_version": 2,
         "description": str(correction["description"]),
@@ -39,7 +42,7 @@ def build_payload(result: Mapping[str, Any]) -> dict[str, Any]:
                 "version": 1,
                 "inputs": [
                     {"name": "variation", "type": "string"},
-                    {"name": "abseta", "type": "real"},
+                    {"name": eta_name, "type": "real"},
                     {"name": "pt", "type": "real"},
                 ],
                 "output": {"name": "weight", "type": "real"},
@@ -51,7 +54,7 @@ def build_payload(result: Mapping[str, Any]) -> dict[str, Any]:
                             "key": variation,
                             "value": {
                                 "nodetype": "multibinning",
-                                "inputs": ["abseta", "pt"],
+                                "inputs": [eta_name, "pt"],
                                 "edges": axes,
                                 "content": content,
                                 "flow": str(correction.get("flow", "clamp")),

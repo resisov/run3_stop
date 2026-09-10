@@ -14,7 +14,7 @@ from collections import Counter
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
-from .config import load_config
+from .config import eta_axis, eta_metadata, load_config
 
 STATUS_NAMES = {
     1: "idle",
@@ -283,6 +283,12 @@ def prepare_campaign(
         "proxy_included": proxy is not None,
         "jobs": jobs,
     }
+    config = load_config(config_path.resolve())
+    eta_name, eta_edges = eta_axis(config)
+    manifest["eta_definition"] = {
+        f"probe_{eta_name}_edges": eta_edges,
+        "probe_eta_expression": str(config["probe"]["eta"]),
+    }
     _write(campaign_dir / "campaign.json", manifest)
     return {
         "campaign_dir": str(campaign_dir),
@@ -324,7 +330,9 @@ def submit_campaign(
     return submission
 
 
-def _validate_result(path: Path, job: Mapping[str, Any]) -> str | None:
+def _validate_result(
+    path: Path, job: Mapping[str, Any], expected_eta: Mapping[str, Any] | None = None
+) -> str | None:
     try:
         result = _read(path)
         processing = result["processing"]
@@ -339,6 +347,8 @@ def _validate_result(path: Path, job: Mapping[str, Any]) -> str | None:
             return "ROOT failures are present"
         if result.get("status") != "complete":
             return "result is not complete"
+        if expected_eta is not None and eta_metadata(result) != expected_eta:
+            return "eta definition mismatch; recount with the campaign configuration"
     except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError) as error:
         return f"{type(error).__name__}: {error}"
     return None
@@ -397,7 +407,7 @@ def campaign_status(
         if not path.exists():
             missing.append(str(job["result"]))
             continue
-        error = _validate_result(path, job)
+        error = _validate_result(path, job, manifest.get("eta_definition"))
         if error:
             invalid[str(job["result"])] = error
         else:

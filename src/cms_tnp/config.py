@@ -143,9 +143,50 @@ def load_config(path: Path | str) -> dict[str, Any]:
 
 def _edges(config: Mapping[str, Any], name: str) -> list[float]:
     values = [float(value) for value in config["axes"][name]]
-    if len(values) < 2 or any(right <= left for left, right in zip(values, values[1:])):
-        raise ValueError(f"axes.{name} must be strictly increasing")
+    if (
+        len(values) < 2
+        or not all(np.isfinite(values))
+        or any(right <= left for left, right in zip(values, values[1:]))
+    ):
+        raise ValueError(f"axes.{name} must be finite and strictly increasing")
     return values
+
+
+def eta_axis(config: Mapping[str, Any]) -> tuple[str, list[float]]:
+    """Return the correction input name and edges; the key defines folding."""
+    axes = config["axes"]
+    keys = [name for name in ("eta_edges", "abseta_edges") if name in axes]
+    if len(keys) != 1:
+        raise ValueError(
+            "choose exactly one of eta_edges (signed eta) or "
+            "abseta_edges (absolute eta); do not specify both"
+        )
+    key = keys[0]
+    values = _edges(config, key)
+    if key == "abseta_edges" and values[0] < 0:
+        raise ValueError(
+            "abseta_edges cannot be negative; use eta_edges for signed eta"
+        )
+    return ("eta" if key == "eta_edges" else "abseta"), values
+
+
+def histogram_eta_axis(payload: Mapping[str, Any]) -> tuple[str, list[float]]:
+    """Read new signed outputs and existing absolute-eta histogram/fit JSONs."""
+    axes = {
+        key: payload[f"probe_{key}"]
+        for key in ("eta_edges", "abseta_edges")
+        if f"probe_{key}" in payload
+    }
+    return eta_axis({"axes": axes})
+
+
+def eta_metadata(payload: Mapping[str, Any]) -> dict[str, Any]:
+    histogram_eta_axis(payload)
+    return {
+        key: payload[key]
+        for key in ("probe_eta_edges", "probe_abseta_edges", "probe_eta_expression")
+        if key in payload
+    }
 
 
 def validate_config(config: Mapping[str, Any]) -> None:
@@ -193,7 +234,7 @@ def validate_config(config: Mapping[str, Any]) -> None:
             )
     Expression(str(config["pair"].get("selection", "True")))
     _edges(config, "pt_edges_gev")
-    _edges(config, "abseta_edges")
+    eta_axis(config)
     window = [float(value) for value in config["pair"]["mass_window_gev"]]
     peak = [float(value) for value in config["fit"]["peak_bounds_gev"]]
     if (

@@ -17,6 +17,69 @@ cms-tnp doctor
 
 The base package depends only on NumPy. `.[all]` installs ROOT I/O, fitting, correctionlib, and plotting support.
 
+For an existing checkout, run `git pull --ff-only` on `global-tnp-standalone`,
+then `python -m pip install -e '.[all]'`. `cms-tnp --version` should show 0.4.0.
+For Condor use, rebuild the worker environment archive with this version before
+starting a signed-eta campaign.
+
+## Signed eta: start here
+
+To measure negative and positive eta separately, create a configuration with:
+
+```bash
+cms-tnp init --signed-eta --output measurement.json
+```
+
+The default profile is `electron_jpsi_lowpt`. For photons, for example:
+
+```bash
+cms-tnp init --profile photon_z --signed-eta --output photon_id.json
+```
+
+`init` creates a new file and refuses to overwrite an existing configuration.
+The generated file has signed `eta_edges` and a correction name containing
+`signed_eta`. Set your datasets, year, ID and golden JSON, then follow the
+counting and fitting workflow below. A ready electron example is
+[`configs/measurement_signed_eta.json`](configs/measurement_signed_eta.json).
+
+Choose exactly one eta-axis key in your configuration:
+
+| Configuration | Meaning | Correctionlib input |
+|---|---|---|
+| `"eta_edges": [-2.5, -1.4442, 0, 1.4442, 2.5]` | Signed eta: negative and positive probes stay separate | `eta` |
+| `"abseta_edges": [0, 1.4442, 2.5]` | Absolute eta: negative and positive probes are combined | `abseta` |
+
+Both keys, negative `abseta_edges`, and non-finite or unordered boundaries are
+rejected. With a profile, either key can be placed at the top level or inside
+`axes`, but it must occur only once. Existing `abseta_edges` configurations and
+absolute-eta results remain supported. Positive-only `eta_edges` still means
+signed eta; the choice is determined by the key, not by the boundary signs.
+
+Confirm the resolved axis before counting:
+
+```bash
+cms-tnp doctor --config measurement.json
+cms-tnp resolve --config measurement.json --output measurement.resolved.json
+```
+
+`doctor` prints the mode, eta expression, boundaries and correction input name.
+The built-in electron and photon profiles use supercluster eta,
+`eta + deltaEtaSC`; muons use `eta`. Signed binning preserves that coordinate's
+sign. Acceptance cuts such as `abs(eta) < 2.4` and the ECAL gap exclusion
+continue to select the same objects.
+
+This is an optional measurement-binning change. Existing absolute-eta
+histograms have already lost the sign, so they cannot be converted by refitting.
+Reuse the input file lists, count into a new output/campaign directory, and
+refit the new histograms. Merge and refit reject incompatible eta axes; new
+outputs and Condor campaigns also record and compare the eta expression. Do not mix old shards
+without this provenance with newly counted shards. With symmetric boundaries,
+the sum of the positive and negative mass histograms reproduces the absolute
+histograms away from exact internal boundaries; scale factors must then be
+fitted, not averaged. Each axis follows the standard histogram convention:
+`[lower, upper)`, with the last upper edge included. Values exactly on a
+negative internal boundary therefore follow the signed interval convention.
+
 ## Start from low-pT J/psi
 
 The default is the low-pT electron J/psi profile.
@@ -194,7 +257,8 @@ Or repeat fitting, correctionlib export, and plotting together:
 cms-tnp reproduce --histograms histograms.json --output-dir reproduced
 ```
 
-The correction inputs are `variation`, `abseta`, and `pt`:
+For absolute-eta configurations, the correction inputs are `variation`,
+`abseta`, and `pt`:
 
 ```python
 import correctionlib
@@ -202,6 +266,18 @@ import correctionlib
 corrections = correctionlib.CorrectionSet.from_file("scale_factors.json.gz")
 weight = corrections["private_electron_id_sf"].evaluate("nominal", abs_eta, pt)
 ```
+
+For signed eta, the inputs are `variation`, `eta`, and `pt`. Pass the same
+signed coordinate used when counting, without applying `abs()`:
+
+```python
+sf = corrections["private_electron_jpsi_lowpt_signed_eta_sf"]
+eta_sc = electron_eta + electron_deltaEtaSC
+weight = sf.evaluate("nominal", eta_sc, pt)
+```
+
+Use the correction name from your own configuration. Photons also use signed
+supercluster eta by default; muons use their signed eta.
 
 ## Photon ID SF example
 
