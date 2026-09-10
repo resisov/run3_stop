@@ -1,0 +1,15 @@
+{
+  "batch": 0,
+  "inputs": [
+    {
+      "root": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/flat2024_v8/outputs/nominal/data_shard_00013.root",
+      "sidecar": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/flat2024_v8/outputs/nominal/data_shard_00013.json"
+    }
+  ],
+  "kind": "data",
+  "manifest": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/gnn/full_manifest.json",
+  "output": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/gnn/full/partials_pending/data_0000_retry_1.json",
+  "repository": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/gnn_code",
+  "schema_version": "gnn_lowdm_test_histogram_request_v1",
+  "stop_xsec": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/gnn_code/autonomous_allhad/signals/stop_xsec_13p6TeV.json"
+}

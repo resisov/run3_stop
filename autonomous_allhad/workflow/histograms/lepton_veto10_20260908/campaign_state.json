@@ -3,7 +3,10 @@
   "topw_sf_update": {
     "source_commit": "456fd370",
     "stage": "full_production",
-    "clusters": {"main": 1113836, "gnn": 1113839},
+    "clusters": {
+      "main": 1113836,
+      "gnn": 1113839
+    },
     "gnn_input_recovery": {
       "removed_cluster": 1113837,
       "removed_queue_verified_empty": true,
@@ -13,50 +16,113 @@
       "bytes": 99564,
       "py38_environment_modified": false
     },
-    "years": [2024, 2025],
+    "years": [
+      2024,
+      2025
+    ],
     "schedd": "bigbird24.cern.ch",
     "job_flavour": "workday",
     "max_runtime_seconds": 28800,
     "canonical_histograms_replaced": false,
     "full_production_submitted": true,
-    "full_clusters": {"main": 1113843, "gnn": 1113844},
+    "full_clusters": {
+      "main": 1113843,
+      "gnn": 1113844
+    },
     "monitoring": {
       "automation_id": "run3-30",
       "interval_minutes": 30,
       "advance_validated_stages": true
     },
     "gnn_merge": {
-      "submitted_utc": "2026-09-10T14:48:16Z",
-      "cluster": 1113859,
+      "submitted_utc": "2026-09-10T15:33:18.438522Z",
+      "cluster": 1113863,
       "jobs": 2,
-      "years": [2024, 2025],
-      "stage": "submitted",
+      "years": [
+        2024,
+        2025
+      ],
+      "stage": "resubmitted_with_recovered_inputs",
       "submit_source": "gnn_merge.sub",
       "partials_directory": "gnn/full/partials_pending",
       "output": "gnn/hists.pending.json",
-      "partial_outputs": {"2024": 240, "2025": 337},
-      "partial_exit_zero_jobs": {"1113844": 568, "1113850": 9},
-      "partial_name_set_matches_queue": true,
+      "partial_outputs": {
+        "2024": 241,
+        "2025": 338
+      },
+      "partial_exit_zero_jobs": {
+        "1113844": 568,
+        "1113850": 9
+      },
       "schedd": "bigbird24.cern.ch",
       "job_flavour": "workday",
       "max_runtime_seconds": 28800,
-      "proxy_seconds_before_submission": 447669,
-      "voms_seconds_before_submission": 418869,
+      "proxy_seconds_before_submission": 444965,
+      "voms_seconds_before_submission": 416165,
       "merge_source_sha256": "fbed6cb5cbecd2748aa66b30f31bb2d41ae0e17adbdb70723f5997d26d80e019",
-      "queue_after_submission": {"idle": 2, "running": 0, "held": 0}
+      "queue_after_submission": {
+        "idle": 2,
+        "running": 0,
+        "held": 0
+      },
+      "expected_inputs": {
+        "2024": 5954,
+        "2025": 8390
+      },
+      "previous_attempts": [
+        {
+          "cluster": 1113859,
+          "status": "incomplete",
+          "exit_codes": {
+            "2024": 2,
+            "2025": 2
+          },
+          "valid_inputs": {
+            "2024": 5953,
+            "2025": 8389
+          },
+          "held_jobs_removed": true
+        }
+      ],
+      "original_partial_name_set_matches_queue": true,
+      "recovery_cluster": 1113862
     },
     "gnn_retries": [
       {
         "submitted_utc": "2026-09-10T13:53:53Z",
         "cluster": 1113850,
         "jobs": 9,
-        "jobs_by_year": {"2024": 8, "2025": 1},
+        "jobs_by_year": {
+          "2024": 8,
+          "2025": 1
+        },
         "removed_cluster": 1113844,
-        "removed_procs": [159, 164, 168, 180, 189, 206, 209, 215, 290],
+        "removed_procs": [
+          159,
+          164,
+          168,
+          180,
+          189,
+          206,
+          209,
+          215,
+          290
+        ],
         "removed_queue_verified_empty": true,
         "items": {
-          "2024": ["mc_0104", "mc_0109", "mc_0113", "mc_0125", "mc_0134", "mc_0151", "mc_0154", "mc_0160"],
-          "2025": ["data_0050"]
+          "2024": [
+            "mc_0104",
+            "mc_0109",
+            "mc_0113",
+            "mc_0125",
+            "mc_0134",
+            "mc_0151",
+            "mc_0154",
+            "mc_0160"
+          ],
+          "2025": [
+            "data_0050"
+          ]
         },
         "cause": "Python module import failed with OSError errno 5 (Input/output error)",
         "submit_source": "gnn_production.sub",
@@ -67,23 +133,47 @@
         "max_runtime_seconds": 28800,
         "proxy_seconds_before_submission": 451047,
         "voms_seconds_before_submission": 422247,
-        "queue_after_submission": {"idle": 9, "running": 0, "held": 0}
+        "queue_after_submission": {
+          "idle": 9,
+          "running": 0,
+          "held": 0
+        }
       }
     ],
-    "full_jobs": {"main": 2, "gnn": 577},
-    "full_max_runtime_seconds": {"main": 172800, "gnn": 28800},
+    "full_jobs": {
+      "main": 2,
+      "gnn": 577
+    },
+    "full_max_runtime_seconds": {
+      "main": 172800,
+      "gnn": 28800
+    },
     "full_proxy_seconds_before_submission": 453721,
     "full_voms_seconds_before_submission": 424921,
     "pilot_validation": {
-      "exit_codes": {"main_2024": 0, "main_2025": 0, "gnn_2024": 0, "gnn_2025": 0},
-      "valid_inputs": {"2024": 6, "2025": 8},
-      "main_events": {"2024": 367712, "2025": 317836},
+      "exit_codes": {
+        "main_2024": 0,
+        "main_2025": 0,
+        "gnn_2024": 0,
+        "gnn_2025": 0
+      },
+      "valid_inputs": {
+        "2024": 6,
+        "2025": 8
+      },
+      "main_events": {
+        "2024": 367712,
+        "2025": 317836
+      },
       "nonfinite_contents": 0,
       "negative_variances": 0,
       "strict_warnings": 0,
       "gnn_bad_files": 0,
       "lowpt_lepton_templates": 0,
-      "topw_up_down_templates": {"2024": 26, "2025": 30},
+      "topw_up_down_templates": {
+        "2024": 26,
+        "2025": 30
+      },
       "sha256": {
         "main_2024": "83012e4ea43a294af05e9d453b0d4efc4fff1bef1b23e3ecd222244585e84df3",
         "main_2025": "440599f4a9000a427d4be9a0dea5a932620899324c8c9f44c4af6e2206915fe4",
@@ -96,10 +186,19 @@
     "full_input_validation": {
       "main_gnn_input_sets_equal": true,
       "duplicates": 0,
-      "files": {"2024": 5954, "2025": 8390},
-      "gnn_jobs": {"2024": 240, "2025": 337},
+      "files": {
+        "2024": 5954,
+        "2025": 8390
+      },
+      "gnn_jobs": {
+        "2024": 240,
+        "2025": 337
+      },
       "missing_model_selection_config_files": 0,
-      "mc_efficiency_dataset_matches": {"2024": 179, "2025": 179},
+      "mc_efficiency_dataset_matches": {
+        "2024": 179,
+        "2025": 179
+      },
       "unmatched_mc_efficiency_datasets": 0,
       "request_argv_output_mismatches": 0,
       "pending_output_collisions": 0
@@ -109,8 +208,96 @@
       "user_approved": "2026-09-10",
       "action": "delete_without_retaining_backup",
       "condition": "replacement_outputs_validated_and_promoted",
-      "scope": ["histograms", "datacards", "fit_outputs", "limits", "impacts"],
-      "preserve": ["current_production_inputs", "runtime_environments", "canonical_source"]
+      "scope": [
+        "histograms",
+        "datacards",
+        "fit_outputs",
+        "limits",
+        "impacts"
+      ],
+      "preserve": [
+        "current_production_inputs",
+        "runtime_environments",
+        "canonical_source"
+      ]
+    },
+    "gnn_source_recovery": {
+      "stage": "validated",
+      "reason": "OSError errno 5 while reading input metadata; partial exit 0 included bad_files",
+      "jobs": 2,
+      "attempt": 1,
+      "targets": [
+        {
+          "year": 2024,
+          "source": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/flat2024_v8/outputs/nominal/data_shard_00013.root",
+          "original_request": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/gnn/full/requests/data_0000.json",
+          "retry_request": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/gnn/full/requests/data_0000_retry_1.json",
+          "retry_argv": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/gnn/full/argv/data_0000_retry_1.argv",
+          "output": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/gnn/full/partials_pending/data_0000_retry_1.json",
+          "attempt": 1
+        },
+        {
+          "year": 2025,
+          "source": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/flat2025_v8/outputs/nominal/mc_shard_03092.root",
+          "original_request": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2025/gnn/full/requests/mc_0123.json",
+          "retry_request": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2025/gnn/full/requests/mc_0123_retry_1.json",
+          "retry_argv": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2025/gnn/full/argv/mc_0123_retry_1.argv",
+          "output": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2025/gnn/full/partials_pending/mc_0123_retry_1.json",
+          "attempt": 1
+        }
+      ],
+      "proxy_seconds_before_submission": 445374,
+      "voms_seconds_before_submission": 416574,
+      "schedd": "bigbird24.cern.ch",
+      "job_flavour": "workday",
+      "held_merge_removed": true,
+      "cluster": 1113862,
+      "submitted_utc": "2026-09-10T15:26:29.686890Z",
+      "git_sync": {
+        "status": "user_approved",
+        "local_eos_hashes_verified": true,
+        "remote": "https://github.com/resisov/run3_stop.git",
+        "branch": "run3_full_analysis",
+        "affected_files": [
+          "campaign_state.json",
+          "gnn_recovery.sub",
+          "2024/gnn/full/requests/data_0000_retry_1.json",
+          "2024/gnn/full/argv/data_0000_retry_1.argv",
+          "2025/gnn/full/requests/mc_0123_retry_1.json",
+          "2025/gnn/full/argv/mc_0123_retry_1.argv"
+        ],
+        "approval_request_mail": {
+          "to": "taiwoo.kim@cern.ch",
+          "mechanism": "CERN sendmail",
+          "accepted_exit_code": 0,
+          "recipient_delivery_verified": true,
+          "recorded_utc": "2026-09-10T15:30:21.972507Z"
+        },
+        "user_approval": "2026-09-10: user confirms receiving approval email and explicitly approves proceeding",
+        "previous_rejection": "auto-review rejected external upload of EOS paths and campaign metadata; do not retry before user approval"
+      },
+      "validation": {
+        "2024": {
+          "status": "complete",
+          "input_files_valid": 1,
+          "bad_files": 0,
+          "nonfinite_values": 0,
+          "sha256": "3a92ccf63148798914689d1f3c4863fa95aeb8cc62c4f0548774cae5bc3c55b5",
+          "bytes": 48641
+        },
+        "2025": {
+          "status": "complete",
+          "input_files_valid": 1,
+          "bad_files": 0,
+          "nonfinite_values": 0,
+          "sha256": "d615d96938cc72cf69db83dcce01e935056ffb7b6e65b39a05e8fc78903735ab",
+          "bytes": 1582012
+        }
+      },
+      "exit_codes": {
+        "2024": 0,
+        "2025": 0
+      }
     }
   },
   "code_commit": "40434055",
@@ -554,7 +741,7 @@
     "original_root_entries": 1,
     "card_sha256": "fbe06f6a67285a2e95395ba099348ff59a13623d6b9be74bd4bf85dcca16361c",
     "output": "combined/T2bW/recovery_precision_2/limits",
-    "r_abs_accuracy": 1e-7,
+    "r_abs_accuracy": 1e-07,
     "verbosity": 2,
     "same_submission_snapshot_as_recovery_1": true,
     "proxy_seconds_before_submit": 630417,
@@ -575,7 +762,7 @@
       "exit_code": 0,
       "source_cluster": 1111251,
       "source_proc": 0,
-      "r_abs_accuracy": 1e-7,
+      "r_abs_accuracy": 1e-07,
       "eos_sha256_matched": true,
       "original_invalid_sha256": "d6b8bb66eed077be4f64f706b725df13f8ef384a41a6616f546921fc4c0e368d",
       "promoted_at_utc": "2026-09-08T13:16:34Z",
@@ -922,7 +1109,7 @@
         "sha256": "52621ea7fb3c6ce93af3013915ce6d11e8b391a998b2c06e12915d98a49bb0c0",
         "exit_code": 0,
         "source_cluster": 1111245,
-        "r_abs_accuracy": 1e-7,
+        "r_abs_accuracy": 1e-07,
         "eos_sha256_matched": true,
         "original_invalid_sha256": "38665da320c84d50f0e76fca596cf808faba20c2d244059f428ca68dfa2e45a2",
         "job": "1111245.0",
@@ -945,7 +1132,7 @@
         "sha256": "59af219f925e50bb32b3efb3a58c6f5f08f304f1d284a3c2c66b7cef6e180278",
         "exit_code": 0,
         "source_cluster": 1111245,
-        "r_abs_accuracy": 1e-7,
+        "r_abs_accuracy": 1e-07,
         "eos_sha256_matched": true,
         "original_invalid_sha256": "4c2d0fba7f1da5cb4f4d5b6dcae8fecd0fcb9d3dd97493a38424b98ed184b577",
         "job": "1111245.2",
@@ -969,7 +1156,7 @@
         "exit_code": 0,
         "source_cluster": 1111245,
         "source_proc": 1,
-        "r_abs_accuracy": 1e-7,
+        "r_abs_accuracy": 1e-07,
         "eos_sha256_matched": true,
         "original_invalid_sha256": "bcd278c003f979e4281a26eddc7afb9bf9f2d364c6a4cee7bbfb074b7e82aae1",
         "job": "1111245.1",
@@ -1013,7 +1200,7 @@
     "submitted_at_utc": "2026-09-08T11:35:25Z",
     "original_outputs_preserved": true,
     "same_cards_and_physics_model": true,
-    "r_abs_accuracy": 1e-7,
+    "r_abs_accuracy": 1e-07,
     "verbosity": 2,
     "hypothesis": "Default rAbsAcc=0.0005 can skip a narrow expected-quantile bisection loop, leaving minosStat=-1 and returning NaN. Diagnosis from installed Combine AsymptoticLimits.cc; recovery result pending.",
     "combine_runtime_sha256": "2909cf59caf57cfa47e65e6d43a7bcca8c864c72984679127d8eebabb551614a",
@@ -2015,19 +2202,19 @@
             "rows": [
               {
                 "r": 1,
-                "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": 0.000005777426849817857,
+                "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": 5.777426849817857e-06,
                 "deltaNLL": 0,
                 "quantileExpected": -1
               },
               {
                 "r": 1,
-                "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": 0.000005777426849817857,
+                "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": 5.777426849817857e-06,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               },
               {
                 "r": 1,
-                "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": 0.000005777426849817857,
+                "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": 5.777426849817857e-06,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               }
@@ -2041,19 +2228,19 @@
             "rows": [
               {
                 "r": 1,
-                "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0": 0.000001051844719768269,
+                "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0": 1.051844719768269e-06,
                 "deltaNLL": 0,
                 "quantileExpected": -1
               },
               {
                 "r": 1,
-                "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0": 0.000001051844719768269,
+                "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0": 1.051844719768269e-06,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               },
               {
                 "r": 1,
-                "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0": 0.000001051844719768269,
+                "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0": 1.051844719768269e-06,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               }
@@ -2067,19 +2254,19 @@
             "rows": [
               {
                 "r": 1,
-                "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin4_bin0": 0.0000018504720173950773,
+                "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin4_bin0": 1.8504720173950773e-06,
                 "deltaNLL": 0,
                 "quantileExpected": -1
               },
               {
                 "r": 1,
-                "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin4_bin0": 0.0000018504720173950773,
+                "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin4_bin0": 1.8504720173950773e-06,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               },
               {
                 "r": 1,
-                "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin4_bin0": 0.0000018504720173950773,
+                "prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin4_bin0": 1.8504720173950773e-06,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               }
@@ -2093,19 +2280,19 @@
             "rows": [
               {
                 "r": 1,
-                "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin1_bin0": 3.409395787912217e-7,
+                "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin1_bin0": 3.409395787912217e-07,
                 "deltaNLL": 0,
                 "quantileExpected": -1
               },
               {
                 "r": 1,
-                "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin1_bin0": 3.409395787912217e-7,
+                "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin1_bin0": 3.409395787912217e-07,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               },
               {
                 "r": 1,
-                "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin1_bin0": 3.409395787912217e-7,
+                "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin1_bin0": 3.409395787912217e-07,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               }
@@ -2119,19 +2306,19 @@
             "rows": [
               {
                 "r": 1,
-                "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0": 3.6407976722330204e-7,
+                "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0": 3.6407976722330204e-07,
                 "deltaNLL": 0,
                 "quantileExpected": -1
               },
               {
                 "r": 1,
-                "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0": 3.6407976722330204e-7,
+                "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0": 3.6407976722330204e-07,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               },
               {
                 "r": 1,
-                "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0": 3.6407976722330204e-7,
+                "prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0": 3.6407976722330204e-07,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               }
@@ -2145,19 +2332,19 @@
             "rows": [
               {
                 "r": 1,
-                "prop_biny2024_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": -0.000016404617781518027,
+                "prop_biny2024_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": -1.6404617781518027e-05,
                 "deltaNLL": 0,
                 "quantileExpected": -1
               },
               {
                 "r": 1,
-                "prop_biny2024_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": -0.000016404617781518027,
+                "prop_biny2024_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": -1.6404617781518027e-05,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               },
               {
                 "r": 1,
-                "prop_biny2024_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": -0.000016404617781518027,
+                "prop_biny2024_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": -1.6404617781518027e-05,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               }
@@ -2171,19 +2358,19 @@
             "rows": [
               {
                 "r": 1,
-                "prop_biny2024_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -0.000009729117664392106,
+                "prop_biny2024_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -9.729117664392106e-06,
                 "deltaNLL": 0,
                 "quantileExpected": -1
               },
               {
                 "r": 1,
-                "prop_biny2024_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -0.000009729117664392106,
+                "prop_biny2024_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -9.729117664392106e-06,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               },
               {
                 "r": 1,
-                "prop_biny2024_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -0.000009729117664392106,
+                "prop_biny2024_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -9.729117664392106e-06,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               }
@@ -2197,19 +2384,19 @@
             "rows": [
               {
                 "r": 1,
-                "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": 0.000008789825187704992,
+                "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": 8.789825187704992e-06,
                 "deltaNLL": 0,
                 "quantileExpected": -1
               },
               {
                 "r": 1,
-                "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": 0.000008789825187704992,
+                "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": 8.789825187704992e-06,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               },
               {
                 "r": 1,
-                "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": 0.000008789825187704992,
+                "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": 8.789825187704992e-06,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               }
@@ -2223,19 +2410,19 @@
             "rows": [
               {
                 "r": 1,
-                "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0": 0.000001181561742669146,
+                "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0": 1.181561742669146e-06,
                 "deltaNLL": 0,
                 "quantileExpected": -1
               },
               {
                 "r": 1,
-                "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0": 0.000001181561742669146,
+                "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0": 1.181561742669146e-06,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               },
               {
                 "r": 1,
-                "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0": 0.000001181561742669146,
+                "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0": 1.181561742669146e-06,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               }
@@ -2249,19 +2436,19 @@
             "rows": [
               {
                 "r": 1,
-                "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR0_bin0_bin0": -7.235133807625971e-7,
+                "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR0_bin0_bin0": -7.235133807625971e-07,
                 "deltaNLL": 0,
                 "quantileExpected": -1
               },
               {
                 "r": 1,
-                "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR0_bin0_bin0": -7.235133807625971e-7,
+                "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR0_bin0_bin0": -7.235133807625971e-07,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               },
               {
                 "r": 1,
-                "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR0_bin0_bin0": -7.235133807625971e-7,
+                "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR0_bin0_bin0": -7.235133807625971e-07,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               }
@@ -2275,19 +2462,19 @@
             "rows": [
               {
                 "r": 1,
-                "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -0.000005201452040637378,
+                "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -5.201452040637378e-06,
                 "deltaNLL": 0,
                 "quantileExpected": -1
               },
               {
                 "r": 1,
-                "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -0.000005201452040637378,
+                "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -5.201452040637378e-06,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               },
               {
                 "r": 1,
-                "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -0.000005201452040637378,
+                "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -5.201452040637378e-06,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               }
@@ -2301,19 +2488,19 @@
             "rows": [
               {
                 "r": 1,
-                "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0": -0.0000015382710216726991,
+                "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0": -1.5382710216726991e-06,
                 "deltaNLL": 0,
                 "quantileExpected": -1
               },
               {
                 "r": 1,
-                "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0": -0.0000015382710216726991,
+                "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0": -1.5382710216726991e-06,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               },
               {
                 "r": 1,
-                "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0": -0.0000015382710216726991,
+                "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0": -1.5382710216726991e-06,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               }
@@ -2327,19 +2514,19 @@
             "rows": [
               {
                 "r": 1,
-                "prop_biny2025_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": -0.000014159477359498851,
+                "prop_biny2025_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": -1.4159477359498851e-05,
                 "deltaNLL": 0,
                 "quantileExpected": -1
               },
               {
                 "r": 1,
-                "prop_biny2025_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": -0.000014159477359498851,
+                "prop_biny2025_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": -1.4159477359498851e-05,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               },
               {
                 "r": 1,
-                "prop_biny2025_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": -0.000014159477359498851,
+                "prop_biny2025_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0": -1.4159477359498851e-05,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               }
@@ -2353,19 +2540,19 @@
             "rows": [
               {
                 "r": 1,
-                "prop_biny2025_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -0.000008451041139778681,
+                "prop_biny2025_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -8.451041139778681e-06,
                 "deltaNLL": 0,
                 "quantileExpected": -1
               },
               {
                 "r": 1,
-                "prop_biny2025_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -0.000008451041139778681,
+                "prop_biny2025_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -8.451041139778681e-06,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               },
               {
                 "r": 1,
-                "prop_biny2025_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -0.000008451041139778681,
+                "prop_biny2025_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0": -8.451041139778681e-06,
                 "deltaNLL": 0,
                 "quantileExpected": 0.3199999928474426
               }
@@ -2388,7 +2575,7 @@
             "name": "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR0_bin1_bin0",
             "entries": 3,
             "parameter_values": [
-              2.7341087616150617e-7,
+              2.7341087616150617e-07,
               -0.9424516558647156,
               0.944353461265564
             ],
@@ -2400,7 +2587,7 @@
             "name": "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin2_bin0",
             "entries": 3,
             "parameter_values": [
-              0.00000117576439606637,
+              1.17576439606637e-06,
               -0.7550134658813477,
               0.7555961012840271
             ],
@@ -2412,7 +2599,7 @@
             "name": "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin3_bin0",
             "entries": 3,
             "parameter_values": [
-              -7.598968920774496e-8,
+              -7.598968920774496e-08,
               -0.7832885980606079,
               0.7868486642837524
             ],
@@ -2424,7 +2611,7 @@
             "name": "prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin4_bin0",
             "entries": 3,
             "parameter_values": [
-              -2.3712381391760573e-7,
+              -2.3712381391760573e-07,
               -0.880662739276886,
               0.8808696866035461
             ],
@@ -2436,7 +2623,7 @@
             "name": "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR0_bin1_bin0",
             "entries": 3,
             "parameter_values": [
-              -2.3687152861384675e-7,
+              -2.3687152861384675e-07,
               -0.9389863610267639,
               0.943063497543335
             ],
@@ -2448,7 +2635,7 @@
             "name": "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR0_bin4_bin0",
             "entries": 3,
             "parameter_values": [
-              -2.3555824668619607e-7,
+              -2.3555824668619607e-07,
               -0.9063954949378967,
               0.9178949594497681
             ],
@@ -2460,7 +2647,7 @@
             "name": "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin1_bin0",
             "entries": 3,
             "parameter_values": [
-              -0.0000024456694518448785,
+              -2.4456694518448785e-06,
               -0.9627963304519653,
               0.9645624756813049
             ],
@@ -2472,7 +2659,7 @@
             "name": "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin2_bin0",
             "entries": 3,
             "parameter_values": [
-              -0.000001999356527448981,
+              -1.999356527448981e-06,
               -0.6715450882911682,
               0.6776750087738037
             ],
@@ -2484,7 +2671,7 @@
             "name": "prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin4_bin0",
             "entries": 3,
             "parameter_values": [
-              -0.0000025488261599093676,
+              -2.5488261599093676e-06,
               -0.8084027171134949,
               0.809654712677002
             ],
@@ -2496,7 +2683,7 @@
             "name": "prop_biny2025_LLCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0",
             "entries": 3,
             "parameter_values": [
-              0.0000016194175032069325,
+              1.6194175032069325e-06,
               -0.9807881116867065,
               0.980095624923706
             ],
@@ -2508,7 +2695,7 @@
             "name": "prop_biny2025_LLCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0",
             "entries": 3,
             "parameter_values": [
-              0.0000012607450798896025,
+              1.2607450798896025e-06,
               -0.7986648678779602,
               0.7998002767562866
             ],
@@ -2647,7 +2834,7 @@
               "valid": true,
               "entries": 3,
               "parameter_values": [
-                1.3415404964689515e-7,
+                1.3415404964689515e-07,
                 -0.9162113070487976,
                 0.917547345161438
               ]
@@ -2658,7 +2845,7 @@
               "valid": true,
               "entries": 3,
               "parameter_values": [
-                -0.0000028219749310665065,
+                -2.8219749310665065e-06,
                 -0.921021044254303,
                 0.9210426211357117
               ]
@@ -2669,7 +2856,7 @@
               "valid": true,
               "entries": 3,
               "parameter_values": [
-                -0.0000016974516938716988,
+                -1.6974516938716988e-06,
                 -0.9459127187728882,
                 0.9485390782356262
               ]
@@ -2680,7 +2867,7 @@
               "valid": true,
               "entries": 3,
               "parameter_values": [
-                0.0000038714465517841745,
+                3.8714465517841745e-06,
                 -0.9916897416114807,
                 0.9916560649871826
               ]
@@ -2752,7 +2939,7 @@
               "valid": true,
               "entries": 3,
               "parameter_values": [
-                5.736828825320117e-7,
+                5.736828825320117e-07,
                 -0.8135942816734314,
                 0.8138436079025269
               ]
@@ -2763,7 +2950,7 @@
               "valid": true,
               "entries": 3,
               "parameter_values": [
-                -0.0000012892938912045793,
+                -1.2892938912045793e-06,
                 -0.9167959094047546,
                 0.9119341373443604
               ]
@@ -2774,7 +2961,7 @@
               "valid": true,
               "entries": 3,
               "parameter_values": [
-                -0.000006612670858885394,
+                -6.612670858885394e-06,
                 -0.9782527685165405,
                 0.9774042367935181
               ]
@@ -2785,7 +2972,7 @@
               "valid": true,
               "entries": 3,
               "parameter_values": [
-                -0.0000016390907831009827,
+                -1.6390907831009827e-06,
                 -0.8954192996025085,
                 0.8978826999664307
               ]
@@ -2855,7 +3042,7 @@
               "valid": true,
               "entries": 3,
               "parameter_values": [
-                -4.83372502912971e-7,
+                -4.83372502912971e-07,
                 -0.9197046160697937,
                 0.9200073480606079
               ]
@@ -2866,7 +3053,7 @@
               "valid": true,
               "entries": 3,
               "parameter_values": [
-                -9.278170978177513e-7,
+                -9.278170978177513e-07,
                 -0.9368533492088318,
                 0.9387007355690002
               ]
