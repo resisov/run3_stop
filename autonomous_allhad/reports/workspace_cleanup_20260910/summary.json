@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-09-10T12:56:30.491050+00:00",
+  "status": "cleanup_complete_canonical_sync_pending_main_agent",
+  "initial_head": "561c2721b7dd97ddba1166c8b2ac7de7f07a5701",
+  "initial_branch": "codex/package-lowpt-tnp",
+  "original_deletions": 2367,
+  "original_deletions_confirmed_intentional": true,
+  "removed_bytes_in_action_log": 4821022706,
+  "git_maintenance_reclaimed_allocated_bytes": 3872600064,
+  "current_allocated_bytes": {
+    ".git": 1710034944,
+    ".": 2430447616
+  },
+  "eos_compared_source_paths": 3414,
+  "eos_compared_campaign_paths": 2622,
+  "campaign_identical_paths": 2615,
+  "campaign_missing_on_eos_preserved": 7,
+  "local_campaign_evictions": 1882,
+  "local_campaign_evicted_bytes": 767750184,
+  "eos_production_outputs_deleted": 0,
+  "orphan_copy_files_removed": 3783,
+  "registered_worktrees_preserved": 2,
+  "stale_worktree_registrations_pruned": 4,
+  "unreachable_git_objects_deleted": 8620,
+  "git_fsck_passed": true,
+  "physics_source_modified_by_cleanup": false,
+  "compiled_payloads_modified_by_cleanup": false,
+  "canonical_sync_policy": "Currently used version, to be identified by high-dM main Agent at user request; no divergent physics overwrite before identification.",
+  "canonical_sync_status": "pending_main_agent_response",
+  "main_agent_response_status": "Reply sharing blocked by automatic approval review in the main agent task; user authorization evidence forwarded.",
+  "github_pages_deployed": false
+}

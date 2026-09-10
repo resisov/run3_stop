@@ -1,0 +1,33 @@
+{
+  "files": [
+    {
+      "path": ".git/objects/pack/pack-43f9ae970c081be311783d036f7f993eec782b00.idx",
+      "bytes": 273224,
+      "sha256": "c3b89edf9436f5a1a6817a1e58a604c06f09c72dbe2307400d3d3d66d5d6a93d"
+    },
+    {
+      "path": ".git/objects/pack/pack-43f9ae970c081be311783d036f7f993eec782b00.mtimes",
+      "bytes": 34532,
+      "sha256": "6a8c833ac73fd9d57cd39ce90a76c7974e7a76e85c2a405525faa0588cad3848"
+    },
+    {
+      "path": ".git/objects/pack/pack-43f9ae970c081be311783d036f7f993eec782b00.pack",
+      "bytes": 3689344377,
+      "sha256": "c1f7c8c1392d4e84eee6a7fbce87efd07f910ade9613e83ef759821ceb6a2f90"
+    },
+    {
+      "path": ".git/objects/pack/pack-43f9ae970c081be311783d036f7f993eec782b00.rev",
+      "bytes": 34532,
+      "sha256": "9f16a6f226497a4df8e52beb0a26624c688da21a641e4dc7c6433fd61bf36f6e"
+    }
+  ],
+  "objects": 8620,
+  "reachable_overlap": 0,
+  "reachable_check": "git rev-list --objects --all --reflog --indexed-objects",
+  "archive_relative_path": "workspace_archives/workspace_cleanup_20260910/git-cruft",
+  "action": "permanently_deleted_on_explicit_user_request",
+  "user_authorization": "보관할 필요 없다. 삭제하라",
+  "backup_created": false,
+  "git_fsck_exit_code": 0,
+  "refs_unchanged": true
+}

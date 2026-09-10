@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "note": "Inventory, not an assertion that every legacy reference is used by current production.",
+  "files": [
+    {
+      "path": "AN2019_016_v9.pdf",
+      "present": true,
+      "bytes": 7044639,
+      "sha256": "46d8acc9219b58d8914401454919fbcf5207dfbdb5b0d7ab7dceaa1a1b24426f"
+    },
+    {
+      "path": "analysis/processors/stop_processor_v4.py",
+      "present": true,
+      "bytes": 67434,
+      "sha256": "ac975d5f7bf542f3c3bca92da7e017d14160a7193c245b8f5610f10e1641c3bd"
+    },
+    {
+      "path": "analysis/utils/ids.py",
+      "present": true,
+      "bytes": 8530,
+      "sha256": "a40d327efedb8dad42afb59da944deff995500b09fc157a53853159d36901da1"
+    },
+    {
+      "path": "analysis/utils/corrections.py",
+      "present": true,
+      "bytes": 51293,
+      "sha256": "c8ecd046246c68704fac78753fcc1f055e0264f3f5f015b5a05af138cef15ce0"
+    },
+    {
+      "path": "analysis/data/ids.coffea",
+      "present": true,
+      "bytes": 3195,
+      "sha256": "f34995ac34dee52f9ba782e409fb24a11a60a18525f24532a51ec6e74d1e4b48"
+    },
+    {
+      "path": "analysis/data/corrections.coffea",
+      "present": true,
+      "bytes": 10068,
+      "sha256": "ec0e178d156194b4345d0fc53f84798e0163b7a8518272b591703dbb38ae3b4f"
+    },
+    {
+      "path": "analysis/hists/btageff2024.merged",
+      "present": false,
+      "note": "Absent at cleanup start; report claim that this payload was tracked was not supported by Git inventory."
+    },
+    {
+      "path": "analysis/hists/topwtageff2024.merged",
+      "present": true,
+      "bytes": 2245877,
+      "sha256": "1d19be3a7fc6e59f1ee9798cb85b7154feca16ad2c1390ce8382453fcaaa1c68"
+    },
+    {
+      "path": "analysis/hists/topwtageff2025.merged",
+      "present": true,
+      "bytes": 2245877,
+      "sha256": "1d19be3a7fc6e59f1ee9798cb85b7154feca16ad2c1390ce8382453fcaaa1c68"
+    }
+  ]
+}

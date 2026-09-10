@@ -1,0 +1,311 @@
+{
+  "schema_version": "workspace_cleanup_inventory_v1",
+  "generated": "2026-09-10",
+  "head": "561c2721",
+  "branch": "codex/package-lowpt-tnp",
+  "scope": "로컬 작업 트리 전수 조사. EOS와 CVMFS는 읽지 않았고, 어떤 파일도 삭제·이동·수정하지 않았다.",
+  "path_convention": "repo-relative",
+  "totals": {
+    "workspace_kb": 7113000,
+    "git_dir_kb": 5450324,
+    "git_pack_kb": 5105600,
+    "git_unique_blob_kb": 1780000,
+    "git_pack_count": 15,
+    "worktree_tracked_kb": 185000,
+    "worktree_tracked_files": 1042,
+    "worktree_untracked_kb": 1500000,
+    "worktree_untracked_files": 10894,
+    "worktree_ignored_kb": 147000,
+    "worktree_ignored_files": 1559
+  },
+  "blockers": [
+    {
+      "id": "B1",
+      "severity": "high",
+      "summary": "미커밋 삭제 2367개가 작업 트리에 남아 있다. 커밋할지 되돌릴지 정해지기 전에는 어떤 청소도 시작하지 않는다.",
+      "evidence": "git status --porcelain | grep -c '^ D' -> 2367; git diff --stat HEAD -> -3004062 lines",
+      "affected": [
+        "docs/nominal_plots_2024_fullselection_v5_dyexclusive_t2models_freebkg_20260728 (613)",
+        "docs/highdm_distributions_2024_2025_20260720 (584)",
+        "docs/lowdm_gnn_20260901 (466)",
+        "autonomous_allhad/reports (550)",
+        "autonomous_allhad/lowpt_tnp (9)",
+        ".github/workflows/lowpt-tnp.yml (1)"
+      ],
+      "recovery": "추적 파일의 unstaged 삭제이므로 git restore -- <path> 로 복구 가능",
+      "note": "현재 브랜치명은 codex/package-lowpt-tnp 인데 autonomous_allhad/lowpt_tnp/ 가 통째로 삭제되어 있다. 의도 확인 필요."
+    },
+    {
+      "id": "B2",
+      "severity": "high",
+      "summary": "AGENTS.md 4대 참조 문서 중 AN2019_016_v9.pdf 의 유일본이 gitignore 되는 tmp/ 안에 있다.",
+      "evidence": "find . -name AN2019_016_v9.pdf -> ./tmp/pdfs/AN2019_016_v9.pdf ; git ls-files --error-unmatch 실패",
+      "action_required": "tmp/ 청소 전에 추적되는 경로로 이동하거나 EOS 사본 존재를 확인할 것"
+    },
+    {
+      "id": "B3",
+      "severity": "medium",
+      "summary": ".gitignore 는 /output/ 을 루트 스크래치로 규정하지만, 활성 코드의 기본 출력 경로가 output/ 이다.",
+      "evidence": [
+        "autonomous_allhad/workflow/build_analysis_sf_physics_report.py:40",
+        "autonomous_allhad/gnn_lowdm/_implementation/plot_diagonal_v3_model_schematic.py:387"
+      ],
+      "action_required": "출력 경로를 autonomous_allhad/reports 아래로 옮기거나 .gitignore 정책 문구를 코드에 맞출 것. 둘 중 하나로 통일."
+    },
+    {
+      "id": "B4",
+      "severity": "medium",
+      "summary": "analysis/hists/topwtageff2024.merged, topwtageff2025.merged 가 untracked 이다.",
+      "evidence": ".gitignore 는 analysis/hists/* 를 차단하고 btageff2024.merged 만 예외 허용한다",
+      "action_required": "Top/W 효율 payload 재생성 비용이 크다. 예외 허용을 추가하거나 EOS 사본을 확인하고 나서 청소할 것"
+    },
+    {
+      "id": "B5",
+      "severity": "medium",
+      "summary": "fast_analysis/ 는 import 0건이지만 AGENTS.md 의 Architecture B 프로토타입 증빙이다.",
+      "evidence": "AGENTS.md 'Required architecture candidates' 및 'Completion criteria' 항목",
+      "action_required": "삭제 금지. 격리(archive)만 검토할 것"
+    }
+  ],
+  "targets": [
+    {
+      "id": "T1",
+      "category": "git-maintenance",
+      "path": ".git/objects/pack",
+      "size_kb": 5105600,
+      "reclaim_kb_estimate": 3200000,
+      "git_class": "n/a",
+      "risk": "none",
+      "recoverable": "손실 없음. 히스토리 재작성 아님",
+      "action": "git gc --prune=now",
+      "rationale": "pack 15개 합 4.87 GB 인데 고유 blob 내용은 1.78 GB. 차이는 pack 간 중복.",
+      "verify": "git count-objects -vH"
+    },
+    {
+      "id": "T2",
+      "category": "orphan-copy",
+      "path": ".codex-worktrees/signal-histogram-limits",
+      "size_kb": 356616,
+      "reclaim_kb_estimate": 356616,
+      "git_class": "untracked",
+      "risk": "low",
+      "recoverable": "내용이 과거 커밋에 존재(히스토리 231 MB). git worktree 아님",
+      "action": "디렉토리 삭제",
+      "rationale": ".git 파일이 없고 git worktree list 에 미등록. 레포 전체의 맨 복사본 잔해. 내부 docs/ 만 268 MB.",
+      "verify": "test ! -e .codex-worktrees/signal-histogram-limits/.git && git worktree list | grep -c signal-histogram-limits"
+    },
+    {
+      "id": "T3",
+      "category": "git-maintenance",
+      "path": ".git/worktrees",
+      "size_kb": 2700,
+      "reclaim_kb_estimate": 2700,
+      "git_class": "n/a",
+      "risk": "none",
+      "recoverable": "메타데이터만 제거",
+      "action": "git worktree prune",
+      "rationale": "/private/tmp/ 아래 사라진 worktree 4개가 등록만 남아 있다 (run3-stop-highdm-publish-20260901, run3-stop-lowpt-tnp-release, run3-stop-publish-lowdm-gnn-2025, run3publish-cfcae627)",
+      "verify": "git worktree list | grep prunable"
+    },
+    {
+      "id": "T4",
+      "category": "cache",
+      "path": "__pycache__ / .pytest_cache / .DS_Store",
+      "size_kb": 6200,
+      "reclaim_kb_estimate": 6200,
+      "git_class": "ignored",
+      "risk": "none",
+      "recoverable": "재생성됨",
+      "action": "삭제",
+      "rationale": "__pycache__ 22개(5.7 MB), .pytest_cache 4개, .DS_Store 17개. 루트 .pytest_cache 에 dy_window20_*_20260907 테스트 임시디렉토리 5개 잔존",
+      "verify": "find . -name __pycache__ -type d -not -path './.git/*' | wc -l"
+    },
+    {
+      "id": "T5",
+      "category": "campaign-scratch",
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908",
+      "subpaths": [
+        {"path": "plots/pdf_validation", "size_kb": 20148, "note": "PNG 500장. 같은 그림의 래스터 사본"},
+        {"path": "combined_pilot", "size_kb": 8348, "note": "pilot 잔재"},
+        {"path": "plot_validation", "size_kb": 6616, "note": "검증 스크래치"},
+        {"path": "cards_pilot_v2", "size_kb": 5288, "note": "pilot 잔재"},
+        {"path": "card_unit_tests", "size_kb": 2628, "note": ".gitignore 가 이미 차단 대상으로 명시. 441 파일"},
+        {"path": "impact_step_unit_tests", "size_kb": 1684, "note": ".gitignore 가 이미 차단 대상으로 명시. 469 파일"},
+        {"path": "plot_cache", "size_kb": 128, "note": ".gitignore 차단 대상"},
+        {"path": "impact_code_*", "size_kb": 80, "note": "디렉토리 7개, 각 1파일. 진단 잔재"}
+      ],
+      "size_kb": 44920,
+      "reclaim_kb_estimate": 44920,
+      "git_class": "untracked/ignored",
+      "risk": "low",
+      "recoverable": "pilot/unit-test 산출물. 캐노니컬 결과 아님",
+      "action": "삭제",
+      "rationale": ".gitignore 가 이미 차단하도록 작성되어 있으나 파일은 디스크에 남아 계속 증가한다",
+      "verify": "git check-ignore -v <path>"
+    },
+    {
+      "id": "T6",
+      "category": "duplicate",
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots",
+      "size_kb": 124132,
+      "reclaim_kb_estimate": 39292,
+      "git_class": "zip=tracked, 낱개본=untracked",
+      "risk": "medium",
+      "recoverable": "zip 은 추적 중이므로 복구 가능. 낱개본은 재생성 필요",
+      "action": "zip 과 낱개본 중 하나만 남긴다. 결정 필요",
+      "rationale": "cr_sr_plots_2024_2025.zip(37.5 MB, 517 files)이 plots/2024 + plots/2025 + plots/2024_2025(49 MB)와 같은 내용이다. zip 쪽이 tracked 라 히스토리에 40 MB blob 2개로 이미 들어가 있다.",
+      "verify": "unzip -l plots/cr_sr_plots_2024_2025.zip | tail -3"
+    },
+    {
+      "id": "T7",
+      "category": "campaign-output",
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/cards",
+      "size_kb": 673060,
+      "reclaim_kb_estimate": 673060,
+      "git_class": "untracked (tracked 0)",
+      "risk": "high",
+      "recoverable": "EOS 사본 확인 전에는 복구 불가",
+      "action": "EOS 대조 후 로컬에서 제거. 대조 전 삭제 금지",
+      "rationale": "1860 파일. manifest.json 6개만 207 MB(개당 27-40 MB), datacard .txt 1848개. AGENTS.md 는 ROOT 입력과 fit 산출물을 EOS 에 두고 로컬은 compact export 만 쓰도록 규정한다.",
+      "verify": "find <path> -type f | wc -l; du -sk <path>"
+    },
+    {
+      "id": "T8",
+      "category": "campaign-output",
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/{2024,2025,combined}",
+      "size_kb": 112460,
+      "reclaim_kb_estimate": 112460,
+      "git_class": "대부분 untracked",
+      "risk": "high",
+      "recoverable": "EOS 사본 확인 전에는 복구 불가",
+      "action": "EOS 대조 후 판단",
+      "rationale": "plot_payload.json 23 MB + 20 MB 는 .gitignore 차단 대상인데 디스크에 존재. combined/ 는 limit 산출물과 condor_logs 를 포함.",
+      "verify": "git check-ignore -v autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/plot_payload.json"
+    },
+    {
+      "id": "T9",
+      "category": "dead-code",
+      "path": "automation",
+      "size_kb": 196,
+      "reclaim_kb_estimate": 196,
+      "git_class": "tracked",
+      "risk": "low",
+      "recoverable": "히스토리에서 복구 가능",
+      "action": "삭제 또는 archive",
+      "rationale": "레포 전체에서 import 0건. 최종 커밋 2026-06-23 (a124351d)",
+      "verify": "grep -rn 'from automation\\|import automation' --include='*.py' . | grep -v '^./automation/'"
+    },
+    {
+      "id": "T10",
+      "category": "dead-code",
+      "path": "condor",
+      "size_kb": 80,
+      "reclaim_kb_estimate": 80,
+      "git_class": "tracked",
+      "risk": "low",
+      "recoverable": "히스토리에서 복구 가능",
+      "action": "삭제 또는 archive",
+      "rationale": "레거시 submit 파일. 현행 캠페인은 autonomous_allhad/workflow 와 scripts 가 .sub 를 생성한다. 최종 커밋 2026-07-24 (7fc9ea96)",
+      "verify": "grep -rn 'condor/run_condor' --include='*.py' --include='*.sh' --include='*.md' ."
+    },
+    {
+      "id": "T11",
+      "category": "dead-code",
+      "path": "fast_analysis",
+      "size_kb": 184,
+      "reclaim_kb_estimate": 0,
+      "git_class": "tracked",
+      "risk": "blocked",
+      "recoverable": "n/a",
+      "action": "삭제 금지. B5 참조",
+      "rationale": "import 0건이지만 AGENTS.md Architecture B 의 프로토타입 증빙이다. 완료 조건에 3개 아키텍처가 요구된다.",
+      "verify": "grep -rn 'fast_analysis' --include='*.py' . | grep -v '^./fast_analysis/'"
+    },
+    {
+      "id": "T12",
+      "category": "stale-source",
+      "path": "analysis/distribution_draw_v5.py",
+      "size_kb": 34,
+      "reclaim_kb_estimate": 34,
+      "git_class": "tracked",
+      "risk": "low",
+      "recoverable": "히스토리에서 복구 가능",
+      "action": "analysis/plotting/distribution_draw_v5.py 와 대조 후 하나로 통합",
+      "rationale": "두 파일의 md5 가 다르다(0c4803cb / 29166508). 루트본은 2026-07-24, plotting 본은 2026-08-12.",
+      "verify": "md5 -q analysis/distribution_draw_v5.py analysis/plotting/distribution_draw_v5.py"
+    },
+    {
+      "id": "T13",
+      "category": "stale-source",
+      "path": "analysis/libs, analysis/metadata/backup, configs/stop_2024.yaml, setup_condor.sh, signal_xsec.txt, github-profile-banner.png",
+      "size_kb": 600,
+      "reclaim_kb_estimate": 600,
+      "git_class": "tracked",
+      "risk": "low",
+      "recoverable": "히스토리에서 복구 가능",
+      "action": "참조 확인 후 삭제 또는 archive",
+      "rationale": "analysis/libs 2026-06-17, analysis/metadata/backup 2026-05-26, configs 2026-06-18 이후 미변경. configs/stop_2024.yaml 은 autonomous_allhad/spec/baseline_dataflow.md 와 fast_analysis 문서에서만 참조된다.",
+      "verify": "git log -1 --format='%ad %h' --date=short -- <path>"
+    },
+    {
+      "id": "T14",
+      "category": "history-rewrite",
+      "path": "docs/ (git 히스토리)",
+      "size_kb": 1220000,
+      "reclaim_kb_estimate": 1220000,
+      "git_class": "history",
+      "risk": "high",
+      "recoverable": "filter-repo 후 되돌릴 수 없음. force-push 필요",
+      "action": "별건. 사용자 승인 없이 진행 금지",
+      "rationale": "고유 blob 1.78 GB 중 1.22 GB(29092 obj)가 docs/ 의 날짜별 플롯 갤러리 16종이다. PNG 13890개 1.40 GB, PDF 18689개 158 MB.",
+      "top_offenders": [
+        {"path": "docs/highdm_distributions_2024_2025_20260720", "kb": 302700},
+        {"path": "docs/nominal_plots_2024_fullselection_v5_dyexclusive_t2models_freebkg_20260728", "kb": 272300},
+        {"path": ".codex-worktrees/signal-histogram-limits", "kb": 230800},
+        {"path": "docs/partial_merge_preview_sf_unc_v2_combined_data2_v2_20260622", "kb": 154000},
+        {"path": "docs/nominal_plots_2024_fullselection_v4_dyptll100200_lowdm34_nbge1_20260727", "kb": 109600},
+        {"path": "docs/highlowdm_full_20260705", "kb": 79000}
+      ],
+      "verify": "git rev-list --objects --all | git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize:disk) %(rest)'"
+    }
+  ],
+  "keep": [
+    {
+      "path": "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908",
+      "size_kb": 86016,
+      "reason": "README 가 가리키는 현행 배경추정 입력. tracked. tf_inputs.json 2개가 61 MB 이므로 EOS 이관만 검토 가능"
+    },
+    {
+      "path": "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908",
+      "size_kb": 9626,
+      "reason": "현행 배경추정 플롯. tracked"
+    },
+    {
+      "path": "autonomous_allhad/reports/{topw_efficiency_an_handoff,gnn_cms_an_handoff_20260909,trigger_sf_2024_an_handoff,trigger_sf_2025_an_handoff,object_definitions_20260909,higgsino_relic_contours_20260902}",
+      "size_kb": 8300,
+      "reason": "AN 핸드오프 근거. 크기 대비 가치 높음"
+    },
+    {
+      "path": "analysis/data, analysis/hists, analysis/utils, analysis/processors, analysis/plotting",
+      "size_kb": 29268,
+      "reason": "레거시가 아니다. run_flat_hists_chunked.py 의 EXECUTION_CONTRACT 가 corrections.coffea, ids.coffea, correctionlib JSON, btag 효율을 sha256 으로 고정해 배치 payload 로 배포한다. analysis/processors 와 analysis/plotting 은 2026-09-08, 09 에도 수정되었다"
+    },
+    {
+      "path": "autonomous_allhad/{spec,configs,cards,signals}",
+      "size_kb": 1060,
+      "reason": "명세와 캐노니컬 설정. spec 과 cards 는 2026-09-07 갱신"
+    }
+  ],
+  "recommended_order": [
+    {"step": 1, "targets": ["B1"], "note": "미커밋 삭제 2367개 처리 결정. 선행 조건"},
+    {"step": 2, "targets": ["B2", "B4"], "note": "AN pdf 와 topwtageff merged 를 추적 경로로 이동하거나 EOS 사본 확인"},
+    {"step": 3, "targets": ["T1"], "note": "git gc. 약 3.1 GB, 위험 0"},
+    {"step": 4, "targets": ["T2", "T3", "T4"], "note": "약 365 MB, 위험 낮음"},
+    {"step": 5, "targets": ["T5"], "note": "약 44 MB. 캠페인 스크래치"},
+    {"step": 6, "targets": ["T6"], "note": "플롯 중복 해소. zip/낱개본 결정 필요"},
+    {"step": 7, "targets": ["T9", "T10", "T12", "T13"], "note": "죽은 코드. T11 은 제외"},
+    {"step": 8, "targets": ["T7", "T8"], "note": "EOS 대조 완료 후에만. 약 767 MB"},
+    {"step": 9, "targets": ["T14"], "note": "별건. 사용자 승인 필요"},
+    {"step": 10, "targets": ["B3"], "note": "output/ 정책 모순 해소"}
+  ]
+}

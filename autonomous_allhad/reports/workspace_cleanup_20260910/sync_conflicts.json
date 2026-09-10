@@ -1,0 +1,575 @@
+{
+  "schema_version": 1,
+  "status": "unresolved_preserved",
+  "files": [
+    {
+      "path": ".gitignore",
+      "local": {
+        "kind": "file",
+        "bytes": 6778,
+        "sha256": "b395daa7824412bbaa8af6d89b7e95f0535079134559c4196f344708e81b9fec"
+      },
+      "eos": {
+        "kind": "file",
+        "bytes": 4690,
+        "sha256": "3d8c687bc51758399c365fec2c3ab4a80aa0f0d049d390d3d2524afabeee82b1"
+      },
+      "match": false
+    },
+    {
+      "path": "README.md",
+      "local": {
+        "kind": "file",
+        "bytes": 972,
+        "sha256": "1e1fbda1d6006f7ec2b10874798f194b6d69a36c83760119827fa4d287173026"
+      },
+      "eos": {
+        "kind": "file",
+        "bytes": 15558,
+        "sha256": "dc7d8609f8cdc1f9b0a266f93dabed1ba4c8bf58de2d60eec3ec90fa0ec3b568"
+      },
+      "match": false
+    },
+    {
+      "path": "analysis/data/JMESF/2025/jetvetomaps.json.gz",
+      "local": {
+        "kind": "file",
+        "bytes": 304845,
+        "sha256": "9b6f0ad931b31752111e6aceb88e3b806010491473b39e97d4a4e83772ec7151"
+      },
+      "eos": {
+        "kind": "file",
+        "bytes": 304844,
+        "sha256": "61de83931454ff37c9cc1df476d03dde9bb7871e85558018ce3304d5224c939e"
+      },
+      "match": false
+    },
+    {
+      "path": "analysis/datasets/datasets_2024.txt",
+      "local": {
+        "kind": "file",
+        "bytes": 563414,
+        "sha256": "8cdd7f24f080dcf1b54becdb9a7adf3f60fa75f03a6db30b7f929aebfe2b4d6c"
+      },
+      "eos": {
+        "kind": "file",
+        "bytes": 564122,
+        "sha256": "d9de62e8684159db66788872bf6b3851b8756a806aefffc3f17badedd9fb56b4"
+      },
+      "match": false
+    },
+    {
+      "path": "analysis/metadata/KNU_2024_v4.json.gz",
+      "local": {
+        "kind": "file",
+        "bytes": 1341617,
+        "sha256": "4f720444db255bbb85ac1ad8d30e4bee56673ba38e60b0614d8fbf0f1cb1ed0c"
+      },
+      "eos": {
+        "kind": "file",
+        "bytes": 1311545,
+        "sha256": "365df1a13c0a61567b70a2136cc083ae78d2fa3c013f0f0fac4be738f934b863"
+      },
+      "match": false
+    },
+    {
+      "path": "analysis/metadata/json_maker_lxplus.py",
+      "local": {
+        "kind": "file",
+        "bytes": 20294,
+        "sha256": "873989db5ee27783d698c3d59a5bd66ba3c78b2346a7254cce0f35ec0974c17d"
+      },
+      "eos": {
+        "kind": "file",
+        "bytes": 19389,
+        "sha256": "7c3a01b49832fb28f794f86aec6956640b7df61d6d7e3db0972bf437483dfe4f"
+      },
+      "match": false
+    },
+    {
+      "path": "analysis/processors/stop_processor_v4.py",
+      "local": {
+        "kind": "file",
+        "bytes": 67434,
+        "sha256": "ac975d5f7bf542f3c3bca92da7e017d14160a7193c245b8f5610f10e1641c3bd"
+      },
+      "eos": {
+        "kind": "file",
+        "bytes": 67331,
+        "sha256": "a9f66c5d19682a57731b9399ff1f123d2c328d2403ec66625a0b139a08c6e4a0"
+      },
+      "match": false
+    },
+    {
+      "path": "autonomous_allhad/autonomous_allhad/dy_estimation/README.md",
+      "local": {
+        "kind": "file",
+        "bytes": 1939,
+        "sha256": "624094cbcfff83b8af9ab2ad989a8c5ba1d6b2558cccf07162a2aae53ca7ab8f"
+      },
+      "eos": {
+        "kind": "file",
+        "bytes": 9432,
+        "sha256": "cfd057cc12af6c7291f6424569c686a878e9d2334086a83cbdfd105b58770b19"
+      },
+      "match": false
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/README.md",
+      "local": {
+        "kind": "file",
+        "bytes": 5160,
+        "sha256": "5fb925056e3e526d6c0d6db5f8792078b0b4f1f7f75b7f2cb7113c836716f712"
+      },
+      "eos": {
+        "kind": "file",
+        "bytes": 4155,
+        "sha256": "e18cfc7eb1a53e8ca81853772d5f7868e8d926e425f2702f3828f0884231c82a"
+      },
+      "match": false
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/plot_hyperparameter_losses.py",
+      "local": {
+        "kind": "file",
+        "bytes": 17936,
+        "sha256": "a48eb865ee44d2bdfa0aebe92f756683a4a9e5191e06222372b8d3bb8b208b00"
+      },
+      "eos": {
+        "kind": "file",
+        "bytes": 8046,
+        "sha256": "70413cd8600a442f6327cf45c0871edb0c0d2b3895e07e753ad2f2f4e276ef02"
+      },
+      "match": false
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/supplementary_plots.py",
+      "local": {
+        "kind": "file",
+        "bytes": 16690,
+        "sha256": "404a6be1a5849f03e097fdb012d8361321e62331659ee3e8a16ccd840afde2eb"
+      },
+      "eos": {
+        "kind": "file",
+        "bytes": 9505,
+        "sha256": "8de78930409a233c97e3089503b61f68235a0cc8db3032d391b3b5c6504780ea"
+      },
+      "match": false
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/plotting.py",
+      "local": {
+        "kind": "file",
+        "bytes": 1693,
+        "sha256": "4c87668644f2cb992d6d1a5987076cc0455cf4aa3668f47667e588131a161c7a"
+      },
+      "eos": {
+        "kind": "file",
+        "bytes": 1540,
+        "sha256": "4e951bf5f89f16e115c4a5f55f69521143040241dff22ba200296a95a4ae1404"
+      },
+      "match": false
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/requirements.txt",
+      "local": {
+        "kind": "file",
+        "bytes": 218,
+        "sha256": "581fb3e1bb4f7d79d1e4d9edaadd44ed29d6e08319e8bc4348948d0d9ed8aabc"
+      },
+      "eos": {
+        "kind": "file",
+        "bytes": 129,
+        "sha256": "70495c798fce18b08d2bd82e31f005138ec7cd1d5ac890f464f07a542921e036"
+      },
+      "match": false
+    },
+    {
+      "path": "autonomous_allhad/tests/test_2025_data_policy.py",
+      "local": {
+        "kind": "file",
+        "bytes": 3446,
+        "sha256": "2239bf9355dffa7175ba36c24809f6e4757d24c5a933d8a18ddb80c64af20c95"
+      },
+      "eos": {
+        "kind": "file",
+        "bytes": 3257,
+        "sha256": "2581b994f4b8530fe52d43058367a76fce86763c50b9bbbf5642c9fa2a3c9fc4"
+      },
+      "match": false
+    },
+    {
+      "path": "autonomous_allhad/tests/test_canonical_card_projection.py",
+      "local": {
+        "kind": "file",
+        "bytes": 11857,
+        "sha256": "91c8ef3ba75754c7b00c38a4678a88c6a00ccc404c5e438d747c5d5988dd6cde"
+      },
+      "eos": {
+        "kind": "file",
+        "bytes": 12007,
+        "sha256": "030749f00322a9d361b67bd0e3109889f3f11e467acefbc4eddb0df6c07fd6b9"
+      },
+      "match": false
+    },
+    {
+      "path": "autonomous_allhad/tests/test_trigger_efficiency.py",
+      "local": {
+        "kind": "file",
+        "bytes": 1693,
+        "sha256": "b4aa1f33c622da67c43caf02dfc3c91a2a0a483d0f21dd0ebb0c7e46b3631083"
+      },
+      "eos": {
+        "kind": "file",
+        "bytes": 1320,
+        "sha256": "8b694d56ba2521bf5afd64d313893aea4a50481ac97b3b4b5faa2b69f3431b9b"
+      },
+      "match": false
+    },
+    {
+      "path": "autonomous_allhad/workflow/flat_ntuple_analysis_pipeline.md",
+      "local": {
+        "kind": "file",
+        "bytes": 2940,
+        "sha256": "fdad06a6579e29e56f7193200d85045a45aa0c7b23544f8d08e3a3e3ed9d7230"
+      },
+      "eos": {
+        "kind": "file",
+        "bytes": 2487,
+        "sha256": "e67d9125062a989d6f10dca7e4a4c00a92766302924e1b9798a3d1704bcaed0b"
+      },
+      "match": false
+    },
+    {
+      "path": "autonomous_allhad/workflow/measure_trigger.py",
+      "local": {
+        "kind": "file",
+        "bytes": 64380,
+        "sha256": "6cb5cbcd16f942debb10a9e7bc81d4d7290ef345e45064c7b61bcc1371d88056"
+      },
+      "eos": {
+        "kind": "file",
+        "bytes": 54875,
+        "sha256": "fe41550aea38b2bc8a5091903a8771822a0e7ca051c12cd40a5b3e44de4f0b56"
+      },
+      "match": false
+    },
+    {
+      "path": "autonomous_allhad/workflow/run_batch.sh",
+      "local": {
+        "kind": "file",
+        "bytes": 2535,
+        "sha256": "d366a51d83545d2249b4599ab30c10781b5abdf9b2a4c3b3f91f8c4fb839a1a5"
+      },
+      "eos": {
+        "kind": "file",
+        "bytes": 2771,
+        "sha256": "4c91cdcbe19e872ca1ff5c09e9662b3cee38f524d6fb57ca8a7a68a8e0eede0c"
+      },
+      "match": false
+    }
+  ],
+  "missing_on_eos": [
+    "analysis/data/JMESF/2024/idtest.py",
+    "analysis/data/JMESF/2024/jerctest.py",
+    "analysis/data/JMESF/2025/jetid.json.gz",
+    "analysis/metadata/backup/json_maker.py",
+    "analysis/metadata/backup/json_maker_nano.py",
+    "autonomous_allhad/configs/samples_2025.json",
+    "autonomous_allhad/outputs/AN2019_016_v9.extracted.txt",
+    "autonomous_allhad/outputs/production_feature_table.status.json",
+    "autonomous_allhad/outputs/search_bins.yaml",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/highdm/mll_highdm_dy2e_nb1.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/highdm/mll_highdm_dy2e_nb1.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/highdm/mll_highdm_dy2e_nb1_post.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/highdm/mll_highdm_dy2e_nb1_post.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/highdm/mll_highdm_dy2e_nb2plus.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/highdm/mll_highdm_dy2e_nb2plus.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/highdm/mll_highdm_dy2e_nb2plus_post.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/highdm/mll_highdm_dy2e_nb2plus_post.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/highdm/mll_highdm_dy2m_nb1.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/highdm/mll_highdm_dy2m_nb1.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/highdm/mll_highdm_dy2m_nb1_post.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/highdm/mll_highdm_dy2m_nb1_post.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/highdm/mll_highdm_dy2m_nb2plus.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/highdm/mll_highdm_dy2m_nb2plus.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/highdm/mll_highdm_dy2m_nb2plus_post.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/highdm/mll_highdm_dy2m_nb2plus_post.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/highdm/rt_highdm.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/highdm/rt_highdm.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/highdm/rz_highdm.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/highdm/rz_highdm.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/lowdm/mll_lowdm_dy2e_nb1.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/lowdm/mll_lowdm_dy2e_nb1.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/lowdm/mll_lowdm_dy2e_nb1_post.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/lowdm/mll_lowdm_dy2e_nb1_post.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/lowdm/mll_lowdm_dy2e_nb2plus.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/lowdm/mll_lowdm_dy2e_nb2plus.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/lowdm/mll_lowdm_dy2e_nb2plus_post.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/lowdm/mll_lowdm_dy2e_nb2plus_post.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/lowdm/mll_lowdm_dy2m_nb1.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/lowdm/mll_lowdm_dy2m_nb1.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/lowdm/mll_lowdm_dy2m_nb1_post.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/lowdm/mll_lowdm_dy2m_nb1_post.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/lowdm/mll_lowdm_dy2m_nb2plus.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/lowdm/mll_lowdm_dy2m_nb2plus.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/lowdm/mll_lowdm_dy2m_nb2plus_post.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/lowdm/mll_lowdm_dy2m_nb2plus_post.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/lowdm/rt_lowdm.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/lowdm/rt_lowdm.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/lowdm/rz_lowdm.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/lowdm/rz_lowdm.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/sgamma/photon_q_normalization.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/sgamma/photon_q_normalization.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/sgamma/sgamma_highdm.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/sgamma/sgamma_highdm.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/sgamma/sgamma_lowdm.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/sgamma/sgamma_lowdm.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/gnn/transfer_factor_qcd_qcdcr_lowdm_gnn.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/gnn/transfer_factor_qcd_qcdcr_lowdm_gnn.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/gnn/transfer_factor_top_llcr_lowdm_gnn.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/gnn/transfer_factor_top_llcr_lowdm_gnn.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/gnn/transfer_factor_w_llcr_lowdm_gnn.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/gnn/transfer_factor_w_llcr_lowdm_gnn.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/gnn/transfer_factor_zinv_gcr_lowdm_gnn.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/gnn/transfer_factor_zinv_gcr_lowdm_gnn.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/plot_manifest.json",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/transfer_factor_qcd_qcdcr_highdm.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/transfer_factor_qcd_qcdcr_highdm.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/transfer_factor_top_llcr_highdm.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/transfer_factor_top_llcr_highdm.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/transfer_factor_w_llcr_highdm.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/transfer_factor_w_llcr_highdm.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/zgamma/zgamma_double_ratio_highdm.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/zgamma/zgamma_double_ratio_highdm.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/zgamma/zgamma_double_ratio_lowdm.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/zgamma/zgamma_double_ratio_lowdm.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/highdm/mll_highdm_dy2e_nb1.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/highdm/mll_highdm_dy2e_nb1.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/highdm/mll_highdm_dy2e_nb1_post.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/highdm/mll_highdm_dy2e_nb1_post.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/highdm/mll_highdm_dy2e_nb2plus.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/highdm/mll_highdm_dy2e_nb2plus.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/highdm/mll_highdm_dy2e_nb2plus_post.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/highdm/mll_highdm_dy2e_nb2plus_post.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/highdm/mll_highdm_dy2m_nb1.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/highdm/mll_highdm_dy2m_nb1.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/highdm/mll_highdm_dy2m_nb1_post.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/highdm/mll_highdm_dy2m_nb1_post.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/highdm/mll_highdm_dy2m_nb2plus.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/highdm/mll_highdm_dy2m_nb2plus.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/highdm/mll_highdm_dy2m_nb2plus_post.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/highdm/mll_highdm_dy2m_nb2plus_post.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/highdm/rt_highdm.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/highdm/rt_highdm.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/highdm/rz_highdm.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/highdm/rz_highdm.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/lowdm/mll_lowdm_dy2e_nb1.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/lowdm/mll_lowdm_dy2e_nb1.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/lowdm/mll_lowdm_dy2e_nb1_post.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/lowdm/mll_lowdm_dy2e_nb1_post.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/lowdm/mll_lowdm_dy2e_nb2plus.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/lowdm/mll_lowdm_dy2e_nb2plus.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/lowdm/mll_lowdm_dy2e_nb2plus_post.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/lowdm/mll_lowdm_dy2e_nb2plus_post.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/lowdm/mll_lowdm_dy2m_nb1.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/lowdm/mll_lowdm_dy2m_nb1.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/lowdm/mll_lowdm_dy2m_nb1_post.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/lowdm/mll_lowdm_dy2m_nb1_post.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/lowdm/mll_lowdm_dy2m_nb2plus.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/lowdm/mll_lowdm_dy2m_nb2plus.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/lowdm/mll_lowdm_dy2m_nb2plus_post.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/lowdm/mll_lowdm_dy2m_nb2plus_post.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/lowdm/rt_lowdm.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/lowdm/rt_lowdm.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/lowdm/rz_lowdm.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/dy_report/lowdm/rz_lowdm.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/sgamma/photon_q_normalization.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/sgamma/photon_q_normalization.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/sgamma/sgamma_highdm.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/sgamma/sgamma_highdm.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/sgamma/sgamma_lowdm.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/sgamma/sgamma_lowdm.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/tf/gnn/transfer_factor_qcd_qcdcr_lowdm_gnn.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/tf/gnn/transfer_factor_qcd_qcdcr_lowdm_gnn.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/tf/gnn/transfer_factor_top_llcr_lowdm_gnn.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/tf/gnn/transfer_factor_top_llcr_lowdm_gnn.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/tf/gnn/transfer_factor_w_llcr_lowdm_gnn.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/tf/gnn/transfer_factor_w_llcr_lowdm_gnn.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/tf/gnn/transfer_factor_zinv_gcr_lowdm_gnn.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/tf/gnn/transfer_factor_zinv_gcr_lowdm_gnn.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/tf/plot_manifest.json",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/tf/transfer_factor_qcd_qcdcr_highdm.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/tf/transfer_factor_qcd_qcdcr_highdm.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/tf/transfer_factor_top_llcr_highdm.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/tf/transfer_factor_top_llcr_highdm.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/tf/transfer_factor_w_llcr_highdm.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/tf/transfer_factor_w_llcr_highdm.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/zgamma/zgamma_double_ratio_highdm.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/zgamma/zgamma_double_ratio_highdm.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/zgamma/zgamma_double_ratio_lowdm.pdf",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/zgamma/zgamma_double_ratio_lowdm.png",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/README.md",
+    "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/manifest.json",
+    "autonomous_allhad/reports/datacard_control_region_strategy_20260813.md",
+    "autonomous_allhad/reports/gcr_normalization_corrections_audit_20260726.md",
+    "autonomous_allhad/reports/highdm_canonical_dependencies.md",
+    "autonomous_allhad/reports/lepton_veto10_canonical_20260908.json",
+    "autonomous_allhad/reports/lowdm_canonical_dependencies.md",
+    "autonomous_allhad/reports/lowdm_gnn_template_policy_20260908.md",
+    "autonomous_allhad/reports/trigger_sf_2024_an_handoff/met_trigger_efficiency_2024.pdf",
+    "autonomous_allhad/reports/trigger_sf_2024_an_handoff/met_trigger_efficiency_2024.png",
+    "autonomous_allhad/reports/trigger_sf_2024_an_handoff/met_trigger_result.json",
+    "autonomous_allhad/reports/trigger_sf_2024_an_handoff/met_trigger_scale_factor_2024.pdf",
+    "autonomous_allhad/reports/trigger_sf_2024_an_handoff/met_trigger_scale_factor_2024.png",
+    "autonomous_allhad/reports/trigger_sf_2024_an_handoff/photon_trigger_efficiency_2024.pdf",
+    "autonomous_allhad/reports/trigger_sf_2024_an_handoff/photon_trigger_efficiency_2024.png",
+    "autonomous_allhad/reports/trigger_sf_2024_an_handoff/photon_trigger_result.json",
+    "autonomous_allhad/reports/trigger_sf_2024_an_handoff/photon_trigger_scale_factor_2024.pdf",
+    "autonomous_allhad/reports/trigger_sf_2024_an_handoff/photon_trigger_scale_factor_2024.png",
+    "autonomous_allhad/reports/trigger_sf_2024_an_handoff/plot_manifest.json",
+    "autonomous_allhad/reports/trigger_sf_2025_an_handoff/met_trigger_efficiency_2025.pdf",
+    "autonomous_allhad/reports/trigger_sf_2025_an_handoff/met_trigger_efficiency_2025.png",
+    "autonomous_allhad/reports/trigger_sf_2025_an_handoff/met_trigger_result.json",
+    "autonomous_allhad/reports/trigger_sf_2025_an_handoff/met_trigger_scale_factor_2025.pdf",
+    "autonomous_allhad/reports/trigger_sf_2025_an_handoff/met_trigger_scale_factor_2025.png",
+    "autonomous_allhad/reports/trigger_sf_2025_an_handoff/photon_trigger_efficiency_2025.pdf",
+    "autonomous_allhad/reports/trigger_sf_2025_an_handoff/photon_trigger_efficiency_2025.png",
+    "autonomous_allhad/reports/trigger_sf_2025_an_handoff/photon_trigger_result.json",
+    "autonomous_allhad/reports/trigger_sf_2025_an_handoff/photon_trigger_scale_factor_2025.pdf",
+    "autonomous_allhad/reports/trigger_sf_2025_an_handoff/photon_trigger_scale_factor_2025.png",
+    "autonomous_allhad/reports/trigger_sf_2025_an_handoff/plot_manifest.json",
+    "autonomous_allhad/reports/trota_resolved_top_an_handoff_20260821.md",
+    "autonomous_allhad/reports/workflow_inventory.md",
+    "autonomous_allhad/scripts/monitor_condor_campaign.py",
+    "autonomous_allhad/scripts/prepare_2024_objectcorr_campaign.py",
+    "autonomous_allhad/scripts/prepare_2024_shape_hist_campaign.py",
+    "autonomous_allhad/scripts/prepare_2024_shape_hist_campaign_fullselection.py",
+    "autonomous_allhad/scripts/prepare_2024_shape_hist_condor_pairs.py",
+    "autonomous_allhad/scripts/prepare_2025_data_campaign.py",
+    "autonomous_allhad/scripts/prepare_2026_data_objectcorr_campaign.py",
+    "autonomous_allhad/scripts/prepare_dyto2x4jets_condor10.py",
+    "autonomous_allhad/scripts/prepare_dyto2x4jets_hist_replacement.py",
+    "autonomous_allhad/scripts/prepare_dyto2x4jets_subset.py",
+    "autonomous_allhad/scripts/run_2024_shape_hist_local_pairwise.py",
+    "autonomous_allhad/scripts/run_2024_shape_hist_local_parallel.py",
+    "autonomous_allhad/scripts/run_btageff_sharded_local.py",
+    "autonomous_allhad/scripts/run_t2tb_t2bw_btageff_local.py",
+    "autonomous_allhad/scripts/run_t2tb_t2bw_fastsim_local.py",
+    "autonomous_allhad/scripts/split_condor_submission.py",
+    "autonomous_allhad/scripts/submit_2024_shape_hist_condor_pairs.py",
+    "autonomous_allhad/scripts/watch_t2tb_t2bw_btageff_retries.py",
+    "autonomous_allhad/tests/test_canonical_plot_projection.py",
+    "autonomous_allhad/tests/test_dy_ptll_stitching_policy.py",
+    "autonomous_allhad/tests/test_dycr_mass_window.py",
+    "autonomous_allhad/tests/test_highdm_orthogonality_projection.py",
+    "autonomous_allhad/tests/test_highdm_resolved_categories.py",
+    "autonomous_allhad/tests/test_highdm_selection_fom_2024.py",
+    "autonomous_allhad/tests/test_run_flat_hists_chunked_dy_policy.py",
+    "autonomous_allhad/tests/test_trota_resolved_2024.py",
+    "autonomous_allhad/tests/test_trota_resolved_2024_inplace.py",
+    "autonomous_allhad/workflow/append_t2tb_t2bw_btageff_2024.py",
+    "autonomous_allhad/workflow/audit_parking_electron_jpsi.py",
+    "autonomous_allhad/workflow/audit_trota_resolved_2024_inplace_campaign.py",
+    "autonomous_allhad/workflow/audit_trota_resolved_2024_xrootd.py",
+    "autonomous_allhad/workflow/bad_files.json",
+    "autonomous_allhad/workflow/bad_files.txt",
+    "autonomous_allhad/workflow/build_2025_hist_payload.py",
+    "autonomous_allhad/workflow/build_analysis_sf_physics_report.py",
+    "autonomous_allhad/workflow/campaign_monitor_sf_unc_v2_20260621.sh",
+    "autonomous_allhad/workflow/cleanup_balanced_data_sources.py",
+    "autonomous_allhad/workflow/data_failed_retry_sidecar_20260627.sh",
+    "autonomous_allhad/workflow/extract_signal_searchbin_entries.py",
+    "autonomous_allhad/workflow/file_validation_summary.json",
+    "autonomous_allhad/workflow/finalize_nominal_inputs_2024.py",
+    "autonomous_allhad/workflow/freeze_jesflavorqcd_ready.py",
+    "autonomous_allhad/workflow/full_production_state_jesTotalDown.json",
+    "autonomous_allhad/workflow/full_production_state_jesTotalUp.json",
+    "autonomous_allhad/workflow/full_production_state_metUnclusteredDown.json",
+    "autonomous_allhad/workflow/full_production_state_metUnclusteredUp.json",
+    "autonomous_allhad/workflow/highdm_selection_fom_2024.py",
+    "autonomous_allhad/workflow/latest_summary.md",
+    "autonomous_allhad/workflow/limit_point_exclusions_20260731.json",
+    "autonomous_allhad/workflow/limit_point_exclusions_t2bw_mStop1450_mLSP1350.json",
+    "autonomous_allhad/workflow/limit_point_exclusions_t2bw_mStop1650_mLSP1.json",
+    "autonomous_allhad/workflow/local_bad_file_recovery_generic.py",
+    "autonomous_allhad/workflow/local_data2_shard_recovery_20260627.sh",
+    "autonomous_allhad/workflow/merge_balanced_data_intermediates.py",
+    "autonomous_allhad/workflow/merge_balanced_mc_snapshot.py",
+    "autonomous_allhad/workflow/merge_plot_toptag_efficiency.py",
+    "autonomous_allhad/workflow/plot_applied_scale_factors.py",
+    "autonomous_allhad/workflow/plot_gcr_prompt_overlap_full_2024.py",
+    "autonomous_allhad/workflow/plot_gcr_tight_eb_candidate_2024.py",
+    "autonomous_allhad/workflow/plot_signal_sr_category_comparison.py",
+    "autonomous_allhad/workflow/prepare_jesflavorqcd_highdm60_campaign.py",
+    "autonomous_allhad/workflow/prepare_shape_root_condor_20260719.py",
+    "autonomous_allhad/workflow/prepare_submit_dy_t2tb_t2bw_condor_2024.py",
+    "autonomous_allhad/workflow/prepare_t2tb_t2bw_fastsim_2024.py",
+    "autonomous_allhad/workflow/prepare_trota_resolved_2024_inplace_campaign.py",
+    "autonomous_allhad/workflow/prepare_trota_resolved_2024_inplace_recovery.py",
+    "autonomous_allhad/workflow/prepare_trota_resolved_2024_inplace_resume.py",
+    "autonomous_allhad/workflow/prepare_trota_resolved_2024_staged_resume.py",
+    "autonomous_allhad/workflow/production_state_jesTotalDown.json",
+    "autonomous_allhad/workflow/production_state_jesTotalUp.json",
+    "autonomous_allhad/workflow/production_state_metUnclusteredDown.json",
+    "autonomous_allhad/workflow/production_state_metUnclusteredUp.json",
+    "autonomous_allhad/workflow/publish_an_zinv_measurements_2024.py",
+    "autonomous_allhad/workflow/publish_dy2e_zinv_web_2024.py",
+    "autonomous_allhad/workflow/publish_fullstat_impact_2024.py",
+    "autonomous_allhad/workflow/publish_highdm_lowdm_limit_2024.py",
+    "autonomous_allhad/workflow/publish_lowdm_isrge1_no_metsqrtht_update.py",
+    "autonomous_allhad/workflow/publish_lowdm_selection_update.py",
+    "autonomous_allhad/workflow/remap_lowdm_search_bins_nsv_inclusive.py",
+    "autonomous_allhad/workflow/replace_lowdm_sr_histogram.py",
+    "autonomous_allhad/workflow/run_bad_file_recovery_once_2024.py",
+    "autonomous_allhad/workflow/scan_gcr_prompt_overlap_2024.py",
+    "autonomous_allhad/workflow/scan_gcr_prompt_overlap_full_2024.py",
+    "autonomous_allhad/workflow/split_flat_ntuple_process.py",
+    "autonomous_allhad/workflow/stage_append_only_btag_chunk_reuse.py",
+    "autonomous_allhad/workflow/submit_jesflavorqcd_highdm60_campaign.py",
+    "autonomous_allhad/workflow/summarize_lowdm_selection_update.py",
+    "condor/check_done.py",
+    "condor/missing.txt",
+    "condor/run_condor_2024.sh",
+    "condor/run_condor_2024.sub",
+    "condor/run_condor_2025.sh",
+    "condor/run_condor_2025.sub",
+    "condor/run_condor_jer.sub",
+    "condor/run_condor_jesTotal.sub",
+    "condor/run_condor_metUnclustered.sub",
+    "docs/index.html",
+    "fast_analysis/__init__.py",
+    "fast_analysis/benchmark.py",
+    "fast_analysis/cli.py",
+    "fast_analysis/config/__init__.py",
+    "fast_analysis/config/analysis_2024.json",
+    "fast_analysis/config/defaults.py",
+    "fast_analysis/corrections/__init__.py",
+    "fast_analysis/docs/architecture.md",
+    "fast_analysis/docs/benchmark_manifest.example.json",
+    "fast_analysis/docs/eos_py38_environment.md",
+    "fast_analysis/docs/full_to_fast_mapping.yaml",
+    "fast_analysis/docs/statistical_model.md",
+    "fast_analysis/env.py",
+    "fast_analysis/histogram/__init__.py",
+    "fast_analysis/paths.py",
+    "fast_analysis/reporting/__init__.py",
+    "fast_analysis/reporting/static.py",
+    "fast_analysis/schema/compact_event_schema_v1.json",
+    "fast_analysis/selection/__init__.py",
+    "fast_analysis/skim/__init__.py",
+    "fast_analysis/statistics/__init__.py",
+    "fast_analysis/tests/__init__.py",
+    "fast_analysis/tests/test_path_policy.py",
+    "fast_analysis/validation/__init__.py",
+    "fast_analysis/validation/compare.py",
+    "fast_analysis/validation/reference.py",
+    "fast_analysis/workflow/__init__.py",
+    "fast_analysis/workflow/manifest.py",
+    "github-profile-banner.png"
+  ],
+  "missing_locally": [
+    "AN2019_016_v9.pdf",
+    "autonomous_allhad/workflow/analysis_sf_integration_validation/summary.json"
+  ]
+}

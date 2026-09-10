@@ -10,6 +10,10 @@ __pycache__/
 # Editor/local settings
 .vscode/
 .DS_Store
+/.codex-worktrees/
+# Private recovery snapshots and local-only reference material; never publish.
+/.workspace-local/
+**/.mplconfig/
 
 # Credentials/proxies/private keys
 analysis/proxy/
@@ -32,6 +36,14 @@ autonomous_allhad/workflow/histograms/**/impact_step_unit_tests/
 autonomous_allhad/workflow/histograms/**/plot_cache/
 autonomous_allhad/workflow/histograms/**/plots/.cache/
 autonomous_allhad/workflow/histograms/**/plots/.mplconfig/
+# EOS-owned cards and fit internals; retain campaign state, validation summaries,
+# local_storage_manifest*.json, compact exports and frozen source snapshots.
+autonomous_allhad/workflow/histograms/**/cards/
+autonomous_allhad/workflow/histograms/**/datacards/
+autonomous_allhad/workflow/histograms/**/cards_pilot_v2/
+autonomous_allhad/workflow/histograms/**/impact_*/**/work/
+autonomous_allhad/workflow/histograms/**/plots/pdf_validation/
+autonomous_allhad/workflow/histograms/**/*.zip
 autonomous_allhad/workflow/topw_truth_*/tests/
 *.npy
 *.parquet
@@ -47,8 +59,9 @@ autonomous_allhad/workflow/topw_truth_*/tests/
 *.pkl
 *.pickle
 
-# Repository-root scratch and rendered handoff outputs. Canonical analysis
-# artifacts belong under autonomous_allhad/reports, results, validation, or docs.
+# Repository-root scratch and preview renders (also the default destination of
+# report/schematic builders). Promote reviewed final handoffs to
+# autonomous_allhad/reports/; publish only reviewed public artifacts in docs/.
 /output/
 /tmp/
 
@@ -73,6 +86,8 @@ analysis/hists/
 !analysis/hists/
 analysis/hists/*
 !analysis/hists/btageff2024.merged
+!analysis/hists/topwtageff2024.merged
+!analysis/hists/topwtageff2025.merged
 analysis/condor/generated/
 analysis/combine/
 fast_outputs/

@@ -1,0 +1,266 @@
+{
+  "schema_version": 1,
+  "actions": [
+    {
+      "action": "protect_private_reference",
+      "source": "tmp/pdfs/AN2019_016_v9.pdf",
+      "destination": "AN2019_016_v9.pdf",
+      "sha256": "46d8acc9219b58d8914401454919fbcf5207dfbdb5b0d7ab7dceaa1a1b24426f",
+      "eos_hash_matches": true,
+      "old_path": "compatibility symlink"
+    },
+    {
+      "action": "remove_verified_orphan_copy",
+      "path": ".codex-worktrees/signal-histogram-limits",
+      "files": 3783,
+      "bytes": 357156906,
+      "evidence": "orphan_inventory.json; all non-cache bytes also in reachable Git history or identical local file"
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": ".pytest_cache",
+      "files": 88,
+      "bytes": 132420
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "__pycache__",
+      "files": 1,
+      "bytes": 10662
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": ".DS_Store",
+      "files": 1,
+      "bytes": 10244
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "autonomous_allhad/.pytest_cache",
+      "files": 5,
+      "bytes": 6103
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "autonomous_allhad/.DS_Store",
+      "files": 1,
+      "bytes": 10244
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "autonomous_allhad/autonomous_allhad/__pycache__",
+      "files": 22,
+      "bytes": 755057
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "autonomous_allhad/autonomous_allhad/dy_estimation/__pycache__",
+      "files": 11,
+      "bytes": 115433
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "autonomous_allhad/tests/__pycache__",
+      "files": 52,
+      "bytes": 838756
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "autonomous_allhad/workflow/__pycache__",
+      "files": 57,
+      "bytes": 1917393
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "autonomous_allhad/workflow/.mplconfig",
+      "files": 1,
+      "bytes": 127207
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "autonomous_allhad/workflow/.DS_Store",
+      "files": 1,
+      "bytes": 6148
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "autonomous_allhad/workflow/histograms/.DS_Store",
+      "files": 1,
+      "bytes": 6148
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/.mplconfig",
+      "files": 1,
+      "bytes": 127207
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "autonomous_allhad/scripts/__pycache__",
+      "files": 7,
+      "bytes": 221447
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "autonomous_allhad/gnn_lowdm/__pycache__",
+      "files": 4,
+      "bytes": 110298
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "autonomous_allhad/gnn_lowdm/.DS_Store",
+      "files": 1,
+      "bytes": 6148
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "autonomous_allhad/gnn_lowdm/tests/__pycache__",
+      "files": 3,
+      "bytes": 64575
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/__pycache__",
+      "files": 15,
+      "bytes": 338590
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "autonomous_allhad/reports/.DS_Store",
+      "files": 1,
+      "bytes": 6148
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "autonomous_allhad/reports/trigger_sf_2024_an_handoff/.DS_Store",
+      "files": 1,
+      "bytes": 6148
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/.DS_Store",
+      "files": 1,
+      "bytes": 8196
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/.DS_Store",
+      "files": 1,
+      "bytes": 6148
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/tf/.DS_Store",
+      "files": 1,
+      "bytes": 8196
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/.DS_Store",
+      "files": 1,
+      "bytes": 10244
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/dy_report/.DS_Store",
+      "files": 1,
+      "bytes": 8196
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2024/tf/.DS_Store",
+      "files": 1,
+      "bytes": 8196
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "autonomous_allhad/reports/object_definitions_20260909/__pycache__",
+      "files": 2,
+      "bytes": 29836
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "autonomous_allhad/reports/object_definitions_20260909/.DS_Store",
+      "files": 1,
+      "bytes": 8196
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/batch/__pycache__",
+      "files": 1,
+      "bytes": 8108
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "analysis/utils/__pycache__",
+      "files": 1,
+      "bytes": 57479
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "output/.DS_Store",
+      "files": 1,
+      "bytes": 6148
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "fast_analysis/__pycache__",
+      "files": 2,
+      "bytes": 8443
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "fast_analysis/config/__pycache__",
+      "files": 2,
+      "bytes": 2299
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "fast_analysis/tests/__pycache__",
+      "files": 2,
+      "bytes": 6997
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "fast_analysis/workflow/__pycache__",
+      "files": 2,
+      "bytes": 5141
+    },
+    {
+      "action": "remove_regenerable_cache",
+      "path": "automation/__pycache__",
+      "files": 5,
+      "bytes": 100477
+    },
+    {
+      "action": "evict_eos_verified_local_copies",
+      "manifest": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/local_storage_manifest_20260910.json",
+      "files": 1882,
+      "bytes": 767750184
+    },
+    {
+      "action": "remove_regenerable_campaign_scratch",
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/card_unit_tests",
+      "files": 441,
+      "bytes": 1158893
+    },
+    {
+      "action": "remove_regenerable_campaign_scratch",
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/impact_step_unit_tests",
+      "files": 469,
+      "bytes": 44175
+    },
+    {
+      "action": "remove_regenerable_campaign_scratch",
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plot_cache",
+      "files": 1,
+      "bytes": 127207
+    },
+    {
+      "action": "delete_unreachable_git_objects_per_user",
+      "objects": 8620,
+      "bytes": 3689686665,
+      "git_fsck_exit_code": 0
+    }
+  ]
+}
