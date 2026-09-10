@@ -611,7 +611,8 @@ def main() -> int:
             "dy_mass_window_gev": [71.0, 111.0],
             "lepton_veto_pt_min_gev": {"electron": 10.0, "muon": 10.0},
             "lepton_veto_pt_comparison": ">",
-            "analysis_sf_components": ["met_trigger", "photon_trigger"],
+            "analysis_sf_components": ["met_trigger", "photon_trigger"]
+                + (["topw_tagging"] if "topw_tagging" in manifest.get("analysis_sf_components", []) else []),
             "sr_data": "blinded",
         },
         "regions": list(regions),
