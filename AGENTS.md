@@ -365,6 +365,18 @@ in the existing histogram audit, not a new sidecar. Complete correction inputs
 must use the measured SF; corrupt Events/TROTA or invalid normalization are
 not covered by this fallback.
 
+The user also adopts Top/W SF nominal/Up/Down = 1.0 (uncertainty = 0.0)
+for explicitly failed calibration fits, including failed uncertainty endpoints.
+Apply this only to the affected calibration bins; keep valid measured bins
+unchanged. Do not infer a failed fit merely from a malformed payload or NaN.
+
+The user adopts corrected Top/W efficiency = min(SF * MC efficiency, 1),
+separately for nominal, Up, and Down. Recompute both pass and fail weights
+from that bounded efficiency, preserving pass+fail normalization wherever
+the MC has support. Do not clip only the fail weight or replace these valid
+measurements with the fit-failure unity fallback. Retain the asymmetric
+variation endpoints after saturation.
+
 For VOMS proxy creation or renewal, request `--valid 200:00`.
 After issuance, verify the actual proxy and VOMS lifetimes before batch
 submission; the requested duration is not a substitute for that check.

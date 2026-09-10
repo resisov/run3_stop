@@ -64,10 +64,12 @@ def correction(
     description: str,
     axes: Iterable[tuple[str, Iterable[float]]],
     nominal: Iterable[float],
-    uncertainty: Iterable[float],
+    uncertainty: Iterable[float] | None = None,
+    up: Iterable[float] | None = None,
+    down: Iterable[float] | None = None,
     version: int = 1,
 ) -> dict[str, Any]:
-    """Return a variation-category correction with symmetric total uncertainty.
+    """Build symmetric uncertainties or preserve explicit asymmetric endpoints.
 
     The flattened content follows correctionlib multibinning order: the last
     axis varies fastest.  All analysis-owned corrections use ``flow=clamp``;
@@ -76,18 +78,29 @@ def correction(
 
     parsed_axes = [_axis(axis_name, edges) for axis_name, edges in axes]
     nominal_values = _finite_list(nominal, label=f"{name} nominal")
-    uncertainty_values = _finite_list(uncertainty, label=f"{name} uncertainty")
-    if len(nominal_values) != len(uncertainty_values):
-        raise ValueError("nominal and uncertainty arrays must have equal length")
-    if any(value <= 0.0 for value in nominal_values):
-        raise ValueError(f"{name} nominal scale factors must be positive")
-    if any(value < 0.0 for value in uncertainty_values):
-        raise ValueError(f"{name} uncertainties must be non-negative")
-    values = {
-        "nominal": nominal_values,
-        "up": [value + error for value, error in zip(nominal_values, uncertainty_values)],
-        "down": [max(1.0e-6, value - error) for value, error in zip(nominal_values, uncertainty_values)],
-    }
+    if uncertainty is not None:
+        if up is not None or down is not None:
+            raise ValueError("choose uncertainty or explicit up/down, not both")
+        uncertainty_values = _finite_list(uncertainty, label=f"{name} uncertainty")
+        if len(nominal_values) != len(uncertainty_values):
+            raise ValueError("nominal and uncertainty arrays must have equal length")
+        if any(value <= 0.0 for value in nominal_values):
+            raise ValueError(f"{name} nominal scale factors must be positive")
+        if any(value < 0.0 for value in uncertainty_values):
+            raise ValueError(f"{name} uncertainties must be non-negative")
+        up_values = [value + error for value, error in zip(nominal_values, uncertainty_values)]
+        down_values = [max(1.0e-6, value - error) for value, error in zip(nominal_values, uncertainty_values)]
+    else:
+        if up is None or down is None:
+            raise ValueError("both explicit up and down endpoints are required")
+        up_values = _finite_list(up, label=f"{name} up")
+        down_values = _finite_list(down, label=f"{name} down")
+        if not len(nominal_values) == len(up_values) == len(down_values):
+            raise ValueError("nominal/up/down arrays must have equal length")
+        if any(low < 0 or not low <= value <= high
+               for low, value, high in zip(down_values, nominal_values, up_values)):
+            raise ValueError("explicit endpoints must be nonnegative and bracket nominal")
+    values = {"nominal": nominal_values, "up": up_values, "down": down_values}
     return {
         "name": name,
         "description": description,

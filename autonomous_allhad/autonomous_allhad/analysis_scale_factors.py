@@ -52,6 +52,19 @@ TOPW_CORRECTION_BRANCHES = (
 )
 
 
+def topw_fit_categories(flavor: Any, *, top_like: bool) -> np.ndarray:
+    """Map decay containment to JME fit processes for an explicit sample group."""
+    flavor = np.asarray(flavor)
+    if (flavor.ndim != 1 or flavor.dtype.kind not in "iu"
+        or np.any((flavor < 0) | (flavor > 4))):
+        raise ValueError("Top/W decay flavors must be a flat integer array in [0, 4]")
+    if not isinstance(top_like, bool):
+        raise ValueError("Top/W sample-group membership must be explicit")
+    if not top_like:
+        return np.full(flavor.shape, "other", dtype="U5")
+    return np.asarray(["tp1", "tp1", "tp1", "tp2", "tp3"])[flavor]
+
+
 def topw_file_input_policy(root_file: Any) -> dict[str, Any]:
     """Missing correction inputs do not remove an otherwise valid event file."""
     events = root_file["Events"]
@@ -115,8 +128,9 @@ def apply_topw_highpt_extrapolation(
     *,
     tagger: str,
     year: str,
+    fit_failed: Any = None,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """Apply the adopted high-pT SF=1, uncertainty=0 prescription."""
+    """Use unity for high-pT extrapolation and explicitly failed fit bins."""
     if str(year) not in {"2024", "2025"}:
         raise AnalysisScaleFactorUnavailable(f"unsupported Top/W SF year: {year}")
     limits = {"top": 1200.0, "w": 800.0}
@@ -126,12 +140,18 @@ def apply_topw_highpt_extrapolation(
     if pt.ndim != 1 or not np.all(np.isfinite(pt)) or np.any(pt < 0):
         raise ValueError("Top/W SF pT must be a finite nonnegative flat array")
     highpt = pt >= limits[tagger]
+    failed = np.zeros(pt.shape, dtype=bool)
+    if fit_failed is not None:
+        failed = np.asarray(fit_failed)
+        if failed.shape != pt.shape or failed.dtype != np.bool_:
+            raise ValueError("Top/W fit-failure mask must be a matching boolean array")
+    unity = highpt | failed
     result = []
     for values in (nominal, up, down):
         values = np.asarray(values, dtype=float)
         if values.shape != pt.shape:
             raise ValueError("Top/W SF and pT array shapes differ")
-        values = np.where(highpt, 1.0, values)
+        values = np.where(unity, 1.0, values)
         if not np.all(np.isfinite(values)) or np.any(values < 0):
             raise AnalysisScaleFactorUnavailable("invalid in-range Top/W SF")
         result.append(values)
@@ -148,7 +168,7 @@ def topw_pass_fail_triplet(
     up: Any,
     down: Any,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """Weight eligible, truth-matched jets without changing pass+fail yield."""
+    """Use min(SF * efficiency, 1) for each nominal/Up/Down probability."""
     tagged = np.asarray(tagged)
     efficiency = np.asarray(efficiency, dtype=float)
     if tagged.ndim != 1 or tagged.dtype != np.bool_ or efficiency.shape != tagged.shape:
@@ -164,17 +184,18 @@ def topw_pass_fail_triplet(
             raise ValueError("Top/W SF and efficiency array shapes differ")
         if not np.all(np.isfinite(scale)) or np.any(scale < 0):
             raise AnalysisScaleFactorUnavailable("invalid Top/W SF variation")
-        if np.any(scale * efficiency > 1):
-            raise AnalysisScaleFactorUnavailable("Top/W SF times MC efficiency exceeds one")
-        if np.any((efficiency == 1) & (scale != 1)):
-            raise AnalysisScaleFactorUnavailable("no failing MC support for non-unity Top/W SF")
+        if np.any((efficiency == 1) & (scale < 1)):
+            raise AnalysisScaleFactorUnavailable("no failing MC support for a reduced Top/W efficiency")
     if np.any(variations[2] > variations[0]) or np.any(variations[0] > variations[1]):
         raise AnalysisScaleFactorUnavailable("Top/W SF variations do not bracket nominal")
     result = []
     for scale in variations:
+        corrected = np.minimum(scale * efficiency, 1.0)
+        passed = np.ones_like(efficiency)
         fail = np.ones_like(efficiency)
-        np.divide(1 - scale * efficiency, 1 - efficiency, out=fail, where=efficiency < 1)
-        result.append(np.where(tagged, scale, fail))
+        np.divide(corrected, efficiency, out=passed, where=efficiency > 0)
+        np.divide(1 - corrected, 1 - efficiency, out=fail, where=efficiency < 1)
+        result.append(np.where(tagged, passed, fail))
     return tuple(result)
 
 

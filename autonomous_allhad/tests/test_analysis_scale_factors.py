@@ -12,6 +12,7 @@ import numpy as np
 from autonomous_allhad.analysis_scale_factors import (
     AnalysisScaleFactorUnavailable,
     TOPW_CORRECTION_BRANCHES,
+    topw_fit_categories,
     topw_file_input_policy,
     topw_file_sf_triplet,
     apply_topw_missing_input_fallback,
@@ -23,6 +24,54 @@ from autonomous_allhad.analysis_scale_factors import (
     veto_electron_lowpt_triplet,
 )
 from workflow.sf_payload import correction, correction_set, install_adopted_result, write_json_gz
+
+
+class TopWFitCategoryTest(unittest.TestCase):
+    def test_top_like_includes_partial_and_mistag_in_tp1(self):
+        np.testing.assert_array_equal(
+            topw_fit_categories([0, 1, 2, 3, 4], top_like=True),
+            ["tp1", "tp1", "tp1", "tp2", "tp3"],
+        )
+
+    def test_non_top_is_other_even_with_contained_w(self):
+        np.testing.assert_array_equal(
+            topw_fit_categories([0, 1, 2, 3, 4], top_like=False),
+            ["other"] * 5,
+        )
+
+    def test_rejects_ambiguous_group_and_invalid_flavor(self):
+        for flavor in ([5], [-1], [1.0], [[1]], [True]):
+            with self.subTest(flavor=flavor), self.assertRaises(ValueError):
+                topw_fit_categories(flavor, top_like=True)
+        for group in (None, 1, "TT"):
+            with self.subTest(group=group), self.assertRaises(ValueError):
+                topw_fit_categories([0], top_like=group)
+
+
+class AsymmetricScaleFactorPayloadTest(unittest.TestCase):
+    def test_roundtrip_preserves_asymmetry_and_zero_endpoint(self):
+        payload = correction_set("test", [correction(
+            name="topw", description="test", axes=[("pt", [400, 480, 600])],
+            nominal=[1.103, 1.0], up=[1.224, 1.0], down=[0.0, 1.0],
+        )])
+        evaluator = correctionlib.CorrectionSet.from_string(json.dumps(payload))["topw"]
+        for name, expected in (("nominal", 1.103), ("up", 1.224), ("down", 0.0)):
+            self.assertEqual(evaluator.evaluate(name, 450.0), expected)
+        for name in ("nominal", "up", "down"):
+            self.assertEqual(evaluator.evaluate(name, 500.0), 1.0)
+
+    def test_rejects_mixed_missing_or_invalid_endpoints(self):
+        for endpoints in (
+            {}, {"up": [1.1]}, {"down": [0.9]},
+            {"up": [1.1], "down": [0.9], "uncertainty": [0.1]},
+            {"up": [0.9], "down": [0.8]},
+            {"up": [1.1], "down": [-0.1]},
+            {"up": [float("nan")], "down": [0.9]},
+            {"up": [1.1, 1.2], "down": [0.9]},
+        ):
+            with self.subTest(endpoints=endpoints), self.assertRaises(ValueError):
+                correction(name="topw", description="test", axes=[("pt", [400, 480])],
+                           nominal=[1.0], **endpoints)
 
 
 class TopWMissingInputTest(unittest.TestCase):
@@ -122,6 +171,37 @@ class TopWMissingInputTest(unittest.TestCase):
 
 
 class TopWExtrapolationTest(unittest.TestCase):
+    def test_explicit_fit_failure_is_unity_for_both_years_and_taggers(self):
+        for year in ("2024", "2025"):
+            for tagger in ("top", "w"):
+                with self.subTest(year=year, tagger=tagger):
+                    result = apply_topw_highpt_extrapolation(
+                        [450, 500, 650], [1.1, 1.293, np.nan],
+                        [1.2, 1.444, np.inf], [0.9, 0.0, -1.0],
+                        tagger=tagger, year=year, fit_failed=[False, True, True],
+                    )
+                    for actual, expected in zip(result, ([1.1, 1, 1], [1.2, 1, 1], [0.9, 1, 1])):
+                        np.testing.assert_array_equal(actual, expected)
+
+    def test_fit_failure_preserves_pass_and_fail_yields(self):
+        scales = apply_topw_highpt_extrapolation(
+            [500, 500], [1.293, 1.293], [1.444, 1.444], [0, 0],
+            tagger="top", year="2024", fit_failed=[True, True],
+        )
+        for weights in topw_pass_fail_triplet([True, False], [0.8, 0.8], *scales):
+            np.testing.assert_array_equal(weights, [1, 1])
+
+    def test_fit_failure_mask_is_explicit_and_aligned(self):
+        for mask in ([1], [True, False], True):
+            with self.subTest(mask=mask), self.assertRaises(ValueError):
+                apply_topw_highpt_extrapolation(
+                    [500], [1], [1], [1], tagger="top", year="2024", fit_failed=mask,
+                )
+        with self.assertRaises(AnalysisScaleFactorUnavailable):
+            apply_topw_highpt_extrapolation(
+                [500], [np.nan], [1], [1], tagger="top", year="2024", fit_failed=[False],
+            )
+
     def test_both_years_and_exact_upper_edges(self):
         for year in ("2024", "2025"):
             for tagger, edge in (("top", 1200.0), ("w", 800.0)):
@@ -198,11 +278,50 @@ class TopWPassFailTest(unittest.TestCase):
         for weights in topw_pass_fail_triplet([True, False], [0.8, 0.4], *scales):
             np.testing.assert_array_equal(weights, [1, 1])
 
-    def test_unsupported_efficiencies_are_not_clipped(self):
+    def test_unsupported_efficiencies_are_rejected(self):
         for tagged, eff, sf in ((True, 0, 1), (False, 1, 1), (True, 1, 0.9),
-                               (False, 0.9, 1.2), (True, np.nan, 1), (False, -0.1, 1)):
+                               (True, np.nan, 1), (False, -0.1, 1)):
             with self.subTest(tagged=tagged, eff=eff, sf=sf), self.assertRaises(AnalysisScaleFactorUnavailable):
                 topw_pass_fail_triplet([tagged], [eff], [sf], [sf], [sf])
+
+    def test_observed_t2tt_case_saturates_pass_and_fail_together(self):
+        eff = 9972.0 / (9972.0 + 496.0)
+        nominal, up, down = topw_pass_fail_triplet(
+            [True, False], [eff, eff], [1.103] * 2, [1.224] * 2, [1.017] * 2,
+        )
+        np.testing.assert_allclose(nominal, [1.0 / eff, 0.0])
+        np.testing.assert_array_equal(up, nominal)
+        self.assertAlmostEqual(down[0], 1.017)
+        self.assertGreater(down[1], 0.0)
+        for weights in (nominal, up, down):
+            self.assertTrue(np.all(weights >= 0))
+            self.assertAlmostEqual(eff * weights[0] + (1 - eff) * weights[1], 1.0)
+
+    def test_only_up_endpoint_can_saturate(self):
+        nominal, up, down = topw_pass_fail_triplet(
+            [True, False], [0.8, 0.8], [1.1] * 2, [1.4] * 2, [0.9] * 2,
+        )
+        np.testing.assert_allclose(nominal, [1.1, 0.6])
+        np.testing.assert_allclose(up, [1.25, 0.0])
+        np.testing.assert_allclose(down, [0.9, 1.4])
+
+    def test_projection_preserves_total_across_efficiencies(self):
+        eff = np.concatenate(([1.e-12, np.nextafter(1., 0.)], np.linspace(.01, .99, 99)))
+        scales = [np.full_like(eff, sf) for sf in (1.3, 2.0, 0.0)]
+        passed = topw_pass_fail_triplet(np.ones(eff.shape, dtype=bool), eff, *scales)
+        failed = topw_pass_fail_triplet(np.zeros(eff.shape, dtype=bool), eff, *scales)
+        for p, f in zip(passed, failed):
+            self.assertTrue(np.all(np.isfinite(p)) and np.all(np.isfinite(f)))
+            self.assertTrue(np.all(p >= 0) and np.all(f >= 0))
+            np.testing.assert_allclose(eff * p + (1 - eff) * f, 1.0, rtol=0, atol=2.e-15)
+        self.assertTrue(np.all(passed[1] >= passed[0]))
+        self.assertTrue(np.all(passed[0] >= passed[2]))
+        self.assertTrue(np.all(failed[1] <= failed[0]))
+        self.assertTrue(np.all(failed[0] <= failed[2]))
+
+    def test_unit_efficiency_accepts_saturated_scales(self):
+        for weights in topw_pass_fail_triplet([True], [1.], [1.2], [1.4], [1.]):
+            np.testing.assert_array_equal(weights, [1.])
 
     def test_supported_boundary_efficiencies(self):
         for weights in topw_pass_fail_triplet([True, False], [1, 0], [1, 1], [1, 1], [1, 1]):
