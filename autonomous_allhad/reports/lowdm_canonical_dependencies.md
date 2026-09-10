@@ -67,7 +67,6 @@ SR observation, intermediate ROOT, NanoAOD는 읽지 않는다.
 4. **배포·runtime 계약이 서로 다르다.** 학습 requirements는 Python 3.12 계열, signal worker는 py38 및 mt2 1.2.0, cache worker는 CVMFS LCG_110_swan, limit plotter는 별도 py38 버전 집합이다. 학습 requirements 하나로 전체 workflow가 충족되지 않는다.
 5. **로컬 보정 파일 일부가 없다.** 2025 AnalysisSF 4개와 `analysis/hists/btageff2024.merged`, `btageff2025.merged`가 현 repository 위치에 없다. EOS 사본 유무는 이 조사에서 확인하지 않았다. `corrections.coffea`는 존재하지만 원본 소스와 직렬화 payload의 동등성은 확인하지 않았다.
 6. **현재 plot dispatcher의 연결이 최종 공용 인터페이스와 완전히 일치하지 않는다.** `cr`은 자체 `plot_control_regions.py`를 쓰며 공용 `plot_control_search_bins_style.py`를 import하지 않는다. `combined-limit`은 2024 luminosity와 구형 Run-2 입력명, Low-dM-only 추가 grid를 사용하는 wrapper다. 공용 `postprocess_limits.py`의 최신 CLI 기본값·topology·xsec 옵션을 전부 전달하지 않는다.
-7. **30이라는 총 bin 수만으로 다른 workflow를 같은 것으로 분류하면 안 된다.** 공용 디렉토리의 `build_lowdm_gnn30_combine_inputs.py`는 10 category × 3 score bins 및 기존 34-bin 재분배 코드다. 현 frozen 6 × 5 GNN30의 import 그래프에 연결되지 않으며, 이 보고서에서는 대조 대상으로 분리했다.
 8. **2024+2025 결합과 SR 최초 배경-template 작성이 공개 8개 진입점 안에서 끝까지 연결되어 있지 않다.** `merge_datacard.py`는 연도별 패키징이고, signal merge는 기존 Low-dM template/manifest를 입력으로 받아 신호를 추가한다. `limits-prepare`는 주어진 High/Low 카드들을 결합한다. 두 연도 결합 공용 도구는 아래 별도 항목이며 자동으로 호출되지 않는다.
 9. **systematic 전파는 파일의 존재와 별개다.** 현 `build_datacard.py`는 signal lumi, CR rateParam, autoMCStats를 작성한다. object/weight systematic GNN score migration까지 완성된 통계모델이라는 의미가 아니다.
 
@@ -191,7 +190,6 @@ RZ는 [autonomous_allhad/gnn_lowdm/_implementation/region_io.py](</Users/taiwoom
 | [autonomous_allhad/workflow/background_process_groups.py](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/background_process_groups.py>) | 공용 배경 process grouping |
 | [autonomous_allhad/workflow/plot_control_search_bins_style.py](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/plot_control_search_bins_style.py>) | 사용자가 지정한 공용 distribution plotter; 현 plotting cr은 이 코드를 호출하지 않음 |
 | [autonomous_allhad/workflow/plot_highdm73_from_limit_templates.py](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/plot_highdm73_from_limit_templates.py>) | high-dM73 template 플롯; 공용 style을 import |
-| [autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py>) | 이름만 유사한 10×3 score redistribution; frozen 6×5 모델과 별개 |
 
 ## 7. 외부 패키지·실행 환경
 
@@ -1109,24 +1107,6 @@ Python 표준 라이브러리 전체: `__future__`, `argparse`, `array`, `collec
 | [12](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/plot_highdm73_from_limit_templates.py:12>): `module` | `import uproot` | 표준 라이브러리 / 외부 설치 패키지 |
 | [14](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/plot_highdm73_from_limit_templates.py:14>): `module` | `import plot_control_search_bins_style as style` | [autonomous_allhad/workflow/plot_control_search_bins_style.py](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/plot_control_search_bins_style.py>) |
 
-#### [autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py>)
-
-| 위치·실행 범위 | import | 해결 파일 / 종류 |
-|---|---|---|
-| [11](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:11>): `module` | `from __future__ import annotations` | 표준 라이브러리 / 외부 설치 패키지 |
-| [13](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:13>): `module` | `import argparse` | 표준 라이브러리 / 외부 설치 패키지 |
-| [14](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:14>): `module` | `import copy` | 표준 라이브러리 / 외부 설치 패키지 |
-| [15](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:15>): `module` | `import hashlib` | 표준 라이브러리 / 외부 설치 패키지 |
-| [16](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:16>): `module` | `import json` | 표준 라이브러리 / 외부 설치 패키지 |
-| [17](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:17>): `module` | `import math` | 표준 라이브러리 / 외부 설치 패키지 |
-| [18](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:18>): `module` | `import re` | 표준 라이브러리 / 외부 설치 패키지 |
-| [19](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:19>): `module` | `import sys` | 표준 라이브러리 / 외부 설치 패키지 |
-| [20](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:20>): `module` | `from collections import defaultdict` | 표준 라이브러리 / 외부 설치 패키지 |
-| [21](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:21>): `module` | `from pathlib import Path` | 표준 라이브러리 / 외부 설치 패키지 |
-| [22](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:22>): `module` | `from typing import Any` | 표준 라이브러리 / 외부 설치 패키지 |
-| [24](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:24>): `module` | `import numpy as np` | 표준 라이브러리 / 외부 설치 패키지 |
-| [25](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:25>): `module` | `import uproot` | 표준 라이브러리 / 외부 설치 패키지 |
-| [33](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:33>): `module` | `import build_combine_inputs as canonical` | [autonomous_allhad/workflow/build_combine_inputs.py](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_combine_inputs.py>) |
 
 ## 부록 B. 파일 I/O·CLI 입력 전수 색인
 
@@ -1808,34 +1788,6 @@ Python 표준 라이브러리 전체: `__future__`, `argparse`, `array`, `collec
 | [79](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/plot_highdm73_from_limit_templates.py:79>) `main` | `args.bin_map.read_text()` |
 | [92](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/plot_highdm73_from_limit_templates.py:92>) `main` | `uproot.open(path)` |
 
-### [autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py>)
-
-| 줄·함수 | 참조 표현식 |
-|---|---|
-| [54](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:54>) `sha256` | `path.open('rb')` |
-| [144](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:144>) `background_fractions` | `manifest_path.read_text()` |
-| [146](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:146>) `background_fractions` | `uproot.open(score_root)` |
-| [193](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:193>) `signal_fractions` | `uproot.open(score_root)` |
-| [467](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:467>) `write_gnn_cards` | `path.read_text()` |
-| [479](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:479>) `main` | `parser.add_argument('--hists', type=Path, required=True)` |
-| [481](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:481>) `main` | `parser.add_argument('--campaign-year', choices=('2024', '2025'), required=True)` |
-| [483](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:483>) `main` | `parser.add_argument('--sgamma', type=Path, required=True)` |
-| [484](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:484>) `main` | `parser.add_argument('--rz-high', type=Path, required=True)` |
-| [485](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:485>) `main` | `parser.add_argument('--rz-low', type=Path, required=True)` |
-| [486](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:486>) `main` | `parser.add_argument('--zgamma-double-ratio', type=Path, required=True)` |
-| [487](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:487>) `main` | `parser.add_argument('--search-bin-config', type=Path, required=True)` |
-| [488](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:488>) `main` | `parser.add_argument('--background-scores', type=Path, required=True)` |
-| [489](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:489>) `main` | `parser.add_argument('--signal-scores', type=Path, required=True)` |
-| [490](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:490>) `main` | `parser.add_argument('--gnn-selection', type=Path, required=True)` |
-| [491](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:491>) `main` | `parser.add_argument('--gnn-checkpoint', type=Path, required=True)` |
-| [492](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:492>) `main` | `parser.add_argument('--campaign-manifest', type=Path, required=True)` |
-| [493](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:493>) `main` | `parser.add_argument('--output-dir', type=Path, required=True)` |
-| [507](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:507>) `main` | `args.gnn_selection.read_text()` |
-| [525](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:525>) `main` | `canonical.read_json(args.sgamma)` |
-| [526](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:526>) `main` | `canonical.read_json(args.rz_high)` |
-| [527](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:527>) `main` | `canonical.read_json(args.rz_low)` |
-| [528](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:528>) `main` | `canonical.read_json(args.zgamma_double_ratio)` |
-| [529](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py:529>) `main` | `canonical.read_json(args.search_bin_config)` |
 
 ## 부록 C. 현재 소스 식별
 
@@ -1903,7 +1855,6 @@ Python 표준 라이브러리 전체: `__future__`, `argparse`, `array`, `collec
 | [autonomous_allhad/workflow/background_process_groups.py](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/background_process_groups.py>) | `afe5af0d1dc478f3294fc236b7083346e5cf3fdc0762bcbaf7eb0e2f04d8e419` | `clean tracked` |
 | [autonomous_allhad/workflow/plot_control_search_bins_style.py](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/plot_control_search_bins_style.py>) | `bf3e2b388916d0431b510876f4216ca72aabf86103c1453c05ec1fccc4dd0324` | `M autonomous_allhad/workflow/plot_control_search_bins_style.py` |
 | [autonomous_allhad/workflow/plot_highdm73_from_limit_templates.py](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/plot_highdm73_from_limit_templates.py>) | `a40810a5203915d7b4ce7f96584c855eab0c8f8095982ea994c59b1448dd149c` | `?? autonomous_allhad/workflow/plot_highdm73_from_limit_templates.py` |
-| [autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py>) | `f2bc33c76e79e03463ec0e05aee3e946eb7327691df16d91533e1b9d16bd8526` | `?? autonomous_allhad/workflow/build_lowdm_gnn30_combine_inputs.py` |
 | [autonomous_allhad/gnn_lowdm/_implementation/run_highdm79minus6_lowdm30_bundle.sh](</Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/gnn_lowdm/_implementation/run_highdm79minus6_lowdm30_bundle.sh>) | `6338467f81cb49afd368bca38db5327337e7694bdaa756f79bb766541acc37c8` | `clean tracked` |
 
 ## 부록 D. 배포·보존해야 하는 연결과 추가 확인 결과

@@ -1,5 +1,8 @@
 # Workspace storage and synchronization
 
+Active analysis branch: `run3_full_analysis`. It continues the published
+`codex/package-lowpt-tnp` history; earlier commit identifiers remain valid.
+
 The currently used, validated payload is authoritative. A newer timestamp, a
 branch name, or the presence of a local copy does not establish that authority.
 Resolve conflicting physics files with the main analysis agent using the actual

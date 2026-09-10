@@ -2,6 +2,8 @@
 
 2024+2025 · High-dM 79−6 = 73 bins + frozen Low-dM GNN 30 bins.
 
+Development branch: `run3_full_analysis`.
+
 - [High-dM canonical code](autonomous_allhad/reports/highdm_canonical_dependencies.md)
 - [Low-dM canonical dependencies](autonomous_allhad/reports/lowdm_canonical_dependencies.md)
 - [Current workflow locations](autonomous_allhad/reports/workflow_inventory.md)

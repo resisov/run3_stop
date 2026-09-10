@@ -3,7 +3,6 @@
   "status": "canonical",
   "campaign": "lepton_veto10_20260908",
   "promoted_at_utc": "2026-09-08T07:43:30Z",
-  "supersedes": "autonomous_allhad/reports/dy_window20_canonical_20260907.json",
   "electron_veto_pt_min_gev": 10,
   "muon_veto_pt_min_gev": 10,
   "lepton_threshold_operator": ">",
@@ -230,6 +229,6 @@
       "histogram_validation"
     ],
     "local_main_and_gnn_cache": "not downloaded; local aliases identify the new campaign but require explicit EOS retrieval before local use",
-    "old_eos_histograms": "preserved; superseded"
+    "old_eos_histograms": "removed"
   }
 }
