@@ -20,6 +20,56 @@
     "canonical_histograms_replaced": false,
     "full_production_submitted": true,
     "full_clusters": {"main": 1113843, "gnn": 1113844},
+    "monitoring": {
+      "automation_id": "run3-30",
+      "interval_minutes": 30,
+      "advance_validated_stages": true
+    },
+    "gnn_merge": {
+      "submitted_utc": "2026-09-10T14:48:16Z",
+      "cluster": 1113859,
+      "jobs": 2,
+      "years": [2024, 2025],
+      "stage": "submitted",
+      "submit_source": "gnn_merge.sub",
+      "partials_directory": "gnn/full/partials_pending",
+      "output": "gnn/hists.pending.json",
+      "partial_outputs": {"2024": 240, "2025": 337},
+      "partial_exit_zero_jobs": {"1113844": 568, "1113850": 9},
+      "partial_name_set_matches_queue": true,
+      "schedd": "bigbird24.cern.ch",
+      "job_flavour": "workday",
+      "max_runtime_seconds": 28800,
+      "proxy_seconds_before_submission": 447669,
+      "voms_seconds_before_submission": 418869,
+      "merge_source_sha256": "fbed6cb5cbecd2748aa66b30f31bb2d41ae0e17adbdb70723f5997d26d80e019",
+      "queue_after_submission": {"idle": 2, "running": 0, "held": 0}
+    },
+    "gnn_retries": [
+      {
+        "submitted_utc": "2026-09-10T13:53:53Z",
+        "cluster": 1113850,
+        "jobs": 9,
+        "jobs_by_year": {"2024": 8, "2025": 1},
+        "removed_cluster": 1113844,
+        "removed_procs": [159, 164, 168, 180, 189, 206, 209, 215, 290],
+        "removed_queue_verified_empty": true,
+        "items": {
+          "2024": ["mc_0104", "mc_0109", "mc_0113", "mc_0125", "mc_0134", "mc_0151", "mc_0154", "mc_0160"],
+          "2025": ["data_0050"]
+        },
+        "cause": "Python module import failed with OSError errno 5 (Input/output error)",
+        "submit_source": "gnn_production.sub",
+        "argv_unchanged": true,
+        "pending_output_collisions": 0,
+        "schedd": "bigbird24.cern.ch",
+        "job_flavour": "workday",
+        "max_runtime_seconds": 28800,
+        "proxy_seconds_before_submission": 451047,
+        "voms_seconds_before_submission": 422247,
+        "queue_after_submission": {"idle": 9, "running": 0, "held": 0}
+      }
+    ],
     "full_jobs": {"main": 2, "gnn": 577},
     "full_max_runtime_seconds": {"main": 172800, "gnn": 28800},
     "full_proxy_seconds_before_submission": 453721,

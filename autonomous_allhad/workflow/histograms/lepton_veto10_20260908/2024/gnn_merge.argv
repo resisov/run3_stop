@@ -1,0 +1,10 @@
+python
+-m
+gnn_lowdm.eval
+cr-merge
+--partials
+/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/gnn/full/partials_pending
+--manifest
+/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/gnn/full_manifest.json
+--output
+/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/gnn/hists.pending.json
