@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generated_at_utc": "2026-09-10T12:56:30.491050+00:00",
-  "status": "cleanup_complete_canonical_sync_pending_main_agent",
+  "status": "cleanup_complete_current_use_sync_in_progress",
   "initial_head": "561c2721b7dd97ddba1166c8b2ac7de7f07a5701",
   "initial_branch": "codex/package-lowpt-tnp",
   "original_deletions": 2367,
@@ -27,7 +27,14 @@
   "physics_source_modified_by_cleanup": false,
   "compiled_payloads_modified_by_cleanup": false,
   "canonical_sync_policy": "Currently used version, to be identified by high-dM main Agent at user request; no divergent physics overwrite before identification.",
-  "canonical_sync_status": "pending_main_agent_response",
-  "main_agent_response_status": "Reply sharing blocked by automatic approval review in the main agent task; user authorization evidence forwarded.",
-  "github_pages_deployed": false
+  "canonical_sync_status": "main_agent_decision_received_selected_files_being_verified",
+  "main_agent_response_status": "Completed: current-use authority recorded in canonical_decision.json",
+  "github_pages_deployed": false,
+  "cleanup_commit": "13dfa10a2e30eee3b7a3074ff9699da6836e5eb2",
+  "cleanup_github_push_verified": true,
+  "cleanup_eos_verified_files": 15,
+  "current_btag_payload_sha256": "9326454608126467219a60f8d5763a6c92465127ca6ea32ac415ace8ed0ec004",
+  "current_topw_efficiency_sha256": "1d19be3a7fc6e59f1ee9798cb85b7154feca16ad2c1390ce8382453fcaaa1c68",
+  "historical_or_unproven_variants_preserved": 7,
+  "selected_sync_file_count": 30
 }

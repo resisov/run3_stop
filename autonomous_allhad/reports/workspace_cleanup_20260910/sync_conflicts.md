@@ -1,6 +1,8 @@
 # Local / EOS synchronization conflicts
 
-Inspection snapshot: 2026-09-10. Neither side has been overwritten. Existing local deletions were explicitly confirmed by the user.
+Initial inspection snapshot: 2026-09-10. Existing local deletions were explicitly confirmed by the user.
+
+Resolution: [canonical_decision.json](canonical_decision.json) records the main agent’s current-use decision. EOS dataset/metadata/batch-runner versions and local GNN plotting versions were adopted. Documentation and ignore rules use the reviewed local version. Seven inactive or unproven reference/test variants remain preserved; their initial hashes below are historical evidence, not a claim that all 19 conflicts remain open.
 
 The active EOS checkout and local branch are not interchangeable. A common Git commit alone would not validate these physics inputs.
 

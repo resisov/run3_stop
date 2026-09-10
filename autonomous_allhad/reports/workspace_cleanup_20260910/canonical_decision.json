@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "user_policy": "현재 사용하는 것이 정본이다",
+  "main_agent": "high-dM main Agent",
+  "received_at_utc": "2026-09-10T13:08:22.986501+00:00",
+  "adopted": [
+    {
+      "path": "analysis/datasets/datasets_2024.txt",
+      "authority": "current_EOS_use_confirmed_by_main_agent",
+      "sha256": "d9de62e8684159db66788872bf6b3851b8756a806aefffc3f17badedd9fb56b4"
+    },
+    {
+      "path": "analysis/metadata/KNU_2024_v4.json.gz",
+      "authority": "current_EOS_use_confirmed_by_main_agent",
+      "sha256": "365df1a13c0a61567b70a2136cc083ae78d2fa3c013f0f0fac4be738f934b863"
+    },
+    {
+      "path": "autonomous_allhad/workflow/run_batch.sh",
+      "authority": "current_EOS_use_confirmed_by_main_agent",
+      "sha256": "4c91cdcbe19e872ca1ff5c09e9662b3cee38f524d6fb57ca8a7a68a8e0eede0c"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/README.md",
+      "authority": "current_local_plotting_confirmed_by_main_agent",
+      "sha256": "5fb925056e3e526d6c0d6db5f8792078b0b4f1f7f75b7f2cb7113c836716f712"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/plot_hyperparameter_losses.py",
+      "authority": "current_local_plotting_confirmed_by_main_agent",
+      "sha256": "a48eb865ee44d2bdfa0aebe92f756683a4a9e5191e06222372b8d3bb8b208b00"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/supplementary_plots.py",
+      "authority": "current_local_plotting_confirmed_by_main_agent",
+      "sha256": "404a6be1a5849f03e097fdb012d8361321e62331659ee3e8a16ccd840afde2eb"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/plotting.py",
+      "authority": "current_local_plotting_confirmed_by_main_agent",
+      "sha256": "4c87668644f2cb992d6d1a5987076cc0455cf4aa3668f47667e588131a161c7a"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/requirements.txt",
+      "authority": "current_local_plotting_confirmed_by_main_agent",
+      "sha256": "581fb3e1bb4f7d79d1e4d9edaadd44ed29d6e08319e8bc4348948d0d9ed8aabc"
+    }
+  ],
+  "kept_variants": [
+    "analysis/data/JMESF/2025/jetvetomaps.json.gz",
+    "analysis/metadata/json_maker_lxplus.py",
+    "analysis/processors/stop_processor_v4.py",
+    "autonomous_allhad/workflow/measure_trigger.py",
+    "autonomous_allhad/tests/test_2025_data_policy.py",
+    "autonomous_allhad/tests/test_canonical_card_projection.py",
+    "autonomous_allhad/tests/test_trigger_efficiency.py"
+  ],
+  "jet_veto_note": "EOS root, code_main_v2 and gnn_code share Winter25Prompt25_RunCDEFG_V1, sha256 61de83931454ff37c9cc1df476d03dde9bb7871e85558018ce3304d5224c939e. Current histogram does not reevaluate this payload. real_subset_worker names Summer24Prompt25_RunCDEFG_V1; actual intermediate ROOT production payload remains unproven. No jet-veto payload or source changed in cleanup.",
+  "inactive_reference_note": "json_maker_lxplus.py, stop_processor_v4.py and measure_trigger.py are not executed by current hist production. Preserve variants and associated differing tests; no inferred baseline choice.",
+  "protected_campaign": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908",
+  "frozen_code_preserved": [
+    "code_main_v2",
+    "gnn_code"
+  ],
+  "root_inputs_and_runtime_untouched": true,
+  "btag_sha256": "9326454608126467219a60f8d5763a6c92465127ca6ea32ac415ace8ed0ec004",
+  "topw_efficiency_sha256": "1d19be3a7fc6e59f1ee9798cb85b7154feca16ad2c1390ce8382453fcaaa1c68"
+}

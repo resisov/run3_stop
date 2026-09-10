@@ -39,11 +39,6 @@
       "sha256": "ec0e178d156194b4345d0fc53f84798e0163b7a8518272b591703dbb38ae3b4f"
     },
     {
-      "path": "analysis/hists/btageff2024.merged",
-      "present": false,
-      "note": "Absent at cleanup start; report claim that this payload was tracked was not supported by Git inventory."
-    },
-    {
       "path": "analysis/hists/topwtageff2024.merged",
       "present": true,
       "bytes": 2245877,
@@ -54,6 +49,24 @@
       "present": true,
       "bytes": 2245877,
       "sha256": "1d19be3a7fc6e59f1ee9798cb85b7154feca16ad2c1390ce8382453fcaaa1c68"
+    },
+    {
+      "path": "analysis/hists/btageff2024.merged",
+      "present": true,
+      "bytes": 521273,
+      "sha256": "9326454608126467219a60f8d5763a6c92465127ca6ea32ac415ace8ed0ec004",
+      "source": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/code_main_v2/analysis/hists/btageff2024.merged",
+      "authority": "high-dM main Agent confirmed currently used worker payload; snapshot and EOS source hashes reverified",
+      "local_state_before_cleanup": "absent"
+    },
+    {
+      "path": "analysis/hists/btageff2025.merged",
+      "present": true,
+      "bytes": 521273,
+      "sha256": "9326454608126467219a60f8d5763a6c92465127ca6ea32ac415ace8ed0ec004",
+      "source": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/code_main_v2/analysis/hists/btageff2025.merged",
+      "authority": "high-dM main Agent confirmed currently used worker payload; snapshot and EOS source hashes reverified",
+      "local_state_before_cleanup": "absent"
     }
   ]
 }

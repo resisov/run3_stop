@@ -40,7 +40,7 @@
 5. `impact_code_*`는 추적되는 실행 snapshot이므로 삭제하지 않았다. pilot/검증 산출물도
    이름만으로 삭제하지 않았다. PDF와 대응이 확인되지 않은 QA 이미지 역시 보존했다.
 6. `btageff2024.merged`가 로컬에서 추적된다는 기술은 시작 시점 Git 목록과 맞지 않았다.
-   처음부터 로컬에 없었다. 현재 사용 경로를 메인 에이전트에 문의했다.
+   처음부터 로컬에 없었다. 메인 에이전트가 확인한 현재 worker snapshot에서 2024/2025 입력을 복원했으며, 두 파일 모두 SHA-256 `9326454608126467219a60f8d5763a6c92465127ca6ea32ac415ace8ed0ec004`로 검증했다.
 7. `output/`은 preview 출력 기본 경로로 허용하고, 최종 handoff는 reports로 명시적으로
    승격하는 것으로 정책을 정리했다. 물리 builder 코드는 수정하지 않았다.
 
@@ -52,9 +52,14 @@ EOS canonical checkout은 시작 시 `master` / `c6fd36b9e23b36fcb2e736ade79d915
 
 3,414개 경로의 초기 대조에서 내용이 다른 파일 19개가 있었다.
 [파일별 차이](sync_conflicts.md), [기계 판독 목록](sync_conflicts.json)을 보존했다.
-현재 사용본 확인을 `high-dM main Agent`에 요청했다. 해당 작업의 자동 승인 심사가
-회신 공유를 차단하여 사용자 발언 원문을 추가 전달한 상태다.
-**아직 전체 물리 source/payload 동기화가 완료됐다고 주장하지 않는다.**
+현재 사용본 확인을 `high-dM main Agent`에 요청했다. 해당 작업에서 사용자 공유 승인을 받은 뒤,
+현재 b-tag/TopW worker 입력 경로와 hash를 회신받았다. 파일별 분류는 `canonical_decision.json`에 기록했다. 현재 캠페인과 맞는 EOS 데이터셋 목록·metadata·실제 batch executable을 로컬로 채택하고, 현재 로컬 GNN plotting source를 EOS로 맞춘다.
+
+2025 jet-veto의 EOS 설치본과 실제 중간 ROOT 생산 provenance는 구분한다. 후자는 확인되지 않았다. 현재 hist가 실행하지 않는 reference/재측정 코드와 관련 tests까지 합한 7개 변형은 양쪽을 보존하고 임의 통일하지 않는다. 이들은 현재 histogram 입력의 동기화 완료 주장에 포함하지 않는다.
+
+정리 커밋 `13dfa10a`는 GitHub 작업 브랜치에 실제 반영됐고, cleanup metadata 및 동일 TopW 입력
+15개는 EOS에서 SHA-256이 같음을 재검증했다. 상세 기록은 `cleanup_sync_receipt.json`이다.
+**확인된 현재 사용본의 동기화와, 현재 사용 여부가 입증되지 않은 reference 변형 7개의 보존을 구분한다.**
 
 기존 미커밋 source 변경과 다른 작업이 갱신 중인 campaign state는 보존했다.
 `ids.py`, `corrections.py`와 compiled `.coffea`를 수정하지 않았으므로 재컴파일 작업도 만들지 않았다.

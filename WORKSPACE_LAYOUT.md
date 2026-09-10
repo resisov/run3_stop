@@ -9,7 +9,7 @@ production path and SHA-256 before synchronizing them.
 |---|---|
 | `analysis/`, `autonomous_allhad/` source and configurations | Versioned implementation and dependencies. Match the adopted source and compiled payload hashes on EOS. |
 | `analysis/data/{ids,corrections}.coffea` | Compiled physics inputs. Regenerate whenever their source changes; deploy source and payload together. |
-| `analysis/hists/{btageff2024,topwtageff2024,topwtageff2025}.merged` | Protected required efficiency inputs; explicitly allowed in Git. |
+| `analysis/hists/{btageff2024,btageff2025,topwtageff2024,topwtageff2025}.merged` | Protected required efficiency inputs; explicitly allowed in Git. |
 | `autonomous_allhad/workflow/histograms/<campaign>/` | Campaign-local state, requests, validation and frozen code. Large cards, histograms, ROOT templates and fits live on EOS. |
 | `autonomous_allhad/reports/` | Reviewed reports and compact exports. Do not remove evidence solely because it is old or untracked. |
 | `docs/` | Public, reviewed website artifacts. Removed historical galleries link to their immutable Git snapshot and are labelled as archived. |

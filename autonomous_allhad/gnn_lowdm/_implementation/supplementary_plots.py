@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import argparse
+import copy
+import hashlib
 import json
 from pathlib import Path
 
@@ -25,6 +27,139 @@ PACKAGE = Path(__file__).resolve().parent.parent
 MODEL = PACKAGE / "models/diagonal_v3_h48_l3_sig010"
 RESULT = PACKAGE / "results/diagonal_v3_significance_full_20260831"
 DEFAULT_OUTPUT = RESULT / "supplementary"
+
+ROC_STYLES = (
+    ("All signal", "black", "-"),
+    ("T2tt", "red", "--"),
+    ("T2bW", "blue", "--"),
+    ("T2tb", "green", "--"),
+)
+
+
+def file_sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def pdf_polylines(path: Path) -> tuple[list[dict], str]:
+    """Read existing vector vertices, not raster digitization or new estimates.
+
+    This recovery path deliberately accepts only untransformed straight-line
+    paths in a one-page Matplotlib PDF. Unsupported geometry fails closed.
+    pypdf is an optional dependency needed only for archived-PDF recovery.
+    """
+    from pypdf import PdfReader
+
+    reader = PdfReader(path)
+    if len(reader.pages) != 1:
+        raise ValueError("Expected one archived plot page")
+    state = {"color": (0.0, 0.0, 0.0), "clip": None,
+             "dash": (), "transformed": False}
+    stack, vertices, paths = [], [], []
+    rectangle = None
+    curved = False
+    for operands, operator in reader.pages[0].get_contents().operations:
+        if operator == b"q":
+            stack.append(copy.deepcopy(state))
+        elif operator == b"Q":
+            state = stack.pop()
+        elif operator == b"cm":
+            state["transformed"] = True
+        elif operator == b"RG":
+            state["color"] = tuple(float(x) for x in operands)
+        elif operator == b"G":
+            state["color"] = (float(operands[0]),) * 3
+        elif operator == b"d":
+            state["dash"] = tuple(float(x) for x in operands[0])
+        elif operator == b"re":
+            rectangle = tuple(float(x) for x in operands)
+        elif operator in (b"W", b"W*"):
+            state["clip"] = rectangle
+        elif operator == b"m":
+            vertices = [tuple(float(x) for x in operands)]
+            curved = False
+        elif operator == b"l":
+            vertices.append(tuple(float(x) for x in operands))
+        elif operator in (b"c", b"v", b"y"):
+            curved = True
+        elif operator == b"S":
+            if len(vertices) >= 2 and state["clip"] is not None:
+                if curved or state["transformed"]:
+                    if len(vertices) > 10:
+                        raise ValueError("Unsupported transformed/curved data path")
+                else:
+                    paths.append({**copy.deepcopy(state), "vertices": vertices})
+            vertices = []
+        elif operator in (b"n", b"f", b"f*", b"B", b"B*"):
+            vertices = []
+    return paths, reader.pages[0].extract_text()
+
+
+def _archived_roc_coordinates(pdf: Path) -> dict[str, np.ndarray]:
+    from matplotlib.colors import to_rgb
+
+    paths, _ = pdf_polylines(pdf)
+    result = {}
+    for name, color, _ in ROC_STYLES:
+        matches = [p for p in paths if len(p["vertices"]) > 100
+                   and np.allclose(p["color"], to_rgb(color), atol=1e-7)]
+        if len(matches) != 1:
+            raise ValueError(f"Expected exactly one vector ROC for {name}")
+        path = matches[0]
+        x, y, width, height = path["clip"]
+        coordinates = (np.asarray(path["vertices"]) - (x, y)) / (width, height)
+        # The archived and canonical ROC plotters use these linear axis limits.
+        coordinates[:, 1] *= 1.02
+        if (np.any(coordinates < -1e-7) or np.any(coordinates > 1.0 + 1e-7)
+                or np.any(np.diff(coordinates, axis=0) < -1e-7)
+                or not np.allclose(coordinates[[0, -1]], [[0, 0], [1, 1]], atol=1e-7)):
+            raise ValueError(f"Invalid recovered ROC geometry: {name}")
+        result[name] = coordinates
+    return result
+
+
+def archived_roc(pdf: Path, summary: Path, output: Path) -> dict[str, object]:
+    """Restyle archived weighted curves without re-evaluating their events."""
+    if pdf.resolve() == (output / "independent_test_roc_auc.pdf").resolve():
+        raise ValueError("Archived source PDF must not be overwritten")
+    source = json.loads(summary.read_text())["roc"]
+    if file_sha256(pdf) != source["artifacts"]["pdf"]["sha256"]:
+        raise ValueError("Archived PDF does not match the frozen ROC summary")
+    coordinates = _archived_roc_coordinates(pdf)
+    curves = {}
+    for name, xy in coordinates.items():
+        auc = float(source["curves"][name]["auc"])
+        displayed_area = float(np.trapezoid(xy[:, 1], xy[:, 0]))
+        if abs(displayed_area - auc) > 5e-5:
+            raise ValueError(f"Vector ROC area inconsistent with frozen AUC: {name}")
+        curves[name] = {"fpr": xy[:, 0].tolist(), "tpr": xy[:, 1].tolist(),
+                        "auc": auc, "archived_vector_area": displayed_area}
+    output.mkdir(parents=True, exist_ok=True)
+    data_path = output / "weighted_roc_curves.json"
+    data_path.write_text(json.dumps(curves, indent=2) + "\n")
+    with plt.rc_context({"path.simplify": False}):
+        artifacts = _render_roc(curves, output)
+    recovered = _archived_roc_coordinates(Path(artifacts["pdf"]))
+    checks = {}
+    for name, xy in coordinates.items():
+        if xy.shape != recovered[name].shape:
+            raise ValueError(f"ROC vertex count changed: {name}")
+        error = float(np.max(np.abs(xy - recovered[name])))
+        if error > 1e-7:
+            raise ValueError(f"ROC vector round-trip failed: {name}: {error}")
+        checks[name] = {"vertices": len(xy), "max_coordinate_difference": error,
+                       "auc_preserved": curves[name]["auc"],
+                       "pdf_area_minus_frozen_auc": curves[name]["archived_vector_area"] - curves[name]["auc"]}
+    return {
+        "source_pdf": str(pdf.resolve()), "source_pdf_sha256": file_sha256(pdf),
+        "source_summary": str(summary.resolve()), "source_summary_sha256": file_sha256(summary),
+        "method": "Exact archived PDF line vertices; linear axes (0,1)/(0,1.02); no smoothing or event re-evaluation",
+        "limitation": "Preserves the published vector geometry, not all original event-level ROC vertices. PDF was already simplified/rounded; frozen event-weighted AUC is retained from the summary, not recomputed from the PDF.",
+        "missing_score_fields": ["weights", "signal_topology_id"],
+        "curve_data": str(data_path.resolve()), "curve_data_sha256": file_sha256(data_path),
+        "validation": checks, "artifacts": artifacts,
+        "renderer": {"path": str(Path(__file__).resolve()), "sha256": file_sha256(Path(__file__)),
+                     "matplotlib": matplotlib.__version__, "mplhep": hep.__version__},
+    }
 
 
 def _selected_epoch() -> int:
@@ -151,8 +286,6 @@ def roc_curve(scores_path: Path, output: Path) -> dict[str, object]:
         weights = np.asarray(source["weights"], dtype=float)
         topology = np.asarray(source["signal_topology_id"], dtype=int)
 
-    hep.style.use("CMS")
-    figure, axis = plt.subplots(figsize=(8.3, 7.4))
     definitions = [("All signal", np.ones(len(scores), dtype=bool), "black", "-")]
     for identifier, name, color in (
         (1, "T2tt", "red"),
@@ -163,8 +296,24 @@ def roc_curve(scores_path: Path, output: Path) -> dict[str, object]:
     curves = {}
     for name, use, color, style in definitions:
         fpr, tpr, auc = _weighted_roc(labels[use], scores[use], weights[use])
-        axis.plot(fpr, tpr, color=color, linestyle=style, linewidth=2.2, label=f"{name}: AUC = {auc:.4f}")
-        curves[name] = auc
+        curves[name] = {"fpr": fpr, "tpr": tpr, "auc": auc}
+    return {
+        "source": str(scores_path),
+        "weighting": "absolute event weights",
+        "auc": {name: curve["auc"] for name, curve in curves.items()},
+        "artifacts": _render_roc(curves, output),
+    }
+
+
+def _render_roc(curves: dict, output: Path) -> dict[str, str]:
+    hep.style.use("CMS")
+    # Retain every supplied vertex, including archived PDF vertices.
+    plt.rcParams["path.simplify"] = False
+    figure, axis = plt.subplots(figsize=(8.3, 7.4))
+    for name, color, style in ROC_STYLES:
+        curve = curves[name]
+        axis.plot(curve["fpr"], curve["tpr"], color=color, linestyle=style,
+                  linewidth=2.2, label=f"{name}: AUC = {curve['auc']:.4f}")
     axis.plot((0, 1), (0, 1), color="0.5", linestyle=":", linewidth=1.3)
     axis.set(xlim=(0.0, 1.0), ylim=(0.0, 1.02), xlabel="Background efficiency", ylabel="Signal efficiency")
     axis.tick_params(labelsize=13)
@@ -172,13 +321,7 @@ def roc_curve(scores_path: Path, output: Path) -> dict[str, object]:
     axis.legend(frameon=False, fontsize=12, loc="lower right")
     _cms(axis)
     figure.tight_layout(rect=(0.0, 0.0, 1.0, 0.93))
-    artifacts = _save(figure, output / "independent_test_roc_auc")
-    return {
-        "source": str(scores_path),
-        "weighting": "absolute event weights",
-        "auc": curves,
-        "artifacts": artifacts,
-    }
+    return _save(figure, output / "independent_test_roc_auc")
 
 
 def shap_plots(values_path: Path, output: Path, top: int, seed: int) -> dict[str, object]:
@@ -228,9 +371,13 @@ def main_training_curves() -> int:
 def main_roc() -> int:
     parser = argparse.ArgumentParser(description="Plot independent-test ROC and AUC.")
     parser.add_argument("--scores", type=Path, default=RESULT / "test/diagonal_v3_test_scores.npz")
+    parser.add_argument("--source-pdf", type=Path, help="Explicitly recover archived PDF vectors instead of evaluating event scores")
+    parser.add_argument("--summary", type=Path, default=RESULT / "test/diagonal_v3_test_summary.json")
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args()
-    return _write_manifest(args.output, "roc", roc_curve(args.scores, args.output))
+    payload = (archived_roc(args.source_pdf, args.summary, args.output)
+               if args.source_pdf else roc_curve(args.scores, args.output))
+    return _write_manifest(args.output, "roc", payload)
 
 
 def main_shap() -> int:

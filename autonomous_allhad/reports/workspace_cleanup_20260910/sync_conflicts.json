@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "unresolved_preserved",
+  "status": "current_use_resolved_historical_variants_preserved",
   "files": [
     {
       "path": ".gitignore",
@@ -14,7 +14,10 @@
         "bytes": 4690,
         "sha256": "3d8c687bc51758399c365fec2c3ab4a80aa0f0d049d390d3d2524afabeee82b1"
       },
-      "match": false
+      "match": false,
+      "resolution": {
+        "status": "documentation_or_ignore_rules_synced_to_reviewed_local_version"
+      }
     },
     {
       "path": "README.md",
@@ -28,7 +31,10 @@
         "bytes": 15558,
         "sha256": "dc7d8609f8cdc1f9b0a266f93dabed1ba4c8bf58de2d60eec3ec90fa0ec3b568"
       },
-      "match": false
+      "match": false,
+      "resolution": {
+        "status": "documentation_or_ignore_rules_synced_to_reviewed_local_version"
+      }
     },
     {
       "path": "analysis/data/JMESF/2025/jetvetomaps.json.gz",
@@ -42,7 +48,11 @@
         "bytes": 304844,
         "sha256": "61de83931454ff37c9cc1df476d03dde9bb7871e85558018ce3304d5224c939e"
       },
-      "match": false
+      "match": false,
+      "resolution": {
+        "status": "preserved_not_current_histogram_input_or_associated_test",
+        "reason": "No verified current-use basis to choose these reference/production-provenance variants."
+      }
     },
     {
       "path": "analysis/datasets/datasets_2024.txt",
@@ -56,7 +66,12 @@
         "bytes": 564122,
         "sha256": "d9de62e8684159db66788872bf6b3851b8756a806aefffc3f17badedd9fb56b4"
       },
-      "match": false
+      "match": false,
+      "resolution": {
+        "path": "analysis/datasets/datasets_2024.txt",
+        "authority": "current_EOS_use_confirmed_by_main_agent",
+        "sha256": "d9de62e8684159db66788872bf6b3851b8756a806aefffc3f17badedd9fb56b4"
+      }
     },
     {
       "path": "analysis/metadata/KNU_2024_v4.json.gz",
@@ -70,7 +85,12 @@
         "bytes": 1311545,
         "sha256": "365df1a13c0a61567b70a2136cc083ae78d2fa3c013f0f0fac4be738f934b863"
       },
-      "match": false
+      "match": false,
+      "resolution": {
+        "path": "analysis/metadata/KNU_2024_v4.json.gz",
+        "authority": "current_EOS_use_confirmed_by_main_agent",
+        "sha256": "365df1a13c0a61567b70a2136cc083ae78d2fa3c013f0f0fac4be738f934b863"
+      }
     },
     {
       "path": "analysis/metadata/json_maker_lxplus.py",
@@ -84,7 +104,11 @@
         "bytes": 19389,
         "sha256": "7c3a01b49832fb28f794f86aec6956640b7df61d6d7e3db0972bf437483dfe4f"
       },
-      "match": false
+      "match": false,
+      "resolution": {
+        "status": "preserved_not_current_histogram_input_or_associated_test",
+        "reason": "No verified current-use basis to choose these reference/production-provenance variants."
+      }
     },
     {
       "path": "analysis/processors/stop_processor_v4.py",
@@ -98,7 +122,11 @@
         "bytes": 67331,
         "sha256": "a9f66c5d19682a57731b9399ff1f123d2c328d2403ec66625a0b139a08c6e4a0"
       },
-      "match": false
+      "match": false,
+      "resolution": {
+        "status": "preserved_not_current_histogram_input_or_associated_test",
+        "reason": "No verified current-use basis to choose these reference/production-provenance variants."
+      }
     },
     {
       "path": "autonomous_allhad/autonomous_allhad/dy_estimation/README.md",
@@ -112,7 +140,10 @@
         "bytes": 9432,
         "sha256": "cfd057cc12af6c7291f6424569c686a878e9d2334086a83cbdfd105b58770b19"
       },
-      "match": false
+      "match": false,
+      "resolution": {
+        "status": "documentation_or_ignore_rules_synced_to_reviewed_local_version"
+      }
     },
     {
       "path": "autonomous_allhad/gnn_lowdm/README.md",
@@ -126,7 +157,12 @@
         "bytes": 4155,
         "sha256": "e18cfc7eb1a53e8ca81853772d5f7868e8d926e425f2702f3828f0884231c82a"
       },
-      "match": false
+      "match": false,
+      "resolution": {
+        "path": "autonomous_allhad/gnn_lowdm/README.md",
+        "authority": "current_local_plotting_confirmed_by_main_agent",
+        "sha256": "5fb925056e3e526d6c0d6db5f8792078b0b4f1f7f75b7f2cb7113c836716f712"
+      }
     },
     {
       "path": "autonomous_allhad/gnn_lowdm/_implementation/plot_hyperparameter_losses.py",
@@ -140,7 +176,12 @@
         "bytes": 8046,
         "sha256": "70413cd8600a442f6327cf45c0871edb0c0d2b3895e07e753ad2f2f4e276ef02"
       },
-      "match": false
+      "match": false,
+      "resolution": {
+        "path": "autonomous_allhad/gnn_lowdm/_implementation/plot_hyperparameter_losses.py",
+        "authority": "current_local_plotting_confirmed_by_main_agent",
+        "sha256": "a48eb865ee44d2bdfa0aebe92f756683a4a9e5191e06222372b8d3bb8b208b00"
+      }
     },
     {
       "path": "autonomous_allhad/gnn_lowdm/_implementation/supplementary_plots.py",
@@ -154,7 +195,12 @@
         "bytes": 9505,
         "sha256": "8de78930409a233c97e3089503b61f68235a0cc8db3032d391b3b5c6504780ea"
       },
-      "match": false
+      "match": false,
+      "resolution": {
+        "path": "autonomous_allhad/gnn_lowdm/_implementation/supplementary_plots.py",
+        "authority": "current_local_plotting_confirmed_by_main_agent",
+        "sha256": "404a6be1a5849f03e097fdb012d8361321e62331659ee3e8a16ccd840afde2eb"
+      }
     },
     {
       "path": "autonomous_allhad/gnn_lowdm/plotting.py",
@@ -168,7 +214,12 @@
         "bytes": 1540,
         "sha256": "4e951bf5f89f16e115c4a5f55f69521143040241dff22ba200296a95a4ae1404"
       },
-      "match": false
+      "match": false,
+      "resolution": {
+        "path": "autonomous_allhad/gnn_lowdm/plotting.py",
+        "authority": "current_local_plotting_confirmed_by_main_agent",
+        "sha256": "4c87668644f2cb992d6d1a5987076cc0455cf4aa3668f47667e588131a161c7a"
+      }
     },
     {
       "path": "autonomous_allhad/gnn_lowdm/requirements.txt",
@@ -182,7 +233,12 @@
         "bytes": 129,
         "sha256": "70495c798fce18b08d2bd82e31f005138ec7cd1d5ac890f464f07a542921e036"
       },
-      "match": false
+      "match": false,
+      "resolution": {
+        "path": "autonomous_allhad/gnn_lowdm/requirements.txt",
+        "authority": "current_local_plotting_confirmed_by_main_agent",
+        "sha256": "581fb3e1bb4f7d79d1e4d9edaadd44ed29d6e08319e8bc4348948d0d9ed8aabc"
+      }
     },
     {
       "path": "autonomous_allhad/tests/test_2025_data_policy.py",
@@ -196,7 +252,11 @@
         "bytes": 3257,
         "sha256": "2581b994f4b8530fe52d43058367a76fce86763c50b9bbbf5642c9fa2a3c9fc4"
       },
-      "match": false
+      "match": false,
+      "resolution": {
+        "status": "preserved_not_current_histogram_input_or_associated_test",
+        "reason": "No verified current-use basis to choose these reference/production-provenance variants."
+      }
     },
     {
       "path": "autonomous_allhad/tests/test_canonical_card_projection.py",
@@ -210,7 +270,11 @@
         "bytes": 12007,
         "sha256": "030749f00322a9d361b67bd0e3109889f3f11e467acefbc4eddb0df6c07fd6b9"
       },
-      "match": false
+      "match": false,
+      "resolution": {
+        "status": "preserved_not_current_histogram_input_or_associated_test",
+        "reason": "No verified current-use basis to choose these reference/production-provenance variants."
+      }
     },
     {
       "path": "autonomous_allhad/tests/test_trigger_efficiency.py",
@@ -224,7 +288,11 @@
         "bytes": 1320,
         "sha256": "8b694d56ba2521bf5afd64d313893aea4a50481ac97b3b4b5faa2b69f3431b9b"
       },
-      "match": false
+      "match": false,
+      "resolution": {
+        "status": "preserved_not_current_histogram_input_or_associated_test",
+        "reason": "No verified current-use basis to choose these reference/production-provenance variants."
+      }
     },
     {
       "path": "autonomous_allhad/workflow/flat_ntuple_analysis_pipeline.md",
@@ -238,7 +306,10 @@
         "bytes": 2487,
         "sha256": "e67d9125062a989d6f10dca7e4a4c00a92766302924e1b9798a3d1704bcaed0b"
       },
-      "match": false
+      "match": false,
+      "resolution": {
+        "status": "documentation_or_ignore_rules_synced_to_reviewed_local_version"
+      }
     },
     {
       "path": "autonomous_allhad/workflow/measure_trigger.py",
@@ -252,7 +323,11 @@
         "bytes": 54875,
         "sha256": "fe41550aea38b2bc8a5091903a8771822a0e7ca051c12cd40a5b3e44de4f0b56"
       },
-      "match": false
+      "match": false,
+      "resolution": {
+        "status": "preserved_not_current_histogram_input_or_associated_test",
+        "reason": "No verified current-use basis to choose these reference/production-provenance variants."
+      }
     },
     {
       "path": "autonomous_allhad/workflow/run_batch.sh",
@@ -266,7 +341,12 @@
         "bytes": 2771,
         "sha256": "4c91cdcbe19e872ca1ff5c09e9662b3cee38f524d6fb57ca8a7a68a8e0eede0c"
       },
-      "match": false
+      "match": false,
+      "resolution": {
+        "path": "autonomous_allhad/workflow/run_batch.sh",
+        "authority": "current_EOS_use_confirmed_by_main_agent",
+        "sha256": "4c91cdcbe19e872ca1ff5c09e9662b3cee38f524d6fb57ca8a7a68a8e0eede0c"
+      }
     }
   ],
   "missing_on_eos": [

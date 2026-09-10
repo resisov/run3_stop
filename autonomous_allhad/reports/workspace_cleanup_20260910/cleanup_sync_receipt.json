@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "scope": "cleanup metadata and already-equal protected TopW inputs only; not full physics source synchronization",
+  "content_git_commit": "13dfa10a2e30eee3b7a3074ff9699da6836e5eb2",
+  "files": [
+    {
+      "path": ".gitignore",
+      "sha256": "b95a18181bf66db31922a573fcd07c16ae5bcc4b9d7ac319dd50300a0be6be6a",
+      "bytes": 7537,
+      "action": "metadata_updated"
+    },
+    {
+      "path": "WORKSPACE_LAYOUT.md",
+      "sha256": "b808fd8d6a521b4168f1a2fe6187e9ba7b9e0ab20e2e2acc472bd363e4fcf50b",
+      "bytes": 3472,
+      "action": "metadata_updated"
+    },
+    {
+      "path": "docs/index.html",
+      "sha256": "de3ef3edff6eeca9d911ed00f41c417a00c937725c692808e9e6a21c50750113",
+      "bytes": 8974,
+      "action": "metadata_updated"
+    },
+    {
+      "path": "analysis/hists/topwtageff2024.merged",
+      "sha256": "1d19be3a7fc6e59f1ee9798cb85b7154feca16ad2c1390ce8382453fcaaa1c68",
+      "bytes": 2245877,
+      "action": "already_equal"
+    },
+    {
+      "path": "analysis/hists/topwtageff2025.merged",
+      "sha256": "1d19be3a7fc6e59f1ee9798cb85b7154feca16ad2c1390ce8382453fcaaa1c68",
+      "bytes": 2245877,
+      "action": "already_equal"
+    },
+    {
+      "path": "autonomous_allhad/reports/workspace_cleanup_inventory_20260910.md",
+      "sha256": "1b19edf1cac0c7c54dda538cda21e07f8a7c962806929b14eb1a5495554a5b8a",
+      "bytes": 16263,
+      "action": "metadata_updated"
+    },
+    {
+      "path": "autonomous_allhad/reports/workspace_cleanup_inventory_20260910.json",
+      "sha256": "183a883151dde4368509b3c9dda4da66eb490ce4fbeaf0b8e41a49536b0fee61",
+      "bytes": 15771,
+      "action": "metadata_updated"
+    },
+    {
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/local_storage_manifest_20260910.json",
+      "sha256": "1057945275e40f6f7c4a23283c1f39a82dee558f241fa7a60759479d9c5fd575",
+      "bytes": 877679,
+      "action": "metadata_updated"
+    },
+    {
+      "path": "autonomous_allhad/reports/workspace_cleanup_20260910/README.md",
+      "sha256": "3136055f0869ad346d3546100273e2e8ae62db40dcfdcc66d70f08e91d4f572a",
+      "bytes": 6018,
+      "action": "metadata_updated"
+    },
+    {
+      "path": "autonomous_allhad/reports/workspace_cleanup_20260910/cleanup_actions.json",
+      "sha256": "a2005266214564f45fa760be02dcdcde60721e4984913cf5bf9f7cf8a6656c99",
+      "bytes": 7442,
+      "action": "metadata_updated"
+    },
+    {
+      "path": "autonomous_allhad/reports/workspace_cleanup_20260910/git_object_cleanup.json",
+      "sha256": "03ea17caa7a58208147cd33e16c8c4cf2f2d2b9c966300cfd4036aa859c44ee0",
+      "bytes": 1258,
+      "action": "metadata_updated"
+    },
+    {
+      "path": "autonomous_allhad/reports/workspace_cleanup_20260910/protected_inputs.json",
+      "sha256": "4166d6e14ad0456866521ad2d42cb9ef4014a15d9c81d8dbf118f9435b435972",
+      "bytes": 1862,
+      "action": "metadata_updated"
+    },
+    {
+      "path": "autonomous_allhad/reports/workspace_cleanup_20260910/summary.json",
+      "sha256": "acb43b708826235ba2cc8ab31d1a5b0472e06668ad039300c6a2bcf3a4d6f50f",
+      "bytes": 1491,
+      "action": "metadata_updated"
+    },
+    {
+      "path": "autonomous_allhad/reports/workspace_cleanup_20260910/sync_conflicts.json",
+      "sha256": "6bd2f99b73d6fdaba256ef91fa7aa0a74a7e3142a288120bd8b92882b6c561a4",
+      "bytes": 35070,
+      "action": "metadata_updated"
+    },
+    {
+      "path": "autonomous_allhad/reports/workspace_cleanup_20260910/sync_conflicts.md",
+      "sha256": "383ee3ecea15505f2010c449325b64a7521d3b81b123c4d293999030ba27dc31",
+      "bytes": 4819,
+      "action": "metadata_updated"
+    }
+  ],
+  "github_branch": "codex/package-lowpt-tnp",
+  "github_verified_commit": "13dfa10a2e30eee3b7a3074ff9699da6836e5eb2",
+  "physics_source_sync": "pending_current_use_classification_from_main_agent"
+}

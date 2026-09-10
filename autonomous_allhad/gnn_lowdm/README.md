@@ -62,6 +62,7 @@ python -m autonomous_allhad.gnn_lowdm.eval --help
 python -m autonomous_allhad.gnn_lowdm.plotting --help
 
 python -m autonomous_allhad.gnn_lowdm.plotting training-curves
+python -m autonomous_allhad.gnn_lowdm.plotting hyperparameters --help
 python -m autonomous_allhad.gnn_lowdm.plotting roc
 python -m autonomous_allhad.gnn_lowdm.plotting shap
 python -m autonomous_allhad.gnn_lowdm.plotting sr --help
@@ -78,6 +79,19 @@ be reproduced exactly. Legacy score archives without those arrays are rejected
 instead of silently producing an unweighted ROC; rerun `eval test` once to
 upgrade such an archive. The already validated legacy weighted ROC remains in
 the frozen test-result directory.
+
+When raw per-epoch logs or weighted event arrays are unavailable, an explicitly
+requested display-only recovery is supported with `plotting hyperparameters
+--source-pdf ... --campaign ... --output ...` or `plotting roc --source-pdf ...
+--summary ... --output ...`. It uses `pypdf` to read existing vector vertices,
+not raster digitization or a new evaluation. The recovery checks frozen summary
+values, remaining raw history, and the re-rendered PDF vertices; candidate marker
+geometry and counts are also checked. Original PDFs must not be overwritten.
+Coordinates and validation manifests accompany the PNG and vector PDF outputs.
+Recovered display coordinates are **not** substitutes for missing raw logs;
+the frozen event-weighted AUC, not an area estimated from a simplified PDF line,
+is retained. See `autonomous_allhad/reports/gnn_cms_an_handoff_20260909/` for the
+verified eight-candidate comparison and weighted ROC handoff.
 
 ## Validation
 
