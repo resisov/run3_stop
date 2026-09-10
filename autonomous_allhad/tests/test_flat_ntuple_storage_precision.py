@@ -141,19 +141,23 @@ def _check_topw_append(tmp_path, year, in_place=False):
             promoted = flat.append_topw_truth(original, original, repo, tmp_path / "scratch", year,
                                               validated_output=output)
             assert promoted["sha256"] == flat._sha256(output)
-    from autonomous_allhad.sidecar_store import read_root_metadata
+    from autonomous_allhad.sidecar_store import apply_topw_metadata, read_root_metadata
     metadata = read_root_metadata(original)
     assert metadata["root_sha256"] == flat._sha256(original)
     assert metadata["topw_truth"]["input_sha256"] == original_hash
     assert metadata["root_trees"] == ["Events", "TROTA", "TopWTruth"]
     assert metadata["files"][0]["file_id"] == file_id
     assert original_contents == flat._root_content_digests(original, exclude_truth=True)
-    report_path = original.with_suffix(".topw.json")
-    report = json.loads(report_path.read_text())
-    report["marker"]["input_sha256"] = "incorrect"
-    report_path.write_text(json.dumps(report))
+    assert not original.with_suffix(".topw.json").exists()
+    report = {
+        "status": "already_complete", "root": str(original),
+        "sha256": metadata["root_sha256"], "bytes": original.stat().st_size,
+        "marker": dict(metadata["topw_truth"]),
+    }
+    assert apply_topw_metadata(original, metadata, report) == metadata
+    report["marker"]["events_entries"] += 1
     with np.testing.assert_raises_regex(RuntimeError, "augmentation metadata"):
-        read_root_metadata(original)
+        apply_topw_metadata(original, metadata, report)
 
 
 def _check_topw_read_reorders_selected_rows(tmp_path):

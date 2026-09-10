@@ -75,7 +75,7 @@ def read_root_metadata(
         payload = json.loads(adjacent.read_text())
         if not isinstance(payload, dict):
             raise RuntimeError(f"{adjacent}: expected a JSON object")
-        return _with_topw_metadata(root_path, payload)
+        return payload
 
     database = store_path_for_root(root_path)
     if database.is_file():
@@ -93,7 +93,7 @@ def read_root_metadata(
             payload = json.loads(raw)
             if not isinstance(payload, dict):
                 raise RuntimeError(f"stored metadata for {root_path} is not an object")
-            return _with_topw_metadata(root_path, payload)
+            return payload
 
     if fallback is not None:
         return fallback
@@ -102,18 +102,17 @@ def read_root_metadata(
     )
 
 
-def _with_topw_metadata(root_path: Path, payload: dict[str, Any]) -> dict[str, Any]:
-    augmentation = root_path.with_suffix(".topw.json")
-    if not augmentation.is_file():
-        return payload
-    report = json.loads(augmentation.read_text())
+def apply_topw_metadata(
+    root_path: Path, payload: dict[str, Any], report: dict[str, Any]
+) -> dict[str, Any]:
     marker = report["marker"]
+    expected_hashes = {marker.get("input_sha256"), report.get("sha256")}
     if (report.get("status") not in ("complete", "already_complete")
         or marker.get("status") != "complete"
         or marker.get("schema_version") != "topw_truth_v1"
         or Path(report["root"]).resolve() != root_path.resolve()
         or report.get("bytes") != root_path.stat().st_size
-        or payload.get("root_sha256") != marker.get("input_sha256")
+        or payload.get("root_sha256") not in expected_hashes
         or payload.get("events_written") != marker.get("events_entries")
         or not isinstance(report.get("sha256"), str)
         or len(report["sha256"]) != 64):

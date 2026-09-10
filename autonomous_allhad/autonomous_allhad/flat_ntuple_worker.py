@@ -961,6 +961,14 @@ def _read_topw_nano_rows(source: str, entries: np.ndarray, expected_entries: int
     raise RuntimeError("NanoAOD truth access failed: " + "; ".join(errors))
 
 
+def _record_topw_metadata(output: Path, report: dict[str, Any]) -> None:
+    from .sidecar_store import apply_topw_metadata
+
+    metadata_path = output.with_suffix(".json")
+    payload = json.loads(metadata_path.read_text())
+    write_json(metadata_path, apply_topw_metadata(output, payload, report))
+
+
 def _publish_topw_truth(input_path: Path, output: Path, local: Path,
                        marker: dict[str, Any]) -> dict[str, Any]:
     output_hash = _sha256(local)
@@ -978,7 +986,7 @@ def _publish_topw_truth(input_path: Path, output: Path, local: Path,
     report = {"status": "complete", "root": str(output), "sha256": output_hash,
               "bytes": output.stat().st_size, "marker": marker}
     if input_path.resolve() == output.resolve():
-        write_json(output.with_suffix(".topw.json"), report)
+        _record_topw_metadata(output, report)
     local.unlink()
     return report
 
@@ -992,6 +1000,8 @@ def append_topw_truth(input_path: Path, output: Path, repo: Path, work_dir: Path
 
     if year not in (2024, 2025):
         raise ValueError("Top/W truth requires an explicit 2024/2025 application year")
+    if input_path.resolve() == output.resolve() and not output.with_suffix(".json").is_file():
+        raise FileNotFoundError(f"existing production metadata required: {output.with_suffix('.json')}")
     for path in (input_path, output, work_dir):
         if not path.is_absolute() or any(part in ("tmp", "afs") for part in path.parts):
             raise ValueError(f"disallowed truth workflow path: {path}")
@@ -1015,7 +1025,7 @@ def append_topw_truth(input_path: Path, output: Path, repo: Path, work_dir: Path
                 report = {"status": "already_complete", "root": str(output), "marker": marker,
                           "sha256": _sha256(output), "bytes": output.stat().st_size}
                 if input_path.resolve() == output.resolve():
-                    write_json(output.with_suffix(".topw.json"), report)
+                    _record_topw_metadata(output, report)
                 return report
             if TOPW_TRUTH_TREE in root or input_path.resolve() != output.resolve():
                 raise RuntimeError("refusing to overwrite an existing or partial truth output")
@@ -1063,7 +1073,7 @@ def append_topw_truth(input_path: Path, output: Path, repo: Path, work_dir: Path
     types.update({"fatjet_source_index_all": "var * int32", "fatjet_decay_flavor_all": "var * int8"})
     counts = np.zeros(5, dtype=np.int64)
     processed = 0
-    with uproot.open(input_path) as root:
+    with uproot.open(input_path) as root, uproot.update(local) as destination:
         tree = root["Events"]
         trota = json.loads(str(root["TROTA_metadata"]))
         if ("TROTA" not in root or trota.get("status") != "complete"
@@ -1071,54 +1081,57 @@ def append_topw_truth(input_path: Path, output: Path, repo: Path, work_dir: Path
             or trota.get("events_entries") != tree.num_entries
             or not trota.get("model_sha256")):
             raise RuntimeError("missing or incompatible integrated TROTA completion")
-        with uproot.update(local) as destination:
-            truth = destination.mktree(TOPW_TRUTH_TREE, types)
-            for stored in tree.iterate(list(TOPW_STORED_FIELDS), step_size=1000, library="ak"):
-                if bool(ak.any(stored["is_data"])) or not bool(ak.all(stored["year"] == year)):
-                    raise ValueError("truth augmentation received data or a different application year")
-                file_ids = np.asarray(stored["file_id"])
-                pieces, positions = [], []
-                for file_id in np.unique(file_ids):
-                    record = source_map[int(file_id)]
-                    indices = np.flatnonzero(file_ids == file_id)
-                    rows = stored[indices]
-                    entries = np.asarray(rows["entry"], dtype=np.int64)
-                    allowed = np.zeros(len(entries), dtype=bool)
-                    for entry_range in record["processed_entry_ranges"]:
-                        start = int(entry_range["entry_start"])
-                        stop = int(entry_range["entry_stop"])
-                        if not 0 <= start < stop <= int(record["number_of_entries"]):
-                            raise ValueError("invalid original processed entry range")
-                        allowed |= (entries >= start) & (entries < stop)
-                    if not np.all(allowed):
-                        raise ValueError("retained entries outside original processed ranges")
-                    nano = _read_topw_nano_rows(record["file_path"], entries, int(record["number_of_entries"]))
-                    pieces.append(ak.Array(topw_truth_payload(rows, nano, decay_flavor)))
-                    positions.append(indices)
-                payload = ak.concatenate(pieces)[np.argsort(np.concatenate(positions))]
-                for name in TOPW_ID_FIELDS:
-                    if not np.array_equal(np.asarray(payload[name]), np.asarray(stored[name])):
-                        raise ValueError("truth output row ordering mismatch")
-                truth.extend({name: payload[name] for name in types})
-                counts += np.bincount(np.asarray(ak.flatten(payload["fatjet_decay_flavor_all"])), minlength=5)
-                processed += len(stored)
-                print(json.dumps({"stage": "topw_truth", "events": processed, "total": int(tree.num_entries)}), flush=True)
-    if processed != original_contents["Events"]["entries"]:
-        raise RuntimeError("incomplete Top/W truth event coverage")
-    if _root_content_digests(local, exclude_truth=True) != original_contents:
-        raise RuntimeError("original Events/TROTA content changed during truth augmentation")
-    marker = {
-        "schema_version": TOPW_TRUTH_SCHEMA, "status": "complete", "application_year": year,
-        "events_entries": processed, "flavor_counts": counts.tolist(),
-        "classifier_sha256": classifier_hash, "worker_sha256": _sha256(Path(__file__)),
-        "input_sha256": original_hash, "input_bytes": original_size,
-        "original_contents": original_contents,
-        "truth_content": _root_content_digests(local)[TOPW_TRUTH_TREE],
-        "source_mapping_sha256": hashlib.sha256(json.dumps(source_map, sort_keys=True).encode()).hexdigest(),
-        "nano_branches": list(TOPW_NANO_FIELDS),
-    }
-    with uproot.update(local) as destination:
+        truth = destination.mktree(TOPW_TRUTH_TREE, types)
+        for stored in tree.iterate(list(TOPW_STORED_FIELDS), step_size=1000, library="ak"):
+            if bool(ak.any(stored["is_data"])) or not bool(ak.all(stored["year"] == year)):
+                raise ValueError("truth augmentation received data or a different application year")
+            file_ids = np.asarray(stored["file_id"])
+            pieces, positions = [], []
+            for file_id in np.unique(file_ids):
+                record = source_map[int(file_id)]
+                indices = np.flatnonzero(file_ids == file_id)
+                rows = stored[indices]
+                entries = np.asarray(rows["entry"], dtype=np.int64)
+                allowed = np.zeros(len(entries), dtype=bool)
+                for entry_range in record["processed_entry_ranges"]:
+                    start = int(entry_range["entry_start"])
+                    stop = int(entry_range["entry_stop"])
+                    if not 0 <= start < stop <= int(record["number_of_entries"]):
+                        raise ValueError("invalid original processed entry range")
+                    allowed |= (entries >= start) & (entries < stop)
+                if not np.all(allowed):
+                    raise ValueError("retained entries outside original processed ranges")
+                nano = _read_topw_nano_rows(record["file_path"], entries, int(record["number_of_entries"]))
+                pieces.append(ak.Array(topw_truth_payload(rows, nano, decay_flavor)))
+                positions.append(indices)
+            payload = ak.concatenate(pieces)[np.argsort(np.concatenate(positions))]
+            for name in TOPW_ID_FIELDS:
+                if not np.array_equal(np.asarray(payload[name]), np.asarray(stored[name])):
+                    raise ValueError("truth output row ordering mismatch")
+            truth.extend({name: payload[name] for name in types})
+            counts += np.bincount(np.asarray(ak.flatten(payload["fatjet_decay_flavor_all"])), minlength=5)
+            processed += len(stored)
+            print(json.dumps({"stage": "topw_truth", "events": processed, "total": int(tree.num_entries)}), flush=True)
+        if processed != original_contents["Events"]["entries"]:
+            raise RuntimeError("incomplete Top/W truth event coverage")
+        destination.file.sink.flush()
+        contents = _root_content_digests(local)
+        if {k: v for k, v in contents.items() if k != TOPW_TRUTH_TREE} != original_contents:
+            raise RuntimeError("original Events/TROTA content changed during truth augmentation")
+        marker = {
+            "schema_version": TOPW_TRUTH_SCHEMA, "status": "complete", "application_year": year,
+            "events_entries": processed, "flavor_counts": counts.tolist(),
+            "classifier_sha256": classifier_hash, "worker_sha256": _sha256(Path(__file__)),
+            "input_sha256": original_hash, "input_bytes": original_size,
+            "original_contents": original_contents,
+            "truth_content": contents[TOPW_TRUTH_TREE],
+            "source_mapping_sha256": hashlib.sha256(json.dumps(source_map, sort_keys=True).encode()).hexdigest(),
+            "nano_branches": list(TOPW_NANO_FIELDS),
+        }
         destination[TOPW_TRUTH_MARKER] = json.dumps(marker, sort_keys=True, allow_nan=False)
+    with uproot.open(local) as completed:
+        if json.loads(str(completed[TOPW_TRUTH_MARKER])) != marker:
+            raise RuntimeError("Top/W truth completion marker readback mismatch")
     return _publish_topw_truth(input_path, output, local, marker)
 
 
