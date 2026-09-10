@@ -167,25 +167,35 @@ def topw_pass_fail_triplet(
     nominal: Any,
     up: Any,
     down: Any,
+    *,
+    denominator: Any = None,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """Use min(SF * efficiency, 1) for each nominal/Up/Down probability."""
+    """Bound corrected probabilities; use unity for zero-denominator cells."""
     tagged = np.asarray(tagged)
     efficiency = np.asarray(efficiency, dtype=float)
     if tagged.ndim != 1 or tagged.dtype != np.bool_ or efficiency.shape != tagged.shape:
         raise ValueError("Top/W tag decisions and efficiencies must be aligned flat arrays")
+    zero_denominator = np.zeros(tagged.shape, dtype=bool)
+    if denominator is not None:
+        denominator = np.asarray(denominator, dtype=float)
+        if (denominator.shape != tagged.shape or not np.all(np.isfinite(denominator))
+            or np.any(denominator < 0)):
+            raise ValueError("Top/W efficiency denominators must be aligned nonnegative finite counts")
+        zero_denominator = denominator == 0
+        efficiency = np.where(zero_denominator, 0.0, efficiency)
     if (not np.all(np.isfinite(efficiency))
         or np.any((efficiency < 0) | (efficiency > 1))):
         raise AnalysisScaleFactorUnavailable("invalid Top/W MC efficiency")
-    if np.any(tagged & (efficiency == 0)) or np.any(~tagged & (efficiency == 1)):
-        raise AnalysisScaleFactorUnavailable("tag decision has no MC efficiency support")
-    variations = [np.asarray(value, dtype=float) for value in (nominal, up, down)]
-    for scale in variations:
+    zero_denominator |= (efficiency == 0) | (efficiency == 1)
+    variations = []
+    for value in (nominal, up, down):
+        scale = np.asarray(value, dtype=float)
         if scale.shape != tagged.shape:
             raise ValueError("Top/W SF and efficiency array shapes differ")
+        scale = np.where(zero_denominator, 1.0, scale)
         if not np.all(np.isfinite(scale)) or np.any(scale < 0):
             raise AnalysisScaleFactorUnavailable("invalid Top/W SF variation")
-        if np.any((efficiency == 1) & (scale < 1)):
-            raise AnalysisScaleFactorUnavailable("no failing MC support for a reduced Top/W efficiency")
+        variations.append(scale)
     if np.any(variations[2] > variations[0]) or np.any(variations[0] > variations[1]):
         raise AnalysisScaleFactorUnavailable("Top/W SF variations do not bracket nominal")
     result = []

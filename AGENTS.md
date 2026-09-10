@@ -377,6 +377,11 @@ the MC has support. Do not clip only the fail weight or replace these valid
 measurements with the fit-failure unity fallback. Retain the asymmetric
 variation endpoints after saturation.
 
+For a zero Top/W efficiency or pass/fail-weight denominator, use SF
+nominal/Up/Down = 1.0 (uncertainty = 0.0) for that efficiency cell only.
+This includes MC efficiency 0 or 1 and an explicitly empty pass+fail count.
+Do not treat an unexplained NaN or malformed input as a zero denominator.
+
 For VOMS proxy creation or renewal, request `--valid 200:00`.
 After issuance, verify the actual proxy and VOMS lifetimes before batch
 submission; the requested duration is not a substitute for that check.

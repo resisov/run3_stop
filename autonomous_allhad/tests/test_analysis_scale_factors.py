@@ -279,10 +279,32 @@ class TopWPassFailTest(unittest.TestCase):
             np.testing.assert_array_equal(weights, [1, 1])
 
     def test_unsupported_efficiencies_are_rejected(self):
-        for tagged, eff, sf in ((True, 0, 1), (False, 1, 1), (True, 1, 0.9),
-                               (True, np.nan, 1), (False, -0.1, 1)):
+        for tagged, eff, sf in ((True, np.nan, 1), (False, -0.1, 1), (True, 1.1, 1)):
             with self.subTest(tagged=tagged, eff=eff, sf=sf), self.assertRaises(AnalysisScaleFactorUnavailable):
                 topw_pass_fail_triplet([tagged], [eff], [sf], [sf], [sf])
+
+    def test_zero_pass_or_fail_denominator_has_zero_uncertainty(self):
+        for tagged in (True, False):
+            for weights in topw_pass_fail_triplet(
+                [tagged, tagged], [0., 1.], [0.9, 0.9], [1.3, 1.3], [0.6, 0.6],
+            ):
+                np.testing.assert_array_equal(weights, [1., 1.])
+
+    def test_empty_efficiency_denominator_is_explicit_cell_local_fallback(self):
+        nominal, up, down = topw_pass_fail_triplet(
+            [True, False], [np.nan, .4], [np.nan, 1.1], [np.nan, 1.3], [np.nan, .8],
+            denominator=[0, 10],
+        )
+        for weights in (nominal, up, down):
+            self.assertEqual(weights[0], 1.0)
+        np.testing.assert_allclose([nominal[1], up[1], down[1]], [.56/.6, .48/.6, .68/.6])
+        with self.assertRaises(AnalysisScaleFactorUnavailable):
+            topw_pass_fail_triplet([True], [np.nan], [1.], [1.], [1.], denominator=[10])
+
+    def test_invalid_denominator_is_not_an_empty_cell(self):
+        for denominator in ([np.nan], [np.inf], [-1], [0, 10]):
+            with self.subTest(denominator=denominator), self.assertRaises(ValueError):
+                topw_pass_fail_triplet([True], [.5], [1.], [1.], [1.], denominator=denominator)
 
     def test_observed_t2tt_case_saturates_pass_and_fail_together(self):
         eff = 9972.0 / (9972.0 + 496.0)
