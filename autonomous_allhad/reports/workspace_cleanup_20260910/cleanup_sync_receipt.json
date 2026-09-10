@@ -1,25 +1,43 @@
 {
   "schema_version": 1,
-  "scope": "cleanup metadata and already-equal protected TopW inputs only; not full physics source synchronization",
-  "content_git_commit": "13dfa10a2e30eee3b7a3074ff9699da6836e5eb2",
+  "scope": "Explicit 30-file cleanup/current-use set; excludes active frozen campaign inputs and seven preserved reference/test variants.",
+  "content_git_commit": "b568ad4607067d1634bee21bbaf60e208834708b",
   "files": [
     {
       "path": ".gitignore",
-      "sha256": "b95a18181bf66db31922a573fcd07c16ae5bcc4b9d7ac319dd50300a0be6be6a",
-      "bytes": 7537,
+      "sha256": "7b07810bade4e387ac855ece25d4b0ad66c2245f9a49c3b6cdc62ea0af152329",
+      "bytes": 7572,
+      "action": "metadata_updated"
+    },
+    {
+      "path": "README.md",
+      "sha256": "1e1fbda1d6006f7ec2b10874798f194b6d69a36c83760119827fa4d287173026",
+      "bytes": 972,
       "action": "metadata_updated"
     },
     {
       "path": "WORKSPACE_LAYOUT.md",
-      "sha256": "b808fd8d6a521b4168f1a2fe6187e9ba7b9e0ab20e2e2acc472bd363e4fcf50b",
-      "bytes": 3472,
+      "sha256": "d4cc48173a7a74a59ba5ece6831a22c2a74a4bc88d259008eac9157a3d30c7b5",
+      "bytes": 3484,
       "action": "metadata_updated"
     },
     {
-      "path": "docs/index.html",
-      "sha256": "de3ef3edff6eeca9d911ed00f41c417a00c937725c692808e9e6a21c50750113",
-      "bytes": 8974,
-      "action": "metadata_updated"
+      "path": "analysis/datasets/datasets_2024.txt",
+      "sha256": "d9de62e8684159db66788872bf6b3851b8756a806aefffc3f17badedd9fb56b4",
+      "bytes": 564122,
+      "action": "already_equal"
+    },
+    {
+      "path": "analysis/hists/btageff2024.merged",
+      "sha256": "9326454608126467219a60f8d5763a6c92465127ca6ea32ac415ace8ed0ec004",
+      "bytes": 521273,
+      "action": "already_equal"
+    },
+    {
+      "path": "analysis/hists/btageff2025.merged",
+      "sha256": "9326454608126467219a60f8d5763a6c92465127ca6ea32ac415ace8ed0ec004",
+      "bytes": 521273,
+      "action": "already_equal"
     },
     {
       "path": "analysis/hists/topwtageff2024.merged",
@@ -34,67 +52,125 @@
       "action": "already_equal"
     },
     {
-      "path": "autonomous_allhad/reports/workspace_cleanup_inventory_20260910.md",
-      "sha256": "1b19edf1cac0c7c54dda538cda21e07f8a7c962806929b14eb1a5495554a5b8a",
-      "bytes": 16263,
+      "path": "analysis/metadata/KNU_2024_v4.json.gz",
+      "sha256": "365df1a13c0a61567b70a2136cc083ae78d2fa3c013f0f0fac4be738f934b863",
+      "bytes": 1311545,
+      "action": "already_equal"
+    },
+    {
+      "path": "autonomous_allhad/autonomous_allhad/dy_estimation/README.md",
+      "sha256": "624094cbcfff83b8af9ab2ad989a8c5ba1d6b2558cccf07162a2aae53ca7ab8f",
+      "bytes": 1939,
       "action": "metadata_updated"
     },
     {
-      "path": "autonomous_allhad/reports/workspace_cleanup_inventory_20260910.json",
-      "sha256": "183a883151dde4368509b3c9dda4da66eb490ce4fbeaf0b8e41a49536b0fee61",
-      "bytes": 15771,
+      "path": "autonomous_allhad/gnn_lowdm/README.md",
+      "sha256": "5fb925056e3e526d6c0d6db5f8792078b0b4f1f7f75b7f2cb7113c836716f712",
+      "bytes": 5160,
       "action": "metadata_updated"
     },
     {
-      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/local_storage_manifest_20260910.json",
-      "sha256": "1057945275e40f6f7c4a23283c1f39a82dee558f241fa7a60759479d9c5fd575",
-      "bytes": 877679,
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/plot_hyperparameter_losses.py",
+      "sha256": "a48eb865ee44d2bdfa0aebe92f756683a4a9e5191e06222372b8d3bb8b208b00",
+      "bytes": 17936,
       "action": "metadata_updated"
     },
     {
-      "path": "autonomous_allhad/reports/workspace_cleanup_20260910/README.md",
-      "sha256": "3136055f0869ad346d3546100273e2e8ae62db40dcfdcc66d70f08e91d4f572a",
-      "bytes": 6018,
+      "path": "autonomous_allhad/gnn_lowdm/_implementation/supplementary_plots.py",
+      "sha256": "404a6be1a5849f03e097fdb012d8361321e62331659ee3e8a16ccd840afde2eb",
+      "bytes": 16690,
+      "action": "metadata_updated"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/plotting.py",
+      "sha256": "4c87668644f2cb992d6d1a5987076cc0455cf4aa3668f47667e588131a161c7a",
+      "bytes": 1693,
+      "action": "metadata_updated"
+    },
+    {
+      "path": "autonomous_allhad/gnn_lowdm/requirements.txt",
+      "sha256": "581fb3e1bb4f7d79d1e4d9edaadd44ed29d6e08319e8bc4348948d0d9ed8aabc",
+      "bytes": 218,
+      "action": "metadata_updated"
+    },
+    {
+      "path": "autonomous_allhad/reports/workspace_cleanup_20260910/canonical_decision.json",
+      "sha256": "8547067a3996f07f7f96ad3f20e07714ec930c14b5ba5815d7f0f7c20b5b506a",
+      "bytes": 3407,
       "action": "metadata_updated"
     },
     {
       "path": "autonomous_allhad/reports/workspace_cleanup_20260910/cleanup_actions.json",
       "sha256": "a2005266214564f45fa760be02dcdcde60721e4984913cf5bf9f7cf8a6656c99",
       "bytes": 7442,
-      "action": "metadata_updated"
+      "action": "already_equal"
     },
     {
       "path": "autonomous_allhad/reports/workspace_cleanup_20260910/git_object_cleanup.json",
       "sha256": "03ea17caa7a58208147cd33e16c8c4cf2f2d2b9c966300cfd4036aa859c44ee0",
       "bytes": 1258,
-      "action": "metadata_updated"
+      "action": "already_equal"
     },
     {
       "path": "autonomous_allhad/reports/workspace_cleanup_20260910/protected_inputs.json",
-      "sha256": "4166d6e14ad0456866521ad2d42cb9ef4014a15d9c81d8dbf118f9435b435972",
-      "bytes": 1862,
-      "action": "metadata_updated"
-    },
-    {
-      "path": "autonomous_allhad/reports/workspace_cleanup_20260910/summary.json",
-      "sha256": "acb43b708826235ba2cc8ab31d1a5b0472e06668ad039300c6a2bcf3a4d6f50f",
-      "bytes": 1491,
+      "sha256": "c14943467799439694566eaddd474c034ad9cfc532faa932680c24064f4379f0",
+      "bytes": 2634,
       "action": "metadata_updated"
     },
     {
       "path": "autonomous_allhad/reports/workspace_cleanup_20260910/sync_conflicts.json",
-      "sha256": "6bd2f99b73d6fdaba256ef91fa7aa0a74a7e3142a288120bd8b92882b6c561a4",
-      "bytes": 35070,
+      "sha256": "0334f83d07385fdde24fb0a0c31a64c3a88a68f797d8a88054059954423c4a02",
+      "bytes": 39080,
       "action": "metadata_updated"
     },
     {
       "path": "autonomous_allhad/reports/workspace_cleanup_20260910/sync_conflicts.md",
-      "sha256": "383ee3ecea15505f2010c449325b64a7521d3b81b123c4d293999030ba27dc31",
-      "bytes": 4819,
+      "sha256": "b8ccd60a29f9aa7bb068a859cefbb16414a55030e4ccb63a127d074833c06dde",
+      "bytes": 5225,
       "action": "metadata_updated"
+    },
+    {
+      "path": "autonomous_allhad/reports/workspace_cleanup_inventory_20260910.json",
+      "sha256": "183a883151dde4368509b3c9dda4da66eb490ce4fbeaf0b8e41a49536b0fee61",
+      "bytes": 15771,
+      "action": "already_equal"
+    },
+    {
+      "path": "autonomous_allhad/reports/workspace_cleanup_inventory_20260910.md",
+      "sha256": "1b19edf1cac0c7c54dda538cda21e07f8a7c962806929b14eb1a5495554a5b8a",
+      "bytes": 16263,
+      "action": "already_equal"
+    },
+    {
+      "path": "autonomous_allhad/workflow/flat_ntuple_analysis_pipeline.md",
+      "sha256": "fdad06a6579e29e56f7193200d85045a45aa0c7b23544f8d08e3a3e3ed9d7230",
+      "bytes": 2940,
+      "action": "metadata_updated"
+    },
+    {
+      "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/local_storage_manifest_20260910.json",
+      "sha256": "1057945275e40f6f7c4a23283c1f39a82dee558f241fa7a60759479d9c5fd575",
+      "bytes": 877679,
+      "action": "already_equal"
+    },
+    {
+      "path": "autonomous_allhad/workflow/run_batch.sh",
+      "sha256": "4c91cdcbe19e872ca1ff5c09e9662b3cee38f524d6fb57ca8a7a68a8e0eede0c",
+      "bytes": 2771,
+      "action": "already_equal"
+    },
+    {
+      "path": "docs/index.html",
+      "sha256": "de3ef3edff6eeca9d911ed00f41c417a00c937725c692808e9e6a21c50750113",
+      "bytes": 8974,
+      "action": "already_equal"
     }
   ],
-  "github_branch": "codex/package-lowpt-tnp",
-  "github_verified_commit": "13dfa10a2e30eee3b7a3074ff9699da6836e5eb2",
-  "physics_source_sync": "pending_current_use_classification_from_main_agent"
+  "verified_at_utc": "2026-09-10T13:11:38.760527+00:00",
+  "excluded_receipt_metadata": [
+    "README.md",
+    "summary.json",
+    "cleanup_sync_receipt.json"
+  ],
+  "note": "Receipt metadata is excluded to avoid self-referential hashes; the deployment command rechecks all 30 files."
 }

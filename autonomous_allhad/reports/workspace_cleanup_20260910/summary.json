@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generated_at_utc": "2026-09-10T12:56:30.491050+00:00",
-  "status": "cleanup_complete_current_use_sync_in_progress",
+  "status": "completed_scoped_cleanup_and_current_use_sync",
   "initial_head": "561c2721b7dd97ddba1166c8b2ac7de7f07a5701",
   "initial_branch": "codex/package-lowpt-tnp",
   "original_deletions": 2367,
@@ -9,8 +9,8 @@
   "removed_bytes_in_action_log": 4821022706,
   "git_maintenance_reclaimed_allocated_bytes": 3872600064,
   "current_allocated_bytes": {
-    ".git": 1710034944,
-    ".": 2430447616
+    ".git": 1715716096,
+    ".": 2439786496
   },
   "eos_compared_source_paths": 3414,
   "eos_compared_campaign_paths": 2622,
@@ -27,14 +27,17 @@
   "physics_source_modified_by_cleanup": false,
   "compiled_payloads_modified_by_cleanup": false,
   "canonical_sync_policy": "Currently used version, to be identified by high-dM main Agent at user request; no divergent physics overwrite before identification.",
-  "canonical_sync_status": "main_agent_decision_received_selected_files_being_verified",
+  "canonical_sync_status": "30_scoped_files_verified_local_eos_git; 7_reference_test_variants_preserved",
   "main_agent_response_status": "Completed: current-use authority recorded in canonical_decision.json",
   "github_pages_deployed": false,
   "cleanup_commit": "13dfa10a2e30eee3b7a3074ff9699da6836e5eb2",
   "cleanup_github_push_verified": true,
-  "cleanup_eos_verified_files": 15,
+  "cleanup_eos_verified_files": 30,
   "current_btag_payload_sha256": "9326454608126467219a60f8d5763a6c92465127ca6ea32ac415ace8ed0ec004",
   "current_topw_efficiency_sha256": "1d19be3a7fc6e59f1ee9798cb85b7154feca16ad2c1390ce8382453fcaaa1c68",
   "historical_or_unproven_variants_preserved": 7,
-  "selected_sync_file_count": 30
+  "selected_sync_file_count": 30,
+  "current_use_commit": "b568ad4607067d1634bee21bbaf60e208834708b",
+  "active_campaign_inputs_modified": false,
+  "unrelated_existing_edits_preserved": true
 }

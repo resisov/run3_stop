@@ -53,12 +53,13 @@ EOS canonical checkout은 시작 시 `master` / `c6fd36b9e23b36fcb2e736ade79d915
 3,414개 경로의 초기 대조에서 내용이 다른 파일 19개가 있었다.
 [파일별 차이](sync_conflicts.md), [기계 판독 목록](sync_conflicts.json)을 보존했다.
 현재 사용본 확인을 `high-dM main Agent`에 요청했다. 해당 작업에서 사용자 공유 승인을 받은 뒤,
-현재 b-tag/TopW worker 입력 경로와 hash를 회신받았다. 파일별 분류는 `canonical_decision.json`에 기록했다. 현재 캠페인과 맞는 EOS 데이터셋 목록·metadata·실제 batch executable을 로컬로 채택하고, 현재 로컬 GNN plotting source를 EOS로 맞춘다.
+현재 b-tag/TopW worker 입력 경로와 hash를 회신받았다. 파일별 분류는 `canonical_decision.json`에 기록했다. 현재 캠페인과 맞는 EOS 데이터셋 목록·metadata·실제 batch executable을 로컬로 채택하고, 현재 로컬 GNN plotting source를 EOS로 맞췄다.
 
 2025 jet-veto의 EOS 설치본과 실제 중간 ROOT 생산 provenance는 구분한다. 후자는 확인되지 않았다. 현재 hist가 실행하지 않는 reference/재측정 코드와 관련 tests까지 합한 7개 변형은 양쪽을 보존하고 임의 통일하지 않는다. 이들은 현재 histogram 입력의 동기화 완료 주장에 포함하지 않는다.
 
-정리 커밋 `13dfa10a`는 GitHub 작업 브랜치에 실제 반영됐고, cleanup metadata 및 동일 TopW 입력
-15개는 EOS에서 SHA-256이 같음을 재검증했다. 상세 기록은 `cleanup_sync_receipt.json`이다.
+정리 커밋 `13dfa10a`는 GitHub 작업 브랜치에 실제 반영됐다. 현재 사용본 정리 커밋은 `b568ad46`이며,
+이번에 명시적으로 선택한 cleanup/source/input 30개는 EOS와 로컬 SHA-256을 검증했다.
+내용 commit과 상세 해시는 `cleanup_sync_receipt.json`에 기록했다. 실행 snapshot은 변경하지 않았다.
 **확인된 현재 사용본의 동기화와, 현재 사용 여부가 입증되지 않은 reference 변형 7개의 보존을 구분한다.**
 
 기존 미커밋 source 변경과 다른 작업이 갱신 중인 campaign state는 보존했다.
@@ -79,3 +80,14 @@ Git 히스토리를 재작성하거나 force-push하지 않았으며, GitHub Pag
 
 전체 분석 테스트나 생산·fit 재실행은 이 정리의 검증 범위가 아니다. 파일 hash, Git 무결성,
 HTML 링크 대상, JSON 파싱 및 ignore 규칙을 검증한다.
+
+## 최종 검증
+
+- 현재 b-tag 입력2개: worker SHA 일치. Top/W 입력2개: current worker SHA 일치.
+- 현재 EOS 데이터셋·metadata·batch executable bytes와 로컬 채택본 일치.
+- GNN plotting source 문법 검사, batch shell 문법 검사, 5,338-entry metadata JSON 파싱 통과.
+- 보존/복원 manifest JSON 및 1,882개의 유일한 상대 경로·용량 합계 검증 통과.
+- HTML의 모든 로컬 anchor와 Git archive 링크 대상 검증 통과.
+- Git-ignore 개인정보/비공개 참조 보호와 efficiency payload 예외 검증 통과.
+- 진행 중인 production의 snapshot, ROOT, argv/request/manifest, runtime 수정 없음.
+- 최종 commit/push 및 EOS 재확인은 작업 응답의 commit을 기준으로 한다.
