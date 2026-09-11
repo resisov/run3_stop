@@ -1,0 +1,4 @@
+python3
+-c
+import sys,json; from pathlib import Path; sys.path.insert(0,"/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow"); from postprocess_limits import collect_limits; d=Path(sys.argv[1]); m=json.loads((d/"manifest.json").read_text()); r=collect_limits(d/"limits",m["mass_points"],d/"expected_limits.json"); print(json.dumps({k:v for k,v in r.items() if k!="points"}),flush=True)
+/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined_pending/T2tb

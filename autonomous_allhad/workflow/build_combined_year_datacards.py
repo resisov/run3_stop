@@ -192,7 +192,10 @@ def write_condor_limit_submission(
     batch_name: str,
     r_abs_accuracy: float | None = None,
     verbosity: int = 0,
+    workspace_timeout: int = 900,
 ) -> tuple[Path, Path]:
+    if not isinstance(workspace_timeout, int) or workspace_timeout <= 0:
+        raise ValueError("workspace_timeout must be a positive integer")
     combine_options: list[str] = []
     if r_abs_accuracy is not None:
         if not 0 < r_abs_accuracy < float("inf"):
@@ -213,7 +216,7 @@ def write_condor_limit_submission(
                 "CARD_NAME=$2",
                 "OUTDIR=$3",
                 f"POINT_TIMEOUT={int(point_timeout)}",
-                "WORKSPACE_TIMEOUT=900",
+                f"WORKSPACE_TIMEOUT={workspace_timeout}",
                 "export PYTHONNOUSERSITE=1",
                 "unset PYTHONPATH PYTHONHOME",
                 ': "${_CONDOR_SCRATCH_DIR:?Condor scratch directory is required}"',
@@ -287,7 +290,7 @@ request_cpus = 1
 request_memory = 6000MB
 request_disk = 4000MB
 +JobFlavour = "workday"
-+MaxRuntime = {max(28800, int(point_timeout) + 1800)}
++MaxRuntime = {max(28800, int(point_timeout) + workspace_timeout + 900)}
 +JobBatchName = \"{batch_name}\"
 queue mass,card from (
 {rows}

@@ -72,6 +72,25 @@ def test_combined_card_template_audit(tmp_path, monkeypatch, failure):
         assert result["shape_references_checked"] == 2 and result["sr_blinded"] == 1
 
 
+def test_limit_workspace_timeout_override(tmp_path):
+    import build_combined_year_datacards as combined
+
+    wrapper, submit = combined.write_condor_limit_submission(
+        {"mStop1300_mLSP1": str(tmp_path / "datacard.txt")}, tmp_path,
+        tmp_path / "combine_cmssw_14_1_0_pre4.tgz", "0" * 64, 7200,
+        "NPS26012_test", workspace_timeout=3600,
+    )
+    assert "WORKSPACE_TIMEOUT=3600" in wrapper.read_text()
+    assert "POINT_TIMEOUT=7200" in wrapper.read_text()
+    assert '+JobFlavour = "workday"' in submit.read_text()
+    assert "+MaxRuntime = 28800" in submit.read_text()
+    with pytest.raises(ValueError):
+        combined.write_condor_limit_submission(
+            {}, tmp_path, tmp_path / "runtime.tgz", "0" * 64, 7200,
+            "NPS26012_test", workspace_timeout=0,
+        )
+
+
 def leaf(value: float) -> dict:
     return {
         "nominal": {
