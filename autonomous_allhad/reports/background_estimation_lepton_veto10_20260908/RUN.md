@@ -2,11 +2,18 @@
 
 ## Top/W input update — 2026-09-11
 
+2024 was subsequently promoted with canonical manifest SHA256
+`868acb7888b77fb2a218df4a63f16c2801f84ab8683b56cd7d6386e4f3b8718c`.
+Validation 1115056.0 completed with ExitCode=0. The same `calculation.sub`
+submitted **only 2024** as **1115059.0** with py38/workday on the EOS schedd.
+The completed 2025 calculation is not resubmitted. The final audit will check
+both years and refresh the combined campaign state without refitting 2025.
+
 2025 was promoted by the main task with canonical manifest SHA256
 `3a9784dd2e648300f0e4790f41c96ec99fcc174454c90b50c3802c15c49d55ca`.
 The existing `calculation.sub` submitted only 2025 as **1115053.0** on the
 EOS schedd `bigbird24.cern.ch`, using the existing py38 runtime and workday.
-2024 is awaiting its separate promotion and is not included in this job.
+2024 was not included in that 2025 job; its later submission is recorded above.
 
 Calculation 1115053.0 completed with ExitCode=0 (142 seconds worker wall time).
 All five derived products matched the new recorded hashes; four calculation

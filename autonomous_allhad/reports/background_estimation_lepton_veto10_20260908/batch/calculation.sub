@@ -20,4 +20,4 @@ request_disk = 5000MB
 +MaxRuntime = 28800
 +JobBatchName = "NPS26012_BackgroundVeto10_calculation"
 on_exit_hold = (ExitBySignal == True) || (ExitCode != 0)
-queue year in 2025
+queue year in 2024
