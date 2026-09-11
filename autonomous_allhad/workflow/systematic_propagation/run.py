@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import gzip
 import hashlib
 import json
 import os
@@ -24,7 +25,11 @@ WEIGHTS = ("pileup", "btagSF", "electron_id", "electron_reco", "muon_id",
 
 
 def read(path):
-    return json.loads(Path(path).read_text())
+    path = Path(path)
+    if path.suffix == ".gz":
+        with gzip.open(path, "rt") as source:
+            return json.load(source)
+    return json.loads(path.read_text())
 
 
 def load_config(path):
@@ -135,7 +140,8 @@ def prepare_full(args):
         for name in ("run.py", "run.sh"):
             shared["pins"][str(campaign / name)] = sha(campaign / name)
         shared.update(status="full_mc_prepared", shifts=list(SHIFTS[1:]),
-                      keep_input_cache=False, root_retention="on EOS; never on laptop")
+                      keep_input_cache=False, compact_output=True,
+                      root_retention="batch scratch only; compressed histograms and metadata on EOS")
         base = target / str(year)
         shared_path = base / "common.json"
         write(shared_path, shared)
@@ -494,17 +500,40 @@ def worker(args):
         report["stages"]["gnn"] = gnn["status"]
         del gnn
         products = {}
-        for name in (root.name, metadata_path.name, "main.json", "gnn.json", "trota.json", "truth.json"):
-            target = destination / name
+        compact = config.get("compact_output", False)
+        names = [metadata_path.name, "main.json", "gnn.json", "trota.json", "truth.json"]
+        if not compact:
+            names.insert(0, root.name)
+        report["root_retained"] = not compact
+        report["validated_root_sha256"] = sha(root)
+        report["validated_root_bytes"] = root.stat().st_size
+        for name in names:
+            output_name = name + ".gz" if compact else name
+            target = destination / output_name
             if target.exists():
                 raise FileExistsError(target)
-            temporary = target.with_name(name + ".partial")
-            shutil.copyfile(work / name, temporary)
-            expected = sha(work / name)
+            temporary = target.with_name(output_name + ".partial")
+            source = work / name
+            uncompressed_sha = sha(source)
+            if compact:
+                compressed = work / output_name
+                with source.open("rb") as src, compressed.open("wb") as dst:
+                    with gzip.GzipFile(filename="", mode="wb", fileobj=dst, mtime=0) as archive:
+                        shutil.copyfileobj(src, archive)
+                digest = hashlib.sha256()
+                with gzip.open(compressed, "rb") as archive:
+                    for block in iter(lambda: archive.read(1024 * 1024), b""):
+                        digest.update(block)
+                if digest.hexdigest() != uncompressed_sha:
+                    raise RuntimeError("compressed product round-trip mismatch")
+                source = compressed
+            shutil.copyfile(source, temporary)
+            expected = sha(source)
             if sha(temporary) != expected:
                 raise RuntimeError("stage-out checksum mismatch")
             temporary.replace(target)
-            products[name] = dict(path=str(target), sha256=expected, bytes=target.stat().st_size)
+            products[output_name] = dict(path=str(target), sha256=expected,
+                                        uncompressed_sha256=uncompressed_sha, bytes=target.stat().st_size)
         report.update(status="complete_with_bad_files" if report["bad_files"] else "complete",
                       products=products, finished=time.time(),
                       validation="individual shifted job complete; nominal closure pending",

@@ -73,8 +73,11 @@ the four validated pilot Up/Down results. Nominal ROOT production is not repeate
 Submit the two generated `full_met_20260911/{2024,2025}/jobs.sub` files to the EOS
 schedd. Both use `workday`; background jobs request 6 GB and signal jobs 12 GB,
 matching the existing signal-template resource allocation. NanoAOD caches are
-released after processing each source. ROOT, metadata, main and GNN histograms
-remain under the separate campaign's `outputs/` directories on EOS.
+released after processing each source. Shifted ROOTs stay in worker scratch;
+their validated hashes and event counts are recorded before scratch cleanup.
+Only compressed JSON metadata and main/GNN histograms are staged to the separate
+campaign's `outputs/` directories on EOS. Compression is round-trip checked;
+the original nominal ROOTs and completed pilot ROOTs remain unchanged.
 
 An individual input read failure is retained in the job metadata and does not
 discard the other valid files. Such a job is marked `complete_with_bad_files`,
