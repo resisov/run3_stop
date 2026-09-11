@@ -1,0 +1,31 @@
+universe = vanilla
+executable = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/run_batch.sh
+initialdir = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/cards
+arguments = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/cards/$(year)_$(topology).argv
+output = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/logs/cards.$(ClusterId).$(ProcId).out
+error = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/logs/cards.$(ClusterId).$(ProcId).err
+log = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/logs/cards.$(ClusterId).log
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+transfer_executable = TRUE
+transfer_input_files = /eos/user/t/taiwoo/run3_stop/runtime/combine_cmssw_14_1_0_pre4.tgz
+transfer_output_files = ""
+getenv = False
+environment = "BATCH_RUNTIME=combine COMBINE_RUNTIME_SHA256=2909cf59caf57cfa47e65e6d43a7bcca8c864c72984679127d8eebabb551614a AUTONOMOUS_ALLHAD_LOCAL_ANALYSIS_DATA=0"
+use_x509userproxy = true
+x509userproxy = /eos/user/t/taiwoo/decaf/analysis/proxy/x509up_u147757
+request_cpus = 2
+request_memory = 16000MB
+request_disk = 6000MB
++JobFlavour = "workday"
++MaxRuntime = 28800
++JobBatchName = "NPS26012_TopW_cards"
+on_exit_hold = (ExitBySignal == True) || (ExitCode != 0)
+queue year,topology from (
+2024 T2tt
+2024 T2bW
+2024 T2tb
+2025 T2tt
+2025 T2bW
+2025 T2tb
+)
