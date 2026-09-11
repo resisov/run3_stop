@@ -3936,7 +3936,7 @@
     "primary_limits_running": 0,
     "timeout_recovery_running": 0
   },
-  "status": "topw_sf_running; all_primary_limits_terminated; 17_points_in_recovery",
+  "status": "topw_sf_running; T2tt_limits_validated; 14_points_in_recovery",
   "topologies": [
     "T2tt",
     "T2bW",
@@ -5605,21 +5605,22 @@
     "schedd": "bigbird24.cern.ch",
     "source_backup": "topw_previous_sources.tar.gz",
     "source_commit": "456fd370",
-    "stage": "primary_limits_terminated; targeted_limit_recovery_and_impacts_running",
+    "stage": "T2tt_limits_validated; collected_export_refresh_for_local_plots; other_recoveries_and_impacts_running",
     "last_monitor": {
-      "utc": "2026-09-11T15:22:47Z",
+      "utc": "2026-09-11T16:06:18Z",
       "live_queue_status": "available",
       "schedd_error": null,
       "schedd_recovered_at_utc": "2026-09-11T14:09:16Z",
-      "current_queue": {"primary_limits_running": 0, "impacts_running": 2, "recovery_running": 4, "recovery_idle": 13, "collection_running": 1, "held": 0},
+      "current_queue": {"primary_limits_running": 0, "impacts_running": 2, "recovery_running": 1, "recovery_idle": 13, "collection_idle": 3, "held": 0},
+      "queue_snapshot_precedes_latest_T2tb_recovery_and_collection_refresh": false,
       "queue_snapshot_precedes_sigbus_retry_and_additional_submissions": false,
-      "validation_checked_at_utc": "2026-09-11T15:22:16Z",
+      "validation_checked_at_utc": "2026-09-11T16:04:04Z",
       "ssh_access": true,
       "eos_access": true,
       "kerberos_klist_s_exit": 0,
       "roots_present_at_1409_utc": {"T2tt": 178, "T2bW": 334, "T2tb": 304},
       "file_counts_are_not_validated_completion": true,
-      "collection_status": "T2tt/T2bW exit0; T2tb terminated by SIGBUS and released once",
+      "collection_status": "all three exit0; four recoveries validated and promoted; refreshed export jobs submitted",
       "termination_log_snapshot": {
         "utc": "2026-09-11T15:22:16Z",
         "T2tt": {"terminated": 205, "exit0": 203, "exit124": 2},
@@ -5761,20 +5762,21 @@
       "physics_changed": false
     },
     "limits": {
-      "status": "all_primary_jobs_terminated; 17_points_in_recovery; validation_in_progress",
+      "status": "T2tt_205_of_205_validated; T2bW_344_of_354_validated; T2tb_361_of_365_validated; 14_points_in_recovery",
       "expected_total": 924,
       "submitted_total": 924,
       "last_queue_check": {"utc": "2026-09-11T15:15:33Z", "running": 0, "idle": 0, "held": 0, "primary_termination_events_verified": 924},
       "quantile_validation": {
-        "utc": "2026-09-11T15:22:16Z",
-        "counts": {"T2tt": 203, "T2bW": 342, "T2tb": null},
+        "utc": "2026-09-11T16:04:04Z",
+        "counts": {"T2tt": 205, "T2bW": 344, "T2tb": 361},
+        "total": 910,
         "five_finite_nonnegative_ordered_quantiles": true,
         "T2tt": {"batch_collected": 199, "late_outputs_individually_validated": ["mStop1600_mLSP1300", "mStop1600_mLSP1400", "mStop1700_mLSP1500", "mStop1800_mLSP1600"], "export_refresh_pending": true},
-        "T2bW_incomplete_trees": {"mStop100_mLSP1": 0, "mStop200_mLSP100": 0, "mStop300_mLSP150": 1, "mStop300_mLSP200": 1},
-        "T2tb": "collection worker SIGBUS; validation pending one retry",
+        "T2bW_incomplete_trees": {"mStop100_mLSP1": 0, "mStop300_mLSP150": 1, "mStop300_mLSP200": 1},
+        "T2tb": {"batch_collected": 361, "incomplete_trees": {"mStop100_mLSP1": 1}},
         "all_outputs_promoted": false
       },
-      "invalid_results": [{"topology": "T2bW", "mass_point": "mStop200_mLSP100", "job": "1115252.271", "reason": "limit tree has zero entries; expected five quantiles", "observed_at_utc": "2026-09-11T12:54:15Z", "path": "combined_pending/T2bW/limits/higgsCombine_mStop200_mLSP100.AsymptoticLimits.mH120.root", "termination_log_exit_code": 0, "retry_submitted": true, "retry_job": "1115315.0"}],
+      "invalid_results": [{"topology": "T2bW", "mass_point": "mStop200_mLSP100", "job": "1115252.271", "reason": "original limit tree had zero entries", "observed_at_utc": "2026-09-11T12:54:15Z", "path": "combined_pending/T2bW/limits/higgsCombine_mStop200_mLSP100.AsymptoticLimits.mH120.root", "termination_log_exit_code": 0, "retry_submitted": true, "retry_job": "1115315.0", "resolved": true, "replacement_validated_and_promoted": true}],
       "output_directory": "combined_pending",
       "recovery": {
         "submitted_confirmed_by_utc": "2026-09-11T14:41:54Z",
@@ -5786,10 +5788,10 @@
         "voms_seconds_before_submit": 333281,
         "git_commit": "1d8af64e468be2b4ec4b1dd9be4f70e112fe7f54",
         "jobs": {
-          "1115313.0": {"topology": "T2tt", "mass_point": "mStop1300_mLSP1", "workspace_timeout_seconds": 3600},
-          "1115313.1": {"topology": "T2tt", "mass_point": "mStop1450_mLSP400", "workspace_timeout_seconds": 3600},
-          "1115314.0": {"topology": "T2bW", "mass_point": "mStop1750_mLSP1250", "workspace_timeout_seconds": 3600},
-          "1115315.0": {"topology": "T2bW", "mass_point": "mStop200_mLSP100", "workspace_timeout_seconds": 900, "r_abs_accuracy": 1e-7},
+          "1115313.0": {"topology": "T2tt", "mass_point": "mStop1300_mLSP1", "workspace_timeout_seconds": 3600, "status": "validated_promoted", "exit_code": 0, "root_sha256": "655595908837c96e7b6e6f618fa98d3db2f919b8b8fba3ba0142cada4da3818d"},
+          "1115313.1": {"topology": "T2tt", "mass_point": "mStop1450_mLSP400", "workspace_timeout_seconds": 3600, "status": "validated_promoted", "exit_code": 0, "root_sha256": "27f66dc71d9d7926ef46d45b209ed6d333ed812f824ffed7d8af3c4dbfe8ac7c"},
+          "1115314.0": {"topology": "T2bW", "mass_point": "mStop1750_mLSP1250", "workspace_timeout_seconds": 3600, "status": "validated_promoted", "exit_code": 0, "root_sha256": "765af07794eea041d7b9ab0ef8a18a844bc86d31f3ebd7e820ea6aa4ddcbd854"},
+          "1115315.0": {"topology": "T2bW", "mass_point": "mStop200_mLSP100", "workspace_timeout_seconds": 900, "r_abs_accuracy": 1e-7, "status": "validated_promoted", "exit_code": 0, "root_sha256": "6a31920f53025c287cb137f27427e50d6c484abefdeaf000840a054cdadfaff0"},
           "1115319.0": {"topology": "T2bW", "mass_point": "mStop1550_mLSP1100", "original_job": "1115252.161", "failure": "combine_timeout_7200s", "point_timeout_seconds": 21600},
           "1115319.1": {"topology": "T2bW", "mass_point": "mStop1750_mLSP1300", "original_job": "1115252.238", "failure": "combine_timeout_7200s", "point_timeout_seconds": 21600},
           "1115319.2": {"topology": "T2bW", "mass_point": "mStop1750_mLSP1350", "original_job": "1115252.239", "failure": "combine_timeout_7200s", "point_timeout_seconds": 21600},
@@ -5802,7 +5804,8 @@
           "1115320.2": {"topology": "T2tb", "mass_point": "mStop1800_mLSP1450", "original_job": "1115258.260", "failure": "combine_timeout_7200s", "point_timeout_seconds": 21600},
           "1115321.0": {"topology": "T2bW", "mass_point": "mStop100_mLSP1", "failure": "zero_quantiles", "r_abs_accuracy": 1e-7},
           "1115321.1": {"topology": "T2bW", "mass_point": "mStop300_mLSP150", "failure": "one_quantile_only", "r_abs_accuracy": 1e-7},
-          "1115321.2": {"topology": "T2bW", "mass_point": "mStop300_mLSP200", "failure": "one_quantile_only", "r_abs_accuracy": 1e-7}
+          "1115321.2": {"topology": "T2bW", "mass_point": "mStop300_mLSP200", "failure": "one_quantile_only", "r_abs_accuracy": 1e-7},
+          "1115566.0": {"topology": "T2tb", "mass_point": "mStop100_mLSP1", "original_job": "1115258.12", "original_exit_code": 0, "failure": "one_quantile_only", "r_abs_accuracy": 1e-7}
         },
         "default_workspace_timeout_seconds": 900,
         "additional_submissions": {
@@ -5812,6 +5815,7 @@
           "1115319": {"path": "combined_pending/T2bW/recovery_fit_timeout_1/limits_eossubmit.sub", "sha256": "585b924f853d2ffb6e196c4917aded4a8c8aff4775167be05d76604be0371375", "jobs": 7},
           "1115320": {"path": "combined_pending/T2tb/recovery_fit_timeout_1/limits_eossubmit.sub", "sha256": "59a8823487b59f75e32fc8c41a91c00fd596d9bc354de2ac60921552e2ea9358", "jobs": 3},
           "1115321": {"path": "combined_pending/T2bW/recovery_precision_2/limits_eossubmit.sub", "sha256": "d052873ad6d1f8a7e9db58ea0f1d581e94914a08978f6a5051f4c01bbe35e53c", "jobs": 3},
+          "1115566": {"path": "combined_pending/T2tb/recovery_precision_1/limits_eossubmit.sub", "sha256": "ffe5e5de8a280e7c69371f8e4ee0fe25dfafc03985c1caa52acab8313611823f", "jobs": 1, "confirmed_by_utc": "2026-09-11T16:04:04Z", "proxy_seconds_before_submit": 356764, "voms_seconds_before_submit": 327964},
           "max_runtime_seconds": 28800,
           "same_cards_and_physics_model": true
         },
@@ -5825,18 +5829,24 @@
           "8a60e1fe4932d4674101b1264e905abd59c56c4d271c06fc698c1e96aa60daf6",
           "e4d1fb27464d710ef9ed44d36576fc2c976138ed6e8e27ccc63a6b9c5413f61e"
         ],
-        "validated_recoveries": 0,
-        "last_queue_check": {"utc": "2026-09-11T15:22:47Z", "running": 4, "idle": 13, "held": 0},
+        "validated_recoveries": 4,
+        "promoted_recoveries": 4,
+        "pending_recoveries": 14,
+        "promotion_target": "combined_pending/{topology}/limits",
+        "replaced_invalid_outputs": [{"path": "combined_pending/T2bW/limits/higgsCombine_mStop200_mLSP100.AsymptoticLimits.mH120.root", "previous_limit_entries": 0, "replacement_validated": true, "backup_retained": false}],
+        "last_queue_check": {"utc": "2026-09-11T16:06:18Z", "running": 1, "idle": 13, "held": 0},
         "outputs_promoted": false,
         "healthy_jobs_modified": false,
         "submission_incident": "T2bW timeout submit response timed out; queue and event/output checks found no committed job before resubmission"
       },
       "collection": {
-        "status": "T2tt_T2bW_exit0; T2tb_SIGBUS_released_once",
-        "completed": {"1115316.0": {"exit_code": 0, "validated": 199}, "1115316.1": {"exit_code": 0, "validated": 342}},
-        "retry": {"job": "1115316.2", "exit_by_signal": true, "exit_signal": 7, "reason": "SIGBUS; no stderr or stdout produced", "root_cause": "not_determined", "release_event_utc": "2026-09-11T15:17:10Z", "release_command_exit_code": 0, "retry_count": 1, "retry_completion": false},
-        "last_queue_check": {"utc": "2026-09-11T15:22:47Z", "running": 1, "idle": 0, "held": 0},
-        "cluster": 1115316,
+        "status": "all_three_previous_jobs_exit0; refreshed_export_submitted_after_recovery_promotion",
+        "completed": {"1115316.0": {"exit_code": 0, "validated": 199}, "1115316.1": {"exit_code": 0, "validated": 342}, "1115316.2": {"exit_code": 0, "validated": 361}},
+        "retry": {"job": "1115316.2", "exit_by_signal": true, "exit_signal": 7, "reason": "SIGBUS; no stderr or stdout produced", "root_cause": "not_determined", "release_event_utc": "2026-09-11T15:17:10Z", "release_command_exit_code": 0, "retry_count": 1, "retry_completion": true, "retry_exit_code": 0, "completed_at_utc": "2026-09-11T15:24:33Z"},
+        "last_queue_check": {"utc": "2026-09-11T16:06:18Z", "running": 0, "idle": 3, "held": 0},
+        "previous_cluster": 1115316,
+        "cluster": 1115567,
+        "refresh_submitted_confirmed_by_utc": "2026-09-11T16:04:04Z",
         "jobs": {"0": "T2tt", "1": "T2bW", "2": "T2tb"},
         "schedd": "bigbird24.cern.ch",
         "submission_file": "cards/collect.sub",
@@ -5846,7 +5856,8 @@
         "max_runtime_seconds": 28800,
         "output": "combined_pending/{topology}/expected_limits.json",
         "partial_snapshot_possible_while_primary_jobs_run": true,
-        "validated_total": 541
+        "validated_total": 902,
+        "total_after_late_outputs_and_promotions": 910
       },
       "T2bW": {
         "cluster": 1115252,
@@ -5892,7 +5903,7 @@
       "max_runtime_seconds": 43200,
       "proxy_seconds_before_submit": 368164,
       "voms_seconds_before_submit": 339364,
-      "last_queue_check": {"utc": "2026-09-11T15:22:47Z", "idle": 0, "running": 2, "held": 0},
+      "last_queue_check": {"utc": "2026-09-11T16:06:18Z", "idle": 0, "running": 2, "held": 0},
       "r1": {"cluster": 1115259, "submission_file": "combined_pending/T2tt/impact_r1_eossubmit.sub", "submission_sha256": "21d333d880c05f3069ef7729d1802aa0fe51e359c6d33d9d7dc8153a0e3642b4"},
       "r0": {"cluster": 1115260, "submission_file": "combined_pending/T2tt/impact_r0_eossubmit.sub", "submission_sha256": "372e2a760525b0a5dcd085e6c6fe209a5af3e257dd394fc41a5e571bd142a541"}
     },
