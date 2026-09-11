@@ -13,7 +13,7 @@ import time
 from pathlib import Path
 
 
-HERE = Path(__file__).resolve().parent
+HERE = Path(__file__).absolute().parent
 SHIFTS = ("nominal", "metUnclusteredUp", "metUnclusteredDown")
 TROTA_SETUP = "/cvmfs/sft.cern.ch/lcg/views/LCG_104/x86_64-el9-gcc13-opt/setup.sh"
 WEIGHTS = ("pileup", "btagSF", "electron_id", "electron_reco", "muon_id",
@@ -76,7 +76,7 @@ def source_records(sidecar, year):
 
 def prepare(args):
     repo = eos(args.repo)
-    campaign = eos(HERE)
+    campaign = repo / "autonomous_allhad/workflow/systematic_propagation"
     canonical_path = repo / "autonomous_allhad/reports/lepton_veto10_canonical_20260908.json"
     canonical = read(canonical_path)
     nominal = repo / "autonomous_allhad/workflow/histograms/lepton_veto10_20260908"
@@ -217,7 +217,7 @@ def worker(args):
         for key in ("PYTHONHOME", "PYTHONPATH", "LD_LIBRARY_PATH"):
             trota_env.pop(key, None)
         script = ('set -e; set +u; source "$1"; shift; '
-                  'export PYTHONPATH="$1/autonomous_allhad:$1"; shift; '
+                  'export PYTHONPATH="$1/autonomous_allhad:$1${PYTHONPATH:+:$PYTHONPATH}"; shift; '
                   'exec python3 -u -m autonomous_allhad.trota_resolved_2024_inplace "$@"')
         execute(["/bin/bash", "-c", script, "trota", config["trota_setup"], repo,
                  "--input", root, "--model", config["trota_model"],
