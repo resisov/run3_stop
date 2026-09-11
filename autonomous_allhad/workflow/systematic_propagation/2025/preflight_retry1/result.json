@@ -1,0 +1,1135 @@
+{
+  "bad_files": [],
+  "status": "complete",
+  "summary": {
+    "chunk_summaries": [
+      {
+        "ak4_jec_status": {
+          "applied": true,
+          "object": "AK4",
+          "shift": "nominal",
+          "shift_applied": false,
+          "source": "object_corrections_2025_precalibrated"
+        },
+        "ak8_jec_status": {
+          "applied": true,
+          "object": "AK8",
+          "shift": "nominal",
+          "shift_applied": false,
+          "source": "object_corrections_2025_precalibrated"
+        },
+        "available_systematics": [
+          "nominal"
+        ],
+        "boosted_resolved_cross_cleaning_inputs": {
+          "ak4_identity": "jet_source_index_all indexes the NanoAOD Jet collection",
+          "ak8_identity": "fatjet_source_index_all indexes the NanoAOD FatJet collection",
+          "boosted_masks": {
+            "top": "fatjet_boosted_top_pass_all",
+            "w": "fatjet_boosted_w_pass_all"
+          },
+          "status": "stored",
+          "subjet_identity": "fatjet_subjet_index{1,2}_all index subjet_eta_all/subjet_phi_all",
+          "trota_inference_stage": "main Condor job after Events creation and before EOS stage-out",
+          "variation_scope": "nominal"
+        },
+        "boosted_tagging": {
+          "missing_score_branches": [],
+          "top_definition": "pt>400, abs(eta)<2.0, mSD>105, score>WP",
+          "top_score_branch": "FatJet_globalParT3_withMassTopvsQCD",
+          "top_score_wp": 0.5078,
+          "w_definition": "pt>200, abs(eta)<2.0, 60<mSD<105, score>WP",
+          "w_score_branch": "FatJet_globalParT3_withMassWvsQCD",
+          "w_score_wp": 0.9385
+        },
+        "correction_year": "2025",
+        "cutflows": {
+          "DY2E": [
+            {
+              "cut": "total_read_events",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "valid_MET",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "lumimask",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "MET_filters",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "trigger_requirement",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "lepton_veto_or_selection",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "tau_veto",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "isolated_track_veto",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "jet_veto_map",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "jet_multiplicity",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "bjet_multiplicity",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "MET_or_recoil_threshold",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "HT_threshold",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "delta_phi_requirements",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "final_region_selection",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            }
+          ],
+          "DY2M": [
+            {
+              "cut": "total_read_events",
+              "first_zero_cut": "lepton_veto_or_selection",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "valid_MET",
+              "first_zero_cut": "lepton_veto_or_selection",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "lumimask",
+              "first_zero_cut": "lepton_veto_or_selection",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "MET_filters",
+              "first_zero_cut": "lepton_veto_or_selection",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "trigger_requirement",
+              "first_zero_cut": "lepton_veto_or_selection",
+              "unweighted": 4,
+              "weighted": 331.5734558105469
+            },
+            {
+              "cut": "lepton_veto_or_selection",
+              "first_zero_cut": "lepton_veto_or_selection",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "tau_veto",
+              "first_zero_cut": "lepton_veto_or_selection",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "isolated_track_veto",
+              "first_zero_cut": "lepton_veto_or_selection",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "jet_veto_map",
+              "first_zero_cut": "lepton_veto_or_selection",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "jet_multiplicity",
+              "first_zero_cut": "lepton_veto_or_selection",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "bjet_multiplicity",
+              "first_zero_cut": "lepton_veto_or_selection",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "MET_or_recoil_threshold",
+              "first_zero_cut": "lepton_veto_or_selection",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "HT_threshold",
+              "first_zero_cut": "lepton_veto_or_selection",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "delta_phi_requirements",
+              "first_zero_cut": "lepton_veto_or_selection",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "final_region_selection",
+              "first_zero_cut": "lepton_veto_or_selection",
+              "unweighted": 0,
+              "weighted": 0.0
+            }
+          ],
+          "GCR": [
+            {
+              "cut": "total_read_events",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "valid_MET",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "lumimask",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "MET_filters",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "trigger_requirement",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "lepton_veto_or_selection",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "tau_veto",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "isolated_track_veto",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "jet_veto_map",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "jet_multiplicity",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "bjet_multiplicity",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "MET_or_recoil_threshold",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "HT_threshold",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "delta_phi_requirements",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "final_region_selection",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            }
+          ],
+          "LLCR": [
+            {
+              "cut": "total_read_events",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "valid_MET",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "lumimask",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "MET_filters",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "trigger_requirement",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "lepton_veto_or_selection",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "tau_veto",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "isolated_track_veto",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "jet_veto_map",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "jet_multiplicity",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "bjet_multiplicity",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "MET_or_recoil_threshold",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "HT_threshold",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "delta_phi_requirements",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "final_region_selection",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            }
+          ],
+          "QCDCR": [
+            {
+              "cut": "total_read_events",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "valid_MET",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "lumimask",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "MET_filters",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "trigger_requirement",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "lepton_veto_or_selection",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "tau_veto",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "isolated_track_veto",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "jet_veto_map",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "jet_multiplicity",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "bjet_multiplicity",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "MET_or_recoil_threshold",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "HT_threshold",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "delta_phi_requirements",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "final_region_selection",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            }
+          ],
+          "SR": [
+            {
+              "cut": "total_read_events",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "valid_MET",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "lumimask",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "MET_filters",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "trigger_requirement",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "lepton_veto_or_selection",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "tau_veto",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "isolated_track_veto",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "jet_veto_map",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "jet_multiplicity",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "bjet_multiplicity",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "MET_or_recoil_threshold",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "HT_threshold",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "delta_phi_requirements",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "final_region_selection",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            }
+          ],
+          "preselection": [
+            {
+              "cut": "total_read_events",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "valid_MET",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "lumimask",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "MET_filters",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 500,
+              "weighted": 39125.66778564453
+            },
+            {
+              "cut": "trigger_requirement",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "lepton_veto_or_selection",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "tau_veto",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "isolated_track_veto",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "jet_veto_map",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "jet_multiplicity",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "bjet_multiplicity",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "MET_or_recoil_threshold",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "HT_threshold",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "delta_phi_requirements",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            },
+            {
+              "cut": "final_region_selection",
+              "first_zero_cut": "trigger_requirement",
+              "unweighted": 0,
+              "weighted": 0.0
+            }
+          ]
+        },
+        "data_taking_year": "2025",
+        "deferred_central_sf_readiness": {
+          "components": {
+            "btag_fixed_wp": {
+              "missing_fields": [],
+              "required_fields": [
+                "good_jet_b_medium",
+                "good_jet_btag_upart",
+                "good_jet_eta",
+                "good_jet_hadron_flavour",
+                "good_jet_pt"
+              ],
+              "status": "ready"
+            },
+            "electron_id_reco": {
+              "missing_fields": [],
+              "required_fields": [
+                "electron_medium_eta_sc",
+                "electron_medium_phi",
+                "electron_medium_pt",
+                "electron_veto_eta_sc",
+                "electron_veto_phi",
+                "electron_veto_pt"
+              ],
+              "status": "ready"
+            },
+            "muon_id_iso_trigger": {
+              "missing_fields": [],
+              "required_fields": [
+                "muon_loose_eta",
+                "muon_loose_phi",
+                "muon_loose_pt",
+                "muon_medium_eta",
+                "muon_medium_phi",
+                "muon_medium_pt"
+              ],
+              "status": "ready"
+            },
+            "photon_id_csev_pixel_veto": {
+              "missing_fields": [],
+              "required_fields": [
+                "photon_electron_veto_all",
+                "photon_medium_eta",
+                "photon_medium_phi",
+                "photon_medium_pt",
+                "photon_pixel_seed_all"
+              ],
+              "status": "ready"
+            },
+            "pileup": {
+              "missing_fields": [],
+              "required_fields": [
+                "pu_ntrueint"
+              ],
+              "status": "ready"
+            },
+            "tau_id": {
+              "missing_fields": [],
+              "required_fields": [
+                "tau_decay_mode_all",
+                "tau_deeptau_vse_all",
+                "tau_deeptau_vsjet_all",
+                "tau_deeptau_vsmu_all",
+                "tau_eta_all",
+                "tau_genpart_flavour_all",
+                "tau_pt_all"
+              ],
+              "status": "ready"
+            }
+          },
+          "missing_fields": [],
+          "status": "ready"
+        },
+        "dy_mass_window": "on_z",
+        "dy_recoil_selection": {
+          "DY2E": "electron-cleaned jets; deltaPhi(j1..j4,uT)>0.5; uT>250 GeV",
+          "DY2M": "muon-cleaned jets; deltaPhi(j1..j4,uT)>0.5; uT>250 GeV"
+        },
+        "entries": 500,
+        "entry_start": 0,
+        "entry_stop": 500,
+        "fatjet_id_source": "correctionlib_AK8PUPPI_TightLeptonVeto",
+        "flat_preselection": {
+          "definition": "base_common & zero_tau & any analysis trigger & (MET>250 or photon/dilepton recoil threshold) & HT threshold in at least one object cleaning scheme & >=2 AK4 jets in at least one cleaning scheme",
+          "unweighted": 0
+        },
+        "gen_weight_sum": 39125.66778564453,
+        "gen_weight_sum2": 3435654.893692146,
+        "genmodel_branch_count": 0,
+        "intermediate_schema": "flat_ntuple_shard_v8_float32_fullselection_2025_trota",
+        "jet_id_source": "correctionlib_AK4PUPPI_TightLeptonVeto",
+        "jet_veto_source": "correctionlib_Summer24Prompt25_RunCDEFG_V1",
+        "lowdm": {
+          "bjet_pt_threshold_gev": 30.0,
+          "btagger": "UParTAK4B",
+          "dilepton_policy": "opposite-sign same-flavor, on-Z 81<mll<101, leading/subleading pT thresholds, and pT(ll)>200",
+          "isr_policy": "exactly one cleaned AK8 ISR candidate, pT>200, abs(eta)<2.4, and deltaPhi(recoil,ISR)>2; the UParTAK4 loose-subjet b-veto decision is stored for diagnostics but is not selected",
+          "loose_wp": 0.0246,
+          "medium_wp": 0.1272,
+          "nres_status": "not_available_in_current_worker; Nt/NW veto stored, resolved-top veto requires later branch implementation",
+          "nsv_required_branches": [
+            "SV_pt",
+            "SV_eta",
+            "SV_phi",
+            "SV_dxy",
+            "SV_dlenSig",
+            "SV_pAngle",
+            "SV_ntracks"
+          ],
+          "nsv_softb_available": true,
+          "photon_policy": "pT>220, fiducial eta, medium cutBased ID, and explicit Photon_electronVeto",
+          "region_counts": {
+            "DY2E": 0,
+            "DY2M": 0,
+            "GCR": 0,
+            "LLCR": 0,
+            "QCDCR": 0,
+            "SR": 0
+          },
+          "region_recoil_policy": {
+            "DY2E": "dielectron recoil with AK4 dR<0.2 and AK8 dR<0.4 electron cleaning",
+            "DY2M": "dimuon recoil with AK4 dR<0.2 and AK8 dR<0.4 muon cleaning",
+            "GCR": "photon recoil with AK4 dR<0.2 and AK8 dR<0.4 photon cleaning",
+            "SR_LLCR_QCDCR": "corrected PuppiMET and uncleaned AK4/AK8 collections"
+          },
+          "search_bin_definition": "Run-3 low-dM 42-bin Nsv-inclusive map, with pTb computed from pT>30 medium UParT b jets by descending btag score; ISR-subjet b veto and mTb are diagnostic-only"
+        },
+        "lumi_mask_source": "not_applicable_mc",
+        "materialization_applied": true,
+        "materialize_skim_flag": "feature_flat_preselection",
+        "materialized_entries": 0,
+        "met_shift_status": {
+          "applied": true,
+          "collection": "PuppiMET",
+          "shift": "nominal",
+          "source": "object_corrections_2025_precalibrated_and_propagated"
+        },
+        "missing_filters": [],
+        "object_branch_audit": {
+          "groups": {
+            "ak4": {
+              "missing": [],
+              "required": 10
+            },
+            "ak8": {
+              "missing": [],
+              "required": 7
+            },
+            "electron": {
+              "missing": [],
+              "required": 10
+            },
+            "event": {
+              "missing": [],
+              "required": 4
+            },
+            "lowdm": {
+              "missing": [],
+              "required": 12
+            },
+            "mc_matching": {
+              "missing": [],
+              "required": 12
+            },
+            "met": {
+              "missing": [],
+              "required": 6
+            },
+            "muon": {
+              "missing": [],
+              "required": 9
+            },
+            "photon": {
+              "missing": [],
+              "required": 8
+            },
+            "tau": {
+              "missing": [],
+              "required": 9
+            }
+          },
+          "missing_required": [],
+          "status": "valid"
+        },
+        "object_correction_year": "2025",
+        "object_corrections_2025": {
+          "ak4": {
+            "jec": "Summer24Prompt25_V3_MC_L1L2L3Res_AK4PFPuppi",
+            "jec_input": "NanoAOD pt/mass multiplied by (1-rawFactor)",
+            "jer": "Summer24Prompt25_JRV2",
+            "prefix": "Jet",
+            "shift": "nominal"
+          },
+          "ak8": {
+            "jec": "Summer24Prompt25_V3_MC_L1L2L3Res_AK8PFPuppi",
+            "jec_input": "NanoAOD pt/mass multiplied by (1-rawFactor)",
+            "jer": "Summer24Prompt25_JRV2",
+            "prefix": "FatJet",
+            "shift": "nominal"
+          },
+          "electron": {
+            "minimum_pt_gev": 20.0,
+            "mode": "mc_gaussian_smearing",
+            "payload": "electronSS_EtDependent.json.gz",
+            "prefix": "Electron",
+            "random_seed": "blake2b(run,lumi,event,object,index)",
+            "scale_variation": "nominal",
+            "shift": "nominal",
+            "smearing_variation": "smear"
+          },
+          "met": {
+            "base": "NanoAOD PuppiMET",
+            "propagation": "AK4 Summer24Prompt25 V3/JRV2 type-1 delta plus electron, muon, photon, and tau momentum deltas"
+          },
+          "muon": {
+            "mode": "mc_scale_and_crystal_ball_resolution",
+            "payload": "muon_scalesmearing.json.gz",
+            "random_source": "correctionlib RandomSmearing(event,lumi,phi)",
+            "scale_formula": "1/(m/pt + charge*a)",
+            "shift": "nominal",
+            "valid_pt_gev": [
+              26.0,
+              200.0
+            ]
+          },
+          "photon": {
+            "minimum_pt_gev": 20.0,
+            "mode": "mc_gaussian_smearing",
+            "payload": "photonSS_EtDependent.json.gz",
+            "prefix": "Photon",
+            "random_seed": "blake2b(run,lumi,event,object,index)",
+            "scale_variation": "nominal",
+            "shift": "nominal",
+            "smearing_variation": "smear"
+          },
+          "shift": "nominal",
+          "status": "applied",
+          "tau": {
+            "mode": "mc_tau_energy_scale",
+            "payload": "tau.json.gz",
+            "selection_wp": "DeepTau2018v2p5 VSjet Medium",
+            "shift": "nominal",
+            "supported_decay_modes": [
+              0,
+              1,
+              10,
+              11
+            ],
+            "variation": "nom",
+            "vse_wp_for_tes": "VVLoose (least restrictive payload category; baseline veto has no VSe cut)"
+          }
+        },
+        "payload_status": {
+          "era": "Run3-25Prompt-Summer24-NanoAODv15",
+          "errors": [],
+          "files": [
+            {
+              "filename": "jet_jerc.json.gz",
+              "group": "JME",
+              "path": "/eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/2025/preflight_retry1/payload/payloads/JME/jet_jerc.json.gz",
+              "sha256": "a4beaeefc5fba02fdb037025460824f411f59aa1eed1905d75327a5a87edfead",
+              "status": "valid"
+            },
+            {
+              "filename": "fatJet_jerc.json.gz",
+              "group": "JME",
+              "path": "/eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/2025/preflight_retry1/payload/payloads/JME/fatJet_jerc.json.gz",
+              "sha256": "c5250701e2601ba7e42dc71c929b58fbc81175e33011a178e0b282b3d13908af",
+              "status": "valid"
+            },
+            {
+              "filename": "jetid.json.gz",
+              "group": "JME",
+              "path": "/eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/2025/preflight_retry1/payload/payloads/JME/jetid.json.gz",
+              "sha256": "2ae07e7b7c67332fa4ccc374c7b3cfe667c653ce65c3f421f956460e46b1eb35",
+              "status": "valid"
+            },
+            {
+              "filename": "jetvetomaps.json.gz",
+              "group": "JME",
+              "path": "/eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/2025/preflight_retry1/payload/payloads/JME/jetvetomaps.json.gz",
+              "sha256": "9b6f0ad931b31752111e6aceb88e3b806010491473b39e97d4a4e83772ec7151",
+              "status": "valid"
+            },
+            {
+              "filename": "electron.json.gz",
+              "group": "EGM",
+              "path": "/eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/2025/preflight_retry1/payload/payloads/EGM/electron.json.gz",
+              "sha256": "ce00150762905b294fe057249d23ef5b44c3ab041277a2b73e621eea0c63b5a6",
+              "status": "valid"
+            },
+            {
+              "filename": "electronSS_EtDependent.json.gz",
+              "group": "EGM",
+              "path": "/eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/2025/preflight_retry1/payload/payloads/EGM/electronSS_EtDependent.json.gz",
+              "sha256": "4bdfee00dc381550d0be04fbb9e7e085caf304bcb577d446cdd1167cd3d9767e",
+              "status": "valid"
+            },
+            {
+              "filename": "photon.json.gz",
+              "group": "EGM",
+              "path": "/eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/2025/preflight_retry1/payload/payloads/EGM/photon.json.gz",
+              "sha256": "5d607e98c8331339a2f664b04a9a1f57d2b4979ace24574a0ccd10e098bbbb28",
+              "status": "valid"
+            },
+            {
+              "filename": "photonSS_EtDependent.json.gz",
+              "group": "EGM",
+              "path": "/eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/2025/preflight_retry1/payload/payloads/EGM/photonSS_EtDependent.json.gz",
+              "sha256": "87d7785fc7e82d51a794daf950a3c33366674b66c9420c95b86ae3a8199b1bba",
+              "status": "valid"
+            },
+            {
+              "filename": "muon_Z.json.gz",
+              "group": "MUO",
+              "path": "/eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/2025/preflight_retry1/payload/payloads/MUO/muon_Z.json.gz",
+              "sha256": "87ec76e637ab322ea9ca92433990c867b7d781f8009a09b5e6178fad718729fa",
+              "status": "valid"
+            },
+            {
+              "filename": "muon_HighPt.json.gz",
+              "group": "MUO",
+              "path": "/eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/2025/preflight_retry1/payload/payloads/MUO/muon_HighPt.json.gz",
+              "sha256": "f297b629d43c59f1fcd7b87237bf3ea5e69e8cd5dafd2c938e6d0d31bb29f8bf",
+              "status": "valid"
+            },
+            {
+              "filename": "muon_scalesmearing.json.gz",
+              "group": "MUO",
+              "path": "/eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/2025/preflight_retry1/payload/payloads/MUO/muon_scalesmearing.json.gz",
+              "sha256": "466861f1cbacf5258a52db216a8b954df8efee7f815021fec68e065a846bc4e4",
+              "status": "valid"
+            },
+            {
+              "filename": "btagging.json.gz",
+              "group": "BTV",
+              "path": "/eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/2025/preflight_retry1/payload/payloads/BTV/btagging.json.gz",
+              "sha256": "7bc84b37b4a41ec242cabf0900be011b95d5342c2c04a378ea65db2962875f61",
+              "status": "valid"
+            },
+            {
+              "filename": "tau.json.gz",
+              "group": "TAU",
+              "path": "/eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/2025/preflight_retry1/payload/payloads/TAU/tau.json.gz",
+              "sha256": "f2d204a211c5656aa7ad1d63d82f55e4f9e6e802c5d96043ace4915306127301",
+              "status": "valid"
+            },
+            {
+              "filename": "puWeights_2025pp_Golden_Summer24_25ns_69200ub.json.gz",
+              "group": "LUM",
+              "path": "/eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/2025/preflight_retry1/payload/payloads/LUM/puWeights_2025pp_Golden_Summer24_25ns_69200ub.json.gz",
+              "sha256": "55e2a75f5e91172f380adb7f7e7d7e0cc18e2d7aa125deb0a3216b857b7565a3",
+              "status": "valid"
+            }
+          ],
+          "jec_tag": "Summer24Prompt25_V3",
+          "jer_tag": "Summer24Prompt25_JRV2",
+          "status": "valid"
+        },
+        "regions": {
+          "DY2E": 0,
+          "DY2M": 0,
+          "GCR": 0,
+          "LLCR": 0,
+          "QCDCR": 0,
+          "SR": 0,
+          "preselection": 0
+        },
+        "scale_factor_status": {
+          "applied": false,
+          "available_variations": [
+            "nominal"
+          ],
+          "components": {},
+          "note": "JEC/FJEC and MET/JES shape shifts are applied before skim; multiplicative scale factors are intentionally not applied in flat ntuple production.",
+          "reason": "deferred_to_post_skim"
+        },
+        "shape_shift": "nominal",
+        "signal_cutflow_histograms": {},
+        "trigger_policy": "standard trigger requirement"
+      }
+    ],
+    "dataset": "TBbarQto2Q-t-channel-4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____10_",
+    "effective_file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/TBbarQto2Q-t-channel-4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/90000/07fb6241-6929-44d7-ba23-53464c4ce277.root",
+    "events_read": 500,
+    "events_tree_exists": true,
+    "events_written": 0,
+    "fastsim_trigger_bypass": false,
+    "file_access": {
+      "access_method": "direct",
+      "alternate_access_attempted": false,
+      "cache_path": null,
+      "cache_reused": false,
+      "direct_open_attempted": true,
+      "direct_open_error": null,
+      "direct_open_status": "success",
+      "effective_file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/TBbarQto2Q-t-channel-4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/90000/07fb6241-6929-44d7-ba23-53464c4ce277.root",
+      "fallback_sources_considered": [],
+      "fallback_status": "not_needed",
+      "prefer_cache": false,
+      "source_file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/TBbarQto2Q-t-channel-4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/90000/07fb6241-6929-44d7-ba23-53464c4ce277.root",
+      "xrdcp_attempts": [],
+      "xrdcp_command": null,
+      "xrdcp_exit_status": null,
+      "xrdcp_stderr_tail": "",
+      "xrdcp_stdout_tail": ""
+    },
+    "file_id": 1849066489,
+    "file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/TBbarQto2Q-t-channel-4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/90000/07fb6241-6929-44d7-ba23-53464c4ce277.root",
+    "number_of_entries": 49308,
+    "process": "ST",
+    "processed_entry_ranges": [
+      {
+        "entry_start": 0,
+        "entry_stop": 500
+      }
+    ],
+    "processing_status": "processed_limited_chunks",
+    "read_status": "success",
+    "required_branch_validation": {
+      "Jet_pt": true,
+      "event": true,
+      "luminosityBlock": true,
+      "run": true,
+      "usable_MET_phi": true,
+      "usable_MET_pt": true
+    },
+    "runs_sumw": {
+      "generic_candidates": [
+        "genEventSumw",
+        "genEventSumw2"
+      ],
+      "generic_sumw": 3833486.4652979993,
+      "generic_sumw_branch": "genEventSumw",
+      "signal_runs_branches": [],
+      "signal_sumw_by_genmodel": {}
+    },
+    "runs_tree_exists": true,
+    "shape_shift": "nominal",
+    "sumw": 3833486.4652979993,
+    "sumw2": 0.0,
+    "sumw_source": "Runs.genEventSumw"
+  }
+}

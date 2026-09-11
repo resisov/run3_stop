@@ -16,6 +16,8 @@ Use the existing miniconda py38 executable for `run.py prepare --repo REPO`.
 Submit `pilot.sub` to the EOS schedd after input/hash checks. The user approved
 `workday` (28,800 seconds) and the existing TROTA-only LCG_104/TensorFlow child
 environment. All other Python execution uses the existing `py38.tgz`.
+Year-specific object payloads are unpacked from the existing production bundle
+into job scratch; they do not rely on loose payload files in the live checkout.
 
 An individual job is complete only after all stages and output checksums pass.
 Full production requires nominal-reference closure first. Pilot ROOTs remain on

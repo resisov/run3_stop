@@ -13,9 +13,28 @@
   ],
   "runtime": "py38; TROTA-only LCG_104",
   "status": "pilot_submitted",
-  "submitted_clusters": [1115064],
+  "submitted_clusters": [1115064, 1115066],
   "schedd": "bigbird24.cern.ch",
   "verified_classads": {"jobs": 6, "JobFlavour": "workday", "MaxRuntime": 28800},
-  "worker_commit": "93458bfc",
+  "attempts": [
+    {
+      "cluster": 1115064,
+      "worker_commit": "93458bfc",
+      "running_procs": [0, 1, 2],
+      "removed_procs": [3, 4, 5],
+      "removal_reason": "2025 jetid.json.gz missing from the live EOS repository; common payload staging failure, not an input ROOT failure"
+    },
+    {
+      "cluster": 1115066,
+      "worker_commit": "60925e81",
+      "year": 2025,
+      "procs": [0, 1, 2],
+      "config": "2025/pilot_retry1.json",
+      "preflight_events": 500,
+      "preflight_bad_files": 0,
+      "status": "running"
+    }
+  ],
+  "preparations": {"pilot_retry1": {"jobs": 3, "years": [2025]}},
   "canonical_promotion": false
 }
