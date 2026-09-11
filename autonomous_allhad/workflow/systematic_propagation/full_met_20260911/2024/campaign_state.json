@@ -1,0 +1,49 @@
+{
+  "common_sha256": "e5dcaa0959a9e5d672037add9baaee2f2ddfbf6bf51c529631a35ae6d02f5e89",
+  "compact_output": true,
+  "counts": {
+    "background_shards": 4079,
+    "events_read": 9816629156,
+    "files": 41307,
+    "signal_shards": 517
+  },
+  "duplicate_files": 0,
+  "input_list_sha256": "cad0c05ba59500ebdf965e8751f9085b66eb0d73ee9c68cf9276b38405934743",
+  "jobs": 9190,
+  "process_files": {
+    "DY": 9367,
+    "GJ": 3930,
+    "QCD": 2178,
+    "SMS": 517,
+    "ST": 3524,
+    "TT": 2986,
+    "VV": 1449,
+    "WtoLNu": 13496,
+    "Zto2Nu": 3860
+  },
+  "queue_sha256": "1c71762f80b32598a222396c56c9d8c2a2cf728c930ee276458a1226f1313561",
+  "reused": [
+    {
+      "output": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/2024/pilot/metUnclusteredUp",
+      "shard": "mc_shard_00000",
+      "shift": "metUnclusteredUp"
+    },
+    {
+      "output": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/2024/pilot/metUnclusteredDown",
+      "shard": "mc_shard_00000",
+      "shift": "metUnclusteredDown"
+    }
+  ],
+  "root_retention": "batch scratch only; compressed histograms and metadata on EOS",
+  "source_bad_files": [],
+  "status": "submitted",
+  "cluster": 1115311,
+  "process_range": [0, 9189],
+  "schedd": "bigbird24.cern.ch",
+  "job_flavour": "workday",
+  "max_runtime_seconds": 28800,
+  "source_commit": "ba8543f8c203d3072599ea32d45dada266ec5487",
+  "submit": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/full_met_20260911/2024/jobs.sub",
+  "unique_files": 41307,
+  "worker_sha256": "417aa3eb2381b28d992dcaa0042d7f57abb03d4a2f43fcac393c7f472aa24b46"
+}
