@@ -50,8 +50,25 @@
   ],
   "canonical_modified": false,
   "canonical_promotion": false,
+  "full_campaigns": {
+    "full_met_20260911": {
+      "jobs": 18380,
+      "path": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/full_met_20260911",
+      "shifts": [
+        "metUnclusteredUp",
+        "metUnclusteredDown"
+      ],
+      "status": "submitted",
+      "clusters": {
+        "2024": 1115311,
+        "2025": 1115312
+      },
+      "compact_output": true,
+      "source_commit": "ba8543f8c203d3072599ea32d45dada266ec5487"
+    }
+  },
   "job_flavour": "workday",
-  "jobs": 6,
+  "jobs": 18380,
   "pending": [
     "full MC propagation",
     "JES/JER TROTA-input propagation",
@@ -67,8 +84,8 @@
       "gnn_histogram_leaves": 1368,
       "main_bin_values_checked": 8628,
       "main_histogram_leaves": 402,
-      "maximum_histogram_absolute_difference": 0.0,
-      "maximum_trota_score_absolute_difference": 7.450580596923828e-07,
+      "maximum_histogram_absolute_difference": 0,
+      "maximum_trota_score_absolute_difference": 7.450580596923828e-7,
       "metUnclusteredDown": {
         "entering": 3,
         "events": 378,
@@ -93,7 +110,7 @@
             "checked_bin_values": 51300,
             "current_sha256": "b7ae8383e67d11538ce837ae1bb919d713eca8c46ab5e92b75ef7c11759f8ec8",
             "histogram_leaves": 1368,
-            "maximum_absolute_difference": 0.0,
+            "maximum_absolute_difference": 0,
             "reference_sha256": "a63154dd3a63223d9bb4e5e70c9daa661d68713032ca6b1fec351e7fe4d04a78",
             "status": "passed"
           },
@@ -101,7 +118,7 @@
             "checked_bin_values": 8628,
             "current_sha256": "7376a3b923c0fdbb4e9e3c7985a94d4281e0d7abadb49849d5e82777bdf040a8",
             "histogram_leaves": 402,
-            "maximum_absolute_difference": 0.0,
+            "maximum_absolute_difference": 0,
             "reference_sha256": "74c1883586439bbc15aea6f8f2b15b9b99343b16a8688f593497d2b2975ec736",
             "status": "passed"
           }
@@ -170,8 +187,8 @@
       "gnn_histogram_leaves": 1368,
       "main_bin_values_checked": 8628,
       "main_histogram_leaves": 402,
-      "maximum_histogram_absolute_difference": 0.0,
-      "maximum_trota_score_absolute_difference": 7.450580596923828e-07,
+      "maximum_histogram_absolute_difference": 0,
+      "maximum_trota_score_absolute_difference": 7.450580596923828e-7,
       "nominal_closure": "passed",
       "nonfinite_values": 0,
       "topw_truth_matches": true,
@@ -184,7 +201,7 @@
             "checked_bin_values": 51300,
             "current_sha256": "a65555ab6a8735b1271e24dcbfc09f24d12c29cfcf7d36501556516540fbc0ea",
             "histogram_leaves": 1368,
-            "maximum_absolute_difference": 0.0,
+            "maximum_absolute_difference": 0,
             "reference_sha256": "d8a61cf39f13789a65744aa4960c7776e3802f6d1f8f00e71a7503dd505d4338",
             "status": "passed"
           },
@@ -192,7 +209,7 @@
             "checked_bin_values": 8628,
             "current_sha256": "2cb23afb39d3ae6616b8bd6ce5690940c5ffc15a1cf681219ae4019a8965ff8f",
             "histogram_leaves": 402,
-            "maximum_absolute_difference": 0.0,
+            "maximum_absolute_difference": 0,
             "reference_sha256": "3393c9805b94ce6adc8072d4a4f06edb9c0f6f8ab4785368bab35df100f4d92a",
             "status": "passed"
           }
@@ -268,14 +285,17 @@
   },
   "runtime": "py38; TROTA-only LCG_104",
   "schedd": "bigbird24.cern.ch",
-  "status": "met_unclustered_pilot_validated",
+  "status": "met_unclustered_full_submitted",
   "submitted_clusters": [
     1115064,
-    1115066
+    1115066,
+    1115311,
+    1115312
   ],
   "verified_classads": {
     "JobFlavour": "workday",
     "MaxRuntime": 28800,
     "jobs": 6
-  }
+  },
+  "pilot_jobs": 6
 }

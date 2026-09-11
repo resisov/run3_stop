@@ -1,0 +1,226 @@
+{
+  "canonical_modified": false,
+  "canonical_promotion": false,
+  "job_flavour": "workday",
+  "scope": "all canonical background and signal MC",
+  "shifts": [
+    "metUnclusteredUp",
+    "metUnclusteredDown"
+  ],
+  "status": "submitted",
+  "submitted_clusters": [
+    1115311,
+    1115312
+  ],
+  "years": {
+    "2024": {
+      "common_sha256": "e5dcaa0959a9e5d672037add9baaee2f2ddfbf6bf51c529631a35ae6d02f5e89",
+      "compact_output": true,
+      "counts": {
+        "background_shards": 4079,
+        "events_read": 9816629156,
+        "files": 41307,
+        "signal_shards": 517
+      },
+      "duplicate_files": 0,
+      "input_list_sha256": "cad0c05ba59500ebdf965e8751f9085b66eb0d73ee9c68cf9276b38405934743",
+      "jobs": 9190,
+      "process_files": {
+        "DY": 9367,
+        "GJ": 3930,
+        "QCD": 2178,
+        "SMS": 517,
+        "ST": 3524,
+        "TT": 2986,
+        "VV": 1449,
+        "WtoLNu": 13496,
+        "Zto2Nu": 3860
+      },
+      "queue_sha256": "1c71762f80b32598a222396c56c9d8c2a2cf728c930ee276458a1226f1313561",
+      "reused": [
+        {
+          "output": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/2024/pilot/metUnclusteredUp",
+          "shard": "mc_shard_00000",
+          "shift": "metUnclusteredUp"
+        },
+        {
+          "output": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/2024/pilot/metUnclusteredDown",
+          "shard": "mc_shard_00000",
+          "shift": "metUnclusteredDown"
+        }
+      ],
+      "root_retention": "batch scratch only; compressed histograms and metadata on EOS",
+      "source_bad_files": [],
+      "status": "submitted",
+      "cluster": 1115311,
+      "process_range": [
+        0,
+        9189
+      ],
+      "schedd": "bigbird24.cern.ch",
+      "job_flavour": "workday",
+      "max_runtime_seconds": 28800,
+      "source_commit": "ba8543f8c203d3072599ea32d45dada266ec5487",
+      "submit": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/full_met_20260911/2024/jobs.sub",
+      "unique_files": 41307,
+      "worker_sha256": "417aa3eb2381b28d992dcaa0042d7f57abb03d4a2f43fcac393c7f472aa24b46"
+    },
+    "2025": {
+      "common_sha256": "c43475fb45f408420ac6553710b18d86415f59a3a2555b78ca4c84ac90df2385",
+      "compact_output": true,
+      "counts": {
+        "background_shards": 4079,
+        "events_read": 9811814169,
+        "files": 41297,
+        "signal_shards": 517
+      },
+      "duplicate_files": 0,
+      "input_list_sha256": "063ff672da5383b38e1ca844304e7426d17e970ed370aba700b31a0330a03432",
+      "jobs": 9190,
+      "process_files": {
+        "DY": 9367,
+        "GJ": 3930,
+        "QCD": 2178,
+        "SMS": 517,
+        "ST": 3524,
+        "TT": 2981,
+        "VV": 1449,
+        "WtoLNu": 13491,
+        "Zto2Nu": 3860
+      },
+      "queue_sha256": "b99bfdeb913cb33214541eb166f15184211f13b600571c93e1222bce36d5b6cd",
+      "reused": [
+        {
+          "output": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/2025/pilot_retry1/metUnclusteredUp",
+          "shard": "mc_shard_00000",
+          "shift": "metUnclusteredUp"
+        },
+        {
+          "output": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/2025/pilot_retry1/metUnclusteredDown",
+          "shard": "mc_shard_00000",
+          "shift": "metUnclusteredDown"
+        }
+      ],
+      "root_retention": "batch scratch only; compressed histograms and metadata on EOS",
+      "source_bad_files": [
+        {
+          "concise_error": "direct ROOT open failed and all xrdcp fallback sources failed",
+          "dataset": "TTto4Q_TuneCP5_13p6TeV_powheg-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____44_",
+          "exception_type": "RootOpenFailure",
+          "failure_stage": "flat_ntuple_open_or_read",
+          "file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/TTto4Q_TuneCP5_13p6TeV_powheg-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/2520000/ad7063cb-cfdc-4f2a-8b2f-34ce92b3e722.root",
+          "first_failure_time": "2026-08-20T10:07:00Z",
+          "last_failure_time": "2026-08-20T10:07:00Z",
+          "process": "TT"
+        },
+        {
+          "concise_error": "direct ROOT open failed and all xrdcp fallback sources failed",
+          "dataset": "TTto4Q_TuneCP5_13p6TeV_powheg-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____44_",
+          "exception_type": "RootOpenFailure",
+          "failure_stage": "flat_ntuple_open_or_read",
+          "file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/TTto4Q_TuneCP5_13p6TeV_powheg-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/2520000/faf6a296-4c04-4051-9efb-e67260cd52b2.root",
+          "first_failure_time": "2026-08-20T10:07:21Z",
+          "last_failure_time": "2026-08-20T10:07:21Z",
+          "process": "TT"
+        },
+        {
+          "concise_error": "direct ROOT open failed and all xrdcp fallback sources failed",
+          "dataset": "TTto4Q_TuneCP5_13p6TeV_powheg-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____45_",
+          "exception_type": "RootOpenFailure",
+          "failure_stage": "flat_ntuple_open_or_read",
+          "file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/TTto4Q_TuneCP5_13p6TeV_powheg-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/2520000/bfb9c382-8918-47dd-9174-a6be27d02153.root",
+          "first_failure_time": "2026-08-20T10:26:27Z",
+          "last_failure_time": "2026-08-20T10:26:27Z",
+          "process": "TT"
+        },
+        {
+          "concise_error": "direct ROOT open failed and all xrdcp fallback sources failed",
+          "dataset": "TTto4Q_TuneCP5_13p6TeV_powheg-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____50_",
+          "exception_type": "RootOpenFailure",
+          "failure_stage": "flat_ntuple_open_or_read",
+          "file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/TTto4Q_TuneCP5_13p6TeV_powheg-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/2520000/f2bd01e7-149a-4aee-8a22-9861da9b615e.root",
+          "first_failure_time": "2026-08-20T10:02:29Z",
+          "last_failure_time": "2026-08-20T10:02:29Z",
+          "process": "TT"
+        },
+        {
+          "concise_error": "direct ROOT open failed and all xrdcp fallback sources failed",
+          "dataset": "TTto4Q_TuneCP5_13p6TeV_powheg-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2____50_",
+          "exception_type": "RootOpenFailure",
+          "failure_stage": "flat_ntuple_open_or_read",
+          "file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/TTto4Q_TuneCP5_13p6TeV_powheg-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/2520000/3a47eb7d-5273-4753-905c-bccdabc0e794.root",
+          "first_failure_time": "2026-08-20T10:05:44Z",
+          "last_failure_time": "2026-08-20T10:05:44Z",
+          "process": "TT"
+        },
+        {
+          "concise_error": "direct ROOT open failed and all xrdcp fallback sources failed",
+          "dataset": "WtoLNu-2Jets_Bin-2J-PTLNu-40to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____138_",
+          "exception_type": "RootOpenFailure",
+          "failure_stage": "flat_ntuple_open_or_read",
+          "file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/WtoLNu-2Jets_Bin-2J-PTLNu-40to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v3/90000/cda8119c-4ef7-4dae-81cd-f3ebaf75a2fa.root",
+          "first_failure_time": "2026-08-20T11:41:56Z",
+          "last_failure_time": "2026-08-20T11:41:56Z",
+          "process": "WtoLNu"
+        },
+        {
+          "concise_error": "direct ROOT open failed and all xrdcp fallback sources failed",
+          "dataset": "WtoLNu-2Jets_Bin-2J-PTLNu-40to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____138_",
+          "exception_type": "RootOpenFailure",
+          "failure_stage": "flat_ntuple_open_or_read",
+          "file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/WtoLNu-2Jets_Bin-2J-PTLNu-40to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v3/90000/38084e5c-8f17-4f4f-816e-4774d5b2c610.root",
+          "first_failure_time": "2026-08-20T11:41:53Z",
+          "last_failure_time": "2026-08-20T11:41:53Z",
+          "process": "WtoLNu"
+        },
+        {
+          "concise_error": "direct ROOT open failed and all xrdcp fallback sources failed",
+          "dataset": "WtoLNu-2Jets_Bin-2J-PTLNu-40to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____139_",
+          "exception_type": "RootOpenFailure",
+          "failure_stage": "flat_ntuple_open_or_read",
+          "file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/WtoLNu-2Jets_Bin-2J-PTLNu-40to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v3/90000/46aba469-22f4-4836-b13f-90f9ee94a176.root",
+          "first_failure_time": "2026-08-20T11:52:20Z",
+          "last_failure_time": "2026-08-20T11:52:20Z",
+          "process": "WtoLNu"
+        },
+        {
+          "concise_error": "direct ROOT open failed and all xrdcp fallback sources failed",
+          "dataset": "WtoLNu-2Jets_Bin-2J-PTLNu-40to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____139_",
+          "exception_type": "RootOpenFailure",
+          "failure_stage": "flat_ntuple_open_or_read",
+          "file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/WtoLNu-2Jets_Bin-2J-PTLNu-40to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v3/90000/99b65c41-7c8e-4773-8c55-1c9a41fcc004.root",
+          "first_failure_time": "2026-08-20T12:00:40Z",
+          "last_failure_time": "2026-08-20T12:00:40Z",
+          "process": "WtoLNu"
+        },
+        {
+          "concise_error": "direct ROOT open failed and all xrdcp fallback sources failed",
+          "dataset": "WtoLNu-2Jets_Bin-2J-PTLNu-40to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8-RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v3____139_",
+          "exception_type": "RootOpenFailure",
+          "failure_stage": "flat_ntuple_open_or_read",
+          "file_path": "root://cms-xrd-global.cern.ch//store/mc/RunIII2024Summer24NanoAODv15/WtoLNu-2Jets_Bin-2J-PTLNu-40to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v3/90000/1a916fc5-a7f1-46cf-9dff-142fafbf0493.root",
+          "first_failure_time": "2026-08-20T12:15:33Z",
+          "last_failure_time": "2026-08-20T12:15:33Z",
+          "process": "WtoLNu"
+        }
+      ],
+      "status": "submitted",
+      "submit": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/full_met_20260911/2025/jobs.sub",
+      "unique_files": 41297,
+      "worker_sha256": "417aa3eb2381b28d992dcaa0042d7f57abb03d4a2f43fcac393c7f472aa24b46",
+      "cluster": 1115312,
+      "process_range": [
+        0,
+        9189
+      ],
+      "schedd": "bigbird24.cern.ch",
+      "job_flavour": "workday",
+      "max_runtime_seconds": 28800,
+      "source_commit": "ba8543f8c203d3072599ea32d45dada266ec5487"
+    }
+  },
+  "jobs_submitted": 18380,
+  "reused_shift_jobs": 4,
+  "compact_output": true,
+  "root_retention": "batch scratch only; compressed histograms and metadata on EOS"
+}
