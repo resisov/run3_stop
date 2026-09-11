@@ -1,1 +1,311 @@
-{"background_histogram_sha256": "9b2279529275cadefd0cd8f42aed8f644bd3fa9ee17c69d8b7fc0622801d6aca", "checks": {"SR_blinded": true, "compact_projection_comparisons": 106, "frozen_GNN30": true, "joint_projection_records": 5662, "verified_sparse_zero_records": [{"category": "Nb1_NISR0", "region": "DY2E", "sample": "QCD"}, {"category": "Nb1_NISR0", "region": "DY2E", "sample": "WtoLNu"}, {"category": "Nb1_NISR0", "region": "DY2E", "sample": "Zto2Nu"}, {"category": "Nb1_NISR1plus", "region": "DY2E", "sample": "QCD"}, {"category": "Nb1_NISR1plus", "region": "DY2E", "sample": "Zto2Nu"}, {"category": "Nb2plus_NISR0", "region": "DY2E", "sample": "QCD"}, {"category": "Nb2plus_NISR0", "region": "DY2E", "sample": "WtoLNu"}, {"category": "Nb2plus_NISR0", "region": "DY2E", "sample": "Zto2Nu"}, {"category": "Nb2plus_NISR1plus", "region": "DY2E", "sample": "QCD"}, {"category": "Nb2plus_NISR1plus", "region": "DY2E", "sample": "Zto2Nu"}, {"category": "Nb1_NISR0", "region": "DY2M", "sample": "GJ"}, {"category": "Nb1_NISR0", "region": "DY2M", "sample": "QCD"}, {"category": "Nb1_NISR0", "region": "DY2M", "sample": "WtoLNu"}, {"category": "Nb1_NISR0", "region": "DY2M", "sample": "Zto2Nu"}, {"category": "Nb1_NISR1plus", "region": "DY2M", "sample": "GJ"}, {"category": "Nb1_NISR1plus", "region": "DY2M", "sample": "Zto2Nu"}, {"category": "Nb2plus_NISR0", "region": "DY2M", "sample": "GJ"}, {"category": "Nb2plus_NISR0", "region": "DY2M", "sample": "QCD"}, {"category": "Nb2plus_NISR0", "region": "DY2M", "sample": "WtoLNu"}, {"category": "Nb2plus_NISR0", "region": "DY2M", "sample": "Zto2Nu"}, {"category": "Nb2plus_NISR1plus", "region": "DY2M", "sample": "GJ"}, {"category": "Nb2plus_NISR1plus", "region": "DY2M", "sample": "QCD"}, {"category": "Nb2plus_NISR1plus", "region": "DY2M", "sample": "Zto2Nu"}, {"category": "Nb2plus_NISR0", "region": "GCR", "sample": "DY"}, {"category": "Nb2plus_NISR0", "region": "GCR", "sample": "Zto2Nu"}, {"category": "Nb2plus_NISR0", "region": "QCDCR", "sample": "DY"}]}, "gnn_config_sha256": "5a3a51852766a43b663d05b926528224a0d5467f58478e33140f86321087aa70", "gnn_sha256": "2906493ee21d84756f89c55b2560043ef48ed77e6e8dc08612e6521f7207639b", "histogram_only": true, "lowpt_templates_absent": true, "main_chunks": 596, "main_inputs": 5954, "main_sha256": "5e8d056adbe0a5404f4a60425d2b84b3203cf240d02b982d0b320ef3b6523e83", "status": "complete", "validation_code_sha256": "4c1d59cd6a4cbebe364f16d521b1fa0d7e0587b6308eb7162c15795c39a49930", "year": 2024}
+{
+  "background_histogram_sha256": "0af58aac1c2f54c3df4f10874ad350778b0751be6707715f5ba844f835e5ea94",
+  "checks": {
+    "SR_blinded": true,
+    "compact_projection_comparisons": 106,
+    "frozen_GNN30": true,
+    "joint_projection_records": 10394,
+    "verified_sparse_zero_records": [
+      {
+        "category": "Nb1_NISR0",
+        "region": "DY2E",
+        "sample": "QCD"
+      },
+      {
+        "category": "Nb1_NISR0",
+        "region": "DY2E",
+        "sample": "WtoLNu"
+      },
+      {
+        "category": "Nb1_NISR0",
+        "region": "DY2E",
+        "sample": "Zto2Nu"
+      },
+      {
+        "category": "Nb1_NISR1plus",
+        "region": "DY2E",
+        "sample": "QCD"
+      },
+      {
+        "category": "Nb1_NISR1plus",
+        "region": "DY2E",
+        "sample": "Zto2Nu"
+      },
+      {
+        "category": "Nb2plus_NISR0",
+        "region": "DY2E",
+        "sample": "QCD"
+      },
+      {
+        "category": "Nb2plus_NISR0",
+        "region": "DY2E",
+        "sample": "WtoLNu"
+      },
+      {
+        "category": "Nb2plus_NISR0",
+        "region": "DY2E",
+        "sample": "Zto2Nu"
+      },
+      {
+        "category": "Nb2plus_NISR1plus",
+        "region": "DY2E",
+        "sample": "QCD"
+      },
+      {
+        "category": "Nb2plus_NISR1plus",
+        "region": "DY2E",
+        "sample": "Zto2Nu"
+      },
+      {
+        "category": "Nb1_NISR0",
+        "region": "DY2M",
+        "sample": "GJ"
+      },
+      {
+        "category": "Nb1_NISR0",
+        "region": "DY2M",
+        "sample": "QCD"
+      },
+      {
+        "category": "Nb1_NISR0",
+        "region": "DY2M",
+        "sample": "WtoLNu"
+      },
+      {
+        "category": "Nb1_NISR0",
+        "region": "DY2M",
+        "sample": "Zto2Nu"
+      },
+      {
+        "category": "Nb1_NISR1plus",
+        "region": "DY2M",
+        "sample": "GJ"
+      },
+      {
+        "category": "Nb1_NISR1plus",
+        "region": "DY2M",
+        "sample": "Zto2Nu"
+      },
+      {
+        "category": "Nb2plus_NISR0",
+        "region": "DY2M",
+        "sample": "GJ"
+      },
+      {
+        "category": "Nb2plus_NISR0",
+        "region": "DY2M",
+        "sample": "QCD"
+      },
+      {
+        "category": "Nb2plus_NISR0",
+        "region": "DY2M",
+        "sample": "WtoLNu"
+      },
+      {
+        "category": "Nb2plus_NISR0",
+        "region": "DY2M",
+        "sample": "Zto2Nu"
+      },
+      {
+        "category": "Nb2plus_NISR1plus",
+        "region": "DY2M",
+        "sample": "GJ"
+      },
+      {
+        "category": "Nb2plus_NISR1plus",
+        "region": "DY2M",
+        "sample": "QCD"
+      },
+      {
+        "category": "Nb2plus_NISR1plus",
+        "region": "DY2M",
+        "sample": "Zto2Nu"
+      },
+      {
+        "category": "Nb2plus_NISR0",
+        "region": "GCR",
+        "sample": "DY"
+      },
+      {
+        "category": "Nb2plus_NISR0",
+        "region": "GCR",
+        "sample": "Zto2Nu"
+      },
+      {
+        "category": "Nb2plus_NISR0",
+        "region": "QCDCR",
+        "sample": "DY"
+      }
+    ]
+  },
+  "gnn_config_sha256": "5a3a51852766a43b663d05b926528224a0d5467f58478e33140f86321087aa70",
+  "gnn_sha256": "ae98c866fb6f6521a35c718a4f7c015ecfc76da01f445c3452a0a2a2417898c3",
+  "histogram_only": true,
+  "lowpt_templates_absent": true,
+  "main_chunks": 596,
+  "main_inputs": 5954,
+  "main_sha256": "77b4aad45632086ace80cf4d36edbeb8336bb7b49dce7a03b8d7970e93975ab4",
+  "status": "complete",
+  "topw_sf_sha256": "749a45eb9ee67d46bee02d6f637fab50b2508ef5a8c76afbd12782955288bdcf",
+  "topw_variations": [
+    "topw_top_tp1_pt400to480Down",
+    "topw_top_tp1_pt400to480Up",
+    "topw_top_tp1_pt480to600Down",
+    "topw_top_tp1_pt480to600Up",
+    "topw_top_tp2_pt400to480Down",
+    "topw_top_tp2_pt400to480Up",
+    "topw_top_tp2_pt480to600Down",
+    "topw_top_tp2_pt480to600Up",
+    "topw_top_tp2_pt600to1200Down",
+    "topw_top_tp2_pt600to1200Up",
+    "topw_top_tp3_pt400to480Down",
+    "topw_top_tp3_pt400to480Up",
+    "topw_w_other_pt200to300Down",
+    "topw_w_other_pt200to300Up",
+    "topw_w_tp1_pt300to400Down",
+    "topw_w_tp1_pt300to400Up",
+    "topw_w_tp2_pt200to300Down",
+    "topw_w_tp2_pt200to300Up",
+    "topw_w_tp2_pt300to400Down",
+    "topw_w_tp2_pt300to400Up",
+    "topw_w_tp2_pt400to800Down",
+    "topw_w_tp2_pt400to800Up",
+    "topw_w_tp3_pt300to400Down",
+    "topw_w_tp3_pt300to400Up",
+    "topw_w_tp3_pt400to800Down",
+    "topw_w_tp3_pt400to800Up"
+  ],
+  "validation_code_sha256": "4c1d59cd6a4cbebe364f16d521b1fa0d7e0587b6308eb7162c15795c39a49930",
+  "year": 2024,
+  "zero_event_records_without_topw_variations": [
+    [
+      "highdm",
+      "DY2E",
+      "Nb1",
+      "GJ"
+    ],
+    [
+      "highdm",
+      "DY2E",
+      "Nb1",
+      "QCD"
+    ],
+    [
+      "highdm",
+      "DY2E",
+      "Nb1",
+      "Zto2Nu"
+    ],
+    [
+      "highdm",
+      "DY2E",
+      "Nb2plus",
+      "GJ"
+    ],
+    [
+      "highdm",
+      "DY2E",
+      "Nb2plus",
+      "QCD"
+    ],
+    [
+      "highdm",
+      "DY2E",
+      "Nb2plus",
+      "Zto2Nu"
+    ],
+    [
+      "highdm",
+      "DY2M",
+      "Nb1",
+      "GJ"
+    ],
+    [
+      "highdm",
+      "DY2M",
+      "Nb1",
+      "QCD"
+    ],
+    [
+      "highdm",
+      "DY2M",
+      "Nb1",
+      "Zto2Nu"
+    ],
+    [
+      "highdm",
+      "DY2M",
+      "Nb2plus",
+      "GJ"
+    ],
+    [
+      "highdm",
+      "DY2M",
+      "Nb2plus",
+      "QCD"
+    ],
+    [
+      "highdm",
+      "DY2M",
+      "Nb2plus",
+      "Zto2Nu"
+    ],
+    [
+      "lowdm",
+      "DY2E",
+      "Nb1",
+      "QCD"
+    ],
+    [
+      "lowdm",
+      "DY2E",
+      "Nb1",
+      "Zto2Nu"
+    ],
+    [
+      "lowdm",
+      "DY2E",
+      "Nb2plus",
+      "QCD"
+    ],
+    [
+      "lowdm",
+      "DY2E",
+      "Nb2plus",
+      "Zto2Nu"
+    ],
+    [
+      "lowdm",
+      "DY2M",
+      "Nb1",
+      "GJ"
+    ],
+    [
+      "lowdm",
+      "DY2M",
+      "Nb1",
+      "Zto2Nu"
+    ],
+    [
+      "lowdm",
+      "DY2M",
+      "Nb2plus",
+      "GJ"
+    ],
+    [
+      "lowdm",
+      "DY2M",
+      "Nb2plus",
+      "QCD"
+    ],
+    [
+      "lowdm",
+      "DY2M",
+      "Nb2plus",
+      "Zto2Nu"
+    ]
+  ],
+  "validation_job_id": "1115056.0",
+  "validation_exit_code": 0,
+  "validated_at_utc": "2026-09-11T07:51:08Z"
+}

@@ -2,11 +2,14 @@
   "schema_version": 1,
   "status": "canonical",
   "campaign": "lepton_veto10_20260908",
-  "promoted_at_utc": "2026-09-11T06:51:59Z",
+  "promoted_at_utc": "2026-09-11T07:56:53Z",
   "topw_sf_update": {
-    "status": "partially_promoted",
-    "promoted_years": [2025],
-    "pending_years": [2024]
+    "status": "promoted",
+    "promoted_years": [
+      2024,
+      2025
+    ],
+    "pending_years": []
   },
   "electron_veto_pt_min_gev": 10,
   "muon_veto_pt_min_gev": 10,
@@ -154,8 +157,8 @@
   "sr_data": "blinded",
   "years": {
     "2024": {
-      "promoted_at_utc": "2026-09-08T07:43:30Z",
-      "topw_tagging_applied": false,
+      "promoted_at_utc": "2026-09-11T07:56:53Z",
+      "topw_tagging_applied": true,
       "input_roots": 5954,
       "source_bad_file_count": 0,
       "data_source_bad_file_count": 0,
@@ -163,25 +166,28 @@
       "main": {
         "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/hists.json",
         "canonical_alias": "autonomous_allhad/workflow/plot2024/hists.json",
-        "sha256": "5e8d056adbe0a5404f4a60425d2b84b3203cf240d02b982d0b320ef3b6523e83",
-        "bytes": 2820473081
+        "sha256": "77b4aad45632086ace80cf4d36edbeb8336bb7b49dce7a03b8d7970e93975ab4",
+        "bytes": 5240571864
       },
       "background_estimation": {
         "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/hists_background_estimation.json",
         "canonical_alias": "autonomous_allhad/workflow/plot2024/hists_background_estimation.json",
-        "sha256": "9b2279529275cadefd0cd8f42aed8f644bd3fa9ee17c69d8b7fc0622801d6aca",
-        "bytes": 2336908
+        "sha256": "0af58aac1c2f54c3df4f10874ad350778b0751be6707715f5ba844f835e5ea94",
+        "bytes": 3976981
       },
       "gnn": {
         "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/gnn/hists.json",
         "canonical_alias": "autonomous_allhad/workflow/plot2024/hists_lowdm_gnn30.json",
-        "sha256": "2906493ee21d84756f89c55b2560043ef48ed77e6e8dc08612e6521f7207639b",
-        "bytes": 1936076424
+        "sha256": "ae98c866fb6f6521a35c718a4f7c015ecfc76da01f445c3452a0a2a2417898c3",
+        "bytes": 3559001013
       },
       "normalization_sha256": "9060c4ed526f95b5e2b352c07a4692de9a67469fbff5f91f210eceb9122b606c",
       "search_bin_config_sha256": "d1a396538eaa994a54d85bb277d71a5d90473be9e1a86ee4f47ad625f2cee929",
       "validation_report": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/histogram_validation.json",
-      "validation_report_sha256": "ed3a2fd4f4464ab11cba3fc77f69e89f82eaebe76749fc3ec40464e66b9087b9"
+      "validation_report_sha256": "058805925cb4e80e6134848c4bf7ab91ab93690e13907463256cfc283f795a15",
+      "topw_sf_sha256": "749a45eb9ee67d46bee02d6f637fab50b2508ef5a8c76afbd12782955288bdcf",
+      "validation_job_id": "1115056.0",
+      "validation_exit_code": 0
     },
     "2025": {
       "promoted_at_utc": "2026-09-11T06:51:59Z",
@@ -218,8 +224,11 @@
     }
   },
   "validation": {
-    "cluster": 1111093,
-    "clusters_by_year": {"2024": 1111093, "2025": 1115050},
+    "cluster": 1115056,
+    "clusters_by_year": {
+      "2024": 1115056,
+      "2025": 1115050
+    },
     "exit_codes": {
       "2024": 0,
       "2025": 0
@@ -231,8 +240,14 @@
     "frozen_gnn_code": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/gnn_code",
     "main_builder_sha256": "d01a601eb236eac90e4a630d43160b221ea85a2e174f8de5470b423ac5ad8ecb",
     "histogram_builder_sha256_by_year": {
-      "2024": ["b1cb425ca92222bf52ddfe85911c8cb73870d7d2c3a7873f269a67d0910bc06b"],
-      "2025": ["af502f27f458e86b395b25c9cd6919265dc230983d200ae25f2a9d72760c1cfb", "d01a601eb236eac90e4a630d43160b221ea85a2e174f8de5470b423ac5ad8ecb"]
+      "2024": [
+        "af502f27f458e86b395b25c9cd6919265dc230983d200ae25f2a9d72760c1cfb",
+        "d01a601eb236eac90e4a630d43160b221ea85a2e174f8de5470b423ac5ad8ecb"
+      ],
+      "2025": [
+        "af502f27f458e86b395b25c9cd6919265dc230983d200ae25f2a9d72760c1cfb",
+        "d01a601eb236eac90e4a630d43160b221ea85a2e174f8de5470b423ac5ad8ecb"
+      ]
     },
     "ids_source_sha256": "a40d327efedb8dad42afb59da944deff995500b09fc157a53853159d36901da1",
     "ids_coffea_sha256": "f34995ac34dee52f9ba782e409fb24a11a60a18525f24532a51ec6e74d1e4b48",
