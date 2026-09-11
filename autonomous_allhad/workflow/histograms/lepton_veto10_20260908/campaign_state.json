@@ -3991,7 +3991,8 @@
         "plot_payload_job": "1115060.0",
         "plot_payload_exit_code": 0,
         "plot_payload_sha256": "bc7e9f3679787d4fb7f8960fc86033e1286e1133d70538c655f9a5c52fb2f87a",
-        "sr_status": "pending"
+        "sr_status": "complete",
+        "sr_plot_count": 2
       },
       "2025": {
         "physical_cr_plot_count": 114,
@@ -4008,7 +4009,8 @@
         "plot_payload_job": "1115057.0",
         "plot_payload_exit_code": 0,
         "plot_payload_sha256": "85d02b805c4606edd4260359582b9a91c72bd138ac41a4b996e9025c34f5cee6",
-        "sr_status": "pending"
+        "sr_status": "complete",
+        "sr_plot_count": 2
       },
       "runtime": "local_existing_plotters",
       "VR_included": false,
@@ -4022,10 +4024,25 @@
         "focused_tests_passed": 7,
         "export_cluster": 1115065,
         "submission_confirmed_utc": "2026-09-11T08:51:25Z",
-        "previous_cluster": {"id": 1115062, "status": "removed", "reason": "missing_TopW_nuisance_name_mapping", "active_jobs_after_removal": 0},
+        "previous_cluster": {
+          "id": 1115062,
+          "status": "removed",
+          "reason": "missing_TopW_nuisance_name_mapping",
+          "active_jobs_after_removal": 0
+        },
         "actual_gnn_check": {
-          "2024": {"bins": 30, "Sgamma_parameters": 10, "duplicate_constraints": 0, "max_relative_Z_rounding_difference": 1.985339196907413e-08},
-          "2025": {"bins": 30, "Sgamma_parameters": 10, "duplicate_constraints": 0, "max_relative_Z_rounding_difference": 1.480358162754221e-08}
+          "2024": {
+            "bins": 30,
+            "Sgamma_parameters": 10,
+            "duplicate_constraints": 0,
+            "max_relative_Z_rounding_difference": 1.985339196907413e-08
+          },
+          "2025": {
+            "bins": 30,
+            "Sgamma_parameters": 10,
+            "duplicate_constraints": 0,
+            "max_relative_Z_rounding_difference": 1.480358162754221e-08
+          }
         },
         "downstream_card_builder_required_commit": "eaa7a3ca",
         "schedd": "bigbird24.cern.ch",
@@ -4037,12 +4054,38 @@
           "2": "2025_T2tt",
           "3": "2025_T2bW"
         },
-        "last_check_utc": "2026-09-11T08:51:25Z",
+        "last_check_utc": "2026-09-11T09:37:29Z",
         "states": {
-          "submitted": 4,
-          "validated": 0
-        }
-      }
+          "completed_exit_zero": 4,
+          "validated": 4,
+          "local_sr_plots": 6
+        },
+        "local_render_exit_code": 0,
+        "representative_visual_qa": "combined highdm73 and lowdm30 passed",
+        "outputs": [
+          {
+            "path": "sr_inputs/2024_T2bW.json",
+            "bytes": 183097,
+            "sha256": "ad4f3c4069679c390f63cb32573b0db7de42e1dd64a3daa879c0b66a235c93a0"
+          },
+          {
+            "path": "sr_inputs/2024_T2tt.json",
+            "bytes": 185921,
+            "sha256": "e36ae7db02fe2abad2ae9697cc992d95db36f224ffb916de9c006f7661bbfa3e"
+          },
+          {
+            "path": "sr_inputs/2025_T2bW.json",
+            "bytes": 183191,
+            "sha256": "61eb7e7b98170a6fd01aa9390b21e2a71abd4590f71fb670e3c644b081986127"
+          },
+          {
+            "path": "sr_inputs/2025_T2tt.json",
+            "bytes": 186021,
+            "sha256": "1601fa51af12d99f01a401b689896f55d8c9a32bf39b1b684fe96f1861ad25cc"
+          }
+        ]
+      },
+      "combined_sr_plot_count": 2
     },
     "clusters": {
       "gnn": 1113839,
@@ -5562,7 +5605,7 @@
     "schedd": "bigbird24.cern.ch",
     "source_backup": "topw_previous_sources.tar.gz",
     "source_commit": "456fd370",
-    "stage": "both_years_background_estimation_complete; SR_prefit_export_1115065_then_local_plotting_before_cards",
+    "stage": "background_estimation_and_local_CR_SR_plots_complete; cards_next",
     "superseded_output_policy": {
       "action": "delete_without_retaining_backup",
       "condition": "replacement_outputs_validated_and_promoted",

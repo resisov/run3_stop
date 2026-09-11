@@ -1,336 +1,72 @@
 {
   "status": "complete",
+  "prediction_stage": "prefit",
+  "sr_data_blinded": true,
+  "rate_initials_applied": true,
+  "renderer_rescaling": false,
+  "uncertainty": "mc_statistical_only",
   "plots": [
     {
-      "status": "complete",
       "name": "highdm73_sr_2024",
-      "png": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/2024/sr/highdm73_sr_2024.png",
-      "pdf": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/2024/sr/highdm73_sr_2024.pdf",
-      "bins": 73,
-      "labels": [
-        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}=0$\n$N_{res}=1$",
-        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}=0$\n$N_{res}\\geq2$",
-        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}\\geq1$\n$N_{res}=0$",
-        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}\\geq1$\n$N_{res}\\geq1$",
-        "$N_{b}\\geq1$\n$N_{t}\\geq1$, $N_{W}=0$\n$N_{res}\\geq1$",
-        "$N_{b}\\geq1$\n$N_{t}\\geq1$, $N_{W}\\geq1$\n$N_{res}\\geq1$",
-        "$N_{b}=1$\n$N_{t}\\geq1$, $N_{W}=0$\n$N_{res}=0$",
-        "$N_{b}=1$\n$N_{t}\\geq1$, $N_{W}\\geq1$\n$N_{res}=0$",
-        "$N_{b}=2$\n$N_{t}=1$, $N_{W}=0$\n$N_{res}=0$",
-        "$N_{b}=2$\n$N_{t}=1$, $N_{W}=1$\n$N_{res}=0$",
-        "$N_{b}=2$\n$N_{t}\\geq2$, $N_{W}=0$\n$N_{res}=0$",
-        "$N_{b}\\geq3$\n$N_{t}=1$, $N_{W}=0$\n$N_{res}=0$",
-        "$N_{b}\\geq3$\n$N_{t}=1,2$\n$N_{W}=1,0$; $N_{res}=0$"
-      ],
-      "signals": [
-        "mStop1000_mLSP1",
-        "mStop1200_mLSP1"
-      ],
-      "legend_yields_displayed": false,
-      "unit_area": false,
-      "unit_area_audit": null,
-      "lower_panel": "signal_significance",
-      "lower_panel_ylim": [
-        0,
-        5
-      ],
-      "main_panel_ylim": [
-        0.03,
-        2122723.220775129
-      ],
-      "significance_definition": "S/sqrt(B)",
-      "dropped_input_bins_1based": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
       "years": [
         "2024"
       ],
-      "source": "current datacard templates and rateParam initial values",
-      "sr_data_blinded": true,
-      "postfit": false
+      "bins": 73,
+      "png": "2024/sr/highdm73_sr_2024.png",
+      "pdf": "2024/sr/highdm73_sr_2024.pdf",
+      "summary": "2024/sr/highdm73_sr_2024.json"
     },
     {
-      "binning": "/Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/sr_inputs/binning.json",
-      "categories": [
-        "SR_Nb1_NISR0",
-        "SR_Nb1_NISR1",
-        "SR_Nb1_NISR2plus",
-        "SR_Nb2plus_NISR0",
-        "SR_Nb2plus_NISR1",
-        "SR_Nb2plus_NISR2plus"
-      ],
-      "luminosity_fb": 109.82,
-      "main_panel_ylim": [
-        0.03,
-        1819951.9758889896
-      ],
-      "pdf": "/Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/2024/sr/lowdm30_sr_2024.pdf",
-      "png": "/Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/2024/sr/lowdm30_sr_2024.png",
-      "schema_version": "lowdm30_sr_category_plot_v1",
-      "score_bins_per_category": 5,
-      "signal_scale": 1,
-      "signals": [
-        {
-          "chargino_minus_lsp": 75,
-          "deltaM": 150,
-          "mLSP": 650,
-          "mStop": 800,
-          "topology": "T2bW"
-        },
-        {
-          "chargino_minus_lsp": 75,
-          "deltaM": 150,
-          "mLSP": 850,
-          "mStop": 1000,
-          "topology": "T2bW"
-        }
-      ],
-      "significance_definition": "S/sqrt(B)",
-      "significance_ylim": [
-        0,
-        5
-      ],
-      "status": "complete",
-      "templates": [
-        "/Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/sr_inputs/2024.root"
-      ],
-      "total_bins": 30,
-      "typography_reference": "High-dM 73-bin plot",
       "name": "lowdm30_sr_2024",
       "years": [
         "2024"
       ],
-      "sr_data_blinded": true,
-      "postfit": false,
-      "source": "current T2bW canonical datacard templates and initial rateParams",
-      "renderer_source_sha256": "421cd35f0545b5669c989562d905d6c62d409f13bd45f645b70786067ce20e11"
+      "bins": 30,
+      "png": "2024/sr/lowdm30_sr_2024.png",
+      "pdf": "2024/sr/lowdm30_sr_2024.pdf",
+      "summary": "2024/sr/lowdm30_sr_2024.json"
     },
     {
-      "status": "complete",
       "name": "highdm73_sr_2025",
-      "png": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/2025/sr/highdm73_sr_2025.png",
-      "pdf": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/2025/sr/highdm73_sr_2025.pdf",
-      "bins": 73,
-      "labels": [
-        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}=0$\n$N_{res}=1$",
-        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}=0$\n$N_{res}\\geq2$",
-        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}\\geq1$\n$N_{res}=0$",
-        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}\\geq1$\n$N_{res}\\geq1$",
-        "$N_{b}\\geq1$\n$N_{t}\\geq1$, $N_{W}=0$\n$N_{res}\\geq1$",
-        "$N_{b}\\geq1$\n$N_{t}\\geq1$, $N_{W}\\geq1$\n$N_{res}\\geq1$",
-        "$N_{b}=1$\n$N_{t}\\geq1$, $N_{W}=0$\n$N_{res}=0$",
-        "$N_{b}=1$\n$N_{t}\\geq1$, $N_{W}\\geq1$\n$N_{res}=0$",
-        "$N_{b}=2$\n$N_{t}=1$, $N_{W}=0$\n$N_{res}=0$",
-        "$N_{b}=2$\n$N_{t}=1$, $N_{W}=1$\n$N_{res}=0$",
-        "$N_{b}=2$\n$N_{t}\\geq2$, $N_{W}=0$\n$N_{res}=0$",
-        "$N_{b}\\geq3$\n$N_{t}=1$, $N_{W}=0$\n$N_{res}=0$",
-        "$N_{b}\\geq3$\n$N_{t}=1,2$\n$N_{W}=1,0$; $N_{res}=0$"
-      ],
-      "signals": [
-        "mStop1000_mLSP1",
-        "mStop1200_mLSP1"
-      ],
-      "legend_yields_displayed": false,
-      "unit_area": false,
-      "unit_area_audit": null,
-      "lower_panel": "signal_significance",
-      "lower_panel_ylim": [
-        0,
-        5
-      ],
-      "main_panel_ylim": [
-        0.03,
-        2047520.0070029204
-      ],
-      "significance_definition": "S/sqrt(B)",
-      "dropped_input_bins_1based": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
       "years": [
         "2025"
       ],
-      "source": "current datacard templates and rateParam initial values",
-      "sr_data_blinded": true,
-      "postfit": false
+      "bins": 73,
+      "png": "2025/sr/highdm73_sr_2025.png",
+      "pdf": "2025/sr/highdm73_sr_2025.pdf",
+      "summary": "2025/sr/highdm73_sr_2025.json"
     },
     {
-      "binning": "/Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/sr_inputs/binning.json",
-      "categories": [
-        "SR_Nb1_NISR0",
-        "SR_Nb1_NISR1",
-        "SR_Nb1_NISR2plus",
-        "SR_Nb2plus_NISR0",
-        "SR_Nb2plus_NISR1",
-        "SR_Nb2plus_NISR2plus"
-      ],
-      "luminosity_fb": 110.84,
-      "main_panel_ylim": [
-        0.03,
-        1819951.9758889896
-      ],
-      "pdf": "/Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/2025/sr/lowdm30_sr_2025.pdf",
-      "png": "/Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/2025/sr/lowdm30_sr_2025.png",
-      "schema_version": "lowdm30_sr_category_plot_v1",
-      "score_bins_per_category": 5,
-      "signal_scale": 1,
-      "signals": [
-        {
-          "chargino_minus_lsp": 75,
-          "deltaM": 150,
-          "mLSP": 650,
-          "mStop": 800,
-          "topology": "T2bW"
-        },
-        {
-          "chargino_minus_lsp": 75,
-          "deltaM": 150,
-          "mLSP": 850,
-          "mStop": 1000,
-          "topology": "T2bW"
-        }
-      ],
-      "significance_definition": "S/sqrt(B)",
-      "significance_ylim": [
-        0,
-        5
-      ],
-      "status": "complete",
-      "templates": [
-        "/Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/sr_inputs/2025.root"
-      ],
-      "total_bins": 30,
-      "typography_reference": "High-dM 73-bin plot",
       "name": "lowdm30_sr_2025",
       "years": [
         "2025"
       ],
-      "sr_data_blinded": true,
-      "postfit": false,
-      "source": "current T2bW canonical datacard templates and initial rateParams",
-      "renderer_source_sha256": "421cd35f0545b5669c989562d905d6c62d409f13bd45f645b70786067ce20e11"
+      "bins": 30,
+      "png": "2025/sr/lowdm30_sr_2025.png",
+      "pdf": "2025/sr/lowdm30_sr_2025.pdf",
+      "summary": "2025/sr/lowdm30_sr_2025.json"
     },
     {
-      "status": "complete",
       "name": "highdm73_sr_2024_2025",
-      "png": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/2024_2025/sr/highdm73_sr_2024_2025.png",
-      "pdf": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/2024_2025/sr/highdm73_sr_2024_2025.pdf",
-      "bins": 73,
-      "labels": [
-        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}=0$\n$N_{res}=1$",
-        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}=0$\n$N_{res}\\geq2$",
-        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}\\geq1$\n$N_{res}=0$",
-        "$N_{b}\\geq1$\n$N_{t}=0$, $N_{W}\\geq1$\n$N_{res}\\geq1$",
-        "$N_{b}\\geq1$\n$N_{t}\\geq1$, $N_{W}=0$\n$N_{res}\\geq1$",
-        "$N_{b}\\geq1$\n$N_{t}\\geq1$, $N_{W}\\geq1$\n$N_{res}\\geq1$",
-        "$N_{b}=1$\n$N_{t}\\geq1$, $N_{W}=0$\n$N_{res}=0$",
-        "$N_{b}=1$\n$N_{t}\\geq1$, $N_{W}\\geq1$\n$N_{res}=0$",
-        "$N_{b}=2$\n$N_{t}=1$, $N_{W}=0$\n$N_{res}=0$",
-        "$N_{b}=2$\n$N_{t}=1$, $N_{W}=1$\n$N_{res}=0$",
-        "$N_{b}=2$\n$N_{t}\\geq2$, $N_{W}=0$\n$N_{res}=0$",
-        "$N_{b}\\geq3$\n$N_{t}=1$, $N_{W}=0$\n$N_{res}=0$",
-        "$N_{b}\\geq3$\n$N_{t}=1,2$\n$N_{W}=1,0$; $N_{res}=0$"
-      ],
-      "signals": [
-        "mStop1000_mLSP1",
-        "mStop1200_mLSP1"
-      ],
-      "legend_yields_displayed": false,
-      "unit_area": false,
-      "unit_area_audit": null,
-      "lower_panel": "signal_significance",
-      "lower_panel_ylim": [
-        0,
-        5
-      ],
-      "main_panel_ylim": [
-        0.03,
-        4160677.5732929683
-      ],
-      "significance_definition": "S/sqrt(B)",
-      "dropped_input_bins_1based": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
       "years": [
         "2024",
         "2025"
       ],
-      "source": "current datacard templates and rateParam initial values",
-      "sr_data_blinded": true,
-      "postfit": false
+      "bins": 73,
+      "png": "2024_2025/sr/highdm73_sr_2024_2025.png",
+      "pdf": "2024_2025/sr/highdm73_sr_2024_2025.pdf",
+      "summary": "2024_2025/sr/highdm73_sr_2024_2025.json"
     },
     {
-      "binning": "/Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/sr_inputs/binning.json",
-      "categories": [
-        "SR_Nb1_NISR0",
-        "SR_Nb1_NISR1",
-        "SR_Nb1_NISR2plus",
-        "SR_Nb2plus_NISR0",
-        "SR_Nb2plus_NISR1",
-        "SR_Nb2plus_NISR2plus"
-      ],
-      "luminosity_fb": 220.66,
-      "main_panel_ylim": [
-        0.03,
-        1819951.9758889896
-      ],
-      "pdf": "/Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/2024_2025/sr/lowdm30_sr_2024_2025.pdf",
-      "png": "/Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/2024_2025/sr/lowdm30_sr_2024_2025.png",
-      "schema_version": "lowdm30_sr_category_plot_v1",
-      "score_bins_per_category": 5,
-      "signal_scale": 1,
-      "signals": [
-        {
-          "chargino_minus_lsp": 75,
-          "deltaM": 150,
-          "mLSP": 650,
-          "mStop": 800,
-          "topology": "T2bW"
-        },
-        {
-          "chargino_minus_lsp": 75,
-          "deltaM": 150,
-          "mLSP": 850,
-          "mStop": 1000,
-          "topology": "T2bW"
-        }
-      ],
-      "significance_definition": "S/sqrt(B)",
-      "significance_ylim": [
-        0,
-        5
-      ],
-      "status": "complete",
-      "templates": [
-        "/Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/sr_inputs/2024.root",
-        "/Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/plots/sr_inputs/2025.root"
-      ],
-      "total_bins": 30,
-      "typography_reference": "High-dM 73-bin plot",
       "name": "lowdm30_sr_2024_2025",
       "years": [
         "2024",
         "2025"
       ],
-      "sr_data_blinded": true,
-      "postfit": false,
-      "source": "current T2bW canonical datacard templates and initial rateParams",
-      "renderer_source_sha256": "421cd35f0545b5669c989562d905d6c62d409f13bd45f645b70786067ce20e11"
+      "bins": 30,
+      "png": "2024_2025/sr/lowdm30_sr_2024_2025.png",
+      "pdf": "2024_2025/sr/lowdm30_sr_2024_2025.pdf",
+      "summary": "2024_2025/sr/lowdm30_sr_2024_2025.json"
     }
-  ],
-  "uncertainty": "MC statistical only, rateParam initial values applied to yields and variances"
+  ]
 }
