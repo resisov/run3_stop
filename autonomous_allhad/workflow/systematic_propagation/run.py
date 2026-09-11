@@ -9,6 +9,7 @@ import os
 import shutil
 import subprocess
 import sys
+import tarfile
 import time
 from pathlib import Path
 
@@ -52,6 +53,20 @@ def execute(argv, env, cwd):
     subprocess.run(list(map(str, argv)), env=env, cwd=cwd, check=True)
 
 
+def prepare_payload(config, destination):
+    destination.mkdir(parents=True, exist_ok=True)
+    with tarfile.open(config["object_payload_bundle"]) as archive:
+        for member in archive:
+            relative = Path(member.name)
+            if relative.is_absolute() or ".." in relative.parts or not member.isfile():
+                raise ValueError("unsupported payload member: " + member.name)
+            path = destination / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            with archive.extractfile(member) as source, path.open("wb") as target:
+                shutil.copyfileobj(source, target)
+    return destination
+
+
 def source_records(sidecar, year):
     metadata = read(sidecar)
     if metadata["status"] != "complete" or metadata.get("bad_files"):
@@ -83,7 +98,7 @@ def prepare(args):
     main_repo = repo / canonical["production"]["frozen_main_code"]
     gnn_repo = repo / canonical["production"]["frozen_gnn_code"]
     all_jobs = []
-    for year in (2024, 2025):
+    for year in args.years:
         base = campaign / str(year)
         source = repo / f"autonomous_allhad/workflow/flat{year}_v8/outputs/nominal/mc_shard_00000.root"
         source_list = nominal / str(year) / "inputs.txt"
@@ -94,9 +109,11 @@ def prepare(args):
                      shard_id="mc_shard_00000", record_group="mc", records=records,
                      records_per_shard=len(records),
                      record_digest=hashlib.sha256(json.dumps(records, sort_keys=True).encode()).hexdigest()[:16])
-        shard_path = base / "pilot/shard.json"
+        shard_path = base / args.label / "shard.json"
         write(shard_path, shard)
         model = repo / f"autonomous_allhad/workflow/flat{year}_v8/bundles/model_TopResolved_2024_TROTA2D_ptcut.h5"
+        payload_name = "objectcorr_2024_payloads.tgz" if year == 2024 else "objectcorr_2025_data_payloads.tgz"
+        object_payload = model.parent / payload_name
         norm = nominal / str(year) / "norm.json"
         search = main_repo / f"autonomous_allhad/configs/search_bins_{year}.json"
         if sha(norm) != canonical["years"][str(year)]["normalization_sha256"]:
@@ -109,6 +126,7 @@ def prepare(args):
                       source_root=str(source), source_sidecar=str(source.with_suffix(".json")),
                       shard=str(shard_path), normalization=str(norm), search_config=str(search),
                       trota_model=str(model), trota_setup=TROTA_SETUP,
+                      object_payload_bundle=str(object_payload),
                       gnn_manifest=str(nominal / str(year) / "gnn/full_manifest.json"),
                       gnn_model=str(gnn_model / "diagonal_v3_numpy.npz"),
                       gnn_selection=str(gnn_model / "selection.json"),
@@ -118,7 +136,7 @@ def prepare(args):
                       shifts=list(SHIFTS), root_retention="pilot only, on EOS",
                       canonical_report_sha256=sha(canonical_path), pins={})
         paths = [HERE / "run.py", HERE / "run.sh", canonical_path, source_list,
-                 source.with_suffix(".json"), shard_path, norm, search, model,
+                 source.with_suffix(".json"), shard_path, norm, search, model, object_payload,
                  Path(config["gnn_manifest"]), Path(config["gnn_model"]),
                  Path(config["gnn_selection"]), Path(config["gnn_configuration"]),
                  main_repo / "autonomous_allhad/workflow/build_flat_boosted_recoil_hists.py"]
@@ -128,15 +146,15 @@ def prepare(args):
         paths.extend([repo / "analysis/data/ids.coffea", repo / "analysis/data/corrections.coffea"])
         for path in paths:
             config["pins"][str(path)] = sha(path)
-        config_path = base / "campaign.json"
+        config_path = base / ("campaign.json" if args.label == "pilot" else args.label + ".json")
         write(config_path, config)
         for shift in SHIFTS:
-            out = base / "pilot" / shift
+            out = base / args.label / shift
             out.mkdir(parents=True, exist_ok=True)
             all_jobs.append(f"{year} {shift} {config_path} {out}")
     logs = campaign / "logs"
     logs.mkdir(exist_ok=True)
-    (campaign / "pilot.queue").write_text("\n".join(all_jobs) + "\n")
+    (campaign / (args.label + ".queue")).write_text("\n".join(all_jobs) + "\n")
     runtime = repo.parent / "runtime"
     proxy = Path("/eos/user/t/taiwoo/decaf/analysis/proxy/x509up_u147757")
     for path in (runtime / "py38.tgz", runtime / "mt2-1.2.0-cp38-cp38-manylinux2010_x86_64.whl", proxy):
@@ -164,14 +182,47 @@ request_disk = 18000MB
 +MaxRuntime = 28800
 +JobBatchName = "NPS26012_separate_shape_pilot"
 on_exit_hold = (ExitBySignal == True) || (ExitCode != 0)
-queue year,shift,config,output from {campaign}/pilot.queue
+queue year,shift,config,output from {campaign}/{args.label}.queue
 '''
-    (campaign / "pilot.sub").write_text(submit)
-    write(campaign / "campaign_state.json", dict(status="pilot_prepared", jobs=len(all_jobs),
+    (campaign / (args.label + ".sub")).write_text(submit)
+    if (campaign / "campaign_state.json").exists():
+        state = read(campaign / "campaign_state.json")
+        state.setdefault("preparations", {})[args.label] = dict(jobs=len(all_jobs), years=args.years)
+    else:
+        state = dict(status="pilot_prepared", jobs=len(all_jobs),
           canonical_modified=False, runtime="py38; TROTA-only LCG_104", job_flavour="workday",
           submitted_clusters=[], pending=["pilot execution", "nominal closure", "full MC propagation",
-          "JES/JER TROTA-input propagation", "EGM", "MUO/TAU decomposition", "JMS/JMR prescription"]))
-    print(json.dumps({"status": "pilot_prepared", "jobs": len(all_jobs), "submit": str(campaign / "pilot.sub")}))
+          "JES/JER TROTA-input propagation", "EGM", "MUO/TAU decomposition", "JMS/JMR prescription"])
+    write(campaign / "campaign_state.json", state)
+    print(json.dumps({"status": "pilot_prepared", "jobs": len(all_jobs), "submit": str(campaign / (args.label + ".sub"))}))
+
+
+def preflight(args):
+    import importlib
+    config = read(args.config)
+    repo = eos(config["repo"])
+    work = eos(args.output)
+    payload = prepare_payload(config, work / "payload")
+    os.environ.update(AUTONOMOUS_ALLHAD_LOCAL_ANALYSIS_DATA="0",
+                      AUTONOMOUS_ALLHAD_XRD_PREFER_CACHE="0",
+                      AUTONOMOUS_ALLHAD_XRD_CACHE=str(work / "xrd"))
+    sys.path.insert(0, str(repo / "autonomous_allhad"))
+    year = config["year"]
+    correction = importlib.import_module(f"autonomous_allhad.object_corrections_{year}")
+    validation = correction.validate_payloads(payload)
+    if validation["status"] != "valid":
+        raise RuntimeError(str(validation))
+    module = ("autonomous_allhad.intermediate_2024_worker" if year == 2024
+              else "autonomous_allhad.intermediate_2025_data_worker")
+    importlib.import_module(module).install_backend()
+    from autonomous_allhad import flat_ntuple_worker as flat
+    record = read(config["shard"])["records"][0]
+    rows, summary, bad = flat.process_record(record, payload, 500, "nominal",
+                                             "feature_flat_preselection", False, 1, True)
+    write(work / "result.json", dict(status="failed" if bad else "complete", summary=summary, bad_files=bad))
+    print(json.dumps(dict(rows=len(rows), events_read=summary["events_read"], error=summary.get("error"))))
+    if bad:
+        raise RuntimeError(str(bad))
 
 
 def worker(args):
@@ -182,6 +233,14 @@ def worker(args):
         if sha(path) != expected:
             raise RuntimeError("pinned input changed: " + path)
     destination = eos(args.output)
+    if (destination / "result.json").exists():
+        existing = read(destination / "result.json")
+        if existing.get("status") == "complete":
+            if (existing.get("config_sha256") != sha(args.config) or any(
+                    sha(item["path"]) != item["sha256"] for item in existing["products"].values())):
+                raise RuntimeError("existing completed output changed")
+            print(json.dumps({"status": "already_complete", "output": str(destination)}))
+            return
     work = Path(os.environ["_CONDOR_SCRATCH_DIR"]) / "shape"
     work.mkdir()
     repo = Path(config["repo"])
@@ -202,9 +261,10 @@ def worker(args):
 
     try:
         checkpoint()
+        payload_repo = prepare_payload(config, work / "payload") if config.get("object_payload_bundle") else repo
         module = ("autonomous_allhad.intermediate_2024_worker" if year == 2024
                   else "autonomous_allhad.intermediate_2025_data_worker")
-        execute([sys.executable, "-u", "-m", module, "--repo", repo,
+        execute([sys.executable, "-u", "-m", module, "--repo", payload_repo,
                  "--shard", config["shard"], "--output", root, "--metadata-output", metadata_path,
                  "--shift", args.shift, "--record-workers", "1", "--chunk-size", "25000"], env, work)
         metadata = read(metadata_path)
@@ -295,12 +355,17 @@ def main():
     commands = parser.add_subparsers(dest="command", required=True)
     prep = commands.add_parser("prepare")
     prep.add_argument("--repo", required=True, type=Path)
+    prep.add_argument("--years", nargs="+", type=int, choices=(2024, 2025), default=[2024, 2025])
+    prep.add_argument("--label", default="pilot", choices=("pilot", "pilot_retry1"))
+    check = commands.add_parser("preflight")
+    check.add_argument("--config", required=True, type=Path)
+    check.add_argument("--output", required=True, type=Path)
     job = commands.add_parser("worker")
     job.add_argument("--config", required=True, type=Path)
     job.add_argument("--shift", required=True, choices=SHIFTS)
     job.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
-    return prepare(args) if args.command == "prepare" else worker(args)
+    return {"prepare": prepare, "preflight": preflight, "worker": worker}[args.command](args)
 
 
 if __name__ == "__main__":
