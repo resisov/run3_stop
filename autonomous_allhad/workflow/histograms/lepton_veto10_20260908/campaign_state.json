@@ -3936,7 +3936,7 @@
     "primary_limits_running": 0,
     "timeout_recovery_running": 0
   },
-  "status": "topw_sf_T2bW_limits_submitted; T2tt_T2tb_combining",
+  "status": "topw_sf_all_limits_and_impacts_submitted; one_empty_limit_result_detected",
   "topologies": [
     "T2tt",
     "T2bW",
@@ -5605,7 +5605,7 @@
     "schedd": "bigbird24.cern.ch",
     "source_backup": "topw_previous_sources.tar.gz",
     "source_commit": "456fd370",
-    "stage": "all_source_templates_validated; T2bW_limits_submitted; T2tt_T2tb_combining",
+    "stage": "all_combined_cards_complete; all_924_limits_and_both_impacts_submitted",
     "cards": {
       "status": "all_six_exit0; all_templates_and_card_shape_references_validated",
       "template_validation": {
@@ -5681,11 +5681,14 @@
       }
     },
     "combined_cards": {
-      "status": "T2bW_complete; T2tt_T2tb_running",
+      "status": "all_three_complete_exit0",
       "git_commit": "45b5d38a",
       "git_publication_approved": "User: 푸시해",
-      "generated_at_utc": "2026-09-11T12:28:55Z",
-      "generated_counts": {"T2tt": 48, "T2bW": 354, "T2tb": 288},
+      "generated_at_utc": "2026-09-11T12:51:35Z",
+      "generated_counts": {"T2tt": 205, "T2bW": 354, "T2tb": 365},
+      "all_exit_codes": {"T2tt": 0, "T2bW": 0, "T2tb": 0},
+      "completion_epochs": {"T2tt": 1789130216, "T2bW": 1789129380, "T2tb": 1789130098},
+      "manifest_sha256": {"T2tt": "824426e43c2e5372454da0df3262242a4b53b06b15c19251de12dd17e18774b4", "T2tb": "3665601d2a5660b39a8479624a502984b8c24dce51daf3ad691e9fcb57223e23"},
       "completed": {"T2bW": {"exit_code": 0, "exit_by_signal": false, "completion_epoch": 1789129380, "mass_points": 354, "warnings": 0, "manifest_sha256": "7cbf2f00ba694442139fbc293999f93d8f67a9a52eae1e623cbe4794cf080a64"}},
       "cluster": 1115246,
       "submitted_at_utc": "2026-09-11T11:52:14Z",
@@ -5703,14 +5706,16 @@
       "max_runtime_seconds": 28800,
       "effective_queue_cpus_per_job": 6,
       "effective_queue_memory_mb_per_job": 18000,
-      "last_queue_check": {"utc": "2026-09-11T12:27:44Z", "idle": 0, "running": 2, "held": 0, "history_exit0": 1},
+      "last_queue_check": {"utc": "2026-09-11T12:51:35Z", "idle": 0, "running": 0, "held": 0, "history_exit0": 3},
       "validation": "all six source ROOT files; finite contents and variances; all nominal and Up/Down card references; blinded SR placeholders",
       "physics_changed": false
     },
     "limits": {
-      "status": "T2bW_submitted; T2tt_T2tb_waiting_for_combination",
+      "status": "all_submitted; one_empty_result_needs_recovery_after_exit_verification",
       "expected_total": 924,
-      "submitted_total": 354,
+      "submitted_total": 924,
+      "last_queue_check": {"utc": "2026-09-11T12:56:15Z", "running": 546, "idle": 376, "held": 0, "absent_from_queue_not_yet_counted_complete": 2},
+      "invalid_results": [{"topology": "T2bW", "mass_point": "mStop200_mLSP100", "job": "1115252.271", "reason": "limit tree has zero entries; expected five quantiles", "observed_at_utc": "2026-09-11T12:54:15Z", "path": "combined_pending/T2bW/limits/higgsCombine_mStop200_mLSP100.AsymptoticLimits.mH120.root", "history_query": "timed_out_after_25_seconds; exit_code_not_confirmed", "retry_submitted": false}],
       "output_directory": "combined_pending",
       "T2bW": {
         "cluster": 1115252,
@@ -5724,10 +5729,42 @@
         "max_runtime_seconds": 28800,
         "point_timeout_seconds": 7200,
         "workspace_timeout_seconds": 900,
-        "last_queue_check": {"utc": "2026-09-11T12:29:23Z", "idle": 354, "running": 0, "held": 0}
+        "last_queue_check": {"utc": "2026-09-11T12:56:15Z", "idle": 0, "running": 352, "held": 0, "absent_not_counted_complete": 2}
+      },
+      "T2tt": {
+        "cluster": 1115257,
+        "schedd": "bigbird24.cern.ch",
+        "mass_points": 205,
+        "submission_file": "combined_pending/T2tt/limits_eossubmit.sub",
+        "submission_sha256": "4931f9b236d2000536a0e59dee5119008ca21763322c6ebe2101bede82101195",
+        "proxy_seconds_before_submit": 368164,
+        "voms_seconds_before_submit": 339364,
+        "max_runtime_seconds": 28800,
+        "last_queue_check": {"utc": "2026-09-11T12:56:15Z", "idle": 11, "running": 194, "held": 0}
+      },
+      "T2tb": {
+        "cluster": 1115258,
+        "schedd": "bigbird24.cern.ch",
+        "mass_points": 365,
+        "submission_file": "combined_pending/T2tb/limits_eossubmit.sub",
+        "submission_sha256": "7e166065f446b801f691862f39f4f745670ad9c8f8a5e152e819d87a9454764d",
+        "proxy_seconds_before_submit": 368164,
+        "voms_seconds_before_submit": 339364,
+        "max_runtime_seconds": 28800,
+        "last_queue_check": {"utc": "2026-09-11T12:56:15Z", "idle": 365, "running": 0, "held": 0}
       }
     },
-    "impacts": {"status": "waiting_for_validated_combined_cards", "topology": "T2tt", "mStop": 1200, "mLSP": 500, "asimov_r": [1, 0], "plots": "local_only"},
+    "impacts": {
+      "status": "both_submitted",
+      "topology": "T2tt", "mStop": 1200, "mLSP": 500, "asimov_r": [1, 0], "plots": "local_only",
+      "schedd": "bigbird24.cern.ch",
+      "max_runtime_seconds": 43200,
+      "proxy_seconds_before_submit": 368164,
+      "voms_seconds_before_submit": 339364,
+      "last_queue_check": {"utc": "2026-09-11T12:56:15Z", "idle": 2, "running": 0, "held": 0},
+      "r1": {"cluster": 1115259, "submission_file": "combined_pending/T2tt/impact_r1_eossubmit.sub", "submission_sha256": "21d333d880c05f3069ef7729d1802aa0fe51e359c6d33d9d7dc8153a0e3642b4"},
+      "r0": {"cluster": 1115260, "submission_file": "combined_pending/T2tt/impact_r0_eossubmit.sub", "submission_sha256": "372e2a760525b0a5dcd085e6c6fe209a5af3e257dd394fc41a5e571bd142a541"}
+    },
     "superseded_output_policy": {
       "action": "delete_without_retaining_backup",
       "condition": "replacement_outputs_validated_and_promoted",
