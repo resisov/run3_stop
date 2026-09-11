@@ -3,19 +3,22 @@
 ## Scope and provenance
 
 The user confirmed strict electron/loose-muon veto **pT > 10 GeV** and the
-**250 GeV Low-dM double-ratio lower boundary**. Both years were remeasured
-from the promoted histogram-only inputs; no old 5-GeV factors were reused.
+**250 GeV Low-dM double-ratio lower boundary**. The 2025 results below were
+remeasured from the new Top/W-SF histograms promoted on 2026-09-11. The 2024
+update is still awaiting promotion: its previous files are not new-SF results.
+No old 5-GeV factors were reused.
 
 - Local: `/Users/taiwoomac/Documents/All Hadronic Stop Analysis/autonomous_allhad/reports/background_estimation_lepton_veto10_20260908`
 - EOS: `/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/reports/background_estimation_lepton_veto10_20260908`
-- Canonical manifest SHA256: `92f800ec26da259e96b9e72ba14e4aeff35e6453f741b237e8678784245945cc`.
+- Canonical manifest SHA256: `3a9784dd2e648300f0e4790f41c96ec99fcc174454c90b50c3802c15c49d55ca`.
 - `campaign_state.json` records the final audit, every per-year artifact hash,
   input hashes, and source hashes. `calculation_state.json` preserves the
   separate completed calculation and command records for each year.
 
 ## Inputs for the existing card machinery
 
-Use the following names under **each of `2024/` and `2025/`**:
+Use the following names under **`2025/` for the completed update**. The same
+interface will be used for 2024 after its separate promotion.
 
 | Product | File |
 |---|---|
@@ -32,7 +35,8 @@ Use the following names under **each of `2024/` and `2025/`**:
 
 Do not replace `tf_inputs.json` with the smaller GNN export when complete
 systematic histograms are needed: the small export intentionally omits the
-large `histograms` member.
+large `histograms` member. Generated `tf_inputs.json` is retained on EOS and
+excluded from Git; its recorded checksum is authoritative.
 
 ## Existing conventions retained
 
@@ -57,17 +61,19 @@ large `histograms` member.
 
 ## Plots and interpretation
 
-Each year has 52 figures, available in both PNG and PDF (104 files/year):
+Updated 2025 has 32 figures, available in both PNG and PDF (64 files):
 
 - `dy_report/highdm/` and `dy_report/lowdm/`: RZ, RT and mll before/after scaling.
 - `sgamma/`: Q diagnostic and Sgamma by Nb group.
 - `zgamma/`: double ratios for both regimes.
 - `tf/`: High-dM Top, W, QCD TFs; `tf/gnn/`: Low-dM Top, W, QCD and raw Z/GCR TFs.
 
-Existing plotting code was reused. Only rendering controls were added to
-separate batch calculation from local plotting; the existing mll y-axis upper
-limit was extended where the Z peak would otherwise be clipped. Every measured
-factor JSON retained its original calculation hash after plotting.
+Existing plotting code was reused, including the Photon HLT-style TF layout.
+Each Low-dM background is displayed with its categories overlaid, without
+changing bin edges or values. Every measured factor JSON retained its new
+calculation hash after plotting. The existing presentation bundle
+`../background_estimation_plots_2024_2025_20260908/` also has these 2025 plots;
+its 2024 plots remain from the previous measurement.
 
 RZ post-scaling plots are fitted-data displays, not independent closure tests.
 TF reconstruction and Q/Sgamma identities are mechanical checks, not physics
@@ -78,20 +84,21 @@ normalization difference; the Q diagnostic is not an extra Z normalization.
 
 The canonical 2025 source retains 8390 inputs but records 11 source bad files,
 including one data file; **data luminosity coverage remains incomplete**.
-The 2024 source retains 5954 inputs, with no source bad files and complete
-recorded coverage. No event input was reopened to change this accounting.
+The pending 2024 update has not been processed by this task. No event input
+was reopened to change source coverage accounting.
 
-Previous `background_estimation_histonly_20260907` results and rollback records
-are preserved. Its 254 recorded per-year artifact checksums still match, and
-no tracked file in that result directory changed.
-
-Regression result: **38 passed**. See `RUN.md` for reproduction and batch job
+Regression result: **40 passed**. See `RUN.md` for reproduction and batch job
 identifiers, and `README.md` for the machine-derived numerical summary.
 Nothing in this result package has been published to the web.
 
-Final audit **1111099.0** completed with return value 0. All 248 recorded
-per-year artifacts and 11 canonical source hashes also match locally after
-retrieval. QCD has 3 (2024) and 4 (2025) zero nominal GNN numerator bins;
-these were kept as measured, not assigned a nonzero floor. The signed-bin
-lists are empty. Each year contains 30 reconstructed GNN double-ratio
-component responses.
+Calculation **1115053.0** and final 2025 audit **1115054.0** completed with
+return value 0 (142 and 96 seconds worker wall time). All **84** recorded
+2025 artifacts match locally and on EOS. QCD has four zero nominal GNN
+numerator bins, retained without a nonzero floor; there are no signed nominal
+TF bins. All 30 GNN double-ratio responses reconstruct, with maximum
+fractional up response 0.0572099. These are mechanical checks, not physics
+closure. The overall state is `partial` only because 2024 remains pending.
+
+The main task must next generate/check the full SR/CR histogram plots locally
+before creating cards. The background-estimation plots here do not substitute
+for that separate full-histogram plotting step. No cards or limits were run.

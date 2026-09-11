@@ -2,26 +2,26 @@
   "closure_checks": {
     "highdm": {
       "Nb1": {
-        "Q_times_summed_gamma": 8378.184215245477,
+        "Q_times_summed_gamma": 8380.795092077344,
         "relative_residual": 0.0,
-        "summed_numerator": 8378.184215245477
+        "summed_numerator": 8380.795092077344
       },
       "Nb2plus": {
-        "Q_times_summed_gamma": 2637.770873594126,
+        "Q_times_summed_gamma": 2637.8710564638563,
         "relative_residual": 0.0,
-        "summed_numerator": 2637.770873594126
+        "summed_numerator": 2637.8710564638563
       }
     },
     "lowdm": {
       "Nb1": {
-        "Q_times_summed_gamma": 91878.20088362518,
+        "Q_times_summed_gamma": 91879.87904801994,
         "relative_residual": 0.0,
-        "summed_numerator": 91878.20088362518
+        "summed_numerator": 91879.87904801994
       },
       "Nb2plus": {
-        "Q_times_summed_gamma": 11095.538970809183,
+        "Q_times_summed_gamma": 11095.699965531876,
         "relative_residual": 0.0,
-        "summed_numerator": 11095.538970809183
+        "summed_numerator": 11095.699965531876
       }
     }
   },
@@ -40,102 +40,102 @@
       "Q": {
         "denominator": 5133.526123165923,
         "denominator_variance": 325.25687355174887,
-        "numerator": 8378.184215245477,
-        "numerator_variance": 15810.155349913364,
-        "stat": 0.02515572176352353,
+        "numerator": 8380.795092077344,
+        "numerator_variance": 15809.765081141322,
+        "stat": 0.025155834727435825,
         "status": "complete",
-        "value": 1.6320525140482822
+        "value": 1.6325611073171633
       },
       "bins": [
         {
           "Sgamma": {
-            "denominator": 3078.0054687143997,
-            "denominator_variance": 2593.842422009404,
-            "numerator": 3196.957708080052,
-            "numerator_variance": 5646.860491146416,
-            "stat": 0.029856023884858373,
+            "denominator": 3078.964661417755,
+            "denominator_variance": 2594.0764505912434,
+            "numerator": 3197.1945785465828,
+            "numerator_variance": 5646.913285959883,
+            "stat": 0.0298449138870381,
             "status": "complete",
-            "value": 1.0386458830481984
+            "value": 1.0383992445935988
           },
           "data": 3668.0,
           "data_variance": 3668.0,
           "gamma_mc": 1885.9720764005642,
           "gamma_mc_variance": 128.77527641481697,
           "index": 0,
-          "other_mc": 471.0422919199482,
-          "other_mc_variance": 1978.860491146416
+          "other_mc": 470.80542145341724,
+          "other_mc_variance": 1978.9132859598833
         },
         {
           "Sgamma": {
-            "denominator": 2006.4219533410019,
-            "denominator_variance": 1165.9712170492191,
-            "numerator": 2012.9456683771593,
-            "numerator_variance": 5809.7550305904415,
-            "stat": 0.04164939739382653,
+            "denominator": 2007.0472106113534,
+            "denominator_variance": 1166.1104296208387,
+            "numerator": 2013.0586701718703,
+            "numerator_variance": 5809.909250649187,
+            "stat": 0.041635512650023486,
             "status": "complete",
-            "value": 1.003251417293005
+            "value": 1.002995175962346
           },
           "data": 2376.0,
           "data_variance": 2376.0,
           "gamma_mc": 1229.38565767354,
           "gamma_mc_variance": 78.67132259285346,
           "index": 1,
-          "other_mc": 363.05433162284066,
-          "other_mc_variance": 3433.7550305904415
+          "other_mc": 362.9413298281297,
+          "other_mc_variance": 3433.9092506491866
         },
         {
           "Sgamma": {
-            "denominator": 1190.7851655426691,
-            "denominator_variance": 457.5072210304941,
-            "numerator": 1164.8072888665479,
-            "numerator_variance": 1967.6332410007726,
-            "stat": 0.04118697717998679,
+            "denominator": 1191.1562475480982,
+            "denominator_variance": 457.58544144115933,
+            "numerator": 1165.3615172131506,
+            "numerator_variance": 1967.4951058506833,
+            "stat": 0.04117483468704743,
             "status": "complete",
-            "value": 0.9781842456323492
+            "value": 0.9783447970087518
           },
           "data": 1346.0,
           "data_variance": 1346.0,
           "gamma_mc": 729.6242953536735,
           "gamma_mc_variance": 45.288266069864676,
           "index": 2,
-          "other_mc": 181.19271113345224,
-          "other_mc_variance": 621.6332410007727
+          "other_mc": 180.6384827868494,
+          "other_mc_variance": 621.4951058506833
         },
         {
           "Sgamma": {
-            "denominator": 1166.3739354427312,
-            "denominator_variance": 437.83859984675206,
-            "numerator": 1146.1555143224728,
-            "numerator_variance": 1416.959158003333,
-            "stat": 0.03677406124612649,
+            "denominator": 1166.7374102252263,
+            "denominator_variance": 437.91295852223055,
+            "numerator": 1147.133512600652,
+            "numerator_variance": 1416.6777630620304,
+            "stat": 0.036765087548589745,
             "status": "complete",
-            "value": 0.9826655753306216
+            "value": 0.9831976780269779
           },
           "data": 1275.0,
           "data_variance": 1275.0,
           "gamma_mc": 714.6669150673085,
           "gamma_mc_variance": 43.03637080943665,
           "index": 3,
-          "other_mc": 128.84448567752725,
-          "other_mc_variance": 141.95915800333302
+          "other_mc": 127.86648739934787,
+          "other_mc_variance": 141.6777630620304
         },
         {
           "Sgamma": {
-            "denominator": 936.5976922046757,
-            "denominator_variance": 286.94441183695625,
-            "numerator": 857.3180355992454,
-            "numerator_variance": 968.9474291724017,
-            "stat": 0.03713013608088403,
+            "denominator": 936.8895622749121,
+            "denominator_variance": 286.9952403648666,
+            "numerator": 858.0468135450881,
+            "numerator_variance": 968.7696756195381,
+            "stat": 0.03712046833002716,
             "status": "complete",
-            "value": 0.9153535640058942
+            "value": 0.9158462727043498
           },
           "data": 933.0,
           "data_variance": 933.0,
           "gamma_mc": 573.8771786708376,
           "gamma_mc_variance": 29.485637664777048,
           "index": 4,
-          "other_mc": 75.68196440075462,
-          "other_mc_variance": 35.947429172401684
+          "other_mc": 74.95318645491193,
+          "other_mc_variance": 35.76967561953818
         }
       ]
     },
@@ -143,102 +143,102 @@
       "Q": {
         "denominator": 1354.3867704736963,
         "denominator_variance": 76.82325330044405,
-        "numerator": 2637.770873594126,
-        "numerator_variance": 3747.443208972521,
-        "stat": 0.04692297085145568,
+        "numerator": 2637.8710564638563,
+        "numerator_variance": 3747.873815343062,
+        "stat": 0.046925600737553474,
         "status": "complete",
-        "value": 1.9475757819692572
+        "value": 1.94764975114255
       },
       "bins": [
         {
           "Sgamma": {
-            "denominator": 972.3585056815872,
-            "denominator_variance": 660.3452215368072,
-            "numerator": 966.5363930894329,
-            "numerator_variance": 1442.8266677722872,
-            "stat": 0.04707555205776388,
+            "denominator": 972.3954359799999,
+            "denominator_variance": 660.4152144388715,
+            "numerator": 966.6187766723946,
+            "numerator_variance": 1442.8780223308981,
+            "stat": 0.04707581064685117,
             "status": "complete",
-            "value": 0.9940123806619316
+            "value": 0.9940593516856818
           },
           "data": 1140.0,
           "data_variance": 1140.0,
           "gamma_mc": 499.26606948172457,
           "gamma_mc_variance": 29.400782455946786,
           "index": 0,
-          "other_mc": 173.46360691056714,
-          "other_mc_variance": 302.8266677722873
+          "other_mc": 173.38122332760543,
+          "other_mc_variance": 302.8780223308981
         },
         {
           "Sgamma": {
-            "denominator": 614.2067274774101,
-            "denominator_variance": 287.37826797243156,
-            "numerator": 672.1099783875081,
-            "numerator_variance": 993.4301611172373,
-            "stat": 0.05954425946831619,
+            "denominator": 614.2300551262148,
+            "denominator_variance": 287.4080107267755,
+            "numerator": 672.1013317109916,
+            "numerator_variance": 993.6260460688986,
+            "stat": 0.05954637169238327,
             "status": "complete",
-            "value": 1.0942732280838257
+            "value": 1.0942175917667936
           },
           "data": 796.0,
           "data_variance": 796.0,
           "gamma_mc": 315.3698732361345,
           "gamma_mc_variance": 18.031593065310947,
           "index": 1,
-          "other_mc": 123.89002161249192,
-          "other_mc_variance": 197.43016111723728
+          "other_mc": 123.89866828900841,
+          "other_mc_variance": 197.62604606889857
         },
         {
           "Sgamma": {
-            "denominator": 373.16656273657645,
-            "denominator_variance": 121.8633450994904,
-            "numerator": 378.7428859452917,
-            "numerator_variance": 562.1190114939591,
-            "stat": 0.07027187134227468,
+            "denominator": 373.18073564959053,
+            "denominator_variance": 121.87552295616771,
+            "numerator": 378.5011429150801,
+            "numerator_variance": 562.2517740413955,
+            "stat": 0.07026795424027858,
             "status": "complete",
-            "value": 1.0149432552794169
+            "value": 1.0142569183166126
           },
           "data": 443.0,
           "data_variance": 443.0,
           "gamma_mc": 191.60567008039894,
           "gamma_mc_variance": 10.81728751661199,
           "index": 2,
-          "other_mc": 64.25711405470832,
-          "other_mc_variance": 119.1190114939591
+          "other_mc": 64.49885708491993,
+          "other_mc_variance": 119.25177404139552
         },
         {
           "Sgamma": {
-            "denominator": 375.9979535468729,
-            "denominator_variance": 123.79604567330097,
-            "numerator": 352.73341395649607,
-            "numerator_variance": 434.0162691741553,
-            "stat": 0.061972800588686774,
+            "denominator": 376.01223399646625,
+            "denominator_variance": 123.80841483399733,
+            "numerator": 353.24155296820413,
+            "numerator_variance": 433.9237354789552,
+            "stat": 0.061983240630747984,
             "status": "complete",
-            "value": 0.9381258877317888
+            "value": 0.9394416485170104
           },
           "data": 412.0,
           "data_variance": 412.0,
           "gamma_mc": 193.05947271879154,
           "gamma_mc_variance": 11.002208181219178,
           "index": 3,
-          "other_mc": 59.26658604350391,
-          "other_mc_variance": 22.0162691741553
+          "other_mc": 58.75844703179584,
+          "other_mc_variance": 21.923735478955212
         },
         {
           "Sgamma": {
-            "denominator": 302.041124151679,
-            "denominator_variance": 81.67455057209939,
-            "numerator": 267.6482022153973,
-            "numerator_variance": 315.051099414882,
-            "stat": 0.06447021592616704,
+            "denominator": 302.0525957115848,
+            "denominator_variance": 81.68266828202619,
+            "numerator": 267.40825219718647,
+            "numerator_variance": 315.1942374229144,
+            "stat": 0.0644702918615909,
             "status": "complete",
-            "value": 0.8861316582870011
+            "value": 0.8853036060399279
           },
           "data": 304.0,
           "data_variance": 304.0,
           "gamma_mc": 155.08568495664667,
           "gamma_mc_variance": 7.571382081355155,
           "index": 4,
-          "other_mc": 36.351797784602724,
-          "other_mc_variance": 11.051099414881977
+          "other_mc": 36.59174780281356,
+          "other_mc_variance": 11.194237422914386
         }
       ]
     }
@@ -247,20 +247,20 @@
     "Nb1": {
       "denominator": 53700.31712849809,
       "denominator_variance": 3469.8427102777614,
-      "numerator": 91878.20088362518,
-      "numerator_variance": 168572.06711053662,
-      "stat": 0.007872654404387272,
+      "numerator": 91879.87904801994,
+      "numerator_variance": 168572.0802844224,
+      "stat": 0.00787266286659503,
       "status": "complete",
-      "value": 1.7109433574437227
+      "value": 1.710974607992779
     },
     "Nb2plus": {
       "denominator": 6722.72477043706,
       "denominator_variance": 394.99362501212295,
-      "numerator": 11095.538970809183,
-      "numerator_variance": 24325.811901635127,
-      "stat": 0.02370755007882886,
+      "numerator": 11095.699965531876,
+      "numerator_variance": 24325.941481311762,
+      "stat": 0.023707625118123472,
       "status": "complete",
-      "value": 1.6504526586602823
+      "value": 1.6504766064981296
     }
   },
   "lowdm_aggregated_diagnostic": {},
@@ -270,102 +270,102 @@
       "Q": {
         "denominator": 53700.31712849809,
         "denominator_variance": 3469.8427102777614,
-        "numerator": 91878.20088362518,
-        "numerator_variance": 168572.06711053662,
-        "stat": 0.007872654404387272,
+        "numerator": 91879.87904801994,
+        "numerator_variance": 168572.0802844224,
+        "stat": 0.00787266286659503,
         "status": "complete",
-        "value": 1.7109433574437227
+        "value": 1.710974607992779
       },
       "bins": [
         {
           "Sgamma": {
-            "denominator": 32973.47984834293,
-            "denominator_variance": 26652.882049196647,
-            "numerator": 33972.4956448531,
-            "numerator_variance": 75051.77893128482,
-            "stat": 0.009749406739738358,
+            "denominator": 32974.08211220227,
+            "denominator_variance": 26653.06425655674,
+            "numerator": 33972.62909043836,
+            "numerator_variance": 75051.93559196239,
+            "stat": 0.009749206916404978,
             "status": "complete",
-            "value": 1.0302975543104642
+            "value": 1.0302827831518795
           },
           "data": 37030.0,
           "data_variance": 37030.0,
           "gamma_mc": 19272.10489165917,
           "gamma_mc_variance": 1241.1076635540633,
           "index": 0,
-          "other_mc": 3057.504355146899,
-          "other_mc_variance": 38021.77893128481
+          "other_mc": 3057.370909561643,
+          "other_mc_variance": 38021.9355919624
         },
         {
           "Sgamma": {
-            "denominator": 24487.342192106167,
-            "denominator_variance": 15452.880289703655,
-            "numerator": 25090.55170587964,
-            "numerator_variance": 47659.93279450943,
-            "stat": 0.010321735535518257,
+            "denominator": 24487.789455824804,
+            "denominator_variance": 15453.008306095857,
+            "numerator": 25090.10875253327,
+            "numerator_variance": 47660.22515260232,
+            "stat": 0.010321487337102917,
             "status": "complete",
-            "value": 1.0246335232726043
+            "value": 1.0245967198384742
           },
           "data": 27184.0,
           "data_variance": 27184.0,
           "gamma_mc": 14312.187534187038,
           "gamma_mc_variance": 941.8987472111282,
           "index": 1,
-          "other_mc": 2093.4482941203623,
-          "other_mc_variance": 20475.932794509426
+          "other_mc": 2093.8912474667286,
+          "other_mc_variance": 20476.22515260232
         },
         {
           "Sgamma": {
-            "denominator": 14031.817056644304,
-            "denominator_variance": 5739.904752917753,
-            "numerator": 13880.31952930931,
-            "numerator_variance": 23699.98937339311,
-            "stat": 0.012202337352840969,
+            "denominator": 14032.073349165837,
+            "denominator_variance": 5739.971112184977,
+            "numerator": 13881.02298825413,
+            "numerator_variance": 23699.925261050514,
+            "stat": 0.012202190429994285,
             "status": "complete",
-            "value": 0.9892032851680277
+            "value": 0.9892353498194415
           },
           "data": 15048.0,
           "data_variance": 15048.0,
           "gamma_mc": 8201.216595275771,
           "gamma_mc_variance": 536.7425712927943,
           "index": 2,
-          "other_mc": 1167.6804706906896,
-          "other_mc_variance": 8651.989373393108
+          "other_mc": 1166.9770117458702,
+          "other_mc_variance": 8651.925261050514
         },
         {
           "Sgamma": {
-            "denominator": 12361.710027715166,
-            "denominator_variance": 4637.939229625973,
-            "numerator": 11964.493429512684,
-            "numerator_variance": 14512.640665961919,
-            "stat": 0.011108650450450966,
+            "denominator": 12361.935815567207,
+            "denominator_variance": 4637.997420446235,
+            "numerator": 11965.008596735646,
+            "numerator_variance": 14512.47893053268,
+            "stat": 0.011108479425977884,
             "status": "complete",
-            "value": 0.9678671804053067
+            "value": 0.9678911762078787
           },
           "data": 12794.0,
           "data_variance": 12794.0,
           "gamma_mc": 7225.084322010803,
           "gamma_mc_variance": 479.1188039572715,
           "index": 3,
-          "other_mc": 829.506570487315,
-          "other_mc_variance": 1718.6406659619186
+          "other_mc": 828.9914032643528,
+          "other_mc_variance": 1718.4789305326788
         },
         {
           "Sgamma": {
-            "denominator": 8023.851758816617,
-            "denominator_variance": 2156.3610886713477,
-            "numerator": 6970.340574070429,
-            "numerator_variance": 7647.72534538734,
-            "stat": 0.012002571753840948,
+            "denominator": 8023.9983152598315,
+            "denominator_variance": 2156.392996285134,
+            "numerator": 6971.10962005854,
+            "numerator_variance": 7647.515348274532,
+            "stat": 0.012002426115854385,
             "status": "complete",
-            "value": 0.8687025612619789
+            "value": 0.8687825378528637
           },
           "data": 7366.0,
           "data_variance": 7366.0,
           "gamma_mc": 4689.723785365315,
           "gamma_mc_variance": 270.97492426250415,
           "index": 4,
-          "other_mc": 395.6594259295707,
-          "other_mc_variance": 281.72534538734044
+          "other_mc": 394.8903799414602,
+          "other_mc_variance": 281.51534827453156
         }
       ],
       "group": "Nb1"
@@ -374,102 +374,102 @@
       "Q": {
         "denominator": 6722.72477043706,
         "denominator_variance": 394.99362501212295,
-        "numerator": 11095.538970809183,
-        "numerator_variance": 24325.811901635127,
-        "stat": 0.02370755007882886,
+        "numerator": 11095.699965531876,
+        "numerator_variance": 24325.941481311762,
+        "stat": 0.023707625118123472,
         "status": "complete",
-        "value": 1.6504526586602823
+        "value": 1.6504766064981296
       },
       "bins": [
         {
           "Sgamma": {
-            "denominator": 4097.024876325039,
-            "denominator_variance": 3859.033573730215,
-            "numerator": 4226.943455555063,
-            "numerator_variance": 10784.73767008869,
-            "stat": 0.029786102242818874,
+            "denominator": 4097.08432358448,
+            "denominator_variance": 3859.0669794590785,
+            "numerator": 4226.70541957104,
+            "numerator_variance": 10784.817740443246,
+            "stat": 0.02978520385167256,
             "status": "complete",
-            "value": 1.0317104687308023
+            "value": 1.0316374000994823
           },
           "data": 4816.0,
           "data_variance": 4816.0,
           "gamma_mc": 2482.3643712693383,
           "gamma_mc_variance": 145.23510233289073,
           "index": 0,
-          "other_mc": 589.0565444449362,
-          "other_mc_variance": 5968.737670088691
+          "other_mc": 589.2945804289602,
+          "other_mc_variance": 5968.817740443247
         },
         {
           "Sgamma": {
-            "denominator": 2909.8587137474774,
-            "denominator_variance": 2028.4092475332116,
-            "numerator": 2833.546560751226,
-            "numerator_variance": 8669.266431518394,
-            "stat": 0.03536966987039336,
+            "denominator": 2909.900935391503,
+            "denominator_variance": 2028.4284716067864,
+            "numerator": 2833.402339015787,
+            "numerator_variance": 8669.381097398431,
+            "stat": 0.03536895848399407,
             "status": "complete",
-            "value": 0.9737746191470676
+            "value": 0.9737109275971199
           },
           "data": 3310.0,
           "data_variance": 3310.0,
           "gamma_mc": 1763.067058287809,
           "gamma_mc_variance": 103.28084333035196,
           "index": 1,
-          "other_mc": 476.45343924877375,
-          "other_mc_variance": 5359.266431518394
+          "other_mc": 476.597660984213,
+          "other_mc_variance": 5359.381097398431
         },
         {
           "Sgamma": {
-            "denominator": 1682.8523383470094,
-            "denominator_variance": 748.9389606768414,
-            "numerator": 1760.1758226196448,
-            "numerator_variance": 2221.9475004532733,
-            "stat": 0.032770498225478104,
+            "denominator": 1682.8767562996893,
+            "denominator_variance": 748.9474366418744,
+            "numerator": 1760.1155477677607,
+            "numerator_variance": 2221.9642361854785,
+            "stat": 0.03276973245017774,
             "status": "complete",
-            "value": 1.0459478722587074
+            "value": 1.0458968793638246
           },
           "data": 1911.0,
           "data_variance": 1911.0,
           "gamma_mc": 1019.6307840256544,
           "gamma_mc_variance": 60.42875022792632,
           "index": 2,
-          "other_mc": 150.82417738035508,
-          "other_mc_variance": 310.9475004532735
+          "other_mc": 150.88445223223937,
+          "other_mc_variance": 310.96423618547846
         },
         {
           "Sgamma": {
-            "denominator": 1458.8956853403924,
-            "denominator_variance": 592.1575132389654,
-            "numerator": 1463.7588781639142,
-            "numerator_variance": 1738.5186069476965,
-            "stat": 0.0331195818909909,
+            "denominator": 1458.916853713278,
+            "denominator_variance": 592.1647334476029,
+            "numerator": 1464.087632357693,
+            "numerator_variance": 1738.465391973311,
+            "stat": 0.03312055217135207,
             "status": "complete",
-            "value": 1.0033334753624876
+            "value": 1.0035442586267027
           },
           "data": 1595.0,
           "data_variance": 1595.0,
           "gamma_mc": 883.9367052943028,
           "gamma_mc_variance": 56.16924282050485,
           "index": 3,
-          "other_mc": 131.24112183608565,
-          "other_mc_variance": 143.51860694769658
+          "other_mc": 130.91236764230678,
+          "other_mc_variance": 143.46539197331097
         },
         {
           "Sgamma": {
-            "denominator": 946.9073570492646,
-            "denominator_variance": 266.39654275302064,
-            "numerator": 811.1142537193338,
-            "numerator_variance": 911.3416926270754,
-            "stat": 0.03513412666063586,
+            "denominator": 946.9210965429265,
+            "denominator_variance": 266.4000759022932,
+            "numerator": 811.3890268195933,
+            "numerator_variance": 911.3130153112929,
+            "stat": 0.03513521506160479,
             "status": "complete",
-            "value": 0.8565930422664717
+            "value": 0.8568707886875248
           },
           "data": 870.0,
           "data_variance": 870.0,
           "gamma_mc": 573.7258515599565,
           "gamma_mc_variance": 29.879686300449038,
           "index": 4,
-          "other_mc": 58.88574628066624,
-          "other_mc_variance": 41.341692627075446
+          "other_mc": 58.610973180406745,
+          "other_mc_variance": 41.31301531129297
         }
       ],
       "group": "Nb2plus"
@@ -479,7 +479,7 @@
   "provenance": {
     "campaign_year": "2025",
     "hist_input": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2025/hists_background_estimation.json",
-    "hist_input_sha256": "4c1e9b5734a2356f995925e3252e76721ee655156c481c7babddb1b0144b6be3",
+    "hist_input_sha256": "b1016bc2db943c3f2b79d0d6d58b513160afc9df8eeeadab5fd5b801fedbb84a",
     "histogram_provenance": {
       "intermediate_root_reread": false,
       "regions": [

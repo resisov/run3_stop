@@ -8,6 +8,19 @@ The existing `calculation.sub` submitted only 2025 as **1115053.0** on the
 EOS schedd `bigbird24.cern.ch`, using the existing py38 runtime and workday.
 2024 is awaiting its separate promotion and is not included in this job.
 
+Calculation 1115053.0 completed with ExitCode=0 (142 seconds worker wall time).
+All five derived products matched the new recorded hashes; four calculation
+commands exited successfully. Existing local plot commands completed, with
+TF mechanical residual 1.36e-16. The obsolete 48 per-category Low-dM TF PNG/PDF
+files for 2025 were removed after verifying the new combined TF figures.
+They remain recoverable from Git history. Large generated `tf_inputs.json`
+files are no longer tracked in Git; the actual EOS/local products remain.
+Final 2025 audit **1115054.0** completed with ExitCode=0 (96 seconds worker
+wall time), verified 84 artifacts and exported all RZ covariance/GNN response
+products. The campaign state is `partial`, with `audited_years=[2025]` and
+`pending_years=[2024]`; this is not a failed 2025 calculation. Forty regression
+tests passed. The full SR/CR histogram plotting step remains with the main task.
+
 The existing runner's `--replace-stale` option retains the previous products
 while recalculating in Condor worker scratch. It retains final relative
 provenance paths, checks the completed products and copies, then replaces the

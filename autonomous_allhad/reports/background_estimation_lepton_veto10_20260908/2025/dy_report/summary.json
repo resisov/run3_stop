@@ -2,8 +2,8 @@
   "combined": {
     "highdm": {
       "Nb1": {
-        "RZ": 0.6499250269711674,
-        "RZ_stat": 0.0452938576667959,
+        "RZ": 0.6502015346870776,
+        "RZ_stat": 0.04529417605578557,
         "channels": [
           "DY2E",
           "DY2M"
@@ -11,8 +11,8 @@
         "status": "complete"
       },
       "Nb2plus": {
-        "RZ": 0.8142901187990683,
-        "RZ_stat": 0.08984031237320733,
+        "RZ": 0.8149990713226877,
+        "RZ_stat": 0.08986488123723618,
         "channels": [
           "DY2E",
           "DY2M"
@@ -22,8 +22,8 @@
     },
     "lowdm": {
       "Nb1": {
-        "RZ": 0.5660578059402085,
-        "RZ_stat": 0.011476550342892132,
+        "RZ": 0.5661295092356029,
+        "RZ_stat": 0.01147641872623233,
         "channels": [
           "DY2E",
           "DY2M"
@@ -31,8 +31,8 @@
         "status": "complete"
       },
       "Nb2plus": {
-        "RZ": 0.5774138544076456,
-        "RZ_stat": 0.029859431195611005,
+        "RZ": 0.5778145207640438,
+        "RZ_stat": 0.029864397983592944,
         "channels": [
           "DY2E",
           "DY2M"
@@ -62,7 +62,7 @@
           ]
         },
         "hist_input": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2025/hists_background_estimation.json",
-        "hist_input_sha256": "4c1e9b5734a2356f995925e3252e76721ee655156c481c7babddb1b0144b6be3",
+        "hist_input_sha256": "b1016bc2db943c3f2b79d0d6d58b513160afc9df8eeeadab5fd5b801fedbb84a",
         "intermediate_root_reread": false,
         "mass_windows": {
           "off": [
@@ -82,7 +82,7 @@
         }
       },
       "schema_version": "dy_estimation_measurement_2025_v3",
-      "sha256": "bdc6d31d3095a7e4d33de38c261f19d177ce3633f89efa11eeafd451f12f8e63",
+      "sha256": "ba137b88a1ba569b027569d6e2b006c8fdf6679410cdd7757bc5f44485c26620",
       "summary": {
         "candidate_events": 0,
         "completed_partitions": 0,

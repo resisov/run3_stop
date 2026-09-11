@@ -1,11 +1,11 @@
 {
-  "status": "verified",
+  "status": "verified_mixed_update",
   "source": "../background_estimation_lepton_veto10_20260908",
-  "source_campaign_state_sha256": "1896e05821ba60874bd75a87820fce9754e8081f8c0c7f5eaf6260d085cc28a2",
+  "source_campaign_state_sha256": "ac71f20442eca604b9f4e1920af74b0fc594dfda3c7174cf22db73e942639f55",
   "tf_layout": "categories_overlaid_per_background",
-  "factor_values_changed": false,
+  "factor_values_changed": true,
   "retired_presentation_copies_removed": 96,
-  "original_validated_campaign_preserved": true,
+  "original_validated_campaign_preserved": false,
   "files": [
     {
       "path": "2024/dy_report/highdm/mll_highdm_dy2e_nb1.pdf",
@@ -265,95 +265,95 @@
     },
     {
       "path": "2025/dy_report/highdm/mll_highdm_dy2e_nb1.pdf",
-      "sha256": "db787adbdf1fb05f37c912eaef6fd7d6117c633d84392be5783f7b944e705025"
+      "sha256": "53f5089ac56c51d5e8d75690deb0f25f1479b1cb74ecd85446a178867b1647d4"
     },
     {
       "path": "2025/dy_report/highdm/mll_highdm_dy2e_nb1.png",
-      "sha256": "40c0e1224457ff32759c77804aa9736986d3d477dc94c5ed01e4bfa3185f058b"
+      "sha256": "467f776f0ab807cbd9fad241cea08c97b2cf081378ca4864fdaab0cb011b93b8"
     },
     {
       "path": "2025/dy_report/highdm/mll_highdm_dy2e_nb1_post.pdf",
-      "sha256": "99e461ffb712fccf4bbbe4ad6fb9eceb81395cfd19fc57a4ec6448e4573f199d"
+      "sha256": "f3ec3b460d2f9267b3e510967f3f39ac727f9f4c2d11e47c5fe7576870c80d83"
     },
     {
       "path": "2025/dy_report/highdm/mll_highdm_dy2e_nb1_post.png",
-      "sha256": "9594801a367fc54bdf3ff5b081e0dd6bc5fdd20e638b4d583bf56f814cffe1af"
+      "sha256": "74716c3ce43ce2668b6bfbf1cf3a5f8d275ece02885bf5636b70cbbaabd0f4aa"
     },
     {
       "path": "2025/dy_report/highdm/mll_highdm_dy2e_nb2plus.pdf",
-      "sha256": "a3544eedb6488c9b85cf75c5bfbb876910e63ba1459a3369ac1b48ebf8ce8b76"
+      "sha256": "f57a027104a778c6386cdb678a19604eca54e8c66f857d9574ef485d09f25b80"
     },
     {
       "path": "2025/dy_report/highdm/mll_highdm_dy2e_nb2plus.png",
-      "sha256": "db734228d401b371ff7075aad61c0870c1da832f887d693877619d078c823b01"
+      "sha256": "88f7e62416de0c5925e0d85a7f12fa88806e852ecd4ec3c27bdc8e39c1c801d6"
     },
     {
       "path": "2025/dy_report/highdm/mll_highdm_dy2e_nb2plus_post.pdf",
-      "sha256": "225c46606a1c7a95d75267b976de6913c3bb90f837052d0ce25756790cf45a76"
+      "sha256": "06ff6c9e0d75b59e3937a009b8fe3b646428b5113933f6965dd35cf3b1cb9356"
     },
     {
       "path": "2025/dy_report/highdm/mll_highdm_dy2e_nb2plus_post.png",
-      "sha256": "d9d9c937e5d9e4f8832dbe997089682a3c039a946bca83b87d359534904c6d3a"
+      "sha256": "692fab9b05f069369ad7b16dc3e97bf45d6593605e7e52f661e203d28be544fa"
     },
     {
       "path": "2025/dy_report/highdm/mll_highdm_dy2m_nb1.pdf",
-      "sha256": "0478420bfed081aae910a07d3df07db684edc81f799d5ff1441910eb5c3fdbac"
+      "sha256": "6f69a6e4d6d77b0ae3a112e029d69b54e5f17873c24df4e319aab4601b106110"
     },
     {
       "path": "2025/dy_report/highdm/mll_highdm_dy2m_nb1.png",
-      "sha256": "1f9adb90d882750c66a6d32cbe38f95883519b485f62116cae5fa659f78db84d"
+      "sha256": "1581a4f1d800e8b2ee4a3ae6de9e47153d451fafe0b33edb9c66d03ab5df9a9b"
     },
     {
       "path": "2025/dy_report/highdm/mll_highdm_dy2m_nb1_post.pdf",
-      "sha256": "af6da243569c43a2ff6b67a4da38792a226f3a51ef1ccef3526bcf3f0dfb808c"
+      "sha256": "d0f9daece3cb2b097ad5b076dfca9695e85749d4f94e9123f525262176370e71"
     },
     {
       "path": "2025/dy_report/highdm/mll_highdm_dy2m_nb1_post.png",
-      "sha256": "a6b4bf62046e6a8caa82ce1b9f21a0d244e5b36cce073a69348177a029bfd32b"
+      "sha256": "a9a4040badc47349a6f8fc29c53def9754248bdbff5d2b4e25c092b823d9fe22"
     },
     {
       "path": "2025/dy_report/highdm/mll_highdm_dy2m_nb2plus.pdf",
-      "sha256": "c39d1266a03b36e590c9728a063b8c2cc2fc54f2cd844fcd1039b7fdce109e36"
+      "sha256": "65678815858b4e229a21be16b93f74e70c2966f5a0353226331e3d1b96de890f"
     },
     {
       "path": "2025/dy_report/highdm/mll_highdm_dy2m_nb2plus.png",
-      "sha256": "aad0d4205d782d766022b1f74e70a5037226b0c80f6f22bbbfc1e6b69d5d90de"
+      "sha256": "42acf5cebfd7261125dc9c1ba59d381afbcd70ef3fad7774a0dfc2fa87e57599"
     },
     {
       "path": "2025/dy_report/highdm/mll_highdm_dy2m_nb2plus_post.pdf",
-      "sha256": "0fd1300ecb7b58a6bf48868e2008133b00b34572222f381ab8446b3a5a4d006e"
+      "sha256": "61a3f3312ae76c619c967a8905c42d720c35c86e1f984867ed8cf3a75e144e2b"
     },
     {
       "path": "2025/dy_report/highdm/mll_highdm_dy2m_nb2plus_post.png",
-      "sha256": "20e01da59e749025a970426f5809b7ea7a12cd1dffd64aa9902d479045cc2ed5"
+      "sha256": "42742bcd224baaf7c51189180d7fe9ff99759db5cd0acd6b1333bfb7fa057cd6"
     },
     {
       "path": "2025/dy_report/highdm/rt_highdm.pdf",
-      "sha256": "06930b20427499938b5a26040892b38846128887273900f91ae4b3a7cfac7538"
+      "sha256": "c9340ced665fd56ed011dd8c1bfa0e2d72cdb43404590d0013bc4a10f4fc8fb3"
     },
     {
       "path": "2025/dy_report/highdm/rt_highdm.png",
-      "sha256": "5eae60981c6ceef5ed21f23ca6ffc57e78f5a4df9da2ab6b255303fa67ed680f"
+      "sha256": "ee97c95ade3a36fcafc906dfc8bc358fcaaf65df04157e8465b650c7f9fa7901"
     },
     {
       "path": "2025/dy_report/highdm/rz_highdm.pdf",
-      "sha256": "0ac421a968753e76c7ebe092681f9f91ee56e6a9aa52d9089fdcfaffda0ca930"
+      "sha256": "9225914ec6acef7ae1e6586a524e6ac09067761911137aea4c169ac4b8798887"
     },
     {
       "path": "2025/dy_report/highdm/rz_highdm.png",
-      "sha256": "cf664b7b0938df407fc36ef83e051741db020136ffc27a812e20359409863ef8"
+      "sha256": "3978f1037975bf207d1e6edba79fe1d03b2fbbcd0e11d0c4aad64e23049d3c84"
     },
     {
       "path": "2025/dy_report/lowdm/mll_lowdm_dy2e_nb1.pdf",
-      "sha256": "0af015dce908bd459d96571d95470cf257d5a98cb286814f413f5f65e09c5182"
+      "sha256": "fde143a9eecc5ba613791cd98616e1c8c06cdc56a92c99099d77ca58b203e336"
     },
     {
       "path": "2025/dy_report/lowdm/mll_lowdm_dy2e_nb1.png",
-      "sha256": "02d052638854b8859a3a2f1b3424b25ba5f5e62d983eb812bed35cfd75267037"
+      "sha256": "f86017bf67bed7581190e55f32ca579d7827278709a6fcb8729f8a7098bb66a7"
     },
     {
       "path": "2025/dy_report/lowdm/mll_lowdm_dy2e_nb1_post.pdf",
-      "sha256": "800f5f5330edf98f63b1832ee0a012aea41b708a7ae6d1afc6ce06700e485ef7"
+      "sha256": "64b2682485df10e3fd5c75afdf6c78a28e060cd410df566ccd5331abf566f5b9"
     },
     {
       "path": "2025/dy_report/lowdm/mll_lowdm_dy2e_nb1_post.png",
@@ -361,95 +361,95 @@
     },
     {
       "path": "2025/dy_report/lowdm/mll_lowdm_dy2e_nb2plus.pdf",
-      "sha256": "327ba9034349e7818cf06dc06e8a2c4354d13c730d03aa34aebdac470ba7984e"
+      "sha256": "3396a7e65b044ced898b17a330023d0e829078b81a6a8bb6db012cdf3ddbdc37"
     },
     {
       "path": "2025/dy_report/lowdm/mll_lowdm_dy2e_nb2plus.png",
-      "sha256": "83842512374f908a0b9adfca2b55afa9a1bcf72202db90f792ac439d93eec9c5"
+      "sha256": "032323c108ed9059b4a05cbad6f1195c5225319bd90a23ff2ac64408ca855b08"
     },
     {
       "path": "2025/dy_report/lowdm/mll_lowdm_dy2e_nb2plus_post.pdf",
-      "sha256": "a86041d5cdef9401446ee291b64672ab8c4fbddd68eed6353b690e871cc71a57"
+      "sha256": "6bbb766d7e26c0d6526d38afd205908355a0dd217ee1285c5d32ee8694704cf2"
     },
     {
       "path": "2025/dy_report/lowdm/mll_lowdm_dy2e_nb2plus_post.png",
-      "sha256": "25b6c4373492f977bb1c6711bb94b965ca1c5bb79c9ca329c2567cd295372a65"
+      "sha256": "92e4aaa3220de8f2bd3f7da603fc31fac3dc14d7ec1bfbc19ff44eef778f521e"
     },
     {
       "path": "2025/dy_report/lowdm/mll_lowdm_dy2m_nb1.pdf",
-      "sha256": "bf8cedb288b2619dd1d14b3770f7b8c2a9dadb7d459f5ae1f52c47c3495dc99c"
+      "sha256": "32d415cfce4d1b19b7f54f291576ce3d580113d0031db03b81c41be184664dea"
     },
     {
       "path": "2025/dy_report/lowdm/mll_lowdm_dy2m_nb1.png",
-      "sha256": "40b3872692e3d26c5c399d1a53ee70f9255c1d21f838cd461479f26be908e3ce"
+      "sha256": "0c258005efa5f626beb46c7bb7f3c651ef546978ac8ce6623318f6b47cdfe86c"
     },
     {
       "path": "2025/dy_report/lowdm/mll_lowdm_dy2m_nb1_post.pdf",
-      "sha256": "0ce5087329af977ab142f074079b2a9c8b39594474755fff187adeb36a8641ee"
+      "sha256": "fbdb2c5ab36b18bbc8fc4000ebe68936bec07b95f682f4b5dea9f2bfa7b68992"
     },
     {
       "path": "2025/dy_report/lowdm/mll_lowdm_dy2m_nb1_post.png",
-      "sha256": "8d88cd5688d7d5ba39a5d7115392a0527432edf5d943ed07b83b1c9251071cff"
+      "sha256": "1c095c863eeb029d36a2b1cb6f2ab4b261e0b609b085471f14a39f9f6d18c703"
     },
     {
       "path": "2025/dy_report/lowdm/mll_lowdm_dy2m_nb2plus.pdf",
-      "sha256": "78319eaa0244d92d5a6d184b097d110596e4c95d8a677d410f9e24c1d4f136fe"
+      "sha256": "23a193ee94b4906f8bc6a77980b540d610598f95bb8dd21b9841e3d6f31349ee"
     },
     {
       "path": "2025/dy_report/lowdm/mll_lowdm_dy2m_nb2plus.png",
-      "sha256": "a30ab5b8d23773a4355fe72391f0e628299d46ea24413ac5bdc2edd06b9f9c41"
+      "sha256": "cffa03882a02eba838434ff6753386c170e1ee3af09fa17494bcbc6287133dd5"
     },
     {
       "path": "2025/dy_report/lowdm/mll_lowdm_dy2m_nb2plus_post.pdf",
-      "sha256": "ab22349707bf6dc4679f6d22820dbeaca85624d6f0ea18c748673583f74564fa"
+      "sha256": "cc31c273e836c414966bbaa799ff5f011ba0471dcd059f79f51b993aea60e1cc"
     },
     {
       "path": "2025/dy_report/lowdm/mll_lowdm_dy2m_nb2plus_post.png",
-      "sha256": "2dba8c4a07dcd8485880b75e1c51137cad23c23aeef8be77023754ce83057595"
+      "sha256": "e57f9fb5f08301a191fb5618a73daea26f914ebea27dc2f9fd307661f607c2ad"
     },
     {
       "path": "2025/dy_report/lowdm/rt_lowdm.pdf",
-      "sha256": "fdf373d4613f38ed4c896dce2ac43da454b9990b57bb6610a010175eb52e35c7"
+      "sha256": "a976d256bda7ca12be940df6844e3835b185b0a65b6db6fa01d5f946ae66602a"
     },
     {
       "path": "2025/dy_report/lowdm/rt_lowdm.png",
-      "sha256": "5d7253ea96fa3d99b284d0e1f793053f28152ac19b9d55e7525843184667bcb7"
+      "sha256": "d1c068e6e85c73f4ccf304f2823fc41ae755ab6d6e0bf99fefb196f564420912"
     },
     {
       "path": "2025/dy_report/lowdm/rz_lowdm.pdf",
-      "sha256": "3abdd4d4f550de7f8d34e93b69804af4c02cb722a662ff3b3d86825cac101958"
+      "sha256": "8b9755f094d32ec01ac22a811fb049ff912d0bace76e93ae5c98c9082ab48630"
     },
     {
       "path": "2025/dy_report/lowdm/rz_lowdm.png",
-      "sha256": "58f90a0544d18f82087b4be6455cf68aa760f4dd8b3e9cb1775ef604ca53eaf0"
+      "sha256": "efe9a239483e40101ce5ad2bff3a1a4373b0e1fa1ae350b0734af59c9beb7f06"
     },
     {
       "path": "2025/sgamma/photon_q_normalization.pdf",
-      "sha256": "645d0b2fa23c079d2098d8f48b1a7e15a679f1ba85e00ddfeec40abe1a84fd48"
+      "sha256": "fc9998b110c010b612af2515b3c5ff78c44b79191814289e3d2b36480d94722e"
     },
     {
       "path": "2025/sgamma/photon_q_normalization.png",
-      "sha256": "5e592c4b67b9fd4afa9840a576a715d1add622868cb2dc2f3a921f105f5d4f90"
+      "sha256": "7e303368cbd5d609d36efec64956d01cfb471ccfba16bfa7bbfeb5e00ec22db2"
     },
     {
       "path": "2025/sgamma/sgamma_highdm.pdf",
-      "sha256": "daea2e02d123a519229f5b98b93b26d66390b8d8f2221875d3cf4aec76af2cb2"
+      "sha256": "3dfbccced3efb6c5e1c52868b86a8431e60c0b616a454e03280b6f6f5d88656b"
     },
     {
       "path": "2025/sgamma/sgamma_highdm.png",
-      "sha256": "88d29d96d910901c76cc5ea7d8d65a60a58149e444d954b1bce7ce16380250bb"
+      "sha256": "7b6de763bf366f5ff6806e108b45117d129f45e01a88170bf1240eb729b72251"
     },
     {
       "path": "2025/sgamma/sgamma_lowdm.pdf",
-      "sha256": "0336b9821fcf260505e884dc40965e93b7da32ed96e64a19301534e873ed2338"
+      "sha256": "7123a3f61e1c106469b76629ac0946cc2f89c1e393166d77175a4066d90f3af9"
     },
     {
       "path": "2025/sgamma/sgamma_lowdm.png",
-      "sha256": "607a37f9e9aa5b9876c7c2d258dc1c13391c55e063b0c00db74cd922c2f1fc31"
+      "sha256": "9d2c4314c10a5773a869f56f4e4498d66cfc876a9293da808483dfb8f92c9496"
     },
     {
       "path": "2025/tf/gnn/transfer_factor_qcd_qcdcr_lowdm_gnn.pdf",
-      "sha256": "2f50e5ed54ea74a69a828f9e02192d6f7abab066ac4de9c8d0ed9fd4b790e387"
+      "sha256": "510555d962ef5cb3897dce7fec84fe44645b83b6db97b7f729f4cbff0e251b98"
     },
     {
       "path": "2025/tf/gnn/transfer_factor_qcd_qcdcr_lowdm_gnn.png",
@@ -457,15 +457,15 @@
     },
     {
       "path": "2025/tf/gnn/transfer_factor_top_llcr_lowdm_gnn.pdf",
-      "sha256": "c985b6fc815e21c45f2592ee946ad1a6e9d666030593bd3723af565d4ba096c3"
+      "sha256": "2345bf7a5ad7217cec9ae4c0b96a586a07e19e40c3697ff144e075dad06bdbfc"
     },
     {
       "path": "2025/tf/gnn/transfer_factor_top_llcr_lowdm_gnn.png",
-      "sha256": "d95e0be83dc943868946e4fba9675079a60315138aba530d187019300f0287d3"
+      "sha256": "86dfa5f573527bbce3fa1483813f8a67c561959d2938ce08e3618ee7449e122a"
     },
     {
       "path": "2025/tf/gnn/transfer_factor_w_llcr_lowdm_gnn.pdf",
-      "sha256": "dc331d449b67d5b41ca7e25e50c3cc5017ced50e52b79aaa5c5fac8daa072dfa"
+      "sha256": "5aa29a0e994024718c2875ef7840c8a02f67a7584040a4ea8e1c318934f75351"
     },
     {
       "path": "2025/tf/gnn/transfer_factor_w_llcr_lowdm_gnn.png",
@@ -473,7 +473,7 @@
     },
     {
       "path": "2025/tf/gnn/transfer_factor_zinv_gcr_lowdm_gnn.pdf",
-      "sha256": "91b6099c994f1a80e36d6b10436ef6011bee7fb0acaa6c1532a3812ff48151a9"
+      "sha256": "6efa68899f4df6ccf79a08c5857a2acb0144c43619afdedb2a54cf93be5d91c9"
     },
     {
       "path": "2025/tf/gnn/transfer_factor_zinv_gcr_lowdm_gnn.png",
@@ -481,7 +481,7 @@
     },
     {
       "path": "2025/tf/transfer_factor_qcd_qcdcr_highdm.pdf",
-      "sha256": "dcc4c38240e31e318ec333bf4b18b5a3b9576ca00de41c75176dc10097dfb427"
+      "sha256": "f2fb04618d761886d887f5fbb84fe99d15c8cc50d55a5701d62271b869f5d58b"
     },
     {
       "path": "2025/tf/transfer_factor_qcd_qcdcr_highdm.png",
@@ -489,15 +489,15 @@
     },
     {
       "path": "2025/tf/transfer_factor_top_llcr_highdm.pdf",
-      "sha256": "4005fcc26a3284e434cf5cdf5fade2bee3e0ca9b25609a02c48a46fcfe7d780c"
+      "sha256": "10d43da3030519697d91306eb3c4f8c1b508db822de07e5804b6c119282d36f2"
     },
     {
       "path": "2025/tf/transfer_factor_top_llcr_highdm.png",
-      "sha256": "751898906e8bba4fc8186a5c368d51eb349821c3ecabad725bae1da8be074cdf"
+      "sha256": "02bb0645aaa564e9f31e9d3c3ea42175d9e5844aed46ca6fc01fff7e70920c65"
     },
     {
       "path": "2025/tf/transfer_factor_w_llcr_highdm.pdf",
-      "sha256": "8511f4bf809a3598ba518541c8637ee4f8f0f6689d711dd1731acccd3f7a63a5"
+      "sha256": "ea5730046a9f6bbdc902ec4b5e9fe624dc26913f2f80cbfa028cdd7ef9216667"
     },
     {
       "path": "2025/tf/transfer_factor_w_llcr_highdm.png",
@@ -505,19 +505,19 @@
     },
     {
       "path": "2025/zgamma/zgamma_double_ratio_highdm.pdf",
-      "sha256": "82ac3b851fe325c12bcc8bba5f06e7378cc6e9f6534eb13270ffb0a9a1b0334a"
+      "sha256": "de899d6865a17b614194a7e3fe7b4510bb255667cd4eb1cbfa95d7870f357287"
     },
     {
       "path": "2025/zgamma/zgamma_double_ratio_highdm.png",
-      "sha256": "11920572eb6cd48595275fcd4ca9f769b8e4ff6ee163705d0a2c6f734ac61165"
+      "sha256": "0cd05e4e9c9226e745b07906bd922320a0e06e246562a17c40a09fa894624cc7"
     },
     {
       "path": "2025/zgamma/zgamma_double_ratio_lowdm.pdf",
-      "sha256": "f10b87f358834c7b0c3c417900e47fdcbeca8abdf8d24d31a8967680de231a8f"
+      "sha256": "ff6c5ca6c188769739ff52f3e8ba43fabb81ba306db541f3e02fb972133c15d3"
     },
     {
       "path": "2025/zgamma/zgamma_double_ratio_lowdm.png",
-      "sha256": "64b14b854b3b37129b857cf505d1f8263926ba46d7e72c577664ee9a8e19ec41"
+      "sha256": "c39546228b8c744d268864dad5a16f1595ce1f14c6ef4183d4febdcf9fd41a36"
     }
   ],
   "tf_rendering": {
@@ -551,7 +551,7 @@
     "2025": {
       "status": "complete",
       "source": "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/tf/transfer_factors_2025_nb_recoil.json",
-      "source_sha256": "86ee464c35a955531f12d674a4d8679fec0490692302fa204a240b78006be268",
+      "source_sha256": "15c84e901644bb6ff038e98640b26c2b99d65262b0909c6953bdbc8fa7d16bb1",
       "plotter_sha256": "c46b7a046fcaff225adf5d395edcc2c23ab7a8ddce119a6bb473957b8d8ae357",
       "campaign_year": "2025",
       "style_reference": "plot_measurement.py: photon trigger scale factor",
@@ -573,8 +573,31 @@
         "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/tf/gnn/transfer_factor_qcd_qcdcr_lowdm_gnn.pdf",
         "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/tf/gnn/transfer_factor_zinv_gcr_lowdm_gnn.png",
         "autonomous_allhad/reports/background_estimation_plots_2024_2025_20260908/2025/tf/gnn/transfer_factor_zinv_gcr_lowdm_gnn.pdf"
+      ],
+      "rendering_origin": "Copied exact canonical figures generated by the existing TF plotter",
+      "canonical_plot_paths": [
+        "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/tf/transfer_factor_top_llcr_highdm.png",
+        "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/tf/transfer_factor_top_llcr_highdm.pdf",
+        "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/tf/transfer_factor_w_llcr_highdm.png",
+        "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/tf/transfer_factor_w_llcr_highdm.pdf",
+        "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/tf/transfer_factor_qcd_qcdcr_highdm.png",
+        "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/tf/transfer_factor_qcd_qcdcr_highdm.pdf",
+        "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/tf/gnn/transfer_factor_top_llcr_lowdm_gnn.png",
+        "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/tf/gnn/transfer_factor_top_llcr_lowdm_gnn.pdf",
+        "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/tf/gnn/transfer_factor_w_llcr_lowdm_gnn.png",
+        "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/tf/gnn/transfer_factor_w_llcr_lowdm_gnn.pdf",
+        "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/tf/gnn/transfer_factor_qcd_qcdcr_lowdm_gnn.png",
+        "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/tf/gnn/transfer_factor_qcd_qcdcr_lowdm_gnn.pdf",
+        "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/tf/gnn/transfer_factor_zinv_gcr_lowdm_gnn.png",
+        "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/tf/gnn/transfer_factor_zinv_gcr_lowdm_gnn.pdf"
       ]
     }
   },
-  "tf_style": "Photon HLT scale factor; shared plot_measurement.py style"
+  "tf_style": "Photon HLT scale factor; shared plot_measurement.py style",
+  "updated_years": [
+    "2025"
+  ],
+  "pending_years": [
+    "2024"
+  ]
 }
