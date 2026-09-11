@@ -3936,7 +3936,7 @@
     "primary_limits_running": 0,
     "timeout_recovery_running": 0
   },
-  "status": "topw_sf_cards_submitted",
+  "status": "topw_sf_combining_cards",
   "topologies": [
     "T2tt",
     "T2bW",
@@ -5605,9 +5605,12 @@
     "schedd": "bigbird24.cern.ch",
     "source_backup": "topw_previous_sources.tar.gz",
     "source_commit": "456fd370",
-    "stage": "background_estimation_and_local_CR_SR_plots_complete; cards_submitted",
+    "stage": "cards_generated; template_validation_and_year_combination_submitted",
     "cards": {
-      "status": "running",
+      "status": "all_six_exit0; exhaustive_template_validation_running_in_combination_jobs",
+      "completed_at_utc": "2026-09-11T11:15:04Z",
+      "generated_cards_per_year": {"T2tt": 205, "T2bW": 354, "T2tb": 365},
+      "generated_cards_total": 1848,
       "cluster": 1115236,
       "schedd": "bigbird24.cern.ch",
       "submitted_at_utc": "2026-09-11T10:46:51Z",
@@ -5634,10 +5637,11 @@
       "request_memory_mb_per_job": 16000,
       "effective_queue_memory_mb_per_job": 18000,
       "last_queue_check": {
-        "utc": "2026-09-11T10:48:40Z",
+        "utc": "2026-09-11T11:23:22Z",
         "idle": 0,
-        "running": 6,
+        "running": 0,
         "held": 0,
+        "history_exit0": 6,
         "validated": 0
       },
       "mass_point_selection": "all_supported_positive_yield_points_in_current_canonical_histograms; max_mstop_1800; no_only_filter",
@@ -5647,7 +5651,8 @@
       "intermediate_ROOT_access": false,
       "old_outputs": "unchanged_until_replacements_validate",
       "git_sync": {
-        "status": "publication_approved",
+        "status": "pushed",
+        "commit": "99e1d359e8f07cb0f58abbe79122425c659614c8",
         "user_approval": "그래 공개해라",
         "destination": "https://github.com/resisov/run3_stop.git",
         "branch": "run3_full_analysis",
@@ -5660,6 +5665,30 @@
         "calculation_blocked": false
       }
     },
+    "combined_cards": {
+      "status": "submitted",
+      "cluster": 1115246,
+      "submitted_at_utc": "2026-09-11T11:52:14Z",
+      "schedd": "bigbird24.cern.ch",
+      "jobs": {"0": "T2tt", "1": "T2bW", "2": "T2tb"},
+      "input_directory": "cards_pending",
+      "output_directory": "combined_pending",
+      "submission_file": "cards/combine.sub",
+      "submission_sha256": "d546f28162f8ad0ded449e05dce06cbed216f9810e434286e70aa534ced94706",
+      "builder_sha256": "fecbc18c05ac5c122018ae5c9bc3b0c6098462804986ab31ed6d4ef93859bb16",
+      "expected_mass_points": {"T2tt": 205, "T2bW": 354, "T2tb": 365},
+      "expected_total": 924,
+      "proxy_seconds_before_submit": 371828,
+      "voms_seconds_before_submit": 343028,
+      "max_runtime_seconds": 28800,
+      "effective_queue_cpus_per_job": 6,
+      "effective_queue_memory_mb_per_job": 18000,
+      "last_queue_check": {"utc": "2026-09-11T11:52:40Z", "idle": 3, "running": 0, "held": 0},
+      "validation": "all six source ROOT files; finite contents and variances; all nominal and Up/Down card references; blinded SR placeholders",
+      "physics_changed": false
+    },
+    "limits": {"status": "waiting_for_validated_combined_cards", "expected_total": 924},
+    "impacts": {"status": "waiting_for_validated_combined_cards", "topology": "T2tt", "mStop": 1200, "mLSP": 500, "asimov_r": [1, 0], "plots": "local_only"},
     "superseded_output_policy": {
       "action": "delete_without_retaining_backup",
       "condition": "replacement_outputs_validated_and_promoted",

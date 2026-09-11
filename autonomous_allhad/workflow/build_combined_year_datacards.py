@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import hashlib
+import math
 import os
 import re
 import shlex
@@ -72,6 +74,113 @@ def read_combine_runtime(path: Path) -> tuple[Path, str]:
     if not re.fullmatch(r"[0-9a-f]{64}", checksum):
         raise ValueError(f"invalid Combine runtime checksum in {path}")
     return archive, checksum
+
+
+def validate_source_templates(card_dir: Path, manifest: dict) -> dict:
+    import ROOT
+
+    ROOT.gROOT.SetBatch(True)
+    ROOT.TH1.AddDirectory(False)
+    path = Path(manifest["template_root"])
+    source = ROOT.TFile.Open(str(path), "READ")
+    if not source or source.IsZombie() or source.TestBit(ROOT.TFile.kRecovered):
+        raise ValueError(f"invalid template ROOT: {path}")
+    channels = manifest["root_summary"]["channels"]
+    available: dict[str, set[str]] = {}
+    histogram_count = 0
+    try:
+        if {key.GetName() for key in source.GetListOfKeys()} != set(channels):
+            raise ValueError(f"template channel set differs from manifest: {path}")
+        for name, metadata in channels.items():
+            if metadata["region"] not in {"SR", "LLCR", "QCDCR", "GCR"}:
+                raise ValueError(f"unexpected likelihood region: {name}")
+            directory = source.GetDirectory(name)
+            names: set[str] = set()
+            observation = None
+            latest_keys = {}
+            for key in directory.GetListOfKeys():
+                previous = latest_keys.get(str(key.GetName()))
+                if previous is None or key.GetCycle() > previous.GetCycle():
+                    latest_keys[str(key.GetName())] = key
+            for key in latest_keys.values():
+                object_name = str(key.GetName())
+                names.add(object_name)
+                hist = key.ReadObj()
+                if not hist or not hist.InheritsFrom("TH1") or hist.GetNbinsX() != 1:
+                    raise ValueError(f"invalid one-bin template: {name}/{object_name}")
+                hist.SetDirectory(0)
+                ROOT.SetOwnership(hist, True)
+                for index in range(hist.GetNcells()):
+                    content = float(hist.GetBinContent(index))
+                    error = float(hist.GetBinError(index))
+                    if not math.isfinite(content) or not math.isfinite(error) or content < 0:
+                        raise ValueError(f"invalid template content: {name}/{object_name}")
+                for index in range(hist.GetSumw2().GetSize()):
+                    variance = float(hist.GetSumw2().At(index))
+                    if not math.isfinite(variance) or variance < 0:
+                        raise ValueError(f"invalid template variance: {name}/{object_name}")
+                if object_name == "data_obs":
+                    observation = float(hist.GetBinContent(1))
+                histogram_count += 1
+                del hist
+            expected = metadata.get("observation", metadata["background_yield"])
+            if metadata["region"] == "SR" and "observation" in metadata:
+                raise ValueError(f"SR observation is not blinded: {name}")
+            if observation is None or not math.isclose(
+                observation, max(float(expected), 1e-9), rel_tol=1e-8, abs_tol=1e-8
+            ):
+                raise ValueError(f"observation/Asimov placeholder mismatch: {name}")
+            available[name] = names
+    finally:
+        source.Close()
+
+    cards = cards_by_mass(card_dir)
+    if set(cards) != set(manifest["mass_points"]):
+        raise ValueError(f"card grid differs from manifest: {card_dir}")
+    shape_references = 0
+    for mass, card in cards.items():
+        rows = [line.split() for line in card.read_text().splitlines() if line.strip()]
+        shapes = [row for row in rows if row[0] == "shapes"]
+        if len(shapes) != 1 or shapes[0][1:3] != ["*", "*"] or shapes[0][4:] != [
+            "$CHANNEL/$PROCESS", "$CHANNEL/$PROCESS_$SYSTEMATIC"
+        ] or stable_path(Path(shapes[0][3])) != stable_path(path):
+            raise ValueError(f"unexpected template mapping: {card}")
+        bins = [row[1:] for row in rows if row[0] == "bin"]
+        processes = [row[1:] for row in rows if row[0] == "process"]
+        observations = [row[1:] for row in rows if row[0] == "observation"]
+        if len(bins) != 2 or set(bins[0]) != set(channels) or len(bins[0]) != len(channels):
+            raise ValueError(f"invalid channel mapping: {card}")
+        if observations != [["-1"] * len(channels)] or len(processes) != 2:
+            raise ValueError(f"invalid observation/process declaration: {card}")
+        columns = list(zip(bins[1], processes[0]))
+        if not len(bins[1]) == len(processes[0]) == len(processes[1]):
+            raise ValueError(f"invalid process columns: {card}")
+        for channel, process in columns:
+            if process not in available.get(channel, set()):
+                raise ValueError(f"missing nominal template: {card}: {channel}/{process}")
+        for row in rows:
+            if len(row) < 2 or row[1] not in {"shape", "lnN"}:
+                continue
+            if len(row[2:]) != len(columns):
+                raise ValueError(f"nuisance column mismatch: {card}: {row[0]}")
+            for (channel, process), value in zip(columns, row[2:]):
+                if value == "-":
+                    continue
+                if any(not math.isfinite(float(x)) or float(x) <= 0 for x in value.split("/")):
+                    raise ValueError(f"invalid nuisance value: {card}: {row[0]}")
+                if row[1] == "shape":
+                    for direction in ("Up", "Down"):
+                        reference = f"{process}_{row[0]}{direction}"
+                        if reference not in available[channel]:
+                            raise ValueError(f"missing shape: {card}: {channel}/{reference}")
+                        shape_references += 1
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(4 * 1024 * 1024), b""):
+            digest.update(chunk)
+    return {"status": "passed", "cards": len(cards), "root_histograms": histogram_count,
+            "shape_references_checked": shape_references, "template_sha256": digest.hexdigest(),
+            "sr_blinded": sum(x["region"] == "SR" for x in channels.values())}
 
 
 def write_condor_limit_submission(
@@ -177,7 +286,8 @@ x509userproxy = {stable_path(DEFAULT_X509_PROXY)}
 request_cpus = 1
 request_memory = 6000MB
 request_disk = 4000MB
-+MaxRuntime = {int(point_timeout) + 600}
++JobFlavour = "workday"
++MaxRuntime = {max(28800, int(point_timeout) + 1800)}
 +JobBatchName = \"{batch_name}\"
 queue mass,card from (
 {rows}
@@ -322,6 +432,15 @@ def main() -> int:
     datacard_dir.mkdir(parents=True, exist_ok=True)
     combined_cards: dict[str, str] = {}
     warnings: list[dict[str, str]] = []
+    source_validation = {}
+    if args.submission_only and (output_dir / "manifest.json").is_file():
+        source_validation = json.loads((output_dir / "manifest.json").read_text()).get("source_validation", {})
+    if not args.submission_only:
+        source_validation = {
+            args.left_label: validate_source_templates(args.left_dir, left_manifest),
+            args.right_label: validate_source_templates(args.right_dir, right_manifest),
+        }
+        print(json.dumps({"source_validation": source_validation}), flush=True)
     if args.submission_only:
         existing = cards_by_mass(datacard_dir)
         if set(existing) != set(left):
@@ -426,6 +545,7 @@ def main() -> int:
                     expect_signal,
                     runtime_archive,
                     runtime_checksum,
+                    extra_environment={"IMPACT_PLOT": "0"},
                 )
             )
     manifest = {
@@ -470,6 +590,7 @@ def main() -> int:
         "impact_submits": impact_submits,
         "impact_mass_key": args.impact_mass_key,
         "combine_cards_warnings": warnings,
+        "source_validation": source_validation,
     }
     write_json(output_dir / "combine_input_manifest.json", manifest)
     write_json(output_dir / "manifest.json", manifest)

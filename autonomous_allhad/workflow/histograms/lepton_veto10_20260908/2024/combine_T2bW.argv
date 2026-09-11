@@ -1,0 +1,12 @@
+python3
+/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/build_combined_year_datacards.py
+--left-dir
+/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/cards_pending/2024/T2bW/cards
+--right-dir
+/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/cards_pending/2025/T2bW/cards
+--output-dir
+/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined_pending/T2bW
+--point-timeout
+7200
+--condor-batch-name
+NPS26012_TopW_T2bW_limits

@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import sys
+import types
 from pathlib import Path
 
 import numpy as np
@@ -17,6 +18,58 @@ SPEC = importlib.util.spec_from_file_location("canonical_card_projection", MODUL
 MODULE = importlib.util.module_from_spec(SPEC)
 assert SPEC.loader is not None
 SPEC.loader.exec_module(MODULE)
+
+
+@pytest.mark.parametrize("failure", [None, "missing_shape", "nonfinite", "unblinded"])
+def test_combined_card_template_audit(tmp_path, monkeypatch, failure):
+    import build_combined_year_datacards as combined
+
+    class Histogram:
+        def __init__(self, value): self.value = value
+        def InheritsFrom(self, kind): return kind == "TH1"
+        def GetNbinsX(self): return 1
+        def SetDirectory(self, value): pass
+        def GetNcells(self): return 3
+        def GetBinContent(self, index): return self.value if index == 1 else 0.
+        def GetBinError(self, index): return 1.
+        def GetSumw2(self): return types.SimpleNamespace(GetSize=lambda: 3, At=lambda index: 1.)
+
+    class Key:
+        def __init__(self, name, value, cycle=1): self.name, self.value, self.cycle = name, value, cycle
+        def GetName(self): return self.name
+        def GetCycle(self): return self.cycle
+        def ReadObj(self): return Histogram(self.value)
+
+    keys = [Key("Top", 5.), Key("Top_testUp", float("nan") if failure == "nonfinite" else 6.),
+            Key("data_obs", 999., 1), Key("data_obs", 5., 2)]
+    if failure != "missing_shape": keys.append(Key("Top_testDown", 4.))
+    source = types.SimpleNamespace(IsZombie=lambda: False, TestBit=lambda flag: False,
+        GetListOfKeys=lambda: [Key("SR_a", 0.)], Close=lambda: None,
+        GetDirectory=lambda name: types.SimpleNamespace(GetListOfKeys=lambda: keys))
+    monkeypatch.setitem(sys.modules, "ROOT", types.SimpleNamespace(
+        gROOT=types.SimpleNamespace(SetBatch=lambda value: None),
+        TH1=types.SimpleNamespace(AddDirectory=lambda value: None),
+        TFile=types.SimpleNamespace(Open=lambda *args: source, kRecovered=1),
+        SetOwnership=lambda *args: None))
+    monkeypatch.chdir(tmp_path)
+    template = Path("synthetic_template.bin")
+    template.write_bytes(b"synthetic test only")
+    card_dir = tmp_path / "cards"
+    card_dir.mkdir()
+    (card_dir / "datacard_mStop1200_mLSP500.txt").write_text(
+        f"shapes * * {template} $CHANNEL/$PROCESS $CHANNEL/$PROCESS_$SYSTEMATIC\n"
+        "bin SR_a\nobservation -1\nbin SR_a\nprocess Top\nprocess 1\nrate -1\n"
+        "test shape 1\nlumi lnN 1.016\n")
+    channel = {"region": "SR", "background_yield": 5.}
+    if failure == "unblinded": channel["observation"] = 5.
+    manifest = {"template_root": str(template), "mass_points": ["mStop1200_mLSP500"],
+                "root_summary": {"channels": {"SR_a": channel}}}
+    if failure:
+        with pytest.raises(ValueError): combined.validate_source_templates(card_dir, manifest)
+    else:
+        result = combined.validate_source_templates(card_dir, manifest)
+        assert result["cards"] == 1 and result["root_histograms"] == 4
+        assert result["shape_references_checked"] == 2 and result["sr_blinded"] == 1
 
 
 def leaf(value: float) -> dict:
