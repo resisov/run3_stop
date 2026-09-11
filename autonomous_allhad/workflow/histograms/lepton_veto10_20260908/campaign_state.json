@@ -3936,7 +3936,7 @@
     "primary_limits_running": 0,
     "timeout_recovery_running": 0
   },
-  "status": "topw_sf_all_limits_and_impacts_submitted; one_empty_limit_result_detected",
+  "status": "topw_sf_running; targeted_limit_recovery_and_collection_submitted",
   "topologies": [
     "T2tt",
     "T2bW",
@@ -5606,6 +5606,53 @@
     "source_backup": "topw_previous_sources.tar.gz",
     "source_commit": "456fd370",
     "stage": "all_combined_cards_complete; all_924_limits_and_both_impacts_submitted",
+    "last_monitor": {
+      "utc": "2026-09-11T14:41:46Z",
+      "live_queue_status": "available",
+      "schedd_error": null,
+      "schedd_recovered_at_utc": "2026-09-11T14:09:16Z",
+      "current_queue": {"T2tt_running": 4, "T2bW_running": 0, "T2tb_running": 10, "impacts_running": 2, "recovery_running": 2, "recovery_idle": 2, "collection_idle": 3, "held": 0},
+      "ssh_access": true,
+      "eos_access": true,
+      "kerberos_klist_s_exit": 0,
+      "roots_present_at_1409_utc": {"T2tt": 178, "T2bW": 334, "T2tb": 304},
+      "file_counts_are_not_validated_completion": true,
+      "existing_collector_attempt": "60-second bounded collect_limits attempt timed out; no new validation total claimed",
+      "termination_log_snapshot": {
+        "utc": "2026-09-11T14:09:25Z",
+        "T2tt": {"terminated": 180, "exit0": 178, "exit124": 2},
+        "T2bW": {"terminated": 334, "exit0": 333, "exit124": 1},
+        "T2tb": {"terminated": 304, "exit0": 304, "exit124": 0}
+      },
+      "verified_failures": [
+        {"job": "1115252.271", "topology": "T2bW", "mass_point": "mStop200_mLSP100", "exit_code": 0, "reason": "empty limit tree", "retry_submitted": true, "retry_job": "1115315.0"},
+        {"job": "1115252.237", "topology": "T2bW", "mass_point": "mStop1750_mLSP1250", "exit_code": 124, "reason": "text2workspace timeout 900s", "retry_submitted": true, "retry_job": "1115314.0"},
+        {"job": "1115257.63", "topology": "T2tt", "mass_point": "mStop1300_mLSP1", "exit_code": 124, "reason": "text2workspace timeout 900s", "retry_submitted": true, "retry_job": "1115313.0"},
+        {"job": "1115257.109", "topology": "T2tt", "mass_point": "mStop1450_mLSP400", "exit_code": 124, "reason": "text2workspace timeout 900s", "retry_submitted": true, "retry_job": "1115313.1"}
+      ],
+      "impacts": {
+        "r1": {"job": "1115259.0", "execution_event_utc": "2026-09-11T12:59:44Z", "latest_memory_event_utc": "2026-09-11T14:00:00Z", "memory_mb": 3207, "termination_event": false},
+        "r0": {"job": "1115260.0", "execution_event_utc": "2026-09-11T13:00:32Z", "latest_memory_event_utc": "2026-09-11T13:30:43Z", "memory_mb": 3197, "termination_event": false},
+        "parameter_fit_progress": "unavailable_until_worker_access_or_stageout; no completion claimed"
+      },
+      "recovery_blocked_by": null,
+      "approved_configuration": {
+        "user_approval": "승인한다",
+        "git_commit": "1d8af64e468be2b4ec4b1dd9be4f70e112fe7f54",
+        "git_pushed": true,
+        "files": ["autonomous_allhad/workflow/build_combined_year_datacards.py", "autonomous_allhad/tests/test_canonical_card_projection.py", "cards/collect.sub", "cards/collect_T2tt.argv", "cards/collect_T2bW.argv", "cards/collect_T2tb.argv"],
+        "changes": "backward-compatible workspace_timeout option (default 900s; 3600s for three failed points only); existing collect_limits through existing run_batch and py38",
+        "tests_passed": 5,
+        "eos_matches_git_head": true,
+        "eos_builder_sha256": "fecbc18c05ac5c122018ae5c9bc3b0c6098462804986ab31ed6d4ef93859bb16",
+        "local_pending_builder_sha256": "345e9564472b2a34352cef6d37dacae45af677beadfe9442cadeef9ed4714bd0",
+        "sync_performed": true,
+        "synced_file_hashes_verified": 6,
+        "recovery_submitted": true,
+        "collection_submitted": true
+      },
+      "running_jobs_modified": false
+    },
     "cards": {
       "status": "all_six_exit0; all_templates_and_card_shape_references_validated",
       "template_validation": {
@@ -5711,12 +5758,58 @@
       "physics_changed": false
     },
     "limits": {
-      "status": "all_submitted; one_empty_result_needs_recovery_after_exit_verification",
+      "status": "all_submitted; targeted_recovery_and_batch_collection_in_progress",
       "expected_total": 924,
       "submitted_total": 924,
-      "last_queue_check": {"utc": "2026-09-11T12:56:15Z", "running": 546, "idle": 376, "held": 0, "absent_from_queue_not_yet_counted_complete": 2},
-      "invalid_results": [{"topology": "T2bW", "mass_point": "mStop200_mLSP100", "job": "1115252.271", "reason": "limit tree has zero entries; expected five quantiles", "observed_at_utc": "2026-09-11T12:54:15Z", "path": "combined_pending/T2bW/limits/higgsCombine_mStop200_mLSP100.AsymptoticLimits.mH120.root", "history_query": "timed_out_after_25_seconds; exit_code_not_confirmed", "retry_submitted": false}],
+      "last_queue_check": {"utc": "2026-09-11T14:41:46Z", "running": 14, "idle": 0, "held": 0, "absent_from_queue_not_yet_counted_complete": 910},
+      "invalid_results": [{"topology": "T2bW", "mass_point": "mStop200_mLSP100", "job": "1115252.271", "reason": "limit tree has zero entries; expected five quantiles", "observed_at_utc": "2026-09-11T12:54:15Z", "path": "combined_pending/T2bW/limits/higgsCombine_mStop200_mLSP100.AsymptoticLimits.mH120.root", "termination_log_exit_code": 0, "retry_submitted": true, "retry_job": "1115315.0"}],
       "output_directory": "combined_pending",
+      "recovery": {
+        "submitted_confirmed_by_utc": "2026-09-11T14:41:54Z",
+        "schedd": "bigbird24.cern.ch",
+        "job_flavour": "workday",
+        "max_runtime_seconds": 28800,
+        "point_timeout_seconds": 7200,
+        "proxy_seconds_before_submit": 362081,
+        "voms_seconds_before_submit": 333281,
+        "git_commit": "1d8af64e468be2b4ec4b1dd9be4f70e112fe7f54",
+        "jobs": {
+          "1115313.0": {"topology": "T2tt", "mass_point": "mStop1300_mLSP1", "workspace_timeout_seconds": 3600},
+          "1115313.1": {"topology": "T2tt", "mass_point": "mStop1450_mLSP400", "workspace_timeout_seconds": 3600},
+          "1115314.0": {"topology": "T2bW", "mass_point": "mStop1750_mLSP1250", "workspace_timeout_seconds": 3600},
+          "1115315.0": {"topology": "T2bW", "mass_point": "mStop200_mLSP100", "workspace_timeout_seconds": 900, "r_abs_accuracy": 1e-7}
+        },
+        "submission_files": [
+          "combined_pending/T2tt/recovery_timeout_1/limits_eossubmit.sub",
+          "combined_pending/T2bW/recovery_timeout_1/limits_eossubmit.sub",
+          "combined_pending/T2bW/recovery_precision_1/limits_eossubmit.sub"
+        ],
+        "submission_sha256": [
+          "fa5d5467b9fa5511afb89f40c4390c832006e27070e34918083a639cd833bf4a",
+          "8a60e1fe4932d4674101b1264e905abd59c56c4d271c06fc698c1e96aa60daf6",
+          "e4d1fb27464d710ef9ed44d36576fc2c976138ed6e8e27ccc63a6b9c5413f61e"
+        ],
+        "validated_recoveries": 0,
+        "last_queue_check": {"utc": "2026-09-11T14:41:46Z", "running": 2, "idle": 2, "held": 0},
+        "outputs_promoted": false,
+        "healthy_jobs_modified": false,
+        "submission_incident": "T2bW timeout submit response timed out; queue and event/output checks found no committed job before resubmission"
+      },
+      "collection": {
+        "status": "submitted; output_validation_pending",
+        "last_queue_check": {"utc": "2026-09-11T14:41:46Z", "running": 0, "idle": 3, "held": 0},
+        "cluster": 1115316,
+        "jobs": {"0": "T2tt", "1": "T2bW", "2": "T2tb"},
+        "schedd": "bigbird24.cern.ch",
+        "submission_file": "cards/collect.sub",
+        "submission_sha256": "f7af2b5787420a1450fa4e73bd4251a024edd4b0941139b3fecfcd1a642a8ebe",
+        "runtime": "py38.tgz",
+        "runtime_sha256": "861489a46f4af796a7ce9d2af55d7b1e5a5ba4d166ab0dd794f44fc03c3c2cce",
+        "max_runtime_seconds": 28800,
+        "output": "combined_pending/{topology}/expected_limits.json",
+        "partial_snapshot_possible_while_primary_jobs_run": true,
+        "validated_total": null
+      },
       "T2bW": {
         "cluster": 1115252,
         "schedd": "bigbird24.cern.ch",
@@ -5761,7 +5854,7 @@
       "max_runtime_seconds": 43200,
       "proxy_seconds_before_submit": 368164,
       "voms_seconds_before_submit": 339364,
-      "last_queue_check": {"utc": "2026-09-11T12:56:15Z", "idle": 2, "running": 0, "held": 0},
+      "last_queue_check": {"utc": "2026-09-11T14:41:46Z", "idle": 0, "running": 2, "held": 0},
       "r1": {"cluster": 1115259, "submission_file": "combined_pending/T2tt/impact_r1_eossubmit.sub", "submission_sha256": "21d333d880c05f3069ef7729d1802aa0fe51e359c6d33d9d7dc8153a0e3642b4"},
       "r0": {"cluster": 1115260, "submission_file": "combined_pending/T2tt/impact_r0_eossubmit.sub", "submission_sha256": "372e2a760525b0a5dcd085e6c6fe209a5af3e257dd394fc41a5e571bd142a541"}
     },
