@@ -2,6 +2,7 @@ import importlib.util
 import json
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 import numpy as np
 
@@ -92,6 +93,126 @@ def test_nominal_only_keeps_nominal_after_full_bundle_is_available():
     assert list(selected) == ["nominal"]
     assert selected["nominal"] is variations["nominal"]
     assert HISTS.histogram_variations(variations, nominal_only=False) is variations
+
+
+def _lowdm_cr_weight_fixture(monkeypatch):
+    n = 4
+    chunk = {
+        "dataset_id": np.ones(n, dtype=int),
+        "nb_medium": np.asarray([1, 1, 2, 2]),
+        "nb_photon_clean": np.asarray([1, 1, 2, 2]),
+        "nb_lepton_clean": np.asarray([1, 1, 2, 2]),
+        "mee": np.asarray([91., 120., 91., 120.]),
+        "mmm": np.asarray([91., 120., 91., 120.]),
+        "pass_dy2e_open_high": np.ones(n, dtype=bool),
+        "pass_dy2m_open_high": np.ones(n, dtype=bool),
+    }
+    for _, branch in HISTS.BASE_REGION_VARIABLES.values():
+        chunk[branch] = np.full(n, 275.)
+    block = SimpleNamespace(
+        core=np.ones(n, dtype=bool), nb=chunk["nb_medium"],
+        nt=np.zeros(n, dtype=int), nw=np.zeros(n, dtype=int),
+        njet=np.full(n, 5), recoil=np.full(n, 275.),
+    )
+    blocks = dict.fromkeys(HISTS.BACKGROUND_ESTIMATION_REGIONS, block)
+    monkeypatch.setattr(HISTS, "region_mask", lambda *args: np.ones(n, dtype=bool))
+    monkeypatch.setattr(HISTS, "lowdm_nres_zero_mask", lambda *args: np.ones(n, dtype=bool))
+    variations = {"nominal": np.full(n, 2.), "topwUp": np.full(n, 2.5)}
+    regional = {
+        region: {"nominal": np.full(n, i), "topwUp": np.full(n, i + .5)}
+        for region, i in (("GCR", 3.), ("DY2E", 4.), ("DY2M", 5.))
+    }
+    return chunk, blocks, variations, regional
+
+
+def test_lowdm_cr_weights_preserve_highdm_and_other_regions(monkeypatch):
+    chunk, blocks, variations, regional = _lowdm_cr_weight_fixture(monkeypatch)
+    outputs = []
+    for weights in (None, regional):
+        output = HISTS.empty_background_estimation_inputs()
+        HISTS.fill_background_estimation_histograms(
+            chunk, variations, np.full(4, .5), "TT", "TT", "TT",
+            False, False, output, blocks, blocks, weights,
+        )
+        outputs.append(output)
+    before, after = outputs
+    assert before["highdm"] == after["highdm"]
+    assert before["dy_rz"]["highdm"] == after["dy_rz"]["highdm"]
+    for region in ("SR", "LLCR", "QCDCR"):
+        assert before["lowdm"]["recoil"][region] == after["lowdm"]["recoil"][region]
+    for region, weights in regional.items():
+        for group in ("Nb1", "Nb2plus"):
+            for variation, weight in weights.items():
+                leaf = after["lowdm"]["recoil"][region][group]["TT"][variation]
+                assert sum(leaf["entries"]) == 2
+                assert sum(leaf["sumw"]) == weight[0]
+                assert sum(leaf["sumw2"]) == 2 * (weight[0] * .5) ** 2
+    for channel in ("DY2E", "DY2M"):
+        for group in ("Nb1", "Nb2plus"):
+            expected = regional[channel]["nominal"][0] * .5
+            for window in ("on", "off"):
+                leaf = after["dy_rz"]["lowdm"]["yields"][channel][group][window]["other"]["nominal"]
+                assert sum(leaf["sumw"]) == expected
+                assert sum(leaf["sumw2"]) == expected ** 2
+                assert sum(leaf["entries"]) == 1
+            leaf = after["dy_rz"]["lowdm"]["mll"][channel][group]["other"]["nominal"]
+            assert sum(leaf["sumw"]) == 2 * expected
+            assert sum(leaf["sumw2"]) == 2 * expected ** 2
+
+
+def test_lowdm_cr_distribution_uses_same_weights_as_estimator(monkeypatch):
+    chunk, blocks, variations, regional = _lowdm_cr_weight_fixture(monkeypatch)
+    monkeypatch.setattr(HISTS, "LOWDM_REGION_VARIABLES", {
+        region: ["met"] for region in HISTS.BACKGROUND_ESTIMATION_REGIONS
+    })
+    monkeypatch.setattr(HISTS, "broad_lowdm_variable_values", lambda *args: np.full(4, 275.))
+    histograms = {}
+    HISTS.fill_broad_lowdm_distribution_histograms(
+        chunk, variations, np.full(4, .5), "TT", "TT", False,
+        histograms, {}, blocks=blocks, object_audit={}, region_variations=regional,
+    )
+    for region, channel in HISTS.LOWDM_REGION_MAP.items():
+        for variation, weight in regional.get(region, variations).items():
+            leaf = histograms[channel]["met"]["TT"][variation]
+            assert sum(leaf["entries"]) == 4
+            assert sum(leaf["sumw"]) == 2 * weight[0]
+            assert sum(leaf["sumw2"]) == weight[0] ** 2
+
+
+def test_lowdm_cr_reuses_gnn_cleaning_without_double_weighting(monkeypatch):
+    import awkward as ak
+    from autonomous_allhad import analysis_scale_factors as sf
+    from gnn_lowdm._implementation import region_io
+
+    assert HISTS.broad_lowdm_topw_weights is region_io.topw_region_weight_variations
+    arrays = {"year": np.asarray([2024]),
+              "fatjet_eta_all": ak.Array([[0., 2.]]),
+              "fatjet_phi_all": ak.Array([[0., 0.]])}
+    for obj in ("photon", "electron", "muon"):
+        arrays[obj + "_eta_all"] = ak.Array([[0.]])
+        arrays[obj + "_phi_all"] = ak.Array([[0.]])
+    monkeypatch.setattr(region_io, "object_masks", lambda arrays: {
+        obj + "_medium": ak.Array([[True]]) for obj in ("photon", "electron", "muon")
+    })
+    masks = []
+    def apply(weights, status, *args, cleaned=None):
+        masks.append(ak.to_list(cleaned))
+        status["topw_correction"] = {"mode": "available"}
+        return {name: values * 3. for name, values in weights.items()}
+    monkeypatch.setattr(sf, "apply_topw_event_weights", apply)
+    weights = {"nominal": np.asarray([2.])}
+    record = {"is_data": False, "dataset": "TT", "process": "TT"}
+    manifest = {"analysis_sf_components": ["topw_tagging"]}
+    for region in ("GCR", "DY2E", "DY2M"):
+        result = HISTS.broad_lowdm_topw_weights(
+            weights, {}, arrays, region, record, manifest, Path("."), {"mode": "available"},
+        )
+        assert result["nominal"].tolist() == [6.]
+        assert weights["nominal"].tolist() == [2.]
+    assert masks == [[[False, True]]] * 3
+    assert HISTS.broad_lowdm_topw_weights(
+        weights, {}, arrays, "GCR", dict(record, is_data=True), manifest, Path("."), None,
+    ) is weights
 
 
 def test_required_normalization_rejects_missing_and_nonfinite_factors():

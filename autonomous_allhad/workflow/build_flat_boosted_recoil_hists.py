@@ -47,6 +47,7 @@ from gnn_lowdm._implementation.region_io import (
     SELECTION_BRANCHES as BROAD_LOWDM_SELECTION_BRANCHES,
     build_region_blocks as build_broad_lowdm_region_blocks,
     dycr_lepton_mask,
+    topw_region_weight_variations as broad_lowdm_topw_weights,
     update_veto_leptons,
 )
 
@@ -1486,6 +1487,7 @@ def fill_broad_lowdm_distribution_histograms(
     summary: dict[str, Any],
     blocks: dict[str, Any] | None = None,
     object_audit: dict[str, int] | None = None,
+    region_variations: dict[str, dict[str, Any]] | None = None,
 ) -> None:
     """Fill physical distributions for the broad Low-dM SR and CRs."""
     n = len(chunk["dataset_id"])
@@ -1538,7 +1540,7 @@ def fill_broad_lowdm_distribution_histograms(
             )
             for variable in LOWDM_REGION_VARIABLES.get(region, [])
         }
-        for variation_name, raw_weight in variations.items():
+        for variation_name, raw_weight in (region_variations or {}).get(region, variations).items():
             weights = finite_array(raw_weight, n, 0.0) * normv
             for variable, values in values_by_variable.items():
                 spec = LOWDM_VARIABLE_SPECS[variable]
@@ -1700,6 +1702,7 @@ def fill_background_estimation_histograms(
     output: dict[str, Any],
     lowdm_blocks: dict[str, Any],
     rz_blocks: dict[str, Any],
+    lowdm_region_variations: dict[str, dict[str, Any]] | None = None,
 ) -> None:
     """Persist every TF, Sgamma, double-ratio, and RZ counting input.
 
@@ -1744,7 +1747,11 @@ def fill_background_estimation_histograms(
                 mask = selected & group_mask
                 if not np.any(mask):
                     continue
-                for variation_name, raw_weight in variations.items():
+                region_weights = (
+                    (lowdm_region_variations or {}).get(region, variations)
+                    if regime == "lowdm" else variations
+                )
+                for variation_name, raw_weight in region_weights.items():
                     weights = finite_array(raw_weight, n, 0.0) * normv
                     add_binned_hist(
                         _background_recoil_leaf(
@@ -1763,7 +1770,6 @@ def fill_background_estimation_histograms(
                     )
 
     component = _dy_rz_component(dataset, process, is_data)
-    nominal_weight = finite_array(variations["nominal"], n, 0.0) * normv
     unit_coordinate = np.full(n, 0.5, dtype=float)
     for channel in ("DY2E", "DY2M"):
         if is_data and not data_process_allowed(process, channel):
@@ -1793,6 +1799,11 @@ def fill_background_estimation_histograms(
             ("highdm", high_selected),
             ("lowdm", low_selected),
         ):
+            region_weights = (
+                (lowdm_region_variations or {}).get(channel, variations)
+                if regime == "lowdm" else variations
+            )
+            nominal_weight = finite_array(region_weights["nominal"], n, 0.0) * normv
             for group, group_mask in (
                 ("Nb1", nb == 1),
                 ("Nb2plus", nb >= 2),
@@ -2898,8 +2909,30 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                                 "Required analysis SF weight variations are unavailable "
                                 f"for {dataset}: {missing_variations}"
                             )
+                    lowdm_region_variations = {}
                     if not is_data:
                         if "topw_tagging" in (analysis_sf_components or []):
+                            if broad_blocks is not None:
+                                for region in ("GCR", "DY2E", "DY2M"):
+                                    selected = broad_lowdm_region_mask(
+                                        broad_blocks[region], sub_group, inputs["n"]
+                                    )
+                                    if rz_blocks is not None and region in rz_blocks:
+                                        selected |= broad_lowdm_region_mask(
+                                            rz_blocks[region], sub_group, inputs["n"]
+                                        )
+                                    if not np.any(selected):
+                                        continue
+                                    # Use the GNN's adopted CR jet cleaning on
+                                    # the pre-TopW bundle; do not apply SF twice.
+                                    lowdm_region_variations[region] = histogram_variations(
+                                        broad_lowdm_topw_weights(
+                                            variations, status, sub_group, region,
+                                            {"dataset": dataset, "process": process, "is_data": False},
+                                            {"analysis_sf_components": analysis_sf_components},
+                                            repo, topw_policy,
+                                        ), nominal_only,
+                                    )
                             variations = apply_topw_event_weights(
                                 variations, status, repo, year, dataset, process,
                                 sub_group, topw_policy,
@@ -2917,7 +2950,13 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                         status,
                         inputs["n"],
                     )
-                    for variation_name, raw_weight in variations.items():
+                    weight_checks = list(variations.items())
+                    for region, region_weights in lowdm_region_variations.items():
+                        weight_checks.extend(
+                            (f"lowdm/{region}/{name}", weight)
+                            for name, weight in region_weights.items()
+                        )
+                    for variation_name, raw_weight in weight_checks:
                         raw_array = np.asarray(raw_weight, dtype=float) * normv
                         nonfinite = int(np.count_nonzero(~np.isfinite(raw_array)))
                         excessive = int(
@@ -2959,6 +2998,7 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                             background_estimation_inputs,
                             broad_blocks,
                             rz_blocks,
+                            lowdm_region_variations=lowdm_region_variations,
                         )
                     if only_lowdm_sr_nsv_inclusive:
                         for vname, wraw in variations.items():
@@ -3032,6 +3072,7 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                             summary,
                             blocks=broad_blocks,
                             object_audit=broad_object_audit,
+                            region_variations=lowdm_region_variations,
                         )
                     if distribution_only:
                         summary["events_processed"] = int(summary.get("events_processed", 0)) + original_n
