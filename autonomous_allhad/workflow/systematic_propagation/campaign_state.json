@@ -1,0 +1,21 @@
+{
+  "canonical_modified": false,
+  "job_flavour": "workday",
+  "jobs": 6,
+  "pending": [
+    "pilot execution",
+    "nominal closure",
+    "full MC propagation",
+    "JES/JER TROTA-input propagation",
+    "EGM",
+    "MUO/TAU decomposition",
+    "JMS/JMR prescription"
+  ],
+  "runtime": "py38; TROTA-only LCG_104",
+  "status": "pilot_submitted",
+  "submitted_clusters": [1115064],
+  "schedd": "bigbird24.cern.ch",
+  "verified_classads": {"jobs": 6, "JobFlavour": "workday", "MaxRuntime": 28800},
+  "worker_commit": "93458bfc",
+  "canonical_promotion": false
+}
