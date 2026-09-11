@@ -1,7 +1,17 @@
 {
   "schema_version": 1,
   "campaign": "lepton_veto10_20260908",
-  "status": "validated",
+  "status": "partial_topw_update",
+  "topw_update": {
+    "2025": {"physical_cr_plots": 114, "gnn_cr_plots": 4, "sr_status": "pending"},
+    "2024": {"physical_cr_plots": 114, "gnn_cr_plots": 4, "sr_status": "pending"},
+    "SR_export_cluster": 1115065,
+    "previous_sr_records": "not yet regenerated with the new TopW SF inputs; do not present as current",
+    "file_hash_table": "will be refreshed after the SR stage; existing entries describe the previous full bundle",
+    "2024_plot_payload_sha256": "bc7e9f3679787d4fb7f8960fc86033e1286e1133d70538c655f9a5c52fb2f87a",
+    "2025_plot_payload_sha256": "85d02b805c4606edd4260359582b9a91c72bd138ac41a4b996e9025c34f5cee6",
+    "VR_included": false
+  },
   "fit_state": "prefit",
   "sr_blinded": true,
   "bins": {
@@ -37,7 +47,7 @@
     "sr": "MC statistical only at current datacard rateParam initial values"
   },
   "gcr_normalization": "data and total MC independently unit-area normalized for shape comparison",
-  "sr_normalization": "Current RZ-normalized template contents multiplied by current card initial Sgamma rate parameters; variances scale by their squares",
+  "sr_normalization": "RZ in the nominal template; initial Sgamma applied once by the shared card/plot export path; no renderer rescaling",
   "signal_benchmarks": {
     "highdm_T2tt": [
       [

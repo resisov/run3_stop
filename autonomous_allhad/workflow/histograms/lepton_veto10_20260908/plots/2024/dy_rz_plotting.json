@@ -3,48 +3,48 @@
     "status": "complete",
     "source": "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2024",
     "source_sha256": {
-      "rz_high.json": "f7e1b68b067b82ec0e244b774036d65b9e034267b065351c8151767de5c9ff8f",
-      "rz_low.json": "662193bbf086c1c77a7ce34c414e824b4e54471f22c4af93ce3878a5a90f9f59"
+      "rz_high.json": "134c3a092d02a39f757c96f7ebe695a51ac8bc20c97334fcea1533ec766aab59",
+      "rz_low.json": "d9be949043aa9e024bf515c8e6e1d72ce135f6df04b0cdacd0d3701420915c97"
     },
     "factor_policy": "channel-specific measured RZ(Nb); exact on explicit Nb axes, DY-yield-weighted effective RZ for inclusive physical distributions",
     "channels": {
       "DY2E": {
         "highdm": {
-          "Nb1": 0.8331329151620448,
-          "Nb2plus": 0.7029683081154766,
-          "effective": 0.7951680943699765,
+          "Nb1": 0.833050214809825,
+          "Nb2plus": 0.7021681580676647,
+          "effective": 0.7948862551795516,
           "dy_yields_for_effective": {
-            "Nb1": 308.31234684460765,
-            "Nb2plus": 126.95282138320829
+            "Nb1": 308.34373634853637,
+            "Nb2plus": 126.91824220737325
           }
         },
         "lowdm": {
-          "Nb1": 0.606480829265619,
-          "Nb2plus": 0.6675302706757165,
-          "effective": 0.6143447697663387,
+          "Nb1": 0.6065109470601358,
+          "Nb2plus": 0.6675375855217196,
+          "effective": 0.6143716545818861,
           "dy_yields_for_effective": {
-            "Nb1": 4166.591447135131,
-            "Nb2plus": 616.0669105459392
+            "Nb1": 4166.238985355637,
+            "Nb2plus": 615.9882005387371
           }
         }
       },
       "DY2M": {
         "highdm": {
-          "Nb1": 0.7086530953617859,
-          "Nb2plus": 0.8522209777267429,
-          "effective": 0.7424299077060601,
+          "Nb1": 0.7083298657388493,
+          "Nb2plus": 0.8508902652045487,
+          "effective": 0.7418702222838724,
           "dy_yields_for_effective": {
-            "Nb1": 451.1317385960541,
-            "Nb2plus": 138.7889932599672
+            "Nb1": 451.1289341064507,
+            "Nb2plus": 138.7912249192206
           }
         },
         "lowdm": {
-          "Nb1": 0.598269341820992,
-          "Nb2plus": 0.6488158845219634,
-          "effective": 0.6052266709199328,
+          "Nb1": 0.5983023771086502,
+          "Nb2plus": 0.6489309402676281,
+          "effective": 0.6052706588423343,
           "dy_yields_for_effective": {
-            "Nb1": 5301.416936590999,
-            "Nb2plus": 846.1658119210447
+            "Nb1": 5300.997458783601,
+            "Nb2plus": 846.051435228465
           }
         }
       }
