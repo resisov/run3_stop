@@ -3936,7 +3936,7 @@
     "primary_limits_running": 0,
     "timeout_recovery_running": 0
   },
-  "status": "topw_sf_running; T2tt_local_plots_complete; 13_points_in_recovery",
+  "status": "topw_sf_running; T2tt_web_published; 12_points_in_recovery",
   "topologies": [
     "T2tt",
     "T2bW",
@@ -5605,22 +5605,22 @@
     "schedd": "bigbird24.cern.ch",
     "source_backup": "topw_previous_sources.tar.gz",
     "source_commit": "456fd370",
-    "stage": "T2tt_local_PNG_PDF_complete_and_EOS_synced; remaining_recoveries_and_impacts_running; web_update_pending",
+    "stage": "T2tt_validated_plots_web_published; remaining_recoveries_and_impacts_running",
     "last_monitor": {
-      "utc": "2026-09-11T16:39:15Z",
+      "utc": "2026-09-11T17:57:17Z",
       "live_queue_status": "available",
       "schedd_error": null,
       "schedd_recovered_at_utc": "2026-09-11T14:09:16Z",
-      "current_queue": {"primary_limits_running": 0, "impacts_running": 2, "recovery_running": 1, "recovery_idle": 12, "collection_running": 0, "held": 0},
+      "current_queue": {"primary_limits_running": 0, "impacts_running": 2, "recovery_running": 0, "recovery_idle": 12, "collection_running": 0, "held": 0},
       "queue_snapshot_precedes_latest_T2tb_recovery_and_collection_refresh": false,
       "queue_snapshot_precedes_sigbus_retry_and_additional_submissions": false,
-      "validation_checked_at_utc": "2026-09-11T16:46:01Z",
+      "validation_checked_at_utc": "2026-09-11T18:01:15Z",
       "ssh_access": true,
       "eos_access": true,
       "kerberos_klist_s_exit": 0,
       "roots_present_at_1409_utc": {"T2tt": 178, "T2bW": 334, "T2tb": 304},
       "file_counts_are_not_validated_completion": true,
-      "collection_status": "all three refreshed exports exit0; T2tt 205-point plots generated locally; fifth recovery validated and promoted",
+      "collection_status": "Sixth recovery validated and promoted; T2tt plots published, Pages succeeded and PDF/PNG hashes verified",
       "termination_log_snapshot": {
         "utc": "2026-09-11T15:22:16Z",
         "T2tt": {"terminated": 205, "exit0": 203, "exit124": 2},
@@ -5634,8 +5634,8 @@
         {"job": "1115257.109", "topology": "T2tt", "mass_point": "mStop1450_mLSP400", "exit_code": 124, "reason": "text2workspace timeout 900s", "retry_submitted": true, "retry_job": "1115313.1"}
       ],
       "impacts": {
-        "r1": {"job": "1115259.0", "execution_event_utc": "2026-09-11T12:59:44Z", "latest_memory_event_utc": "2026-09-11T14:00:00Z", "memory_mb": 3207, "termination_event": false},
-        "r0": {"job": "1115260.0", "execution_event_utc": "2026-09-11T13:00:32Z", "latest_memory_event_utc": "2026-09-11T13:30:43Z", "memory_mb": 3197, "termination_event": false},
+        "r1": {"job": "1115259.0", "execution_event_utc": "2026-09-11T12:59:44Z", "latest_memory_event_utc": "2026-09-11T17:35:23Z", "memory_mb": 3207, "termination_event": false},
+        "r0": {"job": "1115260.0", "execution_event_utc": "2026-09-11T13:00:32Z", "latest_memory_event_utc": "2026-09-11T17:41:15Z", "memory_mb": 3211, "termination_event": false},
         "parameter_fit_progress": "unavailable_until_worker_access_or_stageout; no completion claimed",
         "live_tail_attempt": "both condor_tail calls exceeded 15 seconds; no progress fraction inferred"
       },
@@ -5767,12 +5767,15 @@
       "submitted_total": 924,
       "last_queue_check": {"utc": "2026-09-11T15:15:33Z", "running": 0, "idle": 0, "held": 0, "primary_termination_events_verified": 924},
       "quantile_validation": {
-        "utc": "2026-09-11T16:46:01Z",
-        "counts": {"T2tt": 205, "T2bW": 345, "T2tb": 361},
-        "total": 911,
+        "utc": "2026-09-11T18:01:15Z",
+        "counts": {"T2tt": 205, "T2bW": 346, "T2tb": 361},
+        "total": 912,
         "five_finite_nonnegative_ordered_quantiles": true,
         "T2tt": {"batch_collected": 205, "late_outputs_individually_validated": [], "export_refresh_pending": false},
-        "T2bW": {"batch_collected": 344, "late_outputs_individually_validated": ["mStop1550_mLSP1100"], "export_refresh_pending": true},
+        "T2bW": {"batch_collected": 344, "late_outputs_individually_validated": [
+          "mStop1550_mLSP1100",
+          "mStop1750_mLSP1300"
+        ], "export_refresh_pending": true},
         "T2bW_incomplete_trees": {"mStop100_mLSP1": 0, "mStop300_mLSP150": 1, "mStop300_mLSP200": 1},
         "T2tb": {"batch_collected": 361, "incomplete_trees": {"mStop100_mLSP1": 1}},
         "all_outputs_promoted": false
@@ -5794,7 +5797,16 @@
           "1115314.0": {"topology": "T2bW", "mass_point": "mStop1750_mLSP1250", "workspace_timeout_seconds": 3600, "status": "validated_promoted", "exit_code": 0, "root_sha256": "765af07794eea041d7b9ab0ef8a18a844bc86d31f3ebd7e820ea6aa4ddcbd854"},
           "1115315.0": {"topology": "T2bW", "mass_point": "mStop200_mLSP100", "workspace_timeout_seconds": 900, "r_abs_accuracy": 1e-7, "status": "validated_promoted", "exit_code": 0, "root_sha256": "6a31920f53025c287cb137f27427e50d6c484abefdeaf000840a054cdadfaff0"},
           "1115319.0": {"topology": "T2bW", "mass_point": "mStop1550_mLSP1100", "original_job": "1115252.161", "failure": "combine_timeout_7200s", "point_timeout_seconds": 21600, "status": "validated_promoted", "exit_code": 0, "root_sha256": "b48257ce363bb2435e0ebc5c99f92403052708d4a81bf9ebc2300a7503da1e7a"},
-          "1115319.1": {"topology": "T2bW", "mass_point": "mStop1750_mLSP1300", "original_job": "1115252.238", "failure": "combine_timeout_7200s", "point_timeout_seconds": 21600},
+          "1115319.1": {
+            "topology": "T2bW",
+            "mass_point": "mStop1750_mLSP1300",
+            "original_job": "1115252.238",
+            "failure": "combine_timeout_7200s",
+            "point_timeout_seconds": 21600,
+            "status": "validated_promoted",
+            "exit_code": 0,
+            "root_sha256": "cd7a3efc7d1f91062b0cfdbd5edcd32310ec8f1b075bcc92497742cadff123e2"
+          },
           "1115319.2": {"topology": "T2bW", "mass_point": "mStop1750_mLSP1350", "original_job": "1115252.239", "failure": "combine_timeout_7200s", "point_timeout_seconds": 21600},
           "1115319.3": {"topology": "T2bW", "mass_point": "mStop1750_mLSP1400", "original_job": "1115252.240", "failure": "combine_timeout_7200s", "point_timeout_seconds": 21600},
           "1115319.4": {"topology": "T2bW", "mass_point": "mStop1750_mLSP1450", "original_job": "1115252.241", "failure": "combine_timeout_7200s", "point_timeout_seconds": 21600},
@@ -5830,12 +5842,12 @@
           "8a60e1fe4932d4674101b1264e905abd59c56c4d271c06fc698c1e96aa60daf6",
           "e4d1fb27464d710ef9ed44d36576fc2c976138ed6e8e27ccc63a6b9c5413f61e"
         ],
-        "validated_recoveries": 5,
-        "promoted_recoveries": 5,
-        "pending_recoveries": 13,
+        "validated_recoveries": 6,
+        "promoted_recoveries": 6,
+        "pending_recoveries": 12,
         "promotion_target": "combined_pending/{topology}/limits",
         "replaced_invalid_outputs": [{"path": "combined_pending/T2bW/limits/higgsCombine_mStop200_mLSP100.AsymptoticLimits.mH120.root", "previous_limit_entries": 0, "replacement_validated": true, "backup_retained": false}],
-        "last_queue_check": {"utc": "2026-09-11T16:39:15Z", "running": 1, "idle": 12, "held": 0},
+        "last_queue_check": {"utc": "2026-09-11T17:57:17Z", "running": 0, "idle": 12, "held": 0},
         "outputs_promoted": false,
         "healthy_jobs_modified": false,
         "submission_incident": "T2bW timeout submit response timed out; queue and event/output checks found no committed job before resubmission"
@@ -5859,7 +5871,7 @@
         "output": "combined_pending/{topology}/expected_limits.json",
         "partial_snapshot_possible_while_primary_jobs_run": true,
         "validated_total": 910,
-        "total_after_late_outputs_and_promotions": 911
+        "total_after_late_outputs_and_promotions": 912
       },
       "plots": {
         "T2tt": {
@@ -5872,9 +5884,18 @@
           "plotted_mass_points": 205,
           "excluded_points": 0,
           "interpolation_mode": "topology-aware",
-          "mstop_range_gev": [600, 1800],
-          "mlsp_range_gev": [1, 1800],
-          "xsec_color_range_pb": [0.0001, 0.1],
+          "mstop_range_gev": [
+            600,
+            1800
+          ],
+          "mlsp_range_gev": [
+            1,
+            1800
+          ],
+          "xsec_color_range_pb": [
+            0.0001,
+            0.1
+          ],
           "thermal_relic_sha256": "b23a3e51e81e26cb00cadaf79e3cdecba4eb071c58b65b7a233f278e5363ed61",
           "xsec_pdf": "combined_pending/T2tt/expected_limit_t2tt_2024_2025_highdm73_lowdm30_xsec_topology_thermal_relic.pdf",
           "ratio_pdf": "combined_pending/T2tt/expected_limit_t2tt_2024_2025_highdm73_lowdm30_topology_thermal_relic.pdf",
@@ -5885,8 +5906,23 @@
           "temporary_render_checks_removed": true,
           "local_root_files_downloaded": 0,
           "runtime_policy": "existing local display-only runtime; versions recorded in plot manifests",
-          "web_publication": "not_deployed",
-          "publication_context": "Existing public Pages deployment uses master; run3_full_analysis docs/index.html is archive-only. Do not deploy the archive-only checkout over current galleries blindly."
+          "web_publication": "deployed_and_four_remote_artifact_hashes_verified",
+          "publication_context": "Minimal fast-forward update to the existing master Pages branch; other public galleries retained and explicitly labelled previous results.",
+          "publication_commit": "ca1421d5821167ef5fe26d2abfee8021aeab2d50",
+          "publication_base_commit": "4b9e0488143081f58da46ba5ce124534ea38efe6",
+          "url": "https://resisov.github.io/run3_stop/#current-limits",
+          "publication_checked_at_utc": "2026-09-11T18:03:01Z",
+          "deployment_run_id": 34630902117,
+          "deployment_url": "https://github.com/resisov/run3_stop/actions/runs/34630902117",
+          "public_png_sha256": {
+            "xsec": "446508bc838dceb3c4b4b414c1581024dabacb6ed56c5c665d44d3aaa8218f8f",
+            "ratio": "c8fa7e5b8224d516f797cc5c3109d646a2515df26912568c1eecfa9eb828f227"
+          },
+          "an_update": {
+            "thread_id": "019f7a16-19ab-76f1-8953-a737c5b0dd68",
+            "requested_at_utc": "2026-09-11T18:03:01Z",
+            "scope": "T2tt only; other updated limits and impacts remain incomplete"
+          }
         }
       },
       "T2bW": {
@@ -5933,7 +5969,7 @@
       "max_runtime_seconds": 43200,
       "proxy_seconds_before_submit": 368164,
       "voms_seconds_before_submit": 339364,
-      "last_queue_check": {"utc": "2026-09-11T16:39:15Z", "idle": 0, "running": 2, "held": 0},
+      "last_queue_check": {"utc": "2026-09-11T17:57:17Z", "idle": 0, "running": 2, "held": 0},
       "r1": {"cluster": 1115259, "submission_file": "combined_pending/T2tt/impact_r1_eossubmit.sub", "submission_sha256": "21d333d880c05f3069ef7729d1802aa0fe51e359c6d33d9d7dc8153a0e3642b4"},
       "r0": {"cluster": 1115260, "submission_file": "combined_pending/T2tt/impact_r0_eossubmit.sub", "submission_sha256": "372e2a760525b0a5dcd085e6c6fe209a5af3e257dd394fc41a5e571bd142a541"}
     },
