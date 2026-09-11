@@ -157,6 +157,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--manifest", type=Path, required=True)
     parser.add_argument("--output-root", type=Path, required=True)
+    parser.add_argument("--years", choices=("2024", "2025"), nargs="+",
+                        help="Audit only ready years; omit for the complete two-year campaign.")
     parser.add_argument("--prepare-low250", action="store_true",
                         help="Historical recovery only: preserve verified 300-start products.")
     args = parser.parse_args()
@@ -167,6 +169,8 @@ def main():
     baseline_path = args.output_root / "low250_adoption_baseline.json"
     baseline = read(baseline_path) if baseline_path.exists() else None
     manifest = read(args.manifest)
+    years = list(dict.fromkeys(args.years or manifest["years"]))
+    pending_years = sorted(set(manifest["years"]) - set(years))
     policy = input_policy(manifest, historical=baseline is not None)
     approval = baseline["approval"] if baseline else {
         "source": str(args.manifest), "domain_min_gev": manifest["lowdm_double_ratio_min_gev"],
@@ -176,6 +180,10 @@ def main():
               "SR_blinded": True, "years": {}, "downstream_10gev_veto_use": policy,
               "lowdm_double_ratio_adoption": {"min_ut_gev": 250, "status": "adopted", "approval": approval},
               "cards_limits_web_untouched": True}
+    result["audited_years"] = years
+    result["pending_years"] = pending_years
+    if pending_years:
+        result["status"] = "partial"
     code_paths = ["autonomous_allhad/workflow/" + name for name in (
         "build_histogram_tf_inputs_2024.py", "gnn_background_histograms.py",
         "plot_recoil_transfer_factors_2024.py", "build_sgamma_ut_report_2024.py",
@@ -189,7 +197,8 @@ def main():
              "No intermediate ROOT or NanoAOD input was opened. Nominal histograms were not modified or reweighted.", "",
              "High-dM: retained 73 bins. Low-dM: frozen GNN30. Nb1/Nb2plus are factor groups, not new SR categories.", "",
              "## RZ results", "", "| Year | Region | Nb = 1 | Nb ≥ 2 |", "|---|---|---|---|"]
-    for year, info in manifest["years"].items():
+    for year in years:
+        info = manifest["years"][year]
         base = args.output_root / year
         inputs = {}
         for name in ("main", "background_estimation", "gnn"):
@@ -303,6 +312,8 @@ def main():
             for relative, expected in group.items():
                 if sha256(args.output_root / relative) != expected:
                     raise ValueError("historical rollback checksum mismatch")
+    if pending_years:
+        lines += ["", "Pending updated inputs/products: " + ", ".join(pending_years) + ". Their previous outputs have not been revalidated for this update."]
     lines += ["", "RZ errors use the existing on/off-Z profile fit and inverse-variance ee/μμ combination. Per-channel RZ–RT covariance is exported. Combined cross-group diagonal covariance is the existing downstream assumption, not a measured absent correlation.",
               "", "## GNN transfer and shape propagation", "",
               "- Top = TT + ST. Top/W parameter sharing is unchanged; W and QCD factors remain separately exported.",

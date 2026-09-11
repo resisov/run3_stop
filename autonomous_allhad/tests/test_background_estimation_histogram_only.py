@@ -23,6 +23,30 @@ REGIONS = ("SR", "LLCR", "QCDCR", "GCR", "DY2E", "DY2M")
 SAMPLES = ("data_obs", "DY", "GJ", "QCD", "ST", "TT", "VV", "WtoLNu", "Zto2Nu")
 
 
+def test_existing_batch_stages_before_product_replacement(tmp_path):
+    import runpy
+
+    runner = runpy.run_path(str(REPO / "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/batch/run.py"))
+    repo = tmp_path / "repo"
+    (repo / "autonomous_allhad/workflow").mkdir(parents=True)
+    staged_repo = runner["staged_repository"](tmp_path, repo)
+    assert (staged_repo / "autonomous_allhad/workflow").resolve() == repo / "autonomous_allhad/workflow"
+    relative = Path("autonomous_allhad/reports/campaign/2025")
+    staged, final = staged_repo / relative, repo / relative
+    for name in runner["PRODUCTS"]:
+        for root, value in ((staged, "new"), (final, "old")):
+            path = root / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps({"status": "complete", "provenance": {"hist_input_sha256": value}}))
+    with pytest.raises(ValueError, match="stale"):
+        runner["validate_products"](staged, "wrong")
+    assert all('"old"' in (final / name).read_text() for name in runner["PRODUCTS"])
+    products = runner["validate_products"](staged, "new")
+    runner["promote_products"](staged, final, products)
+    assert all(runner["sha"](final / name) == value for name, value in products.items())
+    assert not list(final.rglob("*.pending"))
+
+
 def test_tf_overlay_keeps_each_category_edges_values_and_errors(monkeypatch, tmp_path):
     import importlib
     import numpy as np

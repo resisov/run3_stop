@@ -1,5 +1,26 @@
 # Strict 10-GeV lepton-veto background estimation: 2024 and 2025
 
+## Top/W input update — 2026-09-11
+
+2025 was promoted by the main task with canonical manifest SHA256
+`3a9784dd2e648300f0e4790f41c96ec99fcc174454c90b50c3802c15c49d55ca`.
+The existing `calculation.sub` submitted only 2025 as **1115053.0** on the
+EOS schedd `bigbird24.cern.ch`, using the existing py38 runtime and workday.
+2024 is awaiting its separate promotion and is not included in this job.
+
+The existing runner's `--replace-stale` option retains the previous products
+while recalculating in Condor worker scratch. It retains final relative
+provenance paths, checks the completed products and copies, then replaces the
+five measured products in the same campaign. No new campaign or sidecar is
+created. The frozen numerical sources/configuration are unchanged. Existing
+input SHA checks are retained; no old/new histogram bitwise protection is used.
+`audit_background_histogram_products.py --years 2025` audits this ready year
+without treating pending 2024 as an updated result. After both years are ready,
+omit `--years` for the complete audit. ROOT inputs and large histogram JSON
+remain on EOS; only compact measured products are copied for local plotting.
+
+The execution records below describe the original 2026-09-08 measurement.
+
 This campaign uses the user-approved canonical manifest in `input_manifest.json`.
 It does not reuse factors measured with the old 5-GeV selection. The Low-dM
 double-ratio lower boundary is the already-approved 250 GeV. All downstream

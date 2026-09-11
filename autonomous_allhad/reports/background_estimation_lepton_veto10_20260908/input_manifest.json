@@ -2,8 +2,12 @@
   "schema_version": 1,
   "status": "canonical",
   "campaign": "lepton_veto10_20260908",
-  "promoted_at_utc": "2026-09-08T07:43:30Z",
-  "supersedes": "autonomous_allhad/reports/dy_window20_canonical_20260907.json",
+  "promoted_at_utc": "2026-09-11T06:51:59Z",
+  "topw_sf_update": {
+    "status": "partially_promoted",
+    "promoted_years": [2025],
+    "pending_years": [2024]
+  },
   "electron_veto_pt_min_gev": 10,
   "muon_veto_pt_min_gev": 10,
   "lepton_threshold_operator": ">",
@@ -150,6 +154,8 @@
   "sr_data": "blinded",
   "years": {
     "2024": {
+      "promoted_at_utc": "2026-09-08T07:43:30Z",
+      "topw_tagging_applied": false,
       "input_roots": 5954,
       "source_bad_file_count": 0,
       "data_source_bad_file_count": 0,
@@ -178,6 +184,11 @@
       "validation_report_sha256": "ed3a2fd4f4464ab11cba3fc77f69e89f82eaebe76749fc3ec40464e66b9087b9"
     },
     "2025": {
+      "promoted_at_utc": "2026-09-11T06:51:59Z",
+      "topw_tagging_applied": true,
+      "topw_sf_sha256": "43f0baf49d94660fd23595a391803d13ca445083542591a6596c59409c0854c1",
+      "validation_job_id": "1115050.0",
+      "validation_exit_code": 0,
       "input_roots": 8390,
       "source_bad_file_count": 11,
       "data_source_bad_file_count": 1,
@@ -185,29 +196,30 @@
       "main": {
         "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2025/hists.json",
         "canonical_alias": "autonomous_allhad/workflow/plot2025/hists.json",
-        "sha256": "e395cd14e026ffdac9a127a6b665347d0db7c20f1391c7d3ab2a34dfb28f5ba6",
-        "bytes": 2458889388
+        "sha256": "d2a1287abdba6db4c12598a992d149337a0d6f3812b7652ceb7c472be333253c",
+        "bytes": 5243792386
       },
       "background_estimation": {
         "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2025/hists_background_estimation.json",
         "canonical_alias": "autonomous_allhad/workflow/plot2025/hists_background_estimation.json",
-        "sha256": "4c1e9b5734a2356f995925e3252e76721ee655156c481c7babddb1b0144b6be3",
-        "bytes": 2192998
+        "sha256": "b1016bc2db943c3f2b79d0d6d58b513160afc9df8eeeadab5fd5b801fedbb84a",
+        "bytes": 4084945
       },
       "gnn": {
         "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2025/gnn/hists.json",
         "canonical_alias": "autonomous_allhad/workflow/plot2025/hists_lowdm_gnn30.json",
-        "sha256": "6195bd21d72c9474b2793f0b15c51e21538692904f7b0020b47056cd4dc34d9c",
-        "bytes": 1684605720
+        "sha256": "9167917b1bfdc420b772d4fc0241a6169789fe1d537585d7aa36f7f8d940498b",
+        "bytes": 3554305836
       },
       "normalization_sha256": "7322c219f181b7406d863827cfd4146c027f42dc32d5b0e29b97cc3bc7259e2e",
       "search_bin_config_sha256": "b3b0c07ad698468d77031dbe2cc69d592dd9a27b7a04963b134d39cda5dd325e",
       "validation_report": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2025/histogram_validation.json",
-      "validation_report_sha256": "b76b80e14363d38aa5d157588128d773b9e5c75a67c1ca2b91673997e6b8b524"
+      "validation_report_sha256": "f2e1b05f096764f473ff988cdf28e1188ae246a5c3559be00beb5a8c9c75c3ef"
     }
   },
   "validation": {
     "cluster": 1111093,
+    "clusters_by_year": {"2024": 1111093, "2025": 1115050},
     "exit_codes": {
       "2024": 0,
       "2025": 0
@@ -217,7 +229,11 @@
   "production": {
     "frozen_main_code": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/code_main_v2",
     "frozen_gnn_code": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/gnn_code",
-    "main_builder_sha256": "b1cb425ca92222bf52ddfe85911c8cb73870d7d2c3a7873f269a67d0910bc06b",
+    "main_builder_sha256": "d01a601eb236eac90e4a630d43160b221ea85a2e174f8de5470b423ac5ad8ecb",
+    "histogram_builder_sha256_by_year": {
+      "2024": ["b1cb425ca92222bf52ddfe85911c8cb73870d7d2c3a7873f269a67d0910bc06b"],
+      "2025": ["af502f27f458e86b395b25c9cd6919265dc230983d200ae25f2a9d72760c1cfb", "d01a601eb236eac90e4a630d43160b221ea85a2e174f8de5470b423ac5ad8ecb"]
+    },
     "ids_source_sha256": "a40d327efedb8dad42afb59da944deff995500b09fc157a53853159d36901da1",
     "ids_coffea_sha256": "f34995ac34dee52f9ba782e409fb24a11a60a18525f24532a51ec6e74d1e4b48",
     "corrections_source_sha256": "c8ecd046246c68704fac78753fcc1f055e0264f3f5f015b5a05af138cef15ce0",
@@ -230,6 +246,6 @@
       "histogram_validation"
     ],
     "local_main_and_gnn_cache": "not downloaded; local aliases identify the new campaign but require explicit EOS retrieval before local use",
-    "old_eos_histograms": "preserved; superseded"
+    "old_eos_histograms": "removed"
   }
 }

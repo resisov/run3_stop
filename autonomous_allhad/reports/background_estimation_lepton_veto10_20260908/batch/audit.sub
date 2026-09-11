@@ -16,7 +16,8 @@ x509userproxy = /eos/user/t/taiwoo/decaf/analysis/proxy/x509up_u147757
 request_cpus = 1
 request_memory = 2000MB
 request_disk = 5000MB
-+MaxRuntime = 7200
++JobFlavour = "workday"
++MaxRuntime = 28800
 +JobBatchName = "NPS26012_BackgroundVeto10_audit"
 on_exit_hold = (ExitBySignal == True) || (ExitCode != 0)
 queue 1

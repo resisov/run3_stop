@@ -32,7 +32,16 @@
     "min_ut_gev": 250,
     "status": "adopted"
   },
-  "status": "complete",
+  "status": "in_progress",
+  "measurement_update": {
+    "reason": "New promoted Top/W-SF histograms",
+    "input_manifest_sha256": "3a9784dd2e648300f0e4790f41c96ec99fcc174454c90b50c3802c15c49d55ca",
+    "calculation_job": "1115053.0",
+    "schedd": "bigbird24.cern.ch",
+    "submitted_years": [2025],
+    "pending_promotion_years": [2024],
+    "previous_year_records_below": "Historical only; not yet revalidated for the Top/W update"
+  },
   "years": {
     "2024": {
       "GNN_response_checks": {
