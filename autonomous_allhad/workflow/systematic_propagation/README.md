@@ -55,3 +55,30 @@ JES/JER require propagation to the raw-NanoAOD-based TROTA model inputs relative
 to their nominal reference, without changing the nominal model convention.
 That extension, EGM variations, MUO/TAU decomposition, and the JMS/JMR prescription
 are subsequent stages, not claimed as implemented by the MET pilot.
+
+## Full MC MET-unclustered production
+
+`prepare-full` expands the validated runner to every background and signal MC
+ROOT in the frozen nominal input lists. It checks the pilot dependency hashes,
+retains the existing file grouping, rejects duplicate NanoAOD inputs, and reuses
+the four validated pilot Up/Down results. Nominal ROOT production is not repeated.
+
+```bash
+"$SHAPE_PY" "$SHAPE_ROOT/run.py" prepare-full \
+  --repo /eos/user/t/taiwoo/run3_stop/decaf \
+  --label full_met_20260911 \
+  --proxy /eos/user/t/taiwoo/decaf/analysis/proxy/x509up_u147757
+```
+
+Submit the two generated `full_met_20260911/{2024,2025}/jobs.sub` files to the EOS
+schedd. Both use `workday`; background jobs request 6 GB and signal jobs 12 GB,
+matching the existing signal-template resource allocation. NanoAOD caches are
+released after processing each source. ROOT, metadata, main and GNN histograms
+remain under the separate campaign's `outputs/` directories on EOS.
+
+An individual input read failure is retained in the job metadata and does not
+discard the other valid files. Such a job is marked `complete_with_bad_files`,
+not complete coverage. The original normalization remains fixed; missing-file
+effects must be reconciled before adopting any merged variation. Preparation
+alone is not submission or completion; record cluster IDs and verify final
+outputs in this campaign's state.

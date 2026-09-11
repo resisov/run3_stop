@@ -11,6 +11,8 @@ import subprocess
 import sys
 import tarfile
 import time
+from collections import Counter
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 
@@ -23,6 +25,19 @@ WEIGHTS = ("pileup", "btagSF", "electron_id", "electron_reco", "muon_id",
 
 def read(path):
     return json.loads(Path(path).read_text())
+
+
+def load_config(path):
+    config = read(path)
+    if "shared_config" in config:
+        shared_path = eos(config["shared_config"])
+        if sha(shared_path) != config["shared_config_sha256"]:
+            raise RuntimeError("shared configuration changed")
+        shared = read(shared_path)
+        pins = {**shared.pop("pins"), **config.get("pins", {})}
+        shared.update(config)
+        config = dict(shared, pins=pins)
+    return config
 
 
 def write(path, value):
@@ -67,16 +82,18 @@ def prepare_payload(config, destination):
     return destination
 
 
-def source_records(sidecar, year):
-    metadata = read(sidecar)
-    if metadata["status"] != "complete" or metadata.get("bad_files"):
+def source_records(sidecar, year, metadata=None):
+    metadata = read(sidecar) if metadata is None else metadata
+    if metadata["status"] not in ("complete", "complete_with_bad_files"):
         raise ValueError("source shard is not complete: " + str(sidecar))
     datasets = {v["dataset"]: v for v in metadata["datasets"].values()}
     records = []
     for index, item in enumerate(metadata["files"]):
         info = datasets[item["dataset"]]
-        if info["is_data"] or item["read_status"] != "success":
-            raise ValueError("pilot requires successful MC sources")
+        if info["is_data"]:
+            raise ValueError("shape production requires MC sources")
+        if item["read_status"] != "success":
+            continue
         record = dict(dataset=item["dataset"], process_group=item["process"],
                       file_path=item["file_path"], file_index=index, year=str(year),
                       is_data=False, is_signal=info["is_signal"],
@@ -87,6 +104,143 @@ def source_records(sidecar, year):
     if len(records) != metadata["files_processed"]:
         raise ValueError("source file accounting mismatch")
     return records
+
+
+def prepare_full(args):
+    repo = eos(args.repo)
+    campaign = repo / "autonomous_allhad/workflow/systematic_propagation"
+    state = read(campaign / "campaign_state.json")
+    target = eos(campaign / args.label)
+    if (target / "campaign_state.json").exists():
+        raise FileExistsError("campaign already prepared: " + str(target))
+    summary = dict(status="prepared", scope="all canonical background and signal MC",
+                   shifts=list(SHIFTS[1:]), job_flavour="workday", years={},
+                   canonical_modified=False, canonical_promotion=False, submitted_clusters=[])
+    for year in args.years:
+        if state["pilot_validation"][str(year)]["validation_cli"]["status"] != "passed":
+            raise RuntimeError("nominal pilot closure is required")
+        pilot_config = campaign / str(year) / ("campaign.json" if year == 2024 else "pilot_retry1.json")
+        pilot = read(pilot_config)
+        shared = dict(pilot)
+        for path, expected in shared["pins"].items():
+            if Path(path).name in ("run.py", "run.sh"):
+                continue
+            if sha(path) != expected:
+                raise RuntimeError("validated dependency changed: " + path)
+        for key in ("source_root", "source_sidecar", "shard"):
+            shared.pop(key)
+        shared["pins"] = {p: h for p, h in shared["pins"].items()
+                          if p not in (pilot["source_sidecar"], pilot["shard"])
+                          and Path(p).name not in ("run.py", "run.sh")}
+        for name in ("run.py", "run.sh"):
+            shared["pins"][str(campaign / name)] = sha(campaign / name)
+        shared.update(status="full_mc_prepared", shifts=list(SHIFTS[1:]),
+                      keep_input_cache=False, root_retention="on EOS; never on laptop")
+        base = target / str(year)
+        shared_path = base / "common.json"
+        write(shared_path, shared)
+        shared_hash = sha(shared_path)
+        source_list = repo / f"autonomous_allhad/workflow/histograms/lepton_veto10_20260908/{year}/inputs.txt"
+        sources = [eos(line) for line in source_list.read_text().splitlines()
+                   if line and not Path(line).name.startswith("data_")]
+        seen, names, jobs, reused, input_failures = set(), set(), [], [], []
+        counts = Counter()
+        process_files = Counter()
+
+        def inspect(source):
+            metadata_path = source.with_suffix(".json")
+            metadata = read(metadata_path)
+            records = source_records(metadata_path, year, metadata)
+            if not records or not source.is_file():
+                raise RuntimeError("missing or empty canonical source: " + str(source))
+            compact = {key: metadata.get(key) for key in ("events_read", "bad_files")}
+            return source, metadata_path, compact, records
+
+        with ThreadPoolExecutor(max_workers=4) as pool:
+            for source, metadata_path, metadata, records in pool.map(inspect, sources):
+                name = source.stem
+                if name in names:
+                    raise RuntimeError("duplicate output shard name: " + name)
+                names.add(name)
+                for record in records:
+                    key = record["file_path"].split("/store/", 1)[-1]
+                    if key in seen:
+                        raise RuntimeError("duplicate canonical NanoAOD: " + key)
+                    seen.add(key)
+                    process_files[record["process_group"]] += 1
+                counts["signal_shards" if any(r["is_signal"] for r in records) else "background_shards"] += 1
+                counts["files"] += len(records)
+                counts["events_read"] += metadata["events_read"]
+                input_failures.extend(metadata.get("bad_files", []))
+                if str(source) == pilot["source_root"]:
+                    old_base = campaign / str(year) / ("pilot" if year == 2024 else "pilot_retry1")
+                    for shift in SHIFTS[1:]:
+                        result = read(old_base / shift / "result.json")
+                        if result["status"] != "complete" or any(
+                                sha(p["path"]) != p["sha256"] for p in result["products"].values()):
+                            raise RuntimeError("validated pilot product changed")
+                        reused.append(dict(shard=name, shift=shift, output=str(old_base / shift)))
+                    continue
+                shard_path = base / "shards" / (name + ".json")
+                write(shard_path, dict(schema_version="full_production_shard_spec_v2_boosted",
+                    shard_id=name, record_group="mc", records=records, records_per_shard=len(records),
+                    record_digest=hashlib.sha256(json.dumps(records, sort_keys=True).encode()).hexdigest()[:16]))
+                config_path = base / "configs" / (name + ".json")
+                write(config_path, dict(shared_config=str(shared_path), shared_config_sha256=shared_hash,
+                    source_root=str(source), source_sidecar=str(metadata_path), shard=str(shard_path),
+                    pins={str(metadata_path): sha(metadata_path), str(shard_path): sha(shard_path)}))
+                memory = 12000 if any(r["is_signal"] for r in records) else 6000
+                for shift in SHIFTS[1:]:
+                    output = base / "outputs" / name / shift
+                    output.mkdir(parents=True, exist_ok=True)
+                    jobs.append(f"{name} {shift} {config_path} {output} {memory}")
+                if len(names) % 500 == 0:
+                    print(json.dumps(dict(year=year, inspected_shards=len(names))), flush=True)
+        logs = base / "logs"
+        logs.mkdir(parents=True, exist_ok=True)
+        queue = base / "jobs.queue"
+        queue.write_text("\n".join(jobs) + "\n")
+        runtime = repo.parent / "runtime"
+        proxy = eos(args.proxy)
+        for path in (runtime / "py38.tgz", runtime / "mt2-1.2.0-cp38-cp38-manylinux2010_x86_64.whl", proxy):
+            if not path.is_file():
+                raise FileNotFoundError(path)
+        submit_path = base / "jobs.sub"
+        submit_path.write_text(f'''universe = vanilla
+initialdir = {base}
+executable = {campaign}/run.sh
+arguments = {campaign}/run.py worker --config $(config) --shift $(shift) --output $(resultdir)
+getenv = False
+output = {logs}/$(shard)_$(shift).$(ClusterId).out
+error = {logs}/$(shard)_$(shift).$(ClusterId).err
+log = {logs}/jobs.$(ClusterId).log
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+transfer_executable = True
+transfer_input_files = {runtime}/py38.tgz, {runtime}/mt2-1.2.0-cp38-cp38-manylinux2010_x86_64.whl
+transfer_output_files = ""
+use_x509userproxy = True
+x509userproxy = {proxy}
+request_cpus = 2
+request_memory = $(memory)
+request_disk = 25000MB
++JobFlavour = "workday"
++MaxRuntime = 28800
++JobBatchName = "NPS26012_shape_{args.label}_{year}"
+on_exit_hold = (ExitBySignal == True) || (ExitCode != 0)
+queue shard,shift,config,resultdir,memory from {queue}
+''')
+        year_state = dict(status="prepared", jobs=len(jobs), reused=reused, counts=dict(counts),
+                          process_files=dict(process_files), unique_files=len(seen), duplicate_files=0,
+                          source_bad_files=input_failures, input_list_sha256=sha(source_list),
+                          common_sha256=shared_hash, queue_sha256=sha(queue), submit=str(submit_path))
+        write(base / "campaign_state.json", year_state)
+        summary["years"][str(year)] = year_state
+        print(json.dumps(dict(year=year, jobs=len(jobs), files=len(seen), reused=len(reused))), flush=True)
+    write(target / "campaign_state.json", summary)
+    state.setdefault("full_campaigns", {})[args.label] = dict(path=str(target), status="prepared",
+        jobs=sum(y["jobs"] for y in summary["years"].values()), shifts=list(SHIFTS[1:]))
+    write(campaign / "campaign_state.json", state)
 
 
 def prepare(args):
@@ -226,7 +380,7 @@ def preflight(args):
 
 
 def worker(args):
-    config = read(args.config)
+    config = load_config(args.config)
     if args.shift not in SHIFTS:
         raise ValueError("shift not validated by this propagation stage")
     for path, expected in config["pins"].items():
@@ -249,10 +403,11 @@ def worker(args):
     vendor = os.environ.get("PYTHONPATH", "")
     env.update(PYTHONPATH=f"{repo}/autonomous_allhad:{repo}:{vendor}",
                AUTONOMOUS_ALLHAD_LOCAL_ANALYSIS_DATA="0",
-               AUTONOMOUS_ALLHAD_XRD_PREFER_CACHE="1", AUTONOMOUS_ALLHAD_XRD_KEEP_CACHE="1",
+               AUTONOMOUS_ALLHAD_XRD_PREFER_CACHE="1",
+               AUTONOMOUS_ALLHAD_XRD_KEEP_CACHE="1" if config.get("keep_input_cache", True) else "0",
                AUTONOMOUS_ALLHAD_XRD_CACHE=str(work / "xrd"),
                AUTONOMOUS_ALLHAD_FRAGMENT_DIR=str(work / "fragments"))
-    root = work / "mc_shard_00000.root"
+    root = work / Path(config["source_root"]).name
     metadata_path = root.with_suffix(".json")
     report = dict(status="running", year=year, shift=args.shift, stages={}, started=time.time())
 
@@ -268,8 +423,9 @@ def worker(args):
                  "--shard", config["shard"], "--output", root, "--metadata-output", metadata_path,
                  "--shift", args.shift, "--record-workers", "1", "--chunk-size", "25000"], env, work)
         metadata = read(metadata_path)
-        if metadata["status"] != "complete" or metadata["bad_files"]:
+        if metadata["status"] not in ("complete", "complete_with_bad_files"):
             raise RuntimeError("incomplete shifted Events production")
+        report["bad_files"] = metadata["bad_files"]
         report["stages"]["events"] = dict(events_read=metadata["events_read"],
             events_written=metadata["events_written"], files=metadata["files_processed"])
         checkpoint()
@@ -340,7 +496,8 @@ def worker(args):
                 raise RuntimeError("stage-out checksum mismatch")
             temporary.replace(target)
             products[name] = dict(path=str(target), sha256=expected, bytes=target.stat().st_size)
-        report.update(status="complete", products=products, finished=time.time(),
+        report.update(status="complete_with_bad_files" if report["bad_files"] else "complete",
+                      products=products, finished=time.time(),
                       validation="individual shifted job complete; nominal closure pending",
                       config_sha256=sha(args.config))
         checkpoint()
@@ -495,6 +652,11 @@ def main():
     prep.add_argument("--repo", required=True, type=Path)
     prep.add_argument("--years", nargs="+", type=int, choices=(2024, 2025), default=[2024, 2025])
     prep.add_argument("--label", default="pilot", choices=("pilot", "pilot_retry1"))
+    full = commands.add_parser("prepare-full")
+    full.add_argument("--repo", required=True, type=Path)
+    full.add_argument("--years", nargs="+", type=int, choices=(2024, 2025), default=[2024, 2025])
+    full.add_argument("--label", required=True, choices=("full_met_20260911",))
+    full.add_argument("--proxy", required=True, type=Path)
     check = commands.add_parser("preflight")
     check.add_argument("--config", required=True, type=Path)
     check.add_argument("--output", required=True, type=Path)
@@ -508,7 +670,8 @@ def main():
     validation.add_argument("--reference", required=True, type=Path)
     validation.add_argument("--cluster", required=True, type=int)
     args = parser.parse_args()
-    return {"prepare": prepare, "preflight": preflight, "worker": worker, "validate": validate}[args.command](args)
+    return {"prepare": prepare, "prepare-full": prepare_full, "preflight": preflight,
+            "worker": worker, "validate": validate}[args.command](args)
 
 
 if __name__ == "__main__":
