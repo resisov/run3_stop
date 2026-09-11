@@ -3936,7 +3936,7 @@
     "primary_limits_running": 0,
     "timeout_recovery_running": 0
   },
-  "status": "topw_sf_combining_cards",
+  "status": "topw_sf_T2bW_limits_submitted; T2tt_T2tb_combining",
   "topologies": [
     "T2tt",
     "T2bW",
@@ -5605,9 +5605,24 @@
     "schedd": "bigbird24.cern.ch",
     "source_backup": "topw_previous_sources.tar.gz",
     "source_commit": "456fd370",
-    "stage": "cards_generated; template_validation_and_year_combination_submitted",
+    "stage": "all_source_templates_validated; T2bW_limits_submitted; T2tt_T2tb_combining",
     "cards": {
-      "status": "all_six_exit0; exhaustive_template_validation_running_in_combination_jobs",
+      "status": "all_six_exit0; all_templates_and_card_shape_references_validated",
+      "template_validation": {
+        "verified_at_utc": "2026-09-11T12:28:00Z",
+        "source": "1115246 stdout source_validation records; completed T2bW manifest",
+        "root_histograms": 3815319,
+        "shape_references_checked": 47747262,
+        "sr_blinded_per_year_per_topology": 103,
+        "template_sha256": {
+          "2024_T2tt": "61c7f2e1a5ade3a682c311a53e0bee1879451b3e1839da76a86932a474b28e8f",
+          "2025_T2tt": "38cca027fd2339a2b7fd03d67341e444c29d42d67912f794e845e0bf1b002d32",
+          "2024_T2bW": "fae0704100d8920f21a5eb737d1ecf27b3c111b6d5eeb37434c72e8abc3dd8a2",
+          "2025_T2bW": "f7b093ac4349ff9e806a2f71625ae7e2a9002a026b34e9dffdf4578f6b8c98b7",
+          "2024_T2tb": "ddea950b832a03fd3c8b8beb9ba68f54c95721326c7df8edc07b958a62403826",
+          "2025_T2tb": "c25ce2c27694d16149ae3b1386e51ad351ceb2a5adac1029e630b5b7c26bb4e3"
+        }
+      },
       "completed_at_utc": "2026-09-11T11:15:04Z",
       "generated_cards_per_year": {"T2tt": 205, "T2bW": 354, "T2tb": 365},
       "generated_cards_total": 1848,
@@ -5666,7 +5681,12 @@
       }
     },
     "combined_cards": {
-      "status": "submitted",
+      "status": "T2bW_complete; T2tt_T2tb_running",
+      "git_commit": "45b5d38a",
+      "git_publication_approved": "User: 푸시해",
+      "generated_at_utc": "2026-09-11T12:28:55Z",
+      "generated_counts": {"T2tt": 48, "T2bW": 354, "T2tb": 288},
+      "completed": {"T2bW": {"exit_code": 0, "exit_by_signal": false, "completion_epoch": 1789129380, "mass_points": 354, "warnings": 0, "manifest_sha256": "7cbf2f00ba694442139fbc293999f93d8f67a9a52eae1e623cbe4794cf080a64"}},
       "cluster": 1115246,
       "submitted_at_utc": "2026-09-11T11:52:14Z",
       "schedd": "bigbird24.cern.ch",
@@ -5683,11 +5703,30 @@
       "max_runtime_seconds": 28800,
       "effective_queue_cpus_per_job": 6,
       "effective_queue_memory_mb_per_job": 18000,
-      "last_queue_check": {"utc": "2026-09-11T11:52:40Z", "idle": 3, "running": 0, "held": 0},
+      "last_queue_check": {"utc": "2026-09-11T12:27:44Z", "idle": 0, "running": 2, "held": 0, "history_exit0": 1},
       "validation": "all six source ROOT files; finite contents and variances; all nominal and Up/Down card references; blinded SR placeholders",
       "physics_changed": false
     },
-    "limits": {"status": "waiting_for_validated_combined_cards", "expected_total": 924},
+    "limits": {
+      "status": "T2bW_submitted; T2tt_T2tb_waiting_for_combination",
+      "expected_total": 924,
+      "submitted_total": 354,
+      "output_directory": "combined_pending",
+      "T2bW": {
+        "cluster": 1115252,
+        "schedd": "bigbird24.cern.ch",
+        "mass_points": 354,
+        "submission_file": "combined_pending/T2bW/limits_eossubmit.sub",
+        "submission_sha256": "e4fcef7c1d1b7db89577c746c8b456c9aa70066ee115c2482dada971df383075",
+        "wrapper_sha256": "b2892938faa38f3ddb40bccf25b324b3612de0c32bb5325222a6cddfaa0b4eac",
+        "proxy_seconds_before_submit": 369644,
+        "voms_seconds_before_submit": 340844,
+        "max_runtime_seconds": 28800,
+        "point_timeout_seconds": 7200,
+        "workspace_timeout_seconds": 900,
+        "last_queue_check": {"utc": "2026-09-11T12:29:23Z", "idle": 354, "running": 0, "held": 0}
+      }
+    },
     "impacts": {"status": "waiting_for_validated_combined_cards", "topology": "T2tt", "mStop": 1200, "mLSP": 500, "asimov_r": [1, 0], "plots": "local_only"},
     "superseded_output_policy": {
       "action": "delete_without_retaining_backup",
