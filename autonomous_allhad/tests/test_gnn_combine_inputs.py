@@ -151,6 +151,13 @@ def test_initial_rate_scale_matches_card_precision():
     assert card.initial_rate_scale(channel, "Top") == 1.0
 
 
+@pytest.mark.parametrize("year", ["2024", "2025"])
+@pytest.mark.parametrize("source", ["topw_top_tp1_pt400to480", "topw_w_other_pt200to300"])
+def test_topw_fit_cell_names_keep_year_and_identity(monkeypatch, year, source):
+    monkeypatch.setattr(card, "CAMPAIGN_YEAR", year)
+    assert card.nps_nuisance_name(source) == f"CMS_NPS26012_eff_{source[5:]}_{year}"
+
+
 def test_double_ratio_uses_central_deviation_and_shared_ut(inputs):
     channels, _ = card.build_gnn_channels(*inputs)
     seen = set()

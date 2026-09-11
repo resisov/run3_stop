@@ -138,6 +138,13 @@ def nps_nuisance_name(name: str) -> str:
     for source, cms_name in yearly_jes.items():
         if name == f"{source}{CAMPAIGN_YEAR}":
             return f"{cms_name}_{CAMPAIGN_YEAR}"
+    topw = re.fullmatch(r"topw_(top|w)_(tp[123]|other)_pt(\d+)to(\d+)", name)
+    if topw:
+        tag, category, low, high = topw.groups()
+        cells = {"top": {(400, 480), (480, 600), (600, 1200)},
+                 "w": {(200, 300), (300, 400), (400, 800)}}
+        if (int(low), int(high)) in cells[tag]:
+            return f"{ANALYSIS_NUISANCE_PREFIX}_eff_{tag}_{category}_pt{low}to{high}_{CAMPAIGN_YEAR}"
     raise ValueError(f"no CMS nuisance-name mapping for canonical variation {name!r}")
 
 
