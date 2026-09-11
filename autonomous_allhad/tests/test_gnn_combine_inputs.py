@@ -106,6 +106,51 @@ def test_qgamma_is_not_transferred_to_z(inputs):
             np.testing.assert_allclose(after["backgrounds"][process]["nominal"], record["nominal"] * scale)
 
 
+def test_prefit_export_applies_rz_and_sgamma_once(inputs, tmp_path):
+    channels, bins = card.build_gnn_channels(*inputs)
+    output = tmp_path / "sr.json"
+    card.export_sr_plot_payload(channels, {}, [], {"lowdm": bins}, {}, "T2bW", {}, output)
+    payload = json.loads(output.read_text())
+    assert payload["prediction_stage"] == "prefit"
+    assert payload["rate_initials_applied"] is True
+    assert payload["sr_observations_included"] is False
+    assert payload["uncertainty"] == "mc_statistical_only"
+    assert len(payload["channels"]) == 30
+    for row in bins:
+        processes = payload["channels"][row["channel"]]
+        assert "data_obs" not in processes
+        z = sum(record["sumw"][0] for name, record in processes.items() if name.startswith("Zto2Nu_"))
+        expected = inputs[0]["lowdm_gnn"]["zinv_projection"][row["category"]]["rz_sgamma"][row["score_bin"]]
+        assert z == pytest.approx(expected)
+        channel = next(c for c in channels if c["name"] == row["channel"])
+        for name, record in processes.items():
+            original = channel["backgrounds"][name]
+            scale = card.initial_rate_scale(channel, name)
+            assert record["sumw2"][0] == pytest.approx(original["sumw2"][0] * scale**2)
+
+
+def test_sgamma_has_only_shared_rateparams_in_card(inputs):
+    channels, _ = card.build_gnn_channels(*inputs)
+    summary = {"signals": {"mStop1200_mLSP500": {
+        "channels": {}, "weight_nuisances": [], "nuisance_factors": {}}},
+        "channels": {c["name"]: {"backgrounds": {}} for c in channels}}
+    text = card.datacard_text(Path("templates.root"), channels, "mStop1200_mLSP500", summary, 10)
+    lines = [line.split() for line in text.splitlines() if "sgamma_shape" in line]
+    assert lines and all(line[1] == "rateParam" for line in lines)
+    names = {line[0] for line in lines}
+    for name in names:
+        regions = {line[2].split("_", 1)[0] for line in lines if line[0] == name}
+        assert regions == {"SR", "GCR"}
+    assert not any(c["region"] in ("DY2E", "DY2M", "DYCR") for c in channels)
+
+
+def test_initial_rate_scale_matches_card_precision():
+    channel = {"name": "SR", "rate_params": {"Z": "sgamma"},
+               "rate_initial": {"Z": 0.994098412345}}
+    assert card.initial_rate_scale(channel, "Z") == 0.99409841
+    assert card.initial_rate_scale(channel, "Top") == 1.0
+
+
 def test_double_ratio_uses_central_deviation_and_shared_ut(inputs):
     channels, _ = card.build_gnn_channels(*inputs)
     seen = set()

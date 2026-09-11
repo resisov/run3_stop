@@ -63,34 +63,65 @@ def one_bin(directory: uproot.ReadOnlyDirectory, names: list[str]) -> tuple[floa
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
+    inputs = parser.add_mutually_exclusive_group(required=True)
+    inputs.add_argument(
         "--templates",
-        required=True,
         type=Path,
         nargs="+",
         help="one or more same-binning yearly template ROOT files to sum",
     )
-    parser.add_argument("--bin-map", required=True, type=Path)
+    inputs.add_argument("--payloads", type=Path, nargs="+",
+                        help="canonical SR model JSON exports; no local ROOT input")
+    parser.add_argument("--bin-map", type=Path)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--luminosity-fb", type=float, default=style.LUMINOSITY_FB)
     args = parser.parse_args()
     args.output.parent.mkdir(parents=True, exist_ok=True)
 
-    bin_map = json.loads(args.bin_map.read_text())
+    exports = [json.loads(path.read_text()) for path in args.payloads or []]
+    if exports:
+        if any(item.get("schema_version") != "canonical_sr_plot_payload_v1"
+               or item.get("sr_observations_included") is not False
+               or item.get("prediction_stage") != "prefit"
+               or item.get("rate_initials_applied") is not True
+               or item.get("uncertainty") != "mc_statistical_only"
+               or item.get("topology") != "T2tt" for item in exports):
+            raise RuntimeError("invalid blinded T2tt SR plot payload")
+        bin_map = exports[0]["bin_map"]
+        if any(item["bin_map"]["highdm"] != bin_map["highdm"] for item in exports):
+            raise RuntimeError("yearly High-dM bin maps differ")
+    else:
+        if args.bin_map is None:
+            parser.error("--templates requires --bin-map")
+        bin_map = json.loads(args.bin_map.read_text())
     highdm = list(bin_map["highdm"])
-    if len(highdm) != 79:
-        raise RuntimeError(f"expected 79 source High-dM bins, found {len(highdm)}")
     expected_removed = [f"SR_highdm_bin{index}" for index in range(6)]
-    if [record["channel"] for record in highdm[:6]] != expected_removed:
+    if exports:
+        if len(highdm) != 73 or any(item["highdm_projection"].get("dropped_final_bins_1based") != list(range(1, 7)) for item in exports):
+            raise RuntimeError("SR export must contain the 73 retained High-dM bins")
+    elif len(highdm) != 79 or [record["channel"] for record in highdm[:6]] != expected_removed:
         raise RuntimeError("limit bin map does not begin with SR_highdm_bin0--5")
 
     samples = {
         sample: {"sumw": [], "sumw2": []}
         for sample in (*BACKGROUND_COMPONENTS, "data_obs", *SIGNALS)
     }
-    with ExitStack() as stack:
-        root_files = [stack.enter_context(uproot.open(path)) for path in args.templates]
+    if exports:
         for record in highdm:
+            directories = [item["channels"][record["channel"]] for item in exports]
+            for sample, patterns in BACKGROUND_COMPONENTS.items():
+                leaves = [directory[name] for directory in directories
+                          for name in matching_names(list(directory), patterns)]
+                samples[sample]["sumw"].append(sum(float(leaf["sumw"][0]) for leaf in leaves))
+                samples[sample]["sumw2"].append(sum(float(leaf["sumw2"][0]) for leaf in leaves))
+            samples["data_obs"]["sumw"].append(0.0)
+            samples["data_obs"]["sumw2"].append(0.0)
+            for sample, name in SIGNALS.items():
+                for field in ("sumw", "sumw2"):
+                    samples[sample][field].append(sum(float(directory[name][field][0]) for directory in directories))
+    with ExitStack() as stack:
+        root_files = [stack.enter_context(uproot.open(path)) for path in args.templates or []]
+        for record in highdm if root_files else []:
             directories = [root_file[str(record["channel"])] for root_file in root_files]
             names_by_directory = [nominal_names(directory) for directory in directories]
             for sample, patterns in BACKGROUND_COMPONENTS.items():
@@ -125,7 +156,8 @@ def main() -> int:
     payload = {
         "search_bin_schemes": {
             "highdm_search_bins": {
-                "bin_labels": [record["label"] for record in highdm]
+                "bin_labels": [record["label"] for record in highdm],
+                "dropped_final_bins_1based": list(range(1, 7)) if exports else [],
             }
         },
         "search_bin_histograms": {
@@ -151,14 +183,17 @@ def main() -> int:
     summary.update(
         {
             "schema_version": "highdm73_limit_template_plot_v1",
-            "templates": [str(path) for path in args.templates],
-            "bin_map": str(args.bin_map),
+            "templates": [str(path) for path in args.templates or []],
+            "payloads": [str(path) for path in args.payloads or []],
+            "bin_map": str(args.bin_map) if args.bin_map else None,
             "luminosity_fb": args.luminosity_fb,
             "source_highdm_bins": 79,
             "removed_channels": expected_removed,
             "retained_highdm_bins": 73,
             "significance_definition": "S/sqrt(B)",
             "main_ylabel": "Events",
+            "prediction_stage": "prefit" if exports else "template_input",
+            "uncertainty": "mc_statistical_only",
         }
     )
     args.output.with_suffix(".json").write_text(

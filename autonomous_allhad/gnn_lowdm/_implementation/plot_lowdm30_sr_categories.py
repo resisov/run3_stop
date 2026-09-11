@@ -103,13 +103,15 @@ def score_interval(low: float, high: float, final: bool) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
+    inputs = parser.add_mutually_exclusive_group(required=True)
+    inputs.add_argument(
         "--templates",
-        required=True,
         type=Path,
         nargs="+",
         help="one or more same-binning yearly template ROOT files to sum",
     )
+    inputs.add_argument("--payloads", type=Path, nargs="+",
+                        help="canonical SR model JSON exports; no local ROOT input")
     parser.add_argument("--binning", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--luminosity-fb", type=float, default=LUMINOSITY_FB)
@@ -127,9 +129,41 @@ def main() -> int:
         "SR_" + category: np.asarray(edges, dtype=float)
         for category, edges in binning["edges_by_category"].items()
     }
-    with ExitStack() as stack:
-        root_files = [stack.enter_context(uproot.open(path)) for path in args.templates]
+    exports = [json.loads(path.read_text()) for path in args.payloads or []]
+    if exports:
+        if any(item.get("schema_version") != "canonical_sr_plot_payload_v1"
+               or item.get("sr_observations_included") is not False
+               or item.get("prediction_stage") != "prefit"
+               or item.get("rate_initials_applied") is not True
+               or item.get("uncertainty") != "mc_statistical_only"
+               or item.get("topology") != "T2bW" for item in exports):
+            raise RuntimeError("invalid blinded T2bW SR plot payload")
+        mapping = {"VV": "VV_VVV", "Top": "Top", "DY": "DY", "Photon": "PhotonJet",
+                   "W": "WtoLNu", "Zinv": "Zto2Nu", "QCD": "QCD"}
         for category in CATEGORIES:
+            yearly = []
+            for item in exports:
+                rows = [row for row in item["bin_map"]["lowdm"] if "SR_" + row["category"] == category]
+                if [row["score_bin"] for row in rows] != list(range(5)):
+                    raise RuntimeError(f"invalid score-bin order: {category}")
+                np.testing.assert_array_equal([rows[0]["score_edges"][0]] + [row["score_edges"][1] for row in rows], raw_edges[category])
+                yearly.append([item["channels"][row["channel"]] for row in rows])
+            for process in PROCESS_ORDER:
+                prefix = mapping[process]
+                for field, target in (("sumw", process_values), ("sumw2", process_variances)):
+                    values = np.zeros(5)
+                    for directories in yearly:
+                        for index, directory in enumerate(directories):
+                            values[index] += sum(float(leaf[field][0]) for name, leaf in directory.items()
+                                                 if name == prefix or name.startswith(prefix + "_"))
+                    target[process].append(values)
+            for key, _, _ in BENCHMARKS:
+                name = key.replace("signal_", "sig_", 1)
+                signal_values[key].append(np.sum([[float(directory[name]["sumw"][0])
+                                                   for directory in directories] for directories in yearly], axis=0))
+    with ExitStack() as stack:
+        root_files = [stack.enter_context(uproot.open(path)) for path in args.templates or []]
+        for category in CATEGORIES if root_files else []:
             for process in PROCESS_ORDER:
                 value_sum = None
                 variance_sum = None
@@ -347,12 +381,15 @@ def main() -> int:
         "schema_version": "lowdm30_sr_category_plot_v1",
         "status": "complete",
         "luminosity_fb": args.luminosity_fb,
-        "templates": [str(path.resolve()) for path in args.templates],
+        "templates": [str(path.resolve()) for path in args.templates or []],
+        "payloads": [str(path.resolve()) for path in args.payloads or []],
         "binning": str(args.binning.resolve()),
         "categories": list(CATEGORIES),
         "score_bins_per_category": 5,
         "total_bins": 30,
         "signal_scale": 1.0,
+        "prediction_stage": "prefit" if exports else "template_input",
+        "uncertainty": "mc_statistical_only",
         "signals": [
             {
                 "topology": "T2bW",

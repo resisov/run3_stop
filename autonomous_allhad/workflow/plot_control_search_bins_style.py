@@ -1743,6 +1743,13 @@ def selected_an17_recoil_blocks(payload: dict, scheme_name: str) -> list[dict]:
             block["dropped_input_bins_1based"] = list(
                 range(1, HIGHDM_PLOT_DROPPED_LEADING_BINS + 1)
             )
+    elif (
+        int(rec["nbin"]) == 73
+        and scheme.get("dropped_final_bins_1based") == list(range(1, 7))
+        and all(block.get("category_key") != "Nb1plus_T0_W0" for block in blocks)
+    ):
+        for block in blocks:
+            block["dropped_input_bins_1based"] = list(range(1, 7))
     else:
         raise RuntimeError(
             "High-dM plotting projection does not begin with the expected "

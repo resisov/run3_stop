@@ -2446,6 +2446,65 @@ def mass_points(
     return sorted(selected, key=parse_mass_key)
 
 
+def initial_rate_scale(channel: dict[str, Any], process: str) -> float:
+    if process not in channel["rate_params"]:
+        return 1.0
+    value = float(channel["rate_initial"].get(process, 1.0))
+    if not math.isfinite(value):
+        raise ValueError(f"nonfinite rate initial: {channel['name']}/{process}")
+    # Match the value serialized in the datacard, including its precision.
+    return float(f"{min(max(value, 1.0e-4), 9.999):.8g}")
+
+
+def export_sr_plot_payload(
+    channels: list[dict[str, Any]], hists: dict[str, Any], masses: list[str],
+    bin_map: dict[str, Any], projection: dict[str, Any],
+    topology: str, inputs: dict[str, Path], output: Path,
+) -> None:
+    """Export the initial model prediction, without observations or ROOT files."""
+    records = {}
+    for channel in channels:
+        if channel["region"] != "SR":
+            continue
+        histograms = {}
+        for process, record in channel["backgrounds"].items():
+            scale = initial_rate_scale(channel, process)
+            histograms[process] = {
+                "sumw": (record["nominal"] * scale).tolist(),
+                "sumw2": (record["sumw2"] * scale * scale).tolist(),
+            }
+        sources = channel.get("signal_sources")
+        if sources is None:
+            sources = [channel["signal_source"]] if channel.get("signal_source") else []
+        for mass in masses:
+            if not sources or len({regime for regime, _ in sources}) != 1:
+                raise ValueError(f"invalid SR signal mapping: {channel['name']}")
+            nominal, variance = signal_leaf(hists, sources[0][0], mass, "nominal", topology)
+            bins = [index for _, index in sources]
+            if any(index >= len(nominal) for index in bins):
+                raise ValueError(f"missing SR signal bin: {channel['name']}/{mass}")
+            histograms[signal_process_name(mass)] = {
+                "sumw": [max(float(sum(nominal[index] for index in bins)), MIN_BIN)],
+                "sumw2": [max(float(sum(variance[index] for index in bins)), 0.0)],
+            }
+        for process, record in histograms.items():
+            if any(not np.isfinite(record[field]).all() for field in ("sumw", "sumw2")):
+                raise ValueError(f"nonfinite SR plot input: {channel['name']}/{process}")
+            if np.any(np.asarray(record["sumw2"]) < 0):
+                raise ValueError(f"negative SR variance: {channel['name']}/{process}")
+        records[channel["name"]] = histograms
+    output.parent.mkdir(parents=True, exist_ok=True)
+    write_json(output, {
+        "schema_version": "canonical_sr_plot_payload_v1", "year": CAMPAIGN_YEAR,
+        "topology": topology, "sr_observations_included": False,
+        "prediction_stage": "prefit", "rate_initials_applied": True,
+        "uncertainty": "mc_statistical_only",
+        "bin_map": bin_map, "highdm_projection": projection,
+        "channels": records,
+        "inputs": {key: {"path": str(path), "sha256": sha256(path)} for key, path in inputs.items()},
+    })
+
+
 def build_root(
     channels: list[dict[str, Any]],
     hists: dict[str, Any],
@@ -2878,6 +2937,10 @@ def datacard_text(
             for item in records
         }
     )
+    rate_names = {name for channel in channels for name in channel["rate_params"].values()}
+    duplicate_constraints = rate_names.intersection(set(nuisances) | set(extra_names))
+    if duplicate_constraints:
+        raise ValueError(f"rate parameters duplicated as independent constraints: {sorted(duplicate_constraints)}")
     for nuisance in extra_names:
         mask = []
         for channel_name, process, _ in columns:
@@ -2896,7 +2959,7 @@ def datacard_text(
     rate_lines = []
     for channel in channels:
         for process, parameter in sorted(channel["rate_params"].items()):
-            initial = min(max(float(channel["rate_initial"].get(process, 1.0)), 1.0e-4), 9.999)
+            initial = initial_rate_scale(channel, process)
             rate_lines.append(
                 f"{parameter} rateParam {channel['name']} {process} {initial:.8g} [0,10]"
             )
@@ -2966,6 +3029,8 @@ def main() -> int:
         help="Adopted year-specific High-dM search-bin configuration",
     )
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--export-sr-json", type=Path,
+                        help="Export the initial SR model for local plotting; do not write cards or ROOT.")
     parser.add_argument("--only", nargs="*")
     parser.add_argument("--max-mstop", type=int, default=1800)
     parser.add_argument("--auto-mc-stats", type=int, default=10)
@@ -3082,7 +3147,8 @@ def main() -> int:
         args.drop_highdm_leading_bins,
     )
     rz_covariance = build_rz_covariance(rz_high, rz_low)
-    write_json(output_dir / "rz_covariance.json", rz_covariance)
+    if not args.export_sr_json:
+        write_json(output_dir / "rz_covariance.json", rz_covariance)
     (
         channels,
         unmatched_rate_parameters,
@@ -3108,7 +3174,8 @@ def main() -> int:
         hists["search_bin_histograms"][GNN_SCHEME] = gnn_signal_histograms(
             args.gnn_hists, args.topology, gnn_config, args.only
         )
-    write_json(output_dir / "bin_map.json", bin_map)
+    if not args.export_sr_json:
+        write_json(output_dir / "bin_map.json", bin_map)
     low_control_group_summary = [
         {
             "nb_group": str(record["nb_group"]),
@@ -3133,6 +3200,12 @@ def main() -> int:
     )
     if not masses:
         raise SystemExit("no signal mass points selected")
+    if args.export_sr_json:
+        export_sr_plot_payload(channels, hists, masses, bin_map, highdm_bin_projection,
+                               args.topology, input_paths, args.export_sr_json)
+        print(json.dumps({"status": "complete", "sr_plot_payload": str(args.export_sr_json),
+                          "year": CAMPAIGN_YEAR, "topology": args.topology}))
+        return 0
     template_root = output_dir / ("templates.root" if args.gnn_hists else f"highdm_{CAMPAIGN_YEAR}.root")
     card_dir = output_dir / "cards"
     limit_dir = output_dir / "limits"
