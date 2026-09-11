@@ -1,40 +1,281 @@
 {
+  "attempts": [
+    {
+      "cluster": 1115064,
+      "completed_procs": [
+        0,
+        1,
+        2
+      ],
+      "exit_codes": {
+        "0": 0,
+        "1": 0,
+        "2": 0
+      },
+      "removal_reason": "2025 jetid.json.gz missing from the live EOS repository; common payload staging failure, not an input ROOT failure",
+      "removed_procs": [
+        3,
+        4,
+        5
+      ],
+      "running_procs": [],
+      "status": "complete_with_removed_procs",
+      "worker_commit": "93458bfc"
+    },
+    {
+      "cluster": 1115066,
+      "completed_procs": [
+        0,
+        1,
+        2
+      ],
+      "config": "2025/pilot_retry1.json",
+      "exit_codes": {
+        "0": 0,
+        "1": 0,
+        "2": 0
+      },
+      "preflight_bad_files": 0,
+      "preflight_events": 500,
+      "procs": [
+        0,
+        1,
+        2
+      ],
+      "running_procs": [],
+      "status": "complete",
+      "worker_commit": "60925e81",
+      "year": 2025
+    }
+  ],
   "canonical_modified": false,
+  "canonical_promotion": false,
   "job_flavour": "workday",
   "jobs": 6,
   "pending": [
-    "pilot execution",
-    "nominal closure",
     "full MC propagation",
     "JES/JER TROTA-input propagation",
     "EGM",
     "MUO/TAU decomposition",
     "JMS/JMR prescription"
   ],
-  "runtime": "py38; TROTA-only LCG_104",
-  "status": "pilot_submitted",
-  "submitted_clusters": [1115064, 1115066],
-  "schedd": "bigbird24.cern.ch",
-  "verified_classads": {"jobs": 6, "JobFlavour": "workday", "MaxRuntime": 28800},
-  "attempts": [
-    {
-      "cluster": 1115064,
-      "worker_commit": "93458bfc",
-      "running_procs": [0, 1, 2],
-      "removed_procs": [3, 4, 5],
-      "removal_reason": "2025 jetid.json.gz missing from the live EOS repository; common payload staging failure, not an input ROOT failure"
+  "pilot_validation": {
+    "2024": {
+      "event_identity_matches": true,
+      "events": 379,
+      "gnn_bin_values_checked": 51300,
+      "gnn_histogram_leaves": 1368,
+      "main_bin_values_checked": 8628,
+      "main_histogram_leaves": 402,
+      "maximum_histogram_absolute_difference": 0.0,
+      "maximum_trota_score_absolute_difference": 7.450580596923828e-07,
+      "metUnclusteredDown": {
+        "entering": 3,
+        "events": 378,
+        "leaving": 4,
+        "other_object_kinematics_unchanged": true
+      },
+      "metUnclusteredUp": {
+        "entering": 10,
+        "events": 384,
+        "leaving": 5,
+        "other_object_kinematics_unchanged": true
+      },
+      "nominal_closure": "passed",
+      "nonfinite_values": 0,
+      "topw_truth_matches": true,
+      "trota_candidate_identity_matches": true,
+      "trota_candidates": 357,
+      "validation_cli": {
+        "config_sha256": "bb01d683899ef9cfc86ff2156f9ba91ecc6dd59c3812b16bfe1cb03060bc8c5c",
+        "histogram_closure": {
+          "gnn": {
+            "checked_bin_values": 51300,
+            "current_sha256": "b7ae8383e67d11538ce837ae1bb919d713eca8c46ab5e92b75ef7c11759f8ec8",
+            "histogram_leaves": 1368,
+            "maximum_absolute_difference": 0.0,
+            "reference_sha256": "a63154dd3a63223d9bb4e5e70c9daa661d68713032ca6b1fec351e7fe4d04a78",
+            "status": "passed"
+          },
+          "main": {
+            "checked_bin_values": 8628,
+            "current_sha256": "7376a3b923c0fdbb4e9e3c7985a94d4281e0d7abadb49849d5e82777bdf040a8",
+            "histogram_leaves": 402,
+            "maximum_absolute_difference": 0.0,
+            "reference_sha256": "74c1883586439bbc15aea6f8f2b15b9b99343b16a8688f593497d2b2975ec736",
+            "status": "passed"
+          }
+        },
+        "reference": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/2024/nominal_reference",
+        "scope": "single complete MC-shard pilot",
+        "shifts": {
+          "metUnclusteredDown": {
+            "entering": 3,
+            "events_read": 573499,
+            "events_written": 378,
+            "exit_code": 0,
+            "files": 10,
+            "leaving": 4,
+            "root_sha256": "8e730d1a55d7a63116948682e92e402261fdd487eb1109b3d4089a9558e2b14c",
+            "trota": {
+              "candidates_evaluated": 4565,
+              "events": 378,
+              "events_with_selected_candidates": 166,
+              "selected_candidates": 352
+            },
+            "truth_integrity": "passed"
+          },
+          "metUnclusteredUp": {
+            "entering": 10,
+            "events_read": 573499,
+            "events_written": 384,
+            "exit_code": 0,
+            "files": 10,
+            "leaving": 5,
+            "root_sha256": "60face77ad972532b8077ceb210c2226074b227744594223b603b7c65dc182a4",
+            "trota": {
+              "candidates_evaluated": 4643,
+              "events": 384,
+              "events_with_selected_candidates": 169,
+              "selected_candidates": 360
+            },
+            "truth_integrity": "passed"
+          },
+          "nominal": {
+            "entering": 0,
+            "events_read": 573499,
+            "events_written": 379,
+            "exit_code": 0,
+            "files": 10,
+            "leaving": 0,
+            "root_sha256": "06a32ffbe4b52bca110ff1ac4a52d3417b120f97ee8104965402cd5227fdcfd0",
+            "trota": {
+              "candidates_evaluated": 4581,
+              "events": 379,
+              "events_with_selected_candidates": 167,
+              "selected_candidates": 357
+            },
+            "truth_integrity": "passed"
+          }
+        },
+        "status": "passed",
+        "validator_sha256": "8a888b68ab85facaee48c4a85c84adb2585401726fce30fa79b428c7e8f4605e",
+        "year": 2024
+      }
     },
-    {
-      "cluster": 1115066,
-      "worker_commit": "60925e81",
-      "year": 2025,
-      "procs": [0, 1, 2],
-      "config": "2025/pilot_retry1.json",
-      "preflight_events": 500,
-      "preflight_bad_files": 0,
-      "status": "running"
+    "2025": {
+      "event_identity_matches": true,
+      "events": 380,
+      "gnn_bin_values_checked": 51300,
+      "gnn_histogram_leaves": 1368,
+      "main_bin_values_checked": 8628,
+      "main_histogram_leaves": 402,
+      "maximum_histogram_absolute_difference": 0.0,
+      "maximum_trota_score_absolute_difference": 7.450580596923828e-07,
+      "nominal_closure": "passed",
+      "nonfinite_values": 0,
+      "topw_truth_matches": true,
+      "trota_candidate_identity_matches": true,
+      "trota_candidates": 356,
+      "validation_cli": {
+        "config_sha256": "dfec025970e5412f33899dabff553a9d8e2338ecd2b405b3e12632574e1790e3",
+        "histogram_closure": {
+          "gnn": {
+            "checked_bin_values": 51300,
+            "current_sha256": "a65555ab6a8735b1271e24dcbfc09f24d12c29cfcf7d36501556516540fbc0ea",
+            "histogram_leaves": 1368,
+            "maximum_absolute_difference": 0.0,
+            "reference_sha256": "d8a61cf39f13789a65744aa4960c7776e3802f6d1f8f00e71a7503dd505d4338",
+            "status": "passed"
+          },
+          "main": {
+            "checked_bin_values": 8628,
+            "current_sha256": "2cb23afb39d3ae6616b8bd6ce5690940c5ffc15a1cf681219ae4019a8965ff8f",
+            "histogram_leaves": 402,
+            "maximum_absolute_difference": 0.0,
+            "reference_sha256": "3393c9805b94ce6adc8072d4a4f06edb9c0f6f8ab4785368bab35df100f4d92a",
+            "status": "passed"
+          }
+        },
+        "reference": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/2025/nominal_reference",
+        "scope": "single complete MC-shard pilot",
+        "shifts": {
+          "metUnclusteredDown": {
+            "entering": 4,
+            "events_read": 573499,
+            "events_written": 380,
+            "exit_code": 0,
+            "files": 10,
+            "leaving": 4,
+            "root_sha256": "1aaccf87fa704ad1e3b781afd795f50e719b5d2e6accc68af9806fadd9100869",
+            "trota": {
+              "candidates_evaluated": 4345,
+              "events": 380,
+              "events_with_selected_candidates": 171,
+              "selected_candidates": 367
+            },
+            "truth_integrity": "passed"
+          },
+          "metUnclusteredUp": {
+            "entering": 8,
+            "events_read": 573499,
+            "events_written": 383,
+            "exit_code": 0,
+            "files": 10,
+            "leaving": 5,
+            "root_sha256": "e4443136da0db953734d0a17abb65e949a02317f6cfcfcdfc56336ddd696b5be",
+            "trota": {
+              "candidates_evaluated": 4231,
+              "events": 383,
+              "events_with_selected_candidates": 172,
+              "selected_candidates": 358
+            },
+            "truth_integrity": "passed"
+          },
+          "nominal": {
+            "entering": 0,
+            "events_read": 573499,
+            "events_written": 380,
+            "exit_code": 0,
+            "files": 10,
+            "leaving": 0,
+            "root_sha256": "4de42dc250726ac76ef13cae07392be8222e61a4cd7ba76551dfaf2c091c466f",
+            "trota": {
+              "candidates_evaluated": 4274,
+              "events": 380,
+              "events_with_selected_candidates": 171,
+              "selected_candidates": 356
+            },
+            "truth_integrity": "passed"
+          }
+        },
+        "status": "passed",
+        "validator_sha256": "8a888b68ab85facaee48c4a85c84adb2585401726fce30fa79b428c7e8f4605e",
+        "year": 2025
+      }
+    },
+    "reference": "existing flat-v8 nominal ROOT, evaluated with the same frozen main/GNN code, current normalization and lepton veto pT > 10 GeV",
+    "scope": "one complete ST MC shard per application year, 10 original NanoAOD files and 573499 events; not full-MC production",
+    "stored_branch_difference": "Original ROOT veto-object vectors include 5-10 GeV leptons; regenerated vectors use the current 10 GeV definition. The frozen analysis rebuilds the 10 GeV veto, and all final nominal main/GNN histogram bins match exactly. No claim of byte-identical original Events branches is made."
+  },
+  "preparations": {
+    "pilot_retry1": {
+      "jobs": 3,
+      "years": [
+        2025
+      ]
     }
+  },
+  "runtime": "py38; TROTA-only LCG_104",
+  "schedd": "bigbird24.cern.ch",
+  "status": "met_unclustered_pilot_validated",
+  "submitted_clusters": [
+    1115064,
+    1115066
   ],
-  "preparations": {"pilot_retry1": {"jobs": 3, "years": [2025]}},
-  "canonical_promotion": false
+  "verified_classads": {
+    "JobFlavour": "workday",
+    "MaxRuntime": 28800,
+    "jobs": 6
+  }
 }

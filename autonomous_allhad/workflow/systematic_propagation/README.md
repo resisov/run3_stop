@@ -24,6 +24,33 @@ Full production requires nominal-reference closure first. Pilot ROOTs remain on
 EOS for that comparison; no ROOT is copied to the laptop. No result is installed
 into the canonical histograms by this runner.
 
+`validate` checks successful Condor termination, input coverage, product hashes,
+Events/TROTA/TopWTruth integrity and identities, and every nominal histogram bin.
+It records the result in the existing `campaign_state.json`. The reference
+directories contain the original canonical ROOT evaluated with the same frozen
+main/GNN commands, normalization and 10 GeV veto. The pilot's `_condor_stdout`
+records those commands; only the ROOT/sidecar input and output paths differ.
+
+On lxplus:
+
+```bash
+SHAPE_ROOT=/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation
+SHAPE_PY=/eos/user/t/taiwoo/miniconda3/envs/py38/bin/python
+"$SHAPE_PY" "$SHAPE_ROOT/run.py" validate \
+  --config "$SHAPE_ROOT/2024/campaign.json" \
+  --output "$SHAPE_ROOT/2024/pilot" \
+  --reference "$SHAPE_ROOT/2024/nominal_reference" --cluster 1115064
+"$SHAPE_PY" "$SHAPE_ROOT/run.py" validate \
+  --config "$SHAPE_ROOT/2025/pilot_retry1.json" \
+  --output "$SHAPE_ROOT/2025/pilot_retry1" \
+  --reference "$SHAPE_ROOT/2025/nominal_reference" --cluster 1115066
+```
+
+The submitted configurations retain the hashes of their historical worker
+revisions. Do not regenerate those configurations or overwrite completed pilot
+products when updating the runner. This validation is for one ST shard, not a
+claim that the complete MC campaign or all kinematic nuisances are finished.
+
 JES/JER require propagation to the raw-NanoAOD-based TROTA model inputs relative
 to their nominal reference, without changing the nominal model convention.
 That extension, EGM variations, MUO/TAU decomposition, and the JMS/JMR prescription

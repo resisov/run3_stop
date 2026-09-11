@@ -163,7 +163,7 @@ def prepare(args):
     submit = f'''universe = vanilla
 initialdir = {campaign}
 executable = {campaign}/run.sh
-arguments = {campaign}/run.py worker --config $(config) --shift $(shift) --output $(output)
+arguments = {campaign}/run.py worker --config $(config) --shift $(shift) --output $(resultdir)
 getenv = False
 output = {logs}/pilot_$(year)_$(shift).$(ClusterId).out
 error = {logs}/pilot_$(year)_$(shift).$(ClusterId).err
@@ -182,7 +182,7 @@ request_disk = 18000MB
 +MaxRuntime = 28800
 +JobBatchName = "NPS26012_separate_shape_pilot"
 on_exit_hold = (ExitBySignal == True) || (ExitCode != 0)
-queue year,shift,config,output from {campaign}/{args.label}.queue
+queue year,shift,config,resultdir from {campaign}/{args.label}.queue
 '''
     (campaign / (args.label + ".sub")).write_text(submit)
     if (campaign / "campaign_state.json").exists():
@@ -350,6 +350,144 @@ def worker(args):
         raise
 
 
+def histogram_leaves(value, path=()):
+    if not isinstance(value, dict):
+        return {}
+    if "sumw" in value and "sumw2" in value:
+        return {"/".join(path): value}
+    result = {}
+    for name, item in value.items():
+        result.update(histogram_leaves(item, path + (name,)))
+    return result
+
+
+def compare_histograms(reference, current):
+    import numpy as np
+    left, right = histogram_leaves(read(reference)), histogram_leaves(read(current))
+    if not left or left.keys() != right.keys():
+        raise RuntimeError("histogram structure mismatch: " + str(current))
+    checked, largest = 0, 0.0
+    for path in left:
+        for field in ("sumw", "sumw2", "entries"):
+            if field not in left[path] and field not in right[path]:
+                continue
+            a, b = np.asarray(left[path][field]), np.asarray(right[path][field])
+            if a.shape != b.shape or not np.all(np.isfinite(a)) or not np.all(np.isfinite(b)):
+                raise RuntimeError("invalid histogram array: " + path + "/" + field)
+            checked += a.size
+            difference = float(np.max(np.abs(a - b))) if a.size else 0.0
+            largest = max(largest, difference)
+            matches = np.array_equal(a, b) if field == "entries" else np.allclose(a, b, rtol=1e-10, atol=1e-10)
+            if not matches:
+                raise RuntimeError("nominal histogram mismatch: " + path + "/" + field)
+    return dict(status="passed", histogram_leaves=len(left), checked_bin_values=checked,
+                maximum_absolute_difference=largest, reference_sha256=sha(reference),
+                current_sha256=sha(current))
+
+
+def tree_identities(root, name):
+    import uproot
+    names = ["file_id", "entry", "run", "luminosityBlock", "event"]
+    if name == "TROTA":
+        names.extend(f"TopResolved1pct_sourceJetIdx{i}" for i in range(3))
+    with uproot.open(root) as source:
+        arrays = source[name].arrays(names, library="np")
+        rows = list(zip(*(arrays[field].tolist() for field in names)))
+    if len(set(rows)) != len(rows):
+        raise RuntimeError("duplicate identities in " + str(root) + ":" + name)
+    return set(rows)
+
+
+def validate(args):
+    import math
+    import uproot
+    config = read(args.config)
+    output, reference = eos(args.output), eos(args.reference)
+    sys.path.insert(0, str(Path(config["repo"]) / "autonomous_allhad"))
+    from autonomous_allhad.flat_ntuple_worker import _root_content_digests
+    from autonomous_allhad.trota_resolved_2024_inplace import verify_complete_root
+
+    def finite(value):
+        if isinstance(value, float):
+            return math.isfinite(value)
+        if isinstance(value, dict):
+            return all(finite(item) for item in value.values())
+        if isinstance(value, list):
+            return all(finite(item) for item in value)
+        return True
+
+    campaign = Path(config["repo"]) / "autonomous_allhad/workflow/systematic_propagation"
+    events = (campaign / f"logs/pilot.{args.cluster}.log").read_text().split("\n...\n")
+    source_metadata = read(config["source_sidecar"])
+    report = dict(status="passed", scope="single complete MC-shard pilot", year=config["year"],
+                  config_sha256=sha(args.config), validator_sha256=sha(Path(__file__)),
+                  reference=str(reference), shifts={})
+    identities = {}
+    for proc, shift in enumerate(SHIFTS):
+        terminations = [event for event in events if event.startswith(f"005 ({args.cluster}.{proc:03d}.000)")]
+        if not terminations or "Normal termination (return value 0)" not in terminations[-1]:
+            raise RuntimeError(f"successful termination not recorded: {args.cluster}.{proc}")
+        directory = output / shift
+        result = read(directory / "result.json")
+        if result["status"] != "complete" or result["config_sha256"] != sha(args.config):
+            raise RuntimeError("incomplete or changed job: " + shift)
+        expected_products = {"mc_shard_00000.root", "mc_shard_00000.json", "main.json", "gnn.json", "trota.json", "truth.json"}
+        if set(result["products"]) != expected_products:
+            raise RuntimeError("missing expected products: " + shift)
+        for name, product in result["products"].items():
+            path = directory / name
+            if str(path) != product["path"] or sha(path) != product["sha256"] or path.stat().st_size != product["bytes"]:
+                raise RuntimeError("product integrity mismatch: " + str(path))
+            if name.endswith(".json") and not finite(read(path)):
+                raise RuntimeError("non-finite JSON value: " + str(path))
+        metadata = read(directory / "mc_shard_00000.json")
+        if (metadata["status"] != "complete" or metadata["bad_files"]
+                or metadata["files_processed"] != source_metadata["files_processed"]
+                or metadata["events_read"] != source_metadata["events_read"]):
+            raise RuntimeError("input coverage mismatch: " + shift)
+        root = directory / "mc_shard_00000.root"
+        if metadata["root_sha256"] != sha(root):
+            raise RuntimeError("metadata ROOT checksum mismatch: " + shift)
+        trota = verify_complete_root(root, target_year=config["year"])
+        with uproot.open(root) as source:
+            marker = json.loads(str(source["TopWTruth_metadata"]))
+            if (marker["status"] != "complete" or marker["application_year"] != config["year"]
+                    or source["TopWTruth"].num_entries != source["Events"].num_entries
+                    or marker["events_entries"] != source["Events"].num_entries
+                    or metadata["events_written"] != source["Events"].num_entries):
+                raise RuntimeError("Top/W truth coverage mismatch: " + shift)
+        contents = _root_content_digests(root)
+        original = {key: value for key, value in contents.items() if key not in ("TopWTruth", "TopWTruth_metadata")}
+        if contents["TopWTruth"] != marker["truth_content"] or original != marker["original_contents"]:
+            raise RuntimeError("Top/W truth content mismatch: " + shift)
+        for kind in ("main", "gnn"):
+            histograms = read(directory / (kind + ".json"))
+            if histograms["status"] != "complete" or histograms.get("bad_files"):
+                raise RuntimeError("incomplete histogram output: " + shift + "/" + kind)
+        identities[shift] = tree_identities(root, "Events")
+        report["shifts"][shift] = dict(exit_code=0, files=metadata["files_processed"],
+            events_read=metadata["events_read"], events_written=metadata["events_written"],
+            trota=trota["counts"], root_sha256=sha(root), truth_integrity="passed")
+    for shift in SHIFTS:
+        report["shifts"][shift].update(entering=len(identities[shift] - identities["nominal"]),
+                                      leaving=len(identities["nominal"] - identities[shift]))
+    for tree in ("Events", "TROTA", "TopWTruth"):
+        if tree_identities(Path(config["source_root"]), tree) != tree_identities(output / "nominal/mc_shard_00000.root", tree):
+            raise RuntimeError("nominal identity mismatch: " + tree)
+    report["histogram_closure"] = {
+        kind: compare_histograms(reference / (kind + ".json"), output / "nominal" / (kind + ".json"))
+        for kind in ("main", "gnn")}
+    state_path = campaign / "campaign_state.json"
+    state = read(state_path)
+    validation = state.setdefault("pilot_validation", {})
+    validation.setdefault(str(config["year"]), {})["validation_cli"] = report
+    if all(validation.get(str(year), {}).get("validation_cli", {}).get("status") == "passed" for year in (2024, 2025)):
+        state["status"] = "met_unclustered_pilot_validated"
+        state["pending"] = [item for item in state["pending"] if item not in ("pilot execution", "nominal closure")]
+    write(state_path, state)
+    print(json.dumps(report, sort_keys=True))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
@@ -364,8 +502,13 @@ def main():
     job.add_argument("--config", required=True, type=Path)
     job.add_argument("--shift", required=True, choices=SHIFTS)
     job.add_argument("--output", required=True, type=Path)
+    validation = commands.add_parser("validate")
+    validation.add_argument("--config", required=True, type=Path)
+    validation.add_argument("--output", required=True, type=Path)
+    validation.add_argument("--reference", required=True, type=Path)
+    validation.add_argument("--cluster", required=True, type=int)
     args = parser.parse_args()
-    return {"prepare": prepare, "preflight": preflight, "worker": worker}[args.command](args)
+    return {"prepare": prepare, "preflight": preflight, "worker": worker, "validate": validate}[args.command](args)
 
 
 if __name__ == "__main__":

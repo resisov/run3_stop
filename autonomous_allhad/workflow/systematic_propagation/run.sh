@@ -11,6 +11,7 @@ mkdir -p runtime_cache runtime_tmp runtime_mpl
 export TMPDIR="$PWD/runtime_tmp" TMP="$PWD/runtime_tmp" TEMP="$PWD/runtime_tmp"
 export XDG_CACHE_HOME="$PWD/runtime_cache" MPLCONFIGDIR="$PWD/runtime_mpl"
 export NUMBA_CACHE_DIR="$PWD/runtime_cache/numba"
+export KERAS_HOME="$PWD/runtime_cache/keras"
 export PYTHONNOUSERSITE=1 PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
 export TF_NUM_INTRAOP_THREADS=1 TF_NUM_INTEROP_THREADS=1
