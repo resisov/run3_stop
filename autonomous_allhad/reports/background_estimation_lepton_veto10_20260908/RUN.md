@@ -9,6 +9,21 @@ submitted **only 2024** as **1115059.0** with py38/workday on the EOS schedd.
 The completed 2025 calculation is not resubmitted. The final audit will check
 both years and refresh the combined campaign state without refitting 2025.
 
+Calculation **1115059.0** completed with ExitCode=0 and no signal, with
+132 seconds worker wall time. All four commands succeeded and all five
+derived-product checksums matched locally after transfer. Existing local
+plotting produced 32 figures (32 PNG + 32 PDF); the measured-product hashes
+were unchanged by plotting. TF mechanical residual was 1.33e-16.
+The obsolete 48 individual-category Low-dM TF files were removed locally
+and on EOS after the new combined figures were verified; Git retains them.
+The existing two-year final audit **1115061.0** terminated normally with
+return value 0 and 165 seconds execution time. Both years passed; all 168
+recorded artifacts (84 per year) match locally and on EOS. The 84 completed
+2025 artifacts are unchanged. Final campaign-state SHA256:
+`26701007010260ac29d5c655781567d78262b669758b4bd95715cec3596a3ef8`.
+The same four regression test files below passed **40 tests in 25.49 seconds**.
+Both years' existing presentation bundle was updated to the verified plots.
+
 2025 was promoted by the main task with canonical manifest SHA256
 `3a9784dd2e648300f0e4790f41c96ec99fcc174454c90b50c3802c15c49d55ca`.
 The existing `calculation.sub` submitted only 2025 as **1115053.0** on the

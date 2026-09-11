@@ -9,10 +9,10 @@ High-dM: retained 73 bins. Low-dM: frozen GNN30. Nb1/Nb2plus are factor groups, 
 
 | Year | Region | Nb = 1 | Nb ≥ 2 |
 |---|---|---|---|
+| 2024 | highdm | 0.7539 ± 0.0468 | 0.7719 ± 0.0805 |
+| 2024 | lowdm | 0.6019 ± 0.0112 | 0.6569 ± 0.0302 |
 | 2025 | highdm | 0.6502 ± 0.0453 | 0.8150 ± 0.0899 |
 | 2025 | lowdm | 0.5661 ± 0.0115 | 0.5778 ± 0.0299 |
-
-Pending updated inputs/products: 2024. Their previous outputs have not been revalidated for this update.
 
 RZ errors use the existing on/off-Z profile fit and inverse-variance ee/μμ combination. Per-channel RZ–RT covariance is exported. Combined cross-group diagonal covariance is the existing downstream assumption, not a measured absent correlation.
 
@@ -31,6 +31,7 @@ The already-approved 250-GeV lower boundary and merged 500–1500 display tail a
 
 | Year | Retained inputs | Source bad files | Data bad files | Complete data luminosity coverage | Zero / signed GNN TF numerator bins |
 |---|---|---|---|---|---|
+| 2024 | 5954 | 0 | 0 | True | 3 / 0 |
 | 2025 | 8390 | 11 | 1 | False | 4 / 0 |
 
 No smoothing, floors, fabricated missing templates, SR observations, or VR likelihood channels were introduced. RZ post plots use fitted data and are not independent closure tests; TF reconstruction and Q/Sgamma identities are mechanical checks, not physics closure.

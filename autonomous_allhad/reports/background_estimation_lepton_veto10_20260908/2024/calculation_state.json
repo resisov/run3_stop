@@ -2,14 +2,14 @@
   "year": "2024",
   "status": "complete",
   "inputs": {
-    "main": "5e8d056adbe0a5404f4a60425d2b84b3203cf240d02b982d0b320ef3b6523e83",
-    "background_estimation": "9b2279529275cadefd0cd8f42aed8f644bd3fa9ee17c69d8b7fc0622801d6aca",
-    "gnn": "2906493ee21d84756f89c55b2560043ef48ed77e6e8dc08612e6521f7207639b"
+    "main": "77b4aad45632086ace80cf4d36edbeb8336bb7b49dce7a03b8d7970e93975ab4",
+    "background_estimation": "0af58aac1c2f54c3df4f10874ad350778b0751be6707715f5ba844f835e5ea94",
+    "gnn": "ae98c866fb6f6521a35c718a4f7c015ecfc76da01f445c3452a0a2a2417898c3"
   },
-  "input_manifest_sha256": "92f800ec26da259e96b9e72ba14e4aeff35e6453f741b237e8678784245945cc",
+  "input_manifest_sha256": "868acb7888b77fb2a218df4a63f16c2801f84ab8683b56cd7d6386e4f3b8718c",
   "code_manifest_sha256": "11fbf855b83639db61237cf220e67b68ef116bb74e8202926edaffefee413ede",
   "intermediate_root_reread": false,
-  "started_unix": 1788854435.9369457,
+  "started_unix": 1789113854.514561,
   "steps": [
     {
       "command": [
@@ -74,12 +74,18 @@
       "exit_code": 0
     }
   ],
-  "products": {
-    "dy_measurement.json": "a201437d8dcbfef480371a46282f695b787ed5905a9e0bc5769948051403fd2c",
-    "sgamma/sgamma_ut.json": "d559c44e654631153f4268267e280aaf970515406056e06282bd3353a714e7c4",
-    "sgamma/sgamma_ut.csv": "11a2cdff34e21b002e9792c0f630c3dcd6e07d150a52b72e294db5a43aa58b92",
-    "zgamma/zgamma_double_ratio.json": "bb400ec42095cee4b12ed2d2ebf9aa6ad7cfd7bd8dc3235296818250edcb7fe0",
-    "tf_inputs.json": "62f0ffa755c750a79b18d9a8d76d5a526a566306577ebf9163a76309a054e33b"
+  "staged_in_worker_scratch": true,
+  "replaces_input_hashes": {
+    "main": "5e8d056adbe0a5404f4a60425d2b84b3203cf240d02b982d0b320ef3b6523e83",
+    "background_estimation": "9b2279529275cadefd0cd8f42aed8f644bd3fa9ee17c69d8b7fc0622801d6aca",
+    "gnn": "2906493ee21d84756f89c55b2560043ef48ed77e6e8dc08612e6521f7207639b"
   },
-  "finished_unix": 1788854526.7020378
+  "products": {
+    "dy_measurement.json": "6aee749916b5c3123668dfaec30a638358bedd94677f404083826c4f5a0f9149",
+    "sgamma/sgamma_ut.json": "2f9fb8d8e3dc3fcba56f8a8b24fc12d657b39a79911a9b5821bed30e5335a542",
+    "sgamma/sgamma_ut.csv": "117bf73dc955642df9fac0d52dad00591ca0266c1505cf1deff0d082508e08a3",
+    "zgamma/zgamma_double_ratio.json": "9ec50db5f7433685b694ac8b9cccb87458ec6c6a5a58c727f9ba84b4a611715f",
+    "tf_inputs.json": "55fbe7500aeab92fd46cb82b361b8872c6bc34564a5fdc4f98f35d41cc9241ee"
+  },
+  "finished_unix": 1789113926.9651706
 }

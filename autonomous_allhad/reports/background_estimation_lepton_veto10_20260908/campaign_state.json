@@ -1,6 +1,7 @@
 {
   "SR_blinded": true,
   "audited_years": [
+    "2024",
     "2025"
   ],
   "cards_limits_web_untouched": true,
@@ -24,7 +25,7 @@
     "valid_only_for_recorded_input_hashes": true
   },
   "input_manifest": "autonomous_allhad/reports/lepton_veto10_canonical_20260908.json",
-  "input_manifest_sha256": "3a9784dd2e648300f0e4790f41c96ec99fcc174454c90b50c3802c15c49d55ca",
+  "input_manifest_sha256": "868acb7888b77fb2a218df4a63f16c2801f84ab8683b56cd7d6386e4f3b8718c",
   "intermediate_root_reread": false,
   "lowdm_double_ratio_adoption": {
     "approval": {
@@ -35,11 +36,267 @@
     "min_ut_gev": 250,
     "status": "adopted"
   },
-  "pending_years": [
-    "2024"
-  ],
-  "status": "partial",
+  "pending_years": [],
+  "status": "complete",
   "years": {
+    "2024": {
+      "GNN_response_checks": {
+        "max_fractional_up_response": 0.008997363259915403,
+        "nominal_reconstruction": true,
+        "response_count": 30
+      },
+      "artifact_hashes": {
+        "calculation_state.json": "a98e4ed359c267d517123b7a1f4007ffe7861cae363d4eb2873c149199564230",
+        "dy_measurement.json": "6aee749916b5c3123668dfaec30a638358bedd94677f404083826c4f5a0f9149",
+        "dy_report/highdm/index.html": "c64e4a0edadde46e61920ce80c61b12ea8ed8e552f8ef84ba330b2211beb547b",
+        "dy_report/highdm/mll_highdm_dy2e_nb1.pdf": "0188cab19a4c30159bf2199a2b6c58a7e20ed7aaf656baead787b4ba5b4d3638",
+        "dy_report/highdm/mll_highdm_dy2e_nb1.png": "e6d77333255c4622fe2a28300dfed0f17a426aeb9b7a5c516f8b688709dbbdcc",
+        "dy_report/highdm/mll_highdm_dy2e_nb1_post.pdf": "d47ab54352bea5b871351cb53167a68c3e0a6ed868345b4f09f38b0db205a8e4",
+        "dy_report/highdm/mll_highdm_dy2e_nb1_post.png": "eb7d13542a5e3cfc585cdf4ac3a316dfaae62243459de280107430adfa33b897",
+        "dy_report/highdm/mll_highdm_dy2e_nb2plus.pdf": "63f2f6d8c1488d0724bc226c633dde2f91a7e43ee130951bf29207d2cd5d4d62",
+        "dy_report/highdm/mll_highdm_dy2e_nb2plus.png": "156966ccfabb41abc808fbdaee6527420910cc53ab137ff14c64054046180c4c",
+        "dy_report/highdm/mll_highdm_dy2e_nb2plus_post.pdf": "8f6b2f1bbd42c32d4dba7bcb9358980dd8853b766c4f78e5503811293f785974",
+        "dy_report/highdm/mll_highdm_dy2e_nb2plus_post.png": "0cfff30371b44eb000c1ca12d46f0174f4ed6ab94d3a80e5249e46ed65f06a15",
+        "dy_report/highdm/mll_highdm_dy2m_nb1.pdf": "faddd83709f3f9a83510e3ec186122a25232ff5996879eb9097517263e675f50",
+        "dy_report/highdm/mll_highdm_dy2m_nb1.png": "02096c327847718324a9c4f15b7728bc8de06c972413fcb086ed9529ee3cb002",
+        "dy_report/highdm/mll_highdm_dy2m_nb1_post.pdf": "365b1f6d33aa5dcd132d0547237cd035be599d1a31279dd7915facda27d6cc1d",
+        "dy_report/highdm/mll_highdm_dy2m_nb1_post.png": "cc613b27832d63a955fb5f92a7947f891cde5a2373a5deb6b1603d021ce04f57",
+        "dy_report/highdm/mll_highdm_dy2m_nb2plus.pdf": "8a050f2c246bfe329cd6612e3c1fdf11e43a0faeb41f85b22e7b8f22ac7e9043",
+        "dy_report/highdm/mll_highdm_dy2m_nb2plus.png": "b576a66051159e75bf39f574fdad74ee17362b1ace0591ad840acc39ad6ae842",
+        "dy_report/highdm/mll_highdm_dy2m_nb2plus_post.pdf": "98d757fe5debd2e39a2b4df9d3954248063a8ae43b4b97edf3fd3953452b707c",
+        "dy_report/highdm/mll_highdm_dy2m_nb2plus_post.png": "8e00d3a5abd37ddcdca4c03f804a6b6c53face019244f1d0a03f9ece7ade2457",
+        "dy_report/highdm/rt_highdm.pdf": "a1120ac5f57ab1b0f5d46714ffdc9dbff5aa218243c265bba1603ec55e292cf4",
+        "dy_report/highdm/rt_highdm.png": "ba8d059c5e26134c5a216e2737b99db09a32e3aee3905dde861fcc7fdf09ff34",
+        "dy_report/highdm/rz_highdm.pdf": "0166b5ec9f388e1ac0414fbd99734d5a99b7d8b7a04b9e367b6849d40186ace5",
+        "dy_report/highdm/rz_highdm.png": "18944989d245b308af028eadbb2872be4f934ff80541e78a934148e350dbf3aa",
+        "dy_report/highdm/summary.json": "6ed580cfdb5fbfd43a6d2ad28c1372baf0bbce191fd5ae02ea08861df847da92",
+        "dy_report/index.html": "e16c90ad677adbd78d676e8ccc149ea7c7ae4b774e40749b5887ea6f5b66e449",
+        "dy_report/lowdm/index.html": "8dede0bcc84ba40799c4367493ea3165cad8f374ed00238eca4cc20f7480b8ff",
+        "dy_report/lowdm/mll_lowdm_dy2e_nb1.pdf": "7fda0e67e241d7efe07b18955373793fbf7e576e0864eae0db1ca18eb7f953fa",
+        "dy_report/lowdm/mll_lowdm_dy2e_nb1.png": "4d33ce465a8640a220bccbab7c6ec97e467c0754a0e52979769db462585315e1",
+        "dy_report/lowdm/mll_lowdm_dy2e_nb1_post.pdf": "8f924e3ba21af0fc6afb00d9e00168920c9cc1851031f37d63e38ecf70b3454f",
+        "dy_report/lowdm/mll_lowdm_dy2e_nb1_post.png": "65574e4cf98bf6ff3ae77358bfcfd58fee448a7681d1c7700e0af57a570f61db",
+        "dy_report/lowdm/mll_lowdm_dy2e_nb2plus.pdf": "252f22c6a9c1c40b6758365ad3b587abc5ad047122a7e4bd9ee8c631a63c61c7",
+        "dy_report/lowdm/mll_lowdm_dy2e_nb2plus.png": "e6bbdb1660b07301b3f62bfe911e35acaef02e99db73b2a19abdd97f05f66452",
+        "dy_report/lowdm/mll_lowdm_dy2e_nb2plus_post.pdf": "302f312fd4895bd727759a6702624093de122327180a0cfaf824eab155548c5d",
+        "dy_report/lowdm/mll_lowdm_dy2e_nb2plus_post.png": "e9ad0bca31ae7d0e85c6a38f7e7e3f8535be6df8011b0e59328bc7980a02150c",
+        "dy_report/lowdm/mll_lowdm_dy2m_nb1.pdf": "1750b035ee310a3565d2eaa10f17c25b8ff19f7ccda36274a8c08d8f2726bb8a",
+        "dy_report/lowdm/mll_lowdm_dy2m_nb1.png": "b31181a423e3f19d76bb5a4ea8ed4f9c74d04fb5e2739523e48f738ba6a0e803",
+        "dy_report/lowdm/mll_lowdm_dy2m_nb1_post.pdf": "527074a8269ce2d4a3e5faae7008d7d5a234dc1b4b31c61bdad16a3605911ef0",
+        "dy_report/lowdm/mll_lowdm_dy2m_nb1_post.png": "212b1cc9fd675aff47c02f45b8385f844bb88e578dac4c0415f8464d600dae6c",
+        "dy_report/lowdm/mll_lowdm_dy2m_nb2plus.pdf": "df595da8faf96beecedf7eec39c2eb2676ddc6fde3aaba18367d9ef28ca12572",
+        "dy_report/lowdm/mll_lowdm_dy2m_nb2plus.png": "21623fc1cb1134b79e57fad546c9f04aed86f9b669e1b32cee711daff78da2b4",
+        "dy_report/lowdm/mll_lowdm_dy2m_nb2plus_post.pdf": "9de27591b95a34d3153fee0f755be8b845de928ce54fe74a07e400827c793bc9",
+        "dy_report/lowdm/mll_lowdm_dy2m_nb2plus_post.png": "c3770ba7f9effd2a56b24a9040e59c5bc383477713c113d071b932c971aa26dd",
+        "dy_report/lowdm/rt_lowdm.pdf": "1cf58fc2a8a641a2b301b719c4627926303808f6d59e3639476dedb4a2317689",
+        "dy_report/lowdm/rt_lowdm.png": "cc7bf7a84ace2625ebb9aa116f9496f6423d4dd929c8eedcb231b42c9fd35ce2",
+        "dy_report/lowdm/rz_lowdm.pdf": "8ada9c2e84c3d9728a195bcc52a9d456ab7b4f979e1e65d7babebb852120b73b",
+        "dy_report/lowdm/rz_lowdm.png": "c8d37dd0dd0245c811d68aa8a72e1c885ef432ae76b77682cb3ce9595835515d",
+        "dy_report/lowdm/summary.json": "629991fbb1b702136d0d30f0eafe4d7a95baa941a95c5a37e6e8676656016c0e",
+        "dy_report/summary.json": "3415d6bb9a794015ad69e6a387d420b69eedda86099cdc9cf01cace9bc95b561",
+        "lowdm_gnn_backgrounds.json": "499b419fb5147a0cbab6b497c13cc9883a19786b9cb39ce5d37f4abc31c15b5d",
+        "lowdm_gnn_double_ratio.json": "3d4c9f2b5fc45196a94bc202b833afe0dc732419fb87395baf458a901fde71e4",
+        "rz_covariance.json": "6054f735e62de04501f2763543809f0b7b528b9c5659af5c6993c3cbac3e7596",
+        "rz_high.json": "134c3a092d02a39f757c96f7ebe695a51ac8bc20c97334fcea1533ec766aab59",
+        "rz_low.json": "d9be949043aa9e024bf515c8e6e1d72ce135f6df04b0cdacd0d3701420915c97",
+        "sgamma/photon_q_normalization.pdf": "c3b40b7ad764cd1f90a9e4cc982a89f698fe11d2f84c9981dbc0c020bb88bfcd",
+        "sgamma/photon_q_normalization.png": "db2b7f1480bb64b1b6fe15b0d2f12744d38867734c1e5eea660527af9771c85e",
+        "sgamma/plot_manifest.json": "d343754e8fe143d1d4b6e548b00183a44cdf53ee49700ade796cf43ead3cb7b4",
+        "sgamma/sgamma_highdm.pdf": "2e1eca9de00ad5fc5ac7b16a0d92e3e92d9c3004f137f4ccf8ce347178d19573",
+        "sgamma/sgamma_highdm.png": "0b9e6076e627d796266bed2e445749d0e11b7e7747e1fc46cbf8241ac31fa64a",
+        "sgamma/sgamma_lowdm.pdf": "5378034899f2684dc6c72128fc1753d2d3c4548c65c5c1e59a681d9eecb1a68f",
+        "sgamma/sgamma_lowdm.png": "aa5a2d0c80df72eb5f5bdfb7ec97f1547bedfa2f54d6b4caf1703d977b75bf0d",
+        "sgamma/sgamma_ut.csv": "117bf73dc955642df9fac0d52dad00591ca0266c1505cf1deff0d082508e08a3",
+        "sgamma/sgamma_ut.json": "2f9fb8d8e3dc3fcba56f8a8b24fc12d657b39a79911a9b5821bed30e5335a542",
+        "tf/gnn/transfer_factor_qcd_qcdcr_lowdm_gnn.pdf": "996001a464b8ab84bb0642d06460e8bbb70b62990c94a7aa692d4be52025f175",
+        "tf/gnn/transfer_factor_qcd_qcdcr_lowdm_gnn.png": "c80bf2bb1c5a0297f6ab298adbf759d950f947fe661892afa03959170446441f",
+        "tf/gnn/transfer_factor_top_llcr_lowdm_gnn.pdf": "cbd2c59573fe86161d19a7966e88f6237c7bf53272764741a6b3268ad87371b7",
+        "tf/gnn/transfer_factor_top_llcr_lowdm_gnn.png": "dfa21b9eadb61e41a35d3cab0390cb58ca5d68c441d379d959a30dba8a31c59f",
+        "tf/gnn/transfer_factor_w_llcr_lowdm_gnn.pdf": "d0d969b347a129244af64bd5bc839f3cc8458a81f9943e34fa9dece5fef6101d",
+        "tf/gnn/transfer_factor_w_llcr_lowdm_gnn.png": "685bd8c72edb0082e75bcc5bfb5b8dbdef45ff462280e68550238c2a8f03214b",
+        "tf/gnn/transfer_factor_zinv_gcr_lowdm_gnn.pdf": "a559e99a5798e9a7295a616f72f3fcacf44717eb54304d0655204577e4cffbb3",
+        "tf/gnn/transfer_factor_zinv_gcr_lowdm_gnn.png": "ce9057c792021144757f30352daf6c701b1e00b0abc3755dafddaa81113824fe",
+        "tf/transfer_factor_qcd_qcdcr_highdm.pdf": "0cf238dcee4dc22671d75f233f2bf0044e2d06cff125f5f85c7c3d4d131a3a60",
+        "tf/transfer_factor_qcd_qcdcr_highdm.png": "336167fa29cef514656aedd34e4d12b3f7448c096b22cc9fbbaa22694997fe44",
+        "tf/transfer_factor_top_llcr_highdm.pdf": "42e558e5ae33ddc6d766a4d880e66496b800b2637c5ed8a80ab8b5752b5dc9bd",
+        "tf/transfer_factor_top_llcr_highdm.png": "4e115f8dee492a4086bed27a6ccfe1ad9f6a343289e06e7dd3ac5ac80f8d085c",
+        "tf/transfer_factor_w_llcr_highdm.pdf": "c7eb3b490cc4689fd641f97e9a5603e32b0c15f7094e343c3a314be042d5a419",
+        "tf/transfer_factor_w_llcr_highdm.png": "7fbeba1ec6df36197809e737c494e39fb6f63f0a108d7a706723ca8ca97e892a",
+        "tf/transfer_factors_2024_nb_recoil.json": "57a828b80a8ca13c7963935fa54c07f06bed016cc7ef8f809899c870609ff7db",
+        "tf_inputs.json": "55fbe7500aeab92fd46cb82b361b8872c6bc34564a5fdc4f98f35d41cc9241ee",
+        "zgamma/plot_manifest.json": "a91f6223147333ff19a41c8db1bab19d5e9a1acedfcb2f2e75d21da92e989ab4",
+        "zgamma/zgamma_double_ratio.json": "9ec50db5f7433685b694ac8b9cccb87458ec6c6a5a58c727f9ba84b4a611715f",
+        "zgamma/zgamma_double_ratio_highdm.pdf": "497b123b14a3dac511e231744d03a55e4acb6f26c9663b84bba3ead50397ebad",
+        "zgamma/zgamma_double_ratio_highdm.png": "2de0b2bd26ff50905639e21badb8c151eeeb6e0736dc8c087c70aa2a3f4e48b5",
+        "zgamma/zgamma_double_ratio_lowdm.pdf": "87e170d8bf65c9e78ae19af763d90e1aa98b33cd53d13aa7a61e1c53e5b5e5e1",
+        "zgamma/zgamma_double_ratio_lowdm.png": "c2325cbd6e28fdd339e288c9644bf81ae7a6c6e41a5eae43c1a7c8cdd045a015"
+      },
+      "data_luminosity_coverage_complete": true,
+      "data_source_bad_file_count": 0,
+      "factor_plot_files": 24,
+      "gnn_checks": {
+        "SR_blinded": true,
+        "compact_projection_comparisons": 106,
+        "frozen_GNN30": true,
+        "joint_projection_records": 10394,
+        "verified_sparse_zero_records": [
+          {
+            "category": "Nb1_NISR0",
+            "region": "DY2E",
+            "sample": "QCD"
+          },
+          {
+            "category": "Nb1_NISR0",
+            "region": "DY2E",
+            "sample": "WtoLNu"
+          },
+          {
+            "category": "Nb1_NISR0",
+            "region": "DY2E",
+            "sample": "Zto2Nu"
+          },
+          {
+            "category": "Nb1_NISR1plus",
+            "region": "DY2E",
+            "sample": "QCD"
+          },
+          {
+            "category": "Nb1_NISR1plus",
+            "region": "DY2E",
+            "sample": "Zto2Nu"
+          },
+          {
+            "category": "Nb2plus_NISR0",
+            "region": "DY2E",
+            "sample": "QCD"
+          },
+          {
+            "category": "Nb2plus_NISR0",
+            "region": "DY2E",
+            "sample": "WtoLNu"
+          },
+          {
+            "category": "Nb2plus_NISR0",
+            "region": "DY2E",
+            "sample": "Zto2Nu"
+          },
+          {
+            "category": "Nb2plus_NISR1plus",
+            "region": "DY2E",
+            "sample": "QCD"
+          },
+          {
+            "category": "Nb2plus_NISR1plus",
+            "region": "DY2E",
+            "sample": "Zto2Nu"
+          },
+          {
+            "category": "Nb1_NISR0",
+            "region": "DY2M",
+            "sample": "GJ"
+          },
+          {
+            "category": "Nb1_NISR0",
+            "region": "DY2M",
+            "sample": "QCD"
+          },
+          {
+            "category": "Nb1_NISR0",
+            "region": "DY2M",
+            "sample": "WtoLNu"
+          },
+          {
+            "category": "Nb1_NISR0",
+            "region": "DY2M",
+            "sample": "Zto2Nu"
+          },
+          {
+            "category": "Nb1_NISR1plus",
+            "region": "DY2M",
+            "sample": "GJ"
+          },
+          {
+            "category": "Nb1_NISR1plus",
+            "region": "DY2M",
+            "sample": "Zto2Nu"
+          },
+          {
+            "category": "Nb2plus_NISR0",
+            "region": "DY2M",
+            "sample": "GJ"
+          },
+          {
+            "category": "Nb2plus_NISR0",
+            "region": "DY2M",
+            "sample": "QCD"
+          },
+          {
+            "category": "Nb2plus_NISR0",
+            "region": "DY2M",
+            "sample": "WtoLNu"
+          },
+          {
+            "category": "Nb2plus_NISR0",
+            "region": "DY2M",
+            "sample": "Zto2Nu"
+          },
+          {
+            "category": "Nb2plus_NISR1plus",
+            "region": "DY2M",
+            "sample": "GJ"
+          },
+          {
+            "category": "Nb2plus_NISR1plus",
+            "region": "DY2M",
+            "sample": "QCD"
+          },
+          {
+            "category": "Nb2plus_NISR1plus",
+            "region": "DY2M",
+            "sample": "Zto2Nu"
+          },
+          {
+            "category": "Nb2plus_NISR0",
+            "region": "GCR",
+            "sample": "DY"
+          },
+          {
+            "category": "Nb2plus_NISR0",
+            "region": "GCR",
+            "sample": "Zto2Nu"
+          },
+          {
+            "category": "Nb2plus_NISR0",
+            "region": "QCDCR",
+            "sample": "DY"
+          }
+        ]
+      },
+      "input_count": 5954,
+      "inputs": {
+        "background_estimation": {
+          "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/hists_background_estimation.json",
+          "sha256": "0af58aac1c2f54c3df4f10874ad350778b0751be6707715f5ba844f835e5ea94"
+        },
+        "gnn": {
+          "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/gnn/hists.json",
+          "sha256": "ae98c866fb6f6521a35c718a4f7c015ecfc76da01f445c3452a0a2a2417898c3"
+        },
+        "main": {
+          "path": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/2024/hists.json",
+          "sha256": "77b4aad45632086ace80cf4d36edbeb8336bb7b49dce7a03b8d7970e93975ab4"
+        }
+      },
+      "nominal_GNN_signed_numerator_bins": [],
+      "nominal_GNN_zero_numerator_bins": [
+        "qcd_qcdcr/Nb1_NISR0/4",
+        "qcd_qcdcr/Nb2plus_NISR0/3",
+        "qcd_qcdcr/Nb2plus_NISR0/4"
+      ],
+      "normalization_sha256": "9060c4ed526f95b5e2b352c07a4692de9a67469fbff5f91f210eceb9122b606c",
+      "signed_bin_policy": "Retained without clipping; existing downstream signed-bin treatment must be reviewed if this list is nonempty.",
+      "source_bad_file_count": 0
+    },
     "2025": {
       "GNN_response_checks": {
         "max_fractional_up_response": 0.05720986454690245,

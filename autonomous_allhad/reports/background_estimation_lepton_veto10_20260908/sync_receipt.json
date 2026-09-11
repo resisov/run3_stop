@@ -1,14 +1,13 @@
 {
-  "status": "verified_2025_local_eos",
+  "status": "verified_local_eos",
   "result_root": "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908",
   "audited_years": [
+    "2024",
     "2025"
   ],
-  "pending_years": [
-    "2024"
-  ],
-  "campaign_state_sha256": "ac71f20442eca604b9f4e1920af74b0fc594dfda3c7174cf22db73e942639f55",
-  "input_manifest_sha256": "3a9784dd2e648300f0e4790f41c96ec99fcc174454c90b50c3802c15c49d55ca",
+  "pending_years": [],
+  "campaign_state_sha256": "26701007010260ac29d5c655781567d78262b669758b4bd95715cec3596a3ef8",
+  "input_manifest_sha256": "868acb7888b77fb2a218df4a63f16c2801f84ab8683b56cd7d6386e4f3b8718c",
   "canonical_source_hashes": {
     "autonomous_allhad/autonomous_allhad/dy_estimation/__main__.py": "c8d74bb107db27f0fe61aa15ac276e179a384127009716d352fe86667e03ec10",
     "autonomous_allhad/autonomous_allhad/dy_estimation/build_measurement.py": "05b4e1094e74ad19b88f7f669a18b33f5271a56b8883a6f735e272e9edb487aa",
@@ -23,21 +22,15 @@
     "autonomous_allhad/workflow/plot_recoil_transfer_factors_2024.py": "c46b7a046fcaff225adf5d395edcc2c23ab7a8ddce119a6bb473957b8d8ae357"
   },
   "per_year_artifacts_verified": 84,
-  "calculation_job": {
-    "id": "1115053.0",
-    "exit_code": 0,
-    "exit_by_signal": false,
-    "worker_wall_seconds": 142
-  },
   "audit_job": {
-    "id": "1115054.0",
+    "id": "1115061.0",
     "exit_code": 0,
     "exit_by_signal": false,
-    "worker_wall_seconds": 96
+    "execution_seconds": 165
   },
   "tests": {
     "passed": 40,
-    "seconds": 12.94,
+    "seconds": 25.49,
     "test_source_sha256": "0444b79cb435eb1617a5d15a91fb82b2df6c432d6e2b176fda854a29d6644831"
   },
   "plots": {
@@ -46,9 +39,30 @@
       "png_files": 32,
       "pdf_files": 32
     },
-    "measured_json_hashes_unchanged_by_plotting": true
+    "measured_json_hashes_unchanged_by_plotting": true,
+    "2024": {
+      "figures": 32,
+      "png_files": 32,
+      "pdf_files": 32
+    }
   },
   "large_tf_histogram_json": "Retained on EOS; excluded from Git",
   "intermediate_root_reread": false,
-  "web_published": false
+  "web_published": false,
+  "total_artifacts_verified": 168,
+  "calculation_jobs": {
+    "2024": {
+      "id": "1115059.0",
+      "exit_code": 0,
+      "exit_by_signal": false,
+      "worker_wall_seconds": 132
+    },
+    "2025": {
+      "id": "1115053.0",
+      "exit_code": 0,
+      "exit_by_signal": false,
+      "worker_wall_seconds": 142
+    }
+  },
+  "completed_2025_artifact_hashes_unchanged": true
 }
