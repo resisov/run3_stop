@@ -5607,7 +5607,7 @@
     "source_commit": "456fd370",
     "stage": "T2tt_validated_plots_web_published; remaining_recoveries_and_impacts_running",
     "last_monitor": {
-      "utc": "2026-09-11T19:47:43Z",
+      "utc": "2026-09-11T20:19:14Z",
       "live_queue_status": "available",
       "schedd_error": null,
       "schedd_recovered_at_utc": "2026-09-11T14:09:16Z",
@@ -5847,7 +5847,7 @@
         "pending_recoveries": 12,
         "promotion_target": "combined_pending/{topology}/limits",
         "replaced_invalid_outputs": [{"path": "combined_pending/T2bW/limits/higgsCombine_mStop200_mLSP100.AsymptoticLimits.mH120.root", "previous_limit_entries": 0, "replacement_validated": true, "backup_retained": false}],
-        "last_queue_check": {"utc": "2026-09-11T19:47:43Z", "running": 0, "idle": 12, "held": 0},
+        "last_queue_check": {"utc": "2026-09-11T20:19:14Z", "running": 0, "idle": 12, "held": 0},
         "idle_diagnostic": {
           "job": "1115319.2",
           "checked_at_utc": "2026-09-11T19:13:24Z",
@@ -5987,7 +5987,7 @@
       "max_runtime_seconds": 43200,
       "proxy_seconds_before_submit": 368164,
       "voms_seconds_before_submit": 339364,
-      "last_queue_check": {"utc": "2026-09-11T19:47:43Z", "idle": 0, "running": 2, "held": 0},
+      "last_queue_check": {"utc": "2026-09-11T20:19:14Z", "idle": 0, "running": 2, "held": 0},
       "r1": {"cluster": 1115259, "submission_file": "combined_pending/T2tt/impact_r1_eossubmit.sub", "submission_sha256": "21d333d880c05f3069ef7729d1802aa0fe51e359c6d33d9d7dc8153a0e3642b4"},
       "r0": {"cluster": 1115260, "submission_file": "combined_pending/T2tt/impact_r0_eossubmit.sub", "submission_sha256": "372e2a760525b0a5dcd085e6c6fe209a5af3e257dd394fc41a5e571bd142a541"}
     },
