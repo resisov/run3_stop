@@ -156,7 +156,26 @@ def prepare_full(args):
             compact = {key: metadata.get(key) for key in ("events_read", "bad_files")}
             return source, metadata_path, compact, records
 
-        with ThreadPoolExecutor(max_workers=4) as pool:
+        def prepare_source(source, metadata_path, records):
+            name = source.stem
+            shard_path = base / "shards" / (name + ".json")
+            write(shard_path, dict(schema_version="full_production_shard_spec_v2_boosted",
+                shard_id=name, record_group="mc", records=records, records_per_shard=len(records),
+                record_digest=hashlib.sha256(json.dumps(records, sort_keys=True).encode()).hexdigest()[:16]))
+            config_path = base / "configs" / (name + ".json")
+            write(config_path, dict(shared_config=str(shared_path), shared_config_sha256=shared_hash,
+                source_root=str(source), source_sidecar=str(metadata_path), shard=str(shard_path),
+                pins={str(metadata_path): sha(metadata_path), str(shard_path): sha(shard_path)}))
+            memory = 12000 if any(r["is_signal"] for r in records) else 6000
+            rows = []
+            for shift in SHIFTS[1:]:
+                output = base / "outputs" / name / shift
+                output.mkdir(parents=True, exist_ok=True)
+                rows.append(f"{name} {shift} {config_path} {output} {memory}")
+            return rows
+
+        prepared = []
+        with ThreadPoolExecutor(max_workers=4) as pool, ThreadPoolExecutor(max_workers=8) as writers:
             for source, metadata_path, metadata, records in pool.map(inspect, sources):
                 name = source.stem
                 if name in names:
@@ -181,21 +200,11 @@ def prepare_full(args):
                             raise RuntimeError("validated pilot product changed")
                         reused.append(dict(shard=name, shift=shift, output=str(old_base / shift)))
                     continue
-                shard_path = base / "shards" / (name + ".json")
-                write(shard_path, dict(schema_version="full_production_shard_spec_v2_boosted",
-                    shard_id=name, record_group="mc", records=records, records_per_shard=len(records),
-                    record_digest=hashlib.sha256(json.dumps(records, sort_keys=True).encode()).hexdigest()[:16]))
-                config_path = base / "configs" / (name + ".json")
-                write(config_path, dict(shared_config=str(shared_path), shared_config_sha256=shared_hash,
-                    source_root=str(source), source_sidecar=str(metadata_path), shard=str(shard_path),
-                    pins={str(metadata_path): sha(metadata_path), str(shard_path): sha(shard_path)}))
-                memory = 12000 if any(r["is_signal"] for r in records) else 6000
-                for shift in SHIFTS[1:]:
-                    output = base / "outputs" / name / shift
-                    output.mkdir(parents=True, exist_ok=True)
-                    jobs.append(f"{name} {shift} {config_path} {output} {memory}")
+                prepared.append(writers.submit(prepare_source, source, metadata_path, records))
                 if len(names) % 500 == 0:
                     print(json.dumps(dict(year=year, inspected_shards=len(names))), flush=True)
+            for future in prepared:
+                jobs.extend(future.result())
         logs = base / "logs"
         logs.mkdir(parents=True, exist_ok=True)
         queue = base / "jobs.queue"
