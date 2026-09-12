@@ -5796,9 +5796,9 @@
           "mStop300_mLSP200",
           "mStop1750_mLSP1350",
           "mStop1750_mLSP1400"
-        ], "export_refresh_pending": true},
+        ], "export_refresh_pending": false},
         "T2bW_incomplete_trees": {},
-        "T2tb": {"batch_collected": 361, "incomplete_trees": {}, "late_outputs_individually_validated": ["mStop100_mLSP1"], "export_refresh_pending": true},
+        "T2tb": {"batch_collected": 361, "incomplete_trees": {}, "late_outputs_individually_validated": ["mStop100_mLSP1"], "export_refresh_pending": false},
         "all_outputs_promoted": false
       },
       "invalid_results": [{"topology": "T2bW", "mass_point": "mStop200_mLSP100", "job": "1115252.271", "reason": "original limit tree had zero entries", "observed_at_utc": "2026-09-11T12:54:15Z", "path": "combined_pending/T2bW/limits/higgsCombine_mStop200_mLSP100.AsymptoticLimits.mH120.root", "termination_log_exit_code": 0, "retry_submitted": true, "retry_job": "1115315.0", "resolved": true, "replacement_validated_and_promoted": true}],
@@ -5946,7 +5946,9 @@
         "submission_incident": "T2bW timeout submit response timed out; queue and event/output checks found no committed job before resubmission"
       },
       "collection": {
-        "status": "all_three_refreshed_export_jobs_exit0",
+        "status": "all_three_compact_exports_refreshed_for_user_requested_preview",
+        "latest_refresh_utc": "2026-09-12T07:53:54Z",
+        "latest_counts": {"T2tt": 205, "T2bW": 351, "T2tb": 362},
         "refresh_completed": {"1115567.0": {"exit_code": 0, "validated": 205, "completed_at_utc": "2026-09-11T16:26:34Z"}, "1115567.1": {"exit_code": 0, "validated": 344, "completed_at_utc": "2026-09-11T16:29:22Z"}, "1115567.2": {"exit_code": 0, "validated": 361, "completed_at_utc": "2026-09-11T16:26:38Z"}},
         "completed": {"1115316.0": {"exit_code": 0, "validated": 199}, "1115316.1": {"exit_code": 0, "validated": 342}, "1115316.2": {"exit_code": 0, "validated": 361}},
         "retry": {"job": "1115316.2", "exit_by_signal": true, "exit_signal": 7, "reason": "SIGBUS; no stderr or stdout produced", "root_cause": "not_determined", "release_event_utc": "2026-09-11T15:17:10Z", "release_command_exit_code": 0, "retry_count": 1, "retry_completion": true, "retry_exit_code": 0, "completed_at_utc": "2026-09-11T15:24:33Z"},
@@ -5963,8 +5965,29 @@
         "max_runtime_seconds": 28800,
         "output": "combined_pending/{topology}/expected_limits.json",
         "partial_snapshot_possible_while_primary_jobs_run": true,
-        "validated_total": 910,
+        "validated_total": 918,
         "total_after_late_outputs_and_promotions": 918
+      },
+      "preview": {
+        "created_at_utc": "2026-09-12T07:57:33Z",
+        "status": "user_requested_partial_snapshot_locally_rendered_and_PDF_visually_checked",
+        "source": "autonomous_allhad/workflow/postprocess_limits.py",
+        "source_sha256": "e9885888a8226692456d73f6592a2ef2b1b68bc0f1eaa35f236ae258159a14c9",
+        "interpolation_mode": "topology-aware",
+        "color_field": "xsec",
+        "mstop_range_gev": [600, 1800],
+        "mlsp_range_gev": [1, 1800],
+        "xsec_color_range_pb": [0.0001, 0.1],
+        "validated_input_counts": {"T2tt": 205, "T2bW": 351, "T2tb": 362},
+        "plotted_input_counts": {"T2tt": 205, "T2bW": 330, "T2tb": 342},
+        "missing_counts": {"T2tt": 0, "T2bW": 3, "T2tb": 3},
+        "existing_user_exclusions": {"T2bW": ["mStop1300_mLSP300"]},
+        "pdf_pattern": "combined_pending/{topology}/expected_limit_{topology_lower}_2024_2025_highdm73_lowdm30_xsec_topology_thermal_relic.pdf",
+        "pdf_sha256": {"T2tt": "7715a07c9559bd246cb8d67bb3ef3346b16881e9ee230a03066f3c05fdb1227a", "T2bW": "9af2ba7252a48fd6ad61cd536ec9c251580624ba8c1500faef17003206ceae3a", "T2tb": "f7b29ca6195f0168df0ad1ad956cf07d17255fab0db22c5054f1a9f5f0c411fe"},
+        "png_sha256": {"T2tt": "446508bc838dceb3c4b4b414c1581024dabacb6ed56c5c665d44d3aaa8218f8f", "T2bW": "243a4b59b587b9e415a10272dd582ac1e13059a83ebf02adcdd99e81e5043a87", "T2tb": "3c92d149d9a409d0a69e13a28146ba13cf4b9e0914043b14340ec55df350abf0"},
+        "public_web_updated": false,
+        "local_root_files_downloaded": 0,
+        "physics_or_plot_source_changed": false
       },
       "plots": {
         "T2tt": {
