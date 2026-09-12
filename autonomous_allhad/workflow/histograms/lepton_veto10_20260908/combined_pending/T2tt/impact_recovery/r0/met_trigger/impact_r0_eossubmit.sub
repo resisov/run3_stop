@@ -1,0 +1,20 @@
+universe = vanilla
+executable = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/run_asimov_impacts_eos.sh
+initialdir = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined_pending/T2tt/impact_recovery/r0/met_trigger/impact_mStop1200_mLSP500_r0
+arguments = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined_pending/T2tt/datacards/datacard_mStop1200_mLSP500.txt /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined_pending/T2tt/impact_recovery/r0/met_trigger/impact_mStop1200_mLSP500_r0 1200
+output = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined_pending/T2tt/impact_recovery/r0/met_trigger/impact_mStop1200_mLSP500_r0/condor_logs/impact.out
+error = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined_pending/T2tt/impact_recovery/r0/met_trigger/impact_mStop1200_mLSP500_r0/condor_logs/impact.err
+log = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined_pending/T2tt/impact_recovery/r0/met_trigger/impact_mStop1200_mLSP500_r0/condor_logs/cluster.log
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+transfer_input_files = /eos/user/t/taiwoo/run3_stop/runtime/combine_cmssw_14_1_0_pre4.tgz
+transfer_output_files = ""
+use_x509userproxy = true
+x509userproxy = /eos/user/t/taiwoo/decaf/analysis/proxy/x509up_u147757
+environment = "IMPACT_EXPECT_SIGNAL=0 IMPACT_R_MIN=-20 IMPACT_R_MAX=20 COMBINE_RUNTIME_SHA256=2909cf59caf57cfa47e65e6d43a7bcca8c864c72984679127d8eebabb551614a COMBINE_RUNTIME_ARCHIVE=combine_cmssw_14_1_0_pre4.tgz IMPACT_PLOT=0 IMPACT_SUBSET_ONLY=1 IMPACT_RESUME_DIR=/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/combined_pending/T2tt/impact_recovery/r0/seed IMPACT_RESUME_NUISANCES=CMS_NPS26012_trigger_met_2024 IMPACT_RESUME_CARD_SHA256=8bc063bdec8d564cb99ce2a6c6e950a9ca2d1c6b0190b8d10dadbdc434028533 IMPACT_RESUME_WORKSPACE_SHA256=4f99e3b31e2712f5ce5580781b9480e2b15f5aecbaf867e919f089a8646d1391 IMPACT_RESUME_INITIAL_SHA256=21224c81e81fe3c1cac4d578520441f18c8c66519673753910543be56a582738 IMPACT_PARALLEL=1 IMPACT_MINIMIZER_STRATEGY=2 IMPACT_VERBOSITY=1 IMPACT_STEP_SIZE=0.001 IMPACT_MINIMIZER_PRECISION=1e-8"
+request_cpus = 2
+request_memory = 16000MB
+request_disk = 8000MB
++MaxRuntime = 43200
++JobBatchName = "NPS26012_TopW_impact_r0_met_trigger"
+queue 1
