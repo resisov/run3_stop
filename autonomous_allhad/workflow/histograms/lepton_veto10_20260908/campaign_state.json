@@ -5625,7 +5625,7 @@
       "calculations_blocked": false
     },
     "last_monitor": {
-      "utc": "2026-09-12T17:40:04Z",
+      "utc": "2026-09-12T18:13:07Z",
       "live_queue_status": "condor_q available; stalled condor_history query stopped, completed-subset event 005 and EOS outputs independently verified",
       "schedd_error": null,
       "schedd_recovered_at_utc": "2026-09-11T14:09:16Z",
@@ -6181,7 +6181,7 @@
       "status": "4_subsets_independently_validated; 1_worker_validated_independent_recheck_pending_EOS_IO; 4_running; full_collection_pending",
       "subset_recovery": {
         "checked_at_utc": "2026-09-12T03:18:08Z",
-        "latest_execution_check_utc": "2026-09-12T17:38:10Z",
+        "latest_execution_check_utc": "2026-09-12T18:13:07Z",
         "running_jobs": 4,
         "completed_subsets": 4,
         "batch_exit0_subsets": 5,
@@ -6370,7 +6370,7 @@
       "max_runtime_seconds": 43200,
       "proxy_seconds_before_submit": 368164,
       "voms_seconds_before_submit": 339364,
-      "last_queue_check": {"utc":"2026-09-12T17:38:10Z","idle":0,"running":4,"held":0,"primary_failed":2,"prepared_not_submitted":0,"recovery_subset_exit0_and_endpoints_verified":4,"batch_exit0_subsets":5,"worker_validated_recheck_pending_subsets":1,"completed_subset_validation_utc":"2026-09-12T14:37:00Z","new_release_confirmed_by_event_013":true,"running_remote_cpu_seconds":{"1115966.0":{"user":88368,"system":19},"1115967.0":{"user":22039,"system":8},"1115968.0":{"user":87585,"system":56},"1115969.0":{"user":22039,"system":15}}},
+      "last_queue_check": {"utc":"2026-09-12T18:13:07Z","idle":0,"running":4,"held":0,"primary_failed":2,"prepared_not_submitted":0,"recovery_subset_exit0_and_endpoints_verified":4,"batch_exit0_subsets":5,"worker_validated_recheck_pending_subsets":1,"completed_subset_validation_utc":"2026-09-12T14:37:00Z","new_release_confirmed_by_event_013":true,"running_remote_cpu_seconds":{"1115966.0":{"user":95543,"system":20},"1115967.0":{"user":23828,"system":8},"1115968.0":{"user":94694,"system":59},"1115969.0":{"user":23824,"system":16}}},
       "match_analysis": {"utc": "2026-09-12T08:38:33Z", "job": "1115819.0", "slots": 5225, "machines": 4064, "rejected_by_job_requirements": 1893, "rejected_by_slot_requirements": 145, "matching_and_willing": 9, "would_match_if_drained": 3178, "analysis_ignores_user_priority": true, "site_injected_afs_mount_requirement": true, "diagnosis": "No successful match recorded; last failed match reports no match found. Requirements remain satisfiable when user priority is ignored; exact scheduling cause is not established.", "jobs_modified": false},
       "idle_diagnostic": {"utc": "2026-09-12T03:55:18Z", "job": "1115819.0", "job_status": 1, "num_job_starts": 0, "last_match_time": null, "request_cpus": 6, "request_memory_mb": 18000, "max_runtime_seconds": 43200, "hold_reason": null, "jobs_modified": false},
       "runtime_observation": {
