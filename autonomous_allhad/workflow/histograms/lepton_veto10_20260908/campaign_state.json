@@ -5605,7 +5605,7 @@
     "schedd": "bigbird24.cern.ch",
     "source_backup": "topw_previous_sources.tar.gz",
     "source_commit": "456fd370",
-    "stage": "all_924_limits_validated; all_three_limit_plots_web_and_AN_updated; 2_impact_subsets_endpoints_validated_and_7_running",
+    "stage": "all_924_limits_validated; all_three_limit_plots_web_and_AN_updated; 4_impact_subsets_endpoints_validated_and_5_running",
     "git_checkpoint": {
       "status": "current_and_subsequent_status_updates_authorized",
       "file": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/campaign_state.json",
@@ -5624,15 +5624,15 @@
       "calculations_blocked": false
     },
     "last_monitor": {
-      "utc": "2026-09-12T13:54:21Z",
+      "utc": "2026-09-12T14:37:00Z",
       "live_queue_status": "condor_q available; stalled condor_history query stopped, completed-subset event 005 and EOS outputs independently verified",
       "schedd_error": null,
       "schedd_recovered_at_utc": "2026-09-11T14:09:16Z",
-      "current_queue": {"primary_limits_running": 0, "impacts_running": 7, "impacts_recovery_idle": 0, "impacts_recovery_unsubmitted": 0, "recovery_running": 0, "recovery_idle": 0, "local_limit_recovery_running": 0, "collection_running": 0, "held": 0},
+      "current_queue": {"primary_limits_running": 0, "impacts_running": 5, "impacts_recovery_idle": 0, "impacts_recovery_unsubmitted": 0, "recovery_running": 0, "recovery_idle": 0, "local_limit_recovery_running": 0, "collection_running": 0, "held": 0},
       "limit_recovery_update_utc": "2026-09-12T13:52:36Z",
       "queue_snapshot_precedes_latest_T2tb_recovery_and_collection_refresh": false,
       "queue_snapshot_precedes_sigbus_retry_and_additional_submissions": false,
-      "validation_checked_at_utc": "2026-09-12T13:54:21Z",
+      "validation_checked_at_utc": "2026-09-12T14:37:00Z",
       "ssh_access": true,
       "eos_access": true,
       "kerberos_klist_s_exit": 0,
@@ -6176,13 +6176,13 @@
       }
     },
     "impacts": {
-      "status": "2_recovery_subsets_endpoints_validated; 7_subsets_running; full_collection_pending",
+      "status": "4_recovery_subsets_endpoints_validated; 5_subsets_running; full_collection_pending",
       "subset_recovery": {
         "checked_at_utc": "2026-09-12T03:18:08Z",
-        "latest_execution_check_utc": "2026-09-12T13:54:21Z",
-        "running_jobs": 7,
-        "completed_subsets": 2,
-        "recovered_endpoint_count": 17,
+        "latest_execution_check_utc": "2026-09-12T14:37:00Z",
+        "running_jobs": 5,
+        "completed_subsets": 4,
+        "recovered_endpoint_count": 57,
         "full_collection_and_convergence_review_pending": true,
         "worker_usage": {
           "checked_at_utc": "2026-09-12T12:17:31Z",
@@ -6199,7 +6199,7 @@
           "1115968.0": {"user_cpu_seconds":9390,"system_cpu_seconds":19,"memory_mb":3174},
           "1115969.0": {"user_cpu_seconds":2385,"system_cpu_seconds":6,"memory_mb":1465}
         },
-        "completed_subset_stdout_stderr_verified": 2,
+        "completed_subset_stdout_stderr_verified": 4,
         "schedd": "bigbird24.cern.ch",
         "error": null,
         "previous_error": "Failed to process job credential requests (1): ERROR: store_cred of Kerberos credential failed - Arguments are missing, client and server my be mismatched",
@@ -6219,8 +6219,8 @@
         "latest_retry": {"submitted_job": "1115821.0", "submitted_at_utc": "2026-09-12T02:29:27Z", "release_response_timed_out": true, "release_event_013_verified": true, "released_at_utc": "2026-09-12T02:32:54Z", "afs_home_removed_and_environment_verified": true, "next_submission": "r1/incomplete_3", "next_submission_timeout_seconds": 45, "next_submission_queue_and_event_log_absent": true, "subsequent_five_submissions_not_attempted": true},
         "mail": {"recipient":"taiwoo.kim@cern.ch","mechanism":"CERN /usr/sbin/sendmail","exit_code":0,"status":"accepted_by_local_mail_service; recipient_delivery_not_confirmed"},
         "jobs": [
-          {"r":1,"label":"incomplete_1","count":20,"submission_file":"impact_recovery/r1/incomplete_1/impact_r1_eossubmit.sub","submission_sha256":"648f5b097362e1ef4c69bfc943455d93d611bb5d0dd049775bc5dde148551c12","cluster":1115819,"status":"running","output_work":"impact_recovery/r1/incomplete_1/impact_mStop1200_mLSP500_r1/work","afs_home_removed":true,"num_job_starts":1,"current_start_utc":"2026-09-12T11:17:37Z"},
-          {"r":1,"label":"incomplete_2","count":20,"submission_file":"impact_recovery/r1/incomplete_2/impact_r1_eossubmit.sub","submission_sha256":"f0389a198c9adf22dd0c5205e909965e5f3e8f1e80b58799d1ca9d2a5b4307bc","cluster":1115820,"status":"running","output_work":"impact_recovery/r1/incomplete_2/impact_mStop1200_mLSP500_r1/work","afs_home_removed":true,"num_job_starts":1,"current_start_utc":"2026-09-12T11:17:40Z"},
+          {"r":1,"label":"incomplete_1","count":20,"submission_file":"impact_recovery/r1/incomplete_1/impact_r1_eossubmit.sub","submission_sha256":"648f5b097362e1ef4c69bfc943455d93d611bb5d0dd049775bc5dde148551c12","cluster":1115819,"status":"endpoints_validated_full_collection_pending","output_work":"impact_recovery/r1/incomplete_1/impact_mStop1200_mLSP500_r1/work","afs_home_removed":true,"num_job_starts":1,"current_start_utc":"2026-09-12T11:17:37Z","exit_code":0,"completed_at_utc":"2026-09-12T14:02:01Z","completion_source":"Condor event 005 normal termination; stdout checksums OK; stderr empty","independent_recheck_utc":"2026-09-12T14:37:00Z","validated_endpoint_count":20,"validation":"three finite entries with nonzero endpoints bracketing nominal; full convergence review pending","root_sha256":{"CMS_eff_e_reco_13p6TeV_2024":"03ed3b6852d4e32e9678cdcad8c8c84d4fa646c69b5615242b85eec6fc4e1d1c","CMS_eff_e_reco_13p6TeV_2025":"62649b9bf2c634f8175bdcdcefc75cfe490ebd5c560af0b7fe44528d5a3c166f","prop_biny2024_GCR_lowdm_gnn_Nb1_NISR0_bin0_bin0":"1e8a4b3bae298bed1e7ad449f661a013280156aecfa6fcf59b187484ffa8b595","prop_biny2024_GCR_lowdm_gnn_Nb1_NISR0_bin1_bin0":"2a58fb145415413d0d605ca656c0d9abae960dd49b95bbf7ccf22943cdefd438","prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0":"571f674d48c38bdb54375620acf54425df97529305118f5dcedaf8bc99ad573a","prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0":"81b9da2d948fc9e965a534ffc9364f0ddb37fa4a9389639433b1d41fce58acda","prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin2_bin0":"913a34bdf0abcb8c3a84ebbed3c0e2ea8930ca0fdcfa359e427f927be360d254","prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin3_bin0":"5b787366d66fa257d1b18a14643730c41257961865bb5aeb0d8f57edf76441d2","prop_biny2024_GCR_lowdm_gnn_Nb1_NISR1plus_bin4_bin0":"84625827384ac883b27748b1c796cb44e43962e6159b4065572e061192fde060","prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR0_bin0_bin0":"325dc036dad2edcb65d52330c105ce6486a02cffc70c305739e4f7613de8ae47","prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR0_bin1_bin0":"c3b56e513b1b1f9ce80b8d76b059b56eae3a7b98d217cac60e767567fafd7102","prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR0_bin4_bin0":"57b933bae0d90ec3a0d7eb5d7db923e322c0afc29bed559a1e5c6f54bc94a7bb","prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0":"fd742772eee52011a102ff15cf126b9aba99df29c8baa59d5eef2d9809d56881","prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin1_bin0":"440dc36397b83b37724ee8fbb87928a9cf9f5a4d1504ad9f96f4315c9446aac7","prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin2_bin0":"1bed5fbc09fd540047889273d3481d291aa17cf6d903161f970f2838e4bcbd14","prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0":"59fe07f7518cc52cb40e6859b316796fd3dd82ad3b445e5f980054c19ec7d06b","prop_biny2024_GCR_lowdm_gnn_Nb2plus_NISR1plus_bin4_bin0":"5b6f173b8dc4cb306bf7a627daf8ec4d5eb825230645b30f15f2dd21520aaf14","prop_biny2024_LLCR_highdm_Nb2plus_bin0_bin0":"fa08aed0274af50d4d83ed46ed8681dc4e066b1612435fc9ffad46e5a074f1a3","prop_biny2024_LLCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0":"d38ca4970289685dd87ebda8c7fdb177fa84fd1a49795ef7e1dd4be2bf826104","prop_biny2024_LLCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0":"e777c896e638f784ea9894450964400cfac784ebea09642f7b6015f5ffcce0ef"}},
+          {"r":1,"label":"incomplete_2","count":20,"submission_file":"impact_recovery/r1/incomplete_2/impact_r1_eossubmit.sub","submission_sha256":"f0389a198c9adf22dd0c5205e909965e5f3e8f1e80b58799d1ca9d2a5b4307bc","cluster":1115820,"status":"endpoints_validated_full_collection_pending","output_work":"impact_recovery/r1/incomplete_2/impact_mStop1200_mLSP500_r1/work","afs_home_removed":true,"num_job_starts":1,"current_start_utc":"2026-09-12T11:17:40Z","exit_code":0,"completed_at_utc":"2026-09-12T14:12:36Z","completion_source":"Condor event 005 normal termination; stdout checksums OK; stderr empty","independent_recheck_utc":"2026-09-12T14:37:00Z","validated_endpoint_count":20,"validation":"three finite entries with nonzero endpoints bracketing nominal; full convergence review pending","root_sha256":{"prop_biny2024_LLCR_lowdm_gnn_Nb1_NISR1plus_bin2_bin0":"a1a07a3932f23bb75e693827837653865f3243a81d9038ee08774dc5a4686edc","prop_biny2024_LLCR_lowdm_gnn_Nb1_NISR1plus_bin3_bin0":"4bb952da393e467850adc54a1eddc4d1a71bba82fa6462ba2224369bf264888c","prop_biny2024_LLCR_lowdm_gnn_Nb1_NISR1plus_bin4_bin0":"f5c249e899e3c4e283cdae613cd5c483aac423db4b74a85fabf8b19211591302","prop_biny2024_LLCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0":"9c83ba87e9eab162cb001520d81aa8fcdcac6bc31e19d1bc6cfc40272a1eb941","prop_biny2024_LLCR_lowdm_gnn_Nb2plus_NISR1plus_bin1_bin0":"e233091198f1b99b6537f9ac0c29ef8b81d5bdd2c4c0ea4fb6656bb32b62dbaf","prop_biny2024_LLCR_lowdm_gnn_Nb2plus_NISR1plus_bin2_bin0":"26bd29a7c093911cb05ed6f5335e129bffc6853bc7d69332b8441a07f342d25c","prop_biny2024_LLCR_lowdm_gnn_Nb2plus_NISR1plus_bin3_bin0":"979dff3a891b028937428dd0b8061de23a64f997251093be5d7c7766938e37a8","prop_biny2024_LLCR_lowdm_gnn_Nb2plus_NISR1plus_bin4_bin0":"75aaf938aff3fcac5ab6c6cd5d4e8b6a01f4020ad4e5be0f443f7f1b3cafb149","prop_biny2024_QCDCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0":"975edeeafad184d51676ef5f03f7851c076a1a72c48fc3a21652943955fca224","prop_biny2024_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin0_bin0":"76aae04c81f90679003131c8a0714d753fdf2b2c8e8534f15f1e2d5e28fb12aa","prop_biny2024_QCDCR_lowdm_gnn_Nb2plus_NISR1plus_bin2_bin0":"16056af0e82992de75a7b792445b92d448758c36426b4fc3cd068e5e4e57e930","prop_biny2025_GCR_lowdm_gnn_Nb1_NISR0_bin0_bin0":"a04096233b3cd7c4ffbf06caa6ec5c79ed43f289c2cd51bfb1f2c9f341ecfa28","prop_biny2025_GCR_lowdm_gnn_Nb1_NISR0_bin1_bin0":"c68a4fa94d9b9e5b7d773f2e80eb127d6add8a44d7567e98512884bf3d89d89b","prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin0_bin0":"5e049b8feb6109056b3da60f40da4beb7a1ad88169b2756da6673eac523d80b6","prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin1_bin0":"0e556d32d78a1de3d214be0dfd1987cf39a3f77179fe428ec6a1da5916d013e1","prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin2_bin0":"9aed3cf297b51bde0500ca704ccde8faa2126219ad12c261824c97954e080bab","prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin3_bin0":"ec833504a1ec455bd2925b8c5e843b80fb4356d1eb03c1079cf8ca6b94682bf9","prop_biny2025_GCR_lowdm_gnn_Nb1_NISR1plus_bin4_bin0":"b97c8b4653b18200a9197fd3a894f12e67cefe30a9cfef4be1b6fd74cfe3c887","prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR0_bin0_bin0":"30df15c9e9ee8b31681a8e88ecb79c4bacd9df002237c89dcaca409a6ed56712","prop_biny2025_GCR_lowdm_gnn_Nb2plus_NISR0_bin1_bin0":"d44479100ba7b18dcc275eaf101243aa880ad989466019c9beb656d327900c19"}},
           {"r":1,"label":"incomplete_3","count":20,"submission_file":"impact_recovery/r1/incomplete_3/impact_r1_eossubmit.sub","submission_sha256":"edb546a0963f40b34cf73de74d2a07795fe19ce86c7ddcc4754fe6a452c2b514","cluster":1115965,"status":"running","output_work":"impact_recovery/r1/incomplete_3/impact_mStop1200_mLSP500_r1/work","afs_home_removed":true,"release_event_013_verified":true,"submitted_at_utc":"2026-09-12T03:11:14Z","released_at_utc":"2026-09-12T03:17:27Z","release_command_exit_code":0,"num_job_starts":1,"current_start_utc":"2026-09-12T11:17:42Z"},
           {"r":1,"label":"normalization","count":6,"submission_file":"impact_recovery/r1/normalization/impact_r1_eossubmit.sub","submission_sha256":"b6aaadf0ffda2b54ab71284ada0d14ec3a32cded78e2ed468540481fb380792d","cluster":1115821,"status":"endpoints_validated_full_collection_pending","output_work":"impact_recovery/r1/normalization/impact_mStop1200_mLSP500_r1/work","afs_home_removed":true,"release_event_013_verified":true,"num_job_starts":1,"current_start_utc":"2026-09-12T11:17:43Z","exit_code":0,"completed_at_utc":"2026-09-12T12:39:48Z","independent_recheck_utc":"2026-09-12T12:51:30Z","validated_endpoint_count":6,"validation":"three finite entries with nonzero endpoints bracketing nominal; convergence review pending","root_sha256":{"CMS_NPS26012_ll_norm_highdm_Nb2plus_bin0_2025":"3e7992d6e5366b7cc305542cab3b9ac39b26267e9b1977dd419d0225ecdedffc","CMS_NPS26012_ll_norm_highdm_Nb2plus_bin1_2025":"da2248e3d3139e63e543c42e6ab1ecedd1a9bb3d099cf2b2a1bccf8699ad89cd","CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2024":"1cc8cacc5aadb50b034e2f0187ac55941f6598ae657c7220cb91c17ba04140d3","CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025":"a8d809647d575939500ce27964c71a27412e2e4440e7951cfafa1394b53a22bc","CMS_NPS26012_ll_norm_lowdm_Nb2plus_NISR1plus_inclusive_2025":"871771c1052a324ed01207abbcd0e00869e64bc510719f9c1bb257ccec1436fe","CMS_NPS26012_qcd_norm_lowdm_Nb1_NISR1plus_inclusive_2025":"472bcbfc976036a1028d07ade6a5fb149fd4b60c7f1c86837789f12b9a9f8f99"}},
           {"r":1,"label":"sgamma","count":14,"submission_file":"impact_recovery/r1/sgamma/impact_r1_eossubmit.sub","submission_sha256":"0c80a0ac1bbc85d9cc7007c8f0fe38281fff9417173f4df683b8141c2fdbbb5d","cluster":1115966,"status":"running","output_work":"impact_recovery/r1/sgamma/impact_mStop1200_mLSP500_r1/work","afs_home_removed":true,"release_event_013_verified":true,"submitted_at_utc":"2026-09-12T03:11:51Z","released_at_utc":"2026-09-12T03:17:27Z","release_command_exit_code":0,"num_job_starts":1,"current_start_utc":"2026-09-12T11:17:40Z"},
@@ -6236,7 +6236,7 @@
         "validation": "finite three-entry endpoints; zero-width sides checked against card bounds; final workspace and convergence validation pending",
         "r1": {"parameter_root_count":767,"strict_two_sided_finite":686,"retry_count":81,"workspace_sha256":"f3a3f53faee9dd12f79e39552315ec95d60a58d6a430b04e3559f8377b5d318b","initial_fit_sha256":"1f88da82b6b846a6a82f72a425fa1515783cf4cc92d395f115818847bdd43048"},
         "r0": {"parameter_root_count":767,"strict_two_sided_finite":740,"retry_count":27,"workspace_sha256":"4f99e3b31e2712f5ce5580781b9480e2b15f5aecbaf867e919f089a8646d1391","initial_fit_sha256":"21224c81e81fe3c1cac4d578520441f18c8c66519673753910543be56a582738"},
-        "status": "2_subsets_endpoints_validated; 7_running; full_collection_and_convergence_review_pending",
+        "status": "4_subsets_endpoints_validated; 5_running; full_collection_and_convergence_review_pending",
         "existing_fit_outputs_preserved": true,
         "physics_changed": false,
         "invalid_endpoints": [
@@ -6366,7 +6366,7 @@
       "max_runtime_seconds": 43200,
       "proxy_seconds_before_submit": 368164,
       "voms_seconds_before_submit": 339364,
-      "last_queue_check": {"utc": "2026-09-12T13:51:17Z", "idle": 0, "running": 7, "held": 0, "primary_failed": 2, "prepared_not_submitted": 0, "recovery_subset_exit0_and_endpoints_verified": 2, "completed_subset_validation_utc": "2026-09-12T13:54:21Z", "new_release_confirmed_by_event_013": true},
+      "last_queue_check": {"utc": "2026-09-12T14:35:41Z", "idle": 0, "running": 5, "held": 0, "primary_failed": 2, "prepared_not_submitted": 0, "recovery_subset_exit0_and_endpoints_verified": 4, "completed_subset_validation_utc": "2026-09-12T14:37:00Z", "new_release_confirmed_by_event_013": true},
       "match_analysis": {"utc": "2026-09-12T08:38:33Z", "job": "1115819.0", "slots": 5225, "machines": 4064, "rejected_by_job_requirements": 1893, "rejected_by_slot_requirements": 145, "matching_and_willing": 9, "would_match_if_drained": 3178, "analysis_ignores_user_priority": true, "site_injected_afs_mount_requirement": true, "diagnosis": "No successful match recorded; last failed match reports no match found. Requirements remain satisfiable when user priority is ignored; exact scheduling cause is not established.", "jobs_modified": false},
       "idle_diagnostic": {"utc": "2026-09-12T03:55:18Z", "job": "1115819.0", "job_status": 1, "num_job_starts": 0, "last_match_time": null, "request_cpus": 6, "request_memory_mb": 18000, "max_runtime_seconds": 43200, "hold_reason": null, "jobs_modified": false},
       "runtime_observation": {
