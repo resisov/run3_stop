@@ -5605,7 +5605,7 @@
     "schedd": "bigbird24.cern.ch",
     "source_backup": "topw_previous_sources.tar.gz",
     "source_commit": "456fd370",
-    "stage": "T2tt_and_T2bW_validated_plots_web_and_AN_updated; final_T2tb_limit_running; 1_impact_subset_endpoints_validated_and_8_running",
+    "stage": "all_924_limits_validated; all_three_limit_plots_web_and_AN_updated; 2_impact_subsets_endpoints_validated_and_7_running",
     "git_checkpoint": {
       "status": "current_and_subsequent_status_updates_authorized",
       "file": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/campaign_state.json",
@@ -5624,21 +5624,21 @@
       "calculations_blocked": false
     },
     "last_monitor": {
-      "utc": "2026-09-12T12:51:30Z",
-      "live_queue_status": "available; longer bounded RPC waits used for intermittent service latency",
+      "utc": "2026-09-12T13:54:21Z",
+      "live_queue_status": "condor_q available; stalled condor_history query stopped, completed-subset event 005 and EOS outputs independently verified",
       "schedd_error": null,
       "schedd_recovered_at_utc": "2026-09-11T14:09:16Z",
-      "current_queue": {"primary_limits_running": 0, "impacts_running": 8, "impacts_recovery_idle": 0, "impacts_recovery_unsubmitted": 0, "recovery_running": 0, "recovery_idle": 0, "local_limit_recovery_running": 1, "collection_running": 0, "held": 0},
-      "limit_recovery_update_utc": "2026-09-12T12:51:30Z",
+      "current_queue": {"primary_limits_running": 0, "impacts_running": 7, "impacts_recovery_idle": 0, "impacts_recovery_unsubmitted": 0, "recovery_running": 0, "recovery_idle": 0, "local_limit_recovery_running": 0, "collection_running": 0, "held": 0},
+      "limit_recovery_update_utc": "2026-09-12T13:52:36Z",
       "queue_snapshot_precedes_latest_T2tb_recovery_and_collection_refresh": false,
       "queue_snapshot_precedes_sigbus_retry_and_additional_submissions": false,
-      "validation_checked_at_utc": "2026-09-12T12:51:30Z",
+      "validation_checked_at_utc": "2026-09-12T13:54:21Z",
       "ssh_access": true,
       "eos_access": true,
       "kerberos_klist_s_exit": 0,
       "roots_present_at_1409_utc": {"T2tt": 178, "T2bW": 334, "T2tb": 304},
       "file_counts_are_not_validated_completion": true,
-      "collection_status": "T2tt and T2bW complete; T2tb 364/365 individually validated, while its exported partial plot still uses 362 points",
+      "collection_status": "All 924 expected limits validated and collected: T2tt 205, T2bW 354, T2tb 365",
       "termination_log_snapshot": {
         "utc": "2026-09-11T15:22:16Z",
         "T2tt": {"terminated": 205, "exit0": 203, "exit124": 2},
@@ -5780,20 +5780,20 @@
       "physics_changed": false
     },
     "limits": {
-      "status": "T2tt_205_of_205_validated; T2bW_354_of_354_validated; T2tb_364_of_365_validated; final_point_in_authorized_direct_recovery",
+      "status": "all_924_expected_limits_validated_and_collected",
       "expected_total": 924,
       "submitted_total": 924,
       "last_queue_check": {"utc": "2026-09-11T15:15:33Z", "running": 0, "idle": 0, "held": 0, "primary_termination_events_verified": 924},
       "quantile_validation": {
-        "utc": "2026-09-12T12:51:30Z",
-        "counts": {"T2tt": 205, "T2bW": 354, "T2tb": 364},
-        "total": 923,
+        "utc": "2026-09-12T13:52:36Z",
+        "counts": {"T2tt": 205, "T2bW": 354, "T2tb": 365},
+        "total": 924,
         "five_finite_nonnegative_ordered_quantiles": true,
         "T2tt": {"batch_collected": 205, "late_outputs_individually_validated": [], "export_refresh_pending": false},
         "T2bW": {"batch_collected": 354, "late_outputs_individually_validated": [], "export_refresh_pending": false},
         "T2bW_incomplete_trees": {},
-        "T2tb": {"batch_collected": 361, "incomplete_trees": {}, "late_outputs_individually_validated": ["mStop100_mLSP1","mStop1750_mLSP1400","mStop1750_mLSP1500"], "export_refresh_pending": true},
-        "all_outputs_promoted": false
+        "T2tb": {"batch_collected": 365, "incomplete_trees": {}, "late_outputs_individually_validated": [], "export_refresh_pending": false},
+        "all_outputs_promoted": true
       },
       "invalid_results": [{"topology": "T2bW", "mass_point": "mStop200_mLSP100", "job": "1115252.271", "reason": "original limit tree had zero entries", "observed_at_utc": "2026-09-11T12:54:15Z", "path": "combined_pending/T2bW/limits/higgsCombine_mStop200_mLSP100.AsymptoticLimits.mH120.root", "termination_log_exit_code": 0, "retry_submitted": true, "retry_job": "1115315.0", "resolved": true, "replacement_validated_and_promoted": true}],
       "output_directory": "combined_pending",
@@ -5829,7 +5829,7 @@
           "1115319.6": {"topology": "T2bW", "mass_point": "mStop1800_mLSP1400", "original_job": "1115252.259", "failure": "combine_timeout_7200s", "point_timeout_seconds": 21600, "condor_status": "removed_for_direct_recovery", "status": "resolved_by_direct_recovery", "direct_result_sha256": "ffbd8a890b67f388abb504d41cb0474a75ddbb39896e548b84441eedf5af1a84"},
           "1115320.0": {"topology": "T2tb", "mass_point": "mStop1750_mLSP1400", "original_job": "1115258.240", "failure": "combine_timeout_7200s", "point_timeout_seconds": 21600, "condor_status": "removed_for_direct_recovery", "status": "resolved_by_direct_recovery", "direct_result_sha256": "bd99244587397e618f1ad36560a2bcc189ec103ea4d3bbaebc83193557e3785a"},
           "1115320.1": {"topology": "T2tb", "mass_point": "mStop1750_mLSP1500", "original_job": "1115258.242", "failure": "combine_timeout_7200s", "point_timeout_seconds": 21600, "condor_status": "removed_for_direct_recovery", "status": "resolved_by_direct_recovery", "direct_result_sha256": "70518e964ca90e7ee7dc45b4c8c91c043493a7cb6ba1aa60140cf77113cdc66a"},
-          "1115320.2": {"topology": "T2tb", "mass_point": "mStop1800_mLSP1450", "original_job": "1115258.260", "failure": "combine_timeout_7200s", "point_timeout_seconds": 21600},
+          "1115320.2": {"topology":"T2tb","mass_point":"mStop1800_mLSP1450","original_job":"1115258.260","failure":"combine_timeout_7200s","point_timeout_seconds":21600,"condor_status":"removed_for_direct_recovery","status":"resolved_by_direct_recovery","direct_result_sha256":"55e91b7bfce87f9f9ede94e8eb700ca116778bee568170cdae35580a11405cda"},
           "1115321.0": {"topology": "T2bW", "mass_point": "mStop100_mLSP1", "failure": "zero_quantiles", "r_abs_accuracy": 1e-7, "condor_status": "removed_for_direct_recovery", "status": "resolved_by_direct_recovery", "direct_result_sha256": "7bb5569e1479c34e2cde124d31f366e29fc7ec4f2ebe8d027b8ffd08ae2d4940"},
           "1115321.1": {"topology": "T2bW", "mass_point": "mStop300_mLSP150", "failure": "one_quantile_only", "r_abs_accuracy": 1e-7, "condor_status": "removed_for_direct_recovery", "status": "resolved_by_direct_recovery", "direct_result_sha256": "c12eca4ffc3c4399077fcef5f2b9b1ba1a0dfb8f434397689458d69b1c44e161"},
           "1115321.2": {"topology": "T2bW", "mass_point": "mStop300_mLSP200", "failure": "one_quantile_only", "r_abs_accuracy": 1e-7, "condor_status": "removed_for_direct_recovery", "status": "resolved_by_direct_recovery", "direct_result_sha256": "039d06e301f806ffbc209f642127c04a51def1b3b131cd2eb103461fc0a87ed6"},
@@ -5857,22 +5857,23 @@
           "8a60e1fe4932d4674101b1264e905abd59c56c4d271c06fc698c1e96aa60daf6",
           "e4d1fb27464d710ef9ed44d36576fc2c976138ed6e8e27ccc63a6b9c5413f61e"
         ],
-        "validated_recoveries": 17,
-        "promoted_recoveries": 17,
-        "pending_recoveries": 1,
+        "validated_recoveries": 18,
+        "promoted_recoveries": 18,
+        "pending_recoveries": 0,
         "promotion_target": "combined_pending/{topology}/limits",
         "replaced_invalid_outputs": [{"path":"combined_pending/T2bW/limits/higgsCombine_mStop200_mLSP100.AsymptoticLimits.mH120.root","previous_limit_entries":0,"replacement_validated":true,"backup_retained":false},{"path":"combined_pending/T2bW/limits/higgsCombine_mStop100_mLSP1.AsymptoticLimits.mH120.root","previous_limit_entries":0,"replacement_validated":true,"backup_retained":false},{"path":"combined_pending/T2bW/limits/higgsCombine_mStop300_mLSP150.AsymptoticLimits.mH120.root","previous_limit_entries":1,"replacement_validated":true,"backup_retained":false},{"path":"combined_pending/T2bW/limits/higgsCombine_mStop300_mLSP200.AsymptoticLimits.mH120.root","previous_limit_entries":1,"replacement_validated":true,"backup_retained":false},{"path":"combined_pending/T2tb/limits/higgsCombine_mStop100_mLSP1.AsymptoticLimits.mH120.root","previous_limit_entries":1,"replacement_validated":true,"backup_retained":false}],
         "last_queue_check": {"utc": "2026-09-12T01:46:14Z", "running": 0, "idle": 0, "held": 0, "removed_for_direct_recovery": 12},
         "direct_recovery": {
-          "status": "running",
+          "status": "complete_validated",
+          "completed_at_utc": "2026-09-12T13:50:52Z",
           "approval": "User approved one-process-at-a-time direct lxplus recovery after the CPU-use risk and prior prohibition were stated.",
           "approval_date": "2026-09-12",
           "approval_scope": "Only the 12 unresolved expected-limit points; not impact fits or future campaigns",
           "host": "lxplus924.cern.ch",
           "supervisor_pid": 1216901,
           "started_at_utc": "2026-09-12T01:53:34Z",
-          "last_checked_at_utc": "2026-09-12T12:51:30Z",
-          "current_point": {"topology": "T2tb", "mass_point": "mStop1800_mLSP1450", "stage": "AsymptoticLimits", "timeout_pid": 2002773, "combine_pid": 2002774, "combine_elapsed_seconds": 699, "combine_cpu_percent": 99.5, "cpu_active": true, "workspace_exit_code": 0, "workspace_completed_utc": "2026-09-12T12:39:07Z"},
+          "last_checked_at_utc": "2026-09-12T13:52:36Z",
+          "current_point": null,
           "max_parallel": 1,
           "thread_limits": 1,
           "nice": 10,
@@ -5913,8 +5914,8 @@
             "T2bW": ["mStop100_mLSP1", "mStop300_mLSP150", "mStop300_mLSP200", "mStop1750_mLSP1350", "mStop1750_mLSP1400", "mStop1750_mLSP1450", "mStop1750_mLSP1500", "mStop1800_mLSP1400"],
             "T2tb": ["mStop100_mLSP1", "mStop1750_mLSP1400", "mStop1750_mLSP1500", "mStop1800_mLSP1450"]
           },
-          "completed_validated": 11,
-          "validated_results": [{"topology":"T2bW","mass_point":"mStop100_mLSP1","combine_exit_code":0,"combine_completed_utc":"2026-09-12T02:40:56Z","promoted_utc":"2026-09-12T02:41:00Z","independent_recheck_utc":"2026-09-12T03:07:03Z","sha256":"7bb5569e1479c34e2cde124d31f366e29fc7ec4f2ebe8d027b8ffd08ae2d4940","expected_m2":0.00044707953929901123,"expected_m1":0.0005957406247034669,"expected":0.000835418701171875,"expected_p1":0.0011784102534875274,"expected_p2":0.0015987075166776776},{"topology":"T2bW","mass_point":"mStop300_mLSP150","combine_exit_code":0,"combine_completed_utc":"2026-09-12T03:24:37Z","promoted_utc":"2026-09-12T03:24:43Z","independent_recheck_utc":"2026-09-12T03:55:18Z","sha256":"c12eca4ffc3c4399077fcef5f2b9b1ba1a0dfb8f434397689458d69b1c44e161","expected_m2":0.0014188885688781738,"expected_m1":0.0018928153440356255,"expected":0.00263214111328125,"expected_p1":0.0036813237238675356,"expected_p2":0.004930834751576185},{"topology":"T2bW","mass_point":"mStop300_mLSP200","combine_exit_code":0,"combine_completed_utc":"2026-09-12T04:02:20Z","promoted_utc":"2026-09-12T04:02:24Z","independent_recheck_utc":"2026-09-12T04:29:22Z","sha256":"039d06e301f806ffbc209f642127c04a51def1b3b131cd2eb103461fc0a87ed6","expected_m2":0.0008002519607543945,"expected_m1":0.0010717790573835373,"expected":0.001495361328125,"expected_p1":0.0021093005780130625,"expected_p2":0.002842567628249526},{"topology":"T2tb","mass_point":"mStop100_mLSP1","combine_exit_code":0,"combine_completed_utc":"2026-09-12T04:41:49Z","promoted_utc":"2026-09-12T04:41:53Z","independent_recheck_utc":"2026-09-12T05:10:12Z","sha256":"1d3457fae59f96d80cecbd11da29ac12a768bb8368800c6ed0e41545cce4e093","expected_m2":0.0014216899871826172,"expected_m1":0.0019171927124261856,"expected":0.002716064453125,"expected_p1":0.003896136535331607,"expected_p2":0.00543001014739275},{"topology":"T2bW","mass_point":"mStop1750_mLSP1350","combine_exit_code":0,"combine_completed_utc":"2026-09-12T05:46:57Z","promoted_utc":"2026-09-12T05:47:01Z","independent_recheck_utc":"2026-09-12T06:13:22Z","sha256":"d73484e178f89bdc4aadf6dcab6c355658dedb428fc341d9dd4de46624d6f331","expected_m2":18.9921875,"expected_m1":25.40728759765625,"expected":35.75,"expected_p1":50.712608337402344,"expected_p2":69.06351470947266},{"topology":"T2bW","mass_point":"mStop1750_mLSP1400","combine_exit_code":0,"combine_completed_utc":"2026-09-12T06:47:44Z","promoted_utc":"2026-09-12T06:47:48Z","independent_recheck_utc":"2026-09-12T07:18:47Z","sha256":"ff41f63a3fc527672f932dfb34fff4ff70f8680bada965e6c0c789a109a4fea9","expected_m2":21.560546875,"expected_m1":29.193618774414062,"expected":41.5,"expected_p1":59.8617057800293,"expected_p2":82.92304229736328},{"topology":"T2bW","mass_point":"mStop1750_mLSP1450","combine_exit_code":0,"combine_completed_utc":"2026-09-12T08:05:30Z","promoted_utc":"2026-09-12T08:05:34Z","independent_recheck_utc":"2026-09-12T08:38:21Z","sha256":"e70bed5d0778d21c24d03db5e9574173812ed14130dfb051a19d8762c4e425f0","expected_m2":37.8515625,"expected_m1":50.8978271484375,"expected":71.25,"expected_p1":100.50257110595703,"expected_p2":136.34828186035156},{"topology":"T2bW","mass_point":"mStop1750_mLSP1500","combine_exit_code":0,"combine_completed_utc":"2026-09-12T09:11:16Z","promoted_utc":"2026-09-12T09:11:19Z","independent_recheck_utc":"2026-09-12T09:20:41Z","sha256":"21abb3a44a58e81f3a78ce7b7480cc5ca5b9b1c3add8c1f82216811addbb68c6","expected_m2":37.8984375,"expected_m1":51.52716064453125,"expected":73.5,"expected_p1":106.31310272216797,"expected_p2":147.97036743164062},{"topology":"T2bW","mass_point":"mStop1800_mLSP1400","combine_exit_code":0,"combine_completed_utc":"2026-09-12T10:13:32Z","promoted_utc":"2026-09-12T10:13:35Z","independent_recheck_utc":"2026-09-12T10:26:23Z","sha256":"ffbd8a890b67f388abb504d41cb0474a75ddbb39896e548b84441eedf5af1a84","expected_m2":25.56640625,"expected_m1":34.37835693359375,"expected":48.125,"expected_p1":68.07514190673828,"expected_p2":92.22752380371094},{"topology":"T2tb","mass_point":"mStop1750_mLSP1400","combine_exit_code":0,"combine_completed_utc":"2026-09-12T11:15:05Z","promoted_utc":"2026-09-12T11:15:09Z","independent_recheck_utc":"2026-09-12T11:42:30Z","sha256":"bd99244587397e618f1ad36560a2bcc189ec103ea4d3bbaebc83193557e3785a","expected_m2":21.29150390625,"expected_m1":28.596904754638672,"expected":40.375,"expected_p1":57.27333068847656,"expected_p2":78.5100326538086},{"topology":"T2tb","mass_point":"mStop1750_mLSP1500","combine_exit_code":0,"combine_completed_utc":"2026-09-12T12:37:41Z","promoted_utc":"2026-09-12T12:37:44Z","independent_recheck_utc":"2026-09-12T12:51:30Z","sha256":"70518e964ca90e7ee7dc45b4c8c91c043493a7cb6ba1aa60140cf77113cdc66a","expected_m2":42.53662109375,"expected_m1":57.59584426879883,"expected":81.875,"expected_p1":118.75337219238281,"expected_p2":166.05859375}],
+          "completed_validated": 12,
+          "validated_results": [{"topology":"T2bW","mass_point":"mStop100_mLSP1","combine_exit_code":0,"combine_completed_utc":"2026-09-12T02:40:56Z","promoted_utc":"2026-09-12T02:41:00Z","independent_recheck_utc":"2026-09-12T03:07:03Z","sha256":"7bb5569e1479c34e2cde124d31f366e29fc7ec4f2ebe8d027b8ffd08ae2d4940","expected_m2":0.00044707953929901123,"expected_m1":0.0005957406247034669,"expected":0.000835418701171875,"expected_p1":0.0011784102534875274,"expected_p2":0.0015987075166776776},{"topology":"T2bW","mass_point":"mStop300_mLSP150","combine_exit_code":0,"combine_completed_utc":"2026-09-12T03:24:37Z","promoted_utc":"2026-09-12T03:24:43Z","independent_recheck_utc":"2026-09-12T03:55:18Z","sha256":"c12eca4ffc3c4399077fcef5f2b9b1ba1a0dfb8f434397689458d69b1c44e161","expected_m2":0.0014188885688781738,"expected_m1":0.0018928153440356255,"expected":0.00263214111328125,"expected_p1":0.0036813237238675356,"expected_p2":0.004930834751576185},{"topology":"T2bW","mass_point":"mStop300_mLSP200","combine_exit_code":0,"combine_completed_utc":"2026-09-12T04:02:20Z","promoted_utc":"2026-09-12T04:02:24Z","independent_recheck_utc":"2026-09-12T04:29:22Z","sha256":"039d06e301f806ffbc209f642127c04a51def1b3b131cd2eb103461fc0a87ed6","expected_m2":0.0008002519607543945,"expected_m1":0.0010717790573835373,"expected":0.001495361328125,"expected_p1":0.0021093005780130625,"expected_p2":0.002842567628249526},{"topology":"T2tb","mass_point":"mStop100_mLSP1","combine_exit_code":0,"combine_completed_utc":"2026-09-12T04:41:49Z","promoted_utc":"2026-09-12T04:41:53Z","independent_recheck_utc":"2026-09-12T05:10:12Z","sha256":"1d3457fae59f96d80cecbd11da29ac12a768bb8368800c6ed0e41545cce4e093","expected_m2":0.0014216899871826172,"expected_m1":0.0019171927124261856,"expected":0.002716064453125,"expected_p1":0.003896136535331607,"expected_p2":0.00543001014739275},{"topology":"T2bW","mass_point":"mStop1750_mLSP1350","combine_exit_code":0,"combine_completed_utc":"2026-09-12T05:46:57Z","promoted_utc":"2026-09-12T05:47:01Z","independent_recheck_utc":"2026-09-12T06:13:22Z","sha256":"d73484e178f89bdc4aadf6dcab6c355658dedb428fc341d9dd4de46624d6f331","expected_m2":18.9921875,"expected_m1":25.40728759765625,"expected":35.75,"expected_p1":50.712608337402344,"expected_p2":69.06351470947266},{"topology":"T2bW","mass_point":"mStop1750_mLSP1400","combine_exit_code":0,"combine_completed_utc":"2026-09-12T06:47:44Z","promoted_utc":"2026-09-12T06:47:48Z","independent_recheck_utc":"2026-09-12T07:18:47Z","sha256":"ff41f63a3fc527672f932dfb34fff4ff70f8680bada965e6c0c789a109a4fea9","expected_m2":21.560546875,"expected_m1":29.193618774414062,"expected":41.5,"expected_p1":59.8617057800293,"expected_p2":82.92304229736328},{"topology":"T2bW","mass_point":"mStop1750_mLSP1450","combine_exit_code":0,"combine_completed_utc":"2026-09-12T08:05:30Z","promoted_utc":"2026-09-12T08:05:34Z","independent_recheck_utc":"2026-09-12T08:38:21Z","sha256":"e70bed5d0778d21c24d03db5e9574173812ed14130dfb051a19d8762c4e425f0","expected_m2":37.8515625,"expected_m1":50.8978271484375,"expected":71.25,"expected_p1":100.50257110595703,"expected_p2":136.34828186035156},{"topology":"T2bW","mass_point":"mStop1750_mLSP1500","combine_exit_code":0,"combine_completed_utc":"2026-09-12T09:11:16Z","promoted_utc":"2026-09-12T09:11:19Z","independent_recheck_utc":"2026-09-12T09:20:41Z","sha256":"21abb3a44a58e81f3a78ce7b7480cc5ca5b9b1c3add8c1f82216811addbb68c6","expected_m2":37.8984375,"expected_m1":51.52716064453125,"expected":73.5,"expected_p1":106.31310272216797,"expected_p2":147.97036743164062},{"topology":"T2bW","mass_point":"mStop1800_mLSP1400","combine_exit_code":0,"combine_completed_utc":"2026-09-12T10:13:32Z","promoted_utc":"2026-09-12T10:13:35Z","independent_recheck_utc":"2026-09-12T10:26:23Z","sha256":"ffbd8a890b67f388abb504d41cb0474a75ddbb39896e548b84441eedf5af1a84","expected_m2":25.56640625,"expected_m1":34.37835693359375,"expected":48.125,"expected_p1":68.07514190673828,"expected_p2":92.22752380371094},{"topology":"T2tb","mass_point":"mStop1750_mLSP1400","combine_exit_code":0,"combine_completed_utc":"2026-09-12T11:15:05Z","promoted_utc":"2026-09-12T11:15:09Z","independent_recheck_utc":"2026-09-12T11:42:30Z","sha256":"bd99244587397e618f1ad36560a2bcc189ec103ea4d3bbaebc83193557e3785a","expected_m2":21.29150390625,"expected_m1":28.596904754638672,"expected":40.375,"expected_p1":57.27333068847656,"expected_p2":78.5100326538086},{"topology":"T2tb","mass_point":"mStop1750_mLSP1500","combine_exit_code":0,"combine_completed_utc":"2026-09-12T12:37:41Z","promoted_utc":"2026-09-12T12:37:44Z","independent_recheck_utc":"2026-09-12T12:51:30Z","sha256":"70518e964ca90e7ee7dc45b4c8c91c043493a7cb6ba1aa60140cf77113cdc66a","expected_m2":42.53662109375,"expected_m1":57.59584426879883,"expected":81.875,"expected_p1":118.75337219238281,"expected_p2":166.05859375},{"topology":"T2tb","mass_point":"mStop1800_mLSP1450","combine_exit_code":0,"combine_completed_utc":"2026-09-12T13:50:49Z","promoted_utc":"2026-09-12T13:50:52Z","independent_recheck_utc":"2026-09-12T13:52:36Z","sha256":"55e91b7bfce87f9f9ede94e8eb700ca116778bee568170cdae35580a11405cda","expected_m2":25.24658203125,"expected_m1":33.90902328491211,"expected":47.875,"expected_p1":68.1031723022461,"expected_p2":93.222900390625}],
           "failed": 0,
           "validator": "postprocess_limits.parse_limit_file plus ordered-quantile check",
           "promotion_requires_combine_exit0": true,
@@ -5935,14 +5936,14 @@
           "diagnosis": "Idle; job requirements are satisfiable. No definitive scheduler-delay cause established.",
           "job_modified": false
         },
-        "outputs_promoted": false,
+        "outputs_promoted": true,
         "healthy_jobs_modified": false,
         "submission_incident": "T2bW timeout submit response timed out; queue and event/output checks found no committed job before resubmission"
       },
       "collection": {
-        "status": "T2tt_and_T2bW_complete_exports; T2tb_partial_export",
-        "latest_refresh_utc": "2026-09-12T10:27:08Z",
-        "latest_counts": {"T2tt": 205, "T2bW": 354, "T2tb": 362},
+        "status": "all_three_topologies_complete_exports",
+        "latest_refresh_utc": "2026-09-12T13:52:36Z",
+        "latest_counts": {"T2tt": 205, "T2bW": 354, "T2tb": 365},
         "refresh_completed": {"1115567.0": {"exit_code": 0, "validated": 205, "completed_at_utc": "2026-09-11T16:26:34Z"}, "1115567.1": {"exit_code": 0, "validated": 344, "completed_at_utc": "2026-09-11T16:29:22Z"}, "1115567.2": {"exit_code": 0, "validated": 361, "completed_at_utc": "2026-09-11T16:26:38Z"}},
         "completed": {"1115316.0": {"exit_code": 0, "validated": 199}, "1115316.1": {"exit_code": 0, "validated": 342}, "1115316.2": {"exit_code": 0, "validated": 361}},
         "retry": {"job": "1115316.2", "exit_by_signal": true, "exit_signal": 7, "reason": "SIGBUS; no stderr or stdout produced", "root_cause": "not_determined", "release_event_utc": "2026-09-11T15:17:10Z", "release_command_exit_code": 0, "retry_count": 1, "retry_completion": true, "retry_exit_code": 0, "completed_at_utc": "2026-09-11T15:24:33Z"},
@@ -5959,12 +5960,12 @@
         "max_runtime_seconds": 28800,
         "output": "combined_pending/{topology}/expected_limits.json",
         "partial_snapshot_possible_while_primary_jobs_run": true,
-        "validated_total": 921,
-        "total_after_late_outputs_and_promotions": 923
+        "validated_total": 924,
+        "total_after_late_outputs_and_promotions": 924
       },
       "preview": {
         "created_at_utc": "2026-09-12T07:57:33Z",
-        "status": "initial_user_requested_snapshot; T2bW_superseded_by_complete_result_in_plots; T2tb_partial_snapshot_retained",
+        "status": "initial_user_requested_snapshot; superseded_by_complete_results_in_plots",
         "source": "autonomous_allhad/workflow/postprocess_limits.py",
         "source_sha256": "e9885888a8226692456d73f6592a2ef2b1b68bc0f1eaa35f236ae258159a14c9",
         "interpolation_mode": "topology-aware",
@@ -5985,6 +5986,66 @@
         "physics_or_plot_source_changed": false
       },
       "plots": {
+         "T2tb": {
+          "status": "local_rendered_PDF_visually_verified_EOS_synced_web_deployed_AN_updated",
+          "source": "autonomous_allhad/workflow/postprocess_limits.py",
+          "source_sha256": "e9885888a8226692456d73f6592a2ef2b1b68bc0f1eaa35f236ae258159a14c9",
+          "input_mass_points": 365,
+          "expected_limits_sha256": "cc3958e23e660b8a805c45701a39d71324f8c5a06d0c69e0838fd27b6454724d",
+          "build_manifest_sha256": "3665601d2a5660b39a8479624a502984b8c24dce51daf3ad691e9fcb57223e23",
+          "plotted_mass_points": 345,
+          "out_of_plot_range_mass_points": 20,
+          "existing_user_excluded_points": [],
+          "interpolation_mode": "topology-aware",
+          "mstop_range_gev": [
+            600,
+            1800
+          ],
+          "mlsp_range_gev": [
+            1,
+            1800
+          ],
+          "xsec_color_range_pb": [
+            0.0001,
+            0.1
+          ],
+          "thermal_relic_sha256": "b23a3e51e81e26cb00cadaf79e3cdecba4eb071c58b65b7a233f278e5363ed61",
+          "xsec_pdf": "combined_pending/T2tb/expected_limit_t2tb_2024_2025_highdm73_lowdm30_xsec_topology_thermal_relic.pdf",
+          "ratio_pdf": "combined_pending/T2tb/expected_limit_t2tb_2024_2025_highdm73_lowdm30_topology_thermal_relic.pdf",
+          "xsec_pdf_sha256": "fffea0ef9f03a3b8e2b6d7efd5b9bbcb0555356f9d66649091d21661f70d2417",
+          "ratio_pdf_sha256": "379476bcc53fc8eb57c2fc72ba5f4074a4e46089a92b7ea8c21e4c75b4473cc8",
+          "same_stem_pngs": true,
+          "eos_hashes_verified": true,
+          "local_root_files_downloaded": 0,
+          "physics_or_plot_source_changed": false,
+          "runtime_policy": "existing local display-only runtime; versions recorded in plot manifests",
+          "web_publication": "deployed_and_four_remote_artifact_hashes_verified",
+          "publication_commit": "4175a4cefc4951080558914b2bff2444bddef71b",
+          "publication_base_commit": "6d672848bebd07c04e994f6b1c274f6527dc67af",
+          "url": "https://resisov.github.io/run3_stop/#current-limits",
+          "deployment_run_id": 34697855894,
+          "deployment_url": "https://github.com/resisov/run3_stop/actions/runs/34697855894",
+          "public_png_sha256": {
+            "xsec": "3c92d149d9a409d0a69e13a28146ba13cf4b9e0914043b14340ec55df350abf0",
+            "ratio": "fcdb6aa7d1851056ba5d7d981df77c1765a1010b0bcbf0dcefb6553e459f05e6"
+          },
+          "previous_partial_replaced_without_backup": true,
+          "temporary_render_checks_and_font_cache_removed": true,
+          "an_update": {
+            "status": "complete",
+            "thread_id": "019f7a16-19ab-76f1-8953-a737c5b0dd68",
+            "commit": "8af29282bafe8724d1c9f408f91a9c5183edb9c8",
+            "gitlab_and_overleaf_remote_commits_verified": true,
+            "source_and_destination_pdf_hashes_verified": true,
+            "figure": "67(c)",
+            "pending_scan_caption_removed": true,
+            "agent_reported_build_pages": 169,
+            "agent_reported_visual_review_pages": [
+              111
+            ],
+            "impacts_preserved": true
+          }
+        },
         "T2bW": {
           "status": "local_rendered_PDF_visually_verified_EOS_synced_web_deployed_AN_updated",
           "source": "autonomous_allhad/workflow/postprocess_limits.py",
@@ -6115,13 +6176,13 @@
       }
     },
     "impacts": {
-      "status": "1_recovery_subset_endpoints_validated; 8_subsets_running; full_collection_pending",
+      "status": "2_recovery_subsets_endpoints_validated; 7_subsets_running; full_collection_pending",
       "subset_recovery": {
         "checked_at_utc": "2026-09-12T03:18:08Z",
-        "latest_execution_check_utc": "2026-09-12T12:51:30Z",
-        "running_jobs": 8,
-        "completed_subsets": 1,
-        "recovered_endpoint_count": 6,
+        "latest_execution_check_utc": "2026-09-12T13:54:21Z",
+        "running_jobs": 7,
+        "completed_subsets": 2,
+        "recovered_endpoint_count": 17,
         "full_collection_and_convergence_review_pending": true,
         "worker_usage": {
           "checked_at_utc": "2026-09-12T12:17:31Z",
@@ -6138,7 +6199,7 @@
           "1115968.0": {"user_cpu_seconds":9390,"system_cpu_seconds":19,"memory_mb":3174},
           "1115969.0": {"user_cpu_seconds":2385,"system_cpu_seconds":6,"memory_mb":1465}
         },
-        "completed_subset_stdout_stderr_verified": 1,
+        "completed_subset_stdout_stderr_verified": 2,
         "schedd": "bigbird24.cern.ch",
         "error": null,
         "previous_error": "Failed to process job credential requests (1): ERROR: store_cred of Kerberos credential failed - Arguments are missing, client and server my be mismatched",
@@ -6164,7 +6225,7 @@
           {"r":1,"label":"normalization","count":6,"submission_file":"impact_recovery/r1/normalization/impact_r1_eossubmit.sub","submission_sha256":"b6aaadf0ffda2b54ab71284ada0d14ec3a32cded78e2ed468540481fb380792d","cluster":1115821,"status":"endpoints_validated_full_collection_pending","output_work":"impact_recovery/r1/normalization/impact_mStop1200_mLSP500_r1/work","afs_home_removed":true,"release_event_013_verified":true,"num_job_starts":1,"current_start_utc":"2026-09-12T11:17:43Z","exit_code":0,"completed_at_utc":"2026-09-12T12:39:48Z","independent_recheck_utc":"2026-09-12T12:51:30Z","validated_endpoint_count":6,"validation":"three finite entries with nonzero endpoints bracketing nominal; convergence review pending","root_sha256":{"CMS_NPS26012_ll_norm_highdm_Nb2plus_bin0_2025":"3e7992d6e5366b7cc305542cab3b9ac39b26267e9b1977dd419d0225ecdedffc","CMS_NPS26012_ll_norm_highdm_Nb2plus_bin1_2025":"da2248e3d3139e63e543c42e6ab1ecedd1a9bb3d099cf2b2a1bccf8699ad89cd","CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2024":"1cc8cacc5aadb50b034e2f0187ac55941f6598ae657c7220cb91c17ba04140d3","CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025":"a8d809647d575939500ce27964c71a27412e2e4440e7951cfafa1394b53a22bc","CMS_NPS26012_ll_norm_lowdm_Nb2plus_NISR1plus_inclusive_2025":"871771c1052a324ed01207abbcd0e00869e64bc510719f9c1bb257ccec1436fe","CMS_NPS26012_qcd_norm_lowdm_Nb1_NISR1plus_inclusive_2025":"472bcbfc976036a1028d07ade6a5fb149fd4b60c7f1c86837789f12b9a9f8f99"}},
           {"r":1,"label":"sgamma","count":14,"submission_file":"impact_recovery/r1/sgamma/impact_r1_eossubmit.sub","submission_sha256":"0c80a0ac1bbc85d9cc7007c8f0fe38281fff9417173f4df683b8141c2fdbbb5d","cluster":1115966,"status":"running","output_work":"impact_recovery/r1/sgamma/impact_mStop1200_mLSP500_r1/work","afs_home_removed":true,"release_event_013_verified":true,"submitted_at_utc":"2026-09-12T03:11:51Z","released_at_utc":"2026-09-12T03:17:27Z","release_command_exit_code":0,"num_job_starts":1,"current_start_utc":"2026-09-12T11:17:40Z"},
           {"r":1,"label":"met_trigger","count":1,"submission_file":"impact_recovery/r1/met_trigger/impact_r1_eossubmit.sub","submission_sha256":"a400340e76ae399df8b017ab845dafa19f3388cca65d585943fb1f0010fb720f","cluster":1115967,"status":"running","output_work":"impact_recovery/r1/met_trigger/impact_mStop1200_mLSP500_r1/work","afs_home_removed":true,"release_event_013_verified":true,"submitted_at_utc":"2026-09-12T03:12:28Z","released_at_utc":"2026-09-12T03:17:27Z","release_command_exit_code":0,"num_job_starts":1,"current_start_utc":"2026-09-12T11:17:42Z"},
-          {"r":0,"label":"normalization","count":11,"submission_file":"impact_recovery/r0/normalization/impact_r0_eossubmit.sub","submission_sha256":"88e61f152db28a193798ac50ac7e3dde363233029151c4cce37e506fd3f2138b","cluster":1115964,"status":"running","output_work":"impact_recovery/r0/normalization/impact_mStop1200_mLSP500_r0/work","afs_home_removed":true,"release_event_013_verified":true,"submitted_at_utc":"2026-09-12T03:07:16Z","released_at_utc":"2026-09-12T03:09:41Z","release_response_timed_out":true,"num_job_starts":1,"current_start_utc":"2026-09-12T11:17:40Z"},
+          {"r":0,"label":"normalization","count":11,"submission_file":"impact_recovery/r0/normalization/impact_r0_eossubmit.sub","submission_sha256":"88e61f152db28a193798ac50ac7e3dde363233029151c4cce37e506fd3f2138b","cluster":1115964,"status":"endpoints_validated_full_collection_pending","output_work":"impact_recovery/r0/normalization/impact_mStop1200_mLSP500_r0/work","afs_home_removed":true,"release_event_013_verified":true,"submitted_at_utc":"2026-09-12T03:07:16Z","released_at_utc":"2026-09-12T03:09:41Z","release_response_timed_out":true,"num_job_starts":1,"current_start_utc":"2026-09-12T11:17:40Z","exit_code":0,"completed_at_utc":"2026-09-12T13:21:48Z","completion_source":"Condor event 005 normal termination; stdout checksums OK; stderr empty","independent_recheck_utc":"2026-09-12T13:54:21Z","validated_endpoint_count":11,"validation":"three finite entries with nonzero endpoints bracketing nominal; full convergence review pending","root_sha256":{"CMS_NPS26012_ll_norm_highdm_Nb1_bin0_2025":"e5b08c10df22f05c2e33300a8627d2b5b17e4e2049e86b6ea5a1495fcc110c51","CMS_NPS26012_ll_norm_highdm_Nb1_bin1_2025":"159c751fb5cf4d5bb89bbde0d4573b98c3bde1fe6457251b9d057d328ab1bc11","CMS_NPS26012_ll_norm_highdm_Nb1_bin4_2025":"b6ab609741c0c033bd1466f6bcad1c3849735ca089852634a7b7f63dced46987","CMS_NPS26012_ll_norm_highdm_Nb2plus_bin0_2024":"c63089e76209dc02162811572679e85fd9d3fdba4f82a3c0e89bdb265de66f7b","CMS_NPS26012_ll_norm_highdm_Nb2plus_bin0_2025":"013542f72c2be43179509c805b4b42c7968c90745c9ee8ac5fe9b1ff2cea6346","CMS_NPS26012_ll_norm_highdm_Nb2plus_bin1_2025":"ad727564deee57babc4221cddfe0f574785360589fa6b797460e37cce4787bb5","CMS_NPS26012_ll_norm_lowdm_Nb1_NISR0_inclusive_2025":"679007efeaed84c467eb837ea3f8b73551c6a475a130cf0669558061aae73b71","CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2024":"9847795490455612107bd29ea97da841e7172d21880def2611302ac374331a92","CMS_NPS26012_ll_norm_lowdm_Nb1_NISR1plus_inclusive_2025":"3173029135b029210cb9567058ce2a26941a766c2f7b115eef895fbb49b8b8e3","CMS_NPS26012_ll_norm_lowdm_Nb2plus_NISR1plus_inclusive_2025":"bda72e0345f6f3a42de15dcc293d9b085ec1b6486b072ee567d39e9c6064f11f","CMS_NPS26012_qcd_norm_lowdm_Nb1_NISR1plus_inclusive_2025":"bfd399874899e119c2ad55f112a3c3408a35675ebca524c061d9bbc1447e6086"}},
           {"r":0,"label":"sgamma","count":15,"submission_file":"impact_recovery/r0/sgamma/impact_r0_eossubmit.sub","submission_sha256":"64d7fe1fc908de71ff2e8f147e3d354bbe8fc0cd1608d4fa3901078708a1284d","cluster":1115968,"status":"running","output_work":"impact_recovery/r0/sgamma/impact_mStop1200_mLSP500_r0/work","afs_home_removed":true,"release_event_013_verified":true,"submitted_at_utc":"2026-09-12T03:13:04Z","released_at_utc":"2026-09-12T03:17:27Z","release_command_exit_code":0,"num_job_starts":1,"current_start_utc":"2026-09-12T11:17:42Z"},
           {"r":0,"label":"met_trigger","count":1,"submission_file":"impact_recovery/r0/met_trigger/impact_r0_eossubmit.sub","submission_sha256":"802c2838895f7189f5c69fba192ae9c042966b4dc8ec0f6bf5bfb7e54a2df299","cluster":1115969,"status":"running","output_work":"impact_recovery/r0/met_trigger/impact_mStop1200_mLSP500_r0/work","afs_home_removed":true,"release_event_013_verified":true,"submitted_at_utc":"2026-09-12T03:13:14Z","released_at_utc":"2026-09-12T03:17:27Z","release_command_exit_code":0,"num_job_starts":1,"current_start_utc":"2026-09-12T11:17:43Z"}
         ]
@@ -6175,7 +6236,7 @@
         "validation": "finite three-entry endpoints; zero-width sides checked against card bounds; final workspace and convergence validation pending",
         "r1": {"parameter_root_count":767,"strict_two_sided_finite":686,"retry_count":81,"workspace_sha256":"f3a3f53faee9dd12f79e39552315ec95d60a58d6a430b04e3559f8377b5d318b","initial_fit_sha256":"1f88da82b6b846a6a82f72a425fa1515783cf4cc92d395f115818847bdd43048"},
         "r0": {"parameter_root_count":767,"strict_two_sided_finite":740,"retry_count":27,"workspace_sha256":"4f99e3b31e2712f5ce5580781b9480e2b15f5aecbaf867e919f089a8646d1391","initial_fit_sha256":"21224c81e81fe3c1cac4d578520441f18c8c66519673753910543be56a582738"},
-        "status": "1_subset_endpoints_validated; 8_running; full_collection_and_convergence_review_pending",
+        "status": "2_subsets_endpoints_validated; 7_running; full_collection_and_convergence_review_pending",
         "existing_fit_outputs_preserved": true,
         "physics_changed": false,
         "invalid_endpoints": [
@@ -6305,7 +6366,7 @@
       "max_runtime_seconds": 43200,
       "proxy_seconds_before_submit": 368164,
       "voms_seconds_before_submit": 339364,
-      "last_queue_check": {"utc": "2026-09-12T12:49:47Z", "idle": 0, "running": 8, "held": 0, "primary_failed": 2, "prepared_not_submitted": 0, "recovery_subset_exit0_and_endpoints_verified": 1, "new_release_confirmed_by_event_013": true},
+      "last_queue_check": {"utc": "2026-09-12T13:51:17Z", "idle": 0, "running": 7, "held": 0, "primary_failed": 2, "prepared_not_submitted": 0, "recovery_subset_exit0_and_endpoints_verified": 2, "completed_subset_validation_utc": "2026-09-12T13:54:21Z", "new_release_confirmed_by_event_013": true},
       "match_analysis": {"utc": "2026-09-12T08:38:33Z", "job": "1115819.0", "slots": 5225, "machines": 4064, "rejected_by_job_requirements": 1893, "rejected_by_slot_requirements": 145, "matching_and_willing": 9, "would_match_if_drained": 3178, "analysis_ignores_user_priority": true, "site_injected_afs_mount_requirement": true, "diagnosis": "No successful match recorded; last failed match reports no match found. Requirements remain satisfiable when user priority is ignored; exact scheduling cause is not established.", "jobs_modified": false},
       "idle_diagnostic": {"utc": "2026-09-12T03:55:18Z", "job": "1115819.0", "job_status": 1, "num_job_starts": 0, "last_match_time": null, "request_cpus": 6, "request_memory_mb": 18000, "max_runtime_seconds": 43200, "hold_reason": null, "jobs_modified": false},
       "runtime_observation": {
