@@ -23,5 +23,13 @@ export PATH="$PWD/bin:$PATH" LD_LIBRARY_PATH="$PWD/lib"
 "$PY" -c 'import sys,zipfile; zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])' \
   mt2-1.2.0-cp38-cp38-manylinux2010_x86_64.whl "$PWD/vendor"
 export PYTHONPATH="$PWD/vendor"
+export SHAPE_VENDOR="$PWD/vendor"
 "$PY" -c 'import mt2; assert mt2.__version__ == "1.2.0"'
+if [ "${1:-}" = "object-worker" ]; then
+  export SHAPE_BUNDLE="$PWD/object_code.tgz"
+  export SHAPE_CODE_ROOT="$PWD/object_code"
+  mkdir -p "$SHAPE_CODE_ROOT"
+  tar -xzf "$SHAPE_BUNDLE" -C "$SHAPE_CODE_ROOT"
+  DRIVER="$SHAPE_CODE_ROOT/run.py"
+fi
 exec "$PY" -u "$DRIVER" "$@"

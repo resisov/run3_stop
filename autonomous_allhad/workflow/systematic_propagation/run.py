@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import gzip
 import hashlib
+import importlib
 import json
 import os
 import shutil
@@ -19,6 +20,10 @@ from pathlib import Path
 
 HERE = Path(__file__).absolute().parent
 SHIFTS = ("nominal", "metUnclusteredUp", "metUnclusteredDown")
+OBJECT_SHIFTS = tuple(name + direction for name in (
+    "electronScale", "electronSmear", "photonScale", "photonSmear",
+    "muonScale", "muonResolution", "tauEnergyScale",
+) for direction in ("Up", "Down"))
 TROTA_SETUP = "/cvmfs/sft.cern.ch/lcg/views/LCG_104/x86_64-el9-gcc13-opt/setup.sh"
 WEIGHTS = ("pileup", "btagSF", "electron_id", "electron_reco", "muon_id",
            "muon_iso", "muon_hlt", "photon_id", "met_trigger", "photon_trigger")
@@ -109,6 +114,557 @@ def source_records(sidecar, year, metadata=None):
     if len(records) != metadata["files_processed"]:
         raise ValueError("source file accounting mismatch")
     return records
+
+
+def shift_objects(chunk, year, shift, payload):
+    import awkward as ak
+    import numpy as np
+
+    if shift not in ("nominal", *OBJECT_SHIFTS):
+        raise ValueError("unsupported intermediate-object variation: " + shift)
+    output = dict(chunk)
+    if shift == "nominal":
+        return output
+    calibration = importlib.import_module(f"autonomous_allhad.object_corrections_{year}")
+    flavor = next(name for name in ("electron", "photon", "muon", "tau") if shift.startswith(name))
+    prefix = flavor.capitalize()
+    arrays = {key: chunk[key] for key in ("run", "luminosityBlock", "event")}
+    for field in ("pt", "mass", "eta", "phi"):
+        if flavor == "photon" and field == "mass":
+            continue
+        branch = f"{flavor}_nanoaod_{field}" if field in ("pt", "mass") else f"{flavor}_{field}_all"
+        arrays[f"{prefix}_{field}"] = chunk[branch]
+    fields = {
+        "electron": {"r9": "r9", "seedGain": "seed_gain"},
+        "photon": {"r9": "r9", "seedGain": "seed_gain"},
+        "muon": {"charge": "charge", "nTrackerLayers": "tracker_layers"},
+        "tau": {"decayMode": "decay_mode", "genPartFlav": "genpart_flavour"},
+    }
+    for target, source in fields[flavor].items():
+        arrays[f"{prefix}_{target}"] = chunk[f"{flavor}_{source}_all"]
+    if flavor == "electron":
+        arrays["Electron_deltaEtaSC"] = chunk["electron_eta_sc_all"] - chunk["electron_eta_all"]
+    if flavor in ("electron", "photon"):
+        evaluate = lambda variation: calibration._calibrate_egm_collection(arrays, prefix, False, variation, payload)
+    else:
+        evaluate = lambda variation: getattr(calibration, f"_calibrate_{flavor}s")(arrays, False, variation, payload)
+    nominal = evaluate("nominal")
+    varied = evaluate(shift)
+    for index, field in enumerate(("pt", "mass")):
+        if nominal[index] is None:
+            continue
+        stored = chunk[f"{flavor}_corrected_{field}"]
+        a, b = (np.asarray(ak.flatten(value), dtype=float) for value in (stored, nominal[index]))
+        if not np.allclose(a, b, rtol=2e-6, atol=1e-6):
+            raise RuntimeError(f"{flavor} stored nominal calibration does not match {year} payload")
+        value = stored + (varied[index] - nominal[index])
+        if not np.all(np.isfinite(ak.to_numpy(ak.flatten(value)))):
+            raise RuntimeError(f"nonfinite {shift} {field}")
+        output[f"{flavor}_corrected_{field}"] = value
+        output[f"{flavor}_{field}_all"] = value
+    delta = output[f"{flavor}_corrected_pt"] - chunk[f"{flavor}_corrected_pt"]
+    phi = chunk[f"{flavor}_phi_all"]
+    met, met_phi = (np.asarray(chunk[key], dtype=float) for key in ("met", "met_phi"))
+    px = met * np.cos(met_phi) - ak.sum(delta * np.cos(phi), axis=1)
+    py = met * np.sin(met_phi) - ak.sum(delta * np.sin(phi), axis=1)
+    affected = ak.any(delta != 0, axis=1)
+    output["met"] = ak.where(affected, np.hypot(px, py), chunk["met"])
+    output["met_phi"] = ak.where(affected, np.arctan2(py, px), chunk["met_phi"])
+    output["puppi_met_corrected"] = output["met"]
+    output["puppi_met_corrected_phi"] = output["met_phi"]
+    return output
+
+
+def rebuild_kinematics(chunk):
+    import awkward as ak
+    import numpy as np
+    from autonomous_allhad import real_subset_worker as physics
+    from gnn_lowdm._implementation import region_io as regions
+    from build_flat_boosted_recoil_hists import apply_highdm_veto_pt_thresholds, region_mask
+
+    output = dict(chunk)
+    masks = regions.object_masks(output)
+    counts = {"electron_veto": "n_e_veto", "electron_medium": "n_e_medium",
+              "muon_loose": "n_m_loose", "muon_medium": "n_m_medium",
+              "photon_medium": "n_photon_medium"}
+    for collection, mask in masks.items():
+        flavor = collection.split("_")[0]
+        for field in ("pt", "eta", "phi", "eta_sc"):
+            source = f"{flavor}_{field}_all"
+            if source in output:
+                output[f"{collection}_{field}"] = output[source][mask]
+        output[counts[collection]] = ak.sum(mask, axis=1)
+    met = np.asarray(output["met"], dtype=float)
+    met_phi = np.asarray(output["met_phi"], dtype=float)
+    for flavor, mass_name, pt_name, region in (
+        ("electron", "mee", "pee", "dy2e"), ("muon", "mmm", "pmm", "dy2m"),
+    ):
+        selected = masks[flavor + "_medium"]
+        pairs = []
+        for index in (0, 1):
+            pair = [physics.nth_or(-99 if field == "pt" else 0,
+                    output[f"{flavor}_{field}_all"][selected], index)
+                    for field in ("pt", "eta", "phi", "mass")]
+            pairs.append(pair)
+        output[mass_name] = physics.invariant_mass(*pairs[0], *pairs[1])
+        pt1, _, phi1, _ = pairs[0]
+        pt2, _, phi2, _ = pairs[1]
+        output[pt_name] = np.sqrt(np.maximum(0, pt1**2 + pt2**2 + 2 * pt1 * pt2 * np.cos(phi1-phi2)))
+        output[f"recoil_{region}"], output[f"recoil_{region}_phi"] = physics.transverse_vector_sum(
+            (met, met_phi), (pt1, phi1), (pt2, phi2))
+    output["recoil_gcr"], output["recoil_gcr_phi"] = physics.transverse_vector_sum(
+        (met, met_phi), (physics.first_or(0, output["photon_medium_pt"]),
+                         physics.first_or(0, output["photon_medium_phi"])))
+    tau_mt = physics.transverse_mass(output["tau_pt_all"], output["tau_phi_all"], met, met_phi)
+    tau = ((output["tau_pt_all"] > 20) & (abs(output["tau_eta_all"]) < 2.5)
+           & (abs(output["tau_dz_all"]) < .2) & (output["tau_decay_mode_all"] != 5)
+           & (output["tau_decay_mode_all"] != 6) & (output["tau_deeptau_vsjet_all"] >= 5)
+           & (tau_mt < 100))
+    output["pass_zero_tau"] = ak.sum(tau, axis=1) == 0
+    output["pass_met_250"] = met > 250
+    jet_pt, jet_eta, jet_phi = (output[f"jet_{field}"] for field in ("corrected_pt", "eta_all", "phi_all"))
+    good = (jet_pt > 30) & (abs(jet_eta) < 2.4) & ak.values_astype(output["jet_id_all"], np.bool_)
+    medium = good & (output["jet_btag_upart_all"] > physics.UPART_AK4_MEDIUM_WP)
+    jets = physics.jet_feature_block(jet_pt, jet_eta, jet_phi, good, medium, met_phi)
+    for flag in ("open_pre", "open_high", "qcd_open", "dphi123_0p1"):
+        output["pass_" + flag] = jets[flag]
+    for index in range(1, 5):
+        output[f"j{index}_met_dphi"] = jets[f"j{index}dphi"]
+    output["min_dphi4"] = jets["min_dphi4"]
+    clean_masks = {}
+    for region, flavor in (("gcr", "photon"), ("dy2e", "electron"), ("dy2m", "muon")):
+        clean = physics.clean_by_delta_r(jet_eta, jet_phi, output[flavor + "_medium_eta"],
+                                         output[flavor + "_medium_phi"], .2)
+        clean_masks[flavor] = clean
+        block = physics.jet_feature_block(jet_pt, jet_eta, jet_phi, good & clean, medium & clean,
+                                           output[f"recoil_{region}_phi"])
+        output[f"pass_{region}_open_high"] = block["open_high"]
+        if region == "gcr":
+            for field, key in (("ht", "ht"), ("njet", "njet"), ("nb", "nb")):
+                output[field + "_photon_clean"] = block[key]
+            output["pass_ht_photon_300"] = block["ht"] > 300
+            for index in range(1, 5):
+                output[f"gcr_j{index}_recoil_dphi"] = block[f"j{index}dphi"]
+            output["gcr_min_recoil_dphi4"] = block["min_dphi4"]
+        else:
+            output[f"pass_{region}_ut_250"] = output[f"recoil_{region}"] > 250
+    clean = clean_masks["electron"] & clean_masks["muon"]
+    leptons = physics.jet_feature_block(jet_pt, jet_eta, jet_phi, good & clean, medium & clean, met_phi)
+    for field in ("ht", "njet", "nb"):
+        output[field + "_lepton_clean"] = leptons[field]
+    output["pass_ht_lepton_300"] = leptons["ht"] > 300
+    block = regions.jet_kinematics(jet_pt, jet_eta, jet_phi, output["jet_btag_upart_all"], good, met, met_phi)
+    for field in ("mtb", "ptb", "met_sqrt_ht"):
+        output["lowdm_" + field] = block[field]
+    output["lowdm_isr_dphi"] = np.where(output["lowdm_isr_pt"] > 0,
+        physics.delta_phi(output["lowdm_isr_phi"], met_phi), -99.)
+    apply_highdm_veto_pt_thresholds(output, 10., 10.)
+    for region in ("DY2E", "DY2M"):
+        output["feature_" + region] = region_mask(output, region, "feature_" + region, len(met))
+    blocks, _ = regions.build_region_blocks(ak.zip(output, depth_limit=1))
+    for region, block in blocks.items():
+        clean = ak.ones_like(output["fatjet_corrected_pt"], dtype=np.bool_)
+        if region in ("GCR", "DY2E", "DY2M"):
+            flavor = {"GCR": "photon", "DY2E": "electron", "DY2M": "muon"}[region]
+            clean = physics.clean_by_delta_r(output["fatjet_eta_all"], output["fatjet_phi_all"],
+                output[flavor + "_medium_eta"], output[flavor + "_medium_phi"], .4)
+        selected = (clean & ak.values_astype(output["fatjet_id_all"], np.bool_)
+                    & (output["fatjet_corrected_pt"] > 200) & (abs(output["fatjet_eta_all"]) < 2.4))
+        isr_pt = physics.first_or(-99, output["fatjet_corrected_pt"][selected])
+        isr_phi = physics.first_or(-99, output["fatjet_phi_all"][selected])
+        quality = ((block.nt == 0) & (block.nw == 0) & (block.nisr == 1)
+                   & (physics.delta_phi(isr_phi, block.recoil_phi) > 2) & (block.met_sqrt_ht >= 10))
+        core = block.core & quality
+        bins = np.asarray([physics.assign_lowdm_search_bin(int(block.njet[i]), int(block.nb[i]),
+            int(output["n_sv_softb"][i]), float(isr_pt[i]), float(block.ptb[i]),
+            float(block.recoil[i]), float(block.mtb[i])) if core[i] else -1 for i in range(len(met))])
+        output["lowdm_search_bin_" + region] = bins
+        output["feature_lowdm_" + region] = core & (bins >= 0)
+    output["lowdm_search_bin"] = output["lowdm_search_bin_SR"]
+    output["feature_lowdm_sr_base"] = output["feature_lowdm_SR"]
+    output["pass_lowdm_isr"] = (output["n_lowdm_isr"] == 1) & (output["lowdm_isr_dphi"] > 2)
+    output["pass_lowdm_met_sqrt_ht"] = output["lowdm_met_sqrt_ht"] >= 10
+    output["pass_lowdm_mtb"] = (output["nb_medium_lowdm"] == 0) | (output["lowdm_mtb"] < 175)
+    output["feature_lowdm_preselection"] = (output["pass_base_common"] & output["pass_signal_trigger"]
+        & output["pass_no_veto_leptons"] & output["pass_zero_tau"] & (output["njet"] >= 2)
+        & output["pass_met_250"] & output["pass_open_pre"] & output["pass_ht_300"])
+    if "feature_preselection" in output:
+        output["feature_preselection"] = output["feature_lowdm_preselection"]
+    return output
+
+
+def write_intermediate_parts(config, shift, destination, payload):
+    import awkward as ak
+    import numpy as np
+    import uproot
+    from autonomous_allhad.analysis_scale_factors import topw_file_input_policy
+    from autonomous_allhad.highdm_resolved_categories import map_candidates_to_events
+    from gnn_lowdm._implementation.region_io import validate_trota_provenance
+
+    source = Path(config["source_root"])
+    metadata = read(config["source_sidecar"])
+    validate_trota_provenance(metadata)
+    if metadata["status"] not in ("complete", "complete_with_bad_files"):
+        raise RuntimeError("incomplete intermediate input")
+    destination.mkdir(parents=True, exist_ok=True)
+    products = []
+    with uproot.open(source) as root:
+        policy = topw_file_input_policy(root)
+        tree = root["Events"]
+        if tree.num_entries != metadata["events_written"]:
+            raise RuntimeError("intermediate Events/sidecar count mismatch")
+        trota = root["TROTA"].arrays(library="ak")
+        identity = tree.arrays(["file_id", "entry"], library="np")
+        candidate_event = map_candidates_to_events(identity["file_id"], identity["entry"],
+            np.asarray(trota["file_id"]), np.asarray(trota["entry"]))
+        step = int(config.get("chunk_events", 25000))
+        for start in range(0, max(1, tree.num_entries), step):
+            stop = min(start + step, tree.num_entries)
+            original = tree.arrays(entry_start=start, entry_stop=stop, library="ak", how=dict)
+            changed = original
+            if stop > start and shift != "nominal":
+                calibrated = shift_objects(original, config["year"], shift, payload)
+                flavor = next(name for name in ("electron", "photon", "muon", "tau") if shift.startswith(name))
+                affected = ak.any(calibrated[f"{flavor}_pt_all"] != original[f"{flavor}_pt_all"], axis=1)
+                changed = rebuild_kinematics(calibrated)
+                selected_rows = np.arange(stop-start) + np.where(affected, 0, stop-start)
+                changed = {name: ak.concatenate([ak.Array(value), original[name]], axis=0)[selected_rows] if name in original else value
+                           for name, value in changed.items()}
+            # Preserve the nominal storage precision and let uproot regenerate counters.
+            counters = {branch.count_branch.name for branch in tree.values() if branch.count_branch is not None}
+            values = {}
+            for name, value in changed.items():
+                if name in counters:
+                    continue
+                if name in original:
+                    flat = ak.to_numpy(ak.flatten(original[name], axis=None))
+                    value = ak.values_astype(ak.Array(value), flat.dtype)
+                values[name] = value
+            path = destination / f"part_{start:09d}.root"
+            with uproot.recreate(path) as target:
+                target["Events"] = values
+                selected = (candidate_event >= start) & (candidate_event < stop)
+                target["TROTA"] = {name: trota[name][selected] for name in ak.fields(trota)}
+                target["TROTA_metadata"] = str(root["TROTA_metadata"])
+                if "TopWTruth" in root:
+                    truth = root["TopWTruth"].arrays(entry_start=start, entry_stop=stop, library="ak", how=dict)
+                    truth_counters = {branch.count_branch.name for branch in root["TopWTruth"].values() if branch.count_branch is not None}
+                    target["TopWTruth"] = {name: value for name, value in truth.items() if name not in truth_counters}
+                    if "TopWTruth_metadata" in root:
+                        marker = json.loads(str(root["TopWTruth_metadata"]))
+                        marker.update(events_entries=stop-start, parent_events_entries=tree.num_entries,
+                                      reuse="unchanged jets; retained-event slice")
+                        target["TopWTruth_metadata"] = json.dumps(marker)
+            sidecar = dict(metadata, events_written=stop-start, root_sha256=sha(path),
+                shape_shift=shift, intermediate_parent=config.get("canonical_source_root", str(source)),
+                intermediate_entry_range=[start, stop],
+                systematic_scope="retained events; nominal base_common fixed; no skim migration study")
+            write(path.with_suffix(".json"), sidecar)
+            with uproot.open(path) as check:
+                if check["Events"].num_entries != stop-start or topw_file_input_policy(check) != policy:
+                    raise RuntimeError("intermediate slice integrity mismatch")
+            products.append(path)
+    return products
+
+
+def histogram_parts(config, roots, work):
+    main_repo, gnn_repo = (Path(config[key]) for key in ("main_repo", "gnn_repo"))
+    env = dict(os.environ, AUTONOMOUS_ALLHAD_LOCAL_ANALYSIS_DATA="0")
+    vendor = os.environ.get("SHAPE_VENDOR", "")
+    env["PYTHONPATH"] = f"{main_repo}/autonomous_allhad:{main_repo}/autonomous_allhad/workflow:{main_repo}:{vendor}"
+    execute([sys.executable, "-u", main_repo / "autonomous_allhad/workflow/build_flat_boosted_recoil_hists.py",
+        "--repo", main_repo, "--inputs", *roots, "--normalization", config["normalization"],
+        "--output", work / "main.json", "--campaign-year", str(config["year"]),
+        "--nominal-only", "--step-size", "5000",
+        "--require-btag", "--expected-btag-efficiency-sha256", config["btag_efficiency_sha256"],
+        "--require-weight-components", *WEIGHTS, "--analysis-sf-components", "met_trigger", "photon_trigger", "topw_tagging",
+        "--require-branches", "--require-normalization", "--allow-zero-entry-roots",
+        "--electron-veto-pt-min", "10", "--muon-veto-pt-min", "10",
+        "--search-bin-config", config["search_config"], "--dy-ptll-policy", "all"], env, work)
+    if read(work / "main.json")["status"] != "complete":
+        raise RuntimeError("High-dM histogram production failed")
+    env["PYTHONPATH"] = f"{gnn_repo}/autonomous_allhad:{gnn_repo}/autonomous_allhad/workflow:{gnn_repo}:{vendor}"
+    request = dict(kind="mc", batch=0, manifest=config["gnn_manifest"], repository=str(gnn_repo),
+        stop_xsec=config["stop_xsec"], inputs=[dict(root=str(path), sidecar=str(path.with_suffix(".json"))) for path in roots])
+    write(work / "gnn_request.json", request)
+    execute([sys.executable, "-u", "-m", "gnn_lowdm.eval", "cr-partial",
+        "--request", work / "gnn_request.json", "--output", work / "gnn.json",
+        "--model", config["gnn_model"], "--selection", config["gnn_selection"],
+        "--configuration", config["gnn_configuration"], "--raw-dy",
+        "--regions", "SR", "LLCR", "QCDCR", "GCR", "DY2E", "DY2M"], env, work)
+    result = read(work / "gnn.json")
+    if result["status"] != "complete" or result["bad_files"] or result["input_files_valid"] != len(roots):
+        raise RuntimeError("GNN histogram production failed: " + str(result["bad_files"]))
+
+
+def compact_product(source, destination):
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    temporary = destination.with_name(destination.name + ".partial")
+    with source.open("rb") as src, temporary.open("wb") as dst:
+        with gzip.GzipFile(filename="", mode="wb", fileobj=dst, mtime=0) as archive:
+            shutil.copyfileobj(src, archive)
+    digest = hashlib.sha256()
+    with gzip.open(temporary, "rb") as archive:
+        for block in iter(lambda: archive.read(1024 * 1024), b""):
+            digest.update(block)
+    if digest.hexdigest() != sha(source):
+        raise RuntimeError("compressed product checksum mismatch")
+    temporary.replace(destination)
+    return dict(path=str(destination), sha256=sha(destination),
+                uncompressed_sha256=digest.hexdigest(), bytes=destination.stat().st_size)
+
+
+def root_content_digests(path):
+    """Verify the existing TopWTruth marker's flat_ntuple_worker digest format."""
+    import awkward as ak
+    import numpy as np
+    import uproot
+
+    result = {}
+    with uproot.open(path) as root:
+        for name in root.keys(cycle=False):
+            obj = root[name]
+            digest = hashlib.sha256()
+            if hasattr(obj, "iterate"):
+                digest.update(json.dumps(obj.typenames(), sort_keys=True).encode())
+                for arrays in obj.iterate(step_size=1000, library="ak"):
+                    form, length, buffers = ak.to_buffers(arrays)
+                    digest.update(str(length).encode())
+                    digest.update(str(form).encode())
+                    for key, values in sorted(buffers.items()):
+                        digest.update(key.encode())
+                        digest.update(np.asarray(values).tobytes())
+                result[name] = dict(entries=int(obj.num_entries), sha256=digest.hexdigest())
+            elif obj.classname == "TObjString":
+                result[name] = dict(sha256=hashlib.sha256(str(obj).encode()).hexdigest())
+            else:
+                raise RuntimeError("unsupported ROOT object: " + name)
+    return result
+
+
+def object_worker(args):
+    config = load_config(args.config)
+    if config.get("input_mode") != "intermediate_root_only":
+        raise ValueError("object worker requires the intermediate-only input contract")
+    destination = eos(args.output)
+    bundle = Path(os.environ["SHAPE_CODE_ROOT"])
+    if sha(os.environ["SHAPE_BUNDLE"]) != config["source_bundle_sha256"]:
+        raise RuntimeError("source bundle changed")
+    for name, expected in read(bundle / "hashes.json").items():
+        if sha(bundle / name) != expected:
+            raise RuntimeError("staged dependency checksum mismatch: " + name)
+    work = Path(args.work) if args.work else Path(os.environ["_CONDOR_SCRATCH_DIR"]) / "objects"
+    work.mkdir(parents=True, exist_ok=True)
+    original = dict(config)
+    config.update(read(bundle / f"runtime_{config['year']}.json"))
+    for key in ("main_repo", "gnn_repo", "normalization", "gnn_manifest", "gnn_model", "gnn_selection",
+                "gnn_configuration", "search_config", "stop_xsec", "object_payload_bundle"):
+        config[key] = str(bundle / config[key])
+    sys.path[:0] = [str(Path(config["main_repo"]) / "autonomous_allhad"),
+                    str(Path(config["main_repo"]) / "autonomous_allhad/workflow")]
+    if sha(config["source_sidecar"]) != config["source_sidecar_sha256"]:
+        raise RuntimeError("intermediate sidecar changed")
+    source = eos(config["source_root"])
+    cached = work / "source.root"
+    if not cached.exists():
+        shutil.copyfile(source, cached)
+    source_hash = sha(cached)
+    source_validation = "exact_root_sha256"
+    if source_hash != config["source_root_sha256"]:
+        import uproot
+
+        with uproot.open(cached) as root:
+            marker = json.loads(str(root["TopWTruth_metadata"]))
+        if (marker.get("input_sha256") != config["source_root_sha256"]
+            or marker.get("status") != "complete" or marker.get("application_year") != config["year"]):
+            raise RuntimeError("intermediate ROOT checksum mismatch without matching TopWTruth provenance")
+        contents = root_content_digests(cached)
+        if ({key: value for key, value in contents.items() if key not in ("TopWTruth", "TopWTruth_metadata")}
+            != marker["original_contents"] or contents["TopWTruth"] != marker["truth_content"]):
+            raise RuntimeError("intermediate content changed after TopWTruth augmentation")
+        source_validation = "validated_topw_augmentation_of_sidecar_root"
+    config["source_root"] = str(cached)
+    config["canonical_source_root"] = str(source)
+    payload = prepare_payload(config, work / "payload")
+    for shift in args.shifts:
+        target = destination / shift
+        state_path = target / "result.json"
+        if state_path.exists():
+            existing = read(state_path)
+            if existing.get("status") == "complete":
+                if (existing.get("config_sha256") != sha(args.config)
+                    or any(sha(item["path"]) != item["sha256"] for item in existing["products"].values())):
+                    raise RuntimeError("existing result does not match pinned inputs")
+                continue
+        report = dict(status="running", year=config["year"], shift=shift, started=time.time(),
+            input_mode=config["input_mode"], source_root=str(source), source_root_sha256=source_hash,
+            sidecar_root_sha256=config["source_root_sha256"], source_validation=source_validation,
+            config_sha256=sha(args.config), source_bundle_sha256=original["source_bundle_sha256"],
+            migration_study="deferred_by_user", nominal_base_common="fixed",
+            trota="reused; jet inputs unchanged", topw_truth="reused; no NanoAOD access",
+            normalization="unchanged frozen nominal normalization")
+        write(state_path, report)
+        stage = work / shift
+        try:
+            parts = write_intermediate_parts(config, shift, stage / "parts", payload)
+            histogram_parts(config, parts, stage)
+            products = {name: compact_product(stage / name, target / (name + ".gz"))
+                        for name in ("main.json", "gnn.json")}
+            report.update(status="complete", products=products, parts=len(parts),
+                events=sum(read(path.with_suffix(".json"))["events_written"] for path in parts),
+                finished=time.time(), canonical_promotion=False)
+            write(state_path, report)
+            shutil.rmtree(stage)
+        except BaseException as error:
+            report.update(status="failed", error=f"{type(error).__name__}: {error}", finished=time.time())
+            write(state_path, report)
+            raise
+
+
+def prepare_objects(args):
+    repo = eos(args.repo)
+    campaign = repo / "autonomous_allhad/workflow/systematic_propagation"
+    target = eos(campaign / args.label)
+    target.mkdir(parents=True, exist_ok=True)
+    bundle = target / "bundles/object_code.tgz"
+    bundle.parent.mkdir(exist_ok=True)
+    if bundle.exists() and not args.refresh_unsubmitted:
+        raise FileExistsError("frozen object campaign already exists: " + str(bundle))
+    if bundle.exists():
+        state_path = target / "campaign_state.json"
+        if state_path.exists() and read(state_path)["status"] != "prepared_not_submitted":
+            raise RuntimeError("cannot refresh a submitted campaign")
+    baseline = repo / "autonomous_allhad/workflow/histograms/lepton_veto10_20260908"
+    files, runtime = {}, {}
+    for label, folder in (("main", baseline / "code_main_v2"), ("gnn", baseline / "gnn_code")):
+        for subtree in ("autonomous_allhad/autonomous_allhad", "autonomous_allhad/workflow",
+                        "autonomous_allhad/gnn_lowdm", "autonomous_allhad/configs",
+                        "autonomous_allhad/signals", "analysis/utils", "analysis/data", "analysis/hists"):
+            for parent, directories, names in os.walk(folder / subtree, followlinks=True):
+                directories[:] = [name for name in directories if name not in ("__pycache__", "results", "tests", ".git")]
+                for name in names:
+                    source = Path(parent) / name
+                    if source.suffix not in (".py", ".json", ".gz", ".coffea", ".merged", ".npz"):
+                        continue
+                    files[str(Path(label) / source.relative_to(folder))] = source
+    files["run.py"] = HERE / "run.py"
+    for year in args.years:
+        common = read(HERE / "full_met_20260911" / str(year) / "common.json")
+        for key in ("main_repo", "gnn_repo", "normalization", "gnn_manifest", "gnn_model", "gnn_selection",
+                    "gnn_configuration", "search_config", "stop_xsec"):
+            path = Path(common[key])
+            if key in ("main_repo", "gnn_repo"):
+                common[key] = "main" if key == "main_repo" else "gnn"
+            elif str(path).startswith(str(baseline / "code_main_v2") + "/"):
+                common[key] = str(Path("main") / path.relative_to(baseline / "code_main_v2"))
+            elif str(path).startswith(str(baseline / "gnn_code") + "/"):
+                common[key] = str(Path("gnn") / path.relative_to(baseline / "gnn_code"))
+            else:
+                common[key] = f"inputs/{year}/{path.name}"
+                files[common[key]] = path
+        object_bundle = repo / f"autonomous_allhad/workflow/flat{year}_v8/bundles" / (
+            "objectcorr_2024_payloads.tgz" if year == 2024 else "objectcorr_2025_data_payloads.tgz")
+        common["object_payload_bundle"] = f"payload_{year}.tgz"
+        files[common["object_payload_bundle"]] = object_bundle
+        for path, expected in common["pins"].items():
+            if Path(path) != HERE / "run.py" and Path(path) in files.values() and sha(path) != expected:
+                raise RuntimeError("baseline dependency changed: " + path)
+        keep = ("main_repo", "gnn_repo", "normalization", "gnn_manifest", "gnn_model", "gnn_selection",
+                "gnn_configuration", "search_config", "stop_xsec", "object_payload_bundle", "btag_efficiency_sha256")
+        runtime[year] = {key: common[key] for key in keep}
+        runtime_file = target / "bundles" / f"runtime_{year}.json"
+        write(runtime_file, runtime[year])
+        files[runtime_file.name] = runtime_file
+    hashes = {name: sha(path) for name, path in sorted(files.items())}
+    write(target / "bundles/hashes.json", hashes)
+    write(target / "bundles/origins.json", {name: dict(path=str(path), sha256=hashes[name]) for name, path in files.items()})
+    with tarfile.open(bundle, "w:gz", dereference=True) as archive:
+        for name, source in sorted(files.items()):
+            archive.add(source, arcname=name, recursive=False)
+        archive.add(target / "bundles/hashes.json", arcname="hashes.json", recursive=False)
+    bundle_hash = sha(bundle)
+    summary = dict(status="prepared_not_submitted", input_mode="intermediate_root_only",
+        shifts=list(OBJECT_SHIFTS), job_flavour="workday", migration_study="deferred_by_user",
+        source_bundle_sha256=bundle_hash, nominal_modified=False, canonical_promotion=False, years={})
+    for year in args.years:
+        base = target / str(year)
+        sources_file = baseline / str(year) / "inputs.txt"
+        sources = [eos(line.strip()) for line in sources_file.read_text().splitlines()
+                   if line.strip() and not Path(line.strip()).name.startswith("data_")]
+        if len(sources) != len(set(sources)):
+            raise RuntimeError("duplicate intermediate ROOT paths")
+        jobs, inputs = [], []
+        previous = read(base / "campaign_state.json") if (base / "campaign_state.json").exists() else {}
+        reusable = {item["root"]: item for item in previous.get("inputs", [])}
+        if reusable and previous["input_list_sha256"] != sha(sources_file):
+            raise RuntimeError("frozen nominal input list changed")
+
+        def prepare_source(source):
+            config_path = base / "configs" / (source.stem + ".json")
+            output = base / "outputs" / source.stem
+            if args.refresh_unsubmitted and str(source) in reusable and config_path.exists():
+                config = read(config_path)
+                config["source_bundle_sha256"] = bundle_hash
+                write(config_path, config)
+                return f"{source.stem} {config_path} {output}", reusable[str(source)]
+            sidecar = source.with_suffix(".json")
+            metadata = read(sidecar)
+            if metadata["status"] not in ("complete", "complete_with_bad_files") or not source.is_file():
+                raise RuntimeError("invalid intermediate ROOT: " + str(source))
+            config = dict(input_mode="intermediate_root_only", year=year, source_root=str(source),
+                source_sidecar=str(sidecar), source_sidecar_sha256=sha(sidecar),
+                source_root_sha256=metadata["root_sha256"], source_bundle_sha256=bundle_hash,
+                chunk_events=25000)
+            write(config_path, config)
+            output.mkdir(parents=True, exist_ok=True)
+            return (f"{source.stem} {config_path} {output}",
+                    dict(root=str(source), events=metadata["events_written"],
+                         root_sha256=config["source_root_sha256"]))
+
+        with ThreadPoolExecutor(max_workers=8) as pool:
+            for row, item in pool.map(prepare_source, sources):
+                jobs.append(row)
+                inputs.append(item)
+        logs = base / "logs"
+        logs.mkdir(exist_ok=True)
+        queue = base / "jobs.queue"
+        queue.write_text("\n".join(jobs) + "\n")
+        runtime_dir = repo.parent / "runtime"
+        proxy = eos(args.proxy)
+        for path in (runtime_dir / "py38.tgz", runtime_dir / "mt2-1.2.0-cp38-cp38-manylinux2010_x86_64.whl", proxy):
+            if not path.is_file():
+                raise FileNotFoundError(path)
+        submit = base / "jobs.sub"
+        submit.write_text(f'''universe = vanilla
+initialdir = {base}
+executable = {campaign}/run.sh
+arguments = {campaign}/run.py object-worker --config $(config) --output $(resultdir)
+getenv = False
+output = {logs}/$(shard).$(ClusterId).out
+error = {logs}/$(shard).$(ClusterId).err
+log = {logs}/jobs.$(ClusterId).log
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+transfer_executable = True
+transfer_input_files = {runtime_dir}/py38.tgz, {runtime_dir}/mt2-1.2.0-cp38-cp38-manylinux2010_x86_64.whl, {bundle}
+transfer_output_files = ""
+use_x509userproxy = True
+x509userproxy = {proxy}
+request_cpus = 2
+request_memory = 10000MB
+request_disk = 25000MB
++JobFlavour = "workday"
++MaxRuntime = 28800
++JobBatchName = "NPS26012_objects_intermediate_{year}"
+on_exit_hold = (ExitBySignal == True) || (ExitCode != 0)
+queue shard,config,resultdir from {queue}
+''')
+        state = dict(status="prepared_not_submitted", jobs=len(jobs), input_list_sha256=sha(sources_file),
+            inputs=inputs, submit=str(submit), submit_sha256=sha(submit), queue_sha256=sha(queue))
+        write(base / "campaign_state.json", state)
+        summary["years"][str(year)] = {key: value for key, value in state.items() if key != "inputs"}
+    write(target / "campaign_state.json", summary)
+    print(json.dumps(summary), flush=True)
 
 
 def prepare_full(args):
@@ -686,6 +1242,17 @@ def validate(args):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
+    objects = commands.add_parser("prepare-objects")
+    objects.add_argument("--repo", required=True, type=Path)
+    objects.add_argument("--years", nargs="+", type=int, choices=(2024, 2025), default=[2024, 2025])
+    objects.add_argument("--label", default="objects_intermediate_20260912")
+    objects.add_argument("--proxy", required=True, type=Path)
+    objects.add_argument("--refresh-unsubmitted", action="store_true")
+    object_job = commands.add_parser("object-worker")
+    object_job.add_argument("--config", required=True, type=Path)
+    object_job.add_argument("--output", required=True, type=Path)
+    object_job.add_argument("--work", type=Path)
+    object_job.add_argument("--shifts", nargs="+", choices=("nominal", *OBJECT_SHIFTS), default=list(OBJECT_SHIFTS))
     prep = commands.add_parser("prepare")
     prep.add_argument("--repo", required=True, type=Path)
     prep.add_argument("--years", nargs="+", type=int, choices=(2024, 2025), default=[2024, 2025])
@@ -708,7 +1275,8 @@ def main():
     validation.add_argument("--reference", required=True, type=Path)
     validation.add_argument("--cluster", required=True, type=int)
     args = parser.parse_args()
-    return {"prepare": prepare, "prepare-full": prepare_full, "preflight": preflight,
+    return {"prepare-objects": prepare_objects, "object-worker": object_worker,
+            "prepare": prepare, "prepare-full": prepare_full, "preflight": preflight,
             "worker": worker, "validate": validate}[args.command](args)
 
 

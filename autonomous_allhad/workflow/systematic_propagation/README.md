@@ -7,11 +7,44 @@ of both `full_met_20260911/{2024,2025}/outputs` directories. Clusters 1115311 an
 1115312 were removed. The original nominal intermediate ROOTs and nominal
 analysis outputs are unchanged. Migration studies are explicitly deferred.
 
-The intermediate-only execution path is not implemented yet. The inspected
-2024 and 2025 nominal intermediate ROOTs store nominal/corrected PuppiMET but
-not the unclustered Up/Down pt/phi inputs. Do not substitute a guessed variation,
-restart the old NanoAOD jobs, or present this requested transition as production
-already running. The commands below document the superseded NanoAOD workflow.
+The intermediate-only path is `run.py object-worker`. It applies electron and
+photon scale/smearing, muon scale/resolution, and tau energy-scale Up/Down
+variations to the stored objects. Each endpoint is anchored to the stored
+nominal calibration. The corresponding transverse-momentum change is propagated
+to MET, photon/dilepton recoil, transverse masses, object cleaning and the
+High-dM/GNN selections. Central event weights and GNN scores are reevaluated.
+
+Only retained Events are processed. `pass_base_common` (including the original
+isolated-track and PuppiMET/CaloMET requirements), triggers, identities, and
+normalization remain fixed. No NanoAOD is read and no out-of-skim migration study
+is performed. Jets are unchanged: existing TROTA candidates and TopWTruth are
+reused with their event identities. JES/JER, unclustered MET and JMS/JMR are not
+part of this stage.
+
+The existing year-dependent calibration ranges are unchanged: electron/photon
+pT >= 20 GeV, muon 26 <= pT <= 200 GeV, and tau pT >= 20 GeV with the supported
+decay modes. These variations do not add an extrapolation outside those ranges.
+
+`prepare-objects` freezes the existing analysis source, corrections, GNN model
+and normalization in one checksummed bundle. `run.sh` stages it alongside the
+existing `py38.tgz`. Each input is copied once to worker scratch; temporary ROOT
+parts contain at most 25,000 events so the unchanged GNN reader cannot load a
+large original shard at once. Only compressed histogram JSONs and their checksums
+are staged out. A completed endpoint is not repeated.
+
+```bash
+SHAPE_ROOT=/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation
+SHAPE_PY=/eos/user/t/taiwoo/miniconda3/envs/py38/bin/python
+"$SHAPE_PY" "$SHAPE_ROOT/run.py" prepare-objects \
+  --repo /eos/user/t/taiwoo/run3_stop/decaf \
+  --proxy /eos/user/t/taiwoo/decaf/analysis/proxy/x509up_u147757
+```
+
+Use the generated year-specific `jobs.sub` on the EOS schedd after the retained-
+event nominal histogram check. Jobs use `workday` and all fourteen endpoints of
+one input ROOT. Preparation is not submission, and output production is not
+canonical adoption. Runtime state belongs in `objects_intermediate_20260912/`.
+The commands below describe the superseded NanoAOD workflow only.
 
 ## Historical NanoAOD workflow
 
