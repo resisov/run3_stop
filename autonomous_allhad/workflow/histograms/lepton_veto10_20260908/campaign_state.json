@@ -5605,13 +5605,13 @@
     "schedd": "bigbird24.cern.ch",
     "source_backup": "topw_previous_sources.tar.gz",
     "source_commit": "456fd370",
-    "stage": "T2tt_validated_plots_web_published; 8_limits_remaining_in_authorized_direct_recovery; all_9_impact_recovery_subsets_submitted_and_released",
+    "stage": "T2tt_validated_plots_web_published; 7_limits_remaining_in_authorized_direct_recovery; all_9_impact_recovery_subsets_submitted_and_released",
     "git_checkpoint": {
-      "status": "publication_authorized",
+      "status": "publication_authorized_previous_checkpoint_verified",
       "file": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/campaign_state.json",
       "destination": "https://github.com/resisov/run3_stop.git",
       "branch": "run3_full_analysis",
-      "last_remote_commit": "98344374411f377ce7c55ac0f504ecf5d118d44f",
+      "last_remote_commit": "7b91ff8a79763d60c6cee829ff10133fabdd8fa0",
       "reason": "User approved Git push in response to the explicit request to publish campaign_state.json, including internal EOS paths and job IDs, to github.com/resisov/run3_stop on run3_full_analysis.",
       "approval_date": "2026-09-12",
       "approval_message": "깃 푸시 승인한다. 현상황 보고하라.",
@@ -5622,21 +5622,21 @@
       "calculations_blocked": false
     },
     "last_monitor": {
-      "utc": "2026-09-12T05:39:51Z",
+      "utc": "2026-09-12T06:13:22Z",
       "live_queue_status": "available; longer bounded RPC waits used for intermittent service latency",
       "schedd_error": null,
       "schedd_recovered_at_utc": "2026-09-11T14:09:16Z",
       "current_queue": {"primary_limits_running": 0, "impacts_running": 0, "impacts_recovery_idle": 9, "impacts_recovery_unsubmitted": 0, "recovery_running": 0, "recovery_idle": 0, "local_limit_recovery_running": 1, "collection_running": 0, "held": 0},
-      "limit_recovery_update_utc": "2026-09-12T05:39:51Z",
+      "limit_recovery_update_utc": "2026-09-12T06:13:22Z",
       "queue_snapshot_precedes_latest_T2tb_recovery_and_collection_refresh": false,
       "queue_snapshot_precedes_sigbus_retry_and_additional_submissions": false,
-      "validation_checked_at_utc": "2026-09-12T05:10:12Z",
+      "validation_checked_at_utc": "2026-09-12T06:13:22Z",
       "ssh_access": true,
       "eos_access": true,
       "kerberos_klist_s_exit": 0,
       "roots_present_at_1409_utc": {"T2tt": 178, "T2bW": 334, "T2tb": 304},
       "file_counts_are_not_validated_completion": true,
-      "collection_status": "Tenth recovery validated and promoted; T2tb mStop100_mLSP1 repaired; T2tt plots remain published and verified",
+      "collection_status": "Eleventh recovery validated and promoted; T2bW mStop1750_mLSP1350 repaired; T2tt plots remain published and verified",
       "termination_log_snapshot": {
         "utc": "2026-09-11T15:22:16Z",
         "T2tt": {"terminated": 205, "exit0": 203, "exit124": 2},
@@ -5778,14 +5778,14 @@
       "physics_changed": false
     },
     "limits": {
-      "status": "T2tt_205_of_205_validated; T2bW_349_of_354_validated; T2tb_362_of_365_validated; 8_points_in_authorized_direct_recovery",
+      "status": "T2tt_205_of_205_validated; T2bW_350_of_354_validated; T2tb_362_of_365_validated; 7_points_in_authorized_direct_recovery",
       "expected_total": 924,
       "submitted_total": 924,
       "last_queue_check": {"utc": "2026-09-11T15:15:33Z", "running": 0, "idle": 0, "held": 0, "primary_termination_events_verified": 924},
       "quantile_validation": {
-        "utc": "2026-09-12T05:10:12Z",
-        "counts": {"T2tt": 205, "T2bW": 349, "T2tb": 362},
-        "total": 916,
+        "utc": "2026-09-12T06:13:22Z",
+        "counts": {"T2tt": 205, "T2bW": 350, "T2tb": 362},
+        "total": 917,
         "five_finite_nonnegative_ordered_quantiles": true,
         "T2tt": {"batch_collected": 205, "late_outputs_individually_validated": [], "export_refresh_pending": false},
         "T2bW": {"batch_collected": 344, "late_outputs_individually_validated": [
@@ -5793,7 +5793,8 @@
           "mStop1750_mLSP1300",
           "mStop100_mLSP1",
           "mStop300_mLSP150",
-          "mStop300_mLSP200"
+          "mStop300_mLSP200",
+          "mStop1750_mLSP1350"
         ], "export_refresh_pending": true},
         "T2bW_incomplete_trees": {},
         "T2tb": {"batch_collected": 361, "incomplete_trees": {}, "late_outputs_individually_validated": ["mStop100_mLSP1"], "export_refresh_pending": true},
@@ -5826,7 +5827,7 @@
             "exit_code": 0,
             "root_sha256": "cd7a3efc7d1f91062b0cfdbd5edcd32310ec8f1b075bcc92497742cadff123e2"
           },
-          "1115319.2": {"topology": "T2bW", "mass_point": "mStop1750_mLSP1350", "original_job": "1115252.239", "failure": "combine_timeout_7200s", "point_timeout_seconds": 21600},
+          "1115319.2": {"topology": "T2bW", "mass_point": "mStop1750_mLSP1350", "original_job": "1115252.239", "failure": "combine_timeout_7200s", "point_timeout_seconds": 21600, "condor_status": "removed_for_direct_recovery", "status": "resolved_by_direct_recovery", "direct_result_sha256": "d73484e178f89bdc4aadf6dcab6c355658dedb428fc341d9dd4de46624d6f331"},
           "1115319.3": {"topology": "T2bW", "mass_point": "mStop1750_mLSP1400", "original_job": "1115252.240", "failure": "combine_timeout_7200s", "point_timeout_seconds": 21600},
           "1115319.4": {"topology": "T2bW", "mass_point": "mStop1750_mLSP1450", "original_job": "1115252.241", "failure": "combine_timeout_7200s", "point_timeout_seconds": 21600},
           "1115319.5": {"topology": "T2bW", "mass_point": "mStop1750_mLSP1500", "original_job": "1115252.242", "failure": "combine_timeout_7200s", "point_timeout_seconds": 21600},
@@ -5861,9 +5862,9 @@
           "8a60e1fe4932d4674101b1264e905abd59c56c4d271c06fc698c1e96aa60daf6",
           "e4d1fb27464d710ef9ed44d36576fc2c976138ed6e8e27ccc63a6b9c5413f61e"
         ],
-        "validated_recoveries": 10,
-        "promoted_recoveries": 10,
-        "pending_recoveries": 8,
+        "validated_recoveries": 11,
+        "promoted_recoveries": 11,
+        "pending_recoveries": 7,
         "promotion_target": "combined_pending/{topology}/limits",
         "replaced_invalid_outputs": [{"path":"combined_pending/T2bW/limits/higgsCombine_mStop200_mLSP100.AsymptoticLimits.mH120.root","previous_limit_entries":0,"replacement_validated":true,"backup_retained":false},{"path":"combined_pending/T2bW/limits/higgsCombine_mStop100_mLSP1.AsymptoticLimits.mH120.root","previous_limit_entries":0,"replacement_validated":true,"backup_retained":false},{"path":"combined_pending/T2bW/limits/higgsCombine_mStop300_mLSP150.AsymptoticLimits.mH120.root","previous_limit_entries":1,"replacement_validated":true,"backup_retained":false},{"path":"combined_pending/T2bW/limits/higgsCombine_mStop300_mLSP200.AsymptoticLimits.mH120.root","previous_limit_entries":1,"replacement_validated":true,"backup_retained":false},{"path":"combined_pending/T2tb/limits/higgsCombine_mStop100_mLSP1.AsymptoticLimits.mH120.root","previous_limit_entries":1,"replacement_validated":true,"backup_retained":false}],
         "last_queue_check": {"utc": "2026-09-12T01:46:14Z", "running": 0, "idle": 0, "held": 0, "removed_for_direct_recovery": 12},
@@ -5875,8 +5876,8 @@
           "host": "lxplus924.cern.ch",
           "supervisor_pid": 1216901,
           "started_at_utc": "2026-09-12T01:53:34Z",
-          "last_checked_at_utc": "2026-09-12T05:39:51Z",
-          "current_point": {"topology": "T2bW", "mass_point": "mStop1750_mLSP1350", "stage": "AsymptoticLimits", "timeout_pid": 1447169, "combine_pid": 1447170, "combine_elapsed_seconds": 3364, "combine_cpu_percent": 99.7, "cpu_active": true, "workspace_exit_code": 0, "workspace_completed_utc": "2026-09-12T04:43:48Z"},
+          "last_checked_at_utc": "2026-09-12T06:13:22Z",
+          "current_point": {"topology": "T2bW", "mass_point": "mStop1750_mLSP1400", "stage": "AsymptoticLimits", "timeout_pid": 1532942, "combine_pid": 1532943, "combine_elapsed_seconds": 1503, "combine_cpu_percent": 99.6, "cpu_active": true, "workspace_exit_code": 0, "workspace_completed_utc": "2026-09-12T05:48:19Z"},
           "max_parallel": 1,
           "thread_limits": 1,
           "nice": 10,
@@ -5917,8 +5918,8 @@
             "T2bW": ["mStop100_mLSP1", "mStop300_mLSP150", "mStop300_mLSP200", "mStop1750_mLSP1350", "mStop1750_mLSP1400", "mStop1750_mLSP1450", "mStop1750_mLSP1500", "mStop1800_mLSP1400"],
             "T2tb": ["mStop100_mLSP1", "mStop1750_mLSP1400", "mStop1750_mLSP1500", "mStop1800_mLSP1450"]
           },
-          "completed_validated": 4,
-          "validated_results": [{"topology":"T2bW","mass_point":"mStop100_mLSP1","combine_exit_code":0,"combine_completed_utc":"2026-09-12T02:40:56Z","promoted_utc":"2026-09-12T02:41:00Z","independent_recheck_utc":"2026-09-12T03:07:03Z","sha256":"7bb5569e1479c34e2cde124d31f366e29fc7ec4f2ebe8d027b8ffd08ae2d4940","expected_m2":0.00044707953929901123,"expected_m1":0.0005957406247034669,"expected":0.000835418701171875,"expected_p1":0.0011784102534875274,"expected_p2":0.0015987075166776776},{"topology":"T2bW","mass_point":"mStop300_mLSP150","combine_exit_code":0,"combine_completed_utc":"2026-09-12T03:24:37Z","promoted_utc":"2026-09-12T03:24:43Z","independent_recheck_utc":"2026-09-12T03:55:18Z","sha256":"c12eca4ffc3c4399077fcef5f2b9b1ba1a0dfb8f434397689458d69b1c44e161","expected_m2":0.0014188885688781738,"expected_m1":0.0018928153440356255,"expected":0.00263214111328125,"expected_p1":0.0036813237238675356,"expected_p2":0.004930834751576185},{"topology":"T2bW","mass_point":"mStop300_mLSP200","combine_exit_code":0,"combine_completed_utc":"2026-09-12T04:02:20Z","promoted_utc":"2026-09-12T04:02:24Z","independent_recheck_utc":"2026-09-12T04:29:22Z","sha256":"039d06e301f806ffbc209f642127c04a51def1b3b131cd2eb103461fc0a87ed6","expected_m2":0.0008002519607543945,"expected_m1":0.0010717790573835373,"expected":0.001495361328125,"expected_p1":0.0021093005780130625,"expected_p2":0.002842567628249526},{"topology":"T2tb","mass_point":"mStop100_mLSP1","combine_exit_code":0,"combine_completed_utc":"2026-09-12T04:41:49Z","promoted_utc":"2026-09-12T04:41:53Z","independent_recheck_utc":"2026-09-12T05:10:12Z","sha256":"1d3457fae59f96d80cecbd11da29ac12a768bb8368800c6ed0e41545cce4e093","expected_m2":0.0014216899871826172,"expected_m1":0.0019171927124261856,"expected":0.002716064453125,"expected_p1":0.003896136535331607,"expected_p2":0.00543001014739275}],
+          "completed_validated": 5,
+          "validated_results": [{"topology":"T2bW","mass_point":"mStop100_mLSP1","combine_exit_code":0,"combine_completed_utc":"2026-09-12T02:40:56Z","promoted_utc":"2026-09-12T02:41:00Z","independent_recheck_utc":"2026-09-12T03:07:03Z","sha256":"7bb5569e1479c34e2cde124d31f366e29fc7ec4f2ebe8d027b8ffd08ae2d4940","expected_m2":0.00044707953929901123,"expected_m1":0.0005957406247034669,"expected":0.000835418701171875,"expected_p1":0.0011784102534875274,"expected_p2":0.0015987075166776776},{"topology":"T2bW","mass_point":"mStop300_mLSP150","combine_exit_code":0,"combine_completed_utc":"2026-09-12T03:24:37Z","promoted_utc":"2026-09-12T03:24:43Z","independent_recheck_utc":"2026-09-12T03:55:18Z","sha256":"c12eca4ffc3c4399077fcef5f2b9b1ba1a0dfb8f434397689458d69b1c44e161","expected_m2":0.0014188885688781738,"expected_m1":0.0018928153440356255,"expected":0.00263214111328125,"expected_p1":0.0036813237238675356,"expected_p2":0.004930834751576185},{"topology":"T2bW","mass_point":"mStop300_mLSP200","combine_exit_code":0,"combine_completed_utc":"2026-09-12T04:02:20Z","promoted_utc":"2026-09-12T04:02:24Z","independent_recheck_utc":"2026-09-12T04:29:22Z","sha256":"039d06e301f806ffbc209f642127c04a51def1b3b131cd2eb103461fc0a87ed6","expected_m2":0.0008002519607543945,"expected_m1":0.0010717790573835373,"expected":0.001495361328125,"expected_p1":0.0021093005780130625,"expected_p2":0.002842567628249526},{"topology":"T2tb","mass_point":"mStop100_mLSP1","combine_exit_code":0,"combine_completed_utc":"2026-09-12T04:41:49Z","promoted_utc":"2026-09-12T04:41:53Z","independent_recheck_utc":"2026-09-12T05:10:12Z","sha256":"1d3457fae59f96d80cecbd11da29ac12a768bb8368800c6ed0e41545cce4e093","expected_m2":0.0014216899871826172,"expected_m1":0.0019171927124261856,"expected":0.002716064453125,"expected_p1":0.003896136535331607,"expected_p2":0.00543001014739275},{"topology":"T2bW","mass_point":"mStop1750_mLSP1350","combine_exit_code":0,"combine_completed_utc":"2026-09-12T05:46:57Z","promoted_utc":"2026-09-12T05:47:01Z","independent_recheck_utc":"2026-09-12T06:13:22Z","sha256":"d73484e178f89bdc4aadf6dcab6c355658dedb428fc341d9dd4de46624d6f331","expected_m2":18.9921875,"expected_m1":25.40728759765625,"expected":35.75,"expected_p1":50.712608337402344,"expected_p2":69.06351470947266}],
           "failed": 0,
           "validator": "postprocess_limits.parse_limit_file plus ordered-quantile check",
           "promotion_requires_combine_exit0": true,
@@ -5962,7 +5963,7 @@
         "output": "combined_pending/{topology}/expected_limits.json",
         "partial_snapshot_possible_while_primary_jobs_run": true,
         "validated_total": 910,
-        "total_after_late_outputs_and_promotions": 916
+        "total_after_late_outputs_and_promotions": 917
       },
       "plots": {
         "T2tt": {
@@ -6229,7 +6230,7 @@
       "max_runtime_seconds": 43200,
       "proxy_seconds_before_submit": 368164,
       "voms_seconds_before_submit": 339364,
-      "last_queue_check": {"utc": "2026-09-12T05:39:51Z", "idle": 9, "running": 0, "held": 0, "primary_failed": 2, "prepared_not_submitted": 0, "new_release_confirmed_by_event_013": true},
+      "last_queue_check": {"utc": "2026-09-12T06:12:47Z", "idle": 9, "running": 0, "held": 0, "primary_failed": 2, "prepared_not_submitted": 0, "new_release_confirmed_by_event_013": true},
       "match_analysis": {"utc": "2026-09-12T04:29:22Z", "job": "1115819.0", "slots": 5225, "machines": 4064, "rejected_by_job_requirements": 1892, "rejected_by_slot_requirements": 138, "matching_and_willing": 115, "would_match_if_drained": 3080, "analysis_ignores_user_priority": true, "site_injected_afs_mount_requirement": true, "diagnosis": "Requirements are satisfiable; scheduler waiting, exact priority or scheduling cause not established.", "jobs_modified": false},
       "idle_diagnostic": {"utc": "2026-09-12T03:55:18Z", "job": "1115819.0", "job_status": 1, "num_job_starts": 0, "last_match_time": null, "request_cpus": 6, "request_memory_mb": 18000, "max_runtime_seconds": 43200, "hold_reason": null, "jobs_modified": false},
       "runtime_observation": {
