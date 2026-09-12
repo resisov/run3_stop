@@ -5611,7 +5611,7 @@
       "file": "autonomous_allhad/workflow/histograms/lepton_veto10_20260908/campaign_state.json",
       "destination": "https://github.com/resisov/run3_stop.git",
       "branch": "run3_full_analysis",
-      "last_remote_commit": "1fb9891711ff31d9fd704825a80b6ce1eef84a0c",
+      "last_remote_commit": "3a083dda4909ee622b7919a405b312760a0330fb",
       "reason": "User explicitly approved the current and subsequent status-only updates of this same campaign_state.json, including internal EOS paths, job IDs, validation metadata and output hashes, to the stated repository and branch.",
       "approval_date": "2026-09-12",
       "approval_message": "승인한다.",
@@ -5624,7 +5624,7 @@
       "calculations_blocked": false
     },
     "last_monitor": {
-      "utc": "2026-09-12T09:20:41Z",
+      "utc": "2026-09-12T09:53:41Z",
       "live_queue_status": "available; longer bounded RPC waits used for intermittent service latency",
       "schedd_error": null,
       "schedd_recovered_at_utc": "2026-09-11T14:09:16Z",
@@ -5881,8 +5881,8 @@
           "host": "lxplus924.cern.ch",
           "supervisor_pid": 1216901,
           "started_at_utc": "2026-09-12T01:53:34Z",
-          "last_checked_at_utc": "2026-09-12T09:20:41Z",
-          "current_point": {"topology": "T2bW", "mass_point": "mStop1800_mLSP1400", "stage": "AsymptoticLimits", "timeout_pid": 1764447, "combine_pid": 1764449, "combine_elapsed_seconds": 481, "combine_cpu_percent": 99.5, "cpu_active": true, "workspace_exit_code": 0, "workspace_completed_utc": "2026-09-12T09:12:40Z"},
+          "last_checked_at_utc": "2026-09-12T09:53:41Z",
+          "current_point": {"topology": "T2bW", "mass_point": "mStop1800_mLSP1400", "stage": "AsymptoticLimits", "timeout_pid": 1764447, "combine_pid": 1764449, "combine_elapsed_seconds": 2461, "combine_cpu_percent": 99.7, "cpu_active": true, "workspace_exit_code": 0, "workspace_completed_utc": "2026-09-12T09:12:40Z"},
           "max_parallel": 1,
           "thread_limits": 1,
           "nice": 10,
@@ -6259,7 +6259,7 @@
       "max_runtime_seconds": 43200,
       "proxy_seconds_before_submit": 368164,
       "voms_seconds_before_submit": 339364,
-      "last_queue_check": {"utc": "2026-09-12T09:20:06Z", "idle": 9, "running": 0, "held": 0, "primary_failed": 2, "prepared_not_submitted": 0, "new_release_confirmed_by_event_013": true},
+      "last_queue_check": {"utc": "2026-09-12T09:53:41Z", "idle": 9, "running": 0, "held": 0, "primary_failed": 2, "prepared_not_submitted": 0, "new_release_confirmed_by_event_013": true},
       "match_analysis": {"utc": "2026-09-12T08:38:33Z", "job": "1115819.0", "slots": 5225, "machines": 4064, "rejected_by_job_requirements": 1893, "rejected_by_slot_requirements": 145, "matching_and_willing": 9, "would_match_if_drained": 3178, "analysis_ignores_user_priority": true, "site_injected_afs_mount_requirement": true, "diagnosis": "No successful match recorded; last failed match reports no match found. Requirements remain satisfiable when user priority is ignored; exact scheduling cause is not established.", "jobs_modified": false},
       "idle_diagnostic": {"utc": "2026-09-12T03:55:18Z", "job": "1115819.0", "job_status": 1, "num_job_starts": 0, "last_match_time": null, "request_cpus": 6, "request_memory_mb": 18000, "max_runtime_seconds": 43200, "hold_reason": null, "jobs_modified": false},
       "runtime_observation": {
