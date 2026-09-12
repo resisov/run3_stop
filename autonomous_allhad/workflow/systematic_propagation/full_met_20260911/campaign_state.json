@@ -7,7 +7,14 @@
     "metUnclusteredUp",
     "metUnclusteredDown"
   ],
-  "status": "submitted",
+  "status": "stopped_outputs_discarded",
+  "active_jobs": 0,
+  "disposition_date": "2026-09-12",
+  "disposition_reason": "User requested intermediate-ROOT-only processing, disposal of this campaign's output directories, and deferral of migration studies.",
+  "discarded_output_files": 102033,
+  "discarded_output_bytes": 13353435040,
+  "separate_backup_created": false,
+  "storage_deletion_policy": "EOS default recycle policy; no separate archive",
   "submitted_clusters": [
     1115311,
     1115312
@@ -51,7 +58,8 @@
       ],
       "root_retention": "batch scratch only; compressed histograms and metadata on EOS",
       "source_bad_files": [],
-      "status": "submitted",
+      "status": "stopped_outputs_discarded",
+      "active_jobs": 0,
       "cluster": 1115311,
       "process_range": [
         0,
@@ -204,7 +212,8 @@
           "process": "WtoLNu"
         }
       ],
-      "status": "submitted",
+      "status": "stopped_outputs_discarded",
+      "active_jobs": 0,
       "submit": "/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation/full_met_20260911/2025/jobs.sub",
       "unique_files": 41297,
       "worker_sha256": "417aa3eb2381b28d992dcaa0042d7f57abb03d4a2f43fcac393c7f472aa24b46",

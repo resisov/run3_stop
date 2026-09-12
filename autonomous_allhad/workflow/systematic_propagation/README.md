@@ -1,5 +1,20 @@
 # Separate shape-systematic propagation
 
+## Current instruction: intermediate ROOTs only
+
+On 2026-09-12 the user stopped the NanoAOD-based campaign and requested removal
+of both `full_met_20260911/{2024,2025}/outputs` directories. Clusters 1115311 and
+1115312 were removed. The original nominal intermediate ROOTs and nominal
+analysis outputs are unchanged. Migration studies are explicitly deferred.
+
+The intermediate-only execution path is not implemented yet. The inspected
+2024 and 2025 nominal intermediate ROOTs store nominal/corrected PuppiMET but
+not the unclustered Up/Down pt/phi inputs. Do not substitute a guessed variation,
+restart the old NanoAOD jobs, or present this requested transition as production
+already running. The commands below document the superseded NanoAOD workflow.
+
+## Historical NanoAOD workflow
+
 This directory is independent of nominal production. `run.py` orchestrates the
 existing intermediate, TROTA, Top/W, main histogram and frozen GNN executables;
 it does not duplicate their physics selections. Outputs and campaign state are

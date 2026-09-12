@@ -58,7 +58,10 @@
         "metUnclusteredUp",
         "metUnclusteredDown"
       ],
-      "status": "submitted",
+      "status": "stopped_outputs_discarded",
+      "active_jobs": 0,
+      "disposition_date": "2026-09-12",
+      "disposition_reason": "User requested intermediate-ROOT-only processing and disposal of the NanoAOD campaign outputs.",
       "clusters": {
         "2024": 1115311,
         "2025": 1115312
@@ -285,7 +288,10 @@
   },
   "runtime": "py38; TROTA-only LCG_104",
   "schedd": "bigbird24.cern.ch",
-  "status": "met_unclustered_full_submitted",
+  "status": "intermediate_root_transition_pending",
+  "requested_input_mode": "intermediate_root_only",
+  "migration_study": "deferred_by_user; not performed",
+  "met_unclustered_input_status": "Up/Down pt and phi are absent in the inspected 2024 and 2025 nominal intermediate ROOTs; no approximation or NanoAOD fallback authorized.",
   "submitted_clusters": [
     1115064,
     1115066,
