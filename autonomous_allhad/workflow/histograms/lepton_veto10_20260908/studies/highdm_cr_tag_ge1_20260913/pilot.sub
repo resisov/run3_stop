@@ -1,0 +1,26 @@
+universe = vanilla
+initialdir = /eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/studies/highdm_cr_tag_ge1_20260913
+executable = /eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/run_batch.sh
+arguments = /eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/studies/highdm_cr_tag_ge1_20260913/argv/$(job).argv
+getenv = False
+environment = "PYTHONPATH=/eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/studies/highdm_cr_tag_ge1_20260913/code/autonomous_allhad AUTONOMOUS_ALLHAD_LOCAL_ANALYSIS_DATA=0"
+output = /eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/studies/highdm_cr_tag_ge1_20260913/logs/$(job).$(ClusterId).out
+error = /eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/studies/highdm_cr_tag_ge1_20260913/logs/$(job).$(ClusterId).err
+log = /eos/home-t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/histograms/lepton_veto10_20260908/studies/highdm_cr_tag_ge1_20260913/logs/jobs.$(ClusterId).log
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+transfer_executable = TRUE
+transfer_input_files = /eos/user/t/taiwoo/run3_stop/runtime/py38.tgz
+transfer_output_files = ""
+use_x509userproxy = true
+x509userproxy = /eos/user/t/taiwoo/decaf/analysis/proxy/x509up_u147757
+request_cpus = 1
+request_memory = 8000MB
+request_disk = 4000MB
++MaxRuntime = 21600
++JobBatchName = "NPS26012_HighDM_CR_TagGE1_Comparison"
+on_exit_hold = (ExitBySignal == True) || (ExitCode != 0)
+queue job in (
+2024_pilot
+2025_pilot
+)
