@@ -75,6 +75,11 @@
     .caption strong { font-size: 16px; }
     .caption span { color: var(--muted); white-space: nowrap; }
     .badge { display: inline-block; margin-right: 8px; padding: 3px 8px; color: #0b6670; background: #def8f6; border-radius: 999px; font-size: 12px; font-weight: 800; }
+    .cr-group { margin: 10px 0; background: #fff; border: 1px solid var(--line); border-radius: 12px; }
+    .cr-group summary { padding: 16px 18px; cursor: pointer; font-weight: 750; font-size: 17px; }
+    .cr-group summary span { float: right; color: var(--muted); font-size: 13px; font-weight: 500; }
+    .cr-group > .grid { padding: 0 14px 14px; }
+    .coverage-note { color: var(--muted); font-size: 13px; }
     footer { color: var(--muted); padding: 0 0 34px; text-align: center; }
     @media (max-width: 900px) {
       .grid, .grid.three { grid-template-columns: 1fr; }
@@ -89,12 +94,13 @@
     <div class="wrap">
       <p class="eyebrow">CMS · NPS-26-012</p>
       <h1>Run-3 all-hadronic stop search</h1>
-      <p>Combined 2024+2025 results and previous analysis galleries.</p>
+      <p>2024+2025 signal regions, control regions and expected limits.</p>
     </div>
   </header>
   <nav><div class="wrap">
     <a href="#search-bins">Search bins</a>
-    <a href="#lowdm-gnn">Low-Δm GNN</a>
+    <a href="#control-regions">Control regions</a>
+    <a href="#lowdm-gnn">GNN controls</a>
     <a href="#current-limits">Current limits</a>
     <a href="#limits">Previous limits</a>
     <a href="#impacts">Impacts</a>
@@ -133,50 +139,1090 @@
           <div class="caption"><strong>T2tb · ratio to theory</strong><span>95% CL · PDF</span></div>
         </a>
       </div>
-      <p>Asimov r = 1 / r = 0 impacts are still being updated. The galleries below show previous results.</p>
+      <p>Asimov r = 1 / r = 0 impacts are still being updated. The impact gallery below still shows previous results.</p>
+    </section>
+    <section id="search-bins">
+      <div class="section-head"><h2>Signal regions</h2><p>Top/W SF updated · data blinded</p></div>
+      <p>CR-corrected prefit: RZ × initial Sγ applied once. Bands show MC statistics only, not the full fit uncertainty.</p>
+      <h3 class="year">2024+2025</h3>
+      <div class="grid">
+        <a class="card search" href="plots/search_bins/2024_2025/highdm73_search_bins.pdf" data-current-plot="true">
+          <img src="plots/search_bins/2024_2025/highdm73_search_bins.png" alt="High-Δm · 73 search bins" loading="lazy">
+          <div class="caption"><strong>High-Δm</strong><span>73 search bins · PDF</span></div>
+        </a>
+        <a class="card search" href="plots/search_bins/2024_2025/lowdm30_gnn_search_bins.pdf" data-current-plot="true">
+          <img src="plots/search_bins/2024_2025/lowdm30_gnn_search_bins.png" alt="Low-Δm GNN · 30 search bins" loading="lazy">
+          <div class="caption"><strong>Low-Δm GNN</strong><span>30 search bins · PDF</span></div>
+        </a>
+      </div>
+      <h3 class="year">2024</h3>
+      <div class="grid">
+        <a class="card search" href="plots/search_bins/2024/highdm73_search_bins.pdf" data-current-plot="true">
+          <img src="plots/search_bins/2024/highdm73_search_bins.png" alt="High-Δm · 73 search bins" loading="lazy">
+          <div class="caption"><strong>High-Δm</strong><span>73 search bins · PDF</span></div>
+        </a>
+        <a class="card search" href="plots/search_bins/2024/lowdm30_gnn_search_bins.pdf" data-current-plot="true">
+          <img src="plots/search_bins/2024/lowdm30_gnn_search_bins.png" alt="Low-Δm GNN · 30 search bins" loading="lazy">
+          <div class="caption"><strong>Low-Δm GNN</strong><span>30 search bins · PDF</span></div>
+        </a>
+      </div>
+      <h3 class="year">2025</h3>
+      <div class="grid">
+        <a class="card search" href="plots/search_bins/2025/highdm73_search_bins.pdf" data-current-plot="true">
+          <img src="plots/search_bins/2025/highdm73_search_bins.png" alt="High-Δm · 73 search bins" loading="lazy">
+          <div class="caption"><strong>High-Δm</strong><span>73 search bins · PDF</span></div>
+        </a>
+        <a class="card search" href="plots/search_bins/2025/lowdm30_gnn_search_bins.pdf" data-current-plot="true">
+          <img src="plots/search_bins/2025/lowdm30_gnn_search_bins.png" alt="Low-Δm GNN · 30 search bins" loading="lazy">
+          <div class="caption"><strong>Low-Δm GNN</strong><span>30 search bins · PDF</span></div>
+        </a>
+      </div>
+    </section>
+    <section id="control-regions">
+      <div class="section-head"><h2>Control regions</h2><p>2024 + 2025 · updated Top/W SF and variations</p></div>
+      <p>Prefit distributions. Bands: MC statistics + available systematic variations. Photon-CR plots compare unit-area shapes.</p>
+      <p class="coverage-note">2025 input coverage: 11 files were excluded, including one data file; complete luminosity coverage is not certified.</p>
+      <h3 class="year">2024</h3>
+      <details class="cr-group">
+        <summary>High-Δm · Lost-lepton CR<span>11 distributions</span></summary>
+        <div class="grid three">
+        <a class="card" href="plots/control_regions/2024/highdm/LLCR/cr_llcr_bjet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/LLCR/cr_llcr_bjet_pt.png" alt="Leading b-jet pT · 2024 · LLCR" loading="lazy">
+          <div class="caption"><strong>Leading b-jet pT</strong><span>2024 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/LLCR/cr_llcr_fatjet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/LLCR/cr_llcr_fatjet_pt.png" alt="Leading AK8 jet pT · 2024 · LLCR" loading="lazy">
+          <div class="caption"><strong>Leading AK8 jet pT</strong><span>2024 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/LLCR/cr_llcr_ht.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/LLCR/cr_llcr_ht.png" alt="HT · 2024 · LLCR" loading="lazy">
+          <div class="caption"><strong>HT</strong><span>2024 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/LLCR/cr_llcr_jet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/LLCR/cr_llcr_jet_pt.png" alt="Leading jet pT · 2024 · LLCR" loading="lazy">
+          <div class="caption"><strong>Leading jet pT</strong><span>2024 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/LLCR/cr_llcr_met.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/LLCR/cr_llcr_met.png" alt="pTmiss · 2024 · LLCR" loading="lazy">
+          <div class="caption"><strong>pTmiss</strong><span>2024 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/LLCR/cr_llcr_nb.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/LLCR/cr_llcr_nb.png" alt="Nb · 2024 · LLCR" loading="lazy">
+          <div class="caption"><strong>Nb</strong><span>2024 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/LLCR/cr_llcr_nfatjet.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/LLCR/cr_llcr_nfatjet.png" alt="NAK8 · 2024 · LLCR" loading="lazy">
+          <div class="caption"><strong>NAK8</strong><span>2024 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/LLCR/cr_llcr_njet.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/LLCR/cr_llcr_njet.png" alt="Nj · 2024 · LLCR" loading="lazy">
+          <div class="caption"><strong>Nj</strong><span>2024 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/LLCR/cr_llcr_ntop.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/LLCR/cr_llcr_ntop.png" alt="Nt · 2024 · LLCR" loading="lazy">
+          <div class="caption"><strong>Nt</strong><span>2024 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/LLCR/cr_llcr_nw.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/LLCR/cr_llcr_nw.png" alt="NW · 2024 · LLCR" loading="lazy">
+          <div class="caption"><strong>NW</strong><span>2024 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/LLCR/cr_llcr_ut.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/LLCR/cr_llcr_ut.png" alt="Recoil pT · 2024 · LLCR" loading="lazy">
+          <div class="caption"><strong>Recoil pT</strong><span>2024 · LLCR · PDF</span></div>
+        </a>
+        </div>
+      </details>
+      <details class="cr-group">
+        <summary>High-Δm · Multijet CR<span>11 distributions</span></summary>
+        <div class="grid three">
+        <a class="card" href="plots/control_regions/2024/highdm/QCDCR/cr_qcdcr_bjet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/QCDCR/cr_qcdcr_bjet_pt.png" alt="Leading b-jet pT · 2024 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Leading b-jet pT</strong><span>2024 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/QCDCR/cr_qcdcr_fatjet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/QCDCR/cr_qcdcr_fatjet_pt.png" alt="Leading AK8 jet pT · 2024 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Leading AK8 jet pT</strong><span>2024 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/QCDCR/cr_qcdcr_ht.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/QCDCR/cr_qcdcr_ht.png" alt="HT · 2024 · QCDCR" loading="lazy">
+          <div class="caption"><strong>HT</strong><span>2024 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/QCDCR/cr_qcdcr_jet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/QCDCR/cr_qcdcr_jet_pt.png" alt="Leading jet pT · 2024 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Leading jet pT</strong><span>2024 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/QCDCR/cr_qcdcr_met.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/QCDCR/cr_qcdcr_met.png" alt="pTmiss · 2024 · QCDCR" loading="lazy">
+          <div class="caption"><strong>pTmiss</strong><span>2024 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/QCDCR/cr_qcdcr_nb.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/QCDCR/cr_qcdcr_nb.png" alt="Nb · 2024 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Nb</strong><span>2024 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/QCDCR/cr_qcdcr_nfatjet.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/QCDCR/cr_qcdcr_nfatjet.png" alt="NAK8 · 2024 · QCDCR" loading="lazy">
+          <div class="caption"><strong>NAK8</strong><span>2024 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/QCDCR/cr_qcdcr_njet.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/QCDCR/cr_qcdcr_njet.png" alt="Nj · 2024 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Nj</strong><span>2024 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/QCDCR/cr_qcdcr_ntop.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/QCDCR/cr_qcdcr_ntop.png" alt="Nt · 2024 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Nt</strong><span>2024 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/QCDCR/cr_qcdcr_nw.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/QCDCR/cr_qcdcr_nw.png" alt="NW · 2024 · QCDCR" loading="lazy">
+          <div class="caption"><strong>NW</strong><span>2024 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/QCDCR/cr_qcdcr_ut.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/QCDCR/cr_qcdcr_ut.png" alt="Recoil pT · 2024 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Recoil pT</strong><span>2024 · QCDCR · PDF</span></div>
+        </a>
+        </div>
+      </details>
+      <details class="cr-group">
+        <summary>High-Δm · Photon CR · unit area<span>10 distributions</span></summary>
+        <div class="grid three">
+        <a class="card" href="plots/control_regions/2024/highdm/GCR/cr_gcr_bjet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/GCR/cr_gcr_bjet_pt.png" alt="Leading b-jet pT · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>Leading b-jet pT</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/GCR/cr_gcr_fatjet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/GCR/cr_gcr_fatjet_pt.png" alt="Leading AK8 jet pT · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>Leading AK8 jet pT</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/GCR/cr_gcr_ht.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/GCR/cr_gcr_ht.png" alt="HT · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>HT</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/GCR/cr_gcr_jet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/GCR/cr_gcr_jet_pt.png" alt="Leading jet pT · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>Leading jet pT</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/GCR/cr_gcr_nb.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/GCR/cr_gcr_nb.png" alt="Nb · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>Nb</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/GCR/cr_gcr_nfatjet.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/GCR/cr_gcr_nfatjet.png" alt="NAK8 · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>NAK8</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/GCR/cr_gcr_njet.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/GCR/cr_gcr_njet.png" alt="Nj · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>Nj</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/GCR/cr_gcr_ntop.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/GCR/cr_gcr_ntop.png" alt="Nt · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>Nt</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/GCR/cr_gcr_nw.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/GCR/cr_gcr_nw.png" alt="NW · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>NW</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/GCR/cr_gcr_ut.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/GCR/cr_gcr_ut.png" alt="Recoil pT · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>Recoil pT</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        </div>
+      </details>
+      <details class="cr-group">
+        <summary>High-Δm · DY CR · ee + μμ<span>12 distributions</span></summary>
+        <div class="grid three">
+        <a class="card" href="plots/control_regions/2024/highdm/DYCR/cr_dycr_bjet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/DYCR/cr_dycr_bjet_pt.png" alt="Leading b-jet pT · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>Leading b-jet pT</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/DYCR/cr_dycr_fatjet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/DYCR/cr_dycr_fatjet_pt.png" alt="Leading AK8 jet pT · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>Leading AK8 jet pT</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/DYCR/cr_dycr_ht.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/DYCR/cr_dycr_ht.png" alt="HT · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>HT</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/DYCR/cr_dycr_jet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/DYCR/cr_dycr_jet_pt.png" alt="Leading jet pT · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>Leading jet pT</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/DYCR/cr_dycr_met.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/DYCR/cr_dycr_met.png" alt="pTmiss · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>pTmiss</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/DYCR/cr_dycr_nb.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/DYCR/cr_dycr_nb.png" alt="Nb · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>Nb</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/DYCR/cr_dycr_nfatjet.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/DYCR/cr_dycr_nfatjet.png" alt="NAK8 · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>NAK8</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/DYCR/cr_dycr_njet.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/DYCR/cr_dycr_njet.png" alt="Nj · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>Nj</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/DYCR/cr_dycr_ntop.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/DYCR/cr_dycr_ntop.png" alt="Nt · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>Nt</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/DYCR/cr_dycr_nw.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/DYCR/cr_dycr_nw.png" alt="NW · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>NW</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/DYCR/cr_dycr_ptll.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/DYCR/cr_dycr_ptll.png" alt="Dilepton pT · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>Dilepton pT</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/highdm/DYCR/cr_dycr_ut.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/highdm/DYCR/cr_dycr_ut.png" alt="Recoil pT · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>Recoil pT</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        </div>
+      </details>
+      <details class="cr-group">
+        <summary>Low-Δm · Lost-lepton CR<span>15 distributions</span></summary>
+        <div class="grid three">
+        <a class="card" href="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_ht.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_ht.png" alt="HT · 2024 · LLCR" loading="lazy">
+          <div class="caption"><strong>HT</strong><span>2024 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_leading_lowdm_fatjet_msd.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_leading_lowdm_fatjet_msd.png" alt="Leading AK8 soft-drop mass · 2024 · LLCR" loading="lazy">
+          <div class="caption"><strong>Leading AK8 soft-drop mass</strong><span>2024 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_leading_lowdm_fatjet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_leading_lowdm_fatjet_pt.png" alt="Leading AK8 jet pT · 2024 · LLCR" loading="lazy">
+          <div class="caption"><strong>Leading AK8 jet pT</strong><span>2024 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_lowdm_isr_dphi.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_lowdm_isr_dphi.png" alt="ISR–pTmiss Δφ · 2024 · LLCR" loading="lazy">
+          <div class="caption"><strong>ISR–pTmiss Δφ</strong><span>2024 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_lowdm_isr_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_lowdm_isr_pt.png" alt="ISR pT · 2024 · LLCR" loading="lazy">
+          <div class="caption"><strong>ISR pT</strong><span>2024 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_lowdm_met_sqrt_ht.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_lowdm_met_sqrt_ht.png" alt="pTmiss / √HT · 2024 · LLCR" loading="lazy">
+          <div class="caption"><strong>pTmiss / √HT</strong><span>2024 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_lowdm_mtb.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_lowdm_mtb.png" alt="mT(b, pTmiss) · 2024 · LLCR" loading="lazy">
+          <div class="caption"><strong>mT(b, pTmiss)</strong><span>2024 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_lowdm_ptb.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_lowdm_ptb.png" alt="pT(b) · 2024 · LLCR" loading="lazy">
+          <div class="caption"><strong>pT(b)</strong><span>2024 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_met.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_met.png" alt="pTmiss · 2024 · LLCR" loading="lazy">
+          <div class="caption"><strong>pTmiss</strong><span>2024 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_n_e_veto.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_n_e_veto.png" alt="Veto-electron multiplicity · 2024 · LLCR" loading="lazy">
+          <div class="caption"><strong>Veto-electron multiplicity</strong><span>2024 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_n_lowdm_isr.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_n_lowdm_isr.png" alt="ISR multiplicity · 2024 · LLCR" loading="lazy">
+          <div class="caption"><strong>ISR multiplicity</strong><span>2024 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_n_m_loose.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_n_m_loose.png" alt="Loose-muon multiplicity · 2024 · LLCR" loading="lazy">
+          <div class="caption"><strong>Loose-muon multiplicity</strong><span>2024 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_nb_loose_lowdm.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_nb_loose_lowdm.png" alt="Loose Nb · 2024 · LLCR" loading="lazy">
+          <div class="caption"><strong>Loose Nb</strong><span>2024 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_nb_medium_lowdm.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_nb_medium_lowdm.png" alt="Medium Nb · 2024 · LLCR" loading="lazy">
+          <div class="caption"><strong>Medium Nb</strong><span>2024 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_njet.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/LLCR/lowdm_cr_llcr_njet.png" alt="Nj · 2024 · LLCR" loading="lazy">
+          <div class="caption"><strong>Nj</strong><span>2024 · LLCR · PDF</span></div>
+        </a>
+        </div>
+      </details>
+      <details class="cr-group">
+        <summary>Low-Δm · Multijet CR<span>15 distributions</span></summary>
+        <div class="grid three">
+        <a class="card" href="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_ht.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_ht.png" alt="HT · 2024 · QCDCR" loading="lazy">
+          <div class="caption"><strong>HT</strong><span>2024 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_leading_lowdm_fatjet_msd.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_leading_lowdm_fatjet_msd.png" alt="Leading AK8 soft-drop mass · 2024 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Leading AK8 soft-drop mass</strong><span>2024 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_leading_lowdm_fatjet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_leading_lowdm_fatjet_pt.png" alt="Leading AK8 jet pT · 2024 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Leading AK8 jet pT</strong><span>2024 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_lowdm_isr_dphi.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_lowdm_isr_dphi.png" alt="ISR–pTmiss Δφ · 2024 · QCDCR" loading="lazy">
+          <div class="caption"><strong>ISR–pTmiss Δφ</strong><span>2024 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_lowdm_isr_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_lowdm_isr_pt.png" alt="ISR pT · 2024 · QCDCR" loading="lazy">
+          <div class="caption"><strong>ISR pT</strong><span>2024 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_lowdm_met_sqrt_ht.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_lowdm_met_sqrt_ht.png" alt="pTmiss / √HT · 2024 · QCDCR" loading="lazy">
+          <div class="caption"><strong>pTmiss / √HT</strong><span>2024 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_lowdm_mtb.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_lowdm_mtb.png" alt="mT(b, pTmiss) · 2024 · QCDCR" loading="lazy">
+          <div class="caption"><strong>mT(b, pTmiss)</strong><span>2024 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_lowdm_ptb.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_lowdm_ptb.png" alt="pT(b) · 2024 · QCDCR" loading="lazy">
+          <div class="caption"><strong>pT(b)</strong><span>2024 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_met.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_met.png" alt="pTmiss · 2024 · QCDCR" loading="lazy">
+          <div class="caption"><strong>pTmiss</strong><span>2024 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_n_e_veto.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_n_e_veto.png" alt="Veto-electron multiplicity · 2024 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Veto-electron multiplicity</strong><span>2024 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_n_lowdm_isr.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_n_lowdm_isr.png" alt="ISR multiplicity · 2024 · QCDCR" loading="lazy">
+          <div class="caption"><strong>ISR multiplicity</strong><span>2024 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_n_m_loose.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_n_m_loose.png" alt="Loose-muon multiplicity · 2024 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Loose-muon multiplicity</strong><span>2024 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_nb_loose_lowdm.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_nb_loose_lowdm.png" alt="Loose Nb · 2024 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Loose Nb</strong><span>2024 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_nb_medium_lowdm.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_nb_medium_lowdm.png" alt="Medium Nb · 2024 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Medium Nb</strong><span>2024 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_njet.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/QCDCR/lowdm_cr_qcdcr_njet.png" alt="Nj · 2024 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Nj</strong><span>2024 · QCDCR · PDF</span></div>
+        </a>
+        </div>
+      </details>
+      <details class="cr-group">
+        <summary>Low-Δm · Photon CR · unit area<span>20 distributions</span></summary>
+        <div class="grid three">
+        <a class="card" href="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_ht.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_ht.png" alt="HT · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>HT</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_ht_photon_clean.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_ht_photon_clean.png" alt="Photon-cleaned HT · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>Photon-cleaned HT</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_leading_lowdm_fatjet_msd.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_leading_lowdm_fatjet_msd.png" alt="Leading AK8 soft-drop mass · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>Leading AK8 soft-drop mass</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_leading_lowdm_fatjet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_leading_lowdm_fatjet_pt.png" alt="Leading AK8 jet pT · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>Leading AK8 jet pT</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_lowdm_isr_dphi.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_lowdm_isr_dphi.png" alt="ISR–pTmiss Δφ · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>ISR–pTmiss Δφ</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_lowdm_isr_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_lowdm_isr_pt.png" alt="ISR pT · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>ISR pT</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_lowdm_met_sqrt_ht.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_lowdm_met_sqrt_ht.png" alt="pTmiss / √HT · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>pTmiss / √HT</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_lowdm_mtb.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_lowdm_mtb.png" alt="mT(b, pTmiss) · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>mT(b, pTmiss)</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_lowdm_ptb.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_lowdm_ptb.png" alt="pT(b) · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>pT(b)</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_met.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_met.png" alt="pTmiss · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>pTmiss</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_n_e_veto.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_n_e_veto.png" alt="Veto-electron multiplicity · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>Veto-electron multiplicity</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_n_lowdm_isr.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_n_lowdm_isr.png" alt="ISR multiplicity · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>ISR multiplicity</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_n_m_loose.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_n_m_loose.png" alt="Loose-muon multiplicity · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>Loose-muon multiplicity</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_n_photon_medium.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_n_photon_medium.png" alt="Photon multiplicity · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>Photon multiplicity</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_nb_loose_lowdm.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_nb_loose_lowdm.png" alt="Loose Nb · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>Loose Nb</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_nb_medium_lowdm.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_nb_medium_lowdm.png" alt="Medium Nb · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>Medium Nb</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_nb_photon_clean.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_nb_photon_clean.png" alt="Photon-cleaned Nb · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>Photon-cleaned Nb</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_njet.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_njet.png" alt="Nj · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>Nj</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_njet_photon_clean.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_njet_photon_clean.png" alt="Photon-cleaned Nj · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>Photon-cleaned Nj</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_recoil_gcr.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/GCR/lowdm_cr_gcr_recoil_gcr.png" alt="Photon recoil pT · 2024 · GCR" loading="lazy">
+          <div class="caption"><strong>Photon recoil pT</strong><span>2024 · GCR · PDF</span></div>
+        </a>
+        </div>
+      </details>
+      <details class="cr-group">
+        <summary>Low-Δm · DY CR · ee + μμ<span>20 distributions</span></summary>
+        <div class="grid three">
+        <a class="card" href="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_ht.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_ht.png" alt="HT · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>HT</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_ht_lepton_clean.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_ht_lepton_clean.png" alt="Lepton-cleaned HT · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>Lepton-cleaned HT</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_leading_lowdm_fatjet_msd.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_leading_lowdm_fatjet_msd.png" alt="Leading AK8 soft-drop mass · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>Leading AK8 soft-drop mass</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_leading_lowdm_fatjet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_leading_lowdm_fatjet_pt.png" alt="Leading AK8 jet pT · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>Leading AK8 jet pT</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_lowdm_isr_dphi.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_lowdm_isr_dphi.png" alt="ISR–pTmiss Δφ · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>ISR–pTmiss Δφ</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_lowdm_isr_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_lowdm_isr_pt.png" alt="ISR pT · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>ISR pT</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_lowdm_met_sqrt_ht.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_lowdm_met_sqrt_ht.png" alt="pTmiss / √HT · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>pTmiss / √HT</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_lowdm_mtb.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_lowdm_mtb.png" alt="mT(b, pTmiss) · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>mT(b, pTmiss)</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_lowdm_ptb.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_lowdm_ptb.png" alt="pT(b) · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>pT(b)</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_met.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_met.png" alt="pTmiss · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>pTmiss</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_mll.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_mll.png" alt="Dilepton mass · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>Dilepton mass</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_n_e_veto.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_n_e_veto.png" alt="Veto-electron multiplicity · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>Veto-electron multiplicity</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_n_lowdm_isr.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_n_lowdm_isr.png" alt="ISR multiplicity · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>ISR multiplicity</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_n_m_loose.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_n_m_loose.png" alt="Loose-muon multiplicity · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>Loose-muon multiplicity</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_nb_lepton_clean.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_nb_lepton_clean.png" alt="Lepton-cleaned Nb · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>Lepton-cleaned Nb</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_nb_loose_lowdm.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_nb_loose_lowdm.png" alt="Loose Nb · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>Loose Nb</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_nb_medium_lowdm.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_nb_medium_lowdm.png" alt="Medium Nb · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>Medium Nb</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_njet.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_njet.png" alt="Nj · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>Nj</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_njet_lepton_clean.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_njet_lepton_clean.png" alt="Lepton-cleaned Nj · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>Lepton-cleaned Nj</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_recoil_dy.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/lowdm/DYCR/lowdm_cr_dycr_recoil_dy.png" alt="Dilepton recoil pT · 2024 · DYCR" loading="lazy">
+          <div class="caption"><strong>Dilepton recoil pT</strong><span>2024 · DYCR · PDF</span></div>
+        </a>
+        </div>
+      </details>
+      <h3 class="year">2025</h3>
+      <details class="cr-group">
+        <summary>High-Δm · Lost-lepton CR<span>11 distributions</span></summary>
+        <div class="grid three">
+        <a class="card" href="plots/control_regions/2025/highdm/LLCR/cr_llcr_bjet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/LLCR/cr_llcr_bjet_pt.png" alt="Leading b-jet pT · 2025 · LLCR" loading="lazy">
+          <div class="caption"><strong>Leading b-jet pT</strong><span>2025 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/LLCR/cr_llcr_fatjet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/LLCR/cr_llcr_fatjet_pt.png" alt="Leading AK8 jet pT · 2025 · LLCR" loading="lazy">
+          <div class="caption"><strong>Leading AK8 jet pT</strong><span>2025 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/LLCR/cr_llcr_ht.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/LLCR/cr_llcr_ht.png" alt="HT · 2025 · LLCR" loading="lazy">
+          <div class="caption"><strong>HT</strong><span>2025 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/LLCR/cr_llcr_jet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/LLCR/cr_llcr_jet_pt.png" alt="Leading jet pT · 2025 · LLCR" loading="lazy">
+          <div class="caption"><strong>Leading jet pT</strong><span>2025 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/LLCR/cr_llcr_met.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/LLCR/cr_llcr_met.png" alt="pTmiss · 2025 · LLCR" loading="lazy">
+          <div class="caption"><strong>pTmiss</strong><span>2025 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/LLCR/cr_llcr_nb.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/LLCR/cr_llcr_nb.png" alt="Nb · 2025 · LLCR" loading="lazy">
+          <div class="caption"><strong>Nb</strong><span>2025 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/LLCR/cr_llcr_nfatjet.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/LLCR/cr_llcr_nfatjet.png" alt="NAK8 · 2025 · LLCR" loading="lazy">
+          <div class="caption"><strong>NAK8</strong><span>2025 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/LLCR/cr_llcr_njet.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/LLCR/cr_llcr_njet.png" alt="Nj · 2025 · LLCR" loading="lazy">
+          <div class="caption"><strong>Nj</strong><span>2025 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/LLCR/cr_llcr_ntop.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/LLCR/cr_llcr_ntop.png" alt="Nt · 2025 · LLCR" loading="lazy">
+          <div class="caption"><strong>Nt</strong><span>2025 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/LLCR/cr_llcr_nw.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/LLCR/cr_llcr_nw.png" alt="NW · 2025 · LLCR" loading="lazy">
+          <div class="caption"><strong>NW</strong><span>2025 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/LLCR/cr_llcr_ut.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/LLCR/cr_llcr_ut.png" alt="Recoil pT · 2025 · LLCR" loading="lazy">
+          <div class="caption"><strong>Recoil pT</strong><span>2025 · LLCR · PDF</span></div>
+        </a>
+        </div>
+      </details>
+      <details class="cr-group">
+        <summary>High-Δm · Multijet CR<span>11 distributions</span></summary>
+        <div class="grid three">
+        <a class="card" href="plots/control_regions/2025/highdm/QCDCR/cr_qcdcr_bjet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/QCDCR/cr_qcdcr_bjet_pt.png" alt="Leading b-jet pT · 2025 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Leading b-jet pT</strong><span>2025 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/QCDCR/cr_qcdcr_fatjet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/QCDCR/cr_qcdcr_fatjet_pt.png" alt="Leading AK8 jet pT · 2025 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Leading AK8 jet pT</strong><span>2025 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/QCDCR/cr_qcdcr_ht.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/QCDCR/cr_qcdcr_ht.png" alt="HT · 2025 · QCDCR" loading="lazy">
+          <div class="caption"><strong>HT</strong><span>2025 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/QCDCR/cr_qcdcr_jet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/QCDCR/cr_qcdcr_jet_pt.png" alt="Leading jet pT · 2025 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Leading jet pT</strong><span>2025 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/QCDCR/cr_qcdcr_met.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/QCDCR/cr_qcdcr_met.png" alt="pTmiss · 2025 · QCDCR" loading="lazy">
+          <div class="caption"><strong>pTmiss</strong><span>2025 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/QCDCR/cr_qcdcr_nb.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/QCDCR/cr_qcdcr_nb.png" alt="Nb · 2025 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Nb</strong><span>2025 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/QCDCR/cr_qcdcr_nfatjet.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/QCDCR/cr_qcdcr_nfatjet.png" alt="NAK8 · 2025 · QCDCR" loading="lazy">
+          <div class="caption"><strong>NAK8</strong><span>2025 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/QCDCR/cr_qcdcr_njet.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/QCDCR/cr_qcdcr_njet.png" alt="Nj · 2025 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Nj</strong><span>2025 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/QCDCR/cr_qcdcr_ntop.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/QCDCR/cr_qcdcr_ntop.png" alt="Nt · 2025 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Nt</strong><span>2025 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/QCDCR/cr_qcdcr_nw.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/QCDCR/cr_qcdcr_nw.png" alt="NW · 2025 · QCDCR" loading="lazy">
+          <div class="caption"><strong>NW</strong><span>2025 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/QCDCR/cr_qcdcr_ut.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/QCDCR/cr_qcdcr_ut.png" alt="Recoil pT · 2025 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Recoil pT</strong><span>2025 · QCDCR · PDF</span></div>
+        </a>
+        </div>
+      </details>
+      <details class="cr-group">
+        <summary>High-Δm · Photon CR · unit area<span>10 distributions</span></summary>
+        <div class="grid three">
+        <a class="card" href="plots/control_regions/2025/highdm/GCR/cr_gcr_bjet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/GCR/cr_gcr_bjet_pt.png" alt="Leading b-jet pT · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>Leading b-jet pT</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/GCR/cr_gcr_fatjet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/GCR/cr_gcr_fatjet_pt.png" alt="Leading AK8 jet pT · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>Leading AK8 jet pT</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/GCR/cr_gcr_ht.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/GCR/cr_gcr_ht.png" alt="HT · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>HT</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/GCR/cr_gcr_jet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/GCR/cr_gcr_jet_pt.png" alt="Leading jet pT · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>Leading jet pT</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/GCR/cr_gcr_nb.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/GCR/cr_gcr_nb.png" alt="Nb · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>Nb</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/GCR/cr_gcr_nfatjet.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/GCR/cr_gcr_nfatjet.png" alt="NAK8 · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>NAK8</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/GCR/cr_gcr_njet.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/GCR/cr_gcr_njet.png" alt="Nj · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>Nj</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/GCR/cr_gcr_ntop.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/GCR/cr_gcr_ntop.png" alt="Nt · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>Nt</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/GCR/cr_gcr_nw.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/GCR/cr_gcr_nw.png" alt="NW · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>NW</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/GCR/cr_gcr_ut.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/GCR/cr_gcr_ut.png" alt="Recoil pT · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>Recoil pT</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        </div>
+      </details>
+      <details class="cr-group">
+        <summary>High-Δm · DY CR · ee + μμ<span>12 distributions</span></summary>
+        <div class="grid three">
+        <a class="card" href="plots/control_regions/2025/highdm/DYCR/cr_dycr_bjet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/DYCR/cr_dycr_bjet_pt.png" alt="Leading b-jet pT · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>Leading b-jet pT</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/DYCR/cr_dycr_fatjet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/DYCR/cr_dycr_fatjet_pt.png" alt="Leading AK8 jet pT · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>Leading AK8 jet pT</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/DYCR/cr_dycr_ht.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/DYCR/cr_dycr_ht.png" alt="HT · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>HT</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/DYCR/cr_dycr_jet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/DYCR/cr_dycr_jet_pt.png" alt="Leading jet pT · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>Leading jet pT</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/DYCR/cr_dycr_met.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/DYCR/cr_dycr_met.png" alt="pTmiss · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>pTmiss</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/DYCR/cr_dycr_nb.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/DYCR/cr_dycr_nb.png" alt="Nb · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>Nb</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/DYCR/cr_dycr_nfatjet.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/DYCR/cr_dycr_nfatjet.png" alt="NAK8 · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>NAK8</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/DYCR/cr_dycr_njet.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/DYCR/cr_dycr_njet.png" alt="Nj · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>Nj</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/DYCR/cr_dycr_ntop.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/DYCR/cr_dycr_ntop.png" alt="Nt · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>Nt</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/DYCR/cr_dycr_nw.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/DYCR/cr_dycr_nw.png" alt="NW · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>NW</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/DYCR/cr_dycr_ptll.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/DYCR/cr_dycr_ptll.png" alt="Dilepton pT · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>Dilepton pT</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/highdm/DYCR/cr_dycr_ut.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/highdm/DYCR/cr_dycr_ut.png" alt="Recoil pT · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>Recoil pT</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        </div>
+      </details>
+      <details class="cr-group">
+        <summary>Low-Δm · Lost-lepton CR<span>15 distributions</span></summary>
+        <div class="grid three">
+        <a class="card" href="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_ht.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_ht.png" alt="HT · 2025 · LLCR" loading="lazy">
+          <div class="caption"><strong>HT</strong><span>2025 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_leading_lowdm_fatjet_msd.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_leading_lowdm_fatjet_msd.png" alt="Leading AK8 soft-drop mass · 2025 · LLCR" loading="lazy">
+          <div class="caption"><strong>Leading AK8 soft-drop mass</strong><span>2025 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_leading_lowdm_fatjet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_leading_lowdm_fatjet_pt.png" alt="Leading AK8 jet pT · 2025 · LLCR" loading="lazy">
+          <div class="caption"><strong>Leading AK8 jet pT</strong><span>2025 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_lowdm_isr_dphi.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_lowdm_isr_dphi.png" alt="ISR–pTmiss Δφ · 2025 · LLCR" loading="lazy">
+          <div class="caption"><strong>ISR–pTmiss Δφ</strong><span>2025 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_lowdm_isr_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_lowdm_isr_pt.png" alt="ISR pT · 2025 · LLCR" loading="lazy">
+          <div class="caption"><strong>ISR pT</strong><span>2025 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_lowdm_met_sqrt_ht.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_lowdm_met_sqrt_ht.png" alt="pTmiss / √HT · 2025 · LLCR" loading="lazy">
+          <div class="caption"><strong>pTmiss / √HT</strong><span>2025 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_lowdm_mtb.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_lowdm_mtb.png" alt="mT(b, pTmiss) · 2025 · LLCR" loading="lazy">
+          <div class="caption"><strong>mT(b, pTmiss)</strong><span>2025 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_lowdm_ptb.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_lowdm_ptb.png" alt="pT(b) · 2025 · LLCR" loading="lazy">
+          <div class="caption"><strong>pT(b)</strong><span>2025 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_met.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_met.png" alt="pTmiss · 2025 · LLCR" loading="lazy">
+          <div class="caption"><strong>pTmiss</strong><span>2025 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_n_e_veto.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_n_e_veto.png" alt="Veto-electron multiplicity · 2025 · LLCR" loading="lazy">
+          <div class="caption"><strong>Veto-electron multiplicity</strong><span>2025 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_n_lowdm_isr.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_n_lowdm_isr.png" alt="ISR multiplicity · 2025 · LLCR" loading="lazy">
+          <div class="caption"><strong>ISR multiplicity</strong><span>2025 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_n_m_loose.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_n_m_loose.png" alt="Loose-muon multiplicity · 2025 · LLCR" loading="lazy">
+          <div class="caption"><strong>Loose-muon multiplicity</strong><span>2025 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_nb_loose_lowdm.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_nb_loose_lowdm.png" alt="Loose Nb · 2025 · LLCR" loading="lazy">
+          <div class="caption"><strong>Loose Nb</strong><span>2025 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_nb_medium_lowdm.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_nb_medium_lowdm.png" alt="Medium Nb · 2025 · LLCR" loading="lazy">
+          <div class="caption"><strong>Medium Nb</strong><span>2025 · LLCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_njet.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/LLCR/lowdm_cr_llcr_njet.png" alt="Nj · 2025 · LLCR" loading="lazy">
+          <div class="caption"><strong>Nj</strong><span>2025 · LLCR · PDF</span></div>
+        </a>
+        </div>
+      </details>
+      <details class="cr-group">
+        <summary>Low-Δm · Multijet CR<span>15 distributions</span></summary>
+        <div class="grid three">
+        <a class="card" href="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_ht.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_ht.png" alt="HT · 2025 · QCDCR" loading="lazy">
+          <div class="caption"><strong>HT</strong><span>2025 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_leading_lowdm_fatjet_msd.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_leading_lowdm_fatjet_msd.png" alt="Leading AK8 soft-drop mass · 2025 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Leading AK8 soft-drop mass</strong><span>2025 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_leading_lowdm_fatjet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_leading_lowdm_fatjet_pt.png" alt="Leading AK8 jet pT · 2025 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Leading AK8 jet pT</strong><span>2025 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_lowdm_isr_dphi.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_lowdm_isr_dphi.png" alt="ISR–pTmiss Δφ · 2025 · QCDCR" loading="lazy">
+          <div class="caption"><strong>ISR–pTmiss Δφ</strong><span>2025 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_lowdm_isr_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_lowdm_isr_pt.png" alt="ISR pT · 2025 · QCDCR" loading="lazy">
+          <div class="caption"><strong>ISR pT</strong><span>2025 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_lowdm_met_sqrt_ht.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_lowdm_met_sqrt_ht.png" alt="pTmiss / √HT · 2025 · QCDCR" loading="lazy">
+          <div class="caption"><strong>pTmiss / √HT</strong><span>2025 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_lowdm_mtb.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_lowdm_mtb.png" alt="mT(b, pTmiss) · 2025 · QCDCR" loading="lazy">
+          <div class="caption"><strong>mT(b, pTmiss)</strong><span>2025 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_lowdm_ptb.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_lowdm_ptb.png" alt="pT(b) · 2025 · QCDCR" loading="lazy">
+          <div class="caption"><strong>pT(b)</strong><span>2025 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_met.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_met.png" alt="pTmiss · 2025 · QCDCR" loading="lazy">
+          <div class="caption"><strong>pTmiss</strong><span>2025 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_n_e_veto.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_n_e_veto.png" alt="Veto-electron multiplicity · 2025 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Veto-electron multiplicity</strong><span>2025 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_n_lowdm_isr.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_n_lowdm_isr.png" alt="ISR multiplicity · 2025 · QCDCR" loading="lazy">
+          <div class="caption"><strong>ISR multiplicity</strong><span>2025 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_n_m_loose.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_n_m_loose.png" alt="Loose-muon multiplicity · 2025 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Loose-muon multiplicity</strong><span>2025 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_nb_loose_lowdm.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_nb_loose_lowdm.png" alt="Loose Nb · 2025 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Loose Nb</strong><span>2025 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_nb_medium_lowdm.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_nb_medium_lowdm.png" alt="Medium Nb · 2025 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Medium Nb</strong><span>2025 · QCDCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_njet.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/QCDCR/lowdm_cr_qcdcr_njet.png" alt="Nj · 2025 · QCDCR" loading="lazy">
+          <div class="caption"><strong>Nj</strong><span>2025 · QCDCR · PDF</span></div>
+        </a>
+        </div>
+      </details>
+      <details class="cr-group">
+        <summary>Low-Δm · Photon CR · unit area<span>20 distributions</span></summary>
+        <div class="grid three">
+        <a class="card" href="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_ht.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_ht.png" alt="HT · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>HT</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_ht_photon_clean.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_ht_photon_clean.png" alt="Photon-cleaned HT · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>Photon-cleaned HT</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_leading_lowdm_fatjet_msd.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_leading_lowdm_fatjet_msd.png" alt="Leading AK8 soft-drop mass · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>Leading AK8 soft-drop mass</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_leading_lowdm_fatjet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_leading_lowdm_fatjet_pt.png" alt="Leading AK8 jet pT · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>Leading AK8 jet pT</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_lowdm_isr_dphi.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_lowdm_isr_dphi.png" alt="ISR–pTmiss Δφ · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>ISR–pTmiss Δφ</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_lowdm_isr_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_lowdm_isr_pt.png" alt="ISR pT · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>ISR pT</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_lowdm_met_sqrt_ht.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_lowdm_met_sqrt_ht.png" alt="pTmiss / √HT · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>pTmiss / √HT</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_lowdm_mtb.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_lowdm_mtb.png" alt="mT(b, pTmiss) · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>mT(b, pTmiss)</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_lowdm_ptb.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_lowdm_ptb.png" alt="pT(b) · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>pT(b)</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_met.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_met.png" alt="pTmiss · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>pTmiss</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_n_e_veto.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_n_e_veto.png" alt="Veto-electron multiplicity · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>Veto-electron multiplicity</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_n_lowdm_isr.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_n_lowdm_isr.png" alt="ISR multiplicity · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>ISR multiplicity</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_n_m_loose.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_n_m_loose.png" alt="Loose-muon multiplicity · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>Loose-muon multiplicity</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_n_photon_medium.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_n_photon_medium.png" alt="Photon multiplicity · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>Photon multiplicity</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_nb_loose_lowdm.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_nb_loose_lowdm.png" alt="Loose Nb · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>Loose Nb</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_nb_medium_lowdm.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_nb_medium_lowdm.png" alt="Medium Nb · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>Medium Nb</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_nb_photon_clean.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_nb_photon_clean.png" alt="Photon-cleaned Nb · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>Photon-cleaned Nb</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_njet.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_njet.png" alt="Nj · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>Nj</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_njet_photon_clean.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_njet_photon_clean.png" alt="Photon-cleaned Nj · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>Photon-cleaned Nj</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_recoil_gcr.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/GCR/lowdm_cr_gcr_recoil_gcr.png" alt="Photon recoil pT · 2025 · GCR" loading="lazy">
+          <div class="caption"><strong>Photon recoil pT</strong><span>2025 · GCR · PDF</span></div>
+        </a>
+        </div>
+      </details>
+      <details class="cr-group">
+        <summary>Low-Δm · DY CR · ee + μμ<span>20 distributions</span></summary>
+        <div class="grid three">
+        <a class="card" href="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_ht.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_ht.png" alt="HT · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>HT</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_ht_lepton_clean.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_ht_lepton_clean.png" alt="Lepton-cleaned HT · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>Lepton-cleaned HT</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_leading_lowdm_fatjet_msd.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_leading_lowdm_fatjet_msd.png" alt="Leading AK8 soft-drop mass · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>Leading AK8 soft-drop mass</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_leading_lowdm_fatjet_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_leading_lowdm_fatjet_pt.png" alt="Leading AK8 jet pT · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>Leading AK8 jet pT</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_lowdm_isr_dphi.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_lowdm_isr_dphi.png" alt="ISR–pTmiss Δφ · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>ISR–pTmiss Δφ</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_lowdm_isr_pt.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_lowdm_isr_pt.png" alt="ISR pT · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>ISR pT</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_lowdm_met_sqrt_ht.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_lowdm_met_sqrt_ht.png" alt="pTmiss / √HT · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>pTmiss / √HT</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_lowdm_mtb.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_lowdm_mtb.png" alt="mT(b, pTmiss) · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>mT(b, pTmiss)</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_lowdm_ptb.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_lowdm_ptb.png" alt="pT(b) · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>pT(b)</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_met.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_met.png" alt="pTmiss · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>pTmiss</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_mll.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_mll.png" alt="Dilepton mass · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>Dilepton mass</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_n_e_veto.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_n_e_veto.png" alt="Veto-electron multiplicity · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>Veto-electron multiplicity</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_n_lowdm_isr.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_n_lowdm_isr.png" alt="ISR multiplicity · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>ISR multiplicity</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_n_m_loose.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_n_m_loose.png" alt="Loose-muon multiplicity · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>Loose-muon multiplicity</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_nb_lepton_clean.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_nb_lepton_clean.png" alt="Lepton-cleaned Nb · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>Lepton-cleaned Nb</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_nb_loose_lowdm.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_nb_loose_lowdm.png" alt="Loose Nb · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>Loose Nb</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_nb_medium_lowdm.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_nb_medium_lowdm.png" alt="Medium Nb · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>Medium Nb</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_njet.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_njet.png" alt="Nj · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>Nj</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_njet_lepton_clean.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_njet_lepton_clean.png" alt="Lepton-cleaned Nj · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>Lepton-cleaned Nj</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        <a class="card" href="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_recoil_dy.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/lowdm/DYCR/lowdm_cr_dycr_recoil_dy.png" alt="Dilepton recoil pT · 2025 · DYCR" loading="lazy">
+          <div class="caption"><strong>Dilepton recoil pT</strong><span>2025 · DYCR · PDF</span></div>
+        </a>
+        </div>
+      </details>
+    </section>
+    <section id="lowdm-gnn">
+      <div class="section-head"><h2>Low-Δm GNN control templates</h2><p>Existing GNN plotting style · 2024 and 2025</p></div>
+      <p>Data and prefit prediction in the GNN control categories. Bands show MC statistics only; DY uses ee + μμ.</p>
+      <h3 class="year">2024</h3>
+      <div class="grid">
+        <a class="card search" href="plots/control_regions/2024/gnn_cr/lowdm_llcr_gnn_out_inclusive.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/gnn_cr/lowdm_llcr_gnn_out_inclusive.png" alt="Lost-lepton CR · 2024 · GNN" loading="lazy">
+          <div class="caption"><strong>Lost-lepton CR</strong><span>2024 · GNN · PDF</span></div>
+        </a>
+        <a class="card search" href="plots/control_regions/2024/gnn_cr/lowdm_qcdcr_gnn_out_inclusive.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/gnn_cr/lowdm_qcdcr_gnn_out_inclusive.png" alt="Multijet CR · 2024 · GNN" loading="lazy">
+          <div class="caption"><strong>Multijet CR</strong><span>2024 · GNN · PDF</span></div>
+        </a>
+        <a class="card search" href="plots/control_regions/2024/gnn_cr/lowdm_gcr_gnn_out_inclusive.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/gnn_cr/lowdm_gcr_gnn_out_inclusive.png" alt="Photon CR · 2024 · GNN" loading="lazy">
+          <div class="caption"><strong>Photon CR</strong><span>2024 · GNN · PDF</span></div>
+        </a>
+        <a class="card search" href="plots/control_regions/2024/gnn_cr/lowdm_dycr_gnn_out_inclusive.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2024/gnn_cr/lowdm_dycr_gnn_out_inclusive.png" alt="DY CR · ee + μμ · 2024 · GNN" loading="lazy">
+          <div class="caption"><strong>DY CR · ee + μμ</strong><span>2024 · GNN · PDF</span></div>
+        </a>
+      </div>
+      <h3 class="year">2025</h3>
+      <div class="grid">
+        <a class="card search" href="plots/control_regions/2025/gnn_cr/lowdm_llcr_gnn_out_inclusive.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/gnn_cr/lowdm_llcr_gnn_out_inclusive.png" alt="Lost-lepton CR · 2025 · GNN" loading="lazy">
+          <div class="caption"><strong>Lost-lepton CR</strong><span>2025 · GNN · PDF</span></div>
+        </a>
+        <a class="card search" href="plots/control_regions/2025/gnn_cr/lowdm_qcdcr_gnn_out_inclusive.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/gnn_cr/lowdm_qcdcr_gnn_out_inclusive.png" alt="Multijet CR · 2025 · GNN" loading="lazy">
+          <div class="caption"><strong>Multijet CR</strong><span>2025 · GNN · PDF</span></div>
+        </a>
+        <a class="card search" href="plots/control_regions/2025/gnn_cr/lowdm_gcr_gnn_out_inclusive.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/gnn_cr/lowdm_gcr_gnn_out_inclusive.png" alt="Photon CR · 2025 · GNN" loading="lazy">
+          <div class="caption"><strong>Photon CR</strong><span>2025 · GNN · PDF</span></div>
+        </a>
+        <a class="card search" href="plots/control_regions/2025/gnn_cr/lowdm_dycr_gnn_out_inclusive.pdf" data-current-plot="true">
+          <img src="plots/control_regions/2025/gnn_cr/lowdm_dycr_gnn_out_inclusive.png" alt="DY CR · ee + μμ · 2025 · GNN" loading="lazy">
+          <div class="caption"><strong>DY CR · ee + μμ</strong><span>2025 · GNN · PDF</span></div>
+        </a>
+      </div>
     </section>
     <section aria-label="Archive status" style="padding:18px;background:#fff4d6;border:1px solid #d4ae45;border-radius:12px">
       <h2>Previous analysis galleries</h2>
       <p>These galleries were removed from this checkout during the workspace cleanup on 10 September 2026. The links below open the preserved Git snapshot; they do not describe the current analysis campaign.</p>
       <p>Current analysis: <a href="https://github.com/resisov/run3_stop/tree/run3_full_analysis">source and campaign documentation</a>. No new physics results were produced by this cleanup.</p>
-    </section>
-    <section id="search-bins">
-      <div class="section-head"><h2>Signal regions</h2><p>Blinded data · click any plot for PDF</p></div>
-      <h3 class="year">2024</h3>
-      <div class="grid">
-        <a class="card search" href="https://github.com/resisov/run3_stop/blob/561c2721b7dd97ddba1166c8b2ac7de7f07a5701/docs/plots/search_bins/2024/highdm73_search_bins.pdf">
-
-          <div class="caption"><strong><span class="badge">2024</span>High-Δm</strong><span>73 bins</span></div>
-        </a>
-        <a class="card search" href="https://github.com/resisov/run3_stop/blob/561c2721b7dd97ddba1166c8b2ac7de7f07a5701/docs/plots/search_bins/2024/lowdm30_gnn_search_bins.pdf">
-
-          <div class="caption"><strong><span class="badge">2024</span>Low-Δm GNN</strong><span>30 bins</span></div>
-        </a>
-      </div>
-      <h3 class="year">2025</h3>
-      <div class="grid">
-        <a class="card search" href="https://github.com/resisov/run3_stop/blob/561c2721b7dd97ddba1166c8b2ac7de7f07a5701/docs/plots/search_bins/2025/highdm85_search_bins.pdf">
-
-          <div class="caption"><strong><span class="badge">2025</span>High-Δm</strong><span>85 bins</span></div>
-        </a>
-        <a class="card search" href="https://github.com/resisov/run3_stop/blob/561c2721b7dd97ddba1166c8b2ac7de7f07a5701/docs/plots/search_bins/2025/lowdm30_gnn_search_bins.pdf">
-
-          <div class="caption"><strong><span class="badge">2025</span>Low-Δm GNN</strong><span>30 bins</span></div>
-        </a>
-      </div>
-    </section>
-    <section id="lowdm-gnn">
-      <div class="section-head"><h2>Low-Δm GNN templates</h2><p>SR and observed-data control regions · frozen 2024 binning</p></div>
-      <div class="grid">
-        <a class="card search" href="https://github.com/resisov/run3_stop/blob/561c2721b7dd97ddba1166c8b2ac7de7f07a5701/docs/lowdm_gnn_20260901/index.html">
-
-          <div class="caption"><strong><span class="badge">2024</span>SR + CR report</strong><span>109.82 fb⁻¹</span></div>
-        </a>
-        <a class="card search" href="https://github.com/resisov/run3_stop/blob/561c2721b7dd97ddba1166c8b2ac7de7f07a5701/docs/lowdm_gnn_20260901/index.html">
-
-          <div class="caption"><strong><span class="badge">2025</span>SR + CR report</strong><span>110.84 fb⁻¹ · preliminary SFs</span></div>
-        </a>
-      </div>
     </section>
     <section id="limits">
       <div class="section-head"><h2>Expected limits</h2><p>2024+2025 combined</p></div>
