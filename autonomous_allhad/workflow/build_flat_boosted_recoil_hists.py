@@ -1883,6 +1883,21 @@ def highdm_base_region(region: str) -> str:
     return "SR" if region.startswith("SR_") else region
 
 
+def highdm_cr_tag_mask(chunk: dict[str, Any], n: int) -> np.ndarray:
+    """Optional comparison selection; never infer missing tag counts as zero."""
+    counts = []
+    for name in ("nboosted_top", "nboosted_w", DERIVED_NRES_BRANCH):
+        if name not in chunk:
+            raise RuntimeError(f"High-dM CR tag selection requires {name}")
+        values = np.asarray(chunk[name], dtype=float)
+        if values.shape != (n,) or not np.all(
+            np.isfinite(values) & (values >= 0) & (values == np.floor(values))
+        ):
+            raise RuntimeError(f"Invalid High-dM CR tag multiplicity: {name}")
+        counts.append(values)
+    return (counts[0] + counts[1] + counts[2]) >= 1
+
+
 def highdm_distribution_masks(chunk: dict[str, Any], n: int) -> dict[str, np.ndarray]:
     masks: dict[str, np.ndarray] = {}
     for region in HIGHDM_CR_REGIONS + HIGHDM_VR_REGIONS:
@@ -1979,17 +1994,35 @@ def fill_highdm_distribution_histograms(
     summary: dict[str, Any],
     only_regions: list[str] | None = None,
     only_variables: list[str] | None = None,
+    require_highdm_cr_tag: bool = False,
 ) -> None:
     n = len(normv)
     masks = highdm_distribution_masks(chunk, n)
     if only_regions:
         requested = set(only_regions)
         masks = {region: mask for region, mask in masks.items() if region in requested}
+    tag_mask = highdm_cr_tag_mask(chunk, n) if require_highdm_cr_tag else None
     for region, region_event_mask in masks.items():
         data_region = "SR" if region.startswith("SR_") else region
         if is_data and not data_process_allowed(process, data_region):
             note_data_exclusion(summary, region, process, int(np.count_nonzero(region_event_mask)))
             continue
+        if tag_mask is not None and region in HIGHDM_CR_REGIONS:
+            baseline_mask = region_event_mask
+            region_event_mask = baseline_mask & tag_mask
+            weights = finite_array(variations["nominal"], n, 0.0) * normv
+            audit = summary.setdefault("highdm_cr_tag_audit", {}).setdefault(
+                region, {}
+            ).setdefault(label, {})
+            for key, mask in (("baseline", baseline_mask), ("selected", region_event_mask),
+                              ("rejected", baseline_mask & ~tag_mask)):
+                for suffix, value in (
+                    ("entries", int(np.count_nonzero(mask))),
+                    ("sumw", float(np.sum(weights[mask]))),
+                    ("sumw2", float(np.sum(weights[mask] ** 2))),
+                ):
+                    name = f"{key}_{suffix}"
+                    audit[name] = audit.get(name, 0) + value
         if not np.any(region_event_mask):
             continue
         for variable, spec in HIGHDM_DISTRIBUTION_VARIABLE_SPECS.items():
@@ -2265,6 +2298,7 @@ def compute_trota_nres(
     *,
     include_lowdm: bool,
     highdm_configuration: dict[str, Any] | None,
+    include_highdm_cr: bool = False,
     electron_veto_pt_min: float = 10.0,
     muon_veto_pt_min: float = 10.0,
 ) -> tuple[np.ndarray, dict[str, int]]:
@@ -2278,6 +2312,10 @@ def compute_trota_nres(
                 | set(VETO_PT_REBUILD_BRANCHES))
     if include_lowdm:
         required |= set(TROTA_LOWDM_SELECTION_BRANCHES)
+    if include_highdm_cr:
+        required |= set(BROAD_LOWDM_SELECTION_BRANCHES)
+        required |= {"nboosted_w", "pass_dy2e_open_high", "pass_dy2m_open_high",
+                     "njet_lepton_clean", "nb_lepton_clean", "ht_lepton_clean"}
     if highdm_configuration is not None:
         required |= set(TROTA_HIGHDM_SELECTION_BRANCHES)
     available = set(event_tree.keys())
@@ -2323,7 +2361,12 @@ def compute_trota_nres(
             & (baseline55 >= 0)
         )
 
-    eligible = lowdm_eligible | highdm_eligible
+    highdm_cr_eligible = np.zeros(number_events, dtype=bool)
+    if include_highdm_cr:
+        for region in HIGHDM_CR_REGIONS:
+            flag, _ = REGION_VARIABLES[region]
+            highdm_cr_eligible |= region_mask(light_chunk, region, flag, number_events)
+    eligible = lowdm_eligible | highdm_eligible | highdm_cr_eligible
     counts = np.zeros(number_events, dtype=np.int16)
 
     tree_fields = set(trota_tree.keys())
@@ -2408,6 +2451,8 @@ def compute_trota_nres(
         "eligible_events": int(np.count_nonzero(eligible)),
         "eligible_lowdm_events": int(np.count_nonzero(lowdm_eligible)),
         "eligible_highdm_events": int(np.count_nonzero(highdm_eligible)),
+        **({"eligible_highdm_cr_events": int(np.count_nonzero(highdm_cr_eligible))}
+           if include_highdm_cr else {}),
         "nres_positive_events": int(np.count_nonzero(eligible & (counts > 0))),
         "trota_rows": int(trota_tree.num_entries),
         "run2_fiducial_rows": int(selected_rows.size),
@@ -2556,7 +2601,7 @@ def iterate_tree_for_gcr_study(
         yield full[selected]
 
 
-def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: dict[str, Any], highdm_control_components: dict[str, Any], search_histograms: dict[str, Any], highdm_search_bin_components: dict[str, Any], lowdm_variable_histograms: dict[str, Any], highdm_variable_histograms: dict[str, Any], background_estimation_inputs: dict[str, Any], summary: dict[str, Any], step_size: int, campaign_year: str = "2024", only_regions: list[str] | None = None, require_btag: bool = False, require_weight_components: list[str] | None = None, analysis_sf_components: list[str] | None = None, require_branches: bool = False, require_normalization: bool = False, nominal_only: bool = False, distribution_only: bool = False, only_variables: list[str] | None = None, only_signal_mass: tuple[int, int] | None = None, only_lowdm_sr_nsv_inclusive: bool = False, only_lowdm_nsv_repair: bool = False, lowdm_only: bool = False, highdm_only: bool = False, electron_veto_pt_min: float = 10.0, muon_veto_pt_min: float = 10.0, require_lowdm_nres_zero: bool = False, search_bin_configuration: dict[str, Any] | None = None, dy_ptll_policy: str = "all", gcr_only: bool = False, gcr_photon_policy: str = "nominal") -> None:
+def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: dict[str, Any], highdm_control_components: dict[str, Any], search_histograms: dict[str, Any], highdm_search_bin_components: dict[str, Any], lowdm_variable_histograms: dict[str, Any], highdm_variable_histograms: dict[str, Any], background_estimation_inputs: dict[str, Any], summary: dict[str, Any], step_size: int, campaign_year: str = "2024", only_regions: list[str] | None = None, require_btag: bool = False, require_weight_components: list[str] | None = None, analysis_sf_components: list[str] | None = None, require_branches: bool = False, require_normalization: bool = False, nominal_only: bool = False, distribution_only: bool = False, only_variables: list[str] | None = None, only_signal_mass: tuple[int, int] | None = None, only_lowdm_sr_nsv_inclusive: bool = False, only_lowdm_nsv_repair: bool = False, lowdm_only: bool = False, highdm_only: bool = False, electron_veto_pt_min: float = 10.0, muon_veto_pt_min: float = 10.0, require_lowdm_nres_zero: bool = False, search_bin_configuration: dict[str, Any] | None = None, dy_ptll_policy: str = "all", gcr_only: bool = False, gcr_photon_policy: str = "nominal", require_highdm_cr_tag: bool = False) -> None:
     try:
         meta = read_root_metadata(root_path, fallback=norm)
     except FileNotFoundError:
@@ -2606,7 +2651,7 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
         branches = [b for b in effective_read_branches if b in present]
         trota_nres = None
         trota_nres_cursor = 0
-        if require_lowdm_nres_zero or search_bin_configuration is not None:
+        if require_lowdm_nres_zero or search_bin_configuration is not None or require_highdm_cr_tag:
             expected_trota_schema = EXPECTED_TROTA_SCHEMA_BY_YEAR[campaign_year]
             if "TROTA" not in root_file:
                 raise RuntimeError(f"{root_path}: required TROTA tree is missing")
@@ -2624,6 +2669,7 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                 root_file["TROTA"],
                 include_lowdm=require_lowdm_nres_zero,
                 highdm_configuration=search_bin_configuration,
+                include_highdm_cr=require_highdm_cr_tag,
                 electron_veto_pt_min=electron_veto_pt_min,
                 muon_veto_pt_min=muon_veto_pt_min,
             )
@@ -3059,6 +3105,7 @@ def process_root(repo: Path, root_path: Path, norm: dict[str, Any], histograms: 
                             highdm_variable_histograms, summary,
                             ["GCR"] if gcr_only else only_regions,
                             only_variables,
+                            require_highdm_cr_tag=require_highdm_cr_tag,
                         )
                     if not highdm_only and not gcr_only and not only_regions:
                         fill_broad_lowdm_distribution_histograms(
@@ -3350,6 +3397,8 @@ def main() -> int:
         ),
     )
     parser.add_argument("--distribution-only", action="store_true")
+    parser.add_argument("--require-highdm-cr-tag", action="store_true",
+                        help="Comparison only: require Nt+Nw+Nres>=1 in High-dM CR distributions.")
     parser.add_argument("--only-signal-mass", nargs=2, type=int, metavar=("MSTOP", "MLSP"))
     parser.add_argument(
         "--only-lowdm-sr-nsv-inclusive",
@@ -3422,6 +3471,11 @@ def main() -> int:
         ),
     )
     args = parser.parse_args()
+    if args.require_highdm_cr_tag and not (
+        args.distribution_only and args.highdm_only and args.only_regions
+        and set(args.only_regions) <= set(HIGHDM_CR_REGIONS)
+    ):
+        parser.error("--require-highdm-cr-tag requires --distribution-only --highdm-only and explicit CR-only --only-regions")
     if args.only_lowdm_nsv_repair and not args.only_lowdm_sr_nsv_inclusive:
         parser.error("--only-lowdm-nsv-repair requires --only-lowdm-sr-nsv-inclusive")
     if args.gcr_only and args.only_regions:
@@ -3509,6 +3563,7 @@ def main() -> int:
         args.require_btag or "btagSF" in args.require_weight_components
     )
     build_options = {
+        **({"require_highdm_cr_tag": True} if args.require_highdm_cr_tag else {}),
         "step_size": int(args.step_size),
         "only_regions": list(args.only_regions) if args.only_regions else None,
         "only_variables": list(args.only_variables) if args.only_variables else None,
@@ -3599,6 +3654,7 @@ def main() -> int:
             dy_ptll_policy=args.dy_ptll_policy,
             gcr_only=args.gcr_only,
             gcr_photon_policy=args.gcr_photon_policy,
+            require_highdm_cr_tag=args.require_highdm_cr_tag,
         )
     if summary.get("weight_failures"):
         payload_status = "complete_with_weight_fallbacks"
@@ -3759,6 +3815,13 @@ def main() -> int:
             },
         },
         "highdm_distribution_variable_specs": HIGHDM_DISTRIBUTION_VARIABLE_SPECS,
+        **({"highdm_cr_tag_selection": {
+            "status": "physics_comparison_not_adopted", "requirement": "Nt + Nw + Nres >= 1",
+            "boosted_counts": ["nboosted_top", "nboosted_w"],
+            "resolved_count": DERIVED_NRES_BRANCH,
+            "resolved_definition": "TROTA 1pct; abs(eta)<2; 100<=mass<=250; boosted and resolved overlap removal",
+            "scope": list(args.only_regions), "main_replacement": False,
+        }} if args.require_highdm_cr_tag else {}),
         "highdm_distribution_regions": {
             "control": HIGHDM_CR_REGIONS,
             "validation": HIGHDM_VR_REGIONS,

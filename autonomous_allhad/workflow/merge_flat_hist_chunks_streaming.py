@@ -182,6 +182,7 @@ def update_summary(
         "scale_factor_status_audit",
         "gcr_prefilter",
         "gcr_photon_selection_audit",
+        "highdm_cr_tag_audit",
     ):
         merge_nested_numeric_counts(
             summary.setdefault(key, {}),

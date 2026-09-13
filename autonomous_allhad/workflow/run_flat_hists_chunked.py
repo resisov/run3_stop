@@ -730,6 +730,7 @@ def merge_payloads(
             "gcr_prefilter",
             "gcr_photon_selection_audit",
             "highdm_veto_pt_threshold_audit",
+            "highdm_cr_tag_audit",
         ):
             merge_nested_numeric_counts(
                 summary.setdefault(key, {}),
@@ -864,7 +865,7 @@ def main() -> int:
     parser.add_argument("--step-size", type=int, default=50000)
     parser.add_argument("--python", default=sys.executable)
     parser.add_argument("--local-analysis-data", choices=["0", "1"], default="0")
-    parser.add_argument("--only-regions", nargs="+", choices=["GCR", "HighDMVR_Nb1", "HighDMVR_Nb2", "HighDMVR_Nb3plus"])
+    parser.add_argument("--only-regions", nargs="+", choices=["LLCR", "QCDCR", "GCR", "DY2E", "DY2M", "HighDMVR_Nb1", "HighDMVR_Nb2", "HighDMVR_Nb3plus"])
     parser.add_argument(
         "--only-variables",
         nargs="+",
@@ -933,6 +934,7 @@ def main() -> int:
         ),
     )
     parser.add_argument("--distribution-only", action="store_true")
+    parser.add_argument("--require-highdm-cr-tag", action="store_true")
     parser.add_argument("--only-signal-mass", nargs=2, type=int, metavar=("MSTOP", "MLSP"))
     parser.add_argument("--only-lowdm-sr-nsv-inclusive", action="store_true")
     parser.add_argument("--only-lowdm-nsv-repair", action="store_true")
@@ -1079,6 +1081,7 @@ def main() -> int:
         args.require_btag or "btagSF" in args.require_weight_components
     )
     expected_build_options = {
+        **({"require_highdm_cr_tag": True} if args.require_highdm_cr_tag else {}),
         "step_size": int(args.step_size),
         "only_regions": list(args.only_regions) if args.only_regions else None,
         "only_variables": list(args.only_variables) if args.only_variables else None,
@@ -1142,6 +1145,8 @@ def main() -> int:
             cmd.extend(["--only-variables", *args.only_variables])
         if args.distribution_only:
             cmd.append("--distribution-only")
+        if args.require_highdm_cr_tag:
+            cmd.append("--require-highdm-cr-tag")
         if args.require_btag:
             cmd.append("--require-btag")
         cmd.extend(

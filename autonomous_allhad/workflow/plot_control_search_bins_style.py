@@ -2459,6 +2459,8 @@ def draw_highdm_distribution_report(
                 )
                 if not record:
                     continue
+                if payload.get("highdm_cr_tag_selection") and kind == "CR":
+                    record["label"] += "\n" + r"$N_t+N_W+N_{res}\geq1$ (comparison)"
                 slug = region.lower().replace("highdm", "highdm_").replace("__", "_")
                 name = f"{kind.lower()}_{slug}_{variable}"
                 plot = draw_flat_blocks(
