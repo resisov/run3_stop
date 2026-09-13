@@ -32,6 +32,19 @@ parts contain at most 25,000 events so the unchanged GNN reader cannot load a
 large original shard at once. Only compressed histogram JSONs and their checksums
 are staged out. A completed endpoint is not repeated.
 
+Compression, decompression checks and SHA-256 calculation run in worker scratch.
+Input ROOTs, sidecars and configurations are copied with XRootD checksum checks;
+histograms and completion records use checksum-verified, successful-close EOS
+transfers with at most three attempts. No just-written histogram is reread through
+the EOS mount. Empty Events, TROTA and TopWTruth trees retain their typed schemas
+without invoking uproot's empty-array extension. The original normalization and
+zero-entry-file accounting are preserved.
+
+The failed September 12 object campaign was recalled and its products and result
+records discarded at the user's request. A discarded campaign may be prepared
+again with `--refresh-unsubmitted` only after its state is `outputs_discarded`;
+this does not permit replacing the bundle of an active submitted campaign.
+
 ```bash
 SHAPE_ROOT=/eos/user/t/taiwoo/run3_stop/decaf/autonomous_allhad/workflow/systematic_propagation
 SHAPE_PY=/eos/user/t/taiwoo/miniconda3/envs/py38/bin/python

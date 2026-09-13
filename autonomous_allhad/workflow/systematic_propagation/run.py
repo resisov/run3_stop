@@ -13,6 +13,7 @@ import subprocess
 import sys
 import tarfile
 import time
+import zlib
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -76,6 +77,60 @@ def eos(path):
 def execute(argv, env, cwd):
     print(json.dumps({"command": list(map(str, argv))}), flush=True)
     subprocess.run(list(map(str, argv)), env=env, cwd=cwd, check=True)
+
+
+def xrootd(arguments, allow_missing=False):
+    env = dict(os.environ)
+    env.pop("LD_LIBRARY_PATH", None)
+    executable = shutil.which(arguments[0], path="/usr/bin:/bin")
+    if executable is None:
+        raise RuntimeError("missing XRootD client: " + arguments[0])
+    command = [executable, *map(str, arguments[1:])]
+    for attempt in range(3):
+        result = subprocess.run(command, env=env, stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE, text=True)
+        if result.returncode == 0:
+            return result.stdout.strip()
+        if allow_missing and "[3011]" in result.stderr and "No such file or directory" in result.stderr:
+            return None
+        if attempt < 2:
+            print(json.dumps(dict(transfer_retry=attempt + 1, command=command,
+                                  error=result.stderr[-2000:])), flush=True)
+            time.sleep(2 ** attempt)
+    raise RuntimeError(f"XRootD failed ({result.returncode}): {command}: {result.stderr[-2000:]}")
+
+
+def stage_input(source, destination):
+    destination = Path(destination)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    partial = destination.with_name(destination.name + ".partial")
+    xrootd(["xrdcp", "--force", "--nopbar", "--cksum", "adler32",
+            "root://eosuser.cern.ch/" + str(eos(source)), partial])
+    partial.replace(destination)
+    return destination
+
+
+def publish_product(source, destination):
+    destination = eos(destination)
+    xrootd(["xrdfs", "root://eosuser.cern.ch", "mkdir", "-p", destination.parent])
+    xrootd(["xrdcp", "--force", "--nopbar", "--posc", "--cksum", "adler32",
+            source, "root://eosuser.cern.ch/" + str(destination)])
+
+
+def checkpoint(path, value, work):
+    local = work / "checkpoint.json"
+    write(local, value)
+    publish_product(local, path)
+
+
+def write_tree(target, name, values):
+    import awkward as ak
+
+    if len(next(iter(values.values()))):
+        target[name] = values
+    else:
+        # uproot 4 cannot extend an empty jagged counter; create only its schema.
+        target.mktree(name, {key: ak.type(value).type for key, value in values.items()})
 
 
 def prepare_payload(config, destination):
@@ -342,14 +397,14 @@ def write_intermediate_parts(config, shift, destination, payload):
                 values[name] = value
             path = destination / f"part_{start:09d}.root"
             with uproot.recreate(path) as target:
-                target["Events"] = values
+                write_tree(target, "Events", values)
                 selected = (candidate_event >= start) & (candidate_event < stop)
-                target["TROTA"] = {name: trota[name][selected] for name in ak.fields(trota)}
+                write_tree(target, "TROTA", {name: trota[name][selected] for name in ak.fields(trota)})
                 target["TROTA_metadata"] = str(root["TROTA_metadata"])
                 if "TopWTruth" in root:
                     truth = root["TopWTruth"].arrays(entry_start=start, entry_stop=stop, library="ak", how=dict)
                     truth_counters = {branch.count_branch.name for branch in root["TopWTruth"].values() if branch.count_branch is not None}
-                    target["TopWTruth"] = {name: value for name, value in truth.items() if name not in truth_counters}
+                    write_tree(target, "TopWTruth", {name: value for name, value in truth.items() if name not in truth_counters})
                     if "TopWTruth_metadata" in root:
                         marker = json.loads(str(root["TopWTruth_metadata"]))
                         marker.update(events_entries=stop-start, parent_events_entries=tree.num_entries,
@@ -398,8 +453,7 @@ def histogram_parts(config, roots, work):
 
 
 def compact_product(source, destination):
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    temporary = destination.with_name(destination.name + ".partial")
+    temporary = source.with_name(source.name + ".gz")
     with source.open("rb") as src, temporary.open("wb") as dst:
         with gzip.GzipFile(filename="", mode="wb", fileobj=dst, mtime=0) as archive:
             shutil.copyfileobj(src, archive)
@@ -409,9 +463,15 @@ def compact_product(source, destination):
             digest.update(block)
     if digest.hexdigest() != sha(source):
         raise RuntimeError("compressed product checksum mismatch")
-    temporary.replace(destination)
-    return dict(path=str(destination), sha256=sha(destination),
-                uncompressed_sha256=digest.hexdigest(), bytes=destination.stat().st_size)
+    checksum = 1
+    with temporary.open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            checksum = zlib.adler32(block, checksum)
+    product = dict(path=str(destination), sha256=sha(temporary),
+                   adler32=f"{checksum & 0xffffffff:08x}",
+                   uncompressed_sha256=digest.hexdigest(), bytes=temporary.stat().st_size)
+    publish_product(temporary, destination)
+    return product
 
 
 def root_content_digests(path):
@@ -443,7 +503,11 @@ def root_content_digests(path):
 
 
 def object_worker(args):
-    config = load_config(args.config)
+    work = Path(args.work) if args.work else Path(os.environ["_CONDOR_SCRATCH_DIR"]) / "objects"
+    work.mkdir(parents=True, exist_ok=True)
+    local_config = stage_input(args.config, work / "config.json")
+    config_hash = sha(local_config)
+    config = load_config(local_config)
     if config.get("input_mode") != "intermediate_root_only":
         raise ValueError("object worker requires the intermediate-only input contract")
     destination = eos(args.output)
@@ -453,8 +517,6 @@ def object_worker(args):
     for name, expected in read(bundle / "hashes.json").items():
         if sha(bundle / name) != expected:
             raise RuntimeError("staged dependency checksum mismatch: " + name)
-    work = Path(args.work) if args.work else Path(os.environ["_CONDOR_SCRATCH_DIR"]) / "objects"
-    work.mkdir(parents=True, exist_ok=True)
     original = dict(config)
     config.update(read(bundle / f"runtime_{config['year']}.json"))
     for key in ("main_repo", "gnn_repo", "normalization", "gnn_manifest", "gnn_model", "gnn_selection",
@@ -462,12 +524,14 @@ def object_worker(args):
         config[key] = str(bundle / config[key])
     sys.path[:0] = [str(Path(config["main_repo"]) / "autonomous_allhad"),
                     str(Path(config["main_repo"]) / "autonomous_allhad/workflow")]
-    if sha(config["source_sidecar"]) != config["source_sidecar_sha256"]:
+    sidecar = stage_input(config["source_sidecar"], work / "source.json")
+    if sha(sidecar) != config["source_sidecar_sha256"]:
         raise RuntimeError("intermediate sidecar changed")
+    config["source_sidecar"] = str(sidecar)
     source = eos(config["source_root"])
     cached = work / "source.root"
     if not cached.exists():
-        shutil.copyfile(source, cached)
+        stage_input(source, cached)
     source_hash = sha(cached)
     source_validation = "exact_root_sha256"
     if source_hash != config["source_root_sha256"]:
@@ -489,21 +553,25 @@ def object_worker(args):
     for shift in args.shifts:
         target = destination / shift
         state_path = target / "result.json"
-        if state_path.exists():
-            existing = read(state_path)
+        if xrootd(["xrdfs", "root://eosuser.cern.ch", "stat", state_path], allow_missing=True) is not None:
+            existing = read(stage_input(state_path, work / "existing.json"))
             if existing.get("status") == "complete":
-                if (existing.get("config_sha256") != sha(args.config)
-                    or any(sha(item["path"]) != item["sha256"] for item in existing["products"].values())):
+                if (existing.get("config_sha256") != config_hash
+                    or set(existing.get("products", {})) != {"main.json", "gnn.json"}):
                     raise RuntimeError("existing result does not match pinned inputs")
+                for product in existing["products"].values():
+                    checksum = xrootd(["xrdfs", "root://eosuser.cern.ch", "query", "checksum", eos(product["path"])])
+                    if checksum.split() != ["adler32", product["adler32"]]:
+                        raise RuntimeError("existing product checksum mismatch: " + product["path"])
                 continue
         report = dict(status="running", year=config["year"], shift=shift, started=time.time(),
             input_mode=config["input_mode"], source_root=str(source), source_root_sha256=source_hash,
             sidecar_root_sha256=config["source_root_sha256"], source_validation=source_validation,
-            config_sha256=sha(args.config), source_bundle_sha256=original["source_bundle_sha256"],
+            config_sha256=config_hash, source_bundle_sha256=original["source_bundle_sha256"],
             migration_study="deferred_by_user", nominal_base_common="fixed",
             trota="reused; jet inputs unchanged", topw_truth="reused; no NanoAOD access",
             normalization="unchanged frozen nominal normalization")
-        write(state_path, report)
+        print(json.dumps(report), flush=True)
         stage = work / shift
         try:
             parts = write_intermediate_parts(config, shift, stage / "parts", payload)
@@ -513,11 +581,14 @@ def object_worker(args):
             report.update(status="complete", products=products, parts=len(parts),
                 events=sum(read(path.with_suffix(".json"))["events_written"] for path in parts),
                 finished=time.time(), canonical_promotion=False)
-            write(state_path, report)
+            checkpoint(state_path, report, work)
             shutil.rmtree(stage)
         except BaseException as error:
             report.update(status="failed", error=f"{type(error).__name__}: {error}", finished=time.time())
-            write(state_path, report)
+            try:
+                checkpoint(state_path, report, work)
+            except Exception as transfer_error:
+                print(json.dumps(dict(failed_report=report, checkpoint_error=str(transfer_error))), flush=True)
             raise
 
 
@@ -532,7 +603,7 @@ def prepare_objects(args):
         raise FileExistsError("frozen object campaign already exists: " + str(bundle))
     if bundle.exists():
         state_path = target / "campaign_state.json"
-        if state_path.exists() and read(state_path)["status"] != "prepared_not_submitted":
+        if state_path.exists() and read(state_path)["status"] not in ("prepared_not_submitted", "outputs_discarded"):
             raise RuntimeError("cannot refresh a submitted campaign")
     baseline = repo / "autonomous_allhad/workflow/histograms/lepton_veto10_20260908"
     files, runtime = {}, {}
