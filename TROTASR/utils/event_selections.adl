@@ -1,45 +1,890 @@
-# TROTASR declarative analysis contract, version 1.
-# Documentation companion to event_selections.py; not advertised as a
-# separately executed CutLang implementation. All energies are in GeV.
-# Status: user-authorized TEST, not production adoption.
+info analysis
+  title "CMS Run-3 all-hadronic stop: signal and control regions"
+  years 2024 2025
+  objects "ids.adl"
+  corrections "corrections.adl"
+  energyunit GeV
 
-define MixedWP = 0.9027690887451172
-define MixedScore = TTScore / (TTScore + QCDScore)
-define RawMixed = MixedScore >= MixedWP
-# Region cleaning precedes the candidate arbitration below.
-# Shared AK4 association: two valid subjets with dR<0.4, otherwise AK8 dR<0.8.
-# Candidate order within M/R: descending score, ascending candidateIndex.
-define Arbitration = Boosted > Mixed > Resolved > independent_W
-define HighTopology = Nbst >= 1 or Nmix >= 1 or Nres >= 1 or Nw >= 1
-define LowTopology = Nbst == 0 and Nmix == 0 and Nres == 0 and Nw == 0
-define HighCore = region_specific_non_topology_cuts and Nj >= 4 and Nb >= 1
-define LowCore = adopted_diagonal_GNN_region_core and Nb >= 1
+info derivedInputs
+  validMET "finite MET pT >= 0"
+  certifiedLuminosity "golden JSON for data; true for MC"
+  counts "SR/GCR/DY2E/DY2M_Nbst,Nmix,Nres,Nw = exclusive region counts from utils/event_selections.py:select"
+  highdm_mtb "minimum mT(b,MET) of the two highest-UParT medium b jets; the single b jet if Nb=1"
+  gnn_score "region-specific gnn4lowdm.inference.Rank005Numpy score"
+  inputP4 "the calibrated event view; SR/LLCR/QCDCR use MET, GCR/DY use recoil"
+  sourceBinning "jsons/highdm_sr_binning.json: 162 high-dM SR bins"
+  finalBinning "jsons/sr_category_merge.json: 21 classes, 118 high-dM SR bins per year"
+  lowBinning "gnn4lowdm/config.json: six classes, 30 low-dM SR bins per year"
 
-region HighDM
-  select HighCore
-  select HighTopology
-region HighDM_SR_search
-  select HighDM_SR
+triggerset HLTMETMHT
+  trigger HLT_PFMET120_PFMHT120_IDTight or HLT_PFMET130_PFMHT130_IDTight or HLT_PFMET140_PFMHT140_IDTight or HLT_PFMETNoMu120_PFMHTNoMu120_IDTight or HLT_PFMETNoMu130_PFMHTNoMu130_IDTight or HLT_PFMETNoMu140_PFMHTNoMu140_IDTight
+
+triggerset HLTPhoton
+  trigger HLT_Photon175 or HLT_Photon200
+
+triggerset HLTEle
+  trigger HLT_Ele115_CaloIdVT_GsfTrkIdT or HLT_Ele135_CaloIdVT_GsfTrkIdT or HLT_Ele30_WPTight_Gsf or HLT_Ele32_WPTight_Gsf or HLT_Ele35_WPTight_Gsf or HLT_Ele38_WPTight_Gsf or HLT_Ele40_WPTight_Gsf or HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ or HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL or HLT_DoubleEle25_CaloIdL_MW or HLT_DoubleEle27_CaloIdL_MW or HLT_DoubleEle33_CaloIdL_MW
+
+triggerset HLTMu
+  trigger HLT_IsoMu20 or HLT_IsoMu24 or HLT_IsoMu27 or HLT_IsoMu24_eta2p1 or HLT_Mu50 or HLT_Mu55
+
+define HT = sum(pT(ak4Jets))
+define HTCRpho = sum(pT(ak4JetsCRpho))
+define HTCRll = sum(pT(ak4JetsCRll))
+
+define eeVector = selectedElectrons[0] + selectedElectrons[1]
+define mumuVector = selectedMuons[0] + selectedMuons[1]
+define photonRecoilVector = PuppiMET[0] + selectedPhotons[0]
+define photonRecoil = pT(photonRecoilVector)
+define eeRecoilVector = PuppiMET[0] + eeVector
+define mumuRecoilVector = PuppiMET[0] + mumuVector
+define eeRecoil = pT(eeRecoilVector)
+define mumuRecoil = pT(mumuRecoilVector)
+
+define Nbst = SR_Nbst
+define Nmix = SR_Nmix
+define Nres = SR_Nres
+define Nw = SR_Nw
+define NbstCRpho = GCR_Nbst
+define NmixCRpho = GCR_Nmix
+define NresCRpho = GCR_Nres
+define NwCRpho = GCR_Nw
+define NbstCRee = DY2E_Nbst
+define NmixCRee = DY2E_Nmix
+define NresCRee = DY2E_Nres
+define NwCRee = DY2E_Nw
+define NbstCRmumu = DY2M_Nbst
+define NmixCRmumu = DY2M_Nmix
+define NresCRmumu = DY2M_Nres
+define NwCRmumu = DY2M_Nw
+define mTb = highdm_mtb
+
+region collisionDataQuality
+  select validMET == 1
+  select certifiedLuminosity == 1
+  select size(vetoMapJets) == 0
+  select Flag_goodVertices == 1
+  select Flag_globalSuperTightHalo2016Filter == 1
+  select Flag_HBHENoiseFilter == 1
+  select Flag_HBHENoiseIsoFilter == 1
+  select Flag_EcalDeadCellTriggerPrimitiveFilter == 1
+  select Flag_BadPFMuonFilter == 1
+  select Flag_BadPFMuonDzFilter == 1
+  select Flag_eeBadScFilter == 1
+  select Flag_ecalBadCalibFilter == 1
+  select pT(PuppiMET[0]) / pT(CaloMET[0]) < 5
+
+region SRpresel
+  take collisionDataQuality
+  trigger HLTMETMHT
+  select size(vetoElectrons) + size(vetoMuons) == 0
+  select size(selectedHadTaus) == 0
+  select size(isotracks) == 0
+  select size(ak4Jets) >= 4
+  select size(bJets) >= 1
+  select Nbst + Nmix + Nres + Nw >= 1
   select mTb >= 175
-region LowDM
-  select LowCore
-  select LowTopology
+  select HT > 300
+  select pT(PuppiMET[0]) > 250
+  select all(dphi(ak4Jets[0:4], PuppiMET[0]) > 0.5)
 
-# Existing non-topology thresholds retained:
-# SR/LLCR: MET>250, HT>300; high: first four jet |dphi|>.5.
-# Low SR/LLCR: dphi1>.5, dphi2>.15, dphi3>.15, Nj>=2.
-# QCDCR: existing qcd_open and dphi123>.1, MET>250, HT>300.
-# LLCR: one veto lepton, mT<100; SR/QCDCR: no veto leptons.
-# GCR: exactly one medium photon, MET<250, recoil>250, HTclean>300,
-# photon trigger, no veto leptons; AK4 dR>0.2 / AK8 dR>0.4 cleaning.
-# DY2E/DY2M: opposite-sign medium pair, opposite-flavor veto, 71<mll<111,
-# pTll>200, leading e>40 / mu>50, subleading>20, recoil>250, HTclean>300.
-# All: base_common and zero_tau; region-specific triggers.
-# Low diagonal selection does not reintroduce obsolete mTb/NISR/METsqrtHT cuts.
+region SR_class1
+  take SRpresel
+  select size(bJets) >= 1
+  select Nbst == 0
+  select Nmix == 0
+  select Nres == 1
+  select Nw == 0
+  bin pT(PuppiMET[0]) >= 250 and pT(PuppiMET[0]) < 300
+  bin pT(PuppiMET[0]) >= 300 and pT(PuppiMET[0]) < 350
+  bin pT(PuppiMET[0]) >= 350 and pT(PuppiMET[0]) < 400
+  bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
+  bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
+  bin pT(PuppiMET[0]) >= 800
 
-# High SR sparse axes (no final statistical merge adopted):
-# Nb > Nbst > Nmix > Nres > Nw > recoil.
-# High CR: Nb=1/Nb>=2 by native recoil only; no SR topology replication.
-# Low SR: six Nb x NISR categories with existing five score bins each.
-# Low CR: Nb=1/Nb>=2 with five frozen common GNN bins, NISR pooled.
-# SR observed data remain blinded.
+region SR_class2
+  take SRpresel
+  select size(bJets) >= 1
+  select Nbst == 0
+  select Nmix == 0
+  select Nres >= 1
+  select Nw >= 1
+  bin pT(PuppiMET[0]) >= 250 and pT(PuppiMET[0]) < 300
+  bin pT(PuppiMET[0]) >= 300 and pT(PuppiMET[0]) < 350
+  bin pT(PuppiMET[0]) >= 350 and pT(PuppiMET[0]) < 400
+  bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
+  bin pT(PuppiMET[0]) >= 500
+
+region SR_class3
+  take SRpresel
+  select size(bJets) >= 1
+  select Nbst == 0
+  select Nmix == 0
+  select Nres >= 2
+  select Nw == 0
+  bin pT(PuppiMET[0]) >= 250 and pT(PuppiMET[0]) < 300
+  bin pT(PuppiMET[0]) >= 300 and pT(PuppiMET[0]) < 350
+  bin pT(PuppiMET[0]) >= 350 and pT(PuppiMET[0]) < 400
+  bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
+  bin pT(PuppiMET[0]) >= 500
+
+region SR_class4
+  take SRpresel
+  select size(bJets) >= 1
+  select Nbst == 0
+  select Nmix >= 1
+  select Nres >= 1
+  select Nw >= 0
+  bin pT(PuppiMET[0]) >= 250 and pT(PuppiMET[0]) < 300
+  bin pT(PuppiMET[0]) >= 300 and pT(PuppiMET[0]) < 350
+  bin pT(PuppiMET[0]) >= 350 and pT(PuppiMET[0]) < 400
+  bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
+  bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
+  bin pT(PuppiMET[0]) >= 800
+
+region SR_class5
+  take SRpresel
+  select size(bJets) >= 1
+  select Nbst == 0
+  select Nmix >= 2
+  select Nres == 0
+  select Nw == 0
+  bin pT(PuppiMET[0]) >= 250 and pT(PuppiMET[0]) < 300
+  bin pT(PuppiMET[0]) >= 300 and pT(PuppiMET[0]) < 350
+  bin pT(PuppiMET[0]) >= 350 and pT(PuppiMET[0]) < 400
+  bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
+  bin pT(PuppiMET[0]) >= 500
+
+region SR_class6
+  take SRpresel
+  select size(bJets) >= 1
+  select Nbst >= 1
+  select Nmix == 0
+  select Nres >= 1
+  select Nw >= 0
+  bin pT(PuppiMET[0]) >= 250 and pT(PuppiMET[0]) < 300
+  bin pT(PuppiMET[0]) >= 300 and pT(PuppiMET[0]) < 350
+  bin pT(PuppiMET[0]) >= 350 and pT(PuppiMET[0]) < 400
+  bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
+  bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
+  bin pT(PuppiMET[0]) >= 800
+
+region SR_class7
+  take SRpresel
+  select size(bJets) >= 1
+  select Nbst >= 1
+  select Nmix >= 1
+  select Nres >= 0
+  select Nw >= 0
+  bin pT(PuppiMET[0]) >= 250 and pT(PuppiMET[0]) < 300
+  bin pT(PuppiMET[0]) >= 300 and pT(PuppiMET[0]) < 350
+  bin pT(PuppiMET[0]) >= 350 and pT(PuppiMET[0]) < 400
+  bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
+  bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
+  bin pT(PuppiMET[0]) >= 800
+
+region SR_class8
+  take SRpresel
+  select size(bJets) >= 1
+  select Nbst >= 2
+  select Nmix == 0
+  select Nres == 0
+  select Nw == 0
+  bin pT(PuppiMET[0]) >= 250 and pT(PuppiMET[0]) < 300
+  bin pT(PuppiMET[0]) >= 300 and pT(PuppiMET[0]) < 350
+  bin pT(PuppiMET[0]) >= 350 and pT(PuppiMET[0]) < 400
+  bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
+  bin pT(PuppiMET[0]) >= 500
+
+region SR_class9
+  take SRpresel
+  select size(bJets) == 1
+  select Nbst == 0
+  select Nmix == 0
+  select Nres == 0
+  select Nw >= 1
+  bin pT(PuppiMET[0]) >= 250 and pT(PuppiMET[0]) < 300
+  bin pT(PuppiMET[0]) >= 300 and pT(PuppiMET[0]) < 350
+  bin pT(PuppiMET[0]) >= 350 and pT(PuppiMET[0]) < 400
+  bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
+  bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
+  bin pT(PuppiMET[0]) >= 800
+
+region SR_class10
+  take SRpresel
+  select size(bJets) == 1
+  select Nbst == 0
+  select Nmix == 1
+  select Nres == 0
+  select Nw == 0
+  bin pT(PuppiMET[0]) >= 250 and pT(PuppiMET[0]) < 300
+  bin pT(PuppiMET[0]) >= 300 and pT(PuppiMET[0]) < 350
+  bin pT(PuppiMET[0]) >= 350 and pT(PuppiMET[0]) < 400
+  bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
+  bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
+  bin pT(PuppiMET[0]) >= 800
+
+region SR_class11
+  take SRpresel
+  select size(bJets) == 1
+  select Nbst == 0
+  select Nmix >= 1
+  select Nres == 0
+  select Nw >= 1
+  bin pT(PuppiMET[0]) >= 250 and pT(PuppiMET[0]) < 300
+  bin pT(PuppiMET[0]) >= 300 and pT(PuppiMET[0]) < 350
+  bin pT(PuppiMET[0]) >= 350 and pT(PuppiMET[0]) < 400
+  bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
+  bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
+  bin pT(PuppiMET[0]) >= 800
+
+region SR_class12
+  take SRpresel
+  select size(bJets) == 1
+  select Nbst == 1
+  select Nmix == 0
+  select Nres == 0
+  select Nw == 0
+  bin pT(PuppiMET[0]) >= 250 and pT(PuppiMET[0]) < 300
+  bin pT(PuppiMET[0]) >= 300 and pT(PuppiMET[0]) < 350
+  bin pT(PuppiMET[0]) >= 350 and pT(PuppiMET[0]) < 400
+  bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
+  bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
+  bin pT(PuppiMET[0]) >= 800
+
+region SR_class13
+  take SRpresel
+  select size(bJets) == 1
+  select Nbst >= 1
+  select Nmix == 0
+  select Nres == 0
+  select Nw >= 1
+  bin pT(PuppiMET[0]) >= 250 and pT(PuppiMET[0]) < 300
+  bin pT(PuppiMET[0]) >= 300 and pT(PuppiMET[0]) < 350
+  bin pT(PuppiMET[0]) >= 350 and pT(PuppiMET[0]) < 400
+  bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
+  bin pT(PuppiMET[0]) >= 500
+
+region SR_class14
+  take SRpresel
+  select size(bJets) == 2
+  select Nbst == 0
+  select Nmix == 1
+  select Nres == 0
+  select Nw == 0
+  bin pT(PuppiMET[0]) >= 250 and pT(PuppiMET[0]) < 300
+  bin pT(PuppiMET[0]) >= 300 and pT(PuppiMET[0]) < 350
+  bin pT(PuppiMET[0]) >= 350 and pT(PuppiMET[0]) < 400
+  bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
+  bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
+  bin pT(PuppiMET[0]) >= 800
+
+region SR_class15
+  take SRpresel
+  select size(bJets) == 2
+  select Nbst == 0
+  select Nmix >= 1
+  select Nres == 0
+  select Nw >= 1
+  bin pT(PuppiMET[0]) >= 250 and pT(PuppiMET[0]) < 300
+  bin pT(PuppiMET[0]) >= 300 and pT(PuppiMET[0]) < 350
+  bin pT(PuppiMET[0]) >= 350 and pT(PuppiMET[0]) < 400
+  bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
+  bin pT(PuppiMET[0]) >= 500
+
+region SR_class16
+  take SRpresel
+  select size(bJets) == 2
+  select Nbst == 1
+  select Nmix == 0
+  select Nres == 0
+  select Nw == 0
+  bin pT(PuppiMET[0]) >= 250 and pT(PuppiMET[0]) < 300
+  bin pT(PuppiMET[0]) >= 300 and pT(PuppiMET[0]) < 350
+  bin pT(PuppiMET[0]) >= 350 and pT(PuppiMET[0]) < 400
+  bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
+  bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
+  bin pT(PuppiMET[0]) >= 800
+
+region SR_class17
+  take SRpresel
+  select size(bJets) >= 2
+  select Nbst == 0
+  select Nmix == 0
+  select Nres == 0
+  select Nw >= 1
+  bin pT(PuppiMET[0]) >= 250 and pT(PuppiMET[0]) < 300
+  bin pT(PuppiMET[0]) >= 300 and pT(PuppiMET[0]) < 350
+  bin pT(PuppiMET[0]) >= 350 and pT(PuppiMET[0]) < 400
+  bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
+  bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
+  bin pT(PuppiMET[0]) >= 800
+
+region SR_class18
+  take SRpresel
+  select size(bJets) >= 2
+  select Nbst >= 1
+  select Nmix == 0
+  select Nres == 0
+  select Nw >= 1
+  bin pT(PuppiMET[0]) >= 250 and pT(PuppiMET[0]) < 300
+  bin pT(PuppiMET[0]) >= 300 and pT(PuppiMET[0]) < 350
+  bin pT(PuppiMET[0]) >= 350 and pT(PuppiMET[0]) < 400
+  bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
+  bin pT(PuppiMET[0]) >= 500
+
+region SR_class19
+  take SRpresel
+  select size(bJets) >= 3
+  select Nbst == 0
+  select Nmix == 1
+  select Nres == 0
+  select Nw == 0
+  bin pT(PuppiMET[0]) >= 250 and pT(PuppiMET[0]) < 300
+  bin pT(PuppiMET[0]) >= 300 and pT(PuppiMET[0]) < 350
+  bin pT(PuppiMET[0]) >= 350 and pT(PuppiMET[0]) < 400
+  bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
+  bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
+  bin pT(PuppiMET[0]) >= 800
+
+region SR_class20
+  take SRpresel
+  select size(bJets) >= 3
+  select Nbst == 0
+  select Nmix >= 1
+  select Nres == 0
+  select Nw >= 1
+  bin pT(PuppiMET[0]) >= 250 and pT(PuppiMET[0]) < 300
+  bin pT(PuppiMET[0]) >= 300 and pT(PuppiMET[0]) < 350
+  bin pT(PuppiMET[0]) >= 350 and pT(PuppiMET[0]) < 400
+  bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
+  bin pT(PuppiMET[0]) >= 500
+
+region SR_class21
+  take SRpresel
+  select size(bJets) >= 3
+  select Nbst == 1
+  select Nmix == 0
+  select Nres == 0
+  select Nw == 0
+  bin pT(PuppiMET[0]) >= 250 and pT(PuppiMET[0]) < 300
+  bin pT(PuppiMET[0]) >= 300 and pT(PuppiMET[0]) < 350
+  bin pT(PuppiMET[0]) >= 350 and pT(PuppiMET[0]) < 400
+  bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
+  bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
+  bin pT(PuppiMET[0]) >= 800
+
+region CRlostLepton
+  take collisionDataQuality
+  trigger HLTMETMHT
+  select size(vetoLeptons) == 1
+  select size(selectedHadTaus) == 0
+  select size(isotracks) == 0
+  select size(ak4Jets) >= 4
+  select size(bJets) >= 1
+  select Nbst + Nmix + Nres + Nw >= 1
+  select HT > 300
+  select pT(PuppiMET[0]) > 250
+  select fMT(vetoLeptons[0], PuppiMET[0]) < 100
+  select all(dphi(ak4Jets[0:4], PuppiMET[0]) > 0.5)
+
+region CRmultijet
+  take collisionDataQuality
+  trigger HLTMETMHT
+  select size(vetoLeptons) == 0
+  select size(selectedHadTaus) == 0
+  select size(isotracks) == 0
+  select size(ak4Jets) >= 4
+  select size(bJets) >= 1
+  select Nbst + Nmix + Nres + Nw >= 1
+  select HT > 300
+  select pT(PuppiMET[0]) > 250
+  select any(dphi(ak4Jets[0:4], PuppiMET[0]) < 0.5)
+  select any(dphi(ak4Jets[0:3], PuppiMET[0]) < 0.1)
+
+region CRphoton
+  take collisionDataQuality
+  trigger HLTPhoton
+  select size(selectedPhotons) == 1
+  select size(vetoElectrons) == 0 and size(vetoMuons) == 0
+  select size(selectedHadTaus) == 0
+  select size(isotracks) == 0
+  select size(ak4JetsCRpho) >= 4
+  select size(ak4bJetsCRpho) >= 1
+  select NbstCRpho + NmixCRpho + NresCRpho + NwCRpho >= 1
+  select HTCRpho > 300
+  select pT(PuppiMET[0]) < 250
+  select photonRecoil > 250
+  select all(dphi(ak4JetsCRpho[0:4], photonRecoilVector) > 0.5)
+
+region CRDYee
+  take collisionDataQuality
+  trigger HLTEle
+  select size(selectedElectrons) == 2
+  select size(vetoMuons) == 0
+  select size(selectedHadTaus) == 0
+  select size(isotracks) == 0
+  select pT(selectedElectrons[0]) > 40
+  select pT(selectedElectrons[1]) > 20
+  select q(selectedElectrons[0]) + q(selectedElectrons[1]) == 0
+  select m(eeVector) > 71 and m(eeVector) < 111
+  select pT(eeVector) > 200
+  select eeRecoil > 250
+  select size(ak4JetsCRll) >= 4
+  select size(ak4bJetsCRll) >= 1
+  select NbstCRee + NmixCRee + NresCRee + NwCRee >= 1
+  select sum(pT(ak4JetsCRll)) > 300
+  select all(dphi(ak4JetsCRll[0:4], eeRecoilVector) > 0.5)
+
+region CRDYmumu
+  take collisionDataQuality
+  trigger HLTMu
+  select size(selectedMuons) == 2
+  select size(vetoElectrons) == 0
+  select size(selectedHadTaus) == 0
+  select size(isotracks) == 0
+  select pT(selectedMuons[0]) > 50
+  select pT(selectedMuons[1]) > 20
+  select q(selectedMuons[0]) + q(selectedMuons[1]) == 0
+  select m(mumuVector) > 71 and m(mumuVector) < 111
+  select pT(mumuVector) > 200
+  select mumuRecoil > 250
+  select size(ak4JetsCRll) >= 4
+  select size(ak4bJetsCRll) >= 1
+  select NbstCRmumu + NmixCRmumu + NresCRmumu + NwCRmumu >= 1
+  select sum(pT(ak4JetsCRll)) > 300
+  select all(dphi(ak4JetsCRll[0:4], mumuRecoilVector) > 0.5)
+
+region SRpresellowdM
+  take collisionDataQuality
+  trigger HLTMETMHT
+  select size(vetoLeptons) == 0
+  select size(selectedHadTaus) == 0
+  select size(isotracks) == 0
+  select size(ak4Jets) >= 2
+  select size(bJets) >= 1
+  select HT > 300
+  select pT(PuppiMET[0]) > 250
+  select Nbst == 0
+  select Nmix == 0
+  select Nw == 0
+  select Nres == 0
+  select dphi(ak4Jets[0], PuppiMET[0]) > 0.5
+  select dphi(ak4Jets[1], PuppiMET[0]) > 0.15
+  select size(ak4Jets) < 3 or dphi(ak4Jets[2], PuppiMET[0]) > 0.15
+
+region SR_lowdM_Nb1_NISR0
+  take SRpresellowdM
+  select size(bJets) == 1
+  select size(ak8JetsISR) == 0
+  bin gnn_score >= 0.0 and gnn_score < 0.5725103585725855
+  bin gnn_score >= 0.5725103585725855 and gnn_score < 0.8620847087987249
+  bin gnn_score >= 0.8620847087987249 and gnn_score < 0.9360990208521849
+  bin gnn_score >= 0.9360990208521849 and gnn_score < 0.9851454291100825
+  bin gnn_score >= 0.9851454291100825 and gnn_score <= 1.0
+
+region SR_lowdM_Nb1_NISR1
+  take SRpresellowdM
+  select size(bJets) == 1
+  select size(ak8JetsISR) == 1
+  bin gnn_score >= 0.0 and gnn_score < 0.4337835196146913
+  bin gnn_score >= 0.4337835196146913 and gnn_score < 0.7192719000531151
+  bin gnn_score >= 0.7192719000531151 and gnn_score < 0.8272557967497884
+  bin gnn_score >= 0.8272557967497884 and gnn_score < 0.9250179337760895
+  bin gnn_score >= 0.9250179337760895 and gnn_score <= 1.0
+
+region SR_lowdM_Nb1_NISR2plus
+  take SRpresellowdM
+  select size(bJets) == 1
+  select size(ak8JetsISR) >= 2
+  bin gnn_score >= 0.0 and gnn_score < 0.3255093377477263
+  bin gnn_score >= 0.3255093377477263 and gnn_score < 0.7888373113816193
+  bin gnn_score >= 0.7888373113816193 and gnn_score < 0.8877326655690037
+  bin gnn_score >= 0.8877326655690037 and gnn_score < 0.9555760529187631
+  bin gnn_score >= 0.9555760529187631 and gnn_score <= 1.0
+
+region SR_lowdM_Nb2plus_NISR0
+  take SRpresellowdM
+  select size(bJets) >= 2
+  select size(ak8JetsISR) == 0
+  bin gnn_score >= 0.0 and gnn_score < 0.309950268336004
+  bin gnn_score >= 0.309950268336004 and gnn_score < 0.7035191792183281
+  bin gnn_score >= 0.7035191792183281 and gnn_score < 0.8914239639925238
+  bin gnn_score >= 0.8914239639925238 and gnn_score < 0.9609786467235909
+  bin gnn_score >= 0.9609786467235909 and gnn_score <= 1.0
+
+region SR_lowdM_Nb2plus_NISR1
+  take SRpresellowdM
+  select size(bJets) >= 2
+  select size(ak8JetsISR) == 1
+  bin gnn_score >= 0.0 and gnn_score < 0.6463224331017129
+  bin gnn_score >= 0.6463224331017129 and gnn_score < 0.9131184463900763
+  bin gnn_score >= 0.9131184463900763 and gnn_score < 0.9538017779111643
+  bin gnn_score >= 0.9538017779111643 and gnn_score < 0.9805978490720786
+  bin gnn_score >= 0.9805978490720786 and gnn_score <= 1.0
+
+region SR_lowdM_Nb2plus_NISR2plus
+  take SRpresellowdM
+  select size(bJets) >= 2
+  select size(ak8JetsISR) >= 2
+  bin gnn_score >= 0.0 and gnn_score < 0.7036410177458037
+  bin gnn_score >= 0.7036410177458037 and gnn_score < 0.8336335596549056
+  bin gnn_score >= 0.8336335596549056 and gnn_score < 0.9625404014158108
+  bin gnn_score >= 0.9625404014158108 and gnn_score < 0.9876508846987722
+  bin gnn_score >= 0.9876508846987722 and gnn_score <= 1.0
+
+region CRlostLeptonlowdM
+  take collisionDataQuality
+  trigger HLTMETMHT
+  select size(vetoLeptons) == 1
+  select size(selectedHadTaus) == 0
+  select size(isotracks) == 0
+  select size(ak4Jets) >= 2
+  select size(bJets) >= 1
+  select HT > 300
+  select pT(PuppiMET[0]) > 250
+  select fMT(vetoLeptons[0], PuppiMET[0]) < 100
+  select Nbst == 0
+  select Nmix == 0
+  select Nw == 0
+  select Nres == 0
+  select dphi(ak4Jets[0], PuppiMET[0]) > 0.5
+  select dphi(ak4Jets[1], PuppiMET[0]) > 0.15
+  select size(ak4Jets) < 3 or dphi(ak4Jets[2], PuppiMET[0]) > 0.15
+
+region CRmultijetlowdM
+  take collisionDataQuality
+  trigger HLTMETMHT
+  select size(vetoLeptons) == 0
+  select size(selectedHadTaus) == 0
+  select size(isotracks) == 0
+  select size(ak4Jets) >= 2
+  select size(bJets) >= 1
+  select HT > 300
+  select pT(PuppiMET[0]) > 250
+  select Nbst == 0
+  select Nmix == 0
+  select Nw == 0
+  select Nres == 0
+  select dphi(ak4Jets[0], PuppiMET[0]) < 0.5 or
+         dphi(ak4Jets[1], PuppiMET[0]) < 0.5 or
+         (size(ak4Jets) >= 3 and dphi(ak4Jets[2], PuppiMET[0]) < 0.5) or
+         (size(ak4Jets) >= 4 and dphi(ak4Jets[3], PuppiMET[0]) < 0.5)
+  select dphi(ak4Jets[0], PuppiMET[0]) < 0.1 or
+         dphi(ak4Jets[1], PuppiMET[0]) < 0.1 or
+         (size(ak4Jets) >= 3 and dphi(ak4Jets[2], PuppiMET[0]) < 0.1)
+
+region CRphotonlowdM
+  take collisionDataQuality
+  trigger HLTPhoton
+  select size(selectedPhotons) == 1
+  select size(vetoLeptons) == 0
+  select size(selectedHadTaus) == 0
+  select size(isotracks) == 0
+  select size(ak4JetsCRpho) >= 2
+  select size(ak4bJetsCRpho) >= 1
+  select sum(pT(ak4JetsCRpho)) > 300
+  select pT(PuppiMET[0]) < 250
+  select photonRecoil > 250
+  select NbstCRpho == 0
+  select NmixCRpho == 0
+  select NwCRpho == 0
+  select NresCRpho == 0
+  select dphi(ak4JetsCRpho[0], photonRecoilVector) > 0.5
+  select dphi(ak4JetsCRpho[1], photonRecoilVector) > 0.15
+  select size(ak4JetsCRpho) < 3 or dphi(ak4JetsCRpho[2], photonRecoilVector) > 0.15
+
+region CRDYeelowdM
+  take collisionDataQuality
+  trigger HLTEle
+  select size(selectedElectrons) == 2
+  select size(vetoMuons) == 0
+  select size(selectedHadTaus) == 0
+  select size(isotracks) == 0
+  select pT(selectedElectrons[0]) > 40
+  select pT(selectedElectrons[1]) > 20
+  select q(selectedElectrons[0]) + q(selectedElectrons[1]) == 0
+  select m(eeVector) > 71 and m(eeVector) < 111
+  select pT(eeVector) > 200
+  select eeRecoil > 250
+  select size(ak4JetsCRll) >= 2
+  select size(ak4bJetsCRll) >= 1
+  select sum(pT(ak4JetsCRll)) > 300
+  select NbstCRee == 0
+  select NmixCRee == 0
+  select NwCRee == 0
+  select NresCRee == 0
+  select abs(dphi(ak4JetsCRll[0], eeRecoilVector)) > 0.5
+  select abs(dphi(ak4JetsCRll[1], eeRecoilVector)) > 0.15
+  select size(ak4JetsCRll) < 3 or abs(dphi(ak4JetsCRll[2], eeRecoilVector)) > 0.15
+
+region CRDYmumulowdM
+  take collisionDataQuality
+  trigger HLTMu
+  select size(selectedMuons) == 2
+  select size(vetoElectrons) == 0
+  select size(selectedHadTaus) == 0
+  select size(isotracks) == 0
+  select pT(selectedMuons[0]) > 50
+  select pT(selectedMuons[1]) > 20
+  select q(selectedMuons[0]) + q(selectedMuons[1]) == 0
+  select m(mumuVector) > 71 and m(mumuVector) < 111
+  select pT(mumuVector) > 200
+  select mumuRecoil > 250
+  select size(ak4JetsCRll) >= 2
+  select size(ak4bJetsCRll) >= 1
+  select sum(pT(ak4JetsCRll)) > 300
+  select NbstCRmumu == 0
+  select NmixCRmumu == 0
+  select NwCRmumu == 0
+  select NresCRmumu == 0
+  select abs(dphi(ak4JetsCRll[0], mumuRecoilVector)) > 0.5
+  select abs(dphi(ak4JetsCRll[1], mumuRecoilVector)) > 0.15
+  select size(ak4JetsCRll) < 3 or abs(dphi(ak4JetsCRll[2], mumuRecoilVector)) > 0.15
+
+region CRDYeeoffZ
+  take collisionDataQuality
+  trigger HLTEle
+  select size(selectedElectrons) == 2
+  select size(vetoMuons) == 0
+  select size(selectedHadTaus) == 0
+  select size(isotracks) == 0
+  select pT(selectedElectrons[0]) > 40
+  select pT(selectedElectrons[1]) > 20
+  select q(selectedElectrons[0]) + q(selectedElectrons[1]) == 0
+  select (m(eeVector) > 50 and m(eeVector) < 71) or m(eeVector) > 111
+  select pT(eeVector) > 200
+  select eeRecoil > 250
+  select size(ak4JetsCRll) >= 4
+  select size(ak4bJetsCRll) >= 1
+  select NbstCRee + NmixCRee + NresCRee + NwCRee >= 1
+  select HTCRll > 300
+  select all(dphi(ak4JetsCRll[0:4], eeRecoilVector) > 0.5)
+
+region CRDYmumuoffZ
+  take collisionDataQuality
+  trigger HLTMu
+  select size(selectedMuons) == 2
+  select size(vetoElectrons) == 0
+  select size(selectedHadTaus) == 0
+  select size(isotracks) == 0
+  select pT(selectedMuons[0]) > 50
+  select pT(selectedMuons[1]) > 20
+  select q(selectedMuons[0]) + q(selectedMuons[1]) == 0
+  select (m(mumuVector) > 50 and m(mumuVector) < 71) or m(mumuVector) > 111
+  select pT(mumuVector) > 200
+  select mumuRecoil > 250
+  select size(ak4JetsCRll) >= 4
+  select size(ak4bJetsCRll) >= 1
+  select NbstCRmumu + NmixCRmumu + NresCRmumu + NwCRmumu >= 1
+  select HTCRll > 300
+  select all(dphi(ak4JetsCRll[0:4], mumuRecoilVector) > 0.5)
+region CRDYeeoffZlowdM
+  take collisionDataQuality
+  trigger HLTEle
+  select size(selectedElectrons) == 2
+  select size(vetoMuons) == 0
+  select size(selectedHadTaus) == 0
+  select size(isotracks) == 0
+  select pT(selectedElectrons[0]) > 40
+  select pT(selectedElectrons[1]) > 20
+  select q(selectedElectrons[0]) + q(selectedElectrons[1]) == 0
+  select (m(eeVector) > 50 and m(eeVector) < 71) or m(eeVector) > 111
+  select pT(eeVector) > 200
+  select eeRecoil > 250
+  select size(ak4JetsCRll) >= 2
+  select size(ak4bJetsCRll) >= 1
+  select HTCRll > 300
+  select NbstCRee == 0
+  select NmixCRee == 0
+  select NresCRee == 0
+  select NwCRee == 0
+  select dphi(ak4JetsCRll[0], eeRecoilVector) > 0.5
+  select dphi(ak4JetsCRll[1], eeRecoilVector) > 0.15
+  select size(ak4JetsCRll) < 3 or dphi(ak4JetsCRll[2], eeRecoilVector) > 0.15
+
+region CRDYmumuoffZlowdM
+  take collisionDataQuality
+  trigger HLTMu
+  select size(selectedMuons) == 2
+  select size(vetoElectrons) == 0
+  select size(selectedHadTaus) == 0
+  select size(isotracks) == 0
+  select pT(selectedMuons[0]) > 50
+  select pT(selectedMuons[1]) > 20
+  select q(selectedMuons[0]) + q(selectedMuons[1]) == 0
+  select (m(mumuVector) > 50 and m(mumuVector) < 71) or m(mumuVector) > 111
+  select pT(mumuVector) > 200
+  select mumuRecoil > 250
+  select size(ak4JetsCRll) >= 2
+  select size(ak4bJetsCRll) >= 1
+  select HTCRll > 300
+  select NbstCRmumu == 0
+  select NmixCRmumu == 0
+  select NresCRmumu == 0
+  select NwCRmumu == 0
+  select dphi(ak4JetsCRll[0], mumuRecoilVector) > 0.5
+  select dphi(ak4JetsCRll[1], mumuRecoilVector) > 0.15
+  select size(ak4JetsCRll) < 3 or dphi(ak4JetsCRll[2], mumuRecoilVector) > 0.15
+
+region CRDYeeonZlowdM
+  take collisionDataQuality
+  trigger HLTEle
+  select size(selectedElectrons) == 2
+  select size(vetoMuons) == 0
+  select size(selectedHadTaus) == 0
+  select size(isotracks) == 0
+  select pT(selectedElectrons[0]) > 40
+  select pT(selectedElectrons[1]) > 20
+  select q(selectedElectrons[0]) + q(selectedElectrons[1]) == 0
+  select m(eeVector) > 71 and m(eeVector) < 111
+  select pT(eeVector) > 200
+  select eeRecoil > 250
+  select size(ak4JetsCRll) >= 2
+  select size(ak4bJetsCRll) >= 1
+  select HTCRll > 300
+  select NbstCRee == 0
+  select NmixCRee == 0
+  select NresCRee == 0
+  select NwCRee == 0
+  select dphi(ak4JetsCRll[0], eeRecoilVector) > 0.5
+  select dphi(ak4JetsCRll[1], eeRecoilVector) > 0.15
+  select size(ak4JetsCRll) < 3 or dphi(ak4JetsCRll[2], eeRecoilVector) > 0.15
+
+region CRDYmumuonZlowdM
+  take collisionDataQuality
+  trigger HLTMu
+  select size(selectedMuons) == 2
+  select size(vetoElectrons) == 0
+  select size(selectedHadTaus) == 0
+  select size(isotracks) == 0
+  select pT(selectedMuons[0]) > 50
+  select pT(selectedMuons[1]) > 20
+  select q(selectedMuons[0]) + q(selectedMuons[1]) == 0
+  select m(mumuVector) > 71 and m(mumuVector) < 111
+  select pT(mumuVector) > 200
+  select mumuRecoil > 250
+  select size(ak4JetsCRll) >= 2
+  select size(ak4bJetsCRll) >= 1
+  select HTCRll > 300
+  select NbstCRmumu == 0
+  select NmixCRmumu == 0
+  select NresCRmumu == 0
+  select NwCRmumu == 0
+  select dphi(ak4JetsCRll[0], mumuRecoilVector) > 0.5
+  select dphi(ak4JetsCRll[1], mumuRecoilVector) > 0.15
+  select size(ak4JetsCRll) < 3 or dphi(ak4JetsCRll[2], mumuRecoilVector) > 0.15
+
+region CRlostLepton_Nb1
+  take CRlostLepton
+  select size(bJets) == 1
+  bin pT(PuppiMET[0]) >= 250 and pT(PuppiMET[0]) < 300
+  bin pT(PuppiMET[0]) >= 300 and pT(PuppiMET[0]) < 350
+  bin pT(PuppiMET[0]) >= 350 and pT(PuppiMET[0]) < 400
+  bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
+  bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
+  bin pT(PuppiMET[0]) >= 800
+
+region CRlostLeptonlowdM_Nb1
+  take CRlostLeptonlowdM
+  select size(bJets) == 1
+  bin gnn_score >= 0 and gnn_score < 0.7087745055357697
+  bin gnn_score >= 0.7087745055357697 and gnn_score < 0.8666955795676624
+  bin gnn_score >= 0.8666955795676624 and gnn_score < 0.9283805475420253
+  bin gnn_score >= 0.9283805475420253 and gnn_score < 0.9610429653306511
+  bin gnn_score >= 0.9610429653306511 and gnn_score <= 1
+
+region CRlostLepton_Nb2plus
+  take CRlostLepton
+  select size(bJets) >= 2
+  bin pT(PuppiMET[0]) >= 250 and pT(PuppiMET[0]) < 300
+  bin pT(PuppiMET[0]) >= 300 and pT(PuppiMET[0]) < 350
+  bin pT(PuppiMET[0]) >= 350 and pT(PuppiMET[0]) < 400
+  bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
+  bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
+  bin pT(PuppiMET[0]) >= 800
+
+region CRlostLeptonlowdM_Nb2plus
+  take CRlostLeptonlowdM
+  select size(bJets) >= 2
+  bin gnn_score >= 0 and gnn_score < 0.7087745055357697
+  bin gnn_score >= 0.7087745055357697 and gnn_score < 0.8666955795676624
+  bin gnn_score >= 0.8666955795676624 and gnn_score < 0.9283805475420253
+  bin gnn_score >= 0.9283805475420253 and gnn_score < 0.9610429653306511
+  bin gnn_score >= 0.9610429653306511 and gnn_score <= 1
+
+region CRmultijet_Nb1
+  take CRmultijet
+  select size(bJets) == 1
+  bin pT(PuppiMET[0]) >= 250 and pT(PuppiMET[0]) < 300
+  bin pT(PuppiMET[0]) >= 300 and pT(PuppiMET[0]) < 350
+  bin pT(PuppiMET[0]) >= 350 and pT(PuppiMET[0]) < 400
+  bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
+  bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
+  bin pT(PuppiMET[0]) >= 800
+
+region CRmultijetlowdM_Nb1
+  take CRmultijetlowdM
+  select size(bJets) == 1
+  bin gnn_score >= 0 and gnn_score < 0.7087745055357697
+  bin gnn_score >= 0.7087745055357697 and gnn_score < 0.8666955795676624
+  bin gnn_score >= 0.8666955795676624 and gnn_score < 0.9283805475420253
+  bin gnn_score >= 0.9283805475420253 and gnn_score < 0.9610429653306511
+  bin gnn_score >= 0.9610429653306511 and gnn_score <= 1
+
+region CRmultijet_Nb2plus
+  take CRmultijet
+  select size(bJets) >= 2
+  bin pT(PuppiMET[0]) >= 250 and pT(PuppiMET[0]) < 300
+  bin pT(PuppiMET[0]) >= 300 and pT(PuppiMET[0]) < 350
+  bin pT(PuppiMET[0]) >= 350 and pT(PuppiMET[0]) < 400
+  bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
+  bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
+  bin pT(PuppiMET[0]) >= 800
+
+region CRmultijetlowdM_Nb2plus
+  take CRmultijetlowdM
+  select size(bJets) >= 2
+  bin gnn_score >= 0 and gnn_score < 0.7087745055357697
+  bin gnn_score >= 0.7087745055357697 and gnn_score < 0.8666955795676624
+  bin gnn_score >= 0.8666955795676624 and gnn_score < 0.9283805475420253
+  bin gnn_score >= 0.9283805475420253 and gnn_score < 0.9610429653306511
+  bin gnn_score >= 0.9610429653306511 and gnn_score <= 1
+
+region CRphoton_Nb1
+  take CRphoton
+  select size(ak4bJetsCRpho) == 1
+  bin photonRecoil >= 250 and photonRecoil < 300
+  bin photonRecoil >= 300 and photonRecoil < 350
+  bin photonRecoil >= 350 and photonRecoil < 400
+  bin photonRecoil >= 400 and photonRecoil < 500
+  bin photonRecoil >= 500 and photonRecoil < 800
+  bin photonRecoil >= 800
+
+region CRphotonlowdM_Nb1
+  take CRphotonlowdM
+  select size(ak4bJetsCRpho) == 1
+  bin gnn_score >= 0 and gnn_score < 0.7087745055357697
+  bin gnn_score >= 0.7087745055357697 and gnn_score < 0.8666955795676624
+  bin gnn_score >= 0.8666955795676624 and gnn_score < 0.9283805475420253
+  bin gnn_score >= 0.9283805475420253 and gnn_score < 0.9610429653306511
+  bin gnn_score >= 0.9610429653306511 and gnn_score <= 1
+
+region CRphoton_Nb2plus
+  take CRphoton
+  select size(ak4bJetsCRpho) >= 2
+  bin photonRecoil >= 250 and photonRecoil < 300
+  bin photonRecoil >= 300 and photonRecoil < 350
+  bin photonRecoil >= 350 and photonRecoil < 400
+  bin photonRecoil >= 400 and photonRecoil < 500
+  bin photonRecoil >= 500 and photonRecoil < 800
+  bin photonRecoil >= 800
+
+region CRphotonlowdM_Nb2plus
+  take CRphotonlowdM
+  select size(ak4bJetsCRpho) >= 2
+  bin gnn_score >= 0 and gnn_score < 0.7087745055357697
+  bin gnn_score >= 0.7087745055357697 and gnn_score < 0.8666955795676624
+  bin gnn_score >= 0.8666955795676624 and gnn_score < 0.9283805475420253
+  bin gnn_score >= 0.9283805475420253 and gnn_score < 0.9610429653306511
+  bin gnn_score >= 0.9610429653306511 and gnn_score <= 1

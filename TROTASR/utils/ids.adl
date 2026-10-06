@@ -1,32 +1,206 @@
-# TROTASR ID contract; companion to ids.py, not a second execution engine.
-object VetoElectron
+info analysis
+  title "CMS Run-3 all-hadronic stop: object definitions"
+  years 2024 2025
+  energyunit GeV
+
+info jetID
+  input "tightLeptonVetoID: stored jet_id_all or fatjet_id_all"
+  ak4 "AK4PUPPI_TightLeptonVeto"
+  ak8 "AK8PUPPI_TightLeptonVeto"
+  source "utils/nanoaod_ids.py; intermediate Events"
+
+info topReconstruction
+  resolved "TROTA tree joined to Events by file_id and entry"
+  mixed "TopMixed1pct_* in Events"
+  score "TTScore / (TTScore + QCDScore)"
+  ordering "descending QCDDiscriminant, then ascending candidateIndex"
+  arbitration "Boosted > Mixed > Resolved > independent W"
+  ak4Footprint "two valid subjets: dR(AK4,subjet)<0.4; otherwise dR(AK4,AK8)<0.8"
+  cleaning "all AK4 constituents dR>0.2 and AK8 constituent dR>0.4 from selected region references"
+  references "none for SR/LLCR/QCDCR; selectedPhotons for GCR; selectedElectrons for DY2E; selectedMuons for DY2M"
+  exclusion "reject shared original AK8 or occupied original AK4 constituents"
+  wMultiplicity "no additional W-W overlap veto"
+  source "utils/event_selections.py:topology_counts,arbitrate; utils/constituents.py"
+
+object vetoElectrons
   take Electron
-  select pt > 10
-  select abs(eta) < 1.4442 or (abs(eta) > 1.566 and abs(eta) < 2.5)
-  select cutBased >= 1 and miniPFRelIso_all < 0.1
-object MediumElectron
-  take VetoElectron
+  select pT > 10
+  select abs(eta) < 2.5
+  select abs(eta) < 1.4442 or abs(eta) > 1.5660
+  select cutBased >= 1
+  select miniPFRelIso_all < 0.10
+
+object selectedElectrons
+  take Electron
+  select pT > 10
+  select abs(eta) < 2.5
+  select abs(eta) < 1.4442 or abs(eta) > 1.5660
   select cutBased >= 3
-object LooseMuon
+  select miniPFRelIso_all < 0.10
+
+object vetoMuons
   take Muon
-  select pt > 10 and abs(eta) < 2.4
-  select looseId and miniPFRelIso_all < 0.2
-object MediumMuon
+  select pT > 10
+  select abs(eta) < 2.4
+  select looseId == 1
+  select miniPFRelIso_all < 0.20
+
+object selectedMuons
   take Muon
-  select pt > 10 and abs(eta) < 2.4
-  select mediumId and miniPFRelIso_all < 0.2
-object MediumPhoton
+  select pT > 10
+  select abs(eta) < 2.4
+  select mediumId == 1
+  select miniPFRelIso_all < 0.20
+
+object selectedPhotons
   take Photon
-  select pt > 220
-  select abs(eta) < 1.4442 or (abs(eta) > 1.566 and abs(eta) < 2.5)
-  select cutBased >= 2 and electronVeto
-# Adopted histogram ID above is distinct from the old NanoAOD ids.py photon
-# helper (cutBased>=3); the new public histogram path uses cutBased>=2.
-object GoodAK4
-  take corrected_Jet
-  select pt > 30 and abs(eta) < 2.4 and stored_validated_jetID
-# b medium: UParT > 0.1272, as in the adopted 2024/2025 region implementation.
-# AK4 reference-object cleaning dR>0.2; AK8 cleaning dR>0.4.
-# Stored validated Boosted/W decisions and original constituent indices are
-# read from Events. Mixed is selected from TopMixed1pct_* Events branches;
-# Resolved candidates are joined from the same file's TROTA tree by file_id/entry.
+  select pT > 220
+  select abs(eta) < 2.5
+  select abs(eta) < 1.4442 or abs(eta) > 1.5660
+  select cutBased >= 2
+  select electronVeto == 1
+
+object selectedHadTaus
+  take Tau
+  select pT > 20
+  select abs(eta) < 2.5
+  select abs(dz) < 0.2
+  select decayMode != 5 and decayMode != 6
+  select idDeepTau2018v2p5VSjet >= 5
+  select fMT(this, PuppiMET[0]) < 100
+
+object eleLikeTracks
+  take IsoTrack
+  select pT > 5
+  select abs(eta) < 2.5
+  select abs(pdgId) == 11
+  select pfRelIso03_all < 0.20
+  select fMT(this, PuppiMET[0]) < 100
+
+object muonLikeTracks
+  take IsoTrack
+  select pT > 5
+  select abs(eta) < 2.5
+  select abs(pdgId) == 13
+  select pfRelIso03_all < 0.20
+  select fMT(this, PuppiMET[0]) < 100
+
+object chargedHadTracks
+  take IsoTrack
+  select pT > 10
+  select abs(eta) < 2.5
+  select abs(pdgId) == 211
+  select pfRelIso03_all < 0.10
+  select fMT(this, PuppiMET[0]) < 100
+
+object vetoLeptons
+  take union(vetoElectrons, vetoMuons)
+
+object selectedLeptons
+  take union(selectedElectrons, selectedMuons)
+
+object isotracks
+  take union(eleLikeTracks, muonLikeTracks, chargedHadTracks)
+
+object ak4Jets
+  take Jet
+  select pT > 30
+  select abs(eta) < 2.4
+  select tightLeptonVetoID == 1
+
+object bJets
+  take sort(ak4Jets, btagUParTAK4B, descend)
+  select btagUParTAK4B > 0.1272
+
+object ak4JetsCRpho
+  take ak4Jets
+  select all(dR(this, selectedPhotons) > 0.2)
+
+object ak4bJetsCRpho
+  take bJets
+  select all(dR(this, selectedPhotons) > 0.2)
+
+object ak4JetsCRll
+  take ak4Jets
+  select all(dR(this, selectedLeptons) > 0.2)
+
+object ak4bJetsCRll
+  take bJets
+  select all(dR(this, selectedLeptons) > 0.2)
+
+object ak8JetsHighDM
+  take FatJet
+  select pT > 200
+  select abs(eta) < 2.0
+  select tightLeptonVetoID == 1
+  select msoftdrop > 60
+
+object topCands
+  take ak8JetsHighDM
+  select pT > 400
+  select msoftdrop > 105
+  select globalParT3_withMassTopvsQCD > 0.5078
+  select globalParT3_withMassTopvsQCD <= 1
+
+object hadWCands
+  take ak8JetsHighDM
+  select msoftdrop < 105
+  select globalParT3_withMassWvsQCD > 0.9385
+  select globalParT3_withMassWvsQCD <= 1
+
+object ak8JetsISR
+  take FatJet
+  select pT > 200
+  select abs(eta) < 2.4
+  select tightLeptonVetoID == 1
+
+object ak8JetsISRCRpho
+  take ak8JetsISR
+  select all(dR(this, selectedPhotons) > 0.4)
+
+object ak8JetsISRCRee
+  take ak8JetsISR
+  select all(dR(this, selectedElectrons) > 0.4)
+
+object ak8JetsISRCRmumu
+  take ak8JetsISR
+  select all(dR(this, selectedMuons) > 0.4)
+
+object topCandsCRpho
+  take topCands
+  select all(dR(this, selectedPhotons) > 0.4)
+
+object topCandsCRee
+  take topCands
+  select all(dR(this, selectedElectrons) > 0.4)
+
+object topCandsCRmumu
+  take topCands
+  select all(dR(this, selectedMuons) > 0.4)
+
+object hadWCandsCRpho
+  take hadWCands
+  select all(dR(this, selectedPhotons) > 0.4)
+
+object hadWCandsCRee
+  take hadWCands
+  select all(dR(this, selectedElectrons) > 0.4)
+
+object hadWCandsCRmumu
+  take hadWCands
+  select all(dR(this, selectedMuons) > 0.4)
+
+object rawMixedTops
+  take TopMixed1pct
+  select QCDDiscriminant >= 0.9027690887451172
+
+object rawResolvedTops
+  take TopResolved1pct
+  select QCDDiscriminant >= 0.9433798789978027
+  select abs(eta) < 2.0
+  select mass >= 100 and mass <= 250
+
+object vetoMapJets
+  take Jet
+  select pT > 30
+  select jetVetoMap != 0

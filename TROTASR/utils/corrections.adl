@@ -1,26 +1,226 @@
-# TROTASR correction contract; Python functions are the executable authority.
-# Payload root: scales/<POG>/<year>; allowed years: 2024, 2025.
-define EventWeight = genWeight * normalization * pileup * btag * lepton * photon * trigger * topPt * topW
-define normalization = validated_luminosity_times_xsec_over_generator_sumw
-# Missing or invalid normalization is fatal, never unity or silently zero.
-# POGs: JME, BTV, EGM, MUO, TAU, LUM. Measured analysis SF: Private.
-# Private efficiency counts: estimations/btageff<year>.merged,
-# estimations/topwtageff<year>.merged.
-define correctedTopWEfficiency = min(SF * MCEfficiency, 1)
-# Evaluate nominal/Up/Down separately, preserving asymmetric saturated endpoints.
-# Recompute both pass and fail weights from the bounded efficiency.
-# Explicit failed fit bins -> (1,1,1); malformed payload or NaN is not a failed fit.
-# Missing TopW branches -> (1,1,1) for that file, audited in the histogram.
-# MC efficiency 0 or 1, or empty pass+fail denominator -> (1,1,1) for that cell.
-# Valid bins retain measured SFs. Mixed-specific SF is not provided or fabricated.
-# Compile utils/compiled/{ids,corrections}.coffea whenever source changes.
-# Non-JME shapes keep stored TROTA/TopMixed, nominal jet quantities and WPs.
-# Existing endpoint families (Up/Down): electronScale, electronSmear,
-# photonScale, photonSmear, muonScale, muonResolution, tauEnergyScale,
-# metUnclustered. Payloads and hashes: scales/object_shapes.json.
+info analysis
+  title "CMS Run-3 all-hadronic stop: corrections and event weights"
+  years 2024 2025
+  energyunit GeV
+  implementation "utils/corrections.py; utils/pog_corrections.py; utils/private_scales.py; utils/weight_components.py"
+  payloads "scales/<POG>/<year>/"
+  normalization "estimations/normalization_<year>.json.gz"
+
+info pileup
+  file2024 "scales/LUM/2024/puWeights.json.gz"
+  key2024 "Collisions24_BCDEFGHI_goldenJSON"
+  file2025 "scales/LUM/2025/puWeights_2025pp_Golden_Summer24_25ns_69200ub.json.gz"
+  key2025 "Collisions25_goldenJSON"
+  inputs "Pileup_nTrueInt, nominal/up/down"
+  evaluator "get_pu_weight"
+
+info btag
+  file "scales/BTV/<year>/btagging.json.gz"
+  heavyKey "UParTAK4_comb"
+  lightKey "UParTAK4_light"
+  workingPoint M
+  efficiency "estimations/btageff<year>.merged"
+  jets "good AK4 jets; Jet_hadronFlavour = 0,4,5"
+  variation "central, up/down_correlated, up/down_uncorrelated; heavy and light separately"
+  evaluator "BTagCorrector"
+
+define boundedBTagEfficiency = min(btagSF * btagMCEfficiency, 1)
+define btagPassWeight = boundedBTagEfficiency / btagMCEfficiency
+define btagFailWeight = (1 - boundedBTagEfficiency) / (1 - btagMCEfficiency)
+
+info electronID
+  file "scales/EGM/<year>/electron.json.gz"
+  key "Electron-ID-SF"
+  era "2024Prompt or 2025Prompt"
+  coordinates "Electron_eta + Electron_deltaEtaSC, Electron_pt"
+  workingPoints "Veto for one veto electron; Medium for two selected electrons"
+  application "product over the selected collection; two-medium-electron case takes precedence"
+  variation "sf, sfup, sfdown"
+  evaluator "get_ele_veto_id_sf; get_ele_medium_id_sf"
+
+info electronReco
+  file "scales/EGM/<year>/electron.json.gz"
+  key "Electron-ID-SF"
+  coordinates "Electron_eta + Electron_deltaEtaSC, Electron_pt"
+  workingPoints2024 "RecoBelow20: 10<=pT<20; Reco20to75: 20<=pT<75; RecoAbove75: pT>=75"
+  workingPoints2025 "Reco20to75: 20<=pT<75; RecoAbove75: pT>=75; 10<=pT<20 uses unity"
+  application "same one-veto/two-medium collection choice as electronID"
+  evaluator "get_ele_reco_sf"
+
+info electronTrigger
+  file2024 "scales/EGM/2024/electronHlt.json.gz"
+  key "Electron-HLT-SF"
+  workingPoint "HLT_SF_Ele30_TightID"
+  coordinates "Electron_eta, max(Electron_pt,25)"
+  application "product for two medium electrons"
+  year2025 "unity: no adopted 2025 electron HLT SF"
+  evaluator "get_ele_hlt_sf"
+
+info electronIsolation
+  selection "miniPFRelIso_all < 0.10"
+  separateSF "none"
+
+info muonID
+  file "scales/MUO/<year>/muon_Z.json.gz"
+  looseKey "NUM_LooseID_DEN_TrackerMuons"
+  mediumKey "NUM_MediumID_DEN_TrackerMuons"
+  application "one loose muon or two medium muons; two-medium case takes precedence"
+  coordinates "Muon_eta clipped to [-2.399,2.399], max(Muon_pt,10)"
+  variation "nominal, systup, systdown"
+  evaluator "get_mu_loose_id_sf; get_mu_medium_id_sf"
+
+info muonIsolation
+  file "scales/MUO/<year>/muon_Z.json.gz"
+  looseKey "NUM_LooseMiniIso_DEN_LooseID"
+  mediumKey "NUM_LooseMiniIso_DEN_MediumID"
+  selection "miniPFRelIso_all < 0.20"
+  application "same one-loose/two-medium collection choice as muonID"
+  coordinates "Muon_eta clipped to [-2.399,2.399], max(Muon_pt,10)"
+  evaluator "get_mu_loose_miniiso_sf; get_mu_medium_miniiso_sf"
+
+info muonTrigger
+  file "scales/MUO/<year>/muon_Z.json.gz"
+  key "NUM_Mu50_or_CascadeMu100_or_HighPtTkMu100_DEN_CutBasedIdGlobalHighPt_and_TkIsoLoose"
+  application "product for two medium muons"
+  coordinates "Muon_eta clipped to [-2.399,2.399], max(Muon_pt,52)"
+  evaluator "get_mu_hlt_sf"
+
+info photonID
+  file "scales/EGM/<year>/photon.json.gz"
+  key "Photon-ID-SF"
+  workingPoint Medium
+  coordinates2024 "Photon_eta, Photon_pt"
+  coordinates2025 "Photon_eta, Photon_pt"
+  application "selected photon in GCR"
+  evaluator "get_photon_id_sf"
+
+info photonElectronVeto
+  file "scales/EGM/<year>/photon.json.gz"
+  key "Photon-CSEV-SF"
+  workingPoint Medium
+  coordinates2024 "Photon_eta, Photon_r9"
+  coordinates2025 "Photon_eta, Photon_r9, Photon_pt"
+  application "selected photon in GCR; no additional pixel-seed-veto SF"
+  evaluator "get_photon_csev_sf"
+
+info photonTrigger
+  file "scales/Private/<year>/photon_trigger_sf.json.gz"
+  key "photon_trigger_sf"
+  inputs "nominal/up/down, abs(Photon_eta), Photon_pt"
+  application "selected photon in GCR"
+  evaluator "photon_trigger_triplet"
+
+info metTrigger
+  file "scales/Private/<year>/met_trigger_sf.json.gz"
+  key "met_trigger_sf_genuine"
+  inputs "nominal/up/down, MET"
+  application "SR, LLCR, QCDCR; same measured SF for QCD and other MC"
+  evaluator "met_trigger_triplet"
+
+info topPt
+  application "TTto datasets; first two hard-process last-copy generator top quarks"
+  evaluator "get_top_pt_reweight"
+  variation "none"
+
+define topPtFactor(pT) = (0.103 * exp(-0.0118 * pT) - 0.000134 * pT + 1.051) * (0.991 + 0.000075 * pT)
+define topPairPtWeight = sqrt(topPtFactor(pT(genTop[0])) * topPtFactor(pT(genTop[1])))
+
+info topWTagging
+  file "scales/Private/<year>/topw_tagging_sf.json.gz"
+  efficiency "estimations/topwtageff<year>.merged"
+  keys "topw_top_tp1_sf, topw_top_tp2_sf, topw_top_tp3_sf, topw_top_other_sf, topw_w_tp1_sf, topw_w_tp2_sf, topw_w_tp3_sf, topw_w_other_sf"
+  inputs "nominal/up/down, pT"
+  topBins "300,400,480,600,1200"
+  wBins "200,300,400,800"
+  flavor "top-like sample: decay-flavor 0/1/2->tp1, 3->tp2, 4->tp3; other samples->other"
+  jets "region-cleaned AK8s after Mixed/Resolved constituent exclusions"
+  variation "each tag/category/pT interval independently; asymmetric endpoints retained"
+  unity "missing file-level Top/W inputs; explicitly failed fit bin; efficiency 0 or 1; empty efficiency denominator; top pT>=1200 or W pT>=800"
+  mixedSF "none"
+  evaluator "topw_file_sf_triplet; topw_pass_fail_triplet; topw_event_variations"
+
+define boundedTopWEfficiency = min(topWSF * topWMCEfficiency, 1)
+define topWPassWeight = boundedTopWEfficiency / topWMCEfficiency
+define topWFailWeight = (1 - boundedTopWEfficiency) / (1 - topWMCEfficiency)
+
+info eventWeightInputs
+  source "utils/weight_components.py:compute_weight_bundle; utils/corrections.py:event_weights"
+  factors "pileup, btagSF, electron_id, electron_reco, electron_hlt, muon_id, muon_iso, muon_hlt, photon_id, photon_csev, photon_trigger, met_trigger, top_pt_reweight, topw"
+  variedFactor "one requested factor evaluated at its Up or Down endpoint"
+  otherFactors "all remaining SF factors evaluated at nominal"
+  normalizationFactor "dataset or signal-mass normalization_factor from the year-specific normalization file"
+  inactive "5-10 GeV lepton SFs: excluded by the pT>10 GeV object selection"
+  data "weight=1; region-specific primary dataset; observed SR excluded"
+
+define weightData = 1
+define weightMC = genWeight * normalizationFactor * pileup * btagSF * electron_id * electron_reco * electron_hlt * muon_id * muon_iso * muon_hlt * photon_id * photon_csev * photon_trigger * met_trigger * top_pt_reweight * topw
+define weightVariation = genWeight * normalizationFactor * variedFactor * product(otherFactors)
+
+info jetCalibration
+  files2024 "scales/JME/2024/Summer24Prompt24_V5/jet_jerc.json.gz; scales/JME/2024/Summer24Prompt24_V5/fatJet_jerc.json.gz"
+  files2025 "scales/JME/2025/jet_jerc.json.gz; scales/JME/2025/fatJet_jerc.json.gz"
+  jec2024 "Summer24Prompt24_V5"
+  jer2024 "Summer24Prompt24_JRV2"
+  jec2025 "Summer24Prompt25_V3"
+  jer2025 "Summer24Prompt25_JRV2"
+  radii "AK4PFPuppi, AK8PFPuppi"
+  jecKey "<jec>_MC_L1L2L3Res_<radius>"
+  jerKeys "<jer>_MC_PtResolution_<radius>, <jer>_MC_ScaleFactor_<radius>, <jer>_MC_SFUncertainty_<radius>"
+  jesKey "<jec>_MC_Total_<radius>"
+  endpoints "nominal, jesTotalUp, jesTotalDown, jerUp, jerDown"
+  propagation "jet p4, MET, TROTA, candidate arbitration, selections, recoil, GNN and event weights"
+  evaluator "utils/jme_calibration.py:calibrated_endpoints; utils/systematic_views.py:event_views"
+
+define rawJetPt = NanoAODJetPt * (1 - rawFactor)
+define rawJetMass = NanoAODJetMass * (1 - rawFactor)
+define jecJetPt = rawJetPt * JEC
+define jecJetMass = rawJetMass * JEC
+define jesUpPt = nominalJetPt * (1 + totalJESUncertainty)
+define jesDownPt = nominalJetPt * (1 - totalJESUncertainty)
+
+info electronPhotonMomentum
+  files "scales/EGM/<year>/electronSS_EtDependent.json.gz; scales/EGM/<year>/photonSS_EtDependent.json.gz"
+  keys "Scale (compound), SmearAndSyst"
+  coordinates "run, SC eta, r9, pT, seedGain as required by the correction"
+  domain "pT>=20, abs(SC eta)<2.5"
+  data "Scale(scale,run,SC eta,r9,pT,seedGain)"
+  mc "SmearAndSyst(smear,pT,r9,SC eta); deterministic Gaussian from run/luminosityBlock/event/object index"
+  endpoints "electronScaleUp/Down, electronSmearUp/Down, photonScaleUp/Down, photonSmearUp/Down"
+  evaluator "utils/corrections.py:_calibrate_egm_collection"
+
+info muonMomentum
+  file "scales/MUO/<year>/muon_scalesmearing.json.gz"
+  keys "a_data, m_data, a_mc, m_mc, poly_params, cb_params, RandomSmearing, k_data, k_mc"
+  domain "26<=pT<=200, abs(eta)<2.4"
+  endpoints "muonScaleUp/Down, muonResolutionUp/Down"
+  evaluator "utils/corrections.py:_calibrate_muons"
+
+define scaledMuonPt = 1 / (muonMultiplicative / Muon_pt + Muon_charge * muonAdditive)
+
+info tauMomentum
+  file "scales/TAU/<year>/tau.json.gz"
+  key "tau_energy_scale"
+  endpoints "tauEnergyScaleUp/Down"
+  evaluator "utils/corrections.py:_calibrate_taus"
+
+info nonJetMomentumPropagation
+  payloadRegistry "scales/object_shapes.json"
+  metEndpoints "metUnclusteredUp, metUnclusteredDown"
+  propagation "object IDs, vetoes, cleaning, recoil, dilepton mass, selections, GNN and nominal SF"
+  fixed "stored jet momenta, TROTA reconstruction and tagger working points"
+  combination "absolute stored non-JME endpoints with corrected-central JME histograms; no recentering"
+  configuration "jsons/combined_systematics_config.json:systematic_combination"
+
 define shiftedObjectPt = storedCorrectedPt + variedCalibrationPt - nominalCalibrationPt
-define shiftedMETx = storedMETx - sum((shiftedObjectPt-storedCorrectedPt)*cos(objectPhi))
-define shiftedMETy = storedMETy - sum((shiftedObjectPt-storedCorrectedPt)*sin(objectPhi))
-# MET-unclustered endpoints add the stored shifted-minus-nominal NanoAOD MET vector.
-# Reevaluate IDs, vetoes, cleaning, recoil, dilepton mass, selections, GNN and nominal SF.
-# Preserve all original values on unaffected rows; never create shifted ROOTs.
+define shiftedMETx = storedMETx - sum((shiftedObjectPt - storedCorrectedPt) * cos(objectPhi))
+define shiftedMETy = storedMETy - sum((shiftedObjectPt - storedCorrectedPt) * sin(objectPhi))
+
+info statisticalUncertainties
+  templateShapes "all adopted weight and momentum endpoints"
+  rz "8 independent measured RZ statistical shape nuisances"
+  nonclosure "26 Z/gamma double-ratio shape nuisances; Up=1+abs(D-1), Down=1/(1+abs(D-1))"
+  normalization "96 free rate parameters in [0.01,5]"
+  mcStatistics "autoMCStats 10 1 1"
+  lnN "two luminosity terms and one signal cross-section term"
+  signal "SR only"
+  correlations "utils/statistical_templates.py; utils/statistics_model.py; workflows/build_nominal_grid.py"
