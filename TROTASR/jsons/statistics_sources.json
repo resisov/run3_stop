@@ -1,0 +1,55 @@
+{
+  "schema": "trotasr_statistics_source_extraction_v1",
+  "approval_date": "2026-09-23",
+  "runtime_external_analysis_dependencies": [],
+  "sources": [
+    {
+      "source": "autonomous_allhad/workflow/build_run2_linked_card.py",
+      "source_sha256": "e3e361b7af929570a42f2ea41b9b2fcb1a5159a7f9d4f98e93b43a410f9ef955",
+      "target": "utils/statistical_templates.py",
+      "included": "Native TH1 assembly, normalization bindings, negative-bin audit, card text and template writer functions",
+      "excluded": "Legacy CLI, fixed 398-bin check, campaign-file reading and old output orchestration",
+      "adaptations": "Internal paths; duplicate/scope/observation validation; prohibit ROOT creation on the local Mac"
+    },
+    {
+      "source": "autonomous_allhad/workflow/build_standard_shape_card.py",
+      "source_sha256": "4a5363cc0eef49424203d6cd4ec762b3a6d1e961d205bd1e23b9526dd3bc1c91",
+      "target": "utils/statistical_templates.py",
+      "included": ["ALIASES", "ORDER", "physical", "aggregate"],
+      "excluded": "All legacy input loading, dynamic external imports and obsolete statistical model builders"
+    },
+    {
+      "source": "autonomous_allhad/workflow/signal_theory.py",
+      "source_sha256": "c3790ec3d84f857a1b8322fd2a9867d21b3f73caa20d64d9e90b0d22dc3cd831",
+      "target": "utils/renderers/signal_theory.py",
+      "included": "Reuse the already present byte-identical internal copy; no duplicate file added"
+    },
+    {
+      "source": "autonomous_allhad/workflow/build_combine_inputs.py",
+      "source_sha256": "050c5fd6ae2b419ff77b36d62ae385f9ebfc6f423c67a4b1b824d507341745b8",
+      "target": "utils/statistics_model.py",
+      "included": ["nps_nuisance_name", "require_positive", "scaled_record", "sum_one_bin_backgrounds", "build_rz_covariance", "rz_value", "rz_nuisances", "closure_record", "rate_parameter", "add_extra"],
+      "adaptations": "Year is an explicit argument, not mutable global state; JES Total keeps adopted per-year names without environment selection",
+      "excluded": "Legacy campaign loaders, external imports, old SR maps/overlap-bin removal, floor-to-epsilon ROOT writer, old runners",
+      "internal_adapter": "utils/statistics_inputs.py",
+      "adapter_contract": "Adopted 162-bin high-dM SR; exact Nb/native recoil components; unchanged high CR axes; low-dM SR30/CR10 with true GNN x recoil Sgamma projection; signed contributions reach audited native template writer"
+    }
+  ],
+  "validation": {
+    "local_tests_passed": 62,
+    "synthetic_template_validate_only_executed": true,
+    "synthetic_validate_only_is_idempotent": true,
+    "synthetic_analysis_bins_per_year": 270,
+    "synthetic_two_year_th1_channels": 16,
+    "background_measurements_executed": false,
+    "background_measurement_producer_implemented": true,
+    "native_root_writer_executed": false,
+    "combine_executed": false,
+    "full_workflow_complete": false,
+    "remote_sync_of_latest_python_changes": true,
+    "remote_unit_tests_passed": 83,
+    "remote_representative_input_tests_passed": 4,
+    "compiled_dependency_rebuild_required": false,
+    "remote_compiled_definitions_reloaded": true
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "schema": "trotasr_nominal_grid_config_v1",
+  "fit_campaign": "jme_weights_preliminary",
+  "preliminary_fit_exclusions": {
+    "id": "sr_qcd_nb1_u6_20260928",
+    "user_approved": true,
+    "approval": "2026-09-28 user: 그렇게해, approving fit-only omission of the two SR zero-total components",
+    "preserve_all_root_objects": true,
+    "auto_mc_stats": [
+      10,
+      1,
+      1
+    ],
+    "targets": [
+      {
+        "channel": "SR_highdm_c1_2024",
+        "process": "QCD_Nb1_u6"
+      },
+      {
+        "channel": "SR_highdm_c1_2025",
+        "process": "QCD_Nb1_u6"
+      }
+    ]
+  },
+  "systematic_scope": "JME corrected-central nominal + JES Total Up/Down + JER Up/Down + existing weights; preliminary, non-JME16 excluded by user choice",
+  "grid": "stats/signal_grid.json",
+  "theory": "stats/stop_xsec_13p6TeV.json",
+  "sr_merge": {
+    "path": "sr_category_merge.json",
+    "sha256": "2b3ab3fcfb5047b37fdfdb8ad4a214b75cae62c2013317583cdf2d56fead5f89"
+  },
+  "years": {
+    "2024": {
+      "hists": "campaigns/systematics_20260924/merged/systematics_2024.json.gz",
+      "sgamma": "estimations/jme_weights_20260928/2024/sgamma.json.gz",
+      "rz_high": "estimations/jme_weights_20260928/2024/rz_high.json.gz",
+      "rz_low": "estimations/jme_weights_20260928/2024/rz_low.json.gz",
+      "double_ratio": "estimations/jme_weights_20260928/2024/double_ratio.json.gz"
+    },
+    "2025": {
+      "hists": "campaigns/systematics_20260924/merged/systematics_2025.json.gz",
+      "sgamma": "estimations/jme_weights_20260928/2025/sgamma.json.gz",
+      "rz_high": "estimations/jme_weights_20260928/2025/rz_high.json.gz",
+      "rz_low": "estimations/jme_weights_20260928/2025/rz_low.json.gz",
+      "double_ratio": "estimations/jme_weights_20260928/2025/double_ratio.json.gz"
+    }
+  },
+  "background_estimation_uncertainties": {
+    "id": "jme_background_shapes_20260929",
+    "mode": "shape",
+    "auto_mc_stats": [
+      10,
+      1,
+      1
+    ],
+    "user_approved": true
+  },
+  "reused_input_cache": {
+    "source_output": "stats/jme_weights_20260928_sr118/grid",
+    "contract_sha256": "975e98e2a19bee27e3fc3654c50de9823e18930972d41a3acabbd7c675d5c414",
+    "prior_config": "validation/approved_sr_exclusion_20260928/prior_source/config.json",
+    "prior_builder": "validation/approved_sr_exclusion_20260928/prior_source/build_nominal_grid.py",
+    "cache_sha256": {
+      "2024": "d9f2ae23690a279423c2ec0376c21dd78fba2c6ecedd5a8aad511e39719459df",
+      "2025": "2f5188f74e54c7170a1b9773ebdd25cb3026bb67b1e881975b0fc86fc1fc8bbb"
+    }
+  },
+  "statistical_revision": {
+    "id": "cr12_shapes_20260929",
+    "user_approved": true,
+    "rate_parameter_range": [
+      0.01,
+      5
+    ],
+    "highdm_cr_bins_per_region_year": 12,
+    "native_recoil_groups": [
+      [
+        0
+      ],
+      [
+        1
+      ],
+      [
+        2
+      ],
+      [
+        3
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        6,
+        7
+      ]
+    ],
+    "recoil_edges": [
+      250,
+      300,
+      350,
+      400,
+      500,
+      800,
+      1500
+    ],
+    "last_bin_open_ended": true,
+    "signal_contamination": false,
+    "auto_mc_stats": [
+      10,
+      1,
+      1
+    ],
+    "preserve_sr_bins": [
+      118,
+      30
+    ],
+    "preserve_existing_uncertainty_correlations": true
+  }
+}

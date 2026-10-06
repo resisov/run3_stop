@@ -1,0 +1,42 @@
+{
+  "schema": "trotasr_nonjme_payloads_v1",
+  "source": "Frozen objects_intermediate_20260914 payload bundles; unchanged payloads and retained-event delta prescription",
+  "years": {
+    "2024": {
+      "electron": {
+        "path": "scales/EGM/2024/electronSS_EtDependent.json.gz",
+        "sha256": "b464129d2c0c3974618d0d0dbda7d1bdff73641a0b8d04c2ac4164180ae5ed67"
+      },
+      "photon": {
+        "path": "scales/EGM/2024/photonSS_EtDependent.json.gz",
+        "sha256": "49dd136db56ba99874cb0d0bb2d46317689de7f28e7b7fdf0b4c8a1021ab9fac"
+      },
+      "muon": {
+        "path": "scales/MUO/2024/muon_scalesmearing.json.gz",
+        "sha256": "d9ca1368ae0bd09535d8fa8ea90df07242cee4d8e9ca9279c0032657624fa041"
+      },
+      "tau": {
+        "path": "scales/TAU/2024/tau.json.gz",
+        "sha256": "2f36d1ff0df7bce33e3bddd5f01177961393bbb1f6a43b5f22e9c7d5a5caadf3"
+      }
+    },
+    "2025": {
+      "electron": {
+        "path": "scales/EGM/2025/electronSS_EtDependent.json.gz",
+        "sha256": "4bdfee00dc381550d0be04fbb9e7e085caf304bcb577d446cdd1167cd3d9767e"
+      },
+      "photon": {
+        "path": "scales/EGM/2025/photonSS_EtDependent.json.gz",
+        "sha256": "87d7785fc7e82d51a794daf950a3c33366674b66c9420c95b86ae3a8199b1bba"
+      },
+      "muon": {
+        "path": "scales/MUO/2025/muon_scalesmearing.json.gz",
+        "sha256": "466861f1cbacf5258a52db216a8b954df8efee7f815021fec68e065a846bc4e4"
+      },
+      "tau": {
+        "path": "scales/TAU/2025/tau.json.gz",
+        "sha256": "f2d204a211c5656aa7ad1d63d82f55e4f9e6e802c5d96043ace4915306127301"
+      }
+    }
+  }
+}

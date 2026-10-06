@@ -1,0 +1,10 @@
+{
+  "input_plan": "campaigns/systematics_20260924/plan.json",
+  "grid": "stats/combined_systematics_sr118/grid/manifest.json",
+  "signal": {"model": "T2tt", "mstop": 1200, "mlsp": 500},
+  "histograms": {
+    "2024": "campaigns/nonjme_20260927/combined/merged/systematics_2024.json.gz",
+    "2025": "campaigns/nonjme_20260927/combined/merged/systematics_2025.json.gz"
+  },
+  "max_workers": 8
+}

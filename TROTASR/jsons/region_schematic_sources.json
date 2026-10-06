@@ -1,0 +1,23 @@
+{
+  "schema": "trotasr_region_schematic_sources_v1",
+  "sources": [
+    {
+      "source": "AN-26-090/figures/region_orthogonality_schematic.tex",
+      "target": "workflows/renderers/region_schematics/region_orthogonality_schematic.tex",
+      "source_sha256": "785550bc24f46302a5eb5ff5057aba9c03ff94a8182555ca494ca7b3ce0c87e4",
+      "target_sha256": "0c44f0ab89dddb092baf816fb6bad6d3df7d045700ee0bbd974a249b42e6ae75",
+      "before": "N_{\\mathrm{t}}+N_{\\mathrm{W}}+N_{\\mathrm{res}}\\geq1",
+      "after": "N_{\\mathrm{bst}}+N_{\\mathrm{mix}}+N_{\\mathrm{res}}+N_{\\mathrm{W}}\\geq1"
+    },
+    {
+      "source": "AN-26-090/figures/region_orthogonality_schematic_lowdm.tex",
+      "target": "workflows/renderers/region_schematics/region_orthogonality_schematic_lowdm.tex",
+      "source_sha256": "066f58a0aec04faec6f0d02e6201b4cda04e6b805fa9526c10f4d5edf9ff0d34",
+      "target_sha256": "1d414da9a99898b324e99f4a24e3787c919654cbbc57dbf5b733c0790b996668",
+      "before": "N_{\\mathrm{t}}=N_{\\mathrm{W}}=N_{\\mathrm{res}}=0",
+      "after": "N_{\\mathrm{bst}}=N_{\\mathrm{mix}}=N_{\\mathrm{res}}=N_{\\mathrm{W}}=0"
+    }
+  ],
+  "runtime_external_analysis_dependencies": [],
+  "original_AN_modified": false
+}

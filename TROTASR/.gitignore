@@ -1,0 +1,41 @@
+__pycache__/
+*.pyc
+hists/*
+!hists/.gitkeep
+stats/**/work/
+stats/**/*.root
+stats/**/*.log
+validation/outputs/
+utils/compiled/*.coffea
+intermediate/
+
+# Publication policy: keep local tests, standalone audits and runtime products
+# out of the source/payload branch. Production input-integrity functions used
+# by the actual histogram/fit workflows are part of the production source.
+*.png
+*.pdf
+/test/
+/tests/
+/validation/
+/campaigns/
+/results/
+/plots/
+/output/
+/tmp/
+/NOMINAL_CONTINUATION.md
+/workflows/test_*.py
+/workflows/audit_*.py
+/workflows/validate_*.py
+/workflows/verify_*.py
+/workflows/summarize_validation.py
+/workflows/prepare_datacard_review.py
+/workflows/optimize_systematics.py
+/scales/.incoming*/
+/stats/*/
+/estimations/*/
+
+# Adopted efficiency maps are calibration inputs, not audit outputs.
+!/estimations/btageff2024.merged
+!/estimations/btageff2025.merged
+!/estimations/topwtageff2024.merged
+!/estimations/topwtageff2025.merged

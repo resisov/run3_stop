@@ -1,0 +1,79 @@
+{
+  "schema": "trotasr_nominal_plot_sources_v1",
+  "sources": [
+    {
+      "source": "autonomous_allhad/workflow/plot_measurement.py",
+      "source_sha256": "ecb2d3c9b2bf3457f1a183e2b02c5e476ea20a2bbd5514960801503ab8a086dc",
+      "target": "workflows/renderers/measurement_style.py",
+      "target_sha256": "6641eb58db9aac4a477a139a7e3ccdac0cf98751f842e4c0ed15a74c9ca6286a",
+      "fragments": {
+        "CMS_LABEL_FONT_SIZE": "54bc6ebba57925959c4e7c8f23bc0bdeedc0f650ea0770a6e31b6b21c27acce0",
+        "FIGURE_SIZE": "8f310f0d8fe75a27bafe6382e78ca7467fb38b4a8408dc808d2d6aede9917e45",
+        "_apply_style": "85e3fc371d8498d33f27ffcb901aa35a616a4986ad0d61b9397543e68fe957c1"
+      },
+      "fragments_verbatim": true
+    },
+    {
+      "source": "autonomous_allhad/workflow/plot_recoil_transfer_factors_2024.py",
+      "source_sha256": "c46b7a046fcaff225adf5d395edcc2c23ab7a8ddce119a6bb473957b8d8ae357",
+      "target": "workflows/renderers/transfer_factors.py",
+      "target_sha256": "54e8e15335cabde458f450bed6e62e3b4780373f53d869ba53943a7096446b60",
+      "fragments": {
+        "CMS_LABEL": "70e11ba5abba512e5b71736463df8c35199bfe3e4a996af326a39a3983e4b624",
+        "PATHS": "8a2a8057423a176f1fbd9e6f920131e6644ee7879bc1b23372d24b2224bb1de5",
+        "HIGH_STYLES": "ebe78c4c89c1f8f3597834ff8b726e069e51a96a4b347faf3adc0e2af10d734b",
+        "GNN_STYLES": "d5c34a522d3af79d8c0a1d149bf0fc62baae3e16ad3177d59cdb61df89ee6ed9",
+        "GNN_PATHS": "c3c6e7ec4660c920012fcf55213366439ca479de38a4e854e2f619ffcd305446",
+        "finite_arrays": "2a79838e2a3c5b4104e374d09fb6e9e21b10c9b1273a74e109401a193001367c",
+        "set_tf_ylim": "a26de7845d9c3b5b2d950a22cb014065c43ae0032a5c4b8b98ede80388f19afd",
+        "save_figure": "fc88cf1ae4863e3e75c94053017a098ee3cf7710fae675011080719e325f3d2b",
+        "plot_highdm": "25292f9abd96e02dfc411680bbefe05eb997fb83d208787bad27e2244aebca74",
+        "render_factors": "39d432dd2e96579d63e9e03284c3472f57f8e21774cda3e72f3041dc21a2041b"
+      },
+      "fragments_verbatim": true
+    },
+    {
+      "source": "autonomous_allhad/autonomous_allhad/dy_estimation/report.py",
+      "source_sha256": "56fe170df42ecc6a1abff6ab62e8551d49b30a2cb560f621b24eec0dad26eb68",
+      "target": "workflows/renderers/dy_measurement.py",
+      "target_sha256": "492c6524736686f2b1131bf509392e6f899ac8393d67c70f5192e2f3ab2a0112",
+      "fragments": {
+        "CMS_LABEL": "70e11ba5abba512e5b71736463df8c35199bfe3e4a996af326a39a3983e4b624",
+        "CHANNELS": "d271b710c3c193306dbe161f6d1f38b618e7c2d207c1d1e9eed2b3f6a1bf5d8b",
+        "GROUPS": "5db49757a338256066bb426ac6f376c39c1fff81c176868b0cf9e523dd48a2b5",
+        "save_figure": "3a88c71e54a23773c0970e900fff8c803f2eca066f2551937a21d61e940dc667",
+        "plot_rt": "ef8395d93db26cd0473d94ba6e2cedbe396c738812f6aa0893e66c0a778a748e",
+        "plot_rz_nb": "107187d67ee211c355ff41d28cb1db7a302775873a42a6e691189f022cda620c",
+        "plot_mll": "e2077bed14e2015abaa0e9436badfc8ebee00294652277e45d1147f1dfb55694"
+      },
+      "fragments_verbatim": true
+    },
+    {
+      "source": "autonomous_allhad/workflow/build_an_zinv_factors_2024.py",
+      "source_sha256": "ed56f80041d06513c1bc18a000f916c014dba67bfe003b1499a84671cddb9208",
+      "target": "workflows/renderers/photon_measurement.py",
+      "target_sha256": "92b3c1d2fb3eac91d27802b36fcc9cf888887f5a63d75c41cbc0893b3d866d95",
+      "fragments": {
+        "CMS_LABEL": "70e11ba5abba512e5b71736463df8c35199bfe3e4a996af326a39a3983e4b624",
+        "LOW_GROUPS": "1454c566e75b7c13c23d34b8c51726c9765293b3fe254f0893c1a3fa423bd559",
+        "low_ut_geometry": "34aee787e65f525fd2fde46a7725a215d2790a90922120e558024d280d527b2c",
+        "save_square_figure": "b921be5ba1be350fa91fe50830b259e614718d9c2c0037b59934dcfce160ec1e",
+        "plot_q": "b52caa3abf2b4ce2211d8541f025cbdb44bb68e7f5f3b9cd2e6ff380d08b4e2f",
+        "plot_sgamma": "010e316f84404fa829bc3444218fc10606bf6d468595d447d9ff6b9adb00629e"
+      },
+      "fragments_verbatim": true
+    },
+    {
+      "source": "autonomous_allhad/workflow/build_zgamma_double_ratio_2024.py",
+      "source_sha256": "0a9791effbc9349ff9b3c9bf77acb17a4d3fcce731c43e696dea35b67425656e",
+      "target": "workflows/renderers/zgamma_measurement.py",
+      "target_sha256": "1981b6921bb9ff2e0c75a20f7a034934ae8944ee85b6a3d5fd3e57084452f8ce",
+      "fragments": {
+        "CMS_LABEL": "6dc8a823a7a29f835d45d960195784ffea6e3f2e3cc6c420b37a2d8073bbb592",
+        "plot": "2699ccb6f4ad6234c8f2470874276c9b9ce74e96851dc8e5ac26896975f1f13f"
+      },
+      "fragments_verbatim": true
+    }
+  ],
+  "runtime_external_analysis_dependencies": []
+}

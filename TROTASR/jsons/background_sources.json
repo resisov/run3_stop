@@ -1,0 +1,83 @@
+{
+  "schema": "trotasr_background_source_provenance_v1",
+  "recorded_on": "2026-09-23",
+  "runtime_external_analysis_dependencies": [],
+  "sources": [
+    {
+      "source": "autonomous_allhad/autonomous_allhad/dy_estimation/model.py",
+      "source_sha256": "6cf75e103e08740e71a39c09c07ff01b751e1113987a212483499109459fa427",
+      "target": "utils/dy_estimation.py",
+      "target_sha256": "605ea3f948275124c323ba8a0a4a11f92d2edf8c91a04852a46b669d8167b03b",
+      "functions": [
+        "empty_yield",
+        "add_yield",
+        "nested_yield",
+        "empty_histogram",
+        "nested_histogram",
+        "fill_histogram",
+        "merge_yield",
+        "merge_tree",
+        "solve_matrix",
+        "finalize_rz"
+      ],
+      "functions_verbatim": true
+    },
+    {
+      "source": "autonomous_allhad/workflow/build_an_zinv_factors_2024.py",
+      "source_sha256": "ed56f80041d06513c1bc18a000f916c014dba67bfe003b1499a84671cddb9208",
+      "target": "utils/photon_estimation.py",
+      "target_sha256": "d76bb3fd8a300c40a65a597686ec7995fafe84cd9e3098dba169fd21d05a1cc8",
+      "functions": [
+        "factor",
+        "leaf_array",
+        "sum_samples",
+        "data_leaf",
+        "build_q_sgamma"
+      ],
+      "functions_verbatim": true
+    },
+    {
+      "source": "autonomous_allhad/workflow/build_zgamma_double_ratio_2024.py",
+      "source_sha256": "0a9791effbc9349ff9b3c9bf77acb17a4d3fcce731c43e696dea35b67425656e",
+      "target": "utils/zgamma_estimation.py",
+      "target_sha256": "af7f89b9635545af067ccc1749baf297e233f9192efcb10d6376ad20bb2721d2",
+      "functions": [
+        "rebin",
+        "ratio",
+        "normalized_shape",
+        "records"
+      ],
+      "functions_verbatim": true
+    },
+    {
+      "source": "autonomous_allhad/workflow/plot_recoil_transfer_factors_2024.py",
+      "source_sha256": "c46b7a046fcaff225adf5d395edcc2c23ab7a8ddce119a6bb473957b8d8ae357",
+      "target": "utils/transfer_factors.py",
+      "adaptation": "Internal histogram boundary only; preserved numerical equations or observable specifications; regression tested"
+    },
+    {
+      "source": "autonomous_allhad/workflow/gnn_background_histograms.py",
+      "source_sha256": "4c1d59cd6a4cbebe364f16d521b1fa0d7e0587b6308eb7162c15795c39a49930",
+      "target": "utils/transfer_factors.py",
+      "adaptation": "Internal histogram boundary only; preserved numerical equations or observable specifications; regression tested"
+    },
+    {
+      "source": "autonomous_allhad/workflow/pool_lowdm_transfer_factors.py",
+      "source_sha256": "773f80fae142c7c16c77282e6a38fadce955f7aac1fba5ede1131ab8ff9601c0",
+      "target": "utils/transfer_factors.py",
+      "adaptation": "Internal histogram boundary only; preserved numerical equations or observable specifications; regression tested"
+    },
+    {
+      "source": "autonomous_allhad/workflow/build_flat_boosted_recoil_hists.py",
+      "source_sha256": "0b0835a7ff9f67eb825d11647507105e72d87a996c4d4c6b1a95b27a76ee0883",
+      "target": "utils/observable_specs.py",
+      "adaptation": "Internal histogram boundary only; preserved numerical equations or observable specifications; regression tested"
+    }
+  ],
+  "validation": {
+    "remote_unit_tests_passed": 83,
+    "remote_unit_tests_seconds": 2.119,
+    "real_background_measurement_executed": false,
+    "full_workflow_complete": false
+  }
+}

@@ -1,0 +1,2972 @@
+{
+  "schema": "trotasr_an_figure_inventory_v1",
+  "recorded_on": "2026-09-23",
+  "status": "in_progress_not_delivered_to_AN",
+  "source": "/Users/taiwoomac/Desktop/Working/CMS-AN-2026-090/AN-26-090/AN-26-090_overleaf.tex",
+  "source_sha256": "4f95362ec4b00cc375b3770673ceda9aea8b32c36c16e1a598003174d7b724d9",
+  "an_was_modified": false,
+  "figures": [
+    {
+      "an_path": "figures/signal_models/t2tt_diagram.pdf",
+      "an_source_line": 435,
+      "section": "Data and simulation",
+      "subsection": "Signal simulation",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_unchanged_signal_diagram",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/signal_models/t2tt_diagram.pdf"
+    },
+    {
+      "an_path": "figures/signal_models/t2bw_diagram.pdf",
+      "an_source_line": 440,
+      "section": "Data and simulation",
+      "subsection": "Signal simulation",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_unchanged_signal_diagram",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/signal_models/t2bw_diagram.pdf"
+    },
+    {
+      "an_path": "figures/signal_models/t2tb_diagram.pdf",
+      "an_source_line": 447,
+      "section": "Data and simulation",
+      "subsection": "Signal simulation",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_unchanged_signal_diagram",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/signal_models/t2tb_diagram.pdf"
+    },
+    {
+      "an_path": "figures/trigger_efficiencies/met_trigger_efficiency_2024.pdf",
+      "an_source_line": 925,
+      "section": "Corrections and Scales",
+      "subsection": "Trigger efficiency scale factors",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/trigger_efficiencies/met_trigger_efficiency_2024.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/triggers/pdf_numeric_binding.json"
+    },
+    {
+      "an_path": "figures/trigger_efficiencies/met_trigger_scale_factor_2024.pdf",
+      "an_source_line": 926,
+      "section": "Corrections and Scales",
+      "subsection": "Trigger efficiency scale factors",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/trigger_efficiencies/met_trigger_scale_factor_2024.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/triggers/pdf_numeric_binding.json"
+    },
+    {
+      "an_path": "figures/trigger_efficiencies/met_trigger_efficiency_2025.pdf",
+      "an_source_line": 927,
+      "section": "Corrections and Scales",
+      "subsection": "Trigger efficiency scale factors",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/trigger_efficiencies/met_trigger_efficiency_2025.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/triggers/pdf_numeric_binding.json"
+    },
+    {
+      "an_path": "figures/trigger_efficiencies/met_trigger_scale_factor_2025.pdf",
+      "an_source_line": 928,
+      "section": "Corrections and Scales",
+      "subsection": "Trigger efficiency scale factors",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/trigger_efficiencies/met_trigger_scale_factor_2025.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/triggers/pdf_numeric_binding.json"
+    },
+    {
+      "an_path": "figures/trigger_efficiencies/photon_trigger_efficiency_2024.pdf",
+      "an_source_line": 938,
+      "section": "Corrections and Scales",
+      "subsection": "Trigger efficiency scale factors",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/trigger_efficiencies/photon_trigger_efficiency_2024.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/triggers/pdf_numeric_binding.json"
+    },
+    {
+      "an_path": "figures/trigger_efficiencies/photon_trigger_scale_factor_2024.pdf",
+      "an_source_line": 939,
+      "section": "Corrections and Scales",
+      "subsection": "Trigger efficiency scale factors",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/trigger_efficiencies/photon_trigger_scale_factor_2024.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/triggers/pdf_numeric_binding.json"
+    },
+    {
+      "an_path": "figures/trigger_efficiencies/photon_trigger_efficiency_2025.pdf",
+      "an_source_line": 940,
+      "section": "Corrections and Scales",
+      "subsection": "Trigger efficiency scale factors",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/trigger_efficiencies/photon_trigger_efficiency_2025.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/triggers/pdf_numeric_binding.json"
+    },
+    {
+      "an_path": "figures/trigger_efficiencies/photon_trigger_scale_factor_2025.pdf",
+      "an_source_line": 941,
+      "section": "Corrections and Scales",
+      "subsection": "Trigger efficiency scale factors",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/trigger_efficiencies/photon_trigger_scale_factor_2025.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/triggers/pdf_numeric_binding.json"
+    },
+    {
+      "an_path": "figures/lowpt_lepton_id_2024/electron_mass_fit.pdf",
+      "an_source_line": 1017,
+      "section": "Corrections and Scales",
+      "subsection": "Electron corrections and scale factors",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_archived_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/lowpt_lepton_id_2024/electron_mass_fit.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/verification.json"
+    },
+    {
+      "an_path": "figures/lowpt_lepton_id_2025/electron_mass_fit_bin_00.pdf",
+      "an_source_line": 1018,
+      "section": "Corrections and Scales",
+      "subsection": "Electron corrections and scale factors",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_archived_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/lowpt_lepton_id_2025/electron_mass_fit_bin_00.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/verification.json"
+    },
+    {
+      "an_path": "figures/lowpt_lepton_id_2024/electron_efficiency.pdf",
+      "an_source_line": 1028,
+      "section": "Corrections and Scales",
+      "subsection": "Electron corrections and scale factors",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_numeric_review_required",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "archived_payload_bound_but_preserved_AN_figure_mismatches",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/lowpt_lepton_id_2024/electron_efficiency.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/verification.json",
+      "numeric_issues": [
+        {
+          "bin": 0,
+          "series": "data",
+          "issue": "numeric_mismatch"
+        },
+        {
+          "bin": 0,
+          "series": "mc",
+          "issue": "numeric_mismatch"
+        },
+        {
+          "bin": 1,
+          "series": "data",
+          "issue": "numeric_mismatch"
+        },
+        {
+          "bin": 1,
+          "series": "mc",
+          "issue": "numeric_mismatch"
+        },
+        {
+          "bin": 2,
+          "series": "data",
+          "issue": "numeric_mismatch"
+        },
+        {
+          "bin": 2,
+          "series": "mc",
+          "issue": "numeric_mismatch"
+        },
+        {
+          "bin": 3,
+          "series": "data",
+          "issue": "numeric_mismatch"
+        },
+        {
+          "bin": 3,
+          "series": "mc",
+          "issue": "numeric_mismatch"
+        },
+        {
+          "bin": 4,
+          "series": "data",
+          "issue": "numeric_mismatch"
+        },
+        {
+          "bin": 4,
+          "series": "mc",
+          "issue": "numeric_mismatch"
+        },
+        {
+          "bin": 5,
+          "series": "data",
+          "issue": "numeric_mismatch"
+        },
+        {
+          "bin": 5,
+          "series": "mc",
+          "issue": "numeric_mismatch"
+        }
+      ],
+      "correction_candidate": {
+        "path": "plots/reference_corrections_20260923/electron2024/efficiency.pdf",
+        "sha256": "9bd786384a0034dcf4355408077f35b65ab63e0ee73d8b0bd22fe6ab6eed630a",
+        "numeric_status": "verified",
+        "status": "display_decision_pending",
+        "audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/candidate_recovery_20260923.json"
+      }
+    },
+    {
+      "an_path": "figures/lowpt_lepton_id_2024/electron_scale_factor.pdf",
+      "an_source_line": 1029,
+      "section": "Corrections and Scales",
+      "subsection": "Electron corrections and scale factors",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_numeric_review_required",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "archived_payload_bound_but_preserved_AN_figure_mismatches",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/lowpt_lepton_id_2024/electron_scale_factor.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/verification.json",
+      "numeric_issues": [
+        {
+          "bin": 0,
+          "series": "sf",
+          "issue": "numeric_mismatch"
+        },
+        {
+          "bin": 1,
+          "series": "sf",
+          "issue": "numeric_mismatch"
+        },
+        {
+          "bin": 2,
+          "series": "sf",
+          "issue": "numeric_mismatch"
+        },
+        {
+          "bin": 3,
+          "series": "sf",
+          "issue": "numeric_mismatch"
+        },
+        {
+          "bin": 4,
+          "series": "sf",
+          "issue": "unexpected_point"
+        },
+        {
+          "bin": 5,
+          "series": "sf",
+          "issue": "unexpected_point"
+        }
+      ],
+      "correction_candidate": {
+        "path": "plots/reference_corrections_20260923/electron2024/scale_factor.pdf",
+        "sha256": "055a994e01997aa1c933018106fd9a1cbfdd932f4f54e2f2741e2d1148f93c3e",
+        "numeric_status": "verified",
+        "status": "display_decision_pending",
+        "audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/candidate_recovery_20260923.json"
+      }
+    },
+    {
+      "an_path": "figures/lowpt_lepton_id_2025/electron_efficiency.pdf",
+      "an_source_line": 1030,
+      "section": "Corrections and Scales",
+      "subsection": "Electron corrections and scale factors",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_archived_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/lowpt_lepton_id_2025/electron_efficiency.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/verification.json"
+    },
+    {
+      "an_path": "figures/lowpt_lepton_id_2025/electron_scale_factor.pdf",
+      "an_source_line": 1031,
+      "section": "Corrections and Scales",
+      "subsection": "Electron corrections and scale factors",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_AN_defined_valid_measurement_only_scope_with_applied_policy_distinction",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/lowpt_lepton_id_2025/electron_scale_factor.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/verification.json",
+      "reference_scope_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/an_measurement_scope.json"
+    },
+    {
+      "an_path": "figures/lowpt_lepton_id_2024/muon_mass_fit.pdf",
+      "an_source_line": 1099,
+      "section": "Corrections and Scales",
+      "subsection": "Muon corrections and scale factors",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_archived_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/lowpt_lepton_id_2024/muon_mass_fit.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/verification.json"
+    },
+    {
+      "an_path": "figures/lowpt_lepton_id_2025/muon_mass_fit_bin_00.pdf",
+      "an_source_line": 1100,
+      "section": "Corrections and Scales",
+      "subsection": "Muon corrections and scale factors",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_archived_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/lowpt_lepton_id_2025/muon_mass_fit_bin_00.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/verification.json"
+    },
+    {
+      "an_path": "figures/lowpt_lepton_id_2024/muon_efficiency.pdf",
+      "an_source_line": 1108,
+      "section": "Corrections and Scales",
+      "subsection": "Muon corrections and scale factors",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_archived_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/lowpt_lepton_id_2024/muon_efficiency.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/verification.json"
+    },
+    {
+      "an_path": "figures/lowpt_lepton_id_2024/muon_scale_factor.pdf",
+      "an_source_line": 1109,
+      "section": "Corrections and Scales",
+      "subsection": "Muon corrections and scale factors",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_archived_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/lowpt_lepton_id_2024/muon_scale_factor.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/verification.json"
+    },
+    {
+      "an_path": "figures/lowpt_lepton_id_2025/muon_efficiency.pdf",
+      "an_source_line": 1110,
+      "section": "Corrections and Scales",
+      "subsection": "Muon corrections and scale factors",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_archived_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/lowpt_lepton_id_2025/muon_efficiency.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/verification.json"
+    },
+    {
+      "an_path": "figures/lowpt_lepton_id_2025/muon_scale_factor.pdf",
+      "an_source_line": 1111,
+      "section": "Corrections and Scales",
+      "subsection": "Muon corrections and scale factors",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_archived_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/lowpt_lepton_id_2025/muon_scale_factor.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/verification.json"
+    },
+    {
+      "an_path": "figures/gnn/lowdm_hyperparameter_comparison.pdf",
+      "an_source_line": 1386,
+      "section": "Event selection",
+      "subsection": "Graph neural network for the low-\\texorpdfstring{$\\Delta m$}{Delta-m} selection",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_frozen_training_reference",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/gnn/lowdm_hyperparameter_comparison.pdf"
+    },
+    {
+      "an_path": "figures/gnn/lowdm_training_loss.pdf",
+      "an_source_line": 1416,
+      "section": "Event selection",
+      "subsection": "Graph neural network for the low-\\texorpdfstring{$\\Delta m$}{Delta-m} selection",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_frozen_training_reference",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/gnn/lowdm_training_loss.pdf"
+    },
+    {
+      "an_path": "figures/gnn/lowdm_training_accuracy.pdf",
+      "an_source_line": 1417,
+      "section": "Event selection",
+      "subsection": "Graph neural network for the low-\\texorpdfstring{$\\Delta m$}{Delta-m} selection",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_frozen_training_reference",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/gnn/lowdm_training_accuracy.pdf"
+    },
+    {
+      "an_path": "figures/gnn/lowdm_test_roc.pdf",
+      "an_source_line": 1426,
+      "section": "Event selection",
+      "subsection": "Graph neural network for the low-\\texorpdfstring{$\\Delta m$}{Delta-m} selection",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_frozen_training_reference",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/gnn/lowdm_test_roc.pdf"
+    },
+    {
+      "an_path": "figures/gnn/lowdm_shap_beeswarm.pdf",
+      "an_source_line": 1439,
+      "section": "Event selection",
+      "subsection": "Graph neural network for the low-\\texorpdfstring{$\\Delta m$}{Delta-m} selection",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_frozen_training_reference",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/gnn/lowdm_shap_beeswarm.pdf"
+    },
+    {
+      "an_path": "figures/region_orthogonality_schematic.pdf",
+      "an_source_line": 1506,
+      "section": "Analysis regions",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ Analysis Region}{High-Delta-m Analysis Region}",
+      "required_action": "regenerate_current_nominal",
+      "previous_required_action": "verify_unchanged_reference_asset",
+      "classification_correction": "2026-09-23: old baseline omits the adopted Nmix contribution; retain the original schematic style and all other cuts, update the approved topology condition only",
+      "status": "generated_visual_qa_passed_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "generated_path": "plots/region_schematics_20260923/region_orthogonality_schematic.pdf",
+      "provenance": "region_schematic_sources.json",
+      "visual_qa": "plots/region_schematics_20260923/visual_qa.json"
+    },
+    {
+      "an_path": "figures/region_orthogonality_schematic_lowdm.pdf",
+      "an_source_line": 1617,
+      "section": "Analysis regions",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ Analysis Region}{Low-Delta-m Analysis Region}",
+      "required_action": "regenerate_current_nominal",
+      "previous_required_action": "verify_unchanged_reference_asset",
+      "classification_correction": "2026-09-23: old baseline omits the adopted Nmix veto; retain the original schematic style and all other cuts, update the approved topology condition only",
+      "status": "generated_visual_qa_passed_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "generated_path": "plots/region_schematics_20260923/region_orthogonality_schematic_lowdm.pdf",
+      "provenance": "region_schematic_sources.json",
+      "visual_qa": "plots/region_schematics_20260923/visual_qa.json"
+    },
+    {
+      "an_path": "figures/transfer_factors/transfer_factor_top_llcr_highdm.pdf",
+      "an_source_line": 1704,
+      "section": "Background estimation",
+      "subsection": "Lost lepton and multijet transfer factors",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/transfer_factors/transfer_factor_top_llcr_highdm_2025.pdf",
+      "an_source_line": 1705,
+      "section": "Background estimation",
+      "subsection": "Lost lepton and multijet transfer factors",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/transfer_factors/transfer_factor_top_llcr_lowdm_gnn.pdf",
+      "an_source_line": 1707,
+      "section": "Background estimation",
+      "subsection": "Lost lepton and multijet transfer factors",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/transfer_factors/transfer_factor_top_llcr_lowdm_gnn_2025.pdf",
+      "an_source_line": 1708,
+      "section": "Background estimation",
+      "subsection": "Lost lepton and multijet transfer factors",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/transfer_factors/transfer_factor_w_llcr_highdm.pdf",
+      "an_source_line": 1715,
+      "section": "Background estimation",
+      "subsection": "Lost lepton and multijet transfer factors",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/transfer_factors/transfer_factor_w_llcr_highdm_2025.pdf",
+      "an_source_line": 1716,
+      "section": "Background estimation",
+      "subsection": "Lost lepton and multijet transfer factors",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/transfer_factors/transfer_factor_w_llcr_lowdm_gnn.pdf",
+      "an_source_line": 1718,
+      "section": "Background estimation",
+      "subsection": "Lost lepton and multijet transfer factors",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/transfer_factors/transfer_factor_w_llcr_lowdm_gnn_2025.pdf",
+      "an_source_line": 1719,
+      "section": "Background estimation",
+      "subsection": "Lost lepton and multijet transfer factors",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/transfer_factors/transfer_factor_qcd_qcdcr_highdm.pdf",
+      "an_source_line": 1726,
+      "section": "Background estimation",
+      "subsection": "Lost lepton and multijet transfer factors",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/transfer_factors/transfer_factor_qcd_qcdcr_highdm_2025.pdf",
+      "an_source_line": 1727,
+      "section": "Background estimation",
+      "subsection": "Lost lepton and multijet transfer factors",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/transfer_factors/transfer_factor_qcd_qcdcr_lowdm_gnn.pdf",
+      "an_source_line": 1729,
+      "section": "Background estimation",
+      "subsection": "Lost lepton and multijet transfer factors",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/transfer_factors/transfer_factor_qcd_qcdcr_lowdm_gnn_2025.pdf",
+      "an_source_line": 1730,
+      "section": "Background estimation",
+      "subsection": "Lost lepton and multijet transfer factors",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/transfer_factors/transfer_factor_zinv_gcr_lowdm_gnn.pdf",
+      "an_source_line": 1752,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/transfer_factors/transfer_factor_zinv_gcr_lowdm_gnn_2025.pdf",
+      "an_source_line": 1753,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_highdm_dy2e_nb1.pdf",
+      "an_source_line": 1788,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_highdm_dy2e_nb2plus.pdf",
+      "an_source_line": 1789,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_highdm_dy2m_nb1.pdf",
+      "an_source_line": 1790,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_highdm_dy2m_nb2plus.pdf",
+      "an_source_line": 1791,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_highdm_dy2e_nb1_post.pdf",
+      "an_source_line": 1799,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_highdm_dy2e_nb2plus_post.pdf",
+      "an_source_line": 1800,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_highdm_dy2m_nb1_post.pdf",
+      "an_source_line": 1801,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_highdm_dy2m_nb2plus_post.pdf",
+      "an_source_line": 1802,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_highdm_dy2e_nb1_2025.pdf",
+      "an_source_line": 1810,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_highdm_dy2e_nb2plus_2025.pdf",
+      "an_source_line": 1811,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_highdm_dy2m_nb1_2025.pdf",
+      "an_source_line": 1812,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_highdm_dy2m_nb2plus_2025.pdf",
+      "an_source_line": 1813,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_highdm_dy2e_nb1_post_2025.pdf",
+      "an_source_line": 1821,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_highdm_dy2e_nb2plus_post_2025.pdf",
+      "an_source_line": 1822,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_highdm_dy2m_nb1_post_2025.pdf",
+      "an_source_line": 1823,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_highdm_dy2m_nb2plus_post_2025.pdf",
+      "an_source_line": 1824,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_lowdm_dy2e_nb1.pdf",
+      "an_source_line": 1832,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_lowdm_dy2e_nb2plus.pdf",
+      "an_source_line": 1833,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_lowdm_dy2m_nb1.pdf",
+      "an_source_line": 1834,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_lowdm_dy2m_nb2plus.pdf",
+      "an_source_line": 1835,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_lowdm_dy2e_nb1_post.pdf",
+      "an_source_line": 1843,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_lowdm_dy2e_nb2plus_post.pdf",
+      "an_source_line": 1844,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_lowdm_dy2m_nb1_post.pdf",
+      "an_source_line": 1845,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_lowdm_dy2m_nb2plus_post.pdf",
+      "an_source_line": 1846,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_lowdm_dy2e_nb1_2025.pdf",
+      "an_source_line": 1854,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_lowdm_dy2e_nb2plus_2025.pdf",
+      "an_source_line": 1855,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_lowdm_dy2m_nb1_2025.pdf",
+      "an_source_line": 1856,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_lowdm_dy2m_nb2plus_2025.pdf",
+      "an_source_line": 1857,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_lowdm_dy2e_nb1_post_2025.pdf",
+      "an_source_line": 1865,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_lowdm_dy2e_nb2plus_post_2025.pdf",
+      "an_source_line": 1866,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_lowdm_dy2m_nb1_post_2025.pdf",
+      "an_source_line": 1867,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/mll_lowdm_dy2m_nb2plus_post_2025.pdf",
+      "an_source_line": 1868,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/rz_highdm.pdf",
+      "an_source_line": 1916,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/rt_highdm.pdf",
+      "an_source_line": 1917,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/rz_lowdm.pdf",
+      "an_source_line": 1918,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/rt_lowdm.pdf",
+      "an_source_line": 1919,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/rz_highdm_2025.pdf",
+      "an_source_line": 1927,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/rt_highdm_2025.pdf",
+      "an_source_line": 1928,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/rz_lowdm_2025.pdf",
+      "an_source_line": 1929,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/rt_lowdm_2025.pdf",
+      "an_source_line": 1930,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/photon_q_normalization.pdf",
+      "an_source_line": 1951,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/photon_q_normalization_2025.pdf",
+      "an_source_line": 1952,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/sgamma_highdm.pdf",
+      "an_source_line": 2007,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/sgamma_highdm_2025.pdf",
+      "an_source_line": 2008,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/sgamma_lowdm.pdf",
+      "an_source_line": 2009,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/sgamma_lowdm_2025.pdf",
+      "an_source_line": 2010,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/zgamma_double_ratio_highdm.pdf",
+      "an_source_line": 2018,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/zgamma_double_ratio_lowdm.pdf",
+      "an_source_line": 2019,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/zgamma_double_ratio_highdm_2025.pdf",
+      "an_source_line": 2022,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/zinv_measurements/zgamma_double_ratio_lowdm_2025.pdf",
+      "an_source_line": 2023,
+      "section": "Background estimation",
+      "subsection": "Invisible Z background",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/cr_llcr_met.pdf",
+      "an_source_line": 2217,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/cr_qcdcr_met.pdf",
+      "an_source_line": 2218,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/cr_gcr_ut.pdf",
+      "an_source_line": 2219,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/cr_dycr_ut.pdf",
+      "an_source_line": 2220,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/cr_llcr_met.pdf",
+      "an_source_line": 2228,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/cr_qcdcr_met.pdf",
+      "an_source_line": 2229,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/cr_gcr_ut.pdf",
+      "an_source_line": 2230,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/cr_dycr_ut.pdf",
+      "an_source_line": 2231,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/cr_llcr_nb.pdf",
+      "an_source_line": 2239,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/cr_qcdcr_nb.pdf",
+      "an_source_line": 2240,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/cr_gcr_nb.pdf",
+      "an_source_line": 2241,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/cr_dycr_nb.pdf",
+      "an_source_line": 2242,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/cr_llcr_nb.pdf",
+      "an_source_line": 2250,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/cr_qcdcr_nb.pdf",
+      "an_source_line": 2251,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/cr_gcr_nb.pdf",
+      "an_source_line": 2252,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/cr_dycr_nb.pdf",
+      "an_source_line": 2253,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/cr_llcr_njet.pdf",
+      "an_source_line": 2261,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/cr_qcdcr_njet.pdf",
+      "an_source_line": 2262,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/cr_gcr_njet.pdf",
+      "an_source_line": 2263,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/cr_dycr_njet.pdf",
+      "an_source_line": 2264,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/cr_llcr_njet.pdf",
+      "an_source_line": 2272,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/cr_qcdcr_njet.pdf",
+      "an_source_line": 2273,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/cr_gcr_njet.pdf",
+      "an_source_line": 2274,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/cr_dycr_njet.pdf",
+      "an_source_line": 2275,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/cr_llcr_ntop.pdf",
+      "an_source_line": 2283,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/cr_qcdcr_ntop.pdf",
+      "an_source_line": 2284,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/cr_gcr_ntop.pdf",
+      "an_source_line": 2285,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/cr_dycr_ntop.pdf",
+      "an_source_line": 2286,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/cr_llcr_ntop.pdf",
+      "an_source_line": 2294,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/cr_qcdcr_ntop.pdf",
+      "an_source_line": 2295,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/cr_gcr_ntop.pdf",
+      "an_source_line": 2296,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/cr_dycr_ntop.pdf",
+      "an_source_line": 2297,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/cr_llcr_nw.pdf",
+      "an_source_line": 2305,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/cr_qcdcr_nw.pdf",
+      "an_source_line": 2306,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/cr_gcr_nw.pdf",
+      "an_source_line": 2307,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/cr_dycr_nw.pdf",
+      "an_source_line": 2308,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/cr_llcr_nw.pdf",
+      "an_source_line": 2316,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/cr_qcdcr_nw.pdf",
+      "an_source_line": 2317,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/cr_gcr_nw.pdf",
+      "an_source_line": 2318,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/cr_dycr_nw.pdf",
+      "an_source_line": 2319,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{High-$\\Delta m$ control region}{High-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/lowdm_llcr_gnn_out_inclusive.pdf",
+      "an_source_line": 2334,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/lowdm_qcdcr_gnn_out_inclusive.pdf",
+      "an_source_line": 2336,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/lowdm_gcr_gnn_out_inclusive.pdf",
+      "an_source_line": 2343,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/lowdm_dycr_gnn_out_inclusive.pdf",
+      "an_source_line": 2345,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/lowdm_llcr_gnn_out_inclusive.pdf",
+      "an_source_line": 2352,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/lowdm_qcdcr_gnn_out_inclusive.pdf",
+      "an_source_line": 2354,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/lowdm_gcr_gnn_out_inclusive.pdf",
+      "an_source_line": 2361,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/lowdm_dycr_gnn_out_inclusive.pdf",
+      "an_source_line": 2363,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024_2025/lowdm_llcr_gnn_nisr_merged.pdf",
+      "an_source_line": 2370,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024_2025/lowdm_qcdcr_gnn_nisr_merged.pdf",
+      "an_source_line": 2372,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024_2025/lowdm_gcr_gnn_nisr_merged.pdf",
+      "an_source_line": 2379,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/lowdm_cr_llcr_met.pdf",
+      "an_source_line": 2387,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/lowdm_cr_qcdcr_met.pdf",
+      "an_source_line": 2388,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/lowdm_cr_gcr_recoil_gcr.pdf",
+      "an_source_line": 2389,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/lowdm_cr_dycr_recoil_dy.pdf",
+      "an_source_line": 2390,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/lowdm_cr_llcr_met.pdf",
+      "an_source_line": 2398,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/lowdm_cr_qcdcr_met.pdf",
+      "an_source_line": 2399,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/lowdm_cr_gcr_recoil_gcr.pdf",
+      "an_source_line": 2400,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/lowdm_cr_dycr_recoil_dy.pdf",
+      "an_source_line": 2401,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/lowdm_cr_llcr_njet.pdf",
+      "an_source_line": 2409,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/lowdm_cr_qcdcr_njet.pdf",
+      "an_source_line": 2410,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/lowdm_cr_gcr_njet_photon_clean.pdf",
+      "an_source_line": 2411,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/lowdm_cr_dycr_njet_lepton_clean.pdf",
+      "an_source_line": 2412,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/lowdm_cr_llcr_njet.pdf",
+      "an_source_line": 2420,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/lowdm_cr_qcdcr_njet.pdf",
+      "an_source_line": 2421,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/lowdm_cr_gcr_njet_photon_clean.pdf",
+      "an_source_line": 2422,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/lowdm_cr_dycr_njet_lepton_clean.pdf",
+      "an_source_line": 2423,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/lowdm_cr_llcr_nb_medium_lowdm.pdf",
+      "an_source_line": 2431,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/lowdm_cr_qcdcr_nb_medium_lowdm.pdf",
+      "an_source_line": 2432,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/lowdm_cr_gcr_nb_photon_clean.pdf",
+      "an_source_line": 2433,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/lowdm_cr_dycr_nb_lepton_clean.pdf",
+      "an_source_line": 2434,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/lowdm_cr_llcr_nb_medium_lowdm.pdf",
+      "an_source_line": 2442,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/lowdm_cr_qcdcr_nb_medium_lowdm.pdf",
+      "an_source_line": 2443,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/lowdm_cr_gcr_nb_photon_clean.pdf",
+      "an_source_line": 2444,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/lowdm_cr_dycr_nb_lepton_clean.pdf",
+      "an_source_line": 2445,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/lowdm_cr_llcr_ht.pdf",
+      "an_source_line": 2453,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/lowdm_cr_qcdcr_ht.pdf",
+      "an_source_line": 2454,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/lowdm_cr_gcr_ht_photon_clean.pdf",
+      "an_source_line": 2455,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2024/lowdm_cr_dycr_ht_lepton_clean.pdf",
+      "an_source_line": 2456,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/lowdm_cr_llcr_ht.pdf",
+      "an_source_line": 2464,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/lowdm_cr_qcdcr_ht.pdf",
+      "an_source_line": 2465,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/lowdm_cr_gcr_ht_photon_clean.pdf",
+      "an_source_line": 2466,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results_distributions/2025/lowdm_cr_dycr_ht_lepton_clean.pdf",
+      "an_source_line": 2467,
+      "section": "Results",
+      "subsection": "\\texorpdfstring{Low-$\\Delta m$ control region}{Low-Delta-m control region}",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results/highdm73_sr_2024_2025.pdf",
+      "an_source_line": 2527,
+      "section": "Results",
+      "subsection": "Signal categorization",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results/lowdm30_sr_2024_2025.pdf",
+      "an_source_line": 2544,
+      "section": "Results",
+      "subsection": "Signal categorization",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results/cronly_nuisance_pulls_2024_2025.pdf",
+      "an_source_line": 2586,
+      "section": "Results",
+      "subsection": "Control region fit",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results/expected_limit_2024_2025_t2tt_highdm73_lowdm30.pdf",
+      "an_source_line": 2604,
+      "section": "Results",
+      "subsection": "Limit",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results/expected_limit_2024_2025_t2bw_highdm73_lowdm30.pdf",
+      "an_source_line": 2609,
+      "section": "Results",
+      "subsection": "Limit",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results/expected_limit_2024_2025_t2tb_highdm73_lowdm30.pdf",
+      "an_source_line": 2616,
+      "section": "Results",
+      "subsection": "Limit",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/results/impacts_T2tt_1200_500_r1_nisr_pooled_top30.pdf",
+      "an_source_line": 2628,
+      "section": "Results",
+      "subsection": "Limit",
+      "required_action": "regenerate_current_nominal",
+      "status": "pending",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": null
+    },
+    {
+      "an_path": "figures/lowpt_lepton_id_2024/electron_mass_fit_bin_01.pdf",
+      "an_source_line": 2658,
+      "section": "Supplementary object performance",
+      "subsection": "\\texorpdfstring{Low-$p_{\\mathrm{T}}$ lepton identification fits}{Low-pT lepton identification fits}",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_archived_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/lowpt_lepton_id_2024/electron_mass_fit_bin_01.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/verification.json"
+    },
+    {
+      "an_path": "figures/lowpt_lepton_id_2024/electron_mass_fit_bin_02.pdf",
+      "an_source_line": 2659,
+      "section": "Supplementary object performance",
+      "subsection": "\\texorpdfstring{Low-$p_{\\mathrm{T}}$ lepton identification fits}{Low-pT lepton identification fits}",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_archived_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/lowpt_lepton_id_2024/electron_mass_fit_bin_02.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/verification.json"
+    },
+    {
+      "an_path": "figures/lowpt_lepton_id_2024/electron_mass_fit_bin_03.pdf",
+      "an_source_line": 2660,
+      "section": "Supplementary object performance",
+      "subsection": "\\texorpdfstring{Low-$p_{\\mathrm{T}}$ lepton identification fits}{Low-pT lepton identification fits}",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_archived_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/lowpt_lepton_id_2024/electron_mass_fit_bin_03.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/verification.json"
+    },
+    {
+      "an_path": "figures/lowpt_lepton_id_2024/electron_mass_fit_bin_04.pdf",
+      "an_source_line": 2661,
+      "section": "Supplementary object performance",
+      "subsection": "\\texorpdfstring{Low-$p_{\\mathrm{T}}$ lepton identification fits}{Low-pT lepton identification fits}",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_archived_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/lowpt_lepton_id_2024/electron_mass_fit_bin_04.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/verification.json"
+    },
+    {
+      "an_path": "figures/lowpt_lepton_id_2024/electron_mass_fit_bin_05.pdf",
+      "an_source_line": 2662,
+      "section": "Supplementary object performance",
+      "subsection": "\\texorpdfstring{Low-$p_{\\mathrm{T}}$ lepton identification fits}{Low-pT lepton identification fits}",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_archived_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/lowpt_lepton_id_2024/electron_mass_fit_bin_05.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/verification.json"
+    },
+    {
+      "an_path": "figures/lowpt_lepton_id_2025/electron_mass_fit_bin_01.pdf",
+      "an_source_line": 2672,
+      "section": "Supplementary object performance",
+      "subsection": "\\texorpdfstring{Low-$p_{\\mathrm{T}}$ lepton identification fits}{Low-pT lepton identification fits}",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_archived_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/lowpt_lepton_id_2025/electron_mass_fit_bin_01.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/verification.json"
+    },
+    {
+      "an_path": "figures/lowpt_lepton_id_2025/electron_mass_fit_bin_02.pdf",
+      "an_source_line": 2673,
+      "section": "Supplementary object performance",
+      "subsection": "\\texorpdfstring{Low-$p_{\\mathrm{T}}$ lepton identification fits}{Low-pT lepton identification fits}",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_archived_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/lowpt_lepton_id_2025/electron_mass_fit_bin_02.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/verification.json"
+    },
+    {
+      "an_path": "figures/lowpt_lepton_id_2025/electron_mass_fit_bin_03.pdf",
+      "an_source_line": 2674,
+      "section": "Supplementary object performance",
+      "subsection": "\\texorpdfstring{Low-$p_{\\mathrm{T}}$ lepton identification fits}{Low-pT lepton identification fits}",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_archived_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/lowpt_lepton_id_2025/electron_mass_fit_bin_03.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/verification.json"
+    },
+    {
+      "an_path": "figures/lowpt_lepton_id_2025/electron_mass_fit_bin_04.pdf",
+      "an_source_line": 2675,
+      "section": "Supplementary object performance",
+      "subsection": "\\texorpdfstring{Low-$p_{\\mathrm{T}}$ lepton identification fits}{Low-pT lepton identification fits}",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_archived_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/lowpt_lepton_id_2025/electron_mass_fit_bin_04.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/verification.json"
+    },
+    {
+      "an_path": "figures/lowpt_lepton_id_2025/electron_mass_fit_bin_05.pdf",
+      "an_source_line": 2676,
+      "section": "Supplementary object performance",
+      "subsection": "\\texorpdfstring{Low-$p_{\\mathrm{T}}$ lepton identification fits}{Low-pT lepton identification fits}",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_archived_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/lowpt_lepton_id_2025/electron_mass_fit_bin_05.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/verification.json"
+    },
+    {
+      "an_path": "figures/lowpt_lepton_id_2024/muon_mass_fit_bin_01.pdf",
+      "an_source_line": 2686,
+      "section": "Supplementary object performance",
+      "subsection": "\\texorpdfstring{Low-$p_{\\mathrm{T}}$ lepton identification fits}{Low-pT lepton identification fits}",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_archived_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/lowpt_lepton_id_2024/muon_mass_fit_bin_01.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/verification.json"
+    },
+    {
+      "an_path": "figures/lowpt_lepton_id_2024/muon_mass_fit_bin_02.pdf",
+      "an_source_line": 2687,
+      "section": "Supplementary object performance",
+      "subsection": "\\texorpdfstring{Low-$p_{\\mathrm{T}}$ lepton identification fits}{Low-pT lepton identification fits}",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_archived_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/lowpt_lepton_id_2024/muon_mass_fit_bin_02.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/verification.json"
+    },
+    {
+      "an_path": "figures/lowpt_lepton_id_2025/muon_mass_fit_bin_01.pdf",
+      "an_source_line": 2697,
+      "section": "Supplementary object performance",
+      "subsection": "\\texorpdfstring{Low-$p_{\\mathrm{T}}$ lepton identification fits}{Low-pT lepton identification fits}",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_archived_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/lowpt_lepton_id_2025/muon_mass_fit_bin_01.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/verification.json"
+    },
+    {
+      "an_path": "figures/lowpt_lepton_id_2025/muon_mass_fit_bin_02.pdf",
+      "an_source_line": 2698,
+      "section": "Supplementary object performance",
+      "subsection": "\\texorpdfstring{Low-$p_{\\mathrm{T}}$ lepton identification fits}{Low-pT lepton identification fits}",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_archived_measurement_payload_and_PDF_numeric_geometry",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/lowpt_lepton_id_2025/muon_mass_fit_bin_02.pdf",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/lowpt_leptons/verification.json"
+    },
+    {
+      "an_path": "figures/btageff2024/TTto2L2Nu_b_medium.png",
+      "an_source_line": 2717,
+      "section": "Supplementary object performance",
+      "subsection": "Simulated tagging efficiencies",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_adopted_UParTAK4_payload_and_PNG_displayed_cells",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/btageff2024/TTto2L2Nu_b_medium.png",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/btag_efficiencies/png_numeric_binding.json"
+    },
+    {
+      "an_path": "figures/btageff2024/TTto2L2Nu_c_medium.png",
+      "an_source_line": 2718,
+      "section": "Supplementary object performance",
+      "subsection": "Simulated tagging efficiencies",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_adopted_UParTAK4_payload_and_PNG_displayed_cells",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/btageff2024/TTto2L2Nu_c_medium.png",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/btag_efficiencies/png_numeric_binding.json"
+    },
+    {
+      "an_path": "figures/btageff2024/TTto2L2Nu_lf_medium.png",
+      "an_source_line": 2719,
+      "section": "Supplementary object performance",
+      "subsection": "Simulated tagging efficiencies",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_adopted_UParTAK4_payload_and_PNG_displayed_cells",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/btageff2024/TTto2L2Nu_lf_medium.png",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/btag_efficiencies/png_numeric_binding.json"
+    },
+    {
+      "an_path": "figures/btageff2024/TTtoLNu2Q_b_medium.png",
+      "an_source_line": 2720,
+      "section": "Supplementary object performance",
+      "subsection": "Simulated tagging efficiencies",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_adopted_UParTAK4_payload_and_PNG_displayed_cells",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/btageff2024/TTtoLNu2Q_b_medium.png",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/btag_efficiencies/png_numeric_binding.json"
+    },
+    {
+      "an_path": "figures/btageff2024/TTtoLNu2Q_c_medium.png",
+      "an_source_line": 2721,
+      "section": "Supplementary object performance",
+      "subsection": "Simulated tagging efficiencies",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_adopted_UParTAK4_payload_and_PNG_displayed_cells",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/btageff2024/TTtoLNu2Q_c_medium.png",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/btag_efficiencies/png_numeric_binding.json"
+    },
+    {
+      "an_path": "figures/btageff2024/TTtoLNu2Q_lf_medium.png",
+      "an_source_line": 2722,
+      "section": "Supplementary object performance",
+      "subsection": "Simulated tagging efficiencies",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_adopted_UParTAK4_payload_and_PNG_displayed_cells",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/btageff2024/TTtoLNu2Q_lf_medium.png",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/btag_efficiencies/png_numeric_binding.json"
+    },
+    {
+      "an_path": "figures/btageff2024/TTto4Q_b_medium.png",
+      "an_source_line": 2723,
+      "section": "Supplementary object performance",
+      "subsection": "Simulated tagging efficiencies",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_adopted_UParTAK4_payload_and_PNG_displayed_cells",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/btageff2024/TTto4Q_b_medium.png",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/btag_efficiencies/png_numeric_binding.json"
+    },
+    {
+      "an_path": "figures/btageff2024/TTto4Q_c_medium.png",
+      "an_source_line": 2724,
+      "section": "Supplementary object performance",
+      "subsection": "Simulated tagging efficiencies",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_adopted_UParTAK4_payload_and_PNG_displayed_cells",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/btageff2024/TTto4Q_c_medium.png",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/btag_efficiencies/png_numeric_binding.json"
+    },
+    {
+      "an_path": "figures/btageff2024/TTto4Q_lf_medium.png",
+      "an_source_line": 2725,
+      "section": "Supplementary object performance",
+      "subsection": "Simulated tagging efficiencies",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_adopted_UParTAK4_payload_and_PNG_displayed_cells",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/btageff2024/TTto4Q_lf_medium.png",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/btag_efficiencies/png_numeric_binding.json"
+    },
+    {
+      "an_path": "figures/btageff2024/WtoLNu_b_medium.png",
+      "an_source_line": 2726,
+      "section": "Supplementary object performance",
+      "subsection": "Simulated tagging efficiencies",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_adopted_UParTAK4_payload_and_PNG_displayed_cells",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/btageff2024/WtoLNu_b_medium.png",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/btag_efficiencies/png_numeric_binding.json"
+    },
+    {
+      "an_path": "figures/btageff2024/WtoLNu_c_medium.png",
+      "an_source_line": 2727,
+      "section": "Supplementary object performance",
+      "subsection": "Simulated tagging efficiencies",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_adopted_UParTAK4_payload_and_PNG_displayed_cells",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/btageff2024/WtoLNu_c_medium.png",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/btag_efficiencies/png_numeric_binding.json"
+    },
+    {
+      "an_path": "figures/btageff2024/WtoLNu_lf_medium.png",
+      "an_source_line": 2728,
+      "section": "Supplementary object performance",
+      "subsection": "Simulated tagging efficiencies",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_adopted_UParTAK4_payload_and_PNG_displayed_cells",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/btageff2024/WtoLNu_lf_medium.png",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/btag_efficiencies/png_numeric_binding.json"
+    },
+    {
+      "an_path": "figures/btageff2024/Zto2Nu_b_medium.png",
+      "an_source_line": 2729,
+      "section": "Supplementary object performance",
+      "subsection": "Simulated tagging efficiencies",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_adopted_UParTAK4_payload_and_PNG_displayed_cells",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/btageff2024/Zto2Nu_b_medium.png",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/btag_efficiencies/png_numeric_binding.json"
+    },
+    {
+      "an_path": "figures/btageff2024/Zto2Nu_c_medium.png",
+      "an_source_line": 2730,
+      "section": "Supplementary object performance",
+      "subsection": "Simulated tagging efficiencies",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_adopted_UParTAK4_payload_and_PNG_displayed_cells",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/btageff2024/Zto2Nu_c_medium.png",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/btag_efficiencies/png_numeric_binding.json"
+    },
+    {
+      "an_path": "figures/btageff2024/Zto2Nu_lf_medium.png",
+      "an_source_line": 2731,
+      "section": "Supplementary object performance",
+      "subsection": "Simulated tagging efficiencies",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_verified_not_delivered_to_AN",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "passed",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_adopted_UParTAK4_payload_and_PNG_displayed_cells",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/btageff2024/Zto2Nu_lf_medium.png",
+      "numeric_binding_audit": "validation/reference_assets_20260923/provenance/btag_efficiencies/png_numeric_binding.json"
+    },
+    {
+      "an_path": "figures/topw_efficiencies/TTto2L2Nu_top.pdf",
+      "an_source_line": 2743,
+      "section": "Supplementary object performance",
+      "subsection": "Simulated tagging efficiencies",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_visual_review_required",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "review_required_inherited_corner_tick_overlap",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_efficiency_payload_hash",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/topw_efficiencies/TTto2L2Nu_top.pdf"
+    },
+    {
+      "an_path": "figures/topw_efficiencies/TTto2L2Nu_w.pdf",
+      "an_source_line": 2744,
+      "section": "Supplementary object performance",
+      "subsection": "Simulated tagging efficiencies",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_visual_review_required",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "review_required_inherited_corner_tick_overlap",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_efficiency_payload_hash",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/topw_efficiencies/TTto2L2Nu_w.pdf"
+    },
+    {
+      "an_path": "figures/topw_efficiencies/TTtoLNu2Q_top.pdf",
+      "an_source_line": 2745,
+      "section": "Supplementary object performance",
+      "subsection": "Simulated tagging efficiencies",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_visual_review_required",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "review_required_inherited_corner_tick_overlap",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_efficiency_payload_hash",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/topw_efficiencies/TTtoLNu2Q_top.pdf"
+    },
+    {
+      "an_path": "figures/topw_efficiencies/TTtoLNu2Q_w.pdf",
+      "an_source_line": 2746,
+      "section": "Supplementary object performance",
+      "subsection": "Simulated tagging efficiencies",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_visual_review_required",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "review_required_inherited_corner_tick_overlap",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_efficiency_payload_hash",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/topw_efficiencies/TTtoLNu2Q_w.pdf"
+    },
+    {
+      "an_path": "figures/topw_efficiencies/TTto4Q_top.pdf",
+      "an_source_line": 2747,
+      "section": "Supplementary object performance",
+      "subsection": "Simulated tagging efficiencies",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_visual_review_required",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "review_required_inherited_corner_tick_overlap",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_efficiency_payload_hash",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/topw_efficiencies/TTto4Q_top.pdf"
+    },
+    {
+      "an_path": "figures/topw_efficiencies/TTto4Q_w.pdf",
+      "an_source_line": 2748,
+      "section": "Supplementary object performance",
+      "subsection": "Simulated tagging efficiencies",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_visual_review_required",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "review_required_inherited_corner_tick_overlap",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_efficiency_payload_hash",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/topw_efficiencies/TTto4Q_w.pdf"
+    },
+    {
+      "an_path": "figures/topw_efficiencies/WtoLNu_top.pdf",
+      "an_source_line": 2749,
+      "section": "Supplementary object performance",
+      "subsection": "Simulated tagging efficiencies",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_visual_review_required",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "review_required_inherited_corner_tick_overlap",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_efficiency_payload_hash",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/topw_efficiencies/WtoLNu_top.pdf"
+    },
+    {
+      "an_path": "figures/topw_efficiencies/WtoLNu_w.pdf",
+      "an_source_line": 2750,
+      "section": "Supplementary object performance",
+      "subsection": "Simulated tagging efficiencies",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_visual_review_required",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "review_required_inherited_corner_tick_overlap",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_efficiency_payload_hash",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/topw_efficiencies/WtoLNu_w.pdf"
+    },
+    {
+      "an_path": "figures/topw_efficiencies/Zto2Nu_top.pdf",
+      "an_source_line": 2751,
+      "section": "Supplementary object performance",
+      "subsection": "Simulated tagging efficiencies",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_visual_review_required",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "review_required_inherited_corner_tick_overlap",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_efficiency_payload_hash",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/topw_efficiencies/Zto2Nu_top.pdf"
+    },
+    {
+      "an_path": "figures/topw_efficiencies/Zto2Nu_w.pdf",
+      "an_source_line": 2752,
+      "section": "Supplementary object performance",
+      "subsection": "Simulated tagging efficiencies",
+      "required_action": "verify_unchanged_reference_asset",
+      "status": "reference_visual_review_required",
+      "source_exists": true,
+      "delivered_path": null,
+      "visual_qa": {
+        "status": "review_required_inherited_corner_tick_overlap",
+        "audit": "validation/reference_assets_20260923/visual_qa.json"
+      },
+      "provenance_qa": "verified_efficiency_payload_hash",
+      "internal_reference_path": "plots/reference_assets_20260923/figures/topw_efficiencies/Zto2Nu_w.pdf"
+    }
+  ],
+  "policy": "Inventory is not completion evidence. Legacy highdm73 result names must map explicitly to new highdm162 nominal products. No old fit or contour may be relabelled. Reference assets require hash/provenance/QA validation; no retraining or remeasurement is authorized by this inventory alone.",
+  "reference_qa_summary": {
+    "total": 67,
+    "verified": 55,
+    "visual_passed_provenance_pending": 0,
+    "visual_review_required": 10,
+    "numeric_review_required": 2
+  }
+}

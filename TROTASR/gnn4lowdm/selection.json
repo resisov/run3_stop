@@ -1,0 +1,18 @@
+{
+  "best_epoch": 17,
+  "best_trial": "h48_l3_sig010",
+  "model_selection_key": [
+    3.507825170964355,
+    4.175401695460577,
+    0.007834230051213321,
+    0.8728350185251297,
+    0.9399274928042819,
+    -0.3204555462624311
+  ],
+  "analysis_configuration": "../../config.json",
+  "schema_version": "lowdm_diagonal_v3_model_selection_v2",
+  "status": "test_evaluated",
+  "test_summary": "autonomous_allhad/gnn_lowdm/results/diagonal_v3_significance_full_20260831/test/diagonal_v3_test_summary.json",
+  "test_summary_sha256": "850697646179a19388641c12e8c3b8bf83e2e09cbbcebfca7ea82f6a2d307a27",
+  "test_touched": true
+}

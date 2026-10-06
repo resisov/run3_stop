@@ -1,0 +1,24 @@
+{
+  "schema": "trotasr_internal_jme_provenance_v1",
+  "sources": {
+    "autonomous_allhad/autonomous_allhad/object_corrections_2024.py": {
+      "sha256": "f77c992dc77e0a61ed9d57ad86a2ded5d108e56fd33667440d8852f439281927",
+      "functions": [
+        "_flatten",
+        "_broadcast_flat",
+        "_evaluate_jagged",
+        "_deterministic_normal",
+        "_jer_smear"
+      ]
+    },
+    "autonomous_allhad/workflow/retained_jme_shapes.py": {
+      "sha256": "52811a5303f5d64cc9d21ca82a9e32c9cfd244e470818da185ee6e8384da41aa",
+      "functions": [
+        "jet_inputs"
+      ]
+    }
+  },
+  "year_2025_functions_ast_equal": true,
+  "minimum_jet_energy_GeV": 0.01,
+  "runtime_external_imports": []
+}

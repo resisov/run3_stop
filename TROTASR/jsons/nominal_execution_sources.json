@@ -1,0 +1,72 @@
+{
+  "schema": "trotasr_nominal_execution_sources_v1",
+  "recorded_on": "2026-09-23",
+  "sources": [
+    {
+      "source": "autonomous_allhad/workflow/retry_failed_limits_hep2.py",
+      "source_sha256": "c108a9ff461ac9a07132b691c8f29b560059d389701cb07e2059c98cab4c39fa",
+      "target": "workflows/limit_validation.py",
+      "target_sha256": "59c033e804d10169a9c55235b87b15d419770d24803ea3263301a6cc29813541",
+      "functions_verbatim": [
+        "crossing_check",
+        "validate"
+      ],
+      "constants_unchanged": [
+        "QUANTILES",
+        "REL_ACC",
+        "ABS_ACC",
+        "SCAN"
+      ]
+    },
+    {
+      "source": "autonomous_allhad/workflow/run_run2_linked_grid_hep2.py",
+      "source_sha256": "bf35eeef13de6970e5f61b5eb8e1a4b0addaf0cb2a9aedf2b576e9fc6cb63cb9",
+      "target": "workflows/combine_limits.py",
+      "preserved_policy": "Native text2workspace and AsymptoticLimits blind; strategy0, bisection, picky, Migrad fallback, two attempts (tolerance0.1/rmax and tolerance0.01/2*rmax), crossing verification",
+      "adaptations": "Internal cards/templates/config only; content validation on resume; aggregate resource admission including controllers; no implicit plotting or old fit-value reuse"
+    },
+    {
+      "source": "hep2 existing CMSSW scratch-only sitecustomize compatibility guard",
+      "target": "stats/runtime/sitecustomize.py",
+      "source_and_target_sha256": "20513fd0067b62a6d31bd8e5ff12e73d21670b3f4b3f28ba84ca3f198ff39d67",
+      "adaptation": "Byte-preserved inward copy, replacing external analysis runtime path"
+    },
+    {
+      "source": "autonomous_allhad/workflow/build_run2_linked_grid.py",
+      "source_sha256": "9b7ee311a72ca81b7e4b1623e489b1e937b282abd2d445d5f6ba9ab019ce6072",
+      "targets": [
+        "workflows/signal_grid_inputs.py",
+        "workflows/build_nominal_grid.py"
+      ],
+      "preserved_policy": "Linear signal projection; native named TH1s with sumw2 and bin labels; shared background templates; original card_text and correlated signal-only cross-section nuisance",
+      "adaptations": "Full current SR162/SR30 map and pooled CR axes, 540 combined analysis bins; read current histograms once per year; preserve per-bin negative signal audit; verify all native signal and background TH1s by readback; no external analysis imports or old fit values"
+    },
+    {
+      "source": "autonomous_allhad/workflow/run_run2_linked_grid_hep2.py::plot",
+      "target": "workflows/plotting_limit_contour.py",
+      "preserved_policy": "Original postprocess_limits.py bytes, 600-1800 x 1-1800 GeV axes, cross-section color, topology-aware interpolation, Run-2 and thermal-relic overlays",
+      "adaptations": "Only internal references/config, full-grid accounting compared with new fit-controller results, correct highdm162 identity, pending visual QA status",
+      "reference_manifest": "stats/contour_config.json"
+    },
+    {
+      "source": "autonomous_allhad/signals/stop_xsec_13p6TeV.json",
+      "target": "stats/stop_xsec_13p6TeV.json",
+      "source_and_target_sha256": "7741bc0b13a9881faac7aa3c4e5e88ceffacf3d0c73dbd70d14e638d5e320d8a",
+      "adaptation": "Byte-identical internal physics payload; not an old fit result"
+    }
+  ],
+  "actual_Combine_fits_executed": false,
+  "full_grid_builder_implemented": true,
+  "full_grid_builder_actual_native_execution": false,
+  "native_grid_helpers_synthetic_io_verified": true,
+  "remote_full_unit_tests_passed": 153,
+  "contour_adapter_implemented": true,
+  "contours_generated": false,
+  "full_workflow_complete": false,
+  "diagnostic_source_manifest": "diagnostic_sources.json",
+  "cronly_runner_implemented": true,
+  "impact_runner_implemented": true,
+  "bounded_impact_recovery_implemented": true,
+  "diagnostic_native_software_smoke_passed": true,
+  "diagnostic_native_software_smoke_scope": "imports_and_help_only_no_fit"
+}

@@ -1,0 +1,31 @@
+{
+  "schema": "trotasr_nominal_input_jme_payloads_v1",
+  "purpose": "Match actual integrated ROOT production, not an upgrade of nominal calibration",
+  "historical_assets_preserved": true,
+  "years": {
+    "2024": {
+      "jec_tag": "Summer24Prompt24_V5",
+      "jer_tag": "Summer24Prompt24_JRV2",
+      "Jet": {
+        "path": "scales/JME/2024/Summer24Prompt24_V5/jet_jerc.json.gz",
+        "sha256": "b0e60dd2244f9d4cfa3215eafb94afa5b6a491b18af4584522b749d56f5c9540"
+      },
+      "FatJet": {
+        "path": "scales/JME/2024/Summer24Prompt24_V5/fatJet_jerc.json.gz",
+        "sha256": "09dd3f22f0fa8d283140e03edb4f5d60b840f1cea5183225ccb095a68dcb24b1"
+      }
+    },
+    "2025": {
+      "jec_tag": "Summer24Prompt25_V3",
+      "jer_tag": "Summer24Prompt25_JRV2",
+      "Jet": {
+        "path": "scales/JME/2025/jet_jerc.json.gz",
+        "sha256": "a4beaeefc5fba02fdb037025460824f411f59aa1eed1905d75327a5a87edfead"
+      },
+      "FatJet": {
+        "path": "scales/JME/2025/fatJet_jerc.json.gz",
+        "sha256": "c5250701e2601ba7e42dc71c929b58fbc81175e33011a178e0b282b3d13908af"
+      }
+    }
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "schema": "trotasr_selection_design_v1",
+  "recorded_on": "2026-09-23",
+  "status": "trial_implementation_under_validation_not_production_adopted",
+  "scope": {
+    "years": [2024, 2025],
+    "isolated_study": true,
+    "main_analysis_modified": false,
+    "histogram_production_started": false,
+    "systematics_restarted": false
+  },
+  "sr_category_axis_order": ["Nb", "Nbst", "Nmix", "Nres", "Nw"],
+  "highdm_sr_test_binning": {
+    "user_instruction": "2026-09-23: high-dM 테스트에서 임의로 빈을 줄이지 않는다",
+    "same_full_map_for_test_and_production": true,
+    "test_reduction_allowed_only_for_input_file_count": true,
+    "occupancy_based_category_or_bin_removal": false,
+    "automatic_test_merging_or_rebinning": false,
+    "empty_categories_and_bins_preserved": true,
+    "plot_requires_explicit_full_bin_map": true,
+    "new_full_map_status": "user_adopted_162_definition_adapter_integration_pending",
+    "adopted_definition": "highdm_sr_binning.json",
+    "categories_per_year": 28,
+    "bins_per_year": 162
+  },
+  "candidate_priority_trial": {
+    "user_approval": "2026-09-23: 이 우선순위로 시험·비교 검증",
+    "order": ["Boosted", "Mixed", "Resolved", "independent W"],
+    "same_type_tie_break": "descending discriminant then ascending candidateIndex for Mixed/Resolved",
+    "ak4_footprint": "existing two-subjet dR<0.4 association; AK8-axis dR<0.8 fallback",
+    "production_adopted": false
+  },
+  "mixed": {
+    "nominal_input": "TopMixed1pct_* branches in the existing Events tree",
+    "raw_count_branch": "nTopMixed1pct",
+    "analysis_count": "Nmix after region cleaning and exclusive candidate selection",
+    "raw_count_is_analysis_count": false,
+    "discriminant": "TT/(TT+QCD)",
+    "working_point": 0.9027690887451172,
+    "operator": ">=",
+    "nominal_reinference": false,
+    "event_sidecar": false
+  },
+  "w_mixed_exclusivity": {
+    "required": true,
+    "precedence_for_shared_objects": "selected Mixed candidate over overlapping W candidate",
+    "analysis_Nw": "count of region-cleaned W candidates remaining after removal of candidates overlapping selected Mixed objects",
+    "same_sourceFatJetIdx_is_overlap": true,
+    "constituent_identity_inputs": ["sourceFatJetIdx", "sourceJetIdx0", "sourceJetIdx1", "sourceJetIdx2"],
+    "reject_all_W_when_Nmix_positive": false,
+    "Nmix_positive_and_Nw_positive_allowed_for_disjoint_objects": true,
+    "new_angular_threshold_adopted": false,
+    "implementation_gate": "Specify and test the full shared-constituent/geometric overlap predicate with the adopted object-cleaning rules; identical AK8 rejection alone is not a claim of complete geometric cleaning."
+  },
+  "region_topology": {
+    "highdm": {
+      "core": "existing region-specific high-dM selection excluding its old top/W/resolved tag-union condition; retain Nj>=4 and every other adopted cut",
+      "tag_union": "Nbst >= 1 || Nmix >= 1 || Nres >= 1 || Nw >= 1",
+      "compose": "highdm_core && tag_union",
+      "do_not_intersect_with_old_tag_restricted_region_flag": true
+    },
+    "lowdm": {
+      "core": "existing region-specific low-dM non-topology selection, including its existing SR/CR-specific kinematic requirements",
+      "topology_veto": "Nbst == 0 && Nmix == 0 && Nres == 0 && Nw == 0",
+      "compose": "lowdm_core && topology_veto"
+    },
+    "apply_consistently_to": ["SR", "LLCR", "QCDCR", "GCR", "DY2E", "DY2M", "corresponding preselection and existing VR where the same topology condition applies"],
+    "other_selection_changes": false,
+    "per_region_high_low_intersection_required": 0,
+    "acceptance_migration_audit_required": true
+  },
+  "cr_model": {
+    "independent_of_sr_topology_binning": true,
+    "nb_streams": ["Nb == 1", "Nb >= 2"],
+    "existing_year_and_recoil_parameter_scopes_preserved": true,
+    "new_sr_topology_cr_bins": false,
+    "lowdm_sr_bins": 30,
+    "lowdm_llcr_qcdcr_gcr_bins_each_per_year": 10,
+    "lowdm_sgamma": "existing GNN x recoil projection"
+  },
+  "histogram_resources": {
+    "hep2_aggregate_core_limit": 100,
+    "threads_per_compute_worker": 1,
+    "budget_includes": ["other active campaigns", "controller reservation", "merge workers", "transfer workers"],
+    "capacity_rule": "max(0, 100 - other_active_slots - controller_and_merge_transfer_reservations)",
+    "example_without_other_work": "99 compute workers plus one controller slot",
+    "memory_and_io_bounded": true,
+    "current_topmixed_integration_worker_limit_changed": false,
+    "current_topmixed_integration_worker_limit": 50
+  },
+  "required_before_production": [
+    "Complete and validate all in-place TopMixed ROOT outputs.",
+    "Quantitatively validate the user-authorized Boosted > Mixed > Resolved > independent W trial before production adoption.",
+    "Validate the full W-Mixed overlap predicate, retaining independent W candidates.",
+    "Rebuild affected masks from non-topology cuts so Mixed-only high-dM events are not blocked by old precomputed flags.",
+    "Use the same region-specific counts for high/low selection and category assignment.",
+    "Check selected-object and Top/W weight consistency without inventing a Mixed scale factor.",
+    "Report per-process acceptance migrations, especially for T2bW, and prove per-region high/low exclusivity.",
+    "Benchmark representative nominal inputs before full histogram dispatch."
+  ]
+}

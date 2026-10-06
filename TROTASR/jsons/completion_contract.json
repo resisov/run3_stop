@@ -1,0 +1,43 @@
+{
+  "schema": "trotasr_nominal_completion_contract_v1",
+  "adopted_on": "2026-09-23",
+  "user_requested_outcome": "AN에 필요한 모든 플롯 생성 및 nominal T2tt, T2tb, T2bW limit contour",
+  "status": "in_progress",
+  "years": [2024, 2025],
+  "combined_years": [2024, 2025],
+  "signal_topologies": ["T2tt", "T2tb", "T2bW"],
+  "limit_kind": "blinded_expected",
+  "highdm_sr_bins_per_year": 118,
+  "source_histogram_highdm_sr_bins_per_year": 162,
+  "active_sr_category_merge": "sr_category_merge.json",
+  "active_statistics_grid": "stats/nominal_20260924_sr118/grid/manifest.json",
+  "lowdm_sr_bins_per_year": 30,
+  "an_figure_inventory": "an_figure_inventory.json",
+  "required_stages": [
+    "validated_integrated_Events_TROTA_TopMixed_inputs",
+    "representative_data_background_and_three_signal_topologies_test",
+    "complete_nominal_histograms_with_coverage_and_weight_audit",
+    "current_selection_RZ_Qgamma_Sgamma_double_ratio_and_transfer_factors",
+    "AN_SR_CR_kinematic_GNN_and_background_measurement_plots",
+    "AN_required_nominal_fit_diagnostics",
+    "native_TH1_templates_and_datacards_verified_by_readback",
+    "new_T2tt_T2tb_T2bW_expected_limit_grids_and_contours",
+    "all_AN_inventory_entries_resolved_with_provenance",
+    "all_new_PDF_pages_rendered_with_Poppler_and_visually_checked",
+    "compact_deliverables_and_final_failure_coverage_report"
+  ],
+  "constraints": {
+    "sr_data_blinded": true,
+    "preserve_original_renderer_style": true,
+    "no_external_analysis_runtime_paths": true,
+    "no_event_sidecars": true,
+    "no_shifted_ROOT_production": true,
+    "no_systematic_campaign_restart": true,
+    "no_local_ROOT": true,
+    "hep2_aggregate_single_thread_cpu_slots": 100,
+    "existing_TopMixed_worker_limit": 50,
+    "no_physics_method_invention": true,
+    "no_automatic_AN_edit_or_main_analysis_adoption": true
+  },
+  "not_completion": ["code_written", "unit_tests_only", "partial_grid", "generated_pending_visual_QA"]
+}

@@ -1,0 +1,26 @@
+# TROTASR correction contract; Python functions are the executable authority.
+# Payload root: scales/<POG>/<year>; allowed years: 2024, 2025.
+define EventWeight = genWeight * normalization * pileup * btag * lepton * photon * trigger * topPt * topW
+define normalization = validated_luminosity_times_xsec_over_generator_sumw
+# Missing or invalid normalization is fatal, never unity or silently zero.
+# POGs: JME, BTV, EGM, MUO, TAU, LUM. Measured analysis SF: Private.
+# Private efficiency counts: estimations/btageff<year>.merged,
+# estimations/topwtageff<year>.merged.
+define correctedTopWEfficiency = min(SF * MCEfficiency, 1)
+# Evaluate nominal/Up/Down separately, preserving asymmetric saturated endpoints.
+# Recompute both pass and fail weights from the bounded efficiency.
+# Explicit failed fit bins -> (1,1,1); malformed payload or NaN is not a failed fit.
+# Missing TopW branches -> (1,1,1) for that file, audited in the histogram.
+# MC efficiency 0 or 1, or empty pass+fail denominator -> (1,1,1) for that cell.
+# Valid bins retain measured SFs. Mixed-specific SF is not provided or fabricated.
+# Compile utils/compiled/{ids,corrections}.coffea whenever source changes.
+# Non-JME shapes keep stored TROTA/TopMixed, nominal jet quantities and WPs.
+# Existing endpoint families (Up/Down): electronScale, electronSmear,
+# photonScale, photonSmear, muonScale, muonResolution, tauEnergyScale,
+# metUnclustered. Payloads and hashes: scales/object_shapes.json.
+define shiftedObjectPt = storedCorrectedPt + variedCalibrationPt - nominalCalibrationPt
+define shiftedMETx = storedMETx - sum((shiftedObjectPt-storedCorrectedPt)*cos(objectPhi))
+define shiftedMETy = storedMETy - sum((shiftedObjectPt-storedCorrectedPt)*sin(objectPhi))
+# MET-unclustered endpoints add the stored shifted-minus-nominal NanoAOD MET vector.
+# Reevaluate IDs, vetoes, cleaning, recoil, dilepton mass, selections, GNN and nominal SF.
+# Preserve all original values on unaffected rows; never create shifted ROOTs.

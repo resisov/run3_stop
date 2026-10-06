@@ -1,0 +1,125 @@
+{
+  "schema": "trotasr_diagnostic_source_provenance_v1",
+  "recorded_on": "2026-09-23",
+  "sources": [
+    {
+      "source": "autonomous_allhad/workflow/run_asimov_impacts_hep2.py",
+      "source_sha256": "6421004db6fd5fe4e16306b0cc985187aa75809cd53219be92d390067670c14f",
+      "target": "workflows/impact_legacy.py",
+      "target_sha256": "312e1f4a053a07a84e81d17ced4a1c7c8e4937ef85d85061670b1d7f8fe9c26c",
+      "source_fragments": {
+        "check_endpoints": "523c1cdcdc94fd477342dd3cd00df8f7b43e549758f3c3dd13618f13ffec6296",
+        "fit_command": "ba06eaca712732bc0768e21de6baf4e34f22e69ac669630f38349e31cc1284a1",
+        "validate_fit": "fd3ee91fe69f275e377b43985160f01fe2acf1a39ecf38f28dae9e9f96375703"
+      },
+      "target_fragments": {
+        "check_endpoints": "523c1cdcdc94fd477342dd3cd00df8f7b43e549758f3c3dd13618f13ffec6296",
+        "fit_command": "ba06eaca712732bc0768e21de6baf4e34f22e69ac669630f38349e31cc1284a1",
+        "validate_fit": "fd3ee91fe69f275e377b43985160f01fe2acf1a39ecf38f28dae9e9f96375703"
+      },
+      "verbatim_functions": [
+        "check_endpoints",
+        "fit_command",
+        "validate_fit"
+      ],
+      "adaptation": "Functions verbatim; post.overlay.sha is an internal-only sha256 facade. Statistical mass label is 120 as in current cards, physical benchmark remains T2tt(1200,500)."
+    },
+    {
+      "source": "autonomous_allhad/workflow/recover_bounded_rate_impacts_hep2.py",
+      "source_sha256": "69e140d8024613d7ec880af4706afa6e7de21337d50ee9694da8572d7b4dea20",
+      "target": "workflows/impact_recovery_legacy.py",
+      "target_sha256": "b4f94e6b27b74b904e70298df5c0621f69a5e8f4452d936ccc747f60fe0b852a",
+      "source_fragments": {
+        "tree_rows": "5b12a5725bfb981db779905d132af67a53bdb972a066d9487bff3ac0ac9cbe85",
+        "missing_endpoint_side": "b13dd50b9952741b4b7bf34badae57e64c832a92051bbe84a4a6f9b2bed775e1",
+        "prepare": "58ee135312a3899f405fc99d0fcbd2989bd0a8182f422b6e761e80b5943fce57",
+        "Recovery": "19617d39403690aef33855a7acfb25bb142920d82b91430ab594d1a75d280132",
+        "collect": "314b6415c5a04b442a04d5d448de365d7332ddcea1fea28f358ac0812a38aae9"
+      },
+      "target_fragments": {
+        "tree_rows": "3212b7b4562a4632d86124dbdafa6ff0514dcf4deb8bab1fe6f7ad70e468a91e",
+        "missing_endpoint_side": "b13dd50b9952741b4b7bf34badae57e64c832a92051bbe84a4a6f9b2bed775e1",
+        "missing_endpoint_rows": "dd70ebee56e9aa764be8782983debf1963e292945e981a4b54dbd21b6f9ccd17",
+        "prepare": "81918f11c6d5fa30f890d7f96fdcd4ad19abc3a5d5f3005699326310121e7e9d",
+        "Recovery": "a789a8a77e5630103977517125655eea9a1f876e021d490f429a0eaec184bc7e",
+        "collect": "314b6415c5a04b442a04d5d448de365d7332ddcea1fea28f358ac0812a38aae9"
+      },
+      "verbatim_functions": [
+        "missing_endpoint_side",
+        "collect"
+      ],
+      "adaptation": "Numerical equations/configurations and bounded searches preserved; internal I/O, CommandRunner and integrity checks on reuse added. On 2026-09-24, actual failed ROOT rows showed four explicit LL upper endpoints equal to the central theta away from bounds. A strict input adapter recognizes exactly one such failed row, preserves the original ROOT/rows and routes the central plus nondegenerate endpoint to the unchanged missing-side algorithm. This is not a relaxed fit acceptance. New generated names use direct_profile/profileAsimov, without recovery/retry suffixes."
+    },
+    {
+      "source": "autonomous_allhad/workflow/extract_cronly_fit_covariance.py",
+      "source_sha256": "f974415d57b00e58e0bac7d66148f311b23b0c1d1dda198e0ac70d9df086ddba",
+      "target": "workflows/extract_cronly_covariance.py",
+      "target_sha256": "d3e492aeb3e6f4b8a1d5ce7029413248a9f79e2cd58fabb5360619dd124e0c87",
+      "source_fragments": {
+        "main": "499c71f93e7947fa60233e20e880eb318d6de971388e2b4c4ad2f1c44ca46bf4"
+      },
+      "target_fragments": {
+        "main": "ac54ac4bc89ed9060ecb492113beb928e58588f9457cbf00fc6e871be0dd319e"
+      },
+      "verbatim_functions": [],
+      "adaptation": "Only internal path checks after argument parsing added; extraction math and full covariance unchanged."
+    },
+    {
+      "source": "autonomous_allhad/workflow/plot_cronly_nuisance_pulls.py",
+      "source_sha256": "eb35a72ff0dc883fd5a9544937e663a667901345f64edbab468c87d429adcfa1",
+      "target": "workflows/renderers/cronly_pulls.py",
+      "target_sha256": "65de5320ce14da2e534c233dc15c6ac3b369279158a5c6babc80368c6baf7ba1",
+      "source_fragments": {
+        "split_scope": "68c836d54d3085c3e09329aff9f471e0a868ea08c4bd1dd914b15e11980dfb40",
+        "configure_style": "1e2a6af605b9be419f8f7e3d04498ffaaa2e54f5df98c9e0a06c47ae5065872b",
+        "main": "919ff5b2bd8aeeba6c3f8c5751b435e4ff3a94ccdc3c13d13bf58e7b5b542887"
+      },
+      "target_fragments": {
+        "split_scope": "68c836d54d3085c3e09329aff9f471e0a868ea08c4bd1dd914b15e11980dfb40",
+        "configure_style": "1e2a6af605b9be419f8f7e3d04498ffaaa2e54f5df98c9e0a06c47ae5065872b",
+        "main": "f1fdf360510a777ec2f614357d82f89f0ac5f020f8388c89f899692d38939d41"
+      },
+      "verbatim_functions": [
+        "split_scope",
+        "configure_style"
+      ],
+      "adaptation": "Only internal input/output path checks added after argument parsing. Original rendering body/style unchanged."
+    },
+    {
+      "source": "autonomous_allhad/workflow/run_current_card_cronly_hep2.py",
+      "source_sha256": "66be7812654f4adf37c1a61482b2e354724f10774db610ac9b1fcfe3a099157b",
+      "target": "workflows/combine_cronly.py",
+      "target_sha256": "12dd6e5f780b345b7c6d91d9fc697e6c9179b5bb5216c0d0039ba89a77aca4aa",
+      "source_fragments": {},
+      "target_fragments": {},
+      "verbatim_functions": [],
+      "adaptation": "Same FitDiagnostics options and status0/covQual3/finite EDM. Direct verified CR-only card already contains exactly twelve channels; no redundant combineCards selection."
+    },
+    {
+      "source": "autonomous_allhad/workflow/run_asimov_impacts_hep2.py",
+      "source_sha256": "6421004db6fd5fe4e16306b0cc985187aa75809cd53219be92d390067670c14f",
+      "target": "workflows/combine_impacts.py",
+      "target_sha256": "d55fb7c6bb368cd35909251003330158f5cadc06258251f962d493e486c80396",
+      "previous_target_sha256": "2112c798e1995a1bc67eed1309c6da1dab0d3281597b24f33aad39f4fe218aa1",
+      "source_fragments": {},
+      "target_fragments": {},
+      "verbatim_functions": [],
+      "adaptation": "Same S+B Asimov robustFit and finite strategies0,1; attempt folders preserve all outputs; retries persist across resume; all-parameter collection validation; original plotImpacts separately. On 2026-10-01 the canonical entrypoint gained explicit model/mass selection and hash-checked reuse of the same point's saved limit workspace. Default T2tt(1200,500) labels and all numerical kernels remain unchanged."
+    },
+    {
+      "source": "autonomous_allhad/workflow/recover_bounded_rate_impacts_hep2.py",
+      "source_sha256": "69e140d8024613d7ec880af4706afa6e7de21337d50ee9694da8572d7b4dea20",
+      "target": "workflows/recover_impacts.py",
+      "target_sha256": "d38200f5b26bd00c3dddd4963fb58b016f896605875f3ddbd02b8eab7c55bffb",
+      "previous_target_sha256": "a68affc729da0e8712b1805f5ac4d1a8b4d229de3aad19db47d2ae3945e6ebb6",
+      "source_fragments": {},
+      "target_fragments": {},
+      "verbatim_functions": [],
+      "adaptation": "Exact failed scope, original [0,10] legacy rate bounds, explicit missing-endpoint selection including one strictly recognized zero-width failed row, and one finite precision refinement; aggregate slot admission; no hidden boundary endpoints. The previously completed 2026-09-30 bounded-Sgamma mode additionally preserves the current [0.01,5] bounds and records independently validated boundary-limited endpoints. Its already-deployed hash is recorded here on 2026-10-01; no recovery source is changed in this metadata update."
+    }
+  ],
+  "runtime_external_analysis_dependencies": [],
+  "software_runtime": "stats/runtime.json",
+  "actual_Combine_fits": false,
+  "full_workflow_complete": false
+}

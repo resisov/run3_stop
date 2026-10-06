@@ -1,0 +1,45 @@
+# TROTASR declarative analysis contract, version 1.
+# Documentation companion to event_selections.py; not advertised as a
+# separately executed CutLang implementation. All energies are in GeV.
+# Status: user-authorized TEST, not production adoption.
+
+define MixedWP = 0.9027690887451172
+define MixedScore = TTScore / (TTScore + QCDScore)
+define RawMixed = MixedScore >= MixedWP
+# Region cleaning precedes the candidate arbitration below.
+# Shared AK4 association: two valid subjets with dR<0.4, otherwise AK8 dR<0.8.
+# Candidate order within M/R: descending score, ascending candidateIndex.
+define Arbitration = Boosted > Mixed > Resolved > independent_W
+define HighTopology = Nbst >= 1 or Nmix >= 1 or Nres >= 1 or Nw >= 1
+define LowTopology = Nbst == 0 and Nmix == 0 and Nres == 0 and Nw == 0
+define HighCore = region_specific_non_topology_cuts and Nj >= 4 and Nb >= 1
+define LowCore = adopted_diagonal_GNN_region_core and Nb >= 1
+
+region HighDM
+  select HighCore
+  select HighTopology
+region HighDM_SR_search
+  select HighDM_SR
+  select mTb >= 175
+region LowDM
+  select LowCore
+  select LowTopology
+
+# Existing non-topology thresholds retained:
+# SR/LLCR: MET>250, HT>300; high: first four jet |dphi|>.5.
+# Low SR/LLCR: dphi1>.5, dphi2>.15, dphi3>.15, Nj>=2.
+# QCDCR: existing qcd_open and dphi123>.1, MET>250, HT>300.
+# LLCR: one veto lepton, mT<100; SR/QCDCR: no veto leptons.
+# GCR: exactly one medium photon, MET<250, recoil>250, HTclean>300,
+# photon trigger, no veto leptons; AK4 dR>0.2 / AK8 dR>0.4 cleaning.
+# DY2E/DY2M: opposite-sign medium pair, opposite-flavor veto, 71<mll<111,
+# pTll>200, leading e>40 / mu>50, subleading>20, recoil>250, HTclean>300.
+# All: base_common and zero_tau; region-specific triggers.
+# Low diagonal selection does not reintroduce obsolete mTb/NISR/METsqrtHT cuts.
+
+# High SR sparse axes (no final statistical merge adopted):
+# Nb > Nbst > Nmix > Nres > Nw > recoil.
+# High CR: Nb=1/Nb>=2 by native recoil only; no SR topology replication.
+# Low SR: six Nb x NISR categories with existing five score bins each.
+# Low CR: Nb=1/Nb>=2 with five frozen common GNN bins, NISR pooled.
+# SR observed data remain blinded.

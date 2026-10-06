@@ -27,6 +27,9 @@ x509up*
 
 # Large binary/runtime artifacts
 *.root
+# Figures are local deliverables unless the user explicitly requests publication.
+*.png
+*.pdf
 # Generated histogram payloads and fit scratch are EOS-owned, not source snapshots.
 autonomous_allhad/workflow/histograms/**/hists.json
 autonomous_allhad/workflow/histograms/**/plot_payload.json
@@ -200,3 +203,21 @@ autonomous_allhad/workflow/nominal_plots_*/
 autonomous_allhad/workflow/shape_hists_*/
 autonomous_allhad/workflow/signal54_*/
 autonomous_allhad/workflow/trigger_efficiency_*/
+
+# Local campaign workspaces; canonical source/configuration lives outside them.
+# Already tracked campaign manifests and settings remain tracked.
+/autonomous_allhad/workflow/histograms/
+/autonomous_allhad/workflow/plot20[0-9][0-9]/
+/autonomous_allhad/workflow/topw_truth_*/
+/autonomous_allhad/workflow/topwtageff_*/
+
+# Generated report bundles; keep authoring code, text and reference data visible.
+/autonomous_allhad/reports/gnn_cms_an_handoff_*/*
+!/autonomous_allhad/reports/gnn_cms_an_handoff_*/README.md
+/autonomous_allhad/reports/higgsino_relic_contours_*/*
+!/autonomous_allhad/reports/higgsino_relic_contours_*/README.md
+!/autonomous_allhad/reports/higgsino_relic_contours_*/source/
+/autonomous_allhad/reports/object_definitions_*/*
+!/autonomous_allhad/reports/object_definitions_*/*.py
+!/autonomous_allhad/reports/object_definitions_*/*.md
+/autonomous_allhad/reports/topw_efficiency_an_handoff/

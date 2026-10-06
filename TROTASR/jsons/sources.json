@@ -1,0 +1,264 @@
+{
+  "schema": "trotasr_source_migration_v1",
+  "files": [
+    {
+      "source": "autonomous_allhad/gnn_lowdm/_implementation/region_io.py",
+      "source_sha256": "275f3ed8cca7abaac1b22a831580888876ca5852a43582fc7b281d3a321f12e5",
+      "target": "utils/ids.py",
+      "symbols": [
+        "LEPTON_VETO_PT_MIN",
+        "as_ak_bool",
+        "clean_by_delta_r",
+        "delta_phi",
+        "object_masks"
+      ],
+      "sha256": "6ffa3fd02eeff10640bca746526db3039418ed7f1c9aa6da2c2e95824730a17a"
+    },
+    {
+      "source": "autonomous_allhad/gnn_lowdm/_implementation/region_io.py",
+      "source_sha256": "275f3ed8cca7abaac1b22a831580888876ca5852a43582fc7b281d3a321f12e5",
+      "target": "utils/region_kinematics.py",
+      "symbols": [
+        "DATA_STREAM",
+        "HISTOGRAMS",
+        "LEPTON_VETO_PT_MIN",
+        "REGIONS",
+        "RegionBlock",
+        "SELECTION_BRANCHES",
+        "UPART_AK4_MEDIUM_WP_2024",
+        "as_bool",
+        "as_float",
+        "as_int",
+        "block_fields",
+        "build_region_blocks",
+        "delta_phi",
+        "dycr_lepton_mask",
+        "fatjet_kinematics",
+        "first",
+        "jet_kinematics",
+        "nth",
+        "update_veto_leptons"
+      ],
+      "sha256": "bbe060707f667638e7ce95e7f4c055c75b0bb955c5679760b1db48c91331b0ab"
+    },
+    {
+      "source": "autonomous_allhad/autonomous_allhad/highdm_resolved_categories.py",
+      "source_sha256": "10d46148be4589ebb525113433d6d8c63ffe7864d7f66dd043cb83674ee22ae1",
+      "target": "utils/constituents.py",
+      "symbols": [
+        "FATJET_FALLBACK_DR",
+        "ResolvedSelection",
+        "SUBJET_MATCH_DR",
+        "_combined_event_key",
+        "_valid_subjet_indices",
+        "boosted_overlap_vetoed_ak4_indices",
+        "delta_phi",
+        "delta_r2",
+        "map_candidates_to_events",
+        "map_candidates_to_events_rle",
+        "select_exclusive_resolved_candidates"
+      ],
+      "sha256": "b736014869e89bdb8aae5eab206a0e9a2e5bced330dc4a8897d148e2daf342f7"
+    },
+    {
+      "source": "autonomous_allhad/autonomous_allhad/signal_models.py",
+      "target": "utils/signal_models.py",
+      "byte_identical": true,
+      "sha256": "ad15ac4b4eb19e4f3ea8cd9c9154beea40550cc4946851df53e27884657e0d09"
+    },
+    {
+      "source": "analysis/utils/ids.py",
+      "source_sha256": "a40d327efedb8dad42afb59da944deff995500b09fc157a53853159d36901da1",
+      "target": "utils/nanoaod_ids.py",
+      "symbols": [
+        "isGoodFatJet",
+        "isGoodJet",
+        "isJetVeto",
+        "isLooseMuon",
+        "isMediumElectron",
+        "isMediumMuon",
+        "isMediumTau",
+        "isTrackElectron",
+        "isTrackMuon",
+        "isTrackPion",
+        "isVetoElectron"
+      ],
+      "sha256": "8f5a7fcb0a156165f22db6c4a8517486bcd787e7eb3060a52b367adfb2c79bd9"
+    },
+    {
+      "source": "analysis/utils/corrections.py",
+      "source_sha256": "c8ecd046246c68704fac78753fcc1f055e0264f3f5f015b5a05af138cef15ce0",
+      "target": "utils/pog_corrections.py",
+      "symbols": [
+        "BTagCorrector",
+        "_clip_jec_residual_run",
+        "_get_photon_veto_sf",
+        "corrections",
+        "get_ele_hlt_sf",
+        "get_ele_loose_id_sf",
+        "get_ele_medium_id_sf",
+        "get_ele_reco_sf",
+        "get_ele_tight_id_sf",
+        "get_ele_veto_id_sf",
+        "get_fjec_correction",
+        "get_fjer_sf",
+        "get_jec_correction",
+        "get_jec_uncertainty",
+        "get_jer_sf",
+        "get_met_xy_correction",
+        "get_mu_highpt_id_sf",
+        "get_mu_hlt_sf",
+        "get_mu_loose_id_sf",
+        "get_mu_loose_iso_sf",
+        "get_mu_loose_miniiso_sf",
+        "get_mu_medium_id_sf",
+        "get_mu_medium_miniiso_sf",
+        "get_mu_sf",
+        "get_mu_tight_id_sf",
+        "get_mu_tight_iso_sf",
+        "get_photon_csev_sf",
+        "get_photon_id_sf",
+        "get_photon_pixel_veto_sf",
+        "get_pu_weight",
+        "get_top_pt_reweight"
+      ],
+      "sha256": "9769a83a0383920b3a8771f7891a4d99f191799232519e590130bdb2c55cacf2"
+    },
+    {
+      "source": "autonomous_allhad/autonomous_allhad/analysis_scale_factors.py",
+      "target": "utils/private_scales.py",
+      "changes": "payload paths only",
+      "source_sha256": "9e6e705e35d7a3c955388d1bfe05d269f94f99829baf7703e04b8389f4a17f8c",
+      "sha256": "4a5409ea0e027522d0b70ae095c49c7562053ea35fd39ddb5d42b4be496f23bb"
+    },
+    {
+      "source": "autonomous_allhad/autonomous_allhad/real_subset_worker.py",
+      "source_sha256": "89eeed0112a5587dc878da1754321f38fa28131d5f4514ea28caa2abbba77501",
+      "target": "utils/weight_components.py",
+      "symbols": [
+        "_BTAG_CORRECTOR_CACHE",
+        "analysis_year",
+        "arr",
+        "campaign_year",
+        "compute_weight_bundle",
+        "finite_float",
+        "finite_weight_array",
+        "get_btag_corrector",
+        "has_field",
+        "is_data_process",
+        "jagged_prod",
+        "np_filled",
+        "replace_component"
+      ],
+      "sha256": "48ad99ad43f2fdb7ba2a3f62b10034350509627e64c0b5ca6925c334e7d5fc81"
+    },
+    {
+      "source": "autonomous_allhad/workflow/build_flat_boosted_recoil_hists.py",
+      "source_sha256": "0b0835a7ff9f67eb825d11647507105e72d87a996c4d4c6b1a95b27a76ee0883",
+      "target": "utils/weight_inputs.py",
+      "symbols": [
+        "SIGNAL_BTAG_EFFICIENCY_DATASETS",
+        "SIGNAL_BTAG_FASTSIM_MASSES",
+        "WEIGHT_BRANCHES",
+        "as_bool",
+        "combine_two",
+        "flat_arrays_for_weights",
+        "ones_mask",
+        "signal_btag_efficiency_dataset",
+        "zeros_mask"
+      ],
+      "sha256": "2c0762d9f66e01288b2051e2b850660c47d2bd9e1f7d771425df9dbe3bb58a04"
+    },
+    {
+      "source": "autonomous_allhad/workflow/build_flat_boosted_recoil_hists.py",
+      "source_sha256": "0b0835a7ff9f67eb825d11647507105e72d87a996c4d4c6b1a95b27a76ee0883",
+      "target": "utils/normalization.py",
+      "symbols": [
+        "DATA_PROCESSES",
+        "DATA_PROCESS_BY_REGION",
+        "canonical_process",
+        "data_process_allowed",
+        "dataset_label",
+        "norm_vector",
+        "process_to_group"
+      ],
+      "sha256": "cb7731048cc23375e5513d33549a60084d931cf31aaf52c28e2789e6905eb9ff"
+    },
+    {
+      "source": "autonomous_allhad/gnn_lowdm/data.py",
+      "source_sha256": "0c25d4edecb62816e2cc3defc680f715602f4159ba8b7c008a446de362a4e360",
+      "target": "gnn4lowdm/features.py",
+      "symbols": [
+        "DIAGONAL_V3_GLOBAL_FEATURE_NAMES",
+        "UPART_AK4_MEDIUM_WP_2024",
+        "_delta_phi_numpy",
+        "_diagonal_v3_features",
+        "_four_vectors",
+        "_invariant_mass",
+        "_pad"
+      ],
+      "sha256": "80ff9ec27b03630edc000b8dd8c14ae183975f783a024d5722432521ad403f0e"
+    },
+    {
+      "source": "autonomous_allhad/gnn_lowdm/_implementation/diagonal_v3_region_features.py",
+      "source_sha256": "93fb8ae4b7788ecfcf9c74f5b31939fcf87efbc9dc5b079a2b415e51ad271904",
+      "target": "gnn4lowdm/region_features.py",
+      "symbols": [
+        "NOMINAL_REGIONS",
+        "_leading",
+        "_reference_objects",
+        "_region_isr",
+        "feature_arrays"
+      ],
+      "sha256": "ba6c2b91ab3de0f6bc3263ed7df35c9e7aacf2a01710498fb6a4d6f64b4c4793"
+    },
+    {
+      "source": "autonomous_allhad/gnn_lowdm/_implementation/rank005_numpy.py",
+      "target": "gnn4lowdm/inference.py",
+      "byte_identical": true,
+      "sha256": "d4d8fa8aa9191c2bd412c7b06d05fa2f0e42b7454c61590e5e6dcc2eb2fab870"
+    },
+    {
+      "source": "autonomous_allhad/gnn_lowdm/config.json",
+      "target": "gnn4lowdm/config.json",
+      "byte_identical": true,
+      "sha256": "5a3a51852766a43b663d05b926528224a0d5467f58478e33140f86321087aa70"
+    },
+    {
+      "source": "autonomous_allhad/workflow/plot_control_search_bins_style.py",
+      "target": "utils/renderers/plot_control_search_bins_style.py",
+      "byte_identical": true,
+      "sha256": "9d4af52f6f34eaf1262e7c45cea00af00156bcce072adc424f953e6760526481"
+    },
+    {
+      "source": "autonomous_allhad/workflow/postprocess_limits.py",
+      "target": "utils/renderers/postprocess_limits.py",
+      "byte_identical": true,
+      "sha256": "446dece4eddd330313902260edf1c3ec362e1d531e648ac9867e45ae735e0bd3"
+    },
+    {
+      "source": "autonomous_allhad/workflow/background_process_groups.py",
+      "target": "utils/renderers/background_process_groups.py",
+      "byte_identical": true,
+      "sha256": "afe5af0d1dc478f3294fc236b7083346e5cf3fdc0762bcbaf7eb0e2f04d8e419"
+    },
+    {
+      "source": "autonomous_allhad/workflow/signal_theory.py",
+      "target": "utils/renderers/signal_theory.py",
+      "byte_identical": true,
+      "sha256": "c3790ec3d84f857a1b8322fd2a9867d21b3f73caa20d64d9e90b0d22dc3cd831"
+    },
+    {
+      "source": "autonomous_allhad/autonomous_allhad/search_bin_categorization.py",
+      "target": "utils/renderers/autonomous_allhad/search_bin_categorization.py",
+      "byte_identical": true,
+      "sha256": "319cc061f56895ec26727e39bb6785047f1cdb135bcb4c50b7537f66af1b98ff"
+    },
+    {
+      "source": "autonomous_allhad/autonomous_allhad/highdm_resolved_categories.py",
+      "target": "utils/renderers/autonomous_allhad/highdm_resolved_categories.py",
+      "byte_identical": true,
+      "sha256": "10d46148be4589ebb525113433d6d8c63ffe7864d7f66dd043cb83674ee22ae1"
+    }
+  ]
+}

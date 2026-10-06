@@ -1,0 +1,63 @@
+{
+  "schema": "trotasr_contour_config_v1",
+  "references": {
+    "T2tt": {
+      "path": "stats/references/run2_sus19010_t2tt_contours.json",
+      "sha256": "3244734a888448706a93b227b270f5237cbea6ad1734562f7afd63babc05930d",
+      "migrated_from": "autonomous_allhad/gnn_lowdm/inputs/run2_sus19010_t2tt_contours.json",
+      "source_sha256": "6a75071d33212831b07fe71c09ec4aeba8750f432806929fca644764930421c4",
+      "byte_identical": false,
+      "physics_values_unchanged": true
+    },
+    "T2tt_compressed": {
+      "path": "stats/references/run2_sus19010_t2ttc_contours.json",
+      "sha256": "62bc78f21e820260973fc4bf2abe71ceddbac304e6964120b490bbc1ea921c54",
+      "migrated_from": "autonomous_allhad/gnn_lowdm/inputs/run2_sus19010_t2ttc_contours.json",
+      "source_sha256": "62bc78f21e820260973fc4bf2abe71ceddbac304e6964120b490bbc1ea921c54",
+      "byte_identical": true,
+      "physics_values_unchanged": true
+    },
+    "T2tb": {
+      "path": "stats/references/run2_sus19010_t2tb_contours.json",
+      "sha256": "cdf283d4c9469aadc1a0b0f011c2805d0ec5fc83662f78a098c0f493af411ae0",
+      "migrated_from": "autonomous_allhad/gnn_lowdm/inputs/run2_sus19010_t2tb_contours.json",
+      "source_sha256": "cdf283d4c9469aadc1a0b0f011c2805d0ec5fc83662f78a098c0f493af411ae0",
+      "byte_identical": true,
+      "physics_values_unchanged": true
+    },
+    "T2bW": {
+      "path": "stats/references/run2_sus19010_t2bw_contours.json",
+      "sha256": "99abfe94f262df1a0f4cf8cb4399b6a7ffc7b238630a26cf95cbd19916ec1dcb",
+      "migrated_from": "autonomous_allhad/gnn_lowdm/inputs/run2_sus19010_t2bw_contours.json",
+      "source_sha256": "99abfe94f262df1a0f4cf8cb4399b6a7ffc7b238630a26cf95cbd19916ec1dcb",
+      "byte_identical": true,
+      "physics_values_unchanged": true
+    },
+    "T2bW_compressed": {
+      "path": "stats/references/run2_sus19010_t2bwc_contours.json",
+      "sha256": "9ea46bd591c6c3e15eac68c83187da1c9503cd2766fc7e75cce94b611f3d5e78",
+      "migrated_from": "autonomous_allhad/gnn_lowdm/inputs/run2_sus19010_t2bwc_contours.json",
+      "source_sha256": "9ea46bd591c6c3e15eac68c83187da1c9503cd2766fc7e75cce94b611f3d5e78",
+      "byte_identical": true,
+      "physics_values_unchanged": true
+    },
+    "thermal_relic": {
+      "path": "stats/references/higgsino_stop_relic_contours.json",
+      "sha256": "b23a3e51e81e26cb00cadaf79e3cdecba4eb071c58b65b7a233f278e5363ed61",
+      "migrated_from": "autonomous_allhad/reports/higgsino_relic_contours_20260902/higgsino_stop_relic_contours.json",
+      "source_sha256": "b23a3e51e81e26cb00cadaf79e3cdecba4eb071c58b65b7a233f278e5363ed61",
+      "byte_identical": true,
+      "physics_values_unchanged": true
+    }
+  },
+  "theory": {
+    "path": "stats/stop_xsec_13p6TeV.json",
+    "sha256": "7741bc0b13a9881faac7aa3c4e5e88ceffacf3d0c73dbd70d14e638d5e320d8a",
+    "migrated_from": "autonomous_allhad/signals/stop_xsec_13p6TeV.json",
+    "source_sha256": "7741bc0b13a9881faac7aa3c4e5e88ceffacf3d0c73dbd70d14e638d5e320d8a",
+    "byte_identical": true,
+    "physics_values_unchanged": true
+  },
+  "policy": "Byte-preserved original renderer; same 600-1800 x 1-1800 GeV axes, topology-aware interpolation, Run-2 and thermal-relic overlays. No external theory shift.",
+  "migration_note": "The T2tt reference JSON gained only a final newline; all parsed values exactly match the sources."
+}

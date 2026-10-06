@@ -1,0 +1,21 @@
+{
+  "schema": "trotasr_nominal_grid_config_v1",
+  "grid": "stats/signal_grid.json",
+  "theory": "stats/stop_xsec_13p6TeV.json",
+  "years": {
+    "2024": {
+      "hists": "campaigns/nominal_20260923/merged/nominal_2024.json.gz",
+      "sgamma": "estimations/nominal_20260923/2024/sgamma.json.gz",
+      "rz_high": "estimations/nominal_20260923/2024/rz_high.json.gz",
+      "rz_low": "estimations/nominal_20260923/2024/rz_low.json.gz",
+      "double_ratio": "estimations/nominal_20260923/2024/double_ratio.json.gz"
+    },
+    "2025": {
+      "hists": "campaigns/nominal_20260923/merged/nominal_2025.json.gz",
+      "sgamma": "estimations/nominal_20260923/2025/sgamma.json.gz",
+      "rz_high": "estimations/nominal_20260923/2025/rz_high.json.gz",
+      "rz_low": "estimations/nominal_20260923/2025/rz_low.json.gz",
+      "double_ratio": "estimations/nominal_20260923/2025/double_ratio.json.gz"
+    }
+  }
+}

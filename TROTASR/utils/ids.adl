@@ -1,0 +1,32 @@
+# TROTASR ID contract; companion to ids.py, not a second execution engine.
+object VetoElectron
+  take Electron
+  select pt > 10
+  select abs(eta) < 1.4442 or (abs(eta) > 1.566 and abs(eta) < 2.5)
+  select cutBased >= 1 and miniPFRelIso_all < 0.1
+object MediumElectron
+  take VetoElectron
+  select cutBased >= 3
+object LooseMuon
+  take Muon
+  select pt > 10 and abs(eta) < 2.4
+  select looseId and miniPFRelIso_all < 0.2
+object MediumMuon
+  take Muon
+  select pt > 10 and abs(eta) < 2.4
+  select mediumId and miniPFRelIso_all < 0.2
+object MediumPhoton
+  take Photon
+  select pt > 220
+  select abs(eta) < 1.4442 or (abs(eta) > 1.566 and abs(eta) < 2.5)
+  select cutBased >= 2 and electronVeto
+# Adopted histogram ID above is distinct from the old NanoAOD ids.py photon
+# helper (cutBased>=3); the new public histogram path uses cutBased>=2.
+object GoodAK4
+  take corrected_Jet
+  select pt > 30 and abs(eta) < 2.4 and stored_validated_jetID
+# b medium: UParT > 0.1272, as in the adopted 2024/2025 region implementation.
+# AK4 reference-object cleaning dR>0.2; AK8 cleaning dR>0.4.
+# Stored validated Boosted/W decisions and original constituent indices are
+# read from Events. Mixed is selected from TopMixed1pct_* Events branches;
+# Resolved candidates are joined from the same file's TROTA tree by file_id/entry.

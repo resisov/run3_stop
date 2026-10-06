@@ -1,0 +1,69 @@
+{
+  "schema": "trotasr_prediction_plot_sources_v1",
+  "sources": [
+    {
+      "source": "autonomous_allhad/gnn_lowdm/_implementation/plot_control_regions.py",
+      "source_sha256": "b68776db124d620616ed7f8074fe7e858a8a36a887397851edbcacb32e46de07",
+      "target": "workflows/renderers/gnn_control.py",
+      "target_sha256": "9c07f40dbade4a637c6b261998904a78337b951f1a7a53c1f7f0076c8448c5b6",
+      "fragments": {
+        "LUMINOSITY_FB": "c60b8a05f4549ee0efe1f418583ef2942282075cdc8eb22c1fff60e3325a7501",
+        "CATEGORIES": "c7e00c658a82c11cdf5860118b6b28104362efc063ddc226d3995b8462ce1098",
+        "CATEGORY_LABELS": "5a10bc0e12c77cad340ca4b8b05760e1a1415abcbd3576711901bdf8415f8a31",
+        "REGION_COMPONENTS": "4fbc5f2d8ed5d83bfb9bfc826b9b2c39aa793335fb7d4459888962f8a828cbe8",
+        "REGION_LABELS": "d2216f5ff5a49e658e868e2ddbe19c2194c40c682043a6eca550c317c3ec3102",
+        "GROUP_ORDER": "ad7c980c08f322976232a4f30aef9663e28013c54d3235967a2ce44e58c70711",
+        "GROUP_COLORS": "153f7bcd2894c77f518c190e79c30ac3d3b652caf5a7ee1b883a0e4f626e7891",
+        "GROUP_LABELS": "aaa5b7b2acfbb2582a2601947b784ac3cd0c9d3b20bf20863c8ec0ac09727342",
+        "RAW_GROUPS": "5932fdb4836fdb7d72046b339f51412b9ca3dd576a2c65bce787de146180596e",
+        "ALLOWED_SAMPLES": "007977ab55213331083744f864e888e2c7dbb6ae32cfbf3c28f82c9f3c73f076",
+        "score_edges": "b3d9dfbf72f95928cb92d2364fd825289296a2a4ea6b41963b8075203e15e879",
+        "component": "427203124f68e311cc8451f77feed801eec132af0a0cba3330728af896b567c5",
+        "combined_component": "d2f6c2c70e2820047b56be86978db58be3f9dcaae8ec2edb35aa9538ea9ef311",
+        "signed_stack": "7ff541380858290beda0299f4fc56b8456f4b1d4073045c3e6cdc6b9efd5a4f7",
+        "flattened": "68940600190fbdfc765a382389fa161bf1350c60e1cee1525abd7c4e4bc7d75d",
+        "interval_label": "3db5d3f66ecc0927aa9237776c27cc2bc98416506f594ba666fd6cacbb9eb355",
+        "draw": "81bf222aa58913719cc000b4a7ec03a7dcc4e00cf1f7106d848935c04d9d3fd7"
+      }
+    },
+    {
+      "source": "autonomous_allhad/gnn_lowdm/_implementation/plot_lowdm30_sr_categories.py",
+      "source_sha256": "785a3d18a5c060effccc37d30df3062736e8bb8ac541b8cfebd344be0a6cb84f",
+      "target": "workflows/renderers/lowdm_sr.py",
+      "target_sha256": "3f2cd9b82847872d9bd524770edcff7c1e10e37863cc8d3065e188d1464f8140",
+      "fragments": {
+        "LUMINOSITY_FB": "c60b8a05f4549ee0efe1f418583ef2942282075cdc8eb22c1fff60e3325a7501",
+        "HIGHDM_MAIN_YLIM": "85d6e80b45d810bbf22ba460229cbb195acd9000d4bd988dade20032398b750b",
+        "CATEGORIES": "68515e07e44fcbc383898d939414ec3c913f2a432247314cef46b57c72979a93",
+        "CATEGORY_LABELS": "f4d189c5249f602b5bb4b47b2eef18a53672dd446ec374290315e36ea139de1d",
+        "PROCESS_ORDER": "918a89979621843d7b93c56115c7db8e683e11ffb9b0717473ff9ec53c151cca",
+        "PROCESS_LABELS": "e482438fcf8d13c829f9733f27c4794ce8204b28a0a2d6918548b8384e7b3468",
+        "PROCESS_COLORS": "28aef04c0274112541a7b4d794f48c178e249b8ddbe13766a971454c8dcb6de8",
+        "BENCHMARKS": "9529ea8ccc5c57e561fe3d43cdce0e4e6bc3f4174bb7f20e7391d9e0e9b96208",
+        "signed_stack": "ea088af432b3c6fe53765003ea7a602ed89266be2519a76bad043d7682c13a14",
+        "score_interval": "da0f08ec8913723eacfec1f7aca85f238241e843c565f0fe039bbb11e98e50fa"
+      },
+      "drawing_body_sha256": "d5edc51f89e21fafb5f3d9ae87a5696d659a5b9e75881dbe8c1ffc4847d3ec20",
+      "drawing_body_start": "    uncertainty = validated_plot_uncertainty(background, background_variance, band)",
+      "drawing_body_end": "    plt.close(figure)"
+    }
+  ],
+  "runtime_external_analysis_dependencies": [],
+  "adopted_gnn_binding": {
+    "an_source_sha256": "4f95362ec4b00cc375b3770673ceda9aea8b32c36c16e1a598003174d7b724d9",
+    "an_source_lines": [2328,2340,2350,2360,2370,2380],
+    "yearly_and_combined_LL_QCD_GCR": "Current native-card prefit yields; GCR is not unit area; LLCR 10-to-5 display only",
+    "auxiliary_DY": "Original dedicated renderer, two Nb streams; not a likelihood channel",
+    "ll_projection_source": "AN-26-090/figures/results_distributions/render_llcr_inclusive.py",
+    "ll_projection_sha256": "c3fef826c61cf5dff1d00abdc77293c718121af1a0a8a8d8225868218befc44c",
+    "an_import_adapter_sha256": "5fe7b4c1995822790c02e5d0cb97d2e01f00f3c0253d7f69965d879099820568",
+    "reference_fixture_use": "Regression only. Old predictions must never enter new production or fits."
+  },
+  "method_references": [
+    {"path":"autonomous_allhad/workflow/plot_highdm73_from_limit_templates.py","sha256":"41d0be506e56c7caff94eec312426b02ef36738f4dd29fdaa48009312ca5aaf9"},
+    {"path":"autonomous_allhad/workflow/export_pooled_gnn_cr_plots.py","sha256":"08db69d887c075fe61f5c4b3c0b64b1401757cd87b65ed742362aea011986a72"},
+    {"path":"autonomous_allhad/workflow/plot_pooled_gnn_cr.py","sha256":"060146ad9364334709b16ccaf7e32184787d53fb3b78fd7013b53af237893572"},
+    {"path":"autonomous_allhad/workflow/combine_sr_plot_payloads.py","sha256":"8c657f36b17f9e779754387bc9f51d8c68b9106d3b643576abb6b810a478ce40"},
+    {"path":"autonomous_allhad/workflow/pool_dy_gnn_display.py","sha256":"6251fd06d3dd39e6e9dcc046e6604a1e948f0ed2b6e8d6da4eef30033c9b77de"}
+  ]
+}

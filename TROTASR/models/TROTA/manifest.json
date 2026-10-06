@@ -1,0 +1,17 @@
+{
+  "schema": "trotasr_trota_models_v1",
+  "application_years": [2024, 2025],
+  "model_release_year": 2024,
+  "upstream_commit": "38fb282d5c3479d2eec96cc57d60fac7fd412d7f",
+  "operator": ">=",
+  "resolved": {
+    "path": "models/TROTA/model_TopResolved_2024_TROTA2D_ptcut.h5",
+    "sha256": "ce673e6497860cc67fcdfb30017301fb476e32a0a33a60e8b51a31ba109f7ef3",
+    "threshold": 0.9433798789978027
+  },
+  "mixed": {
+    "path": "models/TROTA/model_TopMixed_2024_TROTA2D_ptcut.h5",
+    "sha256": "40469a1a62f64b08b4225682a2df6ac2538f49a1e7eef5ef4bdff857d0b875a4",
+    "threshold": 0.9027690887451172
+  }
+}

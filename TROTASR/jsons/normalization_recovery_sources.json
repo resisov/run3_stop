@@ -1,0 +1,35 @@
+{
+  "schema": "trotasr_normalization_recovery_sources_v1",
+  "source": "autonomous_allhad/workflow/merge_flat_ntuple_metadata.py",
+  "source_sha256": "fe5aa483a0c95fa0cc1c52355e4d26fb9b15cb3c1ab3a3ca09a3ff7cf928071f",
+  "target": "workflows/normalization_metadata_legacy.py",
+  "target_sha256": "618880c62a7b229257c133596f5f3db02f41374af379590e5019f86f1dbedda2",
+  "functions": {
+    "finite": "019a312abe7eacc05732437e38fe06a37a01635ae7021635b362669553e238c4",
+    "positive": "3008d64af20fe3f1274928890a2a0d7ff4b342901ac5bd0a8c85bdab79694b40",
+    "add_counts": "4e73f4c249e305a0e0620b06377b8b5ac4a126e816ee7abaab75bffc8b94207f",
+    "add_float_map": "985cb760ff7a936c793318ba2512cc8d040a0204e6e3f4522e2b8f30d624d3bb",
+    "merge_signal_cutflow_histograms": "a6fd38e58bc6d49db47a919937a8de7615c48cd40312b8fbae4a4144e28bbba7",
+    "parse_genmodel": "7894a1d48404d6d2786c706c24965c00f949382b04ace7e2d212c217b0c02067",
+    "load_signal_xsec": "33ff4ce6100a7cf3d4288a6da8bad25d60316f5e30962f25bdc903084df1d7b5",
+    "merge_dataset": "91d5e071414d2927b2d9691da6e68b14602c1a2139b7a3b6ac3e9cc9b7c1cb71",
+    "build_physical": "4cd9cf500f86dd0de32fb8031bb53b30a79055c3368cd43e051f1cccb6b8e449",
+    "build_signal_mass_points": "0ff95639ea491445b139fb056ca60624831970463f48ed08d7be4a81cb35f08c"
+  },
+  "functions_verbatim": true,
+  "scope": "Recover missing signal-shard metadata using unchanged Runs sumw, luminosity and stop cross section; candidate only until explicit preserved promotion.",
+  "runtime_external_analysis_dependencies": [],
+  "promotion_files_sha256": {
+    "workflows/normalization_metadata_legacy.py": "618880c62a7b229257c133596f5f3db02f41374af379590e5019f86f1dbedda2",
+    "workflows/audit_normalization_coverage.py": "9e4207ab7116bcd21422d67c5841ca8d094a3626b6417e40987df45b1e71697c",
+    "workflows/normalization_recovery.py": "6c187ccab702712f56c20fd4ff8bdc9ce8afec141b923337e81c1ffc96955716",
+    "workflows/promote_normalization_recovery.py": "096ae58de3171ef2334af90968525b56fe5e11b7b0ce09d4286da43b4cc2eea1",
+    "tests/test_normalization_coverage.py": "91d71ef4b0e448c7ba8684c3f269ad8278e572f802cc582e5f28ecce7f3a2a1d",
+    "validation/normalization_recovery_20260923/staged_workflows/nominal_campaign.py": "c900ad673aee7e2ff005d2824b7afb5198f05fb753a167fc90909ef1cd0c75cf",
+    "validation/normalization_recovery_20260923/staged_workflows/merge_nominal.py": "04ac9926a627472cc09c8a19a7b40f4337a2087df97f9dc276f3ca5f8c6b2299"
+  },
+  "original_active_files_sha256": {
+    "workflows/nominal_campaign.py": "453dc07d13d30741a0be14767195c36e41e38e0912d75a8a0b3ed31ea35c6bfe",
+    "workflows/merge_nominal.py": "7028b1af24c1fb2c728eacd1a2123163ef034345f22984f0b2bc2cbc110b75e8"
+  }
+}

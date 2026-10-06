@@ -1,0 +1,25 @@
+{
+  "schema": "trotasr_trota_inmemory_source_provenance_v1",
+  "sources": {
+    "trota_resolved_2024_inplace.py": {
+      "sha256": "5d9e882d718d2fa79c289248dc820dc2cd752722c64014c3908d73b31c6b9249",
+      "functions": [
+        "_build_candidates_impl",
+        "_flatten_jets"
+      ]
+    },
+    "topmixed_2024_inplace.py": {
+      "sha256": "3909aa193051c4216557ca39854c422ff11ef607ab89bcfb81977bc66f820526",
+      "functions": [
+        "dphi",
+        "p4",
+        "kin",
+        "build_candidates",
+        "pack",
+        "candidate_cost"
+      ]
+    }
+  },
+  "physics_changes": [],
+  "runtime_external_analysis_imports": []
+}

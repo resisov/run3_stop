@@ -1,0 +1,8 @@
+{
+  "schema": "trotasr_software_runtime_v1",
+  "cmssw": "/hep2-scratch/twkim/envs/combine_20260914/CMSSW_14_1_0_pre4",
+  "cmsset_default": "/cvmfs/cms.cern.ch/cmsset_default.sh",
+  "guard": "stats/runtime",
+  "purpose": "Existing numerical software only; no external analysis code or payload dependencies",
+  "threads": 1
+}

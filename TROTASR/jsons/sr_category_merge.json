@@ -1,0 +1,1028 @@
+{
+  "schema": "trotasr_sr_category_merge_v1",
+  "adopted_on": "2026-09-24",
+  "user_instruction": "SR에서 백그라운드 합이 2미만인 카테고리를 적절히 다른 카테고리에 합병하라.",
+  "threshold": 2,
+  "threshold_scope": "2024+2025_category_integral",
+  "source_binning": "highdm_sr_binning.json",
+  "source_binning_sha256": "4c985e9e47794ed286248d41d604d8368f20fb8534d1a282ba4732489a2eb513",
+  "decision_payload": "stats/nominal_20260923/plots/predictions/prediction_payload.json",
+  "decision_payload_sha256": "be5d8893d15beeb7bbb0aea131c2d89ef5aeaf6c1fc4b00eeee7a34d24dbb53d",
+  "categories_per_year": 21,
+  "bins_per_year": 118,
+  "source_bins_per_year": 162,
+  "lowdm_bins": 30,
+  "cr_binning_changed": false,
+  "category_axis_order": [
+    "Nb",
+    "Nbst",
+    "Nmix",
+    "Nres",
+    "Nw"
+  ],
+  "physics_change": "User-authorized SR-only category unions plus final-two-recoil-bin merges in displayed classes 2, 15 and 20; identical in both years; selections and CRs unchanged.",
+  "recoil_bin_merge_instruction": "클래스 2, 15, 20의 마지막빈을 앞의빈에 병합하라. 통계가 너무적다.",
+  "recoil_bin_merges": [
+    {"class_1based": 2, "source_categories_1based": [2], "operation": "merge_last_into_previous", "source_edges": [250, 300, 350, 400, 500, 800, 1500], "removed_boundary": 800},
+    {"class_1based": 15, "source_categories_1based": [21], "operation": "merge_last_into_previous", "source_edges": [250, 300, 350, 400, 500, 800, 1500], "removed_boundary": 800},
+    {"class_1based": 20, "source_categories_1based": [26], "operation": "merge_last_into_previous", "source_edges": [250, 300, 350, 400, 500, 800, 1500], "removed_boundary": 800}
+  ],
+  "negative_policy": "Sum adopted clipped source-bin contents and independent variances; retain separate normalized processes and correlated nuisance endpoints.",
+  "rationale": [
+    "Preserve Nb/Nbst/Nmix where supported; merge sparse W/Resolved subdivisions.",
+    "Pool rare W-containing Nb>=3 with identical Nb=2 topology, retaining W sensitivity.",
+    "No per-bin threshold, no observed-SR or signal-dependent merge decision."
+  ],
+  "low_background_source_categories_1based": [
+    5,
+    8,
+    10,
+    11,
+    12,
+    24,
+    28
+  ],
+  "source_category_yields": [
+    {
+      "category": 1,
+      "background_by_year": {
+        "2024": 5104.055294492379,
+        "2025": 4949.125112684437
+      },
+      "background_total": 10053.180407176817
+    },
+    {
+      "category": 2,
+      "background_by_year": {
+        "2024": 2.786591058491078,
+        "2025": 2.66482232339332
+      },
+      "background_total": 5.451413381884398
+    },
+    {
+      "category": 3,
+      "background_by_year": {
+        "2024": 78.01773411820915,
+        "2025": 77.94523754979323
+      },
+      "background_total": 155.96297166800238
+    },
+    {
+      "category": 4,
+      "background_by_year": {
+        "2024": 216.44293826477332,
+        "2025": 213.87233028398725
+      },
+      "background_total": 430.31526854876057
+    },
+    {
+      "category": 5,
+      "background_by_year": {
+        "2024": 0.0013254982426624984,
+        "2025": 0.0019296093369913735
+      },
+      "background_total": 0.003255107579653872
+    },
+    {
+      "category": 6,
+      "background_by_year": {
+        "2024": 126.20744927156187,
+        "2025": 126.40680048523876
+      },
+      "background_total": 252.61424975680063
+    },
+    {
+      "category": 7,
+      "background_by_year": {
+        "2024": 65.93017436091327,
+        "2025": 61.82182310683866
+      },
+      "background_total": 127.75199746775192
+    },
+    {
+      "category": 8,
+      "background_by_year": {
+        "2024": 0.003798377814174643,
+        "2025": 0.026962205160724374
+      },
+      "background_total": 0.030760582974899017
+    },
+    {
+      "category": 9,
+      "background_by_year": {
+        "2024": 115.97732012585729,
+        "2025": 115.44524221447068
+      },
+      "background_total": 231.42256234032797
+    },
+    {
+      "category": 10,
+      "background_by_year": {
+        "2024": 0.5237290684770153,
+        "2025": 0.5561416744480283
+      },
+      "background_total": 1.0798707429250436
+    },
+    {
+      "category": 11,
+      "background_by_year": {
+        "2024": 0.5758603028590261,
+        "2025": 0.528442122576172
+      },
+      "background_total": 1.104302425435198
+    },
+    {
+      "category": 12,
+      "background_by_year": {
+        "2024": 0,
+        "2025": 0
+      },
+      "background_total": 0
+    },
+    {
+      "category": 13,
+      "background_by_year": {
+        "2024": 10.914644482872344,
+        "2025": 12.24708977140503
+      },
+      "background_total": 23.161734254277373
+    },
+    {
+      "category": 14,
+      "background_by_year": {
+        "2024": 105.83146053386314,
+        "2025": 106.11585882125955
+      },
+      "background_total": 211.9473193551227
+    },
+    {
+      "category": 15,
+      "background_by_year": {
+        "2024": 9790.386177327608,
+        "2025": 9490.052824685847
+      },
+      "background_total": 19280.439002013452
+    },
+    {
+      "category": 16,
+      "background_by_year": {
+        "2024": 22.21895335090485,
+        "2025": 22.573469637056192
+      },
+      "background_total": 44.79242298796105
+    },
+    {
+      "category": 17,
+      "background_by_year": {
+        "2024": 1200.8915090928813,
+        "2025": 1202.4753405068248
+      },
+      "background_total": 2403.3668495997063
+    },
+    {
+      "category": 18,
+      "background_by_year": {
+        "2024": 5.864071824763667,
+        "2025": 5.490913309159797
+      },
+      "background_total": 11.354985133923464
+    },
+    {
+      "category": 19,
+      "background_by_year": {
+        "2024": 8.546457753952266,
+        "2025": 8.375072595137935
+      },
+      "background_total": 16.9215303490902
+    },
+    {
+      "category": 20,
+      "background_by_year": {
+        "2024": 2172.723954034185,
+        "2025": 2056.6400336617953
+      },
+      "background_total": 4229.3639876959805
+    },
+    {
+      "category": 21,
+      "background_by_year": {
+        "2024": 4.11700450387169,
+        "2025": 3.938242622219367
+      },
+      "background_total": 8.055247126091057
+    },
+    {
+      "category": 22,
+      "background_by_year": {
+        "2024": 310.81407993119274,
+        "2025": 297.2970206006905
+      },
+      "background_total": 608.1111005318833
+    },
+    {
+      "category": 23,
+      "background_by_year": {
+        "2024": 3.9036405942391674,
+        "2025": 4.324436190339597
+      },
+      "background_total": 8.228076784578764
+    },
+    {
+      "category": 24,
+      "background_by_year": {
+        "2024": 0.7769117315746218,
+        "2025": 0.6197800390156855
+      },
+      "background_total": 1.3966917705903072
+    },
+    {
+      "category": 25,
+      "background_by_year": {
+        "2024": 303.20079108471236,
+        "2025": 279.59535327928563
+      },
+      "background_total": 582.796144363998
+    },
+    {
+      "category": 26,
+      "background_by_year": {
+        "2024": 1.5200277971717637,
+        "2025": 1.3774090495110047
+      },
+      "background_total": 2.8974368466827682
+    },
+    {
+      "category": 27,
+      "background_by_year": {
+        "2024": 49.79032075043257,
+        "2025": 48.4443377366329
+      },
+      "background_total": 98.23465848706547
+    },
+    {
+      "category": 28,
+      "background_by_year": {
+        "2024": 0.37302270884812194,
+        "2025": 0.3556252727944125
+      },
+      "background_total": 0.7286479816425344
+    }
+  ],
+  "categories": [
+    {
+      "predicates": {
+        "Nb": {
+          "ge": 1
+        },
+        "Nbst": {
+          "eq": 0
+        },
+        "Nmix": {
+          "eq": 0
+        },
+        "Nres": {
+          "eq": 1
+        },
+        "Nw": {
+          "eq": 0
+        }
+      },
+      "edges": [
+        250,
+        300,
+        350,
+        400,
+        500,
+        800,
+        1500
+      ],
+      "source_categories_1based": [
+        1
+      ],
+      "background_by_year": {
+        "2024": 5104.055294492379,
+        "2025": 4949.125112684437
+      },
+      "background_total": 10053.180407176817
+    },
+    {
+      "predicates": {
+        "Nb": {
+          "ge": 1
+        },
+        "Nbst": {
+          "eq": 0
+        },
+        "Nmix": {
+          "eq": 0
+        },
+        "Nres": {
+          "ge": 1
+        },
+        "Nw": {
+          "ge": 1
+        }
+      },
+      "edges": [
+        250,
+        300,
+        350,
+        400,
+        500,
+        1500
+      ],
+      "source_categories_1based": [
+        2
+      ],
+      "background_by_year": {
+        "2024": 2.786591058491078,
+        "2025": 2.66482232339332
+      },
+      "background_total": 5.451413381884398
+    },
+    {
+      "predicates": {
+        "Nb": {
+          "ge": 1
+        },
+        "Nbst": {
+          "eq": 0
+        },
+        "Nmix": {
+          "eq": 0
+        },
+        "Nres": {
+          "ge": 2
+        },
+        "Nw": {
+          "eq": 0
+        }
+      },
+      "edges": [
+        250,
+        300,
+        350,
+        400,
+        500,
+        1500
+      ],
+      "source_categories_1based": [
+        3
+      ],
+      "background_by_year": {
+        "2024": 78.01773411820915,
+        "2025": 77.94523754979323
+      },
+      "background_total": 155.96297166800238
+    },
+    {
+      "predicates": {
+        "Nb": {
+          "ge": 1
+        },
+        "Nbst": {
+          "eq": 0
+        },
+        "Nmix": {
+          "ge": 1
+        },
+        "Nres": {
+          "ge": 1
+        },
+        "Nw": {
+          "ge": 0
+        }
+      },
+      "edges": [
+        250,
+        300,
+        350,
+        400,
+        500,
+        800,
+        1500
+      ],
+      "source_categories_1based": [
+        4,
+        5
+      ],
+      "background_by_year": {
+        "2024": 216.44426376301598,
+        "2025": 213.87425989332425
+      },
+      "background_total": 430.31852365634023
+    },
+    {
+      "predicates": {
+        "Nb": {
+          "ge": 1
+        },
+        "Nbst": {
+          "eq": 0
+        },
+        "Nmix": {
+          "ge": 2
+        },
+        "Nres": {
+          "eq": 0
+        },
+        "Nw": {
+          "eq": 0
+        }
+      },
+      "edges": [
+        250,
+        300,
+        350,
+        400,
+        500,
+        1500
+      ],
+      "source_categories_1based": [
+        6
+      ],
+      "background_by_year": {
+        "2024": 126.20744927156187,
+        "2025": 126.40680048523876
+      },
+      "background_total": 252.61424975680063
+    },
+    {
+      "predicates": {
+        "Nb": {
+          "ge": 1
+        },
+        "Nbst": {
+          "ge": 1
+        },
+        "Nmix": {
+          "eq": 0
+        },
+        "Nres": {
+          "ge": 1
+        },
+        "Nw": {
+          "ge": 0
+        }
+      },
+      "edges": [
+        250,
+        300,
+        350,
+        400,
+        500,
+        800,
+        1500
+      ],
+      "source_categories_1based": [
+        7,
+        8
+      ],
+      "background_by_year": {
+        "2024": 65.93397273872745,
+        "2025": 61.84878531199938
+      },
+      "background_total": 127.78275805072683
+    },
+    {
+      "predicates": {
+        "Nb": {
+          "ge": 1
+        },
+        "Nbst": {
+          "ge": 1
+        },
+        "Nmix": {
+          "ge": 1
+        },
+        "Nres": {
+          "ge": 0
+        },
+        "Nw": {
+          "ge": 0
+        }
+      },
+      "edges": [
+        250,
+        300,
+        350,
+        400,
+        500,
+        800,
+        1500
+      ],
+      "source_categories_1based": [
+        9,
+        10,
+        11,
+        12
+      ],
+      "background_by_year": {
+        "2024": 117.07690949719333,
+        "2025": 116.52982601149488
+      },
+      "background_total": 233.6067355086882
+    },
+    {
+      "predicates": {
+        "Nb": {
+          "ge": 1
+        },
+        "Nbst": {
+          "ge": 2
+        },
+        "Nmix": {
+          "eq": 0
+        },
+        "Nres": {
+          "eq": 0
+        },
+        "Nw": {
+          "eq": 0
+        }
+      },
+      "edges": [
+        250,
+        300,
+        350,
+        400,
+        500,
+        1500
+      ],
+      "source_categories_1based": [
+        13
+      ],
+      "background_by_year": {
+        "2024": 10.914644482872344,
+        "2025": 12.24708977140503
+      },
+      "background_total": 23.161734254277373
+    },
+    {
+      "predicates": {
+        "Nb": {
+          "eq": 1
+        },
+        "Nbst": {
+          "eq": 0
+        },
+        "Nmix": {
+          "eq": 0
+        },
+        "Nres": {
+          "eq": 0
+        },
+        "Nw": {
+          "ge": 1
+        }
+      },
+      "edges": [
+        250,
+        300,
+        350,
+        400,
+        500,
+        800,
+        1500
+      ],
+      "source_categories_1based": [
+        14
+      ],
+      "background_by_year": {
+        "2024": 105.83146053386314,
+        "2025": 106.11585882125955
+      },
+      "background_total": 211.9473193551227
+    },
+    {
+      "predicates": {
+        "Nb": {
+          "eq": 1
+        },
+        "Nbst": {
+          "eq": 0
+        },
+        "Nmix": {
+          "eq": 1
+        },
+        "Nres": {
+          "eq": 0
+        },
+        "Nw": {
+          "eq": 0
+        }
+      },
+      "edges": [
+        250,
+        300,
+        350,
+        400,
+        500,
+        800,
+        1500
+      ],
+      "source_categories_1based": [
+        15
+      ],
+      "background_by_year": {
+        "2024": 9790.386177327608,
+        "2025": 9490.052824685847
+      },
+      "background_total": 19280.439002013452
+    },
+    {
+      "predicates": {
+        "Nb": {
+          "eq": 1
+        },
+        "Nbst": {
+          "eq": 0
+        },
+        "Nmix": {
+          "ge": 1
+        },
+        "Nres": {
+          "eq": 0
+        },
+        "Nw": {
+          "ge": 1
+        }
+      },
+      "edges": [
+        250,
+        300,
+        350,
+        400,
+        500,
+        800,
+        1500
+      ],
+      "source_categories_1based": [
+        16
+      ],
+      "background_by_year": {
+        "2024": 22.21895335090485,
+        "2025": 22.573469637056192
+      },
+      "background_total": 44.79242298796105
+    },
+    {
+      "predicates": {
+        "Nb": {
+          "eq": 1
+        },
+        "Nbst": {
+          "eq": 1
+        },
+        "Nmix": {
+          "eq": 0
+        },
+        "Nres": {
+          "eq": 0
+        },
+        "Nw": {
+          "eq": 0
+        }
+      },
+      "edges": [
+        250,
+        300,
+        350,
+        400,
+        500,
+        800,
+        1500
+      ],
+      "source_categories_1based": [
+        17
+      ],
+      "background_by_year": {
+        "2024": 1200.8915090928813,
+        "2025": 1202.4753405068248
+      },
+      "background_total": 2403.3668495997063
+    },
+    {
+      "predicates": {
+        "Nb": {
+          "eq": 1
+        },
+        "Nbst": {
+          "ge": 1
+        },
+        "Nmix": {
+          "eq": 0
+        },
+        "Nres": {
+          "eq": 0
+        },
+        "Nw": {
+          "ge": 1
+        }
+      },
+      "edges": [
+        250,
+        300,
+        350,
+        400,
+        500,
+        1500
+      ],
+      "source_categories_1based": [
+        18
+      ],
+      "background_by_year": {
+        "2024": 5.864071824763667,
+        "2025": 5.490913309159797
+      },
+      "background_total": 11.354985133923464
+    },
+    {
+      "predicates": {
+        "Nb": {
+          "eq": 2
+        },
+        "Nbst": {
+          "eq": 0
+        },
+        "Nmix": {
+          "eq": 1
+        },
+        "Nres": {
+          "eq": 0
+        },
+        "Nw": {
+          "eq": 0
+        }
+      },
+      "edges": [
+        250,
+        300,
+        350,
+        400,
+        500,
+        800,
+        1500
+      ],
+      "source_categories_1based": [
+        20
+      ],
+      "background_by_year": {
+        "2024": 2172.723954034185,
+        "2025": 2056.6400336617953
+      },
+      "background_total": 4229.3639876959805
+    },
+    {
+      "predicates": {
+        "Nb": {
+          "eq": 2
+        },
+        "Nbst": {
+          "eq": 0
+        },
+        "Nmix": {
+          "ge": 1
+        },
+        "Nres": {
+          "eq": 0
+        },
+        "Nw": {
+          "ge": 1
+        }
+      },
+      "edges": [
+        250,
+        300,
+        350,
+        400,
+        500,
+        1500
+      ],
+      "source_categories_1based": [
+        21
+      ],
+      "background_by_year": {
+        "2024": 4.11700450387169,
+        "2025": 3.938242622219367
+      },
+      "background_total": 8.055247126091057
+    },
+    {
+      "predicates": {
+        "Nb": {
+          "eq": 2
+        },
+        "Nbst": {
+          "eq": 1
+        },
+        "Nmix": {
+          "eq": 0
+        },
+        "Nres": {
+          "eq": 0
+        },
+        "Nw": {
+          "eq": 0
+        }
+      },
+      "edges": [
+        250,
+        300,
+        350,
+        400,
+        500,
+        800,
+        1500
+      ],
+      "source_categories_1based": [
+        22
+      ],
+      "background_by_year": {
+        "2024": 310.81407993119274,
+        "2025": 297.2970206006905
+      },
+      "background_total": 608.1111005318833
+    },
+    {
+      "predicates": {
+        "Nb": {
+          "ge": 2
+        },
+        "Nbst": {
+          "eq": 0
+        },
+        "Nmix": {
+          "eq": 0
+        },
+        "Nres": {
+          "eq": 0
+        },
+        "Nw": {
+          "ge": 1
+        }
+      },
+      "edges": [
+        250,
+        300,
+        350,
+        400,
+        500,
+        800,
+        1500
+      ],
+      "source_categories_1based": [
+        19,
+        24
+      ],
+      "background_by_year": {
+        "2024": 9.323369485526888,
+        "2025": 8.99485263415362
+      },
+      "background_total": 18.318222119680506
+    },
+    {
+      "predicates": {
+        "Nb": {
+          "ge": 2
+        },
+        "Nbst": {
+          "ge": 1
+        },
+        "Nmix": {
+          "eq": 0
+        },
+        "Nres": {
+          "eq": 0
+        },
+        "Nw": {
+          "ge": 1
+        }
+      },
+      "edges": [
+        250,
+        300,
+        350,
+        400,
+        500,
+        1500
+      ],
+      "source_categories_1based": [
+        23,
+        28
+      ],
+      "background_by_year": {
+        "2024": 4.27666330308729,
+        "2025": 4.68006146313401
+      },
+      "background_total": 8.9567247662213
+    },
+    {
+      "predicates": {
+        "Nb": {
+          "ge": 3
+        },
+        "Nbst": {
+          "eq": 0
+        },
+        "Nmix": {
+          "eq": 1
+        },
+        "Nres": {
+          "eq": 0
+        },
+        "Nw": {
+          "eq": 0
+        }
+      },
+      "edges": [
+        250,
+        300,
+        350,
+        400,
+        500,
+        800,
+        1500
+      ],
+      "source_categories_1based": [
+        25
+      ],
+      "background_by_year": {
+        "2024": 303.20079108471236,
+        "2025": 279.59535327928563
+      },
+      "background_total": 582.796144363998
+    },
+    {
+      "predicates": {
+        "Nb": {
+          "ge": 3
+        },
+        "Nbst": {
+          "eq": 0
+        },
+        "Nmix": {
+          "ge": 1
+        },
+        "Nres": {
+          "eq": 0
+        },
+        "Nw": {
+          "ge": 1
+        }
+      },
+      "edges": [
+        250,
+        300,
+        350,
+        400,
+        500,
+        1500
+      ],
+      "source_categories_1based": [
+        26
+      ],
+      "background_by_year": {
+        "2024": 1.5200277971717637,
+        "2025": 1.3774090495110047
+      },
+      "background_total": 2.8974368466827682
+    },
+    {
+      "predicates": {
+        "Nb": {
+          "ge": 3
+        },
+        "Nbst": {
+          "eq": 1
+        },
+        "Nmix": {
+          "eq": 0
+        },
+        "Nres": {
+          "eq": 0
+        },
+        "Nw": {
+          "eq": 0
+        }
+      },
+      "edges": [
+        250,
+        300,
+        350,
+        400,
+        500,
+        800,
+        1500
+      ],
+      "source_categories_1based": [
+        27
+      ],
+      "background_by_year": {
+        "2024": 49.79032075043257,
+        "2025": 48.4443377366329
+      },
+      "background_total": 98.23465848706547
+    }
+  ]
+}

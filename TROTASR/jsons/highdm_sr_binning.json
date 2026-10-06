@@ -1,0 +1,61 @@
+{
+  "schema": "trotasr_adopted_sr_binning_v1",
+  "name": "highdm_sr_flexible_nb_162",
+  "adopted_on": "2026-09-23",
+  "user_approval": "그래 162빈으로 가자. 현 상황 보고하라",
+  "status": "user_adopted_definition_implementation_pending",
+  "years": [2024, 2025],
+  "region": "SR",
+  "mode": "highdm",
+  "category_axis_order": ["Nb", "Nbst", "Nmix", "Nres", "Nw"],
+  "categories_per_year": 28,
+  "bins_per_year": 162,
+  "nb_partitions": {
+    "pooled": [{"ge": 1}],
+    "split": [{"eq": 1}, {"eq": 2}, {"ge": 3}]
+  },
+  "met_binning": {
+    "six": {"lower_edges_GeV": [250, 300, 350, 400, 500, 800], "last_bin_open_ended": true},
+    "five": {"lower_edges_GeV": [250, 300, 350, 400, 500], "last_bin_open_ended": true}
+  },
+  "interval_convention": "lower-inclusive, upper-exclusive; the last interval has no finite upper bound",
+  "topology_rules": [
+    {"id": 1, "nb_partition": "split", "Nbst": {"eq": 0}, "Nmix": {"eq": 0}, "Nres": {"eq": 0}, "Nw": {"ge": 1}, "met": "six"},
+    {"id": 2, "nb_partition": "pooled", "Nbst": {"eq": 0}, "Nmix": {"eq": 0}, "Nres": {"eq": 1}, "Nw": {"eq": 0}, "met": "six"},
+    {"id": 3, "nb_partition": "pooled", "Nbst": {"eq": 0}, "Nmix": {"eq": 0}, "Nres": {"ge": 2}, "Nw": {"eq": 0}, "met": "five"},
+    {"id": 4, "nb_partition": "pooled", "Nbst": {"eq": 0}, "Nmix": {"eq": 0}, "Nres": {"ge": 1}, "Nw": {"ge": 1}, "met": "six"},
+    {"id": 5, "nb_partition": "split", "Nbst": {"eq": 0}, "Nmix": {"eq": 1}, "Nres": {"eq": 0}, "Nw": {"eq": 0}, "met": "six"},
+    {"id": 6, "nb_partition": "pooled", "Nbst": {"eq": 0}, "Nmix": {"ge": 2}, "Nres": {"eq": 0}, "Nw": {"eq": 0}, "met": "five"},
+    {"id": 7, "nb_partition": "split", "Nbst": {"eq": 0}, "Nmix": {"ge": 1}, "Nres": {"eq": 0}, "Nw": {"ge": 1}, "met": "six"},
+    {"id": 8, "nb_partition": "pooled", "Nbst": {"eq": 0}, "Nmix": {"ge": 1}, "Nres": {"ge": 1}, "Nw": {"eq": 0}, "met": "six"},
+    {"id": 9, "nb_partition": "pooled", "Nbst": {"eq": 0}, "Nmix": {"ge": 1}, "Nres": {"ge": 1}, "Nw": {"ge": 1}, "met": "six"},
+    {"id": 10, "nb_partition": "split", "Nbst": {"eq": 1}, "Nmix": {"eq": 0}, "Nres": {"eq": 0}, "Nw": {"eq": 0}, "met": "six"},
+    {"id": 11, "nb_partition": "pooled", "Nbst": {"ge": 2}, "Nmix": {"eq": 0}, "Nres": {"eq": 0}, "Nw": {"eq": 0}, "met": "five"},
+    {"id": 12, "nb_partition": "split", "Nbst": {"ge": 1}, "Nmix": {"eq": 0}, "Nres": {"eq": 0}, "Nw": {"ge": 1}, "met": "five"},
+    {"id": 13, "nb_partition": "pooled", "Nbst": {"ge": 1}, "Nmix": {"eq": 0}, "Nres": {"ge": 1}, "Nw": {"eq": 0}, "met": "six"},
+    {"id": 14, "nb_partition": "pooled", "Nbst": {"ge": 1}, "Nmix": {"eq": 0}, "Nres": {"ge": 1}, "Nw": {"ge": 1}, "met": "six"},
+    {"id": 15, "nb_partition": "pooled", "Nbst": {"ge": 1}, "Nmix": {"ge": 1}, "Nres": {"eq": 0}, "Nw": {"eq": 0}, "met": "six"},
+    {"id": 16, "nb_partition": "pooled", "Nbst": {"ge": 1}, "Nmix": {"ge": 1}, "Nres": {"eq": 0}, "Nw": {"ge": 1}, "met": "six"},
+    {"id": 17, "nb_partition": "pooled", "Nbst": {"ge": 1}, "Nmix": {"ge": 1}, "Nres": {"ge": 1}, "Nw": {"eq": 0}, "met": "six"},
+    {"id": 18, "nb_partition": "pooled", "Nbst": {"ge": 1}, "Nmix": {"ge": 1}, "Nres": {"ge": 1}, "Nw": {"ge": 1}, "met": "six"}
+  ],
+  "invariants": {
+    "all_zero_topology_excluded": true,
+    "exclusive_analysis_counts_not_raw_candidate_counts": true,
+    "mixed_and_counted_w_must_be_disjoint": true,
+    "independent_w_retained_when_mixed_present": true,
+    "test_and_production_binning_identical": true,
+    "empty_bins_preserved": true,
+    "sr_data_blinded": true,
+    "cr_binning_unchanged": true,
+    "lowdm_sr_bins_per_year_unchanged": 30,
+    "pooled_sr_preserves_separate_nb1_and_nb2plus_normalization_components": true,
+    "sr_nb2_and_nb3plus_share_existing_cr_nb2plus_normalization": true
+  },
+  "implementation_pending": [
+    "Preserve Nb=1, Nb=2 and Nb>=3 in high-dM SR histogram source categories, instead of the current Nb>=2 pooling.",
+    "Implement the adopted predicate map and fixed 162-bin plotting adapter; do not pass this definition to the legacy exact-key v1 plot-map parser.",
+    "Retain native recoil and Nb components for the unchanged CR normalization model.",
+    "Validate boundaries, full-map empty bins, and representative 2024/2025 data/MC and T2tt/T2bW/T2tb inputs before full production."
+  ]
+}
