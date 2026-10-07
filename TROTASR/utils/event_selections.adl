@@ -88,7 +88,7 @@ region SRpresel
   select pT(PuppiMET[0]) > 250
   select all(dphi(ak4Jets[0:4], PuppiMET[0]) > 0.5)
 
-region SR_class1
+region SR_highdm_class1
   take SRpresel
   select size(bJets) >= 1
   select Nbst == 0
@@ -102,7 +102,7 @@ region SR_class1
   bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
   bin pT(PuppiMET[0]) >= 800
 
-region SR_class2
+region SR_highdm_class2
   take SRpresel
   select size(bJets) >= 1
   select Nbst == 0
@@ -115,7 +115,7 @@ region SR_class2
   bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
   bin pT(PuppiMET[0]) >= 500
 
-region SR_class3
+region SR_highdm_class3
   take SRpresel
   select size(bJets) >= 1
   select Nbst == 0
@@ -128,7 +128,7 @@ region SR_class3
   bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
   bin pT(PuppiMET[0]) >= 500
 
-region SR_class4
+region SR_highdm_class4
   take SRpresel
   select size(bJets) >= 1
   select Nbst == 0
@@ -142,7 +142,7 @@ region SR_class4
   bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
   bin pT(PuppiMET[0]) >= 800
 
-region SR_class5
+region SR_highdm_class5
   take SRpresel
   select size(bJets) >= 1
   select Nbst == 0
@@ -155,7 +155,7 @@ region SR_class5
   bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
   bin pT(PuppiMET[0]) >= 500
 
-region SR_class6
+region SR_highdm_class6
   take SRpresel
   select size(bJets) >= 1
   select Nbst >= 1
@@ -169,7 +169,7 @@ region SR_class6
   bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
   bin pT(PuppiMET[0]) >= 800
 
-region SR_class7
+region SR_highdm_class7
   take SRpresel
   select size(bJets) >= 1
   select Nbst >= 1
@@ -183,7 +183,7 @@ region SR_class7
   bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
   bin pT(PuppiMET[0]) >= 800
 
-region SR_class8
+region SR_highdm_class8
   take SRpresel
   select size(bJets) >= 1
   select Nbst >= 2
@@ -196,7 +196,7 @@ region SR_class8
   bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
   bin pT(PuppiMET[0]) >= 500
 
-region SR_class9
+region SR_highdm_class9
   take SRpresel
   select size(bJets) == 1
   select Nbst == 0
@@ -210,7 +210,7 @@ region SR_class9
   bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
   bin pT(PuppiMET[0]) >= 800
 
-region SR_class10
+region SR_highdm_class10
   take SRpresel
   select size(bJets) == 1
   select Nbst == 0
@@ -224,7 +224,7 @@ region SR_class10
   bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
   bin pT(PuppiMET[0]) >= 800
 
-region SR_class11
+region SR_highdm_class11
   take SRpresel
   select size(bJets) == 1
   select Nbst == 0
@@ -238,7 +238,7 @@ region SR_class11
   bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
   bin pT(PuppiMET[0]) >= 800
 
-region SR_class12
+region SR_highdm_class12
   take SRpresel
   select size(bJets) == 1
   select Nbst == 1
@@ -252,7 +252,7 @@ region SR_class12
   bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
   bin pT(PuppiMET[0]) >= 800
 
-region SR_class13
+region SR_highdm_class13
   take SRpresel
   select size(bJets) == 1
   select Nbst >= 1
@@ -265,7 +265,7 @@ region SR_class13
   bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
   bin pT(PuppiMET[0]) >= 500
 
-region SR_class14
+region SR_highdm_class14
   take SRpresel
   select size(bJets) == 2
   select Nbst == 0
@@ -279,7 +279,7 @@ region SR_class14
   bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
   bin pT(PuppiMET[0]) >= 800
 
-region SR_class15
+region SR_highdm_class15
   take SRpresel
   select size(bJets) == 2
   select Nbst == 0
@@ -292,7 +292,7 @@ region SR_class15
   bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
   bin pT(PuppiMET[0]) >= 500
 
-region SR_class16
+region SR_highdm_class16
   take SRpresel
   select size(bJets) == 2
   select Nbst == 1
@@ -306,7 +306,7 @@ region SR_class16
   bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
   bin pT(PuppiMET[0]) >= 800
 
-region SR_class17
+region SR_highdm_class17
   take SRpresel
   select size(bJets) >= 2
   select Nbst == 0
@@ -320,7 +320,7 @@ region SR_class17
   bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
   bin pT(PuppiMET[0]) >= 800
 
-region SR_class18
+region SR_highdm_class18
   take SRpresel
   select size(bJets) >= 2
   select Nbst >= 1
@@ -333,7 +333,7 @@ region SR_class18
   bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
   bin pT(PuppiMET[0]) >= 500
 
-region SR_class19
+region SR_highdm_class19
   take SRpresel
   select size(bJets) >= 3
   select Nbst == 0
@@ -347,7 +347,7 @@ region SR_class19
   bin pT(PuppiMET[0]) >= 500 and pT(PuppiMET[0]) < 800
   bin pT(PuppiMET[0]) >= 800
 
-region SR_class20
+region SR_highdm_class20
   take SRpresel
   select size(bJets) >= 3
   select Nbst == 0
@@ -360,7 +360,7 @@ region SR_class20
   bin pT(PuppiMET[0]) >= 400 and pT(PuppiMET[0]) < 500
   bin pT(PuppiMET[0]) >= 500
 
-region SR_class21
+region SR_highdm_class21
   take SRpresel
   select size(bJets) >= 3
   select Nbst == 1
@@ -385,7 +385,7 @@ region CRlostLepton
   select Nbst + Nmix + Nres + Nw >= 1
   select HT > 300
   select pT(PuppiMET[0]) > 250
-  select fMT(vetoLeptons[0], PuppiMET[0]) < 100
+  select sqrt(2 * pT(vetoLeptons[0]) * pT(PuppiMET[0]) * (1 - cos(phi(vetoLeptons[0]) - phi(PuppiMET[0])))) < 100
   select all(dphi(ak4Jets[0:4], PuppiMET[0]) > 0.5)
 
 region CRmultijet
@@ -543,7 +543,7 @@ region CRlostLeptonlowdM
   select size(bJets) >= 1
   select HT > 300
   select pT(PuppiMET[0]) > 250
-  select fMT(vetoLeptons[0], PuppiMET[0]) < 100
+  select sqrt(2 * pT(vetoLeptons[0]) * pT(PuppiMET[0]) * (1 - cos(phi(vetoLeptons[0]) - phi(PuppiMET[0])))) < 100
   select Nbst == 0
   select Nmix == 0
   select Nw == 0

@@ -12,8 +12,8 @@ info jetID
 info topReconstruction
   resolved "TROTA tree joined to Events by file_id and entry"
   mixed "TopMixed1pct_* in Events"
-  score "TTScore / (TTScore + QCDScore)"
-  ordering "descending QCDDiscriminant, then ascending candidateIndex"
+  probabilities "topProbability: TROTA true-top output TTScore; multijetProbability: TROTA multijet output QCDScore"
+  ordering "descending topProbability / (topProbability + multijetProbability), then ascending candidateIndex"
   arbitration "Boosted > Mixed > Resolved > independent W"
   ak4Footprint "two valid subjets: dR(AK4,subjet)<0.4; otherwise dR(AK4,AK8)<0.8"
   cleaning "all AK4 constituents dR>0.2 and AK8 constituent dR>0.4 from selected region references"
@@ -67,7 +67,7 @@ object selectedHadTaus
   select abs(dz) < 0.2
   select decayMode != 5 and decayMode != 6
   select idDeepTau2018v2p5VSjet >= 5
-  select fMT(this, PuppiMET[0]) < 100
+  select sqrt(2 * pT(this) * pT(PuppiMET[0]) * (1 - cos(phi(this) - phi(PuppiMET[0])))) < 100
 
 object eleLikeTracks
   take IsoTrack
@@ -75,7 +75,7 @@ object eleLikeTracks
   select abs(eta) < 2.5
   select abs(pdgId) == 11
   select pfRelIso03_all < 0.20
-  select fMT(this, PuppiMET[0]) < 100
+  select sqrt(2 * pT(this) * pT(PuppiMET[0]) * (1 - cos(phi(this) - phi(PuppiMET[0])))) < 100
 
 object muonLikeTracks
   take IsoTrack
@@ -83,7 +83,7 @@ object muonLikeTracks
   select abs(eta) < 2.5
   select abs(pdgId) == 13
   select pfRelIso03_all < 0.20
-  select fMT(this, PuppiMET[0]) < 100
+  select sqrt(2 * pT(this) * pT(PuppiMET[0]) * (1 - cos(phi(this) - phi(PuppiMET[0])))) < 100
 
 object chargedHadTracks
   take IsoTrack
@@ -91,7 +91,7 @@ object chargedHadTracks
   select abs(eta) < 2.5
   select abs(pdgId) == 211
   select pfRelIso03_all < 0.10
-  select fMT(this, PuppiMET[0]) < 100
+  select sqrt(2 * pT(this) * pT(PuppiMET[0]) * (1 - cos(phi(this) - phi(PuppiMET[0])))) < 100
 
 object vetoLeptons
   take union(vetoElectrons, vetoMuons)
@@ -192,11 +192,11 @@ object hadWCandsCRmumu
 
 object rawMixedTops
   take TopMixed1pct
-  select QCDDiscriminant >= 0.9027690887451172
+  select topProbability / (topProbability + multijetProbability) >= 0.9027690887451172
 
 object rawResolvedTops
   take TopResolved1pct
-  select QCDDiscriminant >= 0.9433798789978027
+  select topProbability / (topProbability + multijetProbability) >= 0.9433798789978027
   select abs(eta) < 2.0
   select mass >= 100 and mass <= 250
 
