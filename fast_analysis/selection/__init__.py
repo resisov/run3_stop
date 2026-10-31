@@ -1,1 +1,0 @@
-"""Vectorized selection tools."""

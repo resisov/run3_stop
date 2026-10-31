@@ -10,6 +10,7 @@ from functools import lru_cache
 import numpy as np
 import awkward as ak
 from .nanoaod_ids import isTrackElectron, isTrackMuon, isTrackPion, isVetoElectron, isMediumElectron, isLooseMuon, isMediumMuon, isMediumTau, isGoodJet, isGoodFatJet, isJetVeto
+from .paths import muon_pt_min
 
 
 def delta_phi(phi1: Any, phi2: Any) -> Any:
@@ -31,7 +32,7 @@ def clean_by_delta_r(
 LEPTON_VETO_PT_MIN = 10.0
 
 
-def object_masks(arrays: ak.Array) -> dict[str, ak.Array]:
+def object_masks(arrays: ak.Array, year=2024) -> dict[str, ak.Array]:
     e_pt = arrays["electron_pt_all"]
     e_eta = arrays["electron_eta_all"]
     e_cb = arrays["electron_cutbased_all"]
@@ -44,13 +45,13 @@ def object_masks(arrays: ak.Array) -> dict[str, ak.Array]:
     m_eta = arrays["muon_eta_all"]
     m_iso = arrays["muon_mini_iso_all"]
     m_loose = (
-        (m_pt > LEPTON_VETO_PT_MIN)
+        (m_pt > muon_pt_min(year))
         & (abs(m_eta) < 2.4)
         & as_ak_bool(arrays["muon_loose_id_all"])
         & (m_iso < 0.2)
     )
     m_medium = (
-        (m_pt > 10.0)
+        (m_pt > muon_pt_min(year))
         & (abs(m_eta) < 2.4)
         & as_ak_bool(arrays["muon_medium_id_all"])
         & (m_iso < 0.2)

@@ -1,4 +1,5 @@
 """Internal, finite, content-checked command execution for fit diagnostics."""
+from contextlib import contextmanager
 import fcntl
 import hashlib
 import json
@@ -15,6 +16,59 @@ from TROTASR.workflows.combine_limits import IntegrityCache, runtime, verify_car
 
 SPAWN_LOCK = threading.Lock()
 COMPUTE = re.compile(r'^(python|root|combine|text2workspace|xrdcp|rsync|hadd$|cp$)')
+_RUN3_ADMISSION_PID = None
+_LOCAL_ADMISSION = None
+
+
+@contextmanager
+def local_fit_admission(workers, minimum_available=2 * 1024**3):
+    """Explicit Mac-only admission for the user-authorized T2tt host split.
+
+    The calling queue verifies the pinned runtime and remote ownership lease.
+    This changes only process admission; all numerical commands stay native.
+    """
+    global _LOCAL_ADMISSION
+    if sys.platform != 'darwin' or not 1 <= workers <= 4:
+        raise ValueError('Local admission requires macOS and one to four workers')
+    if threading.current_thread() is not threading.main_thread() or _LOCAL_ADMISSION is not None:
+        raise RuntimeError('Local admission must have one main-thread owner')
+    _LOCAL_ADMISSION = (os.getpid(), workers, minimum_available)
+    try:
+        yield
+    finally:
+        _LOCAL_ADMISSION = None
+
+
+def fit_admission_slots():
+    """Controller-local opt-in, shared by its threads but not inherited forks."""
+    return 120 if _RUN3_ADMISSION_PID == os.getpid() else 100
+
+
+@contextmanager
+def run3_fit_admission(manifest_path, *, plot_range_only):
+    """Scope the approved 120-slot aggregate guard to the new 895-point pool.
+
+    The controller must already have validated the input/point contract. Enter
+    this on its main thread before starting the pool, and exit after joining it.
+    Worker threads only read the process-local setting; all other controllers
+    keep the historical 100-slot guard. The caller still enforces its separate
+    116-slot downstream budget and the existing failure-first scheduling.
+    """
+    global _RUN3_ADMISSION_PID
+    expected = ROOT / 'stats/run3_systematics_20261025/grid/manifest.json'
+    if plot_range_only is not True or internal_path(manifest_path) != expected.resolve():
+        raise ValueError('120-slot admission is restricted to the new displayed six-era grid')
+    if threading.current_thread() is not threading.main_thread():
+        raise RuntimeError('Fit admission must be configured by the controller main thread')
+    with SPAWN_LOCK:
+        if _RUN3_ADMISSION_PID is not None:
+            raise RuntimeError('Fit admission context is already active')
+        _RUN3_ADMISSION_PID = os.getpid()
+    try:
+        yield
+    finally:
+        with SPAWN_LOCK:
+            _RUN3_ADMISSION_PID = None
 
 
 def native_arguments(arguments):
@@ -60,22 +114,56 @@ def admitted_popen(command, **kwargs):
     children are single threaded; no secondary process pool is used. Full-grid
     prerequisites prevent running fits alongside unfinished histogram inputs.
     """
+    if sys.platform == 'darwin':
+        import psutil
+        if _LOCAL_ADMISSION is None or _LOCAL_ADMISSION[0] != os.getpid():
+            raise RuntimeError('Local diagnostic launch requires the verified local queue')
+        while True:
+            with SPAWN_LOCK:
+                children = psutil.Process().children(recursive=True)
+                native = 0
+                for process in children:
+                    try:
+                        args = process.cmdline()
+                        native += (process.is_running() and any(
+                            Path(arg).name in ('combine', 'text2workspace.py') for arg in args[:2]))
+                    except (psutil.NoSuchProcess, psutil.ZombieProcess):
+                        pass
+                if (native < _LOCAL_ADMISSION[1]
+                        and psutil.virtual_memory().available >= _LOCAL_ADMISSION[2]):
+                    return subprocess.Popen(command, **kwargs)
+            time.sleep(3)
     while True:
         with SPAWN_LOCK, (ROOT / 'stats/fit_admission.lock').open('a') as lock:
             fcntl.flock(lock, fcntl.LOCK_EX)
             slots, memory = live_resources()
-            if slots < 100 and memory >= 36 * 1024**3:
+            if slots < fit_admission_slots() and memory >= 36 * 1024**3:
                 return subprocess.Popen(command, **kwargs)
         time.sleep(3)
 
 
-def cr_channels(text):
+def record_years(record):
+    from TROTASR.utils.paths import EARLY_ERAS, ERAS
+    years = tuple(map(str, record.get('years', ('2024', '2025'))))
+    if years not in (('2024', '2025'), EARLY_ERAS, ERAS):
+        raise ValueError('Unexpected statistical target-era group')
+    if years == ERAS:
+        from TROTASR.workflows.build_nominal_grid import require_hybrid_policy, require_run3_systematics_policy
+        if not (require_hybrid_policy(record) or require_run3_systematics_policy(record)):
+            raise ValueError('Six-era record must identify its systematic treatment')
+    return years
+
+
+def cr_channels(text, years=('2024', '2025')):
     rows = [line.split() for line in text.splitlines() if line.strip() and not line.lstrip().startswith('#')]
     channels = next((row[1:] for row in rows if row[0] == 'bin'), [])
     expected = {f'{r}_{m}_c1_{y}' for r in ('LLCR', 'QCDCR', 'GCR')
-                for m in ('highdm', 'lowdm') for y in ('2024', '2025')}
-    if len(channels) != 12 or set(channels) != expected:
-        raise ValueError('CR-only card must contain exactly twelve current CR channels, no SR')
+                for m in ('highdm', 'lowdm') for y in years}
+    merged = {f'{r}_{m}_c1' for r in ('LLCR','QCDCR','GCR') for m in ('highdm','lowdm')}
+    if set(channels) == merged and len(channels) == 6:
+        expected = merged
+    if len(channels) != len(expected) or set(channels) != expected:
+        raise ValueError('CR-only card must contain six current CR channels per era, no SR')
     if ['*', 'autoMCStats', '10', '1', '1'] not in rows:
         raise ValueError('autoMCStats must remain 10 1 1')
     processes = [row[1:] for row in rows if row[0] == 'process']
@@ -95,8 +183,9 @@ def cr_only_support_ready(record):
         require_revised_record(record)
         from TROTASR.workflows.build_nominal_grid import background_shape_names
         audit = support.get('background_error_shapes', {})
-        revised_shapes = (audit.get('nuisances') == 34
-            and set(audit.get('nuisance_names', [])) == background_shape_names()
+        years = record_years(record)
+        revised_shapes = (audit.get('nuisances') == 17 * len(years)
+            and set(audit.get('nuisance_names', [])) == background_shape_names(years)
             and audit.get('measured_factors_unchanged') is True
             and audit.get('existing_shape_endpoints_unchanged') is True)
     return (record.get('status') == 'templates_verified_fit_blocked'
@@ -114,11 +203,20 @@ def require_revised_record(record):
     from TROTASR.workflows.build_nominal_grid import require_statistical_revision
     revised = require_statistical_revision(record.get('statistical_revision'))
     combined = record.get('scope') == 'full_combined_systematic_production'
+    from TROTASR.workflows.build_nominal_grid import HYBRID_SCOPE, require_hybrid_policy
+    hybrid = record.get('scope') == HYBRID_SCOPE
+    if hybrid and not require_hybrid_policy(record):
+        raise ValueError('Missing six-era hybrid policy')
+    combined = combined or hybrid
     if combined and not revised:
         raise ValueError('Combined diagnostics require the adopted CR12 revision')
     if not revised:
         return False
-    if (record.get('bins') != 428 or record.get('rate_parameters') != 96
+    years = record_years(record)
+    count = record.get('rate_parameters')
+    if (record.get('bins') != 214 * len(years)
+            or not isinstance(count, int) or count <= 0
+            or years == ('2024', '2025') and count != 96
             or record.get('signal_contamination') is not False
             or record.get('auto_mc_stats') != [10, 1, 1]
             or record.get('sr_data_blinded') is not True
@@ -137,6 +235,7 @@ def require_revised_record(record):
 
 def verify_revised_card(card, manifest, digest):
     from TROTASR.workflows.build_nominal_grid import background_shape_names
+    years = record_years(manifest)
     meta = read_json(card.with_suffix('.manifest.json'))
     fields = ('statistical_revision', 'background_estimation_uncertainties',
               'systematic_combination', 'signal_contamination', 'rate_parameters')
@@ -144,11 +243,11 @@ def verify_revised_card(card, manifest, digest):
         raise ValueError('Card metadata does not match the adopted statistical revision')
     rows = [line.split() for line in card.read_text().splitlines() if line.strip() and not line.startswith('#')]
     parameters = [r for r in rows if len(r) > 1 and r[1] == 'rateParam']
-    if (len({r[0] for r in parameters}) != 96
+    if (len({r[0] for r in parameters}) != manifest['rate_parameters']
             or any(len(r) != 6 or r[-1] != '[0.01,5]' or not .01 <= float(r[-2]) <= 5 for r in parameters)
             or ['*', 'autoMCStats', '10', '1', '1'] not in rows):
         raise ValueError('Actual card normalization/MC-statistics policy changed')
-    names = background_shape_names()
+    names = background_shape_names(years)
     for row in rows:
         if row[0] in names and row[1] != 'shape':
             raise ValueError('Measured background uncertainty is not a shape nuisance')
@@ -159,7 +258,7 @@ def verify_revised_card(card, manifest, digest):
         raise ValueError('Actual card violates the SR-only signal policy')
     expected = {f'{r}_{m}_c1_{y}': (118 if m == 'highdm' else 30) if r == 'SR'
                 else (12 if m == 'highdm' else 10) for r in ('SR', 'LLCR', 'QCDCR', 'GCR')
-                for m in ('highdm', 'lowdm') for y in ('2024', '2025')}
+                for m in ('highdm', 'lowdm') for y in years}
     if len(meta['inputs']) != 1:
         raise ValueError('Revised card must use one shared four-template model')
     for source in meta['inputs']:
@@ -171,36 +270,93 @@ def verify_revised_card(card, manifest, digest):
         if (record['scope'] != manifest['scope'] or any(record.get(k) != manifest.get(k) for k in fields)
                 or {c: len(b) for c, b in record['channels'].items()} != expected
                 or set(record['files']) != {'template_'+m+'_'+y+'.root'
-                    for m in ('highdm', 'lowdm') for y in ('2024', '2025')}):
+                    for m in ('highdm', 'lowdm') for y in years}):
             raise ValueError('Revised template layout/provenance changed')
         for key in ('statistical_revision', 'background_estimation_uncertainties', 'systematic_combination'):
             if record['contract'].get(key) != record.get(key):
                 raise ValueError('Revised template contract/model disagreement')
         audit = record['fit_compatibility'].get('background_error_shapes', {})
-        if (audit.get('nuisances') != 34 or set(audit.get('nuisance_names', [])) != names
+        if (audit.get('nuisances') != 17 * len(years) or set(audit.get('nuisance_names', [])) != names
                 or audit.get('measured_factors_unchanged') is not True
                 or audit.get('existing_shape_endpoints_unchanged') is not True):
             raise ValueError('Missing verified measured background-shape audit')
 
 
+def published_diagnostic(output, manifest_path, kind, model='T2tt', mass='mStop1200_mLSP500'):
+    """Reuse the delivered current-model diagnostic, without opening fit ROOTs."""
+    path = internal_path(output)/'publication.json'
+    if not path.is_file():
+        return None
+    publication = read_json(path)
+    manifest = read_json(internal_path(manifest_path))
+    point = (manifest['cr_only_card'] if kind == 'cronly' else
+             next(p for p in manifest['points'] if (p['model'],p['mass']) == (model,mass)))
+    if (publication.get('kind') != kind or publication.get('canonical_model') != 'era_merged'
+            or manifest.get('canonical_model') != 'era_merged'
+            or publication.get('current_card_sha256') != point['card_sha256']
+            or publication.get('sr_observed_data_used') is not False
+            or publication.get('complete') is not True):
+        return None
+    if kind == 'impact' and publication.get('benchmark') != model+'_'+mass:
+        return None
+    if not internal_path(output/publication['payload']).is_file():
+        raise FileNotFoundError('Delivered diagnostic payload is missing')
+    return publication
+
+
 def grid_card(manifest_path, kind, model='T2tt', mass='mStop1200_mLSP500'):
     manifest_path = internal_path(manifest_path)
     manifest = read_json(manifest_path)
+    if manifest.get('era_merged') is True:
+        if (manifest.get('status') != 'cards_ready' or manifest.get('sr_data_blinded') is not True
+                or manifest.get('bins') != 214 or manifest.get('likelihood_channels') != 8
+                or manifest.get('floating_normalization_parameters') != 48
+                or tuple(map(str,manifest['years'])) != ('2022','2022EE','2023','2023BPix','2024','2025')
+                or manifest.get('auto_mc_stats') != [10,1,1]):
+            raise ValueError('Accepted canonical six-era merged card receipt required')
+        point = (manifest['cr_only_card'] if kind == 'cronly' else
+                 next(p for p in manifest['points'] if (p['model'],p['mass']) == (model,mass)))
+        if kind not in ('cronly','impact') or (kind == 'impact' and point.get('fit_ready') is not True):
+            raise ValueError('One accepted fit-ready diagnostic card is required')
+        card = internal_path(ROOT/point['card'])
+        digest = sha256(card)
+        if digest != point['card_sha256']:
+            raise ValueError('Accepted small diagnostic card changed')
+        if kind == 'cronly':
+            metadata=read_json(card.with_suffix('.manifest.json'))
+            if metadata.get('fit_ready') is not True or metadata.get('cr_only') is not True:
+                raise ValueError('Accepted CR-only card receipt is required')
+            cr_channels(card.read_text(),tuple(manifest['years']))
+        return card,dict(manifest=str(manifest_path.relative_to(ROOT)),
+            manifest_sha256=sha256(manifest_path),card=str(card.relative_to(ROOT)),
+            card_sha256=digest,input_check_scope='accepted_current_merged_card; no_upstream_or_ROOT_rehash')
+    years = record_years(manifest)
     revised = require_revised_record(manifest)
-    bins = 516 if revised else 540
+    bins = (258 if revised else 270) * len(years)
     if manifest.get('sr_merge'):
         from TROTASR.utils.sr_merge import load_merge
         merge = load_merge(manifest['sr_merge'])
-        bins += 2 * (merge['bins_per_year'] - 162)
+        bins += len(years) * (merge['bins_per_year'] - 162)
     preserved_cr_only = kind == 'cronly' and cr_only_support_ready(manifest)
     if ((manifest.get('status') != 'cards_ready' and not preserved_cr_only)
-            or manifest.get('scope') not in ('full_nominal_production', 'full_cms_trota_jme_production', 'full_combined_systematic_production')
-            or manifest.get('bins') != bins or manifest.get('th1_channels') != 16
+            or manifest.get('scope') not in ('full_nominal_production', 'full_cms_trota_jme_production', 'full_combined_systematic_production', 'full_run3_hybrid_production')
+            or manifest.get('bins') != bins or manifest.get('th1_channels') != 8 * len(years)
             or not manifest.get('root_integrity_checked')):
         raise ValueError('Diagnostics require the verified full-input current nominal grid')
     counts = {m: sum(p['model'] == m for p in manifest['points']) for m in ('T2tt', 'T2tb', 'T2bW')}
     expected_counts = ({'T2tt': 225, 'T2tb': 365, 'T2bW': 365}
         if manifest['scope'] == 'full_combined_systematic_production' else {'T2tt': 205, 'T2tb': 365, 'T2bW': 354})
+    if manifest.get('requested_grid'):
+        from TROTASR.workflows.signal_grid_inputs import requested_grid
+        source = manifest['requested_grid']
+        path = internal_path(ROOT/source['path'])
+        if sha256(path) != source['sha256']:
+            raise ValueError('Requested signal grid changed')
+        grid = requested_grid(path)
+        expected_counts = grid['expected_points_by_model']
+        if {(p['model'], p['mass']) for p in manifest['points']} != {
+                (m, mass) for m, masses in grid['models'].items() for mass in masses}:
+            raise ValueError('Signal grid differs from the frozen requested mass points')
     if (counts != expected_counts or counts != manifest['expected_points_by_model']
             or len({(p['model'], p['mass']) for p in manifest['points']}) != sum(expected_counts.values())):
         raise ValueError('Unexpected full signal-grid coverage')
@@ -221,10 +377,10 @@ def grid_card(manifest_path, kind, model='T2tt', mass='mStop1200_mLSP500'):
         meta = read_json(card.with_suffix('.manifest.json'))
         if preserved_cr_only and meta.get('fit_ready') is not True:
             raise ValueError('Preserved CR-only card has not passed its own fit-support gate')
-        if (not meta['cr_only'] or not meta['sr_data_blinded'] or meta['years'] != ['2024', '2025']
+        if (not meta['cr_only'] or not meta['sr_data_blinded'] or tuple(meta['years']) != years
                 or meta['auto_mc_stats'] != [10, 1, 1] or meta['card_sha256'] != point['card_sha256']):
             raise ValueError('CR card provenance/blinding mismatch')
-        cr_channels(card.read_text())
+        cr_channels(card.read_text(), years)
         for source in meta['inputs']:
             folder = internal_path(ROOT / source['path'])
             record_path = folder / 'model_manifest.json'

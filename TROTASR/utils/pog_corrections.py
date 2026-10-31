@@ -52,13 +52,10 @@ def get_pu_weight(year, trueint):
 
 
 def get_met_xy_correction(year, met_type, isData, met_pt, met_phi, npvGood):
-    evaluator = _load_pog(str(resolve_payload('data/JMESF/'+year+'/met_xy_correction.json.gz')))
-    if year == '2022pre':
-        epoch = '2022'
-    elif year == '2022post':
-        epoch = '2022EE'
-    else:
-        pass
+    from .paths import analysis_era
+    epoch = analysis_era(year)
+    evaluator = _load_pog(str(resolve_payload(
+        f'data/JMESF/{year}/met_xyCorrections_{epoch[:4]}_{epoch}.json.gz')))
     if isData:
         dtmc = 'DATA'
     else:
@@ -476,7 +473,7 @@ def get_mu_medium_miniiso_sf (year, eta, pt):
     pt = ak.where((pt<10.), ak.full_like(pt,10.), pt)
     flatpt = ak.flatten(pt)
 
-    evaluator = evaluator["NUM_LooseMiniIso_DEN_MediumID"]
+    evaluator = evaluator["NUM_MediumMiniIso_DEN_MediumID"]
     sf_nominal = evaluator.evaluate(flateta, flatpt, "nominal")
     sf_up = evaluator.evaluate(flateta, flatpt, "systup")
     sf_down = evaluator.evaluate(flateta, flatpt, "systdown")
@@ -547,11 +544,15 @@ def get_photon_id_sf(year, wp, eta, pt, phi):
 def _get_photon_veto_sf(year, correction, wp, eta, r9, pt=None):
     evaluator = _load_pog(str(resolve_payload('data/EGammaSF/'+year+'/photon.json.gz')))
     yr = {
+        '2022pre': '2022Re-recoBCD',
+        '2022post': '2022Re-recoE+PromptFG',
+        '2023pre': '2023PromptC',
+        '2023post': '2023PromptD',
         '2024': '2024Prompt',
         '2025': '2025Prompt',
     }
     if year not in yr:
-        raise RuntimeError(f"{correction} is only configured for 2024 and 2025")
+        raise RuntimeError(f"{correction} is not configured for {year}")
     flateta, counts = ak.flatten(eta), ak.num(eta)
     flatr9 = ak.flatten(r9)
     corr = evaluator[correction]
@@ -712,20 +713,25 @@ def get_ele_tight_id_sf (year, eta, pt, phi):
 def get_ele_reco_sf(year, eta, pt, phi):
     evaluator = _load_pog(str(resolve_payload('data/EGammaSF/'+year+'/electron.json.gz')))["Electron-ID-SF"]
     yr = {
+        '2022pre': '2022Re-recoBCD',
+        '2022post': '2022Re-recoE+PromptFG',
+        '2023pre': '2023PromptC',
+        '2023post': '2023PromptD',
         '2024': '2024Prompt',
         '2025': '2025Prompt',
     }
     if year not in yr:
-        raise RuntimeError("electron reco SF is only configured for 2024 and 2025")
+        raise RuntimeError("electron reco SF is not configured for " + str(year))
 
     counts = ak.num(pt)
     flateta = np.asarray(ak.flatten(eta), dtype=float)
     flatpt = np.asarray(ak.flatten(pt), dtype=float)
+    flatphi = np.asarray(ak.flatten(phi), dtype=float)
     nominal = np.ones(len(flatpt), dtype=float)
     up = np.ones(len(flatpt), dtype=float)
     down = np.ones(len(flatpt), dtype=float)
     working_points = []
-    if year == '2024':
+    if year != '2025':
         working_points.append(("RecoBelow20", (flatpt >= 10.0) & (flatpt < 20.0)))
     working_points.extend([
         ("Reco20to75", (flatpt >= 20.0) & (flatpt < 75.0)),
@@ -734,9 +740,12 @@ def get_ele_reco_sf(year, eta, pt, phi):
     for working_point, mask in working_points:
         if not np.any(mask):
             continue
-        nominal[mask] = evaluator.evaluate(yr[year], "sf", working_point, flateta[mask], flatpt[mask])
-        up[mask] = evaluator.evaluate(yr[year], "sfup", working_point, flateta[mask], flatpt[mask])
-        down[mask] = evaluator.evaluate(yr[year], "sfdown", working_point, flateta[mask], flatpt[mask])
+        coordinates = [flateta[mask], flatpt[mask]]
+        if year in ('2023pre', '2023post'):
+            coordinates.append(flatphi[mask])
+        nominal[mask] = evaluator.evaluate(yr[year], "sf", working_point, *coordinates)
+        up[mask] = evaluator.evaluate(yr[year], "sfup", working_point, *coordinates)
+        down[mask] = evaluator.evaluate(yr[year], "sfdown", working_point, *coordinates)
     return ak.unflatten(nominal, counts=counts), ak.unflatten(up, counts=counts), ak.unflatten(down, counts=counts)
 
 
@@ -761,9 +770,9 @@ def get_ele_hlt_sf (year, eta, pt, phi):
         sf_up = evaluator["Electron-HLT-SF"].evaluate(yr[year], "sfup", "HLT_SF_Ele30_TightID", flateta, flatpt)
         sf_down = evaluator["Electron-HLT-SF"].evaluate(yr[year], "sfdown", "HLT_SF_Ele30_TightID", flateta, flatpt)
     elif '2023' in year:
-        sf_nominal = evaluator["Electron-HLT-SF"].evaluate(yr[year], "sf", "HLT_SF_Ele30_TightID", flateta, flatpt, flatphi)
-        sf_up = evaluator["Electron-HLT-SF"].evaluate(yr[year], "sfup", "HLT_SF_Ele30_TightID", flateta, flatpt, flatphi)
-        sf_down = evaluator["Electron-HLT-SF"].evaluate(yr[year], "sfdown", "HLT_SF_Ele30_TightID", flateta, flatpt, flatphi)
+        sf_nominal = evaluator["Electron-HLT-SF"].evaluate(yr[year], "sf", "HLT_SF_Ele30_TightID", flateta, flatpt)
+        sf_up = evaluator["Electron-HLT-SF"].evaluate(yr[year], "sfup", "HLT_SF_Ele30_TightID", flateta, flatpt)
+        sf_down = evaluator["Electron-HLT-SF"].evaluate(yr[year], "sfdown", "HLT_SF_Ele30_TightID", flateta, flatpt)
     elif '2024' in year:
         sf_nominal = evaluator["Electron-HLT-SF"].evaluate(yr[year], "sf", "HLT_SF_Ele30_TightID", flateta, flatpt)
         sf_up = evaluator["Electron-HLT-SF"].evaluate(yr[year], "sfup", "HLT_SF_Ele30_TightID", flateta, flatpt)
@@ -781,6 +790,28 @@ def get_top_pt_reweight(pt):
     return sf * extra_13p6
 
 
+def btag_probability_ratio(eff, eff_data, istag):
+    """Adopted 2026-10-22: neutralize only a jet's exactly zero denominator.
+
+    Keep the original product-of-probabilities arithmetic for supported jets,
+    including its rounding. Never turn an unexplained NaN/inf into a fallback.
+    """
+    for value in (eff, eff_data):
+        if not bool(ak.all(ak.fill_none(np.isfinite(value), False))):
+            raise ValueError('Nonfinite b-tag probability input')
+    if not bool(ak.all((eff >= 0.) & (eff <= 1.))):
+        raise ValueError('B-tag MC efficiency outside [0,1]')
+    denominator = ak.where(istag, eff, 1. - eff)
+    numerator = ak.where(istag, eff_data, 1. - eff_data)
+    zero = denominator == 0.
+    numerator = ak.where(zero, 1., numerator)
+    denominator = ak.where(zero, 1., denominator)
+    result = ak.prod(numerator, axis=1) / ak.prod(denominator, axis=1)
+    if not bool(ak.all(np.isfinite(result))):
+        raise ValueError('Nonfinite b-tag probability ratio after zero-denominator guard')
+    return result
+
+
 class BTagCorrector:
     def __init__(self, tagger, year, workingpoint, caller):
         self._year = year
@@ -794,29 +825,29 @@ class BTagCorrector:
         self._wp = wp[workingpoint]
         self._mc = caller
 
-        btvjson = {}
-        if year in {'2024', '2025'}:
-            btvjson['UParTAK4'] = {
-                'comb': _load_pog(str(resolve_payload('data/BTVSF/'+year+'/btagging.json.gz')))["UParTAK4_comb"],
-                'ligh': _load_pog(str(resolve_payload('data/BTVSF/'+year+'/btagging.json.gz')))["UParTAK4_light"],
-            }
-        else:
-            btvjson['UParTAK4'] = {
-                'comb': _load_pog(str(resolve_payload('data/BTVSF/'+year+'/btagging.json.gz')))["UParTAK4_comb"],
-                'ligh': _load_pog(str(resolve_payload('data/BTVSF/'+year+'/btagging.json.gz')))["UParTAK4_light"],
-            }
-        self.sf = btvjson[tagger]
+        early = {'2022', '2022EE', '2023', '2023BPix',
+                 '2022pre', '2022post', '2023pre', '2023post'}
+        expected = 'particleNet' if year in early else 'UParTAK4'
+        if year not in early | {'2024', '2025'} or tagger != expected:
+            raise ValueError('B-tag algorithm does not match the analysis era: ' + str((year, tagger)))
+        payload = _load_pog(str(resolve_payload('data/BTVSF/'+year+'/btagging.json.gz')))
+        self.sf = {'comb': payload[tagger+'_comb'], 'ligh': payload[tagger+'_light']}
 
         files = {
-            '2022pre' : 'btageff2022pre.merged',
-            '2022post': 'btageff2022post.merged',
-            '2023pre' : 'btageff2023pre.merged',
-            '2023post': 'btageff2023post.merged',
+            '2022pre' : 'btageff2022.merged',
+            '2022post': 'btageff2022EE.merged',
+            '2023pre' : 'btageff2023.merged',
+            '2023post': 'btageff2023BPix.merged',
+            '2022': 'btageff2022.merged',
+            '2022EE': 'btageff2022EE.merged',
+            '2023': 'btageff2023.merged',
+            '2023BPix': 'btageff2023BPix.merged',
             '2024': 'btageff2024.merged',
             '2025': 'btageff2025.merged'
         }
         filename = 'hists/'+files[year]
-        btag_file = load(str(resolve_payload(filename)))
+        from .io import load_efficiency
+        btag_file = load_efficiency(resolve_payload(filename))
         #for k in btag_file[tagger]:
         #    try:
         #        btag += btag_file[tagger][k]
@@ -837,22 +868,24 @@ class BTagCorrector:
         abseta = abs(eta)
         flateta, counts = ak.fill_none(ak.flatten(abseta), 0.), ak.num(abseta)
 
-        pt = ak.where((pt>999.99), ak.full_like(pt,999.99), pt)
         pt = ak.where((pt<20.0), ak.full_like(pt,20.0), pt)
         flatpt =  ak.fill_none(ak.flatten(pt), 20.)
+        # The measured efficiency lookup is bounded; the POG SF must receive
+        # physical pT so that its own out-of-range uncertainty is retained.
+        efficiency_pt = ak.where(flatpt > 999.99, 999.99, flatpt)
 
         flatflavor = ak.fill_none(ak.flatten(flavor), 0)
         
         #https://twiki.cern.ch/twiki/bin/viewauth/CMS/BTagSFMethods
-        def P(eff):
-            weight = ak.where(istag, eff, 1-eff)
-            return ak.prod(weight, axis=1)
-
         eff = ak.where(
             ~np.isnan(ak.fill_none(pt, np.nan)),
-            ak.unflatten(self.eff.evaluate(flatflavor, flatpt, flateta), counts=counts),
+            ak.unflatten(self.eff.evaluate(flatflavor, efficiency_pt, flateta), counts=counts),
             ak.zeros_like(pt)
         )
+        zero = ak.where(istag, eff, 1. - eff) == 0.
+        self.zero_denominator_audit = dict(
+            policy='per_jet_zero_probability_unity_20261022',
+            jets=int(ak.sum(zero)), events=int(ak.sum(ak.any(zero, axis=1))))
         sf_nom = ak.where(
             (flavor==0),
             ak.unflatten(self.sf['ligh'].evaluate('central',self._wp, ak.full_like(flatflavor, 0.), flateta, flatpt), counts=counts),
@@ -864,7 +897,7 @@ class BTagCorrector:
         )
         if not include_variations:
             eff_data_nom = ak.where((sf_nom*eff>1.), ak.ones_like(eff), sf_nom*eff)
-            return (np.nan_to_num(P(eff_data_nom)/P(eff), nan=1.),)
+            return (btag_probability_ratio(eff, eff_data_nom, istag),)
         sf_bc_up_correlated = ak.where(
             (flavor==0),
             ak.unflatten(self.sf['ligh'].evaluate('central',self._wp, ak.full_like(flatflavor, 0.), flateta, flatpt), counts=counts),
@@ -984,25 +1017,11 @@ class BTagCorrector:
             sf_light_down_uncorrelated*eff
         )
 
-        nom = P(eff_data_nom)/P(eff)
-        bc_up_correlated = P(eff_data_bc_up_correlated)/P(eff)
-        bc_down_correlated = P(eff_data_bc_down_correlated)/P(eff)
-        bc_up_uncorrelated = P(eff_data_bc_up_uncorrelated)/P(eff)
-        bc_down_uncorrelated = P(eff_data_bc_down_uncorrelated)/P(eff)
-        light_up_correlated = P(eff_data_light_up_correlated)/P(eff)
-        light_down_correlated = P(eff_data_light_down_correlated)/P(eff)
-        light_up_uncorrelated = P(eff_data_light_up_uncorrelated)/P(eff)
-        light_down_uncorrelated = P(eff_data_light_down_uncorrelated)/P(eff)
-
-        return np.nan_to_num(nom, nan=1.), \
-        np.nan_to_num(bc_up_correlated, nan=1.), \
-        np.nan_to_num(bc_down_correlated, nan=1.), \
-        np.nan_to_num(bc_up_uncorrelated, nan=1.), \
-        np.nan_to_num(bc_down_uncorrelated, nan=1.), \
-        np.nan_to_num(light_up_correlated, nan=1.), \
-        np.nan_to_num(light_down_correlated, nan=1.), \
-        np.nan_to_num(light_up_uncorrelated, nan=1.), \
-        np.nan_to_num(light_down_uncorrelated, nan=1.)
+        return tuple(btag_probability_ratio(eff, value, istag) for value in (
+            eff_data_nom, eff_data_bc_up_correlated, eff_data_bc_down_correlated,
+            eff_data_bc_up_uncorrelated, eff_data_bc_down_uncorrelated,
+            eff_data_light_up_correlated, eff_data_light_down_correlated,
+            eff_data_light_up_uncorrelated, eff_data_light_down_uncorrelated))
 
 
 corrections = {

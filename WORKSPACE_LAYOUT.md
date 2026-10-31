@@ -1,45 +1,34 @@
-# Workspace storage and synchronization
+# Final canonical workspace
 
-Active analysis branch: `run3_full_analysis`. It continues the published
-`codex/package-lowpt-tnp` history; earlier commit identifiers remain valid.
+User-approved frozen baseline: 2026-10-31.
 
-The currently used, validated payload is authoritative. A newer timestamp, a
-branch name, or the presence of a local copy does not establish that authority.
-Resolve conflicting physics files with the main analysis agent using the actual
-production path and SHA-256 before synchronizing them.
-
-| Location | Role and retention |
+| Location | Role |
 |---|---|
-| `analysis/`, `autonomous_allhad/` source and configurations | Versioned implementation and dependencies. Match the adopted source and compiled payload hashes on EOS. |
-| `analysis/data/{ids,corrections}.coffea` | Compiled physics inputs. Regenerate whenever their source changes; deploy source and payload together. |
-| `analysis/hists/{btageff2024,btageff2025,topwtageff2024,topwtageff2025}.merged` | Protected required efficiency inputs; explicitly allowed in Git. |
-| `autonomous_allhad/workflow/histograms/<campaign>/` | Campaign-local state, requests, validation and frozen code. Large cards, histograms, ROOT templates and fits live on EOS. |
-| `autonomous_allhad/reports/` | Reviewed reports and compact exports. Do not remove evidence solely because it is old or untracked. |
-| `docs/` | Public, reviewed website artifacts. Removed historical galleries link to their immutable Git snapshot and are labelled as archived. |
-| `AN2019_016_v9.pdf` | Private reference, protected outside scratch and deliberately ignored by Git. `tmp/pdfs/AN2019_016_v9.pdf` is only a compatibility symlink. |
-| `output/`, `tmp/` | Preview renders and working scratch. Builders may use these defaults; promote final handoffs explicitly to reports. The private-reference symlink must not be followed by cleanup. |
-| `.workspace-local/` | Ignored local recovery records and conflicting-version snapshots. Never publish. |
-| `.codex-worktrees/` | Ignored worktree area. Registered worktrees can contain independent work; never remove them by directory name alone. |
-| `automation/`, `condor/`, `fast_analysis/`, `configs/stop_2024.yaml` | Retained legacy workflow and architecture evidence. CLI/config dependencies remain; absence of an import is not evidence that they are dead. |
+| `TROTASR/` | Only analysis, plotting and fitting implementation |
+| `TROTASR/jsons/analysis.json` | Adopted six-era statistical configuration |
+| hep2 `TROTASR/inputs`, `scales`, `models`, `utils/compiled`, `estimations`, `results` | Current input and calibration payloads; large files stay remote |
+| hep2 `TROTASR/stats/run3` | Official templates, cards, workspaces, receipts and final results |
+| `output/pdf/` | Current delivered figures, compact plot inputs and delivery receipts |
+| `AN2019_016_v9.pdf` | Retained physics reference, not an executable analysis copy |
+| `docs/`, `.github/` | Existing website publication files, not another analysis implementation |
+| hep2 `Stop_Object_Review` | Review material explicitly retained by the user |
 
-The authoritative EOS repository location is documented in
-[`workflow_inventory.md`](autonomous_allhad/reports/workflow_inventory.md).
-Use matching repository-relative paths for source and cached results. This is a
-source-and-manifest relationship, not a whole-directory mirror: ROOT data and
-fit outputs stay on EOS, while private references and credentials stay out of Git.
+The sole hep2 root is `/hep2-scratch/twkim/postprocessing/TROTASR`.
+The matching local package is
+`/Users/taiwoomac/Documents/All Hadronic Stop Analysis/TROTASR`.
 
-Before evicting any local result, compare SHA-256 with the EOS copy and record
-the relative restore path, size and hash inside its campaign. For the September
-2026 campaign, see
-[`local_storage_manifest_20260910.json`](autonomous_allhad/workflow/histograms/lepton_veto10_20260908/local_storage_manifest_20260910.json).
-Its entries are local cache evictions, not failed jobs or lost production data.
-Retain unmatched local files. Do not use recursive `rsync --delete`, `git clean`,
-or directory-wide removal against an active analysis workspace.
+The numerical dependencies used by `TROTASR/workflows/run_inference.sh` are
+retained in place: `combine_20260914/CMSSW_14_1_0_pre4` and
+`trotasr_inference_py39` under `/hep2-scratch/twkim/envs`. These are dependencies
+of the single implementation, not separate analysis checkouts. The unused
+`py38` environment was permanently removed with explicit approval.
 
-Preserve campaign state and frozen code during source synchronization. Commit
-only reviewed changes, push without force, and verify the deployed file hashes
-against the recorded Git revision. A dirty EOS checkout must not be blindly
-reset or switched to another branch.
+Do not create additional campaigns, runtimes, source snapshots, restoration
+archives or path aliases. Current scientific completion receipts and adopted
+reference inputs remain part of the baseline. Their provenance strings do not
+authorize reconstruction of retired execution paths.
 
-The cleanup review and measured results are recorded in
-[`workspace_cleanup_20260910/`](autonomous_allhad/reports/workspace_cleanup_20260910/).
+No scientific source, input, model or figure changes are authorized merely by
+review preparation or a status request. Reuse the final products; obtain a new
+explicit user instruction before changing or recalculating them. Monitoring
+remains stopped. No Git history or Codex conversation database was modified.

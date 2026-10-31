@@ -7,6 +7,7 @@ import awkward as ak
 import numpy as np
 from .ids import object_masks, clean_by_delta_r
 from .region_kinematics import jet_kinematics, update_veto_leptons, delta_phi
+from .paths import tagging_definition
 
 
 def first(values, default=-99.):
@@ -39,7 +40,7 @@ def met_contribution(a, pt):
             for fn in (np.cos, np.sin)]
 
 
-def varied_view(a, momenta):
+def varied_view(a, momenta, year=2024):
     """Propagate the same AK4 change to type-1 MET, then all consumed fields."""
     out = {k: a[k] for k in ak.fields(a)}
     before, after = met_contribution(a, a['jet_corrected_pt']), met_contribution(a, momenta['jet_corrected_pt'])
@@ -48,14 +49,15 @@ def varied_view(a, momenta):
     out.update(momenta)
     out.update(met=np.hypot(x, y), met_phi=np.arctan2(y, x))
     out['puppi_met_corrected'], out['puppi_met_corrected_phi'] = out['met'], out['met_phi']
-    return rebuild(out)
+    return rebuild(out, year=year)
 
 
-def rebuild(a, objects_only=False):
+def rebuild(a, objects_only=False, year=2024):
     out = dict(a)
-    pt, eta, phi, tag = [out[k] for k in ('jet_corrected_pt','jet_eta_all','jet_phi_all','jet_btag_upart_all')]
+    definition = tagging_definition(year)
+    pt, eta, phi, tag = [out[k] for k in ('jet_corrected_pt','jet_eta_all','jet_phi_all',definition['btag_branch'])]
     good = (pt>30)&(abs(eta)<2.4)&(out['jet_id_all']!=0)
-    medium, loose = good&(tag>.1272), good&(tag>.0246)
+    medium, loose = good&(tag>definition['medium']), good&(tag>definition['loose'])
     jets = jet_block(pt, eta, phi, good, medium, out['met_phi'])
     for name in ('njet','ht','j1pt','j1eta','j1phi','j2pt','min_dphi4'):
         out[name] = jets[name]
@@ -67,16 +69,17 @@ def rebuild(a, objects_only=False):
         out['pass_'+name] = jets[name]
     for i, angle in enumerate(jets['angles'], 1):
         out['j%s_met_dphi'%i] = angle
-    for name, value in dict(pt=pt, eta=eta, phi=phi, btag_upart=tag,
+    for name, value in dict(pt=pt, eta=eta, phi=phi,
             hadron_flavour=out['jet_hadron_flavour_all'], b_loose=loose, b_medium=medium).items():
         out['good_jet_'+name] = value[good]
+    out['good_'+definition['btag_branch'].replace('_all', '')] = tag[good]
     if not objects_only:
         fpt, feta, fphi, mass, msd = [out[k] for k in ('fatjet_corrected_pt','fatjet_eta_all',
             'fatjet_phi_all','fatjet_corrected_mass','fatjet_msoftdrop_all')]
         fid = out['fatjet_id_all']!=0
         top, w = out['fatjet_top_score_all'], out['fatjet_w_score_all']
-        tp = fid&(fpt>400)&(abs(feta)<2)&(msd>105)&(top>.5078)
-        wp = fid&(fpt>200)&(abs(feta)<2)&(msd>60)&(msd<105)&(w>.9385)
+        tp = fid&(fpt>400)&(abs(feta)<2)&(msd>105)&(top>definition['top'])
+        wp = fid&(fpt>200)&(abs(feta)<2)&(msd>60)&(msd<105)&(w>definition['w'])
         out['fatjet_boosted_top_pass_all'], out['fatjet_boosted_w_pass_all'] = tp, wp
         out['nboosted_top'], out['nboosted_w'] = [np.asarray(ak.sum(v,axis=1)) for v in (tp,wp)]
         out['nboosted_total'] = out['nboosted_top']+out['nboosted_w']
@@ -97,7 +100,7 @@ def rebuild(a, objects_only=False):
         same_isr = (np.abs(out['lowdm_isr_eta']-old_eta)<1e-6)&(delta_phi(out['lowdm_isr_phi'],old_phi)<1e-6)
         out['lowdm_isr_subjet_btag_max'] = np.where(same_isr, out['lowdm_isr_subjet_btag_max'], -1.)
         out['pass_lowdm_topology_veto'] = (out['nboosted_top']==0)&(out['nboosted_w']==0)
-    masks = object_masks(out)
+    masks = object_masks(out, year)
     counts = dict(electron_veto='n_e_veto',electron_medium='n_e_medium',muon_loose='n_m_loose',
                   muon_medium='n_m_medium',photon_medium='n_photon_medium')
     for name, mask in masks.items():
@@ -155,10 +158,10 @@ def rebuild(a, objects_only=False):
     for field in ('ht','njet','nb'):
         out[field+'_lepton_clean'] = b[field]
     out['pass_ht_lepton_300'] = b['ht']>300
-    b = jet_kinematics(pt,eta,phi,tag,good,met,mp)
+    b = jet_kinematics(pt,eta,phi,tag,good,met,mp,year=year)
     for field in ('mtb','ptb','met_sqrt_ht'):
         out['lowdm_'+field] = b[field]
     out['lowdm_isr_dphi'] = np.where(out['lowdm_isr_pt']>0,delta_phi(out['lowdm_isr_phi'],mp),-99.)
     view = ak.Array(out)
-    update_veto_leptons(view)
+    update_veto_leptons(view, year=year)
     return view

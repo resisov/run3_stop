@@ -147,6 +147,8 @@ def assemble_endpoints(payloads, endpoints, compatible_codes=()):
 
 
 def merge(campaign, year):
+    from TROTASR.utils.paths import era_year
+    year = era_year(year)
     campaign = internal_path(campaign)
     plan = frozen_plan(campaign)
     from TROTASR.workflows.normalization_recovery import prior_contracts, payload_contract
@@ -250,19 +252,24 @@ def merge(campaign, year):
     return output
 
 
-def merge_refreshed_year(campaign):
-    """Strict 2025 remerge at the original path, with unchanged data reused."""
-    from TROTASR.workflows.run_systematic_campaign import (refresh_plan, REFRESH_ID,
+def merge_refreshed_year(campaign, year=2025):
+    """Remerge a registered updated year at its original central path."""
+    from TROTASR.workflows.run_systematic_campaign import (refresh_plan,
         refresh_task_required, refreshed_population_verified, refresh_result_contract)
     campaign=internal_path(campaign);plan=refresh_plan(campaign);spec=plan['payload_refresh']
+    if year not in spec.get('years', [spec.get('year')]):
+        raise ValueError('Year is outside the registered payload update')
+    revision = spec['id']
+    contract = spec['contracts'][str(year)] if 'contracts' in spec else spec['contract']
     if spec['validation'].get('status') != 'passed':
         raise ValueError('Every refreshed/rebuilt file must pass its registered validation')
     records=[]
     for task in spec['tasks']:
+        if task['year'] != year:continue
         if refresh_task_required(task):
             s=read_json(campaign/'state'/(task['key']+'.json'))
             if (s.get('status')!='complete' or s.get('exit_code')!=0 or
-                    s.get('payload_revision')!=REFRESH_ID or not refreshed_population_verified(task,s)):
+                    s.get('payload_revision')!=revision or not refreshed_population_verified(task,s)):
                 raise ValueError('Unverified refreshed input: '+task['key'])
             record=dict(task=task,output=s['output'],sha256=s['output_sha256'])
         else:
@@ -274,14 +281,14 @@ def merge_refreshed_year(campaign):
             raise ValueError('Refreshed or retained input/output changed')
         records.append(record)
     merged=dict(schema='trotasr_histograms_v1',status='complete',scope=plan['scope'],
-        contract=spec['contract'],sr_data_blinded=True,bins_merged=False,
+        contract=contract,sr_data_blinded=True,bins_merged=False,
         highdm_sr_source_axes='exact_nb_exact_topology_native_recoil_v2',mixed_sf='not_provided',
         histograms={},physical_histograms={},dy_rz={},dy_rz_variations={},input_metadata={},
         category_order=['Nb','Nbst','Nmix','Nres','Nw'],
         audit=dict(events_read=0,migrations={},selection_totals={},
             per_file_weight_audit='Retained in the canonical hashed per-file outputs'),
         merge_provenance=dict(plan_sha256=sha256(campaign/'plan.json'),
-            merge_code_sha256=sha256(Path(__file__)),payload_revision=REFRESH_ID,
+            merge_code_sha256=sha256(Path(__file__)),payload_revision=revision,
             input_hashes={r['task']['key']:r['sha256'] for r in records}),
         coverage=dict(expected_files=len(records),completed_files=len(records),failed_files=0,
             expected_events=sum(r['task']['entries'] for r in records),full_input_inventory=True,
@@ -303,7 +310,7 @@ def merge_refreshed_year(campaign):
         merge_datasets(merged['input_metadata'],payload['input_metadata'])
         merged['audit']['events_read']+=payload['audit']['events_read']
         merge_counters(merged['audit']['migrations'],payload['audit']['migrations'])
-        for section in ('trota_inference','shape_migrations','object_endpoints','object_response','object_acceptance'):
+        for section in ('trota_inference','shape_migrations','object_endpoints','object_response','object_acceptance','central_object_corrections'):
             if section in payload['audit']:
                 merge_counters(merged['audit'].setdefault(section,{}),payload['audit'][section])
         for chunk in payload['audit']['chunks']:
@@ -313,15 +320,15 @@ def merge_refreshed_year(campaign):
             merge_counters(target,{k:v for k,v in chunk.items() if k not in ('SR','endpoint')})
     if merged['audit']['events_read']!=merged['coverage']['expected_events']:
         raise ValueError('Incomplete refreshed-year traversal')
-    output=campaign/'merged/systematics_2025.json.gz'
+    output=campaign/'merged'/('systematics_'+str(year)+'.json.gz')
     if output.exists():raise FileExistsError('Existing merge must be preserved before replacement')
     write_json(output,merged)
     check=read_json(output)
     if check['merge_provenance']!=merged['merge_provenance']:
         raise ValueError('Refreshed merge readback failed')
-    write_json(campaign/'merged/systematics_2025.summary.json',dict(status='complete',scope=plan['scope'],
+    write_json(campaign/'merged'/('systematics_'+str(year)+'.summary.json'),dict(status='complete',scope=plan['scope'],
         output=relative(output),sha256=sha256(output),coverage=check['coverage'],
-        physics_contract=spec['contract'],payload_revision=REFRESH_ID,full_workflow_complete=False))
+        physics_contract=contract,payload_revision=revision,full_workflow_complete=False))
     return output
 
 
@@ -344,6 +351,8 @@ def combine_saved_payloads(jme, nonjme, policy):
     endpoints = set(NONJME_ENDPOINTS)
     for payload, scope, mode in ((jme, 'full_cms_trota_jme_production', 'cms_trota_jme'),
             (nonjme, 'full_nonjme_systematic_production', 'stored_trota_nonjme')):
+        from TROTASR.workflows.rare_top_policy import require_clean
+        require_clean(payload)
         coverage = payload.get('coverage', {})
         if (payload.get('status') != 'complete' or payload.get('scope') != scope
                 or payload.get('contract', {}).get('shape_mode') != mode
@@ -434,7 +443,8 @@ def combine(campaign, other_campaign, year, output, policy):
 if __name__ == '__main__':
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--campaign', required=True, type=Path)
-    p.add_argument('--year', type=int, required=True, choices=(2024, 2025))
+    from TROTASR.utils.paths import ERAS, analysis_era
+    p.add_argument('--year', type=analysis_era, required=True, choices=ERAS)
     p.add_argument('--combine-with', type=Path, help='Complete non-JME campaign for an explicitly approved as-is union')
     p.add_argument('--config', type=Path, help='Configuration containing the exact systematic_combination policy')
     p.add_argument('--output', type=Path, help='New combined year histogram file; original results are preserved')
@@ -447,4 +457,6 @@ if __name__ == '__main__':
     else:
         if a.config or a.output:
             p.error('--config and --output are only for explicit combination')
-        print(merge(a.campaign, a.year))
+        campaign = internal_path(a.campaign)
+        from TROTASR.workflows.rare_top_policy import canonical_merge
+        print(canonical_merge(campaign, a.year, merge))

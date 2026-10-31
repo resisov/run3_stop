@@ -1,534 +1,163 @@
 # AGENTS.md
 
-## Project mission
-
-This repository contains a CMS Run-3 all-hadronic stop search.
-
-The principal reference files are:
-
-* `AN2019_016_v9.pdf`
-* `stop_processor_v4.py`
-* `ids.py`
-* `corrections.py`
-
-Treat these files as physics references and validation baselines, not as an implementation architecture that must be preserved.
-
-The objective is to design, implement, validate, execute, and publish an improved end-to-end Run-3 all-hadronic stop analysis.
-
-Do not merely refactor the existing processor.
-
-## Reference hierarchy
-
-Use the four reference files as follows.
-
-### `AN2019_016_v9.pdf`
-
-Use this document to understand:
-
-* the Run-2 all-hadronic stop-search strategy;
-* physics motivation;
-* signal topology;
-* background estimation;
-* signal and control region logic;
-* event categorization;
-* search-bin construction;
-* discriminating variables;
-* statistical treatment;
-* validation philosophy.
-
-Do not copy Run-2 definitions blindly into Run 3. Identify which elements remain physically useful and which require redesign for Run-3 data, reconstruction, triggers, taggers, corrections, and available luminosity.
-
-### `stop_processor_v4.py`
-
-Use this file to recover the current Run-3 implementation, including:
-
-* supported years;
-* datasets and process groups;
-* triggers;
-* MET filters;
-* object construction;
-* object cleaning;
-* recoil definitions;
-* region selections;
-* weights;
-* systematic variations;
-* histogram definitions;
-* output conventions.
-
-### `ids.py`
-
-Use this file as the current implementation reference for:
-
-* electron identification;
-* muon identification;
-* photon identification;
-* AK4 jet identification;
-* AK8/fatjet identification;
-* veto, loose, medium, and tight working points;
-* object cleaning and overlap behavior.
-
-### `corrections.py`
-
-Use this file as the current implementation reference for:
-
-* pileup weights;
-* MET XY corrections;
-* JEC;
-* JER;
-* JES uncertainty;
-* electron scale factors;
-* muon scale factors;
-* photon scale factors;
-* trigger scale factors;
-* b-tagging scale factors;
-* b-tagging efficiency treatment;
-* top-pT reweighting;
-* year-dependent correction availability;
-* missing implementations and placeholders.
-
-## Core priorities
-
-Prioritize, in order:
-
-1. physics correctness;
-2. reproducibility;
-3. expected exclusion sensitivity;
-4. control-region constraining power;
-5. statistical robustness;
-6. systematic robustness;
-7. failure recovery;
-8. runtime;
-9. memory usage;
-10. EOS and CVMFS I/O efficiency;
-11. HTCondor efficiency;
-12. maintainability;
-13. auditability;
-14. clarity of the final web report.
-
-Do not select a faster implementation if it fails physics validation.
-
-Do not select a more sensitive categorization if the improvement depends on unstable low-statistics bins, poor control-region closure, fragile transfer factors, unjustified nuisance assumptions, or unexplained disagreement with the baseline.
-
-## Physics baseline versus implementation
-
-The reference files define the starting physics intent and current behavior.
-
-They do not define the architecture that must be retained.
-
-You may redesign:
-
-* input discovery;
-* branch reading;
-* skim format;
-* feature storage;
-* event processing;
-* chunking;
-* correction evaluation;
-* caching;
-* multiprocessing;
-* HTCondor job structure;
-* retry logic;
-* reduction;
-* merging;
-* histogram representation;
-* plotting;
-* search-bin evaluation;
-* datacard production;
-* expected-limit execution;
-* report generation;
-* GitHub Pages publication.
-
-Do not silently modify physics definitions.
-
-Any change to selections, regions, categories, search bins, background estimation, nuisance correlations, or normalization must be labeled as a physics proposal and compared quantitatively with the baseline.
-
-## Top-tagging-independent categorization
-
-The primary event-categorization optimization must not use top-tagging discriminator values, top-tagging working points, or top-tagging pass/fail decisions.
-
-AK8 jet kinematics may be used, including:
-
-* multiplicity;
-* transverse momentum;
-* mass;
-* angular relations;
-* recoil balance.
-
-Top-tag scores must not be used for the primary categorization.
-
-Develop and compare categories using quantities such as:
-
-* jet multiplicity;
-* b-jet multiplicity;
-* HT;
-* MET;
-* recoil transverse momentum;
-* leading-jet kinematics;
-* minimum delta-phi;
-* individual jet–MET angular variables;
-* resolved hadronic-W reconstruction;
-* resolved hadronic-top kinematics;
-* invariant masses;
-* transverse masses involving b jets;
-* MT2-like quantities where justified;
-* ISR-sensitive variables;
-* event-shape quantities;
-* AK8 kinematics without tagger scores.
-
-At minimum, evaluate:
-
-1. a minimal Njet–Nb–MET categorization;
-2. a resolved-kinematics categorization;
-3. an ISR-sensitive categorization;
-4. an AK8-kinematics categorization without tag scores;
-5. a statistically optimized hybrid categorization.
-
-## Required architecture candidates
-
-Develop and benchmark at least three architectures.
-
-### Architecture A: optimized faithful rewrite
-
-Reproduce the current Run-3 physics definitions as faithfully as possible while redesigning the software for better performance and robustness.
-
-### Architecture B: feature-table analysis
-
-Produce a reusable event-level feature representation that supports rapid changes to regions, categories, bins, and statistical models without repeatedly processing full NanoAOD inputs.
-
-### Architecture C: redesigned categorization and binning
-
-Use the validated event representation to optimize top-tagging-independent categories, search-bin boundaries, control-region mappings, and the statistical model.
-
-Additional candidates may be evaluated when justified.
-
-## Validation requirements
-
-Validate candidate implementations against the current Run-3 baseline.
-
-### File level
-
-Compare:
-
-* discovered files;
-* accepted files;
-* skipped files;
-* duplicate files;
-* expected and retained event counts;
-* sum-of-weight bookkeeping.
-
-### Event level
-
-Compare using run, luminosity block, and event number.
-
-Check:
-
-* event acceptance;
-* selected objects;
-* object indices;
-* region assignment;
-* category assignment;
-* search-bin assignment;
-* nominal event weight;
-* systematic weights.
-
-### Object level
-
-Check:
-
-* object multiplicities;
-* kinematics;
-* object IDs;
-* cleaning decisions;
-* corrected quantities;
-* working-point decisions.
-
-### Region level
-
-Check all current high-DeltaM regions, including:
-
-* preselection;
-* lost-lepton control region;
-* QCD control region;
-* photon control region;
-* dielectron control region;
-* dimuon control region;
-* signal region;
-* any existing validation regions.
-
-### Yield and shape level
-
-Compare every relevant process, region, category, search bin, and histogram.
-
-### Systematic level
-
-Compare all implemented nominal and shifted quantities, including:
-
-* JES;
-* JER;
-* MET;
-* pileup;
-* b tagging;
-* electron corrections;
-* muon corrections;
-* photon corrections;
-* top-pT;
-* MC statistics;
-* normalization uncertainties.
-
-### Statistical level
-
-Compare:
-
-* datacard rates;
-* nuisance definitions;
-* nuisance correlations;
-* control-region constraints;
-* expected limits;
-* fit convergence;
-* nuisance impacts;
-* low-statistical-bin behavior.
-
-## Corrupted ROOT file policy
-
-A corrupted, unreadable, truncated, malformed, or structurally invalid ROOT file must not stop the complete campaign.
-
-When a file cannot be read:
-
-1. distinguish a transient storage failure from reproducible corruption;
-2. retry from an alternate endpoint when appropriate;
-3. if the failure is reproducible, skip the file;
-4. record it in a bad-file manifest;
-5. exclude it from subsequent submissions;
-6. continue processing valid files.
-
-Maintain:
-
-* `autonomous_allhad/workflow/bad_files.json`
-* `autonomous_allhad/workflow/bad_files.txt`
-* `autonomous_allhad/workflow/file_validation_summary.json`
-
-Each record must include:
-
-* dataset;
-* file path;
-* failure stage;
-* exception type;
-* concise error;
-* first and last failure times;
-* whether alternate access was attempted;
-* whether the file was permanently skipped.
-
-Do not silently discard files.
-
-Quantify the lost fraction by:
-
-* file count;
-* event count where available;
-* generator sum of weights;
-* data run and luminosity coverage;
-* affected signal mass points.
-
-For MC, ensure that normalization bookkeeping is consistent with the valid retained files.
-
-For data, do not claim complete luminosity coverage when skipped files remove unique luminosity sections.
-
-A dataset must be marked incomplete when the skipped fraction exceeds configurable thresholds.
-
-## Workflow behavior
-
-Do not download or retain ROOT caches in the local laptop workspace. Keep ROOT
-inputs, templates, fit outputs, and truth-augmentation products on EOS or in
-batch-worker scratch. Local plotting must use compact exported data where
-possible. Keep generated large histogram JSON and fit scratch out of Git.
-
-Keep canonical source, configuration, and dependency manifests synchronized
-between local, EOS, and the tracked Git branch, with verified file hashes.
-Do not overwrite divergent physics payloads or active frozen campaign snapshots
-as part of synchronization; report conflicts before choosing a baseline.
-
-When additional permission or scope approval is required, email the exact
-request, affected targets, and risks to `taiwoo.kim@cern.ch` through an
-already-authorized mail mechanism. Do not include credentials. Wait for the
-user's approval before the affected action; an email sent is not approval.
-If email delivery is unavailable, report the precise blocker in the task.
-
-The 2024/2025 intermediate ROOT production must complete Events and TROTA
-in the same main batch job before stage-out. Require the TROTA completion
-marker, model/year provenance, and validation before recording success.
-Preserve already-valid integrated ROOT files rather than repeating production.
-
-Histogramming must retain an otherwise valid file when its Top/W correction
-branches are absent. For that file only, use Top/W SF nominal/Up/Down = 1.0
-(uncertainty = 0.0), through the shared `topw_file_sf_triplet` input guard.
-Keep all other corrections and selections unchanged. Record the missing inputs
-in the existing histogram audit, not a new sidecar. Complete correction inputs
-must use the measured SF; corrupt Events/TROTA or invalid normalization are
-not covered by this fallback.
-
-The user also adopts Top/W SF nominal/Up/Down = 1.0 (uncertainty = 0.0)
-for explicitly failed calibration fits, including failed uncertainty endpoints.
-Apply this only to the affected calibration bins; keep valid measured bins
-unchanged. Do not infer a failed fit merely from a malformed payload or NaN.
-
-The user adopts corrected Top/W efficiency = min(SF * MC efficiency, 1),
-separately for nominal, Up, and Down. Recompute both pass and fail weights
-from that bounded efficiency, preserving pass+fail normalization wherever
-the MC has support. Do not clip only the fail weight or replace these valid
-measurements with the fit-failure unity fallback. Retain the asymmetric
-variation endpoints after saturation.
-
-For a zero Top/W efficiency or pass/fail-weight denominator, use SF
-nominal/Up/Down = 1.0 (uncertainty = 0.0) for that efficiency cell only.
-This includes MC efficiency 0 or 1 and an explicitly empty pass+fail count.
-Do not treat an unexplained NaN or malformed input as a zero denominator.
-
-For VOMS proxy creation or renewal, request `--valid 200:00`.
-After issuance, verify the actual proxy and VOMS lifetimes before batch
-submission; the requested duration is not a substitute for that check.
-
-The workflow must be:
-
-* resumable;
-* idempotent;
-* deterministic;
-* configuration driven;
-* auditable.
-
-Whenever `ids.py` or `corrections.py` changes, recompile the corresponding
-`.coffea` artifact before running validation or production. Synchronize the
-source and compiled payload used by workers, verify their recorded hashes, and
-do not declare the change complete while the compiled artifact is stale.
-
-Completed valid work must not be repeated unnecessarily.
-
-Queue disappearance is not evidence of success.
-
-A job is successful only when:
-
-* it exits successfully;
-* the expected output exists;
-* the output passes integrity checks;
-* required metadata exists;
-* campaign state records the output as valid.
-
-Maintain machine-readable state, history, manifests, and summaries inside each
-active campaign directory. Do not use a shared monolithic workflow state.
-
-## GitHub Pages report
-
-Create a static analysis website that can be hosted with GitHub Pages.
-
-The website must be generated from machine-readable outputs, not manually invented values.
-
-Use a structure such as:
-
-```text
-docs/
-├── index.html
-├── assets/
-├── plots/
-├── data/
-├── benchmarks/
-├── validation/
-└── reports/
-```
-
-The website must include:
-
-* project overview;
-* current pipeline state;
-* input and bad-file summary;
-* baseline analysis summary;
-* architecture candidates;
-* performance benchmarks;
-* object-level validation;
-* event-level validation;
-* region and yield comparisons;
-* systematic comparisons;
-* top-tagging-independent categorization study;
-* search-bin study;
-* control-region closure;
-* transfer-factor studies;
-* combined control-region plots;
-* expected-limit comparisons;
-* final architecture decision;
-* unresolved issues;
-* reproducibility information;
-* git commit and configuration hashes.
-
-The site must clearly distinguish:
-
-* completed results;
-* preliminary results;
-* failed stages;
-* missing samples;
-* skipped files;
-* proposed physics changes;
-* adopted physics changes.
-
-Do not publish credentials, proxies, private tokens, internal secrets, or sensitive paths.
-
-Create a GitHub Actions workflow for GitHub Pages when appropriate:
-
-```text
-.github/workflows/pages.yml
-```
-
-Do not claim the site is publicly deployed unless the push and GitHub Pages deployment actually succeed.
-
-When repository credentials or GitHub permissions are unavailable, generate the complete `docs/` site and provide the exact remaining publication step.
-
-## Safety and destructive actions
-
-Do not perform destructive operations without necessity.
-
-Do not:
-
-* delete valid production outputs;
-* remove large EOS directories;
-* rewrite verified results;
-* force-push protected branches;
-* expose credentials;
-* fabricate successful job status;
-* fabricate benchmark or limit results.
-
-When a destructive action is necessary, document why and preserve recoverable backups where practical.
-
-## Completion criteria
-
-The project is not complete when code has merely been written.
-
-It is complete only when:
-
-* the four reference files have been fully inspected;
-* the baseline has been reverse-engineered;
-* machine-readable specifications exist;
-* the baseline has been benchmarked;
-* at least three architectures have been implemented or meaningfully prototyped;
-* the architectures have been tested on identical representative inputs;
-* corrupted ROOT files have been skipped and documented;
-* event-, object-, region-, yield-, shape-, systematic-, and expected-limit comparisons exist;
-* top-tagging-independent categories have been evaluated;
-* a final architecture has been selected quantitatively;
-* the selected implementation has run end-to-end on the representative subset;
-* the static website has been generated;
-* GitHub Pages publication has been attempted when credentials permit;
-* all unresolved issues are documented.
-
-At completion, report:
-
-* architecture candidates;
-* selected architecture;
-* quantitative selection reasons;
-* physics differences from the baseline;
-* categories tested;
-* performance results;
-* skipped corrupted files;
-* normalization effects;
-* validation discrepancies;
-* control-region results;
-* expected-limit results;
-* generated website location;
-* GitHub Pages status;
-* modified and created files;
-* unresolved issues.
+## Mission and authority
+
+CMS Run-3 all-hadronic stop search. Physics correctness and reproducibility
+precede sensitivity, statistical robustness, recovery and performance.
+Use AN2019_016_v9.pdf and the adopted TROTASR/utils/ids.py and corrections.py
+as physics references, not a reason to restore obsolete implementations.
+The user retains final scientific responsibility. Do not silently change
+selections, regions, bins, background estimation, nuisance correlations or
+normalization. New physics proposals need explicit approval.
+The user explicitly owns final scientific judgement, result approval and
+responsibility. Record actual fit quality/assumptions truthfully; do not turn
+covQual=2 alone into an assistant-imposed veto, omitted result/uncertainty band
+or new refit/validation requirement. For the requested CR-only plots propagate
+the saved fit covariance including correlations and draw the uncertainty bands.
+
+## One implementation and one current result
+
+- Final baseline approved 2026-10-31: the current inputs, results, analysis code,
+  plotting code and fitting code are FROZEN as the final canonical TROTASR.
+  Do not change, regenerate, refit or rerender them without a new explicit user
+  instruction. Review preparation reuses these artifacts. A final-version
+  declaration does not alter the adopted physics/systematic scope or blinding.
+- The sole hep2 analysis root is /hep2-scratch/twkim/postprocessing/TROTASR,
+  with the corresponding local TROTASR package. Current config is
+  TROTASR/jsons/analysis.json; statistical products are TROTASR/stats/run3.
+- Use python -m TROTASR <stage>. Recovery, resume and collection belong inside
+  that stage. Do not create sidecars, copied workflows, nested analysis roots,
+  dated/request-specific campaigns, alternative runtimes or launcher scripts.
+  A wrapper importing a retired implementation is not consolidation.
+- Obsolete analysis/test environments, earlier statistical models, recovery
+  snapshots and launcher/handoff records have been permanently retired.
+  Do not retain a Trash copy, restoration archive, old path alias or instructions
+  that can resurrect them. Scientific result receipts are not execution branches.
+  Never reconstruct retired paths or launchers from history.
+- User exception: preserve /hep2-scratch/twkim/postprocessing/Stop_Object_Review
+  as review material. It is not an alternate analysis or fitting implementation.
+  Preserve current scientific completion receipts and required reference inputs;
+  old path strings in provenance never authorize restoring an old runtime.
+- All future changes belong in the top-level implementation. Use current
+  accepted inputs/results directly; do not restore deleted policy JSONs or
+  earlier-stage validation gates. Keep only current scientific configuration.
+- Monitoring is stopped. Do not enable schedules, create follow-up jobs or start
+  another chat without a new direct user instruction.
+
+## Required context
+
+Read TROTASR/NOMINAL_CONTINUATION.md for current paths/status/continuation.
+For a status question inspect only current state, exact receipt, short relevant
+log and PID/startticks/lock. Old launch records are not execution evidence.
+Deleted agent_context policies remain deleted; do not recreate them.
+
+## Adopted physics and statistical model
+
+- One combination: 2022, 2022EE, 2023, 2023BPix, 2024 and 2025.
+  The user-approved era-merged model is the official default: corresponding
+  channels 48->8, likelihood bins 1284->214, free CR normalizations 288->48.
+  Keep the tested eraScale rateParam formulas, era-specific central corrections
+  and bounds, original era templates/GNN boundaries and nuisance functions.
+  Histogram rates remain -1. No optional model switch or separate campaign.
+- Results are six-era partial systematics, not final full-systematic Run-3.
+  Reuse the approved 2024/2025 systematics and early-era experimental/luminosity
+  model; retain CR constraints, measured background errors and autoMCStats.
+  This existing scope label alone is not evidence of a missing nuisance or
+  authorization to start further systematic production.
+- SR observations remain blinded. Never expose observed SR counts.
+  Fit only 895 displayed points: T2tt205/T2bW345/T2tb345,
+  mStop600-1800 GeV/mLSP1-1800 GeV. Do not fit the other60 points.
+- Frozen early-era central luminosity is 61.8971 fb^-1. The remembered
+  62.31 fb^-1 is not approved for application. Do not only relabel figures.
+  Keep LUM POG revision39 correlated lumi_1/2/3 for 2022/2023/2024,
+  shared within each early calendar year, and independent5% for2025.
+  Current luminosity physics policy remains an adopted input.
+- TTWH/TTZH excluded. TTW-WtoQQ-1Jets, TTZ-ZtoQQ-1Jets, TTWW, TTWZ,
+  TTZZ and present TTTT belong to Top in every era.
+  Keep exact fit-only ZJet exclusion, Z/gamma bin merge, approved muon thresholds
+  and per-jet b-tag/Top/W fallback scopes. No broader fallback is approved.
+- Exclude only SR_highdm_c1_2022 / QCD_Nb1_u5 and QCD_Nb2plus_u5 from the fit.
+  Retain original ROOT objects/endpoints and both CR components/rate parameters.
+  No additional zero-support exclusion or endpoint alteration is approved.
+- Early signals use v15 with each target era's corrections/objects.
+  2023 use of 2022 FastSim production is approved; source year does not select
+  analysis era. Source NanoAOD/MiniAOD is read-only.
+- Existing high-dM displays combine all six eras; low-dM prediction displays
+  split early four versus2024+2025. Preserve approved region/bin definitions.
+
+## Fitting and resources
+
+- Reuse accepted cards/templates/workspaces and completed-result receipts.
+  No upstream policy reconstruction, repeated large immutable-file hash,
+  exhaustive ROOT readback or repeated smoke tests. New input validation uses
+  the approved structural scope; never claim exhaustive numerical validation.
+- New expected fits require successful exit, actual five expected quantiles and
+  existing five-crossing/numerical checks. Queue disappearance is not success.
+- Run all applicable existing finite recovery methods; failures first in the
+  shared pool. Do not stop at the initial two configurations. Inapplicable
+  methods need a reason. Never repeat an identical consumed command, invent
+  success, loosen tolerances or freeze variables to force acceptance.
+- Same-point successful numerical recipes are kept by the canonical limits
+  stage itself. They are starting settings only, not reusable fit values or
+  certified new-model NLL brackets. Do not import a historical executor.
+- Reduce rMax only if converged NLL evidence from the same point/attempt supports
+  all five expected targets. Signed failed/unknown conditional statuses,
+  including -1, cannot certify a smaller range. Full-state starts require an
+  actual compatible saved state; never alter Asimov generation for a warm start.
+- Existing hep2 runtime only: bash TROTASR/workflows/run_inference.sh.
+  Account cap120 including controllers/transfers; downstream116.
+  At most70 limit point futures including unmaterialized/reserved futures.
+  Reserve3GiB per future, credit only measured materialized native RSS already
+  deducted from MemAvailable, capped3GiB. No active+free double reservation.
+  Keep memory reserve32GiB/emergency24GiB and disk80GiB. No idle45 reservation.
+- Preserve healthy fits, exclusive point/controller locks and other users' jobs.
+  Never replace active frozen code. Local fits and retired leases/controllers
+  remain stopped. Large ROOT/templates/fit scratch remain remote.
+- Impacts: merged T2tt1200/500, mu1 S+B Asimov, r[0,20], original finite robust
+  strategies/endpoints. CR-only pulls are a SEPARATE observed-CR B-only r0 fit,
+  no Asimov and no SR. Neither diagnostic replaces expected limits.
+  Preserve actual covariance qualifications; profile-complete is not covQual3.
+- Recompile corresponding .coffea artifacts if ids.py/corrections.py changes.
+  Preserve approved current payload/source consistency without rehashing all
+  immutable inputs. Do not overwrite divergent unrelated dirty work.
+
+## Remote production and safety
+
+- Signal recovery on lxplus remains local-only under the standing instruction;
+  preserve healthy Condor jobs and do not submit new Condor recovery.
+  CERN batch queries/submissions use eosschedd. EOS work/cache/logs/proxy, not
+  /tmp or /afs. Never read personal keys/certificates.
+  User renews VOMS with --valid200:00; verify lifetime/owner-only access.
+- Check account-wide1TB EOS quota and hep2 headroom before new admission.
+  Record reproducible corrupt inputs/lost coverage in canonical bad-file
+  manifests and continue valid files.
+- Do not delete current valid outputs, source data, untransferred results or
+  unrelated work. Retirement approval concerns obsolete execution trees/records
+  and old models, not the frozen official products or preserved review material.
+  No force pushes, credential disclosure or conversation-database modification.
+
+## Reporting and context discipline
+
+- Report concisely in Korean; times use Thoiry (Europe/Paris).
+  Keep NOMINAL_CONTINUATION.md current and <=8KiB; replace stale status.
+- Scoped rg/counts/selected JSON fields only. Usual tool output <=2000tokens.
+  Do not dump all955points, full manifests or historical retries.
+- Reports reuse the three frozen official limit figures. Do not refresh plots
+  merely for a report; rerendering now requires an explicit user request. Preserve
+  axes, masks, labels, ticks, legends and layout. No unsolicited status/
+  provenance text inside or beneath figures; put time/coverage in report/manifest.
+- Show the three verified official PNGs inline using absolute paths.
+  Do not substitute retired separated-era results. State actual snapshot time
+  and partial-systematic qualification in prose. This never resumes monitoring.
+- Prefit/postfit CR comparisons must call the existing canonical distribution
+  renderer, not a hand-drawn lookalike with different fonts/axes/legend styling.
+  Put the CR name and its Nb category together inside each category box.
+  For these prefit/postfit comparisons only, omit parenthesized legend yields;
+  keep every other plot's existing yield-label policy. Use one comparison with
+  high-dM left/low-dM right and double the previous 12-inch canvas width.
+  Keep the prefit and postfit legends in one horizontal row each.
+  Category separators extend over the full panel height. Category boxes may be
+  enlarged; Prefit/Postfit titles are larger and bold in this comparison.
+  Keep the canvas compact vertically with shorter ax/rax panels and a tighter
+  main-axis y upper limit. Put category boxes INSIDE ax, just above its x axis;
+  covering background histograms is explicitly allowed. Do not put them below rax.

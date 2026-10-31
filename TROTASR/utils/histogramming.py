@@ -12,11 +12,12 @@ import importlib.metadata
 import numpy as np
 import awkward as ak
 import uproot
-from .paths import ROOT, JSONS, internal_path
-from .io import read_json, write_json, sha256, validate_root
+from .paths import ROOT, JSONS, internal_path, era_year, analysis_era, EARLY_ERAS
+from .io import read_json, write_json, sha256, validate_root, era_assets
 from .reader import resolved_candidates
 from .event_selections import select, REGIONS, CATEGORY_ORDER, FixedJetTopologyCache
 from .event_selections import _references
+from .region_kinematics import update_veto_leptons
 from .ids import clean_by_delta_r
 from .normalization import dataset_label, norm_vector, data_process_allowed
 from .signal_models import signal_topology, signal_mass_key
@@ -24,11 +25,21 @@ from .corrections import event_weights, topw_file_input_policy, TopWEvents
 from .private_scales import topw_event_variations
 from ..gnn4lowdm.inference import Rank005Numpy
 from ..gnn4lowdm.region_features import feature_arrays
+from ..gnn4lowdm.configuration import configuration_path, portable_model
 from .physical_histograms import fill as fill_physical
 
 RECOIL = np.asarray([250, 300, 350, 400, 500, 650, 800, 1000, 1500], dtype=float)
 SR_RECOIL = np.asarray([250, 300, 350, 400, 500, 800, 1500], dtype=float)
 MLL_EDGES = np.asarray([50., 71., 81., 91., 101., 111., 160., 250., 500.])
+
+
+def weight_variations_needed(endpoint, variations, reference_execution=False):
+    """Shape endpoints need central SFs, not a shape x weight cross product.
+
+    The reference path deliberately retains the old extra computation so that
+    output-equivalence tests compare against the pre-optimization calculation.
+    """
+    return endpoint == 'nominal' and (reference_execution or tuple(variations) != ('nominal',))
 
 
 @lru_cache(maxsize=1)
@@ -66,7 +77,8 @@ def candidate_columns():
                       'pass_' + region + '_open_high', 'pass_' + region + '_ut_250'))
     for index in range(1, 5):
         names.update(('j%d_met_dphi' % index, 'gcr_j%d_recoil_dphi' % index))
-    for field in ('pt', 'eta', 'phi', 'btag_upart', 'hadron_flavour', 'b_loose', 'b_medium'):
+    names.add('jet_btag_pnet_all')
+    for field in ('pt', 'eta', 'phi', 'btag_upart', 'btag_pnet', 'hadron_flavour', 'b_loose', 'b_medium'):
         names.add('good_jet_' + field)
     for direction in ('up', 'down'):
         names.update(('puppi_met_unclustered_' + direction, 'puppi_met_phi_unclustered_' + direction))
@@ -132,7 +144,7 @@ def split_endpoint(payload, endpoint):
     return result
 
 
-def region_scores(a, selections, model, batch_size=256):
+def region_scores(a, selections, model, batch_size=256, year=2024):
     """Evaluate each region once before splitting datasets and mass points."""
     result = {}
     for region in REGIONS:
@@ -142,7 +154,7 @@ def region_scores(a, selections, model, batch_size=256):
             selected &= (mass > 71.) & (mass < 111.)
         score = np.zeros(len(a), dtype=float)
         if model is not None and np.any(selected):
-            features = feature_arrays(a, selections[region]['block'], region, selected)
+            features = feature_arrays(a, selections[region]['block'], region, selected, year=year)
             score[selected] = model.predict(*features[:5], batch_size=batch_size)
         result[region] = score
     return result
@@ -182,7 +194,7 @@ def _response_identity(dataset_id, mstop, mlsp, region):
     return int(dataset_id), int(mstop), int(mlsp), region
 
 
-def nominal_response_arrays(a, selections, model, cached_scores=None):
+def nominal_response_arrays(a, selections, model, cached_scores=None, year=2024):
     """Only the central arrays needed by endpoint response diagnostics.
 
     An independent endpoint must not repeat central SF/histogram production.
@@ -207,7 +219,7 @@ def nominal_response_arrays(a, selections, model, cached_scores=None):
             if cached_scores is None and model is not None and np.any(low):
                 selected = np.zeros(len(a), dtype=bool)
                 selected[chosen] = low
-                features = feature_arrays(a, sel['block'], region, selected)
+                features = feature_arrays(a, sel['block'], region, selected, year=year)
                 score[low] = model.predict(*features[:5], batch_size=128)
             result[_response_identity(dataset, ms, ml, region)] = dict(
                 high=high, low=low, counts=sel['counts'][chosen],
@@ -218,8 +230,9 @@ def nominal_response_arrays(a, selections, model, cached_scores=None):
 def build(input_path, year, output, modes=('highdm', 'lowdm'), variations=('nominal',), chunk_size=2000,
           shape_mode=None, candidate_budget=150000, object_endpoint=None, object_endpoints=None,
           reference_execution=False, support_only=False):
-    if year not in (2024, 2025) or chunk_size <= 0:
-        raise ValueError('Only 2024/2025 and positive chunk sizes are supported')
+    year = era_year(year)
+    if chunk_size <= 0:
+        raise ValueError('Positive chunk sizes are required')
     if not set(modes) <= {'highdm', 'lowdm'}:
         raise ValueError('Invalid histogram mode')
     if reference_execution and shape_mode != 'stored_trota_nonjme':
@@ -244,17 +257,23 @@ def build(input_path, year, output, modes=('highdm', 'lowdm'), variations=('nomi
     output = internal_path(output)
     fingerprint = dict(size=input_path.stat().st_size, mtime_ns=input_path.stat().st_mtime_ns)
     metadata = validate_root(input_path, year)
-    for asset in read_json(JSONS / 'assets.json')['files']:
+    assets_sha256, assets = era_assets(year)
+    for asset in assets:
         if sha256(ROOT / asset['target']) != asset['sha256']:
             raise ValueError('Changed immutable asset: ' + asset['target'])
-    configuration = read_json(ROOT / 'gnn4lowdm/config.json')
+    configuration = read_json(configuration_path(year))
     normalization_path = ROOT / 'estimations' / ('normalization_%s.json.gz' % year)
     normalization = read_json(normalization_path)
     contract = dict(input=str(input_path), fingerprint=fingerprint, year=year,
+                    central_object_corrections=('target_era_intermediate' if analysis_era(year) in EARLY_ERAS
+                                                else 'muon_scaled_resolution_fallback_v1'),
                     code=signatures(), normalization_sha256=sha256(normalization_path),
-                    assets_sha256=sha256(JSONS / 'assets.json'), modes=list(modes), variations=list(variations),
-                    configuration_sha256=sha256(ROOT / 'gnn4lowdm/config.json'),
+                    assets_sha256=assets_sha256, modes=list(modes), variations=list(variations),
+                    configuration_sha256=sha256(configuration_path(year)),
                     sr_binning_sha256=sha256(JSONS / 'highdm_sr_binning.json'))
+    if analysis_era(year) in EARLY_ERAS:
+        contract['muon_selection'] = dict(loose_pt_gt=15., medium_pt_gt=15.,
+                                         adopted='2026-10-20')
     if shape_mode is not None:
         if shape_mode not in ('cms_trota_jme', 'stored_trota_nonjme'):
             raise ValueError('Unknown shape implementation')
@@ -282,7 +301,7 @@ def build(input_path, year, output, modes=('highdm', 'lowdm'), variations=('nomi
         if previous.get('status') == 'complete_one_file_test' and previous.get('contract') == contract:
             return previous
         raise ValueError('Existing output has a different contract; select a separate test output')
-    model = Rank005Numpy(ROOT / 'gnn4lowdm/diagonal_v3_numpy.npz') if 'lowdm' in modes else None
+    model = Rank005Numpy(portable_model(year)) if 'lowdm' in modes else None
     start = time.monotonic()
     payload = dict(schema='trotasr_histograms_v1', status='running', contract=contract,
                    category_order=list(CATEGORY_ORDER), input_metadata=metadata.get('datasets', {}),
@@ -291,7 +310,7 @@ def build(input_path, year, output, modes=('highdm', 'lowdm'), variations=('nomi
                    mixed_sf='not_provided', overlap_policy='B>M>R; independent W; test only',
                    histograms={}, physical_histograms={}, dy_rz={}, audit={'chunks': [], 'weights': [], 'events_read': 0, 'migrations': {}})
     with uproot.open(input_path, object_cache=None, array_cache=None) as f:
-        resolved = resolved_candidates(f) if shape_mode != 'cms_trota_jme' else None
+        resolved = resolved_candidates(f, year) if shape_mode != 'cms_trota_jme' else None
         policy = topw_file_input_policy(f)
         reader = TopWEvents(f, policy)
         # Events is an already reduced intermediate ntuple, not NanoAOD. Only
@@ -300,7 +319,10 @@ def build(input_path, year, output, modes=('highdm', 'lowdm'), variations=('nomi
         if shape_mode == 'stored_trota_nonjme' and not reference_execution:
             payload['branch_read'] = branch_plan(f['Events'])
             branches = payload['branch_read']['columns']
-        source_chunks = reader.iterate(branches, step_size=chunk_size)
+        from .corrections import corrected_central_chunks
+        payload['audit']['central_object_corrections'] = {}
+        source_chunks = corrected_central_chunks(reader.iterate(branches, step_size=chunk_size),
+            year, payload['audit']['central_object_corrections'])
         if shape_mode == 'stored_trota_nonjme':
             from .corrections import nonjme_event_views
             payload['audit']['object_endpoints'] = {}
@@ -324,17 +346,34 @@ def build(input_path, year, output, modes=('highdm', 'lowdm'), variations=('nomi
             if endpoint == 'nominal':
                 payload['audit']['events_read'] += n
                 nominal_response = {}
-                topology_cache = (FixedJetTopologyCache(a, resolved)
+                nominal_arrays = a
+                unchanged_weights = {}
+                topology_cache = (FixedJetTopologyCache(a, resolved, year)
                                   if shape_mode == 'stored_trota_nonjme' else None)
             # One selection/object pass also retains the disjoint off-Z
             # measurement sample. The displayed DY CR remains on-Z only.
-            selections, audit = select(a, resolved, dy_mass_window=None, topology_cache=topology_cache)
-            cached_scores = region_scores(a, selections, model) if shape_mode == 'stored_trota_nonjme' and not reference_execution else None
+            reuse_nominal = (shape_mode == 'stored_trota_nonjme' and not reference_execution
+                             and endpoint != 'nominal' and a is nominal_arrays)
+            cache_nominal = (shape_mode == 'stored_trota_nonjme' and not reference_execution
+                             and (endpoint == 'nominal' or reuse_nominal))
+            include_weight_variations = weight_variations_needed(endpoint, variations, reference_execution)
+            if reuse_nominal:
+                selections, audit = nominal_selections, copy.deepcopy(nominal_selection_audit)
+                # select() updates veto collections in place. Preserve its
+                # per-call bookkeeping after the nominal removal has occurred.
+                audit.update(update_veto_leptons(a, year=year))
+                cached_scores = nominal_scores
+            else:
+                selections, audit = select(a, resolved, dy_mass_window=None, topology_cache=topology_cache, year=year)
+                cached_scores = region_scores(a, selections, model, year=year) if shape_mode == 'stored_trota_nonjme' and not reference_execution else None
+            if endpoint == 'nominal':
+                nominal_selection_audit = copy.deepcopy(audit)
+                nominal_scores = cached_scores
             if endpoints is not None and 'nominal' not in endpoints and endpoint == 'nominal':
                 if np.any(np.asarray(a['is_data'], bool)):
                     raise ValueError('Independent object variations require MC input')
                 nominal_selections = selections
-                nominal_response = nominal_response_arrays(a, selections, model, cached_scores)
+                nominal_response = nominal_response_arrays(a, selections, model, cached_scores, year)
                 continue
             audit['endpoint'] = endpoint
             payload['audit']['chunks'].append(audit)
@@ -367,8 +406,15 @@ def build(input_path, year, output, modes=('highdm', 'lowdm'), variations=('nomi
                 if is_data:
                     base = {'nominal': np.ones(int(chosen.sum()))}; wa = {'data': True}
                 else:
-                    base, wa = event_weights(sub, dataset, process, year, masks, policy, apply_topw=False,
-                                             include_variations=(endpoint == 'nominal'))
+                    cache_key = (int(dataset_id), int(ms), int(ml))
+                    if reuse_nominal and cache_key in unchanged_weights:
+                        base, wa = unchanged_weights[cache_key]
+                        wa = copy.deepcopy(wa)
+                    else:
+                        base, wa = event_weights(sub, dataset, process, year, masks, policy, apply_topw=False,
+                                                 include_variations=include_weight_variations)
+                        if cache_nominal:
+                            unchanged_weights[cache_key] = (base, copy.deepcopy(wa))
                 record = dict(dataset=dataset, process=process, audit=wa, topw={}, endpoint=endpoint)
                 payload['audit']['weights'].append(record)
                 sample = 'data' if is_data else (signal_mass_key(signal_topology(dataset), int(ms), int(ml)) if is_signal else process)
@@ -382,12 +428,19 @@ def build(input_path, year, output, modes=('highdm', 'lowdm'), variations=('nomi
                         tw = {'nominal': np.ones(int(chosen.sum()))}
                         old_tw = tw
                     else:
-                        tw, record['topw'][region] = topw_event_variations(ROOT, str(year), dataset, process, sub, policy,
-                            cleaned=sel['sf_clean'][chosen], include_variations=(endpoint == 'nominal'))
-                        eta, phi = _references(a, region)
-                        old_clean = clean_by_delta_r(a['fatjet_eta_all'], a['fatjet_phi_all'], eta, phi, .4)[chosen]
-                        old_tw, _ = topw_event_variations(ROOT, str(year), dataset, process, sub, policy,
-                                                        cleaned=old_clean, include_variations=False)
+                        region_key = (*cache_key, region)
+                        if reuse_nominal and region_key in unchanged_weights:
+                            tw, topw_audit, old_tw = unchanged_weights[region_key]
+                            record['topw'][region] = copy.deepcopy(topw_audit)
+                        else:
+                            tw, record['topw'][region] = topw_event_variations(ROOT, str(year), dataset, process, sub, policy,
+                                cleaned=sel['sf_clean'][chosen], include_variations=include_weight_variations)
+                            eta, phi = _references(a, region, year)
+                            old_clean = clean_by_delta_r(a['fatjet_eta_all'], a['fatjet_phi_all'], eta, phi, .4)[chosen]
+                            old_tw, _ = topw_event_variations(ROOT, str(year), dataset, process, sub, policy,
+                                                            cleaned=old_clean, include_variations=False)
+                            if cache_nominal:
+                                unchanged_weights[region_key] = (tw, copy.deepcopy(record['topw'][region]), old_tw)
                     allowed = set(base) | set(tw)
                     requested = variations if endpoint == 'nominal' else ('nominal',)
                     names = sorted(allowed) if requested == ('all_weights',) else requested
@@ -443,7 +496,7 @@ def build(input_path, year, output, modes=('highdm', 'lowdm'), variations=('nomi
                     if cached_scores is None and model is not None and np.any(low):
                         selected_low = np.zeros(n, dtype=bool)
                         selected_low[chosen] = low
-                        features = feature_arrays(a, b, region, selected_low)
+                        features = feature_arrays(a, b, region, selected_low, year=year)
                         score[low] = model.predict(*features[:5], batch_size=128)
                     if shape_mode == 'stored_trota_nonjme' and not is_data:
                         key = _response_identity(dataset_id, ms, ml, region)

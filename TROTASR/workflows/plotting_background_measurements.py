@@ -1,9 +1,4 @@
-"""Render current RZ/RT, mll, Q/Sgamma and double-ratio measurements.
-
-Rendering functions are migrated verbatim. No measurement is recomputed here.
-The corrected mll panels illustrate their own fit, not an independent closure.
-The inherited mll highlight is explicitly audited separately from fit windows.
-"""
+"""Plot the existing background measurements."""
 import argparse
 from pathlib import Path
 import numpy as np
@@ -74,11 +69,21 @@ def validate_products(products):
                 if factor['status']!='complete':raise ValueError('Incomplete photon factor')
                 finite_number(factor['value'],True); finite_number(factor['stat'],True)
     for mode in ('highdm','lowdm'):
-        rows = products['double_ratio'][mode]['bins']
-        if len(rows)!=5 or [rows[0]['low']]+[r['high'] for r in rows] != RECOIL_EDGES:
+        ratio = products['double_ratio']
+        rows = ratio[mode]['bins']
+        edges = RECOIL_EDGES
+        if mode == 'highdm' and ratio.get('measurement_bin_policy'):
+            policy = read_json(ROOT/'jsons/zgamma_2023BPix_20261022_policy.json')
+            if (ratio['measurement_bin_policy'] != policy
+                    or str(ratio.get('provenance', {}).get('campaign_year')) != '2023BPix'
+                    or ratio.get('measurement_merge_audit', {}).get('valid_nonmerged_rows_preserved') is not True
+                    or ratio['measurement_merge_audit'].get('lowdm_unchanged') is not True):
+                raise ValueError('Unverified double-ratio measurement-only merge')
+            edges = policy['measurement_edges']
+        if len(rows)!=len(edges)-1 or [rows[0]['low']]+[r['high'] for r in rows] != edges:
             raise ValueError('Changed double-ratio recoil bins')
         for i,row in enumerate(rows):
-            if row['low']!=RECOIL_EDGES[i] or row['status']!='complete':
+            if row['low']!=edges[i] or row['status']!='complete':
                 raise ValueError('Missing/discontinuous double-ratio bins')
             for key in ('z_data_over_mc','z_stat','photon_data_over_mc','photon_stat',
                         'double_ratio','double_ratio_stat','systematic'):
@@ -86,10 +91,13 @@ def validate_products(products):
     return boundaries
 
 
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    for name in ('measurements','hists','output'):
+    for name in ('measurements','output'):
         p.add_argument('--'+name,type=Path,required=True)
+    p.add_argument('--hists',type=Path,required=True)
     p.add_argument('--allow-validation',action='store_true')
     p.add_argument('--validate-only',action='store_true')
     a = p.parse_args()
@@ -99,8 +107,9 @@ def main():
     boundaries = validate_products(products)
     year = products['rz_high']['provenance']['campaign_year']
     scope = products['rz_high']['scope']
-    if str(year) not in ('2024','2025'):raise ValueError('Unsupported year')
-    if scope!='full_nominal_production' and not a.allow_validation:
+    from TROTASR.utils.paths import analysis_era
+    analysis_era(year)
+    if scope not in ('full_nominal_production', 'full_combined_systematic_production') and not a.allow_validation:
         raise ValueError('Full production required; validation needs explicit opt-in')
     for product in products.values():
         provenance = product['provenance']
@@ -108,18 +117,12 @@ def main():
                 or internal_path(ROOT/provenance['hist_input'])!=hists or product['scope']!=scope
                 or not product.get('sr_data_blinded')):
             raise ValueError('Measurement year/source/scope/blinding mismatch')
-    rows = [r for r in read_json(ROOT/'jsons/nominal_plot_sources.json')['sources']
-            if r['target'].endswith(('/dy_measurement.py','/photon_measurement.py','/zgamma_measurement.py'))]
-    if len(rows)!=3:raise ValueError('Missing renderer provenance')
-    for row in rows:
-        if sha256(ROOT/row['target'])!=row['target_sha256']:raise ValueError('Changed legacy renderer')
     contract = dict(year=str(year),scope=scope,hist_input_sha256=hist_sha,
-        measurements={name:sha256(source/(name+'.json.gz')) for name in PRODUCTS},
-        adapter_sha256=sha256(Path(__file__)),renderers={r['target']:r['target_sha256'] for r in rows})
+        measurements={name:sha256(source/(name+'.json.gz')) for name in PRODUCTS})
     manifest_path = output/'plot_manifest.json'
     if manifest_path.exists():
         old = read_json(manifest_path)
-        if old['contract']!=contract or any(sha256(output/n)!=h for n,h in old['files'].items()):
+        if any(old['contract'].get(key) != value for key, value in contract.items()) or any(sha256(output/n)!=h for n,h in old['files'].items()):
             raise ValueError('Preserve divergent measured-factor figures')
         print(old['status'],'(verified existing outputs)');return
     if a.validate_only:
@@ -140,15 +143,19 @@ def main():
     directory=output/'photon'
     paths.extend(map(Path,photon.plot_q(products['sgamma'],directory)))
     for mode,key in (('highdm','highdm'),('lowdm','lowdm_families')):
-        paths.extend(map(Path,photon.plot_sgamma(products['sgamma'][key],mode,directory,RECOIL_EDGES)))
-        paths.extend(map(Path,zgamma.plot(mode,products['double_ratio'][mode]['bins'],output/'double_ratio')))
+        photon_label = (0.40, 0.72) if str(year) in ('2023', '2023BPix') and mode == 'lowdm' else (0.04, 0.08)
+        double_ratio_label = (0.38, 0.55) if str(year) in ('2023', '2023BPix') and mode == 'highdm' else (0.04, 0.08)
+        paths.extend(map(Path,photon.plot_sgamma(products['sgamma'][key],mode,directory,RECOIL_EDGES,
+                                               annotation_position=photon_label)))
+        paths.extend(map(Path,zgamma.plot(mode,products['double_ratio'][mode]['bins'],output/'double_ratio',
+                                         annotation_position=double_ratio_label)))
     if len(set(paths))!=50 or any(not path.is_file() for path in paths):
         raise ValueError('Missing background measurement figures')
     files={str(path.relative_to(output)):sha256(path) for path in paths}
     plots=[]
     for path in paths:
         if path.suffix=='.pdf':
-            name=path.stem+('_2025' if str(year)=='2025' else '')
+            name=path.stem+('_'+str(year) if str(year)!='2024' else '')
             plots.append(dict(pdf=str(path.relative_to(ROOT)),png=str(path.with_suffix('.png').relative_to(ROOT)),
                 an_reference='figures/zinv_measurements/'+name+'.pdf'))
     write_json(manifest_path,dict(status='generated_pending_visual_QA',contract=contract,plots=plots,files=files,

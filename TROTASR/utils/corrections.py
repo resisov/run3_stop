@@ -4,7 +4,7 @@ import contextlib
 from functools import lru_cache
 from pathlib import Path
 import numpy as np
-from .paths import ROOT
+from .paths import ROOT, analysis_era, EARLY_ERAS
 from .io import read_json, sha256
 from .private_scales import (topw_file_input_policy, topw_file_sf_triplet,
     topw_pass_fail_triplet, topw_event_variations, TopWEvents)
@@ -46,7 +46,7 @@ def event_weights(arrays, dataset, process, year, region_masks, topw_policy, cle
         masses = np.unique(np.asarray(arrays["mStop"], dtype=int))
         if len(masses) != 1:
             raise ValueError("Evaluate signal weights per mass point")
-        _, correction_dataset = signal_btag_efficiency_dataset(int(masses[0]), dataset)
+        _, correction_dataset = signal_btag_efficiency_dataset(int(masses[0]), dataset, year=year)
     _, variations, audit = compute_weight_bundle(raw, ROOT, correction_dataset, process, str(year),
                                                 **values, analysis_sf_components=("met_trigger", "photon_trigger"),
                                                 include_variations=include_variations)
@@ -253,6 +253,73 @@ def nonjme_calibrate(arrays, year, flavor, shift):
     return function(arrays, False, shift, ROOT, correction_set=cset)
 
 
+def corrected_central_chunks(chunks, year, audit):
+    """Apply the muon fallback correction in memory to retained Events.
+
+    Original and already-updated inputs are distinguished on the affected
+    muons. Jet momenta, stored TROTA, file identities and normalization stay
+    untouched. No intermediate ROOT is rewritten.
+    """
+    if analysis_era(year) in EARLY_ERAS:
+        # These intermediate files already contain their own era's corrected
+        # objects and MET XY. The 2024/25 retained-muon repair does not apply.
+        for original in chunks:
+            audit['events'] = audit.get('events', 0) + len(original)
+            audit['mode'] = 'reuse_target_era_intermediate'
+            yield original
+        return
+    from .shape_kinematics import rebuild
+    for original in chunks:
+        data = np.asarray(original['is_data'], bool)
+        if np.any(data):
+            if not np.all(data):
+                raise ValueError('Mixed data/MC correction input')
+            yield original
+            continue
+        raw = nonjme_calibration_inputs(original, 'muon')
+        cset = _nonjme_cset(year, 'muon')
+        old = _calibrate_muons(raw, False, 'nominal', ROOT,
+            correction_set=cset, preserve_scaled_fallback=False)
+        new = _calibrate_muons(raw, False, 'nominal', ROOT, correction_set=cset)
+        changed = abs(new[0]-old[0]) > 1e-7
+        stored = original['muon_corrected_pt']
+        old_match = abs(stored-old[0]) <= 2e-5+1e-5*abs(old[0])
+        new_match = abs(stored-new[0]) <= 2e-5+1e-5*abs(new[0])
+        if ak.any(changed & ~old_match & ~new_match):
+            raise ValueError('Muon central input matches neither retained nor updated correction')
+        apply = changed & old_match & ~new_match
+        affected = np.asarray(ak.any(apply, axis=1))
+        audit['events'] = audit.get('events', 0)+len(original)
+        audit['updated_events'] = audit.get('updated_events', 0)+int(affected.sum())
+        audit['updated_muons'] = audit.get('updated_muons', 0)+int(ak.sum(apply))
+        audit['already_updated_muons'] = audit.get('already_updated_muons', 0)+int(ak.sum(changed & new_match))
+        if not np.any(affected):
+            yield original
+            continue
+        out = {k: original[k] for k in ak.fields(original)}
+        for i, field in enumerate(('pt', 'mass')):
+            name = 'muon_corrected_'+field
+            out[name] = original[name]+ak.where(apply, new[i]-old[i], 0.)
+            out['muon_'+field+'_all'] = out[name]
+        delta = out['muon_corrected_pt']-stored
+        phi = original['muon_phi_all']
+        x = original['met']*np.cos(original['met_phi'])-ak.sum(delta*np.cos(phi), axis=1)
+        y = original['met']*np.sin(original['met_phi'])-ak.sum(delta*np.sin(phi), axis=1)
+        out.update(met=np.hypot(x, y), met_phi=np.arctan2(y, x))
+        out['puppi_met_corrected'], out['puppi_met_corrected_phi'] = out['met'], out['met_phi']
+        rebuilt = rebuild(out, objects_only=True, year=year)
+        rows = np.arange(len(original))+np.where(affected, 0, len(original))
+        columns = {}
+        for name in ak.fields(rebuilt):
+            if name not in ak.fields(original):
+                columns[name] = rebuilt[name]
+                continue
+            value = ak.concatenate([rebuilt[name], original[name]], axis=0)[rows]
+            dtype = np.asarray(ak.flatten(original[name], axis=None)).dtype
+            columns[name] = ak.values_astype(value, dtype)
+        yield ak.Array(columns)
+
+
 def nonjme_event_views(chunks, year, resolved, audit, endpoints=NONJME_ENDPOINTS):
     """Frozen retained-event delta method; no TROTA inference or ROOT writing.
 
@@ -311,7 +378,7 @@ def nonjme_event_views(chunks, year, resolved, audit, endpoints=NONJME_ENDPOINTS
                 continue
             out['met'], out['met_phi'] = np.hypot(x,y), np.arctan2(y,x)
             out['puppi_met_corrected'], out['puppi_met_corrected_phi'] = out['met'], out['met_phi']
-            view = rebuild(out, objects_only=True)
+            view = rebuild(out, objects_only=True, year=year)
             # Same changed-row selection and storage precision as frozen run.py,
             # performed only in memory (no shifted ROOT/event sidecar).
             rows = np.arange(len(original))+np.where(affected, 0, len(original))
@@ -388,7 +455,7 @@ def _crystal_ball_invcdf(uniform: Any, mean: Any, sigma: Any, alpha: Any, power:
 
 def _calibrate_muons(arrays: Any, is_data: bool, shift: str, root: Path,
                      *, correction_set: Any = None,
-                     preserve_scaled_fallback: bool = False) -> tuple[Any, Any, dict[str, Any]]:
+                     preserve_scaled_fallback: bool = True) -> tuple[Any, Any, dict[str, Any]]:
     if correction_set is None:
         raise ValueError("An internal, hash-verified correction set is required")
     cset = correction_set
@@ -435,7 +502,7 @@ def _calibrate_muons(arrays: Any, is_data: bool, shift: str, root: Path,
         residual_k = np.sqrt(np.maximum(k_data * k_data - k_mc * k_mc, 0.0))
         # The official resolution function receives the already scaled pT.
         # Its unphysical-result fallback must therefore retain that scale.
-        # Keep the established 2024 behavior unless an era explicitly opts in.
+        # The optional old convention is retained only for baseline comparisons.
         resolution_base = scaled if preserve_scaled_fallback else pt
         resolution_valid = valid & (scaled >= 26.0) & (scaled <= 200.0) if preserve_scaled_fallback else valid
         nominal = _valid_scaled_pt(resolution_base, scaled * (1.0 + residual_k * resolution * random_value), resolution_valid)

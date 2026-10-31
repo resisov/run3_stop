@@ -13,7 +13,8 @@ hep.style.use("CMS")
 CMS_LABEL = {"llabel": "Work in progress", "rlabel": "2024 (13.6 TeV)"}
 
 
-def plot(regime: str, rows: list[dict[str, Any]], output_dir: Path) -> list[str]:
+def plot(regime: str, rows: list[dict[str, Any]], output_dir: Path, *,
+         annotation_position: tuple[float, float] = (0.04, 0.08)) -> list[str]:
     edges = np.asarray([rows[0]["low"]] + [row["high"] for row in rows])
     x = 0.5 * (edges[:-1] + edges[1:])
     xerr = 0.5 * np.diff(edges)
@@ -36,7 +37,7 @@ def plot(regime: str, rows: list[dict[str, Any]], output_dir: Path) -> list[str]
     ax.axhline(1.0, color="0.35", lw=1.5)
     ax.set_ylabel("Normalized Data/MC")
     ax.legend(fontsize=18, loc="best")
-    ax.text(0.04, 0.08, r"High-$\Delta m$" if regime == "highdm" else r"Low-$\Delta m$",
+    ax.text(*annotation_position, r"High-$\Delta m$" if regime == "highdm" else r"Low-$\Delta m$",
             transform=ax.transAxes, fontsize=20)
     hep.cms.label(ax=ax, loc=0, **CMS_LABEL)
 

@@ -19,8 +19,9 @@ import traceback
 if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
-from TROTASR.utils.paths import ROOT, internal_path
-from TROTASR.utils.io import read_json, write_json, sha256
+from TROTASR.utils.paths import ROOT, internal_path, analysis_era, era_year, EARLY_ERAS
+from TROTASR.utils.io import read_json, write_json, sha256, era_assets
+from TROTASR.gnn4lowdm.configuration import configuration_path
 
 COMPLETE = 'complete_one_file_test'
 THREAD_ENV = {name: '1' for name in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS',
@@ -34,6 +35,65 @@ def relative(path):
 def fingerprint(path):
     s = internal_path(path).stat()
     return dict(inode=s.st_ino, size=s.st_size, mtime_ns=s.st_mtime_ns)
+
+
+def early_inventory(source_root, eras, manifest_path):
+    """Register checksum-delivered inputs by hard link; never copy or edit ROOT."""
+    from TROTASR.utils.signal_models import signal_topology
+    source_root = Path(source_root).resolve()
+    tasks, evidence = [], {}
+    for era in eras:
+        if era not in EARLY_ERAS:
+            raise ValueError('Early-era inventory only')
+        normalization = read_json(ROOT/'estimations'/('normalization_'+era+'.json.gz'))
+        folder = source_root/('flat'+era)
+        target_folder = ROOT/'inputs'/era
+        target_folder.mkdir(parents=True, exist_ok=True)
+        for record in normalization['source_sidecars']:
+            source = Path(record['path']).resolve()
+            if source.parent != folder/'outputs/nominal':
+                raise ValueError('Normalization source is outside the requested delivered era')
+            receipt_path = folder/'transfers/files'/source.name
+            receipt = json.loads(receipt_path.read_text())
+            if receipt.get('status') != 'verified_complete' or receipt.get('era') != era:
+                raise ValueError('Missing successful transfer receipt: '+str(receipt_path))
+            paths = (source.with_suffix('.root'), source)
+            for path in paths:
+                stamp = path.stat()
+                if [stamp.st_size, stamp.st_mtime_ns] != receipt['target_fingerprints'][path.name]:
+                    raise ValueError('Delivered input changed: '+str(path))
+                if path == source and record['sha256'] != receipt['files'][path.name]['sha256']:
+                    raise ValueError('Normalization/transfer metadata mismatch')
+            for path in paths:
+                target = target_folder/path.name
+                if target.exists():
+                    if not os.path.samefile(path, target):
+                        raise ValueError('Existing input is not this delivered inode: '+str(target))
+                else:
+                    os.link(path, target)
+            groups = set()
+            for identity in record['dataset_ids']:
+                ds = normalization['datasets'][identity]
+                groups.add(('signal_'+signal_topology(ds['dataset'])) if ds.get('is_signal') else
+                           ('data_' if ds.get('is_data') else 'background_')+str(ds['process']))
+            root = target_folder/paths[0].name
+            meta = target_folder/source.name
+            tasks.append(dict(key=era+'_'+source.stem, year=era, input=relative(root),
+                metadata=relative(meta), fingerprint=fingerprint(root), metadata_fingerprint=fingerprint(meta),
+                entries=record['events_written'], groups=sorted(groups),
+                transfer_receipt=str(receipt_path), receipt_sha256=__import__('hashlib').sha256(receipt_path.read_bytes()).hexdigest()))
+        evidence[era] = dict(files=len(normalization['source_sidecars']),
+            normalization_sha256=sha256(ROOT/'estimations'/('normalization_'+era+'.json.gz')),
+            coverage='all delivered active background/data metadata plus the completed v15 signal inventory')
+    manifest = dict(scope='representative_validation', tasks=tasks,
+        expected_files_by_year={era:sum(t['year']==era for t in tasks) for era in eras},
+        integrated_input_inventory_complete=True, input_evidence=evidence,
+        source_root=str(source_root), root_and_metadata_unchanged=True, storage='same_filesystem_hardlinks')
+    manifest_path = internal_path(manifest_path)
+    if manifest_path.exists() and read_json(manifest_path) != manifest:
+        raise ValueError('Existing registered inventory differs')
+    write_json(manifest_path, manifest)
+    return manifest
 
 
 def relocated_seed(task):
@@ -50,13 +110,19 @@ def relocated_seed(task):
 
 
 def current_contract(year, shape_mode=None, variations=None):
-    contract = dict(year=int(year),
+    year = era_year(year)
+    contract = dict(year=year,
+        central_object_corrections=('target_era_intermediate' if analysis_era(year) in EARLY_ERAS
+                                    else 'muon_scaled_resolution_fallback_v1'),
         code={str(p.relative_to(ROOT)): sha256(p) for d in ('utils', 'gnn4lowdm')
               for p in sorted((ROOT/d).rglob('*.py'))},
         normalization_sha256=sha256(ROOT/'estimations'/('normalization_%s.json.gz' % year)),
-        assets_sha256=sha256(ROOT/'jsons/assets.json'), modes=['highdm', 'lowdm'], variations=['nominal'],
-        configuration_sha256=sha256(ROOT/'gnn4lowdm/config.json'),
+        assets_sha256=era_assets(year)[0], modes=['highdm', 'lowdm'], variations=['nominal'],
+        configuration_sha256=sha256(configuration_path(year)),
         sr_binning_sha256=sha256(ROOT/'jsons/highdm_sr_binning.json'))
+    if analysis_era(year) in EARLY_ERAS:
+        contract['muon_selection'] = dict(loose_pt_gt=15., medium_pt_gt=15.,
+                                         adopted='2026-10-20')
     if shape_mode is not None:
         if shape_mode not in ('cms_trota_jme', 'stored_trota_nonjme'):
             raise ValueError('Unsupported shape mode')
@@ -78,7 +144,7 @@ def current_contract(year, shape_mode=None, variations=None):
 
 
 def validate_tasks(manifest):
-    tasks = manifest['tasks']
+    tasks = [dict(t, year=era_year(t['year'])) for t in manifest['tasks']]
     if not tasks:
         raise ValueError('Empty input inventory')
     keys, inodes = set(), set()
@@ -87,7 +153,8 @@ def validate_tasks(manifest):
         if not key or any(c not in 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-' for c in key):
             raise ValueError('Invalid task key')
         p = internal_path(ROOT/t['input'])
-        if p.suffix != '.root' or t['year'] not in (2024, 2025) or t['entries'] < 0:
+        era_year(t['year'])
+        if p.suffix != '.root' or t['entries'] < 0:
             raise ValueError('Invalid nominal input')
         actual = fingerprint(p)
         if actual != t['fingerprint']:
@@ -105,13 +172,14 @@ def validate_tasks(manifest):
         raise ValueError('Explicit campaign scope required')
     if manifest['scope'] in ('full_nominal_production', 'full_cms_trota_jme_production', 'full_weight_systematic_production', 'full_nonjme_systematic_production'):
         expected = manifest.get('expected_files_by_year', {})
-        counts = {str(y): sum(t['year'] == y for t in tasks) for y in (2024, 2025)}
+        years = sorted({analysis_era(t['year']) for t in tasks})
+        counts = {y: sum(analysis_era(t['year']) == y for t in tasks) for y in years}
         if counts != expected or not manifest.get('integrated_input_inventory_complete'):
             raise ValueError('Full campaign requires the complete validated integrated input inventory')
         gate = read_json(ROOT/manifest['validation_gate'])
         if gate.get('status') != 'passed' or not gate.get('three_signal_topologies_tested'):
             raise ValueError('Full production requires a completed representative validation gate')
-        for year in (2024, 2025):
+        for year in years:
             if gate.get('contracts', {}).get(str(year)) != current_contract(year, manifest.get('shape_mode'), manifest.get('variations')):
                 raise ValueError('Validation gate does not cover the current physics implementation')
         if manifest['scope'] == 'full_cms_trota_jme_production' and (
@@ -154,7 +222,7 @@ def prepare(manifest_path, campaign, workers=99, chunk_size=2000):
         (campaign/d).mkdir()
     plan = dict(schema='trotasr_nominal_plan_v1', scope=manifest['scope'], tasks=tasks,
                 source_manifest=relative(manifest_path), source_manifest_sha256=sha256(manifest_path),
-                contracts={str(y): current_contract(y, manifest.get('shape_mode'), manifest.get('variations')) for y in sorted({t['year'] for t in tasks})},
+                contracts={y: current_contract(y, manifest.get('shape_mode'), manifest.get('variations')) for y in sorted({analysis_era(t['year']) for t in tasks})},
                 runner_sha256=sha256(Path(__file__)), max_workers=workers,
                 aggregate_slots=100, minimum_free_bytes=40*1024**3,
                 minimum_available_memory_bytes=32*1024**3, admission_bytes_per_worker=4*1024**3,
@@ -355,7 +423,7 @@ def load_execution(campaign, plan):
             or gate.get('contracts') != spec['contracts'] or not gate.get('histograms_and_audits_equal')):
         raise ValueError('Missing exact canonical execution equivalence evidence')
     for year, current in spec['contracts'].items():
-        if current_contract(int(year), plan['shape_mode'], plan['variations']) != current:
+        if current_contract(year, plan['shape_mode'], plan['variations']) != current:
             raise ValueError('Current implementation differs from tested execution')
         before = plan['contracts'][year]
         if {k:v for k,v in current.items() if k != 'code'} != {k:v for k,v in before.items() if k != 'code'}:
@@ -682,7 +750,7 @@ def frozen_plan(campaign):
     if sha256(Path(__file__)) != plan['runner_sha256']:
         raise ValueError('Runner changed; preserve campaign and make an explicit recovery plan')
     for year, expected in plan['contracts'].items():
-        if current_contract(int(year), plan.get('shape_mode'), plan.get('variations')) != expected:
+        if current_contract(year, plan.get('shape_mode'), plan.get('variations')) != expected:
             raise ValueError('Physics code/configuration changed during campaign')
     for name,digest in plan.get('memory_control_policy',{}).get('workflow_sha256',{}).items():
         if sha256(ROOT/name) != digest:
@@ -813,6 +881,7 @@ def run(campaign):
         common_failure = None
         observed_peak = 0
         memory_audit = {}
+        last_rss = {}
         while pending or active:
             for key, (proc, stream, attempt) in list(active.items()):
                 rc = proc.poll()
@@ -856,9 +925,14 @@ def run(campaign):
             external=max(0,external-sum(proc.pid in retained_pids for proc,_,_ in active.values()))
             if control.FIELD in plan:
                 usage = [control.memory_usage(proc.pid) for proc,_,_ in active.values()]
-                observed_peak = max([observed_peak]+[u['VmHWM'] for u in usage])
+                pids = [proc.pid for proc,_,_ in active.values()]
+                recent_growth = max([0]+[u['VmRSS']-last_rss.get(pid,u['VmRSS'])
+                                        for pid,u in zip(pids,usage)])
+                last_rss = {pid:u['VmRSS'] for pid,u in zip(pids,usage)}
+                adaptive = plan[control.FIELD].get('budget_mode') == 'adaptive_peak_growth'
+                observed_peak = max(([0] if adaptive else [observed_peak])+[u['VmHWM'] for u in usage])
                 limit,memory_audit = control.reserved_capacity(plan,external,memory,
-                    [u['VmRSS'] for u in usage],observed_peak,time.time()-started)
+                    [u['VmRSS'] for u in usage],observed_peak,time.time()-started,recent_growth)
                 # Do not allow known pressure to become another global OOM.
                 # Fail this attempt explicitly; it is not automatically retried.
                 if memory < plan[control.FIELD]['emergency_available_bytes'] and active:
@@ -882,7 +956,10 @@ def run(campaign):
             else:
                 limit = capacity(plan, external, memory, len(active))
             free = shutil.disk_usage(campaign).free
-            while pending and not common_failure and len(active) < limit and free > plan['minimum_free_bytes']:
+            admissions = 0
+            admission_batch = plan.get(control.FIELD,{}).get('admission_batch', len(pending))
+            while (pending and not common_failure and len(active) < limit
+                   and admissions < admission_batch and free > plan['minimum_free_bytes']):
                 key = pending.pop(0)
                 attempt = states.get(key, {}).get('attempt', 0) + 1
                 log = campaign/'logs'/(key+'.attempt%s.log' % attempt)
@@ -894,6 +971,7 @@ def run(campaign):
                 write_json(campaign/'state'/(key+'.json'), s)
                 states[key] = s
                 active[key] = (proc, stream, attempt)
+                admissions += 1
             completed = [k for k, s in states.items() if s['status'] == 'complete']
             failed = [k for k, s in states.items() if s['status'] == 'failed' and k not in pending]
             write_json(campaign/'state.json', dict(status='running' if active else 'waiting_for_resources',

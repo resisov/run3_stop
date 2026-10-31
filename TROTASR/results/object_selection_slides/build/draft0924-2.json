@@ -1,0 +1,1953 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/hwbqtkby",
+    "id": "hwbqtkby",
+    "slide": 2,
+    "layoutId": "/ppt/slideLayouts/slideLayout2.xml",
+    "layoutName": "제목 및 내용",
+    "layoutType": "obj",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "Office",
+    "colors": {
+      "accent1": "#4472C4",
+      "accent2": "#ED7D31",
+      "accent3": "#A5A5A5",
+      "accent4": "#FFC000",
+      "accent5": "#5B9BD5",
+      "accent6": "#70AD47",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#44546A",
+      "lt2": "#E7E6E6",
+      "hlink": "#0563C1",
+      "folHlink": "#954F72"
+    },
+    "fontScheme": {
+      "name": "Office",
+      "majorFont": {
+        "latinTypeface": "맑은 고딕"
+      },
+      "minorFont": {
+        "latinTypeface": "맑은 고딕"
+      }
+    },
+    "typefaces": [
+      "Helvetica Neue Light",
+      "Helvetica Neue Medium",
+      "맑은 고딕"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout2.xml",
+      "name": "제목 및 내용",
+      "type": "obj",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": [
+        {
+          "order": 1,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout2.xml/2",
+          "id": "2",
+          "name": "제목 1",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "text": "마스터 제목 스타일 편집",
+          "textPreview": "마스터 제목 스타일 편집",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "마스터 제목 스타일 편집",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "마스터 제목 스타일 편집"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout2.xml/3",
+          "id": "3",
+          "name": "내용 개체 틀 2",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "text": "마스터 텍스트 스타일을 편집하려면 클릭\n두 번째 수준\n세 번째 수준\n네 번째 수준\n다섯 번째 수준",
+          "textPreview": "마스터 텍스트 스타일을 편집하려면 클릭 | 두 번째 수준 | 세 번째 수준 | 네 번째 수준 | 다섯 번째 수준",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "마스터 텍스트 스타일을 편집하려면 클릭",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "마스터 텍스트 스타일을 편집하려면 클릭"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "text": "두 번째 수준",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "두 번째 수준"
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "text": "세 번째 수준",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "세 번째 수준"
+                }
+              ]
+            },
+            {
+              "index": 4,
+              "text": "네 번째 수준",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "네 번째 수준"
+                }
+              ]
+            },
+            {
+              "index": 5,
+              "text": "다섯 번째 수준",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "다섯 번째 수준"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout2.xml/4",
+          "id": "4",
+          "name": "날짜 개체 틀 3",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "text": "2026. 9. 24.",
+          "textPreview": "2026. 9. 24.",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "2026. 9. 24.",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "2026. 9. 24."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout2.xml/5",
+          "id": "5",
+          "name": "바닥글 개체 틀 4",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "order": 5,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout2.xml/6",
+          "id": "6",
+          "name": "슬라이드 번호 개체 틀 5",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "text": "‹#›",
+          "textPreview": "‹#›",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "‹#›",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "‹#›"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "type": "master",
+      "elements": [
+        {
+          "order": 1,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/2",
+          "id": "2",
+          "name": "제목 개체 틀 1",
+          "bbox": [
+            88,
+            38.33,
+            1104,
+            139.17
+          ],
+          "geometry": "rect",
+          "text": "마스터 제목 스타일 편집",
+          "textPreview": "마스터 제목 스타일 편집",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "마스터 제목 스타일 편집",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "마스터 제목 스타일 편집"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/3",
+          "id": "3",
+          "name": "텍스트 개체 틀 2",
+          "bbox": [
+            88,
+            191.67,
+            1104,
+            456.83
+          ],
+          "geometry": "rect",
+          "text": "마스터 텍스트 스타일을 편집하려면 클릭\n두 번째 수준\n세 번째 수준\n네 번째 수준\n다섯 번째 수준",
+          "textPreview": "마스터 텍스트 스타일을 편집하려면 클릭 | 두 번째 수준 | 세 번째 수준 | 네 번째 수준 | 다섯 번째 수준",
+          "resolvedTextStyle": {
+            "vertical": 1,
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "마스터 텍스트 스타일을 편집하려면 클릭",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "마스터 텍스트 스타일을 편집하려면 클릭"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "text": "두 번째 수준",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "두 번째 수준"
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "text": "세 번째 수준",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "세 번째 수준"
+                }
+              ]
+            },
+            {
+              "index": 4,
+              "text": "네 번째 수준",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "네 번째 수준"
+                }
+              ]
+            },
+            {
+              "index": 5,
+              "text": "다섯 번째 수준",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "다섯 번째 수준"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/4",
+          "id": "4",
+          "name": "날짜 개체 틀 3",
+          "bbox": [
+            88,
+            667.33,
+            288,
+            38.33
+          ],
+          "geometry": "rect",
+          "text": "2026. 9. 24.",
+          "textPreview": "2026. 9. 24.",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "2026. 9. 24.",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "2026. 9. 24."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/5",
+          "id": "5",
+          "name": "바닥글 개체 틀 4",
+          "bbox": [
+            424,
+            667.33,
+            432,
+            38.33
+          ],
+          "geometry": "rect",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          }
+        },
+        {
+          "order": 5,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/6",
+          "id": "6",
+          "name": "슬라이드 번호 개체 틀 5",
+          "bbox": [
+            904,
+            667.33,
+            288,
+            38.33
+          ],
+          "geometry": "rect",
+          "text": "‹#›",
+          "textPreview": "‹#›",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "‹#›",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "‹#›"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/9072xkry",
+      "id": "2",
+      "name": "제목 1",
+      "bbox": [
+        53.61,
+        0,
+        1172.79,
+        139.17
+      ],
+      "text": "Object definition",
+      "textPreview": "Object definition",
+      "resolvedFontSize": 58.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 58.67,
+        "typeface": "맑은 고딕",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "autoFit": "shrinkText",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Object definition"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Object definition",
+          "runs": [
+            {
+              "index": 1,
+              "text": "Object definition",
+              "typeface": "Helvetica Neue Medium"
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 90000
+        }
+      ]
+    },
+    {
+      "order": 2,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/mpcv2l0b",
+      "id": "19",
+      "name": "그림 5",
+      "bbox": [
+        1192,
+        634.31,
+        75.59,
+        75.59
+      ],
+      "contentType": "image/jpeg",
+      "asset": {
+        "assetId": "/ppt/media/image3.jpg",
+        "contentType": "image/jpeg",
+        "byteLength": 115589
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image3.jpg",
+        "contentType": "image/jpeg",
+        "byteLength": 115589
+      }
+    },
+    {
+      "order": 3,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/q1cfel4j",
+      "id": "20",
+      "name": "그림 2",
+      "bbox": [
+        1097.05,
+        634.31,
+        75.59,
+        75.59
+      ],
+      "contentType": "image/png",
+      "asset": {
+        "assetId": "/ppt/media/image2.png",
+        "contentType": "image/png",
+        "byteLength": 8695
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image2.png",
+        "contentType": "image/png",
+        "byteLength": 8695
+      }
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/cnupgny5",
+      "id": "18",
+      "name": "부제목 2",
+      "bbox": [
+        33.05,
+        687.38,
+        1064.55,
+        28.34
+      ],
+      "geometry": "rect",
+      "text": "1     2026. 9. 24.     Taiwoo KIM – Weekly Stop Meeting",
+      "textPreview": "1     2026. 9. 24.     Taiwoo KIM – Weekly Stop Meeting",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Helvetica Neue Light",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 9.6,
+          "bottom": 0,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "1     2026. 9. 24.     Taiwoo KIM – Weekly Stop Meeting"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "1     2026. 9. 24.     Taiwoo KIM – Weekly Stop Meeting",
+          "resolvedTextStyle": {
+            "fontSize": 18.67,
+            "typeface": "Helvetica Neue Light",
+            "color": "#000000"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "1     2026. 9. 24.     Taiwoo KIM – Weekly Stop Meeting",
+              "fontSize": 18.67,
+              "typeface": "Helvetica Neue Light",
+              "color": "#000000"
+            }
+          ],
+          "bulletCharacter": "•",
+          "marginLeft": 228600,
+          "indent": -228600,
+          "lineSpacingPercent": 90000
+        }
+      ]
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/mtwrmxg7",
+      "id": "12",
+      "name": "직선 연결선[R] 11",
+      "bbox": [
+        42.18,
+        681.21,
+        1026.62,
+        0
+      ],
+      "horizontalFlip": true,
+      "geometry": "line",
+      "lineColor": "tx1",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 6,
+      "kind": "table",
+      "scope": "slide",
+      "aid": "tb/ru94re98",
+      "id": "21",
+      "bbox": [
+        53,
+        151,
+        1174,
+        384
+      ],
+      "text": "Object | Inputs | Jet selection | Candidate selection | Tag requirement\nBoosted top\nNbst | 1 AK8 | pT > 400 GeV\n|η| < 2 | mSD > 105 GeV | Top score > 0.5078\nMixed top\nNmix | 2 or 3 AK4\n+ 1 AK8 | AK4: pT > 25 GeV, |η| < 2.5\nAK8: pT > 200 GeV, |η| < 2.5 | No additional top\nmass or η window | TT / (TT + QCD)\n≥ 0.9027690887451172\nResolved top\nNres | 3 distinct AK4 | Each AK4:\npT > 25 GeV, |η| < 2.5 | 100 ≤ m(3 AK4) ≤ 250 GeV\n|η(3 AK4)| < 2 | TT / (TT + QCD)\n≥ 0.9433798789978027\nW\nNw | 1 AK8 | pT > 200 GeV\n|η| < 2 | 60 < mSD < 105 GeV | W score > 0.9385",
+      "textPreview": "Object | Inputs | Jet selection | Candidate selection | Tag requirement | Boosted top | Nbst | 1 AK8 | pT > 400 GeV | |η| < 2 | mSD > 105...",
+      "rows": 5,
+      "cols": 5,
+      "cells": [
+        {
+          "index": 1,
+          "row": 1,
+          "column": 1,
+          "bbox": [
+            53,
+            151,
+            155,
+            48
+          ],
+          "text": "Object",
+          "textPreview": "Object",
+          "fillColor": "#4472C4",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Object",
+              "resolvedTextStyle": {
+                "fontSize": 24,
+                "typeface": "Helvetica Neue Medium",
+                "color": "#FFFFFF"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Object",
+                  "fontSize": 24,
+                  "typeface": "Helvetica Neue Medium",
+                  "color": "#FFFFFF"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "row": 1,
+          "column": 2,
+          "bbox": [
+            208,
+            151,
+            145,
+            48
+          ],
+          "text": "Inputs",
+          "textPreview": "Inputs",
+          "fillColor": "#4472C4",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Inputs",
+              "resolvedTextStyle": {
+                "fontSize": 24,
+                "typeface": "Helvetica Neue Medium",
+                "color": "#FFFFFF"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Inputs",
+                  "fontSize": 24,
+                  "typeface": "Helvetica Neue Medium",
+                  "color": "#FFFFFF"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "row": 1,
+          "column": 3,
+          "bbox": [
+            353,
+            151,
+            318,
+            48
+          ],
+          "text": "Jet selection",
+          "textPreview": "Jet selection",
+          "fillColor": "#4472C4",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Jet selection",
+              "resolvedTextStyle": {
+                "fontSize": 24,
+                "typeface": "Helvetica Neue Medium",
+                "color": "#FFFFFF"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Jet selection",
+                  "fontSize": 24,
+                  "typeface": "Helvetica Neue Medium",
+                  "color": "#FFFFFF"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "row": 1,
+          "column": 4,
+          "bbox": [
+            671,
+            151,
+            268,
+            48
+          ],
+          "text": "Candidate selection",
+          "textPreview": "Candidate selection",
+          "fillColor": "#4472C4",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Candidate selection",
+              "resolvedTextStyle": {
+                "fontSize": 24,
+                "typeface": "Helvetica Neue Medium",
+                "color": "#FFFFFF"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Candidate selection",
+                  "fontSize": 24,
+                  "typeface": "Helvetica Neue Medium",
+                  "color": "#FFFFFF"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 5,
+          "row": 1,
+          "column": 5,
+          "bbox": [
+            939,
+            151,
+            288,
+            48
+          ],
+          "text": "Tag requirement",
+          "textPreview": "Tag requirement",
+          "fillColor": "#4472C4",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Tag requirement",
+              "resolvedTextStyle": {
+                "fontSize": 24,
+                "typeface": "Helvetica Neue Medium",
+                "color": "#FFFFFF"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Tag requirement",
+                  "fontSize": 24,
+                  "typeface": "Helvetica Neue Medium",
+                  "color": "#FFFFFF"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 6,
+          "row": 2,
+          "column": 1,
+          "bbox": [
+            53,
+            199,
+            155,
+            78
+          ],
+          "text": "Boosted top\nNbst",
+          "textPreview": "Boosted top | Nbst",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Boosted top",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Boosted top",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "text": "Nbst",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Nbst",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 7,
+          "row": 2,
+          "column": 2,
+          "bbox": [
+            208,
+            199,
+            145,
+            78
+          ],
+          "text": "1 AK8",
+          "textPreview": "1 AK8",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1 AK8",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1 AK8",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 8,
+          "row": 2,
+          "column": 3,
+          "bbox": [
+            353,
+            199,
+            318,
+            78
+          ],
+          "text": "pT > 400 GeV\n|η| < 2",
+          "textPreview": "pT > 400 GeV | |η| < 2",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "pT > 400 GeV",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "pT > 400 GeV",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "text": "|η| < 2",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "|η| < 2",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 9,
+          "row": 2,
+          "column": 4,
+          "bbox": [
+            671,
+            199,
+            268,
+            78
+          ],
+          "text": "mSD > 105 GeV",
+          "textPreview": "mSD > 105 GeV",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "mSD > 105 GeV",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "mSD > 105 GeV",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 10,
+          "row": 2,
+          "column": 5,
+          "bbox": [
+            939,
+            199,
+            288,
+            78
+          ],
+          "text": "Top score > 0.5078",
+          "textPreview": "Top score > 0.5078",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Top score > 0.5078",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Top score > 0.5078",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 11,
+          "row": 3,
+          "column": 1,
+          "bbox": [
+            53,
+            277,
+            155,
+            96
+          ],
+          "text": "Mixed top\nNmix",
+          "textPreview": "Mixed top | Nmix",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Mixed top",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Mixed top",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "text": "Nmix",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Nmix",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 12,
+          "row": 3,
+          "column": 2,
+          "bbox": [
+            208,
+            277,
+            145,
+            96
+          ],
+          "text": "2 or 3 AK4\n+ 1 AK8",
+          "textPreview": "2 or 3 AK4 | + 1 AK8",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "2 or 3 AK4",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "2 or 3 AK4",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "text": "+ 1 AK8",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "+ 1 AK8",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 13,
+          "row": 3,
+          "column": 3,
+          "bbox": [
+            353,
+            277,
+            318,
+            96
+          ],
+          "text": "AK4: pT > 25 GeV, |η| < 2.5\nAK8: pT > 200 GeV, |η| < 2.5",
+          "textPreview": "AK4: pT > 25 GeV, |η| < 2.5 | AK8: pT > 200 GeV, |η| < 2.5",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "AK4: pT > 25 GeV, |η| < 2.5",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "AK4: pT > 25 GeV, |η| < 2.5",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "text": "AK8: pT > 200 GeV, |η| < 2.5",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "AK8: pT > 200 GeV, |η| < 2.5",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 14,
+          "row": 3,
+          "column": 4,
+          "bbox": [
+            671,
+            277,
+            268,
+            96
+          ],
+          "text": "No additional top\nmass or η window",
+          "textPreview": "No additional top | mass or η window",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "No additional top",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "No additional top",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "text": "mass or η window",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "mass or η window",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 15,
+          "row": 3,
+          "column": 5,
+          "bbox": [
+            939,
+            277,
+            288,
+            96
+          ],
+          "text": "TT / (TT + QCD)\n≥ 0.9027690887451172",
+          "textPreview": "TT / (TT + QCD) | ≥ 0.9027690887451172",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "TT / (TT + QCD)",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "TT / (TT + QCD)",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "text": "≥ 0.9027690887451172",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "≥ 0.9027690887451172",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 16,
+          "row": 4,
+          "column": 1,
+          "bbox": [
+            53,
+            373,
+            155,
+            88
+          ],
+          "text": "Resolved top\nNres",
+          "textPreview": "Resolved top | Nres",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Resolved top",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Resolved top",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "text": "Nres",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Nres",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 17,
+          "row": 4,
+          "column": 2,
+          "bbox": [
+            208,
+            373,
+            145,
+            88
+          ],
+          "text": "3 distinct AK4",
+          "textPreview": "3 distinct AK4",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "3 distinct AK4",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "3 distinct AK4",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 18,
+          "row": 4,
+          "column": 3,
+          "bbox": [
+            353,
+            373,
+            318,
+            88
+          ],
+          "text": "Each AK4:\npT > 25 GeV, |η| < 2.5",
+          "textPreview": "Each AK4: | pT > 25 GeV, |η| < 2.5",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Each AK4:",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Each AK4:",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "text": "pT > 25 GeV, |η| < 2.5",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "pT > 25 GeV, |η| < 2.5",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 19,
+          "row": 4,
+          "column": 4,
+          "bbox": [
+            671,
+            373,
+            268,
+            88
+          ],
+          "text": "100 ≤ m(3 AK4) ≤ 250 GeV\n|η(3 AK4)| < 2",
+          "textPreview": "100 ≤ m(3 AK4) ≤ 250 GeV | |η(3 AK4)| < 2",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "100 ≤ m(3 AK4) ≤ 250 GeV",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "100 ≤ m(3 AK4) ≤ 250 GeV",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "text": "|η(3 AK4)| < 2",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "|η(3 AK4)| < 2",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 20,
+          "row": 4,
+          "column": 5,
+          "bbox": [
+            939,
+            373,
+            288,
+            88
+          ],
+          "text": "TT / (TT + QCD)\n≥ 0.9433798789978027",
+          "textPreview": "TT / (TT + QCD) | ≥ 0.9433798789978027",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "TT / (TT + QCD)",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "TT / (TT + QCD)",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "text": "≥ 0.9433798789978027",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "≥ 0.9433798789978027",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 21,
+          "row": 5,
+          "column": 1,
+          "bbox": [
+            53,
+            461,
+            155,
+            74
+          ],
+          "text": "W\nNw",
+          "textPreview": "W | Nw",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "W",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "W",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "text": "Nw",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Nw",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 22,
+          "row": 5,
+          "column": 2,
+          "bbox": [
+            208,
+            461,
+            145,
+            74
+          ],
+          "text": "1 AK8",
+          "textPreview": "1 AK8",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1 AK8",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1 AK8",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 23,
+          "row": 5,
+          "column": 3,
+          "bbox": [
+            353,
+            461,
+            318,
+            74
+          ],
+          "text": "pT > 200 GeV\n|η| < 2",
+          "textPreview": "pT > 200 GeV | |η| < 2",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "pT > 200 GeV",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "pT > 200 GeV",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "text": "|η| < 2",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "|η| < 2",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 24,
+          "row": 5,
+          "column": 4,
+          "bbox": [
+            671,
+            461,
+            268,
+            74
+          ],
+          "text": "60 < mSD < 105 GeV",
+          "textPreview": "60 < mSD < 105 GeV",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "60 < mSD < 105 GeV",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "60 < mSD < 105 GeV",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 25,
+          "row": 5,
+          "column": 5,
+          "bbox": [
+            939,
+            461,
+            288,
+            74
+          ],
+          "text": "W score > 0.9385",
+          "textPreview": "W score > 0.9385",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "W score > 0.9385",
+              "resolvedTextStyle": {
+                "fontSize": 21.51,
+                "typeface": "Helvetica Neue Light",
+                "color": "#000000"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "W score > 0.9385",
+                  "fontSize": 21.51,
+                  "typeface": "Helvetica Neue Light",
+                  "color": "#000000"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/76twva5c",
+      "id": "22",
+      "name": "common-id",
+      "bbox": [
+        65,
+        557,
+        1150,
+        34
+      ],
+      "geometry": "rect",
+      "text": "Jet ID and region-dependent photon/lepton cleaning apply before arbitration.",
+      "textPreview": "Jet ID and region-dependent photon/lepton cleaning apply before arbitration.",
+      "resolvedFontSize": 25,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 25,
+        "typeface": "Helvetica Neue Light",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Jet ID and region-dependent photon/lepton cleaning apply before arbitration."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Jet ID and region-dependent photon/lepton cleaning apply before arbitration.",
+          "resolvedTextStyle": {
+            "fontSize": 25,
+            "typeface": "Helvetica Neue Light",
+            "color": "#000000"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Jet ID and region-dependent photon/lepton cleaning apply before arbitration.",
+              "fontSize": 25,
+              "typeface": "Helvetica Neue Light",
+              "color": "#000000"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/65kfmpor",
+      "id": "23",
+      "name": "independent-collections",
+      "bbox": [
+        65,
+        600,
+        1120,
+        34
+      ],
+      "geometry": "rect",
+      "text": "AK4, AK8 and SubJet are separate jet collections.",
+      "textPreview": "AK4, AK8 and SubJet are separate jet collections.",
+      "resolvedFontSize": 27,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 27,
+        "typeface": "Helvetica Neue Light",
+        "color": "#002060",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "AK4, AK8 and SubJet are separate jet collections."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "AK4, AK8 and SubJet are separate jet collections.",
+          "resolvedTextStyle": {
+            "fontSize": 27,
+            "typeface": "Helvetica Neue Light",
+            "color": "#002060"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "AK4, AK8 and SubJet are separate jet collections.",
+              "fontSize": 27,
+              "typeface": "Helvetica Neue Light",
+              "color": "#002060"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/hcvy14ne",
+      "id": "24",
+      "name": "mass-definition",
+      "bbox": [
+        65,
+        643,
+        1000,
+        25
+      ],
+      "geometry": "rect",
+      "text": "mSD: AK8 soft-drop mass. TT and QCD: TROTA class probabilities.",
+      "textPreview": "mSD: AK8 soft-drop mass. TT and QCD: TROTA class probabilities.",
+      "resolvedFontSize": 21,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 21,
+        "typeface": "Helvetica Neue Light",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "mSD: AK8 soft-drop mass. TT and QCD: TROTA class probabilities."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "mSD: AK8 soft-drop mass. TT and QCD: TROTA class probabilities.",
+          "resolvedTextStyle": {
+            "fontSize": 21,
+            "typeface": "Helvetica Neue Light",
+            "color": "#000000"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "mSD: AK8 soft-drop mass. TT and QCD: TROTA class probabilities.",
+              "fontSize": 21,
+              "typeface": "Helvetica Neue Light",
+              "color": "#000000"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

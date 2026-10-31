@@ -1,6 +1,0 @@
-{
-  "aggregate_output": "autonomous_allhad/outputs/full_normalized_yields.json",
-  "reason": "full production writes aggregate shard outputs instead of an all-events feature table",
-  "status": "complete",
-  "table_produced": false
-}

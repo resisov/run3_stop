@@ -20,6 +20,13 @@ THROUGHPUT_CHANGED={'utils/event_selections.py','utils/pog_corrections.py',
 
 
 def approved_retry(plan,key,state):
+    forward = plan.get('forward_jer_support_update', {})
+    attempt = forward.get('original_attempts', {}).get(key)
+    if (attempt is not None and state.get('attempt') == attempt
+            and state.get('status') == 'failed' and state.get('exception_type') == 'ValueError'
+            and state.get('error') == 'Invalid JER input'
+            and 'utils/jme_calibration.py' in state.get('traceback', '')):
+        return True
     attempt=plan.get('object_response_audit_update',{}).get('original_attempts',{}).get(key)
     trace=state.get('traceback','')
     # Retained workers execute old bytecode, but traceback linecache can read
@@ -63,6 +70,46 @@ def adopt_worker(plan,campaign,key,state):
 
 
 def prior_contracts(plan, _historical=False):
+    forward = plan.get('forward_jer_support_update')
+    if forward:
+        old_path, gate_path = [internal_path(ROOT/forward[k]) for k in ('previous_plan', 'validation')]
+        if (sha256(old_path) != forward['previous_plan_sha256']
+                or sha256(gate_path) != forward['validation_sha256']):
+            raise ValueError('Changed forward-JER compatibility evidence')
+        old, gate = read_json(old_path), read_json(gate_path)
+        before_hash = '42d8a01ef18866d00ebf984aab43cb597155f4e6ef5f6c954f25edd0b984af5a'
+        after_hash = '67b3f945bb1109f86b320a0fde1a5416f7ec13887db8cd4235e53996a8642549'
+        if (gate.get('status') != 'passed' or gate.get('previous_source_sha256') != before_hash
+                or gate.get('source_sha256') != after_hash or gate.get('unit_tests', 0) < 35
+                or gate.get('valid_domain_unchanged') is not True
+                or gate.get('all_consumers_outside_support') is not True
+                or set(gate.get('evidence', {})) != {'unit', 'input', 'consumer', 'additional'}
+                or len(gate.get('full_input_scans', [])) != 3
+                or any(r.get('remaining_invalid') != 0 or not r.get('affected')
+                       for r in gate['full_input_scans'])):
+            raise ValueError('Missing exact forward-JER validation')
+        for name, record in gate['evidence'].items():
+            if sha256(internal_path(ROOT/record['path'])) != record['sha256']:
+                raise ValueError('Changed forward-JER evidence: '+name)
+        if plan.get('shape_mode') not in ('cms_trota_jme', 'stored_trota_nonjme'):
+            raise ValueError('Forward JER bridge is only for frozen shape campaigns')
+        if (old['contracts'] != gate['before_contracts'][forward['campaign']]
+                or plan['contracts'] != gate['after_contracts'][forward['campaign']]):
+            raise ValueError('Forward-JER contracts differ from validation')
+        for year, current in plan['contracts'].items():
+            before = old['contracts'][year]
+            if {k:v for k,v in current.items() if k!='code'} != {k:v for k,v in before.items() if k!='code'}:
+                raise ValueError('Forward-JER update changed non-code physics')
+            changed = {k for k in set(current['code'])|set(before['code'])
+                       if current['code'].get(k) != before['code'].get(k)}
+            if (changed != {'utils/jme_calibration.py'}
+                    or before['code']['utils/jme_calibration.py'] != before_hash
+                    or current['code']['utils/jme_calibration.py'] != after_hash):
+                raise ValueError('Unexpected forward-JER source change')
+        for name, digest in forward['workflow_sha256'].items():
+            if not _historical and sha256(ROOT/name) != digest:
+                raise ValueError('Changed forward-JER workflow: '+name)
+        return old['contracts']
     endpoint = plan.get('endpoint_execution_update')
     if endpoint:
         old_path, gate_path = [internal_path(ROOT/endpoint[k]) for k in ('previous_plan','validation')]

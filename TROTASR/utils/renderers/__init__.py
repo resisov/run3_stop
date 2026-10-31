@@ -1,1 +1,1 @@
-"""Byte-preserved legacy renderers; see sources.json."""
+"""Shared analysis figure renderers."""

@@ -10,6 +10,7 @@ from functools import lru_cache
 import numpy as np
 import awkward as ak
 from .ids import object_masks, clean_by_delta_r, as_ak_bool
+from .paths import tagging_definition, analysis_era, EARLY_ERAS, muon_pt_min as era_muon_pt_min
 
 
 REGIONS = ("SR", "LLCR", "QCDCR", "GCR", "DY2E", "DY2M")
@@ -214,11 +215,12 @@ def jet_kinematics(
     good: ak.Array,
     recoil_pt: np.ndarray,
     recoil_phi: np.ndarray,
+    year=2024,
 ) -> dict[str, np.ndarray]:
     selected_pt = jet_pt[good]
     selected_phi = jet_phi[good]
     selected_btag = jet_btag[good]
-    medium = selected_btag > UPART_AK4_MEDIUM_WP_2024
+    medium = selected_btag > tagging_definition(year)['medium']
     dphi = delta_phi(selected_phi, recoil_phi[:, None])
     j1 = first(dphi, 999.0)
     j2 = nth(dphi, 1, 999.0)
@@ -261,17 +263,76 @@ def jet_kinematics(
 LEPTON_VETO_PT_MIN = 10.0
 
 
+def update_medium_muons(arrays, threshold, year):
+    """Update stored medium muons and affected DY quantities without ROOT rewriting."""
+    keep = arrays["muon_medium_pt"] > threshold
+    old = np.asarray(arrays["n_m_medium"], dtype=int)
+    count = np.asarray(ak.sum(keep, axis=1), dtype=int)
+    changed = old != count
+    if not np.any(changed):
+        return 0
+    for field in ("pt", "eta", "phi"):
+        arrays["muon_medium_" + field] = arrays["muon_medium_" + field][keep]
+    arrays["n_m_medium"] = ak.Array(count)
+    mask = object_masks(arrays, year)["muon_medium"]
+    pairs = [
+        [nth(arrays["muon_" + field + "_all"][mask], i,
+             -99.0 if field == "pt" else 0.0)
+         for field in ("pt", "eta", "phi", "mass")]
+        for i in (0, 1)
+    ]
+    p1, e1, f1, m1 = pairs[0]
+    p2, e2, f2, m2 = pairs[1]
+    x1, y1, z1 = p1*np.cos(f1), p1*np.sin(f1), p1*np.sinh(e1)
+    x2, y2, z2 = p2*np.cos(f2), p2*np.sin(f2), p2*np.sinh(e2)
+    energy1 = np.sqrt(m1*m1 + x1*x1 + y1*y1 + z1*z1)
+    energy2 = np.sqrt(m2*m2 + x2*x2 + y2*y2 + z2*z2)
+    values = {
+        "mmm": np.sqrt(np.maximum(0., (energy1+energy2)**2
+                                - (x1+x2)**2 - (y1+y2)**2 - (z1+z2)**2)),
+        "pmm": np.hypot(x1+x2, y1+y2),
+    }
+    met, met_phi = as_float(arrays, "met"), as_float(arrays, "met_phi")
+    x, y = met*np.cos(met_phi)+x1+x2, met*np.sin(met_phi)+y1+y2
+    values.update(recoil_dy2m=np.hypot(x, y), recoil_dy2m_phi=np.arctan2(y, x))
+    pt, eta, phi = (arrays["jet_" + name] for name in ("corrected_pt", "eta_all", "phi_all"))
+    tag = arrays[tagging_definition(year)["btag_branch"]]
+    good = (pt > 30.) & (abs(eta) < 2.4) & as_ak_bool(arrays["jet_id_all"])
+    muon_clean = clean_by_delta_r(eta, phi, arrays["muon_medium_eta"],
+                                 arrays["muon_medium_phi"], .2)
+    electron_clean = clean_by_delta_r(eta, phi, arrays["electron_medium_eta"],
+                                     arrays["electron_medium_phi"], .2)
+    jets = jet_kinematics(pt, eta, phi, tag, good & muon_clean & electron_clean,
+                         met, met_phi, year)
+    for name in ("njet", "nb", "ht"):
+        values[name + "_lepton_clean"] = jets[name]
+    angles = delta_phi(phi[good & muon_clean][:, :4],
+                       values["recoil_dy2m_phi"][:, None])
+    values["pass_dy2m_open_high"] = np.asarray(ak.all(angles > .5, axis=1))
+    values["pass_dy2m_ut_250"] = values["recoil_dy2m"] > 250.
+    values["pass_ht_lepton_300"] = jets["ht"] > 300.
+    for name, value in values.items():
+        # Preserve the stored values bit-for-bit for events unaffected by the cut.
+        arrays[name] = ak.Array(np.where(changed, value, np.asarray(arrays[name])))
+    return int(np.count_nonzero(changed))
+
+
 def update_veto_leptons(
     arrays: Any,
     electron_pt_min: float = LEPTON_VETO_PT_MIN,
-    muon_pt_min: float = LEPTON_VETO_PT_MIN,
+    muon_pt_min: float | None = None,
+    *,
+    year=2024,
 ) -> dict[str, int]:
     """Rebuild veto collections, counts and lepton flags from stored objects."""
+    muon_pt_min = era_muon_pt_min(year) if muon_pt_min is None else muon_pt_min
     if min(electron_pt_min, muon_pt_min) < 5.0:
         raise ValueError("stored veto collections only support thresholds >=5 GeV")
     fields = set(arrays) if isinstance(arrays, dict) else set(ak.fields(arrays))
     old_e = np.asarray(arrays["n_e_veto"], dtype=int)
     old_m = np.asarray(arrays["n_m_loose"], dtype=int)
+    medium_removed = (update_medium_muons(arrays, muon_pt_min, year)
+                      if analysis_era(year) in EARLY_ERAS else None)
     for prefix, threshold in (("electron_veto", electron_pt_min), ("muon_loose", muon_pt_min)):
         keep = arrays[f"{prefix}_pt"] > threshold
         for suffix in ("pt", "eta", "eta_sc", "phi"):
@@ -293,10 +354,13 @@ def update_veto_leptons(
     arrays["pass_no_veto_leptons"] = ak.Array((ne == 0) & (nm == 0))
     arrays["pass_one_veto_lepton"] = ak.Array(((ne == 1) & (nm == 0)) | ((ne == 0) & (nm == 1)))
     arrays["pass_mt_100"] = ak.Array(mt_pass)
-    return {
+    audit = {
         "events_with_removed_electrons": int(np.count_nonzero(old_e != ne)),
         "events_with_removed_muons": int(np.count_nonzero(old_m != nm)),
     }
+    if medium_removed is not None:
+        audit["events_with_removed_medium_muons"] = medium_removed
+    return audit
 
 
 def fatjet_kinematics(
@@ -331,6 +395,7 @@ def dycr_lepton_mask(
     channel: str,
     masks: dict[str, Any] | None = None,
     mass_window: tuple[float, float] | None = (71.0, 111.0),
+    year=2024,
 ) -> np.ndarray:
     """Rebuild the DY lepton selection from stored objects.
 
@@ -341,7 +406,7 @@ def dycr_lepton_mask(
     """
     if channel not in {"DY2E", "DY2M"}:
         raise ValueError(f"unknown dilepton channel: {channel}")
-    masks = object_masks(arrays) if masks is None else masks
+    masks = object_masks(arrays, year) if masks is None else masks
     electron = channel == "DY2E"
     flavor = "electron" if electron else "muon"
     selected = masks[f"{flavor}_medium"]
@@ -373,10 +438,11 @@ def build_region_blocks(
     arrays: ak.Array,
     *,
     dy_mass_window: tuple[float, float] | None = (71.0, 111.0),
+    year=2024,
 ) -> tuple[dict[str, RegionBlock], dict[str, int]]:
     n = len(arrays)
-    veto_audit = update_veto_leptons(arrays)
-    masks = object_masks(arrays)
+    veto_audit = update_veto_leptons(arrays, year=year)
+    masks = object_masks(arrays, year)
     audit = {
         **veto_audit,
         "electron_veto_count_mismatches": int(
@@ -414,7 +480,7 @@ def build_region_blocks(
     jet_pt = arrays["jet_corrected_pt"]
     jet_eta = arrays["jet_eta_all"]
     jet_phi = arrays["jet_phi_all"]
-    jet_btag = arrays["jet_btag_upart_all"]
+    jet_btag = arrays[tagging_definition(year)['btag_branch']]
     good_nominal = (
         (jet_pt > 30.0)
         & (abs(jet_eta) < 2.4)
@@ -428,7 +494,7 @@ def build_region_blocks(
     met = as_float(arrays, "met")
     met_phi = as_float(arrays, "met_phi")
     nominal_jets = jet_kinematics(
-        jet_pt, jet_eta, jet_phi, jet_btag, good_nominal, met, met_phi
+        jet_pt, jet_eta, jet_phi, jet_btag, good_nominal, met, met_phi, year
     )
     base = as_bool(arrays, "pass_base_common") & as_bool(arrays, "pass_zero_tau")
     signal_trigger = as_bool(arrays, "pass_signal_trigger")
@@ -522,6 +588,7 @@ def build_region_blocks(
             good_nominal & jet_clean,
             recoil,
             recoil_phi,
+            year,
         )
         nisr, nt, nw = fatjet_kinematics(arrays, obj_eta, obj_phi)
         cleaned[region] = {

@@ -1,4 +1,4 @@
-"""Measurement functions migrated verbatim; no external analysis imports."""
+"""Photon control-region background measurements."""
 from __future__ import annotations
 import math
 from typing import Any

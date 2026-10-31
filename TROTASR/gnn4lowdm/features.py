@@ -100,6 +100,9 @@ def _diagonal_v3_features(
     njet: np.ndarray,
     nb: np.ndarray,
     arrays: ak.Array,
+    btag_medium_wp: float = UPART_AK4_MEDIUM_WP_2024,
+    btag_strict: bool = False,
+    include_isr_subjet_btag: bool = True,
 ) -> list[np.ndarray]:
     """Rotation-invariant diagonal features with explicit missingness masks."""
     try:
@@ -113,7 +116,9 @@ def _diagonal_v3_features(
     row = np.arange(event_count)
     px, py, pz, energy = _four_vectors(pt, eta, phi, np.abs(mass))
 
-    bmask = mask & (btag >= UPART_AK4_MEDIUM_WP_2024)
+    tagged = btag > btag_medium_wp if btag_strict else btag >= btag_medium_wp
+    untagged = btag <= btag_medium_wp if btag_strict else btag < btag_medium_wp
+    bmask = mask & tagged
     b_order = np.argsort(
         np.where(bmask, btag, -np.inf), axis=1, kind="stable"
     )[:, ::-1]
@@ -217,8 +222,8 @@ def _diagonal_v3_features(
             w_valid = (
                 mask[:, first]
                 & mask[:, second]
-                & (btag[:, first] < UPART_AK4_MEDIUM_WP_2024)
-                & (btag[:, second] < UPART_AK4_MEDIUM_WP_2024)
+                & untagged[:, first]
+                & untagged[:, second]
             )
             for third in range(max_resolved_jets):
                 if third in (first, second):
@@ -226,7 +231,7 @@ def _diagonal_v3_features(
                 candidate_valid = (
                     w_valid
                     & mask[:, third]
-                    & (btag[:, third] >= UPART_AK4_MEDIUM_WP_2024)
+                    & tagged[:, third]
                 )
                 top_px = w_px + px[:, third]
                 top_py = w_py + py[:, third]
@@ -266,9 +271,10 @@ def _diagonal_v3_features(
     isr_eta = np.asarray(arrays["lowdm_isr_eta"], dtype=np.float32)
     isr_phi = np.asarray(arrays["lowdm_isr_phi"], dtype=np.float32)
     isr_dphi = np.asarray(arrays["lowdm_isr_dphi"], dtype=np.float32)
-    isr_subjet_btag = np.asarray(
-        arrays["lowdm_isr_subjet_btag_max"], dtype=np.float32
-    )
+    if include_isr_subjet_btag:
+        isr_subjet_btag = np.asarray(
+            arrays["lowdm_isr_subjet_btag_max"], dtype=np.float32
+        )
     has_isr = (n_isr > 0.0) & np.isfinite(isr_pt) & (isr_pt > 0.0)
     safe_isr = np.maximum(isr_pt, 1.0)
     recoil_scalar_balance = np.abs(met - isr_pt) / np.maximum(
@@ -324,7 +330,8 @@ def _diagonal_v3_features(
         only_with_isr(np.log1p(np.clip(isr_pt, 0.0, None)) / 8.0),
         only_with_isr(np.clip(isr_eta / 3.0, -1.5, 1.5)),
         only_with_isr(np.clip(isr_dphi / np.pi, 0.0, 1.0)),
-        only_with_isr(np.clip(isr_subjet_btag, -1.0, 1.0)),
+        *([only_with_isr(np.clip(isr_subjet_btag, -1.0, 1.0))]
+          if include_isr_subjet_btag else []),
         only_with_isr(np.clip(met / safe_isr, 0.0, 3.0) / 3.0),
         only_with_isr(np.clip(recoil_scalar_balance, 0.0, 1.0)),
         only_with_isr(np.clip(recoil_vector_balance, 0.0, 1.0)),

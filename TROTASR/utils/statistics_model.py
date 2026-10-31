@@ -13,8 +13,8 @@ ANALYSIS_NUISANCE_PREFIX = "CMS_NPS26012"
 RZ_CATEGORIES = ("highdm_Nb1", "highdm_Nb2plus", "lowdm_Nb1", "lowdm_Nb2plus")
 
 def nps_nuisance_name(name: str, year: str) -> str:
-    if str(year) not in ('2024', '2025'):
-        raise ValueError('Only 2024/2025 are supported')
+    from .paths import analysis_era
+    year = analysis_era(year)
     if name == "jesTotal":
         return f"CMS_scale_j_Total_{year}"
     # A name is shared between years only when the producing POG explicitly

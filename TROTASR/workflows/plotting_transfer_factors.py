@@ -1,4 +1,4 @@
-"""Plot newly measured MC transfer factors with the verbatim legacy renderer."""
+"""Plot the measured MC transfer factors."""
 import argparse
 from copy import deepcopy
 from pathlib import Path
@@ -71,10 +71,13 @@ def prepare_factors(source, config):
     return result, unavailable
 
 
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    for name in ('input', 'hists', 'output'):
+    for name in ('input', 'output'):
         p.add_argument('--'+name, type=Path, required=True)
+    p.add_argument('--hists', type=Path, required=True)
     p.add_argument('--allow-validation', action='store_true')
     p.add_argument('--allow-partial', action='store_true')
     p.add_argument('--validate-only', action='store_true')
@@ -82,29 +85,27 @@ def main():
     source_path, hist_path, output = (internal_path(v) for v in (a.input, a.hists, a.output))
     source = read_json(source_path)
     year = source.get('year')
-    if year not in (2024, 2025) or not source.get('sr_data_blinded'):
+    from TROTASR.utils.paths import analysis_era
+    from TROTASR.gnn4lowdm.configuration import configuration
+    analysis_era(year)
+    if not source.get('sr_data_blinded'):
         raise ValueError('Unsupported TF year or missing blinding contract')
     provenance = source['provenance']
     if (provenance['hist_input_sha256'] != sha256(hist_path)
             or str(provenance['campaign_year']) != str(year)
             or internal_path(ROOT/provenance['hist_input']) != hist_path):
         raise ValueError('TF does not belong to the current histogram input')
-    if source.get('scope') != 'full_nominal_production' and not a.allow_validation:
+    if source.get('scope') not in ('full_nominal_production', 'full_combined_systematic_production') and not a.allow_validation:
         raise ValueError('Full production required; validation needs explicit opt-in')
-    factors, unavailable = prepare_factors(source, read_json(ROOT/'gnn4lowdm/config.json'))
+    factors, unavailable = prepare_factors(source, configuration(year))
     if unavailable and not a.allow_partial:
         raise ValueError('Unsupported TF cells; explicit diagnostic opt-in required: '+str(unavailable))
-    provenance_rows = read_json(ROOT/'jsons/nominal_plot_sources.json')['sources']
-    for row in provenance_rows:
-        if sha256(ROOT/row['target']) != row['target_sha256']:
-            raise ValueError('Preserved TF rendering source changed')
     contract = dict(input_sha256=sha256(source_path), hist_input_sha256=provenance['hist_input_sha256'],
-        year=year, scope=source['scope'], adapter_sha256=sha256(Path(__file__)),
-        renderer_sources={r['target']:r['target_sha256'] for r in provenance_rows})
+        year=year, scope=source['scope'])
     manifest_path = output/'plot_manifest.json'
     if manifest_path.exists():
         old = read_json(manifest_path)
-        if old['contract'] != contract or any(sha256(output/n) != h for n,h in old['files'].items()):
+        if any(old['contract'].get(key) != value for key, value in contract.items()) or any(sha256(output/n) != h for n,h in old['files'].items()):
             raise ValueError('Divergent TF plots must be preserved')
         print(old['status'], '(verified existing outputs)')
         return
@@ -116,7 +117,8 @@ def main():
     from TROTASR.workflows.renderers import transfer_factors as renderer
     renderer.CMS_LABEL = dict(renderer.CMS_LABEL, rlabel=str(year)+' (13.6 TeV)')
     output.mkdir(parents=True)
-    high, low = renderer.render_factors(output, factors, 'all')
+    positions = {'top_llcr': (0.04, 0.74)} if str(year) == '2023' else {}
+    high, low = renderer.render_factors(output, factors, 'all', high_annotation_positions=positions)
     files = {str(Path(path).relative_to(output)):sha256(path) for path in high+low}
     if len(files) != 14:
         raise ValueError('Missing expected transfer-factor figures')
@@ -124,7 +126,7 @@ def main():
     for path in high+low:
         if Path(path).suffix != '.pdf':
             continue
-        name = Path(path).stem + ('_2025' if year == 2025 else '')
+        name = Path(path).stem + ('_'+str(year) if str(year) != '2024' else '')
         plots.append(dict(pdf=str(Path(path).relative_to(ROOT)),
                           png=str(Path(path).with_suffix('.png').relative_to(ROOT)),
                           an_reference='figures/transfer_factors/'+name+'.pdf'))

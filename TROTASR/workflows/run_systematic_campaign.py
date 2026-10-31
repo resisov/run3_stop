@@ -17,15 +17,17 @@ import traceback
 if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
-from TROTASR.utils.paths import ROOT, internal_path
+from TROTASR.utils.paths import ROOT, internal_path, analysis_era, era_year
 from TROTASR.utils.io import read_json,write_json,sha256
 from TROTASR.workflows.nominal_campaign import run, file_worker
 from TROTASR.workflows.merge_nominal import merge
 
 
 REFRESH_ID = 'payload_update_20261005'
+UPDATE_ID = 'object_sf_update_20261018'
 REFERENCE_REPAIR = 'reference_repair'
 SUPPORT_REFRESH = 'support_refresh'
+UNCHANGED_VIEW_REUSE = 'unchanged_view_reuse_20261019'
 MISSING_REFRESH_SEEDS = frozenset({
     '2025_data_shard_01052', '2025_mc_shard_00000', '2025_mc_shard_03059',
     '2025_signal_shard_00077', '2025_signal_shard_00294', '2025_signal_shard_00568',
@@ -41,10 +43,10 @@ def refresh_required(task):
     return match.group(1)!='data'
 
 
-def preserve_before_refresh(campaign, path, move=False, revision=None):
+def preserve_before_refresh(campaign, path, move=False, revision=None, update_id=None):
     """Recoverable history only; the active product keeps its canonical path."""
     campaign, path = map(internal_path, (campaign, path))
-    base = campaign/'history'/REFRESH_ID
+    base = campaign/'history'/(update_id or REFRESH_ID)
     target = (base/revision if revision else base)/path.relative_to(campaign)
     if not path.exists():
         return target
@@ -84,6 +86,9 @@ def refresh_task_required(task):
 
 
 def refreshed_population_verified(task, state):
+    if (state.get('payload_revision') == UPDATE_ID and
+            state.get('population_validation') == 'muon_correction_migrations_recorded'):
+        return True
     if state.get('previous_populations_identical') is True:
         return True
     return (task.get('rebuild_missing_seed') is True
@@ -183,11 +188,13 @@ def refresh_plan(campaign):
     from TROTASR.workflows.nominal_campaign import current_contract, verify_compiled
     plan = read_json(campaign/'plan.json')
     spec = plan['payload_refresh']
-    if spec['id'] != REFRESH_ID or spec['year'] != 2025:
+    if spec['id'] not in (REFRESH_ID, UPDATE_ID):
         raise ValueError('Unapproved payload refresh')
     verify_compiled()
-    if current_contract(2025, plan['shape_mode'], spec['variations']) != spec['contract']:
-        raise ValueError('Active refresh correction/selection contract changed')
+    for year in spec.get('years', [spec.get('year')]):
+        expected = spec['contracts'][str(year)] if 'contracts' in spec else spec['contract']
+        if current_contract(year, plan['shape_mode'], spec['variations']) != expected:
+            raise ValueError('Active refresh correction/selection contract changed')
     for name, digest in spec['sources'].items():
         if sha256(ROOT/name) != digest:
             raise ValueError('Active refresh source changed: '+name)
@@ -261,15 +268,170 @@ def resume_paused_refresh(campaign):
 
 def refresh_result_contract(spec, task, digest):
     """Only specifically hash-registered prior successes use the old code contract."""
+    reuse = spec.get(UNCHANGED_VIEW_REUSE, {})
+    if digest is not None and reuse:
+        accepted = reuse['retained_completed'].get(task['key']) == digest
+        identity = reuse['retained_running'].get(task['key'])
+        if identity is not None:
+            receipt = read_json(ROOT/reuse['campaign']/'state'/(task['key']+'.json'))
+            accepted = (receipt.get('identity') == identity and receipt.get('status') == 'complete'
+                and receipt.get('exit_code') == 0 and receipt.get('output_sha256') == digest
+                and receipt.get('payload_revision') == spec['id'])
+        if accepted:
+            return reuse['previous_contracts'][str(task['year'])]
     previous=spec.get(SUPPORT_REFRESH,{})
-    if previous.get('retained_completed',{}).get(task['key']) == digest:
+    if digest is not None and previous.get('retained_completed',{}).get(task['key']) == digest:
         return previous['previous_contract']
-    return spec['contract']
+    return spec['contracts'][str(task['year'])] if 'contracts' in spec else spec['contract']
 
 
-def prepare_refresh(campaign, workers):
+def adopt_unchanged_views(campaign):
+    """Register an exact-output execution change, retaining old results/workers."""
+    from TROTASR.workflows.nominal_campaign import current_contract, verify_compiled
+    from TROTASR.workflows.control_systematic_memory import kernel_state
+    campaign = internal_path(campaign)
+    allowed = [ROOT/'campaigns'/n for n in ('systematics_20260924','nonjme_20260927')]
+    if campaign not in allowed:raise ValueError('Not a current correction-update campaign')
+    control = read_json(allowed[1]/'worker_control.json')
+    if control.get('status') != 'refilling_at_cap' or kernel_state(control['identity'])[0] not in ('T','t'):
+        raise RuntimeError('Suspend resource admission during the source handoff')
+    for record in control['retained']:
+        if not record.get('finished') and kernel_state(record['identity'])[0] not in (None,'Z','T','t'):
+            raise RuntimeError('Retain and suspend in-flight work during the source handoff')
+    report_path = allowed[1]/'unchanged_view_comparison.json'
+    report = read_json(report_path)
+    if (report.get('status') != 'passed' or len(report.get('records',[])) != 8
+            or report.get('selection_calls_reused',0) <= 0
+            or report['candidate_sha256'] != sha256(ROOT/'utils/histogramming.py')
+            or not all(r['all_histograms_and_audits_exact'] for r in report['records'])):
+        raise ValueError('Missing exact-output comparison for the deployed optimization')
+    plan = read_json(campaign/'plan.json');spec = plan['payload_refresh']
+    if UNCHANGED_VIEW_REUSE in spec:
+        return refresh_plan(campaign)
+    if spec['id'] != UPDATE_ID:raise ValueError('Wrong correction update')
+    verify_compiled()
+    current = {str(y):current_contract(y,plan['shape_mode'],spec['variations']) for y in (2024,2025)}
+    for year, previous in spec['contracts'].items():
+        new = current[year]
+        if {k:v for k,v in previous.items() if k!='code'} != {k:v for k,v in new.items() if k!='code'}:
+            raise ValueError('Optimization changed physics or payloads')
+        changed = {n for n in previous['code'].keys() | new['code'].keys()
+                   if previous['code'].get(n) != new['code'].get(n)}
+        if changed != {'utils/histogramming.py'} or previous['code']['utils/histogramming.py'] != report['baseline_sha256']:
+            raise ValueError('Unreviewed histogram source change')
+    backup = campaign/'history'/UPDATE_ID/UNCHANGED_VIEW_REUSE/'sources'
+    for source, digest in {**spec['contracts']['2024']['code'], **spec['sources']}.items():
+        if sha256(ROOT/source) == digest:continue
+        if source not in ('utils/histogramming.py','workflows/run_systematic_campaign.py') or sha256(backup/source) != digest:
+            raise ValueError('Missing original source for execution handoff: '+source)
+    complete, running = {}, {}
+    for task in spec['tasks']:
+        path = campaign/'state'/(task['key']+'.json')
+        receipt = read_json(path) if path.exists() else {}
+        if receipt.get('payload_revision') != UPDATE_ID:continue
+        if receipt.get('status') == 'complete' and receipt.get('exit_code') == 0:
+            complete[task['key']] = receipt['output_sha256']
+        elif receipt.get('status') == 'running' and receipt.get('identity'):
+            if kernel_state(receipt['identity'])[0] not in ('T','t'):
+                raise RuntimeError('Running receipt does not match retained suspended work')
+            running[task['key']] = receipt['identity']
+        else:raise RuntimeError('Unrelated failed/interrupted task: '+task['key'])
+    preserve_before_refresh(campaign,campaign/'plan.json',update_id=UPDATE_ID,revision=UNCHANGED_VIEW_REUSE)
+    spec[UNCHANGED_VIEW_REUSE] = dict(time=time.time(),campaign=str(campaign.relative_to(ROOT)),
+        previous_contracts=spec['contracts'],previous_sources=spec['sources'],
+        retained_completed=complete,retained_running=running,comparison_sha256=sha256(report_path),
+        physics_changed=False,completed_outputs_modified=False)
+    spec['contracts'] = current
+    spec['sources'] = {source:sha256(ROOT/source) for source in spec['sources']}
+    write_json(campaign/'plan.json',plan)
+    refresh_plan(campaign)
+    print({'campaign':str(campaign),'completed_preserved':len(complete),'running_preserved':len(running)},flush=True)
+    return plan
+
+
+def prepare_payload_update(campaign, workers, years):
+    """A new revision of the existing central campaign, retaining prior results."""
+    from TROTASR.workflows import nominal_campaign as execution
+    if sorted(years) != [2024, 2025] or not 1 <= workers <= 97:
+        raise ValueError('This update covers 2024/2025 within the shared 100-slot budget')
+    plan = read_json(campaign/'plan.json')
+    if plan.get('payload_refresh', {}).get('id') == UPDATE_ID:
+        return refresh_plan(campaign)
+    state = read_json(campaign/'state.json')
+    if state.get('status') != 'histograms_complete' or state.get('active') or state.get('failed'):
+        raise RuntimeError('Previous histogram campaign is not complete and idle')
+    if plan['shape_mode'] not in ('cms_trota_jme', 'stored_trota_nonjme'):
+        raise ValueError('Unrecognized current systematic component')
+    execution.verify_compiled()
+    old_spec = plan.get('payload_refresh', {})
+    expanded = {}
+    for task in execution.execution_tasks(plan):
+        expanded.setdefault(task.get('parent_key', task['key']), []).append(task)
+    tasks, previous = [], {}
+    old_tasks = {t['key']:t for t in old_spec.get('tasks', [])}
+    for original in plan['tasks']:
+        task = execution.relocated_seed(original)
+        task.pop('seed_output', None)
+        if execution.fingerprint(ROOT/task['input']) != task['fingerprint']:
+            raise ValueError('Changed retained input: '+task['key'])
+        if task.get('metadata') and execution.fingerprint(ROOT/task['metadata']) != task['metadata_fingerprint']:
+            raise ValueError('Changed retained metadata: '+task['key'])
+        match = re.fullmatch(r'(2024|2025)_(data|mc|signal)_shard_[0-9]+', task['key'])
+        if not match or int(match[1]) != task['year']:
+            raise ValueError('Unrecognized retained input identity')
+        task['refresh_required'] = match[2] != 'data'
+        records = []
+        if task['key'] in old_tasks:
+            old_task = old_tasks[task['key']]
+            candidates = ([old_task] if refresh_task_required(old_task) else [])
+            if not candidates:
+                records = [refresh_output_record(campaign, r) for r in old_spec['previous_outputs'][task['key']]]
+        else:
+            candidates = expanded[task['key']]
+        for old_task in candidates:
+            s = read_json(campaign/'state'/(old_task['key']+'.json'))
+            if s.get('status') != 'complete':
+                raise ValueError('Previous output is not complete: '+old_task['key'])
+            record = dict(key=old_task['key'], output=s['output'], sha256=s['output_sha256'],
+                          endpoint=old_task.get('object_endpoint'))
+            try:
+                records.append(refresh_output_record(campaign, record))
+            except FileNotFoundError:
+                if not original.get('seed_output'):
+                    raise
+                task.setdefault('missing_historical_seed', []).append(record)
+                task['rebuild_missing_seed'] = True
+        previous[task['key']] = records
+        tasks.append(task)
+    old_plan = preserve_before_refresh(campaign, campaign/'plan.json', update_id=UPDATE_ID)
+    for name in ('state.json', 'stage_result.json'):
+        preserve_before_refresh(campaign, campaign/name, update_id=UPDATE_ID)
+    variations = ['all_weights'] if plan['shape_mode'] == 'cms_trota_jme' else ['nominal']
+    sources = {name:sha256(ROOT/name) for name in (
+        'workflows/run_systematic_campaign.py', 'workflows/build_systematics.py',
+        'workflows/nominal_campaign.py', 'workflows/merge_nominal.py', 'utils/compiled/manifest.json')}
+    spec = dict(id=UPDATE_ID, years=sorted(years), tasks=tasks, previous_outputs=previous,
+        previous_plan=str(old_plan.relative_to(ROOT)), previous_plan_sha256=sha256(old_plan),
+        contracts={str(y):execution.current_contract(y, plan['shape_mode'], variations) for y in years},
+        sources=sources, variations=variations, workers=workers,
+        chunk_size=25000 if plan['shape_mode']=='stored_trota_nonjme' else plan['chunk_size'],
+        aggregate_slots=100, reserve_bytes=32*1024**3, emergency_bytes=24*1024**3,
+        created=time.time(), central_paths_preserved=True, event_sidecar=False,
+        physics_change='Official BTV/MUO payloads, MediumMiniIso, btag high-pT extrapolation, muon scaled fallback',
+        population_policy='muon_correction_migrations_recorded', preserved_2024={},
+        validation=dict(status='pending_real_files'))
+    if plan['shape_mode']=='cms_trota_jme':
+        spec[SUPPORT_REFRESH] = dict(inference_support='all_region_pretopology_union')
+    plan['payload_refresh'] = spec
+    write_json(campaign/'plan.json', plan)
+    return refresh_plan(campaign)
+
+
+def prepare_refresh(campaign, workers, years=None):
     """Revise the existing campaign, not a sidecar histogram/campaign."""
     from TROTASR.workflows import nominal_campaign as execution
+    if years is not None:
+        return prepare_payload_update(campaign, workers, years)
     if not 1 <= workers <= 98:
         raise ValueError('Leave controller/diagnostic capacity within 100 slots')
     plan = read_json(campaign/'plan.json')
@@ -369,6 +531,28 @@ def compare_refresh_populations(before, after):
         raise ValueError('Changed retained-event traversal')
 
 
+def compare_updated_populations(before, after):
+    """Muon correction can migrate bins; retain exact counts as diagnostics."""
+    if before['input_metadata'] != after['input_metadata']:
+        raise ValueError('Changed input/normalization bookkeeping')
+    if before['audit']['events_read'] != after['audit']['events_read']:
+        raise ValueError('Changed retained-event traversal')
+    changes = []
+    def walk(a, b, path):
+        if isinstance(a, dict) and 'sumw' in a:
+            if b is not None and a.get('edges') != b.get('edges'):
+                raise ValueError('Changed histogram axes: '+path)
+            old, new = a.get('entries', []), b.get('entries', []) if b else []
+            if old != new:
+                changes.append(dict(path=path, before=old, after=new))
+        elif isinstance(a, dict):
+            for key, value in a.items():
+                walk(value, b.get(key) if isinstance(b, dict) else None, path+'/'+str(key))
+    for name in ('histograms','physical_histograms','dy_rz','dy_rz_variations'):
+        walk(before.get(name, {}), after.get(name, {}), name)
+    return changes
+
+
 def refresh_worker(campaign, key):
     from TROTASR.workflows.nominal_campaign import validate_payload, fingerprint
     from TROTASR.workflows.campaign_resources import chunk_collection
@@ -376,20 +560,21 @@ def refresh_worker(campaign, key):
     path = campaign/'state'/(key+'.json')
     ownership = {}
     try:
+        revision = read_json(campaign/'plan.json')['payload_refresh']['id']
         deadline = time.monotonic()+30
         while time.monotonic()<deadline:
             ownership = read_json(path) if path.exists() else {}
-            if ownership.get('pid') == os.getpid() and ownership.get('payload_revision') == REFRESH_ID:
+            if ownership.get('pid') == os.getpid() and ownership.get('payload_revision') == revision:
                 break
             time.sleep(.1)
         plan = refresh_plan(campaign); spec = plan['payload_refresh']
         task = next(t for t in spec['tasks'] if t['key'] == key and refresh_task_required(t))
-        if ownership.get('pid') != os.getpid() or ownership.get('payload_revision') != REFRESH_ID:
+        if ownership.get('pid') != os.getpid() or ownership.get('payload_revision') != revision:
             raise ValueError('Refresh worker ownership mismatch')
         if fingerprint(ROOT/task['input']) != task['fingerprint']:
             raise ValueError('Refresh ROOT fingerprint changed')
         previous = spec['previous_outputs'][key]
-        if not previous and not (task.get('rebuild_missing_seed') and key in MISSING_REFRESH_SEEDS
+        if not previous and not task.get('missing_historical_seed') and not (task.get('rebuild_missing_seed') and key in MISSING_REFRESH_SEEDS
                                  and key in spec[REFERENCE_REPAIR]['missing_seeds']):
             raise ValueError('Missing unregistered previous output: '+key)
         # Validate old output bytes before any canonical-path replacement.
@@ -398,30 +583,39 @@ def refresh_worker(campaign, key):
             if sha256(p) != record['sha256']:
                 raise ValueError('Prior histogram changed: '+record['output'])
         output = campaign/'outputs'/(key+'.json.gz')
-        old_output = preserve_before_refresh(campaign, output, move=True) if output.exists() else None
+        old_output = preserve_before_refresh(campaign, output, move=True, update_id=revision) if output.exists() else None
+        expected = refresh_result_contract(spec, task, None)
         with chunk_collection(True):
-            payload = build(ROOT/task['input'], 2025, output,
+            payload = build(ROOT/task['input'], task['year'], output,
                 variations=tuple(spec['variations']), shape_mode=plan['shape_mode'],
                 chunk_size=spec['chunk_size'], candidate_budget=plan.get('candidate_budget',150000),
                 support_only=bool(spec.get(SUPPORT_REFRESH)))
-        validate_payload(payload, task, spec['contract'])
+        validate_payload(payload, task, expected)
         from TROTASR.workflows.continue_systematic_campaign import finite_histogram_arrays
         for section in ('histograms','physical_histograms','dy_rz','dy_rz_variations'):
             finite_histogram_arrays(payload.get(section,{}))
+        migrations = []
         for record in previous:
             p = ROOT/record['output']
             if p == output and old_output is not None:
                 p = old_output
-            compare_refresh_populations(read_json(p), payload)
+            if revision == UPDATE_ID:
+                migrations.extend(compare_updated_populations(read_json(p), payload))
+            else:
+                compare_refresh_populations(read_json(p), payload)
         # Read back actual output, not just the in-memory builder return.
-        validate_payload(read_json(output), task, spec['contract'])
+        validate_payload(read_json(output), task, expected)
         refresh_plan(campaign)
         result = dict(ownership, status='complete', pid=None, finished=time.time(),
             output=str(output.relative_to(ROOT)), output_sha256=sha256(output),
-            entries=task['entries'], year=2025, seconds=payload['seconds'],
+            entries=task['entries'], year=task['year'], seconds=payload['seconds'],
             previous_populations_identical=True if previous else None,
             population_validation=('compared_to_retained_output' if previous else
                                    'retained_input_contract_old_seed_unavailable'), exit_code=0)
+        if revision == UPDATE_ID:
+            result.update(previous_populations_identical=(not migrations) if previous else None,
+                population_validation='muon_correction_migrations_recorded',
+                population_migrations=migrations, central_object_corrections=payload['audit']['central_object_corrections'])
     except BaseException as exc:
         result = dict(ownership, status='failed', pid=None, finished=time.time(), exit_code=1,
             error=str(exc), exception_type=type(exc).__name__, traceback=traceback.format_exc())
@@ -429,14 +623,15 @@ def refresh_worker(campaign, key):
     return result['exit_code']
 
 
-def execute_refresh(campaign, workers):
+def execute_refresh(campaign, workers, years=None):
     from TROTASR.workflows.nominal_campaign import resources, THREAD_ENV
     from TROTASR.workflows.normalization_recovery import process_identity
     from TROTASR.workflows.campaign_resources import memory_usage
     from TROTASR.workflows.merge_nominal import merge_refreshed_year
     with (campaign/'controller.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX|fcntl.LOCK_NB)
-        plan = prepare_refresh(campaign, workers); spec = plan['payload_refresh']
+        plan = prepare_refresh(campaign, workers, years); spec = plan['payload_refresh']
+        revision = spec['id']
         tasks = [t for t in spec['tasks'] if refresh_task_required(t)]
         # Start with small nonempty real shards; these production outputs are
         # reused, not a second pilot campaign. Every later file is also compared.
@@ -445,7 +640,7 @@ def execute_refresh(campaign, workers):
         for t in tasks:
             path=campaign/'state'/(t['key']+'.json')
             s=read_json(path) if path.exists() else {}
-            if s.get('payload_revision') == REFRESH_ID:
+            if s.get('payload_revision') == revision:
                 if s.get('status') == 'complete':
                     if sha256(ROOT/s['output']) != s['output_sha256']:
                         raise ValueError('Changed completed refresh')
@@ -462,8 +657,8 @@ def execute_refresh(campaign, workers):
                     continue
                 raise RuntimeError('Prior failed/interrupted refresh retained: '+t['key'])
             pending.append(t)
-        state=dict(status='payload_refresh_running',payload_revision=REFRESH_ID,
-            pid=os.getpid(),updated=time.time(),year=2025,total=len(tasks),
+        state=dict(status='payload_refresh_running',payload_revision=revision,
+            pid=os.getpid(),updated=time.time(),years=spec.get('years',[2025]),total=len(tasks),
             completed=len(completed),active=0,pending=len(pending),failed=[],full_workflow_complete=False)
         while pending or active:
             for key,(proc,stream) in list(active.items()):
@@ -483,14 +678,14 @@ def execute_refresh(campaign, workers):
                 len(active)+max(0,(memory-spec['reserve_bytes']-growth)//budget)))
             if memory < spec['emergency_bytes'] or failed:limit=0
             # Validate the first four actual production outputs before scaling.
-            if len(completed)<4:limit=min(limit,1)
+            if len(completed)<4:limit=min(limit,4)
             for _ in range(min(8,len(pending),max(0,limit-len(active)))):
                 task=pending.pop(0);key=task['key'];path=campaign/'state'/(key+'.json')
                 if (path.exists() and key not in spec.get(REFERENCE_REPAIR, {}).get('requeue', [])
                         and key not in spec.get(SUPPORT_REFRESH,{}).get('requeue',[])):
-                    preserve_before_refresh(campaign,path)
+                    preserve_before_refresh(campaign,path,update_id=revision)
                 log=campaign/'logs'/(key+'.log')
-                if log.exists():preserve_before_refresh(campaign,log,move=True)
+                if log.exists():preserve_before_refresh(campaign,log,move=True,update_id=revision)
                 stream=log.open('w')
                 command=[sys.executable,'-u',str(ROOT/'workflows/run_systematic_campaign.py'),
                     '--campaign',str(campaign),'--refresh-worker',key]
@@ -498,10 +693,10 @@ def execute_refresh(campaign, workers):
                 proc=subprocess.Popen(command,cwd=ROOT,env=dict(os.environ,**THREAD_ENV),
                     stdin=subprocess.DEVNULL,stdout=stream,stderr=subprocess.STDOUT)
                 write_json(path,dict(status='running',key=key,pid=proc.pid,identity=process_identity(proc.pid),
-                    command=command,started=time.time(),payload_revision=REFRESH_ID))
+                    command=command,started=time.time(),payload_revision=revision))
                 active[key]=(proc,stream)
-            state=dict(status='payload_refresh_running',payload_revision=REFRESH_ID,
-                pid=os.getpid(),updated=time.time(),year=2025,total=len(tasks),
+            state=dict(status='payload_refresh_running',payload_revision=revision,
+                pid=os.getpid(),updated=time.time(),years=spec.get('years',[2025]),total=len(tasks),
                 completed=len(completed),active=len(active),pending=len(pending),failed=list(failed),
                 memory_available_bytes=memory,worker_budget_bytes=budget,external_slots=external,
                 admission_limit=limit,aggregate_slots=100,full_workflow_complete=False)
@@ -518,10 +713,11 @@ def execute_refresh(campaign, workers):
             retained_input_contract_for_deleted_seeds=[t['key'] for t in tasks if t.get('rebuild_missing_seed')],
             corrected_compiled_payload=True,completed=time.time())
         write_json(campaign/'plan.json',plan)
-        for suffix in ('.json.gz','.summary.json'):
-            p=campaign/'merged'/('systematics_2025'+suffix)
-            if p.exists():preserve_before_refresh(campaign,p,move=True)
-        merge_refreshed_year(campaign)
+        for year in spec.get('years', [2025]):
+            for suffix in ('.json.gz','.summary.json'):
+                p=campaign/'merged'/('systematics_'+str(year)+suffix)
+                if p.exists():preserve_before_refresh(campaign,p,move=True,update_id=revision)
+            merge_refreshed_year(campaign, year)
         write_json(campaign/'state.json',dict(state,status='histograms_complete',pid=None,
             total=len(plan['tasks']),completed=len(plan['tasks']),active=0,pending=0,failed=[],
             refreshed_files=len(completed),completed_time=time.time()))
@@ -654,6 +850,14 @@ def check_integration(campaign):
     return previous_gate
 
 
+def campaign_years(plan):
+    """Merge only the eras actually frozen in this canonical campaign."""
+    eras = sorted({analysis_era(task['year']) for task in plan['tasks']})
+    if not eras or set(eras) != set(plan['contracts']):
+        raise ValueError('Systematic task eras differ from frozen contracts')
+    return [era_year(era) for era in eras]
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--campaign',required=True,type=Path)
@@ -663,14 +867,23 @@ def main():
     action.add_argument('--file-worker',help=argparse.SUPPRESS)
     action.add_argument('--refresh-year',type=int,choices=[2025],
                         help='Apply the approved 2025 SF update in this existing central campaign')
+    action.add_argument('--update-years', type=int, nargs='+', choices=[2024,2025],
+                        help='Apply the approved current object/SF corrections to both central years')
     action.add_argument('--refresh-worker',help=argparse.SUPPRESS)
+    action.add_argument('--adopt-unchanged-views',action='store_true',
+                        help='Register the exact-output reuse optimization without repeating completed work')
     p.add_argument('--workers',type=int,default=98)
     p.add_argument('--adopt-execution',type=Path,help='Existing execution contract whose live workers and successful receipts must be retained')
     a=p.parse_args();campaign=internal_path(a.campaign)
+    if a.adopt_unchanged_views:
+        adopt_unchanged_views(campaign)
+        return 0
     if a.refresh_worker:
         return refresh_worker(campaign,a.refresh_worker)
     if a.refresh_year:
         return execute_refresh(campaign,a.workers)
+    if a.update_years:
+        return execute_refresh(campaign,a.workers,a.update_years)
     if a.file_worker:
         return file_worker(campaign,a.file_worker)
     if a.check_integration:
@@ -687,7 +900,7 @@ def main():
         raise ValueError('This entry point requires a validated JME or stored-TROTA weight campaign')
     rc=run(campaign)
     if rc:return rc
-    merged={str(y):str(merge(campaign,y)) for y in (2024,2025)}
+    merged={str(y):str(merge(campaign,y)) for y in campaign_years(plan)}
     write_json(campaign/'stage_result.json',dict(status='stored_trota_nonjme_histograms_merged' if nonjme else 'stored_trota_weight_histograms_merged' if weights_only else 'central_weights_jme_histograms_merged',
         completed=time.time(),merged=merged,full_workflow_complete=False,
         remaining=([] if nonjme else ['other object-shape propagation with unchanged strategy'])+[

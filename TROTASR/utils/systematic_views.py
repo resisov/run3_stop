@@ -42,7 +42,7 @@ def anchored_endpoints(a, year, audit=None):
     return values
 
 
-def analysis_support(view):
+def analysis_support(view, year=2024):
     """Necessary pre-topology selection, including the off-Z measurement.
 
     This is an execution mask, not a new selection: an event outside this
@@ -50,7 +50,7 @@ def analysis_support(view):
     """
     from .event_selections import REGIONS, highdm_core
     from .region_kinematics import build_region_blocks
-    blocks, _ = build_region_blocks(view, dy_mass_window=None)
+    blocks, _ = build_region_blocks(view, dy_mass_window=None, year=year)
     support = np.zeros(len(view), dtype=bool)
     for region in REGIONS:
         support |= highdm_core(view, blocks, region, dy_mass_window=None)
@@ -92,7 +92,7 @@ def event_views(chunks, year, models, audit, candidate_budget=150000, support_on
                                                  for n in P4_FIELDS}) for s in endpoints}
         bounds = {0, len(original)}
         for view in inference_inputs.values():
-            for sl in bounded_slices(view, candidate_budget):
+            for sl in bounded_slices(view, candidate_budget, year=year):
                 bounds.update((sl.start, sl.stop))
         bounds = sorted(bounds)
         for start, stop in zip(bounds[:-1], bounds[1:]):
@@ -101,7 +101,7 @@ def event_views(chunks, year, models, audit, candidate_budget=150000, support_on
             for shift in endpoints:
                 momenta = {k: v[start:stop] for k,v in values[shift].items()}
                 if support_only:
-                    support = analysis_support(varied_view(source, momenta))
+                    support = analysis_support(varied_view(source, momenta, year=year), year=year)
                     inferred, resolved, counts, states = supported_inference(
                         inference_inputs[shift][start:stop], models, support)
                 else:
@@ -110,7 +110,7 @@ def event_views(chunks, year, models, audit, candidate_budget=150000, support_on
                 # reference or into later correction calculations.
                 for name in P4_FIELDS:
                     inferred = ak.with_field(inferred, source[name], name)
-                view = varied_view(inferred, momenta)
+                view = varied_view(inferred, momenta, year=year)
                 record = audit.setdefault(shift, dict(events=0, resolved_candidates=0, resolved_passing=0,
                     mixed_candidates=0, mixed_passing=0, candidate_migrations={}))
                 for name, count in counts.items():

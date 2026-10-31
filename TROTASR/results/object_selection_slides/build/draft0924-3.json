@@ -1,0 +1,2136 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/ofy9wn61",
+    "id": "ofy9wn61",
+    "slide": 3,
+    "layoutId": "/ppt/slideLayouts/slideLayout2.xml",
+    "layoutName": "제목 및 내용",
+    "layoutType": "obj",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "Office",
+    "colors": {
+      "accent1": "#4472C4",
+      "accent2": "#ED7D31",
+      "accent3": "#A5A5A5",
+      "accent4": "#FFC000",
+      "accent5": "#5B9BD5",
+      "accent6": "#70AD47",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#44546A",
+      "lt2": "#E7E6E6",
+      "hlink": "#0563C1",
+      "folHlink": "#954F72"
+    },
+    "fontScheme": {
+      "name": "Office",
+      "majorFont": {
+        "latinTypeface": "맑은 고딕"
+      },
+      "minorFont": {
+        "latinTypeface": "맑은 고딕"
+      }
+    },
+    "typefaces": [
+      "Helvetica Neue Light",
+      "Helvetica Neue Medium",
+      "맑은 고딕"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout2.xml",
+      "name": "제목 및 내용",
+      "type": "obj",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": [
+        {
+          "order": 1,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout2.xml/2",
+          "id": "2",
+          "name": "제목 1",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "text": "마스터 제목 스타일 편집",
+          "textPreview": "마스터 제목 스타일 편집",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "마스터 제목 스타일 편집",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "마스터 제목 스타일 편집"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout2.xml/3",
+          "id": "3",
+          "name": "내용 개체 틀 2",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "text": "마스터 텍스트 스타일을 편집하려면 클릭\n두 번째 수준\n세 번째 수준\n네 번째 수준\n다섯 번째 수준",
+          "textPreview": "마스터 텍스트 스타일을 편집하려면 클릭 | 두 번째 수준 | 세 번째 수준 | 네 번째 수준 | 다섯 번째 수준",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "마스터 텍스트 스타일을 편집하려면 클릭",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "마스터 텍스트 스타일을 편집하려면 클릭"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "text": "두 번째 수준",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "두 번째 수준"
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "text": "세 번째 수준",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "세 번째 수준"
+                }
+              ]
+            },
+            {
+              "index": 4,
+              "text": "네 번째 수준",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "네 번째 수준"
+                }
+              ]
+            },
+            {
+              "index": 5,
+              "text": "다섯 번째 수준",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "다섯 번째 수준"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout2.xml/4",
+          "id": "4",
+          "name": "날짜 개체 틀 3",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "text": "2026. 9. 24.",
+          "textPreview": "2026. 9. 24.",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "2026. 9. 24.",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "2026. 9. 24."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout2.xml/5",
+          "id": "5",
+          "name": "바닥글 개체 틀 4",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "order": 5,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout2.xml/6",
+          "id": "6",
+          "name": "슬라이드 번호 개체 틀 5",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "text": "‹#›",
+          "textPreview": "‹#›",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "‹#›",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "‹#›"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "type": "master",
+      "elements": [
+        {
+          "order": 1,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/2",
+          "id": "2",
+          "name": "제목 개체 틀 1",
+          "bbox": [
+            88,
+            38.33,
+            1104,
+            139.17
+          ],
+          "geometry": "rect",
+          "text": "마스터 제목 스타일 편집",
+          "textPreview": "마스터 제목 스타일 편집",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "마스터 제목 스타일 편집",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "마스터 제목 스타일 편집"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/3",
+          "id": "3",
+          "name": "텍스트 개체 틀 2",
+          "bbox": [
+            88,
+            191.67,
+            1104,
+            456.83
+          ],
+          "geometry": "rect",
+          "text": "마스터 텍스트 스타일을 편집하려면 클릭\n두 번째 수준\n세 번째 수준\n네 번째 수준\n다섯 번째 수준",
+          "textPreview": "마스터 텍스트 스타일을 편집하려면 클릭 | 두 번째 수준 | 세 번째 수준 | 네 번째 수준 | 다섯 번째 수준",
+          "resolvedTextStyle": {
+            "vertical": 1,
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "마스터 텍스트 스타일을 편집하려면 클릭",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "마스터 텍스트 스타일을 편집하려면 클릭"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "text": "두 번째 수준",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "두 번째 수준"
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "text": "세 번째 수준",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "세 번째 수준"
+                }
+              ]
+            },
+            {
+              "index": 4,
+              "text": "네 번째 수준",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "네 번째 수준"
+                }
+              ]
+            },
+            {
+              "index": 5,
+              "text": "다섯 번째 수준",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "다섯 번째 수준"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/4",
+          "id": "4",
+          "name": "날짜 개체 틀 3",
+          "bbox": [
+            88,
+            667.33,
+            288,
+            38.33
+          ],
+          "geometry": "rect",
+          "text": "2026. 9. 24.",
+          "textPreview": "2026. 9. 24.",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "2026. 9. 24.",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "2026. 9. 24."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/5",
+          "id": "5",
+          "name": "바닥글 개체 틀 4",
+          "bbox": [
+            424,
+            667.33,
+            432,
+            38.33
+          ],
+          "geometry": "rect",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          }
+        },
+        {
+          "order": 5,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/6",
+          "id": "6",
+          "name": "슬라이드 번호 개체 틀 5",
+          "bbox": [
+            904,
+            667.33,
+            288,
+            38.33
+          ],
+          "geometry": "rect",
+          "text": "‹#›",
+          "textPreview": "‹#›",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "‹#›",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "‹#›"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/cza94vmx",
+      "id": "2",
+      "name": "제목 1",
+      "bbox": [
+        53.61,
+        0,
+        1172.79,
+        139.17
+      ],
+      "text": "Object hierarchy",
+      "textPreview": "Object hierarchy",
+      "resolvedFontSize": 58.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 58.67,
+        "typeface": "맑은 고딕",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "autoFit": "shrinkText",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Object hierarchy"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Object hierarchy",
+          "runs": [
+            {
+              "index": 1,
+              "text": "Object hierarchy",
+              "typeface": "Helvetica Neue Medium"
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 90000
+        }
+      ]
+    },
+    {
+      "order": 2,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/tk36hgva",
+      "id": "19",
+      "name": "그림 5",
+      "bbox": [
+        1192,
+        634.31,
+        75.59,
+        75.59
+      ],
+      "contentType": "image/jpeg",
+      "asset": {
+        "assetId": "/ppt/media/image3.jpg",
+        "contentType": "image/jpeg",
+        "byteLength": 115589
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image3.jpg",
+        "contentType": "image/jpeg",
+        "byteLength": 115589
+      }
+    },
+    {
+      "order": 3,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/p4bu58jm",
+      "id": "20",
+      "name": "그림 2",
+      "bbox": [
+        1097.05,
+        634.31,
+        75.59,
+        75.59
+      ],
+      "contentType": "image/png",
+      "asset": {
+        "assetId": "/ppt/media/image2.png",
+        "contentType": "image/png",
+        "byteLength": 8695
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image2.png",
+        "contentType": "image/png",
+        "byteLength": 8695
+      }
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ja54na9g",
+      "id": "18",
+      "name": "부제목 2",
+      "bbox": [
+        33.05,
+        687.38,
+        1064.55,
+        28.34
+      ],
+      "geometry": "rect",
+      "text": "2     2026. 9. 24.     Taiwoo KIM – Weekly Stop Meeting",
+      "textPreview": "2     2026. 9. 24.     Taiwoo KIM – Weekly Stop Meeting",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Helvetica Neue Light",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 9.6,
+          "bottom": 0,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "2     2026. 9. 24.     Taiwoo KIM – Weekly Stop Meeting"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "2     2026. 9. 24.     Taiwoo KIM – Weekly Stop Meeting",
+          "resolvedTextStyle": {
+            "fontSize": 18.67,
+            "typeface": "Helvetica Neue Light",
+            "color": "#000000"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "2     2026. 9. 24.     Taiwoo KIM – Weekly Stop Meeting",
+              "fontSize": 18.67,
+              "typeface": "Helvetica Neue Light",
+              "color": "#000000"
+            }
+          ],
+          "bulletCharacter": "•",
+          "marginLeft": 228600,
+          "indent": -228600,
+          "lineSpacingPercent": 90000
+        }
+      ]
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/943mhgre",
+      "id": "12",
+      "name": "직선 연결선[R] 11",
+      "bbox": [
+        42.18,
+        681.21,
+        1026.62,
+        0
+      ],
+      "horizontalFlip": true,
+      "geometry": "line",
+      "lineColor": "tx1",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/f29gbyx0",
+      "id": "21",
+      "name": "boosted",
+      "bbox": [
+        63,
+        148,
+        210,
+        66
+      ],
+      "geometry": "roundRect",
+      "text": "1  Boosted\nNbst",
+      "textPreview": "1  Boosted | Nbst",
+      "resolvedFontSize": 27,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 27,
+        "typeface": "Helvetica Neue Light",
+        "color": "#FFFFFF",
+        "alignment": "center",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 4,
+          "right": 8,
+          "bottom": 4,
+          "left": 8
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "1  Boosted"
+          },
+          {
+            "index": 2,
+            "text": "Nbst"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "1  Boosted",
+          "resolvedTextStyle": {
+            "fontSize": 27,
+            "typeface": "Helvetica Neue Light",
+            "color": "#FFFFFF",
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "1  Boosted",
+              "fontSize": 27,
+              "typeface": "Helvetica Neue Light",
+              "color": "#FFFFFF",
+              "alignment": "center"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "Nbst",
+          "resolvedTextStyle": {
+            "fontSize": 27,
+            "typeface": "Helvetica Neue Light",
+            "color": "#FFFFFF",
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Nbst",
+              "fontSize": 27,
+              "typeface": "Helvetica Neue Light",
+              "color": "#FFFFFF",
+              "alignment": "center"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": "#4472C4",
+      "lineColor": "#002060",
+      "lineWidth": 1
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/03ix43e5",
+      "id": "22",
+      "name": "mixed",
+      "bbox": [
+        63,
+        233,
+        210,
+        66
+      ],
+      "geometry": "roundRect",
+      "text": "2  Mixed\nNmix",
+      "textPreview": "2  Mixed | Nmix",
+      "resolvedFontSize": 27,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 27,
+        "typeface": "Helvetica Neue Light",
+        "color": "#FFFFFF",
+        "alignment": "center",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 4,
+          "right": 8,
+          "bottom": 4,
+          "left": 8
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "2  Mixed"
+          },
+          {
+            "index": 2,
+            "text": "Nmix"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "2  Mixed",
+          "resolvedTextStyle": {
+            "fontSize": 27,
+            "typeface": "Helvetica Neue Light",
+            "color": "#FFFFFF",
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "2  Mixed",
+              "fontSize": 27,
+              "typeface": "Helvetica Neue Light",
+              "color": "#FFFFFF",
+              "alignment": "center"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "Nmix",
+          "resolvedTextStyle": {
+            "fontSize": 27,
+            "typeface": "Helvetica Neue Light",
+            "color": "#FFFFFF",
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Nmix",
+              "fontSize": 27,
+              "typeface": "Helvetica Neue Light",
+              "color": "#FFFFFF",
+              "alignment": "center"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": "#4472C4",
+      "lineColor": "#002060",
+      "lineWidth": 1
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/14ryd8fq",
+      "id": "23",
+      "name": "resolved",
+      "bbox": [
+        63,
+        318,
+        210,
+        66
+      ],
+      "geometry": "roundRect",
+      "text": "3  Resolved\nNres",
+      "textPreview": "3  Resolved | Nres",
+      "resolvedFontSize": 27,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 27,
+        "typeface": "Helvetica Neue Light",
+        "color": "#FFFFFF",
+        "alignment": "center",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 4,
+          "right": 8,
+          "bottom": 4,
+          "left": 8
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "3  Resolved"
+          },
+          {
+            "index": 2,
+            "text": "Nres"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "3  Resolved",
+          "resolvedTextStyle": {
+            "fontSize": 27,
+            "typeface": "Helvetica Neue Light",
+            "color": "#FFFFFF",
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "3  Resolved",
+              "fontSize": 27,
+              "typeface": "Helvetica Neue Light",
+              "color": "#FFFFFF",
+              "alignment": "center"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "Nres",
+          "resolvedTextStyle": {
+            "fontSize": 27,
+            "typeface": "Helvetica Neue Light",
+            "color": "#FFFFFF",
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Nres",
+              "fontSize": 27,
+              "typeface": "Helvetica Neue Light",
+              "color": "#FFFFFF",
+              "alignment": "center"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": "#4472C4",
+      "lineColor": "#002060",
+      "lineWidth": 1
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/6d0fytg3",
+      "id": "24",
+      "name": "w",
+      "bbox": [
+        63,
+        403,
+        210,
+        66
+      ],
+      "geometry": "roundRect",
+      "text": "4  W\nNw",
+      "textPreview": "4  W | Nw",
+      "resolvedFontSize": 27,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 27,
+        "typeface": "Helvetica Neue Light",
+        "color": "#FFFFFF",
+        "alignment": "center",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 4,
+          "right": 8,
+          "bottom": 4,
+          "left": 8
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "4  W"
+          },
+          {
+            "index": 2,
+            "text": "Nw"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "4  W",
+          "resolvedTextStyle": {
+            "fontSize": 27,
+            "typeface": "Helvetica Neue Light",
+            "color": "#FFFFFF",
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "4  W",
+              "fontSize": 27,
+              "typeface": "Helvetica Neue Light",
+              "color": "#FFFFFF",
+              "alignment": "center"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "Nw",
+          "resolvedTextStyle": {
+            "fontSize": 27,
+            "typeface": "Helvetica Neue Light",
+            "color": "#FFFFFF",
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Nw",
+              "fontSize": 27,
+              "typeface": "Helvetica Neue Light",
+              "color": "#FFFFFF",
+              "alignment": "center"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": "#002060",
+      "lineColor": "#002060",
+      "lineWidth": 1
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/re9g7yxo",
+      "id": "25",
+      "bbox": [
+        168,
+        214,
+        0,
+        19
+      ],
+      "geometry": "straightConnector1",
+      "lineColor": "#002060",
+      "lineWidth": 2
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/sfix03y9",
+      "id": "26",
+      "bbox": [
+        168,
+        299,
+        0,
+        19
+      ],
+      "geometry": "straightConnector1",
+      "lineColor": "#002060",
+      "lineWidth": 2
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/tgry9ofu",
+      "id": "27",
+      "bbox": [
+        168,
+        384,
+        0,
+        19
+      ],
+      "geometry": "straightConnector1",
+      "lineColor": "#002060",
+      "lineWidth": 2
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/a9kfadwn",
+      "id": "28",
+      "name": "stage-0",
+      "bbox": [
+        298,
+        148,
+        492,
+        66
+      ],
+      "geometry": "rect",
+      "text": "Keep all passing AK8 jets.\nReserve their overlapping AK4 jets.",
+      "textPreview": "Keep all passing AK8 jets. | Reserve their overlapping AK4 jets.",
+      "resolvedFontSize": 23.51,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 23.51,
+        "typeface": "Helvetica Neue Light",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Keep all passing AK8 jets."
+          },
+          {
+            "index": 2,
+            "text": "Reserve their overlapping AK4 jets."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Keep all passing AK8 jets.",
+          "resolvedTextStyle": {
+            "fontSize": 23.51,
+            "typeface": "Helvetica Neue Light",
+            "color": "#000000"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Keep all passing AK8 jets.",
+              "fontSize": 23.51,
+              "typeface": "Helvetica Neue Light",
+              "color": "#000000"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "Reserve their overlapping AK4 jets.",
+          "resolvedTextStyle": {
+            "fontSize": 23.51,
+            "typeface": "Helvetica Neue Light",
+            "color": "#000000"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Reserve their overlapping AK4 jets.",
+              "fontSize": 23.51,
+              "typeface": "Helvetica Neue Light",
+              "color": "#000000"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/batgjixs",
+      "id": "29",
+      "name": "stage-1",
+      "bbox": [
+        298,
+        233,
+        492,
+        66
+      ],
+      "geometry": "rect",
+      "text": "Highest score first. Reject shared AK8\nor AK4 overlap with selected tops.",
+      "textPreview": "Highest score first. Reject shared AK8 | or AK4 overlap with selected tops.",
+      "resolvedFontSize": 23.51,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 23.51,
+        "typeface": "Helvetica Neue Light",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Highest score first. Reject shared AK8"
+          },
+          {
+            "index": 2,
+            "text": "or AK4 overlap with selected tops."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Highest score first. Reject shared AK8",
+          "resolvedTextStyle": {
+            "fontSize": 23.51,
+            "typeface": "Helvetica Neue Light",
+            "color": "#000000"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Highest score first. Reject shared AK8",
+              "fontSize": 23.51,
+              "typeface": "Helvetica Neue Light",
+              "color": "#000000"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "or AK4 overlap with selected tops.",
+          "resolvedTextStyle": {
+            "fontSize": 23.51,
+            "typeface": "Helvetica Neue Light",
+            "color": "#000000"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "or AK4 overlap with selected tops.",
+              "fontSize": 23.51,
+              "typeface": "Helvetica Neue Light",
+              "color": "#000000"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 15,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/l4fi9cza",
+      "id": "30",
+      "name": "stage-2",
+      "bbox": [
+        298,
+        318,
+        492,
+        66
+      ],
+      "geometry": "rect",
+      "text": "Highest score first. Reject AK4 overlap\nwith selected tops.",
+      "textPreview": "Highest score first. Reject AK4 overlap | with selected tops.",
+      "resolvedFontSize": 23.51,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 23.51,
+        "typeface": "Helvetica Neue Light",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Highest score first. Reject AK4 overlap"
+          },
+          {
+            "index": 2,
+            "text": "with selected tops."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Highest score first. Reject AK4 overlap",
+          "resolvedTextStyle": {
+            "fontSize": 23.51,
+            "typeface": "Helvetica Neue Light",
+            "color": "#000000"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Highest score first. Reject AK4 overlap",
+              "fontSize": 23.51,
+              "typeface": "Helvetica Neue Light",
+              "color": "#000000"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "with selected tops.",
+          "resolvedTextStyle": {
+            "fontSize": 23.51,
+            "typeface": "Helvetica Neue Light",
+            "color": "#000000"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "with selected tops.",
+              "fontSize": 23.51,
+              "typeface": "Helvetica Neue Light",
+              "color": "#000000"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 16,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/k3m1g7yp",
+      "id": "31",
+      "name": "stage-3",
+      "bbox": [
+        298,
+        403,
+        492,
+        66
+      ],
+      "geometry": "rect",
+      "text": "Reject shared AK8 or AK4 overlap\nwith selected tops. Keep independent W.",
+      "textPreview": "Reject shared AK8 or AK4 overlap | with selected tops. Keep independent W.",
+      "resolvedFontSize": 23.51,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 23.51,
+        "typeface": "Helvetica Neue Light",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Reject shared AK8 or AK4 overlap"
+          },
+          {
+            "index": 2,
+            "text": "with selected tops. Keep independent W."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Reject shared AK8 or AK4 overlap",
+          "resolvedTextStyle": {
+            "fontSize": 23.51,
+            "typeface": "Helvetica Neue Light",
+            "color": "#000000"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Reject shared AK8 or AK4 overlap",
+              "fontSize": 23.51,
+              "typeface": "Helvetica Neue Light",
+              "color": "#000000"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "with selected tops. Keep independent W.",
+          "resolvedTextStyle": {
+            "fontSize": 23.51,
+            "typeface": "Helvetica Neue Light",
+            "color": "#000000"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "with selected tops. Keep independent W.",
+              "fontSize": 23.51,
+              "typeface": "Helvetica Neue Light",
+              "color": "#000000"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 17,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/z2d07mh4",
+      "id": "32",
+      "name": "overlap-heading",
+      "bbox": [
+        828,
+        146,
+        394,
+        35
+      ],
+      "geometry": "rect",
+      "text": "AK4–AK8 overlap",
+      "textPreview": "AK4–AK8 overlap",
+      "resolvedFontSize": 29,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 29,
+        "typeface": "Helvetica Neue Medium",
+        "color": "#002060",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "AK4–AK8 overlap"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "AK4–AK8 overlap",
+          "resolvedTextStyle": {
+            "fontSize": 29,
+            "typeface": "Helvetica Neue Medium",
+            "color": "#002060",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "AK4–AK8 overlap",
+              "fontSize": 29,
+              "typeface": "Helvetica Neue Medium",
+              "color": "#002060",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 18,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/y14jehgj",
+      "id": "33",
+      "name": "two-subjets",
+      "bbox": [
+        828,
+        196,
+        394,
+        31
+      ],
+      "geometry": "rect",
+      "text": "AK8 has two valid SubJets",
+      "textPreview": "AK8 has two valid SubJets",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 24,
+        "typeface": "Helvetica Neue Medium",
+        "color": "#000000",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "AK8 has two valid SubJets"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "AK8 has two valid SubJets",
+          "resolvedTextStyle": {
+            "fontSize": 24,
+            "typeface": "Helvetica Neue Medium",
+            "color": "#000000",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "AK8 has two valid SubJets",
+              "fontSize": 24,
+              "typeface": "Helvetica Neue Medium",
+              "color": "#000000",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 19,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/x0vi5czy",
+      "id": "34",
+      "name": "subjet-rule",
+      "bbox": [
+        828,
+        234,
+        396,
+        71
+      ],
+      "geometry": "rect",
+      "text": "ΔR(AK4, SubJet 1) < 0.4\nor ΔR(AK4, SubJet 2) < 0.4",
+      "textPreview": "ΔR(AK4, SubJet 1) < 0.4 | or ΔR(AK4, SubJet 2) < 0.4",
+      "resolvedFontSize": 24.51,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 24.51,
+        "typeface": "Helvetica Neue Light",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "ΔR(AK4, SubJet 1) < 0.4"
+          },
+          {
+            "index": 2,
+            "text": "or ΔR(AK4, SubJet 2) < 0.4"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "ΔR(AK4, SubJet 1) < 0.4",
+          "resolvedTextStyle": {
+            "fontSize": 24.51,
+            "typeface": "Helvetica Neue Light",
+            "color": "#000000"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "ΔR(AK4, SubJet 1) < 0.4",
+              "fontSize": 24.51,
+              "typeface": "Helvetica Neue Light",
+              "color": "#000000"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "or ΔR(AK4, SubJet 2) < 0.4",
+          "resolvedTextStyle": {
+            "fontSize": 24.51,
+            "typeface": "Helvetica Neue Light",
+            "color": "#000000"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "or ΔR(AK4, SubJet 2) < 0.4",
+              "fontSize": 24.51,
+              "typeface": "Helvetica Neue Light",
+              "color": "#000000"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 20,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/czmhc7id",
+      "id": "35",
+      "name": "fallback-heading",
+      "bbox": [
+        828,
+        326,
+        394,
+        31
+      ],
+      "geometry": "rect",
+      "text": "Otherwise",
+      "textPreview": "Otherwise",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 24,
+        "typeface": "Helvetica Neue Medium",
+        "color": "#000000",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Otherwise"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Otherwise",
+          "resolvedTextStyle": {
+            "fontSize": 24,
+            "typeface": "Helvetica Neue Medium",
+            "color": "#000000",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Otherwise",
+              "fontSize": 24,
+              "typeface": "Helvetica Neue Medium",
+              "color": "#000000",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 21,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/byd032h8",
+      "id": "36",
+      "name": "fallback-rule",
+      "bbox": [
+        828,
+        366,
+        394,
+        45
+      ],
+      "geometry": "rect",
+      "text": "ΔR(AK4, AK8 axis) < 0.8",
+      "textPreview": "ΔR(AK4, AK8 axis) < 0.8",
+      "resolvedFontSize": 25,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 25,
+        "typeface": "Helvetica Neue Light",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "ΔR(AK4, AK8 axis) < 0.8"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "ΔR(AK4, AK8 axis) < 0.8",
+          "resolvedTextStyle": {
+            "fontSize": 25,
+            "typeface": "Helvetica Neue Light",
+            "color": "#000000"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "ΔR(AK4, AK8 axis) < 0.8",
+              "fontSize": 25,
+              "typeface": "Helvetica Neue Light",
+              "color": "#000000"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 22,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ax4zax0n",
+      "id": "37",
+      "name": "overlap-meaning",
+      "bbox": [
+        828,
+        435,
+        394,
+        61
+      ],
+      "geometry": "rect",
+      "text": "AK4 jets satisfying this rule\nenter the overlap veto.",
+      "textPreview": "AK4 jets satisfying this rule | enter the overlap veto.",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 24,
+        "typeface": "Helvetica Neue Light",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "AK4 jets satisfying this rule"
+          },
+          {
+            "index": 2,
+            "text": "enter the overlap veto."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "AK4 jets satisfying this rule",
+          "resolvedTextStyle": {
+            "fontSize": 24,
+            "typeface": "Helvetica Neue Light",
+            "color": "#000000"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "AK4 jets satisfying this rule",
+              "fontSize": 24,
+              "typeface": "Helvetica Neue Light",
+              "color": "#000000"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "enter the overlap veto.",
+          "resolvedTextStyle": {
+            "fontSize": 24,
+            "typeface": "Helvetica Neue Light",
+            "color": "#000000"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "enter the overlap veto.",
+              "fontSize": 24,
+              "typeface": "Helvetica Neue Light",
+              "color": "#000000"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 23,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/hwzihwzi",
+      "id": "38",
+      "name": "candidate-not-event",
+      "bbox": [
+        65,
+        523,
+        1150,
+        38
+      ],
+      "geometry": "rect",
+      "text": "Only the overlapping candidate is rejected. Independent Mixed and W can coexist.",
+      "textPreview": "Only the overlapping candidate is rejected. Independent Mixed and W can coexist.",
+      "resolvedFontSize": 25,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 25,
+        "typeface": "Helvetica Neue Light",
+        "color": "#002060",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Only the overlapping candidate is rejected. Independent Mixed and W can coexist."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Only the overlapping candidate is rejected. Independent Mixed and W can coexist.",
+          "resolvedTextStyle": {
+            "fontSize": 25,
+            "typeface": "Helvetica Neue Light",
+            "color": "#002060"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Only the overlapping candidate is rejected. Independent Mixed and W can coexist.",
+              "fontSize": 25,
+              "typeface": "Helvetica Neue Light",
+              "color": "#002060"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 24,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/wv61obyx",
+      "id": "39",
+      "name": "current-limitations",
+      "bbox": [
+        65,
+        568,
+        1150,
+        34
+      ],
+      "geometry": "rect",
+      "text": "No Boosted–Boosted or W–W pairwise veto. No direct ΔR(AK8, AK8) cut.",
+      "textPreview": "No Boosted–Boosted or W–W pairwise veto. No direct ΔR(AK8, AK8) cut.",
+      "resolvedFontSize": 23,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 23,
+        "typeface": "Helvetica Neue Light",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "No Boosted–Boosted or W–W pairwise veto. No direct ΔR(AK8, AK8) cut."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "No Boosted–Boosted or W–W pairwise veto. No direct ΔR(AK8, AK8) cut.",
+          "resolvedTextStyle": {
+            "fontSize": 23,
+            "typeface": "Helvetica Neue Light",
+            "color": "#000000"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "No Boosted–Boosted or W–W pairwise veto. No direct ΔR(AK8, AK8) cut.",
+              "fontSize": 23,
+              "typeface": "Helvetica Neue Light",
+              "color": "#000000"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 25,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/4nuhs7uh",
+      "id": "40",
+      "name": "topology-selection",
+      "bbox": [
+        65,
+        610,
+        1020,
+        35
+      ],
+      "geometry": "rect",
+      "text": "High-dM: Nbst + Nmix + Nres + Nw ≥ 1. Low-dM: all four counts = 0.",
+      "textPreview": "High-dM: Nbst + Nmix + Nres + Nw ≥ 1. Low-dM: all four counts = 0.",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 24,
+        "typeface": "Helvetica Neue Light",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "High-dM: Nbst + Nmix + Nres + Nw ≥ 1. Low-dM: all four counts = 0."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "High-dM: Nbst + Nmix + Nres + Nw ≥ 1. Low-dM: all four counts = 0.",
+          "resolvedTextStyle": {
+            "fontSize": 24,
+            "typeface": "Helvetica Neue Light",
+            "color": "#000000"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "High-dM: Nbst + Nmix + Nres + Nw ≥ 1. Low-dM: all four counts = 0.",
+              "fontSize": 24,
+              "typeface": "Helvetica Neue Light",
+              "color": "#000000"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 26,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/po3ilcvm",
+      "id": "41",
+      "name": "nb-independent",
+      "bbox": [
+        65,
+        649,
+        970,
+        24
+      ],
+      "geometry": "rect",
+      "text": "The overlap veto does not reduce Nb.",
+      "textPreview": "The overlap veto does not reduce Nb.",
+      "resolvedFontSize": 21,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 21,
+        "typeface": "Helvetica Neue Light",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "The overlap veto does not reduce Nb."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "The overlap veto does not reduce Nb.",
+          "resolvedTextStyle": {
+            "fontSize": 21,
+            "typeface": "Helvetica Neue Light",
+            "color": "#000000"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "The overlap veto does not reduce Nb.",
+              "fontSize": 21,
+              "typeface": "Helvetica Neue Light",
+              "color": "#000000"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

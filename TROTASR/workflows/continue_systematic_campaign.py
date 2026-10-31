@@ -32,11 +32,15 @@ def main():
     p.add_argument('--nonjme-throughput',action='store_true')
     p.add_argument('--statistics-adapter',action='store_true')
     p.add_argument('--endpoint-execution',action='store_true')
+    p.add_argument('--forward-jer-support', action='store_true')
     p.add_argument('--recover-retained',action='store_true',
                    help='Verify and adopt existing terminal retained outputs; never rerun events')
     p.add_argument('--evidence',type=Path,
                    help='Relocated, byte-identical endpoint equivalence evidence')
     args=p.parse_args();campaign=internal_path(args.campaign)
+    if args.forward_jer_support:
+        if args.evidence is None:p.error('--forward-jer-support requires --evidence')
+        return apply_forward_jer_support(campaign, internal_path(args.evidence), args.apply)
     if args.recover_retained:
         if args.evidence is None:
             p.error('--recover-retained requires --evidence')
@@ -156,6 +160,142 @@ def main():
     receipt.update(status='controller_started',controller_pid=proc.pid,controller_start_ticks=ident['start_ticks'])
     write_json(campaign/'input_policy_update.json',receipt)
     print(dict(status='controller_started',pid=proc.pid,retained_workers=len(retained),log=str(log)),flush=True)
+
+
+def apply_forward_jer_support(campaign, request_path, apply):
+    """Promote the exact validated forward sentinel fix; preserve live workers."""
+    import contextlib
+    import importlib
+    from TROTASR.workflows import nominal_campaign as nc
+    from TROTASR.workflows import control_systematic_memory as control
+    request = read_json(request_path); folder = request_path.parent
+    report = folder/'handoff.json'
+    names = ['early_jme_optimized_20261025', 'early_nonjme_optimized_20261025']
+    if campaign != ROOT/'campaigns'/names[0] or report.exists():
+        raise ValueError('Wrong campaign or existing forward-JER handoff')
+    paths = [ROOT/'campaigns'/name for name in names]
+    if set(request['campaigns']) != set(names):raise ValueError('Unexpected campaign scope')
+    allowed = {'utils/jme_calibration.py', 'workflows/systematic_continuation.py',
+               'workflows/continue_systematic_campaign.py'}
+    if set(request['sources']) != allowed:raise ValueError('Unexpected source set')
+    gate_path = internal_path(ROOT/request['validation'])
+    if sha256(gate_path) != request['validation_sha256']:raise ValueError('Validation changed')
+    gate = read_json(gate_path)
+    if gate['status'] != 'passed' or gate.get('handoff_tests',0) < 4:
+        raise ValueError('Missing workflow validation')
+    plans, launches, owners = {}, {}, {}
+    for name,record in request['sources'].items():
+        if sha256(ROOT/name) != record['before'] or sha256(ROOT/record['staged']) != record['after']:
+            raise ValueError('Source changed before forward-JER promotion: '+name)
+    for path in paths:
+        plans[path] = nc.frozen_plan(path); launches[path] = read_json(path/'launch.json')
+        owners[path] = launches[path]['identity']
+        if sha256(path/'plan.json') != request['campaigns'][path.name]['plan_sha256']:
+            raise ValueError('Plan changed before handoff')
+        actual=process_identity(owners[path]['pid'])
+        if actual != owners[path]:
+            terminal=read_json(path/'state.json')
+            if actual is not None or terminal.get('status')!='stopped_common_failure' or terminal.get('active')!=0:
+                raise ValueError('Controller identity changed without a terminal common-failure receipt')
+    module_spec=importlib.util.spec_from_file_location('forward_policy_preflight',
+        ROOT/request['sources']['workflows/systematic_continuation.py']['staged'])
+    candidate=importlib.util.module_from_spec(module_spec);module_spec.loader.exec_module(candidate)
+    for path in paths:
+        preview=copy.deepcopy(plans[path]);preview['contracts']=gate['after_contracts'][path.name]
+        preview['forward_jer_support_update']=dict(campaign=path.name,
+            previous_plan=str((path/'plan.json').relative_to(ROOT)),previous_plan_sha256=sha256(path/'plan.json'),
+            validation=str(gate_path.relative_to(ROOT)),validation_sha256=sha256(gate_path),workflow_sha256={})
+        candidate.prior_contracts(preview,_historical=True)
+    if not apply:
+        print(dict(status='validated_ready',campaigns=names));return
+    audit = dict(status='suspending_admission',started=time.time(),request_sha256=sha256(request_path),
+                 retained={},preserved={},controllers={},workers_restarted=0)
+    write_json(report,audit); terminated=False
+    try:
+        for owner in owners.values():control.stop_exact(owner)
+        for path in paths:
+            states={p.stem:read_json(p) for p in (path/'state').glob('*.json')}
+            retained={};preserved={};attempts={}
+            for key,state in list(states.items()):
+                if state['status']=='running':
+                    ident=process_identity(state['pid']);history=path/'history'/(key+'.attempt%s.json'%state['attempt'])
+                    if ident:
+                        expected=[str(ROOT/'workflows/nominal_campaign.py'),'worker','--campaign',str(path),
+                                  '--key',key,'--attempt',str(state['attempt'])]
+                        if ident['arguments'][-len(expected):]!=expected:raise ValueError('Worker identity mismatch')
+                        retained[key]=dict(pid=state['pid'],attempt=state['attempt'],identity=ident,
+                                           history=str(history.relative_to(ROOT)))
+                    elif history.exists():
+                        state=read_json(history);states[key]=state;write_json(path/'state'/(key+'.json'),state)
+                    else:raise ValueError('Exited worker has no receipt')
+                if state['status']=='complete':
+                    if sha256(ROOT/state['output'])!=state['output_sha256']:raise ValueError('Successful output changed')
+                    preserved[key]=state['output_sha256']
+                if path.name==names[0] and key!='2023_mc_shard_01602':
+                    if state['status']=='running' or (state['status']=='failed' and state.get('error')=='Invalid JER input'):
+                        attempts[key]=state['attempt']
+            registered={r['pid'] for r in retained.values()}
+            for pr in Path('/proc').glob('[0-9]*'):
+                try:
+                    stat=(pr/'stat').read_text().rsplit(') ',1)[1].split()
+                    if int(stat[1])==owners[path]['pid'] and stat[0]!='Z' and int(pr.name) not in registered:
+                        raise RuntimeError('Unregistered live child; old controller resumed')
+                except FileNotFoundError:pass
+            audit['retained'][path.name]=retained;audit['preserved'][path.name]=preserved
+            audit['controllers'][path.name]=dict(previous=owners[path],original_attempts=attempts)
+        write_json(report,audit)
+        for owner in owners.values():control.terminate_controller(owner)
+        terminated=True
+        with contextlib.ExitStack() as stack:
+            for path in paths:
+                lock=stack.enter_context((path/'controller.lock').open('a'));fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+                backup=folder/'before'/path.name;backup.mkdir(parents=True,exist_ok=False)
+                for name in ('plan.json','launch.json','state.json'):shutil.copy2(path/name,backup/name)
+            for name,record in request['sources'].items():
+                target=ROOT/name;backup=folder/'before'/name;backup.parent.mkdir(parents=True,exist_ok=True)
+                shutil.copy2(target,backup);temporary=target.with_name(target.name+'.forward.'+str(os.getpid()))
+                shutil.copy2(ROOT/record['staged'],temporary);os.replace(temporary,target)
+            verify_compiled()
+            from TROTASR.workflows import systematic_continuation as policy
+            importlib.reload(policy)
+            for path in paths:
+                old=plans[path];new=copy.deepcopy(old)
+                new['contracts']={y:current_contract(y,old['shape_mode'],old['variations']) for y in old['contracts']}
+                new['memory_control_policy']['retained_workers']=audit['retained'][path.name]
+                previous=folder/'before'/path.name/'plan.json'
+                new['forward_jer_support_update']=dict(campaign=path.name,
+                    previous_plan=str(previous.relative_to(ROOT)),previous_plan_sha256=sha256(previous),
+                    validation=str(gate_path.relative_to(ROOT)),validation_sha256=sha256(gate_path),
+                    original_attempts=audit['controllers'][path.name]['original_attempts'],
+                    workflow_sha256={n:r['after'] for n,r in request['sources'].items() if n.startswith('workflows/')},
+                    externally_running_recovery=['2023_mc_shard_01602'])
+                policy.prior_contracts(new);write_json(path/'plan.json',new);nc.frozen_plan(path)
+        audit['status']='launching_controllers';write_json(report,audit)
+        for path in paths:
+            command=launches[path]['command'];log=folder/(path.name+'.controller.log')
+            with log.open('x') as stream:
+                proc=subprocess.Popen(command,cwd=ROOT.parent,stdin=subprocess.DEVNULL,stdout=stream,
+                                      stderr=subprocess.STDOUT,start_new_session=True)
+            for _ in range(100):
+                identity=process_identity(proc.pid)
+                if (identity and Path(identity['arguments'][0]).name.startswith('python')
+                        and identity['arguments'][-len(command[2:]):]==command[2:]):break
+                if proc.poll() is not None:raise RuntimeError('Replacement controller exited')
+                time.sleep(.1)
+            else:raise RuntimeError('Replacement did not enter numerical runtime')
+            write_json(path/'launch.json',dict(command=command,pid=proc.pid,identity=identity,started=time.time(),
+                       plan_sha256=sha256(path/'plan.json'),forward_jer_handoff=str(report.relative_to(ROOT)),
+                       previous_launch=str((folder/'before'/path.name/'launch.json').relative_to(ROOT))))
+            audit['controllers'][path.name]['replacement']=identity;write_json(report,audit)
+        audit.update(status='handed_off',finished=time.time(),successful_outputs_rewritten=0)
+        write_json(report,audit)
+        print(dict(status='handed_off',retained={k:len(v) for k,v in audit['retained'].items()},
+                   preserved={k:len(v) for k,v in audit['preserved'].items()}),flush=True)
+    except BaseException as error:
+        if not terminated:
+            for owner in owners.values():control.signal_exact(owner,signal.SIGCONT)
+        audit.update(status='needs_attention',error=repr(error),finished=time.time());write_json(report,audit)
+        raise
 
 
 def apply_negative_pt_selection(campaign, apply):

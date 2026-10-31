@@ -1,0 +1,171 @@
+{
+  "schemaVersion": "presentation-finalization.v1",
+  "finalSha256": "2f748bc4003eb173c697152c28208d0741d8d57d20092e0d211f02211fc9b432",
+  "byteCount": 3299071,
+  "packageIntegrity": {
+    "chart_count": 0,
+    "claim_boundary": "Structural package checks only; no slide text, notes, formulas, chart values, or native PowerPoint execution were inspected.",
+    "finding_count": 0,
+    "findings": [],
+    "notes_parts_skipped": 8,
+    "relationship_part_count": 31,
+    "slide_count": 8,
+    "status": "pass",
+    "exitCode": 0,
+    "findingCount": 0,
+    "warnings": []
+  },
+  "presentationLayout": {
+    "finding_count": 0,
+    "findings": [],
+    "font_policy": {
+      "checked_text_script_count": 135,
+      "native_font_rendering_verified": false,
+      "observed_font_families": [
+        "Helvetica Neue",
+        "Helvetica Neue Light",
+        "Helvetica Neue Medium"
+      ],
+      "observed_font_use_counts": {
+        "Helvetica Neue": 21,
+        "Helvetica Neue Light": 92,
+        "Helvetica Neue Medium": 22
+      },
+      "passed": true,
+      "performed": true
+    },
+    "slide_count": 8,
+    "slide_size_in": [
+      13.3333,
+      7.5
+    ],
+    "warning_count": 2,
+    "warnings": [
+      {
+        "kind": "object_outside_slide_boundary",
+        "object_id": "27",
+        "object_kind": "pic",
+        "slide": 1
+      },
+      {
+        "kind": "object_outside_slide_boundary",
+        "object_id": "24",
+        "object_kind": "pic",
+        "slide": 8
+      }
+    ],
+    "exitCode": 0,
+    "findingCount": 0,
+    "fontPolicy": {
+      "checked_text_script_count": 135,
+      "native_font_rendering_verified": false,
+      "observed_font_families": [
+        "Helvetica Neue",
+        "Helvetica Neue Light",
+        "Helvetica Neue Medium"
+      ],
+      "observed_font_use_counts": {
+        "Helvetica Neue": 21,
+        "Helvetica Neue Light": 92,
+        "Helvetica Neue Medium": 22
+      },
+      "passed": true,
+      "performed": true
+    }
+  },
+  "fontSelection": {
+    "basis": "reference",
+    "approvedFamilies": [
+      "Helvetica Neue",
+      "Helvetica Neue Light",
+      "Helvetica Neue Medium"
+    ],
+    "scriptFonts": {},
+    "referenceSha256": "ecae985ed1fd6758290e52a9a658a4ad98997306ed7c0c3e4007cd71f8a7363f",
+    "referenceFontsVerifiedInEncodedText": true,
+    "checked_text_script_count": 135,
+    "native_font_rendering_verified": false,
+    "observed_font_families": [
+      "Helvetica Neue",
+      "Helvetica Neue Light",
+      "Helvetica Neue Medium"
+    ],
+    "observed_font_use_counts": {
+      "Helvetica Neue": 21,
+      "Helvetica Neue Light": 92,
+      "Helvetica Neue Medium": 22
+    },
+    "passed": true,
+    "performed": true
+  },
+  "firstPartyImport": {
+    "performed": true,
+    "passed": true,
+    "slideCount": 8,
+    "sha256": "2f748bc4003eb173c697152c28208d0741d8d57d20092e0d211f02211fc9b432",
+    "runtimeNodeModules": "/Users/taiwoomac/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules",
+    "nodeExecutable": "/Users/taiwoomac/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node"
+  },
+  "nativeTableArithmetic": {
+    "performed": true,
+    "checked_column_count": 0,
+    "checks": [],
+    "claim_boundary": "Displayed-value arithmetic with rounding tolerance; not source-data verification.",
+    "eligible_table_count": 0,
+    "finding_count": 0,
+    "findings": [],
+    "native_table_count": 1,
+    "passed": true,
+    "schema_version": "presentation-native-table-arithmetic.v1",
+    "skipped_tables": [
+      {
+        "reason": "no_numeric_amounts",
+        "slide": 2,
+        "table": 1
+      }
+    ],
+    "slide_count": 8,
+    "warning_count": 0,
+    "warnings": []
+  },
+  "nativeChartTitles": {
+    "performed": true,
+    "checks": [],
+    "finding_count": 0,
+    "findings": [],
+    "native_chart_count": 0,
+    "native_powerpoint_verified": false,
+    "passed": true,
+    "presentation_sha256": "2f748bc4003eb173c697152c28208d0741d8d57d20092e0d211f02211fc9b432",
+    "schema_version": "presentation-native-chart-titles.v1",
+    "slide_count": 8,
+    "source_text_emitted": false,
+    "unresolved_linked_title_count": 0
+  },
+  "sourceDerivedPolicyFlags": [
+    "--expected-slide-size-emu",
+    "12192000,6858000",
+    "--validate-bullet-geometry",
+    "--validate-heading-fit",
+    "--require-native-table-slide",
+    "2",
+    "--cover-role",
+    "none",
+    "--expected-slide-count",
+    "8",
+    "--approved-font-family",
+    "Helvetica Neue",
+    "--approved-font-family",
+    "Helvetica Neue Light",
+    "--approved-font-family",
+    "Helvetica Neue Medium"
+  ],
+  "nativeChartValidation": {
+    "detectedOwnerSlides": [],
+    "detectedChartCount": 0,
+    "targetApplication": "portable",
+    "sourceChartOwnersExplicitlyDeclared": true,
+    "validatorRan": false,
+    "passed": true
+  }
+}

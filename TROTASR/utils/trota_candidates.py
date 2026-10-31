@@ -8,6 +8,7 @@ import math
 import awkward as ak
 import numpy as np
 from numba import njit
+from .paths import analysis_era, EARLY_ERAS
 
 RESOLVED_JETS = ("jet_nanoaod_pt", "jet_eta_all", "jet_phi_all", "jet_nanoaod_mass",
                  "jet_area", "jet_btag_upart_all", "jet_id_all")
@@ -15,6 +16,21 @@ JETS = RESOLVED_JETS + ("jet_source_index_all",)
 FATJETS = ("fatjet_nanoaod_pt", "fatjet_eta_all", "fatjet_phi_all", "fatjet_nanoaod_mass",
            "fatjet_area", "fatjet_globalpart3_xbb_all", "fatjet_globalpart3_qcd_all",
            "fatjet_top_score_all", "fatjet_w_score_all", "fatjet_id_all", "fatjet_source_index_all")
+
+
+def input_fields(year=2024):
+    """Frozen model-release inputs; Mixed DeepFlav is not the analysis b tag."""
+    if analysis_era(year) not in EARLY_ERAS:
+        return RESOLVED_JETS, JETS, FATJETS
+    resolved = tuple({'jet_btag_upart_all': 'jet_btag_pnet_all',
+                      'jet_id_all': 'jet_nanoaod_id'}.get(k, k) for k in RESOLVED_JETS)
+    jets = tuple({'jet_btag_upart_all': 'jet_btag_deepflav_all',
+                  'jet_id_all': 'jet_nanoaod_id'}.get(k, k) for k in JETS)
+    fatjets = tuple({'fatjet_globalpart3_xbb_all': 'fatjet_btagdeepb_all',
+                     'fatjet_globalpart3_qcd_all': 'fatjet_pnetwmass_qcd_all',
+                     'fatjet_id_all': 'fatjet_nanoaod_id'}.get(k, k) for k in FATJETS)
+    return resolved, jets, fatjets + ('fatjet_pnet_qcd_all', 'fatjet_pnet_xbbvsqcd_all',
+                                     'fatjet_pnet_xqqvsqcd_all')
 
 @njit(cache=False)
 def build_resolved_candidates(
@@ -216,7 +232,7 @@ def kin(v):
 
 
 @njit(cache=False)
-def build_mixed_candidates(jo, jets, fo, fatjets):
+def build_mixed_candidates(jo, jets, fo, fatjets, pnet_v12=False):
     """Float64 four-vectors, float32 inputs, official leg/enumeration order."""
     n = len(jo)-1
     capacity = 0
@@ -232,8 +248,8 @@ def build_mixed_candidates(jo, jets, fo, fatjets):
             if fatjets[i, 9] != 0 and fatjets[i, 0] > 200 and abs(fatjets[i, 1]) < 2.5:
                 nf += 1
                 denom = fatjets[i, 5]+fatjets[i, 6]
-                zero += int(denom==0)
-                negative += int(denom<0)
+                zero += int(not pnet_v12 and denom==0)
+                negative += int(not pnet_v12 and denom<0)
         if nj>=2:
             invalid[2] += zero
             invalid[3] += negative
@@ -241,7 +257,7 @@ def build_mixed_candidates(jo, jets, fo, fatjets):
             invalid[5] += int(negative>0)
         capacity += nf*(nj*(nj-1)//2 + nj*(nj-1)*(nj-2)//6)
     jf = np.zeros((capacity, 3, 8), np.float32)
-    ff = np.empty((capacity, 9), np.float32)
+    ff = np.empty((capacity, 12 if pnet_v12 else 9), np.float32)
     tf = np.empty((capacity, 3), np.float32)
     ints = np.empty((capacity, 10), np.int32)
     kinematics = np.empty((capacity, 4), np.float32)
@@ -262,7 +278,7 @@ def build_mixed_candidates(jo, jets, fo, fatjets):
                         nleg = 2 if j2 == -1 else 3
                         fj = fatjets[fs[fi]]
                         denom = fj[5] + fj[6]
-                        if denom <= 0:
+                        if not pnet_v12 and denom <= 0:
                             # User-adopted policy: only this candidate is
                             # untagged; never invent a model feature or discard
                             # the event. Keep AK8 indices and other candidates.
@@ -306,8 +322,12 @@ def build_mixed_candidates(jo, jets, fo, fatjets):
                             jf[out, leg, 5] = j[0]
                             jf[out, leg, 6] = dphi(j[2], fj[2])
                             jf[out, leg, 7] = j[1]-fj[1]
-                        ff[out] = np.array((fj[4], fj[5]/denom, fj[6], fj[7], fj[8],
-                                            fj[1], fj[3], fj[2], fj[0]), np.float32)
+                        if pnet_v12:
+                            ff[out] = np.array((fj[4], fj[5], fj[7], fj[8], fj[11], fj[6],
+                                                fj[12], fj[13], fj[1], fj[3], fj[2], fj[0]), np.float32)
+                        else:
+                            ff[out] = np.array((fj[4], fj[5]/denom, fj[6], fj[7], fj[8],
+                                                fj[1], fj[3], fj[2], fj[0]), np.float32)
                         tf[out] = np.array((sk[3], tk[3], tk[0]), np.float32)
                         kinematics[out] = np.array(tk, np.float32)
                         events[out] = ev
@@ -327,8 +347,9 @@ def pack(a, names):
     return np.r_[0, np.cumsum(sizes)].astype(np.int64), values
 
 
-def candidate_cost(a):
-    j = ((a[JETS[6]] != 0) & (a[JETS[0]] > 25) & (abs(a[JETS[1]]) < 2.5))
-    f = ((a[FATJETS[9]] != 0) & (a[FATJETS[0]] > 200) & (abs(a[FATJETS[1]]) < 2.5))
+def candidate_cost(a, year=2024):
+    _, jets, fatjets = input_fields(year)
+    j = ((a[jets[6]] != 0) & (a[jets[0]] > 25) & (abs(a[jets[1]]) < 2.5))
+    f = ((a[fatjets[9]] != 0) & (a[fatjets[0]] > 200) & (abs(a[fatjets[1]]) < 2.5))
     nj, nf = np.asarray(ak.sum(j, axis=1), dtype=np.int64), np.asarray(ak.sum(f, axis=1), dtype=np.int64)
     return nf*(nj*(nj-1)//2 + nj*(nj-1)*(nj-2)//6)

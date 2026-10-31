@@ -221,3 +221,6 @@ autonomous_allhad/workflow/trigger_efficiency_*/
 !/autonomous_allhad/reports/object_definitions_*/*.py
 !/autonomous_allhad/reports/object_definitions_*/*.md
 /autonomous_allhad/reports/topw_efficiency_an_handoff/
+
+# Local, checksum-preserved pre-compaction instruction/handoff snapshots.
+/agent_context/archive/

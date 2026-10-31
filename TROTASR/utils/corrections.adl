@@ -23,6 +23,8 @@ info btag
   jets "good AK4 jets; Jet_hadronFlavour = 0,4,5"
   variation "central, up/down_correlated, up/down_uncorrelated; heavy and light separately"
   evaluator "BTagCorrector"
+  sfMomentum "physical jet pT (minimum 20 GeV); POG high-pT extrapolation retained"
+  efficiencyMomentum "measured efficiency lookup limited to 20--999.99 GeV"
 
 define boundedBTagEfficiency = min(btagSF * btagMCEfficiency, 1)
 define btagPassWeight = boundedBTagEfficiency / btagMCEfficiency
@@ -55,6 +57,7 @@ info electronTrigger
   application "product for two medium electrons"
   year2025 "unity: no adopted 2025 electron HLT SF"
   evaluator "get_ele_hlt_sf"
+  coverage "Legacy approximation, not an efficiency ratio for the full selected DY trigger OR; replacement requires a matching measurement"
 
 info electronIsolation
   selection "miniPFRelIso_all < 0.10"
@@ -72,7 +75,8 @@ info muonID
 info muonIsolation
   file "scales/MUO/<year>/muon_Z.json.gz"
   looseKey "NUM_LooseMiniIso_DEN_LooseID"
-  mediumKey "NUM_LooseMiniIso_DEN_MediumID"
+  mediumKey "NUM_MediumMiniIso_DEN_MediumID"
+  looseApproximation "LooseMiniIso for LooseID retained by user approval; no MediumMiniIso_DEN_LooseID payload"
   selection "miniPFRelIso_all < 0.20"
   application "same one-loose/two-medium collection choice as muonID"
   coordinates "Muon_eta clipped to [-2.399,2.399], max(Muon_pt,10)"
@@ -84,6 +88,7 @@ info muonTrigger
   application "product for two medium muons"
   coordinates "Muon_eta clipped to [-2.399,2.399], max(Muon_pt,52)"
   evaluator "get_mu_hlt_sf"
+  coverage "Legacy HighPtID/TkIso single-muon SF product does not match the MediumID/miniIso DY event OR; replacement requires a matching measurement"
 
 info photonID
   file "scales/EGM/<year>/photon.json.gz"
@@ -194,6 +199,7 @@ info muonMomentum
   domain "26<=pT<=200, abs(eta)<2.4"
   endpoints "muonScaleUp/Down, muonResolutionUp/Down"
   evaluator "utils/corrections.py:_calibrate_muons"
+  resolutionFallback "Retain the already scaled pT for invalid smearing or a scaled pT outside 26--200 GeV"
 
 define scaledMuonPt = 1 / (muonMultiplicative / Muon_pt + Muon_charge * muonAdditive)
 

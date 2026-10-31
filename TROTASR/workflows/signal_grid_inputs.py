@@ -241,6 +241,8 @@ def extract_year(paths, grid, allow_validation=False, preserve_unsupported=False
     digests = {key: sha256(path) for key, path in paths.items()}
     inputs = {key: read_json(path) for key, path in paths.items()}
     payload = inputs['hists']
+    from TROTASR.workflows.rare_top_policy import require_clean
+    require_clean(payload)
     if not allow_validation and (payload.get('scope') not in ('full_nominal_production', 'full_cms_trota_jme_production', 'full_combined_systematic_production')
             or not payload.get('coverage', {}).get('full_input_inventory')
             or payload['coverage']['failed_files'] != 0
@@ -252,8 +254,10 @@ def extract_year(paths, grid, allow_validation=False, preserve_unsupported=False
     for key in FIELDS[1:]:
         if inputs[key].get('provenance', {}).get('hist_input_sha256') != digests['hists']:
             raise ValueError('Background measurement does not match supplied histograms: ' + key)
+    from TROTASR.gnn4lowdm.configuration import configuration_path
+    gnn_path = configuration_path(payload['contract']['year'])
     for field, path in (('sr_binning_sha256', ROOT / 'jsons/highdm_sr_binning.json'),
-                        ('configuration_sha256', ROOT / 'gnn4lowdm/config.json')):
+                        ('configuration_sha256', gnn_path)):
         if payload['contract'].get(field) != sha256(path):
             raise ValueError('Histogram physics contract mismatch: ' + field)
     represented = represented_signals(payload)
@@ -262,7 +266,7 @@ def extract_year(paths, grid, allow_validation=False, preserve_unsupported=False
     if missing:
         raise ValueError('Requested signal inputs absent from nonzero Runs bookkeeping: ' + ', '.join(missing))
     model_input = build_inputs(*(inputs[k] for k in FIELDS), 'T2tt', 1200, 500)
-    gnn = read_json(ROOT / 'gnn4lowdm/config.json')
+    gnn = read_json(gnn_path)
     signals, source_bins, audit = project_signals(payload, model_input, grid, gnn)
     year = model_input['year']
     channels, data, clipping, issues = assemble([model_input])

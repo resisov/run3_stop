@@ -10,7 +10,8 @@ from TROTASR.utils.histogramming import build
 def main(default='highdm'):
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--input', type=Path)
-    p.add_argument('--year', type=int, choices=(2024, 2025))
+    from TROTASR.utils.paths import ERAS, analysis_era
+    p.add_argument('--year', type=analysis_era, choices=ERAS)
     p.add_argument('--output', required=True, type=Path)
     p.add_argument('--mode', choices=('highdm', 'lowdm', 'both'), default=default)
     p.add_argument('--chunk-size', type=int, default=2000)

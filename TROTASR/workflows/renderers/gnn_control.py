@@ -1,6 +1,4 @@
-"""Original GNN CR rendering functions; only imports/input dispatch relocated.
-Source fragment checks are recorded in prediction_plot_sources.json.
-"""
+"""Low-dM GNN control-region figures."""
 from __future__ import annotations
 from pathlib import Path
 import numpy as np

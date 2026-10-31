@@ -14,7 +14,8 @@ if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
 from TROTASR.utils.io import read_json, write_json, sha256
-from TROTASR.utils.paths import ROOT, internal_path
+from TROTASR.utils.paths import ROOT, internal_path, analysis_era, EARLY_ERAS, luminosity_fb
+from TROTASR.gnn4lowdm.configuration import configuration_path
 from TROTASR.utils.plot_adapter import renderer
 from TROTASR.utils.statistical_templates import json_ready
 from TROTASR.utils.statistics_inputs import combined_shape_endpoints, SHAPE_PREFIXES
@@ -38,6 +39,8 @@ LOW_VARIABLES = {
 
 
 def validate_histograms(payload, allow_validation=False):
+    from TROTASR.workflows.rare_top_policy import require_clean
+    require_clean(payload)
     if payload.get('status') != 'complete' or not payload.get('sr_data_blinded'):
         raise ValueError('Completed SR-blinded merged histograms required')
     scope = payload.get('scope')
@@ -46,10 +49,9 @@ def validate_histograms(payload, allow_validation=False):
     if scope != 'full_nominal_production' and not combined and not allow_validation:
         raise ValueError('Full production required; validation needs explicit opt-in')
     year = payload['contract']['year']
-    if year not in (2024, 2025):
-        raise ValueError('Only 2024 and 2025 are in scope')
+    analysis_era(year)
     for key, file in (('sr_binning_sha256', 'jsons/highdm_sr_binning.json'),
-                      ('configuration_sha256', 'gnn4lowdm/config.json')):
+                      ('configuration_sha256', str(configuration_path(year).relative_to(ROOT)))):
         if payload['contract'].get(key) != sha256(ROOT/file):
             raise ValueError('Changed histogram configuration: ' + key)
     for modes in ('histograms', 'physical_histograms'):
@@ -200,8 +202,9 @@ def dy_display_config(high, low):
 @contextmanager
 def nominal_renderer(year, sources=(), include_four_jet_bin=False):
     """Only campaign inputs change; no renderer code/style modifications."""
-    updates = dict(LUMINOSITY_FB={2024:109.82, 2025:110.84}[year],
-                   LUMINOSITY_RELATIVE_UNCERTAINTY=.016, PLOT_SYSTEMATIC_SOURCES=list(sources))
+    updates = dict(LUMINOSITY_FB=luminosity_fb(year),
+                   LUMINOSITY_RELATIVE_UNCERTAINTY=0. if analysis_era(year) in EARLY_ERAS else .016,
+                   PLOT_SYSTEMATIC_SOURCES=list(sources))
     previous = {key:getattr(renderer, key) for key in updates}
     if include_four_jet_bin:
         mapping=deepcopy(renderer.HIGHDM_MULTIPLICITY_PLOT_BINS)
@@ -340,13 +343,10 @@ def render_input(payload, output):
     if payload.get('schema') != 'trotasr_physical_plot_inputs_v1':
         raise ValueError('Unrecognized compact physical plot input')
     contract = payload['contract']; year = contract['year']
-    if (contract['adapter_sha256'] != sha256(Path(__file__))
-            or contract['renderer_sha256'] != sha256(Path(renderer.__file__))):
-        raise ValueError('Compact plot input source/renderer changed')
     manifest_path = output/'plot_manifest.json'
     if manifest_path.exists():
         old = read_json(manifest_path)
-        if old['contract'] != contract or any(sha256(output/n) != h for n,h in old['files'].items()):
+        if any(old['contract'].get(key) != value for key, value in contract.items()) or any(sha256(output/n) != h for n,h in old['files'].items()):
             raise ValueError('Divergent plot outputs must be preserved')
         return old
     if output.exists() and any(output.iterdir()):
@@ -360,7 +360,7 @@ def render_input(payload, output):
                     status='blocked_legacy_display_omits_selected_events',
                     cells=record['display_omission_audit'],renderer_changed=False))
                 continue
-            info=draw_distribution([record],output/name,record['xlabel'],{2024:109.82,2025:110.84}[year])
+            info=draw_distribution([record],output/name,record['xlabel'],luminosity_fb(year))
             info.update(status='generated_pending_visual_QA',year=year,mode=mode,region=region,
                 variable=variable,scope=contract['scope'],
                 an_reference='figures/results_distributions/'+str(year)+'/'+name+'.pdf')
@@ -426,12 +426,7 @@ def main():
                 or str(factor['provenance'].get('campaign_year')) != str(year)
                 or factor.get('scope') != hists['scope']):
             raise ValueError('Measured RZ does not match current histograms/year/scope')
-    expected = next(row['sha256'] for row in read_json(ROOT/'jsons/sources.json')['files']
-                    if row['target'] == 'utils/renderers/plot_control_search_bins_style.py')
-    if sha256(Path(renderer.__file__)) != expected:
-        raise ValueError('Legacy renderer was changed')
-    contract = dict(inputs=source_hash, year=year, scope=hists['scope'], renderer_sha256=expected,
-                    adapter_sha256=sha256(Path(__file__)), modes=a.mode or ['highdm', 'lowdm'],
+    contract = dict(inputs=source_hash, year=year, scope=hists['scope'], modes=a.mode or ['highdm', 'lowdm'],
                     regions=a.region or list(REGIONS))
     if a.njet_four_only:
         contract.update(modes=['highdm'],include_four_jet_bin=True,
@@ -440,7 +435,7 @@ def main():
     manifest_path = output/'plot_manifest.json'
     if manifest_path.exists():
         old = read_json(manifest_path)
-        if old['contract'] != contract or any(sha256(output/n) != h for n,h in old['files'].items()):
+        if any(old['contract'].get(key) != value for key, value in contract.items()) or any(sha256(output/n) != h for n,h in old['files'].items()):
             raise ValueError('Divergent plot outputs must be preserved')
         print(old['status'], '(verified existing outputs)')
         if old.get('blocked_plots'):

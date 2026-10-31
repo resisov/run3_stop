@@ -1,8 +1,4 @@
-"""Internal native-TH1/card functions, extracted from three approved sources.
-
-No legacy campaign loader, source-code argument, or external import is retained.
-The exact source hashes and extraction scope are recorded in statistics_sources.json.
-"""
+"""Native ROOT histogram and datacard construction."""
 from collections import OrderedDict, defaultdict
 import math
 import re
@@ -153,7 +149,7 @@ def pack_bins(bins):
 def parameter_unit(parameter):
     if not parameter:
         return 'fixed'
-    match = re.search(r'_(?:highdm|lowdm)_(.+)_(bin\d+|inclusive)_202[45]$', parameter)
+    match = re.search(r'_(?:highdm|lowdm)_(.+)_(bin\d+|inclusive)_(?:2022(?:EE)?|2023(?:BPix)?|202[45])$', parameter)
     if not match:
         raise ValueError(parameter)
     category, unit = match.groups()
@@ -179,10 +175,11 @@ def process_names(keys):
 
 
 def assemble(payloads, packing='region', preserve_flat=False):
+    from .paths import ERAS
     seen = set()
     for payload in payloads:
-        if str(payload['year']) not in ('2024', '2025'):
-            raise ValueError('Only 2024/2025 are supported')
+        if str(payload['year']) not in ERAS:
+            raise ValueError('Unsupported analysis era')
         for original in payload['groups'].values():
             if not original:
                 raise ValueError('An empty channel group is not an analysis layout')
@@ -245,7 +242,7 @@ def template_name(channel):
     return 'template_{}_{}.root'.format(regime, year)
 
 
-def card_text(channels, data, cr_only=False):
+def card_text(channels, data, cr_only=False, luminosity_uncertainties=None):
     selected = [c for c in channels if not cr_only or not c.startswith('SR_')]
     names = sorted({p for c, p in data if p != 'signal'}, key=lambda p: (ORDER.index(data[next(k for k in data if k[1] == p)]['family']), p))
     ids = {p: i+1 for i, p in enumerate(names)}
@@ -271,9 +268,16 @@ def card_text(channels, data, cr_only=False):
     for name in extra_names:
         factors = {k: next((e for e in data[k]['extra_lnN'] if e[0] == name), None) for k in columns}
         lines.append(name + ' lnN ' + ' '.join('{:.8g}/{:.8g}'.format(factors[k][1], factors[k][2]) if factors[k] else '-' for k in columns))
-    for year in ('2024', '2025'):
+    if luminosity_uncertainties is None:
+        years = {str(b['year']) for bins in channels.values() for b in bins}
+        if not years <= {'2024', '2025'}:
+            raise ValueError('Explicit early-era luminosity uncertainty policy required')
+        luminosity_uncertainties = {'2024': 1.016, '2025': 1.016}
+    for year, factor in luminosity_uncertainties.items():
+        if not math.isfinite(float(factor)) or float(factor) < 1:
+            raise ValueError('Invalid luminosity uncertainty factor')
         lines.append('lumi_13p6TeV_' + year + ' lnN ' + ' '.join(
-            '1.016' if c.endswith(year) and (data[c,p]['family'] == 'signal' or
+            str(factor) if c.endswith('_'+year) and (data[c,p]['family'] == 'signal' or
                         (data[c,p]['family'] in ('VV','DYJet','PhotonJet') and not data[c,p]['parameter'])) else '-'
             for c,p in columns))
     for c, p in columns:

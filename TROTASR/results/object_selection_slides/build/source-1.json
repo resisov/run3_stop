@@ -1,0 +1,946 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/y90nupkv",
+    "id": "y90nupkv",
+    "slide": 1,
+    "layoutId": "/ppt/slideLayouts/slideLayout1.xml",
+    "layoutName": "제목 슬라이드",
+    "layoutType": "title",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "Office",
+    "colors": {
+      "accent1": "#4472C4",
+      "accent2": "#ED7D31",
+      "accent3": "#A5A5A5",
+      "accent4": "#FFC000",
+      "accent5": "#5B9BD5",
+      "accent6": "#70AD47",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#44546A",
+      "lt2": "#E7E6E6",
+      "hlink": "#0563C1",
+      "folHlink": "#954F72"
+    },
+    "fontScheme": {
+      "name": "Office",
+      "majorFont": {
+        "latinTypeface": "맑은 고딕"
+      },
+      "minorFont": {
+        "latinTypeface": "맑은 고딕"
+      }
+    },
+    "typefaces": [
+      "Helvetica Neue",
+      "Helvetica Neue Light",
+      "맑은 고딕"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout1.xml",
+      "name": "제목 슬라이드",
+      "type": "title",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": [
+        {
+          "order": 1,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout1.xml/2",
+          "id": "2",
+          "name": "제목 1",
+          "bbox": [
+            160,
+            117.83,
+            960,
+            250.67
+          ],
+          "text": "마스터 제목 스타일 편집",
+          "textPreview": "마스터 제목 스타일 편집",
+          "resolvedTextStyle": {
+            "anchor": 3,
+            "verticalAlignment": "bottom"
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "마스터 제목 스타일 편집",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "마스터 제목 스타일 편집"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout1.xml/3",
+          "id": "3",
+          "name": "부제목 2",
+          "bbox": [
+            160,
+            378.17,
+            960,
+            173.83
+          ],
+          "text": "클릭하여 마스터 부제목 스타일 편집",
+          "textPreview": "클릭하여 마스터 부제목 스타일 편집",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "클릭하여 마스터 부제목 스타일 편집",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "클릭하여 마스터 부제목 스타일 편집"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout1.xml/4",
+          "id": "4",
+          "name": "날짜 개체 틀 3",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "text": "2026. 9. 17.",
+          "textPreview": "2026. 9. 17.",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "2026. 9. 17.",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "2026. 9. 17."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout1.xml/5",
+          "id": "5",
+          "name": "바닥글 개체 틀 4",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "order": 5,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout1.xml/6",
+          "id": "6",
+          "name": "슬라이드 번호 개체 틀 5",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "text": "‹#›",
+          "textPreview": "‹#›",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "‹#›",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "‹#›"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "type": "master",
+      "elements": [
+        {
+          "order": 1,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/2",
+          "id": "2",
+          "name": "제목 개체 틀 1",
+          "bbox": [
+            88,
+            38.33,
+            1104,
+            139.17
+          ],
+          "geometry": "rect",
+          "text": "마스터 제목 스타일 편집",
+          "textPreview": "마스터 제목 스타일 편집",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "마스터 제목 스타일 편집",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "마스터 제목 스타일 편집"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/3",
+          "id": "3",
+          "name": "텍스트 개체 틀 2",
+          "bbox": [
+            88,
+            191.67,
+            1104,
+            456.83
+          ],
+          "geometry": "rect",
+          "text": "마스터 텍스트 스타일을 편집하려면 클릭\n두 번째 수준\n세 번째 수준\n네 번째 수준\n다섯 번째 수준",
+          "textPreview": "마스터 텍스트 스타일을 편집하려면 클릭 | 두 번째 수준 | 세 번째 수준 | 네 번째 수준 | 다섯 번째 수준",
+          "resolvedTextStyle": {
+            "vertical": 1,
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "마스터 텍스트 스타일을 편집하려면 클릭",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "마스터 텍스트 스타일을 편집하려면 클릭"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "text": "두 번째 수준",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "두 번째 수준"
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "text": "세 번째 수준",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "세 번째 수준"
+                }
+              ]
+            },
+            {
+              "index": 4,
+              "text": "네 번째 수준",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "네 번째 수준"
+                }
+              ]
+            },
+            {
+              "index": 5,
+              "text": "다섯 번째 수준",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "다섯 번째 수준"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/4",
+          "id": "4",
+          "name": "날짜 개체 틀 3",
+          "bbox": [
+            88,
+            667.33,
+            288,
+            38.33
+          ],
+          "geometry": "rect",
+          "text": "2026. 9. 17.",
+          "textPreview": "2026. 9. 17.",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "2026. 9. 17.",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "2026. 9. 17."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/5",
+          "id": "5",
+          "name": "바닥글 개체 틀 4",
+          "bbox": [
+            424,
+            667.33,
+            432,
+            38.33
+          ],
+          "geometry": "rect",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          }
+        },
+        {
+          "order": 5,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/6",
+          "id": "6",
+          "name": "슬라이드 번호 개체 틀 5",
+          "bbox": [
+            904,
+            667.33,
+            288,
+            38.33
+          ],
+          "geometry": "rect",
+          "text": "‹#›",
+          "textPreview": "‹#›",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "‹#›",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "‹#›"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/dgvyd8fa",
+      "id": "23",
+      "name": "그림 16",
+      "bbox": [
+        310.12,
+        105.8,
+        1431.55,
+        908.03
+      ],
+      "rotation": 20.37,
+      "contentType": "image/png",
+      "asset": {
+        "assetId": "/ppt/media/image1.png",
+        "contentType": "image/png",
+        "byteLength": 102029
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image1.png",
+        "contentType": "image/png",
+        "byteLength": 102029
+      }
+    },
+    {
+      "order": 2,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/eh4fmdgv",
+      "id": "24",
+      "name": "그림 9",
+      "bbox": [
+        30.34,
+        22.8,
+        151.18,
+        151.18
+      ],
+      "contentType": "image/png",
+      "asset": {
+        "assetId": "/ppt/media/image2.png",
+        "contentType": "image/png",
+        "byteLength": 8695
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image2.png",
+        "contentType": "image/png",
+        "byteLength": 8695
+      }
+    },
+    {
+      "order": 3,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/zidgfixg",
+      "id": "25",
+      "name": "그림 17",
+      "bbox": [
+        362.61,
+        22.8,
+        151.18,
+        151.18
+      ],
+      "contentType": "image/jpeg",
+      "asset": {
+        "assetId": "/ppt/media/image3.jpg",
+        "contentType": "image/jpeg",
+        "byteLength": 115589
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image3.jpg",
+        "contentType": "image/jpeg",
+        "byteLength": 115589
+      }
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/dgzetcfa",
+      "id": "19",
+      "name": "TextBox 18",
+      "bbox": [
+        77.43,
+        211.36,
+        1155.23,
+        151.87
+      ],
+      "geometry": "rect",
+      "text": "Template and datacard\nFor fitting (NPS-26-012) ",
+      "textPreview": "Template and datacard | For fitting (NPS-26-012)",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "fontSize": 24,
+        "typeface": "맑은 고딕",
+        "color": "tx1",
+        "alignment": "left",
+        "wrap": "square",
+        "autoFit": "resizeShapeToFitText",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Template and datacard"
+          },
+          {
+            "index": 2,
+            "text": "For fitting (NPS-26-012)"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Template and datacard",
+          "runs": [
+            {
+              "index": 1,
+              "text": "Template and ",
+              "fontSize": 58.67,
+              "typeface": "Helvetica Neue",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "datacard",
+              "fontSize": 58.67,
+              "typeface": "Helvetica Neue",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "For fitting (NPS-26-012) ",
+          "runs": [
+            {
+              "index": 1,
+              "text": "For fitting ",
+              "fontSize": 58.67,
+              "typeface": "Helvetica Neue",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "(NPS-26-012) ",
+              "fontSize": 32,
+              "typeface": "Helvetica Neue",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1cvuxc7e",
+      "id": "20",
+      "name": "TextBox 19",
+      "bbox": [
+        78.86,
+        422.77,
+        1038.02,
+        155.1
+      ],
+      "geometry": "rect",
+      "text": "‡Taiwoo Kim1, Sezen Sekmen1, Young Do Oh1, Chang-Seong Moon1,\n Nathan Brandman-Hughes2, Richard Cavanaugh2\n\n1 Kyungpook National University (KNU, Korea)\n2 University of Illinois Chicago (UIC, USA)",
+      "textPreview": "‡Taiwoo Kim1, Sezen Sekmen1, Young Do Oh1, Chang-Seong Moon1, |  Nathan Brandman-Hughes2, Richard Cavanaugh2 |  | 1 Kyungpook National Un...",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "fontSize": 24,
+        "typeface": "맑은 고딕",
+        "color": "tx1",
+        "alignment": "left",
+        "wrap": "square",
+        "autoFit": "resizeShapeToFitText",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 5,
+        "lines": [
+          {
+            "index": 1,
+            "text": "‡Taiwoo Kim1, Sezen Sekmen1, Young Do Oh1, Chang-Seong Moon1,"
+          },
+          {
+            "index": 2,
+            "text": " Nathan Brandman-Hughes2, Richard Cavanaugh2"
+          },
+          {
+            "index": 3,
+            "text": ""
+          },
+          {
+            "index": 4,
+            "text": "1 Kyungpook National University (KNU, Korea)"
+          },
+          {
+            "index": 5,
+            "text": "2 University of Illinois Chicago (UIC, USA)"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "‡Taiwoo Kim1, Sezen Sekmen1, Young Do Oh1, Chang-Seong Moon1,",
+          "runs": [
+            {
+              "index": 1,
+              "text": "‡",
+              "typeface": "Helvetica Neue"
+            },
+            {
+              "index": 2,
+              "text": "Taiwoo Kim",
+              "typeface": "Helvetica Neue"
+            },
+            {
+              "index": 3,
+              "text": "1",
+              "typeface": "Helvetica Neue"
+            },
+            {
+              "index": 4,
+              "text": ", Sezen Sekmen",
+              "typeface": "Helvetica Neue"
+            },
+            {
+              "index": 5,
+              "text": "1",
+              "typeface": "Helvetica Neue"
+            },
+            {
+              "index": 6,
+              "text": ", Young Do Oh",
+              "typeface": "Helvetica Neue"
+            },
+            {
+              "index": 7,
+              "text": "1",
+              "typeface": "Helvetica Neue"
+            },
+            {
+              "index": 8,
+              "text": ", Chang-Seong Moon",
+              "typeface": "Helvetica Neue"
+            },
+            {
+              "index": 9,
+              "text": "1",
+              "typeface": "Helvetica Neue"
+            },
+            {
+              "index": 10,
+              "text": ",",
+              "typeface": "Helvetica Neue"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": " Nathan Brandman-Hughes2, Richard Cavanaugh2",
+          "runs": [
+            {
+              "index": 1,
+              "text": " Nathan Brandman-Hughes",
+              "typeface": "Helvetica Neue"
+            },
+            {
+              "index": 2,
+              "text": "2",
+              "typeface": "Helvetica Neue"
+            },
+            {
+              "index": 3,
+              "text": ", Richard Cavanaugh",
+              "typeface": "Helvetica Neue"
+            },
+            {
+              "index": 4,
+              "text": "2",
+              "typeface": "Helvetica Neue"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 4,
+          "text": "1 Kyungpook National University (KNU, Korea)",
+          "runs": [
+            {
+              "index": 1,
+              "text": "1",
+              "typeface": "Helvetica Neue Light"
+            },
+            {
+              "index": 2,
+              "text": " ",
+              "typeface": "Helvetica Neue Light"
+            },
+            {
+              "index": 3,
+              "text": "Kyungpook National University (KNU, Korea)",
+              "typeface": "Helvetica Neue Light"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 5,
+          "text": "2 University of Illinois Chicago (UIC, USA)",
+          "runs": [
+            {
+              "index": 1,
+              "text": "2",
+              "typeface": "Helvetica Neue Light"
+            },
+            {
+              "index": 2,
+              "text": " ",
+              "typeface": "Helvetica Neue Light"
+            },
+            {
+              "index": 3,
+              "text": "University of Illinois Chicago (UIC, USA)",
+              "typeface": "Helvetica Neue Light"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/zadcv2p8",
+      "id": "22",
+      "name": "TextBox 21",
+      "bbox": [
+        81.73,
+        588.45,
+        525.45,
+        67.86
+      ],
+      "geometry": "rect",
+      "text": "Meyrin, Suisse\n17th September 2026",
+      "textPreview": "Meyrin, Suisse | 17th September 2026",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "fontSize": 24,
+        "typeface": "맑은 고딕",
+        "color": "tx1",
+        "alignment": "left",
+        "wrap": "square",
+        "autoFit": "resizeShapeToFitText",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Meyrin, Suisse"
+          },
+          {
+            "index": 2,
+            "text": "17th September 2026"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Meyrin, Suisse",
+          "runs": [
+            {
+              "index": 1,
+              "text": "Meyrin",
+              "typeface": "Helvetica Neue Light"
+            },
+            {
+              "index": 2,
+              "text": ", Suisse",
+              "typeface": "Helvetica Neue Light"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "17th September 2026",
+          "runs": [
+            {
+              "index": 1,
+              "text": "17",
+              "typeface": "Helvetica Neue Light"
+            },
+            {
+              "index": 2,
+              "text": "th",
+              "typeface": "Helvetica Neue Light"
+            },
+            {
+              "index": 3,
+              "text": " September 2026",
+              "typeface": "Helvetica Neue Light"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/k3yl0zql",
+      "id": "3",
+      "name": "TextBox 2",
+      "bbox": [
+        80.93,
+        361.03,
+        928,
+        38.78
+      ],
+      "geometry": "rect",
+      "text": "Weekly All-hadronic Stop Meeting",
+      "textPreview": "Weekly All-hadronic Stop Meeting",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "fontSize": 24,
+        "typeface": "맑은 고딕",
+        "color": "tx1",
+        "alignment": "left",
+        "wrap": "square",
+        "autoFit": "resizeShapeToFitText",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Weekly All-hadronic Stop Meeting"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Weekly All-hadronic Stop Meeting",
+          "runs": [
+            {
+              "index": 1,
+              "text": "Weekly All-hadronic Stop Meeting",
+              "typeface": "Helvetica Neue Light",
+              "color": "#C00000"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 8,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/0jmxony1",
+      "id": "26",
+      "name": "그림 7",
+      "bbox": [
+        196.84,
+        22.8,
+        150.45,
+        151.18
+      ],
+      "contentType": "image/png",
+      "asset": {
+        "assetId": "/ppt/media/image4.png",
+        "contentType": "image/png",
+        "byteLength": 41254
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image4.png",
+        "contentType": "image/png",
+        "byteLength": 41254
+      }
+    }
+  ],
+  "composeRuns": []
+}

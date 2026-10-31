@@ -124,6 +124,8 @@ def plot_sgamma(
     regime: str,
     output_dir: Path,
     recoil_edges: list[float] | np.ndarray | None = None,
+    *,
+    annotation_position: tuple[float, float] = (0.04, 0.08),
 ) -> list[str]:
     paths: list[str] = []
     nb_recoil_mode = regime == "highdm" or set(factors) == set(LOW_GROUPS)
@@ -189,8 +191,7 @@ def plot_sgamma(
         ax.set_ylabel(r"$S_{\gamma,i}$", fontsize=30)
         ax.tick_params(labelsize=24)
         ax.text(
-            0.04,
-            0.08,
+            *annotation_position,
             (r"High-$\Delta m$" if regime == "highdm" else r"Low-$\Delta m$"),
             transform=ax.transAxes,
             fontsize=22,

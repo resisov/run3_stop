@@ -11,6 +11,7 @@ import numpy as np
 import awkward as ak
 from .event_selections import legacy_vr_mask as region_mask
 from .signal_models import signal_topology
+from .paths import analysis_era, EARLY_ERAS
 
 
 WEIGHT_BRANCHES = [
@@ -53,7 +54,14 @@ SIGNAL_BTAG_EFFICIENCY_DATASETS = {
 def signal_btag_efficiency_dataset(
     mstop: int,
     source_dataset: str = "",
+    year=2024,
 ) -> tuple[int, str]:
+    if analysis_era(year) in EARLY_ERAS:
+        # Do not attach a 2024 UParT or old NanoAODv12 efficiency to a new
+        # era-specific v15 signal. Its measured PNet dataset key is explicit.
+        if not source_dataset:
+            raise ValueError('Signal efficiency requires its source dataset')
+        return int(mstop), source_dataset
     topology = signal_topology(source_dataset)
     if topology in {"T2tb", "T2bW"}:
         parts = str(source_dataset).strip("/").split("/")

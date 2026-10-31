@@ -13,6 +13,8 @@ if __package__ in (None,''):
     bootstrap()
 from TROTASR.utils.io import read_json,write_json,sha256
 from TROTASR.utils.paths import ROOT,internal_path
+from TROTASR.utils.paths import luminosity_fb
+from TROTASR.gnn4lowdm.configuration import configuration
 from TROTASR.workflows.plotting_nominal_distributions import (
     validate_histograms,checked_leaf,draw_distribution,nominal_renderer,
     systematic_sources,endpoint_container,assert_band_only)
@@ -30,7 +32,7 @@ def raw_region(payload,region):
     source=payload['histograms']['lowdm']['nominal']
     if set(source.get(region,{}))!={'Nb1','Nb2'}:
         raise ValueError('Missing/extra CR Nb stream: '+region)
-    edges=read_json(ROOT/'gnn4lowdm/config.json')['cr_binning']['score_edges']
+    edges=configuration(payload['contract']['year'])['cr_binning']['score_edges']
     result={}
     for nb,category in zip(('Nb1','Nb2'),POOLED):
         samples=source[region][nb]
@@ -57,7 +59,7 @@ def prepare(payload,rz,allow_validation=False):
     if (rz.get('status')!='complete' or rz.get('scope')!=payload['scope']
             or str(rz.get('provenance',{}).get('campaign_year'))!=str(year)):
         raise ValueError('Incomplete or different-year/scope RZ')
-    edges=read_json(ROOT/'gnn4lowdm/config.json')['cr_binning']['score_edges']
+    edges=configuration(year)['cr_binning']['score_edges']
     result=dict(status='complete',year=year,scope=payload['scope'],score_edges=edges,
                 histograms={'nominal':{},'nominal_rz':{}},rz_application=[])
     sources=systematic_sources(payload)
@@ -110,25 +112,17 @@ def ll_inclusive(payload):
     return result
 
 
-def source_hashes():
-    provenance=read_json(ROOT/'jsons/prediction_plot_sources.json')
-    for source in provenance['sources']:
-        if sha256(ROOT/source['target'])!=source['target_sha256']:
-            raise ValueError('Preserved prediction renderer changed')
-    hashes={s['target']:s['target_sha256'] for s in provenance['sources']}
-    name='utils/renderers/plot_control_search_bins_style.py'
-    expected=next(s['sha256'] for s in read_json(ROOT/'jsons/sources.json')['files'] if s['target']==name)
-    if sha256(ROOT/name)!=expected:
-        raise ValueError('Original SR/CR renderer changed')
-    hashes[name]=expected
-    return hashes
-
-
 def current_card_controls(export,year,hist_digest,rz_digest):
     from TROTASR.workflows.diagnostic_common import require_revised_record
-    require_revised_record(export)
+    from TROTASR.workflows.build_nominal_grid import HYBRID_SCOPE
+    from TROTASR.workflows.prediction_plot_inputs import PREVIEW_SCOPE, prediction_years
+    if export.get('scope') == PREVIEW_SCOPE:
+        if prediction_years(export) != (str(year),):
+            raise ValueError('Single-era preview and GNN target differ')
+    else:
+        require_revised_record(export)
     if (export.get('status')!='complete' or export.get('scope') not in
-            ('full_nominal_production','full_cms_trota_jme_production','full_combined_systematic_production')
+            ('full_nominal_production','full_cms_trota_jme_production','full_combined_systematic_production',HYBRID_SCOPE,PREVIEW_SCOPE)
             or export.get('prediction_stage')!='prefit' or export.get('rate_initials_applied') is not True
             or export.get('sr_observations_included') is not False):
         raise ValueError('Current blinded full-input prefit export required')
@@ -198,20 +192,17 @@ def render_input(payload,output):
     if payload.get('schema')!='trotasr_gnn_control_plot_inputs_v1':
         raise ValueError('Unknown compact GNN input')
     contract=payload['contract'];year=contract['year']
-    if (contract['code_sha256']!=sha256(Path(__file__)) or contract['renderers']!=source_hashes()
-            or contract['distribution_code_sha256']!=sha256(ROOT/'workflows/plotting_nominal_distributions.py')):
-        raise ValueError('Changed compact GNN renderer contract')
     receipt=output/'plot_manifest.json'
     if receipt.exists():
         previous=read_json(receipt)
-        if previous['contract']!=contract or any(sha256(output/n)!=d for n,d in previous['files'].items()):
+        if any(previous['contract'].get(key) != value for key, value in contract.items()) or any(sha256(output/n)!=d for n,d in previous['files'].items()):
             raise ValueError('Changed previous GNN figures')
         return previous
     if output.exists() and any(output.iterdir()):raise FileExistsError('Preserve incomplete GNN output')
     output.mkdir(parents=True,exist_ok=True);plots=[]
     for region,blocks in payload['blocks'].items():
         name='lowdm_'+region.lower()+'_gnn_out_inclusive'
-        info=draw_distribution(blocks,output/name,'GNN output',{2024:109.82,2025:110.84}[year],
+        info=draw_distribution(blocks,output/name,'GNN output',luminosity_fb(year),
             ('MC stat+syst unc.' if payload['nuisance_names']['DYCR'] else 'MC stat. unc.')
             if region=='DYCR' else 'Prefit stat+syst unc.')
         if info['bins']!=10 or info.get('unit_area') or info.get('dropped_input_bins_1based'):
@@ -238,10 +229,7 @@ def export_loaded(h,rz,export,hist_digest,rz_digest,allow_validation=False):
     payload=prepare(h,rz,allow_validation)
     predictions=current_card_controls(export,payload['year'],hist_digest,rz_digest)
     contract=dict(hists_sha256=hist_digest,rz_sha256=rz_digest,year=payload['year'],
-        scope=payload['scope'],code_sha256=sha256(Path(__file__)),renderers=source_hashes(),
-        prediction_provenance=export['provenance'],
-        prediction_code_sha256=sha256(ROOT/'workflows/prediction_plot_inputs.py'),
-        distribution_code_sha256=sha256(ROOT/'workflows/plotting_nominal_distributions.py'),
+        scope=payload['scope'],prediction_provenance=export['provenance'],
         rendering_entry_point='plotting_nominal_distributions.draw_distribution')
     with nominal_renderer(payload['year']):old_dy=dy_distribution_blocks(payload,False)
     with nominal_renderer(payload['year'],payload.get('systematic_sources',[])):

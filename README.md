@@ -1,44 +1,41 @@
-# Run-3 all-hadronic stop analysis
+# TROTASR - final canonical analysis
 
-The current analysis package is **[TROTASR](TROTASR/README.md)** on the
-`run3_full_analysis` branch.
+The current inputs, results, analysis code, plotting code and fitting code were
+approved by the user as the final frozen baseline on **2026-10-31**.
 
-For setup, required inputs, exact commands and output locations, start with
-the **[TROTASR execution guide](TROTASR/README.md)**.
+The sole analysis implementation is [TROTASR](TROTASR/README.md), on the
+`run3_full_analysis` branch. Its actual hep2 root is:
 
 ```text
-Integrated Events + TROTA ROOT files
-  → high-/low-dM histograms with corrections and systematic variations
-  → yearly merge and background measurements
-  → templates and datacards
-  → expected limits, impacts, CR-only fit and pulls
-  → SR/CR distributions and exclusion contours
+/hep2-scratch/twkim/postprocessing/TROTASR
 ```
 
-The 2024+2025 statistical model uses 118 high-dM and 30 low-dM SR bins per
-year, high-dM CRs with 12 bins each, and low-dM CRs with 10 bins each.
-The combined model has 428 bins in 16 channels. Observed SR data remain blinded.
+Use `python -m TROTASR <stage>` through the existing runtime documented in the
+[execution guide](TROTASR/README.md). Current configuration is
+`TROTASR/jsons/analysis.json`; current statistical products are `stats/run3`
+inside the hep2 TROTASR root. No separate campaign, sidecar, old analysis copy
+or replacement environment is part of this baseline.
 
-| Resource | Location |
-|---|---|
-| Execution guide | [TROTASR/README.md](TROTASR/README.md) |
-| Object definitions | [ids.adl](TROTASR/utils/ids.adl) |
-| Region and bin definitions | [event_selections.adl](TROTASR/utils/event_selections.adl) |
-| Correction keys, SFs and variations | [corrections.adl](TROTASR/utils/corrections.adl) |
-| Combined model configuration | [combined_systematics_config.json](TROTASR/jsons/combined_systematics_config.json) |
-| Final high-dM category merge | [sr_category_merge.json](TROTASR/jsons/sr_category_merge.json) |
-| Early Run-3 payload inventory | [early_run3_assets.json](TROTASR/jsons/early_run3_assets.json) |
+The official model combines 2022, 2022EE, 2023, 2023BPix, 2024 and 2025 in
+8 era-merged channels, 214 likelihood bins and 48 shared CR normalizations.
+Era templates, GNN boundaries and nuisance functions are retained. SR data
+remain blinded. The adopted systematic scope is unchanged by finalization.
 
-2022, 2022EE, 2023 and 2023BPix calibration payloads are staged in TROTASR.
-Their histogram/statistical year interfaces are not yet connected; payload
-availability alone does not make those eras executable through the 2024/2025
-commands.
+Completed products: 895 expected-limit points, T2tt(1200,500) impacts,
+observed CR-only pulls, prefit/postfit predictions and the approved figures.
+See [the current baseline handoff](TROTASR/NOMINAL_CONTINUATION.md) for exact paths.
 
-`autonomous_allhad/` contains upstream production tools and earlier analysis
-implementations. Its historical histogram/datacard drivers are not the current
-TROTASR execution path.
+Review work reuses these final artifacts. New source/input/model changes,
+reprocessing, refitting or rerendering need a new explicit user instruction.
+Monitoring remains stopped.
 
-Event ROOT files, HDF5 models, campaign outputs, fit scratch and generated
-figures are not included in Git. The execution guide lists the external
-inputs required for reproduction. Internal test/validation products and
-PNG/PDF files are excluded from publication unless explicitly requested.
+Object, region and correction definitions are documented alongside the code:
+[ids.adl](TROTASR/utils/ids.adl),
+[event_selections.adl](TROTASR/utils/event_selections.adl), and
+[corrections.adl](TROTASR/utils/corrections.adl).
+
+The user explicitly retained hep2 `Stop_Object_Review` as review material,
+not an alternative analysis runtime. Current scientific receipts, calibration
+inputs and published physics references are preserved. Retired environments,
+earlier model outputs, source backups and operational histories are not retained
+as restoration mechanisms.

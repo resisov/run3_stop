@@ -26,6 +26,58 @@
         "path": "scales/JME/2025/fatJet_jerc.json.gz",
         "sha256": "c5250701e2601ba7e42dc71c929b58fbc81175e33011a178e0b282b3d13908af"
       }
+    },
+    "2022": {
+      "jec_tag": "Summer22_22Sep2023_V4",
+      "jer_tag": "Summer22_22Sep2023_JRV2",
+      "nominal_prescription": "retained_early_hybrid_dR_and_dpt_zero_floor",
+      "Jet": {
+        "path": "scales/JME/2022/jet_jerc.json.gz",
+        "sha256": "0b28256b2d7e1ddc65b89f2ad98061b01c1ea13d83cab4f2995f26d92a4b06e4"
+      },
+      "FatJet": {
+        "path": "scales/JME/2022/fatJet_jerc.json.gz",
+        "sha256": "2dae4f95e17bf9ef421c452af136a3b88b760a060ed43dacf65eabf2e499a9d0"
+      }
+    },
+    "2022EE": {
+      "jec_tag": "Summer22EE_22Sep2023_V4",
+      "jer_tag": "Summer22EE_22Sep2023_JRV2",
+      "nominal_prescription": "retained_early_hybrid_dR_and_dpt_zero_floor",
+      "Jet": {
+        "path": "scales/JME/2022EE/jet_jerc.json.gz",
+        "sha256": "c369ec13753d25bf5245e3afa57d02103a7219d4b0bb294f95ee9e8d79855b97"
+      },
+      "FatJet": {
+        "path": "scales/JME/2022EE/fatJet_jerc.json.gz",
+        "sha256": "34d587c8893a02dbccaae3411deb293baada6f7f21c55fceb34c0e91b506e9e1"
+      }
+    },
+    "2023": {
+      "jec_tag": "Summer23Prompt23_V4",
+      "jer_tag": "Summer23Prompt23_RunCv1234_JRV3",
+      "nominal_prescription": "retained_early_hybrid_dR_and_dpt_zero_floor",
+      "Jet": {
+        "path": "scales/JME/2023/jet_jerc.json.gz",
+        "sha256": "b83bbbba1012336606d3268e65da0700f7a10cef8bcefb80dba1dcd9e18e1a4c"
+      },
+      "FatJet": {
+        "path": "scales/JME/2023/fatJet_jerc.json.gz",
+        "sha256": "85b61bf8302f577b5758ecb564b8c5200607333c0c967271696142ad6766d3ba"
+      }
+    },
+    "2023BPix": {
+      "jec_tag": "Summer23BPixPrompt23_V4",
+      "jer_tag": "Summer23BPixPrompt23_RunD_JRV3",
+      "nominal_prescription": "retained_early_hybrid_dR_and_dpt_zero_floor",
+      "Jet": {
+        "path": "scales/JME/2023BPix/jet_jerc.json.gz",
+        "sha256": "b7a2b3e709e08d41ae77bcf720bf4207b0ca9e55fbfe85d6f0fd4529c73d50ef"
+      },
+      "FatJet": {
+        "path": "scales/JME/2023BPix/fatJet_jerc.json.gz",
+        "sha256": "4a6ccc56a8a8edfbc515d5e83d6999ea4a4ac7e4ae4abf9df110f62dd85b9e26"
+      }
     }
   }
 }

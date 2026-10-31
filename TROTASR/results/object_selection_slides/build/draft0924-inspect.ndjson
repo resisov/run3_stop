@@ -1,0 +1,103 @@
+{"kind":"slide","id":"sl/y90nupkv","slide":1,"title":"TopMixed Application for","textShapes":4}
+{"kind":"textbox","id":"sh/dgzetcfa","slide":1,"name":"TextBox 18","text":"TopMixed Application for\nhigh-dM regions(NPS-26-012) ","textPreview":"TopMixed Application for | high-dM regions(NPS-26-012)","textChars":53,"textLines":2,"bbox":[77.43,211.36,1155.23,151.87]}
+{"kind":"textbox","id":"sh/1cvuxc7e","slide":1,"name":"TextBox 19","text":"‡Taiwoo Kim1, Sezen Sekmen1, Young Do Oh1, Chang-Seong Moon1,\n Nathan Brandman-Hughes2, Richard Cavanaugh2\n\n1 Kyungpook National University (KNU, Korea)\n2 University of Illinois Chicago (UIC, USA)","textPreview":"‡Taiwoo Kim1, Sezen Sekmen1, Young Do Oh1, Chang-Seong Moon1, |  Nathan Brandman-Hughes2, Richard Cavanaugh2 |  | 1 Kyungpook National Un...","textChars":196,"textLines":5,"bbox":[78.86,422.77,1038.02,155.1]}
+{"kind":"textbox","id":"sh/zadcv2p8","slide":1,"name":"TextBox 21","text":"Meyrin, Suisse\n24th September 2026","textPreview":"Meyrin, Suisse | 24th September 2026","textChars":34,"textLines":2,"bbox":[81.73,588.45,525.45,67.86]}
+{"kind":"textbox","id":"sh/k3yl0zql","slide":1,"name":"TextBox 2","text":"Weekly All-hadronic Stop Meeting","textPreview":"Weekly All-hadronic Stop Meeting","textChars":32,"textLines":1,"bbox":[80.93,361.03,928,38.78]}
+{"kind":"image","id":"im/dgvyd8fa","slide":1,"name":"그림 16","bbox":[310.12,105.8,1431.55,908.03]}
+{"kind":"image","id":"im/eh4fmdgv","slide":1,"name":"그림 9","bbox":[30.34,22.8,151.18,151.18]}
+{"kind":"image","id":"im/zidgfixg","slide":1,"name":"그림 17","bbox":[362.61,22.8,151.18,151.18]}
+{"kind":"image","id":"im/0jmxony1","slide":1,"name":"그림 7","bbox":[196.84,22.8,150.45,151.18]}
+{"kind":"slide","id":"sl/hwbqtkby","slide":2,"title":"Object definition","textShapes":5}
+{"kind":"textbox","id":"sh/9072xkry","slide":2,"name":"제목 1","placeholder":"title","text":"Object definition","textPreview":"Object definition","textChars":17,"textLines":1,"bbox":[53.61,0,1172.79,139.17]}
+{"kind":"textbox","id":"sh/cnupgny5","slide":2,"name":"부제목 2","text":"1     2026. 9. 24.     Taiwoo KIM – Weekly Stop Meeting","textPreview":"1     2026. 9. 24.     Taiwoo KIM – Weekly Stop Meeting","textChars":55,"textLines":1,"bbox":[33.05,687.38,1064.55,28.34]}
+{"kind":"shape","id":"sh/mtwrmxg7","slide":2,"name":"직선 연결선[R] 11","bbox":[42.18,681.21,1026.62,0]}
+{"kind":"textbox","id":"sh/76twva5c","slide":2,"name":"common-id","text":"Jet ID and region-dependent photon/lepton cleaning apply before arbitration.","textPreview":"Jet ID and region-dependent photon/lepton cleaning apply before arbitration.","textChars":76,"textLines":1,"bbox":[65,557,1150,34]}
+{"kind":"textbox","id":"sh/65kfmpor","slide":2,"name":"independent-collections","text":"AK4, AK8 and SubJet are separate jet collections.","textPreview":"AK4, AK8 and SubJet are separate jet collections.","textChars":49,"textLines":1,"bbox":[65,600,1120,34]}
+{"kind":"textbox","id":"sh/hcvy14ne","slide":2,"name":"mass-definition","text":"mSD: AK8 soft-drop mass. TT and QCD: TROTA class probabilities.","textPreview":"mSD: AK8 soft-drop mass. TT and QCD: TROTA class probabilities.","textChars":63,"textLines":1,"bbox":[65,643,1000,25]}
+{"kind":"table","id":"tb/ru94re98","slide":2,"name":"","rows":5,"cols":5,"preview":"Object | Inputs | Jet selection | Candidate selection | Tag requirement","bbox":[53,151,1174,384]}
+{"kind":"image","id":"im/mpcv2l0b","slide":2,"name":"그림 5","bbox":[1192,634.31,75.59,75.59]}
+{"kind":"image","id":"im/q1cfel4j","slide":2,"name":"그림 2","bbox":[1097.05,634.31,75.59,75.59]}
+{"kind":"slide","id":"sl/ofy9wn61","slide":3,"title":"Object hierarchy","textShapes":20}
+{"kind":"textbox","id":"sh/cza94vmx","slide":3,"name":"제목 1","placeholder":"title","text":"Object hierarchy","textPreview":"Object hierarchy","textChars":16,"textLines":1,"bbox":[53.61,0,1172.79,139.17]}
+{"kind":"textbox","id":"sh/ja54na9g","slide":3,"name":"부제목 2","text":"2     2026. 9. 24.     Taiwoo KIM – Weekly Stop Meeting","textPreview":"2     2026. 9. 24.     Taiwoo KIM – Weekly Stop Meeting","textChars":55,"textLines":1,"bbox":[33.05,687.38,1064.55,28.34]}
+{"kind":"shape","id":"sh/943mhgre","slide":3,"name":"직선 연결선[R] 11","bbox":[42.18,681.21,1026.62,0]}
+{"kind":"textbox","id":"sh/f29gbyx0","slide":3,"name":"boosted","text":"1  Boosted\nNbst","textPreview":"1  Boosted | Nbst","textChars":15,"textLines":2,"bbox":[63,148,210,66]}
+{"kind":"textbox","id":"sh/03ix43e5","slide":3,"name":"mixed","text":"2  Mixed\nNmix","textPreview":"2  Mixed | Nmix","textChars":13,"textLines":2,"bbox":[63,233,210,66]}
+{"kind":"textbox","id":"sh/14ryd8fq","slide":3,"name":"resolved","text":"3  Resolved\nNres","textPreview":"3  Resolved | Nres","textChars":16,"textLines":2,"bbox":[63,318,210,66]}
+{"kind":"textbox","id":"sh/6d0fytg3","slide":3,"name":"w","text":"4  W\nNw","textPreview":"4  W | Nw","textChars":7,"textLines":2,"bbox":[63,403,210,66]}
+{"kind":"shape","id":"sh/re9g7yxo","slide":3,"bbox":[168,214,0,19]}
+{"kind":"shape","id":"sh/sfix03y9","slide":3,"bbox":[168,299,0,19]}
+{"kind":"shape","id":"sh/tgry9ofu","slide":3,"bbox":[168,384,0,19]}
+{"kind":"textbox","id":"sh/a9kfadwn","slide":3,"name":"stage-0","text":"Keep all passing AK8 jets.\nReserve their overlapping AK4 jets.","textPreview":"Keep all passing AK8 jets. | Reserve their overlapping AK4 jets.","textChars":62,"textLines":2,"bbox":[298,148,492,66]}
+{"kind":"textbox","id":"sh/batgjixs","slide":3,"name":"stage-1","text":"Highest score first. Reject shared AK8\nor AK4 overlap with selected tops.","textPreview":"Highest score first. Reject shared AK8 | or AK4 overlap with selected tops.","textChars":73,"textLines":2,"bbox":[298,233,492,66]}
+{"kind":"textbox","id":"sh/l4fi9cza","slide":3,"name":"stage-2","text":"Highest score first. Reject AK4 overlap\nwith selected tops.","textPreview":"Highest score first. Reject AK4 overlap | with selected tops.","textChars":59,"textLines":2,"bbox":[298,318,492,66]}
+{"kind":"textbox","id":"sh/k3m1g7yp","slide":3,"name":"stage-3","text":"Reject shared AK8 or AK4 overlap\nwith selected tops. Keep independent W.","textPreview":"Reject shared AK8 or AK4 overlap | with selected tops. Keep independent W.","textChars":72,"textLines":2,"bbox":[298,403,492,66]}
+{"kind":"textbox","id":"sh/z2d07mh4","slide":3,"name":"overlap-heading","text":"AK4–AK8 overlap","textPreview":"AK4–AK8 overlap","textChars":15,"textLines":1,"bbox":[828,146,394,35]}
+{"kind":"textbox","id":"sh/y14jehgj","slide":3,"name":"two-subjets","text":"AK8 has two valid SubJets","textPreview":"AK8 has two valid SubJets","textChars":25,"textLines":1,"bbox":[828,196,394,31]}
+{"kind":"textbox","id":"sh/x0vi5czy","slide":3,"name":"subjet-rule","text":"ΔR(AK4, SubJet 1) < 0.4\nor ΔR(AK4, SubJet 2) < 0.4","textPreview":"ΔR(AK4, SubJet 1) < 0.4 | or ΔR(AK4, SubJet 2) < 0.4","textChars":50,"textLines":2,"bbox":[828,234,396,71]}
+{"kind":"textbox","id":"sh/czmhc7id","slide":3,"name":"fallback-heading","text":"Otherwise","textPreview":"Otherwise","textChars":9,"textLines":1,"bbox":[828,326,394,31]}
+{"kind":"textbox","id":"sh/byd032h8","slide":3,"name":"fallback-rule","text":"ΔR(AK4, AK8 axis) < 0.8","textPreview":"ΔR(AK4, AK8 axis) < 0.8","textChars":23,"textLines":1,"bbox":[828,366,394,45]}
+{"kind":"textbox","id":"sh/ax4zax0n","slide":3,"name":"overlap-meaning","text":"AK4 jets satisfying this rule\nenter the overlap veto.","textPreview":"AK4 jets satisfying this rule | enter the overlap veto.","textChars":53,"textLines":2,"bbox":[828,435,394,61]}
+{"kind":"textbox","id":"sh/hwzihwzi","slide":3,"name":"candidate-not-event","text":"Only the overlapping candidate is rejected. Independent Mixed and W can coexist.","textPreview":"Only the overlapping candidate is rejected. Independent Mixed and W can coexist.","textChars":80,"textLines":1,"bbox":[65,523,1150,38]}
+{"kind":"textbox","id":"sh/wv61obyx","slide":3,"name":"current-limitations","text":"No Boosted–Boosted or W–W pairwise veto. No direct ΔR(AK8, AK8) cut.","textPreview":"No Boosted–Boosted or W–W pairwise veto. No direct ΔR(AK8, AK8) cut.","textChars":68,"textLines":1,"bbox":[65,568,1150,34]}
+{"kind":"textbox","id":"sh/4nuhs7uh","slide":3,"name":"topology-selection","text":"High-dM: Nbst + Nmix + Nres + Nw ≥ 1. Low-dM: all four counts = 0.","textPreview":"High-dM: Nbst + Nmix + Nres + Nw ≥ 1. Low-dM: all four counts = 0.","textChars":66,"textLines":1,"bbox":[65,610,1020,35]}
+{"kind":"textbox","id":"sh/po3ilcvm","slide":3,"name":"nb-independent","text":"The overlap veto does not reduce Nb.","textPreview":"The overlap veto does not reduce Nb.","textChars":36,"textLines":1,"bbox":[65,649,970,24]}
+{"kind":"image","id":"im/tk36hgva","slide":3,"name":"그림 5","bbox":[1192,634.31,75.59,75.59]}
+{"kind":"image","id":"im/p4bu58jm","slide":3,"name":"그림 2","bbox":[1097.05,634.31,75.59,75.59]}
+{"kind":"slide","id":"sl/jyx0ra1s","slide":4,"title":"New high-dM SR","textShapes":5}
+{"kind":"textbox","id":"sh/1cj2d8b6","slide":4,"name":"제목 1","placeholder":"title","text":"New high-dM SR","textPreview":"New high-dM SR","textChars":14,"textLines":1,"bbox":[53.61,0,1172.79,139.17]}
+{"kind":"textbox","id":"sh/g36tgryd","slide":4,"name":"부제목 2","text":"3     2026. 9. 24.     Taiwoo KIM – Weekly Stop Meeting","textPreview":"3     2026. 9. 24.     Taiwoo KIM – Weekly Stop Meeting","textChars":55,"textLines":1,"bbox":[33.05,687.38,1064.55,28.34]}
+{"kind":"shape","id":"sh/i94r6xgz","slide":4,"name":"직선 연결선[R] 11","bbox":[42.18,681.21,1026.62,0]}
+{"kind":"textbox","id":"sh/3ytsrmpw","slide":4,"name":"sr-summary","text":"21 classes, 118 high-dM bins. Low-dM retains 30 bins. SR data remain blinded.","textPreview":"21 classes, 118 high-dM bins. Low-dM retains 30 bins. SR data remain blinded.","textChars":77,"textLines":1,"bbox":[65,533,1150,38]}
+{"kind":"textbox","id":"sh/2xkrih8b","slide":4,"name":"sr-order","text":"Category order: Nb, Nbst, Nmix, Nres, Nw. CRs retain the existing Nb streams.","textPreview":"Category order: Nb, Nbst, Nmix, Nres, Nw. CRs retain the existing Nb streams.","textChars":77,"textLines":1,"bbox":[65,577,1150,37]}
+{"kind":"textbox","id":"sh/1wbapc7q","slide":4,"name":"sr-merges","text":"B < 2 category merges, then the last two bins of classes 2, 15 and 20 combined.","textPreview":"B < 2 category merges, then the last two bins of classes 2, 15 and 20 combined.","textChars":79,"textLines":1,"bbox":[65,622,1015,41]}
+{"kind":"image","id":"im/q5onm50v","slide":4,"name":"그림 5","bbox":[1192,634.31,75.59,75.59]}
+{"kind":"image","id":"im/m1s7e9k3","slide":4,"name":"그림 2","bbox":[1097.05,634.31,75.59,75.59]}
+{"kind":"image","id":"im/n2187e1o","slide":4,"name":"","alt":"predictions/highdm118_sr_2024_2025.png","bbox":[53,151,1174,368.32]}
+{"kind":"slide","id":"sl/i107q5of","slide":5,"title":"Limit comparison: T2tt","textShapes":7}
+{"kind":"textbox","id":"sh/dgbulwnm","slide":5,"name":"제목 1","placeholder":"title","text":"Limit comparison: T2tt","textPreview":"Limit comparison: T2tt","textChars":22,"textLines":1,"bbox":[53.61,0,1172.79,139.17]}
+{"kind":"textbox","id":"sh/sb6xsvu9","slide":5,"name":"부제목 2","text":"4     2026. 9. 24.     Taiwoo KIM – Weekly Stop Meeting","textPreview":"4     2026. 9. 24.     Taiwoo KIM – Weekly Stop Meeting","textChars":55,"textLines":1,"bbox":[33.05,687.38,1064.55,28.34]}
+{"kind":"shape","id":"sh/ahkvi1cb","slide":5,"name":"직선 연결선[R] 11","bbox":[42.18,681.21,1026.62,0]}
+{"kind":"textbox","id":"sh/ud0ne10b","slide":5,"name":"before-heading","text":"Without Nmix (21 Sep)","textPreview":"Without Nmix (21 Sep)","textChars":21,"textLines":1,"bbox":[65,134,555,38]}
+{"kind":"textbox","id":"sh/pkr6tgjy","slide":5,"name":"after-heading","text":"With Nmix (24 Sep)","textPreview":"With Nmix (24 Sep)","textChars":18,"textLines":1,"bbox":[660,134,555,38]}
+{"kind":"textbox","id":"sh/4ji5kbid","slide":5,"name":"before-model","text":"HighSR73 + lowSR30, adopted syst., 203/205 valid","textPreview":"HighSR73 + lowSR30, adopted syst., 203/205 valid","textChars":48,"textLines":1,"bbox":[65,176,570,27]}
+{"kind":"textbox","id":"sh/3i94r61s","slide":5,"name":"after-model","text":"HighSR118 + lowSR30, nominal, 201/205 valid","textPreview":"HighSR118 + lowSR30, nominal, 201/205 valid","textChars":43,"textLines":1,"bbox":[660,176,570,27]}
+{"kind":"textbox","id":"sh/2h0ni107","slide":5,"name":"comparison-scope","text":"Binning and nuisance sets differ. New TROTA JES/JER propagation is pending on the right.","textPreview":"Binning and nuisance sets differ. New TROTA JES/JER propagation is pending on the right.","textChars":88,"textLines":1,"bbox":[65,643,1015,32]}
+{"kind":"image","id":"im/uhkvq14z","slide":5,"name":"그림 5","bbox":[1192,634.31,75.59,75.59]}
+{"kind":"image","id":"im/yt0f21or","slide":5,"name":"그림 2","bbox":[1097.05,634.31,75.59,75.59]}
+{"kind":"image","id":"im/zu9wb6pc","slide":5,"name":"","alt":"contours/expected_limit_t2tt_2024_2025_highdm118_lowdm30_xsec_topology_thermal_relic.png","bbox":[660,201,525,437.5]}
+{"kind":"image","id":"im/kf2x4b6x","slide":5,"name":"","alt":"2026-09-21 adopted T2tt result without Nmix","bbox":[65,201,525,437.5]}
+{"kind":"slide","id":"sl/pm8sqw","slide":6,"title":"Limit comparison: T2bW","textShapes":7}
+{"kind":"textbox","id":"sh/bqpw3ids","slide":6,"name":"제목 1","placeholder":"title","text":"Limit comparison: T2bW","textPreview":"Limit comparison: T2bW","textChars":22,"textLines":1,"bbox":[53.61,0,1172.79,139.17]}
+{"kind":"textbox","id":"sh/y50re907","slide":6,"name":"부제목 2","text":"5     2026. 9. 24.     Taiwoo KIM – Weekly Stop Meeting","textPreview":"5     2026. 9. 24.     Taiwoo KIM – Weekly Stop Meeting","textChars":55,"textLines":1,"bbox":[33.05,687.38,1064.55,28.34]}
+{"kind":"shape","id":"sh/gz29o3il","slide":6,"name":"직선 연결선[R] 11","bbox":[42.18,681.21,1026.62,0]}
+{"kind":"textbox","id":"sh/obepofy5","slide":6,"name":"before-heading","text":"Without Nmix (21 Sep)","textPreview":"Without Nmix (21 Sep)","textChars":21,"textLines":1,"bbox":[65,134,555,38]}
+{"kind":"textbox","id":"sh/bypozaxg","slide":6,"name":"after-heading","text":"With Nmix (24 Sep)","textPreview":"With Nmix (24 Sep)","textChars":18,"textLines":1,"bbox":[660,134,555,38]}
+{"kind":"textbox","id":"sh/adg7q5gv","slide":6,"name":"before-model","text":"HighSR73 + lowSR30, adopted syst., 350/354 valid","textPreview":"HighSR73 + lowSR30, adopted syst., 350/354 valid","textChars":48,"textLines":1,"bbox":[65,176,570,27]}
+{"kind":"textbox","id":"sh/x0761kfm","slide":6,"name":"after-model","text":"HighSR118 + lowSR30, nominal, 339/354 valid","textPreview":"HighSR118 + lowSR30, nominal, 339/354 valid","textChars":43,"textLines":1,"bbox":[660,176,570,27]}
+{"kind":"textbox","id":"sh/czypsfy1","slide":6,"name":"comparison-scope","text":"Binning and nuisance sets differ. New TROTA JES/JER propagation is pending on the right.","textPreview":"Binning and nuisance sets differ. New TROTA JES/JER propagation is pending on the right.","textChars":88,"textLines":1,"bbox":[65,643,1015,32]}
+{"kind":"image","id":"im/k7qtw321","slide":6,"name":"그림 5","bbox":[1192,634.31,75.59,75.59]}
+{"kind":"image","id":"im/4ni58be9","slide":6,"name":"그림 2","bbox":[1097.05,634.31,75.59,75.59]}
+{"kind":"image","id":"im/pormhgfu","slide":6,"name":"","alt":"contours/expected_limit_t2bw_2024_2025_highdm118_lowdm30_xsec_topology_thermal_relic.png","bbox":[660,201,525,437.5]}
+{"kind":"image","id":"im/2lgn6lw3","slide":6,"name":"","alt":"2026-09-21 adopted T2bW result without Nmix","bbox":[65,201,525,437.5]}
+{"kind":"slide","id":"sl/386lie","slide":7,"title":"Limit comparison: T2tb","textShapes":7}
+{"kind":"textbox","id":"sh/krulwnu9","slide":7,"name":"제목 1","placeholder":"title","text":"Limit comparison: T2tb","textPreview":"Limit comparison: T2tb","textChars":22,"textLines":1,"bbox":[53.61,0,1172.79,139.17]}
+{"kind":"textbox","id":"sh/zal43y9k","slide":7,"name":"부제목 2","text":"6     2026. 9. 24.     Taiwoo KIM – Weekly Stop Meeting","textPreview":"6     2026. 9. 24.     Taiwoo KIM – Weekly Stop Meeting","textChars":55,"textLines":1,"bbox":[33.05,687.38,1064.55,28.34]}
+{"kind":"shape","id":"sh/h4nmd8ry","slide":7,"name":"직선 연결선[R] 11","bbox":[42.18,681.21,1026.62,0]}
+{"kind":"textbox","id":"sh/p83mxobi","slide":7,"name":"before-heading","text":"Without Nmix (21 Sep)","textPreview":"Without Nmix (21 Sep)","textChars":21,"textLines":1,"bbox":[65,134,555,38]}
+{"kind":"textbox","id":"sh/q9cnqtc3","slide":7,"name":"after-heading","text":"With Nmix (24 Sep)","textPreview":"With Nmix (24 Sep)","textChars":18,"textLines":1,"bbox":[660,134,555,38]}
+{"kind":"textbox","id":"sh/bal4zyto","slide":7,"name":"before-model","text":"HighSR73 + lowSR30, adopted syst., 356/365 valid","textPreview":"HighSR73 + lowSR30, adopted syst., 356/365 valid","textChars":48,"textLines":1,"bbox":[65,176,570,27]}
+{"kind":"textbox","id":"sh/cbu5s3u9","slide":7,"name":"after-model","text":"HighSR118 + lowSR30, nominal, 353/365 valid","textPreview":"HighSR118 + lowSR30, nominal, 353/365 valid","textChars":43,"textLines":1,"bbox":[660,176,570,27]}
+{"kind":"textbox","id":"sh/xc3618bu","slide":7,"name":"comparison-scope","text":"Binning and nuisance sets differ. New TROTA JES/JER propagation is pending on the right.","textPreview":"Binning and nuisance sets differ. New TROTA JES/JER propagation is pending on the right.","textChars":88,"textLines":1,"bbox":[65,643,1015,32]}
+{"kind":"image","id":"im/9kn2xc7a","slide":7,"name":"그림 5","bbox":[1192,634.31,75.59,75.59]}
+{"kind":"image","id":"im/p4va5ov2","slide":7,"name":"그림 2","bbox":[1097.05,634.31,75.59,75.59]}
+{"kind":"image","id":"im/43m9cjuh","slide":7,"name":"","alt":"contours/expected_limit_t2tb_2024_2025_highdm118_lowdm30_xsec_topology_thermal_relic.png","bbox":[660,201,525,437.5]}
+{"kind":"image","id":"im/32ds3edw","slide":7,"name":"","alt":"2026-09-21 adopted T2tb result without Nmix","bbox":[65,201,525,437.5]}
+{"kind":"slide","id":"sl/x8f69ofe","slide":8,"title":"Merci !","textShapes":3}
+{"kind":"textbox","id":"sh/svmt4v6t","slide":8,"name":"TextBox 18","text":"Merci !","textPreview":"Merci !","textChars":7,"textLines":1,"bbox":[77.43,285.9,1155.23,96.94]}
+{"kind":"textbox","id":"sh/zi98nu94","slide":8,"name":"TextBox 2","text":"All-hadronic stop search","textPreview":"All-hadronic stop search","textChars":24,"textLines":1,"bbox":[77.43,382.83,928,38.78]}
+{"kind":"textbox","id":"sh/yhg7epsj","slide":8,"name":"TextBox 1","text":"“Anything your heart desires will come to you.”\n\nWhen you wish upon a star – Pinocchio","textPreview":"“Anything your heart desires will come to you.” |  | When you wish upon a star – Pinocchio","textChars":86,"textLines":3,"bbox":[77.43,604.41,393.08,77.55]}
+{"kind":"image","id":"im/zax8jq94","slide":8,"name":"그림 16","bbox":[310.12,105.8,1431.55,908.03]}
+{"kind":"image","id":"im/e9orqlsj","slide":8,"name":"그림 9","bbox":[30.34,22.8,151.18,151.18]}
+{"kind":"image","id":"im/1cfql0ra","slide":8,"name":"그림 17","bbox":[362.61,22.8,151.18,151.18]}
+{"kind":"image","id":"im/0b69svap","slide":8,"name":"그림 7","bbox":[196.84,22.8,150.45,151.18]}

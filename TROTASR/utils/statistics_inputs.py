@@ -226,7 +226,8 @@ def build_inputs(payload, sgamma, rz_high, rz_low, double_ratio, topology, mstop
     if payload.get('highdm_sr_source_axes') != 'exact_nb_exact_topology_native_recoil_v2':
         raise ValueError('Exact Nb/native recoil SR components are required')
     year = str(payload['contract']['year'])
-    if year not in ('2024', '2025') or topology not in SUPPORTED_SIGNAL_TOPOLOGIES:
+    from .paths import ERAS
+    if year not in ERAS or topology not in SUPPORTED_SIGNAL_TOPOLOGIES:
         raise ValueError('Unsupported year/topology')
     for name, factor in [('sgamma', sgamma), ('rz_high', rz_high), ('rz_low', rz_low), ('double_ratio', double_ratio)]:
         allowed = ('complete', 'feature_stage_complete') if name == 'rz_low' else ('complete',)
@@ -237,7 +238,9 @@ def build_inputs(payload, sgamma, rz_high, rz_low, double_ratio, topology, mstop
     streams = {r.get('process') for r in payload.get('input_metadata', {}).values() if r.get('is_data')}
     if not {'JetMET', 'EGamma'} <= streams:
         raise ValueError('CR data streams are missing; no pseudo-observations substituted')
-    gnn = read_json(ROOT / 'gnn4lowdm/config.json') if gnn is None else gnn
+    if gnn is None:
+        from TROTASR.gnn4lowdm.configuration import configuration
+        gnn = configuration(year)
     layout = expand(definition)
     view = HistogramView(payload, year, gnn)
     rz = model.build_rz_covariance(rz_high, rz_low, year)

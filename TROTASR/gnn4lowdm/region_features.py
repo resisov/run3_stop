@@ -10,6 +10,8 @@ from functools import lru_cache
 import numpy as np
 import awkward as ak
 from TROTASR.utils import region_kinematics as base
+from TROTASR.utils.paths import tagging_definition, analysis_era, EARLY_ERAS
+from .configuration import global_feature_names
 from .features import DIAGONAL_V3_GLOBAL_FEATURE_NAMES, _diagonal_v3_features, _pad
 
 
@@ -17,12 +19,12 @@ NOMINAL_REGIONS = {"SR", "LLCR", "QCDCR"}
 
 
 def _reference_objects(
-    arrays: ak.Array, region: str
+    arrays: ak.Array, region: str, year=2024
 ) -> tuple[ak.Array, ak.Array]:
     if region in NOMINAL_REGIONS:
         empty = arrays["jet_eta_all"][:, :0]
         return empty, empty
-    masks = base.object_masks(arrays)
+    masks = base.object_masks(arrays, year)
     if region == "GCR":
         return (
             arrays["photon_eta_all"][masks["photon_medium"]],
@@ -55,6 +57,7 @@ def _region_isr(
     reference_eta: ak.Array,
     reference_phi: ak.Array,
     recoil_phi: np.ndarray,
+    include_subjet_btag: bool = True,
 ) -> tuple[dict[str, np.ndarray], dict[str, int]]:
     """Return ISR inputs and audit nominal-subjet information reuse.
 
@@ -71,7 +74,7 @@ def _region_isr(
         isr_dphi = np.asarray(arrays["lowdm_isr_dphi"][selected], dtype=np.float32)
         isr_btag = np.asarray(
             arrays["lowdm_isr_subjet_btag_max"][selected], dtype=np.float32
-        )
+        ) if include_subjet_btag else None
         has_isr = (n_isr > 0.0) & np.isfinite(isr_pt) & (isr_pt > 0.0)
         return {
             "n_lowdm_isr": n_isr,
@@ -79,7 +82,7 @@ def _region_isr(
             "lowdm_isr_eta": isr_eta,
             "lowdm_isr_phi": isr_phi,
             "lowdm_isr_dphi": isr_dphi,
-            "lowdm_isr_subjet_btag_max": isr_btag,
+            **({"lowdm_isr_subjet_btag_max": isr_btag} if include_subjet_btag else {}),
         }, {
             "events": int(len(n_isr)),
             "has_isr": int(np.count_nonzero(has_isr)),
@@ -114,6 +117,12 @@ def _region_isr(
         )
     ).astype(np.float32)
     isr_dphi[~has_isr] = -99.0
+
+    if not include_subjet_btag:
+        return dict(n_lowdm_isr=n_isr, lowdm_isr_pt=isr_pt,
+                    lowdm_isr_eta=isr_eta, lowdm_isr_phi=isr_phi,
+                    lowdm_isr_dphi=isr_dphi), dict(events=len(n_isr),
+                    has_isr=int(np.count_nonzero(has_isr)), subjet_btag_excluded=True)
 
     nominal_n = np.asarray(arrays["n_lowdm_isr"][selected], dtype=np.float32)
     nominal_pt = np.asarray(arrays["lowdm_isr_pt"][selected], dtype=np.float32)
@@ -163,6 +172,7 @@ def feature_arrays(
     region: str,
     selected: np.ndarray,
     max_jets: int = 10,
+    year=2024,
 ) -> tuple[
     np.ndarray,
     np.ndarray,
@@ -175,13 +185,15 @@ def feature_arrays(
     if region not in base.REGIONS:
         raise ValueError("unknown Low-dM region: " + region)
     selected = np.asarray(selected, dtype=bool)
-    reference_eta, reference_phi = _reference_objects(arrays, region)
+    early = analysis_era(year) in EARLY_ERAS
+    reference_eta, reference_phi = _reference_objects(arrays, region, year)
 
     jet_pt = arrays["jet_corrected_pt"]
     jet_eta = arrays["jet_eta_all"]
     jet_phi = arrays["jet_phi_all"]
     jet_mass = arrays["jet_corrected_mass"]
-    jet_btag = arrays["jet_btag_upart_all"]
+    tag = tagging_definition(year)
+    jet_btag = arrays[tag['btag_branch']]
     jet_clean = base.clean_by_delta_r(
         jet_eta, jet_phi, reference_eta, reference_phi, 0.2
     )
@@ -249,6 +261,7 @@ def feature_arrays(
         reference_eta,
         reference_phi,
         recoil_phi,
+        include_subjet_btag=not early,
     )
     feature_source: dict[str, Any] = {
         **isr,
@@ -268,9 +281,12 @@ def feature_arrays(
         njet=njet,
         nb=nb,
         arrays=feature_source,
+        btag_medium_wp=tag['medium'],
+        btag_strict=early,
+        include_isr_subjet_btag=not early,
     )
     global_features = np.stack(global_columns, axis=-1).astype(np.float32)
-    if global_features.shape[1] != len(DIAGONAL_V3_GLOBAL_FEATURE_NAMES):
+    if global_features.shape[1] != len(global_feature_names(year)):
         raise RuntimeError("diagonal-v3 global feature width mismatch")
 
     relative_phi = np.arctan2(

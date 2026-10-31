@@ -14,7 +14,7 @@ from typing import Any
 import awkward as ak
 import correctionlib
 import numpy as np
-from .paths import ROOT, internal_path
+from .paths import ROOT, internal_path, analysis_era, tagging_definition
 
 
 class AnalysisScaleFactorUnavailable(RuntimeError):
@@ -147,8 +147,8 @@ def _topw_dataset_primary(dataset: str) -> str:
 
 @lru_cache(maxsize=2)
 def _topw_efficiencies(path: str) -> Any:
-    from coffea.util import load
-    return load(str(internal_path(path)))
+    from .io import load_efficiency
+    return load_efficiency(path)
 
 
 def topw_fit_variations(payload: Any) -> dict[str, tuple[str, str, int, int, tuple[float, ...]]]:
@@ -170,6 +170,8 @@ def topw_event_variations(
     policy: dict[str, Any], *, cleaned: Any = None, include_variations: bool = True,
 ) -> tuple[dict[str, np.ndarray], dict[str, Any]]:
     """Evaluate analysis-eligible AK8 jets; keep fit-bin variations separate."""
+    year = analysis_era(year)
+    tagger = tagging_definition(year)['topw']
     n = len(arrays["gen_weight"])
     payload = _payload(repo, "topw_tagging", str(year))
     sources = topw_fit_variations(payload) if include_variations else {}
@@ -182,7 +184,7 @@ def topw_event_variations(
     efficiency_path = repo / "estimations" / f"topwtageff{year}.merged"
     histograms = _topw_efficiencies(str(efficiency_path))
     primary = _topw_dataset_primary(dataset)
-    keys = list(histograms["GlobalParT3_Top"])
+    keys = list(histograms[tagger + "_Top"])
     matches = [key for key in keys if key == dataset]
     if not matches:
         matches = [key for key in keys if _topw_dataset_primary(key) == primary]
@@ -209,7 +211,7 @@ def topw_event_variations(
              "zero_denominator_jets": 0, "saturated_nominal_jets": 0,
              "highpt_unity_jets": 0}
     groups = {"tp1": [0, 1, 2], "tp2": [3], "tp3": [4]} if top_like else {"other": [0, 1, 2, 3, 4]}
-    for tag, variable in (("top", "GlobalParT3_Top"), ("w", "GlobalParT3_W")):
+    for tag, variable in (("top", tagger + "_Top"), ("w", tagger + "_W")):
         eligible = base & ((pt > 400.) & (mass > 105.) if tag == "top" else (pt > 200.) & (mass > 60.) & (mass < 105.))
         audit["eligible_jets"] += int(eligible.sum())
         audit["highpt_unity_jets"] += int((eligible & (pt >= TOPW_PT_EDGES[tag][-1])).sum())
@@ -315,8 +317,7 @@ def apply_topw_highpt_extrapolation(
     fit_failed: Any = None,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Use unity for high-pT extrapolation and explicitly failed fit bins."""
-    if str(year) not in {"2024", "2025"}:
-        raise AnalysisScaleFactorUnavailable(f"unsupported Top/W SF year: {year}")
+    analysis_era(year)
     limits = {"top": 1200.0, "w": 800.0}
     if tagger not in limits:
         raise ValueError(f"unsupported Top/W tagger: {tagger}")
@@ -404,10 +405,7 @@ def payload_path(repo: Path, key: str, year: str) -> Path:
         raise ValueError('Private corrections must use this TROTASR')
     if key not in PAYLOAD_FILENAMES:
         raise KeyError(f"unknown analysis SF component: {key}")
-    if str(year) not in {"2024", "2025"}:
-        raise AnalysisScaleFactorUnavailable(
-            f"analysis SF component {key!r} has no payload campaign for year {year!r}"
-        )
+    year = analysis_era(year)
     return internal_path(
         repo
         / "scales/Private"

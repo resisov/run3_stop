@@ -7,11 +7,11 @@ The caller supplies explicit AK4/AK8 p4, leaving integrated ROOTs immutable.
 from __future__ import annotations
 import numpy as np
 import awkward as ak
-from .paths import ROOT, internal_path
+from .paths import ROOT, internal_path, analysis_era, EARLY_ERAS, tagging_definition
 from .io import read_json, sha256
 from .trota_candidates import (RESOLVED_JETS, JETS, FATJETS, _flatten_jets,
                                build_resolved_candidates, build_mixed_candidates,
-                               pack, candidate_cost)
+                               pack, candidate_cost, input_fields)
 
 RESOLVED_WP = np.float32(0.9433798789978027)
 MIXED_WP = np.float32(0.9027690887451172)
@@ -23,20 +23,36 @@ P4_FIELDS = ("jet_nanoaod_pt", "jet_nanoaod_mass", "fatjet_nanoaod_pt", "fatjet_
 
 def load_models(year):
     manifest = read_json(ROOT / 'models/TROTA/manifest.json')
+    if analysis_era(year) in EARLY_ERAS:
+        manifest = manifest['early_eras']
+        year = analysis_era(year)
+    else:
+        year = int(analysis_era(year))
     if year not in manifest['application_years']:
         raise ValueError('Unsupported TROTA application year')
     paths = {}
-    for kind, wp in (('resolved', RESOLVED_WP), ('mixed', MIXED_WP)):
+    definition = tagging_definition(year)
+    for kind in ('resolved', 'mixed'):
+        wp = definition[kind+'_wp']
         spec = manifest[kind]
         path = internal_path(ROOT / spec['path'])
-        if sha256(path) != spec['sha256'] or spec['threshold'] != float(wp):
+        if (sha256(path) != spec['sha256'] or spec['sha256'] != definition[kind+'_sha256']
+                or spec['threshold'] != float(wp)):
             raise ValueError('TROTA model hash/WP mismatch: ' + kind)
         paths[kind] = path
     import tensorflow as tf
     # Configure once, before either model initializes the runtime.
     tf.config.threading.set_inter_op_parallelism_threads(1)
     tf.config.threading.set_intra_op_parallelism_threads(1)
-    return {kind: tf.keras.models.load_model(str(path), compile=False) for kind, path in paths.items()}
+    models = {kind: tf.keras.models.load_model(str(path), compile=False) for kind, path in paths.items()}
+    early = analysis_era(year) in EARLY_ERAS
+    expected = {'fatjet': (None, 12 if early else 9),
+                'jet': (None, None if early else 3, 8), 'top': (None, 3)}
+    actual = {t.name.split(':')[0]: tuple(t.shape) for t in models['mixed'].inputs}
+    if actual != expected:
+        raise ValueError('TROTA model/input feature contract mismatch: '+repr(actual))
+    models['_year'] = year
+    return models
 
 
 def p4_view(a, momenta):
@@ -57,13 +73,14 @@ def p4_view(a, momenta):
     return out
 
 
-def bounded_slices(a, budget=150000):
+def bounded_slices(a, budget=150000, year=2024):
     """Budget both models by candidate count, including previously failed WPs."""
     if budget < 1:
         raise ValueError('Candidate budget must be positive')
-    good = (a[JETS[6]] != 0) & (a[JETS[0]] > 25) & (abs(a[JETS[1]]) < 2.5)
+    resolved_fields, _, _ = input_fields(year)
+    good = (a[resolved_fields[6]] != 0) & (a[resolved_fields[0]] > 25) & (abs(a[resolved_fields[1]]) < 2.5)
     nj = np.asarray(ak.sum(good, axis=1), dtype=np.int64)
-    costs = candidate_cost(a) + nj * (nj-1) * (nj-2) // 6
+    costs = candidate_cost(a, year) + nj * (nj-1) * (nj-2) // 6
     if np.any(costs > budget):
         raise ValueError('One event exceeds TROTA candidate budget; no event silently dropped')
     start, accumulated = 0, 0
@@ -103,11 +120,15 @@ def infer_chunk(a, models):
     only, in memory. Constituent identities, not renumbered candidateIndex,
     identify a candidate across endpoints.
     """
-    flat = _flatten_jets(a)
+    year = models.get('_year', 2024)
+    definition = tagging_definition(year)
+    early = analysis_era(year) in EARLY_ERAS
+    resolved_fields, jets, fatjets = input_fields(year)
+    flat = _flatten_jets(a, resolved_fields)
     rp = build_resolved_candidates(*flat)
     _, features, rev, rind, _, _, _, r0, r1, r2, rpt, reta, rphi, rmass = rp
     rs, rd = probabilities(models['resolved'], {'jet': features})
-    rselected = rd >= RESOLVED_WP
+    rselected = rd >= np.float32(definition['resolved_wp'])
     # The baseline builder returns vector positions. Resolve to original IDs.
     source = np.asarray(ak.flatten(a['jet_source_index_all']), dtype=np.int32)
     rsrc = np.column_stack([source[flat[0][rev] + idx] for idx in (r0, r1, r2)])
@@ -121,9 +142,15 @@ def infer_chunk(a, models):
         resolved.setdefault(key, []).append(dict(index=int(rind[i]), jets=rsrc[i].tolist(),
             score=float(rd[i]), eta=float(reta[i]), mass=float(rmass[i])))
     del features, rp
-    jf, ff, tf, mi, mk, mev, invalid = build_mixed_candidates(*pack(a, JETS), *pack(a, FATJETS))
+    # The frozen early evaluator does not inspect features in zero-candidate
+    # events. Preserve that scope rather than inventing missing tagger inputs.
+    positions = np.flatnonzero(candidate_cost(a, year)>0) if early else np.arange(len(a))
+    mixed_source = a[positions] if early else a
+    jf, ff, tf, mi, mk, mev, invalid = build_mixed_candidates(
+        *pack(mixed_source, jets), *pack(mixed_source, fatjets), early)
+    mev = positions[mev]
     ms, md = probabilities(models['mixed'], {'jet': jf, 'fatjet': ff, 'top': tf})
-    mselected = md >= MIXED_WP
+    mselected = md >= np.float32(definition['mixed_wp'])
     if not np.isfinite(mk).all():
         raise ValueError('Nonfinite Mixed candidate p4')
     counts = np.bincount(mev[mselected], minlength=len(a)).astype(np.int32)

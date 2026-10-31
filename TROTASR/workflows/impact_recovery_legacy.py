@@ -20,6 +20,13 @@ NLL_TOL = 0.002
 RUNNER = None
 
 
+def artifact_stat(path):
+    """Pin an accepted file during collection without reading its ROOT payload."""
+    item = internal_path(path).stat()
+    return dict(device=item.st_dev,inode=item.st_ino,size=item.st_size,
+                mtime_ns=item.st_mtime_ns,ctime_ns=item.st_ctime_ns)
+
+
 def tree_rows(path, name):
     import ROOT
     path = internal_path(path)
@@ -355,10 +362,13 @@ class Recovery:
         return result
 
 
-def collect(work, out, recovered, source):
-    from HiggsAnalysis.CombinedLimit.tool_base import utils
+def collect(work, out, recovered, source, accepted_original_stats=None, prefit=None):
     records = {p.stem: read(p) for p in (work / 'fit_state').glob('*.json') if p.stem != 'r'}
-    prefit = utils.prefit_from_workspace(str(source), 'w', list(records), None)
+    if prefit is None:
+        from HiggsAnalysis.CombinedLimit.tool_base import utils
+        prefit = utils.prefit_from_workspace(str(source), 'w', list(records), None)
+    if set(prefit) != set(records):
+        raise ValueError('Prefit metadata must cover exactly the accepted nuisance inventory')
     initial = read(work / 'fit_state/r.json')['validation']['entries']
     data = dict(POIs=[dict(name='r', fit=[initial[1][0], initial[0][0], initial[2][0]])], params=[])
     for name, original in sorted(records.items()):
@@ -374,8 +384,12 @@ def collect(work, out, recovered, source):
             if original['status'] != 'complete':
                 raise ValueError('missing recovered result: ' + name)
             root = work / ('higgsCombine_paramFit_Test_'+name+'.MultiDimFit.mH120.root')
-            if sha(root) != original['validation']['sha256']:
-                raise ValueError('successful output changed: ' + name)
+            if accepted_original_stats is None:
+                if sha(root) != original['validation']['sha256']:
+                    raise ValueError('successful output changed: ' + name)
+            else:
+                if artifact_stat(root) != accepted_original_stats[str(root)]:
+                    raise ValueError('Accepted output changed during collection: '+name)
             rows = original['validation']['entries']
             parameter.update(fit=[rows[i][1] for i in (1,0,2)], r=[rows[i][0] for i in (1,0,2)])
         parameter['impact_r'] = max(abs(parameter['r'][i]-parameter['r'][1]) for i in (0,2))

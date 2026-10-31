@@ -1,0 +1,1712 @@
+{
+  "schema": "trotasr-background-plot-delivery-v1",
+  "scope": "existing measured background factors and CR validation only; no SR, limits, or impacts",
+  "current_sr_model": "highdm118_lowdm30",
+  "artifact_policy": "114 original plots retained; 11 GNN CR plots regenerated through the shared distribution renderer; no histograms or fits rerun",
+  "notes": "배경 측정·CR 검증 125개입니다. 이 중 GNN CR 11개는 다른 변수 분포와 동일한 draw_distribution 코드로 갱신했습니다. LLCR을 포함한 모든 GNN CR은 Nb=1의 5빈 + Nb≥2의 5빈으로 표시하며, 숫자 인덱스 대신 실제 점수 구간을 표기합니다. 카드·fit·히스토그램 수치는 변경하지 않았습니다.",
+  "warning": "GNN CR 11개는 실제 구간 라벨과 10빈 표시를 확인했습니다. 다만 공통 renderer의 Nb 경계선이 레전드를 지나며, 일부 QCDCR 점은 기존 고정 Data/MC 축(0–2) 밖에 있습니다. 최종 시각 QA 통과로 표시하지 않습니다. 다른 그림의 기존 축 범위 문제와 mℓℓ 음영(81–101 GeV)·fit 구간(71–111 GeV) 차이도 남아 있습니다. 보정 후 mℓℓ는 독립 closure 검증이 아닙니다.",
+  "missing_explanation": "미생성 23개: TF 14개는 일부 high-dM QCD 셀의 SR numerator=sumw2=0 때문에 전체 plotting 단계가 차단된 결과입니다. 그중 12개는 완전한 입력이 있고 2개 high-dM QCD 그림만 일부 unsupported/null 셀이 있습니다. High-dM CR Njet 8개는 선택된 Njet=4가 기존 표시맵에서 빠져 누락 방지 검사에 걸렸습니다(히스토그램은 존재). CR-only 1개만 실제 fit 품질 실패이며 두 시도 모두 covQual=2로 요구값 3을 충족하지 못했습니다.",
+  "plots": [
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2e_nb1.pdf",
+      "png": "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2e_nb1.png",
+      "stage": "measurements_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2e_nb1.pdf": "b03032e538bdede7250f0f01ef696390418e2272bdec8e8c16b4297e506c318f",
+        "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2e_nb1.png": "c5db7b9cb8f9f3da4c975883fc9a2f475556ffa8aa9f00adcc7b33e697f1bc2c"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 39,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2e_nb2plus.pdf",
+      "png": "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2e_nb2plus.png",
+      "stage": "measurements_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2e_nb2plus.pdf": "c10890f7af8955c638e825937e26c10173cfba051713dd0bd0c0f8e617165f8e",
+        "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2e_nb2plus.png": "52ace18291f9cf8a31926ed850e64b007cdd86833c1479ede25e2c500cfd1791"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 41,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2m_nb1.pdf",
+      "png": "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2m_nb1.png",
+      "stage": "measurements_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2m_nb1.pdf": "4d8aa1c6d1117dce1e2c0ba2c347b60e2e579f2881fad6f37b2f091c241b9b1b",
+        "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2m_nb1.png": "9d13756ea1737b72fee2c8e7d5c78c81dd6c92adba602bd9a991514e36a3db2c"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 43,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2m_nb2plus.pdf",
+      "png": "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2m_nb2plus.png",
+      "stage": "measurements_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2m_nb2plus.pdf": "bdc18f0d38faea51f3531d924192a423faa67196b06cd68302498f52c7b43918",
+        "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2m_nb2plus.png": "cb585f691d6d6d980ac1e76c95392095d07b466987ab9e690c7b8832d1078830"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 45,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2e_nb1_post.pdf",
+      "png": "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2e_nb1_post.png",
+      "stage": "measurements_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2e_nb1_post.pdf": "d417728c57d05de4de27559fac1c9d3cf22e3ea419df4704cbfa439b570f85db",
+        "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2e_nb1_post.png": "9eb19f744b4af2597f9ba4a4aa52a9a97e14c1bd291e950eaa211474846e4c1b"
+      },
+      "qa_status": "visual_review_required",
+      "prior_render_index": 40,
+      "issues": [
+        "At least one data/MC marker is at or beyond the inherited fixed ratio-panel range 0 to 2 and is partly or wholly clipped."
+      ]
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2e_nb2plus_post.pdf",
+      "png": "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2e_nb2plus_post.png",
+      "stage": "measurements_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2e_nb2plus_post.pdf": "864bbce494018b056797efe7914502623a30eb8f5677ae1c47060ab5d05b39ab",
+        "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2e_nb2plus_post.png": "230d9e40ebd31b95b9b40d85d0443a60fc7e90dc18b394d970098d8a08abf227"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 42,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2m_nb1_post.pdf",
+      "png": "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2m_nb1_post.png",
+      "stage": "measurements_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2m_nb1_post.pdf": "9479e710aaf895aa12f1ecb259b431e80a5a1bac813d104b1b13f73da9e20b0b",
+        "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2m_nb1_post.png": "e89df351803026ca6e38bb3f996aa22c9190645db8c61975781fc260b22b686b"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 44,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2m_nb2plus_post.pdf",
+      "png": "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2m_nb2plus_post.png",
+      "stage": "measurements_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2m_nb2plus_post.pdf": "dc59f7b6005e6b3e19854f09ddb1f38b3eaded21381c0c5927dcbde7cfb897d4",
+        "stats/nominal_20260923/plots/2024/measurements/dy/highdm/mll_highdm_dy2m_nb2plus_post.png": "146e43186ec45b4e717e48cb27a8b77fce82ad4638e93e764f77c052361f26b0"
+      },
+      "qa_status": "visual_review_required",
+      "prior_render_index": 46,
+      "issues": [
+        "At least one data/MC marker is at or beyond the inherited fixed ratio-panel range 0 to 2 and is partly or wholly clipped."
+      ]
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2e_nb1.pdf",
+      "png": "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2e_nb1.png",
+      "stage": "measurements_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2e_nb1.pdf": "d25a221c5e50c41d9e06c17a7b9d0f4f096354a69b9f56203cb8fcbdde929bc9",
+        "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2e_nb1.png": "d4070d738c3cf969588d5e8d690b416ba6b7b45c402aad641a8522c93f89cffa"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 100,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2e_nb2plus.pdf",
+      "png": "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2e_nb2plus.png",
+      "stage": "measurements_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2e_nb2plus.pdf": "b11974f573181ca74f4d734d89599b30580546fb2d2d84f693192fe0e57771dd",
+        "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2e_nb2plus.png": "54fa77fb599c73b4deba195625fb61ca63e39ceac1bf6c4533880d90d519b73e"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 102,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2m_nb1.pdf",
+      "png": "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2m_nb1.png",
+      "stage": "measurements_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2m_nb1.pdf": "e1d3a627755ca77708b91f86c15ce8324bf32be0970dc57bae2b9b5aa481e4bf",
+        "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2m_nb1.png": "9a1a538e2681c3486b6c70e7ee5103b5b0261db4815b38b22f3f889d4643e0aa"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 104,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2m_nb2plus.pdf",
+      "png": "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2m_nb2plus.png",
+      "stage": "measurements_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2m_nb2plus.pdf": "fd898720f113ed234f25b1d9a2d27f142f36300600a031d8f22bb17cf45f47bd",
+        "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2m_nb2plus.png": "011d2592841b5a6973e08229e20b2122e62bfc429234f6905ee5a876e3dd326b"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 106,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2e_nb1_post.pdf",
+      "png": "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2e_nb1_post.png",
+      "stage": "measurements_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2e_nb1_post.pdf": "f4e3720487c9d2e46a813bf9fd7c4b42b4d160462543dd080c0a3e8fb0002615",
+        "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2e_nb1_post.png": "7688c1cd9da679e070c2b25dba16f79c1f22766e07fbcf2f0e436256c05c563d"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 101,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2e_nb2plus_post.pdf",
+      "png": "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2e_nb2plus_post.png",
+      "stage": "measurements_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2e_nb2plus_post.pdf": "cb35947649eeabfd64fb188362feaf381455227f74c67a85ceff5ee98a9d282a",
+        "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2e_nb2plus_post.png": "220b5b08c17bf50d01495d9bd0dd005c0b8e52b88c87e86afe183a379b58875c"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 103,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2m_nb1_post.pdf",
+      "png": "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2m_nb1_post.png",
+      "stage": "measurements_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2m_nb1_post.pdf": "62956e3bc4882e86fbc0637d285955babe4a8fd26d33323fd3f889cc61738126",
+        "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2m_nb1_post.png": "ccbdf681bbe7aa44d80a20a282fde09da63f61b0fda12f81f1430b4960266389"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 105,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2m_nb2plus_post.pdf",
+      "png": "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2m_nb2plus_post.png",
+      "stage": "measurements_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2m_nb2plus_post.pdf": "91e448bdbaf5e4dc7cc2dca46f13e2de6495a0c08ddb2cc5eaad40e57f592456",
+        "stats/nominal_20260923/plots/2025/measurements/dy/highdm/mll_highdm_dy2m_nb2plus_post.png": "aa193d71352010c52ea7f0ad96a1ba4ab315c438847a6e8de642e62ad0881f3d"
+      },
+      "qa_status": "visual_review_required",
+      "prior_render_index": 107,
+      "issues": [
+        "At least one data/MC marker is at or beyond the inherited fixed ratio-panel range 0 to 2 and is partly or wholly clipped."
+      ]
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2e_nb1.pdf",
+      "png": "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2e_nb1.png",
+      "stage": "measurements_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2e_nb1.pdf": "a681439625b983d30a5bea1ba62741a7d6c642cfa7d344ef3b3db98202e5230e",
+        "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2e_nb1.png": "ab90b4dc50c8652892d6527fc2dd7cfdcb22d154e08e55cdbea8811bd365bc60"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 49,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2e_nb2plus.pdf",
+      "png": "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2e_nb2plus.png",
+      "stage": "measurements_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2e_nb2plus.pdf": "6b3a35e69c4531a4ce69251afc4e5d932cb498c686c41621fdaf06df255e7fd6",
+        "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2e_nb2plus.png": "d5932a76be7abd0ca0ce0abe53576a29562c36264e05f98db41c041ed6896fdd"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 51,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2m_nb1.pdf",
+      "png": "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2m_nb1.png",
+      "stage": "measurements_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2m_nb1.pdf": "60c2e1b9b18fae4330e394d61ba0cc70887e1608739a97152f152c7b8c4f2034",
+        "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2m_nb1.png": "5600d3220d378e9f175b26c3e2e287b113afa952129808ab026e17333371c2cf"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 53,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2m_nb2plus.pdf",
+      "png": "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2m_nb2plus.png",
+      "stage": "measurements_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2m_nb2plus.pdf": "51ab10ff75452490da48f972d7f9021af3c9138be13bc585dc3a6c4028d8e4e4",
+        "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2m_nb2plus.png": "13ed44ef609aed89282c1e2f995c7b72eb4ac49752a4219e5ba15aa8198f7a38"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 55,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2e_nb1_post.pdf",
+      "png": "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2e_nb1_post.png",
+      "stage": "measurements_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2e_nb1_post.pdf": "5a779ad4c686114fb37fd68482d5be3dc86b48fcdf7f9a0b4d5b068ba86705ea",
+        "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2e_nb1_post.png": "8273349d480f65756e273c46260fdcc81361f2562a0eebff84fd0d40771fb307"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 50,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2e_nb2plus_post.pdf",
+      "png": "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2e_nb2plus_post.png",
+      "stage": "measurements_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2e_nb2plus_post.pdf": "0d9773061a3773f833ff7dc5265db990c1902260c01b1e53779e478deb0201eb",
+        "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2e_nb2plus_post.png": "1f6cd65efc1b9f5f0f7caa07500b0470143e09404c5f4ce348c760c0f192fef5"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 52,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2m_nb1_post.pdf",
+      "png": "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2m_nb1_post.png",
+      "stage": "measurements_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2m_nb1_post.pdf": "21ea40b6b1e75eb2aa8c4d88ee57ccea4a85bdea9efdb3e29329d7e74b2bd76d",
+        "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2m_nb1_post.png": "62d373246d9cc29761af24d55d273e353aef9fe11ceb139d3aa9ed718f71d025"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 54,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2m_nb2plus_post.pdf",
+      "png": "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2m_nb2plus_post.png",
+      "stage": "measurements_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2m_nb2plus_post.pdf": "5882376561dbecc8acdc0080ff12078b6f44b3d6094c5c2b3ff82c12422a7864",
+        "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/mll_lowdm_dy2m_nb2plus_post.png": "6bc7e05190c09b29441e9069869f3621dc607a0b15d87baaef75dfbb9f722943"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 56,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2e_nb1.pdf",
+      "png": "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2e_nb1.png",
+      "stage": "measurements_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2e_nb1.pdf": "74789c4b3132b2103d34c2c630c9e8344c92d93e64b0ad161afce1a2cfd02e9d",
+        "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2e_nb1.png": "e9a43e3a62719f6d59f02baa77b33efc1228cd5d8f85340b158fe2b5ee879b42"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 110,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2e_nb2plus.pdf",
+      "png": "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2e_nb2plus.png",
+      "stage": "measurements_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2e_nb2plus.pdf": "5d8637e9e23f5828bd246c5fe0459f5d14f5425deb61de2984e1336801018c41",
+        "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2e_nb2plus.png": "8def35e35c30db10f5661a81a8e9846c0586121127fb0474116e443df7e50f5a"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 112,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2m_nb1.pdf",
+      "png": "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2m_nb1.png",
+      "stage": "measurements_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2m_nb1.pdf": "1bd452f63a65775a91bba45d62258bb09f7c94c7d4a2be7c8cfe5822b1942a15",
+        "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2m_nb1.png": "aa7a522cdd6d8f83d050c693025c6d9518747f8cc75473f5962f40ec139bdd71"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 114,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2m_nb2plus.pdf",
+      "png": "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2m_nb2plus.png",
+      "stage": "measurements_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2m_nb2plus.pdf": "5f05e9debdcd385b7fcd92daba37172f140cab88e98b3eea195512e476a340fa",
+        "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2m_nb2plus.png": "42f4f3f9f03aa2e73e720e73f50ea692f5dc71039b1eca6423827a25e392edf7"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 116,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2e_nb1_post.pdf",
+      "png": "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2e_nb1_post.png",
+      "stage": "measurements_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2e_nb1_post.pdf": "2759457eea423e976899a1d60ad132ae101696b463a817c4d4d722c348d3d9c4",
+        "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2e_nb1_post.png": "18a4506847f9f55ce5741cb53e28273a46bcd171ef22327a6d8305f4f6156379"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 111,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2e_nb2plus_post.pdf",
+      "png": "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2e_nb2plus_post.png",
+      "stage": "measurements_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2e_nb2plus_post.pdf": "a82fa656ba7b9f7998b7650a37c17bc18f44d704c45dbb0f46420896a0e9b2d9",
+        "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2e_nb2plus_post.png": "562c74a79977c8d93d241ea5a84b8d0570611ef4387323cd9deebc2b96971e7f"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 113,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2m_nb1_post.pdf",
+      "png": "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2m_nb1_post.png",
+      "stage": "measurements_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2m_nb1_post.pdf": "16ccae54d08b491b72bcba80e287c0424c507a199833cccda39585a77ca75469",
+        "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2m_nb1_post.png": "b4d4a2866140a875db4b6c4e57a2c2afb69c7a97a673735f381e7e4abd88dba7"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 115,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2m_nb2plus_post.pdf",
+      "png": "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2m_nb2plus_post.png",
+      "stage": "measurements_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2m_nb2plus_post.pdf": "c16f194948a024812ef43b50ccb912e9457a9f3e416ba0754c4f12cf499f9572",
+        "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/mll_lowdm_dy2m_nb2plus_post.png": "2330c03888da40b93e2f07f0c8236186d08bf9c033b39ad7c6a954d335af1432"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 117,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/measurements/dy/highdm/rz_highdm.pdf",
+      "png": "stats/nominal_20260923/plots/2024/measurements/dy/highdm/rz_highdm.png",
+      "stage": "measurements_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/measurements/dy/highdm/rz_highdm.pdf": "db1a13bb9427d86be7af25e0cad7d643057508407d896286d31a4b3b1af33860",
+        "stats/nominal_20260923/plots/2024/measurements/dy/highdm/rz_highdm.png": "e7d0007700144ebb6671228041391c2910b882ca8c203c2e53a6aed115719f86"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 48,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/measurements/dy/highdm/rt_highdm.pdf",
+      "png": "stats/nominal_20260923/plots/2024/measurements/dy/highdm/rt_highdm.png",
+      "stage": "measurements_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/measurements/dy/highdm/rt_highdm.pdf": "1d622f0d82aeb6468f317587bfa16caffdb7a5c6762760781ec8c927d383de96",
+        "stats/nominal_20260923/plots/2024/measurements/dy/highdm/rt_highdm.png": "240642961778752e024dae78356a48f930297c2be762a27dbb9aae527d713b9d"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 47,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/rz_lowdm.pdf",
+      "png": "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/rz_lowdm.png",
+      "stage": "measurements_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/rz_lowdm.pdf": "9ea65c0092bf539e37d5342a32ce984658c7383470d3cbbf9867e74173f48530",
+        "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/rz_lowdm.png": "4a4172061d04060376846893448eda8f1b3637f7e982bf0d4fcff1da5abe766b"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 58,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/rt_lowdm.pdf",
+      "png": "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/rt_lowdm.png",
+      "stage": "measurements_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/rt_lowdm.pdf": "94c0a2a121cf6aa3aa4e8870dda1199dfdfe3fb185eae6308656ccb17d09ccb3",
+        "stats/nominal_20260923/plots/2024/measurements/dy/lowdm/rt_lowdm.png": "5f6f240ec8b363702e94b0e293f7ee54a447f882576a28020bd723ed26e75a00"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 57,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/measurements/dy/highdm/rz_highdm.pdf",
+      "png": "stats/nominal_20260923/plots/2025/measurements/dy/highdm/rz_highdm.png",
+      "stage": "measurements_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/measurements/dy/highdm/rz_highdm.pdf": "97fc67bfbf17aacabe9573d63e834c572dec3a8f8ec887762d77bc7a28ca0804",
+        "stats/nominal_20260923/plots/2025/measurements/dy/highdm/rz_highdm.png": "8c13ea9570c365589afa909b333678361a584d5d0c4887601bb2a7ab9f026cd0"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 109,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/measurements/dy/highdm/rt_highdm.pdf",
+      "png": "stats/nominal_20260923/plots/2025/measurements/dy/highdm/rt_highdm.png",
+      "stage": "measurements_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/measurements/dy/highdm/rt_highdm.pdf": "df5a1ca9f92df39064e96f180ab9a53b6e00f676d9e97d549861076df91b45d7",
+        "stats/nominal_20260923/plots/2025/measurements/dy/highdm/rt_highdm.png": "b0680d5fffb6e55a7cf68f6641f92f8ca25e83807a1bc2d512a34c2f3e906345"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 108,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/rz_lowdm.pdf",
+      "png": "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/rz_lowdm.png",
+      "stage": "measurements_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/rz_lowdm.pdf": "c3d804fee0cd5b589c1bb168848fdaafb00c668b56ffbd33365379735f579a5a",
+        "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/rz_lowdm.png": "549677063b4c119317d6d57794b9cf2c5001a7189a579bf8f4370a01839ef226"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 119,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/rt_lowdm.pdf",
+      "png": "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/rt_lowdm.png",
+      "stage": "measurements_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/rt_lowdm.pdf": "db24eeaa906ef92b6e5b7c3c2ec8b4c7916c246af79ca7276d59925c0110b72d",
+        "stats/nominal_20260923/plots/2025/measurements/dy/lowdm/rt_lowdm.png": "67bd00351a2e17f69eecd451c8d6e035f5107f9ce13e9e6507718fce624c8767"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 118,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/measurements/photon/photon_q_normalization.pdf",
+      "png": "stats/nominal_20260923/plots/2024/measurements/photon/photon_q_normalization.png",
+      "stage": "measurements_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/measurements/photon/photon_q_normalization.pdf": "40015689fef24cd54e2cb119f54e3f2dcc4591f80b0c4a2eb0465ba41493c9a0",
+        "stats/nominal_20260923/plots/2024/measurements/photon/photon_q_normalization.png": "a8eecc146ce4d40ab1d22304e9645ad6192ea2ddd9a90e064a6aa26789f6da1b"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 59,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/measurements/photon/photon_q_normalization.pdf",
+      "png": "stats/nominal_20260923/plots/2025/measurements/photon/photon_q_normalization.png",
+      "stage": "measurements_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/measurements/photon/photon_q_normalization.pdf": "db9092d25b49b5f5059aa51642bdbfa2ef03091385af35c98f652df8d85f7ec3",
+        "stats/nominal_20260923/plots/2025/measurements/photon/photon_q_normalization.png": "8033682b6baf2bce0c05c3990174908ec8349928830e46bc8f755c2f82901917"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 120,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/measurements/photon/sgamma_highdm.pdf",
+      "png": "stats/nominal_20260923/plots/2024/measurements/photon/sgamma_highdm.png",
+      "stage": "measurements_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/measurements/photon/sgamma_highdm.pdf": "c3013d0e1d2a9dab9218184bf398322ba2dfc350d9f31977dc66777721dae324",
+        "stats/nominal_20260923/plots/2024/measurements/photon/sgamma_highdm.png": "9140dbc9a290710918a6895226e0ba9330fe54949024b589e9e710f036dbcbfe"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 60,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/measurements/photon/sgamma_highdm.pdf",
+      "png": "stats/nominal_20260923/plots/2025/measurements/photon/sgamma_highdm.png",
+      "stage": "measurements_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/measurements/photon/sgamma_highdm.pdf": "36b833f73d56609ad5dde4db61df863c9121f525ca8dd8f2f576fb75b1995281",
+        "stats/nominal_20260923/plots/2025/measurements/photon/sgamma_highdm.png": "32f767356cf2de5e3a26275442c5b2a77f6c7ddc867fbdaa9125087cf9d9c6d7"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 121,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/measurements/photon/sgamma_lowdm.pdf",
+      "png": "stats/nominal_20260923/plots/2024/measurements/photon/sgamma_lowdm.png",
+      "stage": "measurements_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/measurements/photon/sgamma_lowdm.pdf": "0ad26701d4cdefa4d8cbdbe4702f2cb253dd0356b1877b8f75198712953a95b0",
+        "stats/nominal_20260923/plots/2024/measurements/photon/sgamma_lowdm.png": "6f5bcae4e4b471d02da985780648026e48ba82e3940eb5a553c0ad68feea6b03"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 61,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/measurements/photon/sgamma_lowdm.pdf",
+      "png": "stats/nominal_20260923/plots/2025/measurements/photon/sgamma_lowdm.png",
+      "stage": "measurements_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/measurements/photon/sgamma_lowdm.pdf": "111b6d36f840ed3ad164dd62a495649c28260af60012186903643f8b982ea7b1",
+        "stats/nominal_20260923/plots/2025/measurements/photon/sgamma_lowdm.png": "3c92932c3f8439a4bc868925e868385331765c8769e73ce4e4ceac4336f8b81a"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 122,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/measurements/double_ratio/zgamma_double_ratio_highdm.pdf",
+      "png": "stats/nominal_20260923/plots/2024/measurements/double_ratio/zgamma_double_ratio_highdm.png",
+      "stage": "measurements_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/measurements/double_ratio/zgamma_double_ratio_highdm.pdf": "a4df1397ac54935c12b752cce6968d8bbb68142f2fe655dd6a22389d5bcf99ce",
+        "stats/nominal_20260923/plots/2024/measurements/double_ratio/zgamma_double_ratio_highdm.png": "07d98457e3134bd31e0ebdf0f27dd052c0ef884e69d76004fcf7305cfe8c7b7f"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 37,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/measurements/double_ratio/zgamma_double_ratio_lowdm.pdf",
+      "png": "stats/nominal_20260923/plots/2024/measurements/double_ratio/zgamma_double_ratio_lowdm.png",
+      "stage": "measurements_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/measurements/double_ratio/zgamma_double_ratio_lowdm.pdf": "35fd2a3ec9cf1da32b2320ff9714a1dbc6df2cb1a89f1285a5e20ac99ba202f6",
+        "stats/nominal_20260923/plots/2024/measurements/double_ratio/zgamma_double_ratio_lowdm.png": "fced84ac1cf7a537107087a23f2e9f61d022719d6ca2c97322431bd73a03fe92"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 38,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/measurements/double_ratio/zgamma_double_ratio_highdm.pdf",
+      "png": "stats/nominal_20260923/plots/2025/measurements/double_ratio/zgamma_double_ratio_highdm.png",
+      "stage": "measurements_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/measurements/double_ratio/zgamma_double_ratio_highdm.pdf": "a0949689c6766c3d76f84b40a7a342cdc111cd120f60e0d9a03d6050956455df",
+        "stats/nominal_20260923/plots/2025/measurements/double_ratio/zgamma_double_ratio_highdm.png": "9aebce72c201e7daf045d519d87b8e23559ab16ca3a3b4557f5d79d932323aa6"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 98,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/measurements/double_ratio/zgamma_double_ratio_lowdm.pdf",
+      "png": "stats/nominal_20260923/plots/2025/measurements/double_ratio/zgamma_double_ratio_lowdm.png",
+      "stage": "measurements_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/measurements/double_ratio/zgamma_double_ratio_lowdm.pdf": "8f7c1409df805d784e1a7ec9e5d99e6ea98e8fbe955104056770707ad957564a",
+        "stats/nominal_20260923/plots/2025/measurements/double_ratio/zgamma_double_ratio_lowdm.png": "8455feace0f33fc03da65820ae3636d272a59d392085055866bec69354cdb08a"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 99,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/cr_llcr_met.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/cr_llcr_met.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/cr_llcr_met.pdf": "1e45f00c5b0504036232bba1acb2affecfe13fb90f48b5e19803c2eb102a23d4",
+        "stats/nominal_20260923/plots/2024/distributions/cr_llcr_met.png": "d2a089c9d0e92cca20875157a55dcd628dfd4696eb262f0d16b87a606a57323f"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 9,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/cr_qcdcr_met.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/cr_qcdcr_met.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/cr_qcdcr_met.pdf": "0a21a1daf67f17ade63aede1ad681e20a04a3ebe3facc1816d783abccdf7bf62",
+        "stats/nominal_20260923/plots/2024/distributions/cr_qcdcr_met.png": "3eef673c0448506371f98f55c7b1e1ada0f8336d0061ec606803342e533fb113"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 13,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/cr_gcr_ut.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/cr_gcr_ut.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/cr_gcr_ut.pdf": "2c8e3d494826c25833dd2ce1e0ac717c42ac064e061d43e159c6fee2d6bc763e",
+        "stats/nominal_20260923/plots/2024/distributions/cr_gcr_ut.png": "cd30af6dfd4c7a6222dce5f0f034766703d115c81659e3596086163b9252f850"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 8,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/cr_dycr_ut.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/cr_dycr_ut.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/cr_dycr_ut.pdf": "a0e03145a904a60d546daf0ae4eef10a3a8f503dd53285f1db0ebf5ef60c2e1b",
+        "stats/nominal_20260923/plots/2024/distributions/cr_dycr_ut.png": "23cffbd86e43890c440451053db3735ed47d4c48c53087bde334c486ab09a45f"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 4,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/cr_llcr_met.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/cr_llcr_met.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/cr_llcr_met.pdf": "5af37c2e382bc67acb8ef0961f688c6258a83916d5d1154f5ade3852247000b4",
+        "stats/nominal_20260923/plots/2025/distributions/cr_llcr_met.png": "2e5aa9f1bfa17f01aaa736107cd64be66b5ee48ee4ecc00980cec285a5a2a508"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 70,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/cr_qcdcr_met.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/cr_qcdcr_met.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/cr_qcdcr_met.pdf": "19eac6cba913b46fd4a091e70bf42ac2ff3da64593b7737c1631f13dff9d1911",
+        "stats/nominal_20260923/plots/2025/distributions/cr_qcdcr_met.png": "ff1f1d0a721b7d7d5f1782eddfcb6d217ebd07fc8c132a3506ca78d83d48b8db"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 74,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/cr_gcr_ut.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/cr_gcr_ut.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/cr_gcr_ut.pdf": "52a206dd2b2bc4db48674015f15ad4577c35abc641d8e29d268b014feebd4b95",
+        "stats/nominal_20260923/plots/2025/distributions/cr_gcr_ut.png": "f5b7741621d1dca70eb070c262cfb93d881ff88141aaf8f4770ce3d81f3e0c64"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 69,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/cr_dycr_ut.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/cr_dycr_ut.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/cr_dycr_ut.pdf": "b51a579fa1d57d10f6c786770d0a968b293e91209f9ace5c3040d0cb3040faba",
+        "stats/nominal_20260923/plots/2025/distributions/cr_dycr_ut.png": "1911a280eb43a892410aaf1632fb2a39bc4b4e993e408a5d160f5558b4ac6c49"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 65,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/cr_llcr_nb.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/cr_llcr_nb.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/cr_llcr_nb.pdf": "f1c30c10f3d150e43a0a07d3ec60958c21880d5c17dcb64e4e8d2fdbfb187c51",
+        "stats/nominal_20260923/plots/2024/distributions/cr_llcr_nb.png": "2972666c41dee94bccbb224bc40d9576679652b32f5b43fc84a66fdd2cf29189"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 10,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/cr_qcdcr_nb.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/cr_qcdcr_nb.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/cr_qcdcr_nb.pdf": "f15f69edd0d8202a9a8d5b58af1f8ab12b7ef5bcab58a5fa0e13bf0219acf666",
+        "stats/nominal_20260923/plots/2024/distributions/cr_qcdcr_nb.png": "9412d7b5e00788dfaeb7f64b2003de025e5beef195310c609b9552d2a8c7b9cf"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 14,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/cr_gcr_nb.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/cr_gcr_nb.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/cr_gcr_nb.pdf": "d1c53d7b3dae4233e0f895f1e0ddc228287560eb03a5ed6b66f96768a8a749ec",
+        "stats/nominal_20260923/plots/2024/distributions/cr_gcr_nb.png": "ccd692891da38c7e03b4066dfebccca770e15875efe7d945478d8ba0a5c46a4d"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 5,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/cr_dycr_nb.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/cr_dycr_nb.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/cr_dycr_nb.pdf": "5c9e5f231fc05760332cae023d555c40a2b0fed7fcea15f8dcd887ce8eb144fc",
+        "stats/nominal_20260923/plots/2024/distributions/cr_dycr_nb.png": "42d694d8e9c37cd6f10a8dfb004508d389e31297f4470ddd5e7f34d259037733"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 1,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/cr_llcr_nb.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/cr_llcr_nb.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/cr_llcr_nb.pdf": "a48afd264f8958f17b8e80e7ebcd0c05f132b8b4df00338919d37f409a54d0d2",
+        "stats/nominal_20260923/plots/2025/distributions/cr_llcr_nb.png": "7ace399e3a7ccfbe73d0a477e4cf61ccca86f0e999cbd391f4c53ec744e09c07"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 71,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/cr_qcdcr_nb.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/cr_qcdcr_nb.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/cr_qcdcr_nb.pdf": "7781829b028337ff8f11e4dc46e02be95596df4f4baa93cb8c364b5f749c212e",
+        "stats/nominal_20260923/plots/2025/distributions/cr_qcdcr_nb.png": "5b617933b70f09074ebffdfcb1e37abca03586fb36e14ac25df3d307d7095daa"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 75,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/cr_gcr_nb.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/cr_gcr_nb.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/cr_gcr_nb.pdf": "3715dcdda5a02eaf8b6bc1a8d8ca25d9193ec34d5cf7f8924a53db2074c0ebac",
+        "stats/nominal_20260923/plots/2025/distributions/cr_gcr_nb.png": "789f1f53fe18163c56279d29be8c92fba9fd158f6a854384e44c2406ffc23ba7"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 66,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/cr_dycr_nb.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/cr_dycr_nb.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/cr_dycr_nb.pdf": "48ec988de8f3ad38ed9802ef6f991a3c01983c10a5a4606f4e4ad48be0f45bfa",
+        "stats/nominal_20260923/plots/2025/distributions/cr_dycr_nb.png": "11fe1c6b782a165703665a6e1c1f3f2d625a718edd24654d818014d3fb8c67eb"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 62,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/cr_llcr_ntop.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/cr_llcr_ntop.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/cr_llcr_ntop.pdf": "0a242980c3bc6afeb6293908fa637b546f24521aed55536e6836d52a17340325",
+        "stats/nominal_20260923/plots/2024/distributions/cr_llcr_ntop.png": "cb90cb0ef8f6c854cf9293772c65a2e3e35a95c471ffb7fcea181535ec0d9f6f"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 11,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/cr_qcdcr_ntop.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/cr_qcdcr_ntop.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/cr_qcdcr_ntop.pdf": "3b9520c121087244a1b1a881cdca2b98549d19f5ccefa83f8b41be893fdadedd",
+        "stats/nominal_20260923/plots/2024/distributions/cr_qcdcr_ntop.png": "04193816349dd2891dd9633b9ff5489f0a547bba876e41f9eaa76fd7a0b805f2"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 15,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/cr_gcr_ntop.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/cr_gcr_ntop.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/cr_gcr_ntop.pdf": "7cb5044a136cf1f8f1239aa5bed13933b5c2d69b5e5dfc34db77e39e3be7c650",
+        "stats/nominal_20260923/plots/2024/distributions/cr_gcr_ntop.png": "5026c394a35942f4f9263974e08f6333711deba3d14a6b79328eb11e6fd869f8"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 6,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/cr_dycr_ntop.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/cr_dycr_ntop.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/cr_dycr_ntop.pdf": "39b90c7238ae69da15dcecb6e31f4929724f7161df074dd02c07726a3dd2a2b1",
+        "stats/nominal_20260923/plots/2024/distributions/cr_dycr_ntop.png": "ef4b6836dc6cd1d84862532db8faf3b6be05f7b295f365c8f7e2c82053a728bc"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 2,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/cr_llcr_ntop.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/cr_llcr_ntop.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/cr_llcr_ntop.pdf": "b7b18804c2b363582076cf625f5914c7a660e3cc3f1985bba98edc6d6c54ce71",
+        "stats/nominal_20260923/plots/2025/distributions/cr_llcr_ntop.png": "66ff20e5829280ed2cc1ee50f9e23800203280744f6ddb404cf5ccbae056bbc7"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 72,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/cr_qcdcr_ntop.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/cr_qcdcr_ntop.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/cr_qcdcr_ntop.pdf": "d1924699e0d88a2e1b8ffc0568905ce87974bbcc13c319ffeb460d8c2200ad99",
+        "stats/nominal_20260923/plots/2025/distributions/cr_qcdcr_ntop.png": "0ba591a3d1421cfeee1b9129b791287fbeb510fcc19374978969bc95f0e48e1b"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 76,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/cr_gcr_ntop.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/cr_gcr_ntop.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/cr_gcr_ntop.pdf": "5de8c548bbddae2084bb7cd0ef659e5e90349de154dc4c5538ca487b868f3d10",
+        "stats/nominal_20260923/plots/2025/distributions/cr_gcr_ntop.png": "2c4041e6087c0eebca5dc6c908d53a991359efd7880dd864b01094bb32bd412c"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 67,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/cr_dycr_ntop.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/cr_dycr_ntop.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/cr_dycr_ntop.pdf": "ce03af538afa1ac948a341c44a94793c4f323ecf16c22e4633c6b2a4aa2df1b0",
+        "stats/nominal_20260923/plots/2025/distributions/cr_dycr_ntop.png": "5227fff93b9c5f696a246f48be6ec4d1bf9b9a395fec40c7262f4f75324d8b77"
+      },
+      "qa_status": "visual_review_required",
+      "prior_render_index": 63,
+      "issues": [
+        "At least one data/MC marker is at or beyond the inherited fixed ratio-panel range 0 to 2 and is partly or wholly clipped."
+      ]
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/cr_llcr_nw.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/cr_llcr_nw.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/cr_llcr_nw.pdf": "b004a76e79992c0ed89e87a26d3f7a13e299bba82c2e7c13beab3fb2f6899db6",
+        "stats/nominal_20260923/plots/2024/distributions/cr_llcr_nw.png": "0f2819d4a2a94032b06358ce07aa5bb2f393030bf3c0558a51368df7e0ef4ca4"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 12,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/cr_qcdcr_nw.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/cr_qcdcr_nw.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/cr_qcdcr_nw.pdf": "1fa2213d43faf30a51fc805c648098f3158c6f877d1bdf8442e2cfaa809ae7e2",
+        "stats/nominal_20260923/plots/2024/distributions/cr_qcdcr_nw.png": "8b07f91a8e940deb3d5f01ffa6412b319e25915aeb95ff4d00a7ea2c7430b333"
+      },
+      "qa_status": "visual_review_required",
+      "prior_render_index": 16,
+      "issues": [
+        "At least one data/MC marker is at or beyond the inherited fixed ratio-panel range 0 to 2 and is partly or wholly clipped."
+      ]
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/cr_gcr_nw.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/cr_gcr_nw.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/cr_gcr_nw.pdf": "3f1ea8fff07faae366dbaed10155bd6a2cb93dcc0a32fc860e46ceb03ace5e17",
+        "stats/nominal_20260923/plots/2024/distributions/cr_gcr_nw.png": "98b7d0c2c1966946d557b967bcae53ecc02c696d811272676f9a72bab7710290"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 7,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/cr_dycr_nw.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/cr_dycr_nw.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/cr_dycr_nw.pdf": "aa0d4254181e4f3f76b11911bc2c9e734dc739aa17c36fe53e5fd0e8200b8017",
+        "stats/nominal_20260923/plots/2024/distributions/cr_dycr_nw.png": "769829ebc79ba30b74497c04459ec6d46633d9f69041c400d9eb6dae0d60a5c9"
+      },
+      "qa_status": "visual_review_required",
+      "prior_render_index": 3,
+      "issues": [
+        "At least one data/MC marker is at or beyond the inherited fixed ratio-panel range 0 to 2 and is partly or wholly clipped."
+      ]
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/cr_llcr_nw.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/cr_llcr_nw.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/cr_llcr_nw.pdf": "0e61cf36851d84ab6f12a192356ecd960a34154f4204b91ba08fde1d9081c7ec",
+        "stats/nominal_20260923/plots/2025/distributions/cr_llcr_nw.png": "9c24a7b68b75a78691c84167da5b4295f62d14d69f0e7eb04157dbbf12266c1b"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 73,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/cr_qcdcr_nw.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/cr_qcdcr_nw.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/cr_qcdcr_nw.pdf": "7cfc2e32f5b9667757d68494bfdfc3eb7fba6e6944b714d50d527f1c598eeb4d",
+        "stats/nominal_20260923/plots/2025/distributions/cr_qcdcr_nw.png": "73853d229ae6ce7c622593416d97b79d7bd2097a93da1dc9598ae0d40d11bf61"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 77,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/cr_gcr_nw.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/cr_gcr_nw.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/cr_gcr_nw.pdf": "c33c5d0aba333737c2ee1e82142179271f58241af472fb04427c4802d28d6037",
+        "stats/nominal_20260923/plots/2025/distributions/cr_gcr_nw.png": "b4c2cef852a78d0da3eedd0b2389c2ae4ad6d7142876ae7194f5f476f9aedba3"
+      },
+      "qa_status": "visual_review_required",
+      "prior_render_index": 68,
+      "issues": [
+        "At least one data/MC marker is at or beyond the inherited fixed ratio-panel range 0 to 2 and is partly or wholly clipped."
+      ]
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/cr_dycr_nw.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/cr_dycr_nw.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/cr_dycr_nw.pdf": "992f48ed1662b3b9e7d2e012ef67f625165825321fe41749454cecfcab48bd77",
+        "stats/nominal_20260923/plots/2025/distributions/cr_dycr_nw.png": "16c94f4b9041582039705bf6a98a4cbb7e34f6d979b69f0cd37d444560bdd226"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 64,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260924_sr118/plots/2024/gnn_controls/lowdm_llcr_gnn_out_inclusive.pdf",
+      "png": "stats/nominal_20260924_sr118/plots/2024/gnn_controls/lowdm_llcr_gnn_out_inclusive.png",
+      "stage": "gnn_controls_2024",
+      "sha256": {
+        "stats/nominal_20260924_sr118/plots/2024/gnn_controls/lowdm_llcr_gnn_out_inclusive.pdf": "6a07c4719f0f865f7ed63acb2ac936aeca317a5c8905582b23f29e4bfbbe5c4f",
+        "stats/nominal_20260924_sr118/plots/2024/gnn_controls/lowdm_llcr_gnn_out_inclusive.png": "f623c516ffcdb109496466d3b4e97b1f1140ec20c3c2ed308a1bf9238677630b"
+      },
+      "qa_status": "visual_review_required",
+      "issues": [
+        "The unchanged common renderer's Nb separator crosses the central legend column; final publication visual QA is not passed."
+      ],
+      "qa_record": "validation/common_distribution_20260924/visual_qa.json"
+    },
+    {
+      "pdf": "stats/nominal_20260924_sr118/plots/2024/gnn_controls/lowdm_qcdcr_gnn_out_inclusive.pdf",
+      "png": "stats/nominal_20260924_sr118/plots/2024/gnn_controls/lowdm_qcdcr_gnn_out_inclusive.png",
+      "stage": "gnn_controls_2024",
+      "sha256": {
+        "stats/nominal_20260924_sr118/plots/2024/gnn_controls/lowdm_qcdcr_gnn_out_inclusive.pdf": "a2c2730ec5b7a4df284abd7d38a41564f3999a529b4f801f367a824349704dda",
+        "stats/nominal_20260924_sr118/plots/2024/gnn_controls/lowdm_qcdcr_gnn_out_inclusive.png": "4e0bf8540bcb87e54b3333c45a79bad00a019812e4d8f49d52362e2ba8ed106e"
+      },
+      "qa_status": "visual_review_required",
+      "issues": [
+        "The unchanged common renderer's Nb separator crosses the central legend column; final publication visual QA is not passed."
+      ],
+      "qa_record": "validation/common_distribution_20260924/visual_qa.json"
+    },
+    {
+      "pdf": "stats/nominal_20260924_sr118/plots/2024/gnn_controls/lowdm_gcr_gnn_out_inclusive.pdf",
+      "png": "stats/nominal_20260924_sr118/plots/2024/gnn_controls/lowdm_gcr_gnn_out_inclusive.png",
+      "stage": "gnn_controls_2024",
+      "sha256": {
+        "stats/nominal_20260924_sr118/plots/2024/gnn_controls/lowdm_gcr_gnn_out_inclusive.pdf": "b3949c0d987a554a60ed1d9f327bb99bc24f7a60ee07d871f2a44f2e8be80799",
+        "stats/nominal_20260924_sr118/plots/2024/gnn_controls/lowdm_gcr_gnn_out_inclusive.png": "53dbb60cdc9eb007b277249f05bbb60989f96048a6a101e8873fef504806eaa8"
+      },
+      "qa_status": "visual_review_required",
+      "issues": [
+        "The unchanged common renderer's Nb separator crosses the central legend column; final publication visual QA is not passed."
+      ],
+      "qa_record": "validation/common_distribution_20260924/visual_qa.json"
+    },
+    {
+      "pdf": "stats/nominal_20260924_sr118/plots/2024/gnn_controls/lowdm_dycr_gnn_out_inclusive.pdf",
+      "png": "stats/nominal_20260924_sr118/plots/2024/gnn_controls/lowdm_dycr_gnn_out_inclusive.png",
+      "stage": "gnn_controls_2024",
+      "sha256": {
+        "stats/nominal_20260924_sr118/plots/2024/gnn_controls/lowdm_dycr_gnn_out_inclusive.pdf": "2f18c040c06b6eb4e4fa68fbf92f4f327726b374f55e1bc8b48ab0ad1e6a317b",
+        "stats/nominal_20260924_sr118/plots/2024/gnn_controls/lowdm_dycr_gnn_out_inclusive.png": "68b0dd1922c6a147b9a107fae964e286f533c3a2a5977fede2e75cd664d55533"
+      },
+      "qa_status": "visual_review_required",
+      "issues": [
+        "The unchanged common renderer's Nb separator crosses the central legend column; final publication visual QA is not passed."
+      ],
+      "qa_record": "validation/common_distribution_20260924/visual_qa.json"
+    },
+    {
+      "pdf": "stats/nominal_20260924_sr118/plots/2025/gnn_controls/lowdm_llcr_gnn_out_inclusive.pdf",
+      "png": "stats/nominal_20260924_sr118/plots/2025/gnn_controls/lowdm_llcr_gnn_out_inclusive.png",
+      "stage": "gnn_controls_2025",
+      "sha256": {
+        "stats/nominal_20260924_sr118/plots/2025/gnn_controls/lowdm_llcr_gnn_out_inclusive.pdf": "c18439ddd2c8f319520b5a7a9e4a81d86fdef79f6d13f277b631a92cbab525bb",
+        "stats/nominal_20260924_sr118/plots/2025/gnn_controls/lowdm_llcr_gnn_out_inclusive.png": "a16e2369f039666d375ff1b91de82020140e6e683de014b3ff7681675bbd1037"
+      },
+      "qa_status": "visual_review_required",
+      "issues": [
+        "The unchanged common renderer's Nb separator crosses the central legend column; final publication visual QA is not passed."
+      ],
+      "qa_record": "validation/common_distribution_20260924/visual_qa.json"
+    },
+    {
+      "pdf": "stats/nominal_20260924_sr118/plots/2025/gnn_controls/lowdm_qcdcr_gnn_out_inclusive.pdf",
+      "png": "stats/nominal_20260924_sr118/plots/2025/gnn_controls/lowdm_qcdcr_gnn_out_inclusive.png",
+      "stage": "gnn_controls_2025",
+      "sha256": {
+        "stats/nominal_20260924_sr118/plots/2025/gnn_controls/lowdm_qcdcr_gnn_out_inclusive.pdf": "dc56c7a61849984b739bf2379ee1eca8268a20bbf581ef0a4e108e6e0cd70533",
+        "stats/nominal_20260924_sr118/plots/2025/gnn_controls/lowdm_qcdcr_gnn_out_inclusive.png": "585b9e2468192bab238a899d4b57abd7f38cad9df802502545f40599abc71585"
+      },
+      "qa_status": "visual_review_required",
+      "issues": [
+        "The unchanged common renderer's Nb separator crosses the central legend column; final publication visual QA is not passed.",
+        "Data/MC markers or error bars exceed the inherited fixed 0-2 ratio range. The axis was not silently changed."
+      ],
+      "qa_record": "validation/common_distribution_20260924/visual_qa.json"
+    },
+    {
+      "pdf": "stats/nominal_20260924_sr118/plots/2025/gnn_controls/lowdm_gcr_gnn_out_inclusive.pdf",
+      "png": "stats/nominal_20260924_sr118/plots/2025/gnn_controls/lowdm_gcr_gnn_out_inclusive.png",
+      "stage": "gnn_controls_2025",
+      "sha256": {
+        "stats/nominal_20260924_sr118/plots/2025/gnn_controls/lowdm_gcr_gnn_out_inclusive.pdf": "5487a0361fe0cdbc81e91c6abb42e84ace7e9990f5ba629699af853d5e92707c",
+        "stats/nominal_20260924_sr118/plots/2025/gnn_controls/lowdm_gcr_gnn_out_inclusive.png": "d146650b167f6751cefc4c3d41cd1494c059407f6848cdca2ecf5f066417e388"
+      },
+      "qa_status": "visual_review_required",
+      "issues": [
+        "The unchanged common renderer's Nb separator crosses the central legend column; final publication visual QA is not passed."
+      ],
+      "qa_record": "validation/common_distribution_20260924/visual_qa.json"
+    },
+    {
+      "pdf": "stats/nominal_20260924_sr118/plots/2025/gnn_controls/lowdm_dycr_gnn_out_inclusive.pdf",
+      "png": "stats/nominal_20260924_sr118/plots/2025/gnn_controls/lowdm_dycr_gnn_out_inclusive.png",
+      "stage": "gnn_controls_2025",
+      "sha256": {
+        "stats/nominal_20260924_sr118/plots/2025/gnn_controls/lowdm_dycr_gnn_out_inclusive.pdf": "d10507b994b39e2e563140bf15d049215bfcd37871890cb41d9194fc31cfe05a",
+        "stats/nominal_20260924_sr118/plots/2025/gnn_controls/lowdm_dycr_gnn_out_inclusive.png": "c9b555f93cbe79e0a1080f237f91e56987de6d0895a71d6ce45c70b410b60f99"
+      },
+      "qa_status": "visual_review_required",
+      "issues": [
+        "The unchanged common renderer's Nb separator crosses the central legend column; final publication visual QA is not passed."
+      ],
+      "qa_record": "validation/common_distribution_20260924/visual_qa.json"
+    },
+    {
+      "pdf": "stats/nominal_20260924_sr118/plots/gnn_controls/lowdm_llcr_gnn_nisr_merged.pdf",
+      "png": "stats/nominal_20260924_sr118/plots/gnn_controls/lowdm_llcr_gnn_nisr_merged.png",
+      "stage": "predictions",
+      "sha256": {
+        "stats/nominal_20260924_sr118/plots/gnn_controls/lowdm_llcr_gnn_nisr_merged.pdf": "e769011ca752fab97424385804452686dab2707c089ec5b9e5d9ff50604cfee2",
+        "stats/nominal_20260924_sr118/plots/gnn_controls/lowdm_llcr_gnn_nisr_merged.png": "dafe2f93b5e794e1b44c61b0da6a7ba3e3e59db6b4f55146c598fb39dc8b846e"
+      },
+      "qa_status": "visual_review_required",
+      "issues": [
+        "The unchanged common renderer's Nb separator crosses the central legend column; final publication visual QA is not passed."
+      ],
+      "qa_record": "validation/common_distribution_20260924/visual_qa.json"
+    },
+    {
+      "pdf": "stats/nominal_20260924_sr118/plots/gnn_controls/lowdm_qcdcr_gnn_nisr_merged.pdf",
+      "png": "stats/nominal_20260924_sr118/plots/gnn_controls/lowdm_qcdcr_gnn_nisr_merged.png",
+      "stage": "predictions",
+      "sha256": {
+        "stats/nominal_20260924_sr118/plots/gnn_controls/lowdm_qcdcr_gnn_nisr_merged.pdf": "952ee2b2119759bb7ceb7f8b0475d2ec5468f7c32ebbd0e20b0b74949a69beeb",
+        "stats/nominal_20260924_sr118/plots/gnn_controls/lowdm_qcdcr_gnn_nisr_merged.png": "2841505613305d2a22c8ec64312c15859d5613f8fbfbdb26eb185d064dd038e4"
+      },
+      "qa_status": "visual_review_required",
+      "issues": [
+        "The unchanged common renderer's Nb separator crosses the central legend column; final publication visual QA is not passed.",
+        "Data/MC markers or error bars exceed the inherited fixed 0-2 ratio range. The axis was not silently changed."
+      ],
+      "qa_record": "validation/common_distribution_20260924/visual_qa.json"
+    },
+    {
+      "pdf": "stats/nominal_20260924_sr118/plots/gnn_controls/lowdm_gcr_gnn_nisr_merged.pdf",
+      "png": "stats/nominal_20260924_sr118/plots/gnn_controls/lowdm_gcr_gnn_nisr_merged.png",
+      "stage": "predictions",
+      "sha256": {
+        "stats/nominal_20260924_sr118/plots/gnn_controls/lowdm_gcr_gnn_nisr_merged.pdf": "4433ffa53bc45ba2ac25439368d90c09b084c3c62fe9b1fa992b0a209f8707de",
+        "stats/nominal_20260924_sr118/plots/gnn_controls/lowdm_gcr_gnn_nisr_merged.png": "04b1ac2f246f1dcc56feada08ca9d512c7605dca22dd3e3c359eed1d215b04c7"
+      },
+      "qa_status": "visual_review_required",
+      "issues": [
+        "The unchanged common renderer's Nb separator crosses the central legend column; final publication visual QA is not passed."
+      ],
+      "qa_record": "validation/common_distribution_20260924/visual_qa.json"
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_llcr_met.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_llcr_met.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_llcr_met.pdf": "45c6334b0b13003f14aede9da7de6dc5e0a05caea9909edcc7c38c8c169b1eba",
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_llcr_met.png": "98d1921d55d785d371554a359f378f63c15a9f14de0dc1caf44d46ba64173c33"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 26,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_qcdcr_met.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_qcdcr_met.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_qcdcr_met.pdf": "00fb209dbf02872d54d304b49311de886833c3161b045bdcad077f96185f76e7",
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_qcdcr_met.png": "7a2a06ece3f1ed7b7f8cc669186cb6df80df4f63362e6d38090c789aacc239b8"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 30,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_gcr_recoil_gcr.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_gcr_recoil_gcr.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_gcr_recoil_gcr.pdf": "3cd9ec125081bbfe1613938c5384c5339580bfd96d8d430914cb76814474b836",
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_gcr_recoil_gcr.png": "4e03afe42a3d732e638655cddf23543233c3fe14a2755ab51dfbce971d077422"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 24,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_dycr_recoil_dy.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_dycr_recoil_dy.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_dycr_recoil_dy.pdf": "737ca4ec9498eef9c28c06ed07ac22dce5d71bf48c565bbf9ef9132cbd484bc1",
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_dycr_recoil_dy.png": "013cc0f3879866ee34ce5ac5e3d5448b45bccc471531a5e472ed175344545b2f"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 20,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_llcr_met.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_llcr_met.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_llcr_met.pdf": "8be3f229c8089019aed047102a56246f698e1a7e12f2e5e309942984c8b5837a",
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_llcr_met.png": "87d02d1107dc3b45b2e2ae1775be1de85fb8aca356b8d609ebcced549ba5dc80"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 87,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_qcdcr_met.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_qcdcr_met.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_qcdcr_met.pdf": "63d08313f94430a15557f690b7cb717232de8ebe8354b4e5f762423a7d05f7cb",
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_qcdcr_met.png": "efc5a1f1c6fc2cd16ab170a273b7021ec1bbf29972f31d68862c17f49b94a0b8"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 91,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_gcr_recoil_gcr.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_gcr_recoil_gcr.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_gcr_recoil_gcr.pdf": "190e1adf1318783ca8faffa9b8885124abeb9989f062959f97f5168ad0c522ac",
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_gcr_recoil_gcr.png": "e609cbc3ab599eb6f15692554f6e61d50d2acfb0ba39fd5479d9505e222ed61e"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 85,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_dycr_recoil_dy.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_dycr_recoil_dy.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_dycr_recoil_dy.pdf": "106d5a0fddda8f94c9b3a544cb14bb835daf8868566c11485daa1f67c7e27094",
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_dycr_recoil_dy.png": "e31db56cb34c59d3112cbdd74ef07be4c22d42a67360108e6f0d55bed989d7fe"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 81,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_llcr_njet.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_llcr_njet.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_llcr_njet.pdf": "93cbc7bf52d5af4d44bd245f68b8ac9fe6e8b2bbbc25dae2a758ebc9730f6f54",
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_llcr_njet.png": "def3c61cde119091ef3d2ca4cb8b9679490efa685ee384750966f3ceb32758a8"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 28,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_qcdcr_njet.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_qcdcr_njet.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_qcdcr_njet.pdf": "a91561244b486c78d9af32cce5fd23053706933354180010a9db3f7d03db8518",
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_qcdcr_njet.png": "1115ea31c257fad9e84719cb0a782b1156ddcc8c28bea38879a10fb665a2a331"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 32,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_gcr_njet_photon_clean.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_gcr_njet_photon_clean.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_gcr_njet_photon_clean.pdf": "0e6ae47d21316aa5e11ff7a1efb42e4de6d4461c04cc7267cd131fe7202d025d",
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_gcr_njet_photon_clean.png": "20e94b122625cdd78df7fc60addc7fa77c25bed47c955716ba7e2bcbd2e5b6c2"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 23,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_dycr_njet_lepton_clean.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_dycr_njet_lepton_clean.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_dycr_njet_lepton_clean.pdf": "607a4f46c368658419b8aafab99603f948e53372e4a9a02528875656cd431ed4",
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_dycr_njet_lepton_clean.png": "d62c51b23f85b7a5f011b9d2a337291a3c2b42eb4f52d8f900df4ff4ffa1ea8f"
+      },
+      "qa_status": "visual_review_required",
+      "prior_render_index": 19,
+      "issues": [
+        "At least one data/MC marker is at or beyond the inherited fixed ratio-panel range 0 to 2 and is partly or wholly clipped."
+      ]
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_llcr_njet.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_llcr_njet.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_llcr_njet.pdf": "4e51e8ee26af33c9f351453cc15c24009b73ae7deae011f9a23d1a7b5b1e4d19",
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_llcr_njet.png": "9e528abe7c09a51fc13f2a988c3ede3d36693bfe3f507c0c406f2fe56b31260e"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 89,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_qcdcr_njet.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_qcdcr_njet.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_qcdcr_njet.pdf": "e2c056eba93b5fcca8b989df1ed14fa903dfc27a5696fbd8a784a6aa9d2994a3",
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_qcdcr_njet.png": "312804724cfb2445c873edd1eb39dae0a90957768131856ed2802fbb18c8ae1c"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 93,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_gcr_njet_photon_clean.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_gcr_njet_photon_clean.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_gcr_njet_photon_clean.pdf": "122b63fc274e0fc40e732c4b8d1607e9339ede31afb33d931e9510ea2331e5c2",
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_gcr_njet_photon_clean.png": "e3a95c8bd71640432b9b60a0fb3f4857c24b64f2c51d3de84873e54a8d617f00"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 84,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_dycr_njet_lepton_clean.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_dycr_njet_lepton_clean.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_dycr_njet_lepton_clean.pdf": "738932d6ecf8aa779085f816fa1ad0ffba7ec71bc7c332c4f022dc3dfab59393",
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_dycr_njet_lepton_clean.png": "75209babd6301d58a1a2a66a762003ecfb858b7a1eed8f0cd96975afaf6bcb6b"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 80,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_llcr_nb_medium_lowdm.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_llcr_nb_medium_lowdm.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_llcr_nb_medium_lowdm.pdf": "4faff85026d7c50870f24e82a38753e44e3d90c815643a63736c53c9fb65eb4a",
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_llcr_nb_medium_lowdm.png": "ca7c571880ed5ea0789a7ac9b9ae5817e7743b2ffc5b72880ae8de662a0ca16b"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 27,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_qcdcr_nb_medium_lowdm.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_qcdcr_nb_medium_lowdm.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_qcdcr_nb_medium_lowdm.pdf": "a9dad2e991fdff2a497d9d4e0c248e6fb2902a39ff4bfc25ff6d5b59a50faecc",
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_qcdcr_nb_medium_lowdm.png": "9ead03ef68506954bb544501001d6b34df98cbdc5eaf5e5d48a62c76955b04f1"
+      },
+      "qa_status": "visual_review_required",
+      "prior_render_index": 31,
+      "issues": [
+        "At least one data/MC marker is at or beyond the inherited fixed ratio-panel range 0 to 2 and is partly or wholly clipped."
+      ]
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_gcr_nb_photon_clean.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_gcr_nb_photon_clean.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_gcr_nb_photon_clean.pdf": "ae741c91f72e7ab6beedd3e3ecde36876ff819da68f14540dd6773ba0e7e3dc5",
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_gcr_nb_photon_clean.png": "e0047c4e93197e2ec8ef1587c60fef157e401c56680529748314f9be1f5e5ea1"
+      },
+      "qa_status": "visual_review_required",
+      "prior_render_index": 22,
+      "issues": [
+        "At least one data/MC marker is at or beyond the inherited fixed ratio-panel range 0 to 2 and is partly or wholly clipped."
+      ]
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_dycr_nb_lepton_clean.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_dycr_nb_lepton_clean.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_dycr_nb_lepton_clean.pdf": "9b23de10957aa04530ac4ef4d38cedd76b7926570b02f597f32fd13605450092",
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_dycr_nb_lepton_clean.png": "56a02d408e70f804cd9fd293a7d73b130d3887fc7b2f5e1eefc1b4ce047e1f73"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 18,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_llcr_nb_medium_lowdm.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_llcr_nb_medium_lowdm.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_llcr_nb_medium_lowdm.pdf": "67803ee22329e5d61dba08713de70042ce5bb0a6f848167b1c9bb7bb3ccc216d",
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_llcr_nb_medium_lowdm.png": "52ee2351d5d8ecd0fc81adabac0ca718973dc269403fb0c85c80a078b8d93e63"
+      },
+      "qa_status": "visual_review_required",
+      "prior_render_index": 88,
+      "issues": [
+        "At least one data/MC marker is at or beyond the inherited fixed ratio-panel range 0 to 2 and is partly or wholly clipped."
+      ]
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_qcdcr_nb_medium_lowdm.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_qcdcr_nb_medium_lowdm.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_qcdcr_nb_medium_lowdm.pdf": "7fd8be089eec1842c8c1196235a7d2be2deda0bdf4fd216e992c4f26f3d06386",
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_qcdcr_nb_medium_lowdm.png": "caf8b7833eb6991bf5667e9873d2f498224a25df01c1d0238816a240dfd77d06"
+      },
+      "qa_status": "visual_review_required",
+      "prior_render_index": 92,
+      "issues": [
+        "At least one data/MC marker is at or beyond the inherited fixed ratio-panel range 0 to 2 and is partly or wholly clipped."
+      ]
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_gcr_nb_photon_clean.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_gcr_nb_photon_clean.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_gcr_nb_photon_clean.pdf": "4c8523515fbc6aa4c30e397e3f4250e995c7c9732fe0f0686d23106e219716f3",
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_gcr_nb_photon_clean.png": "9f885ea69ef80aed8002f834bdd5bb277f40b39b1ef32b2455a7a9513d7a375d"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 83,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_dycr_nb_lepton_clean.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_dycr_nb_lepton_clean.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_dycr_nb_lepton_clean.pdf": "17458433689e43583f2bf31a1f1272d83a699d2553698e43e4952f20dadf058c",
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_dycr_nb_lepton_clean.png": "a31625affc306ca7a3f4af3b3ed1651f2afebb693faa289dc0d62bb910ad2507"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 79,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_llcr_ht.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_llcr_ht.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_llcr_ht.pdf": "5e02e280f4cfb48ddb199187044f771f05e0b27957e9ad85d967e90aeda4424c",
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_llcr_ht.png": "8cb55971079dbe4d148d5e694acec68cce43fcfff36a603e7e85cef2d7dd4e9e"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 25,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_qcdcr_ht.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_qcdcr_ht.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_qcdcr_ht.pdf": "3368991bbb5e3f82c257286d96820795716e64ea708af9dd8cc1c6fe212bc7ba",
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_qcdcr_ht.png": "101edfd6ae53f1b562e3cb2f85b85a342a214bf0d502b20c6782df6a5492db7f"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 29,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_gcr_ht_photon_clean.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_gcr_ht_photon_clean.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_gcr_ht_photon_clean.pdf": "1ff1f07ac4222531e8ecaa0c79cd694aa8b3144aa89169cd27217593e787a63a",
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_gcr_ht_photon_clean.png": "bec52d00bbeb8b4b2bfb07871cf0683af124ec94825515d6293fea6e9d788858"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 21,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_dycr_ht_lepton_clean.pdf",
+      "png": "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_dycr_ht_lepton_clean.png",
+      "stage": "distributions_2024",
+      "sha256": {
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_dycr_ht_lepton_clean.pdf": "744f4c24e833e354ddc2a52ae76bfbdc9aad39b0509dce753b42504ba45d81f2",
+        "stats/nominal_20260923/plots/2024/distributions/lowdm_cr_dycr_ht_lepton_clean.png": "b7ac396200ace3ef75df2abde80217109468b764aef1be9eeb5013d4621b9f71"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 17,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_llcr_ht.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_llcr_ht.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_llcr_ht.pdf": "5637945e8fbf02170150837632abda65db0581c733af86228cccc2519d4cdab3",
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_llcr_ht.png": "d72881adc2109bfd935c3cf7c482d2365dd4da52813f7a70dd11319c01413772"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 86,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_qcdcr_ht.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_qcdcr_ht.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_qcdcr_ht.pdf": "6d1e245dcfce1b97fef368418ae8abf58419908aa165bee94ab666240937302d",
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_qcdcr_ht.png": "75fa3b92a8ccb31a4cdf7c4c2a575e0cf8439ad9e125d43d265aeed3ae052b9d"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 90,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_gcr_ht_photon_clean.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_gcr_ht_photon_clean.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_gcr_ht_photon_clean.pdf": "ca7ab71c99f5f6fdc598a341fb0919f906a120442cb6f4db4579f83bdf28df9a",
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_gcr_ht_photon_clean.png": "1c0866807205c9c58a8a606e3880ced93bc623ab64773c5df1cb2f99922f20fb"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 82,
+      "issues": []
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_dycr_ht_lepton_clean.pdf",
+      "png": "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_dycr_ht_lepton_clean.png",
+      "stage": "distributions_2025",
+      "sha256": {
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_dycr_ht_lepton_clean.pdf": "2892c58c0aa709237ecb34ad6fd631ea300d3a4fc6cbcc012cd2d0c399e001f9",
+        "stats/nominal_20260923/plots/2025/distributions/lowdm_cr_dycr_ht_lepton_clean.png": "b18ff227f800d66834381c1f5c9132412a5d425de7fb2d77f2f375888599882c"
+      },
+      "qa_status": "visual_QA_no_visible_layout_defect_not_delivered",
+      "prior_render_index": 78,
+      "issues": []
+    }
+  ],
+  "missing": [
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/transfer_factors/transfer_factor_top_llcr_highdm.pdf",
+      "stage": "transfer_factors_2024",
+      "status": "blocked_by_other_panel_TF_stage_gate",
+      "previous_status": "pending_stage_receipt"
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/transfer_factors/transfer_factor_top_llcr_highdm.pdf",
+      "stage": "transfer_factors_2025",
+      "status": "blocked_by_other_panel_TF_stage_gate",
+      "previous_status": "pending_stage_receipt"
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/transfer_factors/gnn/transfer_factor_top_llcr_lowdm_gnn.pdf",
+      "stage": "transfer_factors_2024",
+      "status": "blocked_by_other_panel_TF_stage_gate",
+      "previous_status": "pending_stage_receipt"
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/transfer_factors/gnn/transfer_factor_top_llcr_lowdm_gnn.pdf",
+      "stage": "transfer_factors_2025",
+      "status": "blocked_by_other_panel_TF_stage_gate",
+      "previous_status": "pending_stage_receipt"
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/transfer_factors/transfer_factor_w_llcr_highdm.pdf",
+      "stage": "transfer_factors_2024",
+      "status": "blocked_by_other_panel_TF_stage_gate",
+      "previous_status": "pending_stage_receipt"
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/transfer_factors/transfer_factor_w_llcr_highdm.pdf",
+      "stage": "transfer_factors_2025",
+      "status": "blocked_by_other_panel_TF_stage_gate",
+      "previous_status": "pending_stage_receipt"
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/transfer_factors/gnn/transfer_factor_w_llcr_lowdm_gnn.pdf",
+      "stage": "transfer_factors_2024",
+      "status": "blocked_by_other_panel_TF_stage_gate",
+      "previous_status": "pending_stage_receipt"
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/transfer_factors/gnn/transfer_factor_w_llcr_lowdm_gnn.pdf",
+      "stage": "transfer_factors_2025",
+      "status": "blocked_by_other_panel_TF_stage_gate",
+      "previous_status": "pending_stage_receipt"
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/transfer_factors/transfer_factor_qcd_qcdcr_highdm.pdf",
+      "stage": "transfer_factors_2024",
+      "status": "blocked_partial_unsupported_QCD_cells",
+      "previous_status": "pending_stage_receipt"
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/transfer_factors/transfer_factor_qcd_qcdcr_highdm.pdf",
+      "stage": "transfer_factors_2025",
+      "status": "blocked_partial_unsupported_QCD_cells",
+      "previous_status": "pending_stage_receipt"
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/transfer_factors/gnn/transfer_factor_qcd_qcdcr_lowdm_gnn.pdf",
+      "stage": "transfer_factors_2024",
+      "status": "blocked_by_other_panel_TF_stage_gate",
+      "previous_status": "pending_stage_receipt"
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/transfer_factors/gnn/transfer_factor_qcd_qcdcr_lowdm_gnn.pdf",
+      "stage": "transfer_factors_2025",
+      "status": "blocked_by_other_panel_TF_stage_gate",
+      "previous_status": "pending_stage_receipt"
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/transfer_factors/gnn/transfer_factor_zinv_gcr_lowdm_gnn.pdf",
+      "stage": "transfer_factors_2024",
+      "status": "blocked_by_other_panel_TF_stage_gate",
+      "previous_status": "pending_stage_receipt"
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/transfer_factors/gnn/transfer_factor_zinv_gcr_lowdm_gnn.pdf",
+      "stage": "transfer_factors_2025",
+      "status": "blocked_by_other_panel_TF_stage_gate",
+      "previous_status": "pending_stage_receipt"
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/cr_llcr_njet.pdf",
+      "stage": "distributions_2024",
+      "status": "blocked_display_map_omits_selected_Njet4",
+      "previous_status": "not_generated"
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/cr_qcdcr_njet.pdf",
+      "stage": "distributions_2024",
+      "status": "blocked_display_map_omits_selected_Njet4",
+      "previous_status": "not_generated"
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/cr_gcr_njet.pdf",
+      "stage": "distributions_2024",
+      "status": "blocked_display_map_omits_selected_Njet4",
+      "previous_status": "not_generated"
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2024/distributions/cr_dycr_njet.pdf",
+      "stage": "distributions_2024",
+      "status": "blocked_display_map_omits_selected_Njet4",
+      "previous_status": "not_generated"
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/cr_llcr_njet.pdf",
+      "stage": "distributions_2025",
+      "status": "blocked_display_map_omits_selected_Njet4",
+      "previous_status": "not_generated"
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/cr_qcdcr_njet.pdf",
+      "stage": "distributions_2025",
+      "status": "blocked_display_map_omits_selected_Njet4",
+      "previous_status": "not_generated"
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/cr_gcr_njet.pdf",
+      "stage": "distributions_2025",
+      "status": "blocked_display_map_omits_selected_Njet4",
+      "previous_status": "not_generated"
+    },
+    {
+      "pdf": "stats/nominal_20260923/plots/2025/distributions/cr_dycr_njet.pdf",
+      "stage": "distributions_2025",
+      "status": "blocked_display_map_omits_selected_Njet4",
+      "previous_status": "not_generated"
+    },
+    {
+      "pdf": "stats/nominal_20260923/cronly/cronly_nuisance_pulls_ylim6.pdf",
+      "stage": "cronly_plot",
+      "status": "blocked_unchanged_CR_fit_covQual2",
+      "previous_status": "blocked_unchanged_CR_fit_covQual2"
+    }
+  ],
+  "counts": {
+    "measurements_2024": 25,
+    "measurements_2025": 25,
+    "distributions_2024": 32,
+    "distributions_2025": 32,
+    "gnn_controls_2024": 4,
+    "gnn_controls_2025": 4,
+    "predictions": 3
+  },
+  "qa_counts": {
+    "visual_QA_no_visible_layout_defect_not_delivered": 102,
+    "visual_review_required": 23
+  }
+}

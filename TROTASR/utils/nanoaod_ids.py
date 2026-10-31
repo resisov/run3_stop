@@ -11,6 +11,7 @@ import numpy as np
 import awkward as ak
 import correctionlib
 from .paths import payload_path as resolve_payload
+from .paths import muon_pt_min
 
 
 def isTrackElectron(track, met_pt, met_phi, year):
@@ -113,7 +114,7 @@ def isLooseMuon(muon, year):
     miniIso = muon.miniPFRelIso_all
     looseId = muon.looseId
     mask = (
-            (pt > 10)
+            (pt > muon_pt_min(year))
             & (abs(eta) < 2.4)
             & (looseId)
             & (miniIso < 0.2)
@@ -127,7 +128,7 @@ def isMediumMuon(muon, year):
     miniIso = muon.miniPFRelIso_all
     mediumId = muon.mediumId
     mask = (
-            (pt > 10)
+            (pt > muon_pt_min(year))
             & (abs(eta) < 2.4)
             & (mediumId)
             & (miniIso < 0.2)

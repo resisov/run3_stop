@@ -37,6 +37,78 @@
         "path": "scales/TAU/2025/tau.json.gz",
         "sha256": "f2d204a211c5656aa7ad1d63d82f55e4f9e6e802c5d96043ace4915306127301"
       }
+    },
+    "2022": {
+      "electron": {
+        "path": "scales/EGM/2022/electronSS_EtDependent.json.gz",
+        "sha256": "b70e5dc0ae3cb0cd610ab9d28fa50200023a8c3705aba0df73b532f0c99b5787"
+      },
+      "photon": {
+        "path": "scales/EGM/2022/photonSS_EtDependent.json.gz",
+        "sha256": "0ed6fd502fbf4419465fec490557d9486dbd6442b57efb4ee486e54cc08a3146"
+      },
+      "muon": {
+        "path": "scales/MUO/2022/muon_scalesmearing.json.gz",
+        "sha256": "4d7e7867b40585de8cb98cb7b3bea6cfa9569bca06011627a80c4e191d870725"
+      },
+      "tau": {
+        "path": "scales/TAU/2022/tau.json.gz",
+        "sha256": "0ddf9be5e082f4d37172d0bbee9ef295ac75c8477c32371eca2aaddb25873305"
+      }
+    },
+    "2022EE": {
+      "electron": {
+        "path": "scales/EGM/2022EE/electronSS_EtDependent.json.gz",
+        "sha256": "5ed5fd9678dcc8a5027bba04d58a34273f76cf938bd74ab325e25f58ee4d336f"
+      },
+      "photon": {
+        "path": "scales/EGM/2022EE/photonSS_EtDependent.json.gz",
+        "sha256": "c8b89729804fba9852bc299e4c7169c37ef5bbf659f490c6de10053cde8badc6"
+      },
+      "muon": {
+        "path": "scales/MUO/2022EE/muon_scalesmearing.json.gz",
+        "sha256": "d301a1c5203d06300f1848425acc015f2472497a1083e80c388c8f36d1230f63"
+      },
+      "tau": {
+        "path": "scales/TAU/2022EE/tau.json.gz",
+        "sha256": "9530c9e32c77ea3803db4ff36576b7aba67cb76dd237d7b65651cbb77f64f154"
+      }
+    },
+    "2023": {
+      "electron": {
+        "path": "scales/EGM/2023/electronSS_EtDependent.json.gz",
+        "sha256": "e9d230bd66596efca49b4dbe0cbdfa5221f3d81ff3c7f001426f7f402caaf494"
+      },
+      "photon": {
+        "path": "scales/EGM/2023/photonSS_EtDependent.json.gz",
+        "sha256": "fa8a3b78c632218382b9dcdc348079f979909664ba06ed9382349f4906357d1f"
+      },
+      "muon": {
+        "path": "scales/MUO/2023/muon_scalesmearing.json.gz",
+        "sha256": "9014c885c8c9d5dfd6ce0e0f3c584e524c7d8499acbfedaf61bf92c46849f32e"
+      },
+      "tau": {
+        "path": "scales/TAU/2023/tau.json.gz",
+        "sha256": "3336f3286e89411ddd7419cdd000a3d6ddd2499c8e3bf96bbc962644925a88df"
+      }
+    },
+    "2023BPix": {
+      "electron": {
+        "path": "scales/EGM/2023BPix/electronSS_EtDependent.json.gz",
+        "sha256": "233cf61e69cd496056c8d0a8a8cfc1aec9e102bcab74e9393a698a93a807c71d"
+      },
+      "photon": {
+        "path": "scales/EGM/2023BPix/photonSS_EtDependent.json.gz",
+        "sha256": "43c76f11db59c396b7e0cdff11e7b663361cfc2692bbb01c64602750de7afd0d"
+      },
+      "muon": {
+        "path": "scales/MUO/2023BPix/muon_scalesmearing.json.gz",
+        "sha256": "ccadb1a9904c7d200cfeaaab245bf202dc39ea3c1a947d77171da93caf5114cb"
+      },
+      "tau": {
+        "path": "scales/TAU/2023BPix/tau.json.gz",
+        "sha256": "0664247696a5a1fd50f74e329f8cc6c5a1465fac64bc58c644f9fc0d48fbe9c2"
+      }
     }
   }
 }

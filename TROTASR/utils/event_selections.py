@@ -10,6 +10,7 @@ import awkward as ak
 from .region_kinematics import build_region_blocks, dycr_lepton_mask, object_masks, clean_by_delta_r
 from .ids import delta_phi
 from .constituents import boosted_overlap_vetoed_ak4_indices
+from .paths import tagging_definition, analysis_era
 
 REGIONS = ("SR", "LLCR", "QCDCR", "GCR", "DY2E", "DY2M")
 MIXED_WP = 0.9027690887451172
@@ -56,12 +57,12 @@ def arbitrate(boosted, mixed, resolved, w_candidates, footprints):
     return dict(B=chosen_b, M=chosen_m, R=chosen_r, W=chosen_w, rejected=rejected)
 
 
-def _references(a, region):
+def _references(a, region, year=2024):
     if region in ("SR", "LLCR", "QCDCR"):
         empty = a["jet_eta_all"][:, :0]
         return empty, empty
     flavor = {"GCR": "photon", "DY2E": "electron", "DY2M": "muon"}[region]
-    selected = object_masks(a)[flavor + "_medium"]
+    selected = object_masks(a, year)[flavor + "_medium"]
     return a[flavor + "_eta_all"][selected], a[flavor + "_phi_all"][selected]
 
 
@@ -93,9 +94,10 @@ def topology_buffers(a):
     return columns, scalar, footprints
 
 
-def topology_counts(a, resolved_by_identity, region, prepared=None):
+def topology_counts(a, resolved_by_identity, region, prepared=None, year=2024):
+    mixed_wp = tagging_definition(year)['mixed_wp']
     columns_all, scalar, footprints_all = topology_buffers(a) if prepared is None else prepared
-    eta, phi = _references(a, region)
+    eta, phi = _references(a, region, year)
     clean_fat = clean_by_delta_r(a["fatjet_eta_all"], a["fatjet_phi_all"], eta, phi, .4)
     clean_jet = clean_by_delta_r(a["jet_eta_all"], a["jet_phi_all"], eta, phi, .2)
     n = len(a)
@@ -124,7 +126,7 @@ def topology_counts(a, resolved_by_identity, region, prepared=None):
             score = columns["QCDDiscriminant"][k]
             if fat not in footprints or not set(jets) <= set(jj) or len(jets) != len(set(jets)):
                 raise ValueError("Invalid Mixed original constituent index")
-            if not np.isfinite(score) or score < MIXED_WP:
+            if not np.isfinite(score) or score < mixed_wp:
                 raise ValueError("Invalid stored Mixed discriminant")
             if fat in good_fat and set(jets) <= good_jet:
                 mixed.append(dict(index=index, fat=fat, jets=jets, score=score))
@@ -162,7 +164,7 @@ def legacy_vr_mask(chunk, region, flag, n):
             & (d[0] > .5) & (d[1] > .15) & (d[2] > .15) & ((d[1] < .5) | (d[2] < .5) | (d[3] < .5)))
 
 
-def highdm_core(a, blocks, region, dy_mass_window=(71., 111.)):
+def highdm_core(a, blocks, region, dy_mass_window=(71., 111.), year=2024):
     get = lambda k: np.asarray(a[k])
     base = get("pass_base_common").astype(bool) & get("pass_zero_tau").astype(bool)
     if region in ("SR", "LLCR", "QCDCR"):
@@ -176,7 +178,7 @@ def highdm_core(a, blocks, region, dy_mass_window=(71., 111.)):
     if region == "GCR":
         # The intermediate schema does not store pass_gcr_open_high. Rebuild
         # the same four-jet angular predicate from its retained AK4 columns.
-        eta, phi = _references(a, region)
+        eta, phi = _references(a, region, year)
         good = ((a['jet_corrected_pt'] > 30.) & (abs(a['jet_eta_all']) < 2.4)
                 & ak.values_astype(a['jet_id_all'], np.bool_)
                 & clean_by_delta_r(a['jet_eta_all'], a['jet_phi_all'], eta, phi, .2))
@@ -184,7 +186,7 @@ def highdm_core(a, blocks, region, dy_mass_window=(71., 111.)):
         opened = np.asarray(ak.all(angles > .5, axis=1))
         b = blocks[region]
         return b.core & (b.njet >= 4) & (b.nb >= 1) & opened
-    return (dycr_lepton_mask(a, region, mass_window=dy_mass_window)
+    return (dycr_lepton_mask(a, region, mass_window=dy_mass_window, year=year)
             & get("pass_" + region.lower() + "_open_high").astype(bool)
             & (get("njet_lepton_clean") >= 4) & (get("nb_lepton_clean") >= 1)
             & (get("ht_lepton_clean") > 300.) & (get("recoil_" + region.lower()) > 250.))
@@ -197,7 +199,8 @@ class FixedJetTopologyCache:
     only for identical selected reference directions; threshold crossings miss
     the cache and run the original arbitration. No event selections are cached.
     """
-    def __init__(self, a, resolved):
+    def __init__(self, a, resolved, year=2024):
+        self.year = analysis_era(year)
         self.resolved = resolved
         self.prepared = topology_buffers(a)
         names = (*OVERLAP_FIELDS, *("TopMixed1pct_" + x for x in MIXED_FIELDS),
@@ -219,20 +222,22 @@ class FixedJetTopologyCache:
                 raise ValueError('Fixed-jet topology input changed: ' + name)
 
     def get(self, a, region):
-        eta, phi = _references(a, region)
+        eta, phi = _references(a, region, self.year)
         reference = (ak.to_list(eta), ak.to_list(phi))
         old = self.regions.get(region)
         if old is None or old[0] != reference:
-            value = topology_counts(a, self.resolved, region, self.prepared)
+            value = topology_counts(a, self.resolved, region, self.prepared, self.year)
             self.regions[region] = reference, value
         return self.regions[region][1]
 
 
-def select(a, resolved_by_identity, dy_mass_window=(71., 111.), topology_cache=None):
-    blocks, audit = build_region_blocks(a, dy_mass_window=dy_mass_window)
+def select(a, resolved_by_identity, dy_mass_window=(71., 111.), topology_cache=None, year=2024):
+    blocks, audit = build_region_blocks(a, dy_mass_window=dy_mass_window, year=year)
     if topology_cache is None:
         prepared = topology_buffers(a)
     else:
+        if topology_cache.year != analysis_era(year):
+            raise ValueError('Topology cache belongs to another analysis era')
         topology_cache.validate(a, resolved_by_identity)
     output = {}
     for region in REGIONS:
@@ -241,11 +246,11 @@ def select(a, resolved_by_identity, dy_mass_window=(71., 111.), topology_cache=N
         elif topology_cache is not None:
             counts, sf_clean, caudit, baseline = topology_cache.get(a, region)
         else:
-            counts, sf_clean, caudit, baseline = topology_counts(a, resolved_by_identity, region, prepared)
+            counts, sf_clean, caudit, baseline = topology_counts(a, resolved_by_identity, region, prepared, year)
         if region == 'SR':
             shared_topology = counts, sf_clean, caudit, baseline
         b = blocks[region]
-        core = highdm_core(a, blocks, region, dy_mass_window)
+        core = highdm_core(a, blocks, region, dy_mass_window, year)
         high = core & (counts.sum(axis=1) >= 1)
         low = b.core & (b.nb >= 1) & (counts.sum(axis=1) == 0)
         old_high = core & (baseline.sum(axis=1) >= 1)

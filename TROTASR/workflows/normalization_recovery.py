@@ -91,6 +91,9 @@ def verify_extension(old, new):
 
 def retry_keys(plan, states):
     """Exactly one corrected attempt; initial failed records/logs are retained."""
+    if 'btag_zero_denominator_recovery' in plan:
+        from TROTASR.workflows.btag_zero_recovery import retry_keys as btag_retry
+        return btag_retry(plan, states)
     spec=plan.get('normalization_extension_recovery')
     if not spec:return []
     result=[]
@@ -108,6 +111,9 @@ def retry_keys(plan, states):
 
 
 def prior_contracts(plan):
+    if 'btag_zero_denominator_recovery' in plan:
+        from TROTASR.workflows.btag_zero_recovery import prior_contracts as btag_contracts
+        return btag_contracts(plan)
     spec=plan.get('normalization_extension_recovery')
     if not spec:return {}
     audit_path=internal_path(ROOT/spec['audit'])

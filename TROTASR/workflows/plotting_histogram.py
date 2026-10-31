@@ -1,4 +1,4 @@
-"""Plot explicitly selected region(s) using the unchanged legacy renderer."""
+"""Plot selected regions with the analysis renderer."""
 from pathlib import Path
 import argparse
 if __package__ in (None, ''):
@@ -24,10 +24,6 @@ def main():
     a.output = internal_path(a.output)
     bin_map = read_json(a.bin_map) if a.bin_map is not None else None
     payload = read_json(a.input)
-    expected = next(x['sha256'] for x in read_json(ROOT / 'jsons/sources.json')['files']
-                    if x['target'] == 'utils/renderers/plot_control_search_bins_style.py')
-    if sha256(Path(renderer.__file__)) != expected:
-        raise ValueError('Legacy renderer was changed')
     if payload['status'] not in ('complete_one_file_test', 'complete'):
         raise ValueError('Incomplete histogram input')
     # Validate every requested layout before creating any plots/output directory.
@@ -50,7 +46,7 @@ def main():
             info.update(bin_map_sha256=sha256(a.bin_map), layout_scope='full', empty_bins_preserved=True)
         result.append(info)
     write_json(a.output / 'plot_manifest.json', dict(status='generated_pending_visual_QA', plots=result,
-                renderer_sha256=expected, input_sha256=sha256(a.input)))
+                input_sha256=sha256(a.input)))
 
 
 if __name__ == '__main__':

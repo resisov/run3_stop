@@ -1,9 +1,0 @@
-{
-  "source_sha256": "a4351c673bd311dc10a98c1ced11ab988fce8aa620da9b422387adbcc214a47a",
-  "plots": [
-    "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/zgamma/zgamma_double_ratio_highdm.png",
-    "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/zgamma/zgamma_double_ratio_highdm.pdf",
-    "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/zgamma/zgamma_double_ratio_lowdm.png",
-    "autonomous_allhad/reports/background_estimation_lepton_veto10_20260908/2025/zgamma/zgamma_double_ratio_lowdm.pdf"
-  ]
-}

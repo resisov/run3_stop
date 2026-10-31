@@ -3,9 +3,10 @@ import math
 import os
 import contextlib
 import gc
+import fcntl
 from pathlib import Path
-from TROTASR.utils.paths import ROOT
-from TROTASR.utils.io import read_json
+from TROTASR.utils.paths import ROOT, internal_path
+from TROTASR.utils.io import read_json, sha256
 from TROTASR.workflows.normalization_recovery import process_identity
 
 FIELD = 'memory_control_policy'
@@ -45,24 +46,68 @@ def memory_usage(pid):
         return {'VmRSS': 0, 'VmHWM': 0}
 
 
-def reserved_capacity(plan, external, available, rss, observed_peak, elapsed):
+def component_worker_limit(plan):
+    """Borrow the finished peer's slots without changing success/failure state."""
+    base = plan['max_workers']
+    allocation = plan.get('resource_allocation', {})
+    if not allocation.get('borrow_after_peer_drained'):
+        return base, False
+    # Oct27's extra ten belong to non-JME, not whichever controller refills
+    # first. Reserve its full target plus both admission controllers. Existing
+    # workers above this cap finish in place; this only limits new admissions.
+    if plan['shape_mode'] == 'cms_trota_jme':
+        base = min(base, max(0, plan['aggregate_slots']-2-
+                            allocation['component_targets']['stored_trota_nonjme']))
+    peer = internal_path(ROOT/allocation['peer_campaigns'][plan['shape_mode']])
+    try:
+        state = read_json(peer/'state.json')
+        if (state.get('status') not in ('histograms_complete', 'complete_with_failures')
+                or state.get('active') != 0 or state.get('pending') != 0
+                or not state.get('total')
+                or state.get('completed', 0)+len(state.get('failed', [])) != state['total']):
+            return base, False
+        launch = read_json(peer/'launch.json')
+        if process_identity(launch['identity']['pid']) is not None:
+            return base, False
+        # No new controller may own the peer while its capacity is released.
+        with (peer/'controller.lock').open('r') as lock:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            peer_plan = read_json(peer/'plan.json')
+            if (launch['plan_sha256'] != sha256(peer/'plan.json')
+                    or peer_plan.get('resource_allocation') != allocation
+                    or peer_plan.get('shape_mode') == plan.get('shape_mode')):
+                return base, False
+            return max(base, plan['aggregate_slots']-1), True
+    except (FileNotFoundError, BlockingIOError):
+        return base, False
+
+
+def reserved_capacity(plan, external, available, rss, observed_peak, elapsed, recent_growth=0):
     """Reserve each active worker's future growth, not just its current RSS."""
     spec = plan[FIELD]
     quantum = spec.get('budget_quantum_bytes', GIB)
-    budget = max(plan['admission_bytes_per_worker'],
-                 math.ceil(observed_peak*spec['peak_safety_factor']/quantum)*quantum)
+    if spec.get('budget_mode') == 'adaptive_peak_growth':
+        # Same admission formula as the adopted 2024 file-local controller.
+        budget = max(GIB, int(observed_peak*1.1)+2*max(0, recent_growth))
+    else:
+        budget = max(plan['admission_bytes_per_worker'],
+                     math.ceil(observed_peak*spec['peak_safety_factor']/quantum)*quantum)
     growth = sum(max(0, budget-value) for value in rss)
     slots = max(0, (available-plan['minimum_available_memory_bytes']-growth)//budget)
+    component_cap, borrowed = component_worker_limit(plan)
     stages = spec.get('post_collection_stages')
-    if stages:
+    if borrowed:
+        ramp = component_cap
+    elif stages:
         if not spec.get('legacy_workers_exited_verified') or not spec.get('collect_after_chunk'):
             raise ValueError('Post-collection scaling requires verified legacy exit and active collection')
-        ramp = min(plan['max_workers'], stages[min(int(elapsed//spec['ramp_seconds']),len(stages)-1)])
+        ramp = min(component_cap, stages[min(int(elapsed//spec['ramp_seconds']),len(stages)-1)])
     else:
-        ramp = min(plan['max_workers'], spec['initial_workers']+int(elapsed//spec['ramp_seconds']))
+        ramp = min(component_cap, spec['initial_workers']+int(elapsed//spec['ramp_seconds']))
     limit = max(0, min(ramp, plan['aggregate_slots']-1-external, len(rss)+slots))
     return int(limit), dict(worker_budget_bytes=budget, reserved_growth_bytes=growth,
-                           observed_peak_bytes=observed_peak, ramp_limit=ramp)
+                           observed_peak_bytes=observed_peak, ramp_limit=ramp,
+                           peer_capacity_released=borrowed, component_target=plan['max_workers'])
 
 
 class OrphanProcess:

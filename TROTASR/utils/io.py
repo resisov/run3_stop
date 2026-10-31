@@ -5,7 +5,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
-from .paths import internal_path
+from .paths import internal_path, analysis_era, tagging_definition, EARLY_ERAS
 
 
 def sha256(path):
@@ -20,6 +20,57 @@ def read_json(path):
     p = internal_path(path)
     with (gzip.open(p, "rt") if p.suffix == ".gz" else p.open()) as stream:
         return json.load(stream)
+
+
+def era_assets(year):
+    """Return the target era's registered inputs and their contract digest."""
+    from .paths import ROOT
+    era = analysis_era(year)
+    if era not in EARLY_ERAS:
+        path = ROOT / 'jsons/assets.json'
+        return sha256(path), read_json(path)['files']
+    registry = read_json(ROOT / 'jsons/early_run3_assets.json')
+    records = [r for r in registry['files'] if r['era'] == era]
+    records.extend(r for r in registry.get('analysis_inputs', {}).values()
+                   if r['era'] == era)
+    files = sorted((dict(target=r['target'], sha256=r['sha256']) for r in records),
+                   key=lambda r: r['target'])
+    if not files or len({r['target'] for r in files}) != len(files):
+        raise ValueError('Missing or duplicate era assets: ' + era)
+    digest = hashlib.sha256(json.dumps(dict(era=era, files=files),
+                                      sort_keys=True, separators=(',', ':')).encode()).hexdigest()
+    return digest, files
+
+
+def load_efficiency(path):
+    """Read existing Coffea measurements across NumPy's private-module rename.
+
+    No array, axis, count or uncertainty is transformed. Restrict this loader
+    to the installed analysis-owned efficiency files, not arbitrary pickles.
+    """
+    from .paths import ROOT
+    p = internal_path(path)
+    if p.parent != ROOT / 'estimations' or p.suffix != '.merged':
+        raise ValueError('Efficiency input must be installed in estimations')
+    return decode_efficiency(p.read_bytes())
+
+
+def decode_efficiency(data):
+    """Decode trusted, checksum-verified analysis efficiency bytes only."""
+    import io
+    import pickle
+    import numpy as np
+    import lz4.frame
+
+    class EfficiencyUnpickler(pickle.Unpickler):
+        def find_class(self, module, name):
+            if int(np.__version__.split('.')[0]) < 2 and (
+                    module == 'numpy._core' or module.startswith('numpy._core.')):
+                module = 'numpy.core' + module[len('numpy._core'):]
+            return super().find_class(module, name)
+
+    with lz4.frame.open(io.BytesIO(data), 'rb') as stream:
+        return EfficiencyUnpickler(stream).load()
 
 
 def write_json(path, value):
@@ -54,23 +105,29 @@ def validate_root(root_path, year, require_mixed=True):
         missing = required - set(f.keys(cycle=False))
         if missing:
             raise ValueError("Missing ROOT objects: " + ",".join(sorted(missing)))
+        era = analysis_era(year)
+        tag = tagging_definition(era)
+        early = era in EARLY_ERAS
+        meta = root_metadata(root_path, f)
+        if early and meta.get('campaign_year') != era:
+            raise ValueError('Intermediate target era differs from requested analysis era')
         trota = json.loads(str(f["TROTA_metadata"]))
         if trota.get("status") != "complete":
             raise ValueError("Incomplete TROTA")
-        if (trota.get("application_year") != year or trota.get("events_entries") != f["Events"].num_entries
-                or trota.get("model_sha256") != "ce673e6497860cc67fcdfb30017301fb476e32a0a33a60e8b51a31ba109f7ef3"):
+        if (str(trota.get("application_year")) != era[:4] or trota.get("events_entries") != f["Events"].num_entries
+                or trota.get("model_sha256") != tag['resolved_sha256']):
             raise ValueError("Resolved year/model/coverage contract mismatch")
-        meta = root_metadata(root_path, f)
         if meta.get("status") not in ("complete", "complete_with_bad_files"):
             raise ValueError("Incomplete input production")
         if require_mixed:
             mixed = json.loads(str(f["TopMixedResults_metadata"]))
-            if (mixed.get("status") != "complete" or mixed.get("year") != year
+            if (mixed.get("status") != "complete" or str(mixed.get("year")) != era[:4]
                     or mixed.get("operator") != ">="
-                    or mixed.get("threshold") != 0.9027690887451172):
+                    or mixed.get("threshold") != tag['mixed_wp']
+                    or (early and mixed.get('analysis_era') != era)):
                 raise ValueError("Mixed model/year/WP contract mismatch")
             if mixed.get("entries") != f["Events"].num_entries:
                 raise ValueError("Incomplete Mixed event coverage")
-            if mixed.get("model_sha256") != "40469a1a62f64b08b4225682a2df6ac2538f49a1e7eef5ef4bdff857d0b875a4":
+            if mixed.get("model_sha256") != tag['mixed_sha256']:
                 raise ValueError("Mixed model hash mismatch")
         return meta

@@ -19,7 +19,7 @@ def main():
         if not load(str(folder / (name + ".coffea"))):
             raise RuntimeError("Compiled artifact is empty")
     sources = ["utils/" + n + ".py" for n in ("corrections", "pog_corrections", "private_scales",
-               "weight_components", "weight_inputs", "paths", "ids", "nanoaod_ids")]
+               "weight_components", "weight_inputs", "paths", "io", "ids", "nanoaod_ids")]
     write_json(folder / "manifest.json", dict(status="complete", sources={p: sha256(ROOT / p) for p in sources},
         artifacts={name: sha256(folder / name) for name in ("ids.coffea", "corrections.coffea")}))
     print("Local IDs and corrections compiled and reloaded")

@@ -11,6 +11,7 @@ import math
 import os
 from pathlib import Path
 import re
+import sys
 import time
 if __package__ in (None, ''):
     from _bootstrap import bootstrap
@@ -18,7 +19,7 @@ if __package__ in (None, ''):
 from TROTASR.utils.paths import ROOT, internal_path
 from TROTASR.utils.io import read_json, write_json, sha256
 from TROTASR.workflows.diagnostic_common import (native_runtime, grid_card,
-    freeze_contract, CommandRunner, require_success, workspace)
+    freeze_contract, CommandRunner, require_success, workspace, published_diagnostic)
 from TROTASR.workflows.impact_legacy import check_endpoints, fit_command, validate_fit
 
 SOURCES = ['workflows/combine_impacts.py', 'workflows/diagnostic_common.py',
@@ -45,10 +46,12 @@ def saved_workspace(state_path, card, model, mass):
             or state.get('workspace_valid') is not True
             or internal_path(ROOT / state['card']) != card
             or state.get('card_sha256') != sha256(card)
-            or state.get('workspace_sha256') != sha256(target)):
+            or not re.fullmatch('[0-9a-f]{64}',state.get('workspace_sha256',''))
+            or not target.is_file() or target.stat().st_size <= 0):
         raise ValueError('Saved workspace does not match the verified benchmark/card')
     return target, dict(state=str(state_path.relative_to(ROOT)), state_sha256=sha256(state_path),
-                       workspace=str(target.relative_to(ROOT)), workspace_sha256=sha256(target))
+                       workspace=str(target.relative_to(ROOT)), workspace_sha256=state['workspace_sha256'],
+                       input_check_scope='accepted_limit_workspace_receipt; no_workspace_rehash')
 
 
 def publish_output(source, destination):
@@ -149,22 +152,56 @@ def validate_collection(collected, names, results, initial):
 
 
 def plot(runner, output, state, stem_name='impacts_mStop1200_mLSP500'):
+    if state.get('status')=='needs_attention' and state.get('recovery_status'):
+        recovery=read_json(ROOT/state['recovery_status'])
+        old_log=output/'plot.log'
+        if (recovery['status']=='fits_complete' and recovery['json_sha256']==state.get('json_sha256')
+                and old_log.exists() and "No module named 'HiggsAnalysis'" in old_log.read_text()):
+            state['status']='fits_complete'
+            state['previous_plot_error']=state.pop('error',None)
     if state.get('status') not in ('fits_complete', 'generated_pending_visual_QA'):
         raise ValueError('Do not plot incomplete impact fits')
     payload = internal_path(ROOT / state['json'])
     if sha256(payload) != state['json_sha256']:
         raise ValueError('Impact JSON changed')
     stem = output / stem_name
-    require_success(runner.run(['plotImpacts.py', '-i', payload, '-o', stem], output,
-                               output / 'plot.log', [stem.with_suffix('.pdf')]))
+    import shutil
+    script=shutil.which('plotImpacts.py')
+    if not script:raise ValueError('Installed Combine impact renderer is unavailable')
+    env=dict(os.environ)
+    env['PYTHONPATH']=str(Path(env['CMSSW_BASE'])/'python')+os.pathsep+env.get('PYTHONPATH','')
+    require_success(runner.run([sys.executable, script, '-i', payload, '-o', stem], output,
+                               output / 'plot_runtime.log', [stem.with_suffix('.pdf')],env=env))
     # plotImpacts produces a multi-page PDF. Poppler rendering and all-page QA
     # are deliberately a later explicit step, not fabricated by this runner.
-    state.update(status='generated_pending_visual_QA', figures={str(stem.with_suffix('.pdf').relative_to(ROOT)):
+    state.update(status='generated_pending_visual_QA', plot_source_sha256=sha256(Path(__file__)),figures={str(stem.with_suffix('.pdf').relative_to(ROOT)):
                                                                sha256(stem.with_suffix('.pdf'))})
     return state
 
 
-def run(manifest, output, workers=49, plot_only=False, model='T2tt', mass='mStop1200_mLSP500', workspace_state=None):
+def run(manifest, output, workers=40, plot_only=False, model='T2tt', mass='mStop1200_mLSP500', workspace_state=None):
+    output=internal_path(output)
+    published=published_diagnostic(output,manifest,'impact',model,mass)
+    if published is not None:
+        with (output/'impact.lock').open('a') as lock:
+            fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+            if plot_only:
+                state=read_json(output/'impact_status.json')
+                state=plot(CommandRunner(output),output,state)
+                write_json(output/'impact_status.json',state)
+        return 0
+    if workspace_state is None:
+        candidate=internal_path(manifest).parents[1]/'limits'/model/mass/'state.json'
+        if candidate.is_file():
+            workspace_state=candidate
+    if workspace_state is not None:
+        with (internal_path(workspace_state).parent/'point.lock').open('a') as lock:
+            fcntl.flock(lock,fcntl.LOCK_SH|fcntl.LOCK_NB)
+            return _run(manifest,output,workers,plot_only,model,mass,workspace_state)
+    return _run(manifest,output,workers,plot_only,model,mass)
+
+
+def _run(manifest, output, workers=40, plot_only=False, model='T2tt', mass='mStop1200_mLSP500', workspace_state=None):
     if not 1 <= workers <= 99:
         raise ValueError('Reserve at least one controller slot')
     identity, label, stem = benchmark_labels(model, mass)
@@ -177,7 +214,18 @@ def run(manifest, output, workers=49, plot_only=False, model='T2tt', mass='mStop
     output.mkdir(parents=True, exist_ok=True)
     with (output / 'impact.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        freeze_contract(output, origins, SOURCES, options)
+        if plot_only:
+            contract=read_json(output/'contract.json')
+            if contract['origins']!=origins or contract['options']!=options:
+                raise ValueError('Original impact input contract changed')
+            campaign=output.parent if output.name=='impacts' else output.parent.parent
+            for name,digest in contract['code'].items():
+                source=ROOT/name
+                if sha256(source)!=digest:
+                    source=campaign/'history/recovery_20261009/source'/Path(name).name
+                if not source.is_file() or sha256(source)!=digest:
+                    raise ValueError('Original impact producer source unavailable: '+name)
+        else:freeze_contract(output, origins, SOURCES, options)
         runner = CommandRunner(output)
         path = output / 'impact_status.json'
         state = read_json(path) if path.exists() else dict(status='running', started=time.time(),
@@ -202,7 +250,8 @@ def run(manifest, output, workers=49, plot_only=False, model='T2tt', mass='mStop
                 names, bounds = enumerate_parameters(target)
                 if state.get('names') is not None and state['names'] != names:
                     raise ValueError('Workspace parameter enumeration changed')
-                state.update(workspace=str(target), workspace_sha256=sha256(target), names=names,
+                state.update(workspace=str(target), workspace_sha256=(
+                    options['reused_workspace']['workspace_sha256'] if reused is not None else sha256(target)), names=names,
                              nuisance_count=len(names), status='running', phase='initial_fit')
                 write_json(path, state)
                 initial = fit_one(output, target, 'r', bounds['r'], runner)
@@ -252,9 +301,9 @@ def run(manifest, output, workers=49, plot_only=False, model='T2tt', mass='mStop
 
 if __name__ == '__main__':
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('--manifest', type=Path, required=True)
-    p.add_argument('--output', type=Path, required=True)
-    p.add_argument('--workers', type=int, default=49)
+    p.add_argument('--manifest', type=Path, default=ROOT/'stats/run3/grid/manifest.json')
+    p.add_argument('--output', type=Path, default=ROOT/'stats/run3/impacts')
+    p.add_argument('--workers', type=int, default=40)
     p.add_argument('--model', choices=('T2tt', 'T2bW', 'T2tb'), default='T2tt')
     p.add_argument('--mass', default='mStop1200_mLSP500')
     p.add_argument('--workspace-state', type=Path, help='Reuse the exact verified limit-point workspace')

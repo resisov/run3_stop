@@ -1,0 +1,15 @@
+{
+  "schema":"trotasr_region_schematic_visual_qa_v1",
+  "recorded_on":"2026-09-23",
+  "status":"passed",
+  "manifest_sha256":"85b0bf80f9cec861b7a14dfeee896d79956d52935aea0c1d2e5df3470cfe4e1e",
+  "poppler_command":"pdftoppm -png -r 150 -singlefile",
+  "all_pages_rendered_and_visually_inspected":true,
+  "pdfs":{
+    "region_orthogonality_schematic.pdf":{"sha256":"9fa59287a1243316cb71a97e89e859276d9088e55c6f2cd9d0b91cbb4a7c81d8","pages":1,"visual_qa":"passed"},
+    "region_orthogonality_schematic_lowdm.pdf":{"sha256":"49dd56fa5216ffc67dca5a0ace25e8fd85972009de619302351ea2ee55ed184b","pages":1,"visual_qa":"passed"}
+  },
+  "checks":["Nmix included in high union and low veto","Nbst,Nmix,Nres,NW order","legible baseline expression","no clipped or overlapping card text","original geometry/colors/other cuts retained"],
+  "AN_modified":false,
+  "full_workflow_complete":false
+}

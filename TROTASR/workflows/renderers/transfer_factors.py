@@ -116,6 +116,7 @@ def plot_highdm(
     output_suffix: str | None = None,
     ylabel: str = r"Transfer factor $N_{\mathrm{SR}}/N_{\mathrm{CR}}$",
     styles: dict[str, tuple[str, str, str]] | None = None,
+    annotation_position: tuple[float, float] | None = None,
 ) -> list[str]:
     apply_photon_hlt_style()
     fig, axis = plt.subplots(figsize=FIGURE_SIZE)
@@ -157,9 +158,11 @@ def plot_highdm(
     axis.set_xlabel(xlabel)
     axis.set_ylabel(ylabel)
     axis.grid(axis="y", linestyle=":", color="0.78", linewidth=0.9)
+    if annotation_position is None:
+        annotation_position = (0.04, 0.70 if len(group_order) > 3 else
+                               (0.73 if path["key"] == "qcd_qcdcr" and regime == "highdm" else 0.07))
     axis.text(
-        0.04,
-        0.70 if len(group_order) > 3 else (0.73 if path["key"] == "qcd_qcdcr" and regime == "highdm" else 0.07),
+        *annotation_position,
         annotation if annotation is not None else ("High-" if regime == "highdm" else "Low-")
         + r"$\Delta m$"
         + "\n"
@@ -180,7 +183,8 @@ def plot_highdm(
     )
 
 
-def render_factors(output_dir: Path, factors: dict[str, Any], regime: str) -> tuple[list[str], list[str]]:
+def render_factors(output_dir: Path, factors: dict[str, Any], regime: str, *,
+                   high_annotation_positions: dict | None = None) -> tuple[list[str], list[str]]:
     """Use the existing renderer once per background, overlaying categories."""
     high_plots, gnn_plots = [], []
     if regime in {"all", "highdm"}:
@@ -188,6 +192,7 @@ def render_factors(output_dir: Path, factors: dict[str, Any], regime: str) -> tu
             high_plots.extend(plot_highdm(
                 output_dir, path, np.asarray(factors["highdm"]["edges"]),
                 factors["highdm"]["records"][path["key"]],
+                annotation_position=(high_annotation_positions or {}).get(path["key"]),
             ))
     if regime in {"all", "lowdm"}:
         (output_dir / "gnn").mkdir(parents=True, exist_ok=True)

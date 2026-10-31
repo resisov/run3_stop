@@ -17,7 +17,12 @@ _BTAG_CORRECTOR_CACHE: dict[tuple[Path, str, str, str, str], Any] = {}
 
 
 def campaign_year(year: str) -> str:
-    return year if year in {"2022pre", "2022post", "2023pre", "2023post", "2024", "2025"} else "2024"
+    aliases = {'2022': '2022pre', '2022EE': '2022post',
+               '2023': '2023pre', '2023BPix': '2023post'}
+    year = aliases.get(str(year), str(year))
+    if year not in {"2022pre", "2022post", "2023pre", "2023post", "2024", "2025"}:
+        raise ValueError('Unknown correction era: ' + year)
+    return year
 
 
 def analysis_year(year: str) -> str:
@@ -74,7 +79,9 @@ def replace_component(base: dict[str, np.ndarray], name: str, varied: np.ndarray
     return out
 
 
-def get_btag_corrector(repo: Path, year: str, caller: str, tagger: str = "UParTAK4", workingpoint: str = "medium") -> Any:
+def get_btag_corrector(repo: Path, year: str, caller: str, tagger: str | None = None, workingpoint: str = "medium") -> Any:
+    if tagger is None:
+        tagger = 'UParTAK4' if analysis_year(year) in {'2024', '2025'} else 'particleNet'
     key = (repo.resolve(), analysis_year(year), caller, tagger, workingpoint)
     if key not in _BTAG_CORRECTOR_CACHE:
         corrections = load_analysis_corrections(repo)
@@ -205,6 +212,9 @@ def compute_weight_bundle(
             for name in names[1:]:
                 alternates[name] = ("btagSF", bvals[name])
             record("btagSF", True, "analysis.utils.corrections.BTagCorrector")
+            zero_audit = getattr(btag_corrector, 'zero_denominator_audit', {})
+            if zero_audit.get('jets'):
+                status['components']['btagSF']['zero_denominator'] = dict(zero_audit)
         except Exception as exc:
             components["btagSF"] = one
             record("btagSF", False, "unity_fallback", f"{type(exc).__name__}: {exc}")

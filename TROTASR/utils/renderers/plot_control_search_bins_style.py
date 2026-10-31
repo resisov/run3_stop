@@ -1818,6 +1818,86 @@ def lowdm_nsv_inclusive_blocks(payload: dict, scheme_name: str) -> list[dict]:
     return blocks
 
 
+def draw_cronly_prefit_postfit(payload, outbase, luminosity_fb):
+    """Arrange two unchanged canonical CR renderings; no separate plot style."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import mplhep as hep
+
+    if (payload.get("schema") != "trotasr_cronly_prefit_postfit_v1"
+            or payload.get("sr_observations_included") is not False):
+        raise ValueError("Observed CR-only plot input required")
+    hep.style.use("CMS")
+    # Twice the previous width: high-dM left, low-dM right. Every artist still
+    # comes from the existing canonical renderer; only panel geometry is compacted.
+    frame_height = 5.5
+    canvas_height = 2*frame_height
+    fig = plt.figure(figsize=(24.0, canvas_height))
+    panels = []
+    for index, (stage, title) in enumerate((("prefit", "Prefit"), ("postfit", "Postfit"))):
+        offset = frame_height if index == 0 else 0.0
+        grid = fig.add_gridspec(2, 1, height_ratios=[3.0, 1.1], hspace=.04,
+            left=matplotlib.rcParams["figure.subplot.left"],
+            right=matplotlib.rcParams["figure.subplot.right"],
+            bottom=(offset+1.00)/canvas_height,
+            top=(offset+5.00)/canvas_height)
+        ax = fig.add_subplot(grid[0])
+        rax = fig.add_subplot(grid[1],sharex=ax)
+        blocks = []
+        for mode in ("highdm", "lowdm"):
+            mode_label = r"high $\Delta m$" if mode == "highdm" else r"low $\Delta m$"
+            for region in ("LLCR", "QCDCR", "GCR"):
+                row = payload["channels"][region+"_"+mode+"_c1"]
+                count = 6 if mode == "highdm" else 5
+                if len(row["data"]) != count*2:
+                    raise ValueError("Do not rebin the approved CR likelihood")
+                for nb, label in enumerate((r"$N_b=1$", r"$N_b\geq2$")):
+                    sl = slice(nb*count,(nb+1)*count)
+                    values = row[stage]
+                    data = np.asarray(row["data"])[sl]
+                    blocks.append(dict(nbin=count,label=region+"\n"+mode_label+"\n"+label,
+                        label_box=True,label_fontsize=17,label_box_pad=.30,label_va="bottom",
+                        category_labels_on_main=True,category_label_y=.04,
+                        main_panel_ymax_factor=4.,main_annotation=title,
+                        main_annotation_y=.90,main_annotation_fontsize=24,
+                        main_annotation_fontweight="bold",
+                        groups={k:np.asarray(v)[sl] for k,v in values["groups"].items()},
+                        background=np.asarray(values["background"])[sl],
+                        background_unc=np.asarray(values["background_unc"])[sl],
+                        data=data,data_unc=poisson_unc(data),
+                        signals={},signal_specs=[],xlabels=[str(i+1) for i in range(count)],
+                        physics_scope=region,unit_area=False,blind_data=False))
+        info = draw_flat_blocks(blocks,outbase,
+            xlabel="CR bin",
+            reference_style=True,show_yields=False,luminosity_fb=luminosity_fb,
+            figure_axes=(fig,ax,rax),legend_ncol=9)
+        display_peak = max(float(np.max(np.maximum(block["data"],
+            block["background"]+block["background_unc"]))) for block in blocks)
+        ax.set_ylim(top=11.5*display_peak)
+        info["main_panel_ylim"] = [float(v) for v in ax.get_ylim()]
+        ax.tick_params(axis="x",labelbottom=False)
+        rax.yaxis.label.set_fontsize(24)
+        panels.append(info)
+    # Crop horizontal whitespace only; keep every artist's size and vertical layout.
+    from matplotlib.transforms import Bbox
+    fig.canvas.draw()
+    tight = fig.get_tightbbox(fig.canvas.get_renderer())
+    output_box = Bbox.from_extents(tight.x0-.10, 0., tight.x1+.10, canvas_height)
+    fig.savefig(outbase.with_suffix(".png"),dpi=180,bbox_inches=output_box,pad_inches=0)
+    fig.savefig(outbase.with_suffix(".pdf"),bbox_inches=output_box,pad_inches=0)
+    plt.close(fig)
+    return dict(modes=["highdm","lowdm"],bins=66,
+        stages=["prefit","postfit"],uncertainty_bands=True,fit_recalculated=False,
+        style="canonical draw_flat_blocks(reference_style=True, show_yields=False)",
+        figure_size_inches=[float(output_box.width),canvas_height],
+        canvas_size_inches=[24.,canvas_height],horizontal_outer_padding_inches=.10,
+        legend_yields_displayed=False,
+        category_boxes="inside main ax along its x axis",panel_height_ratios=[3.0,1.1],
+        nb_in_each_region_box=True,panels=panels,
+        png=str(outbase.with_suffix(".png")),pdf=str(outbase.with_suffix(".pdf")))
+
+
 def draw_flat_blocks(
     blocks: list[dict],
     outbase: Path,
@@ -1828,6 +1908,8 @@ def draw_flat_blocks(
     uncertainty_label_override: str | None = None,
     luminosity_fb: float | None = None,
     x_tick_rotation: float = 0.0,
+    figure_axes=None,
+    legend_ncol: int | None = None,
 ) -> dict:
     import matplotlib
 
@@ -2101,7 +2183,10 @@ def draw_flat_blocks(
 
     requested_width = max((float(block.get("figure_width", 0.0)) for block in blocks), default=0.0)
     figure_size = (12.0, 10.0) if reference_style else (max(12.0, nbin * 0.26, requested_width), 8.4)
-    fig, (ax, rax) = plt.subplots(2, 1, figsize=figure_size, gridspec_kw={"height_ratios": [3.2, 1.05 if reference_style else 1.1], "hspace": 0.04}, sharex=True)
+    if figure_axes is None:
+        fig, (ax, rax) = plt.subplots(2, 1, figsize=figure_size, gridspec_kw={"height_ratios": [3.2, 1.05 if reference_style else 1.1], "hspace": 0.04}, sharex=True)
+    else:
+        fig, ax, rax = figure_axes
     stack_inputs = []
     stack_weights = []
     stack_colors = []
@@ -2216,7 +2301,8 @@ def draw_flat_blocks(
             significance = np.divide(
                 vals,
                 significance_denominator,
-                out=np.zeros_like(vals),
+                out=(np.full_like(vals, np.nan) if any(block.get('undefined_significance_nan', False) for block in blocks)
+                     else np.zeros_like(vals)),
                 where=significance_denominator > 0.0,
             )
             rax.stairs(
@@ -2272,7 +2358,7 @@ def draw_flat_blocks(
                 label,
                 transform=label_axis.get_xaxis_transform(),
                 ha="center",
-                va="center",
+                va=str(block.get("label_va", "center")),
                 fontsize=float(block.get("label_fontsize", 15)),
                 bbox={
                     "boxstyle": f"round,pad={float(block.get('label_box_pad', 0.28))}",
@@ -2282,6 +2368,17 @@ def draw_flat_blocks(
                 },
                 zorder=20,
             )
+    main_annotations = {block['main_annotation'] for block in blocks if block.get('main_annotation')}
+    if len(main_annotations) > 1:
+        raise ValueError('Cannot mix global selection annotations')
+    if main_annotations:
+        annotation_style = next(block for block in blocks if block.get('main_annotation'))
+        ax.text(float(annotation_style.get('main_annotation_x',.01)),
+                float(annotation_style.get('main_annotation_y',.81)),
+                next(iter(main_annotations)), transform=ax.transAxes,
+                fontsize=float(annotation_style.get('main_annotation_fontsize',14)),
+                fontweight=annotation_style.get('main_annotation_fontweight','normal'),
+                ha='left', va='center', zorder=21)
     positive = []
     for arr in [bkg + unc, data[mask] if np.any(mask) else np.array([]), *signals.values()]:
         arr = np.asarray(arr, dtype=float)
@@ -2382,14 +2479,15 @@ def draw_flat_blocks(
         ordered = [(handles[legend_labels.index(label)], label) for label in desired if label in legend_labels]
         if ordered:
             legend_fontsize = 13 if len(ordered) > 10 else 15
-            ax.legend([item[0] for item in ordered], [item[1] for item in ordered], fontsize=legend_fontsize, ncol=3, frameon=False, columnspacing=1.2, handlelength=1.8, loc="upper center", bbox_to_anchor=(0.52, 0.995))
+            ax.legend([item[0] for item in ordered], [item[1] for item in ordered], fontsize=legend_fontsize, ncol=legend_ncol or 3, frameon=False, columnspacing=1.2, handlelength=1.8, loc="upper center", bbox_to_anchor=(0.52, 0.995))
     else:
         ax.legend(fontsize=12, ncol=4, frameon=False, columnspacing=1.05, handlelength=2.0, loc="upper center", bbox_to_anchor=(0.5, 0.995))
     outbase.parent.mkdir(parents=True, exist_ok=True)
     save_kwargs = {} if reference_style else {"bbox_inches": "tight"}
-    fig.savefig(outbase.with_suffix(".png"), dpi=180, **save_kwargs)
-    fig.savefig(outbase.with_suffix(".pdf"), **save_kwargs)
-    plt.close(fig)
+    if figure_axes is None:
+        fig.savefig(outbase.with_suffix(".png"), dpi=180, **save_kwargs)
+        fig.savefig(outbase.with_suffix(".pdf"), **save_kwargs)
+        plt.close(fig)
     return {
         "status": "complete",
         "name": outbase.name,
