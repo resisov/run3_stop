@@ -279,9 +279,9 @@ def build_mixed_candidates(jo, jets, fo, fatjets, pnet_v12=False):
                         fj = fatjets[fs[fi]]
                         denom = fj[5] + fj[6]
                         if not pnet_v12 and denom <= 0:
-                            # User-adopted policy: only this candidate is
-                            # untagged; never invent a model feature or discard
-                            # the event. Keep AK8 indices and other candidates.
+                            # Skip this candidate for a nonpositive discriminant
+                            # denominator. Preserve the event, AK8 indices and
+                            # all other candidates.
                             invalid[0 if denom==0 else 1] += 1
                             ci += 1
                             continue

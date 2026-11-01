@@ -12,7 +12,7 @@ from TROTASR.gnn4lowdm.configuration import configuration_path
 
 
 def merged_zgamma_measurement(payload, previous, policy):
-    """Approved measurement-only merge, using the existing ratio equations."""
+    """Merge measurement inputs using the existing ratio equations."""
     import copy
     import math
     import numpy as np

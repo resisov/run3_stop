@@ -1,4 +1,4 @@
-"""Exact approved 2022 SR-only fit omission; never edit native ROOT inputs.
+"""Fit-only exclusion of two 2022 SR QCD components; retain native ROOT inputs.
 
 This is a downstream card-scope policy, not an endpoint or zero-yield repair.
 The two omitted records remain in the original background/template mapping.
@@ -55,7 +55,7 @@ def expected_policy():
 
 
 def load_early_qcd_fit_policy(reference):
-    """Require an exact approved in-package document and its actual hash."""
+    """Require the in-package exclusion document to match its recorded hash."""
     if (not isinstance(reference, dict) or set(reference) != {'path', 'sha256'}
             or reference.get('path') != POLICY_PATH
             or not isinstance(reference.get('sha256'), str)

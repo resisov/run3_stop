@@ -631,7 +631,7 @@ def flat_blocks(record, mode, region, merge=None, *, pool_llcr_display=True):
             xlabels=['1','2','3','4','5'],figure_width=14.,main_ylabel='Events',
             physics_scope=region,unit_area=False,blind_data=sr)
         if sr:
-            # User-requested high-dM category-box reduction, 2026-09-24.
+            # Use compact category boxes for the dense high-dM SR layout.
             b.update(xlabels=[],label_fontsize=9.5,label_box_pad=.12,figure_width=22.,
                 significance_panel=True,significance_ylim=[0.,5.],
                 significance_mode='s_over_sqrt_b',significance_ylabel=r'$S/\sqrt{B}$')

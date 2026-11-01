@@ -1,7 +1,6 @@
-"""Pure statistical-model rules from the user-approved build_combine_inputs.py.
+"""Statistical-model transformations and CMS nuisance-name mappings.
 
-Only mathematical transformations and official nuisance names are retained.
-There is no file I/O, legacy import, environment-selected physics, or global year.
+Functions operate on supplied payloads with an explicit analysis era.
 """
 from __future__ import annotations
 import math
@@ -17,11 +16,10 @@ def nps_nuisance_name(name: str, year: str) -> str:
     year = analysis_era(year)
     if name == "jesTotal":
         return f"CMS_scale_j_Total_{year}"
-    # A name is shared between years only when the producing POG explicitly
-    # prescribes an across-year correlation.  The BTV fixed-WP payload does so
-    # for its ``*_correlated`` variations.  EGM, MUO and PU correctionlib
-    # payloads used here are year-specific and do not publish an across-year
-    # correlation prescription, so their nuisance names retain the year.
+    # Common names correlate the listed variations across eras; yearly names
+    # carry an era suffix. Scale/resolution and efficiency variations are
+    # mapped separately. BTV fixed-WP correlated variations share a name,
+    # while its uncorrelated variations carry an era suffix.
     common = {
         "btagSF_bc_correlated": "CMS_btag_fixedWP_bc_correlated",
         "btagSF_light_correlated": "CMS_btag_fixedWP_light_correlated",

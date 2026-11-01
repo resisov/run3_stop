@@ -22,7 +22,7 @@ _LOCAL_ADMISSION = None
 
 @contextmanager
 def local_fit_admission(workers, minimum_available=2 * 1024**3):
-    """Explicit Mac-only admission for the user-authorized T2tt host split.
+    """Limit macOS fit admission to the configured worker budget.
 
     The calling queue verifies the pinned runtime and remote ownership lease.
     This changes only process admission; all numerical commands stay native.
@@ -46,7 +46,7 @@ def fit_admission_slots():
 
 @contextmanager
 def run3_fit_admission(manifest_path, *, plot_range_only):
-    """Scope the approved 120-slot aggregate guard to the new 895-point pool.
+    """Apply the 120-slot aggregate guard to the displayed six-era limit pool.
 
     The controller must already have validated the input/point contract. Enter
     this on its main thread before starting the pool, and exit after joining it.
@@ -108,7 +108,7 @@ def live_resources():
 
 
 def admitted_popen(command, **kwargs):
-    """Count every live user's compute process, including our own children.
+    """Count all compute processes owned by the account, including child jobs.
 
     The lock serializes admission among these diagnostic controllers. All
     children are single threaded; no secondary process pool is used. Full-grid

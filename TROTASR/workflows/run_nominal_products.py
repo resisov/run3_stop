@@ -37,7 +37,7 @@ RUN3_PLOT_NAMES = tuple('gnn_controls_'+y for y in ('2022','2022EE','2023','2023
 
 
 def canonical_limit_output(output):
-    """Only the approved six-era destination adopts the unified fit caller."""
+    """Use the unified fit caller for the six-era products destination."""
     return Path(output) in (ROOT/'stats/run3', ROOT/'stats/run3_systematics_20261025')
 
 
@@ -392,7 +392,7 @@ def stage_plan(campaign, output, config, worker_budget=None, prioritize_run3_plo
     if nominal_first:
         # Only one fit pool: the deferred impacts must not reserve half the
         # compute budget. Retain room for controllers and the auxiliary lane;
-        # live admission continues to count every other user's-own process.
+    # live admission continues to count the account's other compute processes.
         fit_workers=min(92, (worker_budget if worker_budget is not None else 96)-4)
     grid = output/'grid'; manifest = grid/'manifest.json'
     specs = {}
@@ -501,8 +501,7 @@ def stage_plan(campaign, output, config, worker_budget=None, prioritize_run3_plo
         specs['contours']['dependencies'] = ['limit_recovery']
         specs['contours']['command'].append('--allow-partial')
     if run3:
-        # The likelihood retains six era channels. Display only the approved
-        # common-bin SR groups, never combine unlike early/late GNN bins.
+        # Render each era's SR groups without pooling unlike early/late GNN bins.
         specs.pop('predictions')
         for year in years:
             folder=output/'plots'/year/'predictions'
@@ -542,7 +541,7 @@ def stage_plan(campaign, output, config, worker_budget=None, prioritize_run3_plo
 
 
 def resolve_products_handoff(campaign, output, config):
-    """Read a user-authorized downstream-only handoff after histograms finish.
+    """Redirect an unstarted downstream products destination.
 
     The live parent and its immutable histogram plan are never restarted.
     Only an unstarted four-era products destination may be redirected.
@@ -570,7 +569,7 @@ def resolve_products_handoff(campaign, output, config):
 
 
 def live_primary_ready(spec, parent):
-    """Cheap identity/selection gate; the canonical assistant verifies cards."""
+    """Check the live limit controller's identity and displayed-point selection."""
     command=spec['command']
     manifest=internal_path(Path(command[command.index('--manifest')+1]))
     output=internal_path(Path(command[command.index('--output')+1]))

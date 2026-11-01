@@ -1,4 +1,4 @@
-"""One payload resolver. Paths are relative to TROTASR, never a campaign."""
+"""Resolve calibration, configuration and result paths inside TROTASR."""
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -41,7 +41,7 @@ def era_year(year):
 
 
 def muon_pt_min(year):
-    """User-adopted loose/medium muon threshold, 2026-10-20."""
+    """Minimum loose/medium muon pT in GeV for the target analysis era."""
     return 15.0 if analysis_era(year) in EARLY_ERAS else 10.0
 
 
@@ -78,10 +78,9 @@ def tagging_definition(year):
 
 
 def internal_path(path):
-    """Reject external paths, including symlink/.. escapes, before any I/O.
+    """Reject external paths and retired execution namespaces before I/O.
 
-    No external-input exceptions are currently registered. Approval to inspect
-    a legacy source during development does not grant runtime access to it.
+    Resolve symlinks and parent-directory components before checking scope.
     """
     resolved = Path(path).resolve()
     if resolved != ROOT and ROOT not in resolved.parents:

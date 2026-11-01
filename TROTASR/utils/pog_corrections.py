@@ -791,7 +791,7 @@ def get_top_pt_reweight(pt):
 
 
 def btag_probability_ratio(eff, eff_data, istag):
-    """Adopted 2026-10-22: neutralize only a jet's exactly zero denominator.
+    """Neutralize only a jet's exactly zero efficiency denominator.
 
     Keep the original product-of-probabilities arithmetic for supported jets,
     including its rounding. Never turn an unexplained NaN/inf into a fallback.
@@ -848,11 +848,6 @@ class BTagCorrector:
         filename = 'hists/'+files[year]
         from .io import load_efficiency
         btag_file = load_efficiency(resolve_payload(filename))
-        #for k in btag_file[tagger]:
-        #    try:
-        #        btag += btag_file[tagger][k]
-        #    except:
-        #        btag = btag_file[tagger][k]
         btag = btag_file[tagger][self._mc]
         bpass = btag[{"wp": workingpoint, "btag": "pass"}].view()
         ball = btag[{"wp": workingpoint, "btag": sum}].view()

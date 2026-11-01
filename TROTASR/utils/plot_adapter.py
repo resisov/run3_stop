@@ -1,4 +1,4 @@
-"""Data-format adapter to the byte-preserved legacy histogram renderer."""
+"""Adapt histogram payloads to the control/search-bin distribution renderer."""
 import numpy as np
 from .paths import internal_modules
 internal_modules('autonomous_allhad', 'background_process_groups')
@@ -21,10 +21,10 @@ def category_label(mode, region, category):
 
 
 def full_sr_layout(bin_map, observable):
-    """Require an explicit full layout; never infer it from a test's occupancy.
+    """Read a complete SR layout, including empty categories.
 
-    This validates a supplied definition, not its physics approval. No default
-    category universe, multiplicity cap, merging, or rebinning is invented here.
+    Category definitions and bin edges come from the supplied bin map rather
+    than the populated histogram bins.
     """
     if not isinstance(bin_map, dict):
         raise ValueError('High-dM SR requires an explicit full bin map, including empty categories')

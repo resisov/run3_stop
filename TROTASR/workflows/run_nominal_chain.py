@@ -228,7 +228,7 @@ def continue_failed_products(campaign, workers):
 
 
 def update_central_years(campaign, years, workers, resume=False):
-    """Continue the approved two-year correction update through native products."""
+    """Continue the two-year correction update through native products."""
     from TROTASR.workflows.run_systematic_campaign import UPDATE_ID, preserve_before_refresh
     from TROTASR.workflows.normalization_recovery import process_identity
     from TROTASR.workflows.merge_nominal import COMBINATION_POLICY

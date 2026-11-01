@@ -1,4 +1,4 @@
-"""Lossless SR-only projection for the user-authorized category merge.
+"""Lossless projection of high-dM SR bins onto merged categories.
 
 The event histogram and the original 162-bin definition are immutable sources.
 Every source bin occurs exactly once. CR axes, processes and normalization
@@ -72,7 +72,7 @@ def validate_merge(config):
 
 
 def bin_groups(config):
-    """Exact source-bin partition, including explicitly authorized tail merges."""
+    """Source-bin partition, including the configured tail merges."""
     offsets = []
     offset = 0
     original = expand()

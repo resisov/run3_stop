@@ -1,8 +1,8 @@
 """Account for Combine's float return and six-decimal scan logging only.
 
-The quantile, likelihood-target and bracket requirements are retained. Asimov
-warnings are diagnostic-only under the user's 2026-09-29 correction. A failed exact-r match may be
-reconciled only with the actual binary32 rounding interval and printf precision.
+Quantile, likelihood-target and bracket requirements still apply. Asimov
+warnings are diagnostic-only. Reconcile exact-r mismatches using the binary32
+rounding interval and the precision of the printed scan values.
 """
 import copy
 import math

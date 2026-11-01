@@ -33,7 +33,7 @@ def merged_channel(channel):
 
 
 def parse_accepted_card(text):
-    """Parse only the already approved card dialect; never inspect upstream inputs."""
+    """Parse the supported Combine card syntax."""
     rows = [line.split() for line in text.splitlines()
             if line.strip() and not line.lstrip().startswith('#')]
     bins = [row[1:] for row in rows if row[0] == 'bin']
@@ -230,7 +230,7 @@ def merged_card_plan(card, text, output):
 
 
 def sum_accepted_observations(card, plan):
-    """Construct observation sums from 48 approved data_obs objects only."""
+    """Sum the 48 source data_obs histograms."""
     import ROOT as root
     root.gROOT.SetBatch(True)
     files, sums, source_labels = {}, {}, {}
@@ -336,7 +336,7 @@ def cr_only_card(plan):
 
 
 def merge_accepted_grid(manifest_path, lock_held=False):
-    """Adopt the approved merged likelihood as the normal official card grid.
+    """Build the era-merged likelihood grid from the existing signal cards.
 
     The 895 displayed points are rewritten from delivered cards only. Original
     templates, nuisance functions and blinded observations are not recomputed.
@@ -427,8 +427,8 @@ def merge_accepted_grid(manifest_path, lock_held=False):
             return dict(point,card=str(final.relative_to(analysis)),card_sha256=card_hash,era_merged=True)
         with ThreadPoolExecutor(max_workers=8) as pool:
             converted=list(pool.map(convert,selected))
-        # Same approved model, constructed here rather than loaded from an old
-        # benchmark/validation checkout. No SR observations enter this card.
+        # Construct the CR-only card from the merged model, excluding SR
+        # observations.
         cr_source=cards/'datacard_cronly.txt'
         if not cr_source.is_file():
             raise FileNotFoundError('Accepted CR-only source card is missing')

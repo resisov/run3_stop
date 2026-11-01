@@ -24,9 +24,16 @@ Local/remote maintained Python/shell sources match exactly (131 files).
 Source identity: SHA256 over sorted relative-path -> file-SHA256 JSON,
 compact separators, in utils/workflows/gnn4lowdm and top-level *.py;
 exclude __pycache__, history and macOS ._ metadata.
-dc863a126a248d9ace0f27829c96d0db0d3b583123eb5f657cf96ba21b7011a2
+354af07cda61ba9555f8651856929064dc8874574d57a2a177ce463e65881e59
 analysis.json SHA256:
 db2a5adccf19135ea8c75827970db4ccf0c4e45c56d1d753ef8254c03e853cdc
+
+Review revision 2026-11-01: comments/docstrings in 32 Python files now describe
+current behavior rather than conversational instructions or development history.
+Two commented-out code blocks were removed. Executable ASTs excluding docstrings
+match the preceding version. No fit, recompile, workspace build, rerender or
+physics/configuration change. Scientific receipts retain their execution-time
+source identities; this documentation revision does not rewrite result provenance.
 
 Current input/calibration/model/compiled/normalization/histogram/measurement
 payloads stay at R/inputs,scales,models,utils/compiled,estimations,results.

@@ -262,8 +262,8 @@ def draw_distribution(blocks, outbase, xlabel, luminosity_fb, uncertainty_label=
                          category_label_y=.72)
     rotation = 90.0 if any(b.get('variable')=='gnn_score' for b in blocks) else 0.0
     import matplotlib
-    # Room for the user-requested vertical interval labels; unchanged defaults
-    # for ordinary distributions. CMS style does not override subplot margins.
+    # Reserve space for vertical interval labels on this plot while retaining
+    # the standard margins for ordinary distributions.
     with matplotlib.rc_context({'figure.subplot.bottom':.25} if rotation else {}):
         return renderer.draw_flat_blocks(blocks, outbase, xlabel=xlabel,
             reference_style=True, show_yields=True, luminosity_fb=luminosity_fb,

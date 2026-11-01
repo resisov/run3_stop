@@ -55,7 +55,7 @@ ZJET_FIT_EXCLUSION = dict(id='bpix_gcr_zjet_fit_only_20261022', user_approved=Tr
 
 
 def approved_zjet_fit_background(background, issues, policy=None):
-    """Exact user-approved fit-only omission; never change stored TH1s."""
+    """Apply the fit-only exclusion while retaining stored TH1s."""
     import numpy as np
     if policy is None:
         return background, issues, []
@@ -181,7 +181,7 @@ def cr12_parameter(name):
 
 
 def cr12_payload(payload):
-    """User-adopted signed native-CR sum, before clipping; no SR changes."""
+    """Sum signed native CR yields before clipping; leave SR yields unchanged."""
     result = dict(year=payload['year'], groups={})
     fixed = {(r['channel'], r['process']): r for r in payload.get('cr_only_unity_audit', [])}
     for region in ('LLCR', 'QCDCR', 'GCR'):
@@ -241,10 +241,10 @@ def cr12_payload(payload):
 
 
 def correlated_luminosity_rows(channels, data, cr_only, model):
-    """Regroup native luminosity columns using the approved LUM POG matrix.
+    """Regroup native luminosity columns using the LUM POG correlation matrix.
 
     The native builder retains its exact signal/unconstrained-background mask;
-    only same-name nuisance correlation and the approved factors change.
+    only same-name nuisance correlation and luminosity factors change.
     """
     policy=read_json(ROOT/'jsons/run3_luminosity_20261025_policy.json')
     if model != policy or not policy.get('user_approved') or not policy.get('central_normalization_unchanged'):
@@ -289,7 +289,7 @@ def card_text(channels, data, cr_only=False, statistical_revision=None, luminosi
 
 
 def background_shape_names(years=('2024', '2025')):
-    """Exact names in the user-adopted JME background-error revision."""
+    """Nuisance names for the JME background-error revision."""
     names = {'CMS_NPS26012_RZstat_'+m+'_'+b+'_'+y
         for m in ('highdm', 'lowdm') for b in ('Nb1', 'Nb2plus') for y in years}
     for mode, intervals in (
@@ -356,7 +356,7 @@ def background_error_shapes(background, policy=None):
 
 
 def fit_background(background, issues, policy=None):
-    """User-adopted preliminary exception: two SR columns, never ROOT content.
+    """Preliminary fit-scope exclusion of two SR columns; retain ROOT content.
 
     This is a physics-scope restriction, not a zero-integral numerical repair.
     No other process, CR attachment, rate parameter, or endpoint is waived.
@@ -405,7 +405,7 @@ def fit_background(background, issues, policy=None):
 def original_exclusion_audit(background, issues, policy, combination=None):
     """Check the original JME exception without changing any stored endpoint.
 
-    Only the two already-approved SR columns may carry additional non-JME
+    Only the two excluded SR columns may carry additional non-JME
     endpoints. Their original nominal/JME/weight subset must still pass the
     unchanged strict exclusion check above. All other issues remain blocking.
     """
@@ -929,7 +929,7 @@ def minimal_template_inventory(channels, points, caches, sources, background):
 
 
 def verify_minimal_template(path, inventory):
-    """User-approved structural check only; no histogram array/label readback."""
+    """Check template structure without reading histogram arrays or labels."""
     import uproot
     with uproot.open(path, object_cache=None, array_cache=None) as root:
         classes = root.classnames(recursive=True, cycle=False)
@@ -1036,9 +1036,7 @@ def verified_readback_receipt(path, request_hash, filename, root_hash, check_mod
 
 
 def readback_runtime_identity():
-    # This one explicitly approved executable lives in the original package,
-    # outside an optimized package's analysis-input resolver. No analysis input
-    # or physics payload gains an external-path exception.
+    # Record the ROOT readback executable separately from analysis-input paths.
     import hashlib
     return dict(path=str(READBACK_RUNTIME), sha256=hashlib.sha256(READBACK_RUNTIME.read_bytes()).hexdigest())
 
@@ -1448,7 +1446,7 @@ def same_extraction_contract(old, current):
 
 
 def recover_verified_fit_scope(output, contract, config, dry_run=False):
-    """Reuse completed immutable ROOTs after the one approved card-scope change.
+    """Reuse completed ROOT templates after the configured card-scope change.
 
     Original metadata/cards are archived, not deleted. The completed exhaustive
     readback is reused only with identical ROOT/cache hashes and input contracts.
@@ -1961,7 +1959,7 @@ def test_comparison_bin_count(record):
 
 
 def load_medium_test_comparison(path):
-    """Read the approved two-model freeze without relabeling it as validation."""
+    """Read the two-model freeze with its original evaluation-sample labels."""
     import json
     import hashlib
     path=Path(path).resolve()
@@ -2073,7 +2071,7 @@ def read_medium_test_comparison(path, candidate):
 
 
 def candidate_bin_count(candidate, *, allow_hard_invalid=False):
-    """Validate the explicitly requested optimization, not the frozen-test gate."""
+    """Validate the optimization contract separately from the frozen-test gate."""
     if candidate.get('schema') == MET_CATEGORY_SCHEMA:
         return met_category_candidate_bin_count(candidate,allow_hard_invalid=allow_hard_invalid)
     if allow_hard_invalid:
@@ -2182,7 +2180,7 @@ def cutbased_candidate_bin_count(candidate):
 
 
 def met_category_groups():
-    """The approved ten physical categories; open MET endpoints use JSON null."""
+    """Define ten physical categories; open MET endpoints use JSON null."""
     groups = []
     for number,nb in ((1,False),(2,True)):
         for suffix,nisr in (('a',False),('b',True)):
@@ -2200,7 +2198,7 @@ def met_category_groups():
 
 
 def exact_global_cuts(cuts):
-    """Validate the authorized five-observable global predicates, not SR splits."""
+    """Validate five-observable global predicates separately from SR splits."""
     if not isinstance(cuts,list) or not 1<=len(cuts)<=5:
         raise ValueError('Explicit one-to-five global cut predicates are required')
     axes={'mtb','ht','jet1_pt','jet2_pt','jet3_pt'}
@@ -2238,7 +2236,7 @@ def exact_global_cuts(cuts):
 
 
 def shap_global_cuts(cuts):
-    """The three approved conditional vetoes; missing objects pass, no NN."""
+    """Apply three conditional vetoes; missing objects pass, with no NN input."""
     if not isinstance(cuts,list) or len(cuts)>3:raise ValueError('At most three B/T/I blocks')
     seen=set()
     for cut in cuts:

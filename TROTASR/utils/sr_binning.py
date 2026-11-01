@@ -1,4 +1,4 @@
-"""The user-adopted 162-bin high-dM SR map; no occupancy-driven decisions."""
+"""Fixed 162-bin high-dM SR map."""
 import copy
 import itertools
 import numpy as np

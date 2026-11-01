@@ -725,7 +725,7 @@ def execute_refresh(campaign, workers, years=None):
 
 
 def compare_values(before, after, path=''):
-    """Counts/structure are exact; the user-approved 1e-7 roundoff is nonfatal."""
+    """Require exact counts/structure and 1e-7 relative/absolute float agreement."""
     if isinstance(before, dict):
         if not isinstance(after, dict) or set(before) != set(after):
             raise ValueError('Changed fields: '+path)

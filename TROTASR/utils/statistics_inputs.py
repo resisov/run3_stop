@@ -25,7 +25,7 @@ SHAPE_PREFIXES = ('jes', 'jer', 'metUnclustered', 'metuncl', 'electronScale',
 
 
 def combined_shape_endpoints(payload):
-    """Validate the explicitly approved absolute-endpoint union, not a reanchor."""
+    """Validate the union of JME central and stored absolute non-JME endpoints."""
     contract = payload.get('contract', {})
     policy = dict(id='jme_with_stored_nonjme_as_is', user_approved=True,
         central='corrected_central_jme', nonjme_endpoints='stored_absolute_histograms',

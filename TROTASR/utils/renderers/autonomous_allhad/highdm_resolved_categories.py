@@ -318,10 +318,9 @@ def coarse_nres_topology_label(
 ) -> str | None:
     """Return the exclusive coarse Nres>0 topology used by the Run-3 study.
 
-    This is a deliberately smaller projection of the Run-2 Table-16 category
-    lattice.  It preserves the physics distinctions explicitly requested for
-    the 55-bin extension: one versus at least two resolved-only candidates,
-    coexistence with a boosted top, coexistence with a boosted W, and the
+    This is a smaller projection of the Run-2 Table-16 category lattice.
+    The 55-bin extension distinguishes one versus at least two resolved-only
+    candidates, coexistence with a boosted top, coexistence with a boosted W, and the
     three-object overflow.  Nres=0 remains in the corresponding adopted
     55-bin category and therefore has no additional label here.
     """

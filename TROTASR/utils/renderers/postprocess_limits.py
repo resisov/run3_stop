@@ -178,7 +178,7 @@ def topology_phase_space_coordinate(
 
 
 def load_excluded_points(input_dir: Path) -> set[str]:
-    """Read explicit user-policy exclusions for this topology."""
+    """Read topology-specific plotting exclusions."""
 
     excluded_points: set[str] = set()
     exclusion_dir = input_dir / "excluded_points"
@@ -1688,7 +1688,7 @@ def main() -> int:
         cached_accounting = set(all_limits.get("points") or {}) | set(
             all_limits.get("missing_points") or []
         )
-        # A cached collection belongs to the immutable build manifest.  User
+        # A cached collection belongs to the immutable build manifest. Plotting
         # exclusions are applied below when selecting the plotted grid; they
         # must not require rerunning or rewriting successful Combine outputs.
         if cached_accounting != set(original_mass_keys):

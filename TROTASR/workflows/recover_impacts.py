@@ -161,7 +161,7 @@ def bounded_boundary_pair(first, second, edge, r_tolerance=.0002):
 
 
 def reconcile_seed_bounds(seeds, bounds):
-    """Restore only the exact binary32 image of an approved endpoint.
+    """Restore only the exact binary32 image of an endpoint.
 
     Combine's trackedParam branches are floats. The stored value of 0.01 is
     0.009999999776..., which its double-precision CLI correctly rejects.

@@ -1,4 +1,4 @@
-"""One approved failed-file recovery, retaining immutable successful outputs."""
+"""Recover failed b-tag input files while retaining successful outputs."""
 import argparse
 import contextlib
 import copy

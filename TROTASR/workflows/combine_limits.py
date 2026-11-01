@@ -1187,9 +1187,9 @@ def run_integrated_point(point, output, env, progress=lambda phase, pid: None):
                 write_json(state_path, state)
                 return accepted_fit_record(point, state, str(state_path.relative_to(ROOT)))
             write_json(state_path, state)
-        # The user requested successful same-point prescriptions first. Reuse
-        # settings only, on this model's workspace, within the existing finite
-        # branch allowance. Already accepted points returned before this lookup.
+        # Try successful same-point numerical settings first, using this
+        # model's workspace and the finite branch budget. Accepted points
+        # return before this lookup; fitted values are not reused.
         prescription = state.get('historical_success_prescription')
         if prescription is None:
             specs, diagnosis = historical_success_commands(point, workspace, output,
@@ -1215,8 +1215,8 @@ def run_integrated_point(point, output, env, progress=lambda phase, pid: None):
                 ledger['status'] = 'complete'
                 write_json(state_path,state)
                 return accepted_fit_record(point,state,str(state_path.relative_to(ROOT)))
-        # Retain existing frozen plans. Only a new ledger gets the already
-        # approved conditional-status-based finite scheduling policy.
+        # Preserve existing plans; derive a conditional-status-based stage
+        # order only for a new recovery ledger.
         if 'recovery_stage_order' not in state:
             fixed = bool(inherited or state['attempts'] or any(
                 ledger.get('plans') for ledger in state['stages'].values()))

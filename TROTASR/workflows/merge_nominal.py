@@ -338,7 +338,7 @@ COMBINATION_POLICY = dict(id='jme_with_stored_nonjme_as_is', user_approved=True,
 
 
 def combine_saved_payloads(jme, nonjme, policy):
-    """Explicit user-approved *as-is* union, never a hidden nominal rebasing.
+    """Combine JME central histograms with stored absolute non-JME endpoints.
 
     Nominal, weights, JME, data and normalization come from JME unchanged.
     The sixteen non-JME absolute endpoint populations retain their own stored

@@ -1,8 +1,8 @@
 """All analysis event selections, independent of histogram and plotting code.
 
-2026-09-23: user-authorized TEST of B > M > R > W constituent arbitration.
-The only new topology cuts are the Mixed high-dM union and low-dM veto.
-Other high-dM and diagonal-GNN low-dM cuts retain the adopted definitions.
+Constituent arbitration prioritizes boosted, mixed and resolved top candidates,
+then selects independent W candidates. Topology cuts include the Mixed high-dM
+union and the low-dM veto.
 """
 from __future__ import annotations
 import numpy as np
@@ -25,8 +25,8 @@ OVERLAP_FIELDS = ("jet_source_index_all", "jet_eta_all", "jet_phi_all", "fatjet_
 def arbitrate(boosted, mixed, resolved, w_candidates, footprints):
     """Deterministic disjoint constituents, independent W retained.
 
-    AK8 footprint means the already-adopted two-subjet dR<0.4, otherwise
-    AK8-axis dR<0.8 AK4 association, not a newly invented cone size.
+    AK8 footprints use the two-subjet dR<0.4 association where available,
+    otherwise the dR<0.8 association around the AK8 axis.
     """
     chosen_b = sorted(set(boosted))
     occupied_fat = set(chosen_b)
@@ -52,8 +52,8 @@ def arbitrate(boosted, mixed, resolved, w_candidates, footprints):
             rejected["w"] += 1
             continue
         chosen_w.append(f)
-        # Existing W multiplicity counts independent AK8s; do not invent W-W
-        # overlap removal in a change authorized for top/W exclusivity.
+        # W multiplicity counts independent AK8s; overlap removal applies to
+        # top/W pairs, not W/W pairs.
     return dict(B=chosen_b, M=chosen_m, R=chosen_r, W=chosen_w, rejected=rejected)
 
 

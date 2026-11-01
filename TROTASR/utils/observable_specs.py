@@ -1,4 +1,4 @@
-"""Unchanged physical-variable bins and labels from the legacy histogrammer."""
+"""Physical-variable binning and display labels."""
 
 LOWDM_VARIABLE_SPECS = {
     "met": {

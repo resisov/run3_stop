@@ -176,7 +176,6 @@ def isGoodJet(jet, year):
             evaluator = correctionlib.CorrectionSet.from_file(str(resolve_payload('data/JMESF/'+year+'/jetid.json.gz')))
         elif year == '2025':
             evaluator = correctionlib.CorrectionSet.from_file(str(resolve_payload('data/JMESF/2024/jetid.json.gz')))
-        #evaluator = correctionlib.CorrectionSet.from_file('data/JMESF/2022pre/jetid.json.gz')
         corr = evaluator["AK4PUPPI_TightLeptonVeto"]
         counts = ak.num(eta)
         eta, chHEF, neHEF, chEmEF, neEmEF, muEF = ak.flatten(eta), ak.flatten(chHEF), ak.flatten(neHEF), ak.flatten(chEmEF), ak.flatten(neEmEF), ak.flatten(muEF)

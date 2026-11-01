@@ -1,4 +1,4 @@
-"""Exact compatibility for the two approved, formerly file-fatal input cases.
+"""Compatibility handling for two formerly file-fatal input cases.
 
 Successful old results are immutable: both updates only extend a formerly
 raising domain. No arbitrary source/normalization contract bypass is allowed.

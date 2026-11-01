@@ -1819,7 +1819,7 @@ def lowdm_nsv_inclusive_blocks(payload: dict, scheme_name: str) -> list[dict]:
 
 
 def draw_cronly_prefit_postfit(payload, outbase, luminosity_fb):
-    """Arrange two unchanged canonical CR renderings; no separate plot style."""
+    """Draw prefit and postfit CR comparisons with the distribution renderer."""
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -1829,8 +1829,7 @@ def draw_cronly_prefit_postfit(payload, outbase, luminosity_fb):
             or payload.get("sr_observations_included") is not False):
         raise ValueError("Observed CR-only plot input required")
     hep.style.use("CMS")
-    # Twice the previous width: high-dM left, low-dM right. Every artist still
-    # comes from the existing canonical renderer; only panel geometry is compacted.
+    # Use a 24-inch canvas with high-dM left and low-dM right in each fit panel.
     frame_height = 5.5
     canvas_height = 2*frame_height
     fig = plt.figure(figsize=(24.0, canvas_height))

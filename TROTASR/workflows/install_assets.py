@@ -1,7 +1,6 @@
-"""Explicit one-time migration of immutable calibration/model inputs.
+"""Import calibration and model inputs from an in-package staged bundle.
 
-The source bundle must already be staged inside TROTASR after explicit approval.
-Existing divergent targets are rejected, not overwritten.
+Existing divergent targets are rejected rather than overwritten.
 """
 from pathlib import Path
 import argparse
@@ -109,7 +108,7 @@ def install_early_eras(bundle, catalog, eras, check_only=False):
 
 
 def topw_reference_payload(reference, era, source_sha256):
-    """Serialize the already approved PNetWithMass cells, without a new fit."""
+    """Serialize existing PNetWithMass measurement cells without refitting."""
     aliases = dict(zip(EARLY_ERAS, ('2022pre', '2022post', '2023pre', '2023post')))
     if era not in aliases:
         raise ValueError('Unknown early Run-3 era')
@@ -152,7 +151,7 @@ def topw_reference_payload(reference, era, source_sha256):
 
 
 def install_topw_references(bundle, eras):
-    """Convert existing approved references into the canonical Private payloads."""
+    """Convert existing reference measurements into Private correction payloads."""
     bundle = internal_path(bundle)
     records, prepared = [], []
     for era in eras:

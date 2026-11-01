@@ -1,9 +1,7 @@
-"""Existing Combine expected-limit numerical validation, internal copy.
+"""Numerical acceptance checks for Combine expected limits.
 
-The crossing check retains the adopted retry_failed_limits_hep2.py policy.
-The user explicitly removed the Asimov-warning veto on 2026-09-29; warnings
-and fitted r are diagnostics, not a numerical failure criterion.
-No five-quantile ROOT file is accepted without measured crossing evidence.
+Acceptance requires five ordered expected quantiles and measured NLL crossings.
+Asimov warnings and fitted r are retained as diagnostics, not acceptance vetoes.
 """
 import math
 import re
