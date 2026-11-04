@@ -32,6 +32,7 @@ Load Combine v10.5.1 in `CMSSW_14_1_0_pre4`. Run the commands below from
 signal workspace.
 
 ```bash
+ulimit -Ss 262144
 GRID="$PWD"
 OUT=$(mktemp -d "$PWD/nps-26-012.XXXXXX")
 MODEL=T2tt
