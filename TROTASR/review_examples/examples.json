@@ -1,0 +1,30 @@
+{
+  "card_sha256": {
+    "datacards/datacard_T2bW_mStop1000_mLSP800.txt": "63474a0f05226dfb6c4b64e4b8f565d7e3938525af34ab0ea05ed28f628cd0c7",
+    "datacards/datacard_T2bW_mStop1200_mLSP500.txt": "7ea730272a21b4fd3a1353644e78d81a1a8162100defc3c2b86d6aec02be3713",
+    "datacards/datacard_T2tb_mStop1000_mLSP800.txt": "f9752874fbd5509a3b85ccab889755c330d274dfda42e9003564cf572419196a",
+    "datacards/datacard_T2tb_mStop1200_mLSP500.txt": "3437df282b85da8789dcba6d888f293c8f6aec1941514bb21c05e8ef16b05dcd",
+    "datacards/datacard_T2tt_mStop1200_mLSP500.txt": "328bb3244f3bcdf7145bfe771c963b69d1c2ed19016fa08fda73dc04df094e0e",
+    "datacards/datacard_cronly.txt": "17c339ee847779c5a94b75b4a267ee15e3140ee8fb980194ea89f094104fbfdc"
+  },
+  "cmssw": "CMSSW_14_1_0_pre4",
+  "combine": "v10.5.1",
+  "cr_observations": "observed",
+  "model": "six-era era-merged, partial systematics",
+  "sr_observations": "background-only Asimov",
+  "template_objects": {
+    "datacards/era_merged_data_obs.root": 8,
+    "templates/template_highdm_2022.root": 4983,
+    "templates/template_highdm_2022EE.root": 5539,
+    "templates/template_highdm_2023.root": 5458,
+    "templates/template_highdm_2023BPix.root": 4963,
+    "templates/template_highdm_2024.root": 5635,
+    "templates/template_highdm_2025.root": 5509,
+    "templates/template_lowdm_2022.root": 2183,
+    "templates/template_lowdm_2022EE.root": 2333,
+    "templates/template_lowdm_2023.root": 2281,
+    "templates/template_lowdm_2023BPix.root": 2165,
+    "templates/template_lowdm_2024.root": 2359,
+    "templates/template_lowdm_2025.root": 2309
+  }
+}
