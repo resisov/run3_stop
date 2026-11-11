@@ -1,5 +1,4 @@
 """Internal, finite, content-checked command execution for fit diagnostics."""
-from contextlib import contextmanager
 import fcntl
 import hashlib
 import json
@@ -16,59 +15,11 @@ from TROTASR.workflows.combine_limits import IntegrityCache, runtime, verify_car
 
 SPAWN_LOCK = threading.Lock()
 COMPUTE = re.compile(r'^(python|root|combine|text2workspace|xrdcp|rsync|hadd$|cp$)')
-_RUN3_ADMISSION_PID = None
-_LOCAL_ADMISSION = None
-
-
-@contextmanager
-def local_fit_admission(workers, minimum_available=2 * 1024**3):
-    """Limit macOS fit admission to the configured worker budget.
-
-    The calling queue verifies the pinned runtime and remote ownership lease.
-    This changes only process admission; all numerical commands stay native.
-    """
-    global _LOCAL_ADMISSION
-    if sys.platform != 'darwin' or not 1 <= workers <= 4:
-        raise ValueError('Local admission requires macOS and one to four workers')
-    if threading.current_thread() is not threading.main_thread() or _LOCAL_ADMISSION is not None:
-        raise RuntimeError('Local admission must have one main-thread owner')
-    _LOCAL_ADMISSION = (os.getpid(), workers, minimum_available)
-    try:
-        yield
-    finally:
-        _LOCAL_ADMISSION = None
 
 
 def fit_admission_slots():
-    """Controller-local opt-in, shared by its threads but not inherited forks."""
-    return 120 if _RUN3_ADMISSION_PID == os.getpid() else 100
-
-
-@contextmanager
-def run3_fit_admission(manifest_path, *, plot_range_only):
-    """Apply the 120-slot aggregate guard to the displayed six-era limit pool.
-
-    The controller must already have validated the input/point contract. Enter
-    this on its main thread before starting the pool, and exit after joining it.
-    Worker threads only read the process-local setting; all other controllers
-    keep the historical 100-slot guard. The caller still enforces its separate
-    116-slot downstream budget and the existing failure-first scheduling.
-    """
-    global _RUN3_ADMISSION_PID
-    expected = ROOT / 'stats/run3_systematics_20261025/grid/manifest.json'
-    if plot_range_only is not True or internal_path(manifest_path) != expected.resolve():
-        raise ValueError('120-slot admission is restricted to the new displayed six-era grid')
-    if threading.current_thread() is not threading.main_thread():
-        raise RuntimeError('Fit admission must be configured by the controller main thread')
-    with SPAWN_LOCK:
-        if _RUN3_ADMISSION_PID is not None:
-            raise RuntimeError('Fit admission context is already active')
-        _RUN3_ADMISSION_PID = os.getpid()
-    try:
-        yield
-    finally:
-        with SPAWN_LOCK:
-            _RUN3_ADMISSION_PID = None
+    """Account-wide cap, including controllers and transfers."""
+    return 120
 
 
 def native_arguments(arguments):
@@ -114,25 +65,8 @@ def admitted_popen(command, **kwargs):
     children are single threaded; no secondary process pool is used. Full-grid
     prerequisites prevent running fits alongside unfinished histogram inputs.
     """
-    if sys.platform == 'darwin':
-        import psutil
-        if _LOCAL_ADMISSION is None or _LOCAL_ADMISSION[0] != os.getpid():
-            raise RuntimeError('Local diagnostic launch requires the verified local queue')
-        while True:
-            with SPAWN_LOCK:
-                children = psutil.Process().children(recursive=True)
-                native = 0
-                for process in children:
-                    try:
-                        args = process.cmdline()
-                        native += (process.is_running() and any(
-                            Path(arg).name in ('combine', 'text2workspace.py') for arg in args[:2]))
-                    except (psutil.NoSuchProcess, psutil.ZombieProcess):
-                        pass
-                if (native < _LOCAL_ADMISSION[1]
-                        and psutil.virtual_memory().available >= _LOCAL_ADMISSION[2]):
-                    return subprocess.Popen(command, **kwargs)
-            time.sleep(3)
+    if sys.platform != 'linux':
+        raise RuntimeError('Fits use the existing hep2 runtime')
     while True:
         with SPAWN_LOCK, (ROOT / 'stats/fit_admission.lock').open('a') as lock:
             fcntl.flock(lock, fcntl.LOCK_EX)
@@ -200,7 +134,7 @@ def cr_only_support_ready(record):
 
 def require_revised_record(record):
     """Opt-in adopted model, without relabeling historical nominal grids."""
-    from TROTASR.workflows.build_nominal_grid import require_statistical_revision
+    from TROTASR.workflows.build_nominal_grid import require_statistical_revision, scientific_settings
     revised = require_statistical_revision(record.get('statistical_revision'))
     combined = record.get('scope') == 'full_combined_systematic_production'
     from TROTASR.workflows.build_nominal_grid import HYBRID_SCOPE, require_hybrid_policy
@@ -220,12 +154,12 @@ def require_revised_record(record):
             or record.get('signal_contamination') is not False
             or record.get('auto_mc_stats') != [10, 1, 1]
             or record.get('sr_data_blinded') is not True
-            or record.get('background_estimation_uncertainties') != dict(
-                id='jme_background_shapes_20260929', mode='shape', auto_mc_stats=[10, 1, 1], user_approved=True)):
+            or scientific_settings(record.get('background_estimation_uncertainties')) != dict(
+                mode='shape', auto_mc_stats=[10, 1, 1])):
         raise ValueError('Unverified CR12/background-shape model policy')
     if combined:
         from TROTASR.workflows.merge_nominal import COMBINATION_POLICY
-        if (record.get('systematic_combination') != COMBINATION_POLICY
+        if (scientific_settings(record.get('systematic_combination')) != scientific_settings(COMBINATION_POLICY)
                 or record.get('preliminary') is not True
                 or record.get('central_conventions_consistent') is not False
                 or not record.get('systematic_scope')):
@@ -413,13 +347,60 @@ def grid_card(manifest_path, kind, model='T2tt', mass='mStop1200_mLSP500'):
                       card=str(card.relative_to(ROOT)), card_sha256=digest(card))
 
 
+def contract_options(options):
+    """Scheduling and figure range do not define the fitted likelihood."""
+    return {key: value for key, value in options.items()
+            if key not in ('workers', 'pull_ylim', 'original_status_sha256')}
+
+
 def freeze_contract(output, origins, files, options):
-    contract = dict(origins=origins, code={p: sha256(ROOT / p) for p in files}, options=options)
+    """Bind a run to its scientific inputs, not a historical source snapshot."""
     target = internal_path(output) / 'contract.json'
-    if target.exists() and read_json(target) != contract:
-        raise ValueError('Divergent diagnostic contract; preserve existing run')
+    if target.exists():
+        saved = read_json(target)
+        if (saved['origins'] != origins
+                or contract_options(saved['options']) != contract_options(options)):
+            raise ValueError('Divergent diagnostic inputs or fit settings; preserve existing run')
+        return saved
+    contract = dict(origins=origins, sources=list(files), options=options)
     write_json(target, contract)
     return contract
+
+
+def process_identity(pid):
+    """Linux start ticks distinguish a live child from a recycled PID."""
+    if not pid:
+        return None
+    try:
+        fields = Path('/proc/%d/stat' % int(pid)).read_text().rsplit(')', 1)[1].split()
+    except FileNotFoundError:
+        return None
+    return None if fields[0] == 'Z' else int(fields[19])
+
+
+def process_active(state, field='pid'):
+    start = process_identity(state.get(field))
+    return start is not None and state.get(field + '_start_ticks', start) == start
+
+
+def product_stats(products):
+    return {str(p.relative_to(ROOT)): dict(size=p.stat().st_size, mtime_ns=p.stat().st_mtime_ns)
+            for p in products if p.is_file()}
+
+
+def check_products(state):
+    """Reuse receipts without rereading large immutable ROOT files."""
+    for name in state.get('products', {}):
+        path = ROOT / name
+        if not path.is_file() or not path.stat().st_size:
+            raise ValueError('Completed diagnostic product missing: ' + name)
+        expected = state.get('product_stats', {}).get(name)
+        if expected and product_stats([path])[name] != expected:
+            raise ValueError('Completed diagnostic product changed: ' + name)
+
+
+class CommandFailure(RuntimeError):
+    """A consumed command failed; the stage may select its next finite recipe."""
 
 
 def command_key(command, cwd):
@@ -446,32 +427,38 @@ class CommandRunner:
             if path.exists():
                 old = read_json(path)
                 if old['status'] == 'running':
-                    raise RuntimeError('Interrupted/running command retained; explicit recovery required: ' + str(path))
+                    if process_active(old) or process_active(old, 'controller_pid'):
+                        raise BlockingIOError('Diagnostic command is still active: ' + str(path))
+                    old.update(status='failed', exit_code=None, pid=None, controller_pid=None,
+                               finished=time.time(), interruption='owner and child exited; command consumed')
+                    old.setdefault('log', str(log.relative_to(ROOT)))
+                    write_json(path, old)
                 if old['status'] == 'complete':
                     if set(old['products']) != {str(p.relative_to(ROOT)) for p in products}:
                         raise ValueError('Changed expected command products')
-                    for name, digest in old['products'].items():
-                        if sha256(ROOT / name) != digest:
-                            raise ValueError('Completed diagnostic product changed: ' + name)
+                    check_products(old)
                 return old
             if log.exists() or any(p.exists() for p in products):
                 raise FileExistsError('Unregistered diagnostic artifacts retained: ' + str(log))
             log.parent.mkdir(parents=True, exist_ok=True)
             state = dict(status='running', command=command, cwd=str(cwd.relative_to(ROOT)),
-                         log=str(log.relative_to(ROOT)), started=time.time(), pid=None)
+                         log=str(log.relative_to(ROOT)), started=time.time(), pid=None,
+                         controller_pid=os.getpid(), controller_pid_start_ticks=process_identity(os.getpid()))
             write_json(path, state)
             environment = dict(os.environ if env is None else env, OMP_NUM_THREADS='1',
                                OPENBLAS_NUM_THREADS='1', MKL_NUM_THREADS='1', NUMEXPR_NUM_THREADS='1')
             try:
                 with log.open('x') as stream:
                     proc = admitted_popen(command, cwd=cwd, env=environment, stdin=subprocess.DEVNULL,
-                                          stdout=stream, stderr=subprocess.STDOUT)
+                                          stdout=stream, stderr=subprocess.STDOUT, pass_fds=(lock.fileno(),))
                     state['pid'] = proc.pid
+                    state['pid_start_ticks'] = process_identity(proc.pid)
                     write_json(path, state)
                     rc = proc.wait()
                 complete = rc == 0 and all(p.is_file() and p.stat().st_size > 0 for p in products)
                 state.update(status='complete' if complete else 'failed', exit_code=rc, pid=None,
-                             finished=time.time(), products={str(p.relative_to(ROOT)): sha256(p)
+                             finished=time.time(), controller_pid=None, product_stats=product_stats(products),
+                             products={str(p.relative_to(ROOT)): sha256(p)
                              for p in products if p.is_file()})
                 write_json(path, state)
                 return state
@@ -484,7 +471,7 @@ class CommandRunner:
 
 def require_success(state):
     if state['status'] != 'complete':
-        raise RuntimeError('Diagnostic command failed; finite attempt preserved: ' + state['log'])
+        raise CommandFailure('Diagnostic command failed; finite attempt preserved: ' + state['log'])
 
 
 def workspace(runner, card, output, cr_only=False):

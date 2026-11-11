@@ -14,7 +14,7 @@ from TROTASR.utils.statistical_templates import assemble, load_theory, profiled_
 from TROTASR.workflows.signal_grid_inputs import (MODELS, FIELDS, project_signals, signal_data,
     check_reference, extract_year, requested_grid, represented_signals, require_fit_support_issues)
 from TROTASR.workflows.build_nominal_grid import (build, point_card, combine_cached, point_signals,
-    fit_background, audit_continuation, verify_signal_objects)
+    fit_background, verify_signal_objects)
 from TROTASR.utils.sr_merge import load_merge, bin_groups, project
 from TROTASR.utils.statistical_templates import template_name
 from TROTASR.workflows.combine_limits import IntegrityCache
@@ -298,14 +298,14 @@ class NominalGridTests(unittest.TestCase):
         self.assertEqual(row['omitted_variations']['CMS_scale_j_Total_2025']['up'], .037)
         self.assertEqual(data[key]['variations']['CMS_scale_j_Total_2025']['up'][0], .037)
 
-    def test_extracted_resume_requires_unchanged_inputs_and_extractor(self):
+    def test_extracted_resume_requires_unchanged_inputs(self):
         old = dict(inputs={'2025':'input'}, code={'workflows/build_nominal_grid.py':'old',
                                                 'workflows/signal_grid_inputs.py':'same'})
         current = copy.deepcopy(old)
         current['code']['workflows/build_nominal_grid.py'] = 'new'
         self.assertTrue(builder.same_extraction_contract(old, current))
         current['code']['workflows/signal_grid_inputs.py'] = 'changed'
-        self.assertFalse(builder.same_extraction_contract(old, current))
+        self.assertTrue(builder.same_extraction_contract(old, current))
         current = copy.deepcopy(old); current['inputs']['2025'] = 'changed'
         self.assertFalse(builder.same_extraction_contract(old, current))
 

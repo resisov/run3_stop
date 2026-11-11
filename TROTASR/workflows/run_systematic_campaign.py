@@ -23,6 +23,60 @@ from TROTASR.workflows.nominal_campaign import run, file_worker
 from TROTASR.workflows.merge_nominal import merge
 
 
+def kernel_state(identity):
+    """Read the original process, including an unreaped child's exit status."""
+    folder = Path('/proc')/str(identity['pid'])
+    def checked_stat():
+        if folder.stat().st_uid != os.getuid():
+            raise RuntimeError('Process owner changed')
+        fields = (folder/'stat').read_text().rsplit(') ', 1)[1].split()
+        if int(fields[19]) != identity['start_ticks']:
+            raise RuntimeError('Process PID was reused')
+        return fields
+    try:
+        for _ in range(3):
+            fields = checked_stat()
+            if fields[0] == 'Z':
+                return 'Z', int(fields[49])
+            arguments = [a.decode() for a in (folder/'cmdline').read_bytes().split(b'\0') if a]
+            fields = checked_stat()
+            if fields[0] == 'Z':
+                return 'Z', int(fields[49])
+            if arguments == identity['arguments']:
+                return fields[0], None
+            if arguments:
+                raise RuntimeError('Process command changed')
+            # Linux can clear cmdline before publishing the zombie state.
+            time.sleep(.01)
+        return 'X', None  # Exit in flight; retain the slot, do not signal it.
+    except (FileNotFoundError, ProcessLookupError):
+        return None, None
+
+
+
+def finite_histogram_arrays(value):
+    """Check signed contents, nonnegative variances/counts, and finite entries."""
+    import math
+    if not isinstance(value, dict):
+        raise ValueError('Malformed histogram node')
+    if 'sumw' in value:
+        if not {'sumw2','entries','edges'} <= set(value):
+            raise ValueError('Incomplete histogram leaf')
+        def check(array, nonnegative):
+            if isinstance(array, list):
+                for item in array:
+                    check(item, nonnegative)
+            elif (isinstance(array, bool) or not isinstance(array, (int,float))
+                  or not math.isfinite(array) or nonnegative and array < 0):
+                raise ValueError('Invalid histogram contents or variance')
+        for name in ('sumw','sumw2','entries'):
+            check(value[name], name != 'sumw')
+    else:
+        for child in value.values():
+            finite_histogram_arrays(child)
+
+
+
 REFRESH_ID = 'payload_update_20261005'
 UPDATE_ID = 'object_sf_update_20261018'
 REFERENCE_REPAIR = 'reference_repair'
@@ -288,7 +342,6 @@ def refresh_result_contract(spec, task, digest):
 def adopt_unchanged_views(campaign):
     """Register an exact-output execution change, retaining old results/workers."""
     from TROTASR.workflows.nominal_campaign import current_contract, verify_compiled
-    from TROTASR.workflows.control_systematic_memory import kernel_state
     campaign = internal_path(campaign)
     allowed = [ROOT/'campaigns'/n for n in ('systematics_20260924','nonjme_20260927')]
     if campaign not in allowed:raise ValueError('Not a current correction-update campaign')
@@ -591,7 +644,6 @@ def refresh_worker(campaign, key):
                 chunk_size=spec['chunk_size'], candidate_budget=plan.get('candidate_budget',150000),
                 support_only=bool(spec.get(SUPPORT_REFRESH)))
         validate_payload(payload, task, expected)
-        from TROTASR.workflows.continue_systematic_campaign import finite_histogram_arrays
         for section in ('histograms','physical_histograms','dy_rz','dy_rz_variations'):
             finite_histogram_arrays(payload.get(section,{}))
         migrations = []

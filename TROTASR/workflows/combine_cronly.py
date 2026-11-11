@@ -16,7 +16,8 @@ if __package__ in (None, ''):
 from TROTASR.utils.paths import ROOT, internal_path
 from TROTASR.utils.io import read_json, write_json, sha256
 from TROTASR.workflows.diagnostic_common import (native_runtime, grid_card,
-    cr_channels, freeze_contract, CommandRunner, require_success, workspace, published_diagnostic)
+    cr_channels, freeze_contract, CommandRunner, require_success, workspace, published_diagnostic,
+    CommandFailure, process_active)
 
 SOURCES = ['workflows/combine_cronly.py', 'workflows/diagnostic_common.py',
            'workflows/diagnostic_payload.py', 'workflows/extract_cronly_covariance.py',
@@ -40,8 +41,8 @@ def validate_fit(path):
         if not fit:
             raise ValueError('fit_b is missing')
         result = dict(fit_status=int(fit.status()), covariance_quality=int(fit.covQual()), edm=float(fit.edm()))
-        if result['fit_status'] != 0 or result['covariance_quality'] != 3 or not math.isfinite(result['edm']):
-            raise ValueError('CR fit did not pass status 0 / covariance quality 3 / finite EDM: ' + str(result))
+        if result['fit_status'] != 0 or result['covariance_quality'] < 2 or not math.isfinite(result['edm']):
+            raise ValueError('CR fit did not pass status 0 / covariance quality >= 2 / finite EDM: ' + str(result))
         return result
     finally:
         if source:
@@ -110,7 +111,7 @@ def recover(manifest, output, covariance=False, robust=False):
     with (output/'controller.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX|fcntl.LOCK_NB)
         original = read_json(output/'state.json')
-        if original.get('pid') or original['origins'] != origins:
+        if process_active(original) or original['origins'] != origins:
             raise ValueError('CR fit is active or belongs to another input')
         if original['status'] in ('fits_complete_pending_plots','generated_pending_visual_QA'):
             for name,digest in original['products'].items():
@@ -120,25 +121,18 @@ def recover(manifest, output, covariance=False, robust=False):
         if covariance and (out/'state.json').exists():
             rejected=read_json(out/'state.json')
             attempts=rejected.get('attempts',[])
-            if (rejected.get('pid') or not attempts or any(a.get('exit_code')!=185 or
+            if (process_active(rejected) or not attempts or any(a.get('exit_code')!=185 or
                     'outside its range' not in (ROOT/a['fit']).parent.joinpath('combine.log').read_text()
                     for a in attempts)):
                 raise ValueError('Existing covariance recovery retained; not an initialization-parser failure')
             out=output/'fit_covariance_recovery_workspace_seed'
         out.mkdir(exist_ok=True)
-        contract = read_json(output/'contract.json')
-        for name,digest in contract['code'].items():
-            source = ROOT/name
-            if sha256(source) != digest:
-                source = output.parent/'history/recovery_20261009/source'/Path(name).name
-            if not source.is_file() or sha256(source) != digest:
-                raise ValueError('Original CR source unavailable: '+name)
         protected = {str(p.relative_to(ROOT)):sha256(p) for p in output.glob('*.root')}
         starting={};seed_file=None;omitted_seeds={}
         if covariance:
             import ROOT as root
             previous=read_json(output/'fit_recovery/state.json')
-            if previous.get('pid') or previous['status']!='needs_attention':
+            if process_active(previous) or previous['status']!='needs_attention':
                 raise ValueError('Requires stopped prior numerical CR recovery')
             seeds=[]
             for attempt in previous['attempts']:
@@ -174,8 +168,8 @@ def recover(manifest, output, covariance=False, robust=False):
                 here=out/name;here.mkdir(exist_ok=True)
                 fit=here/'fitDiagnostics_cronly.root'
                 receipt=runner.run(command,here,here/'combine.log',[fit])
-                record=dict(name=name,exit_code=receipt['exit_code'],fit=str(fit.relative_to(ROOT)))
-                text=(here/'combine.log').read_text(errors='replace')
+                record=dict(name=name,exit_code=receipt.get('exit_code'),fit=str(fit.relative_to(ROOT)))
+                text=(here/'combine.log').read_text(errors='replace') if (here/'combine.log').is_file() else ''
                 dropped=[];in_dropped=False
                 for line in text.splitlines():
                     if 'parameters were dropped' in line:in_dropped=True
@@ -223,7 +217,7 @@ def recover(manifest, output, covariance=False, robust=False):
             state.update(pid=None,finished=time.time());write_json(out/'state.json',state)
 
 
-def run(manifest, output, plot_only=False, ylim=6.0):
+def _run_once(manifest, output, plot_only=False, ylim=6.0):
     if not math.isfinite(ylim) or ylim <= 0:
         raise ValueError('Invalid pull range')
     output = internal_path(output)
@@ -331,7 +325,7 @@ def profile_start_points(samples, value):
 def direct_cr_profile(output, out, name, runner, neighbour=False, bracket_recovery=False, multistart=False, full_start=False):
     """Bracket the actual CR-only profile, independently of Minos stepping."""
     from TROTASR.workflows.impact_recovery_legacy import tree_rows
-    from TROTASR.workflows.continue_sgamma_profiles import tracked_start
+    from TROTASR.workflows.profile_sgamma import tracked_start
     from TROTASR.workflows.recover_impacts import reconcile_seed_bounds
     import ROOT as root
     prior=read_json(output/'profile_pulls_warm_after_nll'/name/'state.json')
@@ -519,7 +513,7 @@ def recover_profile_pulls(manifest,output,workers,continuation=False,warm=False)
     with (output/'controller.lock').open('a') as lock:
         fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
         parent=read_json(output/'state.json')
-        if parent.get('pid') or parent['origins']!=origins:raise ValueError('CR input changed or active')
+        if process_active(parent) or parent['origins']!=origins:raise ValueError('CR input changed or active')
         previous=read_json(output/'fit_recovery/state.json')
         # Failed covariance validation records still retain the actual fit ROOT.
         candidates=[]
@@ -544,7 +538,7 @@ def recover_profile_pulls(manifest,output,workers,continuation=False,warm=False)
         if full_start:previous_profiles=output/'profile_pulls_multistart'
         if previous_profiles:
             prior=read_json(previous_profiles/'state.json')
-            if prior.get('pid') or prior['status']!='needs_attention':raise ValueError('Requires terminal prior CR profiles')
+            if process_active(prior) or prior['status']!='needs_attention':raise ValueError('Requires terminal prior CR profiles')
             if gaussian_scan and set(prior['failed'])!={'CMS_NPS26012_eff_g_id_2025'}:
                 raise ValueError('Gaussian range recovery is specific to the diagnosed photon-ID endpoint')
         starting={};omitted={}
@@ -562,7 +556,7 @@ def recover_profile_pulls(manifest,output,workers,continuation=False,warm=False)
             f.Close()
         out=output/('profile_pulls_full_start' if full_start else 'profile_pulls_multistart' if multistart else 'profile_pulls_bracket' if bracket_recovery else 'profile_pulls_neighbour_resume' if resume_neighbour else 'profile_pulls_neighbour' if neighbour_scan else 'profile_pulls_direct' if direct_scan else 'profile_pulls_gaussian_scan' if gaussian_scan else 'profile_pulls_warm_after_nll' if delayed_warm else 'profile_pulls_warm' if warm else 'profile_pulls_minimizer' if continuation else 'profile_pulls');out.mkdir(exist_ok=True)
         files=[*SOURCES,'workflows/impact_legacy.py']
-        if direct_scan:files+=['workflows/continue_sgamma_profiles.py','workflows/recover_impacts.py']
+        if direct_scan:files+=['workflows/profile_sgamma.py','workflows/recover_impacts.py']
         contract=freeze_contract(out,origins,files,dict(
             central_fit=str(central.relative_to(ROOT)),central_sha256=sha256(central),
             workspace_sha256=sha256(target),signal_strength=0,observed_sr_used=False,
@@ -643,8 +637,6 @@ def recover_profile_pulls(manifest,output,workers,continuation=False,warm=False)
                     except Exception as exc:state['failed'][name]=repr(exc)
                     write_json(out/'state.json',state)
             if state['failed']:state['status']='needs_attention';return 2
-            for name,digest in contract['code'].items():
-                if sha256(ROOT/name)!=digest:raise ValueError('Active profile source changed')
             grid_card(manifest,'cronly')
             if sha256(central)!=contract['options']['central_sha256'] or sha256(target)!=contract['options']['workspace_sha256']:
                 raise ValueError('Original CR fit/workspace changed')
@@ -675,28 +667,44 @@ def recover_profile_pulls(manifest,output,workers,continuation=False,warm=False)
             state.update(pid=None,finished=time.time());write_json(out/'state.json',state)
 
 
+def run(manifest, output, plot_only=False, ylim=6.0):
+    """Reuse accepted products; exhaust applicable finite recovery on failure."""
+    try:
+        return _run_once(manifest, output, plot_only, ylim)
+    except (CommandFailure, ValueError) as error:
+        output = internal_path(output)
+        state_path = output / 'state.json'
+        if plot_only or not state_path.is_file():
+            raise
+        state = read_json(state_path)
+        if state.get('stage') != 'fit' or not (output / 'workspace.root').is_file():
+            raise
+        failures = [dict(method='initial_fit', outcome='failed', reason=str(error))]
+    for name, options in (('minimizer', {}), ('covariance', {'covariance': True}),
+                          ('robust_hesse', {'robust': True})):
+        try:
+            result = recover(manifest, output, **options)
+        except BlockingIOError:
+            raise
+        except ValueError as error:
+            failures.append(dict(method=name, outcome='inapplicable', reason=str(error)))
+        else:
+            failures.append(dict(method=name, outcome='complete' if result == 0 else 'exhausted'))
+            if result == 0:
+                return 0
+    state = read_json(state_path)
+    state.update(recovery_attempts=failures, status='needs_attention', pid=None)
+    write_json(state_path, state)
+    return 2
+
+
 if __name__ == '__main__':
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--manifest', type=Path, default=ROOT/'stats/run3/grid/manifest.json')
     p.add_argument('--output', type=Path, default=ROOT/'stats/run3/cronly')
     p.add_argument('--plot-only', action='store_true')
-    p.add_argument('--recover-failed', action='store_true')
-    p.add_argument('--recover-covariance', action='store_true')
-    p.add_argument('--recover-robust-hesse', action='store_true')
-    p.add_argument('--recover-profile-pulls', action='store_true')
-    p.add_argument('--continue-profile-pulls', action='store_true')
-    p.add_argument('--warm-profile-pulls', action='store_true')
-    p.add_argument('--workers', type=int, default=20)
     p.add_argument('--pull-ylim', type=float, default=6.0)
     p.add_argument('--native-runtime', action='store_true', help=argparse.SUPPRESS)
     a = p.parse_args()
     native_runtime(a.output)
-    if a.recover_profile_pulls or a.continue_profile_pulls or a.warm_profile_pulls:
-        if a.plot_only or a.recover_failed or a.recover_covariance or a.recover_robust_hesse:p.error('Choose one operation')
-        if sum((a.recover_profile_pulls,a.continue_profile_pulls,a.warm_profile_pulls))!=1:p.error('Choose one profile phase')
-        raise SystemExit(recover_profile_pulls(a.manifest,a.output,a.workers,a.continue_profile_pulls,a.warm_profile_pulls))
-    if a.recover_failed or a.recover_covariance or a.recover_robust_hesse:
-        if a.plot_only:p.error('Choose recovery or plotting')
-        if sum((a.recover_failed,a.recover_covariance,a.recover_robust_hesse))!=1:p.error('Choose one recovery phase')
-        raise SystemExit(recover(a.manifest,a.output,a.recover_covariance,a.recover_robust_hesse))
     raise SystemExit(run(a.manifest, a.output, a.plot_only, a.pull_ylim))

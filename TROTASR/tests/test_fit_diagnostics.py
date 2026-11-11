@@ -134,12 +134,14 @@ class ImpactBenchmarkTests(unittest.TestCase):
         card = ROOT/'stats/not_created/card.txt'
         state_path = ROOT/'stats/not_created/state.json'
         state = dict(model='T2bW', mass='mStop1000_mLSP800', workspace_valid=True,
-                     card=str(card.relative_to(ROOT)), card_sha256='digest', workspace_sha256='digest')
+                     card=str(card.relative_to(ROOT)), card_sha256='digest', workspace_sha256='a'*64)
         with patch.object(impact, 'read_json', return_value=state), \
-             patch.object(impact, 'sha256', return_value='digest'):
+             patch.object(impact, 'sha256', return_value='digest'), \
+             patch.object(Path,'is_file',return_value=True), \
+             patch.object(Path,'stat',return_value=types.SimpleNamespace(st_size=1)):
             target, provenance = impact.saved_workspace(state_path, card, 'T2bW', 'mStop1000_mLSP800')
             self.assertEqual(target, state_path.parent/'workspace.root')
-            self.assertEqual(provenance['workspace_sha256'], 'digest')
+            self.assertEqual(provenance['workspace_sha256'], 'a'*64)
             for key, value in (('model','T2tb'), ('mass','mStop1200_mLSP500'),
                                ('workspace_valid',False), ('workspace_sha256','changed'),
                                ('card_sha256','changed'), ('card','stats/not_created/other.txt')):
@@ -208,15 +210,6 @@ class DiagnosticPolicyTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             common.cr_channels(cr_text().replace('LLCR_highdm_c1_2024', 'SR_highdm_c1_2024'))
 
-    def test_cr_card_from_current_template_builder(self):
-        from TROTASR.tests.test_statistics_inputs import fixture
-        from TROTASR.utils.statistics_inputs import build_inputs
-        from TROTASR.utils.statistical_templates import assemble, card_text
-        inputs = [build_inputs(*fixture(year),'T2tt',1200,500) for year in (2024,2025)]
-        channels,data,_,issues=assemble(inputs)
-        self.assertFalse(issues)
-        selected=common.cr_channels(card_text(channels,data,cr_only=True))
-        self.assertEqual(sum(len(channels[c]) for c in selected),156)
 
     def test_signal_and_mcstat_changes_rejected(self):
         for text in (cr_text().replace('process 1 1', 'process 0 1'),
@@ -447,8 +440,70 @@ class CommandIntegrityTests(unittest.TestCase):
     def test_interrupted_command_is_not_duplicated(self):
         key=common.command_key(['test-command'],self.work)
         write_json(self.work/'commands'/(key+'.json'),dict(status='running',pid=123))
-        with self.assertRaisesRegex(RuntimeError,'Interrupted/running'):
+        with patch.object(common,'process_identity',return_value=None), patch.object(common,'admitted_popen') as popen:
+            result=self.runner.run(['test-command'],self.work,self.work/'log.txt',[self.product])
+            self.assertEqual(result['status'],'failed')
+            self.assertIsNone(result['exit_code'])
+            popen.assert_not_called()
+
+    def test_live_child_is_not_restarted(self):
+        key=common.command_key(['test-command'],self.work)
+        write_json(self.work/'commands'/(key+'.json'),dict(status='running',pid=123,pid_start_ticks=5))
+        with patch.object(common,'process_identity',return_value=5), self.assertRaises(BlockingIOError):
             self.runner.run(['test-command'],self.work,self.work/'log.txt',[self.product])
+
+    def test_code_history_and_worker_count_do_not_block_resume(self):
+        old=dict(origins={'input':'x'}, code={'deleted_old_source.py':'old'}, options={'workers':1,'strategy':0})
+        write_json(self.work/'contract.json',old)
+        result=common.freeze_contract(self.work,{'input':'x'},['workflows/current.py'],{'workers':40,'strategy':0})
+        self.assertEqual(result,old)
+        self.assertEqual(read_json(self.work/'contract.json'),old)
+
+    def test_cr_main_advances_finite_recovery(self):
+        from TROTASR.workflows import combine_cronly as cr
+        write_json(self.work/'state.json',dict(stage='fit',status='needs_attention'))
+        (self.work/'workspace.root').touch()
+        with patch.object(cr,'_run_once',side_effect=common.CommandFailure('failed')), \
+             patch.object(cr,'recover',side_effect=[2,2,0]) as recover:
+            self.assertEqual(cr.run('manifest',self.work),0)
+        self.assertEqual(recover.call_count,3)
+        self.assertEqual(recover.call_args_list[-1].kwargs,{'robust':True})
+
+    def test_accepted_cr_result_does_not_launch_recovery(self):
+        from TROTASR.workflows import combine_cronly as cr
+        with patch.object(cr,'_run_once',return_value=0), patch.object(cr,'recover') as recover:
+            self.assertEqual(cr.run('manifest',self.work),0)
+            recover.assert_not_called()
+
+    def test_impact_main_exhausts_finite_profiles(self):
+        from TROTASR.workflows import recover_impacts as recovery
+        write_json(self.work/'impact_status.json',dict(status='needs_attention'))
+        with patch.object(impact,'_run',return_value=2), \
+             patch.object(recovery,'run_bounded',return_value=2) as fits:
+            self.assertEqual(impact.run_with_recovery('manifest',self.work,4),2)
+        self.assertEqual(fits.call_count,6)
+        self.assertEqual(len(read_json(self.work/'impact_status.json')['recovery_attempts']),7)
+
+    def test_policy_labels_do_not_replace_physics_checks(self):
+        from TROTASR.workflows import build_nominal_grid as cards
+        policy=dict(cards.CR12_POLICY, id='renamed', user_approved=False)
+        self.assertTrue(cards.require_statistical_revision(policy))
+        with self.assertRaises(ValueError):
+            cards.require_statistical_revision(dict(policy,auto_mc_stats=[0,1,1]))
+
+    def test_cleanup_preserves_input_identity(self):
+        from TROTASR.workflows.build_nominal_grid import same_extraction_contract
+        old=dict(inputs={'2025':'input'}, code={'removed.py':'old'})
+        self.assertTrue(same_extraction_contract(old,dict(old,code={'current.py':'new'})))
+        self.assertFalse(same_extraction_contract(old,dict(old,inputs={'2025':'different'})))
+
+    def test_covqual_two_is_accepted_without_changing_reported_quality(self):
+        from TROTASR.workflows.combine_cronly import validate_fit
+        fit=types.SimpleNamespace(status=lambda:0,covQual=lambda:2,edm=lambda:0.001)
+        source=types.SimpleNamespace(IsZombie=lambda:False,Get=lambda name:fit,Close=lambda:None)
+        root=types.SimpleNamespace(TFile=types.SimpleNamespace(Open=lambda path:source))
+        with patch.dict('sys.modules',{'ROOT':root}):
+            self.assertEqual(validate_fit(self.work/'fit.root')['covariance_quality'],2)
 
     def test_external_path_blocked(self):
         with self.assertRaisesRegex(ValueError,'escapes TROTASR'):

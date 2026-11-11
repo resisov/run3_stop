@@ -23,7 +23,7 @@ if __package__ in (None, ''):
     bootstrap()
 from TROTASR.utils.paths import ROOT, internal_path
 from TROTASR.utils.io import read_json, write_json, sha256
-from TROTASR.workflows.diagnostic_common import native_runtime, grid_card, freeze_contract, CommandRunner
+from TROTASR.workflows.diagnostic_common import grid_card, freeze_contract, CommandRunner, process_active
 from TROTASR.workflows import impact_recovery_legacy as legacy
 
 
@@ -43,7 +43,7 @@ def publish_completed_profiles(work, output, shard_statuses, cached_collection=N
             lock = stack.enter_context((folder/'impact.lock').open('r'))
             fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
         parent = read_json(work/'impact_status.json')
-        if (parent.get('controller_pid') is not None or parent.get('sr_data_used') is not False
+        if (process_active(parent, 'controller_pid') is not None or parent.get('sr_data_used') is not False
                 or parent.get('asimov_expect_signal') != 1):
             raise ValueError('Require terminal blinded mu=1 Asimov impact receipts')
         if parent.get('status') in ('fits_complete','generated_pending_visual_QA') and parent.get('json'):
@@ -136,7 +136,7 @@ def publish_completed_profiles(work, output, shard_statuses, cached_collection=N
 
 def bounded_sgamma_scope(parent, records, bounds):
     names = recovery_scope(parent, records, (), (), {})
-    if any(not re.fullmatch(r'CMS_NPS26012_(?:sgamma_shape_lowdm|qcd_norm_highdm)_Nb(?:1|2plus)_bin\d+_202[45]', n)
+    if any(not re.fullmatch(r'CMS_NPS26012_(?:sgamma_shape_lowdm|qcd_norm_highdm)_Nb(?:1|2plus)_bin\d+(?:_202[2345](?:EE|BPix)?)?', n)
            or bounds.get(n) != [.01, 5.] for n in names):
         raise ValueError('Requires failed Sgamma/QCD rate parameters with adopted [0.01,5] bounds')
     return names
@@ -209,7 +209,7 @@ class BoundedSgamma(legacy.Recovery):
 
     def fixed(self, name, value, label=None, seed=None, strategies=(0, 1)):
         from TROTASR.workflows.profile_sgamma import fixed_command
-        from TROTASR.workflows.continue_sgamma_profiles import tracked_start
+        from TROTASR.workflows.profile_sgamma import tracked_start
         lo, hi = self.inputs['parameter_bounds'][name]
         if not math.isfinite(value) or not lo <= value <= hi:
             raise ValueError('Conditional point outside approved range')
@@ -420,14 +420,8 @@ def bounded_preflight(manifest, work, model='T2tt', mass='mStop1200_mLSP500', co
         raise ValueError('Bounded Sgamma requires the current combined model')
     parent = read_json(work/'impact_status.json')
     contract = read_json(work/'contract.json')
-    if contract['origins'] != origins or parent.get('controller_pid'):
+    if contract['origins'] != origins or process_active(parent, 'controller_pid'):
         raise ValueError('Impact provenance changed or primary still active')
-    for name,digest in contract['code'].items():
-        source=ROOT/name
-        if sha256(source)!=digest:
-            campaign=work.parent if work.name=='impacts' else work.parent.parent
-            source=campaign/'history/recovery_20261009/source'/Path(name).name
-        if not source.is_file() or sha256(source)!=digest:raise ValueError('Impact source unavailable: '+name)
     if sha256(parent['workspace']) != parent['workspace_sha256']:
         raise ValueError('Impact workspace changed')
     records = {p.stem:read_json(p) for p in (work/'fit_state').glob('*.json') if p.stem != 'r'}
@@ -470,10 +464,9 @@ def bounded_preflight(manifest, work, model='T2tt', mass='mStop1200_mLSP500', co
 
 
 def run_bounded(manifest, work, workers, preflight_only=False, resume=False, finish=False,
-                model='T2tt', mass='mStop1200_mLSP500', complete=False, polish=False, hybrid=False, likelihood=False, refine=False):
+                model='T2tt', mass='mStop1200_mLSP500', complete=False, polish=False, hybrid=False, likelihood=False, refine=False, final=False):
     if not 1 <= workers <= 98: raise ValueError('Reserve controller and diagnostic slots')
     manifest,work = internal_path(manifest),internal_path(work)
-    final=refine and (work/'bounded_sgamma_refined/status.json').exists()
     with (work/'impact.lock').open('r') as lock:
         fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
         audit = bounded_preflight(manifest,work,model,mass,complete)
@@ -489,21 +482,9 @@ def run_bounded(manifest, work, workers, preflight_only=False, resume=False, fin
         if previous:
             old_state = read_json(previous/'status.json')
             old_contract = read_json(previous/'contract.json')
-            if (old_state['status'] != 'needs_attention' or old_state.get('controller_pid')
-                    or not old_state.get('failed') or old_contract['origins'] != audit['origins']
-                    or old_contract['options']['original_status_sha256'] != audit['original_status_sha256']):
+            if (old_state['status'] != 'needs_attention' or process_active(old_state, 'controller_pid')
+                    or not old_state.get('failed') or old_contract['origins'] != audit['origins']):
                 raise ValueError('Requires terminal, unpromoted original bounded recovery')
-            backup = work.parent/'history/sgamma_recovery_20260930'/('source_before_finish' if finish else 'source_before_resume')/'recover_impacts.py'
-            if polish or hybrid or likelihood or refine:
-                campaign=work.parent if work.name=='impacts' else work.parent.parent
-                backup=campaign/'history/recovery_20261009'/('source_refined' if final else 'source_likelihood' if refine else 'source_minimizer' if likelihood else 'source_precision' if hybrid else 'source_complete')/'recover_impacts.py'
-            for name,digest in old_contract['code'].items():
-                candidates = [ROOT/name]
-                if name == 'workflows/recover_impacts.py':
-                    campaign=work.parent if work.name=='impacts' else work.parent.parent
-                    candidates += [backup, campaign/'history/recovery_20261021/recover_impacts.py']
-                if not any(p.is_file() and sha256(p) == digest for p in candidates):
-                    raise ValueError('Frozen recovery source unavailable: '+name)
             prior = dict(previous_contract_sha256=sha256(previous/'contract.json'),
                 previous_status_sha256=sha256(previous/'status.json'),
                 failed_parameters=sorted(old_state['failed']),
@@ -526,7 +507,7 @@ def run_bounded(manifest, work, workers, preflight_only=False, resume=False, fin
             return 0
         out = work/('bounded_sgamma_final' if final else 'bounded_sgamma_refined' if refine else 'bounded_sgamma_likelihood' if likelihood else 'bounded_sgamma_minimizer' if hybrid else 'bounded_sgamma_precision' if polish else 'bounded_sgamma_complete' if complete else 'bounded_sgamma_finish_20260930' if finish else 'bounded_sgamma_resume_20260930' if resume else 'bounded_sgamma_20260930');out.mkdir(exist_ok=True)
         files = ['workflows/recover_impacts.py','workflows/impact_recovery_legacy.py',
-                 'workflows/profile_sgamma.py','workflows/continue_sgamma_profiles.py',
+                 'workflows/profile_sgamma.py','workflows/profile_sgamma.py',
                  'workflows/diagnostic_common.py','workflows/impact_legacy.py']
         contract = freeze_contract(out,audit['origins'],files,dict(parameters=audit['names'],
             bounds=audit['bounds'],original_status_sha256=audit['original_status_sha256'],
@@ -579,8 +560,6 @@ def run_bounded(manifest, work, workers, preflight_only=False, resume=False, fin
                     write_json(out/'status.json',state)
             for name,digest in audit['protected'].items():
                 if sha256(ROOT/name) != digest: raise ValueError('Protected original changed: '+name)
-            for name,digest in contract['code'].items():
-                if sha256(ROOT/name) != digest: raise ValueError('Active recovery source changed: '+name)
             state['protected_files_unchanged'] = len(audit['protected'])
             if state['failed']:
                 state['status']='needs_attention';return 2
@@ -636,9 +615,6 @@ def run(manifest, work, workers, missing=(), refined=()):
     contract = read_json(work / 'contract.json')
     if contract['origins'] != origins:
         raise ValueError('Original impact origins changed')
-    for name, digest in contract['code'].items():
-        if sha256(ROOT / name) != digest:
-            raise ValueError('Original impact source changed')
     out = work / 'direct_profile'
     out.mkdir(exist_ok=True)
     with (work / 'impact.lock').open('a') as lock:
@@ -741,36 +717,3 @@ def run(manifest, work, workers, missing=(), refined=()):
             state.update(controller_pid=None, finished=time.time())
             write_json(state_path, state)
     return 0
-
-
-if __name__ == '__main__':
-    p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('--manifest', required=True, type=Path)
-    p.add_argument('--work', required=True, type=Path)
-    p.add_argument('--workers', type=int, default=49)
-    p.add_argument('--missing-endpoint', action='append', default=[])
-    p.add_argument('--refine-parameter', action='append', default=[])
-    p.add_argument('--bounded-sgamma', action='store_true')
-    p.add_argument('--complete-bounded-sgamma', action='store_true')
-    p.add_argument('--polish-bounded-sgamma', action='store_true')
-    p.add_argument('--hybrid-bounded-sgamma', action='store_true')
-    p.add_argument('--likelihood-bounded-sgamma', action='store_true')
-    p.add_argument('--refine-bounded-sgamma', action='store_true')
-    p.add_argument('--model', choices=['T2tt','T2bW','T2tb'], default='T2tt')
-    p.add_argument('--mass', default='mStop1200_mLSP500')
-    p.add_argument('--preflight-only', action='store_true')
-    p.add_argument('--resume-bounded-sgamma', action='store_true')
-    p.add_argument('--finish-bounded-sgamma', action='store_true')
-    p.add_argument('--native-runtime', action='store_true', help=argparse.SUPPRESS)
-    a = p.parse_args()
-    native_runtime(a.work)
-    if a.bounded_sgamma or a.resume_bounded_sgamma or a.finish_bounded_sgamma or a.complete_bounded_sgamma or a.polish_bounded_sgamma or a.hybrid_bounded_sgamma or a.likelihood_bounded_sgamma or a.refine_bounded_sgamma:
-        if sum((a.bounded_sgamma,a.resume_bounded_sgamma,a.finish_bounded_sgamma,a.complete_bounded_sgamma,a.polish_bounded_sgamma,a.hybrid_bounded_sgamma,a.likelihood_bounded_sgamma,a.refine_bounded_sgamma)) != 1:
-            p.error('Choose initial or finite resume, not both')
-        if a.missing_endpoint or a.refine_parameter:
-            p.error('Bounded current-model Sgamma is separate from legacy [0,10] recovery')
-        raise SystemExit(run_bounded(a.manifest,a.work,a.workers,a.preflight_only,a.resume_bounded_sgamma,
-            a.finish_bounded_sgamma,a.model,a.mass,a.complete_bounded_sgamma or a.polish_bounded_sgamma or a.hybrid_bounded_sgamma or a.likelihood_bounded_sgamma or a.refine_bounded_sgamma,
-            a.polish_bounded_sgamma,a.hybrid_bounded_sgamma,a.likelihood_bounded_sgamma or a.refine_bounded_sgamma,a.refine_bounded_sgamma))
-    if a.preflight_only: p.error('--preflight-only requires --bounded-sgamma')
-    raise SystemExit(run(a.manifest, a.work, a.workers, a.missing_endpoint, a.refine_parameter))

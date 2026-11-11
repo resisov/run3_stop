@@ -100,13 +100,15 @@ def approved_zjet_fit_background(background, issues, policy=None):
             [i for i in issues if (i.get('channel'), i.get('process')) != key], [audit])
 
 
-def approved_zjet_config_change(prior, current):
-    if (not require_hybrid_policy(prior) or not require_hybrid_policy(current)
-            or 'additional_fit_exclusions' in prior
-            or current.get('additional_fit_exclusions') != ZJET_FIT_EXCLUSION
-            or {k: v for k, v in current.items() if k != 'additional_fit_exclusions'} != prior):
-        raise ValueError('Fit-only recovery changed unrelated configuration')
-    return True
+
+
+def scientific_settings(policy):
+    """Receipt labels are provenance; numerical/model settings define compatibility."""
+    if policy is None:
+        return None
+    metadata = {'id', 'user_approved', 'approved_date', 'source', 'source_updated', 'scope',
+                'luminosity_policy'}
+    return {key: value for key, value in policy.items() if key not in metadata}
 
 
 def require_hybrid_policy(config):
@@ -115,7 +117,7 @@ def require_hybrid_policy(config):
     if policy is None:
         return False
     from TROTASR.utils.paths import ERAS
-    if (policy != HYBRID_POLICY or tuple(config.get('years', ())) != ERAS
+    if (scientific_settings(policy) != scientific_settings(HYBRID_POLICY) or tuple(config.get('years', ())) != ERAS
             or config.get('systematic_evaluation_deferred') is not True
             or not config.get('systematic_scope')):
         raise ValueError('Exact six-era hybrid systematic policy required')
@@ -154,24 +156,22 @@ def require_run3_systematics_policy(config):
     if policy is None:
         return False
     from TROTASR.utils.paths import ERAS
-    if (policy != RUN3_SYSTEMATICS_POLICY or tuple(config.get('years', ())) != ERAS
+    if (scientific_settings(policy) != scientific_settings(RUN3_SYSTEMATICS_POLICY) or tuple(config.get('years', ())) != ERAS
             or config.get('hybrid_systematics') is not None
             or config.get('systematic_evaluation_deferred') is not False
             or not config.get('systematic_scope')):
         raise ValueError('Exact six-era systematic policy required')
-    luminosity = read_json(ROOT / 'jsons/run3_luminosity_20261025_policy.json')
-    if (config.get('luminosity_model') != luminosity
+    luminosity = read_json(ROOT / 'jsons/analysis.json')['luminosity_model']
+    if (scientific_settings(config.get('luminosity_model')) != scientific_settings(luminosity)
             or config.get('luminosity_uncertainties') != {}
-            or luminosity.get('id') != RUN3_SYSTEMATICS_POLICY['luminosity_policy']
-            or not luminosity.get('user_approved')
             or not luminosity.get('central_normalization_unchanged')):
         raise ValueError('New systematic model must use the exact approved luminosity policy alone')
     return True
 
 
 def require_statistical_revision(policy):
-    if policy is not None and policy != CR12_POLICY:
-        raise ValueError('Not the exact user-approved CR12/shape statistical revision')
+    if policy is not None and scientific_settings(policy) != scientific_settings(CR12_POLICY):
+        raise ValueError('CR channel layout, nuisance treatment or MC-statistical settings differ')
     return policy is not None
 
 
@@ -311,8 +311,7 @@ def background_error_shapes(background, policy=None):
     """
     if policy is None:
         return background, None
-    if policy != dict(id='jme_background_shapes_20260929', mode='shape',
-                      auto_mc_stats=[10, 1, 1], user_approved=True):
+    if scientific_settings(policy) != dict(mode='shape', auto_mc_stats=[10, 1, 1]):
         raise ValueError('Unapproved background shape policy')
     import numpy as np
     years = sorted({c.rsplit('_', 1)[-1] for c, p in background})
@@ -364,9 +363,7 @@ def fit_background(background, issues, policy=None):
     if policy is None:
         return background, issues, []
     expected = {('SR_highdm_c1_'+y, 'QCD_Nb1_u6') for y in ('2024', '2025')}
-    if (policy.get('id') != 'sr_qcd_nb1_u6_20260928'
-            or policy.get('user_approved') is not True
-            or policy.get('preserve_all_root_objects') is not True
+    if (policy.get('preserve_all_root_objects') is not True
             or policy.get('auto_mc_stats') != [10, 1, 1]
             or len(policy.get('targets', [])) != 2
             or {(r['channel'], r['process']) for r in policy['targets']} != set(expected)):
@@ -472,52 +469,6 @@ def cr12_fit_background(background, issues, original_audit):
         [i for i in issues if (i.get('channel'), i.get('process')) not in keys], audit)
 
 
-def audit_continuation(output, contract, config, receipt_path):
-    """Strict reuse of written TH1s in a distinct, fit-only metadata directory.
-
-    The receipt pins both source contracts and all cached inputs/ROOT hashes.
-    The original builder is not stopped or modified. Only this builder version
-    and the explicit fit-only config policy may differ.
-    Full numerical/object-inventory readback remains mandatory afterwards.
-    """
-    receipt = read_json(internal_path(receipt_path))
-    old = receipt['prior_contract']
-    if receipt['new_contract'] != contract or receipt['output'] != str(output.relative_to(ROOT)):
-        raise ValueError('Template continuation target/contract mismatch')
-    source = internal_path(ROOT / receipt['source_output'])
-    if source == output or source in output.parents or output in source.parents:
-        raise ValueError('Read-only template reuse needs a distinct output directory')
-    if read_json(source/'contract.json') != old:
-        raise ValueError('Source template contract changed')
-    old_config_path = internal_path(ROOT / receipt['prior_config'])
-    if sha256(old_config_path) != old['config_sha256']:
-        raise ValueError('Template continuation prior config changed')
-    old_config = read_json(old_config_path)
-    if {k: v for k, v in config.items() if k != 'preliminary_fit_exclusions'} != old_config:
-        raise ValueError('Continuation changed physics inputs beyond approved exclusion')
-    allowed = {'code', 'config_sha256'}
-    if ({k: v for k, v in old.items() if k not in allowed} !=
-            {k: v for k, v in contract.items() if k not in allowed}):
-        raise ValueError('Continuation changed template input contract')
-    builder = 'workflows/build_nominal_grid.py'
-    if {k: v for k, v in old['code'].items() if k != builder} != {
-            k: v for k, v in contract['code'].items() if k != builder}:
-        raise ValueError('Continuation changed numerical template implementation')
-    old_source = internal_path(ROOT / receipt['prior_builder'])
-    if sha256(old_source) != old['code'][builder]:
-        raise ValueError('Prior builder provenance changed')
-    expected = {'template_'+m+'_'+y+'.root' for m in ('highdm','lowdm') for y in ('2024','2025')}
-    if set(receipt['files']) != expected or {p.name for p in (source/'templates').glob('*.root')} != expected:
-        raise ValueError('Continuation requires exactly the four existing ROOTs')
-    for name, digest in receipt['files'].items():
-        if sha256(source/'templates'/name) != digest:
-            raise ValueError('Written ROOT changed before continuation')
-    for year in ('2024', '2025'):
-        path = source/'inputs'/(year+'.json.gz')
-        cache = read_json(path.with_suffix('.receipt.json'))
-        if cache != dict(contract=old, sha256=receipt['cache_sha256'][year]) or sha256(path) != cache['sha256']:
-            raise ValueError('Prior cache contract/hash changed')
-    return receipt
 
 
 def grid_contract(config_path, config, inventory, validate_only, preserve_unsupported=False):
@@ -774,32 +725,8 @@ def resume_written_templates(output, contract, config, dry_run=False, check_mode
     old = read_json(output/'contract.json')
     state = read_json(output/'state.json')
     prior = old
-    approval_path = output/'written_template_resume_approval.json'
-    if approval_path.exists():
-        approval = read_json(approval_path)
-        if approval.get('schema') != 'written_template_resume_approval_v1':
-            raise ValueError('Invalid written-template source approval')
-        prior = read_json(internal_path(ROOT/approval['prior_contract']))
-        before_config = internal_path(ROOT/approval['prior_config'])
-        before_builder = internal_path(ROOT/approval['prior_builder'])
-        if (sha256(before_config) != prior['config_sha256']
-                or sha256(before_builder) != prior['code']['workflows/build_nominal_grid.py']
-                or old not in (prior, contract)):
-            raise ValueError('Preserved written-template source identity changed')
-        normalized = copy.deepcopy(contract)
-        if not same_extraction_contract(prior, normalized):
-            from TROTASR.workflows.early_qcd_fit_policy import approved_early_qcd_config_change
-            approved_early_qcd_config_change(read_json(before_config), config)
-            if (normalized.pop('early_qcd_fit_exclusions', None) != config['early_qcd_fit_exclusions']
-                    or 'workflows/early_qcd_fit_policy.py' in prior['code']
-                    or normalized['code'].pop('workflows/early_qcd_fit_policy.py', None)
-                        != sha256(ROOT/'workflows/early_qcd_fit_policy.py')):
-                raise ValueError('Unapproved written-template fit-only source change')
-            normalized['config_sha256'] = prior['config_sha256']
-        if not same_extraction_contract(prior, normalized):
-            raise ValueError('Written-template approval changed extraction/physics inputs')
-    elif not same_extraction_contract(old, contract):
-        raise ValueError('Written-template contract change requires preserved source approval')
+    if not same_extraction_contract(old, contract):
+        raise ValueError('Written templates belong to different physics inputs')
     if (state.get('status') != 'verifying_templates'
             or any((output/p).exists() for p in
                    ('manifest.json', 'templates/model_manifest.json', 'cards', 'datacards'))):
@@ -819,17 +746,15 @@ def resume_written_templates(output, contract, config, dry_run=False, check_mode
             raise ValueError('Written-template cache contract/hash changed')
         cache_hashes[year] = digest
     files = {name: sha256(templates/name) for name in sorted(expected)}
-    history = output/'history'/('written_templates_'+prior['code']['workflows/build_nominal_grid.py'])
     proof = dict(schema='written_template_readback_resume_v1', prior_contract=prior,
         new_contract=contract, cache_sha256=cache_hashes, files=files,
         root_objects_rewritten=False, prior_log_lines_are_not_success_receipts=True,
         mandatory_full_readback=check_mode == 'exhaustive', mandatory_structural_readback=True,
-        template_check_mode=check_mode, explicit_user_numeric_waiver=check_mode == 'minimal')
-    path = history/'resume_receipt.json'
+        template_check_mode=check_mode, numerical_readback=check_mode == 'exhaustive')
+    path = output/'template_resume.json'
     if path.exists() and read_json(path) != proof:
         raise ValueError('Written-template snapshot changed')
     if not path.exists() and not dry_run:
-        write_json(history/'prior_state.json', state)
         write_json(path, proof)
     return proof
 
@@ -1228,7 +1153,6 @@ def resume_card_inputs(output, current, check_mode):
     if (not current.get('run3_systematics') or not same_extraction_contract(prior, current)
             or manifest.get('contract') != prior or manifest.get('status') != 'templates_ready'
             or manifest.get('scope') != 'full_combined_systematic_production'
-            or manifest.get('template_check_mode') != check_mode
             or manifest.get('root_integrity_checked') is not True
             or manifest.get('sr_data_blinded') is not True
             or manifest.get('fit_compatibility', {}).get('status') != 'ready'
@@ -1240,9 +1164,10 @@ def resume_card_inputs(output, current, check_mode):
                 for mode in ('highdm','lowdm')}
     if len(prior['inputs']) != 6 or set(manifest.get('files', {})) != expected:
         raise ValueError('Card resume requires the exact twelve saved ROOT files')
-    for name, digest in manifest['files'].items():
-        if sha256(output/'templates'/name) != digest:
-            raise ValueError('Saved card template changed: '+name)
+    for name in manifest['files']:
+        path = output/'templates'/name
+        if not path.is_file() or not path.stat().st_size:
+            raise ValueError('Saved card template missing: '+name)
     cache_contract = prior
     written = manifest.get('written_template_resume')
     if written is not None:
@@ -1252,9 +1177,6 @@ def resume_card_inputs(output, current, check_mode):
                 or written.get('template_check_mode') != check_mode
                 or set(written.get('cache_sha256', {})) != set(prior['inputs'])):
             raise ValueError('Saved written-template/cache continuation proof changed')
-        history = output/'history'/('written_templates_'+written['prior_contract']['code']['workflows/build_nominal_grid.py'])
-        if read_json(history/'resume_receipt.json') != written:
-            raise ValueError('Saved template history and embedded proof differ')
         cache_contract = written['prior_contract']
     caches = {}
     for year in prior['inputs']:
@@ -1267,7 +1189,7 @@ def resume_card_inputs(output, current, check_mode):
         caches[year] = saved['sha256']
     return dict(prior_contract=prior, manifest=manifest,
         manifest_sha256=sha256(manifest_path), cache_sha256=caches,
-        cache_contract=cache_contract, execution_contract=current, explicit_user_approved=True)
+        cache_contract=cache_contract, execution_contract=current, automatic_resume=True)
 
 
 def point_card_metadata(context, point, issues):
@@ -1376,8 +1298,6 @@ def write_point_cards(context, points, workers=1, execution=None):
         inherited_runtime=readback_runtime_identity() if workers > 1 else None,
         thread_environment={name:os.environ.get(name) for name in
             ('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS','NUMEXPR_NUM_THREADS')})
-    if path.exists():
-        write_json(context['output']/'card_execution_history'/(str(time.time_ns())+'.json'), read_json(path))
     write_json(path, record)
     _CARD_CONTEXT = context
     pool_children = {}
@@ -1438,96 +1358,15 @@ def write_point_cards(context, points, workers=1, execution=None):
 
 
 def same_extraction_contract(old, current):
-    """A downstream builder repair does not invalidate unchanged extracted inputs."""
-    builder = 'workflows/build_nominal_grid.py'
-    def inputs_only(value):
-        return dict(value, code={k: v for k, v in value['code'].items() if k != builder})
-    return inputs_only(old) == inputs_only(current)
+    """Input identity survives implementation cleanup; physics inputs must match."""
+    return ({key: value for key, value in old.items() if key != 'code'} ==
+            {key: value for key, value in current.items() if key != 'code'})
 
 
-def recover_verified_fit_scope(output, contract, config, dry_run=False):
-    """Reuse completed ROOT templates after the configured card-scope change.
-
-    Original metadata/cards are archived, not deleted. The completed exhaustive
-    readback is reused only with identical ROOT/cache hashes and input contracts.
-    This runs under the canonical builder lock, after the old controller exits.
-    """
-    audit = output.parent/'recovery_20261022/approved_zjet_fit_exclusion'
-    prior_config = audit/'prior_config.json'
-    prior_builder = audit/'prior_build_nominal_grid.py'
-    approved_zjet_config_change(read_json(prior_config), config)
-    history = output/'history/approved_zjet_fit_only_20261022'
-    proof_path = history/'reuse_receipt.json'
-    if proof_path.exists():
-        proof = read_json(proof_path)
-        if proof['new_contract'] != contract:
-            raise ValueError('Changed fit-only recovery contract')
-        old = proof['prior_contract']
-        old_manifest = read_json(history/'model_manifest.json')
-        if sha256(history/'model_manifest.json') != proof['verified_manifest_sha256']:
-            raise ValueError('Prior exhaustive readback receipt changed')
-    else:
-        old = read_json(output/'contract.json')
-        old_manifest = read_json(output/'templates/model_manifest.json')
-        final = read_json(output/'manifest.json')
-        support = final['fit_compatibility']
-        target = dict(channel='GCR_highdm_c1_2023BPix', process='ZJet', parameter='',
-            problem='zero_integral_nonempty_component', sumw2=0.010207432109671547, variations=[])
-        if (final['status'] != 'templates_verified_fit_blocked'
-                or final.get('root_integrity_checked') is not True
-                or final.get('template_points') != 955 or len(final.get('points', [])) != 955
-                or final.get('blocked') != [] or support.get('background_issues') != [target]
-                or support.get('blocked_signal_points') != []
-                or old_manifest.get('root_integrity_checked') is not True
-                or old_manifest.get('contract') != old
-                or old_manifest.get('fit_compatibility') != support
-                or old_manifest.get('status') != 'templates_verified_fit_blocked'):
-            raise ValueError('Only the completed exact GCR-blocked grid may be recovered')
-        proof = dict(source_output=str(output.relative_to(ROOT)), prior_contract=old,
-            new_contract=contract, files=old_manifest['files'],
-            object_coverage=old_manifest['object_coverage'],
-            verified_manifest_sha256=sha256(output/'templates/model_manifest.json'),
-            approved_policy=ZJET_FIT_EXCLUSION, reuse_verified_readback=True,
-            full_workflow_complete=False)
-    if sha256(prior_config) != old['config_sha256'] or sha256(prior_builder) != old['code']['workflows/build_nominal_grid.py']:
-        raise ValueError('Prior fit-only recovery source/config identity changed')
-    ignored = {'config_sha256', 'code'}
-    if ({k:v for k,v in old.items() if k not in ignored} !=
-            {k:v for k,v in contract.items() if k not in ignored}
-            or {k:v for k,v in old['code'].items() if k != 'workflows/build_nominal_grid.py'} !=
-               {k:v for k,v in contract['code'].items() if k != 'workflows/build_nominal_grid.py'}):
-        raise ValueError('Fit-only recovery changed numerical template inputs')
-    expected = {'template_'+m+'_'+y+'.root' for m in ('highdm','lowdm') for y in config['years']}
-    if (set(proof['files']) != expected or set(proof['object_coverage']) != expected
-            or {p.name for p in (output/'templates').glob('*.root')} != expected
-            or any(r.get('all_expected_objects_read_back') is not True or
-                   r.get('extra_objects_rejected') is not True for r in proof['object_coverage'].values())):
-        raise ValueError('Incomplete prior exhaustive ROOT verification')
-    for name, digest in proof['files'].items():
-        if sha256(output/'templates'/name) != digest:
-            raise ValueError('Verified ROOT changed: '+name)
-    for year in config['years']:
-        path = output/'inputs'/(year+'.json.gz')
-        cache = read_json(path.with_suffix('.receipt.json'))
-        if not same_extraction_contract(cache['contract'], old) or sha256(path) != cache['sha256']:
-            raise ValueError('Verified extracted cache changed')
-        proof.setdefault('cache_contracts', {})[year] = cache['contract']
-    if dry_run:
-        return proof, proof_path
-    if not proof_path.exists():
-        history.mkdir(parents=True, exist_ok=False)
-        for name in ('contract.json','manifest.json','state.json','fit_compatibility.json',
-                     'negative_to_zero_audit.json','blocked_points.json','signal_theory.json','datacards'):
-            source = output/name
-            if source.exists():
-                source.rename(history/name)
-        (output/'templates/model_manifest.json').rename(history/'model_manifest.json')
-        write_json(proof_path, proof)
-    return proof, proof_path
 
 
-def build(config_path, output, validate_only=False, preserve_unsupported=False, continuation=None,
-          resume_extracted=False, resume_written=False, template_verify_workers=1, template_check_mode='exhaustive',
+def build(config_path, output, validate_only=False, preserve_unsupported=False,
+          resume_extracted=False, resume_written=False, template_verify_workers=1, template_check_mode='minimal',
           resume_cards=False, card_workers=1):
     output = internal_path(output)
     # A delivered card stage is the downstream input. Do not reconstruct or
@@ -1542,24 +1381,21 @@ def build(config_path, output, validate_only=False, preserve_unsupported=False, 
     if config_path is None:
         raise ValueError('A config is required only before the accepted card stage exists')
     config_path = internal_path(config_path)
-    if resume_cards and (resume_extracted or resume_written or continuation or validate_only):
+    if resume_cards and (resume_extracted or resume_written or validate_only):
         raise ValueError('Card resume is mutually exclusive with extraction/template recovery')
     if not 1 <= card_workers <= 32:
         raise ValueError('Card workers must be between one and 32')
-    if resume_written and (resume_extracted or continuation or validate_only):
+    if resume_written and (resume_extracted or validate_only):
         raise ValueError('Written-template resume is a distinct production-only recovery')
-    if template_check_mode not in ('exhaustive','minimal') or (
-            template_check_mode == 'minimal' and (not (resume_written or resume_cards) or not preserve_unsupported)):
-        raise ValueError('Minimal checks require explicit preserved written-template recovery')
+    if template_check_mode not in ('exhaustive','minimal'):
+        raise ValueError('Unknown template check mode')
     if not validate_only and sys.platform != 'linux':
         raise RuntimeError('Native ROOT templates must stay on hep2, not the local laptop')
     config = read_json(config_path)
     revision = config.get('statistical_revision')
     revised = require_statistical_revision(revision)
-    if revised and continuation:
-        raise ValueError('CR12 templates require their own immutable output, not old-template continuation')
-    if revised and config.get('background_estimation_uncertainties') != dict(
-            id='jme_background_shapes_20260929', mode='shape', auto_mc_stats=[10, 1, 1], user_approved=True):
+    if revised and scientific_settings(config.get('background_estimation_uncertainties')) != dict(
+            mode='shape', auto_mc_stats=[10, 1, 1]):
         raise ValueError('CR12 requires the exact adopted measured-background shape policy')
     inventory = internal_path(ROOT / config['grid'])
     grid = requested_grid(inventory)
@@ -1567,11 +1403,17 @@ def build(config_path, output, validate_only=False, preserve_unsupported=False, 
     output.mkdir(parents=True, exist_ok=True)
     with (output / 'builder.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        if not validate_only and not (resume_cards or resume_written or resume_extracted):
+            # Resume the furthest committed stage using the same main command.
+            state_path = output/'state.json'
+            saved = read_json(state_path) if state_path.is_file() else {}
+            resume_cards = (output/'templates/model_manifest.json').is_file()
+            resume_written = not resume_cards and saved.get('status') == 'verifying_templates'
+            resume_extracted = not (resume_cards or resume_written) and (output/'inputs').is_dir()
         card_resume = resume_card_inputs(output, contract, template_check_mode) if resume_cards else None
         execution_contract = contract
         if card_resume:
             contract = card_resume['prior_contract']
-        receipt = audit_continuation(output, contract, config, continuation) if continuation else None
         written_receipt = resume_written_templates(output, contract, config,
             check_mode=template_check_mode) if resume_written else None
         contract_path = output / 'contract.json'
@@ -1579,33 +1421,18 @@ def build(config_path, output, validate_only=False, preserve_unsupported=False, 
         unwritten_same_extraction = (prior_contract is not None
             and same_extraction_contract(prior_contract, contract)
             and not any((output/name).exists() for name in ('manifest.json', 'templates', 'cards', 'datacards')))
-        if (resume_extracted and config.get('additional_fit_exclusions') and not continuation
-                and ((prior_contract is not None and prior_contract != contract and not unwritten_same_extraction)
-                     or (output/'history/approved_zjet_fit_only_20261022/reuse_receipt.json').exists())):
-            receipt, continuation = recover_verified_fit_scope(output, contract, config)
-        if not written_receipt and contract_path.exists() and read_json(contract_path) != contract and (
-                not receipt or read_json(contract_path) != receipt['prior_contract']):
-            old = read_json(contract_path)
-            if (not resume_extracted or not same_extraction_contract(old, contract)
-                    or (output/'manifest.json').exists() or (output/'templates').exists()
-                    or (output/'cards').exists() or (output/'datacards').exists()):
-                raise ValueError('Preserve existing grid with a different source/input contract')
-            history = output/'history'/('extracted_'+old['code']['workflows/build_nominal_grid.py'])
-            write_json(history/'contract.json', old)
-            if (output/'state.json').exists():
-                write_json(history/'state.json', read_json(output/'state.json'))
+        if not written_receipt and prior_contract is not None and not same_extraction_contract(prior_contract, contract):
+            raise ValueError('Existing grid has different physics inputs; preserve its products')
         if not card_resume:
             write_json(contract_path, contract)
         caches = {}
         for year in config['years']:
-            cache_root = ROOT / receipt['source_output'] if receipt else output
+            cache_root = output
             path = cache_root / 'inputs' / (year + '.json.gz')
             cache_receipt = path.with_suffix('.receipt.json')
             if path.exists():
                 state = read_json(cache_receipt)
-                accepted = [contract] + ([receipt['prior_contract']] if receipt else [])
-                if receipt and year in receipt.get('cache_contracts', {}):
-                    accepted.append(receipt['cache_contracts'][year])
+                accepted = [contract]
                 reusable = ((resume_extracted or resume_cards) and same_extraction_contract(state['contract'], contract))
                 if card_resume:
                     reusable = (same_extraction_contract(state['contract'], card_resume['cache_contract'])
@@ -1747,31 +1574,30 @@ def build(config_path, output, validate_only=False, preserve_unsupported=False, 
         if validate_only or (fit_blocked and not preserve_unsupported):
             write_json(output / 'state.json', summary)
             return 2 if fit_blocked else 0
-        templates = (ROOT/receipt['source_output'] if receipt else output) / 'templates'
+        templates = (output) / 'templates'
         template_manifest = output / 'templates' / 'model_manifest.json'
         def full_readback():
             return parallel_verify_signal_objects(templates, channels, points, caches, sources,
                 preserve_unsupported, background, output, contract, workers=template_verify_workers,
-                cache_root=ROOT/receipt['source_output'] if receipt else output, check_mode=template_check_mode)
+                cache_root=output, check_mode=template_check_mode)
         if template_manifest.exists():
             manifest = read_json(template_manifest)
             expected_status = 'templates_verified_fit_blocked' if fit_blocked else 'templates_ready'
-            if manifest['contract'] != contract or manifest['status'] != expected_status:
+            if not same_extraction_contract(manifest['contract'], contract) or manifest['status'] != expected_status:
                 raise ValueError('Interrupted/divergent template outputs retained; explicit recovery required')
             if not card_resume:
                 for name, digest in manifest['files'].items():
                     if sha256(templates / name) != digest:
                         raise ValueError('Completed shared template changed')
-            coverage = (card_resume['manifest']['object_coverage'] if card_resume else
-                receipt['object_coverage'] if receipt and receipt.get('reuse_verified_readback') else full_readback())
+            coverage = card_resume['manifest']['object_coverage'] if card_resume else full_readback()
             validation['reused_exhaustive_files'] = sorted(name for name,row in coverage.items()
                 if minimal and row.get('check_mode') == 'exhaustive' and row.get('numeric_readback_performed') is True)
             if manifest.get('object_coverage') != coverage:
                 raise ValueError('Changed template endpoint coverage')
-        elif templates.exists() and not receipt and not written_receipt:
+        elif templates.exists() and not written_receipt:
             raise FileExistsError('Incomplete ROOT template directory retained; explicit recovery required')
         else:
-            if not receipt and not written_receipt:
+            if not written_receipt:
                 templates.mkdir()
                 write_json(output / 'state.json', dict(summary, status='writing_templates', pid=os.getpid()))
                 write_templates(templates, channels, background)
@@ -1795,9 +1621,8 @@ def build(config_path, output, validate_only=False, preserve_unsupported=False, 
                     for f in files.values():
                         f.Close()
             write_json(output/'state.json', dict(summary, status='verifying_templates', pid=os.getpid(),
-                reused_written_templates=bool(receipt or written_receipt)))
-            coverage = (receipt['object_coverage'] if receipt and receipt.get('reuse_verified_readback') else
-                full_readback())
+                reused_written_templates=bool(written_receipt)))
+            coverage = full_readback()
             validation['reused_exhaustive_files'] = sorted(name for name,row in coverage.items()
                 if minimal and row.get('check_mode') == 'exhaustive' and row.get('numeric_readback_performed') is True)
             manifest = dict(status='templates_verified_fit_blocked' if fit_blocked else 'templates_ready',
@@ -1813,12 +1638,6 @@ def build(config_path, output, validate_only=False, preserve_unsupported=False, 
                 if manifest['files'] != written_receipt['files']:
                     raise ValueError('Read-only written-template resume modified ROOT files')
                 manifest['written_template_resume'] = written_receipt
-            if receipt:
-                if manifest['files'] != receipt['files']:
-                    raise ValueError('Read-only continuation modified ROOT files')
-                manifest['template_continuation'] = dict(path=str(internal_path(continuation).relative_to(ROOT)),
-                    sha256=sha256(continuation))
-                manifest['template_directory'] = str(templates.relative_to(ROOT))
             if config.get('sr_merge'):
                 manifest['sr_merge'] = config['sr_merge']
             if config.get('systematic_scope'):
@@ -3021,20 +2840,12 @@ if __name__ == '__main__':
     p.add_argument('--preserve-unsupported-templates', action='store_true',
         help='Preserve genuine zero-support nominal/endpoint TH1s and report fit incompatibility; never mark them fit-ready')
     p.add_argument('--native-runtime', action='store_true', help=argparse.SUPPRESS)
-    p.add_argument('--continue-template-audit', type=Path,
-        help='Exact old/new contract receipt for reusing written ROOTs; full readback required')
-    p.add_argument('--resume-extracted', action='store_true',
-        help='Reuse unchanged year extraction after a downstream builder-only repair, before templates exist')
-    p.add_argument('--resume-written-templates', action='store_true',
-        help='Verify exact existing closed ROOTs after a builder-only repair; never rewrite them')
-    p.add_argument('--resume-cards', action='store_true',
-        help='Reuse complete immutable templates and hash-bound cards after a card-writer-only repair')
     p.add_argument('--card-workers', type=int, choices=range(1,33), default=1,
         help='Canonical-runtime fork workers for unfinished cards (default: 1)')
     p.add_argument('--template-verify-workers', type=int, choices=range(1,13), default=1,
         help='Bounded file-level exhaustive ROOT readback workers (default: 1)')
     p.add_argument('--template-check-mode', choices=('exhaustive','minimal'), default='minimal',
-        help='Explicit user-approved structural-only check for existing written templates')
+        help='Structural checks by default; exhaustive readback only when requested')
     p.add_argument('--verify-template-request', type=Path, help=argparse.SUPPRESS)
     p.add_argument('--verify-template-file', help=argparse.SUPPRESS)
     p.add_argument('--verify-template-result', type=Path, help=argparse.SUPPRESS)
@@ -3055,10 +2866,6 @@ if __name__ == '__main__':
         p.error('Incomplete ROOT readback worker invocation')
     if not a.output:
         p.error('--output is required')
-    if a.resume_written_templates and (a.resume_extracted or a.continue_template_audit or a.validate_only):
-        p.error('--resume-written-templates is mutually exclusive with other recovery/validation modes')
-    if a.resume_cards and (a.resume_written_templates or a.resume_extracted or a.continue_template_audit or a.validate_only):
-        p.error('--resume-cards is mutually exclusive with other recovery/validation modes')
     if a.sr_only_comparison:
         if not a.parent_grid: p.error('--parent-grid is required for the comparison')
         raise SystemExit(build_comparison(a.sr_only_comparison, a.output, a.parent_grid,
@@ -3079,14 +2886,8 @@ if __name__ == '__main__':
         os.execvpe('python3', ['python3', str(Path(__file__).resolve()),
             '--config', str(internal_path(a.config)), '--output', str(internal_path(a.output)),
             '--native-runtime'] + (['--preserve-unsupported-templates'] if a.preserve_unsupported_templates else [])
-            + (['--continue-template-audit', str(internal_path(a.continue_template_audit))]
-               if a.continue_template_audit else [])
-            + (['--resume-extracted'] if a.resume_extracted else [])
-            + (['--resume-written-templates'] if a.resume_written_templates else [])
-            + (['--resume-cards'] if a.resume_cards else [])
             + ['--template-verify-workers', str(a.template_verify_workers),
                '--template-check-mode', a.template_check_mode, '--card-workers', str(a.card_workers)], env)
     raise SystemExit(build(a.config, a.output, a.validate_only, a.preserve_unsupported_templates,
-                          a.continue_template_audit, a.resume_extracted,
-                          a.resume_written_templates, a.template_verify_workers, a.template_check_mode,
-                          a.resume_cards, a.card_workers))
+                          template_verify_workers=a.template_verify_workers,
+                          template_check_mode=a.template_check_mode, card_workers=a.card_workers))

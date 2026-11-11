@@ -18,6 +18,21 @@ cards for CR-only fits, impacts and limits. The settings are in
 `jsons/analysis.json`. Find the finished fits and figures in
 [current results](NOMINAL_CONTINUATION.md).
 
+### Resume an interrupted stage
+
+Run the same `python -m TROTASR <stage>` command again. `cards` selects the
+furthest committed extraction, template or card state. `limits` keeps successful
+points and advances through its finite numerical recipes. `cronly` and `impacts`
+also run their applicable finite recovery internally. Separate recovery
+launchers and source-snapshot approvals are not required.
+
+A live process or held lock is never replaced. A dead diagnostic command is
+recorded as interrupted, not successful; an identical consumed fit command is
+not submitted again. Input/model identity, SR blinding, finite values, numerical
+crossings and resource limits remain required. Code hashes and approval dates
+do not determine scientific compatibility. Existing accepted results are reused;
+this behavior does not authorize refitting or redrawing a frozen result.
+
 ## Datacard review
 
 Get the five signal cards, the CR-only card and their ROOT files from

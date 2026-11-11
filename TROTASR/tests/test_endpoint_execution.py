@@ -27,37 +27,9 @@ def payload(endpoint):
 
 
 class EndpointExecutionTests(unittest.TestCase):
-    def test_retained_bridge_rejects_unvalidated_physics_and_code(self):
-        from TROTASR.workflows.continue_systematic_campaign import retained_contract_bridge
-        old = dict(contracts={str(y):dict(code={'utils/histogramming.py':'old'},year=y,
-                                         variations=['nominal']) for y in (2024,2025)})
-        new = copy.deepcopy(old)
-        for c in new['contracts'].values():
-            c['code']['utils/histogramming.py']='new'
-        new['endpoint_execution_update']={'chunk_size':25000}
-        gate=dict(status='passed',unit_tests=104,
-            records=[dict(year=2024+i%2,status='passed') for i in range(18)],
-            three_signal_topologies_tested=True,large_batch_validation_passed=True,
-            strict_endpoint_merge_tested=True,regions=['SR','LLCR','QCDCR','GCR','DY2E','DY2M'],
-            before_contracts=copy.deepcopy(old['contracts']),after_contracts=copy.deepcopy(new['contracts']),
-            selected_chunk_size=25000)
-        retained_contract_bridge(new,gate,old)
-        for field,value in [('unit_tests',0),('strict_endpoint_merge_tested',False),
-                            ('records',[]),('selected_chunk_size',50000)]:
-            broken=copy.deepcopy(gate);broken[field]=value
-            with self.subTest(field=field),self.assertRaises(ValueError):
-                retained_contract_bridge(new,broken,old)
-        changed=copy.deepcopy(new);changed['contracts']['2024']['variations']=['all_weights']
-        badgate=copy.deepcopy(gate);badgate['after_contracts']=changed['contracts']
-        with self.assertRaisesRegex(ValueError,'physics'):
-            retained_contract_bridge(changed,badgate,old)
-        changed=copy.deepcopy(new);changed['contracts']['2024']['code']['utils/corrections.py']='changed'
-        badgate=copy.deepcopy(gate);badgate['after_contracts']=changed['contracts']
-        with self.assertRaisesRegex(ValueError,'scheduling'):
-            retained_contract_bridge(changed,badgate,old)
 
     def test_recovered_histograms_keep_signed_yields_but_reject_invalid_arrays(self):
-        from TROTASR.workflows.continue_systematic_campaign import finite_histogram_arrays
+        from TROTASR.workflows.run_systematic_campaign import finite_histogram_arrays
         good=dict(x=dict(sumw=[[-1.,2.]],sumw2=[[1.,4.]],entries=[[1,1]],edges=[[0,1],[0,1,2]]))
         finite_histogram_arrays(good)
         for field,value in [('sumw',float('nan')),('sumw',float('inf')),

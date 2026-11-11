@@ -19,7 +19,7 @@ if __package__ in (None, ''):
 from TROTASR.utils.paths import ROOT, internal_path
 from TROTASR.utils.io import read_json, write_json, sha256
 from TROTASR.workflows.diagnostic_common import (native_runtime, grid_card,
-    freeze_contract, CommandRunner, require_success, workspace, published_diagnostic)
+    freeze_contract, CommandRunner, require_success, workspace, published_diagnostic, process_active)
 from TROTASR.workflows.impact_legacy import check_endpoints, fit_command, validate_fit
 
 SOURCES = ['workflows/combine_impacts.py', 'workflows/diagnostic_common.py',
@@ -197,8 +197,8 @@ def run(manifest, output, workers=40, plot_only=False, model='T2tt', mass='mStop
     if workspace_state is not None:
         with (internal_path(workspace_state).parent/'point.lock').open('a') as lock:
             fcntl.flock(lock,fcntl.LOCK_SH|fcntl.LOCK_NB)
-            return _run(manifest,output,workers,plot_only,model,mass,workspace_state)
-    return _run(manifest,output,workers,plot_only,model,mass)
+            return run_with_recovery(manifest,output,workers,plot_only,model,mass,workspace_state)
+    return run_with_recovery(manifest,output,workers,plot_only,model,mass)
 
 
 def _run(manifest, output, workers=40, plot_only=False, model='T2tt', mass='mStop1200_mLSP500', workspace_state=None):
@@ -218,14 +218,8 @@ def _run(manifest, output, workers=40, plot_only=False, model='T2tt', mass='mSto
             contract=read_json(output/'contract.json')
             if contract['origins']!=origins or contract['options']!=options:
                 raise ValueError('Original impact input contract changed')
-            campaign=output.parent if output.name=='impacts' else output.parent.parent
-            for name,digest in contract['code'].items():
-                source=ROOT/name
-                if sha256(source)!=digest:
-                    source=campaign/'history/recovery_20261009/source'/Path(name).name
-                if not source.is_file() or sha256(source)!=digest:
-                    raise ValueError('Original impact producer source unavailable: '+name)
-        else:freeze_contract(output, origins, SOURCES, options)
+        else:
+            freeze_contract(output, origins, SOURCES, options)
         runner = CommandRunner(output)
         path = output / 'impact_status.json'
         state = read_json(path) if path.exists() else dict(status='running', started=time.time(),
@@ -297,6 +291,68 @@ def _run(manifest, output, workers=40, plot_only=False, model='T2tt', mass='mSto
             state['controller_pid'] = None
             write_json(path, state)
     return 0
+
+
+def run_with_recovery(manifest, output, workers, plot_only=False, model='T2tt',
+                      mass='mStop1200_mLSP500', workspace_state=None):
+    """The impacts stage owns primary fits and their finite bounded profiles."""
+    from TROTASR.workflows.recover_impacts import run_bounded, run as direct_profile
+    result = _run(manifest, output, workers, plot_only, model, mass, workspace_state)
+    if result != 2 or plot_only:
+        return result
+    path = internal_path(output) / 'impact_status.json'
+    attempts = []
+    phases = (('bounded_sgamma_complete', {}),
+              ('bounded_sgamma_precision', {'polish': True}),
+              ('bounded_sgamma_minimizer', {'hybrid': True}),
+              ('bounded_sgamma_likelihood', {'likelihood': True}),
+              ('bounded_sgamma_refined', {'refine': True}),
+              ('bounded_sgamma_final', {'refine': True, 'final': True}))
+    for phase, options in phases:
+        receipt = internal_path(output) / phase / 'status.json'
+        saved = read_json(receipt) if receipt.is_file() else {}
+        if process_active(saved, 'controller_pid'):
+            raise BlockingIOError('Impact profile controller is still active')
+        if saved.get('status') == 'needs_attention' and saved.get('failed'):
+            attempts.append(dict(method=phase, outcome='exhausted'))
+            continue
+        try:
+            result = run_bounded(manifest, internal_path(output), workers, model=model,
+                                 mass=mass, complete=True, **options)
+        except BlockingIOError:
+            raise
+        except ValueError as error:
+            attempts.append(dict(method=phase, outcome='inapplicable', reason=str(error)))
+        else:
+            attempts.append(dict(method=phase, outcome='complete' if result == 0 else 'exhausted'))
+            if result == 0:
+                return 0
+    # The older direct recipe is applicable only to its physical [0,10]
+    # rate bounds or a numerically established missing endpoint. Its own
+    # preflight checks these conditions before issuing any Combine command.
+    state = read_json(path)
+    failed = state.get('failed_nuisances', [])
+    records = [read_json(internal_path(output)/'fit_state'/(name+'.json')) for name in failed]
+    bounded = records and all(record.get('bounds') == [.01,5.] for record in records)
+    if bounded or not failed or (model,mass) != ('T2tt','mStop1200_mLSP500'):
+        attempts.append(dict(method='direct_profile', outcome='inapplicable',
+                             reason='Requires original benchmark and compatible direct-profile endpoints/bounds'))
+    else:
+        missing = [name for name in failed if 'sgamma_shape' not in name and 'qcd_norm' not in name]
+        try:
+            result = direct_profile(manifest, internal_path(output), workers, missing=missing)
+        except BlockingIOError:
+            raise
+        except ValueError as error:
+            attempts.append(dict(method='direct_profile', outcome='inapplicable', reason=str(error)))
+        else:
+            attempts.append(dict(method='direct_profile', outcome='complete' if result == 0 else 'exhausted'))
+            if result == 0:
+                return 0
+    state = read_json(path)
+    state['recovery_attempts'] = attempts
+    write_json(path, state)
+    return 2
 
 
 if __name__ == '__main__':

@@ -20,26 +20,13 @@ Do not recreate any alternate environment, old model, source snapshot or sidecar
 The user explicitly retained R/../Stop_Object_Review as review material,
 not a second analysis implementation. Source NanoAOD/MiniAOD stays read-only.
 
-Local/remote maintained Python/shell sources match exactly (131 files).
-Source identity: SHA256 over sorted relative-path -> file-SHA256 JSON,
-compact separators, in utils/workflows/gnn4lowdm and top-level *.py;
-exclude __pycache__, history and macOS ._ metadata.
-354af07cda61ba9555f8651856929064dc8874574d57a2a177ce463e65881e59
-analysis.json SHA256:
-db2a5adccf19135ea8c75827970db4ccf0c4e45c56d1d753ef8254c03e853cdc
-
-Review revision 2026-11-01: comments/docstrings in 32 Python files now describe
-current behavior rather than conversational instructions or development history.
-Two commented-out code blocks were removed. Executable ASTs excluding docstrings
-match the preceding version. No fit, recompile, workspace build, rerender or
-physics/configuration change. Scientific receipts retain their execution-time
-source identities; this documentation revision does not rewrite result provenance.
-
-Current input/calibration/model/compiled/normalization/histogram/measurement
-payloads stay at R/inputs,scales,models,utils/compiled,estimations,results.
-Four adopted late-era efficiency files in estimations were matched byte-for-byte
-before retiring the old local analysis tree. No large ROOT rehash/readback,
-upstream reconstruction, physics changes or reprocessing was performed.
+Resume through `python -m TROTASR <stage>` in the same canonical output.
+Cards select the saved extraction/template/card stage automatically; limits,
+CR-only and impacts own their finite recovery. Scientific input compatibility,
+blinding, numerical acceptance and process locks remain required. Historical
+source snapshots, approval labels and code hashes no longer gate these resumes.
+The 2026-11-11 cleanup changed code only; accepted results and active work were
+preserved. See README for the current commands.
 
 ## Adopted model and completed results
 
