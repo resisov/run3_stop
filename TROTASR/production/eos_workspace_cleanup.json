@@ -1,0 +1,33 @@
+{
+  "completed_at": "2026-11-15T13:01:37.285345+01:00",
+  "checkout": "/eos/user/t/taiwoo/run3_stop/decaf",
+  "branch": "run3_full_analysis",
+  "commit": "71b4bca2f6f74e58d312dd5d7d481ff588814e86",
+  "origin": "https://github.com/resisov/run3_stop.git",
+  "tracked_files_match_git": true,
+  "cli_help_exit_code": 0,
+  "removed_obsolete_workspaces": [
+    "/eos/user/t/taiwoo/run3_stop/combined-analysis",
+    "/eos/user/t/taiwoo/run3_stop/decaf (replaced with current Git checkout)",
+    "/eos/user/t/taiwoo/decaf (code removed; two credential files preserved)"
+  ],
+  "preserved": {
+    "nanoaod_cache": "/eos/user/t/taiwoo/run3_stop/inputs/nanoaod_cache",
+    "source_root_files": 234,
+    "trota_h5_models": 4,
+    "scale_files": 143,
+    "signal_collection_receipts": 1122,
+    "credentials": "existing paths, mode 0600",
+    "local_and_hep2_work": "unchanged by this cleanup"
+  },
+  "temporary_clone_and_transfer_files_removed": true,
+  "eos_recycle": {
+    "site_managed": true,
+    "permanent_purge": "denied: CERN sudo/admin role required",
+    "user_managed_backup_or_trash_created": false
+  },
+  "unrelated_repositories_preserved": [
+    "/eos/user/t/taiwoo/run3_stop/MCIRequest",
+    "/eos/user/t/taiwoo/run3_stop/conda-env"
+  ]
+}
