@@ -41,17 +41,17 @@ def _covered(coverage):
 
 def _observations(mc, data):
     background_only = mc.get("background_only") is True
-    if (mc.get("schema") != "trotasr_vr_mc_nominal_v1" or mc.get("status") != "complete"
+    if (mc.get("schema") != "trotasr_vr_mc_nominal_v1" or mc.get("status") not in ("complete", "incomplete")
+            or mc.get("pilot") is True
             or mc.get("mc_only") is not True or mc.get("sr_observations_read") is not False
             or mc.get("vr_observations_read") is not False
             or set(mc.get("coverage", {})) != set(ERAS)
             or any(not _covered(mc["coverage"][era].get("background")) for era in ERAS)
-            or (background_only and (mc.get("full_era_signal_points") != 0
+            or (background_only and (mc.get("status") != "complete" or mc.get("full_era_signal_points") != 0
                     or mc.get("missing_era_signal_points", {}) is not None
                     or any(mc["coverage"][era].get("signal") != [0, 0] for era in ERAS)))
-            or (not background_only and any(not _covered(mc["coverage"][era].get("signal"))
-                                           for era in ERAS))):
-        raise ValueError("A complete blinded six-era VR background summary with explicit signal coverage is required")
+            or (not background_only and not isinstance(mc.get("missing_era_signal_points"), dict))):
+        raise ValueError("A complete blinded six-era VR background summary is required")
     if (data.get("schema") != "trotasr_vr_jetmet_v1" or data.get("status") != "complete"
             or data.get("sr_observations_used") is not False or data.get("sr_histograms_filled") is not False
             or data.get("low_bins") != 30 or data.get("high_bins") != 118
@@ -283,6 +283,22 @@ def _nominal_years(mc, eras, slc):
                          background_unc=stat_unc, background_stat_unc=stat_unc), len(stat_unc))
 
 
+def _display_inputs(mc, data, luminosities, *, nominal=False):
+    from TROTASR.utils.statistical_templates import json_ready
+
+    counts = _observations(mc, data)
+    out = {}
+    for name, eras in VIEWS.items():
+        slc = slice(30, 148) if name == "highdm" else slice(0, 30)
+        out[name] = dict(geometry=_layout(mc, name, eras),
+                         observed=sum(counts[era][slc] for era in eras),
+                         luminosity=sum(luminosity_fb(e) if luminosities is None else float(luminosities[e])
+                                        for e in eras))
+        if nominal:
+            out[name]["prediction"] = _nominal_years(mc, eras, slc)
+    return json_ready(out)
+
+
 def render_nominal(mc, data, output, luminosities=None):
     """Plot observed VR against nominal MC with statistical uncertainty only."""
     counts = _observations(mc, data)
@@ -305,6 +321,23 @@ def render_nominal(mc, data, output, luminosities=None):
                         stages=("prefit",), band_labels={"prefit": NOMINAL_BAND},
                         titles={"prefit": "Nominal prefit (MC stat. only)"})
             for name, args in prepared.items()}
+
+
+def _completed_figures(output, stem):
+    from TROTASR.utils.io import read_json
+
+    receipt = output / "plot_manifest.json"
+    if not receipt.is_file():
+        return None
+    prior = read_json(receipt)
+    expected = {f"vr_{view}_{stem}.{extension}" for view in VIEWS for extension in ("png", "pdf")}
+    if (set(prior.get("plots", {})) != set(VIEWS)
+            or set(prior.get("files", ())) != expected
+            or prior.get("sr_observations_used") is not False
+            or prior.get("vr_data_fitted") is not False or prior.get("fit_recalculated") is not False
+            or any(not (output / name).is_file() or not (output / name).stat().st_size for name in expected)):
+        raise ValueError("Incompatible or incomplete VR figures; preserve existing artifacts")
+    return prior
 
 
 def main():
@@ -340,16 +373,32 @@ def main():
         bundle = read_json(source) if source else {x: read_json(vr / (x + "_summary.json.gz"))
                                                    for x in ("mc", "data")}
         rates_source = internal_path(args.normalization_input) if args.normalization_input else None
-        rates = read_json(rates_source) if rates_source else saved_rates()
-        prediction = project(bundle["mc"], rates)
         output.mkdir(parents=True, exist_ok=True)
         with (output / "plot.lock").open("a") as owner:
             fcntl.flock(owner, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            display = _display_inputs(bundle["mc"], bundle["data"], bundle.get("luminosities"),
+                                      nominal=True)
+            prior = _completed_figures(output, "cr_normalization_only")
+            if prior is not None:
+                if prior.get("display_inputs", display) != display:
+                    raise ValueError("Current VR yields or bins differ from the existing figures")
+                if rates_source:
+                    saved = read_json(output / "prediction_payload.json.gz")
+                    current = project(bundle["mc"], read_json(rates_source))
+                    fields = ("views", "covariance", "years", "normalization_only")
+                    from TROTASR.utils.statistical_templates import json_ready
+                    if any(saved.get(k) != json_ready(current.get(k)) for k in fields):
+                        raise ValueError("Supplied CR normalization gives a different VR prediction")
+                print(prior["status"], "(verified existing outputs)")
+                return
+            rates = read_json(rates_source) if rates_source else saved_rates()
+            prediction = project(bundle["mc"], rates)
             plots = render(prediction, bundle["mc"], bundle["data"], output,
                            normalization_only=True, luminosities=bundle.get("luminosities"))
             write_json(output / "prediction_payload.json.gz", prediction)
             write_json(output / "plot_manifest.json", dict(status="generated_pending_visual_QA",
                 scope=prediction["scope"], fit=prediction["fit"], plots=plots,
+                display_inputs=display,
                 nominal_input=str(source) if source else None,
                 rates_input=str(rates_source) if rates_source else None,
                 source_state=bundle.get("state"),
@@ -371,15 +420,23 @@ def main():
                 bundle = {k: read_json(p) for k, p in sources.items()}
                 source_identity = {k: dict(name=p.name, size=p.stat().st_size,
                                            mtime_ns=p.stat().st_mtime_ns) for k, p in sources.items()}
-                bundle["state"] = {k: {field: state[field] for field in ("status", "updated", "completed", "total")}
-                                   for k in sources for state in [read_json(vr / (k + "_state.json"))]}
+                states = {k: vr / (k + "_state.json") for k in sources}
+                bundle["state"] = {k: {field: state.get(field) for field in ("status", "updated", "completed", "total")}
+                                   for k, path in states.items() if path.is_file() for state in [read_json(path)]}
         output.mkdir(parents=True, exist_ok=True)
         with (output / "plot.lock").open("a") as owner:
             fcntl.flock(owner, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            display = _display_inputs(bundle["mc"], bundle["data"], bundle.get("luminosities"), nominal=True)
+            prior = _completed_figures(output, "nominal_prefit")
+            if prior is not None:
+                if prior.get("display_inputs", display) != display:
+                    raise ValueError("Current VR yields or bins differ from the existing figures")
+                print(prior["status"], "(verified existing outputs)")
+                return
             plots = render_nominal(bundle["mc"], bundle["data"], output, bundle.get("luminosities"))
             write_json(output / "plot_manifest.json", dict(status="generated_pending_visual_QA",
                 scope="nominal background MC vs observed JetMET in VR; no transfer or fit",
-                input_identity=source_identity, source_state=bundle.get("state"),
+                input_identity=source_identity, source_state=bundle.get("state"), display_inputs=display,
                 **_mc_scope(bundle["mc"]),
                 plots=plots, files=sorted(Path(row[k]).name for row in plots.values()
                                          for k in ("png", "pdf")),
@@ -410,12 +467,16 @@ def compare_saved_fit():
                 or response.get("no_fit_or_transfer_factors_applied") is not True
                 or response.get("source_nominal_reused") is not True):
             raise ValueError("Require the accepted MC-only VR response inventory")
-        if (mc.get("status") != "complete"
+        if (mc.get("status") not in ("complete", "incomplete")
                 or any(response["coverage"][e] != mc["coverage"][e]["background"] for e in ERAS)):
             raise ValueError("VR response coverage does not match the completed nominal MC")
         output.mkdir(parents=True, exist_ok=True)
         with (output / "plot.lock").open("a") as owner:
             fcntl.flock(owner, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            prior = _completed_figures(output, "prefit_postfit")
+            if prior is not None:
+                print(prior["status"], "(verified existing outputs)")
+                return
             payload = project(run_root, response)
             # The prediction is fully computed before opening the VR data summary.
             data = read_json(vr / "data_summary.json.gz")

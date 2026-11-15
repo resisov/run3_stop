@@ -5,7 +5,6 @@ from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
 import fcntl
 import os
 from pathlib import Path
-import re
 import time
 
 import awkward as ak
@@ -16,20 +15,22 @@ from TROTASR.utils.event_selections import OVERLAP_FIELDS, topology_counts
 from TROTASR.utils.ids import object_masks
 from TROTASR.utils.io import read_json, validate_root, write_json
 from TROTASR.utils.normalization import dataset_label
-from TROTASR.utils.paths import EARLY_ERAS, ERAS, ROOT, era_year, internal_path, tagging_definition
+from TROTASR.utils.paths import ERAS, ROOT, era_year, tagging_definition
 from TROTASR.utils.region_kinematics import jet_kinematics
 from TROTASR.utils.shape_kinematics import jet_block, met_contribution, varied_view
 from TROTASR.utils.trota_candidates import input_fields
 from TROTASR.utils.trota_inference import MIXED_FLOATS, MIXED_INTS, P4_FIELDS, bounded_slices, infer_chunk, p4_view
 from TROTASR.workflows.validation_regions import (
-    OUTPUT, _headroom, _models, _select_and_bin, angular_candidates, layout,
+    OUTPUT, _accepted_input_path, _active_controller, _headroom, _input_inventory, _input_kind,
+    _models, _select_and_bin, angular_candidates, geometry,
 )
+from TROTASR.workflows.resources import process_identity
 
 
 SCHEMA = "trotasr_vr_jetmet_v1"
 MAX_WORKERS = 12
-DATA_NAME = re.compile(r"data_(?:shard|completion_MET2022C)_\d+\.root")
-IDENTITY = ("dataset_id", "is_data", "is_signal", "pass_base_common", "pass_signal_trigger")
+IDENTITY = ("dataset_id", "is_data", "is_signal")
+JETMET_SELECTION = ("pass_base_common", "pass_signal_trigger")
 JETS = ("jet_corrected_pt", "jet_eta_all", "jet_phi_all", "jet_id_all", "met", "met_phi")
 TYPE1 = ("jet_nanoaod_pt", "jet_ch_em_ef", "jet_ne_em_ef", "jet_muon_subtr_factor")
 VETO = (
@@ -134,7 +135,7 @@ def _bin_chunk(tree, entries, year, era, bins):
     a, entries, low, high = a[keep], entries[keep], low[keep], high[keep]
     a = p4_view(_boosted(a, year), {k: a[k.replace("nanoaod", "corrected")] for k in P4_FIELDS})
     trota, gnn = _models(era)
-    low_bins, high_bins, _ = layout(era)
+    low_bins, high_bins = geometry(era)
     for sl in bounded_slices(a, year=year):
         inferred, resolved, _, _ = infer_chunk(a[sl], trota)
         tags, _, _, _ = topology_counts(inferred, resolved, "SR", year=year)
@@ -157,14 +158,7 @@ def _bin_chunk(tree, entries, year, era, bins):
 
 
 def _source(task):
-    relative = Path(task["input"])
-    if relative.parent != Path("inputs") / str(task["year"]) or not DATA_NAME.fullmatch(relative.name):
-        raise ValueError("Expected an accepted observed shard")
-    path = internal_path(ROOT / relative)
-    st = path.stat()
-    if task["fingerprint"].get("size", st.st_size) != st.st_size:
-        raise ValueError("Observed shard size differs from the accepted inventory")
-    return path
+    return _accepted_input_path(task)
 
 
 def _work(task):
@@ -177,40 +171,34 @@ def _work(task):
         raise ValueError("Observed shard metadata is not data-only")
     jetmet = [k for k, (_, process, _, _) in labels.items() if process == "JetMET"]
     bins = np.zeros(148, np.int64)
-    if jetmet:
-        with uproot.open(path, object_cache=None, array_cache=None) as f:
-            tree = f["Events"]
-            if tree.num_entries != task["entries"]:
-                raise ValueError("Observed shard entry metadata differs from the inventory")
-            for start in range(0, tree.num_entries, 12000):
-                a = tree.arrays(IDENTITY, entry_start=start, entry_stop=min(tree.num_entries, start + 12000))
-                dataset = np.asarray(a["dataset_id"])
-                if not np.all(a["is_data"]) or np.any(a["is_signal"]) or not np.all(np.isin(dataset, tuple(labels))):
-                    raise ValueError("Unexpected event identity in observed shard")
+    fields = IDENTITY + JETMET_SELECTION if jetmet else IDENTITY
+    events = 0
+    with uproot.open(path, object_cache=None, array_cache=None) as f:
+        tree = f["Events"]
+        if tree.num_entries != task["entries"]:
+            raise ValueError("Observed Events count differs from the inventory")
+        for start in range(0, tree.num_entries, 12000):
+            stop = min(tree.num_entries, start + 12000)
+            a = tree.arrays(fields, entry_start=start, entry_stop=stop)
+            dataset = np.asarray(a["dataset_id"])
+            if (len(dataset) != stop - start or not np.all(a["is_data"])
+                    or np.any(a["is_signal"]) or not np.all(np.isin(dataset, tuple(labels)))):
+                raise ValueError("Unexpected event range or dataset identity in observed shard")
+            events += len(dataset)
+            if jetmet:
                 use = (np.isin(dataset, jetmet) & np.asarray(a["pass_base_common"], bool)
                        & np.asarray(a["pass_signal_trigger"], bool))
                 _bin_chunk(tree, np.flatnonzero(use) + start, year, era, bins)
-    write_json(_receipt_path(task), dict(schema=SCHEMA, input=task["input"], fingerprint=task["fingerprint"],
+    write_json(_receipt_path(task), dict(schema=SCHEMA, input=task["input"], era=era,
+               events=events, event_range=[0, events],
                bins=bins.tolist(), sr_histograms_filled=False, sr_observations_used=False))
 
 
 def _inventory():
-    tasks = {e: [] for e in ERAS}
-    for name, eras in (("early_nominal_20261022_full.json", EARLY_ERAS),
-                       ("full_nominal_20260923.json", ("2024", "2025"))):
-        data = read_json(ROOT / "inputs/manifests" / name)
-        if data.get("integrated_input_inventory_complete") is not True:
-            raise ValueError("Incomplete observed input inventory")
-        for t in data["tasks"]:
-            if not Path(t["input"]).name.startswith("data_"):
-                continue
-            era = str(t["year"])
-            if era not in eras or not DATA_NAME.fullmatch(Path(t["input"]).name):
-                raise ValueError("Unexpected observed inventory item")
-            tasks[era].append(t)
-    names = [t["input"] for group in tasks.values() for t in group]
-    if not all(tasks.values()) or len(names) != len(set(names)):
-        raise ValueError("Missing era or duplicate observed shards")
+    tasks = {era: [t for t in group if _input_kind(t) == "data"]
+             for era, group in _input_inventory().items()}
+    if not all(tasks.values()):
+        raise ValueError("Missing observed shards for an accepted era")
     return tasks
 
 
@@ -223,12 +211,15 @@ def _receipt(task):
     if not path.is_file():
         return None
     d = read_json(path)
-    if (d["schema"] != SCHEMA or d["input"] != task["input"]
-            or d["fingerprint"].get("size") != task["fingerprint"].get("size")
-            or d["sr_observations_used"] is not False or d["sr_histograms_filled"] is not False
-            or len(d["bins"]) != 148):
+    era, expected = str(task["year"]), task["entries"]
+    bins = d.get("bins", ())
+    if (d.get("schema") != SCHEMA or d.get("era", era) != era
+            or d.get("sr_observations_used") is not False or d.get("sr_histograms_filled") is not False
+            or d.get("events", expected) != expected or d.get("event_range", [0, expected]) != [0, expected]
+            or len(bins) != 148 or any(type(n) is not int or n < 0 for n in bins)
+            or sum(bins) > expected):
         raise ValueError("Divergent VR observed receipt")
-    return d["bins"]
+    return bins
 
 
 def _capacity():
@@ -236,9 +227,9 @@ def _capacity():
     mc_reserve = 0
     if state.is_file():
         d = read_json(state)
-        pid = d.get("pid")
-        p = Path("/proc") / str(pid)
-        if d.get("status") == "running" and p.exists():
+        pid = _active_controller(d, OUTPUT / "controller.lock", legacy_args=("--vr-mc",))
+        if pid is not None:
+            p = Path("/proc") / str(pid)
             try:
                 active = len((p / "task" / str(pid) / "children").read_text().split())
             except FileNotFoundError:
@@ -258,9 +249,11 @@ def run(workers):
         total = sum(map(len, tasks.values()))
         done = total - sum(map(len, pending.values()))
         failures = []
+        controller = process_identity(os.getpid())
 
         def state(status, active=0):
             write_json(OUTPUT / "data_state.json", dict(schema=SCHEMA, status=status, pid=os.getpid(),
+                       start_ticks=controller["start_ticks"],
                        workers=workers, total=total, completed=done, active=active, failures=failures,
                        sr_observations_used=False, sr_histograms_filled=False, updated=time.time()))
 

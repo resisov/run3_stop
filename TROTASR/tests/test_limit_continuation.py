@@ -2,9 +2,10 @@
 import unittest
 from tempfile import TemporaryDirectory
 from pathlib import Path
-from TROTASR.utils.io import write_json
+from TROTASR.utils.io import read_json, write_json
 from TROTASR.utils.paths import ROOT
-from TROTASR.workflows.combine_limits import replacement_card
+from TROTASR.workflows.combine_limits import (
+    accepted_fit_record, historical_success_commands, reconcile_interrupted_attempts, replacement_card)
 from TROTASR.workflows.limit_recovery import choose_range, command_for, target_nll
 
 
@@ -14,6 +15,52 @@ def block(rows):
 
 
 class NumericalContinuationTests(unittest.TestCase):
+    def test_interrupted_attempt_uses_real_receipt_or_remains_consumed_unknown(self):
+        with TemporaryDirectory(dir=ROOT) as directory:
+            work = Path(directory)
+            state = work/'workflow.json'
+            attempts = []
+            for name in ('interrupted', 'saved'):
+                here = work/name
+                here.mkdir()
+                attempts.append(dict(name=name, command=['combine', name], exit_code=None,
+                    log=str((here/'combine.log').relative_to(ROOT)),
+                    output=str((here/'limit.root').relative_to(ROOT))))
+            write_json(work/'saved/validation.json', dict(attempts[1], exit_code=0, passed=True))
+            reconcile_interrupted_attempts(dict(attempts=attempts, pid=123), state)
+            saved = read_json(state)
+            self.assertIsNone(saved['pid'])
+            self.assertIsNone(saved['attempts'][0]['exit_code'])
+            self.assertFalse(saved['attempts'][0]['passed'])
+            self.assertTrue(saved['attempts'][0]['interruption'])
+            self.assertEqual(saved['attempts'][1]['exit_code'], 0)
+
+    def test_accepted_fit_with_missing_ancillary_files(self):
+        with TemporaryDirectory(dir=ROOT) as directory:
+            work = Path(directory)
+            root = work/'limit.root'
+            root.write_bytes(b'accepted product')
+            point = dict(model='T2tt', mass='mStop1200_mLSP500', model_revision='era_merged')
+            attempt = dict(exit_code=0, passed=True, output=str(root.relative_to(ROOT)),
+                           log=str((work/'combine.log').relative_to(ROOT)),
+                           command=['combine', 'recorded'])
+            record = dict(point, status='complete', accepted_attempt=attempt,
+                          validation=dict(quantiles={'.025': 1, '.16': 2, '.5': 3, '.84': 4, '.975': 5}))
+            self.assertEqual(accepted_fit_record(point, record, str(work/'workflow.json'))['output'], str(root))
+            root.unlink()
+            with self.assertRaises(FileNotFoundError):
+                accepted_fit_record(point, record, str(work/'workflow.json'))
+
+    def test_malformed_optional_numerical_recipe_is_inapplicable(self):
+        with TemporaryDirectory(dir=ROOT) as directory:
+            output = Path(directory)
+            point = dict(model='T2tt', mass='mStop1200_mLSP500')
+            write_json(output/'successful_recipes.json',
+                       {'points': {'T2tt/mStop1200_mLSP500': {'command': ['combine'], 'name': 'old'}}})
+            commands, status = historical_success_commands(point, output/'workspace.root', output)
+            self.assertEqual(commands, [])
+            self.assertEqual(status['status'], 'inapplicable')
+
     def test_replacement_point_cannot_fall_back_to_old_cards_or_receipts(self):
         with TemporaryDirectory(dir=ROOT) as directory:
             products = Path(directory)/'new_signal'

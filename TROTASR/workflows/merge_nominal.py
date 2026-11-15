@@ -12,7 +12,7 @@ if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
 from TROTASR.utils.paths import ROOT, internal_path
-from TROTASR.utils.io import read_json, write_json, scientific_settings
+from TROTASR.utils.io import read_json, write_json, scientific_settings, without_provenance_fields
 
 
 def add_numbers(a, b):
@@ -258,14 +258,16 @@ def assemble_endpoints(payloads, endpoints):
                 raise ValueError('Nominal endpoint must be assembled first')
             result = payload
             continue
-        if (payload['input_metadata'] != result['input_metadata'] or
+        if (without_provenance_fields(payload['input_metadata']) != without_provenance_fields(result['input_metadata']) or
                 payload['audit']['events_read'] != result['audit']['events_read']):
             raise ValueError('Endpoint input/normalization accounting mismatch')
         for field in ('schema','sr_data_blinded','bins_merged','highdm_sr_source_axes',
                       'mixed_sf','category_order'):
             if payload.get(field) != result.get(field):
                 raise ValueError('Endpoint invariant differs: '+field)
-        for field in ('input', 'year', 'modes', 'variations'):
+        if Path(payload['contract']['input']).name != Path(result['contract']['input']).name:
+            raise ValueError('Endpoint source shard differs')
+        for field in ('year', 'modes', 'variations'):
             if payload['contract'].get(field) != result['contract'].get(field):
                 raise ValueError('Endpoint contract differs: '+field)
         if payload.get('dy_rz') or payload['audit'].get('migrations'):
@@ -334,7 +336,8 @@ def combine_saved_payloads(jme, nonjme, policy):
     mc = {k:v for k,v in jme['input_metadata'].items() if not v.get('is_data')}
     if set(mc) != set(nonjme['input_metadata']):
         raise ValueError('JME/non-JME MC dataset inventories differ')
-    compare_values(mc, nonjme['input_metadata'], 'MC bookkeeping')
+    compare_values(without_provenance_fields(mc), without_provenance_fields(nonjme['input_metadata']),
+                   'MC bookkeeping')
     if set(nonjme['contract'].get('object_endpoints', [])) != endpoints:
         raise ValueError('All sixteen non-JME endpoints are required')
     for section in ('histograms', 'physical_histograms'):
@@ -394,17 +397,19 @@ def compare_values(before, after, path=''):
 
 
 def validate_input(payload, task, settings):
+    from TROTASR.utils.histogramming import histogram_settings
+    from TROTASR.utils.paths import analysis_era
     if payload.get('status') not in ('complete', 'complete_one_file_test') or payload.get('sr_data_blinded') is not True:
         raise ValueError('Incomplete or unblinded histogram: ' + task['input'])
     contract = payload['contract']
-    if internal_path(contract['input']) != internal_path(ROOT / task['input']):
+    if analysis_era(contract['year']) != analysis_era(task['year']):
+        raise ValueError('Histogram belongs to a different target era')
+    if Path(contract['input']).name != Path(task['input']).name:
         raise ValueError('Histogram belongs to a different input')
     if payload['audit']['events_read'] != task['entries']:
         raise ValueError('Histogram event coverage differs from the input inventory')
-    if contract['fingerprint'].get('size') != task['fingerprint']['size']:
-        raise ValueError('Histogram input size differs')
-    common = {k: v for k, v in contract.items() if k not in ('input', 'fingerprint', 'signal_normalization')}
-    if scientific_settings(common) != scientific_settings(settings):
+    common = {k: v for k, v in contract.items() if k != 'signal_normalization'}
+    if histogram_settings(common) != histogram_settings(settings):
         raise ValueError('Histogram corrections, region definitions or binning differ')
     for section in ('histograms', 'physical_histograms'):
         validate_histograms(payload.get(section, {}))
@@ -447,9 +452,26 @@ def validate_histograms(node):
         raise ValueError('Histogram edges must be finite and increasing')
 
 
+def merge_fields(path, fields):
+    """Read the requested fields of a closed merge without retaining its arrays."""
+    opener = gzip.open if path.suffix == '.gz' else open
+    with opener(path, 'rt') as stream:
+        reader = JsonStream(stream)
+        result = {}
+        for key in reader.items():
+            if key in fields:
+                result[key] = reader.value()
+            else:
+                reader.copy_value(lambda _: None)
+        if reader.buffer[reader.position:].strip() or stream.read().strip():
+            raise ValueError('Unexpected data after merged JSON')
+    return result
+
+
 def merge(inventory, year, output):
     """Merge the complete per-era task list produced by the histograms stage."""
     import fcntl
+    from TROTASR.utils.histogramming import histogram_settings
     from TROTASR.utils.paths import analysis_era
     year = analysis_era(year)
     inventory, output = internal_path(inventory), internal_path(output)
@@ -458,24 +480,46 @@ def merge(inventory, year, output):
     if not tasks or len({t['input'] for t in tasks}) != len(tasks):
         raise ValueError('Missing or duplicate source files in the merge inventory')
     sources = {t['input']: dict(output=t['output']) for t in tasks}
+    expected_events = sum(t['entries'] for t in tasks)
     output.parent.mkdir(parents=True, exist_ok=True)
     summary_path = output.with_name(output.name.removesuffix('.gz').removesuffix('.json') + '.summary.json')
     with output.with_name(output.name + '.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         if output.exists():
-            summary = read_json(summary_path)
-            coverage = summary.get('coverage', {})
-            if (summary.get('status') == 'complete' and coverage.get('completed_files') == len(tasks)
-                    and coverage.get('expected_events') == sum(t['entries'] for t in tasks)
-                    and str(summary.get('physics_contract', {}).get('year')) == year):
-                return output
-            raise ValueError('Existing merge uses different histogram inputs: ' + str(output))
+            saved = merge_fields(output, {'status', 'scope', 'contract', 'coverage',
+                                          'sr_data_blinded', 'merge_provenance'})
+            coverage = saved.get('coverage', {})
+            contract = saved.get('contract', {})
+            saved_sources = saved.get('merge_provenance', {}).get('sources', {})
+            options = document.get('histogram_options', {})
+            shape = options.get('shape_mode')
+            if shape is None and options.get('use_trota_friend'):
+                shape = 'cms_trota_jme'
+            if (saved.get('status') != 'complete' or saved.get('sr_data_blinded') is not True
+                    or not coverage.get('full_input_inventory') or coverage.get('failed_files') != 0
+                    or coverage.get('completed_files') != len(tasks)
+                    or coverage.get('expected_files') != len(tasks)
+                    or coverage.get('expected_events') != expected_events
+                    or str(contract.get('year')) != year
+                    or (('shape_mode' in options or 'use_trota_friend' in options)
+                        and contract.get('shape_mode') != shape)
+                    or any(contract.get(field) != list(options[field])
+                           for field in ('modes', 'variations') if field in options)
+                    or (options.get('object_endpoints') is not None
+                        and set(contract.get('object_endpoints', ())) != set(options['object_endpoints']) - {'nominal'})
+                    or sorted(Path(p).name for p in saved_sources) != sorted(Path(p).name for p in sources)):
+                raise ValueError('Existing merge uses different histogram inputs: ' + str(output))
+            if not summary_path.is_file():
+                write_json(summary_path, dict(status='complete', output=str(output.relative_to(ROOT)),
+                    sources=sources, coverage=coverage, physics_contract=contract,
+                    scope=saved['scope'], completed=time.time()))
+            return output
         merged = None
         for task in tasks:
             payload = read_json(ROOT / task['output'])
             if merged is None:
-                settings = scientific_settings({k: v for k, v in payload['contract'].items()
-                            if k not in ('input', 'fingerprint', 'signal_normalization')})
+                settings = histogram_settings({k: v for k, v in payload['contract'].items()
+                                               if k != 'signal_normalization'})
                 mode = settings.get('shape_mode')
                 scope = {'cms_trota_jme': 'full_cms_trota_jme_production',
                          'stored_trota_nonjme': 'full_nonjme_systematic_production'}.get(mode, 'full_nominal_production')
@@ -498,7 +542,6 @@ def merge(inventory, year, output):
                 values = {k: v for k, v in chunk.items() if k not in ('SR','endpoint')}
                 merge_counters(merged['audit']['selection_totals'].setdefault(endpoint, {}), values)
             merged['background_policy']['excluded_files'].extend(payload.get('background_policy', {}).get('excluded_files', []))
-        expected_events = sum(t['entries'] for t in tasks)
         if merged['audit']['events_read'] != expected_events:
             raise ValueError('Merged event coverage is incomplete')
         merged['coverage'] = dict(expected_files=len(tasks), completed_files=len(tasks), failed_files=0,
@@ -514,6 +557,7 @@ def merge(inventory, year, output):
 def combine(jme_path, nonjme_path, year, output):
     """Combine completed endpoint sets, reusing a matching completed output."""
     import fcntl
+    from TROTASR.utils.histogramming import histogram_settings
     paths = [internal_path(p) for p in (jme_path, nonjme_path)]
     output = internal_path(output)
     sources = [str(p.relative_to(ROOT)) for p in paths]
@@ -523,11 +567,30 @@ def combine(jme_path, nonjme_path, year, output):
     with output.with_name(output.name + '.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         if output.exists():
-            summary = read_json(summary_path)
-            if (summary.get('status') == 'complete'
-                    and scientific_settings(summary.get('combination_policy')) == scientific_settings(policy)):
-                return output
-            raise ValueError('Existing combined histogram uses different inputs or endpoints: ' + str(output))
+            saved = merge_fields(output, {'status', 'scope', 'contract', 'coverage', 'sr_data_blinded'})
+            contract = saved.get('contract', {})
+            coverage = saved.get('coverage', {})
+            components = contract.get('component_contracts', {})
+            if (saved.get('status') != 'complete' or saved.get('sr_data_blinded') is not True
+                    or saved.get('scope') != 'full_combined_systematic_production'
+                    or str(contract.get('year')) != str(year)
+                    or not coverage.get('full_input_inventory') or coverage.get('failed_files') != 0
+                    or not coverage.get('expected_files')
+                    or coverage.get('expected_files') != coverage.get('completed_files')
+                    or set(components) != {'jme', 'nonjme'}
+                    or scientific_settings(contract.get('combination_policy')) != scientific_settings(policy)):
+                raise ValueError('Existing combined histogram uses different inputs or endpoints: ' + str(output))
+            for path, component in zip(paths, ('jme', 'nonjme')):
+                if path.is_file():
+                    source = merge_fields(path, {'contract', 'status', 'sr_data_blinded'})
+                    if (source.get('status') != 'complete' or source.get('sr_data_blinded') is not True
+                            or histogram_settings(source['contract']) != histogram_settings(components[component])):
+                        raise ValueError('Combined histogram component physics changed: ' + component)
+            if not summary_path.is_file():
+                write_json(summary_path, dict(status='complete', output=str(output.relative_to(ROOT)),
+                    sources=sources, combination_policy=policy, coverage=coverage,
+                    scope=saved['scope'], completed=time.time()))
+            return output
         inputs = [read_json(p) for p in paths]
         if any(str(p['contract']['year']) != str(year) for p in inputs):
             raise ValueError('Systematic inputs belong to a different era')

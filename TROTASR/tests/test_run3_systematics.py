@@ -608,8 +608,10 @@ class SignalReplacementCardTests(unittest.TestCase):
             builder.write_replacement_card(target,displaced,meta)
             self.assertEqual(read_json(target.with_suffix('.manifest.json')),meta)
             self.assertFalse(source.exists())
+            builder.write_replacement_card(target,displaced+'# comment only',meta)
+            self.assertEqual(target.read_text(), displaced)
             with self.assertRaises(FileExistsError):
-                builder.write_replacement_card(target,displaced+'# changed',meta)
+                builder.write_replacement_card(target,displaced.replace('[0.01,5]', '[0.01,6]'),meta)
 
 
 if __name__=='__main__':

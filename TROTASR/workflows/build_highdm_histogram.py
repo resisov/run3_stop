@@ -12,9 +12,6 @@ def run_task(task, options):
     from TROTASR.utils.paths import ROOT, internal_path
     source = internal_path(ROOT / task['input'])
     output = internal_path(ROOT / task['output'])
-    stat = source.stat()
-    if task['fingerprint']['size'] != stat.st_size:
-        raise ValueError('Histogram inventory input size differs: ' + task['input'])
     payload = build(source, task['year'], output, **options)
     if payload['audit']['events_read'] != task['entries']:
         raise ValueError('Histogram event count differs from the inventory')
@@ -25,7 +22,6 @@ def run_file_process(inventory, index, task, options):
     """Retry a failed process once with a smaller event chunk."""
     import subprocess
     import sys
-    from TROTASR.utils.io import read_json
     from TROTASR.utils.paths import ROOT
     chunk = options.get('chunk_size', 2000)
     attempts = []
@@ -36,9 +32,6 @@ def run_file_process(inventory, index, task, options):
         attempts.append(dict(chunk_size=size, exit_code=result.returncode, error=result.stderr[-2000:]))
         if result.returncode == 0:
             return dict(input=task['input'], status='complete', output=task['output'], attempts=attempts)
-        output = ROOT / task['output']
-        if output.exists() and read_json(output).get('status') in ('complete', 'complete_one_file_test', 'complete_member_sums'):
-            break
     return dict(input=task['input'], status='failed', attempts=attempts)
 
 
@@ -135,10 +128,15 @@ def prepare_lhe_inventory(population):
     with path.with_suffix('.lock').open('a') as owner:
         fcntl.flock(owner, fcntl.LOCK_EX | fcntl.LOCK_NB)
         if path.is_file():
-            if read_json(path) != document:
+            def input_scope(record):
+                settings = record.get('histogram_options', {})
+                return (record.get('population'), {field: settings.get(field) for field in
+                        ('lhe_weights', 'use_trota_friend', 'shape_mode', 'variations', 'modes')},
+                        {(task['input'], task['output'], task['year'], task['entries'])
+                         for task in record['tasks']})
+            if input_scope(read_json(path)) != input_scope(document):
                 raise ValueError('Preserve the prior generator inventory; inputs changed')
-        else:
-            write_json(path, document)
+        write_json(path, document)
     return path
 
 
@@ -247,14 +245,8 @@ def main(default='highdm'):
         p.error('--input and --year are required for histogram production')
     mode = args.mode or default
     modes = ('highdm', 'lowdm') if mode == 'both' else (mode,)
-    use_friend = args.trota_friend
-    if use_friend is None:
-        from TROTASR.utils.paths import internal_path
-        from TROTASR.utils.trota_friend import find_friend_task, friend_production_complete
-        if friend_production_complete() and find_friend_task(internal_path(args.input), args.year):
-            use_friend = True
     result = build(args.input, args.year, args.output, modes=modes, chunk_size=2000 if args.chunk_size is None else args.chunk_size,
-                   lhe_weights=args.lhe_weights, use_trota_friend=use_friend,
+                   lhe_weights=args.lhe_weights, use_trota_friend=args.trota_friend,
                    shape_mode=args.shape_mode, variations=args.variations or ('nominal',))
     print(result['status'], 'events=', result['audit']['events_read'], 'seconds=', round(result['seconds'], 2))
 

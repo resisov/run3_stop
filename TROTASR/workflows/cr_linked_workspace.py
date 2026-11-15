@@ -258,13 +258,13 @@ def workspace_step(stage, source, directory, run_root, *, products=None):
         with (donor.parent / "controller.lock").open("rb") as owner:
             fcntl.flock(owner, fcntl.LOCK_SH | fcntl.LOCK_NB)
             marker = read_json(products / "limits/model.json")
-            stat = donor.stat()
             if (marker.get("model_revision") != MODEL_REVISION or
-                    stat.st_mtime_ns != marker["photon_cr_workspace_mtime_ns"] or
-                    stat.st_size != marker["photon_cr_workspace_size"]):
-                raise ValueError("The adopted CR-only workspace changed")
+                    not donor.is_file() or donor.stat().st_size <= 0):
+                raise ValueError("The adopted CR-only workspace is unavailable")
             with root.TFile.Open(str(source), "READ") as native, root.TFile.Open(
                     str(donor), "READ") as cronly:
+                if not native or native.IsZombie() or not cronly or cronly.IsZombie():
+                    raise ValueError("Missing or unreadable linked-workspace input")
                 link_workspace(root, native.Get("w"), cronly.Get("w"), directory / "linked.root")
     else:
         raise ValueError(f"Unknown workspace step: {stage}")

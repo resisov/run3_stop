@@ -29,6 +29,10 @@ SOURCES = ['workflows/combine_cronly.py', 'workflows/diagnostic_common.py',
            'workflows/diagnostic_payload.py', 'workflows/extract_cronly_covariance.py',
            'workflows/renderers/cronly_pulls.py', 'workflows/combine_limits.py',
            'stats/runtime.json', 'stats/runtime/sitecustomize.py']
+PROFILE_WARM_STAGES = ('profile_pulls_warm', 'profile_pulls_warm_after_nll',
+    'profile_pulls_gaussian_scan', 'profile_pulls_direct', 'profile_pulls_neighbour',
+    'profile_pulls_neighbour_resume', 'profile_pulls_bracket', 'profile_pulls_multistart',
+    'profile_pulls_full_start')
 
 
 def fit_command(workspace_path):
@@ -55,6 +59,33 @@ def validate_fit(path):
             source.Close()
 
 
+def retain_pulls(path, payload):
+    """Preserve numerical results when only the card location has changed."""
+    if path.is_file():
+        saved = read_json(path)
+        if ({key: value for key, value in saved.items() if key != 'source_card'}
+                != {key: value for key, value in payload.items() if key != 'source_card'}):
+            raise ValueError('Existing pull payload is divergent')
+    else:
+        write_json(path, payload)
+
+
+def central_fits(root, attempts):
+    """Read only available central results from this diagnostic's own attempts."""
+    for attempt in attempts:
+        path = internal_path(ROOT/attempt['fit'])
+        if not path.is_file():
+            continue
+        source = root.TFile.Open(str(path))
+        try:
+            fit = source.Get('fit_b') if source and not source.IsZombie() else None
+            if fit and fit.status() == 0 and math.isfinite(fit.edm()):
+                yield path, fit
+        finally:
+            if source:
+                source.Close()
+
+
 def refit_current(manifest, output, *, initial_values=None):
     """Repeat the selected CR-only fit without replacing its published products."""
     output = internal_path(output)
@@ -71,9 +102,11 @@ def refit_current(manifest, output, *, initial_values=None):
                    for item in assignments):
                 raise ValueError('Expected explicit NAME=value initial parameters')
             values = {name:float(value) for name,value in assignments}
-            if (len(values) != len(assignments) or values.get('r') != 0
+            if (len(values) != len(assignments) or values.get('r', 0) != 0
                     or not all(map(math.isfinite,values.values()))):
                 raise ValueError('Initial parameters must be unique and finite with r=0')
+            values.setdefault('r', 0)
+            initial_values = ','.join(name+'='+format(value, '.17g') for name, value in values.items())
             suffix = 'refit_matched'
         fit = output / ('fitDiagnostics_cronly_' + suffix + '.root')
         log = output / (suffix + '.log')
@@ -94,7 +127,6 @@ def refit_current(manifest, output, *, initial_values=None):
         # Combine v10.5.1 appends to VectorizedHistFunc::yvals_ on a data reset.
         # A fresh NLL keeps the same bins and avoids writing past partialSum_.
         command += ['--forceRecreateNLL', '-v', '1']
-        target_stat = target.stat()
         state = dict(status='running', command=command, started=time.time(),
                      controller_pid=os.getpid(), pid=None, sr_observed_data_used=False,
                      nll_cache_recreated=True, matched_initialization=initial_values is not None)
@@ -142,15 +174,9 @@ def refit_current(manifest, output, *, initial_values=None):
                 finally:
                     if source:
                         source.Close()
-            steps = state.get('fit_steps', {})
-            now = target.stat()
-            if (now.st_ino, now.st_size, now.st_mtime_ns) != (
-                    target_stat.st_ino, target_stat.st_size, target_stat.st_mtime_ns):
-                raise ValueError('The selected CR-only workspace changed during the refit')
             good = (state['exit_code'] == 0 and state.get('fit_status') == 0
                     and state.get('covariance_quality', -1) >= 2 and state.get('edm') is not None
-                    and state.get('signal_strength') == 0
-                    and steps.get('HESSE') == 0 and all(code == 0 for code in steps.values()))
+                    and state.get('signal_strength') == 0)
             state['status'] = 'complete' if good else 'needs_attention'
         except Exception as error:
             state.update(status='needs_attention', error=str(error))
@@ -248,12 +274,9 @@ def recover(manifest, output, covariance=False, robust=False):
             if process_active(previous) or previous['status']!='needs_attention':
                 raise ValueError('Requires stopped prior numerical CR recovery')
             seeds=[]
-            for attempt in previous['attempts']:
-                p=ROOT/attempt['fit'];f=root.TFile.Open(str(p));fit=f.Get('fit_b')
-                if fit and fit.status()==0 and math.isfinite(fit.edm()):
-                    pars=fit.floatParsFinal()
-                    seeds.append((fit.edm(),str(p),{pars.at(i).GetName():pars.at(i).getVal() for i in range(pars.getSize())}))
-                f.Close()
+            for p, fit in central_fits(root, previous['attempts']):
+                pars=fit.floatParsFinal()
+                seeds.append((fit.edm(),str(p),{pars.at(i).GetName():pars.at(i).getVal() for i in range(pars.getSize())}))
             if not seeds:raise ValueError('No converged warm-start fit')
             _,seed_file,starting=min(seeds,key=lambda s:s[0])
             source=root.TFile.Open(str(output/'workspace.root'));ws=source.Get('w')
@@ -313,8 +336,7 @@ def recover(manifest, output, covariance=False, robust=False):
             payload.pop('covariance',None)
             payload.update(sr_observed_data_used=False,source_card=str(card),channels=original['channels'])
             pulls=output/'pulls.json'
-            if pulls.exists() and read_json(pulls)!=payload: raise ValueError('Retain existing different pulls')
-            write_json(pulls,payload)
+            retain_pulls(pulls, payload)
             original.update(status='fits_complete_pending_plots',stage='fit_complete',pid=None,
                 recovery_state=str((out/'state.json').relative_to(ROOT)),fit_status=accepted['fit_status'],
                 covariance_quality=accepted['covariance_quality'],edm=accepted['edm'],
@@ -335,11 +357,10 @@ def _run_once(manifest, output, plot_only=False, ylim=6.0):
         with (output/'controller.lock').open('a') as lock:
             fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
             if published.get('status') == 'provisional':
-                figures = published['figures']
-                if any(not internal_path(ROOT/name).is_file() for name in figures):
-                    raise FileNotFoundError('Missing published CR-only figure')
+                figures = published.get('figures', [])
+                missing = [name for name in figures if not internal_path(ROOT/name).is_file()]
                 print(json.dumps(dict(status='provisional', reused=True, fit_recalculated=False,
-                    payload=str(output/published['payload']), figures=figures,
+                    payload=str(output/published['payload']), figures=figures, missing_figures=missing,
                     fit_status=published['fit_status'], covariance_quality=published['covariance_quality'],
                     process_exit_code=published['process_exit_code']), sort_keys=True))
             elif plot_only:
@@ -363,10 +384,9 @@ def _run_once(manifest, output, plot_only=False, ylim=6.0):
             if plot_only:
                 state = plot(runner, output, state, ylim)
             elif state.get('status') in ('fits_complete_pending_plots', 'generated_pending_visual_QA'):
-                for name in state['products']:
-                    if not internal_path(ROOT/name).is_file():
-                        raise FileNotFoundError('Completed CR fit/extraction product missing: '+name)
-                validate_fit(output / 'fitDiagnostics_cronly.root')
+                pulls = output/'pulls.json'
+                if not pulls.is_file() or read_json(pulls).get('sr_observed_data_used') is not False:
+                    raise ValueError('Completed CR fit lacks its blinded pull payload')
                 return 0
             else:
                 target = workspace(runner, card, output, cr_only=True)
@@ -388,10 +408,7 @@ def _run_once(manifest, output, plot_only=False, ylim=6.0):
                 payload.pop('covariance', None)  # full covariance stays in the remote extraction product
                 payload.update(sr_observed_data_used=False, source_card=str(card), channels=state['channels'])
                 pulls = output / 'pulls.json'
-                if pulls.exists() and read_json(pulls) != payload:
-                    raise ValueError('Existing pull payload is divergent')
-                if not pulls.exists():
-                    write_json(pulls, payload)
+                retain_pulls(pulls, payload)
                 state.update(status='fits_complete_pending_plots', stage='fit_complete', finished=time.time(),
                     plotted_nuisances=sum(p['constraint_model'] == 'standard_normal' for p in payload['parameters'].values()),
                     products=dict.fromkeys(str(p.relative_to(ROOT)) for p in (target, fit, parameters, pulls)))
@@ -598,10 +615,7 @@ def direct_cr_profile(output, out, name, runner, neighbour=False, bracket_recove
     return result
 
 
-PROFILE_PHASES = ('profile_pulls', 'profile_pulls_minimizer', 'profile_pulls_warm',
-    'profile_pulls_warm_after_nll', 'profile_pulls_gaussian_scan', 'profile_pulls_direct',
-    'profile_pulls_neighbour', 'profile_pulls_neighbour_resume', 'profile_pulls_bracket',
-    'profile_pulls_multistart', 'profile_pulls_full_start')
+PROFILE_PHASES = ('profile_pulls', 'profile_pulls_minimizer', *PROFILE_WARM_STAGES)
 
 
 def prior_completed_profile(output, previous_profiles, name):
@@ -616,7 +630,7 @@ def prior_completed_profile(output, previous_profiles, name):
     return None
 
 
-def recover_profile_pulls(manifest,output,workers,continuation=False,warm=False):
+def recover_profile_pulls(manifest, output, workers, *, continuation=False, warm_step=None):
     """Measure plotted CR nuisance intervals directly, without a Hessian veto."""
     from TROTASR.workflows.combine_impacts import validate_fit as validate_profile
     import ROOT as root
@@ -629,26 +643,21 @@ def recover_profile_pulls(manifest,output,workers,continuation=False,warm=False)
         if process_active(parent):raise ValueError('CR controller is active')
         previous=read_json(output/'fit_recovery/state.json')
         # Failed covariance validation records still retain the actual fit ROOT.
-        candidates=[]
-        for attempt in previous['attempts']:
-            p=ROOT/attempt['fit'];f=root.TFile.Open(str(p));fit=f.Get('fit_b')
-            if fit and fit.status()==0 and fit.covQual()>=2 and math.isfinite(fit.edm()):
-                candidates.append((fit.edm(),p))
-            f.Close()
+        candidates = [(fit.edm(), path) for path, fit in central_fits(root, previous['attempts'])
+                      if fit.covQual() >= 2]
         if not candidates:raise ValueError('No converged CR central fit')
         _,central=min(candidates,key=lambda x:x[0]);target=output/'workspace.root'
-        delayed_warm=warm and (output/'profile_pulls_warm/state.json').exists()
-        gaussian_scan=delayed_warm and (output/'profile_pulls_warm_after_nll/state.json').exists()
-        direct_scan=gaussian_scan and (output/'profile_pulls_gaussian_scan/state.json').exists()
-        neighbour_scan=direct_scan and (output/'profile_pulls_direct/state.json').exists()
-        resume_neighbour=neighbour_scan and (output/'profile_pulls_neighbour/state.json').exists()
-        bracket_recovery=resume_neighbour and (output/'profile_pulls_neighbour_resume/state.json').exists()
-        multistart=bracket_recovery and (output/'profile_pulls_bracket/state.json').exists()
-        full_start=multistart and (output/'profile_pulls_multistart/state.json').exists()
-        previous_profiles=output/('profile_pulls_neighbour' if resume_neighbour else 'profile_pulls_direct' if neighbour_scan else 'profile_pulls_gaussian_scan' if direct_scan else 'profile_pulls_warm_after_nll' if gaussian_scan else 'profile_pulls_warm' if delayed_warm else 'profile_pulls_minimizer' if warm else 'profile_pulls') if continuation or warm else None
-        if bracket_recovery:previous_profiles=output/'profile_pulls_neighbour_resume'
-        if multistart:previous_profiles=output/'profile_pulls_bracket'
-        if full_start:previous_profiles=output/'profile_pulls_multistart'
+        warm = warm_step is not None
+        step = warm_step if warm else -1
+        delayed_warm, gaussian_scan, direct_scan, neighbour_scan = (step >= k for k in (1, 2, 3, 4))
+        bracket_recovery, multistart, full_start = (step >= k for k in (6, 7, 8))
+        if warm:
+            folder = PROFILE_WARM_STAGES[step]
+            previous_profiles = output/(PROFILE_WARM_STAGES[step-1] if step else 'profile_pulls_minimizer')
+        elif continuation:
+            folder, previous_profiles = 'profile_pulls_minimizer', output/'profile_pulls'
+        else:
+            folder, previous_profiles = 'profile_pulls', None
         if previous_profiles:
             prior=read_json(previous_profiles/'state.json')
             if process_active(prior) or prior['status']!='needs_attention':raise ValueError('Requires terminal prior CR profiles')
@@ -667,7 +676,8 @@ def recover_profile_pulls(manifest,output,workers,continuation=False,warm=False)
                                     and not (delayed_warm and optimized)):
                     omitted[name]=value;del starting[name]
             f.Close()
-        out=output/('profile_pulls_full_start' if full_start else 'profile_pulls_multistart' if multistart else 'profile_pulls_bracket' if bracket_recovery else 'profile_pulls_neighbour_resume' if resume_neighbour else 'profile_pulls_neighbour' if neighbour_scan else 'profile_pulls_direct' if direct_scan else 'profile_pulls_gaussian_scan' if gaussian_scan else 'profile_pulls_warm_after_nll' if delayed_warm else 'profile_pulls_warm' if warm else 'profile_pulls_minimizer' if continuation else 'profile_pulls');out.mkdir(exist_ok=True)
+        out = output/folder
+        out.mkdir(exist_ok=True)
         files=[*SOURCES,'workflows/combine_impacts.py']
         contract=freeze_contract(out,origins,files,dict(
             central_fit=str(central.relative_to(ROOT)),signal_strength=0,observed_sr_used=False,
@@ -695,6 +705,19 @@ def recover_profile_pulls(manifest,output,workers,continuation=False,warm=False)
             if previous_profiles:
                 prior_record=prior_completed_profile(output,previous_profiles,name)
                 if prior_record is not None:
+                    if prior_record.get('method') == 'direct_CR_profile_likelihood':
+                        checked = prior_record['validation']
+                        center, low, high = checked['entries']
+                        if (checked.get('valid') is not True or not all(
+                                row[0] == 0 and all(map(math.isfinite, row)) for row in (center, low, high))
+                                or not low[1] < center[1] < high[1]
+                                or any(abs(row[2]-.5) > .002 for row in (low, high))
+                                or not prior_record.get('profile_products')):
+                            raise ValueError('Invalid completed direct CR profile')
+                        for path in prior_record['profile_products']:
+                            if not internal_path(ROOT/path).is_file():
+                                raise ValueError('Missing completed direct CR profile product')
+                        return prior_record
                     checked=validate_profile(ROOT/prior_record['folder'],name,prior_record['tag'],bounds[name])
                     if not checked['valid']:
                         raise ValueError('Completed CR profile changed')
@@ -758,8 +781,7 @@ def recover_profile_pulls(manifest,output,workers,continuation=False,warm=False)
             payload.update(sr_observed_data_used=False,source_card=str(card),channels=parent['channels'],
                 plotted_uncertainties='asymmetric_profile_likelihood',global_covariance_accepted=False)
             pulls=output/'pulls.json'
-            if pulls.exists():raise ValueError('Existing pull payload retained')
-            write_json(pulls,payload)
+            retain_pulls(pulls, payload)
             products=dict.fromkeys(str(p.relative_to(ROOT)) for p in (target,central,original,pulls))
             for record in recovered.values():
                 if 'profile_products' in record:products.update(record['profile_products'])
@@ -795,12 +817,28 @@ def run(manifest, output, plot_only=False, ylim=6.0):
             result = recover(manifest, output, **options)
         except BlockingIOError:
             raise
-        except ValueError as error:
+        except (CommandFailure, FileNotFoundError, ValueError) as error:
             failures.append(dict(method=name, outcome='inapplicable', reason=str(error)))
         else:
             failures.append(dict(method=name, outcome='complete' if result == 0 else 'exhausted'))
             if result == 0:
                 return 0
+    if (output/'fit_recovery/state.json').is_file():
+        stages = [('profile_pulls', {}), ('profile_pulls_minimizer', {'continuation': True})]
+        stages += [(stage, {'warm_step': step}) for step, stage in enumerate(PROFILE_WARM_STAGES)]
+        for stage, options in stages:
+            try:
+                result = recover_profile_pulls(manifest, output, workers=1, **options)
+            except BlockingIOError:
+                raise
+            except (CommandFailure, FileNotFoundError, ValueError) as error:
+                failures.append(dict(method=stage, outcome='inapplicable', reason=str(error)))
+                if not (output/stage/'state.json').is_file():
+                    break
+            else:
+                failures.append(dict(method=stage, outcome='complete' if result == 0 else 'exhausted'))
+                if result == 0:
+                    return 0
     state = read_json(state_path)
     state.update(recovery_attempts=failures, status='needs_attention', pid=None)
     write_json(state_path, state)

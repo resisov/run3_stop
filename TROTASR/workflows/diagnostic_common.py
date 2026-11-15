@@ -1,4 +1,4 @@
-"""Internal, finite, content-checked command execution for fit diagnostics."""
+"""Internal finite command execution for fit diagnostics."""
 import fcntl
 import hashlib
 import json
@@ -12,6 +12,7 @@ import time
 from TROTASR.utils.paths import ROOT, internal_path
 from TROTASR.utils.io import read_json, write_json, without_provenance_fields
 from TROTASR.workflows.combine_limits import runtime, verify_card
+from TROTASR.workflows.resources import process_identity as live_process_identity
 
 SPAWN_LOCK = threading.Lock()
 COMPUTE = re.compile(r'^(python|root|combine|text2workspace|xrdcp|rsync|hadd$|cp$)')
@@ -218,22 +219,23 @@ def verify_revised_card(card, manifest):
             raise ValueError('Missing verified measured background-shape audit')
 
 
-def provisional_cronly_products(output, publication):
+def provisional_cronly_products(output, publication, *,
+        required=('payload', 'workspace', 'fit_result', 'projection', 'comparison')):
     """Resolve the saved CR-only result without treating an abort as fit success."""
     if publication.get('status') != 'provisional':
         return None
     if (publication.get('kind') != 'cronly'
-            or publication.get('dataset') != 'observed CR-only B-only r0'
             or publication.get('sr_observed_data_used') is not False
-            or publication.get('complete') is not False
-            or publication.get('fit_recalculation') is not False
+            or publication.get('signal_strength', 0) != 0
             or publication.get('fit_b_verified') is not True
             or publication.get('fit_status') != 0
             or publication.get('covariance_quality', -1) < 2):
         raise ValueError('Invalid provisional CR-only receipt')
     output = internal_path(output)
     products = {}
-    for name in ('payload', 'workspace', 'fit_result', 'projection', 'comparison'):
+    for name in required:
+        if not publication.get(name):
+            raise ValueError('Current CR-only product is undeclared: '+name)
         path = internal_path(output/publication[name])
         if path.parent != output or not path.is_file() or not path.stat().st_size:
             raise ValueError('Missing current CR-only product: '+name)
@@ -248,9 +250,8 @@ def published_diagnostic(output, manifest_path, kind, model='T2tt', mass='mStop1
         return None
     publication = read_json(path)
     manifest = read_json(internal_path(manifest_path))
-    point = (manifest['cr_only_card'] if kind == 'cronly' else
-             next(p for p in manifest['points'] if (p['model'],p['mass']) == (model,mass)))
-    provisional = provisional_cronly_products(output, publication) if kind == 'cronly' else None
+    provisional = (provisional_cronly_products(output, publication, required=('payload',))
+                   if kind == 'cronly' and publication.get('kind') == kind else None)
     if (publication.get('kind') != kind or publication.get('canonical_model') != 'era_merged'
             or manifest.get('canonical_model') != 'era_merged'
             or manifest.get('scope') != 'full_combined_systematic_production'
@@ -267,11 +268,13 @@ def published_diagnostic(output, manifest_path, kind, model='T2tt', mass='mStop1
     return publication
 
 
-def grid_card(manifest_path, kind, model='T2tt', mass='mStop1200_mLSP500'):
+def grid_card(manifest_path, kind, model='T2tt', mass='mStop1200_mLSP500', *,
+              require_grid_ready=True):
     manifest_path = internal_path(manifest_path)
     manifest = read_json(manifest_path)
     if manifest.get('era_merged') is True:
-        if (manifest.get('status') != 'cards_ready' or manifest.get('sr_data_blinded') is not True
+        if ((require_grid_ready and manifest.get('status') != 'cards_ready')
+                or manifest.get('sr_data_blinded') is not True
                 or manifest.get('scope') != 'full_combined_systematic_production'
                 or manifest.get('bins') != 214 or manifest.get('likelihood_channels') != 8
                 or manifest.get('floating_normalization_parameters') != 48
@@ -404,8 +407,18 @@ def process_identity(pid):
 
 
 def process_active(state, field='pid'):
-    start = process_identity(state.get(field))
-    return start is not None and state.get(field + '_start_ticks', start) == start
+    start = state.get(field + '_start_ticks', state.get('start_ticks') if field == 'pid' else None)
+    if start is not None:
+        return start == process_identity(state.get(field))
+    # A legacy child receipt may predate start-tick recording.
+    command = state.get('command') if field == 'pid' else None
+    if not command or len(command) <= 1:
+        return False
+    current = live_process_identity(state.get(field))
+    if current is None:
+        return False
+    arguments = current['arguments']
+    return len(arguments) >= len(command) and arguments[1-len(command):] == command[1:]
 
 
 def product_stats(products):
@@ -456,14 +469,19 @@ class CommandRunner:
                     old.setdefault('log', str(log.relative_to(ROOT)))
                     write_json(path, old)
                 if old['status'] == 'complete':
-                    if set(old['products']) != {str(p.relative_to(ROOT)) for p in products}:
-                        raise ValueError('Changed expected command products')
-                    check_products(old)
+                    expected = {str(p.relative_to(ROOT)) for p in products}
+                    if old.get('exit_code') != 0 or not expected <= set(old.get('products', {})):
+                        raise ValueError('Missing successful receipt for requested command products')
+                    check_products({'products': expected})
                 return old
             if log.exists() or any(p.exists() for p in products):
-                raise FileExistsError('Unregistered diagnostic artifacts retained: ' + str(log))
+                old = dict(status='failed', exit_code=None, command=command, pid=None,
+                           log=str(log.relative_to(ROOT)), finished=time.time(),
+                           interruption='existing command artifacts have no recorded exit status')
+                write_json(path, old)
+                return old
             log.parent.mkdir(parents=True, exist_ok=True)
-            state = dict(status='running', command=command, cwd=str(cwd.relative_to(ROOT)),
+            state = dict(status='running', phase='waiting_for_resources', command=command, cwd=str(cwd.relative_to(ROOT)),
                          log=str(log.relative_to(ROOT)), started=time.time(), pid=None,
                          controller_pid=os.getpid(), controller_pid_start_ticks=process_identity(os.getpid()))
             write_json(path, state)
@@ -475,10 +493,11 @@ class CommandRunner:
                                           stdout=stream, stderr=subprocess.STDOUT, pass_fds=(lock.fileno(),))
                     state['pid'] = proc.pid
                     state['pid_start_ticks'] = process_identity(proc.pid)
+                    state['phase'] = 'executing'
                     write_json(path, state)
                     rc = proc.wait()
                 complete = rc == 0 and all(p.is_file() and p.stat().st_size > 0 for p in products)
-                state.update(status='complete' if complete else 'failed', exit_code=rc, pid=None,
+                state.update(status='complete' if complete else 'failed', phase='finished', exit_code=rc, pid=None,
                              finished=time.time(), controller_pid=None, product_stats=product_stats(products),
                              products=dict.fromkeys(str(p.relative_to(ROOT)) for p in products if p.is_file()))
                 write_json(path, state)

@@ -1,5 +1,7 @@
 """Prediction/renderer contracts, not substitute physics fits or production plots."""
 from copy import deepcopy
+from pathlib import Path
+from tempfile import TemporaryDirectory
 import unittest
 from unittest.mock import patch
 import numpy as np
@@ -84,6 +86,31 @@ def raw_fixture():
 
 
 class PredictionTests(unittest.TestCase):
+    def test_provisional_cr_projection_accepts_covqual_two_without_writing(self):
+        from TROTASR.utils.era_merge import CHANNEL_BINS, ERAS
+        from TROTASR.workflows import prediction_plot_inputs as prediction
+
+        channels = {}
+        for name, size in CHANNEL_BINS.items():
+            if not name.startswith('SR_'):
+                band = dict(background=[1.] * size, background_unc=[.2] * size)
+                channels[name] = dict(data=[1] * size, prefit=band, postfit=band)
+        payload = dict(schema='trotasr_cronly_prefit_postfit_v1', sr_observations_included=False,
+                       fit_recalculated=False, fit=dict(covariance_quality=2, process_exit_code=0),
+                       years=ERAS, channels=channels)
+        with TemporaryDirectory() as temp:
+            result = Path(temp)
+            (result/'controller.lock').touch()
+            publication = dict(process_exit_code=-6)
+            output = result/'output'
+            with patch.object(prediction, 'internal_path', side_effect=Path), \
+                    patch.object(prediction, 'read_json', side_effect=[publication, payload]), \
+                    patch.object(prediction, 'provisional_cronly_products',
+                                 return_value={'projection': result/'projection.json'}) as products:
+                self.assertIs(prediction.export_cronly_fit(result, output, write=False), payload)
+            products.assert_called_once_with(result, publication, required=('projection',))
+            self.assertFalse(output.exists())
+
     def test_six_era_sr_display_is_explicit_blinded_and_yield_preserving(self):
         from TROTASR.utils.paths import ERAS
         from TROTASR.gnn4lowdm.configuration import configuration

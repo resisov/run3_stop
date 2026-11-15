@@ -340,16 +340,32 @@ def render_input(payload, output):
         raise ValueError('Unrecognized compact physical plot input')
     contract = payload['contract']; year = contract['year']
     manifest_path = output/'plot_manifest.json'
+    reports, blocked = [], []
+    rendered = set()
     if manifest_path.exists():
         saved = read_json(manifest_path)
         _verify_plot_manifest(output, saved, contract, (row[0] for row in payload['records']))
-        return saved
-    if output.exists() and any(output.iterdir()):
+        previous = {row['name']: row['cells'] for row in saved.get('blocked_plots', ())}
+        current = {row[0]: row[-1]['display_omission_audit'] for row in payload['records']
+                   if row[-1].get('display_omission_audit')}
+        if current == previous:
+            return saved
+        if not current.keys() <= previous.keys():
+            raise ValueError('Current inputs omit bins shown in existing figures; preserve those figures')
+        rendered = {row[0] for row in payload['records']} - previous.keys()
+        previous_inputs = read_json(output/'plot_inputs.json')
+        prior_records = {row[0]: row[1:] for row in previous_inputs['records'] if row[0] in rendered}
+        current_records = {row[0]: row[1:] for row in payload['records'] if row[0] in rendered}
+        if prior_records != current_records:
+            raise ValueError('Existing figures have different physical inputs; preserve those figures')
+        reports.extend(saved['plots'])
+    elif output.exists() and any(output.iterdir()):
         raise FileExistsError('Preserve incomplete outputs; choose a new directory')
     output.mkdir(parents=True,exist_ok=True)
-    reports, blocked = [], []
     with nominal_renderer(year,payload['systematic_sources']):
         for name,mode,region,variable,record in payload['records']:
+            if name in rendered:
+                continue
             if record.get('display_omission_audit'):
                 blocked.append(dict(name=name,mode=mode,region=region,variable=variable,
                     status='blocked_display_omits_selected_events',
@@ -416,17 +432,16 @@ def main():
                     year=year, scope=hists['scope'], modes=a.mode or ['highdm', 'lowdm'],
                     regions=a.region or list(REGIONS), include_four_jet_bin=True)
     manifest_path = output/'plot_manifest.json'
-    if manifest_path.exists():
+    if manifest_path.exists() and not (a.validate_only or a.export_only):
         saved = read_json(manifest_path)
         names = (_physical_plot_name(mode, region, variable)[0]
                  for mode in contract['modes'] for region in contract['regions']
                  for variable in _physical_variables(mode, region))
         _verify_plot_manifest(output, saved, contract, names)
-        print(saved['status'], '(verified existing outputs)')
-        if saved.get('blocked_plots'):
-            raise SystemExit(2)
-        return
-    if output.exists() and any(output.iterdir()):
+        if not saved.get('blocked_plots'):
+            print(saved['status'], '(verified existing outputs)')
+            return
+    elif not a.validate_only and output.exists() and any(output.iterdir()):
         raise FileExistsError('Preserve incomplete outputs; choose a new directory')
     sources=systematic_sources(hists)
     boundary = physical_boundary(hists,include_systematics=bool(sources))

@@ -158,6 +158,49 @@ def candidate_markers(era, counts):
     return resolved, mixed
 
 
+def parent_deepcsv_complete(output, metadata):
+    """Use the committed ROOT branch to resume the early-era parent step."""
+    with uproot.open(output) as root:
+        tree = root['Events']
+        if 'fatjet_btagdeepb_all' not in tree or 'TopMixedInputs_metadata' not in root:
+            return False
+        marker = json.loads(str(root['TopMixedInputs_metadata']))
+        if (tree.num_entries != metadata['events_written']
+                or tree['fatjet_btagdeepb_all'].num_entries != tree.num_entries
+                or marker.get('entries') != tree.num_entries or marker.get('status') != 'complete'
+                or marker.get('target') != 'fatjet_btagdeepb_all'):
+            raise ValueError('Incomplete saved early-era DeepCSV association')
+    metadata['topmixed_inputs'] = marker
+    names = metadata['branch_schema']['vector_float32']
+    if 'fatjet_btagdeepb_all' not in names:
+        names.append('fatjet_btagdeepb_all')
+    write_json(output.with_suffix('.json'), metadata)
+    return True
+
+
+def recover_candidate_metadata(output, era, metadata):
+    """Finish the receipt of an already committed candidate ROOT."""
+    era = analysis_era(era)
+    with uproot.open(output) as root:
+        if 'TROTA_metadata' not in root or 'TopMixedResults_metadata' not in root:
+            return False
+        resolved = json.loads(str(root['TROTA_metadata']))
+        mixed = json.loads(str(root['TopMixedResults_metadata']))
+        entries = root['Events'].num_entries
+        if (metadata.get('analysis_era') != era or entries != metadata['events_written']
+                or root['TopWTruth'].num_entries != entries
+                or resolved.get('status') != 'complete' or mixed.get('status') != 'complete'
+                or resolved.get('analysis_era') != era or mixed.get('analysis_era') != era
+                or resolved.get('events_entries') != entries or mixed.get('entries') != entries
+                or resolved.get('resolved_passing') != root['TROTA'].num_entries
+                or mixed.get('threshold') != tagging_definition(era)['mixed_wp']
+                or 'nTopMixed1pct' not in root['Events']):
+            raise ValueError('Incomplete saved signal candidate ROOT')
+    metadata.update(status='complete', campaign_year=era, trota=resolved, topmixed_results=mixed)
+    write_json(output.with_suffix('.json'), metadata)
+    return True
+
+
 def complete_metadata(output, era):
     """Repair missing completion objects without recalculating or changing events."""
     output = Path(output)
@@ -249,7 +292,8 @@ def validate_output(path, era, source):
     """New-output structural checks, without exhaustive numerical readback."""
     path = Path(path)
     metadata = json.loads(path.with_suffix('.json').read_text())
-    if metadata['status'] != 'complete' or metadata['events_read'] != source['nevents']:
+    if (metadata['status'] != 'complete' or metadata['events_read'] != source['nevents']
+            or metadata.get('analysis_era') != analysis_era(era)):
         raise ValueError('Incomplete signal production')
     with uproot.open(path) as root:
         if root['Events'].num_entries != metadata['events_written']:

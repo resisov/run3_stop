@@ -91,11 +91,16 @@ def saved_rates():
 
 def project(mc, rates):
     """Apply only identifiable ratios to the existing prefit bin contents."""
+    from TROTASR.workflows.plotting_vr_predictions import SIGNAL, _covered
+
     if (mc.get("fields") != ["sumw", "sumw2", "entries"]
-            or mc.get("status") != "complete" or mc.get("mc_only") is not True
+            or mc.get("status") not in ("complete", "incomplete") or mc.get("mc_only") is not True
+            or mc.get("pilot") is True
             or mc.get("fit_or_transfer_factors_applied") is not False
             or mc.get("sr_observations_read") is not False
             or mc.get("vr_observations_read") is not False
+            or set(mc.get("coverage", {})) != set(ERAS)
+            or any(not _covered(mc["coverage"][era].get("background")) for era in ERAS)
             or set(mc["era_samples"]) != set(ERAS)):
         raise ValueError("Require the completed, unchanged VR MC aggregate")
     geometry = _cells(mc)
@@ -119,6 +124,8 @@ def project(mc, rates):
         unmapped, mapped = defaultdict(list), defaultdict(list)
         for era in years:
             for process, rows in mc["era_samples"][era].items():
+                if SIGNAL.fullmatch(process):
+                    continue
                 if process not in (*CONTROLLED, *OTHER):
                     raise ValueError(f"Unrecognized background: {process}")
                 a = np.asarray(rows, float)

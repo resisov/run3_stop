@@ -9,14 +9,20 @@ import statistics
 
 QUANTILES = (0.025, 0.16, 0.5, 0.84, 0.975)
 REL_ACC, ABS_ACC = 0.0025, 0.00001
-SCAN = re.compile(r'At r = ([\d.eE+\-]+):\s*delta\(nll\) = ([\d.eE+\-]+)')
+SCAN = re.compile(r'At[ \t]+r[ \t]*=[ \t]*([\d.eE+\-]+)[ \t]*:\s*delta\(nll\)[ \t]*=[ \t]*([\d.eE+\-]+)')
+CROSSING_HEADER = re.compile(r'Will\s+search\s+for\s+NLL\s+crossing\s+by\s+bisection')
+
+
+def crossing_blocks(text):
+    """Keep the actual scan blocks in Combine's order."""
+    return [block for block in CROSSING_HEADER.split(text)[1:] if block.strip()]
 
 
 def asimov_diagnostics(text):
     warnings = [line.strip() for line in text.splitlines()
                 if 'Best fit of asimov dataset is at' in line]
     blocks = text.split('Fit to asimov dataset:')
-    fit = blocks[1].split('Will search for NLL crossing by bisection')[0] if len(blocks) == 2 else ''
+    fit = CROSSING_HEADER.split(blocks[1], maxsplit=1)[0] if len(blocks) == 2 else ''
     number = r'[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?'
     rows = re.findall(r'^\s*r\s+('+number+r')\s+('+number+r')\s+\+/-\s+('+number+r')', fit, re.M)
     return dict(warning_lines=warnings, fitted_r=float(rows[0][1]) if len(rows) == 1 else None,
@@ -31,7 +37,7 @@ def crossing_check(text, values, tolerance):
     bracketing interval containing the returned limit. An interrupted early
     scan retaining a stale success flag therefore cannot pass this check.
     """
-    blocks = text.split('Will search for NLL crossing by bisection')[1:]
+    blocks = crossing_blocks(text)
     if len(blocks) != 5:
         return False, {'reason': 'expected_five_crossing_searches', 'count': len(blocks)}
     evidence = []

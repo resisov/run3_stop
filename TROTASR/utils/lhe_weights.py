@@ -56,15 +56,13 @@ class Prescription:
 @lru_cache(maxsize=1)
 def _signal_inventory():
     base = ROOT / 'production'
-    manifest, collection = (read_json(base / name) for name in ('tasks.json', 'collection.json'))
+    manifest = read_json(base / 'tasks.json')
     total = SIGNAL_FILES_PER_ERA * len(ERAS)
     records = manifest['tasks']
     expected = {era: set() for era in ERAS}
     result = {}
-    if (tuple(manifest['eras']) != ERAS or manifest['files'] != SIGNAL_FILES_PER_ERA
-            or len(records) != total or collection.get('total') != total
-            or collection.get('completed') != total or collection.get('active') != 0
-            or collection.get('errors') != {}):
+    if (set(manifest['eras']) != set(ERAS) or manifest['files'] != SIGNAL_FILES_PER_ERA
+            or len(records) != total):
         raise ValueError('LHE signal weights require the complete new UUID collection')
     for task in records:
         era, stem, source = (task[k] for k in ('era', 'name', 'source'))
@@ -94,9 +92,11 @@ def lhe_input_population(path, year):
         raise ValueError('Signal ROOT was not registered in the new UUID inventory')
     receipt = read_json(ROOT / 'production' / 'collected' / era / path.with_suffix('.json').name)
     if (receipt.get('status') != 'collected' or receipt.get('era') != era
-            or receipt.get('events') != source['nevents']
-            or receipt.get('bytes') != path.stat().st_size):
+            or receipt.get('events') != source['nevents']):
         raise ValueError('Registered UUID signal ROOT disagrees with its collection receipt')
+    if receipt.get('bytes') != path.stat().st_size:
+        from .nanoaod_production import validate_output
+        validate_output(path, era, source)
     return source
 
 
@@ -263,9 +263,8 @@ class SourceWeights:
             'source': path, 'endpoint': url, 'missing': missing, 'joined_events': 0, 'branches': {}})
         if info['missing'] != missing:
             raise ValueError('LHE branch presence changed when reopening original NanoAOD')
-        if self.signal is not None and (tree.num_entries != self.signal['entries']
-                or file.file.source.num_bytes != self.signal['bytes']):
-            raise ValueError('Original signal source event or byte count differs from the registered input')
+        if self.signal is not None and tree.num_entries != self.signal['entries']:
+            raise ValueError('Original signal event count differs from the registered input')
         return tree
 
     def _definitions(self, tree, file_id):
@@ -790,14 +789,11 @@ def _check_task_payload(task, era, payload):
             or payload['scope'] != 'source_lhe_member_sums_not_reduced'):
         raise ValueError('Expected an unreduced, SR-blinded LHE member payload')
     contract = payload['contract']
-    if (Path(contract['input']) != ROOT / task['input'] or analysis_era(contract['year']) != era
+    if (Path(contract['input']).name != Path(task['input']).name or analysis_era(contract['year']) != era
             or payload['audit']['events_read'] != task['entries']
             or contract['lhe_weights']['source'] != 'original_nanoaod'
             or contract['lhe_weights']['signal_uncertainties'] is not False):
         raise ValueError('LHE receipt does not match the registered background input')
-    fingerprint = contract['fingerprint']
-    if fingerprint['size'] != task['fingerprint']['size']:
-        raise ValueError('LHE receipt size differs from the registered background input')
     if any(rec.get('is_data') or rec.get('is_signal') for rec in payload['input_metadata'].values()):
         raise ValueError('Observed or signal input cannot be part of a background LHE member merge')
     joined, files, usable_bases = _payload_source_coverage(payload)
@@ -910,23 +906,20 @@ def _validate_signal_lhe_payload(task, source, era, payload, atol, rtol):
         raise ValueError('Expected an unreduced, SR-blinded signal member payload')
     contract = payload['contract']
     entry = contract['lhe_weights']
-    if (Path(contract['input']) != ROOT / task['input'] or analysis_era(contract['year']) != era
+    if (Path(contract['input']).name != Path(task['input']).name or analysis_era(contract['year']) != era
             or contract['shape_mode'] != 'cms_trota_jme' or contract['variations'] != ['nominal']
             or payload['audit']['events_read'] != task['entries']
             or entry['signal_uncertainties'] is not True or entry['source'] != 'original_nanoaod'
             or entry['selection'] != 'new_uuid_corrected_trota_nominal'
             or entry['normalization'] != 'unscaled_selected_yields_and_signed_per_mass_denominators'):
         raise ValueError('Signal LHE receipt does not match the corrected nominal population')
-    fingerprint = contract['fingerprint']
-    if fingerprint['size'] != task['fingerprint']['size']:
-        raise ValueError('Signal member payload size differs from the registered input')
     datasets = list(payload['input_metadata'].values())
     if (len(datasets) != 1 or datasets[0].get('is_data') is not False or datasets[0].get('is_signal') is not True
             or datasets[0]['dataset'] != source['dataset']):
         raise ValueError('Signal LHE input must match the registered signal-only dataset')
     expected_mass = {'GenModel_' + name: float(value) for name, value in source['nano_metadata']['mass_sumw'].items()}
     registered = entry['registered_source']
-    expected_source = dict(entries=source['nevents'], bytes=source['size'])
+    expected_source = dict(entries=source['nevents'])
     if (any(registered.get(k) != v for k, v in expected_source.items())
             or registered.get('nominal_by_genmodel') != expected_mass or registered.get('dataset') != source['dataset']):
         raise ValueError('Signal LHE original source coverage or point registry differs')

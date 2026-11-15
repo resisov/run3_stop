@@ -17,6 +17,7 @@ import shutil
 import subprocess
 import sys
 import tarfile
+import tempfile
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor, wait, FIRST_COMPLETED
@@ -105,15 +106,29 @@ def prepare():
                     physics='current target-era objects; raw signed generator weights; no multiplicative SF',
                     accepted_inputs_replaced=False)
     path = PRODUCTION / 'tasks.json'
-    if path.exists() and read(path) != manifest:
-        raise ValueError('Active production task definitions differ')
+    if path.exists():
+        def task_definitions(document):
+            return [(task['era'], task['name'], task['source']['name'],
+                     task['source']['dataset'], task['source']['nevents'],
+                     sorted(task['source']['parents']), task['source']['nano_metadata']['mass_sumw'])
+                    for task in document['tasks']]
+        if task_definitions(read(path)) != task_definitions(manifest):
+            raise ValueError('Active production task definitions differ')
     write_json(path, manifest)
     (PRODUCTION / 'logs').mkdir(exist_ok=True)
     (PRODUCTION / 'outputs').mkdir(exist_ok=True)
-    (PRODUCTION / 'bundles').mkdir(exist_ok=True)
+    bundle = _write_producer_bundle()
+    print(json.dumps(dict(files=len(sources), eras=list(ERAS), jobs=len(tasks),
+                          bundle_bytes=bundle.stat().st_size)), flush=True)
+
+
+def _write_producer_bundle():
+    """Publish a bundle from the current package before a new submission."""
     bundle = PRODUCTION / 'bundles/producer.tgz'
-    if not bundle.exists():
-        with tarfile.open(bundle, 'w:gz') as archive:
+    bundle.parent.mkdir(exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix='.bundle-', dir=bundle.parent) as temporary:
+        candidate = Path(temporary) / bundle.name
+        with tarfile.open(candidate, 'w:gz') as archive:
             for relative in ('__init__.py', '__main__.py', 'utils', 'models/TROTA',
                              'scales/JME', 'scales/EGM', 'scales/MUO', 'scales/TAU',
                              'scales/object_shapes.json', 'production/tasks.json'):
@@ -121,12 +136,34 @@ def prepare():
                             filter=lambda item: None if '__pycache__' in item.name or item.name.endswith('.pyc') else item)
             archive.add(ROOT / 'workflows/__init__.py', arcname='TROTASR/workflows/__init__.py')
             archive.add(ROOT / 'workflows/produce.py', arcname='TROTASR/workflows/produce.py')
-    print(json.dumps(dict(files=len(sources), eras=list(ERAS), jobs=len(tasks),
-                          bundle_bytes=bundle.stat().st_size)), flush=True)
+        os.replace(candidate, bundle)
+    return bundle
 
 
 def receipt_path(task):
     return PRODUCTION / 'collected' / task['era'] / (task['name'] + '.json')
+
+
+def _collected_target(task):
+    return ROOT / 'inputs' / task['era'] / (task['name'] + '.root')
+
+
+def _collected_receipt(task):
+    """Check the accepted local receipt and its two published files."""
+    target = _collected_target(task)
+    try:
+        receipt = read(receipt_path(task))
+        metadata = read(target.with_suffix('.json'))
+        if (isinstance(receipt, dict) and isinstance(metadata, dict)
+                and receipt.get('status') == 'collected' and receipt.get('era') == task['era']
+                and receipt.get('events') == task['source']['nevents']
+                and target.is_file() and target.stat().st_size == receipt.get('bytes')
+                and metadata.get('status') == 'complete' and metadata.get('analysis_era') == task['era']
+                and metadata.get('events_read') == task['source']['nevents']):
+            return receipt
+    except (OSError, ValueError):
+        pass
+    return None
 
 
 def submit(eras, limit=None):
@@ -141,13 +178,15 @@ def submit(eras, limit=None):
     for number, task in enumerate(tasks):
         done = PRODUCTION / 'outputs' / task['era'] / (task['name'] + '.json')
         if (task['era'] in eras and number not in active and number not in submitted
-                and not done.exists() and not receipt_path(task).exists()):
+                and not (done.is_file() and done.with_suffix('.root').is_file())
+                and _collected_receipt(task) is None):
             pending.append(number)
     pending.sort(key=lambda number: (tasks[number]['source']['nevents'], number))
     if limit is not None:
         pending = pending[:limit]
     if not pending:
         print('No pending tasks'); return
+    _write_producer_bundle()
     batch_root = EOS_ROOT + '/production'
     description = '\n'.join([
         'universe = vanilla', 'executable = ' + EOS_ROOT + '/workflows/produce.py',
@@ -196,8 +235,9 @@ def worker(number, phase=None, corrected_binding=None):
         return
     metadata = read(output.with_suffix('.json')) if output.with_suffix('.json').exists() else {}
     if metadata.get('status') not in ('events_complete', 'complete'):
-        production.build_events(source, era, output)
-    if era in EARLY_ERAS and not metadata.get('topmixed_inputs'):
+        metadata = production.build_events(source, era, output)
+    if (era in EARLY_ERAS and metadata.get('status') != 'complete'
+            and not metadata.get('topmixed_inputs') and not production.parent_deepcsv_complete(output, metadata)):
         from TROTASR.utils.nanoaod_parent import deepcsv_cmssw_config
         edm = output.with_suffix('.edm.root')
         config, count = deepcsv_cmssw_config([output], source['parents'], edm)
@@ -214,7 +254,8 @@ def worker(number, phase=None, corrected_binding=None):
         in_environment(setup, ['--worker', str(number), '--phase', 'parent'])
         edm.unlink(missing_ok=True)
         config_path.unlink()
-    if read(output.with_suffix('.json')).get('status') != 'complete':
+    metadata = read(output.with_suffix('.json'))
+    if metadata.get('status') != 'complete' and not production.recover_candidate_metadata(output, era, metadata):
         in_environment('source ' + TENSORFLOW,
                        ['--worker', str(number), '--phase', 'trota'])
     metadata = production.validate_output(output, era, source)
@@ -234,34 +275,42 @@ def collect_file(task, ready):
     from TROTASR.utils.nanoaod_production import validate_output
     receipt = receipt_path(task)
     remote = EOS_ROOT + '/production/outputs/' + task['era'] + '/' + task['name']
-    target = ROOT / 'inputs' / task['era'] / (task['name'] + '.root')
+    target = _collected_target(task)
     target.parent.mkdir(parents=True, exist_ok=True)
-    if receipt.exists():
-        metadata = read(receipt)
-        if not target.exists() or target.stat().st_size != metadata['bytes']:
-            raise ValueError('Collected ROOT no longer matches its receipt: ' + str(target))
-    else:
+    accepted = _collected_receipt(task)
+    try:
+        metadata = validate_output(target, task['era'], task['source'])
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        if not all(remote + suffix in ready for suffix in ('.json', '.root')):
+            raise ValueError('Local signal is incomplete and a complete EOS pair is unavailable: '
+                             + str(target)) from error
         if shutil.disk_usage(ROOT).free < 80 * 1024**3:
             raise OSError('hep2 free disk is below the required 80 GiB reserve')
-        for suffix in ('.json', '.root'):
-            path = target.with_suffix(suffix)
-            if not path.exists():
-                pending = path.with_name(path.name + '.partial')
-                run(['xrdcp', '--force',
-                     'root://eosuser.cern.ch/' + remote + suffix, pending])
-                os.replace(pending, path)
-        metadata = validate_output(target, task['era'], task['source'])
+        with tempfile.TemporaryDirectory(prefix='.collect-', dir=target.parent) as staging:
+            candidate = Path(staging) / target.name
+            for suffix in ('.json', '.root'):
+                run(['xrdcp', '--force', 'root://eosuser.cern.ch/' + remote + suffix,
+                     candidate.with_suffix(suffix)])
+            metadata = validate_output(candidate, task['era'], task['source'])
+            os.replace(candidate, target)
+            os.replace(candidate.with_suffix('.json'), target.with_suffix('.json'))
+        accepted = None
+    if accepted is None:
         write_json(receipt, dict(status='collected', path=str(target), time=time.time(),
                                 era=task['era'], source=task['source']['name'],
                                 events=metadata['events_read'], bytes=target.stat().st_size))
     # A receipt is published before deleting either staging file. If cleanup
     # fails, the next pass reuses the accepted hep2 file and retries cleanup.
     eos_receipt = EOS_ROOT + '/production/collected/' + task['era']
-    run(['xrdcp', '--force', receipt, 'root://eosuser.cern.ch/' + eos_receipt + '/' + receipt.name])
-    for suffix in ('.root', '.json'):
-        if remote + suffix in ready:
-            run(['xrdfs', 'root://eosuser.cern.ch', 'rm', remote + suffix])
+    try:
+        run(['xrdcp', '--force', receipt, 'root://eosuser.cern.ch/' + eos_receipt + '/' + receipt.name])
+        for suffix in ('.root', '.json'):
+            if remote + suffix in ready:
+                run(['xrdfs', 'root://eosuser.cern.ch', 'rm', remote + suffix])
+    except (OSError, subprocess.SubprocessError) as exc:
+        return str(exc)[-600:]
     print('COLLECTED', task['era'], task['name'], flush=True)
+    return None
 
 
 def collect(follow=False, workers=16):
@@ -282,7 +331,7 @@ def collect(follow=False, workers=16):
                  EOS_ROOT + '/production/collected/' + era])
         ready, active, retry_after, failures = set(), {}, {}, {}
         retired, refreshed = set(), 0.0
-        completed = {i for i, task in enumerate(tasks) if receipt_path(task).exists()}
+        completed = {i for i, task in enumerate(tasks) if _collected_receipt(task) is not None}
         with ThreadPoolExecutor(max_workers=workers) as pool:
             while True:
                 now = time.time()
@@ -302,17 +351,27 @@ def collect(follow=False, workers=16):
                     if len(active) >= workers: break
                     if i in busy or i in retired or now < retry_after.get(i, 0): continue
                     remote = EOS_ROOT + '/production/outputs/' + task['era'] + '/' + task['name']
+                    local = _collected_target(task)
                     available = remote + '.json' in ready or i in completed and remote + '.root' in ready
-                    if available:
+                    retry_cleanup = i in completed and str(i) in failures
+                    if available or retry_cleanup or (
+                            i not in completed and local.is_file() and local.with_suffix('.json').is_file()):
                         active[pool.submit(collect_file, task, ready.copy())] = i
                 if active:
                     finished, _ = wait(active, timeout=5, return_when=FIRST_COMPLETED)
                     for future in finished:
                         i = active.pop(future)
                         try:
-                            future.result()
-                            completed.add(i); retired.add(i); failures.pop(str(i), None)
+                            cleanup_error = future.result()
+                            completed.add(i)
+                            if cleanup_error:
+                                failures[str(i)] = cleanup_error
+                                retry_after[i] = time.time() + 60
+                            else:
+                                retired.add(i)
+                                failures.pop(str(i), None)
                         except Exception as exc:
+                            completed.discard(i)
                             failures[str(i)] = str(exc)[-600:]
                             retry_after[i] = time.time() + 60
                             print('COLLECTION RETRY', i, str(exc), flush=True)
@@ -320,7 +379,10 @@ def collect(follow=False, workers=16):
                              workers=workers, active=len(active), errors=failures)
                 write_json(PRODUCTION / 'collection.json', state)
                 if len(completed) == len(tasks) and not active and not failures: return
-                if not follow and not active: return
+                if not follow and not active:
+                    if failures:
+                        raise RuntimeError('Signal collection failures remain; see production/collection.json')
+                    return
                 if not active: time.sleep(10)
 
 
@@ -342,7 +404,7 @@ def recover(numbers, workers=2):
     def retry(number):
         task = tasks[number]
         published = PRODUCTION / 'outputs' / task['era'] / (task['name'] + '.json')
-        if receipt_path(task).exists() or published.exists():
+        if _collected_receipt(task) is not None or (published.is_file() and published.with_suffix('.root').is_file()):
             return dict(status='complete', attempts=0)
         log_path = PRODUCTION / 'logs' / ('recover.%d.log' % number)
         for attempt in range(1, 4):
@@ -501,12 +563,10 @@ def _replacement_signal_inputs():
     from TROTASR.workflows.validation_regions import layout
 
     prod = PRODUCTION
-    manifest, collection = (read_json(prod / name) for name in ("tasks.json", "collection.json"))
+    manifest = read_json(prod / "tasks.json")
     records = manifest["tasks"]
     n = REPLACEMENT_FILES_PER_ERA * len(ERAS)
-    if (tuple(manifest["eras"]) != ERAS or manifest["files"] != REPLACEMENT_FILES_PER_ERA
-            or len(records) != n or collection.get("completed") != n or collection.get("total") != n
-            or collection.get("active") != 0 or collection.get("errors") != {}):
+    if set(manifest["eras"]) != set(ERAS) or manifest["files"] != REPLACEMENT_FILES_PER_ERA or len(records) != n:
         raise ValueError("The six-era replacement signal collection is not complete")
     tasks = {era: [] for era in ERAS}
     names, runs, lfns = ({era: {} for era in ERAS}, {era: defaultdict(float) for era in ERAS},
@@ -529,7 +589,7 @@ def _replacement_signal_inputs():
         files, datasets = metadata["files"], metadata["datasets"]
         retained = metadata["events_written"]
         if (receipt.get("status") != "collected" or receipt.get("era") != era
-                or receipt.get("bytes") != fingerprint["size"] or receipt.get("events") != source_events
+                or receipt.get("events") != source_events
                 or metadata.get("status") != "complete" or metadata.get("analysis_era") != era
                 or metadata.get("input_nanoaod_version") != 15 or metadata.get("events_read") != source_events
                 or type(retained) is not int or not 0 <= retained <= source_events
@@ -547,9 +607,13 @@ def _replacement_signal_inputs():
             if topology != signal_topology(dataset) or mass is None or lsp is None or not np.isfinite(float(value)):
                 raise ValueError("Invalid replacement signal Runs sum: " + str(relative))
             runs[era][signal_mass_key(topology, mass, lsp)] += float(value)
-        tasks[era].append(dict(year=era, input=str(relative), metadata=str(metadata_path),
-                               entries=retained, fingerprint=fingerprint,
-                               signal_population=REPLACEMENT_SIGNAL_POPULATION))
+        task = dict(year=era, input=str(relative), metadata=str(metadata_path),
+                    entries=retained, fingerprint=fingerprint, source_events=source_events,
+                    dataset=dataset, signal_sumw_by_genmodel=weight_sums,
+                    signal_population=REPLACEMENT_SIGNAL_POPULATION)
+        if receipt.get("bytes") != fingerprint["size"]:
+            _validate_replacement_root(ROOT / relative, era, task)
+        tasks[era].append(task)
     if (any(len(t) != REPLACEMENT_FILES_PER_ERA for t in tasks.values())
             or any(lfns[era] != lfns[ERAS[0]] for era in ERAS)
             or len({t["input"] for group in tasks.values() for t in group}) != n):
@@ -563,6 +627,24 @@ def _replacement_signal_inputs():
     return tasks, bases
 
 
+def _validate_replacement_root(path, era, task):
+    """Revalidate a repacked intermediate against the registered signal fields."""
+    from TROTASR.utils.nanoaod_production import validate_output
+
+    source_events = task.get('source_events')
+    if source_events is None:
+        source_events = read_json(path.with_suffix('.json'))['events_read']
+    metadata = validate_output(path, era, {'nevents': source_events})
+    datasets = list(metadata['datasets'].values())
+    if (metadata.get('input_nanoaod_version') != 15 or metadata['events_written'] != task['entries']
+            or len(datasets) != 1 or datasets[0].get('is_signal') is not True
+            or datasets[0].get('is_data') is not False
+            or ('dataset' in task and datasets[0].get('dataset') != task['dataset'])
+            or ('signal_sumw_by_genmodel' in task
+                and datasets[0].get('signal_sumw_by_genmodel') != task['signal_sumw_by_genmodel'])):
+        raise ValueError('Replacement signal ROOT has different retained events or Runs metadata: ' + str(path))
+
+
 def _replacement_task_source(task):
     era = str(task['year'])
     relative = Path(task['input'])
@@ -572,8 +654,8 @@ def _replacement_task_source(task):
             or task.get('metadata') != str(relative.with_suffix('.json'))):
         raise ValueError('Replacement signal requires its registered ROOT and metadata identities')
     output = ROOT / relative
-    if _replacement_fingerprint(output)['size'] != task['fingerprint']['size']:
-        raise ValueError('Unexpected replacement signal ROOT size: ' + str(relative))
+    if _replacement_fingerprint(output)['size'] != task.get('fingerprint', {}).get('size'):
+        _validate_replacement_root(output, era, task)
     return output
 
 
@@ -586,9 +668,13 @@ def _corrected_signal_inputs(tasks):
     for era in ERAS:
         accepted = ROOT / 'estimations' / f'normalization_{era}.json.gz'
         generated = PRODUCTION / 'histograms' / accepted.name
-        fields = ('luminosity_pb', 'signal_mass_points')
         installed, measured = read_json(accepted), read_json(generated)
-        if any(installed[k] != measured[k] for k in fields):
+        def normalization_values(table):
+            fields = ('topology', 'mStop', 'mLSP', 'sumw_mass_point', 'xsec_pb', 'normalization_factor')
+            return {point: tuple(record.get(field) for field in fields)
+                    for point, record in table['signal_mass_points'].items()}
+        if (installed['luminosity_pb'] != measured['luminosity_pb']
+                or normalization_values(installed) != normalization_values(measured)):
             raise ValueError('Published and production Runs normalization differ: ' + era)
         norm[era] = dict(path=str(accepted.relative_to(ROOT)))
     bindings = [dict(task=by_path[f"inputs/{task['era']}/{task['name']}.root"],
@@ -603,8 +689,7 @@ def _corrected_histogram_result(result, binding, source):
     contract = result['contract']
     if (result.get('status') != 'complete' or result.get('sr_data_blinded') is not True
             or result.get('highdm_sr_source_axes') != 'exact_nb_exact_topology_native_recoil_v2'
-            or contract.get('input') != str(source) or str(contract.get('year')) != str(task['year'])
-            or contract.get('fingerprint', {}).get('size') != task['fingerprint']['size']
+            or Path(contract['input']).name != source.name or str(contract.get('year')) != str(task['year'])
             or contract.get('shape_mode') != 'cms_trota_jme'
             or contract.get('nominal_calibrations_only') is not True
             or contract.get('signal_sr_only') is not True
@@ -678,22 +763,56 @@ def _merge_corrected_signals(era, inputs):
     """Merge only corrected nominal signal payloads, never current physics inputs."""
     from TROTASR.utils.io import file_identity, read_json, scientific_settings
     from TROTASR.workflows.merge_nominal import merge_datasets, merge_histograms
+    from TROTASR.workflows.signal_grid_inputs import _corrected_signal_contract, _read_nominal_replacement
     from TROTASR.workflows.validation_regions import _available_memory
 
     directory = _corrected_signal_directory()
     destination = directory / f'systematics_{era}.json.gz'
     if internal_path(destination) != destination:
         raise ValueError('Corrected signal merge does not resolve to its canonical path')
+    tasks = [binding['task'] for binding in inputs]
+    if (len(tasks) != REPLACEMENT_FILES_PER_ERA or any(str(task['year']) != era for task in tasks)
+            or len({task['input'] for task in tasks}) != len(tasks)):
+        raise ValueError('Incomplete, duplicated or wrong-era corrected signal merge: ' + era)
+    expected_events = sum(task['entries'] for task in tasks)
+    coverage = dict(full_input_inventory=True, expected_files=len(tasks), completed_files=len(tasks),
+                    failed_files=0, expected_events=expected_events, processed_events=expected_events)
+    scope = 'full_cms_trota_jme_production'
+    norm = inputs[0]['normalization']
+    if destination.is_file():
+        saved = _read_nominal_replacement(destination, ())
+        datasets = saved['input_metadata']
+        replacement = saved.get('signal_replacement', {})
+        if (saved.get('status') != 'complete' or saved.get('sr_data_blinded') is not True
+                or saved.get('scope') != scope
+                or any(saved.get('coverage', {}).get(field) != value for field, value in coverage.items())
+                or saved.get('highdm_sr_source_axes') != 'exact_nb_exact_topology_native_recoil_v2'
+                or not _corrected_signal_contract(saved['contract'], era)
+                or set(saved['histograms']) != {'highdm', 'lowdm'} or not datasets
+                or replacement.get('files') != len(tasks)
+                or replacement.get('datasets') != len(datasets)
+                or replacement.get('retained_events') != expected_events
+                or replacement.get('central') != 'cms_trota_jme_nominal'
+                or replacement.get('signal_input') != REPLACEMENT_SIGNAL_POPULATION
+                or replacement.get('signal_uncertainties') is not False
+                or replacement.get('background_and_data_unchanged') is not True):
+            raise ValueError('Incomplete or misbound completed corrected signal merge: ' + era)
+        for binding in inputs:
+            source = ROOT / binding['task']['input']
+            path = directory / era / (source.stem + '.json.gz')
+            if path.is_file():
+                _corrected_histogram_result(read_json(path), binding, source)
+        return dict(status='complete', output=str(destination.relative_to(ROOT)), coverage=coverage,
+                    physics_contract=saved['contract'], scope=scope, normalization=norm,
+                    signal_replacement=replacement, files=len(tasks), datasets=len(datasets),
+                    retained_events=expected_events)
     histograms, physical, datasets = {}, {}, {}
     physics = None
     identities = []
-    norm = None
     events = 0
     for binding in inputs:
         if _available_memory() < 24*1024**3 or shutil.disk_usage(directory).free < 80*1024**3:
             raise RuntimeError('Corrected signal merge stopped for hep2 memory or disk emergency')
-        if str(binding['task']['year']) != era:
-            raise ValueError('Wrong target era in corrected signal merge')
         task = binding['task']
         source = ROOT / task['input']
         path = directory / era / (source.stem + '.json.gz')
@@ -706,36 +825,27 @@ def _merge_corrected_signals(era, inputs):
         common = scientific_settings({k: v for k, v in contract.items() if k not in (
             'input', 'fingerprint', 'registered_signal_source')})
         if physics is None:
-            physics, norm = common, binding['normalization']
+            physics = common
         elif physics != common:
             raise ValueError('Corrected nominal signal contracts differ for ' + era)
         merge_histograms(histograms, result['histograms'])
         merge_histograms(physical, result['physical_histograms'])
         merge_datasets(datasets, result['input_metadata'])
         events += result['audit']['events_read']
-    if (len(inputs) != REPLACEMENT_FILES_PER_ERA or set(histograms) != {'highdm', 'lowdm'}
-            or not datasets or len({row['path'] for row in identities}) != len(inputs)):
+    if set(histograms) != {'highdm', 'lowdm'} or not datasets or events != expected_events:
         raise ValueError('Incomplete corrected signal merge for ' + era)
     if any(record['identity'][2] != (ROOT / record['path']).stat().st_size for record in identities):
         raise ValueError('Corrected signal inputs changed before merge publication: ' + era)
-    coverage = dict(full_input_inventory=True, expected_files=len(inputs), completed_files=len(inputs),
-                    failed_files=0, expected_events=sum(task['task']['entries'] for task in inputs),
-                    processed_events=events)
     replacement = dict(files=len(inputs), datasets=len(datasets), retained_events=events,
                        signal_uncertainties=False, background_and_data_unchanged=True,
                        central='cms_trota_jme_nominal', signal_input='regenerated_signal_uuid')
-    scope = 'full_cms_trota_jme_production'
     payload = dict(status='complete', scope=scope, contract=physics, coverage=coverage,
                    sr_data_blinded=True, highdm_sr_source_axes='exact_nb_exact_topology_native_recoil_v2',
                    histograms=histograms, physical_histograms=physical, input_metadata=datasets,
                    signal_replacement=replacement)
-    if destination.exists():
-        if scientific_settings(read_json(destination)) != scientific_settings(payload):
-            raise ValueError('Preserve divergent completed corrected signal merge: ' + era)
-    else:
-        write_json(destination, payload)
+    write_json(destination, payload)
     return dict(status='complete', output=str(destination.relative_to(ROOT)),
-                output_identity=list(file_identity(destination)), coverage=coverage, physics_contract=physics,
+                coverage=coverage, physics_contract=physics,
                 scope=scope, normalization=norm, signal_replacement=replacement,
                 files=len(inputs), datasets=len(datasets), retained_events=events)
 
@@ -791,19 +901,16 @@ def refresh_signals(workers=8, limit=None, *, corrected_nominal=False):
         selected = list(enumerate(tasks))
         if limit is not None: selected = selected[:limit]
         if corrected_nominal:
-            for key, receipt in state['completed'].items():
+            for era in list(state['merged']):
+                if not (directory / f'systematics_{era}.json.gz').is_file():
+                    del state['merged'][era]
+            for key, receipt in list(state['completed'].items()):
                 task = tasks[int(key)]
                 path = directory / task['era'] / (task['name'] + '.json.gz')
-                if (receipt.get('era') != task['era']
-                        or not path.is_file() or receipt.get('identity', [None, None, path.stat().st_size])[2]
-                        != path.stat().st_size):
-                    raise ValueError('Preserve a divergent corrected signal completion receipt: ' + str(path))
-            for era, receipt in state['merged'].items():
-                path = directory / f'systematics_{era}.json.gz'
-                if (not path.is_file()
-                        or receipt.get('output_identity', [None, None, path.stat().st_size])[2]
-                        != path.stat().st_size):
-                    raise ValueError('Preserve a divergent corrected signal merge receipt: ' + str(path))
+                if receipt.get('era') != task['era']:
+                    raise ValueError('Wrong era in corrected signal completion receipt: ' + str(path))
+                if not path.is_file() and task['era'] not in state['merged']:
+                    del state['completed'][key]
         pending = [(n,t) for n,t in selected if str(n) not in state['completed']]
         attempts, futures = {}, {}
         state.update(status='histograms', total=len(tasks), selected=len(selected))

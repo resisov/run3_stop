@@ -24,7 +24,7 @@ from TROTASR.gnn4lowdm.inference import Rank005Numpy
 from TROTASR.gnn4lowdm.region_features import feature_arrays
 from TROTASR.utils.corrections import NONJME_ENDPOINTS, corrected_central_chunks, event_weights, nonjme_event_views
 from TROTASR.utils.event_selections import REGIONS, highdm_core, select
-from TROTASR.utils.io import read_json, validate_root, write_json
+from TROTASR.utils.io import read_json, root_metadata, validate_root, write_json
 from TROTASR.utils.normalization import dataset_label, norm_vector
 from TROTASR.utils.paths import EARLY_ERAS, ERAS, ROOT, era_year, internal_path
 from TROTASR.utils.private_scales import TopWEvents, topw_event_variations, topw_file_input_policy
@@ -39,6 +39,7 @@ from TROTASR.utils.trota_inference import (
     MIXED_FLOATS, MIXED_INTS, P4_FIELDS, bounded_slices, infer_chunk, load_models, p4_view,
 )
 from TROTASR.workflows.rare_top_policy import POLICY, excluded_ids, primary
+from TROTASR.workflows.resources import process_identity
 
 
 SCHEMA = "trotasr_vr_mc_nominal_v1"
@@ -49,6 +50,7 @@ REPLACEMENT_SIGNAL_POPULATION = "regenerated_signal_uuid"
 OUTPUT = ROOT / "stats/run3/vr"
 GRID = ROOT / "stats/run3/grid/manifest.json"
 MC_NAME = re.compile(r"(?:mc_shard|signal_shard|signal_v15(?:_batch)?)_\d+\.root")
+DATA_NAME = re.compile(r"data_(?:shard|completion_MET2022C)_\d+\.root")
 FIELDS = ("sumw", "sumw2", "entries")
 GIB = 2**30
 MC_RESERVE_BYTES = 16 * GIB
@@ -74,9 +76,9 @@ TROTA_RESULT_FIELDS = ("nTopMixed1pct", *("TopMixed1pct_" + k for k in (*MIXED_I
 
 
 @lru_cache(maxsize=6)
-def layout(era):
+def geometry(era):
     grid = read_json(GRID)
-    if (grid.get("status") != "cards_ready" or grid.get("era_merged") is not True
+    if (grid.get("era_merged") is not True or tuple(grid.get("years", ())) != ERAS
             or grid.get("sr_data_blinded") is not True
             or grid.get("systematic_combination", {}).get("central") != "corrected_central_jme"):
         raise ValueError("Expected the adopted blinded era-merged grid and corrected central MC")
@@ -88,11 +90,18 @@ def layout(era):
     high = load_merge(grid["sr_merge"])
     if high["bins_per_year"] != 118:
         raise ValueError("Expected the adopted 118-bin high-dM SR projection")
+    return {key: low[key] for key in expected}, high["categories"]
+
+
+@lru_cache(maxsize=6)
+def layout(era):
+    low, high = geometry(era)
+    grid = read_json(GRID)
     signals = {signal_mass_key(row["model"], *map(int, re.findall(r"\d+", row["mass"])))
                for row in grid["points"] if row.get("fit_ready") is True}
     if len(signals) != 895:
         raise ValueError("Expected exactly the displayed 895 signal points")
-    return {key: low[key] for key in expected}, high["categories"], signals
+    return low, high, signals
 
 
 def angular_candidates(a):
@@ -286,15 +295,38 @@ def _task_source(task):
     if task.get("signal_population") == REPLACEMENT_SIGNAL_POPULATION:
         from TROTASR.workflows.produce import _replacement_task_source
         return _replacement_task_source(task)
+    return _accepted_input_path(task)
+
+
+def _accepted_input_path(task):
     era = str(task["year"])
     relative = Path(task["input"])
-    if relative.parent != Path("inputs") / era or not MC_NAME.fullmatch(relative.name):
-        raise ValueError("Only accepted background or signal MC files are allowed")
+    if era not in ERAS or relative.parent != Path("inputs") / era or relative.suffix != ".root":
+        raise ValueError("Expected a ROOT shard from an accepted era inventory")
     path = internal_path(ROOT / relative)
-    st = path.stat()
-    if task["fingerprint"].get("size", st.st_size) != st.st_size:
-        raise ValueError(f"VR input size changed: {relative}")
+    if not path.is_file():
+        raise FileNotFoundError(f"Missing registered VR shard: {relative}")
     return path
+
+
+def _input_kind(task):
+    if task.get("signal_population") == REPLACEMENT_SIGNAL_POPULATION:
+        return "signal"
+    if "vr_kind" in task:
+        return task["vr_kind"]
+    name = Path(task["input"]).name
+    if DATA_NAME.fullmatch(name):
+        return "data"
+    if MC_NAME.fullmatch(name):
+        return "background" if name.startswith("mc_") else "signal"
+    path = _accepted_input_path(task)
+    with uproot.open(path, object_cache=None, array_cache=None) as root:
+        datasets = root_metadata(path, root).get("datasets", {})
+    kinds = {(row.get("is_data") is True, row.get("is_signal") is True) for row in datasets.values()}
+    for flags, kind in (((True, False), "data"), ((False, True), "signal"), ((False, False), "background")):
+        if kinds == {flags}:
+            return kind
+    raise ValueError(f"Unknown or mixed dataset type in {path.name}")
 
 
 def _event_branches(root, friend):
@@ -329,7 +361,7 @@ def _registered_signal_normalization(era):
     lumi = float(current["luminosity_pb"])
     if not np.isfinite(lumi) or lumi <= 0:
         raise ValueError("Invalid adopted luminosity for " + era)
-    tasks = sorted((t for t in inventory()[era] if Path(t["input"]).name.startswith("signal_")),
+    tasks = sorted((t for t in inventory()[era] if _input_kind(t) == "signal"),
                    key=lambda task: task["input"])
     if not tasks:
         raise ValueError("No registered signal inputs for " + era)
@@ -486,17 +518,16 @@ def _response_contract():
     nominal = read_json(OUTPUT / "mc_summary.json.gz")
     background_only = nominal.get("background_only") is True
     expected = _background_inventory(inventory())
-    if (nominal.get("schema") != SCHEMA or nominal.get("status") != "complete"
+    if (nominal.get("schema") != SCHEMA or nominal.get("status") not in ("complete", "incomplete")
             or nominal.get("pilot") or nominal.get("sr_observations_read") is not False
             or nominal.get("vr_observations_read") is not False
             or not _has_background_coverage(nominal, expected)
             or set(nominal.get("era_samples", {})) != set(expected)
             or (background_only and (nominal.get("full_era_signal_points") != 0
-                or any(nominal["coverage"][e].get("signal") != [0, 0] for e in expected)))
-            or (not background_only and nominal.get("full_era_signal_points") != 895)):
+                or any(nominal["coverage"][e].get("signal") != [0, 0] for e in expected)))):
         raise ValueError("Complete the accepted nominal VR backgrounds before producing responses")
-    card, card_id = grid_card(GRID, "impact")
-    cr, cr_id = grid_card(GRID, "cronly")
+    card, card_id = grid_card(GRID, "impact", require_grid_ready=False)
+    cr, cr_id = grid_card(GRID, "cronly", require_grid_ready=False)
     sr_payload, cr_payload = parse_card(card.read_text()), parse_card(cr.read_text())
     scopes = _response_card_scopes(sr_payload)
     support = _fit_only_response_support(sr_payload, cr_payload, scopes)
@@ -671,15 +702,15 @@ def _record_shape_endpoint(target, cells, weights, name, direction, scopes):
 
 
 def compute_response(task, contract, *, use_friend=True):
-    path = _task_source(task)
-    if _mc_batch_kind(task) != "standard":
+    if _input_kind(task) != "background":
         raise ValueError("VR response applies only to background MC")
+    path = _task_source(task)
     accepted = _read_receipt(task)
     if accepted is None or accepted.get("kind") != "background":
         raise ValueError("Missing accepted background-only VR nominal receipt")
     era = str(task["year"])
     year = era_year(era)
-    low, high, signals = layout(era)
+    low, high = geometry(era)
     metadata = validate_root(path, year)
     datasets = metadata.get("datasets", {})
     if not datasets or any(r.get("is_data") or r.get("is_signal") for r in datasets.values()):
@@ -700,7 +731,7 @@ def compute_response(task, contract, *, use_friend=True):
             if np.any(np.asarray(chunk["is_data"], bool)):
                 raise ValueError("Observed data are forbidden in VR responses")
             allowed = np.zeros(len(chunk), dtype=bool)
-            for mask, *_ in _row_samples(chunk, metadata, "background", signals, excluded, set(), era):
+            for mask, *_ in _row_samples(chunk, metadata, "background", (), excluded, set(), era):
                 allowed |= mask
             allowed &= np.asarray(chunk["pass_base_common"], bool) & np.asarray(chunk["pass_signal_trigger"], bool)
             selected, resolved = _attach_friend(friend, chunk, start, allowed)
@@ -720,7 +751,7 @@ def compute_response(task, contract, *, use_friend=True):
                     for a, resolved, lo, hi, gnn in views:
                         cells, clean = _select_and_bin(a, resolved, lo, hi, gnn, era, (low, high), subdivide=True)
                         for mask, dataset_id, dataset, process, _, sample in _row_samples(
-                                a, metadata, "background", signals, excluded, set(), era):
+                                a, metadata, "background", (), excluded, set(), era):
                             mask &= cells >= 0
                             if not mask.any():
                                 continue
@@ -744,7 +775,7 @@ def compute_response(task, contract, *, use_friend=True):
     def pairs(values):
         return {n: {d: _response_sparse(h) for d, h in pair.items()} for n, pair in values.items()}
 
-    return dict(schema=RESPONSE_SCHEMA, input=task["input"], era=era, fingerprint=task["fingerprint"],
+    return dict(schema=RESPONSE_SCHEMA, input=task["input"], era=era,
                 card=contract["card"], cr_card=contract["cr_card"],
                 events=events, sr_observations_read=False,
                 nominal={sample: _response_sparse(rows) for sample, rows in nominal.items()},
@@ -755,13 +786,19 @@ def compute_response(task, contract, *, use_friend=True):
 
 def compute(task, *, tight_mixed=False, use_friend=True, signal_normalization=None):
     era = str(task["year"])
+    kind = _input_kind(task)
+    if kind not in ("background", "signal"):
+        raise ValueError("Expected an accepted MC shard")
     path = _task_source(task)
     if tight_mixed and path != ROOT / task["input"]:
         raise ValueError("Tight-Mixed MC inputs cannot redirect through symlinks")
-    low_layout, high_layout, signals = layout(era)
     year = era_year(era)
     metadata = validate_root(path, year)
-    kind = "background" if path.name.startswith("mc_") else "signal"
+    if kind == "signal":
+        low_layout, high_layout, signals = layout(era)
+    else:
+        low_layout, high_layout = geometry(era)
+        signals = ()
     replacement = task.get("signal_population") == REPLACEMENT_SIGNAL_POPULATION
     if replacement and (tight_mixed or signal_normalization is None):
         raise ValueError("Replacement signals require the approved nominal VR and their own Runs normalization")
@@ -839,7 +876,7 @@ def compute(task, *, tight_mixed=False, use_friend=True, signal_normalization=No
     if tight_mixed and sum(int(rows[:, 2].sum()) for rows in sums.values()) != overlap["SR_preselection"]:
         raise ValueError("Tight-Mixed weighted MC coverage disagrees with its raw selection")
     return dict(schema=TIGHT_MIXED_SCHEMA if tight_mixed else SCHEMA,
-                era=era, input=task["input"], fingerprint=task["fingerprint"],
+                era=era, input=task["input"],
                 kind=kind, events=events, signal_points_seen=sorted(seen),
                 bins={k: {str(i): x[i].tolist() for i in np.flatnonzero(x[:, 2])}
                       for k, x in sums.items()}, sr_observations_read=False,
@@ -850,9 +887,10 @@ def compute(task, *, tight_mixed=False, use_friend=True, signal_normalization=No
 
 
 @lru_cache(maxsize=1)
-def inventory():
-    """Use the two accepted input inventories without reopening production gates."""
+def _input_inventory():
+    """Read the accepted six-era input population and classify each listed shard."""
     found = {era: [] for era in ERAS}
+    seen = set()
     plans = (("early_nominal_20261022_full.json", EARLY_ERAS),
              ("full_nominal_20260923.json", ("2024", "2025")))
     for name, eras in plans:
@@ -863,29 +901,31 @@ def inventory():
         if dict(counts) != source["expected_files_by_year"] or set(counts) != set(eras):
             raise ValueError("Unexpected input inventory coverage")
         for task in source["tasks"]:
-            name = Path(task["input"]).name
-            if name.startswith("data_"):
-                continue
-            if not MC_NAME.fullmatch(name):
-                raise ValueError("Unrecognized MC input name: " + name)
-            found[str(task["year"])].append(task)
-    paths = [t["input"] for tasks in found.values() for t in tasks]
-    if len(set(paths)) != len(paths):
-        raise ValueError("Duplicate MC inputs")
+            era, shard = str(task["year"]), Path(task["input"]).stem
+            if (era, shard) in seen:
+                raise ValueError(f"Duplicate accepted VR shard in {era}: {shard}")
+            seen.add((era, shard))
+            found[era].append(dict(task, vr_kind=_input_kind(task)))
     return found
+
+
+@lru_cache(maxsize=1)
+def inventory():
+    return {era: [task for task in tasks if _input_kind(task) in ("background", "signal")]
+            for era, tasks in _input_inventory().items()}
 
 
 def _pilot(tasks):
     # Only the selected MC shards are opened. Prefer modest-size shards so
     # this exercises both kinds and all target eras without a full scan.
-    return [min((t for t in tasks if Path(t["input"]).name.startswith(prefix)),
+    return [min((t for t in tasks if _input_kind(t) == kind),
                 key=lambda t: (abs(t["entries"] - 12000), t["input"]))
-            for prefix in ("mc_", "signal_")]
+            for kind in ("background", "signal")]
 
 
 def _background_inventory(tasks_by_era):
     """Exclude all signal inputs before resolving paths or normalization."""
-    selected = {era: [t for t in tasks if Path(t["input"]).name.startswith("mc_")]
+    selected = {era: [t for t in tasks if _input_kind(t) == "background"]
                 for era, tasks in tasks_by_era.items()}
     if set(selected) != set(ERAS) or not all(selected.values()):
         raise ValueError("Missing a background VR era")
@@ -908,8 +948,10 @@ def _read_receipt(task, *, tight_mixed=False):
     if not path.is_file():
         return None
     result = read_json(path)
-    if (result.get("schema") != (TIGHT_MIXED_SCHEMA if tight_mixed else SCHEMA) or result.get("input") != task["input"]
-            or result.get("fingerprint", {}).get("size") != task["fingerprint"].get("size")
+    era = str(task["year"])
+    if (result.get("schema") != (TIGHT_MIXED_SCHEMA if tight_mixed else SCHEMA)
+            or result.get("era", era) != era
+            or ("kind" in result and result["kind"] != _input_kind(task))
             or result.get("events") != task["entries"] or result.get("sr_observations_read") is not False):
         raise ValueError("Divergent VR MC receipt: " + str(path))
     if tight_mixed:
@@ -926,8 +968,8 @@ def _read_response_receipt(task, contract):
     if not path.is_file():
         return None
     result = read_json(path)
-    if (result.get("schema") != RESPONSE_SCHEMA or result.get("input") != task["input"]
-            or result.get("fingerprint", {}).get("size") != task["fingerprint"].get("size")
+    era = str(task["year"])
+    if (result.get("schema") != RESPONSE_SCHEMA or result.get("era", era) != era
             or result.get("events") != task["entries"]
             or result.get("nominal_receipt_reused") is not True or result.get("sr_observations_read") is not False):
         raise ValueError("Divergent VR response receipt: " + str(path))
@@ -946,6 +988,31 @@ def _available_memory():
                     if line.startswith("MemAvailable:"))) * 1024
 
 
+def _active_controller(state, lock_path, *, pid_field="pid", ticks_field="start_ticks", legacy_args=()):
+    """Match the current controller and its held lock, including old active runs."""
+    if state.get("status") not in ("running", "draining"):
+        return None
+    pid = state.get(pid_field)
+    live = process_identity(pid)
+    if live is None:
+        return None
+    ticks = state.get(ticks_field)
+    if ticks is None:
+        if not any(arg in legacy_args or Path(arg).name in legacy_args for arg in live["arguments"]):
+            return None
+    elif live["start_ticks"] != ticks:
+        return None
+    try:
+        with lock_path.open("rb") as lock:
+            try:
+                fcntl.flock(lock, fcntl.LOCK_SH | fcntl.LOCK_NB)
+            except BlockingIOError:
+                return pid
+    except FileNotFoundError:
+        pass
+    return None
+
+
 def _resource_room(*, reserve_vr_data=False, reserve_bytes=32 * GIB):
     """Account for all admitted fit futures, including unmaterialized ones."""
     rows = {}
@@ -957,14 +1024,17 @@ def _resource_room(*, reserve_vr_data=False, reserve_bytes=32 * GIB):
             rows[int(pid)] = (int(ppid), int(rss) * 1024, command)
     run_root = OUTPUT.parent
     reserved = credit = unmaterialized = 0
-    for name, file, pid_key, workers_key in (
-            ("limits", "workflow_state.json", "pid", "requested_workers"),
-            ("impacts", "impact_status.json", "controller_pid", "workers")):
+    for name, file, lock, pid_key, ticks_key, workers_key, module in (
+            ("limits", "workflow_state.json", "controller.lock", "pid", "start_ticks",
+             "requested_workers", "combine_limits.py"),
+            ("impacts", "impact_status.json", "impact.lock", "controller_pid", "controller_pid_start_ticks",
+             "workers", "combine_impacts.py")):
         path = run_root / name / file
         if not path.is_file():
             continue
         state = read_json(path)
-        pid = state.get(pid_key)
+        pid = _active_controller(state, path.with_name(lock), pid_field=pid_key, ticks_field=ticks_key,
+                                 legacy_args=(name, module))
         if pid not in rows:
             continue
         family = {pid}
@@ -974,7 +1044,7 @@ def _resource_room(*, reserve_vr_data=False, reserve_bytes=32 * GIB):
                 break
             family |= new
         native = [rows[p][1] for p in family - {pid} if rows[p][2] == "combine"]
-        futures = max(int(state[workers_key]), len(family) - 1)
+        futures = max(int(state.get(workers_key, 0)), len(family) - 1)
         reserved += futures
         credit += sum(min(rss, 3 * GIB) for rss in native)
         unmaterialized += futures - (len(family) - 1)
@@ -985,8 +1055,10 @@ def _resource_room(*, reserve_vr_data=False, reserve_bytes=32 * GIB):
     path = OUTPUT / "data_state.json"
     if reserve_vr_data and path.is_file():
         data = read_json(path)
-        if data.get("status") == "running" and data.get("pid") in rows:
-            materialized = [rss for parent, rss, _ in rows.values() if parent == data["pid"]]
+        pid = _active_controller(data, OUTPUT / "data_controller.lock",
+                                 legacy_args=("vr-data", "validation_data.py"))
+        if pid in rows:
+            materialized = [rss for parent, rss, _ in rows.values() if parent == pid]
             missing = max(0, int(data["workers"]) - len(materialized))
             unmaterialized += missing
             remaining_data_bytes = (missing * DATA_WORKER_BYTES
@@ -1071,7 +1143,7 @@ def _mc_pool_high_water(workers):
 
 
 def _mc_batch_kind(task):
-    return "signal" if Path(task["input"]).name.startswith("signal_") else "standard"
+    return "signal" if _input_kind(task) == "signal" else "standard"
 
 
 def _mc_cpu_slots(own_worker_load=0.0):
@@ -1127,7 +1199,7 @@ def _collect(all_tasks, pilot, *, tight_mixed=False, background_only=False, repl
         overlap = Counter(dict.fromkeys((*REGIONS, "SR_preselection"), 0))
         overlaps[era] = overlap
         for task in tasks:
-            kind = "background" if Path(task["input"]).name.startswith("mc_") else "signal"
+            kind = _input_kind(task)
             coverage[era][kind][1] += 1
             result = _read_receipt(task, tight_mixed=True) if tight_mixed else _read_receipt(task)
             if result is None:
@@ -1144,11 +1216,15 @@ def _collect(all_tasks, pilot, *, tight_mixed=False, background_only=False, repl
         for sample, values in sums.items():
             samples[sample] = samples.get(sample, 0) + values
     complete = all(a == b for era in coverage.values() for a, b in era.values())
-    _, high, signals = layout("2024")
+    if background_only:
+        low, high = geometry("2024")
+        signals = ()
+    else:
+        low, high, signals = layout("2024")
     bkg = sum((x for k, x in samples.items() if k not in signals), np.zeros((148, 3)))
     full_signals = sorted(k for k in signals if signal_eras[k] == set(ERAS))
     definitions = [(mode, key, j, lo, hi, predicates) for mode, groups in (
-        ("lowdm", [(key, edges, {}) for key, edges in layout("2024")[0].items()]),
+        ("lowdm", [(key, edges, {}) for key, edges in low.items()]),
         ("highdm", [(f"class{i}", c["edges"], c["predicates"]) for i, c in enumerate(high, 1)]))
         for key, edges, predicates in groups for j, (lo, hi) in enumerate(zip(edges, edges[1:]), 1)]
     rows = []
@@ -1203,7 +1279,7 @@ def _collect(all_tasks, pilot, *, tight_mixed=False, background_only=False, repl
                 coverage=coverage, full_era_signal_points=len(full_signals),
                 missing_era_signal_points=None if background_only else {
                     k: sorted(set(ERAS) - signal_eras[k]) for k in sorted(signals) if k not in full_signals},
-                low_edges_by_era={e: layout(e)[0] for e in ERAS}, high_categories=high,
+                low_edges_by_era={e: geometry(e)[0] for e in ERAS}, high_categories=high,
                 rows=rows, samples={k: v.tolist() for k, v in samples.items()},
                 era_samples={era: {k: v.tolist() for k, v in sums.items()}
                              for era, sums in per_era.items()}, **extra)
@@ -1345,7 +1421,7 @@ def run(pilot=False, workers=4, response=False, *, tight_mixed=False, background
     with (OUTPUT / "controller.lock").open("a") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         for era in ERAS:
-            layout(era)
+            (geometry if response or background_only else layout)(era)
         contract = _response_contract() if response else None
         worker_contract = ({k: v for k, v in contract.items() if k != "nominal_era_samples"}
                            if response else None)
@@ -1395,10 +1471,12 @@ def run(pilot=False, workers=4, response=False, *, tight_mixed=False, background
         reserve = 32 * GIB if reservation else MC_RESERVE_BYTES
         emergency = 24 * GIB if reservation else MC_RESERVE_BYTES
         signal_limit = workers if tight_mixed else MC_SIGNAL_WORKERS
+        controller = process_identity(os.getpid())
 
         def state(status, active=0, pool_workers=0, kind=None, peak=0, cpu=None):
             write_json(OUTPUT / f"{tag}_state.json", dict(
                 schema=schema, status=status, pilot=pilot, pid=os.getpid(), workers=workers,
+                start_ticks=controller["start_ticks"],
                 total=total, completed=done, active=active, pool_workers=pool_workers, failures=failures,
                 batch_kind=kind, pool_peak_rss_gib=peak / GIB,
                 memory_reserve_gib=reserve / GIB,

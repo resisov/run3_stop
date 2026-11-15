@@ -247,20 +247,41 @@ def render(limits_dir, grid_manifest, output, allow_partial=False, live_snapshot
             claim='In-progress grid; only complete five-quantile fits; missing support is masked',
             fit_or_histogram_recalculation=False)
     receipt = output / 'plot_manifest.json'
-    if output.exists():
+    plots = []
+    if receipt.is_file():
         old = read_json(receipt)
         keys = ('allow_partial', 'sr_bins_per_year', 'sr_merge', 'years',
                 'systematic_scope', 'live_snapshot')
         previous = old['contract']
         if (without_provenance_fields({k: previous.get(k) for k in keys})
-                != without_provenance_fields({k: contract.get(k) for k in keys})
-                or {p['model'] for p in old.get('plots', [])} != set(MODELS)):
+                != without_provenance_fields({k: contract.get(k) for k in keys})):
             raise FileExistsError('Preserve incompatible/incomplete contour directory')
-        if not old['files'] or any(not (output/name).is_file() for name in old['files']):
+        old_plots = {p['model']: p for p in old.get('plots', ())}
+        if any(not (output/name).is_file() for name in old['files']):
             raise ValueError('Missing completed contour artifact')
-        return old
-    output.mkdir(parents=True)
-    plots = []
+        if not live_snapshot:
+            if set(old_plots) != set(MODELS) or not old['files']:
+                raise FileExistsError('Preserve incomplete contour directory')
+            return old
+        for model, plot in old_plots.items():
+            prior = read_json(output / (model + '_expected_limits_with_signal_theory.json'))['points']
+            prior = {mass: {k: v for k, v in row.items() if k != 'signal_theory'}
+                     for mass, row in prior.items()}
+            current = records[model]['payload']['points']
+            if not prior.keys() <= current.keys():
+                raise ValueError('Current snapshot lost accepted fit support; preserve the previous contour')
+            if prior == current:
+                plots.append(plot)
+        expected = {m for m, r in records.items() if len(r['payload']['points']) >= 4}
+        if {p['model'] for p in plots} == expected:
+            if previous.get('snapshot_counts') == contract['snapshot_counts']:
+                return old
+            refreshed = dict(old, contract=dict(previous, snapshot_counts=contract['snapshot_counts']))
+            write_json(receipt, refreshed)
+            return refreshed
+    elif output.exists() and any(output.iterdir()):
+        raise FileExistsError('Preserve incompatible/incomplete contour directory')
+    output.mkdir(parents=True, exist_ok=True)
     write_json(receipt, dict(status='rendering', contract=contract, plots=[], full_workflow_complete=False))
     from TROTASR.utils.paths import analysis_era
     analysis_root = Path(grid['_canonical_analysis_root'])
@@ -270,7 +291,10 @@ def render(limits_dir, grid_manifest, output, allow_partial=False, live_snapshot
     if not all(math.isfinite(value) and value > 0 for value in luminosities):
         raise ValueError('Invalid recorded normalization luminosity')
     luminosity_label = r'%.2f fb$^{-1}$ (13.6 TeV)' % sum(luminosities)
+    reused = {p['model'] for p in plots}
     for model in MODELS:
+        if model in reused:
+            continue
         record = records[model]
         payload = annotate_expected_grid(record['payload'], theory)
         name = 'expected_limit_%s_%s_highdm%d_lowdm%d_xsec_topology_thermal_relic' % (
@@ -299,7 +323,8 @@ def render(limits_dir, grid_manifest, output, allow_partial=False, live_snapshot
             full_grid_missing=record['full_grid_missing'], full_grid_point_count=record['full_grid_point_count'],
             out_of_plot_range=record['out_of_plot_range'],
             status='generated_pending_visual_QA', external_theory_shift_applied=False))
-    result = dict(status='generated_pending_visual_QA', contract=contract, plots=plots,
+    result = dict(status='generated_pending_visual_QA', contract=contract,
+        plots=sorted(plots, key=lambda plot: MODELS.index(plot['model'])),
         files=sorted(p.name for p in output.iterdir() if p.is_file() and p != receipt),
         sr_data_blinded=True, full_workflow_complete=False)
     write_json(receipt, result)

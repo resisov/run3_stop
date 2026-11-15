@@ -7,6 +7,7 @@ is a later stage; completed fits do not imply complete AN deliverables.
 import argparse
 from concurrent.futures import ThreadPoolExecutor, wait, FIRST_COMPLETED
 from contextlib import ExitStack, contextmanager
+import errno
 import fcntl
 import json
 import math
@@ -101,12 +102,12 @@ def fit_command(workspace, mass, rmax, tolerance):
         '--rRelAcc',str(REL_ACC),'--rAbsAcc',str(ABS_ACC),'-v','2']
 
 
-def convert_workspace(card, workspace, record, state_path, env, stream):
+def convert_workspace(card, workspace, record, state_path, env, stream, lock_fd):
     from TROTASR.workflows.cr_linked_workspace import MODEL_REVISION
 
     def execute(command, cwd):
         proc = subprocess.Popen(command, cwd=cwd, env=env, stdin=subprocess.DEVNULL,
-                                stdout=stream, stderr=subprocess.STDOUT)
+                                stdout=stream, stderr=subprocess.STDOUT, pass_fds=(lock_fd,))
         record.update(child_identity(proc.pid), phase='workspace', command=command)
         write_json(state_path, record)
         return proc.wait()
@@ -228,7 +229,35 @@ def failed_log_text(path):
     return path.read_text(errors='replace')
 
 
-def run_primary_point(point, output, env):
+def reconcile_interrupted_attempts(record, state_path):
+    """Recover committed validation or keep an interrupted command consumed."""
+    changed = False
+    for attempt in record.get('attempts', ()):
+        if attempt.get('exit_code') is not None or attempt.get('interruption'):
+            continue
+        saved = {}
+        if attempt.get('log'):
+            folder = (ROOT / attempt['log']).resolve().parent
+            if folder.is_relative_to(state_path.parent):
+                try:
+                    candidate = read_json(folder/'validation.json')
+                    if isinstance(candidate, dict):
+                        saved = candidate
+                except (FileNotFoundError, ValueError):
+                    pass
+        fields = ('name', 'command', 'log', 'output')
+        if (type(saved.get('exit_code')) is int
+                and all(saved.get(field) == attempt.get(field) for field in fields)):
+            attempt.update(saved)
+        else:
+            attempt.update(passed=False, interruption='execution ended without a recorded exit status')
+        changed = True
+    if changed:
+        record.update(pid=None)
+        write_json(state_path, record)
+
+
+def run_primary_point(point, output, env, lock_fd):
     """Run the two primary configurations under the caller's point lock."""
     from TROTASR.workflows.limit_recovery import optimize_saved_command
 
@@ -239,15 +268,24 @@ def run_primary_point(point, output, env):
     record=read_json(state_path) if state_path.exists() else dict(point,status='running',started=time.time(),attempts=[])
     if any(record.get(key) != point.get(key) for key in ('model','mass','model_revision')):
         raise ValueError('Preserve old fit for a different point or statistical model')
-    if record['status'] == 'complete':
-        return record
-    assert_previous_child_exited(record, work)
+    attempts = record['attempts']
+    reconcile_interrupted_attempts(record, state_path)
+    for accepted in reversed(attempts):
+        if accepted.get('exit_code') == 0 and accepted.get('passed'):
+            record.update(status='complete', pid=None, output=accepted['output'],
+                          validation=accepted['validation'], accepted_attempt=accepted)
+            write_json(state_path, record)
+            return record
     workspace=work/'workspace.root'
     if not record.get('workspace_valid'):
-        if workspace.exists():
-            raise ValueError('Interrupted workspace output retained; explicit recovery required')
-        with (work/'workspace.log').open('x') as stream:
-            rc=convert_workspace(card,workspace,record,state_path,env,stream)
+        rc = record.get('workspace_conversion_exit')
+        if rc is None:
+            if workspace.exists() or record.get('phase') == 'workspace':
+                raise ValueError('Interrupted workspace conversion has no recorded exit status')
+            with (work/'workspace.log').open('a') as stream:
+                rc=convert_workspace(card,workspace,record,state_path,env,stream,lock_fd)
+            record.update(workspace_conversion_exit=rc, pid=None)
+            write_json(state_path, record)
         if rc or not workspace.is_file() or workspace.stat().st_size<1000:
             record.update(status='failed',error='workspace_conversion_failed',exit_code=rc,finished=time.time(),pid=None)
             write_json(state_path,record);return record
@@ -258,39 +296,60 @@ def run_primary_point(point, output, env):
         write_json(state_path,record)
     elif not workspace.is_file():
         raise ValueError('Previously verified workspace missing')
-    completed_attempts={a['name'] for a in record['attempts']}
+    completed_attempts={a['name'] for a in attempts}
     for label, tolerance, scale in ATTEMPTS:
         if label in completed_attempts:continue
         here=work/label
-        if here.exists():
-            raise ValueError('Interrupted fit attempt retained; explicit recovery required')
-        here.mkdir();(here/'tmp').mkdir()
         rmax = float(point.get('rmax_seed',20.))*scale
         command=fit_command(workspace,point['mass'],rmax,tolerance)
-        saved_attempts = record['attempts']
+        log=here/'combine.log'
+        result=here/('higgsCombine_'+point['mass']+'.AsymptoticLimits.mH120.root')
+        attempt=dict(name=label,tolerance=tolerance,passed=False,exit_code=None,
+            log=str(log.relative_to(ROOT)), output=str(result.relative_to(ROOT)))
+        if (record.get('current_attempt') == label
+                or (here.is_dir() and any(path != here/'tmp' for path in here.iterdir()))):
+            if record.get('current_attempt') == label and record.get('command'):
+                attempt['command'] = record['command']
+            elif (here/'validation.json').is_file():
+                attempt['command'] = read_json(here/'validation.json').get('command')
+            attempts.append(attempt)
+            reconcile_interrupted_attempts(record, state_path)
+            if attempt.get('exit_code') == 0 and attempt.get('passed'):
+                record.update(status='complete', pid=None, output=attempt['output'],
+                              validation=attempt['validation'], accepted_attempt=attempt)
+                write_json(state_path, record)
+                return record
+            continue
+        known = [a['command'] for a in attempts if a.get('command')]
+        if command in known:
+            continue
         saved_logs = [(a['log'], failed_log_text(ROOT/a['log']))
-                      for a in saved_attempts if a.get('log')
+                      for a in attempts if a.get('log')
                       and internal_path(ROOT/a['log']).is_file()]
         command, speed_evidence = optimize_saved_command(
-            workspace, point['mass'], command, saved_logs,
-            [a['command'] for a in saved_attempts if a.get('command')],
-            attempts=saved_attempts)
-        log=here/'combine.log'
-        with log.open('x') as stream:
-            proc=subprocess.Popen(command,cwd=here,env=dict(env,TMPDIR=str(here/'tmp')),
-                stdin=subprocess.DEVNULL,stdout=stream,stderr=subprocess.STDOUT)
-            record.update(child_identity(proc.pid), phase='fit', command=command, current_attempt=label)
-            write_json(state_path,record);rc=wait_for_inference(proc,log)
-        result=here/('higgsCombine_'+point['mass']+'.AsymptoticLimits.mH120.root')
-        passed,evidence=validate(result,log,tolerance) if rc==0 else (False,dict(exit_code=rc))
-        ready_card(point)
-        attempt=dict(name=label,tolerance=tolerance,passed=passed,exit_code=rc,
-            log=str(log.relative_to(ROOT)), command=command,
-            output=str(result.relative_to(ROOT)),
-            validation=evidence)
+            workspace, point['mass'], command, saved_logs, known, attempts=attempts)
+        if command in known:
+            continue
+        here.mkdir(exist_ok=True)
+        (here/'tmp').mkdir(exist_ok=True)
+        attempt['command'] = command
         if speed_evidence is not None:
             attempt['numerical_speed'] = speed_evidence
-        record['attempts'].append(attempt)
+        attempts.append(attempt)
+        record.update(phase='fit', command=command, current_attempt=label, pid=None)
+        write_json(state_path, record)
+        with log.open('x') as stream:
+            proc=subprocess.Popen(command,cwd=here,env=dict(env,TMPDIR=str(here/'tmp')),
+                stdin=subprocess.DEVNULL,stdout=stream,stderr=subprocess.STDOUT,pass_fds=(lock_fd,))
+            record.update(child_identity(proc.pid))
+            write_json(state_path,record)
+            rc=wait_for_inference(proc,log)
+        attempt['exit_code'] = rc
+        record['pid'] = None
+        write_json(state_path, record)
+        passed,evidence=validate(result,log,tolerance) if rc==0 else (False,dict(exit_code=rc))
+        ready_card(point)
+        attempt.update(passed=passed, exit_code=rc, validation=evidence)
         write_json(here/'validation.json',attempt)
         record.update(pid=None)
         if passed:
@@ -388,17 +447,24 @@ def accepted_fit_record(point, record, origin):
     if (set(values) != set(FIELDS) or any(not math.isfinite(v) or v <= 0 for v in values.values())
             or any(a >= b for a, b in zip(ordered, ordered[1:]))):
         raise ValueError('Accepted receipt lacks five finite ordered expected quantiles: '+origin)
-    paths = dict(output=attempt['output'], log=attempt['log'],
-                 workspace=record.get('workspace', str(Path(origin).parent/'workspace.root')))
+    paths = dict(output=attempt['output'])
+    if attempt.get('log'):
+        paths['log'] = attempt['log']
+    if record.get('workspace'):
+        paths['workspace'] = record['workspace']
     # Recovery receipts refer to the primary workspace, not a duplicate copy.
     if 'workspace' not in record:
         command = attempt.get('command', [])
         if '-M' in command and len(command) > command.index('-M')+2:
             paths['workspace'] = command[command.index('-M')+2]
-    for path in paths.values():
-        if not internal_path(ROOT/path).is_file():
-            raise FileNotFoundError('Accepted fit artifact is missing: '+str(path))
-    paths = {name: str(internal_path(ROOT/path)) for name, path in paths.items()}
+    product = internal_path(ROOT/paths['output'])
+    if not product.is_file() or product.stat().st_size <= 0:
+        raise FileNotFoundError('Accepted fit ROOT is missing or empty: '+str(product))
+    ancillary = {}
+    for name in ('log', 'workspace'):
+        if name in paths and (path := (ROOT/paths[name]).resolve()).is_relative_to(ROOT):
+            ancillary[name] = str(path)
+    paths = dict(ancillary, output=str(product))
     return dict(record, **point, status='complete', **paths, validation=evidence,
         accepted_attempt=attempt, command=attempt['command'], exit_code=0,
         receipt_origin=origin, input_check_scope=INPUT_CHECK_SCOPE)
@@ -431,27 +497,31 @@ def saved_point_result(point, output):
     return None
 
 
-def integrated_attempt(point, workspace, target, spec, env, state, state_path, progress):
+def integrated_attempt(point, target, spec, env, state, state_path, progress, lock_fd):
     from TROTASR.workflows.limit_recovery import validate_attempt
-    target.mkdir(parents=True, exist_ok=False)
-    (target/'tmp').mkdir()
     log = target/'combine.log'
     product = target/('higgsCombine_'+point['mass']+'.AsymptoticLimits.mH120.root')
     attempt = dict(spec, log=str(log.relative_to(ROOT)), output=str(product.relative_to(ROOT)),
                    started=time.time(), exit_code=None, passed=False)
     state['attempts'].append(attempt)
     write_json(state_path, state)
+    if target.is_dir() and any(path != target/'tmp' for path in target.iterdir()):
+        reconcile_interrupted_attempts(state, state_path)
+        return attempt
+    target.mkdir(parents=True, exist_ok=True)
+    (target/'tmp').mkdir(exist_ok=True)
     with log.open('x') as stream:
         process = subprocess.Popen(spec['command'], cwd=target, env=dict(env, TMPDIR=str(target/'tmp')),
-            stdin=subprocess.DEVNULL, stdout=stream, stderr=subprocess.STDOUT)
+            stdin=subprocess.DEVNULL, stdout=stream, stderr=subprocess.STDOUT, pass_fds=(lock_fd,))
         state.update(child_identity(process.pid), phase=spec['stage'], command=spec['command'])
         write_json(state_path, state)
         progress(spec['stage'], process.pid)
         attempt['exit_code'] = wait_for_inference(process,log)
     attempt.update(finished=time.time())
+    state['pid'] = None
+    write_json(state_path, state)
     passed, evidence = validate_attempt(point, attempt)
     attempt.update(passed=passed, validation=evidence)
-    state.update(pid=None)
     write_json(target/'validation.json', attempt)
     write_json(state_path, state)
     return attempt
@@ -469,21 +539,38 @@ def historical_success_commands(point, workspace, output, previous_commands=()):
     if not source.is_file():
         return [], dict(status='unavailable', reason='no_canonical_successful_recipe')
     key = point['model']+'/'+point['mass']
-    accepted = read_json(source).get('points',{}).get(key)
-    if accepted is None:
-        return [], dict(status='unavailable', reason='no_successful_same_point_recipe')
-    command = list(accepted['command'])
-    if (command[command.index('-M')+1] != 'AsymptoticLimits'
-            or command[command.index('--run')+1] != 'blind' or '--picky' not in command
-            or any(flag in command for flag in ('--freezeParameters','--setParameters',
-                                               '--snapshotName','--noFitAsimov'))):
-        raise ValueError('Historical recipe changed the expected-limit dataset/model')
-    command[command.index('-M')+2] = str(workspace)
-    rmax = float(command[command.index('--rMax')+1])
-    if not math.isfinite(rmax) or not 0 < rmax <= 100000:
-        raise ValueError('Invalid historical numerical seed')
-    specs = [dict(name='prior_success_'+accepted['name'], command=command,
-                  rmax=rmax, tolerance=float(command[command.index('--cminDefaultMinimizerTolerance')+1]))]
+    try:
+        accepted = read_json(source).get('points',{}).get(key)
+        if accepted is None:
+            return [], dict(status='unavailable', reason='no_successful_same_point_recipe')
+        name = accepted['name']
+        command = list(accepted['command'])
+        if (not isinstance(name, str) or not re.fullmatch(r'[a-zA-Z0-9][a-zA-Z0-9_.-]*', name)
+                or not all(isinstance(value, str) for value in command)):
+            raise ValueError('Invalid historical command or recipe name')
+        if (Path(command[0]).name != 'combine'
+                or command[command.index('-M')+1] != 'AsymptoticLimits'
+                or command[command.index('-n')+1] != '_'+point['mass']
+                or command[command.index('--run')+1] != 'blind' or '--picky' not in command
+                or any(flag in command for flag in ('--freezeParameters','--setParameters',
+                        '--setParameterRanges', '--snapshotName', '--noFitAsimov', '--toysFrequentist'))):
+            raise ValueError('Historical recipe changed the expected-limit dataset/model')
+        command[command.index('-M')+2] = str(workspace)
+        rmax = float(command[command.index('--rMax')+1])
+        tolerance = float(command[command.index('--cminDefaultMinimizerTolerance')+1])
+        if not 0 < rmax <= 100000 or not math.isfinite(tolerance) or tolerance <= 0:
+            raise ValueError('Invalid historical numerical seed')
+        algorithm = command[command.index('--minosAlgo')+1]
+        adapters = {'new': 'native_profiled', 'stepping': 'stepping_full5'}
+        if (algorithm not in ('bisection', *adapters)
+                or (algorithm in adapters and 'MINIMIZER_no_analytic' not in command)
+                or (algorithm == 'stepping' and '--strictBounds' not in command)):
+            raise ValueError('Historical recipe lacks a supported numerical algorithm')
+    except (AttributeError, FileNotFoundError, IndexError, KeyError, TypeError, ValueError) as error:
+        return [], dict(status='inapplicable', reason=str(error))
+    specs = [dict(name='prior_success_'+name, command=command, rmax=rmax, tolerance=tolerance)]
+    if algorithm in adapters:
+        specs[0]['run3_numerical_adapter'] = adapters[algorithm]
     for algorithm, strategy in (('Migrad',0),('Combined',1)):
         spec = dict(name='prior_success_'+algorithm.lower()+'_s'+str(strategy)+'_calls2m',
             algorithm=algorithm, strategy=strategy, tolerance=.1, precision=None,
@@ -492,7 +579,7 @@ def historical_success_commands(point, workspace, output, previous_commands=()):
     known = set()
     for previous in previous_commands:
         normalized=list(previous)
-        if '-M' in normalized:
+        if '-M' in normalized and normalized.index('-M')+2 < len(normalized):
             normalized[normalized.index('-M')+2]=str(workspace)
         known.add(tuple(normalized))
     selected = []
@@ -520,12 +607,11 @@ def run_integrated_point(point, output, env, progress=lambda phase, pid: None):
         records = point_receipts(point, output)
         for stage, path, record in records:
             assert_previous_child_exited(record, work)
-            if any(a.get('exit_code') is None for a in record.get('attempts', [])):
-                raise RuntimeError('Interrupted command receipt retained; diagnose before new admission')
+            reconcile_interrupted_attempts(record, path)
         progress('primary', None)
         primary = next((r for stage, _, r in records if stage == 'primary'), None)
         if primary is None or primary.get('error') != 'finite_attempts_exhausted':
-            primary = run_primary_point(point, output, env)
+            primary = run_primary_point(point, output, env, lock.fileno())
         if primary.get('status') == 'complete':
             return accepted_fit_record(point, primary, str((work/'state.json').relative_to(ROOT)))
         if not primary.get('workspace_valid'):
@@ -545,13 +631,20 @@ def run_integrated_point(point, output, env, progress=lambda phase, pid: None):
         # failed attempt, without touching already accepted points or inputs.
         checked = state.setdefault('saved_attempt_checks', {})
         for attempt in history:
-            if attempt.get('exit_code') != 0 or attempt.get('passed') or not attempt.get('output'):
+            if attempt.get('exit_code') != 0 or not attempt.get('output'):
                 continue
             identity = json.dumps([attempt['output'], attempt.get('log')])
-            if identity in checked:
-                continue
-            passed, evidence = validate_attempt(point, attempt)
-            checked[identity] = dict(passed=passed, validation=evidence, output=attempt['output'])
+            if attempt.get('passed'):
+                passed, evidence = True, attempt['validation']
+            else:
+                if identity in checked:
+                    continue
+                if not attempt.get('command') or not attempt.get('log') or not (
+                        ROOT/attempt['log']).is_file():
+                    passed, evidence = False, dict(reason='saved_command_or_log_unavailable')
+                else:
+                    passed, evidence = validate_attempt(point, attempt)
+                checked[identity] = dict(passed=passed, validation=evidence, output=attempt['output'])
             if passed:
                 accepted = dict(attempt, passed=True, validation=evidence)
                 state.update(status='complete', finished=time.time(), accepted_attempt=accepted,
@@ -564,7 +657,7 @@ def run_integrated_point(point, output, env, progress=lambda phase, pid: None):
         # model's workspace and the finite branch budget. Accepted points
         # return before this lookup; fitted values are not reused.
         prescription = state.get('historical_success_prescription')
-        if prescription is None:
+        if not isinstance(prescription, dict) or not isinstance(prescription.get('plans'), list):
             specs, diagnosis = historical_success_commands(point, workspace, output,
                 [a['command'] for a in history if a.get('command')])
             prescription = dict(diagnosis, plans=specs)
@@ -578,8 +671,8 @@ def run_integrated_point(point, output, env, progress=lambda phase, pid: None):
             ledger.setdefault('plans',[]).append([spec])
             ledger['status'] = 'pending'
             write_json(state_path,state)
-            attempt = integrated_attempt(point,workspace,work/'recovery/branches'/spec['name'],
-                                         spec,env,state,state_path,progress)
+            attempt = integrated_attempt(point, work/'recovery/branches'/spec['name'],
+                                         spec, env, state, state_path, progress, lock.fileno())
             history.append(attempt)
             if attempt['passed']:
                 state.update(status='complete',finished=time.time(),accepted_attempt=attempt,
@@ -646,8 +739,8 @@ def run_integrated_point(point, output, env, progress=lambda phase, pid: None):
                 for spec in specs[:maximum-len(stage_attempts)]:
                     spec = dict(spec, stage=stage)
                     target = work/'recovery'/stage/spec['name']
-                    attempt = integrated_attempt(point, workspace, target, spec, env,
-                                                 state, state_path, progress)
+                    attempt = integrated_attempt(point, target, spec, env, state, state_path,
+                                                 progress, lock.fileno())
                     stage_attempts.append(attempt)
                     history.append(attempt)
                     if attempt['passed']:
@@ -908,8 +1001,8 @@ def run_integrated_grid(manifest, output, workers):
                         or baseline.get('canonical_model') != 'era_merged'
                         or donor.st_size <= 0):
                     raise ValueError('The accepted Photon CR workspace is required for new signals')
-                model_record = {k: baseline[k] for k in ('canonical_model', 'model_revision',
-                    'photon_cr_workspace', 'photon_cr_workspace_mtime_ns', 'photon_cr_workspace_size')}
+                model_record = {k: baseline[k] for k in ('canonical_model', 'model_revision')}
+                model_record['photon_cr_workspace'] = str(donor_workspace(run_root).relative_to(ROOT))
                 model_record.update(signal_input_revision=signal_input_revision,
                                     signal_uncertainties=False, observed_sr_used=False,
                                     input_check_scope=INPUT_CHECK_SCOPE)
@@ -931,7 +1024,11 @@ def run_integrated_grid(manifest, output, workers):
         previous_failures = set(read_json(state_path).get('failed', ())) if state_path.is_file() else set()
         for point in points:
             key = point['model']+'/'+point['mass']
-            saved = saved_point_result(point, output)
+            try:
+                saved = saved_point_result(point, output)
+            except (FileNotFoundError, KeyError, TypeError, ValueError) as error:
+                results[key] = dict(point, status='needs_attention', error=repr(error))
+                continue
             if saved is not None:
                 results[key] = saved
             else:
@@ -1019,9 +1116,11 @@ def run_integrated_grid(manifest, output, workers):
                             results[key] = future.result()
                         except Exception as error:
                             results[key] = dict(point, status='needs_attention', error=repr(error))
-                            # Shared environment/ownership failure stops NEW admission;
-                            # healthy active points drain and retain their outputs.
-                            stopped.set()
+                            if isinstance(error, OSError) and (
+                                    error.errno in (errno.EDQUOT, errno.ENOSPC, errno.EROFS,
+                                        errno.EIO, errno.ENOMEM, errno.EMFILE, errno.ENFILE)
+                                    or error.filename in ('combine', 'text2workspace.py')):
+                                stopped.set()
                     snapshot(active, external, memory, limit)
                     if not active and pending and not stopped.is_set():
                         time.sleep(5)

@@ -46,7 +46,6 @@ class DependencyBoundaryTests(unittest.TestCase):
     def test_workflows_do_not_extend_analysis_import_paths(self):
         native_bindings = {
             ('combine_impacts.py', 'sys.path.insert(0, cmssw_python)'),
-            ('prepare_datacard_review.py', "sys.path.insert(0, str(Path(os.environ['CMSSW_BASE']) / 'python'))"),
         }
         for path in (ROOT / 'workflows').glob('*.py'):
             for node in ast.walk(ast.parse(path.read_text())):

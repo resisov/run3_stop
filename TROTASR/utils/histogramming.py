@@ -13,7 +13,7 @@ import numpy as np
 import awkward as ak
 import uproot
 from .paths import ROOT, JSONS, internal_path, era_year, analysis_era, EARLY_ERAS
-from .io import read_json, write_json, validate_root
+from .io import read_json, scientific_settings, write_json, validate_root
 from .reader import resolved_candidates
 from .event_selections import select, REGIONS, CATEGORY_ORDER, FixedJetTopologyCache
 from .event_selections import _references
@@ -31,6 +31,18 @@ from .physical_histograms import fill as fill_physical
 RECOIL = np.asarray([250, 300, 350, 400, 500, 650, 800, 1000, 1500], dtype=float)
 SR_RECOIL = np.asarray([250, 300, 350, 400, 500, 800, 1500], dtype=float)
 MLL_EDGES = np.asarray([50., 71., 81., 91., 101., 111., 160., 250., 500.])
+
+
+def histogram_settings(contract):
+    """Keep the selected physics view independent of how its tags were computed."""
+    settings = {key: value for key, value in contract.items()
+                if key not in {'input', 'fingerprint', 'registered_signal_source', 'nominal_trota_friend'}}
+    if 'lhe_weights' in settings:
+        settings['lhe_weights'] = {key: value for key, value in settings['lhe_weights'].items()
+                                   if key != 'registered_source'}
+    elif (contract.get('nominal_trota_friend') or {}).get('nominal_only'):
+        settings['nominal_calibrations_only'] = True
+    return scientific_settings(settings)
 
 
 def weight_variations_needed(endpoint, variations):
@@ -430,7 +442,7 @@ def _build(input_path, year, output, modes, variations, chunk_size, shape_mode,
             raise ValueError('Unknown shape implementation')
         contract['shape_mode'] = shape_mode
         if shape_mode == 'cms_trota_jme':
-            if nominal_calibrations_only:
+            if nominal_calibrations_only or friend_nominal_only:
                 contract['nominal_calibrations_only'] = True
             if friend_task is not None:
                 from .trota_friend import SCHEMA as FRIEND_SCHEMA
@@ -454,22 +466,22 @@ def _build(input_path, year, output, modes, variations, chunk_size, shape_mode,
                 branch_selection='consumer_columns',
                 physics_definitions_changed=False)
     if Path(output).exists():
-        from .io import scientific_settings
         previous = read_json(output)
         complete = previous.get('status') in ('complete', 'complete_one_file_test', 'complete_member_sums')
         if complete:
             saved = previous['contract']
-            if saved['fingerprint']['size'] != fingerprint['size']:
-                raise ValueError('Completed histogram reports a different input size: ' + str(output))
-            def settings(record):
-                selected = {k: v for k, v in record.items()
-                            if k not in {'input', 'fingerprint', 'registered_signal_source'}}
-                if 'lhe_weights' in selected:
-                    selected['lhe_weights'] = {k: v for k, v in selected['lhe_weights'].items()
-                                               if k != 'registered_source'}
-                return scientific_settings(selected)
-            if settings(saved) != settings(contract):
+            if histogram_settings(saved) != histogram_settings(contract):
                 raise ValueError('Completed histogram uses different inputs, corrections or binning: ' + str(output))
+            if ('events_written' in metadata
+                    and previous['audit']['events_read'] != metadata['events_written']):
+                raise ValueError('Completed histogram does not cover the current ROOT events: ' + str(output))
+            dataset_fields = ('dataset', 'is_data', 'is_signal', 'events_written', 'sumw',
+                              'signal_sumw_by_genmodel')
+            def dataset_scope(records):
+                return {key: tuple(record.get(field) for field in dataset_fields)
+                        for key, record in records.items()}
+            if dataset_scope(previous['input_metadata']) != dataset_scope(metadata['datasets']):
+                raise ValueError('Completed histogram has different input populations: ' + str(output))
             require_clean(previous)
             return previous
     model = Rank005Numpy(portable_model(year)) if 'lowdm' in modes else None

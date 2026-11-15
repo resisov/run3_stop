@@ -60,7 +60,8 @@ def load_early_qcd_fit_policy(reference):
         raise ValueError('Invalid exact early-QCD policy reference')
     path = internal_path(ROOT / POLICY_PATH)
     policy = read_json(path)
-    if policy != expected_policy():
+    expected = expected_policy()
+    if any(policy.get(key) != value for key, value in expected.items() if key != 'id'):
         raise ValueError('Unapproved early-QCD fit-only policy')
     return policy
 

@@ -249,9 +249,16 @@ def _load_fit(run_root, needed, rate_names, gaussian_names):
     root.RooMsgService.instance().setGlobalKillBelow(root.RooFit.ERROR)
     r = run_root / "cronly"
     pub = read_json(r / "publication.json")
-    products = provisional_cronly_products(r, pub)
+    products = provisional_cronly_products(r, pub, required=("workspace", "fit_result"))
     if products is None:
-        raise ValueError("Expected the currently published provisional CR-only fit")
+        if (pub.get("kind") != "cronly" or pub.get("complete") is not True
+                or pub.get("dataset") != "observed CR-only B-only r0"
+                or pub.get("sr_observed_data_used") is not False):
+            raise ValueError("Expected the accepted observed CR-only fit")
+        products = {key: internal_path(r / pub.get(key, default)) for key, default in (
+            ("workspace", "workspace.root"), ("fit_result", "fitDiagnostics_cronly.root"))}
+        if any(path.parent != r for path in products.values()):
+            raise ValueError("CR-only fit inputs must belong to the accepted result directory")
 
     def ident(p):
         stat = p.stat()
@@ -268,10 +275,9 @@ def _load_fit(run_root, needed, rate_names, gaussian_names):
             stack.callback(f.Close)
             files.append(f)
         w, result = files[0].Get("w"), files[1].Get("fit_b")
-        if (not result or int(result.status()) != 0
-                or int(result.covQual()) != pub["covariance_quality"]
+        if (not w or not result or int(result.status()) != 0
                 or int(result.covQual()) < 2 or not math.isfinite(float(result.edm()))
-                or w.var("r") is None):
+                or w.var("r") is None or w.cat("CMS_channel") is None):
             raise ValueError("Invalid saved CR-only fit_b")
         channels = {str(p.first) for p in w.cat("CMS_channel")}
         if channels != {f"{c}_{m}_c1" for c in ("LLCR", "QCDCR", "GCR")
@@ -283,7 +289,11 @@ def _load_fit(run_root, needed, rate_names, gaussian_names):
                or not np.isfinite(a).all() for a in photon.values()):
             raise ValueError("Invalid prefit photon weights for GNN-to-recoil projection")
         floats = {str(x.GetName()): float(x.getVal()) for x in result.floatParsFinal()}
-        if not set(GNN).issubset(floats) or set(RECOIL) & floats.keys():
+        fixed_r = result.constPars().find("r")
+        if "r" in floats or (fixed_r and float(fixed_r.getVal()) != 0):
+            raise ValueError("Expected the saved B-only fit with r fixed to zero")
+        if (not all(math.isfinite(value) for value in floats.values())
+                or not set(GNN).issubset(floats) or set(RECOIL) & floats.keys()):
             raise ValueError("The saved fit does not use the accepted Photon CR GNN model")
         fixed_legacy = set(RECOIL)
         bounded, prefit, constrained = {}, {}, {}
@@ -339,8 +349,8 @@ def _load_fit(run_root, needed, rate_names, gaussian_names):
             prior[name] = (dict(prefit, **{name: max(low, prefit[name] - sigma)}),
                            dict(prefit, **{name: min(high, prefit[name] + sigma)}))
         quality = dict(fit_status=int(result.status()), covariance_quality=int(result.covQual()),
-                       edm=float(result.edm()), saved_process_exit=pub["process_exit_code"],
-                       termination=pub["termination"], publication=pub["status"],
+                       edm=float(result.edm()), saved_process_exit=pub.get("process_exit_code"),
+                       termination=pub.get("termination"), publication=pub.get("status"),
                        fit_recalculated=False, cr_only=True, draw_count=n_draws,
                        draw_seed=12345, bounded_values=clipped,
                        constrained_from_fit=sorted(floating),

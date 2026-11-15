@@ -24,6 +24,17 @@ def cronly_fit_plots(result, output, *, refit=None):
     """Compare prefit/postfit CR yields with the adopted stack presentation."""
     from TROTASR.workflows.prediction_plot_inputs import export_cronly_fit, cronly_refit_paths
     payload = export_cronly_fit(result,output,refit=refit)
+    receipt = output/'plot_manifest.json'
+    if receipt.is_file():
+        previous = read_json(receipt)
+        if (previous.get('dataset') != payload['dataset']
+                or previous.get('fit', {}).get('source_fit') != payload['fit'].get('source_fit')
+                or previous.get('sr_observations_included') is not False
+                or not previous.get('files')
+                or any(not (output/name).is_file() for name in previous['files'])):
+            raise ValueError('Incompatible or incomplete CR-only figures')
+        print(previous['status'])
+        return
     luminosity = sum(luminosity_fb(y) for y in payload['years'])
     plots = [renderer.draw_cronly_prefit_postfit(payload,
         output/'cronly_prefit_postfit',luminosity)]
@@ -44,7 +55,7 @@ def cronly_fit_plots(result, output, *, refit=None):
         artifacts += [stem.with_suffix('.pdf'), stem.with_name(stem.name+'_part1.png'),
                       stem.with_name(stem.name+'_part2.png')]
     files = sorted(p.name for p in artifacts)
-    write_json(output/'plot_manifest.json',dict(status='generated_pending_visual_QA',
+    write_json(receipt,dict(status='generated_pending_visual_QA',
         plots=plots,files=files,fit=payload['fit'],dataset=payload['dataset'],
         sr_observations_included=False,fit_recalculated=False,
         uncertainty_method=payload['uncertainty_method'],covariance_samples=500))
@@ -115,8 +126,9 @@ def main():
     p.add_argument('--year',choices=('2022','2022EE','2023','2023BPix','2024','2025'),
                    help='Exact one-era view of an existing verified card export; no new fit')
     p.add_argument('--output',required=True,type=Path)
-    p.add_argument('--validate-only',action='store_true')
-    p.add_argument('--export-only',action='store_true',help='Write compact verified inputs without authoring figures')
+    operation=p.add_mutually_exclusive_group()
+    operation.add_argument('--validate-only',action='store_true')
+    operation.add_argument('--export-only',action='store_true',help='Write compact verified inputs without authoring figures')
     p.add_argument('--combine-era-sr',action='store_true',
         help='Explicit six-era high-dM or approved same-GNN-group low-dM SR display')
     p.add_argument('--era-group',choices=('early','late'),help='Approved low-dM era group; source remains the six-era card export')
@@ -129,7 +141,13 @@ def main():
     if a.cronly_refit and (not a.cronly_result or a.validate_only or a.export_only):
         p.error('--cronly-refit requires --cronly-result and a figure destination')
     if a.cronly_result:
-        cronly_fit_plots(internal_path(a.cronly_result),output,refit=a.cronly_refit)
+        result = internal_path(a.cronly_result)
+        if a.validate_only or a.export_only:
+            from TROTASR.workflows.prediction_plot_inputs import export_cronly_fit
+            export_cronly_fit(result, output, write=a.export_only)
+            print('Validated CR-only projection' if a.validate_only else 'Exported CR-only projection')
+        else:
+            cronly_fit_plots(result, output, refit=a.cronly_refit)
         return
     if a.combine_era_sr and (a.year or not (a.high_sr_only or a.low_sr_only or a.export_only)):
         p.error('--combine-era-sr requires --high-sr-only, --low-sr-only or --export-only')

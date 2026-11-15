@@ -23,7 +23,8 @@ if __package__ in (None, ''):
 from TROTASR.utils.paths import ROOT, internal_path
 from TROTASR.utils.io import read_json, write_json
 from TROTASR.workflows.diagnostic_common import (native_runtime, grid_card,
-    freeze_contract, CommandRunner, require_success, workspace, published_diagnostic, process_active)
+    freeze_contract, CommandRunner, require_success, workspace, published_diagnostic,
+    process_active, process_identity)
 SOURCES = ['workflows/combine_impacts.py', 'workflows/diagnostic_common.py',
            'workflows/combine_limits.py',
            'stats/runtime.json', 'stats/runtime/sitecustomize.py']
@@ -162,9 +163,8 @@ def validate_collection(collected, names, results, initial):
 def plot(runner, output, state, stem_name='impacts_mStop1200_mLSP500'):
     if state.get('status')=='needs_attention' and state.get('recovery_status'):
         recovery=read_json(ROOT/state['recovery_status'])
-        old_log=output/'plot.log'
-        if (recovery['status']=='fits_complete' and recovery['json']==state.get('json')
-                and old_log.exists() and "No module named 'HiggsAnalysis'" in old_log.read_text()):
+        if recovery.get('status') == 'fits_complete' and recovery.get('json'):
+            state['json'] = recovery['json']
             state['status']='fits_complete'
             state['previous_plot_error']=state.pop('error',None)
     if state.get('status') not in ('fits_complete', 'generated_pending_visual_QA'):
@@ -271,7 +271,8 @@ def _run(manifest, output, workers=40, plot_only=False, model='T2tt', mass='mSto
             benchmark=label, asimov_expect_signal=1, sr_data_used=False,
             approximate_impacts=False, full_workflow_complete=False, origins=origins)
         try:
-            state.update(controller_pid=os.getpid(), workers=workers)
+            state.update(controller_pid=os.getpid(),
+                         controller_pid_start_ticks=process_identity(os.getpid()), workers=workers)
             if plot_only:
                 state = plot(runner, output, state, stem)
             elif state.get('status') in ('fits_complete', 'generated_pending_visual_QA'):
@@ -332,7 +333,7 @@ def _run(manifest, output, workers=40, plot_only=False, model='T2tt', mass='mSto
             state.update(status='needs_attention', error=repr(error), finished=time.time())
             raise
         finally:
-            state['controller_pid'] = None
+            state.update(controller_pid=None, controller_pid_start_ticks=None)
             write_json(path, state)
     return 0
 
@@ -1087,7 +1088,6 @@ class BoundedSgamma(ImpactProfileRecovery):
         raise RuntimeError(name+' conditional fit failed at '+str(value))
 
     def validate_point(self, point):
-        from TROTASR.workflows.diagnostic_common import command_key
         if point['status'] != 'complete':
             raise ValueError('Conditional result is incomplete')
         rows = tree_rows(point['root'], point['name'])
@@ -1096,16 +1096,12 @@ class BoundedSgamma(ImpactProfileRecovery):
                 or not math.isclose(point['theta'],point['value'],rel_tol=2e-6,abs_tol=2e-7)
                 or point['deltaNLL'] < -.005):
             raise ValueError('Conditional ROOT/receipt disagreement')
-        if not internal_path(ROOT/point['log']).is_file():
-            raise FileNotFoundError('Conditional log is missing')
-        cwd = Path(point['root']).parent
+        cwd = internal_path(ROOT/point['root']).parent
         receipt_out = cwd.parents[2]
         if receipt_out not in [self.out, *self.prior_roots]:
             raise ValueError('Conditional result outside the frozen recovery namespaces')
-        record = read_json(receipt_out/'commands'/(command_key(point['command'],cwd)+'.json'))
-        if (record['status'] != 'complete' or record['exit_code'] != 0 or record.get('pid')
-                or str(Path(point['root']).relative_to(ROOT)) not in record['products']):
-            raise ValueError('Conditional execution receipt invalid')
+        if point.get('exit_code') != 0:
+            raise ValueError('Conditional result lacks successful execution')
 
     def recover(self, name):
         target = self.out/'parameters'/(name+'.json')

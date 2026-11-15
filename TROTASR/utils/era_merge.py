@@ -360,6 +360,22 @@ def observation_bindings(card, parsed):
                  for channel in parsed['channels'])
 
 
+def verify_observation_sum(path, sums, labels):
+    """Validate the small shared observation file when its receipt is missing."""
+    import uproot
+    with uproot.open(path) as root:
+        for channel, row in sums.items():
+            hist = root[channel+'/data_obs']
+            axis = hist.axis()
+            variances = hist.variances()
+            if (not hist.classname.startswith('TH1') or axis.labels() != labels[channel]
+                    or list(axis.edges()) != list(range(len(row['values'])+1))
+                    or list(hist.values()) != row['values'] or variances is None
+                    or not all(math.isclose(actual, expected, rel_tol=1e-12, abs_tol=1e-12)
+                               for actual, expected in zip(variances, row['variances']))):
+                raise ValueError('Merged observation histogram differs from current inputs: '+channel)
+
+
 def prepare_merged_cards(path, text, metadata, channels, template_background):
     """Prepare shared observations from today's in-memory card ingredients."""
     if metadata.get('fit_ready') is not True or metadata.get('sr_data_blinded') is not True:
@@ -374,12 +390,14 @@ def prepare_merged_cards(path, text, metadata, channels, template_background):
         construction='sum the CR observations and the native MC-only SR placeholders')
     if receipt_path.is_file():
         saved = read_json(receipt_path)
-        fields = ('scope', 'data_obs_root', 'source_channels', 'target_channels',
+        fields = ('scope', 'source_channels', 'target_channels',
                   'sr_data_blinded', 'observed_sr_used')
         if any(saved.get(field) != receipt[field] for field in fields):
             raise ValueError('Merged observation layout or blinding differs from the existing receipt')
     elif target.exists():
-        raise ValueError('Merged observation file has no matching input receipt')
+        sums, labels = sum_template_observations(plan, channels, template_background)
+        verify_observation_sum(target, sums, labels)
+        write_json(receipt_path, receipt)
     else:
         write_json(receipt_path, receipt)
     if not target.exists():

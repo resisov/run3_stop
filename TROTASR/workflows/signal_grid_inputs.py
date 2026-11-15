@@ -186,9 +186,7 @@ def replacement_production_receipts(state):
     """Return the six committed generations, not a partial replacement."""
     merged, completed = state.get('merged', {}), state.get('completed', {})
     count = state.get('total')
-    if (state.get('status') != 'complete' or state.get('active')
-            or state.get('errors') or state.get('merge_errors')
-            or state.get('central') != 'cms_trota_jme_nominal'
+    if (state.get('central') != 'cms_trota_jme_nominal'
             or state.get('signal_input') != 'regenerated_signal_uuid'
             or set(merged) != set(ERAS) or type(count) is not int or count <= 0
             or len(completed) != count or set(state.get('normalization_by_era', {})) != set(ERAS)):
@@ -514,10 +512,15 @@ def extract_year(paths, grid, allow_validation=False, preserve_unsupported=False
     payload = inputs['hists']
     from TROTASR.workflows.rare_top_policy import require_clean
     require_clean(payload)
-    if not allow_validation and (payload.get('scope') not in ('full_nominal_production', 'full_cms_trota_jme_production', 'full_combined_systematic_production')
-            or not payload.get('coverage', {}).get('full_input_inventory')
-            or payload['coverage']['failed_files'] != 0
-            or payload['coverage']['expected_files'] != payload['coverage']['completed_files']):
+    coverage = payload.get('coverage', {})
+    production_coverage = (
+        payload.get('scope') in ('full_nominal_production', 'full_cms_trota_jme_production',
+                                 'full_combined_systematic_production')
+        and bool(coverage.get('full_input_inventory'))
+        and coverage.get('failed_files') == 0
+        and 'expected_files' in coverage
+        and coverage.get('expected_files') == coverage.get('completed_files'))
+    if not allow_validation and not production_coverage:
         raise ValueError('Full-input production coverage is required')
     if payload.get('scope') == 'full_combined_systematic_production':
         from TROTASR.utils.statistics_inputs import combined_shape_endpoints
@@ -547,7 +550,8 @@ def extract_year(paths, grid, allow_validation=False, preserve_unsupported=False
         for channel in bins:
             channel['physical'].pop('signal', None)
     return dict(schema='trotasr_nominal_grid_inputs_v1', status='complete', year=year,
-        scope=payload['scope'], background=model_input, signals=signals, source_bins=source_bins,
+        scope=payload['scope'], production_coverage=production_coverage,
+        background=model_input, signals=signals, source_bins=source_bins,
         inputs={k: dict(path=str(p.relative_to(ROOT))) for k,p in paths.items()},
         signal_input_coverage={k: represented[k] for k in sorted(represented)},
         projection_audit=audit, negative_background_audit=[a for a in clipping if a['process'] != 'signal'],

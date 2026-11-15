@@ -5,6 +5,7 @@ from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
+from TROTASR.utils.io import read_json, write_json
 from TROTASR.utils.paths import ERAS
 from TROTASR.utils.statistical_templates import template_name
 from TROTASR.workflows import build_nominal_grid as builder
@@ -73,19 +74,15 @@ class WrittenTemplateResumeTests(unittest.TestCase):
 
     def test_inventory_only_never_rewrites_receipt_or_reopens_root(self):
         before = {p.name: p.read_bytes() for p in self.templates.iterdir()}
-        with patch.object(builder,'read_json',return_value={'status':'verifying_templates'}) as read, \
+        with patch.object(builder,'read_json',side_effect=AssertionError('stage read')), \
              patch.object(builder,'write_json',side_effect=AssertionError('receipt rewrite')), \
              patch.object(builder,'verify_minimal_template',side_effect=AssertionError('premature ROOT check')):
             builder.resume_written_templates(self.output, self.contract)
-        read.assert_called_once_with(self.output/'state.json')
         self.assertEqual({p.name:p.read_bytes() for p in self.templates.iterdir()},before)
         self.assertEqual(set(p.name for p in self.output.iterdir()), {'templates'})
 
     def test_only_closed_complete_template_stage_may_resume(self):
-        with patch.object(builder,'read_json',return_value={'status':'writing_templates'}):
-            with self.assertRaisesRegex(ValueError,'completed pre-card write stage'):
-                builder.resume_written_templates(self.output,self.contract)
-        with patch.object(builder,'read_json',return_value={'status':'verifying_templates'}):
+        with patch.object(builder,'read_json',side_effect=AssertionError('stage read')):
             (self.output/'datacards').mkdir()
             with self.assertRaisesRegex(ValueError,'completed pre-card write stage'):
                 builder.resume_written_templates(self.output,self.contract)
@@ -100,6 +97,40 @@ class WrittenTemplateResumeTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'missing or empty'):
                 builder.resume_written_templates(self.output,self.contract)
 
+
+class CardResumeTests(unittest.TestCase):
+    def test_cache_reuses_full_input_without_receipt_and_refreshes_changed_binding(self):
+        year = '2025'
+        mass = 'mStop1200_mLSP500'
+        grid = dict(models={'T2tt': [mass]})
+        def cache(source, nominal):
+            return dict(status='complete', year=year, sr_data_blinded=True,
+                        inputs={'hists': {'path': source}}, production_coverage=True,
+                        signals={'T2tt': {mass: {'nominal': [nominal]}}})
+        contract = dict(inputs={year: {'hists': {'path': 'first'}}}, validate_only=False,
+                        preserve_unsupported_templates=False)
+        with tempfile.TemporaryDirectory() as directory, patch('TROTASR.utils.io.internal_path', side_effect=Path):
+            path = Path(directory)/'2025.json.gz'
+            write_json(path, cache('first', 1.0))
+            with patch.object(builder, 'extract_year', side_effect=AssertionError('already extracted')):
+                self.assertEqual(builder.year_extraction(path, year, {}, contract, grid), cache('first', 1.0))
+            moved = dict(contract, inputs={year: {'hists': {'path': 'second'}}})
+            with patch.object(builder, 'extract_year', return_value=cache('second', 2.0)):
+                with self.assertRaisesRegex(ValueError, 'template yields'):
+                    builder.year_extraction(path, year, {}, moved, grid, protected_contract=contract)
+                self.assertEqual(read_json(path), cache('first', 1.0))
+                self.assertEqual(builder.year_extraction(path, year, {}, moved, grid), cache('second', 2.0))
+
+    def test_interrupted_card_can_gain_receipt_with_comments_preserved(self):
+        with tempfile.TemporaryDirectory() as directory, patch('TROTASR.utils.io.internal_path', side_effect=Path):
+            path = Path(directory)/'point.txt'
+            original = '# human comment\nrate  -1  # preserve spacing\n'
+            path.write_text(original)
+            builder.write_card_once(path, 'rate -1\n', {'sr_data_blinded': True})
+            self.assertEqual(path.read_text(), original)
+            self.assertTrue(read_json(path.with_suffix('.manifest.json'))['sr_data_blinded'])
+            with self.assertRaisesRegex(FileExistsError, 'Divergent datacard'):
+                builder.write_card_once(path, 'rate 1\n', {'sr_data_blinded': True})
 
 if __name__ == '__main__':
     unittest.main()

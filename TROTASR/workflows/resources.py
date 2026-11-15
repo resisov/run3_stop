@@ -10,7 +10,7 @@ def process_identity(pid):
         return None
     try:
         folder = Path('/proc')/str(pid)
-        fields = (folder/'stat').read_text().split(') ', 1)[1].split()
+        fields = (folder/'stat').read_text().rsplit(') ', 1)[1].split()
         if fields[0] == 'Z':
             return None
         return dict(pid=pid, start_ticks=int(fields[19]),
@@ -26,12 +26,13 @@ def external_process_slots(rows, own_pid):
         if more <= ours:
             break
         ours |= more
-    return sum(pid not in ours and (comm.startswith(('python', 'root', 'combine', 'xrdcp', 'rsync'))
+    return sum(pid not in ours and (comm.startswith(('python', 'root', 'combine', 'text2workspace', 'xrdcp', 'rsync'))
                or comm in ('hadd', 'cp')) for pid, _, comm in rows)
 
 def resources():
-    raw = subprocess.check_output(['ps', '-u', str(os.getuid()), '-o', 'pid=,ppid=,comm='], text=True)
-    rows = [(int(p), int(pp), c) for p, pp, c in (s.split(None, 2) for s in raw.splitlines())]
+    raw = subprocess.check_output(['ps', '-u', str(os.getuid()), '-o', 'pid=,ppid=,stat=,comm='], text=True)
+    rows = [(int(p), int(pp), c) for p, pp, stat, c in (s.split(None, 3) for s in raw.splitlines())
+            if not stat.startswith('Z')]
     external = external_process_slots(rows, os.getpid())
     memory = next(int(line.split()[1])*1024 for line in Path('/proc/meminfo').read_text().splitlines()
                   if line.startswith('MemAvailable:'))

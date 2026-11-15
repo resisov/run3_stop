@@ -7,7 +7,7 @@ rounding interval and the precision of the printed scan values.
 import copy
 import math
 import struct
-from TROTASR.workflows.limit_validation import SCAN, validate
+from TROTASR.workflows.limit_validation import SCAN, crossing_blocks, validate
 
 
 def rounding_interval(value):
@@ -26,7 +26,7 @@ def rounding_interval(value):
 
 def reconcile_crossings(text, evidence, tolerance):
     result = copy.deepcopy(evidence)
-    blocks = text.split('Will search for NLL crossing by bisection')[1:]
+    blocks = crossing_blocks(text)
     crossings = result.get('crossings', [])
     if len(blocks) != 5 or len(crossings) != 5 or 'quantiles' not in result:
         return False, result

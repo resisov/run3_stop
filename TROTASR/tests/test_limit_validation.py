@@ -25,6 +25,14 @@ class LimitCrossingTests(unittest.TestCase):
         text,values=self.log()
         self.assertTrue(crossing_check(text,values,.1)[0])
 
+    def test_empty_progress_header_does_not_count_as_crossing(self):
+        text,values=self.log()
+        self.assertTrue(crossing_check('Will  search for NLL crossing by bisection\n'+text,
+                                       values,.1)[0])
+        self.assertFalse(crossing_check(text+text,values,.1)[0])
+        invalid='Will search for NLL crossing by bisection\nAt r = nan: delta(nll) = nan\n'
+        self.assertFalse(crossing_check(invalid+text,values,.1)[0])
+
     def test_finite_values_without_crossings_fail(self):
         text,values=self.log(miss=True)
         self.assertFalse(crossing_check(text,values,.1)[0])

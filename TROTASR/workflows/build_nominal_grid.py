@@ -15,6 +15,7 @@ import os
 from pathlib import Path
 import re
 import sys
+from tempfile import NamedTemporaryFile
 import time
 if __package__ in (None, ''):
     from _bootstrap import bootstrap
@@ -676,14 +677,25 @@ def inference_runtime_identity():
     return dict(path=str(INFERENCE_RUNTIME))
 
 
+def card_tokens(text):
+    """Compare Combine statements while ignoring comments and spacing."""
+    rows = (line.partition('#')[0].split() for line in text.splitlines())
+    return [row for row in rows if row and any(token.strip('-') for token in row)]
+
+
 def write_card_once(path, text, manifest):
-    if path.exists():
-        if path.read_text() != text:
-            raise FileExistsError('Divergent datacard retained: ' + str(path))
-    else:
+    if not path.exists():
         path.parent.mkdir(parents=True, exist_ok=True)
-        with path.open('x') as stream:
+        with NamedTemporaryFile(mode='w', dir=path.parent, prefix='.'+path.name+'.') as stream:
             stream.write(text)
+            stream.flush()
+            os.fchmod(stream.fileno(), 0o644)
+            try:
+                os.link(stream.name, path)
+            except FileExistsError:
+                pass  # Another publisher left a card to validate below.
+    if card_tokens(path.read_text()) != card_tokens(text):
+        raise FileExistsError('Divergent datacard retained: ' + str(path))
     side = path.with_suffix('.manifest.json')
     if side.exists() and card_scientific_metadata(read_json(side)) != card_scientific_metadata(manifest):
         raise FileExistsError('Divergent datacard scientific metadata retained')
@@ -700,10 +712,8 @@ def require_template_files(directory, names):
 
 def resume_written_templates(output, contract):
     """Resume the structural check of closed, not-yet-accepted ROOTs."""
-    state = read_json(output/'state.json')
-    if (state.get('status') != 'verifying_templates'
-            or any((output/path).exists() for path in
-                   ('manifest.json', 'templates/model_manifest.json', 'cards', 'datacards'))):
+    if any((output/path).exists() for path in
+           ('manifest.json', 'templates/model_manifest.json', 'cards', 'datacards')):
         raise ValueError('Written-template resume requires the completed pre-card write stage')
     expected = {template_name('SR_'+mode+'_c1_'+year) for year in contract['inputs']
                 for mode in ('highdm', 'lowdm')}
@@ -784,7 +794,7 @@ def existing_card(context, point):
     path = context['output']/'datacards'/('datacard_'+point['model']+'_'+point['mass']+'.txt')
     side = path.with_suffix('.manifest.json')
     if not side.exists():
-        return None  # An interrupted TXT alone is compared exactly by write_card_once.
+        return None  # An interrupted TXT alone is checked by write_card_once.
     if not path.is_file():
         raise ValueError('Card provenance without its TXT is retained: '+str(path))
     issues = context['point_issues'].get(point['model']+'/'+point['mass'], [])
@@ -844,42 +854,54 @@ def write_point_cards(context, points, workers=1, execution=None):
     _CARD_CONTEXT = context
     pool_children = {}
     try:
+        from shutil import disk_usage
+
+        def available(active):
+            external, memory = resources()
+            limit = card_capacity(workers, external, memory, active, disk_usage(context['output']).free)
+            record.update(active=active, external_slots=external, available_memory_bytes=memory,
+                          status='writing_cards' if limit else 'waiting_for_resources', updated=time.time())
+            return limit
+
         if workers == 1:
-            for point in pending:
+            for remaining, point in enumerate(pending):
+                while not available(0):
+                    record['pending'] = len(pending)-remaining
+                    write_json(path, record)
+                    time.sleep(5)
                 result = card_worker(point); results[result['model']+'/'+result['mass']] = result
                 record.update(completed=len(results)); write_json(path, record)
         elif pending:
             if sys.platform != 'linux':
                 raise RuntimeError('Parallel cards require the inherited Linux inference runtime')
             import multiprocessing
-            import shutil
             from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
-            external, memory = resources()
-            admitted = card_capacity(workers, external, memory, 0, shutil.disk_usage(context['output']).free)
-            if not admitted:
-                raise RuntimeError('Insufficient shared slots/memory/disk for card admission')
-            record['admitted_workers'] = admitted
-            with ProcessPoolExecutor(max_workers=admitted, mp_context=multiprocessing.get_context('fork')) as pool:
-                active = {}; cursor = 0
-                while active or cursor < len(pending):
-                    external, memory = resources()
-                    limit = card_capacity(admitted, external, memory, len(active),
-                                          shutil.disk_usage(context['output']).free)
-                    while len(active) < limit and cursor < len(pending):
-                        point = pending[cursor]; cursor += 1
-                        active[pool.submit(card_worker, point)] = point
-                    pool_children = dict(pool._processes)
-                    record.update(worker_pids=sorted(pool._processes),
-                        worker_identities={str(pid):process_identity(pid) for pid in pool._processes}, completed=len(results),
-                        active=len(active), pending=len(pending)-cursor, external_slots=external,
-                        available_memory_bytes=memory, updated=time.time())
+            # A fork pool creates all worker processes on its first submission.
+            # Size each batch by actual admission so temporary pressure does not
+            # reserve idle slots for the rest of the grid.
+            cursor = 0
+            while cursor < len(pending):
+                limit = available(0)
+                if not limit:
+                    record['pending'] = len(pending)-cursor
                     write_json(path, record)
-                    if not active:
-                        raise RuntimeError('Shared card capacity exhausted; completed pairs are reusable')
-                    done, _ = wait(active, timeout=5, return_when=FIRST_COMPLETED)
-                    for future in done:
-                        active.pop(future); result = future.result()
-                        results[result['model']+'/'+result['mass']] = result
+                    time.sleep(5)
+                    continue
+                size = min(limit, len(pending)-cursor)
+                record['admitted_workers'] = size
+                with ProcessPoolExecutor(max_workers=size, mp_context=multiprocessing.get_context('fork')) as pool:
+                    active = {pool.submit(card_worker, point) for point in pending[cursor:cursor+size]}
+                    cursor += size
+                    pool_children.update(pool._processes)
+                    while active:
+                        record.update(worker_pids=sorted(pool._processes), active=len(active),
+                            worker_identities={str(pid):process_identity(pid) for pid in pool._processes},
+                            completed=len(results), pending=len(pending)-cursor, updated=time.time())
+                        write_json(path, record)
+                        done, active = wait(active, timeout=5, return_when=FIRST_COMPLETED)
+                        for future in done:
+                            result = future.result()
+                            results[result['model']+'/'+result['mass']] = result
             if any(process.exitcode != 0 for process in pool_children.values()):
                 raise RuntimeError('Card fork worker did not exit successfully')
         for key, saved in reused_pairs.items():
@@ -899,7 +921,7 @@ def write_point_cards(context, points, workers=1, execution=None):
 
 def same_extraction_contract(old, current):
     """Input identity survives implementation cleanup; physics inputs must match."""
-    ignore = {'code', 'inputs'}
+    ignore = {'code', 'inputs', 'validate_only', 'preserve_unsupported_templates'}
     policies = {'statistical_revision', 'run3_systematics',
                 'background_estimation_uncertainties', 'systematic_combination', 'luminosity_model'}
     if 'selection_settings' not in old or 'selection_settings' not in current:
@@ -909,15 +931,69 @@ def same_extraction_contract(old, current):
         return without_provenance_fields({k: scientific_settings(v) if k in policies else v
                 for k, v in contract.items() if k not in ignore})
     def fields(contract):
-        return {era: set(inputs) for era, inputs in contract.get('inputs', {}).items()}
+        return {era: set(inputs) if isinstance(inputs, dict) else inputs
+                for era, inputs in contract.get('inputs', {}).items()}
     return fields(old) == fields(current) and science(old) == science(current)
 
 
 def same_year_extraction(old, current, year):
-    """Cached arrays depend on source inputs and their projection, not fit-only exclusions."""
-    fields = ('validate_only', 'preserve_unsupported_templates')
-    return (set(old.get('inputs', {}).get(year, {})) == set(current['inputs'][year])
-            and all(old.get(key) == current.get(key) for key in fields))
+    """Use changed input bindings to refresh an extraction, without rejecting a move."""
+    def bindings(rows):
+        if not isinstance(rows, dict):
+            return None
+        return {key: value.get('path') if isinstance(value, dict) else value
+                for key, value in rows.items()}
+    return bindings(old.get('inputs', {}).get(year, {})) == bindings(current['inputs'][year])
+
+
+def year_extraction(path, year, inputs, contract, grid, *, protected_contract=None):
+    """Resume a complete extraction or refresh it from the selected physics inputs."""
+    current = contract['inputs'][year]
+    validate_only = contract['validate_only']
+    preserve_unsupported = contract['preserve_unsupported_templates']
+    cache = read_json(path) if path.is_file() else None
+    legacy = {}
+    if cache is not None and 'production_coverage' not in cache:
+        receipt_path = path.with_suffix('.receipt.json')
+        if receipt_path.is_file():
+            try:
+                legacy = read_json(receipt_path).get('contract', {})
+            except (OSError, json.JSONDecodeError):
+                pass  # Validate the actual selected inputs on the normal extract path.
+
+    def complete(record):
+        return (record.get('status') == 'complete' and record.get('year') == year
+                and record.get('sr_data_blinded') is True
+                and set(record.get('inputs', {})) == set(current)
+                and {model: set(points) for model, points in record.get('signals', {}).items()}
+                == {model: set(points) for model, points in grid['models'].items()})
+
+    if cache is not None and complete(cache):
+        saved_bindings = dict(inputs={year: cache['inputs']})
+        covered = cache.get('production_coverage', legacy.get('validate_only') is False
+                            and same_year_extraction(legacy, saved_bindings, year))
+        if (same_year_extraction(saved_bindings, contract, year) and (validate_only or covered)
+                and (preserve_unsupported or not cache.get('fit_support_issues'))):
+            return cache
+
+    fresh = json_ready(extract_year(inputs, grid, allow_validation=validate_only,
+                                   preserve_unsupported=preserve_unsupported))
+    if not complete(fresh):
+        raise ValueError('Year input coverage or blinding does not match: '+year)
+    if protected_contract is not None:
+        # A change of location can keep the same inputs. Established templates
+        # still require the actual selected yields, binning and nuisance arrays.
+        fields = ('scope', 'background', 'signals', 'source_bins', 'signal_input_coverage')
+        if cache is None:
+            same_yields = same_year_extraction(protected_contract, contract, year)
+        else:
+            same_yields = all(cache.get(k) == fresh.get(k) for k in fields if k != 'background')
+            same_yields = same_yields and (without_provenance_fields(cache.get('background'))
+                                           == without_provenance_fields(fresh.get('background')))
+        if not same_yields:
+            raise ValueError('Selected inputs disagree with existing template yields or coverage: '+year)
+    write_json(path, fresh)
+    return fresh
 
 
 
@@ -960,43 +1036,29 @@ def build(config_path, output, validate_only=False, preserve_unsupported=False,
                                            prior=prior_contract)
         if prior_contract is not None and not same_extraction_contract(prior_contract, execution_contract):
             raise ValueError('Existing grid has different physics inputs; preserve its products')
-        contract = prior_contract if prior_contract is not None else execution_contract
+        contract = execution_contract
         templates = output/'templates'
         template_manifest = templates/'model_manifest.json'
-        card_resume = (resume_card_inputs(output, prior_contract)
+        card_resume = (resume_card_inputs(output, contract)
                        if not validate_only and template_manifest.is_file() else None)
-        state_path = output/'state.json'
-        saved = read_json(state_path) if state_path.is_file() else {}
-        resume_written = not validate_only and card_resume is None and saved.get('status') == 'verifying_templates'
+        resume_written = (not validate_only and card_resume is None and templates.is_dir()
+                          and any(templates.iterdir()))
         if resume_written:
             if prior_contract is None:
                 raise ValueError('Written templates require the saved input contract')
             resume_written_templates(output, contract)
-        if prior_contract is None:
+        if prior_contract is None or not (card_resume or resume_written):
             write_json(contract_path, contract)
         caches = {}
+        protected_contract = (card_resume['contract'] if card_resume else
+                              prior_contract if resume_written else None)
         for year in config['years']:
             path = output / 'inputs' / (year + '.json.gz')
-            cache_receipt = path.with_suffix('.receipt.json')
-            if path.exists():
-                receipt = read_json(cache_receipt)
-                if not same_year_extraction(receipt['contract'], contract, year):
-                    raise ValueError('Changed or unverified extracted year inputs')
-                cache = read_json(path)
-            else:
-                if card_resume is not None or resume_written or cache_receipt.exists():
-                    raise ValueError('Saved year input is missing: '+year)
+            if not path.is_file():
                 write_json(output / 'state.json', dict(status='extracting', year=year,
                     pid=os.getpid(), updated=time.time(), full_workflow_complete=False))
-                cache = extract_year(config['years'][year], grid, allow_validation=validate_only,
-                                     preserve_unsupported=preserve_unsupported)
-            if (cache['status'] != 'complete' or cache['year'] != year or cache.get('sr_data_blinded') is not True
-                    or set(cache['inputs']) != set(contract['inputs'][year])):
-                raise ValueError('Year input coverage or blinding does not match: '+year)
-            if not path.exists():
-                write_json(path, json_ready(cache))
-                write_json(cache_receipt, dict(contract=contract))
-            caches[year] = cache
+            caches[year] = year_extraction(path, year, config['years'][year], contract, grid,
+                                         protected_contract=protected_contract)
         background_issues, original_exclusions = [], []
         channels, background, clipping, sources = combine_cached(caches, config.get('sr_merge'),
             fit_issues=background_issues if preserve_unsupported else None,
@@ -1049,9 +1111,10 @@ def build(config_path, output, validate_only=False, preserve_unsupported=False,
                 preliminary=True, central_conventions_consistent=False)
         points, blocked, signal_clipping = [], [], []
         if card_resume:
-            points = copy.deepcopy(card_resume['points'])
-            expected_points = [dict(model=model, mass=mass) for model in MODELS for mass in grid['models'][model]]
-            if points != expected_points:
+            points = [dict(model=model, mass=mass) for model in MODELS for mass in grid['models'][model]]
+            saved_points = card_resume['points']
+            if (len(saved_points) != len(points) or {(p['model'], p['mass']) for p in saved_points}
+                    != {(p['model'], p['mass']) for p in points}):
                 raise ValueError('Saved template point inventory changed')
             blocked = copy.deepcopy(card_resume['fit_compatibility']['blocked_signal_points'])
         else:
@@ -1080,8 +1143,12 @@ def build(config_path, output, validate_only=False, preserve_unsupported=False,
             fit_compatibility.update(preliminary_fit_exclusions=exclusions,
                 original_background_issues=original_background_issues,
                 likelihood_scope_restricted=True, all_template_objects_preserved=True)
-        if card_resume and fit_compatibility != card_resume['fit_compatibility']:
-            raise ValueError('Saved template/card fit compatibility changed')
+        if card_resume:
+            fields = ('status', 'auto_mc_stats', 'background_issues', 'blocked_signal_points', 'cr_only_ready',
+                      'preliminary_fit_exclusions', 'background_error_shapes', 'endpoints_modified')
+            if any(without_provenance_fields(fit_compatibility.get(k))
+                   != without_provenance_fields(card_resume['fit_compatibility'].get(k)) for k in fields):
+                raise ValueError('Saved template/card fit compatibility changed')
         if not card_resume:
             write_json(output / 'fit_compatibility.json', fit_compatibility)
             write_json(output / 'negative_to_zero_audit.json', dict(
@@ -1105,11 +1172,9 @@ def build(config_path, output, validate_only=False, preserve_unsupported=False,
                              'template_check_user_approved', 'root_integrity_scope', 'template_validation')
         if card_resume:
             summary.update({k:card_resume[k] for k in validation_fields if k in card_resume})
-        elif templates.exists() and not resume_written:
-            raise FileExistsError('Incomplete ROOT template directory retained; explicit recovery required')
         else:
             if not resume_written:
-                templates.mkdir()
+                templates.mkdir(exist_ok=True)
                 write_json(output / 'state.json', dict(summary, status='writing_templates', pid=os.getpid()))
                 write_templates(templates, channels, background)
                 import ROOT as pyroot
@@ -1256,15 +1321,7 @@ def rewrite_replacement_signal_shapes(text, source, target, point, signal_templa
 
 
 def write_replacement_card(path, text, metadata):
-    """Atomically publish a new card, then its completion receipt."""
-    import tempfile
-    if not path.exists():
-        with tempfile.TemporaryDirectory(prefix='.card-',dir=path.parent) as temporary:
-            candidate = Path(temporary)/path.name
-            candidate.write_text(text)
-            if path.exists():
-                raise FileExistsError('Preserve existing signal card: '+str(path))
-            candidate.rename(path)
+    """Publish the replacement card through the shared card writer."""
     return write_card_once(path,text,metadata)
 
 
@@ -1328,6 +1385,26 @@ def build_signal_replacement():
     baseline = ROOT/'stats/run3/grid'
     output = ROOT/'stats/run3/new_signal/grid'
     production = ROOT/'stats/run3/new_signal/signal_histograms'
+    state_path, manifest_path = output/'state.json', output/'manifest.json'
+
+    def reuse_complete_grid():
+        if not manifest_path.is_file():
+            return False
+        delivered = read_json(manifest_path)
+        points = replacement_points(delivered)
+        if delivered.get('signal_templates_nominal_only') is not True:
+            raise ValueError('Completed replacement cards require nominal-only signal templates')
+        cards = output/'datacards'
+        paths = [internal_path(ROOT/point['card']) for point in points]
+        if len(set(paths)) != len(points) or any(path.parent != cards for path in paths):
+            raise ValueError('Completed replacement card inventory is incomplete')
+        require_template_files(cards, (path.name for path in paths))
+        require_template_files(output/'templates', (template_name(f'SR_{mode}_c1_{era}')
+                                                    for era in ERAS for mode in ('highdm', 'lowdm')))
+        return True
+
+    if reuse_complete_grid():
+        return 0
     baseline_manifest = baseline/'manifest.json'
     accepted = read_json(baseline_manifest)
     points = replacement_points(accepted)
@@ -1354,20 +1431,17 @@ def build_signal_replacement():
         return bindings
 
     output.mkdir(parents=True,exist_ok=True)
-    state_path, manifest_path = output/'state.json', output/'manifest.json'
     source_lock = ROOT/'production/histograms/lock'
     with (output/'builder.lock').open('a') as lock, source_lock.open('rb') as generation_lock:
         fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+        if reuse_complete_grid():
+            return 0
         fcntl.flock(generation_lock,fcntl.LOCK_SH|fcntl.LOCK_NB)
         production_state = read_json(production/'state.json')
         receipts = replacement_production_receipts(production_state)
         sources = source_bindings(receipts)
         origin = dict(accepted_grid=str(baseline_manifest.relative_to(ROOT)),
                       accepted_native_templates=str(native_manifest.relative_to(ROOT)), sources=sources)
-        if manifest_path.is_file():
-            delivered = read_json(manifest_path)
-            replacement_points(delivered)
-            return 0
         templates, cards = output/'templates', output/'datacards'
         if state_path.is_file():
             state = read_json(state_path)
@@ -1409,9 +1483,10 @@ def build_signal_replacement():
             numeric_readback_performed=False)
         if template_manifest.is_file():
             saved_templates = read_json(template_manifest)
+            fields = ('status', 'scope', 'years', 'root_integrity_checked', 'sr_data_blinded',
+                      'nominal_signal_only', 'channels')
             if (set(saved_templates.get('files', {})) != set(template_record['files'])
-                    or without_provenance_fields({k:v for k,v in saved_templates.items() if k not in ('files','origin')})
-                    != without_provenance_fields({k:v for k,v in template_record.items() if k not in ('files','origin')})):
+                    or any(saved_templates.get(k) != template_record[k] for k in fields)):
                 raise ValueError('Existing signal template receipt differs')
         else:
             write_json(template_manifest,template_record)

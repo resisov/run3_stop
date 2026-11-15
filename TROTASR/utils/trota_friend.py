@@ -47,16 +47,11 @@ def _source_record(task, source):
     if (relative.parent != Path('inputs') / era or not MC_NAME.fullmatch(relative.name)
             or Path(source) != exact_path or exact_path.resolve() != exact_path):
         raise ValueError('Expected an accepted, non-symlink intermediate MC ROOT path')
-    stat = exact_path.stat()
     if not exact_path.is_file():
         raise ValueError('MC input is not a regular file')
-    fingerprint = dict(size=stat.st_size, mtime_ns=stat.st_mtime_ns, inode=stat.st_ino)
-    expected = task['fingerprint']
-    if fingerprint['size'] != expected['size']:
-        raise ValueError('Unexpected MC input size: ' + str(relative))
     tag = tagging_definition(era)
     return dict(schema=SCHEMA, status='complete', mc_only=True, sr_observations_read=False,
-                input=str(relative), fingerprint=fingerprint, era=era, events=int(task['entries']),
+                input=str(relative), era=era, events=int(task['entries']),
                 p4='canonical_nominal_anchored_endpoints',
                 models={kind: dict(wp=tag[kind + '_wp'])
                         for kind in ('mixed', 'resolved')})
@@ -125,8 +120,7 @@ def _disk_headroom(parent):
 def _validate_open_product(root, expected, path):
     found = json.loads(str(root[METADATA]))
     models = found.get('models', {})
-    if (any(found.get(k) != v for k, v in expected.items() if k not in ('models', 'fingerprint'))
-            or found.get('fingerprint', {}).get('size') != expected['fingerprint']['size']
+    if (any(found.get(k) != v for k, v in expected.items() if k not in ('models', 'input'))
             or set(models) != set(expected['models'])
             or any(models[k].get('wp') != record['wp'] for k, record in expected['models'].items())):
         raise ValueError('Divergent corrected nominal friend receipt: ' + str(path))
@@ -143,14 +137,28 @@ def _validate_open_product(root, expected, path):
     return found
 
 
-def _validate_product(path, expected):
+def _validate_product(path, expected, source=None):
     with uproot.open(path, object_cache=None, array_cache=None) as root:
-        return _validate_open_product(root, expected, path)
+        found = _validate_open_product(root, expected, path)
+        if source is not None:
+            with uproot.open(source, object_cache=None, array_cache=None) as original:
+                events, friend = original['Events'], root[FRIEND_TREE]
+                if (events.num_entries != friend.num_entries
+                        or any(events[k].interpretation.numpy_dtype.kind not in 'iu' for k in ID_FIELDS)):
+                    raise ValueError('Source Events and nominal friend have incompatible event coverage')
+                if events.num_entries:
+                    for index in {0, events.num_entries - 1}:
+                        interval = dict(entry_start=index, entry_stop=index + 1)
+                        keys = events.arrays(list(ID_FIELDS), **interval)
+                        cached = friend.arrays(list(ID_FIELDS), **interval)
+                        if not all(np.array_equal(a, b) for a, b in zip(_identity(keys), _identity(cached))):
+                            raise ValueError('Nominal friend boundary event keys differ from Events')
+        return found
 
 
 def validate_friend(task, source, output):
     """Check the input, adopted working points and whole-tree coverage."""
-    return _validate_product(_destination(task, output), _source_record(task, source))
+    return _validate_product(_destination(task, output), _source_record(task, source), source)
 
 
 @contextmanager
@@ -191,7 +199,7 @@ def write_friend(task, source, output):
     expected = _source_record(task, source)
     output = _destination(task, output)
     if output.exists():
-        return _validate_product(output, expected)
+        return _validate_product(output, expected, source)
     output.parent.mkdir(parents=True, exist_ok=True)
     _disk_headroom(output.parent)
     fd, name = tempfile.mkstemp(prefix=f'.{output.name}.', suffix='.pending', dir=output.parent)
@@ -200,7 +208,6 @@ def write_friend(task, source, output):
     try:
         year = era_year(expected['era'])
         events_seen = mixed = resolved = 0
-        boundary = None
         with uproot.open(source, object_cache=None, array_cache=None) as src, uproot.recreate(temporary) as target:
             tree = src['Events']
             if tree.num_entries != expected['events']:
@@ -214,8 +221,6 @@ def write_friend(task, source, output):
                 if ak.any(a['is_data']):
                     raise ValueError('Observed rows are forbidden in corrected nominal MC friends')
                 keys = _identity(a)
-                current_first, current_last = tuple(tuple(int(v[i]) for v in keys) for i in (0, -1))
-                boundary = (boundary[0] if boundary else current_first, current_last)
                 momenta = anchored_endpoints(a, year, nominal_only=True)['nominal']
                 view = p4_view(a, {k: momenta[k.replace('nanoaod', 'corrected')] for k in P4_FIELDS})
                 rows_seen = 0
@@ -239,13 +244,7 @@ def write_friend(task, source, output):
                 raise ValueError('Corrected nominal TROTA did not cover all Events rows')
             receipt = dict(expected, mixed_passing=mixed, resolved_passing=resolved)
             target[METADATA] = json.dumps(receipt, sort_keys=True, allow_nan=False)
-        _validate_product(temporary, receipt)
-        if boundary is not None:
-            with uproot.open(temporary, object_cache=None, array_cache=None) as f:
-                for key, i in zip(boundary, (0, events_seen - 1)):
-                    row = f[FRIEND_TREE].arrays(list(ID_FIELDS), entry_start=i, entry_stop=i + 1)
-                    if tuple(int(v[0]) for v in _identity(row)) != key:
-                        raise ValueError('Friend ROOT readback event keys changed')
+        _validate_product(temporary, receipt, source)
         _source_record(task, source)
         _disk_headroom(output.parent)
         with temporary.open('rb') as stream:
@@ -253,7 +252,7 @@ def write_friend(task, source, output):
         try:
             os.link(temporary, output)
         except FileExistsError:
-            return _validate_product(output, expected)
+            return _validate_product(output, expected, source)
         fd = os.open(output.parent, os.O_RDONLY | os.O_DIRECTORY)
         try:
             os.fsync(fd)

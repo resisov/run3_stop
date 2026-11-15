@@ -90,31 +90,34 @@ def main():
     analysis_era(year)
     if not source.get('sr_data_blinded'):
         raise ValueError('Unsupported TF year or missing blinding contract')
-    provenance = source['provenance']
-    if str(provenance['campaign_year']) != str(year):
-        raise ValueError('TF provenance year does not match product year')
     if source.get('scope') not in ('full_nominal_production', 'full_combined_systematic_production') and not a.allow_validation:
         raise ValueError('Full production required; validation needs explicit opt-in')
     factors, unavailable = prepare_factors(source, configuration(year))
     if unavailable and not a.allow_partial:
         raise ValueError('Unsupported TF cells; explicit diagnostic opt-in required: '+str(unavailable))
     contract = dict(input=str(source_path.relative_to(ROOT)), year=year, scope=source['scope'])
+    if a.validate_only:
+        print(dict(status='validated_plot_inputs_not_generated', plots=7, unavailable=unavailable, contract=contract))
+        return
     manifest_path = output/'plot_manifest.json'
     if manifest_path.exists():
         old = read_json(manifest_path)
         if (any(old['contract'].get(k) != contract[k] for k in ('year', 'scope'))
                 or len(old['files']) != 14 or any(not (output/n).is_file() for n in old['files'])):
             raise ValueError('Incompatible or incomplete TF plots must be preserved')
-        print(old['status'], '(verified existing outputs)')
-        return
-    if a.validate_only:
-        print(dict(status='validated_plot_inputs_not_generated', plots=7, unavailable=unavailable, contract=contract))
-        return
-    if output.exists():
+        if old.get('unavailable', []) == unavailable:
+            print(old['status'], '(verified existing outputs)')
+            return
+        def missing_cells(rows):
+            return {(r['mode'], r['route'], r['category'], b)
+                    for r in rows for b in r['bins_1based']}
+        if not missing_cells(unavailable) < missing_cells(old.get('unavailable', [])):
+            raise ValueError('Preserve TF plots when their available cells have not improved')
+    elif output.exists() and any(output.iterdir()):
         raise FileExistsError('Preserve incomplete TF outputs; choose a new directory')
     from TROTASR.workflows.renderers import transfer_factors as renderer
     renderer.CMS_LABEL = dict(renderer.CMS_LABEL, rlabel=str(year)+' (13.6 TeV)')
-    output.mkdir(parents=True)
+    output.mkdir(parents=True, exist_ok=True)
     positions = {'top_llcr': (0.04, 0.74)} if str(year) == '2023' else {}
     high, low = renderer.render_factors(output, factors, 'all', high_annotation_positions=positions)
     files = sorted({str(Path(path).relative_to(output)) for path in high+low})

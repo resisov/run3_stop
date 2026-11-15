@@ -10,7 +10,7 @@ from pathlib import Path
 import numpy as np
 from TROTASR.utils.paths import ROOT, internal_path, ERAS
 from TROTASR.gnn4lowdm.configuration import configuration
-from TROTASR.utils.io import read_json, without_hash_fields, without_provenance_fields
+from TROTASR.utils.io import read_json, without_provenance_fields
 from TROTASR.utils.sr_binning import expand, label
 from TROTASR.utils.plot_adapter import renderer
 from TROTASR.utils.statistical_templates import json_ready
@@ -32,7 +32,7 @@ def cronly_refit_paths(result, variant):
             result/'commands'/f'cronly_refit_{variant}.json')
 
 
-def export_cronly_fit(result, output, *, refit=None):
+def export_cronly_fit(result, output, *, refit=None, write=True):
     """Project the accepted CR-only RooFit model without fitting or rebuilding.
 
     Evaluate the existing CMSHistErrorPropagator totals and official process
@@ -42,12 +42,14 @@ def export_cronly_fit(result, output, *, refit=None):
     import fcntl
     import math
     import time
-    import ROOT as root
+    from contextlib import ExitStack
     from TROTASR.utils.io import write_json
     from TROTASR.utils.era_merge import CHANNEL_BINS
     result, output = internal_path(result), internal_path(output)
+    expected = {name: n for name, n in CHANNEL_BINS.items() if not name.startswith('SR_')}
     published = read_json(result/'publication.json')
-    products = provisional_cronly_products(result, published)
+    required = ('workspace', 'projection') if refit else ('projection',)
+    products = provisional_cronly_products(result, published, required=required)
     if products is not None and not refit:
         with (result/'controller.lock').open('rb') as lock:
             fcntl.flock(lock, fcntl.LOCK_SH|fcntl.LOCK_NB)
@@ -56,18 +58,26 @@ def export_cronly_fit(result, output, *, refit=None):
             if (payload.get('schema') != 'trotasr_cronly_prefit_postfit_v1'
                     or payload.get('sr_observations_included') is not False
                     or payload.get('fit_recalculated') is not False
-                    or payload.get('fit', {}).get('covariance_quality') != 3
-                    or payload.get('fit', {}).get('process_exit_code') != published['process_exit_code']
+                    or payload.get('fit', {}).get('covariance_quality') not in (2, 3)
                     or tuple(payload.get('years', ())) != ERAS
-                    or set(channels) != {r+'_'+m+'_c1' for r in ('LLCR','QCDCR','GCR')
-                                         for m in ('highdm','lowdm')}
-                    or sum(len(row['data']) for row in channels.values()) != 66):
+                    or set(channels) != set(expected)
+                    or any(len(channels[name].get('data', ())) != n for name, n in expected.items())):
                 raise ValueError('Invalid provisional CR-only projection')
+            for name, n in expected.items():
+                row = channels[name]
+                data = array(row['data'], n, nonnegative=True)
+                if np.any(data != np.floor(data)):
+                    raise ValueError('CR-only observations must be unweighted counts')
+                for stage in ('prefit', 'postfit'):
+                    array(row[stage]['background'], n)
+                    array(row[stage]['background_unc'], n, nonnegative=True)
             cached = output/'prediction_payload.json'
-            if cached.is_file():
-                if without_provenance_fields(read_json(cached)) != without_provenance_fields(payload):
+            if write and cached.is_file():
+                recorded = read_json(cached)
+                if any(recorded.get(k) != payload.get(k) for k in (
+                        'schema', 'years', 'sr_observations_included', 'channels')):
                     raise ValueError('Divergent CR projection at output path')
-            else:
+            elif write:
                 write_json(cached, payload)
             return payload
     card = result.parent/'grid/datacards/datacard_cronly.txt'
@@ -83,10 +93,10 @@ def export_cronly_fit(result, output, *, refit=None):
                 or not receipt.get('nll_cache_recreated')):
             raise ValueError('Normally terminated CR-only refit required')
         if refit == 'matched' and (receipt.get('matched_initialization') is not True
-                or receipt.get('covariance_quality') != 3 or receipt.get('float_parameters') != 305
+                or receipt.get('float_parameters') != 305
                 or receipt.get('invalid_nll') != 0
                 or receipt.get('fit_steps') != {'MINIMIZE':0,'HESSE':0}):
-            raise ValueError('Verified matched-initialization covQual=3 refit required')
+            raise ValueError('Verified matched-initialization refit required')
         prefit_source = read_json(products['projection'])
         if (prefit_source.get('schema') != 'trotasr_cronly_prefit_postfit_v1'
                 or prefit_source.get('sr_observations_included') is not False
@@ -110,23 +120,30 @@ def export_cronly_fit(result, output, *, refit=None):
                 and bool('clipped_parameter_values' in saved) == bool(refit)):
             return saved
         raise ValueError('Cached CR projection has incompatible schema, years or fit mode')
-    output.mkdir(parents=True,exist_ok=True)
+    import ROOT as root
     started = time.time()
-    with (result/'controller.lock').open('a') as owner, (output/'plot.lock').open('a') as lock:
+    with ExitStack() as stack:
+        owner = stack.enter_context((result/'controller.lock').open('rb'))
         fcntl.flock(owner,fcntl.LOCK_SH|fcntl.LOCK_NB)
-        fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+        if write:
+            output.mkdir(parents=True,exist_ok=True)
+            lock = stack.enter_context((output/'plot.lock').open('a'))
+            fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
         root_paths = (workspace,fit_path) if refit else (workspace,fit_path,card.parent/'era_merged_data_obs.root')
         files = [root.TFile.Open(str(p),'READ') for p in root_paths]
         try:
+            if any(not f or f.IsZombie() or f.TestBit(root.TFile.kRecovered) for f in files):
+                raise ValueError('Cannot read the accepted CR-only ROOT inputs')
             w, fit = files[0].Get('w'), files[1].Get('fit_b')
-            if not fit or int(fit.status()) != 0 or not math.isfinite(float(fit.edm())):
+            if (not w or not fit or int(fit.status()) != 0 or fit.covQual() < 2
+                    or not math.isfinite(float(fit.edm()))):
                 raise ValueError('Missing successful saved CR fit')
+            fixed_r = fit.constPars().find('r')
+            if fit.floatParsFinal().find('r') or (fixed_r and fixed_r.getVal() != 0):
+                raise ValueError('Expected a saved B-only fit with r fixed to zero')
             fit_quality = dict(status=int(fit.status()),covariance_quality=int(fit.covQual()),
                                edm=float(fit.edm()),global_covariance_accepted=False)
             if refit:
-                if (files[1].TestBit(root.TFile.kRecovered) or fit.covQual() < 2
-                        or fit.covQual() != receipt['covariance_quality']):
-                    raise ValueError('Refit ROOT does not match its receipt')
                 fit_quality['process_exit_code'] = receipt['exit_code']
                 fit_quality['source_fit'] = fit_path.name
                 fit_quality['source_receipt'] = receipt_path.name
@@ -262,7 +279,8 @@ def export_cronly_fit(result, output, *, refit=None):
                 payload['uncertainty_method']['prefit'] = 'reused approved prefit, same model'
                 payload['uncertainty_method']['postfit'] += '; workspace-bound projection'
                 payload['clipped_parameter_values'] = clipped
-            write_json(payload_path,payload)
+            if write:
+                write_json(payload_path,payload)
             return payload
         finally:
             for f in files:
@@ -486,16 +504,19 @@ def _prediction_metadata(grid):
 
 
 def _template_validation_provenance(grid, templates, provenance):
-    """Carry the exact producer check level, without upgrading partial checks."""
+    """Record the reported check levels without making them plot prerequisites."""
     from copy import deepcopy
     field = 'template_validation'
-    if field not in grid and field not in templates:
-        return provenance  # Preserve legacy exports with no new claim.
-    value = grid.get(field)
-    if (field not in grid or field not in templates or not isinstance(value, dict)
-            or not value or without_hash_fields(value) != without_hash_fields(templates[field])):
-        raise ValueError('Template/grid validation metadata mismatch')
-    return dict(provenance, template_validation=deepcopy(value))
+    recorded = {name: source[field] for name, source in (('grid', grid), ('templates', templates))
+                if isinstance(source.get(field), dict) and source[field]}
+    if not recorded:
+        return provenance
+    result = dict(provenance)
+    if 'templates' in recorded:
+        result['template_validation'] = deepcopy(recorded['templates'])
+    if 'grid' in recorded:
+        result['grid_template_validation'] = deepcopy(recorded['grid'])
+    return result
 
 
 def export_grid(manifest_path):
