@@ -13,25 +13,36 @@ python -m TROTASR --help
 python -m TROTASR limits --help
 ```
 
-Run `histograms`, `merge`, `background` and `cards` in that order. Use the saved
-cards for CR-only fits, impacts and limits. The settings are in
-`jsons/analysis.json`. Find the finished fits and figures in
-[current results](NOMINAL_CONTINUATION.md).
+Use the saved fits and figures listed in [current results](NOMINAL_CONTINUATION.md)
+for review. The workflow commands below apply to explicitly authorized runs.
+Run `histograms`, `merge`, `background` and `cards` in that order, then use the
+saved cards for CR-only fits, impacts and limits. Settings are in
+`jsons/analysis.json`.
 
-### Resume an interrupted stage
+### Resume an interrupted analysis stage
 
 Run the same `python -m TROTASR <stage>` command again. `cards` selects the
-furthest committed extraction, template or card state. `limits` keeps successful
-points and advances through its finite numerical recipes. `cronly` and `impacts`
-also run their applicable finite recovery internally. Separate recovery
-launchers and source-snapshot approvals are not required.
+furthest committed extraction, template or card state. `limits` reuses accepted
+points. `limits`, `cronly` and `impacts` handle their applicable recovery steps
+internally.
 
-A live process or held lock is never replaced. A dead diagnostic command is
-recorded as interrupted, not successful; an identical consumed fit command is
-not submitted again. Input/model identity, SR blinding, finite values, numerical
-crossings and resource limits remain required. Code hashes and approval dates
-do not determine scientific compatibility. Existing accepted results are reused;
-this behavior does not authorize refitting or redrawing a frozen result.
+Preserve live processes, held locks and accepted results. Record interrupted
+diagnostics and continue with the next applicable fit recipe. Check input and
+model compatibility, SR blinding, finite values, numerical crossings and
+resource limits.
+
+#### Recover failed signal tasks
+
+On lxplus, where the deployed CLI lists `produce`, recover failed task numbers
+with `python3 -m TROTASR produce --recover TASK [TASK ...] --workers 2`.
+Recovery checks the Condor queue before retrying locally.
+
+### Validation regions
+
+Use MC for signal contamination and separate observed JetMET data for
+independent validation of the CR-constrained prediction. Keep the SR blinded.
+Use the saved CR-only fit without fitting or tuning to the VR data. On hep2,
+where the deployed CLI lists `vr-data`, that stage counts observed VR events.
 
 ## Datacard review
 

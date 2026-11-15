@@ -2,54 +2,45 @@
 
 ## Mission and authority
 
-CMS Run-3 all-hadronic stop search. Physics correctness and reproducibility
-precede sensitivity, statistical robustness, recovery and performance.
-Use AN2019_016_v9.pdf and the adopted TROTASR/utils/ids.py and corrections.py
-as physics references, not a reason to restore obsolete implementations.
-The user retains final scientific responsibility. Do not silently change
-selections, regions, bins, background estimation, nuisance correlations or
-normalization. New physics proposals need explicit approval.
-The user explicitly owns final scientific judgement, result approval and
-responsibility. Record actual fit quality/assumptions truthfully; do not turn
-covQual=2 alone into an assistant-imposed veto, omitted result/uncertainty band
-or new refit/validation requirement. For the requested CR-only plots propagate
-the saved fit covariance including correlations and draw the uncertainty bands.
+Put physics correctness and reproducibility first, followed by sensitivity,
+statistical robustness, recovery and performance. For the CMS Run 3
+all-hadronic stop search, use `AN2019_016_v9.pdf`, `TROTASR/utils/ids.py`
+and `TROTASR/utils/corrections.py` as references.
+
+The user owns scientific decisions, responsibility and result approval. Get explicit approval
+for new physics proposals. Do not silently change selections, regions, bins,
+background estimates, nuisance correlations or normalization.
+
+Record the actual fit quality and assumptions. Keep results and bands when
+`covQual=2` is the sole concern. It requires no refit or extra validation on its
+own. Draw the CR-only bands using the saved covariance and its correlations.
 
 ## One implementation and one current result
 
-- Final baseline approved 2026-10-31: the current inputs, results, analysis code,
-  plotting code and fitting code are FROZEN as the final canonical TROTASR.
-  Do not change, regenerate, refit or rerender them without a new explicit user
-  instruction. Review preparation reuses these artifacts. A final-version
-  declaration does not alter the adopted physics/systematic scope or blinding.
+- The inputs, results, analysis, plotting and fitting code approved on
+  2026-10-31 are the frozen TROTASR baseline. Reuse them for review. Changes,
+  regeneration, refits and rerenders require an explicit user instruction.
 - The sole hep2 analysis root is /hep2-scratch/twkim/postprocessing/TROTASR,
   with the corresponding local TROTASR package. Current config is
   TROTASR/jsons/analysis.json; statistical products are TROTASR/stats/run3.
-- Use python -m TROTASR <stage>. Recovery, resume and collection belong inside
-  that stage. Do not create sidecars, copied workflows, nested analysis roots,
-  dated/request-specific campaigns, alternative runtimes or launcher scripts.
-  A wrapper importing a retired implementation is not consolidation.
-- Obsolete analysis/test environments, earlier statistical models, recovery
-  snapshots and launcher/handoff records have been permanently retired.
-  Do not retain a Trash copy, restoration archive, old path alias or instructions
-  that can resurrect them. Scientific result receipts are not execution branches.
-  Never reconstruct retired paths or launchers from history.
-- User exception: preserve /hep2-scratch/twkim/postprocessing/Stop_Object_Review
-  as review material. It is not an alternate analysis or fitting implementation.
-  Preserve current scientific completion receipts and required reference inputs;
-  old path strings in provenance never authorize restoring an old runtime.
-- All future changes belong in the top-level implementation. Use current
-  accepted inputs/results directly; do not restore deleted policy JSONs or
-  earlier-stage validation gates. Keep only current scientific configuration.
+- Use `python -m TROTASR <stage>` for execution, recovery, resume and
+  collection. Put changes in the top-level implementation. Use accepted inputs
+  and results directly. Keep only current scientific configuration and
+  validation gates. Do not create sidecars, copied workflows, nested analysis
+  roots, dated campaigns, alternate runtimes or launchers.
+- Keep obsolete environments, models, policy JSONs, recovery snapshots and
+  launcher records retired. Do not retain restoration archives, Trash copies,
+  aliases or instructions for reconstructing retired paths.
+- Preserve current scientific completion receipts, required reference inputs
+  and `/hep2-scratch/twkim/postprocessing/Stop_Object_Review` for review.
 - Monitoring is stopped. Do not enable schedules, create follow-up jobs or start
   another chat without a new direct user instruction.
 
 ## Required context
 
-Read TROTASR/NOMINAL_CONTINUATION.md for current paths/status/continuation.
-For a status question inspect only current state, exact receipt, short relevant
-log and PID/startticks/lock. Old launch records are not execution evidence.
-Deleted agent_context policies remain deleted; do not recreate them.
+Read `TROTASR/NOMINAL_CONTINUATION.md` for current paths and results. For
+status checks, read only the current state, matching receipt, relevant log
+excerpt, PID, start ticks and lock.
 
 ## Adopted physics and statistical model
 
@@ -59,19 +50,17 @@ Deleted agent_context policies remain deleted; do not recreate them.
   Keep the tested eraScale rateParam formulas, era-specific central corrections
   and bounds, original era templates/GNN boundaries and nuisance functions.
   Histogram rates remain -1. No optional model switch or separate campaign.
-- Results are six-era partial systematics, not final full-systematic Run-3.
-  Reuse the approved 2024/2025 systematics and early-era experimental/luminosity
-  model; retain CR constraints, measured background errors and autoMCStats.
-  This existing scope label alone is not evidence of a missing nuisance or
-  authorization to start further systematic production.
+- Results use six-era partial systematics. Reuse the approved 2024/2025
+  systematics and early-era experimental and luminosity model. Retain CR
+  constraints, measured background errors and autoMCStats. Further systematic
+  production requires explicit approval.
 - SR observations remain blinded. Never expose observed SR counts.
   Fit only 895 displayed points: T2tt205/T2bW345/T2tb345,
   mStop600-1800 GeV/mLSP1-1800 GeV. Do not fit the other60 points.
-- Frozen early-era central luminosity is 61.8971 fb^-1. The remembered
-  62.31 fb^-1 is not approved for application. Do not only relabel figures.
-  Keep LUM POG revision39 correlated lumi_1/2/3 for 2022/2023/2024,
-  shared within each early calendar year, and independent5% for2025.
-  Current luminosity physics policy remains an adopted input.
+- Use 61.8971 fb^-1 for the frozen early-era normalization. Figure labels
+  must match the luminosity used for yields. Keep LUM POG revision 39
+  correlated `lumi_1/2/3` for 2022/2023/2024, shared within each early calendar
+  year, and independent 5% for 2025.
 - TTWH/TTZH excluded. TTW-WtoQQ-1Jets, TTZ-ZtoQQ-1Jets, TTWW, TTWZ,
   TTZZ and present TTTT belong to Top in every era.
   Keep exact fit-only ZJet exclusion, Z/gamma bin merge, approved muon thresholds
@@ -147,8 +136,7 @@ Deleted agent_context policies remain deleted; do not recreate them.
   axes, masks, labels, ticks, legends and layout. No unsolicited status/
   provenance text inside or beneath figures; put time/coverage in report/manifest.
 - Show the three verified official PNGs inline using absolute paths.
-  Do not substitute retired separated-era results. State actual snapshot time
-  and partial-systematic qualification in prose. This never resumes monitoring.
+  State the actual snapshot time and partial-systematics scope in prose.
 - Prefit/postfit CR comparisons must call the existing canonical distribution
   renderer, not a hand-drawn lookalike with different fonts/axes/legend styling.
   Put the CR name and its Nb category together inside each category box.

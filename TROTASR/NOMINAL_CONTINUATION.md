@@ -1,99 +1,62 @@
-# Final canonical TROTASR
+# Current TROTASR results
 
-User-approved final baseline: 2026-10-31, Thoiry/Europe-Paris.
-All current inputs, results, analysis/plotting/fitting code are FROZEN.
-No new changes, production, refits or rerenders without an explicit instruction.
-Monitoring remains stopped. Review preparation reuses the final artifacts.
+Use the frozen 2026-10-31 baseline and its delivered figures for review. The
+updated limit calculation and provisional CR-only result are listed below.
 
-## One implementation
+## Where to work
 
-Remote R=/hep2-scratch/twkim/postprocessing/TROTASR
-Local /Users/taiwoomac/Documents/All Hadronic Stop Analysis/TROTASR
-P=R/stats/run3; G=P/grid; L=P/limits
-Configuration R/jsons/analysis.json.
-Use python -m TROTASR <stage>, on hep2 through:
-bash TROTASR/workflows/run_inference.sh -m TROTASR <stage>
+The hep2 analysis root is `/hep2-scratch/twkim/postprocessing/TROTASR`.
+Use `jsons/analysis.json` for configuration and [`README.md`](README.md) for
+commands and recovery. `WORKSPACE_LAYOUT.md` lists workspace and runtime paths.
 
-Existing numerical dependencies only, under /hep2-scratch/twkim/envs:
-combine_20260914/CMSSW_14_1_0_pre4 and trotasr_inference_py39.
-Do not recreate any alternate environment, old model, source snapshot or sidecar.
-The user explicitly retained R/../Stop_Object_Review as review material,
-not a second analysis implementation. Source NanoAOD/MiniAOD stays read-only.
+## Fits
 
-Resume through `python -m TROTASR <stage>` in the same canonical output.
-Cards select the saved extraction/template/card stage automatically; limits,
-CR-only and impacts own their finite recovery. Scientific input compatibility,
-blinding, numerical acceptance and process locks remain required. Historical
-source snapshots, approval labels and code hashes no longer gate these resumes.
-The 2026-11-11 cleanup changed code only; accepted results and active work were
-preserved. See README for the current commands.
+The six-era partial-systematics model combines 2022, 2022EE, 2023, 2023BPix,
+2024 and 2025. It merges 48 channels into 8, 1,284 bins into 214, and 288 free
+CR normalizations into 48. The adopted eraScale formulas, era templates, GNN
+boundaries, nuisance functions and histogram rates of −1 apply. SR observations
+remain blinded. The frozen early-era normalization is 61.8971 fb⁻¹ with LUM
+revision 39 and independent 5% for 2025. TTWH and TTZH are excluded, and the
+available TTTT belongs to Top. See `AGENTS.md` for the fit exclusions.
 
-## Adopted model and completed results
+| Result | hep2 path | Recorded status |
+| --- | --- | --- |
+| Official expected limits | `stats/references/era_merged_recoil/limits/workflow_state.json` | **895/895 accepted**. T2tt 205, T2bW 345, T2tb 345. The other 60 points remain excluded. |
+| Updated expected limits | `stats/run3/limits/workflow_state.json` | **892/895 complete**, `needs_attention`, 0 active on 2026-11-15. Use the official figure delivery for review. |
+| Official impacts | `stats/references/era_merged_recoil/impacts/` | T2tt (1200, 500), S+B Asimov at μ = 1, r ∈ [0, 20]. All 753 profiles passed. The receipt is `publication.json` and the collection is `collection/impacts_mStop1200_mLSP500.json`. |
+| Provisional CR-only | `stats/run3/cronly/publication.json` | Observed CR data, B-only at r = 0, with no Asimov data or SR observations. The receipt selects `current_workspace.root`, `current_fit.root`, `current_pulls.json` and `current_prediction.json`. Saved `fit_b` has status 0, HESSE 0, covQual 3 and zero invalid NLL. Combine exited with SIGABRT (−6) after saving. |
 
-Six-era era-merged model: 2022/2022EE/2023/2023BPix/2024/2025.
-48channels/1284bins/288freeCRnorms ->8/214/48.
-eraScale formulas, era templates/GNN boundaries and nuisance functions retained.
-Histogram rate=-1. SR observations remain blinded.
-Early normalization61.8971; LUM revision39 and independent5% for2025.
-TTWH/TTZH excluded; present TTTT belongs to Top. Adopted fit-only exclusions
-and all actual fit-quality qualifications remain unchanged.
-The existing partial-systematic scope is preserved; this finalization neither
-adds uncertainties nor certifies an all-source systematic model. Do not infer
-a missing nuisance or authorize new work from the scope label alone.
+The provisional CR-only fit is the 2026-11-09 low-dM Photon CR Nb=1 GNN shape
+result. It uses four relative GNN coefficients and preserves each era's
+photon total and the 2025 gamma+jets CSEV total treatment. The earlier
+approved CR-only result remains a reference. Its recorded covQual is 2,
+with `global_covariance_accepted=false`, 156/156 constrained profiles and
+306 total parameters.
 
-L:895/895 accepted, T2tt205/T2bW345/T2tb345, active0.
-Actual five expected quantiles and existing numerical acceptance are preserved.
-The other60 points remain excluded. Use actual point receipts/workflow_state.
-P/impacts: T2tt1200/500, mu1 S+B Asimov,r[0,20],753/753 valid.
-publication.json complete; collection/impacts_mStop1200_mLSP500.json.
-P/cronly: observed CR-only B-only r0,noAsimov,SR0,156/156 constrained profiles,
-306totalparameters; publication.json complete. Actual covQual2 remains2,
-global_covariance_accepted=false. User owns scientific approval/responsibility.
-No diagnostic is a substitute for an expected-limit fit.
-Current scientific completion receipts, accepted workspaces and required
-same-model input records remain part of the frozen baseline, not old runtimes.
+## Figures
 
-## Final figures
+- Official limits: local `output/pdf/run3_limits_current_20261023/` contains
+  the T2tt, T2bW and T2tb PNG/PDF pairs and `delivery_manifest.json`. The
+  delivery covers 895/895 points as of 2026-10-30 13:11:55 CET with partial
+  systematics. Updated plots are under hep2 `stats/run3/plots/limits/`.
+- CR comparison: `cronly_prefit_postfit.png` and `.pdf` in hep2
+  `stats/run3/plots/cronly/` or local `output/pdf/cronly/`. See
+  `prediction_payload.json` and `plot_manifest.json`. The 66-bin comparison
+  puts 36 high-dM bins on the left and 30 low-dM bins on the right, with
+  prefit above postfit. Both show bands and Data/MC. Prefit uses 242 Gaussian
+  and 16 Poisson priors. Postfit uses the saved correlated covariance with
+  500 shared draws and seed 12345.
+- Official impacts: local `output/pdf/impacts/impacts_T2tt_1200_500.pdf` and
+  the two PNG previews of the top 60. The delivery manifest records the
+  26-page PDF.
+- Earlier approved CR pulls: local
+  `output/pdf/era_merged_diagnostics_20261029/cronly/` contains
+  `cronly_nuisance_pulls_ylim6_split2.pdf` and its two PNGs (78 pulls per page).
 
-Remote P/plots/limits; local output/pdf/run3_limits_current_20261023/
-T2tt.png/pdf,T2bW.png/pdf,T2tb.png/pdf,index.html,delivery_manifest.json.
-Actual final limit snapshot2026-10-30 13:11:55CET,full895coverage.
-Reuse these figures; a status report does not authorize a refresh.
+Local `output/pdf/` also holds the delivered six-era distributions, systematic
+plots, reference diagrams and GNN figures.
 
-Remote P/plots/cronly; local output/pdf/cronly/
-cronly_prefit_postfit.png/pdf,prediction_payload.json,plot_manifest.json.
-One66-bin comparison: high-dM36 LEFT,low-dM30 RIGHT; Prefit above/Postfit below.
-Both uncertainty bands and Data/MC,17pt category boxes inside main ax at its
-x axis,24pt bold titles,one-row legends,no yield counts,full-height dividers.
-Base24x11in, horizontal crop19.89x11in,0.10in outer padding.
-Ymax11.5x actual display peak; prefit2.615e6/postfit2.571e6.
-Existing canonical draw_flat_blocks style/colors/labels unchanged.
-Prefit:242Gaussian+16Poisson priors. Postfit:full saved correlated covariance,
-500shared draws,seed12345. Cached66bins; no fit/ROOT re-export/resampling.
-Actual PDF QA2026-10-30 16:39:21CET; source output checksums matched.
+## Analysis note
 
-Local impacts: output/pdf/impacts/impacts_T2tt_1200_500.pdf(26pages),
-_part1.png/_part2.png(top60),delivery_manifest.json; all actual pages reviewed.
-Local CR pulls: output/pdf/era_merged_diagnostics_20261029/cronly/
-cronly_nuisance_pulls_ylim6_split2.pdf,_part1.png,_part2.png;78+78,2pages reviewed.
-Retain current six-era distribution/systematic figure deliveries in output/pdf,
-reference diagrams and GNN figures; their dates are delivery identities only.
-
-AN chat Review Overleaf AN draft:019f7a16-19ab-76f1-8953-a737c5b0dd68.
-Latest confirmed GitLab/Overleaf sync410a466: section11.4 uses the cropped
-prefit/postfit figure before nuisance pulls; PDF placement was checked.
-No further message or AN change is implied by this baseline freeze.
-
-## Retirement completed
-
-Local and hep2 obsolete analysis/test trees, older statistical models/cards/
-templates, source/layout backups, intermediate contour snapshots and obsolete
-operational records were permanently removed; no Trash/restoration archive.
-Unused py38 removed with explicit additional user approval.
-Hep2 two measured deletion batches reclaimed111.544+50.987=162.531GiB;
-free space at final check502.639GiB. Stop_Object_Review preserved by exception.
-Only stats/run3,runtime,references remain as hep2 statistics directories.
-Only TROTASR and the retained review tree remain under hep2 postprocessing.
-Current numerical source/config identities, inputs and completion receipts
-were preserved. No new fit, workspace build, rerender or smoke campaign ran.
-No Git-history rewriting or conversation-database changes.
+At GitLab/Overleaf revision `410a466`, AN §11.4 places the cropped
+prefit/postfit figure before the nuisance pulls. The PDF placement was verified.
