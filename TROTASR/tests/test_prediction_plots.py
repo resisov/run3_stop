@@ -337,4 +337,27 @@ class GNNControlTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'actual CR data'):prepare(p,rz,True)
 
 
+class BackgroundSummaryTests(unittest.TestCase):
+    def test_accepts_current_card_labels_and_rejects_unknown_background(self):
+        from TROTASR.workflows import validation_regions as vr
+        tasks = {era: [{'year': era, 'input': f'inputs/{era}/mc_shard_00001.root'}]
+                 for era in vr.ERAS}
+        low = {'Nb1_NISR0': [0., .2, .4, .6, .8, 1.]}
+        labels = ('DY', 'GJ', 'WtoLNu', 'Zto2Nu')
+        receipt = dict(signal_points_seen=[], bins={label: {'0': [1., 2., 3.]} for label in labels})
+        with patch.object(vr, 'geometry', return_value=(low, [])), \
+             patch.object(vr, '_read_receipt', return_value=receipt):
+            result = vr._collect(tasks, False, background_only=True)
+            self.assertEqual(result['status'], 'complete')
+            self.assertEqual(set(result['samples']), set(labels))
+            self.assertEqual(result['samples']['DY'][0], [6., 12., 18.])
+            receipt['bins']['undefined'] = {'0': [1., 2., 3.]}
+            with self.assertRaisesRegex(ValueError, 'unknown process'):
+                vr._collect(tasks, False, background_only=True)
+            del receipt['bins']['undefined']
+            receipt['signal_points_seen'] = ['T2tt/mStop1200_mLSP500']
+            with self.assertRaisesRegex(ValueError, 'Signal or unknown process'):
+                vr._collect(tasks, False, background_only=True)
+
+
 if __name__=='__main__':unittest.main()

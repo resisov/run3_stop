@@ -1265,7 +1265,8 @@ def _collect(all_tasks, pilot, *, tight_mixed=False, background_only=False, repl
                                                     fraction=float(s/(y+s)) if y > 0. else None)
                                 if worst is not None and s > 0. else None))
     if background_only:
-        if any(signal_eras.values()) or set(samples) - set(CARD_SAMPLES):
+        allowed_backgrounds = set(CARD_SAMPLES) | set(CARD_SAMPLES.values())
+        if any(signal_eras.values()) or set(samples) - allowed_backgrounds:
             raise ValueError("Signal or unknown process in a background-only VR receipt")
         extra["background_only"] = True
     if replacement_normalizations is not None:
