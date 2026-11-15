@@ -4,10 +4,8 @@ from pathlib import Path
 import subprocess
 import sys
 import tempfile
-import types
 import unittest
-from unittest.mock import patch
-from TROTASR.utils.paths import ROOT, internal_path, payload_path, internal_modules
+from TROTASR.utils.paths import ROOT, internal_path, payload_path
 from TROTASR.utils.io import read_json, write_json, sha256
 
 
@@ -32,7 +30,7 @@ class DependencyBoundaryTests(unittest.TestCase):
 
     def test_external_payload_root_rejected(self):
         with self.assertRaises(ValueError):
-            payload_path('data/JMESF/2024/jet_jerc.json.gz', root=ROOT.parent)
+            payload_path('scales/JME/2024/jet_jerc.json.gz', root=ROOT.parent)
 
     def test_internal_roundtrip(self):
         with tempfile.TemporaryDirectory(dir=ROOT/'results') as folder:
@@ -40,23 +38,32 @@ class DependencyBoundaryTests(unittest.TestCase):
             write_json(path, {'internal': True})
             self.assertEqual(read_json(path), {'internal': True})
 
-    def test_external_alias_rejected_before_renderer_import(self):
-        external = types.ModuleType('autonomous_allhad')
-        external.__file__ = str(ROOT.parent / 'autonomous_allhad/__init__.py')
-        with patch.dict(sys.modules, {'autonomous_allhad': external}):
-            with self.assertRaises(ValueError):
-                internal_modules('autonomous_allhad')
+    def test_retired_execution_paths_rejected(self):
+        for path in ('campaigns/run.json', 'validation/old_runner.py', 'history/old_runner.py'):
+            with self.subTest(path=path), self.assertRaises(ValueError):
+                internal_path(ROOT / path)
 
-    def test_workflows_do_not_extend_sys_path(self):
+    def test_workflows_do_not_extend_analysis_import_paths(self):
+        native_bindings = {
+            ('combine_impacts.py', 'sys.path.insert(0, cmssw_python)'),
+            ('prepare_datacard_review.py', "sys.path.insert(0, str(Path(os.environ['CMSSW_BASE']) / 'python'))"),
+        }
         for path in (ROOT / 'workflows').glob('*.py'):
-            self.assertNotIn('sys.path.insert', path.read_text(), path.name)
-            self.assertNotIn('sys.path.append', path.read_text(), path.name)
+            for node in ast.walk(ast.parse(path.read_text())):
+                if not isinstance(node, ast.Call):
+                    continue
+                if ast.unparse(node.func) not in ('sys.path.insert', 'sys.path.append'):
+                    continue
+                # Impacts can add only the installed CMSSW native Python
+                # binding, not an external analysis implementation.
+                self.assertIn((path.name, ast.unparse(node)), native_bindings)
 
-    def test_bootstrap_from_independent_working_directory(self):
+    def test_canonical_command_selects_histogram_stage(self):
         result = subprocess.run(
-            [sys.executable, '-E', '-s', str(ROOT / 'workflows/summarize_validation.py'), '--help'],
-            cwd=str(ROOT), capture_output=True, text=True)
+            [sys.executable, '-E', '-s', '-m', 'TROTASR', 'histograms', '--help'],
+            cwd=str(ROOT.parent), capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn('--inventory', result.stdout)
 
     def test_no_internal_file_symlinks_escape(self):
         for path in ROOT.rglob('*'):
@@ -66,7 +73,7 @@ class DependencyBoundaryTests(unittest.TestCase):
     def test_legacy_sources_not_runtime_imports(self):
         for path in ROOT.rglob('*.py'):
             if 'renderers' in path.parts:
-                continue  # Byte-preserved aliases are checked at the adapter boundary.
+                continue  # Frozen renderers are checked at the adapter boundary.
             for node in ast.walk(ast.parse(path.read_text())):
                 names = ([a.name for a in node.names] if isinstance(node, ast.Import)
                          else [node.module or ''] if isinstance(node, ast.ImportFrom) else [])

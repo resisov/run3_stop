@@ -29,17 +29,8 @@ PAYLOAD_FILENAMES = {
     "topw_tagging": "topw_tagging_sf.json.gz",
 }
 
-# Backward-compatible registry for callers that only need the component list.
-# Evaluation itself resolves the data-taking year explicitly below.
-PAYLOADS = {
-    component: Path("analysis/data/AnalysisSF/2024") / filename
-    for component, filename in PAYLOAD_FILENAMES.items()
-}
-
-# Production histogramming must fail closed if any adopted analysis-owned
-# payload is absent.  Keep this contract next to the payload registry so every
-# entry point uses the same list.
-REQUIRED_ANALYSIS_SF_COMPONENTS = tuple(key for key in PAYLOADS if key != "topw_tagging")
+# All selected components must have a payload for the target era.
+REQUIRED_ANALYSIS_SF_COMPONENTS = tuple(key for key in PAYLOAD_FILENAMES if key != "topw_tagging")
 DEFAULT_ANALYSIS_SF_COMPONENTS = ("met_trigger", "photon_trigger")
 REQUIRED_ANALYSIS_SF_VARIATIONS = tuple(
     f"{component}{direction}"

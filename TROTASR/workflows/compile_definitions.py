@@ -1,5 +1,5 @@
-"""Compile the local public ID/correction definitions and record exact hashes."""
-from pathlib import Path
+"""Serialize the current object IDs and correction callables."""
+import argparse
 if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
@@ -8,6 +8,7 @@ from TROTASR.utils.io import sha256, write_json
 
 
 def main():
+    argparse.ArgumentParser(prog='python -m TROTASR compile', description=__doc__).parse_args()
     from coffea.util import save, load
     from TROTASR.utils import ids, pog_corrections
     folder = internal_path(ROOT / "utils/compiled")
@@ -18,8 +19,7 @@ def main():
     for name in ("corrections", "ids"):
         if not load(str(folder / (name + ".coffea"))):
             raise RuntimeError("Compiled artifact is empty")
-    sources = ["utils/" + n + ".py" for n in ("corrections", "pog_corrections", "private_scales",
-               "weight_components", "weight_inputs", "paths", "io", "ids", "nanoaod_ids")]
+    sources = ["utils/" + n + ".py" for n in ("pog_corrections", "private_scales", "ids", "nanoaod_ids")]
     write_json(folder / "manifest.json", dict(status="complete", sources={p: sha256(ROOT / p) for p in sources},
         artifacts={name: sha256(folder / name) for name in ("ids.coffea", "corrections.coffea")}))
     print("Local IDs and corrections compiled and reloaded")

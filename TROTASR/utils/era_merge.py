@@ -1,20 +1,14 @@
 """Canonical six-era merged-channel likelihood; adopted benchmark algebra unchanged."""
-import argparse
-from concurrent.futures import ThreadPoolExecutor
-from contextlib import nullcontext
 from collections import OrderedDict
-import copy
-import fcntl
 from functools import lru_cache
 import hashlib
 import math
 import os
 from pathlib import Path
 import re
-import shutil
-import time
-from TROTASR.utils.paths import ROOT, internal_path
-from TROTASR.utils.io import read_json, write_json, sha256
+import tempfile
+from TROTASR.utils.paths import internal_path
+from TROTASR.utils.io import read_json, write_json
 
 
 ERAS = ('2022', '2022EE', '2023', '2023BPix', '2024', '2025')
@@ -229,48 +223,40 @@ def merged_card_plan(card, text, output):
         alpha_bounds=alpha_bounds, formula_count=len(formula_rows))
 
 
-def sum_accepted_observations(card, plan):
-    """Sum the 48 source data_obs histograms."""
-    import ROOT as root
-    root.gROOT.SetBatch(True)
-    files, sums, source_labels = {}, {}, {}
-    def source_file(path):
-        if path not in files:
-            files[path] = root.TFile.Open(str(path), 'READ')
-            if not files[path] or files[path].IsZombie():
-                raise OSError('Cannot open accepted source: ' + str(path))
-        return files[path]
-    try:
-        for channel in plan['source']['channels']:
-            head, era = merged_channel(channel)
-            path, nominal, unused = source_shape(card, plan['source']['shapes'], channel, 'data_obs')
-            hist = source_file(path).Get(nominal)
-            if not hist or not hist.InheritsFrom('TH1') or hist.GetDimension() != 1:
-                raise ValueError('Missing approved data_obs TH1: ' + channel)
-            size = int(hist.GetNbinsX())
-            if size != CHANNEL_BINS[head]:
-                raise ValueError('Unexpected ordinal-bin count: ' + channel)
-            labels = [str(hist.GetXaxis().GetBinLabel(i)) for i in range(1, size + 1)]
-            if not all(labels) or len(set(labels)) != size:
-                raise ValueError('Missing or duplicate ordinal labels: ' + channel)
-            if head in source_labels and source_labels[head] != labels:
-                raise ValueError('Era ordinal categories do not match: ' + channel)
-            source_labels[head] = labels
-            row = sums.setdefault(head, dict(values=[0.] * size, variances=[0.] * size, eras=[]))
-            row['eras'].append(era)
-            for index in range(size):
-                value, error = float(hist.GetBinContent(index + 1)), float(hist.GetBinError(index + 1))
-                if not math.isfinite(value) or value < 0 or not math.isfinite(error) or error < 0:
-                    raise ValueError('Invalid approved observation histogram')
-                row['values'][index] += value
-                row['variances'][index] += error * error
-        if set(sums) != set(CHANNEL_BINS) or any(set(row['eras']) != set(ERAS) for row in sums.values()):
-            raise ValueError('Incomplete era summation')
-        return sums, source_labels
-    finally:
-        for source in files.values():
-            if source:
-                source.Close()
+def sum_template_observations(plan, channels, background):
+    """Use the template writer's inputs: measured CRs and MC-only SR placeholders."""
+    sums, source_labels, by_channel = {}, {}, {}
+    for (channel, _), record in background.items():
+        if record['family'] != 'signal':
+            by_channel.setdefault(channel, []).append(record)
+    for channel in plan['source']['channels']:
+        head, era = merged_channel(channel)
+        bins = channels[channel]
+        size = CHANNEL_BINS[head]
+        labels = [str(row['name']) for row in bins]
+        if len(bins) != size or not all(labels) or len(set(labels)) != size:
+            raise ValueError('Unexpected ordinal bins: ' + channel)
+        if head in source_labels and source_labels[head] != labels:
+            raise ValueError('Era ordinal categories do not match: ' + channel)
+        source_labels[head] = labels
+        row = sums.setdefault(head, dict(values=[0.] * size, variances=[0.] * size, eras=[]))
+        row['eras'].append(era)
+        for index, bin_ in enumerate(bins):
+            if head.startswith('SR_'):
+                value = sum(r['nominal'][index] * r['initial'] for r in by_channel.get(channel, ()))
+            else:
+                value = bin_['observation']
+            value = float(value)
+            if not math.isfinite(value) or value < 0:
+                raise ValueError('Invalid observation template input: ' + channel)
+            # The per-era writer sets GetBinError to sqrt(value); retain its
+            # variance convention exactly, rather than switching to MC sumw2.
+            error = math.sqrt(value)
+            row['values'][index] += value
+            row['variances'][index] += error * error
+    if set(sums) != set(CHANNEL_BINS) or any(set(row['eras']) != set(ERAS) for row in sums.values()):
+        raise ValueError('Incomplete era summation')
+    return sums, source_labels
 
 
 def write_observation_sum(path, sums, labels):
@@ -335,146 +321,112 @@ def cr_only_card(plan):
     return '\n'.join(lines+[' '.join(r) for r in tail])+'\n'
 
 
-def merge_accepted_grid(manifest_path, lock_held=False):
-    """Build the era-merged likelihood grid from the existing signal cards.
+DISPLAY_COUNTS = {'T2tt': 205, 'T2bW': 345, 'T2tb': 345}
+SOURCE_COUNTS = {'T2tt': 225, 'T2bW': 365, 'T2tb': 365}
+REFERENCE_POINT = ('T2tt', 'mStop1200_mLSP500')
 
-    The 895 displayed points are rewritten from delivered cards only. Original
-    templates, nuisance functions and blinded observations are not recomputed.
-    """
-    manifest_path = internal_path(manifest_path)
-    grid, analysis = manifest_path.parent, manifest_path.parents[3]
-    old = read_json(manifest_path)
-    if old.get('era_merged') is True:
-        return old
-    if old.get('status') != 'cards_ready' or not old.get('run3_systematics') or old.get('sr_data_blinded') is not True:
-        raise ValueError('A completed blinded six-era card grid is required')
-    history = grid/'history/separate_eras'
-    stage = grid/'datacards.next'
-    cards = grid/'datacards'
-    evidence_path = grid/'observation_construction.json'
-    reference_point = next(p for p in old['points']
-        if p['model'] == 'T2tt' and p['mass'] == 'mStop1200_mLSP500')
-    reference = internal_path(analysis/reference_point['card'])
-    reference_text = reference.read_text()
-    if hashlib.sha256(reference_text.encode()).hexdigest() != reference_point['card_sha256']:
-        raise ValueError('Accepted reference card changed')
-    reference_parsed = parse_accepted_card(reference_text)
-    reference_plan = merged_card_plan(reference,reference_text,cards/reference.name)
-    def observations(card, parsed):
-        return tuple((c, str(source_shape(card, parsed['shapes'], c, 'data_obs')[0]),
-                      source_shape(card, parsed['shapes'], c, 'data_obs')[1]) for c in parsed['channels'])
-    observation_identity = observations(reference, reference_parsed)
-    with (nullcontext() if lock_held else (grid/'builder.lock').open('a')) as lock:
-        if not lock_held:
-            fcntl.flock(lock, fcntl.LOCK_EX|fcntl.LOCK_NB)
-        if (history/'datacards').exists():
-            raise RuntimeError('Prior card handoff exists; inspect it rather than overwrite')
-        stage.mkdir(exist_ok=True)
-        observation_copy = stage/'era_merged_data_obs.root'
-        if not observation_copy.exists():
-            sums, labels = sum_accepted_observations(reference, reference_plan)
-            write_observation_sum(observation_copy, sums, labels)
-        write_json(evidence_path,dict(scope='accepted_card_era_merge_observations',
-            source_card=str(history/'datacards'/reference.name),
-            source_card_sha256=reference_point['card_sha256'],
-            data_obs_root=str(cards/'era_merged_data_obs.root'),sr_data_blinded=True,
-            observed_sr_used=False,source_channels=48,target_channels=8,
-            construction='canonical sum_accepted_observations/write_observation_sum',
-            historical_code_or_benchmark_dependency=False))
-        selected = []
-        for point in old['points']:
-            match = re.fullmatch(r'mStop(\d+)_mLSP(\d+)', point['mass'])
-            stop, lsp = map(int, match.groups())
-            if 600 <= stop <= 1800 and 1 <= lsp <= 1800:
-                selected.append(point)
-        counts = {m:sum(p['model']==m for p in selected) for m in ('T2tt','T2bW','T2tb')}
-        if counts != dict(T2tt=205,T2bW=345,T2tb=345):
-            raise ValueError('Keep the authorized 895-point display scope')
-        def convert(point):
-            original = internal_path(analysis/point['card'])
-            text = original.read_text()
-            if hashlib.sha256(text.encode()).hexdigest() != point['card_sha256']:
-                raise ValueError('Delivered card receipt mismatch: '+point['mass'])
-            final = cards/original.name
-            output = stage/original.name
-            meta = read_json(original.with_suffix('.manifest.json'))
-            if meta.get('fit_ready') is not True or meta.get('sr_data_blinded') is not True:
-                raise ValueError('Only accepted blinded cards can be merged')
-            plan = merged_card_plan(original, text, final)
-            if observations(original, plan['source']) != observation_identity:
-                raise ValueError('Observation references differ; do not assume common data')
-            payload = '\n'.join(plan['lines'])+'\n'
-            card_hash = hashlib.sha256(payload.encode()).hexdigest()
-            if output.exists():
-                if sha256(output) != card_hash:
-                    raise ValueError('Retained new card differs')
-            else:
-                with output.open('x') as stream:
-                    stream.write(payload)
-            meta.update(card_sha256=card_hash, era_merged=True, official_result=True,
-                source_card=str(history/'datacards'/original.name), source_card_sha256=point['card_sha256'],
-                source_channels=48,target_channels=8,source_bins=1284,target_bins=214,
-                source_rate_parameters=288,target_rate_parameters=48,rate_parameters=48,
-                floating_normalization_parameters=48,dependent_rateparam_formulas=plan['formula_count'],
-                normalization_model='shared alpha with preserved era-dependent rateParam formula scales',
-                shared_alpha_bounds={n:list(v) for n,v in plan['alpha_bounds'].items()},
-                original_histograms_and_nuisance_functions_preserved=True,
-                data_obs_root=str(cards/'era_merged_data_obs.root'),
-                data_obs_construction_receipt=str(evidence_path),
-                observed_sr_used=False,comparison_only=False,production_model_replaced=True,
-                input_check_scope='accepted small card/receipt and exact observation-reference identity; no template ROOT reads/hashes')
-            write_json(output.with_suffix('.manifest.json'),meta)
-            return dict(point,card=str(final.relative_to(analysis)),card_sha256=card_hash,era_merged=True)
-        with ThreadPoolExecutor(max_workers=8) as pool:
-            converted=list(pool.map(convert,selected))
-        # Construct the CR-only card from the merged model, excluding SR
-        # observations.
-        cr_source=cards/'datacard_cronly.txt'
-        if not cr_source.is_file():
-            raise FileNotFoundError('Accepted CR-only source card is missing')
-        cr_payload=cr_only_card(reference_plan)
-        (stage/'datacard_cronly.txt').write_text(cr_payload)
-        cr_hash=hashlib.sha256(cr_payload.encode()).hexdigest()
-        cr_meta=read_json(cr_source.with_suffix('.manifest.json'))
-        cr_meta.update(status='card_written_not_fitted',
-            fit_ready=True,cr_only=True,era_merged=True,official_result=True,
-            card_sha256=cr_hash,sr_data_blinded=True,observed_sr_used=False,
-            source_card=str(cr_source),auto_mc_stats=[10,1,1])
-        write_json(stage/'datacard_cronly.manifest.json',cr_meta)
-        mapping={p['model']+'/'+p['mass']:p for p in converted}
-        updated=[]
-        for point in old['points']:
-            key=point['model']+'/'+point['mass']
-            if key in mapping:
-                updated.append(mapping[key])
-            else:
-                updated.append(dict(point,card=str((history/'datacards'/Path(point['card']).name).relative_to(analysis)),
-                                    fit_ready=False,excluded_out_of_plot_range=True))
-        final=copy.deepcopy(old)
-        final.update(era_merged=True,official_result=True,comparison_only=False,
-            production_model_replaced=True,bins=214,source_bins=1284,
-            likelihood_channels=8,source_likelihood_channels=48,
-            floating_normalization_parameters=48,points=updated,
-            canonical_model='era_merged',model_adopted=time.time(),
-            displayed_model_points=895,merged_points_by_model=counts,
-            th1_channels=CHANNEL_BINS,
-            cr_only_card=dict(card=str((cards/'datacard_cronly.txt').relative_to(analysis)),card_sha256=cr_hash),
-            previous_model='separate_eras',previous_model_manifest=str(history/'manifest.json'),
-            data_obs_construction_receipt=str(evidence_path),
-            input_check_scope='accepted card-stage handoff; no upstream production validation or immutable ROOT hashing')
-        history.mkdir(parents=True,exist_ok=True)
-        shutil.copy2(manifest_path,history/'manifest.json')
-        if (grid/'state.json').exists():
-            shutil.copy2(grid/'state.json',history/'state.json')
-        # Preserve original card-relative template references inside history.
-        if not (history/'templates').exists():
-            (history/'templates').symlink_to(grid/'templates',target_is_directory=True)
-        cards.rename(history/'datacards')
-        stage.rename(cards)
-        write_json(manifest_path,final)
-        write_json(grid/'state.json',{k:v for k,v in final.items() if k!='points'})
-        print('canonical_era_merged_cards_ready',len(converted),counts,flush=True)
-        return final
+
+def merge_accepted_grid(manifest_path):
+    """Return an accepted era-merged receipt; never regenerate a past model."""
+    manifest = read_json(internal_path(manifest_path))
+    if (manifest.get('era_merged') is not True or manifest.get('status') != 'cards_ready'
+            or manifest.get('sr_data_blinded') is not True):
+        raise ValueError('A completed blinded era-merged card grid is required')
+    return manifest
+
+
+def displayed_points(points):
+    """Select exactly the authorized mass window without dropping inventory rows."""
+    selected, seen = [], set()
+    source_counts = dict.fromkeys(SOURCE_COUNTS, 0)
+    display_counts = dict.fromkeys(DISPLAY_COUNTS, 0)
+    for point in points:
+        model, mass = point['model'], point['mass']
+        match = re.fullmatch(r'mStop(\d+)_mLSP(\d+)', mass)
+        if model not in source_counts or not match or (model, mass) in seen:
+            raise ValueError('Invalid or duplicate signal-grid point')
+        seen.add((model, mass))
+        source_counts[model] += 1
+        stop, lsp = map(int, match.groups())
+        if 600 <= stop <= 1800 and 1 <= lsp <= 1800:
+            selected.append(point)
+            display_counts[model] += 1
+    if source_counts != SOURCE_COUNTS or display_counts != DISPLAY_COUNTS:
+        raise ValueError('Keep the authorized 955-point inventory and 895-point display scope')
+    return selected
+
+
+def observation_bindings(card, parsed):
+    return tuple((channel, *map(str, source_shape(card, parsed['shapes'], channel, 'data_obs')[:2]))
+                 for channel in parsed['channels'])
+
+
+def prepare_merged_cards(path, text, metadata, channels, template_background):
+    """Prepare shared observations from today's in-memory card ingredients."""
+    if metadata.get('fit_ready') is not True or metadata.get('sr_data_blinded') is not True:
+        raise ValueError('Era-merged cards require ready blinded template inputs')
+    plan = merged_card_plan(path, text, path)
+    bindings = observation_bindings(path, plan['source'])
+    target = plan['data_root']
+    receipt_path = target.parent.parent/'observation_construction.json'
+    receipt = dict(scope='era_merged_template_observations',
+        reference_ingredients_sha256=hashlib.sha256(text.encode()).hexdigest(),
+        template_inputs=metadata['inputs'], data_obs_root=str(target),
+        source_channels=48, target_channels=8, sr_data_blinded=True, observed_sr_used=False,
+        construction='sum the CR observations and the native MC-only SR placeholders')
+    if receipt_path.is_file():
+        if read_json(receipt_path) != receipt:
+            raise ValueError('Merged observation ingredients differ from the existing receipt')
+    elif target.exists():
+        raise ValueError('Merged observation file has no matching input receipt')
+    else:
+        write_json(receipt_path, receipt)
+    if not target.exists():
+        sums, labels = sum_template_observations(plan, channels, template_background)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(prefix='.observations-', dir=target.parent) as tmp:
+            pending = Path(tmp)/target.name
+            write_observation_sum(pending, sums, labels)
+            if target.exists():
+                raise FileExistsError('Preserve existing merged observations: ' + str(target))
+            pending.rename(target)
+    if not target.is_file() or not target.stat().st_size:
+        raise ValueError('Merged observation ROOT is missing or empty')
+    return dict(observation_bindings=bindings, observation_receipt=str(receipt_path),
+                data_obs_root=str(target), reference_plan=plan)
+
+
+def merged_card_metadata(metadata, merge):
+    """Common provenance for new and already completed canonical card pairs."""
+    return dict(metadata, era_merged=True, official_result=True, comparison_only=False,
+        observed_sr_used=False, rate_parameters=48, floating_normalization_parameters=48,
+        source_channels=48, source_bins=1284, source_rate_parameters=288,
+        target_channels=8, target_bins=214, target_rate_parameters=48,
+        normalization_model='shared alpha with preserved era-dependent rateParam formula scales',
+        original_histograms_and_nuisance_functions_preserved=True,
+        data_obs_root=merge['data_obs_root'], data_obs_construction_receipt=merge['observation_receipt'])
+
+
+def render_merged_signal_card(path, text, metadata, merge):
+    """Transform one native source text without publishing any unmerged card."""
+    if metadata.get('fit_ready') is not True or metadata.get('sr_data_blinded') is not True:
+        raise ValueError('Only ready blinded cards can be merged')
+    plan = merged_card_plan(path, text, path)
+    if observation_bindings(path, plan['source']) != merge['observation_bindings']:
+        raise ValueError('Observation references differ; do not assume common data')
+    model = merged_card_metadata(metadata, merge)
+    model.update(source_card_sha256=hashlib.sha256(text.encode()).hexdigest(),
+        dependent_rateparam_formulas=plan['formula_count'],
+        shared_alpha_bounds={n:list(v) for n,v in plan['alpha_bounds'].items()})
+    return '\n'.join(plan['lines'])+'\n', model
+
+
+def publication_metadata(merge):
+    return dict(era_merged=True, canonical_model='era_merged', official_result=True,
+        comparison_only=False, bins=214, source_bins=1284, likelihood_channels=8,
+        source_likelihood_channels=48, rate_parameters=48, floating_normalization_parameters=48,
+        displayed_model_points=sum(DISPLAY_COUNTS.values()), merged_points_by_model=DISPLAY_COUNTS,
+        th1_channels=CHANNEL_BINS, data_obs_construction_receipt=merge['observation_receipt'])
 
 
 

@@ -4,6 +4,9 @@ import math
 from typing import Any
 import numpy as np
 HIGH_GROUPS = LOW_GROUPS = ("Nb1", "Nb2plus")
+ZGamma_BPIX_MERGE = dict(year='2023BPix', mode='highdm',
+    original_edges=[250, 300, 350, 400, 500, 1500], measurement_edges=[250, 300, 400, 500, 1500],
+    analysis_bins_unchanged=True, gnn_boundaries_unchanged=True, preserve_other_measurements=True)
 
 def rebin(values: np.ndarray, source_edges: np.ndarray, target_edges: np.ndarray) -> np.ndarray:
     """Sum source bins into target bins with exactly aligned boundaries."""

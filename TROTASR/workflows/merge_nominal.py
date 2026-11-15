@@ -1,21 +1,18 @@
-"""Strict deterministic per-year merge; preserve every histogram axis.
-
-Large per-file correction audits stay on hep2 with content hashes. Compact
-summed acceptance and normalization bookkeeping accompany merged histograms.
-No partial campaign can masquerade as complete or feed a production fit.
-"""
+"""Merge per-file histograms and combine the adopted systematic endpoints."""
 import argparse
 import copy
 import math
+import gzip
+import json
+import os
+import re
 import time
 from pathlib import Path
 if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
 from TROTASR.utils.paths import ROOT, internal_path
-from TROTASR.utils.io import read_json, write_json, sha256
-from TROTASR.workflows.nominal_campaign import (frozen_plan, validate_payload, fingerprint, relative,
-                                               execution_tasks, task_contract)
+from TROTASR.utils.io import read_json, write_json, sha256, scientific_settings, file_identity
 
 
 def add_numbers(a, b):
@@ -88,7 +85,162 @@ def merge_datasets(target, source):
                 raise ValueError('Dataset identity/normalization metadata differs: ' + key+'/'+field)
 
 
-def assemble_endpoints(payloads, endpoints, compatible_codes=()):
+class JsonStream:
+    """Copy unchanged JSON values in bounded chunks, without loading the grid."""
+    structural = re.compile(r'[{}\[\]"\\]')
+    delimiter = re.compile(r'[,\]}\s]')
+
+    def __init__(self, stream):
+        self.stream, self.buffer, self.position = stream, '', 0
+
+    def refill(self):
+        self.buffer = self.buffer[self.position:] + self.stream.read(65536)
+        self.position = 0
+
+    def peek(self):
+        while True:
+            if self.position == len(self.buffer):
+                self.refill()
+                if not self.buffer:
+                    raise ValueError('Truncated merged JSON')
+            if not self.buffer[self.position].isspace():
+                return self.buffer[self.position]
+            self.position += 1
+
+    def consume(self, expected):
+        if self.peek() != expected:
+            raise ValueError('Unexpected merged JSON structure')
+        self.position += 1
+
+    def copy_value(self, write):
+        first = self.peek()
+        composite = first in '[{'
+        quoted = first == '"'
+        depth = 1 if composite else 0
+        if composite or quoted:
+            write(first); self.position += 1
+        while True:
+            pattern = self.structural if composite or quoted else self.delimiter
+            match = pattern.search(self.buffer, self.position)
+            if match is None:
+                write(self.buffer[self.position:]); self.position = len(self.buffer)
+                self.refill()
+                if not self.buffer:
+                    if not composite and not quoted:
+                        return
+                    raise ValueError('Truncated JSON value')
+                continue
+            index, token = match.start(), match.group()
+            if not composite and not quoted:
+                write(self.buffer[self.position:index]); self.position = index
+                return
+            if quoted and token == '\\':
+                if index + 1 == len(self.buffer):
+                    write(self.buffer[self.position:index]); self.position = index
+                    self.refill(); index = 0
+                    if len(self.buffer) < 2:
+                        raise ValueError('Truncated JSON escape')
+                write(self.buffer[self.position:index+2]); self.position = index+2
+                continue
+            if token == '"':
+                quoted = not quoted
+            elif not quoted:
+                if token in '[{': depth += 1
+                elif token in ']}': depth -= 1
+            write(self.buffer[self.position:index+1]); self.position = index+1
+            if depth == 0 and not quoted:
+                return
+
+    def value(self):
+        parts = []
+        self.copy_value(parts.append)
+        return json.loads(''.join(parts))
+
+    def items(self):
+        self.consume('{')
+        if self.peek() == '}':
+            self.consume('}'); return
+        while True:
+            key = self.value()
+            self.consume(':')
+            yield key
+            if self.peek() == '}':
+                self.consume('}'); return
+            self.consume(',')
+
+
+def replace_signal_tree(reader, write, replacement, depth=0):
+    """Replace sample nodes, retaining all background/data bytes and axes."""
+    write('{'); comma = ''; seen = set()
+    for key in reader.items():
+        if depth == 4 and re.fullmatch(r'(?:T2bW_|T2tb_)?mStop\d+_mLSP\d+', key):
+            reader.copy_value(lambda _: None)
+            continue
+        write(comma + json.dumps(key) + ':'); comma = ','; seen.add(key)
+        if depth < 4:
+            replace_signal_tree(reader, write, replacement.get(key, {}), depth+1)
+        else:
+            reader.copy_value(write)
+    for key in sorted(replacement.keys() - seen):
+        write(comma + json.dumps(key) + ':' + json.dumps(replacement[key], allow_nan=False, separators=(',', ':')))
+        comma = ','
+    write('}')
+
+
+def replace_signals(year, payload_paths, normalization_path):
+    """Install complete new signal yields into the current six-era inputs."""
+    histograms = dict(histograms={}, physical_histograms={})
+    datasets = {}
+    events = 0
+    for path in payload_paths:
+        payload = read_json(path)
+        if payload.get('status') not in ('complete', 'complete_one_file_test') or not payload.get('sr_data_blinded'):
+            raise ValueError('Incomplete or unblinded signal histogram input')
+        if any(not d.get('is_signal') for d in payload['input_metadata'].values()):
+            raise ValueError('Signal replacement includes background or data')
+        for section in histograms:
+            merge_histograms(histograms[section], payload[section])
+        merge_datasets(datasets, payload['input_metadata'])
+        events += payload['audit']['events_read']
+    receipt = dict(files=len(payload_paths), datasets=len(datasets), retained_events=events,
+        histograms='production/histograms/'+str(year), efficiencies='production/efficiencies/state.json',
+        signal_uncertainties=False, background_and_data_unchanged=True, time=time.time())
+    target = ROOT / 'results/merged' / f'systematics_{year}.json.gz'
+    temporary = target.with_name(target.name + '.pending.' + str(os.getpid()))
+    with gzip.open(target, 'rt') as source, gzip.open(temporary, 'wt', compresslevel=6) as output:
+        reader = JsonStream(source)
+        output.write('{'); comma = ''
+        for key in reader.items():
+            if key == 'signal_replacement':
+                reader.copy_value(lambda _: None); continue
+            output.write(comma + json.dumps(key) + ':'); comma = ','
+            if key in histograms:
+                replace_signal_tree(reader, output.write, histograms[key])
+            elif key == 'input_metadata':
+                output.write('{'); inside = ''
+                for dataset_id in reader.items():
+                    record = reader.value()
+                    if not record.get('is_signal'):
+                        output.write(inside + json.dumps(dataset_id) + ':' + json.dumps(record, allow_nan=False))
+                        inside = ','
+                for dataset_id, record in datasets.items():
+                    output.write(inside + json.dumps(dataset_id) + ':' + json.dumps(record, allow_nan=False))
+                    inside = ','
+                output.write('}')
+            else:
+                reader.copy_value(output.write)
+        output.write(comma + '"signal_replacement":' + json.dumps(receipt) + '}\n')
+    os.replace(temporary, target)
+    write_json(ROOT / 'estimations' / f'normalization_{year}.json.gz', read_json(normalization_path))
+    summary_path = target.with_name(f'systematics_{year}.summary.json')
+    summary = read_json(summary_path)
+    summary.update(output=str(target.relative_to(ROOT)), sha256=sha256(target),
+                   signal_replacement=receipt, completed=time.time())
+    write_json(summary_path, summary)
+    return receipt
+
+
+def assemble_endpoints(payloads, endpoints):
     """Join disjoint variations, counting metadata and central traversal once.
 
     The caller supplies nominal first, and validates every shard's contract,
@@ -114,11 +266,8 @@ def assemble_endpoints(payloads, endpoints, compatible_codes=()):
                       'mixed_sf','category_order'):
             if payload.get(field) != result.get(field):
                 raise ValueError('Endpoint invariant differs: '+field)
-        for field in ('input','fingerprint','year','code','normalization_sha256','assets_sha256',
+        for field in ('input','fingerprint','year','normalization_sha256','assets_sha256',
                       'modes','variations','configuration_sha256','sr_binning_sha256','object_payloads'):
-            if field=='code' and compatible_codes and all(c in compatible_codes for c in
-                    (payload['contract'].get('code'),result['contract'].get('code'))):
-                continue
             if payload['contract'].get(field) != result['contract'].get(field):
                 raise ValueError('Endpoint contract differs: '+field)
         if payload.get('dy_rz') or payload['audit'].get('migrations'):
@@ -146,194 +295,11 @@ def assemble_endpoints(payloads, endpoints, compatible_codes=()):
     return result
 
 
-def merge(campaign, year):
-    from TROTASR.utils.paths import era_year
-    year = era_year(year)
-    campaign = internal_path(campaign)
-    plan = frozen_plan(campaign)
-    from TROTASR.workflows.normalization_recovery import prior_contracts, payload_contract
-    previous_contracts = {} if '_execution' in plan else prior_contracts(plan)
-    from TROTASR.workflows.systematic_continuation import prior_contracts as policy_contracts
-    if '_execution' not in plan:
-        previous_contracts.update(policy_contracts(plan))
-    tasks = [t for t in plan['tasks'] if t['year'] == year]
-    if not tasks:
-        raise ValueError('No inputs for requested year')
-    results, groups = [], {}
-    for task in execution_tasks(plan):
-        if task['year'] != year:
-            continue
-        s = read_json(campaign/'state'/(task['key']+'.json'))
-        if s['status'] != 'complete':
-            raise ValueError('Incomplete task: ' + task['key'])
-        p = internal_path(ROOT/s['output'])
-        if sha256(p) != s['output_sha256'] or fingerprint(ROOT/task['input']) != task['fingerprint']:
-            raise ValueError('Completed input/output changed: ' + task['key'])
-        if task.get('metadata') and fingerprint(ROOT/task['metadata']) != task['metadata_fingerprint']:
-            raise ValueError('Completed metadata changed: '+task['key'])
-        r = dict(task=task, output=s['output'], sha256=s['output_sha256'], state=s)
-        results.append(r)
-        groups.setdefault(task.get('parent_key',task['key']),[]).append(r)
-    provenance = dict(plan_sha256=sha256(campaign/'plan.json'), merge_code_sha256=sha256(Path(__file__)),
-                      input_hashes={r['task']['key']:r['sha256'] for r in results})
-    prefix = 'systematics' if plan.get('shape_mode') or plan.get('variations') == ['all_weights'] else 'nominal'
-    output = campaign/'merged'/('%s_%s.json.gz' % (prefix, year))
-    if output.exists():
-        old = read_json(output)
-        if old.get('merge_provenance') == provenance and old.get('status') == 'complete':
-            return output
-        raise FileExistsError('Preserve divergent existing merge')
-    merged = dict(schema='trotasr_histograms_v1', status='complete', scope=plan['scope'],
-        contract=plan['contracts'][str(year)], sr_data_blinded=True, bins_merged=False,
-        highdm_sr_source_axes='exact_nb_exact_topology_native_recoil_v2', mixed_sf='not_provided',
-        histograms={}, physical_histograms={}, dy_rz={}, dy_rz_variations={}, input_metadata={},
-        category_order=['Nb', 'Nbst', 'Nmix', 'Nres', 'Nw'],
-        audit=dict(events_read=0, migrations={}, selection_totals={},
-                   per_file_weight_audit='Retained in hashed input outputs; not discarded'),
-        merge_provenance=provenance,
-        coverage=dict(expected_files=len(tasks), completed_files=len(groups), failed_files=0,
-            completed_execution_tasks=len(results),
-            expected_events=sum(t['entries'] for t in tasks),
-            full_input_inventory=plan['scope'] in ('full_nominal_production','full_cms_trota_jme_production','full_weight_systematic_production','full_nonjme_systematic_production')))
-    def validated_records(records):
-        for r in records:
-            raw = read_json(ROOT/r['output'])
-            if '_execution' in plan:
-                from TROTASR.workflows.nominal_campaign import integration_payload
-                yield integration_payload(raw,r['task'],plan,r['state'])
-                continue
-            independent = 'object_endpoint' in r['task']
-            expected = payload_contract(raw, task_contract(plan,r['task']),
-                None if independent else previous_contracts.get(str(year)))
-            yield validate_payload(raw, r['task'], expected)
-    for task in tasks:
-        records = groups[task['key']]
-        payloads = validated_records(records)
-        if 'object_endpoint' in records[0]['task']:
-            if '_execution' in plan:
-                # These exact per-file payloads have each been checked above
-                # against the immutable result registry and current physics.
-                validated=list(payloads)
-                codes=[p['contract']['code'] for p in validated]
-                payload=assemble_endpoints(validated,plan['contracts'][str(year)]['object_endpoints'],codes)
-            else:
-                payload = assemble_endpoints(payloads, plan['contracts'][str(year)]['object_endpoints'])
-        else:
-            if len(records) != 1:
-                raise ValueError('Duplicate full-file output')
-            payload = next(payloads)
-        for section in ('histograms', 'physical_histograms', 'dy_rz', 'dy_rz_variations'):
-            merge_histograms(merged[section], payload.get(section, {}))
-        merge_datasets(merged['input_metadata'], payload['input_metadata'])
-        merged['audit']['events_read'] += payload['audit']['events_read']
-        merge_counters(merged['audit']['migrations'], payload['audit']['migrations'])
-        for section in ('trota_inference','shape_migrations','object_endpoints','object_response','object_acceptance'):
-            if section in payload['audit']:
-                merge_counters(merged['audit'].setdefault(section, {}),payload['audit'][section])
-        for chunk in payload['audit']['chunks']:
-            # Data-only SR is deliberately absent from this aggregation; a
-            # MC SR count must never be confused with an unblinded data count.
-            endpoint = chunk.get('endpoint','nominal')
-            chunk = {k:v for k,v in chunk.items() if k not in ('SR','endpoint')}
-            target = (merged['audit']['selection_totals'] if endpoint=='nominal' else
-                      merged['audit'].setdefault('selection_totals_by_endpoint',{}).setdefault(endpoint,{}))
-            merge_counters(target, chunk)
-    if merged['audit']['events_read'] != merged['coverage']['expected_events']:
-        raise ValueError('Merged traversal mismatch')
-    write_json(output, merged)
-    # Readback ensures compression/JSON integrity; hashes bind downstream.
-    check = read_json(output)
-    if check['merge_provenance'] != provenance:
-        raise RuntimeError('Merge readback mismatch')
-    write_json(output.with_name('%s_%s.summary.json' % (prefix,year)), dict(status='complete',
-        scope=plan['scope'], output=relative(output), sha256=sha256(output),
-        coverage=merged['coverage'], migrations=merged['audit']['migrations'],
-        physics_contract=plan['contracts'][str(year)], full_workflow_complete=False))
-    return output
 
 
-def merge_refreshed_year(campaign, year=2025):
-    """Remerge a registered updated year at its original central path."""
-    from TROTASR.workflows.run_systematic_campaign import (refresh_plan,
-        refresh_task_required, refreshed_population_verified, refresh_result_contract)
-    campaign=internal_path(campaign);plan=refresh_plan(campaign);spec=plan['payload_refresh']
-    if year not in spec.get('years', [spec.get('year')]):
-        raise ValueError('Year is outside the registered payload update')
-    revision = spec['id']
-    contract = spec['contracts'][str(year)] if 'contracts' in spec else spec['contract']
-    if spec['validation'].get('status') != 'passed':
-        raise ValueError('Every refreshed/rebuilt file must pass its registered validation')
-    records=[]
-    for task in spec['tasks']:
-        if task['year'] != year:continue
-        if refresh_task_required(task):
-            s=read_json(campaign/'state'/(task['key']+'.json'))
-            if (s.get('status')!='complete' or s.get('exit_code')!=0 or
-                    s.get('payload_revision')!=revision or not refreshed_population_verified(task,s)):
-                raise ValueError('Unverified refreshed input: '+task['key'])
-            record=dict(task=task,output=s['output'],sha256=s['output_sha256'])
-        else:
-            old=spec['previous_outputs'][task['key']]
-            if len(old)!=1 or old[0]['endpoint'] is not None:
-                raise ValueError('Unexpected data endpoint layout')
-            record=dict(task=task,output=old[0]['output'],sha256=old[0]['sha256'])
-        if sha256(ROOT/record['output'])!=record['sha256'] or fingerprint(ROOT/task['input'])!=task['fingerprint']:
-            raise ValueError('Refreshed or retained input/output changed')
-        records.append(record)
-    merged=dict(schema='trotasr_histograms_v1',status='complete',scope=plan['scope'],
-        contract=contract,sr_data_blinded=True,bins_merged=False,
-        highdm_sr_source_axes='exact_nb_exact_topology_native_recoil_v2',mixed_sf='not_provided',
-        histograms={},physical_histograms={},dy_rz={},dy_rz_variations={},input_metadata={},
-        category_order=['Nb','Nbst','Nmix','Nres','Nw'],
-        audit=dict(events_read=0,migrations={},selection_totals={},
-            per_file_weight_audit='Retained in the canonical hashed per-file outputs'),
-        merge_provenance=dict(plan_sha256=sha256(campaign/'plan.json'),
-            merge_code_sha256=sha256(Path(__file__)),payload_revision=revision,
-            input_hashes={r['task']['key']:r['sha256'] for r in records}),
-        coverage=dict(expected_files=len(records),completed_files=len(records),failed_files=0,
-            expected_events=sum(r['task']['entries'] for r in records),full_input_inventory=True,
-            refreshed_mc_signal_files=sum(r['task']['refresh_required'] for r in records),
-            rebuilt_missing_data_files=sum(not r['task']['refresh_required'] and
-                r['task'].get('rebuild_missing_seed',False) for r in records),
-            reused_data_files=sum(not refresh_task_required(r['task']) for r in records)))
-    for r in records:
-        payload=read_json(ROOT/r['output']);task=r['task']
-        if refresh_task_required(task):
-            validate_payload(payload,task,refresh_result_contract(spec,task,r['sha256']))
-        elif (payload.get('status')!='complete_one_file_test' or
-                not payload.get('sr_data_blinded') or
-                not all(x.get('is_data') for x in payload['input_metadata'].values()) or
-                payload['audit']['events_read']!=task['entries']):
-            raise ValueError('Retained file is not validated collision data')
-        for section in ('histograms','physical_histograms','dy_rz','dy_rz_variations'):
-            merge_histograms(merged[section],payload.get(section,{}))
-        merge_datasets(merged['input_metadata'],payload['input_metadata'])
-        merged['audit']['events_read']+=payload['audit']['events_read']
-        merge_counters(merged['audit']['migrations'],payload['audit']['migrations'])
-        for section in ('trota_inference','shape_migrations','object_endpoints','object_response','object_acceptance','central_object_corrections'):
-            if section in payload['audit']:
-                merge_counters(merged['audit'].setdefault(section,{}),payload['audit'][section])
-        for chunk in payload['audit']['chunks']:
-            endpoint=chunk.get('endpoint','nominal')
-            target=(merged['audit']['selection_totals'] if endpoint=='nominal' else
-                merged['audit'].setdefault('selection_totals_by_endpoint',{}).setdefault(endpoint,{}))
-            merge_counters(target,{k:v for k,v in chunk.items() if k not in ('SR','endpoint')})
-    if merged['audit']['events_read']!=merged['coverage']['expected_events']:
-        raise ValueError('Incomplete refreshed-year traversal')
-    output=campaign/'merged'/('systematics_'+str(year)+'.json.gz')
-    if output.exists():raise FileExistsError('Existing merge must be preserved before replacement')
-    write_json(output,merged)
-    check=read_json(output)
-    if check['merge_provenance']!=merged['merge_provenance']:
-        raise ValueError('Refreshed merge readback failed')
-    write_json(campaign/'merged'/('systematics_'+str(year)+'.summary.json'),dict(status='complete',scope=plan['scope'],
-        output=relative(output),sha256=sha256(output),coverage=check['coverage'],
-        physics_contract=contract,payload_revision=revision,full_workflow_complete=False))
-    return output
 
 
-COMBINATION_POLICY = dict(id='jme_with_stored_nonjme_as_is', user_approved=True,
-    central='corrected_central_jme', nonjme_endpoints='stored_absolute_histograms',
+COMBINATION_POLICY = dict(central='corrected_central_jme', nonjme_endpoints='stored_absolute_histograms',
     nominal_mismatch_acknowledged=True, reanchor=False, recompute_events=False)
 
 
@@ -346,8 +312,8 @@ def combine_saved_payloads(jme, nonjme, policy):
     Inputs may be consumed in memory; persisted source files stay untouched.
     """
     from TROTASR.utils.corrections import NONJME_ENDPOINTS
-    if policy != COMBINATION_POLICY:
-        raise ValueError('Explicit acknowledged as-is combination policy required')
+    if scientific_settings(policy) != scientific_settings(COMBINATION_POLICY):
+        raise ValueError('Incompatible JME/non-JME central and endpoint definitions')
     endpoints = set(NONJME_ENDPOINTS)
     for payload, scope, mode in ((jme, 'full_cms_trota_jme_production', 'cms_trota_jme'),
             (nonjme, 'full_nonjme_systematic_production', 'stored_trota_nonjme')):
@@ -371,7 +337,6 @@ def combine_saved_payloads(jme, nonjme, policy):
     mc = {k:v for k,v in jme['input_metadata'].items() if not v.get('is_data')}
     if set(mc) != set(nonjme['input_metadata']):
         raise ValueError('JME/non-JME MC dataset inventories differ')
-    from TROTASR.workflows.run_systematic_campaign import compare_values
     compare_values(mc, nonjme['input_metadata'], 'MC bookkeeping')
     if set(nonjme['contract'].get('object_endpoints', [])) != endpoints:
         raise ValueError('All sixteen non-JME endpoints are required')
@@ -408,55 +373,190 @@ def combine_saved_payloads(jme, nonjme, policy):
     return jme
 
 
-def combine(campaign, other_campaign, year, output, policy):
-    """Bind strict completed year merges and preserve both original campaigns."""
-    campaign, other_campaign, output = map(internal_path, (campaign, other_campaign, output))
-    sources = {}
-    for name, folder in (('jme', campaign), ('nonjme', other_campaign)):
-        path = folder/'merged'/('systematics_%s.json.gz' % year)
-        summary = read_json(path.with_name('systematics_%s.summary.json' % year))
-        digest = sha256(path)
-        if summary.get('status') != 'complete' or summary.get('sha256') != digest:
-            raise ValueError('Strict year merge is absent or changed: '+name)
-        sources[name] = dict(path=relative(path), sha256=digest,
-                             summary_sha256=sha256(path.with_name('systematics_%s.summary.json' % year)))
-    provenance = dict(sources=sources, policy=policy, merge_code_sha256=sha256(Path(__file__)))
-    if output.exists():
-        old = read_json(output)
-        if old.get('combination_provenance') != provenance or old.get('status') != 'complete':
-            raise FileExistsError('Preserve existing different combined product')
+
+
+
+
+def compare_values(before, after, path=''):
+    """Require exact counts/structure and 1e-7 relative/absolute float agreement."""
+    if isinstance(before, dict):
+        if not isinstance(after, dict) or set(before) != set(after):
+            raise ValueError('Changed fields: '+path)
+        for key in before:
+            compare_values(before[key], after[key], path+'/'+str(key))
+    elif isinstance(before, list):
+        if not isinstance(after, list) or len(before) != len(after):
+            raise ValueError('Changed dimensions: '+path)
+        for i, (a,b) in enumerate(zip(before,after)):
+            compare_values(a,b,path+'/'+str(i))
+    elif isinstance(before, float):
+        if not isinstance(after,(float,int)) or not math.isfinite(before) or not math.isfinite(after) or not math.isclose(before,after,rel_tol=1e-7,abs_tol=1e-7):
+            raise ValueError('Changed numerical result: '+path)
+    elif before != after:
+        raise ValueError('Changed count/value: '+path)
+
+
+def validate_input(payload, task, settings):
+    if payload.get('status') not in ('complete', 'complete_one_file_test') or payload.get('sr_data_blinded') is not True:
+        raise ValueError('Incomplete or unblinded histogram: ' + task['input'])
+    contract = payload['contract']
+    if internal_path(contract['input']) != internal_path(ROOT / task['input']):
+        raise ValueError('Histogram belongs to a different input')
+    if payload['audit']['events_read'] != task['entries']:
+        raise ValueError('Histogram event coverage differs from the input inventory')
+    if any(contract['fingerprint'].get(k) != task['fingerprint'][k] for k in ('size', 'mtime_ns')):
+        raise ValueError('Histogram input has changed')
+    common = {k: v for k, v in contract.items() if k not in ('input', 'fingerprint', 'signal_normalization')}
+    if scientific_settings(common) != scientific_settings(settings):
+        raise ValueError('Histogram corrections, region definitions or binning differ')
+    for section in ('histograms', 'physical_histograms'):
+        validate_histograms(payload.get(section, {}))
+        for modes in payload.get(section, {}).values():
+            for regions in modes.values():
+                for samples in regions.get('SR', {}).values():
+                    if {'data', 'data_obs'} & set(samples):
+                        raise ValueError('SR observations in histogram input')
+    for chunk in payload['audit'].get('chunks', ()):
+        if any(isinstance(v, dict) and v.get('intersection', 0) for v in chunk.values()):
+            raise ValueError('High-/low-dM selections overlap')
+    from TROTASR.workflows.rare_top_policy import require_clean
+    require_clean(payload)
+    return payload
+
+
+def validate_histograms(node):
+    """Keep signed yields, nonnegative variances and the declared axis shape."""
+    import numpy as np
+    if not isinstance(node, dict):
+        raise ValueError('Histogram node must be a mapping')
+    if 'sumw' not in node:
+        for child in node.values():
+            validate_histograms(child)
+        return
+    if not {'sumw', 'sumw2', 'entries', 'edges'} <= node.keys():
+        raise ValueError('Missing histogram fields')
+    arrays = {key: np.asarray(node[key]) for key in ('sumw','sumw2','entries')}
+    if any(a.dtype.kind not in 'fiu' or not np.isfinite(a).all() for a in arrays.values()):
+        raise ValueError('Nonfinite or nonnumeric histogram content')
+    if any(a.shape != arrays['sumw'].shape for a in arrays.values()):
+        raise ValueError('Histogram yield, variance and entry shapes differ')
+    if (arrays['sumw2'] < 0).any() or (arrays['entries'] < 0).any() or (arrays['entries'] % 1 != 0).any():
+        raise ValueError('Invalid histogram variance or entry count')
+    edges = node['edges']
+    axes = edges if arrays['sumw'].ndim > 1 else [edges]
+    if len(axes) != arrays['sumw'].ndim or tuple(len(e)-1 for e in axes) != arrays['sumw'].shape:
+        raise ValueError('Histogram axes do not match its contents')
+    if any(not np.isfinite(e).all() or not (np.diff(e) > 0).all() for e in axes):
+        raise ValueError('Histogram edges must be finite and increasing')
+
+
+def merge(inventory, year, output):
+    """Merge the complete per-era task list produced by the histograms stage."""
+    import fcntl
+    from TROTASR.utils.paths import analysis_era
+    year = analysis_era(year)
+    inventory, output = internal_path(inventory), internal_path(output)
+    document = read_json(inventory)
+    tasks = [t for t in document['tasks'] if analysis_era(t['year']) == year]
+    if not tasks or len({t['input'] for t in tasks}) != len(tasks):
+        raise ValueError('Missing or duplicate source files in the merge inventory')
+    sources = {t['input']: dict(output=t['output'], identity=list(file_identity(ROOT / t['output']))) for t in tasks}
+    output.parent.mkdir(parents=True, exist_ok=True)
+    summary_path = output.with_name(output.name.removesuffix('.gz').removesuffix('.json') + '.summary.json')
+    with output.with_name(output.name + '.lock').open('a') as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        if output.exists():
+            summary = read_json(summary_path)
+            if summary.get('status') == 'complete' and summary.get('sources') == sources:
+                return output
+            raise ValueError('Existing merge uses different histogram inputs: ' + str(output))
+        merged = None
+        for task in tasks:
+            payload = read_json(ROOT / task['output'])
+            if merged is None:
+                settings = {k: v for k, v in payload['contract'].items()
+                            if k not in ('input', 'fingerprint', 'signal_normalization')}
+                mode = settings.get('shape_mode')
+                scope = {'cms_trota_jme': 'full_cms_trota_jme_production',
+                         'stored_trota_nonjme': 'full_nonjme_systematic_production'}.get(mode, 'full_nominal_production')
+                merged = {k: copy.deepcopy(payload[k]) for k in
+                          ('schema', 'sr_data_blinded', 'bins_merged', 'highdm_sr_source_axes', 'mixed_sf', 'category_order')}
+                merged.update(status='complete', scope=scope, contract=settings,
+                    histograms={}, physical_histograms={}, dy_rz={}, dy_rz_variations={}, input_metadata={},
+                    audit=dict(events_read=0, migrations={}, selection_totals={}),
+                    background_policy=dict(excluded_primaries=['TTWH','TTZH'], excluded_files=[]))
+            validate_input(payload, task, settings)
+            for section in ('histograms', 'physical_histograms', 'dy_rz', 'dy_rz_variations'):
+                merge_histograms(merged[section], payload.get(section, {}))
+            merge_datasets(merged['input_metadata'], payload['input_metadata'])
+            merged['audit']['events_read'] += payload['audit']['events_read']
+            for section in ('migrations', 'trota_inference', 'shape_migrations', 'object_endpoints', 'object_response', 'object_acceptance'):
+                if section in payload['audit']:
+                    merge_counters(merged['audit'].setdefault(section, {}), payload['audit'][section])
+            for chunk in payload['audit'].get('chunks', ()):
+                endpoint = chunk.get('endpoint', 'nominal')
+                values = {k: v for k, v in chunk.items() if k not in ('SR','endpoint')}
+                merge_counters(merged['audit']['selection_totals'].setdefault(endpoint, {}), values)
+            merged['background_policy']['excluded_files'].extend(payload.get('background_policy', {}).get('excluded_files', []))
+        expected_events = sum(t['entries'] for t in tasks)
+        if merged['audit']['events_read'] != expected_events:
+            raise ValueError('Merged event coverage is incomplete')
+        merged['coverage'] = dict(expected_files=len(tasks), completed_files=len(tasks), failed_files=0,
+                                  expected_events=expected_events, full_input_inventory=True)
+        merged['merge_provenance'] = dict(inventory=str(inventory.relative_to(ROOT)), sources=sources)
+        write_json(output, merged)
+        write_json(summary_path, dict(status='complete', output=str(output.relative_to(ROOT)),
+            sha256=sha256(output), sources=sources, coverage=merged['coverage'],
+            physics_contract=settings, scope=merged['scope'], completed=time.time()))
         return output
-    joined = combine_saved_payloads(*(read_json(ROOT/sources[n]['path']) for n in ('jme', 'nonjme')), policy)
-    joined['combination_provenance'] = provenance
-    write_json(output, joined)
-    del joined
-    check = read_json(output)
-    if check.get('combination_provenance') != provenance:
-        raise RuntimeError('Combined histogram readback failed')
-    write_json(output.with_name('systematics_%s.summary.json' % year),
-        dict(status='complete', scope=check['scope'], output=relative(output), sha256=sha256(output),
-             coverage=check['coverage'], combination_provenance=provenance, completed=time.time(),
-             preliminary=True, central_conventions_consistent=False, full_workflow_complete=False))
+
+
+def combine(jme_path, nonjme_path, year, output):
+    """Combine completed endpoint sets, reusing a matching completed output."""
+    import fcntl
+    paths = [internal_path(p) for p in (jme_path, nonjme_path)]
+    output = internal_path(output)
+    sources = {str(p.relative_to(ROOT)): list(file_identity(p)) for p in paths}
+    policy = read_json(ROOT / 'jsons/analysis.json')['systematic_combination']
+    output.parent.mkdir(parents=True, exist_ok=True)
+    summary_path = output.with_name(output.name.removesuffix('.gz').removesuffix('.json') + '.summary.json')
+    with output.with_name(output.name + '.lock').open('a') as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        if output.exists():
+            summary = read_json(summary_path)
+            if (summary.get('status') == 'complete' and summary.get('sources') == sources
+                    and scientific_settings(summary.get('combination_policy')) == scientific_settings(policy)):
+                return output
+            raise ValueError('Existing combined histogram uses different inputs or endpoints: ' + str(output))
+        inputs = [read_json(p) for p in paths]
+        if any(str(p['contract']['year']) != str(year) for p in inputs):
+            raise ValueError('Systematic inputs belong to a different era')
+        payload = combine_saved_payloads(*inputs, policy)
+        write_json(output, payload)
+        write_json(summary_path, dict(status='complete', output=str(output.relative_to(ROOT)),
+            sha256=sha256(output), sources=sources, combination_policy=policy,
+            coverage=payload['coverage'], scope=payload['scope'], completed=time.time()))
     return output
 
 
-if __name__ == '__main__':
-    p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('--campaign', required=True, type=Path)
-    from TROTASR.utils.paths import ERAS, analysis_era
-    p.add_argument('--year', type=analysis_era, required=True, choices=ERAS)
-    p.add_argument('--combine-with', type=Path, help='Complete non-JME campaign for an explicitly approved as-is union')
-    p.add_argument('--config', type=Path, help='Configuration containing the exact systematic_combination policy')
-    p.add_argument('--output', type=Path, help='New combined year histogram file; original results are preserved')
-    a = p.parse_args()
-    if a.combine_with:
-        if not a.config or not a.output:
-            p.error('--combine-with requires --config and --output')
-        print(combine(a.campaign, a.combine_with, a.year, a.output,
-                      read_json(internal_path(a.config))['systematic_combination']))
+def main():
+    from TROTASR.utils.paths import ERAS
+    parser = argparse.ArgumentParser(prog='python -m TROTASR merge', description=__doc__)
+    parser.add_argument('--year', required=True, choices=ERAS)
+    parser.add_argument('--inventory', type=Path, help='Histogram task list with input, output, entries and fingerprint')
+    parser.add_argument('--output', required=True, type=Path)
+    parser.add_argument('--jme', type=Path, help='Complete JME year histogram')
+    parser.add_argument('--nonjme', type=Path, help='Complete stored non-JME year histogram')
+    args = parser.parse_args()
+    if args.jme or args.nonjme:
+        if not args.jme or not args.nonjme or args.inventory:
+            parser.error('--jme and --nonjme are used together, without --inventory')
+        print(combine(args.jme, args.nonjme, args.year, args.output))
     else:
-        if a.config or a.output:
-            p.error('--config and --output are only for explicit combination')
-        campaign = internal_path(a.campaign)
-        from TROTASR.workflows.rare_top_policy import canonical_merge
-        print(canonical_merge(campaign, a.year, merge))
+        if not args.inventory:
+            parser.error('--inventory is required for per-file merging')
+        print(merge(args.inventory, args.year, args.output))
+
+
+if __name__ == '__main__':
+    main()

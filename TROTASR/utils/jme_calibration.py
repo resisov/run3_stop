@@ -37,7 +37,7 @@ def correction_set(year, prefix):
     return correctionlib.CorrectionSet.from_file(str(ROOT/relative))
 
 
-def calibrated_endpoints(chunk, year):
+def calibrated_endpoints(chunk, year, *, nominal_only=False):
     """Evaluate nominal-correlated CMS AK4/AK8 endpoints once per read slice.
 
     No convention ratio to a nearly-zero nominal jet is ever taken here.
@@ -50,7 +50,7 @@ def calibrated_endpoints(chunk, year):
     early = analysis_era(year) in EARLY_ERAS
     jec, jer = TAGS[year]
     arrays = jet_inputs(chunk, early=early)
-    result = {shift: {} for shift in ENDPOINTS}
+    result = {shift: {} for shift in (('nominal',) if nominal_only else ENDPOINTS)}
     for prefix, stored, gen, radius in (('Jet', 'jet', 'GenJet', 'AK4PFPuppi'),
                                        ('FatJet', 'fatjet', 'GenJetAK8', 'AK8PFPuppi')):
         cset = correction_set(year, prefix)
@@ -66,11 +66,14 @@ def calibrated_endpoints(chunk, year):
         inputs['JetPt'] = pt
         resolution = _evaluate_named(cset[f'{jer}_MC_PtResolution_{radius}'], pt, inputs)
         sf = _evaluate_named(cset[f'{jer}_MC_ScaleFactor_{radius}'], pt, inputs)
-        unc = _evaluate_named(cset[f'{jer}_MC_SFUncertainty_{radius}'], pt, inputs)
-        if early:
-            unc = _early_supported_jer_uncertainty(eta, correction, resolution, sf, unc)
+        scales = [('nominal', sf)]
+        if not nominal_only:
+            unc = _evaluate_named(cset[f'{jer}_MC_SFUncertainty_{radius}'], pt, inputs)
+            if early:
+                unc = _early_supported_jer_uncertainty(eta, correction, resolution, sf, unc)
+            scales.extend((('jerUp', sf+unc), ('jerDown', sf-unc)))
         index = prefix+'_genJetIdx' if prefix == 'Jet' else 'FatJet_genJetAK8Idx'
-        for shift, scale in (('nominal', sf), ('jerUp', sf+unc), ('jerDown', sf-unc)):
+        for shift, scale in scales:
             if early:
                 smear = _early_jer_smear(pt, eta, phi, resolution, scale,
                     arrays[index], arrays[gen+'_pt'], arrays[gen+'_eta'], arrays[gen+'_phi'],
@@ -82,14 +85,15 @@ def calibrated_endpoints(chunk, year):
                     np.asarray(arrays['event']), prefix, corrected_mass=mass)
             result[shift][stored+'_corrected_pt'] = pt*smear
             result[shift][stored+'_corrected_mass'] = mass*smear
-        nominal_pt = result['nominal'][stored+'_corrected_pt']
-        inputs['JetPt'] = nominal_pt
-        jes = _evaluate_named(cset[f'{jec}_MC_Total_{radius}'], nominal_pt, inputs)
-        for shift, sign in (('jesTotalUp', 1), ('jesTotalDown', -1)):
-            for field in ('pt', 'mass'):
-                name = stored+'_corrected_'+field
-                result[shift][name] = result['nominal'][name]*(1+sign*jes)
-        for shift in ENDPOINTS:
+        if not nominal_only:
+            nominal_pt = result['nominal'][stored+'_corrected_pt']
+            inputs['JetPt'] = nominal_pt
+            jes = _evaluate_named(cset[f'{jec}_MC_Total_{radius}'], nominal_pt, inputs)
+            for shift, sign in (('jesTotalUp', 1), ('jesTotalDown', -1)):
+                for field in ('pt', 'mass'):
+                    name = stored+'_corrected_'+field
+                    result[shift][name] = result['nominal'][name]*(1+sign*jes)
+        for shift in result:
             for field in ('pt', 'mass'):
                 values = result[shift][stored+'_corrected_'+field]
                 if not np.isfinite(np.asarray(ak.flatten(values))).all():

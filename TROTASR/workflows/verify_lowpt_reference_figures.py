@@ -10,7 +10,6 @@ import hashlib
 import json
 import math
 from pathlib import Path
-import pdfplumber
 if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
@@ -241,6 +240,8 @@ fit-result bins. Missing valid measurements still fail the ordinary comparison.
 
 
 def run(provenance, output):
+    import pdfplumber
+
     source = read_json(internal_path(provenance))
     payloads, calibration_checks = {}, []
     for calibration in source['calibrations']:

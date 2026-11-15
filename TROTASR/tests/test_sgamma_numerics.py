@@ -1,5 +1,5 @@
 import unittest
-from TROTASR.workflows.profile_sgamma import fixed_command
+from TROTASR.workflows.combine_impacts import fixed_command
 
 
 class SgammaNumericsTests(unittest.TestCase):

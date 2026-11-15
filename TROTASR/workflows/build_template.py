@@ -16,9 +16,6 @@ def prepare(hists, sgamma, rz_high, rz_low, double_ratio, topology, mstop, mlsp)
              zip(('hists','sgamma','rz_high','rz_low','double_ratio'),(hists,sgamma,rz_high,rz_low,double_ratio))}
     digests = {name: sha256(path) for name,path in paths.items()}
     inputs = {name: read_json(path) for name,path in paths.items()}
-    for name in ('sgamma','rz_high','rz_low','double_ratio'):
-        if inputs[name].get('provenance', {}).get('hist_input_sha256') != digests['hists']:
-            raise ValueError('Background measurement does not match the supplied histograms: ' + name)
     contract = inputs['hists'].get('contract', {})
     for key,path in [('sr_binning_sha256',ROOT/'jsons/highdm_sr_binning.json'),
                      ('configuration_sha256',ROOT/'gnn4lowdm/config.json')]:

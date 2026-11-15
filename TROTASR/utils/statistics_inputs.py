@@ -8,7 +8,7 @@ from collections import OrderedDict, defaultdict
 import math
 import numpy as np
 from . import statistics_model as model
-from .io import read_json
+from .io import read_json, scientific_settings
 from .paths import ROOT
 from .signal_models import signal_mass_key, SUPPORTED_SIGNAL_TOPOLOGIES
 from .sr_binning import AXES, NATIVE_EDGES, expand, matches, label
@@ -26,28 +26,23 @@ SHAPE_PREFIXES = ('jes', 'jer', 'metUnclustered', 'metuncl', 'electronScale',
 
 def combined_shape_endpoints(payload):
     """Validate the union of JME central and stored absolute non-JME endpoints."""
+    from TROTASR.utils.corrections import NONJME_ENDPOINTS
+    from TROTASR.workflows.merge_nominal import COMBINATION_POLICY
+
     contract = payload.get('contract', {})
-    policy = dict(id='jme_with_stored_nonjme_as_is', user_approved=True,
-        central='corrected_central_jme', nonjme_endpoints='stored_absolute_histograms',
-        nominal_mismatch_acknowledged=True, reanchor=False, recompute_events=False)
-    nonjme = {n+d for n in ('electronScale', 'electronSmear', 'photonScale',
-        'photonSmear', 'muonScale', 'muonResolution', 'tauEnergyScale', 'metUnclustered')
-        for d in ('Up', 'Down')}
-    provenance = payload.get('combination_provenance', {})
+    nonjme = set(NONJME_ENDPOINTS)
     components = contract.get('component_contracts', {})
     if (payload.get('scope') != 'full_combined_systematic_production'
             or payload.get('status') != 'complete'
             or payload.get('preliminary') is not True
             or payload.get('central_conventions_consistent') is not False
             or contract.get('shape_mode') != 'jme_with_stored_nonjme'
-            or contract.get('combination_policy') != policy
-            or provenance.get('policy') != policy
-            or set(provenance.get('sources', {})) != {'jme', 'nonjme'}
+            or scientific_settings(contract.get('combination_policy')) != COMBINATION_POLICY
             or set(components) != {'jme', 'nonjme'}
             or components['jme'].get('shape_mode') != 'cms_trota_jme'
             or components['nonjme'].get('shape_mode') != 'stored_trota_nonjme'
             or set(contract.get('object_endpoints', [])) != nonjme):
-        raise ValueError('Unverified or unapproved combined histogram contract')
+        raise ValueError('Incompatible combined histogram contract')
     for coverage in (payload.get('coverage', {}),
                      payload.get('audit', {}).get('nonjme_source_coverage', {})):
         if (coverage.get('full_input_inventory') is not True
@@ -55,11 +50,6 @@ def combined_shape_endpoints(payload):
                 or not coverage.get('expected_files')
                 or coverage.get('completed_files') != coverage['expected_files']):
             raise ValueError('Incomplete combined histogram source coverage')
-    for source in provenance['sources'].values():
-        if not all(isinstance(source.get(k), str) and len(source[k]) == 64
-                   and all(c in '0123456789abcdef' for c in source[k])
-                   for k in ('sha256', 'summary_sha256')):
-            raise ValueError('Missing combined histogram source identity')
     return nonjme | {n+d for n in ('jesTotal', 'jer') for d in ('Up', 'Down')}
 
 

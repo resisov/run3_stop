@@ -11,7 +11,7 @@ import threading
 import time
 from TROTASR.utils.paths import ROOT, internal_path
 from TROTASR.utils.io import read_json, write_json, sha256
-from TROTASR.workflows.combine_limits import IntegrityCache, runtime, verify_card
+from TROTASR.workflows.combine_limits import runtime, verify_card
 
 SPAWN_LOCK = threading.Lock()
 COMPUTE = re.compile(r'^(python|root|combine|text2workspace|xrdcp|rsync|hadd$|cp$)')
@@ -82,9 +82,10 @@ def record_years(record):
     if years not in (('2024', '2025'), EARLY_ERAS, ERAS):
         raise ValueError('Unexpected statistical target-era group')
     if years == ERAS:
-        from TROTASR.workflows.build_nominal_grid import require_hybrid_policy, require_run3_systematics_policy
-        if not (require_hybrid_policy(record) or require_run3_systematics_policy(record)):
-            raise ValueError('Six-era record must identify its systematic treatment')
+        from TROTASR.workflows.build_nominal_grid import require_run3_systematics_policy
+        if (record.get('scope', 'full_combined_systematic_production') != 'full_combined_systematic_production'
+                or not require_run3_systematics_policy(record)):
+            raise ValueError('Six-era record must identify the adopted Run 3 systematic treatment')
     return years
 
 
@@ -137,20 +138,23 @@ def require_revised_record(record):
     from TROTASR.workflows.build_nominal_grid import require_statistical_revision, scientific_settings
     revised = require_statistical_revision(record.get('statistical_revision'))
     combined = record.get('scope') == 'full_combined_systematic_production'
-    from TROTASR.workflows.build_nominal_grid import HYBRID_SCOPE, require_hybrid_policy
-    hybrid = record.get('scope') == HYBRID_SCOPE
-    if hybrid and not require_hybrid_policy(record):
-        raise ValueError('Missing six-era hybrid policy')
-    combined = combined or hybrid
     if combined and not revised:
         raise ValueError('Combined diagnostics require the adopted CR12 revision')
     if not revised:
         return False
     years = record_years(record)
+    merged = record.get('era_merged') is True
     count = record.get('rate_parameters')
-    if (record.get('bins') != 214 * len(years)
+    # Earlier accepted merged manifests left this generic count set to their
+    # native model. The explicit floating count is the merged-model quantity.
+    source_count = (count == 288 and record.get('source_bins') == 1284
+                    and record.get('source_likelihood_channels') == 48)
+    if (record.get('bins') != (214 if merged else 214 * len(years))
             or not isinstance(count, int) or count <= 0
-            or years == ('2024', '2025') and count != 96
+            or (merged and (len(years) != 6 or (count != 48 and not source_count)
+                            or record.get('likelihood_channels') != 8
+                            or record.get('floating_normalization_parameters') != 48))
+            or (not merged and years == ('2024', '2025') and count != 96)
             or record.get('signal_contamination') is not False
             or record.get('auto_mc_stats') != [10, 1, 1]
             or record.get('sr_data_blinded') is not True
@@ -216,6 +220,29 @@ def verify_revised_card(card, manifest, digest):
             raise ValueError('Missing verified measured background-shape audit')
 
 
+def provisional_cronly_products(output, publication):
+    """Resolve the saved CR-only result without treating an abort as fit success."""
+    if publication.get('status') != 'provisional':
+        return None
+    if (publication.get('kind') != 'cronly'
+            or publication.get('dataset') != 'observed CR-only B-only r0'
+            or publication.get('sr_observed_data_used') is not False
+            or publication.get('complete') is not False
+            or publication.get('fit_recalculation') is not False
+            or publication.get('fit_b_verified') is not True
+            or publication.get('fit_status') != 0
+            or publication.get('covariance_quality', -1) < 2):
+        raise ValueError('Invalid provisional CR-only receipt')
+    output = internal_path(output)
+    products = {}
+    for name in ('payload', 'workspace', 'fit_result', 'projection', 'comparison'):
+        path = internal_path(output/publication[name])
+        if path.parent != output or not path.is_file() or not path.stat().st_size:
+            raise ValueError('Missing current CR-only product: '+name)
+        products[name] = path
+    return products
+
+
 def published_diagnostic(output, manifest_path, kind, model='T2tt', mass='mStop1200_mLSP500'):
     """Reuse the delivered current-model diagnostic, without opening fit ROOTs."""
     path = internal_path(output)/'publication.json'
@@ -225,11 +252,16 @@ def published_diagnostic(output, manifest_path, kind, model='T2tt', mass='mStop1
     manifest = read_json(internal_path(manifest_path))
     point = (manifest['cr_only_card'] if kind == 'cronly' else
              next(p for p in manifest['points'] if (p['model'],p['mass']) == (model,mass)))
+    provisional = provisional_cronly_products(output, publication) if kind == 'cronly' else None
     if (publication.get('kind') != kind or publication.get('canonical_model') != 'era_merged'
             or manifest.get('canonical_model') != 'era_merged'
+            or manifest.get('scope') != 'full_combined_systematic_production'
             or publication.get('current_card_sha256') != point['card_sha256']
-            or publication.get('sr_observed_data_used') is not False
-            or publication.get('complete') is not True):
+            or publication.get('sr_observed_data_used') is not False):
+        if provisional is not None:
+            raise ValueError('Provisional CR-only result does not match the current base grid')
+        return None
+    if provisional is None and publication.get('complete') is not True:
         return None
     if kind == 'impact' and publication.get('benchmark') != model+'_'+mass:
         return None
@@ -243,6 +275,7 @@ def grid_card(manifest_path, kind, model='T2tt', mass='mStop1200_mLSP500'):
     manifest = read_json(manifest_path)
     if manifest.get('era_merged') is True:
         if (manifest.get('status') != 'cards_ready' or manifest.get('sr_data_blinded') is not True
+                or manifest.get('scope') != 'full_combined_systematic_production'
                 or manifest.get('bins') != 214 or manifest.get('likelihood_channels') != 8
                 or manifest.get('floating_normalization_parameters') != 48
                 or tuple(map(str,manifest['years'])) != ('2022','2022EE','2023','2023BPix','2024','2025')
@@ -273,7 +306,7 @@ def grid_card(manifest_path, kind, model='T2tt', mass='mStop1200_mLSP500'):
         bins += len(years) * (merge['bins_per_year'] - 162)
     preserved_cr_only = kind == 'cronly' and cr_only_support_ready(manifest)
     if ((manifest.get('status') != 'cards_ready' and not preserved_cr_only)
-            or manifest.get('scope') not in ('full_nominal_production', 'full_cms_trota_jme_production', 'full_combined_systematic_production', 'full_run3_hybrid_production')
+            or manifest.get('scope') not in ('full_nominal_production', 'full_cms_trota_jme_production', 'full_combined_systematic_production')
             or manifest.get('bins') != bins or manifest.get('th1_channels') != 8 * len(years)
             or not manifest.get('root_integrity_checked')):
         raise ValueError('Diagnostics require the verified full-input current nominal grid')
@@ -294,7 +327,7 @@ def grid_card(manifest_path, kind, model='T2tt', mass='mStop1200_mLSP500'):
     if (counts != expected_counts or counts != manifest['expected_points_by_model']
             or len({(p['model'], p['mass']) for p in manifest['points']}) != sum(expected_counts.values())):
         raise ValueError('Unexpected full signal-grid coverage')
-    digest = IntegrityCache()
+    digest = sha256
     if kind == 'impact':
         if model not in ('T2tt', 'T2bW', 'T2tb') or not re.fullmatch(r'mStop\d+_mLSP\d+', mass):
             raise ValueError('Invalid impact benchmark')

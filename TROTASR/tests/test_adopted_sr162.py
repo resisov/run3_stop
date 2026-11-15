@@ -7,9 +7,13 @@ from TROTASR.utils.sr_binning import expand, project, NATIVE_EDGES
 from TROTASR.utils.plot_adapter import blocks
 
 
+SR_LAYOUT = ROOT/'jsons/highdm_sr_binning.json'
+
+
+@unittest.skipUnless(SR_LAYOUT.is_file(), 'Canonical high-dM SR layout is not installed locally')
 class AdoptedSR162Tests(unittest.TestCase):
     def setUp(self):
-        self.definition = read_json(ROOT / 'highdm_sr_binning.json')
+        self.definition = read_json(SR_LAYOUT)
         self.payload = dict(highdm_sr_source_axes='exact_nb_exact_topology_native_recoil_v2',
                             histograms={'highdm': {'nominal': {'SR': {}}}})
 

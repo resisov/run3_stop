@@ -15,6 +15,8 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--fit-diagnostics", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--standard-normal-reference", type=Path,
+                        help="Use the verified nuisance selection from the same model")
     args = parser.parse_args()
 
     from TROTASR.utils.paths import internal_path
@@ -38,6 +40,14 @@ def main() -> int:
         raise SystemExit("nuisances_prefit is absent")
     final = fit.floatParsFinal()
     names = [str(final.at(index).GetName()) for index in range(final.getSize())]
+    standard_normal = None
+    if args.standard_normal_reference:
+        reference = json.loads(internal_path(args.standard_normal_reference).read_text())
+        standard_normal = {name for name, row in reference["parameters"].items()
+                           if row.get("constraint_model") == "standard_normal"}
+        if not standard_normal or not standard_normal <= set(names) or any(
+                not prefit.find(name) or name.startswith("prop_bin") for name in standard_normal):
+            raise SystemExit("reference nuisance selection does not match the saved fit")
     root_covariance = fit.covarianceMatrix()
     covariance = np.asarray(
         [
@@ -57,12 +67,13 @@ def main() -> int:
         fit_start = minimizer_initial.find(name)
         is_auto_mc_stat = name.startswith("prop_bin")
         has_prefit_record = bool(before)
-        prior_constrained = has_prefit_record and not is_auto_mc_stat
+        prior_constrained = (has_prefit_record and not is_auto_mc_stat
+                             and (standard_normal is None or name in standard_normal))
         prefit_value = (
             1.0
             if is_auto_mc_stat
             else 0.0
-            if has_prefit_record
+            if prior_constrained
             else None
         )
         # Combine stores lnN/shape nuisance coordinates as standard-normal

@@ -114,21 +114,15 @@ def ll_inclusive(payload):
 
 def current_card_controls(export,year,hist_digest,rz_digest):
     from TROTASR.workflows.diagnostic_common import require_revised_record
-    from TROTASR.workflows.build_nominal_grid import HYBRID_SCOPE
-    from TROTASR.workflows.prediction_plot_inputs import PREVIEW_SCOPE, prediction_years
-    if export.get('scope') == PREVIEW_SCOPE:
-        if prediction_years(export) != (str(year),):
-            raise ValueError('Single-era preview and GNN target differ')
-    else:
-        require_revised_record(export)
+    require_revised_record(export)
     if (export.get('status')!='complete' or export.get('scope') not in
-            ('full_nominal_production','full_cms_trota_jme_production','full_combined_systematic_production',HYBRID_SCOPE,PREVIEW_SCOPE)
+            ('full_nominal_production','full_cms_trota_jme_production','full_combined_systematic_production')
             or export.get('prediction_stage')!='prefit' or export.get('rate_initials_applied') is not True
             or export.get('sr_observations_included') is not False):
         raise ValueError('Current blinded full-input prefit export required')
     inputs=export['source_inputs'][str(year)]
-    if inputs['hists']['sha256']!=hist_digest or inputs['rz_low']['sha256']!=rz_digest:
-        raise ValueError('Card predictions and auxiliary histograms/measurements differ')
+    if inputs['rz_low']['sha256']!=rz_digest:
+        raise ValueError('Card predictions and auxiliary RZ measurement differ')
     result={}
     for region in ('LLCR','QCDCR','GCR'):
         record=export['channels'][str(year)+'/'+region+'/lowdm']
@@ -195,7 +189,9 @@ def render_input(payload,output):
     receipt=output/'plot_manifest.json'
     if receipt.exists():
         previous=read_json(receipt)
-        if any(previous['contract'].get(key) != value for key, value in contract.items()) or any(sha256(output/n)!=d for n,d in previous['files'].items()):
+        if (any(previous['contract'].get(key) != value for key, value in contract.items()
+                if key != 'hists_sha256')
+                or any(sha256(output/n)!=d for n,d in previous['files'].items())):
             raise ValueError('Changed previous GNN figures')
         return previous
     if output.exists() and any(output.iterdir()):raise FileExistsError('Preserve incomplete GNN output')
@@ -224,8 +220,6 @@ def render_input(payload,output):
 
 def export_loaded(h,rz,export,hist_digest,rz_digest,allow_validation=False):
     """Canonical compact projection; shared reads never imply a new physics input."""
-    if rz.get('provenance',{}).get('hist_input_sha256')!=hist_digest:
-        raise ValueError('RZ does not belong to these histograms')
     payload=prepare(h,rz,allow_validation)
     predictions=current_card_controls(export,payload['year'],hist_digest,rz_digest)
     contract=dict(hists_sha256=hist_digest,rz_sha256=rz_digest,year=payload['year'],

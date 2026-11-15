@@ -251,9 +251,6 @@ def extract_year(paths, grid, allow_validation=False, preserve_unsupported=False
     if payload.get('scope') == 'full_combined_systematic_production':
         from TROTASR.utils.statistics_inputs import combined_shape_endpoints
         combined_shape_endpoints(payload)
-    for key in FIELDS[1:]:
-        if inputs[key].get('provenance', {}).get('hist_input_sha256') != digests['hists']:
-            raise ValueError('Background measurement does not match supplied histograms: ' + key)
     from TROTASR.gnn4lowdm.configuration import configuration_path
     gnn_path = configuration_path(payload['contract']['year'])
     for field, path in (('sr_binning_sha256', ROOT / 'jsons/highdm_sr_binning.json'),

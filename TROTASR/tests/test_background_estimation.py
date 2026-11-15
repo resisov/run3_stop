@@ -32,18 +32,23 @@ def measurement_fixture():
                 input_metadata={s:dict(process=s,is_data=True) for s in ('JetMET','EGamma','Muon')})
 
 
+def zgamma_policy_fixture():
+    return dict(id='zgamma_2023BPix_measurement_merge_20261022', year='2023BPix',
+                user_approved=True, mode='highdm', original_edges=[250, 300, 350, 400, 500, 1500],
+                measurement_edges=[250, 300, 400, 500, 1500], analysis_bins_unchanged=True,
+                gnn_boundaries_unchanged=True, preserve_other_measurements=True)
+
+
 class BackgroundTests(unittest.TestCase):
     def test_approved_zgamma_merge_preserves_other_results(self):
         from TROTASR.workflows.build_background_estimation import merged_zgamma_measurement
-        from TROTASR.utils.paths import ROOT
-        from TROTASR.utils.io import read_json
         p=measurement_fixture();p['contract']['year']='2023BPix'
         for region in ('DY2E','DY2M'):
             for group in ('Nb1','Nb2'):
                 leaf=p['histograms']['highdm']['nominal'][region][group]['DY']['recoil']
                 leaf['sumw'][2]=-1.
         old=measure(p)['double_ratio'];preserved=copy.deepcopy(old)
-        policy=read_json(ROOT/'jsons/zgamma_2023BPix_20261022_policy.json')
+        policy=zgamma_policy_fixture()
         result=merged_zgamma_measurement(p,old,policy)
         self.assertEqual(old,preserved)
         self.assertEqual(result['status'],'complete')
@@ -54,9 +59,44 @@ class BackgroundTests(unittest.TestCase):
         totals=result['measurement_merge_audit']
         for before,after in zip(totals['input_totals'],totals['merged_totals']):
             for key in before:self.assertAlmostEqual(sum(before[key]),sum(after[key]))
-        for key,value in (('year','2024'),('user_approved',False),('measurement_edges',[250,400,1500])):
+        for key,value in (('year','2024'),('measurement_edges',[250,400,1500]),
+                          ('preserve_other_measurements',False)):
             bad=dict(policy,**{key:value})
             with self.assertRaises(ValueError):merged_zgamma_measurement(p,old,bad)
+        metadata_only=dict(policy,id='receipt label',user_approved=False)
+        self.assertEqual(merged_zgamma_measurement(p,old,metadata_only), result)
+
+    def test_zgamma_recovery_reuses_same_output_without_history(self):
+        from pathlib import Path
+        from tempfile import TemporaryDirectory
+        from TROTASR.utils.io import read_json, write_json, sha256
+        from TROTASR.utils.paths import ROOT
+        from TROTASR.workflows.build_background_estimation import recover_zgamma
+
+        payload = measurement_fixture()
+        payload['contract']['year'] = '2023BPix'
+        for region in ('DY2E', 'DY2M'):
+            for group in ('Nb1', 'Nb2'):
+                payload['histograms']['highdm']['nominal'][region][group]['DY']['recoil']['sumw'][2] = -1.
+        products = measure(payload)
+        with TemporaryDirectory(dir=ROOT) as directory:
+            output = Path(directory)
+            files = {}
+            for name, product in products.items():
+                path = output / (name+'.json.gz')
+                write_json(path, product)
+                files[path.name] = sha256(path)
+            manifest = output / 'measurement_manifest.json'
+            write_json(manifest, dict(status='blocked', provenance=dict(campaign_year='2023BPix'),
+                stages={n:p['status'] for n, p in products.items()}, files=files))
+            self.assertEqual(recover_zgamma(output, payload), 0)
+            self.assertEqual(recover_zgamma(output, payload), 0)
+            self.assertEqual(read_json(manifest)['status'], 'complete')
+            self.assertFalse((output/'history').exists())
+            self.assertFalse((output/'zgamma_recovery.json').exists())
+            for name, digest in files.items():
+                if name != 'double_ratio.json.gz':
+                    self.assertEqual(sha256(output/name), digest)
 
     def test_existing_measurement_equations_and_algebraic_closure(self):
         products = measure(measurement_fixture())

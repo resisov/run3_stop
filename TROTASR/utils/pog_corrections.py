@@ -43,7 +43,7 @@ def get_pu_weight(year, trueint):
         if year == '2025'
         else 'puWeights.json.gz'
     )
-    evaluator = _load_pog(str(resolve_payload('data/PUweight/'+year+'/'+filename)))
+    evaluator = _load_pog(str(resolve_payload('scales/LUM/'+year+'/'+filename)))
     weight = evaluator[correction[year]].evaluate(trueint, 'nominal')
     systup = evaluator[correction[year]].evaluate(trueint, 'up')
     systdown = evaluator[correction[year]].evaluate(trueint, 'down')
@@ -55,7 +55,7 @@ def get_met_xy_correction(year, met_type, isData, met_pt, met_phi, npvGood):
     from .paths import analysis_era
     epoch = analysis_era(year)
     evaluator = _load_pog(str(resolve_payload(
-        f'data/JMESF/{year}/met_xyCorrections_{epoch[:4]}_{epoch}.json.gz')))
+        f'scales/JME/{year}/met_xyCorrections_{epoch[:4]}_{epoch}.json.gz')))
     if isData:
         dtmc = 'DATA'
     else:
@@ -66,7 +66,7 @@ def get_met_xy_correction(year, met_type, isData, met_pt, met_phi, npvGood):
 
 
 def get_jec_correction(year, pt, eta, phi, rho, area, run, isData):
-    evaluator = _load_pog(str(resolve_payload('data/JMESF/'+year+'/jet_jerc.json.gz')))
+    evaluator = _load_pog(str(resolve_payload('scales/JME/'+year+'/jet_jerc.json.gz')))
     counts = ak.num(pt)
     run, _ = ak.broadcast_arrays(run, pt)
     rho, _ = ak.broadcast_arrays(rho, pt)
@@ -183,7 +183,7 @@ def get_jec_correction(year, pt, eta, phi, rho, area, run, isData):
 
 
 def get_jec_uncertainty(year, pt, eta):
-    evaluator = _load_pog(str(resolve_payload('data/JMESF/'+year+'/jet_jerc.json.gz')))
+    evaluator = _load_pog(str(resolve_payload('scales/JME/'+year+'/jet_jerc.json.gz')))
     counts = ak.num(pt)
     pt, eta = ak.flatten(pt), ak.flatten(eta)
     if year == '2022pre':
@@ -204,7 +204,7 @@ def get_jec_uncertainty(year, pt, eta):
 
 
 def get_fjec_correction(year, pt, eta, phi, rho, area, run, isData):
-    evaluator = _load_pog(str(resolve_payload('data/JMESF/'+year+'/fatJet_jerc.json.gz')))
+    evaluator = _load_pog(str(resolve_payload('scales/JME/'+year+'/fatJet_jerc.json.gz')))
     counts = ak.num(pt)
     run, _ = ak.broadcast_arrays(run, pt)
     rho, _ = ak.broadcast_arrays(rho, pt)
@@ -320,7 +320,7 @@ def get_fjec_correction(year, pt, eta, phi, rho, area, run, isData):
 
 
 def get_jer_sf(year, pt, eta):
-    evaluator = _load_pog(str(resolve_payload('data/JMESF/'+year+'/jet_jerc.json.gz')))
+    evaluator = _load_pog(str(resolve_payload('scales/JME/'+year+'/jet_jerc.json.gz')))
     counts = ak.num(pt)
     flatpt, flateta = ak.flatten(pt), ak.flatten(eta)
     sf_nominal = evaluator["Summer24Prompt24_JRV1_MC_ScaleFactor_AK4PFPuppi"].evaluate(flateta, flatpt)
@@ -331,7 +331,7 @@ def get_jer_sf(year, pt, eta):
 
 
 def get_fjer_sf(year, pt, eta):
-    evaluator = _load_pog(str(resolve_payload('data/JMESF/'+year+'/fatJet_jerc.json.gz')))
+    evaluator = _load_pog(str(resolve_payload('scales/JME/'+year+'/fatJet_jerc.json.gz')))
     counts = ak.num(pt)
     flatpt, flateta = ak.flatten(pt), ak.flatten(eta)
     sf_nominal = evaluator["Summer24Prompt24_JRV1_MC_ScaleFactor_AK8PFPuppi"].evaluate(flateta, flatpt)
@@ -342,7 +342,7 @@ def get_fjer_sf(year, pt, eta):
 
 
 def get_mu_highpt_id_sf (year, eta, pt):
-    evaluator = _load_pog(str(resolve_payload('data/MuonSF/'+year+'/muon_Z.json.gz')))
+    evaluator = _load_pog(str(resolve_payload('scales/MUO/'+year+'/muon_Z.json.gz')))
 
     eta = ak.where((eta>2.399), ak.full_like(eta,2.399), eta)
     flateta, counts = ak.flatten(eta), ak.num(eta)
@@ -356,7 +356,7 @@ def get_mu_highpt_id_sf (year, eta, pt):
 
 
 def get_mu_loose_iso_sf (year, eta, pt):
-    evaluator = _load_pog(str(resolve_payload('data/MuonSF/'+year+'/muon_Z.json.gz')))
+    evaluator = _load_pog(str(resolve_payload('scales/MUO/'+year+'/muon_Z.json.gz')))
 
     eta = ak.where((eta>2.399), ak.full_like(eta,2.399), eta)
     eta = ak.where((eta<-2.399), ak.full_like(eta,-2.399), eta)
@@ -371,7 +371,7 @@ def get_mu_loose_iso_sf (year, eta, pt):
 
 
 def get_mu_hlt_sf (year, eta, pt):
-    evaluator = _load_pog(str(resolve_payload('data/MuonSF/'+year+'/muon_Z.json.gz')))
+    evaluator = _load_pog(str(resolve_payload('scales/MUO/'+year+'/muon_Z.json.gz')))
 
     eta = ak.where((eta>2.399), ak.full_like(eta,2.399), eta)
     eta = ak.where((eta < -2.399), ak.full_like(eta, -2.399), eta)
@@ -388,7 +388,7 @@ def get_mu_hlt_sf (year, eta, pt):
 
 
 def get_mu_sf (year, corr, eta, pt):
-    evaluator = _load_pog(str(resolve_payload('data/MuonSF/'+year+'/muon_Z.json.gz')))
+    evaluator = _load_pog(str(resolve_payload('scales/MUO/'+year+'/muon_Z.json.gz')))
 
     eta = ak.where((eta>2.399), ak.full_like(eta,2.399), eta)
     flateta, counts = ak.flatten(eta), ak.num(eta)
@@ -413,7 +413,7 @@ def get_mu_sf (year, corr, eta, pt):
 
 
 def get_mu_loose_id_sf (year, eta, pt):
-    evaluator = _load_pog(str(resolve_payload('data/MuonSF/'+year+'/muon_Z.json.gz')))
+    evaluator = _load_pog(str(resolve_payload('scales/MUO/'+year+'/muon_Z.json.gz')))
 
     eta = ak.where((eta>2.399), ak.full_like(eta,2.399), eta)
     eta = ak.where((eta<-2.399), ak.full_like(eta,-2.399), eta)
@@ -430,7 +430,7 @@ def get_mu_loose_id_sf (year, eta, pt):
 
 
 def get_mu_medium_id_sf (year, eta, pt):
-    evaluator = _load_pog(str(resolve_payload('data/MuonSF/'+year+'/muon_Z.json.gz')))
+    evaluator = _load_pog(str(resolve_payload('scales/MUO/'+year+'/muon_Z.json.gz')))
 
     eta = ak.where((eta>2.399), ak.full_like(eta,2.399), eta)
     eta = ak.where((eta<-2.399), ak.full_like(eta,-2.399), eta)
@@ -447,7 +447,7 @@ def get_mu_medium_id_sf (year, eta, pt):
 
 
 def get_mu_loose_miniiso_sf (year, eta, pt):
-    evaluator = _load_pog(str(resolve_payload('data/MuonSF/'+year+'/muon_Z.json.gz')))
+    evaluator = _load_pog(str(resolve_payload('scales/MUO/'+year+'/muon_Z.json.gz')))
 
     eta = ak.where((eta>2.399), ak.full_like(eta,2.399), eta)
     eta = ak.where((eta<-2.399), ak.full_like(eta,-2.399), eta)
@@ -464,7 +464,7 @@ def get_mu_loose_miniiso_sf (year, eta, pt):
 
 
 def get_mu_medium_miniiso_sf (year, eta, pt):
-    evaluator = _load_pog(str(resolve_payload('data/MuonSF/'+year+'/muon_Z.json.gz')))
+    evaluator = _load_pog(str(resolve_payload('scales/MUO/'+year+'/muon_Z.json.gz')))
 
     eta = ak.where((eta>2.399), ak.full_like(eta,2.399), eta)
     eta = ak.where((eta<-2.399), ak.full_like(eta,-2.399), eta)
@@ -481,7 +481,7 @@ def get_mu_medium_miniiso_sf (year, eta, pt):
 
 
 def get_mu_tight_id_sf (year, eta, pt):
-    evaluator = _load_pog(str(resolve_payload('data/MuonSF/'+year+'/muon_Z.json.gz')))
+    evaluator = _load_pog(str(resolve_payload('scales/MUO/'+year+'/muon_Z.json.gz')))
 
     eta = ak.where((eta>2.399), ak.full_like(eta,2.399), eta)
     flateta, counts = ak.flatten(eta), ak.num(eta)
@@ -495,7 +495,7 @@ def get_mu_tight_id_sf (year, eta, pt):
 
 
 def get_mu_tight_iso_sf (year, eta, pt):
-    evaluator = _load_pog(str(resolve_payload('data/MuonSF/'+year+'/muon_Z.json.gz')))
+    evaluator = _load_pog(str(resolve_payload('scales/MUO/'+year+'/muon_Z.json.gz')))
 
     eta = ak.where((eta>2.399), ak.full_like(eta,2.399), eta)
     flateta, counts = ak.flatten(eta), ak.num(eta)
@@ -509,7 +509,7 @@ def get_mu_tight_iso_sf (year, eta, pt):
 
 
 def get_photon_id_sf(year, wp, eta, pt, phi):
-    evaluator = _load_pog(str(resolve_payload('data/EGammaSF/'+year+'/photon.json.gz')))
+    evaluator = _load_pog(str(resolve_payload('scales/EGM/'+year+'/photon.json.gz')))
     flateta, counts = ak.flatten(eta), ak.num(eta)
     pt  = ak.where((pt<20.),ak.full_like(pt,20.),pt)
     flatpt = ak.flatten(pt)
@@ -542,7 +542,7 @@ def get_photon_id_sf(year, wp, eta, pt, phi):
 
 
 def _get_photon_veto_sf(year, correction, wp, eta, r9, pt=None):
-    evaluator = _load_pog(str(resolve_payload('data/EGammaSF/'+year+'/photon.json.gz')))
+    evaluator = _load_pog(str(resolve_payload('scales/EGM/'+year+'/photon.json.gz')))
     yr = {
         '2022pre': '2022Re-recoBCD',
         '2022post': '2022Re-recoE+PromptFG',
@@ -583,7 +583,7 @@ def get_photon_pixel_veto_sf(year, wp, eta, r9, pt=None):
 
 
 def get_ele_veto_id_sf (year, eta, pt, phi):
-    evaluator = _load_pog(str(resolve_payload('data/EGammaSF/'+year+'/electron.json.gz')))
+    evaluator = _load_pog(str(resolve_payload('scales/EGM/'+year+'/electron.json.gz')))
     pt = ak.where((pt<10.), ak.full_like(pt,10.), pt)
     flatphi, flatpt = ak.flatten(phi), ak.flatten(pt)
     flateta, counts = ak.flatten(eta), ak.num(eta)
@@ -615,7 +615,7 @@ def get_ele_veto_id_sf (year, eta, pt, phi):
 
 
 def get_ele_loose_id_sf (year, eta, pt, phi):
-    evaluator = _load_pog(str(resolve_payload('data/EGammaSF/'+year+'/electron.json.gz')))
+    evaluator = _load_pog(str(resolve_payload('scales/EGM/'+year+'/electron.json.gz')))
     pt = ak.where((pt<10.), ak.full_like(pt,10.), pt)
     flatphi, flatpt = ak.flatten(phi), ak.flatten(pt)
     flateta, counts = ak.flatten(eta), ak.num(eta)
@@ -647,7 +647,7 @@ def get_ele_loose_id_sf (year, eta, pt, phi):
 
 
 def get_ele_medium_id_sf (year, eta, pt, phi):
-    evaluator = _load_pog(str(resolve_payload('data/EGammaSF/'+year+'/electron.json.gz')))
+    evaluator = _load_pog(str(resolve_payload('scales/EGM/'+year+'/electron.json.gz')))
     pt = ak.where((pt<10.), ak.full_like(pt,10.), pt)
     flatphi, flatpt = ak.flatten(phi), ak.flatten(pt)
     flateta, counts = ak.flatten(eta), ak.num(eta)
@@ -679,7 +679,7 @@ def get_ele_medium_id_sf (year, eta, pt, phi):
 
 
 def get_ele_tight_id_sf (year, eta, pt, phi):
-    evaluator = _load_pog(str(resolve_payload('data/EGammaSF/'+year+'/electron.json.gz')))
+    evaluator = _load_pog(str(resolve_payload('scales/EGM/'+year+'/electron.json.gz')))
     pt = ak.where((pt<10.), ak.full_like(pt,10.), pt)
     flatphi, flatpt = ak.flatten(phi), ak.flatten(pt)
     flateta, counts = ak.flatten(eta), ak.num(eta)
@@ -711,7 +711,7 @@ def get_ele_tight_id_sf (year, eta, pt, phi):
 
 
 def get_ele_reco_sf(year, eta, pt, phi):
-    evaluator = _load_pog(str(resolve_payload('data/EGammaSF/'+year+'/electron.json.gz')))["Electron-ID-SF"]
+    evaluator = _load_pog(str(resolve_payload('scales/EGM/'+year+'/electron.json.gz')))["Electron-ID-SF"]
     yr = {
         '2022pre': '2022Re-recoBCD',
         '2022post': '2022Re-recoE+PromptFG',
@@ -753,7 +753,7 @@ def get_ele_hlt_sf (year, eta, pt, phi):
     if year == '2025':
         raise RuntimeError("2025 electron HLT SF is not available")
 
-    evaluator = _load_pog(str(resolve_payload('data/EGammaSF/'+year+'/electronHlt.json.gz')))
+    evaluator = _load_pog(str(resolve_payload('scales/EGM/'+year+'/electronHlt.json.gz')))
     pt = ak.where((pt<25.), ak.full_like(pt,25.), pt)
     flatphi, flatpt = ak.flatten(phi), ak.flatten(pt)
     flateta, counts = ak.flatten(eta), ak.num(eta)
@@ -830,7 +830,7 @@ class BTagCorrector:
         expected = 'particleNet' if year in early else 'UParTAK4'
         if year not in early | {'2024', '2025'} or tagger != expected:
             raise ValueError('B-tag algorithm does not match the analysis era: ' + str((year, tagger)))
-        payload = _load_pog(str(resolve_payload('data/BTVSF/'+year+'/btagging.json.gz')))
+        payload = _load_pog(str(resolve_payload('scales/BTV/'+year+'/btagging.json.gz')))
         self.sf = {'comb': payload[tagger+'_comb'], 'ligh': payload[tagger+'_light']}
 
         files = {
@@ -845,7 +845,7 @@ class BTagCorrector:
             '2024': 'btageff2024.merged',
             '2025': 'btageff2025.merged'
         }
-        filename = 'hists/'+files[year]
+        filename = 'estimations/'+files[year]
         from .io import load_efficiency
         btag_file = load_efficiency(resolve_payload(filename))
         btag = btag_file[tagger][self._mc]

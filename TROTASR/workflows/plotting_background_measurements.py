@@ -6,7 +6,8 @@ if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
 from TROTASR.utils.paths import ROOT, internal_path
-from TROTASR.utils.io import read_json, write_json, sha256
+from TROTASR.utils.io import read_json, write_json, sha256, scientific_settings
+from TROTASR.utils.zgamma_estimation import ZGamma_BPIX_MERGE
 
 PRODUCTS = ('rz_high', 'rz_low', 'sgamma', 'double_ratio')
 GROUPS = {'Nb1', 'Nb2plus'}
@@ -73,9 +74,9 @@ def validate_products(products):
         rows = ratio[mode]['bins']
         edges = RECOIL_EDGES
         if mode == 'highdm' and ratio.get('measurement_bin_policy'):
-            policy = read_json(ROOT/'jsons/zgamma_2023BPix_20261022_policy.json')
-            if (ratio['measurement_bin_policy'] != policy
-                    or str(ratio.get('provenance', {}).get('campaign_year')) != '2023BPix'
+            policy = ZGamma_BPIX_MERGE
+            if (scientific_settings(ratio['measurement_bin_policy']) != policy
+                    or str(ratio.get('provenance', {}).get('campaign_year')) != policy['year']
                     or ratio.get('measurement_merge_audit', {}).get('valid_nonmerged_rows_preserved') is not True
                     or ratio['measurement_merge_audit'].get('lowdm_unchanged') is not True):
                 raise ValueError('Unverified double-ratio measurement-only merge')
@@ -97,12 +98,11 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     for name in ('measurements','output'):
         p.add_argument('--'+name,type=Path,required=True)
-    p.add_argument('--hists',type=Path,required=True)
+    p.add_argument('--hists',type=Path,help='Compatibility option; measurements are the plot inputs')
     p.add_argument('--allow-validation',action='store_true')
     p.add_argument('--validate-only',action='store_true')
     a = p.parse_args()
-    source,hists,output = (internal_path(v) for v in (a.measurements,a.hists,a.output))
-    hist_sha = sha256(hists)
+    source,output = (internal_path(v) for v in (a.measurements,a.output))
     products = {name:read_json(source/(name+'.json.gz')) for name in PRODUCTS}
     boundaries = validate_products(products)
     year = products['rz_high']['provenance']['campaign_year']
@@ -113,11 +113,10 @@ def main():
         raise ValueError('Full production required; validation needs explicit opt-in')
     for product in products.values():
         provenance = product['provenance']
-        if (str(provenance['campaign_year']) != str(year) or provenance['hist_input_sha256']!=hist_sha
-                or internal_path(ROOT/provenance['hist_input'])!=hists or product['scope']!=scope
+        if (str(provenance['campaign_year']) != str(year) or product['scope']!=scope
                 or not product.get('sr_data_blinded')):
-            raise ValueError('Measurement year/source/scope/blinding mismatch')
-    contract = dict(year=str(year),scope=scope,hist_input_sha256=hist_sha,
+            raise ValueError('Measurement year/scope/blinding mismatch')
+    contract = dict(year=str(year),scope=scope,
         measurements={name:sha256(source/(name+'.json.gz')) for name in PRODUCTS})
     manifest_path = output/'plot_manifest.json'
     if manifest_path.exists():

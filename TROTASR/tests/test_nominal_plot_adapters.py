@@ -17,8 +17,11 @@ from TROTASR.workflows.plotting_background_measurements import validate_products
 
 
 def physical_fixture():
+    binning = ROOT / 'jsons/highdm_sr_binning.json'
+    if not binning.is_file():
+        raise unittest.SkipTest('Canonical SR binning payload is not installed locally')
     p = dict(status='complete', scope='synthetic_unit_test', sr_data_blinded=True,
-        contract=dict(year=2024, sr_binning_sha256=sha256(ROOT/'highdm_sr_binning.json'),
+        contract=dict(year=2024, sr_binning_sha256=sha256(binning),
                       configuration_sha256=sha256(ROOT/'gnn4lowdm/config.json')),
         physical_histograms={})
     for mode,specs in (('highdm',HIGHDM_DISTRIBUTION_VARIABLE_SPECS),('lowdm',LOWDM_VARIABLE_SPECS)):
@@ -49,24 +52,41 @@ def rz_fixture(key):
 
 
 class PhysicalPlotAdapterTests(unittest.TestCase):
-    def test_explicit_four_jet_display_only_extends_old_bins_and_restores_map(self):
-        from TROTASR.workflows.plotting_nominal_distributions import assert_four_jet_extension
-        h=physical_fixture()
-        for categories in h['physical_histograms']['highdm']['nominal'].values():
-            for samples in categories.values():
-                for record in samples.values():
-                    for field in ('sumw','sumw2','entries'):record['njet'][field][:3]=[0,0,0]
-        boundary=physical_boundary(h);mapping=deepcopy(renderer.HIGHDM_MULTIPLICITY_PLOT_BINS)
-        with nominal_renderer(2024):old=[r for r in make_records(boundary,['highdm']) if r[3]=='njet']
-        with nominal_renderer(2024,include_four_jet_bin=True):
-            new=[r for r in make_records(boundary,['highdm']) if r[3]=='njet']
-        self.assertEqual(mapping,renderer.HIGHDM_MULTIPLICITY_PLOT_BINS)
-        reference=dict(schema='trotasr_physical_plot_inputs_v1',contract=dict(inputs={},year=2024),records=old)
-        assert_four_jet_extension(reference,new,{},2024)
-        self.assertTrue(all(r[-1]['xlabels']==['4','5','6','7-8',r'$\geq9$'] for r in new))
-        for field in ('data','background','background_stat_unc'):
-            changed=deepcopy(new);changed[0][-1][field][2]+=1
-            with self.assertRaises(AssertionError):assert_four_jet_extension(reference,changed,{},2024)
+    def test_current_four_jet_projection_has_approved_bins_and_restores_renderer(self):
+        raw = {'data_obs': {'nominal': {
+            'sumw': [0, 0, 0, 1, 2, 3, 4, 5, 6, 7],
+            'sumw2': [0, 0, 0, 2, 3, 4, 5, 6, 7, 8],
+            'entries': [0, 0, 0, 3, 4, 5, 6, 7, 8, 9],
+        }}}
+        mapping = renderer.HIGHDM_MULTIPLICITY_PLOT_BINS
+        with patch('TROTASR.workflows.plotting_nominal_distributions.luminosity_fb', return_value=109.82):
+            with nominal_renderer(2024):
+                projected, edges, labels = renderer.rebin_highdm_multiplicity(
+                    raw, 'njet', HIGHDM_DISTRIBUTION_VARIABLE_SPECS['njet']['bins'])
+                self.assertFalse(omitted_physical_cells(raw, 'njet'))
+        self.assertIs(mapping,renderer.HIGHDM_MULTIPLICITY_PLOT_BINS)
+        self.assertEqual(edges,[3.5,4.5,5.5,6.5,7.5,8.5])
+        self.assertEqual(labels,['4','5','6','7-8',r'$\geq9$'])
+        self.assertEqual(projected['data_obs']['nominal'], dict(
+            sumw=[1,2,3,4,18],sumw2=[2,3,4,5,21],entries=[3,4,5,6,24]))
+
+    def test_canonical_compact_plot_reuse_checks_inventory_not_prior_display(self):
+        from TROTASR.workflows import plotting_nominal_distributions as nominal
+        contract = dict(year=2024, include_four_jet_bin=True, reference_input_sha256='retired',
+                        inputs={'hists':'merged','rz_low':'rz'})
+        payload = dict(schema='trotasr_physical_plot_inputs_v1', contract=contract,
+                       records=[('cr_llcr_njet','highdm','LLCR','njet',{}),
+                                ('cr_llcr_met','highdm','LLCR','met',{})])
+        receipt = dict(contract=dict(contract, reference_input_sha256='different'),
+                       files={name + suffix:'intact' for name in ['cr_llcr_njet','cr_llcr_met']
+                              for suffix in ['.pdf','.png']})
+        with patch.object(Path,'exists',return_value=True), patch.object(nominal,'read_json',return_value=receipt), \
+                patch.object(nominal,'sha256',return_value='intact'), patch.object(nominal,'write_json') as save:
+            self.assertIs(nominal.render_input(payload,Path('existing')),receipt)
+            del receipt['files']['cr_llcr_met.pdf']
+            with self.assertRaisesRegex(ValueError,'requested inventory'):
+                nominal.render_input(payload,Path('existing'))
+            save.assert_not_called()
 
     def test_sparse_shapes_keep_migrations_but_weight_only_population_is_rejected(self):
         from TROTASR.workflows.plotting_nominal_distributions import endpoint_container
@@ -174,12 +194,14 @@ class PhysicalPlotAdapterTests(unittest.TestCase):
         self.assertIs(renderer.PLOT_SYSTEMATIC_SOURCES,old)
         self.assertEqual(renderer.LUMINOSITY_FB,lumi)
 
-    def test_four_jet_events_are_flagged_not_silently_lost_or_rebinned(self):
+    def test_unmapped_selected_events_are_flagged_not_silently_lost(self):
         raw={'data_obs':{'nominal':dict(sumw=[0.]*10,sumw2=[0.]*10,entries=[0.]*10)}}
-        for field in ('sumw','sumw2','entries'):raw['data_obs']['nominal'][field][3]=52.
+        for field in ('sumw','sumw2','entries'):raw['data_obs']['nominal'][field][2]=52.
         before=deepcopy(renderer.HIGHDM_MULTIPLICITY_PLOT_BINS)
-        audit=omitted_physical_cells(raw,'njet')
-        self.assertEqual(audit,[dict(sample='data_obs',source_bin_1based=4,interval=[3.5,4.5],
+        with patch('TROTASR.workflows.plotting_nominal_distributions.luminosity_fb', return_value=109.82):
+            with nominal_renderer(2024):
+                audit=omitted_physical_cells(raw,'njet')
+        self.assertEqual(audit,[dict(sample='data_obs',source_bin_1based=3,interval=[2.5,3.5],
                                     sumw=52.,sumw2=52.,entries=52.)])
         self.assertEqual(renderer.HIGHDM_MULTIPLICITY_PLOT_BINS,before)
 
@@ -260,8 +282,9 @@ class MeasurementPlotAdapterTests(unittest.TestCase):
     def test_exact_approved_measurement_merge_only(self):
         p = measurement_fixture()
         ratio = p['double_ratio']
-        from TROTASR.workflows.plotting_background_measurements import ROOT as package_root
-        ratio['measurement_bin_policy'] = read_json(package_root/'jsons/zgamma_2023BPix_20261022_policy.json')
+        from TROTASR.tests.test_background_estimation import zgamma_policy_fixture
+        policy = zgamma_policy_fixture()
+        ratio['measurement_bin_policy'] = deepcopy(policy)
         ratio['provenance'] = dict(campaign_year='2023BPix')
         ratio['measurement_merge_audit'] = dict(valid_nonmerged_rows_preserved=True, lowdm_unchanged=True)
         ratio['highdm']['bins'][1]['high'] = 400.
@@ -270,7 +293,8 @@ class MeasurementPlotAdapterTests(unittest.TestCase):
         self.assertEqual(validate_products(p), [])
         self.assertEqual(p, before)
         ratio['provenance']['campaign_year'] = '2024'
-        with self.assertRaisesRegex(ValueError, 'measurement-only merge'): validate_products(p)
+        with self.assertRaisesRegex(ValueError, 'measurement-only merge'):
+            validate_products(p)
 
     def test_complete_data_not_refitted_or_mutated(self):
         p=measurement_fixture();before=deepcopy(p)

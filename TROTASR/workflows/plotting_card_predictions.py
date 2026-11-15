@@ -14,21 +14,36 @@ from TROTASR.utils.io import read_json,write_json,sha256
 from TROTASR.utils.statistical_templates import json_ready
 from TROTASR.workflows.prediction_plot_inputs import (
     export_grid,combine,flat_blocks,uncertainty_band,LOW_PROCESSES,LOW_SIGNALS,renderer,expected_labels,
-    PREVIEW_SCOPE,ERA_VIEW_SCOPE,prediction_years,export_single_era,select_era)
+    ERA_VIEW_SCOPE,prediction_years,select_era)
 from TROTASR.workflows.plotting_gnn_controls import distribution_blocks
 from TROTASR.workflows.plotting_nominal_distributions import draw_distribution
 from TROTASR.utils.sr_merge import load_merge
 
 
-def cronly_fit_plots(result, output):
+def cronly_fit_plots(result, output, *, refit=None):
     """Compare prefit/postfit CR yields with the adopted stack presentation."""
-    from TROTASR.workflows.prediction_plot_inputs import export_cronly_fit
-    payload = export_cronly_fit(result,output)
+    from TROTASR.workflows.prediction_plot_inputs import export_cronly_fit, cronly_refit_paths
+    payload = export_cronly_fit(result,output,refit=refit)
     luminosity = sum(luminosity_fb(y) for y in payload['years'])
     plots = [renderer.draw_cronly_prefit_postfit(payload,
         output/'cronly_prefit_postfit',luminosity)]
-    files = {p.name:sha256(p) for p in
-        (output/'cronly_prefit_postfit.png',output/'cronly_prefit_postfit.pdf')}
+    artifacts = [output/'cronly_prefit_postfit.png',output/'cronly_prefit_postfit.pdf']
+    if refit:
+        import subprocess
+        extractor = ROOT/'workflows/diagnostic_payload.py'
+        pulls = output/'pulls.json'
+        stem = output/'cronly_nuisance_pulls_ylim6_split2'
+        fit_path, _ = cronly_refit_paths(result, refit)
+        subprocess.run([sys.executable,str(extractor),'--operation','extract_cronly',
+            '--fit-diagnostics',str(fit_path),
+            '--standard-normal-reference',str(result/read_json(result/'publication.json')['payload']),
+            '--output',str(pulls)],check=True)
+        subprocess.run([sys.executable,str(extractor),'--operation','plot_cronly',
+            '--input',str(pulls),'--output-stem',str(stem),'--ylim','6','--parts','2',
+            '--era-label','2022-2025 (13.6 TeV)'],check=True,stdout=subprocess.DEVNULL)
+        artifacts += [stem.with_suffix('.pdf'), stem.with_name(stem.name+'_part1.png'),
+                      stem.with_name(stem.name+'_part2.png')]
+    files = {p.name:sha256(p) for p in artifacts}
     write_json(output/'plot_manifest.json',dict(status='generated_pending_visual_QA',
         plots=plots,files=files,fit=payload['fit'],dataset=payload['dataset'],
         sr_observations_included=False,fit_recalculated=False,
@@ -40,18 +55,17 @@ def cronly_fit_plots(result, output):
 
 def prepare(payload, *, combine_era_sr=False, display_years=None):
     from TROTASR.workflows.diagnostic_common import require_revised_record
-    if payload.get('scope') in (PREVIEW_SCOPE, ERA_VIEW_SCOPE):
+    if payload.get('scope') == ERA_VIEW_SCOPE:
         prediction_years(payload)
     else:
         require_revised_record(payload)
     from TROTASR.workflows.build_nominal_grid import require_run3_systematics_policy
-    hybrid = (payload.get('scope') == 'full_run3_hybrid_production'
-              or payload.get('scope') == 'full_combined_systematic_production'
-              and require_run3_systematics_policy(payload))
-    if hybrid != bool(combine_era_sr):
+    six_era = (payload.get('scope') == 'full_combined_systematic_production'
+               and require_run3_systematics_policy(payload))
+    if six_era != bool(combine_era_sr):
         raise ValueError('Six-era SR display requires explicit --combine-era-sr')
     if (payload.get('schema')!='trotasr_card_prediction_plot_v1' or payload.get('status')!='complete'
-            or payload.get('scope') not in ('full_nominal_production','full_cms_trota_jme_production','full_combined_systematic_production','full_run3_hybrid_production',PREVIEW_SCOPE,ERA_VIEW_SCOPE)
+            or payload.get('scope') not in ('full_nominal_production','full_cms_trota_jme_production','full_combined_systematic_production',ERA_VIEW_SCOPE)
             or payload.get('prediction_stage')!='prefit'
             or payload.get('sr_observations_included') is not False or payload.get('rate_initials_applied') is not True):
         raise ValueError('Only current full-input blinded prefit predictions')
@@ -69,7 +83,7 @@ def prepare(payload, *, combine_era_sr=False, display_years=None):
         if record['labels']!=expected_labels(f'{r}_{m}_c1_{y}', merge):
             raise ValueError('Prediction bins not in the full native order')
     if display_years is not None:
-        if not hybrid or tuple(display_years) not in (('2022','2022EE','2023','2023BPix'),('2024','2025')):
+        if not six_era or tuple(display_years) not in (('2022','2022EE','2023','2023BPix'),('2024','2025')):
             raise ValueError('Only the two approved low-dM era groups are allowed')
         years=tuple(display_years)
         edges=[configuration(y)['sr_binning']['edges_by_category'] for y in years]
@@ -78,9 +92,9 @@ def prepare(payload, *, combine_era_sr=False, display_years=None):
     records={}
     for mode,regions in (('highdm',('SR',)),('lowdm',('SR','LLCR','QCDCR','GCR'))):
         for region in regions:
-            if hybrid and region != 'SR':
+            if six_era and region != 'SR':
                 continue  # This opt-in is not a new combined CR score distribution.
-            if hybrid and display_years is None and mode == 'lowdm':
+            if six_era and display_years is None and mode == 'lowdm':
                 continue  # Never combine early and late GNN boundaries.
             record=combine([payload['channels'][y+'/'+region+'/'+mode] for y in years])
             if len(record['background'])!={'highdm':merge['bins_per_year'] if merge else 162,'lowdm':30 if region=='SR' else 10}[mode]:
@@ -98,10 +112,10 @@ def main():
     inputs=p.add_mutually_exclusive_group(required=True)
     inputs.add_argument('--manifest',type=Path,help='Full verified new card grid; ROOT stays on hep2')
     inputs.add_argument('--input',type=Path,help='Compact export from these verified cards')
-    inputs.add_argument('--preview-config',type=Path,help='Strict one-era nominal prefit preview; no fit/grid claim')
     inputs.add_argument('--cronly-result',type=Path,
         help='Accepted observed CR-only fit; draw prefit/postfit and correlated uncertainty bands, no refit')
-    p.add_argument('--preview-year',choices=('2022','2022EE','2023','2023BPix'))
+    p.add_argument('--cronly-refit',nargs='?',const='fixed',choices=('fixed','matched'),
+        help='Plot the saved, normally terminated CR-only refit, without replacing its provisional figures')
     p.add_argument('--year',choices=('2022','2022EE','2023','2023BPix','2024','2025'),
                    help='Exact one-era view of an existing verified card export; no new fit')
     p.add_argument('--output',required=True,type=Path)
@@ -116,20 +130,18 @@ def main():
     selection.add_argument('--low-sr-only',action='store_true',help='Produce only low-dM SR with unchanged score boundaries')
     selection.add_argument('--cr-only',action='store_true',help='Produce only the three combined CRs with the shared distribution template')
     a=p.parse_args();output=internal_path(a.output)
+    if a.cronly_refit and (not a.cronly_result or a.validate_only or a.export_only):
+        p.error('--cronly-refit requires --cronly-result and a figure destination')
     if a.cronly_result:
-        cronly_fit_plots(internal_path(a.cronly_result),output)
+        cronly_fit_plots(internal_path(a.cronly_result),output,refit=a.cronly_refit)
         return
-    if a.combine_era_sr and (a.year or a.preview_config or not (a.high_sr_only or a.low_sr_only or a.export_only)):
+    if a.combine_era_sr and (a.year or not (a.high_sr_only or a.low_sr_only or a.export_only)):
         p.error('--combine-era-sr requires --high-sr-only, --low-sr-only or --export-only')
     if a.era_group and not (a.combine_era_sr and a.low_sr_only) or a.combine_era_sr and a.low_sr_only and not a.era_group:
         p.error('Combined low-dM requires an explicit --era-group early/late')
-    if a.year and (a.preview_config or not a.sr_only or a.export_only):
+    if a.year and (not a.sr_only or a.export_only):
         p.error('--year requires --manifest/--input and --sr-only')
-    if a.preview_config:
-        if not a.preview_year or not a.sr_only or a.export_only or a.validate_only:
-            p.error('Single-era preview requires --preview-year and --sr-only')
-        payload=export_single_era(a.preview_config,a.preview_year,output.parent/(output.name+'_native'))
-    elif a.manifest:
+    if a.manifest:
         if sys.platform!='linux':
             raise RuntimeError('Native ROOT exports are hep2-only')
         payload=export_grid(internal_path(a.manifest))
@@ -178,7 +190,9 @@ def main():
     receipt=output/'plot_manifest.json'
     if receipt.exists():
         previous=read_json(receipt)
-        if any(previous['contract'].get(key) != value for key, value in contract.items()) or any(sha256(output/n)!=d for n,d in previous['files'].items()):
+        if (any(previous['contract'].get(key) != value for key, value in contract.items()
+                if key != 'distribution_code')
+                or any(sha256(output/n)!=d for n,d in previous['files'].items())):
             raise ValueError('Changed previous card-prediction plots')
         print(previous['status']);return
     if output.exists() and any(output.iterdir()):

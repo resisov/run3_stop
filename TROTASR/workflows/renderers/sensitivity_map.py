@@ -5,7 +5,18 @@ import textwrap
 
 from TROTASR.utils.paths import internal_path
 from TROTASR.utils.io import write_json, sha256
-from TROTASR.workflows.sensitivity_map import LABELS, COMPETING
+
+LABELS = {
+    'mc_statistics': 'MC statistics (signal + background)',
+    'background_transfer': 'Background transfer / nonclosure',
+    'btag': 'b tagging', 'topw_tagging': 'Top / W tagging',
+    'lepton_photon': 'Lepton / photon corrections',
+    'jet_met': 'Jet / MET corrections', 'trigger': 'Trigger',
+    'pileup_lumi': 'Pileup / luminosity', 'signal_theory': 'Signal cross section',
+    'cr_normalizations': 'CR-constrained background normalizations',
+    'all_constrained': 'All constrained nuisances (CR norms free)',
+}
+COMPETING = tuple(key for key in LABELS if key != 'all_constrained')
 
 
 def render(source, grid, output):

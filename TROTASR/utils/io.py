@@ -1,19 +1,51 @@
-"""Atomic compact artifacts, strict provenance, and ROOT-only event inputs."""
+"""Read analysis inputs and write JSON products atomically."""
 from __future__ import annotations
 import gzip
 import hashlib
 import json
 import os
 from pathlib import Path
+from threading import RLock
 from .paths import internal_path, analysis_era, tagging_definition, EARLY_ERAS
 
 
+_DIGESTS = {}
+_DIGEST_LOCK = RLock()
+
+
+def file_identity(path):
+    stat = Path(path).stat()
+    return (stat.st_dev, stat.st_ino, stat.st_size, stat.st_mtime_ns, stat.st_ctime_ns)
+
+
 def sha256(path):
-    h = hashlib.sha256()
-    with internal_path(path).open("rb") as stream:
-        for part in iter(lambda: stream.read(4 * 1024**2), b""):
-            h.update(part)
-    return h.hexdigest()
+    """Hash an input once per process, rereading it only after a file change."""
+    path = internal_path(path)
+    with _DIGEST_LOCK:
+        identity = file_identity(path)
+        cached = _DIGESTS.get(path)
+        if cached is not None and cached[0] == identity:
+            return cached[1]
+        digest = hashlib.sha256()
+        with path.open("rb") as stream:
+            for part in iter(lambda: stream.read(4 * 1024**2), b""):
+                digest.update(part)
+        if file_identity(path) != identity:
+            raise RuntimeError("Input changed while reading: " + str(path))
+        value = digest.hexdigest()
+        _DIGESTS[path] = identity, value
+        return value
+
+
+def scientific_settings(value):
+    """Compare scientific inputs without receipt labels or execution settings."""
+    metadata = {'id', 'user_approved', 'approved_date', 'adopted', 'source_updated',
+                'code', 'runner_sha256', 'merge_code_sha256', 'execution'}
+    if isinstance(value, dict):
+        return {key: scientific_settings(item) for key, item in value.items() if key not in metadata}
+    if isinstance(value, list):
+        return [scientific_settings(item) for item in value]
+    return value
 
 
 def read_json(path):

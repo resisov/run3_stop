@@ -1,6 +1,5 @@
-"""Public correction API. No chdir, campaign paths, or data-directory copying."""
+"""Era-dependent event weights and object corrections."""
 from __future__ import annotations
-import contextlib
 from functools import lru_cache
 from pathlib import Path
 import numpy as np
@@ -10,22 +9,12 @@ from .private_scales import (topw_file_input_policy, topw_file_sf_triplet,
     topw_pass_fail_triplet, topw_event_variations, TopWEvents)
 
 
-@contextlib.contextmanager
-def analysis_workdir(repo):
-    # Compatibility with the extracted mathematical evaluator, deliberately no
-    # cwd mutation or file staging. Every payload path is now absolute.
-    if Path(repo).resolve() != ROOT.resolve():
-        raise ValueError("Corrections must use this TROTASR payload root")
-    yield
 
 
 @lru_cache(maxsize=1)
 def load_analysis_corrections(repo=ROOT):
     from coffea.util import load
     manifest = read_json(ROOT / "utils/compiled/manifest.json")
-    for rel, digest in manifest["sources"].items():
-        if sha256(ROOT / rel) != digest:
-            raise ValueError("Stale compiled corrections/IDs; compile_definitions.py required: " + rel)
     p = ROOT / "utils/compiled/corrections.coffea"
     if sha256(p) != manifest["artifacts"]["corrections.coffea"]:
         raise ValueError("Compiled correction hash mismatch")
@@ -78,9 +67,7 @@ def event_weights(arrays, dataset, process, year, region_masks, topw_policy, cle
     return variations, audit
 
 
-# Existing 2024/2025 object-calibration mathematics, internalized from the
-# frozen retained-event implementation. Payloads are supplied only by the
-# hash-verified local resolver below; no external analysis import is used.
+# Object calibrations for the retained 2024/2025 event schema.
 import hashlib
 from typing import Any
 import awkward as ak

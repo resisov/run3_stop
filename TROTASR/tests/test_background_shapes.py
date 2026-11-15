@@ -1,15 +1,9 @@
 """The 2026-09-29 adopted representation change; no physics toy fit claims."""
 import copy
-import tempfile
 import unittest
-from pathlib import Path
-from unittest.mock import patch
 import numpy as np
-from TROTASR.utils.io import read_json, write_json, sha256
-from TROTASR.utils.paths import ROOT
 from TROTASR.utils.statistical_templates import card_text
 from TROTASR.workflows.build_nominal_grid import background_error_shapes, background_shape_names
-from TROTASR.validation.background_shapes_20260929.builder_candidate import audit_cached_inputs
 
 
 POLICY = dict(id='jme_background_shapes_20260929', mode='shape',
@@ -103,35 +97,6 @@ class BackgroundShapes(unittest.TestCase):
             scaled_clipped_projected = np.maximum(signed*f,0).reshape(2,2).sum(axis=1)
             np.testing.assert_allclose(projected_then_scaled, scaled_clipped_projected)
         self.assertNotEqual(max(sum(signed[:2]),0), sum(np.maximum(signed[:2],0)))
-
-    def test_cache_reuse_strict_hashes_and_extraction_contract(self):
-        with tempfile.TemporaryDirectory(dir=ROOT/'results') as temp:
-            base = Path(temp); source = base/'old'; output = base/'new'
-            source.mkdir(); (source/'inputs').mkdir()
-            prior = base/'prior.json'; write_json(prior, dict(years={'2024':{}}, physics='fixed'))
-            builder = base/'builder.py'; builder.write_text('# prior snapshot\n')
-            old = dict(config_sha256=sha256(prior), code={'workflows/build_nominal_grid.py':sha256(builder), 'extractor':'abc'}, inputs={'x':'hash'}, validate_only=False)
-            write_json(source/'contract.json', old)
-            hashes={}
-            for y in ('2024','2025'):
-                p = source/'inputs'/(y+'.json.gz'); write_json(p, dict(year=y)); hashes[y]=sha256(p)
-                write_json(p.with_suffix('.receipt.json'), dict(contract=old,sha256=hashes[y]))
-            reuse=dict(source_output=str(source.relative_to(ROOT)),contract_sha256=sha256(source/'contract.json'),
-                prior_config=str(prior.relative_to(ROOT)),prior_builder=str(builder.relative_to(ROOT)),cache_sha256=hashes)
-            config=dict(years={'2024':{}},physics='fixed',reused_input_cache=reuse,background_estimation_uncertainties=POLICY)
-            contract=copy.deepcopy(old); contract['code']['workflows/build_nominal_grid.py']='new'; contract['config_sha256']='new'
-            result=audit_cached_inputs(output,contract,config)
-            self.assertEqual(result['source'],source)
-            for field in ('inputs','code','config','cache','source'):
-                c=copy.deepcopy(contract); cfg=copy.deepcopy(config); out=output
-                if field=='inputs': c['inputs']['x']='changed'
-                if field=='code': c['code']['extractor']='changed'
-                if field=='config': cfg['physics']='changed'
-                if field=='cache': cfg['reused_input_cache']['cache_sha256']['2024']='wrong'
-                if field=='source': out=source
-                with self.subTest(field=field),self.assertRaises(ValueError): audit_cached_inputs(out,c,cfg)
-            self.assertEqual(read_json(source/'contract.json'),old)
-
 
 if __name__ == '__main__':
     unittest.main()

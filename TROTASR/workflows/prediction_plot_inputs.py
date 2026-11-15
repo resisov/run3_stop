@@ -14,7 +14,7 @@ from TROTASR.utils.io import read_json, sha256
 from TROTASR.utils.sr_binning import expand, label
 from TROTASR.utils.plot_adapter import renderer
 from TROTASR.utils.statistical_templates import json_ready
-from TROTASR.workflows.diagnostic_common import grid_card
+from TROTASR.workflows.diagnostic_common import grid_card, provisional_cronly_products
 
 DISPLAY = {'Top':'Top', 'WJet':'W -> lv', 'ZJet':'Z -> vv', 'QCD':'QCD Multijet',
            'PhotonJet':'Photon+jet', 'DYJet':'DY', 'VV':'VV+VVV'}
@@ -22,11 +22,17 @@ LOW_PROCESSES = {'VV':'VV', 'Top':'Top', 'DYJet':'DY', 'PhotonJet':'Photon',
                  'WJet':'W', 'ZJet':'Zinv', 'QCD':'QCD'}
 LOW_SIGNALS = ('mStop800_mLSP650', 'mStop1000_mLSP850')
 
-PREVIEW_SCOPE = 'single_era_nominal_prefit_preview'
 ERA_VIEW_SCOPE = 'single_era_card_prefit_view'
 
 
-def export_cronly_fit(result, output):
+def cronly_refit_paths(result, variant):
+    if variant not in ('fixed', 'matched'):
+        raise ValueError('Unknown saved CR-only refit')
+    return (result/f'fitDiagnostics_cronly_refit_{variant}.root',
+            result/'commands'/f'cronly_refit_{variant}.json')
+
+
+def export_cronly_fit(result, output, *, refit=None):
     """Project the accepted CR-only RooFit model without fitting or rebuilding.
 
     Evaluate the existing CMSHistErrorPropagator totals and official process
@@ -41,14 +47,60 @@ def export_cronly_fit(result, output):
     from TROTASR.utils.era_merge import CHANNEL_BINS
     result, output = internal_path(result), internal_path(output)
     published = read_json(result/'publication.json')
-    if (published.get('kind') != 'cronly' or published.get('complete') is not True
-            or published.get('sr_observed_data_used') is not False
-            or published.get('dataset') != 'observed CR-only B-only r0'):
-        raise ValueError('Accepted observed CR-only result required')
+    products = provisional_cronly_products(result, published)
+    if products is not None and not refit:
+        with (result/'controller.lock').open('rb') as lock:
+            fcntl.flock(lock, fcntl.LOCK_SH|fcntl.LOCK_NB)
+            payload = read_json(products['projection'])
+            channels = payload.get('channels', {})
+            if (payload.get('schema') != 'trotasr_cronly_prefit_postfit_v1'
+                    or payload.get('sr_observations_included') is not False
+                    or payload.get('fit_recalculated') is not False
+                    or payload.get('fit', {}).get('covariance_quality') != 3
+                    or payload.get('fit', {}).get('process_exit_code') != published['process_exit_code']
+                    or tuple(payload.get('years', ())) != ERAS
+                    or set(channels) != {r+'_'+m+'_c1' for r in ('LLCR','QCDCR','GCR')
+                                         for m in ('highdm','lowdm')}
+                    or sum(len(row['data']) for row in channels.values()) != 66):
+                raise ValueError('Invalid provisional CR-only projection')
+            cached = output/'prediction_payload.json'
+            if cached.is_file():
+                if read_json(cached) != payload:
+                    raise ValueError('Divergent CR projection at output path')
+            else:
+                write_json(cached, payload)
+            return payload
     card = result.parent/'grid/datacards/datacard_cronly.txt'
-    workspace, fit_path = result/'workspace.root', result/'fitDiagnostics_cronly.root'
-    identity = {name:dict(size=p.stat().st_size,mtime_ns=p.stat().st_mtime_ns)
-                for name,p in (('workspace',workspace),('fit',fit_path),('card',card))}
+    if refit:
+        if products is None or output == result.parent/'plots/cronly':
+            raise ValueError('Refit plots require the current workspace and a separate figure destination')
+        fit_path, receipt_path = cronly_refit_paths(result, refit)
+        receipt = read_json(receipt_path)
+        workspace = products['workspace']
+        if (receipt.get('status') != 'complete' or receipt.get('exit_code') != 0
+                or receipt.get('fit_status') != 0 or receipt.get('signal_strength') != 0
+                or receipt.get('sr_observed_data_used') is not False
+                or not receipt.get('nll_cache_recreated') or str(workspace) not in receipt['command']):
+            raise ValueError('Normally terminated CR-only refit required')
+        if refit == 'matched' and (receipt.get('matched_initialization') is not True
+                or receipt.get('covariance_quality') != 3 or receipt.get('float_parameters') != 305
+                or receipt.get('invalid_nll') != 0
+                or receipt.get('fit_steps') != {'MINIMIZE':0,'HESSE':0}):
+            raise ValueError('Verified matched-initialization covQual=3 refit required')
+        prefit_source = read_json(products['projection'])
+        if (prefit_source.get('schema') != 'trotasr_cronly_prefit_postfit_v1'
+                or prefit_source.get('sr_observations_included') is not False
+                or tuple(prefit_source.get('years', ())) != ERAS):
+            raise ValueError('Missing approved prefit projection')
+        sources = (('workspace',workspace),('fit',fit_path),('prefit',products['projection']))
+    else:
+        if (published.get('kind') != 'cronly' or published.get('complete') is not True
+                or published.get('sr_observed_data_used') is not False
+                or published.get('dataset') != 'observed CR-only B-only r0'):
+            raise ValueError('Accepted observed CR-only result required')
+        workspace, fit_path = result/'workspace.root', result/'fitDiagnostics_cronly.root'
+        sources = (('workspace',workspace),('fit',fit_path),('card',card))
+    identity = {name:dict(size=p.stat().st_size,mtime_ns=p.stat().st_mtime_ns) for name,p in sources}
     payload_path = output/'prediction_payload.json'
     if payload_path.is_file():
         saved = read_json(payload_path)
@@ -61,20 +113,33 @@ def export_cronly_fit(result, output):
     with (result/'controller.lock').open('a') as owner, (output/'plot.lock').open('a') as lock:
         fcntl.flock(owner,fcntl.LOCK_SH|fcntl.LOCK_NB)
         fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
-        files = [root.TFile.Open(str(p)) for p in
-                 (workspace,fit_path,card.parent/'era_merged_data_obs.root')]
+        root_paths = (workspace,fit_path) if refit else (workspace,fit_path,card.parent/'era_merged_data_obs.root')
+        files = [root.TFile.Open(str(p),'READ') for p in root_paths]
         try:
             w, fit = files[0].Get('w'), files[1].Get('fit_b')
             if not fit or int(fit.status()) != 0 or not math.isfinite(float(fit.edm())):
                 raise ValueError('Missing successful saved CR fit')
             fit_quality = dict(status=int(fit.status()),covariance_quality=int(fit.covQual()),
                                edm=float(fit.edm()),global_covariance_accepted=False)
+            if refit:
+                if (files[1].TestBit(root.TFile.kRecovered) or fit.covQual() < 2
+                        or fit.covQual() != receipt['covariance_quality']):
+                    raise ValueError('Refit ROOT does not match its receipt')
+                fit_quality['process_exit_code'] = receipt['exit_code']
+                fit_quality['source_fit'] = fit_path.name
+                fit_quality['source_receipt'] = receipt_path.name
             channels = [r+'_'+m+'_c1' for m in ('highdm','lowdm')
                         for r in ('LLCR','QCDCR','GCR')]
             category = w.cat('CMS_channel')
             if {str(c.first) for c in category} != set(channels):
                 raise ValueError('Only the six observed CR channels may be projected')
             x = w.var('CMS_th1x')
+            modified_channel = 'GCR_lowdm_c1'
+            modified = w.pdf('qgnn_cr_native_plus_delta') if refit else None
+            if refit and (not modified or modified.funcList().getSize() != 6
+                    or any(modified.funcList().at(i+1).GetName() != f'qgnn_basis{i}' for i in range(5))):
+                raise ValueError('Missing adopted Photon CR GNN terms')
+            delta_terms = [(modified.funcList().at(i),modified.coefList().at(i)) for i in range(1,6)] if refit else []
             components, records, slices = {}, {}, {}
             offset = 0
             for channel in channels:
@@ -87,17 +152,23 @@ def export_cronly_fit(result, output):
                 if len(labels) != len(coefs) or any(p.split('_',1)[0] not in DISPLAY for p in labels):
                     raise ValueError('Unclassified native CR process')
                 components[channel] = (prop,wrappers,coefs,labels)
-                data = files[2].Get(channel+'/data_obs')
-                if not data or int(data.GetNbinsX()) != n:
-                    raise ValueError('Changed approved CR observation bins')
-                records[channel] = dict(
-                    labels=[str(data.GetXaxis().GetBinLabel(i)) for i in range(1,n+1)],
-                    data=[float(data.GetBinContent(i)) for i in range(1,n+1)])
+                if refit:
+                    row = prefit_source['channels'][channel]
+                    if len(row['data']) != n:
+                        raise ValueError('Changed approved CR observation bins')
+                    records[channel] = {key:row[key] for key in ('labels','data','prefit')}
+                else:
+                    data = files[2].Get(channel+'/data_obs')
+                    if not data or int(data.GetNbinsX()) != n:
+                        raise ValueError('Changed approved CR observation bins')
+                    records[channel] = dict(
+                        labels=[str(data.GetXaxis().GetBinLabel(i)) for i in range(1,n+1)],
+                        data=[float(data.GetBinContent(i)) for i in range(1,n+1)])
                 slices[channel] = slice(offset,offset+n);offset += n
             def totals():
                 values = []
                 for channel in channels:
-                    prop = components[channel][0]
+                    prop = modified if refit and channel == modified_channel else components[channel][0]
                     for i in range(CHANNEL_BINS[channel]):
                         x.setVal(i+.5);values.append(float(prop.getVal()))
                 return np.asarray(values)
@@ -113,15 +184,18 @@ def export_cronly_fit(result, output):
                         x.setVal(i+.5)
                         for wrapper,coef,label in zip(wrappers,coefs,labels):
                             groups[DISPLAY[label.split('_',1)[0]]][i] += float(wrapper.getVal()*coef.getVal())
+                        if refit and channel == modified_channel:
+                            groups[DISPLAY['PhotonJet']][i] += sum(f.getVal()*c.getVal() for f,c in delta_terms)
                     if not np.allclose(sum(groups.values()),total[slices[channel]],rtol=2e-9,atol=1e-6):
                         raise ValueError('CR process wrappers do not sum to the native total')
                     records[channel][stage] = dict(groups={k:v.tolist() for k,v in groups.items()},
                                                   background=total[slices[channel]].tolist())
                 return total
-            central('prefit')
-            prior = list(files[1].Get('nuisances_prefit_res').floatParsFinal())
+            if not refit:
+                central('prefit')
+            prior = [] if refit else list(files[1].Get('nuisances_prefit_res').floatParsFinal())
             variance = np.zeros(offset)
-            prior_counts = dict(gaussian=0,poisson=0)
+            prior_counts = prefit_source['prior_nuisances'] if refit else dict(gaussian=0,poisson=0)
             for index,p in enumerate(prior):
                 v = w.var(p.GetName());nominal = float(v.getVal())
                 if v.hasError() and v.getError() > 0:
@@ -140,16 +214,27 @@ def export_cronly_fit(result, output):
                 if (index+1)%64 == 0:
                     print('CR prefit nuisance propagation',index+1,'/',len(prior),flush=True)
             prefit_error = np.sqrt(variance)
+            if refit:
+                w.var('r').setVal(0)
             for p in fit.floatParsFinal():
                 w.var(p.GetName()).setVal(p.getVal())
             central('postfit')
             root.RooRandom.randomGenerator().SetSeed(12345)
             randomized = list(fit.randomizePars())
             targets = [w.var(p.GetName()) for p in randomized]
+            limits = [(v.getMin(),v.getMax()) for v in targets] if refit else []
+            clipped = 0
             samples = np.empty((500,offset))
             for index in range(500):
                 fit.randomizePars()
-                for v,p in zip(targets,randomized):v.setVal(p.getVal())
+                for j,(v,p) in enumerate(zip(targets,randomized)):
+                    value = p.getVal()
+                    if refit:
+                        low, high = limits[j]
+                        bounded = min(high,max(low,value))
+                        clipped += bounded != value
+                        value = bounded
+                    v.setVal(value)
                 samples[index] = totals()
                 if (index+1)%100 == 0:
                     print('CR postfit correlated covariance samples',index+1,'/ 500',flush=True)
@@ -157,7 +242,8 @@ def export_cronly_fit(result, output):
                 raise ValueError('Nonfinite CR covariance propagation')
             postfit_error = samples.std(axis=0,ddof=0)
             for channel in channels:
-                records[channel]['prefit']['background_unc'] = prefit_error[slices[channel]].tolist()
+                if not refit:
+                    records[channel]['prefit']['background_unc'] = prefit_error[slices[channel]].tolist()
                 records[channel]['postfit']['background_unc'] = postfit_error[slices[channel]].tolist()
             payload = dict(schema='trotasr_cronly_prefit_postfit_v1',status='complete',
                 dataset=published['dataset'],canonical_model='era_merged',years=list(ERAS),
@@ -169,6 +255,11 @@ def export_cronly_fit(result, output):
                 prior_nuisances=prior_counts,covariance_samples=500,covariance_seed=12345,
                 projection='native CMSHistErrorPropagator and CMSHistFuncWrapper',
                 projection_seconds=time.time()-started)
+            if refit:
+                payload['projection'] += ' with the adopted Photon CR GNN terms'
+                payload['uncertainty_method']['prefit'] = 'reused approved prefit, same model'
+                payload['uncertainty_method']['postfit'] += '; workspace-bound projection'
+                payload['clipped_parameter_values'] = clipped
             write_json(payload_path,payload)
             return payload
         finally:
@@ -207,9 +298,10 @@ def select_era(payload, year):
 
 
 def prediction_years(payload):
-    """One-era previews are plot-only, never accepted by the fit-grid reader."""
+    """A single-era display comes only from an accepted card result."""
+    from TROTASR.workflows.diagnostic_common import require_revised_record, record_years
+
     if payload.get('scope') == ERA_VIEW_SCOPE:
-        from TROTASR.workflows.diagnostic_common import require_revised_record, record_years
         view = payload.get('single_era_view', {})
         parent = view.get('source_model', {})
         if not require_revised_record(parent):
@@ -229,139 +321,9 @@ def prediction_years(payload):
                 or payload.get('sr_data_blinded') is not True):
             raise ValueError('Invalid exact single-era card view')
         return years
-    if payload.get('scope') != PREVIEW_SCOPE:
-        if 'single_era_preview' in payload or 'single_era_view' in payload:
-            raise ValueError('Preview cannot be relabeled as a combined result')
-        from TROTASR.workflows.diagnostic_common import record_years
-        return record_years(payload)
-    from TROTASR.utils.paths import EARLY_ERAS
-    from TROTASR.workflows.build_nominal_grid import CR12_POLICY
-    years = tuple(payload.get('years', ()))
-    if (len(years) != 1 or years[0] not in EARLY_ERAS
-            or payload.get('single_era_preview') != dict(plot_only=True, fit_ready=False,
-                source_scope='full_nominal_production')
-            or payload.get('statistical_revision') != CR12_POLICY
-            or payload.get('bins') != 214 or payload.get('th1_channels') != 8
-            or payload.get('sr_data_blinded') is not True
-            or payload.get('sr_observations_included') is not False
-            or payload.get('prediction_stage') != 'prefit'
-            or payload.get('signal_contamination') is not False
-            or payload.get('auto_mc_stats') != [10, 1, 1]
-            or payload.get('full_workflow_complete') is not False
-            or payload.get('background_estimation_uncertainties') != dict(
-                id='jme_background_shapes_20260929', mode='shape',
-                auto_mc_stats=[10, 1, 1], user_approved=True)):
-        raise ValueError('Invalid single-era blinded nominal preview contract')
-    return years
-
-
-def export_single_era(config_path, year, output):
-    """Exact existing statistical kernels and native TH1s, with no fit/grid claim.
-
-    This does not introduce missing eras, alter SR/CR definitions, or read SR
-    observations. Only the four original overlay points and the projection
-    validation benchmark are extracted. The full production chain is untouched.
-    """
-    import sys
-    import fcntl
-    import ROOT as pyroot
-    import uproot
-    from TROTASR.utils.paths import EARLY_ERAS
-    from TROTASR.utils.io import write_json
-    from TROTASR.workflows.signal_grid_inputs import extract_year
-    from TROTASR.workflows.build_nominal_grid import (
-        CODE, CR12_POLICY, combine_cached, background_error_shapes, card_text,
-        point_signals, put_signals, template_name, write_templates, verify_templates)
-    from TROTASR.utils.sr_merge import load_merge
-    config_path, output = internal_path(config_path), internal_path(output)
-    config = read_json(config_path)
-    if (sys.platform != 'linux' or year not in EARLY_ERAS
-            or config.get('statistical_revision') != CR12_POLICY
-            or config.get('systematic_evaluation_deferred') is not True
-            or config.get('luminosity_uncertainties') != {}
-            or config.get('fit_campaign') != 'early_run3_nominal_first'):
-        raise ValueError('Only explicit early-era nominal-first production preview')
-    paths = config['years'][year]
-    contract = dict(config_sha256=sha256(config_path), year=year,
-        inputs={k: dict(path=v, sha256=sha256(internal_path(v))) for k, v in paths.items()},
-        code={p: sha256(ROOT/p) for p in (*CODE, 'workflows/prediction_plot_inputs.py')})
-    output.mkdir(parents=True, exist_ok=True)
-    with (output/'preview.lock').open('a') as lock:
-        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        receipt_path = output/'preview_manifest.json'
-        if receipt_path.exists():
-            previous = read_json(receipt_path)
-            if (previous['contract'] != contract or
-                    any(sha256(output/n) != h for n, h in previous['files'].items())):
-                raise ValueError('Changed single-era preview inputs/products')
-            return read_json(output/'prediction_payload.json')
-        if any(p.name != 'preview.lock' for p in output.iterdir()):
-            raise FileExistsError('Retain incomplete native preview for diagnosis')
-        required = [('T2tt', s['key']) for s in renderer.SIGNAL_OVERLAYS] + [('T2bW', m) for m in LOW_SIGNALS]
-        grid = dict(models={'T2tt': [m for model,m in required if model=='T2tt'] + ['mStop1200_mLSP500'],
-                            'T2bW': list(LOW_SIGNALS), 'T2tb': []})
-        cache = extract_year(paths, grid, preserve_unsupported=True)
-        if cache['year'] != year or cache['scope'] != 'full_nominal_production':
-            raise ValueError('Wrong era or scope in full-input histograms')
-        issues = []
-        channels, background, clipping, sources = combine_cached({year: cache},
-            sr_merge=config['sr_merge'], fit_issues=issues, statistical_revision=CR12_POLICY)
-        background, shape_audit = background_error_shapes(background, config['background_estimation_uncertainties'])
-        text = card_text(channels, background, statistical_revision=CR12_POLICY, luminosity_uncertainties={})
-        card = parse_card(text)
-        (output/'preview_background_card.txt').write_text(text)
-        write_templates(output, channels, background)
-        verify_templates(output, channels, background)
-        filenames = sorted({template_name(c) for c in channels})
-        files = {n: pyroot.TFile(str(output/n), 'UPDATE') for n in filenames}
-        expected_signals = {}
-        try:
-            for model, mass in required:
-                signals, signal_issues, signal_clipping = point_signals(
-                    channels, sources, {year: cache}, model, mass, keep_empty=True)
-                issues.extend(signal_issues); clipping.extend(signal_clipping)
-                put_signals(files, channels, signals, 'signal_'+model+'_'+mass)
-                expected_signals[model,mass] = signals
-        finally:
-            for root in files.values(): root.Close()
-        merge = load_merge(config['sr_merge'])
-        result = {}
-        for mode, regions in (('highdm', ('SR',)), ('lowdm', ('SR','LLCR','QCDCR','GCR'))):
-            for region in regions:
-                channel = f'{region}_{mode}_c1_{year}'
-                labels = expected_labels(channel, merge)
-                if labels != [b['name'] for b in channels[channel]]:
-                    raise ValueError('Preview native bin order changed')
-                with uproot.open(output/template_name(channel), object_cache=None, array_cache=None) as root:
-                    directory = root[channel]
-                    record = channel_prediction(card, channel, directory, labels, (.01, 5))
-                    if region == 'SR':
-                        for model, mass in required:
-                            if (model == 'T2tt') != (mode == 'highdm'): continue
-                            values, variance = read_th1(directory, 'signal_'+model+'_'+mass, labels)
-                            expected = expected_signals[model,mass][channel,'signal']
-                            np.testing.assert_allclose(values, expected['nominal'], rtol=1e-12, atol=1e-12)
-                            np.testing.assert_allclose(variance, expected['sumw2'], rtol=1e-12, atol=1e-12)
-                            record['signals'][mass] = values
-                    result[year+'/'+region+'/'+mode] = record
-        payload = dict(schema='trotasr_card_prediction_plot_v1', status='complete', scope=PREVIEW_SCOPE,
-            years=[year], single_era_preview=dict(plot_only=True, fit_ready=False, source_scope=cache['scope']),
-            prediction_stage='prefit', sr_observations_included=False, sr_data_blinded=True,
-            rate_initials_applied=True, full_workflow_complete=False, signal_contamination=False,
-            channels=json_ready(result), source_inputs={year: cache['inputs']}, provenance=contract,
-            bins=214, th1_channels=8, auto_mc_stats=[10,1,1], statistical_revision=CR12_POLICY,
-            background_estimation_uncertainties=config['background_estimation_uncertainties'],
-            sr_merge=config['sr_merge'], sr_binning_sha256=sha256(ROOT/'jsons/highdm_sr_binning.json'),
-            gnn_sha256=sha256(configuration_path(year)), fit_support_issues=issues,
-            definition='Single-era nominal prefit preview; existing card initials, MC sumw2 and measured background errors. No observed SR or fit.')
-        prediction_years(payload)
-        write_json(output/'prediction_payload.json', payload)
-        write_json(output/'projection_audit.json', json_ready(dict(
-            projection=cache['projection_audit'], shapes=shape_audit, clipping=clipping, fit_support_issues=issues)))
-        files = {p.name: sha256(p) for p in output.iterdir() if p.name != 'preview.lock'}
-        write_json(receipt_path, dict(status='complete', contract=contract, files=files,
-            sr_observations_included=False, fit_ready=False))
-        return payload
+    if 'single_era_preview' in payload or 'single_era_view' in payload:
+        raise ValueError('A standalone preview is not a current card result')
+    return record_years(payload)
 
 
 def array(values, size, nonnegative=False):
@@ -518,7 +480,7 @@ def _prediction_metadata(grid):
     return {k:grid[k] for k in ('statistical_revision','rate_parameters','signal_contamination',
         'auto_mc_stats','background_estimation_uncertainties','systematic_combination','preliminary',
         'central_conventions_consistent','systematic_scope','bins','th1_channels','sr_data_blinded',
-        'years','systematic_evaluation_deferred','hybrid_systematics','run3_systematics','input_scopes_by_era',
+        'years','systematic_evaluation_deferred','run3_systematics','input_scopes_by_era',
         'luminosity_uncertainties','luminosity_model','luminosity_policy_sha256') if k in grid}
 
 
@@ -559,7 +521,7 @@ def export_grid(manifest_path):
     for key,path in (('sr_binning_sha256','jsons/highdm_sr_binning.json'),('gnn_sha256',configuration_path(years[0]))):
         if templates['contract'].get(key)!=sha256(ROOT/path):
             raise ValueError('Templates use a different plot/physics layout')
-    if grid.get('hybrid_systematics') or grid.get('run3_systematics'):
+    if grid.get('run3_systematics'):
         if templates['contract'].get('gnn_sha256_by_era') != {
                 y: sha256(configuration_path(y)) for y in years}:
             raise ValueError('Mixed-era GNN configuration contract changed')

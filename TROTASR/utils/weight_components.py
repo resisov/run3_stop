@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from functools import lru_cache
 import numpy as np
 import awkward as ak
-from .corrections import load_analysis_corrections, analysis_workdir
+from .corrections import load_analysis_corrections
 from .private_scales import (DEFAULT_ANALYSIS_SF_COMPONENTS, REQUIRED_ANALYSIS_SF_COMPONENTS, loose_muon_lowpt_triplet, met_trigger_triplet, photon_trigger_triplet, veto_electron_lowpt_triplet)
 
 
@@ -85,8 +85,7 @@ def get_btag_corrector(repo: Path, year: str, caller: str, tagger: str | None = 
     key = (repo.resolve(), analysis_year(year), caller, tagger, workingpoint)
     if key not in _BTAG_CORRECTOR_CACHE:
         corrections = load_analysis_corrections(repo)
-        with analysis_workdir(repo):
-            _BTAG_CORRECTOR_CACHE[key] = corrections["get_btag_weight"](tagger, analysis_year(year), workingpoint, caller)
+        _BTAG_CORRECTOR_CACHE[key] = corrections["get_btag_weight"](tagger, analysis_year(year), workingpoint, caller)
     return _BTAG_CORRECTOR_CACHE[key]
 
 
@@ -159,8 +158,7 @@ def compute_weight_bundle(
 
     if has_field(arrays, "Pileup_nTrueInt"):
         try:
-            with analysis_workdir(repo):
-                pu_nom, pu_up, pu_down = corrections["get_pu_weight"](y, arrays["Pileup_nTrueInt"])
+            pu_nom, pu_up, pu_down = corrections["get_pu_weight"](y, arrays["Pileup_nTrueInt"])
             components["pileup"] = np_filled(pu_nom, n, 1.0)
             if include_variations:
                 alternates["pileupUp"] = ("pileup", np_filled(pu_up, n, 1.0))
@@ -184,8 +182,7 @@ def compute_weight_bundle(
             t1 = ak.fill_none(ak.pad_none(tops, 2, axis=1, clip=False)[:, 0], 0.0)
             t2 = ak.fill_none(ak.pad_none(tops, 2, axis=1, clip=False)[:, 1], 0.0)
             both = ak.num(tops, axis=1) >= 2
-            with analysis_workdir(repo):
-                vals = np.sqrt(corrections["get_top_pt_reweight"](t1) * corrections["get_top_pt_reweight"](t2))
+            vals = np.sqrt(corrections["get_top_pt_reweight"](t1) * corrections["get_top_pt_reweight"](t2))
             top_pt_sf = np.where(ak.to_numpy(both), np_filled(vals, n, 1.0), 1.0)
             record("top_pt_reweight", True, "analysis.utils.corrections.get_top_pt_reweight")
         except Exception as exc:
@@ -230,9 +227,8 @@ def compute_weight_bundle(
         record(component, True, source)
 
     try:
-        with analysis_workdir(repo):
-            ev_nom, ev_up, ev_down = corrections["get_ele_veto_id_sf"](y, e_eta + e_delta_eta_sc, e_pt, e_phi)
-            em_nom, em_up, em_down = corrections["get_ele_medium_id_sf"](y, e_eta + e_delta_eta_sc, e_pt, e_phi)
+        ev_nom, ev_up, ev_down = corrections["get_ele_veto_id_sf"](y, e_eta + e_delta_eta_sc, e_pt, e_phi)
+        em_nom, em_up, em_down = corrections["get_ele_medium_id_sf"](y, e_eta + e_delta_eta_sc, e_pt, e_phi)
         # The standard EGM payload begins at 10 GeV.  Do not retain the old
         # 10 GeV edge extrapolation for 5--10 GeV veto electrons.
         electron_lowpt = e_veto & (e_pt > 5.0) & (e_pt < 10.0)
@@ -256,13 +252,12 @@ def compute_weight_bundle(
         record("electron_id", False, "unity_fallback", f"{type(exc).__name__}: {exc}")
 
     try:
-        with analysis_workdir(repo):
-            er_nom, er_up, er_down = corrections["get_ele_reco_sf"](
-                y,
-                e_eta + e_delta_eta_sc,
-                e_pt,
-                e_phi,
-            )
+        er_nom, er_up, er_down = corrections["get_ele_reco_sf"](
+            y,
+            e_eta + e_delta_eta_sc,
+            e_pt,
+            e_phi,
+        )
         ele_nom = one.copy(); ele_up = one.copy(); ele_down = one.copy()
         mask_one = np.asarray(n_e_veto == 1, dtype=bool)
         mask_two = np.asarray(n_e_med == 2, dtype=bool)
@@ -308,15 +303,14 @@ def compute_weight_bundle(
             event_nom,
             event_up,
             event_down,
-            f"analysis/data/AnalysisSF/{y}/veto_electron_5to10_sf.json.gz:veto_electron_id_5to10_sf:raw_eta",
+            f"scales/Private/{y}/veto_electron_5to10_sf.json.gz:veto_electron_id_5to10_sf:raw_eta",
         )
     except Exception as exc:
         components["veto_electron_5to10"] = one
         record("veto_electron_5to10", False, "unity_missing_measurement", f"{type(exc).__name__}: {exc}")
 
     try:
-        with analysis_workdir(repo):
-            eh_nom, eh_up, eh_down = corrections["get_ele_hlt_sf"](y, e_eta, e_pt, e_phi)
+        eh_nom, eh_up, eh_down = corrections["get_ele_hlt_sf"](y, e_eta, e_pt, e_phi)
         mask_two = np.asarray(n_e_med == 2, dtype=bool)
         nom = one.copy(); up = one.copy(); down = one.copy()
         nom_vals = jagged_prod(ak.where(e_med, eh_nom, ak.ones_like(e_pt)), n)
@@ -329,9 +323,8 @@ def compute_weight_bundle(
         record("electron_hlt", False, "unity_fallback", f"{type(exc).__name__}: {exc}")
 
     try:
-        with analysis_workdir(repo):
-            ml_nom, ml_up, ml_down = corrections["get_mu_loose_id_sf"](y, m_eta, m_pt)
-            mm_nom, mm_up, mm_down = corrections["get_mu_medium_id_sf"](y, m_eta, m_pt)
+        ml_nom, ml_up, ml_down = corrections["get_mu_loose_id_sf"](y, m_eta, m_pt)
+        mm_nom, mm_up, mm_down = corrections["get_mu_medium_id_sf"](y, m_eta, m_pt)
         # The standard correction used here begins at 10 GeV.  Remove its
         # edge extrapolation in 5--10 GeV and apply the measured ID-only SF
         # below as an independent component.
@@ -356,9 +349,8 @@ def compute_weight_bundle(
         record("muon_id", False, "unity_fallback", f"{type(exc).__name__}: {exc}")
 
     try:
-        with analysis_workdir(repo):
-            ml_nom, ml_up, ml_down = corrections["get_mu_loose_miniiso_sf"](y, m_eta, m_pt)
-            mm_nom, mm_up, mm_down = corrections["get_mu_medium_miniiso_sf"](y, m_eta, m_pt)
+        ml_nom, ml_up, ml_down = corrections["get_mu_loose_miniiso_sf"](y, m_eta, m_pt)
+        mm_nom, mm_up, mm_down = corrections["get_mu_medium_miniiso_sf"](y, m_eta, m_pt)
         # No official mini-isolation SF is defined below 10 GeV.  The
         # dedicated 5--10 GeV payload is ID-only, so mini-isolation stays
         # exactly unity in that interval rather than inheriting the 10 GeV bin.
@@ -411,15 +403,14 @@ def compute_weight_bundle(
             event_nom,
             event_up,
             event_down,
-            f"analysis/data/AnalysisSF/{y}/loose_muon_5to10_sf.json.gz:loose_muon_id_5to10_sf",
+            f"scales/Private/{y}/loose_muon_5to10_sf.json.gz:loose_muon_id_5to10_sf",
         )
     except Exception as exc:
         components["loose_muon_5to10"] = one
         record("loose_muon_5to10", False, "unity_missing_measurement", f"{type(exc).__name__}: {exc}")
 
     try:
-        with analysis_workdir(repo):
-            mh_nom, mh_up, mh_down = corrections["get_mu_hlt_sf"](y, m_eta, m_pt)
+        mh_nom, mh_up, mh_down = corrections["get_mu_hlt_sf"](y, m_eta, m_pt)
         mask_two = np.asarray(n_m_med == 2, dtype=bool)
         nom = one.copy(); up = one.copy(); down = one.copy()
         nom_vals = jagged_prod(ak.where(m_med, mh_nom, ak.ones_like(m_pt)), n)
@@ -432,14 +423,13 @@ def compute_weight_bundle(
         record("muon_hlt", False, "unity_fallback", f"{type(exc).__name__}: {exc}")
 
     try:
-        with analysis_workdir(repo):
-            ph_nom, ph_up, ph_down = corrections["get_photon_id_sf"](
-                y,
-                photon_id_wp,
-                p_eta,
-                p_pt,
-                p_phi,
-            )
+        ph_nom, ph_up, ph_down = corrections["get_photon_id_sf"](
+            y,
+            photon_id_wp,
+            p_eta,
+            p_pt,
+            p_phi,
+        )
         nom = one.copy(); up = one.copy(); down = one.copy()
         mask_g = np.asarray(gcr_mask, dtype=bool)
         nom_vals = jagged_prod(ak.where(p_med, ph_nom, ak.ones_like(p_pt)), n)
@@ -467,14 +457,13 @@ def compute_weight_bundle(
         csev_eta = ak.where(p_med, p_eta, ak.zeros_like(p_eta))
         csev_r9 = ak.where(p_med, p_r9, ak.ones_like(p_r9))
         csev_pt = ak.where(p_med, p_pt, ak.ones_like(p_pt) * 250.0)
-        with analysis_workdir(repo):
-            pc_nom, pc_up, pc_down = corrections["get_photon_csev_sf"](
-                y,
-                photon_id_wp,
-                csev_eta,
-                csev_r9,
-                csev_pt,
-            )
+        pc_nom, pc_up, pc_down = corrections["get_photon_csev_sf"](
+            y,
+            photon_id_wp,
+            csev_eta,
+            csev_r9,
+            csev_pt,
+        )
         nom = one.copy(); up = one.copy(); down = one.copy()
         mask_g = np.asarray(gcr_mask, dtype=bool)
         nom_vals = jagged_prod(ak.where(p_med, pc_nom, ak.ones_like(p_pt)), n)
@@ -514,7 +503,7 @@ def compute_weight_bundle(
             event_nom,
             event_up,
             event_down,
-            f"analysis/data/AnalysisSF/{y}/photon_trigger_sf.json.gz",
+            f"scales/Private/{y}/photon_trigger_sf.json.gz",
         )
     except Exception as exc:
         components["photon_trigger"] = one
@@ -543,7 +532,7 @@ def compute_weight_bundle(
                 event_nom,
                 event_up,
                 event_down,
-                f"analysis/data/AnalysisSF/{y}/met_trigger_sf.json.gz",
+                f"scales/Private/{y}/met_trigger_sf.json.gz",
             )
         except Exception as exc:
             components["met_trigger"] = one

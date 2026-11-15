@@ -9,7 +9,6 @@ import math
 import re
 from pathlib import Path
 import numpy as np
-import pdfplumber
 if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
@@ -88,6 +87,8 @@ def expected_points(result, kind, view):
 
 
 def verify_pdf(path, result, kind, view):
+    import pdfplumber
+
     with pdfplumber.open(path) as pdf:
         if len(pdf.pages) != 1:
             raise ValueError('Expected one-page preserved trigger figure')

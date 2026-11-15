@@ -23,7 +23,7 @@ def binned(values, weights, edges, overflow_policy='exclude'):
     good = np.isfinite(values)
     values, weights = values[good], weights[good]
     if overflow_policy == 'fold':
-        # Exactly the legacy upper-overflow folding. Never fold underflow.
+        # Fold upper overflow into the last bin; exclude underflow.
         values = np.where(values > edges[-1], np.nextafter(float(edges[-1]), float(edges[0])), values)
     elif overflow_policy != 'exclude':
         raise ValueError('Unknown overflow policy')

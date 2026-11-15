@@ -152,8 +152,8 @@ def topology_counts(a, resolved_by_identity, region, prepared=None, year=2024):
     return counts, ak.Array(sf_clean), audits, baseline
 
 
-def legacy_vr_mask(chunk, region, flag, n):
-    """Adopted high-dM VR non-topology mask, used also for trigger SF support."""
+def trigger_highdm_vr_mask(chunk, region):
+    """High-dM VR support of the trigger scale factor, before topology cuts."""
     get = lambda key: np.asarray(chunk[key])
     d = [get("j%d_met_dphi" % k) for k in range(1, 5)]
     nb = get("nb_medium")

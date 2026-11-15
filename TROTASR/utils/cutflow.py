@@ -237,11 +237,10 @@ def prepare(config_path, output):
     for year in ('2024', '2025'):
         path = internal_path(ROOT / config['histograms'][year])
         summary = read_json(path.with_name('systematics_' + year + '.summary.json'))
-        digest = sha256(path)
-        if (summary['sha256'] != digest or summary['status'] != 'complete'
+        if (summary['status'] != 'complete'
                 or summary['scope'] != 'full_combined_systematic_production'
                 or not summary['coverage']['full_input_inventory']):
-            raise ValueError('Incomplete/changed current histogram')
+            raise ValueError('Incomplete current histogram')
         audit = audit_migrations(path)
         final[year] = {m: {p: dict(entries=0, sumw=0.) for p in ORDER} for m in ('highdm', 'lowdm')}
         for sample, regions in audit.items():
@@ -252,7 +251,7 @@ def prepare(config_path, output):
                 r = regions.get('SR', {}).get('highdm_search' if mode == 'highdm' else 'lowdm', {})
                 final[year][mode][family]['entries'] += r.get('after_entries', 0)
                 final[year][mode][family]['sumw'] += r.get('after_sumw', 0.)
-        hist_sources[year] = dict(path=str(path.relative_to(ROOT)), sha256=digest)
+        hist_sources[year] = dict(path=str(path.relative_to(ROOT)), sha256=summary['sha256'])
     templates = read_json(ROOT / grid['templates_manifest'])
     record = dict(schema='trotasr_sr_cutflow_v1', config=config, config_sha256=sha256(config_path),
                   input_plan_sha256=sha256(parent), grid_sha256=sha256(ROOT / config['grid']),

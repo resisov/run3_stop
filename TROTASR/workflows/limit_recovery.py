@@ -869,7 +869,7 @@ def optimize_saved_command(workspace, mass, command, logs, previous_commands, *,
     by guessed parameter values or a skipped Asimov fit.
     """
     result = list(command)
-    evidence = dict(status='not_applied', acceptance_unchanged=True,
+    evidence = dict(status='not_applied',
         warm_start=dict(status='unavailable',
             reason='no_verified_full_nuisance_snapshot_in_saved_attempt_receipts',
             parameters_changed=False))
@@ -1044,8 +1044,7 @@ def recovery_commands(stage, workspace, mass, primary, previous, logs, commands,
             warm_start=dict(status='unavailable', reason='no_verified_full_nuisance_snapshot_in_saved_attempt_receipts'),
             conditional_failure_basis=conditional,
             base_order='existing_combined_first' if stage == 'base' and conditional else 'existing_order',
-            discarded_profile_evidence=discarded_profiles,
-            stage_budget_unchanged=True, acceptance_unchanged=True)
+            discarded_profile_evidence=discarded_profiles)
     if not selected:
         evidence.setdefault('reason', 'all_exact_commands_already_attempted')
     return selected, evidence

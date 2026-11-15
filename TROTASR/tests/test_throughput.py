@@ -98,33 +98,5 @@ class ThroughputTests(unittest.TestCase):
         self.assertEqual(second,dict(events_with_removed_electrons=0,events_with_removed_muons=0))
         self.assertEqual(ak.to_list(a),before)
 
-    def test_execution_handoff_preserves_completed_hash_only(self):
-        from TROTASR.workflows import run_systematic_campaign as campaign
-        old, new = {'code':'old'}, {'code':'new'}
-        spec = dict(id='revision',contracts={'2024':new})
-        spec[campaign.UNCHANGED_VIEW_REUSE] = dict(campaign='unused',
-            retained_completed={'task':'exact'},retained_running={},previous_contracts={'2024':old})
-        task = dict(key='task',year=2024)
-        self.assertEqual(campaign.refresh_result_contract(spec,task,'exact'),old)
-        self.assertEqual(campaign.refresh_result_contract(spec,task,'different'),new)
-        self.assertEqual(campaign.refresh_result_contract(spec,task,None),new)
-
-    def test_execution_handoff_requires_exact_inflight_receipt(self):
-        from TROTASR.workflows import run_systematic_campaign as campaign
-        old, new = {'code':'old'}, {'code':'new'}
-        identity = dict(pid=123,start_ticks=456,arguments=['worker'])
-        spec = dict(id='revision',contracts={'2024':new})
-        spec[campaign.UNCHANGED_VIEW_REUSE] = dict(campaign='unused',retained_completed={},
-            retained_running={'task':identity},previous_contracts={'2024':old})
-        receipt = dict(identity=identity,status='complete',exit_code=0,
-            output_sha256='exact',payload_revision='revision')
-        task = dict(key='task',year=2024)
-        with patch.object(campaign,'read_json',return_value=receipt):
-            self.assertEqual(campaign.refresh_result_contract(spec,task,'exact'),old)
-        for delta in (dict(status='failed'),dict(exit_code=1),dict(output_sha256='different'),
-                      dict(payload_revision='different'),dict(identity=dict(identity,start_ticks=457))):
-            with patch.object(campaign,'read_json',return_value=dict(receipt,**delta)):
-                self.assertEqual(campaign.refresh_result_contract(spec,task,'exact'),new)
-
 
 if __name__=='__main__':unittest.main()

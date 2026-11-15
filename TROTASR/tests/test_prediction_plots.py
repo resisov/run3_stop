@@ -1,11 +1,10 @@
 """Prediction/renderer contracts, not substitute physics fits or production plots."""
 from copy import deepcopy
-from pathlib import Path
 import unittest
 from unittest.mock import patch
 import numpy as np
 from TROTASR.utils.paths import ROOT
-from TROTASR.utils.io import read_json,sha256
+from TROTASR.utils.io import read_json, sha256
 from TROTASR.utils.statistics_inputs import build_inputs
 from TROTASR.utils.statistical_templates import assemble,card_text,json_ready
 from TROTASR.tests.test_statistics_inputs import fixture
@@ -14,6 +13,13 @@ from TROTASR.workflows.prediction_plot_inputs import (
     uncertainty_band,renderer,LOW_SIGNALS,ll_display_projection)
 from TROTASR.workflows.plotting_gnn_controls import prepare,ll_inclusive,POOLED,current_card_controls
 from TROTASR.workflows.plotting_card_predictions import prepare as prepare_cards
+
+
+def sr_binning_path():
+    path = ROOT / 'jsons/highdm_sr_binning.json'
+    if not path.is_file():
+        raise unittest.SkipTest('Canonical SR binning payload is not installed locally')
+    return path
 
 
 class Histogram:
@@ -36,6 +42,7 @@ class Directory(dict):
 
 
 def model_records(year=2024):
+    sr_binning_path()
     inputs=build_inputs(*fixture(year),'T2tt',1200,500)
     channels,values,_,issues=assemble([inputs])
     assert not issues
@@ -65,7 +72,7 @@ def model_records(year=2024):
 
 def raw_fixture():
     payload=fixture()[0]
-    payload['contract'].update(sr_binning_sha256=sha256(ROOT/'highdm_sr_binning.json'),
+    payload['contract'].update(sr_binning_sha256=sha256(sr_binning_path()),
         configuration_sha256=sha256(ROOT/'gnn4lowdm/config.json'))
     source=payload['histograms']['lowdm']['nominal']
     for region in ('DY2E','DY2M'):
@@ -81,27 +88,63 @@ def raw_fixture():
 class PredictionTests(unittest.TestCase):
     def test_six_era_sr_display_is_explicit_blinded_and_yield_preserving(self):
         from TROTASR.utils.paths import ERAS
-        from TROTASR.gnn4lowdm.configuration import configuration_path
-        rows = model_records()
-        channels = {y+k[4:]:deepcopy(v) for y in ERAS for k,v in rows.items()}
+        from TROTASR.gnn4lowdm.configuration import configuration
+        from TROTASR.workflows import plotting_card_predictions as plots, prediction_plot_inputs as inputs
+        analysis = read_json(ROOT/'jsons/analysis.json')
+        late = configuration('2024')
+        early = deepcopy(late)
+        # Exercise distinct early/late edge contracts without opening remote assets.
+        for edges in early['sr_binning']['edges_by_category'].values():
+            edges[1] *= .9
+        merge = {'bins_per_year': 118}
         payload = dict(schema='trotasr_card_prediction_plot_v1',status='complete',
-            scope='full_run3_hybrid_production',prediction_stage='prefit',
-            sr_observations_included=False,rate_initials_applied=True,channels=channels,
-            sr_binning_sha256=sha256(ROOT/'jsons/highdm_sr_binning.json'),
-            gnn_sha256=sha256(configuration_path('2022')))
-        with patch('TROTASR.workflows.diagnostic_common.require_revised_record',return_value=True), \
-             patch('TROTASR.workflows.plotting_card_predictions.prediction_years',return_value=ERAS):
+            scope='full_combined_systematic_production',prediction_stage='prefit',
+            sr_observations_included=False,rate_initials_applied=True,channels={},
+            sr_binning_sha256='fixture-layout',gnn_sha256='fixture-layout',sr_merge=merge,
+            years=list(ERAS), bins=214*len(ERAS), th1_channels=8*len(ERAS),
+            rate_parameters=48*len(ERAS), sr_data_blinded=True, signal_contamination=False,
+            auto_mc_stats=[10,1,1], central_conventions_consistent=False)
+        for key in ('run3_systematics','statistical_revision','systematic_evaluation_deferred',
+                    'systematic_scope','luminosity_uncertainties','luminosity_model',
+                    'systematic_combination','background_estimation_uncertainties','preliminary'):
+            payload[key] = deepcopy(analysis[key])
+        config_for = lambda year: early if year in ERAS[:4] else late
+        with patch.object(plots,'sha256',return_value='fixture-layout'), \
+             patch.object(plots,'load_merge',return_value=merge), \
+             patch.object(plots,'configuration',side_effect=config_for), \
+             patch.object(inputs,'configuration',side_effect=config_for):
+            for era_index, year in enumerate(ERAS, 1):
+                for mode, regions in (('highdm',('SR',)),('lowdm',('SR','LLCR','QCDCR','GCR'))):
+                    for region in regions:
+                        labels = expected_labels(f'{region}_{mode}_c1_{year}', merge)
+                        values = np.full(len(labels), float(era_index))
+                        signals = ([s['key'] for s in renderer.SIGNAL_OVERLAYS] if mode=='highdm'
+                                   else LOW_SIGNALS if region=='SR' else ())
+                        row = dict(labels=labels,sr_data_blinded=region=='SR',background=values,
+                            variance=values,groups={'Top':values},group_variances={'Top':values},
+                            nuisance_deltas={},signals={name:values for name in signals})
+                        if region!='SR':
+                            row.update(data=values,data_variance=values)
+                        payload['channels'][f'{year}/{region}/{mode}'] = row
             with self.assertRaisesRegex(ValueError,'explicit'):prepare_cards(payload)
+            with self.assertRaisesRegex(ValueError,'approved low-dM era groups'):
+                prepare_cards(payload,combine_era_sr=True,display_years=ERAS)
             result=prepare_cards(payload,combine_era_sr=True)
             self.assertEqual(set(result),{('highdm','SR')})
-            np.testing.assert_allclose(result['highdm','SR']['background'],
-                6*np.array(rows['2024/SR/highdm']['background']))
-            for years in (ERAS[:4], ERAS[4:]):
+            np.testing.assert_array_equal(result['highdm','SR']['background'],np.full(118,21.))
+            self.assertNotIn('data',result['highdm','SR'])
+            for years, expected in ((ERAS[:4],10.),(ERAS[4:],11.)):
                 result=prepare_cards(payload,combine_era_sr=True,display_years=years)
-                np.testing.assert_allclose(result['lowdm','SR']['background'],
-                    len(years)*np.array(rows['2024/SR/lowdm']['background']))
+                np.testing.assert_array_equal(result['lowdm','SR']['background'],np.full(30,expected))
                 self.assertNotIn('data',result['lowdm','SR'])
-            channels['2022/SR/lowdm']['data']=[0.]*30
+            with patch.object(plots,'configuration',side_effect=lambda y: late if y=='2023' else config_for(y)):
+                with self.assertRaisesRegex(ValueError,'identical GNN boundaries'):
+                    prepare_cards(payload,combine_era_sr=True,display_years=ERAS[:4])
+            wrong=deepcopy(payload)
+            wrong['run3_systematics']['preserve_per_era_gnn']=False
+            with self.assertRaisesRegex(ValueError,'six-era systematic policy'):
+                prepare_cards(wrong,combine_era_sr=True)
+            payload['channels']['2022/SR/lowdm']['data']=[0.]*30
             with self.assertRaisesRegex(ValueError,'SR observation'):
                 prepare_cards(payload,combine_era_sr=True,display_years=ERAS[:4])
 
@@ -163,7 +206,7 @@ class PredictionTests(unittest.TestCase):
         self.assertEqual(blocks[0]['annotation'],r'Low-$\Delta m$ LLCR')
         self.assertEqual(len(r['background']),10)
 
-    def test_yearly_controls_bind_exact_current_card_inputs_no_unit_area(self):
+    def test_yearly_controls_bind_current_rz_ignore_retired_histogram_hash(self):
         payload=dict(status='complete',scope='full_nominal_production',prediction_stage='prefit',
             rate_initials_applied=True,sr_observations_included=False,channels=model_records(),
             source_inputs={'2024':dict(hists=dict(sha256='hist'),rz_low=dict(sha256='rz'))})
@@ -172,36 +215,15 @@ class PredictionTests(unittest.TestCase):
         for region,r in result.items():
             np.testing.assert_allclose(r['background'],payload['channels']['2024/'+region+'/lowdm']['background'])
             self.assertTrue(all(not b['unit_area'] for b in flat_blocks(r,'lowdm',region)))
-        with self.assertRaisesRegex(ValueError,'differ'):current_card_controls(payload,2024,'stale','rz')
+        self.assertEqual(set(current_card_controls(payload,2024,'replaced_hist','rz')),set(result))
+        with self.assertRaisesRegex(ValueError,'differ'):current_card_controls(payload,2024,'hist','wrong_rz')
         payload['prediction_stage']='postfit'
         with self.assertRaisesRegex(ValueError,'prefit'):current_card_controls(payload,2024,'hist','rz')
-
-    def test_real_legacy_llcr_reference_reproduced_not_used_for_new_fit(self):
-        folder=ROOT/'validation/gnn_prefit_binding_20260923/reference'
-        payload=read_json(folder/'legacy_card_predictions.json')
-        manifest=read_json(folder/'legacy_llcr_manifest.json')
-        self.assertEqual(sha256(folder/'legacy_card_predictions.json'),manifest['source_sha256'])
-        for expected in manifest['plots']:
-            sources=[payload['channels'][name] for name in expected['source_channels']]
-            record=dict(sr_data_blinded=False,signals={},groups={},nuisance_deltas={})
-            for field in ('data','background','variance'):
-                record[field]=sum(np.asarray(r[field]) for r in sources)
-            record['data_variance']=record['data'].copy()
-            for r in sources:
-                for k,v in r['groups'].items():
-                    record['groups'].setdefault(k,np.zeros(10))[:]+=v
-                for k,pair in r['nuisance_deltas'].items():
-                    dst=record['nuisance_deltas'].setdefault(k,dict(up=np.zeros(10),down=np.zeros(10)))
-                    for d in ('up','down'):dst[d]+=pair[d]
-            result=ll_display_projection(record)
-            for field,target in (('data','data'),('background','background'),
-                                  ('variance','mc_stat_variance'),('uncertainty','total_uncertainty')):
-                np.testing.assert_allclose(result[field],expected[target],rtol=1e-12,atol=1e-8)
 
     def test_five_final_card_plots_exact_years_and_signal_choices(self):
         payload=dict(schema='trotasr_card_prediction_plot_v1',status='complete',
             scope='full_nominal_production',prediction_stage='prefit',sr_observations_included=False,
-            sr_binning_sha256=sha256(ROOT/'highdm_sr_binning.json'),gnn_sha256=sha256(ROOT/'gnn4lowdm/config.json'),
+            sr_binning_sha256=sha256(sr_binning_path()),gnn_sha256=sha256(ROOT/'gnn4lowdm/config.json'),
             rate_initials_applied=True,channels=json_ready({**model_records(),**model_records(2025)}))
         result=prepare_cards(payload)
         self.assertEqual(len(result),5)
@@ -230,8 +252,10 @@ class PredictionTests(unittest.TestCase):
         np.testing.assert_allclose(r['nuisance_deltas']['foo']['down'],-1.2)
 
     def test_unsupported_card_directives_never_ignored(self):
-        inp=build_inputs(*fixture(),'T2tt',1200,500)
-        channels,data,_,_=assemble([inp]);text=card_text(channels,data)
+        text = ('bin LLCR_lowdm_c1_2024\nobservation -1\n'
+                'bin LLCR_lowdm_c1_2024\nprocess PhotonJet\nprocess 1\nrate -1\n'
+                '* autoMCStats 10 1 1\n')
+        self.assertEqual(parse_card(text)['columns'], [('LLCR_lowdm_c1_2024', 'PhotonJet')])
         for extra in ('\nx param 0 1\n','\nx flatParam\n'):
             with self.assertRaisesRegex(ValueError,'Unsupported card'):parse_card(text+extra)
         with self.assertRaisesRegex(ValueError,'MC statistics'):

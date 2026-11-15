@@ -1,6 +1,9 @@
 """Preserved normalization kernels; internal boundary only, no alternate physics."""
 from __future__ import annotations
 import math
+import re
+from TROTASR.utils.paths import ROOT
+from TROTASR.utils.io import read_json
 from pathlib import Path
 from typing import Any
 from TROTASR.utils.io import read_json
@@ -247,7 +250,7 @@ def build_signal_mass_points(datasets: dict[str, Any], signal_xsec: dict[str, di
                 "genmodel_branch": genmodel,
                 "sumw_mass_point": 0.0,
                 "event_genweight_sum_fallback": 0.0,
-                "sumw_source": "missing_runs_sumw_uses_event_genweight_fallback_only_if_explicitly_approved",
+                "sumw_source": "missing_runs_sumw",
                 "datasets": [],
             })
             item["event_genweight_sum_fallback"] += finite(sumw)
@@ -274,3 +277,112 @@ def build_signal_mass_points(datasets: dict[str, Any], signal_xsec: dict[str, di
             item["normalization_status"] = "blocked_missing_signal_xsec"
         item["datasets"] = sorted(set(str(x) for x in item.get("datasets") or []))
     return dict(sorted(points.items()))
+
+
+def primary_dataset(dataset: str) -> str:
+    """Drop production/reconstruction labels, not process, generator or cuts."""
+    name = str(dataset)
+    if name.startswith("/"):
+        parts = name.strip("/").split("/")
+        if len(parts) != 3:
+            raise ValueError("Malformed DAS dataset: " + name)
+        return parts[0]
+    name = re.sub(r"____\d+_$", "", name)
+    return re.split(r"-(?:RunIII|Run3)", name, maxsplit=1)[0]
+
+
+def cross_section_sample_key(dataset: str) -> str:
+    """Normalize only the explicit W/Z parton-bin naming permutation."""
+    name = primary_dataset(dataset)
+    match = re.fullmatch(
+        r"(WtoLNu|Zto2Nu)-2Jets_(PTLNu|PTNuNu)-(\d+(?:to\d+)?)_([12]J)_"
+        r"(TuneCP5_13p6TeV_amcatnloFXFX-pythia8)", name)
+    if match:
+        process, variable, interval, jets, generator = match.groups()
+        if (process, variable) in (('WtoLNu', 'PTLNu'), ('Zto2Nu', 'PTNuNu')):
+            return f'{process}-2Jets_Bin-{jets}-{variable}-{interval}_{generator}'
+    return name
+
+
+def background_xsec_index(references):
+    """One adopted cross section per primary sample, independent of target era.
+
+    References contain existing analysis normalization records. Neither their
+    luminosity nor their generator denominators are copied to another target era.
+    """
+    index = {}
+    for source, payload in references:
+        for record in payload["datasets"].values():
+            if record.get("is_data") or record.get("is_signal"):
+                continue
+            dataset = record.get("physical_dataset") or record["dataset"]
+            key = cross_section_sample_key(dataset)
+            value = record.get("xsec_pb")
+            if value is None or not math.isfinite(float(value)) or float(value) <= 0:
+                continue
+            value = float(value)
+            old = index.get(key)
+            if old is not None and not math.isclose(old["xsec_pb"], value, rel_tol=1.e-7, abs_tol=0.):
+                raise ValueError("Conflicting adopted cross sections for " + key)
+            item = index.setdefault(key, dict(xsec_pb=value, sources=[]))
+            if source not in item["sources"]:
+                item["sources"].append(source)
+    return index
+
+
+def adopted_background_xsecs():
+    """Reuse the existing common 13.6 TeV analysis values; no target-year key."""
+    paths = [f"estimations/normalization_{year}.json.gz" for year in (2024, 2025)]
+    references = [(path, read_json(ROOT/path)) for path in paths]
+    registry = ROOT/'jsons/early_run3_assets.json'
+    if registry.exists():
+        extra = read_json(registry).get('background_cross_sections', {})
+        records = {}
+        for primary, record in extra.items():
+            if (record.get('energy_tev') != 13.6 or
+                    primary_dataset(record['DAS']) != primary or
+                    not record.get('source_records') or
+                    not math.isfinite(float(record['xsec_pb'])) or record['xsec_pb'] <= 0):
+                raise ValueError('Malformed registered cross section: ' + primary)
+            records[primary] = dict(record, dataset=primary, is_data=False, is_signal=False)
+        references.append((str(registry.relative_to(ROOT)), dict(datasets=records)))
+    return background_xsec_index(references)
+
+
+def apply_background_xsecs(datasets, index):
+    """Connect matching samples in an in-memory normalization aggregation."""
+    missing = []
+    for dsid, record in datasets.items():
+        if record.get("is_data") or record.get("is_signal"):
+            continue
+        primary = primary_dataset(record.get("physical_dataset") or record["dataset"])
+        key = cross_section_sample_key(primary)
+        reference = index.get(key)
+        if reference is None:
+            missing.append(dict(dataset_id=str(dsid), primary_dataset=primary))
+            continue
+        previous = record.get("xsec_pb")
+        value = reference["xsec_pb"]
+        if previous is not None and not math.isclose(float(previous), value, rel_tol=1.e-7, abs_tol=0.):
+            raise ValueError("Existing cross section differs from adopted value: " + key)
+        record["xsec_pb"] = value if previous is None else previous
+        record["xsec_source"] = dict(primary_dataset=primary, matched_sample=key,
+            references=list(reference["sources"]),
+            mapping=("exact_primary_dataset" if key == primary else "WZ_parton_bin_name_permutation")
+                    + "; independent_of_analysis_era")
+    return missing
+
+
+def build_era_physical(datasets, luminosity_pb):
+    """Combine original/extension generator sums for each target-era sample.
+
+    Input dataset identities and their full Runs sums remain unchanged. Each
+    extension is additional MC statistics, not another copy of the cross section.
+    """
+    from copy import deepcopy
+    grouped = deepcopy(datasets)
+    for record in grouped.values():
+        if not record.get('is_data') and not record.get('is_signal'):
+            record['physical_dataset'] = cross_section_sample_key(
+                record.get('physical_dataset') or record['dataset'])
+    return build_physical(grouped, luminosity_pb)

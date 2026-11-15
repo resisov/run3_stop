@@ -1,12 +1,32 @@
-"""Small synthetic numerical fixtures with the FULL adopted bin layout."""
+"""Small synthetic inputs for the fixed-size statistical model."""
 import copy
+from itertools import product
 import unittest
+from unittest.mock import patch
 import numpy as np
-from TROTASR.utils.io import read_json
+from TROTASR.utils.io import read_json, sha256
 from TROTASR.utils.paths import ROOT
 from TROTASR.utils.statistics_inputs import build_inputs, HistogramView
+from TROTASR.utils.sr_binning import AXES, NATIVE_EDGES
 from TROTASR.utils.statistics_model import nps_nuisance_name
 from TROTASR.utils.statistical_templates import assemble, card_text
+
+
+SR_LAYOUT = ROOT/'jsons/highdm_sr_binning.json'
+SYNTHETIC_LAYOUT_DIGEST = 'a'*64
+
+
+def use_synthetic_sr_layout(testcase, *consumers):
+    """Inject only the immutable map boundary, with matching synthetic provenance."""
+    def layout_reader(path):
+        return synthetic_sr_layout() if path == SR_LAYOUT else read_json(path)
+    def input_digest(path):
+        return SYNTHETIC_LAYOUT_DIGEST if path == SR_LAYOUT else sha256(path)
+    patches = [patch('TROTASR.utils.sr_binning.read_json',side_effect=layout_reader)]
+    patches.extend(patch.object(module,'sha256',side_effect=input_digest) for module in consumers)
+    for patcher in patches:
+        patcher.start()
+        testcase.addCleanup(patcher.stop)
 
 
 class CombinedContractTests(unittest.TestCase):
@@ -17,8 +37,6 @@ class CombinedContractTests(unittest.TestCase):
         return dict(scope='full_combined_systematic_production', status='complete', preliminary=True,
             central_conventions_consistent=False, coverage=coverage,
             audit=dict(nonjme_source_coverage=dict(coverage)),
-            combination_provenance=dict(policy=dict(COMBINATION_POLICY),
-                sources={name:dict(sha256='a'*64, summary_sha256='b'*64) for name in ('jme','nonjme')}),
             contract=dict(shape_mode='jme_with_stored_nonjme', combination_policy=dict(COMBINATION_POLICY),
                 object_endpoints=list(NONJME_ENDPOINTS), component_contracts=dict(
                     jme=dict(shape_mode='cms_trota_jme'), nonjme=dict(shape_mode='stored_trota_nonjme'))))
@@ -27,19 +45,20 @@ class CombinedContractTests(unittest.TestCase):
         from TROTASR.utils.statistics_inputs import combined_shape_endpoints
         self.assertEqual(len(combined_shape_endpoints(self.fixture())), 20)
 
-    def test_policy_coverage_and_source_identity_cannot_be_waived(self):
+    def test_physics_convention_endpoint_and_coverage_cannot_be_waived(self):
         from TROTASR.utils.statistics_inputs import combined_shape_endpoints
-        for change in ('approval','reanchor','central','coverage','endpoint','hash','component'):
+        for change in ('reanchor','central','coverage','endpoint','component'):
             p = self.fixture()
-            if change == 'approval': p['contract']['combination_policy']['user_approved'] = False
-            if change == 'reanchor': p['combination_provenance']['policy']['reanchor'] = True
+            if change == 'reanchor': p['contract']['combination_policy']['reanchor'] = True
             if change == 'central': p['central_conventions_consistent'] = True
             if change == 'coverage': p['audit']['nonjme_source_coverage']['completed_files'] = 1
             if change == 'endpoint': p['contract']['object_endpoints'].pop()
-            if change == 'hash': p['combination_provenance']['sources']['jme']['sha256'] = 'missing'
             if change == 'component': p['contract']['component_contracts']['nonjme']['shape_mode'] = 'cms_trota_jme'
             with self.subTest(change=change), self.assertRaises(ValueError):
                 combined_shape_endpoints(p)
+        old = self.fixture()
+        old['contract']['combination_policy'].update(user_approved=False,id='receipt-label')
+        self.assertEqual(combined_shape_endpoints(old),combined_shape_endpoints(self.fixture()))
 
 def fixture(year=2024):
     gnn = read_json(ROOT / 'gnn4lowdm/config.json')
@@ -92,9 +111,34 @@ def fixture(year=2024):
     return payload, sgamma, rz_high, rz_low, ratio
 
 
+def synthetic_sr_layout():
+    """Exercise fixed-size routing on a test partition, not the physics map."""
+    rules = []
+    for hits in product((0, 1), repeat=4):
+        if not any(hits):
+            continue
+        predicates = {axis: {'eq':0} if not hit else {'ge':1}
+                      for axis, hit in zip(AXES[1:], hits)}
+        if hits == (1, 0, 0, 0):
+            rules.extend((dict(predicates, Nbst={'eq':1}), dict(predicates, Nbst={'ge':2})))
+        else:
+            rules.append(predicates)
+    split = [i for i,row in enumerate(rules)
+             if [row[a] for a in AXES[1:]] != [{'eq':0},{'eq':0},{'ge':1},{'eq':0}]]
+    for i, row in enumerate(rules):
+        row.update(id=f'synthetic-{i}', nb_partition='split' if i in split[:6] else 'pooled',
+                   met='five' if i in split[:2] else 'six')
+    return dict(schema='trotasr_adopted_sr_binning_v1', category_axis_order=list(AXES),
+        bins_per_year=162, categories_per_year=28, topology_rules=rules,
+        nb_partitions={'pooled':[{'ge':1}], 'split':[{'eq':1},{'eq':2},{'ge':3}]},
+        met_binning={name:dict(lower_edges_GeV=NATIVE_EDGES[:count],last_bin_open_ended=True)
+                     for name,count in (('five',5),('six',6))})
+
+
 class StatisticsInputTests(unittest.TestCase):
     def build(self, values=None):
-        return build_inputs(*(fixture() if values is None else values), 'T2tt', 1200, 500)
+        return build_inputs(*(fixture() if values is None else values), 'T2tt', 1200, 500,
+                            definition=synthetic_sr_layout())
 
     def test_fixed_layout_with_sparse_sr(self):
         out = self.build()

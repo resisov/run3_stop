@@ -39,8 +39,7 @@ def summed(samples, names, observable, edges):
 
 
 def recoil_ratio(num, numvar, den, denvar):
-    # Same >0 validity and independent-region variance as calculate_ratio in
-    # the legacy plot_recoil_transfer_factors_2024.py.
+    # Propagate independent-region variances only for positive yields.
     valid = (num > 0.) & (den > 0.)
     ratio = np.full(len(num), np.nan)
     variance = np.full(len(num), np.nan)

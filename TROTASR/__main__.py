@@ -8,7 +8,11 @@ import sys
 
 
 STAGES = {
+    "compile": ("compile_definitions", "Serialize the current object IDs and corrections"),
+    "produce": ("produce", "Produce current signal intermediate ROOTs, one file and era per job"),
+    "trota-friends": ("trota_friends", "Save corrected nominal TROTA tags for accepted MC inputs"),
     "histograms": ("build_highdm_histogram", "Build high-/low-dM histograms from integrated events"),
+    "vr-data": ("validation_data", "Count observed events only in the validation regions"),
     "merge": ("merge_nominal", "Merge per-file histograms for one analysis era"),
     "background": ("build_background_estimation", "Measure the adopted background estimates"),
     "cards": ("build_nominal_grid", "Build templates and datacards for the signal grid"),
@@ -19,6 +23,7 @@ STAGES = {
 
 PLOTS = {
     "limits": ("plotting_limit_contour", "Expected-limit contours"),
+    "vr-predictions": ("plotting_vr_predictions", "VR prefit and CR-only postfit comparisons"),
     "predictions": ("plotting_card_predictions", "SR and CR predictions from the statistical model"),
     "distributions": ("plotting_nominal_distributions", "Control-region distributions"),
     "gnn": ("plotting_gnn_controls", "Low-dM GNN control-region distributions"),

@@ -9,9 +9,9 @@ from dataclasses import dataclass
 from functools import lru_cache
 import numpy as np
 import awkward as ak
-from .event_selections import legacy_vr_mask as region_mask
+from .event_selections import trigger_highdm_vr_mask
 from .signal_models import signal_topology
-from .paths import analysis_era, EARLY_ERAS
+from .paths import ROOT, analysis_era, EARLY_ERAS
 
 
 WEIGHT_BRANCHES = [
@@ -51,6 +51,17 @@ SIGNAL_BTAG_EFFICIENCY_DATASETS = {
 }
 
 
+@lru_cache(maxsize=1)
+def measured_signal_sources():
+    """Exact source keys added by the completed signal efficiency measurement."""
+    path = ROOT / 'production/efficiencies/state.json'
+    if not path.exists():
+        return frozenset()
+    with path.open() as stream:
+        state = json.load(stream)
+    return frozenset(state.get('datasets', ())) if state.get('status') == 'complete' else frozenset()
+
+
 def signal_btag_efficiency_dataset(
     mstop: int,
     source_dataset: str = "",
@@ -63,7 +74,7 @@ def signal_btag_efficiency_dataset(
             raise ValueError('Signal efficiency requires its source dataset')
         return int(mstop), source_dataset
     topology = signal_topology(source_dataset)
-    if topology in {"T2tb", "T2bW"}:
+    if topology in {"T2tb", "T2bW"} or source_dataset in measured_signal_sources():
         parts = str(source_dataset).strip("/").split("/")
         if len(parts) >= 2:
             return int(mstop), f"{parts[0]}-{parts[1]}"
@@ -203,9 +214,9 @@ def flat_arrays_for_weights(chunk: dict[str, Any]) -> tuple[dict[str, Any], dict
             | as_bool(chunk["feature_lowdm_LLCR"], n)
             | as_bool(chunk["feature_lowdm_QCDCR"], n)
             | as_bool(chunk["feature_lowdm_SR"], n)
-            | region_mask(chunk, "HighDMVR_Nb1", "pass_base_common", n)
-            | region_mask(chunk, "HighDMVR_Nb2", "pass_base_common", n)
-            | region_mask(chunk, "HighDMVR_Nb3plus", "pass_base_common", n)
+            | trigger_highdm_vr_mask(chunk, "HighDMVR_Nb1")
+            | trigger_highdm_vr_mask(chunk, "HighDMVR_Nb2")
+            | trigger_highdm_vr_mask(chunk, "HighDMVR_Nb3plus")
         ),
         "electron_eta_source": (
             "raw_eta_with_delta_eta_sc"

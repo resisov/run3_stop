@@ -1,9 +1,6 @@
 """Adapt histogram payloads to the control/search-bin distribution renderer."""
 import numpy as np
-from .paths import internal_modules
-internal_modules('autonomous_allhad', 'background_process_groups')
 from .renderers import plot_control_search_bins_style as renderer
-internal_modules('autonomous_allhad', 'background_process_groups')
 from .renderers.background_process_groups import background_process_for_sample, BACKGROUND_DISPLAY_LABELS
 from .sr_binning import project as project_adopted_sr, label as adopted_label
 

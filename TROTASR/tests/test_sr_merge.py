@@ -5,13 +5,18 @@ from TROTASR.utils.io import read_json, sha256
 from TROTASR.utils.paths import ROOT
 from TROTASR.utils.sr_merge import validate_merge, bin_groups, project, project_prediction
 from TROTASR.workflows.prediction_plot_inputs import combine, expected_labels, flat_blocks
-from TROTASR.workflows.merge_sr_categories import transformed, rewrite_card
 
 
+SR_LAYOUT = ROOT/'jsons/highdm_sr_binning.json'
+SR_MERGE = ROOT/'jsons/sr_category_merge.json'
+
+
+@unittest.skipUnless(SR_LAYOUT.is_file() and SR_MERGE.is_file(),
+    'Canonical high-dM SR layout/merge are not installed locally')
 class SRMergeTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.config=read_json(ROOT/'sr_category_merge.json')
+        cls.config=read_json(SR_MERGE)
         cls.groups=bin_groups(cls.config)
 
     def test_exact_predicate_union_and_partition(self):
@@ -61,13 +66,10 @@ class SRMergeTests(unittest.TestCase):
             np.testing.assert_allclose(project(a,self.groups).sum(),a.sum())
         with self.assertRaises(ValueError):project(np.ones(161),self.groups)
 
-    def test_cr_and_low_sr_identity(self):
-        for channel,n in [('GCR_highdm_c1_2024',16),('SR_lowdm_c1_2024',30),('LLCR_lowdm_c1_2025',10)]:
-            v=np.arange(n,dtype=float)
-            np.testing.assert_array_equal(transformed(v,channel,self.groups),v)
-
     def test_real_prefit_threshold_decision_and_conservation(self):
         p=ROOT/self.config['decision_payload']
+        if not p.is_file():
+            self.skipTest('Accepted SR merge decision payload is not installed locally')
         self.assertEqual(sha256(p),self.config['decision_payload_sha256'])
         payload=read_json(p)
         old=combine([payload['channels'][y+'/SR/highdm'] for y in ('2024','2025')])
@@ -102,12 +104,6 @@ class SRMergeTests(unittest.TestCase):
         self.assertEqual(len(expected_labels('SR_highdm_c1_2024')),162)
         self.assertEqual(len(expected_labels('SR_highdm_c1_2024',self.config)),118)
         self.assertEqual(expected_labels('GCR_lowdm_c1_2024'),expected_labels('GCR_lowdm_c1_2024',self.config))
-
-    def test_card_rewrite_changes_only_shape_file_paths(self):
-        old=ROOT/'stats/source/datacards';src=ROOT/'stats/source/templates'
-        dst=ROOT/'stats/target/templates';new=ROOT/'stats/target/datacards'
-        text='shapes * SR_highdm_c1_2024 ../templates/template_highdm_2024.root $CHANNEL/$PROCESS $CHANNEL/$PROCESS_$SYSTEMATIC\nrate -1\nx rateParam * Top 1 [0,10]\n* autoMCStats 10 1 1\n'
-        self.assertEqual(rewrite_card(text,old,src,dst,new),text)
 
 
 if __name__=='__main__':unittest.main()

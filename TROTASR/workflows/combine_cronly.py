@@ -1,13 +1,19 @@
-"""Existing observed-CR background-only fit, with no observed SR and no new model.
+"""Observed-CR background-only fits and saved diagnostics, with no observed SR.
 
-Fits and original pull rendering are separate commands. --plot-only authors a
-PDF; perform the PDF authoring/visual-QA procedure before/after that command.
+The current provisional result is reused unless a refit is requested. Original pull
+rendering authors a PDF and requires visual QA.
 """
 import argparse
 import fcntl
+import json
 import math
 import os
 from pathlib import Path
+import re
+import resource
+import shutil
+import subprocess
+import tempfile
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 if __package__ in (None, ''):
@@ -16,8 +22,8 @@ if __package__ in (None, ''):
 from TROTASR.utils.paths import ROOT, internal_path
 from TROTASR.utils.io import read_json, write_json, sha256
 from TROTASR.workflows.diagnostic_common import (native_runtime, grid_card,
-    cr_channels, freeze_contract, CommandRunner, require_success, workspace, published_diagnostic,
-    CommandFailure, process_active)
+    cr_channels, freeze_contract, CommandRunner, require_success, workspace,
+    published_diagnostic, admitted_popen, live_resources, CommandFailure, process_active)
 
 SOURCES = ['workflows/combine_cronly.py', 'workflows/diagnostic_common.py',
            'workflows/diagnostic_payload.py', 'workflows/extract_cronly_covariance.py',
@@ -47,6 +53,113 @@ def validate_fit(path):
     finally:
         if source:
             source.Close()
+
+
+def refit_current(manifest, output, *, initial_values=None):
+    """Repeat the selected CR-only fit without replacing its published products."""
+    output = internal_path(output)
+    with (output / 'controller.lock').open('a') as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        published = published_diagnostic(output, manifest, 'cronly')
+        if not published or published.get('status') != 'provisional':
+            raise ValueError('The current provisional CR-only workspace is required')
+        target = internal_path(output / published['workspace'])
+        suffix = 'refit_fixed'
+        if initial_values is not None:
+            assignments = [value.split('=',1) for value in initial_values.split(',')]
+            if any(len(item) != 2 or not re.fullmatch(r'[A-Za-z_][A-Za-z0-9_]*',item[0])
+                   for item in assignments):
+                raise ValueError('Expected explicit NAME=value initial parameters')
+            values = {name:float(value) for name,value in assignments}
+            if (len(values) != len(assignments) or values.get('r') != 0
+                    or not all(map(math.isfinite,values.values()))):
+                raise ValueError('Initial parameters must be unique and finite with r=0')
+            suffix = 'refit_matched'
+        fit = output / ('fitDiagnostics_cronly_' + suffix + '.root')
+        log = output / (suffix + '.log')
+        minimizer_log = output / (suffix + '_minimizer.log')
+        receipt = output / 'commands' / ('cronly_' + suffix + '.json')
+        if any(path.exists() for path in (receipt, fit, log, minimizer_log)):
+            raise FileExistsError('The current CR-only refit has already been attempted')
+        slots, memory = live_resources()
+        if slots >= 116 or memory < 36 * 1024**3 or shutil.disk_usage(output).free < 80 * 1024**3:
+            raise RuntimeError('Insufficient hep2 headroom for the CR-only refit')
+        command = fit_command(target)
+        command[command.index('-n') + 1] = '_cronly_' + suffix
+        command[command.index('--cminDefaultMinimizerStrategy') + 1] = '0' if initial_values is not None else '1'
+        if initial_values is not None:
+            command[command.index('--setParameters') + 1] = initial_values
+        command[command.index('--cminDefaultMinimizerTolerance') + 1] = '0.001'
+        command += ['--X-rtd', 'MINIMIZER_MaxCalls=2000000', '--X-rtd', 'MINIMIZER_no_analytic']
+        # Combine v10.5.1 appends to VectorizedHistFunc::yvals_ on a data reset.
+        # A fresh NLL keeps the same bins and avoids writing past partialSum_.
+        command += ['--forceRecreateNLL', '-v', '1']
+        target_stat = target.stat()
+        state = dict(status='running', command=command, started=time.time(),
+                     controller_pid=os.getpid(), pid=None, sr_observed_data_used=False,
+                     nll_cache_recreated=True, matched_initialization=initial_values is not None)
+        write_json(receipt, state)
+        resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
+        try:
+            with tempfile.TemporaryDirectory(prefix='.fit-', dir=output) as scratch:
+                scratch = Path(scratch)
+                with log.open('x') as stream:
+                    proc = admitted_popen(command, cwd=scratch, stdin=subprocess.DEVNULL,
+                                          stdout=stream, stderr=subprocess.STDOUT)
+                    state['pid'] = proc.pid
+                    try:
+                        proc_stat = Path(f'/proc/{proc.pid}/stat').read_text()
+                        state['start_ticks'] = int(proc_stat.rsplit(')', 1)[1].split()[19])
+                        write_json(receipt, state)
+                    finally:
+                        while True:
+                            try:
+                                state.update(exit_code=proc.wait(), pid=None)
+                                break
+                            except KeyboardInterrupt:
+                                continue
+                for source, destination in ((scratch / fit.name, fit),
+                                            (scratch / 'combine_logger.out', minimizer_log)):
+                    if source.is_file() and source.stat().st_size:
+                        os.replace(source, destination)
+            if fit.is_file():
+                import ROOT
+                source = ROOT.TFile.Open(str(fit))
+                try:
+                    result = (source.Get('fit_b') if source and not source.IsZombie()
+                              and not source.TestBit(ROOT.TFile.kRecovered) else None)
+                    if result:
+                        tree = source.Get('tree_fit_b')
+                        strength = (float(tree.GetLeaf('r').GetValue()) if tree
+                                    and tree.GetLeaf('r') and tree.GetEntry(0) > 0 else None)
+                        state.update(fit_status=int(result.status()), covariance_quality=int(result.covQual()),
+                                     signal_strength=strength,
+                                     float_parameters=int(result.floatParsFinal().getSize()),
+                                     invalid_nll=int(result.numInvalidNLL()),
+                                     fit_steps={str(result.statusLabelHistory(i)): int(result.statusCodeHistory(i))
+                                                for i in range(result.numStatusHistory())},
+                                     edm=float(result.edm()) if math.isfinite(result.edm()) else None)
+                finally:
+                    if source:
+                        source.Close()
+            steps = state.get('fit_steps', {})
+            now = target.stat()
+            if (now.st_ino, now.st_size, now.st_mtime_ns) != (
+                    target_stat.st_ino, target_stat.st_size, target_stat.st_mtime_ns):
+                raise ValueError('The selected CR-only workspace changed during the refit')
+            good = (state['exit_code'] == 0 and state.get('fit_status') == 0
+                    and state.get('covariance_quality', -1) >= 2 and state.get('edm') is not None
+                    and state.get('signal_strength') == 0
+                    and steps.get('HESSE') == 0 and all(code == 0 for code in steps.values()))
+            state['status'] = 'complete' if good else 'needs_attention'
+        except Exception as error:
+            state.update(status='needs_attention', error=str(error))
+            raise
+        finally:
+            state['finished'] = time.time()
+            write_json(receipt, state)
+        print(json.dumps({k:v for k,v in state.items() if k != 'command'}, sort_keys=True))
+        return 0 if good else 1
 
 
 def plot(runner, output, state, ylim):
@@ -225,7 +338,15 @@ def _run_once(manifest, output, plot_only=False, ylim=6.0):
     if published is not None:
         with (output/'controller.lock').open('a') as lock:
             fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
-            if plot_only:
+            if published.get('status') == 'provisional':
+                figures = published['figures']
+                if any(not internal_path(ROOT/name).is_file() for name in figures):
+                    raise FileNotFoundError('Missing published CR-only figure')
+                print(json.dumps(dict(status='provisional', reused=True, fit_recalculated=False,
+                    payload=str(output/published['payload']), figures=figures,
+                    fit_status=published['fit_status'], covariance_quality=published['covariance_quality'],
+                    process_exit_code=published['process_exit_code']), sort_keys=True))
+            elif plot_only:
                 state=plot(CommandRunner(output),output,read_json(output/'state.json'),ylim)
                 write_json(output/'state.json',state)
         return 0
@@ -291,7 +412,7 @@ def _run_once(manifest, output, plot_only=False, ylim=6.0):
 
 
 def cr_profile_command(target, name, strategy):
-    from TROTASR.workflows.impact_legacy import fit_command
+    from TROTASR.workflows.combine_impacts import fit_command
     command,tag=fit_command(target,name,0,strategy)
     for option in ('-t','--expectSignal'):
         index=command.index(option);del command[index:index+2]
@@ -324,9 +445,7 @@ def profile_start_points(samples, value):
 
 def direct_cr_profile(output, out, name, runner, neighbour=False, bracket_recovery=False, multistart=False, full_start=False):
     """Bracket the actual CR-only profile, independently of Minos stepping."""
-    from TROTASR.workflows.impact_recovery_legacy import tree_rows
-    from TROTASR.workflows.profile_sgamma import tracked_start
-    from TROTASR.workflows.recover_impacts import reconcile_seed_bounds
+    from TROTASR.workflows.combine_impacts import tree_rows, tracked_start, reconcile_seed_bounds
     import ROOT as root
     prior=read_json(output/'profile_pulls_warm_after_nll'/name/'state.json')
     base=list(prior['attempts'][0]['execution']['command'])
@@ -505,7 +624,7 @@ def prior_completed_profile(output, previous_profiles, name):
 
 def recover_profile_pulls(manifest,output,workers,continuation=False,warm=False):
     """Measure plotted CR nuisance intervals directly, without a Hessian veto."""
-    from TROTASR.workflows.impact_legacy import validate_fit as validate_profile
+    from TROTASR.workflows.combine_impacts import validate_fit as validate_profile
     import ROOT as root
     root.gROOT.SetBatch(True);root.EnableThreadSafety()
     if not 1<=workers<=90:raise ValueError('Invalid shared worker limit')
@@ -555,8 +674,7 @@ def recover_profile_pulls(manifest,output,workers,continuation=False,warm=False)
                     omitted[name]=value;del starting[name]
             f.Close()
         out=output/('profile_pulls_full_start' if full_start else 'profile_pulls_multistart' if multistart else 'profile_pulls_bracket' if bracket_recovery else 'profile_pulls_neighbour_resume' if resume_neighbour else 'profile_pulls_neighbour' if neighbour_scan else 'profile_pulls_direct' if direct_scan else 'profile_pulls_gaussian_scan' if gaussian_scan else 'profile_pulls_warm_after_nll' if delayed_warm else 'profile_pulls_warm' if warm else 'profile_pulls_minimizer' if continuation else 'profile_pulls');out.mkdir(exist_ok=True)
-        files=[*SOURCES,'workflows/impact_legacy.py']
-        if direct_scan:files+=['workflows/profile_sgamma.py','workflows/recover_impacts.py']
+        files=[*SOURCES,'workflows/combine_impacts.py']
         contract=freeze_contract(out,origins,files,dict(
             central_fit=str(central.relative_to(ROOT)),central_sha256=sha256(central),
             workspace_sha256=sha256(target),signal_strength=0,observed_sr_used=False,
@@ -703,8 +821,16 @@ if __name__ == '__main__':
     p.add_argument('--manifest', type=Path, default=ROOT/'stats/run3/grid/manifest.json')
     p.add_argument('--output', type=Path, default=ROOT/'stats/run3/cronly')
     p.add_argument('--plot-only', action='store_true')
+    p.add_argument('--refit-current', action='store_true')
+    p.add_argument('--refit-initial-values', help='Explicit initial parameter values for the requested refit')
     p.add_argument('--pull-ylim', type=float, default=6.0)
     p.add_argument('--native-runtime', action='store_true', help=argparse.SUPPRESS)
     a = p.parse_args()
+    if a.refit_initial_values and not a.refit_current:
+        p.error('--refit-initial-values requires --refit-current')
+    if a.refit_current and a.plot_only:
+        p.error('Choose a refit or plotting')
     native_runtime(a.output)
+    if a.refit_current:
+        raise SystemExit(refit_current(a.manifest, a.output, initial_values=a.refit_initial_values))
     raise SystemExit(run(a.manifest, a.output, a.plot_only, a.pull_ylim))

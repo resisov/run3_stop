@@ -10,9 +10,9 @@ from TROTASR.utils.io import read_json, write_json, sha256
 from TROTASR.workflows import diagnostic_common as common
 from TROTASR.workflows import combine_impacts as impact
 from TROTASR.workflows.combine_cronly import fit_command as cr_command
-from TROTASR.workflows.impact_legacy import check_endpoints, fit_command
-from TROTASR.workflows.impact_recovery_legacy import Recovery, missing_endpoint_side, missing_endpoint_rows, TARGET, NLL_TOL
-from TROTASR.workflows.recover_impacts import recovery_scope
+from TROTASR.workflows.combine_impacts import (
+    check_endpoints, fit_command, ImpactProfileRecovery, missing_endpoint_side,
+    missing_endpoint_rows, PROFILE_TARGET, PROFILE_NLL_TOL, recovery_scope)
 
 
 def cr_text():
@@ -160,7 +160,7 @@ class ImpactBenchmarkTests(unittest.TestCase):
             expected_points_by_model={'T2tt':205, 'T2tb':365, 'T2bW':354})
         card = ROOT/'stats/not_created/card.txt'
         with patch.object(common, 'read_json', return_value=manifest), \
-             patch.object(common, 'IntegrityCache', return_value=lambda p:'digest'), \
+             patch.object(common, 'sha256', return_value='digest'), \
              patch.object(common, 'verify_card', return_value=card) as verify, \
              patch.object(Path, 'read_text', return_value=''):
             for model in ('T2bW', 'T2tb'):
@@ -174,6 +174,44 @@ class ImpactBenchmarkTests(unittest.TestCase):
 
 
 class DiagnosticPolicyTests(unittest.TestCase):
+    def test_native_and_delivered_six_era_grid_keep_distinct_layout_guards(self):
+        from TROTASR.utils.paths import ERAS
+        from TROTASR.workflows.combine_limits import verify_combined_grid
+        config = read_json(ROOT/'jsons/analysis.json')
+        native = dict(revised_record(), years=list(ERAS), bins=1284, rate_parameters=288,
+                      points=[dict(model=model, mass=f'mStop{600+i}_mLSP1')
+                              for model, count in (('T2tt',225),('T2bW',365),('T2tb',365))
+                              for i in range(count)])
+        for key in ('run3_systematics', 'systematic_evaluation_deferred', 'systematic_scope',
+                    'luminosity_uncertainties', 'luminosity_model'):
+            native[key] = config[key]
+        merged = dict(native, era_merged=True, bins=214, likelihood_channels=8,
+                      rate_parameters=48, floating_normalization_parameters=48)
+        accepted_previous = dict(merged, rate_parameters=288, source_bins=1284,
+                                 source_likelihood_channels=48)
+        for record in (native, merged, accepted_previous):
+            with self.subTest(merged=record.get('era_merged'), rate_parameters=record['rate_parameters']):
+                self.assertTrue(common.require_revised_record(record))
+                verify_combined_grid(record)
+        for invalid in (dict(native, bins=214), dict(merged, bins=1284),
+                        dict(merged, likelihood_channels=48),
+                        dict(merged, floating_normalization_parameters=288),
+                        dict(merged, rate_parameters=288),
+                        dict(merged, scope='full_run3_hybrid_production')):
+            with self.subTest(bins=invalid['bins'], scope=invalid['scope']), self.assertRaises(ValueError):
+                verify_combined_grid(invalid)
+
+    def test_merged_diagnostic_requires_current_scope_before_reading_a_card(self):
+        from TROTASR.utils.paths import ERAS
+        manifest = dict(status='cards_ready', era_merged=True,
+                        scope='full_run3_hybrid_production', sr_data_blinded=True,
+                        years=list(ERAS), bins=214, likelihood_channels=8,
+                        floating_normalization_parameters=48, auto_mc_stats=[10,1,1])
+        with patch.object(common, 'read_json', return_value=manifest), \
+             patch.object(common, 'sha256', side_effect=AssertionError('must not read a retired card')):
+            with self.assertRaisesRegex(ValueError, 'canonical six-era merged card'):
+                common.grid_card(ROOT/'stats/not_created/manifest.json', 'impact')
+
     def test_cr_independent_seeds_include_central_and_distinct_saved_points(self):
         from TROTASR.workflows.combine_cronly import profile_start_points
         samples=[dict(theta=-4.28,deltaNLL=.55,root='near'),
@@ -329,13 +367,13 @@ class DiagnosticPolicyTests(unittest.TestCase):
             missing_endpoint_side([center,upper],.1,[-5,5])
 
     def test_original_profile_crossing(self):
-        recovery = Recovery.__new__(Recovery)
+        recovery = ImpactProfileRecovery.__new__(ImpactProfileRecovery)
         def submit(name, value):
             return types.SimpleNamespace(result=lambda: dict(theta=value,deltaNLL=value))
         recovery.submit = submit
         point, trace = recovery.crossing('x',dict(theta=0.,deltaNLL=0.),dict(theta=1.,deltaNLL=1.))
-        self.assertAlmostEqual(point['deltaNLL'], TARGET)
-        self.assertEqual(NLL_TOL, .002)
+        self.assertAlmostEqual(point['deltaNLL'], PROFILE_TARGET)
+        self.assertEqual(PROFILE_NLL_TOL, .002)
         self.assertLessEqual(len(trace),20)
         with self.assertRaises(ValueError):
             recovery.crossing('x',dict(theta=0.,deltaNLL=.7),dict(theta=1.,deltaNLL=1.))
@@ -374,13 +412,12 @@ class DiagnosticPolicyTests(unittest.TestCase):
         self.assertEqual(recovery_scope(status,records,[name],[],{}),[name])
 
     def test_zero_width_entry_uses_existing_finite_profile_algorithm(self):
-        from TROTASR.workflows import impact_recovery_legacy as profile
         name='CMS_NPS26012_ll_norm_highdm_Nb1_bin1_2024'
         center=dict(theta=1.,r=1.,deltaNLL=0.,quantile=-1.)
         lower=dict(theta=.99,r=.999,deltaNLL=0.,quantile=.16)
         rows=[center,lower,center]
         with tempfile.TemporaryDirectory(dir=ROOT/'results') as folder:
-            worker=Recovery.__new__(Recovery)
+            worker=ImpactProfileRecovery.__new__(ImpactProfileRecovery)
             worker.work=worker.out=Path(folder)
             worker.refined=set()
             worker.inputs=dict(bestfit={name:1.,'r':1.},parameter_bounds={name:[0,10]})
@@ -390,7 +427,7 @@ class DiagnosticPolicyTests(unittest.TestCase):
                 return types.SimpleNamespace(result=lambda:dict(theta=value,r=1.+(value-1.)*.1,
                     deltaNLL=.5*((value-1.)/.01)**2))
             worker.submit=submit
-            with patch.object(profile,'tree_rows',return_value=rows):
+            with patch.object(impact,'tree_rows',return_value=rows):
                 result=worker.recover(name)
             self.assertEqual(result['original_entries'],rows)
             self.assertEqual(result['lower'],lower)
@@ -476,13 +513,30 @@ class CommandIntegrityTests(unittest.TestCase):
             recover.assert_not_called()
 
     def test_impact_main_exhausts_finite_profiles(self):
-        from TROTASR.workflows import recover_impacts as recovery
         write_json(self.work/'impact_status.json',dict(status='needs_attention'))
         with patch.object(impact,'_run',return_value=2), \
-             patch.object(recovery,'run_bounded',return_value=2) as fits:
+             patch.object(impact,'run_bounded',return_value=2) as fits:
             self.assertEqual(impact.run_with_recovery('manifest',self.work,4),2)
         self.assertEqual(fits.call_count,6)
         self.assertEqual(len(read_json(self.work/'impact_status.json')['recovery_attempts']),7)
+
+    def test_impact_collection_reuses_only_terminal_blinded_receipt(self):
+        (self.work/'impact.lock').touch()
+        receipt = self.work/'impact_status.json'
+        accepted = dict(status='fits_complete', controller_pid=None, sr_data_used=False,
+                        asimov_expect_signal=1, json=str(self.product))
+        write_json(receipt, accepted)
+        with patch.object(impact,'collect_profile_endpoints') as collect, \
+             patch.object(impact,'CommandRunner') as runner:
+            self.assertEqual(impact.publish_completed_profiles(self.work,self.work,[]),
+                             self.product)
+            with patch.object(impact,'process_active',return_value=True), self.assertRaises(ValueError):
+                impact.publish_completed_profiles(self.work,self.work,[])
+            write_json(receipt, dict(accepted,sr_data_used=True))
+            with self.assertRaises(ValueError):
+                impact.publish_completed_profiles(self.work,self.work,[])
+        collect.assert_not_called()
+        runner.assert_not_called()
 
     def test_policy_labels_do_not_replace_physics_checks(self):
         from TROTASR.workflows import build_nominal_grid as cards

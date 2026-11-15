@@ -1,17 +1,7 @@
-import ast
-import importlib.util
-import math
 import struct
-from pathlib import Path
 import unittest
-from unittest.mock import patch
 
-source = Path(__file__).with_name('recover_impacts.py')
-if not source.exists():
-    source = Path(__file__).resolve().parents[1]/'workflows/recover_impacts.py'
-spec = importlib.util.spec_from_file_location('TROTASR.workflows.bounded_test',source)
-mod = importlib.util.module_from_spec(spec);spec.loader.exec_module(mod)
-from TROTASR.workflows.profile_sgamma import fixed_command
+from TROTASR.workflows import combine_impacts as mod
 
 NAME='CMS_NPS26012_sgamma_shape_lowdm_Nb1_bin1_2024'
 def p(x,nll,r=1.):return dict(status='complete',theta=x,deltaNLL=nll,r=r)
@@ -32,10 +22,6 @@ class BoundedTests(unittest.TestCase):
         self.assertEqual(mod.reconcile_seed_bounds({'x':1.2},{'x':[.01,5.]}),{'x':1.2})
         for value in (0.,.009999,5.000001,float('nan')):
             with self.assertRaises(ValueError):mod.reconcile_seed_bounds({'x':value},{'x':[.01,5.]})
-
-    def test_bounded_receipt_namespace(self):
-        out=Path('/campaign/bounded_sgamma_20260930')
-        self.assertEqual((out/'points'/NAME/'key').parents[2],out)
 
     def test_exact_scope(self):
         parent=dict(status='needs_attention',failed_nuisances=[NAME],nuisance_count=2)
@@ -81,7 +67,7 @@ class BoundedTests(unittest.TestCase):
                 mod.bounded_boundary_pair(p(.01,.1),other,.01,r_tolerance=None)
 
     def test_fixed_command_preserves_data_and_common_minimum(self):
-        c=fixed_command(dict(snapshot='same.root',asimov='same_asimov.root'),NAME,.01,'_test',
+        c=mod.fixed_command(dict(snapshot='same.root',asimov='same_asimov.root'),NAME,.01,'_test',
             extra=['--cminDefaultMinimizerStrategy','1'],seeds={NAME:1.,'r':1.,'other':.7})
         expected={'--snapshotName':'impact_initial','--toysFile':'same_asimov.root',
             '--setParameterRanges':'r=0,20','--expectSignal':'1','--floatOtherPOIs':'1',
@@ -94,8 +80,8 @@ class BoundedTests(unittest.TestCase):
         self.assertIn(NAME+'=0.01',c[c.index('--fixedPointPOIs')+1])
 
     def test_exact_crossing_math_unchanged(self):
-        self.assertEqual(mod.BoundedSgamma.crossing,mod.legacy.Recovery.crossing)
-        self.assertEqual(mod.legacy.TARGET,.5);self.assertEqual(mod.legacy.NLL_TOL,.002)
+        self.assertEqual(mod.BoundedSgamma.crossing,mod.ImpactProfileRecovery.crossing)
+        self.assertEqual(mod.PROFILE_TARGET,.5);self.assertEqual(mod.PROFILE_NLL_TOL,.002)
 
     def test_fixed_range_guard_before_execution(self):
         obj=mod.BoundedSgamma.__new__(mod.BoundedSgamma)

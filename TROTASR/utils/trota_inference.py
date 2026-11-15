@@ -47,9 +47,11 @@ def load_models(year):
     models = {kind: tf.keras.models.load_model(str(path), compile=False) for kind, path in paths.items()}
     early = analysis_era(year) in EARLY_ERAS
     expected = {'fatjet': (None, 12 if early else 9),
-                'jet': (None, None if early else 3, 8), 'top': (None, 3)}
+                'jet': (None, None, 8), 'top': (None, 3)}
     actual = {t.name.split(':')[0]: tuple(t.shape) for t in models['mixed'].inputs}
-    if actual != expected:
+    # A variable jet axis also accepts the existing three-slot tensor.
+    fixed_late = not early and actual == dict(expected, jet=(None, 3, 8))
+    if actual != expected and not fixed_late:
         raise ValueError('TROTA model/input feature contract mismatch: '+repr(actual))
     models['_year'] = year
     return models

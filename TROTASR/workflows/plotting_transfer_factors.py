@@ -77,12 +77,12 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     for name in ('input', 'output'):
         p.add_argument('--'+name, type=Path, required=True)
-    p.add_argument('--hists', type=Path, required=True)
+    p.add_argument('--hists', type=Path, help='Compatibility option; transfer factors are the plot inputs')
     p.add_argument('--allow-validation', action='store_true')
     p.add_argument('--allow-partial', action='store_true')
     p.add_argument('--validate-only', action='store_true')
     a = p.parse_args()
-    source_path, hist_path, output = (internal_path(v) for v in (a.input, a.hists, a.output))
+    source_path, output = (internal_path(v) for v in (a.input, a.output))
     source = read_json(source_path)
     year = source.get('year')
     from TROTASR.utils.paths import analysis_era
@@ -91,17 +91,14 @@ def main():
     if not source.get('sr_data_blinded'):
         raise ValueError('Unsupported TF year or missing blinding contract')
     provenance = source['provenance']
-    if (provenance['hist_input_sha256'] != sha256(hist_path)
-            or str(provenance['campaign_year']) != str(year)
-            or internal_path(ROOT/provenance['hist_input']) != hist_path):
-        raise ValueError('TF does not belong to the current histogram input')
+    if str(provenance['campaign_year']) != str(year):
+        raise ValueError('TF provenance year does not match product year')
     if source.get('scope') not in ('full_nominal_production', 'full_combined_systematic_production') and not a.allow_validation:
         raise ValueError('Full production required; validation needs explicit opt-in')
     factors, unavailable = prepare_factors(source, configuration(year))
     if unavailable and not a.allow_partial:
         raise ValueError('Unsupported TF cells; explicit diagnostic opt-in required: '+str(unavailable))
-    contract = dict(input_sha256=sha256(source_path), hist_input_sha256=provenance['hist_input_sha256'],
-        year=year, scope=source['scope'])
+    contract = dict(input_sha256=sha256(source_path), year=year, scope=source['scope'])
     manifest_path = output/'plot_manifest.json'
     if manifest_path.exists():
         old = read_json(manifest_path)

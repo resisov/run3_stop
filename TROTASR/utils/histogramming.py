@@ -1,12 +1,12 @@
-"""One bounded input pass shared by high/low-dM and weight variations.
+"""Fill high-/low-dM histograms and their weight and object variations.
 
-Sparse SR axes are not merged here. CR axes never inherit SR topology.
-No event sidecars, shifted ROOT files, or campaign imports are produced.
+Keep sparse SR axes and each control region's own category definition.
 """
 from pathlib import Path
 import ast
 import copy
 from functools import lru_cache
+from contextlib import ExitStack
 import time
 import importlib.metadata
 import numpy as np
@@ -33,13 +33,9 @@ SR_RECOIL = np.asarray([250, 300, 350, 400, 500, 800, 1500], dtype=float)
 MLL_EDGES = np.asarray([50., 71., 81., 91., 101., 111., 160., 250., 500.])
 
 
-def weight_variations_needed(endpoint, variations, reference_execution=False):
-    """Shape endpoints need central SFs, not a shape x weight cross product.
-
-    The reference path deliberately retains the old extra computation so that
-    output-equivalence tests compare against the pre-optimization calculation.
-    """
-    return endpoint == 'nominal' and (reference_execution or tuple(variations) != ('nominal',))
+def weight_variations_needed(endpoint, variations):
+    """Evaluate weight shifts only on the nominal object collection."""
+    return endpoint == 'nominal' and tuple(variations) != ('nominal',)
 
 
 @lru_cache(maxsize=1)
@@ -183,9 +179,6 @@ def add2d(target, path, x, y, weight, ex, ey):
     target['edges'] = [np.asarray(ex).tolist(), np.asarray(ey).tolist()]
 
 
-def signatures():
-    return {str(p.relative_to(ROOT)): sha256(p) for folder in ('utils', 'gnn4lowdm')
-            for p in sorted((ROOT / folder).rglob('*.py'))}
 
 
 def _response_identity(dataset_id, mstop, mlsp, region):
@@ -227,16 +220,50 @@ def nominal_response_arrays(a, selections, model, cached_scores=None, year=2024)
     return result
 
 
+def _friend_chunks(chunks, friend):
+    """Join by original ROOT row and event identity before any region masks."""
+    from .trota_friend import read_friend_slice
+    start = 0
+    for chunk in chunks:
+        stop = start + len(chunk)
+        yield read_friend_slice(friend, chunk, start, stop)
+        start = stop
+    if start != friend.num_entries:
+        raise ValueError('Incomplete corrected nominal TROTA friend traversal')
+
+
+
 def build(input_path, year, output, modes=('highdm', 'lowdm'), variations=('nominal',), chunk_size=2000,
           shape_mode=None, candidate_budget=150000, object_endpoint=None, object_endpoints=None,
-          reference_execution=False, support_only=False):
+          support_only=False, normalization_path=None,
+          use_trota_friend=None):
+    """Build or resume one file under an exclusive output lock."""
+    import fcntl
+    output = internal_path(output)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    with output.with_name(output.name + '.lock').open('a') as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        return _build(input_path, year, output, modes, variations, chunk_size, shape_mode,
+                      candidate_budget, object_endpoint, object_endpoints,
+                      support_only, normalization_path, use_trota_friend)
+
+
+def _build(input_path, year, output, modes, variations, chunk_size, shape_mode,
+           candidate_budget, object_endpoint, object_endpoints,
+           support_only, normalization_path, use_trota_friend):
     year = era_year(year)
+    modes, variations = tuple(modes), tuple(variations)
+    # The stored non-JME endpoints are frozen absolute templates. Corrected
+    # nominal friends change their tag definition, not just their execution.
+    if use_trota_friend and shape_mode == 'stored_trota_nonjme':
+        raise ValueError('Corrected TROTA friends cannot replace the frozen stored-TROTA non-JME endpoints')
+    friend_nominal_only = use_trota_friend is True and shape_mode is None
+    if friend_nominal_only:
+        shape_mode = 'cms_trota_jme'
     if chunk_size <= 0:
         raise ValueError('Positive chunk sizes are required')
     if not set(modes) <= {'highdm', 'lowdm'}:
         raise ValueError('Invalid histogram mode')
-    if reference_execution and shape_mode != 'stored_trota_nonjme':
-        raise ValueError('Unoptimized reference execution is only for non-JME equivalence tests')
     if support_only and shape_mode != 'cms_trota_jme':
         raise ValueError('Inference support masking applies only to corrected-central/JME views')
     if object_endpoint is not None:
@@ -255,25 +282,34 @@ def build(input_path, year, output, modes=('highdm', 'lowdm'), variations=('nomi
             (object_endpoint,) if object_endpoint is not None else ('nominal', *NONJME_ENDPOINTS))
     input_path = internal_path(input_path)
     output = internal_path(output)
+    friend_task = None
+    if shape_mode == 'cms_trota_jme' and use_trota_friend is not False:
+        from .trota_friend import find_friend_task, friend_production_complete
+        if use_trota_friend or friend_production_complete():
+            friend_task = find_friend_task(input_path, year)
+        if use_trota_friend and friend_task is None:
+            raise ValueError('Corrected nominal TROTA friends require an approved MC input in the friend inventory')
     fingerprint = dict(size=input_path.stat().st_size, mtime_ns=input_path.stat().st_mtime_ns)
     metadata = validate_root(input_path, year)
+    from ..workflows.rare_top_policy import excluded_ids, require_clean
+    excluded = excluded_ids(metadata['datasets'])
+    excluded_datasets = {int(value) for value in excluded}
     assets_sha256, assets = era_assets(year)
     for asset in assets:
         if sha256(ROOT / asset['target']) != asset['sha256']:
             raise ValueError('Changed immutable asset: ' + asset['target'])
     configuration = read_json(configuration_path(year))
-    normalization_path = ROOT / 'estimations' / ('normalization_%s.json.gz' % year)
+    normalization_path = internal_path(normalization_path) if normalization_path is not None else ROOT / 'estimations' / ('normalization_%s.json.gz' % year)
     normalization = read_json(normalization_path)
     contract = dict(input=str(input_path), fingerprint=fingerprint, year=year,
                     central_object_corrections=('target_era_intermediate' if analysis_era(year) in EARLY_ERAS
                                                 else 'muon_scaled_resolution_fallback_v1'),
-                    code=signatures(), normalization_sha256=sha256(normalization_path),
+                    normalization_sha256=sha256(normalization_path),
                     assets_sha256=assets_sha256, modes=list(modes), variations=list(variations),
                     configuration_sha256=sha256(configuration_path(year)),
                     sr_binning_sha256=sha256(JSONS / 'highdm_sr_binning.json'))
     if analysis_era(year) in EARLY_ERAS:
-        contract['muon_selection'] = dict(loose_pt_gt=15., medium_pt_gt=15.,
-                                         adopted='2026-10-20')
+        contract['muon_selection'] = dict(loose_pt_gt=15., medium_pt_gt=15.)
     if shape_mode is not None:
         if shape_mode not in ('cms_trota_jme', 'stored_trota_nonjme'):
             raise ValueError('Unknown shape implementation')
@@ -281,6 +317,10 @@ def build(input_path, year, output, modes=('highdm', 'lowdm'), variations=('nomi
         if shape_mode == 'cms_trota_jme':
             contract.update(trota_models_sha256=sha256(ROOT/'models/TROTA/manifest.json'),
                 jme_payloads_sha256=sha256(ROOT/'scales/JME/manifest.json'))
+            if friend_task is not None:
+                from .trota_friend import SCHEMA as FRIEND_SCHEMA
+                contract['nominal_trota_friend'] = dict(schema=FRIEND_SCHEMA,
+                    central_object_view='cms_trota_jme', nominal_only=friend_nominal_only)
             if support_only:
                 contract['execution'] = dict(inference_support='all_region_pretopology_union',
                     physics_definitions_changed=False)
@@ -293,30 +333,40 @@ def build(input_path, year, output, modes=('highdm', 'lowdm'), variations=('nomi
                 contract['object_endpoints'] = [] if object_endpoint == 'nominal' else [object_endpoint]
             contract['object_endpoints'] = [e for e in endpoints if e != 'nominal']
             contract['execution'] = dict(schema='trotasr_file_local_v1', endpoints=list(endpoints),
-                chunk_size=chunk_size, gnn_batch_size=128 if reference_execution else 256,
-                branch_selection='all_reference' if reference_execution else 'consumer_columns',
+                chunk_size=chunk_size, gnn_batch_size=256,
+                branch_selection='consumer_columns',
                 physics_definitions_changed=False)
     if Path(output).exists():
+        from .io import scientific_settings
         previous = read_json(output)
-        if previous.get('status') == 'complete_one_file_test' and previous.get('contract') == contract:
+        complete = previous.get('status') in ('complete', 'complete_one_file_test', 'complete_member_sums')
+        if complete:
+            if scientific_settings(previous.get('contract')) != scientific_settings(contract):
+                raise ValueError('Completed histogram uses different inputs, corrections or binning: ' + str(output))
+            require_clean(previous)
             return previous
-        raise ValueError('Existing output has a different contract; select a separate test output')
     model = Rank005Numpy(portable_model(year)) if 'lowdm' in modes else None
     start = time.monotonic()
     payload = dict(schema='trotasr_histograms_v1', status='running', contract=contract,
                    category_order=list(CATEGORY_ORDER), input_metadata=metadata.get('datasets', {}),
-                   bins_merged=False, sr_data_blinded=True, scope='one_file_validation_not_full_campaign',
+                   bins_merged=False, sr_data_blinded=True, scope='single_file_histograms',
                    highdm_sr_source_axes='exact_nb_exact_topology_native_recoil_v2',
-                   mixed_sf='not_provided', overlap_policy='B>M>R; independent W; test only',
+                   mixed_sf='not_provided', overlap_policy='B>M>R; independent W',
                    histograms={}, physical_histograms={}, dy_rz={}, audit={'chunks': [], 'weights': [], 'events_read': 0, 'migrations': {}})
-    with uproot.open(input_path, object_cache=None, array_cache=None) as f:
+    with ExitStack() as resources:
+        f = resources.enter_context(uproot.open(input_path, object_cache=None, array_cache=None))
         resolved = resolved_candidates(f, year) if shape_mode != 'cms_trota_jme' else None
         policy = topw_file_input_policy(f)
         reader = TopWEvents(f, policy)
         # Events is an already reduced intermediate ntuple, not NanoAOD. Only
         # existing columns are read; all inference input and truth stay in ROOT.
         branches = f['Events'].keys()
-        if shape_mode == 'stored_trota_nonjme' and not reference_execution:
+        if friend_task is not None:
+            from .trota_friend import open_friend
+            friend = resources.enter_context(open_friend(friend_task, input_path))
+            branches = [name for name in branches
+                        if name != 'nTopMixed1pct' and not name.startswith(('TopMixed1pct_', 'nTopMixed1pct_'))]
+        if shape_mode == 'stored_trota_nonjme':
             payload['branch_read'] = branch_plan(f['Events'])
             branches = payload['branch_read']['columns']
         from .corrections import corrected_central_chunks
@@ -337,8 +387,13 @@ def build(input_path, year, output, modes=('highdm', 'lowdm'), variations=('nomi
             from .trota_inference import load_models
             payload['audit']['trota_inference'] = {}
             payload['dy_rz_variations'] = {}
-            views = event_views(source_chunks, year, load_models(year), payload['audit']['trota_inference'],
-                                candidate_budget, support_only=support_only)
+            nominal_only = friend_nominal_only
+            if friend_task is not None:
+                source_chunks = _friend_chunks(source_chunks, friend)
+            models = None if friend_task is not None and nominal_only else load_models(year)
+            views = event_views(source_chunks, year, models, payload['audit']['trota_inference'],
+                                candidate_budget, support_only=support_only,
+                                nominal_only=nominal_only, friend_chunks=friend_task is not None)
         else:
             views = ((chunk, resolved, 'nominal') for chunk in source_chunks)
         for a, resolved, endpoint in views:
@@ -352,11 +407,11 @@ def build(input_path, year, output, modes=('highdm', 'lowdm'), variations=('nomi
                                   if shape_mode == 'stored_trota_nonjme' else None)
             # One selection/object pass also retains the disjoint off-Z
             # measurement sample. The displayed DY CR remains on-Z only.
-            reuse_nominal = (shape_mode == 'stored_trota_nonjme' and not reference_execution
+            reuse_nominal = (shape_mode == 'stored_trota_nonjme'
                              and endpoint != 'nominal' and a is nominal_arrays)
-            cache_nominal = (shape_mode == 'stored_trota_nonjme' and not reference_execution
+            cache_nominal = (shape_mode == 'stored_trota_nonjme'
                              and (endpoint == 'nominal' or reuse_nominal))
-            include_weight_variations = weight_variations_needed(endpoint, variations, reference_execution)
+            include_weight_variations = weight_variations_needed(endpoint, variations)
             if reuse_nominal:
                 selections, audit = nominal_selections, copy.deepcopy(nominal_selection_audit)
                 # select() updates veto collections in place. Preserve its
@@ -365,7 +420,7 @@ def build(input_path, year, output, modes=('highdm', 'lowdm'), variations=('nomi
                 cached_scores = nominal_scores
             else:
                 selections, audit = select(a, resolved, dy_mass_window=None, topology_cache=topology_cache, year=year)
-                cached_scores = region_scores(a, selections, model, year=year) if shape_mode == 'stored_trota_nonjme' and not reference_execution else None
+                cached_scores = region_scores(a, selections, model, year=year) if shape_mode == 'stored_trota_nonjme' else None
             if endpoint == 'nominal':
                 nominal_selection_audit = copy.deepcopy(audit)
                 nominal_scores = cached_scores
@@ -395,6 +450,8 @@ def build(input_path, year, output, modes=('highdm', 'lowdm'), variations=('nomi
                                 target[key]=target.get(key,0)+int(np.sum(value))
             identity = np.stack([np.asarray(a[x], dtype=int) for x in ('dataset_id', 'mStop', 'mLSP')], axis=1)
             for dataset_id, ms, ml in np.unique(identity, axis=0):
+                if int(dataset_id) in excluded_datasets:
+                    continue
                 chosen = np.all(identity == [dataset_id, ms, ml], axis=1)
                 dataset, process, is_data, is_signal = dataset_label(metadata, int(dataset_id))
                 if dataset == 'unknown':
@@ -418,6 +475,8 @@ def build(input_path, year, output, modes=('highdm', 'lowdm'), variations=('nomi
                 record = dict(dataset=dataset, process=process, audit=wa, topw={}, endpoint=endpoint)
                 payload['audit']['weights'].append(record)
                 sample = 'data' if is_data else (signal_mass_key(signal_topology(dataset), int(ms), int(ml)) if is_signal else process)
+                if sample in ('TTV', 'TTTT'):
+                    sample = 'TT'
                 for region in REGIONS:
                     if is_data and (region == 'SR' or not data_process_allowed(process, region)):
                         continue
@@ -557,7 +616,9 @@ def build(input_path, year, output, modes=('highdm', 'lowdm'), variations=('nomi
         raise ValueError('Input ROOT changed during the read; output not committed')
     if payload['audit']['events_read'] != reader.num_entries:
         raise ValueError('Incomplete Events traversal')
-    payload.update(status='complete_one_file_test', seconds=time.monotonic()-start,
+    payload['background_policy'] = dict(excluded_primaries=['TTWH', 'TTZH'],
+        excluded_files=[dict(datasets={key: metadata['datasets'][key] for key in sorted(excluded)})])
+    payload.update(status='complete', seconds=time.monotonic()-start,
                    versions={x: importlib.metadata.version(x) for x in ('numpy', 'awkward', 'uproot', 'coffea', 'correctionlib')})
     write_json(output, payload)
     return payload

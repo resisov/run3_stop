@@ -173,9 +173,9 @@ def isGoodJet(jet, year):
 
     def getJetID(eta, chHEF, neHEF, chEmEF, neEmEF, muEF, chMultiplicity, neMultiplicity, multiplicity):
         if year == '2024':
-            evaluator = correctionlib.CorrectionSet.from_file(str(resolve_payload('data/JMESF/'+year+'/jetid.json.gz')))
+            evaluator = correctionlib.CorrectionSet.from_file(str(resolve_payload('scales/JME/'+year+'/jetid.json.gz')))
         elif year == '2025':
-            evaluator = correctionlib.CorrectionSet.from_file(str(resolve_payload('data/JMESF/2024/jetid.json.gz')))
+            evaluator = correctionlib.CorrectionSet.from_file(str(resolve_payload('scales/JME/2024/jetid.json.gz')))
         corr = evaluator["AK4PUPPI_TightLeptonVeto"]
         counts = ak.num(eta)
         eta, chHEF, neHEF, chEmEF, neEmEF, muEF = ak.flatten(eta), ak.flatten(chHEF), ak.flatten(neHEF), ak.flatten(chEmEF), ak.flatten(neEmEF), ak.flatten(muEF)
@@ -197,7 +197,7 @@ def isJetVeto(jet, year):
     pt = jet.pt
     eta = jet.eta
     phi = jet.phi
-    evaluator = correctionlib.CorrectionSet.from_file(str(resolve_payload('data/JMESF/'+year+'/jetvetomaps.json.gz')))
+    evaluator = correctionlib.CorrectionSet.from_file(str(resolve_payload('scales/JME/'+year+'/jetvetomaps.json.gz')))
     if year == '2024':
         corr = evaluator["Summer24Prompt24_RunBCDEFGHI_V1"]
     elif year == '2025':
@@ -226,9 +226,9 @@ def isGoodFatJet(jet, year):
 
     def getJetID(eta, chHEF, neHEF, chEmEF, neEmEF, muEF, chMultiplicity, neMultiplicity, multiplicity):
         if year == '2024':
-            evaluator = correctionlib.CorrectionSet.from_file(str(resolve_payload('data/JMESF/'+year+'/jetid.json.gz')))
+            evaluator = correctionlib.CorrectionSet.from_file(str(resolve_payload('scales/JME/'+year+'/jetid.json.gz')))
         elif year == '2025':
-            evaluator = correctionlib.CorrectionSet.from_file(str(resolve_payload('data/JMESF/2024/jetid.json.gz'))) ### Future update needed
+            evaluator = correctionlib.CorrectionSet.from_file(str(resolve_payload('scales/JME/2024/jetid.json.gz'))) ### Future update needed
         corr = evaluator["AK8PUPPI_TightLeptonVeto"]
         counts = ak.num(eta)
         eta, chHEF, neHEF, chEmEF, neEmEF, muEF = ak.flatten(eta), ak.flatten(chHEF), ak.flatten(neHEF), ak.flatten(chEmEF), ak.flatten(neEmEF), ak.flatten(muEF)

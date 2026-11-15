@@ -1,3 +1,4 @@
+import hashlib
 """Grid-boundary regressions: full bin layout, never synthetic physics results."""
 import copy
 from pathlib import Path
@@ -5,7 +6,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 import numpy as np
-from TROTASR.tests.test_statistics_inputs import fixture
+from TROTASR.tests.test_statistics_inputs import fixture, SR_LAYOUT, use_synthetic_sr_layout, SYNTHETIC_LAYOUT_DIGEST
 from TROTASR.utils.io import read_json, write_json, sha256
 from TROTASR.utils.paths import ROOT
 from TROTASR.utils.signal_models import signal_mass_key
@@ -14,14 +15,16 @@ from TROTASR.utils.statistical_templates import assemble, load_theory, profiled_
 from TROTASR.workflows.signal_grid_inputs import (MODELS, FIELDS, project_signals, signal_data,
     check_reference, extract_year, requested_grid, represented_signals, require_fit_support_issues)
 from TROTASR.workflows.build_nominal_grid import (build, point_card, combine_cached, point_signals,
-    fit_background, verify_signal_objects)
+    fit_background)
 from TROTASR.utils.sr_merge import load_merge, bin_groups, project
 from TROTASR.utils.statistical_templates import template_name
-from TROTASR.workflows.combine_limits import IntegrityCache
 from TROTASR.workflows import build_nominal_grid as builder
 
 
 MASS = 'mStop1200_mLSP500'
+SR_MERGE = ROOT / 'jsons/sr_category_merge.json'
+requires_layout = unittest.skipUnless(SR_LAYOUT.is_file(), 'Canonical high-dM SR layout is not installed locally')
+requires_merge = unittest.skipUnless(SR_MERGE.is_file(), 'Canonical high-dM SR merge is not installed locally')
 
 
 def grid_fixture():
@@ -36,10 +39,11 @@ def year_fixture(year):
         for samples in payload['histograms'][mode]['nominal']['SR'].values():
             for model in ('T2tb', 'T2bW'):
                 samples[signal_mass_key(model, 1200, 500)] = copy.deepcopy(samples[MASS])
-    payload['input_metadata']['signals'] = dict(is_signal=True,
+    payload['input_metadata']['signals'] = dict(is_signal=True, dataset='/SyntheticGridSignal/Fixture/NANOAOD',
         signal_sumw_by_genmodel={'GenModel_' + model + '_1200_500': 100. for model in MODELS})
-    payload['contract'].update(sr_binning_sha256=sha256(ROOT / 'highdm_sr_binning.json'),
-        configuration_sha256=sha256(ROOT / 'gnn4lowdm/config.json'))
+    from TROTASR.gnn4lowdm.configuration import configuration_path
+    payload['contract'].update(sr_binning_sha256=sha256(SR_LAYOUT) if SR_LAYOUT.is_file() else SYNTHETIC_LAYOUT_DIGEST,
+        configuration_sha256=sha256(configuration_path(year)))
     return values
 
 
@@ -139,6 +143,8 @@ class CanonicalCR12Tests(unittest.TestCase):
         bad['cr_only_unity_audit'][0]['parameter'] = par.replace('Nb1', 'Nb2plus')
         with self.assertRaises(ValueError): builder.cr12_payload(bad)
 
+    @requires_layout
+    @requires_merge
     def test_cr12_full_fixture_preserves_sr_low_and_signal_arrays(self):
         caches = {}
         for year in (2024,2025):
@@ -148,7 +154,7 @@ class CanonicalCR12Tests(unittest.TestCase):
             for rows in model['groups'].values():
                 for row in rows: row['physical'].pop('signal',None)
             caches[str(year)] = dict(background=model,signals=signals,source_bins=source)
-        merge = dict(path='sr_category_merge.json',sha256=sha256(ROOT/'sr_category_merge.json'))
+        merge = dict(path=str(SR_MERGE.relative_to(ROOT)),sha256=sha256(SR_MERGE))
         old, old_data, _, old_sources = combine_cached(caches,merge)
         new, new_data, _, new_sources = combine_cached(caches,merge,statistical_revision=builder.CR12_POLICY)
         self.assertEqual(sum(map(len,new.values())),428)
@@ -230,6 +236,11 @@ class CanonicalCR12Tests(unittest.TestCase):
 
 
 class NominalGridTests(unittest.TestCase):
+    def setUp(self):
+        if not SR_LAYOUT.is_file():
+            from TROTASR.workflows import signal_grid_inputs
+            use_synthetic_sr_layout(self, builder, signal_grid_inputs)
+
     def exclusion_fixture(self):
         data, issues = {}, []
         for y, up in (('2024', .05757514512913886), ('2025', .0253831485651911)):
@@ -269,11 +280,11 @@ class NominalGridTests(unittest.TestCase):
         self.assertEqual(card_text(channels, data, cr_only=True), card_text(channels, fit, cr_only=True))
 
     def test_exclusion_rejects_scope_expansion_or_changed_support(self):
-        for modification in ('target', 'approval', 'nominal', 'nan_up', 'negative_up', 'zero_up', 'other_shape', 'cr', 'issue'):
+        for modification in ('target', 'auto_mc_stats', 'nominal', 'nan_up', 'negative_up', 'zero_up', 'other_shape', 'cr', 'issue'):
             data, issues, policy = self.exclusion_fixture()
             r = data['SR_highdm_c1_2024','QCD_Nb1_u6']
             if modification == 'target': policy['targets'][0]['channel'] = 'QCDCR_highdm_c1_2024'
-            if modification == 'approval': policy['user_approved'] = False
+            if modification == 'auto_mc_stats': policy['auto_mc_stats'] = [1, 1, 1]
             if modification == 'nominal': r['nominal'][0] = 1e-12
             if modification == 'nan_up': r['variations']['CMS_scale_j_Total_2024']['up'][0] = float('nan')
             if modification == 'negative_up': r['variations']['CMS_scale_j_Total_2024']['up'][0] = -.1
@@ -284,6 +295,7 @@ class NominalGridTests(unittest.TestCase):
             with self.subTest(modification=modification), self.assertRaises(ValueError):
                 fit_background(data, issues, policy)
         data, issues, policy = self.exclusion_fixture()
+        self.assertFalse(fit_background(data, issues, dict(policy, user_approved=False))[1])
         extra = dict(channel='SR_lowdm_c1_2024', process='other', problem='zero_integral_variation')
         self.assertEqual(fit_background(data, issues+[extra], policy)[1], [extra])
 
@@ -364,6 +376,8 @@ class NominalGridTests(unittest.TestCase):
         self.assertTrue(issues)
         self.assertTrue(all(float(r['nominal'].sum()) == 0 for r in actual.values()))
 
+    @requires_layout
+    @requires_merge
     def test_four_final_files_and_clip_before_adopted_sr118_projection(self):
         caches={}
         for year in (2024,2025):
@@ -376,7 +390,7 @@ class NominalGridTests(unittest.TestCase):
             caches[str(year)]=dict(background=model,signals=signals,source_bins=source)
         raw,data,_,sources=combine_cached(caches)
         before,_,_=point_signals(raw,sources,caches,'T2tt',MASS)
-        merge=dict(path='sr_category_merge.json',sha256=sha256(ROOT/'sr_category_merge.json'))
+        merge=dict(path=str(SR_MERGE.relative_to(ROOT)),sha256=sha256(SR_MERGE))
         channels,after_data,_,merged_sources=combine_cached(caches,merge)
         after,issues,_=point_signals(channels,merged_sources,caches,'T2tt',MASS)
         self.assertFalse(issues)
@@ -459,12 +473,13 @@ class NominalGridTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Unpaired systematic endpoints'):
             project_signals(values[0], model, grid_fixture(), read_json(ROOT / 'gnn4lowdm/config.json'))
 
-    def test_original_requested_grid_includes_old_failed_points_not_old_limits(self):
-        grid = requested_grid(ROOT / 'stats/signal_grid.json')
-        self.assertEqual(grid['expected_points_by_model'], dict(T2tt=205, T2bW=354, T2tb=365))
-        self.assertIn('mStop1450_mLSP1300', grid['models']['T2tt'])
-        self.assertIn('mStop200_mLSP1', grid['models']['T2tb'])
-        self.assertNotIn('expected', (ROOT / 'stats/signal_grid.json').read_text().replace('expected_points_by_model', '').replace('expected_limits.json', ''))
+    def test_canonical_requested_grid_is_input_inventory_not_fit_output(self):
+        path = ROOT / read_json(ROOT/'jsons/analysis.json')['grid']
+        if not path.is_file():
+            self.skipTest('Canonical 955-point inventory is not installed locally')
+        grid = requested_grid(path)
+        self.assertEqual(grid['expected_points_by_model'], dict(T2tt=225, T2bW=365, T2tb=365))
+        self.assertIn(MASS, grid['models']['T2tt'])
 
     def test_named_signal_binding_and_signal_only_theory(self):
         payloads = [build_inputs(*year_fixture(y), 'T2tb', 1200, 500) for y in (2024, 2025)]
@@ -488,11 +503,18 @@ class NominalGridTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(dir=ROOT/'results') as folder:
             path = Path(folder) / 'hash_test.json'
             write_json(path, dict(value=1))
-            cache = IntegrityCache()
-            with patch('TROTASR.workflows.combine_limits.sha256', wraps=sha256) as digest:
+            cache = sha256
+            with patch('TROTASR.utils.io.hashlib.sha256', wraps=hashlib.sha256) as digest:
                 a = cache(path); self.assertEqual(a, cache(path)); self.assertEqual(digest.call_count, 1)
                 write_json(path, dict(value=2))
                 self.assertNotEqual(a, cache(path)); self.assertEqual(digest.call_count, 2)
+
+    def test_stale_merged_digest_does_not_waive_era_or_coverage_checks(self):
+        from TROTASR.tests.test_template_workflows import assert_stale_digest_ignored
+        from TROTASR.workflows import signal_grid_inputs
+        assert_stale_digest_ignored(self, signal_grid_inputs,
+            lambda names: extract_year(dict(zip(FIELDS,names)),dict(models={m:[] for m in MODELS})),
+            require_coverage=True)
 
     def test_two_year_validation_only_is_resumable_and_never_writes_root(self):
         with tempfile.TemporaryDirectory(dir=ROOT/'results') as folder:
@@ -522,9 +544,15 @@ class NominalGridTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'Full-input production'):
                 extract_year(config['years']['2024'], grid_fixture())
             measurement = ROOT / config['years']['2024']['sgamma']
-            bad = read_json(measurement); bad['provenance']['hist_input_sha256'] = 'wrong'
-            write_json(measurement, bad)
-            with self.assertRaisesRegex(ValueError, 'does not match'):
+            factor = read_json(measurement)
+            factor['provenance']['hist_input_sha256'] = 'old-merged-digest'
+            write_json(measurement, factor)
+            recovered = extract_year(config['years']['2024'], grid_fixture(), allow_validation=True)
+            self.assertEqual(recovered['status'], 'complete')
+            self.assertTrue(recovered['sr_data_blinded'])
+            factor['provenance']['campaign_year'] = '2025'
+            write_json(measurement, factor)
+            with self.assertRaisesRegex(ValueError, 'Measured factor year mismatch: sgamma'):
                 extract_year(config['years']['2024'], grid_fixture(), allow_validation=True)
 
     def test_preserved_template_validation_retains_zero_support_and_blocks_fit(self):

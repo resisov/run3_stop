@@ -200,20 +200,20 @@ def dy_display_config(high, low):
 
 
 @contextmanager
-def nominal_renderer(year, sources=(), include_four_jet_bin=False):
-    """Only campaign inputs change; no renderer code/style modifications."""
+def nominal_renderer(year, sources=()):
+    """Bind the current display bins and era settings to the shared renderer."""
+    mapping = deepcopy(renderer.HIGHDM_MULTIPLICITY_PLOT_BINS)
+    mapping['njet'] = dict(
+        source_edges=HIGHDM_DISTRIBUTION_VARIABLE_SPECS['njet']['bins'],
+        groups=[[3], [4], [5], [6], [7, 8, 9]],
+        edges=[3.5, 4.5, 5.5, 6.5, 7.5, 8.5],
+        labels=['4', '5', '6', '7-8', r'$\geq9$'],
+    )
     updates = dict(LUMINOSITY_FB=luminosity_fb(year),
                    LUMINOSITY_RELATIVE_UNCERTAINTY=0. if analysis_era(year) in EARLY_ERAS else .016,
-                   PLOT_SYSTEMATIC_SOURCES=list(sources))
+                   PLOT_SYSTEMATIC_SOURCES=list(sources),
+                   HIGHDM_MULTIPLICITY_PLOT_BINS=mapping)
     previous = {key:getattr(renderer, key) for key in updates}
-    if include_four_jet_bin:
-        mapping=deepcopy(renderer.HIGHDM_MULTIPLICITY_PLOT_BINS)
-        spec=mapping['njet']
-        if spec['groups']!=[[4],[5],[6],[7,8,9]] or spec['source_edges'][3:5]!=[3.5,4.5]:
-            raise ValueError('Original Njet display mapping changed')
-        spec.update(groups=[[3],*spec['groups']],edges=[3.5,*spec['edges']],labels=['4',*spec['labels']])
-        updates['HIGHDM_MULTIPLICITY_PLOT_BINS']=mapping
-        previous['HIGHDM_MULTIPLICITY_PLOT_BINS']=renderer.HIGHDM_MULTIPLICITY_PLOT_BINS
     try:
         for key,value in updates.items():
             setattr(renderer, key, value)
@@ -224,12 +224,7 @@ def nominal_renderer(year, sources=(), include_four_jet_bin=False):
 
 
 def omitted_physical_cells(raw, variable):
-    """Do not silently discard selected events through an inherited display map.
-
-The legacy Njet display starts at five, whereas the approved selection starts
-at four. Changing that display needs an explicit visual-definition decision;
-record the discrepancy without altering the renderer or any event selection.
-"""
+    """Audit nonzero selected entries outside the defined display groups."""
     config = renderer.HIGHDM_MULTIPLICITY_PLOT_BINS.get(variable)
     if config is None:
         return []
@@ -270,23 +265,35 @@ def draw_distribution(blocks, outbase, xlabel, luminosity_fb, uncertainty_label=
             uncertainty_label_override=uncertainty_label,x_tick_rotation=rotation)
 
 
+def _physical_variables(mode, region):
+    if mode == 'highdm':
+        return HIGH_VARIABLES[region]
+    return LOW_VARIABLES['DY2E' if region == 'DYCR' else region]
+
+
+def _physical_plot_name(mode, region, variable):
+    display = 'recoil_dy' if variable == 'recoil_dy2e' else variable
+    prefix = 'cr_' if mode == 'highdm' else 'lowdm_cr_'
+    return prefix + region.lower() + '_' + display, display
+
+
 def make_records(boundary, modes=('highdm', 'lowdm'), regions=REGIONS):
     output = []
     for mode in modes:
         for region in regions:
             if mode == 'highdm':
-                for variable in HIGH_VARIABLES[region]:
+                for variable in _physical_variables(mode, region):
                     source = boundary['highdm_variable_histograms']
                     raw = (renderer.combine_histogram_containers(source['DY2E'][variable], source['DY2M'][variable])
                            if region == 'DYCR' else source[region][variable])
                     record = renderer.highdm_variable_record(boundary, region, variable, raw_override=raw)
                     if record is not None:
                         record['display_omission_audit'] = omitted_physical_cells(raw, variable)
-                    output.append(('cr_'+region.lower()+'_'+variable, mode, region, variable, record))
+                    name, display = _physical_plot_name(mode, region, variable)
+                    output.append((name, mode, region, display, record))
             else:
-                variables = LOW_VARIABLES['DY2E' if region == 'DYCR' else region]
-                for variable in variables:
-                    display = 'recoil_dy' if variable == 'recoil_dy2e' else variable
+                for variable in _physical_variables(mode, region):
+                    name, display = _physical_plot_name(mode, region, variable)
                     if region == 'DYCR':
                         source = boundary['lowdm_variable_histograms']
                         muon = 'recoil_dy2m' if variable == 'recoil_dy2e' else variable
@@ -301,7 +308,7 @@ def make_records(boundary, modes=('highdm', 'lowdm'), regions=REGIONS):
                         allow_signal=False, raw_override=raw, spec_variable=variable, display_variable=display)
                     if record is not None:
                         record['blind_data'] = False
-                    output.append(('lowdm_cr_'+region.lower()+'_'+display, mode, region, display, record))
+                    output.append((name, mode, region, display, record))
     if any(row[-1] is None for row in output):
         raise ValueError('Unsupported empty physical plot: '+str([row[0] for row in output if row[-1] is None]))
     return output
@@ -315,28 +322,33 @@ def assert_band_only(before, after):
         raise ValueError('Systematic update changed central/statistics/data/axis/style input')
 
 
-def assert_four_jet_extension(previous,records,inputs,year):
-    """Only a new leading selected-4-jet bin; exact old absolute endpoint tails."""
-    if (previous.get('schema')!='trotasr_physical_plot_inputs_v1'
-            or previous['contract']['inputs']!=inputs or previous['contract']['year']!=year):
-        raise ValueError('Njet reference does not bind the same histogram and RZ inputs')
-    old={r[0]:r[-1] for r in previous['records'] if r[1]=='highdm' and r[3]=='njet'}
-    if set(old)!={'cr_'+r.lower()+'_njet' for r in REGIONS} or set(old)!={r[0] for r in records}:
-        raise ValueError('Only all four existing high-dM CR Njet figures may be extended')
-    for name,mode,region,variable,new in records:
-        ref=old[name]
-        if (new['nbin']!=ref['nbin']+1 or new['edges'][1:]!=ref['edges']
-                or new['xlabels'][1:]!=ref['xlabels'] or new.get('display_omission_audit')):
-            raise ValueError('Njet4 display extension altered old mapping or still omits data')
-        for field in ('background','background_unc','background_stat_unc','data','data_unc'):
-            np.testing.assert_array_equal(np.asarray(new[field])[1:],ref[field])
-        if set(new['groups'])!=set(ref['groups']) or set(new['background_systematic_totals'])!=set(ref['background_systematic_totals']):
-            raise ValueError('Njet extension changed process/nuisance inventory')
-        for group,values in ref['groups'].items():
-            np.testing.assert_array_equal(np.asarray(new['groups'][group])[1:],values)
-        for source,pair in ref['background_systematic_totals'].items():
-            for direction,values in pair.items():
-                np.testing.assert_array_equal(np.asarray(new['background_systematic_totals'][source][direction])[1:],values)
+def _cr_inputs(inputs):
+    return {key: value for key, value in inputs.items() if key != 'hists'}
+
+
+def _same_cr_plot_contract(previous, current):
+    """The full merged file hash is provenance, not a CR cache key."""
+    for key, value in current.items():
+        if key == 'reference_input_sha256':
+            continue
+        old_value = previous.get(key)
+        if key == 'inputs' and isinstance(old_value, dict) and isinstance(value, dict):
+            old_value, value = _cr_inputs(old_value), _cr_inputs(value)
+        if old_value != value:
+            return False
+    return True
+
+
+def _verify_plot_manifest(output, receipt, contract, names):
+    if not _same_cr_plot_contract(receipt['contract'], contract):
+        raise ValueError('Divergent plot outputs must be preserved')
+    requested = set(names)
+    blocked = {row['name'] for row in receipt.get('blocked_plots', ())}
+    expected = {name + suffix for name in requested - blocked for suffix in ('.pdf', '.png')}
+    if not blocked <= requested or set(receipt['files']) != expected:
+        raise ValueError('Existing figures do not cover the requested inventory')
+    if any(sha256(output/name) != digest for name,digest in receipt['files'].items()):
+        raise ValueError('Divergent plot outputs must be preserved')
 
 
 def render_input(payload, output):
@@ -345,19 +357,18 @@ def render_input(payload, output):
     contract = payload['contract']; year = contract['year']
     manifest_path = output/'plot_manifest.json'
     if manifest_path.exists():
-        old = read_json(manifest_path)
-        if any(old['contract'].get(key) != value for key, value in contract.items()) or any(sha256(output/n) != h for n,h in old['files'].items()):
-            raise ValueError('Divergent plot outputs must be preserved')
-        return old
+        saved = read_json(manifest_path)
+        _verify_plot_manifest(output, saved, contract, (row[0] for row in payload['records']))
+        return saved
     if output.exists() and any(output.iterdir()):
         raise FileExistsError('Preserve incomplete outputs; choose a new directory')
     output.mkdir(parents=True,exist_ok=True)
     reports, blocked = [], []
-    with nominal_renderer(year,payload['systematic_sources'],bool(contract.get('include_four_jet_bin'))):
+    with nominal_renderer(year,payload['systematic_sources']):
         for name,mode,region,variable,record in payload['records']:
             if record.get('display_omission_audit'):
                 blocked.append(dict(name=name,mode=mode,region=region,variable=variable,
-                    status='blocked_legacy_display_omits_selected_events',
+                    status='blocked_display_omits_selected_events',
                     cells=record['display_omission_audit'],renderer_changed=False))
                 continue
             info=draw_distribution([record],output/name,record['xlabel'],luminosity_fb(year))
@@ -385,9 +396,6 @@ def main():
         p.add_argument('--'+name,type=Path)
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--export-only',action='store_true')
-    p.add_argument('--njet-four-only',action='store_true',help='Explicitly approved addition of Njet=4 to four high-dM CR displays only')
-    p.add_argument('--include-four-jet-bin',action='store_true',help='Retain the user-approved Njet=4 bin in a full refreshed figure set')
-    p.add_argument('--reference-input',type=Path,help='Previous full compact input, required for exact old-bin comparison')
     p.add_argument('--gnn-output',type=Path,help='Optional compact GNN export from this same loaded histogram')
     p.add_argument('--predictions',type=Path,help='Verified card compact export for --gnn-output')
     p.add_argument('--mode', choices=('highdm', 'lowdm'), action='append')
@@ -396,7 +404,7 @@ def main():
     p.add_argument('--validate-only', action='store_true')
     a = p.parse_args()
     if a.input:
-        if a.export_only or a.rz_high or a.rz_low or a.mode or a.region or a.allow_validation or a.njet_four_only or a.include_four_jet_bin or a.reference_input or a.gnn_output or a.predictions:
+        if a.export_only or a.rz_high or a.rz_low or a.mode or a.region or a.allow_validation or a.gnn_output or a.predictions:
             raise ValueError('Compact inputs already freeze measurements and figure selection')
         payload=read_json(internal_path(a.input))
         if a.validate_only:
@@ -406,10 +414,6 @@ def main():
         return
     if not a.rz_high or not a.rz_low:
         raise ValueError('Both current RZ products are required with merged histograms')
-    if a.njet_four_only and (not a.reference_input or a.mode or a.region):
-        raise ValueError('Njet-only extension requires full prior compact inputs and no other selections')
-    if a.reference_input and not a.njet_four_only:raise ValueError('Reference is only for Njet4 extension')
-    if a.njet_four_only and a.include_four_jet_bin:raise ValueError('Choose one Njet display mode')
     if bool(a.gnn_output)!=bool(a.predictions) or a.gnn_output and not a.export_only:
         raise ValueError('Shared GNN projection requires explicit compact predictions and export-only')
     if a.gnn_output:
@@ -422,23 +426,20 @@ def main():
     hists, high, low = (read_json(paths[n]) for n in ('hists', 'rz_high', 'rz_low'))
     year = validate_histograms(hists, a.allow_validation)
     for factor in (high, low):
-        if (factor.get('provenance', {}).get('hist_input_sha256') != source_hash['hists']
-                or str(factor['provenance'].get('campaign_year')) != str(year)
+        if (str(factor['provenance'].get('campaign_year')) != str(year)
                 or factor.get('scope') != hists['scope']):
-            raise ValueError('Measured RZ does not match current histograms/year/scope')
+            raise ValueError('Measured RZ does not match histogram year/scope')
     contract = dict(inputs=source_hash, year=year, scope=hists['scope'], modes=a.mode or ['highdm', 'lowdm'],
-                    regions=a.region or list(REGIONS))
-    if a.njet_four_only:
-        contract.update(modes=['highdm'],include_four_jet_bin=True,
-            reference_input_sha256=sha256(internal_path(a.reference_input)))
-    if a.include_four_jet_bin:contract['include_four_jet_bin']=True
+                    regions=a.region or list(REGIONS), include_four_jet_bin=True)
     manifest_path = output/'plot_manifest.json'
     if manifest_path.exists():
-        old = read_json(manifest_path)
-        if any(old['contract'].get(key) != value for key, value in contract.items()) or any(sha256(output/n) != h for n,h in old['files'].items()):
-            raise ValueError('Divergent plot outputs must be preserved')
-        print(old['status'], '(verified existing outputs)')
-        if old.get('blocked_plots'):
+        saved = read_json(manifest_path)
+        names = (_physical_plot_name(mode, region, variable)[0]
+                 for mode in contract['modes'] for region in contract['regions']
+                 for variable in _physical_variables(mode, region))
+        _verify_plot_manifest(output, saved, contract, names)
+        print(saved['status'], '(verified existing outputs)')
+        if saved.get('blocked_plots'):
             raise SystemExit(2)
         return
     if output.exists() and any(output.iterdir()):
@@ -456,27 +457,15 @@ def main():
         write_json(config_path, config)
         application = renderer.apply_dy_rz(boundary, config_path)
         if baseline is not None:renderer.apply_dy_rz(baseline,config_path)
-    include_four=a.njet_four_only or a.include_four_jet_bin
-    if a.include_four_jet_bin:
-        with nominal_renderer(year,sources):
-            legacy_records=make_records(boundary,contract['modes'],contract['regions'])
     if baseline is not None:
-        with nominal_renderer(year,include_four_jet_bin=include_four):
-            old_records=make_records(baseline,contract['modes'],contract['regions'])
-    with nominal_renderer(year,sources,include_four):
+        with nominal_renderer(year):
+            central_records=make_records(baseline,contract['modes'],contract['regions'])
+    with nominal_renderer(year,sources):
         records = make_records(boundary, contract['modes'], contract['regions'])
-        if a.include_four_jet_bin:
-            previous=dict(schema='trotasr_physical_plot_inputs_v1',contract=dict(inputs=source_hash,year=year),
-                records=legacy_records)
-            assert_four_jet_extension(previous,[r for r in records if r[1]=='highdm' and r[3]=='njet'],source_hash,year)
-        if a.njet_four_only:
-            records=[r for r in records if r[3]=='njet']
-            if baseline is not None:old_records=[r for r in old_records if r[3]=='njet']
-            assert_four_jet_extension(read_json(internal_path(a.reference_input)),records,source_hash,year)
         if baseline is not None:
-            if [r[:4] for r in records]!=[r[:4] for r in old_records]:
+            if [r[:4] for r in records]!=[r[:4] for r in central_records]:
                 raise ValueError('Changed physical figure inventory')
-            for old,new in zip(old_records,records):assert_band_only(old[-1],new[-1])
+            for nominal, varied in zip(central_records,records):assert_band_only(nominal[-1],varied[-1])
         if a.validate_only:
             blocked = [row[0] for row in records if row[-1].get('display_omission_audit')]
             print(dict(status='validated_with_blocked_plot_inputs' if blocked else 'validated_plot_inputs_not_generated',

@@ -4,22 +4,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 if any(parent.name == 'TROTASR' for parent in ROOT.parents):
     raise RuntimeError('Nested TROTASR analysis copies are retired; use the canonical package')
-for canonical in (Path('/hep2-scratch/twkim/postprocessing/TROTASR'),
-                  Path('/Users/taiwoomac/Documents/All Hadronic Stop Analysis/TROTASR')):
-    if canonical.is_dir() and ROOT != canonical.resolve():
-        raise RuntimeError('Only the canonical TROTASR package is allowed: '+str(canonical))
 JSONS = ROOT / 'jsons'
-CONFIG_FILENAMES = frozenset({
-    'an_figure_inventory.json', 'assets.json', 'background_sources.json',
-    'completion_contract.json', 'diagnostic_sources.json', 'highdm_sr_binning.json',
-    'nominal_execution_sources.json', 'nominal_plot_sources.json',
-    'normalization_recovery_sources.json', 'prediction_plot_sources.json',
-    'region_schematic_sources.json', 'selection_contract.json', 'sources.json',
-    'sr_category_merge.json', 'statistics_sources.json', 'systematics_plan.json',
-})
-POG_NAMES = {"JMESF": "JME", "BTVSF": "BTV", "EGammaSF": "EGM",
-             "MuonSF": "MUO", "PUweight": "LUM", "AnalysisSF": "Private",
-             "lumiMask": "LUM"}
 ERA_ALIASES = {'2022pre': '2022', '2022post': '2022EE',
                '2023pre': '2023', '2023post': '2023BPix'}
 EARLY_ERAS = ('2022', '2022EE', '2023', '2023BPix')
@@ -27,7 +12,7 @@ ERAS = (*EARLY_ERAS, '2024', '2025')
 
 
 def analysis_era(year):
-    """Use the target campaign, never the NanoAOD production year."""
+    """Return the target analysis era independently of the source sample year."""
     era = ERA_ALIASES.get(str(year), str(year))
     if era not in ERAS:
         raise ValueError('Unknown analysis era: ' + str(year))
@@ -35,7 +20,7 @@ def analysis_era(year):
 
 
 def era_year(year):
-    """Retain the existing integer contract for the 2024/25 campaigns."""
+    """Return the era key used in the event schema."""
     era = analysis_era(year)
     return int(era) if era in ('2024', '2025') else era
 
@@ -84,59 +69,27 @@ def internal_path(path):
     """
     resolved = Path(path).resolve()
     if resolved != ROOT and ROOT not in resolved.parents:
-        raise ValueError("Path escapes TROTASR; explicit approval required: " + str(path))
+        raise ValueError("Path escapes TROTASR: " + str(path))
     relative=resolved.relative_to(ROOT)
     if relative.parts and relative.parts[0] in ('campaigns','validation'):
         raise ValueError('Retired execution namespace; use current canonical products: '+str(path))
     if relative.parts and relative.parts[0]=='history' and resolved.suffix in ('.py','.sh'):
         raise ValueError('Historical source is not a runtime implementation')
-    # Frozen manifests retain their original strings and content hashes. Only
-    # these explicitly relocated root-level configuration names have an alias;
-    # arbitrary missing files, campaign states and outputs never do.
-    if resolved.parent == ROOT and resolved.name in CONFIG_FILENAMES:
-        if resolved.exists():
-            raise ValueError('Root-level configuration must be moved to jsons: ' + str(resolved))
-        relocated = (JSONS / resolved.name).resolve()
-        if JSONS.resolve() != JSONS or relocated.parent != JSONS:
-            raise ValueError('Configuration relocation escapes jsons: ' + str(path))
-        return relocated
     return resolved
 
 
-def internal_modules(*names):
-    """Do not let legacy renderer aliases bind to an external analysis package."""
-    import sys
-    for name, module in tuple(sys.modules.items()):
-        if any(name == prefix or name.startswith(prefix + '.') for prefix in names):
-            origin = getattr(module, '__file__', None)
-            if origin is None:
-                raise ValueError('Analysis module has no verifiable internal origin: ' + name)
-            internal_path(origin)
-            for folder in getattr(module, '__path__', ()):
-                internal_path(folder)
+
+
 
 
 def payload_path(relative, root=ROOT):
-    """Resolve a legacy physics payload key to the new layout, without symlinks."""
-    root, p = Path(root).resolve(), Path(relative)
-    if root != ROOT:
-        raise ValueError("Payload root must be this TROTASR")
-    parts = list(p.parts)
-    if p.is_absolute():
-        try:
-            parts = list(p.relative_to(root).parts)
-        except ValueError:
-            raise ValueError("Payload escapes TROTASR: " + str(p))
-    if parts and parts[0] == "analysis":
-        parts.pop(0)
-    if parts and parts[0] == "data":
-        parts.pop(0)
-        if parts and parts[0] in POG_NAMES:
-            parts = ["scales", POG_NAMES[parts[0]], *parts[1:]]
-        else:
-            parts = ["utils", "compiled", *parts]
-    elif parts and parts[0] == "hists":
-        parts = ["estimations", *parts[1:]]
+    """Resolve a current payload path, normalizing only analysis-era names."""
+    if Path(root).resolve() != ROOT:
+        raise ValueError('Payload root differs from the analysis package')
+    path = Path(relative)
+    if path.is_absolute():
+        return internal_path(path)
+    parts = list(path.parts)
     if len(parts) >= 3 and parts[0] == 'scales':
         parts[2] = ERA_ALIASES.get(parts[2], parts[2])
-    return internal_path(root.joinpath(*parts))
+    return internal_path(ROOT.joinpath(*parts))
