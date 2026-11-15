@@ -15,6 +15,11 @@ Record the actual fit quality and assumptions. Keep results and bands when
 `covQual=2` is the sole concern. It requires no refit or extra validation on its
 own. Draw the CR-only bands using the saved covariance and its correlations.
 
+Do not use file, source or artifact hashes to accept, reject, resume or reuse
+work. Differences in per-file source or execution records do not block work.
+Validate the fields that enter the analysis, including the target era, event
+alignment, ROOT structure and numerical results.
+
 ## One implementation and one current result
 
 - The inputs, results, analysis, plotting and fitting code approved on
@@ -33,6 +38,9 @@ own. Draw the CR-only bands using the saved covariance and its correlations.
   aliases or instructions for reconstructing retired paths.
 - Preserve current scientific completion receipts, required reference inputs
   and `/hep2-scratch/twkim/postprocessing/Stop_Object_Review` for review.
+- Keep the current analysis code and records connected across local, hep2,
+  lxplus and the tracked Git branch. Match shared source directly and record
+  where remote products and their completion records live.
 - Monitoring is stopped. Do not enable schedules, create follow-up jobs or start
   another chat without a new direct user instruction.
 
