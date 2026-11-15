@@ -148,7 +148,7 @@ def _jer_smear(
 ) -> Any:
     """Hybrid JER with the CMSSW 0.01 GeV minimum *energy* prescription."""
     out = []
-    for iev, (pts, etas, masses, resolutions, sfs, indices) in enumerate(
+    for iev, (pts, etas, masses, resolutions, sfs, indices, gen_pts) in enumerate(
         zip(
             ak.to_list(corrected_pt),
             ak.to_list(eta),
@@ -156,13 +156,15 @@ def _jer_smear(
             ak.to_list(resolution),
             ak.to_list(scale_factor),
             ak.to_list(gen_index),
+            ak.to_list(gen_pt),
         )
     ):
-        gen_pts = ak.to_list(gen_pt[iev])
         event_out = []
+        event_id = None
         for ijet, (pt, jet_eta, mass, res, sf, index) in enumerate(zip(pts, etas, masses, resolutions, sfs, indices)):
             pt = float(pt)
-            if not all(math.isfinite(float(x)) for x in (pt, jet_eta, mass, res, sf)):
+            if not (math.isfinite(pt) and math.isfinite(jet_eta) and math.isfinite(mass)
+                    and math.isfinite(res) and math.isfinite(sf)):
                 raise ValueError("Nonfinite JER input")
             if pt < 0:
                 raise ValueError("Negative JER input pT")
@@ -185,7 +187,9 @@ def _jer_smear(
             if matched:
                 factor = 1.0 + (sf - 1.0) * (pt - matched_pt) / max(pt, 1e-6)
             else:
-                random_value = _deterministic_normal(int(run[iev]), int(lumi[iev]), int(event[iev]), prefix, ijet)
+                if event_id is None:
+                    event_id = (int(run[iev]), int(lumi[iev]), int(event[iev]))
+                random_value = _deterministic_normal(*event_id, prefix, ijet)
                 factor = 1.0 + random_value * res * math.sqrt(max(sf * sf - 1.0, 0.0))
             # Scale the entire four-vector; this is not a pT floor.
             # PhysicsTools/PatUtils/interface/SmearedJetProducerT.h
