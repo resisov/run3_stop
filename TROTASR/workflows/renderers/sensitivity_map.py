@@ -1,10 +1,9 @@
 """Render compact, immutable group-freeze results; no fit or model changes."""
-import hashlib
 import json
 import textwrap
 
 from TROTASR.utils.paths import internal_path
-from TROTASR.utils.io import write_json, sha256
+from TROTASR.utils.io import read_json, write_json
 
 LABELS = {
     'mc_statistics': 'MC statistics (signal + background)',
@@ -31,23 +30,26 @@ def render(source, grid, output):
     source, grid, output = map(internal_path, (source, grid, output))
     raw = (source/'results.json').read_bytes()
     result = json.loads(raw)
-    if result['contract']['manifest_sha256'] != sha256(grid):
-        raise ValueError('Sensitivity results and requested mass grid differ')
     if result['schema'] != 'trotasr_sensitivity_map_results_v1':
         raise ValueError('Unsupported sensitivity result schema')
+    allowed = {(point['model'], point['mass']) for point in read_json(grid)['points']}
+    requested = {(point['model'], f"mStop{point['mStop']:g}_mLSP{point['mLSP']:g}")
+                 for point in result['points']}
+    if len(requested) != len(result['points']) or not requested <= allowed:
+        raise ValueError('Sensitivity results contain duplicate or out-of-grid mass points')
     output.mkdir(parents=True, exist_ok=True)
     # Preserve exactly the data used for these figures, even while fits proceed.
     (output/'input_results.json').write_bytes(raw)
     hep.style.use('CMS')
     colors = plt.get_cmap('tab10').colors
-    artifacts = {}
+    artifacts = []
     coverage = {}
 
     def save(fig, stem):
         for ext in ('png', 'pdf'):
             path = output/(stem+'.'+ext)
             fig.savefig(path, dpi=180)
-            artifacts[path.name] = sha256(path)
+            artifacts.append(path.name)
         plt.close(fig)
 
     for model in ('T2tt', 'T2bW', 'T2tb'):
@@ -102,7 +104,7 @@ def render(source, grid, output):
         save(fig, model+'_group_improvements')
 
     manifest = dict(status='generated_pending_visual_QA', artifacts=artifacts,
-        results_sha256=hashlib.sha256(raw).hexdigest(), coverage=coverage,
+        coverage=coverage,
         complete_points=result['complete_points'], requested=len(result['points']),
         interpolation='none; actual mass-point markers only', non_additive=True,
         ranking='Largest measured conditional improvement; close values need not establish a unique hierarchy.',

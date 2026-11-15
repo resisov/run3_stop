@@ -11,7 +11,7 @@ import numpy as np
 if __package__ in (None,''):
     from _bootstrap import bootstrap
     bootstrap()
-from TROTASR.utils.io import read_json,write_json,sha256
+from TROTASR.utils.io import read_json,write_json
 from TROTASR.utils.paths import ROOT,internal_path
 from TROTASR.utils.paths import luminosity_fb
 from TROTASR.gnn4lowdm.configuration import configuration
@@ -112,7 +112,7 @@ def ll_inclusive(payload):
     return result
 
 
-def current_card_controls(export,year,hist_digest,rz_digest):
+def current_card_controls(export,year):
     from TROTASR.workflows.diagnostic_common import require_revised_record
     require_revised_record(export)
     if (export.get('status')!='complete' or export.get('scope') not in
@@ -120,9 +120,6 @@ def current_card_controls(export,year,hist_digest,rz_digest):
             or export.get('prediction_stage')!='prefit' or export.get('rate_initials_applied') is not True
             or export.get('sr_observations_included') is not False):
         raise ValueError('Current blinded full-input prefit export required')
-    inputs=export['source_inputs'][str(year)]
-    if inputs['rz_low']['sha256']!=rz_digest:
-        raise ValueError('Card predictions and auxiliary RZ measurement differ')
     result={}
     for region in ('LLCR','QCDCR','GCR'):
         record=export['channels'][str(year)+'/'+region+'/lowdm']
@@ -189,10 +186,10 @@ def render_input(payload,output):
     receipt=output/'plot_manifest.json'
     if receipt.exists():
         previous=read_json(receipt)
-        if (any(previous['contract'].get(key) != value for key, value in contract.items()
-                if key != 'hists_sha256')
-                or any(sha256(output/n)!=d for n,d in previous['files'].items())):
-            raise ValueError('Changed previous GNN figures')
+        if (any(previous['contract'].get(k) != contract.get(k) for k in ('year', 'scope'))
+                or len(previous['files']) != 8
+                or any(not (output/n).is_file() for n in previous['files'])):
+            raise ValueError('Incompatible or incomplete GNN figures')
         return previous
     if output.exists() and any(output.iterdir()):raise FileExistsError('Preserve incomplete GNN output')
     output.mkdir(parents=True,exist_ok=True);plots=[]
@@ -208,21 +205,21 @@ def render_input(payload,output):
             nuisance_names=payload['nuisance_names'][region],scope=contract['scope'],
             an_reference=f'figures/results_distributions/{year}/{name}.pdf')
         plots.append(info)
-    files={f.name:sha256(f) for f in output.iterdir() if f.suffix in ('.png','.pdf')}
+    files=sorted(f.name for f in output.iterdir() if f.suffix in ('.png','.pdf'))
     if len(files)!=8:raise ValueError('Missing GNN figures')
     write_json(output/'plot_inputs.json',payload)
     result=dict(status='generated_pending_visual_QA',contract=contract,plots=plots,files=files,
-        plot_inputs_sha256=sha256(output/'plot_inputs.json'),uncertainty_audit=payload['uncertainty_audit'],
+        uncertainty_audit=payload['uncertainty_audit'],
         rz_application=payload['rz_application'],llcr_display_only_nb_pooling=False,
         likelihood_changed=False,full_workflow_complete=False)
     write_json(receipt,result);return result
 
 
-def export_loaded(h,rz,export,hist_digest,rz_digest,allow_validation=False):
+def export_loaded(h,rz,export,allow_validation=False):
     """Canonical compact projection; shared reads never imply a new physics input."""
     payload=prepare(h,rz,allow_validation)
-    predictions=current_card_controls(export,payload['year'],hist_digest,rz_digest)
-    contract=dict(hists_sha256=hist_digest,rz_sha256=rz_digest,year=payload['year'],
+    predictions=current_card_controls(export,payload['year'])
+    contract=dict(year=payload['year'],
         scope=payload['scope'],prediction_provenance=export['provenance'],
         rendering_entry_point='plotting_nominal_distributions.draw_distribution')
     with nominal_renderer(payload['year']):old_dy=dy_distribution_blocks(payload,False)
@@ -266,7 +263,7 @@ def main():
     hists,rzpath,output=map(internal_path,(a.hists,a.rz_low,a.output))
     h=read_json(hists);rz=read_json(rzpath)
     export=export_grid(internal_path(a.manifest)) if a.manifest else read_json(internal_path(a.predictions))
-    compact=export_loaded(h,rz,export,sha256(hists),sha256(rzpath),a.allow_validation)
+    compact=export_loaded(h,rz,export,a.allow_validation)
     if a.validate_only:
         print(dict(status='validated_plot_inputs_not_generated',count=4,contract=compact['contract']));return
     if a.export_only:

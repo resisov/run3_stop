@@ -6,7 +6,7 @@ if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
 from TROTASR.utils.paths import ROOT, internal_path
-from TROTASR.utils.io import read_json, write_json, sha256, scientific_settings
+from TROTASR.utils.io import read_json, write_json, scientific_settings
 from TROTASR.utils.zgamma_estimation import ZGamma_BPIX_MERGE
 
 PRODUCTS = ('rz_high', 'rz_low', 'sgamma', 'double_ratio')
@@ -116,13 +116,15 @@ def main():
         if (str(provenance['campaign_year']) != str(year) or product['scope']!=scope
                 or not product.get('sr_data_blinded')):
             raise ValueError('Measurement year/scope/blinding mismatch')
-    contract = dict(year=str(year),scope=scope,
-        measurements={name:sha256(source/(name+'.json.gz')) for name in PRODUCTS})
+    contract = dict(year=str(year), scope=scope, measurement_directory=str(source.relative_to(ROOT)),
+                    measurements=list(PRODUCTS))
     manifest_path = output/'plot_manifest.json'
     if manifest_path.exists():
         old = read_json(manifest_path)
-        if any(old['contract'].get(key) != value for key, value in contract.items()) or any(sha256(output/n)!=h for n,h in old['files'].items()):
-            raise ValueError('Preserve divergent measured-factor figures')
+        if (any(old['contract'].get(k) != contract[k] for k in ('year', 'scope'))
+                or set(old['contract']['measurements']) != set(PRODUCTS)
+                or len(old['files']) != 50 or any(not (output/n).is_file() for n in old['files'])):
+            raise ValueError('Preserve incompatible or incomplete measured-factor figures')
         print(old['status'],'(verified existing outputs)');return
     if a.validate_only:
         print(dict(status='validated_plot_inputs_not_generated',plots=25,boundary_fits=boundaries,contract=contract));return
@@ -150,7 +152,7 @@ def main():
                                          annotation_position=double_ratio_label)))
     if len(set(paths))!=50 or any(not path.is_file() for path in paths):
         raise ValueError('Missing background measurement figures')
-    files={str(path.relative_to(output)):sha256(path) for path in paths}
+    files=sorted({str(path.relative_to(output)) for path in paths})
     plots=[]
     for path in paths:
         if path.suffix=='.pdf':

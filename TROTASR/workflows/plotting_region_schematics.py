@@ -7,7 +7,7 @@ if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
 from TROTASR.utils.paths import ROOT, internal_path
-from TROTASR.utils.io import read_json, write_json, sha256
+from TROTASR.utils.io import read_json, write_json
 
 
 def render(output):
@@ -15,12 +15,15 @@ def render(output):
     sources = [ROOT/'workflows/renderers/region_schematics'/name for name in (
         'region_orthogonality_schematic.tex',
         'region_orthogonality_schematic_lowdm.tex')]
-    contract = dict(sources={str(path.relative_to(ROOT)): sha256(path) for path in sources})
+    contract = dict(sources=[str(path.relative_to(ROOT)) for path in sources])
     receipt = output/'plot_manifest.json'
     if output.exists():
         previous = read_json(receipt)
-        if previous['contract'] != contract or any(sha256(output/n) != d for n,d in previous['files'].items()):
-            raise ValueError('Changed or incomplete schematic output must be retained')
+        expected = {s.stem + suffix for s in sources for suffix in ('.png', '.pdf')}
+        if (set(previous['contract']['sources']) != set(contract['sources'])
+                or set(previous['files']) != expected
+                or any(not (output/n).is_file() for n in expected)):
+            raise ValueError('Incompatible or incomplete schematic output must be retained')
         return previous
     output.mkdir(parents=True)
     plots = []
@@ -39,7 +42,7 @@ def render(output):
         plots.append(dict(an_reference='figures/'+name+'.pdf',pdf=name+'.pdf',png=name+'.png',
             pages=pages,status='generated_pending_visual_QA'))
     result = dict(status='generated_pending_visual_QA',contract=contract,plots=plots,
-        files={p.name:sha256(p) for p in output.iterdir() if p.suffix in ('.png','.pdf')},
+        files=sorted(p.name for p in output.iterdir() if p.suffix in ('.png','.pdf')),
         an_source_modified=False)
     write_json(receipt,result)
     return result

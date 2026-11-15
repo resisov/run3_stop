@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Signal production cross-section uncertainty, separate from fit nuisances."""
 import argparse
-import hashlib
 import json
 import math
 from pathlib import Path
@@ -63,7 +62,7 @@ def load_theory(table, an_source=None):
             raise ValueError('duplicate theory mass')
         records[str(mass)] = dict(xsec_pb=sigma, uncertainty_up_relative=up, uncertainty_down_relative=down,
                                   xsec_up_pb=sigma*(1+up), xsec_down_pb=sigma*(1-down) if down < 1 else None)
-    result = dict(policy=POLICY, records=records, table_sha256=hashlib.sha256(Path(table).read_bytes()).hexdigest(),
+    result = dict(policy=POLICY, records=records, theory_table=str(table),
                   reference='CMS AN-26-090, signal sample cross-section table; SUS-19-010 exclusion convention')
     if an_source:
         text = Path(an_source).read_text()
@@ -82,7 +81,7 @@ def load_theory(table, an_source=None):
             count += 1
         if count < 10:
             raise ValueError('signal theory table not found')
-        result.update(an_table_checked_rows=count, an_sha256=hashlib.sha256(Path(an_source).read_bytes()).hexdigest())
+        result.update(an_table_checked_rows=count, an_source=str(an_source))
     return result
 
 
@@ -112,7 +111,7 @@ def annotate_expected_grid(payload, theory):
         record['signal_theory'] = interpretation
         points[key] = record
     return dict(payload, points=points, signal_theory_policy=theory['policy'],
-                signal_theory_table_sha256=theory['table_sha256'])
+                signal_theory_table=theory.get('theory_table'))
 
 
 if __name__ == '__main__':

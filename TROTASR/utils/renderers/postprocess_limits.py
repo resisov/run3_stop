@@ -6,7 +6,6 @@ fit receipts, reference paths and runtime provenance; this module only renders.
 
 from __future__ import annotations
 
-import hashlib
 from importlib import metadata
 import json
 import math
@@ -162,7 +161,6 @@ def load_thermal_relic_contour(
         "omega_h2": float(level),
         "points": points[:, :2],
         "path": str(path.resolve()),
-        "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
         "model": payload.get("model"),
         "sources": payload.get("sources"),
         "overabundance_definition": "Omega_LSP*h^2 > 0.12",

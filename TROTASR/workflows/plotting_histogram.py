@@ -4,7 +4,7 @@ import argparse
 if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
-from TROTASR.utils.io import read_json, write_json, sha256
+from TROTASR.utils.io import read_json, write_json
 from TROTASR.utils.paths import ROOT, internal_path
 from TROTASR.utils.plot_adapter import blocks, renderer
 
@@ -43,10 +43,10 @@ def main():
             expected_bins = bin_map.get('bins_per_year', bin_map.get('total_bins'))
             if info['bins'] != expected_bins or info.get('dropped_input_bins_1based'):
                 raise ValueError('Renderer did not preserve the full SR bin map')
-            info.update(bin_map_sha256=sha256(a.bin_map), layout_scope='full', empty_bins_preserved=True)
+            info.update(bin_map=str(a.bin_map), layout_scope='full', empty_bins_preserved=True)
         result.append(info)
     write_json(a.output / 'plot_manifest.json', dict(status='generated_pending_visual_QA', plots=result,
-                input_sha256=sha256(a.input)))
+                input=str(a.input)))
 
 
 if __name__ == '__main__':

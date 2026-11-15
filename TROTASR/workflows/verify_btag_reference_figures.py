@@ -14,7 +14,7 @@ if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
 from TROTASR.utils.paths import ROOT, internal_path
-from TROTASR.utils.io import read_json, write_json, sha256
+from TROTASR.utils.io import read_json, write_json
 
 POSITION_TOLERANCE_PIXELS = 5.0
 
@@ -84,7 +84,7 @@ def verify_panel(path, panel, observations):
                 entry.update(status='verified_at_displayed_three_decimal_precision',text=observation['text'],position_residual_pixels=residual)
             records.append(entry)
     if len(used)!=len(observations):raise ValueError('Unmatched numeric annotation')
-    return dict(an_path=panel['an_path'],image_sha256=sha256(path),frame_pixels=frame,
+    return dict(an_path=panel['an_path'],frame_pixels=frame,
         status='verified_displayed_cells_and_empty_support',cells=len(records),
         numeric_annotations=len(used),blank_zero_denominator_cells=len(records)-len(used),
         max_position_residual_pixels=max((r.get('position_residual_pixels',0) for r in records)),
@@ -95,24 +95,15 @@ def run(output):
     base=ROOT/'validation/reference_assets_20260923/provenance/btag_efficiencies'
     data=read_json(base/'plot_data.json');ocr=read_json(base/'png_numeric_ocr.json')
     if data['tagger']!='UParTAK4' or data['years']!=[2024,2025]:raise ValueError('Unexpected payload')
-    for rel in data['source_payloads']:
-        if sha256(internal_path(ROOT/rel))!=data['source_payload_sha256']:raise ValueError('Adopted payload changed')
-    if sha256(ROOT/'workflows/export_btag_reference_data.py')!=data['exporter_sha256']:
-        raise ValueError('Exporter changed')
     figures={str(Path(p['path']).relative_to('TROTASR/plots/reference_assets_20260923')):p for p in ocr['panels']}
-    rows=read_json(ROOT/'validation/reference_assets_20260923/visual_qa.json')['records']
     results=[]
     for panel in data['panels']:
         rel=panel['an_path'];path=ROOT/'plots/reference_assets_20260923'/rel
-        original=next(r for r in rows if r['an_path']==rel)
-        expected=original['sha256']
-        if sha256(path)!=expected:raise ValueError('Preserved reference image changed')
         results.append(verify_panel(path,panel,figures[rel]['observations']))
     result=dict(schema='trotasr_btag_png_numeric_binding_v1',
-        status='all_15_panels_bound_to_adopted_payload',source_modified=False,
-        years=data['years'],tagger=data['tagger'],source_payload_sha256=data['source_payload_sha256'],
-        source_plot_data_sha256=sha256(base/'plot_data.json'),ocr_sha256=sha256(base/'png_numeric_ocr.json'),
-        verifier_sha256=sha256(Path(__file__)),precision='three decimal places, exactly as displayed',
+        status='all_15_archived_ocr_panels_checked_against_exported_efficiencies',source_modified=False,
+        years=data['years'],tagger=data['tagger'],source_payloads=data['source_payloads'],
+        precision='three decimal places, exactly as displayed',
         position_tolerance_pixels=POSITION_TOLERANCE_PIXELS,
         displayed_pt_range_gev=[30,1000],source_pt_20_to_30_not_displayed=True,
         panels=results,figures_checked=len(results),

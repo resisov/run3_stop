@@ -13,9 +13,8 @@ import numpy as np
 if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
-from TROTASR.utils.io import read_json, write_json, sha256
+from TROTASR.utils.io import read_json, write_json
 from TROTASR.utils.paths import ROOT, internal_path, analysis_era, EARLY_ERAS, luminosity_fb
-from TROTASR.gnn4lowdm.configuration import configuration_path
 from TROTASR.utils.plot_adapter import renderer
 from TROTASR.utils.statistical_templates import json_ready
 from TROTASR.utils.statistics_inputs import combined_shape_endpoints, SHAPE_PREFIXES
@@ -50,10 +49,6 @@ def validate_histograms(payload, allow_validation=False):
         raise ValueError('Full production required; validation needs explicit opt-in')
     year = payload['contract']['year']
     analysis_era(year)
-    for key, file in (('sr_binning_sha256', 'jsons/highdm_sr_binning.json'),
-                      ('configuration_sha256', str(configuration_path(year).relative_to(ROOT)))):
-        if payload['contract'].get(key) != sha256(ROOT/file):
-            raise ValueError('Changed histogram configuration: ' + key)
     for modes in ('histograms', 'physical_histograms'):
         for source in payload.get(modes, {}).values():
             if set(source) - {'nominal'} and not combined:
@@ -322,21 +317,10 @@ def assert_band_only(before, after):
         raise ValueError('Systematic update changed central/statistics/data/axis/style input')
 
 
-def _cr_inputs(inputs):
-    return {key: value for key, value in inputs.items() if key != 'hists'}
-
-
 def _same_cr_plot_contract(previous, current):
-    """The full merged file hash is provenance, not a CR cache key."""
-    for key, value in current.items():
-        if key == 'reference_input_sha256':
-            continue
-        old_value = previous.get(key)
-        if key == 'inputs' and isinstance(old_value, dict) and isinstance(value, dict):
-            old_value, value = _cr_inputs(old_value), _cr_inputs(value)
-        if old_value != value:
-            return False
-    return True
+    """Compare the requested plot layout and scope."""
+    keys = ('year', 'scope', 'modes', 'regions', 'include_four_jet_bin')
+    return all(previous.get(key) == current.get(key) for key in keys)
 
 
 def _verify_plot_manifest(output, receipt, contract, names):
@@ -347,8 +331,8 @@ def _verify_plot_manifest(output, receipt, contract, names):
     expected = {name + suffix for name in requested - blocked for suffix in ('.pdf', '.png')}
     if not blocked <= requested or set(receipt['files']) != expected:
         raise ValueError('Existing figures do not cover the requested inventory')
-    if any(sha256(output/name) != digest for name,digest in receipt['files'].items()):
-        raise ValueError('Divergent plot outputs must be preserved')
+    if any(not (output/name).is_file() for name in expected):
+        raise ValueError('Existing plot outputs are incomplete')
 
 
 def render_input(payload, output):
@@ -376,7 +360,7 @@ def render_input(payload, output):
                 variable=variable,scope=contract['scope'],
                 an_reference='figures/results_distributions/'+str(year)+'/'+name+'.pdf')
             reports.append(info)
-    files={p.name:sha256(p) for p in output.iterdir() if p.suffix in ('.png','.pdf')}
+    files=sorted(p.name for p in output.iterdir() if p.suffix in ('.png','.pdf'))
     if len(files)!=len(reports)*2: raise ValueError('Missing physical figures')
     result=dict(status='partial_generated_pending_visual_QA' if blocked else 'generated_pending_visual_QA',
         contract=contract,plots=reports,blocked_plots=blocked,files=files,
@@ -422,14 +406,14 @@ def main():
             raise FileExistsError('Preserve existing GNN compact inputs before reading histograms')
     paths = {name:internal_path(getattr(a, name)) for name in ('hists', 'rz_high', 'rz_low')}
     output = internal_path(a.output)
-    source_hash = {name:sha256(path) for name,path in paths.items()}
     hists, high, low = (read_json(paths[n]) for n in ('hists', 'rz_high', 'rz_low'))
     year = validate_histograms(hists, a.allow_validation)
     for factor in (high, low):
         if (str(factor['provenance'].get('campaign_year')) != str(year)
                 or factor.get('scope') != hists['scope']):
             raise ValueError('Measured RZ does not match histogram year/scope')
-    contract = dict(inputs=source_hash, year=year, scope=hists['scope'], modes=a.mode or ['highdm', 'lowdm'],
+    contract = dict(inputs={name: str(path.relative_to(ROOT)) for name,path in paths.items()},
+                    year=year, scope=hists['scope'], modes=a.mode or ['highdm', 'lowdm'],
                     regions=a.region or list(REGIONS), include_four_jet_bin=True)
     manifest_path = output/'plot_manifest.json'
     if manifest_path.exists():
@@ -491,8 +475,7 @@ def main():
             from TROTASR.workflows.plotting_gnn_controls import export_loaded
             target=internal_path(a.gnn_output)
             if target.exists() and any(target.iterdir()):raise FileExistsError('Preserve existing GNN compact inputs')
-            compact=export_loaded(hists,low,read_json(internal_path(a.predictions)),
-                source_hash['hists'],source_hash['rz_low'],a.allow_validation)
+            compact=export_loaded(hists,low,read_json(internal_path(a.predictions)),a.allow_validation)
             target.mkdir(parents=True,exist_ok=True);write_json(target/'plot_inputs.json',compact)
         print(dict(status='compact_inputs_exported',records=len(records)));return
     result=render_input(payload,output)

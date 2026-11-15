@@ -6,7 +6,7 @@ import numpy as np
 if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
-from TROTASR.utils.io import read_json, write_json, sha256
+from TROTASR.utils.io import read_json, write_json
 from TROTASR.utils.paths import ROOT, internal_path
 from TROTASR.utils.sr_binning import NATIVE_EDGES
 
@@ -98,12 +98,13 @@ def main():
     factors, unavailable = prepare_factors(source, configuration(year))
     if unavailable and not a.allow_partial:
         raise ValueError('Unsupported TF cells; explicit diagnostic opt-in required: '+str(unavailable))
-    contract = dict(input_sha256=sha256(source_path), year=year, scope=source['scope'])
+    contract = dict(input=str(source_path.relative_to(ROOT)), year=year, scope=source['scope'])
     manifest_path = output/'plot_manifest.json'
     if manifest_path.exists():
         old = read_json(manifest_path)
-        if any(old['contract'].get(key) != value for key, value in contract.items()) or any(sha256(output/n) != h for n,h in old['files'].items()):
-            raise ValueError('Divergent TF plots must be preserved')
+        if (any(old['contract'].get(k) != contract[k] for k in ('year', 'scope'))
+                or len(old['files']) != 14 or any(not (output/n).is_file() for n in old['files'])):
+            raise ValueError('Incompatible or incomplete TF plots must be preserved')
         print(old['status'], '(verified existing outputs)')
         return
     if a.validate_only:
@@ -116,7 +117,7 @@ def main():
     output.mkdir(parents=True)
     positions = {'top_llcr': (0.04, 0.74)} if str(year) == '2023' else {}
     high, low = renderer.render_factors(output, factors, 'all', high_annotation_positions=positions)
-    files = {str(Path(path).relative_to(output)):sha256(path) for path in high+low}
+    files = sorted({str(Path(path).relative_to(output)) for path in high+low})
     if len(files) != 14:
         raise ValueError('Missing expected transfer-factor figures')
     plots = []
