@@ -6,7 +6,7 @@ if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
 from TROTASR.utils.paths import ROOT, internal_path
-from TROTASR.utils.io import read_json, write_json, sha256
+from TROTASR.utils.io import read_json, write_json, without_provenance_fields
 from TROTASR.utils.statistical_templates import (assemble, card_text, template_name,
     verify_templates, load_theory, profiled_theory, add_signal_xsec_lnN)
 
@@ -24,9 +24,10 @@ def main():
         manifest=read_json(folder/'model_manifest.json')
         if manifest.get('status')!='templates_ready' or not manifest.get('root_integrity_checked'):
             raise ValueError('Real ROOT templates have not passed integrity checks: '+str(folder))
-        for name,digest in manifest['files'].items():
-            if sha256(folder/name)!=digest:
-                raise ValueError('Template input changed: '+name)
+        for name in manifest['files']:
+            path = internal_path(folder/name)
+            if path.parent != folder or not path.is_file() or not path.stat().st_size:
+                raise ValueError('Template input missing or empty: '+name)
         payload=read_json(folder/'statistics_inputs.json.gz')
         if payload['status']!='complete' or payload['year'] in directories:
             raise ValueError('Blocked input or duplicated year')
@@ -36,7 +37,7 @@ def main():
         verify_templates(folder,channels,data)
         directories[payload['year']]=folder
         payloads.append(payload)
-        origins.append(dict(path=str(folder.relative_to(ROOT)),sha256=sha256(folder/'model_manifest.json')))
+        origins.append(dict(path=str(folder.relative_to(ROOT))))
     if not 1<=len(payloads)<=2 or len({(p['topology'],p['mStop'],p['mLSP']) for p in payloads})!=1:
         raise ValueError('Combine only matching mass points from distinct 2024/2025 years')
     channels,data,_,issues=assemble(payloads)
@@ -69,13 +70,17 @@ def main():
         with output.open('x') as stream:
             stream.write(text)
     manifest=dict(status='card_written_not_fitted',inputs=origins,
-        card_sha256=sha256(output),years=sorted(directories),topology=payloads[0]['topology'],
+        years=sorted(directories),topology=payloads[0]['topology'],
         mStop=payloads[0]['mStop'],mLSP=payloads[0]['mLSP'],cr_only=a.cr_only,
-        theory_sha256=None if a.cr_only else sha256(theory_path),auto_mc_stats=[10,1,1],
+        auto_mc_stats=[10,1,1],
         sr_data_blinded=True,full_workflow_complete=False)
     manifest_path=internal_path(output.with_suffix('.manifest.json'))
-    if manifest_path.exists() and read_json(manifest_path)!=manifest:
-        raise FileExistsError('Refusing to overwrite divergent card provenance: '+str(manifest_path))
+    if manifest_path.exists():
+        fields = ('years', 'topology', 'mStop', 'mLSP', 'cr_only',
+                  'auto_mc_stats', 'sr_data_blinded', 'status')
+        saved = without_provenance_fields(read_json(manifest_path))
+        if any(saved.get(key) != manifest[key] for key in fields):
+            raise FileExistsError('Existing card scientific metadata differs: '+str(manifest_path))
     if not manifest_path.exists():
         write_json(manifest_path,manifest)
     print('card_written_not_fitted',output)

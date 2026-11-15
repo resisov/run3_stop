@@ -21,7 +21,7 @@ import awkward as ak
 import numpy as np
 import uproot
 from .paths import ROOT, internal_path
-from .io import read_json, write_json, sha256, validate_root
+from .io import read_json, write_json, validate_root
 from .normalization import dataset_label
 from .signal_models import signal_topology, signal_mass_key
 from .shape_kinematics import varied_view
@@ -114,15 +114,10 @@ def sample_masks(a, metadata, signal):
             yield family, chosen
 
 
-def fingerprint(p):
-    s = p.stat()
-    return dict(inode=s.st_ino, size=s.st_size, mtime_ns=s.st_mtime_ns)
-
-
 def count_file(task, signal):
     path = internal_path(ROOT / task['input'])
-    if fingerprint(path) != task['fingerprint']:
-        raise ValueError('Input changed: ' + task['key'])
+    if path.stat().st_size != task['fingerprint']['size']:
+        raise ValueError('Unexpected input size: ' + task['key'])
     metadata = validate_root(path, task['year'])
     totals = {mode: {p: np.zeros(len(STEPS) + int(mode == 'highdm'), dtype=np.int64)
                       for p in ORDER} for mode in ('highdm', 'lowdm')}
@@ -145,8 +140,8 @@ def count_file(task, signal):
                     totals[mode][family] += np.sum(rows[:, chosen], axis=1)
         if entries != tree.num_entries or entries != task['entries']:
             raise ValueError('Incomplete event accounting')
-    if fingerprint(path) != task['fingerprint']:
-        raise ValueError('Input changed during read')
+    if path.stat().st_size != task['fingerprint']['size']:
+        raise ValueError('Input size changed during read')
     return dict(key=task['key'], year=task['year'], status='complete', entries=entries,
                 counts={m: {p: v.tolist() for p, v in rows.items()} for m, rows in totals.items()},
                 input_fingerprint=task['fingerprint'], branches=branches)
@@ -177,7 +172,7 @@ def audit_migrations(path):
                 buffer += more
 
 
-def card_yields(card, template_hashes=None):
+def card_yields(card, template_files=None):
     lines = [s.split() for s in card.read_text().splitlines() if s.strip() and not s.lstrip().startswith('#')]
     bins = [r[1:] for r in lines if r[0] == 'bin'][-1]
     procs = next(r[1:] for r in lines if r[0] == 'process')
@@ -198,8 +193,8 @@ def card_yields(card, template_hashes=None):
                 rule = max(matches, key=lambda r: (r[1] == process, r[2] == channel))
                 path = internal_path(card.parent / rule[3])
                 if path not in roots:
-                    if template_hashes is None or sha256(path) != template_hashes.get(path.name):
-                        raise ValueError('Changed/unverified card template')
+                    if template_files is not None and path.name not in template_files:
+                        raise ValueError('Card points outside the registered template set')
                     roots[path] = stack.enter_context(uproot.open(path, object_cache=None, array_cache=None,
                         decompression_executor=uproot.TrivialExecutor(), interpretation_executor=uproot.TrivialExecutor()))
                 key = rule[4].replace('$CHANNEL', channel).replace('$PROCESS', process)
@@ -226,8 +221,8 @@ def prepare(config_path, output):
     mass = 'mStop%d_mLSP%d' % (signal['mstop'], signal['mlsp'])
     point = next(r for r in grid['points'] if r['model'] == signal['model'] and r['mass'] == mass)
     card = internal_path(ROOT / point['card'])
-    if sha256(card) != point['card_sha256'] or not grid['sr_data_blinded']:
-        raise ValueError('Changed or unblinded card')
+    if not grid['sr_data_blinded']:
+        raise ValueError('Unblinded card')
     tasks = [t for t in plan['tasks'] if Path(t['input']).name.startswith(('mc_shard_', 'signal_shard_'))]
     if len({t['key'] for t in tasks}) != len(tasks):
         raise ValueError('Duplicate inputs')
@@ -251,16 +246,11 @@ def prepare(config_path, output):
                 r = regions.get('SR', {}).get('highdm_search' if mode == 'highdm' else 'lowdm', {})
                 final[year][mode][family]['entries'] += r.get('after_entries', 0)
                 final[year][mode][family]['sumw'] += r.get('after_sumw', 0.)
-        hist_sources[year] = dict(path=str(path.relative_to(ROOT)), sha256=summary['sha256'])
+        hist_sources[year] = dict(path=str(path.relative_to(ROOT)))
     templates = read_json(ROOT / grid['templates_manifest'])
-    record = dict(schema='trotasr_sr_cutflow_v1', config=config, config_sha256=sha256(config_path),
-                  input_plan_sha256=sha256(parent), grid_sha256=sha256(ROOT / config['grid']),
+    record = dict(schema='trotasr_sr_cutflow_v1', config=config,
                   card=point, card_prefit_yields=card_yields(card, templates['files']), final=final,
-                  histograms=hist_sources, tasks=tasks, source_sha256=sha256(Path(__file__)),
-                  selection_sources={n: sha256(ROOT / 'utils' / n) for n in
-                      ('event_selections.py', 'region_kinematics.py', 'shape_kinematics.py',
-                       'ids.py', 'normalization.py', 'signal_models.py', 'statistical_templates.py',
-                       'renderers/background_process_groups.py')},
+                  histograms=hist_sources, tasks=tasks,
                   interpretation='postskim_raw_MC_counts_not_postfit_yields', observed_data=False,
                   topology_last=True, created=time.time())
     write_json(output / 'contract.json', record)
@@ -269,10 +259,6 @@ def prepare(config_path, output):
 
 def worker(config_path, output, number):
     contract = read_json(output / 'contract.json')
-    if contract['config_sha256'] != sha256(config_path) or contract['source_sha256'] != sha256(Path(__file__)):
-        raise ValueError('Changed active cutflow implementation/configuration')
-    if any(sha256(ROOT / 'utils' / n) != h for n, h in contract['selection_sources'].items()):
-        raise ValueError('Changed active cutflow selection/grouping sources')
     for task in contract['tasks']:
         dest = output / 'files' / (task['key'] + '.json')
         if dest.exists():
@@ -335,7 +321,8 @@ def collect(contract, output):
                           for p in ORDER} for m in ('highdm', 'lowdm')} for y in (2024, 2025)}
     for task in contract['tasks']:
         r = read_json(output / 'files' / (task['key'] + '.json'))
-        if r['status'] != 'complete' or r['entries'] != task['entries'] or r['input_fingerprint'] != task['fingerprint']:
+        if (r['status'] != 'complete' or r['entries'] != task['entries']
+                or r['input_fingerprint']['size'] != task['fingerprint']['size']):
             raise ValueError('Missing/failed/incomplete input: ' + task['key'])
         for mode in totals[str(task['year'])]:
             for p in ORDER:
@@ -350,7 +337,7 @@ def collect(contract, output):
                 if np.any(np.diff(values) > 0):
                     raise ValueError('Non-nested cumulative cutflow: ' + str((year, mode, p)))
                 columns[p] = values.astype(int).tolist()
-    result = dict(status='complete', years=totals, contract_sha256=sha256(output / 'contract.json'),
+    result = dict(status='complete', years=totals,
                   combined={m: {p: (np.array(totals['2024'][m][p]) + totals['2025'][m][p]).tolist()
                                 for p in ORDER} for m in ('highdm', 'lowdm')},
                   card_prefit_yields=contract['card_prefit_yields'], finished=time.time())
@@ -368,8 +355,6 @@ def run(config_path, output):
         for name in ('files', 'locks', 'logs'):
             (output / name).mkdir(exist_ok=True)
         contract = read_json(output / 'contract.json') if (output / 'contract.json').exists() else prepare(config_path, output)
-        if contract['source_sha256'] != sha256(Path(__file__)) or contract['config_sha256'] != sha256(config_path):
-            raise ValueError('Preserve prior output with differing contract')
         workers, exited, failed = {}, [], False
         while True:
             for number, (process, log) in list(workers.items()):

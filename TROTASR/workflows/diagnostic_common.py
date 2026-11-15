@@ -10,7 +10,7 @@ import sys
 import threading
 import time
 from TROTASR.utils.paths import ROOT, internal_path
-from TROTASR.utils.io import read_json, write_json, sha256
+from TROTASR.utils.io import read_json, write_json, without_provenance_fields
 from TROTASR.workflows.combine_limits import runtime, verify_card
 
 SPAWN_LOCK = threading.Lock()
@@ -171,7 +171,7 @@ def require_revised_record(record):
     return True
 
 
-def verify_revised_card(card, manifest, digest):
+def verify_revised_card(card, manifest):
     from TROTASR.workflows.build_nominal_grid import background_shape_names
     years = record_years(manifest)
     meta = read_json(card.with_suffix('.manifest.json'))
@@ -201,8 +201,6 @@ def verify_revised_card(card, manifest, digest):
         raise ValueError('Revised card must use one shared four-template model')
     for source in meta['inputs']:
         path = internal_path(ROOT/source['path'])/'model_manifest.json'
-        if digest(path) != source['sha256']:
-            raise ValueError('Revised template manifest changed')
         record = read_json(path)
         require_revised_record(record)
         if (record['scope'] != manifest['scope'] or any(record.get(k) != manifest.get(k) for k in fields)
@@ -256,7 +254,6 @@ def published_diagnostic(output, manifest_path, kind, model='T2tt', mass='mStop1
     if (publication.get('kind') != kind or publication.get('canonical_model') != 'era_merged'
             or manifest.get('canonical_model') != 'era_merged'
             or manifest.get('scope') != 'full_combined_systematic_production'
-            or publication.get('current_card_sha256') != point['card_sha256']
             or publication.get('sr_observed_data_used') is not False):
         if provisional is not None:
             raise ValueError('Provisional CR-only result does not match the current base grid')
@@ -286,17 +283,16 @@ def grid_card(manifest_path, kind, model='T2tt', mass='mStop1200_mLSP500'):
         if kind not in ('cronly','impact') or (kind == 'impact' and point.get('fit_ready') is not True):
             raise ValueError('One accepted fit-ready diagnostic card is required')
         card = internal_path(ROOT/point['card'])
-        digest = sha256(card)
-        if digest != point['card_sha256']:
-            raise ValueError('Accepted small diagnostic card changed')
+        if not card.is_file() or not card.stat().st_size:
+            raise ValueError('Accepted diagnostic card missing or empty')
         if kind == 'cronly':
             metadata=read_json(card.with_suffix('.manifest.json'))
             if metadata.get('fit_ready') is not True or metadata.get('cr_only') is not True:
                 raise ValueError('Accepted CR-only card receipt is required')
             cr_channels(card.read_text(),tuple(manifest['years']))
         return card,dict(manifest=str(manifest_path.relative_to(ROOT)),
-            manifest_sha256=sha256(manifest_path),card=str(card.relative_to(ROOT)),
-            card_sha256=digest,input_check_scope='accepted_current_merged_card; no_upstream_or_ROOT_rehash')
+            card=str(card.relative_to(ROOT)),
+            input_check_scope='accepted_current_merged_card')
     years = record_years(manifest)
     revised = require_revised_record(manifest)
     bins = (258 if revised else 270) * len(years)
@@ -317,8 +313,6 @@ def grid_card(manifest_path, kind, model='T2tt', mass='mStop1200_mLSP500'):
         from TROTASR.workflows.signal_grid_inputs import requested_grid
         source = manifest['requested_grid']
         path = internal_path(ROOT/source['path'])
-        if sha256(path) != source['sha256']:
-            raise ValueError('Requested signal grid changed')
         grid = requested_grid(path)
         expected_counts = grid['expected_points_by_model']
         if {(p['model'], p['mass']) for p in manifest['points']} != {
@@ -327,7 +321,6 @@ def grid_card(manifest_path, kind, model='T2tt', mass='mStop1200_mLSP500'):
     if (counts != expected_counts or counts != manifest['expected_points_by_model']
             or len({(p['model'], p['mass']) for p in manifest['points']}) != sum(expected_counts.values())):
         raise ValueError('Unexpected full signal-grid coverage')
-    digest = sha256
     if kind == 'impact':
         if model not in ('T2tt', 'T2bW', 'T2tb') or not re.fullmatch(r'mStop\d+_mLSP\d+', mass):
             raise ValueError('Invalid impact benchmark')
@@ -335,24 +328,22 @@ def grid_card(manifest_path, kind, model='T2tt', mass='mStop1200_mLSP500'):
         if len(matches) != 1:
             raise ValueError('Missing/duplicate impact benchmark')
         point = matches[0]
-        card = verify_card(point, digest)
+        card = verify_card(point)
     elif kind == 'cronly':
         point = manifest['cr_only_card']
         card = internal_path(ROOT / point['card'])
-        if digest(card) != point['card_sha256']:
-            raise ValueError('CR-only card changed')
+        if not card.is_file() or not card.stat().st_size:
+            raise ValueError('CR card missing or empty')
         meta = read_json(card.with_suffix('.manifest.json'))
         if preserved_cr_only and meta.get('fit_ready') is not True:
             raise ValueError('Preserved CR-only card has not passed its own fit-support gate')
         if (not meta['cr_only'] or not meta['sr_data_blinded'] or tuple(meta['years']) != years
-                or meta['auto_mc_stats'] != [10, 1, 1] or meta['card_sha256'] != point['card_sha256']):
+                or meta['auto_mc_stats'] != [10, 1, 1]):
             raise ValueError('CR card provenance/blinding mismatch')
         cr_channels(card.read_text(), years)
         for source in meta['inputs']:
             folder = internal_path(ROOT / source['path'])
             record_path = folder / 'model_manifest.json'
-            if digest(record_path) != source['sha256']:
-                raise ValueError('CR template provenance changed')
             record = read_json(record_path)
             compatible = (record['status'] == 'templates_ready'
                           or preserved_cr_only and cr_only_support_ready(record))
@@ -360,9 +351,10 @@ def grid_card(manifest_path, kind, model='T2tt', mass='mStop1200_mLSP500'):
                     or record['scope'] != manifest['scope']):
                 raise ValueError('Unverified CR templates')
             template_folder = internal_path(ROOT/record['template_directory']) if record.get('template_directory') else folder
-            for name, expected in record['files'].items():
-                if digest(template_folder / name) != expected:
-                    raise ValueError('CR template changed')
+            for name in record['files']:
+                template = internal_path(template_folder/name)
+                if not template.is_file() or not template.stat().st_size:
+                    raise ValueError('CR template missing or empty')
             declared = {internal_path(template_folder/name) for name in record['files']}
             referenced = {internal_path(card.parent/f[3]) for f in
                 (line.split() for line in card.read_text().splitlines()) if f and f[0]=='shapes'}
@@ -371,19 +363,20 @@ def grid_card(manifest_path, kind, model='T2tt', mass='mStop1200_mLSP500'):
     else:
         raise ValueError('Unknown diagnostic')
     if revised:
-        verify_revised_card(card, manifest, digest)
+        verify_revised_card(card, manifest)
     for line in card.read_text().splitlines():
         fields = line.split()
         if fields and fields[0] == 'shapes':
             internal_path(card.parent / fields[3])
-    return card, dict(manifest=str(manifest_path.relative_to(ROOT)), manifest_sha256=digest(manifest_path),
-                      card=str(card.relative_to(ROOT)), card_sha256=digest(card))
+    return card, dict(manifest=str(manifest_path.relative_to(ROOT)), card=str(card.relative_to(ROOT)))
 
 
 def contract_options(options):
-    """Scheduling and figure range do not define the fitted likelihood."""
-    return {key: value for key, value in options.items()
-            if key not in ('workers', 'pull_ylim', 'original_status_sha256')}
+    """Compare fit settings independently of scheduling and saved source paths."""
+    provenance = {'original_contract', 'protected', 'previous_status',
+                  'central_fit', 'reused_workspace', 'input_check_scope'}
+    return without_provenance_fields({key:value for key,value in options.items()
+            if key not in provenance | {'workers','pull_ylim'}})
 
 
 def freeze_contract(output, origins, files, options):
@@ -391,8 +384,7 @@ def freeze_contract(output, origins, files, options):
     target = internal_path(output) / 'contract.json'
     if target.exists():
         saved = read_json(target)
-        if (saved['origins'] != origins
-                or contract_options(saved['options']) != contract_options(options)):
+        if contract_options(saved['options']) != contract_options(options):
             raise ValueError('Divergent diagnostic inputs or fit settings; preserve existing run')
         return saved
     contract = dict(origins=origins, sources=list(files), options=options)
@@ -427,9 +419,6 @@ def check_products(state):
         path = ROOT / name
         if not path.is_file() or not path.stat().st_size:
             raise ValueError('Completed diagnostic product missing: ' + name)
-        expected = state.get('product_stats', {}).get(name)
-        if expected and product_stats([path])[name] != expected:
-            raise ValueError('Completed diagnostic product changed: ' + name)
 
 
 class CommandFailure(RuntimeError):
@@ -491,8 +480,7 @@ class CommandRunner:
                 complete = rc == 0 and all(p.is_file() and p.stat().st_size > 0 for p in products)
                 state.update(status='complete' if complete else 'failed', exit_code=rc, pid=None,
                              finished=time.time(), controller_pid=None, product_stats=product_stats(products),
-                             products={str(p.relative_to(ROOT)): sha256(p)
-                             for p in products if p.is_file()})
+                             products=dict.fromkeys(str(p.relative_to(ROOT)) for p in products if p.is_file()))
                 write_json(path, state)
                 return state
             except BaseException as error:

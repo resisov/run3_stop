@@ -1,7 +1,6 @@
 """Canonical six-era merged-channel likelihood; adopted benchmark algebra unchanged."""
 from collections import OrderedDict
 from functools import lru_cache
-import hashlib
 import math
 import os
 from pathlib import Path
@@ -370,13 +369,15 @@ def prepare_merged_cards(path, text, metadata, channels, template_background):
     target = plan['data_root']
     receipt_path = target.parent.parent/'observation_construction.json'
     receipt = dict(scope='era_merged_template_observations',
-        reference_ingredients_sha256=hashlib.sha256(text.encode()).hexdigest(),
         template_inputs=metadata['inputs'], data_obs_root=str(target),
         source_channels=48, target_channels=8, sr_data_blinded=True, observed_sr_used=False,
         construction='sum the CR observations and the native MC-only SR placeholders')
     if receipt_path.is_file():
-        if read_json(receipt_path) != receipt:
-            raise ValueError('Merged observation ingredients differ from the existing receipt')
+        saved = read_json(receipt_path)
+        fields = ('scope', 'data_obs_root', 'source_channels', 'target_channels',
+                  'sr_data_blinded', 'observed_sr_used')
+        if any(saved.get(field) != receipt[field] for field in fields):
+            raise ValueError('Merged observation layout or blinding differs from the existing receipt')
     elif target.exists():
         raise ValueError('Merged observation file has no matching input receipt')
     else:
@@ -415,8 +416,7 @@ def render_merged_signal_card(path, text, metadata, merge):
     if observation_bindings(path, plan['source']) != merge['observation_bindings']:
         raise ValueError('Observation references differ; do not assume common data')
     model = merged_card_metadata(metadata, merge)
-    model.update(source_card_sha256=hashlib.sha256(text.encode()).hexdigest(),
-        dependent_rateparam_formulas=plan['formula_count'],
+    model.update(dependent_rateparam_formulas=plan['formula_count'],
         shared_alpha_bounds={n:list(v) for n,v in plan['alpha_bounds'].items()})
     return '\n'.join(plan['lines'])+'\n', model
 

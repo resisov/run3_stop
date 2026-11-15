@@ -5,7 +5,7 @@ if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
 from TROTASR.utils.paths import ROOT, internal_path
-from TROTASR.utils.io import read_json, write_json, sha256, scientific_settings
+from TROTASR.utils.io import read_json, write_json, scientific_settings
 from TROTASR.utils.background_estimation import measure
 from TROTASR.utils.transfer_factors import build_transfer_factors
 from TROTASR.utils.zgamma_estimation import ZGamma_BPIX_MERGE
@@ -70,26 +70,23 @@ def recover_zgamma(output, payload):
         if (str(payload['contract']['year']) != ZGamma_BPIX_MERGE['year']
                 or str(manifest['provenance']['campaign_year']) != ZGamma_BPIX_MERGE['year']):
             raise ValueError('Only the diagnosed 2023BPix measurement can be resumed')
-        if any(sha256(output/n) != h for n, h in manifest['files'].items() if n != name):
-            raise ValueError('An unrelated measurement changed')
-        prior = manifest['files'][name]
-        current = sha256(path)
-        if manifest['stages']['double_ratio'] != 'blocked':
-            if current != prior:
-                raise ValueError('Changed accepted Z/gamma measurement')
-            return 0 if manifest['status'] == 'complete' else 2
+        if name not in manifest['files'] or any(not (output/n).is_file() for n in manifest['files']):
+            raise ValueError('The measurement inventory is incomplete')
         result = read_json(path)
-        if current == prior:
+        if manifest['stages']['double_ratio'] != 'blocked':
+            if result.get('status') != manifest['stages']['double_ratio']:
+                raise ValueError('Z/gamma measurement and manifest status differ')
+            return 0 if manifest['status'] == 'complete' else 2
+        if result.get('status') == 'blocked':
             result = merged_zgamma_measurement(payload, result)
-            result['measurement_merge_audit']['replaces_sha256'] = prior
             write_json(path, result)
-            current = sha256(path)
         elif (result.get('status') != 'complete'
                 or scientific_settings(result.get('measurement_bin_policy')) != ZGamma_BPIX_MERGE
-                or result.get('measurement_merge_audit', {}).get('replaces_sha256') != prior):
-            raise ValueError('Changed incomplete Z/gamma measurement')
+                or not result.get('measurement_merge_audit', {}).get('valid_nonmerged_rows_preserved')
+                or not result.get('measurement_merge_audit', {}).get('lowdm_unchanged')):
+            raise ValueError('Invalid saved Z/gamma measurement')
         manifest['stages']['double_ratio'] = 'complete'
-        manifest['files'][name] = current
+        manifest['files'] = sorted(manifest['files'])
         manifest['status'] = 'complete' if all(s == 'complete' for s in manifest['stages'].values()) else 'blocked'
         write_json(manifest_path, manifest)
         print(manifest['status'], '(only Z/gamma measurement recovered)')
@@ -113,16 +110,19 @@ def main():
             raise ValueError('Existing measurements belong to a different era')
         if year == ZGamma_BPIX_MERGE['year'] and old['stages'].get('double_ratio') == 'blocked':
             return recover_zgamma(output, payload)
-        # The measured products, not mutable producer code or merged signal bytes, are inputs.
-        if all(sha256(output/n) == h for n,h in old['files'].items()):
+        stages = old['stages']
+        if stages and set(old['files']) == {n+'.json.gz' for n in stages} and all(
+                (output/(stage+'.json.gz')).is_file() and
+                read_json(output/(stage+'.json.gz')).get('status') == status
+                for stage,status in stages.items()):
             print(old['status'], '(existing measurements validated)')
             return 0 if old['status'] == 'complete' else 2
         raise FileExistsError('Preserve divergent measured payloads; use a new directory')
     gnn_path = configuration_path(year)
-    provenance = dict(campaign_year=year, hist_input=str(source.relative_to(ROOT)), hist_input_sha256=sha256(source),
-        code={f: sha256(ROOT/f) for f in ('utils/background_estimation.py', 'utils/dy_estimation.py',
+    provenance = dict(campaign_year=year, hist_input=str(source.relative_to(ROOT)),
+        code=['utils/background_estimation.py', 'utils/dy_estimation.py',
               'utils/photon_estimation.py', 'utils/zgamma_estimation.py', 'utils/transfer_factors.py',
-              str(gnn_path.relative_to(ROOT)))})
+              str(gnn_path.relative_to(ROOT))])
     products = measure(payload)
     if year == ZGamma_BPIX_MERGE['year'] and products['double_ratio']['status'] == 'blocked':
         products['double_ratio'] = merged_zgamma_measurement(payload, products['double_ratio'])
@@ -134,7 +134,7 @@ def main():
     status = 'complete' if all(v['status']=='complete' for v in products.values()) else 'blocked'
     write_json(manifest_path, dict(status=status, provenance=provenance,
         stages={n:v['status'] for n,v in products.items()},
-        files={n+'.json.gz':sha256(output/(n+'.json.gz')) for n in products}, full_workflow_complete=False))
+        files=sorted(n+'.json.gz' for n in products), full_workflow_complete=False))
     print(status, {n:v['status'] for n,v in products.items()})
     return 0 if status=='complete' else 2
 

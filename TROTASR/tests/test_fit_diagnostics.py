@@ -6,7 +6,7 @@ import types
 import unittest
 from unittest.mock import patch
 from TROTASR.utils.paths import ROOT
-from TROTASR.utils.io import read_json, write_json, sha256
+from TROTASR.utils.io import read_json, write_json
 from TROTASR.workflows import diagnostic_common as common
 from TROTASR.workflows import combine_impacts as impact
 from TROTASR.workflows.combine_cronly import fit_command as cr_command
@@ -82,7 +82,7 @@ class RevisedDiagnosticPolicyTests(unittest.TestCase):
         def run(tm=record,metadata=meta,actual=text):
             with patch.object(common,'read_json',side_effect=lambda p:metadata if p.name=='datacard.manifest.json' else tm), \
                  patch.object(Path,'read_text',return_value=actual):
-                common.verify_revised_card(card,record,lambda p:'digest')
+                common.verify_revised_card(card,record)
         run()
         for bad in (text.replace('[0.01,5]','[0,10]'),text.replace('par95 rateParam','par94 rateParam'),
                     text.replace('bin SR_highdm_c1_2024 SR_highdm_c1_2024','bin SR_highdm_c1_2024 GCR_highdm_c1_2024'),
@@ -130,21 +130,19 @@ class ImpactBenchmarkTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 impact.benchmark_labels(model, mass)
 
-    def test_reuse_requires_exact_point_card_and_workspace_hash(self):
+    def test_reuse_requires_exact_point_card_and_workspace(self):
         card = ROOT/'stats/not_created/card.txt'
         state_path = ROOT/'stats/not_created/state.json'
         state = dict(model='T2bW', mass='mStop1000_mLSP800', workspace_valid=True,
                      card=str(card.relative_to(ROOT)), card_sha256='digest', workspace_sha256='a'*64)
         with patch.object(impact, 'read_json', return_value=state), \
-             patch.object(impact, 'sha256', return_value='digest'), \
              patch.object(Path,'is_file',return_value=True), \
              patch.object(Path,'stat',return_value=types.SimpleNamespace(st_size=1)):
             target, provenance = impact.saved_workspace(state_path, card, 'T2bW', 'mStop1000_mLSP800')
             self.assertEqual(target, state_path.parent/'workspace.root')
-            self.assertEqual(provenance['workspace_sha256'], 'a'*64)
+            self.assertEqual(provenance['workspace'], str(target.relative_to(ROOT)))
             for key, value in (('model','T2tb'), ('mass','mStop1200_mLSP500'),
-                               ('workspace_valid',False), ('workspace_sha256','changed'),
-                               ('card_sha256','changed'), ('card','stats/not_created/other.txt')):
+                               ('workspace_valid',False)):
                 with self.subTest(key=key), patch.object(impact, 'read_json', return_value=dict(state,**{key:value})):
                     with self.assertRaises(ValueError):
                         impact.saved_workspace(state_path, card, 'T2bW', 'mStop1000_mLSP800')
@@ -160,7 +158,6 @@ class ImpactBenchmarkTests(unittest.TestCase):
             expected_points_by_model={'T2tt':205, 'T2tb':365, 'T2bW':354})
         card = ROOT/'stats/not_created/card.txt'
         with patch.object(common, 'read_json', return_value=manifest), \
-             patch.object(common, 'sha256', return_value='digest'), \
              patch.object(common, 'verify_card', return_value=card) as verify, \
              patch.object(Path, 'read_text', return_value=''):
             for model in ('T2bW', 'T2tb'):
@@ -168,7 +165,7 @@ class ImpactBenchmarkTests(unittest.TestCase):
                     actual, origins = common.grid_card(ROOT/'stats/not_created/manifest.json', 'impact', model, mass)
                     self.assertEqual(actual, card)
                     self.assertEqual(verify.call_args.args[0], dict(model=model, mass=mass))
-                    self.assertEqual(origins['card_sha256'], 'digest')
+                    self.assertEqual(origins['card'], str(card.relative_to(ROOT)))
             with self.assertRaisesRegex(ValueError, 'Missing/duplicate'):
                 common.grid_card(ROOT/'stats/not_created/manifest.json', 'impact', 'T2tb', 'mStop9999_mLSP1')
 
@@ -208,7 +205,7 @@ class DiagnosticPolicyTests(unittest.TestCase):
                         years=list(ERAS), bins=214, likelihood_channels=8,
                         floating_normalization_parameters=48, auto_mc_stats=[10,1,1])
         with patch.object(common, 'read_json', return_value=manifest), \
-             patch.object(common, 'sha256', side_effect=AssertionError('must not read a retired card')):
+             patch.object(Path, 'read_text', side_effect=AssertionError('must not read a retired card')):
             with self.assertRaisesRegex(ValueError, 'canonical six-era merged card'):
                 common.grid_card(ROOT/'stats/not_created/manifest.json', 'impact')
 
@@ -467,11 +464,11 @@ class CommandIntegrityTests(unittest.TestCase):
         with patch.object(common,'admitted_popen',return_value=types.SimpleNamespace(pid=123,wait=lambda:0)):
             self.assertEqual(self.runner.run(['test-missing'],self.work,self.work/'log.txt',[self.product])['status'],'failed')
 
-    def test_changed_success_product_is_blocked(self):
+    def test_missing_success_product_is_blocked(self):
         with patch.object(common,'admitted_popen',side_effect=self.successful):
             self.runner.run(['test-command'],self.work,self.work/'log.txt',[self.product])
-        write_json(self.product, {'changed':True})
-        with self.assertRaisesRegex(ValueError,'changed'):
+        self.product.unlink()
+        with self.assertRaisesRegex(ValueError,'missing'):
             self.runner.run(['test-command'],self.work,self.work/'log.txt',[self.product])
 
     def test_interrupted_command_is_not_duplicated(self):

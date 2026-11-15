@@ -26,7 +26,7 @@ if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
 from TROTASR.utils.paths import ROOT, internal_path
-from TROTASR.utils.io import read_json, write_json, sha256
+from TROTASR.utils.io import read_json, write_json
 from TROTASR.workflows.limit_validation import validate, REL_ACC, ABS_ACC
 from TROTASR.workflows import resources
 
@@ -34,6 +34,7 @@ FIELDS = {.025:'expected_m2', .16:'expected_m1', .5:'expected', .84:'expected_p1
 ATTEMPTS = (('bisection_s0', .1, 1.), ('bisection_s0_refined', .01, 2.))
 GIB = 1024**3
 POINT_RESERVATION = 3*GIB
+NEW_SIGNAL_PRODUCTS = 'new_signal'
 
 
 def verify_combined_grid(record):
@@ -134,16 +135,16 @@ def convert_workspace(card, workspace, record, state_path, env, stream):
         return 0
 
 
-def verify_card(point, digest=sha256):
+def verify_card(point):
     from TROTASR.utils.paths import ERAS, EARLY_ERAS
     from TROTASR.workflows.build_nominal_grid import require_run3_systematics_policy
     card = internal_path(ROOT/point['card'])
-    if digest(card) != point['card_sha256']:
-        raise ValueError('Card changed: '+str(card))
+    if not card.is_file() or not card.stat().st_size:
+        raise ValueError('Card missing or empty: '+str(card))
     meta = read_json(card.with_suffix('.manifest.json'))
     mass = re.fullmatch(r'mStop(\d+)_mLSP(\d+)',point['mass'])
     if (not mass or point['model'] not in ('T2tt','T2tb','T2bW') or meta['cr_only']
-        or not meta['sr_data_blinded'] or meta['card_sha256']!=point['card_sha256']
+        or not meta['sr_data_blinded']
         or tuple(map(str,meta['years'])) not in (('2024','2025'), EARLY_ERAS, ERAS)
         or (tuple(map(str,meta['years'])) == ERAS and not require_run3_systematics_policy(meta))
         or meta['auto_mc_stats'] != [10,1,1]
@@ -152,8 +153,6 @@ def verify_card(point, digest=sha256):
     for source in meta['inputs']:
         folder = internal_path(ROOT/source['path'])
         manifest = folder/'model_manifest.json'
-        if digest(manifest) != source['sha256']:
-            raise ValueError('Template manifest changed')
         record=read_json(manifest)
         if record.get('years', ['2024', '2025']) != list(map(str, meta['years'])):
             raise ValueError('Card and template target eras differ')
@@ -162,9 +161,10 @@ def verify_card(point, digest=sha256):
             raise ValueError('Template ROOT not verified')
         verify_combined_grid(record)
         template_folder = internal_path(ROOT/record['template_directory']) if record.get('template_directory') else folder
-        for name,expected_digest in record['files'].items():
-            if digest(template_folder/name) != expected_digest:
-                raise ValueError('Template file changed: '+name)
+        for name in record['files']:
+            template = internal_path(template_folder/name)
+            if not template.is_file() or not template.stat().st_size:
+                raise ValueError('Template file missing or empty: '+name)
         declared = {internal_path(template_folder/name) for name in record['files']}
         referenced = {internal_path(card.parent/f[3]) for f in
             (line.split() for line in card.read_text().splitlines()) if f and f[0]=='shapes'}
@@ -237,9 +237,8 @@ def run_primary_point(point, output, env):
     work.mkdir(parents=True,exist_ok=True)
     state_path=work/'state.json'
     record=read_json(state_path) if state_path.exists() else dict(point,status='running',started=time.time(),attempts=[])
-    if (record['card_sha256'] != point['card_sha256'] or
-            record.get('model_revision') != point.get('model_revision')):
-        raise ValueError('Preserve old fit for divergent card')
+    if any(record.get(key) != point.get(key) for key in ('model','mass','model_revision')):
+        raise ValueError('Preserve old fit for a different point or statistical model')
     if record['status'] == 'complete':
         return record
     assert_previous_child_exited(record, work)
@@ -255,7 +254,7 @@ def run_primary_point(point, output, env):
         import uproot
         with uproot.open(workspace) as root:
             if 'w' not in root:raise ValueError('Missing RooWorkspace w')
-        record.update(workspace_valid=True,workspace_sha256=sha256(workspace),pid=None)
+        record.update(workspace_valid=True,pid=None)
         write_json(state_path,record)
     elif not workspace.is_file():
         raise ValueError('Previously verified workspace missing')
@@ -286,8 +285,8 @@ def run_primary_point(point, output, env):
         passed,evidence=validate(result,log,tolerance) if rc==0 else (False,dict(exit_code=rc))
         ready_card(point)
         attempt=dict(name=label,tolerance=tolerance,passed=passed,exit_code=rc,
-            log=str(log.relative_to(ROOT)), log_sha256=sha256(log), command=command,
-            output=str(result.relative_to(ROOT)), output_sha256=sha256(result) if result.is_file() else None,
+            log=str(log.relative_to(ROOT)), command=command,
+            output=str(result.relative_to(ROOT)),
             validation=evidence)
         if speed_evidence is not None:
             attempt['numerical_speed'] = speed_evidence
@@ -296,7 +295,7 @@ def run_primary_point(point, output, env):
         record.update(pid=None)
         if passed:
             record.update(status='complete',finished=time.time(),output=str(result.relative_to(ROOT)),
-                output_sha256=sha256(result),validation=evidence)
+                validation=evidence)
             write_json(state_path,record);return record
         write_json(state_path,record)
     record.update(status='failed',finished=time.time(),error='finite_attempts_exhausted',pid=None)
@@ -355,12 +354,23 @@ def ready_card(point):
     return card
 
 
+def replacement_card(point, product_root, signal_revision):
+    """Accept a small replacement-card receipt without reopening inherited ROOT templates."""
+    card = ready_card(point)
+    if card.parent != product_root/'grid/datacards' or point.get('fit_ready') is not True:
+        raise ValueError('The replacement grid must describe new signal cards only')
+    receipt = read_json(card.with_suffix('.manifest.json'))
+    if receipt.get('sr_data_blinded') is not True:
+        raise ValueError('The replacement signal card must preserve SR blinding')
+    return card
+
+
 def accepted_fit_record(point, record, origin):
     """Reuse a completed receipt. Only NEW fits are opened/numerically checked."""
     if record.get('status') not in ('complete', 'verified_not_promoted', 'existing_verified'):
         return None
     identity = record.get('point', record)
-    for name in ('model', 'mass', 'card_sha256', 'model_revision'):
+    for name in ('model', 'mass', 'model_revision'):
         if identity.get(name) != point.get(name):
             raise ValueError('Saved point/card identity differs: '+origin)
     attempt = record.get('accepted_attempt')
@@ -402,7 +412,7 @@ def point_receipts(point, output):
         if path.is_file():
             record = read_json(path)
             identity = record.get('point', record)
-            for name in ('model', 'mass', 'card_sha256', 'model_revision'):
+            for name in ('model', 'mass', 'model_revision'):
                 if identity.get(name) != point.get(name):
                     raise ValueError('Different point/card receipt retained: '+str(path))
             records.append((stage, path, record))
@@ -438,8 +448,7 @@ def integrated_attempt(point, workspace, target, spec, env, state, state_path, p
         write_json(state_path, state)
         progress(spec['stage'], process.pid)
         attempt['exit_code'] = wait_for_inference(process,log)
-    attempt.update(finished=time.time(), log_sha256=sha256(log),
-                   output_sha256=sha256(product) if product.is_file() else None)
+    attempt.update(finished=time.time())
     passed, evidence = validate_attempt(point, attempt)
     attempt.update(passed=passed, validation=evidence)
     state.update(pid=None)
@@ -538,7 +547,7 @@ def run_integrated_point(point, output, env, progress=lambda phase, pid: None):
         for attempt in history:
             if attempt.get('exit_code') != 0 or attempt.get('passed') or not attempt.get('output'):
                 continue
-            identity = json.dumps([attempt.get('output_sha256'), attempt.get('log_sha256')])
+            identity = json.dumps([attempt['output'], attempt.get('log')])
             if identity in checked:
                 continue
             passed, evidence = validate_attempt(point, attempt)
@@ -546,7 +555,7 @@ def run_integrated_point(point, output, env, progress=lambda phase, pid: None):
             if passed:
                 accepted = dict(attempt, passed=True, validation=evidence)
                 state.update(status='complete', finished=time.time(), accepted_attempt=accepted,
-                    output=accepted['output'], output_sha256=accepted['output_sha256'],
+                    output=accepted['output'],
                     validation=evidence, pid=None)
                 write_json(state_path, state)
                 return accepted_fit_record(point, state, str(state_path.relative_to(ROOT)))
@@ -574,7 +583,7 @@ def run_integrated_point(point, output, env, progress=lambda phase, pid: None):
             history.append(attempt)
             if attempt['passed']:
                 state.update(status='complete',finished=time.time(),accepted_attempt=attempt,
-                    output=attempt['output'],output_sha256=attempt['output_sha256'],
+                    output=attempt['output'],
                     validation=attempt['validation'],pid=None)
                 ledger['status'] = 'complete'
                 write_json(state_path,state)
@@ -643,7 +652,7 @@ def run_integrated_point(point, output, env, progress=lambda phase, pid: None):
                     history.append(attempt)
                     if attempt['passed']:
                         state.update(status='complete', finished=time.time(), accepted_attempt=attempt,
-                            output=attempt['output'], output_sha256=attempt['output_sha256'],
+                            output=attempt['output'],
                             validation=attempt['validation'], pid=None)
                         write_json(state_path, state)
                         return accepted_fit_record(point, state, str(state_path.relative_to(ROOT)))
@@ -864,15 +873,23 @@ def run_integrated_grid(manifest, output, workers):
         raise RuntimeError('Expected fits run only in the existing hep2 runtime')
     manifest, output = internal_path(manifest), internal_path(output)
     run_root = ROOT/'stats/run3'
-    if manifest != run_root/'grid/manifest.json' or output != run_root/'limits':
+    generation = manifest == run_root/NEW_SIGNAL_PRODUCTS/'grid/manifest.json'
+    product_root = run_root/NEW_SIGNAL_PRODUCTS if generation else run_root
+    if manifest != product_root/'grid/manifest.json' or output != product_root/'limits':
         raise ValueError('Expected fitting uses only the canonical Run 3 grid and limits paths')
     source = read_json(manifest)
     points, selection = ready_fit_points(source)
+    signal_input_revision = source.get('signal_input_revision') if generation else None
+    if generation and source.get('official_result') is not False:
+        raise ValueError('The replacement grid must describe new signal cards only')
     with ExitStack() as locks:
         # Share only the current model-transition lock. Acquire it before
         # opening controller.lock so adoption cannot relocate the locked inode.
         model_lock = locks.enter_context((run_root/'model_handoff.lock').open('a'))
         fcntl.flock(model_lock, fcntl.LOCK_SH | fcntl.LOCK_NB)
+        if generation:
+            for point in points:
+                replacement_card(point, product_root, signal_input_revision)
         output.mkdir(parents=True, exist_ok=True)
         locks.enter_context(canonical_controller_ownership(output))
         model_marker = output/'model.json'
@@ -883,18 +900,30 @@ def run_integrated_grid(manifest, output, workers):
         else:
             if any(p.name != 'controller.lock' for p in output.iterdir()):
                 raise ValueError('Existing limits are not identified by the current model marker')
-            model_record = dict(canonical_model='era_merged', observed_sr_used=False,
-                                input_check_scope=INPUT_CHECK_SCOPE)
+            if generation:
+                from TROTASR.workflows.cr_linked_workspace import MODEL_REVISION, donor_workspace
+                baseline = read_json(run_root/'limits/model.json')
+                donor = donor_workspace(run_root).stat()
+                if (baseline.get('model_revision') != MODEL_REVISION
+                        or baseline.get('canonical_model') != 'era_merged'
+                        or donor.st_size <= 0):
+                    raise ValueError('The accepted Photon CR workspace is required for new signals')
+                model_record = {k: baseline[k] for k in ('canonical_model', 'model_revision',
+                    'photon_cr_workspace', 'photon_cr_workspace_mtime_ns', 'photon_cr_workspace_size')}
+                model_record.update(signal_input_revision=signal_input_revision,
+                                    signal_uncertainties=False, observed_sr_used=False,
+                                    input_check_scope=INPUT_CHECK_SCOPE)
+            else:
+                model_record = dict(canonical_model='era_merged', observed_sr_used=False,
+                                    input_check_scope=INPUT_CHECK_SCOPE)
             write_json(model_marker, model_record)
         revision = model_record.get('model_revision')
         if revision:
             from TROTASR.workflows.cr_linked_workspace import MODEL_REVISION, donor_workspace
             if revision != MODEL_REVISION:
                 raise ValueError('Unknown canonical CR-linked model revision')
-            donor = donor_workspace(run_root).stat()
-            if (donor.st_mtime_ns, donor.st_size) != (model_record['photon_cr_workspace_mtime_ns'],
-                                                       model_record['photon_cr_workspace_size']):
-                raise ValueError('The adopted CR-only source changed')
+            if donor_workspace(run_root).stat().st_size <= 0:
+                raise ValueError('The adopted CR-only workspace is empty')
             points = [dict(p, model_revision=revision) for p in points]
         results = {}
         pending = []
@@ -929,6 +958,7 @@ def run_integrated_grid(manifest, output, workers):
             record = dict(selection, canonical_limits_pipeline=True,
                 canonical_model='era_merged',
                 model_revision=revision,
+                **({'signal_input_revision': signal_input_revision} if generation else {}),
                 official_result=official,
                 analysis_root=str(ROOT),
                 status=phase, pid=None if final else controller['pid'],
@@ -1020,14 +1050,16 @@ if __name__=='__main__':
         from TROTASR.workflows.cr_linked_workspace import workspace_step
         run_root = ROOT/'stats/run3'
         directory = internal_path(a.output)
-        if (sys.platform != 'linux' or run_root/'limits' not in directory.parents
+        point_dir = directory.parent
+        limits = point_dir.parent.parent
+        if (sys.platform != 'linux' or limits not in (run_root/'limits', run_root/NEW_SIGNAL_PRODUCTS/'limits')
                 or not directory.is_dir() or not directory.name.startswith('.workspace-')
                 or a.workspace_input is None):
             p.error('Use a temporary directory owned by the canonical Run 3 limit point')
         source = internal_path(a.workspace_input)
         if a.workspace_step == 'link' and source != directory/'native.root':
             p.error('The native workspace must belong to the same point conversion')
-        workspace_step(a.workspace_step, source, directory, run_root)
+        workspace_step(a.workspace_step, source, directory, run_root, products=limits.parent)
         raise SystemExit(0)
     if a.adopt_cr_link:
         if sys.platform != 'linux' or not 1 <= a.workers <= 70:

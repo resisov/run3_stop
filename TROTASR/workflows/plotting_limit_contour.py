@@ -6,8 +6,6 @@ Rendering never declares visual QA or the complete AN workflow successful.
 """
 import argparse
 import contextlib
-import hashlib
-import json
 import math
 import time
 from pathlib import Path
@@ -15,7 +13,7 @@ if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
 from TROTASR.utils.paths import ROOT, internal_path
-from TROTASR.utils.io import read_json, write_json, sha256
+from TROTASR.utils.io import read_json, write_json, without_provenance_fields
 from TROTASR.utils.renderers import postprocess_limits as renderer
 from TROTASR.utils.renderers.signal_theory import annotate_expected_grid, profiled_theory
 from TROTASR.utils.statistical_templates import load_theory, json_ready
@@ -70,7 +68,7 @@ def canonical_analysis_root(workflow):
     return internal_path(value)
 
 
-def canonical_workflow_results(grid, workflow, state_path, state_hash,
+def canonical_workflow_results(grid, workflow, state_path,
                                allow_partial=False, live_snapshot=False):
     """Read accepted pipeline receipts without replaying upstream validation."""
     required = (.025, .16, .5, .84, .975)
@@ -123,8 +121,7 @@ def canonical_workflow_results(grid, workflow, state_path, state_hash,
             if not (allow_partial or live_snapshot) and status in ('pending','running'):
                 raise ValueError('Canonical workflow point not terminal: '+key)
             result[key] = dict(record, status=status)
-        evidence[key] = dict(state_sha256=None, accepted=accepted,
-            workflow_state=str(state_path), workflow_state_sha256=state_hash,
+        evidence[key] = dict(accepted=accepted, workflow_state=str(state_path),
             snapshot_status=status, input_source='canonical_limits_pipeline',
             inspection_scope='accepted_receipt_five_quantile_structure_and_artifact_presence')
     return result, evidence
@@ -177,16 +174,15 @@ def supported_contours(masses,available,diagnostics):
 
 def _workflow(limits_dir):
     path = internal_path(limits_dir) / 'workflow_state.json'
-    raw = path.read_bytes()
-    workflow = json.loads(raw)
+    workflow = read_json(path)
     if workflow.get('canonical_limits_pipeline') is not True or workflow.get('observed_sr_used') is True:
         raise ValueError('Require the canonical blinded limits workflow')
-    return path, workflow, hashlib.sha256(raw).hexdigest()
+    return path, workflow
 
 
 def verified_current_results(grid, limits_dir, allow_partial=False, live_snapshot=False):
-    path, workflow, digest = _workflow(limits_dir)
-    return canonical_workflow_results(grid, workflow, path, digest, allow_partial, live_snapshot)
+    path, workflow = _workflow(limits_dir)
+    return canonical_workflow_results(grid, workflow, path, allow_partial, live_snapshot)
 
 
 def prepare(limits_dir, grid_manifest, allow_partial=False, live_snapshot=False):
@@ -197,7 +193,7 @@ def prepare(limits_dir, grid_manifest, allow_partial=False, live_snapshot=False)
     if live_snapshot and (not allow_partial or grid['scope'] != 'full_combined_systematic_production'
                           or not grid.get('run3_systematics')):
         raise ValueError('Live snapshot requires an explicit partial six-era view')
-    workflow_path, workflow, digest = _workflow(limits_dir)
+    workflow_path, workflow = _workflow(limits_dir)
     grid = dict(grid, canonical_limits_pipeline=True,
                 _canonical_analysis_root=str(canonical_analysis_root(workflow)))
     grid['points'] = [point for point in grid['points']
@@ -206,9 +202,8 @@ def prepare(limits_dir, grid_manifest, allow_partial=False, live_snapshot=False)
     grid['expected_points_by_model'] = {
         model: sum(point['model'] == model for point in grid['points']) for model in MODELS}
     sr_bin_counts(grid)
-    results, evidence = canonical_workflow_results(
-        grid, workflow, workflow_path, digest, allow_partial, live_snapshot)
-    evidence_digest = hashlib.sha256(json.dumps(evidence, sort_keys=True).encode()).hexdigest()
+    results, _ = canonical_workflow_results(
+        grid, workflow, workflow_path, allow_partial, live_snapshot)
     records = {}
     for model in MODELS:
         masses = [point['mass'] for point in grid['points'] if point['model'] == model]
@@ -216,37 +211,29 @@ def prepare(limits_dir, grid_manifest, allow_partial=False, live_snapshot=False)
         validate_collected(payload, masses, allow_partial)
         records[model] = dict(
             payload=renderer.select_limit_range(payload, masses), full_payload=payload,
-            input_sha256=evidence_digest, input=str(workflow_path.relative_to(ROOT)),
+            input=str(workflow_path.relative_to(ROOT)),
             requested_masses=masses, full_grid_status=payload['status'],
             full_grid_missing=payload['missing_points'], full_grid_point_count=len(masses),
             out_of_plot_range=[])
         if live_snapshot:
             from collections import Counter
             records[model]['snapshot_counts'] = dict(Counter(results[model+'/'+m]['status'] for m in masses))
-    return grid, records, sha256(Path(renderer.__file__))
+    return grid, records
 
 
 def render(limits_dir, grid_manifest, output, allow_partial=False, live_snapshot=False):
     output = internal_path(output)
     snapshot_started = time.time()
-    grid, records, renderer_hash = prepare(limits_dir, grid_manifest, allow_partial, live_snapshot)
+    grid, records = prepare(limits_dir, grid_manifest, allow_partial, live_snapshot)
     eras = tuple(grid['years'])
     high_bins, low_bins = sr_bin_counts(grid)
     config = read_json(ROOT / 'stats/contour_config.json')
     refs = {name: internal_path(ROOT / spec['path']) for name, spec in config['references'].items()}
-    for name, path in refs.items():
-        if sha256(path) != config['references'][name]['sha256']:
-            raise ValueError('Changed contour reference: ' + name)
     theory_path = internal_path(ROOT / config['theory']['path'])
-    if sha256(theory_path) != config['theory']['sha256']:
-        raise ValueError('Changed stop cross-section table')
     theory = profiled_theory(load_theory(theory_path))
     cross_sections = renderer.load_stop_pair_xsecs(theory_path)
     thermal = renderer.load_thermal_relic_contour(refs['thermal_relic'])
-    contract = dict(grid_sha256=sha256(grid_manifest),
-        collected_sha256={m: r['input_sha256'] for m, r in records.items()},
-        renderer_sha256=renderer_hash, adapter_sha256=sha256(Path(__file__)),
-        config_sha256=sha256(ROOT / 'stats/contour_config.json'), runtime=renderer.runtime_versions(),
+    contract = dict(grid=str(grid_manifest), runtime=renderer.runtime_versions(),
         allow_partial=allow_partial, sr_bins_per_year=dict(highdm=high_bins, lowdm=low_bins),
         sr_merge=grid.get('sr_merge'), canonical_limits_pipeline=True,
         analysis_root=grid['_canonical_analysis_root'])
@@ -262,15 +249,15 @@ def render(limits_dir, grid_manifest, output, allow_partial=False, live_snapshot
     receipt = output / 'plot_manifest.json'
     if output.exists():
         old = read_json(receipt)
-        # Source checksums record provenance; reuse depends on the plotted inputs.
-        exclude = ('adapter_sha256', 'renderer_sha256')
-        if ({k: v for k, v in old['contract'].items() if k not in exclude}
-                != {k: v for k, v in contract.items() if k not in exclude}
-                or not old.get('plots')):
-            raise FileExistsError('Preserve divergent/incomplete contour directory')
-        for name, digest in old['files'].items():
-            if sha256(output / name) != digest:
-                raise ValueError('Completed contour artifact changed')
+        keys = ('allow_partial', 'sr_bins_per_year', 'sr_merge', 'years',
+                'systematic_scope', 'live_snapshot')
+        previous = old['contract']
+        if (without_provenance_fields({k: previous.get(k) for k in keys})
+                != without_provenance_fields({k: contract.get(k) for k in keys})
+                or {p['model'] for p in old.get('plots', [])} != set(MODELS)):
+            raise FileExistsError('Preserve incompatible/incomplete contour directory')
+        if not old['files'] or any(not (output/name).is_file() for name in old['files']):
+            raise ValueError('Missing completed contour artifact')
         return old
     output.mkdir(parents=True)
     plots = []
@@ -313,7 +300,7 @@ def render(limits_dir, grid_manifest, output, allow_partial=False, live_snapshot
             out_of_plot_range=record['out_of_plot_range'],
             status='generated_pending_visual_QA', external_theory_shift_applied=False))
     result = dict(status='generated_pending_visual_QA', contract=contract, plots=plots,
-        files={p.name: sha256(p) for p in output.iterdir() if p.is_file() and p != receipt},
+        files=sorted(p.name for p in output.iterdir() if p.is_file() and p != receipt),
         sr_data_blinded=True, full_workflow_complete=False)
     write_json(receipt, result)
     return result

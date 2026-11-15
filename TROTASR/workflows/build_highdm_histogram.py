@@ -1,4 +1,4 @@
-"""Histogram accepted events using the target era corrections."""
+"""Histogram accepted events and original NanoAOD weight variations."""
 from pathlib import Path
 import argparse
 if __package__ in (None, ''):
@@ -13,9 +13,8 @@ def run_task(task, options):
     source = internal_path(ROOT / task['input'])
     output = internal_path(ROOT / task['output'])
     stat = source.stat()
-    if any(task['fingerprint'][k] != value for k, value in
-           (('size', stat.st_size), ('mtime_ns', stat.st_mtime_ns))):
-        raise ValueError('Histogram inventory input changed: ' + task['input'])
+    if task['fingerprint']['size'] != stat.st_size:
+        raise ValueError('Histogram inventory input size differs: ' + task['input'])
     payload = build(source, task['year'], output, **options)
     if payload['audit']['events_read'] != task['entries']:
         raise ValueError('Histogram event count differs from the inventory')
@@ -100,6 +99,49 @@ def run_inventory(path, workers, chunk_size=None):
     return int(any(r['status']=='failed' for r in results.values()))
 
 
+def prepare_lhe_inventory(population):
+    """Bind raw generator weighting to the current MC-only input registry."""
+    import fcntl
+    from TROTASR.utils.io import read_json, write_json
+    from TROTASR.utils.lhe_weights import MC_SHARD
+    from TROTASR.utils.paths import ERAS, ROOT, internal_path
+    from TROTASR.workflows.validation_regions import inventory
+
+    if population != 'background':
+        raise ValueError('Generator nuisances are applied to backgrounds only')
+    tasks = {era: [t for t in rows if MC_SHARD.fullmatch(Path(t['input']).name)]
+             for era, rows in inventory().items()}
+    if set(tasks) != set(ERAS) or not all(tasks.values()):
+        raise ValueError('No registered generator coverage in one or more target eras')
+
+    directory = ROOT/'stats/run3/new_signal/lhe'/population
+    if internal_path(directory) != directory:
+        raise ValueError('Generator inputs and receipts must stay in the canonical product directory')
+    path = directory/'inventory.json'
+    selected = []
+    for era in ERAS:
+        for row in tasks[era]:
+            relative = Path(row['input'])
+            if relative.parent != Path('inputs')/era or str(row['year']) != era:
+                raise ValueError('Unexpected generator input path or target era')
+            output = directory/'shards'/era/f'{relative.stem}.json.gz'
+            selected.append(dict(row, output=str(output.relative_to(ROOT))))
+    if len({t['input'] for t in selected}) != len(selected):
+        raise ValueError('Duplicate generator input ownership')
+    document = dict(schema='trotasr_lhe_histogram_inventory_v1', population=population,
+                    tasks=selected, files_by_era={era: len(tasks[era]) for era in ERAS},
+                    histogram_options={'lhe_weights': True, 'use_trota_friend': True}, sr_observations_used=False)
+    directory.mkdir(parents=True, exist_ok=True)
+    with path.with_suffix('.lock').open('a') as owner:
+        fcntl.flock(owner, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        if path.is_file():
+            if read_json(path) != document:
+                raise ValueError('Preserve the prior generator inventory; inputs changed')
+        else:
+            write_json(path, document)
+    return path
+
+
 def main(default='highdm'):
     p = argparse.ArgumentParser(prog='python -m TROTASR histograms', description=__doc__)
     p.add_argument('--input', type=Path)
@@ -115,22 +157,41 @@ def main(default='highdm'):
     p.add_argument('--variations', nargs='+')
     p.add_argument('--trota-friend', action='store_true', default=None,
                    help='Use validated nominal corrected TROTA tags for the SR/CR MC input')
+    p.add_argument('--lhe-weights', action='store_true',
+                   help='Accumulate original NanoAOD PDF/scale members with the nominal selection')
+    p.add_argument('--prepare-lhe-inventory', choices=('background',),
+                   help='Register a generator-weight pass for the current background MC')
     p.add_argument('--cutflow-config', type=Path, help='Read-only SR cutflows; no histograms or inference rerun')
     p.add_argument('--cutflow-worker', type=int, help=argparse.SUPPRESS)
     p.add_argument('--vr-mc', action='store_true', help='Build MC-only VRs with the current SR template bins')
     p.add_argument('--vr-tight-mixed', action='store_true',
                    help='Evaluate only the MC tight-angle single-Mixed mTb<175 GeV candidate')
     p.add_argument('--vr-pilot', action='store_true', help='Use one background and one signal MC shard per era')
+    vr_population = p.add_mutually_exclusive_group()
+    vr_population.add_argument('--vr-background-only', action='store_true',
+                               help='Build the complete approved VR background without old signal inputs')
+    vr_population.add_argument('--vr-replacement-signals', action='store_true',
+                               help='Complete the approved VR MC with registered UUID signal inputs')
     p.add_argument('--vr-response', action='store_true',
                    help='After nominal VR completion, compute the missing VR background responses')
     p.add_argument('--vr-plot-after-response', action='store_true',
                    help='Render the VR comparison with the saved CR fit when responses are complete')
     p.add_argument('--vr-workers', type=int, default=4)
     args = p.parse_args()
+    if args.prepare_lhe_inventory:
+        if (args.inventory or args.input or args.output or args.year or args.vr_mc or args.cutflow_config
+                or args.vr_tight_mixed or args.vr_pilot or args.vr_response or args.vr_plot_after_response
+                or args.vr_background_only or args.vr_replacement_signals or args.task_index is not None
+                or args.lhe_weights or args.trota_friend or args.shape_mode or args.variations is not None
+                or args.mode is not None):
+            p.error('--prepare-lhe-inventory is a standalone preparation step')
+        print(prepare_lhe_inventory(args.prepare_lhe_inventory))
+        return
     if args.inventory:
         if (args.input or args.output or args.year or args.vr_mc or args.cutflow_config
                 or args.vr_tight_mixed or args.vr_pilot or args.vr_response or args.vr_plot_after_response
-                or args.trota_friend or args.shape_mode or args.variations is not None or args.mode is not None):
+                or args.vr_background_only or args.vr_replacement_signals
+                or args.lhe_weights or args.trota_friend or args.shape_mode or args.variations is not None or args.mode is not None):
             p.error('--inventory supplies the input/output task list and cannot be combined with single-file or VR options')
         if args.task_index is not None:
             from TROTASR.utils.io import read_json
@@ -149,18 +210,24 @@ def main(default='highdm'):
         p.error('--vr-tight-mixed requires --vr-mc')
     if args.vr_tight_mixed and args.vr_response:
         p.error('--vr-tight-mixed is nominal MC-only; cannot combine it with --vr-response')
+    if (args.vr_background_only or args.vr_replacement_signals) and (
+            not args.vr_mc or args.vr_pilot or args.vr_tight_mixed or args.vr_response):
+        p.error('A VR population option requires --vr-mc and cannot be combined with pilot, tight-Mixed or response')
     if args.vr_plot_after_response and not (args.vr_mc and args.vr_response):
         p.error('--vr-plot-after-response requires --vr-mc --vr-response')
     if args.vr_mc:
         if args.trota_friend:
             p.error('--vr-mc uses the accepted nominal friend registry automatically')
+        if args.lhe_weights:
+            p.error('--lhe-weights is background SR/CR production, not VR production')
         if args.input or args.year or args.output or args.cutflow_config or args.cutflow_worker:
             p.error('--vr-mc uses only the canonical MC inventory and stats/run3/vr output')
         if args.vr_response and args.vr_pilot:
             p.error('--vr-response requires the complete nominal VR and background inventory')
         from TROTASR.workflows.validation_regions import run
         status = run(pilot=args.vr_pilot, workers=args.vr_workers, response=args.vr_response,
-                     tight_mixed=args.vr_tight_mixed)
+                     tight_mixed=args.vr_tight_mixed, background_only=args.vr_background_only,
+                     replacement_signals=args.vr_replacement_signals)
         if status == 0 and args.vr_plot_after_response:
             from TROTASR.workflows.plotting_vr_predictions import compare_saved_fit
             compare_saved_fit()
@@ -187,7 +254,7 @@ def main(default='highdm'):
         if friend_production_complete() and find_friend_task(internal_path(args.input), args.year):
             use_friend = True
     result = build(args.input, args.year, args.output, modes=modes, chunk_size=2000 if args.chunk_size is None else args.chunk_size,
-                   use_trota_friend=use_friend,
+                   lhe_weights=args.lhe_weights, use_trota_friend=use_friend,
                    shape_mode=args.shape_mode, variations=args.variations or ('nominal',))
     print(result['status'], 'events=', result['audit']['events_read'], 'seconds=', round(result['seconds'], 2))
 

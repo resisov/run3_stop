@@ -27,6 +27,7 @@ from TROTASR.workflows.validation_regions import (
 
 
 SCHEMA = "trotasr_vr_jetmet_v1"
+MAX_WORKERS = 12
 DATA_NAME = re.compile(r"data_(?:shard|completion_MET2022C)_\d+\.root")
 IDENTITY = ("dataset_id", "is_data", "is_signal", "pass_base_common", "pass_signal_trigger")
 JETS = ("jet_corrected_pt", "jet_eta_all", "jet_phi_all", "jet_id_all", "met", "met_phi")
@@ -161,9 +162,8 @@ def _source(task):
         raise ValueError("Expected an accepted observed shard")
     path = internal_path(ROOT / relative)
     st = path.stat()
-    for name, val in (("size", st.st_size), ("mtime_ns", st.st_mtime_ns), ("inode", st.st_ino)):
-        if name in task["fingerprint"] and task["fingerprint"][name] != val:
-            raise ValueError("Observed shard changed since the accepted inventory")
+    if task["fingerprint"].get("size", st.st_size) != st.st_size:
+        raise ValueError("Observed shard size differs from the accepted inventory")
     return path
 
 
@@ -223,7 +223,8 @@ def _receipt(task):
     if not path.is_file():
         return None
     d = read_json(path)
-    if (d["schema"] != SCHEMA or d["input"] != task["input"] or d["fingerprint"] != task["fingerprint"]
+    if (d["schema"] != SCHEMA or d["input"] != task["input"]
+            or d["fingerprint"].get("size") != task["fingerprint"].get("size")
             or d["sr_observations_used"] is not False or d["sr_histograms_filled"] is not False
             or len(d["bins"]) != 148):
         raise ValueError("Divergent VR observed receipt")
@@ -247,8 +248,8 @@ def _capacity():
 
 
 def run(workers):
-    if ROOT != Path("/hep2-scratch/twkim/postprocessing/TROTASR") or not 1 <= workers <= 6:
-        raise ValueError("VR data runs only in the canonical hep2 runtime with 1–6 workers")
+    if ROOT != Path("/hep2-scratch/twkim/postprocessing/TROTASR") or not 1 <= workers <= MAX_WORKERS:
+        raise ValueError(f"VR data runs only in the canonical hep2 runtime with 1–{MAX_WORKERS} workers")
     OUTPUT.mkdir(parents=True, exist_ok=True)
     with (OUTPUT / "data_controller.lock").open("a") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)

@@ -1,5 +1,10 @@
 """Numerical policies used by the canonical finite recovery stage."""
 import unittest
+from tempfile import TemporaryDirectory
+from pathlib import Path
+from TROTASR.utils.io import write_json
+from TROTASR.utils.paths import ROOT
+from TROTASR.workflows.combine_limits import replacement_card
 from TROTASR.workflows.limit_recovery import choose_range, command_for, target_nll
 
 
@@ -9,6 +14,22 @@ def block(rows):
 
 
 class NumericalContinuationTests(unittest.TestCase):
+    def test_replacement_point_cannot_fall_back_to_old_cards_or_receipts(self):
+        with TemporaryDirectory(dir=ROOT) as directory:
+            products = Path(directory)/'new_signal'
+            card = products/'grid/datacards/card.txt'
+            card.parent.mkdir(parents=True)
+            card.write_text('test card')
+            point = dict(card=str(card.relative_to(ROOT)), card_sha256='legacy', fit_ready=True)
+            write_json(card.with_suffix('.manifest.json'), dict(signal_input_revision='new_uuid',
+                card_sha256=point['card_sha256'], sr_data_blinded=True))
+            self.assertEqual(replacement_card(point, products, 'new_uuid'), card)
+            with self.assertRaises(ValueError):
+                replacement_card(point, products.parent, 'new_uuid')
+            card.unlink()
+            with self.assertRaises(FileNotFoundError):
+                replacement_card(point, products, 'new_uuid')
+
     def test_exhausted_current_scan_expands_seed_not_limit(self):
         seed,evidence=choose_range([('refined',block([(20,.06786),(30,.14213),(39.84375,.23368)]),40)],40)
         self.assertGreater(seed,300)

@@ -6,14 +6,14 @@ import sys
 import tempfile
 import unittest
 from TROTASR.utils.paths import ROOT, internal_path, payload_path
-from TROTASR.utils.io import read_json, write_json, sha256
+from TROTASR.utils.io import read_json, write_json
 
 
 class DependencyBoundaryTests(unittest.TestCase):
     def test_external_io_rejected_before_open(self):
         from TROTASR.utils.statistical_templates import load_theory
         outside = ROOT.parent / 'not_approved.json'
-        for operation in (read_json, sha256, load_theory, lambda p: write_json(p, {})):
+        for operation in (read_json, load_theory, lambda p: write_json(p, {})):
             with self.assertRaisesRegex(ValueError, 'escapes TROTASR'):
                 operation(outside)
 

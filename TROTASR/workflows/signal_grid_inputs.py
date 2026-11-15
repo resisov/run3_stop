@@ -5,11 +5,12 @@ It does not read ROOT, infer scores, change normalization or merge observed bins
 The native signal packing below follows build_run2_linked_grid.signal_data.
 """
 from collections import defaultdict
+import gzip
 import math
 import re
 import numpy as np
-from TROTASR.utils.io import read_json, sha256
-from TROTASR.utils.paths import ROOT, internal_path
+from TROTASR.utils.io import read_json
+from TROTASR.utils.paths import ERAS, ROOT, internal_path
 from TROTASR.utils.signal_models import signal_mass_from_genmodel, signal_mass_key
 from TROTASR.utils.sr_binning import AXES, NATIVE_EDGES, expand, matches
 from TROTASR.utils.statistics_inputs import build_inputs, HistogramView
@@ -69,7 +70,7 @@ def represented_signals(payload):
     return {name: value for name, value in totals.items() if value != 0.}
 
 
-def project_signals(payload, model_input, grid, gnn):
+def project_signals(payload, model_input, grid, gnn, *, nominal_only=False):
     """Linear signed-yield/sumw2 projection, performed once per populated cell."""
     requested = {signal_mass_key(model, *mass_pair(mass)): (model, mass)
                  for model in MODELS for mass in grid['models'][model]}
@@ -88,9 +89,10 @@ def project_signals(payload, model_input, grid, gnn):
     low_categories = gnn['sr_binning']['category_labels']
     excluded = set()
     conservation = {}
-    view = HistogramView(payload, payload['contract']['year'], gnn)
+    view = None if nominal_only else HistogramView(payload, payload['contract']['year'], gnn)
     for mode in ('highdm', 'lowdm'):
-        hist = payload['histograms'][mode]
+        source = payload['histograms'][mode]
+        hist = {'nominal': source['nominal']} if nominal_only else source
         nominal = hist['nominal'].get('SR', {})
         categories = {c for v in hist.values() for c in v.get('SR', {})}
         destinations = {}
@@ -111,7 +113,7 @@ def project_signals(payload, model_input, grid, gnn):
         conservation[mode] = {}
         for endpoint in sorted(hist, key=lambda n: (n != 'nominal', n)):
             varied = hist[endpoint].get('SR', {})
-            is_shape = endpoint in view.shape_endpoints
+            is_shape = view is not None and endpoint in view.shape_endpoints
             if endpoint != 'nominal':
                 base = endpoint[:-2] if endpoint.endswith('Up') else endpoint[:-4]
                 nuisance = view.variations[mode][base]
@@ -164,6 +166,276 @@ def project_signals(payload, model_input, grid, gnn):
             source_bins[channel['name']] = [(mode, i)]
     return signals, source_bins, dict(conservation=conservation,
         unrequested_histogram_signal_keys=sorted(excluded), bins=dict(highdm=162, lowdm=30))
+
+
+def replacement_points(accepted_grid):
+    """Select the published 895 points from the accepted 955-point inventory."""
+    from TROTASR.utils.era_merge import displayed_points
+    if (accepted_grid.get('status') != 'cards_ready'
+            or accepted_grid.get('scope') != 'full_combined_systematic_production'
+            or accepted_grid.get('era_merged') is not True
+            or accepted_grid.get('sr_data_blinded') is not True):
+        raise ValueError('Signal replacement requires the accepted blinded era-merged grid')
+    points = displayed_points(accepted_grid['points'])
+    if not all(p.get('fit_ready') is True and isinstance(p.get('card'), str) for p in points):
+        raise ValueError('Displayed point has no accepted card binding')
+    return points
+
+
+def replacement_production_receipts(state):
+    """Return the six committed generations, not a partial replacement."""
+    merged, completed = state.get('merged', {}), state.get('completed', {})
+    count = state.get('total')
+    if (state.get('status') != 'complete' or state.get('active')
+            or state.get('errors') or state.get('merge_errors')
+            or state.get('central') != 'cms_trota_jme_nominal'
+            or state.get('signal_input') != 'regenerated_signal_uuid'
+            or set(merged) != set(ERAS) or type(count) is not int or count <= 0
+            or len(completed) != count or set(state.get('normalization_by_era', {})) != set(ERAS)):
+        raise ValueError('Complete six-era signal refresh receipt required')
+    by_era = dict.fromkeys(ERAS, 0)
+    for item in completed.values():
+        era = item['era']
+        if era not in by_era:
+            raise ValueError('Unexpected target era in signal refresh receipt')
+        by_era[era] += 1
+    for era, item in merged.items():
+        c = item.get('coverage', {})
+        replacement = item.get('signal_replacement', {})
+        if (item.get('status') != 'complete' or item.get('scope') != 'full_cms_trota_jme_production'
+                or c.get('full_input_inventory') is not True or c.get('failed_files') != 0
+                or c.get('expected_files') != by_era[era] or c.get('completed_files') != by_era[era]
+                or by_era[era] <= 0 or not c.get('expected_events')
+                or c.get('expected_events') != c.get('processed_events')
+                or replacement.get('central') != 'cms_trota_jme_nominal'
+                or replacement.get('signal_input') != 'regenerated_signal_uuid'
+                or replacement.get('signal_uncertainties') is not False
+                or replacement.get('background_and_data_unchanged') is not True
+                or replacement.get('files') != by_era[era]
+                or replacement.get('retained_events') != c['expected_events']):
+            raise ValueError('Incomplete nominal-only signal merge: '+era)
+    return {era:merged[era] for era in ERAS}
+
+
+def _corrected_signal_contract(contract, era):
+    """Check the physical configuration. The histogram reader checks SR coverage."""
+    return (str(contract.get('year')) == era and contract.get('shape_mode') == 'cms_trota_jme'
+            and contract.get('variations') == ['nominal']
+            and contract.get('nominal_calibrations_only') is True
+            and contract.get('signal_sr_only') is True
+            and contract.get('nominal_trota_friend') is None and contract.get('lhe_weights') is None)
+
+
+def _read_nominal_replacement(path, names):
+    """Stream only signal MC leaves; never decode background/observation arrays."""
+    from TROTASR.workflows.merge_nominal import JsonStream
+
+    def select(reader, keys):
+        for key in reader.items():
+            if key in keys:
+                yield key
+            else:
+                reader.copy_value(lambda _: None)
+
+    metadata = ('status', 'scope', 'sr_data_blinded', 'contract', 'coverage', 'highdm_sr_source_axes',
+                'input_metadata', 'histograms', 'physical_histograms', 'signal_replacement')
+    result = {}
+    with gzip.open(path, 'rt') as stream:
+        reader = JsonStream(stream)
+        for field in select(reader, metadata):
+            if field == 'histograms':
+                modes = {}
+                for mode in reader.items():
+                    if mode not in ('highdm', 'lowdm'):
+                        raise ValueError('Corrected signal contains an unapproved histogram mode')
+                    for endpoint in reader.items():
+                        if endpoint != 'nominal':
+                            raise ValueError('Corrected SR signal contains a non-nominal endpoint')
+                        for region in reader.items():
+                            if region != 'SR':
+                                raise ValueError('Corrected signal histogram contains a non-SR region')
+                            categories = {}
+                            for category in reader.items():
+                                samples = {}
+                                for sample in reader.items():
+                                    if sample in ('data', 'data_obs'):
+                                        raise ValueError('Observed SR histograms are forbidden')
+                                    if not re.fullmatch(r'(?:T2bW_|T2tb_)?mStop\d+_mLSP\d+', sample):
+                                        raise ValueError('Corrected signal-only SR contains a non-signal sample')
+                                    if sample in names:
+                                        samples[sample] = reader.value()
+                                    else:
+                                        reader.copy_value(lambda _: None)
+                                if samples:
+                                    categories[category] = samples
+                            modes[mode] = {'nominal': {'SR': categories}}
+                result[field] = modes
+            elif field == 'physical_histograms':
+                for _ in reader.items():
+                    raise ValueError('Corrected SR signal has unexpected auxiliary histograms')
+                result[field] = {}
+            elif field == 'input_metadata':
+                datasets = {}
+                for key in reader.items():
+                    record = reader.value()
+                    if record.get('is_signal') is not True or record.get('is_data'):
+                        raise ValueError('Corrected signal-only input registers background or data')
+                    datasets[key] = record
+                result[field] = datasets
+            else:
+                result[field] = reader.value()
+    return result
+
+
+def replacement_source_binding(path, year, production_receipt, normalization_path=None):
+    """Select the completed corrected signal input and its Runs table."""
+    path = internal_path(path)
+    if (production_receipt.get('status') != 'complete'
+            or production_receipt.get('output') != str(path.relative_to(ROOT))
+            or production_receipt.get('scope') != 'full_cms_trota_jme_production'
+            or not path.is_file()):
+        raise ValueError('Corrected signal merge receipt does not match production: '+year)
+    normalization = internal_path(normalization_path or ROOT/'estimations'/f'normalization_{year}.json.gz')
+    if not normalization.is_file():
+        raise FileNotFoundError('Missing approved signal Runs normalization: '+year)
+    return dict(path=str(path.relative_to(ROOT)), normalization=str(normalization.relative_to(ROOT)),
+        replacement=production_receipt['signal_replacement'])
+
+
+def read_replacement_model(path):
+    """Read only the native mapping and SR ordinal labels from an accepted cache."""
+    from TROTASR.workflows.merge_nominal import JsonStream
+    result, background = {}, {}
+    with gzip.open(internal_path(path), 'rt') as stream:
+        reader = JsonStream(stream)
+        for key in reader.items():
+            if key in ('year', 'status', 'sr_data_blinded'):
+                result[key] = reader.value()
+            elif key == 'background':
+                for field in reader.items():
+                    if field in ('year', 'highdm_mapping'):
+                        background[field] = reader.value()
+                    elif field == 'groups':
+                        groups = {}
+                        for group in reader.items():
+                            if group not in ('SR_highdm','SR_lowdm'):
+                                reader.copy_value(lambda _:None)
+                                continue
+                            rows = []
+                            reader.consume('[')
+                            while reader.peek() != ']':
+                                row = {}
+                                for column in reader.items():
+                                    if column == 'name':
+                                        row[column] = reader.value()
+                                    else:
+                                        reader.copy_value(lambda _:None)
+                                rows.append(row)
+                                if reader.peek() == ']':
+                                    break
+                                reader.consume(',')
+                            reader.consume(']')
+                            groups[group] = rows
+                        background[field] = groups
+                    else:
+                        reader.copy_value(lambda _:None)
+            else:
+                reader.copy_value(lambda _:None)
+    if (result.get('status') != 'complete' or result.get('sr_data_blinded') is not True
+            or result.get('year') != background.get('year') or len(background.get('highdm_mapping', [])) != 162
+            or {k:len(v) for k,v in background.get('groups', {}).items()} != {'SR_highdm':162,'SR_lowdm':30}):
+        raise ValueError('Accepted cache does not contain the expected native SR mapping')
+    return background
+
+
+def extract_replacement_year(path, year, points, model_input, gnn, *, production_receipt,
+                             accepted_contract, normalization_path=None):
+    """Project only the current replacement's nominal signals on the accepted native bins."""
+    from TROTASR.gnn4lowdm.configuration import configuration_path
+    if year not in ERAS or str(model_input['year']) != year:
+        raise ValueError('Wrong accepted native model era')
+    path = internal_path(path)
+    source = replacement_source_binding(path, year, production_receipt, normalization_path)
+    models = {m:[] for m in MODELS}
+    for p in points:
+        models[p['model']].append(p['mass'])
+    names = {signal_mass_key(m, *mass_pair(mass)) for m in models for mass in models[m]}
+    payload = _read_nominal_replacement(path, names)
+    contract = payload['contract']
+    coverage = payload.get('coverage', {})
+    if (payload.get('status') != 'complete' or payload.get('sr_data_blinded') is not True
+            or payload.get('scope') != 'full_cms_trota_jme_production'
+            or not _corrected_signal_contract(contract, year)
+            or any(coverage.get(k) != production_receipt['coverage'].get(k) for k in
+                   ('expected_files', 'completed_files', 'expected_events', 'processed_events', 'failed_files'))
+            or payload.get('highdm_sr_source_axes') != 'exact_nb_exact_topology_native_recoil_v2'
+            or not coverage.get('full_input_inventory') or coverage.get('failed_files') != 0
+            or coverage.get('expected_files') != coverage.get('completed_files')
+            or not coverage.get('expected_files')
+            or set(payload['histograms']) != {'highdm', 'lowdm'} or payload.get('physical_histograms') != {}
+            or not payload['input_metadata']
+            or len(payload['input_metadata']) != production_receipt['signal_replacement'].get('datasets')):
+        raise ValueError('Incomplete, misbound or unblinded merged signal input: '+year)
+    gnn_path = configuration_path(year)
+    fields = ('category_labels', 'edges_by_category')
+    adopted = read_json(gnn_path)['sr_binning']
+    if any(gnn['sr_binning'][key] != adopted[key] for key in fields):
+        raise ValueError('Replacement signal does not match the accepted GNN/SR binning: '+year)
+    normalized = internal_path(ROOT/source['normalization'])
+    table = read_json(normalized)
+    registration = table.get('signal_replacement', {})
+    if (registration.get('files') != coverage['expected_files']
+            or registration.get('datasets') != len(payload['input_metadata'])
+            or registration.get('luminosity_changed') is not False
+            or registration.get('background_factors_changed') is not False):
+        raise ValueError('Replacement signal does not match the published Runs table: '+year)
+    represented = represented_signals(payload)
+    for point in points:
+        model, mass = point['model'], point['mass']
+        runs = represented.get(model+'/'+mass)
+        spec = table['signal_mass_points'].get(signal_mass_key(model, *mass_pair(mass)), {})
+        if (runs is None or not math.isclose(runs, float(spec.get('sumw_mass_point', 0.)), rel_tol=2e-12)
+                or spec.get('normalization_factor') is None
+                or not math.isfinite(float(spec['normalization_factor']))):
+            raise ValueError('Replacement/normalization Runs mismatch: '+year+'/'+model+'/'+mass)
+    signals, sources, audit = project_signals(payload, model_input, dict(models=models), gnn, nominal_only=True)
+    return dict(year=year, signals=signals, source_bins=sources, projection_audit=audit, source=source)
+
+
+def replacement_signal_object(channel, point):
+    """Use the same ordinal ROOT key as the accepted card shape binding."""
+    if (not re.fullmatch(r'SR_(?:highdm|lowdm)_c1_(?:'+'|'.join(ERAS)+r')', channel)
+            or point['model'] not in MODELS):
+        raise ValueError('Unexpected nominal signal template channel or model')
+    mass_pair(point['mass'])
+    return channel+'/signal_'+point['model']+'_'+point['mass']
+
+
+def replacement_channel_records(extracted, year, point, channels, highdm_groups):
+    """Clip SR162 source bins before the approved SR118 union; preserve sumw2."""
+    if year != extracted['year'] or sorted(i for group in highdm_groups for i in group) != list(range(162)):
+        raise ValueError('Wrong target era or non-partitioned high-dM projection')
+    expected = {f'SR_{mode}_c1_{year}' for mode in ('highdm', 'lowdm')}
+    if set(channels) != expected:
+        raise ValueError('Expected exactly the two adopted SR channels for '+year)
+    native, sources = {}, {}
+    for channel, labels in channels.items():
+        if channel.startswith('SR_highdm_'):
+            if len(highdm_groups) != 118 or labels != [f'SR_highdm_bin{i}' for i in range(118)]:
+                raise ValueError('Changed high-dM SR118 template labels')
+            for label, group in zip(labels, highdm_groups):
+                sources[year, label] = [('highdm', i) for i in group]
+        else:
+            lowdm = [name for name, entries in extracted['source_bins'].items() if entries[0][0] == 'lowdm']
+            if len(lowdm) != 30 or labels != lowdm:
+                raise ValueError('Changed low-dM SR30 template labels')
+            for label in labels:
+                sources[year, label] = extracted['source_bins'][label]
+        native[channel] = [dict(year=year, name=label) for label in labels]
+    # Retain empty *era/channel* columns where needed by the published shape
+    # bindings; callers must reject a mass point with no total SR support.
+    return signal_data(native, sources, {year:dict(signals=extracted['signals'][point['model']])},
+                       point['mass'], keep_empty=True)
 
 
 def signal_data(channels, source_bins, grids, mass, keep_empty=False):
@@ -238,7 +510,6 @@ def check_reference(expected, actual):
 def extract_year(paths, grid, allow_validation=False, preserve_unsupported=False):
     """Load each large histogram input once; no repeated ROOT or JSON passes."""
     paths = {key: internal_path(ROOT / paths[key]) for key in FIELDS}
-    digests = {key: sha256(path) for key, path in paths.items()}
     inputs = {key: read_json(path) for key, path in paths.items()}
     payload = inputs['hists']
     from TROTASR.workflows.rare_top_policy import require_clean
@@ -251,19 +522,14 @@ def extract_year(paths, grid, allow_validation=False, preserve_unsupported=False
     if payload.get('scope') == 'full_combined_systematic_production':
         from TROTASR.utils.statistics_inputs import combined_shape_endpoints
         combined_shape_endpoints(payload)
-    from TROTASR.gnn4lowdm.configuration import configuration_path
-    gnn_path = configuration_path(payload['contract']['year'])
-    for field, path in (('sr_binning_sha256', ROOT / 'jsons/highdm_sr_binning.json'),
-                        ('configuration_sha256', gnn_path)):
-        if payload['contract'].get(field) != sha256(path):
-            raise ValueError('Histogram physics contract mismatch: ' + field)
     represented = represented_signals(payload)
     missing = [model + '/' + mass for model in MODELS for mass in grid['models'][model]
                if model + '/' + mass not in represented]
     if missing:
         raise ValueError('Requested signal inputs absent from nonzero Runs bookkeeping: ' + ', '.join(missing))
     model_input = build_inputs(*(inputs[k] for k in FIELDS), 'T2tt', 1200, 500)
-    gnn = read_json(gnn_path)
+    from TROTASR.gnn4lowdm.configuration import configuration_path
+    gnn = read_json(configuration_path(payload['contract']['year']))
     signals, source_bins, audit = project_signals(payload, model_input, grid, gnn)
     year = model_input['year']
     channels, data, clipping, issues = assemble([model_input])
@@ -282,7 +548,7 @@ def extract_year(paths, grid, allow_validation=False, preserve_unsupported=False
             channel['physical'].pop('signal', None)
     return dict(schema='trotasr_nominal_grid_inputs_v1', status='complete', year=year,
         scope=payload['scope'], background=model_input, signals=signals, source_bins=source_bins,
-        inputs={k: dict(path=str(p.relative_to(ROOT)), sha256=digests[k]) for k, p in paths.items()},
+        inputs={k: dict(path=str(p.relative_to(ROOT))) for k,p in paths.items()},
         signal_input_coverage={k: represented[k] for k in sorted(represented)},
         projection_audit=audit, negative_background_audit=[a for a in clipping if a['process'] != 'signal'],
         full_workflow_complete=False, sr_data_blinded=True,

@@ -1,16 +1,10 @@
 """Read analysis inputs and write JSON products atomically."""
 from __future__ import annotations
 import gzip
-import hashlib
 import json
 import os
 from pathlib import Path
-from threading import RLock
 from .paths import internal_path, analysis_era, tagging_definition, EARLY_ERAS
-
-
-_DIGESTS = {}
-_DIGEST_LOCK = RLock()
 
 
 def file_identity(path):
@@ -18,60 +12,50 @@ def file_identity(path):
     return (stat.st_dev, stat.st_ino, stat.st_size, stat.st_mtime_ns, stat.st_ctime_ns)
 
 
-def sha256(path):
-    """Hash an input once per process, rereading it only after a file change."""
-    path = internal_path(path)
-    with _DIGEST_LOCK:
-        identity = file_identity(path)
-        cached = _DIGESTS.get(path)
-        if cached is not None and cached[0] == identity:
-            return cached[1]
-        digest = hashlib.sha256()
-        with path.open("rb") as stream:
-            for part in iter(lambda: stream.read(4 * 1024**2), b""):
-                digest.update(part)
-        if file_identity(path) != identity:
-            raise RuntimeError("Input changed while reading: " + str(path))
-        value = digest.hexdigest()
-        _DIGESTS[path] = identity, value
-        return value
+_HASH_MARKERS = ('sha256', 'sha1', 'sha512', 'md5', 'checksum', 'adler32', 'digest')
+_PROVENANCE_FIELDS = {
+    'approval', 'approved_date', 'adopted', 'code', 'execution',
+    'input_identity', 'object_payloads', 'origin', 'output_identity',
+    'provenance', 'source_provenance', 'source_receipt', 'source_updated',
+    'user_approved',
+}
+
+
+def _hash_field(key):
+    name = str(key).lower()
+    return 'hash' in name or any(marker in name for marker in _HASH_MARKERS)
+
+
+def _without_fields(value, excluded):
+    if isinstance(value, dict):
+        return {key: _without_fields(item, excluded) for key, item in value.items()
+                if not excluded(key)}
+    if isinstance(value, list):
+        return [_without_fields(item, excluded) for item in value]
+    if isinstance(value, tuple):
+        return tuple(_without_fields(item, excluded) for item in value)
+    return value
+
+
+def without_hash_fields(value):
+    """Remove stored hash fields from comparisons of current and older records."""
+    return _without_fields(value, _hash_field)
+
+
+def without_provenance_fields(value):
+    """Compare scientific fields independently of execution and receipt history."""
+    return _without_fields(value, lambda key: key in _PROVENANCE_FIELDS or _hash_field(key))
 
 
 def scientific_settings(value):
-    """Compare scientific inputs without receipt labels or execution settings."""
-    metadata = {'id', 'user_approved', 'approved_date', 'adopted', 'source_updated',
-                'code', 'runner_sha256', 'merge_code_sha256', 'execution'}
-    if isinstance(value, dict):
-        return {key: scientific_settings(item) for key, item in value.items() if key not in metadata}
-    if isinstance(value, list):
-        return [scientific_settings(item) for item in value]
-    return value
+    """Extract scientific settings from configuration and execution records."""
+    return _without_fields(value, lambda key: key == 'id' or key in _PROVENANCE_FIELDS or _hash_field(key))
 
 
 def read_json(path):
     p = internal_path(path)
     with (gzip.open(p, "rt") if p.suffix == ".gz" else p.open()) as stream:
         return json.load(stream)
-
-
-def era_assets(year):
-    """Return the target era's registered inputs and their contract digest."""
-    from .paths import ROOT
-    era = analysis_era(year)
-    if era not in EARLY_ERAS:
-        path = ROOT / 'jsons/assets.json'
-        return sha256(path), read_json(path)['files']
-    registry = read_json(ROOT / 'jsons/early_run3_assets.json')
-    records = [r for r in registry['files'] if r['era'] == era]
-    records.extend(r for r in registry.get('analysis_inputs', {}).values()
-                   if r['era'] == era)
-    files = sorted((dict(target=r['target'], sha256=r['sha256']) for r in records),
-                   key=lambda r: r['target'])
-    if not files or len({r['target'] for r in files}) != len(files):
-        raise ValueError('Missing or duplicate era assets: ' + era)
-    digest = hashlib.sha256(json.dumps(dict(era=era, files=files),
-                                      sort_keys=True, separators=(',', ':')).encode()).hexdigest()
-    return digest, files
 
 
 def load_efficiency(path):
@@ -88,7 +72,7 @@ def load_efficiency(path):
 
 
 def decode_efficiency(data):
-    """Decode trusted, checksum-verified analysis efficiency bytes only."""
+    """Decode trusted, installed analysis efficiency bytes."""
     import io
     import pickle
     import numpy as np
@@ -146,9 +130,11 @@ def validate_root(root_path, year, require_mixed=True):
         trota = json.loads(str(f["TROTA_metadata"]))
         if trota.get("status") != "complete":
             raise ValueError("Incomplete TROTA")
-        if (str(trota.get("application_year")) != era[:4] or trota.get("events_entries") != f["Events"].num_entries
-                or trota.get("model_sha256") != tag['resolved_sha256']):
-            raise ValueError("Resolved year/model/coverage contract mismatch")
+        if (str(trota.get("application_year")) != era[:4]
+                or trota.get("events_entries") != f["Events"].num_entries):
+            raise ValueError("Resolved year or event coverage mismatch")
+        if "resolved_passing" in trota and trota["resolved_passing"] != f["TROTA"].num_entries:
+            raise ValueError("Resolved candidate count mismatch")
         if meta.get("status") not in ("complete", "complete_with_bad_files"):
             raise ValueError("Incomplete input production")
         if require_mixed:
@@ -157,9 +143,7 @@ def validate_root(root_path, year, require_mixed=True):
                     or mixed.get("operator") != ">="
                     or mixed.get("threshold") != tag['mixed_wp']
                     or (early and mixed.get('analysis_era') != era)):
-                raise ValueError("Mixed model/year/WP contract mismatch")
+                raise ValueError("Mixed year or working point mismatch")
             if mixed.get("entries") != f["Events"].num_entries:
                 raise ValueError("Incomplete Mixed event coverage")
-            if mixed.get("model_sha256") != tag['mixed_sha256']:
-                raise ValueError("Mixed model hash mismatch")
         return meta

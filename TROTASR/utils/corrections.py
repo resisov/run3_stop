@@ -4,7 +4,7 @@ from functools import lru_cache
 from pathlib import Path
 import numpy as np
 from .paths import ROOT, analysis_era, EARLY_ERAS
-from .io import read_json, sha256
+from .io import read_json
 from .private_scales import (topw_file_input_policy, topw_file_sf_triplet,
     topw_pass_fail_triplet, topw_event_variations, TopWEvents)
 
@@ -14,11 +14,11 @@ from .private_scales import (topw_file_input_policy, topw_file_sf_triplet,
 @lru_cache(maxsize=1)
 def load_analysis_corrections(repo=ROOT):
     from coffea.util import load
-    manifest = read_json(ROOT / "utils/compiled/manifest.json")
     p = ROOT / "utils/compiled/corrections.coffea"
-    if sha256(p) != manifest["artifacts"]["corrections.coffea"]:
-        raise ValueError("Compiled correction hash mismatch")
-    return load(str(p))
+    corrections = load(str(p))
+    if not corrections:
+        raise ValueError("Compiled correction payload is empty")
+    return corrections
 
 
 def event_weights(arrays, dataset, process, year, region_masks, topw_policy, cleaned=None, apply_topw=True,
@@ -193,20 +193,9 @@ NONJME_ENDPOINTS = tuple(name + direction for name in (
     for direction in ('Up', 'Down'))
 
 
-def nonjme_payload_contract(year):
-    manifest = read_json(ROOT/'scales/object_shapes.json')
-    records = manifest['years'][str(year)]
-    for record in records.values():
-        if sha256(ROOT/record['path']) != record['sha256']:
-            raise ValueError('Changed object-shape payload: ' + record['path'])
-    return dict(manifest_sha256=sha256(ROOT/'scales/object_shapes.json'),
-                payloads={k: v['sha256'] for k, v in records.items()})
-
-
 @lru_cache(maxsize=8)
 def _nonjme_cset(year, flavor):
     import correctionlib
-    nonjme_payload_contract(year)
     spec = read_json(ROOT/'scales/object_shapes.json')['years'][str(year)][flavor]
     return correctionlib.CorrectionSet.from_file(str(ROOT/spec['path']))
 

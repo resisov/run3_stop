@@ -6,7 +6,7 @@ import unittest
 from unittest.mock import patch
 import numpy as np
 from TROTASR.utils.paths import ROOT
-from TROTASR.utils.io import read_json, write_json, sha256
+from TROTASR.utils.io import read_json, write_json
 from TROTASR.workflows.plotting_nominal_distributions import (
     physical_boundary, checked_leaf, dy_display_config, make_records,
     nominal_renderer, validate_histograms, renderer,
@@ -21,8 +21,7 @@ def physical_fixture():
     if not binning.is_file():
         raise unittest.SkipTest('Canonical SR binning payload is not installed locally')
     p = dict(status='complete', scope='synthetic_unit_test', sr_data_blinded=True,
-        contract=dict(year=2024, sr_binning_sha256=sha256(binning),
-                      configuration_sha256=sha256(ROOT/'gnn4lowdm/config.json')),
+        contract=dict(year=2024),
         physical_histograms={})
     for mode,specs in (('highdm',HIGHDM_DISTRIBUTION_VARIABLE_SPECS),('lowdm',LOWDM_VARIABLE_SPECS)):
         source = p['physical_histograms'][mode] = {'nominal':{}}
@@ -81,7 +80,7 @@ class PhysicalPlotAdapterTests(unittest.TestCase):
                        files={name + suffix:'intact' for name in ['cr_llcr_njet','cr_llcr_met']
                               for suffix in ['.pdf','.png']})
         with patch.object(Path,'exists',return_value=True), patch.object(nominal,'read_json',return_value=receipt), \
-                patch.object(nominal,'sha256',return_value='intact'), patch.object(nominal,'write_json') as save:
+                patch.object(Path,'is_file',return_value=True), patch.object(nominal,'write_json') as save:
             self.assertIs(nominal.render_input(payload,Path('existing')),receipt)
             del receipt['files']['cr_llcr_met.pdf']
             with self.assertRaisesRegex(ValueError,'requested inventory'):

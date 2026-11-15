@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
-from TROTASR.utils.io import read_json,write_json,sha256
+from TROTASR.utils.io import read_json,write_json
 from TROTASR.utils.paths import ROOT
 from TROTASR.workflows.normalization_metadata import build_signal_mass_points, load_signal_xsec
 

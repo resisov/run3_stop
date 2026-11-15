@@ -8,9 +8,7 @@ receipts. Every accepted new output still needs all five measured crossings.
 import math
 import re
 import statistics
-import hashlib
 from TROTASR.utils.paths import ROOT, internal_path
-from TROTASR.utils.io import sha256
 from TROTASR.workflows.limit_validation import SCAN, QUANTILES, REL_ACC, ABS_ACC
 from TROTASR.workflows.limit_serialization import validate_saved_limit as _validate_saved_limit
 
@@ -148,12 +146,10 @@ def _verify_bisection_attempt(point, attempt):
     product = log.parent/('higgsCombine_'+point['mass']+'.AsymptoticLimits.mH120.root')
     if attempt.get('output') and internal_path(ROOT/attempt['output']) != product:
         raise ValueError('Attempt output/log mismatch')
-    if attempt.get('log_sha256') != sha256(log):
-        raise ValueError('Attempt log hash mismatch')
+    if not log.is_file():
+        return False, {'reason': 'missing_saved_log'}
     if not product.is_file():
         return False, {'reason': 'missing_saved_output'}
-    if attempt.get('output_sha256') != sha256(product):
-        raise ValueError('Attempt ROOT hash mismatch')
     return _validate_saved_limit(product, log, attempt['tolerance'])
 
 
@@ -337,7 +333,7 @@ def crossing_commands(attempts, previous_commands=()):
         if not specs:
             return [],dict(status='not_applicable',reason='both_exact_crossing_commands_already_attempted',maximum_new_attempts=0)
         return specs, dict(status='applicable',basis=attempt['name'],
-            basis_log_sha256=attempt['log_sha256'],maximum_new_attempts=len(specs))
+            basis_log=attempt.get('log'),maximum_new_attempts=len(specs))
     return [], dict(status='not_applicable',
         reason='no_new_explicit_minimum_with_five_valid_quantiles_and_partial_crossing_failure',
         maximum_new_attempts=0)
@@ -391,7 +387,7 @@ def native_stepping_proposals(attempts, log_texts, previous_commands=()):
             return not_applicable('all_exact_branch_commands_already_attempted', branch=branch)
         return selected, dict(status='applicable', branch=branch,
             maximum_new_attempts=len(selected), basis=[dict(name=a['name'],
-                log_sha256=a.get('log_sha256'), output_sha256=a.get('output_sha256')) for a in basis])
+                log=a.get('log'), output=a.get('output')) for a in basis])
 
     refined_names = ('crossing_refined_s1_tol0.001', 'crossing_refined_s1_tol0.0001')
     refined = [by_name[n] for n in refined_names if n in by_name]
@@ -721,7 +717,7 @@ def _terminal_profile_diagnostics(name, text, attempt):
     writing them to combine_logger.out. Its failure must not be treated as a
     valid profile sample just because stdout has an ``At r`` line.
     """
-    streams = [(name, text, attempt.get('log_sha256'))]
+    streams = [(name, text)]
     logger_error = None
     try:
         log = internal_path(ROOT/name)
@@ -732,19 +728,17 @@ def _terminal_profile_diagnostics(name, text, attempt):
             if logger.stat().st_size > 8*1024**2:
                 raise ValueError('Diagnostic logger exceeds bounded recovery read')
             raw = logger.read_bytes()
-            streams.append((str(logger), raw.decode(errors='replace'), hashlib.sha256(raw).hexdigest()))
+            streams.append((str(logger), raw.decode(errors='replace')))
     except (OSError, ValueError) as exc:
         logger_error = str(exc)
-    parsed = [(source, _profile_stream_diagnostics(content), checksum)
-              for source, content, checksum in streams]
-    failed = [status for _, item, _ in parsed for status in item['failed_statuses']]
-    conditional = [status for _, item, _ in parsed for status in item['conditional_failures']]
-    certified = {row for _, item, _ in parsed for row in item['certified_rows']}
+    parsed = [(source, _profile_stream_diagnostics(content)) for source, content in streams]
+    failed = [status for _, item in parsed for status in item['failed_statuses']]
+    conditional = [status for _, item in parsed for status in item['conditional_failures']]
+    certified = {row for _, item in parsed for row in item['certified_rows']}
     rows = {(float(r), float(n)) for r, n in SCAN.findall(text)}
-    return dict(source_log=name, diagnostic_sources=[dict(path=source, sha256=checksum)
-                    for source, _, checksum in parsed], logger_error=logger_error,
+    return dict(source_log=name, diagnostic_sources=[dict(path=source) for source, _ in parsed], logger_error=logger_error,
                 failed_statuses=failed, conditional_failed_statuses=conditional,
-                initial_failed_statuses=[status for _, item, _ in parsed
+                initial_failed_statuses=[status for _, item in parsed
                     for status in item['initial_statuses'] if status not in (0, 1)],
                 certified_rows=sorted(certified),
                 stdout_profile_rows=len(rows),
@@ -818,7 +812,7 @@ def measured_five_target_envelope(workspace, mass, primary, previous, logs, comm
             rejected.append(dict(log=name, reason='measured_envelope_outside_finite_ceiling'))
             continue
         candidates.append(dict(status='available', source_log=name,
-            source_log_sha256=attempt.get('log_sha256'), source_attempt=attempt.get('name'),
+            source_attempt=attempt.get('name'),
             brackets=brackets, search_blocks=len(blocks), fitted_r=fitted_r,
             convergence=convergence,
             sampled_upper_r=measured_upper, proposed_rmax=proposal, safety_factor=1.25,

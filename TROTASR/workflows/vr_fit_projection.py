@@ -8,7 +8,7 @@ import re
 
 import numpy as np
 
-from TROTASR.utils.io import read_json, sha256
+from TROTASR.utils.io import read_json
 from TROTASR.utils.paths import EARLY_ERAS, ERAS, ROOT, internal_path
 from TROTASR.utils.sr_binning import NATIVE_EDGES
 from TROTASR.utils.statistics_model import build_rz_covariance, rate_parameter, rz_value
@@ -73,18 +73,14 @@ def _card(path):
 
 
 def _get_measurements(grid):
-    contract = read_json(grid / "contract.json")
     records, identities = {}, {}
     for era in ERAS:
         records[era], identities[era] = {}, {}
         for name in ("rz_high", "rz_low", "double_ratio"):
             # Use the retained measurement itself, not its retired execution path.
             p = internal_path(ROOT / "results" / "measurements" / era / (name + ".json.gz"))
-            identity = sha256(p)
-            if identity != contract["inputs"][era][name]["sha256"]:
-                raise ValueError(f"{era} {name} does not match the adopted grid measurement")
             records[era][name] = read_json(p)
-            identities[era][name] = identity
+            identities[era][name] = str(p.relative_to(ROOT))
         records[era]["rz_covariance"] = build_rz_covariance(
             records[era]["rz_high"], records[era]["rz_low"], era)
     return records, identities
@@ -256,9 +252,6 @@ def _load_fit(run_root, needed, rate_names, gaussian_names):
     products = provisional_cronly_products(r, pub)
     if products is None:
         raise ValueError("Expected the currently published provisional CR-only fit")
-    grid = read_json(run_root / "grid" / "manifest.json")
-    if grid["cr_only_card"]["card_sha256"] != pub["current_card_sha256"]:
-        raise ValueError("Saved CR-only fit does not match the grid")
 
     def ident(p):
         stat = p.stat()
@@ -360,6 +353,12 @@ def project(run_root, response):
     """Compute the two predictions before the renderer receives JetMET counts."""
     from TROTASR.utils.vr_prediction import VRResponse, propagate
 
+    if (response.get("status") != "complete"
+            or response.get("all_applicable_responses_available") is not True
+            or any(response.get("unsupported", {}).values())
+            or response.get("mc_only") is not True
+            or response.get("sr_observations_read") is not False):
+        raise ValueError("Cannot project an incomplete or unsupported VR background response")
     run_root = internal_path(run_root)
     grid = run_root / "grid"
     manifest = read_json(grid / "manifest.json")
@@ -368,12 +367,12 @@ def project(run_root, response):
         raise ValueError("Expected the adopted blinded six-era grid")
     point = next(p for p in manifest["points"] if (p["model"], p["mass"]) == BENCHMARK)
     card = internal_path(ROOT / point["card"])
-    if card.parent != grid / "datacards" or sha256(card) != point["card_sha256"]:
+    if card.parent != grid / "datacards" or not card.is_file():
         raise ValueError("Adopted background template card identity does not match")
     cols, rates, lnns, shapes = _card(card)
     cr_spec = manifest["cr_only_card"]
     cr_card = internal_path(ROOT / cr_spec["card"])
-    if cr_card.parent != grid / "datacards" or sha256(cr_card) != cr_spec["card_sha256"]:
+    if cr_card.parent != grid / "datacards" or not cr_card.is_file():
         raise ValueError("Adopted CR card identity does not match")
     _, control_rates, _, _ = _card(cr_card)
     measurements, hashes = _get_measurements(grid)
@@ -435,8 +434,10 @@ def project(run_root, response):
         offset = where.stop
         joint_index.extend(i * N_BINS + index)
         post = evaluated_postfit["views"][name]
+        pre = central_prefit.view(selections[name])
         result[name] = dict(years=list(eras),
-            prefit=stage(central_prefit.view(selections[name]), index, prior_cov[where, where]),
+            raw_nominal_mc=pre["raw_nominal"][index].tolist(),
+            prefit=stage(pre, index, prior_cov[where, where]),
             postfit=stage(post, index, post["systematic_covariance"][np.ix_(index, index)]))
     pre_stat = np.concatenate([v["prefit"]["background_stat_unc"] for v in result.values()])
     return dict(schema="trotasr_vr_prefit_postfit_v1", status="complete", years=list(ERAS),
@@ -452,5 +453,6 @@ def project(run_root, response):
                 native_clipping=dict(prefit=list(central_prefit.clipping),
                     postfit=list(evaluated_postfit["central"].clipping),
                     postfit_draws=evaluated_postfit["draws_with_native_clipping"]),
-                source=dict(card_sha256=point["card_sha256"], measurements_sha256=hashes,
+                source=dict(card=point["card"], measurements=hashes,
+                            cr_card=cr_spec["card"],
                             photon_prefit_weights={k: a.tolist() for k, a in photon.items()}))

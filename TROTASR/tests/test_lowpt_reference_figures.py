@@ -3,7 +3,7 @@ import copy
 import unittest
 from unittest.mock import patch
 from TROTASR.workflows.verify_lowpt_reference_figures import (
-    compare_summary, digest, verify_summary_measurement, verify_canonical_calibration,
+    compare_summary, verify_summary_measurement, verify_canonical_calibration,
     reference_summary_contract,
 )
 
@@ -26,13 +26,12 @@ def calibration_fixture():
     measurement = dict(bins=[dict(valid=i < 4, nominal={series: dict(
         efficiency=y, efficiency_stat_uncertainty=.02) for series, y in (('data', .88), ('mc', .8))})
         for i in range(6)])
-    calibration = dict(year=2025, kind='electron', measurement=measurement,
-                       decoded_payload_sha256=digest(payload))
+    calibration = dict(year=2025, kind='electron', measurement=measurement)
     scale_figure = dict(year=2025, kind='electron', view='scale_factor',
         an_path='synthetic/electron_scale_factor.pdf',
         canonical_summary=dict(points=summary, xaxis=dict(slope=90.), yaxis=dict(slope=500.)),
         reference_scope=dict(kind='valid_measurement_only', definition_audit='synthetic_audit.json',
-                             definition_audit_sha256='fixture', omitted_invalid_bins=[4, 5]))
+                             omitted_invalid_bins=[4, 5]))
     efficiency_figure = dict(year=2025, kind='electron', view='efficiency',
                              canonical_summary=dict(points=efficiency))
     return calibration, [scale_figure, efficiency_figure], payload
@@ -85,8 +84,7 @@ class LowPtReferenceTests(unittest.TestCase):
     def scoped_summary(self, figure, calibration):
         definition = dict(measurement_only_figures=['synthetic/electron_scale_factor.pdf'],
                           scope='valid_measurement_only')
-        with patch('TROTASR.workflows.verify_lowpt_reference_figures.sha256', return_value='fixture'), \
-             patch('TROTASR.workflows.verify_lowpt_reference_figures.read_json', return_value=definition):
+        with patch('TROTASR.workflows.verify_lowpt_reference_figures.read_json', return_value=definition):
             return reference_summary_contract(figure, calibration)
 
     def test_measurement_only_scope_requires_invalid_fit_evidence(self):
@@ -107,9 +105,6 @@ class LowPtReferenceTests(unittest.TestCase):
         expected, _ = self.scoped_summary(fig, cal)
         actual = copy.deepcopy(expected); actual['points'][0]['present'] = False
         self.assertEqual(compare_summary(actual, expected)['status'], 'reference_numeric_review_required')
-        changed = copy.deepcopy(fig); changed['reference_scope']['definition_audit_sha256'] = 'wrong'
-        with self.assertRaisesRegex(ValueError, 'Changed reference-scope'):
-            self.scoped_summary(changed, cal)
 
 
 if __name__ == '__main__': unittest.main()

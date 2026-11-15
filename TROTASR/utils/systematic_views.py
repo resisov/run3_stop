@@ -2,8 +2,8 @@
 import awkward as ak
 import numpy as np
 from .jme_calibration import calibrated_endpoints, ENDPOINTS
-from .trota_inference import (p4_view, P4_FIELDS, infer_chunk, bounded_slices, migration_counts,
-                              MIXED_INTS, MIXED_FLOATS)
+from .trota_inference import (p4_view, P4_FIELDS, MIXED_INTS, MIXED_FLOATS, infer_chunk,
+                              bounded_slices, migration_counts)
 from .shape_kinematics import varied_view, rebuild
 
 
@@ -54,7 +54,7 @@ def analysis_support(view, year=2024):
     blocks, _ = build_region_blocks(view, dy_mass_window=None, year=year)
     support = np.zeros(len(view), dtype=bool)
     for region in REGIONS:
-        support |= highdm_core(view, blocks, region, dy_mass_window=None)
+        support |= highdm_core(view, blocks, region, dy_mass_window=None, year=year)
         support |= blocks[region].core & (blocks[region].nb >= 1)
     return support
 
@@ -91,7 +91,6 @@ def _same_jet_momenta(left, right):
     return True
 
 
-
 def _friend_selection(view, candidates, support_only, year):
     """Apply only the existing pre-topology execution mask to aligned tags."""
     support = analysis_support(view, year=year) if support_only else np.ones(len(view), dtype=bool)
@@ -109,7 +108,6 @@ def _friend_selection(view, candidates, support_only, year):
                   mixed_passing=int(ak.sum(view['nTopMixed1pct'])),
                   resolved_passing=sum(map(len, resolved.values())))
     return view, resolved, counts
-
 
 
 def _friend_event_views(chunks, year, models, audit, candidate_budget, support_only, nominal_only):
@@ -171,9 +169,13 @@ def _friend_event_views(chunks, year, models, audit, candidate_budget, support_o
                 yield view, resolved, shift
 
 
-
 def event_views(chunks, year, models, audit, candidate_budget=150000, support_only=False,
                 nominal_only=False, *, friend_chunks=False):
+    """Yield canonical views, optionally using validated, aligned nominal tags.
+
+    Friend chunks are (Events with attached Mixed fields, Resolved-by-key).
+    The friend does not replace the adopted central JME kinematic anchoring.
+    """
     if friend_chunks:
         yield from _friend_event_views(chunks, year, models, audit, candidate_budget, support_only, nominal_only)
         return

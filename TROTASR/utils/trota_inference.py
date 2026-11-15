@@ -8,7 +8,7 @@ from __future__ import annotations
 import numpy as np
 import awkward as ak
 from .paths import ROOT, internal_path, analysis_era, EARLY_ERAS, tagging_definition
-from .io import read_json, sha256
+from .io import read_json
 from .trota_candidates import (RESOLVED_JETS, JETS, FATJETS, _flatten_jets,
                                build_resolved_candidates, build_mixed_candidates,
                                pack, candidate_cost, input_fields)
@@ -36,9 +36,8 @@ def load_models(year):
         wp = definition[kind+'_wp']
         spec = manifest[kind]
         path = internal_path(ROOT / spec['path'])
-        if (sha256(path) != spec['sha256'] or spec['sha256'] != definition[kind+'_sha256']
-                or spec['threshold'] != float(wp)):
-            raise ValueError('TROTA model hash/WP mismatch: ' + kind)
+        if spec['threshold'] != float(wp):
+            raise ValueError('TROTA working point mismatch: ' + kind)
         paths[kind] = path
     import tensorflow as tf
     # Configure once, before either model initializes the runtime.

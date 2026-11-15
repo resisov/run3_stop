@@ -13,7 +13,7 @@ import numpy as np
 import awkward as ak
 import uproot
 from .paths import ROOT, JSONS, internal_path, era_year, analysis_era, EARLY_ERAS
-from .io import read_json, write_json, sha256, validate_root, era_assets
+from .io import read_json, write_json, validate_root
 from .reader import resolved_candidates
 from .event_selections import select, REGIONS, CATEGORY_ORDER, FixedJetTopologyCache
 from .event_selections import _references
@@ -156,6 +156,49 @@ def region_scores(a, selections, model, batch_size=256, year=2024):
     return result
 
 
+def _signal_sr_selection(a, resolved, year):
+    """Project only the canonical SR branch, never evaluate a CR selector.
+
+    The SR branch uses the shared SR kinematic/topology primitives. Its veto
+    bookkeeping, tag arbitration and high-dM mTb bin mask match `select`.
+    """
+    from .event_selections import highdm_core, topology_counts
+    from .paths import tagging_definition
+    from .region_kinematics import RegionBlock, as_ak_bool, as_bool, as_float, fatjet_kinematics, jet_kinematics
+
+    audit = update_veto_leptons(a, year=year)
+    pt, eta, phi = (a[k] for k in ('jet_corrected_pt', 'jet_eta_all', 'jet_phi_all'))
+    btag = a[tagging_definition(year)['btag_branch']]
+    good = (pt > 30.) & (abs(eta) < 2.4) & as_ak_bool(a['jet_id_all'])
+    met, met_phi = as_float(a, 'met'), as_float(a, 'met_phi')
+    jets = jet_kinematics(pt, eta, phi, btag, good, met, met_phi, year)
+    empty = a['photon_pt_all'][:, :0]
+    nisr, nt, nw = fatjet_kinematics(a, empty, empty)
+    core = np.logical_and.reduce([as_bool(a, name) for name in (
+        'pass_base_common', 'pass_zero_tau', 'pass_signal_trigger', 'pass_no_veto_leptons',
+        'pass_met_250', 'pass_ht_300')])
+    core &= (jets['njet'] >= 2) & jets['open_pre']
+    block = RegionBlock(core=core, recoil=met, recoil_phi=met_phi, ht=jets['ht'], njet=jets['njet'],
+        nb=jets['nb'], nt=nt, nw=nw, nisr=nisr, met_sqrt_ht=jets['met_sqrt_ht'], mtb=jets['mtb'], ptb=jets['ptb'])
+    counts, clean, topology, baseline = topology_counts(a, resolved, 'SR', year=year)
+    high_core = highdm_core(a, {'SR': block}, 'SR', year=year)
+    search = np.isfinite(block.mtb) & (block.mtb >= 175.)
+    low_core = block.core & (block.nb >= 1)
+    ntag, nold = counts.sum(axis=1), baseline.sum(axis=1)
+    high, old_high = high_core & (ntag >= 1), high_core & (nold >= 1)
+    low, old_low = low_core & (ntag == 0), low_core & (nold == 0)
+    if np.any(high & low):
+        raise ValueError('High/low overlap: SR')
+    high_search, old_search = high & search, old_high & search
+    result = dict(high=high, high_search=high_search, low=low, counts=counts, block=block, sf_clean=clean,
+                  baseline_counts=baseline, baseline_high=old_high, baseline_search=old_search, baseline_low=old_low)
+    audit.update(events=len(a), SR=dict(high=int(high.sum()), high_search=int(high_search.sum()),
+        low=int(low.sum()), intersection=0, baseline_high=int(old_high.sum()), baseline_low=int(old_low.sum()),
+        high_gained=int((high & ~old_high).sum()), high_lost=int((old_high & ~high).sum()),
+        low_gained=int((low & ~old_low).sum()), low_lost=int((old_low & ~low).sum()), **topology))
+    return {'SR': result}, audit
+
+
 def add(target, path, values, weight, edges):
     for key in path:
         target = target.setdefault(str(key), {})
@@ -177,8 +220,6 @@ def add2d(target, path, x, y, weight, ex, ey):
         values = np.histogram2d(x, y, bins=(ex, ey), weights=weights)[0]
         target[name] = (np.asarray(target.get(name, np.zeros_like(values))) + values).tolist()
     target['edges'] = [np.asarray(ex).tolist(), np.asarray(ey).tolist()]
-
-
 
 
 def _response_identity(dataset_id, mstop, mlsp, region):
@@ -232,11 +273,28 @@ def _friend_chunks(chunks, friend):
         raise ValueError('Incomplete corrected nominal TROTA friend traversal')
 
 
+def _signal_normalization_for_histogram(input_path, year, metadata, normalization):
+    source = {str(i): r['dataset'] for i, r in metadata.get('datasets', {}).items() if r.get('is_signal')}
+    replacement = normalization.get('signal_replacement')
+    if not source or not replacement:
+        return normalization, None
+    current = {str(i): r['dataset'] for i, r in normalization['datasets'].items() if r.get('is_signal')}
+    if all(current.get(i) == name for i, name in source.items()):
+        return normalization, None
+    from .trota_friend import find_friend_task
+    if find_friend_task(input_path, year) is None:
+        raise ValueError('Signal input is not part of the requested normalization inventory')
+    from ..workflows.validation_regions import _registered_signal_normalization
+    basis = _registered_signal_normalization(analysis_era(year))
+    if any(basis['datasets'].get(i) != name for i, name in source.items()):
+        raise ValueError('Signal input is not part of the registered Runs sumw inventory')
+    return {**normalization, **basis['norm']}, {k: basis[k] for k in ('basis', 'era')}
+
 
 def build(input_path, year, output, modes=('highdm', 'lowdm'), variations=('nominal',), chunk_size=2000,
           shape_mode=None, candidate_budget=150000, object_endpoint=None, object_endpoints=None,
-          support_only=False, normalization_path=None,
-          use_trota_friend=None):
+          support_only=False, lhe_weights=False, normalization_path=None,
+          use_trota_friend=None, nominal_calibrations_only=False, signal_sr_only=False):
     """Build or resume one file under an exclusive output lock."""
     import fcntl
     output = internal_path(output)
@@ -244,22 +302,54 @@ def build(input_path, year, output, modes=('highdm', 'lowdm'), variations=('nomi
     with output.with_name(output.name + '.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         return _build(input_path, year, output, modes, variations, chunk_size, shape_mode,
-                      candidate_budget, object_endpoint, object_endpoints,
-                      support_only, normalization_path, use_trota_friend)
+                      candidate_budget, object_endpoint, object_endpoints, support_only, lhe_weights,
+                      normalization_path, use_trota_friend, nominal_calibrations_only, signal_sr_only)
 
 
 def _build(input_path, year, output, modes, variations, chunk_size, shape_mode,
            candidate_budget, object_endpoint, object_endpoints,
-           support_only, normalization_path, use_trota_friend):
+           support_only, lhe_weights, normalization_path, use_trota_friend, nominal_calibrations_only=False,
+           signal_sr_only=False):
+    """Build an input's histograms without changing its requested physics view.
+
+    An explicit friend request with no shape mode means corrected CMS nominal
+    only. The CMS-JME mode keeps its requested shape endpoints and can reuse
+    nominal tags automatically once the accepted MC cache is complete.
+    """
     year = era_year(year)
     modes, variations = tuple(modes), tuple(variations)
+    input_path = internal_path(input_path)
+    signal_source = None
+    if lhe_weights or signal_sr_only:
+        from .lhe_weights import lhe_input_population
+        signal_source = lhe_input_population(input_path, year)
+    if lhe_weights and signal_source is not None:
+        raise ValueError('Generator nuisances are applied to backgrounds only; keep new signals nominal')
+    if signal_sr_only and signal_source is None:
+        raise ValueError('SR-only signal production requires the approved new UUID signal inputs')
     # The stored non-JME endpoints are frozen absolute templates. Corrected
     # nominal friends change their tag definition, not just their execution.
     if use_trota_friend and shape_mode == 'stored_trota_nonjme':
         raise ValueError('Corrected TROTA friends cannot replace the frozen stored-TROTA non-JME endpoints')
-    friend_nominal_only = use_trota_friend is True and shape_mode is None
+    friend_nominal_only = use_trota_friend is True and shape_mode is None and not lhe_weights
     if friend_nominal_only:
         shape_mode = 'cms_trota_jme'
+    if lhe_weights:
+        if variations != ('nominal',) or object_endpoint or object_endpoints:
+            raise ValueError('Source LHE weights use the accepted nominal selection only')
+        if shape_mode not in (None, 'cms_trota_jme') or (signal_source is not None and use_trota_friend):
+            raise ValueError('LHE weights require the canonical corrected nominal tag view for this input')
+        if signal_source is not None:
+            signal_sr_only, nominal_calibrations_only = True, True
+        shape_mode, support_only = 'cms_trota_jme', not signal_sr_only
+    if nominal_calibrations_only and (shape_mode != 'cms_trota_jme' or variations != ('nominal',)
+            or object_endpoint or object_endpoints):
+        raise ValueError('Nominal-only calibration requires corrected CMS nominal without alternate endpoints')
+    nominal_only = bool(nominal_calibrations_only or friend_nominal_only or lhe_weights)
+    if signal_sr_only and (not nominal_only or support_only or use_trota_friend):
+        raise ValueError('SR-only signal inference requires corrected nominal without CR support preselection or a friend')
+    if signal_sr_only:
+        use_trota_friend = False
     if chunk_size <= 0:
         raise ValueError('Positive chunk sizes are required')
     if not set(modes) <= {'highdm', 'lowdm'}:
@@ -280,7 +370,6 @@ def _build(input_path, year, output, modes, variations, chunk_size, shape_mode,
         from .corrections import NONJME_ENDPOINTS
         endpoints = endpoint_tuple(object_endpoints if object_endpoints is not None else
             (object_endpoint,) if object_endpoint is not None else ('nominal', *NONJME_ENDPOINTS))
-    input_path = internal_path(input_path)
     output = internal_path(output)
     friend_task = None
     if shape_mode == 'cms_trota_jme' and use_trota_friend is not False:
@@ -291,23 +380,49 @@ def _build(input_path, year, output, modes, variations, chunk_size, shape_mode,
             raise ValueError('Corrected nominal TROTA friends require an approved MC input in the friend inventory')
     fingerprint = dict(size=input_path.stat().st_size, mtime_ns=input_path.stat().st_mtime_ns)
     metadata = validate_root(input_path, year)
+    signal_lhe = None
+    if lhe_weights or signal_sr_only:
+        if signal_source is not None:
+            from .lhe_weights import signal_lhe_provenance
+            provenance = signal_lhe_provenance(signal_source, metadata, year)
+            if lhe_weights:
+                signal_lhe = provenance
+            directory = ROOT / 'production' / 'histograms' if lhe_weights else ROOT / 'estimations'
+            required = directory / f'normalization_{year}.json.gz'
+            if normalization_path is not None and internal_path(normalization_path) != required:
+                raise ValueError('New signal weights require the canonical normalization of their production stage')
+            normalization_path = required
+        elif not metadata['datasets'] or any(m.get('is_data') or m.get('is_signal')
+                                                for m in metadata['datasets'].values()):
+            raise ValueError('Background LHE requires an intermediate with only background MC datasets')
     from ..workflows.rare_top_policy import excluded_ids, require_clean
     excluded = excluded_ids(metadata['datasets'])
     excluded_datasets = {int(value) for value in excluded}
-    assets_sha256, assets = era_assets(year)
-    for asset in assets:
-        if sha256(ROOT / asset['target']) != asset['sha256']:
-            raise ValueError('Changed immutable asset: ' + asset['target'])
     configuration = read_json(configuration_path(year))
     normalization_path = internal_path(normalization_path) if normalization_path is not None else ROOT / 'estimations' / ('normalization_%s.json.gz' % year)
     normalization = read_json(normalization_path)
+    normalization, signal_basis = _signal_normalization_for_histogram(input_path, year, metadata, normalization)
     contract = dict(input=str(input_path), fingerprint=fingerprint, year=year,
                     central_object_corrections=('target_era_intermediate' if analysis_era(year) in EARLY_ERAS
                                                 else 'muon_scaled_resolution_fallback_v1'),
-                    normalization_sha256=sha256(normalization_path),
-                    assets_sha256=assets_sha256, modes=list(modes), variations=list(variations),
-                    configuration_sha256=sha256(configuration_path(year)),
-                    sr_binning_sha256=sha256(JSONS / 'highdm_sr_binning.json'))
+                    modes=list(modes), variations=list(variations))
+    if signal_basis is not None:
+        contract['signal_normalization'] = signal_basis
+    if signal_sr_only:
+        contract['signal_sr_only'] = True
+        contract['regions'] = ['SR']
+        contract['registered_signal_source'] = provenance
+    if lhe_weights:
+        from .lhe_weights import SOURCE_AUDIT_SCHEMA
+        contract['lhe_weights'] = dict(source='original_nanoaod',
+            join='file_id_entry_run_luminosityBlock_event',
+            reduction='after_all_files_are_merged', source_audit=SOURCE_AUDIT_SCHEMA,
+            signal_uncertainties=signal_lhe is not None,
+            normalization='unscaled_selected_yields_and_signed_per_mass_denominators' if signal_lhe
+                          else 'unchanged_nominal_gen_sumw')
+        if signal_lhe is not None:
+            contract['lhe_weights'].update(selection='new_uuid_corrected_trota_nominal',
+                join='file_id_entry_run_luminosityBlock_event_GenModel', registered_source=signal_lhe)
     if analysis_era(year) in EARLY_ERAS:
         contract['muon_selection'] = dict(loose_pt_gt=15., medium_pt_gt=15.)
     if shape_mode is not None:
@@ -315,18 +430,20 @@ def _build(input_path, year, output, modes, variations, chunk_size, shape_mode,
             raise ValueError('Unknown shape implementation')
         contract['shape_mode'] = shape_mode
         if shape_mode == 'cms_trota_jme':
-            contract.update(trota_models_sha256=sha256(ROOT/'models/TROTA/manifest.json'),
-                jme_payloads_sha256=sha256(ROOT/'scales/JME/manifest.json'))
+            if nominal_calibrations_only:
+                contract['nominal_calibrations_only'] = True
             if friend_task is not None:
                 from .trota_friend import SCHEMA as FRIEND_SCHEMA
                 contract['nominal_trota_friend'] = dict(schema=FRIEND_SCHEMA,
-                    central_object_view='cms_trota_jme', nominal_only=friend_nominal_only)
+                    central_object_view='cms_trota_jme', nominal_only=nominal_only)
             if support_only:
                 contract['execution'] = dict(inference_support='all_region_pretopology_union',
                     physics_definitions_changed=False)
+            elif signal_sr_only:
+                contract['execution'] = dict(inference_support='all_retained_mc_rows',
+                    physics_definitions_changed=False)
         else:
-            from .corrections import nonjme_payload_contract, NONJME_ENDPOINTS
-            contract['object_payloads'] = nonjme_payload_contract(year)
+            from .corrections import NONJME_ENDPOINTS
             contract['object_endpoints'] = list(NONJME_ENDPOINTS)
             if object_endpoint is not None:
                 contract['object_task_endpoint'] = object_endpoint
@@ -341,7 +458,17 @@ def _build(input_path, year, output, modes, variations, chunk_size, shape_mode,
         previous = read_json(output)
         complete = previous.get('status') in ('complete', 'complete_one_file_test', 'complete_member_sums')
         if complete:
-            if scientific_settings(previous.get('contract')) != scientific_settings(contract):
+            saved = previous['contract']
+            if saved['fingerprint']['size'] != fingerprint['size']:
+                raise ValueError('Completed histogram reports a different input size: ' + str(output))
+            def settings(record):
+                selected = {k: v for k, v in record.items()
+                            if k not in {'input', 'fingerprint', 'registered_signal_source'}}
+                if 'lhe_weights' in selected:
+                    selected['lhe_weights'] = {k: v for k, v in selected['lhe_weights'].items()
+                                               if k != 'registered_source'}
+                return scientific_settings(selected)
+            if settings(saved) != settings(contract):
                 raise ValueError('Completed histogram uses different inputs, corrections or binning: ' + str(output))
             require_clean(previous)
             return previous
@@ -355,6 +482,14 @@ def _build(input_path, year, output, modes, variations, chunk_size, shape_mode,
                    histograms={}, physical_histograms={}, dy_rz={}, audit={'chunks': [], 'weights': [], 'events_read': 0, 'migrations': {}})
     with ExitStack() as resources:
         f = resources.enter_context(uproot.open(input_path, object_cache=None, array_cache=None))
+        if lhe_weights:
+            from .lhe_weights import SourceWeights, accumulate, theory_process
+            lhe_reader = resources.enter_context(SourceWeights(metadata, signal_provenance=signal_lhe))
+            payload['lhe_histograms'] = {}
+            payload['lhe_source_audit'] = lhe_reader.audit
+            payload['lhe_source_audit']['excluded_dataset_ids'] = sorted(excluded_datasets)
+            if signal_lhe is not None:
+                payload['lhe_signal_denominators'] = lhe_reader.signal_denominators()
         resolved = resolved_candidates(f, year) if shape_mode != 'cms_trota_jme' else None
         policy = topw_file_input_policy(f)
         reader = TopWEvents(f, policy)
@@ -387,7 +522,6 @@ def _build(input_path, year, output, modes, variations, chunk_size, shape_mode,
             from .trota_inference import load_models
             payload['audit']['trota_inference'] = {}
             payload['dy_rz_variations'] = {}
-            nominal_only = friend_nominal_only
             if friend_task is not None:
                 source_chunks = _friend_chunks(source_chunks, friend)
             models = None if friend_task is not None and nominal_only else load_models(year)
@@ -418,6 +552,11 @@ def _build(input_path, year, output, modes, variations, chunk_size, shape_mode,
                 # per-call bookkeeping after the nominal removal has occurred.
                 audit.update(update_veto_leptons(a, year=year))
                 cached_scores = nominal_scores
+            elif signal_sr_only:
+                if np.any(np.asarray(a['is_data'], bool)) or not np.all(np.asarray(a['is_signal'], bool)):
+                    raise ValueError('Only signal MC rows are allowed in the SR-only histogram scope')
+                selections, audit = _signal_sr_selection(a, resolved, year)
+                cached_scores = None
             else:
                 selections, audit = select(a, resolved, dy_mass_window=None, topology_cache=topology_cache, year=year)
                 cached_scores = region_scores(a, selections, model, year=year) if shape_mode == 'stored_trota_nonjme' else None
@@ -432,6 +571,18 @@ def _build(input_path, year, output, modes, variations, chunk_size, shape_mode,
                 continue
             audit['endpoint'] = endpoint
             payload['audit']['chunks'].append(audit)
+            source_groups = []
+            if lhe_weights:
+                simulation = np.asarray(a['is_signal'], bool)
+                if np.any(np.asarray(a['is_data'], bool)) or np.any(simulation != (signal_lhe is not None)):
+                    raise ValueError('Retained rows disagree with the LHE sample population')
+                approved = ~np.isin(np.asarray(a['dataset_id']), list(excluded_datasets))
+                contributing = np.zeros(len(a), dtype=bool)
+                for selection in selections.values():
+                    contributing |= selection['high'] | selection['low']
+                source_rows = np.flatnonzero(approved & contributing)
+                for indices, prescription, ratios in lhe_reader.groups(a[source_rows]):
+                    source_groups.append((source_rows[indices], prescription, ratios))
             if shape_mode == 'stored_trota_nonjme':
                 if endpoint == 'nominal':
                     nominal_selections = selections
@@ -459,7 +610,8 @@ def _build(input_path, year, output, modes, variations, chunk_size, shape_mode,
                 sub = {k: a[k][chosen] for k in ak.fields(a)}
                 norm = norm_vector(normalization, sub, int(dataset_id), dataset, is_data, is_signal,
                                    require_normalization=True)
-                masks = {r: (selections[r]['high'] | selections[r]['low'])[chosen] for r in REGIONS}
+                masks = {r: ((selections[r]['high'] | selections[r]['low'])[chosen] if r in selections
+                             else np.zeros(int(chosen.sum()), dtype=bool)) for r in REGIONS}
                 if is_data:
                     base = {'nominal': np.ones(int(chosen.sum()))}; wa = {'data': True}
                 else:
@@ -477,7 +629,7 @@ def _build(input_path, year, output, modes, variations, chunk_size, shape_mode,
                 sample = 'data' if is_data else (signal_mass_key(signal_topology(dataset), int(ms), int(ml)) if is_signal else process)
                 if sample in ('TTV', 'TTTT'):
                     sample = 'TT'
-                for region in REGIONS:
+                for region in selections:
                     if is_data and (region == 'SR' or not data_process_allowed(process, region)):
                         continue
                     sel = selections[region]
@@ -575,6 +727,26 @@ def _build(input_path, year, output, modes, variations, chunk_size, shape_mode,
                     for v in names:
                         weights = base.get(v, base['nominal']) * tw.get(v, tw['nominal']) * norm
                         v = v if endpoint == 'nominal' else endpoint
+                        def add_lhe(path, coordinates, mask, edges):
+                            if not lhe_weights or is_data or v != 'nominal':
+                                return
+                            chosen_rows = np.flatnonzero(chosen)
+                            # Signal member yields carry signed event weights
+                            # and the nominal SFs, but no nominal or per-file
+                            # variation normalization. Keep each mass point
+                            # separate until summing all its original files.
+                            hard_process = sample if is_signal else theory_process(dataset, process)
+                            member_weights = base['nominal'] * tw['nominal'] if is_signal else weights
+                            for source_indices, prescription, ratios in source_groups:
+                                belongs = chosen[source_indices]
+                                if not np.any(belongs):
+                                    continue
+                                local = np.searchsorted(chosen_rows, source_indices[belongs])
+                                selected = mask[local]
+                                if np.any(selected):
+                                    accumulate(payload['lhe_histograms'], prescription, hard_process,
+                                        path, np.asarray(coordinates)[local[selected]],
+                                        member_weights[local[selected]], ratios[belongs][selected], edges)
                         if not is_signal:
                             for mode, acceptance in (('highdm',high),('lowdm',low)):
                                 if mode in modes:
@@ -588,11 +760,15 @@ def _build(input_path, year, output, modes, variations, chunk_size, shape_mode,
                                     label = ','.join(map(str, cat))
                                     add(payload['histograms'], ('highdm', v, region, label, sample, 'recoil'),
                                         recoil[mask], weights[mask], RECOIL)
+                                    add_lhe(('highdm', region, label, sample, 'recoil'),
+                                            recoil, mask, [RECOIL])
                             else:
                                 for group in (1, 2):
                                     mask = high & (nb == group)
                                     add(payload['histograms'], ('highdm', v, region, 'Nb' + str(group), sample, 'recoil'),
                                         recoil[mask], weights[mask], RECOIL)
+                                    add_lhe(('highdm', region, 'Nb' + str(group), sample, 'recoil'),
+                                            recoil, mask, [RECOIL])
                         if 'lowdm' in modes and np.any(low):
                             if region == 'SR':
                                 nisr = np.minimum(np.asarray(b.nisr[chosen], dtype=int), 2)
@@ -608,17 +784,22 @@ def _build(input_path, year, output, modes, variations, chunk_size, shape_mode,
                                 add(payload['histograms'], (*path, 'gnn_score'), score[mask], weights[mask], edges)
                                 add(payload['histograms'], (*path, 'recoil'), recoil[mask], weights[mask], RECOIL)
                                 add2d(payload['histograms'], (*path, 'gnn_recoil'), score[mask], recoil[mask], weights[mask], edges, RECOIL)
+                                # Reduce the joint histogram first; derive both
+                                # marginals from it to preserve their exact sum.
+                                add_lhe(('lowdm', region, cat, sample, 'gnn_recoil'),
+                                        np.column_stack((score, recoil)), mask, [edges, RECOIL])
             # Never export even raw SR event counts for data.
             if np.any(np.asarray(a['is_data'], dtype=bool)):
                 audit['SR'] = {'blinded': True}
-    final_fingerprint = dict(size=input_path.stat().st_size, mtime_ns=input_path.stat().st_mtime_ns)
-    if final_fingerprint != fingerprint:
-        raise ValueError('Input ROOT changed during the read; output not committed')
+    if input_path.stat().st_size != fingerprint['size']:
+        raise ValueError('Input ROOT size changed during the read; output not committed')
     if payload['audit']['events_read'] != reader.num_entries:
         raise ValueError('Incomplete Events traversal')
     payload['background_policy'] = dict(excluded_primaries=['TTWH', 'TTZH'],
         excluded_files=[dict(datasets={key: metadata['datasets'][key] for key in sorted(excluded)})])
     payload.update(status='complete', seconds=time.monotonic()-start,
                    versions={x: importlib.metadata.version(x) for x in ('numpy', 'awkward', 'uproot', 'coffea', 'correctionlib')})
+    if lhe_weights:
+        payload.update(status='complete_member_sums', scope='source_lhe_member_sums_not_reduced')
     write_json(output, payload)
     return payload

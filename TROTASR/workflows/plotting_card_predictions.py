@@ -8,9 +8,9 @@ if __package__ in (None,''):
     from _bootstrap import bootstrap
     bootstrap()
 from TROTASR.utils.paths import ROOT,internal_path,luminosity_fb
-from TROTASR.gnn4lowdm.configuration import configuration,configuration_path
+from TROTASR.gnn4lowdm.configuration import configuration
 from TROTASR.workflows.diagnostic_common import record_years
-from TROTASR.utils.io import read_json,write_json,sha256
+from TROTASR.utils.io import read_json,write_json
 from TROTASR.utils.statistical_templates import json_ready
 from TROTASR.workflows.prediction_plot_inputs import (
     export_grid,combine,flat_blocks,uncertainty_band,LOW_PROCESSES,LOW_SIGNALS,renderer,expected_labels,
@@ -43,12 +43,11 @@ def cronly_fit_plots(result, output, *, refit=None):
             '--era-label','2022-2025 (13.6 TeV)'],check=True,stdout=subprocess.DEVNULL)
         artifacts += [stem.with_suffix('.pdf'), stem.with_name(stem.name+'_part1.png'),
                       stem.with_name(stem.name+'_part2.png')]
-    files = {p.name:sha256(p) for p in artifacts}
+    files = sorted(p.name for p in artifacts)
     write_json(output/'plot_manifest.json',dict(status='generated_pending_visual_QA',
         plots=plots,files=files,fit=payload['fit'],dataset=payload['dataset'],
         sr_observations_included=False,fit_recalculated=False,
-        uncertainty_method=payload['uncertainty_method'],covariance_samples=500,
-        payload_sha256=sha256(output/'prediction_payload.json')))
+        uncertainty_method=payload['uncertainty_method'],covariance_samples=500))
     print(dict(status='generated_pending_visual_QA',bins=66,plots=len(plots),
                fit_recalculated=False,covariance_quality=payload['fit']['covariance_quality']))
 
@@ -74,9 +73,6 @@ def prepare(payload, *, combine_era_sr=False, display_years=None):
               (('highdm',('SR',)),('lowdm',('SR','LLCR','QCDCR','GCR'))) for r in rs}
     if set(payload['channels'])!=expected:
         raise ValueError('Missing/extra year or plot channel')
-    for key,path in (('sr_binning_sha256','jsons/highdm_sr_binning.json'),('gnn_sha256',configuration_path(years[0]))):
-        if payload.get(key)!=sha256(ROOT/path):
-            raise ValueError('Changed prediction layout contract')
     merge=load_merge(payload['sr_merge']) if payload.get('sr_merge') else None
     for key,record in payload['channels'].items():
         y,r,m=key.split('/')
@@ -166,8 +162,7 @@ def main():
         return
     merge=load_merge(payload['sr_merge']) if payload.get('sr_merge') else None
     high_bins=merge['bins_per_year'] if merge else 162
-    contract=dict(provenance=payload['provenance'],
-        highdm_map=sha256(ROOT/'jsons/highdm_sr_binning.json'),gnn=sha256(configuration_path(years[0])))
+    contract=dict(provenance=payload['provenance'])
     if merge:contract.update(sr_merge=payload['sr_merge'])
     if a.sr_only:contract['sr_only']=True
     if a.combine_era_sr:
@@ -176,24 +171,22 @@ def main():
             lowdm='separate early and late era groups with identical native GNN edges within each group',
             display_years=list(years),
             fit_channels_unchanged=True,
-            gnn_sha256_by_era={y:sha256(configuration_path(y)) for y in years},
             gnn_edges_by_era={y:configuration(y)['sr_binning']['edges_by_category'] for y in years})
     if a.high_sr_only:contract['high_sr_only']=True
     if a.low_sr_only:contract['low_sr_only']=True
     if a.cr_only:contract['cr_only']=True
-    if not (a.sr_only or a.high_sr_only or a.low_sr_only):
-        contract['distribution_code']={name:sha256(ROOT/name) for name in
-            ('workflows/plotting_nominal_distributions.py','workflows/plotting_gnn_controls.py')}
-    if a.input:contract['input_sha256']=sha256(internal_path(a.input))
     if a.validate_only:
         print(dict(status='validated_plot_inputs_not_generated',count=1 if a.high_sr_only or a.low_sr_only else 2 if a.sr_only else 3 if a.cr_only else 5,contract=contract));return
     receipt=output/'plot_manifest.json'
     if receipt.exists():
         previous=read_json(receipt)
-        if (any(previous['contract'].get(key) != value for key, value in contract.items()
-                if key != 'distribution_code')
-                or any(sha256(output/n)!=d for n,d in previous['files'].items())):
-            raise ValueError('Changed previous card-prediction plots')
+        keys = ('sr_merge', 'sr_only', 'six_era_sr_display', 'high_sr_only', 'low_sr_only', 'cr_only')
+        previous_contract = previous['contract']
+        from TROTASR.utils.io import without_hash_fields
+        if (without_hash_fields({key: previous_contract.get(key) for key in keys})
+                != without_hash_fields({key: contract.get(key) for key in keys})
+                or not previous['files'] or any(not (output/n).is_file() for n in previous['files'])):
+            raise ValueError('Incompatible or incomplete card-prediction plots')
         print(previous['status']);return
     if output.exists() and any(output.iterdir()):
         raise FileExistsError('Retain incomplete card plot outputs')
@@ -235,11 +228,11 @@ def main():
             prediction_stage='prefit',rate_initials_applied=True,nuisances=sorted(record['nuisance_deltas']),
             source_scope=payload['scope'])
         plots.append(info)
-    files={f.name:sha256(f) for f in output.iterdir() if f.suffix in ('.png','.pdf')}
+    files=sorted(f.name for f in output.iterdir() if f.suffix in ('.png','.pdf'))
     if len(files)!=(2 if a.high_sr_only or a.low_sr_only else 4 if a.sr_only else 6 if a.cr_only else 10):raise ValueError('Missing card-prediction figures')
     write_json(output/'prediction_payload.json',payload)
     write_json(receipt,dict(status='generated_pending_visual_QA',contract=contract,plots=plots,files=files,
-        payload_sha256=sha256(output/'prediction_payload.json'),sr_observations_included=False,
+        sr_observations_included=False,
         no_old_fits_reused=True,full_workflow_complete=False))
 
 

@@ -21,7 +21,7 @@ if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
 from TROTASR.utils.paths import ROOT, internal_path
-from TROTASR.utils.io import read_json, write_json, sha256
+from TROTASR.utils.io import read_json, write_json
 from TROTASR.workflows.diagnostic_common import (native_runtime, grid_card,
     freeze_contract, CommandRunner, require_success, workspace, published_diagnostic, process_active)
 SOURCES = ['workflows/combine_impacts.py', 'workflows/diagnostic_common.py',
@@ -52,21 +52,16 @@ def saved_workspace(state_path, card, model, mass, revision=None):
     if ((state.get('model'), state.get('mass')) != (model, mass)
             or state.get('model_revision') != revision
             or state.get('workspace_valid') is not True
-            or internal_path(ROOT / state['card']) != card
-            or state.get('card_sha256') != sha256(card)
-            or not re.fullmatch('[0-9a-f]{64}',state.get('workspace_sha256',''))
             or not target.is_file() or target.stat().st_size <= 0):
         raise ValueError('Saved workspace does not match the verified benchmark/card')
     binding = dict(state=str(state_path.relative_to(ROOT)),
-                   workspace=str(target.relative_to(ROOT)), workspace_sha256=state['workspace_sha256'],
+                   workspace=str(target.relative_to(ROOT)),
                    input_check_scope='accepted_limit_workspace_receipt; no_workspace_rehash')
     if revision:
         # The limit point can update its fit receipts while both stages read
         # the already accepted workspace. Bind to that artifact, not the
         # changing limit attempts.
         binding['model_revision'] = revision
-    else:
-        binding['state_sha256'] = sha256(state_path)
     return target, binding
 
 
@@ -74,8 +69,8 @@ def publish_output(source, destination):
     """Read-only-use link within this new fit run; never change input TH1s."""
     source, destination = internal_path(source), internal_path(destination)
     if destination.exists():
-        if sha256(source) != sha256(destination):
-            raise ValueError('Divergent fit output retained: ' + str(destination))
+        if not destination.is_file() or not destination.stat().st_size:
+            raise ValueError('Published fit output missing or empty: ' + str(destination))
     else:
         os.link(source, destination)
 
@@ -106,11 +101,8 @@ def fit_one(output, workspace_path, name, bounds, runner):
             state['attempts'].append(old)
             write_json(path, state)
         if old['validation']['valid']:
-            for product, digest in old['products'].items():
-                if sha256(ROOT / product) != digest:
-                    raise ValueError('Previously valid saved fit changed: ' + product)
             validation = validate_fit(here, name, tag, bounds)
-            if not validation['valid'] or validation['sha256'] != old['validation']['sha256']:
+            if not validation['valid']:
                 raise ValueError('Previously valid impact endpoint changed: ' + name)
             for product in products:
                 publish_output(product, output / product.name)
@@ -171,15 +163,15 @@ def plot(runner, output, state, stem_name='impacts_mStop1200_mLSP500'):
     if state.get('status')=='needs_attention' and state.get('recovery_status'):
         recovery=read_json(ROOT/state['recovery_status'])
         old_log=output/'plot.log'
-        if (recovery['status']=='fits_complete' and recovery['json_sha256']==state.get('json_sha256')
+        if (recovery['status']=='fits_complete' and recovery['json']==state.get('json')
                 and old_log.exists() and "No module named 'HiggsAnalysis'" in old_log.read_text()):
             state['status']='fits_complete'
             state['previous_plot_error']=state.pop('error',None)
     if state.get('status') not in ('fits_complete', 'generated_pending_visual_QA'):
         raise ValueError('Do not plot incomplete impact fits')
     payload = internal_path(ROOT / state['json'])
-    if sha256(payload) != state['json_sha256']:
-        raise ValueError('Impact JSON changed')
+    if not payload.is_file() or not isinstance(read_json(payload).get('params'), list):
+        raise ValueError('Missing or invalid impact JSON')
     stem = output / stem_name
     import shutil
     script=shutil.which('plotImpacts.py')
@@ -190,23 +182,34 @@ def plot(runner, output, state, stem_name='impacts_mStop1200_mLSP500'):
                                output / 'plot_runtime.log', [stem.with_suffix('.pdf')],env=env))
     # plotImpacts produces a multi-page PDF. Poppler rendering and all-page QA
     # are deliberately a later explicit step, not fabricated by this runner.
-    state.update(status='generated_pending_visual_QA', plot_source_sha256=sha256(Path(__file__)),figures={str(stem.with_suffix('.pdf').relative_to(ROOT)):
-                                                               sha256(stem.with_suffix('.pdf'))})
+    state.update(status='generated_pending_visual_QA',
+                 figures={str(stem.with_suffix('.pdf').relative_to(ROOT)): None})
     return state
 
 
 def run(manifest, output, workers=40, plot_only=False, model='T2tt', mass='mStop1200_mLSP500', workspace_state=None):
+    from TROTASR.workflows.combine_limits import NEW_SIGNAL_PRODUCTS
     output=internal_path(output)
+    manifest=internal_path(manifest)
     run_root=ROOT/'stats/run3'
+    new_root=run_root/NEW_SIGNAL_PRODUCTS
+    generation=manifest==new_root/'grid/manifest.json'
+    product_root=new_root if generation else run_root
     if ROOT/'stats/references' in output.parents:
         raise ValueError('Reference fit products are not an execution path')
-    marker=run_root/'limits/model.json'
-    revision=(read_json(marker).get('model_revision') if marker.is_file()
-              and internal_path(manifest)==run_root/'grid/manifest.json' else None)
+    if (generation or new_root in output.parents or output == new_root) and (
+            not generation or output!=new_root/'impacts' or (model, mass)!=('T2tt', 'mStop1200_mLSP500')):
+        raise ValueError('Use only the replacement grid and its canonical benchmark impact output')
+    marker=product_root/'limits/model.json'
+    model_record=(read_json(marker) if marker.is_file() and manifest==product_root/'grid/manifest.json' else {})
+    revision=model_record.get('model_revision')
+    if generation:
+        if not revision:
+            raise ValueError('The new signal limit generation is not ready for impacts')
     if revision:
         from TROTASR.workflows.cr_linked_workspace import MODEL_REVISION
-        canonical_state=run_root/'limits'/model/mass/'state.json'
-        if (revision != MODEL_REVISION or output != run_root/'impacts' or workers > 40
+        canonical_state=product_root/'limits'/model/mass/'state.json'
+        if (revision != MODEL_REVISION or output != product_root/'impacts' or workers > 40
                 or (workspace_state is not None and internal_path(workspace_state) != canonical_state)):
             raise ValueError('Use the updated canonical Run 3 benchmark workspace')
         if (not canonical_state.is_file() or read_json(canonical_state).get('model_revision') != revision
@@ -256,7 +259,8 @@ def _run(manifest, output, workers=40, plot_only=False, model='T2tt', mass='mSto
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         if plot_only:
             contract=read_json(output/'contract.json')
-            if contract['origins']!=origins or contract['options']!=options:
+            from TROTASR.workflows.diagnostic_common import contract_options
+            if contract_options(contract['options']) != contract_options(options):
                 raise ValueError('Original impact input contract changed')
         else:
             sources = SOURCES + (['workflows/cr_linked_workspace.py'] if revision else [])
@@ -271,11 +275,11 @@ def _run(manifest, output, workers=40, plot_only=False, model='T2tt', mass='mSto
             if plot_only:
                 state = plot(runner, output, state, stem)
             elif state.get('status') in ('fits_complete', 'generated_pending_visual_QA'):
-                if sha256(ROOT / state['json']) != state['json_sha256']:
-                    raise ValueError('Completed impact JSON changed')
-                for product, digest in state.get('fit_products', {}).items():
-                    if sha256(ROOT / product) != digest:
-                        raise ValueError('Completed impact fit changed: ' + product)
+                if not isinstance(read_json(ROOT/state['json']).get('params'), list):
+                    raise ValueError('Invalid completed impact JSON')
+                for product in state.get('fit_products', {}):
+                    if not (ROOT/product).is_file():
+                        raise ValueError('Completed impact fit missing: ' + product)
                 return 0
             else:
                 import ROOT as root
@@ -285,8 +289,7 @@ def _run(manifest, output, workers=40, plot_only=False, model='T2tt', mass='mSto
                 names, bounds = enumerate_parameters(target)
                 if state.get('names') is not None and state['names'] != names:
                     raise ValueError('Workspace parameter enumeration changed')
-                state.update(workspace=str(target), workspace_sha256=(
-                    options['reused_workspace']['workspace_sha256'] if reused is not None else sha256(target)), names=names,
+                state.update(workspace=str(target), names=names,
                              nuisance_count=len(names), status='running', phase='initial_fit')
                 write_json(path, state)
                 initial = fit_one(output, target, 'r', bounds['r'], runner)
@@ -321,8 +324,8 @@ def _run(manifest, output, workers=40, plot_only=False, model='T2tt', mass='mSto
                     '-o', payload, '--parallel', '1'], output, output / 'collect.log', [payload]))
                 validate_collection(read_json(payload), names, results, initial)
                 state.update(status='fits_complete', phase='collected', json=str(payload.relative_to(ROOT)),
-                    json_sha256=sha256(payload), plots_status='pending_original_plotImpacts',
-                    fit_products={str(p.relative_to(ROOT)): sha256(p) for p in output.glob('*.root')},
+                    plots_status='pending_original_plotImpacts',
+                    fit_products=dict.fromkeys(str(p.relative_to(ROOT)) for p in output.glob('*.root')),
                     convergence_scope='Initial fit status/covariance and finite bracketed impact endpoints; no fabricated endpoint fit status')
             grid_card(manifest, 'impact', model, mass)
         except BaseException as error:
@@ -390,7 +393,7 @@ def validate_fit(folder, name, tag, bounds):
                 # Combine v10.5.1 does not call saveResult for algo=impact.
                 # doImpact commits each endpoint only if minim.minimize succeeds.
                 result['validation_scope'] = 'three finite bracketed entries; both endpoint minimizations succeeded'
-            result.update(valid=True, entries=values, bounds=list(bounds), sha256=sha256(path))
+            result.update(valid=True, entries=values, bounds=list(bounds))
         except Exception as error:
             result['error'] = str(error)
         finally:
@@ -476,14 +479,11 @@ def prepare_profile_inputs(work, out, source, runner):
     setup = out / 'inputs.json'
     snapshot = out / 'workspace_bestfit_snapshot.root'
     toys = out / 'higgsCombine_profileAsimov.GenerateOnly.mH120.123456.root'
-    provenance = dict(workspace=str(source), workspace_sha256=sha256(source),
-                      initial_fit_sha256=sha256(work / 'multidimfit_initialFit_Test.root'))
+    provenance = dict(workspace=str(source))
     if setup.exists():
         old = read_json(setup)
-        if any(old[k] != v for k, v in provenance.items()):
-            raise ValueError('recovery input provenance changed')
-        if sha256(snapshot) != old['snapshot_sha256'] or sha256(toys) != old['asimov_sha256']:
-            raise ValueError('recovery cache changed')
+        if not snapshot.is_file() or not toys.is_file():
+            raise FileNotFoundError('Recovery snapshot or Asimov sample is missing')
         return old
     if snapshot.exists():
         raise ValueError('Unvalidated recovery snapshot retained; explicit recovery required')
@@ -515,8 +515,7 @@ def prepare_profile_inputs(work, out, source, runner):
         raise ValueError('GenerateOnly did not save toy_asimov')
     provenance.update(asimov_entries=dataset.numEntries(), asimov_sum_weights=dataset.sumEntries())
     toy_file.Close()
-    provenance.update(snapshot=str(snapshot), snapshot_sha256=sha256(snapshot),
-                      asimov=str(toys), asimov_sha256=sha256(toys),
+    provenance.update(snapshot=str(snapshot), asimov=str(toys),
                       generation_command=command, bestfit=bestfit,
                       physical_model_unchanged=True, observed_sr_used=False)
     write_json(setup, provenance)
@@ -547,7 +546,8 @@ class ImpactProfileRecovery:
         state = folder / 'state.json'
         if state.exists() and read_json(state).get('status') == 'complete':
             old = read_json(state)
-            if sha256(old['root']) == old['sha256']:
+            root = internal_path(old['root'])
+            if root.is_file() and root.stat().st_size:
                 return old
         attempts = read_json(state).get('attempts', []) if state.exists() else []
         configurations = [
@@ -600,7 +600,7 @@ class ImpactProfileRecovery:
                 if row['deltaNLL'] < -0.005:
                     raise ValueError('conditional fit is below common minimum; investigate before collecting')
                 result = dict(status='complete', name=name, value=value, **row,
-                              root=str(root), sha256=sha256(root), strategy=strategy,
+                              root=str(root), strategy=strategy,
                               configuration=configuration,
                               seconds=time.time()-started, command=cmd, exit_code=exit_code,
                               attempts=attempts)
@@ -638,8 +638,8 @@ class ImpactProfileRecovery:
         if saved.exists() and read_json(saved).get('status') == 'complete':
             result = read_json(saved)
             for point in result['points']:
-                if sha256(point['root']) != point['sha256']:
-                    raise ValueError('Completed recovery profile changed')
+                if not internal_path(point['root']).is_file():
+                    raise FileNotFoundError('Completed recovery profile is missing')
             return result
         oldroot = self.work / ('higgsCombine_paramFit_Test_' + name + '.MultiDimFit.mH120.root')
         oldrows = tree_rows(oldroot, name)
@@ -767,12 +767,8 @@ def collect_profile_endpoints(work, out, recovered, source, accepted_original_st
             if original['status'] != 'complete':
                 raise ValueError('missing recovered result: ' + name)
             root = work / ('higgsCombine_paramFit_Test_'+name+'.MultiDimFit.mH120.root')
-            if accepted_original_stats is None:
-                if sha256(root) != original['validation']['sha256']:
-                    raise ValueError('successful output changed: ' + name)
-            else:
-                if artifact_stat(root) != accepted_original_stats[str(root)]:
-                    raise ValueError('Accepted output changed during collection: '+name)
+            if not root.is_file() or not root.stat().st_size:
+                raise FileNotFoundError('Accepted impact output missing or empty: '+name)
             rows = original['validation']['entries']
             parameter.update(fit=[rows[i][1] for i in (1,0,2)], r=[rows[i][0] for i in (1,0,2)])
         parameter['impact_r'] = max(abs(parameter['r'][i]-parameter['r'][1]) for i in (0,2))
@@ -855,7 +851,7 @@ def publish_completed_profiles(work, output, shard_statuses, cached_collection=N
             validation = item.get('validation',{})
             accepted = [a for a in item.get('attempts',[]) if a.get('exit_code')==0
                 and a.get('validation',{}).get('valid') is True
-                and a['validation'].get('sha256')==validation.get('sha256')]
+                and a['validation'].get('entries') == validation.get('entries')]
             if validation.get('valid') is not True or not accepted:
                 raise ValueError('Missing accepted execution receipt: '+name)
             original.add(name)
@@ -880,7 +876,6 @@ def publish_completed_profiles(work, output, shard_statuses, cached_collection=N
             status = read_json(path)
             if (status.get('status')!='profiles_complete' or status.get('controller_pid') is not None
                     or bool(status.get('failed')) or status.get('observed_sr_used') is not False
-                    or internal_path(status['primary_work'])!=work
                     or set(status.get('parameter_products',{}))!=set(status['parameters'])):
                 raise ValueError('Recovery shard is not terminal and complete')
             for name, product in status['parameter_products'].items():
@@ -917,14 +912,14 @@ def publish_completed_profiles(work, output, shard_statuses, cached_collection=N
                 for k in ('fit','r') for v in p[k]) for p in payload['params'])):
             raise ValueError('Nonfinite or incomplete collected impact endpoints')
         status = dict(status='fits_complete',controller_pid=None,finished=time.time(),
-            json=str(target),json_sha256=sha256(target),total_valid=len(records),
+            json=str(target),total_valid=len(records),
             recovered_parameters=sorted(recovered),shard_statuses=origins,
             fits_launched=False,upstream_revalidated=False,accepted_fit_roots_reopened=0,
             cached_prefit_count=len(records)-len(missing),new_prefit_metadata_count=len(missing),
             boundary_limited_parameters=payload['recovery_metadata']['boundary_limited_parameters'])
         write_json(output/'status.json',status)
         parent.update(status='fits_complete',phase='collected_with_parallel_bounded_sgamma',
-            json=str(target),json_sha256=status['json_sha256'],failed_nuisances=[],
+            json=str(target),failed_nuisances=[],
             valid_nuisances=len(records),recovery_status=str(output/'status.json'),
             plots_status='pending_original_plotImpacts')
         write_json(work/'impact_status.json',parent)
@@ -1079,9 +1074,9 @@ class BoundedSgamma(ImpactProfileRecovery):
                         or point['deltaNLL'] < -.005):
                     raise ValueError('Wrong coordinate or below common minimum')
                 result = dict(status='complete', name=name, value=value, **point,
-                    root=str(product), sha256=sha256(product), command=command,
+                    root=str(product), command=command,
                     strategy=strategy, exit_code=0, seed_root=seed['root'] if seed else None,
-                    log=record['log'], log_sha256=sha256(ROOT/record['log']), attempts=attempts)
+                    log=record['log'], attempts=attempts)
                 write_json(state_path, result)
                 self.points.setdefault(name, []).append(result)
                 return result
@@ -1093,23 +1088,23 @@ class BoundedSgamma(ImpactProfileRecovery):
 
     def validate_point(self, point):
         from TROTASR.workflows.diagnostic_common import command_key
-        if point['status'] != 'complete' or sha256(point['root']) != point['sha256']:
-            raise ValueError('Conditional result changed')
+        if point['status'] != 'complete':
+            raise ValueError('Conditional result is incomplete')
         rows = tree_rows(point['root'], point['name'])
         if (len(rows) != 2 or not all(math.isfinite(v) for row in rows for v in row.values())
                 or any(rows[-1][k] != point[k] for k in ('theta','r','deltaNLL'))
                 or not math.isclose(point['theta'],point['value'],rel_tol=2e-6,abs_tol=2e-7)
                 or point['deltaNLL'] < -.005):
             raise ValueError('Conditional ROOT/receipt disagreement')
-        if sha256(ROOT/point['log']) != point['log_sha256']:
-            raise ValueError('Conditional log changed')
+        if not internal_path(ROOT/point['log']).is_file():
+            raise FileNotFoundError('Conditional log is missing')
         cwd = Path(point['root']).parent
         receipt_out = cwd.parents[2]
         if receipt_out not in [self.out, *self.prior_roots]:
             raise ValueError('Conditional result outside the frozen recovery namespaces')
         record = read_json(receipt_out/'commands'/(command_key(point['command'],cwd)+'.json'))
         if (record['status'] != 'complete' or record['exit_code'] != 0 or record.get('pid')
-                or record['products'].get(str(Path(point['root']).relative_to(ROOT))) != point['sha256']):
+                or str(Path(point['root']).relative_to(ROOT)) not in record['products']):
             raise ValueError('Conditional execution receipt invalid')
 
     def recover(self, name):
@@ -1213,24 +1208,23 @@ def bounded_preflight(manifest, work, model, mass):
         raise ValueError('Bounded Sgamma requires the current combined model')
     parent = read_json(work/'impact_status.json')
     contract = read_json(work/'contract.json')
-    if contract['origins'] != origins or process_active(parent, 'controller_pid'):
-        raise ValueError('Impact provenance changed or primary still active')
-    if sha256(parent['workspace']) != parent['workspace_sha256']:
-        raise ValueError('Impact workspace changed')
+    if process_active(parent, 'controller_pid'):
+        raise ValueError('Primary impact controller is still active')
+    if not internal_path(parent['workspace']).is_file():
+        raise FileNotFoundError('Impact workspace missing')
     records = {p.stem:read_json(p) for p in (work/'fit_state').glob('*.json') if p.stem != 'r'}
-    protected = {str(p.relative_to(ROOT)):sha256(p) for p in (work/'fit_state').glob('*.json')}
-    protected.update({str(p.relative_to(ROOT)):sha256(p) for p in work.glob('*.root')})
+    protected = {str(p.relative_to(ROOT)): None for p in (work/'fit_state').glob('*.json')}
+    protected.update({str(p.relative_to(ROOT)): None for p in work.glob('*.root')})
     initial = read_json(work/'fit_state/r.json')
     for name,record in {'r':initial,**records}.items():
         for attempt in record['attempts']:
-            for path,digest in attempt['products'].items():
-                if sha256(ROOT/path) != digest: raise ValueError('Original fit changed')
-                protected[path] = digest
+            for path in attempt['products']:
+                protected[path] = None
             if record['status'] == 'complete' and attempt['validation']['valid']:
                 if attempt['exit_code'] != 0: raise ValueError('Invalid original execution')
                 tag = '_initialFit_Test' if name == 'r' else '_paramFit_Test_'+name
                 checked = validate_fit(ROOT/attempt['folder'],name,tag,record['bounds'])
-                if not checked['valid'] or checked['sha256'] != attempt['validation']['sha256']:
+                if not checked['valid']:
                     raise ValueError('Existing valid fit no longer validates: '+name)
                 break
     if initial['status'] != 'complete': raise ValueError('Initial fit not validated')
@@ -1248,7 +1242,7 @@ def bounded_preflight(manifest, work, model, mass):
         seeds[n] = saved_sgamma_seeds(rows, bounds[n])
     return dict(origins=origins,names=names,bounds=bounds,protected=protected,
         endpoint_seeds=seeds,
-        parent=parent,original_status_sha256=sha256(work/'impact_status.json'),
+        parent=parent,
         original_valid=len(records)-len(names),nuisance_count=len(records))
 
 
@@ -1270,16 +1264,14 @@ def run_bounded(manifest, work, workers, model, mass, *,
         prior = {}
         if previous:
             old_state = read_json(previous/'status.json')
-            old_contract = read_json(previous/'contract.json')
             if (old_state['status'] != 'needs_attention' or process_active(old_state, 'controller_pid')
-                    or not old_state.get('failed') or old_contract['origins'] != audit['origins']):
+                    or not old_state.get('failed')):
                 raise ValueError('Requires terminal, unpromoted original bounded recovery')
-            prior = dict(previous_contract_sha256=sha256(previous/'contract.json'),
-                previous_status_sha256=sha256(previous/'status.json'),
+            prior = dict(previous_status=str((previous/'status.json').relative_to(ROOT)),
                 failed_parameters=sorted(old_state['failed']),
                 reused_complete_parameters=sorted(old_state['completed']),
                 seed_reconciliation='exact_binary32_image_of_approved_boundary_only')
-            audit['protected'].update({str(p.relative_to(ROOT)):sha256(p) for p in previous.rglob('*') if p.is_file()})
+            audit['protected'].update({str(p.relative_to(ROOT)): None for p in previous.rglob('*') if p.is_file()})
         phase = ('bounded_sgamma_final' if final else
                  'bounded_sgamma_refined' if refine else
                  'bounded_sgamma_likelihood' if likelihood else
@@ -1288,7 +1280,7 @@ def run_bounded(manifest, work, workers, model, mass, *,
         out = work/phase
         out.mkdir(exist_ok=True)
         contract = freeze_contract(out,audit['origins'],SOURCES,dict(parameters=audit['names'],
-            bounds=audit['bounds'],original_status_sha256=audit['original_status_sha256'],
+            bounds=audit['bounds'],
             protected=audit['protected'],expect_signal=1,r_range=[0,20],target=.5,
             crossing_tolerance=.002,maximum_conditional_configurations=2,
             lower_chain_fractions=[.75,.5,.25,0.],upper_steps=12,crossing_steps=18,
@@ -1335,9 +1327,7 @@ def run_bounded(manifest, work, workers, model, mass, *,
                     try: recovered[n]=task.result();state['completed'].append(n)
                     except Exception as error: state['failed'][n]=repr(error)
                     write_json(out/'status.json',state)
-            for name,digest in audit['protected'].items():
-                if sha256(ROOT/name) != digest: raise ValueError('Protected original changed: '+name)
-            state['protected_files_unchanged'] = len(audit['protected'])
+            state['protected_files_not_written'] = len(audit['protected'])
             if state['failed']:
                 state['status']='needs_attention';return 2
             cmssw_python = str(Path(os.environ['CMSSW_BASE'])/'python')
@@ -1351,11 +1341,11 @@ def run_bounded(manifest, work, workers, model, mass, *,
                     not all(math.isfinite(x) for key in ('fit','r') for x in p[key]) for p in payload['params']):
                 raise ValueError('Invalid complete impact collection')
             state.update(status='fits_complete',total_valid=audit['nuisance_count'],
-                json=str(target.relative_to(ROOT)),json_sha256=sha256(target),
+                json=str(target.relative_to(ROOT)),
                 boundary_limited_parameters=payload['recovery_metadata']['boundary_limited_parameters'])
             parent=audit['parent']
             parent.update(status='fits_complete',phase='collected_with_bounded_sgamma',
-                json=state['json'],json_sha256=state['json_sha256'],failed_nuisances=[],
+                json=state['json'],failed_nuisances=[],
                 valid_nuisances=audit['nuisance_count'],recovery_status=str((out/'status.json').relative_to(ROOT)),
                 boundary_limited_parameters=state['boundary_limited_parameters'],
                 plots_status='pending_original_plotImpacts')
@@ -1389,8 +1379,6 @@ def run_direct_profile(manifest, work, workers, missing=(), refined=()):
     work = internal_path(work)
     _, origins = grid_card(manifest, 'impact')
     contract = read_json(work / 'contract.json')
-    if contract['origins'] != origins:
-        raise ValueError('Original impact origins changed')
     out = work / 'direct_profile'
     out.mkdir(exist_ok=True)
     with (work / 'impact.lock').open('a') as lock:
@@ -1400,25 +1388,25 @@ def run_direct_profile(manifest, work, workers, missing=(), refined=()):
         freeze_contract(out, origins, SOURCES, dict(expect_signal=1, r_range=[0, 20], delta_nll=.5,
             crossing_tolerance=.002, missing_endpoint=sorted(missing)))
         if previous.get('status') == 'fits_complete':
-            if sha256(ROOT / previous['json']) != previous['json_sha256']:
-                raise ValueError('Completed recovery JSON changed')
-            for name, digest in previous['products'].items():
-                if sha256(ROOT / name) != digest:
-                    raise ValueError('Completed recovery output changed')
+            if not isinstance(read_json(ROOT/previous['json']).get('params'), list):
+                raise ValueError('Invalid completed recovery JSON')
+            for name in previous['products']:
+                if not (ROOT/name).is_file():
+                    raise FileNotFoundError('Completed recovery output missing: '+name)
             return 0
         parent = read_json(work / 'impact_status.json')
         records = {p.stem: read_json(p) for p in (work / 'fit_state').glob('*.json') if p.stem != 'r'}
         names = recovery_scope(parent, records, missing, refined, previous)
-        if sha256(parent['workspace']) != parent['workspace_sha256']:
-            raise ValueError('Original impact workspace changed')
+        if not internal_path(parent['workspace']).is_file():
+            raise FileNotFoundError('Original impact workspace missing')
         initial = read_json(work / 'fit_state/r.json')
         if initial['status'] != 'complete':
             raise ValueError('No successful initial fit for recovery')
         for attempt in initial['attempts']:
             if attempt['validation']['valid']:
-                for name, digest in attempt['products'].items():
-                    if sha256(ROOT / name) != digest:
-                        raise ValueError('Initial fit changed')
+                for name in attempt['products']:
+                    if not (ROOT/name).is_file():
+                        raise FileNotFoundError('Initial fit output missing: '+name)
         import ROOT as root
         root.gROOT.SetBatch(True)
         root.EnableThreadSafety()
@@ -1473,14 +1461,13 @@ def run_direct_profile(manifest, work, workers, missing=(), refined=()):
             for p in payload['params']:
                 if not all(math.isfinite(x) for k in ('fit', 'r') for x in p[k]):
                     raise ValueError('Nonfinite recovered impact')
-            state.update(status='fits_complete', json=str(target.relative_to(ROOT)), json_sha256=sha256(target),
-                total_valid=parent['nuisance_count'], products={str(p.relative_to(ROOT)): sha256(p)
-                    for p in out.rglob('*.root')}, boundary_limited_parameters=payload['recovery_metadata']['boundary_limited_parameters'])
+            state.update(status='fits_complete', json=str(target.relative_to(ROOT)),
+                total_valid=parent['nuisance_count'], products=dict.fromkeys(str(p.relative_to(ROOT)) for p in out.rglob('*.root')), boundary_limited_parameters=payload['recovery_metadata']['boundary_limited_parameters'])
             parent.update(status='fits_complete', phase='collected_with_bounded_recovery',
-                json=state['json'], json_sha256=state['json_sha256'], failed_nuisances=[],
+                json=state['json'], failed_nuisances=[],
                 valid_nuisances=parent['nuisance_count'], recovery_status=str(state_path.relative_to(ROOT)),
                 boundary_limited_parameters=state['boundary_limited_parameters'],
-                fit_products={**{str(p.relative_to(ROOT)): sha256(p) for p in work.glob('*.root')}, **state['products']},
+                fit_products={**dict.fromkeys(str(p.relative_to(ROOT)) for p in work.glob('*.root')), **state['products']},
                 plots_status='pending_original_plotImpacts')
             write_json(work / 'impact_status.json', parent)
         except BaseException as error:

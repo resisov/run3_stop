@@ -34,12 +34,14 @@ def cache_source(source, directory):
     errors = []
     for host in ('cms-xrd-global.cern.ch', 'xrootd-cms.infn.it', 'cmsxrootd.fnal.gov'):
         try:
-            command = ['xrdcp', '--force', '--cksum', 'adler32:' + source['adler32'],
+            command = ['xrdcp', '--force',
                        'root://' + host + '/' + source['name'], str(temporary)]
             subprocess.run(command, check=True, timeout=1200)
+            if temporary.stat().st_size != source['size']:
+                raise OSError('Incomplete NanoAOD transfer: ' + source['name'])
             os.replace(temporary, target)
             return target
-        except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as exc:
+        except (subprocess.CalledProcessError, subprocess.TimeoutExpired, OSError) as exc:
             errors.append(str(exc))
     raise OSError('NanoAOD transfer failed after all redirectors: ' + '; '.join(errors))
 
@@ -149,11 +151,10 @@ def candidate_markers(era, counts):
     tag = tagging_definition(era)
     counts = {key: int(counts[key]) for key in ('events', 'resolved_passing', 'mixed_passing')}
     resolved = dict(status='complete', **counts, application_year=era[:4],
-                    analysis_era=era, events_entries=counts['events'],
-                    model_sha256=tag['resolved_sha256'])
+                    analysis_era=era, events_entries=counts['events'])
     mixed = dict(status='complete', year=era[:4], analysis_era=era,
                  entries=counts['events'], passing_candidates=counts['mixed_passing'],
-                 operator='>=', threshold=tag['mixed_wp'], model_sha256=tag['mixed_sha256'])
+                 operator='>=', threshold=tag['mixed_wp'])
     return resolved, mixed
 
 

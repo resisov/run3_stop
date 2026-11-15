@@ -1,14 +1,27 @@
 import copy
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 import awkward as ak
 import numpy as np
-from TROTASR.utils.systematic_views import anchored_endpoints
+from TROTASR.utils.systematic_views import analysis_support, anchored_endpoints
 from TROTASR.utils.shape_kinematics import jet_block, met_contribution
 from TROTASR.utils.jme_calibration import ENDPOINTS
 
 
 class SystematicViewsTests(unittest.TestCase):
+    def test_support_selection_respects_target_era_for_dy_leptons(self):
+        from TROTASR.utils.event_selections import REGIONS
+
+        view = [None]
+        blocks = {name: SimpleNamespace(core=np.array([False]), nb=np.array([0]))
+                  for name in REGIONS}
+        with patch('TROTASR.utils.region_kinematics.build_region_blocks', return_value=(blocks, {})), \
+                patch('TROTASR.utils.event_selections.highdm_core', return_value=np.array([False])) as high:
+            self.assertFalse(analysis_support(view, year='2022EE')[0])
+        self.assertEqual(high.call_count, len(REGIONS))
+        self.assertTrue(all(call.kwargs['year'] == '2022EE' for call in high.call_args_list))
+
     def example(self):
         a = {}
         v = {s:{} for s in ENDPOINTS}

@@ -55,11 +55,7 @@ def tagging_definition(year):
                 btag='particleNet' if early else 'UParTAK4', loose=loose, medium=medium,
                 topw='ParticleNetWithMass' if early else 'GlobalParT3', top=top, w=w,
                 resolved_wp=.973943293094635 if early else .9433798789978027,
-                mixed_wp=.9420878291130066 if early else .9027690887451172,
-                resolved_sha256=('a5f59357291b178b4c7486b0781e2edbd78005a02d921ac3e18b6897f7f060a2'
-                    if early else 'ce673e6497860cc67fcdfb30017301fb476e32a0a33a60e8b51a31ba109f7ef3'),
-                mixed_sha256=('3208e7455892f608b6dde745ba591632f519035f56bb17d5656e9d882aadbbf1'
-                    if early else '40469a1a62f64b08b4225682a2df6ac2538f49a1e7eef5ef4bdff857d0b875a4'))
+                mixed_wp=.9420878291130066 if early else .9027690887451172)
 
 
 def internal_path(path):

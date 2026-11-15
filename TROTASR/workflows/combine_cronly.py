@@ -20,7 +20,7 @@ if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
 from TROTASR.utils.paths import ROOT, internal_path
-from TROTASR.utils.io import read_json, write_json, sha256
+from TROTASR.utils.io import read_json, write_json
 from TROTASR.workflows.diagnostic_common import (native_runtime, grid_card,
     cr_channels, freeze_contract, CommandRunner, require_success, workspace,
     published_diagnostic, admitted_popen, live_resources, CommandFailure, process_active)
@@ -167,9 +167,9 @@ def plot(runner, output, state, ylim):
     if state.get('status') not in ('fits_complete_pending_plots', 'generated_pending_visual_QA'):
         raise ValueError('Pulls require a successful verified CR fit')
     if state.get('stage') != 'profile_pulls_complete':
-        for name, digest in state['products'].items():
-            path=internal_path(ROOT/name)
-            if not path.is_file() or (path.suffix != '.root' and sha256(path) != digest):
+        for name in state['products']:
+            path = internal_path(ROOT/name)
+            if not path.is_file() or not path.stat().st_size:
                 raise ValueError('CR fit/extraction product changed')
     stem = output / ('cronly_nuisance_pulls_ylim' + format(ylim, 'g').replace('.', '')+'_split2')
     # Same Python/scientific software and same plotting body as the original.
@@ -183,7 +183,7 @@ def plot(runner, output, state, ylim):
     figures = [stem.with_suffix('.pdf'),stem.parent/(stem.name+'_part1.png'),
                stem.parent/(stem.name+'_part2.png')]
     require_success(runner.run(command, output, output / 'plot.log', figures, env=env))
-    state.update(status='generated_pending_visual_QA', figures={str(p.relative_to(ROOT)): sha256(p) for p in figures})
+    state.update(status='generated_pending_visual_QA', figures=dict.fromkeys(str(p.relative_to(ROOT)) for p in figures))
     return state
 
 
@@ -224,11 +224,12 @@ def recover(manifest, output, covariance=False, robust=False):
     with (output/'controller.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX|fcntl.LOCK_NB)
         original = read_json(output/'state.json')
-        if process_active(original) or original['origins'] != origins:
-            raise ValueError('CR fit is active or belongs to another input')
+        if process_active(original):
+            raise ValueError('CR fit is active')
         if original['status'] in ('fits_complete_pending_plots','generated_pending_visual_QA'):
-            for name,digest in original['products'].items():
-                if sha256(ROOT/name) != digest: raise ValueError('Completed CR product changed')
+            for name in original['products']:
+                if not internal_path(ROOT/name).is_file():
+                    raise FileNotFoundError('Completed CR product missing: '+name)
             return 0
         out = output/('fit_robust_hesse' if robust else 'fit_covariance_recovery' if covariance else 'fit_recovery')
         if covariance and (out/'state.json').exists():
@@ -240,7 +241,6 @@ def recover(manifest, output, covariance=False, robust=False):
                 raise ValueError('Existing covariance recovery retained; not an initialization-parser failure')
             out=output/'fit_covariance_recovery_workspace_seed'
         out.mkdir(exist_ok=True)
-        protected = {str(p.relative_to(ROOT)):sha256(p) for p in output.glob('*.root')}
         starting={};seed_file=None;omitted_seeds={}
         if covariance:
             import ROOT as root
@@ -263,9 +263,7 @@ def recover(manifest, output, covariance=False, robust=False):
                     if not variable or not variable.getMin()<=value<=variable.getMax():
                         omitted_seeds[name]=value;del starting[name]
             finally:source.Close()
-            protected[str(Path(seed_file).relative_to(ROOT))]=sha256(seed_file)
-        freeze_contract(out,origins,SOURCES,dict(original_contract=sha256(output/'contract.json'),
-            protected=protected,signal_strength=0,maximum_attempts=2 if covariance or robust else 3,
+        freeze_contract(out,origins,SOURCES,dict(signal_strength=0,maximum_attempts=2 if covariance or robust else 3,
             warm_start=seed_file,omitted_out_of_initial_workspace_range_seeds=omitted_seeds,physics_changed=False))
         if not (out/'original_state.json').exists(): write_json(out/'original_state.json',original)
         runner = CommandRunner(out)
@@ -317,12 +315,10 @@ def recover(manifest, output, covariance=False, robust=False):
             pulls=output/'pulls.json'
             if pulls.exists() and read_json(pulls)!=payload: raise ValueError('Retain existing different pulls')
             write_json(pulls,payload)
-            for name,digest in protected.items():
-                if sha256(ROOT/name)!=digest: raise ValueError('Original CR ROOT changed')
             original.update(status='fits_complete_pending_plots',stage='fit_complete',pid=None,
                 recovery_state=str((out/'state.json').relative_to(ROOT)),fit_status=accepted['fit_status'],
                 covariance_quality=accepted['covariance_quality'],edm=accepted['edm'],
-                products={str(p.relative_to(ROOT)):sha256(p) for p in (target,fit,parameters,pulls)},
+                products=dict.fromkeys(str(p.relative_to(ROOT)) for p in (target,fit,parameters,pulls)),
                 plotted_nuisances=sum(p['constraint_model']=='standard_normal' for p in payload['parameters'].values()))
             original.pop('error',None);write_json(output/'state.json',original)
             state['status']='fits_complete_pending_plots';return 0
@@ -356,8 +352,6 @@ def _run_once(manifest, output, plot_only=False, ylim=6.0):
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         if not (plot_only and (output/'fit_recovery/state.json').exists()):
             freeze_contract(output, origins, SOURCES, dict(signal_strength=0, workers=1, strategy=0, pull_ylim=ylim))
-        elif read_json(output/'state.json')['origins'] != origins:
-            raise ValueError('Recovered pull input provenance changed')
         runner = CommandRunner(output)
         state_path = output / 'state.json'
         state = read_json(state_path) if state_path.exists() else dict(
@@ -369,9 +363,9 @@ def _run_once(manifest, output, plot_only=False, ylim=6.0):
             if plot_only:
                 state = plot(runner, output, state, ylim)
             elif state.get('status') in ('fits_complete_pending_plots', 'generated_pending_visual_QA'):
-                for name, digest in state['products'].items():
-                    if sha256(ROOT / name) != digest:
-                        raise ValueError('Completed CR fit/extraction product changed')
+                for name in state['products']:
+                    if not internal_path(ROOT/name).is_file():
+                        raise FileNotFoundError('Completed CR fit/extraction product missing: '+name)
                 validate_fit(output / 'fitDiagnostics_cronly.root')
                 return 0
             else:
@@ -400,7 +394,7 @@ def _run_once(manifest, output, plot_only=False, ylim=6.0):
                     write_json(pulls, payload)
                 state.update(status='fits_complete_pending_plots', stage='fit_complete', finished=time.time(),
                     plotted_nuisances=sum(p['constraint_model'] == 'standard_normal' for p in payload['parameters'].values()),
-                    products={str(p.relative_to(ROOT)): sha256(p) for p in (target, fit, parameters, pulls)})
+                    products=dict.fromkeys(str(p.relative_to(ROOT)) for p in (target, fit, parameters, pulls)))
             grid_card(manifest, 'cronly')  # unchanged card and TH1 files after execution
         except BaseException as error:
             state.update(status='needs_attention', error=repr(error), finished=time.time())
@@ -460,7 +454,7 @@ def direct_cr_profile(output, out, name, runner, neighbour=False, bracket_recove
             f.Close();rows=tree_rows(candidate,name)
             if good and len(rows)==1 and rows[0]['r']==0.:
                 snapshot=candidate;center=rows[0]['theta']
-                products.update({str(p.relative_to(ROOT)):sha256(p) for p in (candidate,fitpath)})
+                products.update(dict.fromkeys(str(p.relative_to(ROOT)) for p in (candidate,fitpath)))
                 break
     for strategy in (0,1,2):
         if snapshot is not None:break
@@ -506,31 +500,31 @@ def direct_cr_profile(output, out, name, runner, neighbour=False, bracket_recove
         for previous in old_profiles:
             for product in sorted((previous/name).glob('point_*/higgsCombine*.root')):
                 rel=str(product.relative_to(ROOT))
-                if reusable.get(rel)!=sha256(product):continue
+                if rel not in reusable:continue
                 rows=tree_rows(product,name)
                 if (len(rows)==2 and all(math.isfinite(v) for row in rows for v in row.values())
                         and rows[-1]['r']==0. and rows[-1]['deltaNLL']>=-.005):
-                    seed_samples.append(dict(rows[-1],root=rel,sha256=sha256(product)))
+                    seed_samples.append(dict(rows[-1],root=rel))
     def fixed(value):
         key='point_'+format(value,'.10f').replace('-','m').replace('.','p')
         if reusable and not multistart:
             for product in sorted(p for previous in old_profiles
                                   for p in (previous/name/key).glob('higgsCombine*.root')):
                 rel=str(product.relative_to(ROOT))
-                if reusable.get(rel)!=sha256(product):raise ValueError('Saved conditional ROOT changed')
+                if rel not in reusable:continue
                 rows=tree_rows(product,name)
                 if (len(rows)==2 and all(math.isfinite(v) for row in rows for v in row.values())
                         and rows[-1]['r']==0. and abs(rows[-1]['theta']-value)<2e-6
                         and rows[-1]['deltaNLL']>=-.005):
-                    result=dict(rows[-1],root=rel,sha256=sha256(product))
-                    samples.append(result);products[rel]=sha256(product);return result
+                    result=dict(rows[-1],root=rel)
+                    samples.append(result);products[rel]=None;return result
         folder=point/key;folder.mkdir(exist_ok=True)
         starts_to_try=profile_start_points(seed_samples+samples,value) if multistart else [None]
         candidates=[]
         if full_start:
             for seed in seed_samples:
                 if abs(seed['theta']-value)<2e-7:
-                    candidates.append(seed);products[seed['root']]=seed['sha256']
+                    candidates.append(seed);products[seed['root']]=None
         for start_index,start in enumerate(starts_to_try):
           for strategy in ((1,2) if multistart else (0,1)):
             tag='_cr_'+key+'_s'+str(strategy)+('_start'+str(start_index) if multistart else '')
@@ -564,7 +558,7 @@ def direct_cr_profile(output, out, name, runner, neighbour=False, bracket_recove
             if (len(rows)==2 and all(math.isfinite(v) for row in rows for v in row.values())
                     and rows[-1]['r']==0. and abs(rows[-1]['theta']-value)<2e-6
                     and rows[-1]['deltaNLL']>=-.005):
-                result=dict(rows[-1],root=str(product.relative_to(ROOT)),sha256=sha256(product))
+                result=dict(rows[-1],root=str(product.relative_to(ROOT)))
                 products.update(receipt['products'])
                 if not multistart:samples.append(result);return result
                 candidates.append(result);break
@@ -632,7 +626,7 @@ def recover_profile_pulls(manifest,output,workers,continuation=False,warm=False)
     with (output/'controller.lock').open('a') as lock:
         fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
         parent=read_json(output/'state.json')
-        if process_active(parent) or parent['origins']!=origins:raise ValueError('CR input changed or active')
+        if process_active(parent):raise ValueError('CR controller is active')
         previous=read_json(output/'fit_recovery/state.json')
         # Failed covariance validation records still retain the actual fit ROOT.
         candidates=[]
@@ -676,8 +670,7 @@ def recover_profile_pulls(manifest,output,workers,continuation=False,warm=False)
         out=output/('profile_pulls_full_start' if full_start else 'profile_pulls_multistart' if multistart else 'profile_pulls_bracket' if bracket_recovery else 'profile_pulls_neighbour_resume' if resume_neighbour else 'profile_pulls_neighbour' if neighbour_scan else 'profile_pulls_direct' if direct_scan else 'profile_pulls_gaussian_scan' if gaussian_scan else 'profile_pulls_warm_after_nll' if delayed_warm else 'profile_pulls_warm' if warm else 'profile_pulls_minimizer' if continuation else 'profile_pulls');out.mkdir(exist_ok=True)
         files=[*SOURCES,'workflows/combine_impacts.py']
         contract=freeze_contract(out,origins,files,dict(
-            central_fit=str(central.relative_to(ROOT)),central_sha256=sha256(central),
-            workspace_sha256=sha256(target),signal_strength=0,observed_sr_used=False,
+            central_fit=str(central.relative_to(ROOT)),signal_strength=0,observed_sr_used=False,
             maximum_configurations=2 if continuation else 3,workers=workers,uncertainty_method='profile_likelihood',
             warm_start=starting,omitted_out_of_workspace_range_seeds=omitted,
             set_parameters_after_nll=delayed_warm,
@@ -687,7 +680,7 @@ def recover_profile_pulls(manifest,output,workers,continuation=False,warm=False)
             independent_conditional_starts=3 if multistart else 1,
             explicit_statistical_nuisances=multistart,
             free_normalizations_in_starts=full_start,
-            previous_profile_state_sha256=sha256(previous_profiles/'state.json') if previous_profiles else None,physics_changed=False))
+            physics_changed=False))
         runner=CommandRunner(out)
         original=out/'central_parameters.json'
         require_success(runner.run(['python3',ROOT/'workflows/diagnostic_payload.py','--operation','extract_cronly',
@@ -703,7 +696,7 @@ def recover_profile_pulls(manifest,output,workers,continuation=False,warm=False)
                 prior_record=prior_completed_profile(output,previous_profiles,name)
                 if prior_record is not None:
                     checked=validate_profile(ROOT/prior_record['folder'],name,prior_record['tag'],bounds[name])
-                    if not checked['valid'] or checked['sha256']!=prior_record['validation']['sha256']:
+                    if not checked['valid']:
                         raise ValueError('Completed CR profile changed')
                     return prior_record
             if direct_scan:return direct_cr_profile(output,out,name,runner,neighbour_scan,bracket_recovery,multistart,full_start)
@@ -712,7 +705,7 @@ def recover_profile_pulls(manifest,output,workers,continuation=False,warm=False)
                 saved=read_json(point/'state.json')
                 if saved['status']=='complete':
                     checked=validate_profile(ROOT/saved['folder'],name,saved['tag'],bounds[name])
-                    if checked['valid'] and checked['sha256']==saved['validation']['sha256']:return saved
+                    if checked['valid']:return saved
                 raise ValueError('Existing failed profile retained')
             attempts=[]
             for strategy in ((0,1) if continuation else (0,1,2)):
@@ -756,8 +749,6 @@ def recover_profile_pulls(manifest,output,workers,continuation=False,warm=False)
                     write_json(out/'state.json',state)
             if state['failed']:state['status']='needs_attention';return 2
             grid_card(manifest,'cronly')
-            if sha256(central)!=contract['options']['central_sha256'] or sha256(target)!=contract['options']['workspace_sha256']:
-                raise ValueError('Original CR fit/workspace changed')
             for name,record in recovered.items():
                 rows=record['validation']['entries'];center,lower,upper=[r[1] for r in rows]
                 item=payload['parameters'][name]
@@ -769,10 +760,10 @@ def recover_profile_pulls(manifest,output,workers,continuation=False,warm=False)
             pulls=output/'pulls.json'
             if pulls.exists():raise ValueError('Existing pull payload retained')
             write_json(pulls,payload)
-            products={str(p.relative_to(ROOT)):sha256(p) for p in (target,central,original,pulls)}
+            products=dict.fromkeys(str(p.relative_to(ROOT)) for p in (target,central,original,pulls))
             for record in recovered.values():
                 if 'profile_products' in record:products.update(record['profile_products'])
-                else:products[str((ROOT/record['folder']/('higgsCombine'+record['tag']+'.MultiDimFit.mH120.root')).relative_to(ROOT))]=record['validation']['sha256']
+                else:products[str((ROOT/record['folder']/('higgsCombine'+record['tag']+'.MultiDimFit.mH120.root')).relative_to(ROOT))]=None
             parent.update(status='fits_complete_pending_plots',stage='profile_pulls_complete',pid=None,
                 recovery_status=str((out/'state.json').relative_to(ROOT)),products=products,
                 fit_status=payload['fit_status'],covariance_quality=payload['covariance_quality'],

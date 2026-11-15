@@ -16,7 +16,7 @@ if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
 from TROTASR.utils.paths import ROOT, internal_path
-from TROTASR.utils.io import validate_root, write_json, sha256
+from TROTASR.utils.io import validate_root, write_json
 from TROTASR.utils.reader import resolved_candidates
 from TROTASR.utils.trota_inference import (load_models, bounded_slices, infer_chunk,
     p4_view, P4_FIELDS, MIXED_INTS, MIXED_FLOATS, migration_counts)
@@ -104,7 +104,7 @@ def validate(path, year, models, *, chunk_size=1000, budget=150000, central_stud
     unchanged = (initial.st_ino, initial.st_size, initial.st_mtime_ns) == (final.st_ino, final.st_size, final.st_mtime_ns)
     passed = unchanged and all(x['passed'] for c in checks for x in c['checks'].values())
     return dict(input=str(path.relative_to(ROOT)), year=year, status='passed' if passed else 'failed',
-        input_unchanged=unchanged, model_manifest_sha256=sha256(ROOT/'models/TROTA/manifest.json'),
+        input_unchanged=unchanged, model_manifest='models/TROTA/manifest.json',
         total=sums, chunks=checks, seconds=time.monotonic()-started, max_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
         selection_check=selection_check, cms_central_convention_study=study,
         scope='neutral_inference_closure_only_not_full_systematics_validation')

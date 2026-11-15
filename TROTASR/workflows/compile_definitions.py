@@ -4,7 +4,7 @@ if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
 from TROTASR.utils.paths import ROOT, internal_path
-from TROTASR.utils.io import sha256, write_json
+from TROTASR.utils.io import write_json
 
 
 def main():
@@ -20,8 +20,8 @@ def main():
         if not load(str(folder / (name + ".coffea"))):
             raise RuntimeError("Compiled artifact is empty")
     sources = ["utils/" + n + ".py" for n in ("pog_corrections", "private_scales", "ids", "nanoaod_ids")]
-    write_json(folder / "manifest.json", dict(status="complete", sources={p: sha256(ROOT / p) for p in sources},
-        artifacts={name: sha256(folder / name) for name in ("ids.coffea", "corrections.coffea")}))
+    write_json(folder / "manifest.json", dict(status="complete", sources=sources,
+        artifacts=["ids.coffea", "corrections.coffea"]))
     print("Local IDs and corrections compiled and reloaded")
 
 

@@ -14,6 +14,10 @@ RZ_CATEGORIES = ("highdm_Nb1", "highdm_Nb2plus", "lowdm_Nb1", "lowdm_Nb2plus")
 def nps_nuisance_name(name: str, year: str) -> str:
     from .paths import analysis_era
     year = analysis_era(year)
+    theory = re.fullmatch(r'(pdf|QCDscale)_([A-Za-z][A-Za-z0-9_]*)', name)
+    if theory:
+        # A hard process shares one nuisance across regions and all six eras.
+        return name
     if name == "jesTotal":
         return f"CMS_scale_j_Total_{year}"
     # Common names correlate the listed variations across eras; yearly names

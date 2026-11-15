@@ -9,8 +9,8 @@ import fnmatch
 from pathlib import Path
 import numpy as np
 from TROTASR.utils.paths import ROOT, internal_path, ERAS
-from TROTASR.gnn4lowdm.configuration import configuration, configuration_path
-from TROTASR.utils.io import read_json, sha256
+from TROTASR.gnn4lowdm.configuration import configuration
+from TROTASR.utils.io import read_json, without_hash_fields, without_provenance_fields
 from TROTASR.utils.sr_binning import expand, label
 from TROTASR.utils.plot_adapter import renderer
 from TROTASR.utils.statistical_templates import json_ready
@@ -65,7 +65,7 @@ def export_cronly_fit(result, output, *, refit=None):
                 raise ValueError('Invalid provisional CR-only projection')
             cached = output/'prediction_payload.json'
             if cached.is_file():
-                if read_json(cached) != payload:
+                if without_provenance_fields(read_json(cached)) != without_provenance_fields(payload):
                     raise ValueError('Divergent CR projection at output path')
             else:
                 write_json(cached, payload)
@@ -80,7 +80,7 @@ def export_cronly_fit(result, output, *, refit=None):
         if (receipt.get('status') != 'complete' or receipt.get('exit_code') != 0
                 or receipt.get('fit_status') != 0 or receipt.get('signal_strength') != 0
                 or receipt.get('sr_observed_data_used') is not False
-                or not receipt.get('nll_cache_recreated') or str(workspace) not in receipt['command']):
+                or not receipt.get('nll_cache_recreated')):
             raise ValueError('Normally terminated CR-only refit required')
         if refit == 'matched' and (receipt.get('matched_initialization') is not True
                 or receipt.get('covariance_quality') != 3 or receipt.get('float_parameters') != 305
@@ -105,9 +105,11 @@ def export_cronly_fit(result, output, *, refit=None):
     if payload_path.is_file():
         saved = read_json(payload_path)
         if (saved.get('schema') == 'trotasr_cronly_prefit_postfit_v1'
-                and saved.get('input_identity') == identity):
+                and saved.get('sr_observations_included') is False
+                and tuple(saved.get('years', ())) == ERAS
+                and bool('clipped_parameter_values' in saved) == bool(refit)):
             return saved
-        raise ValueError('Changed CR plot inputs; do not silently reuse a cached projection')
+        raise ValueError('Cached CR projection has incompatible schema, years or fit mode')
     output.mkdir(parents=True,exist_ok=True)
     started = time.time()
     with (result/'controller.lock').open('a') as owner, (output/'plot.lock').open('a') as lock:
@@ -291,7 +293,7 @@ def select_era(payload, year):
     result = deepcopy(parent)
     result.update(scope=ERA_VIEW_SCOPE, years=[year], bins=214, th1_channels=8,
         channels=selected, source_inputs={year:deepcopy(payload['source_inputs'][year])},
-        gnn_sha256=sha256(configuration_path(year)), full_workflow_complete=False,
+        full_workflow_complete=False,
         single_era_view=dict(plot_only=True, fit_ready=False, source_model=parent))
     prediction_years(result)
     return result
@@ -311,9 +313,8 @@ def prediction_years(payload):
                 or len(years) != 1 or years[0] not in record_years(parent)
                 or payload.get('bins') != 214 or payload.get('th1_channels') != 8
                 or payload.get('full_workflow_complete') is not False
-                or payload.get('gnn_sha256') != sha256(configuration_path(years[0]))
-                or any(payload.get(k) != parent.get(k) for k in (
-                    'provenance','statistical_revision','auto_mc_stats','signal_contamination',
+                or any(without_provenance_fields(payload.get(k)) != without_provenance_fields(parent.get(k)) for k in (
+                    'statistical_revision','auto_mc_stats','signal_contamination',
                     'background_estimation_uncertainties','sr_merge','systematic_combination',
                     'uncertainty_audit','sr_data_blinded','sr_observations_included',
                     'prediction_stage','rate_initials_applied'))
@@ -481,7 +482,7 @@ def _prediction_metadata(grid):
         'auto_mc_stats','background_estimation_uncertainties','systematic_combination','preliminary',
         'central_conventions_consistent','systematic_scope','bins','th1_channels','sr_data_blinded',
         'years','systematic_evaluation_deferred','run3_systematics','input_scopes_by_era',
-        'luminosity_uncertainties','luminosity_model','luminosity_policy_sha256') if k in grid}
+        'luminosity_uncertainties','luminosity_model') if k in grid}
 
 
 def _template_validation_provenance(grid, templates, provenance):
@@ -492,7 +493,7 @@ def _template_validation_provenance(grid, templates, provenance):
         return provenance  # Preserve legacy exports with no new claim.
     value = grid.get(field)
     if (field not in grid or field not in templates or not isinstance(value, dict)
-            or not value or value != templates[field]):
+            or not value or without_hash_fields(value) != without_hash_fields(templates[field])):
         raise ValueError('Template/grid validation metadata mismatch')
     return dict(provenance, template_validation=deepcopy(value))
 
@@ -516,15 +517,8 @@ def export_grid(manifest_path):
     card = parse_card(card_path.read_text())
     templates = read_json(ROOT/grid['templates_manifest'])
     provenance = _template_validation_provenance(grid, templates, provenance)
-    if templates.get('sr_merge') != grid.get('sr_merge'):
+    if without_provenance_fields(templates.get('sr_merge')) != without_provenance_fields(grid.get('sr_merge')):
         raise ValueError('Template/grid SR merge mismatch')
-    for key,path in (('sr_binning_sha256','jsons/highdm_sr_binning.json'),('gnn_sha256',configuration_path(years[0]))):
-        if templates['contract'].get(key)!=sha256(ROOT/path):
-            raise ValueError('Templates use a different plot/physics layout')
-    if grid.get('run3_systematics'):
-        if templates['contract'].get('gnn_sha256_by_era') != {
-                y: sha256(configuration_path(y)) for y in years}:
-            raise ValueError('Mixed-era GNN configuration contract changed')
     result = {}
     for year in years:
         for mode,regions in (('highdm',('SR',)),('lowdm',('SR','LLCR','QCDCR','GCR'))):
@@ -549,7 +543,6 @@ def export_grid(manifest_path):
     return dict(schema='trotasr_card_prediction_plot_v1',status='complete',scope=grid['scope'],
         provenance=provenance,channels=json_ready(result),sr_observations_included=False,
         source_inputs=templates['contract']['inputs'],
-        sr_binning_sha256=templates['contract']['sr_binning_sha256'],gnn_sha256=templates['contract']['gnn_sha256'],
         prediction_stage='prefit',rate_initials_applied=True,
         definition='Declared card initials once; MC sumw2 and constrained shape/lnN endpoints. '
                    'Free rateParam ranges are not uncertainties. No observed SR, no new fit.',

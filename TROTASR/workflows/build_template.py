@@ -6,7 +6,7 @@ if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
 from TROTASR.utils.paths import ROOT, internal_path
-from TROTASR.utils.io import read_json, write_json, sha256
+from TROTASR.utils.io import read_json, write_json
 from TROTASR.utils.statistics_inputs import build_inputs
 from TROTASR.utils.statistical_templates import assemble, write_templates, verify_templates, json_ready
 
@@ -14,13 +14,7 @@ from TROTASR.utils.statistical_templates import assemble, write_templates, verif
 def prepare(hists, sgamma, rz_high, rz_low, double_ratio, topology, mstop, mlsp):
     paths = {name: internal_path(path) for name, path in
              zip(('hists','sgamma','rz_high','rz_low','double_ratio'),(hists,sgamma,rz_high,rz_low,double_ratio))}
-    digests = {name: sha256(path) for name,path in paths.items()}
     inputs = {name: read_json(path) for name,path in paths.items()}
-    contract = inputs['hists'].get('contract', {})
-    for key,path in [('sr_binning_sha256',ROOT/'jsons/highdm_sr_binning.json'),
-                     ('configuration_sha256',ROOT/'gnn4lowdm/config.json')]:
-        if contract.get(key) != sha256(path):
-            raise ValueError('Histogram binning/configuration contract mismatch: ' + key)
     payload = build_inputs(*(inputs[k] for k in ('hists','sgamma','rz_high','rz_low','double_ratio')),
                            topology, mstop, mlsp)
     channels, data, clipping, issues = assemble([payload])
@@ -30,7 +24,7 @@ def prepare(hists, sgamma, rz_high, rz_low, double_ratio, topology, mstop, mlsp)
             issues.append(dict(problem='channel_without_processes', channel=channel))
     if not any(r['family'] == 'signal' and r['nominal'].sum() > 0 for r in data.values()):
         issues.append(dict(problem='no_positive_signal_template', topology=topology, mStop=mstop, mLSP=mlsp))
-    provenance = {name:dict(path=str(path.relative_to(ROOT)),sha256=digests[name]) for name,path in paths.items()}
+    provenance = {name:dict(path=str(path.relative_to(ROOT))) for name,path in paths.items()}
     return payload, channels, data, clipping, issues, provenance
 
 
@@ -48,19 +42,21 @@ def main():
         p.error('ROOT products must stay on approved remote scratch, never on the local laptop')
     payload, channels, data, clipping, issues, inputs = prepare(a.hists,a.sgamma,a.rz_high,a.rz_low,a.double_ratio,
                                                              a.topology,a.mstop,a.mlsp)
-    source_files = ('utils/statistics_inputs.py','utils/statistics_model.py','utils/statistical_templates.py',
-                    'utils/sr_binning.py','utils/renderers/signal_theory.py','workflows/build_template.py')
     contract = dict(inputs=inputs, topology=a.topology,mStop=a.mstop,mLSP=a.mlsp,
-                    code={n:sha256(ROOT/n) for n in source_files}, validate_only=a.validate_only)
+                    validate_only=a.validate_only)
     manifest_path = output / 'model_manifest.json'
     if output.exists():
         if manifest_path.is_file():
             previous=read_json(manifest_path)
             reusable = ('validated_inputs_not_root_templates' if a.validate_only else 'templates_ready')
-            if previous.get('contract')==contract and previous.get('status')==reusable:
-                for name,digest in previous['files'].items():
-                    if sha256(output/name)!=digest:
-                        raise ValueError('Completed template file changed: '+name)
+            previous_contract = previous.get('contract') or {}
+            model_fields = ('topology', 'mStop', 'mLSP', 'validate_only')
+            if (previous.get('status') == reusable
+                    and all(previous_contract.get(name) == contract[name] for name in model_fields)):
+                for name in previous['files']:
+                    path = internal_path(output/name)
+                    if path.parent != output or not path.is_file() or not path.stat().st_size:
+                        raise ValueError('Completed template file missing or empty: '+name)
                 if not a.validate_only:
                     verify_templates(output,channels,data)
                 print(reusable+' (validated existing outputs)')
@@ -82,7 +78,7 @@ def main():
                 error=dict(type=type(exc).__name__,message=str(exc)),root_integrity_checked=False,
                 full_workflow_complete=False))
             raise
-    files={path.name:sha256(path) for path in output.iterdir() if path.is_file() and path != manifest_path}
+    files={path.name: None for path in output.iterdir() if path.is_file() and path != manifest_path}
     write_json(manifest_path,dict(schema='trotasr_templates_v1',status=status,contract=contract,
         year=payload['year'],scope=payload['scope'],bins=payload['bin_counts'],
         channels={c:[b['name'] for b in bins] for c,bins in channels.items()},

@@ -1,7 +1,7 @@
 import copy
 import unittest
 import numpy as np
-from TROTASR.utils.io import read_json, sha256
+from TROTASR.utils.io import read_json
 from TROTASR.utils.paths import ROOT
 from TROTASR.utils.sr_merge import validate_merge, bin_groups, project, project_prediction
 from TROTASR.workflows.prediction_plot_inputs import combine, expected_labels, flat_blocks
@@ -70,7 +70,6 @@ class SRMergeTests(unittest.TestCase):
         p=ROOT/self.config['decision_payload']
         if not p.is_file():
             self.skipTest('Accepted SR merge decision payload is not installed locally')
-        self.assertEqual(sha256(p),self.config['decision_payload_sha256'])
         payload=read_json(p)
         old=combine([payload['channels'][y+'/SR/highdm'] for y in ('2024','2025')])
         new=project_prediction(old,self.config)

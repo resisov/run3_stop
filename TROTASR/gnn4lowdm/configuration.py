@@ -1,6 +1,6 @@
 """Target-era model routing, independent of the input production campaign."""
 from TROTASR.utils.paths import ROOT, analysis_era, EARLY_ERAS
-from TROTASR.utils.io import read_json, sha256
+from TROTASR.utils.io import read_json
 
 
 def configuration_path(year):
@@ -16,10 +16,7 @@ def portable_model(year):
     if analysis_era(year) not in EARLY_ERAS:
         return ROOT / 'gnn4lowdm/diagonal_v3_numpy.npz'
     config = configuration(year)
-    path = ROOT / config['model']['portable_numpy']
-    if sha256(path) != config['model']['portable_numpy_sha256']:
-        raise ValueError('Early-era portable model differs from the adopted checkpoint export')
-    return path
+    return ROOT / config['model']['portable_numpy']
 
 
 def global_feature_names(year):

@@ -4,7 +4,7 @@ import argparse
 if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
-from TROTASR.utils.io import read_json, write_json, sha256
+from TROTASR.utils.io import read_json, write_json
 
 
 def main():
@@ -22,7 +22,7 @@ def main():
                 regions[r] = {'blinded': True}; continue
             regions[r] = {k: sum(c[r][k] for c in chunks)
                           for k in chunks[0][r] if isinstance(chunks[0][r][k], (int, float))}
-        records.append(dict(input=data['contract']['input'], result_sha256=sha256(path),
+        records.append(dict(input=data['contract']['input'], validation_result=str(path),
                             status=data['status'], events=data['audit']['events_read'], seconds=data['seconds'],
                             regions=regions, migrations=data['audit'].get('migrations'),
                             versions=data['versions'], source_contract=data['contract']))

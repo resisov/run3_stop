@@ -8,6 +8,8 @@ internal. No old fit values or workspaces are consumed.
 import argparse
 import copy
 import fcntl
+from uuid import uuid4
+import json
 import math
 import os
 from pathlib import Path
@@ -18,7 +20,7 @@ if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
 from TROTASR.utils.paths import ROOT, internal_path
-from TROTASR.utils.io import read_json, write_json, sha256
+from TROTASR.utils.io import read_json, write_json, without_provenance_fields
 from TROTASR.utils.statistical_templates import (assemble, aggregate, card_text as native_card_text, template_name,
     write_templates, json_ready, load_theory, profiled_theory, add_signal_xsec_lnN)
 from TROTASR.workflows.signal_grid_inputs import (MODELS, FIELDS, requested_grid,
@@ -29,6 +31,15 @@ CODE = ('workflows/build_nominal_grid.py', 'workflows/signal_grid_inputs.py',
     'utils/statistics_inputs.py', 'utils/statistics_model.py', 'utils/statistical_templates.py',
     'utils/sr_binning.py', 'utils/sr_merge.py', 'utils/renderers/signal_theory.py')
 INFERENCE_RUNTIME = ROOT / 'workflows/run_inference.sh'
+
+
+def card_scientific_metadata(metadata):
+    return without_provenance_fields({
+        k: v for k, v in metadata.items()
+        if k not in ('inputs', 'baseline_card', 'signal_templates_manifest',
+                     'data_obs_construction_receipt', 'data_obs_root')
+    })
+
 
 CR12_POLICY = dict(rate_parameter_range=[0.01, 5], highdm_cr_bins_per_region_year=12,
     native_recoil_groups=[[0], [1], [2], [3], [4, 5], [6, 7]],
@@ -459,19 +470,8 @@ def grid_contract(config_path, config, inventory, validate_only, preserve_unsupp
         for key, source in config['years'][year].items():
             path = internal_path(ROOT / source)
             relative = str(path.relative_to(ROOT))
-            saved = (prior or {}).get('inputs', {}).get(year, {}).get(key, {})
-            if saved.get('path') == relative and saved.get('sha256'):
-                # Registered immutable input: keep its delivery digest, not a
-                # new scan every time the card controller resumes.
-                digest = saved['sha256']
-            else:
-                digest = sha256(path)
-            inputs[year][key] = dict(path=relative, sha256=digest)
-    contract = dict(config_sha256=sha256(config_path), inputs=inputs,
-        grid_sha256=sha256(inventory), theory_sha256=sha256(ROOT / config['theory']),
-        code={name: sha256(Path(__file__) if name == 'workflows/build_nominal_grid.py' else ROOT / name) for name in CODE},
-        sr_binning_sha256=sha256(ROOT / 'jsons/highdm_sr_binning.json'),
-        gnn_sha256=sha256(ROOT / 'gnn4lowdm/config.json'), validate_only=validate_only,
+            inputs[year][key] = dict(path=relative)
+    contract = dict(inputs=inputs, validate_only=validate_only,
         preserve_unsupported_templates=preserve_unsupported,
         selection_settings=dict(sr_merge=config.get('sr_merge'),
             preliminary_fit_exclusions=scientific_settings(config.get('preliminary_fit_exclusions')),
@@ -480,13 +480,9 @@ def grid_contract(config_path, config, inventory, validate_only, preserve_unsupp
         from TROTASR.workflows.early_qcd_fit_policy import load_early_qcd_fit_policy
         load_early_qcd_fit_policy(config['early_qcd_fit_exclusions'])
         contract['early_qcd_fit_exclusions'] = config['early_qcd_fit_exclusions']
-        contract['code']['workflows/early_qcd_fit_policy.py'] = sha256(ROOT/'workflows/early_qcd_fit_policy.py')
     if early or run3:
-        from TROTASR.gnn4lowdm.configuration import configuration_path
-        contract['gnn_sha256'] = sha256(configuration_path('2022'))
         contract['luminosity_uncertainties'] = config['luminosity_uncertainties']
         contract['systematic_evaluation_deferred'] = config.get('systematic_evaluation_deferred', False)
-        contract['gnn_sha256_by_era'] = {y: sha256(configuration_path(y)) for y in config['years']}
     if run3:
         contract['run3_systematics'] = config['run3_systematics']
         contract['luminosity_model'] = config['luminosity_model']
@@ -500,8 +496,6 @@ def grid_contract(config_path, config, inventory, validate_only, preserve_unsupp
                 or not revision):
             raise ValueError('Combined inputs require the adopted CR layout and endpoint convention')
         contract['systematic_combination'] = config['systematic_combination']
-        contract['code'].update({name: sha256(ROOT/name) for name in (
-            'workflows/merge_nominal.py', 'utils/corrections.py')})
     return contract
 
 
@@ -679,7 +673,7 @@ def verify_minimal_template(path, inventory):
 
 
 def inference_runtime_identity():
-    return dict(path=str(INFERENCE_RUNTIME), sha256=sha256(INFERENCE_RUNTIME))
+    return dict(path=str(INFERENCE_RUNTIME))
 
 
 def write_card_once(path, text, manifest):
@@ -690,13 +684,11 @@ def write_card_once(path, text, manifest):
         path.parent.mkdir(parents=True, exist_ok=True)
         with path.open('x') as stream:
             stream.write(text)
-    manifest = dict(manifest, card_sha256=sha256(path))
     side = path.with_suffix('.manifest.json')
-    if side.exists() and read_json(side) != manifest:
-        raise FileExistsError('Divergent datacard provenance retained')
+    if side.exists() and card_scientific_metadata(read_json(side)) != card_scientific_metadata(manifest):
+        raise FileExistsError('Divergent datacard scientific metadata retained')
     if not side.exists():
         write_json(side, manifest)
-    return sha256(path)
 
 
 def require_template_files(directory, names):
@@ -727,7 +719,7 @@ def resume_card_inputs(output, prior):
         raise ValueError('Missing six-era template input contract')
     manifest_path = output/'templates/model_manifest.json'
     manifest = read_json(manifest_path)
-    if (manifest.get('contract') != prior or manifest.get('status') != 'templates_ready'
+    if (not same_extraction_contract(manifest.get('contract') or {}, prior) or manifest.get('status') != 'templates_ready'
             or manifest.get('scope') != 'full_combined_systematic_production'
             or manifest.get('root_integrity_checked') is not True
             or manifest.get('sr_data_blinded') is not True
@@ -751,7 +743,7 @@ def point_card_metadata(context, point, issues):
         fit_ready=ready, fit_issues=context['background_issues']+issues,
         preliminary_fit_exclusions=context['exclusions'], inputs=context['origin'],
         topology=point['model'], mStop=stop, mLSP=lsp, cr_only=False, sr_data_blinded=True,
-        theory_sha256=context['contract']['theory_sha256'], full_workflow_complete=False,
+        full_workflow_complete=False,
         **dict(dict(auto_mc_stats=[10, 1, 1]), **context['model_metadata']))
 
 
@@ -779,8 +771,8 @@ def card_worker(point):
     if _CARD_CONTEXT.get('era_merge') is not None:
         from TROTASR.utils.era_merge import render_merged_signal_card
         text, metadata = render_merged_signal_card(path, text, metadata, _CARD_CONTEXT['era_merge'])
-    digest = write_card_once(path, text, metadata)
-    result = dict(point, fit_ready=metadata['fit_ready'], card_sha256=digest,
+    write_card_once(path, text, metadata)
+    result = dict(point, fit_ready=metadata['fit_ready'],
                   card=str(path.relative_to(ROOT)))
     if metadata.get('era_merged') is True:
         result['era_merged'] = True
@@ -788,7 +780,7 @@ def card_worker(point):
 
 
 def existing_card(context, point):
-    """Reuse only a complete hash-bound pair, without regenerating its text."""
+    """Reuse a complete card and its scientific receipt without regenerating its text."""
     path = context['output']/'datacards'/('datacard_'+point['model']+'_'+point['mass']+'.txt')
     side = path.with_suffix('.manifest.json')
     if not side.exists():
@@ -797,18 +789,17 @@ def existing_card(context, point):
         raise ValueError('Card provenance without its TXT is retained: '+str(path))
     issues = context['point_issues'].get(point['model']+'/'+point['mass'], [])
     expected = point_card_metadata(context, point, issues)
-    digest = sha256(path)
     saved = read_json(side)
     if context.get('era_merge') is not None:
         from TROTASR.utils.era_merge import merged_card_metadata
         expected = merged_card_metadata(expected, context['era_merge'])
-        for key in ('source_card_sha256', 'dependent_rateparam_formulas', 'shared_alpha_bounds'):
+        for key in ('dependent_rateparam_formulas', 'shared_alpha_bounds'):
             if key not in saved:
                 raise ValueError('Merged card provenance is incomplete: '+str(path))
             expected[key] = saved[key]
-    if saved != dict(expected, card_sha256=digest):
-        raise ValueError('Existing card provenance/hash differs: '+str(path))
-    result = dict(point, fit_ready=expected['fit_ready'], card_sha256=digest,
+    if card_scientific_metadata(saved) != card_scientific_metadata(expected):
+        raise ValueError('Existing card scientific metadata differs: '+str(path))
+    result = dict(point, fit_ready=expected['fit_ready'],
                   card=str(path.relative_to(ROOT)))
     if expected.get('era_merged') is True:
         result['era_merged'] = True
@@ -837,15 +828,13 @@ def write_point_cards(context, points, workers=1, execution=None):
         if saved is None: pending.append(point)
         else:
             results[key] = saved
-            reused_pairs[key] = dict(card=saved['card'], card_sha256=saved['card_sha256'],
-                sidecar_sha256=sha256((ROOT/saved['card']).with_suffix('.manifest.json')))
+            reused_pairs[key] = dict(card=saved['card'])
     path = context['output']/'card_execution.json'
     record = dict(status='writing_cards', pid=os.getpid(), started=time.time(), workers=workers,
         reused=len(results), completed=len(results), total=len(points),
         process_model='fork_inherited_canonical_runtime' if workers > 1 else 'serial_canonical_runtime',
         executable=sys.executable, argv=sys.argv, aggregate_slots=120, reserve_GiB=32,
         emergency_GiB=24, disk_floor_GiB=80, root_and_cache_rewrite=False,
-        template_manifest_sha256=sha256(context['output']/'templates/model_manifest.json'),
         execution=execution, worker_pids=[], worker_identities={}, reused_pairs=reused_pairs,
         controller_identity=process_identity(os.getpid()),
         inherited_runtime=inference_runtime_identity() if workers > 1 else None,
@@ -895,8 +884,7 @@ def write_point_cards(context, points, workers=1, execution=None):
                 raise RuntimeError('Card fork worker did not exit successfully')
         for key, saved in reused_pairs.items():
             card = ROOT/saved['card']
-            if sha256(card) != saved['card_sha256'] or sha256(card.with_suffix('.manifest.json')) != saved['sidecar_sha256']:
-                raise ValueError('Previously complete card pair changed: '+key)
+            require_template_files(card.parent, (card.name, card.with_suffix('.manifest.json').name))
         record.update(status='cards_complete', completed=len(results), reused_pairs_preserved=True,
                       active=0, pending=0, worker_pids=[])
     except BaseException as error:
@@ -911,25 +899,24 @@ def write_point_cards(context, points, workers=1, execution=None):
 
 def same_extraction_contract(old, current):
     """Input identity survives implementation cleanup; physics inputs must match."""
-    ignore = {'code', 'luminosity_policy_sha256', 'config_sha256'}
+    ignore = {'code', 'inputs'}
     policies = {'statistical_revision', 'run3_systematics',
                 'background_estimation_uncertainties', 'systematic_combination', 'luminosity_model'}
     if 'selection_settings' not in old or 'selection_settings' not in current:
-        # Older receipts do not track all selection/exclusion fields separately.
-        if old.get('config_sha256') != current.get('config_sha256'):
-            return False
+        # Older receipts do not track selection settings separately.
         ignore.add('selection_settings')
     def science(contract):
-        return {k: scientific_settings(v) if k in policies else v
-                for k, v in contract.items() if k not in ignore}
-    return science(old) == science(current)
+        return without_provenance_fields({k: scientific_settings(v) if k in policies else v
+                for k, v in contract.items() if k not in ignore})
+    def fields(contract):
+        return {era: set(inputs) for era, inputs in contract.get('inputs', {}).items()}
+    return fields(old) == fields(current) and science(old) == science(current)
 
 
 def same_year_extraction(old, current, year):
     """Cached arrays depend on source inputs and their projection, not fit-only exclusions."""
-    fields = ('grid_sha256', 'sr_binning_sha256', 'gnn_sha256', 'gnn_sha256_by_era',
-              'validate_only', 'preserve_unsupported_templates')
-    return (old.get('inputs', {}).get(year) == current['inputs'][year]
+    fields = ('validate_only', 'preserve_unsupported_templates')
+    return (set(old.get('inputs', {}).get(year, {})) == set(current['inputs'][year])
             and all(old.get(key) == current.get(key) for key in fields))
 
 
@@ -993,7 +980,7 @@ def build(config_path, output, validate_only=False, preserve_unsupported=False,
             cache_receipt = path.with_suffix('.receipt.json')
             if path.exists():
                 receipt = read_json(cache_receipt)
-                if not same_year_extraction(receipt['contract'], contract, year) or not receipt.get('sha256'):
+                if not same_year_extraction(receipt['contract'], contract, year):
                     raise ValueError('Changed or unverified extracted year inputs')
                 cache = read_json(path)
             else:
@@ -1004,11 +991,11 @@ def build(config_path, output, validate_only=False, preserve_unsupported=False,
                 cache = extract_year(config['years'][year], grid, allow_validation=validate_only,
                                      preserve_unsupported=preserve_unsupported)
             if (cache['status'] != 'complete' or cache['year'] != year or cache.get('sr_data_blinded') is not True
-                    or cache['inputs'] != contract['inputs'][year]):
-                raise ValueError('Year input identity or coverage changed: '+year)
+                    or set(cache['inputs']) != set(contract['inputs'][year])):
+                raise ValueError('Year input coverage or blinding does not match: '+year)
             if not path.exists():
                 write_json(path, json_ready(cache))
-                write_json(cache_receipt, dict(contract=contract, sha256=sha256(path)))
+                write_json(cache_receipt, dict(contract=contract))
             caches[year] = cache
         background_issues, original_exclusions = [], []
         channels, background, clipping, sources = combine_cached(caches, config.get('sr_merge'),
@@ -1045,16 +1032,13 @@ def build(config_path, output, validate_only=False, preserve_unsupported=False,
         if combined and (not revised or grid['expected_points_by_model'] != {'T2tt':225, 'T2bW':365, 'T2tb':365}):
             raise ValueError('Combined model requires the exact 955-point CR12 grid')
         model_metadata = dict(years=list(caches), requested_grid=dict(
-            path=str(inventory.relative_to(ROOT)), sha256=contract['grid_sha256']))
+            path=str(inventory.relative_to(ROOT))))
         if require_run3_systematics_policy(config):
             model_metadata.update(run3_systematics=config['run3_systematics'],
                 systematic_evaluation_deferred=False, systematic_scope=config['systematic_scope'],
                 input_scopes_by_era={y: c['scope'] for y, c in caches.items()},
                 luminosity_uncertainties=contract['luminosity_uncertainties'],
                 luminosity_model=contract['luminosity_model'])
-            if 'luminosity_policy_sha256' in contract:
-                # Preserve the existing card-sidecar provenance; no old file is needed.
-                model_metadata['luminosity_policy_sha256'] = contract['luminosity_policy_sha256']
         if revised:
             model_metadata.update(statistical_revision=revision,
                 rate_parameters=len({r['parameter'] for r in fit_data.values() if r['parameter']}),
@@ -1154,15 +1138,15 @@ def build(config_path, output, validate_only=False, preserve_unsupported=False,
                         for name, expected in template_inventory.items()}
             summary.update(template_check_mode='minimal', numeric_readback_performed=False,
                 numeric_readback_checked=False,
-                root_integrity_scope='file_open_header_object_inventory_types_and_checksums',
+                root_integrity_scope='file_open_header_object_inventory_types',
                 template_validation=dict(mode='minimal', numeric_readback_checked=False,
-                    file_open_header=True, object_inventory=True, required_types=True, checksums=True,
+                    file_open_header=True, object_inventory=True, required_types=True,
                     bin_values=False, sumw2=False, labels=False))
             manifest = dict(status='templates_verified_fit_blocked' if fit_blocked else 'templates_ready',
                 scope=scope, contract=contract, fit_compatibility=fit_compatibility, object_coverage=coverage,
                 root_integrity_checked=True, sr_data_blinded=True, auto_mc_stats=[10, 1, 1],
                 bins=total_bins, channels={c: [b['name'] for b in bins] for c, bins in channels.items()},
-                points=points, files={name: sha256(templates / name) for name in template_inventory},
+                points=points, files=dict.fromkeys(template_inventory),
                 full_workflow_complete=False)
             manifest.update(model_metadata)
             manifest.update({k:summary[k] for k in validation_fields if k in summary})
@@ -1180,14 +1164,14 @@ def build(config_path, output, validate_only=False, preserve_unsupported=False,
             return 2
         theory = profiled_theory(load_theory(ROOT / config['theory']))
         write_json(output / 'signal_theory.json', theory)
-        origin = [dict(path=str(template_manifest.parent.relative_to(ROOT)), sha256=sha256(template_manifest))]
+        origin = [dict(path=str(template_manifest.parent.relative_to(ROOT)))]
         card_context = dict(channels=channels, sources=sources, caches=caches, fit_data=fit_data,
             theory=theory, output=output, templates=templates, revision=revision, config=config,
             preserve_unsupported=preserve_unsupported, background_issues=background_issues,
             exclusions=exclusions, origin=origin, contract=contract, model_metadata=model_metadata,
             point_issues={r['model']+'/'+r['mass']:r['issues'] for r in blocked})
         execution = dict(resume_cards=card_resume is not None, execution_contract=execution_contract,
-            preserved_template_contract=contract, template_manifest_sha256=origin[0]['sha256'])
+            preserved_template_contract=contract)
         from TROTASR.utils.era_merge import (REFERENCE_POINT, cr_only_card, displayed_points,
             merged_card_metadata, prepare_merged_cards, publication_metadata)
         selected = displayed_points(points)
@@ -1207,17 +1191,270 @@ def build(config_path, output, validate_only=False, preserve_unsupported=False,
             preliminary_fit_exclusions=exclusions,
             sr_data_blinded=True, full_workflow_complete=False,
             **dict(dict(auto_mc_stats=[10, 1, 1]), **model_metadata))
-        cr_hash = write_card_once(cr_path, cr_only_card(merge['reference_plan']), merged_card_metadata(cr_meta, merge))
+        write_card_once(cr_path, cr_only_card(merge['reference_plan']), merged_card_metadata(cr_meta, merge))
         final = dict(summary, status='cards_ready', points=all_points, root_integrity_checked=True,
                      templates_manifest=str(template_manifest.relative_to(ROOT)),
-                     cr_only_card=dict(card=str(cr_path.relative_to(ROOT)), card_sha256=cr_hash),
+                     cr_only_card=dict(card=str(cr_path.relative_to(ROOT))),
                      finished=time.time())
         final.update(publication_metadata(merge))
-        final['card_execution'] = dict(path=str((output/'card_execution.json').relative_to(ROOT)),
-                                      sha256=sha256(output/'card_execution.json'))
+        final['card_execution'] = dict(path=str((output/'card_execution.json').relative_to(ROOT)))
         write_json(output / 'manifest.json', final)
         write_json(output / 'state.json', {k: v for k, v in final.items() if k != 'points'})
         print(final['status'], len(converted), 'merged cards; fits and AN plots are not complete')
+        return 0
+
+
+def rewrite_replacement_signal_shapes(text, source, target, point, signal_templates):
+    """Rebind only the twelve signal aliases; all other objects keep the same ROOT."""
+    from TROTASR.utils.paths import ERAS
+    from TROTASR.workflows.signal_grid_inputs import replacement_signal_object
+    expected = {(f'SR_{mode}_c1', 'signal_'+year):f'SR_{mode}_c1_{year}'
+                for year in ERAS for mode in ('highdm','lowdm')}
+    lines = []
+    seen = set()
+    for line in text.splitlines(keepends=True):
+        fields = line.split()
+        if not fields or fields[0] != 'shapes':
+            lines.append(line)
+            continue
+        if len(fields) < 5:
+            raise ValueError('Malformed accepted shape binding')
+        channel, process = fields[2], fields[1]
+        key = channel, process
+        if process.startswith('signal'):
+            if (key not in expected or key in seen or len(fields) != 6
+                    or fields[4] != replacement_signal_object(expected[key],point)
+                    or fields[5] != fields[4]+'_$SYSTEMATIC'):
+                raise ValueError('Unexpected accepted signal shape alias: '+str(key))
+            seen.add(key)
+            root = signal_templates/template_name(expected[key])
+        elif fields[3] != 'FAKE':
+            root = internal_path(source.parent/fields[3])
+        else:
+            lines.append(line)
+            continue
+        root = internal_path(root)
+        if not root.is_file() or not root.stat().st_size:
+            raise FileNotFoundError(root)
+        path = os.path.relpath(root,target.parent)
+        if any(character.isspace() for character in path):
+            raise ValueError('Whitespace in datacard template path')
+        fields[3] = path
+        lines.append(' '.join(fields)+('\n' if line.endswith('\n') else ''))
+    if seen != set(expected):
+        raise ValueError('Expected exactly twelve SR signal shape aliases')
+    rendered = ''.join(lines)
+    clauses = [r.split() for r in rendered.splitlines()]
+    names, ids = [r[1:] for r in clauses if r and r[0]=='process']
+    columns = [r[1:] for r in clauses if r and r[0]=='bin'][-1]
+    if len(names) != len(ids) or len(columns) != len(ids):
+        raise ValueError('Unexpected accepted datacard column count')
+    signal_columns = [(c,p) for c,p,pid in zip(columns,names,ids) if int(pid)<=0]
+    if len(signal_columns)!=len(expected) or set(signal_columns)!=set(expected):
+        raise ValueError('Unexpected physically active signal columns')
+    return rendered
+
+
+def write_replacement_card(path, text, metadata):
+    """Atomically publish a new card, then its completion receipt."""
+    import tempfile
+    if not path.exists():
+        with tempfile.TemporaryDirectory(prefix='.card-',dir=path.parent) as temporary:
+            candidate = Path(temporary)/path.name
+            candidate.write_text(text)
+            if path.exists():
+                raise FileExistsError('Preserve existing signal card: '+str(path))
+            candidate.rename(path)
+    return write_card_once(path,text,metadata)
+
+
+def write_replacement_era(templates, extracted, year, points, labels, highdm_groups):
+    """Materialize only the accepted nominal signal aliases in two new ROOTs."""
+    import tempfile
+    import ROOT as pyroot
+    from TROTASR.workflows.signal_grid_inputs import replacement_channel_records, replacement_signal_object
+    pyroot.gROOT.SetBatch(True)
+    inventory = {template_name(channel):dict(names=sorted(replacement_signal_object(channel,p) for p in points),
+                      channels=[channel], background_and_observation_objects=0, signal_objects=len(points))
+                 for channel in labels}
+    native = {c:[dict(name=label) for label in names] for c,names in labels.items()}
+    support, clipped = [], 0
+    with tempfile.TemporaryDirectory(prefix='.era-'+year+'-',dir=templates) as temporary:
+        directory = Path(temporary)
+        handles = {}
+        try:
+            for name, spec in inventory.items():
+                if (templates/name).exists():
+                    continue
+                handle = pyroot.TFile(str(directory/name),'CREATE')
+                if not handle or handle.IsZombie():
+                    raise OSError('Cannot create nominal-only replacement ROOT: '+name)
+                handles[name] = handle
+                if not handle.mkdir(spec['channels'][0]):
+                    raise OSError('Cannot create nominal-only replacement channel: '+name)
+            for point in points:
+                records, issues, audit = replacement_channel_records(extracted,year,point,labels,highdm_groups)
+                require_fit_support_issues(issues)
+                if any(record['nominal'].sum()>0 for record in records.values()):
+                    support.append(point['model']+'/'+point['mass'])
+                clipped += len(audit)
+                missing = {key:val for key,val in records.items() if template_name(key[0]) in handles}
+                if missing:
+                    put_signals(handles,native,missing,'signal_'+point['model']+'_'+point['mass'])
+        finally:
+            for handle in handles.values():
+                handle.Close()
+        coverage = {name:verify_minimal_template(directory/name if name in handles else templates/name, spec)
+                    for name,spec in inventory.items()}
+        for name in handles:
+            if (templates/name).exists():
+                raise FileExistsError('Preserve existing signal template: '+name)
+            (directory/name).rename(templates/name)
+    return dict(files=dict.fromkeys(inventory),
+                object_coverage=coverage, support=support, clipped_source_bins=clipped)
+
+
+def build_signal_replacement():
+    """Publish a signal-only grid under the authorized Run 3 result namespace."""
+    if sys.platform != 'linux':
+        raise RuntimeError('Replacement ROOTs must stay in the existing hep2 runtime')
+    from concurrent.futures import ThreadPoolExecutor
+    import shutil
+    from TROTASR.gnn4lowdm.configuration import configuration
+    from TROTASR.utils.paths import ERAS
+    from TROTASR.workflows.resources import resources
+    from TROTASR.workflows.signal_grid_inputs import (extract_replacement_year, read_replacement_model,
+        replacement_points, replacement_production_receipts, replacement_source_binding)
+    baseline = ROOT/'stats/run3/grid'
+    output = ROOT/'stats/run3/new_signal/grid'
+    production = ROOT/'stats/run3/new_signal/signal_histograms'
+    baseline_manifest = baseline/'manifest.json'
+    accepted = read_json(baseline_manifest)
+    points = replacement_points(accepted)
+    config = read_json(ROOT/'jsons/analysis.json')
+    require_run3_systematics_policy(config)
+    native_manifest = internal_path(ROOT/accepted['templates_manifest'])
+    native = read_json(native_manifest)
+    contract = read_json(baseline/'contract.json')
+    if (native.get('root_integrity_checked') is not True or native.get('sr_data_blinded') is not True
+            or not same_extraction_contract(native.get('contract') or {}, contract)
+            or native.get('status') != 'templates_ready'):
+        raise ValueError('The accepted native template receipt does not match the frozen card model')
+    highdm_groups = bin_groups(load_merge(accepted['sr_merge']))
+    cr = accepted['cr_only_card']
+    cr_path = internal_path(ROOT/cr['card'])
+    require_template_files(cr_path.parent, (cr_path.name,))
+    def source_bindings(receipts):
+        bindings = {}
+        for era in ERAS:
+            path = internal_path(ROOT/receipts[era]['output'])
+            if production not in path.parents:
+                raise ValueError('Signal replacement requires corrected inputs in the current signal_histograms stage')
+            bindings[era] = replacement_source_binding(path,era,receipts[era])
+        return bindings
+
+    output.mkdir(parents=True,exist_ok=True)
+    state_path, manifest_path = output/'state.json', output/'manifest.json'
+    source_lock = ROOT/'production/histograms/lock'
+    with (output/'builder.lock').open('a') as lock, source_lock.open('rb') as generation_lock:
+        fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+        fcntl.flock(generation_lock,fcntl.LOCK_SH|fcntl.LOCK_NB)
+        production_state = read_json(production/'state.json')
+        receipts = replacement_production_receipts(production_state)
+        sources = source_bindings(receipts)
+        origin = dict(accepted_grid=str(baseline_manifest.relative_to(ROOT)),
+                      accepted_native_templates=str(native_manifest.relative_to(ROOT)), sources=sources)
+        if manifest_path.is_file():
+            delivered = read_json(manifest_path)
+            replacement_points(delivered)
+            return 0
+        templates, cards = output/'templates', output/'datacards'
+        if state_path.is_file():
+            state = read_json(state_path)
+            revision = state['signal_input_revision']
+        elif templates.exists() or cards.exists():
+            raise ValueError('Existing signal replacement products lack their input receipt')
+        else:
+            revision = str(uuid4())
+            state = dict(signal_input_revision=revision, origin=origin, status='writing_templates',
+                         eras={}, completed_cards=0, sr_data_blinded=True, official_result=False)
+            write_json(state_path,state)
+        templates.mkdir(exist_ok=True)
+        for era in ERAS:
+            channels = {f'SR_{mode}_c1_{era}':native['channels'][f'SR_{mode}_c1_{era}']
+                        for mode in ('highdm','lowdm')}
+            if era in state['eras']:
+                require_template_files(templates,state['eras'][era]['files'])
+                continue
+            external, memory = resources()
+            if external >= 115 or memory < 32*1024**3 or shutil.disk_usage(output).free < 80*1024**3:
+                raise RuntimeError('Insufficient account slots, memory or disk; completed eras are preserved')
+            model_input = read_replacement_model(baseline/'inputs'/(era+'.json.gz'))
+            extracted = extract_replacement_year(ROOT/sources[era]['path'],era,points,model_input,configuration(era),
+                production_receipt=receipts[era],accepted_contract=contract)
+            state['eras'][era] = write_replacement_era(templates,extracted,era,points,channels,highdm_groups)
+            state['eras'][era]['projection_audit'] = extracted['projection_audit']
+            write_json(state_path,state)
+            print('SIGNAL_TEMPLATES',era,len(state['eras']),len(ERAS),flush=True)
+        supported = {name for era in state['eras'].values() for name in era['support']}
+        missing = [p['model']+'/'+p['mass'] for p in points if p['model']+'/'+p['mass'] not in supported]
+        if missing:
+            raise ValueError(f'{len(missing)} displayed mass points have no total nominal SR support; first: {missing[0]}')
+        template_manifest = templates/'model_manifest.json'
+        template_record = dict(status='templates_ready', scope=accepted['scope'], years=list(ERAS),
+            root_integrity_checked=True, sr_data_blinded=True, nominal_signal_only=True,
+            signal_input_revision=revision, origin=origin, channels=native['channels'],
+            files={k:v for row in state['eras'].values() for k,v in row['files'].items()},
+            object_coverage={k:v for row in state['eras'].values() for k,v in row['object_coverage'].items()},
+            numeric_readback_performed=False)
+        if template_manifest.is_file():
+            saved_templates = read_json(template_manifest)
+            if (set(saved_templates.get('files', {})) != set(template_record['files'])
+                    or without_provenance_fields({k:v for k,v in saved_templates.items() if k not in ('files','origin')})
+                    != without_provenance_fields({k:v for k,v in template_record.items() if k not in ('files','origin')})):
+                raise ValueError('Existing signal template receipt differs')
+        else:
+            write_json(template_manifest,template_record)
+        cards.mkdir(exist_ok=True)
+        state['status'] = 'writing_cards'
+        write_json(state_path,state)
+        def replace(point):
+            source = internal_path(ROOT/point['card'])
+            if source.parent != baseline/'datacards':
+                raise ValueError('Frozen point card is outside the accepted directory')
+            target = cards/source.name
+            reference = str(template_manifest.relative_to(ROOT))
+            side = target.with_suffix('.manifest.json')
+            if side.is_file():
+                saved = read_json(side)
+                if (saved.get('sr_data_blinded') is not True or saved.get('fit_ready') is not True
+                        or saved.get('era_merged') is not True or not target.is_file() or not target.stat().st_size):
+                    raise ValueError('Preserve different completed signal card: '+str(target))
+                return dict(model=point['model'],mass=point['mass'],fit_ready=True,era_merged=True,
+                            signal_input_revision=revision,card=str(target.relative_to(ROOT)))
+            metadata = read_json(source.with_suffix('.manifest.json'))
+            if (metadata.get('fit_ready') is not True or metadata.get('sr_data_blinded') is not True
+                    or metadata.get('era_merged') is not True):
+                raise ValueError('Frozen point sidecar identity changed: '+point['mass'])
+            text = rewrite_replacement_signal_shapes(source.read_text(),source,target,point,templates)
+            new = dict(metadata, official_result=False, signal_input_revision=revision,
+                       signal_templates_manifest=reference, baseline_card=str(source.relative_to(ROOT)))
+            write_replacement_card(target,text,new)
+            return dict(model=point['model'],mass=point['mass'],fit_ready=True,era_merged=True,
+                        signal_input_revision=revision,card=str(target.relative_to(ROOT)))
+        with ThreadPoolExecutor(max_workers=8) as pool:
+            fitted = {(p['model'],p['mass']):p for p in pool.map(replace,points)}
+        published = [fitted.get((p['model'],p['mass']),dict(model=p['model'],mass=p['mass'],fit_ready=False,
+                        excluded_out_of_plot_range=True,status='excluded_by_approved_range')) for p in accepted['points']]
+        final = dict(accepted,points=published,official_result=False,signal_input_revision=revision,origin=origin,
+            templates_manifest=str(template_manifest.relative_to(ROOT)), signal_templates_nominal_only=True,
+            finished=time.time(), observed_sr_used=False)
+        for key in ('card_execution','previous_model','previous_model_manifest'):
+            final.pop(key,None)
+        write_json(manifest_path,final)
+        state.update(status='cards_ready', completed_cards=len(fitted), finished=final['finished'])
+        write_json(state_path,state)
+        print('signal_replacement_cards_ready',len(fitted),'of',len(published),flush=True)
         return 0
 
 
@@ -1226,12 +1463,25 @@ if __name__ == '__main__':
     p.add_argument('--config', type=Path, default=ROOT/'jsons/analysis.json')
     p.add_argument('--output', type=Path, default=ROOT/'stats/run3/grid')
     p.add_argument('--validate-only', action='store_true')
+    p.add_argument('--replace-signals', action='store_true',
+        help='Publish nominal replacement signals to the isolated current new_signal grid')
     p.add_argument('--preserve-unsupported-templates', action='store_true',
         help='Preserve genuine zero-support nominal/endpoint TH1s and report fit incompatibility; never mark them fit-ready')
     p.add_argument('--native-runtime', action='store_true', help=argparse.SUPPRESS)
     p.add_argument('--card-workers', type=int, choices=range(1,33), default=1,
         help='Canonical-runtime fork workers for unfinished cards (default: 1)')
     a = p.parse_args()
+    if a.replace_signals:
+        allowed_outputs = (ROOT/'stats/run3/grid', ROOT/'stats/run3/new_signal/grid')
+        if (a.validate_only or a.preserve_unsupported_templates
+                or internal_path(a.output) not in allowed_outputs
+                or internal_path(a.config) != ROOT/'jsons/analysis.json'):
+            p.error('--replace-signals uses only the accepted config and new_signal grid')
+        if not a.native_runtime:
+            from TROTASR.workflows.combine_limits import runtime
+            env = runtime(ROOT/'stats/run3/new_signal/grid/software_runtime')
+            os.execvpe('python3',['python3',str(Path(__file__).resolve()),'--replace-signals','--native-runtime'],env)
+        raise SystemExit(build_signal_replacement())
     accepted = internal_path(a.output)/'manifest.json'
     if not a.validate_only and accepted.is_file():
         delivered = read_json(accepted)

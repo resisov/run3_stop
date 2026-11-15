@@ -242,13 +242,14 @@ def donor_workspace(run_root):
     return path
 
 
-def workspace_step(stage, source, directory, run_root):
+def workspace_step(stage, source, directory, run_root, *, products=None):
     """Run each ROOT-intensive conversion step in a single downstream process."""
+    products = run_root if products is None else products
     import ROOT as root
     root.gROOT.SetBatch(True)
     root.RooMsgService.instance().setGlobalKillBelow(root.RooFit.ERROR)
     if stage == "prepare":
-        if source.parent != run_root / "grid/datacards":
+        if source.parent != products / "grid/datacards":
             raise ValueError("Workspace input is not an accepted Run 3 grid card")
         print(prepare_card(root, source, directory / "card.txt", directory / "signal.root"))
     elif stage == "link":
@@ -256,7 +257,7 @@ def workspace_step(stage, source, directory, run_root):
         donor = donor_workspace(run_root)
         with (donor.parent / "controller.lock").open("rb") as owner:
             fcntl.flock(owner, fcntl.LOCK_SH | fcntl.LOCK_NB)
-            marker = read_json(run_root / "limits/model.json")
+            marker = read_json(products / "limits/model.json")
             stat = donor.stat()
             if (marker.get("model_revision") != MODEL_REVISION or
                     stat.st_mtime_ns != marker["photon_cr_workspace_mtime_ns"] or

@@ -4,7 +4,7 @@ import unittest
 from unittest.mock import patch
 import numpy as np
 from TROTASR.utils.paths import ROOT
-from TROTASR.utils.io import read_json, sha256
+from TROTASR.utils.io import read_json
 from TROTASR.utils.statistics_inputs import build_inputs
 from TROTASR.utils.statistical_templates import assemble,card_text,json_ready
 from TROTASR.tests.test_statistics_inputs import fixture
@@ -72,8 +72,6 @@ def model_records(year=2024):
 
 def raw_fixture():
     payload=fixture()[0]
-    payload['contract'].update(sr_binning_sha256=sha256(sr_binning_path()),
-        configuration_sha256=sha256(ROOT/'gnn4lowdm/config.json'))
     source=payload['histograms']['lowdm']['nominal']
     for region in ('DY2E','DY2M'):
         source[region]=deepcopy(source['LLCR'])
@@ -109,8 +107,7 @@ class PredictionTests(unittest.TestCase):
                     'systematic_combination','background_estimation_uncertainties','preliminary'):
             payload[key] = deepcopy(analysis[key])
         config_for = lambda year: early if year in ERAS[:4] else late
-        with patch.object(plots,'sha256',return_value='fixture-layout'), \
-             patch.object(plots,'load_merge',return_value=merge), \
+        with patch.object(plots,'load_merge',return_value=merge), \
              patch.object(plots,'configuration',side_effect=config_for), \
              patch.object(inputs,'configuration',side_effect=config_for):
             for era_index, year in enumerate(ERAS, 1):
@@ -206,24 +203,20 @@ class PredictionTests(unittest.TestCase):
         self.assertEqual(blocks[0]['annotation'],r'Low-$\Delta m$ LLCR')
         self.assertEqual(len(r['background']),10)
 
-    def test_yearly_controls_bind_current_rz_ignore_retired_histogram_hash(self):
+    def test_yearly_controls_use_current_prefit_labels(self):
         payload=dict(status='complete',scope='full_nominal_production',prediction_stage='prefit',
-            rate_initials_applied=True,sr_observations_included=False,channels=model_records(),
-            source_inputs={'2024':dict(hists=dict(sha256='hist'),rz_low=dict(sha256='rz'))})
-        result=current_card_controls(payload,2024,'hist','rz')
+            rate_initials_applied=True,sr_observations_included=False,channels=model_records())
+        result=current_card_controls(payload,2024)
         self.assertEqual(set(result),{'LLCR','QCDCR','GCR'})
         for region,r in result.items():
             np.testing.assert_allclose(r['background'],payload['channels']['2024/'+region+'/lowdm']['background'])
             self.assertTrue(all(not b['unit_area'] for b in flat_blocks(r,'lowdm',region)))
-        self.assertEqual(set(current_card_controls(payload,2024,'replaced_hist','rz')),set(result))
-        with self.assertRaisesRegex(ValueError,'differ'):current_card_controls(payload,2024,'hist','wrong_rz')
         payload['prediction_stage']='postfit'
-        with self.assertRaisesRegex(ValueError,'prefit'):current_card_controls(payload,2024,'hist','rz')
+        with self.assertRaisesRegex(ValueError,'prefit'):current_card_controls(payload,2024)
 
     def test_five_final_card_plots_exact_years_and_signal_choices(self):
         payload=dict(schema='trotasr_card_prediction_plot_v1',status='complete',
             scope='full_nominal_production',prediction_stage='prefit',sr_observations_included=False,
-            sr_binning_sha256=sha256(sr_binning_path()),gnn_sha256=sha256(ROOT/'gnn4lowdm/config.json'),
             rate_initials_applied=True,channels=json_ready({**model_records(),**model_records(2025)}))
         result=prepare_cards(payload)
         self.assertEqual(len(result),5)

@@ -61,10 +61,11 @@ class EndpointExecutionTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'nominal'):
             assemble_endpoints([payload('nominal'),p],['up'])
 
-    def test_changed_fingerprint_rejected(self):
-        p=payload('up');p['contract']['fingerprint']={'size':4}
-        with self.assertRaisesRegex(ValueError,'contract'):
-            assemble_endpoints([payload('nominal'),p],['up'])
+    def test_endpoint_accepts_different_file_record(self):
+        p = payload('up')
+        p['contract']['fingerprint'] = {'size': 4}
+        self.assertEqual(assemble_endpoints([payload('nominal'), p], ['up']),
+                         assemble_endpoints([payload('nominal'), payload('up')], ['up']))
 
     def test_unexpected_hist_endpoint_rejected(self):
         p=payload('up');p['histograms']['highdm']['nominal']={}

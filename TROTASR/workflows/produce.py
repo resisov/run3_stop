@@ -11,11 +11,13 @@ import fcntl
 import json
 import os
 from pathlib import Path
+import re
 import shlex
 import shutil
 import subprocess
 import sys
 import tarfile
+import threading
 import time
 from concurrent.futures import ThreadPoolExecutor, wait, FIRST_COMPLETED
 
@@ -29,10 +31,15 @@ if not __package__:
                'exec python3 -m TROTASR produce ' + shlex.join(sys.argv[1:]))
     raise SystemExit(subprocess.call(['/bin/bash', '--noprofile', '--norc', '-c', command]))
 
-from TROTASR.utils.paths import ROOT, ERAS, EARLY_ERAS
-from TROTASR.utils.io import write_json
+from TROTASR.utils.paths import ROOT, ERAS, EARLY_ERAS, internal_path
+from TROTASR.utils.io import read_json, write_json
 
 PRODUCTION = ROOT / 'production'
+SIGNAL_NORM_BASIS = "registered_mc_runs_sumw_v1"
+REPLACEMENT_SIGNAL_POPULATION = "regenerated_signal_uuid"
+REPLACEMENT_SIGNAL_NAME = re.compile(
+    r"signal_[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}\.root", re.IGNORECASE)
+REPLACEMENT_FILES_PER_ERA = 187
 EOS_ROOT = '/eos/user/t/taiwoo/run3_stop/decaf/TROTASR'
 PROXY = '/eos/user/t/taiwoo/decaf/x509up_u147757'
 LCG = '/cvmfs/sft.cern.ch/lcg/views/LCG_110/x86_64-el9-gcc15-opt/setup.sh'
@@ -164,10 +171,10 @@ def submit(eras, limit=None):
     print(result.stdout.strip(), 'jobs', len(pending), flush=True)
 
 
-def worker(number, phase=None):
+def worker(number, phase=None, corrected_binding=None):
     task = read(PRODUCTION / 'tasks.json')['tasks'][number]
     if phase == 'histograms':
-        return signal_histogram(task)
+        return signal_histogram(task, corrected_binding=corrected_binding)
     era, source = task['era'], task['source']
     directory = PRODUCTION / 'work' / era
     directory.mkdir(parents=True, exist_ok=True)
@@ -215,7 +222,7 @@ def worker(number, phase=None):
     run(['xrdfs', 'root://eosuser.cern.ch', 'mkdir', '-p', destination])
     for path in (output, output.with_suffix('.json')):
         # JSON is published last and acts as the complete-file receipt.
-        run(['xrdcp', '--force', '--cksum', 'adler32', path,
+        run(['xrdcp', '--force', path,
              'root://eosuser.cern.ch/' + destination + '/' + path.name])
     print(json.dumps(dict(status='published', era=era, name=task['name'],
                           events=metadata['events_read'], retained=metadata['events_written'])), flush=True)
@@ -240,7 +247,7 @@ def collect_file(task, ready):
             path = target.with_suffix(suffix)
             if not path.exists():
                 pending = path.with_name(path.name + '.partial')
-                run(['xrdcp', '--force', '--cksum', 'adler32',
+                run(['xrdcp', '--force',
                      'root://eosuser.cern.ch/' + remote + suffix, pending])
                 os.replace(pending, path)
         metadata = validate_output(target, task['era'], task['source'])
@@ -449,7 +456,204 @@ def efficiencies(workers=8, limit=None):
         write_json(state_path, state)
 
 
-def signal_histogram(task):
+def _corrected_signal_directory():
+    return ROOT / 'stats/run3/new_signal/signal_histograms'
+
+
+def _replacement_fingerprint(path):
+    if internal_path(path) != path or not path.is_file():
+        raise ValueError("Expected a canonical replacement signal file: " + str(path))
+    stamp = path.stat()
+    return dict(inode=stamp.st_ino, mtime_ns=stamp.st_mtime_ns, size=stamp.st_size)
+
+
+def _replacement_basis(era, tasks, names, runs, normalization, xsecs, shown):
+    import numpy as np
+
+    scope = normalization.get("signal_replacement", {})
+    datasets = {str(i): row["dataset"] for i, row in normalization["datasets"].items()
+                if row.get("is_signal") and not row.get("is_data")}
+    lumi = float(normalization["luminosity_pb"])
+    if (datasets != names or scope.get("files") != len(tasks)
+            or not np.isfinite(lumi) or lumi <= 0):
+        raise ValueError("Replacement signal Runs normalization inventory disagrees for " + era)
+    factors = {}
+    for point in sorted(shown):
+        saved = normalization["signal_mass_points"].get(point, {})
+        sumw = runs.get(point, 0.)
+        xs = xsecs.get(int(saved.get("mStop", -1)), 0.)
+        expected_factor = xs * lumi / sumw if sumw else 0.
+        if (not np.isfinite(expected_factor) or expected_factor <= 0
+                or not np.isclose(saved.get("sumw_mass_point", np.nan), sumw, rtol=2e-12, atol=0.)
+                or not np.isclose(saved.get("normalization_factor", np.nan) or np.nan,
+                                  expected_factor, rtol=2e-12, atol=0.)):
+            raise ValueError("Replacement signal Runs normalization disagrees for " + era + "/" + point)
+        factors[point] = {"normalization_factor": expected_factor}
+    return dict(basis=SIGNAL_NORM_BASIS, era=era, datasets=names,
+                signal_population=REPLACEMENT_SIGNAL_POPULATION, norm=dict(signal_mass_points=factors))
+
+
+def _replacement_signal_inputs():
+    """Validate the approved UUID collection and exact retained/Run coverage."""
+    from collections import defaultdict
+    import numpy as np
+    from TROTASR.utils.signal_models import signal_mass_from_genmodel, signal_mass_key, signal_topology
+    from TROTASR.workflows.validation_regions import layout
+
+    prod = PRODUCTION
+    manifest, collection = (read_json(prod / name) for name in ("tasks.json", "collection.json"))
+    records = manifest["tasks"]
+    n = REPLACEMENT_FILES_PER_ERA * len(ERAS)
+    if (tuple(manifest["eras"]) != ERAS or manifest["files"] != REPLACEMENT_FILES_PER_ERA
+            or len(records) != n or collection.get("completed") != n or collection.get("total") != n
+            or collection.get("active") != 0 or collection.get("errors") != {}):
+        raise ValueError("The six-era replacement signal collection is not complete")
+    tasks = {era: [] for era in ERAS}
+    names, runs, lfns = ({era: {} for era in ERAS}, {era: defaultdict(float) for era in ERAS},
+                         {era: set() for era in ERAS})
+    for record in records:
+        era, source = record["era"], record["source"]
+        lfn, source_events = source["name"], source["nevents"]
+        stem = record["name"]
+        filename = stem + ".root"
+        if (era not in tasks or lfn in lfns[era] or stem != "signal_" + Path(lfn).stem
+                or not REPLACEMENT_SIGNAL_NAME.fullmatch(filename) or type(source_events) is not int
+                or source_events <= 0):
+            raise ValueError("Unexpected replacement signal task")
+        lfns[era].add(lfn)
+        relative = Path("inputs") / era / filename
+        metadata_path = relative.with_suffix(".json")
+        receipt = read_json(prod / "collected" / era / metadata_path.name)
+        fingerprint = _replacement_fingerprint(ROOT / relative)
+        metadata = read_json(ROOT / metadata_path)
+        files, datasets = metadata["files"], metadata["datasets"]
+        retained = metadata["events_written"]
+        if (receipt.get("status") != "collected" or receipt.get("era") != era
+                or receipt.get("bytes") != fingerprint["size"] or receipt.get("events") != source_events
+                or metadata.get("status") != "complete" or metadata.get("analysis_era") != era
+                or metadata.get("input_nanoaod_version") != 15 or metadata.get("events_read") != source_events
+                or type(retained) is not int or not 0 <= retained <= source_events
+                or len(files) != 1 or len(datasets) != 1):
+            raise ValueError("Unexpected replacement signal receipt or metadata: " + str(relative))
+        dsid, ds = next(iter(datasets.items()))
+        dataset = source["dataset"]
+        weight_sums = ds.get("signal_sumw_by_genmodel", {})
+        if (ds.get("dataset") != dataset or ds.get("is_signal") is not True
+                or ds.get("is_data") is not False or not weight_sums
+                or names[era].setdefault(str(dsid), dataset) != dataset):
+            raise ValueError("Invalid replacement signal dataset metadata: " + str(relative))
+        for branch, value in weight_sums.items():
+            topology, mass, lsp = signal_mass_from_genmodel(branch)
+            if topology != signal_topology(dataset) or mass is None or lsp is None or not np.isfinite(float(value)):
+                raise ValueError("Invalid replacement signal Runs sum: " + str(relative))
+            runs[era][signal_mass_key(topology, mass, lsp)] += float(value)
+        tasks[era].append(dict(year=era, input=str(relative), metadata=str(metadata_path),
+                               entries=retained, fingerprint=fingerprint,
+                               signal_population=REPLACEMENT_SIGNAL_POPULATION))
+    if (any(len(t) != REPLACEMENT_FILES_PER_ERA for t in tasks.values())
+            or any(lfns[era] != lfns[ERAS[0]] for era in ERAS)
+            or len({t["input"] for group in tasks.values() for t in group}) != n):
+        raise ValueError("Incomplete or duplicate replacement signal source coverage")
+    xsecs = {int(r["mStop"]): float(r["xsec_pb"])
+             for r in read_json(ROOT / "stats/stop_xsec_13p6TeV.json")["records"]}
+    bases = {}
+    for era in ERAS:
+        normalization = read_json(prod / "histograms" / f"normalization_{era}.json.gz")
+        bases[era] = _replacement_basis(era, tasks[era], names[era], runs[era], normalization, xsecs, layout(era)[2])
+    return tasks, bases
+
+
+def _replacement_task_source(task):
+    era = str(task['year'])
+    relative = Path(task['input'])
+    if (task.get('signal_population') != REPLACEMENT_SIGNAL_POPULATION
+            or era not in ERAS or relative.parent != Path('inputs') / era
+            or not REPLACEMENT_SIGNAL_NAME.fullmatch(relative.name)
+            or task.get('metadata') != str(relative.with_suffix('.json'))):
+        raise ValueError('Replacement signal requires its registered ROOT and metadata identities')
+    output = ROOT / relative
+    if _replacement_fingerprint(output)['size'] != task['fingerprint']['size']:
+        raise ValueError('Unexpected replacement signal ROOT size: ' + str(relative))
+    return output
+
+
+def _corrected_signal_inputs(tasks):
+    """Reuse the same verified UUID ROOT/Run registry as corrected nominal VR."""
+    from TROTASR.utils.io import read_json
+    inventory, _ = _replacement_signal_inputs()
+    by_path = {t['input']: t for group in inventory.values() for t in group}
+    norm = {}
+    for era in ERAS:
+        accepted = ROOT / 'estimations' / f'normalization_{era}.json.gz'
+        generated = PRODUCTION / 'histograms' / accepted.name
+        fields = ('luminosity_pb', 'signal_mass_points')
+        installed, measured = read_json(accepted), read_json(generated)
+        if any(installed[k] != measured[k] for k in fields):
+            raise ValueError('Published and production Runs normalization differ: ' + era)
+        norm[era] = dict(path=str(accepted.relative_to(ROOT)))
+    bindings = [dict(task=by_path[f"inputs/{task['era']}/{task['name']}.root"],
+                     normalization=norm[task['era']]) for task in tasks]
+    if len(bindings) != len(by_path) or len({t['task']['input'] for t in bindings}) != len(by_path):
+        raise ValueError('Corrected signal histogram inventory differs from the accepted UUID collection')
+    return bindings, norm
+
+
+def _corrected_histogram_result(result, binding, source):
+    task = binding['task']
+    contract = result['contract']
+    if (result.get('status') != 'complete' or result.get('sr_data_blinded') is not True
+            or result.get('highdm_sr_source_axes') != 'exact_nb_exact_topology_native_recoil_v2'
+            or contract.get('input') != str(source) or str(contract.get('year')) != str(task['year'])
+            or contract.get('fingerprint', {}).get('size') != task['fingerprint']['size']
+            or contract.get('shape_mode') != 'cms_trota_jme'
+            or contract.get('nominal_calibrations_only') is not True
+            or contract.get('signal_sr_only') is not True
+            or contract.get('nominal_trota_friend') is not None or contract.get('lhe_weights') is not None
+            or contract.get('variations') != ['nominal']
+            or result['audit']['events_read'] != task['entries']
+            or not result['input_metadata']
+            or any(row.get('is_signal') is not True or row.get('is_data') is not False
+                   for row in result['input_metadata'].values())
+            or result['physical_histograms']
+            or any(set(endpoint) != {'nominal'} or set(endpoint['nominal']) != {'SR'}
+                   for endpoint in result['histograms'].values())):
+        raise ValueError('Incomplete or misbound corrected signal histogram: ' + str(source))
+    return contract
+
+
+def _corrected_signal_histogram(task, binding):
+    from TROTASR.utils.histogramming import build
+    from TROTASR.utils.io import read_json
+
+    era, name = task['era'], task['name']
+    relative = Path('inputs') / era / (name + '.root')
+    normalization = ROOT / 'estimations' / f'normalization_{era}.json.gz'
+    source = _replacement_task_source(binding['task'])
+    if source != ROOT / relative:
+        raise ValueError('Incorrect registered UUID signal input')
+    output = _corrected_signal_directory() / era / (name + '.json.gz')
+    if internal_path(output) != output:
+        raise ValueError('Corrected signal output does not resolve to its canonical path')
+    if output.exists():
+        result = read_json(output)
+    else:
+        # Do not modify accepted ROOT metadata; the original publication
+        # finalized it. Do not read stored TROTA, friend ROOTs or NanoAOD.
+        result = build(source, era, output, normalization_path=normalization,
+            shape_mode='cms_trota_jme', use_trota_friend=False, nominal_calibrations_only=True,
+            signal_sr_only=True, support_only=False, variations=('nominal',))
+    _corrected_histogram_result(result, binding, source)
+    if _replacement_task_source(binding['task']) != source:
+        raise ValueError('Corrected signal ROOT changed during event processing')
+    return result
+
+
+def signal_histogram(task, *, corrected_binding=None):
+    if corrected_binding is not None:
+        result = _corrected_signal_histogram(task, corrected_binding)
+        print('CORRECTED_SIGNAL_HISTOGRAM', task['era'], task['name'],
+              result['audit']['events_read'], flush=True)
+        return
     from TROTASR.utils.histogramming import build
     from TROTASR.utils.nanoaod_production import complete_metadata
     from TROTASR.utils.io import read_json
@@ -470,39 +674,104 @@ def signal_histogram(task):
     print('SIGNAL_HISTOGRAM', era, task['name'], result['audit']['events_read'], flush=True)
 
 
-def register_efficiencies():
-    """Update existing asset records for the twelve newly measured payloads."""
-    from TROTASR.utils.io import read_json, sha256
-    changes = {f'estimations/{kind}eff{era}.merged': sha256(ROOT / 'estimations' / f'{kind}eff{era}.merged')
-               for era in ERAS for kind in ('btag', 'topwtag')}
-    def update(value):
-        if isinstance(value, list):
-            for item in value: update(item)
-        elif isinstance(value, dict):
-            target = value.get('target')
-            if isinstance(target, str) and target in changes and 'sha256' in value:
-                value['sha256'] = changes[target]
-            for item in value.values():
-                if isinstance(item, (dict, list)): update(item)
-    for name in ('assets.json', 'early_run3_assets.json'):
-        path = ROOT / 'jsons' / name
-        payload = read_json(path)
-        update(payload)
-        write_json(path, payload)
+def _merge_corrected_signals(era, inputs):
+    """Merge only corrected nominal signal payloads, never current physics inputs."""
+    from TROTASR.utils.io import file_identity, read_json, scientific_settings
+    from TROTASR.workflows.merge_nominal import merge_datasets, merge_histograms
+    from TROTASR.workflows.validation_regions import _available_memory
+
+    directory = _corrected_signal_directory()
+    destination = directory / f'systematics_{era}.json.gz'
+    if internal_path(destination) != destination:
+        raise ValueError('Corrected signal merge does not resolve to its canonical path')
+    histograms, physical, datasets = {}, {}, {}
+    physics = None
+    identities = []
+    norm = None
+    events = 0
+    for binding in inputs:
+        if _available_memory() < 24*1024**3 or shutil.disk_usage(directory).free < 80*1024**3:
+            raise RuntimeError('Corrected signal merge stopped for hep2 memory or disk emergency')
+        if str(binding['task']['year']) != era:
+            raise ValueError('Wrong target era in corrected signal merge')
+        task = binding['task']
+        source = ROOT / task['input']
+        path = directory / era / (source.stem + '.json.gz')
+        identity = file_identity(path)
+        result = read_json(path)
+        contract = _corrected_histogram_result(result, binding, source)
+        if path.stat().st_size != identity[2]:
+            raise RuntimeError('Corrected signal histogram size changed while reading ' + str(path))
+        identities.append(dict(path=str(path.relative_to(ROOT)), identity=identity))
+        common = scientific_settings({k: v for k, v in contract.items() if k not in (
+            'input', 'fingerprint', 'registered_signal_source')})
+        if physics is None:
+            physics, norm = common, binding['normalization']
+        elif physics != common:
+            raise ValueError('Corrected nominal signal contracts differ for ' + era)
+        merge_histograms(histograms, result['histograms'])
+        merge_histograms(physical, result['physical_histograms'])
+        merge_datasets(datasets, result['input_metadata'])
+        events += result['audit']['events_read']
+    if (len(inputs) != REPLACEMENT_FILES_PER_ERA or set(histograms) != {'highdm', 'lowdm'}
+            or not datasets or len({row['path'] for row in identities}) != len(inputs)):
+        raise ValueError('Incomplete corrected signal merge for ' + era)
+    if any(record['identity'][2] != (ROOT / record['path']).stat().st_size for record in identities):
+        raise ValueError('Corrected signal inputs changed before merge publication: ' + era)
+    coverage = dict(full_input_inventory=True, expected_files=len(inputs), completed_files=len(inputs),
+                    failed_files=0, expected_events=sum(task['task']['entries'] for task in inputs),
+                    processed_events=events)
+    replacement = dict(files=len(inputs), datasets=len(datasets), retained_events=events,
+                       signal_uncertainties=False, background_and_data_unchanged=True,
+                       central='cms_trota_jme_nominal', signal_input='regenerated_signal_uuid')
+    scope = 'full_cms_trota_jme_production'
+    payload = dict(status='complete', scope=scope, contract=physics, coverage=coverage,
+                   sr_data_blinded=True, highdm_sr_source_axes='exact_nb_exact_topology_native_recoil_v2',
+                   histograms=histograms, physical_histograms=physical, input_metadata=datasets,
+                   signal_replacement=replacement)
+    if destination.exists():
+        if scientific_settings(read_json(destination)) != scientific_settings(payload):
+            raise ValueError('Preserve divergent completed corrected signal merge: ' + era)
+    else:
+        write_json(destination, payload)
+    return dict(status='complete', output=str(destination.relative_to(ROOT)),
+                output_identity=list(file_identity(destination)), coverage=coverage, physics_contract=physics,
+                scope=scope, normalization=norm, signal_replacement=replacement,
+                files=len(inputs), datasets=len(datasets), retained_events=events)
 
 
-def refresh_signals(workers=8, limit=None):
+def refresh_signals(workers=8, limit=None, *, corrected_nominal=False):
     """Follow measurement with nominal histograms and signal-only replacement."""
     from TROTASR.utils.normalization import prepare_signal_replacement
     from TROTASR.workflows.merge_nominal import replace_signals
-    directory = PRODUCTION / 'histograms'
+    production_directory = PRODUCTION / 'histograms'
+    directory = _corrected_signal_directory() if corrected_nominal else production_directory
+    if corrected_nominal:
+        if ROOT != Path('/hep2-scratch/twkim/postprocessing/TROTASR') or limit is not None:
+            raise ValueError('Corrected nominal signal production requires the full accepted hep2 collection')
+        if internal_path(directory) != directory:
+            raise ValueError('Corrected signals require a canonical output directory')
+        from TROTASR.utils.io import file_identity
+        from TROTASR.workflows.validation_regions import _resource_room
+    production_directory.mkdir(parents=True, exist_ok=True)
     directory.mkdir(parents=True, exist_ok=True)
     (directory / 'logs').mkdir(exist_ok=True)
-    with (directory / 'lock').open('a+') as lock:
+    with (production_directory / 'lock').open('a+') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         lock.seek(0); lock.truncate(); lock.write(str(os.getpid())); lock.flush()
         state_path = directory / 'state.json'
         state = read(state_path) if state_path.exists() else dict(completed={}, errors={}, merged={})
+        tasks_path = PRODUCTION / 'tasks.json'
+        tasks = read(tasks_path)['tasks']
+        bindings = norm = None
+        if corrected_nominal:
+            bindings, norm = _corrected_signal_inputs(tasks)
+            registration = dict(signal_input='regenerated_signal_uuid', central='cms_trota_jme_nominal',
+                                normalization_by_era=norm)
+            if state_path.exists() and any(state.get(k) != registration[k]
+                    for k in ('signal_input', 'central')):
+                raise ValueError('Preserve corrected signal results with a different population or central view')
+            state.update(registration)
         state['previous_failed_files'] = len(state.get('errors', {}))
         state['errors'] = {}
         state.update(pid=os.getpid(), start_ticks=Path('/proc/self/stat').read_text().split()[21],
@@ -514,14 +783,27 @@ def refresh_signals(workers=8, limit=None):
             complete = read(PRODUCTION / 'efficiencies/state.json')
             if complete['status'] != 'complete':
                 raise RuntimeError('Full-source efficiency measurement has not completed')
-        register_efficiencies()
-        tasks = read(PRODUCTION / 'tasks.json')['tasks']
-        for era in ERAS:
-            sidecars = [ROOT / 'inputs' / era / (task['name'] + '.json')
-                        for task in tasks if task['era'] == era]
-            prepare_signal_replacement(era, sidecars, directory / f'normalization_{era}.json.gz')
+        if not corrected_nominal:
+            for era in ERAS:
+                sidecars = [ROOT / 'inputs' / era / (task['name'] + '.json')
+                            for task in tasks if task['era'] == era]
+                prepare_signal_replacement(era, sidecars, directory / f'normalization_{era}.json.gz')
         selected = list(enumerate(tasks))
         if limit is not None: selected = selected[:limit]
+        if corrected_nominal:
+            for key, receipt in state['completed'].items():
+                task = tasks[int(key)]
+                path = directory / task['era'] / (task['name'] + '.json.gz')
+                if (receipt.get('era') != task['era']
+                        or not path.is_file() or receipt.get('identity', [None, None, path.stat().st_size])[2]
+                        != path.stat().st_size):
+                    raise ValueError('Preserve a divergent corrected signal completion receipt: ' + str(path))
+            for era, receipt in state['merged'].items():
+                path = directory / f'systematics_{era}.json.gz'
+                if (not path.is_file()
+                        or receipt.get('output_identity', [None, None, path.stat().st_size])[2]
+                        != path.stat().st_size):
+                    raise ValueError('Preserve a divergent corrected signal merge receipt: ' + str(path))
         pending = [(n,t) for n,t in selected if str(n) not in state['completed']]
         attempts, futures = {}, {}
         state.update(status='histograms', total=len(tasks), selected=len(selected))
@@ -532,6 +814,17 @@ def refresh_signals(workers=8, limit=None):
             arguments = command.split()
             if not all(flag in arguments for flag in ('TROTASR', 'produce', '--worker', '--phase', 'histograms')):
                 continue
+            if ('--corrected-nominal' in arguments) != corrected_nominal:
+                if corrected_nominal:
+                    # A legacy worker left by an interrupted controller may
+                    # still finish its accepted output/metadata.
+                    try:
+                        process = Path('/proc') / pid
+                        if process.joinpath('cwd').resolve() == ROOT.parent:
+                            raise RuntimeError('An inherited legacy signal histogram worker is still active')
+                    except FileNotFoundError:
+                        continue
+                continue
             try:
                 process = Path('/proc') / pid
                 if process.joinpath('cwd').resolve() != ROOT.parent:
@@ -541,10 +834,21 @@ def refresh_signals(workers=8, limit=None):
             except (FileNotFoundError, ProcessLookupError):
                 continue
         state['inherited_workers'] = {str(n): pid for n,(pid,ticks) in inherited.items()}
+        stopped = threading.Event()
+        child_lock = threading.Lock()
+        children_started = {}
+
+        def stop_own_workers():
+            with child_lock:
+                stopped.set()
+                for child in children_started.values():
+                    if child.poll() is None:
+                        child.kill()
+
         def execute(number, task):
             if number in inherited:
                 pid, ticks = inherited[number]
-                while True:
+                while not stopped.is_set():
                     try:
                         status = Path('/proc',str(pid),'stat').read_text().split()
                     except FileNotFoundError:
@@ -553,10 +857,31 @@ def refresh_signals(workers=8, limit=None):
                         break
                     time.sleep(3)
             log = directory / 'logs' / (task['era'] + '_' + task['name'] + '.log')
+            output = directory / task['era'] / (task['name'] + '.json.gz')
+            command = [sys.executable, '-m', 'TROTASR', 'produce', '--worker', str(number),
+                       '--phase', 'histograms']
             with log.open('a') as stream:
-                run([sys.executable, '-m', 'TROTASR', 'produce', '--worker', str(number),
-                     '--phase', 'histograms'], cwd=ROOT.parent, stdout=stream, stderr=subprocess.STDOUT)
-            return dict(era=task['era'], output=str((directory/task['era']/(task['name']+'.json.gz')).relative_to(ROOT)))
+                if corrected_nominal:
+                    command += ['--corrected-nominal', '--input-binding', json.dumps(bindings[number])]
+                    with child_lock:
+                        if stopped.is_set():
+                            raise RuntimeError('Corrected signal resource stop; preserve completed results')
+                        child = subprocess.Popen(command, cwd=ROOT.parent, stdout=stream, stderr=subprocess.STDOUT)
+                        children_started[number] = child
+                    try:
+                        if child.wait():
+                            raise subprocess.CalledProcessError(child.returncode, command)
+                    finally:
+                        with child_lock:
+                            children_started.pop(number, None)
+                else:
+                    run(command, cwd=ROOT.parent, stdout=stream, stderr=subprocess.STDOUT)
+            result = dict(era=task['era'], output=str(output.relative_to(ROOT)))
+            if corrected_nominal:
+                result['identity'] = list(file_identity(output))
+            return result
+
+        resource_stop = None
         with ThreadPoolExecutor(max_workers=workers) as pool:
             while pending or futures:
                 memory = {line.split(':')[0]:int(line.split()[1])*1024
@@ -568,13 +893,24 @@ def refresh_signals(workers=8, limit=None):
                                 or int(row.split()[0]) in state['inherited_workers'].values())
                             and row.split()[3].startswith('python')]
                 worker_memory = 3*1024**3
+                if corrected_nominal:
+                    worker_memory = 6*1024**3
+                    slots, memory_budget = _resource_room(reserve_vr_data=True, reserve_bytes=32*1024**3)
+                    if memory['MemAvailable'] < 24*1024**3 or shutil.disk_usage(ROOT).free < 80*1024**3:
+                        resource_stop = ('memory_stopped' if memory['MemAvailable'] < 24*1024**3
+                                         else 'disk_stopped')
+                        stop_own_workers()
+                        break
                 resident_credit = sum(min(row[2]*1024, worker_memory) for row in children)
                 disk_room = shutil.disk_usage(ROOT).free > 80*1024**3
                 while pending and len(futures) < workers and disk_room:
                     next_count = len(futures) + 1
                     reservation = max(0, next_count*worker_memory - resident_credit)
                     process_count = len(process_rows) + max(0, next_count-len(children)) + 2
-                    if memory['MemAvailable'] <= 32*1024**3 + reservation or process_count > 120:
+                    if corrected_nominal:
+                        if reservation > memory_budget or max(0, next_count-len(children)) > slots:
+                            break
+                    elif memory['MemAvailable'] <= 32*1024**3 + reservation or process_count > 120:
                         break
                     number, task = pending.pop(0)
                     attempts[number] = attempts.get(number,0)+1
@@ -582,9 +918,9 @@ def refresh_signals(workers=8, limit=None):
                 state.update(time=time.time(), active=[n for n,t in futures.values()])
                 write_json(state_path, state)
                 if not futures:
-                    if pending: time.sleep(30); continue
+                    if pending: time.sleep(3 if corrected_nominal else 30); continue
                     break
-                done, _ = wait(futures, timeout=30, return_when=FIRST_COMPLETED)
+                done, _ = wait(futures, timeout=3 if corrected_nominal else 30, return_when=FIRST_COMPLETED)
                 for future in done:
                     number, task = futures.pop(future)
                     try:
@@ -594,6 +930,16 @@ def refresh_signals(workers=8, limit=None):
                         state['errors'][str(number)] = dict(error=str(exc)[-1000:], attempts=attempts[number])
                         if attempts[number] < 3: pending.append((number,task))
                     print('SIGNALS',len(state['completed']),'/',len(selected),'failed',len(state['errors']),flush=True)
+        if resource_stop:
+            for future, (number, _) in futures.items():
+                try:
+                    result = future.result()
+                except Exception:
+                    continue
+                state['completed'][str(number)] = result
+            state.update(status=resource_stop, active=[], time=time.time())
+            write_json(state_path, state)
+            raise RuntimeError('Corrected signal production paused by ' + resource_stop)
         state.update(active=[],time=time.time())
         if state['errors']:
             state['status']='failed'; write_json(state_path,state)
@@ -607,10 +953,20 @@ def refresh_signals(workers=8, limit=None):
                 memory = {line.split(':')[0]:int(line.split()[1])*1024
                           for line in Path('/proc/meminfo').read_text().splitlines()}
                 processes = subprocess.check_output(['ps','-u',str(os.getuid()),'-o','pid='], text=True)
-                slots = min(len(remaining), workers, 118-len(processes.splitlines()),
-                            int((memory['MemAvailable']-32*1024**3)//(16*1024**3)))
+                if corrected_nominal:
+                    processes_free, memory_budget = _resource_room(reserve_vr_data=True, reserve_bytes=32*1024**3)
+                    slots = min(len(remaining), workers, processes_free-1, memory_budget//(16*1024**3))
+                else:
+                    slots = min(len(remaining), workers, 118-len(processes.splitlines()),
+                                int((memory['MemAvailable']-32*1024**3)//(16*1024**3)))
                 if slots > 0 and shutil.disk_usage(ROOT).free > 80*1024**3:
                     break
+                if corrected_nominal and (memory['MemAvailable'] < 24*1024**3
+                                          or shutil.disk_usage(ROOT).free < 80*1024**3):
+                    state.update(status='memory_stopped' if memory['MemAvailable'] < 24*1024**3
+                                 else 'disk_stopped', active=[], time=time.time())
+                    write_json(state_path, state)
+                    raise RuntimeError('Corrected signal merge resource stop; retained results are reusable')
                 time.sleep(30)
             if remaining:
                 state['merge_workers'] = slots
@@ -619,8 +975,14 @@ def refresh_signals(workers=8, limit=None):
                 with ProcessPoolExecutor(max_workers=slots, mp_context=multiprocessing.get_context('spawn')) as pool:
                     merges = {}
                     for era in remaining:
-                        paths=[directory/era/(t['name']+'.json.gz') for t in tasks if t['era']==era]
-                        merges[pool.submit(replace_signals,era,paths,directory/f'normalization_{era}.json.gz')] = era
+                        if corrected_nominal:
+                            group = [bindings[n] for n, task in enumerate(tasks) if task['era'] == era]
+                            from TROTASR.workflows.produce import _merge_corrected_signals as merge
+                            future = pool.submit(merge, era, group)
+                        else:
+                            paths=[directory/era/(t['name']+'.json.gz') for t in tasks if t['era']==era]
+                            future = pool.submit(replace_signals,era,paths,directory/f'normalization_{era}.json.gz')
+                        merges[future] = era
                     for future in as_completed(merges):
                         era = merges[future]
                         try:
@@ -641,6 +1003,13 @@ def refresh_signals(workers=8, limit=None):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    if sys.argv[1:2] == ['signal-histograms']:
+        corrected = argparse.ArgumentParser(prog='python -m TROTASR produce signal-histograms',
+                                            allow_abbrev=False)
+        corrected.add_argument('--corrected-nominal', action='store_true', required=True)
+        corrected.add_argument('--workers', type=int, default=8, choices=range(1, 71))
+        opts = corrected.parse_args(sys.argv[2:])
+        return refresh_signals(opts.workers, corrected_nominal=True)
     actions = parser.add_mutually_exclusive_group(required=True)
     actions.add_argument('--prepare', action='store_true')
     actions.add_argument('--submit', action='store_true')
@@ -652,13 +1021,18 @@ def main():
     parser.add_argument('--era', choices=ERAS, action='append')
     parser.add_argument('--limit', type=int)
     parser.add_argument('--phase', choices=('parent', 'trota', 'histograms'))
+    parser.add_argument('--corrected-nominal', action='store_true', help=argparse.SUPPRESS)
+    parser.add_argument('--input-binding', type=json.loads, help=argparse.SUPPRESS)
     parser.add_argument('--follow', action='store_true')
     parser.add_argument('--workers', type=int, default=16, choices=range(1, 71),
                         metavar='1..70', help='Maximum concurrent workers; resource limits may reduce dispatch (default: 16; use 8 for efficiencies)')
     args = parser.parse_args()
+    if (args.corrected_nominal != (args.input_binding is not None) or
+            args.corrected_nominal and (args.worker is None or args.phase != 'histograms')):
+        parser.error('Corrected nominal workers require a controller-owned UUID binding')
     if args.prepare: prepare()
     elif args.submit: submit(args.era or ERAS, args.limit)
-    elif args.worker is not None: worker(args.worker, args.phase)
+    elif args.worker is not None: worker(args.worker, args.phase, args.input_binding)
     elif args.recover is not None: recover(args.recover, args.workers)
     elif args.efficiencies: efficiencies(args.workers, args.limit)
     elif args.refresh_signals: refresh_signals(args.workers, args.limit)

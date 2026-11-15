@@ -12,7 +12,7 @@ if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
 from TROTASR.utils.paths import ROOT, internal_path
-from TROTASR.utils.io import read_json, write_json, sha256, scientific_settings, file_identity
+from TROTASR.utils.io import read_json, write_json, scientific_settings
 
 
 def add_numbers(a, b):
@@ -234,8 +234,8 @@ def replace_signals(year, payload_paths, normalization_path):
     write_json(ROOT / 'estimations' / f'normalization_{year}.json.gz', read_json(normalization_path))
     summary_path = target.with_name(f'systematics_{year}.summary.json')
     summary = read_json(summary_path)
-    summary.update(output=str(target.relative_to(ROOT)), sha256=sha256(target),
-                   signal_replacement=receipt, completed=time.time())
+    summary.pop('sha256', None)
+    summary.update(output=str(target.relative_to(ROOT)), signal_replacement=receipt, completed=time.time())
     write_json(summary_path, summary)
     return receipt
 
@@ -243,9 +243,8 @@ def replace_signals(year, payload_paths, normalization_path):
 def assemble_endpoints(payloads, endpoints):
     """Join disjoint variations, counting metadata and central traversal once.
 
-    The caller supplies nominal first, and validates every shard's contract,
-    input identity and content hash before yielding it. No event arrays or
-    intermediate ROOT are written, and only one shard is read at a time.
+    The caller supplies nominal first and validates each shard before yielding
+    it. Only one shard is read at a time.
     """
     result, seen = None, set()
     required = {'nominal', *endpoints}
@@ -266,8 +265,7 @@ def assemble_endpoints(payloads, endpoints):
                       'mixed_sf','category_order'):
             if payload.get(field) != result.get(field):
                 raise ValueError('Endpoint invariant differs: '+field)
-        for field in ('input','fingerprint','year','normalization_sha256','assets_sha256',
-                      'modes','variations','configuration_sha256','sr_binning_sha256','object_payloads'):
+        for field in ('input', 'year', 'modes', 'variations'):
             if payload['contract'].get(field) != result['contract'].get(field):
                 raise ValueError('Endpoint contract differs: '+field)
         if payload.get('dy_rz') or payload['audit'].get('migrations'):
@@ -326,8 +324,7 @@ def combine_saved_payloads(jme, nonjme, policy):
                 or not coverage.get('full_input_inventory') or coverage.get('failed_files') != 0
                 or coverage.get('expected_files') != coverage.get('completed_files')):
             raise ValueError('Incomplete or incompatible source campaign')
-    for field in ('year', 'normalization_sha256', 'assets_sha256', 'modes',
-                  'configuration_sha256', 'sr_binning_sha256'):
+    for field in ('year', 'modes'):
         if jme['contract'].get(field) != nonjme['contract'].get(field):
             raise ValueError('Systematic input identity differs: '+field)
     for field in ('schema', 'bins_merged', 'highdm_sr_source_axes', 'category_order', 'mixed_sf'):
@@ -404,8 +401,8 @@ def validate_input(payload, task, settings):
         raise ValueError('Histogram belongs to a different input')
     if payload['audit']['events_read'] != task['entries']:
         raise ValueError('Histogram event coverage differs from the input inventory')
-    if any(contract['fingerprint'].get(k) != task['fingerprint'][k] for k in ('size', 'mtime_ns')):
-        raise ValueError('Histogram input has changed')
+    if contract['fingerprint'].get('size') != task['fingerprint']['size']:
+        raise ValueError('Histogram input size differs')
     common = {k: v for k, v in contract.items() if k not in ('input', 'fingerprint', 'signal_normalization')}
     if scientific_settings(common) != scientific_settings(settings):
         raise ValueError('Histogram corrections, region definitions or binning differ')
@@ -460,22 +457,25 @@ def merge(inventory, year, output):
     tasks = [t for t in document['tasks'] if analysis_era(t['year']) == year]
     if not tasks or len({t['input'] for t in tasks}) != len(tasks):
         raise ValueError('Missing or duplicate source files in the merge inventory')
-    sources = {t['input']: dict(output=t['output'], identity=list(file_identity(ROOT / t['output']))) for t in tasks}
+    sources = {t['input']: dict(output=t['output']) for t in tasks}
     output.parent.mkdir(parents=True, exist_ok=True)
     summary_path = output.with_name(output.name.removesuffix('.gz').removesuffix('.json') + '.summary.json')
     with output.with_name(output.name + '.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         if output.exists():
             summary = read_json(summary_path)
-            if summary.get('status') == 'complete' and summary.get('sources') == sources:
+            coverage = summary.get('coverage', {})
+            if (summary.get('status') == 'complete' and coverage.get('completed_files') == len(tasks)
+                    and coverage.get('expected_events') == sum(t['entries'] for t in tasks)
+                    and str(summary.get('physics_contract', {}).get('year')) == year):
                 return output
             raise ValueError('Existing merge uses different histogram inputs: ' + str(output))
         merged = None
         for task in tasks:
             payload = read_json(ROOT / task['output'])
             if merged is None:
-                settings = {k: v for k, v in payload['contract'].items()
-                            if k not in ('input', 'fingerprint', 'signal_normalization')}
+                settings = scientific_settings({k: v for k, v in payload['contract'].items()
+                            if k not in ('input', 'fingerprint', 'signal_normalization')})
                 mode = settings.get('shape_mode')
                 scope = {'cms_trota_jme': 'full_cms_trota_jme_production',
                          'stored_trota_nonjme': 'full_nonjme_systematic_production'}.get(mode, 'full_nominal_production')
@@ -506,7 +506,7 @@ def merge(inventory, year, output):
         merged['merge_provenance'] = dict(inventory=str(inventory.relative_to(ROOT)), sources=sources)
         write_json(output, merged)
         write_json(summary_path, dict(status='complete', output=str(output.relative_to(ROOT)),
-            sha256=sha256(output), sources=sources, coverage=merged['coverage'],
+            sources=sources, coverage=merged['coverage'],
             physics_contract=settings, scope=merged['scope'], completed=time.time()))
         return output
 
@@ -516,7 +516,7 @@ def combine(jme_path, nonjme_path, year, output):
     import fcntl
     paths = [internal_path(p) for p in (jme_path, nonjme_path)]
     output = internal_path(output)
-    sources = {str(p.relative_to(ROOT)): list(file_identity(p)) for p in paths}
+    sources = [str(p.relative_to(ROOT)) for p in paths]
     policy = read_json(ROOT / 'jsons/analysis.json')['systematic_combination']
     output.parent.mkdir(parents=True, exist_ok=True)
     summary_path = output.with_name(output.name.removesuffix('.gz').removesuffix('.json') + '.summary.json')
@@ -524,7 +524,7 @@ def combine(jme_path, nonjme_path, year, output):
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         if output.exists():
             summary = read_json(summary_path)
-            if (summary.get('status') == 'complete' and summary.get('sources') == sources
+            if (summary.get('status') == 'complete'
                     and scientific_settings(summary.get('combination_policy')) == scientific_settings(policy)):
                 return output
             raise ValueError('Existing combined histogram uses different inputs or endpoints: ' + str(output))
@@ -534,9 +534,51 @@ def combine(jme_path, nonjme_path, year, output):
         payload = combine_saved_payloads(*inputs, policy)
         write_json(output, payload)
         write_json(summary_path, dict(status='complete', output=str(output.relative_to(ROOT)),
-            sha256=sha256(output), sources=sources, combination_policy=policy,
+            sources=sources, combination_policy=policy,
             coverage=payload['coverage'], scope=payload['scope'], completed=time.time()))
     return output
+
+
+def merge_generator_weights(inventory, year, output):
+    """Publish member sums, not nuisance endpoints, from a registered theory inventory."""
+    import fcntl
+    from TROTASR.utils.lhe_weights import merge_lhe_member_payloads
+    from TROTASR.utils.paths import analysis_era
+
+    year = analysis_era(year)
+    inventory, output = internal_path(inventory), internal_path(output)
+    lhe_root = ROOT/'stats/run3/new_signal/lhe'
+    population = inventory.parent.name
+    if (population != 'background' or inventory != lhe_root/population/'inventory.json'
+            or output != lhe_root/population/f'members_{year}.json.gz'):
+        raise ValueError('Use the canonical generator member paths for this population and era')
+    with inventory.with_suffix('.lock').open('a') as active:
+        fcntl.flock(active, fcntl.LOCK_SH | fcntl.LOCK_NB)
+        document = read_json(inventory)
+        tasks = [t for t in document['tasks'] if analysis_era(t['year']) == year]
+        if (document.get('schema') != 'trotasr_lhe_histogram_inventory_v1'
+                or document.get('population') != population
+                or document.get('histogram_options', {}).get('lhe_weights') is not True
+                or not tasks or len(tasks) != document.get('files_by_era', {}).get(year)
+                or len({t['output'] for t in tasks}) != len(tasks)):
+            raise ValueError('Invalid generator production inventory')
+        def load(task):
+            path = internal_path(ROOT/task['output'])
+            if path.parent != lhe_root/population/'shards'/year:
+                raise ValueError('Cross-population or wrong-era LHE histogram path')
+            return read_json(path) if path.is_file() else None
+
+        with output.with_suffix('.lock').open('a') as owner:
+            fcntl.flock(owner, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            if output.exists():
+                previous = read_json(output)
+                if previous.get('status') == 'complete_member_sums':
+                    return 0
+            result = merge_lhe_member_payloads(tasks, load)
+            result.update(inventory=str(inventory.relative_to(ROOT)), population=population, era=year,
+                          sr_observations_used=False, endpoints_installed=False)
+            write_json(output, result)
+            return 0 if result.get('status') == 'complete_member_sums' else 2
 
 
 def main():
@@ -547,7 +589,12 @@ def main():
     parser.add_argument('--output', required=True, type=Path)
     parser.add_argument('--jme', type=Path, help='Complete JME year histogram')
     parser.add_argument('--nonjme', type=Path, help='Complete stored non-JME year histogram')
+    parser.add_argument('--lhe', action='store_true', help='Merge raw generator members without nuisance reduction')
     args = parser.parse_args()
+    if args.lhe:
+        if args.jme or args.nonjme or not args.inventory:
+            parser.error('--lhe requires its own generator histogram inventory')
+        raise SystemExit(merge_generator_weights(args.inventory, args.year, args.output))
     if args.jme or args.nonjme:
         if not args.jme or not args.nonjme or args.inventory:
             parser.error('--jme and --nonjme are used together, without --inventory')

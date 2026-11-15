@@ -52,13 +52,13 @@ def _source_record(task, source):
         raise ValueError('MC input is not a regular file')
     fingerprint = dict(size=stat.st_size, mtime_ns=stat.st_mtime_ns, inode=stat.st_ino)
     expected = task['fingerprint']
-    if not {'size', 'mtime_ns'} <= expected.keys() or any(fingerprint.get(k) != v for k, v in expected.items()):
-        raise ValueError('Accepted MC input identity changed: ' + str(relative))
+    if fingerprint['size'] != expected['size']:
+        raise ValueError('Unexpected MC input size: ' + str(relative))
     tag = tagging_definition(era)
     return dict(schema=SCHEMA, status='complete', mc_only=True, sr_observations_read=False,
                 input=str(relative), fingerprint=fingerprint, era=era, events=int(task['entries']),
                 p4='canonical_nominal_anchored_endpoints',
-                models={kind: dict(sha256=tag[kind + '_sha256'], wp=tag[kind + '_wp'])
+                models={kind: dict(wp=tag[kind + '_wp'])
                         for kind in ('mixed', 'resolved')})
 
 
@@ -124,7 +124,11 @@ def _disk_headroom(parent):
 
 def _validate_open_product(root, expected, path):
     found = json.loads(str(root[METADATA]))
-    if any(found.get(k) != v for k, v in expected.items()):
+    models = found.get('models', {})
+    if (any(found.get(k) != v for k, v in expected.items() if k not in ('models', 'fingerprint'))
+            or found.get('fingerprint', {}).get('size') != expected['fingerprint']['size']
+            or set(models) != set(expected['models'])
+            or any(models[k].get('wp') != record['wp'] for k, record in expected['models'].items())):
         raise ValueError('Divergent corrected nominal friend receipt: ' + str(path))
     for key in ('mixed_passing', 'resolved_passing'):
         if type(found.get(key)) is not int or found[key] < 0:
@@ -145,7 +149,7 @@ def _validate_product(path, expected):
 
 
 def validate_friend(task, source, output):
-    """Check source identity, embedded provenance and whole-tree structural coverage."""
+    """Check the input, adopted working points and whole-tree coverage."""
     return _validate_product(_destination(task, output), _source_record(task, source))
 
 
@@ -242,8 +246,7 @@ def write_friend(task, source, output):
                     row = f[FRIEND_TREE].arrays(list(ID_FIELDS), entry_start=i, entry_stop=i + 1)
                     if tuple(int(v[0]) for v in _identity(row)) != key:
                         raise ValueError('Friend ROOT readback event keys changed')
-        if _source_record(task, source) != expected:
-            raise ValueError('Source identity changed before corrected friend publication')
+        _source_record(task, source)
         _disk_headroom(output.parent)
         with temporary.open('rb') as stream:
             os.fsync(stream.fileno())

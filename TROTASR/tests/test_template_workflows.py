@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 from TROTASR.tests.test_statistics_inputs import fixture, SR_LAYOUT, use_synthetic_sr_layout, SYNTHETIC_LAYOUT_DIGEST
-from TROTASR.utils.io import write_json, read_json, sha256
+from TROTASR.utils.io import write_json, read_json
 from TROTASR.utils.paths import ROOT
 from TROTASR.utils.statistics_inputs import build_inputs
 from TROTASR.utils.statistical_templates import assemble
@@ -28,8 +28,7 @@ def assert_stale_digest_ignored(testcase, module, invoke, require_coverage=False
         coverage=dict(full_input_inventory=True, failed_files=0, expected_files=1, completed_files=1),
         scope='full_nominal_production',
         contract=dict(year='2025', sr_binning_sha256='current-digest', configuration_sha256='current-digest'))
-    with patch.object(module,'read_json',side_effect=lambda p:inputs[p.name]), \
-         patch.object(module,'sha256',return_value='current-digest'):
+    with patch.object(module,'read_json',side_effect=lambda p:inputs[p.name]):
         with patch.object(module,'build_inputs',side_effect=ModelReached), testcase.assertRaises(ModelReached):
             invoke(names)
         inputs['sgamma']['provenance']['campaign_year'] = '2024'
@@ -71,13 +70,13 @@ class TemplateWorkflowTests(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.folder=Path(self.temp.name)
         values=fixture()
-        values[0]['contract'].update(sr_binning_sha256=sha256(SR_LAYOUT) if SR_LAYOUT.is_file() else SYNTHETIC_LAYOUT_DIGEST,
-                                    configuration_sha256=sha256(ROOT/'gnn4lowdm/config.json'))
+        values[0]['contract'].update(sr_binning_sha256=SYNTHETIC_LAYOUT_DIGEST,
+                                    configuration_sha256='legacy-gnn')
         self.paths=[]
         for name,value in zip(('hists','sgamma','rz_high','rz_low','double_ratio'),values):
             path=self.folder/(name+'.json.gz')
             if name!='hists':
-                value['provenance']['hist_input_sha256']=sha256(self.paths[0])
+                value['provenance']['hist_input_sha256']='legacy-input'
             write_json(path,value)
             self.paths.append(path)
         self.output=self.folder/'templates'
@@ -88,14 +87,14 @@ class TemplateWorkflowTests(unittest.TestCase):
     def test_validate_only_is_reusable_and_never_claims_root_success(self):
         with patch.object(sys,'argv',self.argv+['--validate-only']),redirect_stdout(io.StringIO()):
             main()
-            before=sha256(self.output/'model_manifest.json')
+            before=(self.output/'model_manifest.json').read_bytes()
             main()
         manifest=read_json(self.output/'model_manifest.json')
         self.assertEqual(manifest['status'],'validated_inputs_not_root_templates')
         self.assertFalse(manifest['root_integrity_checked'])
         self.assertEqual(sum(manifest['bins'].values()),270)
         self.assertFalse(list(self.folder.rglob('*.root')))
-        self.assertEqual(before,sha256(self.output/'model_manifest.json'))
+        self.assertEqual(before,(self.output/'model_manifest.json').read_bytes())
         self.assertFalse(manifest['full_workflow_complete'])
 
     def test_two_year_packing_keeps_540_bins_and_16_channels(self):

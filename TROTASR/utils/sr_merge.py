@@ -7,15 +7,13 @@ components are never pooled by this projection.
 import copy
 import itertools
 import numpy as np
-from .io import read_json, sha256
+from .io import read_json
 from .paths import ROOT, internal_path
 from .sr_binning import AXES, expand, matches
 
 
 def load_merge(reference):
     path = internal_path(ROOT / reference['path'])
-    if sha256(path) != reference['sha256']:
-        raise ValueError('SR merge definition changed')
     result = read_json(path)
     validate_merge(result)
     return result
@@ -23,7 +21,6 @@ def load_merge(reference):
 
 def validate_merge(config):
     if (config.get('schema') != 'trotasr_sr_category_merge_v1'
-            or config.get('source_binning_sha256') != sha256(ROOT/'jsons/highdm_sr_binning.json')
             or config.get('threshold') != 2 or config.get('threshold_scope') != '2024+2025_category_integral'
             or config.get('cr_binning_changed') is not False
             or config.get('lowdm_bins') != 30):

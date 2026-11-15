@@ -12,7 +12,7 @@ import numpy as np
 import awkward as ak
 import correctionlib
 from .paths import ROOT, era_year, analysis_era, EARLY_ERAS
-from .io import sha256, read_json
+from .io import read_json
 
 TAGS = {'2022': ('Summer22_22Sep2023_V4', 'Summer22_22Sep2023_JRV2'),
         '2022EE': ('Summer22EE_22Sep2023_V4', 'Summer22EE_22Sep2023_JRV2'),
@@ -31,9 +31,8 @@ def correction_set(year, prefix):
     manifest = read_json(ROOT/'scales/JME/manifest.json')['years'][str(year)]
     record = manifest[prefix]
     relative = record['path']
-    if (TAGS[year] != (manifest['jec_tag'], manifest['jer_tag'])
-            or sha256(ROOT/relative) != record['sha256']):
-        raise ValueError('JME payload provenance mismatch: ' + relative)
+    if TAGS[year] != (manifest['jec_tag'], manifest['jer_tag']):
+        raise ValueError('JME calibration tags differ from the adopted era: ' + relative)
     return correctionlib.CorrectionSet.from_file(str(ROOT/relative))
 
 

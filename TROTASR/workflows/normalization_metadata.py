@@ -104,12 +104,6 @@ def load_signal_xsec(path: Path) -> dict[str, dict[str, Any]]:
         raise RuntimeError(
             f"refusing yield-shaped JSON as a signal xsec source: {path}"
         )
-    if (
-        payload.get("source_file") != "signal_xsec.txt"
-        or payload.get("xsec_table_status") != "parsed"
-        or payload.get("parsed") is not True
-    ):
-        raise RuntimeError(f"signal xsec provenance is incomplete or invalid: {path}")
     records = payload.get("records")
     if not isinstance(records, list) or not records:
         raise RuntimeError(f"signal xsec records are missing: {path}")

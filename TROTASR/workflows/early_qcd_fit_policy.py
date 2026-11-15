@@ -10,7 +10,7 @@ import re
 
 import numpy as np
 
-from TROTASR.utils.io import read_json, sha256
+from TROTASR.utils.io import read_json
 from TROTASR.utils.paths import ROOT, internal_path
 
 
@@ -55,15 +55,10 @@ def expected_policy():
 
 
 def load_early_qcd_fit_policy(reference):
-    """Require the in-package exclusion document to match its recorded hash."""
-    if (not isinstance(reference, dict) or set(reference) != {'path', 'sha256'}
-            or reference.get('path') != POLICY_PATH
-            or not isinstance(reference.get('sha256'), str)
-            or not re.fullmatch(r'[0-9a-f]{64}', reference['sha256'])):
+    """Require the adopted in-package policy and its exact scientific content."""
+    if not isinstance(reference, dict) or reference.get('path') != POLICY_PATH:
         raise ValueError('Invalid exact early-QCD policy reference')
     path = internal_path(ROOT / POLICY_PATH)
-    if sha256(path) != reference['sha256']:
-        raise ValueError('Approved early-QCD policy hash changed')
     policy = read_json(path)
     if policy != expected_policy():
         raise ValueError('Unapproved early-QCD fit-only policy')
@@ -71,7 +66,7 @@ def load_early_qcd_fit_policy(reference):
 
 
 def approved_early_qcd_config_change(prior, current):
-    """Only adding this hash-pinned approval is a compatible card-only change."""
+    """Only adding this approved policy is a compatible card-only change."""
     if (CONFIG_KEY in prior or CONFIG_KEY not in current
             or {k: v for k, v in current.items() if k != CONFIG_KEY} != prior):
         raise ValueError('Early-QCD recovery changed unrelated configuration')

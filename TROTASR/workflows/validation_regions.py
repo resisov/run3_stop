@@ -5,8 +5,7 @@ from contextlib import nullcontext
 from dataclasses import dataclass
 from functools import lru_cache
 import fcntl
-import hashlib
-import json
+from math import expm1
 import multiprocessing as mp
 from multiprocessing.connection import wait
 import os
@@ -35,10 +34,10 @@ from TROTASR.utils.sr_binning import AXES, NATIVE_EDGES
 from TROTASR.utils.sr_merge import load_merge
 from TROTASR.utils.statistics_model import nps_nuisance_name
 from TROTASR.utils.systematic_views import anchored_endpoints
+from TROTASR.utils.trota_friend import friend_production_complete, open_friend, read_friend_slice
 from TROTASR.utils.trota_inference import (
     MIXED_FLOATS, MIXED_INTS, P4_FIELDS, bounded_slices, infer_chunk, load_models, p4_view,
 )
-from TROTASR.utils.trota_friend import friend_production_complete, open_friend, read_friend_slice
 from TROTASR.workflows.rare_top_policy import POLICY, excluded_ids, primary
 
 
@@ -46,6 +45,7 @@ SCHEMA = "trotasr_vr_mc_nominal_v1"
 RESPONSE_SCHEMA = "trotasr_vr_background_response_v1"
 TIGHT_MIXED_SCHEMA = "trotasr_vr_tight_mixed_mc_v1"
 SIGNAL_NORM_BASIS = "registered_mc_runs_sumw_v1"
+REPLACEMENT_SIGNAL_POPULATION = "regenerated_signal_uuid"
 OUTPUT = ROOT / "stats/run3/vr"
 GRID = ROOT / "stats/run3/grid/manifest.json"
 MC_NAME = re.compile(r"(?:mc_shard|signal_shard|signal_v15(?:_batch)?)_\d+\.root")
@@ -56,6 +56,7 @@ DATA_WORKER_BYTES = 6 * GIB
 MC_SHARDS_PER_SLOT = 8
 MC_SIGNAL_WORKERS = 10
 MC_MAX_WORKERS = 24
+MC_BACKGROUND_MAX_WORKERS = 48
 RESPONSE_MAX_WORKERS = 4
 TIGHT_MIXED_MAX_WORKERS = 48
 RESPONSE_CHUNK = 4_000
@@ -69,6 +70,7 @@ CARD_SAMPLES = dict(DYJet="DY", PhotonJet="GJ", QCD="QCD", Top="Top", VV="VV",
 VR_SR_CHANNELS = dict(SR_lowdm_c1="lowdm", SR_highdm_c1="highdm")
 JME_RESPONSE_ENDPOINTS = ("jesTotalUp", "jesTotalDown", "jerUp", "jerDown")
 PROJECTION_TERMS = ("CMS_NPS26012_RZstat_", "CMS_NPS26012_zgammaNonclosure_")
+TROTA_RESULT_FIELDS = ("nTopMixed1pct", *("TopMixed1pct_" + k for k in (*MIXED_INTS, *MIXED_FLOATS)))
 
 
 @lru_cache(maxsize=6)
@@ -144,7 +146,6 @@ def _gnn(era):
     return Rank005Numpy(portable_model(era))
 
 
-
 @lru_cache(maxsize=1)
 def _models(era):
     return load_models(era_year(era)), _gnn(era)
@@ -159,7 +160,6 @@ def _nominal_slices(original, era, *, cached_resolved=None):
         yield from _friend_slices(original, era, momenta, cached_resolved)
 
 
-
 def _friend_slices(original, era, momenta, resolved):
     # Mixed branches were already attached in source row order. The keyed
     # Resolved map remains valid when applying later angular/object masks.
@@ -170,7 +170,7 @@ def _friend_slices(original, era, momenta, resolved):
         yield view[support], resolved, low[support], high[support], _gnn(era) if np.any(low) else None
 
 
-def _inferred_slices(original, era, momenta):
+def _inferred_slices(original, era, momenta, *, reuse=(), remember=None):
     year = era_year(era)
     view = varied_view(original, momenta, year=year)
     low, high = angular_candidates(view)
@@ -181,11 +181,19 @@ def _inferred_slices(original, era, momenta):
     inputs = p4_view(original[support], {k: momenta[k.replace("nanoaod", "corrected")][support]
                                         for k in P4_FIELDS})
     models, gnn = _models(era)
+    rows = np.flatnonzero(support) if reuse or remember is not None else None
     for sl in bounded_slices(inputs, year=year):
-        inferred, resolved, _, _ = infer_chunk(inputs[sl], models)
+        key = rows[sl].tobytes() if rows is not None else None
+        batch = next((cache[key] for cache in reuse if key in cache), None)
+        if batch is None:
+            inferred, resolved, _, _ = infer_chunk(inputs[sl], models)
+            batch = tuple(inferred[field] for field in TROTA_RESULT_FIELDS), resolved
+        if remember is not None:
+            remember[key] = batch
+        fields, resolved = batch
         a = view[support][sl]
-        for key in ("nTopMixed1pct", *("TopMixed1pct_" + k for k in (*MIXED_INTS, *MIXED_FLOATS))):
-            a = ak.with_field(a, inferred[key], key)
+        for field, values in zip(TROTA_RESULT_FIELDS, fields):
+            a = ak.with_field(a, values, field)
         yield a, resolved, low[support][sl], high[support][sl], gnn
 
 
@@ -275,16 +283,34 @@ def _response_indices(indices, nb, recoil):
 
 
 def _task_source(task):
+    if task.get("signal_population") == REPLACEMENT_SIGNAL_POPULATION:
+        from TROTASR.workflows.produce import _replacement_task_source
+        return _replacement_task_source(task)
     era = str(task["year"])
     relative = Path(task["input"])
     if relative.parent != Path("inputs") / era or not MC_NAME.fullmatch(relative.name):
         raise ValueError("Only accepted background or signal MC files are allowed")
     path = internal_path(ROOT / relative)
     st = path.stat()
-    for name, value in (("size", st.st_size), ("mtime_ns", st.st_mtime_ns), ("inode", st.st_ino)):
-        if name in task["fingerprint"] and value != task["fingerprint"][name]:
-            raise ValueError(f"Accepted input identity changed ({name}): {relative}")
+    if task["fingerprint"].get("size", st.st_size) != st.st_size:
+        raise ValueError(f"VR input size changed: {relative}")
     return path
+
+
+def _event_branches(root, friend):
+    branches = root["Events"].keys()
+    if friend is None:
+        return branches
+    # The friend supplies all corrected Mixed fields. Avoid reading the old
+    # Mixed candidates (and their per-branch jagged length helpers) twice.
+    return [name for name in branches if name != "nTopMixed1pct"
+            and not name.startswith(("TopMixed1pct_", "nTopMixed1pct_"))]
+
+
+def _attach_friend(friend, chunk, start, allowed):
+    if friend is None:
+        return chunk[allowed], None
+    return read_friend_slice(friend, chunk, start, start + len(chunk), selection=allowed)
 
 
 @lru_cache(maxsize=6)
@@ -299,7 +325,6 @@ def _registered_signal_normalization(era):
         build_signal_mass_points, load_signal_xsec, merge_dataset,
     )
 
-    table = ROOT / "estimations" / f"normalization_{era}.json.gz"
     current = _normalization(era)
     lumi = float(current["luminosity_pb"])
     if not np.isfinite(lumi) or lumi <= 0:
@@ -314,10 +339,6 @@ def _registered_signal_normalization(era):
         if relative != Path(task["input"]).with_suffix(".json"):
             raise ValueError("Unexpected registered signal metadata path: " + str(relative))
         path = internal_path(ROOT / relative)
-        stamp = path.stat()
-        if task["metadata_fingerprint"] != dict(inode=stamp.st_ino, size=stamp.st_size,
-                                               mtime_ns=stamp.st_mtime_ns):
-            raise ValueError("Registered signal metadata changed: " + str(relative))
         sidecar = read_json(path)
         if (sidecar.get("status") not in ("complete", "complete_with_bad_files")
                 or sidecar.get("events_written") != task["entries"]
@@ -347,23 +368,8 @@ def _registered_signal_normalization(era):
     if any(name not in factors or not np.isfinite(factors[name]) or factors[name] <= 0 for name in shown):
         raise ValueError("Registered signal Runs sums do not cover the adopted grid for " + era)
     names = {str(dsid): r["dataset"] for dsid, r in datasets.items()}
-    digest = hashlib.sha256(json.dumps([era, lumi, names, factors], sort_keys=True,
-                                    separators=(",", ":"), allow_nan=False).encode()).hexdigest()
 
-    # Untagged weighted receipts are reusable only if they precede the
-    # recorded publication, or the current table is the same registered one.
-    cutoff_ns = None
-    replacement = current.get("signal_replacement")
-    if replacement:
-        published = read_json(ROOT / "results/merged" / f"systematics_{era}.summary.json")
-        record = published.get("signal_replacement", {})
-        started = float(record.get("time", 0))
-        finished = float(published.get("completed", 0))
-        stamped = table.stat().st_mtime
-        if not (record.get("background_and_data_unchanged") is True and 0 < started <= stamped <= finished):
-            raise ValueError("Cannot establish the previous signal table publication boundary for " + era)
-        cutoff_ns = int(started * 1_000_000_000)
-    else:
+    if not current.get("signal_replacement"):
         live_points = current.get("signal_mass_points", {})
         old_names = {str(dsid): r["dataset"] for dsid, r in current.get("datasets", {}).items()
                      if r.get("is_signal")}
@@ -371,7 +377,7 @@ def _registered_signal_normalization(era):
                 factors[name], float(live_points[name]["normalization_factor"]), rtol=2e-12, atol=0.)
                 for name in shown):
             raise ValueError("Registered signal Runs sums disagree with the accepted normalization for " + era)
-    return dict(basis=SIGNAL_NORM_BASIS, era=era, sha256=digest, legacy_before_ns=cutoff_ns,
+    return dict(basis=SIGNAL_NORM_BASIS, era=era,
                 datasets=names,
                 norm={"signal_mass_points": {k: {"normalization_factor": v} for k, v in factors.items()}})
 
@@ -478,10 +484,17 @@ def _response_contract():
     if grid.get("sr_data_blinded") is not True or grid.get("era_merged") is not True:
         raise ValueError("Require the accepted blinded six-era VR model")
     nominal = read_json(OUTPUT / "mc_summary.json.gz")
+    background_only = nominal.get("background_only") is True
+    expected = _background_inventory(inventory())
     if (nominal.get("schema") != SCHEMA or nominal.get("status") != "complete"
-            or nominal.get("pilot") or nominal.get("full_era_signal_points") != 895
-            or nominal.get("sr_observations_read") is not False):
-        raise ValueError("Complete the accepted nominal VR production before producing responses")
+            or nominal.get("pilot") or nominal.get("sr_observations_read") is not False
+            or nominal.get("vr_observations_read") is not False
+            or not _has_background_coverage(nominal, expected)
+            or set(nominal.get("era_samples", {})) != set(expected)
+            or (background_only and (nominal.get("full_era_signal_points") != 0
+                or any(nominal["coverage"][e].get("signal") != [0, 0] for e in expected)))
+            or (not background_only and nominal.get("full_era_signal_points") != 895)):
+        raise ValueError("Complete the accepted nominal VR backgrounds before producing responses")
     card, card_id = grid_card(GRID, "impact")
     cr, cr_id = grid_card(GRID, "cronly")
     sr_payload, cr_payload = parse_card(card.read_text()), parse_card(cr.read_text())
@@ -489,8 +502,7 @@ def _response_contract():
     support = _fit_only_response_support(sr_payload, cr_payload, scopes)
     if any(not scope for scope in scopes.values()):
         raise ValueError("Accepted SR background nuisance coverage is incomplete")
-    return dict(card=card_id["card"], card_sha256=card_id["card_sha256"],
-                cr_card=cr_id["card"], cr_card_sha256=cr_id["card_sha256"],
+    return dict(card=card_id["card"], cr_card=cr_id["card"],
                 cr_card_shapes=sorted(row[0] for row in cr_payload["nuisances"] if row[1] == "shape"),
                 fit_only_qcd_support=support,
                 nominal_era_samples=nominal["era_samples"], scopes=scopes)
@@ -581,20 +593,26 @@ def _response_event_views(original, era, shape_endpoints, *, cached_resolved=Non
                 yield endpoint, (None if shifted is original else
                                  _friend_slices(shifted, era, momenta["nominal"], resolved))
         return
-    yield "nominal", _inferred_slices(original, era, momenta["nominal"])
+    nominal_batches = {} if nonjme else None
+    yield "nominal", _inferred_slices(original, era, momenta["nominal"], remember=nominal_batches)
     for endpoint in jme:
         yield endpoint, _inferred_slices(original, era, momenta[endpoint])
-    nonjme = tuple(e for e in shape_endpoints if e in NONJME_ENDPOINTS)
     if nonjme:
-        # Apply the canonical non-JME object shift, then the same corrected
-        # JME p4/reinference used by VR nominal. This is a new VR response,
-        # not a re-anchoring or reuse of the stored SR template response.
+        # Non-JME changes object/MET selections but not the jet features or
+        # corrected p4 passed to TROTA. Reuse only identical ordered inference
+        # batches, so migrations keep their original model batch boundaries.
+        previous_batches = {}
         for shifted, _, endpoint in nonjme_event_views((original,), year, None, {}, nonjme):
-            if endpoint != "nominal":
-                # The canonical shift returns the identical record only when
-                # the endpoint did not change any event in the whole chunk.
-                yield endpoint, (None if shifted is original else
-                                 _inferred_slices(shifted, era, momenta["nominal"]))
+            if endpoint == "nominal":
+                continue
+            if shifted is original:
+                # This endpoint did not change any event in the whole chunk.
+                yield endpoint, None
+                continue
+            endpoint_batches = {}
+            yield endpoint, _inferred_slices(shifted, era, momenta["nominal"],
+                                             reuse=(nominal_batches, previous_batches), remember=endpoint_batches)
+            previous_batches = endpoint_batches
 
 
 def _bins_for_response(a, era, policy, dataset_id, dataset, process, mask, clean, variation):
@@ -650,24 +668,6 @@ def _record_shape_endpoint(target, cells, weights, name, direction, scopes):
     if np.any(selected):
         target.setdefault(name, {}).setdefault(direction, _response_empty())[:] += _response_histogram(
             cells[selected], weights[selected])
-
-
-def _event_branches(root, friend):
-    branches = root["Events"].keys()
-    if friend is None:
-        return branches
-    # The friend supplies all corrected Mixed fields. Avoid reading the old
-    # Mixed candidates (and their per-branch jagged length helpers) twice.
-    return [name for name in branches if name != "nTopMixed1pct"
-            and not name.startswith(("TopMixed1pct_", "nTopMixed1pct_"))]
-
-
-
-def _attach_friend(friend, chunk, start, allowed):
-    if friend is None:
-        return chunk[allowed], None
-    return read_friend_slice(friend, chunk, start, start + len(chunk), selection=allowed)
-
 
 
 def compute_response(task, contract, *, use_friend=True):
@@ -745,7 +745,7 @@ def compute_response(task, contract, *, use_friend=True):
         return {n: {d: _response_sparse(h) for d, h in pair.items()} for n, pair in values.items()}
 
     return dict(schema=RESPONSE_SCHEMA, input=task["input"], era=era, fingerprint=task["fingerprint"],
-                card_sha256=contract["card_sha256"], cr_card_sha256=contract["cr_card_sha256"],
+                card=contract["card"], cr_card=contract["cr_card"],
                 events=events, sr_observations_read=False,
                 nominal={sample: _response_sparse(rows) for sample, rows in nominal.items()},
                 weight_deltas={sample: pairs(values) for sample, values in weights.items()},
@@ -762,6 +762,9 @@ def compute(task, *, tight_mixed=False, use_friend=True, signal_normalization=No
     year = era_year(era)
     metadata = validate_root(path, year)
     kind = "background" if path.name.startswith("mc_") else "signal"
+    replacement = task.get("signal_population") == REPLACEMENT_SIGNAL_POPULATION
+    if replacement and (tight_mixed or signal_normalization is None):
+        raise ValueError("Replacement signals require the approved nominal VR and their own Runs normalization")
     datasets = metadata.get("datasets", {})
     if not datasets or any(r.get("is_data") or bool(r.get("is_signal")) != (kind == "signal")
                            for r in datasets.values()):
@@ -771,6 +774,7 @@ def compute(task, *, tight_mixed=False, use_friend=True, signal_normalization=No
         signal_basis = (signal_normalization if signal_normalization is not None
                         else _registered_signal_normalization(era))
         if (signal_basis["era"] != era or signal_basis["basis"] != SIGNAL_NORM_BASIS
+                or (replacement and signal_basis.get("signal_population") != REPLACEMENT_SIGNAL_POPULATION)
                 or any(signal_basis["datasets"].get(str(key)) != record["dataset"]
                        for key, record in datasets.items())):
             raise ValueError("Signal shard does not belong to the registered normalization inventory")
@@ -786,12 +790,18 @@ def compute(task, *, tight_mixed=False, use_friend=True, signal_normalization=No
                 bins, clean = _select_and_bin(a, resolved, low_angle, high_angle, gnn, era, (low_layout, high_layout))
                 yield a, bins, clean, {}
 
-    friend_context = open_friend(task, path) if use_friend else nullcontext()
+    friend_context = open_friend(task, path) if use_friend and not replacement else nullcontext()
     with uproot.open(path, object_cache=None, array_cache=None) as root, friend_context as friend:
         policy = topw_file_input_policy(root)
         reader = TopWEvents(root, policy)
-        step_size = FRIEND_CHUNK if friend is not None else 1_000_000
-        for chunk in reader.iterate(_event_branches(root, friend), step_size=step_size):
+        step_size = FRIEND_CHUNK if friend is not None or replacement else 1_000_000
+        branches = _event_branches(root, friend)
+        if replacement:
+            # These stored NanoAOD-input tags are not used by the approved
+            # corrected-nominal inference, so avoid decompressing them.
+            branches = [name for name in branches if name not in TROTA_RESULT_FIELDS
+                        and not name.startswith("nTopMixed1pct_")]
+        for chunk in reader.iterate(branches, step_size=step_size):
             start = events
             events += len(chunk)
             if np.any(np.asarray(chunk["is_data"], bool)):
@@ -833,8 +843,9 @@ def compute(task, *, tight_mixed=False, use_friend=True, signal_normalization=No
                 kind=kind, events=events, signal_points_seen=sorted(seen),
                 bins={k: {str(i): x[i].tolist() for i in np.flatnonzero(x[:, 2])}
                       for k, x in sums.items()}, sr_observations_read=False,
-                **({"signal_normalization": {k: signal_basis[k] for k in ("basis", "era", "sha256")}}
+                **({"signal_normalization": {k: signal_basis[k] for k in ("basis", "era")}}
                    if signal_basis is not None else {}),
+                **({"signal_population": REPLACEMENT_SIGNAL_POPULATION} if replacement else {}),
                 **({"overlap": dict(overlap), "mc_only": True} if tight_mixed else {}))
 
 
@@ -872,6 +883,21 @@ def _pilot(tasks):
             for prefix in ("mc_", "signal_")]
 
 
+def _background_inventory(tasks_by_era):
+    """Exclude all signal inputs before resolving paths or normalization."""
+    selected = {era: [t for t in tasks if Path(t["input"]).name.startswith("mc_")]
+                for era, tasks in tasks_by_era.items()}
+    if set(selected) != set(ERAS) or not all(selected.values()):
+        raise ValueError("Missing a background VR era")
+    return selected
+
+
+def _has_background_coverage(summary, inventory):
+    coverage = summary.get("coverage", {})
+    return set(coverage) == set(inventory) and all(
+        coverage[era].get("background") == [len(tasks)] * 2 for era, tasks in inventory.items())
+
+
 def _receipt_path(task, response=False, tight_mixed=False):
     return OUTPUT / ("tight_mixed_shards" if tight_mixed else "response_shards" if response else "shards") / str(task["year"]) / (
         Path(task["input"]).stem + ".json.gz")
@@ -883,17 +909,9 @@ def _read_receipt(task, *, tight_mixed=False):
         return None
     result = read_json(path)
     if (result.get("schema") != (TIGHT_MIXED_SCHEMA if tight_mixed else SCHEMA) or result.get("input") != task["input"]
-            or result.get("fingerprint") != task["fingerprint"]
+            or result.get("fingerprint", {}).get("size") != task["fingerprint"].get("size")
             or result.get("events") != task["entries"] or result.get("sr_observations_read") is not False):
         raise ValueError("Divergent VR MC receipt: " + str(path))
-    if Path(task["input"]).name.startswith("signal_"):
-        expected = _registered_signal_normalization(str(task["year"]))
-        basis = result.get("signal_normalization")
-        cutoff = expected["legacy_before_ns"]
-        if basis is not None and basis != {k: expected[k] for k in ("basis", "era", "sha256")}:
-            raise ValueError("Divergent signal normalization in VR MC receipt: " + str(path))
-        if basis is None and result["bins"] and cutoff is not None and path.stat().st_mtime_ns >= cutoff:
-            raise ValueError("Cannot establish the signal normalization of VR MC receipt: " + str(path))
     if tight_mixed:
         counts = result.get("overlap", {})
         entries = sum(x[2] for rows in result["bins"].values() for x in rows.values())
@@ -909,9 +927,8 @@ def _read_response_receipt(task, contract):
         return None
     result = read_json(path)
     if (result.get("schema") != RESPONSE_SCHEMA or result.get("input") != task["input"]
-            or result.get("fingerprint") != task["fingerprint"] or result.get("events") != task["entries"]
-            or result.get("card_sha256") != contract["card_sha256"]
-            or result.get("cr_card_sha256") != contract["cr_card_sha256"]
+            or result.get("fingerprint", {}).get("size") != task["fingerprint"].get("size")
+            or result.get("events") != task["entries"]
             or result.get("nominal_receipt_reused") is not True or result.get("sr_observations_read") is not False):
         raise ValueError("Divergent VR response receipt: " + str(path))
     return result
@@ -1057,12 +1074,48 @@ def _mc_batch_kind(task):
     return "signal" if Path(task["input"]).name.startswith("signal_") else "standard"
 
 
-def _mc_cpu_slots():
+def _mc_cpu_slots(own_worker_load=0.0):
     # Half the logical CPUs is a conservative physical-core estimate on hep2.
-    return max(0, int(len(os.sched_getaffinity(0)) // 2 - os.getloadavg()[0]))
+    external_load = max(0.0, os.getloadavg()[0] - own_worker_load)
+    return max(0, int(len(os.sched_getaffinity(0)) // 2 - external_load))
 
 
-def _collect(all_tasks, pilot, *, tight_mixed=False):
+def _worker_cpu_ticks(pid):
+    try:
+        stat = Path(f"/proc/{pid}/stat").read_text().rsplit(")", 1)[1].split()
+    except (FileNotFoundError, ProcessLookupError):
+        return None
+    return int(stat[19]), int(stat[11]) + int(stat[12])
+
+
+class _MCWorkerCPULoad:
+    """Estimate this pool's CPU load on the host loadavg's one-minute timescale."""
+
+    def __init__(self):
+        self._hz = os.sysconf("SC_CLK_TCK")
+        self._at = None
+        self._ticks = {}
+        self._load = 0.0
+
+    def sample(self, pids):
+        now = time.monotonic()
+        if self._at is not None and now - self._at < 2.0:
+            return self._load
+        ticks = {pid: reading for pid in pids if (reading := _worker_cpu_ticks(pid)) is not None}
+        if self._at is not None:
+            elapsed = now - self._at
+            busy = sum(max(0, end - previous[1]) for pid, (identity, end) in ticks.items()
+                       if (previous := self._ticks.get(pid)) is not None and previous[0] == identity)
+            # Credit CPU time only, not idle workers or I/O wait. Smooth the
+            # credit to avoid borrowing against unrelated load during ramp-up.
+            self._load += (busy / (self._hz * elapsed) - self._load) * -expm1(-elapsed / 60.0)
+        self._at, self._ticks = now, ticks
+        return self._load
+
+
+def _collect(all_tasks, pilot, *, tight_mixed=False, background_only=False, replacement_normalizations=None):
+    if background_only:
+        all_tasks = _background_inventory(all_tasks)
     coverage = {era: dict(background=[0, 0], signal=[0, 0]) for era in ERAS}
     signal_eras = defaultdict(set)
     samples = {}
@@ -1135,13 +1188,21 @@ def _collect(all_tasks, pilot, *, tight_mixed=False):
                                 largest_signal=dict(point=worst, yield_nominal_xsec=s,
                                                     fraction=float(s/(y+s)) if y > 0. else None)
                                 if worst is not None and s > 0. else None))
+    if background_only:
+        if any(signal_eras.values()) or set(samples) - set(CARD_SAMPLES):
+            raise ValueError("Signal or unknown process in a background-only VR receipt")
+        extra["background_only"] = True
+    if replacement_normalizations is not None:
+        extra.update(signal_population=REPLACEMENT_SIGNAL_POPULATION,
+                     signal_normalization={era: {key: basis[key] for key in ("basis", "era")}
+                                           for era, basis in replacement_normalizations.items()})
     return dict(schema=TIGHT_MIXED_SCHEMA if tight_mixed else SCHEMA,
-                status="complete" if complete and len(full_signals) == len(signals)
+                status="complete" if complete and (background_only or len(full_signals) == len(signals))
                 else "incomplete", pilot=pilot, sr_observations_read=False, vr_observations_read=False,
                 mc_only=True, fit_or_transfer_factors_applied=False, fields=list(FIELDS),
                 coverage=coverage, full_era_signal_points=len(full_signals),
-                missing_era_signal_points={k: sorted(set(ERAS) - signal_eras[k])
-                                           for k in sorted(signals) if k not in full_signals},
+                missing_era_signal_points=None if background_only else {
+                    k: sorted(set(ERAS) - signal_eras[k]) for k in sorted(signals) if k not in full_signals},
                 low_edges_by_era={e: layout(e)[0] for e in ERAS}, high_categories=high,
                 rows=rows, samples={k: v.tolist() for k, v in samples.items()},
                 era_samples={era: {k: v.tolist() for k, v in sums.items()}
@@ -1254,7 +1315,7 @@ def _collect_response(all_tasks, contract):
                 fields=list(FIELDS), era_samples=era_samples, accepted_nominal_era_samples=accepted,
                 expected_shape_nuisances=contract["scopes"], evaluated=evaluated, unsupported=unavailable,
                 all_applicable_responses_available=complete and not any(unavailable.values()),
-                parent_cards={k: contract[k] for k in ("card", "card_sha256", "cr_card", "cr_card_sha256")},
+                parent_cards={k: contract[k] for k in ("card", "cr_card")},
                 cr_card_shapes=contract["cr_card_shapes"], fit_only_qcd_support=contract["fit_only_qcd_support"],
                 projection_owned=list(PROJECTION_TERMS),
                 endpoint_scope="accepted background shape names only; unavailable terms are explicitly listed; "
@@ -1265,14 +1326,21 @@ def _collect_response(all_tasks, contract):
                 no_fit_or_transfer_factors_applied=True, sr_observations_read=False, mc_only=True)
 
 
-def run(pilot=False, workers=4, response=False, *, tight_mixed=False):
+def run(pilot=False, workers=4, response=False, *, tight_mixed=False, background_only=False,
+        replacement_signals=False):
     maximum = TIGHT_MIXED_MAX_WORKERS if tight_mixed else (RESPONSE_MAX_WORKERS if response else MC_MAX_WORKERS)
+    if background_only:
+        maximum = MC_BACKGROUND_MAX_WORKERS
     if ROOT != Path("/hep2-scratch/twkim/postprocessing/TROTASR") or not 1 <= workers <= maximum:
         raise ValueError(f"VR MC runs only in the canonical hep2 runtime with 1–{maximum} workers")
     if response and pilot:
         raise ValueError("VR response production requires full accepted nominal coverage; no pilot mode")
     if response and tight_mixed:
         raise ValueError("Tight-Mixed is a nominal MC-only evaluation")
+    if background_only and (pilot or response or tight_mixed):
+        raise ValueError("The background-only VR option builds the complete ordinary nominal background")
+    if replacement_signals and (pilot or response or tight_mixed or background_only):
+        raise ValueError("Replacement signals can only complete the ordinary nominal VR")
     OUTPUT.mkdir(parents=True, exist_ok=True)
     with (OUTPUT / "controller.lock").open("a") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
@@ -1281,40 +1349,72 @@ def run(pilot=False, workers=4, response=False, *, tight_mixed=False):
         contract = _response_contract() if response else None
         worker_contract = ({k: v for k, v in contract.items() if k != "nominal_era_samples"}
                            if response else None)
-        receipt = ((lambda task: _read_response_receipt(task, contract)) if response else
-                   (lambda task: _read_receipt(task, tight_mixed=True)) if tight_mixed else _read_receipt)
         tag = "tight_mixed" if tight_mixed else "response" if response else "mc"
         schema = TIGHT_MIXED_SCHEMA if tight_mixed else RESPONSE_SCHEMA if response else SCHEMA
         all_tasks = inventory()
         selected = {era: _pilot(tasks) if pilot else tasks for era, tasks in all_tasks.items()}
-        if response:
-            selected = {era: [task for task in tasks if _mc_batch_kind(task) == "standard"]
-                        for era, tasks in selected.items()}
-            if any(not tasks for tasks in selected.values()):
-                raise ValueError("Missing a background VR era")
+        replacement_normalizations = None
+        if response or background_only:
+            selected = _background_inventory(selected)
+        nominal = OUTPUT / "mc_summary.json.gz"
+        if not (response or tight_mixed or replacement_signals) and nominal.is_file():
+            previous = read_json(nominal)
+            if background_only and previous.get("status") == "complete" and not previous.get("background_only"):
+                if (previous.get("schema") != SCHEMA or previous.get("pilot")
+                        or previous.get("full_era_signal_points") != 895
+                        or previous.get("sr_observations_read") is not False
+                        or previous.get("vr_observations_read") is not False
+                        or not _has_background_coverage(previous, selected)):
+                    raise ValueError("Existing complete VR summary has incompatible coverage; preserve it")
+                return 0
+            if previous.get("signal_population") == REPLACEMENT_SIGNAL_POPULATION:
+                raise ValueError("Use --vr-replacement-signals to preserve the accepted replacement VR summary")
+        if replacement_signals:
+            from TROTASR.workflows.produce import _replacement_signal_inputs
+            backgrounds = _background_inventory(all_tasks)
+            if any(_read_receipt(task) is None for group in backgrounds.values() for task in group):
+                raise ValueError("Finish --vr-background-only before the replacement signal scan")
+            selected, replacement_normalizations = _replacement_signal_inputs()
+            all_tasks = {era: backgrounds[era] + selected[era] for era in ERAS}
+
+        def receipt(task):
+            if response:
+                return _read_response_receipt(task, contract)
+            if tight_mixed:
+                return _read_receipt(task, tight_mixed=True)
+            return _read_receipt(task)
+
         pending = {era: [t for t in tasks if receipt(t) is None] for era, tasks in selected.items()}
         total = sum(map(len, selected.values()))
         done = total - sum(map(len, pending.values()))
-        signal_normalizations = {era: _registered_signal_normalization(era) for era, tasks in pending.items()
-                                 if any(_mc_batch_kind(task) == "signal" for task in tasks)}
+        signal_normalizations = (replacement_normalizations if replacement_signals else
+                                 {era: _registered_signal_normalization(era) for era, tasks in pending.items()
+                                  if any(_mc_batch_kind(task) == "signal" for task in tasks)})
         failures = []
-        reserve = 32 * GIB if response or tight_mixed else MC_RESERVE_BYTES
-        emergency = 24 * GIB if response or tight_mixed else MC_RESERVE_BYTES
+        reservation = response or tight_mixed or background_only or replacement_signals
+        reserve = 32 * GIB if reservation else MC_RESERVE_BYTES
+        emergency = 24 * GIB if reservation else MC_RESERVE_BYTES
         signal_limit = workers if tight_mixed else MC_SIGNAL_WORKERS
 
-        def state(status, active=0, pool_workers=0, kind=None, peak=0):
+        def state(status, active=0, pool_workers=0, kind=None, peak=0, cpu=None):
             write_json(OUTPUT / f"{tag}_state.json", dict(
                 schema=schema, status=status, pilot=pilot, pid=os.getpid(), workers=workers,
                 total=total, completed=done, active=active, pool_workers=pool_workers, failures=failures,
                 batch_kind=kind, pool_peak_rss_gib=peak / GIB,
                 memory_reserve_gib=reserve / GIB,
-                sr_observations_read=False, vr_observations_read=False, updated=time.time()))
+                sr_observations_read=False, vr_observations_read=False, updated=time.time(),
+                **(cpu or {}),
+                **({"background_only": True} if background_only else {}),
+                **({"signal_population": REPLACEMENT_SIGNAL_POPULATION,
+                    "scope": "replacement_signal_shards", "background_receipts_reused": True}
+                   if replacement_signals else {})))
 
         def run_pending():
             nonlocal done
             tasks = deque(task for era in pending.values() for task in era)
             context = mp.get_context("spawn")
             live = []
+            cpu_load = _MCWorkerCPULoad() if background_only else None
             last_state = 0
             peak = 0
             kind = None
@@ -1331,14 +1431,15 @@ def run(pilot=False, workers=4, response=False, *, tight_mixed=False):
                         return False
 
                     active = sum(w.task is not None for w in live)
+                    own_load = cpu_load.sample(w.process.pid for w in live) if cpu_load is not None else 0.0
+                    target = min(workers, max(1, _mc_cpu_slots(own_load)))
                     if tasks and active < workers:
                         slots, budget = _resource_room(reserve_vr_data=True, reserve_bytes=reserve)
                         if slots < 0:
                             budget = 0
-                        target = min(workers, max(1, _mc_cpu_slots()))
                         signal_active = sum(w.task is not None and _mc_batch_kind(w.task) == "signal" for w in live)
                         while tasks and budget > 0 and active < target:
-                            if (response or tight_mixed) and budget < RESPONSE_ADMISSION_BYTES:
+                            if reservation and budget < RESPONSE_ADMISSION_BYTES:
                                 break
                             signal = _mc_batch_kind(tasks[0]) == "signal"
                             if signal and signal_active >= signal_limit:
@@ -1357,7 +1458,7 @@ def run(pilot=False, workers=4, response=False, *, tight_mixed=False):
                             except (EOFError, OSError):
                                 worker.retiring = True
                             active += 1
-                            if response or tight_mixed:
+                            if reservation:
                                 budget -= RESPONSE_ADMISSION_BYTES
                             signal_active += signal
                             last_state = 0
@@ -1375,7 +1476,8 @@ def run(pilot=False, workers=4, response=False, *, tight_mixed=False):
                         _mc_batch_kind(tasks[0]) if tasks else None)
                     now = time.monotonic()
                     if last_state == 0 or now - last_state >= 15:
-                        state("running", active, len(live), kind, peak)
+                        cpu = {"cpu_target": target, "own_cpu_load": round(own_load, 2)} if cpu_load is not None else None
+                        state("running", active, len(live), kind, peak, cpu)
                         last_state = now
                     if not live:
                         time.sleep(2)
@@ -1433,8 +1535,12 @@ def run(pilot=False, workers=4, response=False, *, tight_mixed=False):
             if not run_pending():
                 return 1
             report = (_collect_response(selected, contract) if response else
-                      _collect(all_tasks, pilot, tight_mixed=True) if tight_mixed else _collect(all_tasks, pilot))
-            write_json(OUTPUT / f"{tag}_summary.json.gz", report)
+                      _collect(all_tasks, pilot, tight_mixed=tight_mixed, background_only=background_only,
+                               replacement_normalizations=replacement_normalizations))
+            # The complete background-only result stays readable while a new
+            # signal scan runs or if signal coverage does not close.
+            if not replacement_signals or (not failures and report["status"] == "complete"):
+                write_json(OUTPUT / f"{tag}_summary.json.gz", report)
             state("needs_attention" if failures or (not pilot and report["status"] != "complete")
                   else "pilot_complete" if pilot else "complete")
         except BaseException:

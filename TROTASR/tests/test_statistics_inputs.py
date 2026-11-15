@@ -4,7 +4,7 @@ from itertools import product
 import unittest
 from unittest.mock import patch
 import numpy as np
-from TROTASR.utils.io import read_json, sha256
+from TROTASR.utils.io import read_json
 from TROTASR.utils.paths import ROOT
 from TROTASR.utils.statistics_inputs import build_inputs, HistogramView
 from TROTASR.utils.sr_binning import AXES, NATIVE_EDGES
@@ -17,16 +17,12 @@ SYNTHETIC_LAYOUT_DIGEST = 'a'*64
 
 
 def use_synthetic_sr_layout(testcase, *consumers):
-    """Inject only the immutable map boundary, with matching synthetic provenance."""
+    """Inject the synthetic SR layout at the reader boundary."""
     def layout_reader(path):
         return synthetic_sr_layout() if path == SR_LAYOUT else read_json(path)
-    def input_digest(path):
-        return SYNTHETIC_LAYOUT_DIGEST if path == SR_LAYOUT else sha256(path)
-    patches = [patch('TROTASR.utils.sr_binning.read_json',side_effect=layout_reader)]
-    patches.extend(patch.object(module,'sha256',side_effect=input_digest) for module in consumers)
-    for patcher in patches:
-        patcher.start()
-        testcase.addCleanup(patcher.stop)
+    patcher = patch('TROTASR.utils.sr_binning.read_json',side_effect=layout_reader)
+    patcher.start()
+    testcase.addCleanup(patcher.stop)
 
 
 class CombinedContractTests(unittest.TestCase):

@@ -69,7 +69,7 @@ class BackgroundTests(unittest.TestCase):
     def test_zgamma_recovery_reuses_same_output_without_history(self):
         from pathlib import Path
         from tempfile import TemporaryDirectory
-        from TROTASR.utils.io import read_json, write_json, sha256
+        from TROTASR.utils.io import read_json, write_json
         from TROTASR.utils.paths import ROOT
         from TROTASR.workflows.build_background_estimation import recover_zgamma
 
@@ -85,18 +85,19 @@ class BackgroundTests(unittest.TestCase):
             for name, product in products.items():
                 path = output / (name+'.json.gz')
                 write_json(path, product)
-                files[path.name] = sha256(path)
+                files[path.name] = path.read_bytes()
             manifest = output / 'measurement_manifest.json'
             write_json(manifest, dict(status='blocked', provenance=dict(campaign_year='2023BPix'),
-                stages={n:p['status'] for n, p in products.items()}, files=files))
+                stages={n:p['status'] for n, p in products.items()},
+                files={name: 'legacy-receipt' for name in files}))
             self.assertEqual(recover_zgamma(output, payload), 0)
             self.assertEqual(recover_zgamma(output, payload), 0)
             self.assertEqual(read_json(manifest)['status'], 'complete')
             self.assertFalse((output/'history').exists())
             self.assertFalse((output/'zgamma_recovery.json').exists())
-            for name, digest in files.items():
+            for name, contents in files.items():
                 if name != 'double_ratio.json.gz':
-                    self.assertEqual(sha256(output/name), digest)
+                    self.assertEqual((output/name).read_bytes(), contents)
 
     def test_existing_measurement_equations_and_algebraic_closure(self):
         products = measure(measurement_fixture())

@@ -54,14 +54,14 @@ The stage uses the installed LCG110, LCG105 and CMSSW15 runtimes. Job definition
 logs and submission state are under `TROTASR/production`. Submission skips active,
 previously submitted, published and collected tasks. Source files are read-only.
 
-On hep2, the same stage collects complete new files with transfer checksums:
+On hep2, the same stage collects complete new files:
 
 ```bash
 bash TROTASR/workflows/run_inference.sh -m TROTASR produce --collect --follow --workers 16
 ```
 
-This command allows up to 16 concurrent transfers. Collection verifies the
-transfer checksum and ROOT structure before removing the EOS staging copy.
+This command allows up to 16 concurrent transfers. Collection validates the
+transferred file's size and ROOT structure before removing the EOS staging copy.
 Files go to `inputs/<era>/signal_<source UUID>.root`, receipts to
 `production/collected/` and counts to `production/collection.json`.
 `--follow` stops when every task has a receipt and no transfers or errors remain.

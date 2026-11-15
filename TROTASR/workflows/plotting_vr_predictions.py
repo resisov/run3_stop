@@ -15,12 +15,15 @@ SCHEMA = "trotasr_vr_prefit_postfit_v1"
 VIEWS = {"highdm": ERAS, "lowdm_early": EARLY_ERAS, "lowdm_late": ERAS[-2:]}
 STAGES = ("prefit", "postfit")
 LOW_KEYS = tuple(f"Nb{nb}_NISR{i}" for nb in ("1", "2plus") for i in ("0", "1", "2plus"))
-BAND_LABELS = {"prefit": "VR MC stat. + CR transfer unc.",
-               "postfit": "VR MC stat. + CR postfit + transfer unc."}
+BAND_LABELS = {"prefit": "VR MC stat. + background syst.",
+               "postfit": "VR MC stat. + CR fit + background syst."}
 DISPLAY = {**BACKGROUND_DISPLAY_LABELS, "VV": "VV+VVV", "DYJet": "DY",
            "WJet": "W -> lv", "ZJet": "Z -> vv", "GJ": "Photon+jet"}
 SIGNAL = re.compile(r"(?:T2(?:bW|tb)_)?mStop\d+_mLSP\d+")
 NOMINAL_BAND = "VR MC stat. unc."
+NORMALIZATION_BANDS = {"prefit": NOMINAL_BAND,
+                       "postfit": "VR MC stat. + correlated CR normalization unc."}
+NORMALIZATION_TITLES = {"prefit": "Nominal prefit", "postfit": "Postfit (CR normalization only)"}
 
 
 def _values(values, n, what, *, nonnegative=False, integral=False):
@@ -37,13 +40,18 @@ def _covered(coverage):
 
 
 def _observations(mc, data):
+    background_only = mc.get("background_only") is True
     if (mc.get("schema") != "trotasr_vr_mc_nominal_v1" or mc.get("status") != "complete"
             or mc.get("mc_only") is not True or mc.get("sr_observations_read") is not False
             or mc.get("vr_observations_read") is not False
             or set(mc.get("coverage", {})) != set(ERAS)
-            or any(not all(_covered(mc["coverage"][era].get(kind)) for kind in ("background", "signal"))
-                   for era in ERAS)):
-        raise ValueError("A complete blinded six-era VR MC summary is required")
+            or any(not _covered(mc["coverage"][era].get("background")) for era in ERAS)
+            or (background_only and (mc.get("full_era_signal_points") != 0
+                    or mc.get("missing_era_signal_points", {}) is not None
+                    or any(mc["coverage"][era].get("signal") != [0, 0] for era in ERAS)))
+            or (not background_only and any(not _covered(mc["coverage"][era].get("signal"))
+                                           for era in ERAS))):
+        raise ValueError("A complete blinded six-era VR background summary with explicit signal coverage is required")
     if (data.get("schema") != "trotasr_vr_jetmet_v1" or data.get("status") != "complete"
             or data.get("sr_observations_used") is not False or data.get("sr_histograms_filled") is not False
             or data.get("low_bins") != 30 or data.get("high_bins") != 118
@@ -58,6 +66,11 @@ def _observations(mc, data):
     if not np.array_equal(sum(counts.values()), combined):
         raise ValueError("Combined VR observations disagree with the era counts")
     return counts
+
+
+def _mc_scope(mc):
+    return dict(mc_scope="background_only" if mc.get("background_only") is True else "background_and_signal",
+                signal_drawn=False)
 
 
 def _layout(mc, name, eras):
@@ -124,8 +137,18 @@ def _fit_category_boxes(fig, panels):
                 artist.set_fontsize(artist.get_fontsize() * allowed / width)
 
 
+def _mark_unmapped(rax, bins):
+    """Annotate unmapped bins without replacing or covering Data/MC points."""
+    for index in bins:
+        rax.axvspan(index - .5, index + .5, facecolor="#f7c469", edgecolor="#9e5500",
+                    alpha=.35, linewidth=.7, zorder=1.2, gid="vr_unmapped_bin")
+    if bins:
+        rax.text(.004, -.65, "Shaded: contains MC kept nominal (no approved CR mapping)",
+                 transform=rax.transAxes, ha="left", va="top", fontsize=11, color="#744600")
+
+
 def _draw(name, eras, layout, prediction, observed, outbase, *, luminosities=None,
-          stages=STAGES, band_labels=BAND_LABELS, titles=None):
+          stages=STAGES, band_labels=BAND_LABELS, titles=None, unmapped_bins=None):
     import matplotlib
 
     matplotlib.use("Agg")
@@ -184,6 +207,10 @@ def _draw(name, eras, layout, prediction, observed, outbase, *, luminosities=Non
             info["main_panel_ylim"] = [float(v) for v in ax.get_ylim()]
             info["nonpositive_background_bins_1based"] = (np.flatnonzero(values["background"] <= 0) + 1).tolist()
             info["uncertainty_label"] = band_labels[stage]
+            if stage == "postfit" and unmapped_bins is not None:
+                _mark_unmapped(rax, unmapped_bins)
+                info["unmapped_bins_1based"] = list(unmapped_bins)
+                info["unmapped_bins_preserved"] = True
             ax.tick_params(axis="x", labelbottom=False)
             rax.yaxis.label.set_fontsize(24)
             panels[stage] = info
@@ -201,7 +228,7 @@ def _draw(name, eras, layout, prediction, observed, outbase, *, luminosities=Non
         plt.close(fig)
 
 
-def render(prediction, mc, data, output):
+def render(prediction, mc, data, output, *, normalization_only=None, luminosities=None):
     """Render three blinded-SR VR comparisons; make no fit or event reads."""
     if (prediction.get("schema") != SCHEMA or tuple(prediction.get("years", ())) != ERAS
             or set(prediction.get("views", {})) != set(VIEWS)
@@ -209,6 +236,9 @@ def render(prediction, mc, data, output):
             or prediction.get("sr_observations_used", False) is not False):
         raise ValueError("Expected the approved six-era VR-only prediction payload")
     counts = _observations(mc, data)
+    if normalization_only is None:
+        normalization_only = (prediction.get("normalization_only") is True
+                              or any("unmapped_bins_1based" in view for view in prediction["views"].values()))
     prepared = {}
     for name, eras in VIEWS.items():
         view = prediction["views"][name]
@@ -217,10 +247,20 @@ def render(prediction, mc, data, output):
         layout = _layout(mc, name, eras)
         n = sum(x["size"] for x in layout)
         obs = sum(counts[era] for era in eras)[30:] if name == "highdm" else sum(counts[era][:30] for era in eras)
-        prepared[name] = eras, layout, {stage: _vectors(view[stage], n) for stage in STAGES}, obs
+        unmapped = None
+        if normalization_only:
+            bins = view.get("unmapped_bins_1based", ())
+            if (not isinstance(bins, (list, tuple)) or any(type(b) is not int or not 1 <= b <= n for b in bins)
+                    or len(set(bins)) != len(bins)):
+                raise ValueError(f"Invalid unmapped bin indices in {name}")
+            unmapped = sorted(bins)
+        prepared[name] = (eras, layout, {stage: _vectors(view[stage], n) for stage in STAGES}, obs), unmapped
     output = internal_path(Path(output))
-    return {name: _draw(name, *args, output / f"vr_{name}_prefit_postfit")
-            for name, args in prepared.items()}
+    stem = "cr_normalization_only" if normalization_only else "prefit_postfit"
+    return {name: _draw(name, *args, output / f"vr_{name}_{stem}", luminosities=luminosities,
+                        band_labels=NORMALIZATION_BANDS if normalization_only else BAND_LABELS,
+                        titles=NORMALIZATION_TITLES if normalization_only else None, unmapped_bins=unmapped)
+            for name, (args, unmapped) in prepared.items()}
 
 
 def _nominal_years(mc, eras, slc):
@@ -270,27 +310,60 @@ def render_nominal(mc, data, output, luminosities=None):
 def main():
     import argparse
     import fcntl
-    from TROTASR.utils.io import read_json, sha256, write_json
+    from TROTASR.utils.io import read_json, write_json
     from TROTASR.utils.paths import ROOT
 
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--nominal-prefit", action="store_true",
-                        help="Compare nominal background MC with JetMET using MC-statistical bands")
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--nominal-prefit", action="store_true",
+                      help="Compare nominal background MC with JetMET using MC-statistical bands")
+    mode.add_argument("--cr-normalization-only", action="store_true",
+                      help="Apply exact saved CR ratios to existing nominal VR, without event reads")
     parser.add_argument("--nominal-input", type=Path,
                         help="Render an exported, complete VR-only aggregate without the hep2 runtime")
-    parser.add_argument("--output", type=Path, help="Nominal prefit figure directory")
+    parser.add_argument("--normalization-input", type=Path,
+                        help="Optional compact export of saved CR normalization draws")
+    parser.add_argument("--output", type=Path, help="Figure directory for either reduced mode")
     args = parser.parse_args()
-    if (args.nominal_input or args.output) and not args.nominal_prefit:
-        parser.error("--nominal-input and --output require --nominal-prefit")
+    if (args.nominal_input or args.output) and not (args.nominal_prefit or args.cr_normalization_only):
+        parser.error("--nominal-input and --output require a reduced mode")
+    if args.normalization_input and not args.cr_normalization_only:
+        parser.error("--normalization-input requires --cr-normalization-only")
     run_root = ROOT / "stats" / "run3"
     vr = run_root / "vr"
     output = internal_path(run_root / "plots" / "vr")
+    if args.cr_normalization_only:
+        from TROTASR.workflows.vr_normalization import project, saved_rates
+
+        output = internal_path(args.output or output / "cr_normalization_only")
+        source = internal_path(args.nominal_input) if args.nominal_input else None
+        bundle = read_json(source) if source else {x: read_json(vr / (x + "_summary.json.gz"))
+                                                   for x in ("mc", "data")}
+        rates_source = internal_path(args.normalization_input) if args.normalization_input else None
+        rates = read_json(rates_source) if rates_source else saved_rates()
+        prediction = project(bundle["mc"], rates)
+        output.mkdir(parents=True, exist_ok=True)
+        with (output / "plot.lock").open("a") as owner:
+            fcntl.flock(owner, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            plots = render(prediction, bundle["mc"], bundle["data"], output,
+                           normalization_only=True, luminosities=bundle.get("luminosities"))
+            write_json(output / "prediction_payload.json.gz", prediction)
+            write_json(output / "plot_manifest.json", dict(status="generated_pending_visual_QA",
+                scope=prediction["scope"], fit=prediction["fit"], plots=plots,
+                nominal_input=str(source) if source else None,
+                rates_input=str(rates_source) if rates_source else None,
+                source_state=bundle.get("state"),
+                **_mc_scope(bundle["mc"]),
+                files=sorted(Path(row[k]).name for row in plots.values() for k in ("png", "pdf")),
+                same_jetmet=True, vr_data_fitted=False, sr_observations_used=False, fit_recalculated=False))
+        print(dict(status="generated_pending_visual_QA", plots=list(plots)), flush=True)
+        return
     if args.nominal_prefit:
         output = internal_path(args.output or output / "nominal_prefit")
         if args.nominal_input:
             source = internal_path(args.nominal_input)
             bundle = read_json(source)
-            source_identity = dict(input=source.name, sha256=sha256(source))
+            source_identity = dict(input=source.name, size=source.stat().st_size)
         else:
             with (vr / "controller.lock").open("rb") as production:
                 fcntl.flock(production, fcntl.LOCK_SH | fcntl.LOCK_NB)
@@ -307,8 +380,9 @@ def main():
             write_json(output / "plot_manifest.json", dict(status="generated_pending_visual_QA",
                 scope="nominal background MC vs observed JetMET in VR; no transfer or fit",
                 input_identity=source_identity, source_state=bundle.get("state"),
-                plots=plots, files={Path(row[k]).name: sha256(row[k]) for row in plots.values()
-                                    for k in ("png", "pdf")},
+                **_mc_scope(bundle["mc"]),
+                plots=plots, files=sorted(Path(row[k]).name for row in plots.values()
+                                         for k in ("png", "pdf")),
                 vr_data_fitted=False, sr_observations_used=False, fit_recalculated=False))
         print(dict(status="generated_pending_visual_QA", plots=list(plots)), flush=True)
         return
@@ -317,7 +391,7 @@ def main():
 
 
 def compare_saved_fit():
-    """Render the saved CR fit after the VR responses are complete."""
+    """Publish only after the response controller has released its lock."""
     import fcntl
     from TROTASR.utils.io import read_json, write_json
     from TROTASR.utils.paths import ROOT
@@ -349,6 +423,8 @@ def compare_saved_fit():
             plots = render(payload, mc, data, output)
             write_json(output / "plot_manifest.json", dict(status="generated_pending_visual_QA",
                 plots=plots, fit=payload["fit"], same_jetmet_after_projection=True,
+                **_mc_scope(mc),
+                files=sorted(Path(row[k]).name for row in plots.values() for k in ("png", "pdf")),
                 sr_observations_used=False, vr_data_fitted=False, fit_recalculated=False))
             print(dict(status="generated_pending_visual_QA", plots=list(plots),
                        covariance_quality=payload["fit"]["covariance_quality"]), flush=True)

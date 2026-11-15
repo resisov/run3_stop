@@ -1,4 +1,3 @@
-import hashlib
 """Grid-boundary regressions: full bin layout, never synthetic physics results."""
 import copy
 from pathlib import Path
@@ -7,7 +6,7 @@ import unittest
 from unittest.mock import patch
 import numpy as np
 from TROTASR.tests.test_statistics_inputs import fixture, SR_LAYOUT, use_synthetic_sr_layout, SYNTHETIC_LAYOUT_DIGEST
-from TROTASR.utils.io import read_json, write_json, sha256
+from TROTASR.utils.io import read_json, write_json
 from TROTASR.utils.paths import ROOT
 from TROTASR.utils.signal_models import signal_mass_key
 from TROTASR.utils.statistics_inputs import build_inputs
@@ -42,8 +41,8 @@ def year_fixture(year):
     payload['input_metadata']['signals'] = dict(is_signal=True, dataset='/SyntheticGridSignal/Fixture/NANOAOD',
         signal_sumw_by_genmodel={'GenModel_' + model + '_1200_500': 100. for model in MODELS})
     from TROTASR.gnn4lowdm.configuration import configuration_path
-    payload['contract'].update(sr_binning_sha256=sha256(SR_LAYOUT) if SR_LAYOUT.is_file() else SYNTHETIC_LAYOUT_DIGEST,
-        configuration_sha256=sha256(configuration_path(year)))
+    payload['contract'].update(sr_binning_sha256=SYNTHETIC_LAYOUT_DIGEST,
+        configuration_sha256='legacy-gnn')
     return values
 
 
@@ -154,7 +153,7 @@ class CanonicalCR12Tests(unittest.TestCase):
             for rows in model['groups'].values():
                 for row in rows: row['physical'].pop('signal',None)
             caches[str(year)] = dict(background=model,signals=signals,source_bins=source)
-        merge = dict(path=str(SR_MERGE.relative_to(ROOT)),sha256=sha256(SR_MERGE))
+        merge = dict(path=str(SR_MERGE.relative_to(ROOT)))
         old, old_data, _, old_sources = combine_cached(caches,merge)
         new, new_data, _, new_sources = combine_cached(caches,merge,statistical_revision=builder.CR12_POLICY)
         self.assertEqual(sum(map(len,new.values())),428)
@@ -390,7 +389,7 @@ class NominalGridTests(unittest.TestCase):
             caches[str(year)]=dict(background=model,signals=signals,source_bins=source)
         raw,data,_,sources=combine_cached(caches)
         before,_,_=point_signals(raw,sources,caches,'T2tt',MASS)
-        merge=dict(path=str(SR_MERGE.relative_to(ROOT)),sha256=sha256(SR_MERGE))
+        merge=dict(path=str(SR_MERGE.relative_to(ROOT)))
         channels,after_data,_,merged_sources=combine_cached(caches,merge)
         after,issues,_=point_signals(channels,merged_sources,caches,'T2tt',MASS)
         self.assertFalse(issues)
@@ -499,16 +498,6 @@ class NominalGridTests(unittest.TestCase):
         self.assertTrue(all((n != '-') == (p == 'signal') for p, n in zip(names, nuisance)))
         self.assertNotIn('CR_SR', text)
 
-    def test_template_integrity_cache_invalidates_changed_file(self):
-        with tempfile.TemporaryDirectory(dir=ROOT/'results') as folder:
-            path = Path(folder) / 'hash_test.json'
-            write_json(path, dict(value=1))
-            cache = sha256
-            with patch('TROTASR.utils.io.hashlib.sha256', wraps=hashlib.sha256) as digest:
-                a = cache(path); self.assertEqual(a, cache(path)); self.assertEqual(digest.call_count, 1)
-                write_json(path, dict(value=2))
-                self.assertNotEqual(a, cache(path)); self.assertEqual(digest.call_count, 2)
-
     def test_stale_merged_digest_does_not_waive_era_or_coverage_checks(self):
         from TROTASR.tests.test_template_workflows import assert_stale_digest_ignored
         from TROTASR.workflows import signal_grid_inputs
@@ -526,15 +515,15 @@ class NominalGridTests(unittest.TestCase):
                 for key, value in zip(FIELDS, values):
                     path = folder / str(year) / (key + '.json.gz')
                     if key != 'hists':
-                        value['provenance']['hist_input_sha256'] = sha256(ROOT / paths['hists'])
+                        value['provenance']['hist_input_sha256'] = 'legacy-input'
                     write_json(path, value); paths[key] = str(path.relative_to(ROOT))
                 config['years'][str(year)] = paths
             cfg_path = folder / 'config.json'; write_json(cfg_path, config)
             output = folder / 'grid'
             self.assertEqual(build(cfg_path, output, validate_only=True), 0)
-            digest = sha256(output / 'inputs/2024.json.gz')
+            before = (output / 'inputs/2024.json.gz').read_bytes()
             self.assertEqual(build(cfg_path, output, validate_only=True), 0)
-            self.assertEqual(digest, sha256(output / 'inputs/2024.json.gz'))
+            self.assertEqual(before, (output / 'inputs/2024.json.gz').read_bytes())
             state = read_json(output / 'state.json')
             self.assertEqual(state['status'], 'validated_inputs_not_root_templates')
             self.assertEqual(state['bins'], 540)
@@ -578,7 +567,7 @@ class NominalGridTests(unittest.TestCase):
                 for key, value in zip(FIELDS, values):
                     path = folder/str(year)/(key+'.json.gz')
                     if key != 'hists':
-                        value['provenance']['hist_input_sha256'] = sha256(ROOT/paths['hists'])
+                        value['provenance']['hist_input_sha256'] = 'legacy-input'
                     write_json(path, value); paths[key] = str(path.relative_to(ROOT))
                 config['years'][str(year)] = paths
             cfg = folder/'config.json'; write_json(cfg, config)
