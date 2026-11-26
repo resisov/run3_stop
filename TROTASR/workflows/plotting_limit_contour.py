@@ -22,6 +22,17 @@ from TROTASR.workflows.combine_limits import collect
 
 
 FULL_SCOPES = ('full_nominal_production', 'full_combined_systematic_production')
+FULL_GRID_DISPLAY = dict(decay_boundary_guides=False, run2_compressed_overlay=False,
+                         close_expected_on_upper_scan_edge=False, run2_observed_only=True,
+                         run2_reference_doi=renderer.RUN2_PUBLICATION_DOI,
+                         comparison_legend='journal_channel_lumi_solid',
+                         comparison_alpha=renderer.CMS_OBS_ALPHA,
+                         comparison_order=['CMS 0L', 'CMS 1L', 'CMS 2L'],
+                         mixed_decay_title_lines=1,
+                         one_lepton_observed={'CMS': ['T2tt', 'T2bW', 'T2tb']},
+                         two_lepton_observed={'CMS': ['T2tt', 'T2bW']},
+                         expected_band_legend='Median expected ±1σ',
+                         comparison_mass_range='per_model_scan_hull')
 
 
 def sr_bin_counts(grid):
@@ -145,6 +156,8 @@ def support_mask(masses,available):
         physical_coordinates=['mStop','mLSP'],policy='three verified vertices in full requested mass grid')
 
 
+
+
 @contextlib.contextmanager
 def supported_contours(masses,available,diagnostics):
     import numpy as np
@@ -243,7 +256,7 @@ def render(limits_dir, grid_manifest, output, allow_partial=False, live_snapshot
     contract = dict(grid=str(grid_manifest), runtime=renderer.runtime_versions(),
         allow_partial=allow_partial, sr_bins_per_year=dict(highdm=high_bins, lowdm=low_bins),
         sr_merge=grid.get('sr_merge'), canonical_limits_pipeline=True,
-        analysis_root=grid['_canonical_analysis_root'], decay_boundary_guides=False)
+        analysis_root=grid['_canonical_analysis_root'], **FULL_GRID_DISPLAY)
     if grid.get('run3_systematics'):
         contract.update(years=list(eras), run3_systematics=grid['run3_systematics'],
             systematic_scope=grid['systematic_scope'], preliminary=True,
@@ -268,12 +281,14 @@ def render(limits_dir, grid_manifest, output, allow_partial=False, live_snapshot
                 != without_provenance_fields({k: contract.get(k) for k in keys})):
             raise FileExistsError('Preserve incompatible/incomplete contour directory')
         old_plots = {p['model']: p for p in old.get('plots', ())}
+        same_display = all(previous.get(key) == value for key, value in FULL_GRID_DISPLAY.items())
         if any(not (output/name).is_file() for name in old['files']):
             raise ValueError('Missing completed contour artifact')
         if not live_snapshot:
             if set(old_plots) != set(MODELS) or not old['files']:
                 raise FileExistsError('Preserve incomplete contour directory')
-            return old
+            if same_display:
+                return old
         for model, plot in old_plots.items():
             prior = read_json(output / (model + '_expected_limits_with_signal_theory.json'))['points']
             prior = {mass: {k: v for k, v in row.items() if k != 'signal_theory'}
@@ -281,7 +296,7 @@ def render(limits_dir, grid_manifest, output, allow_partial=False, live_snapshot
             current = records[model]['payload']['points']
             if not prior.keys() <= current.keys():
                 raise ValueError('Current snapshot lost accepted fit support; preserve the previous contour')
-            if prior == current and previous.get('decay_boundary_guides') is False:
+            if prior == current and same_display:
                 plots.append(plot)
         expected = {m for m, r in records.items() if drawable(r)}
         if {p['model'] for p in plots} == expected:
@@ -318,10 +333,12 @@ def render(limits_dir, grid_manifest, output, allow_partial=False, live_snapshot
             continue
         with supported_contours(record['requested_masses'], set(payload['points']), diagnostics):
             complete = renderer.plot_contour(payload, png, run2_contours=refs[model],
+                one_lepton_reference=refs['one_lepton'],
+                two_lepton_reference=refs['two_lepton'],
                 luminosity_label=luminosity_label, analysis_label=None,
                 x_min=600., x_max=1800., y_min=1., y_max=1800.,
                 decay_label=renderer.DECAY_LABELS[model], color_field='xsec', stop_pair_xsecs=cross_sections,
-                mask_offshell=False, run2_compressed_contours=refs.get(model + '_compressed'),
+                mask_offshell=False,
                 topology=model, interpolation_mode='topology-aware', interpolation_diagnostics=diagnostics,
                 thermal_relic=thermal)
         if not complete or not png.is_file() or not png.with_suffix('.pdf').is_file():

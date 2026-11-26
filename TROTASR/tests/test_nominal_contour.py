@@ -17,6 +17,47 @@ def fixture():
 
 
 class NominalContourTests(unittest.TestCase):
+    def test_two_lepton_observed_model_matching(self):
+        cfg = read_json(ROOT / 'stats/contour_config.json')
+        refs = read_json(ROOT / cfg['references']['two_lepton']['path'])['references']
+        self.assertEqual({'CMS': list(refs['CMS']['models'])},
+                         contour.FULL_GRID_DISPLAY['two_lepton_observed'])
+        for model, figure, n in [('T2tt', '6a', 160), ('T2bW', '6b', 199)]:
+            entry = refs['CMS']['models'][model]
+            self.assertEqual((entry['figure'], entry['object']), (figure, 'contour_obs'))
+            self.assertEqual([len(p) for p in entry['observed_paths']], [n])
+        self.assertEqual(set(refs), {'CMS'})
+
+    def test_published_one_lepton_observed_references(self):
+        cfg = read_json(ROOT / 'stats/contour_config.json')
+        refs = read_json(ROOT / cfg['references']['one_lepton']['path'])['references']
+        self.assertEqual(set(refs), {'CMS'})
+        self.assertEqual(set(refs['CMS']['models']), {'T2tt', 'T2bW', 'T2tb'})
+        for model, figure, vertices in [('T2tt', 6, 69), ('T2bW', 7, 46), ('T2tb', 8, 45)]:
+            record = refs['CMS']['models'][model]
+            self.assertEqual((record['figure'], record['object']), (figure, 'ObservedLimit'))
+            self.assertEqual([len(path) for path in record['observed_paths']], [vertices])
+
+    def test_observed_overlay_intersects_scan_without_closing_gaps(self):
+        import numpy as np
+        from scipy.spatial import ConvexHull
+        hull = ConvexHull([[600, 1], [600, 400], [1200, 900], [1200, 1]]).equations
+        path = [[590, 200], [610, 200], [610, 0], [800, 0], [800, 4]]
+        clipped = contour.renderer.clip_reference_path(path, hull)
+        np.testing.assert_allclose(clipped, [[600, 200], [610, 200], [610, 1],
+                                             [np.nan, np.nan], [800, 1], [800, 4]],
+                                   equal_nan=True)
+
+    def test_final_display_uses_run2_observed_only_and_no_edge_closure(self):
+        self.assertEqual(contour.FULL_GRID_DISPLAY['comparison_order'], ['CMS 0L', 'CMS 1L', 'CMS 2L'])
+        self.assertEqual(contour.FULL_GRID_DISPLAY['comparison_alpha'], 1.0)
+        self.assertEqual(contour.renderer.observed_label('Journal', '1L', 137),
+                         r'Journal (1L, 137 fb$^{-1}$)')
+        self.assertFalse(contour.FULL_GRID_DISPLAY['close_expected_on_upper_scan_edge'])
+        self.assertTrue(contour.FULL_GRID_DISPLAY['run2_observed_only'])
+        self.assertEqual(contour.FULL_GRID_DISPLAY['run2_reference_doi'],
+                         '10.1103/PhysRevD.104.052001')
+
     def test_canonical_bin_identity_comes_from_accepted_grid(self):
         self.assertEqual(sr_bin_counts(dict(canonical_limits_pipeline=True,
             sr_bins_per_year=dict(highdm=118,lowdm=30))), (118,30))

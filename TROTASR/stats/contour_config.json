@@ -1,20 +1,20 @@
 {
   "schema": "trotasr_contour_config_v1",
   "references": {
+    "two_lepton": {
+      "path": "stats/references/run2_cms_two_lepton_observed.json",
+      "physics_values_unchanged": true
+    },
+    "one_lepton": {
+      "path": "stats/references/run2_cms_one_lepton_observed.json",
+      "physics_values_unchanged": true
+    },
     "T2tt": {
       "path": "stats/references/run2_sus19010_t2tt_contours.json",
       "sha256": "3244734a888448706a93b227b270f5237cbea6ad1734562f7afd63babc05930d",
       "migrated_from": "autonomous_allhad/gnn_lowdm/inputs/run2_sus19010_t2tt_contours.json",
       "source_sha256": "6a75071d33212831b07fe71c09ec4aeba8750f432806929fca644764930421c4",
       "byte_identical": false,
-      "physics_values_unchanged": true
-    },
-    "T2tt_compressed": {
-      "path": "stats/references/run2_sus19010_t2ttc_contours.json",
-      "sha256": "62bc78f21e820260973fc4bf2abe71ceddbac304e6964120b490bbc1ea921c54",
-      "migrated_from": "autonomous_allhad/gnn_lowdm/inputs/run2_sus19010_t2ttc_contours.json",
-      "source_sha256": "62bc78f21e820260973fc4bf2abe71ceddbac304e6964120b490bbc1ea921c54",
-      "byte_identical": true,
       "physics_values_unchanged": true
     },
     "T2tb": {
@@ -30,14 +30,6 @@
       "sha256": "99abfe94f262df1a0f4cf8cb4399b6a7ffc7b238630a26cf95cbd19916ec1dcb",
       "migrated_from": "autonomous_allhad/gnn_lowdm/inputs/run2_sus19010_t2bw_contours.json",
       "source_sha256": "99abfe94f262df1a0f4cf8cb4399b6a7ffc7b238630a26cf95cbd19916ec1dcb",
-      "byte_identical": true,
-      "physics_values_unchanged": true
-    },
-    "T2bW_compressed": {
-      "path": "stats/references/run2_sus19010_t2bwc_contours.json",
-      "sha256": "9ea46bd591c6c3e15eac68c83187da1c9503cd2766fc7e75cce94b611f3d5e78",
-      "migrated_from": "autonomous_allhad/gnn_lowdm/inputs/run2_sus19010_t2bwc_contours.json",
-      "source_sha256": "9ea46bd591c6c3e15eac68c83187da1c9503cd2766fc7e75cce94b611f3d5e78",
       "byte_identical": true,
       "physics_values_unchanged": true
     },
@@ -58,6 +50,6 @@
     "byte_identical": true,
     "physics_values_unchanged": true
   },
-  "policy": "Use 600-1800 x 1-1800 GeV axes and topology-aware interpolation. Omit the decay-forbidden label and its three grey mass-gap guides; retain the expected uncertainty and Run-2 contours and the thermal-relic overlay. No external theory shift.",
+  "policy": "Use 600-1800 x 1-1800 GeV axes and topology-aware interpolation. Display only CMS Run-2 observed references, clipped to each model's scan: 0L/1L on all and 2L on T2tt/T2bW. Use solid lines at alpha 1.0, with journal, channel and luminosity in the legend. The T2tb decay label is one line. No diagonal extension, Run-2 expected or separate compressed-search overlays, decay-forbidden text or grey guides. Keep Run-3 expected uncertainty and the thermal relic. No external theory shift.",
   "migration_note": "The T2tt reference JSON gained only a final newline; all parsed values exactly match the sources."
 }

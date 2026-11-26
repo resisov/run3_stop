@@ -32,6 +32,10 @@ intermediate/
 /workflows/optimize_systematics.py
 /scales/.incoming*/
 /stats/*/
+!/stats/references/
+/stats/references/*
+!/stats/references/run2_cms_one_lepton_observed.json
+!/stats/references/run2_cms_two_lepton_observed.json
 /estimations/*/
 
 # Adopted efficiency maps are calibration inputs, not audit outputs.

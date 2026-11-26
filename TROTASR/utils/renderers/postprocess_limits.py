@@ -15,6 +15,36 @@ from typing import Any
 
 import numpy as np
 
+RUN2_PUBLICATION_DOI = "10.1103/PhysRevD.104.052001"
+CMS_OBS_ALPHA = 1.0
+CMS_OBS_COLORS = {"0L": "#1850ff", "1L": "#d000ab", "2L": "#5821aa"}
+
+
+def observed_label(journal, channel, luminosity):
+    return rf"{journal} ({channel}, {luminosity} fb$^{{-1}}$)"
+
+
+def clip_reference_path(coordinates, hull_equations):
+    """Clip the measured polyline segment by segment; never close an exclusion."""
+    xy = np.asarray(coordinates, dtype=float)
+    normal, offset = hull_equations[:, :2], hull_equations[:, 2]
+    clipped = []
+    for start, end in zip(xy[:-1], xy[1:]):
+        a, b = normal @ start + offset, normal @ end + offset
+        if np.any((a > 1.e-8) & (b > 1.e-8)):
+            continue
+        enter, leave = (a > 1.e-8) & (b <= 1.e-8), (a <= 1.e-8) & (b > 1.e-8)
+        lo = max(a[enter] / (a[enter] - b[enter]), default=0.)
+        hi = min(a[leave] / (a[leave] - b[leave]), default=1.)
+        if hi <= lo:
+            continue
+        p, q = start + lo * (end - start), start + hi * (end - start)
+        if not clipped or not np.allclose(clipped[-1], p, atol=1.e-7, rtol=0):
+            if clipped:
+                clipped.append([np.nan, np.nan])
+            clipped.append(p)
+        clipped.append(q)
+    return np.asarray(clipped, dtype=float).reshape(-1, 2)
 
 def runtime_versions() -> dict[str, str]:
     actual = {
@@ -33,9 +63,7 @@ DECAY_LABELS = {
     "T2tb": (
         r"$pp\rightarrow \tilde{t}_1\bar{\tilde{t}}_1,\ "
         r"\tilde{t}_1\rightarrow b\tilde{\chi}_1^+"
-        r"\rightarrow bW^{+*}\tilde{\chi}_1^0\ (50\%),$"
-        "\n"
-        r"$"
+        r"\rightarrow bW^{+*}\tilde{\chi}_1^0\ (50\%),\ "
         r"\bar{\tilde{t}}_1\rightarrow\bar{t}\tilde{\chi}_1^0\ (50\%)"
         r"$"
     ),
@@ -271,6 +299,8 @@ def plot_contour(
     overlay_legend_label: str | None = None,
     thermal_relic: dict[str, Any] | None = None,
     x_min: float = 500.0,
+    one_lepton_reference: Path | None = None,
+    two_lepton_reference: Path | None = None,
 ) -> bool:
     records = list((limit_payload.get("points") or {}).values())
     points = [
@@ -1093,36 +1123,46 @@ def plot_contour(
                     zorder=5.5,
                 )
 
-    run2_handles: list[Any] = []
+    run2_handles = []
+    from scipy.spatial import ConvexHull
+    reference_hull = ConvexHull(sorted(unique_points)).equations
     if run2_contours is not None and Path(run2_contours).exists():
         try:
             run2_payload = read_json(Path(run2_contours))
         except Exception:
             run2_payload = {}
-        for key, style, label in (
-            ("observed", "-", "SUS-19-010 obs."),
-            ("expected", "--", "SUS-19-010 exp."),
-        ):
-            coordinates = np.asarray(run2_payload.get(key) or [], dtype=float)
-            if coordinates.ndim == 2 and coordinates.shape[1] >= 2:
-                axes.plot(
-                    coordinates[:, 0],
-                    coordinates[:, 1],
-                    color="black",
-                    linestyle=style,
-                    linewidth=2.4,
-                    zorder=7,
-                )
-                run2_handles.append(
-                    Line2D(
-                        [0],
-                        [0],
-                        color="black",
-                        lw=2.4,
-                        linestyle=style,
-                        label=label,
-                    )
-                )
+        coordinates = np.asarray(run2_payload.get("observed") or [], dtype=float)
+        if coordinates.ndim == 2 and coordinates.shape[1] >= 2:
+            coordinates = clip_reference_path(coordinates[:, :2], reference_hull)
+            observed, = axes.plot(
+                coordinates[:, 0], coordinates[:, 1],
+                color=CMS_OBS_COLORS["0L"], linestyle="-", linewidth=2.4, zorder=7,
+                alpha=CMS_OBS_ALPHA, label=observed_label("Phys. Rev. D 104 (2021) 052001", "0L", 137),
+            )
+            run2_handles.append(observed)
+
+    for channel, reference, z in (
+        ("1L", one_lepton_reference, 7.2),
+        ("2L", two_lepton_reference, 7.3),
+    ):
+        if reference is None:
+            continue
+        entry = read_json(Path(reference))["references"]["CMS"]
+        if topology not in entry["models"]:
+            continue
+        label = observed_label(entry["journal"], channel, entry["luminosity_fb"])
+        handle = None
+        for path in entry["models"][topology]["observed_paths"]:
+            xy = clip_reference_path(path, reference_hull)
+            if len(xy) < 2:
+                continue
+            line, = axes.plot(*xy.T, color=CMS_OBS_COLORS[channel], alpha=CMS_OBS_ALPHA,
+                              linestyle="-", linewidth=2.4, zorder=z,
+                              label=label if handle is None else "_nolegend_")
+            if handle is None:
+                handle = line
+        if handle is not None:
+            run2_handles.append(handle)
 
     if (
         run2_compressed_contours is not None
@@ -1204,7 +1244,7 @@ def plot_contour(
                 or (
                     r"High-$\Delta m$ only exp. $\pm 1\sigma$"
                     if overlay_limit_payload is not None
-                    else r"Expected $\pm 1\sigma$"
+                    else r"Median expected $\pm 1\sigma$"
                 )
             ),
         )
@@ -1236,7 +1276,7 @@ def plot_contour(
         borderaxespad=0.0,
         frameon=True,
         title=decay_label,
-        title_fontsize=20 if multiline_decay_label else 23,
+        title_fontsize=20 if multiline_decay_label or decay_label == DECAY_LABELS["T2tb"] else 23,
         facecolor="white",
         edgecolor="black",
         framealpha=1.0,
